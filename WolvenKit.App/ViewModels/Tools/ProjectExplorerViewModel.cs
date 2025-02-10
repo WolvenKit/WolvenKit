@@ -560,7 +560,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     {
         if (SelectedItem.NotNull().IsDirectory)
         {
-            await Task.CompletedTask;
             return;
         }
 
@@ -607,8 +606,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 await Task.Run(() => _gameController.GetController().AddToMod(hash));
             }
         }
-
-        await Task.CompletedTask;
     }
     
     /// <summary>

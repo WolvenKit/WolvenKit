@@ -689,11 +689,10 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         return relPath;
     }
 
-    public Task<IDictionary<string, List<string>>> GetAllReferences(IProgressService<double> progressService,
-        ILoggerService loggerService) => GetAllReferences(progressService, loggerService, new List<string>());
-
-    public async Task<IDictionary<string, List<string>>> GetAllReferences(IProgressService<double> progressService,
-        ILoggerService loggerService, List<string> filePaths)
+    public async Task<IDictionary<string, List<string>>> GetAllReferencesAsync(
+        IProgressService<double> progressService, 
+        ILoggerService loggerService, 
+        List<string> filePaths)
     {
         if (filePaths.Count == 0)
         {
@@ -796,9 +795,9 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
                         references.Add(filePath, updatedResourcePaths);
                     }
                 }
-                catch
+                catch (Exception e)
                 {
-                    loggerService.Error($"Failed to read {filePath}. Results will be incomplete!");
+                    loggerService.Error($"Results will be incomplete: Failed to read {filePath} ({e.Message})");
                 }
                 
                 // Update progress
@@ -851,7 +850,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
     {
         if (references.Count == 0)
         {
-            references.AddRange(await GetAllReferences(progressService, loggerService, []));
+            references.AddRange(await GetAllReferencesAsync(progressService, loggerService, []));
         }
 
         SortedDictionary<string, List<string>> brokenReferences = new();

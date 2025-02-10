@@ -94,7 +94,7 @@ public partial class RibbonViewModel : ObservableObject
 
         if (LaunchProfileText is not null && _settingsManager.LaunchProfiles.TryGetValue(LaunchProfileText, out var launchProfile))
         {
-            await _gameControllerFactory.GetController().LaunchProject(launchProfile);
+            await _gameControllerFactory.GetController().LaunchProjectAsync(launchProfile);
             _settingsManager.LastLaunchProfile = LaunchProfileText;
         }
         else
