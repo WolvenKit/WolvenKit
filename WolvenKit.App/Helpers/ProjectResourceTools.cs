@@ -383,7 +383,9 @@ public class ProjectResourceTools
 
         if (!sourceIsDirectory)
         {
-            if (File.Exists(destAbsPath))
+            // do operations regardless if old filename is new filename as a temp extension is used so no risk of data loss, avoids the popup showing up when only the case is changed
+            bool sourceIsTarget = sourceAbsPath.ToLower() == destAbsPath.ToLower();
+            if (File.Exists(destAbsPath) && !sourceIsTarget)
             {
                 var response = await Interactions.ShowMessageBoxAsync(
                     $"Do you want to overwrite the existing file {destRelPath}?",
@@ -412,7 +414,7 @@ public class ProjectResourceTools
                 File.Move(sourceInRaw, destAbsPath.Replace("archive", "raw"), true);
             }
             
-            
+            _loggerService.Info($"Moved {sourceRelPath} to {destRelPath}");
         }
         else
         {
@@ -421,7 +423,9 @@ public class ProjectResourceTools
              */
             try
             {
-                if (Directory.Exists(destAbsPath) && Directory.EnumerateFiles(destAbsPath).Any())
+                // do operations regardless if old directory is new directory as a temp folder is used so no risk of data loss, avoids the popup showing up when only the case is changed
+                bool sourceIsTarget = sourceAbsPath.ToLower() == destAbsPath.ToLower();
+                if (Directory.Exists(destAbsPath) && Directory.EnumerateFiles(destAbsPath, "*", SearchOption.AllDirectories).Any() && !sourceIsTarget)
                 {
                     var response = await Interactions.ShowMessageBoxAsync(
                         $"Directory {destRelPath} already exists and is not empty. Do you want to overwrite existing files?",
