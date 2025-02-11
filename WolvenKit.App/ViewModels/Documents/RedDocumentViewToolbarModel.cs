@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Security.Policy;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Interaction;
@@ -158,6 +159,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(DeleteDuplicateEntriesCommand))]
     [NotifyCanExecuteChangedFor(nameof(RegenerateVisualControllersCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateMissingMaterialsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ConvertHairToCCXLCommand))]
     [ObservableProperty]
     private RedDocumentItemType _contentType;
     
@@ -384,7 +386,9 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         // Do nothing, we just need the command for the hook. Logic will trigger from view's OnClick
     }
 
-    [RelayCommand(CanExecute = nameof(HasMeshAppearances))]
+    private bool CanConvertHairToCCXL() => RootChunk?.ResolvedData is CMesh mesh;
+
+    [RelayCommand(CanExecute = nameof(CanConvertHairToCCXL))]
     private void ConvertHairToCCXL() { 
         // This is just to hide the button from the .mi toolbar
     }

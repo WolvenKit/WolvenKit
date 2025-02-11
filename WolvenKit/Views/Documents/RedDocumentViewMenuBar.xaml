@@ -432,7 +432,7 @@
                 </MenuItem>
                 <!-- Generate CCXL Materials for hairs -->
                 <MenuItem
-                    Style="{StaticResource MenuItemStyle}"
+                    Style="{StaticResource ShowMeshMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
                                          RelativeSource={RelativeSource Self},
                                          Mode=OneWay,
