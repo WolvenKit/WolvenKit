@@ -1921,7 +1921,7 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 uvBw.Write(mesh.texCoords0[v].X);
-                uvBw.Write(mesh.texCoords0[v].Y);
+                uvBw.Write(1 - mesh.texCoords0[v].Y);
             }
 
             foreach (var i in mesh.indices)
