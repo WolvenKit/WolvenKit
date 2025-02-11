@@ -445,7 +445,7 @@ namespace WolvenKit.Modkit.RED4
 
             UpdateSkinningParamCloth(ref meshes, ref cr2w, args);
 
-            UpdateGarmentSupportParameters(meshes, cr2w, args.ImportGarmentSupport);
+            UpdateGarmentSupportParameters(meshes, cr2w, args.ImportGarmentSupport, args.IgnoreGarmentSupportUVParam);
 
             var expMeshes = meshes.Select(_ => RawMeshToRE4Mesh(_, quantScale, quantTrans)).ToList();
 
@@ -1812,7 +1812,7 @@ namespace WolvenKit.Modkit.RED4
             }
         }
 
-        private static void UpdateGarmentSupportParameters(List<RawMeshContainer> meshes, CR2WFile cr2w, bool importGarmentSupport = true)
+        private static void UpdateGarmentSupportParameters(List<RawMeshContainer> meshes, CR2WFile cr2w, bool importGarmentSupport = true, bool ignoreGarmentSupportUVParam = true)
         {
             if (importGarmentSupport && cr2w.RootChunk is CMesh cMesh)
             {
@@ -1825,7 +1825,7 @@ namespace WolvenKit.Modkit.RED4
 
                     foreach (var mesh in meshes)
                     {
-                        WriteToGarmentSupportParameters(mesh, garmentMeshBlobChunk, garmentBlobChunk);
+                        WriteToGarmentSupportParameters(mesh, garmentMeshBlobChunk, garmentBlobChunk, ignoreGarmentSupportUVParam);
                     }
                 }
                 else
@@ -1876,7 +1876,7 @@ namespace WolvenKit.Modkit.RED4
             return garmentBlobChunk;
         }
 
-        private static void WriteToGarmentSupportParameters(RawMeshContainer mesh, meshMeshParamGarmentSupport garmentMeshBlobChunk, garmentMeshParamGarment garmentBlobChunk)
+        private static void WriteToGarmentSupportParameters(RawMeshContainer mesh, meshMeshParamGarmentSupport garmentMeshBlobChunk, garmentMeshParamGarment garmentBlobChunk, bool ignoreGarmentSupportUVParam = true)
         {
             ArgumentNullException.ThrowIfNull(mesh.positions, nameof(mesh));
             ArgumentNullException.ThrowIfNull(mesh.indices, nameof(mesh));
@@ -1937,7 +1937,7 @@ namespace WolvenKit.Modkit.RED4
                 Indices = new DataBuffer(indBuffer.ToArray()),
                 MorphOffsets = new DataBuffer(morphBuffer.ToArray()),
                 Vertices = new DataBuffer(vertBuffer.ToArray()),
-                Uv = new DataBuffer(uvBuffer.ToArray()),
+                Uv = ignoreGarmentSupportUVParam ? null : new DataBuffer(uvBuffer.ToArray()),
                 NumVertices = Convert.ToUInt32(mesh.positions.Length),
                 LodMask = 1
             });
