@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Splat;
@@ -357,64 +358,90 @@ public class ProjectResourceTools
         var sourceRelPath = sourcePath;
         var destRelPath = destPath;
 
-        // Make sure that we can deal with both absolute and relative paths
-        if (Path.IsPathRooted(sourceRelPath))
+        string projectRootPath = string.Join(Path.DirectorySeparatorChar,
+            absoluteFolderPrefix.ToLower().Split(Path.DirectorySeparatorChar)[..^1]);
+        
+        
+        string SetAbsolutePath(string relativePath)
         {
-            (_, sourceRelPath) = activeProject.SplitFilePath(sourcePath);
+            var inputPath = relativePath;
+            if (Regex.IsMatch(inputPath, @"^\.+\\"))
+            {
+                inputPath = new Uri(new Uri(absoluteFolderPrefix), new Uri(inputPath, UriKind.Relative)).LocalPath;
+            }
+            if (Path.IsPathRooted(inputPath))
+            {
+                if (inputPath.ToLower().StartsWith(string.Join(Path.DirectorySeparatorChar, projectRootPath.ToLower())))
+                {
+                    return inputPath;
+                }
+                throw new Exception($"Path: \"{inputPath}\" is not a valid absolute path inside the project.");
+            }
+            return Path.Join(absoluteFolderPrefix, inputPath);
         }
 
-        if (Path.IsPathRooted(destRelPath))
+        string destAbsPath;
+        string sourceAbsPath;
+        
+        try
         {
-            (_, destRelPath) = activeProject.SplitFilePath(destPath);
+            destRelPath = FileHelper.SanitizePath(destRelPath);
+            destAbsPath = SetAbsolutePath(destRelPath);
+
+            sourceRelPath = FileHelper.SanitizePath(sourceRelPath);
+            sourceAbsPath = SetAbsolutePath(sourceRelPath);
         }
-
-        // If we're given a directory here, make sure that we have a file path
-        var destAbsPath = Path.Join(absoluteFolderPrefix, destRelPath);
-
-        // don't copy a directory on itself
-        if (sourceRelPath == destRelPath)
+        catch (Exception e)
         {
+            _loggerService.Error($"Failed to move \"{sourcePath}\" to \"{destPath}\": {e.Message}");
             return;
         }
-
-        var sourceAbsPath = Path.Join(absoluteFolderPrefix, sourceRelPath);
+        
+        // don't copy a directory on itself
+        if (sourceAbsPath == destAbsPath)
+        {
+            _loggerService.Info($"Source is Destination for \"{sourceAbsPath}\". Skipping...");
+            return;
+        }
+        
         var sourceIsDirectory = Directory.Exists(sourceAbsPath);
         var overwriteFiles = false;
 
         if (!sourceIsDirectory)
         {
-            // do operations regardless if old filename is new filename as a temp extension is used so no risk of data loss, avoids the popup showing up when only the case is changed
-            bool sourceIsTarget = sourceAbsPath.ToLower() == destAbsPath.ToLower();
-            if (File.Exists(destAbsPath) && !sourceIsTarget)
+            try
             {
-                var response = await Interactions.ShowMessageBoxAsync(
-                    $"Do you want to overwrite the existing file {destRelPath}?",
-                    "File already exists!");
-
-                if (response is not (WMessageBoxResult.OK or WMessageBoxResult.Yes))
+                // do operations regardless if old filename is new filename as a temp extension is used so no risk of data loss, avoids the popup showing up when only the case is changed
+                bool sourceIsTarget = sourceAbsPath.ToLower() == destAbsPath.ToLower();
+                if (File.Exists(destAbsPath) && !sourceIsTarget)
                 {
-                    return;
+                    var response = await Interactions.ShowMessageBoxAsync(
+                        $"Do you want to overwrite the existing file {destRelPath}?",
+                        "File already exists!");
+
+                    if (response is not (WMessageBoxResult.OK or WMessageBoxResult.Yes))
+                    {
+                        return;
+                    }
                 }
+
+                var tempId = Guid.NewGuid();
+                var tempPath = $"{destAbsPath}_{tempId}.tmp";
+
+                Directory.CreateDirectory(string.Join(Path.DirectorySeparatorChar,
+                    destAbsPath.Split(Path.DirectorySeparatorChar)[..^1]));
+
+                // moving a file from filename.ext to Filename.ext will delete the file, so move it to .tmp first 
+                File.Move(sourceAbsPath, tempPath);
+                File.Move(tempPath, destAbsPath, true);
+
+                _loggerService.Info($"Moved \"{sourceRelPath}\" to \"{destRelPath}\"");
             }
-
-            var parentDir = Path.GetDirectoryName(destAbsPath);
-
-            if (parentDir is not null && !Directory.Exists(parentDir))
+            catch (Exception e)
             {
-                Directory.CreateDirectory(parentDir);
+                _loggerService.Error(
+                    $"Error when trying to move \"{sourceRelPath}\": {e.Message}");
             }
-
-            // moving a file from filename.ext to Filename.ext will delete the file, so move it to .tmp first 
-            File.Move(sourceAbsPath, $"{destAbsPath}.tmp", true);
-            File.Move($"{destAbsPath}.tmp", destAbsPath, true);
-
-            var sourceInRaw = sourceAbsPath.Replace("archive", "raw");
-            if (sourceInRaw != sourceAbsPath && File.Exists(sourceInRaw))
-            {
-                File.Move(sourceInRaw, destAbsPath.Replace("archive", "raw"), true);
-            }
-            
-            _loggerService.Info($"Moved {sourceRelPath} to {destRelPath}");
         }
         else
         {
@@ -429,28 +456,32 @@ public class ProjectResourceTools
                 {
                     var response = await Interactions.ShowMessageBoxAsync(
                         $"Directory {destRelPath} already exists and is not empty. Do you want to overwrite existing files?",
-                        "Directory already exists!");
-                    overwriteFiles = response is WMessageBoxResult.OK or WMessageBoxResult.Yes;
+                        "Directory already exists!",
+                        WMessageBoxButtons.YesNoCancel);
+                    overwriteFiles = response is WMessageBoxResult.Yes;
+                    if (response is WMessageBoxResult.Cancel)
+                    {
+                        return;
+                    }
                 }
 
-                FileHelper.MoveRecursively(sourceAbsPath, destAbsPath, overwriteFiles, _loggerService);
+                FileHelper.MoveRecursively(sourceAbsPath, destAbsPath, overwriteFiles, projectRootPath, _loggerService);
 
                 var sourceInRaw = sourceAbsPath.Replace("archive", "raw");
                 if (sourceInRaw != sourceAbsPath && Directory.Exists(sourceInRaw))
                 {
-                    FileHelper.MoveRecursively(sourceInRaw, destAbsPath.Replace("archive", "raw"), overwriteFiles,
+                    FileHelper.MoveRecursively(sourceInRaw, destAbsPath.Replace("archive", "raw"), overwriteFiles, projectRootPath,
                         _loggerService);
                 }
 
-                _loggerService.Info($"Moved {sourceRelPath}{Path.DirectorySeparatorChar}* to {destRelPath}");
+                _loggerService.Info($"Moved \"{sourceRelPath}{Path.DirectorySeparatorChar}*\" to \"{destRelPath}\"");
             }
 
             catch (Exception e)
             {
-                _loggerService.Info(
-                    $"Error when trying to move {sourceRelPath}{Path.DirectorySeparatorChar}*: {e.Message}");
+                _loggerService.Error(
+                    $"Error when trying to move \"{sourceRelPath}{Path.DirectorySeparatorChar}*\": {e.Message}");
             }
-
         }
 
         if (!refactor)
