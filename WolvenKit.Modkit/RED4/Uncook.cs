@@ -933,9 +933,23 @@ namespace WolvenKit.Modkit.RED4
 
             MeshTools.WriteGarmentParametersToMesh(ref expMeshes, cMesh, meshExportArgs.ExportGarmentSupport);
 
-            var meshRig = MeshTools.GetOrphanRig(cMesh);
+            var meshRig = MeshTools.GetOrphanRig(cMesh,true);
 
             var Rig = RIG.ProcessRig(_parserService.ReadRed4File(rigStream));
+            ArgumentNullException.ThrowIfNull(Rig);
+            ArgumentNullException.ThrowIfNull(Rig.Names);
+
+
+            ArgumentNullException.ThrowIfNull(meshRig);
+            ArgumentNullException.ThrowIfNull(meshRig.Names);
+            ArgumentNullException.ThrowIfNull(Rig.MeshInverseBinding);
+
+            var meshBoneNameTemp = meshRig.Names.ToList();
+            for (int i = 0; i < Rig.BoneCount; i++)
+            {
+                if (meshRig.MeshInverseBinding != null && meshBoneNameTemp.Contains(Rig.Names[i]))
+                    Rig.MeshInverseBinding[i] = meshRig.MeshInverseBinding[meshBoneNameTemp.IndexOf(Rig.Names[i])];
+            }
 
             MeshTools.UpdateMeshJoints(ref expMeshes, Rig, meshRig);
 
@@ -949,7 +963,7 @@ namespace WolvenKit.Modkit.RED4
                 ParseMaterials(cr2w, outfile, meshExportArgs.MaterialRepo, meshesinfo, meshExportArgs.MaterialUncookExtension);
             }
 
-            var model = MeshTools.RawMeshesToGLTF(expMeshes, Rig);
+            var model = MeshTools.RawMeshesToGLTF(expMeshes, Rig,false, meshExportArgs.useAposeRig);
 
             if (WolvenTesting.IsTesting)
             {
