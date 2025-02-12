@@ -4,7 +4,7 @@ using System.IO;
 using SharpDX;
 using WolvenKit.Core.Extensions;
 
-namespace WolvenKit.App.PhysX;
+namespace WolvenKit.Common.PhysX;
 
 public class ConvexHullData
 {
