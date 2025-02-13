@@ -137,6 +137,12 @@ namespace WolvenKit.Views.Shell
                     return dialog.ViewModel;
                 };
 
+                Interactions.ShowScriptSettingsView = settings =>
+                {
+                    var dialog = new ScriptSettingsWindow(settings);
+                    return dialog.ShowDialog() == true;
+                };
+
 
                 this.Bind(ViewModel,
                     vm => vm.ActiveDocument,

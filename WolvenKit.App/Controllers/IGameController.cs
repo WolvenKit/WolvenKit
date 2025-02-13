@@ -42,7 +42,7 @@ public interface IGameController
     /// </summary>
     /// <param name="file">the file in question</param>
     /// <returns>bool success</returns>
-    Task<bool> AddFileToModModal(IGameFile file);
+    Task<bool> AddFileToModModalAsync(IGameFile file);
 
     /// <summary>
     /// Adds file from the selected search scope to the current modal
@@ -50,14 +50,14 @@ public interface IGameController
     /// <param name="file">the file in question</param>
     /// <param name="searchScope">search scope (basegame/mods/everywhere)</param>
     /// <returns>bool success</returns>
-    Task<bool> AddFileToModModal(IGameFile file, ArchiveManagerScope searchScope);
+    Task<bool> AddFileToModModalAsync(IGameFile file, ArchiveManagerScope searchScope);
 
     /// <summary>
     /// Resolves hash and adds file to the current modal, using the active scope.
     /// </summary>
     /// <param name="hash">unique hash of file</param>
     /// <returns>bool success</returns>
-    Task<bool> AddFileToModModal(ulong hash);
+    Task<bool> AddFileToModModalAsync(ulong hash);
 
     /// <summary>
     /// Resolves hash from search scope and adds file to the current modal.
@@ -65,11 +65,11 @@ public interface IGameController
     /// <param name="hash">unique hash of file</param>
     /// <param name="searchScope">search scope (basegame/mods/everywhere)</param>
     /// <returns>bool success</returns>
-    Task<bool> AddFileToModModal(ulong hash, ArchiveManagerScope searchScope);
+    Task<bool> AddFileToModModalAsync(ulong hash, ArchiveManagerScope searchScope);
 
     public Task HandleStartup();
 
-    Task<bool> LaunchProject(LaunchProfile profile);
-    Task<bool> InstallProjectHot();
+    Task<bool> LaunchProjectAsync(LaunchProfile profile);
+    Task<bool> InstallProjectHotAsync();
     bool CleanAll(bool isPostBuild = false);
 }

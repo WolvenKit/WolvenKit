@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using WolvenKit.App.Models;
+using WolvenKit.Common.PhysX;
 using WolvenKit.RED4.Types;
 
-namespace WolvenKit.App.PhysX;
+namespace WolvenKit.Common.RED4;
 
 public class GeometryCacheReader
 {

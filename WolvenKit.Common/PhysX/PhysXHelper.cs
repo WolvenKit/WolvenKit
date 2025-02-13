@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace WolvenKit.App.PhysX;
+namespace WolvenKit.Common.PhysX;
 
 public class PhysXHeader
 {

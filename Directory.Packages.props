@@ -59,6 +59,7 @@
     <PackageVersion Include="Serilog.Sinks.Console" Version="6.0.0" />
     <PackageVersion Include="Serilog.Sinks.File" Version="6.0.0" />
     <PackageVersion Include="SharpDX.Direct3D11" Version="4.2.0" />
+    <PackageVersion Include="SharpDX.Mathematics" Version="4.2.0" />
     <PackageVersion Include="SharpGLTF.Core" Version="1.0.3" />
     <PackageVersion Include="SharpGLTF.Toolkit" Version="1.0.3" />
     <PackageVersion Include="SharpVectors.Wpf" Version="1.8.4.2" />

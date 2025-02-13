@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using SharpDX;
 
-namespace WolvenKit.App.PhysX;
+namespace WolvenKit.Common.PhysX;
 
 [StructLayout(LayoutKind.Sequential)]
 public struct Bounds3

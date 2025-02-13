@@ -3,16 +3,14 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
+using WolvenKit.Core.Helpers;
 using WolvenKit.Core.Unmanaged;
-using WolvenKit.RED4.TweakDB.Helper;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Pools;
 
@@ -128,7 +126,9 @@ namespace WolvenKit.Common.Services
             var read = stream.Read(compressedBuffer.GetSpan());
 
             if (read != compressedBufferLength)
+            {
                 throw new InvalidOperationException("Read less bytes than expected!");
+            }
 
             Oodle.Decompress(
                 compressedBuffer.Pointer, compressedBuffer.Size,
@@ -150,8 +150,10 @@ namespace WolvenKit.Common.Services
                     var nextLine = sr.ReadLine();
 
                     if (nextLine == null)
+                    {
                         break;
-                    
+                    }
+
                     collection.Add(nextLine);
                 }
                 
@@ -174,38 +176,63 @@ namespace WolvenKit.Common.Services
 
         private void ReadHashes(Stream memoryStream)
         {
-            var dict = new ConcurrentDictionary<ulong, string>();
-            
-            ProcessLinesConcurrently(memoryStream, line =>
+            var collection = new List<string>();
+
+            using var sr = new StreamReader(memoryStream);
+            while (true)
             {
-                dict.GetOrAdd(ResourcePath.CalculateHash(line), line);
-            });
-            
-            ResourcePathPool.SetNative(dict);
+                var nextLine = sr.ReadLine();
+                if (nextLine == null)
+                {
+                    break;
+                }
+                collection.Add(nextLine);
+            }
+
+            var lookupTable = new LookupTable(collection, _maxDoP, ResourcePath.CalculateHash);
+
+            ResourcePathPool.SetNative(lookupTable);
         }
 
-        private void ReadNodeRefs(Stream memoryStream) => 
-            ProcessLinesConcurrently(memoryStream, line => NodeRefPool.AddOrGetHash(line));
+        private void ReadNodeRefs(Stream memoryStream)
+        {
+            var collection = new List<string>();
+
+            using var sr = new StreamReader(memoryStream);
+            while (true)
+            {
+                var nextLine = sr.ReadLine();
+                if (nextLine == null)
+                {
+                    break;
+                }
+                collection.Add(nextLine);
+            }
+
+            var lookupTable = new LookupTable(collection, _maxDoP, ResourcePath.CalculateHash);
+
+            NodeRefPool.SetNative(lookupTable);
+        }
 
         private void ReadTweakNames(Stream memoryStream)
         {
-            var tweakHelper = new TweakDBStringHelper();
-            tweakHelper.LoadFromStream(memoryStream);
+            var collection = new List<string>();
 
-            var hashes = new HashSet<ulong>();
-            var dict = new Dictionary<ulong, string>();
-            foreach (var (hash, value) in tweakHelper.GetAll())
+            using var br = new BinaryReader(memoryStream);
+
+            // skip header
+            br.BaseStream.Position = 20;
+
+            while (br.BaseStream.Position < br.BaseStream.Length)
             {
-                if (!hashes.Add(hash))
-                {
-                    continue;
-                }
-                
-                dict.Add(hash, value);
+                collection.Add(br.ReadLengthPrefixedString());
             }
-            TweakDBIDPool.SetNative(dict);
+
+            var lookupTable = new LookupTable(collection, _maxDoP, TweakDBID.CalculateHash);
+
+            TweakDBIDPool.SetNative(lookupTable);
         }
-        
+
         #endregion Methods
     }
 }

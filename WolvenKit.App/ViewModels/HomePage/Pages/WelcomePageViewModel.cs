@@ -168,7 +168,6 @@ public partial class WelcomePageViewModel : PageViewModel
     private void UnpinItem(string parameter)
     {
         //Argument.IsNotNullOrWhitespace(() => parameter);
-
         //_recentlyUsedItemsService.UnpinItem(parameter);
     }
 

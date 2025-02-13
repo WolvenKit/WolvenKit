@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using WolvenKit.Core.CRC;
+using WolvenKit.RED4.Types.Pools;
 
 namespace WolvenKit.RED4.Types;
 

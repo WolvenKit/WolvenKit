@@ -250,16 +250,15 @@ public partial class AssetBrowserViewModel : ToolViewModel
     #region commands
 
     [RelayCommand]
-    private async Task<Unit> LoadAssetBrowser()
+    private async Task LoadAssetBrowser()
     {
         _manuallyLoading = true;
         ShouldShowLoadButton = !_manuallyLoading && !ProjectLoaded && !ArchiveDirNotFound;
         await _gameController.GetRed4Controller().HandleStartup();
-        return Unit.Default;
     }
 
     [RelayCommand]
-    private async Task OpenWolvenKitSettings() => await _appViewModel.ShowHomePage(EHomePage.Settings);
+    private async Task OpenWolvenKitSettings() => await _appViewModel.ShowHomePageAsync(EHomePage.Settings);
 
     [RelayCommand]
     private void AddSearchKey(string value) => SearchBarText += $" {value}:";
@@ -276,7 +275,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
             case WMessageBoxResult.OK:
             case WMessageBoxResult.Yes:
             {
-                await _appViewModel.ShowHomePage(EHomePage.Plugins);
+                await _appViewModel.ShowHomePageAsync(EHomePage.Plugins);
                 break;
             }
 
@@ -362,7 +361,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
                 case WMessageBoxResult.OK:
                 case WMessageBoxResult.Yes:
                 {
-                    await _appViewModel.ShowHomePage(EHomePage.Plugins);
+                    await _appViewModel.ShowHomePageAsync(EHomePage.Plugins);
                     break;
                 }
 
@@ -622,7 +621,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         switch (RightSelectedItem)
         {
             case RedFileViewModel fileVm:
-                await _gameController.GetController().AddFileToModModal(fileVm.GetGameFile());
+                await _gameController.GetController().AddFileToModModalAsync(fileVm.GetGameFile());
                 break;
             case RedDirectoryViewModel dirVm:
                 MoveToFolder(dirVm);
@@ -683,7 +682,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     private bool CanAddFromArchive() => RightSelectedItem is RedFileViewModel;
     [RelayCommand(CanExecute = nameof(CanAddFromArchive))]
-    private void AddFromArchive(IGameArchive archive)
+    private async Task AddFromArchive(IGameArchive archive)
     {
         if (archive is not ICyberGameArchive cyberArchive || RightSelectedItem is not RedFileViewModel fileVm)
         {
@@ -692,7 +691,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
         // must use "Value" here to force the exact archive
         var realGameFile = cyberArchive.Files.First(_ => _.Value.Name == fileVm.GetGameFile().Name).Value;
-        _gameController.GetController().AddFileToModModal(realGameFile);
+        await _gameController.GetController().AddFileToModModalAsync(realGameFile);
     }
 
     #endregion commands

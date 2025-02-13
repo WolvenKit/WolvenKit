@@ -169,7 +169,7 @@ public partial class ScriptManagerViewModel : DialogViewModel
             File.Copy(scriptFile.Path, localFilePath, true);
         }
 
-        await _appViewModel.RequestFileOpen(localFilePath);
+        _appViewModel.RequestFileOpen(localFilePath);
         _appViewModel.CloseModalCommand.Execute(null);
     }
 
