@@ -18,7 +18,6 @@ public class GeometryCacheService
     private readonly IArchiveManager _archive;
 
     private readonly CName _cachePath = (CName)@"base\worlds\03_night_city\sectors\_generated\collisions\03_night_city.geometry_cache";
-    private bool _isLoaded;
 
     private readonly Lazy<Task> _loadTask;
     
@@ -31,7 +30,6 @@ public class GeometryCacheService
 
     public void Load()
     {
-        _isLoaded = true;
         var file = _archive.Lookup(_cachePath.GetRedHash());
         if (file.HasValue && file.Value is IGameFile fe)
         {
@@ -120,10 +118,8 @@ public class GeometryCacheService
 
     public PhysXMesh? GetEntry(ulong sectorHash, ulong entryHash)
     {
-        if (!_isLoaded)
-        {
-            Load();
-        }
+        _loadTask.Value.Wait();
+        
         if (_entries.TryGetValue(sectorHash, out var sectorEntries) &&
             sectorEntries.TryGetValue(entryHash, out var mesh))
         {
