@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System;
+using System.Threading.Tasks;
 using WolvenKit.Common.PhysX;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.CR2W;
@@ -17,17 +18,18 @@ public class GeometryCacheService
     private readonly IArchiveManager _archive;
 
     private readonly CName _cachePath = (CName)@"base\worlds\03_night_city\sectors\_generated\collisions\03_night_city.geometry_cache";
-    private bool _isLoaded;
 
+    private readonly Lazy<Task> _loadTask;
+    
     public GeometryCacheService(IArchiveManager archive, Red4ParserService parser)
     {
         _archive = archive;
         _parser = parser;
+        _loadTask = new Lazy<Task>(() => Task.Run(() => Load()));
     }
 
     public void Load()
     {
-        _isLoaded = true;
         var file = _archive.Lookup(_cachePath.GetRedHash());
         if (file.HasValue && file.Value is IGameFile fe)
         {
@@ -116,21 +118,35 @@ public class GeometryCacheService
 
     public PhysXMesh? GetEntry(ulong sectorHash, ulong entryHash)
     {
-        if (!_isLoaded)
+        _loadTask.Value.Wait();
+        
+        if (_entries.TryGetValue(sectorHash, out var sectorEntries) &&
+            sectorEntries.TryGetValue(entryHash, out var mesh))
         {
-            Load();
+            return mesh;
         }
-        if (!_entries.ContainsKey(sectorHash))
+
+        if (_entries.TryGetValue(0, out var defaultEntries) &&
+            defaultEntries.TryGetValue(entryHash, out var meshDefault))
         {
-            return null;
+            return meshDefault;
         }
-        if (_entries[sectorHash].ContainsKey(entryHash))
+        return null;
+    }
+    public async Task<PhysXMesh?> GetEntryAsync(ulong sectorHash, ulong entryHash)
+    {
+        await _loadTask.Value;
+
+        if (_entries.TryGetValue(sectorHash, out var sectorEntries) &&
+            sectorEntries.TryGetValue(entryHash, out var mesh))
         {
-            return _entries[sectorHash][entryHash];
+            return mesh;
         }
-        if (_entries[0].ContainsKey(entryHash))
+
+        if (_entries.TryGetValue(0, out var defaultEntries) &&
+            defaultEntries.TryGetValue(entryHash, out var meshDefault))
         {
-            return _entries[0][entryHash];
+            return meshDefault;
         }
         return null;
     }
