@@ -112,7 +112,7 @@
                     <MenuItem
                         x:Name="ToolbarImportEntitySpawnerButton"
                         Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
-                        Header="Import entity spawner .json">
+                        Header="Import object spawner .json">
                         <MenuItem.Icon>
                             <local:IconBox
                                 IconPack="Material"
