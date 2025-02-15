@@ -12,7 +12,7 @@
     <PackageVersion Include="DiscordRichPresence" Version="1.2.1.24" />
     <PackageVersion Include="DrawStringLineHeight" Version="1.0.0" />
     <PackageVersion Include="DynamicData" Version="9.0.4" />
-    <PackageVersion Include="EFCore.BulkExtensions" Version="8.1.1" />
+    <PackageVersion Include="EFCore.BulkExtensions.Sqlite" Version="8.1.1" />
     <PackageVersion Include="HandyControls" Version="3.5.3" />
     <PackageVersion Include="HelixToolkit.SharpDX.Core.Wpf" Version="2.25.0" />
     <PackageVersion Include="K4os.Compression.LZ4" Version="1.3.8" />
