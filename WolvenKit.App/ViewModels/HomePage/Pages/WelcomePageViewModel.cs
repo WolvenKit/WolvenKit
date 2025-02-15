@@ -117,6 +117,10 @@ public partial class WelcomePageViewModel : PageViewModel
     private void OpenProject(string s)
     {
         _mainViewModel.OpenProjectCommand.Execute(s);
+
+        // clear filters
+        RecentFilter = string.Empty;
+        PinnedFilter = string.Empty;
     }
 
     [RelayCommand]
