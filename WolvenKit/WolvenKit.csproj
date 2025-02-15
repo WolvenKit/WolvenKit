@@ -55,6 +55,7 @@
     <PackageReference Include="Nodify" />
     <PackageReference Include="Microsoft.Extensions.Hosting" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" />
+    <PackageReference Include="ReactiveMarbles.ObservableEvents.SourceGenerator" />
     <PackageReference Include="Serilog.Sinks.Async" />
     <PackageReference Include="SharpVectors.Wpf" />
     <PackageReference Include="Splat" />
@@ -64,7 +65,6 @@
     <PackageReference Include="Serilog.Sinks.File" />
 
     <PackageReference Include="ReactiveUI" />
-    <PackageReference Include="ReactiveUI.Events.WPF" />
     <PackageReference Include="ReactiveUI.WPF" />
   </ItemGroup>
 
@@ -129,7 +129,7 @@
     <Compile Remove="Converters\BooleanConverter.cs" />
     <Compile Remove="GridVirtualizingCellsControl.xaml.cs" />
     <Page Remove="GridVirtualizingCellsControl.xaml" />
-      <Compile Remove="Converters\BindingProxy.cs"/>
+      <Compile Remove="Converters\BindingProxy.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Views\Templates\RedFixedPointEditor.cs" />
