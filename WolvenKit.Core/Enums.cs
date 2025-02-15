@@ -330,4 +330,13 @@ namespace WolvenKit.Common
         zh_tw,
         ua_ua
     }
+
+    public enum LoggerVerbosity
+    {
+        Quiet,
+        Minimal,
+        Normal,
+        Detailed,
+        Diagnostic,
+    }
 }
