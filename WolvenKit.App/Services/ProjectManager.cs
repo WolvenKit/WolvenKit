@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.ProjectManagement;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.Common;
@@ -25,6 +26,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
     private readonly IHashService _hashService;
     private readonly IArchiveManager _archiveManager;
     private readonly ISettingsManager _settingsManager;
+    private readonly IRecentlyUsedItemsService _itemsSvc;
 
     public ProjectManager(
         IRecentlyUsedItemsService recentlyUsedItemsService,
@@ -32,7 +34,8 @@ public partial class ProjectManager : ObservableObject, IProjectManager
         ILoggerService loggerService,
         IHashService hashService,
         IArchiveManager archiveManager,
-        ISettingsManager settingsManager
+        ISettingsManager settingsManager,
+        IRecentlyUsedItemsService itemsSvc
     )
     {
         _recentlyUsedItemsService = recentlyUsedItemsService;
@@ -41,6 +44,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
         _hashService = hashService;
         _archiveManager = archiveManager;
         _settingsManager = settingsManager;
+        _itemsSvc = itemsSvc;
     }
 
     #region properties
@@ -80,7 +84,6 @@ public partial class ProjectManager : ObservableObject, IProjectManager
             {
                 return;
             }
-
          
             ActiveProject = x.Result;
             _archiveManager.ProjectArchive = x.Result.AsArchive();
@@ -89,14 +92,16 @@ public partial class ProjectManager : ObservableObject, IProjectManager
             var recentItem = _recentlyUsedItemsService.Items.Items.FirstOrDefault(item => item.Name == location);
             if (recentItem == null)
             {
-                recentItem = new RecentlyUsedItemModel(location, DateTime.Now, DateTime.Now);
-                _recentlyUsedItemsService.AddItem(recentItem);
+                recentItem = new RecentlyUsedItemModel(location, DateTime.Now, DateTime.Now,
+                    x.Result.ProjectColor);
+                _recentlyUsedItemsService.AddOrUpdateItem(recentItem);
             }
             else
             {
                 recentItem.LastOpened = DateTime.Now;
             }
 
+            recentItem.Color = x.Result.ProjectColor;
             _settingsManager.LastUsedProjectPath = x.Result.Location;
 
         });
@@ -158,6 +163,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
                 Email = obj.Email,
                 Description = obj.Description,
                 Version = obj.Version,
+                ProjectColor = ColorHelper.CreateFromHexOrNull(obj.ProjectColor) ?? ColorHelper.GetRandomColor(0.5),
             };
 
             if (_hashService is HashServiceExt hashService)
@@ -257,6 +263,8 @@ public partial class ProjectManager : ObservableObject, IProjectManager
             }
 
             await fs.FlushAsync();
+
+            _itemsSvc.AddOrUpdateItem(new RecentlyUsedItemModel(ActiveProject));
         }
         catch (Exception e)
         {
