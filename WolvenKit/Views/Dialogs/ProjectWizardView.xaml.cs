@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Reactive.Disposables;
 using System.Windows.Controls;
 using ReactiveUI;
@@ -25,12 +26,16 @@ namespace WolvenKit.Views.Dialogs
                         vm => vm.Email,
                         v => v.EmailTextBox.Text).DisposeWith(disposables);
                 this.Bind(ViewModel,
-                        vm => vm.Version,
+                    vm => vm.Version,
                         v => v.VersionTextBox.Text).DisposeWith(disposables);
+                this.Bind(ViewModel,
+                    vm => vm.ProjectColor,
+                    v => v.ProjectColorButton.Color).DisposeWith(disposables);
 
                 this.BindCommand(ViewModel,
                     vm => vm.OpenProjectPathCommand,
                     v => v.ProjectPathButton).DisposeWith(disposables);
+
 
                 this.BindCommand(ViewModel, 
                         x => x.OkCommand, 
