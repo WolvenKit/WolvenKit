@@ -32,6 +32,9 @@ public partial class ProjectSettingsDialog : ReactiveUserControl<ProjectSettings
             this.Bind(ViewModel, x => x.Project.Version, x => x.VersionTextBox.Text)
                 .DisposeWith(disposables);
 
+            this.Bind(ViewModel, x => x.Project.ProjectColor, x => x.ProjectColorButton.Color)
+                .DisposeWith(disposables);
+
             this.BindCommand(ViewModel, x => x.OkCommand, x => x.OkButton)
                 .DisposeWith(disposables);
 
@@ -50,5 +53,10 @@ public partial class ProjectSettingsDialog : ReactiveUserControl<ProjectSettings
                     }
                 }
             });
+
+        if (ViewModel is not null)
+        {
+            ProjectColorButton.Color = ViewModel.Project.ProjectColor;
+        }
     }
 }

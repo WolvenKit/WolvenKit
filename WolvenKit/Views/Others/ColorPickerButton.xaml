@@ -1,0 +1,23 @@
+﻿<UserControl
+    x:Class="WolvenKit.Views.Others.ColorPickerButton"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
+    syncfusionskin:SfSkinManager.Theme="{syncfusionskin:SkinManagerExtension ThemeName=MaterialDark}">
+    <Grid>
+        <syncfusion:ColorPicker
+            Name="ColorPickerControl"
+            Width="40"
+            VerticalAlignment="Bottom"
+            Background="{StaticResource BackgroundColor_Control}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="1"
+            syncfusionskin:SfSkinManager.Theme="{syncfusionskin:SkinManagerExtension ThemeName=MaterialDark}"
+            IsAlphaVisible="False"
+            ColorChanged="ColorPickerControl_OnChange"
+            Color="{Binding Color,
+                            Mode=OneWay}" />
+    </Grid>
+</UserControl>
