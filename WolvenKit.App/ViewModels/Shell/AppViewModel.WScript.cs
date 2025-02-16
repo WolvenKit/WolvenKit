@@ -142,7 +142,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         if (_entSpawnerImportScript is null || !File.Exists(_entSpawnerImportScript.Path))
         {
             _loggerService.Error("You need to update your Wolvenkit Scripts to use this. Please delete any scripts related");
-            _loggerService.Error("to the entity spawner from your script manager's user section, and restart the application.");
+            _loggerService.Error("to the object spawner from your script manager's user section, and restart the application.");
             return;
         }
 
@@ -156,7 +156,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         var openFileDialog = new OpenFileDialog
         {
             Filter = "Json files (*.json)|*.json|All files (*.*)|*.*",
-            Title = "Open entSpawner export",
+            Title = "Open object spawner export file",
             InitialDirectory = GetEntspawnerRelativePath(),
         };
 

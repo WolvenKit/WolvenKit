@@ -325,7 +325,7 @@ namespace WolvenKit.Modkit.RED4.Tools
 
                 if (cMesh != null)
                 {
-                    if (!cMesh.Parameters.Select(x => x.Chunk).OfType<meshMeshParamGarmentSupport>().Any())
+                    if (!cMesh.Parameters.Any(x => x.Chunk is meshMeshParamGarmentSupport or garmentMeshParamGarment))
                     {
                         meshesInfo.garmentSupportExists[i] = false;
                     }

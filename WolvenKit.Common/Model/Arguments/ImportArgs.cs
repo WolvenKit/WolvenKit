@@ -172,6 +172,14 @@ namespace WolvenKit.Common.Model.Arguments
         public bool ImportGarmentSupport { get; set; } = true;
 
         /// <summary>
+        /// Imports garment support data from GLB.
+        /// </summary>
+        [Category("Import Settings")]
+        [Display(Name = "\tIgnore UV param")]
+        [Description("Ignores the Garment Support UV param. Fixes a vanilla bug which creates a seam")]
+        public bool IgnoreGarmentSupportUVParam { get; set; }
+
+        /// <summary>
         /// Use object or node name as mesh name
         /// </summary>
         [Category("Compatibility Settings")]
