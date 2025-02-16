@@ -1,6 +1,5 @@
 using System;
-using Microsoft.Build.Framework;
-using WolvenKit.Core.Exceptions;
+using WolvenKit.Common;
 
 namespace WolvenKit.Core.Interfaces;
 

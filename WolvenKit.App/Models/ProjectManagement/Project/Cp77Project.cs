@@ -492,7 +492,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         (GetAbsoluteSubDirPath(fullPath), GetRelativePath(fullPath));
 
     /// <returns>The absolute path to the subdirectory containing the file, e.g. C:\CyberpunkFiles\...\source\archive</returns>
-    private string GetAbsoluteSubDirPath(string absolutePath)
+    public string GetAbsoluteSubDirPath(string absolutePath)
     {
         if (absolutePath.StartsWith(ModDirectory, StringComparison.Ordinal) ||
             absolutePath.StartsWith(s_relativeModDir))

@@ -44,6 +44,6 @@ public class Cp77ProjectTest
         Assert.Equal(expectedRelativePath, rel);
 
         Assert.Equal(expectedRelativePath, testProject.GetRelativePath(absolutePath));
-        Assert.Equal(absolutePrefix, testProject.GetPrefixPath(absolutePath));
+        Assert.Equal(absolutePrefix, testProject.GetAbsoluteSubDirPath(absolutePath));
     }
 }

@@ -73,7 +73,6 @@
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" />
-    <PackageReference Include="Microsoft.Build.Framework" />
     <PackageReference Include="semver" />
     <PackageReference Include="System.Reflection.MetadataLoadContext" />
     <PackageReference Include="Serilog" />

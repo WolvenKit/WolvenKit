@@ -2,13 +2,10 @@ using System;
 using System.CommandLine;
 using System.CommandLine.Builder;
 using System.CommandLine.Hosting;
-using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using CP77Tools.Commands;
 using CP77Tools.Tasks;
-using Microsoft.Build.Framework;
+using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Compression;
 
