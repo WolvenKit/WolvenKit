@@ -238,7 +238,9 @@ public partial class WelcomePageViewModel : PageViewModel
             if (items.Count > 0)
             {
                 var item = items.First();
-                _recentlyUsedItemsService.AddItem(new RecentlyUsedItemModel(parameter, item.DateTime, item.LastOpened));
+                _recentlyUsedItemsService.AddOrUpdateItem(new RecentlyUsedItemModel(parameter, item.DateTime,
+                    item.LastOpened,
+                    ColorHelper.GetRandomColor()));
                 _recentlyUsedItemsService.RemoveItem(item);
                 return parameter;
             }
@@ -246,6 +248,8 @@ public partial class WelcomePageViewModel : PageViewModel
 
         return "";
     }
+
+    public void Refresh() => ConvertRecentProjects();
 
     private void ConvertRecentProjects() // Converts Recent projects for the homepage.
     {
