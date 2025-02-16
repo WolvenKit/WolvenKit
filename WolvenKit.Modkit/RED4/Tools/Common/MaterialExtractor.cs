@@ -279,6 +279,13 @@ public class MaterialExtractor
                 var status = TryFindFile2(parentFile, cMaterialInstance.BaseMaterial, out var result);
                 if (status is FindFileResult.NoCR2W or FindFileResult.FileNotFound || result.File!.RootChunk is not IMaterial childMaterial)
                 {
+                    if (Equals(DefaultMaterials.DefaultMaterialTemplateFile, parentFile) &&
+                        Equals(DefaultMaterials.DefaultMaterialInstance, material) &&
+                        Equals(materialName, dynamicMaterialName))
+                    {
+                        throw new Exception("Default material is missing!");
+                    }
+
                     // If there's anything wrong with the file, we're falling back to the default material 
                     (mergedMaterial, template) =
                         MergeMaterialChain(DefaultMaterials.DefaultMaterialTemplateFile, DefaultMaterials.DefaultMaterialInstance,
