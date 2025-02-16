@@ -4,7 +4,9 @@ using System.IO;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using WolvenKit.Common;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Interfaces;
 
 namespace CP77Tools.Commands;
@@ -40,6 +42,13 @@ internal class ExportCommand : CommandBase
         if (path is null || path.Length < 1)
         {
             logger.Error("Please fill in an input path.");
+            return ConsoleFunctions.ERROR_BAD_ARGUMENTS;
+        }
+
+        var meshExportArgs = serviceProvider.GetService<IOptions<MeshExportArgs>>();
+        if (meshExportArgs?.Value is { withMaterials: true } && gamepath == null)
+        {
+            logger.Error("Exporting mesh files with materials requires \"--gamepath\" to be set");
             return ConsoleFunctions.ERROR_BAD_ARGUMENTS;
         }
 
