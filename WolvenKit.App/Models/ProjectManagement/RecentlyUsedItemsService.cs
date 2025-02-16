@@ -8,6 +8,7 @@ using WolvenKit.App.Services;
 
 namespace WolvenKit.App.Models.ProjectManagement;
 
+
 public class RecentlyUsedItemsService : IRecentlyUsedItemsService
 {
     private static string GetConfigurationPath() => Path.Combine(ISettingsManager.GetAppData(), "recentItems.json");
@@ -35,7 +36,7 @@ public class RecentlyUsedItemsService : IRecentlyUsedItemsService
             .Subscribe(_ => Save());
     }
 
-    public void AddItem(RecentlyUsedItemModel itemModel)
+    public void AddOrUpdateItem(RecentlyUsedItemModel itemModel)
     {
         _recentlyUsedItems.Edit(innerCache => innerCache.AddOrUpdate(itemModel));
         Save();
