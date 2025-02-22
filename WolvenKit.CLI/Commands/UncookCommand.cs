@@ -16,7 +16,7 @@ namespace CP77Tools.Commands;
 
 internal class UncookCommand : CommandBase
 {
-    private const string s_description = "Target an archive to uncook files fom.";
+    private const string s_description = "Target an archive to uncook files from.";
     private const string s_name = "uncook";
     public UncookCommand() : base(s_name, s_description)
     {
