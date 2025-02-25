@@ -626,8 +626,9 @@ namespace WolvenKit.Modkit.RED4.Tools
             var numLodLevels = 1;
 
             var numSubmeshesPerLod = mesh.Appearances
-                .Where((app) => app.GetValue() is meshMeshAppearance)
-                .Select((app) => ((meshMeshAppearance)app.GetValue()!).ChunkMaterials.Count)
+                .Select((app) => app.GetValue()).OfType<meshMeshAppearance>()
+                .Select((app) => app.ChunkMaterials?.Count ?? 0)
+                .Append(0) // prevent exception if the list is empty
                 .Max();
             try
             {
