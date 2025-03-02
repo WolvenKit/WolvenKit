@@ -2441,7 +2441,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         try
         {
-            return Data is IRedCloneable irc ? (IRedType)irc.DeepCopy() : Data;
+            return Data switch
+            {
+                IRedBaseHandle baseHandle => baseHandle,
+                IRedCloneable irc => (IRedType)irc.DeepCopy(),
+                _ => Data
+            };
         }
         catch (Exception ex)
         {
@@ -2756,12 +2761,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return false;
         }
 
-        var copiedChunks = singleSelectOnly ? [RedDocumentTabViewModel.CopiedChunk!] : RedDocumentTabViewModel.GetCopiedChunks();
-
-        if (IsHandle(Data) && copiedChunks.Count == 1)
+        if (IsHandle(Data) && singleSelectOnly)
         {
-            return CheckTypeCompatibility(ResolvedData.GetType(), copiedChunks[0].GetType()) != TypeCompability.None;
+            return IsHandle(RedDocumentTabViewModel.CopiedChunk);
         }
+        
+        var copiedChunks = singleSelectOnly ? [RedDocumentTabViewModel.CopiedChunk!] : RedDocumentTabViewModel.GetCopiedChunks();
+        
         if (copiedChunks.Count == 0 ||
             (ResolvedData is not IRedArray && Parent is not { ResolvedData: IRedArray }))
         {
