@@ -19,19 +19,27 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.CR2W.Archive
 {
-    public partial class ArchiveManager(
-        IHashService hashService,
-        Red4ParserService wolvenkitFileService,
-        ILoggerService logger,
-        IProgressService<double> progress
-    ) : ObservableObject, IArchiveManager
+    public partial class ArchiveManager : ObservableObject, IArchiveManager
     {
+        public ArchiveManager(
+            IHashService hashService,
+            Red4ParserService wolvenkitFileService,
+            ILoggerService logger,
+            IProgressService<double> progressService
+        )
+        {
+            _hashService = hashService;
+            _wolvenkitFileService = wolvenkitFileService;
+            _logger = logger;
+            _progressServiceService = progressService;
+        }
+        
         #region Fields
 
-        protected readonly IHashService _hashService = hashService;
-        protected readonly Red4ParserService _wolvenkitFileService = wolvenkitFileService;
-        protected readonly ILoggerService _logger = logger;
-        protected readonly IProgressService<double> _progressService = progress;
+        private readonly IHashService _hashService;
+        private readonly Red4ParserService _wolvenkitFileService;
+        private readonly ILoggerService _logger;
+        private readonly IProgressService<double> _progressServiceService;
         
         [ObservableProperty] private bool _isManagerLoading;
         [ObservableProperty] private bool _isManagerLoaded;
@@ -300,7 +308,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             ignoredArchives ??= [];
             
             IsManagerLoading = true;
-            _progressService.IsIndeterminate = true;
+            _progressServiceService.IsIndeterminate = true;
 
             // clear all mod archives
             foreach (var item in GetModArchives().Select(x => x.ArchiveAbsolutePath))
@@ -417,22 +425,22 @@ namespace WolvenKit.RED4.CR2W.Archive
 
             var progress = 0;
 
-            _progressService.IsIndeterminate = false;
+            _progressServiceService.IsIndeterminate = false;
             foreach (var file in redModFiles.Where(f => !ignoredArchives.Contains(Path.GetFileName(f).Replace(".archive", ""))))
             {
                 LoadModArchive(file, analyzeFiles);
                 progress += 1;
-                _progressService.Report(progress / (float)numTotalEntries);
+                _progressServiceService.Report(progress / (float)numTotalEntries);
             }
 
             foreach (var file in legacyFiles.Where(f => !ignoredArchives.Contains(Path.GetFileName(f).Replace(".archive", ""))))
             {
                 LoadModArchive(file, analyzeFiles);
                 progress += 1;
-                _progressService.Report(progress / (float)numTotalEntries); 
+                _progressServiceService.Report(progress / (float)numTotalEntries); 
             }
 
-            _progressService.Completed(); 
+            _progressServiceService.Completed(); 
 
             IsManagerLoading = false;
             IsManagerLoaded = true;
@@ -471,7 +479,7 @@ namespace WolvenKit.RED4.CR2W.Archive
                 }
                 LoadModArchive(file, analyzeFiles);
                 progress += 1;
-                _progressService.Report(progress / totalFiles);
+                _progressServiceService.Report(progress / totalFiles);
             }
 
             files = files.Where(f => !ignoredArchives.Contains(Path.GetFileName(f).Replace(".archive", ""))).ToList();
@@ -493,7 +501,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             IsManagerLoading = false;
             IsManagerLoaded = true;
 
-            _progressService.Completed();
+            _progressServiceService.Completed();
         }
 
         #endregion

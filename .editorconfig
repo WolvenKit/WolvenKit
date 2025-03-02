@@ -110,6 +110,11 @@ csharp_style_expression_bodied_accessors = when_on_single_line:suggestion
 csharp_style_expression_bodied_lambdas = when_on_single_line:suggestion
 csharp_style_expression_bodied_local_functions = when_on_single_line:suggestion
 
+# disable primary constructors
+csharp_style_prefer_primary_constructors = false
+dotnet_diagnostic.IDE0290.severity = none
+resharper_convert_to_primary_constructor_highlighting = none
+
 # Expression-level preferences
 dotnet_style_object_initializer = true:suggestion
 dotnet_style_collection_initializer = true:suggestion
