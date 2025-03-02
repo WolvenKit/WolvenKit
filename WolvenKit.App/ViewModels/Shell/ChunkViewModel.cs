@@ -2335,7 +2335,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     /// <param name="isRegex"></param>
     /// <returns></returns>
     public Task<int> SearchAndReplaceAsync(string searchText, string replaceText, bool isWholeWord, bool isRegex) =>
-        Task.FromResult(SearchAndReplaceInternal(searchText, replaceText, isWholeWord, isRegex));
+        Task.FromResult(SearchAndReplaceInternal(searchText, replaceText, isWholeWord, isRegex, true));
 
     ///<inheritdoc cref="SearchAndReplaceAsync"/>
     public int SearchAndReplace(string searchText, string replaceText, bool isWholeWord, bool isRegex) =>
