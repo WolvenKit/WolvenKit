@@ -1004,8 +1004,8 @@ namespace WolvenKit.Views.Tools
                     propertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>));
         }
 
-        private bool CanPasteHandleSingle() => IsHandle(RedDocumentTabViewModel.CopiedChunk) &&
-                                               SelectedItem?.CanPasteSelection(true) == true;
+        private bool CanPasteHandleSingle() =>
+            IsHandle(SelectedItem?.Data) && IsHandle(RedDocumentTabViewModel.CopiedChunk);
 
         [RelayCommand(CanExecute = nameof(CanPasteHandleSingle))]
         private void PasteHandleSingle()
