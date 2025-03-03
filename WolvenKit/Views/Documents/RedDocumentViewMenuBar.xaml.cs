@@ -177,7 +177,7 @@ namespace WolvenKit.Views.Documents
             var allReferences = await _projectManager.ActiveProject.GetAllReferencesAsync(
                 _progressService,
                 _loggerService,
-                [s.Replace(_projectManager.ActiveProject.ModDirectory, "")]
+                [s.Replace($"{_projectManager.ActiveProject.ModDirectory}{Path.DirectorySeparatorChar}", "")]
             );
 
             var brokenReferences = await _projectManager.ActiveProject.ScanForBrokenReferencePathsAsync(
