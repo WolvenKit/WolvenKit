@@ -72,8 +72,8 @@ public class ImportableItemViewModel : ImportExportItemViewModel
                 },
 
             // common import
-            ERawFileFormat.fbx
-                or ERawFileFormat.csv => new CommonImportArgs(),
+            ERawFileFormat.fbx => new CommonImportArgs(),
+            // or ERawFileFormat.csv => new CommonImportArgs(),
 
             // everything else
             ERawFileFormat.ttf => new FntImportArgs(),
