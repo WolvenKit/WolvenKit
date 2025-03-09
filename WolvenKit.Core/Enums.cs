@@ -144,7 +144,8 @@ namespace WolvenKit.Common
         mesh,
         w2mesh,
         xbm,
-        csv,
+
+        // csv,
         //app,
         //ent,
         //json,
@@ -179,7 +180,7 @@ namespace WolvenKit.Common
         ttf,
         wav,
         masklist,
-        csv,
+        // csv,
         re,
         cube
     }

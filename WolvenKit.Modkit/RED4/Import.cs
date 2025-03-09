@@ -73,7 +73,7 @@ namespace WolvenKit.Modkit.RED4
                 ERawFileFormat.masklist => ImportMlmask(rawRelative, outDir),
                 ERawFileFormat.ttf => ImportTtf(rawRelative, outDir, commonImportArgs),
                 ERawFileFormat.wav => ImportWav(rawRelative, outDir, args.Get<OpusImportArgs>()),
-                ERawFileFormat.csv => ImportCsv(rawRelative, outDir, args),
+                // ERawFileFormat.csv => ImportCsv(rawRelative, outDir, args),
                 ERawFileFormat.re => await ImportAnims(rawRelative, outDir, args.Get<ReImportArgs>()),
                 _ => throw new ArgumentOutOfRangeException(),
             };
