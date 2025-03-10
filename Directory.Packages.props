@@ -39,8 +39,8 @@
     <PackageVersion Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
     <PackageVersion Include="Moq" Version="4.20.72" />
     <PackageVersion Include="MouseKeyHook" Version="5.7.1" />
-    <PackageVersion Include="MSTest.TestAdapter" Version="3.8.0" />
-    <PackageVersion Include="MSTest.TestFramework" Version="3.8.0" />
+    <PackageVersion Include="MSTest.TestAdapter" Version="3.8.2" />
+    <PackageVersion Include="MSTest.TestFramework" Version="3.8.2" />
     <PackageVersion Include="NAudio" Version="2.2.1" />
     <PackageVersion Include="NAudio.Lame" Version="2.1.0" />
     <PackageVersion Include="NAudio.Vorbis" Version="1.5.0" />
