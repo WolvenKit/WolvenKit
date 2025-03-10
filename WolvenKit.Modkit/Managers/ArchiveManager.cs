@@ -19,19 +19,27 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.CR2W.Archive
 {
-    public partial class ArchiveManager(
-        IHashService hashService,
-        Red4ParserService wolvenkitFileService,
-        ILoggerService logger,
-        IProgressService<double> progress
-    ) : ObservableObject, IArchiveManager
+    public partial class ArchiveManager : ObservableObject, IArchiveManager
     {
+        public ArchiveManager(
+            IHashService hashService,
+            Red4ParserService wolvenkitFileService,
+            ILoggerService logger,
+            IProgressService<double> progressService
+        )
+        {
+            _hashService = hashService;
+            _wolvenkitFileService = wolvenkitFileService;
+            _logger = logger;
+            _progressService = progressService;
+        }
+        
         #region Fields
 
-        protected readonly IHashService _hashService = hashService;
-        protected readonly Red4ParserService _wolvenkitFileService = wolvenkitFileService;
-        protected readonly ILoggerService _logger = logger;
-        protected readonly IProgressService<double> _progressService = progress;
+        private readonly IHashService _hashService;
+        private readonly Red4ParserService _wolvenkitFileService;
+        private readonly ILoggerService _logger;
+        private readonly IProgressService<double> _progressService;
         
         [ObservableProperty] private bool _isManagerLoading;
         [ObservableProperty] private bool _isManagerLoaded;
