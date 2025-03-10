@@ -18,7 +18,7 @@ public partial class CPhysicsDecorationResource : IRedAppendix
     [REDProperty(IsIgnored = true)]
     public DataBuffer Unk2
     {
-        get => GetPropertyValue<DataBuffer>();
+        get => GetPropertyValue<DataBuffer>()!; // set in PostConstruct, so not nullable
         set => SetPropertyValue<DataBuffer>(value);
     }
 

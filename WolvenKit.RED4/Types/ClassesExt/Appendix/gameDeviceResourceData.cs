@@ -10,7 +10,7 @@ public partial class gameDeviceResourceData : IRedAppendix
     [REDProperty(IsIgnored = true)]
     public CArray<gameDeviceResourceData_Cls1> Unk1
     {
-        get => GetPropertyValue<CArray<gameDeviceResourceData_Cls1>>();
+        get => GetPropertyValue<CArray<gameDeviceResourceData_Cls1>>()!; // set in PostConstruct, so not nullable
         set => SetPropertyValue<CArray<gameDeviceResourceData_Cls1>>(value);
     }
 
