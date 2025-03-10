@@ -32,17 +32,19 @@ public partial class ChunkViewModel
     /// <param name="replace"></param>
     /// <param name="isWholeWord"></param>
     /// <param name="isRegex"></param>
+    /// <param name="ignoreCache"></param>
     /// <returns></returns>
-    private int SearchAndReplaceInternal(string search, string replace, bool isWholeWord, bool isRegex)
+    private int SearchAndReplaceInternal(string search, string replace, bool isWholeWord, bool isRegex,
+        bool ignoreCache = false)
     {
         NumReplacedEntries = 0;
         var isExpanded = IsExpanded;
 
         // SearchAndReplaceInProperties can influence the expansion state, even if nothing was changed
-        var hasReplacement = SearchAndReplaceInProperties(search, replace, isWholeWord, isRegex);
+        var hasReplacement = SearchAndReplaceInProperties(search, replace, isWholeWord, isRegex, ignoreCache);
         IsExpanded = isExpanded;
 
-        if (hasReplacement)
+        if (!hasReplacement)
         {
             return NumReplacedEntries;
         }
@@ -55,11 +57,12 @@ public partial class ChunkViewModel
 
 
     // Level 1 (will call itself recursively, so let's abort here if we can)
-    private bool SearchAndReplaceInProperties(string search, string replace, bool isWholeWord, bool isRegex)
+    private bool SearchAndReplaceInProperties(string search, string replace, bool isWholeWord, bool isRegex,
+        bool ignoreCache = false)
     {
         var properties = Properties.ToList();
 
-        if (s_resolvedHashes.Contains(GetHashCode()))
+        if (!ignoreCache && s_resolvedHashes.Contains(GetHashCode()))
         {
             return false;
         }
