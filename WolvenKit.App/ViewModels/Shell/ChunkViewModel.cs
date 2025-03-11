@@ -2326,21 +2326,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         catch (Exception ex) { _loggerService.Error(ex); }
     }
 
-    /// <summary>
-    /// Returns the number of replacements made, 0 if none
-    /// </summary>
-    /// <param name="searchText"></param>
-    /// <param name="replaceText"></param>
-    /// <param name="isWholeWord"></param>
-    /// <param name="isRegex"></param>
-    /// <returns></returns>
-    public Task<int> SearchAndReplaceAsync(string searchText, string replaceText, bool isWholeWord, bool isRegex) =>
-        Task.FromResult(SearchAndReplaceInternal(searchText, replaceText, isWholeWord, isRegex, true));
-
-    ///<inheritdoc cref="SearchAndReplaceAsync"/>
-    public int SearchAndReplace(string searchText, string replaceText, bool isWholeWord, bool isRegex) =>
-        SearchAndReplaceInternal(searchText, replaceText, isWholeWord, isRegex);
-
     private bool CanCopyHandle() => Data is IRedBaseHandle;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanCopyHandle))]
     private void CopyHandle()
