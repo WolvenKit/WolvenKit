@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using WolvenKit.App.Helpers;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
@@ -10,11 +12,26 @@ namespace WolvenKit.App.ViewModels.Shell;
 
 public partial class ChunkViewModel
 {
-    private static readonly List<int> s_resolvedHashes = [];
+    private static readonly ConcurrentBag<int> s_resolvedHashes = [];
 
     private static readonly List<string> s_replacedStrings = [];
 
     public int NumReplacedEntries;
+
+    /// <summary>
+    /// Returns the number of replacements made, 0 if none
+    /// </summary>
+    /// <param name="searchText"></param>
+    /// <param name="replaceText"></param>
+    /// <param name="isWholeWord"></param>
+    /// <param name="isRegex"></param>
+    /// <returns></returns>
+    public Task<int> SearchAndReplaceAsync(string searchText, string replaceText, bool isWholeWord, bool isRegex) =>
+        Task.FromResult(SearchAndReplaceInternal(searchText, replaceText, isWholeWord, isRegex));
+
+    ///<inheritdoc cref="SearchAndReplaceAsync"/>
+    public int SearchAndReplace(string searchText, string replaceText, bool isWholeWord, bool isRegex) =>
+        SearchAndReplaceInternal(searchText, replaceText, isWholeWord, isRegex);
 
     /// <summary>
     /// Resets the internal cache so that search and replace operations aren't run twice
@@ -32,6 +49,7 @@ public partial class ChunkViewModel
     /// <param name="replace"></param>
     /// <param name="isWholeWord"></param>
     /// <param name="isRegex"></param>
+    /// <param name="ignoreCache"></param>
     /// <returns></returns>
     private int SearchAndReplaceInternal(string search, string replace, bool isWholeWord, bool isRegex)
     {
@@ -42,7 +60,7 @@ public partial class ChunkViewModel
         var hasReplacement = SearchAndReplaceInProperties(search, replace, isWholeWord, isRegex);
         IsExpanded = isExpanded;
 
-        if (hasReplacement)
+        if (!hasReplacement)
         {
             return NumReplacedEntries;
         }

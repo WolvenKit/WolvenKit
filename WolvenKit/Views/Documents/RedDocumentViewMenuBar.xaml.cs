@@ -526,6 +526,11 @@ namespace WolvenKit.Views.Documents
                 destFolder, materialDependencies
             );
 
+            if (pathReplacements.Count is 0)
+            {
+                return;
+            }
+            
             switch (rootChunk.ResolvedData)
             {
                 case CMaterialInstance:
