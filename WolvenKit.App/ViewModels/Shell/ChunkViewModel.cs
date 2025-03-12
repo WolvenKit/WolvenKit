@@ -2366,8 +2366,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         var gt = propertyType.GetGenericTypeDefinition();
-        return (weakHandleOnly && gt == typeof(CWeakHandle<>)) || gt == typeof(CWeakHandle<>) ||
-               gt == typeof(CHandle<>);
+        return (weakHandleOnly && gt == typeof(CWeakHandle<>)) || 
+            !weakHandleOnly && (gt == typeof(CWeakHandle<>) || gt == typeof(CHandle<>)
+        );
     }
 
 
