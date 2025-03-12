@@ -1414,6 +1414,7 @@ namespace WolvenKit.Modkit.RED4
             }*/
 
             var lods = new List<uint>();
+            var meshNames = model.LogicalMeshes.Select(m => m.Name).ToList();
             foreach (var m in model.LogicalMeshes)
             {
                 var accessors = m.Primitives[0].VertexAccessors.Keys.ToList();
@@ -1439,21 +1440,31 @@ namespace WolvenKit.Modkit.RED4
 
                 if (name.Contains("LOD"))
                 {
-                    var idx = name.IndexOf("LOD_");
-                    if (idx < name.Length - 1)
+                    if (name.EndsWith("LOD_0") && name.Replace("LOD_0", "LOD_8") is string newName &&
+                        !meshNames.Contains(newName))
                     {
-                        if (!uint.TryParse(name.AsSpan(idx + 4, 1), out lod))
-                        {
-                            throw new Exception("Invalid Geometry/sub mesh name: " + name + " , Character after \"LOD_\" should be 1 or 2 or 4 or 8, Representing the Level of Detail (LOD) of the submesh.");
-                        }
-
-                        if (lod is not 1 and not 2 and not 4 and not 8)
-                        {
-                            throw new Exception("Invalid Geometry/sub mesh name: " + name + " , Character after \"LOD_\"  should be 1 or 2 or 4 or 8, Representing the Level of Detail (LOD) of the submesh.");
-                        }
-
-                        lods.Add(lod);
+                        name = newName;
                     }
+
+                    var idx = name.IndexOf("LOD_", StringComparison.Ordinal);
+                    if (idx >= name.Length - 1)
+                    {
+                        continue;
+                    }
+
+                    if (!uint.TryParse(name.AsSpan(idx + 4, 1), out lod))
+                    {
+                        throw new Exception("Invalid Geometry/sub mesh name: " + name +
+                                            " , Character after \"LOD_\" should be 1 or 2 or 4 or 8, Representing the Level of Detail (LOD) of the submesh.");
+                    }
+
+                    if (lod is not 1 and not 2 and not 4 and not 8)
+                    {
+                        throw new Exception("Invalid Geometry/sub mesh name: " + name +
+                                            " , Character after \"LOD_\"  should be 1 or 2 or 4 or 8, Representing the Level of Detail (LOD) of the submesh.");
+                    }
+
+                    lods.Add(lod);
                 }
                 else
                 {
