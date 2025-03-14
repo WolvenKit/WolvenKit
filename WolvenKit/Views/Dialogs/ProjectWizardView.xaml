@@ -9,6 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    xmlns:controls="clr-namespace:WolvenKit.Views.Others"
     mc:Ignorable="av"
     Width="{DynamicResource WolvenKitDialogWidthSmall}"
     Background="{StaticResource ContentBackgroundAlt3}"
@@ -53,7 +54,6 @@
             x:Name="ProjectNameTextBox"
             Grid.Row="1"
             Grid.Column="0"
-            Grid.ColumnSpan="2"
             Margin="{DynamicResource WolvenKitMarginVertical}"
             hc:InfoElement.Necessary="True"
             hc:InfoElement.Title="Project Name"
@@ -65,6 +65,16 @@
                            ValidatesOnNotifyDataErrors=True}"
             TextChanged="ProjectNameTextBox_OnTextChanged"
             Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" />
+
+        <controls:ColorPickerButton
+            x:Name="ProjectColorButton"
+            Grid.Row="1"
+            Grid.Column="1"
+            Width="40"
+            Height="22"
+            Margin="0"
+            Color="{Binding ProjectColor,
+                            Mode=TwoWay}" />
 
         <hc:TextBox
             x:Name="ProjectPathTextBox"
