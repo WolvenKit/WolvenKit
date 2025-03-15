@@ -127,10 +127,6 @@ namespace WolvenKit.FunctionalTests
             var exePath = new FileInfo(Path.Combine(gameDirectory.FullName, "bin", "x64", "Cyberpunk2077.exe"));
             s_bm.LoadGameArchives(exePath);
             s_groupedFiles = s_bm.GetGroupedFiles(ArchiveManagerScope.Basegame);
-
-            var keyes = s_groupedFiles.Keys.ToList();
-            var keystring = string.Join(',', keyes);
-            //Console.WriteLine(keystring);
         }
 
     }
