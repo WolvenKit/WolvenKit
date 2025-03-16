@@ -65,7 +65,7 @@ public partial class ArchiveXlHelper
         {
             { "camera", ["fpp", "tpp"] }, //
             { "feet", ["lifted", "flat", "high_heels", "flat_shoes"] }, //
-            { "arms", ["base_arms", "mantis_blades", "monowire", "projectile_launch"] }, //
+            { "arms", ["base_arms", "mantis_blades", "monowire", "projectile_launcher"] }, //
             { "gender", ["m", "w"] },
             { "body", ["base_body", "for a list check https://tinyurl.com/cyberpunk-body-mods"] },
         };
