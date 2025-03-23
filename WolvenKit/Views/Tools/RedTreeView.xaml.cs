@@ -537,6 +537,16 @@ namespace WolvenKit.Views.Tools
             return GetSelectedChunks() is { Count: > 0 } list && list.All(cvm => cvm.CanCopySelection());
         }
 
+        private void CopySingleSelection(ChunkViewModel single, bool copyAsHandle = false)
+        {
+            RedDocumentTabViewModel.CopiedChunk = single.CopyData(copyAsHandle);
+            single.RefreshCommandStatus();
+            single.RefreshContextMenuFlags();
+            SetCurrentValue(HasSingleItemCopiedProperty, true);
+            SetCurrentValue(HasHandleCopiedProperty, ChunkViewModel.IsHandle(RedDocumentTabViewModel.CopiedChunk));
+            RefreshCommandStatus();
+        }
+
         [RelayCommand(CanExecute = nameof(CanCopySelection))]
         private void CopySelection()
         {
@@ -544,12 +554,7 @@ namespace WolvenKit.Views.Tools
 
             if (selection.Count == 1 && selection.First() is ChunkViewModel single)
             {
-                RedDocumentTabViewModel.CopiedChunk = single.CopyData();
-                single.RefreshCommandStatus();
-                single.RefreshContextMenuFlags();
-                SetCurrentValue(HasSingleItemCopiedProperty, true);
-                SetCurrentValue(HasHandleCopiedProperty, ChunkViewModel.IsHandle(RedDocumentTabViewModel.CopiedChunk));
-                RefreshCommandStatus();
+                CopySingleSelection(single);
                 return;
             }
 
@@ -568,6 +573,17 @@ namespace WolvenKit.Views.Tools
             }
 
             RefreshPasteCommandStatus();
+        }
+
+        [RelayCommand(CanExecute = nameof(CanCopySelection))]
+        private void CopyHandle()
+        {
+            if (SelectedItem is not ChunkViewModel single)
+            {
+                return;
+            }
+
+            CopySingleSelection(single, true);
         }
 
         #endregion

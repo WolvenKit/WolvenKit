@@ -2438,13 +2438,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         catch (Exception ex) { _loggerService.Error(ex); }
     }
 
-    public IRedType? CopyData()
+    public IRedType? CopyData(bool copyAsHandle = false)
     {
         try
         {
             return Data switch
             {
-                IRedBaseHandle baseHandle => baseHandle,
+                IRedBaseHandle baseHandle when copyAsHandle => baseHandle,
                 IRedCloneable irc => (IRedType)irc.DeepCopy(),
                 _ => Data
             };
