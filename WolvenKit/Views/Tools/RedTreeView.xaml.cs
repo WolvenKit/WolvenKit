@@ -832,6 +832,7 @@ namespace WolvenKit.Views.Tools
             ClearArrayCommand.NotifyCanExecuteChanged();
             DeleteSelectionCommand.NotifyCanExecuteChanged();
             DeleteAllButSelectionCommand.NotifyCanExecuteChanged();
+            CopyHandleCommand.NotifyCanExecuteChanged();
 
             SelectedItem?.RefreshCommandStatus();
         }
