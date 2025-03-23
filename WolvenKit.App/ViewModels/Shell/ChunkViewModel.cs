@@ -2438,6 +2438,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         catch (Exception ex) { _loggerService.Error(ex); }
     }
 
+    /// <summary>
+    /// Handles data copy for pasting into another node.
+    /// </summary>
+    /// <param name="copyAsHandle">Copy reference instead of data?</param>
     public IRedType? CopyData(bool copyAsHandle = false)
     {
         try
