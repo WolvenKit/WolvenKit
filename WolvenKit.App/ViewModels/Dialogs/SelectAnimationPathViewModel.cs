@@ -106,6 +106,12 @@ public partial class SelectAnimationPathViewModel : ObservableObject
         "base\\animations\\xbaebsae\\pm_facials\\fem\\xbae_pm_facials_15.anims",
     ];
 
+    // xbae never hooked up pm_facials for masc, they all use the same files
+    public static readonly List<string> PhotomodeAnimEntriesMaleDefault = PhotomodeAnimEntriesFemaleDefault.Select(
+        str => str.Replace("photomode_female_facial.anims", "photomode_male_facial.anims")
+    ).ToList();
+   
+
     private static readonly List<string> NPCAnimEntries =
     [
         "base\\animations\\facial\\male_average\\interactive_scene\\e3_male_average_custom_animations.anims",
