@@ -119,16 +119,20 @@ public class DocumentTools
         return appAppearanceNames;
     }
 
-
+    /// <summary>
+    /// Sets facial animations. Normally, we'd be defaulting to female because who has masc characters anyway,
+    /// yet in this case we have big/massive, who all default to the male animset. 
+    /// </summary>
     public void SetFacialAnimations(string absoluteAppFilePath, PhotomodeBodyGender bodyGender)
     {
         var facialAnim = SelectAnimationPathViewModel.FacialAnimPathMale;
+        var selectedAnims = SelectAnimationPathViewModel.PhotomodeAnimEntriesMaleDefault;
+
         if (bodyGender is PhotomodeBodyGender.Female)
         {
             facialAnim = SelectAnimationPathViewModel.FacialAnimPathFemale;
+            selectedAnims = SelectAnimationPathViewModel.PhotomodeAnimEntriesFemaleDefault;
         }
-
-        var selectedAnims = SelectAnimationPathViewModel.PhotomodeAnimEntriesFemaleDefault;
 
         SetFacialAnimations(absoluteAppFilePath, facialAnim, null, selectedAnims);
     }
