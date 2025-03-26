@@ -2,10 +2,18 @@
 
 namespace WolvenKit.App.Models;
 
-public class SaveGame(string dirName, string screenshot, string save, DateTime lastModified)
+public class SaveGame
 {
-    public string DirName { get; set; } = dirName;
-    public string Screenshot { get; set; } = screenshot;
-    public string Save { get; set; } = save;
-    public DateTime LastModified { get; set; } = lastModified;
+    public SaveGame(string dirName, string screenshot, string save, DateTime lastModified)
+    {
+        DirName = dirName;
+        Screenshot = screenshot;
+        Save = save;
+        LastModified = lastModified;
+    }
+
+    public string DirName { get; set; }
+    public string Screenshot { get; set; }
+    public string Save { get; set; }
+    public DateTime LastModified { get; set; } 
 }

@@ -18,8 +18,8 @@ internal class NodeProperties
 
         details["Type"] = GetNameFromClass(node);
 
-        var _settingsManager = Locator.Current.GetService<ISettingsManager>();
-        if (_settingsManager != null && !_settingsManager.ShowGraphEditorNodeProperties)
+        var settingsManager = Locator.Current.GetService<ISettingsManager>();
+        if (settingsManager != null && !settingsManager.ShowGraphEditorNodeProperties)
         {
             return details;
         }
