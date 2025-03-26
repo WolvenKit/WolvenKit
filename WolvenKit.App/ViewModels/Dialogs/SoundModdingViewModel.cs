@@ -18,7 +18,7 @@ using WolvenKit.Modkit.RED4.Sounds;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 
-public partial class SoundModdingViewModel : DialogViewModel
+public partial class SoundModdingViewModel : DialogExtViewModel
 {
     private readonly INotificationService _notificationService;
     private readonly ILoggerService _logger;
@@ -140,6 +140,7 @@ public partial class SoundModdingViewModel : DialogViewModel
     {
         if (_projectManager.ActiveProject is null)
         {
+            Close();
             return;
         }
 
@@ -198,10 +199,16 @@ public partial class SoundModdingViewModel : DialogViewModel
             File.WriteAllText(modInfoJsonPath, jsonString);
             _notificationService.Success($"Saved sound configuration to {modInfoJsonPath}");
         }
+
+        Close();
     }
 
     [RelayCommand]
-    private void Cancel() => FileHandler?.Invoke(null);
+    private void Cancel()
+    {
+        FileHandler?.Invoke(null);
+        Close();
+    }
 
     [RelayCommand]
     private void Add()
