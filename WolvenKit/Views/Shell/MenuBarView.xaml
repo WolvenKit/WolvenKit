@@ -244,16 +244,40 @@
                 </MenuItem>
 
                 <MenuItem
-                    x:Name="ToolbarProjectDeleteEmptyFoldersButton"
+                    x:Name="ToolbarCleanupButton"
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
-                    Header="Delete empty folders">
+                    Header="Clean up">
                     <MenuItem.Icon>
-                        <local:IconBox
-                            IconPack="Material"
-                            Kind="FolderRemove"
-                            Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="{StaticResource WolvenKitRed}" />
+                        <local:IconBox IconPack="Empty" />
                     </MenuItem.Icon>
+
+                    <MenuItem
+                        x:Name="ToolbarProjectDeleteEmptyFoldersButton"
+                        Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                        Header="Delete empty folders">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="Material"
+                                Kind="FolderRemove"
+                                Size="{DynamicResource WolvenKitIconTiny}"
+                                Foreground="{StaticResource WolvenKitRed}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <MenuItem
+                        x:Name="ToolbarProjectDeleteEmptyMeshesButton"
+                        Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                        Header="Delete empty meshes">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="Material"
+                                Kind="DeleteForever"
+                                Size="{DynamicResource WolvenKitIconTiny}"
+                                Foreground="{StaticResource WolvenKitRed}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+
                 </MenuItem>
 
                 <MenuItem
