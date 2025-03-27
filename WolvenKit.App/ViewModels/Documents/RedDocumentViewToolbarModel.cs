@@ -280,6 +280,19 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         // do nothing, we're handling this in view model's click 
     }
 
+    /*
+     * app: delete unused animation components
+     */
+    private bool CanDeleteUnusedAnimationComponents() => RootChunk?.ResolvedData is appearanceAppearanceResource app &&
+                                                         app.Appearances.Count > 0;
+
+    [RelayCommand(CanExecute = nameof(CanDeleteUnusedAnimationComponents))]
+    private void DeleteUnusedAnimationComponents()
+    {
+        // do nothing, we're handling this in view model's click 
+    }
+
+    
     #endregion
 
     #region jsonFile

@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using HandyControl.Tools.Extension;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App;
@@ -829,6 +830,74 @@ namespace WolvenKit.Views.Documents
         /// </summary>
         private void OnClearPartsValuesClick(object _, RoutedEventArgs e) =>
             ClearAppearancePropertyChild("partsValues");
+
+        /// <summary>
+        /// Called from view: remove all animationComponents that are not used from all appearances
+        /// </summary>
+        private void OnDeleteUnusedAnimationComponentsClick(object _, RoutedEventArgs e)
+        {
+            if (CurrentTab?.FilePath is not string filePath)
+            {
+                return;
+            }
+
+            var cr2w = _cr2WTools.ReadCr2W(filePath);
+            if (cr2w?.RootChunk is not appearanceAppearanceResource appFile)
+            {
+                return;
+            }
+
+            HashSet<string> usedNames = [];
+
+            var wasChanged = false;
+            foreach (var appearance in appFile.Appearances
+                         .Where(app => app.Chunk is not null)
+                         .Select(app => app.Chunk!))
+            {
+                foreach (var component in appearance.Components.OfType<entSkinnedMeshComponent>())
+                {
+                    if (component.ParentTransform?.Chunk is entITransformBinding { BindName: var bindName } &&
+                        !bindName.GetResolvedText().IsNullOrEmpty())
+                    {
+                        usedNames.Add(bindName.GetResolvedText()!);
+                    }
+
+                    if (component.Skinning?.Chunk is entSkinningBinding { BindName: var skinning } &&
+                        !skinning.GetResolvedText().IsNullOrEmpty())
+                    {
+                        usedNames.Add(skinning.GetResolvedText()!);
+                    }
+                }
+
+                var usedComponents = appearance.Components.Where(comp =>
+                        comp is not entAnimatedComponent || comp.Name.GetResolvedText() is not string s ||
+                        usedNames.Contains(s))
+                    .ToList();
+
+                if (usedComponents.Count() == appearance.Components.Count())
+                {
+                    continue;
+                }
+
+                wasChanged = true;
+                appearance.Components.Clear();
+                foreach (var entIComponent in usedComponents)
+                {
+                    appearance.Components.Add(entIComponent);
+                }
+            }
+
+            if (!wasChanged)
+            {
+                _loggerService.Success("Nothing to do here!");
+                return;
+            }
+
+            _cr2WTools.WriteCr2W(cr2w, filePath);
+            _loggerService.Success("... done!");
+
+            _currentTab?.Parent.Reload(false);
+        }
 
         private static List<ChunkViewModel> GetComponentsByName(ChunkViewModel cvm, string componentName)
         {
