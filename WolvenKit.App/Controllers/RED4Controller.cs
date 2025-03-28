@@ -466,12 +466,7 @@ public class RED4Controller : ObservableObject, IGameController
     /// This method will move everything into ModDirectory/packed.
     /// </summary>
     private async Task<bool> PackProjectFilesAsync(LaunchProfile options, Cp77Project cp77Proj)
-    {
-        if (options is { CreateZipFile: false, Install: false })
-        {
-            return true;
-        }
-        
+    {        
         // copy files to packed dir
         // pack archives
         var modfiles = Directory.EnumerateFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories).ToList();
