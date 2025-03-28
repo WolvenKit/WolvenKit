@@ -179,6 +179,13 @@
                         Value="{x:Static documents:RedDocumentItemType.Json}">
                         <Setter Property="Visibility" Value="Visible" />
                     </DataTrigger>
+
+                    <DataTrigger
+                        Binding="{Binding Path=ContentType,
+                                          UpdateSourceTrigger=PropertyChanged}"
+                        Value="{x:Static documents:RedDocumentItemType.App}">
+                        <Setter Property="Visibility" Value="Visible" />
+                    </DataTrigger>
                 </Style.Triggers>
             </Style>
 
@@ -450,7 +457,7 @@
                 </MenuItem>
             </MenuItem>
 
-            <!-- Clean up: .mesh / .json -->
+            <!-- Clean up: .mesh / .json / .app -->
             <MenuItem
                 Style="{StaticResource ShowCleanUpMenuItemStyle}"
                 Header="Clean up"
@@ -462,6 +469,20 @@
                         Kind="Recycle"
                         Foreground="{StaticResource WolvenKitRed}" />
                 </MenuItem.Icon>
+
+                <MenuItem
+                    Style="{StaticResource ShowAppMenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Header="Delete unused animated components"
+                    Command="{Binding Path=DeleteUnusedAnimationComponentsCommand}"
+                    Click="OnDeleteUnusedAnimationComponentsClick">
+                    <MenuItem.Icon>
+                        <templates:IconBox IconPack="Empty" />
+                    </MenuItem.Icon>
+                </MenuItem>
 
                 <MenuItem
                     Style="{StaticResource ShowMeshMenuItemStyle}"

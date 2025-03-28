@@ -957,6 +957,70 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private void DeleteEmptyFolders() => _projectManager.ActiveProject?.DeleteEmptyFolders(_loggerService);
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
+    private void DeleteEmptyMeshes()
+    {
+        if (_projectManager.ActiveProject is not Cp77Project activeProject)
+        {
+            return;
+        }
+
+        _progressService.IsIndeterminate = true;
+        var meshes = activeProject.ModFiles.Where(fileName => fileName.EndsWith(".mesh"))
+            .Where(fileName => new FileInfo(activeProject.GetAbsolutePath(fileName)).Length < 20000)
+            .Where(meshFilePath =>
+            {
+                var cr2w = _cr2WTools.ReadCr2W(activeProject.GetAbsolutePath(meshFilePath));
+                if (cr2w?.RootChunk is not CMesh mesh || mesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob blob)
+                {
+                    return false;
+                }
+
+                // anything with 3 verts counts as empty
+                var isNotEmpty = blob.Header.RenderChunkInfos.Count(rendChunk => rendChunk.NumVertices > 3) > 0;
+                return !isNotEmpty;
+            }).ToList();
+
+        _progressService.IsIndeterminate = false;
+        if (meshes.Count == 0)
+        {
+            return;
+        }
+
+        if (!Interactions.ShowQuestionYesNo((
+                $"The following meshes seem to be empty:\n{string.Join('\n', meshes)}", "Delete empty meshes?")))
+        {
+            return;
+        }
+
+        _progressService.IsIndeterminate = true;
+        foreach (var absolutePath in meshes.Select(mesh => activeProject.GetAbsolutePath(mesh)).Where(File.Exists))
+        {
+            File.Delete(absolutePath);
+        }
+
+        _progressService.IsIndeterminate = false;
+
+        if (!Interactions.ShowQuestionYesNo(("Try to clean up references in files?", "Delete references?")))
+        {
+            return;
+        }
+
+        _progressService.IsIndeterminate = true;
+        var changedFilePaths = AppFileHelper.DeleteMeshComponentsByReference(_cr2WTools, activeProject, meshes);
+
+        var appFilePaths = activeProject.ModFiles.Where(f => f.EndsWith(".app")).ToList();
+        changedFilePaths.AddRange(AppFileHelper.DeleteUnusedAnimComponents(_cr2WTools, activeProject, appFilePaths));
+        _progressService.IsIndeterminate = false;
+        if (changedFilePaths.Count == 0)
+        {
+            return;
+        }
+
+        _loggerService.Success("Cleaned up references to your meshes in the following files:\n\t" +
+                               string.Join("\n\t", changedFilePaths));
+    }
+
+    [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private async Task FindUnusedFiles()
     {
         _loggerService.Info($"Scanning {ActiveProject!.ModFiles.Count} files. Please wait...");
