@@ -22,10 +22,12 @@ public partial class NewFileViewModel : DialogViewModel
     public delegate Task ReturnHandler(NewFileViewModel? file);
     public ReturnHandler? FileHandler;
     private readonly IProjectManager _projectManager;
+    private readonly ISettingsManager _settingsManager;
 
-    public NewFileViewModel(IProjectManager projectManager)
+    public NewFileViewModel(IProjectManager projectManager, ISettingsManager settingsManager)
     {
         _projectManager = projectManager;
+        _settingsManager = settingsManager;
 
         Title = "Create new file";
 
@@ -109,12 +111,17 @@ public partial class NewFileViewModel : DialogViewModel
             return;
         }
 
+        var defaultSubfolder = _settingsManager.ModderName ?? "";
+        
 #pragma warning disable IDE0072 // Add missing cases
         FileName = SelectedFile?.Type switch
         {
-            EWolvenKitFile.TweakXl => Path.Combine("r6", "tweaks", project.Name, $"untitled.{value.Extension.NotNull().ToLower()}"),
-            EWolvenKitFile.RedScript => Path.Combine("r6", "scripts", project.Name, $"untitled.{value.Extension.NotNull().ToLower()}"),
+            EWolvenKitFile.TweakXl => Path.Combine("r6", "tweaks", defaultSubfolder,
+                $"{project.Name}.{value.Extension.NotNull().ToLower()}"),
+            EWolvenKitFile.RedScript => Path.Combine("r6", "scripts", defaultSubfolder,
+                $"{project.Name}.{value.Extension.NotNull().ToLower()}"),
             EWolvenKitFile.CETLua => Path.Combine("bin", "x64", "plugins", "cyber_engine_tweaks", "mods", project.Name, $"init.{value.Extension.NotNull().ToLower()}"),
+            EWolvenKitFile.ArchiveXl => $"{project.Name}.archive.{value.Extension.NotNull().ToLower()}",
             _ => $"{value.Name.NotNull().Split(' ').First()}1.{value.Extension.NotNull().ToLower()}",
         };
 #pragma warning restore IDE0072 // Add missing cases
