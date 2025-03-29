@@ -276,10 +276,6 @@ public class RED4Controller : ObservableObject, IGameController
         };
     }
 
-    private static List<string> GetScriptFiles(Cp77Project cp77Proj)
-        => Directory.EnumerateFiles(cp77Proj.ResourceScriptsDirectory, "*.*", SearchOption.AllDirectories).Where(name => IsCDPRScript(name))
-            .ToList();
-
     private static List<string> GetArchiveXlFiles(Cp77Project cp77Proj) =>
         Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*.xl", SearchOption.AllDirectories).ToList();
 
@@ -288,8 +284,11 @@ public class RED4Controller : ObservableObject, IGameController
         .Where(name => !IsSpecialExtension(name))
         .Where(x => Path.GetFileName(x) != "info.json").ToList();
 
-    private static List<string> GetTweakFiles(Cp77Project cp77Proj) =>
-        Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*.tweak", SearchOption.AllDirectories).ToList();
+    private static List<string> GetREDmodScriptFiles(Cp77Project cp77Proj) =>
+        Directory.EnumerateFiles(Path.Combine(cp77Proj.ResourcesDirectory, "scripts"), "*.*", SearchOption.AllDirectories).Where(name => IsCDPRScript(name)).ToList();
+
+    private static List<string> GetREDmodTweakFiles(Cp77Project cp77Proj) =>
+        Directory.EnumerateFiles(Path.Combine(cp77Proj.ResourcesDirectory, "tweaks"), "*.tweak", SearchOption.AllDirectories).ToList();
 
     /// <summary>
     /// Pack mod with options
@@ -469,10 +468,10 @@ public class RED4Controller : ObservableObject, IGameController
     {        
         // copy files to packed dir
         // pack archives
-        var modfiles = Directory.EnumerateFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories).ToList();
-        if (modfiles.Any())
+        var archives = Directory.EnumerateFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories).ToList();
+        if (archives.Count != 0)
         {
-            var invalidFiles = modfiles
+            var invalidFiles = archives
                 .Select(f => Path.GetRelativePath(cp77Proj.ModDirectory, f))
                 .Where(f => f.Any(char.IsUpper) || f.Any(char.IsWhiteSpace)).ToList();
             if (invalidFiles.Count != 0)
@@ -510,7 +509,7 @@ public class RED4Controller : ObservableObject, IGameController
             _loggerService.Info($"{cp77Proj.Name} archiveXL files packed into {cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)}");
         }
 
-        // pack resources
+        // pack generic resources excluding script and tweak files
         files = GetResourceFiles(cp77Proj);
         if (files.Count != 0)
         {
@@ -672,7 +671,7 @@ public class RED4Controller : ObservableObject, IGameController
         }
 
         // tweaks
-        var files = GetTweakFiles(cp77Proj);
+        var files = GetREDmodTweakFiles(cp77Proj);
         if (files.Count != 0)
         {
             foreach (var file in files)
@@ -693,25 +692,23 @@ public class RED4Controller : ObservableObject, IGameController
         }
 
         // scripts
-        files = GetScriptFiles(cp77Proj);
-        if (files.Count == 0)
+        files = GetREDmodScriptFiles(cp77Proj);
+        if (files.Count != 0)
         {
-            return true;
-        }
-
-        foreach (var file in files)
-        {
-            var fileName = Path.GetFileName(file);
-            var fileRelativeDir = Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(file).NotNull());
-            var fileOutputDir = Path.Combine(cp77Proj.PackedRedModDirectory, fileRelativeDir);
-            var fileOutputPath = Path.Combine(fileOutputDir, fileName);
-            if (!Directory.Exists(fileOutputDir))
+            foreach (var file in files)
             {
-                Directory.CreateDirectory(fileOutputDir);
-            }
+                var fileName = Path.GetFileName(file);
+                var fileRelativeDir = Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(file).NotNull());
+                var fileOutputDir = Path.Combine(cp77Proj.PackedRedModDirectory, fileRelativeDir);
+                var fileOutputPath = Path.Combine(fileOutputDir, fileName);
+                if (!Directory.Exists(fileOutputDir))
+                {
+                    Directory.CreateDirectory(fileOutputDir);
+                }
 
-            // copy files, with overwriting
-            File.Copy(file, fileOutputPath, true);
+                // copy files, with overwriting
+                File.Copy(file, fileOutputPath, true);
+            }
         }
 
         _loggerService.Info($"{cp77Proj.Name} redmod script files packed into {cp77Proj.PackedRedModDirectory}");
@@ -746,6 +743,12 @@ public class RED4Controller : ObservableObject, IGameController
                 IgnoreReadOnlyProperties = true,
             };
             var info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(path), options).NotNull();
+            if (info.CustomSounds.Count == 0)
+            {
+                // nothing to do
+                return false;
+            }
+
             foreach (var e in info.CustomSounds)
             {
                 if (!string.IsNullOrEmpty(e.File))
