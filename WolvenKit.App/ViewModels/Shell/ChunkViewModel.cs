@@ -2379,6 +2379,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
                 destinationHandle.SetValue(value);
                 RecalculateProperties(destinationHandle);
+                CalculateDescriptor();
+                CalculateValue();
 
                 return true;
             }
@@ -2389,6 +2391,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 {
                     Data = CHandle.Parse(sourceHandle.InnerType, value);
                     RecalculateProperties(Data);
+                    CalculateDescriptor();
+                    CalculateValue();
                     return true;
                 }
 
@@ -2399,6 +2403,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
                 Data = CWeakHandle.Parse(sourceHandle.InnerType, value);
                 RecalculateProperties(Data);
+                CalculateDescriptor();
+                CalculateValue();
                 return true;
             }
         }
