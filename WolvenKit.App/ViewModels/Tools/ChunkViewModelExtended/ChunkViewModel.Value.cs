@@ -201,7 +201,10 @@ public partial class ChunkViewModel
                 Value = StringHelper.Stringify(animDef);
                 IsValueExtrapolated = Value != "";
                 break;
-
+            case rendIndexBufferChunk rendBuffer:
+                Value = rendBuffer.TeOffset.ToString();
+                IsValueExtrapolated = true;
+                break;
             case inkanimInterpolator inkAnimInt:
                 Value = StringHelper.Stringify(inkAnimInt);
                 IsValueExtrapolated = true;

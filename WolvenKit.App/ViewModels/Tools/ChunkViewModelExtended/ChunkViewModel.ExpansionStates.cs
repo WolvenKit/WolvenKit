@@ -274,6 +274,13 @@ public partial class ChunkViewModel
 
                     break;
                 }
+                /*
+                 * .anim file
+                 */
+                case animAnimSetEntry when _recursionLevel == 0 || !isExpanded:
+                    treeViewProperties.FirstOrDefault(prop => prop.Name == "animation")
+                        ?.SetChildExpansionStatesInternal(isExpanded, _recursionLevel);
+                    break; 
                 case localizationPersistenceOnScreenEntries when treeViewProperties.Count == 1:
                 case localizationPersistenceSubtitleEntries when treeViewProperties.Count == 1:
                 // .visualTags (.app file and nested under .ent.visualTagSchema)
@@ -339,15 +346,10 @@ public partial class ChunkViewModel
                     treeViewProperties.FirstOrDefault(prop => prop.Name == "slots")
                         ?.SetChildExpansionStatesInternal(isExpanded, _recursionLevel);
                     break;
-                /*
-                 * effect slots
-                 *     - slots
-                 */
                 case CHandle<entEffectDesc> when _recursionLevel == 0 || !isExpanded:
                     treeViewProperties.FirstOrDefault(prop => prop.Name == "compiledEffectInfo")
                         ?.SetChildExpansionStatesInternal(isExpanded, _recursionLevel);
                     break;
-
                 // Components array, or array of effect descriptors
                 case CArray<entIComponent> when _recursionLevel == 0 || !isExpanded:
                 case CArray<CHandle<entEffectDesc>> when _recursionLevel == 0 || !isExpanded:

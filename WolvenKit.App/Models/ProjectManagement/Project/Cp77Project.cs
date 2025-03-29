@@ -912,6 +912,5 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
             }
         }
     }
-
 }
     

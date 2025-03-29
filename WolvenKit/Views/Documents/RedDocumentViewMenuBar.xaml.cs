@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using HandyControl.Tools.Extension;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App;
@@ -829,6 +830,25 @@ namespace WolvenKit.Views.Documents
         /// </summary>
         private void OnClearPartsValuesClick(object _, RoutedEventArgs e) =>
             ClearAppearancePropertyChild("partsValues");
+
+        /// <summary>
+        /// Called from view: remove all animationComponents that are not used from all appearances
+        /// </summary>
+        private void OnDeleteUnusedAnimationComponentsClick(object _, RoutedEventArgs e)
+        {
+            if (CurrentTab?.FilePath is not string filePath || _projectManager.ActiveProject is null)
+            {
+                return;
+            }
+
+            if (!AppFileHelper.DeleteUnusedAnimComponents(_cr2WTools, _projectManager.ActiveProject, [filePath]).Any())
+            {
+                // nothing was deleted
+                return;
+            }
+
+            _currentTab?.Parent.Reload(false);
+        }
 
         private static List<ChunkViewModel> GetComponentsByName(ChunkViewModel cvm, string componentName)
         {
