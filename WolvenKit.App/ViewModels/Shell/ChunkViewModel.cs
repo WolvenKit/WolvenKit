@@ -2351,7 +2351,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         var gt = propertyType.GetGenericTypeDefinition();
-        return (weakHandleOnly && gt == typeof(CWeakHandle<>)) || gt == typeof(CHandle<>);
+        return (weakHandleOnly && gt == typeof(CWeakHandle<>)) || 
+            !weakHandleOnly && (gt == typeof(CWeakHandle<>) || gt == typeof(CHandle<>)
+        );
     }
 
 
@@ -2434,11 +2436,20 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         catch (Exception ex) { _loggerService.Error(ex); }
     }
 
-    public IRedType? CopyData()
+    /// <summary>
+    /// Handles data copy for pasting into another node.
+    /// </summary>
+    /// <param name="copyAsHandle">Copy reference instead of data?</param>
+    public IRedType? CopyData(bool copyAsHandle = false)
     {
         try
         {
-            return Data is IRedCloneable irc ? (IRedType)irc.DeepCopy() : Data;
+            return Data switch
+            {
+                IRedBaseHandle baseHandle when copyAsHandle => baseHandle,
+                IRedCloneable irc => (IRedType)irc.DeepCopy(),
+                _ => Data
+            };
         }
         catch (Exception ex)
         {
@@ -2753,8 +2764,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return false;
         }
 
+        if (IsHandle(Data) && singleSelectOnly)
+        {
+            return IsHandle(RedDocumentTabViewModel.CopiedChunk);
+        }
+        
         var copiedChunks = singleSelectOnly ? [RedDocumentTabViewModel.CopiedChunk!] : RedDocumentTabViewModel.GetCopiedChunks();
-
+        
         if (copiedChunks.Count == 0 ||
             (ResolvedData is not IRedArray && Parent is not { ResolvedData: IRedArray }))
         {
@@ -3442,7 +3458,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         if (srcType.IsAssignableTo(typeof(IRedBaseHandle)) &&
-            srcType.GetGenericArguments()[0].IsAssignableTo(destType))
+            srcType.GetGenericArguments()[0].IsAssignableFrom(destType))
         {
             return TypeCompability.HandleToClass;
         }
