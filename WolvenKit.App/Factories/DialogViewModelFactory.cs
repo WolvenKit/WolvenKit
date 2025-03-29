@@ -10,18 +10,21 @@ public class DialogViewModelFactory : IDialogViewModelFactory
     private readonly ILoggerService _loggerService;
     private readonly IProjectManager _projectManager;
     private readonly INotificationService _notificationService;
+    private readonly ISettingsManager _settingsManager;
 
     public DialogViewModelFactory(
         IProjectManager projectManager,
         ILoggerService loggerService,
-        INotificationService notificationService
+        INotificationService notificationService,
+        ISettingsManager settingsManager
         )
     {
         _projectManager = projectManager;
         _loggerService = loggerService;
         _notificationService = notificationService;
+        _settingsManager = settingsManager;
 
     }
     public SoundModdingViewModel SoundModdingViewModel() => new(_notificationService, _loggerService, _projectManager);
-    public NewFileViewModel NewFileViewModel() => new(_projectManager);
+    public NewFileViewModel NewFileViewModel() => new(_projectManager, _settingsManager);
 }
