@@ -2354,8 +2354,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         var gt = propertyType.GetGenericTypeDefinition();
-        return (weakHandleOnly && gt == typeof(CWeakHandle<>)) || gt == typeof(CWeakHandle<>) ||
-               gt == typeof(CHandle<>);
+        return (weakHandleOnly && gt == typeof(CWeakHandle<>)) || 
+            !weakHandleOnly && (gt == typeof(CWeakHandle<>) || gt == typeof(CHandle<>)
+        );
     }
 
 
@@ -2438,13 +2439,17 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         catch (Exception ex) { _loggerService.Error(ex); }
     }
 
-    public IRedType? CopyData()
+    /// <summary>
+    /// Handles data copy for pasting into another node.
+    /// </summary>
+    /// <param name="copyAsHandle">Copy reference instead of data?</param>
+    public IRedType? CopyData(bool copyAsHandle = false)
     {
         try
         {
             return Data switch
             {
-                IRedBaseHandle baseHandle => baseHandle,
+                IRedBaseHandle baseHandle when copyAsHandle => baseHandle,
                 IRedCloneable irc => (IRedType)irc.DeepCopy(),
                 _ => Data
             };

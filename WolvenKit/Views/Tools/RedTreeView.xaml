@@ -973,7 +973,7 @@
                 <!-- Copy: Handle (that is an array) -->
                 <MenuItem
                     Header="Copy Handle"
-                    Command="{Binding Path=CopySelectionCommand,
+                    Command="{Binding Path=CopyHandleCommand,
                                       Source={x:Reference redTreeView}}">
                     <MenuItem.Style>
                         <Style
