@@ -45,6 +45,7 @@ using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Helpers;
+using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -69,14 +70,16 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
-        if (_archiveManager.ProjectArchive is not FileSystemArchive projArchive)
+        if (_archiveManager.ProjectArchive is not FileSystemArchive projArchive || ActiveProject is null)
         {
             _loggerService.Error("You need an active project to use this.");
             return;
         }
 
+        var filesToValidate = projArchive.Files.Values.Where(f => f.Extension is not "xbm" and not "mlmask").ToList();
+        
         var result = Interactions.ShowConfirmation((
-            $"This will analyse {ActiveProject!.Files.Count} files. This can take up to several minutes. Do you want to proceed?",
+            $"This will analyse {filesToValidate} files. This can take up to several minutes. Do you want to proceed?",
             "Really run file validation?",
             WMessageBoxImage.Question,
             WMessageBoxButtons.YesNo));
@@ -86,9 +89,10 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
+        ScriptService.SuppressLogOutput = true;
         var code = await File.ReadAllTextAsync(_fileValidationScript.Path);
 
-        foreach (var (_, file) in projArchive.Files.Where(kvp => kvp.Value.Extension != ".xbm"))
+        foreach (var file in filesToValidate)
         {
             if (GetRedFile(file) is not { } fileViewModel)
             {
@@ -117,6 +121,8 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         {
             _loggerService.Error($"Failed to open log file: {ex.Message}");
         }
+
+        ScriptService.SuppressLogOutput = false;
     }
 
 
