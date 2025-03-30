@@ -196,4 +196,5 @@ public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
     int NumFilesToReopen { get; set; }
 
     bool ShowVerboseLogOutput { get; set; }
+    bool GroupTweaksAndScriptsByModderName { get; set; }
 }

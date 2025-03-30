@@ -111,20 +111,41 @@ public partial class NewFileViewModel : DialogViewModel
             return;
         }
 
-        var defaultSubfolder = _settingsManager.ModderName ?? "";
+        var defaultSubfolder = GetDefaultSubfolder();
+        var defaultFileName = GetDefaultFileName();
         
 #pragma warning disable IDE0072 // Add missing cases
         FileName = SelectedFile?.Type switch
         {
             EWolvenKitFile.TweakXl => Path.Combine("r6", "tweaks", defaultSubfolder,
-                $"{project.Name}.{value.Extension.NotNull().ToLower()}"),
+                $"{defaultFileName}.{value.Extension.NotNull().ToLower()}"),
             EWolvenKitFile.RedScript => Path.Combine("r6", "scripts", defaultSubfolder,
-                $"{project.Name}.{value.Extension.NotNull().ToLower()}"),
+                $"{defaultFileName}.{value.Extension.NotNull().ToLower()}"),
             EWolvenKitFile.CETLua => Path.Combine("bin", "x64", "plugins", "cyber_engine_tweaks", "mods", project.Name, $"init.{value.Extension.NotNull().ToLower()}"),
             EWolvenKitFile.ArchiveXl => $"{project.Name}.archive.{value.Extension.NotNull().ToLower()}",
             _ => $"{value.Name.NotNull().Split(' ').First()}1.{value.Extension.NotNull().ToLower()}",
         };
 #pragma warning restore IDE0072 // Add missing cases
+    }
+
+    private string GetDefaultSubfolder()
+    {
+        if (_settingsManager is { GroupTweaksAndScriptsByModderName: true, ModderName: string s })
+        {
+            return s;
+        }
+
+        return _projectManager.ActiveProject?.Name ?? "";
+    }
+
+    private string GetDefaultFileName()
+    {
+        if (_settingsManager.GroupTweaksAndScriptsByModderName)
+        {
+            return _projectManager.ActiveProject?.Name ?? "untitled";
+        }
+
+        return "untitled";
     }
 
     [ObservableProperty] private string? _whyNotCreate;

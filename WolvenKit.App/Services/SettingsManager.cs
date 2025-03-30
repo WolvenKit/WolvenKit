@@ -89,7 +89,8 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(ReopenLastProject),
             nameof(NumFilesToReopen),
             nameof(ReopenFiles),
-            nameof(ShowVerboseLogOutput)
+            nameof(ShowVerboseLogOutput),
+            nameof(GroupTweaksAndScriptsByModderName)
             )
           .Subscribe(_ =>
           {
@@ -387,6 +388,13 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
         GroupName = "Interface")]
     [ObservableProperty]
     private bool _showVerboseLogOutput;
+
+    [Display(Name = "Group tweaks and scripts by modder name",
+        Description =
+            "Will set default paths for scripts and tweaks to r6/subfolder/modder instead of r6/subfolder/project",
+        GroupName = "Interface")]
+    [ObservableProperty]
+    private bool _groupTweaksAndScriptsByModderName;
 
     [Display(Name = "Exclude archives from scan by name (comma separated)",
         Description = "Exclude archives from scan if you know that they'll lead to exceptions (only the base name)",

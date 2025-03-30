@@ -84,6 +84,7 @@ public class SettingsDto : ISettingsDto
         ReopenFiles = settings.ReopenFiles;
         ShowVerboseLogOutput = settings.ShowVerboseLogOutput;
         ArchiveNamesExcludeFromScan = settings.ArchiveNamesExcludeFromScan;
+        GroupTweaksAndScriptsByModderName = settings.GroupTweaksAndScriptsByModderName;
 
         MigrateSettings();
     }
@@ -159,6 +160,8 @@ public class SettingsDto : ISettingsDto
     public int NumFilesToReopen { get; set; } = 3;
     public bool ReopenFiles { get; set; } = true;
     public bool ShowVerboseLogOutput { get; set; }
+
+    public bool GroupTweaksAndScriptsByModderName { get; set; }
     public string ArchiveNamesExcludeFromScan { get; set; } = "basegame_AMM_Props";
 
     #endregion
@@ -223,6 +226,7 @@ public class SettingsDto : ISettingsDto
         settingsManager.ReopenFiles = ReopenFiles;
         settingsManager.NumFilesToReopen = NumFilesToReopen;
         settingsManager.ShowVerboseLogOutput = ShowVerboseLogOutput;
+        settingsManager.GroupTweaksAndScriptsByModderName = GroupTweaksAndScriptsByModderName;
         settingsManager.ArchiveNamesExcludeFromScan = ArchiveNamesExcludeFromScan;
 
         return settingsManager;
