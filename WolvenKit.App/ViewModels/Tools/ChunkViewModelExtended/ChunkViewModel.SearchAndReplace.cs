@@ -101,7 +101,7 @@ public partial class ChunkViewModel
             case FixedPoint:
                 return false;
             case IRedPrimitive when !IsArray:
-                if (ResolvedData is not IRedPrimitive<string>)
+                if (ResolvedData is not IRedPrimitive<string> && ResolvedData is not TweakDBID)
                 {
                     return false;
                 }
@@ -296,6 +296,22 @@ public partial class ChunkViewModel
                 ret = (CName)replaced;
                 NumReplacedEntries += 1;
                 return true;
+            case TweakDBID tweakDbId:
+                if (string.IsNullOrEmpty(tweakDbId.GetResolvedText()))
+                {
+                    return false;
+                }
+
+                var resolvedValue = tweakDbId.GetResolvedText()!;
+                replaced = ReplaceInString(resolvedValue, search, replace, isWholeWord, isRegex);
+                if (replaced == resolvedValue)
+                {
+                    return false;
+                }
+
+                ret = (TweakDBID)replaced;
+                NumReplacedEntries += 1;
+                return true;
             case IRedArray redArray:
                 wasChanged = false;
                 for (var i = 0; i < redArray.Count; i++)
@@ -406,7 +422,6 @@ public partial class ChunkViewModel
                 }
 
                 return wasChanged;
-
 
             case IRedMeshComponent meshComponent:
             {
