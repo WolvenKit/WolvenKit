@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace WolvenKit.Common.Extensions
 {
@@ -34,6 +35,26 @@ namespace WolvenKit.Common.Extensions
             return coll1;
         }
 
+
+        private static IEnumerable MergeLists(IEnumerable coll1, IEnumerable coll2)
+        {
+            var elementType = coll1.GetType().GetGenericArguments().FirstOrDefault() ?? typeof(object);
+            var listType = typeof(List<>).MakeGenericType(elementType);
+            var list = (IList)Activator.CreateInstance(listType)!;
+
+            foreach (var item in coll1)
+            {
+                list.Add(item);
+            }
+
+            foreach (var item in coll2)
+            {
+                list.Add(item);
+            }
+
+            return list;
+        }
+        
         // Merges two dictionaries with lists
         public static T MergeRange<T, TK, TV>(this T me, params IDictionary<TK, TV>[] others)
             where T : IDictionary<TK, TV>, new()
@@ -45,13 +66,17 @@ namespace WolvenKit.Common.Extensions
                 {
                     if (me.TryGetValue(p.Key, out var val))
                     {
-                        if (val is IList coll && p.Value is IList coll2)
+                        switch (val)
                         {
-                            me[p.Key] = (TV)MergeLists(coll, coll2);
-                        }
-                        else
-                        {
-                            throw new ArgumentOutOfRangeException(nameof(me), "This method only support lists");
+                            case IList coll when p.Value is IList coll2:
+                                me[p.Key] = (TV)MergeLists(coll, coll2);
+                                break;
+                            case IEnumerable enum1 when p.Value is IEnumerable enum2:
+                                me[p.Key] = (TV)MergeLists(enum1, enum2);
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException(nameof(me),
+                                    $"This method only supports lists, but instead we're trying to merge {p.Value?.GetType().Name} into {val?.GetType().Name}");
                         }
                     }
                     else

@@ -376,11 +376,17 @@ public partial class ImportViewModel : AbstractImportExportViewModel
         switch (args.PropertyName)
         {
             case nameof(GltfImportArgs.Rig):
+                gltfImportArgs.Rig.Clear();
+                
                 var rig = result.Cast<CollectionItemViewModel<FileEntry>>().Select(x => x.Model).FirstOrDefault();
                 if (rig is not null)
                 {
-                    gltfImportArgs.Rig = new List<FileEntry>() { rig };
-                    _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
+                    gltfImportArgs.Rig.Add(rig);
+                    _notificationService.Success($"Selected Rig was added to MeshWithRig arguments: {rig.Name}");
+                }
+                else
+                {
+                    _notificationService.Success("Rigs were cleared");
                 }
 
                 gltfImportArgs.ImportFormat = GltfImportAsFormat.MeshWithRig;
