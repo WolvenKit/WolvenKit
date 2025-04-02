@@ -114,6 +114,7 @@ public partial class NewFileViewModel : DialogViewModel
         {
             EWolvenKitFile.TweakXl => Path.Combine("r6", "tweaks", project.Name, $"untitled.{value.Extension.NotNull().ToLower()}"),
             EWolvenKitFile.RedScript => Path.Combine("r6", "scripts", project.Name, $"untitled.{value.Extension.NotNull().ToLower()}"),
+            EWolvenKitFile.ArchiveXl => $"{project.Name}.archive.{value.Extension.NotNull().ToLower()}",
             EWolvenKitFile.CETLua => Path.Combine("bin", "x64", "plugins", "cyber_engine_tweaks", "mods", project.Name, $"init.{value.Extension.NotNull().ToLower()}"),
             _ => $"{value.Name.NotNull().Split(' ').First()}1.{value.Extension.NotNull().ToLower()}",
         };
