@@ -9,10 +9,16 @@ namespace WolvenKit.App.ViewModels.Dialogs;
 /// <summary>
 /// Implements the viewmodel that drives the log view.
 /// </summary>
-public partial class FolderPathInputDialogViewModel(Cp77Project activeProject, string title = "Enter folder path") : DialogViewModel
+public partial class FolderPathInputDialogViewModel : DialogViewModel
 {
-    public string Title { get; } = title;
-    public Cp77Project ActiveProject { get; } = activeProject;
+    public FolderPathInputDialogViewModel(Cp77Project activeProject, string title = "Enter folder path")
+    {
+        Title = title;
+        ActiveProject = activeProject;
+    }
+
+    public string Title { get; init; }
+    public Cp77Project ActiveProject { get; init; }
     
     [ObservableProperty] private string? _text;
 
