@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
 using WolvenKit.Common;
@@ -21,15 +22,20 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
 {
     public const string ProjectFileExtension = ".cpmodproj";
 
-    public Cp77Project(string location, string name, string modName, Dictionary<DateTime, string> openProjectFiles)
+    public Cp77Project(string location, string name, string modName, Dictionary<DateTime, string> openProjectFiles,
+        Color? color = null)
     {
         Location = location;
         Name = name;
         ModName = modName;
         OpenProjectFiles = openProjectFiles;
+        if (color is Color c)
+        {
+            ProjectColor = c;
+        }
     }
 
-    public Cp77Project(string location, string name, string modName) : this(location, name, modName, [])
+    private Cp77Project(string location, string name, string modName) : this(location, name, modName, [])
     {
         // use other constructor
     }
@@ -58,9 +64,12 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
 
     public string? Version { get; set; }
 
+    public Color ProjectColor { get; set; } = ColorHelper.GetRandomColor();
+
     public static GameType GameType => GameType.Cyberpunk2077;
 
 
+    
     /// <summary>
     /// Returns all files inside <see cref="FileDirectory"/> 
     /// </summary>
@@ -633,7 +642,11 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
     {
         Cp77Project clone = new(Location, Name, ModName)
         {
-            Author = Author, Email = Email, Version = Version, OpenProjectFiles = OpenProjectFiles
+            Author = Author,
+            Email = Email,
+            Version = Version,
+            OpenProjectFiles = OpenProjectFiles,
+            ProjectColor = ProjectColor,
         };
         return clone;
     }

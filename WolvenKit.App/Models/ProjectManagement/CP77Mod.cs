@@ -24,6 +24,7 @@ public partial class ProjectManager
             Email = project.Email;
             Description = project.Description;
             Version = project.Version;
+            ProjectColor = project.ProjectColor.ToString();
 
             OpenProjectFiles = project.OpenProjectFiles.OrderBy(x => x.Key)
                 .Select(x => x.Value).ToList();
@@ -40,6 +41,8 @@ public partial class ProjectManager
         public string? Description { get; set; }
 
         public string? Version { get; set; }
+
+        public string? ProjectColor { get; set; }
 
         [XmlElement(IsNullable = true)] public List<string>? OpenProjectFiles { get; set; }
 
