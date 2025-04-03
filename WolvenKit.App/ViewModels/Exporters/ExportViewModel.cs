@@ -313,42 +313,68 @@ public partial class ExportViewModel : AbstractImportExportViewModel
         }
 
         var availableItems = _archiveManager
-            .GetGroupedFiles()[$".{fetchExtension}"]
-            .Cast<FileEntry>()
-            .Select(_ => new CollectionItemViewModel<FileEntry>(_)).GroupBy(x => x.Name)
-            .Select(x => x.First());
+            .GetGroupedFiles(ArchiveManagerScope.Everywhere)[$".{fetchExtension}"]
+            .Select(x => (FileEntry)x)
+            .Select(_ => new CollectionItemViewModel<FileEntry>(_));
 
         // open dialogue
         var result = Interactions.ShowCollectionView((availableItems, selectedItems));
-        if (result is not null)
+        if (result is null)
         {
-            switch (args.PropertyName)
-            {
-                case nameof(MeshExportArgs.MultiMeshMeshes):
-                    meshExportArgs.MultiMeshMeshes = result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).ToList();
+            return;
+        }
+
+        switch (args.PropertyName)
+        {
+            case nameof(MeshExportArgs.MultiMeshMeshes):
+                meshExportArgs.MultiMeshMeshes =
+                    result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).ToList();
+                if (meshExportArgs.MultiMeshMeshes.Count != 0)
+                {
                     _notificationService.Success($"Selected Meshes were added to MultiMesh arguments.");
                     meshExportArgs.meshExportType = MeshExportType.Multimesh;
-                    break;
+                }
+                else
+                {
+                    _notificationService.Success("MultiMesh arguments were cleared.");
+                }
 
-                case nameof(MeshExportArgs.MultiMeshRigs):
-                    meshExportArgs.MultiMeshRigs = result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).ToList();
+                break;
+
+            case nameof(MeshExportArgs.MultiMeshRigs):
+                meshExportArgs.MultiMeshRigs =
+                    result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).ToList();
+                if (meshExportArgs.MultiMeshRigs.Count != 0)
+                {
                     _notificationService.Success($"Selected Rigs were added to MultiMesh arguments.");
                     meshExportArgs.meshExportType = MeshExportType.Multimesh;
-                    break;
+                }
+                else
+                {
+                    _notificationService.Success($"Selected Rigs were cleared.");
+                }
 
-                case nameof(MeshExportArgs.Rig):
-                    var rig = result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).FirstOrDefault();
-                    if (rig is not null)
-                    {
-                        meshExportArgs.Rig = new List<FileEntry>() { rig };
-                        _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
-                    }
+                break;
+
+            case nameof(MeshExportArgs.Rig):
+                meshExportArgs.Rig.Clear();
+
+                var rig = result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).FirstOrDefault();
+                if (rig is not null)
+                {
+                    meshExportArgs.Rig.Add(rig);
+                    _notificationService.Success($"Selected Rig was added to WithRig arguments: {rig.Name}");
                     meshExportArgs.meshExportType = MeshExportType.WithRig;
-                    break;
+                }
+                else
+                {
+                    _notificationService.Success($"Selected Rig was cleared");
+                }
 
-                default:
-                    break;
-            }
+                break;
+
+            default:
+                break;
         }
     }
 

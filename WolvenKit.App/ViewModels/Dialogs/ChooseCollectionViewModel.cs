@@ -7,9 +7,14 @@ using DynamicData;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 
+/// <summary>
+/// Interface for displayable items in the CollectionView.
+/// </summary>
 public interface IDisplayable
 {
     string Name { get; }
+    string Info { get; }
+    string Path { get; }
 }
 
 public partial class ChooseCollectionViewModel : DialogWindowViewModel
