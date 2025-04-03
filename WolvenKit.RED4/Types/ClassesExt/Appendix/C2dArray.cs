@@ -1,4 +1,3 @@
-using System.IO;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.IO;
 
@@ -10,7 +9,7 @@ public partial class C2dArray : IRedAppendix
     [REDProperty(IsIgnored = true)]
     public CArray<CString> CompiledHeaders
     {
-        get => GetPropertyValue<CArray<CString>>();
+        get => GetPropertyValue<CArray<CString>>()!; // set in PostConstruct, so not nullable
         set => SetPropertyValue<CArray<CString>>(value);
     }
 
@@ -18,7 +17,7 @@ public partial class C2dArray : IRedAppendix
     [REDProperty(IsIgnored = true)]
     public CArray<CArray<CString>> CompiledData
     {
-        get => GetPropertyValue<CArray<CArray<CString>>>();
+        get => GetPropertyValue<CArray<CArray<CString>>>()!; // set in PostConstruct, so not nullable
         set => SetPropertyValue<CArray<CArray<CString>>>(value);
     }
 
