@@ -518,9 +518,9 @@ namespace WolvenKit.RED4.CR2W.Archive
             Dictionary<string, IEnumerable<IGameFile>> ret = [];
             
             // project files
-            if (searchScope is (ArchiveManagerScope.LocalProject or ArchiveManagerScope.Everywhere) && ProjectArchive is not null)
+            if (searchScope is ArchiveManagerScope.LocalProject or ArchiveManagerScope.Everywhere && ProjectArchive is not null)
             {
-                ret.MergeRange(ProjectArchive.Files.Values
+                ret.MergeWith(ProjectArchive.Files.Values
                     .GroupBy(gameFile => gameFile.Extension)
                     .ToDictionary(gameFiles => gameFiles.Key, gameFiles => gameFiles.Select(x => x))); 
             }
@@ -528,7 +528,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             // base game files
             if (searchScope is ArchiveManagerScope.Basegame or ArchiveManagerScope.Everywhere or ArchiveManagerScope.BasegameAndMods)
             {
-                ret.MergeRange(GetGameArchives()
+                ret.MergeWith(GetGameArchives()
                     .SelectMany(archive => archive.Files.Values)
                     .GroupBy(gameFile => gameFile.Extension)
                     .ToDictionary(gameFiles => gameFiles.Key, gameFiles => gameFiles.Select(x => x)));
@@ -537,7 +537,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             // mods
             if (searchScope is ArchiveManagerScope.Mods or ArchiveManagerScope.BasegameAndMods or ArchiveManagerScope.Everywhere)
             {
-                ret.MergeRange(  GetModArchives()
+                ret.MergeWith(  GetModArchives()
                     .SelectMany(archive => archive.Files.Values)
                     .GroupBy(gameFile => gameFile.Extension)
                     .ToDictionary(gameFiles => gameFiles.Key, gameFiles => gameFiles.Select(x => x)));
