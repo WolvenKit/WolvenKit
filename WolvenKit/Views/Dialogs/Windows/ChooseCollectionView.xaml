@@ -37,18 +37,14 @@
                     RowHeight="{DynamicResource WolvenKitTreeRowHeight}"
                     ColumnSizer="Star"
                     AllowFiltering="True"
+                    AllowResizingColumns="True"
+                    AllowDraggingColumns="True"
                     AllowSorting="True"
-                    AutoGenerateColumns="False"
+                    AutoGenerateColumns="True"
                     FilterRowPosition="FixedTop"
                     IsReadOnly="True"
-                    SelectionMode="Extended">
-                    <syncfusion:SfDataGrid.Columns>
-                        <syncfusion:GridTextColumn
-                            FilterRowCondition="Contains"
-                            HeaderText="Available"
-                            MappingName="Name" />
-                    </syncfusion:SfDataGrid.Columns>
-                </syncfusion:SfDataGrid>
+                    ShowToolTip="True"
+                    SelectionMode="Extended" />
 
                 <!-- BUTTONS -->
                 <StackPanel
