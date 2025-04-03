@@ -9,19 +9,6 @@ public class CollectionItemViewModel<T> : ObservableObject, IDisplayable
 {
     public CollectionItemViewModel(T model) => Model = model;
 
-    public string Info
-    {
-        get
-        {
-            return Model switch
-            {
-                FileEntry fe => fe.Name,
-                uint u => u.ToString(),
-                _ => throw new ArgumentException()
-            };
-        }
-    }
-
     public string Name
     {
         get
@@ -35,6 +22,31 @@ public class CollectionItemViewModel<T> : ObservableObject, IDisplayable
         }
     }
 
+    public string Info
+    {
+        get
+        {
+            return Model switch
+            {
+                FileEntry fe => fe.Archive.Name,
+                uint u => "",
+                _ => throw new ArgumentException()
+            };
+        }
+    }
+
+    public string Path
+    {
+        get
+        {
+            return Model switch
+            {
+                FileEntry fe => fe.Name,
+                uint u => "",
+                _ => throw new ArgumentException()
+            };
+        }
+    }
 
     public T Model { get; set; }
 }

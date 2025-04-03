@@ -329,7 +329,7 @@ public partial class ExportViewModel : AbstractImportExportViewModel
             case nameof(MeshExportArgs.MultiMeshMeshes):
                 meshExportArgs.MultiMeshMeshes =
                     result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).ToList();
-                if (meshExportArgs.MultiMeshMeshes.Any())
+                if (meshExportArgs.MultiMeshMeshes.Count != 0)
                 {
                     _notificationService.Success($"Selected Meshes were added to MultiMesh arguments.");
                     meshExportArgs.meshExportType = MeshExportType.Multimesh;
@@ -344,16 +344,16 @@ public partial class ExportViewModel : AbstractImportExportViewModel
             case nameof(MeshExportArgs.MultiMeshRigs):
                 meshExportArgs.MultiMeshRigs =
                     result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).ToList();
-                if (meshExportArgs.MultiMeshRigs.Any())
+                if (meshExportArgs.MultiMeshRigs.Count != 0)
                 {
                     _notificationService.Success($"Selected Rigs were added to MultiMesh arguments.");
+                    meshExportArgs.meshExportType = MeshExportType.Multimesh;
                 }
                 else
                 {
                     _notificationService.Success($"Selected Rigs were cleared.");
                 }
 
-                meshExportArgs.meshExportType = MeshExportType.Multimesh;
                 break;
 
             case nameof(MeshExportArgs.Rig):
