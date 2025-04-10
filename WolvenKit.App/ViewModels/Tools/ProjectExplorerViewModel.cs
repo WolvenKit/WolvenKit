@@ -14,6 +14,8 @@ using System.Windows.Threading;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.VisualBasic.FileIO;
 using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
@@ -34,7 +36,9 @@ using WolvenKit.Core.Services;
 using WolvenKit.RED4.Archive;
 using Clipboard = System.Windows.Clipboard;
 using FileMode = System.IO.FileMode;
+using Key = System.Windows.Input.Key;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+using SearchOption = System.IO.SearchOption;
 
 namespace WolvenKit.App.ViewModels.Tools;
 
@@ -105,7 +109,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         IsShowRelativePath = true;
         ModifierStateService.ModifierStateChanged += OnModifierUpdateEvent;
-        
+
         SetupToolDefaults();
 
         _appViewModel.PropertyChanged += AppViewModelOnPropertyChanged;
@@ -250,8 +254,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [NotifyCanExecuteChangedFor(nameof(ToggleFlatModeCommand))]
     [NotifyCanExecuteChangedFor(nameof(PasteFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(RenameFileCommand))]
-    [NotifyCanExecuteChangedFor(nameof(ConvertToCommand))]
-    [NotifyCanExecuteChangedFor(nameof(ConvertFromCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ConvertArchiveFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ConvertRawFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenInAssetBrowserCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
     private Cp77Project? _activeProject;
@@ -267,14 +271,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [NotifyCanExecuteChangedFor(nameof(RenameFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenInAssetBrowserCommand))]
     [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
-    [NotifyCanExecuteChangedFor(nameof(ConvertToCommand))]
-    [NotifyCanExecuteChangedFor(nameof(ConvertFromCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ConvertArchiveFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ConvertRawFileCommand))]
     private FileSystemModel? _selectedItem;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(DeleteFileCommand))]
-    [NotifyCanExecuteChangedFor(nameof(ConvertToCommand))]
-    [NotifyCanExecuteChangedFor(nameof(ConvertFromCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ConvertArchiveFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ConvertRawFileCommand))]
     private ObservableCollection<object>? _selectedItems = new();
 
     [ObservableProperty] private bool _isFlatModeEnabled;
@@ -867,18 +871,55 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private bool IsInRawFolder(FileSystemModel? model) =>
         ActiveProject is not null && model is not null && model.FullName.Contains(ActiveProject.RawDirectory);
 
-    private bool CanConvertTo() => ActiveProject is not null && SelectedItems is not null &&
-                                   SelectedItems.All(x => x is FileSystemModel m && IsInArchiveFolder(m));
-    [RelayCommand(CanExecute = nameof(CanConvertTo))]
-    private async Task ConvertTo()
+    private bool HasCorrespondingConvertFile(FileSystemModel? model)
     {
-        var progress = 0;
-        _progressService.Report(0);
+        if (model is null || ActiveProject is null)
+        {
+            return false;
+        }
 
+        if (IsInArchiveFolder(model))
+        {
+            return File.Exists(
+                $"{model.FullName.Replace(ActiveProject.ModDirectory, ActiveProject.RawDirectory)}.json");
+        }
+
+        return IsInRawFolder(model) && model.FullName.EndsWith(".json") &&
+               File.Exists(model.FullName.Replace(ActiveProject.RawDirectory, ActiveProject.ModDirectory)
+                   .Replace("json", ""));
+    }
+
+    // If shift key is pressed, we want to convert any matching files in raw _from_ json
+    private bool CanConvertGameFile() => ActiveProject is not null && SelectedItems is not null &&
+                                         SelectedItems.All(x =>
+                                             x is FileSystemModel m && IsInArchiveFolder(m) &&
+                                             (!IsShiftKeyPressed || HasCorrespondingConvertFile(m)));
+
+    [RelayCommand(CanExecute = nameof(CanConvertGameFile))]
+    private async Task ConvertArchiveFile()
+    {
+        if (!IsShiftKeyPressed)
+        {
+            await ConvertToJsonInternal(SelectedItems.NotNull().OfType<FileSystemModel>().Where(IsInArchiveFolder));
+            return;
+        }
+
+        var selectedItemPaths = SelectedItems.NotNull().OfType<FileSystemModel>()
+            .Select(x => x.RawRelativePath.Replace($"raw{Path.DirectorySeparatorChar}", "").Replace(".json", ""));
+
+        var convertSelection = FileList
+            .Where(x => selectedItemPaths.Contains(x.GameRelativePath) && File.Exists(x.FullName)).ToList();
+
+        await ConvertFromJsonInternal(convertSelection);
+    }
+
+
+    private async Task ConvertToJsonInternal(IEnumerable<FileSystemModel> selection)
+    {
         List<string> files = new();
 
         // get all files
-        foreach (var item in SelectedItems.NotNull().OfType<FileSystemModel>().Where(x => !IsInRawFolder(x)))
+        foreach (var item in selection)
         {
             if (item.IsDirectory)
             {
@@ -890,10 +931,27 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             }
         }
 
+        var progress = 0;
+        _progressService.Report(0);
+
         // convert files
         foreach (var file in files)
         {
-            await ConvertToJson(file);
+            if (!File.Exists(file) || !Enum.GetNames<ERedExtension>()
+                    .Contains(Path.GetExtension(file).TrimStart('.').ToLower()))
+            {
+                progress++;
+                continue;
+            }
+
+            var rawOutPath = Path.Combine(ActiveProject.NotNull().RawDirectory, ActiveProject!.GetRelativePath(file));
+            var outDirectoryPath = Path.GetDirectoryName(rawOutPath);
+            if (outDirectoryPath != null)
+            {
+                Directory.CreateDirectory(outDirectoryPath);
+
+                await _modTools.ConvertToJsonAndWriteAsync(file, new DirectoryInfo(outDirectoryPath));
+            }
 
             progress++;
             _progressService.Report(progress / (float)files.Count);
@@ -902,45 +960,44 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _progressService.Completed();
     }
 
-    private async Task ConvertToJson(string file)
+
+    // If shift key is pressed, we want to convert any matching files in archive _to_ json
+    private bool CanConvertRawFile() => ActiveProject is not null && SelectedItems is not null &&
+                                        SelectedItems.All(x =>
+                                            x is FileSystemModel m && IsInRawFolder(m) &&
+                                            (!IsShiftKeyPressed || HasCorrespondingConvertFile(m)));
+
+    [RelayCommand(CanExecute = nameof(CanConvertRawFile))]
+    private async Task ConvertRawFile()
     {
-        if (!File.Exists(file))
+        if (!IsShiftKeyPressed)
         {
+            await ConvertFromJsonInternal(SelectedItems!.OfType<FileSystemModel>().Where(IsInRawFolder));
             return;
         }
 
-        if (!Enum.GetNames<ERedExtension>().Contains(Path.GetExtension(file).TrimStart('.').ToLower()))
-        {
-            return;
-        }
+        var selectedItemPaths = SelectedItems.NotNull().OfType<FileSystemModel>()
+            .Select(x => $"raw{Path.DirectorySeparatorChar}{x.GameRelativePath}.json");
 
-        var rawOutPath = Path.Combine(ActiveProject.NotNull().RawDirectory, ActiveProject!.GetRelativePath(file));
-        var outDirectoryPath = Path.GetDirectoryName(rawOutPath);
-        if (outDirectoryPath != null)
-        {
-            Directory.CreateDirectory(outDirectoryPath);
+        var convertSelection = FileList
+            .Where(x => selectedItemPaths.Contains(x.RawRelativePath) && File.Exists(x.FullName)).ToList();
 
-            await _modTools.ConvertToJsonAndWriteAsync(file, new DirectoryInfo(outDirectoryPath));
-        }
+        await ConvertToJsonInternal(convertSelection);
     }
 
-
-    private bool CanConvertFromJson() => ActiveProject is not null && SelectedItems is not null &&
-                                         SelectedItems.All(x => x is FileSystemModel m && IsInRawFolder(m));
-    [RelayCommand(CanExecute = nameof(CanConvertFromJson))]
-    private async Task ConvertFrom()
+    private async Task ConvertFromJsonInternal(IEnumerable<FileSystemModel> selection)
     {
         var progress = 0;
         _progressService.Report(0);
 
         List<string> files = new();
-
         // get all files
-        foreach (var item in SelectedItems.NotNull().OfType<FileSystemModel>().Where(IsInRawFolder))
+        foreach (var item in selection)
         {
             if (item.IsDirectory)
             {
-                files.AddRange(Directory.GetFiles(item.FullName, "*.json", SearchOption.AllDirectories).Where(name => !name.EndsWith(".Material.json")));
+                files.AddRange(Directory.GetFiles(item.FullName, "*.json", SearchOption.AllDirectories)
+                    .Where(name => !name.EndsWith(".Material.json")));
             }
             else
             {
@@ -1222,6 +1279,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                                IsShowAbsolutePathToCurrentFile || IsShowAbsolutePathToCurrentFolder) ||
                              ModifierViewStateService.IsNoModifierBeingHeld;
 
+        // If shift key status changed, notify convert from / convert to commands
+        var updateShiftCommands = ModifierViewStateService.IsShiftBeingHeld != IsShiftKeyPressed;
         IsShiftKeyPressed = ModifierViewStateService.IsShiftBeingHeld;
     }
 

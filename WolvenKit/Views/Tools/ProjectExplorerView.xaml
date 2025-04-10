@@ -103,9 +103,22 @@
                     Visibility="{Binding Path=IsEnabled,
                                          RelativeSource={RelativeSource Self},
                                          Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Command="{Binding ConvertToCommand}"
-                    Header="Convert to JSON">
+                                         Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource {x:Type MenuItem}}"
+                            TargetType="{x:Type MenuItem}">
+                            <Setter Property="Command" Value="{Binding ConvertArchiveFileCommand}" />
+                            <Setter Property="Header" Value="Convert to JSON" />
+                            <Style.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding IsShiftKeyPressed}"
+                                    Value="True">
+                                    <Setter Property="Header" Value="Convert from raw JSON" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -120,9 +133,22 @@
                     Visibility="{Binding Path=IsEnabled,
                                          RelativeSource={RelativeSource Self},
                                          Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Command="{Binding ConvertFromCommand}"
-                    Header="Convert from JSON">
+                                         Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource {x:Type MenuItem}}"
+                            TargetType="{x:Type MenuItem}">
+                            <Setter Property="Command" Value="{Binding ConvertRawFileCommand}" />
+                            <Setter Property="Header" Value="Convert from JSON" />
+                            <Style.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding IsShiftKeyPressed}"
+                                    Value="True">
+                                    <Setter Property="Header" Value="Convert game file to JSON" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -476,27 +502,27 @@
                         Grid.Column="2"
                         Background="{StaticResource ContentBackground}"
                         Orientation="Horizontal">
-                        
-                        <!-- Copy relative path-->
+
+                        <!-- Copy relative path -->
                         <helpers:TreeGridButton
                             BorderBrush="{StaticResource WolvenKitOrange}"
                             Style="{StaticResource WolvenKitTreeGridButtonDirectory}"
                             Command="{Binding ViewModel.CopyRelPathCommand,
-                                                   RelativeSource={RelativeSource FindAncestor,
-                                                 AncestorType={x:Type local:ProjectExplorerView}}}"
+                                              RelativeSource={RelativeSource FindAncestor,
+                                                                             AncestorType={x:Type local:ProjectExplorerView}}}"
                             CommandParameter="{Binding}"
                             HoverBackground="{StaticResource WolvenKitOrangeShadow}"
                             ToolTip="Copy relative path to game file">
                             <helpers:TreeGridButton.Content>
                                 <templates:IconBox
-                                      IconPack="Material"
-                                      Kind="ContentCopy"
-                                      Size="{DynamicResource WolvenKitIconNano}"
-                                      Foreground="#222"
-                                      Loaded="TreeIcon_Loaded" />
+                                    IconPack="Material"
+                                    Kind="ContentCopy"
+                                    Size="{DynamicResource WolvenKitIconNano}"
+                                    Foreground="#222"
+                                    Loaded="TreeIcon_Loaded" />
                             </helpers:TreeGridButton.Content>
                         </helpers:TreeGridButton>
-                        
+
                         <!-- Open in Explorer -->
                         <helpers:TreeGridButton
                             BorderBrush="{StaticResource WolvenKitYellow}"
