@@ -1073,52 +1073,80 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private static string GetSecondExtension(FileSystemModel model) => Path.GetExtension(Path.ChangeExtension(model.FullName, "").TrimEnd('.')).TrimStart('.');
 
+    private bool IsMlSetup(FileSystemModel model)
+    {
+        if (IsInRawFolder(model))
+        {
+            return model.Extension.ToLower()
+                .Equals(ETextConvertFormat.json.ToString(), StringComparison.Ordinal) && GetSecondExtension(model)
+                .Equals(ERedExtension.mlsetup.ToString(), StringComparison.Ordinal);
+        }
+
+        if (!IsInArchiveFolder(model))
+        {
+            return false;
+        }
+
+        return model.Extension.ToLower().Equals(ERedExtension.mlsetup.ToString(), StringComparison.Ordinal);
+    }
+    
     private bool CanOpenInMlsb() =>
         ActiveProject != null
         && SelectedItem is { IsDirectory: false }
-        && IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower()
-            .Equals(ETextConvertFormat.json.ToString(), StringComparison.Ordinal)
-        && GetSecondExtension(SelectedItem).Equals(ERedExtension.mlsetup.ToString(), StringComparison.Ordinal)
+        && IsMlSetup(SelectedItem)
         && PluginService.IsInstalled(EPlugin.mlsetupbuilder);
 
     [RelayCommand(CanExecute = nameof(CanOpenInMlsb))]
-    private void OpenInMlsb()
+    private async Task OpenInMlsb()
     {
-        if (PluginService.TryGetInstallPath(EPlugin.mlsetupbuilder, out var path))
+        if (!PluginService.TryGetInstallPath(EPlugin.mlsetupbuilder, out var path))
         {
-            if (!Directory.Exists(path))
+            return;
+        }
+
+        if (!Directory.Exists(path))
+        {
+            _loggerService.Error($"MlSetupBuilder not found: {path}");
+            return;
+        }
+
+        var firstFolder = Directory.GetDirectories(path).FirstOrDefault();
+        if (firstFolder is null)
+        {
+            _loggerService.Error($"MlSetupBuilder not found: {path}");
+            return;
+        }
+
+        var exe = Path.Combine(firstFolder, "MlSetupBuilder.exe");
+
+        if (!File.Exists(exe))
+        {
+            _loggerService.Error($"MlSetupBuilder.exe not found: {exe}");
+            return;
+        }
+
+        var filepath = SelectedItem.NotNull().FullName;
+        if (IsInArchiveFolder(SelectedItem))
+        {
+            if (ActiveProject is null)
             {
-                _loggerService.Error($"MlSetupBuilder not found: {path}");
                 return;
             }
 
-            var firstFolder = Directory.GetDirectories(path).FirstOrDefault();
-            if (firstFolder is null)
-            {
-                _loggerService.Error($"MlSetupBuilder not found: {path}");
-                return;
-            }
+            await ConvertToJsonInternal([SelectedItem]);
+            filepath = $"{filepath.Replace(ActiveProject.ModDirectory, ActiveProject.RawDirectory)}.json";
+        }
 
-            var exe = Path.Combine(firstFolder, "MlSetupBuilder.exe");
-
-            if (!File.Exists(exe))
-            {
-                _loggerService.Error($"MlSetupBuilder.exe not found: {exe}");
-                return;
-            }
-
-            var filepath = SelectedItem.NotNull().FullName;
-            var version = _settingsManager.GetVersionNumber();
-            try
-            {
-                var args = $"-o=\"{filepath}\" -wkit=\"{version}\"";
-                _loggerService.Info($"executing: {Path.GetFileName(exe)} {args}");
-                Process.Start(exe, args);
-            }
-            catch (Exception ex)
-            {
-                _loggerService.Error(ex);
-            }
+        var version = _settingsManager.GetVersionNumber();
+        try
+        {
+            var args = $"-o=\"{filepath}\" -wkit=\"{version}\"";
+            _loggerService.Info($"executing: {Path.GetFileName(exe)} {args}");
+            Process.Start(exe, args);
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Error(ex);
         }
     }
 
