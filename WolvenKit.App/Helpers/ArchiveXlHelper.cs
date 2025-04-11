@@ -21,7 +21,7 @@ public static partial class ArchiveXlHelper
         { "{camera}", ["fpp", "tpp"] },
         { "{feet}", ["lifted", "flat", "high_heels", "flat_shoes"] },
         { "{gender}", ["m", "w"] },
-        { "arms", ["base_arms", "mantis_blades", "monowire", "projectile_launcher"] }, //
+        { "{arms}", ["base_arms", "mantis_blades", "monowire", "projectile_launcher"] }, //
         { "{body}", ["base_body"] },
     };
 
