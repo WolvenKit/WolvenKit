@@ -1129,7 +1129,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             }
 
             filepath = $"{filepath.Replace(ActiveProject.ModDirectory, ActiveProject.RawDirectory)}.json";
-            if (!File.Exists(filepath))
+
+            // If file exists: Ask if user wants to re-export it (Hold shift to skip)
+            if (!File.Exists(filepath) || (!IsShiftKeyPressed && File.Exists(filepath) &&
+                                           Interactions.ShowQuestionYesNo(("Export again (and overwrite)?",
+                                               "File already exists"))))
             {
                 await ConvertToJsonInternal([SelectedItem]);
             }
