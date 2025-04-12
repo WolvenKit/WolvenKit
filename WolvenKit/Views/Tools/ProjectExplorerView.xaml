@@ -87,7 +87,7 @@
 
                 <MenuItem
                     Command="{Binding OpenInMlsbCommand}"
-                    Header="Open in MlSetupbuilder">
+                    Header="Open in MlSetupBuilder">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Empty"
