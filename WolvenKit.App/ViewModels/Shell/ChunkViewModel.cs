@@ -1603,6 +1603,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         // Collect material names from appearance chunk materials
         var appearanceNames = appearances
             .SelectMany(mA => mA!.ChunkMaterials.Select(chunkMaterial => chunkMaterial.GetResolvedText()).ToArray())
+            .Where(n => n is not null)
+            .Select(n => n!.Contains('@') ? $"@{n.Split('@').Last()}" : n) // dynamic
             .ToList();
 
         var localMatIdxList = mesh.MaterialEntries.Where((mE) =>
