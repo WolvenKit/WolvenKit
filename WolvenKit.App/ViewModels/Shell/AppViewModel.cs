@@ -693,7 +693,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             {
                 Multiselect = false,
                 Title = "Locate the WolvenKit project",
-                Filter = "Cyberpunk 2077 Project|*.cpmodproj"
+                Filter = "Cyberpunk 2077 Project|*.cpmodproj",
+                InitialDirectory = SettingsManager.DefaultProjectPath ?? SettingsManager.LastUsedProjectPath
             };
 
             if (dlg.ShowDialog() != true || dlg.FileName is not string result || string.IsNullOrEmpty(result))
@@ -724,29 +725,36 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 "Failed to load project. Please open a github issue and attach a zip so that we can fix it!");
         }
 
-        // would you like to locate it?
-
+        // We have an existing project, but it was moved or deleted.
+        // Would you like to locate it?
         var res = Interactions.ShowConfirmation(("Do you want to locate your missing project?", "Project file missing",
             WMessageBoxImage.Question, WMessageBoxButtons.YesNo));
 
-        if (res is (WMessageBoxResult.OK or WMessageBoxResult.Yes))
+        if (res is not (WMessageBoxResult.OK or WMessageBoxResult.Yes))
         {
-            var dlg = new OpenFileDialog
-            {
-                Multiselect = false,
-                Title = "Locate the WolvenKit project",
-                Filter = "Cyberpunk 2077 Project|*.cpmodproj"
-            };
-
-            dlg.ShowDialog();
-
-            location = dlg.FileName;
+            return;
         }
 
-        // user canceled locating a project
-        if (!File.Exists(location))
+        var dlg2 = new OpenFileDialog
         {
-            DeleteProjectFromRecent(location);
+            Multiselect = false,
+            Title = "Locate the WolvenKit project",
+            Filter = "Cyberpunk 2077 Project|*.cpmodproj",
+            InitialDirectory = SettingsManager.DefaultProjectPath ?? SettingsManager.LastUsedProjectPath
+        };
+
+        if (dlg2.ShowDialog() != true || dlg2.FileName is not string filePath || string.IsNullOrEmpty(filePath))
+        {
+            return;
+        }
+
+        // We have to re-create the recent project entry
+        DeleteProjectFromRecent(filePath);
+
+        if (File.Exists(filePath))
+        {
+            CloseModal();
+            await _projectManager.LoadAsync(filePath);
         }
     }
 
