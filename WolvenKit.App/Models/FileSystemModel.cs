@@ -21,7 +21,19 @@ public class FileSystemModel : INotifyPropertyChanged
     private string _extension = "default";
 
 
+    private static readonly string s_archiveSubfolder =
+        $"source{Path.DirectorySeparatorChar}archive{Path.DirectorySeparatorChar}";
+
+    private static readonly string s_rawSubfolder =
+        $"source{Path.DirectorySeparatorChar}raw{Path.DirectorySeparatorChar}";
+
     [Browsable(false)] public FileSystemModel? Parent { get; }
+
+    [Browsable(false)] public bool IsInArchive => FullName.Contains(s_archiveSubfolder);
+    [Browsable(false)] public bool IsInRaw => FullName.Contains(s_rawSubfolder);
+
+    [Browsable(false)]
+    public bool IsGameFile => GameRelativePath.StartsWith("base") || GameRelativePath.StartsWith("ep1");
 
     public string Name
     {

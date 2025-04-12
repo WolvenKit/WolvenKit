@@ -7,14 +7,12 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.VisualBasic.FileIO;
 using Splat;
 using WolvenKit.App.Controllers;
@@ -558,7 +556,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <summary>
     /// Reimports the game file to replace the current one
     /// </summary>
-    private bool CanAddDependencies() => ActiveProject != null && SelectedItem != null && IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower().Contains("xml");
+    private bool CanAddDependencies() => ActiveProject != null && SelectedItem?.IsInRaw == true &&
+                                         SelectedItem!.Extension.Contains("xml",
+                                             StringComparison.CurrentCultureIgnoreCase);
     [RelayCommand(CanExecute = nameof(CanAddDependencies))]
     private async Task AddDependencies()
     {
@@ -616,10 +616,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// Reimports the game file to replace the current one
     /// </summary>
     private bool CanOverwriteWithGameFile() => ActiveProject != null
-                                               && SelectedItem != null
-                                               && !IsInRawFolder(SelectedItem)
-                                               && (SelectedItem.GameRelativePath.StartsWith("base") ||
-                                                   SelectedItem.GameRelativePath.StartsWith("ep1"));
+                                               && SelectedItem is { IsInArchive: true, IsGameFile: true };
 
     [RelayCommand(CanExecute = nameof(CanOverwriteWithGameFile))]
     private async Task OverwriteWithGameFile()
@@ -705,15 +702,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             {
                 if (item.IsDirectory)
                 {
-                    Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(fullPath
-                        , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
-                        , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+                    FileSystem.DeleteDirectory(fullPath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
                 }
                 else
                 {
-                    Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(fullPath
-                        , Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs
-                        , Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+                    FileSystem.DeleteFile(fullPath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
                 }
             }
             catch (Exception)
@@ -865,12 +858,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     #region red4
 
-    private bool IsInArchiveFolder(FileSystemModel? model) =>
-        ActiveProject is not null && model is not null && model.FullName.Contains(ActiveProject.ModDirectory);
-
-    private bool IsInRawFolder(FileSystemModel? model) =>
-        ActiveProject is not null && model is not null && model.FullName.Contains(ActiveProject.RawDirectory);
-
     private bool HasCorrespondingConvertFile(FileSystemModel? model)
     {
         if (model is null || ActiveProject is null)
@@ -878,13 +865,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return false;
         }
 
-        if (IsInArchiveFolder(model))
+        if (model.IsInArchive)
         {
             return File.Exists(
                 $"{model.FullName.Replace(ActiveProject.ModDirectory, ActiveProject.RawDirectory)}.json");
         }
 
-        return IsInRawFolder(model) && model.FullName.EndsWith(".json") &&
+        return model.IsInRaw && model.FullName.EndsWith(".json") &&
                File.Exists(model.FullName.Replace(ActiveProject.RawDirectory, ActiveProject.ModDirectory)
                    .Replace("json", ""));
     }
@@ -892,23 +879,32 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     // If shift key is pressed, we want to convert any matching files in raw _from_ json
     private bool CanConvertGameFile() => ActiveProject is not null && SelectedItems is not null &&
                                          SelectedItems.All(x =>
-                                             x is FileSystemModel m && IsInArchiveFolder(m) &&
+                                             x is FileSystemModel { IsInArchive: true } m &&
                                              (!IsShiftKeyPressed || HasCorrespondingConvertFile(m)));
 
     [RelayCommand(CanExecute = nameof(CanConvertGameFile))]
     private async Task ConvertArchiveFile()
     {
-        if (!IsShiftKeyPressed)
+        if (SelectedItems is null)
         {
-            await ConvertToJsonInternal(SelectedItems.NotNull().OfType<FileSystemModel>().Where(IsInArchiveFolder));
             return;
         }
 
-        var selectedItemPaths = SelectedItems.NotNull().OfType<FileSystemModel>()
-            .Select(x => x.RawRelativePath.Replace($"raw{Path.DirectorySeparatorChar}", "").Replace(".json", ""));
+        var selection = SelectedItems.NotNull().OfType<FileSystemModel>().Where(m => m.IsInArchive).ToList();
+        
+        if (!IsShiftKeyPressed)
+        {
+            await ConvertToJsonInternal(selection);
+            return;
+        }
+
+        var selectedItemPaths = selection
+            .Select(x =>
+                $"{x.FullName.Replace($"archive{Path.DirectorySeparatorChar}", $"raw{Path.DirectorySeparatorChar}")}.json")
+            .ToList();
 
         var convertSelection = FileList
-            .Where(x => selectedItemPaths.Contains(x.GameRelativePath) && File.Exists(x.FullName)).ToList();
+            .Where(x => selectedItemPaths.Contains(x.FullName) && File.Exists(x.FullName)).ToList();
 
         await ConvertFromJsonInternal(convertSelection);
     }
@@ -964,7 +960,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     // If shift key is pressed, we want to convert any matching files in archive _to_ json
     private bool CanConvertRawFile() => ActiveProject is not null && SelectedItems is not null &&
                                         SelectedItems.All(x =>
-                                            x is FileSystemModel m && IsInRawFolder(m) &&
+                                            x is FileSystemModel { IsInRaw: true } m &&
                                             (!IsShiftKeyPressed || HasCorrespondingConvertFile(m)));
 
     [RelayCommand(CanExecute = nameof(CanConvertRawFile))]
@@ -972,15 +968,16 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     {
         if (!IsShiftKeyPressed)
         {
-            await ConvertFromJsonInternal(SelectedItems!.OfType<FileSystemModel>().Where(IsInRawFolder));
+            await ConvertFromJsonInternal(SelectedItems!.OfType<FileSystemModel>().Where(x => x.IsInRaw));
             return;
         }
 
         var selectedItemPaths = SelectedItems.NotNull().OfType<FileSystemModel>()
-            .Select(x => $"raw{Path.DirectorySeparatorChar}{x.GameRelativePath}.json");
+            .Select(x => $"{x.GameRelativePath}".Replace(".json", "")).ToList();
 
         var convertSelection = FileList
-            .Where(x => selectedItemPaths.Contains(x.RawRelativePath) && File.Exists(x.FullName)).ToList();
+            .Where(x => x.IsInArchive)
+            .Where(x => selectedItemPaths.Contains(x.GameRelativePath)).ToList();
 
         await ConvertToJsonInternal(convertSelection);
     }
@@ -1073,33 +1070,31 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private static string GetSecondExtension(FileSystemModel model) => Path.GetExtension(Path.ChangeExtension(model.FullName, "").TrimEnd('.')).TrimStart('.');
 
-    private bool IsMlSetup(FileSystemModel model)
+    private bool IsMlSetup(FileSystemModel? model)
     {
-        if (IsInRawFolder(model))
-        {
-            return model.Extension.ToLower()
-                .Equals(ETextConvertFormat.json.ToString(), StringComparison.Ordinal) && GetSecondExtension(model)
-                .Equals(ERedExtension.mlsetup.ToString(), StringComparison.Ordinal);
-        }
-
-        if (!IsInArchiveFolder(model))
+        if (model is null || model.IsDirectory)
         {
             return false;
         }
 
-        return model.Extension.ToLower().Equals(ERedExtension.mlsetup.ToString(), StringComparison.Ordinal);
+        if (model.IsInArchive)
+        {
+            return model.Extension.ToLower().Equals(ERedExtension.mlsetup.ToString(), StringComparison.Ordinal);
+        }
+
+        return model.IsInRaw && model.Extension.ToLower()
+            .Equals(ETextConvertFormat.json.ToString(), StringComparison.Ordinal) && GetSecondExtension(model)
+            .Equals(ERedExtension.mlsetup.ToString(), StringComparison.Ordinal);
+
     }
-    
-    private bool CanOpenInMlsb() =>
-        ActiveProject != null
-        && SelectedItem is { IsDirectory: false }
-        && IsMlSetup(SelectedItem)
-        && PluginService.IsInstalled(EPlugin.mlsetupbuilder);
+
+    private bool CanOpenInMlsb() => ActiveProject != null && IsMlSetup(SelectedItem)
+                                                          && PluginService.IsInstalled(EPlugin.mlsetupbuilder);
 
     [RelayCommand(CanExecute = nameof(CanOpenInMlsb))]
     private async Task OpenInMlsb()
     {
-        if (!PluginService.TryGetInstallPath(EPlugin.mlsetupbuilder, out var path))
+        if (!PluginService.TryGetInstallPath(EPlugin.mlsetupbuilder, out var path) || SelectedItem is null)
         {
             return;
         }
@@ -1125,16 +1120,19 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        var filepath = SelectedItem.NotNull().FullName;
-        if (IsInArchiveFolder(SelectedItem))
+        var filepath = SelectedItem.FullName;
+        if (SelectedItem.IsInArchive)
         {
             if (ActiveProject is null)
             {
                 return;
             }
 
-            await ConvertToJsonInternal([SelectedItem]);
             filepath = $"{filepath.Replace(ActiveProject.ModDirectory, ActiveProject.RawDirectory)}.json";
+            if (!File.Exists(filepath))
+            {
+                await ConvertToJsonInternal([SelectedItem]);
+            }
         }
 
         var version = _settingsManager.GetVersionNumber();
@@ -1296,8 +1294,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     private void OnModifierUpdateEvent()
     {
-        IsShowAbsolutePathToRawFolder = ModifierStateService.IsCtrlShiftOnlyPressed && IsInArchiveFolder(SelectedItem);
-        IsShowAbsolutePathToArchiveFolder = ModifierStateService.IsCtrlShiftOnlyPressed && IsInRawFolder(SelectedItem);
+        IsShowAbsolutePathToRawFolder = ModifierStateService.IsCtrlShiftOnlyPressed
+                                        && SelectedItem?.IsInArchive == true;
+
+        IsShowAbsolutePathToArchiveFolder = ModifierStateService.IsCtrlShiftOnlyPressed
+                                            && SelectedItem?.IsInRaw == true;
 
         IsShowAbsolutePathToCurrentFile = ModifierStateService.IsShiftKeyPressedOnly;
 
@@ -1307,8 +1308,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                                IsShowAbsolutePathToCurrentFile || IsShowAbsolutePathToCurrentFolder) ||
                              ModifierViewStateService.IsNoModifierBeingHeld;
 
-        // If shift key status changed, notify convert from / convert to commands
-        var updateShiftCommands = ModifierViewStateService.IsShiftBeingHeld != IsShiftKeyPressed;
         IsShiftKeyPressed = ModifierViewStateService.IsShiftBeingHeld;
     }
 
