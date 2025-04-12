@@ -30,6 +30,7 @@ using NAudio.Wave;
 using NAudio.Lame;
 using WolvenKit.RED4.Archive.CR2W;
 using Newtonsoft.Json;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Modkit.Exceptions;
 using WolvenKit.Modkit.RED4.Tools.Common;
 
@@ -937,7 +938,16 @@ namespace WolvenKit.Modkit.RED4
 
             var Rig = RIG.ProcessRig(_parserService.ReadRed4File(rigStream));
 
-            MeshTools.UpdateMeshJoints(ref expMeshes, Rig, meshRig);
+            try
+            {
+                MeshTools.UpdateMeshJoints(ref expMeshes, Rig, meshRig);
+            }
+            catch (WolvenKitException e)
+            {
+                _loggerService.Warning("Bone mismatch! The following bones are missing from the target armature:");
+                _loggerService.Warning(e.Message);
+                _loggerService.Warning("Exporting anyway...");
+            }
 
             if (meshExportArgs.withMaterials)
             {
@@ -995,7 +1005,16 @@ namespace WolvenKit.Modkit.RED4
 
                 var meshRig = MeshTools.GetOrphanRig(cMesh);
 
-                MeshTools.UpdateMeshJoints(ref Meshes, expRig, meshRig, meshName);
+                try
+                {
+                    MeshTools.UpdateMeshJoints(ref Meshes, expRig, meshRig, meshName);
+                }
+                catch (WolvenKitException e)
+                {
+                    _loggerService.Warning("Bone mismatch! The following bones are missing from the target armature:");
+                    _loggerService.Warning(e.Message);
+                    _loggerService.Warning("Exporting anyway...");
+                }
 
                 if (meshExportArgs.withMaterials)
                 {
@@ -1192,7 +1211,18 @@ namespace WolvenKit.Modkit.RED4
 
                     var meshRig = MeshTools.GetOrphanRig(cMesh);
 
-                    MeshTools.UpdateMeshJoints(ref meshes, rigsCombined, meshRig, streamName);
+
+                    try
+                    {
+                        MeshTools.UpdateMeshJoints(ref meshes, rigsCombined, meshRig, streamName);
+                    }
+                    catch (WolvenKitException e)
+                    {
+                        _loggerService.Warning(
+                            "Bone mismatch! The following bones are missing from the target armature:");
+                        _loggerService.Warning(e.Message);
+                        _loggerService.Warning("Exporting anyway...");
+                    }
 
                     if (meshExportArgs is { withMaterials: true, MaterialRepo: not null })
                     {
