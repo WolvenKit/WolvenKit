@@ -151,45 +151,4 @@ public class FileHelper
         inputPath = string.Join(Path.DirectorySeparatorChar, inputPathArray);
         return inputPath;
     }
-
-
-    public static string? GetFirstExistingParentDirectory(string path)
-    {
-        string? currentPath = null;
-        try
-        {
-            // Normalize the path (handle relative paths, remove trailing slashes, etc.)
-            currentPath = Path.GetFullPath(path);
-
-            // If the path itself exists and is a directory, return it
-            if (Directory.Exists(currentPath))
-            {
-                return currentPath;
-            }
-
-            // Walk up the directory tree
-            while (!string.IsNullOrEmpty(currentPath))
-            {
-                if (Directory.Exists(currentPath))
-                {
-                    return currentPath;
-                }
-
-                // Move up one level
-                var parent = Directory.GetParent(currentPath)?.FullName;
-                if (parent == null || parent == currentPath)
-                {
-                    break; // Reached root
-                }
-
-                currentPath = parent;
-            }
-        }
-        catch
-        {
-            return null;
-        }
-
-        return Directory.Exists(currentPath) ? currentPath : null;
-    }
 }
