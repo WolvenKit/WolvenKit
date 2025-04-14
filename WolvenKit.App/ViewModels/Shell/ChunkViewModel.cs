@@ -1330,9 +1330,36 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     [RelayCommand(CanExecute = nameof(CanRegenerateVisualController))]
     private void RegenerateVisualController()
     {
+        switch (ResolvedData)
+        {
+            case appearanceAppearanceDefinition:
+                GetPropertyChild("components")?.RegenerateVisualController();
+                return;
+            case appearanceAppearanceResource:
+            {
+                GetPropertyChild("appearances")?.RegenerateVisualController();
+                return;
+            }
+            case CArray<CHandle<appearanceAppearanceDefinition>>:
+                foreach (var chunkViewModel in TVProperties)
+                {
+                    chunkViewModel.RegenerateVisualController();
+                }
+
+                return;
+        }
+
         if (Data is not CArray<entIComponent> arr)
         {
-            throw new Exception();
+            if (GetRootModel() is ChunkViewModel { ResolvedData: appearanceAppearanceResource } root)
+            {
+                root.RegenerateVisualController();
+                return;
+            }
+
+            _loggerService.Error(
+                "Wrong type to regenerate visual controllers. Please select a component array inside an .app file and re-run!");
+            return;
         }
 
         entVisualControllerComponent? vc = null;
