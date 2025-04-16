@@ -157,7 +157,7 @@ namespace WolvenKit.Modkit.RED4
             var names = new string[numTargets];
             var regionNames = new string[numTargets];
             string baseMesh = morphBlob.BaseMesh.DepotPath.GetResolvedText().NotNull();
-            string baseTexture = morphBlob.BaseTexture.DepotPath.GetResolvedText().NotNull();
+            var baseTexture = morphBlob.BaseTexture.DepotPath.GetResolvedText();
 
             for (var i = 0; i < numTargets; i++)
             {
