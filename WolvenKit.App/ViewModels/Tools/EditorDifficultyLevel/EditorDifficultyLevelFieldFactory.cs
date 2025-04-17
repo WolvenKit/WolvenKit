@@ -77,6 +77,7 @@ public class EditorDifficultyLevelInformation
                 "localMaterialInstances"
             ]
         },
+        { typeof(inkTextureAtlas), ["activeTexture", "dynamicTexture", "dynamicTextureSlot", "texture"] },
     };
 
     /// <summary>
@@ -116,7 +117,6 @@ public class EditorDifficultyLevelInformation
                 "opacityMicromaps", "quantizationOffset", "quantizationScale", "renderChunks"
             ]
         },
-        { typeof(inkTextureAtlas), ["activeTexture", "dynamicTexture", "dynamicTextureSlot", "texture"] },
         { typeof(inkTextureSlot), ["slices"] },
         // .app file
         {
@@ -259,8 +259,13 @@ public class EditorDifficultyLevelInformation
             || (cvm.TVProperties.Count == 1 && cvm.TVProperties.FirstOrDefault() is { IsArray: true, TVProperties.Count: 0 })
             //false boolean
             || (cvm.ResolvedData is CBool boolValue && boolValue == false)
-            //false boolean
-            || (cvm.ResolvedData is IRedString str && string.IsNullOrEmpty(str.ToString())); // empty string
+            // empty string
+            || (cvm.ResolvedData is IRedString str && string.IsNullOrEmpty(str.ToString()))
+            // empty raref
+            || (cvm.ResolvedData is IRedResourceAsyncReference refAs && refAs.DepotPath == ResourcePath.Empty)
+            // empty ref
+            || (cvm.ResolvedData is IRedResourceReference refS && refS.DepotPath == ResourcePath.Empty)
+            ;
     }
 }
 
