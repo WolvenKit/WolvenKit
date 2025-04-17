@@ -1330,14 +1330,42 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     [RelayCommand(CanExecute = nameof(CanRegenerateVisualController))]
     private void RegenerateVisualController()
     {
+        switch (ResolvedData)
+        {
+            case appearanceAppearanceDefinition:
+                GetPropertyChild("components")?.RegenerateVisualController();
+                return;
+            case appearanceAppearanceResource:
+            {
+                GetPropertyChild("appearances")?.RegenerateVisualController();
+                return;
+            }
+            case CArray<CHandle<appearanceAppearanceDefinition>>:
+                foreach (var chunkViewModel in TVProperties)
+                {
+                    chunkViewModel.RegenerateVisualController();
+                }
+
+                return;
+        }
+
         if (Data is not CArray<entIComponent> arr)
         {
-            throw new Exception();
+            if (GetRootModel() is ChunkViewModel { ResolvedData: appearanceAppearanceResource } root)
+            {
+                root.RegenerateVisualController();
+                return;
+            }
+
+            _loggerService.Error(
+                "Wrong type to regenerate visual controllers. Please select a component array inside an .app file and re-run!");
+            return;
         }
 
         entVisualControllerComponent? vc = null;
         var list = new CArray<entVisualControllerDependency>();
 
+        var hasChange = false;
         foreach (var component in arr)
         {
             if (component is entMeshComponent mesh &&
@@ -1350,6 +1378,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     ComponentName = mesh.Name,
                     Mesh = mesh.Mesh
                 });
+
+                hasChange = true;
             }
 
             if (component is entSkinnedMeshComponent skinnedMesh &&
@@ -1362,6 +1392,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     ComponentName = skinnedMesh.Name,
                     Mesh = skinnedMesh.Mesh
                 });
+                hasChange = true;
             }
 
             if (component is entSkinnedClothComponent skinnedCloth &&
@@ -1380,19 +1411,28 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     ComponentName = skinnedCloth.Name,
                     Mesh = skinnedCloth.PhysicalMesh
                 });
+                hasChange = true;
             }
 
             if (component is entVisualControllerComponent c3)
             {
                 vc = c3;
+                hasChange = true;
             }
         }
 
+        if (!hasChange)
+        {
+            return;
+        }
+        
         if (vc != null)
         {
             vc.AppearanceDependency = list;
             RecalculateProperties();
         }
+
+        Tab?.Parent.SetIsDirty(true);
     }
 
     //  
