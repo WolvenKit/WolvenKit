@@ -1,17 +1,21 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
+using System.Windows.Threading;
 using DynamicData;
 using HandyControl.Tools.Extension;
 using MahApps.Metro.Controls;
+using Microsoft.Msagl.Layout.Layered;
 using ReactiveUI;
 using Serilog.Events;
 using Splat;
@@ -35,15 +39,16 @@ namespace WolvenKit.Views.Tools
 
         public ObservableCollection<LogEntry> LogEntries { get; set; } = new();
         public ObservableCollection<LogEntry> FilteredLogEntries { get; set; } = new();
-
+        private readonly List<LogEntry> _logEntryQueue = new();
+        private readonly object _logEntryQueueLock = new();
+        private readonly DispatcherTimer _dispatcherTimer;
+        
         public LogView()
         {
             InitializeComponent();
 
             ViewModel = Locator.Current.GetService<LogViewModel>();
             DataContext = ViewModel;
-
-            LogEntries.CollectionChanged += LogEntries_CollectionChanged;
 
             var sink = Locator.Current.GetService<MySink>();
             _ = sink.Connect()
@@ -65,35 +70,43 @@ namespace WolvenKit.Views.Tools
                 this.OneWayBind(ViewModel, vm => vm.FilterByLevel, v => v.FilterDebugButton.Opacity, level => level[4] ? 1.0 : 0.33)
                     .DisposeWith(disposables);
                 this.WhenAnyValue(v => v.ViewModel.FilterByLevel)
-                    .Subscribe(_ => LogEntries_CollectionChanged(null, null))
+                    .Subscribe(_ => LogLevelFilter_Changed(null, null))
                     .DisposeWith(disposables);
             });
+            
+            _dispatcherTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(100) };
+            _dispatcherTimer.Tick += (_, _) => AddLogsToView();
+            _dispatcherTimer.Start();
         }
 
-        private void LogEntries_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private bool ShouldInclude(LogEntry entry)
         {
-            var filtered = LogEntries.Where(log =>
+            return entry.Level switch
             {
-                switch (log.Level)
-                {
-                    case Logtype.Error:
-                        return ViewModel.FilterByLevel[0];
-                    case Logtype.Warning:
-                        return ViewModel.FilterByLevel[1];
-                    case Logtype.Success:
-                        return ViewModel.FilterByLevel[2];
-                    case Logtype.Normal:
-                    case Logtype.Important:
-                        return ViewModel.FilterByLevel[3];
-                    case Logtype.Debug:
-                        return ViewModel.FilterByLevel[4];
-                    default:
-                        return true;
-                }
-            });
-
+                Logtype.Error => ViewModel.FilterByLevel[0],
+                Logtype.Warning => ViewModel.FilterByLevel[1],
+                Logtype.Success => ViewModel.FilterByLevel[2],
+                Logtype.Normal or Logtype.Important => ViewModel.FilterByLevel[3],
+                Logtype.Debug => ViewModel.FilterByLevel[4],
+                _ => true
+            };
+        }
+        
+        private void LogLevelFilter_Changed(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (_logEntryQueue.Count == 0)
+            {
+                return;
+            }
+            
+            var filtered = LogEntries.Where(log => ShouldInclude(log));
             FilteredLogEntries.Clear();
             FilteredLogEntries.AddRange(filtered);
+            
+            if (_autoscroll)
+            {
+                _scrollViewer?.ScrollToBottom();
+            }
         }
 
         private void ScrollViewer_Loaded(object sender, RoutedEventArgs e) => _scrollViewer = (ScrollViewer)sender;
@@ -138,13 +151,32 @@ namespace WolvenKit.Views.Tools
             var brush = GetBrushForLevel(level);
 
             var message = item.RenderMessage();
-            if (item.Properties.TryGetValue(Core.Constants.InfoCode, out var infoCodeObj) && infoCodeObj is ScalarValue { Value: int infoCode })
+            lock (_logEntryQueueLock)
             {
-                LogEntries.Add(new LogEntry(level, $"[{item.Timestamp.LocalDateTime}] [{level,-9}] {message}", LogCodeHelper.GetUrl(infoCode), brush));
+                if (item.Properties.TryGetValue(Core.Constants.InfoCode, out var infoCodeObj) && infoCodeObj is ScalarValue { Value: int infoCode })
+                {
+                    _logEntryQueue.Add(new LogEntry(level, $"[{item.Timestamp.LocalDateTime}] [{level,-9}] {message}", LogCodeHelper.GetUrl(infoCode), brush));
+                }
+                else
+                {
+                    _logEntryQueue.Add(new LogEntry(level, $"[{item.Timestamp.LocalDateTime}] [{level,-9}] {message}", null, brush));
+                }
             }
-            else
+        }
+
+        private void AddLogsToView()
+        {
+            if (_logEntryQueue.Count == 0)
             {
-                LogEntries.Add(new LogEntry(level, $"[{item.Timestamp.LocalDateTime}] [{level,-9}] {message}", null, brush));
+                return;
+            }
+            
+            lock(_logEntryQueueLock)
+            {
+                var filtered = _logEntryQueue.Where(log => ShouldInclude(log));
+                FilteredLogEntries.AddRange(filtered);
+                LogEntries.AddRange(_logEntryQueue);
+                _logEntryQueue.Clear();
             }
 
             if (_autoscroll)
@@ -152,7 +184,7 @@ namespace WolvenKit.Views.Tools
                 _scrollViewer?.ScrollToBottom();
             }
         }
-
+        
         private static Logtype ToLogtype(LogEventLevel level) =>
             level switch
             {
@@ -176,7 +208,11 @@ namespace WolvenKit.Views.Tools
             _ => throw new ArgumentOutOfRangeException(nameof(level), level, null),
         };
 
-        private void ClearAll_Click(object sender, RoutedEventArgs e) => LogEntries.Clear();
+        private void ClearAll_Click(object sender, RoutedEventArgs e)
+        {
+            LogEntries.Clear();
+            FilteredLogEntries.Clear();
+        }
 
         private void OpenLogFolder_Click(object sender, RoutedEventArgs e) =>
             Process.Start(new ProcessStartInfo(ISettingsManager.GetLogsDir()) { UseShellExecute = true });
