@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -15,7 +14,6 @@ using System.Windows.Threading;
 using DynamicData;
 using HandyControl.Tools.Extension;
 using MahApps.Metro.Controls;
-using Microsoft.Msagl.Layout.Layered;
 using ReactiveUI;
 using Serilog.Events;
 using Splat;
@@ -37,7 +35,7 @@ namespace WolvenKit.Views.Tools
         private ScrollViewer _scrollViewer;
         private bool _autoscroll = true;
 
-        public ObservableCollection<LogEntry> LogEntries { get; set; } = new();
+        public List<LogEntry> LogEntries { get; set; } = new();
         public ObservableCollection<LogEntry> FilteredLogEntries { get; set; } = new();
         private readonly List<LogEntry> _logEntryQueue = new();
         private readonly object _logEntryQueueLock = new();
@@ -74,7 +72,7 @@ namespace WolvenKit.Views.Tools
                     .DisposeWith(disposables);
             });
             
-            _dispatcherTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(100) };
+            _dispatcherTimer = new DispatcherTimer(DispatcherPriority.Input) { Interval = TimeSpan.FromMilliseconds(100) };
             _dispatcherTimer.Tick += (_, _) => AddLogsToView();
             _dispatcherTimer.Start();
         }
@@ -94,11 +92,6 @@ namespace WolvenKit.Views.Tools
         
         private void LogLevelFilter_Changed(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (_logEntryQueue.Count == 0)
-            {
-                return;
-            }
-            
             var filtered = LogEntries.Where(log => ShouldInclude(log));
             FilteredLogEntries.Clear();
             FilteredLogEntries.AddRange(filtered);
@@ -108,9 +101,8 @@ namespace WolvenKit.Views.Tools
                 _scrollViewer?.ScrollToBottom();
             }
         }
-
-        private void ScrollViewer_Loaded(object sender, RoutedEventArgs e) => _scrollViewer = (ScrollViewer)sender;
-
+        
+        private void LogView_Loaded(object sender, RoutedEventArgs e) => _scrollViewer = LogListBox.FindChild<ScrollViewer>();
         private void OnNext(IChangeSet<LogEvent> obj)
         {
             foreach (var change in obj)
@@ -143,7 +135,8 @@ namespace WolvenKit.Views.Tools
         private void AddLog(LogEvent item)
         {
             var level = ToLogtype(item.Level);
-            if (item.Properties.TryGetValue(Core.Constants.IsSuccess, out var isSuccessObj) && isSuccessObj is ScalarValue { Value: true })
+            if (item.Properties.TryGetValue(Core.Constants.IsSuccess, out var isSuccessObj) &&
+                isSuccessObj is ScalarValue { Value: true })
             {
                 level = Logtype.Success;
             }
@@ -153,13 +146,16 @@ namespace WolvenKit.Views.Tools
             var message = item.RenderMessage();
             lock (_logEntryQueueLock)
             {
-                if (item.Properties.TryGetValue(Core.Constants.InfoCode, out var infoCodeObj) && infoCodeObj is ScalarValue { Value: int infoCode })
+                if (item.Properties.TryGetValue(Core.Constants.InfoCode, out var infoCodeObj) &&
+                    infoCodeObj is ScalarValue { Value: int infoCode })
                 {
-                    _logEntryQueue.Add(new LogEntry(level, $"[{item.Timestamp.LocalDateTime}] [{level,-9}] {message}", LogCodeHelper.GetUrl(infoCode), brush));
+                    _logEntryQueue.Add(new LogEntry(level, $"[{item.Timestamp.LocalDateTime}] [{level,-9}] {message}",
+                        LogCodeHelper.GetUrl(infoCode), brush));
                 }
                 else
                 {
-                    _logEntryQueue.Add(new LogEntry(level, $"[{item.Timestamp.LocalDateTime}] [{level,-9}] {message}", null, brush));
+                    _logEntryQueue.Add(new LogEntry(level, $"[{item.Timestamp.LocalDateTime}] [{level,-9}] {message}",
+                        null, brush));
                 }
             }
         }
@@ -171,14 +167,13 @@ namespace WolvenKit.Views.Tools
                 return;
             }
             
-            lock(_logEntryQueueLock)
+            var filtered = _logEntryQueue.Where(log => ShouldInclude(log));
+            lock (_logEntryQueueLock)
             {
-                var filtered = _logEntryQueue.Where(log => ShouldInclude(log));
                 FilteredLogEntries.AddRange(filtered);
                 LogEntries.AddRange(_logEntryQueue);
                 _logEntryQueue.Clear();
             }
-
             if (_autoscroll)
             {
                 _scrollViewer?.ScrollToBottom();

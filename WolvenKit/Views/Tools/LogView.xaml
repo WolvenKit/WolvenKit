@@ -17,7 +17,8 @@
     d:DesignHeight="450"
     x:Name="uc"
     MinWidth="348"
-    SizeChanged="LogView_OnSizeChanged">
+    SizeChanged="LogView_OnSizeChanged"
+    Loaded="LogView_Loaded">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -262,16 +263,17 @@
             </Grid>
         </Grid>
 
-        <ItemsControl
+        <ListBox
+            x:Name="LogListBox"
             Grid.Row="1"
             Grid.Column="0"
             ItemsSource="{Binding ElementName=uc,
                                   Path=FilteredLogEntries}"
             KeyUp="LogView_OnKeyUp"
-            ScrollViewer.CanContentScroll="True"
-            VirtualizingPanel.ScrollUnit="Pixel"
-            VirtualizingStackPanel.VirtualizationMode="Recycling">
-            <ItemsControl.Resources>
+            VirtualizingPanel.IsVirtualizing="True"
+            VirtualizingPanel.VirtualizationMode="Standard"
+            ScrollViewer.CanContentScroll="True">
+            <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type tools1:LogEntry}">
                     <Grid HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
@@ -279,37 +281,18 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-
-                        <Grid.Style>
-                            <Style TargetType="{x:Type Grid}">
-                                <Setter Property="Background" Value="Transparent" />
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background">
-                                            <Setter.Value>
-                                                <SolidColorBrush Opacity="0.10" Color="Gray" />
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Grid.Style>
-
-                        <TextBox
+                        <TextBlock
                             Grid.Column="0"
                             MinHeight="{DynamicResource WolvenKitLogLineMinHeight}"
                             Margin="0"
                             Padding="0"
                             VerticalAlignment="Center"
                             Background="Transparent"
-                            BorderThickness="0"
                             Foreground="{Binding TextColor}"
                             FontSize="{DynamicResource WolvenKitFontSubTitle}"
                             FontFamily="Consolas"
-                            IsReadOnly="True"
                             Text="{Binding Path=Message}"
                             TextWrapping="Wrap" />
-
                         <TextBlock
                             Grid.Column="1"
                             Padding="{DynamicResource WolvenKitMarginMicroHorizontal}"
@@ -318,49 +301,25 @@
                                                  Converter={StaticResource NullVisibilityConverter}}">
                             <Hyperlink
                                 NavigateUri="{Binding Uri}"
-                                RequestNavigate="Hyperlink_OnRequestNavigate"
-                                ToolTip="{Binding Uri}">
-                                More Info
+                                RequestNavigate="Hyperlink_OnRequestNavigate">
+                                Info
                             </Hyperlink>
                         </TextBlock>
-
                         <Button
                             Grid.Column="2"
                             Padding="{DynamicResource WolvenKitMarginRight}"
+                            HorizontalAlignment="Right"
                             VerticalAlignment="Bottom"
                             BorderThickness="1"
                             Style="{StaticResource MahApps.Styles.Button.Chromeless}"
                             Click="CopyLine_OnClick"
-                            Tag="{Binding Message}"
-                            ToolTip="Copy line">
-                            <templates:IconBox
-                                IconPack="Octicons"
-                                Kind="Clippy"
-                                Margin="{DynamicResource WolvenKitMarginMicroVertical}"
-                                Size="{DynamicResource WolvenKitIconMicro}"
-                                Foreground="White" />
+                            Tag="{Binding Message}">
+                            Copy
                         </Button>
                     </Grid>
                 </DataTemplate>
-            </ItemsControl.Resources>
-
-            <ItemsControl.Template>
-                <ControlTemplate>
-                    <ScrollViewer
-                        Background="#131313"
-                        Loaded="ScrollViewer_Loaded"
-                        PreviewKeyDown="ScrollViewer_OnKeyDown">
-                        <ItemsPresenter />
-                    </ScrollViewer>
-                </ControlTemplate>
-            </ItemsControl.Template>
-
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <VirtualizingStackPanel />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
         <StackPanel
             x:Name="LogPanelButtons"
