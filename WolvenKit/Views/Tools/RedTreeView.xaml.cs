@@ -1006,7 +1006,7 @@ namespace WolvenKit.Views.Tools
         }
 
         #region handles
-
+        
         private static bool IsHandle(IRedType potentialHandle)
         {
             if (potentialHandle is null)
@@ -1021,8 +1021,10 @@ namespace WolvenKit.Views.Tools
                     propertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>));
         }
 
-        private bool CanPasteHandleSingle() =>
-            IsHandle(SelectedItem?.Data) && IsHandle(RedDocumentTabViewModel.CopiedChunk);
+        // For logic, see https://github.com/WolvenKit/WolvenKit/pull/2294#issuecomment-2760342954
+        private bool CanPasteHandleSingle() => IsHandle(SelectedItem?.Data) &&
+                                               RedDocumentTabViewModel.CopiedChunk?.GetType()
+                                                   .IsAssignableTo(SelectedItem?.Data.GetType()) == true;
 
         [RelayCommand(CanExecute = nameof(CanPasteHandleSingle))]
         private void PasteHandleSingle()
@@ -1031,14 +1033,13 @@ namespace WolvenKit.Views.Tools
 
             if (ItemsSource is not ICollectionView collectionView ||
                 !ChunkViewModel.IsHandle(RedDocumentTabViewModel.CopiedChunk) ||
-                selectedChunks.Count != 1)
+                selectedChunks.Count != 1 || SelectedItem is not ChunkViewModel cvm)
             {
                 return;
             }
-
+            
             using (collectionView.DeferRefresh())
             {
-                var cvm = selectedChunks.FirstOrDefault();
                 if (cvm?.PasteHandle((IRedBaseHandle)RedDocumentTabViewModel.CopiedChunk!) != true)
                 {
                     return;
