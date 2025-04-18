@@ -2353,32 +2353,49 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         var gt = propertyType.GetGenericTypeDefinition();
-        return (weakHandleOnly && gt == typeof(CWeakHandle<>)) || 
-            !weakHandleOnly && (gt == typeof(CWeakHandle<>) || gt == typeof(CHandle<>)
-        );
+        if (weakHandleOnly)
+        {
+            return gt == typeof(CWeakHandle<>);
+        }
+
+        return gt == typeof(CWeakHandle<>) || gt == typeof(CHandle<>);
     }
 
 
-
+    // pasting logic: See fuzzo comment https://github.com/WolvenKit/WolvenKit/pull/2294#issuecomment-2760342954
     public bool PasteHandle(IRedBaseHandle sourceHandle)
     {
-        if (sourceHandle.GetValue() is not RedBaseClass value)
+        if (sourceHandle.GetValue() is not RedBaseClass srcHandleValue) 
         {
             return false;
         }
+
+        /*
+         * handle -> handle => deepcopy
+         * handle -> whandle => ref
+         * whandle -> whandle => ref
+         */
 
         switch (Data)
         {
             case IRedBaseHandle destinationHandle:
             {
-                if (!destinationHandle.InnerType.IsInstanceOfType(value.NotNull()))
+                if (!destinationHandle.InnerType.IsInstanceOfType(srcHandleValue))
                 {
                     return false;
                 }
 
-                destinationHandle.SetValue(value);
-                RecalculateProperties(destinationHandle);
+                if (PropertyType.GetGenericTypeDefinition() == typeof(CHandle<>))
+                {
+                    Data = CHandle.Parse(sourceHandle.InnerType, srcHandleValue);
+                }
+                else if (PropertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>))
+                {
+                    destinationHandle.SetValue(srcHandleValue);
+                }
 
+                RecalculateProperties(Data);
+                OnPropertyChanged(nameof(Type));
                 return true;
             }
             case RedDummy:
@@ -2386,18 +2403,19 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 if (PropertyType.GetGenericTypeDefinition() == typeof(CHandle<>))
                 {
-                    Data = CHandle.Parse(sourceHandle.InnerType, value);
-                    RecalculateProperties(Data);
-                    return true;
+                    Data = CHandle.Parse(sourceHandle.InnerType, srcHandleValue);
                 }
-
-                if (PropertyType.GetGenericTypeDefinition() != typeof(CWeakHandle<>))
+                else if (PropertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>))
+                {
+                    Data = CWeakHandle.Parse(sourceHandle.InnerType, srcHandleValue);
+                }
+                else
                 {
                     return false;
                 }
 
-                Data = CWeakHandle.Parse(sourceHandle.InnerType, value);
                 RecalculateProperties(Data);
+                OnPropertyChanged(nameof(Type));
                 return true;
             }
         }
