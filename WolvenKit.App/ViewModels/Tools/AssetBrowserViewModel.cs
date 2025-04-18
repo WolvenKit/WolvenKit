@@ -836,7 +836,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private readonly record struct UsedByRefinement(string FilePath) : ISearchRefinement;
 
     // Refinement type matchers
-    private static readonly Regex s_refinementSeparator = new("\\s+>\\s+", s_regexpOpts, s_regexpSafetyTimeout);
+    private static readonly Regex s_refinementSeparator = new("\\s*>\\s*", s_regexpOpts, s_regexpSafetyTimeout);
     private static readonly Regex s_isHashRefinement = new("^h(?:ash)?:(?<numbers>\\d+)$", s_regexpOpts, s_regexpSafetyTimeout);
     private static readonly Regex s_isRegexRefinement = new("^r(?:egexp?)?:(?<pattern>.*)$", s_regexpOpts, s_regexpSafetyTimeout);
 
@@ -1042,6 +1042,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
             return;
         }
 
+        SearchBarText = Regex.Replace(SearchBarText, s_refinementSeparator.ToString(), " > ");
         var searchAsSequentialRefinements =
             s_refinementSeparator
                 .Split(SearchBarText)
@@ -1075,6 +1076,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
             return [];
         }
 
+        SearchBarText = Regex.Replace(SearchBarText, s_refinementSeparator.ToString(), " > ");
         var searchAsSequentialRefinements =
             s_refinementSeparator
                 .Split(SearchBarText)
