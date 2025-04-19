@@ -70,6 +70,8 @@ namespace WolvenKit.Views.Tools
             RedDocumentTabViewModel.OnCopiedChunkChanged += OnCopiedChunkChanged;
 
             SyncPasteStatus();
+            SetCurrentValue(IsShiftBeingHeldProperty, ModifierViewStateService.IsShiftBeingHeld);
+            SetCurrentValue(IsCtrlBeingHeldProperty, ModifierViewStateService.IsCtrlBeingHeld);
         }
 
 
