@@ -85,8 +85,7 @@ public partial class ResourcePathWrapper : ObservableObject, INode<ReferenceSock
             return;
         }
 
-        var chunk = _chunkViewmodelFactory.ChunkViewModel(cr2w.RootChunk, Socket, _appViewModel,
-            _settingsManager?.DefaultEditorDifficultyLevel ?? EditorDifficultyLevel.Easy);
+        var chunk = _chunkViewmodelFactory.ChunkViewModel(cr2w.RootChunk, Socket, _appViewModel);
         chunk.Location = Location;
         DataViewModel.Nodes.Remove(this);
         DataViewModel.Nodes.Add(chunk);

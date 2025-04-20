@@ -141,8 +141,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         set => _chunks = value;
     }
 
-    public virtual ChunkViewModel GenerateChunks() =>
-        _chunkViewmodelFactory.ChunkViewModel(_data, this, _appViewModel, EditorDifficultyLevel);
+    public virtual ChunkViewModel GenerateChunks() => _chunkViewmodelFactory.ChunkViewModel(_data, this, _appViewModel);
 
     [ObservableProperty]
     private bool _isEmbeddedFile;

@@ -64,8 +64,8 @@ public partial class RedDocumentViewModel : DocumentViewModel
         IArchiveManager archiveManager,
         IHookService hookService,
         INodeWrapperFactory nodeWrapperFactory,
-        EditorDifficultyLevel editorMode,
         Cr2WTools cr2WTools,
+        ISettingsManager settingsManager,
         bool isReadyOnly = false) : base(path)
     {
         _documentTabViewmodelFactory = documentTabViewmodelFactory;
@@ -89,18 +89,41 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
         _path = path;
 
+        if (s_globalEditorDifficultyLevel == EditorDifficultyLevel.None)
+        {
+            s_globalEditorDifficultyLevel = settingsManager.DefaultEditorDifficultyLevel;
+        }
 
+        EditorDifficultyLevel = s_globalEditorDifficultyLevel;
+        GlobalEditorDifficultyLevelChanged += OnGlobalEditorDifficultyChanged;
+        
         _extension = Path.GetExtension(path) != "" ? Path.GetExtension(path)[1..] : "";
 
         Cr2wFile = file;
         IsReadOnly = isReadyOnly;
-        EditorDifficultyLevel = editorMode;
         _isInitialized = true;
         PopulateItems();
     }
 
+    private void OnGlobalEditorDifficultyChanged(object? sender, EventArgs e) =>
+        EditorDifficultyLevel = s_globalEditorDifficultyLevel;
+
     #region properties
 
+    private static event EventHandler? GlobalEditorDifficultyLevelChanged;
+
+    private static EditorDifficultyLevel s_globalEditorDifficultyLevel = EditorDifficultyLevel.None;
+
+    public static EditorDifficultyLevel GlobalEditorDifficultyLevel
+    {
+        get => s_globalEditorDifficultyLevel;
+        set
+        {
+            s_globalEditorDifficultyLevel = value;
+            GlobalEditorDifficultyLevelChanged?.Invoke(null, EventArgs.Empty);
+        }
+    }
+    
     public CR2WFile Cr2wFile { get; set; }
 
     [ObservableProperty] private ObservableCollection<RedDocumentTabViewModel> _tabItemViewModels = new();
