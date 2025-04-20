@@ -1,7 +1,7 @@
 # Developer Guide for the Wolvenkit projects
 
 [WolvenKit on Github](https://github.com/WolvenKit/WolvenKit)
-[Dev chat on Cyberpunk 2077 Modding Community Discord](https://discord.gg/Epkq79kd96)
+[Dev chat on Cyberpunk 2077 Modding Community Discord](https://discord.gg/redmodding)
 
 ## Purpose
 
