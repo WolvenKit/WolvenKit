@@ -77,7 +77,7 @@ public partial class WelcomePageViewModel : PageViewModel
 
     #region Properties
 
-    public string DiscordLink = "https://discord.gg/redmodding";
+    public string DiscordLink = "https://discord.gg/Epkq79kd96";
     public string OpenCollectiveLink = "https://opencollective.com/redmodding";
     public string PatreonLink = "https://www.patreon.com/m/RedModdingTools";
     public string TwitterLink = "https://twitter.com/ModdingRed";
