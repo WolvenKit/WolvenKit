@@ -200,8 +200,13 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     }
 
     // Editor level is required for view binding (updating colour of eye icon)
+    // setting it will refresh expansion states, though
     public void SetEditorLevel(EditorDifficultyLevel level)
     {
+        if (EditorLevel == level)
+        {
+            return;
+        }
         EditorLevel = level;
         RootChunk?.SetEditorLevel(level);
     }

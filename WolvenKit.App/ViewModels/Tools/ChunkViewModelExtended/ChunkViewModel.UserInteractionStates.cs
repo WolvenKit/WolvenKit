@@ -45,6 +45,11 @@ public partial class ChunkViewModel
 
     public void SetEditorLevel(EditorDifficultyLevel level)
     {
+        // RecalculateProperties will set expansion states, so only do it if the level has changed/5
+        if (level == _currentEditorDifficultyLevel)
+        {
+            return;
+        }
         _currentEditorDifficultyLevel = level;
         DifficultyLevelFieldInformation = EditorDifficultyLevelFieldFactory.GetInstance(level);
         RecalculateProperties();
