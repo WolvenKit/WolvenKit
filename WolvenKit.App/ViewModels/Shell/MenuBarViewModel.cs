@@ -15,7 +15,7 @@ public class WikiLinks
     public string CyberpunkBlenderAddon => "https://github.com/WolvenKit/Cyberpunk-Blender-add-on";
     public string WolvenKitSetupGuide => "https://wiki.redmodding.org/wolvenkit/getting-started/setup";
     public string WolvenKitCreatingAModGuide => "https://wiki.redmodding.org/wolvenkit/getting-started/creating-a-mod";
-    public string DiscordInvitation => "https://discord.gg/Epkq79kd96";
+    public string DiscordInvitation => "https://discord.gg/redmodding";
     public string AboutWolvenKit => "https://wiki.redmodding.org/wolvenkit/about";
 }
 // ReSharper enable MemberCanBeMadeStatic.Global
