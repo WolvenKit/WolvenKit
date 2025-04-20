@@ -8,7 +8,7 @@
 ![GitHub all releases](https://img.shields.io/github/downloads/WolvenKit/WolvenKit/total)
 ![GitHub issues](https://img.shields.io/github/issues/WolvenKit/WolvenKit)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/WolvenKit/WolvenKit)
-<a href="https://discord.gg/redmodding"><img src="https://img.shields.io/discord/717692382849663036.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2"></a>
+<a href="https://discord.gg/cp77modding"><img src="https://img.shields.io/discord/717692382849663036.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2"></a>
 
 > ⚠️ This repository focuses on REDengine 4 for Cyberpunk 2077. For WolvenKit for <em>The Witcher 3: Wild Hunt</em> please see: https://github.com/WolvenKit/WolvenKit-7
 
@@ -74,7 +74,7 @@ If you want to build the app from source yourself:
 4. Build the projects.
 
 ## Contributing
-- Join the [Cyberpunk 2077 Modding Server](https://discord.gg/redmodding) for active development
+- Join the [Cyberpunk 2077 Modding Server](https://discord.gg/Epkq79kd96) for active development
 
 Do you want to contribute? Community feedback and contributions are highly appreciated!
 It's a good idea to create an issue when implementing a feature so people don't work on the same feature/issue in an asynchronous manner.
