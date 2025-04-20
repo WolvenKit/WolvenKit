@@ -89,6 +89,9 @@ namespace WolvenKit.Views.Tools
 
         private void SyncEditorStates()
         {
+            SetCurrentValue(IsShiftBeingHeldProperty, ModifierViewStateService.IsShiftBeingHeld);
+            SetCurrentValue(IsCtrlBeingHeldProperty, ModifierViewStateService.IsCtrlBeingHeld);
+
             SyncPasteStates();
 
             if (_rdtDataViewModel is not null)
