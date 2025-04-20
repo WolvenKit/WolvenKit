@@ -18,6 +18,7 @@ using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
@@ -69,7 +70,7 @@ namespace WolvenKit.Views.Tools
             RDTDataViewModel.OnSearchStringChanged += OnCurrentSearchChanged;
             RedDocumentTabViewModel.OnCopiedChunkChanged += OnCopiedChunkChanged;
 
-            SyncPasteStatus();
+            SyncEditorStates();
         }
 
 
@@ -82,11 +83,23 @@ namespace WolvenKit.Views.Tools
             RDTDataViewModel.OnSearchStringChanged -= OnCurrentSearchChanged;
         }
 
-        private void OnCopiedChunkChanged(object sender, EventArgs e) => SyncPasteStatus();
+        private void OnCopiedChunkChanged(object sender, EventArgs e) => SyncPasteStates();
 
         private void OnCurrentSearchChanged(object _, List<ChunkViewModel> e) => UpdateFilteredItemsSource(e);
 
-        private void SyncPasteStatus()
+        private void SyncEditorStates()
+        {
+            SyncPasteStates();
+
+            if (_rdtDataViewModel is not null)
+            {
+                _rdtDataViewModel.EditorDifficultyLevel = RedDocumentViewModel.GlobalEditorDifficultyLevel;
+            }
+
+            GetRoot()?.SetEditorLevel(RedDocumentViewModel.GlobalEditorDifficultyLevel);
+        }
+
+        private void SyncPasteStates()
         {
             SetCurrentValue(HasSingleItemCopiedProperty, true);
             SetCurrentValue(HasHandleCopiedProperty, ChunkViewModel.IsHandle(RedDocumentTabViewModel.CopiedChunk));

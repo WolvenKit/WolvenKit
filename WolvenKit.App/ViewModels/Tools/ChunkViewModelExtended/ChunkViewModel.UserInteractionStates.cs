@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.RED4.Types;
 
@@ -17,7 +19,6 @@ public partial class ChunkViewModel
     /// </summary>
     [ObservableProperty] private bool _isDisplayAsReadOnly;
 
-
     /// <summary>
     /// For view visibility - if the noob filter is enabled, only show properties that the user wants to edit.
     /// Fields are defined in <see cref="EditorDifficultyLevelFieldFactory"/>.
@@ -29,7 +30,7 @@ public partial class ChunkViewModel
     /// Fields are defined in <see cref="EditorDifficultyLevelFieldFactory"/>.
     /// </summary>
     [ObservableProperty] private bool _isHiddenBySearch;
-
+    
     private void CalculateUserInteractionStates()
     {
         // Either a root field, or a field that isn't initialized yet

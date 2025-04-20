@@ -36,25 +36,7 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            if (vm.IsDirty)
-            {
-                var result = Interactions.ShowConfirmation((
-                    $"The file {vm.FilePath} has unsaved changes. Do you want to save it before reloading?",
-                    "File Modified",
-                    WMessageBoxImage.Question,
-                    WMessageBoxButtons.YesNo));
-
-                if (result == WMessageBoxResult.No)
-                {
-                    return;
-                }
-
-                vm.SaveSync(null);
-            }
-
-            vm.EditorDifficultyLevel = level;
-            
-            vm.Reload(false);
+            vm.EditorDifficultyLevel = level;            
         }
 
         private void TabControl_OnSelectedItemChangedEvent(object sender, SelectedItemChangedEventArgs e)

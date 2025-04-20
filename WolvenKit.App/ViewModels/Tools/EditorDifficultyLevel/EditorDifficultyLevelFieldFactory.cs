@@ -317,6 +317,7 @@ public static class EditorDifficultyLevelFieldFactory
 {
     private static readonly Dictionary<EditorDifficultyLevel, EditorDifficultyLevelInformation> s_fieldInformation = new()
     {
+        { EditorDifficultyLevel.None, new EditorDifficultyLevelInformation_Easy() },
         { EditorDifficultyLevel.Easy, new EditorDifficultyLevelInformation_Easy() },
         { EditorDifficultyLevel.Default, new EditorDifficultyLevelInformation_Default() },
         { EditorDifficultyLevel.Advanced, new EditorDifficultyLevelInformation_Advanced() }

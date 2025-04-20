@@ -5,4 +5,5 @@ public enum EditorDifficultyLevel
     Easy,
     Default,
     Advanced,
+    None,
 }

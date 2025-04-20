@@ -199,6 +199,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         RefreshMenuVisibility();
     }
 
+    // Editor level is required for view binding (updating colour of eye icon)
     public void SetEditorLevel(EditorDifficultyLevel level)
     {
         EditorLevel = level;
