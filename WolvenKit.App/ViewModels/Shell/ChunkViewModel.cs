@@ -2606,7 +2606,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     private void DuplicateChunk() => DuplicateChunk(-1);
 
-    public ChunkViewModel? DuplicateChunk(int index)
+    public ChunkViewModel? DuplicateChunk(int index, bool pasteAsNew = false)
     {
         if (Parent is null || Data is RedDummy)
         {
@@ -2632,6 +2632,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         var newSibling = Parent.GetChildNode(Math.Min(index, Parent.TVProperties.Count - 1));
 
+        if (newSibling is not null && pasteAsNew)
+        {
+            newSibling.AdjustPropertiesAfterPasteAsNewItem();
+        }
+
         // Unless shift key is pressed, we want to regenerate CRUIDs
         if (IsShiftKeyPressed || newSibling is null)
         {
@@ -2656,26 +2661,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         return newSibling;
     }
 
-    [RelayCommand(CanExecute = nameof(CanDuplicateChunk))]
-    public void DuplicateAsNewChunk()
+    public ChunkViewModel? DuplicateAsNewChunk()
     {
-        if (Parent is null || DuplicateChunk(Parent.Properties.Count) is not ChunkViewModel newChunk)
+        if (Parent is null)
         {
-            return;
+            return null;
         }
 
-        try
-        {
-            Tab?.RemoveFromSelection(this);
-            newChunk.AdjustPropertiesAfterPasteAsNewItem();
-
-            Tab?.AddToSelection(newChunk);
-            Parent.RecalculateProperties();
-        }
-        catch (Exception ex)
-        {
-            _loggerService.Error($"Failed to recalculate properties after duplicating an entry: {ex}");
-        }
+        return DuplicateChunk(Parent.Properties.Count, true);
     }
 
     private void ReindexChildren()

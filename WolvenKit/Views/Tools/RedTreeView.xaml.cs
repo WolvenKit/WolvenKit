@@ -836,17 +836,21 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
+            List<ChunkViewModel> chunksByParent = [];
+            
             using (collectionView.DeferRefresh())
             {
                 var chunks = GetSelectedChunks();
-
                 foreach (var cvm in chunks)
                 {
-                    cvm.DuplicateAsNewChunk();
+                    if (cvm.DuplicateAsNewChunk() is ChunkViewModel newChunk)
+                    {
+                        chunksByParent.Add(newChunk);
+                    }
                 }
-
-                _rdtDataViewModel?.ClearSelection();
             }
+
+            SetSelectedItems(chunksByParent, true);
         }
 
         private void DuplicateSelectedChunks(bool preserveIndex = false)
@@ -886,7 +890,7 @@ namespace WolvenKit.Views.Tools
                 }
 
                 SetSelectedItems(chunksByParent);
-            }
+            } // deferRefresh end
         }
 
         /// <summary>
@@ -962,13 +966,13 @@ namespace WolvenKit.Views.Tools
         }
 
         // Re-select nodes, enforcing change detection. Without setting it to null first, e.g. search&replace won't work.
-        private void SetSelectedItems(List<ChunkViewModel> selectedChunkViewModels)
+        private void SetSelectedItems(List<ChunkViewModel> selectedChunkViewModels, bool forceLocal = false)
         {
 
             SetCurrentValue(SelectedItemsProperty, null);
             SetCurrentValue(SelectedItemProperty, null);
 
-            if (_rdtDataViewModel is not null)
+            if (_rdtDataViewModel is not null && !forceLocal)
             {
                 _rdtDataViewModel.SetSelection(selectedChunkViewModels);
             }

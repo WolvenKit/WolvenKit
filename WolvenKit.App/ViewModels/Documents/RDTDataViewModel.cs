@@ -416,6 +416,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     public void AddToSelection(ChunkViewModel? chunk)
     {
         var selectedChunks = SelectedChunks?.ToList() ?? [];
+        
         ClearSelection();
         if (chunk is null)
         {
@@ -473,19 +474,20 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         {
             return;
         }
-
+        
         // remove duplicates
         var uniqueChunks = new HashSet<ChunkViewModel>(chunks);
         foreach (var cvm in uniqueChunks)
         {
-            cvm.IsSelected = true;
+            // cvm.IsSelected = true;
             ExpandParentNodes(cvm);
-
+            
             if (SelectedChunks is not null && !SelectedChunks.Contains(cvm))
             {
                 SelectedChunks.Add(cvm);
             }
         }
+
 
         SelectedChunk ??= uniqueChunks.LastOrDefault();
 
