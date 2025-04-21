@@ -274,6 +274,15 @@ public partial class ChunkViewModel
 
                     break;
                 }
+                case gameEntitySpawnerComponent when GetTvPropertyFromPath("slotDataArray") is ChunkViewModel sda:
+                    sda.IsExpanded = isExpanded;
+                    sda.ExpansionStateChangedFromParent = isExpanded;
+                    break;
+
+                case IRedArray<gameEntitySpawnerSlotData> when Name is "slotDataArray":
+                    IsExpanded = true;
+                    ExpansionStateChangedFromParent = true;
+                    break;
                 /*
                  * .anim file
                  */
@@ -302,7 +311,6 @@ public partial class ChunkViewModel
                     chunkNames.IsExpanded = this.IsExpanded;
                     chunkNames.ExpansionStateChangedFromParent = IsExpanded;
                     break;
-
                 // inkatlas
                 case CArrayBase<inkTextureSlot>:
                     foreach (var childNode in treeViewProperties)

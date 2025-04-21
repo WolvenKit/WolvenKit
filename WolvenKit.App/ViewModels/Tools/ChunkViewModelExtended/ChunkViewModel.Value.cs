@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -746,6 +747,10 @@ public partial class ChunkViewModel
                 Value = gameEntRef.Reference.GetResolvedText();
                 IsValueExtrapolated = Value != "";
                 break;
+            case gameEntitySpawnerComponent when GetTvPropertyFromPath("slotDataArray") is ChunkViewModel sda:
+                Value = sda.Descriptor;
+                IsValueExtrapolated = Value != "";
+                break;
             case scnPropDef propDef when propDef.FindEntityInNodeParams.NodeRef.GetResolvedText() is string nodeRef &&
                                          nodeRef != "":
                 Value = $"NodeRef: {nodeRef}";
@@ -883,6 +888,22 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = Value != "";
                 break;
             }
+            case IRedArray<gameEntitySpawnerSlotData> slotDataAry:
+                if (slotDataAry.Count() == 0)
+                {
+                    Value = "";
+                }
+                else
+                {
+                    Value = $"[{string.Join(", ", slotDataAry.Select(s => StringHelper.Stringify(s)))}]";
+                }
+
+                IsValueExtrapolated = Value != "";
+                break;
+            case gameEntitySpawnerSlotData slotData:
+                Value = StringHelper.Stringify(slotData, true);
+                IsValueExtrapolated = Value != "";
+                break;
             case locVoiceoverLengthMap lengthMap:
                 Value = $"[{lengthMap.Entries.Count}]";
                 IsValueExtrapolated = Value != "";

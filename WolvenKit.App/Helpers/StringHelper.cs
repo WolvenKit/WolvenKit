@@ -292,4 +292,25 @@ public abstract partial class StringHelper
     public static string Stringify(Quaternion q) => $"{q.I}, {q.J}, {q.K}, {q.R}";
 
     public static string Stringify(NodeRef nodeRef) => nodeRef.GetResolvedText() ?? "";
+
+    public static string Stringify(TweakDBID tweakDbId) => tweakDbId.GetResolvedText() ?? "";
+    public static string Stringify(CName cname) => cname.GetResolvedText() ?? "";
+
+    public static string Stringify(gameEntitySpawnerSlotData slotData, bool asValue = false)
+    {
+        var tweakDbIdString = Stringify(slotData.SpawnableObject);
+        var slotName = Stringify(slotData.SlotName);
+
+        if (tweakDbIdString == "" && !asValue)
+        {
+            return slotName;
+        }
+
+        if (slotName == "" || asValue)
+        {
+            return tweakDbIdString;
+        }
+
+        return $"{slotName} => {tweakDbIdString}";
+    }
 }
