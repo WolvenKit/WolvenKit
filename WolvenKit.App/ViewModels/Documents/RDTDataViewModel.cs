@@ -476,8 +476,6 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
         // remove duplicates
         var uniqueChunks = new HashSet<ChunkViewModel>(chunks);
-        SelectedChunk = uniqueChunks.LastOrDefault();
-
         foreach (var cvm in uniqueChunks)
         {
             cvm.IsSelected = true;
@@ -488,6 +486,9 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
                 SelectedChunks.Add(cvm);
             }
         }
+
+        SelectedChunk ??= uniqueChunks.LastOrDefault();
+
     }
     
     public event EventHandler<string>? OnSectorNodeSelected;
