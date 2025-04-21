@@ -707,10 +707,17 @@ namespace WolvenKit.Views.Tools
 
         private void PasteSelectionInternal(bool pasteSingleSelect = false)
         {
-            var copiedChunks = RedDocumentTabViewModel.GetCopiedChunks();
-            if (ItemsSource is not ICollectionView collectionView
-                || (pasteSingleSelect && RedDocumentTabViewModel.CopiedChunk is null)
-                || (!pasteSingleSelect && copiedChunks.Count == 0))
+            List<IRedType> copiedChunks = [];
+            if (pasteSingleSelect && RedDocumentTabViewModel.CopiedChunk is not null)
+            {
+                copiedChunks.Add(RedDocumentTabViewModel.CopiedChunk);
+            }
+            else if (!pasteSingleSelect)
+            {
+                copiedChunks.AddRange(RedDocumentTabViewModel.GetCopiedChunks());
+            }
+
+            if (ItemsSource is not ICollectionView collectionView || copiedChunks.Count == 0)
             {
                 return;
             }
