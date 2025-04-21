@@ -219,6 +219,8 @@ namespace WolvenKit.Views.Shell
             XmlReader reader = null;
             try
             {
+                PART_DockingManager.BeginInit(); // Begin batch updates
+
                 reader = XmlReader.Create(filePath);
 
                 var defaultXmlSerializer = DockingManager.CreateDefaultXmlSerializer(typeof(List<DockingParams>));
@@ -238,7 +240,8 @@ namespace WolvenKit.Views.Shell
                 var newDockedWindows = dockingParamsList.Select(dockingParam => dockingParam.Name).ToList();
                 for (var i = PART_DockingManager.Children.Count - 1; i >= 0; i--)
                 {
-                    if (PART_DockingManager.Children[i] is not ContentControl contentControl || contentControl.Content is not IDockElement dockElement)
+                    if (PART_DockingManager.Children[i] is not ContentControl contentControl ||
+                        contentControl.Content is not IDockElement dockElement)
                     {
                         throw new Exception($"Can't unload {PART_DockingManager.Children[i].Name}");
                     }
@@ -255,12 +258,13 @@ namespace WolvenKit.Views.Shell
                 // Check if the panel already exists. If not, try creating it via AddDockedPane.
                 foreach (var dockingParam in dockingParamsList
                              .Where(dockingParam =>
-                                 PART_DockingManager.Children.OfType<FrameworkElement>().All(child => child.Name != dockingParam.Name))
+                                 PART_DockingManager.Children.OfType<FrameworkElement>()
+                                     .All(child => child.Name != dockingParam.Name))
                              .Where(dockingParam => !appViewModel.AddDockedPane(dockingParam.Name)))
                 {
                     _logger.Warning($"ViewModel for \"{dockingParam.Name}\" could not be found!");
                 }
-                
+
                 reader.Close();
                 reader = XmlReader.Create(filePath);
 
@@ -274,8 +278,12 @@ namespace WolvenKit.Views.Shell
             {
                 _logger.Error(e);
             }
+            finally
+            {
+                reader?.Close();
+                PART_DockingManager.EndInit(); // End batch updates
+            }
             
-            reader?.Close();
 
             return false;
         }
