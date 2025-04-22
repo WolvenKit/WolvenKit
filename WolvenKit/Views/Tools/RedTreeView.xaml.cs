@@ -1006,7 +1006,8 @@ namespace WolvenKit.Views.Tools
         }
 
         #region handles
-        
+
+
         private static bool IsHandle(IRedType potentialHandle)
         {
             if (potentialHandle is null)
@@ -1014,6 +1015,9 @@ namespace WolvenKit.Views.Tools
                 return false;
             }
 
+            if (potentialHandle is RedDummy)
+            {
+            }
             var propertyType = potentialHandle.GetType();
             return
                 propertyType.IsAssignableTo(typeof(IRedBaseHandle)) && (
@@ -1021,10 +1025,54 @@ namespace WolvenKit.Views.Tools
                     propertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>));
         }
 
+        private static bool IsHandle(ChunkViewModel cvm)
+        {
+            if (cvm is null)
+            {
+                return false;
+            }
+
+            return IsHandle(cvm.Data)
+                   // Data can be a RedDummy after the object has been reset 
+                   || cvm.Type.StartsWith("whandle:")
+                   || cvm.Type.StartsWith("handle:");
+        }
+
+        // Comparing strings - e.g. "wHandle:inkwidget"
         // For logic, see https://github.com/WolvenKit/WolvenKit/pull/2294#issuecomment-2760342954
-        private bool CanPasteHandleSingle() => IsHandle(SelectedItem?.Data) &&
-                                               RedDocumentTabViewModel.CopiedChunk?.GetType()
-                                                   .IsAssignableTo(SelectedItem?.Data.GetType()) == true;
+        private static bool IsTypeCompatible(string pasteType, string targetType)
+        {
+            if (pasteType == targetType)
+            {
+                return true;
+            }
+
+            if (!pasteType.Contains(':') || !targetType.Contains(':'))
+            {
+                return false;
+            }
+
+            var pasteTypeParts = pasteType.Split(":");
+            var targetTypeParts = targetType.Split(":");
+
+            if (targetTypeParts[1] != pasteTypeParts[1])
+            {
+                return false;
+            }
+
+            // only handle may paste into handle, and that has been covered by the first check
+            return targetType != "handle";
+        }
+
+        // For logic, see https://github.com/WolvenKit/WolvenKit/pull/2294#issuecomment-2760342954
+        private bool CanPasteHandleSingle() =>
+            IsHandle(SelectedItem) && RedDocumentTabViewModel.CopiedChunk is IRedType copiedItem && (
+                // handle is directly compatible
+                copiedItem.GetType().IsAssignableTo(SelectedItem.Data.GetType())
+
+                // in case the target item has been reset, the types must match
+                || (IsHandle(copiedItem) && IsTypeCompatible(copiedItem.RedType, SelectedItem.Type))
+            );
 
         [RelayCommand(CanExecute = nameof(CanPasteHandleSingle))]
         private void PasteHandleSingle()
@@ -1032,7 +1080,7 @@ namespace WolvenKit.Views.Tools
             var selectedChunks = GetSelectedChunks();
 
             if (ItemsSource is not ICollectionView collectionView ||
-                !ChunkViewModel.IsHandle(RedDocumentTabViewModel.CopiedChunk) ||
+                !IsHandle(RedDocumentTabViewModel.CopiedChunk) ||
                 selectedChunks.Count != 1 || SelectedItem is not ChunkViewModel cvm)
             {
                 return;
