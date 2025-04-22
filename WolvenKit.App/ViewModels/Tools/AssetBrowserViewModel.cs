@@ -1041,15 +1041,6 @@ public partial class AssetBrowserViewModel : ToolViewModel
             RightItems.Clear();
             return;
         }
-
-        try
-        {
-            SearchBarText = Regex.Replace(SearchBarText, s_refinementSeparator.ToString(), " > ");
-        }
-        catch
-        {
-            // if the thread is busy, I guess we aren't replacing anything
-        }
         
         var searchAsSequentialRefinements =
             s_refinementSeparator
@@ -1082,15 +1073,6 @@ public partial class AssetBrowserViewModel : ToolViewModel
         {
             RightItems.Clear();
             return [];
-        }
-
-        try
-        {
-            SearchBarText = Regex.Replace(SearchBarText, s_refinementSeparator.ToString(), " > ");
-        }
-        catch
-        {
-            // if the thread is busy, I guess we aren't replacing anything
         }
         
         var searchAsSequentialRefinements =
