@@ -459,11 +459,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     }
 
 
-    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-    {
-        base.OnPropertyChanged(e);
-        Console.WriteLine($"PropertyChanged: {e.PropertyName}");
-    }
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e) => base.OnPropertyChanged(e);
 
     public void SetSelection(List<ChunkViewModel> chunks)
     {

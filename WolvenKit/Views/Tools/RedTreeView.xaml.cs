@@ -37,6 +37,8 @@ namespace WolvenKit.Views.Tools
         private readonly IProgressService<double> _progressService;
         private readonly AppViewModel _appViewModel;
         private readonly ProjectResourceTools _projectResourceTools;
+        private readonly ISettingsManager _settingsManager;
+        
 
         public RedTreeView()
         {
@@ -44,7 +46,8 @@ namespace WolvenKit.Views.Tools
             _loggerService = Locator.Current.GetService<ILoggerService>();
             _progressService = Locator.Current.GetService<IProgressService<double>>();
             _appViewModel = Locator.Current.GetService<AppViewModel>();
-            _projectResourceTools = Locator.Current.GetService<ProjectResourceTools>(); 
+            _projectResourceTools = Locator.Current.GetService<ProjectResourceTools>();
+            _settingsManager = Locator.Current.GetService<ISettingsManager>(); 
             
             InitializeComponent();
 
@@ -96,10 +99,10 @@ namespace WolvenKit.Views.Tools
 
             if (_rdtDataViewModel is not null)
             {
-                _rdtDataViewModel.EditorDifficultyLevel = RedDocumentViewModel.GlobalEditorDifficultyLevel;
+                _rdtDataViewModel.EditorDifficultyLevel = _settingsManager.DefaultEditorDifficultyLevel;
             }
 
-            GetRoot()?.SetEditorLevel(RedDocumentViewModel.GlobalEditorDifficultyLevel);
+            GetRoot()?.SetEditorLevel(_settingsManager.DefaultEditorDifficultyLevel);
         }
 
         private void SyncPasteStates()

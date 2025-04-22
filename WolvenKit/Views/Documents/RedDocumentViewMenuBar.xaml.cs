@@ -90,7 +90,7 @@ namespace WolvenKit.Views.Documents
                     return;
                 }
 
-                vm.SetEditorLevel(RedDocumentViewModel.GlobalEditorDifficultyLevel);
+                vm.SetEditorLevel(_settingsManager.DefaultEditorDifficultyLevel);
                 vm.RefreshMenuVisibility(true);
                 vm.OnAddDependencies += OnAddDependencies;
             });
@@ -467,7 +467,7 @@ namespace WolvenKit.Views.Documents
 
         private void OnEditorModeClick(EditorDifficultyLevel level)
         {
-            RedDocumentViewModel.GlobalEditorDifficultyLevel = level;
+            _settingsManager.DefaultEditorDifficultyLevel = level;
             
             ViewModel?.SetEditorLevel(level);
             EditorDifficultChanged?.Invoke(this, level);

@@ -130,7 +130,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         IsReadOnly = isReadOnly;
 
         DifficultyLevelFieldInformation =
-            EditorDifficultyLevelFieldFactory.GetInstance(RedDocumentViewModel.GlobalEditorDifficultyLevel);
+            EditorDifficultyLevelFieldFactory.GetInstance(_settingsManager.DefaultEditorDifficultyLevel);
         
         // If the parent is an array, the numeric index will be passed as property name 
         if (IsInArray && int.TryParse(name, out var arrayIndex))
