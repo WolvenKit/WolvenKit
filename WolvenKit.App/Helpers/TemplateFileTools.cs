@@ -192,7 +192,9 @@ public class TemplateFileTools
 
         yamlTemplate = yamlTemplate.Replace("DISPLAY_NAME",
             $"LocKey#{options.ModderName.ToFileName()}_{fileName}_photomode_i18n");
-        yamlTemplate = yamlTemplate.Replace("NPC_NAME", fileName);
+
+        // upper case first letter makes them show up at the top of the list
+        yamlTemplate = yamlTemplate.Replace("NPC_NAME", fileName.FirstCharToUpper());
 
         if (!string.IsNullOrEmpty(options.EntFilePath))
         {
