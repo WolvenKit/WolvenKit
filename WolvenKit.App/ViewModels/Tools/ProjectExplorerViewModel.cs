@@ -556,7 +556,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <summary>
     /// Reimports the game file to replace the current one
     /// </summary>
-    private bool CanAddDependencies() => ActiveProject != null && SelectedItem?.IsInRaw == true &&
+    private bool CanAddDependencies() => ActiveProject != null && IsInRawFolder(SelectedItem) &&
                                          SelectedItem!.Extension.Contains("xml",
                                              StringComparison.CurrentCultureIgnoreCase);
     [RelayCommand(CanExecute = nameof(CanAddDependencies))]
@@ -611,12 +611,21 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             }
         }
     }
+
+    private bool IsGameFile(FileSystemModel? m)
+    {
+        if (m is null || !(m.GameRelativePath.StartsWith("base") || m.GameRelativePath.StartsWith("ep1")))
+        {
+            return false;
+        }
+
+        return _archiveManager.GetGameFile(m.GameRelativePath, false, false) != null;
+    }
     
     /// <summary>
     /// Reimports the game file to replace the current one
     /// </summary>
-    private bool CanOverwriteWithGameFile() => ActiveProject != null
-                                               && SelectedItem is { IsInArchive: true, IsGameFile: true };
+    private bool CanOverwriteWithGameFile() => IsInArchiveFolder(SelectedItem) && IsGameFile(SelectedItem);
 
     [RelayCommand(CanExecute = nameof(CanOverwriteWithGameFile))]
     private async Task OverwriteWithGameFile()
@@ -858,6 +867,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     #region red4
 
+    private bool IsInArchiveFolder(FileSystemModel? model) =>
+        ActiveProject is not null && model is not null && model.FullName.Contains(ActiveProject.ModDirectory);
+
+    private bool IsInRawFolder(FileSystemModel? model) =>
+        ActiveProject is not null && model is not null && model.FullName.Contains(ActiveProject.RawDirectory);
+
     private bool HasCorrespondingConvertFile(FileSystemModel? model)
     {
         if (model is null || ActiveProject is null)
@@ -865,13 +880,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return false;
         }
 
-        if (model.IsInArchive)
+        if (IsInArchiveFolder(model))
         {
             return File.Exists(
                 $"{model.FullName.Replace(ActiveProject.ModDirectory, ActiveProject.RawDirectory)}.json");
         }
 
-        return model.IsInRaw && model.FullName.EndsWith(".json") &&
+        return IsInRawFolder(model) && model.FullName.EndsWith(".json") &&
                File.Exists(model.FullName.Replace(ActiveProject.RawDirectory, ActiveProject.ModDirectory)
                    .Replace("json", ""));
     }
@@ -879,7 +894,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     // If shift key is pressed, we want to convert any matching files in raw _from_ json
     private bool CanConvertGameFile() => ActiveProject is not null && SelectedItems is not null &&
                                          SelectedItems.All(x =>
-                                             x is FileSystemModel { IsInArchive: true } m &&
+                                             x is FileSystemModel { } m && IsInArchiveFolder(m) &&
                                              (!IsShiftKeyPressed || HasCorrespondingConvertFile(m)));
 
     [RelayCommand(CanExecute = nameof(CanConvertGameFile))]
@@ -890,7 +905,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        var selection = SelectedItems.NotNull().OfType<FileSystemModel>().Where(m => m.IsInArchive).ToList();
+        var selection = SelectedItems.NotNull().OfType<FileSystemModel>().Where(m => IsInArchiveFolder(m)).ToList();
         
         if (!IsShiftKeyPressed)
         {
@@ -960,7 +975,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     // If shift key is pressed, we want to convert any matching files in archive _to_ json
     private bool CanConvertRawFile() => ActiveProject is not null && SelectedItems is not null &&
                                         SelectedItems.All(x =>
-                                            x is FileSystemModel { IsInRaw: true } m &&
+                                            x is FileSystemModel m && IsInRawFolder(m) &&
                                             (!IsShiftKeyPressed || HasCorrespondingConvertFile(m)));
 
     [RelayCommand(CanExecute = nameof(CanConvertRawFile))]
@@ -968,7 +983,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     {
         if (!IsShiftKeyPressed)
         {
-            await ConvertFromJsonInternal(SelectedItems!.OfType<FileSystemModel>().Where(x => x.IsInRaw));
+            await ConvertFromJsonInternal(SelectedItems!.OfType<FileSystemModel>().Where(IsInRawFolder));
             return;
         }
 
@@ -976,7 +991,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             .Select(x => $"{x.GameRelativePath}".Replace(".json", "")).ToList();
 
         var convertSelection = FileList
-            .Where(x => x.IsInArchive)
+            .Where(IsInArchiveFolder)
             .Where(x => selectedItemPaths.Contains(x.GameRelativePath)).ToList();
 
         await ConvertToJsonInternal(convertSelection);
@@ -1077,12 +1092,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return false;
         }
 
-        if (model.IsInArchive)
+        if (IsInArchiveFolder(model))
         {
             return model.Extension.ToLower().Equals(ERedExtension.mlsetup.ToString(), StringComparison.Ordinal);
         }
 
-        return model.IsInRaw && model.Extension.ToLower()
+        return IsInRawFolder(model) && model.Extension.ToLower()
             .Equals(ETextConvertFormat.json.ToString(), StringComparison.Ordinal) && GetSecondExtension(model)
             .Equals(ERedExtension.mlsetup.ToString(), StringComparison.Ordinal);
 
@@ -1121,7 +1136,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
 
         var filepath = SelectedItem.FullName;
-        if (SelectedItem.IsInArchive)
+        if (IsInArchiveFolder(SelectedItem))
         {
             if (ActiveProject is null)
             {
@@ -1299,10 +1314,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private void OnModifierUpdateEvent()
     {
         IsShowAbsolutePathToRawFolder = ModifierStateService.IsCtrlShiftOnlyPressed
-                                        && SelectedItem?.IsInArchive == true;
+                                        && IsInArchiveFolder(SelectedItem);
 
         IsShowAbsolutePathToArchiveFolder = ModifierStateService.IsCtrlShiftOnlyPressed
-                                            && SelectedItem?.IsInRaw == true;
+                                            && IsInRawFolder(SelectedItem);
 
         IsShowAbsolutePathToCurrentFile = ModifierStateService.IsShiftKeyPressedOnly;
 
