@@ -12,7 +12,7 @@ namespace WolvenKit.Functionality.Layout
                 Syncfusion.Windows.Tools.Controls.DockState.Dock => DockState.Dock,
                 Syncfusion.Windows.Tools.Controls.DockState.Float => DockState.Float,
                 Syncfusion.Windows.Tools.Controls.DockState.Hidden => DockState.Hidden,
-                Syncfusion.Windows.Tools.Controls.DockState.AutoHidden => DockState.Hidden,
+                Syncfusion.Windows.Tools.Controls.DockState.AutoHidden => DockState.AutoHidden,
                 Syncfusion.Windows.Tools.Controls.DockState.Document => DockState.Document,
                 _ => throw new ArgumentOutOfRangeException(nameof(sfDockState), sfDockState, null)
             };
