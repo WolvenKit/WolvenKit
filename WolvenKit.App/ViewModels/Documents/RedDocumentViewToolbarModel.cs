@@ -32,15 +32,22 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         IProjectManager projectManager
     )
     {
-        EditorLevel = settingsManager.DefaultEditorDifficultyLevel;
-   
         _modifierViewStateService = modifierSvc;
+        _projectManager = projectManager;
+        _settingsManager = settingsManager;
+
         modifierSvc.ModifierStateChanged += OnModifierChanged;
         modifierSvc.PropertyChanged += (_, args) => OnPropertyChanged(args.PropertyName);
 
-        _projectManager = projectManager;
-        _settingsManager = settingsManager;
-        
+        EditorLevel = settingsManager.DefaultEditorDifficultyLevel;
+        _settingsManager.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName == nameof(ISettingsManager.DefaultEditorDifficultyLevel))
+            {
+                SetEditorLevel(_settingsManager.DefaultEditorDifficultyLevel);
+            }
+        };
+
         RefreshMenuVisibility(true);
     }
 
@@ -207,6 +214,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         {
             return;
         }
+
         EditorLevel = level;
         RootChunk?.SetEditorLevel(level);
     }

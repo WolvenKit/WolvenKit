@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -83,7 +84,7 @@ namespace WolvenKit.Views.Documents
 
             _modifierStateService.ModifierStateChanged += OnModifierStateChanged;
 
-            this.WhenActivated(_ =>
+            this.WhenActivated(disposable =>
             {
                 if (DataContext is not RedDocumentViewToolbarModel vm)
                 {
@@ -92,8 +93,9 @@ namespace WolvenKit.Views.Documents
 
                 vm.SetEditorLevel(_settingsManager.DefaultEditorDifficultyLevel);
                 vm.RefreshMenuVisibility(true);
+
                 vm.OnAddDependencies += OnAddDependencies;
-            });
+            }); 
         }
 
         private void OnModifierStateChanged() => RefreshChildMenuItems();
@@ -463,15 +465,7 @@ namespace WolvenKit.Views.Documents
             cvm.Tab?.Parent.SetIsDirty(true);
         }
 
-        public event EventHandler<EditorDifficultyLevel>? EditorDifficultChanged;
-
-        private void OnEditorModeClick(EditorDifficultyLevel level)
-        {
-            _settingsManager.DefaultEditorDifficultyLevel = level;
-            
-            ViewModel?.SetEditorLevel(level);
-            EditorDifficultChanged?.Invoke(this, level);
-        }
+        private void OnEditorModeClick(EditorDifficultyLevel level) => _settingsManager.DefaultEditorDifficultyLevel = level;
 
         private void OnEditorModeClick_Easy(object _, RoutedEventArgs e) => OnEditorModeClick(EditorDifficultyLevel.Easy);
 

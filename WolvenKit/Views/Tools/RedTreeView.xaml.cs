@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -18,8 +17,6 @@ using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
-using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
-using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.Types;
@@ -96,11 +93,6 @@ namespace WolvenKit.Views.Tools
             SetCurrentValue(IsCtrlBeingHeldProperty, ModifierViewStateService.IsCtrlBeingHeld);
 
             SyncPasteStates();
-
-            if (_rdtDataViewModel is not null)
-            {
-                _rdtDataViewModel.EditorDifficultyLevel = _settingsManager.DefaultEditorDifficultyLevel;
-            }
 
             GetRoot()?.SetEditorLevel(_settingsManager.DefaultEditorDifficultyLevel);
         }

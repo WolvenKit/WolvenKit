@@ -13,7 +13,6 @@ using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
-using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
@@ -89,13 +88,12 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
         _path = path;
 
-        EditorDifficultyLevel = settingsManager.DefaultEditorDifficultyLevel;
-        
         _extension = Path.GetExtension(path) != "" ? Path.GetExtension(path)[1..] : "";
 
         Cr2wFile = file;
         IsReadOnly = isReadyOnly;
         _isInitialized = true;
+
         PopulateItems();
     }
 

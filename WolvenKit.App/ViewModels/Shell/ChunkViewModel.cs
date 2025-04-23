@@ -88,8 +88,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public int NodeIdxInParent = -1;
 
-    private EditorDifficultyLevel _currentEditorDifficultyLevel = EditorDifficultyLevel.Easy;
-
     #region Constructors
 
     public ChunkViewModel(IRedType data, string name, AppViewModel appViewModel,

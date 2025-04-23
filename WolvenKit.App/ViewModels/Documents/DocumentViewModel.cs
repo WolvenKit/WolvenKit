@@ -5,7 +5,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Models.Docking;
 using WolvenKit.App.ViewModels.Shell;
-using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 
 namespace WolvenKit.App.ViewModels.Documents;
 
@@ -42,8 +41,6 @@ public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewMo
         get => _isDirty;
         protected set => SetProperty(ref _isDirty, value);
     }
-
-    [ObservableProperty] private EditorDifficultyLevel _editorDifficultyLevel;
 
     public bool IsInitialized() => _isInitialized;
 

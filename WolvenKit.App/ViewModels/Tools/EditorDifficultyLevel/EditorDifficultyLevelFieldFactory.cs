@@ -14,8 +14,10 @@ namespace WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 /// Helper class to hold the logic for conditional editor field hiding and read-only states.
 /// We'll have one instance of this class per difficulty level. 
 /// </summary>
-public class EditorDifficultyLevelInformation
+public abstract class EditorDifficultyLevelInformation
 {
+    public abstract EditorDifficultyLevel Level { get; }
+
     #region field_definitions
 
     protected static readonly List<string> _informationFields =
@@ -238,7 +240,6 @@ public class EditorDifficultyLevelInformation
         return ReadonlyFields.TryGetValue(dataType, out var fields) && fields.Contains(fieldName);
     }
 
-
     public virtual bool IsHidden(string fieldName, Type dataType, ChunkViewModel cvm)
     {
         if (HiddenFieldNames.Contains(fieldName) || HiddenDataTypes.Contains(dataType) ||
@@ -271,6 +272,8 @@ public class EditorDifficultyLevelInformation
 
 public class EditorDifficultyLevelInformation_Easy : EditorDifficultyLevelInformation
 {
+    public override EditorDifficultyLevel Level => EditorDifficultyLevel.Easy;
+
     public EditorDifficultyLevelInformation_Easy()
     {
         HiddenFieldNames.AddRange(_informationFields);
@@ -290,6 +293,8 @@ public class EditorDifficultyLevelInformation_Easy : EditorDifficultyLevelInform
 
 public class EditorDifficultyLevelInformation_Default : EditorDifficultyLevelInformation
 {
+    public override EditorDifficultyLevel Level => EditorDifficultyLevel.Default;
+
     public EditorDifficultyLevelInformation_Default()
     {
         DisplayAsReadonlyFieldNames.AddRange(_informationFields);
@@ -308,6 +313,8 @@ public class EditorDifficultyLevelInformation_Default : EditorDifficultyLevelInf
 
 public class EditorDifficultyLevelInformation_Advanced : EditorDifficultyLevelInformation
 {
+    public override EditorDifficultyLevel Level => EditorDifficultyLevel.Advanced;
+
     public EditorDifficultyLevelInformation_Advanced()
     {
         DisplayAsReadonlyFieldNames.AddRange(_informationFields);
