@@ -8,7 +8,6 @@ using WolvenKit.App.Models.Nodify;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
-using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 
@@ -85,8 +84,7 @@ public partial class ResourcePathWrapper : ObservableObject, INode<ReferenceSock
             return;
         }
 
-        var chunk = _chunkViewmodelFactory.ChunkViewModel(cr2w.RootChunk, Socket, _appViewModel,
-            _settingsManager?.DefaultEditorDifficultyLevel ?? EditorDifficultyLevel.Easy);
+        var chunk = _chunkViewmodelFactory.ChunkViewModel(cr2w.RootChunk, Socket, _appViewModel);
         chunk.Location = Location;
         DataViewModel.Nodes.Remove(this);
         DataViewModel.Nodes.Add(chunk);

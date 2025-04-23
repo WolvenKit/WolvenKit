@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -18,7 +17,6 @@ using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
-using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.Types;
@@ -36,6 +34,8 @@ namespace WolvenKit.Views.Tools
         private readonly IProgressService<double> _progressService;
         private readonly AppViewModel _appViewModel;
         private readonly ProjectResourceTools _projectResourceTools;
+        private readonly ISettingsManager _settingsManager;
+        
 
         public RedTreeView()
         {
@@ -43,7 +43,8 @@ namespace WolvenKit.Views.Tools
             _loggerService = Locator.Current.GetService<ILoggerService>();
             _progressService = Locator.Current.GetService<IProgressService<double>>();
             _appViewModel = Locator.Current.GetService<AppViewModel>();
-            _projectResourceTools = Locator.Current.GetService<ProjectResourceTools>(); 
+            _projectResourceTools = Locator.Current.GetService<ProjectResourceTools>();
+            _settingsManager = Locator.Current.GetService<ISettingsManager>(); 
             
             InitializeComponent();
 
@@ -69,9 +70,7 @@ namespace WolvenKit.Views.Tools
             RDTDataViewModel.OnSearchStringChanged += OnCurrentSearchChanged;
             RedDocumentTabViewModel.OnCopiedChunkChanged += OnCopiedChunkChanged;
 
-            SyncPasteStatus();
-            SetCurrentValue(IsShiftBeingHeldProperty, ModifierViewStateService.IsShiftBeingHeld);
-            SetCurrentValue(IsCtrlBeingHeldProperty, ModifierViewStateService.IsCtrlBeingHeld);
+            SyncEditorStates();
         }
 
 
@@ -84,11 +83,21 @@ namespace WolvenKit.Views.Tools
             RDTDataViewModel.OnSearchStringChanged -= OnCurrentSearchChanged;
         }
 
-        private void OnCopiedChunkChanged(object sender, EventArgs e) => SyncPasteStatus();
+        private void OnCopiedChunkChanged(object sender, EventArgs e) => SyncPasteStates();
 
         private void OnCurrentSearchChanged(object _, List<ChunkViewModel> e) => UpdateFilteredItemsSource(e);
 
-        private void SyncPasteStatus()
+        private void SyncEditorStates()
+        {
+            SetCurrentValue(IsShiftBeingHeldProperty, ModifierViewStateService.IsShiftBeingHeld);
+            SetCurrentValue(IsCtrlBeingHeldProperty, ModifierViewStateService.IsCtrlBeingHeld);
+
+            SyncPasteStates();
+
+            GetRoot()?.SetEditorLevel(_settingsManager.DefaultEditorDifficultyLevel);
+        }
+
+        private void SyncPasteStates()
         {
             SetCurrentValue(HasSingleItemCopiedProperty, true);
             SetCurrentValue(HasHandleCopiedProperty, ChunkViewModel.IsHandle(RedDocumentTabViewModel.CopiedChunk));

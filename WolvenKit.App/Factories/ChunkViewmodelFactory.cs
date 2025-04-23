@@ -7,7 +7,6 @@ using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.Services;
-using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 
 namespace WolvenKit.App.Factories;
 
@@ -57,7 +56,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
     }
     
     public ChunkViewModel ChunkViewModel(IRedType rootChunk, string name, AppViewModel appViewModel,
-        EditorDifficultyLevel editorDifficultyLevel, ChunkViewModel? parent = null, bool isReadOnly = false) =>
+        ChunkViewModel? parent = null, bool isReadOnly = false) =>
         new ChunkViewModel(rootChunk, name, appViewModel,
             this,
             _tabViewmodelFactory,
@@ -71,12 +70,11 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
             _locKeyService,
             _parserService,
             _cruidService,
-            editorDifficultyLevel,
             parent,
             isReadOnly).SetInitialExpansionState();
 
     public ChunkViewModel ChunkViewModel(IRedType rootChunk, ReferenceSocket socket, AppViewModel appViewModel,
-        EditorDifficultyLevel editorDifficultyLevel, bool isReadOnly = false) =>
+        bool isReadOnly = false) =>
         new ChunkViewModel(rootChunk, socket, appViewModel,
             this,
             _tabViewmodelFactory,
@@ -90,11 +88,10 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
             _locKeyService,
             _parserService,
             _cruidService,
-            editorDifficultyLevel,
             isReadOnly).SetInitialExpansionState();
 
     public ChunkViewModel ChunkViewModel(IRedType rootChunk, RDTDataViewModel tab, AppViewModel appViewModel,
-        EditorDifficultyLevel editorDifficultyLevel, bool isReadOnly = false) =>
+        bool isReadOnly = false) =>
         new ChunkViewModel(rootChunk, tab, appViewModel,
             this,
             _tabViewmodelFactory,
@@ -108,6 +105,5 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
             _locKeyService,
             _parserService,
             _cruidService,
-            editorDifficultyLevel, 
             isReadOnly).SetInitialExpansionState();
 }

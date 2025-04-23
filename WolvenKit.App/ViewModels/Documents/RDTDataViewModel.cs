@@ -16,7 +16,6 @@ using WolvenKit.App.Models.Nodify;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Events;
 using WolvenKit.App.ViewModels.Shell;
-using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive;
@@ -51,8 +50,6 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
         _data = data;
 
-        EditorDifficultyLevel = Parent.EditorDifficultyLevel;
-
         Nodes.Add(new ResourcePathWrapper(this, new ReferenceSocket(Chunks[0].RelativePath), _appViewModel, _chunkViewmodelFactory));
         _nodePaths.Add(Chunks[0].RelativePath);
 
@@ -66,8 +63,6 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
                 lst.Add(Chunks[0]);
             }
         }
-
-        parent.PropertyChanged += RDTDataViewModel_PropertyChanged;
     }
 
     private void SubscribeToChunkPropertyChanges()
@@ -97,7 +92,9 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     public ChunkViewModel? GetRootChunk() => Chunks.FirstOrDefault();
 
-    public override RedDocumentItemType GetContentType() => GetRootChunk()?.ResolvedData switch
+    public override RedDocumentItemType GetContentType()
+    {
+        return GetRootChunk()?.ResolvedData switch
         {
             CMesh => RedDocumentItemType.Mesh,
             appearanceAppearanceResource => RedDocumentItemType.App,
@@ -105,15 +102,6 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
             CMaterialInstance => RedDocumentItemType.Mi,
             _ => base.GetContentType()
         };
-
-    private void RDTDataViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName != nameof(RedDocumentViewModel.EditorDifficultyLevel) || EditorDifficultyLevel == Parent.EditorDifficultyLevel)
-        {
-            return;
-        }
-
-        EditorDifficultyLevel = Parent.EditorDifficultyLevel;
     }
 
     public RDTDataViewModel(string header, IRedType data, RedDocumentViewModel file, AppViewModel appViewModel,
@@ -141,8 +129,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         set => _chunks = value;
     }
 
-    public virtual ChunkViewModel GenerateChunks() =>
-        _chunkViewmodelFactory.ChunkViewModel(_data, this, _appViewModel, EditorDifficultyLevel);
+    public virtual ChunkViewModel GenerateChunks() => _chunkViewmodelFactory.ChunkViewModel(_data, this, _appViewModel);
 
     [ObservableProperty]
     private bool _isEmbeddedFile;
@@ -150,8 +137,6 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     [ObservableProperty] private ChunkViewModel? _selectedChunk;
 
     [ObservableProperty] private List<ChunkViewModel>? _selectedChunks;
-
-    [ObservableProperty] private EditorDifficultyLevel _editorDifficultyLevel;
 
     [ObservableProperty] private ChunkViewModel? _rootChunk;
 
@@ -460,11 +445,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     }
 
 
-    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-    {
-        base.OnPropertyChanged(e);
-        Console.WriteLine($"PropertyChanged: {e.PropertyName}");
-    }
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e) => base.OnPropertyChanged(e);
 
     public void SetSelection(List<ChunkViewModel> chunks)
     {

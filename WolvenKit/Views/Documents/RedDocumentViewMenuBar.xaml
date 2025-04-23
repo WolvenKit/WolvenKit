@@ -28,6 +28,7 @@
 
         <Grid.Resources>
             <converters:HasMenuChildrenVisibilityConverter x:Key="HasMenuChildrenVisibilityConverter" />
+            <converters:EditorLevelToColorConverter x:Key="EditorLevelToColorConverter" />
 
             <Style TargetType="{x:Type Menu}">
                 <Setter Property="Background" Value="{StaticResource BackgroundColor_Frame_Background}" />
@@ -76,34 +77,6 @@
                 BasedOn="{StaticResource MenuItemStyle}"
                 TargetType="{x:Type MenuItem}">
                 <Setter Property="Visibility" Value="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource HasMenuChildrenVisibilityConverter}}" />
-            </Style>
-
-            <!-- Editor Mode -->
-            <Style
-                x:Key="EditorModeStyle"
-                BasedOn="{StaticResource MenuItemStyle}"
-                TargetType="{x:Type MenuItem}">
-                <Setter Property="Foreground" Value="White" />
-
-                <Style.Triggers>
-                    <DataTrigger
-                        Binding="{Binding Path=EditorLevel}"
-                        Value="Easy">
-                        <Setter Property="Foreground" Value="{StaticResource WolvenKitCyan}" />
-                    </DataTrigger>
-
-                    <DataTrigger
-                        Binding="{Binding Path=EditorLevel}"
-                        Value="Default">
-                        <Setter Property="Foreground" Value="{StaticResource WolvenKitYellow}" />
-                    </DataTrigger>
-
-                    <DataTrigger
-                        Binding="{Binding Path=EditorLevel}"
-                        Value="Advanced">
-                        <Setter Property="Foreground" Value="{StaticResource WolvenKitRed}" />
-                    </DataTrigger>
-                </Style.Triggers>
             </Style>
 
             <!-- Materials: .mesh / .mi -->
@@ -274,7 +247,9 @@
             ContextMenuClosing="OnMenuClosed">
             <!-- Editor Mode -->
             <MenuItem
-                Style="{StaticResource EditorModeStyle}"
+                Foreground="{Binding EditorLevel,
+                                     Mode=OneWay,
+                                     Converter={StaticResource EditorLevelToColorConverter}}"
                 Header="Editor Mode">
                 <MenuItem.Icon>
                     <templates:IconBox

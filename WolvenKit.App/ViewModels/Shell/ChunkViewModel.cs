@@ -88,8 +88,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public int NodeIdxInParent = -1;
 
-    private EditorDifficultyLevel _currentEditorDifficultyLevel;
-
     #region Constructors
 
     public ChunkViewModel(IRedType data, string name, AppViewModel appViewModel,
@@ -105,7 +103,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         ILocKeyService locKeyService,
         Red4ParserService parserService,
         CRUIDService cruidService,
-        EditorDifficultyLevel editorLevel,
         ChunkViewModel? parent = null,
         bool isReadOnly = false
     )
@@ -130,9 +127,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         _displayName = name;
         IsReadOnly = isReadOnly;
 
-        _currentEditorDifficultyLevel = editorLevel;
-        DifficultyLevelFieldInformation = EditorDifficultyLevelFieldFactory.GetInstance(editorLevel);
-
+        DifficultyLevelFieldInformation =
+            EditorDifficultyLevelFieldFactory.GetInstance(_settingsManager.DefaultEditorDifficultyLevel);
+        
         // If the parent is an array, the numeric index will be passed as property name 
         if (IsInArray && int.TryParse(name, out var arrayIndex))
         {
@@ -145,7 +142,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             TempList = new ObservableCollectionExtended<ChunkViewModel>(new[]
             {
-                chunkViewmodelFactory.ChunkViewModel(new RedDummy(), nameof(RedDummy), _appViewModel, editorLevel, this)
+                chunkViewmodelFactory.ChunkViewModel(new RedDummy(), nameof(RedDummy), _appViewModel, this)
             });
         }
 
@@ -171,13 +168,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         ILocKeyService locKeyService,
         Red4ParserService parserService,
         CRUIDService cruidService,
-        EditorDifficultyLevel editorDifficultyLevel,
         bool isReadOnly = false
         )
         : this(data, nameof(RDTDataViewModel), appViewModel,
             chunkViewmodelFactory, tabViewmodelFactory, hashService, loggerService, projectManager,
             gameController, settingsManager, archiveManager, tweakDbService, locKeyService, parserService,
-            cruidService, editorDifficultyLevel, null, isReadOnly)
+            cruidService, null, isReadOnly)
     {
         _tab = tab;
         RelativePath = _tab.Parent.RelativePath;
@@ -197,13 +193,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         ILocKeyService locKeyService,
         Red4ParserService parserService,
         CRUIDService cruidService,
-        EditorDifficultyLevel editorDifficultyLevel,
         bool isReadOnly = false
         )
         : this(export, nameof(ReferenceSocket), appViewModel,
               chunkViewmodelFactory, tabViewmodelFactory, hashService, loggerService, projectManager,
               gameController, settingsManager, archiveManager, tweakDbService, locKeyService, parserService,
-              cruidService, editorDifficultyLevel, null, isReadOnly
+              cruidService, null, isReadOnly
               )
     {
         Socket = socket;
@@ -3045,7 +3040,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 if (obj is not null)
                 {
                     Properties.Add(_chunkViewmodelFactory.ChunkViewModel(obj, nameof(TweakDBID), _appViewModel,
-                        _settingsManager.DefaultEditorDifficultyLevel, this, true));
+                        this, true));
                     OnPropertyChanged(nameof(TVProperties));
                     return;
                 }
@@ -3084,7 +3079,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     }
 
                     Properties.Add(_chunkViewmodelFactory.ChunkViewModel(
-                        t, i.ToString(), _appViewModel, _currentEditorDifficultyLevel, this, isreadonly
+                        t, i.ToString(), _appViewModel, this, isreadonly
                     ));
                 }
 
@@ -3097,7 +3092,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     var name = i == 0 ? "Key" : "Value";
                     var data = i == 0 ? kvp.Key : kvp.Value;
                     Properties.Add(_chunkViewmodelFactory.ChunkViewModel(
-                        data, name, _appViewModel, _currentEditorDifficultyLevel, this, isreadonly
+                        data, name, _appViewModel, this, isreadonly
                     ));
                 }
 
@@ -3123,14 +3118,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     var t = redClass.GetProperty(name) ?? new RedDummy();
 
                     Properties.Add(_chunkViewmodelFactory.ChunkViewModel(t, propertyInfo.RedName.NotNull(), _appViewModel,
-                        _currentEditorDifficultyLevel, this, isreadonly));
+                        this, isreadonly));
                 }
 
                 foreach (var dp in dps)
                 {
                     ArgumentNullException.ThrowIfNull(dp);
                     Properties.Add(_chunkViewmodelFactory.ChunkViewModel(redClass.GetProperty(dp).NotNull(), dp, _appViewModel,
-                        _currentEditorDifficultyLevel, this, isreadonly));
+                        this, isreadonly));
                 }
 
                 break;
@@ -3140,7 +3135,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 for (var i = 0; i < PropertyCount; i++)
                 {
                     Properties.Add(_chunkViewmodelFactory.ChunkViewModel(p4.Chunks[i], nameof(RedPackage), _appViewModel,
-                        _currentEditorDifficultyLevel, this, isreadonly));
+                        this, isreadonly));
                 }
 
                 break;
@@ -3155,8 +3150,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                         var value = pi.GetValue(sddb.Data);
                         if (value is IRedType irt)
                         {
-                            Properties.Add(_chunkViewmodelFactory.ChunkViewModel(irt, pi.Name, _appViewModel, _currentEditorDifficultyLevel,
-                                this, isreadonly));
+                            Properties.Add(_chunkViewmodelFactory.ChunkViewModel(irt, pi.Name, _appViewModel, this,
+                                isreadonly));
                         }
                     }
                 }
@@ -3168,7 +3163,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 for (var i = 0; i < PropertyCount; i++)
                 {
                     Properties.Add(_chunkViewmodelFactory.ChunkViewModel(p42.Chunks[i], i.ToString(), _appViewModel,
-                        _currentEditorDifficultyLevel, this, isreadonly));
+                        this, isreadonly));
                 }
 
                 break;
@@ -3176,7 +3171,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             case SharedDataBuffer { Data: IParseableBuffer ipb }:
             {
                 Properties.Add(_chunkViewmodelFactory.ChunkViewModel(ipb.Data.NotNull(), ipb.Data.GetType().Name, _appViewModel,
-                    _currentEditorDifficultyLevel, this, isreadonly));
+                    this, isreadonly));
                 break;
             }
             case DataBuffer { Data: RedPackage p43 }:
@@ -3184,7 +3179,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 for (var i = 0; i < PropertyCount; i++)
                 {
                     Properties.Add(_chunkViewmodelFactory.ChunkViewModel(p43.Chunks[i], i.ToString(), _appViewModel,
-                        _currentEditorDifficultyLevel, this, isreadonly));
+                        this, isreadonly));
                 }
 
                 break;
@@ -3194,7 +3189,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 for (var i = 0; i < PropertyCount; i++)
                 {
                     Properties.Add(_chunkViewmodelFactory.ChunkViewModel(cl.Files[i].RootChunk, i.ToString(),
-                        _appViewModel, _currentEditorDifficultyLevel, this, isreadonly));
+                        _appViewModel, this, isreadonly));
                 }
 
                 break;
@@ -3204,7 +3199,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 foreach (var thing in list.OfType<IRedType>())
                 {
                     var child = _chunkViewmodelFactory.ChunkViewModel(thing, Properties.Count.ToString(), _appViewModel,
-                        _currentEditorDifficultyLevel, this, isreadonly);
+                        this, isreadonly);
                     Properties.Add(child);
                 }
 
@@ -3220,8 +3215,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     var value = pi.GetValue(db.Data);
                     if (value is IRedType irt)
                     {
-                        Properties.Add(_chunkViewmodelFactory.ChunkViewModel(irt, pi.Name, _appViewModel,
-                            _settingsManager.DefaultEditorDifficultyLevel, this, isreadonly));
+                        Properties.Add(
+                            _chunkViewmodelFactory.ChunkViewModel(irt, pi.Name, _appViewModel, this, isreadonly));
                     }
                 }
 
@@ -3239,7 +3234,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                         {
                             if (ibd.GetPropertyValue(name) is IRedType t)
                             {
-                                Properties.Add(_chunkViewmodelFactory.ChunkViewModel(t, name, _appViewModel, _currentEditorDifficultyLevel,
+                                Properties.Add(_chunkViewmodelFactory.ChunkViewModel(t, name, _appViewModel, 
                                     this,
                                     isreadonly));
                             }
@@ -3252,7 +3247,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                         foreach (var thing in list)
                         {
                             Properties.Add(_chunkViewmodelFactory.ChunkViewModel((IRedType)thing, "Element", _appViewModel,
-                                _currentEditorDifficultyLevel, this, isreadonly));
+                                this, isreadonly));
                         }
 
                         break;
@@ -3262,7 +3257,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                         foreach (var (name, thing) in dict)
                         {
                             Properties.Add(_chunkViewmodelFactory.ChunkViewModel((IRedType)thing, name, _appViewModel,
-                                _currentEditorDifficultyLevel,
                                 this, isreadonly));
                         }
 
@@ -3277,7 +3271,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                             if (value is IRedType irt)
                             {
                                 Properties.Add(_chunkViewmodelFactory.ChunkViewModel(irt, pi.Name, _appViewModel,
-                                    _currentEditorDifficultyLevel,
                                     this, isreadonly));
                             }
                         }
@@ -3289,7 +3282,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                             {
                                 var nodeChunk = _chunkViewmodelFactory.ChunkViewModel(wss.Nodes[sst.NodeIndex].NotNull(), "Node",
                                     _appViewModel,
-                                    _currentEditorDifficultyLevel, this, isreadonly);
+                                    this, isreadonly);
                                 nodeChunk.CalculateProperties();
                                 Properties.Add(nodeChunk);
                             }
