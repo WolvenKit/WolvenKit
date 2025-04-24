@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Windows.Forms;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Helpers;
@@ -196,5 +197,33 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
             return Path.Join(relativePhotoModeFolder, pathOrFileName);
         }
+    }
+
+    [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
+    private void GenerateInkatlas()
+    {
+        if (_projectManager.ActiveProject is not Cp77Project activeProject)
+        {
+            return;
+        }
+
+
+        if (Interactions.ShowGenerateInkatlasDialogue(activeProject) is not AddInkatlasDialogViewModel vm)
+
+        {
+            return;
+        }
+
+        InkatlasImageGenerator.GenerateAtlas(
+            pngFolder: vm.PngSourceDir,
+            relativeSourcePath: vm.RelativePath,
+            atlasFileName: vm.InkatlasFileName,
+            tileWidth: int.Parse(vm.TileWidth),
+            tileHeight: int.Parse(vm.TileHeight),
+            _cr2WTools,
+            activeProject
+        );
+
+        _loggerService.Success("Done! Now import the .png files via Import Tool.");
     }
 }

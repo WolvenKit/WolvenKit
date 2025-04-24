@@ -83,6 +83,21 @@
                                 Foreground="{StaticResource WolvenKitYellow}" />
                         </MenuItem.Icon>
                     </MenuItem>
+
+                    <!-- .inkatlas -->
+                    <MenuItem
+                        x:Name="MenuItemGenerateInkatlas"
+                        Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                        Header="Generate .inkatlas"
+                        ToolTip="Adds an .inkatlas file from a folder and generates the textures for it">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="Codicons"
+                                Kind="TerminalTmux"
+                                Size="{DynamicResource WolvenKitIconTiny}"
+                                Foreground="{StaticResource WolvenKitYellow}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
 
                 <MenuItem
