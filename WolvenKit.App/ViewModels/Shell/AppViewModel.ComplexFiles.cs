@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
@@ -207,22 +208,34 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
-
         if (Interactions.ShowGenerateInkatlasDialogue(activeProject) is not AddInkatlasDialogViewModel vm)
-
         {
             return;
         }
 
+        if (!Directory.Exists(vm.PngSourceDir))
+        {
+            _loggerService.Error("PngSourceDir does not exist.");
+            return;
+        }
+
+        // Get all PNG files from source folder
+        var pngFiles = Directory.GetFiles(vm.PngSourceDir, "*.png");
+        if (pngFiles.Length == 0)
+        {
+            _loggerService.Error("The source folder does not contain any PNG files.");
+            return;
+        }
+
         InkatlasImageGenerator.GenerateAtlas(
-            pngFolder: vm.PngSourceDir,
-            relativeSourcePath: vm.RelativePath,
-            atlasFileName: vm.InkatlasFileName,
-            tileWidth: int.Parse(vm.TileWidth),
-            tileHeight: int.Parse(vm.TileHeight),
-            _cr2WTools,
-            activeProject
-        );
+                pngFolder: vm.PngSourceDir,
+                relativeSourcePath: vm.RelativePath,
+                atlasFileName: vm.InkatlasFileName,
+                tileWidth: int.Parse(vm.TileWidth),
+                tileHeight: int.Parse(vm.TileHeight),
+                _cr2WTools,
+                activeProject
+            );
 
         _loggerService.Success("Done! Now import the .png files via Import Tool.");
     }
