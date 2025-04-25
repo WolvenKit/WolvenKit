@@ -14,8 +14,10 @@ namespace WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 /// Helper class to hold the logic for conditional editor field hiding and read-only states.
 /// We'll have one instance of this class per difficulty level. 
 /// </summary>
-public class EditorDifficultyLevelInformation
+public abstract class EditorDifficultyLevelInformation
 {
+    public abstract EditorDifficultyLevel Level { get; }
+
     #region field_definitions
 
     protected static readonly List<string> _informationFields =
@@ -77,6 +79,7 @@ public class EditorDifficultyLevelInformation
                 "localMaterialInstances"
             ]
         },
+        { typeof(inkTextureAtlas), ["activeTexture", "dynamicTexture", "dynamicTextureSlot", "texture"] },
     };
 
     /// <summary>
@@ -116,7 +119,6 @@ public class EditorDifficultyLevelInformation
                 "opacityMicromaps", "quantizationOffset", "quantizationScale", "renderChunks"
             ]
         },
-        { typeof(inkTextureAtlas), ["activeTexture", "dynamicTexture", "dynamicTextureSlot", "texture"] },
         { typeof(inkTextureSlot), ["slices"] },
         // .app file
         {
@@ -238,7 +240,6 @@ public class EditorDifficultyLevelInformation
         return ReadonlyFields.TryGetValue(dataType, out var fields) && fields.Contains(fieldName);
     }
 
-
     public virtual bool IsHidden(string fieldName, Type dataType, ChunkViewModel cvm)
     {
         if (HiddenFieldNames.Contains(fieldName) || HiddenDataTypes.Contains(dataType) ||
@@ -259,13 +260,20 @@ public class EditorDifficultyLevelInformation
             || (cvm.TVProperties.Count == 1 && cvm.TVProperties.FirstOrDefault() is { IsArray: true, TVProperties.Count: 0 })
             //false boolean
             || (cvm.ResolvedData is CBool boolValue && boolValue == false)
-            //false boolean
-            || (cvm.ResolvedData is IRedString str && string.IsNullOrEmpty(str.ToString())); // empty string
+            // empty string
+            || (cvm.ResolvedData is IRedString str && string.IsNullOrEmpty(str.ToString()))
+            // empty raref
+            || (cvm.ResolvedData is IRedResourceAsyncReference refAs && refAs.DepotPath == ResourcePath.Empty)
+            // empty ref
+            || (cvm.ResolvedData is IRedResourceReference refS && refS.DepotPath == ResourcePath.Empty)
+            ;
     }
 }
 
 public class EditorDifficultyLevelInformation_Easy : EditorDifficultyLevelInformation
 {
+    public override EditorDifficultyLevel Level => EditorDifficultyLevel.Easy;
+
     public EditorDifficultyLevelInformation_Easy()
     {
         HiddenFieldNames.AddRange(_informationFields);
@@ -285,6 +293,8 @@ public class EditorDifficultyLevelInformation_Easy : EditorDifficultyLevelInform
 
 public class EditorDifficultyLevelInformation_Default : EditorDifficultyLevelInformation
 {
+    public override EditorDifficultyLevel Level => EditorDifficultyLevel.Default;
+
     public EditorDifficultyLevelInformation_Default()
     {
         DisplayAsReadonlyFieldNames.AddRange(_informationFields);
@@ -303,6 +313,8 @@ public class EditorDifficultyLevelInformation_Default : EditorDifficultyLevelInf
 
 public class EditorDifficultyLevelInformation_Advanced : EditorDifficultyLevelInformation
 {
+    public override EditorDifficultyLevel Level => EditorDifficultyLevel.Advanced;
+
     public EditorDifficultyLevelInformation_Advanced()
     {
         DisplayAsReadonlyFieldNames.AddRange(_informationFields);
@@ -317,6 +329,7 @@ public static class EditorDifficultyLevelFieldFactory
 {
     private static readonly Dictionary<EditorDifficultyLevel, EditorDifficultyLevelInformation> s_fieldInformation = new()
     {
+        { EditorDifficultyLevel.None, new EditorDifficultyLevelInformation_Easy() },
         { EditorDifficultyLevel.Easy, new EditorDifficultyLevelInformation_Easy() },
         { EditorDifficultyLevel.Default, new EditorDifficultyLevelInformation_Default() },
         { EditorDifficultyLevel.Advanced, new EditorDifficultyLevelInformation_Advanced() }

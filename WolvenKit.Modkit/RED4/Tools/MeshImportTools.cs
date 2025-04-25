@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using SharpGLTF.Schema2;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
@@ -441,7 +442,15 @@ namespace WolvenKit.Modkit.RED4
             }
 
 
-            MeshTools.UpdateMeshJoints(ref meshes, existingJoints, incomingJoints);
+            try
+            {
+                MeshTools.UpdateMeshJoints(ref meshes, existingJoints, incomingJoints);
+            }
+            catch (WolvenKitException e)
+            {
+                throw new WolvenKitException(e.ErrorCode,
+                    $"You're trying to import bones into a mesh that doesn't have them. Wolvenkit can't create bones — please remove them in Blender, or import into a different file: {e.Message}");
+            }
 
             UpdateSkinningParamCloth(ref meshes, ref cr2w, args);
 

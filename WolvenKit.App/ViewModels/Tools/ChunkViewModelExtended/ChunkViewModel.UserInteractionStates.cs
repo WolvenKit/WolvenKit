@@ -45,9 +45,11 @@ public partial class ChunkViewModel
 
     public void SetEditorLevel(EditorDifficultyLevel level)
     {
-        _currentEditorDifficultyLevel = level;
-        DifficultyLevelFieldInformation = EditorDifficultyLevelFieldFactory.GetInstance(level);
-        RecalculateProperties();
+        if (DifficultyLevelFieldInformation.Level != level)
+        {
+            DifficultyLevelFieldInformation = EditorDifficultyLevelFieldFactory.GetInstance(level);
+            RecalculateProperties();
+        }
     }
 
     private bool _isPropertiesInitialized;
