@@ -1995,6 +1995,7 @@
                                 Path=SelectedItems,
                                 Mode=TwoWay}"
         MouseDoubleClick="OnDoubleClick"
+        MouseRightButtonDown="OnMouseRightButtonDown"
         SelectionMode="Extended"
         ShowLines="True"
         VirtualizingPanel.IsVirtualizing="True"
