@@ -26,7 +26,9 @@ public partial class ProjectManager
             Version = project.Version;
 
             OpenProjectFiles = project.OpenProjectFiles.OrderBy(x => x.Key)
-                .Select(x => x.Value).ToList();
+                .Select(x => x.Value)
+                .Distinct()
+                .ToList();
         }
 
         public string? Name { get; set; }
