@@ -20,9 +20,8 @@ public class FileSystemModel : INotifyPropertyChanged
     private string _fileSizeStr = null!;
     private string _extension = "default";
 
-
     [Browsable(false)] public FileSystemModel? Parent { get; }
-
+    
     public string Name
     {
         get => _name;

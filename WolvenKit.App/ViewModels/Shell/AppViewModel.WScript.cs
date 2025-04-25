@@ -76,10 +76,10 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
-        var filesToValidate = projArchive.Files.Values.Where(f => f.Extension is not "xbm" and not "mlmask").ToList();
+        var filesToValidate = projArchive.Files.Values.Where(f => f.Extension is not ".xbm" and not ".mlmask").ToList();
         
         var result = Interactions.ShowConfirmation((
-            $"This will analyse {filesToValidate} files. This can take up to several minutes. Do you want to proceed?",
+            $"This will analyse {filesToValidate.Count} files. This can take up to several minutes. Do you want to proceed?",
             "Really run file validation?",
             WMessageBoxImage.Question,
             WMessageBoxButtons.YesNo));
