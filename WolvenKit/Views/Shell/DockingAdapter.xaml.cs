@@ -216,61 +216,62 @@ namespace WolvenKit.Views.Shell
                 return false;
             }
 
-            XmlReader reader = null;
             try
             {
                 PART_DockingManager.BeginInit(); // Begin batch updates
 
-                reader = XmlReader.Create(filePath);
+                using (var reader = XmlReader.Create(filePath)) {              
 
-                var defaultXmlSerializer = DockingManager.CreateDefaultXmlSerializer(typeof(List<DockingParams>));
-                if (!defaultXmlSerializer.CanDeserialize(reader))
-                {
-                    _logger.Error($"{layoutSource} layout can't be deserialized");
-                    return false;
-                }
-
-                var dockingParamsList = defaultXmlSerializer.Deserialize(reader) as List<DockingParams>;
-                if (dockingParamsList == null)
-                {
-                    _logger.Error($"{layoutSource} layout can't be deserialized");
-                    return false;
-                }
-
-                var newDockedWindows = dockingParamsList.Select(dockingParam => dockingParam.Name).ToList();
-                for (var i = PART_DockingManager.Children.Count - 1; i >= 0; i--)
-                {
-                    if (PART_DockingManager.Children[i] is not ContentControl contentControl ||
-                        contentControl.Content is not IDockElement dockElement)
+                    var defaultXmlSerializer = DockingManager.CreateDefaultXmlSerializer(typeof(List<DockingParams>));
+                    if (!defaultXmlSerializer.CanDeserialize(reader))
                     {
-                        throw new Exception($"Can't unload {PART_DockingManager.Children[i].Name}");
+                        _logger.Error($"{layoutSource} layout can't be deserialized");
+                        return false;
                     }
 
-                    if (newDockedWindows.Contains(contentControl.Name))
+                    var dockingParamsList = defaultXmlSerializer.Deserialize(reader) as List<DockingParams>;
+                    if (dockingParamsList == null)
                     {
-                        continue;
+                        _logger.Error($"{layoutSource} layout can't be deserialized");
+                        return false;
                     }
 
-                    appViewModel.DockedViews.Remove(dockElement);
-                    PART_DockingManager.Children.Remove(contentControl);
+                    var newDockedWindows = dockingParamsList.Select(dockingParam => dockingParam.Name).ToList();
+                    for (var i = PART_DockingManager.Children.Count - 1; i >= 0; i--)
+                    {
+                        if (PART_DockingManager.Children[i] is not ContentControl contentControl ||
+                            contentControl.Content is not IDockElement dockElement)
+                        {
+                            throw new Exception($"Can't unload {PART_DockingManager.Children[i].Name}");
+                        }
+
+                        if (newDockedWindows.Contains(contentControl.Name))
+                        {
+                            continue;
+                        }
+
+                        appViewModel.DockedViews.Remove(dockElement);
+                        PART_DockingManager.Children.Remove(contentControl);
+                    }
+
+                    // Check if the panel already exists. If not, try creating it via AddDockedPane.
+                    foreach (var dockingParam in dockingParamsList
+                                 .Where(dockingParam =>
+                                     PART_DockingManager.Children.OfType<FrameworkElement>()
+                                         .All(child => child.Name != dockingParam.Name))
+                                 .Where(dockingParam => !appViewModel.AddDockedPane(dockingParam.Name)))
+                    {
+                        _logger.Warning($"ViewModel for \"{dockingParam.Name}\" could not be found!");
+                    }
+
                 }
 
-                // Check if the panel already exists. If not, try creating it via AddDockedPane.
-                foreach (var dockingParam in dockingParamsList
-                             .Where(dockingParam =>
-                                 PART_DockingManager.Children.OfType<FrameworkElement>()
-                                     .All(child => child.Name != dockingParam.Name))
-                             .Where(dockingParam => !appViewModel.AddDockedPane(dockingParam.Name)))
-                {
-                    _logger.Warning($"ViewModel for \"{dockingParam.Name}\" could not be found!");
+                // Now load layout
+                var isSuccess = false;
+
+                using (var reader = XmlReader.Create(filePath)) {
+                    isSuccess = PART_DockingManager.LoadDockState(reader);
                 }
-
-                reader.Close();
-                reader = XmlReader.Create(filePath);
-
-                var isSuccess = PART_DockingManager.LoadDockState(reader);
-
-                reader.Close();
 
                 return isSuccess;
             }
@@ -280,7 +281,6 @@ namespace WolvenKit.Views.Shell
             }
             finally
             {
-                reader?.Close();
                 PART_DockingManager.EndInit(); // End batch updates
             }
             
