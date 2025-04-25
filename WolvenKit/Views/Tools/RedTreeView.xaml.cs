@@ -13,6 +13,7 @@ using CommunityToolkit.Mvvm.Input;
 using Splat;
 using Syncfusion.Data.Extensions;
 using Syncfusion.UI.Xaml.TreeView;
+using Syncfusion.UI.Xaml.TreeView.Helpers;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
@@ -23,6 +24,7 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.Types;
 using WolvenKit.Views.Dialogs.Windows;
+using WolvenKit.Views.Shell;
 
 namespace WolvenKit.Views.Tools
 {
@@ -178,25 +180,39 @@ namespace WolvenKit.Views.Tools
 
         #region properties
 
-        private void OnSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
+        // https://help.syncfusion.com/wpf/treeview/selection?cs-save-lang=1&cs-lang=csharp#how-to-add-selection-on-right-click
+        private bool IsMouseOverOnExpander(Syncfusion.UI.Xaml.TreeView.TreeViewItem treeViewItem, System.Windows.Point point)
         {
-            // make sure we don't end up with duplicates
-            foreach (var removedItem in e.RemovedItems.Cast<ChunkViewModel>())
+            if (treeViewItem.TreeViewItemInfo.TreeView.ExpanderPosition == ExpanderPosition.Start)
             {
-                removedItem.IsSelected = false;
+                return point.X < treeViewItem.IndentationWidth + treeViewItem.ExpanderWidth;
             }
-
-            // We won't have duplicate selections anymore, because we removed everything
-            foreach (var addedItem in e.AddedItems.Cast<ChunkViewModel>())
+            else
             {
-                addedItem.IsSelected = true;
+                return point.X > (treeViewItem.ActualWidth - treeViewItem.ExpanderWidth);
             }
-
-            RefreshContextMenuFlags();
-            RefreshSelectedItemsContextMenuFlags();
-            RefreshCommandStatus();
         }
+        // https://help.syncfusion.com/wpf/treeview/selection?cs-save-lang=1&cs-lang=csharp#how-to-add-selection-on-right-click
+        private void OnMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var treeViewNode = TreeView.GetNodeAt(e.GetPosition(TreeView));
+            var itemInfo = TreeView.GetItemInfo(treeViewNode.Content);
+            var itemPoint = e.GetPosition(itemInfo.Element);
 
+            if (!TreeView.FullRowSelect && IsMouseOverOnExpander(itemInfo.Element, itemPoint))
+            {
+                return;
+            }
+
+            if (!IsCtrlBeingHeld)
+            {
+                TreeView.SetCurrentValue(SfTreeView.SelectedItemsProperty, new ObservableCollection<object>());
+                TreeView.SetCurrentValue(SfTreeView.SelectedItemProperty, null);
+            }
+            
+            TreeView.SelectedItems.Add(treeViewNode.Content);
+            TreeView.SetCurrentValue(SfTreeView.SelectedItemProperty, treeViewNode.Content);
+        }
 
         public bool HasSelection
         {
@@ -273,8 +289,36 @@ namespace WolvenKit.Views.Tools
 
         /// <summary>Identifies the <see cref="SelectedItem"/> dependency property.</summary>
         public static readonly DependencyProperty SelectedItemProperty =
-            DependencyProperty.Register(nameof(SelectedItem), typeof(ChunkViewModel), typeof(RedTreeView));
+            DependencyProperty.Register(
+                nameof(SelectedItem), 
+                typeof(ChunkViewModel), 
+                typeof(RedTreeView),
+                new PropertyMetadata(null, new PropertyChangedCallback(OnSelectedItemChanged))
+                );
+        
+        private static void OnSelectedItemChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+        {
+            if (sender is not RedTreeView view)
+            {
+                return;
+            }
 
+            // old value
+            if (args.OldValue is ChunkViewModel oldCvm)
+            {
+                oldCvm.IsSelected = false;
+            }
+
+            // new value
+            if (args.NewValue is ChunkViewModel newCvm)
+            {
+                newCvm.IsSelected = true;
+            }
+
+            view.RefreshContextMenuFlags();
+            view.RefreshSelectedItemsContextMenuFlags();
+            view.RefreshCommandStatus();
+        }
 
         /// <summary>Bound to <see cref="RDTDataViewModel.SelectedChunk"/> </summary>
         public ChunkViewModel SelectedItem
@@ -285,7 +329,46 @@ namespace WolvenKit.Views.Tools
 
         /// <summary>Identifies the <see cref="SelectedItems"/> dependency property.</summary>
         public static readonly DependencyProperty SelectedItemsProperty =
-            DependencyProperty.Register(nameof(SelectedItems), typeof(ObservableCollection<object>), typeof(RedTreeView));
+            DependencyProperty.Register(
+                nameof(SelectedItems), 
+                typeof(ObservableCollection<object>), 
+                typeof(RedTreeView), 
+                new PropertyMetadata(null, new PropertyChangedCallback(OnSelectedItemsChanged))
+                );
+        
+        private static void OnSelectedItemsChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+        {
+            if (sender is not RedTreeView view)
+            {
+                return;
+            }
+
+            if (args.OldValue is ObservableCollection<object> oldItems)
+            {
+                foreach (var item in oldItems)
+                {
+                    if (item is ChunkViewModel cvm)
+                    {
+                        cvm.IsSelected = false;
+                    }
+                }
+            }
+
+            if (args.NewValue is ObservableCollection<object> newItems)
+            {
+                foreach (var item in newItems)
+                {
+                    if (item is ChunkViewModel cvm)
+                    {
+                        cvm.IsSelected = true;
+                    }
+                }
+            }
+
+            view.RefreshContextMenuFlags();
+            view.RefreshSelectedItemsContextMenuFlags();
+            view.RefreshCommandStatus();
+        }
 
         /// <summary>Bound to <see cref="RDTDataViewModel.SelectedChunks"/> </summary>
         public ObservableCollection<object> SelectedItems
@@ -350,7 +433,6 @@ namespace WolvenKit.Views.Tools
             set => SetValue(IsShiftBeingHeldProperty, value);
         }
 
-
         /// <summary>Identifies the <see cref="ShouldShowArrayOps"/> dependency property.</summary>
         public static readonly DependencyProperty ShouldShowArrayOpsProperty =
             DependencyProperty.Register(nameof(ShouldShowArrayOps), typeof(bool), typeof(RedTreeView));
@@ -378,15 +460,6 @@ namespace WolvenKit.Views.Tools
         // Drag & Drop Functionality
 
         #region dragAndDrop
-        //private string dropFileLocation;
-        //private RedTypeDto dropFile;
-
-        private void SfTreeView_ItemDragStarting(object sender, TreeViewItemDragStartingEventArgs e)
-        {
-            //var record = e.DraggingNodes[0].Content as ChunkViewModel;
-            //if (typeof(CBool).IsAssignableTo(record.Data.GetType()))
-            //    e.Cancel = true;
-        }
         
         private bool IsAllowDrop(TreeViewItemDragOverEventArgs e)
         {
@@ -817,7 +890,7 @@ namespace WolvenKit.Views.Tools
             var isInArray = selectedItem?.IsInArray == true;
             SetCurrentValue(IsArraySelectedProperty, isArray);
             SetCurrentValue(IsArrayItemSelectedProperty, isInArray);
-            SetCurrentValue(IsHandleSelectedProperty, IsHandle(selectedItem?.Data));
+            SetCurrentValue(IsHandleSelectedProperty, IsHandle(selectedItem));
             SetCurrentValue(ShouldShowArrayOpsProperty, isArray || isInArray);
         }
 
@@ -1015,9 +1088,6 @@ namespace WolvenKit.Views.Tools
                 return false;
             }
 
-            if (potentialHandle is RedDummy)
-            {
-            }
             var propertyType = potentialHandle.GetType();
             return
                 propertyType.IsAssignableTo(typeof(IRedBaseHandle)) && (
@@ -1065,14 +1135,16 @@ namespace WolvenKit.Views.Tools
         }
 
         // For logic, see https://github.com/WolvenKit/WolvenKit/pull/2294#issuecomment-2760342954
-        private bool CanPasteHandleSingle() =>
-            IsHandle(SelectedItem) && RedDocumentTabViewModel.CopiedChunk is IRedType copiedItem && (
+        private bool CanPasteHandleSingle()
+        {
+            return IsHandle(SelectedItem) && RedDocumentTabViewModel.CopiedChunk is IRedType copiedItem && (
                 // handle is directly compatible
                 copiedItem.GetType().IsAssignableTo(SelectedItem.Data.GetType())
 
                 // in case the target item has been reset, the types must match
                 || (IsHandle(copiedItem) && IsTypeCompatible(copiedItem.RedType, SelectedItem.Type))
             );
+        }
 
         [RelayCommand(CanExecute = nameof(CanPasteHandleSingle))]
         private void PasteHandleSingle()
@@ -1088,7 +1160,7 @@ namespace WolvenKit.Views.Tools
             
             using (collectionView.DeferRefresh())
             {
-                if (cvm?.PasteHandle((IRedBaseHandle)RedDocumentTabViewModel.CopiedChunk!) != true)
+                if (PasteHandle(cvm, (IRedBaseHandle)RedDocumentTabViewModel.CopiedChunk!) != true)
                 {
                     return;
                 }
@@ -1102,38 +1174,67 @@ namespace WolvenKit.Views.Tools
             RefreshCommandStatus();
         }
 
-        private bool CanPasteHandles() =>
-            RedDocumentTabViewModel.GetCopiedChunks() is { Count: > 0 } lst &&
-            lst.All(ChunkViewModel.IsHandle);
-
-        [RelayCommand(CanExecute = nameof(CanPasteHandles))]
-        private void PasteHandles()
+        // pasting logic: See fuzzo comment https://github.com/WolvenKit/WolvenKit/pull/2294#issuecomment-2760342954
+        private static bool PasteHandle(ChunkViewModel cvm, IRedBaseHandle sourceHandle)
         {
-            if (ItemsSource is not ICollectionView collectionView ||
-                !ChunkViewModel.IsHandle(RedDocumentTabViewModel.CopiedChunk) ||
-                GetSelectedChunks().Count != 1)
+            if (sourceHandle.GetValue() is not RedBaseClass srcHandleValue)
             {
-                return;
+                return false;
             }
 
-            using (collectionView.DeferRefresh())
+            /*
+             * handle -> handle => deepcopy
+             * handle -> whandle => ref
+             * whandle -> whandle => ref
+             */
+
+            switch (cvm.Data)
             {
-                var cvm = GetSelectedChunks().FirstOrDefault();
-                if (cvm?.PasteHandle((IRedBaseHandle)RedDocumentTabViewModel.CopiedChunk!) != true)
+                case IRedBaseHandle destinationHandle:
                 {
-                    return;
-                }
+                    if (!destinationHandle.InnerType.IsInstanceOfType(srcHandleValue))
+                    {
+                        return false;
+                    }
 
-                cvm.SetVisibilityStatusBySearchString(RedDocumentViewToolbarModel.CurrentActiveSearch);
-                ReapplySearch(cvm.Parent);
+                    if (cvm.PropertyType.GetGenericTypeDefinition() == typeof(CHandle<>))
+                    {
+                        cvm.Data = CHandle.Parse(sourceHandle.InnerType, srcHandleValue);
+                    }
+                    else if (cvm.PropertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>))
+                    {
+                        destinationHandle.SetValue(srcHandleValue);
+                    }
+
+                    cvm.RecalculateProperties(cvm.Data);
+                    return true;
+                }
+                case RedDummy:
+                case null:
+                {
+                    if (cvm.PropertyType.GetGenericTypeDefinition() == typeof(CHandle<>))
+                    {
+                        cvm.Data = CHandle.Parse(sourceHandle.InnerType, srcHandleValue);
+                    }
+                    else if (cvm.PropertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>))
+                    {
+                        cvm.Data = CWeakHandle.Parse(sourceHandle.InnerType, srcHandleValue);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                    cvm.RecalculateProperties(cvm.Data);
+                    return true;
+                }
             }
 
-            RefreshSelectedItemsContextMenuFlags();
-            RefreshCommandStatus();
+            return false;
         }
 
         #endregion
-        
+
         private bool CanDeleteSelection() => SelectedItem is not null;
 
         [RelayCommand(CanExecute = nameof(CanDeleteSelection))]
@@ -1352,6 +1453,7 @@ namespace WolvenKit.Views.Tools
 
         #endregion
 
+       
     }
     
 }

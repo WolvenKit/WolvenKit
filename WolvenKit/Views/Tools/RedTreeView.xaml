@@ -1981,7 +1981,6 @@
         AutoExpandMode="RootNodes"
         ItemHeight="{DynamicResource WolvenKitTreeRowHeight}"
         ItemDragOver="SfTreeView_ItemDragOver"
-        ItemDragStarting="SfTreeView_ItemDragStarting"
         ItemDropping="SfTreeView_ItemDropping"
         ItemTemplateSelector="{StaticResource itemTemplateSelector}"
         ItemsSource="{Binding ElementName=redTreeView,
@@ -1995,7 +1994,7 @@
         SelectedItems="{Binding ElementName=redTreeView,
                                 Path=SelectedItems,
                                 Mode=TwoWay}"
-        SelectionChanged="OnSelectionChanged"
+        MouseRightButtonDown="OnMouseRightButtonDown"
         MouseDoubleClick="OnDoubleClick"
         SelectionMode="Extended"
         ShowLines="True"

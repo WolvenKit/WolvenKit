@@ -2342,9 +2342,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         catch (Exception ex) { _loggerService.Error(ex); }
     }
 
-    public static bool IsHandle(IRedType? irb) => IsHandle(irb, false);
-
-    private static bool IsHandle(IRedType? irb, bool weakHandleOnly)
+    public static bool IsHandle(IRedType? irb, bool weakHandleOnly = false)
     {
         var propertyType = irb?.GetType();
         if (propertyType?.IsAssignableTo(typeof(IRedBaseHandle)) != true)
@@ -2359,68 +2357,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         return gt == typeof(CWeakHandle<>) || gt == typeof(CHandle<>);
-    }
-
-
-    // pasting logic: See fuzzo comment https://github.com/WolvenKit/WolvenKit/pull/2294#issuecomment-2760342954
-    public bool PasteHandle(IRedBaseHandle sourceHandle)
-    {
-        if (sourceHandle.GetValue() is not RedBaseClass srcHandleValue) 
-        {
-            return false;
-        }
-
-        /*
-         * handle -> handle => deepcopy
-         * handle -> whandle => ref
-         * whandle -> whandle => ref
-         */
-
-        switch (Data)
-        {
-            case IRedBaseHandle destinationHandle:
-            {
-                if (!destinationHandle.InnerType.IsInstanceOfType(srcHandleValue))
-                {
-                    return false;
-                }
-
-                if (PropertyType.GetGenericTypeDefinition() == typeof(CHandle<>))
-                {
-                    Data = CHandle.Parse(sourceHandle.InnerType, srcHandleValue);
-                }
-                else if (PropertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>))
-                {
-                    destinationHandle.SetValue(srcHandleValue);
-                }
-
-                RecalculateProperties(Data);
-                OnPropertyChanged(nameof(Type));
-                return true;
-            }
-            case RedDummy:
-            case null:
-            {
-                if (PropertyType.GetGenericTypeDefinition() == typeof(CHandle<>))
-                {
-                    Data = CHandle.Parse(sourceHandle.InnerType, srcHandleValue);
-                }
-                else if (PropertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>))
-                {
-                    Data = CWeakHandle.Parse(sourceHandle.InnerType, srcHandleValue);
-                }
-                else
-                {
-                    return false;
-                }
-
-                RecalculateProperties(Data);
-                OnPropertyChanged(nameof(Type));
-                return true;
-            }
-        }
-
-        return false;
     }
 
     private bool CanResetObject() => Parent != null;
@@ -2442,18 +2378,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         Data = new RedDummy();
         RecalculateProperties(Data);
-    }
-
-    private bool CanCopyChunk() => IsInArray;   // TODO RelayCommand check notify
-    [RelayCommand(CanExecute = nameof(CanCopyChunk))]
-    private void CopyChunk()
-    {
-        try
-        {
-            RedDocumentTabViewModel.CopiedChunk = Data is IRedCloneable irc ? (IRedType)irc.DeepCopy() : Data;
-            RefreshContextMenuFlags();
-        }
-        catch (Exception ex) { _loggerService.Error(ex); }
     }
 
     /// <summary>
@@ -2478,28 +2402,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         return null;
     }
-
-    private bool CanPasteChunks()
-    {
-        if (RedDocumentTabViewModel.CopiedChunk is null)
-        {
-            return false;
-        }
-
-        Type? innerType = null;
-        if (ResolvedData is IRedArray arr)
-        {
-            innerType = arr.InnerType;
-        }
-        else if (Parent is { ResolvedData: IRedArray pArr })
-        {
-            innerType = pArr.InnerType;
-        }
-
-        return innerType != null &&
-               CheckTypeCompatibility(innerType, RedDocumentTabViewModel.CopiedChunk.GetType()) != TypeCompability.None;
-    } // TODO RelayCommand check notify
-
 
     // Visibility check: ShouldShowRenumberArrayIndexProperties
     private bool CanReindexChildDataIndexProperties()
@@ -2548,7 +2450,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         CalculateValue();
     }
 
-    [RelayCommand(CanExecute = nameof(CanPasteChunks))]
     private void PasteChunk()
     {
         try
@@ -2825,46 +2726,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             AddToCopiedChunks(i);
         }
     }
-
-    // [RelayCommand(CanExecute = nameof(CanPasteSelection))]
-    // private void ClearAndPasteSelection()
-    // {
-    //     if (IsInArray && Parent is not null)
-    //     {
-    //         Parent.ClearAndPasteSelection();
-    //         return;
-    //     }
-    //
-    //     DeleteAll();
-    //     PasteAtIndex(RedDocumentTabViewModel.GetCopiedChunks(), -1);
-    // }
-
-
-    // [RelayCommand(CanExecute = nameof(CanPasteSelection))]
-    // private void OverwriteSelectionWithPaste()
-    // {
-    //     var insertAtIndex = -1;
-    //     if (Tab?.SelectedChunks is IList lst)
-    //     {
-    //         insertAtIndex = lst.OfType<ChunkViewModel>().FirstOrDefault(chunk => chunk.IsSelected)?.NodeIdxInParent ?? -1;
-    //     }
-    //
-    //     DeleteSelection();
-    //     PasteAtIndex(RedDocumentTabViewModel.GetCopiedChunks(), insertAtIndex);
-    // }
-
-    // [RelayCommand(CanExecute = nameof(CanPasteSelection))]
-    // private void PasteSelection()
-    // {
-    //     var insertAtIndex = -1;
-    //     if (Tab?.SelectedChunks is IList lst)
-    //     {
-    //         insertAtIndex = lst.OfType<ChunkViewModel>().Where(chunk => chunk.IsSelected).FirstOrDefault()?.NodeIdxInParent ?? -1;
-    //     }
-    //
-    //     PasteAtIndex(RedDocumentTabViewModel.GetCopiedChunks(), insertAtIndex);
-    // }
-
 
     public void PasteAtIndex(List<IRedType> copiedData, int insertAtIndex = -1)
     {
