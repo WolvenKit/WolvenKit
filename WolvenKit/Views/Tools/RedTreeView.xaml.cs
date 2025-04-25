@@ -204,30 +204,34 @@ namespace WolvenKit.Views.Tools
         //    }
         //}
         //// https://help.syncfusion.com/wpf/treeview/selection?cs-save-lang=1&cs-lang=csharp#how-to-add-selection-on-right-click
-        //private void OnMouseRightButtonDown(object sender, MouseButtonEventArgs e)
-        //{
-        //    var treeViewNode = TreeView.GetNodeAt(e.GetPosition(TreeView));
-        //    var itemInfo = TreeView.GetItemInfo(treeViewNode.Content);
-        //    var itemPoint = e.GetPosition(itemInfo.Element);
+        private void OnMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            //    var treeViewNode = TreeView.GetNodeAt(e.GetPosition(TreeView));
+            //    var itemInfo = TreeView.GetItemInfo(treeViewNode.Content);
+            //    var itemPoint = e.GetPosition(itemInfo.Element);
 
-        //    if (!TreeView.FullRowSelect && IsMouseOverOnExpander(itemInfo.Element, itemPoint))
-        //    {
-        //        return;
-        //    }
+            //    if (!TreeView.FullRowSelect && IsMouseOverOnExpander(itemInfo.Element, itemPoint))
+            //    {
+            //        return;
+            //    }
 
-        //    if (!IsCtrlBeingHeld)
-        //    {
-        //        TreeView.SetCurrentValue(SfTreeView.SelectedItemsProperty, new ObservableCollection<object>());
-        //        TreeView.SetCurrentValue(SfTreeView.SelectedItemProperty, null);
-        //    }
+            //    if (!IsCtrlBeingHeld)
+            //    {
+            //        TreeView.SetCurrentValue(SfTreeView.SelectedItemsProperty, new ObservableCollection<object>());
+            //        TreeView.SetCurrentValue(SfTreeView.SelectedItemProperty, null);
+            //    }
 
-        //    if (!TreeView.SelectedItems.Contains(treeViewNode.Content))
-        //    {
-        //        TreeView.SelectedItems.Add(treeViewNode.Content);
-        //    }
-            
-        //    TreeView.SetCurrentValue(SfTreeView.SelectedItemProperty, treeViewNode.Content);
-        //}
+            //    if (!TreeView.SelectedItems.Contains(treeViewNode.Content))
+            //    {
+            //        TreeView.SelectedItems.Add(treeViewNode.Content);
+            //    }
+
+            //    TreeView.SetCurrentValue(SfTreeView.SelectedItemProperty, treeViewNode.Content);
+
+            RefreshContextMenuFlags();
+            RefreshSelectedItemsContextMenuFlags();
+            RefreshCommandStatus();
+        }
 
         public bool HasSelection
         {
@@ -811,10 +815,17 @@ namespace WolvenKit.Views.Tools
 
         private void PasteSelectionInternal(bool pasteSingleSelect = false)
         {
-            var copiedChunks = RedDocumentTabViewModel.GetCopiedChunks();
-            if (ItemsSource is not ICollectionView collectionView
-                || (pasteSingleSelect && RedDocumentTabViewModel.CopiedChunk is null)
-                || (!pasteSingleSelect && copiedChunks.Count == 0))
+            List<IRedType> copiedChunks = [];
+            if (pasteSingleSelect && RedDocumentTabViewModel.CopiedChunk is not null)
+            {
+                copiedChunks.Add(RedDocumentTabViewModel.CopiedChunk);
+            }
+            else if (!pasteSingleSelect)
+            {
+                copiedChunks.AddRange(RedDocumentTabViewModel.GetCopiedChunks());
+            }
+
+            if (ItemsSource is not ICollectionView collectionView || copiedChunks.Count == 0)
             {
                 return;
             }
@@ -934,17 +945,21 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
+            List<ChunkViewModel> chunksByParent = [];
+            
             using (collectionView.DeferRefresh())
             {
                 var chunks = GetSelectedChunks();
-
                 foreach (var cvm in chunks)
                 {
-                    cvm.DuplicateAsNewChunk();
+                    if (cvm.DuplicateAsNewChunk() is ChunkViewModel newChunk)
+                    {
+                        chunksByParent.Add(newChunk);
+                    }
                 }
-
-                _rdtDataViewModel?.ClearSelection();
             }
+
+            SetSelectedItems(chunksByParent, true);
         }
 
         private void DuplicateSelectedChunks(bool preserveIndex = false)
@@ -984,7 +999,7 @@ namespace WolvenKit.Views.Tools
                 }
 
                 SetSelectedItems(chunksByParent);
-            }
+            } // deferRefresh end
         }
 
         /// <summary>
@@ -1060,13 +1075,13 @@ namespace WolvenKit.Views.Tools
         }
 
         // Re-select nodes, enforcing change detection. Without setting it to null first, e.g. search&replace won't work.
-        private void SetSelectedItems(List<ChunkViewModel> selectedChunkViewModels)
+        private void SetSelectedItems(List<ChunkViewModel> selectedChunkViewModels, bool forceLocal = false)
         {
 
             SetCurrentValue(SelectedItemsProperty, null);
             SetCurrentValue(SelectedItemProperty, null);
 
-            if (_rdtDataViewModel is not null)
+            if (_rdtDataViewModel is not null && !forceLocal)
             {
                 _rdtDataViewModel.SetSelection(selectedChunkViewModels);
             }
