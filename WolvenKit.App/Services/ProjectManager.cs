@@ -151,7 +151,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
             obj.ModName ??= obj.Name;
 
             var openProjectFiles =
-                (obj.OpenProjectFiles ?? []).ToDictionary(x => DateTime.Now, x => x);
+                (obj.OpenProjectFiles ?? []).Distinct().ToDictionary(x => DateTime.Now, x => x);
             Cp77Project project = new(path, obj.Name, obj.ModName, openProjectFiles)
             {
                 Author = obj.Author,

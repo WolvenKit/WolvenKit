@@ -1244,6 +1244,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             var openProjectFiles = _appViewModel.DockedViews.OfType<IDocumentViewModel>()
                 .Where(x => x.FilePath is not null)
                 .OrderBy(x => x.OpenedAt)
+                .DistinctBy(x => x.FilePath)
                 .ToDictionary(x => x.OpenedAt, x => project.GetRelativePath(x.FilePath!));
 
             // only write if we had a change
