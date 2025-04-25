@@ -191,39 +191,43 @@ namespace WolvenKit.Views.Tools
 
         #region properties
 
-        // https://help.syncfusion.com/wpf/treeview/selection?cs-save-lang=1&cs-lang=csharp#how-to-add-selection-on-right-click
-        private bool IsMouseOverOnExpander(Syncfusion.UI.Xaml.TreeView.TreeViewItem treeViewItem, System.Windows.Point point)
-        {
-            if (treeViewItem.TreeViewItemInfo.TreeView.ExpanderPosition == ExpanderPosition.Start)
-            {
-                return point.X < treeViewItem.IndentationWidth + treeViewItem.ExpanderWidth;
-            }
-            else
-            {
-                return point.X > (treeViewItem.ActualWidth - treeViewItem.ExpanderWidth);
-            }
-        }
-        // https://help.syncfusion.com/wpf/treeview/selection?cs-save-lang=1&cs-lang=csharp#how-to-add-selection-on-right-click
-        private void OnMouseRightButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            var treeViewNode = TreeView.GetNodeAt(e.GetPosition(TreeView));
-            var itemInfo = TreeView.GetItemInfo(treeViewNode.Content);
-            var itemPoint = e.GetPosition(itemInfo.Element);
+        //// https://help.syncfusion.com/wpf/treeview/selection?cs-save-lang=1&cs-lang=csharp#how-to-add-selection-on-right-click
+        //private bool IsMouseOverOnExpander(Syncfusion.UI.Xaml.TreeView.TreeViewItem treeViewItem, System.Windows.Point point)
+        //{
+        //    if (treeViewItem.TreeViewItemInfo.TreeView.ExpanderPosition == ExpanderPosition.Start)
+        //    {
+        //        return point.X < treeViewItem.IndentationWidth + treeViewItem.ExpanderWidth;
+        //    }
+        //    else
+        //    {
+        //        return point.X > (treeViewItem.ActualWidth - treeViewItem.ExpanderWidth);
+        //    }
+        //}
+        //// https://help.syncfusion.com/wpf/treeview/selection?cs-save-lang=1&cs-lang=csharp#how-to-add-selection-on-right-click
+        //private void OnMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        //{
+        //    var treeViewNode = TreeView.GetNodeAt(e.GetPosition(TreeView));
+        //    var itemInfo = TreeView.GetItemInfo(treeViewNode.Content);
+        //    var itemPoint = e.GetPosition(itemInfo.Element);
 
-            if (!TreeView.FullRowSelect && IsMouseOverOnExpander(itemInfo.Element, itemPoint))
-            {
-                return;
-            }
+        //    if (!TreeView.FullRowSelect && IsMouseOverOnExpander(itemInfo.Element, itemPoint))
+        //    {
+        //        return;
+        //    }
 
-            if (!IsCtrlBeingHeld)
-            {
-                TreeView.SetCurrentValue(SfTreeView.SelectedItemsProperty, new ObservableCollection<object>());
-                TreeView.SetCurrentValue(SfTreeView.SelectedItemProperty, null);
-            }
+        //    if (!IsCtrlBeingHeld)
+        //    {
+        //        TreeView.SetCurrentValue(SfTreeView.SelectedItemsProperty, new ObservableCollection<object>());
+        //        TreeView.SetCurrentValue(SfTreeView.SelectedItemProperty, null);
+        //    }
+
+        //    if (!TreeView.SelectedItems.Contains(treeViewNode.Content))
+        //    {
+        //        TreeView.SelectedItems.Add(treeViewNode.Content);
+        //    }
             
-            TreeView.SelectedItems.Add(treeViewNode.Content);
-            TreeView.SetCurrentValue(SfTreeView.SelectedItemProperty, treeViewNode.Content);
-        }
+        //    TreeView.SetCurrentValue(SfTreeView.SelectedItemProperty, treeViewNode.Content);
+        //}
 
         public bool HasSelection
         {
