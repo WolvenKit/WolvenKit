@@ -286,37 +286,7 @@
             
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type tools1:LogEntry}">
-                    <Grid Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=ScrollViewer}}">
-                        <Grid.ColumnDefinitions >
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        
-                        <TextBlock
-                            MinHeight="{DynamicResource WolvenKitLogLineMinHeight}"
-                            Margin="0"
-                            Padding="0"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Center"
-                            Foreground="{Binding TextColor}"
-                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                            FontFamily="Consolas"
-                            Background="Transparent"
-                            Text="{Binding Path=Message}"
-                            TextWrapping="Wrap">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                        
+                    <StackPanel Orientation="Horizontal">
                         <TextBox
                             MinHeight="{DynamicResource WolvenKitLogLineMinHeight}"
                             Margin="0"
@@ -343,9 +313,30 @@
                                 </Style>
                             </TextBox.Style>
                         </TextBox>
-                        
                         <TextBlock
-                            Grid.Column="1"
+                            MinHeight="{DynamicResource WolvenKitLogLineMinHeight}"
+                            Margin="0"
+                            Padding="0"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Center"
+                            Background="Transparent"
+                            Foreground="{Binding TextColor}"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                            FontFamily="Consolas"
+                            Text="{Binding Path=Message, Mode=OneTime}"
+                            TextWrapping="Wrap">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <TextBlock
                             Padding="{DynamicResource WolvenKitMarginMicroHorizontal}"
                             FontSize="{DynamicResource WolvenKitFontSubTitle}"
                             HorizontalAlignment="Stretch"
@@ -357,22 +348,25 @@
                                 More Info
                             </Hyperlink>
                         </TextBlock>
-
                         <Button
-                            Grid.Column="2"
                             Padding="{DynamicResource WolvenKitMarginRight}"
-                            VerticalAlignment="Bottom"
-                            BorderThickness="1"
+                            MaxHeight="{DynamicResource WolvenKitLogLineMinHeight}"
+                            VerticalAlignment="Center"
+                            Foreground="Transparent"
+                            Background="Transparent"
+                            BorderThickness="0"
                             Click="CopyLine_OnClick"
                             Tag="{Binding Message}"
                             ToolTip="Copy line">
-                            <templates:IconBox
-                                IconPack="Octicons"
-                                Kind="paperclip"
-                                Margin="{DynamicResource WolvenKitMarginMicroVertical}"
-                                Size="{DynamicResource WolvenKitIconMicro}"
-                                Foreground="White" />
-
+                            <Grid ClipToBounds="False">
+                                <templates:IconBox
+                                    IconPack="Octicons"
+                                    Kind="paperclip"
+                                    Margin="0"
+                                    Foreground="White"
+                                    Size="{DynamicResource WolvenKitIconMicro}"
+                                    IsHitTestVisible="False"/>
+                            </Grid>
                             <Button.Style>
                                 <Style BasedOn="{StaticResource MahApps.Styles.Button.Chromeless}" TargetType="Button">
                                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -383,9 +377,8 @@
                                     </Style.Triggers>
                                 </Style>
                             </Button.Style>
-
                         </Button>
-                    </Grid>
+                    </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

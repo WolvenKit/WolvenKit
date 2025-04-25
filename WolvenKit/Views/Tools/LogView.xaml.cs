@@ -35,11 +35,12 @@ namespace WolvenKit.Views.Tools
         private ScrollViewer _scrollViewer;
         private bool _autoscroll = true;
 
-        public List<LogEntry> LogEntries { get; set; } = new();
-        public ObservableCollection<LogEntry> FilteredLogEntries { get; set; } = new();
+        public List<LogEntry> LogEntries { get; } = new();
+        public ObservableCollection<LogEntry> FilteredLogEntries { get; } = new();
         private readonly List<LogEntry> _logEntryQueue = new();
         private readonly object _logEntryQueueLock = new();
         private readonly DispatcherTimer _dispatcherTimer;
+        private const int s_maxFilteredLogEntries = 10000;
         
         public LogView()
         {
@@ -93,9 +94,14 @@ namespace WolvenKit.Views.Tools
         private void LogLevelFilter_Changed(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             var filtered = LogEntries.Where(log => ShouldInclude(log));
+            var tempFiltered = new List<LogEntry>();
+            tempFiltered.AddRange(filtered);
+            while (tempFiltered.Count > s_maxFilteredLogEntries)
+            {
+                tempFiltered.RemoveAt(0);
+            }
             FilteredLogEntries.Clear();
-            FilteredLogEntries.AddRange(filtered);
-            
+            FilteredLogEntries.AddRange(tempFiltered);
             if (_autoscroll)
             {
                 _scrollViewer?.ScrollToBottom();
@@ -173,6 +179,11 @@ namespace WolvenKit.Views.Tools
                 FilteredLogEntries.AddRange(filtered);
                 LogEntries.AddRange(_logEntryQueue);
                 _logEntryQueue.Clear();
+                
+                while (FilteredLogEntries.Count > s_maxFilteredLogEntries)
+                {
+                    FilteredLogEntries.RemoveAt(0);
+                }
             }
             if (_autoscroll)
             {
