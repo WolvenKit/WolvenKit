@@ -137,6 +137,17 @@ namespace WolvenKit.Views.Shell
                     return dialog.ViewModel;
                 };
 
+                Interactions.ShowGenerateInkatlasDialogue = (activeProject) =>
+                {
+                    var dialog = new AddInkatklasDialog(activeProject);
+                    if (dialog.ShowDialog() != true)
+                    {
+                        return null;
+                    }
+
+                    return dialog.ViewModel;
+                };
+
                 Interactions.ShowScriptSettingsView = settings =>
                 {
                     var dialog = new ScriptSettingsWindow(settings);

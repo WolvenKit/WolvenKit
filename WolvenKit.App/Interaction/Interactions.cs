@@ -124,4 +124,7 @@ public static class Interactions
         ShowPhotoModeDialogue { get; set; } = _ => throw new NotImplementedException();
 
     public static Func<ScriptSettingsDictionary, bool> ShowScriptSettingsView { get; set; } = _ => throw new NotImplementedException();
+
+    public static Func<Cp77Project, AddInkatlasDialogViewModel> ShowGenerateInkatlasDialogue { get; set; } =
+        _ => throw new NotImplementedException();
 }
