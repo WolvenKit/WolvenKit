@@ -322,7 +322,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
     }
 
-    private string GetActiveFolderPath() => SelectedTabIndex switch
+    public string GetActiveFolderPath() => SelectedTabIndex switch
     {
         0 => ActiveProject.NotNull().FileDirectory,
         1 => ActiveProject.NotNull().ModDirectory,
@@ -1288,6 +1288,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     public void StopWatcher() => _projectWatcher.ForceStop();
 
+
+    public event EventHandler? OnTabIndexChanged;
+    
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
         switch (e.PropertyName)
@@ -1297,6 +1300,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 break;
             case nameof(SelectedTabIndex) when ActiveProject is not null:
                 ActiveProject.ActiveTab = SelectedTabIndex;
+                OnTabIndexChanged?.Invoke(this, EventArgs.Empty);
                 _projectExplorerTabChanged = true;
                 break;
         }

@@ -90,6 +90,7 @@ namespace WolvenKit.Views.Tools
                 {
                     SetCurrentValue(ViewModelProperty, vm);
                     vm.OnProjectChanged += ResetUiElements;
+                    vm.OnTabIndexChanged += RestoreExpansionStates;
                 }
 
                 AddKeyUpEvent();
@@ -200,6 +201,44 @@ namespace WolvenKit.Views.Tools
             });
         }
 
+        private void RestoreExpansionStates(object sender, EventArgs e)
+        {
+            if (TreeGrid?.View?.Nodes == null || ViewModel == null)
+            {
+                return;
+            }
+
+            foreach (var node in TreeGrid.View.Nodes)
+            {
+                ApplyExpansionStateRecursive(node);
+            }
+        }
+
+        private void ApplyExpansionStateRecursive(TreeNode node)
+        {
+            var activeFolderPath = ViewModel!.GetActiveFolderPath();
+            if (node.Item is FileSystemModel fsm && fsm.RawRelativePath.StartsWith(activeFolderPath))
+            {
+                // Check the saved expansion state in the ViewModel
+                if (ViewModel.ExpansionStateDictionary.TryGetValue(fsm.RawRelativePath, out var isExpanded))
+                {
+                    if (isExpanded)
+                    {
+                        TreeGrid.ExpandNode(node);
+                    }
+                    else
+                    {
+                        TreeGrid.CollapseNode(node);
+                    }
+                }
+            }
+
+            // Recursively apply the expansion state to child nodes
+            foreach (var childNode in node.ChildNodes)
+            {
+                ApplyExpansionStateRecursive(childNode);
+            }
+        }
         private static (string Text, bool EnableRefactoring) ShowRenameDialog(string input)
         {
             var dialog = new RenameDialog(true);
