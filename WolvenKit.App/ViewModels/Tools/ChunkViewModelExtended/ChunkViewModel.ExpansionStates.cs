@@ -94,6 +94,11 @@ public partial class ChunkViewModel
             case CMaterialInstance when GetTvPropertyFromPath("values") is ChunkViewModel child:
                 ExpandAndSelect(child, true);
                 break;
+            // .mt
+            case CMaterialTemplate when GetTvPropertyFromPath("parameters") is ChunkViewModel child &&
+                                        child.GetPropertyChild("2") is ChunkViewModel defaultParams:
+                ExpandAndSelect(defaultParams, true);
+                break;
             // .mlsetup file
             case Multilayer_Setup when GetTvPropertyFromPath("layers") is ChunkViewModel child:
                 ExpandAndSelect(child, true);
