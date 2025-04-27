@@ -1024,27 +1024,35 @@ public class RED4Controller : ObservableObject, IGameController
             return false;
         }
 
-        if (File.Exists(diskPathInfo.FullName))
+        var isFileExists = File.Exists(diskPathInfo.FullName);
+        var successMsg = isFileExists
+            ? $"Overwrote existing file with game file: {file.Name}"
+            : $"Added game file to project: {file.Name}";
+
+        if (!isFileExists)
+        {
+            Directory.CreateDirectory(diskPathInfo.Directory.FullName);
+        }
+
+        try
         {
             using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
             file.Extract(fs);
-            _loggerService.Info($"Overwrote existing file with game file: {file.Name}");
+            _loggerService.Info(successMsg);
         }
-        else
+        catch (IOException ex) when (ex.Message.Contains("used by another process"))
         {
-            Directory.CreateDirectory(diskPathInfo.Directory.FullName);
-            try
-            {
-                using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
-                file.Extract(fs);
-                _loggerService.Info($"Added game file to project: {file.Name}");
-            }
-            catch (Exception ex)
+            _loggerService.Error($"Failed to access the file '{diskPathInfo.FullName}'.");
+            _loggerService.Error(
+                "Make sure it's not used by another process. If that doesn't help, restart Wolvenkit.");
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Error(ex.Message);
+            if (!isFileExists)
             {
                 File.Delete(diskPathInfo.FullName);
-                _loggerService.Error(ex);
             }
-
         }
 
         return true;
