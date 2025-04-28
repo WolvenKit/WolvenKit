@@ -40,7 +40,7 @@ namespace WolvenKit.Views.Tools
         private readonly List<LogEntry> _logEntryQueue = new();
         private readonly object _logEntryQueueLock = new();
         private readonly DispatcherTimer _dispatcherTimer;
-        private const int s_maxFilteredLogEntries = 10000;
+        private const int s_maxFilteredLogEntries = 10 * 1000;
         
         public LogView()
         {
@@ -93,7 +93,7 @@ namespace WolvenKit.Views.Tools
         
         private void LogLevelFilter_Changed(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            var filtered = LogEntries.Where(log => ShouldInclude(log));
+            var filtered = LogEntries.Where(ShouldInclude);
             var tempFiltered = new List<LogEntry>();
             tempFiltered.AddRange(filtered);
             while (tempFiltered.Count > s_maxFilteredLogEntries)
@@ -173,7 +173,7 @@ namespace WolvenKit.Views.Tools
                 return;
             }
             
-            var filtered = _logEntryQueue.Where(log => ShouldInclude(log));
+            var filtered = _logEntryQueue.Where(ShouldInclude);
             lock (_logEntryQueueLock)
             {
                 FilteredLogEntries.AddRange(filtered);

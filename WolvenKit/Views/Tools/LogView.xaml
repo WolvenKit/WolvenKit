@@ -11,6 +11,7 @@
     xmlns:tools="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App"
     xmlns:tools1="clr-namespace:WolvenKit.Views.Tools"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    xmlns:controls="clr-namespace:WolvenKit.Views.Controls"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=tools:LogViewModel}"
     d:DesignWidth="800"
@@ -40,7 +41,7 @@
         </Grid.ColumnDefinitions>
 
         <Grid.Resources>
-            <converters:NullVisibilityConverter x:Key="NullVisibilityConverter" />
+            <converters:NullMoreInfoStringConverter x:Key="NullStringConverter" />
 
             <Style
                 x:Key="LogLevelButtonStyle"
@@ -272,8 +273,10 @@
             KeyUp="LogView_OnKeyUp"
             SelectionMode="Single"
             VirtualizingPanel.IsVirtualizing="True"
-            VirtualizingPanel.VirtualizationMode="Recycling"
+            VirtualizingPanel.VirtualizationMode="Standard"
             VirtualizingPanel.ScrollUnit="Pixel"
+            VirtualizingPanel.IsContainerVirtualizable="True"
+            VirtualizingPanel.IsVirtualizingWhenGrouping="True"
             ScrollViewer.CanContentScroll="True"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             
@@ -283,102 +286,26 @@
                     <Setter Property="BorderThickness" Value="0" />
                 </Style>
             </ListBox.Style>
-            
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type tools1:LogEntry}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBox
-                            MinHeight="{DynamicResource WolvenKitLogLineMinHeight}"
-                            Margin="0"
-                            Padding="0"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Center"
-                            Background="Transparent"
-                            Foreground="{Binding TextColor}"
-                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                            FontFamily="Consolas"
-                            IsReadOnly="True"
-                            IsReadOnlyCaretVisible="False"
-                            BorderThickness="0"
-                            Text="{Binding Path=Message, Mode=OneTime}"
-                            TextWrapping="Wrap">
-                            <TextBox.Style>
-                                <Style TargetType="TextBox">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
-                                            <Setter Property="Visibility" Value="Visible"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBox.Style>
-                        </TextBox>
-                        <TextBlock
-                            MinHeight="{DynamicResource WolvenKitLogLineMinHeight}"
-                            Margin="0"
-                            Padding="0"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Center"
-                            Background="Transparent"
-                            Foreground="{Binding TextColor}"
-                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                            FontFamily="Consolas"
-                            Text="{Binding Path=Message, Mode=OneTime}"
-                            TextWrapping="Wrap">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                        <TextBlock
-                            Padding="{DynamicResource WolvenKitMarginMicroHorizontal}"
-                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                            HorizontalAlignment="Stretch"
-                            Visibility="{Binding Uri,
-                                                 Converter={StaticResource NullVisibilityConverter}}">
-                            <Hyperlink
-                                NavigateUri="{Binding Uri}"
-                                RequestNavigate="Hyperlink_OnRequestNavigate">
-                                More Info
-                            </Hyperlink>
-                        </TextBlock>
-                        <Button
-                            Padding="{DynamicResource WolvenKitMarginRight}"
-                            MaxHeight="{DynamicResource WolvenKitLogLineMinHeight}"
-                            VerticalAlignment="Center"
-                            Foreground="Transparent"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Click="CopyLine_OnClick"
-                            Tag="{Binding Message}"
-                            ToolTip="Copy line">
-                            <Grid ClipToBounds="False">
-                                <templates:IconBox
-                                    IconPack="Octicons"
-                                    Kind="paperclip"
-                                    Margin="0"
-                                    Foreground="White"
-                                    Size="{DynamicResource WolvenKitIconMicro}"
-                                    IsHitTestVisible="False"/>
-                            </Grid>
-                            <Button.Style>
-                                <Style BasedOn="{StaticResource MahApps.Styles.Button.Chromeless}" TargetType="Button">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
-                                            <Setter Property="Visibility" Value="Visible"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                    </StackPanel>
+                    <controls:SelectableTextBlock
+                        MinHeight="{DynamicResource WolvenKitLogLineMinHeight}"
+                        Margin="0"
+                        Padding="0"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        Focusable="True"
+                        Foreground="{Binding TextColor}"
+                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                        FontFamily="Consolas"
+                        Text="{Binding Path=Message, Mode=OneTime}"
+                        TextWrapping="Wrap">
+                        <Hyperlink
+                            NavigateUri="{Binding Uri}"
+                            RequestNavigate="Hyperlink_OnRequestNavigate">
+                            <Run Text="{Binding Uri, Converter={StaticResource NullStringConverter}}"/>
+                        </Hyperlink>
+                    </controls:SelectableTextBlock>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
