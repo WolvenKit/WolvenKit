@@ -80,6 +80,8 @@ public abstract class EditorDifficultyLevelInformation
             ]
         },
         { typeof(inkTextureAtlas), ["activeTexture", "dynamicTexture", "dynamicTextureSlot", "texture"] },
+        // .app file: appearance definition: parts override - ArchiveXL will handle this
+        { typeof(appearanceAppearancePartOverrides), ["partResource"] },
     };
 
     /// <summary>
@@ -149,8 +151,6 @@ public abstract class EditorDifficultyLevelInformation
             ]
         },
 
-        // .app file: appearance definition: parts override - ArchiveXL will handle this
-        { typeof(appearanceAppearancePartOverrides), ["partResource"] },
         // .app file: appearance definition: parts override
         { typeof(appearancePartComponentOverrides), ["acceptDismemberment"] },
 
