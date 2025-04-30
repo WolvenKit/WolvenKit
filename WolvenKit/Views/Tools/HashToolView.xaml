@@ -31,6 +31,7 @@
                         <RowDefinition Height="{DynamicResource WolvenKitRowText}" />
                         <RowDefinition Height="{DynamicResource WolvenKitRowText}" />
                         <RowDefinition Height="{DynamicResource WolvenKitRowText}" />
+                        <RowDefinition Height="{DynamicResource WolvenKitRowText}" />
                     </Grid.RowDefinitions>
 
                     <TextBlock
@@ -170,6 +171,30 @@
                     <TextBox
                         x:Name="Murmur3HashHex"
                         Grid.Row="5"
+                        Grid.Column="6" />
+
+                    <TextBlock
+                        Grid.Row="6"
+                        Grid.Column="0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">
+                        CName Hashmap Key:
+                    </TextBlock>
+                    <TextBox
+                        x:Name="CNameKeyHash"
+                        Grid.Row="6"
+                        Grid.Column="2"
+                        IsReadOnly="True" />
+                    <TextBlock
+                        Grid.Row="6"
+                        Grid.Column="4"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">
+                        Hex:
+                    </TextBlock>
+                    <TextBox
+                        x:Name="CNameKeyHashHex"
+                        Grid.Row="6"
                         Grid.Column="6" />
                 </Grid>
             </TabItem>
