@@ -90,7 +90,7 @@ namespace WolvenKit.Views.Tools
                 {
                     SetCurrentValue(ViewModelProperty, vm);
                     vm.OnProjectChanged += ResetUiElements;
-                    vm.OnTabIndexChanged += RestoreExpansionStates;
+                    vm.OnFileNodeRefresh += RestoreExpansionStates;
                 }
 
                 AddKeyUpEvent();
