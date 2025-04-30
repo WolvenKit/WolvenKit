@@ -36,7 +36,11 @@ public partial class GraphEditorView : UserControl
             return;
         }
 
-        view.Dispatcher.BeginInvoke(new Action(() => UpdateView(view)), DispatcherPriority.ContextIdle);
+        view.Dispatcher.BeginInvoke(new Action(() =>
+        {
+            UpdateView(view);
+            view.Source?.ArrangeNodes();
+        }), DispatcherPriority.ContextIdle);
     }
 
     private static void UpdateView(GraphEditorView view)
