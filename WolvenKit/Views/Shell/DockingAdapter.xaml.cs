@@ -220,7 +220,8 @@ namespace WolvenKit.Views.Shell
             {
                 PART_DockingManager.BeginInit(); // Begin batch updates
 
-                using (var reader = XmlReader.Create(filePath)) {              
+                using (var reader = XmlReader.Create(filePath))
+                {              
 
                     var defaultXmlSerializer = DockingManager.CreateDefaultXmlSerializer(typeof(List<DockingParams>));
                     if (!defaultXmlSerializer.CanDeserialize(reader))
@@ -269,7 +270,8 @@ namespace WolvenKit.Views.Shell
                 // Now load layout
                 var isSuccess = false;
 
-                using (var reader = XmlReader.Create(filePath)) {
+                using (var reader = XmlReader.Create(filePath))
+                {
                     isSuccess = PART_DockingManager.LoadDockState(reader);
                 }
 
