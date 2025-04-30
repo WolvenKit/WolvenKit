@@ -27,6 +27,9 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>
             }
             else if (eventClass?.Chunk is scnPlaySkAnimEvent playSkAnimEvent)
             {
+                string performerName = ResolvePerformerName(playSkAnimEvent.Performer.Id, scnSceneResource);
+                string animSuffix = "[No Anim]";
+                
                 scnAnimName? animNameObj = null;
                 if (playSkAnimEvent.AnimName is CHandle<scnAnimName> handle)
                 {
@@ -46,11 +49,13 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>
                             {
                                 displayAnimName = displayAnimName.Substring(0, maxLen) + "...";
                             }
-                            detailSuffix = $" ({displayAnimName})";
+                            animSuffix = displayAnimName; // Store just the anim name
                         }
-                        else { detailSuffix = " ([unresolved animName])"; }
+                        else { animSuffix = "[unresolved]"; }
                     }
                 }
+                // Combine performer and anim name
+                detailSuffix = $" ({performerName} - Anim: {animSuffix})";
             }
             else if (eventClass?.Chunk is scnDialogLineEvent dialogLineEvent)
             {
@@ -132,10 +137,10 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>
                     string performerName = ResolvePerformerName(basicLookAtData.PerformerId.Id, scnSceneResource);
                     string targetName = "UnknownTarget";
 
-                    var targetTypeEnum = (Enums.scnLookAtTargetType)basicLookAtData.TargetType;
+                    var targetTypeEnum = (WolvenKit.RED4.Types.Enums.scnLookAtTargetType)basicLookAtData.TargetType;
                     switch (targetTypeEnum) 
                     {
-                        case Enums.scnLookAtTargetType.Actor:
+                        case WolvenKit.RED4.Types.Enums.scnLookAtTargetType.Actor:
                             // Use TargetPerformerId when TargetType is Actor
                             if (basicLookAtData.TargetPerformerId != null)
                             {
@@ -143,10 +148,10 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>
                             }
                             else
                             {
-                                targetName = "Performer: [Null ID]"; // Fallback if TargetPerformerId is null
+                                targetName = "Performer: [Null ID]";
                             }
                             break;
-                        case Enums.scnLookAtTargetType.Prop:
+                        case WolvenKit.RED4.Types.Enums.scnLookAtTargetType.Prop:
                              if (basicLookAtData.TargetPropId != null)
                              {
                                 var propDef = scnSceneResource.Props?.FirstOrDefault(p => p.PropId?.Id == basicLookAtData.TargetPropId.Id);
@@ -182,7 +187,6 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>
                              {
                                  targetName = $"Slot: {basicLookAtData.TargetSlot.GetResolvedText() ?? "?"}";
                              }
-                             // Final fallback
                              else
                              {
                                  targetName = $"Unknown ({targetTypeEnum})";
@@ -194,13 +198,72 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>
             }
             else if (eventClass?.Chunk is scneventsVFXEvent vfxEvent)
             {
-                string actionName = vfxEvent.Action.ToString(); // Get enum string representation
+                string actionName = vfxEvent.Action.ToString();
                 string effectName = "[No Effect]";
                 if (vfxEvent.EffectEntry != null && vfxEvent.EffectEntry.EffectName != CName.Empty)
                 {
                     effectName = vfxEvent.EffectEntry.EffectName.GetResolvedText() ?? "[unresolved]";
                 }
                 detailSuffix = $" ({actionName}: {effectName})";
+            }
+            else if (eventClass?.Chunk is scnChangeIdleAnimEvent idleAnimEvent)
+            {
+                string performerName = ResolvePerformerName(idleAnimEvent.Performer.Id, scnSceneResource);
+                string idleAnim = "[None]";
+                if (idleAnimEvent.IdleAnimName != CName.Empty)
+                {
+                    idleAnim = idleAnimEvent.IdleAnimName.GetResolvedText() ?? "[unresolved]";
+                }
+                
+                string facialAnim = "[None]";
+                if (idleAnimEvent.BakedFacialTransition != null)
+                {
+                    var facialCName = CName.Empty;
+                    if (idleAnimEvent.BakedFacialTransition.ToIdleFemale != CName.Empty)
+                    {
+                        facialCName = idleAnimEvent.BakedFacialTransition.ToIdleFemale;
+                    }
+                    else if (idleAnimEvent.BakedFacialTransition.ToIdleMale != CName.Empty)
+                    {
+                        facialCName = idleAnimEvent.BakedFacialTransition.ToIdleMale;
+                    }
+                    
+                    if (facialCName != CName.Empty)
+                    {
+                        facialAnim = facialCName.GetResolvedText() ?? "[unresolved]";
+                    }
+                }
+                
+                // Conditionally add parts to the suffix
+                var parts = new List<string>();
+                parts.Add($"Performer: {performerName}");
+                if (idleAnim != "[None]") parts.Add($"Idle: {idleAnim}");
+                if (facialAnim != "[None]") parts.Add($"Face: {facialAnim}");
+                
+                if (parts.Count > 1)
+                {
+                    detailSuffix = $" ({string.Join(", ", parts)})";
+                }
+                else
+                {
+                    detailSuffix = $" ({performerName})";
+                }
+            }
+            else if (eventClass?.Chunk is scnIKEvent ikEvent)
+            {
+                string performerName = "[No Performer]";
+                if (ikEvent.IkData?.Basic?.PerformerId != null && scnSceneResource != null)
+                {
+                    performerName = ResolvePerformerName(ikEvent.IkData.Basic.PerformerId.Id, scnSceneResource);
+                }
+
+                string chainName = "[No Chain]";
+                if (ikEvent.IkData?.ChainName != null && ikEvent.IkData.ChainName != CName.Empty)
+                {
+                    chainName = ikEvent.IkData.ChainName.GetResolvedText() ?? "[unresolved]";
+                }
+                
+                detailSuffix = $" ({performerName} - Chain: {chainName})";
             }
 
             string fullEventName = evName + detailSuffix;
@@ -215,61 +278,57 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>
         }
     }
 
-    // Helper method to resolve performer IDs to names using BITMASK encoding
     private string ResolvePerformerName(CUInt32 performerIdCUint32, scnSceneResource sceneResource)
     {
-        uint performerId = performerIdCUint32; // Implicit conversion
-
-        // Handle potential 'None' or special values
-        if (performerId == uint.MaxValue || performerId == 4294967040 || performerId == 0) return "None [0]";
-
-        var names = new List<string>();
-        for (int actorIndex = 0; actorIndex < 16; actorIndex++) // Check up to 16 actors
+        uint performerId = performerIdCUint32;
+        if (performerId == uint.MaxValue || performerId == 4294967040) return "None";
+        if (performerId == 0)
         {
-            if (((performerId >> actorIndex) & 1) == 1)
+             var playerActorDef = sceneResource?.PlayerActors?.FirstOrDefault(p => p.ActorId?.Id == 0);
+             if (playerActorDef != null)
+             {
+                 string? playerName = playerActorDef.PlayerName;
+                 if (string.IsNullOrEmpty(playerName)) playerName = "Player";
+                 return $"{playerName} [0]";
+             }
+             return "Player? [0]";
+        }
+        if (performerId >= 2 && (performerId % 256 == 2))
+        {
+            uint propIndex = (performerId - 2) / 256;
+            if (sceneResource?.Props != null && propIndex < sceneResource.Props.Count)
             {
-                string resolvedName = $"Idx {actorIndex}?";
-
-                if (sceneResource?.Actors != null && actorIndex < sceneResource.Actors.Count)
-                {
-                     var actorDef = sceneResource.Actors[actorIndex];
-                     if (actorDef != null)
+                var propDef = sceneResource.Props[(int)propIndex];
+                string? propName = propDef?.PropName;
+                return $"Prop: {propName ?? "Unnamed"} [{propIndex}]";
+            }
+            else { return $"Prop Idx {propIndex}? [{performerId}]"; }
+        }
+        else if (performerId >= 1 && (performerId % 256 == 1))
+        {
+            uint actorIndex = (performerId - 1) / 256;
+            if (sceneResource?.Actors != null && actorIndex < sceneResource.Actors.Count)
+            {
+                 var actorDef = sceneResource.Actors[(int)actorIndex];
+                 if (actorDef != null)
+                 {
+                     var playerActorDef = sceneResource.PlayerActors?.FirstOrDefault(p => p.ActorId?.Id == actorDef.ActorId?.Id);
+                     if(playerActorDef != null)
                      {
-                         var playerActorDef = sceneResource.PlayerActors?.FirstOrDefault(p => p.ActorId?.Id == actorDef.ActorId?.Id);
-                         if(playerActorDef != null)
-                         {
-                             string playerName = playerActorDef.PlayerName;
-                             string? playerNameStr = playerName;
-                             if (string.IsNullOrEmpty(playerNameStr)) playerNameStr = "Player";
-                             resolvedName = $"{playerNameStr} [{actorIndex}]";
-                         }
-                         else
-                         {
-                             string actorName = actorDef.ActorName;
-                             string? actorNameStr = actorName;
-                             resolvedName = $"{actorNameStr ?? "Unnamed"} [{actorIndex}]";
-                         }
+                         string? playerName = playerActorDef.PlayerName;
+                         if (string.IsNullOrEmpty(playerName)) playerName = "Player";
+                         return $"{playerName} [{actorIndex}]";
                      }
                      else
                      {
-                          resolvedName = $"Idx {actorIndex} (Null Def)";
+                         string? actorName = actorDef.ActorName;
+                         return $"{actorName ?? "Unnamed"} [{actorIndex}]";
                      }
-                }
-                 names.Add(resolvedName);
+                 }
+                 else { return $"Actor Idx {actorIndex} (Null Def) [{performerId}]"; }
             }
+            else { return $"Actor Idx {actorIndex}? [{performerId}]"; }
         }
-
-        if (names.Count > 0)
-        {
-            string joinedNames = string.Join(", ", names);
-            const int maxTotalLen = 50;
-            if (joinedNames.Length > maxTotalLen)
-            {
-                joinedNames = joinedNames.Substring(0, maxTotalLen) + "...";
-            }
-            return joinedNames;
-        }
-
         return $"Unknown [{performerId}]";
     }
 
