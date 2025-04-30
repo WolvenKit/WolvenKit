@@ -267,21 +267,18 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>
             else if (eventClass?.Chunk is scneventsAttachPropToPerformer attachEvent)
             {
                 string propName = "[No Prop]";
-                if (attachEvent.PropId != null && scnSceneResource != null)
+                if (attachEvent.PropId != null && scnSceneResource?.Props != null)
                 {
-                    // Resolve prop name using its *index* derived from ID
-                    if (attachEvent.PropId.Id >= 2 && (attachEvent.PropId.Id % 256 == 2))
+                    var propDef = scnSceneResource.Props.FirstOrDefault(p => p.PropId?.Id == attachEvent.PropId.Id);
+                    if (propDef != null)
                     {
-                        uint propIndex = (attachEvent.PropId.Id - 2) / 256;
-                        if (scnSceneResource.Props != null && propIndex < scnSceneResource.Props.Count)
-                        {
-                             var propDef = scnSceneResource.Props[(int)propIndex];
-                             string? pName = propDef?.PropName;
-                             propName = pName ?? "Unnamed";
-                        }
-                        else { propName = $"Idx {propIndex}?"; }
+                        string? pName = propDef.PropName;
+                        propName = pName ?? "Unnamed";
                     }
-                    else { propName = $"InvalidID ({attachEvent.PropId.Id})"; }
+                    else
+                    { 
+                        propName = $"Unknown [{attachEvent.PropId.Id}]";
+                    }
                 }
 
                 string performerName = "[No Performer]";
@@ -337,6 +334,28 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>
                                  : "[No Node]";
                  detailSuffix = $" (Prop: {propName} -> Node: {nodeRef})";
             }
+            else if (eventClass?.Chunk is scneventsEquipItemToPerformer equipEvent)
+            {
+                string performerName = "[No Performer]";
+                if (equipEvent.PerformerId != null && scnSceneResource != null)
+                {
+                    performerName = ResolvePerformerName(equipEvent.PerformerId.Id, scnSceneResource);
+                }
+
+                string itemName = "[No Item]";
+                if (equipEvent.ItemId != TweakDBID.Empty)
+                {
+                    itemName = equipEvent.ItemId.GetResolvedText() ?? "[unresolved]";
+                }
+
+                string slotName = "[No Slot]";
+                if (equipEvent.SlotId != TweakDBID.Empty)
+                {
+                    slotName = equipEvent.SlotId.GetResolvedText() ?? "[unresolved]";
+                }
+
+                detailSuffix = $" (Performer: {performerName}, Item: {itemName}, Slot: {slotName})";
+            }
 
             string fullEventName = evName + detailSuffix;
 
@@ -350,6 +369,7 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>
         }
     }
 
+    // Helper method to resolve performer IDs to names using INDEX encoding (Revised Player Logic)
     private string ResolvePerformerName(CUInt32 performerIdCUint32, scnSceneResource? sceneResource)
     {
         uint performerId = performerIdCUint32;
@@ -361,10 +381,17 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>
              {
                  string? playerName = playerActorDef.PlayerName;
                  if (string.IsNullOrEmpty(playerName)) playerName = "Player";
-                 return $"{playerName} [0]";
+                 return $"{playerName} [ID:0]";
              }
-             return "Player? [0]";
+             var actorDefZero = sceneResource?.Actors?.FirstOrDefault(a => a.ActorId?.Id == 0);
+             if(actorDefZero != null)
+             {
+                 string? actorName = actorDefZero.ActorName;
+                 return $"{actorName ?? "Unnamed"} [ID:0]";
+             }
+             return "Player? [ID:0]";
         }
+        
         if (performerId >= 2 && (performerId % 256 == 2))
         {
             uint propIndex = (performerId - 2) / 256;
@@ -379,25 +406,24 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>
         else if (performerId >= 1 && (performerId % 256 == 1))
         {
             uint actorIndex = (performerId - 1) / 256;
+
+            var playerActorDef = sceneResource?.PlayerActors?.FirstOrDefault(p => p.ActorId?.Id == actorIndex);
+            if(playerActorDef != null)
+            {
+                string? playerName = playerActorDef.PlayerName;
+                if (string.IsNullOrEmpty(playerName)) playerName = "Player";
+                return $"{playerName} [{actorIndex}]";
+            }
+
             if (sceneResource?.Actors != null && actorIndex < sceneResource.Actors.Count)
             {
                  var actorDef = sceneResource.Actors[(int)actorIndex];
                  if (actorDef != null)
                  {
-                     var playerActorDef = sceneResource.PlayerActors?.FirstOrDefault(p => p.ActorId?.Id == actorDef.ActorId?.Id);
-                     if(playerActorDef != null)
-                     {
-                         string? playerName = playerActorDef.PlayerName;
-                         if (string.IsNullOrEmpty(playerName)) playerName = "Player";
-                         return $"{playerName} [{actorIndex}]";
-                     }
-                     else
-                     {
-                         string? actorName = actorDef.ActorName;
-                         return $"{actorName ?? "Unnamed"} [{actorIndex}]";
-                     }
+                     string? actorName = actorDef.ActorName;
+                     return $"{actorName ?? "Unnamed"} [{actorIndex}]";
                  }
-                 else { return $"Actor Idx {actorIndex} (Null Def) [{performerId}]"; }
+                 else { return $"Actor Idx {actorIndex} (Null Def) [{performerId}]"; } 
             }
             else { return $"Actor Idx {actorIndex}? [{performerId}]"; }
         }
