@@ -49,12 +49,11 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>
                             {
                                 displayAnimName = displayAnimName.Substring(0, maxLen) + "...";
                             }
-                            animSuffix = displayAnimName; // Store just the anim name
+                            animSuffix = displayAnimName;
                         }
                         else { animSuffix = "[unresolved]"; }
                     }
                 }
-                // Combine performer and anim name
                 detailSuffix = $" ({performerName} - Anim: {animSuffix})";
             }
             else if (eventClass?.Chunk is scnDialogLineEvent dialogLineEvent)
@@ -265,6 +264,79 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>
                 
                 detailSuffix = $" ({performerName} - Chain: {chainName})";
             }
+            else if (eventClass?.Chunk is scneventsAttachPropToPerformer attachEvent)
+            {
+                string propName = "[No Prop]";
+                if (attachEvent.PropId != null && scnSceneResource != null)
+                {
+                    // Resolve prop name using its *index* derived from ID
+                    if (attachEvent.PropId.Id >= 2 && (attachEvent.PropId.Id % 256 == 2))
+                    {
+                        uint propIndex = (attachEvent.PropId.Id - 2) / 256;
+                        if (scnSceneResource.Props != null && propIndex < scnSceneResource.Props.Count)
+                        {
+                             var propDef = scnSceneResource.Props[(int)propIndex];
+                             string? pName = propDef?.PropName;
+                             propName = pName ?? "Unnamed";
+                        }
+                        else { propName = $"Idx {propIndex}?"; }
+                    }
+                    else { propName = $"InvalidID ({attachEvent.PropId.Id})"; }
+                }
+
+                string performerName = "[No Performer]";
+                if (attachEvent.PerformerId != null && scnSceneResource != null)
+                {
+                    performerName = ResolvePerformerName(attachEvent.PerformerId.Id, scnSceneResource);
+                }
+
+                string slotName = "[No Slot]";
+                if (attachEvent.Slot != CName.Empty)
+                {
+                    slotName = attachEvent.Slot.GetResolvedText() ?? "[unresolved]";
+                }
+
+                detailSuffix = $" (Prop: {propName} -> Performer: {performerName} at Slot: {slotName})";
+            }
+            else if (eventClass?.Chunk is scneventsAttachPropToWorld attachWorldEvent)
+            {
+                string propName = "[No Prop]";
+                if (attachWorldEvent.PropId != null && scnSceneResource?.Props != null)
+                {
+                    var propDef = scnSceneResource.Props.FirstOrDefault(p => p.PropId?.Id == attachWorldEvent.PropId.Id);
+                    if (propDef != null)
+                    {
+                         string? pName = propDef.PropName;
+                         propName = pName ?? "Unnamed";
+                    }
+                    else 
+                    { 
+                        propName = $"Unknown [{attachWorldEvent.PropId.Id}]";
+                    }
+                }
+                 detailSuffix = $" (Prop: {propName} -> World)";
+            }
+            else if (eventClass?.Chunk is scneventsAttachPropToNode attachNodeEvent)
+            {
+                string propName = "[No Prop]";
+                if (attachNodeEvent.PropId != null && scnSceneResource?.Props != null)
+                {
+                    var propDef = scnSceneResource.Props.FirstOrDefault(p => p.PropId?.Id == attachNodeEvent.PropId.Id);
+                    if (propDef != null)
+                    {
+                         string? pName = propDef.PropName;
+                         propName = pName ?? "Unnamed";
+                    }
+                    else 
+                    { 
+                        propName = $"Unknown [{attachNodeEvent.PropId.Id}]";
+                    }
+                }
+                string nodeRef = attachNodeEvent.NodeRef != NodeRef.Empty 
+                                 ? attachNodeEvent.NodeRef.GetRedHash().ToString("X") 
+                                 : "[No Node]";
+                 detailSuffix = $" (Prop: {propName} -> Node: {nodeRef})";
+            }
 
             string fullEventName = evName + detailSuffix;
 
@@ -274,11 +346,11 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>
 
         if (scnSceneResource != null)
         {
-            Title += NodeProperties.SetNameFromNotablePoints(scnSectionNode.NodeId.Id, scnSceneResource);
+        Title += NodeProperties.SetNameFromNotablePoints(scnSectionNode.NodeId.Id, scnSceneResource);
         }
     }
 
-    private string ResolvePerformerName(CUInt32 performerIdCUint32, scnSceneResource sceneResource)
+    private string ResolvePerformerName(CUInt32 performerIdCUint32, scnSceneResource? sceneResource)
     {
         uint performerId = performerIdCUint32;
         if (performerId == uint.MaxValue || performerId == 4294967040) return "None";
