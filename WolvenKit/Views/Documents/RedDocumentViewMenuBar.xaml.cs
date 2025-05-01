@@ -288,16 +288,32 @@ namespace WolvenKit.Views.Documents
                             baseMaterialPath.Replace("{material}", newMatName).Replace("*", ""),
                             InternalEnums.EImportFlags.Default),
                     };
+
                     foreach (var cvp in matInstance.Values)
                     {
                         var value = cvp.Value switch
                         {
+                            CResourceReference<Multilayer_Setup> mlsetup => new CResourceReference<Multilayer_Setup>(
+                                ReplaceMaterialPath(mlsetup.DepotPath, newMatName), InternalEnums.EImportFlags.Default),
+                            CResourceReference<Multilayer_Mask> mlmask => new CResourceReference<Multilayer_Mask>(
+                                ReplaceMaterialPath(mlmask.DepotPath, newMatName), InternalEnums.EImportFlags.Default),
+                            CResourceReference<ITexture> tex => new CResourceReference<ITexture>(
+                                ReplaceMaterialPath(tex.DepotPath, newMatName), InternalEnums.EImportFlags.Default),
+                            CResourceAsyncReference<Multilayer_Setup> mlsetup => new
+                                CResourceAsyncReference<Multilayer_Setup>(
+                                    ReplaceMaterialPath(mlsetup.DepotPath, newMatName),
+                                    InternalEnums.EImportFlags.Default),
+                            CResourceAsyncReference<Multilayer_Mask> mlmask => new
+                                CResourceAsyncReference<Multilayer_Mask>(
+                                    ReplaceMaterialPath(mlmask.DepotPath, newMatName),
+                                    InternalEnums.EImportFlags.Default),
+                            CResourceAsyncReference<ITexture> tex => new CResourceAsyncReference<ITexture>(
+                                ReplaceMaterialPath(tex.DepotPath, newMatName), InternalEnums.EImportFlags.Default),
                             IRedResourceReference val => new CResourceReference<CResource>(
-                                (val.DepotPath.GetResolvedText() ?? "").Replace("{material}", newMatName)
-                                .Replace("*", ""), InternalEnums.EImportFlags.Default),
+                                ReplaceMaterialPath(val.DepotPath, newMatName), InternalEnums.EImportFlags.Default),
                             IRedResourceAsyncReference asyncVal => new CResourceAsyncReference<CResource>(
-                                (asyncVal.DepotPath.GetResolvedText() ?? "").Replace("{material}", newMatName)
-                                .Replace("*", ""), InternalEnums.EImportFlags.Default),
+                                ReplaceMaterialPath(asyncVal.DepotPath, newMatName),
+                                InternalEnums.EImportFlags.Default),
                             _ => cvp.Value
                         };
 
@@ -313,6 +329,18 @@ namespace WolvenKit.Views.Documents
 
             cvm.DeleteUnusedMaterialsCommand.Execute(true);
             cvm.Tab?.Parent.SetIsDirty(true);
+
+
+            string ReplaceMaterialPath(ResourcePath? depotPath, string newMatName)
+            {
+                if (depotPath?.GetResolvedText() is not string s)
+                {
+                    return "";
+                }
+
+                return s.Replace("{material}", newMatName).Replace("*", "");
+            }
+
         }
 
         private void OnConvertHairToCCXLMaterials(object _, RoutedEventArgs e)
