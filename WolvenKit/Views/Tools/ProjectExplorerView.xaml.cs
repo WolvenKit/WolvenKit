@@ -203,14 +203,21 @@ namespace WolvenKit.Views.Tools
 
         private void RestoreExpansionStates(object sender, EventArgs e)
         {
-            if (TreeGrid?.View?.Nodes == null || ViewModel == null)
+            try
             {
-                return;
-            }
+                if (TreeGrid?.View?.Nodes == null || ViewModel == null)
+                {
+                    return;
+                }
 
-            foreach (var node in TreeGrid.View.Nodes)
+                foreach (var node in TreeGrid.View.Nodes)
+                {
+                    ApplyExpansionStateRecursive(node);
+                }
+            }
+            catch
             {
-                ApplyExpansionStateRecursive(node);
+                // During startup, there might be ThreadAccessExceptions
             }
         }
 
