@@ -273,7 +273,7 @@ namespace WolvenKit.Views.Documents
                 var maxIndex = mesh.MaterialEntries.Where(m => m.IsLocalInstance.Equals(material.IsLocalInstance))
                     .Select(m => m.Index).Max();
 
-                foreach (var newMatName in resolvedMatNames)
+                foreach (var newMatName in resolvedMatNames.Distinct())
                 {
                     maxIndex += 1;
                     mesh.MaterialEntries.Add(new CMeshMaterialEntry()
