@@ -3270,42 +3270,54 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
         }
 
-        if (sourceList is not null && destList is not null)
+        if (sourceList is null || destList is null)
         {
-            int oldIndex = -1, i = 0;
-            foreach (var thing in sourceList)
+            return;
+        }
+
+        int oldIndex = -1, i = 0;
+        foreach (var thing in sourceList)
+        {
+            if (thing.GetHashCode() == item.Data.GetHashCode())
             {
-                if (thing.GetHashCode() == item.Data.GetHashCode())
-                {
-                    oldIndex = i;
-                    break;
-                }
-                i++;
+                oldIndex = i;
+                break;
             }
 
-            if (oldIndex > -1)
-            {
-                sourceList.RemoveAt(oldIndex);
-                if (oldIndex < index && sourceList.GetHashCode() == destList.GetHashCode())
-                {
-                    index--;
-                }
+            i++;
+        }
 
-                InsertChild(index, item.Data);
-                Tab?.Parent.SetIsDirty(true);
-                //RecalculateProperties();
-                if (sourceList.GetHashCode() != destList.GetHashCode())
-                {
-                    oldParent.RecalculateProperties();
-                    if (oldParent.Tab is not null && Tab is not null)
-                    {
-                        if (oldParent.Tab.Parent.GetHashCode() != Tab.Parent.GetHashCode())
-                        {
-                            oldParent.Tab.Parent.SetIsDirty(true);
-                        }
-                    }
-                }
-            }
+        if (oldIndex <= -1)
+        {
+            return;
+        }
+
+        sourceList.RemoveAt(oldIndex);
+        if (oldIndex < index && sourceList.GetHashCode() == destList.GetHashCode())
+        {
+            index--;
+        }
+
+        InsertChild(index, item.Data);
+        Tab?.Parent.SetIsDirty(true);
+
+        if (index < TVProperties.Count - 1)
+        {
+            var childNode = TVProperties[index];
+            Tab?.AddToSelection(childNode);
+        }
+
+        if (sourceList.GetHashCode() == destList.GetHashCode())
+        {
+            return;
+        }
+
+        oldParent.RecalculateProperties();
+
+        if (oldParent.Tab is not null && Tab is not null &&
+            oldParent.Tab.Parent.GetHashCode() != Tab.Parent.GetHashCode())
+        {
+            oldParent.Tab.Parent.SetIsDirty(true);
         }
     }
 
