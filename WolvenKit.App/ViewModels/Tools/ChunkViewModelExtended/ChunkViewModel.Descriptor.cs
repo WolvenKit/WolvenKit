@@ -335,6 +335,11 @@ public partial class ChunkViewModel
 
                 break;
 
+            case appearanceAppearancePartOverrides partsOverrides
+                when partsOverrides.PartResource.DepotPath.GetResolvedText() is string s && !string.IsNullOrEmpty(s):
+                Descriptor = s;
+                return;
+            
             case scnscreenplayDialogLine scnscreenplayDialogLine:
             {
                 Descriptor = scnscreenplayDialogLine.FemaleLipsyncAnimationName.GetResolvedText() ?? "";
