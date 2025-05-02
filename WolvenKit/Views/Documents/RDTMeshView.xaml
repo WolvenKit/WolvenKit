@@ -589,6 +589,16 @@
                 <syncfusion:SfTreeGrid.ExpanderContextMenu>
                     <ContextMenu>
                         <MenuItem
+                            Click="CopyComponentNameMenuItem_OnClick"
+                            Header="Copy component name">
+                            <MenuItem.Icon>
+                                <templates:IconBox
+                                    IconPack="Material"
+                                    Kind="Copy" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+
+                        <MenuItem
                             Click="CollapseAllChildrenRecursiveMenuItem_OnClick"
                             Header="Collapse All (Recursive)">
                             <MenuItem.Icon>
