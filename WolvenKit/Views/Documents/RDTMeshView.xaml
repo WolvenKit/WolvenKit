@@ -729,21 +729,6 @@
                         MappingName="Text"
                         MinimumWidth="100" />
 
-                    <!--syncfusion:TreeGridTemplateColumn HeaderText="Chunk Mask">
-                        <syncfusion:TreeGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <syncfusion:ComboBoxAdv
-                                    AllowMultiSelect="True"
-                                    Background="#252525"
-                                    BorderThickness="0"
-                                    ItemsSource="{Binding AllChunks, Mode=OneTime}"
-                                    SelectedItems="{Binding EnabledChunks, Mode=TwoWay}"
-                                    SelectedValueDelimiter=", "
-                                    SelectionChanged="ComboBoxAdv_SelectionChanged" />
-                            </DataTemplate>
-                        </syncfusion:TreeGridTemplateColumn.CellTemplate>
-                    </syncfusion:TreeGridTemplateColumn-->
-
                     <syncfusion:TreeGridTextColumn
                         ColumnSizer="SizeToCells"
                         HeaderText="Appearance"

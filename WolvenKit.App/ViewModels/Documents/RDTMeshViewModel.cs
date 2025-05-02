@@ -311,12 +311,22 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             {
                 return;
             }
-
+            
             var newElems = new SmartElement3DCollection();
             value.ForEach(v => newElems.Add(v));
             SelectedAppearance.ModelGroup = newElems;
             OnPropertyChanged(new PropertyChangedEventArgs(nameof(SelectedModelGroup)));
         }
+    }
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(SelectedAppearance) && SelectedAppearance?.ModelGroup is not null)
+        {
+            SelectedModelGroup = SelectedAppearance.ModelGroup.ToList();
+        }
+
+        base.OnPropertyChanged(e);
     }
 
     #endregion
