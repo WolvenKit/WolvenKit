@@ -952,24 +952,26 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         foreach (var handle in mesh.Appearances)
         {
             var app = handle.GetValue();
-            if (app is meshMeshAppearance mmapp &&
-                (mmapp.Name == meshApp || meshApp == "default" && mesh.Appearances.IndexOf(handle) == 0))
+            if (app is not meshMeshAppearance mmApp ||
+                (mmApp.Name != meshApp && (meshApp != "default" || mesh.Appearances.IndexOf(handle) != 0)))
             {
-                foreach (var m in mmapp.ChunkMaterials)
-                {
-                    var name = GetUniqueMaterialName(m.ToString().NotNull(), mesh);
-                    if (materials.TryGetValue(name, out var material))
-                    {
-                        appMaterials.Add(material);
-                    }
-                    else
-                    {
-                        appMaterials.Add(new Material(name));
-                    }
-                }
-
-                break;
+                continue;
             }
+
+            foreach (var m in mmApp.ChunkMaterials)
+            {
+                var name = GetUniqueMaterialName(m.ToString().NotNull(), mesh);
+                if (materials.TryGetValue(name, out var material))
+                {
+                    appMaterials.Add(material);
+                }
+                else
+                {
+                    appMaterials.Add(new Material(name));
+                }
+            }
+
+            break;
         }
 
         if (appMaterials.Count == 0)
@@ -977,7 +979,15 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             appMaterials.Add(defaultMaterial);
         }
 
-        var model = new LoadableModel(epc.Name.ToString().NotNull().Replace(".", ""))
+        var modelName = (epc.Name.ToString() ?? "").Replace(".", "");
+        var counter = 0;
+        while (appModels.ContainsKey(modelName))
+        {
+            counter += 1;
+            modelName = $"{(epc.Name.ToString() ?? "").Replace(".", "")}_DUPLICATE_{counter}";
+        }
+
+        var model = new LoadableModel(modelName)
         {
             ComponentName = (CName)(componentName ?? ""),
             MeshFile = meshFile,
@@ -993,7 +1003,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             EnabledChunks = enabledChunks,
             DepotPath = depotPath
         };
-        appModels.Add(epc.Name.ToString().NotNull(), model);
+
+        appModels.Add(modelName, model);
     }
 
     public void GetResolvedMatrix(IBindable bindable, ref SeparateMatrix matrix, Dictionary<string, LoadableModel> models)
