@@ -97,7 +97,7 @@ public partial class ChunkViewModel
         }
 
         var oldName = entry.Name;
-        var newName = await Interactions.ShowInputBoxAsync("Rename material", entry.Name.GetResolvedText() ?? "");
+        var newName = await Interactions.ShowInputBoxAsync("Rename material", oldName.GetResolvedText() ?? "");
 
         entry.Name = (CName)newName;
 

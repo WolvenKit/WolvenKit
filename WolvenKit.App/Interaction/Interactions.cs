@@ -44,10 +44,10 @@ public static class Interactions
     }
 
     // wrappers
-    public static async Task<string> ShowInputBoxAsync(string title, string originalName)
+    public static async Task<string> ShowInputBoxAsync(string title, string originalValue)
     {
-        string result = "";
-        DispatcherHelper.RunOnMainThread(() => result = AskForTextInput(""));
+        var result = "";
+        DispatcherHelper.RunOnMainThread(() => result = AskForTextInput((title, originalValue)));
         return await Task.FromResult(result);
     }
 
@@ -105,7 +105,8 @@ public static class Interactions
     public static Func<(string, IDictionary<string, List<string>>), bool> ShowBrokenReferencesList { get; set; } =
         _ => throw new NotImplementedException();
 
-    public static Func<string, string> AskForTextInput { get; set; } = _ => throw new NotImplementedException();
+    public static Func<(string, string), string> AskForTextInput { get; set; } =
+        _ => throw new NotImplementedException();
 
     public static Func<(string, Cp77Project), string> AskForFolderPathInput { get; set; } = _ => throw new NotImplementedException();
 

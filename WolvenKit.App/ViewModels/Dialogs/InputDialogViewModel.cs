@@ -8,7 +8,11 @@ namespace WolvenKit.App.ViewModels.Dialogs;
 /// </summary>
 public partial class InputDialogViewModel : DialogViewModel
 {
-    public InputDialogViewModel(string title = "") => Title = title;
+    public InputDialogViewModel(string title = "", string text = "")
+    {
+        Title = title;
+        Text = text;
+    }
 
     /// <summary>
     /// The application log.
