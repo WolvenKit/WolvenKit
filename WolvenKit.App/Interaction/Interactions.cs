@@ -43,17 +43,31 @@ public static class Interactions
         return Task.FromResult(result).GetAwaiter().GetResult();
     }
 
+    /// <returns>
+    /// <code>
+    ///    Yes = Save and close<br/>
+    ///     No = Close without saving<br/>
+    /// Cancel = Don't close<br/>
+    /// </code>
+    /// </returns>
+    public static async Task<WMessageBoxResult> ShowSaveDialogueAsync(string fileName)
+    {
+        var result = WMessageBoxResult.None;
+        DispatcherHelper.RunOnMainThread(() => result = ShowSaveDialog(fileName));
+        return await Task.FromResult(result);
+    }
+
     // wrappers
     public static async Task<string> ShowInputBoxAsync(string title, string originalName)
     {
-        string result = "";
+        var result = "";
         DispatcherHelper.RunOnMainThread(() => result = AskForTextInput(""));
         return await Task.FromResult(result);
     }
 
     public static async Task<string> ShowRenameBoxAsync(string originalName)
     {
-        string result = "";
+        var result = "";
         DispatcherHelper.RunOnMainThread(() => result = Rename(originalName));
         return await Task.FromResult(result);
     }
@@ -78,6 +92,9 @@ public static class Interactions
 
     // classic popups
     public static Func<(string, string, WMessageBoxImage, WMessageBoxButtons), WMessageBoxResult> ShowConfirmation { get; set; } 
+        = _ => throw new NotImplementedException();
+
+    public static Func<string, WMessageBoxResult> ShowSaveDialog { get; set; }
         = _ => throw new NotImplementedException();
 
     /// <inheritdoc cref="ShowPopupWithWeblinkAsync"/>
