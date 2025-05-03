@@ -356,6 +356,77 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>
 
                 detailSuffix = $" (Performer: {performerName}, Item: {itemName}, Slot: {slotName})";
             }
+            else if (eventClass?.Chunk is scnAudioEvent audioEvent)
+            {
+                string performerName = "[No Performer]";
+                if (audioEvent.Performer != null && scnSceneResource != null)
+                {
+                    performerName = ResolvePerformerName(audioEvent.Performer.Id, scnSceneResource);
+                }
+
+                string audioName = "[No Audio Name]";
+                if (audioEvent.AudioEventName != CName.Empty)
+                {
+                    audioName = audioEvent.AudioEventName.GetResolvedText() ?? "[unresolved]";
+                }
+                
+                detailSuffix = $" ({performerName} - Audio: {audioName})";
+            }
+            else if (eventClass?.Chunk is scnGameplayTransitionEvent gameplayTransitionEvent)
+            {
+                 string performerName = "[No Performer]";
+                 if (gameplayTransitionEvent.Performer != null && scnSceneResource != null)
+                 {
+                     performerName = ResolvePerformerName(gameplayTransitionEvent.Performer.Id, scnSceneResource);
+                 }
+                 
+                 string vehState = gameplayTransitionEvent.VehState.ToEnumString();
+                 
+                 detailSuffix = $" ({performerName} - VehState: {vehState})";
+            }
+            else if (eventClass?.Chunk is scneventsSetAnimFeatureEvent setAnimFeatureEvent)
+            {
+                 string actorName = "[No Actor]";
+                 if (setAnimFeatureEvent.ActorId != null && scnSceneResource != null)
+                 {
+                     actorName = ResolvePerformerName(setAnimFeatureEvent.ActorId.Id, scnSceneResource); // Re-use ResolvePerformerName for actor IDs
+                 }
+
+                 string featureName = "[No Feature Name]";
+                 if (setAnimFeatureEvent.AnimFeatureName != CName.Empty)
+                 {
+                     featureName = setAnimFeatureEvent.AnimFeatureName.GetResolvedText() ?? "[unresolved]";
+                 }
+
+                 string featureType = "[No Feature Type]";
+                 if (setAnimFeatureEvent.AnimFeature is CHandle<animAnimFeature> handle)
+                 {
+                    var featureInstance = handle.GetValue() as animAnimFeature;
+                    if (featureInstance != null) 
+                    {
+                        featureType = featureInstance.GetType().Name; 
+                    }
+                    else
+                    {
+                        featureType = "[Invalid Handle]";
+                    }
+                 }
+                 else if (setAnimFeatureEvent.AnimFeature != null) // Fallback if it's not a Handle for some reason
+                 {
+                    featureType = setAnimFeatureEvent.AnimFeature.GetType().Name;
+                 }
+
+                 detailSuffix = $" ({actorName} - {featureType}: {featureName})";
+            }
+            else if (eventClass?.Chunk is scnUnmountEvent unmountEvent)
+            {
+                string performerName = "[No Performer]";
+                if (unmountEvent.Performer != null && scnSceneResource != null)
+                {
+                    performerName = ResolvePerformerName(unmountEvent.Performer.Id, scnSceneResource);
+                }
+                detailSuffix = $" ({performerName})";
+            }
 
             string fullEventName = evName + detailSuffix;
 
