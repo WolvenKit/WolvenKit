@@ -135,7 +135,6 @@ namespace WolvenKit.Views.Tools
 
                 Interactions.Rename = input => ShowRenameDialog(input).Text;
 
-
                 Interactions.AskForTextInput = (args) =>
                 {
                     var dialog = new InputDialogView(args.Item1, args.Item2);
