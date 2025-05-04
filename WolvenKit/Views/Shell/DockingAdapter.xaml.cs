@@ -9,14 +9,12 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents.DocumentStructures;
+using System.Windows.Input;
 using System.Xml;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.Tools.Controls;
-using WolvenKit.App;
 using WolvenKit.App.Helpers;
-using WolvenKit.App.Interaction;
 using WolvenKit.App.Models.Docking;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels;
@@ -320,18 +318,18 @@ namespace WolvenKit.Views.Shell
 
         private async Task<bool> TryCloseDocument(DocumentViewModel vm)
         {
-            if (vm.IsDirty && !vm.IsReadOnly)
+            if (!await _viewModel.CanCloseDocument(vm))
             {
-                if (await Interactions.ShowMessageBoxAsync($"\"{vm.Header.TrimEnd('*')}\" has unsaved changes - are you sure you want to close this file?", "Confirm", WMessageBoxButtons.YesNo) == WMessageBoxResult.No)
-                {
-                    return false;
-                }
+                return false;
             }
 
-            //vm.Close.Execute().Subscribe();
-
-            (ItemsSource as IList).Remove(vm);
+            if (ItemsSource is IList list)
+            {
+                list.Remove(vm);
+            }
             _viewModel.UpdateTitle();
+
+            await _viewModel.CloseDocumentAsync(vm, true);
 
             return true;
         }
@@ -345,11 +343,24 @@ namespace WolvenKit.Views.Shell
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void PART_DockingManagerOnCloseButtonClick(object sender, CloseButtonEventArgs e)
+        private void PART_DockingManagerOnCloseButtonClick(object sender, CloseButtonEventArgs e)
         {
             if (e.TargetItem is ContentControl { Content: DocumentViewModel vm })
             {
-                e.Cancel = !await TryCloseDocument(vm);
+                e.Cancel = !TryCloseDocument(vm).GetAwaiter().GetResult();
+            }
+        }
+
+        /// <summary>
+        /// fires when a document (but no tool window) gets closed through clicking the close button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="keyEventArgs"></param>
+        private void PART_DockingManagerOnKeyDown(object sender, KeyEventArgs keyEventArgs)
+        {
+            if (keyEventArgs.Key == Key.W && Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                _viewModel.CloseLastActiveDocument();
             }
         }
 
@@ -358,11 +369,11 @@ namespace WolvenKit.Views.Shell
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void PART_DockingManager_WindowClosing(object sender, WindowClosingEventArgs e)
+        private void PART_DockingManager_WindowClosing(object sender, WindowClosingEventArgs e)
         {
             if (e.TargetItem is ContentControl { Content: DocumentViewModel vm })
             {
-                e.Cancel = !await TryCloseDocument(vm);
+                e.Cancel = !TryCloseDocument(vm).GetAwaiter().GetResult();
             }
         }
 
@@ -413,7 +424,7 @@ namespace WolvenKit.Views.Shell
             // set active property
             if (e.OldValue is ContentControl oldValue)
             {
-                if (oldValue.Content is IDockElement dockElement && dockElement.IsActive)
+                if (oldValue.Content is IDockElement { IsActive: true } dockElement)
                 {
                     dockElement.IsActive = false;
                 }
@@ -465,7 +476,7 @@ namespace WolvenKit.Views.Shell
             _viewModel?.UpdateTitle();
         }
 
-        private async void PART_DockingManager_OnCloseAllTabs(object sender, CloseTabEventArgs e)
+        private void PART_DockingManager_OnCloseAllTabs(object sender, CloseTabEventArgs e)
         {
             var closeTasks = e.ClosingTabItems.OfType<TabItemExt>()
                 .Select(item => item.Content).OfType<ContentPresenter>()
@@ -479,7 +490,8 @@ namespace WolvenKit.Views.Shell
                     }
                 });
 
-            await Task.WhenAll(closeTasks);
+            Task.WhenAll(closeTasks).GetAwaiter().GetResult();
+            
         }
 
         public async Task<bool> CloseAll()
@@ -505,7 +517,7 @@ namespace WolvenKit.Views.Shell
             return allClosed;
         }
 
-        private async void PART_DockingManager_OnCloseOtherTabs(object sender, CloseTabEventArgs e)
+        private void PART_DockingManager_OnCloseOtherTabs(object sender, CloseTabEventArgs e)
         {
             var closeTasks = e.ClosingTabItems.OfType<TabItemExt>()
                 .Select(item => item.Content).OfType<ContentPresenter>()
@@ -519,7 +531,7 @@ namespace WolvenKit.Views.Shell
                     }
                 });
 
-            await Task.WhenAll(closeTasks);
+            Task.WhenAll(closeTasks).GetAwaiter().GetResult();
         }
 
 
@@ -722,6 +734,11 @@ namespace WolvenKit.Views.Shell
                            where element.Content == item
                            select element).FirstOrDefault();
 
+            if (control is null)
+            {
+                return;
+            }
+
             var header = DockingManager.GetHeader(control) as string;
 
             if (header is string headerStr && !headerStr.Equals(newHeader))
@@ -739,7 +756,7 @@ namespace WolvenKit.Views.Shell
 
             var newstate = dockStateChange.Value;
             // actually remove and not hide FloatingPaneViewModels
-            if (control is ContentControl { Content: FloatingPaneViewModel vm } && newstate == DockState.Hidden)
+            if (control is { Content: FloatingPaneViewModel vm } && newstate == DockState.Hidden)
             {
                 _viewModel.DockedViews.Remove(vm);
                 return;
