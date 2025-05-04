@@ -33,13 +33,16 @@ public class ProjectResourceTools
 
     private readonly ISettingsManager _settingsService;
 
+    private readonly Cr2WTools _crwWTools;
+
     public ProjectResourceTools(IProjectManager projectManager, IArchiveManager archiveManager,
-        ILoggerService loggerService, ISettingsManager settingsManager)
+        ILoggerService loggerService, ISettingsManager settingsManager, Cr2WTools cr2WTools)
     {
         _projectManager = projectManager;
         _archiveManager = archiveManager;
         _loggerService = loggerService;
         _settingsService = settingsManager;
+        _crwWTools = cr2WTools;
     }
 
 
@@ -449,7 +452,14 @@ public class ProjectResourceTools
 
         if (sourceIsDirectory && !Directory.EnumerateFiles(sourceAbsPath, "*", SearchOption.AllDirectories).Any())
         {
-            Directory.Delete(sourceAbsPath, true);
+            try
+            {
+                ForceDeleteDirectory(sourceAbsPath);
+            }
+            catch
+            {
+                // don't delete it
+            }
         }
         
         if (!refactor)
@@ -458,6 +468,30 @@ public class ProjectResourceTools
         }
 
         ReplacePathInProject(activeProject, destAbsPath, files);
+    }
+
+    private static void ForceDeleteDirectory(string directoryPath)
+    {
+        if (!Directory.Exists(directoryPath))
+        {
+            return;
+        }
+
+        foreach (var file in Directory.GetFiles(directoryPath, "*", SearchOption.AllDirectories))
+        {
+            var fileInfo = new FileInfo(file)
+            {
+                IsReadOnly = false // Remove read-only attribute if set
+            };
+            fileInfo.Delete();
+        }
+
+        foreach (var subDirectory in Directory.GetDirectories(directoryPath, "*", SearchOption.AllDirectories))
+        {
+            Directory.Delete(subDirectory, true);
+        }
+
+        Directory.Delete(directoryPath, true); // Delete the root directory
     }
 
     private Task ProcessFileAsync(string sourcePath, string targetPath, string targetRelPath, bool isDirectory)
@@ -560,7 +594,8 @@ public class ProjectResourceTools
         {
             
             var resourceFiles =
-                Directory.GetFiles(activeProject.ResourcesDirectory, "*.*", SearchOption.AllDirectories);
+                Directory.GetFiles(activeProject.ResourcesDirectory, "*.*", SearchOption.AllDirectories)
+                    .Where(f => Path.GetExtension(f) is string s && s_resourceFileExtensions.Contains(s)).ToList();
 
             Parallel.ForEach(resourceFiles, absoluteFilePath =>
             {
@@ -582,18 +617,9 @@ public class ProjectResourceTools
                     foreach (var (oldAbsPath, newAbsPath) in pathReplacements)
                     {
                         // if it's not a cr2W file from archive, the resource files won't care
-                        if (!oldAbsPath.Contains(activeProject.ModDirectory))
-                        {
-                            continue;
-                        }
-
-                        var fileExtension = Path.GetExtension(oldAbsPath);
-
-                        // Check if we're moving either a folder, or moving a file extension we care about
-                        var replaceInResourceFiles = string.IsNullOrEmpty(fileExtension) ||
-                                                     s_replaceInResourceFileExtensions.Contains(fileExtension);
-
-                        if (!replaceInResourceFiles)
+                        if (!oldAbsPath.Contains(activeProject.ModDirectory) ||
+                            Path.GetExtension(oldAbsPath) is not string fileExtension ||
+                            !s_replaceInResourceFileExtensions.Contains(fileExtension))
                         {
                             continue;
                         }
@@ -608,11 +634,6 @@ public class ProjectResourceTools
 
                         var oldPathWithForwardSlashes = oldPathStr.Replace("\\", "/");
                         var newPathWithForwardSlashes = newPathStr.Replace("\\", "/");
-
-                        if (!string.IsNullOrEmpty(fileExtension) && !s_resourceFileExtensions.Contains(fileExtension))
-                        {
-                            continue;
-                        }
 
                         // replace both forward and backward slashes
                         newFileContent = fileContent.Select(line => line
@@ -647,8 +668,11 @@ public class ProjectResourceTools
             // if it's a resource or raw file, no need to refactor it in mod files 
             var files = Directory.GetFiles(activeProject.ModDirectory, "*.*", SearchOption.AllDirectories);
 
+            // foreach (var absoluteFilePath in files)
+            // {
             Parallel.ForEach(files, absoluteFilePath =>
             {
+
                 // Don't process files that will never hold paths
                 if (Path.GetExtension(absoluteFilePath) is string s && !string.IsNullOrEmpty(s) &&
                     s_fileExtensionsWithoutPaths.Contains(s))
@@ -656,11 +680,7 @@ public class ProjectResourceTools
                     return;
                 }
 
-                using var fs = File.Open(absoluteFilePath, FileMode.Open);
-                using var cr = new CR2WReader(fs);
-
-                if (cr.ReadFile(out var cr2W) != (RED4.Archive.IO.EFileReadErrorCodes)EFileReadErrorCodes.NoError ||
-                    cr2W is null)
+                if (_crwWTools.ReadCr2W(absoluteFilePath) is not CR2WFile cr2W)
                 {
                     return;
                 }
@@ -687,7 +707,7 @@ public class ProjectResourceTools
                             continue;
                         }
 
-                        cr2W = ReplacePathInFile(activeProject, cr2W, oldPathStr, newPathStr, out var newModified);
+                        cr2W = ReplacePathInFile(cr2W, oldPathStr, newPathStr, out var newModified, absoluteFilePath);
                         if (!newModified)
                         {
                             continue;
@@ -703,175 +723,180 @@ public class ProjectResourceTools
                     }
 
                     _loggerService?.Debug(
-                        $"Replaced the following paths in \"{absoluteFilePath}\"\n\t: {string.Join(",\n\t", foundReplacements.Select(kvp => $"{kvp.Key} -> {kvp.Value}"))}");
+                        $"Replaced the following paths in \"{activeProject.GetRelativePath(absoluteFilePath)}\"\n\t: {string.Join(",\n\t", foundReplacements.Select(kvp => $"{kvp.Key} -> {kvp.Value}"))}");
 
-                    // make sure that the file reader isn't hanging 
-                    fs.Dispose();
-
-                    using var fs2 = File.Open(absoluteFilePath, FileMode.Create);
-                    using var cw = new CR2WWriter(fs2);
-
-                    cw.WriteFile(cr2W);
+                    _crwWTools.WriteCr2W(cr2W, absoluteFilePath);
                 }
                 catch (Exception err)
                 {
                     _loggerService?.Error(err.Message);
                     failedFiles.Add(absoluteFilePath.RelativePath(activeProject.ModDirectory));
                 }
+
             });
-        }
-    
-    }
+            // }
 
+            return;
 
-    private CR2WFile ReplacePathInFile(Cp77Project? activeProject, CR2WFile cr2W, string oldPathStr,
-        string newPathStr, out bool wasModified)
-    {
-        wasModified = false;
-
-        if (oldPathStr == newPathStr || activeProject is null)
-        {
-            return cr2W;
-        }
-
-        // Mesh needs to replace in strings for @context materials
-        if (cr2W.RootChunk is JsonResource or C2dArray or CMesh)
-        {
-            wasModified = ReplaceInStrings() || wasModified;
-        }
-
-        if (cr2W.RootChunk is not JsonResource or C2dArray)
-        {
-            wasModified = ReplaceInIRedRefs() || wasModified;
-        }
-
-        return cr2W;
-
-        bool ReplaceInStrings()
-        {
-            var ret = false;
-            var refs = cr2W.FindType(typeof(IRedString));
-            foreach (var result in refs)
+            CR2WFile ReplacePathInFile(CR2WFile cr2W, string oldPathStr, string newPathStr, out bool wasModified,
+                string originalPath)
             {
-                var stringValue = result.Value switch
-                {
-                    CString resourcePath => resourcePath.GetString(),
-                    _ => result.Value.ToString() ?? ""
-                };
+                wasModified = false;
 
-                if (string.IsNullOrEmpty(stringValue) || !stringValue.Contains(oldPathStr))
+                if (oldPathStr == newPathStr)
                 {
-                    continue;
+                    return cr2W;
                 }
 
-                // we need to get the parent node by xpath
-                var resultName = result.Path.Split([':', '.']).LastOrDefault();
-                if (string.IsNullOrEmpty(resultName))
+                // Mesh needs to replace in strings for @context materials
+                if ((cr2W.RootChunk is JsonResource or C2dArray or CMesh) &&
+                    ReplaceInStrings())
                 {
-                    continue;
+                    wasModified = true;
                 }
 
-                var searchResult = cr2W.GetFromXPath(result.Path[..^(resultName.Length + 1)]);
-                if (searchResult.Item2 is not IRedType parent)
+
+                if ((cr2W.RootChunk is not (JsonResource or C2dArray)) &&
+                    ReplaceInIRedRefs())
                 {
-                    continue;
+                    wasModified = true;
                 }
 
-                switch (parent)
+                return cr2W;
+
+
+                bool ReplaceInStrings()
                 {
-                    case IList list when int.TryParse(resultName, out var idx):
-                        list[idx] = (CString)stringValue.Replace(oldPathStr, newPathStr);
+                    var ret = false;
+                    var refs = cr2W.FindType(typeof(IRedString));
+                    foreach (var result in refs)
+                    {
+                        var stringValue = result.Value switch
+                        {
+                            CString resourcePath => resourcePath.GetString(),
+                            _ => result.Value.ToString() ?? ""
+                        };
+
+                        if (string.IsNullOrEmpty(stringValue) || !stringValue.Contains(oldPathStr))
+                        {
+                            continue;
+                        }
+
+                        // we need to get the parent node by xpath
+                        var resultName = result.Path.Split([':', '.']).LastOrDefault();
+                        if (string.IsNullOrEmpty(resultName))
+                        {
+                            continue;
+                        }
+
+                        var searchResult = cr2W.GetFromXPath(result.Path[..^(resultName.Length + 1)]);
+                        if (searchResult.Item2 is not IRedType parent)
+                        {
+                            continue;
+                        }
+
+                        switch (parent)
+                        {
+                            case IList list when int.TryParse(resultName, out var idx):
+                                list[idx] = (CString)stringValue.Replace(oldPathStr, newPathStr);
+                                ret = true;
+                                break;
+                            // CPUNameU64
+                            case CKeyValuePair kvp when resultName == "Value" && kvp.Value is CName str &&
+                                                        str.GetResolvedText() is string s:
+                                kvp.Value = (CName)s.Replace(oldPathStr, newPathStr);
+                                ret = true;
+                                break;
+                        }
+                    }
+
+                    return ret;
+                }
+
+                bool ReplaceInIRedRefs()
+                {
+                    var refs = cr2W.FindType(typeof(IRedRef));
+                    var ret = false;
+                    foreach (var result in refs)
+                    {
+                        if (result.Value is not IRedRef resourceReference ||
+                            resourceReference.DepotPath == ResourcePath.Empty)
+                        {
+                            continue;
+                        }
+
+                        var oldDepotPathStr = resourceReference.DepotPath.GetResolvedText();
+
+                        if (resourceReference.DepotPath.GetResolvedText() != oldPathStr)
+                        {
+                            continue;
+                        }
+
+                        var parentPath = string.Join('.', result.Path.Split('.')[..^1]);
+
+                        var newValue = (IRedRef)RedTypeManager.CreateRedType(resourceReference.RedType,
+                            (ResourcePath)newPathStr,
+                            resourceReference.Flags);
+
+                        if (result.Name.Contains(':'))
+                        {
+                            var parts = result.Name.Split(':');
+                            if (parts.Length != 2)
+                            {
+                                throw new Exception($"Failed to split {result.Name} in two parts");
+                            }
+
+                            var parentArray = cr2W.GetFromXPath(string.Join('.', parentPath, parts[0]));
+                            if (int.TryParse(parts[1], out var index) &&
+                                parentArray is { Item1: true, Item2: IList arr })
+                            {
+                                arr[index] = newValue;
+                                ret = true;
+                                continue;
+                            }
+                        }
+
+                        var parentClass = cr2W.GetFromXPath(parentPath);
+
+                        if (!parentClass.Item1)
+                        {
+                            throw new Exception($"Failed to find {result.Name} in {parentPath}");
+                        }
+
+                        switch (parentClass.Item2)
+                        {
+                            case null:
+                                throw new InvalidDataException("Item2 should not be null");
+                            case RedBaseClass cls:
+                                cls.SetProperty(result.Name, newValue);
+                                break;
+                            case CKeyValuePair kvp:
+                                kvp.Value = newValue;
+                                break;
+                            case IRedHandle handle
+                                when handle.GetValue() is gameuiAppearanceInfo appInfo:
+                                appInfo.Resource =
+                                    new CResourceAsyncReference<appearanceAppearanceResource>(newValue.DepotPath);
+                                break;
+                            case IRedHandle ira:
+                                throw new NotImplementedException(
+                                    $"Can't replace in IRedHandle property type {ira.RedType}, please file a ticket");
+                            default:
+                                throw new NotImplementedException(
+                                    $"Can't replace in property type {parentClass.Item2?.GetType().Name}, please file a ticket");
+                        }
+
+
                         ret = true;
-                        break;
-                    // CPUNameU64
-                    case CKeyValuePair kvp when resultName == "Value" && kvp.Value is CName str &&
-                                                str.GetResolvedText() is string s:
-                        kvp.Value = (CName)s.Replace(oldPathStr, newPathStr);
-                        ret = true;
-                        break;
+                    }
+
+                    return ret;
                 }
             }
 
-            return ret;
+  
+             
         }
-
-        bool ReplaceInIRedRefs()
-        {
-            var refs = cr2W.FindType(typeof(IRedRef));
-            var ret = false;
-            foreach (var result in refs)
-            {
-                if (result.Value is not IRedRef resourceReference || resourceReference.DepotPath == ResourcePath.Empty)
-                {
-                    continue;
-                }
-
-                var oldDepotPathStr = resourceReference.DepotPath.GetResolvedText();
-
-                if (resourceReference.DepotPath.GetResolvedText() != oldPathStr)
-                {
-                    continue;
-                }
-                
-                var parentPath = string.Join('.', result.Path.Split('.')[..^1]);
-
-                var newValue = (IRedRef)RedTypeManager.CreateRedType(resourceReference.RedType,
-                    (ResourcePath)newPathStr,
-                    resourceReference.Flags);
-
-                if (result.Name.Contains(':'))
-                {
-                    var parts = result.Name.Split(':');
-                    if (parts.Length != 2)
-                    {
-                        throw new Exception($"Failed to split {result.Name} in two parts");
-                    }
-
-                    var parentArray = cr2W.GetFromXPath(string.Join('.', parentPath, parts[0]));
-                    if (int.TryParse(parts[1], out var index) && parentArray is { Item1: true, Item2: IList arr })
-                    {
-                        arr[index] = newValue;
-                        continue;
-                    }
-                }
-
-                var parentClass = cr2W.GetFromXPath(parentPath);
-
-                if (!parentClass.Item1)
-                {
-                    throw new Exception($"Failed to find {result.Name} in {parentPath}");
-                }
-
-                switch (parentClass.Item2)
-                {
-                    case null:
-                        throw new Exception();
-                    case RedBaseClass cls:
-                        cls.SetProperty(result.Name, newValue);
-                        break;
-                    case CKeyValuePair kvp:
-                        kvp.Value = newValue;
-                        break;
-                    case IRedHandle handle
-                        when handle.GetValue() is gameuiAppearanceInfo appInfo:
-                        appInfo.Resource =
-                            new CResourceAsyncReference<appearanceAppearanceResource>(newValue.DepotPath);
-                        break;
-                    case IRedHandle ira:
-                        throw new NotImplementedException(
-                            $"Can't replace in IRedHandle property type {ira.RedType}, please file a ticket");
-                    default:
-                        throw new NotImplementedException(
-                            $"Can't replace in property type {parentClass.Item2?.GetType().Name}, please file a ticket");
-                }
-
-
-                ret = true;
-            }
-
-            return ret;
-        }
-
     }
 
     /// <summary>
