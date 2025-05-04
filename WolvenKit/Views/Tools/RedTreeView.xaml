@@ -732,7 +732,32 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <!-- Search & Replace -->
+                <MenuItem
+                    Visibility="{Binding Path=HasSelection,
+                                         Source={x:Reference redTreeView},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Header="Search and Replace in Selection"
+                    Command="{Binding OpenSearchAndReplaceDialogCommand,
+                                      Source={x:Reference redTreeView}}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="FindReplace"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                
                 <!-- Mesh only -->
+
+                <Separator
+                    Visibility="{Binding Path=PlacementTarget.Tag.IsMaterial,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                <!-- Mesh: Material only -->
+                
                 <!-- Rename Material -->
                 <MenuItem
                     Visibility="{Binding Path=PlacementTarget.Tag.IsMaterial,
@@ -751,7 +776,23 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- Mesh only -->
+                <!-- Material: move to index -->
+                <MenuItem
+                    Visibility="{Binding Path=PlacementTarget.Tag.IsMaterial,
+                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Header="Move to index"
+                    Command="{Binding Path=PlacementTarget.Tag.ChangeMaterialIndexCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Bootstrap"
+                            Kind="_123"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
                 <!-- Add material and definition -->
                 <MenuItem
                     Visibility="{Binding Path=PlacementTarget.Tag.IsMaterialArray,
@@ -769,7 +810,6 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- Mesh: Material only -->
                 <!-- Toggle IsMasked -->
                 <MenuItem
                     Visibility="{Binding Path=IsEnabled,
@@ -788,23 +828,27 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- Search & Replace -->
+                <!-- /Mesh: Material only -->
+
+                <!-- Scroll to material -->
                 <MenuItem
-                    Visibility="{Binding Path=HasSelection,
-                                         Source={x:Reference redTreeView},
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Header="Search and Replace in Selection"
-                    Command="{Binding OpenSearchAndReplaceDialogCommand,
-                                      Source={x:Reference redTreeView}}">
+                    Header="Scroll to material"
+                    Command="{Binding Path=PlacementTarget.Tag.ScrollToMaterialCommand,
+                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}">
                     <MenuItem.Icon>
+                        <!-- Old icon Material#ArrowRight -->
                         <templates:IconBox
                             IconPack="Material"
-                            Kind="FindReplace"
+                            Kind="EyeOutline"
                             Margin="{DynamicResource WolvenKitMarginTiny}"
                             Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
-
+                
                 <!--
                     For arrays of indexables: Renumber Indices of child nodes, starting at 0
                     Useful if you paste a bunch of material definitions from multiple sources
@@ -826,26 +870,8 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- Mesh only -->
-                <!-- Scroll to material -->
-                <MenuItem
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Header="Scroll to material"
-                    Command="{Binding Path=PlacementTarget.Tag.ScrollToMaterialCommand,
-                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}">
-                    <MenuItem.Icon>
-                        <!-- Old icon Material#ArrowRight -->
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="EyeOutline"
-                            Margin="{DynamicResource WolvenKitMarginTiny}"
-                            Size="{DynamicResource WolvenKitIconMilli}" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
+                <!-- /Mesh only -->
+                
                 <!-- Generate CRUID -->
                 <MenuItem
                     Visibility="{Binding Path=IsEnabled,

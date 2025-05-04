@@ -3416,11 +3416,26 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     /// <returns>ChunkViewModel or null</returns>
     public ChunkViewModel? GetChildNode(int index)
     {
-        if (!IsArray || Properties is not ObservableCollectionExtended<ChunkViewModel> children ||
-            index >= children.Count)
+        if (!IsArray)
         {
             return null;
         }
+
+        if (Properties.Count == 0)
+        {
+            CalculateProperties();
+        }
+
+        if (Properties is not ObservableCollectionExtended<ChunkViewModel> children)
+        {
+            return null;
+        }
+
+        if (index < children.Count)
+        {
+            return children[index];
+        }
+        
 
         return children[index];
     }
