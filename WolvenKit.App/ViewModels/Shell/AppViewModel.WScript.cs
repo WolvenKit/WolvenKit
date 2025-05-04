@@ -103,13 +103,14 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         }
 
         ScriptService.SuppressLogOutput = true;
+        var redExtensions = Enum.GetNames<ERedExtension>().ToList();
         var code = await File.ReadAllTextAsync(_fileValidationScript.Path);
 
         foreach (var file in filesToValidate)
         {
-            if (file.Extension == ".txt")
+            if (!redExtensions.Contains(file.Extension))
             {
-                _loggerService.Warning($"{file.FileName} is a text file. This will be ignored!");
+                _loggerService.Warning($"{file.FileName} has an unsupported extension and will not be packed!");
                 continue;
             }
             
