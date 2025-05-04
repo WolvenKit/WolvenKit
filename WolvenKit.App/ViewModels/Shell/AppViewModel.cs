@@ -2550,7 +2550,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     /// Checks if the document has unsaved changes and prompts the user if necessary.
     /// </summary>
     /// <returns>false on user abort - do not save in that case</returns>
-    public async Task<bool> CanCloseDocumentAsync(IDocumentViewModel vm)
+    public static async Task<bool> CanCloseDocumentAsync(IDocumentViewModel vm)
     {
         if (vm.IsReadOnly || !vm.IsDirty)
         {
@@ -2558,6 +2558,29 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
 
         switch (await Interactions.ShowSaveDialogueAsync(vm.Header.TrimEnd('*')))
+        {
+            case WMessageBoxResult.Yes: // Save and close
+                vm.SaveCommand.Execute(null);
+                return true;
+            case WMessageBoxResult.No: // Close without saving
+                return true;
+            default: // Cancel
+                return false;
+        }
+    }
+
+    /// <summary>
+    /// Checks if the document has unsaved changes and prompts the user if necessary.
+    /// </summary>
+    /// <returns>false on user abort - do not save in that case</returns>
+    public static bool CanCloseDocument(IDocumentViewModel vm)
+    {
+        if (vm.IsReadOnly || !vm.IsDirty)
+        {
+            return true;
+        }
+
+        switch (Interactions.ShowSaveDialogue(vm.Header.TrimEnd('*')))
         {
             case WMessageBoxResult.Yes: // Save and close
                 vm.SaveCommand.Execute(null);
@@ -2585,11 +2608,28 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         CloseFile(vm);
         return true;
     }
-    
+
+    /// <summary>
+    /// Closes a document by removing it from the DockedViews.
+    /// </summary>
+    /// <param name="vm">Document to close</param>
+    /// <param name="skipSaveCheck">If we check from docking adapter, we can update the view faster </param>
+    /// <returns></returns>
+    public bool CloseDocument(IDocumentViewModel vm, bool skipSaveCheck = false)
+    {
+        if (!skipSaveCheck && !CanCloseDocument(vm))
+        {
+            return false;
+        }
+
+        CloseFile(vm);
+        return true;
+    }
+
     public void CloseLastActiveDocument()
     {
         if ((ActiveDocument ?? _lastActiveDocument) is not IDocumentViewModel documentToClose ||
-            !CloseDocumentAsync(documentToClose).GetAwaiter().GetResult())
+            !CloseDocument(documentToClose))
         {
             return;
         }
