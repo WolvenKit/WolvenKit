@@ -3431,11 +3431,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             CalculateProperties();
         }
 
-        if (index < children.Count)
+        if (index >= children.Count)
         {
-            return children[index];
+            return null;
         }
-        
 
         return children[index];
     }
