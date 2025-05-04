@@ -449,7 +449,7 @@ public class ProjectResourceTools
 
         if (sourceIsDirectory && !Directory.EnumerateFiles(sourceAbsPath, "*", SearchOption.AllDirectories).Any())
         {
-            Directory.Delete(sourceAbsPath);
+            Directory.Delete(sourceAbsPath, true);
         }
         
         if (!refactor)
