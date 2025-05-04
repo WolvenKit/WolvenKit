@@ -236,7 +236,23 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = true;
                 break;
 
-
+            case gameJournalFolderEntry folderEntry:
+                Value = $"[{folderEntry.Entries.Count}]";
+                IsValueExtrapolated = true;
+                break;
+            case IRedArray<IRedHandle<gameJournalFolderEntry>> ary:
+                Value = StringHelper.Stringify(ary);
+                IsValueExtrapolated = Value != "";
+                break;
+            case IRedArray<IRedHandle<graphGraphNodeDefinition>> nodeDefs:
+                Value = StringHelper.Stringify(nodeDefs);
+                IsValueExtrapolated = Value != "";
+                break;
+            case IRedArray<gameJournalFolderEntry> ary:
+                Value = StringHelper.Stringify(ary);
+                IsValueExtrapolated = Value != "";
+                break;
+            
             case worldCompiledEffectPlacementInfo epI when Parent?.Parent?.ResolvedData is worldCompiledEffectInfo info:
                 if (info.RelativePositions.Count > epI.RelativePositionIndex)
                 {
