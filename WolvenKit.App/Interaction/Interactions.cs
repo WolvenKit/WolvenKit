@@ -61,7 +61,7 @@ public static class Interactions
     public static async Task<string> ShowInputBoxAsync(string title, string originalValue)
     {
         var result = "";
-        DispatcherHelper.RunOnMainThread(() => result = AskForTextInput(""));
+        DispatcherHelper.RunOnMainThread(() => result = AskForTextInput((title, originalValue)));
         return await Task.FromResult(result);
     }
 
