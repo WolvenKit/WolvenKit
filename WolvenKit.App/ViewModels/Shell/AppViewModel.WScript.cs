@@ -76,6 +76,18 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
+        var txtFilesInResources = ActiveProject.ResourceFiles.Where(f => f.EndsWith(".txt"))
+            .Select(f => ActiveProject.GetRelativeResourcePath(f).GetResolvedText())
+            .Where(f => !string.IsNullOrEmpty(Path.GetExtension(f?.Replace(".txt", ""))))
+            .ToList();
+
+        if (txtFilesInResources.Count > 0)
+        {
+            _loggerService.Warning(
+                "One or more files in your resource folder have duplicate extensions and end in .txt. These won't do anything:");
+            txtFilesInResources.ForEach(f => _loggerService.Warning($"\t{f}"));
+        }
+
         var filesToValidate = projArchive.Files.Values.Where(f => f.Extension is not ".xbm" and not ".mlmask").ToList();
         
         var result = Interactions.ShowConfirmation((
@@ -90,10 +102,17 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         }
 
         ScriptService.SuppressLogOutput = true;
+        var redExtensions = Enum.GetNames<ERedExtension>().ToList();
         var code = await File.ReadAllTextAsync(_fileValidationScript.Path);
 
         foreach (var file in filesToValidate)
         {
+            if (!redExtensions.Contains(file.Extension))
+            {
+                _loggerService.Warning($"{file.FileName} has an unsupported extension and will not be packed!");
+                continue;
+            }
+            
             if (GetRedFile(file) is not { } fileViewModel)
             {
                 continue;
