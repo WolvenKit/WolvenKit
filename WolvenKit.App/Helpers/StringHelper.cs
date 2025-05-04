@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Media;
 using DynamicData;
@@ -12,22 +13,6 @@ namespace WolvenKit.App.Helpers;
 
 public abstract partial class StringHelper
 {
-    public static string Stringify(CArray<scnOutputSocket> scnOutputAry)
-    {
-        if (scnOutputAry.Count == 0)
-        {
-            return "";
-        }
-
-        var nodeIds = scnOutputAry.Select(
-            scnOutput => Stringify(
-                scnOutput.Destinations.Select(dest => dest.NodeId.Id.ToString())
-                    .Where(s => s != "").ToArray()
-            )
-        ).ToArray();
-        return Stringify(nodeIds);
-    }
-
     public static string Stringify(Vector4 vec, bool defaultIsOne = false)
     {
         var val = defaultIsOne ? 1 : 0;
@@ -108,13 +93,77 @@ public abstract partial class StringHelper
         return $"[ {string.Join(", ", paths)} ]";
     }
 
+    public static string? Stringify(IRedArray<IRedHandle<gameJournalFolderEntry>> journalEntries)
+    {
+        StringBuilder sb = new();
+        foreach (var gameJournalFolderEntry in journalEntries)
+        {
+            if (sb.Length > 0)
+            {
+                sb.Append(", ");
+            }
+
+            sb.Append(StringifyOrNull(((gameJournalFolderEntry?)gameJournalFolderEntry.GetValue())?.Id) ?? "-");
+        }
+
+        return $"[{sb}]";
+    }
+
+    public static string? Stringify(IRedArray<gameJournalFolderEntry> gameJournalFolderEntries)
+    {
+        StringBuilder sb = new();
+        foreach (var gameJournalFolderEntry in gameJournalFolderEntries)
+        {
+            if (sb.Length > 0)
+            {
+                sb.Append(", ");
+            }
+
+            sb.Append(StringifyOrNull(gameJournalFolderEntry.Id) ?? "-");
+        }
+
+        return $"[{sb}]";
+    }
+
+    public static string? Stringify(IRedArray<IRedHandle<graphGraphNodeDefinition>> gameJournalFolderEntries)
+    {
+        StringBuilder sb = new();
+        foreach (var gameJournalFolderEntry in gameJournalFolderEntries)
+        {
+            if (sb.Length > 0)
+            {
+                sb.Append(", ");
+            }
+
+            sb.Append($"[{((graphGraphNodeDefinition?)gameJournalFolderEntry.GetValue())?.Sockets.Count ?? 0}]");
+        }
+
+        return $"[{sb}]";
+    }
+
+    public static string Stringify(CArray<scnOutputSocket> scnOutputAry)
+    {
+        if (scnOutputAry.Count == 0)
+        {
+            return "";
+        }
+
+        var nodeIds = scnOutputAry.Select(scnOutput => Stringify(
+                scnOutput.Destinations.Select(dest => dest.NodeId.Id.ToString())
+                    .Where(s => s != "").ToArray()
+            )
+        ).ToArray();
+        return Stringify(nodeIds);
+    }
+
+
     public static string Stringify(CColor color)
     {
         var ret = $"R: {color.Red}, G: {color.Green}, B: {color.Blue}";
         return color.Alpha == 255 ? ret : $"{ret}, A: {color.Alpha}";
     }
 
-
+    
     public static string Stringify(ResourcePath? depotPath, bool getFilenameOnly = false) =>
         StringifyOrNull(depotPath, getFilenameOnly) ?? "";
 
@@ -141,6 +190,16 @@ public abstract partial class StringHelper
         }
 
         return cname.GetResolvedText();
+    }
+
+    public static string? StringifyOrNull(CString? str)
+    {
+        if (str?.ToString() is not string path || path == "" || path == "None")
+        {
+            return null;
+        }
+
+        return path;
     }
 
     public static string Stringify(WorldTransform bind) =>
@@ -313,4 +372,16 @@ public abstract partial class StringHelper
 
         return $"{slotName} => {tweakDbIdString}";
     }
+
+    private static string Stringify(CString? str, string defaultValue)
+    {
+        if (str?.ToString() is not string s || s == "" || s == "None")
+        {
+            return defaultValue;
+        }
+
+        return s;
+    }
+
+
 }
