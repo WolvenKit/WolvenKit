@@ -422,6 +422,14 @@ public class ProjectResourceTools
             files.Add(sourceAbsPath);
         }
 
+        // the user is moving an empty directory
+        if (files.Count == 0 && sourceIsDirectory)
+        {
+            MoveDirectoryAndChildren(sourceAbsPath, destAbsPath);
+            ForceDeleteDirectory(sourceAbsPath);
+            return;
+        }
+
         var existingFiles = files.Where(file =>
         {
             var relativePath = Path.GetRelativePath(sourceAbsPath, file);
@@ -450,7 +458,8 @@ public class ProjectResourceTools
             await ProcessFileAsync(file, targetFilePath, targetRelPath, files.Count > 0);
         }
 
-        if (sourceIsDirectory && !Directory.EnumerateFiles(sourceAbsPath, "*", SearchOption.AllDirectories).Any())
+        if (sourceIsDirectory && files.Count > 0 &&
+            !Directory.EnumerateFiles(sourceAbsPath, "*", SearchOption.AllDirectories).Any())
         {
             try
             {
@@ -470,6 +479,29 @@ public class ProjectResourceTools
         ReplacePathInProject(activeProject, destAbsPath, files);
     }
 
+    private static void MoveDirectoryAndChildren(string sourceAbsPath, string destAbsPath)
+    {
+        if (!Directory.Exists(sourceAbsPath))
+        {
+            return;
+        }
+
+        if (!Directory.Exists(destAbsPath))
+        {
+            Directory.CreateDirectory(destAbsPath);
+        }
+
+        foreach (var directory in Directory.GetDirectories(sourceAbsPath, "*", SearchOption.AllDirectories))
+        {
+            var relativePath = Path.GetRelativePath(sourceAbsPath, directory);
+            var targetDirPath = Path.Combine(destAbsPath, relativePath);
+
+            Directory.CreateDirectory(targetDirPath);
+        }
+
+        Directory.Delete(sourceAbsPath, true);
+    }
+    
     private static void ForceDeleteDirectory(string directoryPath)
     {
         if (!Directory.Exists(directoryPath))
@@ -641,7 +673,6 @@ public class ProjectResourceTools
                             .Replace(oldPathWithForwardSlashes, newPathWithForwardSlashes)
                         ).ToArray();
                     }
-                   
 
                     if (newFileContent.All(line => fileContent.Contains(line)))
                     {
