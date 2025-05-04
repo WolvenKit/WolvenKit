@@ -318,7 +318,7 @@ namespace WolvenKit.Views.Shell
 
         private async Task<bool> TryCloseDocument(DocumentViewModel vm)
         {
-            if (!await _viewModel.CanCloseDocument(vm))
+            if (!await _viewModel.CanCloseDocumentAsync(vm))
             {
                 return false;
             }

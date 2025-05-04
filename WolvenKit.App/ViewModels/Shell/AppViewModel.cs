@@ -2550,7 +2550,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     /// Checks if the document has unsaved changes and prompts the user if necessary.
     /// </summary>
     /// <returns>false on user abort - do not save in that case</returns>
-    public async Task<bool> CanCloseDocument(IDocumentViewModel vm)
+    public async Task<bool> CanCloseDocumentAsync(IDocumentViewModel vm)
     {
         if (vm.IsReadOnly || !vm.IsDirty)
         {
@@ -2577,7 +2577,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     /// <returns></returns>
     public async Task<bool> CloseDocumentAsync(IDocumentViewModel vm, bool skipSaveCheck = false)
     {
-        if (!skipSaveCheck && !await CanCloseDocument(vm))
+        if (!skipSaveCheck && !await CanCloseDocumentAsync(vm))
         {
             return false;
         }

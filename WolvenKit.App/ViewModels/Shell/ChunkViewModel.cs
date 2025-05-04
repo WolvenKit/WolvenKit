@@ -3421,14 +3421,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return null;
         }
 
-        if (Properties.Count == 0)
-        {
-            CalculateProperties();
-        }
-
         if (Properties is not ObservableCollectionExtended<ChunkViewModel> children)
         {
             return null;
+        }
+
+        if (Properties.Count == 0)
+        {
+            CalculateProperties();
         }
 
         if (index < children.Count)
