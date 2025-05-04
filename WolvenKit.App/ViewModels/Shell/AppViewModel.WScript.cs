@@ -76,6 +76,21 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
+        var txtFilesInResources = ActiveProject.ResourceFiles.Where(f => f.EndsWith(".txt"))
+            .Select(f => ActiveProject.GetRelativeResourcePath(f).GetResolvedText())
+            .Where(f => f is not null)
+            .ToList();
+
+        if (txtFilesInResources.Count > 0)
+        {
+            _loggerService.Warning(
+                "One or more .txt files were found in your resources folder. These will have no effect:");
+            txtFilesInResources.ForEach(f =>
+            {
+                _loggerService.Warning($"\t{f}");
+            });
+        }
+
         var filesToValidate = projArchive.Files.Values.Where(f => f.Extension is not ".xbm" and not ".mlmask").ToList();
         
         var result = Interactions.ShowConfirmation((
@@ -94,6 +109,12 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
         foreach (var file in filesToValidate)
         {
+            if (file.Extension == ".txt")
+            {
+                _loggerService.Warning($"{file.FileName} is a text file. This will be ignored!");
+                continue;
+            }
+            
             if (GetRedFile(file) is not { } fileViewModel)
             {
                 continue;
