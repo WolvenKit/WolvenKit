@@ -100,14 +100,14 @@ public partial class CR2WReader : Red4Reader
 
             var propRedType = RedReflection.GetRedTypeFromCSType(prop.Type, prop.Flags);
 
-            if (redTypeName != CName.Empty && propRedType != redTypeName)
+            if (redTypeName.GetResolvedText() is string s && propRedType != redTypeName)
             {
-                if (TryReadValue(redTypeName!, size, out value))
+                if (TryReadValue(s, size, out value))
                 {
-                    var args = new InvalidRTTIEventArgs(fullName, propRedType, redTypeName!, value);
+                    var args = new InvalidRTTIEventArgs(fullName, propRedType, s, value);
                     if (!HandleParsingError(args))
                     {
-                        throw new InvalidRTTIException(fullName, propRedType, redTypeName!);
+                        throw new InvalidRTTIException(fullName, propRedType, s);
                     }
 
                     SetProperty(cls, prop.RedName, args.Value);
