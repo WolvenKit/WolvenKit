@@ -12,6 +12,7 @@
     <UserControl.Resources>
         <DataTemplate x:Key="EmptyTemplate" />
 
+        <!-- https://pictogrammers.com/library/mdi/ -->
         <DataTemplate x:Key="MaterialTemplate">
             <iconPacks:PackIconMaterial
                 Kind="{Binding Kind}"
@@ -22,6 +23,7 @@
                 RotationAngle="{Binding RotationAngle}" />
         </DataTemplate>
 
+        <!-- https://fonts.google.com/icons -->
         <DataTemplate x:Key="MaterialDesignTemplate">
             <iconPacks:PackIconMaterialDesign
                 Kind="{Binding Kind}"
@@ -32,6 +34,7 @@
                 RotationAngle="{Binding RotationAngle}" />
         </DataTemplate>
 
+        <!-- https://microsoft.github.io/vscode-codicons/dist/codicon.html -->
         <DataTemplate x:Key="CodiconsTemplate">
             <iconPacks:PackIconCodicons
                 Kind="{Binding Kind}"
@@ -42,6 +45,7 @@
                 RotationAngle="{Binding RotationAngle}" />
         </DataTemplate>
 
+        <!-- deprecated - https://forkaweso.me/Fork-Awesome/cheatsheet/ -->
         <DataTemplate x:Key="ForkAwesomeTemplate">
             <iconPacks:PackIconForkAwesome
                 Kind="{Binding Kind}"
@@ -52,6 +56,7 @@
                 RotationAngle="{Binding RotationAngle}" />
         </DataTemplate>
 
+        <!-- https://iconscout.com/unicons/solid-icons -->
         <DataTemplate x:Key="UniconsTemplate">
             <iconPacks:PackIconUnicons
                 Kind="{Binding Kind}"
@@ -62,6 +67,7 @@
                 RotationAngle="{Binding RotationAngle}" />
         </DataTemplate>
 
+        <!-- https://icons.getbootstrap.com -->
         <DataTemplate x:Key="BootstrapTemplate">
             <iconPacks:PackIconBootstrapIcons
                 Kind="{Binding Kind}"
@@ -72,6 +78,7 @@
                 RotationAngle="{Binding RotationAngle}" />
         </DataTemplate>
 
+        <!-- https://vaadin.com/docs/latest/components/icons/default-icons -->
         <DataTemplate x:Key="VaadinTemplate">
             <iconPacks:PackIconVaadinIcons
                 Kind="{Binding Kind}"
@@ -82,6 +89,7 @@
                 RotationAngle="{Binding RotationAngle}" />
         </DataTemplate>
 
+        <!-- https://icongr.am/octicons -->
         <DataTemplate x:Key="OcticonsTemplate">
             <iconPacks:PackIconOcticons
                 Kind="{Binding Kind}"

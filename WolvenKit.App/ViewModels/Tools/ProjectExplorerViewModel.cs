@@ -817,7 +817,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        var newFolderPath = Path.Combine(model.FullName, Interactions.AskForTextInput("Directory name"));
+        var newFolderPath = Path.Combine(model.FullName, Interactions.AskForTextInput(("Directory name", "")));
 
         if (Directory.Exists(newFolderPath))
         {

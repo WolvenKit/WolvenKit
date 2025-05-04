@@ -441,6 +441,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     /// <returns></returns>
     public string GetTextureDirForDependencies(bool useTextureSubfolder)
     {
+        var destFolder = "";
         if (_projectManager.ActiveProject?.ModDirectory is string modDir
             && FilePath?.RelativePath(new DirectoryInfo(modDir)) is string activeFilePath
             && Path.GetDirectoryName(activeFilePath) is string dirName && !string.IsNullOrEmpty(dirName))
@@ -448,21 +449,22 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             // we're in a .mi file
             if (!useTextureSubfolder)
             {
-                return dirName;
+                destFolder = dirName;
             }
-
-            if (CurrentTab?.FilePath is not string filePath ||
-                Directory.GetFiles(Path.Combine(filePath, ".."), "*.mesh").Length <= 1)
+            else if (CurrentTab?.FilePath is not string filePath ||
+                     Directory.GetFiles(Path.Combine(filePath, ".."), "*.mesh").Length <= 1)
             {
-                return Path.Combine(dirName, "textures");
+                destFolder = Path.Combine(dirName, "textures");
             }
-
-            // if the folder contains more than one .mesh file, add a subdirectory inside "textures"
-            var fileName = Path.GetFileName(CurrentTab.FilePath.Split('.').FirstOrDefault() ?? "").ToFileName();
-            return Path.Combine(dirName, "textures", fileName);
+            else
+            {
+                // if the folder contains more than one .mesh file, add a subdirectory inside "textures"
+                var fileName = Path.GetFileName(CurrentTab.FilePath.Split('.').FirstOrDefault() ?? "").ToFileName();
+                destFolder = Path.Combine(dirName, "textures", fileName);
+            }
         }
 
-        var destFolder = Interactions.AskForTextInput("Target folder for dependencies");
+        destFolder = Interactions.AskForTextInput(("Target folder for dependencies", destFolder));
 
         if (!string.IsNullOrEmpty(destFolder))
         {

@@ -97,7 +97,7 @@ public partial class ChunkViewModel
         }
 
         var oldName = entry.Name;
-        var newName = await Interactions.ShowInputBoxAsync("Rename material", entry.Name.GetResolvedText() ?? "");
+        var newName = await Interactions.ShowInputBoxAsync("Rename material", oldName.GetResolvedText() ?? "");
 
         entry.Name = (CName)newName;
 
@@ -137,6 +137,40 @@ public partial class ChunkViewModel
 
         appCvm.RecalculateProperties();
         appCvm.CalculateValue();
+    }
+
+    [RelayCommand]
+    private async Task ChangeMaterialIndex()
+    {
+        if (!IsMaterial || Parent is null)
+        {
+            return;
+        }
+
+        var entryCvm = GetRootModel().GetPropertyFromPath("materialEntries");
+
+        if (entryCvm?.ResolvedData is not CArray<CMeshMaterialEntry> materialEntries ||
+            entryCvm.GetChildNode(NodeIdxInParent) is not ChunkViewModel entryDefinition)
+        {
+            return;
+        }
+
+        var newIdx = await Interactions.ShowInputBoxAsync("New material index", $"{NodeIdxInParent}");
+        if (!int.TryParse(newIdx, out var newIndex))
+        {
+            return;
+        }
+
+        entryCvm.MoveChild(newIndex, entryDefinition);
+        Parent.MoveChild(newIndex, this);
+
+        entryCvm.ReindexChildDataIndexPropertiesCommand.Execute(null);
+
+        Tab?.Parent?.SetIsDirty(true);
+
+        entryCvm.RecalculateProperties();
+        Parent.RecalculateProperties();
+     
     }
 
     /// <summary>
@@ -244,7 +278,7 @@ public partial class ChunkViewModel
     [RelayCommand(CanExecute = nameof(CanScrollToMaterial))]
     private void ScrollToMaterial()
     {
-        if (GetRootModel() is not { ResolvedData: CMesh mesh } rootModel || Tab is null)
+        if (GetRootModel() is not { ResolvedData: CMesh mesh } rootModel || Tab is null || Parent is null)
         {
             return;
         }
@@ -254,12 +288,13 @@ public partial class ChunkViewModel
             rootModel.ConvertPreloadMaterials();
         }
 
-        if (ResolvedData is CName data && Parent?.Name == "chunkMaterials" &&
+        // Appearance
+        if (ResolvedData is CName data && Parent.Name == "chunkMaterials" &&
             data.GetResolvedText() is string materialName &&
             GetRootModel().GetPropertyFromPath("materialEntries") is
                 { ResolvedData: CArray<CMeshMaterialEntry> ary } materialEntries)
         {
-            if (ary.FirstOrDefault(e => e.Name == materialName) is not CMeshMaterialEntry matDef)
+            if (ary.FirstOrDefault(e => e.Name.GetResolvedText() == materialName) is not CMeshMaterialEntry matDef)
             {
                 return;
             }
