@@ -79,16 +79,14 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         var txtFilesInResources = ActiveProject.ResourceFiles.Where(f => f.EndsWith(".txt"))
             .Select(f => ActiveProject.GetRelativeResourcePath(f).GetResolvedText())
             .Where(f => f is not null)
+            .Where(f => Path.GetExtension(f?.Replace(".txt", "")) is not null)
             .ToList();
 
         if (txtFilesInResources.Count > 0)
         {
             _loggerService.Warning(
-                "One or more .txt files were found in your resources folder. These will have no effect:");
-            txtFilesInResources.ForEach(f =>
-            {
-                _loggerService.Warning($"\t{f}");
-            });
+                "One or more files in your resource folder have duplicate extensions and end in .txt. These won't do anything:");
+            txtFilesInResources.ForEach(f => _loggerService.Warning($"\t{f}"));
         }
 
         var filesToValidate = projArchive.Files.Values.Where(f => f.Extension is not ".xbm" and not ".mlmask").ToList();
