@@ -78,8 +78,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
         var txtFilesInResources = ActiveProject.ResourceFiles.Where(f => f.EndsWith(".txt"))
             .Select(f => ActiveProject.GetRelativeResourcePath(f).GetResolvedText())
-            .Where(f => f is not null)
-            .Where(f => Path.GetExtension(f?.Replace(".txt", "")) is not null)
+            .Where(f => !string.IsNullOrEmpty(Path.GetExtension(f?.Replace(".txt", ""))))
             .ToList();
 
         if (txtFilesInResources.Count > 0)
