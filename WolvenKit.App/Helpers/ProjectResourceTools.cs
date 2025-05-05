@@ -449,12 +449,15 @@ public class ProjectResourceTools
             }
         }
 
+        var fileReplacements = new Dictionary<string, string>();
+
         foreach (var file in files)
         {
             var relativePath = Path.GetRelativePath(sourceAbsPath, file);
             var targetFilePath = relativePath == "." ? destAbsPath : Path.Combine(destAbsPath, relativePath);
             var targetRelPath = relativePath == "." ? destRelPath : Path.Combine(destRelPath, relativePath);
 
+            fileReplacements.Add(sourceAbsPath, targetFilePath);
             await ProcessFileAsync(file, targetFilePath, targetRelPath, files.Count > 0);
         }
 
@@ -470,13 +473,14 @@ public class ProjectResourceTools
                 // don't delete it
             }
         }
-        
+
+        Directory.Delete(sourceAbsPath, true);
         if (!refactor)
         {
             return;
         }
 
-        ReplacePathInProject(activeProject, destAbsPath, files);
+        ReplacePathInProject(activeProject, fileReplacements);
     }
 
     private static void MoveDirectoryAndChildren(string sourceAbsPath, string destAbsPath)
@@ -576,37 +580,13 @@ public class ProjectResourceTools
     private static readonly List<string> s_replaceInResourceFileExtensions =
         [".ent", ".app", ".csv", ".json", ".anims", ".workspot"];
 
-    private void ReplacePathInProject(Cp77Project? activeProject, string newAbsolutePath, List<string> oldAbsolutePaths)
+    private void ReplacePathInProject(Cp77Project? activeProject, Dictionary<string, string> pathReplacements)
     {
         List<string> failedFiles = [];
         if (activeProject is null)
         {
             return;
         }
-
-        Dictionary<string, string> pathReplacements = new();
-        foreach (var oldAbsolutePath in oldAbsolutePaths)
-        {
-            if (oldAbsolutePath.Contains(activeProject.RawDirectory))
-            {
-                continue;
-            }
-
-            var newPath = newAbsolutePath;
-
-            if (Directory.Exists(newAbsolutePath) && Path.GetDirectoryName(oldAbsolutePath) is string parentDir)
-            {
-                newPath = oldAbsolutePath.Replace(parentDir, newPath);
-            }
-
-            if (string.Equals(oldAbsolutePath, newPath, StringComparison.Ordinal))
-            {
-                continue;
-            }
-
-            pathReplacements.Add(oldAbsolutePath, newPath);
-        }
-        
 
         ReplaceInCr2WFiles();
 
@@ -627,7 +607,8 @@ public class ProjectResourceTools
             
             var resourceFiles =
                 Directory.GetFiles(activeProject.ResourcesDirectory, "*.*", SearchOption.AllDirectories)
-                    .Where(f => Path.GetExtension(f) is string s && s_resourceFileExtensions.Contains(s)).ToList();
+                    .Where(f => Path.GetExtension(f) is string s && s_resourceFileExtensions.Contains(s.ToLower()))
+                    .ToList();
 
             Parallel.ForEach(resourceFiles, absoluteFilePath =>
             {
