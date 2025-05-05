@@ -236,7 +236,23 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = true;
                 break;
 
-
+            case gameJournalFolderEntry folderEntry:
+                Value = $"[{folderEntry.Entries.Count}]";
+                IsValueExtrapolated = true;
+                break;
+            case IRedArray<IRedHandle<gameJournalFolderEntry>> ary:
+                Value = StringHelper.Stringify(ary);
+                IsValueExtrapolated = Value != "";
+                break;
+            case IRedArray<IRedHandle<graphGraphNodeDefinition>> nodeDefs:
+                Value = StringHelper.Stringify(nodeDefs);
+                IsValueExtrapolated = Value != "";
+                break;
+            case IRedArray<gameJournalFolderEntry> ary:
+                Value = StringHelper.Stringify(ary);
+                IsValueExtrapolated = Value != "";
+                break;
+            
             case worldCompiledEffectPlacementInfo epI when Parent?.Parent?.ResolvedData is worldCompiledEffectInfo info:
                 if (info.RelativePositions.Count > epI.RelativePositionIndex)
                 {
@@ -308,7 +324,38 @@ public partial class ChunkViewModel
                 Value = $"{StringHelper.Stringify(box.Min)} - {StringHelper.Stringify(box.Max)}";
                 IsValueExtrapolated = true;
                 return;
-            
+
+            case appearanceAppearancePartOverrides partsOverrides:
+                if (GetPropertyChild("componentsOverrides") is ChunkViewModel cvm)
+                {
+                    Value = cvm.Value;
+                }
+                else
+                {
+                    Value = $"[{partsOverrides.ComponentsOverrides.Count}] {Value}";
+                }
+
+                IsValueExtrapolated = true;
+                break;
+            case CArray<appearancePartComponentOverrides> ary:
+                foreach (var t in ary)
+                {
+                    if (t.ComponentName.GetResolvedText() is string partName && partName != "")
+                    {
+                        Value = $"{Value} {partName}";
+                    }
+                }
+
+                if (string.IsNullOrEmpty(Value))
+                {
+                    Value = "0";
+                }
+
+                IsValueExtrapolated = true;
+                Value = $"[{Value!.Trim()}]";
+
+                break;
+
             case meshMeshAppearance { ChunkMaterials: not null } appearance:
                 Value = string.Join(", ", appearance.ChunkMaterials);
                 Value = $"[{appearance.ChunkMaterials.Count}] {Value}";

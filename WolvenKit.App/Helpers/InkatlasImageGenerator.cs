@@ -47,7 +47,7 @@ public static class InkatlasImageGenerator
 
         // Load all images with padding if needed
         var images = new List<ImageData>();
-        foreach (var file in pngFiles)
+        foreach (var file in pngFiles.OrderByDescending(x => x))
         {
             try
             {

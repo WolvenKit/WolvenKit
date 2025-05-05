@@ -158,7 +158,10 @@ public partial class ChunkViewModel
             case inkanimVideoInterpolator transInt:
                 Descriptor = $"{transInt.StartValue} => {transInt.EndValue}";
                 break;
-
+            case gameJournalEntry journalEntry:
+                Descriptor = journalEntry.Id.ToString();
+                break;
+            
             # endregion
             // csv files
             case IRedArray { Count: > 0 } csvAry when Parent is { Name: "compiledData" } && GetRootModel().Data is C2dArray csv:
@@ -335,6 +338,11 @@ public partial class ChunkViewModel
 
                 break;
 
+            case appearanceAppearancePartOverrides partsOverrides
+                when partsOverrides.PartResource.DepotPath.GetResolvedText() is string s && !string.IsNullOrEmpty(s):
+                Descriptor = s;
+                return;
+            
             case scnscreenplayDialogLine scnscreenplayDialogLine:
             {
                 Descriptor = scnscreenplayDialogLine.FemaleLipsyncAnimationName.GetResolvedText() ?? "";
