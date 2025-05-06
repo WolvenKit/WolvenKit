@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using WolvenKit.App.ViewModels.Documents;
@@ -120,7 +121,11 @@ public partial class RedGraph
 
     private BaseSceneViewModel WrapSceneNode(scnSceneGraphNode node)
     {
-        var sceneResource = (scnSceneResource)_data;
+        if (!(_data is scnSceneResource sceneResource))
+        {
+            _loggerService?.Error($"RedGraph internal data is not scnSceneResource, cannot create node wrappers correctly.");
+            sceneResource = new scnSceneResource();
+        }
 
         BaseSceneViewModel nodeWrapper;
         if (node is scnAndNode andNode)
@@ -209,7 +214,6 @@ public partial class RedGraph
         }
         else
         {
-            // shouldn't happen, just for failsafe
             nodeWrapper = new scnSceneGraphNodeWrapper(node);
         }
 
