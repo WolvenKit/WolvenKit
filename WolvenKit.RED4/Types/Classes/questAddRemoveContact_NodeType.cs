@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public questAddRemoveContact_NodeType()
 		{
-			Params = new() { new questChangeContactList_NodeTypeParams() };
+			// Params = new() { new questChangeContactList_NodeTypeParams() };
 
 			PostConstruct();
 		}
