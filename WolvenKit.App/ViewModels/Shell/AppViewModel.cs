@@ -859,9 +859,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         if (ActiveDocument is DocumentViewModel { IsDirty: true })
         {
-            var result = Interactions.ShowConfirmation(($"The file {ActiveDocument.FilePath} has unsaved changes. Do you want to reload it?",
+            var result = Interactions.ShowConfirmation((
+                $"The file {ActiveDocument.FilePath} has unsaved changes. Do you really want to reload it?",
                 "File Modified",
-                WMessageBoxImage.Question,
+                WMessageBoxImage.Warning,
                 WMessageBoxButtons.YesNo));
 
             if (result == WMessageBoxResult.No)
@@ -2545,27 +2546,93 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     #endregion methods
 
+    /// <summary>
+    /// Checks if the document has unsaved changes and prompts the user if necessary.
+    /// </summary>
+    /// <returns>false on user abort - do not save in that case</returns>
+    public static async Task<bool> CanCloseDocumentAsync(IDocumentViewModel vm)
+    {
+        if (vm.IsReadOnly || !vm.IsDirty)
+        {
+            return true;
+        }
+
+        switch (await Interactions.ShowSaveDialogueAsync(vm.Header.TrimEnd('*')))
+        {
+            case WMessageBoxResult.Yes: // Save and close
+                vm.SaveCommand.Execute(null);
+                return true;
+            case WMessageBoxResult.No: // Close without saving
+                return true;
+            default: // Cancel
+                return false;
+        }
+    }
+
+    /// <summary>
+    /// Checks if the document has unsaved changes and prompts the user if necessary.
+    /// </summary>
+    /// <returns>false on user abort - do not save in that case</returns>
+    public static bool CanCloseDocument(IDocumentViewModel vm)
+    {
+        if (vm.IsReadOnly || !vm.IsDirty)
+        {
+            return true;
+        }
+
+        switch (Interactions.ShowSaveDialogue(vm.Header.TrimEnd('*')))
+        {
+            case WMessageBoxResult.Yes: // Save and close
+                vm.SaveCommand.Execute(null);
+                return true;
+            case WMessageBoxResult.No: // Close without saving
+                return true;
+            default: // Cancel
+                return false;
+        }
+    }
+
+    /// <summary>
+    /// Closes a document by removing it from the DockedViews.
+    /// </summary>
+    /// <param name="vm">Document to close</param>
+    /// <param name="skipSaveCheck">If we check from docking adapter, we can update the view faster </param>
+    /// <returns></returns>
+    public async Task<bool> CloseDocumentAsync(IDocumentViewModel vm, bool skipSaveCheck = false)
+    {
+        if (!skipSaveCheck && !await CanCloseDocumentAsync(vm))
+        {
+            return false;
+        }
+
+        CloseFile(vm);
+        return true;
+    }
+
+    /// <summary>
+    /// Closes a document by removing it from the DockedViews.
+    /// </summary>
+    /// <param name="vm">Document to close</param>
+    /// <param name="skipSaveCheck">If we check from docking adapter, we can update the view faster </param>
+    /// <returns></returns>
+    public bool CloseDocument(IDocumentViewModel vm, bool skipSaveCheck = false)
+    {
+        if (!skipSaveCheck && !CanCloseDocument(vm))
+        {
+            return false;
+        }
+
+        CloseFile(vm);
+        return true;
+    }
+
     public void CloseLastActiveDocument()
     {
-        var documentToClose = ActiveDocument ?? _lastActiveDocument;
-        if (documentToClose is null)
+        if ((ActiveDocument ?? _lastActiveDocument) is not IDocumentViewModel documentToClose ||
+            !CloseDocument(documentToClose))
         {
             return;
         }
-
-        if (documentToClose.IsDirty)
-        {
-            var response = Interactions.ShowMessageBoxAsync(
-                $"Do you really want to close the file?",
-                "File has changes!").GetAwaiter().GetResult();
-
-            if (response is not (WMessageBoxResult.OK or WMessageBoxResult.Yes))
-            {
-                return;
-            }
-        }
-
-        CloseFile(documentToClose);
 
         ActiveDocument = null;
         _lastActiveDocument = null;

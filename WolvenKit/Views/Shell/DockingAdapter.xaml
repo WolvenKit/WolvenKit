@@ -67,6 +67,7 @@
             AllowProportionalResize="True"
             CloseAllTabs="PART_DockingManager_OnCloseAllTabs"
             CloseButtonClick="PART_DockingManagerOnCloseButtonClick"
+            KeyDown="PART_DockingManagerOnKeyDown"
             CloseOtherTabs="PART_DockingManager_OnCloseOtherTabs"
             CloseTabOnMiddleClick="True"
             DockStateChanged="PART_DockingManagerOnDockStateChanged"

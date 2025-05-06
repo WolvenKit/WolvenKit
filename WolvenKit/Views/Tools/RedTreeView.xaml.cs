@@ -158,7 +158,7 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        private void OnCollapsed(object sender, NodeExpandedCollapsedEventArgs e)
+        private async void OnCollapsed(object sender, NodeExpandedCollapsedEventArgs e)
         {
             if (e.Node.Content is not ChunkViewModel cvm)
             {
@@ -185,7 +185,7 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            _rdtDataViewModel?.Chunks.First()?.RefreshSync();
+            await _rdtDataViewModel?.Chunks.First()?.RefreshAsync();
         }
 
 

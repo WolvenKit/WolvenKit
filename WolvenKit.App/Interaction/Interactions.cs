@@ -40,20 +40,41 @@ public static class Interactions
     {
         var result = WMessageBoxResult.None;
         DispatcherHelper.RunOnMainThread(() => result = ShowConfirmation((text, caption, image, messageBoxButtons)));
-        return Task.FromResult(result).GetAwaiter().GetResult();
+        return result;
+    }
+
+    /// <returns>
+    /// <code>
+    ///    Yes = Save and close<br/>
+    ///     No = Close without saving<br/>
+    /// Cancel = Don't close<br/>
+    /// </code>
+    /// </returns>
+    public static async Task<WMessageBoxResult> ShowSaveDialogueAsync(string fileName)
+    {
+        var result = WMessageBoxResult.None;
+        DispatcherHelper.RunOnMainThread(() => result = ShowSaveDialog(fileName));
+        return await Task.FromResult(result);
+    }
+
+    public static WMessageBoxResult ShowSaveDialogue(string fileName)
+    {
+        var result = WMessageBoxResult.None;
+        DispatcherHelper.RunOnMainThread(() => result = ShowSaveDialog(fileName));
+        return result;
     }
 
     // wrappers
-    public static async Task<string> ShowInputBoxAsync(string title, string originalName)
+    public static async Task<string> ShowInputBoxAsync(string title, string originalValue)
     {
-        string result = "";
-        DispatcherHelper.RunOnMainThread(() => result = AskForTextInput(""));
+        var result = "";
+        DispatcherHelper.RunOnMainThread(() => result = AskForTextInput((title, originalValue)));
         return await Task.FromResult(result);
     }
 
     public static async Task<string> ShowRenameBoxAsync(string originalName)
     {
-        string result = "";
+        var result = "";
         DispatcherHelper.RunOnMainThread(() => result = Rename(originalName));
         return await Task.FromResult(result);
     }
@@ -78,6 +99,9 @@ public static class Interactions
 
     // classic popups
     public static Func<(string, string, WMessageBoxImage, WMessageBoxButtons), WMessageBoxResult> ShowConfirmation { get; set; } 
+        = _ => throw new NotImplementedException();
+
+    public static Func<string, WMessageBoxResult> ShowSaveDialog { get; set; }
         = _ => throw new NotImplementedException();
 
     /// <inheritdoc cref="ShowPopupWithWeblinkAsync"/>
@@ -105,7 +129,8 @@ public static class Interactions
     public static Func<(string, IDictionary<string, List<string>>), bool> ShowBrokenReferencesList { get; set; } =
         _ => throw new NotImplementedException();
 
-    public static Func<string, string> AskForTextInput { get; set; } = _ => throw new NotImplementedException();
+    public static Func<(string, string), string> AskForTextInput { get; set; } =
+        _ => throw new NotImplementedException();
 
     public static Func<(string, Cp77Project), string> AskForFolderPathInput { get; set; } = _ => throw new NotImplementedException();
 

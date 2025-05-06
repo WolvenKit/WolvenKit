@@ -15,7 +15,6 @@ using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common.Services;
-using WolvenKit.Core.Services;
 using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
 using MessageBoxResult = AdonisUI.Controls.MessageBoxResult;
@@ -26,8 +25,6 @@ namespace WolvenKit.Views.Shell
 
     public partial class MainView : IViewFor<AppViewModel>
     {
-        private readonly IModifierViewStateService _modifierViewStateService;
-        private readonly ProjectResourceTools _projectResourceTools;
         public AppViewModel ViewModel { get; set; }
 
         object IViewFor.ViewModel
@@ -36,14 +33,8 @@ namespace WolvenKit.Views.Shell
             set => ViewModel = (AppViewModel)value;
         }
 
-        public MainView(
-            IModifierViewStateService modifierViewStateService,
-            ProjectResourceTools projectResourceTools,
-            AppViewModel viewModel = null
-        )
+        public MainView(ProjectResourceTools projectResourceTools, AppViewModel viewModel = null)
         {
-            _modifierViewStateService = modifierViewStateService;
-            _projectResourceTools = projectResourceTools;
             ViewModel = viewModel ?? Locator.Current.GetService<AppViewModel>();
             DataContext = ViewModel;
 
@@ -54,6 +45,7 @@ namespace WolvenKit.Views.Shell
                 Disposable.Create(() => dockingAdapter.SaveLayout()).DisposeWith(disposables);
 
                 Interactions.ShowConfirmation = ShowConfirmation;
+                Interactions.ShowSaveDialog = ShowSaveDialog;
                 Interactions.ShowQuestionYesNo = ShowQuestionYesNo;
 
                 Interactions.ShowPopupWithWeblink = ShowConfirmationWithLink;
@@ -125,10 +117,9 @@ namespace WolvenKit.Views.Shell
                     return result;
                 };
 
-                Interactions.ShowPhotoModeDialogue = (param) =>
+                Interactions.ShowPhotoModeDialogue = (p) =>
                 {
-                    var dialog = new CreatePhotoModeAppDialog(param.activeProject, param.settingsManager,
-                        _projectResourceTools);
+                    var dialog = new CreatePhotoModeAppDialog(p.activeProject, p.settingsManager, projectResourceTools);
                     if (dialog.ShowDialog() != true)
                     {
                         return null;
@@ -236,7 +227,26 @@ namespace WolvenKit.Views.Shell
             return (WMessageBoxResult)ret;
         }
 
+        private static readonly IMessageBoxButtonModel[] s_saveDialogButtons =
+        [
+            MessageBoxButtons.Cancel("Cancel"),
+            MessageBoxButtons.Yes("Save and close"),
+            MessageBoxButtons.No("Close without saving")
+        ];
 
+        private static WMessageBoxResult ShowSaveDialog(string fileName)
+        {
+            MessageBoxModel messageBox = new()
+            {
+                Text = $"The File {fileName} has unsaved changes!",
+                Caption = "Really close your file?",
+                Icon = GetAdonisImage(WMessageBoxImage.Exclamation),
+                Buttons = s_saveDialogButtons
+            };
+
+            return (WMessageBoxResult)AdonisUI.Controls.MessageBox.Show(Application.Current.MainWindow, messageBox);
+        }
+        
         #endregion
 
         private void Overlay_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -249,9 +259,9 @@ namespace WolvenKit.Views.Shell
             }
         }
 
-        protected override async void OnClosing(CancelEventArgs e)
+        protected override void OnClosing(CancelEventArgs e)
         {
-            if (!await dockingAdapter.CloseAll())
+            if (!dockingAdapter.CloseAll())
             {
                 e.Cancel = true;
                 return;
@@ -271,7 +281,7 @@ namespace WolvenKit.Views.Shell
 
             if (Locator.Current.GetService<IProjectManager>() is ProjectManager pm)
             {
-                await pm.SaveAsync();
+                pm.Save();
             }
 
             if (Locator.Current.GetService<IHashService>() is HashServiceExt hashServiceExt)
