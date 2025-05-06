@@ -3944,7 +3944,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         ArgumentNullException.ThrowIfNull(Tab);
         _appViewModel.SaveFileCommand.SafeExecute();
 
-        await Refresh();
+        await RefreshAsync();
 
         _loggerService.Success($"Successfully imported from JSON");
         return true;
@@ -4305,8 +4305,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         return w;
     }
 
-    public void RefreshSync() => Refresh().GetAwaiter().GetResult();
-    public async Task Refresh()
+    public async Task RefreshAsync()
     {
         var document = _appViewModel.ActiveDocument;
 

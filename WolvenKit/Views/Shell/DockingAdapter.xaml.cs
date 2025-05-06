@@ -316,9 +316,9 @@ namespace WolvenKit.Views.Shell
             return null;
         }
 
-        private async Task<bool> TryCloseDocument(DocumentViewModel vm)
+        private async Task<bool> TryCloseDocumentAsync(DocumentViewModel vm)
         {
-            if (!await _viewModel.CanCloseDocumentAsync(vm))
+            if (!await AppViewModel.CanCloseDocumentAsync(vm))
             {
                 return false;
             }
@@ -334,6 +334,24 @@ namespace WolvenKit.Views.Shell
             return true;
         }
 
+        private bool TryCloseDocument(DocumentViewModel vm)
+        {
+            if (!AppViewModel.CanCloseDocument(vm))
+            {
+                return false;
+            }
+
+            if (ItemsSource is IList list)
+            {
+                list.Remove(vm);
+            }
+            _viewModel.UpdateTitle();
+
+            _viewModel.CloseDocument(vm, true);
+
+            return true;
+        }
+
         #endregion
 
         #region events
@@ -343,11 +361,11 @@ namespace WolvenKit.Views.Shell
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void PART_DockingManagerOnCloseButtonClick(object sender, CloseButtonEventArgs e)
+        private async void PART_DockingManagerOnCloseButtonClick(object sender, CloseButtonEventArgs e)
         {
             if (e.TargetItem is ContentControl { Content: DocumentViewModel vm })
             {
-                e.Cancel = !TryCloseDocument(vm).GetAwaiter().GetResult();
+                e.Cancel = !await TryCloseDocumentAsync(vm);
             }
         }
 
@@ -373,7 +391,7 @@ namespace WolvenKit.Views.Shell
         {
             if (e.TargetItem is ContentControl { Content: DocumentViewModel vm })
             {
-                e.Cancel = !TryCloseDocument(vm).GetAwaiter().GetResult();
+                e.Cancel = !TryCloseDocument(vm);
             }
         }
 
@@ -476,25 +494,20 @@ namespace WolvenKit.Views.Shell
             _viewModel?.UpdateTitle();
         }
 
-        private void PART_DockingManager_OnCloseAllTabs(object sender, CloseTabEventArgs e)
+        private async void PART_DockingManager_OnCloseAllTabs(object sender, CloseTabEventArgs e)
         {
             var closeTasks = e.ClosingTabItems.OfType<TabItemExt>()
                 .Select(item => item.Content).OfType<ContentPresenter>()
                 .Select(contentPresenter => contentPresenter.Content).OfType<ContentControl>()
                 .Select(contentControl => contentControl.Content).OfType<DocumentViewModel>()
-                .Select(async vm =>
-                {
-                    if (!await TryCloseDocument(vm))
-                    {
-                        e.Cancel = true;
-                    }
-                });
+                .Select(TryCloseDocumentAsync);
 
-            Task.WhenAll(closeTasks).GetAwaiter().GetResult();
-            
+            var results = await Task.WhenAll(closeTasks);
+
+            e.Cancel = results.Any(x => !x);
         }
 
-        public async Task<bool> CloseAll()
+        public async Task<bool> CloseAllAsync()
         {
             if (_viewModel == null)
             {
@@ -505,7 +518,7 @@ namespace WolvenKit.Views.Shell
                 .OfType<DocumentViewModel>()
                 .Select(async doc =>
                 {
-                    if (!await TryCloseDocument(doc))
+                    if (!await TryCloseDocumentAsync(doc))
                     {
                         return false;
                     }
@@ -517,21 +530,40 @@ namespace WolvenKit.Views.Shell
             return results.All(result => result);
         }
 
-        private void PART_DockingManager_OnCloseOtherTabs(object sender, CloseTabEventArgs e)
+        public bool CloseAll()
+        {
+            if (_viewModel == null)
+            {
+                return true;
+            }
+
+            var allClosed = true;
+
+            for (var i = _viewModel.DockedViews.Count - 1; i >= 0; i--)
+            {
+                if (_viewModel.DockedViews[i] is DocumentViewModel doc)
+                {
+                    if (!TryCloseDocument(doc))
+                    {
+                        allClosed = false;
+                    }
+                }
+            }
+
+            return allClosed;
+        }
+
+        private async void PART_DockingManager_OnCloseOtherTabs(object sender, CloseTabEventArgs e)
         {
             var closeTasks = e.ClosingTabItems.OfType<TabItemExt>()
                 .Select(item => item.Content).OfType<ContentPresenter>()
                 .Select(contentPresenter => contentPresenter.Content).OfType<ContentControl>()
                 .Select(contentControl => contentControl.Content).OfType<DocumentViewModel>()
-                .Select(async vm =>
-                {
-                    if (!await TryCloseDocument(vm))
-                    {
-                        e.Cancel = true;
-                    }
-                });
+                .Select(TryCloseDocumentAsync);
 
-            Task.WhenAll(closeTasks).GetAwaiter().GetResult();
+            var results = await Task.WhenAll(closeTasks);
+
+            e.Cancel = results.Any(x => !x);
         }
 
 

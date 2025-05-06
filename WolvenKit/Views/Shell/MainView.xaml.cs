@@ -261,7 +261,7 @@ namespace WolvenKit.Views.Shell
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            if (!dockingAdapter.CloseAll().GetAwaiter().GetResult())
+            if (!dockingAdapter.CloseAll())
             {
                 e.Cancel = true;
                 return;
@@ -281,7 +281,7 @@ namespace WolvenKit.Views.Shell
 
             if (Locator.Current.GetService<IProjectManager>() is ProjectManager pm)
             {
-                pm.SaveAsync().GetAwaiter().GetResult();
+                pm.Save();
             }
 
             if (Locator.Current.GetService<IHashService>() is HashServiceExt hashServiceExt)
