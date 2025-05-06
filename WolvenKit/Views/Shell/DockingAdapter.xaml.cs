@@ -501,20 +501,20 @@ namespace WolvenKit.Views.Shell
                 return true;
             }
 
-            var allClosed = true;
-
-            for (var i = _viewModel.DockedViews.Count - 1; i >= 0; i--)
-            {
-                if (_viewModel.DockedViews[i] is DocumentViewModel doc)
+            var closeTasks = _viewModel.DockedViews
+                .OfType<DocumentViewModel>()
+                .Select(async doc =>
                 {
                     if (!await TryCloseDocument(doc))
                     {
-                        allClosed = false;
+                        return false;
                     }
-                }
-            }
 
-            return allClosed;
+                    return true;
+                });
+
+            var results = await Task.WhenAll(closeTasks);
+            return results.All(result => result);
         }
 
         private void PART_DockingManager_OnCloseOtherTabs(object sender, CloseTabEventArgs e)
