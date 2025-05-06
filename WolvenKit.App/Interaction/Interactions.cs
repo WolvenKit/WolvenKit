@@ -40,7 +40,7 @@ public static class Interactions
     {
         var result = WMessageBoxResult.None;
         DispatcherHelper.RunOnMainThread(() => result = ShowConfirmation((text, caption, image, messageBoxButtons)));
-        return Task.FromResult(result).GetAwaiter().GetResult();
+        return result;
     }
 
     /// <returns>
@@ -55,6 +55,13 @@ public static class Interactions
         var result = WMessageBoxResult.None;
         DispatcherHelper.RunOnMainThread(() => result = ShowSaveDialog(fileName));
         return await Task.FromResult(result);
+    }
+
+    public static WMessageBoxResult ShowSaveDialogue(string fileName)
+    {
+        var result = WMessageBoxResult.None;
+        DispatcherHelper.RunOnMainThread(() => result = ShowSaveDialog(fileName));
+        return result;
     }
 
     // wrappers

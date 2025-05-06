@@ -3421,21 +3421,20 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return null;
         }
 
-        if (Properties.Count == 0)
-        {
-            CalculateProperties();
-        }
-
         if (Properties is not ObservableCollectionExtended<ChunkViewModel> children)
         {
             return null;
         }
 
-        if (index < children.Count)
+        if (Properties.Count == 0)
         {
-            return children[index];
+            CalculateProperties();
         }
-        
+
+        if (index >= children.Count)
+        {
+            return null;
+        }
 
         return children[index];
     }
@@ -3945,7 +3944,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         ArgumentNullException.ThrowIfNull(Tab);
         _appViewModel.SaveFileCommand.SafeExecute();
 
-        await Refresh();
+        await RefreshAsync();
 
         _loggerService.Success($"Successfully imported from JSON");
         return true;
@@ -4306,8 +4305,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         return w;
     }
 
-    public void RefreshSync() => Refresh().GetAwaiter().GetResult();
-    public async Task Refresh()
+    public async Task RefreshAsync()
     {
         var document = _appViewModel.ActiveDocument;
 

@@ -41,6 +41,8 @@ public class ArchiveWriter
         ".opuspak"
     };
 
+    private static string s_soundBanksFile = "soundbanks.json";
+
     private readonly IHashService _hashService;
 
     #endregion
@@ -263,14 +265,14 @@ public class ArchiveWriter
             {
                 fileStream.Seek(0, SeekOrigin.Begin);
 
-                if (s_alignedFiles.Contains(fileInfo.Extension.ToLower()))
+                if (s_alignedFiles.Contains(fileInfo.Extension.ToLower()) || fileInfo.FullName.EndsWith(s_soundBanksFile, StringComparison.CurrentCultureIgnoreCase))
                 {
                     bw.PadUntilPage();
                 }
 
                 var offset = (ulong)bw.BaseStream.Position;
 
-                if (s_uncompressedFiles.Contains(fileInfo.Extension.ToLower()))
+                if (s_uncompressedFiles.Contains(fileInfo.Extension.ToLower()) || fileInfo.FullName.EndsWith(s_soundBanksFile, StringComparison.CurrentCultureIgnoreCase))
                 {
                     fileStream.CopyTo(outStream);
                     var size = (uint)fileStream.Length;

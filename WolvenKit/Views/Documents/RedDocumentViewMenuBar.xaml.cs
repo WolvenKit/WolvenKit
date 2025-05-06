@@ -134,7 +134,7 @@ namespace WolvenKit.Views.Documents
 
         private bool _isRunning;
 
-        private async Task RunFileValidation()
+        private async Task RunFileValidationAsync()
         {
             if (_fileValidationScript is null || !File.Exists(_fileValidationScript.Path))
             {
@@ -201,7 +201,7 @@ namespace WolvenKit.Views.Documents
             Interactions.ShowBrokenReferencesList(("Broken references", brokenReferences));
         }
         
-        private void OnFileValidationClick(object _, RoutedEventArgs e)
+        private async void OnFileValidationClick(object _, RoutedEventArgs e)
         {
             // in .app or root entity: warn with >5 appearances, because this can take a while 
             if (ViewModel?.RootChunk is ChunkViewModel cvm
@@ -217,9 +217,12 @@ namespace WolvenKit.Views.Documents
             }
             
             // This needs to be inside the DispatcherHelper, or the UI button will make everything explode
-            DispatcherHelper.RunOnMainThread(
-                () => _loggerService.Info("Running file validation, please wait. The UI will be unresponsive."));
-            DispatcherHelper.RunOnMainThread(() => Task.Run(async () => await RunFileValidation()).GetAwaiter().GetResult());
+            DispatcherHelper.RunOnMainThread(() =>
+            {
+                _loggerService.Info("Running file validation, please wait. The UI will be unresponsive.");
+            });
+
+            await RunFileValidationAsync();
         }
 
         private void OnGenerateMissingMaterialsClick(object _, RoutedEventArgs e)
@@ -605,7 +608,7 @@ namespace WolvenKit.Views.Documents
             }));
 
             // Wait for dirty nodes to refresh themselves
-            await Task.WhenAll(dirtyNodes.Select(node => node.Refresh()));
+            await Task.WhenAll(dirtyNodes.Select(node => node.RefreshAsync()));
 
             if (isDirty && cvm.Tab?.Parent is not null)
             {
