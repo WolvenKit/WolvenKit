@@ -507,29 +507,6 @@ namespace WolvenKit.Views.Shell
             e.Cancel = results.Any(x => !x);
         }
 
-        public async Task<bool> CloseAllAsync()
-        {
-            if (_viewModel == null)
-            {
-                return true;
-            }
-
-            var closeTasks = _viewModel.DockedViews
-                .OfType<DocumentViewModel>()
-                .Select(async doc =>
-                {
-                    if (!await TryCloseDocumentAsync(doc))
-                    {
-                        return false;
-                    }
-
-                    return true;
-                });
-
-            var results = await Task.WhenAll(closeTasks);
-            return results.All(result => result);
-        }
-
         public bool CloseAll()
         {
             if (_viewModel == null)
