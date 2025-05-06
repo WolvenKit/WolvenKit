@@ -48,10 +48,18 @@ public static class RedTypeFactory
             case questJournalQuestEntry_NodeType questNode:
                 questNode.Path ??= Init(new CHandle<gameJournalPath>());
                 break;
+            case CHandle<RedBaseClass> baseHandle:
+                return (T)(IRedType)InitHandle(baseHandle);
             default:
                 break;
         }
 
         return obj;
+    }
+
+    private static CHandle<T> InitHandle<T>(CHandle<T> handle) where T : RedBaseClass
+    {
+        handle.Chunk ??= CreateAndInit(typeof(T)) as T;
+        return handle;
     }
 }
