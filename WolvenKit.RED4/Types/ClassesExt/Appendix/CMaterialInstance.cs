@@ -8,15 +8,13 @@ public partial class CMaterialInstance : IRedAppendix
     [REDProperty(IsIgnored = true)]
     public CArray<CKeyValuePair> Values
     {
-        get => GetPropertyValue<CArray<CKeyValuePair>>()!; // set in PostConstruct, so not nullable
+        get => GetPropertyValue<CArray<CKeyValuePair>>();
         set => SetPropertyValue<CArray<CKeyValuePair>>(value);
-
     }
 
     partial void PostConstruct()
     {
-        Values = [];
-        Metadata ??= new SerializationDeferredDataBuffer();
+        Values = new CArray<CKeyValuePair>();
     }
 
     public void Read(Red4Reader reader, uint size)
@@ -30,11 +28,6 @@ public partial class CMaterialInstance : IRedAppendix
                 
             var redTypeInfos = RedReflection.GetRedTypeInfos(typename);
 
-            if (typename == CName.Empty)
-            {
-                throw new Exception($"Failed to read type name for \"{name}\"!");
-            }
-
             var (hasError, errorRedName) = reader.CheckRedTypeInfos(ref redTypeInfos);
             if (hasError)
             {
@@ -43,10 +36,6 @@ public partial class CMaterialInstance : IRedAppendix
 
             var value = reader.Read(redTypeInfos, (uint)valueSize);
 
-            if (value is null)
-            {
-                throw new Exception($"\"{typename}\": failed to read value!");
-            }
             Values.Add(new CKeyValuePair(name, value));
         }
     }

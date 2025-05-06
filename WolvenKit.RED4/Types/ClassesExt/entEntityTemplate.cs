@@ -7,7 +7,7 @@ public partial class entEntityTemplate
     [REDProperty(IsIgnored = true)]
     public CHandle<entEntity> Entity
     {
-        get => GetPropertyValue<CHandle<entEntity>>()!; // set in PostConstruct, so not nullable
+        get => GetPropertyValue<CHandle<entEntity>>();
         set => SetPropertyValue<CHandle<entEntity>>(value);
     }
 
@@ -15,14 +15,7 @@ public partial class entEntityTemplate
     [REDProperty(IsIgnored = true)]
     public CArray<entIComponent> Components
     {
-        get => GetPropertyValue<CArray<entIComponent>>()!; // set in PostConstruct, so not nullable
+        get => GetPropertyValue<CArray<entIComponent>>();
         set => SetPropertyValue<CArray<entIComponent>>(value);
-    }
-
-
-    partial void PostConstruct()
-    {
-        Entity ??= new CHandle<entEntity>();
-        Components ??= [];
     }
 }
