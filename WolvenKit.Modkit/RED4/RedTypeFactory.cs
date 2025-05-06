@@ -44,9 +44,11 @@ public static class RedTypeFactory
                 break;
             case questShowPopup_NodeSubType subType:
                 subType.Path ??= Init(new CHandle<gameJournalPath>());
+                subType.Path.Chunk ??= Init(new gameJournalPath());
                 break;
             case questJournalQuestEntry_NodeType questNode:
                 questNode.Path ??= Init(new CHandle<gameJournalPath>());
+                questNode.Path.Chunk ??= Init(new gameJournalPath());
                 break;
             case CHandle<RedBaseClass> baseHandle:
                 return (T)(IRedType)InitHandle(baseHandle);
