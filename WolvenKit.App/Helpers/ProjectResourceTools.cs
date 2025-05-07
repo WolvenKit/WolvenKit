@@ -459,8 +459,11 @@ public class ProjectResourceTools
             var targetFilePath = relativePath == "." ? destAbsPath : Path.Combine(destAbsPath, relativePath);
             var targetRelPath = relativePath == "." ? destRelPath : Path.Combine(destRelPath, relativePath);
 
+            if (fileReplacements.ContainsKey(sourceAbsPath)){
+                continue;
+            }
             fileReplacements.Add(sourceAbsPath, targetFilePath);
-            await ProcessFileAsync(file, targetFilePath, targetRelPath, files.Count > 0);
+            await ProcessFileAsync(file, targetFilePath, targetRelPath, files.Count > 0);                
         }
 
         if (sourceIsDirectory && files.Count > 0 &&
