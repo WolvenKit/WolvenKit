@@ -386,7 +386,7 @@ public class ProjectResourceTools
         }
 
         string destAbsPath;
-        string sourceAbsPath;
+        string sourceFileOrDirAbsPath;
 
         try
         {
@@ -394,7 +394,7 @@ public class ProjectResourceTools
             destAbsPath = SetAbsolutePath(destRelPath);
 
             sourceRelPath = FileHelper.SanitizePath(sourceRelPath);
-            sourceAbsPath = SetAbsolutePath(sourceRelPath);
+            sourceFileOrDirAbsPath = SetAbsolutePath(sourceRelPath);
         }
         catch (Exception e)
         {
@@ -403,30 +403,30 @@ public class ProjectResourceTools
         }
 
         // Don't copy a directory on itself
-        if (sourceAbsPath == destAbsPath)
+        if (sourceFileOrDirAbsPath == destAbsPath)
         {
-            _loggerService.Info($"Source is Destination for \"{sourceAbsPath}\". Skipping...");
+            _loggerService.Info($"Source is Destination for \"{sourceFileOrDirAbsPath}\". Skipping...");
             return;
         }
 
-        var sourceIsDirectory = Directory.Exists(sourceAbsPath);
+        var sourceIsDirectory = Directory.Exists(sourceFileOrDirAbsPath);
 
         List<string> files = [];
 
         if (sourceIsDirectory)
         {
-            files.AddRange(Directory.EnumerateFiles(sourceAbsPath, "*", SearchOption.AllDirectories));
+            files.AddRange(Directory.EnumerateFiles(sourceFileOrDirAbsPath, "*", SearchOption.AllDirectories));
         }
         else
         {
-            files.Add(sourceAbsPath);
+            files.Add(sourceFileOrDirAbsPath);
         }
 
         // the user is moving an empty directory
         if (files.Count == 0 && sourceIsDirectory)
         {
-            MoveDirectoryAndChildren(sourceAbsPath, destAbsPath);
-            DeleteEmptyDirectoriesRecursive(sourceAbsPath);
+            MoveDirectoryAndChildren(sourceFileOrDirAbsPath, destAbsPath);
+            DeleteEmptyDirectoriesRecursive(sourceFileOrDirAbsPath);
             return;
         }
 
@@ -434,7 +434,7 @@ public class ProjectResourceTools
 
         var existingFiles = files.Where(file =>
         {
-            var relativePath = Path.GetRelativePath(sourceAbsPath, file);
+            var relativePath = Path.GetRelativePath(sourceFileOrDirAbsPath, file);
             var targetFilePath = Path.Combine(destAbsPath, relativePath);
             return File.Exists(targetFilePath);
         }).ToList();
@@ -453,18 +453,17 @@ public class ProjectResourceTools
 
         var fileReplacements = new Dictionary<string, string>();
 
-        foreach (var file in files)
+        foreach (var sourceAbsPath in files)
         {
-            var relativePath = Path.GetRelativePath(sourceAbsPath, file);
-            var targetFilePath = relativePath == "." ? destAbsPath : Path.Combine(destAbsPath, relativePath);
-            var targetRelPath = relativePath == "." ? destRelPath : Path.Combine(destRelPath, relativePath);
+            // If the file is not a folder, this is just the dest path
+            var targetAbsPath = sourceAbsPath.Replace(sourceFileOrDirAbsPath, destAbsPath);
 
-            if (!fileReplacements.TryAdd(sourceAbsPath, targetFilePath))
+            if (!fileReplacements.TryAdd(sourceAbsPath, targetAbsPath))
             {
                 continue;
             }
 
-            await MoveFileAsync(file, targetFilePath, targetRelPath, sourceIsDirectory);                
+            await MoveFileAsync(sourceAbsPath, targetAbsPath, activeProject, sourceIsDirectory);                
         }
 
         // Delete only files that were successfully replaced
@@ -478,7 +477,7 @@ public class ProjectResourceTools
         // Delete empty directories
         if (successfulReplacements.Count > 0)
         {
-            DeleteEmptyDirectoriesRecursive(sourceAbsPath);
+            DeleteEmptyDirectoriesRecursive(sourceFileOrDirAbsPath);
         }
 
         if (!refactor)
@@ -486,7 +485,7 @@ public class ProjectResourceTools
             return;
         }
 
-        ReplacePathInProject(activeProject, fileReplacements);
+        ReplacePathInProject(activeProject, successfulReplacements);
     }
 
     private static void MoveDirectoryAndChildren(string sourceAbsPath, string destAbsPath)
@@ -531,7 +530,7 @@ public class ProjectResourceTools
         }
     }
 
-    private Task MoveFileAsync(string sourcePath, string targetPath, string targetRelPath, bool isDirectory)
+    private Task MoveFileAsync(string sourcePath, string targetPath, Cp77Project activeProject, bool isDirectory)
     {
         try
         {
@@ -555,7 +554,8 @@ public class ProjectResourceTools
             File.Move(sourcePath, tempPath);
             File.Move(tempPath, targetPath, true);
 
-            _loggerService.Info($"Moved \"{sourcePath}\" to \"{targetRelPath}\"");
+            _loggerService.Info(
+                $"Moved \"{activeProject.GetRelativePath(sourcePath)}\" to \"{activeProject.GetRelativePath(targetPath)}\"");
         }
         catch (Exception e)
         {
@@ -581,7 +581,7 @@ public class ProjectResourceTools
     private static readonly List<string> s_replaceInResourceFileExtensions =
         [".ent", ".app", ".csv", ".json", ".anims", ".workspot"];
 
-    private void ReplacePathInProject(Cp77Project? activeProject, Dictionary<string, string> pathReplacements)
+    private async void ReplacePathInProject(Cp77Project? activeProject, Dictionary<string, string> pathReplacements)
     {
         List<string> failedFiles = [];
         if (activeProject is null)
@@ -589,10 +589,10 @@ public class ProjectResourceTools
             return;
         }
 
-        ReplaceInCr2WFiles();
+        Task[] tasks = [ReplaceInResourceFilesAsync(), ReplaceInCr2WFilesAsync()];
 
-        ReplaceInResourceFiles();
-
+        await Task.WhenAll(tasks);
+        
         if (failedFiles.Count <= 0)
         {
             return;
@@ -603,34 +603,28 @@ public class ProjectResourceTools
 
         return;
 
-        void ReplaceInResourceFiles()
+        async Task ReplaceInResourceFilesAsync()
         {
-            
-            var resourceFiles =
-                Directory.GetFiles(activeProject.ResourcesDirectory, "*.*", SearchOption.AllDirectories)
-                    .Where(f => Path.GetExtension(f) is string s && s_resourceFileExtensions.Contains(s.ToLower()))
-                    .ToList();
+            var resourceFiles = Directory.GetFiles(activeProject.ResourcesDirectory, "*.*", SearchOption.AllDirectories)
+                .Where(f => Path.GetExtension(f) is string s && s_resourceFileExtensions.Contains(s.ToLower()))
+                .ToList();
 
-            Parallel.ForEach(resourceFiles, absoluteFilePath =>
+            var resourceTasks = resourceFiles.Select(async absoluteFilePath =>
             {
-
                 try
                 {
-                    var fileContent = File.ReadLines(absoluteFilePath).ToArray();
+                    var fileContent = await File.ReadAllLinesAsync(absoluteFilePath);
 
-                    // remove duplicate backslashes
+                    // Remove duplicate backslashes
                     var hasDuplicateBackslashes = fileContent.Any(s => s.Contains(@"\\"));
-
                     if (hasDuplicateBackslashes)
                     {
                         fileContent = fileContent.Select(str => str.Replace(@"\\", @"\")).ToArray();
                     }
 
-                    var newFileContent = fileContent.Select(line => line).ToArray();
-
+                    var newFileContent = fileContent.ToArray();
                     foreach (var (oldAbsPath, newAbsPath) in pathReplacements)
                     {
-                        // if it's not a cr2W file from archive, the resource files won't care
                         if (!oldAbsPath.Contains(activeProject.ModDirectory) ||
                             Path.GetExtension(oldAbsPath) is not string fileExtension ||
                             !s_replaceInResourceFileExtensions.Contains(fileExtension))
@@ -649,64 +643,52 @@ public class ProjectResourceTools
                         var oldPathWithForwardSlashes = oldPathStr.Replace("\\", "/");
                         var newPathWithForwardSlashes = newPathStr.Replace("\\", "/");
 
-                        // replace both forward and backward slashes
-                        newFileContent = fileContent.Select(line => line
+                        newFileContent = newFileContent.Select(line => line
                             .Replace(oldPathStr, newPathStr)
                             .Replace(oldPathWithForwardSlashes, newPathWithForwardSlashes)
                         ).ToArray();
                     }
 
-                    if (newFileContent.All(line => fileContent.Contains(line)))
+                    if (!newFileContent.SequenceEqual(fileContent))
                     {
-                        return;
-                    }
+                        if (hasDuplicateBackslashes || absoluteFilePath.EndsWith(".lua"))
+                        {
+                            newFileContent = newFileContent.Select(line => line.Replace(@"\", @"\\")).ToArray();
+                        }
 
-                    // put duplicate backslashes back
-                    if (hasDuplicateBackslashes || absoluteFilePath.EndsWith(".lua"))
-                    {
-                        newFileContent = newFileContent.Select(line => line.Replace(@"\", @"\\")).ToArray();
+                        await File.WriteAllLinesAsync(absoluteFilePath, newFileContent);
                     }
-
-                    File.WriteAllLines(absoluteFilePath, newFileContent);
                 }
                 catch (Exception)
                 {
                     failedFiles.Add(absoluteFilePath.RelativePath(activeProject.ResourcesDirectory));
                 }
             });
+
+            await Task.WhenAll(resourceTasks);
         }
 
-        void ReplaceInCr2WFiles()
+        async Task ReplaceInCr2WFilesAsync()
         {
-            // if it's a resource or raw file, no need to refactor it in mod files 
-            var files = Directory.GetFiles(activeProject.ModDirectory, "*.*", SearchOption.AllDirectories);
+            var files = Directory.GetFiles(activeProject.ModDirectory, "*.*", SearchOption.AllDirectories)
+                .Where(f => Path.GetExtension(f) is string s && !string.IsNullOrEmpty(s) &&
+                            !s_fileExtensionsWithoutPaths.Contains(s))
+                .ToList();
 
-            // foreach (var absoluteFilePath in files)
-            // {
-            Parallel.ForEach(files, absoluteFilePath =>
+            var cr2WTasks = files.Select(absoluteFilePath =>
             {
-
-                // Don't process files that will never hold paths
-                if (Path.GetExtension(absoluteFilePath) is string s && !string.IsNullOrEmpty(s) &&
-                    s_fileExtensionsWithoutPaths.Contains(s))
-                {
-                    return;
-                }
-
-                if (_crwWTools.ReadCr2W(absoluteFilePath) is not CR2WFile cr2W)
-                {
-                    return;
-                }
-
-                var wasModified = false;
-
-                Dictionary<string, string> foundReplacements = new();
-
                 try
                 {
+                    if (_crwWTools.ReadCr2W(absoluteFilePath) is not CR2WFile cr2W)
+                    {
+                        return Task.CompletedTask;
+                    }
+
+                    var wasModified = false;
+                    Dictionary<string, string> foundReplacements = new();
+
                     foreach (var (oldAbsPath, newAbsPath) in pathReplacements)
                     {
-                        // if it's not a cr2W file from archive, the resource files won't care
                         if (!oldAbsPath.Contains(activeProject.ModDirectory))
                         {
                             continue;
@@ -720,8 +702,8 @@ public class ProjectResourceTools
                             continue;
                         }
 
-                        cr2W = ReplacePathInFile(cr2W, oldPathStr, newPathStr, out var newModified, absoluteFilePath);
-                        if (!newModified)
+                        cr2W = ReplacePathInFile(cr2W, oldPathStr, newPathStr, out var b, absoluteFilePath);
+                        if (!b)
                         {
                             continue;
                         }
@@ -732,7 +714,7 @@ public class ProjectResourceTools
 
                     if (!wasModified)
                     {
-                        return;
+                        return Task.CompletedTask;
                     }
 
                     _loggerService?.Debug(
@@ -746,9 +728,11 @@ public class ProjectResourceTools
                     failedFiles.Add(absoluteFilePath.RelativePath(activeProject.ModDirectory));
                 }
 
+                return Task.CompletedTask;
             });
-            // }
 
+            await Task.WhenAll(cr2WTasks);
+      
             return;
 
             CR2WFile ReplacePathInFile(CR2WFile cr2W, string oldPathStr, string newPathStr, out bool wasModified,
