@@ -426,7 +426,7 @@ public class ProjectResourceTools
         if (files.Count == 0 && sourceIsDirectory)
         {
             MoveDirectoryAndChildren(sourceAbsPath, destAbsPath);
-            ForceDeleteDirectory(sourceAbsPath);
+            DeleteEmptyDirectoriesRecursive(sourceAbsPath);
             return;
         }
 
@@ -447,7 +447,7 @@ public class ProjectResourceTools
 
             if (!response)
             {
-                return;
+                files = files.Except(existingFiles).ToList();
             }
         }
 
@@ -459,33 +459,26 @@ public class ProjectResourceTools
             var targetFilePath = relativePath == "." ? destAbsPath : Path.Combine(destAbsPath, relativePath);
             var targetRelPath = relativePath == "." ? destRelPath : Path.Combine(destRelPath, relativePath);
 
-            if (fileReplacements.ContainsKey(sourceAbsPath)){
+            if (!fileReplacements.TryAdd(sourceAbsPath, targetFilePath))
+            {
                 continue;
             }
-            fileReplacements.Add(sourceAbsPath, targetFilePath);
-            await ProcessFileAsync(file, targetFilePath, targetRelPath, files.Count > 0);                
+
+            await MoveFileAsync(file, targetFilePath, targetRelPath, sourceIsDirectory);                
         }
 
-        if (sourceIsDirectory && files.Count > 0 &&
-            !Directory.EnumerateFiles(sourceAbsPath, "*", SearchOption.AllDirectories).Any())
+        // Delete only files that were successfully replaced
+        var successfulReplacements = fileReplacements.Where((kvp) => File.Exists(kvp.Value)).ToDictionary();
+
+        foreach (var originalFile in successfulReplacements.Keys.Where(File.Exists))
         {
-            try
-            {
-                ForceDeleteDirectory(sourceAbsPath);
-            }
-            catch
-            {
-                // don't delete it
-            }
+            File.Delete(originalFile);
         }
 
-        try
+        // Delete empty directories
+        if (successfulReplacements.Count > 0)
         {
-            Directory.Delete(sourceAbsPath, true);
-        }
-        catch
-        {
-            // don't delete it
+            DeleteEmptyDirectoriesRecursive(sourceAbsPath);
         }
 
         if (!refactor)
@@ -518,32 +511,27 @@ public class ProjectResourceTools
 
         Directory.Delete(sourceAbsPath, true);
     }
-    
-    private static void ForceDeleteDirectory(string directoryPath)
+
+    private static void DeleteEmptyDirectoriesRecursive(string directoryPath)
     {
-        if (!Directory.Exists(directoryPath))
+        if (!Directory.Exists(directoryPath) ||
+            Directory.GetFiles(directoryPath, "*", SearchOption.AllDirectories).Length != 0)
         {
             return;
         }
 
-        foreach (var file in Directory.GetFiles(directoryPath, "*", SearchOption.AllDirectories))
-        {
-            var fileInfo = new FileInfo(file)
-            {
-                IsReadOnly = false // Remove read-only attribute if set
-            };
-            fileInfo.Delete();
-        }
-
         foreach (var subDirectory in Directory.GetDirectories(directoryPath, "*", SearchOption.AllDirectories))
         {
-            Directory.Delete(subDirectory, true);
+            DeleteEmptyDirectoriesRecursive(subDirectory);
         }
 
-        Directory.Delete(directoryPath, true); // Delete the root directory
+        if (Directory.GetDirectories(directoryPath, "*", SearchOption.AllDirectories).Length == 0)
+        {
+            Directory.Delete(directoryPath, true); // Delete the root directory
+        }
     }
 
-    private Task ProcessFileAsync(string sourcePath, string targetPath, string targetRelPath, bool isDirectory)
+    private Task MoveFileAsync(string sourcePath, string targetPath, string targetRelPath, bool isDirectory)
     {
         try
         {
