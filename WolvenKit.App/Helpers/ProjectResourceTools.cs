@@ -430,6 +430,8 @@ public class ProjectResourceTools
             return;
         }
 
+        files = files.Distinct().ToList();
+
         var existingFiles = files.Where(file =>
         {
             var relativePath = Path.GetRelativePath(sourceAbsPath, file);
