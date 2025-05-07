@@ -476,7 +476,15 @@ public class ProjectResourceTools
             }
         }
 
-        Directory.Delete(sourceAbsPath, true);
+        try
+        {
+            Directory.Delete(sourceAbsPath, true);
+        }
+        catch
+        {
+            // don't delete it
+        }
+
         if (!refactor)
         {
             return;
