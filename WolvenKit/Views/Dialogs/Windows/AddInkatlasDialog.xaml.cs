@@ -10,7 +10,7 @@ using Window = System.Windows.Window;
 
 namespace WolvenKit.Views.Dialogs.Windows;
 
-public partial class AddInkatklasDialog : IViewFor<AddInkatlasDialogViewModel>
+public partial class AddInkatlasDialog : IViewFor<AddInkatlasDialogViewModel>
 {
     private static string s_lastSourceFolder = "";
     private static string s_lastRelativePath = "";
@@ -18,7 +18,7 @@ public partial class AddInkatklasDialog : IViewFor<AddInkatlasDialogViewModel>
     private static int s_lastTileWidth = 0;
     private static int s_lastTileHeight = 0;
 
-    public AddInkatklasDialog(Cp77Project activeProject)
+    public AddInkatlasDialog(Cp77Project activeProject)
     {
         InitializeComponent();
 
@@ -44,12 +44,14 @@ public partial class AddInkatklasDialog : IViewFor<AddInkatlasDialogViewModel>
                     x => x.RelativePath,
                     x => x.RelativePathBox.Text)
                 .DisposeWith(disposables);
-
+            this.Bind(ViewModel,
+                    x => x.InkatlasFileName,
+                    x => x.InkatlasFileNameBox.Text)
+                .DisposeWith(disposables);
             this.Bind(ViewModel,
                     x => x.PngSourceDir,
                     x => x.PngFolderBox.Text)
                 .DisposeWith(disposables);
-
             this.Bind(ViewModel,
                     x => x.TileWidth,
                     x => x.TileWidthBox.Text)

@@ -130,7 +130,7 @@ namespace WolvenKit.Views.Shell
 
                 Interactions.ShowGenerateInkatlasDialogue = (activeProject) =>
                 {
-                    var dialog = new AddInkatklasDialog(activeProject);
+                    var dialog = new AddInkatlasDialog(activeProject);
                     if (dialog.ShowDialog() != true)
                     {
                         return null;
