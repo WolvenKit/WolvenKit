@@ -1,4 +1,3 @@
-using System.IO;
 using WolvenKit.RED4.IO;
 
 namespace WolvenKit.RED4.Types;
@@ -9,7 +8,7 @@ public partial class gameLocationResource : IRedAppendix
     [REDProperty(IsIgnored = true)]
     public CByteArray Buffer
     {
-        get => GetPropertyValue<CByteArray>();
+        get => GetPropertyValue<CByteArray>()!; // set in PostConstruct, so not nullable
         set => SetPropertyValue<CByteArray>(value);
     }
 
