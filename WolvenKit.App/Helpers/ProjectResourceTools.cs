@@ -403,9 +403,9 @@ public class ProjectResourceTools
         }
 
         // Don't copy a directory on itself
-        if (sourceFileOrDirAbsPath == destAbsPath)
+        if (sourceFileOrDirAbsPath.Equals(destAbsPath, StringComparison.OrdinalIgnoreCase))
         {
-            _loggerService.Info($"Source is Destination for \"{sourceFileOrDirAbsPath}\". Skipping...");
+            _loggerService.Info($"Skipping {sourceFileOrDirAbsPath} (refusing to copy on itself)...");
             return;
         }
 
