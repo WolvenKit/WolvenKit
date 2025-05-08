@@ -107,7 +107,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
         foreach (var file in filesToValidate)
         {
-            if (!redExtensions.Contains(file.Extension))
+            if (!redExtensions.Contains(file.Extension.TrimStart('.').ToLower()))
             {
                 _loggerService.Warning($"{file.FileName} has an unsupported extension and will not be packed!");
                 continue;
