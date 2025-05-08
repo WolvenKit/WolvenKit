@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -18,6 +19,16 @@ public partial class AddInkatlasDialogViewModel : ObservableObject
             .Distinct()
             .ToDictionary<string, string>(x => x);
 
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(RelativePath))
+        {
+            RelativePath = RelativePath.ToLower();
+        }
+
+        base.OnPropertyChanged(e);
+    }
+
     [ObservableProperty] private Dictionary<string, string> _projectFolders;
 
     /// <summary>
@@ -33,7 +44,7 @@ public partial class AddInkatlasDialogViewModel : ObservableObject
     /// <summary>
     /// name for inkatlas file
     /// </summary>
-    [ObservableProperty] private string _inkatlasFileName = "inkatlas";
+    [ObservableProperty] private string _inkatlasFileName = "icons";
 
     /// <summary>
     /// Tile width
