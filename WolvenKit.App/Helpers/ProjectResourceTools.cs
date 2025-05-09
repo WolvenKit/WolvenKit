@@ -463,7 +463,7 @@ public class ProjectResourceTools
                 continue;
             }
 
-            await MoveFileAsync(sourceAbsPath, targetAbsPath, activeProject, sourceIsDirectory);                
+            await MoveFile(sourceAbsPath, targetAbsPath, activeProject, sourceIsDirectory);                
         }
 
         // Delete only files that were successfully replaced
@@ -530,7 +530,7 @@ public class ProjectResourceTools
         }
     }
 
-    private Task MoveFileAsync(string sourcePath, string targetPath, Cp77Project activeProject, bool isDirectory)
+    private Task MoveFile(string sourcePath, string targetPath, Cp77Project activeProject, bool isDirectory)
     {
         try
         {
