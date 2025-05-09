@@ -511,10 +511,12 @@ public class ProjectResourceTools
         Directory.Delete(sourceAbsPath, true);
     }
 
+    /// <summary>
+    /// Deletes all empty directories in a tree (directories not containing files), finally deleting the root if it's empty
+    /// </summary>
     private static void DeleteEmptyDirectoriesRecursive(string directoryPath)
     {
-        if (!Directory.Exists(directoryPath) ||
-            Directory.GetFiles(directoryPath, "*", SearchOption.AllDirectories).Length != 0)
+        if (!Directory.Exists(directoryPath))
         {
             return;
         }
@@ -524,9 +526,11 @@ public class ProjectResourceTools
             DeleteEmptyDirectoriesRecursive(subDirectory);
         }
 
-        if (Directory.GetDirectories(directoryPath, "*", SearchOption.AllDirectories).Length == 0)
+        // if the directory has no children, delete it
+        if (Directory.GetDirectories(directoryPath, "*", SearchOption.AllDirectories).Length == 0 && 
+              Directory.GetFiles(directoryPath, "*", SearchOption.AllDirectories).Length == 0)
         {
-            Directory.Delete(directoryPath, true); // Delete the root directory
+            Directory.Delete(directoryPath, true);
         }
     }
 
