@@ -138,7 +138,13 @@ namespace WolvenKit.Views.Documents
         {
             if (_fileValidationScript is null || !File.Exists(_fileValidationScript.Path))
             {
-                throw new WolvenKitException(0x5002, "File validation script not found! Please contact the devs!");
+                string[] exceptionMsg =
+                [
+                    "File validation script not found!",
+                    "Try deleting '%APPDATA%\\REDModding\\WolvenKit\\Scripts\\Wolvenkit_FileValidation.wscript',",
+                    "then restart Wolvenkit. If that does not help, please get in touch with the devs."
+                ];
+                throw new WolvenKitException(0x5002, string.Join('\n', exceptionMsg));
             }
 
             if (_isRunning)

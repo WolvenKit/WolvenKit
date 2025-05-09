@@ -24,8 +24,13 @@ public interface IGameFile
     /// </summary>
     uint ZSize { get; set; }
 
+    /// <summary>
+    /// Extension of the file without the dot
+    /// </summary>
     public string Extension { get; }
+
     public string? GuessedExtension { get; }
+
     string FileName { get; }
 
 
@@ -34,6 +39,8 @@ public interface IGameFile
     public void Extract(Stream output);
 
     public Task ExtractAsync(Stream output);
+
     T GetArchive<T>() where T : IGameArchive;
+    
     IGameArchive GetArchive();
 }

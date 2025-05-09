@@ -204,7 +204,7 @@ public class ArchiveWriter
             {
                 readStatus = reader.ReadFileInfo(out info, _loggerService);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 _loggerService.Error($"Could not read \"{fileInfo.FullName}\".");
                 return false;
