@@ -16,14 +16,6 @@ public static class HashHelper
     /// Calculates the FNV1A64 hash of a resource path. Used for "addToMod" and lookups.
     /// </summary>
     /// <param name="resourcePath"></param>
-    /// <returns></returns>
-    public static ulong CalculateDepotPathHash(ResourcePath resourcePath)
-    {
-        if (resourcePath.GetResolvedText() is string str && str != "")
-        {
-            return CalculateDepotPathHash(str);
-        }
-
-        return resourcePath.GetRedHash();
-    }
+    /// <returns>The resource path as ulong (you can also just cast it)</returns>
+    public static ulong CalculateDepotPathHash(ResourcePath resourcePath) => resourcePath.GetRedHash();
 }
