@@ -73,10 +73,16 @@ public partial class CR2WReader
     public EFileReadErrorCodes ReadFile(out CR2WFile? file, bool parseBuffer = true)
     {
         var result = ReadFileInfo(out var info);
-        if (result == EFileReadErrorCodes.NoCr2w || info is null || info.StringDict.Count == 0)
+        if (result == EFileReadErrorCodes.NoCr2w || info is null)
         {
             file = null;
             return EFileReadErrorCodes.NoCr2w;
+        }
+
+        if (info.StringDict.Count == 0)
+        {
+            file = null;
+            return EFileReadErrorCodes.Malformed;
         }
 
         file = new CR2WFile() { Info = info };
