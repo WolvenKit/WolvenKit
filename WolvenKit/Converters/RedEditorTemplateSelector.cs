@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using WolvenKit.App.ViewModels.Shell;
@@ -37,6 +38,9 @@ namespace WolvenKit.Converters
         public DataTemplate RedTypeViewer { get; set; }
         public DataTemplate NullTemplate { get; set; }
 
+        // Some vectors are actually colours
+        private static readonly string[] s_vectorsAsColors = ["BaseColorScale", "HSV_Mod"];
+        
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
             if (item == null)
@@ -86,7 +90,8 @@ namespace WolvenKit.Converters
                 if (vm.PropertyType.IsAssignableTo(typeof(Vector4)))
                 {
                     // Some vectors are actually colours
-                    if (vm.Parent?.ResolvedData is CKeyValuePair pair && pair.Key.GetResolvedText() == "BaseColorScale")
+                    if (vm.Parent?.ResolvedData is CKeyValuePair pair &&
+                        s_vectorsAsColors.Contains(pair.Key.GetResolvedText() ?? ""))
                     {
                         return RedVectorColorEditor;
                     }
