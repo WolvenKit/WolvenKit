@@ -143,7 +143,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
     {
         RefreshProjectData();
-
+        
         CheckForOneDriveInPath();
         
         // On first project load, we're already initialized, so this won't fire
@@ -197,8 +197,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             SaveProjectExplorerExpansionStateIfDirty();
             _projectWatcher.UnwatchProject(ActiveProject);
         }
-
-        CheckForOneDriveInPath();
         
         OnProjectChanged?.Invoke();
 
