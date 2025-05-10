@@ -1828,6 +1828,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(ImportFromEntitySpawnerCommand))]
     [NotifyCanExecuteChangedFor(nameof(RunFileValidationOnProjectCommand))]
     [NotifyCanExecuteChangedFor(nameof(ShowPropertiesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(NewPhotoModeFilesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(GenerateInkatlasCommand))]
     private Cp77Project? _activeProject;
 
     [ObservableProperty]
