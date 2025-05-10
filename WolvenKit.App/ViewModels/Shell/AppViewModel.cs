@@ -302,6 +302,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         CheckForUpdatesCommand.SafeExecute(true);
         CheckForScriptUpdatesCommand.SafeExecute();
         CheckForLongPathSupport();
+        CheckForOneDrivePath();
     }
 
     public bool AddDockedPane(string paneString)
@@ -434,6 +435,29 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             _loggerService.Debug(
                 "Setup failed. Please create a ticket under https://github.com/WolvenKit/WolvenKit/issues to help us solve this.");
         }
+    }
+
+    private static void CheckForOneDrivePath()
+    {
+        if (!FilePathHelper.IsOneDrivePath(Assembly.GetExecutingAssembly().Location))
+        {
+            return;
+        }
+
+        List<string> warningText =
+        [
+            "Hey, choom!",
+            "",
+            "Don't run Wolvenkit from inside your OneDrive folder!",
+            "This can cause all kinds of issues!"
+        ];
+
+        DispatcherHelper.RunOnMainThread(() => _ = Interactions.ShowConfirmation((
+            string.Join('\n', warningText),
+            "Onedrive Warning",
+            WMessageBoxImage.Warning,
+            WMessageBoxButtons.Ok
+        )));
     }
 
     private static void CheckForLongPathSupport()
