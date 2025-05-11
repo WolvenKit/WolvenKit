@@ -33,13 +33,16 @@ public class ProjectResourceTools
 
     private readonly ISettingsManager _settingsService;
 
+    private readonly Cr2WTools _crwWTools;
+
     public ProjectResourceTools(IProjectManager projectManager, IArchiveManager archiveManager,
-        ILoggerService loggerService, ISettingsManager settingsManager)
+        ILoggerService loggerService, ISettingsManager settingsManager, Cr2WTools cr2WTools)
     {
         _projectManager = projectManager;
         _archiveManager = archiveManager;
         _loggerService = loggerService;
         _settingsService = settingsManager;
+        _crwWTools = cr2WTools;
     }
 
 
@@ -358,10 +361,9 @@ public class ProjectResourceTools
         var sourceRelPath = sourcePath;
         var destRelPath = destPath;
 
-        string projectRootPath = string.Join(Path.DirectorySeparatorChar,
+        var projectRootPath = string.Join(Path.DirectorySeparatorChar,
             absoluteFolderPrefix.ToLower().Split(Path.DirectorySeparatorChar)[..^1]);
-        
-        
+
         string SetAbsolutePath(string relativePath)
         {
             var inputPath = relativePath;
@@ -369,119 +371,113 @@ public class ProjectResourceTools
             {
                 inputPath = new Uri(new Uri(absoluteFolderPrefix), new Uri(inputPath, UriKind.Relative)).LocalPath;
             }
+
             if (Path.IsPathRooted(inputPath))
             {
                 if (inputPath.ToLower().StartsWith(string.Join(Path.DirectorySeparatorChar, projectRootPath.ToLower())))
                 {
                     return inputPath;
                 }
+
                 throw new Exception($"Path: \"{inputPath}\" is not a valid absolute path inside the project.");
             }
+
             return Path.Join(absoluteFolderPrefix, inputPath);
         }
 
         string destAbsPath;
-        string sourceAbsPath;
-        
+        string sourceFileOrDirAbsPath;
+
         try
         {
             destRelPath = FileHelper.SanitizePath(destRelPath);
             destAbsPath = SetAbsolutePath(destRelPath);
 
             sourceRelPath = FileHelper.SanitizePath(sourceRelPath);
-            sourceAbsPath = SetAbsolutePath(sourceRelPath);
+            sourceFileOrDirAbsPath = SetAbsolutePath(sourceRelPath);
         }
         catch (Exception e)
         {
             _loggerService.Error($"Failed to move \"{sourcePath}\" to \"{destPath}\": {e.Message}");
             return;
         }
-        
-        // don't copy a directory on itself
-        if (sourceAbsPath == destAbsPath)
+
+        // Don't copy a directory on itself
+        if (sourceFileOrDirAbsPath.Equals(destAbsPath, StringComparison.OrdinalIgnoreCase))
         {
-            _loggerService.Info($"Source is Destination for \"{sourceAbsPath}\". Skipping...");
+            _loggerService.Info($"Skipping {sourceFileOrDirAbsPath} (refusing to copy on itself)...");
             return;
         }
-        
-        var sourceIsDirectory = Directory.Exists(sourceAbsPath);
-        var overwriteFiles = false;
 
-        if (!sourceIsDirectory)
+        var sourceIsDirectory = Directory.Exists(sourceFileOrDirAbsPath);
+
+        List<string> files = [];
+
+        if (sourceIsDirectory)
         {
-            try
-            {
-                // do operations regardless if old filename is new filename as a temp extension is used so no risk of data loss, avoids the popup showing up when only the case is changed
-                bool sourceIsTarget = sourceAbsPath.ToLower() == destAbsPath.ToLower();
-                if (File.Exists(destAbsPath) && !sourceIsTarget)
-                {
-                    var response = await Interactions.ShowMessageBoxAsync(
-                        $"Do you want to overwrite the existing file {destRelPath}?",
-                        "File already exists!");
-
-                    if (response is not (WMessageBoxResult.OK or WMessageBoxResult.Yes))
-                    {
-                        return;
-                    }
-                }
-
-                var tempId = Guid.NewGuid();
-                var tempPath = $"{destAbsPath}_{tempId}.tmp";
-
-                Directory.CreateDirectory(string.Join(Path.DirectorySeparatorChar,
-                    destAbsPath.Split(Path.DirectorySeparatorChar)[..^1]));
-
-                // moving a file from filename.ext to Filename.ext will delete the file, so move it to .tmp first 
-                File.Move(sourceAbsPath, tempPath);
-                File.Move(tempPath, destAbsPath, true);
-
-                _loggerService.Info($"Moved \"{sourceRelPath}\" to \"{destRelPath}\"");
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error(
-                    $"Error when trying to move \"{sourceRelPath}\": {e.Message}");
-            }
+            files.AddRange(Directory.EnumerateFiles(sourceFileOrDirAbsPath, "*", SearchOption.AllDirectories));
         }
         else
         {
-            /*
-             * We're moving a directory
-             */
-            try
+            files.Add(sourceFileOrDirAbsPath);
+        }
+
+        // the user is moving an empty directory
+        if (files.Count == 0 && sourceIsDirectory)
+        {
+            MoveDirectoryAndChildren(sourceFileOrDirAbsPath, destAbsPath);
+            DeleteEmptyDirectoriesRecursive(sourceFileOrDirAbsPath);
+            return;
+        }
+
+        files = files.Distinct().ToList();
+
+        var existingFiles = files.Where(file =>
+        {
+            var relativePath = Path.GetRelativePath(sourceFileOrDirAbsPath, file);
+            var targetFilePath = Path.Combine(destAbsPath, relativePath);
+            return File.Exists(targetFilePath);
+        }).ToList();
+
+        if (existingFiles.Count > 0)
+        {
+            var response = Interactions.ShowQuestionYesNo((
+                $"Do you want to overwrite the existing files {string.Join('\n', existingFiles)}?",
+                "One or more files already exists!"));
+
+            if (!response)
             {
-                // do operations regardless if old directory is new directory as a temp folder is used so no risk of data loss, avoids the popup showing up when only the case is changed
-                bool sourceIsTarget = sourceAbsPath.ToLower() == destAbsPath.ToLower();
-                if (Directory.Exists(destAbsPath) && Directory.EnumerateFiles(destAbsPath, "*", SearchOption.AllDirectories).Any() && !sourceIsTarget)
-                {
-                    var response = await Interactions.ShowMessageBoxAsync(
-                        $"Directory {destRelPath} already exists and is not empty. Do you want to overwrite existing files?",
-                        "Directory already exists!",
-                        WMessageBoxButtons.YesNoCancel);
-                    overwriteFiles = response is WMessageBoxResult.Yes;
-                    if (response is WMessageBoxResult.Cancel)
-                    {
-                        return;
-                    }
-                }
+                files = files.Except(existingFiles).ToList();
+            }
+        }
 
-                FileHelper.MoveRecursively(sourceAbsPath, destAbsPath, overwriteFiles, projectRootPath, _loggerService);
+        var fileReplacements = new Dictionary<string, string>();
 
-                var sourceInRaw = sourceAbsPath.Replace("archive", "raw");
-                if (sourceInRaw != sourceAbsPath && Directory.Exists(sourceInRaw))
-                {
-                    FileHelper.MoveRecursively(sourceInRaw, destAbsPath.Replace("archive", "raw"), overwriteFiles, projectRootPath,
-                        _loggerService);
-                }
+        foreach (var sourceAbsPath in files)
+        {
+            // If the file is not a folder, this is just the dest path
+            var targetAbsPath = sourceAbsPath.Replace(sourceFileOrDirAbsPath, destAbsPath);
 
-                _loggerService.Info($"Moved \"{sourceRelPath}{Path.DirectorySeparatorChar}*\" to \"{destRelPath}\"");
+            if (!fileReplacements.TryAdd(sourceAbsPath, targetAbsPath))
+            {
+                continue;
             }
 
-            catch (Exception e)
-            {
-                _loggerService.Error(
-                    $"Error when trying to move \"{sourceRelPath}{Path.DirectorySeparatorChar}*\": {e.Message}");
-            }
+            await MoveFile(sourceAbsPath, targetAbsPath, activeProject, sourceIsDirectory);                
+        }
+
+        // Delete only files that were successfully replaced
+        var successfulReplacements = fileReplacements.Where((kvp) => File.Exists(kvp.Value)).ToDictionary();
+
+        foreach (var originalFile in successfulReplacements.Keys.Where(File.Exists))
+        {
+            File.Delete(originalFile);
+        }
+
+        // Delete empty directories
+        if (successfulReplacements.Count > 0)
+        {
+            DeleteEmptyDirectoriesRecursive(sourceFileOrDirAbsPath);
         }
 
         if (!refactor)
@@ -489,10 +485,88 @@ public class ProjectResourceTools
             return;
         }
 
-     
-        var newRelPath = activeProject.GetResourcePathFromRoot(destAbsPath);
+        ReplacePathInProject(activeProject, successfulReplacements);
+    }
 
-        ReplacePathInProject(activeProject, sourceAbsPath, newRelPath);
+    private static void MoveDirectoryAndChildren(string sourceAbsPath, string destAbsPath)
+    {
+        if (!Directory.Exists(sourceAbsPath))
+        {
+            return;
+        }
+
+        if (!Directory.Exists(destAbsPath))
+        {
+            Directory.CreateDirectory(destAbsPath);
+        }
+
+        foreach (var directory in Directory.GetDirectories(sourceAbsPath, "*", SearchOption.AllDirectories))
+        {
+            var relativePath = Path.GetRelativePath(sourceAbsPath, directory);
+            var targetDirPath = Path.Combine(destAbsPath, relativePath);
+
+            Directory.CreateDirectory(targetDirPath);
+        }
+
+        Directory.Delete(sourceAbsPath, true);
+    }
+
+    /// <summary>
+    /// Deletes all empty directories in a tree (directories not containing files), finally deleting the root if it's empty
+    /// </summary>
+    private static void DeleteEmptyDirectoriesRecursive(string directoryPath)
+    {
+        if (!Directory.Exists(directoryPath))
+        {
+            return;
+        }
+
+        foreach (var subDirectory in Directory.GetDirectories(directoryPath, "*", SearchOption.AllDirectories))
+        {
+            DeleteEmptyDirectoriesRecursive(subDirectory);
+        }
+
+        // if the directory has no children, delete it
+        if (Directory.GetDirectories(directoryPath, "*", SearchOption.AllDirectories).Length == 0 && 
+              Directory.GetFiles(directoryPath, "*", SearchOption.AllDirectories).Length == 0)
+        {
+            Directory.Delete(directoryPath, true);
+        }
+    }
+
+    private Task MoveFile(string sourcePath, string targetPath, Cp77Project activeProject, bool isDirectory)
+    {
+        try
+        {
+            var sourceIsTarget = string.Equals(sourcePath, targetPath, StringComparison.CurrentCultureIgnoreCase);
+            if (sourceIsTarget)
+            {
+                return Task.CompletedTask;
+            }
+
+            if (File.Exists(targetPath))
+            {
+                File.Delete(targetPath);
+            }
+
+            var tempId = Guid.NewGuid();
+            var tempPath = $"{targetPath}_{tempId}.tmp";
+
+            Directory.CreateDirectory(Path.GetDirectoryName(targetPath)!);
+
+            // Move the file to a temporary location first
+            File.Move(sourcePath, tempPath);
+            File.Move(tempPath, targetPath, true);
+
+            _loggerService.Info(
+                $"Moved \"{activeProject.GetRelativePath(sourcePath)}\" to \"{activeProject.GetRelativePath(targetPath)}\"");
+        }
+        catch (Exception e)
+        {
+            _loggerService.Error($"Error when trying to move \"{sourcePath}\": {e.Message}");
+        }
+
+        return Task.CompletedTask;
     }
 
     /// <summary>
@@ -511,27 +585,18 @@ public class ProjectResourceTools
     private static readonly List<string> s_replaceInResourceFileExtensions =
         [".ent", ".app", ".csv", ".json", ".anims", ".workspot"];
 
-    public void ReplacePathInProject(Cp77Project? activeProject, string oldAbsolutePath, ResourcePath newPath)
+    private async void ReplacePathInProject(Cp77Project? activeProject, Dictionary<string, string> pathReplacements)
     {
-        if (activeProject is null || oldAbsolutePath.Contains(activeProject.RawDirectory))
-        {
-            return;
-        }
-
-        var oldPath = activeProject.GetResourcePathFromRoot(oldAbsolutePath);
-        if (string.Equals(oldPath, newPath, StringComparison.Ordinal))
-        {
-            return;
-        }
-
         List<string> failedFiles = [];
+        if (activeProject is null)
+        {
+            return;
+        }
 
-        ReplaceInCr2WFiles();
+        Task[] tasks = [ReplaceInResourceFilesAsync(), ReplaceInCr2WFilesAsync()];
 
-
-        ReplaceInResourceFiles();
-
-
+        await Task.WhenAll(tasks);
+        
         if (failedFiles.Count <= 0)
         {
             return;
@@ -542,322 +607,296 @@ public class ProjectResourceTools
 
         return;
 
-        void ReplaceInResourceFiles()
+        async Task ReplaceInResourceFilesAsync()
         {
-            // if it's not a cr2W file from archive, the resource files won't care
-            if (!oldAbsolutePath.Contains(activeProject.ModDirectory))
+            var resourceFiles = Directory.GetFiles(activeProject.ResourcesDirectory, "*.*", SearchOption.AllDirectories)
+                .Where(f => Path.GetExtension(f) is string s && s_resourceFileExtensions.Contains(s.ToLower()))
+                .ToList();
+
+            var resourceTasks = resourceFiles.Select(async absoluteFilePath =>
             {
-                return;
-            }
-
-            var fileExtension = Path.GetExtension(oldAbsolutePath);
-
-            // Check if we're moving either a folder, or moving a file extension we care about
-            var replaceInResourceFiles = string.IsNullOrEmpty(fileExtension) ||
-                                         s_replaceInResourceFileExtensions.Contains(fileExtension);
-
-            if (!replaceInResourceFiles ||
-                oldPath.GetResolvedText() is not string oldPathStr || string.IsNullOrEmpty(oldPathStr) ||
-                newPath.GetResolvedText() is not string newPathStr || string.IsNullOrEmpty(newPathStr))
-            {
-                return;
-            }
-
-            var oldPathWithForwardSlashes = oldPathStr.Replace("\\", "/");
-            var newPathWithForwardSlashes = newPathStr.Replace("\\", "/");
-
-            var resourceFiles =
-                Directory.GetFiles(activeProject.ResourcesDirectory, "*.*", SearchOption.AllDirectories);
-
-            Parallel.ForEach(resourceFiles, absoluteFilePath =>
-            {
-                if (!string.IsNullOrEmpty(fileExtension) && !s_resourceFileExtensions.Contains(fileExtension))
-                {
-                    return;
-                }
-
                 try
                 {
-                    var fileContent = File.ReadLines(absoluteFilePath).ToArray();
+                    var fileContent = await File.ReadAllLinesAsync(absoluteFilePath);
 
-                    // remove duplicate backslashes
+                    // Remove duplicate backslashes
                     var hasDuplicateBackslashes = fileContent.Any(s => s.Contains(@"\\"));
-
                     if (hasDuplicateBackslashes)
                     {
                         fileContent = fileContent.Select(str => str.Replace(@"\\", @"\")).ToArray();
                     }
 
-                    // replace both forward and backward slashes
-                    var newFileContent = fileContent.Select(line => line
-                        .Replace(oldPathStr, newPathStr)
-                        .Replace(oldPathWithForwardSlashes, newPathWithForwardSlashes)
-                    ).ToArray();
-
-                    if (newFileContent.All(line => fileContent.Contains(line)))
+                    var newFileContent = fileContent.ToArray();
+                    foreach (var (oldAbsPath, newAbsPath) in pathReplacements)
                     {
-                        return;
+                        if (!oldAbsPath.Contains(activeProject.ModDirectory) ||
+                            Path.GetExtension(oldAbsPath) is not string fileExtension ||
+                            !s_replaceInResourceFileExtensions.Contains(fileExtension))
+                        {
+                            continue;
+                        }
+
+                        var oldPathStr = activeProject.GetResourcePathFromRoot(oldAbsPath).GetResolvedText();
+                        var newPathStr = activeProject.GetResourcePathFromRoot(newAbsPath).GetResolvedText();
+
+                        if (string.IsNullOrEmpty(oldPathStr) || string.IsNullOrEmpty(newPathStr))
+                        {
+                            continue;
+                        }
+
+                        var oldPathWithForwardSlashes = oldPathStr.Replace("\\", "/");
+                        var newPathWithForwardSlashes = newPathStr.Replace("\\", "/");
+
+                        newFileContent = newFileContent.Select(line => line
+                            .Replace(oldPathStr, newPathStr)
+                            .Replace(oldPathWithForwardSlashes, newPathWithForwardSlashes)
+                        ).ToArray();
                     }
 
-                    // put duplicate backslashes back
-                    if (hasDuplicateBackslashes || absoluteFilePath.EndsWith(".lua"))
+                    if (!newFileContent.SequenceEqual(fileContent))
                     {
-                        newFileContent = newFileContent.Select(line => line.Replace(@"\", @"\\")).ToArray();
+                        if (hasDuplicateBackslashes || absoluteFilePath.EndsWith(".lua"))
+                        {
+                            newFileContent = newFileContent.Select(line => line.Replace(@"\", @"\\")).ToArray();
+                        }
+
+                        await File.WriteAllLinesAsync(absoluteFilePath, newFileContent);
                     }
-
-
-                    File.WriteAllLines(absoluteFilePath, newFileContent);
                 }
                 catch (Exception)
                 {
                     failedFiles.Add(absoluteFilePath.RelativePath(activeProject.ResourcesDirectory));
                 }
             });
+
+            await Task.WhenAll(resourceTasks);
         }
 
-        void ReplaceInCr2WFiles()
+        async Task ReplaceInCr2WFilesAsync()
         {
-            if (!oldAbsolutePath.Contains(activeProject.ModDirectory))
+            var files = Directory.GetFiles(activeProject.ModDirectory, "*.*", SearchOption.AllDirectories)
+                .Where(f => Path.GetExtension(f) is string s && !string.IsNullOrEmpty(s) &&
+                            !s_fileExtensionsWithoutPaths.Contains(s))
+                .ToList();
+
+            var cr2WTasks = files.Select(absoluteFilePath =>
             {
-                return;
-            }
-
-            // if it's a resource or raw file, no need to refactor it in mod files 
-            var files = Directory.GetFiles(activeProject.ModDirectory, "*.*", SearchOption.AllDirectories);
-
-            Parallel.ForEach(files, file =>
-            {
-                // Don't process files that will never hold paths
-                if (Path.GetExtension(file) is string s && !string.IsNullOrEmpty(s) &&
-                    s_fileExtensionsWithoutPaths.Contains(s))
-                {
-                    return;
-                }
-
-                var hash = activeProject.GetResourcePathFromRoot(file);
-                if (hash == newPath)
-                {
-                    return;
-                }
-
                 try
                 {
-                    ReplacePathInFile(activeProject, file, oldPath, newPath);
+                    if (_crwWTools.ReadCr2W(absoluteFilePath) is not CR2WFile cr2W)
+                    {
+                        return Task.CompletedTask;
+                    }
+
+                    var wasModified = false;
+                    Dictionary<string, string> foundReplacements = new();
+
+                    foreach (var (oldAbsPath, newAbsPath) in pathReplacements)
+                    {
+                        if (!oldAbsPath.Contains(activeProject.ModDirectory))
+                        {
+                            continue;
+                        }
+
+                        var oldPathStr = activeProject.GetRelativePath(oldAbsPath);
+                        var newPathStr = activeProject.GetRelativePath(newAbsPath);
+
+                        if (string.IsNullOrEmpty(oldPathStr) || string.IsNullOrEmpty(newPathStr))
+                        {
+                            continue;
+                        }
+
+                        cr2W = ReplacePathInFile(cr2W, oldPathStr, newPathStr, out var b, absoluteFilePath);
+                        if (!b)
+                        {
+                            continue;
+                        }
+
+                        wasModified = true;
+                        foundReplacements.Add(oldPathStr, newPathStr);
+                    }
+
+                    if (!wasModified)
+                    {
+                        return Task.CompletedTask;
+                    }
+
+                    _loggerService?.Debug(
+                        $"Replaced the following paths in \"{activeProject.GetRelativePath(absoluteFilePath)}\"\n\t: {string.Join(",\n\t", foundReplacements.Select(kvp => $"{kvp.Key} -> {kvp.Value}"))}");
+
+                    _crwWTools.WriteCr2W(cr2W, absoluteFilePath);
                 }
                 catch (Exception err)
                 {
-                    _loggerService.Error(err.Message);
-                    failedFiles.Add(file.RelativePath(activeProject.ModDirectory));
+                    _loggerService?.Error(err.Message);
+                    failedFiles.Add(absoluteFilePath.RelativePath(activeProject.ModDirectory));
                 }
+
+                return Task.CompletedTask;
             });
-        }
-    }
 
-
-    public void ReplacePathInFile(Cp77Project? activeProject, string absoluteFilePath, ResourcePath oldPath,
-        ResourcePath newPath)
-    {
-        if (oldPath == newPath || !File.Exists(absoluteFilePath) || activeProject is null)
-        {
+            await Task.WhenAll(cr2WTasks);
+      
             return;
-        }
 
-        var oldPathStr = oldPath.GetResolvedText();
-        var newPathStr = newPath.GetResolvedText();
-
-        CR2WFile? cr2W;
-        var wasModified = false;
-        var isDirectory = newPathStr != null && Directory.Exists(Path.Join(activeProject.ModDirectory, newPathStr));
-        if (isDirectory)
-        {
-            // Can't replace path if either is null
-            if (oldPathStr == null || newPathStr == null)
+            CR2WFile ReplacePathInFile(CR2WFile cr2W, string oldPathStr, string newPathStr, out bool wasModified,
+                string originalPath)
             {
-                return;
+                wasModified = false;
+
+                if (oldPathStr == newPathStr)
+                {
+                    return cr2W;
+                }
+
+                // Mesh needs to replace in strings for @context materials
+                if ((cr2W.RootChunk is JsonResource or C2dArray or CMesh) &&
+                    ReplaceInStrings())
+                {
+                    wasModified = true;
+                }
+
+
+                if ((cr2W.RootChunk is not (JsonResource or C2dArray)) &&
+                    ReplaceInIRedRefs())
+                {
+                    wasModified = true;
+                }
+
+                return cr2W;
+
+
+                bool ReplaceInStrings()
+                {
+                    var ret = false;
+                    var refs = cr2W.FindType(typeof(IRedString));
+                    foreach (var result in refs)
+                    {
+                        var stringValue = result.Value switch
+                        {
+                            CString resourcePath => resourcePath.GetString(),
+                            _ => result.Value.ToString() ?? ""
+                        };
+
+                        if (string.IsNullOrEmpty(stringValue) || !stringValue.Contains(oldPathStr))
+                        {
+                            continue;
+                        }
+
+                        // we need to get the parent node by xpath
+                        var resultName = result.Path.Split([':', '.']).LastOrDefault();
+                        if (string.IsNullOrEmpty(resultName))
+                        {
+                            continue;
+                        }
+
+                        var searchResult = cr2W.GetFromXPath(result.Path[..^(resultName.Length + 1)]);
+                        if (searchResult.Item2 is not IRedType parent)
+                        {
+                            continue;
+                        }
+
+                        switch (parent)
+                        {
+                            case IList list when int.TryParse(resultName, out var idx):
+                                list[idx] = (CString)stringValue.Replace(oldPathStr, newPathStr);
+                                ret = true;
+                                break;
+                            // CPUNameU64
+                            case CKeyValuePair kvp when resultName == "Value" && kvp.Value is CName str &&
+                                                        str.GetResolvedText() is string s:
+                                kvp.Value = (CName)s.Replace(oldPathStr, newPathStr);
+                                ret = true;
+                                break;
+                        }
+                    }
+
+                    return ret;
+                }
+
+                bool ReplaceInIRedRefs()
+                {
+                    var refs = cr2W.FindType(typeof(IRedRef));
+                    var ret = false;
+                    foreach (var result in refs)
+                    {
+                        if (result.Value is not IRedRef resourceReference ||
+                            resourceReference.DepotPath == ResourcePath.Empty)
+                        {
+                            continue;
+                        }
+
+                        var oldDepotPathStr = resourceReference.DepotPath.GetResolvedText();
+
+                        if (resourceReference.DepotPath.GetResolvedText() != oldPathStr)
+                        {
+                            continue;
+                        }
+
+                        var parentPath = string.Join('.', result.Path.Split('.')[..^1]);
+
+                        var newValue = (IRedRef)RedTypeManager.CreateRedType(resourceReference.RedType,
+                            (ResourcePath)newPathStr,
+                            resourceReference.Flags);
+
+                        if (result.Name.Contains(':'))
+                        {
+                            var parts = result.Name.Split(':');
+                            if (parts.Length != 2)
+                            {
+                                throw new Exception($"Failed to split {result.Name} in two parts");
+                            }
+
+                            var parentArray = cr2W.GetFromXPath(string.Join('.', parentPath, parts[0]));
+                            if (int.TryParse(parts[1], out var index) &&
+                                parentArray is { Item1: true, Item2: IList arr })
+                            {
+                                arr[index] = newValue;
+                                ret = true;
+                                continue;
+                            }
+                        }
+
+                        var parentClass = cr2W.GetFromXPath(parentPath);
+
+                        if (!parentClass.Item1)
+                        {
+                            throw new Exception($"Failed to find {result.Name} in {parentPath}");
+                        }
+
+                        switch (parentClass.Item2)
+                        {
+                            case null:
+                                throw new InvalidDataException("Item2 should not be null");
+                            case RedBaseClass cls:
+                                cls.SetProperty(result.Name, newValue);
+                                break;
+                            case CKeyValuePair kvp:
+                                kvp.Value = newValue;
+                                break;
+                            case IRedHandle handle
+                                when handle.GetValue() is gameuiAppearanceInfo appInfo:
+                                appInfo.Resource =
+                                    new CResourceAsyncReference<appearanceAppearanceResource>(newValue.DepotPath);
+                                break;
+                            case IRedHandle ira:
+                                throw new NotImplementedException(
+                                    $"Can't replace in IRedHandle property type {ira.RedType}, please file a ticket");
+                            default:
+                                throw new NotImplementedException(
+                                    $"Can't replace in property type {parentClass.Item2?.GetType().Name}, please file a ticket");
+                        }
+
+
+                        ret = true;
+                    }
+
+                    return ret;
+                }
             }
 
-            oldPathStr += ResourcePath.DirectorySeparatorChar;
-            newPathStr += ResourcePath.DirectorySeparatorChar;
-        }
-
-        using (var fs = File.Open(absoluteFilePath, FileMode.Open))
-        using (var cr = new CR2WReader(fs))
-        {
-            if (cr.ReadFile(out cr2W) != (RED4.Archive.IO.EFileReadErrorCodes)EFileReadErrorCodes.NoError ||
-                cr2W is null)
-            {
-                return;
-            }
-
-            if (cr2W.RootChunk is JsonResource or C2dArray)
-            {
-                ReplaceInStrings();
-            }
-            else
-            {
-                ReplaceInIRedRefs();
-            }
-        }
-
-        if (!wasModified)
-        {
-            return;
-        }
-
-        using var fs2 = File.Open(absoluteFilePath, FileMode.Create);
-        using var cw = new CR2WWriter(fs2);
-
-        cw.WriteFile(cr2W);
-
-        return;
-
-        void ReplaceInStrings()
-        {
-            if (oldPathStr is null || newPathStr is null)
-            {
-                return;
-            }
-
-            var refs = cr2W.FindType(typeof(IRedString));
-            foreach (var result in refs)
-            {
-                var stringValue = result.Value switch
-                {
-                    CString resourcePath => resourcePath.GetString(),
-                    _ => result.Value.ToString() ?? ""
-                };
-
-                if (string.IsNullOrEmpty(stringValue) || !stringValue.Contains(oldPathStr))
-                {
-                    continue;
-                }
-
-                // we need to get the parent node by xpath
-                var resultName = result.Path.Split([':', '.']).LastOrDefault();
-                if (string.IsNullOrEmpty(resultName))
-                {
-                    continue;
-                }
-
-                var searchResult = cr2W.GetFromXPath(result.Path[..^(resultName.Length + 1)]);
-                if (searchResult.Item2 is not IRedType parent || parent is not IList list ||
-                    !int.TryParse(resultName, out var idx))
-                {
-                    continue;
-                }
-
-                list[idx] = (CString)stringValue.Replace(oldPathStr, newPathStr);
-                wasModified = true;
-            }
-        }
-
-        void ReplaceInIRedRefs()
-        {
-            var refs = cr2W.FindType(typeof(IRedRef));
-            foreach (var result in refs)
-            {
-                if (result.Value is not IRedRef resourceReference || resourceReference.DepotPath == ResourcePath.Empty)
-                {
-                    continue;
-                }
-
-                var oldDepotPathStr = resourceReference.DepotPath.GetResolvedText();
-
-                ResourcePath newDepotPath;
-                if (isDirectory)
-                {
-                    if (oldDepotPathStr == null)
-                    {
-                        continue;
-                    }
-
-                    var isArchiveXL = oldDepotPathStr.StartsWith('*');
-                    if (isArchiveXL)
-                    {
-                        oldDepotPathStr = oldDepotPathStr[1..];
-                    }
-
-                    if (!oldDepotPathStr.StartsWith(oldPathStr!))
-                    {
-                        continue;
-                    }
-
-                    var newDepotPathStr = newPathStr! + oldDepotPathStr[oldPathStr!.Length..];
-                    if (isArchiveXL)
-                    {
-                        newDepotPathStr = "*" + newDepotPathStr;
-                    }
-
-                    newDepotPath = newDepotPathStr;
-                }
-                else
-                {
-                    if (resourceReference.DepotPath != oldPath)
-                    {
-                        continue;
-                    }
-
-                    newDepotPath = newPath;
-                }
-
-                var parentPath = string.Join('.', result.Path.Split('.')[..^1]);
-
-                var newValue = (IRedRef)RedTypeManager.CreateRedType(resourceReference.RedType, newDepotPath,
-                    resourceReference.Flags);
-
-                if (result.Name.Contains(':'))
-                {
-                    var parts = result.Name.Split(':');
-                    if (parts.Length != 2 || !int.TryParse(parts[1], out var index))
-                    {
-                        throw new Exception();
-                    }
-
-                    var parentArray = cr2W.GetFromXPath(string.Join('.', parentPath, parts[0]));
-                    if (!parentArray.Item1 || parentArray.Item2 is not IList arr)
-                    {
-                        throw new Exception();
-                    }
-
-                    _loggerService?.Debug($"Replaced \"{result.Path}\" in \"{absoluteFilePath}\"");
-                    arr[index] = newValue;
-                }
-                else
-                {
-                    var parentClass = cr2W.GetFromXPath(parentPath);
-
-                    if (!parentClass.Item1)
-                    {
-                        throw new Exception();
-                    }
-
-                    switch (parentClass.Item2)
-                    {
-                        case null:
-                            throw new Exception();
-                        case RedBaseClass cls:
-                            cls.SetProperty(result.Name, newValue);
-                            break;
-                        case CKeyValuePair kvp:
-                            kvp.Value = newValue;
-                            break;
-                        case IRedHandle handle when handle.GetValue() is gameuiAppearanceInfo appInfo:
-                            appInfo.Resource =
-                                new CResourceAsyncReference<appearanceAppearanceResource>(newValue.DepotPath);
-                            break;
-                        case IRedHandle ira:
-                            throw new NotImplementedException(
-                                $"Can't replace in IRedHandle property type {ira.RedType}, please file a ticket");
-                        default:
-                            throw new NotImplementedException(
-                                $"Can't replace in property type {parentClass.Item2?.GetType().Name}, please file a ticket");
-                    }
-
-                    _loggerService?.Debug($"Replaced \"{result.Path}\" in \"{absoluteFilePath}\"");
-                }
-
-                wasModified = true;
-            }
+  
+             
         }
     }
 
