@@ -940,8 +940,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanShowSettings))]
     private async Task ShowSettings() => await ShowHomePageAsync(EHomePage.Settings);
 
-    private bool CanShowProjectActions() =>
-        !IsDialogShown && ActiveProject is not null && Status != EAppStatus.Busy && Status is EAppStatus.Ready;
+    private bool CanShowProjectActions() => !IsDialogShown && ActiveProject is not null && Status is EAppStatus.Ready;
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private async Task ScanForBrokenReferencePaths()
@@ -1752,9 +1751,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     public bool IsUpdateAvailable { get; set; }
 
     [ObservableProperty]
-    private EAppStatus? _status;
-
-    [ObservableProperty]
     private string? _title;
 
     [ObservableProperty]
@@ -1808,6 +1804,19 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(GenerateInkatlasCommand))]
     private Cp77Project? _activeProject;
 
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(ShowProjectSettingsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ShowSoundModdingToolCommand))]
+    [NotifyCanExecuteChangedFor(nameof(NewFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ShowLogCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ShowProjectExplorerCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ImportFromEntitySpawnerCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RunFileValidationOnProjectCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ShowPropertiesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(NewPhotoModeFilesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(GenerateInkatlasCommand))]
+    private EAppStatus? _status;
+    
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SaveAllCommand))]
     private ObservableCollection<IDockElement> _dockedViews = new();
