@@ -100,7 +100,7 @@ namespace WolvenKit.Views.Tools
             FilteredLogEntries.AddRange(tempFiltered);
             if (_autoscroll)
             {
-                ScrollToBottom();
+                LogListBox.Dispatcher.BeginInvoke(new Action(ScrollToBottom), DispatcherPriority.Background);
             }
         }
         
@@ -118,7 +118,11 @@ namespace WolvenKit.Views.Tools
             }
             _scrollViewerScrollOffset = e.VerticalOffset;
             
-            Console.WriteLine($"ScrollViewer: {e.VerticalOffset} {e.ExtentHeight} {e.ViewportHeight} {e.VerticalChange}");
+            if (FilteredLogEntries.Count == 0 || LogEntries.Count == 0)
+            {
+                return;
+            }
+            
             if (e.VerticalOffset == 0)
             {
                 var previousTopItem = FilteredLogEntries.First();
@@ -134,7 +138,7 @@ namespace WolvenKit.Views.Tools
                 FilteredLogEntries.RemoveMany(FilteredLogEntries.Skip(s_maxFilteredLogEntries * 2));
                 if (earlierLogs.Count() != 0)
                 {
-                    LogListBox.Dispatcher.BeginInvoke(new Action(() => _scrollViewer.ScrollToVerticalOffset(_scrollViewer.ScrollableHeight - SinglePixelUnit)), DispatcherPriority.Background);
+                    LogListBox.Dispatcher.BeginInvoke(new Action(() => _scrollViewer.ScrollToVerticalOffset(_scrollViewer.ScrollableHeight - (SinglePixelUnit * 2))), DispatcherPriority.Background);
                     LogListBox.Dispatcher.BeginInvoke(new Action(() => LogListBox.ScrollIntoView(previousTopItem)), DispatcherPriority.Background);   
                 }
             }
@@ -155,7 +159,6 @@ namespace WolvenKit.Views.Tools
                     LogListBox.Dispatcher.BeginInvoke(new Action(() => _scrollViewer.ScrollToVerticalOffset(SinglePixelUnit)), DispatcherPriority.Background);
                     LogListBox.Dispatcher.BeginInvoke(new Action(() => LogListBox.ScrollIntoView(previousBottomItem)), DispatcherPriority.Background);
                 }
-                
             }
         }
         
@@ -227,21 +230,28 @@ namespace WolvenKit.Views.Tools
             if (_autoscroll)
             {
                 ScrollToTrueBottom();
-            }
-            lock (_logEntryQueueLock)
-            {
-                FilteredLogEntries.AddRange(filtered);
-                LogEntries.AddRange(_logEntryQueue);
-                _logEntryQueue.Clear();
-                
-                while (FilteredLogEntries.Count > s_maxFilteredLogEntries)
+                lock (_logEntryQueueLock)
                 {
-                    FilteredLogEntries.RemoveAt(0);
+                    FilteredLogEntries.AddRange(filtered);
+                    LogEntries.AddRange(_logEntryQueue);
+                    _logEntryQueue.Clear();
+                    
+                    while (FilteredLogEntries.Count > s_maxFilteredLogEntries)
+                    {
+                        FilteredLogEntries.RemoveAt(0);
+                    }
                 }
-            }
-            if (_autoscroll)
-            {
                 ScrollToBottom();
+            }
+            else
+            {
+                lock (_logEntryQueueLock)
+                {
+                    var amountToAdd = Math.Clamp(s_maxFilteredLogEntries - FilteredLogEntries.Count, 0, _logEntryQueue.Count);
+                    FilteredLogEntries.AddRange(filtered.TakeLast(amountToAdd));
+                    LogEntries.AddRange(_logEntryQueue);
+                    _logEntryQueue.Clear();
+                }
             }
         }
 
