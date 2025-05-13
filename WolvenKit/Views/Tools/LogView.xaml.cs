@@ -14,6 +14,7 @@ using System.Windows.Threading;
 using DynamicData;
 using HandyControl.Tools.Extension;
 using MahApps.Metro.Controls;
+using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using Serilog.Events;
 using Splat;
@@ -40,8 +41,9 @@ namespace WolvenKit.Views.Tools
         private readonly List<LogEntry> _logEntryQueue = new();
         private readonly object _logEntryQueueLock = new();
         private readonly DispatcherTimer _dispatcherTimer;
-        private const int s_maxFilteredLogEntries = 10 * 1000;
-        
+        private const int s_maxFilteredLogEntries = 1000;
+        private double _scrollViewerScrollOffset;
+        private double SinglePixelUnit = 1 / VisualTreeHelper.GetDpi(Application.Current.MainWindow).DpiScaleX;
         public LogView()
         {
             InitializeComponent();
@@ -93,22 +95,70 @@ namespace WolvenKit.Views.Tools
         
         private void LogLevelFilter_Changed(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            var filtered = LogEntries.Where(ShouldInclude);
-            var tempFiltered = new List<LogEntry>();
-            tempFiltered.AddRange(filtered);
-            while (tempFiltered.Count > s_maxFilteredLogEntries)
-            {
-                tempFiltered.RemoveAt(0);
-            }
+            var tempFiltered = LogEntries.Where(ShouldInclude).TakeLast(s_maxFilteredLogEntries);
             FilteredLogEntries.Clear();
             FilteredLogEntries.AddRange(tempFiltered);
             if (_autoscroll)
             {
-                _scrollViewer?.ScrollToBottom();
+                ScrollToBottom();
             }
         }
         
-        private void LogView_Loaded(object sender, RoutedEventArgs e) => _scrollViewer = LogListBox.FindChild<ScrollViewer>();
+        private void LogView_Loaded(object sender, RoutedEventArgs e)
+        {
+            _scrollViewer = LogListBox.FindChild<ScrollViewer>();
+            _scrollViewer.ScrollChanged += OnScrollChanged;
+        }
+
+        private void OnScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            if (e.VerticalOffset.Equals(_scrollViewerScrollOffset))
+            {
+                return;
+            }
+            _scrollViewerScrollOffset = e.VerticalOffset;
+            
+            Console.WriteLine($"ScrollViewer: {e.VerticalOffset} {e.ExtentHeight} {e.ViewportHeight} {e.VerticalChange}");
+            if (e.VerticalOffset == 0)
+            {
+                var previousTopItem = FilteredLogEntries.First();
+                int filteredTopIndex = 0;
+                if (FilteredLogEntries.Count != 0 && LogEntries.Count != 0)
+                {
+                    filteredTopIndex = LogEntries.IndexOf(FilteredLogEntries.First());
+                }
+                var earlierLogs = LogEntries.Where(ShouldInclude).Take(filteredTopIndex);
+                FilteredLogEntries.AddOrInsertRange(earlierLogs.Reverse()
+                    .Take(s_maxFilteredLogEntries)
+                    .Reverse(), 0);
+                FilteredLogEntries.RemoveMany(FilteredLogEntries.Skip(s_maxFilteredLogEntries * 2));
+                if (earlierLogs.Count() != 0)
+                {
+                    LogListBox.Dispatcher.BeginInvoke(new Action(() => _scrollViewer.ScrollToVerticalOffset(_scrollViewer.ScrollableHeight - SinglePixelUnit)), DispatcherPriority.Background);
+                    LogListBox.Dispatcher.BeginInvoke(new Action(() => LogListBox.ScrollIntoView(previousTopItem)), DispatcherPriority.Background);   
+                }
+            }
+            
+            if (e.VerticalOffset.Equals(_scrollViewer.ScrollableHeight))
+            {
+                var previousBottomItem = FilteredLogEntries.Last();
+                int filteredBottomIndex = 0;
+                if (FilteredLogEntries.Count != 0 && LogEntries.Count != 0)
+                {
+                    filteredBottomIndex = LogEntries.IndexOf(FilteredLogEntries.Last());
+                }
+                var laterLogs = LogEntries.Where(ShouldInclude).Skip(filteredBottomIndex + 1).Take(s_maxFilteredLogEntries);
+                FilteredLogEntries.AddRange(laterLogs);
+                FilteredLogEntries.RemoveMany(FilteredLogEntries.Reverse().Skip(s_maxFilteredLogEntries * 2));
+                if (laterLogs.Count() != 0)
+                {
+                    LogListBox.Dispatcher.BeginInvoke(new Action(() => _scrollViewer.ScrollToVerticalOffset(SinglePixelUnit)), DispatcherPriority.Background);
+                    LogListBox.Dispatcher.BeginInvoke(new Action(() => LogListBox.ScrollIntoView(previousBottomItem)), DispatcherPriority.Background);
+                }
+                
+            }
+        }
+        
         private void OnNext(IChangeSet<LogEvent> obj)
         {
             foreach (var change in obj)
@@ -174,6 +224,10 @@ namespace WolvenKit.Views.Tools
             }
             
             var filtered = _logEntryQueue.Where(ShouldInclude);
+            if (_autoscroll)
+            {
+                ScrollToTrueBottom();
+            }
             lock (_logEntryQueueLock)
             {
                 FilteredLogEntries.AddRange(filtered);
@@ -187,9 +241,27 @@ namespace WolvenKit.Views.Tools
             }
             if (_autoscroll)
             {
-                _scrollViewer?.ScrollToBottom();
+                ScrollToBottom();
             }
         }
+
+        private void ScrollToTrueBottom()
+        {
+            if (FilteredLogEntries.Count == 0 || LogEntries.Count == 0)
+            {
+                return;
+            }
+            if (FilteredLogEntries.Last().Message != LogEntries.Last().Message)
+            {
+                FilteredLogEntries.Clear();
+                FilteredLogEntries.AddRange(LogEntries.Where(ShouldInclude).TakeLast(s_maxFilteredLogEntries));
+            }
+
+            ScrollToBottom();
+        }
+
+        private void ScrollToBottom() => _scrollViewer?.ScrollToVerticalOffset(_scrollViewer.ScrollableHeight - SinglePixelUnit);
+        
         
         private static Logtype ToLogtype(LogEventLevel level) =>
             level switch
@@ -240,7 +312,7 @@ namespace WolvenKit.Views.Tools
             Clipboard.SetText($"```{tag}```");
         }
 
-        private void ScrollToBottom_OnClick(object sender, RoutedEventArgs e) => _scrollViewer?.ScrollToBottom();
+        private void ScrollToBottom_OnClick(object sender, RoutedEventArgs e) => ScrollToTrueBottom();
 
         private void ScrollViewer_OnKeyDown(object sender, KeyEventArgs e)
         {

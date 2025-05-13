@@ -273,13 +273,19 @@
             KeyUp="LogView_OnKeyUp"
             SelectionMode="Single"
             VirtualizingPanel.IsVirtualizing="True"
-            VirtualizingPanel.VirtualizationMode="Standard"
+            VirtualizingPanel.VirtualizationMode="Recycling"
             VirtualizingPanel.ScrollUnit="Pixel"
             VirtualizingPanel.IsContainerVirtualizable="True"
             VirtualizingPanel.IsVirtualizingWhenGrouping="True"
             ScrollViewer.CanContentScroll="True"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-            
+
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+
             <ListBox.Style>
                 <Style TargetType="{x:Type ListBox}">
                     <Setter Property="Background" Value="#131313" />
@@ -294,16 +300,18 @@
                         Padding="0"
                         VerticalAlignment="Center"
                         Background="Transparent"
-                        Focusable="True"
                         Foreground="{Binding TextColor}"
                         FontSize="{DynamicResource WolvenKitFontSubTitle}"
                         FontFamily="Consolas"
-                        Text="{Binding Path=Message, Mode=OneTime}"
+                        Focusable="True"
+                        Text="{Binding Path=Message,
+                                       Mode=OneTime}"
                         TextWrapping="Wrap">
                         <Hyperlink
-                            NavigateUri="{Binding Uri}"
+                            NavigateUri="{Binding Uri,
+                                                  Mode=OneTime}"
                             RequestNavigate="Hyperlink_OnRequestNavigate">
-                            <Run Text="{Binding Uri, Converter={StaticResource NullStringConverter}}"/>
+                            <Run Text="{Binding Uri, Converter={StaticResource NullStringConverter}, Mode=OneTime}" />
                         </Hyperlink>
                     </controls:SelectableTextBlock>
                 </DataTemplate>
