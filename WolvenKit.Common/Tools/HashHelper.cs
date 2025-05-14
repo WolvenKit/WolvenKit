@@ -17,5 +17,5 @@ public static class HashHelper
     /// </summary>
     /// <param name="resourcePath"></param>
     /// <returns>The resource path as ulong (you can also just cast it)</returns>
-    public static ulong CalculateDepotPathHash(ResourcePath resourcePath) => resourcePath.GetRedHash();
+    public static ulong CalculateDepotPathHash(ResourcePath resourcePath) => (ulong)resourcePath;
 }
