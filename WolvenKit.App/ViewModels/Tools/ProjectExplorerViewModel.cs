@@ -143,7 +143,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
     {
         RefreshProjectData();
-
+        
+        CheckForOneDriveInPath();
+        
         // On first project load, we're already initialized, so this won't fire
         Refresh();
         OnProjectChanged?.Invoke();
@@ -213,6 +215,30 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
             OnProjectChanged?.Invoke();
         }, DispatcherPriority.ContextIdle);
+    }
+
+    private void CheckForOneDriveInPath()
+    {
+        if (_projectManager.ActiveProject is null ||
+            !FilePathHelper.IsOneDrivePath(_projectManager.ActiveProject.Location))
+        {
+            return;
+        }
+
+        List<string> warningText =
+        [
+            "Hey, choom!",
+            "",
+            "Don't store Wolvenkit projects inside your OneDrive folder!",
+            "This can cause all kinds of issues!"
+        ];
+
+        DispatcherHelper.RunOnMainThread(() => _ = Interactions.ShowConfirmation((
+            string.Join('\n', warningText),
+            "OneDrive Warning",
+            WMessageBoxImage.Warning,
+            WMessageBoxButtons.Ok
+        )));
     }
 
     public DispatchedObservableCollection<FileSystemModel> FileTree => _projectWatcher.FileTree;
