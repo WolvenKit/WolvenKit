@@ -35,6 +35,24 @@ public class ProjectResourceTools
 
     private readonly Cr2WTools _crwWTools;
 
+    /// <summary>
+    /// File extensions from source/archive that require updating of resource files  
+    /// </summary>
+    private static readonly List<string> s_replaceInResourceFileExtensions =
+        [".ent", ".app", ".csv", ".json", ".anims", ".workspot"];
+
+    /// <summary>
+    /// File extensions in resources that we want to update  
+    /// </summary>
+    private static readonly List<string> s_resourceFileExtensions = [".lua", ".xl", ".json", ".yaml", ".yml", ".reds"];
+
+    /// <summary>
+    /// Extensions of files that we don't need to update 
+    /// </summary>
+    private static readonly List<string> s_fileExtensionsWithoutPaths = [".xbm", ".mlmask"];
+
+    private readonly SemaphoreSlim _semaphore = new(1, 1);
+
     public ProjectResourceTools(IProjectManager projectManager, IArchiveManager archiveManager,
         ILoggerService loggerService, ISettingsManager settingsManager, Cr2WTools cr2WTools)
     {
@@ -44,7 +62,6 @@ public class ProjectResourceTools
         _settingsService = settingsManager;
         _crwWTools = cr2WTools;
     }
-
 
     private RED4Controller GetRed4Controller()
     {
@@ -60,8 +77,7 @@ public class ProjectResourceTools
         ).GetRed4Controller();
     }
 
-    public string GetAbsolutePath(string fileName, string rootRelativeFolder = "",
-        bool appendModderNameFromSettings = false)
+    public string GetAbsolutePath(string fileName, string rootRelativeFolder = "", bool appendModderNameFromSettings = false)
     {
         if (_projectManager.ActiveProject is not Cp77Project activeProject)
         {
@@ -88,7 +104,7 @@ public class ProjectResourceTools
         return filePath.Trim();
     }
 
-    private string GetUniqueSubfolderPath(IEnumerable<string> allFilePaths, string currentFilePath)
+    private static string GetUniqueSubfolderPath(IEnumerable<string> allFilePaths, string currentFilePath)
     {
         var fileName = Path.GetFileName(currentFilePath);
         var conflictingPaths = allFilePaths.Where(path => Path.GetFileName(path) == fileName).ToList();
@@ -108,29 +124,7 @@ public class ProjectResourceTools
         return Path.GetDirectoryName(currentFilePath) ?? "";
     }
 
-    public Task<Dictionary<string, string>> AddDependenciesToProjectPathAsync(string destFolderRelativePath,
-        HashSet<ResourcePath> resourcePaths) =>
-        Task.Run(() => AddDependenciesToProjectPath(destFolderRelativePath, resourcePaths));
-
-    private readonly SemaphoreSlim _semaphore = new(1, 1);
-
-    public FileInfo GetFileInfo(string path)
-    {
-        if (!Path.IsPathRooted(path) && _projectManager.ActiveProject is Cp77Project project)
-        {
-            path = Path.Join(project.ModDirectory, path);
-        }
-
-        if (!File.Exists(path))
-        {
-            throw new InvalidDataException($"failed to read ${path}");
-        }
-
-        return new FileInfo(path);
-    }
-
-    private async Task<Dictionary<string, string>> AddDependenciesToProjectPath(string destFolderRelativePath,
-        HashSet<ResourcePath> resourcePaths)
+    public async Task<Dictionary<string, string>> AddDependenciesToProjectPathAsync(string destFolderRelativePath, HashSet<ResourcePath> resourcePaths)
     {
         if (resourcePaths.Count == 0)
         {
@@ -248,7 +242,6 @@ public class ProjectResourceTools
         }
     }
 
-
     public void AddToProject(ResourcePath resourcePath)
     {
         if (resourcePath.GetResolvedText() is not string sourceRelativePath
@@ -281,10 +274,6 @@ public class ProjectResourceTools
     /// <param name="resourcePath">Path of original resource</param>
     /// <param name="targetResourcePath">Path of target resource (the original resource will be moved here)</param>
     /// <exception cref="FileNotFoundException"></exception>
-    public void AddFileToProjectFolder(string projectRoot, ResourcePath resourcePath,
-        ResourcePath targetResourcePath) =>
-        AddFileToProjectFolder(projectRoot, resourcePath, targetResourcePath, [], true);
-
     private void AddFileToProjectFolder(string projectRoot, ResourcePath resourcePath, ResourcePath targetResourcePath,
         Dictionary<string, string> pathReplacements, bool overwriteFiles)
     {
@@ -353,10 +342,7 @@ public class ProjectResourceTools
         pathReplacements.TryAdd(sourceRelativePath, Path.Combine(targetRelativePath, Path.GetFileName(sourceRelativePath)));
     }
 
-
-    public async Task MoveAndRefactor(Cp77Project activeProject, string sourcePath, string destPath,
-        string absoluteFolderPrefix,
-        bool refactor)
+    public async Task MoveAndRefactorAsync(Cp77Project activeProject, string sourcePath, string destPath, string absoluteFolderPrefix, bool refactor)
     {
         var sourceRelPath = sourcePath;
         var destRelPath = destPath;
@@ -463,7 +449,7 @@ public class ProjectResourceTools
                 continue;
             }
 
-            await MoveFile(sourceAbsPath, targetAbsPath, activeProject, sourceIsDirectory);                
+            MoveFile(sourceAbsPath, targetAbsPath, activeProject, sourceIsDirectory);                
         }
 
         // Delete only files that were successfully replaced
@@ -485,7 +471,7 @@ public class ProjectResourceTools
             return;
         }
 
-        ReplacePathInProject(activeProject, successfulReplacements);
+        await ReplacePathInProjectAsync(activeProject, successfulReplacements);
     }
 
     private static void MoveDirectoryAndChildren(string sourceAbsPath, string destAbsPath)
@@ -534,14 +520,14 @@ public class ProjectResourceTools
         }
     }
 
-    private Task MoveFile(string sourcePath, string targetPath, Cp77Project activeProject, bool isDirectory)
+    private void MoveFile(string sourcePath, string targetPath, Cp77Project activeProject, bool isDirectory)
     {
         try
         {
             var sourceIsTarget = string.Equals(sourcePath, targetPath, StringComparison.CurrentCultureIgnoreCase);
             if (sourceIsTarget)
             {
-                return Task.CompletedTask;
+                return;
             }
 
             if (File.Exists(targetPath))
@@ -566,26 +552,10 @@ public class ProjectResourceTools
             _loggerService.Error($"Error when trying to move \"{sourcePath}\": {e.Message}");
         }
 
-        return Task.CompletedTask;
+        return;
     }
 
-    /// <summary>
-    /// File extensions in resources that we want to update  
-    /// </summary>
-    private static readonly List<string> s_resourceFileExtensions = [".lua", ".xl", ".json", ".yaml", ".yml", ".reds"];
-
-    /// <summary>
-    /// Extensions of files that we don't need to update 
-    /// </summary>
-    private static readonly List<string> s_fileExtensionsWithoutPaths = [".xbm", ".mlmask"];
-
-    /// <summary>
-    /// File extensions from source/archive that require updating of resource files  
-    /// </summary>
-    private static readonly List<string> s_replaceInResourceFileExtensions =
-        [".ent", ".app", ".csv", ".json", ".anims", ".workspot"];
-
-    private async void ReplacePathInProject(Cp77Project? activeProject, Dictionary<string, string> pathReplacements)
+    private async Task ReplacePathInProjectAsync(Cp77Project? activeProject, Dictionary<string, string> pathReplacements)
     {
         List<string> failedFiles = [];
         if (activeProject is null)
