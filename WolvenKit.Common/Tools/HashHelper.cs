@@ -1,8 +1,9 @@
 ﻿using WolvenKit.Common.FNV1A;
 using WolvenKit.RED4.Types;
 
-namespace WolvenKit.Modkit.Resources;
-internal static class HashHelper
+namespace WolvenKit.Common.Tools;
+
+public static class HashHelper
 {
     /// <summary>
     /// Calculates the FNV1A64 hash of a file path string. Used for "addToMod" and lookups.
@@ -15,8 +16,6 @@ internal static class HashHelper
     /// Calculates the FNV1A64 hash of a resource path. Used for "addToMod" and lookups.
     /// </summary>
     /// <param name="resourcePath"></param>
-    /// <returns></returns>
-    public static ulong CalculateDepotPathHash(ResourcePath resourcePath) => CalculateDepotPathHash(resourcePath.GetResolvedText());
-
-
+    /// <returns>The resource path as ulong (you can also just cast it)</returns>
+    public static ulong CalculateDepotPathHash(ResourcePath resourcePath) => (ulong)resourcePath;
 }
