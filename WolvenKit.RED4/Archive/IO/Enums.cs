@@ -5,6 +5,7 @@ public enum EFileReadErrorCodes
     NoError,
     NoCr2w,
     UnsupportedVersion,
+    Malformed,
 }
 
 public enum EHashVersion
