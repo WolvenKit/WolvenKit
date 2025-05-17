@@ -427,7 +427,7 @@ public class ProjectResourceTools
         // the user is moving an empty directory
         if (files.Count == 0 && sourceIsDirectory)
         {
-            MoveDirectoryAndChildren(sourceFileOrDirAbsPath, destAbsPath);
+            MoveDirectoryTreeWithoutFiles(sourceFileOrDirAbsPath, destAbsPath);
             DeleteEmptyDirectoriesRecursive(sourceFileOrDirAbsPath);
             return;
         }
@@ -517,7 +517,7 @@ public class ProjectResourceTools
         
     }
 
-    private static void MoveDirectoryAndChildren(string sourceAbsPath, string destAbsPath)
+    private static void MoveDirectoryTreeWithoutFiles(string sourceAbsPath, string destAbsPath)
     {
         if (!Directory.Exists(sourceAbsPath))
         {
