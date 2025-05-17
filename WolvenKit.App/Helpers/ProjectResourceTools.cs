@@ -429,8 +429,7 @@ public class ProjectResourceTools
         // the user is moving an empty directory
         if (files.Count == 0 && sourceIsDirectory)
         {
-            MoveDirectoryTreeWithoutFiles(sourceFileOrDirAbsPath, destAbsPath);
-            DeleteEmptyDirectoriesRecursive(sourceFileOrDirAbsPath);
+            Directory.Move(sourceFileOrDirAbsPath, destAbsPath);
             return;
         }
 
@@ -518,29 +517,7 @@ public class ProjectResourceTools
         await ReplacePathInProjectAsync(activeProject, successfulReplacements);
         
     }
-
-    private static void MoveDirectoryTreeWithoutFiles(string sourceAbsPath, string destAbsPath)
-    {
-        if (!Directory.Exists(sourceAbsPath))
-        {
-            return;
-        }
-
-        if (!Directory.Exists(destAbsPath))
-        {
-            Directory.CreateDirectory(destAbsPath);
-        }
-
-        foreach (var directory in Directory.GetDirectories(sourceAbsPath, "*", SearchOption.AllDirectories))
-        {
-            var relativePath = Path.GetRelativePath(sourceAbsPath, directory);
-            var targetDirPath = Path.Combine(destAbsPath, relativePath);
-
-            Directory.CreateDirectory(targetDirPath);
-        }
-
-        Directory.Delete(sourceAbsPath, true);
-    }
+   
 
     /// <summary>
     /// Deletes all empty directories in a tree (directories not containing files), finally deleting the root if it's empty
