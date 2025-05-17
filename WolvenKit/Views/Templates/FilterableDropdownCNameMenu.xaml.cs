@@ -47,20 +47,18 @@ namespace WolvenKit.Views.Editors
                         x => x.RedCNameEditor.RedString)
                     .DisposeWith(disposables);
 
-
+                string[] optionValues = [];
+                
                 if (vm.Name is "className" && vm.Parent is { Name: "path", Data.RedType: "handle:gameJournalPath" })
                 {
-                    var optionValues = RedTypeHelper.GetExtendedClassNames(typeof(gameJournalEntry));
-                    SetCurrentValue(OptionsProperty, optionValues.ToDictionary(x => x, x => x));
+                    optionValues = RedTypeHelper.GetExtendedClassNames(typeof(gameJournalEntry));
                 }
 
+                SetCurrentValue(OptionsProperty, optionValues.ToDictionary(x => x, x => x));
+                
                 if (vm.Data is CName cname && cname.GetResolvedText() is not null)
                 {
                     SetDropdownViewModelValueFromCName();
-                }
-                else if (Options.Count > 0 && Options.First().Key is string s)
-                {
-                    SetCurrentValue(SelectedOptionProperty, s);
                 }
             });
         }
@@ -165,10 +163,16 @@ namespace WolvenKit.Views.Editors
 
         private void SetChunkViewModelValueFromDropdown()
         {
-            if (DataContext is ChunkViewModel { Data: CName cname } cvm && (cname.GetResolvedText() is not string s ||
-                                                                            s != SelectedOption))
+            if (string.IsNullOrWhiteSpace(SelectedOption))
             {
-                RedCNameEditor.SetCurrentValue(RedCNameEditor.RedStringProperty, (CName)SelectedOption);
+                return;
+            }
+
+            if (DataContext is ChunkViewModel { Data: CName cname } cvm &&
+                (cname.GetResolvedText() is not string s ||
+                 s != SelectedOption))
+            {
+                cvm.Data = (CName)SelectedOption;
             }
         }
 
@@ -177,11 +181,16 @@ namespace WolvenKit.Views.Editors
             if (DataContext is not ChunkViewModel vm || vm.Data is not CName cname ||
                 cname.GetResolvedText() is not string s)
             {
-                SetCurrentValue(SelectedOptionProperty, "");
+                Dropdown.SetCurrentValue(ComboBox.TextProperty, "");
                 return;
             }
 
             var option = Options.FirstOrDefault(o => o.Value == s);
+            if (option.Key is null)
+            {
+                Dropdown.SetCurrentValue(ComboBox.TextProperty, "");
+                return;
+            }
             SetCurrentValue(SelectedOptionProperty, option.Key ?? "");
         }
 

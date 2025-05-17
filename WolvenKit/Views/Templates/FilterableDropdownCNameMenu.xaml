@@ -51,7 +51,8 @@
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
             KeyboardNavigation.TabIndex="1"
             Text="{Binding FilterText,
-                           UpdateSourceTrigger=PropertyChanged}" />
+                           RelativeSource={RelativeSource AncestorType={x:Type editors:FilterableDropdownCNameMenu}},
+                           Mode=TwoWay}" />
 
         <!-- Placeholder text -->
         <TextBlock
