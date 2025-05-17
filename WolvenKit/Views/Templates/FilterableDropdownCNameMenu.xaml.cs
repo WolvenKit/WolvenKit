@@ -157,7 +157,7 @@ namespace WolvenKit.Views.Editors
         private void RecalculateFilteredOptions()
         {
             var options = (Options ?? []).Where(o =>
-                string.IsNullOrEmpty(FilterText) || o.Key.Contains(FilterText)).ToList();
+                string.IsNullOrEmpty(FilterText) || o.Key.Contains(FilterText, StringComparison.Ordinal)).ToList();
             SetCurrentValue(FilteredOptionsProperty, options);
         }
 
