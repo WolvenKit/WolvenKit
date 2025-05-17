@@ -268,6 +268,8 @@ public class ProjectResourceTools
     /// <param name="projectRoot">the mod directory (e.g. activeProject.ModDirectory) </param>
     /// <param name="resourcePath">Path of original resource</param>
     /// <param name="targetResourcePath">Path of target resource (the original resource will be moved here)</param>
+    /// <param name="pathReplacements">Dictionary with replacements in path (string => string)</param>
+    /// <param name="overwriteFiles">boolean: overwrite files?</param>
     /// <exception cref="FileNotFoundException"></exception>
     private void AddFileToProjectFolder(string projectRoot, ResourcePath resourcePath, ResourcePath targetResourcePath,
         Dictionary<string, string> pathReplacements, bool overwriteFiles)
