@@ -17,9 +17,7 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Helpers;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
-using EFileReadErrorCodes = WolvenKit.Common.EFileReadErrorCodes;
 
 namespace WolvenKit.App.Helpers;
 
@@ -152,10 +150,7 @@ public class ProjectResourceTools
                     var archiveRoot = currentProject.ModDirectory;
                     var absoluteTargetFolder = Path.Combine(archiveRoot, destFolderRelativePath);
 
-                    if (!Directory.Exists(absoluteTargetFolder))
-                    {
-                        Directory.CreateDirectory(absoluteTargetFolder);
-                    }
+                    Directory.CreateDirectory(absoluteTargetFolder); // will do nothing if dir exists
 
                     // Group files by their names to identify collisions
                     var fileGroups = resourcePaths.GroupBy(r => Path.GetFileName(r.GetResolvedText() ?? "INVALID")).ToDictionary(
@@ -342,15 +337,25 @@ public class ProjectResourceTools
         pathReplacements.TryAdd(sourceRelativePath, Path.Combine(targetRelativePath, Path.GetFileName(sourceRelativePath)));
     }
 
-    public async Task MoveAndRefactorAsync(Cp77Project activeProject, string sourcePath, string destPath, string absoluteFolderPrefix, bool refactor)
+    private const string s_tempDirSuffix = "_wolvenkit_tempdir";
+
+    public async Task MoveAndRefactorAsync(string sourcePath, string destPath, string absoluteFolderPrefix,
+        bool refactor)
     {
+        if (_projectManager.ActiveProject is not Cp77Project activeProject)
+        {
+            return;
+        }
+
+        var originalSourcePath = sourcePath; 
+        
         var sourceRelPath = sourcePath;
         var destRelPath = destPath;
 
         var projectRootPath = string.Join(Path.DirectorySeparatorChar,
             absoluteFolderPrefix.ToLower().Split(Path.DirectorySeparatorChar)[..^1]);
 
-        string SetAbsolutePath(string relativePath)
+        string ToAbsolutePath(string relativePath)
         {
             var inputPath = relativePath;
             if (Regex.IsMatch(inputPath, @"^\.+\\"))
@@ -358,17 +363,18 @@ public class ProjectResourceTools
                 inputPath = new Uri(new Uri(absoluteFolderPrefix), new Uri(inputPath, UriKind.Relative)).LocalPath;
             }
 
-            if (Path.IsPathRooted(inputPath))
+            if (!Path.IsPathRooted(inputPath))
             {
-                if (inputPath.ToLower().StartsWith(string.Join(Path.DirectorySeparatorChar, projectRootPath.ToLower())))
-                {
-                    return inputPath;
-                }
-
-                throw new Exception($"Path: \"{inputPath}\" is not a valid absolute path inside the project.");
+                return Path.Join(absoluteFolderPrefix, inputPath);
             }
 
-            return Path.Join(absoluteFolderPrefix, inputPath);
+            if (inputPath.StartsWith(string.Join(Path.DirectorySeparatorChar, projectRootPath),
+                    StringComparison.CurrentCultureIgnoreCase))
+            {
+                return inputPath;
+            }
+
+            throw new InvalidDataException($"{relativePath} is not a valid path");
         }
 
         string destAbsPath;
@@ -377,10 +383,10 @@ public class ProjectResourceTools
         try
         {
             destRelPath = FileHelper.SanitizePath(destRelPath);
-            destAbsPath = SetAbsolutePath(destRelPath);
+            destAbsPath = ToAbsolutePath(destRelPath);
 
             sourceRelPath = FileHelper.SanitizePath(sourceRelPath);
-            sourceFileOrDirAbsPath = SetAbsolutePath(sourceRelPath);
+            sourceFileOrDirAbsPath = ToAbsolutePath(sourceRelPath);
         }
         catch (Exception e)
         {
@@ -388,11 +394,21 @@ public class ProjectResourceTools
             return;
         }
 
-        // Don't copy a directory on itself
-        if (sourceFileOrDirAbsPath.Equals(destAbsPath, StringComparison.OrdinalIgnoreCase))
+        if (sourceFileOrDirAbsPath == destAbsPath)
         {
             _loggerService.Info($"Skipping {sourceFileOrDirAbsPath} (refusing to copy on itself)...");
             return;
+        }
+
+        /*
+         * User wants to change the case of a file or directory (usually to lower).
+         * This leads to all kinds of havoc (files vanishing etc.), so we do a three-way move.
+         */
+        if (sourceFileOrDirAbsPath.Equals(destAbsPath, StringComparison.OrdinalIgnoreCase))
+        {
+            var newSourceDir = $"{destAbsPath.TrimEnd(Path.DirectorySeparatorChar)}{s_tempDirSuffix}";
+            await MoveAndRefactorAsync(sourceFileOrDirAbsPath, newSourceDir, absoluteFolderPrefix, refactor);
+            sourceFileOrDirAbsPath = newSourceDir;
         }
 
         var sourceIsDirectory = Directory.Exists(sourceFileOrDirAbsPath);
@@ -437,6 +453,12 @@ public class ProjectResourceTools
             }
         }
 
+        // Maybe the user doesn't want to overwrite files, and nothing is left
+        if (files.Count == 0)
+        {
+            return;
+        }
+        
         var fileReplacements = new Dictionary<string, string>();
 
         foreach (var sourceAbsPath in files)
@@ -449,7 +471,27 @@ public class ProjectResourceTools
                 continue;
             }
 
-            MoveFile(sourceAbsPath, targetAbsPath, activeProject, sourceIsDirectory);                
+            await MoveFileAsync(sourceAbsPath, targetAbsPath, activeProject);
+
+            // Do not log if we're moving to a temp folder (for case sensitivity)
+            if (destAbsPath.Contains(s_tempDirSuffix))
+            {
+                continue;
+            }
+
+            var relativeSourcePath = activeProject.GetRelativePath(sourceAbsPath);
+
+            // We've been moving across temp directories
+            if (originalSourcePath != sourceFileOrDirAbsPath)
+            {
+                var relativeTempPath = activeProject.GetRelativePath(sourceFileOrDirAbsPath);
+                var relativePath = activeProject.GetRelativePath(originalSourcePath);
+                relativeSourcePath = relativeSourcePath.Replace(relativeTempPath, relativePath);
+            }
+
+            var relativeDestPath = activeProject.GetRelativePath(targetAbsPath);
+            _loggerService.Info($"Moved \"{relativeSourcePath}\" to \"{relativeDestPath}\"");
+
         }
 
         // Delete only files that were successfully replaced
@@ -472,6 +514,7 @@ public class ProjectResourceTools
         }
 
         await ReplacePathInProjectAsync(activeProject, successfulReplacements);
+        
     }
 
     private static void MoveDirectoryAndChildren(string sourceAbsPath, string destAbsPath)
@@ -520,14 +563,20 @@ public class ProjectResourceTools
         }
     }
 
-    private void MoveFile(string sourcePath, string targetPath, Cp77Project activeProject, bool isDirectory)
+    /// <summary>
+    /// When moving a directory into a subdirectory of itself, File.Move will simply delete it.
+    /// So we're putting it into a tempdir first.
+    ///
+    /// Example for breaking case: /base/meshes => /base/meshes/turret
+    /// </summary>
+    private Task MoveFileAsync(string sourcePath, string targetPath, Cp77Project activeProject)
     {
         try
         {
             var sourceIsTarget = string.Equals(sourcePath, targetPath, StringComparison.CurrentCultureIgnoreCase);
             if (sourceIsTarget)
             {
-                return;
+                return Task.CompletedTask;
             }
 
             if (File.Exists(targetPath))
@@ -543,16 +592,13 @@ public class ProjectResourceTools
             // Move the file to a temporary location first
             File.Move(sourcePath, tempPath);
             File.Move(tempPath, targetPath, true);
-
-            _loggerService.Info(
-                $"Moved \"{activeProject.GetRelativePath(sourcePath)}\" to \"{activeProject.GetRelativePath(targetPath)}\"");
         }
         catch (Exception e)
         {
             _loggerService.Error($"Error when trying to move \"{sourcePath}\": {e.Message}");
         }
 
-        return;
+        return Task.CompletedTask;
     }
 
     private async Task ReplacePathInProjectAsync(Cp77Project? activeProject, Dictionary<string, string> pathReplacements)
@@ -676,7 +722,7 @@ public class ProjectResourceTools
                             continue;
                         }
 
-                        cr2W = ReplacePathInFile(cr2W, oldPathStr, newPathStr, out var b, absoluteFilePath);
+                        cr2W = ReplacePathInFile(cr2W, oldPathStr, newPathStr, out var b);
                         if (!b)
                         {
                             continue;
@@ -691,14 +737,14 @@ public class ProjectResourceTools
                         return Task.CompletedTask;
                     }
 
-                    _loggerService?.Debug(
+                    _loggerService.Debug(
                         $"Replaced the following paths in \"{activeProject.GetRelativePath(absoluteFilePath)}\"\n\t: {string.Join(",\n\t", foundReplacements.Select(kvp => $"{kvp.Key} -> {kvp.Value}"))}");
 
                     _crwWTools.WriteCr2W(cr2W, absoluteFilePath);
                 }
                 catch (Exception err)
                 {
-                    _loggerService?.Error(err.Message);
+                    _loggerService.Error(err.Message);
                     failedFiles.Add(absoluteFilePath.RelativePath(activeProject.ModDirectory));
                 }
 
@@ -709,8 +755,7 @@ public class ProjectResourceTools
       
             return;
 
-            CR2WFile ReplacePathInFile(CR2WFile cr2W, string oldPathStr, string newPathStr, out bool wasModified,
-                string originalPath)
+            CR2WFile ReplacePathInFile(CR2WFile cr2W, string oldPathStr, string newPathStr, out bool wasModified)
             {
                 wasModified = false;
 
@@ -795,8 +840,6 @@ public class ProjectResourceTools
                         {
                             continue;
                         }
-
-                        var oldDepotPathStr = resourceReference.DepotPath.GetResolvedText();
 
                         if (resourceReference.DepotPath.GetResolvedText() != oldPathStr)
                         {
@@ -890,7 +933,7 @@ public class ProjectResourceTools
             return;
         }
 
-        // Do not delete anything directly under the source directory or outside of the project
+        // Do not delete anything directly under the source directory or outside the project
         if (absoluteFolderPath == activeProject.FileDirectory ||
             Path.GetDirectoryName(absoluteFolderPath) == activeProject.FileDirectory ||
             !absoluteFolderPath.StartsWith(activeProject.FileDirectory))
