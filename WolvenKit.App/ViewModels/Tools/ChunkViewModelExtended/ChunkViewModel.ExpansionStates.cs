@@ -190,6 +190,12 @@ public partial class ChunkViewModel
             case gameuiOptionsGroup when GetPropertyFromPath("options") is ChunkViewModel child:
                 ExpandAndSelect(child, true);
                 break;
+
+            // .questphase
+            case questQuestPhaseResource when GetPropertyFromPath("graph") is ChunkViewModel child:
+                ExpandAndSelect(child, true);
+                break;
+                
             default:
                 if (TVProperties.Count == 1)
                 {

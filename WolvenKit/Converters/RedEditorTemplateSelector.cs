@@ -18,6 +18,7 @@ namespace WolvenKit.Converters
         public DataTemplate RedIntegerEditor { get; set; }
         public DataTemplate RedColorEditor { get; set; }
         public DataTemplate RedVectorColorEditor { get; set; }
+        public DataTemplate FilterableDropdownEditor { get; set; }
         public DataTemplate RedColorPicker { get; set; }
         public DataTemplate RedCurveEditor { get; set; }
         public DataTemplate RedCurvePointEditor { get; set; }
@@ -40,136 +41,177 @@ namespace WolvenKit.Converters
 
         // Some vectors are actually colours
         private static readonly string[] s_vectorsAsColors = ["BaseColorScale", "HSV_Mod"];
+
+        // Some uints are actually chunkMasks
+        private static readonly string[] s_chunkMaskProperties = ["chunkMask", "componentIndexMask"];
+
+        // some CNames should be dropdown fields
+        private static readonly string[] s_cnameDropdownProperties = ["className"];
+
+        public string[] DropdownOptions = [];
+        public string SelectedOption = "";
         
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            if (item == null)
+            if (item is not ChunkViewModel vm)
             {
                 return NullTemplate;
             }
-            if (item is ChunkViewModel vm)
+
+            if (vm.PropertyType.IsAssignableTo(typeof(NodeRef)))
             {
-                if (vm.PropertyType.IsAssignableTo(typeof(NodeRef)))
-                {
-                    return RedNodeRefEditor;
-                }
-                if (vm.PropertyType.IsAssignableTo(typeof(CString)))
-                {
-                    return RedStringEditor;
-                }
-                if (vm.PropertyType.IsAssignableTo(typeof(CName)))
+                return RedNodeRefEditor;
+            }
+
+            if (vm.PropertyType.IsAssignableTo(typeof(CString)))
+            {
+                return RedStringEditor;
+            }
+
+            if (vm.PropertyType.IsAssignableTo(typeof(CName)))
+            {
+                if (!s_cnameDropdownProperties.Contains(vm.Name))
                 {
                     return RedCNameEditor;
                 }
-                if (vm.PropertyType.IsAssignableTo(typeof(TweakDBID)))
-                {
-                    return RedTweakEditor;
-                }
-                if (vm.PropertyType.IsAssignableTo(typeof(IRedPrimitive<ulong>)))
-                {
-                    if (vm.PropertyName is "chunkMask" or "componentIndexMask")
-                    {
-                        return RedChunkMaskEditor;
-                    }
 
-                    return RedUlongEditor;
-                    
-                }
-                if (vm.PropertyType.IsAssignableTo(typeof(FixedPoint)))
+                switch (vm.Name)
                 {
-                    return RedFixedPointEditor;
+                    case "className" when vm.Parent is { Name: "path", Data.RedType: "handle:gameJournalPath" }:
+                        return FilterableDropdownEditor;
+
+                    default: return RedCNameEditor;
                 }
-                if (vm.PropertyType.IsAssignableTo(typeof(Vector2)))
-                {
-                    return RedVector2Editor;
-                }
-                if (vm.PropertyType.IsAssignableTo(typeof(Vector3)))
-                {
-                    return RedVector3Editor;
-                }
-                if (vm.PropertyType.IsAssignableTo(typeof(Vector4)))
-                {
-                    // Some vectors are actually colours
-                    if (vm.Parent?.ResolvedData is CKeyValuePair pair &&
-                        s_vectorsAsColors.Contains(pair.Key.GetResolvedText() ?? ""))
-                    {
-                        return RedVectorColorEditor;
-                    }
-                    return RedVector4Editor;
-                }
-                if (vm.PropertyType.IsAssignableTo(typeof(Quaternion)))
-                {
-                    return RedQuaternionEditor;
-                }
-                if (vm.PropertyType.IsAssignableTo(typeof(WorldPosition)))
-                {
-                    return RedWorldPositionEditor;
-                }
-                if (vm.PropertyType.IsAssignableTo(typeof(IRedPrimitive<float>)))
-                {
-                    return RedFloatEditor;
-                }
-                if (vm.PropertyType.IsAssignableTo(typeof(IRedInteger)))
-                {
-                    return RedIntegerEditor;
-                }
-                if (vm.PropertyType.IsAssignableTo(typeof(IRedPrimitive<bool>)))
-                {
-                    return RedBoolEditor;
-                }
-                if (vm.PropertyType.IsAssignableTo(typeof(IRedBitField)))
-                {
-                    return BitfieldTemplateView;
-                }
-                if (vm.PropertyType.IsAssignableTo(typeof(IRedEnum)))
-                {
-                    return EnumTemplateView;
-                }
-                if (vm.PropertyType.IsAssignableTo(typeof(IRedRef)))
-                {
-                    return RedRefEditor;
-                }
-                if (vm.PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
-                {
-                    return RedCurveEditor;
-                }
-                if (vm.PropertyType.IsAssignableTo(typeof(CColor)))
-                {
-                    return RedColorEditor;
-                }
-                if (vm.PropertyType.IsAssignableTo(typeof(HDRColor)))
-                {
-                    return RedColorPicker;
-                }
-                //if (vm.PropertyType.IsAssignableTo(typeof(IRedArray)))
-                //{
-                //    return RedArrayEditor;
-                //}
-                if (vm.PropertyType.IsAssignableTo(typeof(IRedBufferPointer)))
-                {
-                    return RedArrayEditor;
-                }
-                if (vm.PropertyType.IsAssignableTo(typeof(IRedCurvePoint)))
-                {
-                    return RedCurvePointEditor;
-                }
-                if (vm.PropertyType.IsAssignableTo(typeof(LocalizationString)))
-                {
-                    return RedLocalizationStringEditor;
-                }
-                if (vm.HasChildren())
-                {
-                    return RedArrayEditor;
-                }
-                //if (vm.ResolvedData is RedBaseClass && (
-                //    ((vm.Properties == null || vm.Properties.Count < 5) && vm.DetailsLevel <= 0) ||
-                //    (vm.ForceLoadProperties && vm.DetailsLevel <= 2)) && (vm.Properties == null || vm.Properties.Count < 500))
-                //{
-                //    return RedArrayEditor;
-                //}
-                return RedTypeViewer;
             }
-            return null;
+
+            if (vm.PropertyType.IsAssignableTo(typeof(TweakDBID)))
+            {
+                return RedTweakEditor;
+            }
+
+            if (vm.PropertyType.IsAssignableTo(typeof(IRedPrimitive<ulong>)))
+            {
+                if (s_chunkMaskProperties.Contains(vm.PropertyName))
+                {
+                    return RedChunkMaskEditor;
+                }
+
+                return RedUlongEditor;
+            }
+
+            if (vm.PropertyType.IsAssignableTo(typeof(FixedPoint)))
+            {
+                return RedFixedPointEditor;
+            }
+
+            if (vm.PropertyType.IsAssignableTo(typeof(Vector2)))
+            {
+                return RedVector2Editor;
+            }
+
+            if (vm.PropertyType.IsAssignableTo(typeof(Vector3)))
+            {
+                return RedVector3Editor;
+            }
+
+            if (vm.PropertyType.IsAssignableTo(typeof(Vector4)))
+            {
+                // Some vectors are actually colours
+                if (vm.Parent?.ResolvedData is CKeyValuePair pair &&
+                    s_vectorsAsColors.Contains(pair.Key.GetResolvedText() ?? ""))
+                {
+                    return RedVectorColorEditor;
+                }
+
+                return RedVector4Editor;
+            }
+
+            if (vm.PropertyType.IsAssignableTo(typeof(Quaternion)))
+            {
+                return RedQuaternionEditor;
+            }
+
+            if (vm.PropertyType.IsAssignableTo(typeof(WorldPosition)))
+            {
+                return RedWorldPositionEditor;
+            }
+
+            if (vm.PropertyType.IsAssignableTo(typeof(IRedPrimitive<float>)))
+            {
+                return RedFloatEditor;
+            }
+
+            if (vm.PropertyType.IsAssignableTo(typeof(IRedInteger)))
+            {
+                return RedIntegerEditor;
+            }
+
+            if (vm.PropertyType.IsAssignableTo(typeof(IRedPrimitive<bool>)))
+            {
+                return RedBoolEditor;
+            }
+
+            if (vm.PropertyType.IsAssignableTo(typeof(IRedBitField)))
+            {
+                return BitfieldTemplateView;
+            }
+
+            if (vm.PropertyType.IsAssignableTo(typeof(IRedEnum)))
+            {
+                return EnumTemplateView;
+            }
+
+            if (vm.PropertyType.IsAssignableTo(typeof(IRedRef)))
+            {
+                return RedRefEditor;
+            }
+
+            if (vm.PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
+            {
+                return RedCurveEditor;
+            }
+
+            if (vm.PropertyType.IsAssignableTo(typeof(CColor)))
+            {
+                return RedColorEditor;
+            }
+
+            if (vm.PropertyType.IsAssignableTo(typeof(HDRColor)))
+            {
+                return RedColorPicker;
+            }
+
+            //if (vm.PropertyType.IsAssignableTo(typeof(IRedArray)))
+            //{
+            //    return RedArrayEditor;
+            //}
+            if (vm.PropertyType.IsAssignableTo(typeof(IRedBufferPointer)))
+            {
+                return RedArrayEditor;
+            }
+
+            if (vm.PropertyType.IsAssignableTo(typeof(IRedCurvePoint)))
+            {
+                return RedCurvePointEditor;
+            }
+
+            if (vm.PropertyType.IsAssignableTo(typeof(LocalizationString)))
+            {
+                return RedLocalizationStringEditor;
+            }
+
+            if (vm.HasChildren())
+            {
+                return RedArrayEditor;
+            }
+
+            //if (vm.ResolvedData is RedBaseClass && (
+            //    ((vm.Properties == null || vm.Properties.Count < 5) && vm.DetailsLevel <= 0) ||
+            //    (vm.ForceLoadProperties && vm.DetailsLevel <= 2)) && (vm.Properties == null || vm.Properties.Count < 500))
+            //{
+            //    return RedArrayEditor;
+            //}
+            return RedTypeViewer;
         }
     }
 }

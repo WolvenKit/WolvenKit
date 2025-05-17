@@ -45,6 +45,10 @@ public partial class GraphEditorView : UserControl
 
     private static void UpdateView(GraphEditorView view)
     {
+        if (view.Source is null) // graph editor hasn't been initialized yet
+        {
+            return;
+        }
         view.Source.Editor = view.Editor;
         view.Source.GraphStateLoad();
         //view.Editor.FitToScreen();

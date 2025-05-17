@@ -420,6 +420,12 @@
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedVectorColorEditor>
 
+                <converters:RedEditorTemplateSelector.FilterableDropdownEditor>
+                    <DataTemplate>
+                        <editors:FilterableDropdownCNameMenu Options="{Binding Data}" />
+                    </DataTemplate>
+                </converters:RedEditorTemplateSelector.FilterableDropdownEditor>
+
                 <converters:RedEditorTemplateSelector.RedColorPicker>
                     <DataTemplate>
                         <tools:RedColorPicker
