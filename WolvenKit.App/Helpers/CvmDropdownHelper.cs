@@ -47,7 +47,8 @@ public abstract class CvmDropdownHelper
         IEnumerable<string?> ret = [];
         switch (parent.ResolvedData)
         {
-            case gameJournalPath when cvm.Name is "className" && parent.Name is "path":
+            case gameJournalPath when cvm.Name is "className" &&
+                                      (parent.Name is "path" or "contact" or "caller" or "addressee" or "briefingPath" or "mappinPath"):
                 ret = RedTypeHelper.GetExtendingClassNames(typeof(gameJournalEntry));
                 break;
             case CArray<CName> when parent is { Name: "chunkMaterials", Parent.Parent.Parent.ResolvedData: CMesh mesh }:
@@ -90,10 +91,15 @@ public abstract class CvmDropdownHelper
         {
             return false;
         }
+        // Combine type check with name checks
+        if (parent.ResolvedData is gameJournalPath)
+        {
+            var validPaths = new List<string> { "path", "contact", "caller", "addressee", "briefingPath", "mappinPath" };
+            return cvm.Name is "className" && validPaths.Contains(parent.Name);
+        }
 
         return parent.ResolvedData switch
         {
-            gameJournalPath when cvm.Name is "className" && parent.Name is "path" => true,
             CArray<CName> when parent is { Name: "chunkMaterials", Parent.Parent.Parent.ResolvedData: CMesh mesh } =>
                 true,
             CArray<CName> when parent.Name is "tags" && cvm.GetRootModel() is
