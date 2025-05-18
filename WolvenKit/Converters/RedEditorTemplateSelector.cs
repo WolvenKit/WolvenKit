@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
 
@@ -45,8 +46,6 @@ namespace WolvenKit.Converters
         // Some uints are actually chunkMasks
         private static readonly string[] s_chunkMaskProperties = ["chunkMask", "componentIndexMask"];
 
-        // some CNames should be dropdown fields
-        private static readonly string[] s_cnameDropdownProperties = ["className"];
 
         public string[] DropdownOptions = [];
         public string SelectedOption = "";
@@ -70,18 +69,13 @@ namespace WolvenKit.Converters
 
             if (vm.PropertyType.IsAssignableTo(typeof(CName)))
             {
-                if (!s_cnameDropdownProperties.Contains(vm.Name))
+                if (!CvmDropdownHelper.HasDropdownOptions(vm))
                 {
                     return RedCNameEditor;
                 }
 
-                switch (vm.Name)
-                {
-                    case "className" when vm.Parent is { Name: "path", Data.RedType: "handle:gameJournalPath" }:
-                        return FilterableDropdownEditor;
-
-                    default: return RedCNameEditor;
-                }
+                return FilterableDropdownEditor;
+                
             }
 
             if (vm.PropertyType.IsAssignableTo(typeof(TweakDBID)))

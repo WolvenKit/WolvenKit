@@ -33,11 +33,12 @@
             <ColumnDefinition Width="*" MinWidth="{StaticResource WolvenKitLabelWidth}" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="5" />
+            <RowDefinition x:Name="Row1" Height="Auto" />
+            <RowDefinition x:Name="Row2" Height="5" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="5" />
         </Grid.RowDefinitions>
+
         <!-- ====================================== -->
         <!-- Filter -->
         <!-- ====================================== -->
@@ -48,14 +49,15 @@
             Margin="0"
             Padding="{DynamicResource WolvenKitMarginHorizontal}"
             Foreground="{StaticResource ForegroundColor_Grey_Dark}"
+            Style="{StaticResource WolvenkitTextBoxStyle}"
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
             KeyboardNavigation.TabIndex="1"
             Text="{Binding FilterText,
                            RelativeSource={RelativeSource AncestorType={x:Type editors:FilterableDropdownCNameMenu}},
                            Mode=TwoWay}" />
-
         <!-- Placeholder text -->
         <TextBlock
+            x:Name="Placeholder"
             Grid.Row="0"
             Grid.Column="0"
             Style="{StaticResource WolvenkitPlaceholderStyle}"
@@ -81,6 +83,7 @@
             SelectedValue="{Binding SelectedOption,
                                     RelativeSource={RelativeSource AncestorType={x:Type editors:FilterableDropdownCNameMenu}},
                                     Mode=TwoWay}" />
+
 
 
         <!-- ====================================== -->

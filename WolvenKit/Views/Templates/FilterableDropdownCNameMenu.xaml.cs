@@ -6,6 +6,7 @@ using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
 using ReactiveUI;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.ViewModels.Events;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
@@ -13,27 +14,14 @@ using WolvenKit.RED4.Types;
 namespace WolvenKit.Views.Editors
 {
     /// <summary>
-    /// 
+    /// CName editor with optional dropdown
     /// </summary>
-    /// <example>
-    /// Two-way binding doesn't work, needs to bind like this:
-    /// <code>
-    /// this.WhenActivated(disposables =>
-    /// {
-    ///    this.Bind(ViewModel,
-    ///            x => x.ComponentName,
-    ///            x => x.FilterableDropdownCNameMenu.SelectedOption)
-    ///        .DisposeWith(disposables);
-    ///});
-    /// </code>
-    /// </example>
     public partial class FilterableDropdownCNameMenu : ReactiveUserControl<ChunkViewModel>
     {
         public FilterableDropdownCNameMenu()
         {
             InitializeComponent();
             Options = [];
-
 
             this.WhenActivated(disposables =>
             {
@@ -47,23 +35,39 @@ namespace WolvenKit.Views.Editors
                         x => x.RedCNameEditor.RedString)
                     .DisposeWith(disposables);
 
-                string[] optionValues = [];
-                
-                if (vm.Name is "className" && vm.Parent is { Name: "path", Data.RedType: "handle:gameJournalPath" })
+                SetCurrentValue(OptionsProperty, CvmDropdownHelper.GetDropdownOptions(vm));
+
+                // If we don't have any options, no reason to show the dropdown - disable these UI elements
+                // and show only the default CName editor
+                if (Options.Count == 0)
                 {
-                    optionValues = RedTypeHelper.GetExtendedClassNames(typeof(gameJournalEntry));
+                    SetCurrentValue(HideDropdownProperty, true);
+
+                    Row1.SetCurrentValue(RowDefinition.HeightProperty, new GridLength(0));
+                    Row2.SetCurrentValue(RowDefinition.HeightProperty, new GridLength(0));
+                    Placeholder.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+                    Dropdown.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+                    FilterTextBox.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
                 }
 
-                SetCurrentValue(OptionsProperty, optionValues.ToDictionary(x => x, x => x));
-                
-                if (vm.Data is CName cname && cname.GetResolvedText() is not null)
+
+                if (vm.Data is not CName cname)
                 {
-                    SetDropdownViewModelValueFromCName();
+                    return;
+                }
+
+                SetDropdownValueFromCName();
+
+                if (string.IsNullOrEmpty(SelectedOption) && Options.Count == 1 && (cname == CName.Empty ||
+                        string.IsNullOrEmpty(cname.GetResolvedText())))
+                {
+                    SetCurrentValue(SelectedOptionProperty, Options.Keys.First());
                 }
             });
         }
 
-
+        #region properties
+        
         public string FilterText
         {
             get => (string)GetValue(FilterTextProperty);
@@ -77,6 +81,20 @@ namespace WolvenKit.Views.Editors
                 typeof(string),
                 typeof(FilterableDropdownCNameMenu),
                 new PropertyMetadata(null, OnPropertyChangedCallback));
+
+        public bool HideDropdown
+        {
+            get => (bool)GetValue(HideDropdownProperty);
+            set => SetValue(HideDropdownProperty, value);
+        }
+
+        /// <summary>Identifies the <see cref="HideDropdown"/> dependency property.</summary>
+        public static readonly DependencyProperty HideDropdownProperty =
+            DependencyProperty.Register(
+                nameof(HideDropdown),
+                typeof(bool),
+                typeof(FilterableDropdownCNameMenu),
+                new PropertyMetadata(null));
 
 
         public string SelectedOption
@@ -99,7 +117,6 @@ namespace WolvenKit.Views.Editors
             set => SetValue(OptionsProperty, value);
         }
 
-
         /// <summary>Identifies the <see cref="Options"/> dependency property.</summary>
         public static readonly DependencyProperty OptionsProperty =
             DependencyProperty.Register(
@@ -113,7 +130,6 @@ namespace WolvenKit.Views.Editors
             get => (List<KeyValuePair<string, string>>)GetValue(FilteredOptionsProperty);
             set => SetValue(FilteredOptionsProperty, value);
         }
-
 
         /// <summary>Identifies the <see cref="FilteredOptions"/> dependency property.</summary>
         public static readonly DependencyProperty FilteredOptionsProperty =
@@ -145,7 +161,7 @@ namespace WolvenKit.Views.Editors
                     SetChunkViewModelValueFromDropdown();
                     break;
                 case nameof(ChunkViewModel.Data):
-                    SetDropdownViewModelValueFromCName();
+                    SetDropdownValueFromCName();
                     break;
                 default:
                     break;
@@ -154,10 +170,24 @@ namespace WolvenKit.Views.Editors
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        #endregion
+
+        /// <summary>
+        /// Returns the matching option key for the given option value.
+        /// </summary>
+        private string GetOptionKey(string optionValue)
+        {
+            var option = Options.FirstOrDefault(o => o.Value == optionValue);
+            return option.Key ?? "";
+        }
+
         private void RecalculateFilteredOptions()
         {
-            var options = (Options ?? []).Where(o =>
-                string.IsNullOrEmpty(FilterText) || o.Key.Contains(FilterText, StringComparison.Ordinal)).ToList();
+            var options = (Options ?? []).ToList();
+            if (!string.IsNullOrWhiteSpace(FilterText))
+            {
+                options = options.Where(o => o.Key.Contains(FilterText, StringComparison.Ordinal)).ToList();
+            }
             SetCurrentValue(FilteredOptionsProperty, options);
         }
 
@@ -168,42 +198,39 @@ namespace WolvenKit.Views.Editors
                 return;
             }
 
-            if (DataContext is ChunkViewModel { Data: CName cname } cvm &&
-                (cname.GetResolvedText() is not string s ||
-                 s != SelectedOption))
+            if (DataContext is ChunkViewModel { Data: CName var } cvm &&
+                ((var.GetResolvedText() ?? "") != SelectedOption))
             {
                 cvm.Data = (CName)SelectedOption;
             }
         }
 
-        private void SetDropdownViewModelValueFromCName()
+        private void SetDropdownValueFromCName()
         {
-            if (DataContext is not ChunkViewModel vm || vm.Data is not CName cname ||
-                cname.GetResolvedText() is not string s)
+            var optionKey = "";
+            if (DataContext is ChunkViewModel { Data: CName cname } && cname.GetResolvedText() is string value &&
+                value != "None")
+            {
+                optionKey = GetOptionKey(value);
+            }
+
+            if (string.IsNullOrEmpty(optionKey))
             {
                 Dropdown.SetCurrentValue(ComboBox.TextProperty, "");
                 return;
             }
 
-            var option = Options.FirstOrDefault(o => o.Value == s);
-            if (option.Key is null)
-            {
-                Dropdown.SetCurrentValue(ComboBox.TextProperty, "");
-                return;
-            }
-            SetCurrentValue(SelectedOptionProperty, option.Key ?? "");
+            SetCurrentValue(SelectedOptionProperty, optionKey);
         }
 
 
         private void RedCNameEditor_ValueChanged(object sender, RoutedEventArgs e)
         {
-            if (DataContext is not ChunkViewModel vm || vm.Data is not CName cname ||
-                cname.GetResolvedText() is not string s || s == SelectedOption)
+            if (DataContext is ChunkViewModel { Data: CName var } && ((var.GetResolvedText() ?? "") != SelectedOption))
             {
-                return;
+                SetDropdownValueFromCName();
             }
 
-            SetDropdownViewModelValueFromCName();
         }
     }
 }
