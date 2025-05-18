@@ -169,7 +169,7 @@ namespace WolvenKit.Views.Editors
             var options = (Options ?? []).ToList();
             if (!string.IsNullOrWhiteSpace(FilterText))
             {
-                options = options.Where(o => o.Key.Contains(FilterText, StringComparison.Ordinal)).ToList();
+                options = options.Where(o => o.Key.Contains(FilterText, StringComparison.OrdinalIgnoreCase)).ToList();
             }
             SetCurrentValue(FilteredOptionsProperty, options);
         }
