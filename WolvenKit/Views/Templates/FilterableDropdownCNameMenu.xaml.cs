@@ -41,8 +41,6 @@ namespace WolvenKit.Views.Editors
                 // and show only the default CName editor
                 if (Options.Count == 0)
                 {
-                    SetCurrentValue(HideDropdownProperty, true);
-
                     Row1.SetCurrentValue(RowDefinition.HeightProperty, new GridLength(0));
                     Row2.SetCurrentValue(RowDefinition.HeightProperty, new GridLength(0));
                     Placeholder.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
@@ -81,21 +79,6 @@ namespace WolvenKit.Views.Editors
                 typeof(string),
                 typeof(FilterableDropdownCNameMenu),
                 new PropertyMetadata(null, OnPropertyChangedCallback));
-
-        public bool HideDropdown
-        {
-            get => (bool)GetValue(HideDropdownProperty);
-            set => SetValue(HideDropdownProperty, value);
-        }
-
-        /// <summary>Identifies the <see cref="HideDropdown"/> dependency property.</summary>
-        public static readonly DependencyProperty HideDropdownProperty =
-            DependencyProperty.Register(
-                nameof(HideDropdown),
-                typeof(bool),
-                typeof(FilterableDropdownCNameMenu),
-                new PropertyMetadata(null));
-
 
         public string SelectedOption
         {
