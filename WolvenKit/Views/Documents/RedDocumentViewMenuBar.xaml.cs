@@ -513,7 +513,7 @@ namespace WolvenKit.Views.Documents
         private string GetTextureDirForDependencies(bool useTextureSubfolder) =>
             ViewModel?.GetTextureDirForDependencies(useTextureSubfolder) ?? "";
 
-        private async Task AddDependenciesToFile(ChunkViewModel _)
+        private async Task AddDependenciesToFileAsync(ChunkViewModel _)
         {
             if (RootChunk is not ChunkViewModel rootChunk)
             {
@@ -527,7 +527,7 @@ namespace WolvenKit.Views.Documents
                 rootChunk.DeleteUnusedMaterialsCommand.Execute(true);
             }
 
-            await LoadAndAnalyzeModArchives();
+            await LoadAndAnalyzeModArchivesAsync();
 
             var materialDependencies = await rootChunk.GetMaterialRefsFromFile();
             var isShiftKeyDown = ModifierViewStateService.IsShiftBeingHeld;
@@ -564,13 +564,13 @@ namespace WolvenKit.Views.Documents
             switch (rootChunk.ResolvedData)
             {
                 case CMaterialInstance:
-                    await SearchAndReplaceInChildNodes(rootChunk, pathReplacements, "values");
+                    await SearchAndReplaceInChildNodesAsync(rootChunk, pathReplacements, "values");
                     break;
                 case Multilayer_Setup:
-                    await SearchAndReplaceInChildNodes(rootChunk, pathReplacements, "layers");
+                    await SearchAndReplaceInChildNodesAsync(rootChunk, pathReplacements, "layers");
                     break;
                 case CMesh:
-                    await SearchAndReplaceInChildNodes(rootChunk, pathReplacements, ChunkViewModel.LocalMaterialBufferPath,
+                    await SearchAndReplaceInChildNodesAsync(rootChunk, pathReplacements, ChunkViewModel.LocalMaterialBufferPath,
                         ChunkViewModel.ExternalMaterialPath);
                     break;
                 default:
@@ -578,7 +578,7 @@ namespace WolvenKit.Views.Documents
             }
         }
 
-        private static async Task SearchAndReplaceInChildNodes(ChunkViewModel cvm, Dictionary<string, string> pathReplacements,
+        private static async Task SearchAndReplaceInChildNodesAsync(ChunkViewModel cvm, Dictionary<string, string> pathReplacements,
             params string[] propertyPaths)
         {
             if (pathReplacements.Count == 0)
@@ -622,7 +622,7 @@ namespace WolvenKit.Views.Documents
             }
         }
 
-        private async Task LoadAndAnalyzeModArchives()
+        private async Task LoadAndAnalyzeModArchivesAsync()
         {
             if (!AppArchiveManager.ArchivesNeedRescan ||
                 (!_archiveManager.GetModArchives().Any() && _archiveManager.IsInitialized))
@@ -666,7 +666,7 @@ namespace WolvenKit.Views.Documents
 
             _projectWatcher.Suspend();
 
-            await AddDependenciesToFile(cvm);
+            await AddDependenciesToFileAsync(cvm);
 
             // Project browser will throw an error if we do it immediately - so let's not
             await Task.Run(async () =>
