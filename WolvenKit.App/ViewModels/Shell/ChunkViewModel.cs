@@ -3682,7 +3682,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     //private bool CanOpenSelf() => RelativePath != CName.Empty && _tab == null;
     //private void ExecuteOpenSelf() => Locator.Current.GetService<AppViewModel>().NotNull().OpenFileFromDepotPath(RelativePath);
 
-    private ChunkViewModel GetRootModel()
+    public ChunkViewModel GetRootModel()
     {
         var result = this;
         while (result.Parent != null)

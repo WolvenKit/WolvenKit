@@ -72,7 +72,7 @@ namespace WolvenKit.Views.Editors
         {
             var hasWarning = false;
             var hasError = false;
-            
+
             if (Text == "None" || _settingsManager?.UseValidatingEditor != true)
             {
                 TextBoxToolTip = "CName";
@@ -161,6 +161,10 @@ namespace WolvenKit.Views.Editors
             }
             set
             {
+                if (string.IsNullOrEmpty(value))
+                {
+                    value = "0";
+                }
                 if (_settingsManager.ShowCNameAsHex)
                 {
                     SetValue(RedStringProperty, (CName)ulong.Parse(value, NumberStyles.HexNumber));
