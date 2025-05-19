@@ -82,7 +82,7 @@ namespace WolvenKit.Views.Editors
                 hasError = true;
                 TextBoxToolTip = $"Invalid dynamic appearance condition! {invalidConditions}";
             }
-            else if (!s_regularExpressions.Any(r => r.IsMatch(Text ?? string.Empty)))
+            else if (!s_regularExpressions.Any(r => r.IsMatch(Text)))
             {
                 hasWarning = true;
                 TextBoxToolTip = $"'{Text}' contains invalid characters, or leading/trailing spaces! (Ignore this if everything works)";
@@ -228,10 +228,6 @@ namespace WolvenKit.Views.Editors
         {
             if (propertyName == nameof(Text))
             {
-                if (Text is null)
-                {
-                    return;
-                }
                 RecalculateValidityAndTooltip();
             }
 
