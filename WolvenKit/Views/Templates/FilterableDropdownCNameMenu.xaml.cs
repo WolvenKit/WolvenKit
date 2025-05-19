@@ -6,7 +6,9 @@ using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
 using ReactiveUI;
+using WolvenKit.App.Factories;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Events;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
@@ -18,10 +20,16 @@ namespace WolvenKit.Views.Editors
     /// </summary>
     public partial class FilterableDropdownCNameMenu : ReactiveUserControl<ChunkViewModel>
     {
-        public FilterableDropdownCNameMenu()
+        private readonly DocumentTools _documentTools;
+
+        public FilterableDropdownCNameMenu(DocumentTools documentTools)
         {
+            _documentTools = documentTools; 
+            
             InitializeComponent();
             Options = [];
+            FilteredOptions = [];
+            ShowRefreshButton = false;
 
             this.WhenActivated(disposables =>
             {
@@ -35,11 +43,17 @@ namespace WolvenKit.Views.Editors
                         x => x.RedCNameEditor.RedString)
                     .DisposeWith(disposables);
 
-                SetCurrentValue(OptionsProperty, CvmDropdownHelper.GetDropdownOptions(vm));
+                SetCurrentValue(OptionsProperty, CvmDropdownHelper.GetDropdownOptions(vm, _documentTools, false));
+                SetCurrentValue(ShowRefreshButtonProperty, CvmDropdownHelper.ShouldShowRefreshButton(vm));
 
+                if (!ShowRefreshButton)
+                {
+                    Col3.SetCurrentValue(ColumnDefinition.WidthProperty, new GridLength(0));
+                }
+                
                 // If we don't have any options, no reason to show the dropdown - disable these UI elements
                 // and show only the default CName editor
-                if (Options.Count == 0)
+                if (Options.Count == 0 && !ShowRefreshButton)
                 {
                     Row1.SetCurrentValue(RowDefinition.HeightProperty, new GridLength(0));
                     Row2.SetCurrentValue(RowDefinition.HeightProperty, new GridLength(0));
@@ -79,6 +93,23 @@ namespace WolvenKit.Views.Editors
                 typeof(string),
                 typeof(FilterableDropdownCNameMenu),
                 new PropertyMetadata(null, OnPropertyChangedCallback));
+
+        /// <summary>
+        /// Show the refresh button?
+        /// </summary>
+        public bool ShowRefreshButton
+        {
+            get => (bool)GetValue(ShowRefreshButtonProperty);
+            set => SetValue(ShowRefreshButtonProperty, value);
+        }
+
+        /// <summary>Identifies the <see cref="ShowRefreshButton"/> dependency property.</summary>
+        public static readonly DependencyProperty ShowRefreshButtonProperty =
+            DependencyProperty.Register(
+                nameof(ShowRefreshButton),
+                typeof(bool),
+                typeof(FilterableDropdownCNameMenu),
+                new PropertyMetadata(false));
 
         public string SelectedOption
         {
@@ -213,7 +244,17 @@ namespace WolvenKit.Views.Editors
             {
                 SetDropdownValueFromCName();
             }
+        }
 
+        private void RefreshButton_OnClick_(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is not ChunkViewModel vm)
+            {
+                return;
+            }
+
+            SetCurrentValue(OptionsProperty,
+                CvmDropdownHelper.GetDropdownOptions(vm, _documentTools, true));
         }
     }
 }

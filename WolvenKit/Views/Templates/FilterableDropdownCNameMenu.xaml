@@ -9,6 +9,7 @@
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
     xmlns:shell="clr-namespace:WolvenKit.App.ViewModels.Shell;assembly=WolvenKit.App"
     xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     FocusManager.FocusedElement="{Binding ElementName=FilterTextBox}">
     <Grid>
         <Grid.Resources>
@@ -31,6 +32,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" MinWidth="{StaticResource WolvenKitLabelWidth}" />
             <ColumnDefinition Width="*" MinWidth="{StaticResource WolvenKitLabelWidth}" />
+            <ColumnDefinition x:Name="Col3" Width="{StaticResource WolvenKitButtonGridWidth}" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition x:Name="Row1" Height="Auto" />
@@ -84,7 +86,28 @@
                                     RelativeSource={RelativeSource AncestorType={x:Type editors:FilterableDropdownCNameMenu}},
                                     Mode=TwoWay}" />
 
+        <!-- ====================================== -->
+        <!-- Refresh button -->
+        <!-- ====================================== -->
 
+        <Button
+            x:Name="RefreshButton"
+            Grid.Row="0"
+            Grid.Column="2"
+            Width="{StaticResource WolvenKitButtonWidth}"
+            Margin="0"
+            Padding="0"
+            Click="RefreshButton_OnClick_">
+
+            <StackPanel Orientation="Horizontal">
+                <templates:IconBox
+                    IconPack="Material"
+                    Kind="Cached"
+                    Margin="{DynamicResource WolvenKitMarginMicro}"
+                    Size="{DynamicResource WolvenKitIconSmall}"
+                    Foreground="{StaticResource WolvenKitCyan}" />
+            </StackPanel>
+        </Button>
 
         <!-- ====================================== -->
         <!-- CName editor -->

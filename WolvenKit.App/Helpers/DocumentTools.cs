@@ -1,35 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using WolvenKit.App.Extensions;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
-using WolvenKit.Common.Exceptions;
-using WolvenKit.Common.Services;
+using WolvenKit.Common;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Helpers;
 using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.Archive.IO;
-using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
-using InvalidDataException = System.IO.InvalidDataException;
 
 namespace WolvenKit.App.Helpers;
 
 public class DocumentTools
 {
-    private ILoggerService _loggerService;
-    private Cr2WTools _cr2wTools;
+    private readonly ILoggerService _loggerService;
+    private readonly Cr2WTools _cr2WTools;
+    private readonly IArchiveManager _archiveManager;
+    private readonly IProjectManager _projectManager;
 
     public static Regex PlaceholderRegex { get; } = new Regex(@"^[-=_]+$");
 
-    public DocumentTools(ILoggerService loggerService, Cr2WTools cr2wTools)
+    public DocumentTools(ILoggerService loggerService, Cr2WTools cr2WTools, IArchiveManager archiveManager,
+        IProjectManager projectManager)
     {
         _loggerService = loggerService;
-        _cr2wTools = cr2wTools;
+        _cr2WTools = cr2WTools;
+        _archiveManager = archiveManager;
+        _projectManager = projectManager;
     }
 
 
@@ -54,8 +51,8 @@ public class DocumentTools
             return [];
         }
 
-        var appCr2W = _cr2wTools.ReadCr2W(absoluteAppFilePath);
-        var entCr2W = _cr2wTools.ReadCr2W(absoluteEntFilePath);
+        var appCr2W = _cr2WTools.ReadCr2W(absoluteAppFilePath);
+        var entCr2W = _cr2WTools.ReadCr2W(absoluteEntFilePath);
 
         if (entCr2W.RootChunk is not entEntityTemplate ent)
         {
@@ -69,11 +66,7 @@ public class DocumentTools
             return [];
         }
 
-        var appAppearanceNames = app.Appearances.Select(a => a.Chunk?.Name.GetResolvedText())
-            .Where(s => !string.IsNullOrEmpty(s))
-            .Select(s => s!)
-            .Where(s => !PlaceholderRegex.IsMatch(s))
-            .ToList();
+        var appAppearanceNames = GetAppearanceNamesFromApp(appCr2W);
 
         if (clearExistingEntries)
         {
@@ -115,10 +108,151 @@ public class DocumentTools
             ent.DefaultAppearance = ent.Appearances.LastOrDefault()?.Name.GetResolvedText() ?? "";
         }
 
-        _cr2wTools.WriteCr2W(entCr2W, absoluteEntFilePath);
+        _cr2WTools.WriteCr2W(entCr2W, absoluteEntFilePath);
         return appAppearanceNames;
     }
 
+    private static readonly Dictionary<string, List<string>> s_appAppearancesByPath = [];
+
+    public List<string> GetAppearanceNamesFromApp(ResourcePath relativeAppResourcePath, bool refreshCache)
+    {
+        if (relativeAppResourcePath.GetResolvedText() is not string relativeAppFilePath ||
+            _projectManager.ActiveProject is not { } activeProject)
+        {
+            return [];
+        }
+
+        if (refreshCache)
+        {
+            s_appAppearancesByPath.Remove(relativeAppFilePath);
+        }
+
+        if (s_appAppearancesByPath.TryGetValue(relativeAppFilePath, out var cachedList))
+        {
+            return cachedList;
+        }
+
+        List<string> appAppearances = [];
+
+        if (activeProject.GetAbsolutePath(relativeAppFilePath) is string absolutePath && File.Exists(absolutePath))
+        {
+            if (_cr2WTools.ReadCr2W(absolutePath) is CR2WFile cr2W)
+            {
+                appAppearances = GetAppearanceNamesFromApp(cr2W);
+            }
+
+            s_appAppearancesByPath.Add(relativeAppFilePath, appAppearances);
+            return appAppearances;
+        }
+
+        var appFile = _archiveManager.GetGameFile(relativeAppResourcePath, true, false);
+        if (appFile is null)
+        {
+            s_appAppearancesByPath.Add(relativeAppFilePath, []);
+            return [];
+        }
+
+        switch (appFile.Scope)
+        {
+            case ArchiveManagerScope.Mods:
+                appAppearances = GetAppearanceNamesFromApp(_archiveManager.GetCR2WFile(appFile.FileName, true));
+                break;
+            case ArchiveManagerScope.Basegame:
+                appAppearances = GetAppearanceNamesFromApp(_archiveManager.GetCR2WFile(appFile.FileName, false));
+                break;
+            default:
+                break;
+        }
+
+        s_appAppearancesByPath.Add(relativeAppFilePath, appAppearances);
+        return appAppearances;
+    }
+
+
+    private static readonly Dictionary<string, List<string>> s_meshAppearancesByPath = [];
+
+
+    public List<string> GetAppearanceNamesFromMesh(ResourcePath? relativeMeshResourcePath, bool refreshCache)
+    {
+        if (relativeMeshResourcePath?.GetResolvedText() is not string relativeMeshFilePath ||
+            _projectManager.ActiveProject is not { } activeProject)
+        {
+            return [];
+        }
+
+        if (refreshCache)
+        {
+            s_meshAppearancesByPath.Remove(relativeMeshFilePath);
+        }
+
+        if (s_meshAppearancesByPath.TryGetValue(relativeMeshFilePath, out var cachedList))
+        {
+            return cachedList;
+        }
+
+        List<string> meshAppearances = [];
+
+        if (activeProject.GetAbsolutePath(relativeMeshFilePath) is string absolutePath && File.Exists(absolutePath))
+        {
+            if (_cr2WTools.ReadCr2W(absolutePath) is CR2WFile cr2W)
+            {
+                meshAppearances = GetAppearanceNamesFromApp(cr2W);
+            }
+
+            s_appAppearancesByPath.Add(relativeMeshFilePath, meshAppearances);
+            return meshAppearances;
+        }
+
+        var meshFile = _archiveManager.GetGameFile(relativeMeshFilePath, true, true);
+
+        if (meshFile is null)
+        {
+            s_meshAppearancesByPath.Add(relativeMeshFilePath, meshAppearances);
+            return meshAppearances;
+        }
+
+        switch (meshFile.Scope)
+        {
+            case ArchiveManagerScope.Mods:
+                meshAppearances = GetAppearanceNamesFromMesh(_archiveManager.GetCR2WFile(meshFile.FileName, true));
+                break;
+            case ArchiveManagerScope.Basegame:
+                meshAppearances = GetAppearanceNamesFromMesh(_archiveManager.GetCR2WFile(meshFile.FileName, false));
+                break;
+            default:
+                break;
+        }
+
+        s_meshAppearancesByPath.Add(relativeMeshFilePath, meshAppearances);
+        return meshAppearances;
+    }
+
+    private List<string> GetAppearanceNamesFromMesh(CR2WFile? cr2W)
+    {
+        if (cr2W?.RootChunk is not CMesh mesh)
+        {
+            return [];
+        }
+
+        return mesh.Appearances.Select(app => app.Chunk?.Name.ToString()).Where(x => !string.IsNullOrEmpty(x))
+            .Select(x => x!).ToList();
+    }
+
+
+    private List<string> GetAppearanceNamesFromApp(CR2WFile? cr2W)
+    {
+        if (cr2W?.RootChunk is not appearanceAppearanceResource app)
+        {
+            return [];
+        }
+
+        return app.Appearances.Select(a => a.Chunk?.Name.GetResolvedText())
+            .Where(s => !string.IsNullOrEmpty(s))
+            .Select(s => s!)
+            .Where(s => !PlaceholderRegex.IsMatch(s))
+            .ToList();
+    }
+    
     /// <summary>
     /// Sets facial animations. Normally, we'd be defaulting to female because who has masc characters anyway,
     /// yet in this case we have big/massive, who all default to the male animset. 
@@ -151,7 +285,7 @@ public class DocumentTools
             return;
         }
 
-        var appCr2W = _cr2wTools.ReadCr2W(absoluteAppFilePath);
+        var appCr2W = _cr2WTools.ReadCr2W(absoluteAppFilePath);
 
         if (appCr2W.RootChunk is not appearanceAppearanceResource app)
         {
@@ -212,20 +346,20 @@ public class DocumentTools
 
         if (facialAnimWritten)
         {
-            _loggerService?.Success($"set facial animation to {facialAnim}");
+            _loggerService.Success($"set facial animation to {facialAnim}");
         }
 
         if (facialGraphWritten)
         {
-            _loggerService?.Success($"set animgraph to {animGraph}");
+            _loggerService.Success($"set animgraph to {animGraph}");
         }
 
         if (animationsWritten)
         {
-            _loggerService?.Success($"Wrote {selectedAnims.Count} animations");
+            _loggerService.Success($"Wrote {selectedAnims.Count} animations");
         }
 
-        _cr2wTools.WriteCr2W(appCr2W, absoluteAppFilePath);
+        _cr2WTools.WriteCr2W(appCr2W, absoluteAppFilePath);
     }
 
     # endregion

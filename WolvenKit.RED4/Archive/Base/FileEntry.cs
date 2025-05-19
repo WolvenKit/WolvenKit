@@ -1,3 +1,4 @@
+using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types.Exceptions;
@@ -50,6 +51,8 @@ public class FileEntry : ICyberGameFile
     public uint Size { get; set; }
     public uint ZSize { get; set; }
     public string GuessedExtension { get; set; }
+
+    public ArchiveManagerScope Scope { get; set; }
 
     public ulong Key => NameHash64;
     public string Name => GetNameString(NameHash64.ToString())!;
