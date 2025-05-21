@@ -108,11 +108,10 @@ public class CvmDropdownHelper
             #region iComponent
 
             case entSkinnedMeshComponent meshComp:
-                documentTools.GetAppearanceNamesFromMesh(meshComp.Mesh.DepotPath,
-                    forceCacheRefresh);
+                ret = documentTools.GetAppearanceNamesFromMesh(meshComp.Mesh.DepotPath, forceCacheRefresh);
                 break;
             case entMorphTargetSkinnedMeshComponent morphtargetMeshComp:
-                documentTools.GetAppearanceNamesFromMesh(morphtargetMeshComp.MorphResource.DepotPath,
+                ret = documentTools.GetAppearanceNamesFromMesh(morphtargetMeshComp.MorphResource.DepotPath,
                     forceCacheRefresh);
                 break;
 
@@ -146,6 +145,7 @@ public class CvmDropdownHelper
                 true,
             CArray<CName> when parent.Name is "tags" && cvm.GetRootModel() is
                 { ResolvedData: entEntityTemplate ent } => true,
+            entSkinnedMeshComponent when s_appearanceNames.Contains(cvm.Name) => true,
             entEntityTemplate when s_appearanceNames.Contains(cvm.Name) => true,
             appearanceAppearanceResource when s_appearanceNames.Contains(cvm.Name) => true,
             entTemplateAppearance when cvm.Name == "appearanceName" => true,
@@ -163,6 +163,7 @@ public class CvmDropdownHelper
             entEntityTemplate when s_appearanceNames.Contains(cvm.Name) => true,
             appearanceAppearanceResource when s_appearanceNames.Contains(cvm.Name) => true,
             entTemplateAppearance when cvm.Name == "appearanceName" => true,
+            entSkinnedMeshComponent when s_appearanceNames.Contains(cvm.Name) => true,
             _ => false
         };
     }

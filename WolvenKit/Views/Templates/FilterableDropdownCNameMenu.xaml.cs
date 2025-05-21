@@ -6,10 +6,8 @@ using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
 using ReactiveUI;
-using WolvenKit.App.Factories;
+using Splat;
 using WolvenKit.App.Helpers;
-using WolvenKit.App.Services;
-using WolvenKit.App.ViewModels.Events;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
 
@@ -22,9 +20,9 @@ namespace WolvenKit.Views.Editors
     {
         private readonly DocumentTools _documentTools;
 
-        public FilterableDropdownCNameMenu(DocumentTools documentTools)
+        public FilterableDropdownCNameMenu()
         {
-            _documentTools = documentTools; 
+            _documentTools = Locator.Current.GetService<DocumentTools>(); 
             
             InitializeComponent();
             Options = [];
@@ -255,6 +253,7 @@ namespace WolvenKit.Views.Editors
 
             SetCurrentValue(OptionsProperty,
                 CvmDropdownHelper.GetDropdownOptions(vm, _documentTools, true));
+            RecalculateFilteredOptions();
         }
     }
 }

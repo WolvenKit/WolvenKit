@@ -132,6 +132,12 @@ public class DocumentTools
             return cachedList;
         }
 
+        // initial opening of file
+        if (!refreshCache)
+        {
+            return [];
+        }
+        
         List<string> appAppearances = [];
 
         if (activeProject.GetAbsolutePath(relativeAppFilePath) is string absolutePath && File.Exists(absolutePath))
@@ -190,16 +196,22 @@ public class DocumentTools
             return cachedList;
         }
 
+        // initial opening of file
+        if (!refreshCache)
+        {
+            return [];
+        }
+
         List<string> meshAppearances = [];
 
         if (activeProject.GetAbsolutePath(relativeMeshFilePath) is string absolutePath && File.Exists(absolutePath))
         {
             if (_cr2WTools.ReadCr2W(absolutePath) is CR2WFile cr2W)
             {
-                meshAppearances = GetAppearanceNamesFromApp(cr2W);
+                meshAppearances = GetAppearanceNamesFromMesh(cr2W);
             }
 
-            s_appAppearancesByPath.Add(relativeMeshFilePath, meshAppearances);
+            s_meshAppearancesByPath.Add(relativeMeshFilePath, meshAppearances);
             return meshAppearances;
         }
 
