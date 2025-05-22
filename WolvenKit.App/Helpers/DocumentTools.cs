@@ -376,4 +376,139 @@ public class DocumentTools
 
     # endregion
 
+    private static readonly List<string> s_materialShaders = [];
+
+    public IEnumerable<string?> GetAllBaseMaterials(bool forceCacheRefresh)
+    {
+        if (forceCacheRefresh)
+        {
+            s_materialShaders.Clear();
+        }
+
+        if (s_materialShaders.Count > 0)
+        {
+            return s_materialShaders.Order();
+        }
+
+
+        s_materialShaders.AddRange(
+            _archiveManager.Search(".mt", ArchiveManagerScope.Everywhere).Select(s => s.FileName).Distinct());
+        s_materialShaders.AddRange(_archiveManager.Search(".remt", ArchiveManagerScope.Everywhere)
+            .Select(s => s.FileName).Distinct());
+
+        return s_materialShaders.Order();
+    }
+
+
+    private static readonly Dictionary<string, List<CMaterialParameter>> s_materialProperties = [];
+
+    private static List<string> FilterByType(IRedType cvmResolvedData, List<CMaterialParameter> templateMaterials)
+    {
+        if (cvmResolvedData is not CKeyValuePair kvp)
+        {
+            return [];
+        }
+
+        return kvp.Value switch
+        {
+            CFloat => templateMaterials.Where(m => m is CMaterialParameterScalar)
+                .Select(m => m.ParameterName.GetResolvedText() ?? "")
+                .ToList(),
+            CResourceReference<ITexture> => templateMaterials
+                .Where(m => m is CMaterialParameterTexture)
+                .Select(m => m.ParameterName.GetResolvedText() ?? "")
+                .ToList(),
+            CResourceReference<Multilayer_Mask> => templateMaterials.Where(m => m is CMaterialParameterMultilayerMask)
+                .Select(m => m.ParameterName.GetResolvedText() ?? "")
+                .ToList(),
+            CResourceReference<Multilayer_Setup> => templateMaterials.Where(m => m is CMaterialParameterMultilayerSetup)
+                .Select(m => m.ParameterName.GetResolvedText() ?? "")
+                .ToList(),
+            CColor => templateMaterials.Where(m => m is CMaterialParameterColor)
+                .Select(m => m.ParameterName.GetResolvedText() ?? "")
+                .ToList(),
+            CResourceReference<CGradient> => templateMaterials.Where(m => m is CMaterialParameterGradient)
+                .Select(m => m.ParameterName.GetResolvedText() ?? "")
+                .ToList(),
+            Vector4 => templateMaterials.Where(m => m is CMaterialParameterVector)
+                .Select(m => m.ParameterName.GetResolvedText() ?? "")
+                .ToList(),
+            CName => templateMaterials.Where(m => m is CMaterialParameterCpuNameU64)
+                .Select(m => m.ParameterName.GetResolvedText() ?? "")
+                .ToList(),
+            CResourceReference<CFoliageProfile> => templateMaterials
+                .Where(m => m is CMaterialParameterFoliageParameters)
+                .Select(m => m.ParameterName.GetResolvedText() ?? "")
+                .ToList(),
+            CResourceReference<CHairProfile> => templateMaterials.Where(m => m is CMaterialParameterHairParameters)
+                .Select(m => m.ParameterName.GetResolvedText() ?? "")
+                .ToList(),
+            CResourceReference<CSkinProfile> => templateMaterials.Where(m => m is CMaterialParameterSkinParameters)
+                .Select(m => m.ParameterName.GetResolvedText() ?? "")
+                .ToList(),
+            CResourceReference<CTerrainSetup> => templateMaterials.Where(m => m is CMaterialParameterTerrainSetup)
+                .Select(m => m.ParameterName.GetResolvedText() ?? "")
+                .ToList(),
+            _ => []
+        };
+    }
+
+    private CR2WFile? ReadCr2WFromRelativePath(string relativePath)
+    {
+        if (string.IsNullOrEmpty(relativePath))
+        {
+            return null;
+        }
+
+        if (_projectManager.ActiveProject is { } activeProject &&
+            activeProject.GetAbsolutePath(relativePath) is string s && File.Exists(s))
+        {
+            return _cr2WTools.ReadCr2W(s);
+        }
+
+        return _archiveManager.GetCR2WFile(relativePath, true, true);
+    }
+
+    public List<string> GetMaterialKeys(IRedType cvmResolvedData, string materialPath, bool forceCacheRefresh)
+    {
+        List<string> ret = [];
+
+        if (forceCacheRefresh)
+        {
+            s_materialProperties.Remove(materialPath);
+        }
+
+        if (s_materialProperties.TryGetValue(materialPath, out var cachedList) && cachedList.Count > 0)
+        {
+            ret.AddRange(FilterByType(cvmResolvedData, cachedList));
+        }
+        else if (ReadCr2WFromRelativePath(materialPath) is not { RootChunk: CMaterialTemplate template })
+        {
+            ret = [];
+        }
+        else if (forceCacheRefresh)
+        {
+            s_materialProperties.Remove(materialPath);
+            List<CMaterialParameter> templateMaterials = [];
+
+            var matMaterials = template.Parameters[2];
+            for (var i = 0; i < matMaterials.Count; i++)
+            {
+                if (matMaterials[i] is not IRedHandle<CMaterialParameter> entry ||
+                    entry.GetValue() is not CMaterialParameter material)
+                {
+                    continue;
+                }
+
+                templateMaterials.Add(material);
+            }
+
+            s_materialProperties.TryAdd(materialPath, templateMaterials);
+
+            // return only those parameters which match the kvp's type 
+            ret = FilterByType(cvmResolvedData, templateMaterials);
+        }
+
+        return ret.Distinct().Order().ToList();
+    }
 }

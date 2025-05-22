@@ -66,9 +66,6 @@ public class CvmDropdownHelper
             case gameJournalPath when cvm.Name is "className" && s_questHandleParentNames.Contains(parent.Name):
                 ret = RedTypeHelper.GetExtendingClassNames(typeof(gameJournalEntry));
                 break;
-            case CArray<CName> when parent is { Name: "chunkMaterials", Parent.Parent.Parent.ResolvedData: CMesh mesh }:
-                ret = mesh.MaterialEntries.Select(entry => entry.Name.GetResolvedText()).Distinct();
-                break;
             case entISkinTargetComponent when cvm.Name is "renderingPlaneAnimationParam":
                 ret = s_appFileRenderPlane;
                 break;
@@ -116,6 +113,21 @@ public class CvmDropdownHelper
                 break;
 
             #endregion
+
+            #region mesh
+
+            case CArray<CName> when parent is { Name: "chunkMaterials", Parent.Parent.Parent.ResolvedData: CMesh mesh }:
+                ret = mesh.MaterialEntries.Select(entry => entry.Name.GetResolvedText()).Distinct();
+                break;
+            case CMaterialInstance when cvm.Name is "baseMaterial": // resource path, TODO
+                ret = documentTools.GetAllBaseMaterials(forceCacheRefresh);
+                break;
+            case CKeyValuePair when parent.Parent?.Parent?.ResolvedData is CMaterialInstance matInstance &&
+                                    matInstance.BaseMaterial.DepotPath.GetResolvedText() is string materialPath:
+                ret = documentTools.GetMaterialKeys(parent.ResolvedData, materialPath, forceCacheRefresh);
+                break;
+
+            #endregion
             default:
                 break;
         }
@@ -133,22 +145,33 @@ public class CvmDropdownHelper
             return false;
         }
 
-        if (parent.ResolvedData is gameJournalPath)
-        {
-            return cvm.Name is "className" && s_questHandleParentNames.Contains(parent.Name);
-        }
-        
         return parent.ResolvedData switch
         {
-            gameJournalPath when cvm.Name is "className" && parent.Name is "path" => true,
+            gameJournalPath => s_questHandleParentNames.Contains(parent.Name),
+
+            #region mesh
             CArray<CName> when parent is { Name: "chunkMaterials", Parent.Parent.Parent.ResolvedData: CMesh mesh } =>
                 true,
+            CKeyValuePair when parent.Parent?.Parent?.ResolvedData is CMaterialInstance matInstance &&
+                               !string.IsNullOrEmpty(matInstance.BaseMaterial.DepotPath.GetResolvedText()) => true,
+
+            CMaterialInstance when cvm.Name is "baseMaterial" => true, // resource path, TODO
+
+            #endregion
+
+            #region ent 
             CArray<CName> when parent.Name is "tags" && cvm.GetRootModel() is
                 { ResolvedData: entEntityTemplate ent } => true,
             entSkinnedMeshComponent when s_appearanceNames.Contains(cvm.Name) => true,
             entEntityTemplate when s_appearanceNames.Contains(cvm.Name) => true,
-            appearanceAppearanceResource when s_appearanceNames.Contains(cvm.Name) => true,
             entTemplateAppearance when cvm.Name == "appearanceName" => true,
+
+            #endregion
+
+            #region app
+            appearanceAppearanceResource when s_appearanceNames.Contains(cvm.Name) => true,
+
+            #endregion
             _ => false
         };
     }
@@ -164,6 +187,8 @@ public class CvmDropdownHelper
             appearanceAppearanceResource when s_appearanceNames.Contains(cvm.Name) => true,
             entTemplateAppearance when cvm.Name == "appearanceName" => true,
             entSkinnedMeshComponent when s_appearanceNames.Contains(cvm.Name) => true,
+            CMesh when cvm.Parent?.Parent?.Parent?.ResolvedData is CMaterialInstance matInstance &&
+                       !string.IsNullOrEmpty(matInstance.BaseMaterial.DepotPath.GetResolvedText()) => true, 
             _ => false
         };
     }
