@@ -1,5 +1,6 @@
 using System.IO;
 using System.Threading.Tasks;
+using WolvenKit.Common;
 
 namespace WolvenKit.Core.Interfaces;
 
@@ -33,6 +34,7 @@ public interface IGameFile
 
     string FileName { get; }
 
+    ArchiveManagerScope Scope { get; set; }
 
     #endregion Properties
 

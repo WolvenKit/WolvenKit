@@ -1,5 +1,5 @@
 ﻿<reactiveUi:ReactiveUserControl
-    x:Class="WolvenKit.Views.Editors.FilterableDropdownCNameMenu"
+    x:Class="WolvenKit.Views.Editors.FilterableDropdownResourcePathMenu"
     x:TypeArguments="shell:ChunkViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -30,7 +30,8 @@
         </Grid.Resources>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" MinWidth="{StaticResource WolvenKitLabelWidth}" />
+            <ColumnDefinition Width="*" MinWidth="{StaticResource WolvenKitPluginsToolIconButtonSize}"
+                              MaxWidth="{StaticResource WolvenKitLabelWidthLarge}" />
             <ColumnDefinition Width="*" MinWidth="{StaticResource WolvenKitLabelWidth}" />
             <ColumnDefinition x:Name="Col3" Width="{StaticResource WolvenKitButtonGridWidth}" />
         </Grid.ColumnDefinitions>
@@ -55,7 +56,7 @@
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
             KeyboardNavigation.TabIndex="1"
             Text="{Binding FilterText,
-                           RelativeSource={RelativeSource AncestorType={x:Type editors:FilterableDropdownCNameMenu}},
+                           RelativeSource={RelativeSource AncestorType={x:Type editors:FilterableDropdownResourcePathMenu}},
                            Mode=TwoWay}" />
         <!-- Placeholder text -->
         <TextBlock
@@ -77,13 +78,13 @@
             Grid.Column="1"
             Height="{StaticResource WolvenKitTabHeight}"
             ItemsSource="{Binding FilteredOptions,
-                                  RelativeSource={RelativeSource AncestorType={x:Type editors:FilterableDropdownCNameMenu}},
+                                  RelativeSource={RelativeSource AncestorType={x:Type editors:FilterableDropdownResourcePathMenu}},
                                   Mode=OneWay}"
             KeyboardNavigation.TabIndex="2"
             SelectedValuePath="Value"
             DisplayMemberPath="Key"
             SelectedValue="{Binding SelectedOption,
-                                    RelativeSource={RelativeSource AncestorType={x:Type editors:FilterableDropdownCNameMenu}},
+                                    RelativeSource={RelativeSource AncestorType={x:Type editors:FilterableDropdownResourcePathMenu}},
                                     Mode=TwoWay}" />
 
         <!-- ====================================== -->
@@ -112,20 +113,12 @@
         <!-- ====================================== -->
         <!-- CName editor -->
         <!-- ====================================== -->
-        <editors:RedCNameEditor
-            x:Name="RedCNameEditor"
+        <editors:RedRefEditor
+            x:Name="RedRefEditor"
             Grid.Row="2"
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            RedString="{Binding Data,
-                                Mode=TwoWay}">
-            <editors:RedCNameEditor.Style>
-                <Style TargetType="editors:RedCNameEditor">
-                    <EventSetter
-                        Event="ValueChanged"
-                        Handler="RedCNameEditor_ValueChanged" />
-                </Style>
-            </editors:RedCNameEditor.Style>
-        </editors:RedCNameEditor>
+            RedRef="{Binding Data,
+                             Mode=TwoWay}" />
     </Grid>
 </reactiveUi:ReactiveUserControl>

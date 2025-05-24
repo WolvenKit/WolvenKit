@@ -99,6 +99,8 @@
     <system:Double x:Key="WolvenKitFieldHeight">120</system:Double>
 
     <system:Double x:Key="WolvenKitButtonHeight">32</system:Double>
+    <system:Double x:Key="WolvenKitButtonWidth">32</system:Double>
+    <GridLength x:Key="WolvenKitButtonGridWidth">32</GridLength>
 
     <Rect x:Key="WolvenKitGridSize">0,0,48,48</Rect>
 
