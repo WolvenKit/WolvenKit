@@ -60,7 +60,7 @@ public class DocumentTools
             return [];
         }
 
-        if (appCr2W.RootChunk is not appearanceAppearanceResource app)
+        if (appCr2W.RootChunk is not appearanceAppearanceResource)
         {
             _loggerService.Error($"invalid .app file: {absoluteAppFilePath}!");
             return [];
@@ -376,6 +376,7 @@ public class DocumentTools
 
     # endregion
 
+    # region cvmDropdown
     private static readonly List<string> s_materialShaders = [];
 
     public IEnumerable<string?> GetAllBaseMaterials(bool forceCacheRefresh)
@@ -510,5 +511,21 @@ public class DocumentTools
         }
 
         return ret.Distinct().Order().ToList();
+    }
+
+    #endregion
+
+
+    private static readonly string s_archiveString = "archive" + Path.DirectorySeparatorChar;
+
+    public IList<string> CollectProjectFiles(string fileExtension)
+    {
+        if (_projectManager.ActiveProject is not { } activeProject)
+        {
+            return [];
+        }
+
+        return activeProject.Files.Where(f => f.EndsWith(fileExtension)).Select(s => s.Replace(s_archiveString, ""))
+            .ToList();
     }
 }

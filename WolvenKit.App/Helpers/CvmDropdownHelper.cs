@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using WolvenKit.App.Factories;
-using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
-using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Helpers;
@@ -12,7 +8,7 @@ namespace WolvenKit.App.Helpers;
 /// <summary>
 /// This class takes a <see cref="ChunkViewModel"/> and returns a list of compatible strings for the view. 
 /// </summary>
-public class CvmDropdownHelper
+public abstract class CvmDropdownHelper
 {
 
     // Scanned through 1000+ .app files to find these. If you encounter any others, write a ticket :)
@@ -78,6 +74,11 @@ public class CvmDropdownHelper
                 ret = s_appTags;
                 break;
 
+
+            case appearanceAppearancePart when cvm.Name is "resource":
+                ret = documentTools.CollectProjectFiles(".ent");
+                break;
+
             #endregion
 
             #region entFile
@@ -93,19 +94,33 @@ public class CvmDropdownHelper
                     entAppearance.AppearanceResource.DepotPath,
                     forceCacheRefresh);
                 break;
+            // root entity: .app file paths
+            case entTemplateAppearance when cvm.Name is "appearanceResource":
+                ret = documentTools.CollectProjectFiles(".app");
+                break;
             // mesh entity tag
             case CArray<CName>
                 when parent.Name is "tags" && cvm.GetRootModel() is
                     { ResolvedData: entEntityTemplate { Entity.Chunk: not gameObject } }:
                 ret = s_meshEntityTags;
                 break;
-
             #endregion
 
             #region iComponent
 
+            // mesh entity options
             case entSkinnedMeshComponent meshComp:
-                ret = documentTools.GetAppearanceNamesFromMesh(meshComp.Mesh.DepotPath, forceCacheRefresh);
+                switch (cvm.Name)
+                {
+                    case "meshAppearance":
+                        ret = documentTools.GetAppearanceNamesFromMesh(meshComp.Mesh.DepotPath, forceCacheRefresh);
+                        break;
+                    case "mesh":
+                        ret = documentTools.CollectProjectFiles(".mesh");
+                        break;
+                    default:
+                        break;
+                }
                 break;
             case entMorphTargetSkinnedMeshComponent morphtargetMeshComp:
                 ret = documentTools.GetAppearanceNamesFromMesh(morphtargetMeshComp.MorphResource.DepotPath,
@@ -119,7 +134,7 @@ public class CvmDropdownHelper
             case CArray<CName> when parent is { Name: "chunkMaterials", Parent.Parent.Parent.ResolvedData: CMesh mesh }:
                 ret = mesh.MaterialEntries.Select(entry => entry.Name.GetResolvedText()).Distinct();
                 break;
-            case CMaterialInstance when cvm.Name is "baseMaterial": // resource path, TODO
+            case CMaterialInstance when cvm.Name is "baseMaterial": 
                 ret = documentTools.GetAllBaseMaterials(forceCacheRefresh);
                 break;
             case CKeyValuePair when parent.Parent?.Parent?.ResolvedData is CMaterialInstance matInstance &&
@@ -128,6 +143,7 @@ public class CvmDropdownHelper
                 break;
 
             #endregion
+
             default:
                 break;
         }
@@ -150,7 +166,8 @@ public class CvmDropdownHelper
             gameJournalPath => s_questHandleParentNames.Contains(parent.Name),
 
             #region mesh
-            CArray<CName> when parent is { Name: "chunkMaterials", Parent.Parent.Parent.ResolvedData: CMesh mesh } =>
+
+            CArray<CName> when parent is { Name: "chunkMaterials", Parent.Parent.Parent.ResolvedData: CMesh } =>
                 true,
             CKeyValuePair when parent.Parent?.Parent?.ResolvedData is CMaterialInstance matInstance &&
                                !string.IsNullOrEmpty(matInstance.BaseMaterial.DepotPath.GetResolvedText()) => true,
@@ -161,17 +178,21 @@ public class CvmDropdownHelper
 
             #region ent 
             CArray<CName> when parent.Name is "tags" && cvm.GetRootModel() is
-                { ResolvedData: entEntityTemplate ent } => true,
+                { ResolvedData: entEntityTemplate } => true,
+            appearanceAppearancePart when cvm.Name is ("appearanceResource" or "resource") => true,
             entSkinnedMeshComponent when s_appearanceNames.Contains(cvm.Name) => true,
+            entSkinnedMeshComponent when parent.Name == "mesh" => true,
             entEntityTemplate when s_appearanceNames.Contains(cvm.Name) => true,
-            entTemplateAppearance when cvm.Name == "appearanceName" => true,
+            entTemplateAppearance when cvm.Name is ("appearanceName" or "appearanceResource") => true,
 
             #endregion
 
             #region app
             appearanceAppearanceResource when s_appearanceNames.Contains(cvm.Name) => true,
+            IRedRef when cvm.Name is "resource" && cvm.Parent.ResolvedData is appearanceAppearancePart => true,
 
             #endregion
+
             _ => false
         };
     }
@@ -188,7 +209,7 @@ public class CvmDropdownHelper
             entTemplateAppearance when cvm.Name == "appearanceName" => true,
             entSkinnedMeshComponent when s_appearanceNames.Contains(cvm.Name) => true,
             CMesh when cvm.Parent?.Parent?.Parent?.ResolvedData is CMaterialInstance matInstance &&
-                       !string.IsNullOrEmpty(matInstance.BaseMaterial.DepotPath.GetResolvedText()) => true, 
+                       !string.IsNullOrEmpty(matInstance.BaseMaterial.DepotPath.GetResolvedText()) => true,
             _ => false
         };
     }

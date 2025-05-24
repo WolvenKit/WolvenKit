@@ -19,7 +19,8 @@ namespace WolvenKit.Converters
         public DataTemplate RedIntegerEditor { get; set; }
         public DataTemplate RedColorEditor { get; set; }
         public DataTemplate RedVectorColorEditor { get; set; }
-        public DataTemplate FilterableDropdownEditor { get; set; }
+        public DataTemplate FilterableDropdownCnameEditor { get; set; }
+        public DataTemplate FilterableDropdownRedRefEditor { get; set; }
         public DataTemplate RedColorPicker { get; set; }
         public DataTemplate RedCurveEditor { get; set; }
         public DataTemplate RedCurvePointEditor { get; set; }
@@ -74,7 +75,7 @@ namespace WolvenKit.Converters
                     return RedCNameEditor;
                 }
 
-                return FilterableDropdownEditor;
+                return FilterableDropdownCnameEditor;
                 
             }
 
@@ -157,7 +158,12 @@ namespace WolvenKit.Converters
 
             if (vm.PropertyType.IsAssignableTo(typeof(IRedRef)))
             {
-                return RedRefEditor;
+                if (!CvmDropdownHelper.HasDropdownOptions(vm))
+                {
+                    return RedRefEditor;
+                }
+
+                return FilterableDropdownRedRefEditor;
             }
 
             if (vm.PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
