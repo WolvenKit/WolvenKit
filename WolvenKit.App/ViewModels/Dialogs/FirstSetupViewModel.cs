@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.Core.Interfaces;
 
@@ -36,7 +37,11 @@ public partial class FirstSetupViewModel : DialogWindowViewModel, INotifyDataErr
 
         TryToFindCP77ExecutableAutomatically();
 
-        _materialDepotPath = Path.Combine(ISettingsManager.GetAppData(), "Depot");
+        _materialDepotPath = Path.Combine(
+            Path.GetPathRoot(ISettingsManager.GetAppData()) ?? string.Empty,
+            "Cyberpunk2077Mod",
+            "WolvenkitDepot"
+        );
         if (!Directory.Exists(_materialDepotPath))
         {
             Directory.CreateDirectory(_materialDepotPath);
@@ -211,9 +216,48 @@ public partial class FirstSetupViewModel : DialogWindowViewModel, INotifyDataErr
     {
         _settingsManager.CP77ExecutablePath = CP77ExePath;
         _settingsManager.MaterialRepositoryPath = MaterialDepotPath;
+        ValidateMaterialDepotPath(MaterialDepotPath);
         _settingsManager.Bounce();
     }
 
+    public static void ValidateMaterialDepotPath(string? depotPath)
+    {
+        if (depotPath is null || !Path.IsPathRooted(depotPath))
+        {
+            return;
+        }
+
+        if (!Directory.Exists(depotPath))
+        {
+            DispatcherHelper.RunOnMainThread(() => _ = Interactions.ShowConfirmation((
+                $"Folder {depotPath} does not exist. Please set a valid Depot Path in the settings.",
+                "Depot Path Warning",
+                WMessageBoxImage.Warning,
+                WMessageBoxButtons.Ok
+            )));
+            return;
+        }
+
+        var appdataPath = Environment.ExpandEnvironmentVariables("%APPDATA%");
+        if (!depotPath.Contains(appdataPath))
+        {
+            return;
+        }
+
+        List<string> warningText =
+        [
+            "Hey, choom!",
+            "",
+            "You put your depot path inside your AppData folder.",
+            "This will break the Blender Plugin. Please move it somewhere else!"
+        ];
+        DispatcherHelper.RunOnMainThread(() => _ = Interactions.ShowConfirmation((
+            string.Join('\n', warningText),
+            "Depot Path Warning",
+            WMessageBoxImage.Warning,
+            WMessageBoxButtons.Ok
+        )));
+    }
     partial void OnCP77ExePathChanged(string? value) => ValidateCP77ExePath();
 
     public void ValidateCP77ExePath()

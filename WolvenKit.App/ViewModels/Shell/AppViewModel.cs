@@ -303,6 +303,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         CheckForScriptUpdatesCommand.SafeExecute();
         CheckForLongPathSupport();
         CheckForOneDrivePath();
+        FirstSetupViewModel.ValidateMaterialDepotPath(SettingsManager.MaterialRepositoryPath);
     }
 
     public bool AddDockedPane(string paneString)
@@ -437,6 +438,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
     }
 
+   
     private static void CheckForOneDrivePath()
     {
         if (!FilePathHelper.IsOneDrivePath(Assembly.GetExecutingAssembly().Location))
