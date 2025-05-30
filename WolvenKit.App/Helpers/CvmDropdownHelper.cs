@@ -74,7 +74,6 @@ public abstract class CvmDropdownHelper
                 ret = s_appTags;
                 break;
 
-
             case appearanceAppearancePart when cvm.Name is "resource":
                 ret = documentTools.CollectProjectFiles(".ent");
                 break;
@@ -177,21 +176,20 @@ public abstract class CvmDropdownHelper
             #endregion
 
             #region ent 
-            CArray<CName> when parent.Name is "tags" && cvm.GetRootModel() is
-                { ResolvedData: entEntityTemplate } => true,
             appearanceAppearancePart when cvm.Name is ("appearanceResource" or "resource") => true,
             entSkinnedMeshComponent when s_appearanceNames.Contains(cvm.Name) => true,
             entSkinnedMeshComponent when parent.Name == "mesh" => true,
             entEntityTemplate when s_appearanceNames.Contains(cvm.Name) => true,
             entTemplateAppearance when cvm.Name is ("appearanceName" or "appearanceResource") => true,
-
             #endregion
 
             #region app
             appearanceAppearanceResource when s_appearanceNames.Contains(cvm.Name) => true,
             IRedRef when cvm.Name is "resource" && cvm.Parent.ResolvedData is appearanceAppearancePart => true,
-
             #endregion
+
+            // tags: ent and app
+            IRedArray<CName> when parent is { Name: "tags", Parent.ResolvedData: redTagList } => true,
 
             _ => false
         };
