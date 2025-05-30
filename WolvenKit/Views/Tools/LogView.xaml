@@ -335,7 +335,7 @@
                             ToolTip="Copy line">
                             <templates:IconBox
                                 IconPack="Octicons"
-                                Kind="Clippy"
+                                Kind="Paperclip"
                                 Margin="{DynamicResource WolvenKitMarginMicroVertical}"
                                 Size="{DynamicResource WolvenKitIconMicro}"
                                 Foreground="White" />
