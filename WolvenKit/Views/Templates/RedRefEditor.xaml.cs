@@ -99,9 +99,13 @@ namespace WolvenKit.Views.Editors
 
         public string DepotPath
         {
-            get => RedRef.DepotPath;
+            get => RedRef?.DepotPath ?? "";
             set
             {
+                if (RedRef is null)
+                {
+                    return;
+                }
                 if (!string.IsNullOrEmpty(value.Trim()))
                 {
                     SetValue(RedRefProperty, (IRedRef)RedTypeManager.CreateRedType(RedRef.RedType, (ResourcePath)value, RedRef.Flags));
