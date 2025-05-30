@@ -420,11 +420,11 @@
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedVectorColorEditor>
 
-                <converters:RedEditorTemplateSelector.FilterableDropdownEditor>
+                <converters:RedEditorTemplateSelector.FilterableDropdownCnameEditor>
                     <DataTemplate>
                         <editors:FilterableDropdownCNameMenu DataContext="{Binding}" />
                     </DataTemplate>
-                </converters:RedEditorTemplateSelector.FilterableDropdownEditor>
+                </converters:RedEditorTemplateSelector.FilterableDropdownCnameEditor>
 
                 <converters:RedEditorTemplateSelector.RedColorPicker>
                     <DataTemplate>
@@ -458,6 +458,13 @@
                         <editors:RedRefEditor RedRef="{Binding Data, Mode=TwoWay}" />
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedRefEditor>
+
+                <converters:RedEditorTemplateSelector.FilterableDropdownRedRefEditor>
+                    <DataTemplate>
+                        <editors:FilterableDropdownResourcePathMenu DataContext="{Binding}" />
+                    </DataTemplate>
+                </converters:RedEditorTemplateSelector.FilterableDropdownRedRefEditor>
+
 
                 <converters:RedEditorTemplateSelector.RedNodeRefEditor>
                     <DataTemplate>
