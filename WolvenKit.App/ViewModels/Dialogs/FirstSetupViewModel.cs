@@ -37,7 +37,11 @@ public partial class FirstSetupViewModel : DialogWindowViewModel, INotifyDataErr
 
         TryToFindCP77ExecutableAutomatically();
 
-        _materialDepotPath = Path.Combine(ISettingsManager.GetAppData(), "Depot");
+        _materialDepotPath = Path.Combine(
+            Path.GetPathRoot(ISettingsManager.GetAppData()) ?? string.Empty,
+            "Cyberpunk2077Mod",
+            "WolvenkitDepot"
+        );
         if (!Directory.Exists(_materialDepotPath))
         {
             Directory.CreateDirectory(_materialDepotPath);
