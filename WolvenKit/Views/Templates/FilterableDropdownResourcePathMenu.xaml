@@ -30,8 +30,7 @@
         </Grid.Resources>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" MinWidth="{StaticResource WolvenKitPluginsToolIconButtonSize}"
-                              MaxWidth="{StaticResource WolvenKitLabelWidthLarge}" />
+            <ColumnDefinition Width="*" MinWidth="{StaticResource WolvenKitPluginsToolIconButtonSize}" MaxWidth="{StaticResource WolvenKitLabelWidthLarge}" />
             <ColumnDefinition Width="*" MinWidth="{StaticResource WolvenKitLabelWidth}" />
             <ColumnDefinition x:Name="Col3" Width="{StaticResource WolvenKitButtonGridWidth}" />
         </Grid.ColumnDefinitions>

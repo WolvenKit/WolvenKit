@@ -36,12 +36,6 @@ namespace WolvenKit.Views.Editors
                     return;
                 }
 
-
-                this.Bind(ViewModel,
-                        v => (IRedRef)v.Data,
-                        x => x.RedRefEditor.RedRef)
-                    .DisposeWith(disposables);
-
                 SetCurrentValue(OptionsProperty, CvmDropdownHelper.GetDropdownOptions(vm, _documentTools, false));
                 SetCurrentValue(ShowRefreshButtonProperty, CvmDropdownHelper.ShouldShowRefreshButton(vm));
 
@@ -65,6 +59,14 @@ namespace WolvenKit.Views.Editors
                 {
                     return;
                 }
+
+                SetCurrentValue(RedRefProperty, redRef);
+                RedRefEditor.SetCurrentValue(RedRefEditor.RedRefProperty, redRef);
+
+                // this.Bind(ViewModel,
+                //         v => redRef,
+                //         x => x.RedRefEditor.RedRef)
+                //     .DisposeWith(disposables);
 
                 SetDropdownValueFromCvm();
 
@@ -90,6 +92,20 @@ namespace WolvenKit.Views.Editors
             DependencyProperty.Register(
                 nameof(FilterText),
                 typeof(string),
+                typeof(FilterableDropdownResourcePathMenu),
+                new PropertyMetadata(null, OnPropertyChangedCallback));
+
+        public IRedRef RedRef
+        {
+            get => (IRedRef)GetValue(RedRefProperty);
+            set => SetValue(RedRefProperty, value);
+        }
+
+        /// <summary>Identifies the <see cref="RedRef"/> dependency property.</summary>
+        public static readonly DependencyProperty RedRefProperty =
+            DependencyProperty.Register(
+                nameof(RedRef),
+                typeof(IRedRef),
                 typeof(FilterableDropdownResourcePathMenu),
                 new PropertyMetadata(null, OnPropertyChangedCallback));
 
