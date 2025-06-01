@@ -18,12 +18,6 @@
                     <hc:ThemeResources />
                     <hc:Theme />
                 </ResourceDictionary.MergedDictionaries>
-                <Style
-                    BasedOn="{StaticResource WolvenkitDialogLabelStyleMedium}"
-                    TargetType="{x:Type Label}" />
-                <Style TargetType="{x:Type Grid}">
-                    <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
-                </Style>
                 <converters:IntToVisibilityConverterInverted x:Key="IntToVisibilityConverterInverted" />
                 <converters:IRedTypeToCNameConverter x:Key="IRedTypeToCNameConverter" />
             </ResourceDictionary>
