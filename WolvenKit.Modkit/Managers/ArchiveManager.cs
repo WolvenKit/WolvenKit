@@ -523,7 +523,13 @@ namespace WolvenKit.RED4.CR2W.Archive
             {
                 ret.MergeWith(ProjectArchive.Files.Values
                     .GroupBy(gameFile => gameFile.Extension)
-                    .ToDictionary(gameFiles => gameFiles.Key, gameFiles => gameFiles.Select(x => x))); 
+                    .ToDictionary(gameFiles => gameFiles.Key, gameFiles =>
+                        gameFiles.Select(x =>
+                        {
+                            x.Scope = ArchiveManagerScope.LocalProject;
+                            return x;
+                        })
+                    )); 
             }
             
             // base game files
@@ -532,7 +538,11 @@ namespace WolvenKit.RED4.CR2W.Archive
                 ret.MergeWith(GetGameArchives()
                     .SelectMany(archive => archive.Files.Values)
                     .GroupBy(gameFile => gameFile.Extension)
-                    .ToDictionary(gameFiles => gameFiles.Key, gameFiles => gameFiles.Select(x => x)));
+                    .ToDictionary(gameFiles => gameFiles.Key, gameFiles => gameFiles.Select(x =>
+                    {
+                        x.Scope = ArchiveManagerScope.Basegame;
+                        return x;
+                    })));
             }
             
             // mods
@@ -541,7 +551,11 @@ namespace WolvenKit.RED4.CR2W.Archive
                 ret.MergeWith(  GetModArchives()
                     .SelectMany(archive => archive.Files.Values)
                     .GroupBy(gameFile => gameFile.Extension)
-                    .ToDictionary(gameFiles => gameFiles.Key, gameFiles => gameFiles.Select(x => x)));
+                    .ToDictionary(gameFiles => gameFiles.Key, gameFiles => gameFiles.Select(x =>
+                    {
+                        x.Scope = ArchiveManagerScope.Mods;
+                        return x;
+                    })));
             }
 
             return ret;
@@ -634,6 +648,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             // check if the file is in the project archive
             if (includeProject && ProjectArchive != null && ProjectArchive.Files.TryGetValue(path, out var projectFile))
             {
+                projectFile.Scope = ArchiveManagerScope.LocalProject;
                 return projectFile;
             }
 
@@ -650,6 +665,7 @@ namespace WolvenKit.RED4.CR2W.Archive
 
                 if (modFile != null)
                 {
+                    modFile.Scope = ArchiveManagerScope.Mods;
                     return modFile;
                 }
             }
@@ -661,6 +677,12 @@ namespace WolvenKit.RED4.CR2W.Archive
                 .Select(x => x[path] ?? x[fileHash])
                 .FirstOrDefault();
 
+
+            if (baseFile != null)
+            {
+                baseFile.Scope = ArchiveManagerScope.Basegame;
+            }
+            
             return baseFile; // this can be null
         }
 

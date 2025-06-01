@@ -1,5 +1,5 @@
 ﻿<reactiveUi:ReactiveUserControl
-    x:Class="WolvenKit.Views.Editors.FilterableDropdownCNameMenu"
+    x:Class="WolvenKit.Views.Editors.FilterableDropdownResourcePathMenu"
     x:TypeArguments="shell:ChunkViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -18,27 +18,20 @@
                     <hc:ThemeResources />
                     <hc:Theme />
                 </ResourceDictionary.MergedDictionaries>
-                <Style
-                    BasedOn="{StaticResource WolvenkitDialogLabelStyleMedium}"
-                    TargetType="{x:Type Label}" />
-                <Style TargetType="{x:Type Grid}">
-                    <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
-                </Style>
                 <converters:IntToVisibilityConverterInverted x:Key="IntToVisibilityConverterInverted" />
                 <converters:IRedTypeToCNameConverter x:Key="IRedTypeToCNameConverter" />
             </ResourceDictionary>
         </Grid.Resources>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" MinWidth="{StaticResource WolvenKitLabelWidth}" />
+            <ColumnDefinition Width="*" MinWidth="{StaticResource WolvenKitPluginsToolIconButtonSize}" MaxWidth="{StaticResource WolvenKitLabelWidthLarge}" />
             <ColumnDefinition Width="*" MinWidth="{StaticResource WolvenKitLabelWidth}" />
             <ColumnDefinition x:Name="Col3" Width="{StaticResource WolvenKitButtonGridWidth}" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition x:Name="Row1" Height="Auto" />
-            <RowDefinition x:Name="Row2" Height="5" />
+            <RowDefinition x:Name="FilterRow" Height="Auto" />
+            <RowDefinition x:Name="PlaceholderRow" Height="5" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="5" />
         </Grid.RowDefinitions>
 
         <!-- ====================================== -->
@@ -55,7 +48,7 @@
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
             KeyboardNavigation.TabIndex="1"
             Text="{Binding FilterText,
-                           RelativeSource={RelativeSource AncestorType={x:Type editors:FilterableDropdownCNameMenu}},
+                           RelativeSource={RelativeSource AncestorType={x:Type editors:FilterableDropdownResourcePathMenu}},
                            Mode=TwoWay}" />
         <!-- Placeholder text -->
         <TextBlock
@@ -77,13 +70,13 @@
             Grid.Column="1"
             Height="{StaticResource WolvenKitTabHeight}"
             ItemsSource="{Binding FilteredOptions,
-                                  RelativeSource={RelativeSource AncestorType={x:Type editors:FilterableDropdownCNameMenu}},
+                                  RelativeSource={RelativeSource AncestorType={x:Type editors:FilterableDropdownResourcePathMenu}},
                                   Mode=OneWay}"
             KeyboardNavigation.TabIndex="2"
             SelectedValuePath="Value"
             DisplayMemberPath="Key"
             SelectedValue="{Binding SelectedOption,
-                                    RelativeSource={RelativeSource AncestorType={x:Type editors:FilterableDropdownCNameMenu}},
+                                    RelativeSource={RelativeSource AncestorType={x:Type editors:FilterableDropdownResourcePathMenu}},
                                     Mode=TwoWay}" />
 
         <!-- ====================================== -->
@@ -111,20 +104,12 @@
         <!-- ====================================== -->
         <!-- CName editor -->
         <!-- ====================================== -->
-        <editors:RedCNameEditor
-            x:Name="RedCNameEditor"
+        <editors:RedRefEditor
+            x:Name="RedRefEditor"
             Grid.Row="2"
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            RedString="{Binding Data,
-                                Mode=TwoWay}">
-            <editors:RedCNameEditor.Style>
-                <Style TargetType="editors:RedCNameEditor">
-                    <EventSetter
-                        Event="ValueChanged"
-                        Handler="RedCNameEditor_ValueChanged" />
-                </Style>
-            </editors:RedCNameEditor.Style>
-        </editors:RedCNameEditor>
+            RedRef="{Binding Data,
+                             Mode=TwoWay}" />
     </Grid>
 </reactiveUi:ReactiveUserControl>
