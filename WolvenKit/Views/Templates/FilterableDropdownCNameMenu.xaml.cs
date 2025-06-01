@@ -244,7 +244,7 @@ namespace WolvenKit.Views.Editors
             }
         }
 
-        private void RefreshButton_OnClick_(object sender, RoutedEventArgs e)
+        private void RefreshButton_OnClick(object sender, RoutedEventArgs e)
         {
             if (DataContext is not ChunkViewModel vm)
             {

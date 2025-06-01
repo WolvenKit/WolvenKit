@@ -29,10 +29,9 @@
             <ColumnDefinition x:Name="Col3" Width="{StaticResource WolvenKitButtonGridWidth}" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition x:Name="Row1" Height="Auto" />
-            <RowDefinition x:Name="Row2" Height="5" />
+            <RowDefinition x:Name="FilterRow" Height="Auto" />
+            <RowDefinition x:Name="PlaceholderRow" Height="5" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="5" />
         </Grid.RowDefinitions>
 
         <!-- ====================================== -->
@@ -91,8 +90,7 @@
             Width="{StaticResource WolvenKitButtonWidth}"
             Margin="0"
             Padding="0"
-            Click="RefreshButton_OnClick_">
-
+            Click="RefreshButton_OnClick">
             <StackPanel Orientation="Horizontal">
                 <templates:IconBox
                     IconPack="Material"

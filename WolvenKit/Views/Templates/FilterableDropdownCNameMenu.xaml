@@ -97,8 +97,7 @@
             Width="{StaticResource WolvenKitButtonWidth}"
             Margin="0"
             Padding="0"
-            Click="RefreshButton_OnClick_">
-
+            Click="RefreshButton_OnClick">
             <StackPanel Orientation="Horizontal">
                 <templates:IconBox
                     IconPack="Material"

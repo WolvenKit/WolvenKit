@@ -420,11 +420,11 @@
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedVectorColorEditor>
 
-                <converters:RedEditorTemplateSelector.FilterableDropdownCnameEditor>
+                <converters:RedEditorTemplateSelector.FilterableDropdownCNameEditor>
                     <DataTemplate>
                         <editors:FilterableDropdownCNameMenu DataContext="{Binding}" />
                     </DataTemplate>
-                </converters:RedEditorTemplateSelector.FilterableDropdownCnameEditor>
+                </converters:RedEditorTemplateSelector.FilterableDropdownCNameEditor>
 
                 <converters:RedEditorTemplateSelector.RedColorPicker>
                     <DataTemplate>

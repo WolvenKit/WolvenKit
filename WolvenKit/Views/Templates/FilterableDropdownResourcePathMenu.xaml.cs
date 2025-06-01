@@ -48,8 +48,8 @@ namespace WolvenKit.Views.Editors
                 // and show only the default RedRef editor
                 if (Options.Count == 0 && !ShowRefreshButton)
                 {
-                    Row1.SetCurrentValue(RowDefinition.HeightProperty, new GridLength(0));
-                    Row2.SetCurrentValue(RowDefinition.HeightProperty, new GridLength(0));
+                    FilterRow.SetCurrentValue(RowDefinition.HeightProperty, new GridLength(0));
+                    PlaceholderRow.SetCurrentValue(RowDefinition.HeightProperty, new GridLength(0));
                     Placeholder.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
                     Dropdown.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
                     FilterTextBox.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
@@ -62,11 +62,6 @@ namespace WolvenKit.Views.Editors
 
                 SetCurrentValue(RedRefProperty, redRef);
                 RedRefEditor.SetCurrentValue(RedRefEditor.RedRefProperty, redRef);
-
-                // this.Bind(ViewModel,
-                //         v => redRef,
-                //         x => x.RedRefEditor.RedRef)
-                //     .DisposeWith(disposables);
 
                 SetDropdownValueFromCvm();
 
@@ -232,7 +227,6 @@ namespace WolvenKit.Views.Editors
             }
 
             cvm.Data = RedTypeManager.CreateRedType(redRef.RedType, (ResourcePath)SelectedOption, redRef.Flags);
-            // OnPropertyChanged(nameof(DataContextProperty));
         }
 
         private void SetDropdownValueFromCvm()
@@ -254,7 +248,7 @@ namespace WolvenKit.Views.Editors
             SetCurrentValue(SelectedOptionProperty, optionKey);
         }
 
-        private void RefreshButton_OnClick_(object sender, RoutedEventArgs e)
+        private void RefreshButton_OnClick(object sender, RoutedEventArgs e)
         {
             if (DataContext is not ChunkViewModel vm)
             {

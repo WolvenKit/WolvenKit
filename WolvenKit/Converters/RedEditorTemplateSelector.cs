@@ -19,7 +19,7 @@ namespace WolvenKit.Converters
         public DataTemplate RedIntegerEditor { get; set; }
         public DataTemplate RedColorEditor { get; set; }
         public DataTemplate RedVectorColorEditor { get; set; }
-        public DataTemplate FilterableDropdownCnameEditor { get; set; }
+        public DataTemplate FilterableDropdownCNameEditor { get; set; }
         public DataTemplate FilterableDropdownRedRefEditor { get; set; }
         public DataTemplate RedColorPicker { get; set; }
         public DataTemplate RedCurveEditor { get; set; }
@@ -75,7 +75,7 @@ namespace WolvenKit.Converters
                     return RedCNameEditor;
                 }
 
-                return FilterableDropdownCnameEditor;
+                return FilterableDropdownCNameEditor;
                 
             }
 
