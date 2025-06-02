@@ -1,29 +1,32 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Models.ProjectManagement.Project;
-using WolvenKit.App.Services;
+using WolvenKit.Interfaces.Extensions;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 
 public partial class AddInkatlasDialogViewModel : ObservableObject
 {
-    public AddInkatlasDialogViewModel(Cp77Project project) => ProjectFolders =
-        project.ModFiles // get all folders in mod files
-            .Select(Path.GetDirectoryName)
-            .Where(f => f is not null && f != project.ModDirectory &&
-                        Directory.Exists(Path.Combine(project.ModDirectory, f)))
-            .Select(f => f!)
-            .Distinct()
-            .ToDictionary<string, string>(x => x);
+    public AddInkatlasDialogViewModel(Cp77Project project)
+    {
+        // Dropdown menu should have all folders in mod directory available
+        ProjectFolders = project.GetAllFolders(project.ModDirectory).ToDictionary<string, string>(x => x);
+
+        InkatlasFileName = $"{project.Name}_icons";
+    }
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(RelativePath))
+        switch (e.PropertyName)
         {
-            RelativePath = RelativePath.ToLower();
+            case nameof(RelativePath):
+                RelativePath = RelativePath.ToFileName();
+                break;
+            case nameof(InkatlasFileName):
+                InkatlasFileName = InkatlasFileName.ToFileName().Replace(".inkatlas", "");
+                break;
         }
 
         base.OnPropertyChanged(e);
@@ -44,7 +47,7 @@ public partial class AddInkatlasDialogViewModel : ObservableObject
     /// <summary>
     /// name for inkatlas file
     /// </summary>
-    [ObservableProperty] private string _inkatlasFileName = "icons";
+    [ObservableProperty] private string _inkatlasFileName = "";
 
     /// <summary>
     /// Tile width
