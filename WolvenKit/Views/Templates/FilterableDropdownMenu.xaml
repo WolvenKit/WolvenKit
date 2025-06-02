@@ -8,78 +8,111 @@
     FocusManager.FocusedElement="{Binding ElementName=FilterTextBox}">
     <Grid>
         <Grid.Resources>
-            <ResourceDictionary>
+            <ResourceDictionary xmlns:editors="clr-namespace:WolvenKit.Views.Editors">
                 <ResourceDictionary.MergedDictionaries>
                     <hc:ThemeResources />
                     <hc:Theme />
                 </ResourceDictionary.MergedDictionaries>
-                <Style TargetType="{x:Type Label}" BasedOn="{StaticResource WolvenkitDialogLabelStyleMedium}">
-                </Style>
+                <Style
+                    BasedOn="{StaticResource WolvenkitDialogLabelStyleMedium}"
+                    TargetType="{x:Type Label}" />
                 <Style TargetType="{x:Type Grid}">
-                    <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}"></Setter>
+                    <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
                 </Style>
                 <converters:IntToVisibilityConverterInverted x:Key="IntToVisibilityConverterInverted" />
             </ResourceDictionary>
+
         </Grid.Resources>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="{StaticResource WolvenKitDialogLabelColumnWidthMedium}" />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="5" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="5" />
+            <RowDefinition Height="2" />
+            <RowDefinition x:Name="dropdownRow" Height="Auto" />
+            <RowDefinition x:Name="spacerRow2" Height="2" />
         </Grid.RowDefinitions>
 
         <!-- ====================================== -->
-        <!--                Label                   -->
+        <!-- Label -->
         <!-- ====================================== -->
         <Label
             Grid.Row="0"
             Grid.Column="0"
+            Width="{StaticResource WolvenKitLabelWidthMedium}"
             HorizontalAlignment="Left"
             Background="#252525"
             BorderThickness="0"
-            Width="{StaticResource WolvenKitLabelWidthMedium}"
             Content="{Binding Label}" />
 
-        <!-- ====================================== -->
-        <!--               Filter                   -->
-        <!-- ====================================== -->
+
+        <!-- Filter and Dropdown - StackPanel for inline mode -->
+        <StackPanel
+            x:Name="inlinePanel"
+            Grid.Row="0"
+            Grid.Column="1"
+            Visibility="{Binding IsInline,
+                                 Converter={StaticResource BooleanToVisibilityConverter}}"
+            Orientation="Horizontal">
+            <TextBox
+                x:Name="FilterTextBox"
+                Width="150"
+                Margin="0,0,5,0"
+                Foreground="{StaticResource ForegroundColor_Grey_Dark}"
+                helpers:TextBoxBehavior.TripleClickSelectAll="True"
+                KeyboardNavigation.TabIndex="1"
+                Text="{Binding FilterText,
+                               UpdateSourceTrigger=PropertyChanged}" />
+
+            <ComboBox
+                x:Name="Dropdown"
+                Height="{StaticResource WolvenKitTabHeight}"
+                MinWidth="150"
+                ItemsSource="{Binding FilteredOptions,
+                                      Mode=OneWay}"
+                KeyboardNavigation.TabIndex="2"
+                SelectedValuePath="Value"
+                DisplayMemberPath="Key"
+                SelectedValue="{Binding SelectedOption}" />
+        </StackPanel>
+
+
+        <!-- Original layout elements (with x:Name for toggling) -->
         <TextBox
-            x:Name="FilterTextBox"
+            x:Name="originalFilterTextBox"
             Grid.Row="0"
             Grid.Column="1"
             Margin="0"
             Foreground="{StaticResource ForegroundColor_Grey_Dark}"
+            Visibility="{Binding IsInline,
+                                 Converter={StaticResource InvertBooleanVisibilityConverter}}"
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
             KeyboardNavigation.TabIndex="1"
             Text="{Binding FilterText,
                            UpdateSourceTrigger=PropertyChanged}" />
 
-        <!-- Placeholder text -->
         <TextBlock
+            x:Name="originalPlaceholder"
             Grid.Row="0"
             Grid.Column="1"
-            Text="Filter"
             Style="{StaticResource WolvenkitPlaceholderStyle}"
-            Visibility="{Binding ElementName=FilterTextBox,
+            Visibility="{Binding ElementName=originalFilterTextBox,
                                  Path=Text.Length,
-                                 Converter={StaticResource IntToVisibilityConverterInverted}}" />
+                                 Converter={StaticResource IntToVisibilityConverterInverted}}"
+            Text="Filter" />
 
-        <!-- ====================================== -->
-        <!--             Dropdown                   -->
-        <!-- ====================================== -->
         <ComboBox
-            x:Name="Dropdown"
+            x:Name="originalDropdown"
             Grid.Row="2"
             Grid.Column="1"
             Height="{StaticResource WolvenKitTabHeight}"
+            Visibility="{Binding IsInline,
+                                 Converter={StaticResource InvertBooleanVisibilityConverter}}"
             ItemsSource="{Binding FilteredOptions,
                                   Mode=OneWay}"
-
             KeyboardNavigation.TabIndex="2"
             SelectedValuePath="Value"
             DisplayMemberPath="Key"

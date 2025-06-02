@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 
@@ -91,7 +92,7 @@ public static class InkatlasImageGenerator
                 (
                     file,
                     paddedImage,
-                    Path.GetFileNameWithoutExtension(file),
+                    Path.GetFileNameWithoutExtension(file).ToFileName(),
                     originalWidth,
                     originalHeight
                 ));
@@ -190,6 +191,11 @@ public static class InkatlasImageGenerator
         foreach (var imgData in images)
         {
             imgData.Image.Dispose();
+        }
+
+        if (parts.Count == 1)
+        {
+            parts[0].Name = "icon";
         }
 
         return parts;
@@ -343,7 +349,7 @@ public static class InkatlasImageGenerator
     {
         public AtlasPart(string name) => Name = name;
 
-        public string Name { get; init; }
+        public string Name { get; set; }
         public Rectangle PixelRect { get; init; }
         public RectangleF UvRect { get; init; }
     }
