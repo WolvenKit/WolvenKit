@@ -27,6 +27,10 @@ public interface ISettingsDto
     public string? CP77ExecutablePath { get; set; }
     public string? CP77LaunchCommand { get; set; }
     public string? CP77LaunchOptions { get; set; }
+
+    /// <summary>
+    /// Depot Path
+    /// </summary>
     public string? MaterialRepositoryPath { get; set; }
     public bool AnalyzeModArchives { get; set; }
     public string? ExtraModDirPath { get; set; }
