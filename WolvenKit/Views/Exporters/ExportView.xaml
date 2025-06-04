@@ -212,8 +212,6 @@
                             VerticalAlignment="Center"
                             Foreground="#7EFFFFFF"
                             FontSize="{DynamicResource WolvenKitFontHuge}"
-                            Visibility="{Binding Path=HasItems,
-                                                 Converter={StaticResource InvertBooleanVisibilityConverter}}"
                             TextWrapping="Wrap"
                             Text="No files to export" />
 
@@ -224,8 +222,6 @@
                             VerticalAlignment="Center"
                             Foreground="#7EFFFFFF"
                             FontSize="{DynamicResource WolvenKitFontMedium}"
-                            Visibility="{Binding Path=HasItems,
-                                                 Converter={StaticResource InvertBooleanVisibilityConverter}}"
                             TextWrapping="Wrap"
                             Text="Add files to your project to export them" />
                     </StackPanel>
