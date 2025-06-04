@@ -194,48 +194,52 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-
-            <StackPanel
+            <!-- Placeholder: no files to export -->
+            <Border
                 Grid.Column="0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
                 Width="Auto"
-                Orientation="Vertical">
-                <TextBlock
-                    Visibility="{Binding Path=HasItems,
-                                         Converter={StaticResource InvertBooleanVisibilityConverter}}"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    Background="{StaticResource BackgroundColor_Control}"
-                    Foreground="Gray"
-                    FontSize="{DynamicResource WolvenKitFontHeader}"
-                    Opacity="0.8"
-                    Width="Auto"
-                    Margin="{DynamicResource WolvenKitMargin}"
-                    TextWrapping="Wrap"
-                    Text="No exportable files" />
-                <TextBlock
-                    Visibility="{Binding Path=HasItems,
-                                         Converter={StaticResource InvertBooleanVisibilityConverter}}"
-                    Background="{StaticResource BackgroundColor_Control}"
-                    Foreground="Gray"
-                    FontSize="{DynamicResource WolvenKitFontMedium}"
-                    Opacity="0.8"
-                    Width="Auto"
-                    Margin="{DynamicResource WolvenKitMargin}"
-                    TextWrapping="Wrap"
-                    Text="Add files to your Wolvenkit Project to export them" />
+                Height="Auto"
+                BorderBrush="{StaticResource BorderAlt}"
+                BorderThickness="0,1,0,0"
+                Visibility="{Binding Path=HasItems,
+                                     Converter={StaticResource InvertBooleanVisibilityConverter}}">
+                <Grid VerticalAlignment="Center">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock
+                            Width="Auto"
+                            Margin="{DynamicResource WolvenKitMargin}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="#7EFFFFFF"
+                            FontSize="{DynamicResource WolvenKitFontHuge}"
+                            Visibility="{Binding Path=HasItems,
+                                                 Converter={StaticResource InvertBooleanVisibilityConverter}}"
+                            TextWrapping="Wrap"
+                            Text="No files to export" />
 
-            </StackPanel>
-            
+                        <TextBlock
+                            Width="Auto"
+                            Margin="{DynamicResource WolvenKitMargin}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="#7EFFFFFF"
+                            FontSize="{DynamicResource WolvenKitFontMedium}"
+                            Visibility="{Binding Path=HasItems,
+                                                 Converter={StaticResource InvertBooleanVisibilityConverter}}"
+                            TextWrapping="Wrap"
+                            Text="Add files to your project to export them" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
             <!-- Data Grid Exports -->
             <syncfusion:SfDataGrid
-                Visibility="{Binding Path=HasItems,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
-
                 x:Name="ExportGrid"
                 Grid.Column="0"
+                Height="Auto"
                 BorderThickness="0,1,0,0"
+                Visibility="{Binding Path=HasItems,
+                                     Converter={StaticResource BooleanToVisibilityConverter}}"
                 HeaderRowHeight="{DynamicResource WolvenKitTreeGridRowHeaderHeight}"
                 RowHeight="{DynamicResource WolvenKitTreeGridRowHeight}"
                 ColumnSizer="Auto"
