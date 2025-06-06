@@ -1531,7 +1531,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 var sequenceIndex = GetIndexOfFirstNonRepeatingMaterial(newMaterials.Select(m => m.GetResolvedText() ?? "").ToList());
 
-                while (newMaterials.Count < numSubmeshes)
+                while (newMaterials.Count < numSubmeshes && sequenceIndex < newMaterials.Count + 1)
                 {
                     newMaterials.Add(newMaterials[sequenceIndex]);
                     wasAdded = true;
