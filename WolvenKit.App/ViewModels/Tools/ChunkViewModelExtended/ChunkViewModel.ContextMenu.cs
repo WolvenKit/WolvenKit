@@ -99,6 +99,11 @@ public partial class ChunkViewModel
         var oldName = entry.Name;
         var newName = await Interactions.ShowInputBoxAsync("Rename material", oldName.GetResolvedText() ?? "");
 
+        if (string.IsNullOrEmpty(newName.Trim()))
+        {
+            return;
+        }
+
         entry.Name = (CName)newName;
 
         Tab?.Parent?.SetIsDirty(true);
