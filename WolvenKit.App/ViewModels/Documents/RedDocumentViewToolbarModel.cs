@@ -453,16 +453,19 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             }
             else if (CurrentTab?.FilePath is not string filePath ||
                      Directory.GetFiles(Path.Combine(filePath, ".."), "*.mesh").Length <= 1)
+                     
             {
-                destFolder = Path.Combine(dirName, "textures");
+                destFolder = dirName.EndsWith("textures") ? dirName : Path.Combine(dirName, "textures");
             }
             else
             {
                 // if the folder contains more than one .mesh file, add a subdirectory inside "textures"
                 var fileName = Path.GetFileName(CurrentTab.FilePath.Split('.').FirstOrDefault() ?? "").ToFileName();
-                destFolder = Path.Combine(dirName, "textures", fileName);
+                var subDirName = dirName.EndsWith("textures") ? "" : "textures";
+                destFolder = Path.Combine(dirName, subDirName, fileName);
             }
         }
+
 
         destFolder = Interactions.AskForTextInput(("Target folder for dependencies", destFolder));
 
