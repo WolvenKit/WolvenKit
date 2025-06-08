@@ -99,6 +99,11 @@ public partial class ChunkViewModel
         var oldName = entry.Name;
         var newName = await Interactions.ShowInputBoxAsync("Rename material", oldName.GetResolvedText() ?? "");
 
+        if (string.IsNullOrWhiteSpace(newName))
+        {
+            return;
+        }
+
         entry.Name = (CName)newName;
 
         Tab?.Parent?.SetIsDirty(true);
@@ -156,11 +161,13 @@ public partial class ChunkViewModel
         }
 
         var newIdx = await Interactions.ShowInputBoxAsync("New material index", $"{NodeIdxInParent}");
-        if (!int.TryParse(newIdx, out var newIndex))
+        if (!int.TryParse(newIdx, out var newIndex) || newIndex < 0 || newIndex >= materialEntries.Count)
         {
             return;
         }
 
+        newIndex += 1;
+        
         entryCvm.MoveChild(newIndex, entryDefinition);
         Parent.MoveChild(newIndex, this);
 
