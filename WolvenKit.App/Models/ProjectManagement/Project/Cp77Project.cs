@@ -915,8 +915,8 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
 
     /// <summary>
     /// Gets all folders under a given directory as list. Defaults to mod directory.
-    /// </summary>
     /// <param name="subdirParam">Pass <see cref="ModDirectory"/>, <see cref="ResourcesDirectory"/>, <see cref="RawDirectory"/></param>
+    /// </summary>
     public List<string> GetAllFolders(string? subdirParam)
     {
         var filesToSearch = ModFiles;

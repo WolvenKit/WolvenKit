@@ -256,7 +256,10 @@ public static class InkatlasImageGenerator
             }
             else
             {
-                grid.Add(currentRow);
+                if (currentRow.Count > 0)
+                {
+                    grid.Add(currentRow);
+                }
                 currentRow = [imageData];
                 currentWidth = width;
             }
