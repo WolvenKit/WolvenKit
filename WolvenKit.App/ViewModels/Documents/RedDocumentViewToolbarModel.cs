@@ -460,7 +460,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             else
             {
                 // if the folder contains more than one .mesh file, add a subdirectory inside "textures"
-                var fileName = Path.GetFileName(CurrentTab.FilePath.Split('.').FirstOrDefault() ?? "").ToFileName();
+                var fileName = Path.GetFileName(CurrentTab.FilePath.Split('.').FirstOrDefault() ?? "").ToFilePath();
                 var subDirName = dirName.EndsWith("textures") ? "" : "textures";
                 destFolder = Path.Combine(dirName, subDirName, fileName);
             }
