@@ -22,7 +22,7 @@ public partial class AddInkatlasDialogViewModel : ObservableObject
         switch (e.PropertyName)
         {
             case nameof(RelativePath):
-                RelativePath = RelativePath.ToFileName();
+                RelativePath = RelativePath.ToFilePath();
                 break;
             case nameof(InkatlasFileName):
                 InkatlasFileName = InkatlasFileName.ToFileName().Replace(".inkatlas", "");
