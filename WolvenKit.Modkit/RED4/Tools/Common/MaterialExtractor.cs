@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Common.FNV1A;
@@ -18,7 +19,7 @@ using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
 
 namespace WolvenKit.Modkit.RED4.GeneralStructs;
 
-public class MaterialExtractor
+public partial class MaterialExtractor
 {
     private readonly ModTools _modTools;
     private readonly IArchiveManager _archiveManager;
@@ -29,6 +30,11 @@ public class MaterialExtractor
 
     private readonly List<string> _textureList = new();
 
+
+    [GeneratedRegex(@"^[A-Za-z]:\\", RegexOptions.Compiled)]
+    private static partial Regex WindowsAbsolutePathRegex();
+    
+    
     public MaterialExtractor(ModTools modTools, IArchiveManager archiveManager, string materialRepositoryPath,
         GlobalExportArgs globalExportArgs, ILoggerService loggerService)
     {
@@ -38,6 +44,12 @@ public class MaterialExtractor
         _materialRepositoryPath = materialRepositoryPath;
         _globalExportArgs = globalExportArgs;
         _loggerService = loggerService;
+
+        // Long path support for Blender Python: https://github.com/WolvenKit/WolvenKit/pull/2392#issuecomment-2953961797
+        if (WindowsAbsolutePathRegex().IsMatch(_materialRepositoryPath))
+        {
+            _materialRepositoryPath = @"\\?\" + _materialRepositoryPath;
+        }
     }
 
     public MatData GenerateMaterialData(CR2WFile mainFile)
