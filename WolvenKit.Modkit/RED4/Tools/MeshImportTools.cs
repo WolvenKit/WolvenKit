@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using SharpGLTF.Schema2;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Exceptions;
@@ -700,19 +701,48 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            meshContainer.garmentMorph = Array.Empty<Vec3>();
-            // TODO: https://github.com/WolvenKit/WolvenKit/issues/1506
-            //       Mesh Import Needs to Actually Check it's Working with GarmentSupport Targets.
-            //       For now we'll keep assuming GS is at index 0
-            if (mesh.Primitives[0].MorphTargetsCount > 0)
-            {
-                var idx = mesh.Primitives[0].GetMorphTargetAccessors(0).Keys.ToList().IndexOf("POSITION");
-                var extraDataList = mesh.Primitives[0].GetMorphTargetAccessors(0).Values.ToList()[idx].AsVector3Array().ToList();
+            meshContainer.garmentMorph = [];
 
-                meshContainer.garmentMorph = extraDataList.Select(p => new Vec3(p.X, -p.Z, p.Y)).ToArray();
+            if (mesh.Extras?.Deserialize<MeshExtras>() is { } extras)
+            {
+                if (extras.TargetNames != null)
+                {
+                    ExtractMorphTargets(meshContainer, mesh, extras);
+                }
             }
 
             return meshContainer;
+        }
+
+        private static void ExtractMorphTargets(RawMeshContainer meshContainer, Mesh mesh, MeshExtras extras)
+        {
+            if (extras.TargetNames == null)
+            {
+                return;
+            }
+
+            if (extras.TargetNames.Length != mesh.Primitives[0].MorphTargetsCount)
+            {
+                throw new Exception($"{nameof(MeshExtras)} targetNames count doesn't match morphTarget count");
+            }
+
+            for (var i = 0; i < extras.TargetNames.Length; i++)
+            {
+                if (extras.TargetNames[i] is "GarmentSupport")
+                {
+                    meshContainer.garmentMorph = GetVector3List(i, "POSITION").Select(p => new Vec3(p.X, -p.Z, p.Y)).ToArray();
+                }
+            }
+
+            return;
+
+            List<Vec3> GetVector3List(int morphTargetIndex, string attributeKey)
+            {
+                var idx = mesh.Primitives[0].GetMorphTargetAccessors(morphTargetIndex).Keys.ToList().IndexOf(attributeKey);
+                var extraDataList = mesh.Primitives[0].GetMorphTargetAccessors(morphTargetIndex).Values.ToList()[idx].AsVector3Array().ToList();
+
+                return extraDataList;
+            }
         }
 
         private static Re4MeshContainer RawMeshToRE4Mesh(RawMeshContainer mesh, Vec4 qScale, Vec4 qTrans)
