@@ -31,6 +31,21 @@ namespace WolvenKit.Views.Editors
             DataContext = this;
         }
 
+        #region properties
+
+        public bool IsInline
+        {
+            get => (bool)GetValue(IsInlineProperty);
+            set => SetValue(IsInlineProperty, value);
+        }
+
+        public static readonly DependencyProperty IsInlineProperty =
+            DependencyProperty.Register(
+                nameof(IsInline),
+                typeof(bool),
+                typeof(FilterableDropdownMenu),
+                new PropertyMetadata(false, OnPropertyChangedCallback));
+        
         public string Key
         {
             get => (string)GetValue(KeyProperty);
@@ -124,6 +139,8 @@ namespace WolvenKit.Views.Editors
                 typeof(FilterableDropdownMenu),
                 new PropertyMetadata(null, OnPropertyChangedCallback));
 
+        #endregion
+        
         private void UpdateFilteredOptions()
         {
             if (Options == null)
@@ -155,6 +172,10 @@ namespace WolvenKit.Views.Editors
             {
                 case (nameof(Options)) or (nameof(FilterText)):
                     UpdateFilteredOptions();
+                    break;
+                case nameof(IsInline) when IsInline:
+                    dropdownRow.SetCurrentValue(Grid.HeightProperty, 0.0);
+                    spacerRow2.SetCurrentValue(Grid.HeightProperty, 0.0);
                     break;
             }
 
