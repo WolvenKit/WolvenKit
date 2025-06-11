@@ -232,5 +232,8 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         {
             _loggerService.Error($"Failed to delete {filePath}. This file is no longer needed.");
         }
+
+        // Check for and reload any modified streaming sector or related files that are currently open
+        ReloadChangedFiles();
     }
 }
