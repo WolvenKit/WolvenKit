@@ -25,6 +25,7 @@ using WolvenKit.App.Models.Nodify;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Exceptions;
@@ -1223,6 +1224,86 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
             if (Data is IRedArray arr)
             {
+                // Special handling for scnActorDef arrays - just calculate correct actor ID
+                if (arr.InnerType == typeof(scnActorDef))
+                {
+                    var newActor = new scnActorDef();
+                    
+                    // Calculate the next actor ID based on current array count
+                    uint nextActorId = (uint)arr.Count;
+                    newActor.ActorId.Id = nextActorId;
+                    
+                    InsertChild(-1, newActor);
+                    return;
+                }
+                
+                // Special handling for scnPlayerActorDef arrays - calculate ID continuing after actors
+                if (arr.InnerType == typeof(scnPlayerActorDef) && GetRootModel().ResolvedData is scnSceneResource scene)
+                {
+                    var newPlayerActor = new scnPlayerActorDef();
+                    
+                    // Calculate the next actor ID continuing after regular actors
+                    // Total ID = actors.Count + playerActors.Count
+                    uint nextActorId = (uint)(scene.Actors.Count + arr.Count);
+                    newPlayerActor.ActorId.Id = nextActorId;
+                    
+                    InsertChild(-1, newPlayerActor);
+                    return;
+                }
+                
+                // Special handling for scnPropDef arrays - calculate correct prop ID
+                if (arr.InnerType == typeof(scnPropDef))
+                {
+                    var newProp = new scnPropDef();
+                    
+                    // Calculate the next prop ID based on current array count (0, 1, 2, etc.)
+                    uint nextPropId = (uint)arr.Count;
+                    newProp.PropId.Id = nextPropId;
+                    
+                    InsertChild(-1, newProp);
+                    return;
+                }
+                
+                // Special handling for screenplay lines - itemId: 0, 257, 513, 769, etc.
+                if (arr.InnerType == typeof(scnscreenplayDialogLine))
+                {
+                    var newLine = new scnscreenplayDialogLine();
+                    
+                    // Calculate itemId: 0 + lineIndex * 256
+                    uint itemId = (uint)arr.Count * 256;
+                    newLine.ItemId.Id = itemId;
+                    
+                    InsertChild(-1, newLine);
+                    return;
+                }
+                
+                // Special handling for screenplay options - itemId: 2, 258, 514, 770, etc.
+                if (arr.InnerType == typeof(scnscreenplayChoiceOption))
+                {
+                    var newOption = new scnscreenplayChoiceOption();
+                    
+                    // Calculate itemId: 2 + optionIndex * 256
+                    uint itemId = 2 + (uint)arr.Count * 256;
+                    newOption.ItemId.Id = itemId;
+                    
+                    InsertChild(-1, newOption);
+                    return;
+                }
+                
+                // Special handling for scnPerformerSymbol arrays - just calculate correct performer ID
+                if (arr.InnerType == typeof(scnPerformerSymbol))
+                {
+                    var newPerformer = new scnPerformerSymbol();
+                    
+                    // Calculate the next performer ID based on current array count
+                    // Formula: performerId = 1 + performerIndex * 256
+                    uint performerId = 1 + (uint)arr.Count * 256;
+                    newPerformer.PerformerId.Id = performerId;
+                    
+                    InsertChild(-1, newPerformer);
+                    return;
+                }
+
                 var innerType = arr.InnerType;
                 if (innerType.IsValueType)
                 {

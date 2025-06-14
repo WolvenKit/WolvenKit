@@ -147,6 +147,108 @@ public abstract class CvmDropdownHelper
                 break;
         }
 
+        // Special case for scnActorId.Id - check if we're editing the Id property of a scnActorId
+        if (cvm.Name == "id" && parent.ResolvedData is scnActorId && cvm.GetRootModel().ResolvedData is scnSceneResource scene)
+        {
+            // Generate dropdown options for actor IDs with actor names
+            // Key = display text, Value = actual ID value
+            var actorOptions = new Dictionary<string, string>();
+            
+            // Add regular actors
+            for (int i = 0; i < scene.Actors.Count; i++)
+            {
+                var actor = scene.Actors[i];
+                string actorName = actor.ActorName; // Implicit conversion from CString to string
+                if (string.IsNullOrEmpty(actorName))
+                {
+                    actorName = $"Actor {i}";
+                }
+                actorOptions.Add($"{i}: {actorName}", i.ToString());
+            }
+            
+            // Add player actors
+            for (int i = 0; i < scene.PlayerActors.Count; i++)
+            {
+                var playerActor = scene.PlayerActors[i];
+                var actorId = scene.Actors.Count + i;
+                string actorName = playerActor.PlayerName; // Implicit conversion from CString to string
+                if (string.IsNullOrEmpty(actorName))
+                {
+                    actorName = $"Player Actor {i}";
+                }
+                actorOptions.Add($"{actorId}: {actorName}", actorId.ToString());
+            }
+            
+            return actorOptions;
+        }
+
+        // Special case for scnPerformerId.Id - check if we're editing the Id property of a scnPerformerId
+        if (cvm.Name == "id" && parent.ResolvedData is scnPerformerId && cvm.GetRootModel().ResolvedData is scnSceneResource sceneForPerformer)
+        {
+            // Generate dropdown options for performer IDs with performer names from debugSymbols
+            // Key = display text, Value = actual ID value
+            var performerOptions = new Dictionary<string, string>();
+            
+            if (sceneForPerformer.DebugSymbols?.PerformersDebugSymbols != null)
+            {
+                foreach (var performerSymbol in sceneForPerformer.DebugSymbols.PerformersDebugSymbols)
+                {
+                    var performerId = performerSymbol.PerformerId.Id;
+                    var performerIdValue = ((uint)performerId).ToString();
+                    
+                    // Try to get performer name from various sources
+                    string performerName = $"Performer {performerIdValue}";
+                    
+                    // Try first name in Names array first (most reliable)
+                    if (performerSymbol.EntityRef.Names.Count > 0)
+                    {
+                        var firstName = performerSymbol.EntityRef.Names[0].GetResolvedText() ?? "";
+                        if (!string.IsNullOrEmpty(firstName))
+                        {
+                            performerName = firstName;
+                        }
+                    }
+                    
+                    // If Names didn't work, try Reference (NodeRef)
+                    if (performerName == $"Performer {performerIdValue}")
+                    {
+                        var referenceString = performerSymbol.EntityRef.Reference.ToString() ?? "";
+                        if (!string.IsNullOrEmpty(referenceString) && referenceString != "NodeRef")
+                        {
+                            // Remove the # prefix if present
+                            performerName = referenceString.StartsWith("#") ? referenceString.Substring(1) : referenceString;
+                        }
+                    }
+                    
+                    // Try SceneActorContextName
+                    if (performerName == $"Performer {performerIdValue}")
+                    {
+                        var sceneActorContextName = performerSymbol.EntityRef.SceneActorContextName.GetResolvedText() ?? "";
+                        if (!string.IsNullOrEmpty(sceneActorContextName))
+                        {
+                            performerName = sceneActorContextName;
+                        }
+                    }
+                    
+                    // Try DynamicEntityUniqueName
+                    if (performerName == $"Performer {performerIdValue}")
+                    {
+                        var dynamicEntityName = performerSymbol.EntityRef.DynamicEntityUniqueName.GetResolvedText() ?? "";
+                        if (!string.IsNullOrEmpty(dynamicEntityName))
+                        {
+                            performerName = dynamicEntityName;
+                        }
+                    }
+                    
+                    performerOptions.Add($"{performerIdValue}: {performerName}", performerIdValue);
+                }
+            }
+            
+            return performerOptions;
+        }
+
+
+
         return ret.Where(x => !string.IsNullOrEmpty(x)).ToDictionary(x => x!, y => y!);
     }
 
@@ -159,6 +261,8 @@ public abstract class CvmDropdownHelper
         {
             return false;
         }
+
+
 
         return parent.ResolvedData switch
         {
@@ -190,6 +294,12 @@ public abstract class CvmDropdownHelper
 
             // tags: ent and app
             IRedArray<CName> when parent is { Name: "tags", Parent.ResolvedData: redTagList } => true,
+
+            // scnActorId.Id dropdown
+            scnActorId when cvm.Name == "id" && cvm.GetRootModel().ResolvedData is scnSceneResource => true,
+
+            // scnPerformerId.Id dropdown
+            scnPerformerId when cvm.Name == "id" && cvm.GetRootModel().ResolvedData is scnSceneResource => true,
 
             _ => false
         };
