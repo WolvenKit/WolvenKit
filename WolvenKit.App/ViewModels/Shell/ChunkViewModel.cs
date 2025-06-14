@@ -734,7 +734,46 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    public string ResolvedType => ResolvedPropertyType is not null ? GetTypeRedName(ResolvedPropertyType) ?? ResolvedPropertyType.Name : "";
+        public string ResolvedType
+    {
+        get
+        {
+            if (ResolvedPropertyType is null)
+            {
+                return "";
+            }
+
+            var baseResolvedType = GetTypeRedName(ResolvedPropertyType) ?? ResolvedPropertyType.Name;
+
+            // Special case for scnQuestNode to show the quest node type in the resolved type
+            if (Data is IRedBaseHandle handle && handle.GetValue() is scnQuestNode questNode)
+            {
+                if (questNode.QuestNode?.Chunk != null)
+                {
+                    var questNodeType = NodeProperties.GetNameFromClass(questNode.QuestNode.Chunk);
+
+                    // Show the condition type for pause condition nodes
+                    if (questNode.QuestNode.Chunk is questPauseConditionNodeDefinition pauseCondition)
+                    {
+                        if (pauseCondition.Condition?.Chunk != null)
+                        {
+                            var conditionType = NodeProperties.GetNameFromClass(pauseCondition.Condition.Chunk);
+
+                            return $"scnQuestNode → {questNodeType} → {conditionType}";
+                        }
+
+                        return $"scnQuestNode → {questNodeType} → <No Condition>";
+                    }
+
+                    return $"scnQuestNode → {questNodeType}";
+                }
+
+                return "scnQuestNode → <No Quest Node>";
+            }
+
+            return baseResolvedType;
+        }
+    }
 
     // Controls if value text is being displayed or not
     public bool TypesDiffer => PropertyType != ResolvedPropertyType;
