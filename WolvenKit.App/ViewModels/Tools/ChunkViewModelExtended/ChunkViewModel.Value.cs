@@ -484,7 +484,7 @@ public partial class ChunkViewModel
                     }
                 }
                 break;
-            case scnSceneWorkspotInstanceId sceneWorkspotInstance when sceneWorkspotInstance.Id != 0 && GetRootModel().ResolvedData is scnSceneResource sceneForWorkspot:
+            case scnSceneWorkspotInstanceId sceneWorkspotInstance when GetRootModel().ResolvedData is scnSceneResource sceneForWorkspot:
                  Value = $"{sceneWorkspotInstance.Id}";
                  IsValueExtrapolated = sceneWorkspotInstance.Id != 0;
                  
@@ -507,7 +507,7 @@ public partial class ChunkViewModel
                      }
                  }
                  break;
-            case scnEffectInstanceId scnEffectInstance when scnEffectInstance.Id != 0 && GetRootModel().ResolvedData is scnSceneResource sceneForEffect:
+            case scnEffectInstanceId scnEffectInstance when GetRootModel().ResolvedData is scnSceneResource sceneForEffect:
                 Value = $"{scnEffectInstance.Id}";
                 IsValueExtrapolated = scnEffectInstance.Id != 0;
                 
@@ -527,6 +527,22 @@ public partial class ChunkViewModel
                             var filename = System.IO.Path.GetFileNameWithoutExtension(effectPath);
                             Value = $"{scnEffectInstance.Id}: {filename}";
                         }
+                    }
+                }
+                break;
+            case scnPropId scnPropId when GetRootModel().ResolvedData is scnSceneResource sceneForProp:
+                Value = $"{scnPropId.Id}";
+                IsValueExtrapolated = scnPropId.Id != 0;
+                
+                // Add friendly prop name if available
+                var propDefinition = sceneForProp.Props
+                    .FirstOrDefault(p => p.PropId.Id == scnPropId.Id);
+                if (propDefinition != null)
+                {
+                    var propName = propDefinition.PropName.ToString();
+                    if (!string.IsNullOrEmpty(propName))
+                    {
+                        Value = $"{scnPropId.Id}: {propName}";
                     }
                 }
                 break;
