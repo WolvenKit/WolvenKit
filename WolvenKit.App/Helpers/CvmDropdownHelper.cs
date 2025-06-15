@@ -59,7 +59,7 @@ public abstract class CvmDropdownHelper
         IEnumerable<string?> ret = [];
         switch (parent.ResolvedData)
         {
-            case gameJournalPath when cvm.Name is "className" && s_questHandleParentNames.Contains(parent.Name):
+            case gameJournalPath when cvm.Name is "className" && parent.Name is not null && s_questHandleParentNames.Contains(parent.Name):
                 ret = RedTypeHelper.GetExtendingClassNames(typeof(gameJournalEntry));
                 break;
             case entISkinTargetComponent when cvm.Name is "renderingPlaneAnimationParam":
@@ -382,7 +382,7 @@ public abstract class CvmDropdownHelper
             return propOptions;
         }
 
-        return ret.Where(x => !string.IsNullOrEmpty(x)).ToDictionary(x => x!, y => y!);
+        return (ret ?? []).Where(x => !string.IsNullOrEmpty(x)).ToDictionary(x => x!, y => y!);
     }
 
     /// <summary>
@@ -423,15 +423,15 @@ public abstract class CvmDropdownHelper
 
             #region ent 
             appearanceAppearancePart when cvm.Name is ("appearanceResource" or "resource") => true,
-            entSkinnedMeshComponent when s_appearanceNames.Contains(cvm.Name) => true,
+            entSkinnedMeshComponent when cvm.Name is not null && s_appearanceNames.Contains(cvm.Name) => true,
             entSkinnedMeshComponent when parent.Name == "mesh" => true,
-            entEntityTemplate when s_appearanceNames.Contains(cvm.Name) => true,
+            entEntityTemplate when cvm.Name is not null && s_appearanceNames.Contains(cvm.Name) => true,
             entTemplateAppearance when cvm.Name is ("appearanceName" or "appearanceResource") => true,
             #endregion
 
             #region app
-            appearanceAppearanceResource when s_appearanceNames.Contains(cvm.Name) => true,
-            IRedRef when cvm.Name is "resource" && cvm.Parent.ResolvedData is appearanceAppearancePart => true,
+            appearanceAppearanceResource when cvm.Name is not null && s_appearanceNames.Contains(cvm.Name) => true,
+            IRedRef when cvm.Name is "resource" && cvm.Parent?.ResolvedData is appearanceAppearancePart => true,
             #endregion
 
             // tags: ent and app
@@ -512,6 +512,6 @@ public abstract class CvmDropdownHelper
             "effectDefinitions"                     // Effect definitions
         };
         
-        return definitionPaths.Any(defPath => parentPath.Contains(defPath));
+        return definitionPaths.Any(parentPath.Contains);
     }
 }
