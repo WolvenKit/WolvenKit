@@ -350,6 +350,12 @@ public partial class RedGraph
         Connections.Remove(questConnection);
     }
 
+    public void RemoveQuestConnectionPublic(QuestConnectionViewModel questConnection)
+    {
+        RemoveQuestConnection(questConnection);
+        RefreshCVM(new[] { ((QuestOutputConnectorViewModel)questConnection.Source).Data, ((QuestInputConnectorViewModel)questConnection.Target).Data });
+    }
+
     private void RecalculateQuestSockets(IGraphProvider nodeViewModel)
     {
         if (nodeViewModel is not BaseQuestViewModel phaseNode)

@@ -19,6 +19,8 @@ using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Views.Templates;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 
 namespace WolvenKit.Views.GraphEditor;
 /// <summary>
@@ -366,4 +368,44 @@ public partial class GraphEditorView : UserControl
     #endregion
 
     private void Node_OnMouseDoubleClick(object sender, MouseButtonEventArgs e) => RaiseEvent(new RoutedEventArgs(NodeDoubleClickEvent));
+
+    private void Connection_OnRightClick(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is Connection connection && connection.DataContext is ConnectionViewModel connectionViewModel && Source != null)
+        {
+            // Clear other selections and select this connection to highlight it
+            Editor.SelectedItems.Clear();
+            Editor.SelectedItems.Add(connectionViewModel);
+            
+            // Also set the IsSelected property on the view model for binding
+            connectionViewModel.IsSelected = true;
+            
+            var contextMenu = new ContextMenu();
+            
+            var deleteMenuItem = CreateMenuItem("Delete Connection", "Delete", "WolvenKitRed", () =>
+            {
+                if (Source.GraphType == RedGraphType.Quest)
+                {
+                    if (connectionViewModel is QuestConnectionViewModel questConnection)
+                    {
+                        Source.RemoveQuestConnectionPublic(questConnection);
+                    }
+                }
+                else if (Source.GraphType == RedGraphType.Scene)
+                {
+                    if (connectionViewModel is SceneConnectionViewModel sceneConnection)
+                    {
+                        Source.RemoveSceneConnectionPublic(sceneConnection);
+                    }
+                }
+            });
+            
+            contextMenu.Items.Add(deleteMenuItem);
+            
+            connection.ContextMenu = contextMenu;
+            contextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);
+            
+            e.Handled = true;
+        }
+    }
 }

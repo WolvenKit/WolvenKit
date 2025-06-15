@@ -346,6 +346,11 @@ public partial class RedGraph
         }
     }
 
+    public void RemoveSceneConnectionPublic(SceneConnectionViewModel sceneConnection)
+    {
+        RemoveSceneConnection(sceneConnection);
+    }
+
     public static RedGraph GenerateSceneGraph(string title, scnSceneResource sceneResource)
     {
         var graph = new RedGraph(title, sceneResource);
