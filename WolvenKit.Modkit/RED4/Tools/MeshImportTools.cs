@@ -14,7 +14,6 @@ using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using Mat4 = System.Numerics.Matrix4x4;
 using Quat = System.Numerics.Quaternion;
 using Vec2 = System.Numerics.Vector2;
