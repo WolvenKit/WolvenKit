@@ -294,6 +294,7 @@ public partial class GraphEditorView : UserControl
             node.ContextMenu.Items.Add(new Separator());
         }
 
+        node.ContextMenu.Items.Add(CreateMenuItem("Duplicate Node", "ContentDuplicate", "WolvenKitYellow", () => Source.DuplicateNode(nvm)));
         node.ContextMenu.Items.Add(CreateMenuItem("Remove Node", "Delete", "WolvenKitRed", () => Source.RemoveNode(nvm)));
 
         node.ContextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);

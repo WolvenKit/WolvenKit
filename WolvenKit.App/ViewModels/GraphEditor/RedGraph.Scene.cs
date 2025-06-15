@@ -351,6 +351,83 @@ public partial class RedGraph
         RemoveSceneConnection(sceneConnection);
     }
 
+    public void DuplicateSceneNode(BaseSceneViewModel originalNode)
+    {
+        if (originalNode.Data is not IRedCloneable cloneable)
+        {
+            _loggerService?.Error($"Cannot duplicate node of type {originalNode.Data.GetType().Name} - it doesn't implement IRedCloneable");
+            return;
+        }
+
+        var duplicatedData = (scnSceneGraphNode)cloneable.DeepCopy();
+        
+        var newNodeId = GetNextAvailableSceneNodeId();
+        duplicatedData.NodeId.Id = newNodeId;
+        _currentSceneNodeId = Math.Max(_currentSceneNodeId, newNodeId);
+        
+        // For scnQuestNode, also update the quest node's ID to match
+        if (duplicatedData is scnQuestNode questNode && questNode.QuestNode?.Chunk != null)
+        {
+            questNode.QuestNode.Chunk.Id = (ushort)duplicatedData.NodeId.Id;
+        }
+
+        foreach (var outputSocket in duplicatedData.OutputSockets)
+        {
+            outputSocket.Destinations.Clear();
+        }
+
+        var wrappedDuplicate = WrapSceneNode(duplicatedData);
+        
+        wrappedDuplicate.Location = new System.Windows.Point(
+            originalNode.Location.X + 50, 
+            originalNode.Location.Y + 50
+        );
+
+        ((scnSceneResource)_data).SceneGraph.Chunk!.Graph.Add(new CHandle<scnSceneGraphNode>(duplicatedData));
+        
+        if (GetSceneNodesChunkViewModel() is { } nodes)
+        {
+            nodes.RecalculateProperties();
+        }
+
+        Nodes.Add(wrappedDuplicate);
+        
+        _loggerService?.Info($"Duplicated scene node with new ID: {duplicatedData.NodeId.Id}");
+    }
+
+    private uint GetNextAvailableSceneNodeId()
+    {
+        var sceneResource = (scnSceneResource)_data;
+        
+        uint candidateId = _currentSceneNodeId + 1;
+        
+        if (!IsSceneNodeIdInUse(candidateId, sceneResource))
+        {
+            return candidateId;
+        }
+        
+        // Fallback: if there's a collision, keep searching
+        do
+        {
+            candidateId++;
+        } while (IsSceneNodeIdInUse(candidateId, sceneResource));
+        
+        return candidateId;
+    }
+    
+    private bool IsSceneNodeIdInUse(uint nodeId, scnSceneResource sceneResource)
+    {
+        foreach (var nodeHandle in sceneResource.SceneGraph.Chunk!.Graph)
+        {
+            if (nodeHandle.GetValue() is scnSceneGraphNode node && node.NodeId.Id == nodeId)
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
     public static RedGraph GenerateSceneGraph(string title, scnSceneResource sceneResource)
     {
         var graph = new RedGraph(title, sceneResource);

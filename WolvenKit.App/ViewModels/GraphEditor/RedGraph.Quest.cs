@@ -356,6 +356,85 @@ public partial class RedGraph
         RefreshCVM(new[] { ((QuestOutputConnectorViewModel)questConnection.Source).Data, ((QuestInputConnectorViewModel)questConnection.Target).Data });
     }
 
+    public void DuplicateQuestNode(BaseQuestViewModel originalNode)
+    {
+        if (originalNode.Data is not IRedCloneable cloneable)
+        {
+            _loggerService?.Error($"Cannot duplicate node of type {originalNode.Data.GetType().Name} - it doesn't implement IRedCloneable");
+            return;
+        }
+
+        var duplicatedData = (questNodeDefinition)cloneable.DeepCopy();
+        
+        var newNodeId = GetNextAvailableQuestNodeId();
+        duplicatedData.Id = newNodeId;
+        _currentQuestNodeId = Math.Max(_currentQuestNodeId, newNodeId);
+
+        foreach (var socket in duplicatedData.Sockets)
+        {
+            if (socket.Chunk is questSocketDefinition socketDef)
+            {
+                socketDef.Connections.Clear();
+            }
+        }
+
+        var wrappedDuplicate = WrapQuestNode(duplicatedData, false);
+        
+        wrappedDuplicate.Location = new System.Windows.Point(
+            originalNode.Location.X + 50, 
+            originalNode.Location.Y + 50
+        );
+
+        ((graphGraphDefinition)_data).Nodes.Add(new CHandle<graphGraphNodeDefinition>(duplicatedData));
+        
+        if (GetQuestNodesChunkViewModel() is { } nodes)
+        {
+            nodes.RecalculateProperties();
+        }
+
+        Nodes.Add(wrappedDuplicate);
+        
+        _loggerService?.Info($"Duplicated quest node with new ID: {duplicatedData.Id}");
+    }
+
+    private ushort GetNextAvailableQuestNodeId()
+    {
+        var questGraph = (graphGraphDefinition)_data;
+        
+        ushort candidateId = (ushort)(_currentQuestNodeId + 1);
+        
+        if (candidateId != ushort.MaxValue && !IsQuestNodeIdInUse(candidateId, questGraph))
+        {
+            return candidateId;
+        }
+        
+        // Fallback: if there's a collision, keep searching
+        do
+        {
+            candidateId++;
+        } while (candidateId != ushort.MaxValue && IsQuestNodeIdInUse(candidateId, questGraph));
+        
+        if (candidateId == ushort.MaxValue)
+        {
+            _loggerService?.Error("No available quest node IDs remaining!");
+        }
+        
+        return candidateId;
+    }
+    
+    private bool IsQuestNodeIdInUse(ushort nodeId, graphGraphDefinition questGraph)
+    {
+        foreach (var nodeHandle in questGraph.Nodes)
+        {
+            if (nodeHandle.GetValue() is questNodeDefinition node && node.Id == nodeId)
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
     private void RecalculateQuestSockets(IGraphProvider nodeViewModel)
     {
         if (nodeViewModel is not BaseQuestViewModel phaseNode)
