@@ -247,7 +247,74 @@ public abstract class CvmDropdownHelper
             return performerOptions;
         }
 
+        // Special case for scnSceneWorkspotInstanceId.Id - check if we're editing the Id property of a scnSceneWorkspotInstanceId
+        if (cvm.Name == "id" && parent.ResolvedData is scnSceneWorkspotInstanceId && cvm.GetRootModel().ResolvedData is scnSceneResource sceneForWorkspot)
+        {
+            // Generate dropdown options for workspot instance IDs with workspot resource names
+            // Key = display text, Value = actual ID value
+            var workspotOptions = new Dictionary<string, string>();
+            
+            foreach (var workspotInstance in sceneForWorkspot.WorkspotInstances)
+            {
+                var instanceId = workspotInstance.WorkspotInstanceId.Id;
+                var instanceDataId = workspotInstance.DataId.Id;
+                
+                // Find the workspot resource by DataId
+                var workspotResource = sceneForWorkspot.Workspots.FirstOrDefault(w => w.Chunk is scnWorkspotData workspotData && workspotData.DataId.Id == instanceDataId);
+                var workspotPath = "Unknown";
+                
+                if (workspotResource?.Chunk is scnWorkspotData_ExternalWorkspotResource externalWorkspot)
+                {
+                    workspotPath = externalWorkspot.WorkspotResource.DepotPath.GetResolvedText() ?? "Unknown";
+                }
+                
+                // Extract filename without extension and get origin marker
+                var filename = System.IO.Path.GetFileNameWithoutExtension(workspotPath);
+                var originMarkerText = workspotInstance.OriginMarker.NodeRef.GetResolvedText();
+                var originMarker = string.IsNullOrEmpty(originMarkerText) ? "Unknown" : originMarkerText;
+                
+                var displayText = $"{instanceId}: {filename} ({originMarker})";
+                workspotOptions[displayText] = instanceId.ToString();
+            }
+            
+            return workspotOptions;
+        }
 
+        // Special case for scnEffectInstanceId.Id - check if we're editing the Id property of a scnEffectInstanceId
+        if (cvm.Name == "id" && parent.ResolvedData is scnEffectInstanceId && cvm.GetRootModel().ResolvedData is scnSceneResource sceneForEffect)
+        {
+            // Generate dropdown options for effect instance IDs with effect resource names and first RUID
+            // Key = display text, Value = actual ID value
+            var effectOptions = new Dictionary<string, string>();
+            
+            foreach (var effectInstance in sceneForEffect.EffectInstances)
+            {
+                var instanceId = effectInstance.EffectInstanceId.Id;
+                var effectId = effectInstance.EffectInstanceId.EffectId.Id;
+                
+                // Find the effect definition by EffectId
+                var effectDef = sceneForEffect.EffectDefinitions.FirstOrDefault(e => e.Id.Id == effectId);
+                var effectPath = effectDef?.Effect.DepotPath.GetResolvedText() ?? "Unknown";
+                
+                // Extract filename without extension
+                var filename = System.IO.Path.GetFileNameWithoutExtension(effectPath);
+                
+                // Get first RUID from compiled effect events
+                var firstRuid = "";
+                if (effectInstance.CompiledEffect?.EventsSortedByRUID?.Count > 0)
+                {
+                    firstRuid = effectInstance.CompiledEffect.EventsSortedByRUID[0].EventRUID.ToString();
+                }
+                
+                var displayText = string.IsNullOrEmpty(firstRuid) 
+                    ? $"{instanceId}: {filename}" 
+                    : $"{instanceId}: {filename} ({firstRuid})";
+                    
+                effectOptions[displayText] = instanceId.ToString();
+            }
+            
+            return effectOptions;
+        }
 
         return ret.Where(x => !string.IsNullOrEmpty(x)).ToDictionary(x => x!, y => y!);
     }
@@ -300,6 +367,12 @@ public abstract class CvmDropdownHelper
 
             // scnPerformerId.Id dropdown
             scnPerformerId when cvm.Name == "id" && cvm.GetRootModel().ResolvedData is scnSceneResource => true,
+
+            // scnSceneWorkspotInstanceId.Id dropdown
+            scnSceneWorkspotInstanceId when cvm.Name == "id" && cvm.GetRootModel().ResolvedData is scnSceneResource => true,
+
+            // scnEffectInstanceId.Id dropdown
+            scnEffectInstanceId when cvm.Name == "id" && cvm.GetRootModel().ResolvedData is scnSceneResource => true,
 
             _ => false
         };
