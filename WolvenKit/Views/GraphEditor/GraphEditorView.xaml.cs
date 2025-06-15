@@ -399,6 +399,9 @@ public partial class GraphEditorView : UserControl
                         Source.RemoveSceneConnectionPublic(sceneConnection);
                     }
                 }
+                
+                Editor.SelectedItems.Clear();
+                connectionViewModel.IsSelected = false;
             });
             
             contextMenu.Items.Add(deleteMenuItem);
