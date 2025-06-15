@@ -185,6 +185,18 @@ public abstract class CvmDropdownHelper
         // Special case for scnPerformerId.Id - check if we're editing the Id property of a scnPerformerId
         if (cvm.Name == "id" && parent.ResolvedData is scnPerformerId && cvm.GetRootModel().ResolvedData is scnSceneResource sceneForPerformer)
         {
+            // Check if we're in a definition context (where IDs should be editable) vs usage context (where dropdown is helpful)
+            // Definition contexts: debugSymbols.performersDebugSymbols, actors, playerActors, props, etc.
+            // Usage contexts: scene events, quest nodes, etc.
+            
+            var parentPath = GetParentPath(cvm);
+            
+            // Skip dropdown if we're in definition contexts
+            if (IsInDefinitionContext(parentPath))
+            {
+                return new Dictionary<string, string>(); // Return empty to use regular integer editor
+            }
+            
             // Generate dropdown options for performer IDs with performer names from debugSymbols
             // Key = display text, Value = actual ID value
             var performerOptions = new Dictionary<string, string>();
@@ -250,6 +262,13 @@ public abstract class CvmDropdownHelper
         // Special case for scnSceneWorkspotInstanceId.Id - check if we're editing the Id property of a scnSceneWorkspotInstanceId
         if (cvm.Name == "id" && parent.ResolvedData is scnSceneWorkspotInstanceId && cvm.GetRootModel().ResolvedData is scnSceneResource sceneForWorkspot)
         {
+            // Check if we're in a definition context vs usage context
+            var parentPath = GetParentPath(cvm);
+            if (IsInDefinitionContext(parentPath))
+            {
+                return new Dictionary<string, string>(); // Return empty to use regular integer editor
+            }
+            
             // Generate dropdown options for workspot instance IDs with workspot resource names
             // Key = display text, Value = actual ID value
             var workspotOptions = new Dictionary<string, string>();
@@ -283,6 +302,13 @@ public abstract class CvmDropdownHelper
         // Special case for scnEffectInstanceId.Id - check if we're editing the Id property of a scnEffectInstanceId
         if (cvm.Name == "id" && parent.ResolvedData is scnEffectInstanceId && cvm.GetRootModel().ResolvedData is scnSceneResource sceneForEffect)
         {
+            // Check if we're in a definition context vs usage context
+            var parentPath = GetParentPath(cvm);
+            if (IsInDefinitionContext(parentPath))
+            {
+                return new Dictionary<string, string>(); // Return empty to use regular integer editor
+            }
+            
             // Generate dropdown options for effect instance IDs with effect resource names and first RUID
             // Key = display text, Value = actual ID value
             var effectOptions = new Dictionary<string, string>();
@@ -327,6 +353,13 @@ public abstract class CvmDropdownHelper
         // Special case for scnPropId.Id - check if we're editing the Id property of a scnPropId
         if (cvm.Name == "id" && parent.ResolvedData is scnPropId && cvm.GetRootModel().ResolvedData is scnSceneResource sceneForProp)
         {
+            // Check if we're in a definition context vs usage context
+            var parentPath = GetParentPath(cvm);
+            if (IsInDefinitionContext(parentPath))
+            {
+                return new Dictionary<string, string>(); // Return empty to use regular integer editor
+            }
+            
             // Generate dropdown options for prop IDs with prop names
             // Key = display text, Value = actual ID value
             var propOptions = new Dictionary<string, string>();
@@ -357,12 +390,21 @@ public abstract class CvmDropdownHelper
     /// </summary>
     public static bool HasDropdownOptions(ChunkViewModel cvm)
     {
-        if (cvm.Parent is not ChunkViewModel parent)
+        var parent = cvm.Parent;
+        if (parent == null)
         {
             return false;
         }
 
-
+        // Check if we're in a definition context first - if so, always use regular editor
+        if (cvm.Name == "id")
+        {
+            var parentPath = GetParentPath(cvm);
+            if (IsInDefinitionContext(parentPath))
+            {
+                return false; // Use regular integer editor for definition contexts
+            }
+        }
 
         return parent.ResolvedData switch
         {
@@ -429,5 +471,47 @@ public abstract class CvmDropdownHelper
                        !string.IsNullOrEmpty(matInstance.BaseMaterial.DepotPath.GetResolvedText()) => true,
             _ => false
         };
+    }
+
+    /// <summary>
+    /// Gets the parent path of a ChunkViewModel to determine context
+    /// </summary>
+    private static string GetParentPath(ChunkViewModel cvm)
+    {
+        var pathParts = new List<string>();
+        var current = cvm.Parent;
+        
+        while (current != null)
+        {
+            if (!string.IsNullOrEmpty(current.PropertyName))
+            {
+                pathParts.Add(current.PropertyName);
+            }
+            current = current.Parent;
+        }
+        
+        pathParts.Reverse();
+        return string.Join(".", pathParts);
+    }
+    
+    /// <summary>
+    /// Determines if we're in a definition context where IDs should be editable
+    /// vs usage context where dropdowns are helpful
+    /// </summary>
+    private static bool IsInDefinitionContext(string parentPath)
+    {
+        // Definition contexts where IDs should be directly editable
+        var definitionPaths = new[]
+        {
+            "debugSymbols.performersDebugSymbols",  // Performer definitions
+            "actors",                               // Actor definitions  
+            "playerActors",                         // Player actor definitions
+            "props",                                // Prop definitions
+            "workspotInstances",                    // Workspot instance definitions
+            "effectInstances",                      // Effect instance definitions
+            "effectDefinitions"                     // Effect definitions
+        };
+        
+        return definitionPaths.Any(defPath => parentPath.Contains(defPath));
     }
 }
