@@ -224,4 +224,15 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         public string? Type { get; set; }
         public object? Value { get; set; }
     }
+
+    public class MeshExtras
+    {
+        [JsonPropertyName("materialNames")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public string[]? MaterialNames { get; set; }
+
+        [JsonPropertyName("targetNames")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public string[]? TargetNames { get; set; }
+    };
 }

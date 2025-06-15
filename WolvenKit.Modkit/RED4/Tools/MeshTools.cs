@@ -1032,19 +1032,18 @@ namespace WolvenKit.Modkit.RED4.Tools
                     node.Skin = skin;
                 }
 
-                var materialNames = mesh.materialNames.Select((name) => name.Split('@').FirstOrDefault() ?? name).ToArray();
-                
+                var meshExtras = new MeshExtras
+                {
+                    MaterialNames = mesh.materialNames.Select((name) => name.Split('@').FirstOrDefault() ?? name).ToArray()
+                };
+
                 if (mesh.garmentMorph.Length > 0)
                 {
-                    string[] arr = ["GarmentSupport"];
-                    var obj = new { materialNames, targetNames = arr };
-                    mes.Extras = JsonSerializer.SerializeToNode(obj, Gltf.SerializationOptions());
+                    meshExtras.TargetNames = ["GarmentSupport"];
                 }
-                else
-                {
-                    var obj = new { materialNames };
-                    mes.Extras = JsonSerializer.SerializeToNode(obj, Gltf.SerializationOptions());
-                }
+
+                mes.Extras = JsonSerializer.SerializeToNode(meshExtras, Gltf.SerializationOptions());
+
                 if (mesh.garmentMorph.Length > 0)
                 {
                     var acc = model.CreateAccessor();
