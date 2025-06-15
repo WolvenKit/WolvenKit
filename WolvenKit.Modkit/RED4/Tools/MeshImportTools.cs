@@ -455,7 +455,7 @@ namespace WolvenKit.Modkit.RED4
 
             UpdateSkinningParamCloth(ref meshes, ref cr2w, args);
 
-            UpdateGarmentSupportParameters(meshes, cr2w, args.ImportGarmentSupport, args.IgnoreGarmentSupportUVParam);
+            UpdateGarmentSupportParameters(meshes, meshBlob, args.ImportGarmentSupport, args.IgnoreGarmentSupportUVParam);
 
             var expMeshes = meshes.Select(_ => RawMeshToRE4Mesh(_, quantScale, quantTrans)).ToList();
 
@@ -707,14 +707,14 @@ namespace WolvenKit.Modkit.RED4
             {
                 if (extras.TargetNames != null)
                 {
-                    ExtractMorphTargets(meshContainer, mesh, extras);
+                    ExtractMorphTargets(meshContainer, mesh, extras, args);
                 }
             }
 
             return meshContainer;
         }
 
-        private static void ExtractMorphTargets(RawMeshContainer meshContainer, Mesh mesh, MeshExtras extras)
+        private static void ExtractMorphTargets(RawMeshContainer meshContainer, Mesh mesh, MeshExtras extras, GltfImportArgs args)
         {
             if (extras.TargetNames == null)
             {
@@ -728,7 +728,7 @@ namespace WolvenKit.Modkit.RED4
 
             for (var i = 0; i < extras.TargetNames.Length; i++)
             {
-                if (extras.TargetNames[i] is "GarmentSupport")
+                if (args.ImportGarmentSupport && extras.TargetNames[i] is "GarmentSupport")
                 {
                     meshContainer.garmentMorph = GetVector3List(i, "POSITION").Select(p => new Vec3(p.X, -p.Z, p.Y)).ToArray();
                 }
@@ -1851,71 +1851,65 @@ namespace WolvenKit.Modkit.RED4
             }
         }
 
-        private static void UpdateGarmentSupportParameters(List<RawMeshContainer> meshes, CR2WFile cr2w, bool importGarmentSupport = true, bool ignoreGarmentSupportUVParam = true)
+        #region Parameter: GarmentSupport
+
+        private void UpdateGarmentSupportParameters(List<RawMeshContainer> meshes, CMesh cMesh, bool importGarmentSupport = true, bool ignoreGarmentSupportUVParam = true)
         {
-            if (importGarmentSupport && cr2w.RootChunk is CMesh cMesh)
+            for (var i = cMesh.Parameters.Count - 1; i >= 0; i--)
             {
-
-                if (meshes.All(x => x.garmentMorph?.Length > 0))
+                if (cMesh.Parameters[i] is { Chunk: meshMeshParamGarmentSupport } or { Chunk: garmentMeshParamGarment })
                 {
-                    var garmentMeshBlobChunk = GetParameter_meshMeshParamGarmentSupport(cMesh);
-
-                    var garmentBlobChunk = GetParameter_garmentMeshParamGarment(cMesh);
-
-                    foreach (var mesh in meshes)
-                    {
-                        WriteToGarmentSupportParameters(mesh, garmentMeshBlobChunk, garmentBlobChunk, ignoreGarmentSupportUVParam);
-                    }
-                }
-                else
-                {
-                    RemoveGarmentSupportParameters(cMesh);
+                    cMesh.Parameters.RemoveAt(i);
                 }
             }
+
+            if (!importGarmentSupport)
+            {
+                return;
+            }
+
+            var missingMorphData = new List<string>();
+            foreach (var rawMeshContainer in meshes)
+            {
+                if (rawMeshContainer.garmentMorph?.Length == 0)
+                {
+                    missingMorphData.Add(rawMeshContainer.name!);
+                }
+            }
+
+            if (missingMorphData.Count == meshes.Count)
+            {
+                _loggerService.Warning("Garment support is enabled, but the model doesn't contain any morph data. Please ensure all meshes have garment morph data before enabling garment support. Skipping GS Parameters!");
+                return;
+            }
+                
+            // Not sure if valid or not. Parameters where removed before, so I kept it this way. Remove below if needed - Seb E. Roth
+            if (missingMorphData.Count > 0)
+            {
+                _loggerService.Warning($"Garment support is enabled, but the following submeshes do not have garment morph data: {string.Join(", ", missingMorphData)}. Please ensure all meshes have garment morph data before enabling garment support. Skipping GS Parameters!");
+                return;
+            }
+
+            var meshMeshParamGarmentSupportData = new meshMeshParamGarmentSupport
+            {
+                ChunkCapVertices = [],
+                CustomMorph = true
+            };
+            cMesh.Parameters.Add(meshMeshParamGarmentSupportData);
+
+            var garmentMeshParamGarmentData = new garmentMeshParamGarment
+            {
+                Chunks = []
+            };
+            cMesh.Parameters.Add(garmentMeshParamGarmentData);
+
+            foreach (var mesh in meshes)
+            {
+                UpdateGarmentSupportParameters(mesh, meshMeshParamGarmentSupportData, garmentMeshParamGarmentData, ignoreGarmentSupportUVParam);
+            }
         }
 
-        private static meshMeshParamGarmentSupport GetParameter_meshMeshParamGarmentSupport(CMesh cMesh)
-        {
-            var garmentMeshBlob = cMesh.Parameters.FirstOrDefault(x => x is not null && x.Chunk is meshMeshParamGarmentSupport);
-            if (garmentMeshBlob == null)
-            {
-                garmentMeshBlob = new CHandle<meshMeshParameter>( new meshMeshParamGarmentSupport() );
-                cMesh.Parameters.Add(garmentMeshBlob);
-            }
-
-            if (garmentMeshBlob.Chunk is not meshMeshParamGarmentSupport garmentMeshBlobChunk)
-            {
-                garmentMeshBlobChunk = new meshMeshParamGarmentSupport();
-                garmentMeshBlob.Chunk = garmentMeshBlobChunk;
-            }
-
-            garmentMeshBlobChunk.ChunkCapVertices = new CArray<CArray<CUInt32>>();
-            garmentMeshBlobChunk.CustomMorph = true;
-
-            return garmentMeshBlobChunk;
-        }
-
-        private static garmentMeshParamGarment GetParameter_garmentMeshParamGarment(CMesh cMesh)
-        {
-            var garmentBlob = cMesh.Parameters.FirstOrDefault(x => x is not null && x.Chunk is garmentMeshParamGarment);
-            if (garmentBlob == null)
-            {
-                garmentBlob = new CHandle<meshMeshParameter> ( new garmentMeshParamGarment() );
-                cMesh.Parameters.Add(garmentBlob);
-            }
-
-            if (garmentBlob.Chunk is not garmentMeshParamGarment garmentBlobChunk)
-            {
-                garmentBlobChunk = new garmentMeshParamGarment();
-                garmentBlob.Chunk = garmentBlobChunk;
-            }
-
-            garmentBlobChunk.Chunks = new CArray<garmentMeshParamGarmentChunkData>();
-
-            return garmentBlobChunk;
-        }
-
-        private static void WriteToGarmentSupportParameters(RawMeshContainer mesh, meshMeshParamGarmentSupport garmentMeshBlobChunk, garmentMeshParamGarment garmentBlobChunk, bool ignoreGarmentSupportUVParam = true)
+        private static void UpdateGarmentSupportParameters(RawMeshContainer mesh, meshMeshParamGarmentSupport garmentMeshBlobChunk, garmentMeshParamGarment garmentBlobChunk, bool ignoreGarmentSupportUVParam = true)
         {
             ArgumentNullException.ThrowIfNull(mesh.positions, nameof(mesh));
             ArgumentNullException.ThrowIfNull(mesh.indices, nameof(mesh));
@@ -1982,18 +1976,6 @@ namespace WolvenKit.Modkit.RED4
             });
         }
 
-        private static void RemoveGarmentSupportParameters(CMesh cMesh)
-        {
-            var garmentMeshBlob = cMesh.Parameters.FirstOrDefault(x => x is not null && x.Chunk is meshMeshParamGarmentSupport);
-            if (garmentMeshBlob != null)
-            {
-                cMesh.Parameters.Remove(garmentMeshBlob);
-            }
-            var garmentBlob = cMesh.Parameters.FirstOrDefault(x => x is not null && x.Chunk is garmentMeshParamGarment);
-            if (garmentBlob != null)
-            {
-                cMesh.Parameters.Remove(garmentBlob);
-            }
-        }
+        #endregion Parameter: GarmentSupport
     }
 }
