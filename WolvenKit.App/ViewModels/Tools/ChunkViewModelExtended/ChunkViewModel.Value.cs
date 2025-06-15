@@ -444,10 +444,6 @@ public partial class ChunkViewModel
                 Value = $"[{nodeDef.Sockets.Count}]";
                 IsValueExtrapolated = true;
                 return;
-            case scnSceneWorkspotInstanceId sceneWorkspotInstance when sceneWorkspotInstance.Id != 0:
-                Value = $"{sceneWorkspotInstance.Id}";
-                IsValueExtrapolated = sceneWorkspotInstance.Id != 0;
-                break;
             case scnNotablePoint scnNotablePoint when scnNotablePoint.NodeId.Id != 0:
                 Value = $"NodeId: {scnNotablePoint.NodeId.Id}";
                 IsValueExtrapolated = true;
@@ -455,6 +451,84 @@ public partial class ChunkViewModel
             case scnActorId scnActorId:
                 Value = $"{scnActorId.Id}";
                 IsValueExtrapolated = scnActorId.Id != 0;
+                break;
+            case scnPerformerId scnPerformerId when GetRootModel().ResolvedData is scnSceneResource sceneForPerformer:
+                Value = $"{scnPerformerId.Id}";
+                IsValueExtrapolated = scnPerformerId.Id != 0;
+                
+                if (sceneForPerformer.DebugSymbols?.PerformersDebugSymbols != null)
+                {
+                    var performerSymbol = sceneForPerformer.DebugSymbols.PerformersDebugSymbols
+                        .FirstOrDefault(p => p.PerformerId.Id == scnPerformerId.Id);
+                    if (performerSymbol != null)
+                    {
+                        string? performerName = null;
+                        if (performerSymbol.EntityRef?.Names != null && performerSymbol.EntityRef.Names.Count > 0)
+                        {
+                            performerName = performerSymbol.EntityRef.Names[0].GetResolvedText();
+                        }
+                        
+                        if (string.IsNullOrEmpty(performerName) && performerSymbol.EntityRef?.Reference != null)
+                        {
+                            var referenceString = performerSymbol.EntityRef.Reference.ToString();
+                            if (!string.IsNullOrEmpty(referenceString) && referenceString != "NodeRef")
+                            {
+                                performerName = referenceString.StartsWith("#") ? referenceString.Substring(1) : referenceString;
+                            }
+                        }
+                        
+                        if (!string.IsNullOrEmpty(performerName))
+                        {
+                            Value = $"{scnPerformerId.Id}: {performerName}";
+                        }
+                    }
+                }
+                break;
+            case scnSceneWorkspotInstanceId sceneWorkspotInstance when sceneWorkspotInstance.Id != 0 && GetRootModel().ResolvedData is scnSceneResource sceneForWorkspot:
+                 Value = $"{sceneWorkspotInstance.Id}";
+                 IsValueExtrapolated = sceneWorkspotInstance.Id != 0;
+                 
+                 var matchingWorkspotInstance = sceneForWorkspot.WorkspotInstances
+                     .FirstOrDefault(w => w.WorkspotInstanceId.Id == sceneWorkspotInstance.Id);
+                 if (matchingWorkspotInstance != null)
+                 {
+                     var instanceDataId = matchingWorkspotInstance.DataId.Id;
+                     var workspotResource = sceneForWorkspot.Workspots
+                         .FirstOrDefault(w => w.Chunk is scnWorkspotData workspotData && workspotData.DataId.Id == instanceDataId);
+                     
+                     if (workspotResource?.Chunk is scnWorkspotData_ExternalWorkspotResource externalWorkspot)
+                     {
+                         var workspotPath = externalWorkspot.WorkspotResource.DepotPath.GetResolvedText();
+                         if (!string.IsNullOrEmpty(workspotPath))
+                         {
+                             var filename = System.IO.Path.GetFileNameWithoutExtension(workspotPath);
+                             Value = $"{sceneWorkspotInstance.Id}: {filename}";
+                         }
+                     }
+                 }
+                 break;
+            case scnEffectInstanceId scnEffectInstance when scnEffectInstance.Id != 0 && GetRootModel().ResolvedData is scnSceneResource sceneForEffect:
+                Value = $"{scnEffectInstance.Id}";
+                IsValueExtrapolated = scnEffectInstance.Id != 0;
+                
+                var effectInstance = sceneForEffect.EffectInstances
+                    .FirstOrDefault(e => e.EffectInstanceId.Id == scnEffectInstance.Id);
+                if (effectInstance != null)
+                {
+                    var effectId = effectInstance.EffectInstanceId.EffectId.Id;
+                    var effectDef = sceneForEffect.EffectDefinitions
+                        .FirstOrDefault(e => e.Id.Id == effectId);
+                    
+                    if (effectDef != null)
+                    {
+                        var effectPath = effectDef.Effect.DepotPath.GetResolvedText();
+                        if (!string.IsNullOrEmpty(effectPath))
+                        {
+                            var filename = System.IO.Path.GetFileNameWithoutExtension(effectPath);
+                            Value = $"{scnEffectInstance.Id}: {filename}";
+                        }
+                    }
+                }
                 break;
             case scnPlayerActorDef playerActorDef:
                 Value = $"NodeId: {playerActorDef.SpecCharacterRecordId.GetResolvedText()}";
@@ -711,9 +785,6 @@ public partial class ChunkViewModel
                 break;
             case scnlocVariantId variantId:
                 Value = variantId.Ruid.ToString();
-                break;
-            case scnPerformerId performerId:
-                Value = performerId.Id.ToString();
                 break;
             case CArray<CName> cNames:
                 Value = StringHelper.Stringify(cNames);
