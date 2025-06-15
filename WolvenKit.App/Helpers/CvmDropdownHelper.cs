@@ -291,29 +291,62 @@ public abstract class CvmDropdownHelper
             {
                 var instanceId = effectInstance.EffectInstanceId.Id;
                 var effectId = effectInstance.EffectInstanceId.EffectId.Id;
+                var effectDef = sceneForEffect.EffectDefinitions
+                    .FirstOrDefault(e => e.Id.Id == effectId);
                 
-                // Find the effect definition by EffectId
-                var effectDef = sceneForEffect.EffectDefinitions.FirstOrDefault(e => e.Id.Id == effectId);
-                var effectPath = effectDef?.Effect.DepotPath.GetResolvedText() ?? "Unknown";
-                
-                // Extract filename without extension
-                var filename = System.IO.Path.GetFileNameWithoutExtension(effectPath);
-                
-                // Get first RUID from compiled effect events
-                var firstRuid = "";
-                if (effectInstance.CompiledEffect?.EventsSortedByRUID?.Count > 0)
+                if (effectDef != null)
                 {
-                    firstRuid = effectInstance.CompiledEffect.EventsSortedByRUID[0].EventRUID.ToString();
+                    var effectPath = effectDef.Effect.DepotPath.GetResolvedText();
+                    if (!string.IsNullOrEmpty(effectPath))
+                    {
+                        var filename = System.IO.Path.GetFileNameWithoutExtension(effectPath);
+                        
+                        // Get first RUID from compiled effect if available
+                        string ruidInfo = "";
+                        if (effectInstance.CompiledEffect?.EventsSortedByRUID != null && effectInstance.CompiledEffect.EventsSortedByRUID.Count > 0)
+                        {
+                            ruidInfo = $": {effectInstance.CompiledEffect.EventsSortedByRUID[0].EventRUID}";
+                        }
+                        
+                        effectOptions[$"{instanceId}: {filename}{ruidInfo}"] = instanceId.ToString();
+                    }
+                    else
+                    {
+                        effectOptions[$"{instanceId}: [No Effect Path]"] = instanceId.ToString();
+                    }
                 }
-                
-                var displayText = string.IsNullOrEmpty(firstRuid) 
-                    ? $"{instanceId}: {filename}" 
-                    : $"{instanceId}: {filename} ({firstRuid})";
-                    
-                effectOptions[displayText] = instanceId.ToString();
+                else
+                {
+                    effectOptions[$"{instanceId}: [Unknown Effect]"] = instanceId.ToString();
+                }
             }
             
             return effectOptions;
+        }
+
+        // Special case for scnPropId.Id - check if we're editing the Id property of a scnPropId
+        if (cvm.Name == "id" && parent.ResolvedData is scnPropId && cvm.GetRootModel().ResolvedData is scnSceneResource sceneForProp)
+        {
+            // Generate dropdown options for prop IDs with prop names
+            // Key = display text, Value = actual ID value
+            var propOptions = new Dictionary<string, string>();
+            
+            foreach (var propDefinition in sceneForProp.Props)
+            {
+                var propId = propDefinition.PropId.Id;
+                var propName = propDefinition.PropName.ToString();
+                
+                if (!string.IsNullOrEmpty(propName))
+                {
+                    propOptions[$"{propId}: {propName}"] = propId.ToString();
+                }
+                else
+                {
+                    propOptions[$"{propId}: [Unnamed Prop]"] = propId.ToString();
+                }
+            }
+            
+            return propOptions;
         }
 
         return ret.Where(x => !string.IsNullOrEmpty(x)).ToDictionary(x => x!, y => y!);
@@ -373,6 +406,9 @@ public abstract class CvmDropdownHelper
 
             // scnEffectInstanceId.Id dropdown
             scnEffectInstanceId when cvm.Name == "id" && cvm.GetRootModel().ResolvedData is scnSceneResource => true,
+
+            // scnPropId.Id dropdown
+            scnPropId when cvm.Name == "id" && cvm.GetRootModel().ResolvedData is scnSceneResource => true,
 
             _ => false
         };
