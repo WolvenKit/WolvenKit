@@ -135,18 +135,6 @@ namespace WolvenKit.Interfaces.Extensions
 
         public static bool IsEmptyOrEndsWith(this string target, string value) =>
             target == "" || target.EndsWith(value);
-
-
-        private static char[]? s_invalidFileNameChars = null;
-
-        /// <summary>
-        /// Separate method to avoid SYSLIB1045 warning
-        /// </summary>
-        private static char[] GetInvalidFileNameChars()
-        {
-            s_invalidFileNameChars ??= Path.GetInvalidFileNameChars();
-            return s_invalidFileNameChars;
-        }
         
         /// <summary>
         /// Generates redengine friendly file path. 
@@ -158,9 +146,8 @@ namespace WolvenKit.Interfaces.Extensions
         /// Generates redengine friendly file name 
         /// </summary>
         public static string ToFileName(this string target) =>
-            new string(target.Where(c => GetInvalidFileNameChars().Contains(c)).ToArray()).Trim()
+            new string(target.Where(c => Path.GetInvalidFileNameChars().Contains(c)).ToArray()).Trim()
                 .Replace(" ", "_").ToLower();
-
 
         /// <summary>
         /// Capitalizes each word in the string, replacing underscores with spaces
