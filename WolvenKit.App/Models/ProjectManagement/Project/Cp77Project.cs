@@ -912,5 +912,32 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
             }
         }
     }
+
+    /// <summary>
+    /// Gets all folders under a given directory as list. Defaults to mod directory.
+    /// <param name="subdirParam">Pass <see cref="ModDirectory"/>, <see cref="ResourcesDirectory"/>, <see cref="RawDirectory"/></param>
+    /// </summary>
+    public List<string> GetAllFolders(string? subdirParam)
+    {
+        var filesToSearch = ModFiles;
+        var subdirectory = subdirParam ?? ModDirectory;
+
+        if (subdirectory == RawDirectory)
+        {
+            filesToSearch = RawFiles;
+        }
+        else if (subdirectory == ResourcesDirectory)
+        {
+            filesToSearch = ResourceFiles;
+        }
+
+        return filesToSearch
+            .Select(Path.GetDirectoryName)
+            .Where(f => f is not null && f != subdirectory &&
+                        Directory.Exists(Path.Combine(subdirectory, f)))
+            .Select(f => f!)
+            .Distinct()
+            .ToList();
+    }
 }
     

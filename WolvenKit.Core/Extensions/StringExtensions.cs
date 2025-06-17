@@ -135,17 +135,23 @@ namespace WolvenKit.Interfaces.Extensions
 
         public static bool IsEmptyOrEndsWith(this string target, string value) =>
             target == "" || target.EndsWith(value);
+        
+        /// <summary>
+        /// Generates redengine friendly file path. 
+        /// </summary>
+        public static string ToFilePath(this string target) => string.Join(Path.DirectorySeparatorChar,
+            target.Split(Path.DirectorySeparatorChar).Select(s => s.ToFileName()));
 
-#pragma warning disable SYSLIB1045
-        // Generated regex attribute means the class can't be abstract anymore
         /// <summary>
         /// Generates redengine friendly file name 
         /// </summary>
         public static string ToFileName(this string target) =>
-            new string(target.Where(c => !Path.GetInvalidFileNameChars().Contains(c)).ToArray()).Trim()
+            new string(target.Where(c => Path.GetInvalidFileNameChars().Contains(c)).ToArray()).Trim()
                 .Replace(" ", "_").ToLower();
-#pragma warning restore SYSLIB1045
 
+        /// <summary>
+        /// Capitalizes each word in the string, replacing underscores with spaces
+        /// </summary>
         public static string ToHumanFriendlyString(this string? target) =>
             string.IsNullOrEmpty(target) ? "" : target.Replace("_", " ").CapitalizeEachWord();
     }
