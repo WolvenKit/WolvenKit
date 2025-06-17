@@ -870,8 +870,78 @@ public partial class ChunkViewModel
                 Value = scnWorkspotSymbol.WsEditorEventId.ToString();
                 IsValueExtrapolated = scnWorkspotSymbol.WsEditorEventId != 0;
                 break;
+            case scnCinematicAnimSetSRRefId cinematicAnimSetRefId when GetRootModel().ResolvedData is scnSceneResource sceneForAnimSetRef:
+                var animSetId = cinematicAnimSetRefId.Id;
+                Value = ((uint)animSetId).ToString();
+                
+                // Try to show the animation set file name if available
+                var animSetIdValue = (uint)animSetId;
+                if (sceneForAnimSetRef.ResouresReferences?.CinematicAnimSets != null && 
+                    animSetIdValue < sceneForAnimSetRef.ResouresReferences.CinematicAnimSets.Count)
+                {
+                    var animSet = sceneForAnimSetRef.ResouresReferences.CinematicAnimSets[(int)animSetIdValue];
+                    var animSetPath = animSet.AsyncAnimSet.DepotPath.GetResolvedText();
+                    
+                    if (!string.IsNullOrEmpty(animSetPath))
+                    {
+                        var filename = System.IO.Path.GetFileNameWithoutExtension(animSetPath);
+                        Value = $"{animSetIdValue}: {filename}.anims";
+                        IsValueExtrapolated = true;
+                    }
+                }
+                break;
             case scnCinematicAnimSetSRRefId cinematicAnimSetRefId:
+                // Fallback case when not in a scene context
                 Value = cinematicAnimSetRefId.Id.ToString();
+                break;
+            case scnLipsyncAnimSetSRRefId lipsyncAnimSetRefId when GetRootModel().ResolvedData is scnSceneResource sceneForLipsyncAnimSetRef:
+                var lipsyncAnimSetId = lipsyncAnimSetRefId.Id;
+                Value = ((uint)lipsyncAnimSetId).ToString();
+                
+                // Try to show the lipsync animation set file name if available
+                var lipsyncAnimSetIdValue = (uint)lipsyncAnimSetId;
+                if (sceneForLipsyncAnimSetRef.ResouresReferences?.LipsyncAnimSets != null && 
+                    lipsyncAnimSetIdValue < sceneForLipsyncAnimSetRef.ResouresReferences.LipsyncAnimSets.Count)
+                {
+                    var animSet = sceneForLipsyncAnimSetRef.ResouresReferences.LipsyncAnimSets[(int)lipsyncAnimSetIdValue];
+                    var animSetPath = animSet.AsyncRefLipsyncAnimSet.DepotPath.GetResolvedText();
+                    
+                    if (!string.IsNullOrEmpty(animSetPath))
+                    {
+                        var filename = System.IO.Path.GetFileNameWithoutExtension(animSetPath);
+                        Value = $"{lipsyncAnimSetIdValue}: {filename}.anims";
+                        IsValueExtrapolated = true;
+                    }
+                }
+                break;
+            case scnLipsyncAnimSetSRRefId lipsyncAnimSetRefId:
+                // Fallback case when not in a scene context
+                Value = lipsyncAnimSetRefId.Id.ToString();
+                break;
+
+            case scnDynamicAnimSetSRRefId dynamicAnimSetRefId when GetRootModel().ResolvedData is scnSceneResource sceneForDynamicAnimSetRef:
+                var dynamicAnimSetId = dynamicAnimSetRefId.Id;
+                Value = ((uint)dynamicAnimSetId).ToString();
+                
+                // Try to show the dynamic animation set file name if available
+                var dynamicAnimSetIdValue = (uint)dynamicAnimSetId;
+                if (sceneForDynamicAnimSetRef.ResouresReferences?.DynamicAnimSets != null && 
+                    dynamicAnimSetIdValue < sceneForDynamicAnimSetRef.ResouresReferences.DynamicAnimSets.Count)
+                {
+                    var animSet = sceneForDynamicAnimSetRef.ResouresReferences.DynamicAnimSets[(int)dynamicAnimSetIdValue];
+                    var animSetPath = animSet.AsyncAnimSet.DepotPath.GetResolvedText();
+                    
+                    if (!string.IsNullOrEmpty(animSetPath))
+                    {
+                        var filename = System.IO.Path.GetFileNameWithoutExtension(animSetPath);
+                        Value = $"{dynamicAnimSetIdValue}: {filename}.anims";
+                        IsValueExtrapolated = true;
+                    }
+                }
+                break;
+            case scnDynamicAnimSetSRRefId dynamicAnimSetRefId:
+                // Fallback case when not in a scene context
+                Value = dynamicAnimSetRefId.Id.ToString();
                 break;
             case scnlocSignature locSignature:
                 Value = locSignature.Val.ToString();

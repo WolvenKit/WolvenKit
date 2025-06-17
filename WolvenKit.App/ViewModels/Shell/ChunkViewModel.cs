@@ -1303,6 +1303,19 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     InsertChild(-1, newPerformer);
                     return;
                 }
+                
+                // Special handling for scnCinematicAnimSetSRRefId arrays - auto-assign next available index
+                if (arr.InnerType == typeof(scnCinematicAnimSetSRRefId))
+                {
+                    var newAnimSetRefId = new scnCinematicAnimSetSRRefId();
+                    
+                    // Calculate the next index - start from 0 and increment
+                    uint nextIndex = (uint)arr.Count;
+                    newAnimSetRefId.Id = nextIndex;
+                    
+                    InsertChild(-1, newAnimSetRefId);
+                    return;
+                }
 
                 var innerType = arr.InnerType;
                 if (innerType.IsValueType)

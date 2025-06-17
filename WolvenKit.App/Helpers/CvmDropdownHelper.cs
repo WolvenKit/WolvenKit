@@ -382,6 +382,118 @@ public abstract class CvmDropdownHelper
             return propOptions;
         }
 
+        // Special case for scnCinematicAnimSetSRRefId.Id - check if we're editing the Id property of a scnCinematicAnimSetSRRefId
+        if (cvm.Name == "id" && parent.ResolvedData is scnCinematicAnimSetSRRefId && cvm.GetRootModel().ResolvedData is scnSceneResource sceneForAnimSet)
+        {
+            // Check if we're in a definition context vs usage context
+            var parentPath = GetParentPath(cvm);
+            if (IsInDefinitionContext(parentPath))
+            {
+                return new Dictionary<string, string>(); // Return empty to use regular integer editor
+            }
+            
+            // Generate dropdown options for cinematic animation set IDs with animation file paths
+            // Key = display text, Value = actual ID value (index)
+            var animSetOptions = new Dictionary<string, string>();
+            
+            if (sceneForAnimSet.ResouresReferences?.CinematicAnimSets != null)
+            {
+                for (int i = 0; i < sceneForAnimSet.ResouresReferences.CinematicAnimSets.Count; i++)
+                {
+                    var animSet = sceneForAnimSet.ResouresReferences.CinematicAnimSets[i];
+                    var animSetPath = animSet.AsyncAnimSet.DepotPath.GetResolvedText();
+                    
+                    if (!string.IsNullOrEmpty(animSetPath))
+                    {
+                        var filename = System.IO.Path.GetFileNameWithoutExtension(animSetPath);
+                        var displayText = $"{i}: {filename}.anims";
+                        
+                        animSetOptions[displayText] = i.ToString();
+                    }
+                    else
+                    {
+                        animSetOptions[$"{i}: [No Animation Set Path]"] = i.ToString();
+                    }
+                }
+            }
+            
+            return animSetOptions;
+        }
+
+        // Special case for scnLipsyncAnimSetSRRefId.Id - check if we're editing the Id property of a scnLipsyncAnimSetSRRefId
+        if (cvm.Name == "id" && parent.ResolvedData is scnLipsyncAnimSetSRRefId && cvm.GetRootModel().ResolvedData is scnSceneResource sceneForLipsyncAnimSet)
+        {
+            // Check if we're in a definition context vs usage context
+            var parentPath = GetParentPath(cvm);
+            if (IsInDefinitionContext(parentPath))
+            {
+                return new Dictionary<string, string>(); // Return empty to use regular integer editor
+            }
+            
+            // Generate dropdown options for lipsync animation set IDs with animation file paths
+            // Key = display text, Value = actual ID value (index)
+            var animSetOptions = new Dictionary<string, string>();
+            
+            if (sceneForLipsyncAnimSet.ResouresReferences?.LipsyncAnimSets != null)
+            {
+                for (int i = 0; i < sceneForLipsyncAnimSet.ResouresReferences.LipsyncAnimSets.Count; i++)
+                {
+                    var animSet = sceneForLipsyncAnimSet.ResouresReferences.LipsyncAnimSets[i];
+                    var animSetPath = animSet.AsyncRefLipsyncAnimSet.DepotPath.GetResolvedText();
+                    
+                    if (!string.IsNullOrEmpty(animSetPath))
+                    {
+                        var filename = System.IO.Path.GetFileNameWithoutExtension(animSetPath);
+                        var displayText = $"{i}: {filename}.anims";
+                        animSetOptions[displayText] = i.ToString();
+                    }
+                    else
+                    {
+                        animSetOptions[$"{i}: [No Animation Set Path]"] = i.ToString();
+                    }
+                }
+            }
+            
+            return animSetOptions;
+        }
+
+        // Special case for scnDynamicAnimSetSRRefId.Id - check if we're editing the Id property of a scnDynamicAnimSetSRRefId
+        if (cvm.Name == "id" && parent.ResolvedData is scnDynamicAnimSetSRRefId && cvm.GetRootModel().ResolvedData is scnSceneResource sceneForDynamicAnimSet)
+        {
+            // Check if we're in a definition context vs usage context
+            var parentPath = GetParentPath(cvm);
+            if (IsInDefinitionContext(parentPath))
+            {
+                return new Dictionary<string, string>(); // Return empty to use regular integer editor
+            }
+            
+            // Generate dropdown options for dynamic animation set IDs with animation file paths
+            // Key = display text, Value = actual ID value (index)
+            var animSetOptions = new Dictionary<string, string>();
+            
+            if (sceneForDynamicAnimSet.ResouresReferences?.DynamicAnimSets != null)
+            {
+                for (int i = 0; i < sceneForDynamicAnimSet.ResouresReferences.DynamicAnimSets.Count; i++)
+                {
+                    var animSet = sceneForDynamicAnimSet.ResouresReferences.DynamicAnimSets[i];
+                    var animSetPath = animSet.AsyncAnimSet.DepotPath.GetResolvedText();
+                    
+                    if (!string.IsNullOrEmpty(animSetPath))
+                    {
+                        var filename = System.IO.Path.GetFileNameWithoutExtension(animSetPath);
+                        var displayText = $"{i}: {filename}.anims";
+                        animSetOptions[displayText] = i.ToString();
+                    }
+                    else
+                    {
+                        animSetOptions[$"{i}: [No Animation Set Path]"] = i.ToString();
+                    }
+                }
+            }
+            
+            return animSetOptions;
+        }
+
         return (ret ?? []).Where(x => !string.IsNullOrEmpty(x)).ToDictionary(x => x!, y => y!);
     }
 
@@ -452,6 +564,15 @@ public abstract class CvmDropdownHelper
             // scnPropId.Id dropdown
             scnPropId when cvm.Name == "id" && cvm.GetRootModel().ResolvedData is scnSceneResource => true,
 
+            // scnCinematicAnimSetSRRefId.Id dropdown
+            scnCinematicAnimSetSRRefId when cvm.Name == "id" && cvm.GetRootModel().ResolvedData is scnSceneResource => true,
+
+            // scnLipsyncAnimSetSRRefId.Id dropdown
+            scnLipsyncAnimSetSRRefId when cvm.Name == "id" && cvm.GetRootModel().ResolvedData is scnSceneResource => true,
+
+            // scnDynamicAnimSetSRRefId.Id dropdown
+            scnDynamicAnimSetSRRefId when cvm.Name == "id" && cvm.GetRootModel().ResolvedData is scnSceneResource => true,
+
             _ => false
         };
     }
@@ -500,6 +621,18 @@ public abstract class CvmDropdownHelper
     /// </summary>
     private static bool IsInDefinitionContext(string parentPath)
     {
+        // Usage contexts that can be inside definition paths
+        var usagePaths = new[]
+        {
+            "bodyCinematicAnimSets",
+            "lipsyncAnimSet",
+            "dynamicAnimSets"
+        };
+        if (usagePaths.Any(parentPath.Contains))
+        {
+            return false;
+        }
+
         // Definition contexts where IDs should be directly editable
         var definitionPaths = new[]
         {
