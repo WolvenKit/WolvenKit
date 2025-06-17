@@ -118,29 +118,42 @@ public partial class ModTools
         {
             // Get the relative path of the file with respect to the packedDirectory
             var relativePath = file.FullName[(packedDirectory.FullName.Length + 1)..];
-
+            var destPath = Path.Combine(gameRootDir.FullName, relativePath);
+            
             if (file.FullName.EndsWith(".archive") && installToHot)
             {
+                // try to delete already-installed archive from mod folder. This might fail. 
+                if (File.Exists(destPath))
+                {
+                    try
+                    {
+                        File.Delete(destPath);
+                    }
+                    catch
+                    {
+                        _loggerService.Warning($"If Hot Reload is not working, close the game and delete {destPath}");
+                    }
+                }
                 relativePath = relativePath.Replace(s_modFolder, s_hotFolder);
+                destPath = Path.Combine(gameRootDir.FullName, relativePath);
             }
 
-            var destinationPath = Path.Combine(gameRootDir.FullName, relativePath);
 
             try
             {
                 // Create the directory if it doesn't exist
-                if (Path.GetDirectoryName(destinationPath) is string dirPath && !Directory.Exists(dirPath))
+                if (Path.GetDirectoryName(destPath) is string dirPath && !Directory.Exists(dirPath))
                 {
                     Directory.CreateDirectory(dirPath);
                 }
 
                 // Overwrite files
-                if (File.Exists(destinationPath))
+                if (File.Exists(destPath))
                 {
-                    File.Delete(destinationPath);
+                    File.Delete(destPath);
                 }
 
-                File.Move(file.FullName, destinationPath);
+                File.Move(file.FullName, destPath);
             }
             catch (Exception _)
             {
@@ -148,6 +161,7 @@ public partial class ModTools
                 return false;
             }
         }
+
 
         if (!createTweakFile)
         {
