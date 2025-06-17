@@ -678,59 +678,47 @@ namespace WolvenKit.Views.Tools
 
         private async void RowDragDropController_Drop(object sender, TreeGridRowDropEventArgs e)
         {
-            e.Handled = _isDragging; // which should be true at this point
-
             // this should all be somewhere else, right?
             try
             {
-                if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Handled = _isDragging; // which should be true at this point
+                if (e.TargetNode.Item is not FileSystemModel targetFile ||
+                    ViewModel is not ProjectExplorerViewModel vm ||
+                    vm.SelectedItems?.OfType<FileSystemModel>().Select(fsm => fsm.FullName).ToList() is not
+                        List<string> selectedFilePaths)
                 {
-                    if (e.TargetNode.Item is not FileSystemModel targetFile)
-                    {
-                        return;
-                    }
-
-                    var targetDirectory = Path.GetDirectoryName(targetFile.FullName);
-                    if (File.GetAttributes(targetFile.FullName).HasFlag(FileAttributes.Directory))
-                    {
-                        targetDirectory = targetFile.FullName;
-                    }
-
-                    var files = new List<string>((string[])e.Data.GetData(DataFormats.FileDrop) ?? []);
-                    await ProcessFileAction(files, targetDirectory);
+                    return;
                 }
-                else if (e.Data.GetDataPresent("Nodes"))
+
+                var files = new List<string>();
+
+                if (e.Data.GetDataPresent(DataFormats.FileDrop) &&
+                    e.Data.GetData(DataFormats.FileDrop) is string[] fileDropData
+                   )
                 {
-                    if (e.Data.GetData("Nodes") is not ObservableCollection<TreeNode> treeNodes
-                        || treeNodes.Count == 0
-                        || e.TargetNode.Item is not FileSystemModel targetFile)
-                    {
-                        return;
-                    }
-
-                    var targetDirectory = Path.GetDirectoryName(targetFile.FullName);
-                    if (File.GetAttributes(targetFile.FullName).HasFlag(FileAttributes.Directory))
-                    {
-                        targetDirectory = targetFile.FullName;
-                    }
-
-                    var files = new List<string>();
-                    foreach (var node in treeNodes)
-                    {
-                        if (node.Item is FileSystemModel sourceFile)
-                        {
-                            files.Add(sourceFile.FullName);
-                        }
-                    }
-
-                    // 1146: addresses "prevent self-drag-and-drop" 
-                    if (files.Count > 0 && files[0] == targetDirectory)
-                    {
-                        return;
-                    }
-
-                    await ProcessFileAction(files, targetDirectory);
+                    files.AddRange(fileDropData);
                 }
+                else if (e.Data.GetDataPresent("Nodes") &&
+                         e.Data.GetData("Nodes") is ObservableCollection<TreeNode> treeNodes)
+                {
+                    files.AddRange(treeNodes.Select(n => n.Item).OfType<FileSystemModel>().Select(fsm => fsm.FullName));
+                }
+
+                // Only handle selected items
+                files = files.Where(p => selectedFilePaths.Contains(p, StringComparer.OrdinalIgnoreCase)).ToList();
+
+                // if dragged on file, use file's parent directory as target dir
+                var targetDirectory = Directory.Exists(targetFile.FullName)
+                    ? targetFile.FullName
+                    : Path.GetDirectoryName(targetFile.FullName);
+
+                // 1146: addresses "prevent self-drag-and-drop" 
+                if (files.Count == 0 || files[0] == targetDirectory)
+                {
+                    return;
+                }
+
+                await ProcessFileAction(files, targetDirectory);
             }
             catch (Exception error)
             {
