@@ -669,13 +669,14 @@ namespace WolvenKit.Views.Tools
             try
             {
                 e.Handled = _isDragging; // which should be true at this point
-                if (e.TargetNode.Item is not FileSystemModel targetFile ||
-                    ViewModel is not ProjectExplorerViewModel vm ||
-                    vm.SelectedItems?.OfType<FileSystemModel>().Select(fsm => fsm.FullName).ToList() is not
-                        List<string> selectedFilePaths)
+                if (e.TargetNode.Item is not FileSystemModel targetFile || ViewModel is not ProjectExplorerViewModel vm)
                 {
                     return;
                 }
+
+
+                var selectedFilePaths =
+                    vm.SelectedItems?.OfType<FileSystemModel>().Select(fsm => fsm.FullName).ToList() ?? []; 
 
                 var files = new List<string>();
 
@@ -691,8 +692,11 @@ namespace WolvenKit.Views.Tools
                     files.AddRange(treeNodes.Select(n => n.Item).OfType<FileSystemModel>().Select(fsm => fsm.FullName));
                 }
 
-                // Only handle selected items
-                files = files.Where(p => selectedFilePaths.Contains(p, StringComparer.OrdinalIgnoreCase)).ToList();
+                // If items are selected: ignore anything that isn't
+                if (selectedFilePaths.Count > 0)
+                {
+                    files = files.Where(p => selectedFilePaths.Contains(p, StringComparer.OrdinalIgnoreCase)).ToList();
+                }
 
                 // if dragged on file, use file's parent directory as target dir
                 var targetDirectory = Directory.Exists(targetFile.FullName)
