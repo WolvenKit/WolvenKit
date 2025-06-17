@@ -36,25 +36,42 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>
                         {
                             animNameObj = handle.GetValue() as scnAnimName;
                         }
-                        if (animNameObj != null && animNameObj.Unk1 != null && animNameObj.Unk1.Count > 0)
+                        
+                        if (animNameObj != null)
                         {
-                            var animCName = animNameObj.Unk1[0];
-                            if (animCName != CName.Empty)
+                            var animNameType = (WolvenKit.RED4.Types.Enums.scnAnimNameType)animNameObj.Type;
+                            if (animNameType == WolvenKit.RED4.Types.Enums.scnAnimNameType.direct || animNameType == WolvenKit.RED4.Types.Enums.scnAnimNameType.dynamic)
                             {
-                                string? animNameString = animCName.GetResolvedText();
-                                if (!string.IsNullOrEmpty(animNameString))
+                                if (animNameObj.AnimNames != null && animNameObj.AnimNames.Count > 0)
                                 {
-                                    const int maxLen = 35;
-                                    string displayAnimName = animNameString;
-                                    if (displayAnimName.Length > maxLen)
+                                    var animCName = animNameObj.AnimNames[0];
+                                    if (animCName != CName.Empty)
                                     {
-                                        displayAnimName = displayAnimName.Substring(0, maxLen) + "...";
+                                        string? animNameString = animCName.GetResolvedText();
+                                        if (!string.IsNullOrEmpty(animNameString))
+                                        {
+                                            const int maxLen = 35;
+                                            string displayAnimName = animNameString;
+                                            if (displayAnimName.Length > maxLen)
+                                            {
+                                                displayAnimName = displayAnimName.Substring(0, maxLen) + "...";
+                                            }
+                                            animSuffix = displayAnimName;
+                                        }
+                                        else { animSuffix = "[unresolved]"; }
                                     }
-                                    animSuffix = displayAnimName;
                                 }
-                                else { animSuffix = "[unresolved]"; }
+                            }
+                            else if (animNameType == WolvenKit.RED4.Types.Enums.scnAnimNameType.reference || animNameType == WolvenKit.RED4.Types.Enums.scnAnimNameType.container)
+                            {
+                                if (animNameObj.ReferenceIndices != null && animNameObj.ReferenceIndices.Count > 0)
+                                {
+                                    var indices = string.Join(", ", animNameObj.ReferenceIndices.Select(x => x.ToString()));
+                                    animSuffix = $"{(animNameType.ToString())} Ref Idx: {indices}";
+                                }
                             }
                         }
+
                         detailSuffix = $" ({performerName} - Anim: {animSuffix})";
                     }
                     break;
