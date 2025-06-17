@@ -25,6 +25,13 @@
     <Page Remove="ViewModels\Shared\**" />
   </ItemGroup>
 
+  <!-- Suppress compiler warnings for generated files -->
+  <ItemGroup>
+    <Compile Include="Types\**\*.cs">
+      <NoWarn>8600;8601;8603;8604;8618;8620</NoWarn>
+    </Compile>
+  </ItemGroup>
+
   <ItemGroup>
     <Compile Remove="Controllers\Tw3Controller.cs" />
     <Compile Remove="Models\ProjectManagement\Project\Tw3Project.cs" />
