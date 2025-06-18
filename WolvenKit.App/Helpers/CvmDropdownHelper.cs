@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Helpers;
@@ -105,6 +106,24 @@ public abstract class CvmDropdownHelper
                 break;
             #endregion
 
+            #region questPhaseFile
+            case graphGraphNodeDefinition:
+                switch (cvm.Name)
+                {
+                    case "phaseResource":
+                        ret = documentTools.CollectProjectFiles(".questphase");
+                        break;
+                    case "sceneFile":
+                        ret = documentTools.CollectProjectFiles(".scene");
+                        break;
+                    default:
+                        break;
+                } 
+                break;
+                
+            #endregion
+            
+            
             #region iComponent
 
             // mesh entity options
@@ -187,10 +206,13 @@ public abstract class CvmDropdownHelper
             appearanceAppearanceResource when s_appearanceNames.Contains(cvm.Name) => true,
             IRedRef when cvm.Name is "resource" && cvm.Parent.ResolvedData is appearanceAppearancePart => true,
             #endregion
-
+    
             // tags: ent and app
             IRedArray<CName> when parent is { Name: "tags", Parent.ResolvedData: redTagList } => true,
-
+            
+            #region questPhase
+            graphGraphNodeDefinition when cvm.Name is ("phaseResource" or "sceneFile") => true,
+            #endregion
             _ => false
         };
     }
