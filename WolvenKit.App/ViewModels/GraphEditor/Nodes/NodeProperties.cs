@@ -992,7 +992,7 @@ internal class NodeProperties
         return str;
     }
 
-    private static string GetNameFromClass(RedBaseClass? node)
+    public static string GetNameFromClass(RedBaseClass? node)
     {
         string name = "";
 

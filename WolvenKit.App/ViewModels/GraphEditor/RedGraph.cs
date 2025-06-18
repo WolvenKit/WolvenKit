@@ -184,7 +184,25 @@ public partial class RedGraph : IDisposable
         GraphStateSave();
     }
 
-    public void RemoveNodes(IList<object> nodes)
+    public void DuplicateNode(NodeViewModel node)
+    {
+        if (!Nodes.Contains(node))
+        {
+            return;
+        }
+
+        if (GraphType == RedGraphType.Scene && node is BaseSceneViewModel sceneNode)
+        {
+            DuplicateSceneNode(sceneNode);
+        }
+
+        if (GraphType == RedGraphType.Quest && node is BaseQuestViewModel questNode)
+        {
+            DuplicateQuestNode(questNode);
+        }
+    }
+
+    public void RemoveNodes(IEnumerable<object> nodes)
     {
         var removableNodes = new List<NodeViewModel>();
         foreach (var node in nodes)
