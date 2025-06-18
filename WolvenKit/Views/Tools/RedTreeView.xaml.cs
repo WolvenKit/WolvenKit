@@ -482,7 +482,7 @@ namespace WolvenKit.Views.Tools
         
         private bool IsAllowDrop(TreeViewItemDragOverEventArgs e)
         {
-            if (e.DraggingNodes?[0].Content is not ChunkViewModel source ||
+            if (e.DraggingNodes?[0].Content is not ChunkViewModel { IsSelected: true } source ||
                 e.TargetNode?.Content is not ChunkViewModel target ||
                 source == target || target.Parent == null || target.Parent.IsReadOnly)
             {
@@ -529,10 +529,10 @@ namespace WolvenKit.Views.Tools
 
         private void SfTreeView_ItemDropping(object sender, TreeViewItemDroppingEventArgs e)
         {
-            if (e.DraggingNodes == null
-                || e.TargetNode.Content is not ChunkViewModel target
-                || target.Parent == null
-                || (e.DropPosition != DropPosition.DropBelow && e.DropPosition != DropPosition.DropAbove))
+            if (e.DraggingNodes?.All(node => node.Content is ChunkViewModel { IsSelected: true }) != true
+                || e.TargetNode.Content is not ChunkViewModel { Parent: not null } target
+                || e.DropPosition is not (DropPosition.DropBelow or DropPosition.DropAbove)
+               )
             {
                 e.Handled = true;
                 return;
