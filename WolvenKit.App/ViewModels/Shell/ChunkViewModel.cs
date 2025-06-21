@@ -784,6 +784,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     // Used in view for conditional colouring
     public bool DisplayAsArrayItem => IsInArray && Name != DisplayName;
 
+    // Used in view for muting scene event descriptors
+    public bool ShouldMuteDescriptor => ResolvedData is scnSceneEvent;
+
     // Used in view
     public bool ShowScrollToMaterial => ResolvedData is CMeshMaterialEntry || (ResolvedData is CName && Parent?.Name == "chunkMaterials");
 
