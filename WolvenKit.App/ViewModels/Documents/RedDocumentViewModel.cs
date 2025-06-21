@@ -52,6 +52,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
     protected readonly HashSet<string> _embedHashSet;
 
     private readonly string _path;
+    private bool _suppressNextReload;
 
     public RedDocumentViewModel(CR2WFile file, string path, AppViewModel appViewModel,
         IDocumentTabViewmodelFactory documentTabViewmodelFactory,
@@ -100,6 +101,8 @@ public partial class RedDocumentViewModel : DocumentViewModel
     #region properties
     
     public CR2WFile Cr2wFile { get; set; }
+
+    public event EventHandler? OnSaveCompleted;
 
     [ObservableProperty] private ObservableCollection<RedDocumentTabViewModel> _tabItemViewModels = new();
 
@@ -211,24 +214,40 @@ public partial class RedDocumentViewModel : DocumentViewModel
             return false;
         }
 
+        _suppressNextReload = true;
+
         if (GetMainFile() is null || !_cr2WTools.WriteCr2W(cr2w, filePath))
         {
+            _suppressNextReload = false; // Clear on failure
             return false;
         }
 
         LastWriteTime = File.GetLastWriteTime(filePath);
         SetIsDirty(false);
+        OnSaveCompleted?.Invoke(this, EventArgs.Empty);
         return true;
     }
 
 
     public override bool Reload(bool force)
     {
+        if (_suppressNextReload)
+        {
+            _suppressNextReload = false; // Consume the flag
+            // This reload was triggered by our own save.
+            // We just need to update the timestamp and dirty state, not rebuild the UI.
+            SetIsDirty(false);
+            LastWriteTime = File.GetLastWriteTime(FilePath);
+            return true;
+        }
+
         if (!File.Exists(FilePath) || (!force && IsDirty))
         {
             return false;
         }
 
+        // If we got here, it means the files were different, or an error occurred during comparison.
+        // Proceed with the original, destructive reload.
         using var fs = File.Open(FilePath, FileMode.Open);
         if (!_parserService.TryReadRed4File(fs, out var cr2WFile))
         {
@@ -242,7 +261,6 @@ public partial class RedDocumentViewModel : DocumentViewModel
         LastWriteTime = File.GetLastWriteTime(FilePath);
 
         return true;
-
     }
 
     public RedDocumentTabViewModel? GetMainFile()
@@ -308,6 +326,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
         }
         if (_globals.Value.ENABLE_NODE_EDITOR && cls is graphGraphResource or scnSceneResource)
         {
+            // Always create normal separate tabs - combined view is only used in fullscreen
             TabItemViewModels.Add(new RDTGraphViewModel2(cls, this, _nodeWrapperFactory));
         }
     }

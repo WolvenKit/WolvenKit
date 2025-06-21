@@ -19,11 +19,37 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            
         <StackPanel
             x:Name="Breadcrumb"
-            Grid.Row="0"
+                Grid.Column="0"
             VerticalAlignment="Center"
             Orientation="Horizontal" />
+                
+            <Button
+                x:Name="FullScreenButton"
+                Grid.Column="1"
+                Width="24"
+                Height="24"
+                Margin="8,3,8,3"
+                Background="Transparent"
+                BorderBrush="Transparent"
+                ToolTip="Toggle Full Screen Mode"
+                Click="FullScreenButton_Click">
+                <Button.Content>
+                    <Viewbox Width="16" Height="16">
+                        <Canvas Width="24" Height="24">
+                            <Path Data="M7,14H5v5h5v-2H7V14z M5,10h2V7h3V5H5V10z M17,7h-3v2h3v3h2V7V5h-2V7z M14,14h3v3h2v-5h-5V14z" Fill="#FFFFFF"/>
+                        </Canvas>
+                    </Viewbox>
+                </Button.Content>
+            </Button>
+        </Grid>
 
         <graphEditor:GraphEditorView
             x:Name="Editor"

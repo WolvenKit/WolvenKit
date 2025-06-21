@@ -255,6 +255,9 @@ public partial class RedGraph
 
             Connections.RemoveAt(i);
             RefreshCVM(sceneSource.Data);
+            
+            // Mark document as dirty since we modified connections
+            DocumentViewModel?.SetIsDirty(true);
 
             return;
         }
@@ -275,6 +278,9 @@ public partial class RedGraph
         sceneSource.Data.Destinations.Add(input);
         Connections.Add(new SceneConnectionViewModel(sceneSource, sceneTarget));
         RefreshCVM(sceneSource.Data);
+        
+        // Mark document as dirty since we modified connections
+        DocumentViewModel?.SetIsDirty(true);
     }
 
     private void UpdateTargetNode(SceneInputConnectorViewModel sceneTarget)
@@ -343,6 +349,9 @@ public partial class RedGraph
 
             Connections.Remove(sceneConnection);
             RefreshCVM(sceneSource.Data);
+            
+            // Mark document as dirty since we modified connections
+            DocumentViewModel?.SetIsDirty(true);
         }
     }
 

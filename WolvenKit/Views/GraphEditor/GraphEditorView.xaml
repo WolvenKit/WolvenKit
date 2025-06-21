@@ -28,11 +28,14 @@
             PendingConnection="{Binding ElementName=uc,
                                         Path=Source.PendingConnection}"
             SelectedItem="{Binding ElementName=uc,
-                                   Path=SelectedNode}"
+                                   Path=SelectedNode,
+                                   Mode=TwoWay}"
             SelectedItems="{Binding ElementName=uc,
-                                    Path=SelectedNodes}"
+                                    Path=SelectedNodes,
+                                    Mode=TwoWay}"
             ViewportLocation="{Binding ElementName=uc,
-                                       Path=ViewportLocation}"
+                                       Path=ViewportLocation,
+                                       Mode=TwoWay}"
             ItemsDragCompletedCommand="{Binding ElementName=uc,
                                                 Path=Source.ItemsDragCompletedCommand}">
             <nodify:NodifyEditor.Resources>
@@ -43,33 +46,47 @@
                 </DataTemplate>
 
                 <DataTemplate x:Key="DetailedHeaderTemplate">
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock
-                            Margin="0"
-                            Text="{Binding Title}" />
+                    <StackPanel Orientation="Vertical" Margin="-6">
+                        <!-- Header section with full background -->
+                        <Border Background="{Binding Background}" 
+                                Padding="10,6,10,6"
+                                HorizontalAlignment="Stretch" 
+                                VerticalAlignment="Stretch">
+                            <TextBlock
+                                Margin="0"
+                                Text="{Binding Title}"
+                                FontWeight="Bold"
+                                FontSize="21" />
+                        </Border>
 
-                        <ItemsControl ItemsSource="{Binding Details}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel
-                                        MaxWidth="1000"
-                                        Orientation="Horizontal">
-                                        <TextBlock
-                                            Margin="{DynamicResource WolvenKitMarginTinyRight}"
-                                            Foreground="#999999"
-                                            Text="{Binding Key}"
-                                            TextTrimming="CharacterEllipsis"
-                                            ToolTip="{Binding Key}" />
+                        <!-- Content section with subtle background -->
+                        <Border Background="{Binding ContentBackground}" 
+                                Padding="10,6,10,6"
+                                HorizontalAlignment="Stretch" 
+                                VerticalAlignment="Stretch">
+                            <ItemsControl ItemsSource="{Binding Details}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel
+                                            MaxWidth="1000"
+                                            Orientation="Horizontal">
+                                            <TextBlock
+                                                Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                                                Foreground="#999999"
+                                                Text="{Binding Key}"
+                                                TextTrimming="CharacterEllipsis"
+                                                ToolTip="{Binding Key}" />
 
-                                        <TextBlock
-                                            Text="{Binding Value}"
-                                            TextAlignment="Right"
-                                            TextTrimming="CharacterEllipsis"
-                                            ToolTip="{Binding Value}" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                                            <TextBlock
+                                                Text="{Binding Value}"
+                                                TextAlignment="Right"
+                                                TextTrimming="CharacterEllipsis"
+                                                ToolTip="{Binding Value}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Border>
                     </StackPanel>
                 </DataTemplate>
 
@@ -117,6 +134,8 @@
                             <Style
                                 BasedOn="{StaticResource {x:Type nodify:Node}}"
                                 TargetType="{x:Type nodify:Node}">
+                                <Setter Property="BorderBrush" Value="Transparent" />
+                                <Setter Property="BorderThickness" Value="0" />
                                 <Style.Triggers>
                                     <DataTrigger
                                         Binding="{Binding Details.Count}"
@@ -134,7 +153,9 @@
                                     Anchor="{Binding Anchor,
                                                      Mode=OneWayToSource}"
                                     Header="{Binding Title}"
-                                    IsConnected="{Binding IsConnected}" />
+                                    IsConnected="{Binding IsConnected}"
+                                    Margin="0,2,0,2"
+                                    Background="Transparent" />
                             </DataTemplate>
                         </nodify:Node.InputConnectorTemplate>
 
@@ -212,6 +233,8 @@
                     TargetType="{x:Type nodify:ItemContainer}">
                     <Setter Property="ActualSize" Value="{Binding Size, Mode=OneWayToSource}" />
                     <Setter Property="Location" Value="{Binding Location}" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="0" />
                 </Style>
             </nodify:NodifyEditor.ItemContainerStyle>
 

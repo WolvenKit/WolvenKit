@@ -182,6 +182,9 @@ public partial class RedGraph : IDisposable
         }
 
         GraphStateSave();
+        
+        // Mark document as dirty since we modified the data
+        DocumentViewModel?.SetIsDirty(true);
     }
 
     public void DuplicateNode(NodeViewModel node)
@@ -200,6 +203,9 @@ public partial class RedGraph : IDisposable
         {
             DuplicateQuestNode(questNode);
         }
+        
+        // Mark document as dirty since we modified the data
+        DocumentViewModel?.SetIsDirty(true);
     }
 
     public void RemoveNodes(IEnumerable<object> nodes)

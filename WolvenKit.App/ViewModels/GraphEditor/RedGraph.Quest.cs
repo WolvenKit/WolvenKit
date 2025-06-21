@@ -271,7 +271,9 @@ public partial class RedGraph
         questTarget.Data.Connections.Add(handle);
 
         Connections.Add(new QuestConnectionViewModel(questSource, questTarget, graphGraphConnectionDefinition));
-        RefreshCVM([questSource.Data, questTarget.Data]);
+        
+        // Mark document as dirty since we modified connections
+        DocumentViewModel?.SetIsDirty(true);
     }
 
     private void RefreshCVM(questSocketDefinition[] sockets)
@@ -323,6 +325,9 @@ public partial class RedGraph
         destination.Data.Connections.Add(new CHandle<graphGraphConnectionDefinition>(connection));
 
         Connections.Add(new QuestConnectionViewModel(source, destination, connection));
+        
+        // Mark document as dirty since we modified connections
+        DocumentViewModel?.SetIsDirty(true);
     }
 
     private void RemoveQuestConnection(QuestConnectionViewModel questConnection)
@@ -348,6 +353,9 @@ public partial class RedGraph
             }
         }
         Connections.Remove(questConnection);
+        
+        // Mark document as dirty since we modified connections
+        DocumentViewModel?.SetIsDirty(true);
     }
 
     public void RemoveQuestConnectionPublic(QuestConnectionViewModel questConnection)
