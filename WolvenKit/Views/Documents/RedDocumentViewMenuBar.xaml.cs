@@ -513,7 +513,7 @@ namespace WolvenKit.Views.Documents
         private string GetTextureDirForDependencies(bool useTextureSubfolder) =>
             ViewModel?.GetTextureDirForDependencies(useTextureSubfolder) ?? "";
 
-        private async Task AddDependenciesToFileAsync(ChunkViewModel _)
+        private async Task AddDependenciesToFileAsync(ChunkViewModel _, bool addBasegameFiles = false)
         {
             if (RootChunk is not ChunkViewModel rootChunk)
             {
@@ -530,16 +530,17 @@ namespace WolvenKit.Views.Documents
             await LoadAndAnalyzeModArchivesAsync();
 
             var materialDependencies = await rootChunk.GetMaterialRefsFromFile();
-            var isShiftKeyDown = ModifierViewStateService.IsShiftBeingHeld;
 
             // Filter files: Ignore base game files unless shift key is pressed
             materialDependencies = materialDependencies
                 .Where(refPathHash =>
                     {
+                        var hasModFile = _archiveManager.Lookup(refPathHash, ArchiveManagerScope.Mods) is
+                            { HasValue: true };
                         var hasBasegameFile = _archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame) is { HasValue: true };
-                        var hasModFile = _archiveManager.Lookup(refPathHash, ArchiveManagerScope.Mods) is { HasValue: true };
+                        
                         // Only files from mods. Filter out anything that overwrites basegame files.
-                        if (!isShiftKeyDown)
+                        if (!addBasegameFiles)
                         {
                             return hasModFile && !hasBasegameFile;
                         }
@@ -666,7 +667,7 @@ namespace WolvenKit.Views.Documents
 
             _projectWatcher.Suspend();
 
-            await AddDependenciesToFileAsync(cvm);
+            await AddDependenciesToFileAsync(cvm, eventArgs is AddDependenciesFullEventArgs);
 
             // Project browser will throw an error if we do it immediately - so let's not
             await Task.Run(async () =>
