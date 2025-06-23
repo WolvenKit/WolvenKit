@@ -295,6 +295,21 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <MenuItem
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding CopyMeshMaterialsCommand}"
+                    Header="Copy mesh materials to...">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Empty"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
 
                 <!-- ======================================================================= -->
                 <!-- /Copy commands -->

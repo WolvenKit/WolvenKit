@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Windows;
 using AdonisUI.Controls;
+using DynamicData;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.Helpers;
@@ -117,6 +119,38 @@ namespace WolvenKit.Views.Shell
                     return result;
                 };
 
+                Interactions.ShowSelectionView = input =>
+                {
+                    SelectionView dialog = new(input.Item1, input.Item2, input.Item3, input.Item4);
+
+                    IList<string> result = [];
+                    if (dialog.ShowDialog(this) != true || dialog.ViewModel is null)
+                    {
+                        return result;
+                    }
+
+                    if (dialog.ViewModel.AllowMultiSelect)
+                    {
+                        result.AddRange(dialog.ViewModel.SelectedOptions);
+                    }
+                    else if (dialog.ViewModel.SelectedOption is not null)
+                    {
+                        result.Add(dialog.ViewModel.SelectedOption);
+                    }
+
+                    return result;
+                };
+
+
+                Interactions.SelectProjectFile = (args) =>
+                {
+                    var availableItems = args.Item1.ModFiles.Where(path => path.EndsWith(args.Item2)).ToList();
+                    return Interactions
+                        .ShowSelectionView((availableItems, "Select project file", $"Select .{args.Item2} file", false))
+                        .FirstOrDefault();
+                };
+
+
                 Interactions.ShowPhotoModeDialogue = (p) =>
                 {
                     var dialog = new CreatePhotoModeAppDialog(p.activeProject, p.settingsManager, projectResourceTools);
@@ -138,7 +172,6 @@ namespace WolvenKit.Views.Shell
 
                     return dialog.ViewModel;
                 };
-
                 Interactions.ShowScriptSettingsView = settings =>
                 {
                     var dialog = new ScriptSettingsWindow(settings);
@@ -147,12 +180,12 @@ namespace WolvenKit.Views.Shell
 
 
                 this.Bind(ViewModel,
-                    vm => vm.ActiveDocument,
-                    v => v.dockingAdapter.ActiveDocument)
+                        vm => vm.ActiveDocument,
+                        v => v.dockingAdapter.ActiveDocument)
                     .DisposeWith(disposables);
                 this.Bind(ViewModel,
-                    vm => vm.DockedViews,
-                    v => v.dockingAdapter.ItemsSource)
+                        vm => vm.DockedViews,
+                        v => v.dockingAdapter.ItemsSource)
                     .DisposeWith(disposables);
 
                 this.WhenAnyValue(x => x.ViewModel.ActiveProject).Subscribe(_ => dockingAdapter.OnActiveProjectChanged());

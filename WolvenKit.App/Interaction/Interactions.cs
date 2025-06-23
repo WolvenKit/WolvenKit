@@ -142,6 +142,17 @@ public static class Interactions
     public static Func<(IEnumerable<IDisplayable>?, IEnumerable<IDisplayable>?), IEnumerable<IDisplayable>> ShowCollectionView { get; set; } 
         = _ => throw new NotImplementedException();
 
+    /// <summary>
+    /// Shows a selection view. Parameters: <code>
+    ///   - options (IList of strings)
+    ///   - title (defaults to "Select an item") 
+    ///   - text (will be hidden if null / empty)
+    ///   - boolean: allow multi-select
+    /// </code>
+    /// </summary>
+    public static Func<(IList<string>, string, string, bool), IList<string>> ShowSelectionView { get; set; }
+        = _ => throw new NotImplementedException();
+
     public static Func<string?, string?> ShowSelectSaveView { get; set; } =
         (string? currentSaveGame) => throw new NotImplementedException();
 
@@ -151,5 +162,8 @@ public static class Interactions
     public static Func<ScriptSettingsDictionary, bool> ShowScriptSettingsView { get; set; } = _ => throw new NotImplementedException();
 
     public static Func<Cp77Project, AddInkatlasDialogViewModel> ShowGenerateInkatlasDialogue { get; set; } =
+        _ => throw new NotImplementedException();
+
+    public static Func<(Cp77Project, string), string?> SelectProjectFile { get; set; } =
         _ => throw new NotImplementedException();
 }

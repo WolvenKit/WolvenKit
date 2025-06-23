@@ -929,6 +929,41 @@ public class ProjectResourceTools
 
         Directory.Delete(absoluteFolderPath);
         DeleteEmptyParents(absoluteFolderPath, activeProject);
-    } 
+    }
 
+    public void CopyMeshMaterials(string sourceMeshRelPath, string destMeshRelPath)
+    {
+        if (_projectManager.ActiveProject is not Cp77Project currentProject)
+        {
+            return;
+        }
+
+        var sourceMeshPath = currentProject.GetAbsolutePath(sourceMeshRelPath);
+        var destMeshPath = currentProject.GetAbsolutePath(destMeshRelPath);
+
+        if (!File.Exists(sourceMeshPath) || _crwWTools.ReadCr2W(sourceMeshPath) is not CR2WFile sourceMesh ||
+            sourceMesh.RootChunk is not CMesh sourceChunk)
+        {
+            _loggerService.Error($"Can't copy materials: source {sourceMeshRelPath} is not a mesh.");
+            return;
+        }
+
+        if (!File.Exists(destMeshPath) || _crwWTools.ReadCr2W(destMeshPath) is not CR2WFile destMesh ||
+            destMesh.RootChunk is not CMesh destChunk)
+        {
+            _loggerService.Error($"Can't copy materials:  target file {destMeshRelPath} is not a mesh.");
+            return;
+        }
+
+        destChunk.Appearances = sourceChunk.Appearances;
+        destChunk.ExternalMaterials = sourceChunk.ExternalMaterials;
+        destChunk.InplaceResources = sourceChunk.InplaceResources;
+        destChunk.LocalMaterialBuffer = sourceChunk.LocalMaterialBuffer;
+        destChunk.LocalMaterialInstances = sourceChunk.LocalMaterialInstances;
+        destChunk.MaterialEntries = sourceChunk.MaterialEntries;
+        destChunk.PreloadExternalMaterials = sourceChunk.PreloadExternalMaterials;
+        destChunk.PreloadLocalMaterialInstances = sourceChunk.PreloadLocalMaterialInstances;
+
+        _crwWTools.WriteCr2W(destMesh, destMeshPath);
+    }
 }

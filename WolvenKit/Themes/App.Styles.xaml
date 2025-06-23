@@ -180,6 +180,14 @@
         <Setter Property="BorderBrush" Value="{StaticResource ContentBackgroundAlt3}" />
     </Style>
 
+    <!-- Text style (why didn't we have this?) -->
+    <Style
+        x:Key="WolvenkitTextStyle"
+        BasedOn="{StaticResource {x:Type TextBlock}}"
+        TargetType="{x:Type TextBlock}">
+        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+    </Style>
+
     <!-- Menu Bar Entry Style -->
     <Style
         x:Key="WolvenKitToolBarItem"

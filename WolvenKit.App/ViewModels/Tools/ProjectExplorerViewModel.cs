@@ -450,8 +450,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     [GeneratedRegex(@".*\.\S+\.glb$")]
     private static partial Regex TypedGlbRegex();
-    
-    
+
+    private bool IsExtensionSelected(string ext) =>
+        SelectedItem?.Extension.Contains(ext, StringComparison.CurrentCultureIgnoreCase) == true;
+
     /// <summary>
     /// Copies the path to an item in clipboard
     /// </summary>
@@ -579,16 +581,35 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private void CopyAbsPathToArchiveFolder() => CopyItemPathToClipboard(true, true, true);
 
 
+    private bool CanCopyMeshMaterials => ActiveProject != null && IsExtensionSelected("mesh");
+
+    /// <summary>
+    /// Copy materials from one mesh to another
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanCopyMeshMaterials))]
+    private void CopyMeshMaterials()
+    {
+        if (SelectedItem?.FullName is not string sourceMesh || ActiveProject is null ||
+            Interactions.SelectProjectFile((ActiveProject, "mesh")) is not string destMesh)
+        {
+            return;
+        }
+
+        _projectResourceTools.CopyMeshMaterials(sourceMesh, destMesh);
+    }
+
+
     /// <summary>
     /// Reimports the game file to replace the current one
     /// </summary>
-    private bool CanAddDependencies() => ActiveProject != null && IsInRawFolder(SelectedItem) &&
-                                         SelectedItem!.Extension.Contains("xml",
-                                             StringComparison.CurrentCultureIgnoreCase);
+    private bool CanAddDependencies() => ActiveProject != null
+                                         && IsInRawFolder(SelectedItem)
+                                         && IsExtensionSelected("xml");
+    
     [RelayCommand(CanExecute = nameof(CanAddDependencies))]
     private async Task AddDependencies()
     {
-        if (SelectedItem.NotNull().IsDirectory)
+        if (SelectedItem is null || SelectedItem.IsDirectory || ActiveProject is null)
         {
             return;
         }
@@ -599,42 +620,43 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         await using Stream reader = new FileStream(filename, FileMode.Open);
         // Call the Deserialize method to restore the object's state.
-        if (serializer.Deserialize(reader) is MaterialXmlModel model)
+        if (serializer.Deserialize(reader) is not MaterialXmlModel model)
         {
-            var materials = new List<string>();
-            if (model.Materials is not null)
+            return;
+        }
+
+        var materials = new List<string>();
+        if (model.Materials is not null)
+        {
+            foreach (var material in model.Materials)
             {
-                foreach (var material in model.Materials)
+                if (material.Param is null)
                 {
-                    if (material.Param is null)
+                    continue;
+                }
+
+                foreach (var param in material.Param)
+                {
+                    if (string.IsNullOrEmpty(param.Value) || string.IsNullOrEmpty(param.Type) ||
+                        !param.Type.StartsWith("rRef:"))
                     {
                         continue;
                     }
 
-                    foreach (var param in material.Param)
+                    var path = param.Value;
+                    if (!materials.Contains(path))
                     {
-                        if (string.IsNullOrEmpty(param.Value) || string.IsNullOrEmpty(param.Type) ||
-                            !param.Type.StartsWith("rRef:"))
-                        {
-                            continue;
-                        }
-
-                        var path = param.Value;
-                        if (!materials.Contains(path))
-                        {
-                            materials.Add(path);
-                        }
+                        materials.Add(path);
                     }
                 }
             }
+        }
 
-            // add from AB
-            foreach (var material in materials)
-            {
-                var relPath = ActiveProject!.GetRelativePath(material);
-                var hash = FNV1A64HashAlgorithm.HashString(relPath);
-                await Task.Run(() => _gameController.GetController().AddToMod(hash));
-            }
+        // add from AB
+        foreach (var hash in materials.Select(material => ActiveProject.GetRelativePath(material))
+                     .Select(FNV1A64HashAlgorithm.HashString))
+        {
+            await Task.Run(() => _gameController.GetController().AddToMod(hash));
         }
     }
 
@@ -666,7 +688,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         // Collect hashes of all selected items, we'll export them after
         HashSet<ulong> selectedItems = [];
 
-        foreach (var currentItem in (SelectedItems ?? []).Cast<FileSystemModel>())
+        foreach (var currentItem in (SelectedItems ?? []).OfType<FileSystemModel>())
         {
             if (!currentItem.IsDirectory)
             {
