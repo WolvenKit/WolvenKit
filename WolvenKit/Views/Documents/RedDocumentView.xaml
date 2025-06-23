@@ -49,7 +49,10 @@
                 <docV:RDTGraphView2 ViewModel="{Binding}" />
             </DataTemplate>
 
-            <!-- RDTCombinedViewModel DataTemplate removed - combined view only used in fullscreen mode -->
+            <DataTemplate DataType="{x:Type docVM:CombinedSceneViewModel}">
+                <docV:CombinedSceneView DataContext="{Binding}" />
+            </DataTemplate>
+
         </Grid.Resources>
 
         <Grid.RowDefinitions>

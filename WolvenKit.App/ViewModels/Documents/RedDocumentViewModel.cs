@@ -324,9 +324,21 @@ public partial class RedDocumentViewModel : DocumentViewModel
         {
             TabItemViewModels.Add(_documentTabViewmodelFactory.RDTMeshViewModel(wsb, this));
         }
-        if (_globals.Value.ENABLE_NODE_EDITOR && cls is graphGraphResource or scnSceneResource)
+        if (cls is scnSceneResource sceneResource)
         {
-            // Always create normal separate tabs - combined view is only used in fullscreen
+            var combinedSceneTab = new CombinedSceneViewModel(sceneResource, this, _chunkViewmodelFactory, _nodeWrapperFactory);
+            TabItemViewModels.Add(combinedSceneTab);
+
+            if (_globals.Value.ENABLE_NODE_EDITOR)
+            {
+                TabItemViewModels.Add(new RDTGraphViewModel2(sceneResource, this, _nodeWrapperFactory));
+            }
+
+            return;
+        }
+
+        if (_globals.Value.ENABLE_NODE_EDITOR && cls is graphGraphResource)
+        {
             TabItemViewModels.Add(new RDTGraphViewModel2(cls, this, _nodeWrapperFactory));
         }
     }
