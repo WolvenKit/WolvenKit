@@ -13,6 +13,7 @@ using System.Windows.Threading;
 using Nodify;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.GraphEditor;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
@@ -75,7 +76,14 @@ public partial class GraphEditorView : UserControl
     public NodeViewModel SelectedNode
     {
         get => _selectedNode;
-        set => SetField(ref _selectedNode, value);
+        set 
+        { 
+            if (SetField(ref _selectedNode, value))
+            {
+                // Update the global selection service
+                NodeSelectionService.Instance.SelectedNode = value;
+            }
+        }
     }
 
     private ObservableCollection<object> _selectedNodes = new();

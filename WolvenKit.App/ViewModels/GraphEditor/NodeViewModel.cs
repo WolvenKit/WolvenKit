@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
+using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.RED4.Types;
 using Point = System.Windows.Point;
 
@@ -25,24 +26,95 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
     public ObservableCollection<OutputConnectorViewModel> Output { get; } = new();
 
     public RedBaseClass Data { get; }
+    
+    /// <summary>
+    /// Reference to the document view model for marking dirty and other operations
+    /// </summary>
+    public RedDocumentViewModel? DocumentViewModel { get; set; }
 
     protected NodeViewModel(RedBaseClass data)
     {
         Data = data;
+        
+        // Wire up property change notifications for syncing
+        if (Data is INotifyPropertyChanged notifyPropertyChanged)
+        {
+            notifyPropertyChanged.PropertyChanged += DataOnPropertyChanged;
+        }
+        if (Data is INotifyPropertyChanging notifyPropertyChanging)
+        {
+            notifyPropertyChanging.PropertyChanging += DataOnPropertyChanging;
+        }
     }
 
     protected virtual void DataOnPropertyChanging(object? sender, PropertyChangingEventArgs e)
     {
-
+        // Override in derived classes if pre-change logic is needed
     }
 
     protected virtual void DataOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-
+        // Mark document as dirty when any property changes
+        DocumentViewModel?.SetIsDirty(true);
+        
+        // Update visual aspects that might be affected by property changes
+        UpdateFromPropertyChange(e.PropertyName);
+    }
+    
+    /// <summary>
+    /// Called when a property on the underlying data changes to update visual elements
+    /// </summary>
+    /// <param name="propertyName">Name of the property that changed</param>
+    protected virtual void UpdateFromPropertyChange(string? propertyName)
+    {
+        switch (propertyName)
+        {
+            case "Name" or "Caption" or "Comment":
+                // Update title when common name properties change
+                UpdateTitle();
+                TriggerPropertyChanged(nameof(Title));
+                break;
+                
+            case "OutputSockets" or "InputSockets":
+                // Regenerate sockets when socket arrays change
+                GenerateSockets();
+                TriggerPropertyChanged(nameof(Output));
+                TriggerPropertyChanged(nameof(Input));
+                break;
+                
+            default:
+                // For other properties, just refresh the title in case it's derived
+                UpdateTitle();
+                TriggerPropertyChanged(nameof(Title));
+                break;
+        }
+    }
+    
+    /// <summary>
+    /// Update the node title - override in derived classes for custom title logic
+    /// </summary>
+    protected virtual void UpdateTitle()
+    {
+        // Default implementation - derived classes can override
+        var typeName = Data.GetType().Name;
+        if (typeName.StartsWith("scn"))
+            typeName = typeName[3..];
+        if (typeName.EndsWith("Node"))
+            typeName = typeName[..^4];
+            
+        Title = $"[{UniqueId}] {typeName}";
     }
 
     internal abstract void GenerateSockets();
 
+    /// <summary>
+    /// Public method to trigger property change notifications for external synchronization
+    /// </summary>
+    /// <param name="propertyName">Name of the property that changed</param>
+    public void TriggerPropertyChanged(string propertyName)
+    {
+        OnPropertyChanged(propertyName);
+    }
 
     #region IDisposable
 
@@ -62,6 +134,15 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
         {
             if (disposing)
             {
+                // Unhook property change notifications to prevent memory leaks
+                if (Data is INotifyPropertyChanged notifyPropertyChanged)
+                {
+                    notifyPropertyChanged.PropertyChanged -= DataOnPropertyChanged;
+                }
+                if (Data is INotifyPropertyChanging notifyPropertyChanging)
+                {
+                    notifyPropertyChanging.PropertyChanging -= DataOnPropertyChanging;
+                }
             }
 
             _disposedValue = true;

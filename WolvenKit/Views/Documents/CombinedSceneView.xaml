@@ -13,7 +13,7 @@
              xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance documents:CombinedSceneViewModel, IsDesignTimeCreatable=False}"
-             d:DesignHeight="800" d:DesignWidth="1200">
+                          d:DesignHeight="800" d:DesignWidth="1200">
     <UserControl.Resources>
         <Style x:Key="SpacedWolvenKitTabControl" 
                BasedOn="{StaticResource WolvenKitTabControl}"
@@ -32,53 +32,101 @@
         </Style>
     </UserControl.Resources>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="3*" />
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <!-- Toolbar -->
+        <Border Grid.Row="0" Background="{StaticResource ContentBackground}" BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,0,0,1" Padding="8,4">
+            <StackPanel Orientation="Horizontal">
+                <iconPacks:PackIconMaterial Kind="GraphOutline" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <TextBlock Text="Scene Editor - Node-based workflow" 
+                           VerticalAlignment="Center" 
+                           Foreground="Gray" 
+                           FontSize="11" />
+            </StackPanel>
+        </Border>
 
-        <!-- Left Panel: Curated Tab Control -->
-        <syncfusion:TabControlExt Grid.Column="0" 
-                                  Style="{StaticResource SpacedWolvenKitTabControl}"
-                                  ItemContainerStyle="{StaticResource SpacedTabItemStyle}"
-                                  ItemsSource="{Binding Tabs}"
-                                  SelectedItem="{Binding SelectedTab, Mode=TwoWay}">
-            <syncfusion:TabControlExt.ItemTemplate>
-                <DataTemplate DataType="{x:Type documents:SceneTabDefinition}">
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconMaterial Kind="{Binding Icon}" VerticalAlignment="Center" Margin="0,0,8,0" />
-                        <TextBlock Text="{Binding Header}" VerticalAlignment="Center" />
-                    </StackPanel>
-                </DataTemplate>
-            </syncfusion:TabControlExt.ItemTemplate>
-            <syncfusion:TabControlExt.ContentTemplate>
-                <DataTemplate DataType="{x:Type documents:SceneTabDefinition}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="3*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="2*" />
-                        </Grid.ColumnDefinitions>
+        <!-- Main Content -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
 
-                        <!-- RedTreeView bound directly to the filtered ICollectionView -->
-                        <tools:RedTreeView Grid.Column="0" 
-                                           ItemsSource="{Binding DataContext.SelectedTabContent, RelativeSource={RelativeSource AncestorType={x:Type local:CombinedSceneView}}}"
-                                           SelectedItem="{Binding DataContext.RDTViewModel.SelectedChunk, RelativeSource={RelativeSource AncestorType={x:Type local:CombinedSceneView}}, Mode=TwoWay}"
-                                           SelectedItems="{Binding DataContext.RDTViewModel.SelectedChunks, RelativeSource={RelativeSource AncestorType={x:Type local:CombinedSceneView}}, Mode=TwoWay}"/>
-                        
-                        <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch" Background="#FF404040"/>
-                        
-                        <editors:RedTypeView Grid.Column="2" DataContext="{Binding DataContext.RDTViewModel.SelectedChunk, RelativeSource={RelativeSource AncestorType={x:Type local:CombinedSceneView}}}"/>
-                    </Grid>
-                </DataTemplate>
-            </syncfusion:TabControlExt.ContentTemplate>
-        </syncfusion:TabControlExt>
+            <!-- Left Panel: Curated Tab Control -->
+            <syncfusion:TabControlExt Grid.Column="0" 
+                                      Style="{StaticResource SpacedWolvenKitTabControl}"
+                                      ItemContainerStyle="{StaticResource SpacedTabItemStyle}"
+                                      ItemsSource="{Binding Tabs}"
+                                      SelectedItem="{Binding SelectedTab, Mode=TwoWay}">
+                <syncfusion:TabControlExt.ItemTemplate>
+                    <DataTemplate DataType="{x:Type documents:SceneTabDefinition}">
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconMaterial Kind="{Binding Icon}" VerticalAlignment="Center" Margin="0,0,8,0" />
+                            <TextBlock Text="{Binding Header}" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </DataTemplate>
+                </syncfusion:TabControlExt.ItemTemplate>
+                <syncfusion:TabControlExt.ContentTemplate>
+                    <DataTemplate DataType="{x:Type documents:SceneTabDefinition}">
+                        <Grid>
+                            <!-- Traditional tree view layout for all tabs except Node Properties -->
+                            <Grid>
+                                <Grid.Style>
+                                    <Style TargetType="Grid">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                        <Style.Triggers>
+                                            <!-- Hide traditional view for Node Properties tab -->
+                                            <DataTrigger Binding="{Binding Header}" Value="Node Properties">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Style>
+                                
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="3*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="2*" />
+                                </Grid.ColumnDefinitions>
 
-        <!-- Grid Splitter -->
-        <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch" Background="#FF404040"/>
+                                <!-- RedTreeView bound directly to the filtered ICollectionView -->
+                                <tools:RedTreeView Grid.Column="0" 
+                                                   ItemsSource="{Binding DataContext.SelectedTabContent, RelativeSource={RelativeSource AncestorType={x:Type local:CombinedSceneView}}}"
+                                                   SelectedItem="{Binding DataContext.RDTViewModel.SelectedChunk, RelativeSource={RelativeSource AncestorType={x:Type local:CombinedSceneView}}, Mode=TwoWay}"
+                                                   SelectedItems="{Binding DataContext.RDTViewModel.SelectedChunks, RelativeSource={RelativeSource AncestorType={x:Type local:CombinedSceneView}}, Mode=TwoWay}"/>
+                                
+                                <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch" Background="#FF404040"/>
+                                
+                                <editors:RedTypeView Grid.Column="2" DataContext="{Binding DataContext.RDTViewModel.SelectedChunk, RelativeSource={RelativeSource AncestorType={x:Type local:CombinedSceneView}}}"/>
+                            </Grid>
+                            
+                            <!-- Node Properties tab shows our custom selection-driven view -->
+                            <local:NodePropertiesView>
+                                <local:NodePropertiesView.Style>
+                                    <Style TargetType="local:NodePropertiesView">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Header}" Value="Node Properties">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </local:NodePropertiesView.Style>
+                            </local:NodePropertiesView>
+                        </Grid>
+                    </DataTemplate>
+                </syncfusion:TabControlExt.ContentTemplate>
+            </syncfusion:TabControlExt>
 
-        <!-- Right Panel: Graph Editor -->
-        <graphEditor:GraphEditorView Grid.Column="2" Source="{Binding MainGraph}"/>
+            <!-- Grid Splitter -->
+            <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch" Background="#FF404040"/>
+
+            <!-- Right Panel: Graph Editor -->
+            <graphEditor:GraphEditorView Grid.Column="2" Source="{Binding MainGraph}"/>
+        </Grid>
     </Grid>
 </UserControl> 

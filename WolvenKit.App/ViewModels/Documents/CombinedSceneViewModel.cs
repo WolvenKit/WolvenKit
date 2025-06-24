@@ -24,8 +24,10 @@ namespace WolvenKit.App.ViewModels.Documents
         public Func<ChunkViewModel, bool> Filter { get; set; } = _ => false;
     }
 
-    public partial class CombinedSceneViewModel : RedDocumentTabViewModel
+    public partial class CombinedSceneViewModel : RedDocumentTabViewModel, IDisposable
     {
+        private bool _disposed = false;
+
         public RDTDataViewModel RDTViewModel { get; }
         public RedGraph MainGraph { get; }
         public ObservableCollection<SceneTabDefinition> Tabs { get; } = new();
@@ -135,6 +137,32 @@ namespace WolvenKit.App.ViewModels.Documents
         {
             if (value == null) return;
             UpdateTabContent(value);
+        }
+
+        // Override Unload to ensure disposal when tab is closed
+        public override void Unload()
+        {
+            Dispose();
+            base.Unload();
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed && disposing)
+            {
+                _disposed = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        ~CombinedSceneViewModel()
+        {
+            Dispose(false);
         }
     }
 } 

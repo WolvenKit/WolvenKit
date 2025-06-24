@@ -218,6 +218,9 @@ public partial class RedGraph
         }
 
         nodeWrapper.GenerateSockets();
+        
+        // Set document reference for property change syncing
+        nodeWrapper.DocumentViewModel = DocumentViewModel;
 
         return nodeWrapper;
     }
@@ -227,6 +230,9 @@ public partial class RedGraph
         var nodeWrapper = new DynamicSceneViewModel(node);
 
         nodeWrapper.GenerateSockets();
+        
+        // Set document reference for property change syncing
+        nodeWrapper.DocumentViewModel = DocumentViewModel;
 
         return nodeWrapper;
     }

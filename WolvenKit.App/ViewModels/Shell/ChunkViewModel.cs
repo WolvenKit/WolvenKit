@@ -2355,7 +2355,16 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             _loggerService.Warning($"Something went wrong while trying to delete the selection : {ex}");
         }
 
-        RecalculateProperties();
+        // Lightweight fix: renumber remaining children and notify once
+        if (Data is IRedArray)
+        {
+            for (int i = 0; i < TVProperties.Count; i++)
+                TVProperties[i].PropertyName = $"[{i}]";
+        }
+
+        // Notify Syncfusion once – grid updates rows safely
+        NotifyChain(nameof(TVProperties));
+        
         var newSelectionIndex = Math.Min(indices.First(), TVProperties.Count) - 1;
         newSelectionIndex = Math.Max(0, newSelectionIndex);
         newSelectionIndex = Math.Min(newSelectionIndex, TVProperties.Count - 1);

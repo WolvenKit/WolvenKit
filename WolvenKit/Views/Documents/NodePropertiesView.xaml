@@ -1,0 +1,106 @@
+<UserControl x:Class="WolvenKit.Views.Documents.NodePropertiesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:services="clr-namespace:WolvenKit.App.Services;assembly=WolvenKit.App"
+             xmlns:graphEditor="clr-namespace:WolvenKit.App.ViewModels.GraphEditor;assembly=WolvenKit.App"
+             xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
+             xmlns:tools="clr-namespace:WolvenKit.Views.Tools"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Header -->
+        <Border Grid.Row="0" Background="{StaticResource ContentBackgroundAlt}" Padding="12,8" Margin="0,0,0,1">
+            <StackPanel Orientation="Horizontal">
+                <iconPacks:PackIconMaterial Kind="CubeOutline" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <TextBlock VerticalAlignment="Center" FontWeight="Bold">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Text" Value="Node Properties"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Source={x:Static services:NodeSelectionService.Instance}, Path=SelectedNode}" 
+                                             Value="{x:Null}">
+                                    <Setter Property="Text" Value="Node Properties"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} (ID: {1})">
+                            <Binding Source="{x:Static services:NodeSelectionService.Instance}" Path="SelectedNode.Title"/>
+                            <Binding Source="{x:Static services:NodeSelectionService.Instance}" Path="SelectedNode.UniqueId"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </StackPanel>
+        </Border>
+        
+                <!-- Content -->
+        <Grid Grid.Row="1">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Source={x:Static services:NodeSelectionService.Instance}, Path=SelectedNode}" 
+                                     Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Left: Property tree for the selected node -->
+            <tools:RedTreeView Grid.Column="0" 
+                               SelectedItem="{Binding Source={x:Static services:NodePropertiesSelectionService.Instance}, Path=SelectedProperty, Mode=TwoWay}"
+                               SelectedItems="{Binding Source={x:Static services:NodePropertiesSelectionService.Instance}, Path=SelectedProperties, Mode=TwoWay}">
+                <tools:RedTreeView.ItemsSource>
+                    <Binding Source="{x:Static services:NodeSelectionService.Instance}"
+                             Path="SelectedNode.Data"
+                             Converter="{StaticResource RedTypeToChunkViewModelCollectionConverter}"/>
+                </tools:RedTreeView.ItemsSource>
+            </tools:RedTreeView>
+            
+            <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch" Background="#FF404040"/>
+            
+            <!-- Right: Detail editor for selected property -->
+            <editors:RedTypeView Grid.Column="2" DataContext="{Binding Source={x:Static services:NodePropertiesSelectionService.Instance}, Path=SelectedProperty}"/>
+        </Grid>
+        
+        <!-- No selection message -->
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.6">
+            <StackPanel.Style>
+                <Style TargetType="StackPanel">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Source={x:Static services:NodeSelectionService.Instance}, Path=SelectedNode}" 
+                                     Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Style>
+            
+            <iconPacks:PackIconMaterial Kind="SelectionEllipseArrowInside" 
+                                        HorizontalAlignment="Center" 
+                                        Width="48" Height="48" 
+                                        Margin="0,0,0,16"/>
+            <TextBlock Text="Select a node to edit its properties" 
+                       HorizontalAlignment="Center" 
+                       FontSize="14" 
+                       Foreground="Gray"/>
+        </StackPanel>
+    </Grid>
+</UserControl> 
