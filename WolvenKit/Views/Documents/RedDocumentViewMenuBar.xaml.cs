@@ -518,6 +518,7 @@ namespace WolvenKit.Views.Documents
         [
             ".mltemplate",
             ".mt",
+            ".remt",
             Path.Join("base", "surfaces", "microblends"),
             Path.Join("base", "materials"),
             Path.Join("base", "fx"),
@@ -550,21 +551,26 @@ namespace WolvenKit.Views.Documents
                     {
                         var hasModFile = _archiveManager.Lookup(refPathHash, ArchiveManagerScope.Mods) is
                             { HasValue: true };
-                        var gamefileLookup = _archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame);
-                       
+                        var gameFileOpt = _archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame);
+
                         // Only files from mods. Filter out anything that overwrites basegame files.
-                        if (!addBasegameFiles)
+                        if (hasModFile && !gameFileOpt.HasValue)
                         {
-                            return hasModFile && !gamefileLookup.HasValue;
+                            return true;
                         }
 
-                        return hasModFile || (gamefileLookup.HasValue && !IsIgnoredDependency(gamefileLookup.Value));
+                        return addBasegameFiles && gameFileOpt.HasValue && !IsIgnoredDependency(gameFileOpt.Value);
                     }
                 )
                 .ToHashSet();
             
             var destFolder = GetTextureDirForDependencies(true);
             // Use search and replace to fix file paths
+
+            if (string.IsNullOrEmpty(destFolder))
+            {
+                return;
+            }
             
             var pathReplacements = await _projectResourceTools.AddDependenciesToProjectPathAsync(
                 destFolder, materialDependencies
@@ -595,7 +601,7 @@ namespace WolvenKit.Views.Documents
 
             bool IsIgnoredDependency(IGameFile gameFile)
             {
-                return _ignoredDependencyPartials.Contains($".{gameFile.Extension}") ||
+                return _ignoredDependencyPartials.Contains(gameFile.Extension) ||
                        _ignoredDependencyPartials.Any(p => gameFile.FileName.StartsWith(p));
             }
         }
