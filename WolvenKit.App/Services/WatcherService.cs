@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -103,6 +104,12 @@ public partial class WatcherService : ObservableObject, IWatcherService
         Clear();
     }
 
+    private static readonly List<string> s_ignoredExtensions =
+    [
+        "blend@", // Blender temp files
+        "tmp", // regular temp files
+    ];
+    
     private void Update(CancellationToken cancellationToken)
     {
         while (true)
@@ -161,6 +168,11 @@ public partial class WatcherService : ObservableObject, IWatcherService
         {
             var timestamp = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
 
+            if (s_ignoredExtensions.Contains(e.FullPath.Split('.').LastOrDefault() ?? ""))
+            {
+                return;
+            }
+            
             // Check if delay has passed
             if (e.Ticks > timestamp)
             {
