@@ -513,6 +513,19 @@ namespace WolvenKit.Views.Documents
         private string GetTextureDirForDependencies(bool useTextureSubfolder) =>
             ViewModel?.GetTextureDirForDependencies(useTextureSubfolder) ?? "";
 
+        // If this is static, we can't use Path.Join
+        private readonly List<string> _ignoredDependencyPartials =
+        [
+            ".mltemplate",
+            ".mt",
+            Path.Join("base", "surfaces", "microblends"),
+            Path.Join("base", "materials"),
+            Path.Join("base", "fx"),
+            Path.Join("ep1", "materials"),
+            Path.Join("ep1", "fx"),
+            "engine",
+        ];
+        
         private async Task AddDependenciesToFileAsync(ChunkViewModel _, bool addBasegameFiles = false)
         {
             if (RootChunk is not ChunkViewModel rootChunk)
@@ -537,22 +550,22 @@ namespace WolvenKit.Views.Documents
                     {
                         var hasModFile = _archiveManager.Lookup(refPathHash, ArchiveManagerScope.Mods) is
                             { HasValue: true };
-                        var hasBasegameFile = _archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame) is { HasValue: true };
-                        
+                        var gamefileLookup = _archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame);
+                       
                         // Only files from mods. Filter out anything that overwrites basegame files.
                         if (!addBasegameFiles)
                         {
-                            return hasModFile && !hasBasegameFile;
+                            return hasModFile && !gamefileLookup.HasValue;
                         }
 
-                        return hasModFile || hasBasegameFile;
+                        return hasModFile || (gamefileLookup.HasValue && !IsIgnoredDependency(gamefileLookup.Value));
                     }
                 )
                 .ToHashSet();
             
-
             var destFolder = GetTextureDirForDependencies(true);
             // Use search and replace to fix file paths
+            
             var pathReplacements = await _projectResourceTools.AddDependenciesToProjectPathAsync(
                 destFolder, materialDependencies
             );
@@ -576,6 +589,14 @@ namespace WolvenKit.Views.Documents
                     break;
                 default:
                     break;
+            }
+
+            return;
+
+            bool IsIgnoredDependency(IGameFile gameFile)
+            {
+                return _ignoredDependencyPartials.Contains($".{gameFile.Extension}") ||
+                       _ignoredDependencyPartials.Any(p => gameFile.FileName.StartsWith(p));
             }
         }
 
