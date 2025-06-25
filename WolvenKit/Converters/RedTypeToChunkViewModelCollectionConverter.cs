@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Data;
 using Splat;
 using WolvenKit.App.Factories;
+using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
 
@@ -36,9 +37,29 @@ namespace WolvenKit.Converters
             if (factory == null || appViewModel == null)
                 throw new InvalidOperationException("Required services not available");
 
-            // Create a root-level ChunkViewModel for this node's data
-            var typeName = redData.GetType().Name;
-            var chunkViewModel = factory.ChunkViewModel(redData, typeName, appViewModel, null);
+            // Try to get the current document's RDTDataViewModel to use as Tab reference
+            // This ensures property edits can mark the document as dirty and save properly
+            var currentDocument = appViewModel.ActiveDocument as RedDocumentViewModel;
+            var currentTab = currentDocument?.SelectedTabItemViewModel;
+            
+            ChunkViewModel chunkViewModel;
+            
+            // If we have a CombinedSceneViewModel, use its RDTViewModel as the tab reference
+            if (currentTab is CombinedSceneViewModel combinedScene)
+            {
+                chunkViewModel = factory.ChunkViewModel(redData, combinedScene.RDTViewModel, appViewModel);
+            }
+            // If we have an RDTDataViewModel directly, use it
+            else if (currentTab is RDTDataViewModel rdtTab)
+            {
+                chunkViewModel = factory.ChunkViewModel(redData, rdtTab, appViewModel);
+            }
+            // Fallback to no tab reference (old behavior)
+            else
+            {
+                var typeName = redData.GetType().Name;
+                chunkViewModel = factory.ChunkViewModel(redData, typeName, appViewModel, null);
+            }
             
             // Force calculation of properties so they show up in the property editor
             chunkViewModel.CalculateProperties();

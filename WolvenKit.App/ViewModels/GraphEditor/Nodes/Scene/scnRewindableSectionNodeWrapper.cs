@@ -1,22 +1,56 @@
 ﻿using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 using WolvenKit.RED4.Types;
+using System.Collections.Generic;
+using System;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 
 public class scnRewindableSectionNodeWrapper : BaseSceneViewModel<scnRewindableSectionNode>
 {
+    private readonly scnSceneResource _sceneResource;
+    
     public scnRewindableSectionNodeWrapper(scnRewindableSectionNode scnSceneGraphNode, scnSceneResource scnSceneResource) : base(scnSceneGraphNode)
     {
-        Details["Section Duration"] = scnSceneGraphNode.SectionDuration.Stu.ToString() + "ms";
-        Details["Ff Strategy"] = scnSceneGraphNode.FfStrategy.ToEnumString();
-        Details["Play Speed Modifiers - Backward Fast"] = scnSceneGraphNode.PlaySpeedModifiers.BackwardFast.ToString();
-        Details["Play Speed Modifiers - Backward Slow"] = scnSceneGraphNode.PlaySpeedModifiers.BackwardSlow.ToString();
-        Details["Play Speed Modifiers - Backward Very Fast"] = scnSceneGraphNode.PlaySpeedModifiers.BackwardVeryFast.ToString();
-        Details["Play Speed Modifiers - Forward Fast"] = scnSceneGraphNode.PlaySpeedModifiers.ForwardFast.ToString();
-        Details["Play Speed Modifiers - Forward Slow"] = scnSceneGraphNode.PlaySpeedModifiers.ForwardSlow.ToString();
-        Details["Play Speed Modifiers - Forward Very Fast"] = scnSceneGraphNode.PlaySpeedModifiers.ForwardVeryFast.ToString();
+        _sceneResource = scnSceneResource;
+        PopulateDetails();
+    }
 
-        var events = scnSceneGraphNode.Events;
+    public override void RefreshDetails()
+    {
+        // Create a new dictionary to trigger UI update (WPF needs reference change)
+        var newDetails = new Dictionary<string, string>();
+        
+        // Temporarily set Details to new dictionary so PopulateDetails can populate it
+        var originalDetails = Details;
+        Details = newDetails;
+        
+        try
+        {
+            PopulateDetails();
+            
+            // Update title as well
+            UpdateTitle();
+            OnPropertyChanged(nameof(Title));
+        }
+        catch (Exception)
+        {
+            // If population fails, restore original details
+            Details = originalDetails;
+        }
+    }
+
+    private void PopulateDetails()
+    {
+        Details["Section Duration"] = _castedData.SectionDuration.Stu.ToString() + "ms";
+        Details["Ff Strategy"] = _castedData.FfStrategy.ToEnumString();
+        Details["Play Speed Modifiers - Backward Fast"] = _castedData.PlaySpeedModifiers.BackwardFast.ToString();
+        Details["Play Speed Modifiers - Backward Slow"] = _castedData.PlaySpeedModifiers.BackwardSlow.ToString();
+        Details["Play Speed Modifiers - Backward Very Fast"] = _castedData.PlaySpeedModifiers.BackwardVeryFast.ToString();
+        Details["Play Speed Modifiers - Forward Fast"] = _castedData.PlaySpeedModifiers.ForwardFast.ToString();
+        Details["Play Speed Modifiers - Forward Slow"] = _castedData.PlaySpeedModifiers.ForwardSlow.ToString();
+        Details["Play Speed Modifiers - Forward Very Fast"] = _castedData.PlaySpeedModifiers.ForwardVeryFast.ToString();
+
+        var events = _castedData.Events;
         Details["Events"] = events.Count.ToString();
 
         int counter = 1;
@@ -33,7 +67,7 @@ public class scnRewindableSectionNodeWrapper : BaseSceneViewModel<scnRewindableS
             counter++;
         }
 
-        Title += NodeProperties.SetNameFromNotablePoints(scnSceneGraphNode.NodeId.Id, scnSceneResource);
+        Title += NodeProperties.SetNameFromNotablePoints(_castedData.NodeId.Id, _sceneResource);
     }
 
     internal override void GenerateSockets()

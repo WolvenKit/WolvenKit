@@ -1,6 +1,8 @@
 ﻿using WolvenKit.App.Extensions;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 using WolvenKit.RED4.Types;
+using System.Collections.Generic;
+using System;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 
@@ -8,12 +10,41 @@ public class scnRandomizerNodeWrapper : BaseSceneViewModel<scnRandomizerNode>, I
 {
     public scnRandomizerNodeWrapper(scnRandomizerNode scnRandomizerNode) : base(scnRandomizerNode)
     {
-        Details["Mode"] = scnRandomizerNode?.Mode.ToEnumString()!;
+        PopulateDetails();
+    }
+
+    public override void RefreshDetails()
+    {
+        // Create a new dictionary to trigger UI update (WPF needs reference change)
+        var newDetails = new Dictionary<string, string>();
+        
+        // Temporarily set Details to new dictionary so PopulateDetails can populate it
+        var originalDetails = Details;
+        Details = newDetails;
+        
+        try
+        {
+            PopulateDetails();
+            
+            // Update title as well
+            UpdateTitle();
+            OnPropertyChanged(nameof(Title));
+        }
+        catch (Exception)
+        {
+            // If population fails, restore original details
+            Details = originalDetails;
+        }
+    }
+
+    private void PopulateDetails()
+    {
+        Details["Mode"] = _castedData?.Mode.ToEnumString()!;
 
         var outputWeights = "";
-        if (scnRandomizerNode?.Weights != null)
+        if (_castedData?.Weights != null)
         {
-            foreach (var p in scnRandomizerNode.Weights)
+            foreach (var p in _castedData.Weights)
             {
                 outputWeights += (outputWeights != "" ? ", " : "") + p.ToString();
             }

@@ -317,6 +317,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     partial void OnDataChanged(IRedType value)
     {
+        // Debug logging
+        _loggerService.Info($"OnDataChanged triggered for {PropertyName}: {value}");
+        
         CalculateValue();
         CalculateDescriptor();
         CalculateIsDefault();
@@ -326,13 +329,19 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         if (Parent is null)
         {
+            _loggerService.Info($"OnDataChanged: Parent is null for {PropertyName}, exiting early");
             return;
         }
 
+        _loggerService.Info($"OnDataChanged: Parent exists for {PropertyName}, continuing...");
         Parent.CalculateIsDefault();
+
+        // Always try to notify for graph sync, regardless of Tab state
+        NotifyPropertyUpdateForGraphSync();
 
         if (Tab is not null)
         {
+            _loggerService.Info($"OnDataChanged: Tab is not null for {PropertyName}, entering Tab logic");
             if (Parent.Data is IRedArray arr)
             {
                 // use PropertyName for now, since Name doesn't always work
@@ -342,6 +351,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     arr[index] = Data;
                     Tab.Parent.SetIsDirty(true);
                     Parent.NotifyChain(nameof(Data));
+                    
+                    // Notify property update service for graph sync
+                    NotifyPropertyUpdateForGraphSync();
                 }
 
                 Parent.CalculateDescriptor();
@@ -358,6 +370,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 return;
             }
 
+            _loggerService.Info($"OnDataChanged: Not an array, checking parent data type for {PropertyName}");
             var parentData = Parent.Data switch
             {
                 IRedBaseHandle handle => handle.GetValue(),
@@ -378,6 +391,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
                 Tab.Parent.SetIsDirty(true);
                 Parent.NotifyChain(nameof(Data));
+                
+                // Notify property update service for graph sync
+                NotifyPropertyUpdateForGraphSync();
             }
             else
             {
@@ -397,6 +413,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
                     Tab.Parent.SetIsDirty(true);
                     Parent.NotifyChain(nameof(Data));
+                    
+                    // Notify property update service for graph sync
+                    NotifyPropertyUpdateForGraphSync();
                 }
             }
         }
@@ -4973,6 +4992,47 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             appearanceNode.RecalculateProperties();
             Tab?.Parent.SetIsDirty(true);
         }
+    }
+
+    /// <summary>
+    /// Notify the property update service for graph synchronization
+    /// </summary>
+    private void NotifyPropertyUpdateForGraphSync()
+    {
+        // Find the root node data to notify about
+        var rootNodeData = GetRootNodeData();
+        if (rootNodeData != null)
+        {
+            _loggerService.Info($"Property update notification: {PropertyName} changed on {rootNodeData.GetType().Name}");
+            NodePropertyUpdateService.NotifyPropertyUpdated(rootNodeData);
+        }
+        else
+        {
+            _loggerService.Debug($"Property update notification: {PropertyName} changed but no scene node found in hierarchy");
+        }
+    }
+    
+    /// <summary>
+    /// Get the root node data (scene graph node) that this property belongs to
+    /// </summary>
+    private RedBaseClass? GetRootNodeData()
+    {
+        // Walk up the tree to find a scene graph node
+        var current = this;
+        while (current != null)
+        {
+            _loggerService.Debug($"Checking node: {current.PropertyName} with data type: {current.Data?.GetType().Name}");
+            
+            if (current.Data is scnSceneGraphNode sceneNode)
+            {
+                _loggerService.Info($"Found scene graph node: {sceneNode.GetType().Name} with ID {sceneNode.NodeId.Id}");
+                return sceneNode;
+            }
+            current = current.Parent;
+        }
+        
+        _loggerService.Warning("No scene graph node found in parent hierarchy");
+        return null;
     }
 
     public override string ToString()

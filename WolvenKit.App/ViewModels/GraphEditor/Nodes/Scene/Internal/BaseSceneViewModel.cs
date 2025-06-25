@@ -1,9 +1,11 @@
 ﻿using System.Windows.Media;
 using WolvenKit.RED4.Types;
+using System.Collections.Generic;
+using WolvenKit.App.Services;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 
-public abstract class BaseSceneViewModel : NodeViewModel
+public abstract class BaseSceneViewModel : NodeViewModel, IRefreshableDetails
 {
     public override uint UniqueId => ((scnSceneGraphNode)Data).NodeId.Id;
 
@@ -18,6 +20,29 @@ public abstract class BaseSceneViewModel : NodeViewModel
         
         // Check if this is a simple node type that should have uniform colors
         UpdateBackgroundsBasedOnNodeType(scnSceneGraphNode);
+    }
+
+    protected override void UpdateTitle()
+    {
+        // Format scene node titles properly
+        Title = $"[{UniqueId}] {Data.GetType().Name[3..^4]}";
+    }
+
+    /// <summary>
+    /// Refresh the node's visual details without regenerating sockets
+    /// Override in derived classes to update specific details
+    /// </summary>
+    public virtual void RefreshDetails()
+    {
+        // Create a new dictionary to trigger UI update (WPF needs reference change)
+        var newDetails = new Dictionary<string, string>();
+        
+        // Set new dictionary
+        Details = newDetails;
+        
+        // Base implementation just refreshes the title
+        UpdateTitle();
+        OnPropertyChanged(nameof(Title));
     }
 
     protected void UpdateBackgroundsBasedOnDetails()

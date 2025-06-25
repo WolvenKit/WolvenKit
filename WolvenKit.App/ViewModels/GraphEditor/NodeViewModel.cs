@@ -4,7 +4,10 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Splat;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
 using Point = System.Windows.Point;
 
@@ -20,7 +23,20 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
     public Size Size { get; set; }
 
     public string Title { get; protected set; } = null!;
-    public Dictionary<string, string> Details { get; } = new();
+    
+    private Dictionary<string, string> _details = new();
+    public Dictionary<string, string> Details 
+    { 
+        get => _details;
+        protected set
+        {
+            if (_details != value)
+            {
+                _details = value;
+                OnPropertyChanged(nameof(Details));
+            }
+        }
+    }
 
     public ObservableCollection<InputConnectorViewModel> Input { get; } = new();
     public ObservableCollection<OutputConnectorViewModel> Output { get; } = new();
@@ -45,6 +61,9 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
         {
             notifyPropertyChanging.PropertyChanging += DataOnPropertyChanging;
         }
+        
+        // Listen for property updates from the property panel
+        NodePropertyUpdateService.NodePropertyUpdated += OnNodePropertyUpdated;
     }
 
     protected virtual void DataOnPropertyChanging(object? sender, PropertyChangingEventArgs e)
@@ -105,6 +124,24 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
         Title = $"[{UniqueId}] {typeName}";
     }
 
+    /// <summary>
+    /// Forces a refresh of the node's visual state from its data
+    /// </summary>
+    public void UpdateFromData()
+    {
+        // Update title
+        UpdateTitle();
+        TriggerPropertyChanged(nameof(Title));
+        
+        // Regenerate sockets
+        GenerateSockets();
+        TriggerPropertyChanged(nameof(Output));
+        TriggerPropertyChanged(nameof(Input));
+        
+        // Notify other properties that might be affected
+        OnPropertyChanged(nameof(Details));
+    }
+
     internal abstract void GenerateSockets();
 
     /// <summary>
@@ -114,6 +151,45 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
     public void TriggerPropertyChanged(string propertyName)
     {
         OnPropertyChanged(propertyName);
+    }
+
+    private void OnNodePropertyUpdated(object? sender, NodePropertyUpdatedEventArgs e)
+    {
+        var logger = Locator.Current.GetService<ILoggerService>();
+        
+        // Check if this update is for our data
+        if (ReferenceEquals(e.NodeData, Data))
+        {
+            logger?.Info($"Node {UniqueId} received property update notification - refreshing visual state");
+            // Refresh our visual state
+            RefreshFromData();
+        }
+        else
+        {
+            logger?.Debug($"Node {UniqueId} received property update notification but data doesn't match (event data: {e.NodeData.GetHashCode()}, our data: {Data.GetHashCode()})");
+        }
+    }
+    
+    /// <summary>
+    /// Refresh the node's visual state from the underlying data
+    /// Override in derived classes to update specific visual elements
+    /// </summary>
+    public virtual void RefreshFromData()
+    {
+        // Update title
+        UpdateTitle();
+        OnPropertyChanged(nameof(Title));
+        
+        // Regenerate sockets
+        GenerateSockets();
+        OnPropertyChanged(nameof(Output));
+        OnPropertyChanged(nameof(Input));
+        
+        // Refresh details if implemented by derived class
+        if (this is IRefreshableDetails refreshable)
+        {
+            refreshable.RefreshDetails();
+        }
     }
 
     #region IDisposable
@@ -143,6 +219,9 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
                 {
                     notifyPropertyChanging.PropertyChanging -= DataOnPropertyChanging;
                 }
+                
+                // Unsubscribe from property update service
+                NodePropertyUpdateService.NodePropertyUpdated -= OnNodePropertyUpdated;
             }
 
             _disposedValue = true;
