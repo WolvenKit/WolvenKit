@@ -1,7 +1,12 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Media;
+using Splat;
 using WolvenKit.App.Extensions;
+using WolvenKit.App.ViewModels.Documents;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
@@ -195,5 +200,103 @@ public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
             questPhoneManagerNodeDefinition => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#11B25522")), // Very subtle orange-lime tint
             _ => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#11666666")) // Very subtle default gray tint
         };
+    }
+
+    /// <summary>
+    /// Override to handle quest node details properly for scene quest nodes
+    /// </summary>
+    public override void RefreshDetails()
+    {
+        var loggerService = Locator.Current.GetService<ILoggerService>();
+        
+        try
+        {
+            // Create a new Details dictionary to trigger UI updates
+            var tempDetails = new Dictionary<string, string>();
+            
+            // Get the scene resource from our parent document if possible
+            scnSceneResource? sceneResource = null;
+            if (DocumentViewModel?.SelectedTabItemViewModel is CombinedSceneViewModel combinedScene)
+            {
+                sceneResource = combinedScene.RDTViewModel.GetData() as scnSceneResource;
+            }
+
+            // Get details from the nested quest node
+            if (_castedData.QuestNode?.Chunk != null)
+            {
+                var questNodeDetails = NodeProperties.GetPropertiesFor(_castedData.QuestNode.Chunk, sceneResource);
+                foreach (var kvp in questNodeDetails)
+                {
+                    tempDetails[kvp.Key] = kvp.Value;
+                }
+                
+                loggerService?.Info($"scnQuestNode {UniqueId}: Refreshed quest node details, found {questNodeDetails.Count} properties");
+            }
+            else
+            {
+                tempDetails["Type"] = "Quest";
+                loggerService?.Info($"scnQuestNode {UniqueId}: No nested quest node found");
+            }
+            
+            // Set the new details dictionary to trigger UI update
+            Details = tempDetails;
+            
+            // Also refresh the title
+            UpdateTitle();
+            OnPropertyChanged(nameof(Title));
+        }
+        catch (System.Exception ex)
+        {
+            loggerService?.Error($"Error refreshing scnQuestNode {UniqueId} details: {ex.Message}");
+            Details = new Dictionary<string, string> { ["Error"] = "Failed to refresh details" };
+        }
+    }
+
+    /// <summary>
+    /// Override to update title properly for scene quest nodes
+    /// </summary>
+    protected override void UpdateTitle()
+    {
+        try
+        {
+            if (_castedData.QuestNode?.Chunk != null)
+            {
+                var questNodeType = NodeProperties.GetNameFromClass(_castedData.QuestNode.Chunk);
+                Title = $"[{UniqueId}] {questNodeType}";
+            }
+            else
+            {
+                Title = $"[{UniqueId}] Quest";
+            }
+
+            // Add notable points suffix if available
+            if (DocumentViewModel?.SelectedTabItemViewModel is CombinedSceneViewModel combinedScene)
+            {
+                var sceneResource = combinedScene.RDTViewModel.GetData() as scnSceneResource;
+                if (sceneResource != null)
+                {
+                    Title += NodeProperties.SetNameFromNotablePoints(_castedData.NodeId.Id, sceneResource);
+                }
+            }
+        }
+        catch (System.Exception ex)
+        {
+            var loggerService = Locator.Current.GetService<ILoggerService>();
+            loggerService?.Error($"Error updating scnQuestNode {UniqueId} title: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Override RefreshFromData to avoid regenerating sockets unnecessarily
+    /// </summary>
+    public override void RefreshFromData()
+    {
+        // Update title
+        UpdateTitle();
+        OnPropertyChanged(nameof(Title));
+        
+        // Refresh details but DON'T regenerate sockets (this prevents duplication)
+        // Sockets should only be regenerated when the socket structure actually changes
+        RefreshDetails();
     }
 }

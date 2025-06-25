@@ -1,10 +1,13 @@
-﻿using System.Windows.Media;
+﻿using System.Collections.Generic;
+using System.Windows.Media;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 
-public abstract class BaseQuestViewModel : GraphEditor.NodeViewModel
+public abstract class BaseQuestViewModel : GraphEditor.NodeViewModel, IRefreshableDetails
 {
     public override uint UniqueId { get; }
 
@@ -49,6 +52,52 @@ public abstract class BaseQuestViewModel : GraphEditor.NodeViewModel
     internal virtual void CreateDefaultSockets()
     {
 
+    }
+
+    /// <summary>
+    /// Refresh the quest node's detail information from the underlying data
+    /// </summary>
+    public virtual void RefreshDetails()
+    {
+        // Create a new Details dictionary to trigger UI updates
+        var tempDetails = new Dictionary<string, string>();
+        
+        // Repopulate details from the underlying quest node data
+        PopulateDetailsInto(tempDetails);
+        
+        // Replace the Details dictionary to trigger WPF binding updates
+        Details = tempDetails;
+        
+        // Also refresh the title in case it depends on the data
+        UpdateTitle();
+        OnPropertyChanged(nameof(Title));
+    }
+
+    /// <summary>
+    /// Populate quest node details into the provided dictionary
+    /// </summary>
+    protected virtual void PopulateDetailsInto(Dictionary<string, string> details)
+    {
+        if (Data is questNodeDefinition questNode)
+        {
+            // Use the existing NodeProperties helper to get quest node details
+            var nodeDetails = NodeProperties.GetPropertiesFor(questNode);
+            foreach (var kvp in nodeDetails)
+            {
+                details[kvp.Key] = kvp.Value;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Update the node title - can be overridden by specific quest node types
+    /// </summary>
+    protected override void UpdateTitle()
+    {
+        if (Data is questNodeDefinition questNode)
+        {
+            Title = $"[{questNode.Id}] {questNode.GetType().Name[5..^14]}";
+        }
     }
 }
 

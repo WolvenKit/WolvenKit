@@ -21,19 +21,17 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>
 
     public override void RefreshDetails()
     {
-        var loggerService = Locator.Current.GetService<ILoggerService>();
-        loggerService?.Info($"RefreshDetails called for node {UniqueId}");
-        
         // Build the details in a temporary dictionary first
         var tempDetails = new Dictionary<string, string>();
         
         // Now try to populate with real data
         try
         {
-            PopulateDetailsInto(tempDetails, loggerService);
+            PopulateDetailsInto(tempDetails);
         }
         catch (Exception ex)
         {
+            var loggerService = Locator.Current.GetService<ILoggerService>();
             loggerService?.Error($"Error in PopulateDetails for node {UniqueId}: {ex.Message}");
             tempDetails["Error"] = ex.Message;
         }
@@ -47,484 +45,463 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>
         // Update title as well
         UpdateTitle();
         OnPropertyChanged(nameof(Title));
-        
-        loggerService?.Info($"RefreshDetails completed for node {UniqueId}, Details count: {Details.Count}");
     }
 
-    private void PopulateDetailsInto(Dictionary<string, string> detailsDict, ILoggerService? logger = null)
+    private void PopulateDetailsInto(Dictionary<string, string> detailsDict)
     {        
-        logger?.Debug($"PopulateDetails called for node {UniqueId}");
-        
         if (_castedData == null)
         {
-            logger?.Warning($"_castedData is null for node {UniqueId}");
             detailsDict["Error"] = "Data is null";
             return;
         }
         
         try
         {
-            logger?.Debug($"Attempting to populate details for node {UniqueId}");
-            
-            // Add detailed debugging to see exactly what we're reading
             var duration = _castedData.SectionDuration.Stu;
             var strategy = _castedData.FfStrategy.ToEnumString();
             var eventCount = _castedData.Events.Count;
             
-            logger?.Info($"DETAILED DEBUG for node {UniqueId}:");
-            logger?.Info($"  - Data object hashcode: {_castedData.GetHashCode()}");
-            logger?.Info($"  - SectionDuration.Stu: {duration}");
-            logger?.Info($"  - FfStrategy: {strategy}");
-            logger?.Info($"  - Events.Count: {eventCount}");
-            logger?.Info($"  - Data object type: {_castedData.GetType().Name}");
-            
             detailsDict["Section Duration"] = duration + "ms";
             detailsDict["Ff Strategy"] = strategy;
             detailsDict["Events"] = eventCount.ToString();
-            
-            // Add debug entries to the Details so we can see them in the UI
-            detailsDict["DEBUG: Duration Raw"] = duration.ToString();
-            detailsDict["DEBUG: Data Hash"] = _castedData.GetHashCode().ToString();
-            
-            logger?.Debug($"Successfully added {detailsDict.Count} basic details");
 
             int counter = 1;
             foreach (var eventClass in _castedData.Events)
+        {
+            string evName = eventClass?.Chunk?.GetType().Name ?? "Undefined Event";
+            string detailSuffix = "";
+
+            switch (eventClass?.Chunk)
             {
-                string evName = eventClass?.Chunk?.GetType().Name ?? "UnknownEvent";
-                string detailSuffix = "";
-
-                switch (eventClass?.Chunk)
-                {
-                    case scneventsSocket evSocket:
-                        detailSuffix = " - Name: " + evSocket.OsockStamp.Name.ToString() + ", Ordinal: " + evSocket.OsockStamp.Ordinal.ToString();
-                        break;
-                    case scnPlaySkAnimEvent playSkAnimEvent:
-                        {
+                case scneventsSocket evSocket:
+                    detailSuffix = " - Name: " + evSocket.OsockStamp.Name.ToString() + ", Ordinal: " + evSocket.OsockStamp.Ordinal.ToString();
+                    break;
+                case scnPlaySkAnimEvent playSkAnimEvent:
+                    {
                             string performerName = ResolvePerformerName(playSkAnimEvent.Performer.Id, _sceneResource);
-                            string animSuffix = "[No Anim]";
+                        string animSuffix = "[No Anim]";
 
-                            scnAnimName? animNameObj = null;
-                            if (playSkAnimEvent.AnimName is CHandle<scnAnimName> handle)
-                            {
-                                animNameObj = handle.GetValue() as scnAnimName;
-                            }
-                            if (animNameObj != null && animNameObj.Unk1 != null && animNameObj.Unk1.Count > 0)
-                            {
-                                var animCName = animNameObj.Unk1[0];
-                                if (animCName != CName.Empty)
-                                {
-                                    string? animNameString = animCName.GetResolvedText();
-                                    if (!string.IsNullOrEmpty(animNameString))
-                                    {
-                                        const int maxLen = 35;
-                                        string displayAnimName = animNameString;
-                                        if (displayAnimName.Length > maxLen)
-                                        {
-                                            displayAnimName = displayAnimName.Substring(0, maxLen) + "...";
-                                        }
-                                        animSuffix = displayAnimName;
-                                    }
-                                    else { animSuffix = "[unresolved]"; }
-                                }
-                            }
-                            detailSuffix = $" ({performerName} - Anim: {animSuffix})";
-                        }
-                        break;
-                    case scnDialogLineEvent dialogLineEvent:
+                        scnAnimName? animNameObj = null;
+                        if (playSkAnimEvent.AnimName is CHandle<scnAnimName> handle)
                         {
-                            if (dialogLineEvent.ScreenplayLineId != null &&
+                            animNameObj = handle.GetValue() as scnAnimName;
+                        }
+                        if (animNameObj != null && animNameObj.Unk1 != null && animNameObj.Unk1.Count > 0)
+                        {
+                            var animCName = animNameObj.Unk1[0];
+                            if (animCName != CName.Empty)
+                            {
+                                string? animNameString = animCName.GetResolvedText();
+                                if (!string.IsNullOrEmpty(animNameString))
+                                {
+                                    const int maxLen = 35;
+                                    string displayAnimName = animNameString;
+                                    if (displayAnimName.Length > maxLen)
+                                    {
+                                        displayAnimName = displayAnimName.Substring(0, maxLen) + "...";
+                                    }
+                                    animSuffix = displayAnimName;
+                                }
+                                else { animSuffix = "[unresolved]"; }
+                            }
+                        }
+                        detailSuffix = $" ({performerName} - Anim: {animSuffix})";
+                    }
+                    break;
+                case scnDialogLineEvent dialogLineEvent:
+                    {
+                        if (dialogLineEvent.ScreenplayLineId != null &&
                                 _sceneResource?.LocStore != null &&
                                 _sceneResource.LocStore.VdEntries != null &&
                                 _sceneResource.LocStore.VpEntries != null)
-                            {
-                                CUInt32 screenplayId = dialogLineEvent.ScreenplayLineId.Id;
+                        {
+                            CUInt32 screenplayId = dialogLineEvent.ScreenplayLineId.Id;
                                 var screenplayLine = _sceneResource.ScreenplayStore?.Lines?.FirstOrDefault(line => line.ItemId?.Id == screenplayId);
 
-                                if (screenplayLine != null && screenplayLine.LocstringId != null)
-                                {
-                                    CRUID locstringRuid = screenplayLine.LocstringId.Ruid;
-                                    string? dialogueText = null;
-                                    bool foundText = false;
+                            if (screenplayLine != null && screenplayLine.LocstringId != null)
+                            {
+                                CRUID locstringRuid = screenplayLine.LocstringId.Ruid;
+                                string? dialogueText = null;
+                                bool foundText = false;
 
-                                    var preferredLocaleId = WolvenKit.RED4.Types.Enums.scnlocLocaleId.db_db;
+                                var preferredLocaleId = WolvenKit.RED4.Types.Enums.scnlocLocaleId.db_db;
                                     var vdEntryPreferred = _sceneResource.LocStore.VdEntries.FirstOrDefault(vd => vd.LocstringId?.Ruid == locstringRuid && vd.LocaleId == preferredLocaleId);
 
-                                    if (vdEntryPreferred != null && vdEntryPreferred.VariantId != null)
-                                    {
-                                        CRUID targetVariantRuid = vdEntryPreferred.VariantId.Ruid;
+                                if (vdEntryPreferred != null && vdEntryPreferred.VariantId != null)
+                                {
+                                    CRUID targetVariantRuid = vdEntryPreferred.VariantId.Ruid;
                                         var vpEntry = _sceneResource.LocStore.VpEntries.FirstOrDefault(vp => vp.VariantId?.Ruid == targetVariantRuid);
-                                        if (vpEntry != null)
+                                    if (vpEntry != null)
+                                    {
+                                        dialogueText = vpEntry.Content;
+                                        if (!string.IsNullOrEmpty(dialogueText))
                                         {
-                                            dialogueText = vpEntry.Content;
+                                            foundText = true;
+                                        }
+                                    }
+                                }
+
+                                if (!foundText)
+                                {
+                                        var vdEntryFallback = _sceneResource.LocStore.VdEntries.FirstOrDefault(vd => vd.LocstringId?.Ruid == locstringRuid && vd.LocaleId != preferredLocaleId);
+                                    if (vdEntryFallback != null && vdEntryFallback.VariantId != null)
+                                    {
+                                        CRUID fallbackVariantRuid = vdEntryFallback.VariantId.Ruid;
+                                            var vpEntryFallback = _sceneResource.LocStore.VpEntries.FirstOrDefault(vp => vp.VariantId?.Ruid == fallbackVariantRuid);
+                                        if (vpEntryFallback != null)
+                                        {
+                                            dialogueText = vpEntryFallback.Content;
                                             if (!string.IsNullOrEmpty(dialogueText))
                                             {
                                                 foundText = true;
                                             }
                                         }
                                     }
+                                }
 
-                                    if (!foundText)
+                                if (foundText && !string.IsNullOrEmpty(dialogueText))
+                                {
+                                    const int maxLen = 40;
+                                    string displayDialogue = dialogueText;
+                                    if (displayDialogue.Length > maxLen)
                                     {
-                                        var vdEntryFallback = _sceneResource.LocStore.VdEntries.FirstOrDefault(vd => vd.LocstringId?.Ruid == locstringRuid && vd.LocaleId != preferredLocaleId);
-                                        if (vdEntryFallback != null && vdEntryFallback.VariantId != null)
-                                        {
-                                            CRUID fallbackVariantRuid = vdEntryFallback.VariantId.Ruid;
-                                            var vpEntryFallback = _sceneResource.LocStore.VpEntries.FirstOrDefault(vp => vp.VariantId?.Ruid == fallbackVariantRuid);
-                                            if (vpEntryFallback != null)
-                                            {
-                                                dialogueText = vpEntryFallback.Content;
-                                                if (!string.IsNullOrEmpty(dialogueText))
-                                                {
-                                                    foundText = true;
-                                                }
-                                            }
-                                        }
+                                        displayDialogue = displayDialogue.Substring(0, maxLen) + "...";
                                     }
-
-                                    if (foundText && !string.IsNullOrEmpty(dialogueText))
-                                    {
-                                        const int maxLen = 40;
-                                        string displayDialogue = dialogueText;
-                                        if (displayDialogue.Length > maxLen)
-                                        {
-                                            displayDialogue = displayDialogue.Substring(0, maxLen) + "...";
-                                        }
-                                        detailSuffix = $" (\"{displayDialogue}\")";
-                                    }
-                                    else
-                                    {
-                                        detailSuffix = $" (RUID {locstringRuid} - empty)";
-                                    }
+                                    detailSuffix = $" (\"{displayDialogue}\")";
                                 }
                                 else
                                 {
-                                    detailSuffix = $" (ID {screenplayId} - missing refs)";
+                                    detailSuffix = $" (RUID {locstringRuid} - empty)";
                                 }
-                            }
-                        }
-                        break;
-                    case scnLookAtEvent lookAtEvent:
-                        {
-                            if (lookAtEvent.BasicData?.Basic != null && _sceneResource != null)
-                            {
-                                var basicLookAtData = lookAtEvent.BasicData.Basic;
-                                string performerName = ResolvePerformerName(basicLookAtData.PerformerId.Id, _sceneResource);
-                                string targetName = "UnknownTarget";
-
-                                var targetTypeEnum = (WolvenKit.RED4.Types.Enums.scnLookAtTargetType)basicLookAtData.TargetType;
-                                switch (targetTypeEnum)
-                                {
-                                    case WolvenKit.RED4.Types.Enums.scnLookAtTargetType.Actor:
-                                        // Use TargetPerformerId when TargetType is Actor
-                                        if (basicLookAtData.TargetPerformerId != null)
-                                        {
-                                            targetName = ResolvePerformerName(basicLookAtData.TargetPerformerId.Id, _sceneResource);
-                                        }
-                                        else
-                                        {
-                                            targetName = "Performer: [Null ID]";
-                                        }
-                                        break;
-                                    case WolvenKit.RED4.Types.Enums.scnLookAtTargetType.Prop:
-                                        if (basicLookAtData.TargetPropId != null)
-                                        {
-                                            var propDef = _sceneResource.Props?.FirstOrDefault(p => p.PropId?.Id == basicLookAtData.TargetPropId.Id);
-                                            if (propDef != null)
-                                            {
-                                                targetName = $"Prop: {propDef.PropName} [{basicLookAtData.TargetPropId.Id}]";
-                                            }
-                                            else
-                                            {
-                                                targetName = $"Prop: Unknown [{basicLookAtData.TargetPropId.Id}]";
-                                            }
-                                        }
-                                        else
-                                        {
-                                            targetName = "Prop: [Null ID]";
-                                        }
-                                        break;
-                                    default:
-                                        // Check StaticTarget first (assuming non-default means it's used)
-                                        if (basicLookAtData.StaticTarget.X != 0 || basicLookAtData.StaticTarget.Y != 0 || basicLookAtData.StaticTarget.Z != 0)
-                                        {
-                                            targetName = $"Position: ({basicLookAtData.StaticTarget.X:F1}, {basicLookAtData.StaticTarget.Y:F1}, {basicLookAtData.StaticTarget.Z:F1})";
-                                        }
-                                        // Then check TargetPerformerId
-                                        else if (basicLookAtData.TargetPerformerId != null &&
-                                           basicLookAtData.TargetPerformerId.Id != 4294967040)
-                                        {
-                                            targetName = ResolvePerformerName(basicLookAtData.TargetPerformerId.Id, _sceneResource);
-                                            targetName += " (as Performer)";
-                                        }
-                                        // Then check TargetSlot
-                                        else if (basicLookAtData.TargetSlot != CName.Empty)
-                                        {
-                                            targetName = $"Slot: {basicLookAtData.TargetSlot.GetResolvedText() ?? "?"}";
-                                        }
-                                        else
-                                        {
-                                            targetName = $"Unknown ({targetTypeEnum})";
-                                        }
-                                        break;
-                                }
-                                detailSuffix = $" ({performerName} -> {targetName})";
-                            }
-                        }
-                        break;
-                    case scneventsVFXEvent vfxEvent:
-                        {
-                            string actionName = vfxEvent.Action.ToString();
-                            string effectName = "[No Effect]";
-                            if (vfxEvent.EffectEntry != null && vfxEvent.EffectEntry.EffectName != CName.Empty)
-                            {
-                                effectName = vfxEvent.EffectEntry.EffectName.GetResolvedText() ?? "[unresolved]";
-                            }
-                            detailSuffix = $" ({actionName}: {effectName})";
-                        }
-                        break;
-                    case scnChangeIdleAnimEvent idleAnimEvent:
-                        {
-                            string performerName = ResolvePerformerName(idleAnimEvent.Performer.Id, _sceneResource);
-                            string idleAnim = "[None]";
-                            if (idleAnimEvent.IdleAnimName != CName.Empty)
-                            {
-                                idleAnim = idleAnimEvent.IdleAnimName.GetResolvedText() ?? "[unresolved]";
-                            }
-
-                            string facialAnim = "[None]";
-                            if (idleAnimEvent.BakedFacialTransition != null)
-                            {
-                                var facialCName = CName.Empty;
-                                if (idleAnimEvent.BakedFacialTransition.ToIdleFemale != CName.Empty)
-                                {
-                                    facialCName = idleAnimEvent.BakedFacialTransition.ToIdleFemale;
-                                }
-                                else if (idleAnimEvent.BakedFacialTransition.ToIdleMale != CName.Empty)
-                                {
-                                    facialCName = idleAnimEvent.BakedFacialTransition.ToIdleMale;
-                                }
-
-                                if (facialCName != CName.Empty)
-                                {
-                                    facialAnim = facialCName.GetResolvedText() ?? "[unresolved]";
-                                }
-                            }
-
-                            var suffixParts = new List<string>();
-                            if (idleAnim != "[None]") suffixParts.Add($"Idle: {idleAnim}");
-                            if (facialAnim != "[None]") suffixParts.Add($"Face: {facialAnim}");
-
-                            if (suffixParts.Count > 0)
-                            {
-                                detailSuffix = $" ({performerName} - {string.Join(", ", suffixParts)})";
                             }
                             else
                             {
-                                detailSuffix = $" ({performerName})";
+                                detailSuffix = $" (ID {screenplayId} - missing refs)";
                             }
                         }
-                        break;
-                    case scnIKEvent ikEvent:
+                    }
+                    break;
+                case scnLookAtEvent lookAtEvent:
+                    {
+                            if (lookAtEvent.BasicData?.Basic != null && _sceneResource != null)
                         {
-                            string performerName = "[No Performer]";
-                            if (ikEvent.IkData?.Basic?.PerformerId != null && _sceneResource != null)
-                            {
-                                performerName = ResolvePerformerName(ikEvent.IkData.Basic.PerformerId.Id, _sceneResource);
-                            }
+                            var basicLookAtData = lookAtEvent.BasicData.Basic;
+                                string performerName = ResolvePerformerName(basicLookAtData.PerformerId.Id, _sceneResource);
+                            string targetName = "UnknownTarget";
 
-                            string chainName = "[No Chain]";
-                            if (ikEvent.IkData?.ChainName != null && ikEvent.IkData.ChainName != CName.Empty)
+                            var targetTypeEnum = (WolvenKit.RED4.Types.Enums.scnLookAtTargetType)basicLookAtData.TargetType;
+                            switch (targetTypeEnum)
                             {
-                                chainName = ikEvent.IkData.ChainName.GetResolvedText() ?? "[unresolved]";
+                                case WolvenKit.RED4.Types.Enums.scnLookAtTargetType.Actor:
+                                    // Use TargetPerformerId when TargetType is Actor
+                                    if (basicLookAtData.TargetPerformerId != null)
+                                    {
+                                            targetName = ResolvePerformerName(basicLookAtData.TargetPerformerId.Id, _sceneResource);
+                                    }
+                                    else
+                                    {
+                                        targetName = "Performer: [Null ID]";
+                                    }
+                                    break;
+                                case WolvenKit.RED4.Types.Enums.scnLookAtTargetType.Prop:
+                                    if (basicLookAtData.TargetPropId != null)
+                                    {
+                                            var propDef = _sceneResource.Props?.FirstOrDefault(p => p.PropId?.Id == basicLookAtData.TargetPropId.Id);
+                                        if (propDef != null)
+                                        {
+                                            targetName = $"Prop: {propDef.PropName} [{basicLookAtData.TargetPropId.Id}]";
+                                        }
+                                        else
+                                        {
+                                            targetName = $"Prop: Unknown [{basicLookAtData.TargetPropId.Id}]";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        targetName = "Prop: [Null ID]";
+                                    }
+                                    break;
+                                default:
+                                    // Check StaticTarget first (assuming non-default means it's used)
+                                    if (basicLookAtData.StaticTarget.X != 0 || basicLookAtData.StaticTarget.Y != 0 || basicLookAtData.StaticTarget.Z != 0)
+                                    {
+                                        targetName = $"Position: ({basicLookAtData.StaticTarget.X:F1}, {basicLookAtData.StaticTarget.Y:F1}, {basicLookAtData.StaticTarget.Z:F1})";
+                                    }
+                                    // Then check TargetPerformerId
+                                    else if (basicLookAtData.TargetPerformerId != null &&
+                                       basicLookAtData.TargetPerformerId.Id != 4294967040)
+                                    {
+                                            targetName = ResolvePerformerName(basicLookAtData.TargetPerformerId.Id, _sceneResource);
+                                        targetName += " (as Performer)";
+                                    }
+                                    // Then check TargetSlot
+                                    else if (basicLookAtData.TargetSlot != CName.Empty)
+                                    {
+                                        targetName = $"Slot: {basicLookAtData.TargetSlot.GetResolvedText() ?? "?"}";
+                                    }
+                                    else
+                                    {
+                                        targetName = $"Unknown ({targetTypeEnum})";
+                                    }
+                                    break;
                             }
-
-                            detailSuffix = $" ({performerName} - Chain: {chainName})";
+                            detailSuffix = $" ({performerName} -> {targetName})";
                         }
-                        break;
-                    case scneventsAttachPropToPerformer attachEvent:
+                    }
+                    break;
+                case scneventsVFXEvent vfxEvent:
+                    {
+                        string actionName = vfxEvent.Action.ToString();
+                        string effectName = "[No Effect]";
+                        if (vfxEvent.EffectEntry != null && vfxEvent.EffectEntry.EffectName != CName.Empty)
                         {
-                            string propName = "[No Prop]";
-                            if (attachEvent.PropId != null && _sceneResource?.Props != null)
-                            {
-                                var propDef = _sceneResource.Props.FirstOrDefault(p => p.PropId?.Id == attachEvent.PropId.Id);
-                                if (propDef != null)
-                                {
-                                    string? pName = propDef.PropName;
-                                    propName = pName ?? "Unnamed";
-                                }
-                                else
-                                {
-                                    propName = $"Unknown [{attachEvent.PropId.Id}]";
-                                }
-                            }
-
-                            string performerName = "[No Performer]";
-                            if (attachEvent.PerformerId != null && _sceneResource != null)
-                            {
-                                performerName = ResolvePerformerName(attachEvent.PerformerId.Id, _sceneResource);
-                            }
-
-                            string slotName = "[No Slot]";
-                            if (attachEvent.Slot != CName.Empty)
-                            {
-                                slotName = attachEvent.Slot.GetResolvedText() ?? "[unresolved]";
-                            }
-
-                            detailSuffix = $" (Prop: {propName} -> Performer: {performerName} at Slot: {slotName})";
+                            effectName = vfxEvent.EffectEntry.EffectName.GetResolvedText() ?? "[unresolved]";
                         }
-                        break;
-                    case scneventsAttachPropToWorld attachWorldEvent:
+                        detailSuffix = $" ({actionName}: {effectName})";
+                    }
+                    break;
+                case scnChangeIdleAnimEvent idleAnimEvent:
+                    {
+                            string performerName = ResolvePerformerName(idleAnimEvent.Performer.Id, _sceneResource);
+                        string idleAnim = "[None]";
+                        if (idleAnimEvent.IdleAnimName != CName.Empty)
                         {
-                            string propName = "[No Prop]";
-                            if (attachWorldEvent.PropId != null && _sceneResource?.Props != null)
-                            {
-                                var propDef = _sceneResource.Props.FirstOrDefault(p => p.PropId?.Id == attachWorldEvent.PropId.Id);
-                                if (propDef != null)
-                                {
-                                    string? pName = propDef.PropName;
-                                    propName = pName ?? "Unnamed";
-                                }
-                                else
-                                {
-                                    propName = $"Unknown [{attachWorldEvent.PropId.Id}]";
-                                }
-                            }
-                            detailSuffix = $" (Prop: {propName} -> World)";
+                            idleAnim = idleAnimEvent.IdleAnimName.GetResolvedText() ?? "[unresolved]";
                         }
-                        break;
-                    case scneventsAttachPropToNode attachNodeEvent:
+
+                        string facialAnim = "[None]";
+                        if (idleAnimEvent.BakedFacialTransition != null)
                         {
-                            string propName = "[No Prop]";
-                            if (attachNodeEvent.PropId != null && _sceneResource?.Props != null)
+                            var facialCName = CName.Empty;
+                            if (idleAnimEvent.BakedFacialTransition.ToIdleFemale != CName.Empty)
                             {
-                                var propDef = _sceneResource.Props.FirstOrDefault(p => p.PropId?.Id == attachNodeEvent.PropId.Id);
-                                if (propDef != null)
-                                {
-                                    string? pName = propDef.PropName;
-                                    propName = pName ?? "Unnamed";
-                                }
-                                else
-                                {
-                                    propName = $"Unknown [{attachNodeEvent.PropId.Id}]";
-                                }
+                                facialCName = idleAnimEvent.BakedFacialTransition.ToIdleFemale;
                             }
-                            string nodeRef = attachNodeEvent.NodeRef != NodeRef.Empty
-                                             ? attachNodeEvent.NodeRef.GetRedHash().ToString("X")
-                                             : "[No Node]";
-                            detailSuffix = $" (Prop: {propName} -> Node: {nodeRef})";
+                            else if (idleAnimEvent.BakedFacialTransition.ToIdleMale != CName.Empty)
+                            {
+                                facialCName = idleAnimEvent.BakedFacialTransition.ToIdleMale;
+                            }
+
+                            if (facialCName != CName.Empty)
+                            {
+                                facialAnim = facialCName.GetResolvedText() ?? "[unresolved]";
+                            }
                         }
-                        break;
-                    case scneventsEquipItemToPerformer equipEvent:
+
+                        var suffixParts = new List<string>();
+                        if (idleAnim != "[None]") suffixParts.Add($"Idle: {idleAnim}");
+                        if (facialAnim != "[None]") suffixParts.Add($"Face: {facialAnim}");
+
+                        if (suffixParts.Count > 0)
                         {
-                            string performerName = "[No Performer]";
-                            if (equipEvent.PerformerId != null && _sceneResource != null)
-                            {
-                                performerName = ResolvePerformerName(equipEvent.PerformerId.Id, _sceneResource);
-                            }
-
-                            string itemName = "[No Item]";
-                            if (equipEvent.ItemId != TweakDBID.Empty)
-                            {
-                                itemName = equipEvent.ItemId.GetResolvedText() ?? "[unresolved]";
-                            }
-
-                            string slotName = "[No Slot]";
-                            if (equipEvent.SlotId != TweakDBID.Empty)
-                            {
-                                slotName = equipEvent.SlotId.GetResolvedText() ?? "[unresolved]";
-                            }
-
-                            detailSuffix = $" (Performer: {performerName}, Item: {itemName}, Slot: {slotName})";
+                            detailSuffix = $" ({performerName} - {string.Join(", ", suffixParts)})";
                         }
-                        break;
-                    case scnAudioEvent audioEvent:
+                        else
                         {
-                            string performerName = "[No Performer]";
-                            if (audioEvent.Performer != null && _sceneResource != null)
-                            {
-                                performerName = ResolvePerformerName(audioEvent.Performer.Id, _sceneResource);
-                            }
-
-                            string audioName = "[No Audio Name]";
-                            if (audioEvent.AudioEventName != CName.Empty)
-                            {
-                                audioName = audioEvent.AudioEventName.GetResolvedText() ?? "[unresolved]";
-                            }
-
-                            detailSuffix = $" ({performerName} - Audio: {audioName})";
-                        }
-                        break;
-                    case scnGameplayTransitionEvent gameplayTransitionEvent:
-                        {
-                            string performerName = "[No Performer]";
-                            if (gameplayTransitionEvent.Performer != null && _sceneResource != null)
-                            {
-                                performerName = ResolvePerformerName(gameplayTransitionEvent.Performer.Id, _sceneResource);
-                            }
-
-                            string vehState = gameplayTransitionEvent.VehState.ToEnumString();
-
-                            detailSuffix = $" ({performerName} - VehState: {vehState})";
-                        }
-                        break;
-                    case scneventsSetAnimFeatureEvent setAnimFeatureEvent:
-                        {
-                            string actorName = "[No Actor]";
-                            if (setAnimFeatureEvent.ActorId != null && _sceneResource != null)
-                            {
-                                actorName = ResolvePerformerName(setAnimFeatureEvent.ActorId.Id, _sceneResource);
-                            }
-
-                            string featureName = "[No Feature Name]";
-                            if (setAnimFeatureEvent.AnimFeatureName != CName.Empty)
-                            {
-                                featureName = setAnimFeatureEvent.AnimFeatureName.GetResolvedText() ?? "[unresolved]";
-                            }
-
-                            string featureType = "[No Feature Type]";
-                            if (setAnimFeatureEvent.AnimFeature is CHandle<animAnimFeature> handle)
-                            {
-                               var featureInstance = handle.GetValue() as animAnimFeature;
-                               if (featureInstance != null)
-                               {
-                                   featureType = featureInstance.GetType().Name;
-                               }
-                               else
-                               {
-                                   featureType = "[Invalid Handle]";
-                               }
-                            }
-                            else if (setAnimFeatureEvent.AnimFeature != null)
-                            {
-                               featureType = setAnimFeatureEvent.AnimFeature.GetType().Name;
-                            }
-
-                            detailSuffix = $" ({actorName} - {featureType}: {featureName})";
-                        }
-                        break;
-                     case scnUnmountEvent unmountEvent:
-                        {
-                            string performerName = "[No Performer]";
-                            if (unmountEvent.Performer != null && _sceneResource != null)
-                            {
-                                performerName = ResolvePerformerName(unmountEvent.Performer.Id, _sceneResource);
-                            }
                             detailSuffix = $" ({performerName})";
                         }
-                        break;
-                    default:
-                        break;
-                }
+                    }
+                    break;
+                case scnIKEvent ikEvent:
+                    {
+                        string performerName = "[No Performer]";
+                            if (ikEvent.IkData?.Basic?.PerformerId != null && _sceneResource != null)
+                        {
+                                performerName = ResolvePerformerName(ikEvent.IkData.Basic.PerformerId.Id, _sceneResource);
+                        }
 
-                string fullEventName = evName + detailSuffix;
+                        string chainName = "[No Chain]";
+                        if (ikEvent.IkData?.ChainName != null && ikEvent.IkData.ChainName != CName.Empty)
+                        {
+                            chainName = ikEvent.IkData.ChainName.GetResolvedText() ?? "[unresolved]";
+                        }
 
-                detailsDict["#" + counter.ToString() + " " + eventClass?.Chunk?.StartTime.ToString() + "ms"] = fullEventName;
-                counter++;
+                        detailSuffix = $" ({performerName} - Chain: {chainName})";
+                    }
+                    break;
+                case scneventsAttachPropToPerformer attachEvent:
+                    {
+                        string propName = "[No Prop]";
+                            if (attachEvent.PropId != null && _sceneResource?.Props != null)
+                        {
+                                var propDef = _sceneResource.Props.FirstOrDefault(p => p.PropId?.Id == attachEvent.PropId.Id);
+                            if (propDef != null)
+                            {
+                                string? pName = propDef.PropName;
+                                propName = pName ?? "Unnamed";
+                            }
+                            else
+                            {
+                                propName = $"Unknown [{attachEvent.PropId.Id}]";
+                            }
+                        }
+
+                        string performerName = "[No Performer]";
+                            if (attachEvent.PerformerId != null && _sceneResource != null)
+                        {
+                                performerName = ResolvePerformerName(attachEvent.PerformerId.Id, _sceneResource);
+                        }
+
+                        string slotName = "[No Slot]";
+                        if (attachEvent.Slot != CName.Empty)
+                        {
+                            slotName = attachEvent.Slot.GetResolvedText() ?? "[unresolved]";
+                        }
+
+                        detailSuffix = $" (Prop: {propName} -> Performer: {performerName} at Slot: {slotName})";
+                    }
+                    break;
+                case scneventsAttachPropToWorld attachWorldEvent:
+                    {
+                        string propName = "[No Prop]";
+                            if (attachWorldEvent.PropId != null && _sceneResource?.Props != null)
+                        {
+                                var propDef = _sceneResource.Props.FirstOrDefault(p => p.PropId?.Id == attachWorldEvent.PropId.Id);
+                            if (propDef != null)
+                            {
+                                string? pName = propDef.PropName;
+                                propName = pName ?? "Unnamed";
+                            }
+                            else
+                            {
+                                propName = $"Unknown [{attachWorldEvent.PropId.Id}]";
+                            }
+                        }
+                        detailSuffix = $" (Prop: {propName} -> World)";
+                    }
+                    break;
+                case scneventsAttachPropToNode attachNodeEvent:
+                    {
+                        string propName = "[No Prop]";
+                            if (attachNodeEvent.PropId != null && _sceneResource?.Props != null)
+                        {
+                                var propDef = _sceneResource.Props.FirstOrDefault(p => p.PropId?.Id == attachNodeEvent.PropId.Id);
+                            if (propDef != null)
+                            {
+                                string? pName = propDef.PropName;
+                                propName = pName ?? "Unnamed";
+                            }
+                            else
+                            {
+                                propName = $"Unknown [{attachNodeEvent.PropId.Id}]";
+                            }
+                        }
+                        string nodeRef = attachNodeEvent.NodeRef != NodeRef.Empty
+                                         ? attachNodeEvent.NodeRef.GetRedHash().ToString("X")
+                                         : "[No Node]";
+                        detailSuffix = $" (Prop: {propName} -> Node: {nodeRef})";
+                    }
+                    break;
+                case scneventsEquipItemToPerformer equipEvent:
+                    {
+                        string performerName = "[No Performer]";
+                            if (equipEvent.PerformerId != null && _sceneResource != null)
+                        {
+                                performerName = ResolvePerformerName(equipEvent.PerformerId.Id, _sceneResource);
+                        }
+
+                        string itemName = "[No Item]";
+                        if (equipEvent.ItemId != TweakDBID.Empty)
+                        {
+                            itemName = equipEvent.ItemId.GetResolvedText() ?? "[unresolved]";
+                        }
+
+                        string slotName = "[No Slot]";
+                        if (equipEvent.SlotId != TweakDBID.Empty)
+                        {
+                            slotName = equipEvent.SlotId.GetResolvedText() ?? "[unresolved]";
+                        }
+
+                        detailSuffix = $" (Performer: {performerName}, Item: {itemName}, Slot: {slotName})";
+                    }
+                    break;
+                case scnAudioEvent audioEvent:
+                    {
+                        string performerName = "[No Performer]";
+                            if (audioEvent.Performer != null && _sceneResource != null)
+                        {
+                                performerName = ResolvePerformerName(audioEvent.Performer.Id, _sceneResource);
+                        }
+
+                        string audioName = "[No Audio Name]";
+                        if (audioEvent.AudioEventName != CName.Empty)
+                        {
+                            audioName = audioEvent.AudioEventName.GetResolvedText() ?? "[unresolved]";
+                        }
+
+                        detailSuffix = $" ({performerName} - Audio: {audioName})";
+                    }
+                    break;
+                case scnGameplayTransitionEvent gameplayTransitionEvent:
+                    {
+                        string performerName = "[No Performer]";
+                            if (gameplayTransitionEvent.Performer != null && _sceneResource != null)
+                        {
+                                performerName = ResolvePerformerName(gameplayTransitionEvent.Performer.Id, _sceneResource);
+                        }
+
+                        string vehState = gameplayTransitionEvent.VehState.ToEnumString();
+
+                        detailSuffix = $" ({performerName} - VehState: {vehState})";
+                    }
+                    break;
+                case scneventsSetAnimFeatureEvent setAnimFeatureEvent:
+                    {
+                        string actorName = "[No Actor]";
+                            if (setAnimFeatureEvent.ActorId != null && _sceneResource != null)
+                        {
+                                actorName = ResolvePerformerName(setAnimFeatureEvent.ActorId.Id, _sceneResource);
+                        }
+
+                        string featureName = "[No Feature Name]";
+                        if (setAnimFeatureEvent.AnimFeatureName != CName.Empty)
+                        {
+                            featureName = setAnimFeatureEvent.AnimFeatureName.GetResolvedText() ?? "[unresolved]";
+                        }
+
+                        string featureType = "[No Feature Type]";
+                        if (setAnimFeatureEvent.AnimFeature is CHandle<animAnimFeature> handle)
+                        {
+                           var featureInstance = handle.GetValue() as animAnimFeature;
+                           if (featureInstance != null)
+                           {
+                               featureType = featureInstance.GetType().Name;
+                           }
+                           else
+                           {
+                               featureType = "[Invalid Handle]";
+                           }
+                        }
+                        else if (setAnimFeatureEvent.AnimFeature != null)
+                        {
+                           featureType = setAnimFeatureEvent.AnimFeature.GetType().Name;
+                        }
+
+                        detailSuffix = $" ({actorName} - {featureType}: {featureName})";
+                    }
+                    break;
+                 case scnUnmountEvent unmountEvent:
+                    {
+                        string performerName = "[No Performer]";
+                            if (unmountEvent.Performer != null && _sceneResource != null)
+                        {
+                                performerName = ResolvePerformerName(unmountEvent.Performer.Id, _sceneResource);
+                        }
+                        detailSuffix = $" ({performerName})";
+                    }
+                    break;
+                default:
+                    break;
             }
 
+            string fullEventName = evName + detailSuffix;
+
+                detailsDict["#" + counter.ToString() + " " + eventClass?.Chunk?.StartTime.ToString() + "ms"] = fullEventName;
+            counter++;
+        }
+
             if (_sceneResource != null)
-            {
+        {
             Title += NodeProperties.SetNameFromNotablePoints(_castedData.NodeId.Id, _sceneResource);
             }
         }

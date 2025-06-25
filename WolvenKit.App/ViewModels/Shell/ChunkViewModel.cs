@@ -2288,6 +2288,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
             Parent.RecalculateProperties();
 
+            // Notify for graph sync when array items are deleted
+            NotifyPropertyUpdateForGraphSync();
+
             if (!Tab.HasActiveSearch)
             {
                 newSelectionIndex = Math.Min(newSelectionIndex, Parent.TVProperties.Count) - 1;
@@ -2383,6 +2386,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         // Notify Syncfusion once – grid updates rows safely
         NotifyChain(nameof(TVProperties));
+        
+        // Notify for graph sync when array items are deleted
+        NotifyPropertyUpdateForGraphSync();
         
         var newSelectionIndex = Math.Min(indices.First(), TVProperties.Count) - 1;
         newSelectionIndex = Math.Max(0, newSelectionIndex);
@@ -2573,11 +2579,27 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             Data = defaultValue;
             RecalculateProperties(Data);
             Parent.CalculateIsDefault();
+            
+            // Notify for graph sync when object is reset to default
+            NotifyPropertyUpdateForGraphSync();
             return;
         }
 
-        Data = new RedDummy();
+        // Create a proper default value based on the property type
+        try 
+        {
+            Data = RedTypeFactory.CreateAndInitRedType(PropertyType);
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Warning($"Could not create default value for type {PropertyType.Name}, falling back to RedDummy: {ex.Message}");
+            Data = new RedDummy();
+        }
+        
         RecalculateProperties(Data);
+        
+        // Notify for graph sync when object is reset
+        NotifyPropertyUpdateForGraphSync();
     }
 
     /// <summary>
@@ -2707,6 +2729,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
 
             Tab?.Parent.SetIsDirty(true);
+            
+            // Notify for graph sync when chunk is pasted
+            NotifyPropertyUpdateForGraphSync();
         }
         catch (Exception ex)
         {
@@ -2759,6 +2784,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         Parent.InsertChild(index, newData);
 
         Tab?.Parent.SetIsDirty(true);
+        
+        // Notify for graph sync when items are duplicated
+        Parent.NotifyPropertyUpdateForGraphSync();
 
         var newSibling = Parent.GetChildNode(Math.Min(index, Parent.TVProperties.Count - 1));
 
@@ -2983,6 +3011,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
                 index++;
             }
+            
+            // Notify for graph sync when items are pasted
+            NotifyPropertyUpdateForGraphSync();
         }
         catch (Exception ex) { _loggerService.Error(ex); }
     }
@@ -3707,6 +3738,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             // re-number children
             ReindexChildren();
             Tab?.Parent.SetIsDirty(true);
+            
+            // Notify for graph sync when child is inserted
+            NotifyPropertyUpdateForGraphSync();
 
             if (Properties.Count > index && Tab is not null)
             {
@@ -3946,6 +3980,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             CalculateProperties();
             OnPropertyChanged(nameof(Data));
             Tab?.Parent.SetIsDirty(true);
+            
+            // Notify for graph sync when handle is set
+            NotifyPropertyUpdateForGraphSync();
         }
     }
 
@@ -4018,6 +4055,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         IsDeleteReady = false;
         Tab?.Parent.SetIsDirty(true);
         RecalculateProperties();
+        
+        // Notify for graph sync when array is cleared
+        NotifyPropertyUpdateForGraphSync();
 
         DeleteAllCommand.NotifyCanExecuteChanged();
     }
@@ -4176,6 +4216,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         Tab?.Parent.SetIsDirty(true);
         RecalculateProperties();
+        
+        // Notify for graph sync when selection is deleted
+        NotifyPropertyUpdateForGraphSync();
     }
 
     private void DeleteFullSelection(List<IRedType> l, IRedArray a)
@@ -4194,6 +4237,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         Tab?.Parent.SetIsDirty(true);
         RecalculateProperties();
+        
+        // Notify for graph sync when selection is deleted
+        NotifyPropertyUpdateForGraphSync();
     }
 
     private void AddToCopiedChunks(IRedType elem)
@@ -5003,12 +5049,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         var rootNodeData = GetRootNodeData();
         if (rootNodeData != null)
         {
-            _loggerService.Info($"Property update notification: {PropertyName} changed on {rootNodeData.GetType().Name}");
             NodePropertyUpdateService.NotifyPropertyUpdated(rootNodeData);
-        }
-        else
-        {
-            _loggerService.Debug($"Property update notification: {PropertyName} changed but no scene node found in hierarchy");
         }
     }
     
@@ -5021,17 +5062,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         var current = this;
         while (current != null)
         {
-            _loggerService.Debug($"Checking node: {current.PropertyName} with data type: {current.Data?.GetType().Name}");
-            
             if (current.Data is scnSceneGraphNode sceneNode)
             {
-                _loggerService.Info($"Found scene graph node: {sceneNode.GetType().Name} with ID {sceneNode.NodeId.Id}");
                 return sceneNode;
             }
             current = current.Parent;
         }
         
-        _loggerService.Warning("No scene graph node found in parent hierarchy");
         return null;
     }
 
