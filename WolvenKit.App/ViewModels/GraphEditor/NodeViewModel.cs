@@ -155,18 +155,10 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
 
     private void OnNodePropertyUpdated(object? sender, NodePropertyUpdatedEventArgs e)
     {
-        var logger = Locator.Current.GetService<ILoggerService>();
-        
         // Check if this update is for our data
         if (ReferenceEquals(e.NodeData, Data))
         {
-            logger?.Info($"Node {UniqueId} received property update notification - refreshing visual state");
-            // Refresh our visual state
             RefreshFromData();
-        }
-        else
-        {
-            logger?.Debug($"Node {UniqueId} received property update notification but data doesn't match (event data: {e.NodeData.GetHashCode()}, our data: {Data.GetHashCode()})");
         }
     }
     

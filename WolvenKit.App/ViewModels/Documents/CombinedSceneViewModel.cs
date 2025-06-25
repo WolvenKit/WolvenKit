@@ -49,6 +49,9 @@ namespace WolvenKit.App.ViewModels.Documents
 
             RDTViewModel = new RDTDataViewModel(data, parent, appViewModel, chunkViewmodelFactory, settingsManager, gameController);
             MainGraph = RedGraph.GenerateSceneGraph(parent.Header, data);
+            
+            // Set document reference for property change syncing
+            MainGraph.DocumentViewModel = parent;
 
             CreateTabs();
             

@@ -7,6 +7,8 @@ using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
+using WolvenKit.App.Services;
+
 
 namespace WolvenKit.App.ViewModels.GraphEditor;
 
@@ -262,6 +264,9 @@ public partial class RedGraph
             Connections.RemoveAt(i);
             RefreshCVM(sceneSource.Data);
             
+            // Notify UI to refresh affected nodes
+            NotifyNodesUpdated(sceneSource.OwnerId, sceneTarget.OwnerId);
+            
             // Mark document as dirty since we modified connections
             DocumentViewModel?.SetIsDirty(true);
 
@@ -285,8 +290,11 @@ public partial class RedGraph
         Connections.Add(new SceneConnectionViewModel(sceneSource, sceneTarget));
         RefreshCVM(sceneSource.Data);
         
-        // Mark document as dirty since we modified connections
-        DocumentViewModel?.SetIsDirty(true);
+                    // Notify UI to refresh affected nodes
+            NotifyNodesUpdated(sceneSource.OwnerId, sceneTarget.OwnerId);
+            
+            // Mark document as dirty since we modified connections
+            DocumentViewModel?.SetIsDirty(true);
     }
 
     private void UpdateTargetNode(SceneInputConnectorViewModel sceneTarget)
@@ -312,6 +320,10 @@ public partial class RedGraph
     {
         if (GetSceneNodesChunkViewModel() is { } nodes)
         {
+            // Ensure properties are up-to-date before searching
+            nodes.RecalculateProperties();
+            nodes.ForceLoadPropertiesRecursive();
+            
             var list = new List<ChunkViewModel>();
             foreach (var property in nodes.GetAllProperties())
             {
@@ -320,9 +332,69 @@ public partial class RedGraph
                     list.Add(property.Parent!);
                 }
             }
+
             foreach (var model in list)
             {
                 model.RecalculateProperties();
+                model.NotifyChain(nameof(model.Properties));
+                model.NotifyChain(nameof(model.TVProperties)); // Force UI to rebind to updated Properties
+            }
+
+            // Additionally refresh the root nodes collection to ensure UI picks up structural changes
+            nodes.RecalculateProperties();
+            nodes.NotifyChain(nameof(nodes.Properties));
+
+            // Force the property panel to refresh by notifying NodeSelectionService
+            var nodeSelectionService = NodeSelectionService.Instance;
+            var selectedNode = nodeSelectionService.SelectedNode;
+            
+            if (selectedNode != null)
+            {
+                // Check if the selected node's data was updated or if any updated chunk belongs to the selected node
+                bool nodeDataUpdated = list.Any(updatedChunk => 
+                {
+                    // Direct match: the chunk data is the selected node data
+                    if (ReferenceEquals(updatedChunk.Data, selectedNode.Data))
+                    {
+                        return true;
+                    }
+                    
+                    // Parent-child relationship: the updated chunk is a child of the selected node
+                    if (IsChildOf(updatedChunk, selectedNode.Data))
+                    {
+                        return true;
+                    }
+                    
+                    // Property relationship: check if the updated chunk data is a property of the selected node
+                    if (IsPropertyOf(updatedChunk.Data, selectedNode.Data))
+                    {
+                        return true;
+                    }
+                    
+                    return false;
+                });
+                
+                if (nodeDataUpdated)
+                {
+                    // Try a different approach: Force the binding to think the Data property changed
+                    // while the node is still selected, then refresh the selection
+                    
+                    // Step 1: Trigger Data property change while node is still selected
+                    selectedNode.TriggerPropertyChanged(nameof(selectedNode.Data));
+                    
+                    // Step 2: Force NodeSelectionService to re-notify about the same node
+                    // This should make the binding re-evaluate even though it's the same node
+                    var currentNode = selectedNode;
+                    nodeSelectionService.SelectedNode = null;
+                    
+                    // Small delay to ensure UI processes the null selection
+                    System.Threading.Thread.Sleep(1);
+                    
+                    nodeSelectionService.SelectedNode = currentNode;
+                    
+                    // Step 3: Trigger Data change again after restoration
+                    currentNode.TriggerPropertyChanged(nameof(currentNode.Data));
+                }
             }
         }
     }
@@ -342,6 +414,66 @@ public partial class RedGraph
         return nodes;
     }
 
+    private bool IsChildOf(ChunkViewModel child, ChunkViewModel potentialParent)
+    {
+        var current = child.Parent;
+        while (current != null)
+        {
+            if (current == potentialParent)
+                return true;
+            current = current.Parent;
+        }
+        return false;
+    }
+    
+    private bool IsChildOf(ChunkViewModel child, IRedType potentialParentData)
+    {
+        var current = child.Parent;
+        while (current != null)
+        {
+            if (ReferenceEquals(current.Data, potentialParentData))
+                return true;
+            current = current.Parent;
+        }
+        return false;
+    }
+    
+    private bool IsPropertyOf(IRedType childData, IRedType parentData)
+    {
+        if (parentData is not RedBaseClass parentClass)
+            return false;
+            
+        // Check if childData is directly referenced by any property of parentData
+        foreach (var propertyInfo in parentClass.GetType().GetProperties())
+        {
+            try
+            {
+                var propertyValue = propertyInfo.GetValue(parentClass);
+                
+                // Direct reference check
+                if (ReferenceEquals(propertyValue, childData))
+                    return true;
+                
+                // Check inside arrays/collections
+                if (propertyValue is System.Collections.IEnumerable enumerable && propertyValue is not string)
+                {
+                    foreach (var item in enumerable)
+                    {
+                        if (ReferenceEquals(item, childData))
+                            return true;
+                    }
+                }
+            }
+            catch
+            {
+                // Skip properties that can't be accessed
+                continue;
+            }
+        }
+        
+        return false;
+    }
+
     private void RemoveSceneConnection(SceneConnectionViewModel sceneConnection)
     {
         var sceneSource = (SceneOutputConnectorViewModel)sceneConnection.Source;
@@ -355,6 +487,9 @@ public partial class RedGraph
 
             Connections.Remove(sceneConnection);
             RefreshCVM(sceneSource.Data);
+            
+            // Notify UI to refresh affected nodes
+            NotifyNodesUpdated(sceneSource.OwnerId, ((SceneInputConnectorViewModel)sceneConnection.Target).OwnerId);
             
             // Mark document as dirty since we modified connections
             DocumentViewModel?.SetIsDirty(true);

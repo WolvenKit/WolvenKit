@@ -19,6 +19,7 @@ using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
+using WolvenKit.App.Services;
 
 namespace WolvenKit.App.ViewModels.GraphEditor;
 
@@ -437,6 +438,18 @@ public partial class RedGraph : IDisposable
                 };
 
                 File.WriteAllText(statePath, JsonConvert.SerializeObject(jRoot));
+            }
+        }
+    }
+
+    private void NotifyNodesUpdated(params uint[] nodeIds)
+    {
+        foreach (var nodeId in nodeIds)
+        {
+            var nodeVm = Nodes.FirstOrDefault(n => n.UniqueId == nodeId);
+            if (nodeVm != null)
+            {
+                NodePropertyUpdateService.NotifyPropertyUpdated((RedBaseClass)nodeVm.Data);
             }
         }
     }

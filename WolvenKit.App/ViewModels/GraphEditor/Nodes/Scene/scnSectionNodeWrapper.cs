@@ -507,7 +507,6 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>
         }
         catch (Exception ex)
         {
-            logger?.Error($"Error populating details for node {UniqueId}: {ex.Message}");
             detailsDict["Error"] = ex.Message;
         }
     }

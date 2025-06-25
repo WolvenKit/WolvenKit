@@ -7,6 +7,7 @@ using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
+using WolvenKit.App.Services;
 
 namespace WolvenKit.App.ViewModels.GraphEditor;
 
@@ -263,6 +264,12 @@ public partial class RedGraph
             Connections.RemoveAt(i);
             RefreshCVM([questSource.Data, questTarget.Data]);
 
+            // Notify UI to refresh affected nodes
+            NotifyNodesUpdated(questSource.OwnerId, questTarget.OwnerId);
+
+            // Mark document as dirty since we modified connections
+            DocumentViewModel?.SetIsDirty(true);
+
             return;
         }
 
@@ -278,6 +285,12 @@ public partial class RedGraph
 
         Connections.Add(new QuestConnectionViewModel(questSource, questTarget, graphGraphConnectionDefinition));
         
+        // Refresh ChunkViewModels representing the involved sockets
+        RefreshCVM([questSource.Data, questTarget.Data]);
+        
+        // Notify UI to refresh affected nodes
+        NotifyNodesUpdated(questSource.OwnerId, questTarget.OwnerId);
+
         // Mark document as dirty since we modified connections
         DocumentViewModel?.SetIsDirty(true);
     }
@@ -286,6 +299,10 @@ public partial class RedGraph
     {
         if (GetQuestNodesChunkViewModel() is { } nodes)
         {
+            // Ensure properties are up-to-date before searching
+            nodes.RecalculateProperties();
+            nodes.ForceLoadPropertiesRecursive();
+
             var list = new List<ChunkViewModel>();
             foreach (var property in nodes.GetAllProperties())
             {
@@ -300,7 +317,12 @@ public partial class RedGraph
             foreach (var model in list)
             {
                 model.RecalculateProperties();
+                model.NotifyChain(nameof(model.Properties));
             }
+
+            // Additionally refresh the root nodes collection to ensure UI picks up structural changes
+            nodes.RecalculateProperties();
+            nodes.NotifyChain(nameof(nodes.Properties));
         }
     }
 
@@ -332,6 +354,9 @@ public partial class RedGraph
 
         Connections.Add(new QuestConnectionViewModel(source, destination, connection));
         
+        // Notify UI to refresh affected nodes
+        NotifyNodesUpdated(source.OwnerId, destination.OwnerId);
+
         // Mark document as dirty since we modified connections
         DocumentViewModel?.SetIsDirty(true);
     }
@@ -360,6 +385,9 @@ public partial class RedGraph
         }
         Connections.Remove(questConnection);
         
+        // Notify UI to refresh affected nodes
+        NotifyNodesUpdated(questSource.OwnerId, questDestination.OwnerId);
+
         // Mark document as dirty since we modified connections
         DocumentViewModel?.SetIsDirty(true);
     }

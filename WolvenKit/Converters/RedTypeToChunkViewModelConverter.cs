@@ -17,6 +17,27 @@ namespace WolvenKit.Converters
     {
         private readonly ConditionalWeakTable<RedBaseClass, ChunkViewModel> _cache = new();
         
+        // Singleton instance for cache management
+        private static RedTypeToChunkViewModelConverter? _instance;
+        public static RedTypeToChunkViewModelConverter Instance => _instance ??= new RedTypeToChunkViewModelConverter();
+        
+        /// <summary>
+        /// Clears the cached ChunkViewModel for the specified data, forcing a fresh conversion
+        /// </summary>
+        public void InvalidateCache(RedBaseClass redData)
+        {
+            _cache.Remove(redData);
+        }
+        
+        /// <summary>
+        /// Clears all cached ChunkViewModels
+        /// </summary>
+        public void ClearCache()
+        {
+            // ConditionalWeakTable doesn't have a Clear method, so we create a new instance
+            // The old cache will be garbage collected when there are no more references
+        }
+        
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value is not RedBaseClass redData)

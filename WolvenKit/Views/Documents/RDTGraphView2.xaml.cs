@@ -49,6 +49,11 @@ public partial class RDTGraphView2
                 return;
             }
 
+            if (subGraph.DocumentViewModel == null)
+            {
+                subGraph.DocumentViewModel = Editor.Source.DocumentViewModel;
+            }
+
             if (Editor.SelectedNode.Data is questPhaseNodeDefinition ph)
             {
                 if (!ph.PhaseResource.IsSet)
