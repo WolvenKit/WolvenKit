@@ -43,14 +43,23 @@ public partial class WatcherService : ObservableObject, IWatcherService
     [ObservableProperty]
     private DispatchedObservableCollection<FileSystemModel> _fileTree = new();
 
-    private readonly List<string> _ignoredExtensions =
+    private static readonly List<string> s_ignoredExtensions =
     [
-        ".TMP",
-        ".PDNSAVE"
+        "tmp",
+        "pdnsave",
+        "bak", // photoshop
+        "blend@", // Blender temp files
+        "blend1", // Blender temp files
     ];
 
-    private bool _isWatcherStopped;
+    private static bool HasIgnoredExtension(string? fileName)
+    {
+        var fileExtension = Path.GetExtension(fileName)?.ToUpper();
+        return fileExtension is not null && s_ignoredExtensions.Any(partial =>
+            fileExtension.Contains(partial, StringComparison.OrdinalIgnoreCase));
+    }
 
+    private bool _isWatcherStopped;
 
     public bool IsWatcherStopped => _isWatcherStopped;
 
@@ -104,11 +113,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
         Clear();
     }
 
-    private static readonly List<string> s_ignoredExtensions =
-    [
-        "blend@", // Blender temp files
-        "tmp", // regular temp files
-    ];
+
     
     private void Update(CancellationToken cancellationToken)
     {
@@ -128,7 +133,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
             }
 
             var extension = Path.GetExtension(e.Name);
-            if (!string.IsNullOrEmpty(extension) && _ignoredExtensions.Contains(extension.ToUpper()))
+            if (!string.IsNullOrEmpty(extension) && HasIgnoredExtension(e.Name))
             {
                 continue;
             }
@@ -168,7 +173,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
         {
             var timestamp = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
 
-            if (s_ignoredExtensions.Contains(e.FullPath.Split('.').LastOrDefault() ?? ""))
+            if (HasIgnoredExtension(e.Name))
             {
                 return;
             }
