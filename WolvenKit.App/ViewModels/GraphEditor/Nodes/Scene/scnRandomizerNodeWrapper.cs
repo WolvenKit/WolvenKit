@@ -54,7 +54,9 @@ public class scnRandomizerNodeWrapper : BaseSceneViewModel<scnRandomizerNode>, I
 
     internal override void GenerateSockets()
     {
+        Input.Clear();
         Input.Add(new SceneInputConnectorViewModel("In", "In", UniqueId, 0));
+        Input.Add(new SceneInputConnectorViewModel("CutDestination", "CutDestination", UniqueId, 1));  // Added CutDestination input socket
 
         var names = new string[_castedData.NumOutSockets];
 

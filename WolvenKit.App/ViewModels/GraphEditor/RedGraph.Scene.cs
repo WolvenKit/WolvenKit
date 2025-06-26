@@ -251,10 +251,20 @@ public partial class RedGraph
 
             for (var j = sceneSource.Data.Destinations.Count - 1; j >= 0; j--)
             {
-                if (sceneSource.Data.Destinations[j].NodeId.Id == sceneTarget.OwnerId &&
-                    sceneSource.Data.Destinations[j].IsockStamp.Ordinal == sceneTarget.Ordinal)
+                if (sceneSource.Data.Destinations[j].NodeId.Id == sceneTarget.OwnerId)
+                {
+                    // Determine target type (quest vs scene)
+                    var tgtNode = Nodes.FirstOrDefault(n => n is BaseSceneViewModel bsvm && bsvm.UniqueId == sceneTarget.OwnerId) as BaseSceneViewModel;
+                    bool isQuest = tgtNode is scnQuestNodeWrapper;
+
+                    bool sameSocket = isQuest
+                        ? sceneSource.Data.Destinations[j].IsockStamp.Ordinal == sceneTarget.Ordinal
+                        : sceneSource.Data.Destinations[j].IsockStamp.Name == sceneTarget.Ordinal;
+
+                    if (sameSocket)
                 {
                     sceneSource.Data.Destinations.RemoveAt(j);
+                    }
                 }
             }
 
@@ -273,6 +283,22 @@ public partial class RedGraph
             return;
         }
 
+        // Determine the Name and Ordinal values based on target node type
+        ushort name = 0;
+        ushort ordinal = sceneTarget.Ordinal;
+        
+        // Get the target node from the nodes collection
+        var targetNode = Nodes.FirstOrDefault(n => n is BaseSceneViewModel bsvm && bsvm.UniqueId == sceneTarget.OwnerId) as BaseSceneViewModel;
+        
+        if (targetNode is not scnQuestNodeWrapper)
+        {
+            // For scene nodes: Name determines the socket type
+            // Socket index 0 = Name 0 (normal input)
+            // Socket index 1 = Name 1 (cut input)
+            name = sceneTarget.Ordinal;
+            ordinal = 0; // Scene nodes always use ordinal 0
+        }
+
         var input = new scnInputSocketId
         {
             NodeId = new scnNodeId
@@ -281,8 +307,8 @@ public partial class RedGraph
             },
             IsockStamp = new scnInputSocketStamp
             {
-                Name = 0,
-                Ordinal = sceneTarget.Ordinal
+                Name = name,
+                Ordinal = ordinal
             }
         };
 
@@ -481,6 +507,22 @@ public partial class RedGraph
 
         if (sceneDestination != null)
         {
+            // Determine if this destination maps to the specified socket
+            var tgtNode = Nodes.FirstOrDefault(n => n is BaseSceneViewModel bsvm && bsvm.UniqueId == ((SceneInputConnectorViewModel)sceneConnection.Target).OwnerId) as BaseSceneViewModel;
+            bool isQuest = tgtNode is scnQuestNodeWrapper;
+
+            bool sameSocket = isQuest
+                ? sceneDestination.IsockStamp.Ordinal == ((SceneInputConnectorViewModel)sceneConnection.Target).Ordinal
+                : sceneDestination.IsockStamp.Name == ((SceneInputConnectorViewModel)sceneConnection.Target).Ordinal;
+
+            if (!sameSocket)
+            {
+                sceneDestination = null; // different socket; keep connection
+            }
+        }
+
+        if (sceneDestination != null)
+        {
             sceneSource.Data.Destinations.Remove(sceneDestination);
             sceneSource.IsConnected = sceneSource.Data.Destinations.Count > 0;
             UpdateTargetNode((SceneInputConnectorViewModel)sceneConnection.Target);
@@ -629,19 +671,50 @@ public partial class RedGraph
                         }
                         if (targetNode is IDynamicInputNode dynamicInputNode)
                         {
-                            while (dynamicInputNode.Input.Count <= destination.IsockStamp.Ordinal)
+                            int requiredIndex = destination.IsockStamp.Ordinal;
+                            if (targetNode is not scnQuestNodeWrapper)
+                            {
+                                requiredIndex = destination.IsockStamp.Name;
+                            }
+                            while (dynamicInputNode.Input.Count <= requiredIndex)
                             {
                                 dynamicInputNode.AddInput();
                             }
                         }
 
-                        if (destination.IsockStamp.Ordinal >= targetNode.Input.Count)
+                        int destIndexCheck = destination.IsockStamp.Ordinal;
+                        if (targetNode is not scnQuestNodeWrapper)
+                        {
+                            destIndexCheck = destination.IsockStamp.Name;
+                        }
+
+                        if (destIndexCheck >= targetNode.Input.Count)
                         {
                             _loggerService?.Warning($"Output isock ordinal ({destination.IsockStamp.Ordinal}) of node {sceneNode.UniqueId} is higher than node {targetNode.UniqueId} input max ordinal ({targetNode.Input.Count - 1}). Some connections may be missing in graph view. File: " + title);
                             continue;
                         }
 
-                        graph.Connections.Add(new SceneConnectionViewModel(outputConnector, targetNode.Input[destination.IsockStamp.Ordinal]));
+                        // For scene nodes (not quest nodes), use Name field to determine socket index
+                        // Quest nodes use Ordinal, scene nodes use Name for socket mapping
+                        int socketIndex = destination.IsockStamp.Ordinal;
+                        
+                        // Check if this is a scene-specific node (not a quest node)
+                        if (targetNode is not scnQuestNodeWrapper)
+                        {
+                            // For scene nodes:
+                            // Name 0 = Normal input (socket index 0)
+                            // Name 1 = Cut input (socket index 1)
+                            socketIndex = destination.IsockStamp.Name;
+                            
+                            // Validate socket index
+                            if (socketIndex >= targetNode.Input.Count)
+                            {
+                                _loggerService?.Warning($"Scene node connection name ({destination.IsockStamp.Name}) of node {sceneNode.UniqueId} is higher than node {targetNode.UniqueId} input count ({targetNode.Input.Count}). Some connections may be missing in graph view. File: " + title);
+                                continue;
+                            }
+                        }
+
+                        graph.Connections.Add(new SceneConnectionViewModel(outputConnector, targetNode.Input[socketIndex]));
                 }
             }
         }

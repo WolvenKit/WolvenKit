@@ -111,7 +111,16 @@ public abstract class BaseSceneViewModel<T> : BaseSceneViewModel where T : scnSc
 
     internal override void GenerateSockets()
     {
+        Input.Clear();
         Input.Add(new SceneInputConnectorViewModel("In", "In", UniqueId, 0));
+        
+        // Add Cut input socket for all scene nodes by default (except End nodes)
+        // Quest nodes handle their own sockets differently
+        // Start nodes CAN receive Cut connections (1 found in data), End nodes cannot (0 found)
+        if (Data is not scnEndNode)
+        {
+            Input.Add(new SceneInputConnectorViewModel("CutDestination", "CutDestination", UniqueId, 1));
+        }
 
         for (var i = 0; i < _castedData.OutputSockets.Count; i++)
         {
