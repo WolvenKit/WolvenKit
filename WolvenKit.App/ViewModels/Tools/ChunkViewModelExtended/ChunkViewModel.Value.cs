@@ -138,6 +138,53 @@ public partial class ChunkViewModel
             return;
         }
 
+        else if (ResolvedData is gameuiOptionsGroup &&
+                 GetPropertyChild("options") is ChunkViewModel opts && !string.IsNullOrEmpty(opts.Value))
+        {
+            Value = $"{opts.Value}";
+            IsValueExtrapolated = true;
+            return;
+        }
+        else if (ResolvedData is gameuiSwitcherInfo &&
+                 GetPropertyChild("names") is ChunkViewModel switcherOpts && !string.IsNullOrEmpty(switcherOpts.Value))
+        {
+            Value = $"{switcherOpts.Value}";
+            IsValueExtrapolated = true;
+            return;
+        }
+        else if ((ResolvedData is gameuiSwitcherInfo or gameuiSwitcherOption)
+                 && GetPropertyChild("names") is { Value: string names })
+        {
+            Value = $"{names}";
+            IsValueExtrapolated = true;
+            return;
+        }
+        // inkcc
+        else if (ResolvedData is IRedArray { Count: > 0 } tagsAry && Name is "editTags")
+        {
+            List<string> descriptorParts = [];
+            for (var j = 0; j < tagsAry.Count; j++)
+            {
+                if (tagsAry[j] is not IRedEnum tag)
+                {
+                    continue;
+                }
+
+                // ReSharper disable once InvertIf
+                if (tag.ToEnumString() is string tagName && tagName != "")
+                {
+                    descriptorParts.Add(tagName);
+                }
+            }
+
+            if (descriptorParts.Count > 0)
+            {
+                Descriptor = StringHelper.Stringify(descriptorParts.ToArray());
+                IsValueExtrapolated = true;
+                return;
+            }
+        }
+
         // factory.csv
         else if (Parent is { Name: "compiledData" } && GetRootModel().Data is C2dArray &&
                  Data is CArray<CString> { Count: 3 } ary)
