@@ -1,15 +1,12 @@
 using System;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Text.RegularExpressions;
 using WolvenKit.Common;
 
 namespace WolvenKit.Interfaces.Extensions
 {
-    public static class StringPathExtensions
+    public static partial class StringPathExtensions
     {
         // https://stackoverflow.com/a/3695190
         public static void EnsureFolderExists(this string path)
@@ -85,9 +82,11 @@ namespace WolvenKit.Interfaces.Extensions
         /// <summary>
         /// Sanitizes a file path by splitting it into segments and joining them on either a forward or backward slash
         /// </summary>
+        /// <param name="target">String to run this on (this., it's an extension method)</param>
+        /// <param name="useForwardSlashes">Use forward slashes instead of <see cref="Path.DirectorySeparatorChar"/>?</param>
         public static string SanitizeFilePath(this string target, bool useForwardSlashes = false)
         {
-            var stringPartials = Regex.Split(target, @"[\\/]+");
+            var stringPartials = PathSeparatorRegex().Split(target);
             var directorySeparator = useForwardSlashes ? "/" : Path.DirectorySeparatorChar.ToString();
 
             return string.Join(directorySeparator, stringPartials);
@@ -97,5 +96,11 @@ namespace WolvenKit.Interfaces.Extensions
         /// Checks if a file path has two extensions, e.g. "file.mlsetup.json"
         /// </summary>
         public static bool HasTwoExtensions(this string filePath) => Path.GetFileName(filePath).Split('.').Length > 2;
+
+        /// <summary>
+        /// Regular expression for file path separators, forward or backward slashes
+        /// </summary>
+        [GeneratedRegex(@"[\\/]+")]
+        private static partial Regex PathSeparatorRegex();
     }
 }
