@@ -262,7 +262,7 @@ public partial class ImportViewModel : AbstractImportExportViewModel
         }
 
         var files = Directory.GetFiles(_projectManager.ActiveProject.RawDirectory, "*", SearchOption.AllDirectories)
-            .Where(CanImport);
+            .Where(CanImport).ToList();
 
         // do not refresh if the files are the same
         if(Enumerable.SequenceEqual( Items.Select(x => x.BaseFile), files))
@@ -275,10 +275,18 @@ public partial class ImportViewModel : AbstractImportExportViewModel
         Items.Clear();
         foreach (var filePath in files)
         {
-            if (!Items.Any(x => x.BaseFile.Equals(filePath)))
+            try
             {
-                var vm = await Task.Run(() => new ImportableItemViewModel(filePath, _archiveManager, _projectManager, _parserService));
-                Items.Add(vm);
+                if (!Items.Any(x => x.BaseFile.Equals(filePath)))
+                {
+                    var vm = await Task.Run(() =>
+                        new ImportableItemViewModel(filePath, _archiveManager, _projectManager, _parserService));
+                    Items.Add(vm);
+                }
+            }
+            catch
+            {
+                _loggerService.Error($"Skipping {filePath} (failed to read)");
             }
         }
 
