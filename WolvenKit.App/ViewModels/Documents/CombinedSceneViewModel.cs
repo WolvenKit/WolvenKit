@@ -38,6 +38,9 @@ namespace WolvenKit.App.ViewModels.Documents
         [ObservableProperty]
         private object? _selectedTabContent;
 
+        [ObservableProperty]
+        private bool _isGraphLoading = true;
+
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.MainFile;
 
         public CombinedSceneViewModel(scnSceneResource data, RedDocumentViewModel parent, IChunkViewmodelFactory chunkViewmodelFactory, INodeWrapperFactory nodeWrapperFactory)
@@ -62,6 +65,11 @@ namespace WolvenKit.App.ViewModels.Documents
             {
                 UpdateTabContent(SelectedTab);
             }
+        }
+
+        public void SetGraphLoaded()
+        {
+            IsGraphLoading = false;
         }
 
         private void CreateTabs()

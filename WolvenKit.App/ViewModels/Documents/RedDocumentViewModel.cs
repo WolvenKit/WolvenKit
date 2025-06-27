@@ -327,7 +327,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
         if (cls is scnSceneResource sceneResource)
         {
             var combinedSceneTab = new CombinedSceneViewModel(sceneResource, this, _chunkViewmodelFactory, _nodeWrapperFactory);
-            TabItemViewModels.Add(combinedSceneTab);
+            TabItemViewModels.Insert(0, combinedSceneTab);
 
             if (_globals.Value.ENABLE_NODE_EDITOR)
             {

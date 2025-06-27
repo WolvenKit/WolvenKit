@@ -56,6 +56,12 @@ namespace WolvenKit.Views.Documents
             {
                 SetupConnectionTemplate();
                 UpdateConnectionPathTypes(viewModel.MainGraph);
+                
+                // Add a small delay to ensure smooth loading experience
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    viewModel.SetGraphLoaded();
+                }), System.Windows.Threading.DispatcherPriority.Background);
             }), System.Windows.Threading.DispatcherPriority.Loaded);
         }
 

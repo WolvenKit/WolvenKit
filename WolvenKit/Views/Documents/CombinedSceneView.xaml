@@ -166,7 +166,49 @@
             <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch" Background="#FF404040"/>
 
             <!-- Right Panel: Graph Editor -->
-            <graphEditor:GraphEditorView Grid.Column="2" Source="{Binding MainGraph}" x:Name="SceneGraphEditor" />
+            <Grid Grid.Column="2">
+                <graphEditor:GraphEditorView Source="{Binding MainGraph}" x:Name="SceneGraphEditor" />
+                
+                <!-- Loading Overlay -->
+                <Border Background="#AA000000" 
+                        Visibility="{Binding IsGraphLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <iconPacks:PackIconMaterial Kind="GraphOutline" 
+                                                    Foreground="{StaticResource WolvenKitYellow}"
+                                                    Width="48" 
+                                                    Height="48" 
+                                                    HorizontalAlignment="Center"
+                                                    Margin="0,0,0,16">
+                            <iconPacks:PackIconMaterial.RenderTransform>
+                                <RotateTransform x:Name="LoadingRotation" />
+                            </iconPacks:PackIconMaterial.RenderTransform>
+                            <iconPacks:PackIconMaterial.Triggers>
+                                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                    <BeginStoryboard>
+                                        <Storyboard RepeatBehavior="Forever">
+                                            <DoubleAnimation 
+                                                Storyboard.TargetProperty="RenderTransform.Angle"
+                                                From="0" To="360" Duration="0:0:2" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </iconPacks:PackIconMaterial.Triggers>
+                        </iconPacks:PackIconMaterial>
+                        
+                        <TextBlock Text="Loading scene graph..." 
+                                   Foreground="White" 
+                                   FontSize="16" 
+                                   FontWeight="Medium"
+                                   HorizontalAlignment="Center"/>
+                        
+                        <TextBlock Text="Building nodes and connections" 
+                                   Foreground="Gray" 
+                                   FontSize="12" 
+                                   HorizontalAlignment="Center"
+                                   Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
         </Grid>
     </Grid>
 </UserControl> 
