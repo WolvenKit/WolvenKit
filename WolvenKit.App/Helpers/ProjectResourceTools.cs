@@ -592,6 +592,9 @@ public class ProjectResourceTools
         Task[] tasks = [ReplaceInResourceFilesAsync(), ReplaceInCr2WFilesAsync()];
 
         await Task.WhenAll(tasks);
+
+        // ignore replacement errors in "blah.ext.json"
+        failedFiles = failedFiles.Where(f => !f.EndsWith(".json") && !f.HasTwoExtensions()).ToList();
         
         if (failedFiles.Count <= 0)
         {
