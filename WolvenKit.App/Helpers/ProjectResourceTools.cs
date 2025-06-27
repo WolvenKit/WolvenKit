@@ -14,6 +14,7 @@ using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Tools;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Helpers;
 using WolvenKit.Interfaces.Extensions;
@@ -38,12 +39,29 @@ public class ProjectResourceTools
     /// File extensions from source/archive that require updating of resource files  
     /// </summary>
     private static readonly List<string> s_replaceInResourceFileExtensions =
-        [".ent", ".app", ".csv", ".json", ".anims", ".workspot"];
+    [
+        ".ent",
+        ".app",
+        ".mesh",
+        ".csv",
+        ".json",
+        ".anims",
+        ".workspot"
+    ];
 
     /// <summary>
     /// File extensions in resources that we want to update  
     /// </summary>
-    private static readonly List<string> s_resourceFileExtensions = [".lua", ".xl", ".json", ".yaml", ".yml", ".reds"];
+    private static readonly List<string> s_resourceFileExtensions =
+    [
+        ".lua",
+        ".xl",
+        ".json",
+        ".yaml",
+        ".yml",
+        ".reds",
+        "tweak"
+    ];
 
     /// <summary>
     /// Extensions of files that we don't need to update 
@@ -473,7 +491,7 @@ public class ProjectResourceTools
                 continue;
             }
 
-            await MoveFileAsync(sourceAbsPath, targetAbsPath, activeProject);
+            await MoveFileAsync(sourceAbsPath, targetAbsPath);
 
             // Do not log if we're moving to a temp folder (for case sensitivity)
             if (destAbsPath.Contains(s_tempDirSuffix))
@@ -549,7 +567,7 @@ public class ProjectResourceTools
     ///
     /// Example for breaking case: /base/meshes => /base/meshes/turret
     /// </summary>
-    private Task MoveFileAsync(string sourcePath, string targetPath, Cp77Project activeProject)
+    private Task MoveFileAsync(string sourcePath, string targetPath)
     {
         try
         {
@@ -602,12 +620,16 @@ public class ProjectResourceTools
         failedFiles.ForEach((path) => _loggerService.Error($"  {path}"));
 
         return;
-
+        
         async Task ReplaceInResourceFilesAsync()
         {
             var resourceFiles = Directory.GetFiles(activeProject.ResourcesDirectory, "*.*", SearchOption.AllDirectories)
                 .Where(f => Path.GetExtension(f) is string s && s_resourceFileExtensions.Contains(s.ToLower()))
                 .ToList();
+
+            // add ext.json files from raw folder 
+            resourceFiles.AddRange(Directory.GetFiles(activeProject.RawDirectory, "*.json", SearchOption.AllDirectories)
+                .Where(f => f.EndsWith(".json") && f.HasTwoExtensions()));
 
             var resourceTasks = resourceFiles.Select(async absoluteFilePath =>
             {
@@ -632,16 +654,18 @@ public class ProjectResourceTools
                             continue;
                         }
 
-                        var oldPathStr = activeProject.GetResourcePathFromRoot(oldAbsPath).GetResolvedText();
-                        var newPathStr = activeProject.GetResourcePathFromRoot(newAbsPath).GetResolvedText();
+                        var oldPathStr = activeProject.GetResourcePathFromRoot(oldAbsPath).GetResolvedText()
+                            ?.SanitizeFilePath();
+                        var newPathStr = activeProject.GetResourcePathFromRoot(newAbsPath).GetResolvedText()?
+                            .SanitizeFilePath();
 
                         if (string.IsNullOrEmpty(oldPathStr) || string.IsNullOrEmpty(newPathStr))
                         {
                             continue;
                         }
 
-                        var oldPathWithForwardSlashes = oldPathStr.Replace("\\", "/");
-                        var newPathWithForwardSlashes = newPathStr.Replace("\\", "/");
+                        var oldPathWithForwardSlashes = oldPathStr.SanitizeFilePath(true);
+                        var newPathWithForwardSlashes = newPathStr.SanitizeFilePath(true);
 
                         newFileContent = newFileContent.Select(line => line
                             .Replace(oldPathStr, newPathStr)
@@ -672,10 +696,14 @@ public class ProjectResourceTools
         {
             var files = Directory.GetFiles(activeProject.ModDirectory, "*.*", SearchOption.AllDirectories)
                 .Where(f => Path.GetExtension(f) is string s && !string.IsNullOrEmpty(s) &&
-                            !s_fileExtensionsWithoutPaths.Contains(s))
+                            !s_fileExtensionsWithoutPaths.Contains(s)
+                )
                 .ToList();
 
-            var cr2WTasks = files.Select(absoluteFilePath =>
+            var cr2WTasks = files
+                .Where(s => !s.HasTwoExtensions() ||
+                            !s.EndsWith(".json", StringComparison.OrdinalIgnoreCase)) // ignore xyz.json files)
+                .Select(absoluteFilePath =>
             {
                 try
                 {
@@ -873,11 +901,11 @@ public class ProjectResourceTools
                                     new CResourceAsyncReference<appearanceAppearanceResource>(newValue.DepotPath);
                                 break;
                             case IRedHandle ira:
-                                throw new NotImplementedException(
-                                    $"Can't replace in IRedHandle property type {ira.RedType}, please file a ticket");
+                                throw new WolvenKitException(-1,
+                                    $"Can't replace in IRedHandle property type {ira.RedType}");
                             default:
-                                throw new NotImplementedException(
-                                    $"Can't replace in property type {parentClass.Item2?.GetType().Name}, please file a ticket");
+                                throw new WolvenKitException(-1,
+                                    $"Can't replace in property type {parentClass.Item2?.GetType().Name}");
                         }
 
 
