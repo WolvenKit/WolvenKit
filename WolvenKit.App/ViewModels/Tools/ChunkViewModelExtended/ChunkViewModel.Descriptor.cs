@@ -40,6 +40,31 @@ public partial class ChunkViewModel
                 Descriptor = ((ulong)locKey).ToString();
                 //Value = Locator.Current.GetService<LocKeyService>().GetFemaleVariant(value);
                 return true;
+            case gameuiSwitcherInfo:
+                if (GetPropertyChild("localizedName") is ChunkViewModel loc && !string.IsNullOrEmpty(loc.Descriptor))
+                {
+                    Descriptor = loc.Descriptor;
+                    return true;
+                }
+
+                if (GetPropertyChild("name") is ChunkViewModel name && !string.IsNullOrEmpty(name.Descriptor))
+                {
+                    Descriptor = name.Descriptor;
+                    return true;
+                }
+
+                if (GetPropertyChild("link") is ChunkViewModel link && !string.IsNullOrEmpty(link.Descriptor))
+                {
+                    Descriptor = link.Descriptor;
+                    return true;
+                }
+
+                return false;
+            case gameuiSwitcherOption when GetPropertyChild("localizedName") is ChunkViewModel lName &&
+                                           !string.IsNullOrEmpty(lName.Value):
+
+                Descriptor = lName.Value;
+                return true;
             case IRedString str:
             {
                 var s = str.GetString();
@@ -642,6 +667,7 @@ public partial class ChunkViewModel
         "actorName", // ?
         "sectorHash", // sectors
         "propertyPath", // ?
+        "link", // gameuiSwitcherInfo
     ];
 
     private static readonly string[] s_nonRenamableProperties =
