@@ -672,7 +672,7 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>, IDynami
         else
         {
             // Edge case - show as custom
-            return $"Custom";
+            return $"Out({name},{ordinal})";
         }
 
         return $"Event{eventNumber}";
@@ -695,7 +695,7 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>, IDynami
         }
         else
         {
-            return $"Custom[{name},{ordinal}]"; // Edge case
+            return $"Out({name},{ordinal})"; // Edge case
         }
     }
 

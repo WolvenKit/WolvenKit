@@ -763,6 +763,24 @@ internal class NodeProperties
                 details["Prefetch Only"] = changeAppearanceNodeCasted?.PrefetchOnly == true ? "True" : "False";
             }
         }
+        else if (node is questPuppetAIManagerNodeDefinition puppetAIManagerCasted)
+        {
+            details["Entries Count"] = puppetAIManagerCasted?.Entries?.Count.ToString() ?? "0";
+
+            if (puppetAIManagerCasted?.Entries != null)
+            {
+                int counter = 1;
+                foreach (var entry in puppetAIManagerCasted.Entries)
+                {
+                    if (counter > 3) break; // Limit to first 3 entries to avoid overwhelming details
+
+                    details[$"#{counter} Entity Ref"] = ParseGameEntityReference(entry?.EntityReference);
+                    details[$"#{counter} AI Tier"] = entry?.AiTier.ToEnumString() ?? "Unknown";
+
+                    counter++;
+                }
+            }
+        }
         else if (node is questMovePuppetNodeDefinition movePuppetManagerCasted)
         {
             details["Entity Reference"] = ParseGameEntityReference(movePuppetManagerCasted?.EntityReference);
@@ -771,6 +789,68 @@ internal class NodeProperties
             if (movePuppetManagerCasted?.NodeParams?.Chunk is questMoveOnSplineParams splineParams)
             {
                 details["Spline Node Ref"] = splineParams?.SplineNodeRef.GetResolvedText()!;
+            }
+        }
+        else if (node is questPhoneManagerNodeDefinition phoneManagerCasted)
+        {
+            details["Manager"] = GetNameFromClass(phoneManagerCasted?.Type?.Chunk);
+
+            if (phoneManagerCasted?.Type?.Chunk is questCallContact_NodeType callContactCasted)
+            {
+                details.AddRange(ParseJournalPath(callContactCasted?.Caller?.Chunk, "Caller"));
+                details.AddRange(ParseJournalPath(callContactCasted?.Addressee?.Chunk, "Addressee"));
+                details["Phase"] = callContactCasted?.Phase.ToEnumString()!;
+                details["Mode"] = callContactCasted?.Mode.ToEnumString()!;
+                details["Apply Phone Restriction"] = callContactCasted?.ApplyPhoneRestriction == true ? "True" : "False";
+                details["Is Rejectable"] = callContactCasted?.IsRejectable == true ? "True" : "False";
+                details["Show Avatar"] = callContactCasted?.ShowAvatar == true ? "True" : "False";
+                details["Visuals"] = callContactCasted?.Visuals.ToEnumString()!;
+            }
+            if (phoneManagerCasted?.Type?.Chunk is questSendMessage_NodeType sendMessageCasted)
+            {
+                details.AddRange(ParseJournalPath(sendMessageCasted?.Msg?.Chunk, "Message"));
+                details["Send Notification"] = sendMessageCasted?.SendNotification == true ? "True" : "False";
+            }
+            if (phoneManagerCasted?.Type?.Chunk is questOpenMessage_NodeType openMessageCasted)
+            {
+                details.AddRange(ParseJournalPath(openMessageCasted?.Msg?.Chunk, "Message"));
+            }
+            if (phoneManagerCasted?.Type?.Chunk is questCloseMessage_NodeType closeMessageCasted)
+            {
+                details.AddRange(ParseJournalPath(closeMessageCasted?.Msg?.Chunk, "Message"));
+            }
+            if (phoneManagerCasted?.Type?.Chunk is questSetPhoneStatus_NodeType setStatusCasted)
+            {
+                details["Status"] = setStatusCasted?.Status.ToEnumString()!;
+                details["Custom Status"] = setStatusCasted?.CustomStatus.ToString()!;
+            }
+            if (phoneManagerCasted?.Type?.Chunk is questSetPhoneRestriction_NodeType setRestrictionCasted)
+            {
+                details["Apply Phone Restriction"] = setRestrictionCasted?.ApplyPhoneRestriction == true ? "True" : "False";
+                details["Forced Apply"] = setRestrictionCasted?.ForcedApply == true ? "True" : "False";
+                details["Forced Apply Source"] = setRestrictionCasted?.ForcedApplySource.ToString()!;
+            }
+            if (phoneManagerCasted?.Type?.Chunk is questMinimize_NodeType minimizeCasted)
+            {
+                details["Minimize"] = minimizeCasted?.Minimize == true ? "True" : "False";
+            }
+            if (phoneManagerCasted?.Type?.Chunk is questAddRemoveContact_NodeType addRemoveContactCasted)
+            {
+                if (addRemoveContactCasted?.Params != null && addRemoveContactCasted.Params.Count > 0)
+                {
+                    var firstParam = addRemoveContactCasted.Params[0];
+                    details.AddRange(ParseJournalPath(firstParam?.Contact?.Chunk, "Contact"));
+                    details["Add Contact"] = firstParam?.AddContact == true ? "True" : "False";
+                    details["Send Notification"] = firstParam?.SendNotification == true ? "True" : "False";
+                    if (addRemoveContactCasted.Params.Count > 1)
+                    {
+                        details["Contacts Count"] = addRemoveContactCasted.Params.Count.ToString();
+                    }
+                }
+            }
+            if (phoneManagerCasted?.Type?.Chunk is questRemoveAllContacts_NodeType removeAllContactsCasted)
+            {
+                details["Excluded Contacts Count"] = removeAllContactsCasted?.ExcludedContacts?.Count.ToString() ?? "0";
             }
         }
         else if (node is questVehicleNodeDefinition vehicleNodeCasted)

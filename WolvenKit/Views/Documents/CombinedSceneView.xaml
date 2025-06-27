@@ -11,6 +11,8 @@
              xmlns:tools="clr-namespace:WolvenKit.Views.Tools"
              xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
              xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+             xmlns:nodify="https://miroiu.github.io/nodify"
+             xmlns:sceneNodes="clr-namespace:WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;assembly=WolvenKit.App"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance documents:CombinedSceneViewModel, IsDesignTimeCreatable=False}"
                           d:DesignHeight="800" d:DesignWidth="1200">
@@ -25,11 +27,49 @@
         </Style>
         
         <Style x:Key="SpacedTabItemStyle" 
-               BasedOn="{StaticResource SyncfusionTabItemExtStyle}"
-               TargetType="{x:Type syncfusion:TabItemExt}">
+               TargetType="{x:Type syncfusion:TabItemExt}"
+               BasedOn="{StaticResource SyncfusionTabItemExtStyle}">
             <Setter Property="Padding" Value="12,8,12,8"/>
             <Setter Property="Margin" Value="0,0,2,0"/>
         </Style>
+        
+        <!-- Path Type to Thickness Converter -->
+        <local:PathTypeToThicknessConverter x:Key="PathTypeConverter" 
+                                            ThinThickness="1.5" 
+                                            ThickThickness="3.0" />
+        
+        <!-- Scene Connection Template with Variable Thickness -->
+        <DataTemplate x:Key="SceneConnectionTemplate" DataType="{x:Type sceneNodes:SceneConnectionViewModel}">
+            <nodify:Connection
+                Source="{Binding Source.Anchor}"
+                SourceOffset="7,0"
+                SourceOffsetMode="Static"
+                Target="{Binding Target.Anchor}"
+                TargetOffset="7,0"
+                TargetOffsetMode="Static"
+                IsSelectable="True"
+                IsSelected="{Binding IsSelected}">
+                <nodify:Connection.Style>
+                    <Style TargetType="{x:Type nodify:BaseConnection}">
+                        <Setter Property="Cursor" Value="Hand" />
+                        <Setter Property="Stroke" Value="#33FFFFFF" />
+                        <Setter Property="StrokeThickness" 
+                                Value="{Binding PathType, Converter={StaticResource PathTypeConverter}}" />
+
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Stroke" Value="{StaticResource WolvenKitYellow}" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Stroke" Value="{StaticResource WolvenKitGreen}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </nodify:Connection.Style>
+            </nodify:Connection>
+        </DataTemplate>
+        
+
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -126,7 +166,7 @@
             <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch" Background="#FF404040"/>
 
             <!-- Right Panel: Graph Editor -->
-            <graphEditor:GraphEditorView Grid.Column="2" Source="{Binding MainGraph}"/>
+            <graphEditor:GraphEditorView Grid.Column="2" Source="{Binding MainGraph}" x:Name="SceneGraphEditor" />
         </Grid>
     </Grid>
 </UserControl> 
