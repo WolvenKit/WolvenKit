@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -94,7 +95,7 @@ public partial class GraphEditorView : UserControl
         set => SetField(ref _selectedNodes, value);
     }
 
-    public Point ViewportLocation { get; set; }
+    public System.Windows.Point ViewportLocation { get; set; }
 
     private readonly AppViewModel _appViewModel;
 
@@ -276,7 +277,10 @@ public partial class GraphEditorView : UserControl
 
         if (node.DataContext is IDynamicOutputNode dynamicOutputNode)
         {
-            node.ContextMenu.Items.Add(CreateMenuItem("Add Output", "PlusCircle", () => dynamicOutputNode.AddOutput()));
+            // Check if it's a section node for specific labeling
+            string addLabel = dynamicOutputNode is scnSectionNodeWrapper ? "Add Event" : "Add Output";
+            
+            node.ContextMenu.Items.Add(CreateMenuItem(addLabel, "PlusCircle", () => dynamicOutputNode.AddOutput()));
             node.ContextMenu.Items.Add(new Separator());
         }
 
@@ -377,6 +381,8 @@ public partial class GraphEditorView : UserControl
     #endregion
 
     private void Node_OnMouseDoubleClick(object sender, MouseButtonEventArgs e) => RaiseEvent(new RoutedEventArgs(NodeDoubleClickEvent));
+
+    // Removed ShowSectionOutputPreview - no longer using dialog for add output
 
     private void Connection_OnRightClick(object sender, MouseButtonEventArgs e)
     {

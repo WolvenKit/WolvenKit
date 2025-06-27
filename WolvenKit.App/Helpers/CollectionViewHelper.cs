@@ -83,7 +83,7 @@ namespace WolvenKit.App.Helpers
                        chunk.Name == "ridResources" ||
                        chunk.Name == "effectDefinitions" ||
                        chunk.Name == "effectInstances" ||
-                       chunk.Name == "workspotDefinitions" ||
+                       chunk.Name == "workspots" ||
                        chunk.Name == "workspotInstances";
             };
         }

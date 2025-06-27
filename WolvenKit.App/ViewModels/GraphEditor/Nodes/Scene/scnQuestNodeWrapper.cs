@@ -269,15 +269,7 @@ public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
                 Title = $"[{UniqueId}] Quest";
             }
 
-            // Add notable points suffix if available
-            if (DocumentViewModel?.SelectedTabItemViewModel is CombinedSceneViewModel combinedScene)
-            {
-                var sceneResource = combinedScene.RDTViewModel.GetData() as scnSceneResource;
-                if (sceneResource != null)
-                {
-                    Title += NodeProperties.SetNameFromNotablePoints(_castedData.NodeId.Id, sceneResource);
-                }
-            }
+            // Notable point suffix is now handled by base class
         }
         catch (System.Exception ex)
         {

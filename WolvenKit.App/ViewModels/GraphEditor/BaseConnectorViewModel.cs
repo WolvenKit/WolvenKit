@@ -10,6 +10,9 @@ public abstract partial class BaseConnectorViewModel : ObservableObject
 
     [ObservableProperty]
     private bool _isConnected;
+    
+    [ObservableProperty]
+    private string _subtitle = "";
 
     public string Name { get; }
     public string Title { get; }

@@ -47,6 +47,32 @@
 
                 <DataTemplate x:Key="DetailedHeaderTemplate">
                     <StackPanel Orientation="Vertical" Margin="-6">
+                        <!-- Notable Point Indicator Bar (only visible when HasNotablePoint is true) -->
+                        <Border Background="#CC919100" 
+                                BorderBrush="#DDAB9066"
+                                BorderThickness="0,0,0,1"
+                                Padding="10,6,10,6"
+                                HorizontalAlignment="Stretch"
+                                Visibility="{Binding HasNotablePoint, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="⭐" 
+                                          Margin="0,0,8,0"
+                                          VerticalAlignment="Center"
+                                          FontSize="18"
+                                          Foreground="#FFFFD700" />
+                                <TextBlock Text="Notable Point: "
+                                          VerticalAlignment="Center"
+                                          FontWeight="Bold"
+                                          FontSize="13"
+                                          Foreground="#FFE6E6E6" />
+                                <TextBlock Text="{Binding NotablePointName}"
+                                          VerticalAlignment="Center"
+                                          FontWeight="Bold"
+                                          FontSize="13"
+                                          Foreground="#FFFFFF" />
+                            </StackPanel>
+                        </Border>
+
                         <!-- Header section with full background -->
                         <Border Background="{Binding Background}" 
                                 Padding="10,6,10,6"
@@ -152,10 +178,22 @@
                                 <nodify:NodeInput
                                     Anchor="{Binding Anchor,
                                                      Mode=OneWayToSource}"
-                                    Header="{Binding Title}"
                                     IsConnected="{Binding IsConnected}"
                                     Margin="0,2,0,2"
-                                    Background="Transparent" />
+                                    Background="Transparent">
+                                    <nodify:NodeInput.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Subtitle}" 
+                                                      Margin="0,0,4,0"
+                                                      VerticalAlignment="Center"
+                                                      FontSize="10"
+                                                      Foreground="#777777"
+                                                      FontFamily="Consolas" />
+                                            <TextBlock Text="{Binding Title}" 
+                                                      VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </nodify:NodeInput.Header>
+                                </nodify:NodeInput>
                             </DataTemplate>
                         </nodify:Node.InputConnectorTemplate>
 
@@ -164,8 +202,20 @@
                                 <nodify:NodeOutput
                                     Anchor="{Binding Anchor,
                                                      Mode=OneWayToSource}"
-                                    Header="{Binding Title}"
-                                    IsConnected="{Binding IsConnected}" />
+                                    IsConnected="{Binding IsConnected}">
+                                    <nodify:NodeOutput.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Subtitle}" 
+                                                      Margin="0,0,4,0"
+                                                      VerticalAlignment="Center"
+                                                      FontSize="10"
+                                                      Foreground="#777777"
+                                                      FontFamily="Consolas" />
+                                            <TextBlock Text="{Binding Title}" 
+                                                      VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </nodify:NodeOutput.Header>
+                                </nodify:NodeOutput>
                             </DataTemplate>
                         </nodify:Node.OutputConnectorTemplate>
                     </nodify:Node>

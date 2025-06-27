@@ -67,7 +67,7 @@ public class scnRewindableSectionNodeWrapper : BaseSceneViewModel<scnRewindableS
             counter++;
         }
 
-        Title += NodeProperties.SetNameFromNotablePoints(_castedData.NodeId.Id, _sceneResource);
+
     }
 
     internal override void GenerateSockets()
@@ -79,8 +79,31 @@ public class scnRewindableSectionNodeWrapper : BaseSceneViewModel<scnRewindableS
         Output.Clear();
         for (var i = 0; i < _castedData.OutputSockets.Count; i++)
         {
-            var title = $"Out{i} - Name: " + _castedData.OutputSockets[i].Stamp.Name + ", Ordinal: " + _castedData.OutputSockets[i].Stamp.Ordinal;
-            Output.Add(new SceneOutputConnectorViewModel($"Out{i}", title, UniqueId, _castedData.OutputSockets[i]));
+            var socket = _castedData.OutputSockets[i];
+            var label = GetSocketLabel(i, socket.Stamp.Name, socket.Stamp.Ordinal);
+            var connectorVM = new SceneOutputConnectorViewModel($"Out{i}", label, UniqueId, socket);
+            connectorVM.Subtitle = $"({socket.Stamp.Name},{socket.Stamp.Ordinal})";
+            Output.Add(connectorVM);
+        }
+    }
+    
+    private string GetSocketLabel(int index, ushort name, ushort ordinal)
+    {
+        if (index == 0) return "OnEnd";
+        if (index == 1) return "OnCut";
+        
+        // Detect which pattern for correct Event number
+        if (name == index && ordinal == 0)
+        {
+            return $"Event{index - 2}";  // Direct: Event0, Event1...
+        } 
+        else if (name == 2)
+        {
+            return $"Event{ordinal}";     // Ordinal: Event0, Event1...
+        }
+        else
+        {
+            return $"Custom[{name},{ordinal}]"; // Edge case
         }
     }
 }

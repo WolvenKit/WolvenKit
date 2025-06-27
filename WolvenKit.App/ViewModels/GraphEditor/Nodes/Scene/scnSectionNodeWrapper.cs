@@ -9,14 +9,49 @@ using System;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 
-public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>
+public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>, IDynamicOutputNode
 {
     private readonly scnSceneResource _sceneResource;
     
     public scnSectionNodeWrapper(scnSectionNode scnSectionNode, scnSceneResource scnSceneResource) : base(scnSectionNode)
     {
         _sceneResource = scnSceneResource;
+        EnsureStandardSockets();
         PopulateDetailsInto(Details);
+    }
+    
+    private void EnsureStandardSockets()
+    {
+        // Ensure standard output sockets exist
+        bool hasOnEnd = false;
+        bool hasOnCut = false;
+        
+        for (int i = 0; i < _castedData.OutputSockets.Count; i++)
+        {
+            var socket = _castedData.OutputSockets[i];
+            if (i == 0 && socket.Stamp.Name == 0 && socket.Stamp.Ordinal == 0)
+                hasOnEnd = true;
+            if (i == 1 && socket.Stamp.Name == 1 && socket.Stamp.Ordinal == 0)
+                hasOnCut = true;
+        }
+        
+        // Add missing standard sockets at the beginning
+        if (!hasOnEnd)
+        {
+            _castedData.OutputSockets.Insert(0, new scnOutputSocket 
+            { 
+                Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = 0 } 
+            });
+        }
+        
+        if (!hasOnCut)
+        {
+            int cutIndex = hasOnEnd ? 1 : 0;
+            _castedData.OutputSockets.Insert(cutIndex, new scnOutputSocket 
+            { 
+                Stamp = new scnOutputSocketStamp { Name = 1, Ordinal = 0 } 
+            });
+        }
     }
 
     public override void RefreshDetails()
@@ -74,7 +109,37 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>
             switch (eventClass?.Chunk)
             {
                 case scneventsSocket evSocket:
-                    detailSuffix = " - Name: " + evSocket.OsockStamp.Name.ToString() + ", Ordinal: " + evSocket.OsockStamp.Ordinal.ToString();
+                    {
+                        // Find the corresponding socket index to determine the event label
+                        var socketName = evSocket.OsockStamp.Name;
+                        var socketOrdinal = evSocket.OsockStamp.Ordinal;
+                        
+                        // Try to find the matching output socket to get the index
+                        int socketIndex = -1;
+                        for (int i = 0; i < _castedData.OutputSockets.Count; i++)
+                        {
+                            var outputSocket = _castedData.OutputSockets[i];
+                            if (outputSocket.Stamp.Name == socketName && outputSocket.Stamp.Ordinal == socketOrdinal)
+                            {
+                                socketIndex = i;
+                                break;
+                            }
+                        }
+                        
+                        // Generate the event label using the same logic as sockets
+                        string eventLabel;
+                        if (socketIndex >= 0)
+                        {
+                            eventLabel = GetSocketLabel(socketIndex, socketName, socketOrdinal);
+                        }
+                        else
+                        {
+                            // Fallback: use the helper method
+                            eventLabel = GetEventLabel(socketName, socketOrdinal, socketIndex);
+                        }
+                        
+                        detailSuffix = $" - {eventLabel} ({socketName},{socketOrdinal})";
+                    }
                     break;
                 case scnPlaySkAnimEvent playSkAnimEvent:
                     {
@@ -500,10 +565,7 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>
             counter++;
         }
 
-            if (_sceneResource != null)
-        {
-            Title += NodeProperties.SetNameFromNotablePoints(_castedData.NodeId.Id, _sceneResource);
-            }
+            // Notable point information is now handled by the base class
         }
         catch (Exception ex)
         {
@@ -581,8 +643,124 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>
         Output.Clear();
         for (var i = 0; i < _castedData.OutputSockets.Count; i++)
         {
-            var title = $"Out{i} - Name: " + _castedData.OutputSockets[i].Stamp.Name + ", Ordinal: " + _castedData.OutputSockets[i].Stamp.Ordinal;
-            Output.Add(new SceneOutputConnectorViewModel($"Out{i}", title, UniqueId, _castedData.OutputSockets[i]));
+            var socket = _castedData.OutputSockets[i];
+            var label = GetSocketLabel(i, socket.Stamp.Name, socket.Stamp.Ordinal);
+            var connectorVM = new SceneOutputConnectorViewModel($"Out{i}", label, UniqueId, socket);
+            // Restore subtitle with coordinates for technical reference
+            connectorVM.Subtitle = $"({socket.Stamp.Name},{socket.Stamp.Ordinal})";
+            Output.Add(connectorVM);
+        }
+    }
+    
+    private string GetSocketLabel(int index, ushort name, ushort ordinal)
+    {
+        if (index == 0) return "OnEnd";
+        if (index == 1) return "OnCut";
+        
+        // For event sockets, show just the event number (coordinates now in subtitle)
+        int eventNumber;
+        
+        // Detect which pattern for correct Event number
+        if (name == index && ordinal == 0)
+        {
+            eventNumber = index - 2;  // Direct: Event0, Event1...
+        } 
+        else if (name == 2)
+        {
+            eventNumber = ordinal;     // Ordinal: Event0, Event1...
+        }
+        else
+        {
+            // Edge case - show as custom
+            return $"Custom";
+        }
+
+        return $"Event{eventNumber}";
+    }
+
+    /// <summary>
+    /// Helper method to get event label using the same logic as socket labels
+    /// </summary>
+    private string GetEventLabel(ushort name, ushort ordinal, int index)
+    {
+        // Use the same logic as GetSocketLabel for consistency
+        if (name == index && ordinal == 0)
+        {
+            int eventNumber = index - 2;  // Direct pattern
+            return $"Event{eventNumber}";
+        } 
+        else if (name == 2)
+        {
+            return $"Event{ordinal}";     // Ordinal pattern
+        }
+        else
+        {
+            return $"Custom[{name},{ordinal}]"; // Edge case
+        }
+    }
+
+    public BaseConnectorViewModel AddOutput()
+    {
+        // Auto-detect and continue existing pattern
+        var existingSockets = _castedData.OutputSockets.Where((s, index) => index >= 2); // Skip fixed sockets (OnEnd, OnCut)
+        bool hasOrdinal = existingSockets.Any(s => s.Stamp.Name == 2 && s.Stamp.Ordinal > 0);
+
+        int newIndex = _castedData.OutputSockets.Count;
+        ushort newName, newOrdinal;
+
+        if (hasOrdinal)
+        {
+            // Continue ordinal pattern
+            newName = 2;
+            newOrdinal = (ushort)(newIndex - 2);
+        }
+        else
+        {
+            // Continue/start direct pattern (default for new nodes)
+            newName = (ushort)newIndex;
+            newOrdinal = 0;
+        }
+
+        // Create the new output socket
+        var outputSocket = new scnOutputSocket 
+        { 
+            Stamp = new scnOutputSocketStamp 
+            { 
+                Name = newName, 
+                Ordinal = newOrdinal 
+            } 
+        };
+
+        _castedData.OutputSockets.Add(outputSocket);
+
+        // Create label using our new method
+        var label = GetSocketLabel(newIndex, newName, newOrdinal);
+        var output = new SceneOutputConnectorViewModel($"Out{newIndex}", label, UniqueId, outputSocket);
+        // Restore subtitle with coordinates for technical reference
+        output.Subtitle = $"({newName},{newOrdinal})";
+        Output.Add(output);
+
+        // Mark document as dirty
+        DocumentViewModel?.SetIsDirty(true);
+
+        return output;
+    }
+
+    public void RemoveOutput()
+    {
+        if (_castedData.OutputSockets.Count > 2) // Keep at least OnEnd and OnCut
+        {
+            var lastSocket = _castedData.OutputSockets[^1];
+            
+            // Only remove if it has no connections
+            if (lastSocket.Destinations.Count == 0)
+            {
+                _castedData.OutputSockets.RemoveAt(_castedData.OutputSockets.Count - 1);
+                Output.RemoveAt(Output.Count - 1);
+                
+                // Mark document as dirty
+                DocumentViewModel?.SetIsDirty(true);
+            }
         }
     }
 }
