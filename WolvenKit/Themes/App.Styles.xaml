@@ -51,6 +51,110 @@
 
     <Color x:Key="WolvenKitLabelColor">White</Color>
 
+    <!-- Quest Node Colors - Header backgrounds -->
+    <Color x:Key="QuestStartNodeHeaderColor">#33228B22</Color>
+    <Color x:Key="QuestEndNodeHeaderColor">#33B22222</Color>
+    <Color x:Key="QuestInputNodeHeaderColor">#332288B2</Color>
+    <Color x:Key="QuestOutputNodeHeaderColor">#33B28822</Color>
+    <Color x:Key="QuestConditionNodeHeaderColor">#33B2B222</Color>
+    <Color x:Key="QuestPhaseNodeHeaderColor">#33B222B2</Color>
+    <Color x:Key="QuestSceneNodeHeaderColor">#3322B2B2</Color>
+    <Color x:Key="QuestRandomizerNodeHeaderColor">#33B2AA22</Color>
+    <Color x:Key="QuestFlowControlNodeHeaderColor">#3355AA22</Color>
+    <Color x:Key="QuestSwitchNodeHeaderColor">#33AA2255</Color>
+    <Color x:Key="QuestLogicalAndNodeHeaderColor">#332255AA</Color>
+    <Color x:Key="QuestLogicalXorNodeHeaderColor">#33AA5522</Color>
+    <Color x:Key="QuestLogicalHubNodeHeaderColor">#3355AA55</Color>
+    <Color x:Key="QuestFactsDBManagerNodeHeaderColor">#33AA22AA</Color>
+    <Color x:Key="QuestItemManagerNodeHeaderColor">#3377AA22</Color>
+    <Color x:Key="QuestCharacterManagerNodeHeaderColor">#33AA7722</Color>
+    <Color x:Key="QuestUIManagerNodeHeaderColor">#332277AA</Color>
+    <Color x:Key="QuestAudioNodeHeaderColor">#33AA2277</Color>
+    <Color x:Key="QuestJournalNodeHeaderColor">#3377AA77</Color>
+    <Color x:Key="QuestPauseConditionNodeHeaderColor">#55FF6600</Color>
+    <Color x:Key="QuestSceneManagerNodeHeaderColor">#3322B2B2</Color>
+    <Color x:Key="QuestRenderFxManagerNodeHeaderColor">#33B2AA22</Color>
+    <Color x:Key="QuestSpawnManagerNodeHeaderColor">#33AA22B2</Color>
+    <Color x:Key="QuestTriggerManagerNodeHeaderColor">#33B222AA</Color>
+    <Color x:Key="QuestEntityManagerNodeHeaderColor">#3322AAB2</Color>
+    <Color x:Key="QuestEnvironmentManagerNodeHeaderColor">#33AAB222</Color>
+    <Color x:Key="QuestEventManagerNodeHeaderColor">#33B2B2AA</Color>
+    <Color x:Key="QuestMappinManagerNodeHeaderColor">#33AA77B2</Color>
+    <Color x:Key="QuestRewardManagerNodeHeaderColor">#33B277AA</Color>
+    <Color x:Key="QuestTimeManagerNodeHeaderColor">#3377B2AA</Color>
+    <Color x:Key="QuestVisionModesManagerNodeHeaderColor">#33AA77AA</Color>
+    <Color x:Key="QuestVoicesetManagerNodeHeaderColor">#3377AAAA</Color>
+    <Color x:Key="QuestFXManagerNodeHeaderColor">#33B2AA22</Color>
+    <Color x:Key="QuestPuppetAIManagerNodeHeaderColor">#33AA2255</Color>
+    <Color x:Key="QuestCrowdManagerNodeHeaderColor">#335522AA</Color>
+    <Color x:Key="QuestInteractiveObjectManagerNodeHeaderColor">#3355AAB2</Color>
+    <Color x:Key="QuestPhoneManagerNodeHeaderColor">#33B25522</Color>
+    <Color x:Key="QuestDefaultNodeHeaderColor">#33666666</Color>
+
+    <!-- Quest Node Colors - Content backgrounds -->
+    <Color x:Key="QuestStartNodeContentColor">#11228B22</Color>
+    <Color x:Key="QuestEndNodeContentColor">#11B22222</Color>
+    <Color x:Key="QuestInputNodeContentColor">#112288B2</Color>
+    <Color x:Key="QuestOutputNodeContentColor">#11B28822</Color>
+    <Color x:Key="QuestConditionNodeContentColor">#11B2B222</Color>
+    <Color x:Key="QuestPhaseNodeContentColor">#11B222B2</Color>
+    <Color x:Key="QuestSceneNodeContentColor">#1122B2B2</Color>
+    <Color x:Key="QuestRandomizerNodeContentColor">#11B2AA22</Color>
+    <Color x:Key="QuestFlowControlNodeContentColor">#1155AA22</Color>
+    <Color x:Key="QuestSwitchNodeContentColor">#11AA2255</Color>
+    <Color x:Key="QuestLogicalAndNodeContentColor">#112255AA</Color>
+    <Color x:Key="QuestLogicalXorNodeContentColor">#11AA5522</Color>
+    <Color x:Key="QuestLogicalHubNodeContentColor">#1155AA55</Color>
+    <Color x:Key="QuestFactsDBManagerNodeContentColor">#11AA22AA</Color>
+    <Color x:Key="QuestItemManagerNodeContentColor">#1177AA22</Color>
+    <Color x:Key="QuestCharacterManagerNodeContentColor">#11AA7722</Color>
+    <Color x:Key="QuestUIManagerNodeContentColor">#112277AA</Color>
+    <Color x:Key="QuestAudioNodeContentColor">#11AA2277</Color>
+    <Color x:Key="QuestJournalNodeContentColor">#1177AA77</Color>
+    <Color x:Key="QuestPauseConditionNodeContentColor">#22FF6600</Color>
+    <Color x:Key="QuestSceneManagerNodeContentColor">#1122B2B2</Color>
+    <Color x:Key="QuestRenderFxManagerNodeContentColor">#11B2AA22</Color>
+    <Color x:Key="QuestSpawnManagerNodeContentColor">#11AA22B2</Color>
+    <Color x:Key="QuestTriggerManagerNodeContentColor">#11B222AA</Color>
+    <Color x:Key="QuestEntityManagerNodeContentColor">#1122AAB2</Color>
+    <Color x:Key="QuestEnvironmentManagerNodeContentColor">#11AAB222</Color>
+    <Color x:Key="QuestEventManagerNodeContentColor">#11B2B2AA</Color>
+    <Color x:Key="QuestMappinManagerNodeContentColor">#11AA77B2</Color>
+    <Color x:Key="QuestRewardManagerNodeContentColor">#11B277AA</Color>
+    <Color x:Key="QuestTimeManagerNodeContentColor">#1177B2AA</Color>
+    <Color x:Key="QuestVisionModesManagerNodeContentColor">#11AA77AA</Color>
+    <Color x:Key="QuestVoicesetManagerNodeContentColor">#1177AAAA</Color>
+    <Color x:Key="QuestFXManagerNodeContentColor">#11B2AA22</Color>
+    <Color x:Key="QuestPuppetAIManagerNodeContentColor">#11AA2255</Color>
+    <Color x:Key="QuestCrowdManagerNodeContentColor">#115522AA</Color>
+    <Color x:Key="QuestInteractiveObjectManagerNodeContentColor">#1155AAB2</Color>
+    <Color x:Key="QuestPhoneManagerNodeContentColor">#11B25522</Color>
+    <Color x:Key="QuestDefaultNodeContentColor">#11666666</Color>
+
+    <!-- Scene Node Colors - Header backgrounds -->
+    <Color x:Key="SceneStartNodeHeaderColor">#33228B22</Color>
+    <Color x:Key="SceneEndNodeHeaderColor">#33B22222</Color>
+    <Color x:Key="SceneChoiceNodeHeaderColor">#332288B2</Color>
+    <Color x:Key="SceneQuestNodeHeaderColor">#33B2B222</Color>
+    <Color x:Key="SceneSectionNodeHeaderColor">#33B222B2</Color>
+    <Color x:Key="SceneRandomizerNodeHeaderColor">#3322B2B2</Color>
+    <Color x:Key="SceneHubNodeHeaderColor">#33B2AA22</Color>
+    <Color x:Key="SceneAndNodeHeaderColor">#3355AA22</Color>
+    <Color x:Key="SceneXorNodeHeaderColor">#33AA2255</Color>
+    <Color x:Key="SceneDefaultNodeHeaderColor">#33444444</Color>
+
+    <!-- Scene Node Colors - Content backgrounds -->
+    <Color x:Key="SceneStartNodeContentColor">#11228B22</Color>
+    <Color x:Key="SceneEndNodeContentColor">#11B22222</Color>
+    <Color x:Key="SceneChoiceNodeContentColor">#112288B2</Color>
+    <Color x:Key="SceneQuestNodeContentColor">#11B2B222</Color>
+    <Color x:Key="SceneSectionNodeContentColor">#11B222B2</Color>
+    <Color x:Key="SceneRandomizerNodeContentColor">#1122B2B2</Color>
+    <Color x:Key="SceneHubNodeContentColor">#11B2AA22</Color>
+    <Color x:Key="SceneAndNodeContentColor">#1155AA22</Color>
+    <Color x:Key="SceneXorNodeContentColor">#11AA2255</Color>
+    <Color x:Key="SceneDefaultNodeContentColor">#11444444</Color>
+
     <!-- Brushes -->
     <SolidColorBrush x:Key="CustomSliderForegroundBrush" Color="#FF1E91EA" />
     <SolidColorBrush x:Key="CustomSliderBackgroundBrush" Color="#55ffffff" />
@@ -2254,4 +2358,108 @@
                 TargetType="Button" />
         </Style.Resources>
     </Style>
+
+    <!-- Quest Node Header Brushes -->
+    <SolidColorBrush x:Key="QuestStartNodeHeader" Color="{StaticResource QuestStartNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestEndNodeHeader" Color="{StaticResource QuestEndNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestInputNodeHeader" Color="{StaticResource QuestInputNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestOutputNodeHeader" Color="{StaticResource QuestOutputNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestConditionNodeHeader" Color="{StaticResource QuestConditionNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestPhaseNodeHeader" Color="{StaticResource QuestPhaseNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestSceneNodeHeader" Color="{StaticResource QuestSceneNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestRandomizerNodeHeader" Color="{StaticResource QuestRandomizerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestFlowControlNodeHeader" Color="{StaticResource QuestFlowControlNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestSwitchNodeHeader" Color="{StaticResource QuestSwitchNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestLogicalAndNodeHeader" Color="{StaticResource QuestLogicalAndNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestLogicalXorNodeHeader" Color="{StaticResource QuestLogicalXorNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestLogicalHubNodeHeader" Color="{StaticResource QuestLogicalHubNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestFactsDBManagerNodeHeader" Color="{StaticResource QuestFactsDBManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestItemManagerNodeHeader" Color="{StaticResource QuestItemManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestCharacterManagerNodeHeader" Color="{StaticResource QuestCharacterManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestUIManagerNodeHeader" Color="{StaticResource QuestUIManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestAudioNodeHeader" Color="{StaticResource QuestAudioNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestJournalNodeHeader" Color="{StaticResource QuestJournalNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestPauseConditionNodeHeader" Color="{StaticResource QuestPauseConditionNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestSceneManagerNodeHeader" Color="{StaticResource QuestSceneManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestRenderFxManagerNodeHeader" Color="{StaticResource QuestRenderFxManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestSpawnManagerNodeHeader" Color="{StaticResource QuestSpawnManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestTriggerManagerNodeHeader" Color="{StaticResource QuestTriggerManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestEntityManagerNodeHeader" Color="{StaticResource QuestEntityManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestEnvironmentManagerNodeHeader" Color="{StaticResource QuestEnvironmentManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestEventManagerNodeHeader" Color="{StaticResource QuestEventManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestMappinManagerNodeHeader" Color="{StaticResource QuestMappinManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestRewardManagerNodeHeader" Color="{StaticResource QuestRewardManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestTimeManagerNodeHeader" Color="{StaticResource QuestTimeManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestVisionModesManagerNodeHeader" Color="{StaticResource QuestVisionModesManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestVoicesetManagerNodeHeader" Color="{StaticResource QuestVoicesetManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestFXManagerNodeHeader" Color="{StaticResource QuestFXManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestPuppetAIManagerNodeHeader" Color="{StaticResource QuestPuppetAIManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestCrowdManagerNodeHeader" Color="{StaticResource QuestCrowdManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestInteractiveObjectManagerNodeHeader" Color="{StaticResource QuestInteractiveObjectManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestPhoneManagerNodeHeader" Color="{StaticResource QuestPhoneManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestDefaultNodeHeader" Color="{StaticResource QuestDefaultNodeHeaderColor}" />
+
+    <!-- Quest Node Content Brushes -->
+    <SolidColorBrush x:Key="QuestStartNodeContent" Color="{StaticResource QuestStartNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestEndNodeContent" Color="{StaticResource QuestEndNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestInputNodeContent" Color="{StaticResource QuestInputNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestOutputNodeContent" Color="{StaticResource QuestOutputNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestConditionNodeContent" Color="{StaticResource QuestConditionNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestPhaseNodeContent" Color="{StaticResource QuestPhaseNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestSceneNodeContent" Color="{StaticResource QuestSceneNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestRandomizerNodeContent" Color="{StaticResource QuestRandomizerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestFlowControlNodeContent" Color="{StaticResource QuestFlowControlNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestSwitchNodeContent" Color="{StaticResource QuestSwitchNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestLogicalAndNodeContent" Color="{StaticResource QuestLogicalAndNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestLogicalXorNodeContent" Color="{StaticResource QuestLogicalXorNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestLogicalHubNodeContent" Color="{StaticResource QuestLogicalHubNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestFactsDBManagerNodeContent" Color="{StaticResource QuestFactsDBManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestItemManagerNodeContent" Color="{StaticResource QuestItemManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestCharacterManagerNodeContent" Color="{StaticResource QuestCharacterManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestUIManagerNodeContent" Color="{StaticResource QuestUIManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestAudioNodeContent" Color="{StaticResource QuestAudioNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestJournalNodeContent" Color="{StaticResource QuestJournalNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestPauseConditionNodeContent" Color="{StaticResource QuestPauseConditionNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestSceneManagerNodeContent" Color="{StaticResource QuestSceneManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestRenderFxManagerNodeContent" Color="{StaticResource QuestRenderFxManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestSpawnManagerNodeContent" Color="{StaticResource QuestSpawnManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestTriggerManagerNodeContent" Color="{StaticResource QuestTriggerManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestEntityManagerNodeContent" Color="{StaticResource QuestEntityManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestEnvironmentManagerNodeContent" Color="{StaticResource QuestEnvironmentManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestEventManagerNodeContent" Color="{StaticResource QuestEventManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestMappinManagerNodeContent" Color="{StaticResource QuestMappinManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestRewardManagerNodeContent" Color="{StaticResource QuestRewardManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestTimeManagerNodeContent" Color="{StaticResource QuestTimeManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestVisionModesManagerNodeContent" Color="{StaticResource QuestVisionModesManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestVoicesetManagerNodeContent" Color="{StaticResource QuestVoicesetManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestFXManagerNodeContent" Color="{StaticResource QuestFXManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestPuppetAIManagerNodeContent" Color="{StaticResource QuestPuppetAIManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestCrowdManagerNodeContent" Color="{StaticResource QuestCrowdManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestInteractiveObjectManagerNodeContent" Color="{StaticResource QuestInteractiveObjectManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestPhoneManagerNodeContent" Color="{StaticResource QuestPhoneManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestDefaultNodeContent" Color="{StaticResource QuestDefaultNodeContentColor}" />
+
+    <!-- Scene Node Header Brushes -->
+    <SolidColorBrush x:Key="SceneStartNodeHeader" Color="{StaticResource SceneStartNodeHeaderColor}" />
+    <SolidColorBrush x:Key="SceneEndNodeHeader" Color="{StaticResource SceneEndNodeHeaderColor}" />
+    <SolidColorBrush x:Key="SceneChoiceNodeHeader" Color="{StaticResource SceneChoiceNodeHeaderColor}" />
+    <SolidColorBrush x:Key="SceneQuestNodeHeader" Color="{StaticResource SceneQuestNodeHeaderColor}" />
+    <SolidColorBrush x:Key="SceneSectionNodeHeader" Color="{StaticResource SceneSectionNodeHeaderColor}" />
+    <SolidColorBrush x:Key="SceneRandomizerNodeHeader" Color="{StaticResource SceneRandomizerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="SceneHubNodeHeader" Color="{StaticResource SceneHubNodeHeaderColor}" />
+    <SolidColorBrush x:Key="SceneAndNodeHeader" Color="{StaticResource SceneAndNodeHeaderColor}" />
+    <SolidColorBrush x:Key="SceneXorNodeHeader" Color="{StaticResource SceneXorNodeHeaderColor}" />
+    <SolidColorBrush x:Key="SceneDefaultNodeHeader" Color="{StaticResource SceneDefaultNodeHeaderColor}" />
+
+    <!-- Scene Node Content Brushes -->
+    <SolidColorBrush x:Key="SceneStartNodeContent" Color="{StaticResource SceneStartNodeContentColor}" />
+    <SolidColorBrush x:Key="SceneEndNodeContent" Color="{StaticResource SceneEndNodeContentColor}" />
+    <SolidColorBrush x:Key="SceneChoiceNodeContent" Color="{StaticResource SceneChoiceNodeContentColor}" />
+    <SolidColorBrush x:Key="SceneQuestNodeContent" Color="{StaticResource SceneQuestNodeContentColor}" />
+    <SolidColorBrush x:Key="SceneSectionNodeContent" Color="{StaticResource SceneSectionNodeContentColor}" />
+    <SolidColorBrush x:Key="SceneRandomizerNodeContent" Color="{StaticResource SceneRandomizerNodeContentColor}" />
+    <SolidColorBrush x:Key="SceneHubNodeContent" Color="{StaticResource SceneHubNodeContentColor}" />
+    <SolidColorBrush x:Key="SceneAndNodeContent" Color="{StaticResource SceneAndNodeContentColor}" />
+    <SolidColorBrush x:Key="SceneXorNodeContent" Color="{StaticResource SceneXorNodeContentColor}" />
+    <SolidColorBrush x:Key="SceneDefaultNodeContent" Color="{StaticResource SceneDefaultNodeContentColor}" />
 </ResourceDictionary>

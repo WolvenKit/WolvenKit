@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Media;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes;
@@ -12,41 +13,71 @@ public abstract class BaseQuestViewModel : GraphEditor.NodeViewModel, IRefreshab
     public override uint UniqueId { get; }
 
     public Brush Background { get; protected set; }
+    public Brush ContentBackground { get; protected set; }
 
     protected BaseQuestViewModel(graphGraphNodeDefinition graphGraphNodeDefinition) : base(graphGraphNodeDefinition)
     {
         UniqueId = (uint)graphGraphNodeDefinition.GetHashCode();
-        Title = $"{graphGraphNodeDefinition.GetType().Name[5..^14]}";
+        Title = FormatQuestNodeName(graphGraphNodeDefinition.GetType().Name);
         Background = GetBackgroundForNodeType(graphGraphNodeDefinition);
+        ContentBackground = GetContentBackgroundForNodeType(graphGraphNodeDefinition);
+        
+        // Check if this is a simple node type that should have uniform colors
+        UpdateBackgroundsBasedOnNodeType(graphGraphNodeDefinition);
+    }
+
+    /// <summary>
+    /// Format quest node type name for display by removing common prefixes and suffixes
+    /// </summary>
+    private static string FormatQuestNodeName(string typeName)
+    {
+        // Remove "quest" prefix
+        if (typeName.StartsWith("quest"))
+        {
+            typeName = typeName[5..];
+        }
+
+        // Remove common suffixes
+        if (typeName.EndsWith("NodeDefinition"))
+        {
+            typeName = typeName[..^14];
+        }
+        else if (typeName.EndsWith("Node"))
+        {
+            typeName = typeName[..^4];
+        }
+
+        return typeName;
     }
 
     private static Brush GetBackgroundForNodeType(graphGraphNodeDefinition node)
     {
-        // Create a slight dark tint background based on quest node type
-        return node switch
+        if (node is questNodeDefinition questNode)
         {
-            questStartNodeDefinition => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33228B22")), // Dark green tint
-            questEndNodeDefinition => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33B22222")), // Dark red tint
-            questInputNodeDefinition => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#332288B2")), // Dark blue tint
-            questOutputNodeDefinition => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33B28822")), // Dark orange tint
-            questConditionNodeDefinition => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33B2B222")), // Dark yellow tint
-            questPhaseNodeDefinition => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33B222B2")), // Dark purple tint
-            questSceneNodeDefinition => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3322B2B2")), // Dark cyan tint
-            questRandomizerNodeDefinition => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33B2AA22")), // Dark orange tint
-            questFlowControlNodeDefinition => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3355AA22")), // Dark lime tint
-            questSwitchNodeDefinition => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33AA2255")), // Dark pink tint
-            questLogicalAndNodeDefinition => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#332255AA")), // Dark light blue tint
-            questLogicalXorNodeDefinition => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33AA5522")), // Dark brown tint
-            questLogicalHubNodeDefinition => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3355AA55")), // Dark green-blue tint
-            questFactsDBManagerNodeDefinition => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33AA22AA")), // Dark magenta tint
-            questItemManagerNodeDefinition => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3377AA22")), // Dark olive tint
-            questCharacterManagerNodeDefinition => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33AA7722")), // Dark amber tint
-            questUIManagerNodeDefinition => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#332277AA")), // Dark teal tint
-            questAudioNodeDefinition => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33AA2277")), // Dark rose tint
-            questJournalNodeDefinition => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3377AA77")), // Dark sage tint
-            questPauseConditionNodeDefinition => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33B28822")), // Dark orange tint
-            _ => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33666666")) // Default darker gray tint
-        };
+            if (Application.Current?.Resources != null)
+            {
+                return GraphNodeColors.GetBackgroundForQuestNodeType(questNode);
+            }
+            
+            return new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33666666"));
+        }
+        
+        return new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33666666")); // Default darker gray tint
+    }
+
+    private static Brush GetContentBackgroundForNodeType(graphGraphNodeDefinition node)
+    {
+        if (node is questNodeDefinition questNode)
+        {
+            if (Application.Current?.Resources != null)
+            {
+                return GraphNodeColors.GetContentBackgroundForQuestNodeType(questNode);
+            }
+            
+            return new SolidColorBrush((Color)ColorConverter.ConvertFromString("#11666666"));
+        }
+        
+        return new SolidColorBrush((Color)ColorConverter.ConvertFromString("#11666666")); // Very subtle default gray tint
     }
 
     internal virtual void CreateDefaultSockets()
@@ -96,7 +127,18 @@ public abstract class BaseQuestViewModel : GraphEditor.NodeViewModel, IRefreshab
     {
         if (Data is questNodeDefinition questNode)
         {
-            Title = $"[{questNode.Id}] {questNode.GetType().Name[5..^14]}";
+            var formattedName = FormatQuestNodeName(questNode.GetType().Name);
+            Title = $"[{questNode.Id}] {formattedName}";
+        }
+    }
+
+    private void UpdateBackgroundsBasedOnNodeType(graphGraphNodeDefinition node)
+    {
+        // Simple logical/control nodes that should have uniform colors
+        if (node is questLogicalAndNodeDefinition or questLogicalXorNodeDefinition or questLogicalHubNodeDefinition or 
+            questDeletionMarkerNodeDefinition or questFlowControlNodeDefinition)
+        {
+            ContentBackground = Background;
         }
     }
 }

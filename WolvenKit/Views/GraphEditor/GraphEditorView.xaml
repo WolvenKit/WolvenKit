@@ -67,13 +67,13 @@
 
                 <DataTemplate x:Key="DetailedHeaderTemplate">
                     <StackPanel Orientation="Vertical" Margin="-6">
-                        <!-- Notable Point Indicator Bar (only visible when HasNotablePoint is true) -->
+                        <!-- Notable Point Indicator Bar (only visible for scene nodes with notable points) -->
                         <Border Background="#CC919100" 
                                 BorderBrush="#DDAB9066"
                                 BorderThickness="0,0,0,1"
                                 Padding="10,6,10,6"
                                 HorizontalAlignment="Stretch"
-                                Visibility="{Binding HasNotablePoint, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                Visibility="{Binding HasNotablePoint, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="⭐" 
                                           Margin="0,0,8,0"
@@ -85,7 +85,7 @@
                                           FontWeight="Bold"
                                           FontSize="13"
                                           Foreground="#FFE6E6E6" />
-                                <TextBlock Text="{Binding NotablePointName}"
+                                <TextBlock Text="{Binding NotablePointName, FallbackValue=''}"
                                           VerticalAlignment="Center"
                                           FontWeight="Bold"
                                           FontSize="13"
