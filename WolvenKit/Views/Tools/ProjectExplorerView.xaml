@@ -362,7 +362,8 @@
                                          Mode=OneWay,
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=CreateNewDirectoryCommand}"
-                    Header="Create new folder">
+                    Header="Create new folder"
+                    InputGestureText="F7">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
