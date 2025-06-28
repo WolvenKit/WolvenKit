@@ -625,7 +625,7 @@ public abstract class CvmDropdownHelper
 
         return parent.ResolvedData switch
         {
-            gameJournalPath => s_questHandleParentNames.Contains(parent.Name),
+            gameJournalPath => cvm.Name is "className" && s_questHandleParentNames.Contains(parent.Name),
 
             #region mesh
 
