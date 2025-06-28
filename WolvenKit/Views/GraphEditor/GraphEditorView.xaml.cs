@@ -447,7 +447,7 @@ public partial class GraphEditorView : UserControl
 
     // Removed ShowSectionOutputPreview - no longer using dialog for add output
 
-    private void Connection_OnRightClick(object sender, MouseButtonEventArgs e)
+    public void Connection_OnRightClick(object sender, MouseButtonEventArgs e)
     {
         if (sender is Connection connection && connection.DataContext is ConnectionViewModel connectionViewModel && Source != null)
         {

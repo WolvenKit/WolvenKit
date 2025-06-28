@@ -50,7 +50,8 @@
                 TargetOffset="7,0"
                 TargetOffsetMode="Static"
                 IsSelectable="True"
-                IsSelected="{Binding IsSelected}">
+                IsSelected="{Binding IsSelected}"
+                MouseRightButtonDown="Connection_OnRightClick">
                 <nodify:Connection.Style>
                     <Style TargetType="{x:Type nodify:BaseConnection}">
                         <Setter Property="Cursor" Value="Hand" />

@@ -581,5 +581,14 @@ namespace WolvenKit.Views.Documents
                 viewport.Y + size.Height / 2
             );
         }
+
+        /// <summary>
+        /// Forward connection right-click events to the underlying GraphEditorView
+        /// </summary>
+        private void Connection_OnRightClick(object sender, MouseButtonEventArgs e)
+        {
+            // Forward the event to the underlying GraphEditorView's Connection_OnRightClick method
+            SceneGraphEditor?.Connection_OnRightClick(sender, e);
+        }
     }
 } 
