@@ -8,7 +8,6 @@
     xmlns:dialogs="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     mc:Ignorable="d"
     d:DesignWidth="600"
     d:DesignHeight="350"
@@ -122,8 +121,6 @@
                 </Grid>
             </TabItem>
         </TabControl>
-
-
 
         <StackPanel
             Grid.Row="1"

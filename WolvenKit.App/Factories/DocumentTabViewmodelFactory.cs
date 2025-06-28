@@ -61,6 +61,4 @@ public class DocumentTabViewmodelFactory : IDocumentTabViewmodelFactory
 
     public RDTMeshViewModel RDTMeshViewModel(entEntityTemplate data, RedDocumentViewModel file)
         => new(data, file, _settingsManager, _gameController, _loggerService, _modTools, _geometryCacheService, _modifierSvc);
-
-
 }
