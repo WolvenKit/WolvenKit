@@ -6,20 +6,20 @@ using Splat;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
-using WolvenKit.Core.Services;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Views.Editors
 {
     public partial class ScnActorIdDropdown : UserControl
     {
         private readonly DocumentTools _documentTools;
-        private readonly ILoggerService _loggerService;
+        private static ILoggerService s_loggerService;
+        private static ILoggerService LoggerService => s_loggerService ??= Locator.Current.GetService<ILoggerService>();
         private bool _isUpdatingFromCode = false;
 
         public ScnActorIdDropdown()
         {
             _documentTools = Locator.Current.GetService<DocumentTools>();
-            _loggerService = Locator.Current.GetService<ILoggerService>();
             InitializeComponent();
             
             this.DataContextChanged += OnDataContextChanged;
@@ -117,7 +117,7 @@ namespace WolvenKit.Views.Editors
             }
             catch (System.Exception ex)
             {
-                _loggerService?.Error($"Error populating ScnActorIdDropdown: {ex.Message}");
+                LoggerService.Error($"Error populating ScnActorIdDropdown: {ex.Message}");
                 ActorDropdown.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
             }
         }
@@ -170,67 +170,6 @@ namespace WolvenKit.Views.Editors
                 // Update the display
                 var displayLabel = GetDisplayLabel();
                 CurrentValueText.SetCurrentValue(TextBlock.TextProperty, $"Current {displayLabel}: {selectedValue}");
-            }
-        }
-    }
-}                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
-                ActorDropdown.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-            }
-        }
-
-        private void UpdateDropdownSelection()
-        {
-            if (DataContext is not ChunkViewModel { Data: IRedInteger integerData })
-                return;
-
-            _isUpdatingFromCode = true;
-            
-            var currentValue = GetIntegerValue(integerData);
-            ActorDropdown.SetCurrentValue(System.Windows.Controls.Primitives.Selector.SelectedValueProperty, currentValue);
-            _isUpdatingFromCode = false;
-            
-            System.Diagnostics.Debug.WriteLine($"UpdateDropdownSelection: Set selection to {currentValue}");
-        }
-
-        private void ActorDropdown_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (_isUpdatingFromCode || ActorDropdown.SelectedValue is not string selectedValue)
-                return;
-
-            if (DataContext is not ChunkViewModel cvm || cvm.Data is not IRedInteger integerData)
-                return;
-
-            System.Diagnostics.Debug.WriteLine($"ActorDropdown_SelectionChanged: Selected value {selectedValue}");
-
-            if (uint.TryParse(selectedValue, out var newValue))
-            {
-                // Update the integer value based on the type
-                switch (integerData)
-                {
-                    case CUInt32:
-                        cvm.Data = (CUInt32)newValue;
-                        break;
-                    case CInt32:
-                        cvm.Data = (CInt32)(int)newValue;
-                        break;
-                    case CUInt16:
-                        cvm.Data = (CUInt16)(ushort)newValue;
-                        break;
-                    case CInt16:
-                        cvm.Data = (CInt16)(short)newValue;
-                        break;
-                    case CUInt8:
-                        cvm.Data = (CUInt8)(byte)newValue;
-                        break;
-                    case CInt8:
-                        cvm.Data = (CInt8)(sbyte)newValue;
-                        break;
-                }
-                
-                // Update the display
-                var displayLabel = GetDisplayLabel();
-                CurrentValueText.SetCurrentValue(TextBlock.TextProperty, $"Current {displayLabel}: {selectedValue}");
-                System.Diagnostics.Debug.WriteLine($"ActorDropdown_SelectionChanged: Updated {displayLabel} to {selectedValue}");
             }
         }
     }
