@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.RED4.Types;
+using Splat;
 
 namespace WolvenKit.App.Helpers;
 
@@ -46,6 +48,76 @@ public abstract class CvmDropdownHelper
     [
         "meshAppearance", "appearanceName"
     ];
+
+    /// <summary>
+    /// Finds the scene resource context, either from the root model or from the current document
+    /// </summary>
+    private static scnSceneResource? GetSceneContext(ChunkViewModel cvm)
+    {
+        // First try the normal root model approach
+        var rootModel = cvm.GetRootModel();
+        if (rootModel?.ResolvedData is scnSceneResource sceneFromRoot)
+        {
+            System.Diagnostics.Debug.WriteLine($"GetSceneContext: Found scene from root model - {sceneFromRoot.GetType().Name}");
+            return sceneFromRoot;
+        }
+
+        System.Diagnostics.Debug.WriteLine($"GetSceneContext: Root model is not scnSceneResource, root type: {rootModel?.ResolvedData?.GetType().Name}");
+
+        // If that doesn't work, we might be in the graph editor context
+        // Try to get the scene from the current document
+        try
+        {
+            var appViewModel = Locator.Current.GetService<App.ViewModels.Shell.AppViewModel>();
+            System.Diagnostics.Debug.WriteLine($"GetSceneContext: AppViewModel available: {appViewModel != null}");
+            
+            if (appViewModel?.ActiveDocument is RedDocumentViewModel redDoc)
+            {
+                System.Diagnostics.Debug.WriteLine($"GetSceneContext: Active document type: {redDoc.GetType().Name}");
+                System.Diagnostics.Debug.WriteLine($"GetSceneContext: Selected tab type: {redDoc.SelectedTabItemViewModel?.GetType().Name}");
+                
+                // Check if we have a CombinedSceneViewModel
+                if (redDoc.SelectedTabItemViewModel is CombinedSceneViewModel combinedScene)
+                {
+                    System.Diagnostics.Debug.WriteLine("GetSceneContext: Found CombinedSceneViewModel");
+                    var sceneRootChunk = combinedScene.RDTViewModel.GetRootChunk();
+                    System.Diagnostics.Debug.WriteLine($"GetSceneContext: CombinedScene root chunk type: {sceneRootChunk?.ResolvedData?.GetType().Name}");
+                    
+                    if (sceneRootChunk?.ResolvedData is scnSceneResource sceneFromCombined)
+                    {
+                        System.Diagnostics.Debug.WriteLine("GetSceneContext: Successfully found scene from CombinedSceneViewModel");
+                        return sceneFromCombined;
+                    }
+                }
+                
+                // Check if we have an RDTDataViewModel with scene data
+                if (redDoc.SelectedTabItemViewModel is RDTDataViewModel rdtTab)
+                {
+                    System.Diagnostics.Debug.WriteLine("GetSceneContext: Found RDTDataViewModel");
+                    var rdtRootChunk = rdtTab.GetRootChunk();
+                    System.Diagnostics.Debug.WriteLine($"GetSceneContext: RDT root chunk type: {rdtRootChunk?.ResolvedData?.GetType().Name}");
+                    
+                    if (rdtRootChunk?.ResolvedData is scnSceneResource sceneFromRdt)
+                    {
+                        System.Diagnostics.Debug.WriteLine("GetSceneContext: Successfully found scene from RDTDataViewModel");
+                        return sceneFromRdt;
+                    }
+                }
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("GetSceneContext: No active document or not RedDocumentViewModel");
+            }
+        }
+        catch (System.Exception ex)
+        {
+            // Fallback gracefully if service lookup fails
+            System.Diagnostics.Debug.WriteLine($"GetSceneContext: Exception occurred: {ex.Message}");
+        }
+
+        System.Diagnostics.Debug.WriteLine("GetSceneContext: No scene context found");
+        return null;
+    }
 
 
     public static Dictionary<string, string> GetDropdownOptions(ChunkViewModel cvm, DocumentTools documentTools,
@@ -148,350 +220,382 @@ public abstract class CvmDropdownHelper
         }
 
         // Special case for scnActorId.Id - check if we're editing the Id property of a scnActorId
-        if (cvm.Name == "id" && parent.ResolvedData is scnActorId && cvm.GetRootModel().ResolvedData is scnSceneResource scene)
+        if (cvm.Name == "id" && parent.ResolvedData is scnActorId)
         {
-            // Generate dropdown options for actor IDs with actor names
-            // Key = display text, Value = actual ID value
-            var actorOptions = new Dictionary<string, string>();
-            
-            // Add regular actors
-            for (int i = 0; i < scene.Actors.Count; i++)
+            var scene = GetSceneContext(cvm);
+            if (scene != null)
             {
-                var actor = scene.Actors[i];
-                string actorName = actor.ActorName; // Implicit conversion from CString to string
-                if (string.IsNullOrEmpty(actorName))
+                // Generate dropdown options for actor IDs with actor names
+                // Key = display text, Value = actual ID value
+                var actorOptions = new Dictionary<string, string>();
+                
+                // Add regular actors
+                for (int i = 0; i < scene.Actors.Count; i++)
                 {
-                    actorName = $"Actor {i}";
+                    var actor = scene.Actors[i];
+                    string actorName = actor.ActorName; // Implicit conversion from CString to string
+                    if (string.IsNullOrEmpty(actorName))
+                    {
+                        actorName = $"Actor {i}";
+                    }
+                    actorOptions.Add($"{i}: {actorName}", i.ToString());
                 }
-                actorOptions.Add($"{i}: {actorName}", i.ToString());
-            }
-            
-            // Add player actors
-            for (int i = 0; i < scene.PlayerActors.Count; i++)
-            {
-                var playerActor = scene.PlayerActors[i];
-                var actorId = scene.Actors.Count + i;
-                string actorName = playerActor.PlayerName; // Implicit conversion from CString to string
-                if (string.IsNullOrEmpty(actorName))
+                
+                // Add player actors
+                for (int i = 0; i < scene.PlayerActors.Count; i++)
                 {
-                    actorName = $"Player Actor {i}";
+                    var playerActor = scene.PlayerActors[i];
+                    var actorId = scene.Actors.Count + i;
+                    string actorName = playerActor.PlayerName; // Implicit conversion from CString to string
+                    if (string.IsNullOrEmpty(actorName))
+                    {
+                        actorName = $"Player Actor {i}";
+                    }
+                    actorOptions.Add($"{actorId}: {actorName}", actorId.ToString());
                 }
-                actorOptions.Add($"{actorId}: {actorName}", actorId.ToString());
+                
+                return actorOptions;
             }
-            
-            return actorOptions;
         }
 
         // Special case for scnPerformerId.Id - check if we're editing the Id property of a scnPerformerId
-        if (cvm.Name == "id" && parent.ResolvedData is scnPerformerId && cvm.GetRootModel().ResolvedData is scnSceneResource sceneForPerformer)
+        if (cvm.Name == "id" && parent.ResolvedData is scnPerformerId)
         {
-            // Check if we're in a definition context (where IDs should be editable) vs usage context (where dropdown is helpful)
-            // Definition contexts: debugSymbols.performersDebugSymbols, actors, playerActors, props, etc.
-            // Usage contexts: scene events, quest nodes, etc.
-            
-            var parentPath = GetParentPath(cvm);
-            
-            // Skip dropdown if we're in definition contexts
-            if (IsInDefinitionContext(parentPath))
+            var scene = GetSceneContext(cvm);
+            if (scene != null)
             {
-                return new Dictionary<string, string>(); // Return empty to use regular integer editor
-            }
-            
-            // Generate dropdown options for performer IDs with performer names from debugSymbols
-            // Key = display text, Value = actual ID value
-            var performerOptions = new Dictionary<string, string>();
-            
-            if (sceneForPerformer.DebugSymbols?.PerformersDebugSymbols != null)
-            {
-                foreach (var performerSymbol in sceneForPerformer.DebugSymbols.PerformersDebugSymbols)
+                // Check if we're in a definition context (where IDs should be editable) vs usage context (where dropdown is helpful)
+                // Definition contexts: debugSymbols.performersDebugSymbols, actors, playerActors, props, etc.
+                // Usage contexts: scene events, quest nodes, etc.
+                
+                var parentPath = GetParentPath(cvm);
+                
+                // Skip dropdown if we're in definition contexts
+                if (IsInDefinitionContext(parentPath))
                 {
-                    var performerId = performerSymbol.PerformerId.Id;
-                    var performerIdValue = ((uint)performerId).ToString();
-                    
-                    // Try to get performer name from various sources
-                    string performerName = $"Performer {performerIdValue}";
-                    
-                    // Try first name in Names array first (most reliable)
-                    if (performerSymbol.EntityRef.Names.Count > 0)
-                    {
-                        var firstName = performerSymbol.EntityRef.Names[0].GetResolvedText() ?? "";
-                        if (!string.IsNullOrEmpty(firstName))
-                        {
-                            performerName = firstName;
-                        }
-                    }
-                    
-                    // If Names didn't work, try Reference (NodeRef)
-                    if (performerName == $"Performer {performerIdValue}")
-                    {
-                        var referenceString = performerSymbol.EntityRef.Reference.ToString() ?? "";
-                        if (!string.IsNullOrEmpty(referenceString) && referenceString != "NodeRef")
-                        {
-                            // Remove the # prefix if present
-                            performerName = referenceString.StartsWith("#") ? referenceString.Substring(1) : referenceString;
-                        }
-                    }
-                    
-                    // Try SceneActorContextName
-                    if (performerName == $"Performer {performerIdValue}")
-                    {
-                        var sceneActorContextName = performerSymbol.EntityRef.SceneActorContextName.GetResolvedText() ?? "";
-                        if (!string.IsNullOrEmpty(sceneActorContextName))
-                        {
-                            performerName = sceneActorContextName;
-                        }
-                    }
-                    
-                    // Try DynamicEntityUniqueName
-                    if (performerName == $"Performer {performerIdValue}")
-                    {
-                        var dynamicEntityName = performerSymbol.EntityRef.DynamicEntityUniqueName.GetResolvedText() ?? "";
-                        if (!string.IsNullOrEmpty(dynamicEntityName))
-                        {
-                            performerName = dynamicEntityName;
-                        }
-                    }
-                    
-                    performerOptions.Add($"{performerIdValue}: {performerName}", performerIdValue);
+                    return new Dictionary<string, string>(); // Return empty to use regular integer editor
                 }
+                
+                // Generate dropdown options for performer IDs with performer names from debugSymbols
+                // Key = display text, Value = actual ID value
+                var performerOptions = new Dictionary<string, string>();
+                
+                if (scene.DebugSymbols?.PerformersDebugSymbols != null)
+                {
+                    foreach (var performerSymbol in scene.DebugSymbols.PerformersDebugSymbols)
+                    {
+                        var performerId = performerSymbol.PerformerId.Id;
+                        var performerIdValue = ((uint)performerId).ToString();
+                        
+                        // Try to get performer name from various sources
+                        string performerName = $"Performer {performerIdValue}";
+                        
+                        // Try first name in Names array first (most reliable)
+                        if (performerSymbol.EntityRef.Names.Count > 0)
+                        {
+                            var firstName = performerSymbol.EntityRef.Names[0].GetResolvedText() ?? "";
+                            if (!string.IsNullOrEmpty(firstName))
+                            {
+                                performerName = firstName;
+                            }
+                        }
+                        
+                        // If Names didn't work, try Reference (NodeRef)
+                        if (performerName == $"Performer {performerIdValue}")
+                        {
+                            var referenceString = performerSymbol.EntityRef.Reference.ToString() ?? "";
+                            if (!string.IsNullOrEmpty(referenceString) && referenceString != "NodeRef")
+                            {
+                                // Remove the # prefix if present
+                                performerName = referenceString.StartsWith("#") ? referenceString.Substring(1) : referenceString;
+                            }
+                        }
+                        
+                        // Try SceneActorContextName
+                        if (performerName == $"Performer {performerIdValue}")
+                        {
+                            var sceneActorContextName = performerSymbol.EntityRef.SceneActorContextName.GetResolvedText() ?? "";
+                            if (!string.IsNullOrEmpty(sceneActorContextName))
+                            {
+                                performerName = sceneActorContextName;
+                            }
+                        }
+                        
+                        // Try DynamicEntityUniqueName
+                        if (performerName == $"Performer {performerIdValue}")
+                        {
+                            var dynamicEntityName = performerSymbol.EntityRef.DynamicEntityUniqueName.GetResolvedText() ?? "";
+                            if (!string.IsNullOrEmpty(dynamicEntityName))
+                            {
+                                performerName = dynamicEntityName;
+                            }
+                        }
+                        
+                        performerOptions.Add($"{performerIdValue}: {performerName}", performerIdValue);
+                    }
+                }
+                
+                return performerOptions;
             }
-            
-            return performerOptions;
         }
 
         // Special case for scnSceneWorkspotInstanceId.Id - check if we're editing the Id property of a scnSceneWorkspotInstanceId
-        if (cvm.Name == "id" && parent.ResolvedData is scnSceneWorkspotInstanceId && cvm.GetRootModel().ResolvedData is scnSceneResource sceneForWorkspot)
+        if (cvm.Name == "id" && parent.ResolvedData is scnSceneWorkspotInstanceId)
         {
-            // Check if we're in a definition context vs usage context
-            var parentPath = GetParentPath(cvm);
-            if (IsInDefinitionContext(parentPath))
+            var scene = GetSceneContext(cvm);
+            if (scene != null)
             {
-                return new Dictionary<string, string>(); // Return empty to use regular integer editor
-            }
-            
-            // Generate dropdown options for workspot instance IDs with workspot resource names
-            // Key = display text, Value = actual ID value
-            var workspotOptions = new Dictionary<string, string>();
-            
-            foreach (var workspotInstance in sceneForWorkspot.WorkspotInstances)
-            {
-                var instanceId = workspotInstance.WorkspotInstanceId.Id;
-                var instanceDataId = workspotInstance.DataId.Id;
-                
-                // Find the workspot resource by DataId
-                var workspotResource = sceneForWorkspot.Workspots.FirstOrDefault(w => w.Chunk is scnWorkspotData workspotData && workspotData.DataId.Id == instanceDataId);
-                var workspotPath = "Unknown";
-                
-                if (workspotResource?.Chunk is scnWorkspotData_ExternalWorkspotResource externalWorkspot)
+                // Check if we're in a definition context vs usage context
+                var parentPath = GetParentPath(cvm);
+                if (IsInDefinitionContext(parentPath))
                 {
-                    workspotPath = externalWorkspot.WorkspotResource.DepotPath.GetResolvedText() ?? "Unknown";
+                    return new Dictionary<string, string>(); // Return empty to use regular integer editor
                 }
                 
-                // Extract filename without extension and get origin marker
-                var filename = System.IO.Path.GetFileNameWithoutExtension(workspotPath);
-                var originMarkerText = workspotInstance.OriginMarker.NodeRef.GetResolvedText();
-                var originMarker = string.IsNullOrEmpty(originMarkerText) ? "Unknown" : originMarkerText;
+                // Generate dropdown options for workspot instance IDs with workspot resource names
+                // Key = display text, Value = actual ID value
+                var workspotOptions = new Dictionary<string, string>();
                 
-                var displayText = $"{instanceId}: {filename} ({originMarker})";
-                workspotOptions[displayText] = instanceId.ToString();
+                foreach (var workspotInstance in scene.WorkspotInstances)
+                {
+                    var instanceId = workspotInstance.WorkspotInstanceId.Id;
+                    var instanceDataId = workspotInstance.DataId.Id;
+                    
+                    // Find the workspot resource by DataId
+                    var workspotResource = scene.Workspots.FirstOrDefault(w => w.Chunk is scnWorkspotData workspotData && workspotData.DataId.Id == instanceDataId);
+                    var workspotPath = "Unknown";
+                    
+                    if (workspotResource?.Chunk is scnWorkspotData_ExternalWorkspotResource externalWorkspot)
+                    {
+                        workspotPath = externalWorkspot.WorkspotResource.DepotPath.GetResolvedText() ?? "Unknown";
+                    }
+                    
+                    // Extract filename without extension and get origin marker
+                    var filename = System.IO.Path.GetFileNameWithoutExtension(workspotPath);
+                    var originMarkerText = workspotInstance.OriginMarker.NodeRef.GetResolvedText();
+                    var originMarker = string.IsNullOrEmpty(originMarkerText) ? "Unknown" : originMarkerText;
+                    
+                    var displayText = $"{instanceId}: {filename} ({originMarker})";
+                    workspotOptions[displayText] = instanceId.ToString();
+                }
+                
+                return workspotOptions;
             }
-            
-            return workspotOptions;
         }
 
         // Special case for scnEffectInstanceId.Id - check if we're editing the Id property of a scnEffectInstanceId
-        if (cvm.Name == "id" && parent.ResolvedData is scnEffectInstanceId && cvm.GetRootModel().ResolvedData is scnSceneResource sceneForEffect)
+        if (cvm.Name == "id" && parent.ResolvedData is scnEffectInstanceId)
         {
-            // Check if we're in a definition context vs usage context
-            var parentPath = GetParentPath(cvm);
-            if (IsInDefinitionContext(parentPath))
+            var scene = GetSceneContext(cvm);
+            if (scene != null)
             {
-                return new Dictionary<string, string>(); // Return empty to use regular integer editor
-            }
-            
-            // Generate dropdown options for effect instance IDs with effect resource names and first RUID
-            // Key = display text, Value = actual ID value
-            var effectOptions = new Dictionary<string, string>();
-            
-            foreach (var effectInstance in sceneForEffect.EffectInstances)
-            {
-                var instanceId = effectInstance.EffectInstanceId.Id;
-                var effectId = effectInstance.EffectInstanceId.EffectId.Id;
-                var effectDef = sceneForEffect.EffectDefinitions
-                    .FirstOrDefault(e => e.Id.Id == effectId);
-                
-                if (effectDef != null)
+                // Check if we're in a definition context vs usage context
+                var parentPath = GetParentPath(cvm);
+                if (IsInDefinitionContext(parentPath))
                 {
-                    var effectPath = effectDef.Effect.DepotPath.GetResolvedText();
-                    if (!string.IsNullOrEmpty(effectPath))
+                    return new Dictionary<string, string>(); // Return empty to use regular integer editor
+                }
+                
+                // Generate dropdown options for effect instance IDs with effect resource names and first RUID
+                // Key = display text, Value = actual ID value
+                var effectOptions = new Dictionary<string, string>();
+                
+                foreach (var effectInstance in scene.EffectInstances)
+                {
+                    var instanceId = effectInstance.EffectInstanceId.Id;
+                    var effectId = effectInstance.EffectInstanceId.EffectId.Id;
+                    var effectDef = scene.EffectDefinitions
+                        .FirstOrDefault(e => e.Id.Id == effectId);
+                    
+                    if (effectDef != null)
                     {
-                        var filename = System.IO.Path.GetFileNameWithoutExtension(effectPath);
-                        
-                        // Get first RUID from compiled effect if available
-                        string ruidInfo = "";
-                        if (effectInstance.CompiledEffect?.EventsSortedByRUID != null && effectInstance.CompiledEffect.EventsSortedByRUID.Count > 0)
+                        var effectPath = effectDef.Effect.DepotPath.GetResolvedText();
+                        if (!string.IsNullOrEmpty(effectPath))
                         {
-                            ruidInfo = $": {effectInstance.CompiledEffect.EventsSortedByRUID[0].EventRUID}";
+                            var filename = System.IO.Path.GetFileNameWithoutExtension(effectPath);
+                            
+                            // Get first RUID from compiled effect if available
+                            string ruidInfo = "";
+                            if (effectInstance.CompiledEffect?.EventsSortedByRUID != null && effectInstance.CompiledEffect.EventsSortedByRUID.Count > 0)
+                            {
+                                ruidInfo = $": {effectInstance.CompiledEffect.EventsSortedByRUID[0].EventRUID}";
+                            }
+                            
+                            effectOptions[$"{instanceId}: {filename}{ruidInfo}"] = instanceId.ToString();
                         }
-                        
-                        effectOptions[$"{instanceId}: {filename}{ruidInfo}"] = instanceId.ToString();
+                        else
+                        {
+                            effectOptions[$"{instanceId}: [No Effect Path]"] = instanceId.ToString();
+                        }
                     }
                     else
                     {
-                        effectOptions[$"{instanceId}: [No Effect Path]"] = instanceId.ToString();
+                        effectOptions[$"{instanceId}: [Unknown Effect]"] = instanceId.ToString();
                     }
                 }
-                else
-                {
-                    effectOptions[$"{instanceId}: [Unknown Effect]"] = instanceId.ToString();
-                }
+                
+                return effectOptions;
             }
-            
-            return effectOptions;
         }
 
         // Special case for scnPropId.Id - check if we're editing the Id property of a scnPropId
-        if (cvm.Name == "id" && parent.ResolvedData is scnPropId && cvm.GetRootModel().ResolvedData is scnSceneResource sceneForProp)
+        if (cvm.Name == "id" && parent.ResolvedData is scnPropId)
         {
-            // Check if we're in a definition context vs usage context
-            var parentPath = GetParentPath(cvm);
-            if (IsInDefinitionContext(parentPath))
+            var scene = GetSceneContext(cvm);
+            if (scene != null)
             {
-                return new Dictionary<string, string>(); // Return empty to use regular integer editor
-            }
-            
-            // Generate dropdown options for prop IDs with prop names
-            // Key = display text, Value = actual ID value
-            var propOptions = new Dictionary<string, string>();
-            
-            foreach (var propDefinition in sceneForProp.Props)
-            {
-                var propId = propDefinition.PropId.Id;
-                var propName = propDefinition.PropName.ToString();
+                // Check if we're in a definition context vs usage context
+                var parentPath = GetParentPath(cvm);
+                if (IsInDefinitionContext(parentPath))
+                {
+                    return new Dictionary<string, string>(); // Return empty to use regular integer editor
+                }
                 
-                if (!string.IsNullOrEmpty(propName))
+                // Generate dropdown options for prop IDs with prop names
+                // Key = display text, Value = actual ID value
+                var propOptions = new Dictionary<string, string>();
+                
+                foreach (var propDefinition in scene.Props)
                 {
-                    propOptions[$"{propId}: {propName}"] = propId.ToString();
+                    var propId = propDefinition.PropId.Id;
+                    var propName = propDefinition.PropName.ToString();
+                    
+                    if (!string.IsNullOrEmpty(propName))
+                    {
+                        propOptions[$"{propId}: {propName}"] = propId.ToString();
+                    }
+                    else
+                    {
+                        propOptions[$"{propId}: [Unnamed Prop]"] = propId.ToString();
+                    }
                 }
-                else
-                {
-                    propOptions[$"{propId}: [Unnamed Prop]"] = propId.ToString();
-                }
+                
+                return propOptions;
             }
-            
-            return propOptions;
         }
 
         // Special case for scnCinematicAnimSetSRRefId.Id - check if we're editing the Id property of a scnCinematicAnimSetSRRefId
-        if (cvm.Name == "id" && parent.ResolvedData is scnCinematicAnimSetSRRefId && cvm.GetRootModel().ResolvedData is scnSceneResource sceneForAnimSet)
+        if (cvm.Name == "id" && parent.ResolvedData is scnCinematicAnimSetSRRefId)
         {
-            // Check if we're in a definition context vs usage context
-            var parentPath = GetParentPath(cvm);
-            if (IsInDefinitionContext(parentPath))
+            var scene = GetSceneContext(cvm);
+            if (scene != null)
             {
-                return new Dictionary<string, string>(); // Return empty to use regular integer editor
-            }
-            
-            // Generate dropdown options for cinematic animation set IDs with animation file paths
-            // Key = display text, Value = actual ID value (index)
-            var animSetOptions = new Dictionary<string, string>();
-            
-            if (sceneForAnimSet.ResouresReferences?.CinematicAnimSets != null)
-            {
-                for (int i = 0; i < sceneForAnimSet.ResouresReferences.CinematicAnimSets.Count; i++)
+                // Check if we're in a definition context vs usage context
+                var parentPath = GetParentPath(cvm);
+                if (IsInDefinitionContext(parentPath))
                 {
-                    var animSet = sceneForAnimSet.ResouresReferences.CinematicAnimSets[i];
-                    var animSetPath = animSet.AsyncAnimSet.DepotPath.GetResolvedText();
-                    
-                    if (!string.IsNullOrEmpty(animSetPath))
+                    return new Dictionary<string, string>(); // Return empty to use regular integer editor
+                }
+                
+                // Generate dropdown options for cinematic animation set IDs with animation file paths
+                // Key = display text, Value = actual ID value (index)
+                var animSetOptions = new Dictionary<string, string>();
+                
+                if (scene.ResouresReferences?.CinematicAnimSets != null)
+                {
+                    for (int i = 0; i < scene.ResouresReferences.CinematicAnimSets.Count; i++)
                     {
-                        var filename = System.IO.Path.GetFileNameWithoutExtension(animSetPath);
-                        var displayText = $"{i}: {filename}.anims";
+                        var animSet = scene.ResouresReferences.CinematicAnimSets[i];
+                        var animSetPath = animSet.AsyncAnimSet.DepotPath.GetResolvedText();
                         
-                        animSetOptions[displayText] = i.ToString();
-                    }
-                    else
-                    {
-                        animSetOptions[$"{i}: [No Animation Set Path]"] = i.ToString();
+                        if (!string.IsNullOrEmpty(animSetPath))
+                        {
+                            var filename = System.IO.Path.GetFileNameWithoutExtension(animSetPath);
+                            var displayText = $"{i}: {filename}.anims";
+                            
+                            animSetOptions[displayText] = i.ToString();
+                        }
+                        else
+                        {
+                            animSetOptions[$"{i}: [No Animation Set Path]"] = i.ToString();
+                        }
                     }
                 }
+                
+                return animSetOptions;
             }
-            
-            return animSetOptions;
         }
 
         // Special case for scnLipsyncAnimSetSRRefId.Id - check if we're editing the Id property of a scnLipsyncAnimSetSRRefId
-        if (cvm.Name == "id" && parent.ResolvedData is scnLipsyncAnimSetSRRefId && cvm.GetRootModel().ResolvedData is scnSceneResource sceneForLipsyncAnimSet)
+        if (cvm.Name == "id" && parent.ResolvedData is scnLipsyncAnimSetSRRefId)
         {
-            // Check if we're in a definition context vs usage context
-            var parentPath = GetParentPath(cvm);
-            if (IsInDefinitionContext(parentPath))
+            var scene = GetSceneContext(cvm);
+            if (scene != null)
             {
-                return new Dictionary<string, string>(); // Return empty to use regular integer editor
-            }
-            
-            // Generate dropdown options for lipsync animation set IDs with animation file paths
-            // Key = display text, Value = actual ID value (index)
-            var animSetOptions = new Dictionary<string, string>();
-            
-            if (sceneForLipsyncAnimSet.ResouresReferences?.LipsyncAnimSets != null)
-            {
-                for (int i = 0; i < sceneForLipsyncAnimSet.ResouresReferences.LipsyncAnimSets.Count; i++)
+                // Check if we're in a definition context vs usage context
+                var parentPath = GetParentPath(cvm);
+                if (IsInDefinitionContext(parentPath))
                 {
-                    var animSet = sceneForLipsyncAnimSet.ResouresReferences.LipsyncAnimSets[i];
-                    var animSetPath = animSet.AsyncRefLipsyncAnimSet.DepotPath.GetResolvedText();
-                    
-                    if (!string.IsNullOrEmpty(animSetPath))
+                    return new Dictionary<string, string>(); // Return empty to use regular integer editor
+                }
+                
+                // Generate dropdown options for lipsync animation set IDs with animation file paths
+                // Key = display text, Value = actual ID value (index)
+                var animSetOptions = new Dictionary<string, string>();
+                
+                if (scene.ResouresReferences?.LipsyncAnimSets != null)
+                {
+                    for (int i = 0; i < scene.ResouresReferences.LipsyncAnimSets.Count; i++)
                     {
-                        var filename = System.IO.Path.GetFileNameWithoutExtension(animSetPath);
-                        var displayText = $"{i}: {filename}.anims";
-                        animSetOptions[displayText] = i.ToString();
-                    }
-                    else
-                    {
-                        animSetOptions[$"{i}: [No Animation Set Path]"] = i.ToString();
+                        var animSet = scene.ResouresReferences.LipsyncAnimSets[i];
+                        var animSetPath = animSet.AsyncRefLipsyncAnimSet.DepotPath.GetResolvedText();
+                        
+                        if (!string.IsNullOrEmpty(animSetPath))
+                        {
+                            var filename = System.IO.Path.GetFileNameWithoutExtension(animSetPath);
+                            var displayText = $"{i}: {filename}.anims";
+                            animSetOptions[displayText] = i.ToString();
+                        }
+                        else
+                        {
+                            animSetOptions[$"{i}: [No Animation Set Path]"] = i.ToString();
+                        }
                     }
                 }
+                
+                return animSetOptions;
             }
-            
-            return animSetOptions;
         }
 
         // Special case for scnDynamicAnimSetSRRefId.Id - check if we're editing the Id property of a scnDynamicAnimSetSRRefId
-        if (cvm.Name == "id" && parent.ResolvedData is scnDynamicAnimSetSRRefId && cvm.GetRootModel().ResolvedData is scnSceneResource sceneForDynamicAnimSet)
+        if (cvm.Name == "id" && parent.ResolvedData is scnDynamicAnimSetSRRefId)
         {
-            // Check if we're in a definition context vs usage context
-            var parentPath = GetParentPath(cvm);
-            if (IsInDefinitionContext(parentPath))
+            var scene = GetSceneContext(cvm);
+            if (scene != null)
             {
-                return new Dictionary<string, string>(); // Return empty to use regular integer editor
-            }
-            
-            // Generate dropdown options for dynamic animation set IDs with animation file paths
-            // Key = display text, Value = actual ID value (index)
-            var animSetOptions = new Dictionary<string, string>();
-            
-            if (sceneForDynamicAnimSet.ResouresReferences?.DynamicAnimSets != null)
-            {
-                for (int i = 0; i < sceneForDynamicAnimSet.ResouresReferences.DynamicAnimSets.Count; i++)
+                // Check if we're in a definition context vs usage context
+                var parentPath = GetParentPath(cvm);
+                if (IsInDefinitionContext(parentPath))
                 {
-                    var animSet = sceneForDynamicAnimSet.ResouresReferences.DynamicAnimSets[i];
-                    var animSetPath = animSet.AsyncAnimSet.DepotPath.GetResolvedText();
-                    
-                    if (!string.IsNullOrEmpty(animSetPath))
+                    return new Dictionary<string, string>(); // Return empty to use regular integer editor
+                }
+                
+                // Generate dropdown options for dynamic animation set IDs with animation file paths
+                // Key = display text, Value = actual ID value (index)
+                var animSetOptions = new Dictionary<string, string>();
+                
+                if (scene.ResouresReferences?.DynamicAnimSets != null)
+                {
+                    for (int i = 0; i < scene.ResouresReferences.DynamicAnimSets.Count; i++)
                     {
-                        var filename = System.IO.Path.GetFileNameWithoutExtension(animSetPath);
-                        var displayText = $"{i}: {filename}.anims";
-                        animSetOptions[displayText] = i.ToString();
-                    }
-                    else
-                    {
-                        animSetOptions[$"{i}: [No Animation Set Path]"] = i.ToString();
+                        var animSet = scene.ResouresReferences.DynamicAnimSets[i];
+                        var animSetPath = animSet.AsyncAnimSet.DepotPath.GetResolvedText();
+                        
+                        if (!string.IsNullOrEmpty(animSetPath))
+                        {
+                            var filename = System.IO.Path.GetFileNameWithoutExtension(animSetPath);
+                            var displayText = $"{i}: {filename}.anims";
+                            animSetOptions[displayText] = i.ToString();
+                        }
+                        else
+                        {
+                            animSetOptions[$"{i}: [No Animation Set Path]"] = i.ToString();
+                        }
                     }
                 }
+                
+                return animSetOptions;
             }
-            
-            return animSetOptions;
         }
 
         return (ret ?? []).Where(x => !string.IsNullOrEmpty(x)).ToDictionary(x => x!, y => y!);
@@ -549,29 +653,29 @@ public abstract class CvmDropdownHelper
             // tags: ent and app
             IRedArray<CName> when parent is { Name: "tags", Parent.ResolvedData: redTagList } => true,
 
-            // scnActorId.Id dropdown
-            scnActorId when cvm.Name == "id" && cvm.GetRootModel().ResolvedData is scnSceneResource => true,
+            // scnActorId.Id dropdown - check if this is an id property in a scnActorId and we have scene context
+            scnActorId when cvm.Name == "id" && GetSceneContext(cvm) != null => true,
 
             // scnPerformerId.Id dropdown
-            scnPerformerId when cvm.Name == "id" && cvm.GetRootModel().ResolvedData is scnSceneResource => true,
+            scnPerformerId when cvm.Name == "id" && GetSceneContext(cvm) != null => true,
 
             // scnSceneWorkspotInstanceId.Id dropdown
-            scnSceneWorkspotInstanceId when cvm.Name == "id" && cvm.GetRootModel().ResolvedData is scnSceneResource => true,
+            scnSceneWorkspotInstanceId when cvm.Name == "id" && GetSceneContext(cvm) != null => true,
 
             // scnEffectInstanceId.Id dropdown
-            scnEffectInstanceId when cvm.Name == "id" && cvm.GetRootModel().ResolvedData is scnSceneResource => true,
+            scnEffectInstanceId when cvm.Name == "id" && GetSceneContext(cvm) != null => true,
 
             // scnPropId.Id dropdown
-            scnPropId when cvm.Name == "id" && cvm.GetRootModel().ResolvedData is scnSceneResource => true,
+            scnPropId when cvm.Name == "id" && GetSceneContext(cvm) != null => true,
 
             // scnCinematicAnimSetSRRefId.Id dropdown
-            scnCinematicAnimSetSRRefId when cvm.Name == "id" && cvm.GetRootModel().ResolvedData is scnSceneResource => true,
+            scnCinematicAnimSetSRRefId when cvm.Name == "id" && GetSceneContext(cvm) != null => true,
 
             // scnLipsyncAnimSetSRRefId.Id dropdown
-            scnLipsyncAnimSetSRRefId when cvm.Name == "id" && cvm.GetRootModel().ResolvedData is scnSceneResource => true,
+            scnLipsyncAnimSetSRRefId when cvm.Name == "id" && GetSceneContext(cvm) != null => true,
 
             // scnDynamicAnimSetSRRefId.Id dropdown
-            scnDynamicAnimSetSRRefId when cvm.Name == "id" && cvm.GetRootModel().ResolvedData is scnSceneResource => true,
+            scnDynamicAnimSetSRRefId when cvm.Name == "id" && GetSceneContext(cvm) != null => true,
 
             _ => false
         };
@@ -607,6 +711,10 @@ public abstract class CvmDropdownHelper
             if (!string.IsNullOrEmpty(current.PropertyName))
             {
                 pathParts.Add(current.PropertyName);
+            }
+            else if (!string.IsNullOrEmpty(current.Name))
+            {
+                pathParts.Add(current.Name);
             }
             current = current.Parent;
         }

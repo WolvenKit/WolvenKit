@@ -317,9 +317,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     partial void OnDataChanged(IRedType value)
     {
-        // Debug logging
-        _loggerService.Info($"OnDataChanged triggered for {PropertyName}: {value}");
-        
         CalculateValue();
         CalculateDescriptor();
         CalculateIsDefault();
@@ -329,11 +326,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         if (Parent is null)
         {
-            _loggerService.Info($"OnDataChanged: Parent is null for {PropertyName}, exiting early");
             return;
         }
 
-        _loggerService.Info($"OnDataChanged: Parent exists for {PropertyName}, continuing...");
         Parent.CalculateIsDefault();
 
         // Always try to notify for graph sync, regardless of Tab state
@@ -341,7 +336,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         if (Tab is not null)
         {
-            _loggerService.Info($"OnDataChanged: Tab is not null for {PropertyName}, entering Tab logic");
             if (Parent.Data is IRedArray arr)
             {
                 // use PropertyName for now, since Name doesn't always work
@@ -370,7 +364,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 return;
             }
 
-            _loggerService.Info($"OnDataChanged: Not an array, checking parent data type for {PropertyName}");
             var parentData = Parent.Data switch
             {
                 IRedBaseHandle handle => handle.GetValue(),
