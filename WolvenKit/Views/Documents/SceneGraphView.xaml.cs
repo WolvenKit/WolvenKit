@@ -21,15 +21,15 @@ using Splat;
 namespace WolvenKit.Views.Documents
 {
     /// <summary>
-    /// Interaktionslogik für CombinedSceneView.xaml
+    /// Interaktionslogik für SceneGraphView.xaml
     /// </summary>
-    public partial class CombinedSceneView : UserControl
+    public partial class SceneGraphView : UserControl
     {
         // Navigation memory: tracks which child was last visited from each node in each direction
         private readonly Dictionary<(uint nodeId, Key direction), uint> _navigationMemory = new();
         private readonly List<uint> _navigationHistory = new();
 
-        public CombinedSceneView()
+        public SceneGraphView()
         {
             InitializeComponent();
             DataContextChanged += OnDataContextChanged;
@@ -37,7 +37,7 @@ namespace WolvenKit.Views.Documents
 
         private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (e.NewValue is not CombinedSceneViewModel viewModel) return;
+            if (e.NewValue is not SceneGraphViewModel viewModel) return;
 
             viewModel.MainGraph.Connections.CollectionChanged += (_, _) => UpdateConnectionPathTypes(viewModel.MainGraph);
             viewModel.MainGraph.Nodes.CollectionChanged += (_, _) => UpdateConnectionPathTypes(viewModel.MainGraph);
@@ -413,9 +413,9 @@ namespace WolvenKit.Views.Documents
         /// <summary>
         /// Handles keyboard shortcuts for node deletion and navigation
         /// </summary>
-        private void CombinedSceneView_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        private void SceneGraphView_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
-            var viewModel = DataContext as CombinedSceneViewModel;
+            var viewModel = DataContext as SceneGraphViewModel;
             if (viewModel?.MainGraph == null)
                 return;
 

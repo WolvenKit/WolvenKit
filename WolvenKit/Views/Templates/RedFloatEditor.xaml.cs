@@ -54,10 +54,6 @@ namespace WolvenKit.Views.Editors
                 {
                     var oldValue = cvm.Data;
                     var newValue = (CFloat)float.Parse(value);
-                    
-                    // Debug logging
-                    System.Diagnostics.Debug.WriteLine($"RedFloatEditor: Setting {cvm.PropertyName} from {oldValue} to {newValue}");
-                    
                     cvm.Data = newValue;
                 }
                 else

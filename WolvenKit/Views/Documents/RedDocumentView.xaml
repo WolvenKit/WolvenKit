@@ -49,8 +49,8 @@
                 <docV:RDTGraphView2 ViewModel="{Binding}" />
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type docVM:CombinedSceneViewModel}">
-                <docV:CombinedSceneView DataContext="{Binding}" />
+            <DataTemplate DataType="{x:Type docVM:SceneGraphViewModel}">
+                <docV:SceneGraphView DataContext="{Binding}" />
             </DataTemplate>
 
         </Grid.Resources>

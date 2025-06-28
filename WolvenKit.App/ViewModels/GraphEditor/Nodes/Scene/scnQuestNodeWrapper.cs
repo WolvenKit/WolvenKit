@@ -216,7 +216,7 @@ public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
             
             // Get the scene resource from our parent document if possible
             scnSceneResource? sceneResource = null;
-            if (DocumentViewModel?.SelectedTabItemViewModel is CombinedSceneViewModel combinedScene)
+            if (DocumentViewModel?.SelectedTabItemViewModel is SceneGraphViewModel combinedScene)
             {
                 sceneResource = combinedScene.RDTViewModel.GetData() as scnSceneResource;
             }

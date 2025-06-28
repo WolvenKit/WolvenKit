@@ -56,8 +56,8 @@ namespace WolvenKit.Converters
             
             ChunkViewModel chunkViewModel;
             
-            // If we have a CombinedSceneViewModel, use its RDTViewModel as the tab reference
-            if (currentTab is CombinedSceneViewModel combinedScene)
+            // If we have a SceneGraphViewModel, use its RDTViewModel as the tab reference
+            if (currentTab is SceneGraphViewModel combinedScene)
             {
                 chunkViewModel = factory.ChunkViewModel(redData, combinedScene.RDTViewModel, appViewModel);
             }

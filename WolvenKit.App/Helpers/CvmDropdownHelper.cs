@@ -58,34 +58,26 @@ public abstract class CvmDropdownHelper
         var rootModel = cvm.GetRootModel();
         if (rootModel?.ResolvedData is scnSceneResource sceneFromRoot)
         {
-            System.Diagnostics.Debug.WriteLine($"GetSceneContext: Found scene from root model - {sceneFromRoot.GetType().Name}");
             return sceneFromRoot;
         }
 
-        System.Diagnostics.Debug.WriteLine($"GetSceneContext: Root model is not scnSceneResource, root type: {rootModel?.ResolvedData?.GetType().Name}");
 
         // If that doesn't work, we might be in the graph editor context
         // Try to get the scene from the current document
         try
         {
             var appViewModel = Locator.Current.GetService<App.ViewModels.Shell.AppViewModel>();
-            System.Diagnostics.Debug.WriteLine($"GetSceneContext: AppViewModel available: {appViewModel != null}");
             
             if (appViewModel?.ActiveDocument is RedDocumentViewModel redDoc)
             {
-                System.Diagnostics.Debug.WriteLine($"GetSceneContext: Active document type: {redDoc.GetType().Name}");
-                System.Diagnostics.Debug.WriteLine($"GetSceneContext: Selected tab type: {redDoc.SelectedTabItemViewModel?.GetType().Name}");
-                
-                // Check if we have a CombinedSceneViewModel
-                if (redDoc.SelectedTabItemViewModel is CombinedSceneViewModel combinedScene)
+
+                // Check if we have a SceneGraphViewModel
+                if (redDoc.SelectedTabItemViewModel is SceneGraphViewModel combinedScene)
                 {
-                    System.Diagnostics.Debug.WriteLine("GetSceneContext: Found CombinedSceneViewModel");
                     var sceneRootChunk = combinedScene.RDTViewModel.GetRootChunk();
-                    System.Diagnostics.Debug.WriteLine($"GetSceneContext: CombinedScene root chunk type: {sceneRootChunk?.ResolvedData?.GetType().Name}");
                     
                     if (sceneRootChunk?.ResolvedData is scnSceneResource sceneFromCombined)
                     {
-                        System.Diagnostics.Debug.WriteLine("GetSceneContext: Successfully found scene from CombinedSceneViewModel");
                         return sceneFromCombined;
                     }
                 }
@@ -93,29 +85,20 @@ public abstract class CvmDropdownHelper
                 // Check if we have an RDTDataViewModel with scene data
                 if (redDoc.SelectedTabItemViewModel is RDTDataViewModel rdtTab)
                 {
-                    System.Diagnostics.Debug.WriteLine("GetSceneContext: Found RDTDataViewModel");
                     var rdtRootChunk = rdtTab.GetRootChunk();
-                    System.Diagnostics.Debug.WriteLine($"GetSceneContext: RDT root chunk type: {rdtRootChunk?.ResolvedData?.GetType().Name}");
                     
                     if (rdtRootChunk?.ResolvedData is scnSceneResource sceneFromRdt)
                     {
-                        System.Diagnostics.Debug.WriteLine("GetSceneContext: Successfully found scene from RDTDataViewModel");
                         return sceneFromRdt;
                     }
                 }
-            }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine("GetSceneContext: No active document or not RedDocumentViewModel");
             }
         }
         catch (System.Exception ex)
         {
             // Fallback gracefully if service lookup fails
-            System.Diagnostics.Debug.WriteLine($"GetSceneContext: Exception occurred: {ex.Message}");
+            
         }
-
-        System.Diagnostics.Debug.WriteLine("GetSceneContext: No scene context found");
         return null;
     }
 

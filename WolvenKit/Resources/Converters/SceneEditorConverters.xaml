@@ -17,7 +17,7 @@
     Included Converters:
     - RedTypeToChunkViewModelConverter: Converts RED types to ChunkViewModel for property editing
     - RedTypeToChunkViewModelCollectionConverter: Wraps a single ChunkViewModel in a collection for RedTreeView
-    - PathTypeToThicknessConverter: Maps connection path types to visual thickness
+    - PathTypeToThicknessConverter: Maps connection path types to visual thickness for SceneGraphView
 -->
 <ResourceDictionary 
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"

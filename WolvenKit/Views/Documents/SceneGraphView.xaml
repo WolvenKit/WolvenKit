@@ -1,4 +1,4 @@
-<UserControl x:Class="WolvenKit.Views.Documents.CombinedSceneView"
+<UserControl x:Class="WolvenKit.Views.Documents.SceneGraphView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -14,9 +14,9 @@
              xmlns:nodify="https://miroiu.github.io/nodify"
              xmlns:sceneNodes="clr-namespace:WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;assembly=WolvenKit.App"
              mc:Ignorable="d" 
-             d:DataContext="{d:DesignInstance documents:CombinedSceneViewModel, IsDesignTimeCreatable=False}"
+             d:DataContext="{d:DesignInstance documents:SceneGraphViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="800" d:DesignWidth="1200"
-             PreviewKeyDown="CombinedSceneView_OnPreviewKeyDown">
+             PreviewKeyDown="SceneGraphView_OnPreviewKeyDown">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -137,13 +137,13 @@
 
                                 <!-- RedTreeView bound directly to the filtered ICollectionView -->
                                 <tools:RedTreeView Grid.Column="0" 
-                                                   ItemsSource="{Binding DataContext.SelectedTabContent, RelativeSource={RelativeSource AncestorType={x:Type local:CombinedSceneView}}}"
-                                                   SelectedItem="{Binding DataContext.RDTViewModel.SelectedChunk, RelativeSource={RelativeSource AncestorType={x:Type local:CombinedSceneView}}, Mode=TwoWay}"
-                                                   SelectedItems="{Binding DataContext.RDTViewModel.SelectedChunks, RelativeSource={RelativeSource AncestorType={x:Type local:CombinedSceneView}}, Mode=TwoWay}"/>
+                                                   ItemsSource="{Binding DataContext.SelectedTabContent, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}}"
+                                                   SelectedItem="{Binding DataContext.RDTViewModel.SelectedChunk, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}, Mode=TwoWay}"
+                                                   SelectedItems="{Binding DataContext.RDTViewModel.SelectedChunks, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}, Mode=TwoWay}"/>
                                 
                                 <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch" Background="#FF404040"/>
                                 
-                                <editors:RedTypeView Grid.Column="2" DataContext="{Binding DataContext.RDTViewModel.SelectedChunk, RelativeSource={RelativeSource AncestorType={x:Type local:CombinedSceneView}}}"/>
+                                <editors:RedTypeView Grid.Column="2" DataContext="{Binding DataContext.RDTViewModel.SelectedChunk, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}}"/>
                             </Grid>
                             
                             <!-- Node Properties tab shows our custom selection-driven view -->

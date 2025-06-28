@@ -24,7 +24,7 @@ namespace WolvenKit.App.ViewModels.Documents
         public Func<ChunkViewModel, bool> Filter { get; set; } = _ => false;
     }
 
-    public partial class CombinedSceneViewModel : RedDocumentTabViewModel, IDisposable
+    public partial class SceneGraphViewModel : RedDocumentTabViewModel, IDisposable
     {
         private bool _disposed = false;
 
@@ -43,7 +43,7 @@ namespace WolvenKit.App.ViewModels.Documents
 
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.MainFile;
 
-        public CombinedSceneViewModel(scnSceneResource data, RedDocumentViewModel parent, IChunkViewmodelFactory chunkViewmodelFactory, INodeWrapperFactory nodeWrapperFactory)
+        public SceneGraphViewModel(scnSceneResource data, RedDocumentViewModel parent, IChunkViewmodelFactory chunkViewmodelFactory, INodeWrapperFactory nodeWrapperFactory)
             : base(parent, "Scene Editor")
         {
             var appViewModel = Locator.Current.GetService<AppViewModel>() ?? throw new ArgumentNullException(nameof(AppViewModel));
@@ -171,7 +171,7 @@ namespace WolvenKit.App.ViewModels.Documents
             GC.SuppressFinalize(this);
         }
 
-        ~CombinedSceneViewModel()
+        ~SceneGraphViewModel()
         {
             Dispose(false);
         }
