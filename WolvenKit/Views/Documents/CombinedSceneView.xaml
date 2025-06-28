@@ -15,7 +15,8 @@
              xmlns:sceneNodes="clr-namespace:WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;assembly=WolvenKit.App"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance documents:CombinedSceneViewModel, IsDesignTimeCreatable=False}"
-                          d:DesignHeight="800" d:DesignWidth="1200">
+             d:DesignHeight="800" d:DesignWidth="1200"
+             PreviewKeyDown="CombinedSceneView_OnPreviewKeyDown">
     <UserControl.Resources>
         <Style x:Key="SpacedWolvenKitTabControl" 
                BasedOn="{StaticResource WolvenKitTabControl}"

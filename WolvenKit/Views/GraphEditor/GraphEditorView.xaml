@@ -8,10 +8,30 @@
     xmlns:nodes="clr-namespace:WolvenKit.App.ViewModels.GraphEditor;assembly=WolvenKit.App"
     xmlns:nodify="https://miroiu.github.io/nodify"
     xmlns:scene="clr-namespace:WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;assembly=WolvenKit.App"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     mc:Ignorable="d"
     d:DesignWidth="800"
     d:DesignHeight="450"
     x:Name="uc">
+    <UserControl.Resources>
+        <!-- Style for help/info menu items -->
+        <Style x:Key="HelpMenuItemStyle" TargetType="MenuItem">
+            <Setter Property="Padding" Value="{DynamicResource WolvenKitMarginTiny}" />
+            <Setter Property="Opacity" Value="0.7" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Icon">
+                <Setter.Value>
+                    <iconPacks:PackIconMaterial 
+                        Kind="Information"
+                        Margin="{DynamicResource WolvenKitMarginTiny}"
+                        Width="12"
+                        Height="12"
+                        Foreground="{DynamicResource WolvenKitYellow}"
+                        Opacity="0.7" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <nodify:NodifyEditor
             x:Name="Editor"

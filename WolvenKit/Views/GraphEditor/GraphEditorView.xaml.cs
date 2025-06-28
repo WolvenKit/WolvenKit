@@ -318,41 +318,45 @@ public partial class GraphEditorView : UserControl
             
             if (!(sceneViewModel is scnStartNodeWrapper || sceneViewModel is scnEndNodeWrapper))
             {
+                // Smart delete: if it's already a deletion marker, offer to destroy it completely
+                string deleteLabel = sceneViewModel is scnDeletionMarkerNodeWrapper ? "Destroy Deletion Marker" : "Delete Node";
+                string deleteIcon = sceneViewModel is scnDeletionMarkerNodeWrapper ? "CloseBoxOutline" : "Delete";
+                
                 node.ContextMenu.Items.Add(CreateMenuItem(
-                    "Delete Node",
-                    "Delete",
+                    deleteLabel,
+                    deleteIcon,
                     "WolvenKitRed",
-                    () => Source.ReplaceNodeWithDeletionMarker(sceneViewModel)));
+                    () => {
+                        if (sceneViewModel is scnDeletionMarkerNodeWrapper)
+                        {
+                            // Hard delete for deletion markers
+                            Source.RemoveNode(sceneViewModel);
+                        }
+                        else
+                        {
+                            // Soft delete for normal nodes
+                            Source.ReplaceNodeWithDeletionMarker(sceneViewModel);
+                        }
+                    }));
             }
             
             node.ContextMenu.Items.Add(new Separator());
         }
 
-        node.ContextMenu.Items.Add(CreateMenuItem("Destroy Node", "CloseBoxOutline", "WolvenKitRed", () => Source.RemoveNode(nvm)));
+                node.ContextMenu.Items.Add(CreateMenuItem("Destroy Node", "CloseBoxOutline", "WolvenKitRed", () => Source.RemoveNode(nvm)));
 
+        // Add deletion markers info for scene graphs for now
         if (Source.GraphType == RedGraphType.Scene)
         {
             node.ContextMenu.Items.Add(new Separator());
             
+            // Create help item using XAML-defined style
             var infoItem = new MenuItem
             {
                 Header = "What do these mean?",
-                Padding = (Thickness)Application.Current.Resources["WolvenKitMarginTiny"]!,
-                Opacity = 0.7,
-                FontSize = 11,
+                Style = (Style)Resources["HelpMenuItemStyle"]
             };
             
-            var infoIcon = new IconBox
-            {
-                IconPack = IconPackType.Material,
-                Kind = "Information",
-                Margin = (Thickness)Application.Current.Resources["WolvenKitMarginTiny"]!,
-                Size = 12,
-                Foreground = (Brush)Application.Current.Resources["WolvenKitYellow"]!,
-                Opacity = 0.7
-            };
-            
-            infoItem.Icon = infoIcon;
             infoItem.Click += (_, _) => {
                 try
                 {
@@ -485,6 +489,8 @@ public partial class GraphEditorView : UserControl
             e.Handled = true;
         }
     }
+
+
 
     /// <summary>
     /// Detaches a node by removing all of its input and output connections
