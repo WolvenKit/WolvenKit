@@ -33,6 +33,7 @@ using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
 using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace WolvenKit.App.Scripting;
 
@@ -284,31 +285,28 @@ public class AppScriptFunctions : ScriptFunctions
     }
 
     /// <summary>
-    /// Retrieves a list of files from the project
+    /// Retrieves a stringified list of project files. Pass this to TypeHelper.ParseJson to avoid [object Object] issues.
     /// </summary>
-    /// <param name="folderType">string parameter folderType = "archive" or "raw"</param>
-    /// <returns></returns>
-    public List<string> GetProjectFiles(string folderType)
+    /// <param name="folderType">string parameter folderType = "archive", "resources", or "raw"</param>
+    public string GetProjectFiles(string folderType)
     {
-        var result = new List<string>();
+        // this used to be List<string>, but deserializing that would result in [object Object] in the wscript layer.
+        // Not sure why this happens and why we never ran into it, but this works at least...
+        List<string> result = [];
 
         if (_projectManager.ActiveProject == null)
         {
             _loggerService.Error("No project loaded");
-            return result;
+            return JsonSerializer.Serialize(result.ToArray());
         }
 
-        if (GetBaseFolder(folderType) is not string baseFolder)
+        if (GetBaseFolder(folderType) is string baseFolder)
         {
-            return result;
+            result.AddRange(Directory.GetFiles(baseFolder, "*.*", SearchOption.AllDirectories)
+                .Select(file => Path.GetRelativePath(baseFolder, file)));
         }
 
-        foreach (var file in Directory.GetFiles(baseFolder, "*.*", SearchOption.AllDirectories))
-        {
-            result.Add(Path.GetRelativePath(baseFolder, file));
-        }
-
-        return result;
+        return JsonSerializer.Serialize(result.ToArray());
     }
 
     private string? GetBaseFolder(string folderType)
