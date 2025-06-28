@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -61,6 +62,8 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
     private readonly ScriptFileViewModel? _fileValidationScript;
     private readonly ScriptFileViewModel? _entSpawnerImportScript;
 
+    private static readonly string[] s_ignoredExtensions = { ".xbm", ".mlmask", };
+
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private async Task RunFileValidationOnProject()
     {
@@ -88,10 +91,24 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             txtFilesInResources.ForEach(f => _loggerService.Warning($"\t{f}"));
         }
 
-        var filesToValidate = projArchive.Files.Values.Where(f => f.Extension is not ".xbm" and not ".mlmask").ToList();
+        var filesToValidate = projArchive.Files.Values
+            .Where(f => !s_ignoredExtensions.Contains(f.Extension.ToLower()))
+            .Where(f => !string.IsNullOrEmpty(
+                Path.GetExtension(f.FileName.Replace(".json", "")))) // no double extensions
+            .ToList();
+
+        var resourceFilesToValidate = ActiveProject.ResourceFiles.Where(f => f.EndsWith(".xl")).ToList();
+
+        var totalFileCount = filesToValidate.Count + resourceFilesToValidate.Count;
+
+        if (totalFileCount == 0)
+        {
+            _loggerService.Info("No files to validate - you're funny!");
+            return;
+        }
         
         var result = Interactions.ShowConfirmation((
-            $"This will analyse {filesToValidate.Count} files. This can take up to several minutes. Do you want to proceed?",
+            $"This will analyse {totalFileCount} files. This can take up to several minutes. Do you want to proceed?",
             "Really run file validation?",
             WMessageBoxImage.Question,
             WMessageBoxButtons.YesNo));
