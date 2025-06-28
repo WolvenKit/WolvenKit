@@ -230,12 +230,10 @@ public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
                     tempDetails[kvp.Key] = kvp.Value;
                 }
                 
-                loggerService?.Info($"scnQuestNode {UniqueId}: Refreshed quest node details, found {questNodeDetails.Count} properties");
             }
             else
             {
                 tempDetails["Type"] = "Quest";
-                loggerService?.Info($"scnQuestNode {UniqueId}: No nested quest node found");
             }
             
             // Set the new details dictionary to trigger UI update

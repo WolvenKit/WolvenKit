@@ -92,6 +92,151 @@ public partial class RedGraph
         return sceneGraphNode;
     }
 
+    /// <summary>
+    /// Replace a node with a deletion marker node that preserves all connections
+    /// </summary>
+    /// <param name="node">The node to replace with a deletion marker</param>
+    public void ReplaceNodeWithDeletionMarker(BaseSceneViewModel node)
+    {
+        if (_data is not scnSceneResource sceneResource)
+        {
+            _loggerService?.Error("Cannot replace node with deletion marker: not a scene resource");
+            return;
+        }
+
+        if (node.Data is scnDeletionMarkerNode)
+        {
+            _loggerService?.Warning("Cannot replace a deletion marker with another deletion marker");
+            return;
+        }
+
+        // 1. Create a deletion marker node with the same ID as the node being replaced
+        var deletionMarker = new scnDeletionMarkerNode();
+        deletionMarker.NodeId.Id = node.UniqueId;
+
+        // 2. Match output sockets count with the original node to maintain connections
+        while (deletionMarker.OutputSockets.Count < (node.Data as scnSceneGraphNode)?.OutputSockets.Count)
+        {
+            deletionMarker.OutputSockets.Add(new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = (ushort)deletionMarker.OutputSockets.Count, Ordinal = 0 } });
+        }
+
+        // 3. Copy all the destination connections to the marker node
+        for (int i = 0; i < deletionMarker.OutputSockets.Count && i < (node.Data as scnSceneGraphNode)?.OutputSockets.Count; i++)
+        {
+            var originalSocket = (node.Data as scnSceneGraphNode)?.OutputSockets[i];
+            if (originalSocket != null)
+            {
+                foreach (var destination in originalSocket.Destinations)
+                {
+                    deletionMarker.OutputSockets[i].Destinations.Add(destination);
+                }
+            }
+        }
+
+        // 4. Create a node wrapper for the deletion marker
+        var markerWrapper = new scnDeletionMarkerNodeWrapper(deletionMarker);
+        markerWrapper.Location = node.Location;
+        markerWrapper.DocumentViewModel = DocumentViewModel;
+
+        // 5. Find source connections to this node to preserve incoming connections
+        var incomingConnections = new List<(SceneOutputConnectorViewModel source, SceneInputConnectorViewModel target)>();
+        foreach (var connection in Connections.OfType<SceneConnectionViewModel>())
+        {
+            if (connection.Target.OwnerId == node.UniqueId)
+            {
+                incomingConnections.Add(((SceneOutputConnectorViewModel)connection.Source, (SceneInputConnectorViewModel)connection.Target));
+            }
+        }
+
+        // 6. Remove the original node from the graph data
+        var graph = sceneResource.SceneGraph.Chunk?.Graph;
+        if (graph != null)
+        {
+            for (var i = graph.Count - 1; i >= 0; i--)
+            {
+                if (ReferenceEquals(graph[i].Chunk, node.Data))
+                {
+                    graph.RemoveAt(i);
+                }
+            }
+
+            // 7. Add the deletion marker node to the graph data
+            graph.Add(new CHandle<scnSceneGraphNode>(deletionMarker));
+        }
+        else
+        {
+            _loggerService?.Error("Cannot replace node with deletion marker: scene graph is null");
+            return;
+        }
+
+        // 8. Generate input sockets based on incoming connections
+        markerWrapper.GenerateSockets();
+        
+        // Add enough input sockets for all incoming connections
+        var maxOrdinal = incomingConnections.Count > 0 ? 
+            incomingConnections.Max(c => c.target.Ordinal) : 
+            0;
+            
+        while (markerWrapper.Input.Count <= maxOrdinal)
+        {
+            markerWrapper.AddInput();
+        }
+
+        // 9. Remove the original node from UI
+        Nodes.Remove(node);
+        
+        // 10. Add the deletion marker wrapper to UI
+        Nodes.Add(markerWrapper);
+        
+        // 11. Recreate connections
+        Connections.Clear();  // Clear all UI connections
+        
+        // Rebuild all connections
+        foreach (var nodeViewModel in Nodes)
+        {
+            if (nodeViewModel is BaseSceneViewModel sceneNodeViewModel)
+            {
+                foreach (var output in sceneNodeViewModel.Output.OfType<SceneOutputConnectorViewModel>())
+                {
+                    foreach (var destination in output.Data.Destinations)
+                    {
+                        if (destination.NodeId == null) continue;
+                        
+                        var targetNode = Nodes.FirstOrDefault(n => n is BaseSceneViewModel && (n as BaseSceneViewModel)?.UniqueId == destination.NodeId.Id) as BaseSceneViewModel;
+                        if (targetNode != null)
+                        {
+                            int socketIndex;
+                            if (targetNode is scnQuestNodeWrapper)
+                            {
+                                socketIndex = destination.IsockStamp.Ordinal;
+                            }
+                            else
+                            {
+                                socketIndex = destination.IsockStamp.Name;
+                            }
+
+                            if (socketIndex < targetNode.Input.Count)
+                            {
+                                Connections.Add(new SceneConnectionViewModel(output, targetNode.Input[socketIndex]));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        // 12. Update properties in the nodes collection
+        if (GetSceneNodesChunkViewModel() is { } nodes)
+        {
+            nodes.RecalculateProperties();
+        }
+        
+        // Mark document as dirty since we modified the graph
+        DocumentViewModel?.SetIsDirty(true);
+        
+        _loggerService?.Info($"Replaced node {node.UniqueId} with a deletion marker");
+    }
+
     private void RemoveSceneNode(BaseSceneViewModel node)
     {
         foreach (var inputConnectorViewModel in node.Input)
@@ -274,7 +419,11 @@ public partial class RedGraph
             Connections.RemoveAt(i);
             RefreshCVM(sceneSource.Data);
             
-            // Notify UI to refresh affected nodes
+            // Invalidate converter cache for affected nodes to force ChunkViewModel regeneration
+            InvalidateConverterCacheForNode(sceneSource.OwnerId);
+            InvalidateConverterCacheForNode(sceneTarget.OwnerId);
+            
+            // Restore general property sync (but don't let it regenerate sockets)
             NotifyNodesUpdated(sceneSource.OwnerId, sceneTarget.OwnerId);
             
             // Mark document as dirty since we modified connections
@@ -316,11 +465,15 @@ public partial class RedGraph
         Connections.Add(new SceneConnectionViewModel(sceneSource, sceneTarget));
         RefreshCVM(sceneSource.Data);
         
-                    // Notify UI to refresh affected nodes
-            NotifyNodesUpdated(sceneSource.OwnerId, sceneTarget.OwnerId);
-            
-            // Mark document as dirty since we modified connections
-            DocumentViewModel?.SetIsDirty(true);
+        // Invalidate converter cache for affected nodes to force ChunkViewModel regeneration
+        InvalidateConverterCacheForNode(sceneSource.OwnerId);
+        InvalidateConverterCacheForNode(sceneTarget.OwnerId);
+        
+        // Restore general property sync (but don't let it regenerate sockets)
+        NotifyNodesUpdated(sceneSource.OwnerId, sceneTarget.OwnerId);
+        
+        // Mark document as dirty since we modified connections
+        DocumentViewModel?.SetIsDirty(true);
     }
 
     private void UpdateTargetNode(SceneInputConnectorViewModel sceneTarget)
@@ -332,7 +485,9 @@ public partial class RedGraph
             {
                 foreach (var destination in output.Data.Destinations)
                 {
-                    if (destination.NodeId.Id == sceneTarget.OwnerId && node.Output.Count > 0)
+                    if (destination.NodeId != null && 
+                        destination.NodeId.Id == sceneTarget.OwnerId && 
+                        node.Output.Count > 0)
                     {
                         sceneTarget.IsConnected = true;
                         return;
@@ -351,19 +506,27 @@ public partial class RedGraph
             nodes.ForceLoadPropertiesRecursive();
             
             var list = new List<ChunkViewModel>();
-            foreach (var property in nodes.GetAllProperties())
+            foreach (var cvm in nodes.GetAllProperties())
             {
-                if (ReferenceEquals(property.Data, socket.Destinations))
+                if (ReferenceEquals(cvm.Data, socket.Destinations))
                 {
-                    list.Add(property.Parent!);
+                    list.Add(cvm);                   // the destinations array itself
+                    list.AddRange(cvm.Properties);   // its existing children
+                    if (cvm.Parent != null) list.Add(cvm.Parent);
                 }
             }
 
-            foreach (var model in list)
+            foreach (var model in list.Distinct())
             {
+                // --- begin enhanced refresh logic for expanded destinations ---
                 model.RecalculateProperties();
+                // Ensure already expanded branches refresh their children
+                model.ForceLoadPropertiesRecursive();
+
+                // Raise change notifications so WPF rebinds visible TreeViewItems
                 model.NotifyChain(nameof(model.Properties));
-                model.NotifyChain(nameof(model.TVProperties)); // Force UI to rebind to updated Properties
+                model.NotifyChain(nameof(model.TVProperties));
+                // --- end enhanced refresh logic ---
             }
 
             // Additionally refresh the root nodes collection to ensure UI picks up structural changes
@@ -503,7 +666,7 @@ public partial class RedGraph
     private void RemoveSceneConnection(SceneConnectionViewModel sceneConnection)
     {
         var sceneSource = (SceneOutputConnectorViewModel)sceneConnection.Source;
-        var sceneDestination = sceneSource.Data.Destinations.FirstOrDefault(x => x.NodeId.Id == sceneConnection.Target.OwnerId);
+        var sceneDestination = sceneSource.Data.Destinations.FirstOrDefault(x => x.NodeId != null && x.NodeId.Id == sceneConnection.Target.OwnerId);
 
         if (sceneDestination != null)
         {
@@ -530,7 +693,11 @@ public partial class RedGraph
             Connections.Remove(sceneConnection);
             RefreshCVM(sceneSource.Data);
             
-            // Notify UI to refresh affected nodes
+            // Invalidate converter cache for affected nodes to force ChunkViewModel regeneration
+            InvalidateConverterCacheForNode(sceneSource.OwnerId);
+            InvalidateConverterCacheForNode(((SceneInputConnectorViewModel)sceneConnection.Target).OwnerId);
+            
+            // Restore general property sync (but don't let it regenerate sockets)
             NotifyNodesUpdated(sceneSource.OwnerId, ((SceneInputConnectorViewModel)sceneConnection.Target).OwnerId);
             
             // Mark document as dirty since we modified connections
@@ -721,4 +888,25 @@ public partial class RedGraph
 
         return graph;
     }
+
+    /// <summary>
+    /// Invalidates the RedTypeToChunkViewModelCollectionConverter cache for a specific node
+    /// to force regeneration of its ChunkViewModel when destinations change.
+    /// </summary>
+    /// <param name="nodeId">UniqueId of the node to invalidate</param>
+    private void InvalidateConverterCacheForNode(uint nodeId)
+    {
+        var node = Nodes.FirstOrDefault(n => n.UniqueId == nodeId);
+        if (node?.Data != null)
+        {
+            // Use the converter cache service to invalidate the cache for this node
+            var cacheService = new ConverterCacheService();
+            cacheService.InvalidateConverterCache((RedBaseClass)node.Data);
+            
+            // Trigger Data property change to force UI refresh
+            node.TriggerPropertyChanged(nameof(node.Data));
+        }
+    }
+
+
 }

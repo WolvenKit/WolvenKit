@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Diagnostics;
 using ReactiveUI;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Helpers;
@@ -45,5 +46,18 @@ public partial class TypeSelectorDialog : ReactiveUserControl<TypeSelectorDialog
             this.BindCommand(ViewModel, x => x.CancelCommand, x => x.CancelButton)
                 .DisposeWith(disposables);
         });
+    }
+
+    private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+    {
+        try
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri) { UseShellExecute = true });
+        }
+        catch (Exception)
+        {
+            // Silently handle any exceptions when opening the link
+        }
+        e.Handled = true;
     }
 }

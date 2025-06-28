@@ -90,6 +90,13 @@ public class scnRandomizerNodeWrapper : BaseSceneViewModel<scnRandomizerNode>, I
 
         _castedData.NumOutSockets = (uint)Output.Count;
 
+        // SOCKET SYNC FIX: Subscribe to destination changes for property panel sync
+        SubscribeToSocketDestinations(output);
+
+        // SYNC FIX: Update property panel and graph editor without regenerating connectors
+        TriggerPropertyChanged(nameof(Output));
+        OnPropertyChanged(nameof(Data));
+
         return output;
     }
 

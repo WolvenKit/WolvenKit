@@ -10,6 +10,8 @@ using WolvenKit.App.Factories;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
+using System.Diagnostics;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Converters
 {
@@ -18,15 +20,25 @@ namespace WolvenKit.Converters
     /// </summary>
     public class RedTypeToChunkViewModelCollectionConverter : IValueConverter
     {
-        private readonly ConditionalWeakTable<RedBaseClass, List<ChunkViewModel>> _cache = new();
+        private static ILoggerService? s_loggerService;
+        private static ILoggerService? LoggerService => s_loggerService ??= Locator.Current.GetService<ILoggerService>();
+        
+        /// <summary>
+        /// Global cache shared across all converter instances
+        /// </summary>
+        private static readonly ConditionalWeakTable<RedBaseClass, List<ChunkViewModel>> s_globalCache = new();
         
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value is not RedBaseClass redData)
+            {
                 return null;
+            }
 
-            // Use cache to avoid creating new ChunkViewModel on every selection change
-            return _cache.GetValue(redData, CreateChunkViewModelCollection);
+            // Use global cache to avoid creating new ChunkViewModel on every selection change
+            var result = s_globalCache.GetValue(redData, CreateChunkViewModelCollection);
+            
+            return result;
         }
 
         private List<ChunkViewModel> CreateChunkViewModelCollection(RedBaseClass redData)
@@ -129,6 +141,8 @@ namespace WolvenKit.Converters
                 }
             }
         }
+
+
 
         public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {

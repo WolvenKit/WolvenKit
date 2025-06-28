@@ -135,6 +135,27 @@ public abstract class BaseSceneViewModel : NodeViewModel, IRefreshableDetails
             _ => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#11444444")) // Very subtle default gray tint
         };
     }
+
+    /// <summary>
+    /// Override RefreshFromData to avoid regenerating sockets unnecessarily
+    /// Socket counts are unchanged when connections are made/removed
+    /// </summary>
+    public override void RefreshFromData()
+    {
+        UpdateTitle();
+        OnPropertyChanged(nameof(Title));
+
+        // DON'T regenerate sockets here – counts are unchanged
+        TriggerPropertyChanged(nameof(Output));
+        TriggerPropertyChanged(nameof(Input));
+        OnPropertyChanged(nameof(Data));
+        
+        // Refresh details if implemented by derived class (this is important for property sync)
+        if (this is IRefreshableDetails refreshable)
+        {
+            refreshable.RefreshDetails();
+        }
+    }
 }
 
 public abstract class BaseSceneViewModel<T> : BaseSceneViewModel where T : scnSceneGraphNode

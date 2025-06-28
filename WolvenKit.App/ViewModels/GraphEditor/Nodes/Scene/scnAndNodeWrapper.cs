@@ -30,6 +30,10 @@ public class scnAndNodeWrapper : BaseSceneViewModel<scnAndNode>, IDynamicInputNo
         Input.Add(input);
         _castedData.NumInSockets++;
 
+        // SYNC FIX: Update property panel and graph editor without regenerating connectors
+        TriggerPropertyChanged(nameof(Input));
+        OnPropertyChanged(nameof(Data));
+
         return input;
     }
 
@@ -37,5 +41,9 @@ public class scnAndNodeWrapper : BaseSceneViewModel<scnAndNode>, IDynamicInputNo
     {
         Input.Remove(Input[^1]);
         _castedData.NumInSockets--;
+        
+        // SYNC FIX: Update property panel and graph editor without regenerating connectors
+        TriggerPropertyChanged(nameof(Input));
+        OnPropertyChanged(nameof(Data));
     }
 }

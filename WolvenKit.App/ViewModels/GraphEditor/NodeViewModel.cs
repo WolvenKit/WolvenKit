@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Splat;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
 using Point = System.Windows.Point;
@@ -95,10 +98,10 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
                 break;
                 
             case "OutputSockets" or "InputSockets":
-                // Regenerate sockets when socket arrays change
-                GenerateSockets();
-                TriggerPropertyChanged(nameof(Output));
-                TriggerPropertyChanged(nameof(Input));
+                // SOCKET SYNC FIX: We no longer regenerate sockets here because:
+                // 1. Socket count changes are handled manually in Add*/Remove* methods
+                // 2. Destination changes are handled by direct socket subscription 
+                // 3. Regenerating here breaks UI connections unnecessarily
                 break;
                 
             default:
@@ -151,6 +154,24 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
     public void TriggerPropertyChanged(string propertyName)
     {
         OnPropertyChanged(propertyName);
+    }
+
+    /// <summary>
+    /// Triggers property change notifications to sync with the Node Properties panel
+    /// and refresh the Graph Editor collections without regenerating connectors.
+    /// </summary>
+    /// <param name="propertyName">Name of the property that changed on the Data object</param>
+    protected void TriggerDataPropertyChanged(string propertyName)
+    {
+        // Refresh the property panel by notifying that the Data reference changed
+        OnPropertyChanged(nameof(Data));
+        
+        // Refresh the Graph Editor collections for socket-related changes
+        if (propertyName is "OutputSockets" or "InputSockets")
+        {
+            TriggerPropertyChanged(nameof(Output));
+            TriggerPropertyChanged(nameof(Input));
+        }
     }
 
     private void OnNodePropertyUpdated(object? sender, NodePropertyUpdatedEventArgs e)
@@ -212,6 +233,15 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
                     notifyPropertyChanging.PropertyChanging -= DataOnPropertyChanging;
                 }
                 
+                // Unsubscribe from socket destination changes
+                foreach (var output in Output.OfType<SceneOutputConnectorViewModel>())
+                {
+                    if (output.Data.Destinations is INotifyCollectionChanged notifyCollection)
+                    {
+                        notifyCollection.CollectionChanged -= OnSocketDestinationsChanged;
+                    }
+                }
+                
                 // Unsubscribe from property update service
                 NodePropertyUpdateService.NodePropertyUpdated -= OnNodePropertyUpdated;
             }
@@ -221,4 +251,33 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
     }
 
     #endregion IDisposable
+
+    /// <summary>
+    /// Subscribes to destination changes on output sockets to update the property panel
+    /// without regenerating connectors
+    /// </summary>
+    protected void SubscribeToSocketDestinations(OutputConnectorViewModel connector)
+    {
+        if (connector is SceneOutputConnectorViewModel sceneConnector)
+        {
+            var socket = sceneConnector.Data;
+            
+            // Check if the destinations collection supports change notifications
+            if (socket.Destinations is INotifyCollectionChanged notifyCollection)
+            {
+                // Unsubscribe first to avoid duplicates
+                notifyCollection.CollectionChanged -= OnSocketDestinationsChanged;
+                notifyCollection.CollectionChanged += OnSocketDestinationsChanged;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Handles destination changes for individual sockets
+    /// </summary>
+    private void OnSocketDestinationsChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {        
+        // Only refresh the property panel, don't regenerate connectors
+        OnPropertyChanged(nameof(Data));
+    }
 }

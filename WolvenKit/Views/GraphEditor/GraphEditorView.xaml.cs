@@ -278,7 +278,7 @@ public partial class GraphEditorView : UserControl
         if (node.DataContext is IDynamicOutputNode dynamicOutputNode)
         {
             // Check if it's a section node for specific labeling
-            string addLabel = dynamicOutputNode is scnSectionNodeWrapper ? "Add Event" : "Add Output";
+            string addLabel = dynamicOutputNode is scnSectionNodeWrapper ? "Add Event Socket" : "Add Output";
             
             node.ContextMenu.Items.Add(CreateMenuItem(addLabel, "PlusCircle", () => dynamicOutputNode.AddOutput()));
             node.ContextMenu.Items.Add(new Separator());
@@ -305,14 +305,73 @@ public partial class GraphEditorView : UserControl
                 () => sceneNode.AddSceneToProject()));
             node.ContextMenu.Items.Add(new Separator());
         }
-
+        
         node.ContextMenu.Items.Add(CreateMenuItem("Duplicate Node", "ContentDuplicate", "WolvenKitYellow", () => Source.DuplicateNode(nvm)));
-        node.ContextMenu.Items.Add(CreateMenuItem("Remove Node", "Delete", "WolvenKitRed", () => Source.RemoveNode(nvm)));
+
+        if (Source.GraphType == RedGraphType.Scene && node.DataContext is BaseSceneViewModel sceneViewModel)
+        {
+            node.ContextMenu.Items.Add(CreateMenuItem(
+                "Detach Node",
+                "LinkOff",
+                "WolvenKitYellow",
+                () => DetachNode(sceneViewModel)));
+            
+            if (!(sceneViewModel is scnStartNodeWrapper || sceneViewModel is scnEndNodeWrapper))
+            {
+                node.ContextMenu.Items.Add(CreateMenuItem(
+                    "Delete Node",
+                    "Delete",
+                    "WolvenKitRed",
+                    () => Source.ReplaceNodeWithDeletionMarker(sceneViewModel)));
+            }
+            
+            node.ContextMenu.Items.Add(new Separator());
+        }
+
+        node.ContextMenu.Items.Add(CreateMenuItem("Destroy Node", "CloseBoxOutline", "WolvenKitRed", () => Source.RemoveNode(nvm)));
+
+        if (Source.GraphType == RedGraphType.Scene)
+        {
+            node.ContextMenu.Items.Add(new Separator());
+            
+            var infoItem = new MenuItem
+            {
+                Header = "What do these mean?",
+                Padding = (Thickness)Application.Current.Resources["WolvenKitMarginTiny"]!,
+                Opacity = 0.7,
+                FontSize = 11,
+            };
+            
+            var infoIcon = new IconBox
+            {
+                IconPack = IconPackType.Material,
+                Kind = "Information",
+                Margin = (Thickness)Application.Current.Resources["WolvenKitMarginTiny"]!,
+                Size = 12,
+                Foreground = (Brush)Application.Current.Resources["WolvenKitYellow"]!,
+                Opacity = 0.7
+            };
+            
+            infoItem.Icon = infoIcon;
+            infoItem.Click += (_, _) => {
+                try
+                {
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/quest/deletion-markers") { UseShellExecute = true });
+                }
+                catch (Exception)
+                {
+                    // Silently handle any exceptions when opening the link
+                }
+            };
+            
+            node.ContextMenu.Items.Add(infoItem);
+        }
 
         node.ContextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);
 
         e.Handled = true;
     }
+    
 
     private static MenuItem CreateAddMenuItem() => new()
     {
@@ -424,6 +483,41 @@ public partial class GraphEditorView : UserControl
             contextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);
             
             e.Handled = true;
+        }
+    }
+
+    /// <summary>
+    /// Detaches a node by removing all of its input and output connections
+    /// </summary>
+    private void DetachNode(BaseSceneViewModel node)
+    {
+        if (Source == null) return;
+        
+        // Create a list to store all connections that need to be removed
+        var connectionsToRemove = new List<SceneConnectionViewModel>();
+        
+        // Find all connections where this node is the source (output connections)
+        foreach (var connection in Source.Connections.OfType<SceneConnectionViewModel>())
+        {
+            if (connection.Source.OwnerId == node.UniqueId)
+            {
+                connectionsToRemove.Add(connection);
+            }
+        }
+        
+        // Find all connections where this node is the target (input connections)
+        foreach (var connection in Source.Connections.OfType<SceneConnectionViewModel>())
+        {
+            if (connection.Target.OwnerId == node.UniqueId)
+            {
+                connectionsToRemove.Add(connection);
+            }
+        }
+        
+        // Remove all the connections in the list
+        foreach (var connection in connectionsToRemove)
+        {
+            Source.RemoveSceneConnectionPublic(connection);
         }
     }
 }

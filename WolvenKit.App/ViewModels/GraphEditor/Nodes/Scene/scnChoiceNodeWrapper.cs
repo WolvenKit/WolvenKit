@@ -506,6 +506,13 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
         var newConnector = new SceneOutputConnectorViewModel($"Out{insertPosition}", choiceText, UniqueId, newOutputSocket);
         Output.Insert(insertPosition, newConnector);
 
+        // SOCKET SYNC FIX: Subscribe to destination changes for property panel sync
+        SubscribeToSocketDestinations(newConnector);
+
+        // SYNC FIX: Update property panel and graph editor without regenerating connectors
+        TriggerPropertyChanged(nameof(Output));
+        OnPropertyChanged(nameof(Data));
+
         // Mark document as dirty
         DocumentViewModel?.SetIsDirty(true);
     }

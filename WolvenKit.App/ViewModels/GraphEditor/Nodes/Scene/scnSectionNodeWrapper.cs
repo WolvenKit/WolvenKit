@@ -635,7 +635,7 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>, IDynami
     }
 
     internal override void GenerateSockets()
-    {
+    {        
         Input.Clear();
         Input.Add(new SceneInputConnectorViewModel("In", "In", UniqueId, 0));
         Input.Add(new SceneInputConnectorViewModel("CutDestination", "CutDestination", UniqueId, 1));
@@ -649,6 +649,9 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>, IDynami
             // Restore subtitle with coordinates for technical reference
             connectorVM.Subtitle = $"({socket.Stamp.Name},{socket.Stamp.Ordinal})";
             Output.Add(connectorVM);
+            
+            // Subscribe to destination changes for property panel sync
+            SubscribeToSocketDestinations(connectorVM);
         }
     }
     
@@ -740,6 +743,13 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>, IDynami
         output.Subtitle = $"({newName},{newOrdinal})";
         Output.Add(output);
 
+        // Subscribe to destination changes for property panel sync
+        SubscribeToSocketDestinations(output);
+
+        // Update property panel and graph editor without regenerating connectors
+        TriggerPropertyChanged(nameof(Output));
+        OnPropertyChanged(nameof(Data));
+
         // Mark document as dirty
         DocumentViewModel?.SetIsDirty(true);
 
@@ -747,7 +757,7 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>, IDynami
     }
 
     public void RemoveOutput()
-    {
+    {        
         if (_castedData.OutputSockets.Count > 2) // Keep at least OnEnd and OnCut
         {
             var lastSocket = _castedData.OutputSockets[^1];
@@ -757,6 +767,10 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>, IDynami
             {
                 _castedData.OutputSockets.RemoveAt(_castedData.OutputSockets.Count - 1);
                 Output.RemoveAt(Output.Count - 1);
+                                
+                // Update property panel and graph editor without regenerating connectors
+                TriggerPropertyChanged(nameof(Output));
+                OnPropertyChanged(nameof(Data));
                 
                 // Mark document as dirty
                 DocumentViewModel?.SetIsDirty(true);
