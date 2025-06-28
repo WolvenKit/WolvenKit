@@ -161,6 +161,19 @@ namespace WolvenKit.Views.Tools
                     return innerVm.Text;
                 };
 
+                Interactions.AskForDropdownOption = (args) =>
+                {
+                    var dialog = new SelectDropdownEntryWindow(args.Item1, args.Item2, args.Item3);
+
+                    if (dialog.ViewModel is not SelectDropdownEntryDialogViewModel innerVm
+                        || dialog.ShowDialog(Application.Current.MainWindow) != true)
+                    {
+                        return "";
+                    }
+
+                    return innerVm.SelectedOption;
+                };
+
                 //EventBindings
                 Observable
                     .FromEventPattern(TreeGrid, nameof(TreeGrid.CellDoubleTapped))
