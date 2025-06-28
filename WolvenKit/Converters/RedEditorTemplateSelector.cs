@@ -20,6 +20,7 @@ namespace WolvenKit.Converters
         public DataTemplate RedColorEditor { get; set; }
         public DataTemplate RedVectorColorEditor { get; set; }
         public DataTemplate FilterableDropdownCNameEditor { get; set; }
+        public DataTemplate FilterableDropdownRedstringEditor { get; set; }
         public DataTemplate FilterableDropdownRedRefEditor { get; set; }
         public DataTemplate RedColorPicker { get; set; }
         public DataTemplate RedCurveEditor { get; set; }
@@ -65,7 +66,12 @@ namespace WolvenKit.Converters
 
             if (vm.PropertyType.IsAssignableTo(typeof(CString)))
             {
-                return RedStringEditor;
+                if (!CvmDropdownHelper.HasDropdownOptions(vm))
+                {
+                    return RedStringEditor;
+                }
+
+                return FilterableDropdownRedstringEditor;
             }
 
             if (vm.PropertyType.IsAssignableTo(typeof(CName)))
