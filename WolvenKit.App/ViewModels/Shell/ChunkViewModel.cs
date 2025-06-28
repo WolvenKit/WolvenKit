@@ -1519,9 +1519,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         var numSubmeshes = blob.Header.RenderChunkInfos.Count;
         var wasDeleted = false;
         var wasAdded = false;
-        foreach (var meshAppearance in mesh.Appearances)
+        foreach (var appearance in mesh.Appearances.Select(a => a.GetValue()).OfType<meshMeshAppearance>())
         {
-            if (meshAppearance.GetValue() is not meshMeshAppearance appearance || appearance.ChunkMaterials.Count == numSubmeshes)
+            if (appearance.ChunkMaterials.Count == numSubmeshes || appearance.ChunkMaterials.Count == 0)
             {
                 continue;
             }
@@ -1561,23 +1561,16 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         int GetIndexOfFirstNonRepeatingMaterial(List<string> materials)
         {
-            int numMaterials = materials.Count;
+            var numMaterials = materials.Count;
 
             var materialCounts = new Dictionary<string, int>();
-            foreach (var material in materials)
+            foreach (var material in materials.Where(material => !materialCounts.TryAdd(material, 1)))
             {
-                if (materialCounts.ContainsKey(material))
-                {
-                    materialCounts[material]++;
-                }
-                else
-                {
-                    materialCounts[material] = 1;
-                }
+                materialCounts[material]++;
             }
 
-            int startIndex = 0;
-            for (int i = 0; i < numMaterials; i++)
+            var startIndex = 0;
+            for (var i = 0; i < numMaterials; i++)
             {
                 if (materialCounts[materials[i]] != 1)
                 {
