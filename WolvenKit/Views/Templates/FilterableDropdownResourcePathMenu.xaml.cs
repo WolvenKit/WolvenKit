@@ -65,7 +65,7 @@ namespace WolvenKit.Views.Editors
 
                 SetDropdownValueFromCvm();
 
-                if (string.IsNullOrEmpty(SelectedOption) && Options.Count == 1 &&
+                if (!IsExcludedFromAutoPopulation(vm) && string.IsNullOrEmpty(SelectedOption) && Options.Count == 1 &&
                     (redRef.DepotPath == ResourcePath.Empty ||
                      string.IsNullOrEmpty(redRef.DepotPath.GetResolvedText())))
                 {
@@ -258,6 +258,24 @@ namespace WolvenKit.Views.Editors
             SetCurrentValue(OptionsProperty,
                 CvmDropdownHelper.GetDropdownOptions(vm, _documentTools, true));
             RecalculateFilteredOptions();
+        }
+        
+        public static bool IsExcludedFromAutoPopulation(ChunkViewModel cvm)
+        {
+            if (cvm.GetRootModel() is not ChunkViewModel rootModel)
+            {
+                return false;
+            }
+
+            switch (rootModel.ResolvedData)
+            {
+                case questQuestPhaseResource:
+                    return true;
+                case scnSceneResource:
+                    return true;
+                default:
+                    return false;
+            } 
         }
     }
 }

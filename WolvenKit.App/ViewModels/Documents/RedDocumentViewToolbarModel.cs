@@ -446,8 +446,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             && FilePath?.RelativePath(new DirectoryInfo(modDir)) is string activeFilePath
             && Path.GetDirectoryName(activeFilePath) is string dirName && !string.IsNullOrEmpty(dirName))
         {
-            // we're in a .mi file
-            if (!useTextureSubfolder)
+            if (!useTextureSubfolder || dirName.Contains("textures"))
             {
                 destFolder = dirName;
             }
@@ -460,7 +459,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             {
                 // if the folder contains more than one .mesh file, add a subdirectory inside "textures"
                 var fileName = Path.GetFileName(CurrentTab.FilePath.Split('.').FirstOrDefault() ?? "").ToFileName();
-                destFolder = Path.Combine(dirName, "textures", fileName);
+                destFolder = Path.Combine(dirName, fileName);
             }
         }
 

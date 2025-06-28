@@ -2,6 +2,7 @@
 using System.Linq;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Documents;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 using Splat;
 
@@ -94,10 +95,9 @@ public abstract class CvmDropdownHelper
                 }
             }
         }
-        catch (System.Exception ex)
+        catch (System.Exception)
         {
             // Fallback gracefully if service lookup fails
-            
         }
         return null;
     }
@@ -160,6 +160,24 @@ public abstract class CvmDropdownHelper
                 break;
             #endregion
 
+            #region questPhaseFile
+            case graphGraphNodeDefinition:
+                switch (cvm.Name)
+                {
+                    case "phaseResource":
+                        ret = documentTools.CollectProjectFiles(".questphase");
+                        break;
+                    case "sceneFile":
+                        ret = documentTools.CollectProjectFiles(".scene");
+                        break;
+                    default:
+                        break;
+                } 
+                break;
+                
+            #endregion
+            
+            
             #region iComponent
 
             // mesh entity options
@@ -632,7 +650,7 @@ public abstract class CvmDropdownHelper
             appearanceAppearanceResource when cvm.Name is not null && s_appearanceNames.Contains(cvm.Name) => true,
             IRedRef when cvm.Name is "resource" && cvm.Parent?.ResolvedData is appearanceAppearancePart => true,
             #endregion
-
+    
             // tags: ent and app
             IRedArray<CName> when parent is { Name: "tags", Parent.ResolvedData: redTagList } => true,
 
@@ -660,6 +678,10 @@ public abstract class CvmDropdownHelper
             // scnDynamicAnimSetSRRefId.Id dropdown
             scnDynamicAnimSetSRRefId when cvm.Name == "id" && GetSceneContext(cvm) != null => true,
 
+            
+            #region questPhase
+            graphGraphNodeDefinition when cvm.Name is ("phaseResource" or "sceneFile") => true,
+            #endregion
             _ => false
         };
     }

@@ -14,7 +14,7 @@ public partial class AddInkatlasDialog : IViewFor<AddInkatlasDialogViewModel>
 {
     private static string s_lastSourceFolder = "";
     private static string s_lastRelativePath = "";
-    private static string s_lastFileName = "inkatlas";
+    private static string s_lastFileName = "";
     private static int s_lastTileWidth = 0;
     private static int s_lastTileHeight = 0;
 
