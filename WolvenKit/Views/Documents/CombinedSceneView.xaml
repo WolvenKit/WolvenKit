@@ -18,6 +18,12 @@
              d:DesignHeight="800" d:DesignWidth="1200"
              PreviewKeyDown="CombinedSceneView_OnPreviewKeyDown">
     <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Merge Scene Editor specific converters -->
+                <ResourceDictionary Source="/WolvenKit;component/Resources/Converters/SceneEditorConverters.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
         <Style x:Key="SpacedWolvenKitTabControl" 
                BasedOn="{StaticResource WolvenKitTabControl}"
                TargetType="{x:Type syncfusion:TabControlExt}">
@@ -33,11 +39,6 @@
             <Setter Property="Padding" Value="12,8,12,8"/>
             <Setter Property="Margin" Value="0,0,2,0"/>
         </Style>
-        
-        <!-- Path Type to Thickness Converter -->
-        <local:PathTypeToThicknessConverter x:Key="PathTypeConverter" 
-                                            ThinThickness="1.5" 
-                                            ThickThickness="3.0" />
         
         <!-- Scene Connection Template with Variable Thickness -->
         <DataTemplate x:Key="SceneConnectionTemplate" DataType="{x:Type sceneNodes:SceneConnectionViewModel}">
@@ -55,7 +56,7 @@
                         <Setter Property="Cursor" Value="Hand" />
                         <Setter Property="Stroke" Value="#33FFFFFF" />
                         <Setter Property="StrokeThickness" 
-                                Value="{Binding PathType, Converter={StaticResource PathTypeConverter}}" />
+                                Value="{Binding PathType, Converter={StaticResource PathTypeToThicknessConverter}}" />
 
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
@@ -70,7 +71,7 @@
             </nodify:Connection>
         </DataTemplate>
         
-
+        </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>

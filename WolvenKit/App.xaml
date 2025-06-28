@@ -12,8 +12,7 @@
     xmlns:importvms="clr-namespace:WolvenKit.App.ViewModels.Importers;assembly=WolvenKit.App"
     xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:tools="clr-namespace:WolvenKit.Views.Tools"
-    xmlns:toolvm="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App"
-    xmlns:converters="clr-namespace:WolvenKit.Converters">
+    xmlns:toolvm="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -99,8 +98,6 @@
                 <!-- Converters -->
                 <ResourceDictionary>
                     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-                    <converters:RedTypeToChunkViewModelConverter x:Key="RedTypeToChunkViewModelConverter" />
-                    <converters:RedTypeToChunkViewModelCollectionConverter x:Key="RedTypeToChunkViewModelCollectionConverter" />
                 </ResourceDictionary>
 
                 <!-- Resource Dictionaries -->
