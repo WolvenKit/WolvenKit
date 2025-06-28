@@ -3,14 +3,14 @@ namespace WolvenKit.RED4.Types;
 public partial class inkButtonController
 {
     [RED("shouldUpdateScrollController")]
-    public CBool ShouldUpdateScrollController
+    public new CBool ShouldUpdateScrollController
     {
         get => GetPropertyValue<CBool>();
         set => SetPropertyValue<CBool>(value);
     }
 
     [RED("isNavigalbe")]
-    public CBool IsNavigalbe
+    public new CBool IsNavigalbe
     {
         get => GetPropertyValue<CBool>();
         set => SetPropertyValue<CBool>(value);
