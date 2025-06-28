@@ -426,6 +426,12 @@
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.FilterableDropdownCNameEditor>
 
+                <converters:RedEditorTemplateSelector.FilterableDropdownRedstringEditor>
+                    <DataTemplate>
+                        <editors:FilterableDropdownRedstringMenu DataContext="{Binding}" />
+                    </DataTemplate>
+                </converters:RedEditorTemplateSelector.FilterableDropdownRedstringEditor>
+
                 <converters:RedEditorTemplateSelector.RedColorPicker>
                     <DataTemplate>
                         <tools:RedColorPicker

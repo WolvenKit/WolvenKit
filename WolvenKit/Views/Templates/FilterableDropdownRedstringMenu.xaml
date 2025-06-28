@@ -1,0 +1,131 @@
+﻿<reactiveUi:ReactiveUserControl
+    x:Class="WolvenKit.Views.Editors.FilterableDropdownRedstringMenu"
+    x:TypeArguments="shell:ChunkViewModel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:converters="clr-namespace:WolvenKit.Converters"
+    xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
+    xmlns:shell="clr-namespace:WolvenKit.App.ViewModels.Shell;assembly=WolvenKit.App"
+    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    FocusManager.FocusedElement="{Binding ElementName=FilterTextBox}">
+    <Grid>
+        <Grid.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <hc:ThemeResources />
+                    <hc:Theme />
+                </ResourceDictionary.MergedDictionaries>
+                <Style
+                    BasedOn="{StaticResource WolvenkitDialogLabelStyleMedium}"
+                    TargetType="{x:Type Label}" />
+                <Style TargetType="{x:Type Grid}">
+                    <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
+                </Style>
+                <converters:IntToVisibilityConverterInverted x:Key="IntToVisibilityConverterInverted" />
+                <converters:IRedTypeToCNameConverter x:Key="IRedTypeToRedstringConverter" />
+            </ResourceDictionary>
+        </Grid.Resources>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" MinWidth="{StaticResource WolvenKitLabelWidth}" />
+            <ColumnDefinition Width="*" MinWidth="{StaticResource WolvenKitLabelWidth}" />
+            <ColumnDefinition x:Name="Col3" Width="{StaticResource WolvenKitButtonGridWidth}" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition x:Name="Row1" Height="Auto" />
+            <RowDefinition x:Name="Row2" Height="5" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="5" />
+        </Grid.RowDefinitions>
+
+        <!-- ====================================== -->
+        <!-- Filter -->
+        <!-- ====================================== -->
+        <TextBox
+            x:Name="FilterTextBox"
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="0"
+            Padding="{DynamicResource WolvenKitMarginHorizontal}"
+            Foreground="{StaticResource ForegroundColor_Grey_Dark}"
+            Style="{StaticResource WolvenkitTextBoxStyle}"
+            helpers:TextBoxBehavior.TripleClickSelectAll="True"
+            KeyboardNavigation.TabIndex="1"
+            Text="{Binding FilterText,
+                           RelativeSource={RelativeSource AncestorType={x:Type editors:FilterableDropdownRedstringMenu}},
+                           Mode=TwoWay}" />
+        <!-- Placeholder text -->
+        <TextBlock
+            x:Name="Placeholder"
+            Grid.Row="0"
+            Grid.Column="0"
+            Style="{StaticResource WolvenkitPlaceholderStyle}"
+            Visibility="{Binding ElementName=FilterTextBox,
+                                 Path=Text.Length,
+                                 Converter={StaticResource IntToVisibilityConverterInverted}}"
+            Text="Filter" />
+
+        <!-- ====================================== -->
+        <!-- Dropdown -->
+        <!-- ====================================== -->
+        <ComboBox
+            x:Name="Dropdown"
+            Grid.Row="0"
+            Grid.Column="1"
+            Height="{StaticResource WolvenKitTabHeight}"
+            ItemsSource="{Binding FilteredOptions,
+                                  RelativeSource={RelativeSource AncestorType={x:Type editors:FilterableDropdownRedstringMenu}},
+                                  Mode=OneWay}"
+            KeyboardNavigation.TabIndex="2"
+            SelectedValuePath="Value"
+            DisplayMemberPath="Key"
+            SelectedValue="{Binding SelectedOption,
+                                    RelativeSource={RelativeSource AncestorType={x:Type editors:FilterableDropdownRedstringMenu}},
+                                    Mode=TwoWay}" />
+
+        <!-- ====================================== -->
+        <!-- Refresh button -->
+        <!-- ====================================== -->
+
+        <Button
+            x:Name="RefreshButton"
+            Grid.Row="0"
+            Grid.Column="2"
+            Width="{StaticResource WolvenKitButtonWidth}"
+            Margin="0"
+            Padding="0"
+            Click="RefreshButton_OnClick">
+            <StackPanel Orientation="Horizontal">
+                <templates:IconBox
+                    IconPack="Material"
+                    Kind="Cached"
+                    Margin="{DynamicResource WolvenKitMarginMicro}"
+                    Size="{DynamicResource WolvenKitIconSmall}"
+                    Foreground="{StaticResource WolvenKitCyan}" />
+            </StackPanel>
+        </Button>
+
+        <!-- ====================================== -->
+        <!-- Redstring editor -->
+        <!-- ====================================== -->
+
+        <editors:RedStringEditor
+            x:Name="RedStringEditor"
+            Grid.Row="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            RedString="{Binding Data,
+                                Mode=TwoWay}">
+            <editors:RedStringEditor.Style>
+                <Style TargetType="editors:RedStringEditor">
+                    <EventSetter
+                        Event="ValueChanged"
+                        Handler="RedStringEditor_ValueChanged" />
+                </Style>
+            </editors:RedStringEditor.Style>
+        </editors:RedStringEditor>
+    </Grid>
+</reactiveUi:ReactiveUserControl>
