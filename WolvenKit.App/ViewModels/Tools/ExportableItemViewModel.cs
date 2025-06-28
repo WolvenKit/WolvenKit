@@ -8,24 +8,41 @@ namespace WolvenKit.App.ViewModels.Tools;
 
 public class ExportableItemViewModel : ImportExportItemViewModel
 {
-    public ExportableItemViewModel(string fileName) : base(fileName, DecideExportOptions(Path.GetExtension(fileName).TrimStart('.'))) =>
+    public ExportableItemViewModel(string fileName) : base(fileName, DecideExportOptions(fileName)) =>
         Properties.PropertyChanged += delegate (object? sender, PropertyChangedEventArgs args)
         {
             OnPropertyChanged(nameof(Properties));
         };
 
-    private static ExportArgs DecideExportOptions(string extension)
+    /// <summary>
+    /// Disable LOD filter based on file name. For example, we don't want to apply it for any kind of vehicle.
+    /// Put into helper function for easier extension.
+    /// </summary>
+    private static bool GetLodFilterFromFileName(string fileName)
     {
+        if (!(fileName.Contains(Path.DirectorySeparatorChar + "vehicles") ||
+              fileName.Contains(Path.DirectorySeparatorChar + "cars")))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private static ExportArgs DecideExportOptions(string fileName)
+    {
+        var extension = Path.GetExtension(fileName).TrimStart('.');
         if (!Enum.TryParse(extension, out ECookedFileFormat fileFormat))
         {
             throw new ArgumentException("extension is not ECookedFileFormat", nameof(extension));
         }
 
+
         return fileFormat switch
         {
             ECookedFileFormat.opusinfo => new OpusExportArgs(),
-            ECookedFileFormat.mesh => new MeshExportArgs(),
-            ECookedFileFormat.w2mesh => new MeshExportArgs(),
+            ECookedFileFormat.mesh => new MeshExportArgs() { LodFilter = GetLodFilterFromFileName(fileName) },
+            ECookedFileFormat.w2mesh => new MeshExportArgs() { LodFilter = GetLodFilterFromFileName(fileName) },
             ECookedFileFormat.xbm => new XbmExportArgs(),
             ECookedFileFormat.wem => new WemExportArgs(),
             ECookedFileFormat.csv => new CommonExportArgs(),
@@ -42,7 +59,7 @@ public class ExportableItemViewModel : ImportExportItemViewModel
             //ECookedFileFormat.app => new EntityExportArgs(),
             ECookedFileFormat.anims => new AnimationExportArgs(),
             ECookedFileFormat.inkatlas => new InkAtlasExportArgs(),
-            ECookedFileFormat.physicalscene => new MeshExportArgs(),
+            ECookedFileFormat.physicalscene => new MeshExportArgs() { LodFilter = GetLodFilterFromFileName(fileName) },
             _ => throw new ArgumentOutOfRangeException()
         };
     }
