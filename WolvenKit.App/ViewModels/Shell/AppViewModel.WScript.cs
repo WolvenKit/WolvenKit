@@ -93,8 +93,9 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
         var filesToValidate = projArchive.Files.Values
             .Where(f => !s_ignoredExtensions.Contains(f.Extension.ToLower()))
-            .Where(f => !string.IsNullOrEmpty(
-                Path.GetExtension(f.FileName.Replace(".json", "")))) // no double extensions
+            // no *.ext.json
+            .Where(f => !f.Extension.Contains("json") || string.IsNullOrEmpty(
+                Path.GetExtension(f.FileName.Replace(".json", "")))) 
             .ToList();
 
         var resourceFilesToValidate = ActiveProject.ResourceFiles.Where(f => f.EndsWith(".xl")).ToList();
