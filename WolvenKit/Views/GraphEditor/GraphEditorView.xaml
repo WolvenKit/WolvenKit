@@ -31,11 +31,59 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <!-- Tiled vector grid for the graph background -->
+        <DrawingBrush x:Key="EditorGridBrush"
+                      TileMode="Tile"
+                      Viewport="0,0,20,20"
+                      ViewportUnits="Absolute"
+                      Stretch="None">
+            <DrawingBrush.Drawing>
+                <GeometryDrawing Brush="Transparent">
+                    <GeometryDrawing.Pen>
+                        <!-- Thin subtle grid lines -->
+                        <Pen Brush="#FF1C1C1C" Thickness="0.5" />
+                    </GeometryDrawing.Pen>
+                    <GeometryDrawing.Geometry>
+                        <GeometryGroup>
+                            <!-- Horizontal line -->
+                            <LineGeometry StartPoint="0,0" EndPoint="20,0" />
+                            <!-- Vertical line -->
+                            <LineGeometry StartPoint="0,0" EndPoint="0,20" />
+                        </GeometryGroup>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingBrush.Drawing>
+        </DrawingBrush>
+        <!-- Slightly thicker major lines every 5 tiles -->
+        <DrawingBrush x:Key="EditorGridMajorBrush"
+                      TileMode="Tile"
+                      Viewport="0,0,160,160"
+                      ViewportUnits="Absolute"
+                      Stretch="None">
+            <DrawingBrush.Drawing>
+                <GeometryDrawing Brush="Transparent">
+                    <GeometryDrawing.Pen>
+                        <Pen Brush="#FF222222" Thickness="1.0" />
+                    </GeometryDrawing.Pen>
+                    <GeometryDrawing.Geometry>
+                        <GeometryGroup>
+                            <LineGeometry StartPoint="0,0" EndPoint="160,0" />
+                            <LineGeometry StartPoint="0,0" EndPoint="0,160" />
+                        </GeometryGroup>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingBrush.Drawing>
+        </DrawingBrush>
     </UserControl.Resources>
-    <Grid>
+    <Grid Background="{StaticResource ContentBackground}">
+        <!-- Major grid layer -->
+        <Border IsHitTestVisible="False"
+                Background="{StaticResource EditorGridMajorBrush}" />
+
+        <!-- Editor with minor grid background -->
         <nodify:NodifyEditor
             x:Name="Editor"
-            Background="{StaticResource ContentBackground}"
+            Background="{StaticResource EditorGridBrush}"
             Connections="{Binding ElementName=uc,
                                   Path=Source.Connections}"
             ContextMenuOpening="Editor_OnContextMenuOpening"
@@ -257,8 +305,8 @@
                         <nodify:Connection.Style>
                             <Style TargetType="{x:Type nodify:BaseConnection}">
                                 <Setter Property="Cursor" Value="Hand" />
-                                <Setter Property="Stroke" Value="#33FFFFFF" />
-                                <Setter Property="StrokeThickness" Value="2" />
+                                <Setter Property="Stroke" Value="#FF7F7F7F" />
+                                <Setter Property="StrokeThickness" Value="2.5" />
 
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">

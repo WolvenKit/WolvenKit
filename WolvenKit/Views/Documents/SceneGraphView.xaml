@@ -55,7 +55,8 @@
                 <nodify:Connection.Style>
                     <Style TargetType="{x:Type nodify:BaseConnection}">
                         <Setter Property="Cursor" Value="Hand" />
-                        <Setter Property="Stroke" Value="#33FFFFFF" />
+                        <Setter Property="Stroke" Value="#FF7F7F7F" />
+                        <Setter Property="Opacity" Value="1.0" />
                         <Setter Property="StrokeThickness" 
                                 Value="{Binding PathType, Converter={StaticResource PathTypeToThicknessConverter}}" />
 
