@@ -27,6 +27,11 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
 
     public string Title { get; protected set; } = null!;
     
+    /// <summary>
+    /// The node ID for display outside the node
+    /// </summary>
+    public string NodeIdText => $"[{UniqueId}]";
+    
     private Dictionary<string, string> _details = new();
     public Dictionary<string, string> Details 
     { 
@@ -124,7 +129,7 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
         if (typeName.EndsWith("Node"))
             typeName = typeName[..^4];
             
-        Title = $"[{UniqueId}] {typeName}";
+        Title = typeName; // ID is now shown separately via NodeIdText
     }
 
     /// <summary>

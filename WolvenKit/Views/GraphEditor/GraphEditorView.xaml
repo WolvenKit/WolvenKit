@@ -108,60 +108,121 @@
                                                 Path=Source.ItemsDragCompletedCommand}">
             <nodify:NodifyEditor.Resources>
                 <DataTemplate x:Key="HeaderTemplate">
-                    <TextBlock
-                        Margin="0"
-                        Text="{Binding}" />
+                    <StackPanel>
+                        <!-- Node ID and pills positioned above with negative margin -->
+                        <StackPanel Orientation="Horizontal" 
+                                   HorizontalAlignment="Left"
+                                   Margin="-6,-42,0,-8">
+                            <TextBlock Text="{Binding NodeIdText}"
+                                      FontFamily="Consolas"
+                                      FontSize="13"
+                                      Foreground="#888888"
+                                      Opacity="0.8"
+                                      VerticalAlignment="Center" />
+                            
+                            <!-- Notable Point pill indicator (takes priority) -->
+                            <Border Background="#CCCC9900" 
+                                    BorderBrush="#DDDD9933"
+                                    BorderThickness="1"
+                                    CornerRadius="8"
+                                    Padding="5,1,5,1"
+                                    Margin="6,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Visibility="{Binding HasNotablePoint, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="⭐"
+                                              FontSize="11"
+                                              FontWeight="Bold"
+                                              Foreground="#FFFFFF"
+                                              VerticalAlignment="Center" />
+                                    <TextBlock Text="{Binding NotablePointName, FallbackValue='Notable Point'}"
+                                              FontSize="9"
+                                              FontWeight="Bold"
+                                              Foreground="#FFFFFF"
+                                              Margin="3,0,0,0"
+                                              VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Border>
+                            
+                            <!-- Player pill indicator -->
+                            <Border Background="#CC00AA55" 
+                                    BorderBrush="#DD44CC77"
+                                    BorderThickness="1"
+                                    CornerRadius="8"
+                                    Padding="5,1,5,1"
+                                    Margin="6,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Visibility="{Binding IsPlayerNode, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                                <TextBlock Text="👤 Player Involved"
+                                          FontSize="9"
+                                          FontWeight="Bold"
+                                          Foreground="#FFFFFF"
+                                          VerticalAlignment="Center" />
+                            </Border>
+                        </StackPanel>
+                        
+                        <!-- Main node content -->
+                        <TextBlock Margin="0"
+                                  Text="{Binding Title}" />
+                    </StackPanel>
                 </DataTemplate>
 
                 <DataTemplate x:Key="DetailedHeaderTemplate">
-                    <StackPanel Orientation="Vertical" Margin="-6,-4,-6,-6">
-                        <!-- Notable Point Indicator Bar (only visible for scene nodes with notable points) -->
-                        <Border Background="#CC919100" 
-                                BorderBrush="#DDAB9066"
-                                BorderThickness="1,1,1,1"
-                                Padding="8,3,8,3"
-                                HorizontalAlignment="Stretch"
-                                Visibility="{Binding HasNotablePoint, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="⭐" 
-                                          Margin="0,0,8,0"
-                                          VerticalAlignment="Center"
-                                          FontSize="16"
-                                          Foreground="#FFFFD700" />
-                                <TextBlock Text="Notable Point: "
-                                          VerticalAlignment="Center"
+                    <StackPanel>
+                        <!-- Node ID and pills positioned above with negative margin -->
+                        <StackPanel Orientation="Horizontal" 
+                                   HorizontalAlignment="Left"
+                                   Margin="-6,-42,0,-8">
+                            <TextBlock Text="{Binding NodeIdText}"
+                                      FontFamily="Consolas"
+                                      FontSize="15"
+                                      Foreground="#888888"
+                                      Opacity="0.9"
+                                      VerticalAlignment="Center" />
+                            
+                            <!-- Notable Point pill indicator (takes priority) -->
+                            <Border Background="#CCCC9900" 
+                                    BorderBrush="#DDDD9933"
+                                    BorderThickness="1"
+                                    CornerRadius="8"
+                                    Padding="5,1,5,1"
+                                    Margin="6,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Visibility="{Binding HasNotablePoint, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="⭐"
+                                              FontSize="11"
+                                              FontWeight="Bold"
+                                              Foreground="#FFFFFF"
+                                              VerticalAlignment="Center" />
+                                    <TextBlock Text="{Binding NotablePointName, FallbackValue='Notable Point'}"
+                                              FontSize="9"
+                                              FontWeight="Bold"
+                                              Foreground="#FFFFFF"
+                                              Margin="3,0,0,0"
+                                              VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Border>
+                            
+                            <!-- Player pill indicator -->
+                            <Border Background="#CC00AA55" 
+                                    BorderBrush="#DD44CC77"
+                                    BorderThickness="1"
+                                    CornerRadius="8"
+                                    Padding="4,1,4,1"
+                                    Margin="6,0,0,0"
+                                    VerticalAlignment="Center"
+                                    Visibility="{Binding IsPlayerNode, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                                <TextBlock Text="👤 Player Involved"
+                                          FontSize="9"
                                           FontWeight="Bold"
-                                          FontSize="13"
-                                          Foreground="#FFE6E6E6" />
-                                <TextBlock Text="{Binding NotablePointName, FallbackValue=''}"
-                                          VerticalAlignment="Center"
-                                          FontWeight="Bold"
-                                          FontSize="13"
-                                          Foreground="#FFFFFF" />
-                            </StackPanel>
-                        </Border>
-
-                        <!-- Player Node Indicator Bar (only visible for scene nodes that reference the player) -->
-                        <Border Background="#000055AA" 
-                                BorderBrush="#DD4477CC"
-                                BorderThickness="1,1,1,1"
-                                Padding="8,3,8,3"
-                                HorizontalAlignment="Stretch"
-                                Visibility="{Binding IsPlayerNode, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="👤" 
-                                          Margin="0,0,8,0"
-                                          VerticalAlignment="Center"
-                                          FontSize="16"
-                                          Foreground="#FF77BBDD" />
-                                <TextBlock Text="Player Involved"
-                                          VerticalAlignment="Center"
-                                          FontWeight="Bold"
-                                          FontSize="13"
-                                          Foreground="#FFFFFF" />
-                            </StackPanel>
-                        </Border>
-
+                                          Foreground="#FFFFFF"
+                                          VerticalAlignment="Center" />
+                            </Border>
+                        </StackPanel>
+                        
+                        <!-- Main node content -->
+                        <StackPanel Orientation="Vertical" Margin="-6,-4,-6,-6">
                         <!-- Header section with full background -->
                         <Border Background="{Binding Background}" 
                                 Padding="10,6,10,6"
@@ -202,6 +263,7 @@
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
                         </Border>
+                    </StackPanel>
                     </StackPanel>
                 </DataTemplate>
 

@@ -53,7 +53,7 @@ public abstract class BaseSceneViewModel : NodeViewModel, IRefreshableDetails
         // Detect if this is a player node
         DetectPlayerNode(scnSceneGraphNode);
         
-        Title = $"[{UniqueId}] {Data.GetType().Name[3..^4]}";
+        Title = Data.GetType().Name[3..^4]; // ID is now shown separately via NodeIdText
         Background = GraphNodeColors.GetBackgroundForSceneNodeType(scnSceneGraphNode);
         ContentBackground = GraphNodeColors.GetContentBackgroundForSceneNodeType(scnSceneGraphNode);
         
@@ -63,8 +63,8 @@ public abstract class BaseSceneViewModel : NodeViewModel, IRefreshableDetails
 
     protected override void UpdateTitle()
     {
-        // Format scene node titles properly
-        Title = $"[{UniqueId}] {Data.GetType().Name[3..^4]}";
+        // Format scene node titles properly  
+        Title = Data.GetType().Name[3..^4]; // ID is now shown separately via NodeIdText
         
         // Notable point information is now shown in the visual indicator bar, not in the title
         
@@ -83,6 +83,13 @@ public abstract class BaseSceneViewModel : NodeViewModel, IRefreshableDetails
     {
         try
         {
+            // Choice nodes are always player-involved by nature, so we don't need to show the banner
+            if (scnSceneGraphNode is scnChoiceNode)
+            {
+                IsPlayerNode = false;
+                return;
+            }
+            
             // Check for player node patterns recursively
             IsPlayerNode = CheckForPlayerNodeRecursively(scnSceneGraphNode);
         }

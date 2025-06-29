@@ -258,9 +258,13 @@ public partial class RedGraph : IDisposable
         var graph = new GeometryGraph();
         var msaglNodes = new Dictionary<uint, Node>();
 
+        // Extra height for external node ID (font + margin + padding)
+        const double nodeIdExtraHeight = 35;
+
         foreach (var node in Nodes)
         {
-            var msaglNode = new Node(CurveFactory.CreateRectangle(node.Size.Width, node.Size.Height, new Microsoft.Msagl.Core.Geometry.Point()))
+            var layoutHeight = node.Size.Height + nodeIdExtraHeight;
+            var msaglNode = new Node(CurveFactory.CreateRectangle(node.Size.Width, layoutHeight, new Microsoft.Msagl.Core.Geometry.Point()))
             {
                 UserData = node
             };
@@ -291,14 +295,16 @@ public partial class RedGraph : IDisposable
         foreach (var node in graph.Nodes)
         {
             var nvm = (NodeViewModel)node.UserData;
+            // Offset the Y position to account for the extra height added for node ID spacing
             nvm.Location = new System.Windows.Point(
                 node.Center.X - graph.BoundingBox.Center.X - (nvm.Size.Width / 2) + xOffset,
-                node.Center.Y - graph.BoundingBox.Center.Y - (nvm.Size.Height / 2) + yOffset);
+                node.Center.Y - graph.BoundingBox.Center.Y - (nvm.Size.Height / 2) + yOffset + (nodeIdExtraHeight / 2));
 
+            // Calculate bounds including the node ID space
             maxX = Math.Max(maxX, nvm.Location.X + nvm.Size.Width);
             minX = Math.Min(minX, nvm.Location.X);
-            maxY = Math.Max(maxY, nvm.Location.Y + nvm.Size.Height);
-            minY = Math.Min(minY, nvm.Location.Y);
+            maxY = Math.Max(maxY, nvm.Location.Y + nvm.Size.Height + nodeIdExtraHeight);
+            minY = Math.Min(minY, nvm.Location.Y - nodeIdExtraHeight);
         }
 
         return new System.Windows.Rect(minX, minY, maxX - minX, maxY - minY);
