@@ -248,13 +248,15 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
         // If we got here, it means the files were different, or an error occurred during comparison.
         // Proceed with the original, destructive reload.
-        using var fs = File.Open(FilePath, FileMode.Open);
-        if (!_parserService.TryReadRed4File(fs, out var cr2WFile))
+        try
+        {
+            var cr2WFile = _cr2WTools.ReadCr2W(FilePath);
+            Cr2wFile = cr2WFile;
+        }
+        catch (Exception)
         {
             return false;
         }
-
-        Cr2wFile = cr2WFile;
         PopulateItems();
 
         SetIsDirty(false);
