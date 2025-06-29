@@ -3080,17 +3080,48 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             return;
         }
-        CalculateDisplayName();
+        
+        try
+        {
+            CalculateDisplayName();
+        }
+        catch (Exception ex)
+        {
+            _loggerService?.Error($"Failed to calculate display name: {ex.Message}");
+        }
 
         _propertiesLoaded = true;
-        OnPropertyChanged(nameof(ResolvedData));
+        
+        try
+        {
+            OnPropertyChanged(nameof(ResolvedData));
+        }
+        catch (Exception ex)
+        {
+            _loggerService?.Error($"Failed to notify ResolvedData changed: {ex.Message}");
+        }
 
-        Properties.Clear();
+        try
+        {
+            Properties.Clear();
+        }
+        catch (Exception ex)
+        {
+            _loggerService?.Error($"Failed to clear properties: {ex.Message}");
+            return; // If we can't clear properties, we can't continue
+        }
 
         // Let SFTreeView clear its items first else the ScrollBar calculations are of...
         // Can't use NotificationSubscriptionMode.CollectionChanged neither since SF never attaches to the event...
         // TVProperties also doesn't need to be Observable but doesn't matter really...
-        OnPropertyChanged(nameof(TVProperties));
+        try
+        {
+            OnPropertyChanged(nameof(TVProperties));
+        }
+        catch (Exception ex)
+        {
+            _loggerService?.Error($"Failed to notify TVProperties changed: {ex.Message}");
+        }
 
         var isreadonly = IsReadOnly;
         if (Parent is not null)
@@ -3099,6 +3130,19 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         var obj = Data;
+        
+        // Check for required services
+        if (_chunkViewmodelFactory == null)
+        {
+            _loggerService?.Error("ChunkViewmodelFactory is null, cannot calculate properties");
+            return;
+        }
+        
+        if (_appViewModel == null)
+        {
+            _loggerService?.Error("AppViewModel is null, cannot calculate properties");
+            return;
+        }
 
         switch (obj)
         {
@@ -3194,15 +3238,41 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
                     var t = redClass.GetProperty(name) ?? new RedDummy();
 
-                    Properties.Add(_chunkViewmodelFactory.ChunkViewModel(t, propertyInfo.RedName.NotNull(), _appViewModel,
-                        this, isreadonly));
+                    try
+                    {
+                        var childViewModel = _chunkViewmodelFactory.ChunkViewModel(t, propertyInfo.RedName.NotNull(), _appViewModel,
+                            this, isreadonly);
+                        if (childViewModel != null)
+                        {
+                            Properties.Add(childViewModel);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _loggerService?.Error($"Failed to create child ChunkViewModel for property {propertyInfo.RedName}: {ex.Message}");
+                    }
                 }
 
                 foreach (var dp in dps)
                 {
-                    ArgumentNullException.ThrowIfNull(dp);
-                    Properties.Add(_chunkViewmodelFactory.ChunkViewModel(redClass.GetProperty(dp).NotNull(), dp, _appViewModel,
-                        this, isreadonly));
+                    try
+                    {
+                        ArgumentNullException.ThrowIfNull(dp);
+                        var dynamicProperty = redClass.GetProperty(dp);
+                        if (dynamicProperty != null)
+                        {
+                            var childViewModel = _chunkViewmodelFactory.ChunkViewModel(dynamicProperty, dp, _appViewModel,
+                                this, isreadonly);
+                            if (childViewModel != null)
+                            {
+                                Properties.Add(childViewModel);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _loggerService?.Error($"Failed to create child ChunkViewModel for dynamic property {dp}: {ex.Message}");
+                    }
                 }
 
                 break;
@@ -3344,11 +3414,22 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                         var pis = Data.GetType().GetProperties(s_defaultLookup);
                         foreach (var pi in pis)
                         {
-                            var value = Data is not null ? pi.GetValue(Data) : null;
-                            if (value is IRedType irt)
+                            try
                             {
-                                Properties.Add(_chunkViewmodelFactory.ChunkViewModel(irt, pi.Name, _appViewModel,
-                                    this, isreadonly));
+                                var value = Data is not null ? pi.GetValue(Data) : null;
+                                if (value is IRedType irt)
+                                {
+                                    var childViewModel = _chunkViewmodelFactory.ChunkViewModel(irt, pi.Name, _appViewModel,
+                                        this, isreadonly);
+                                    if (childViewModel != null)
+                                    {
+                                        Properties.Add(childViewModel);
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                _loggerService?.Error($"Failed to create child ChunkViewModel for property {pi.Name}: {ex.Message}");
                             }
                         }
 
@@ -3363,7 +3444,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                                 nodeChunk.CalculateProperties();
                                 Properties.Add(nodeChunk);
                             }
-                            catch (Exception ex) { _loggerService.Error(ex); }
+                            catch (Exception ex) { _loggerService?.Error(ex); }
                         }
 
                         break;
@@ -3373,7 +3454,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 break;
             }
         }
-        OnPropertyChanged(nameof(TVProperties));
+        
+        try
+        {
+            OnPropertyChanged(nameof(TVProperties));
+        }
+        catch (Exception ex)
+        {
+            _loggerService?.Error($"Failed to notify TVProperties changed at end of CalculateProperties: {ex.Message}");
+        }
     }
 
     private void CalculateIsDefault()
