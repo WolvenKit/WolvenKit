@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Media;
+using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes;
@@ -49,95 +50,17 @@ public static class GraphNodeColors
 
     public static Brush GetBackgroundForQuestNodeType(questNodeDefinition node)
     {
-        var resourceKey = node switch
-        {
-            questStartNodeDefinition => "QuestStartNodeHeader",
-            questEndNodeDefinition => "QuestEndNodeHeader",
-            questInputNodeDefinition => "QuestInputNodeHeader",
-            questOutputNodeDefinition => "QuestOutputNodeHeader",
-            questConditionNodeDefinition => "QuestConditionNodeHeader",
-            questPhaseNodeDefinition => "QuestPhaseNodeHeader",
-            questSceneNodeDefinition => "QuestSceneNodeHeader",
-            questRandomizerNodeDefinition => "QuestRandomizerNodeHeader",
-            questFlowControlNodeDefinition => "QuestFlowControlNodeHeader",
-            questSwitchNodeDefinition => "QuestSwitchNodeHeader",
-            questLogicalAndNodeDefinition => "QuestLogicalAndNodeHeader",
-            questLogicalXorNodeDefinition => "QuestLogicalXorNodeHeader",
-            questLogicalHubNodeDefinition => "QuestLogicalHubNodeHeader",
-            questFactsDBManagerNodeDefinition => "QuestFactsDBManagerNodeHeader",
-            questItemManagerNodeDefinition => "QuestItemManagerNodeHeader",
-            questCharacterManagerNodeDefinition => "QuestCharacterManagerNodeHeader",
-            questUIManagerNodeDefinition => "QuestUIManagerNodeHeader",
-            questAudioNodeDefinition => "QuestAudioNodeHeader",
-            questJournalNodeDefinition => "QuestJournalNodeHeader",
-            questPauseConditionNodeDefinition => "QuestPauseConditionNodeHeader",
-            questSceneManagerNodeDefinition => "QuestSceneManagerNodeHeader",
-            questRenderFxManagerNodeDefinition => "QuestRenderFxManagerNodeHeader",
-            questSpawnManagerNodeDefinition => "QuestSpawnManagerNodeHeader",
-            questTriggerManagerNodeDefinition => "QuestTriggerManagerNodeHeader",
-            questEntityManagerNodeDefinition => "QuestEntityManagerNodeHeader",
-            questEnvironmentManagerNodeDefinition => "QuestEnvironmentManagerNodeHeader",
-            questEventManagerNodeDefinition => "QuestEventManagerNodeHeader",
-            questMappinManagerNodeDefinition => "QuestMappinManagerNodeHeader",
-            questRewardManagerNodeDefinition => "QuestRewardManagerNodeHeader",
-            questTimeManagerNodeDefinition => "QuestTimeManagerNodeHeader",
-            questVisionModesManagerNodeDefinition => "QuestVisionModesManagerNodeHeader",
-            questVoicesetManagerNodeDefinition => "QuestVoicesetManagerNodeHeader",
-            questFXManagerNodeDefinition => "QuestFXManagerNodeHeader",
-            questPuppetAIManagerNodeDefinition => "QuestPuppetAIManagerNodeHeader",
-            questCrowdManagerNodeDefinition => "QuestCrowdManagerNodeHeader",
-            questInteractiveObjectManagerNodeDefinition => "QuestInteractiveObjectManagerNodeHeader",
-            questPhoneManagerNodeDefinition => "QuestPhoneManagerNodeHeader",
-            _ => "QuestDefaultNodeHeader"
-        };
-
+        var nodeTypeName = node.GetType().Name;
+        var resourceKey = $"{nodeTypeName.Replace("Definition", "Header").FirstCharToUpper()}";
+        
         return GetResourceWithFallback(resourceKey, "QuestDefaultNodeHeader", "#33666666");
     }
 
     public static Brush GetContentBackgroundForQuestNodeType(questNodeDefinition node)
     {
-        var resourceKey = node switch
-        {
-            questStartNodeDefinition => "QuestStartNodeContent",
-            questEndNodeDefinition => "QuestEndNodeContent",
-            questInputNodeDefinition => "QuestInputNodeContent",
-            questOutputNodeDefinition => "QuestOutputNodeContent",
-            questConditionNodeDefinition => "QuestConditionNodeContent",
-            questPhaseNodeDefinition => "QuestPhaseNodeContent",
-            questSceneNodeDefinition => "QuestSceneNodeContent",
-            questRandomizerNodeDefinition => "QuestRandomizerNodeContent",
-            questFlowControlNodeDefinition => "QuestFlowControlNodeContent",
-            questSwitchNodeDefinition => "QuestSwitchNodeContent",
-            questLogicalAndNodeDefinition => "QuestLogicalAndNodeContent",
-            questLogicalXorNodeDefinition => "QuestLogicalXorNodeContent",
-            questLogicalHubNodeDefinition => "QuestLogicalHubNodeContent",
-            questFactsDBManagerNodeDefinition => "QuestFactsDBManagerNodeContent",
-            questItemManagerNodeDefinition => "QuestItemManagerNodeContent",
-            questCharacterManagerNodeDefinition => "QuestCharacterManagerNodeContent",
-            questUIManagerNodeDefinition => "QuestUIManagerNodeContent",
-            questAudioNodeDefinition => "QuestAudioNodeContent",
-            questJournalNodeDefinition => "QuestJournalNodeContent",
-            questPauseConditionNodeDefinition => "QuestPauseConditionNodeContent",
-            questSceneManagerNodeDefinition => "QuestSceneManagerNodeContent",
-            questRenderFxManagerNodeDefinition => "QuestRenderFxManagerNodeContent",
-            questSpawnManagerNodeDefinition => "QuestSpawnManagerNodeContent",
-            questTriggerManagerNodeDefinition => "QuestTriggerManagerNodeContent",
-            questEntityManagerNodeDefinition => "QuestEntityManagerNodeContent",
-            questEnvironmentManagerNodeDefinition => "QuestEnvironmentManagerNodeContent",
-            questEventManagerNodeDefinition => "QuestEventManagerNodeContent",
-            questMappinManagerNodeDefinition => "QuestMappinManagerNodeContent",
-            questRewardManagerNodeDefinition => "QuestRewardManagerNodeContent",
-            questTimeManagerNodeDefinition => "QuestTimeManagerNodeContent",
-            questVisionModesManagerNodeDefinition => "QuestVisionModesManagerNodeContent",
-            questVoicesetManagerNodeDefinition => "QuestVoicesetManagerNodeContent",
-            questFXManagerNodeDefinition => "QuestFXManagerNodeContent",
-            questPuppetAIManagerNodeDefinition => "QuestPuppetAIManagerNodeContent",
-            questCrowdManagerNodeDefinition => "QuestCrowdManagerNodeContent",
-            questInteractiveObjectManagerNodeDefinition => "QuestInteractiveObjectManagerNodeContent",
-            questPhoneManagerNodeDefinition => "QuestPhoneManagerNodeContent",
-            _ => "QuestDefaultNodeContent"
-        };
-
+        var nodeTypeName = node.GetType().Name;
+        var resourceKey = $"{nodeTypeName.Replace("Definition", "Content").FirstCharToUpper()}";
+        
         return GetResourceWithFallback(resourceKey, "QuestDefaultNodeContent", "#11666666");
     }
 

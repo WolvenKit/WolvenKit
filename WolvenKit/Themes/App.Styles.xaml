@@ -65,7 +65,7 @@
     <Color x:Key="QuestLogicalAndNodeHeaderColor">#332255AA</Color>
     <Color x:Key="QuestLogicalXorNodeHeaderColor">#33AA5522</Color>
     <Color x:Key="QuestLogicalHubNodeHeaderColor">#3355AA55</Color>
-    <Color x:Key="QuestFactsDBManagerNodeHeaderColor">#33AA22AA</Color>
+    <Color x:Key="QuestFactsDBManagerNodeHeaderColor">#33D2443A</Color>
     <Color x:Key="QuestItemManagerNodeHeaderColor">#3377AA22</Color>
     <Color x:Key="QuestCharacterManagerNodeHeaderColor">#33AA7722</Color>
     <Color x:Key="QuestUIManagerNodeHeaderColor">#332277AA</Color>
@@ -89,6 +89,8 @@
     <Color x:Key="QuestCrowdManagerNodeHeaderColor">#335522AA</Color>
     <Color x:Key="QuestInteractiveObjectManagerNodeHeaderColor">#3355AAB2</Color>
     <Color x:Key="QuestPhoneManagerNodeHeaderColor">#33B25522</Color>
+    <Color x:Key="QuestUseWorkspotNodeHeaderColor">#334CAF50</Color>
+    <Color x:Key="QuestWorldDataManagerNodeHeaderColor">#33A0522D</Color>
     <Color x:Key="QuestDefaultNodeHeaderColor">#33666666</Color>
 
     <!-- Quest Node Colors - Content backgrounds -->
@@ -105,7 +107,7 @@
     <Color x:Key="QuestLogicalAndNodeContentColor">#112255AA</Color>
     <Color x:Key="QuestLogicalXorNodeContentColor">#11AA5522</Color>
     <Color x:Key="QuestLogicalHubNodeContentColor">#1155AA55</Color>
-    <Color x:Key="QuestFactsDBManagerNodeContentColor">#11AA22AA</Color>
+    <Color x:Key="QuestFactsDBManagerNodeContentColor">#11D2443A</Color>
     <Color x:Key="QuestItemManagerNodeContentColor">#1177AA22</Color>
     <Color x:Key="QuestCharacterManagerNodeContentColor">#11AA7722</Color>
     <Color x:Key="QuestUIManagerNodeContentColor">#112277AA</Color>
@@ -129,6 +131,8 @@
     <Color x:Key="QuestCrowdManagerNodeContentColor">#115522AA</Color>
     <Color x:Key="QuestInteractiveObjectManagerNodeContentColor">#1155AAB2</Color>
     <Color x:Key="QuestPhoneManagerNodeContentColor">#11B25522</Color>
+    <Color x:Key="QuestUseWorkspotNodeContentColor">#114CAF50</Color>
+    <Color x:Key="QuestWorldDataManagerNodeContentColor">#11A0522D</Color>
     <Color x:Key="QuestDefaultNodeContentColor">#11666666</Color>
 
     <!-- Scene Node Colors - Header backgrounds -->
@@ -2397,6 +2401,8 @@
     <SolidColorBrush x:Key="QuestCrowdManagerNodeHeader" Color="{StaticResource QuestCrowdManagerNodeHeaderColor}" />
     <SolidColorBrush x:Key="QuestInteractiveObjectManagerNodeHeader" Color="{StaticResource QuestInteractiveObjectManagerNodeHeaderColor}" />
     <SolidColorBrush x:Key="QuestPhoneManagerNodeHeader" Color="{StaticResource QuestPhoneManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestUseWorkspotNodeHeader" Color="{StaticResource QuestUseWorkspotNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestWorldDataManagerNodeHeader" Color="{StaticResource QuestWorldDataManagerNodeHeaderColor}" />
     <SolidColorBrush x:Key="QuestDefaultNodeHeader" Color="{StaticResource QuestDefaultNodeHeaderColor}" />
 
     <!-- Quest Node Content Brushes -->
@@ -2437,6 +2443,8 @@
     <SolidColorBrush x:Key="QuestCrowdManagerNodeContent" Color="{StaticResource QuestCrowdManagerNodeContentColor}" />
     <SolidColorBrush x:Key="QuestInteractiveObjectManagerNodeContent" Color="{StaticResource QuestInteractiveObjectManagerNodeContentColor}" />
     <SolidColorBrush x:Key="QuestPhoneManagerNodeContent" Color="{StaticResource QuestPhoneManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestUseWorkspotNodeContent" Color="{StaticResource QuestUseWorkspotNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestWorldDataManagerNodeContent" Color="{StaticResource QuestWorldDataManagerNodeContentColor}" />
     <SolidColorBrush x:Key="QuestDefaultNodeContent" Color="{StaticResource QuestDefaultNodeContentColor}" />
 
     <!-- Scene Node Header Brushes -->
