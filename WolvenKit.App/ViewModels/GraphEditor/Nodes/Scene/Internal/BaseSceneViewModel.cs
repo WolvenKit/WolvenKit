@@ -1,9 +1,11 @@
-﻿using System.Windows.Media;
+﻿using System;
+using System.Windows.Media;
 using WolvenKit.RED4.Types;
 using System.Collections.Generic;
 using WolvenKit.App.Services;
 using System.Linq;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes;
+using System.Reflection;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 
@@ -31,6 +33,11 @@ public abstract class BaseSceneViewModel : NodeViewModel, IRefreshableDetails
     /// </summary>
     public string NotablePointName => NotablePoint?.Name.GetResolvedText() ?? string.Empty;
 
+    /// <summary>
+    /// Whether this node is a player node (has refLocalPlayer set to true)
+    /// </summary>
+    public bool IsPlayerNode { get; protected set; }
+
     protected BaseSceneViewModel(scnSceneGraphNode scnSceneGraphNode, scnSceneResource? sceneResource = null) : base(scnSceneGraphNode)
     {
         _sceneResource = sceneResource;
@@ -42,6 +49,9 @@ public abstract class BaseSceneViewModel : NodeViewModel, IRefreshableDetails
                 .NotablePoints
                 .FirstOrDefault(x => x.NodeId.Id == scnSceneGraphNode.NodeId.Id);
         }
+        
+        // Detect if this is a player node
+        DetectPlayerNode(scnSceneGraphNode);
         
         Title = $"[{UniqueId}] {Data.GetType().Name[3..^4]}";
         Background = GraphNodeColors.GetBackgroundForSceneNodeType(scnSceneGraphNode);
@@ -61,9 +71,256 @@ public abstract class BaseSceneViewModel : NodeViewModel, IRefreshableDetails
         // Notify UI that notable point properties may have changed
         OnPropertyChanged(nameof(HasNotablePoint));
         OnPropertyChanged(nameof(NotablePointName));
+        
+        // Also notify about player node properties in case they changed
+        OnPropertyChanged(nameof(IsPlayerNode));
     }
 
- 
+    /// <summary>
+    /// Detect if this node is a player node (has refLocalPlayer set to true anywhere in its structure)
+    /// </summary>
+    private void DetectPlayerNode(scnSceneGraphNode scnSceneGraphNode)
+    {
+        try
+        {
+            // Check for player node patterns recursively
+            IsPlayerNode = CheckForPlayerNodeRecursively(scnSceneGraphNode);
+        }
+        catch (System.Exception)
+        {
+            // If detection fails, assume it's not a player node
+            IsPlayerNode = false;
+        }
+    }
+
+    /// <summary>
+    /// Recursively check an object for player node indicators
+    /// </summary>
+    protected bool CheckForPlayerNodeRecursively(object obj)
+    {
+        if (obj == null) return false;
+
+        // Check questUniversalRef for refLocalPlayer
+        if (obj is questUniversalRef universalRef && universalRef.RefLocalPlayer == true)
+        {
+            return true;
+        }
+
+        // Check gameEntityReference for player references
+        if (obj is gameEntityReference entityRef)
+        {
+            // Check if reference contains player identifier
+            var resolvedText = entityRef.Reference.GetResolvedText()!;
+            if (!string.IsNullOrEmpty(resolvedText) && 
+                (resolvedText.Contains("player", StringComparison.OrdinalIgnoreCase) ||
+                 resolvedText == "#player"))
+            {
+                return true;
+            }
+            
+            // Check dynamic entity unique name for player
+            var dynamicEntityName = entityRef.DynamicEntityUniqueName.GetResolvedText();
+            if (!string.IsNullOrEmpty(dynamicEntityName) &&
+                dynamicEntityName.Contains("player", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        // Check various quest node types that have specific player flags
+        if (obj is questNodeDefinition questNode)
+        {
+            return CheckQuestNodeForPlayerFlags(questNode);
+        }
+
+        // For IRedBaseHandle, check the contained value
+        if (obj is IRedBaseHandle handle)
+        {
+            var handleValue = handle.GetValue();
+            if (handleValue != null)
+            {
+                return CheckForPlayerNodeRecursively(handleValue);
+            }
+        }
+
+        // For collections, check each item
+        if (obj is System.Collections.IEnumerable enumerable and not string)
+        {
+            foreach (var item in enumerable)
+            {
+                if (item != null)
+                {
+                    if (CheckForPlayerNodeRecursively(item))
+                        return true;
+                }
+            }
+        }
+
+        // For RedBaseClass objects, check all properties
+        if (obj is RedBaseClass redObj)
+        {
+            return CheckRedBaseClassForPlayerFlags(redObj);
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Check quest node definitions for player-related flags
+    /// </summary>
+    private bool CheckQuestNodeForPlayerFlags(questNodeDefinition questNode)
+    {
+        // Check common quest node types that have player-specific properties
+        switch (questNode)
+        {
+            case questTeleportPuppetNodeDefinition teleportNode:
+                if (teleportNode.EntityReference?.Chunk?.RefLocalPlayer == true)
+                    return true;
+                break;
+                
+            case questCharacterManagerNodeDefinition charManagerNode:
+                // Check specific properties instead of full recursion to avoid stack overflow
+                if (CheckSpecificPropertiesForPlayer(charManagerNode))
+                    return true;
+                break;
+                
+            case questSceneManagerNodeDefinition sceneManagerNode:
+                // Check specific properties instead of full recursion to avoid stack overflow
+                if (CheckSpecificPropertiesForPlayer(sceneManagerNode))
+                    return true;
+                break;
+        }
+
+        // Check all properties of the quest node recursively (but avoid circular references)
+        return CheckRedBaseClassForPlayerFlags(questNode);
+    }
+
+    /// <summary>
+    /// Check specific properties for player flags without full recursion to avoid stack overflow
+    /// </summary>
+    private bool CheckSpecificPropertiesForPlayer(RedBaseClass obj)
+    {
+        var type = obj.GetType();
+        var properties = type.GetProperties();
+        
+        foreach (var prop in properties)
+        {
+            try
+            {
+                // Skip properties that might cause circular references
+                if (prop.Name == "Chunk" || prop.Name == "Parent") continue;
+                
+                var value = prop.GetValue(obj);
+                if (value != null)
+                {
+                    // Check for direct player-related boolean properties
+                    if (prop.Name.Contains("Player", System.StringComparison.OrdinalIgnoreCase) ||
+                        prop.Name.Contains("refLocalPlayer", System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (value is CBool boolValue && boolValue == true)
+                        {
+                            return true;
+                        }
+                    }
+                    
+                    // Check direct questUniversalRef properties for refLocalPlayer
+                    if (value is questUniversalRef universalRef && universalRef.RefLocalPlayer == true)
+                    {
+                        return true;
+                    }
+                    
+                    // Check gameEntityReference for player references
+                    if (value is gameEntityReference entityRef)
+                    {
+                        var resolvedText = entityRef.Reference.GetResolvedText()!;
+                        if (!string.IsNullOrEmpty(resolvedText) && 
+                            (resolvedText.Contains("player", StringComparison.OrdinalIgnoreCase) ||
+                             resolvedText == "#player"))
+                        {
+                            return true;
+                        }
+                        
+                        var dynamicEntityName = entityRef.DynamicEntityUniqueName.GetResolvedText();
+                        if (!string.IsNullOrEmpty(dynamicEntityName) &&
+                            dynamicEntityName.Contains("player", StringComparison.OrdinalIgnoreCase))
+                        {
+                            return true;
+                        }
+                    }
+                    
+                    // Check handles that contain questUniversalRef or gameEntityReference
+                    if (value is IRedBaseHandle handle)
+                    {
+                        var handleValue = handle.GetValue();
+                        if (handleValue is questUniversalRef handleUniversalRef && handleUniversalRef.RefLocalPlayer == true)
+                        {
+                            return true;
+                        }
+                        if (handleValue is gameEntityReference handleEntityRef)
+                        {
+                            var handleResolvedText = handleEntityRef.Reference.GetResolvedText()!;
+                            if (!string.IsNullOrEmpty(handleResolvedText) && 
+                                (handleResolvedText.Contains("player", StringComparison.OrdinalIgnoreCase) ||
+                                 handleResolvedText == "#player"))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (System.Exception)
+            {
+                // Skip properties that cause exceptions
+                continue;
+            }
+        }
+        
+        return false;
+    }
+
+    /// <summary>
+    /// Check RedBaseClass properties for player flags
+    /// </summary>
+    private bool CheckRedBaseClassForPlayerFlags(RedBaseClass obj)
+    {
+        var type = obj.GetType();
+        var properties = type.GetProperties();
+        
+        foreach (var prop in properties)
+        {
+            try
+            {
+                // Skip properties that might cause issues
+                if (prop.Name == "Chunk" || prop.Name == "Parent") continue;
+                
+                var value = prop.GetValue(obj);
+                if (value != null)
+                {
+                    // Check for specific player-related properties
+                    if (prop.Name.Contains("Player", System.StringComparison.OrdinalIgnoreCase) ||
+                        prop.Name.Contains("refLocalPlayer", System.StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (value is CBool boolValue && boolValue == true)
+                        {
+                            return true;
+                        }
+                    }
+                    
+                    // Recursively check the property value
+                    if (CheckForPlayerNodeRecursively(value))
+                        return true;
+                }
+            }
+            catch (System.Exception)
+            {
+                // Skip properties that cause exceptions
+                continue;
+            }
+        }
+        
+        return false;
+    }
 
     /// <summary>
     /// Refresh the node's visual details without regenerating sockets

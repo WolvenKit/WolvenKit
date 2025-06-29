@@ -114,19 +114,19 @@
                 </DataTemplate>
 
                 <DataTemplate x:Key="DetailedHeaderTemplate">
-                    <StackPanel Orientation="Vertical" Margin="-6">
+                    <StackPanel Orientation="Vertical" Margin="-6,-4,-6,-6">
                         <!-- Notable Point Indicator Bar (only visible for scene nodes with notable points) -->
                         <Border Background="#CC919100" 
                                 BorderBrush="#DDAB9066"
-                                BorderThickness="0,0,0,1"
-                                Padding="10,6,10,6"
+                                BorderThickness="1,1,1,1"
+                                Padding="8,3,8,3"
                                 HorizontalAlignment="Stretch"
                                 Visibility="{Binding HasNotablePoint, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="⭐" 
                                           Margin="0,0,8,0"
                                           VerticalAlignment="Center"
-                                          FontSize="18"
+                                          FontSize="16"
                                           Foreground="#FFFFD700" />
                                 <TextBlock Text="Notable Point: "
                                           VerticalAlignment="Center"
@@ -134,6 +134,27 @@
                                           FontSize="13"
                                           Foreground="#FFE6E6E6" />
                                 <TextBlock Text="{Binding NotablePointName, FallbackValue=''}"
+                                          VerticalAlignment="Center"
+                                          FontWeight="Bold"
+                                          FontSize="13"
+                                          Foreground="#FFFFFF" />
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Player Node Indicator Bar (only visible for scene nodes that reference the player) -->
+                        <Border Background="#000055AA" 
+                                BorderBrush="#DD4477CC"
+                                BorderThickness="1,1,1,1"
+                                Padding="8,3,8,3"
+                                HorizontalAlignment="Stretch"
+                                Visibility="{Binding IsPlayerNode, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="👤" 
+                                          Margin="0,0,8,0"
+                                          VerticalAlignment="Center"
+                                          FontSize="16"
+                                          Foreground="#FF77BBDD" />
+                                <TextBlock Text="Player Involved"
                                           VerticalAlignment="Center"
                                           FontWeight="Bold"
                                           FontSize="13"
@@ -236,6 +257,10 @@
                                         Value="0">
                                         <Setter Property="Header" Value="{Binding Title}" />
                                         <Setter Property="HeaderTemplate" Value="{StaticResource HeaderTemplate}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                        <Setter Property="BorderBrush" Value="{StaticResource WolvenKitYellow}" />
+                                        <Setter Property="BorderThickness" Value="2" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -353,6 +378,12 @@
                     <Setter Property="Location" Value="{Binding Location}" />
                     <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="BorderThickness" Value="0" />
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="BorderBrush" Value="{StaticResource WolvenKitYellow}" />
+                            <Setter Property="BorderThickness" Value="2" />
+                        </Trigger>
+                    </Style.Triggers>
                 </Style>
             </nodify:NodifyEditor.ItemContainerStyle>
 

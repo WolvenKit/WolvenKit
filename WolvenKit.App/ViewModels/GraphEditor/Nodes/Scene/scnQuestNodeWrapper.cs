@@ -34,7 +34,16 @@ public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
             Title = $"[{UniqueId}] Quest";
         }
 
-        Details.AddRange(NodeProperties.GetPropertiesFor(_castedData.QuestNode?.Chunk, scnSceneResource));
+        // Get properties but exclude the redundant "Type" since it's already shown in the title
+        var questNodeDetails = NodeProperties.GetPropertiesFor(_castedData.QuestNode?.Chunk, scnSceneResource);
+        foreach (var kvp in questNodeDetails)
+        {
+            // Skip the "Type" entry as it's redundant with the title for scene quest nodes
+            if (kvp.Key != "Type")
+            {
+                Details[kvp.Key] = kvp.Value;
+            }
+        }
 
         Title += NodeProperties.SetNameFromNotablePoints(scnSceneGraphNode.NodeId.Id, scnSceneResource);
     }
@@ -136,13 +145,18 @@ public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
                 var questNodeDetails = NodeProperties.GetPropertiesFor(_castedData.QuestNode.Chunk, sceneResource);
                 foreach (var kvp in questNodeDetails)
                 {
-                    tempDetails[kvp.Key] = kvp.Value;
+                    // Skip the "Type" entry as it's redundant with the title for scene quest nodes
+                    if (kvp.Key != "Type")
+                    {
+                        tempDetails[kvp.Key] = kvp.Value;
+                    }
                 }
                 
             }
             else
             {
-                tempDetails["Type"] = "Quest";
+                // For nodes without a quest node, we don't show type since it would just be generic "Quest"
+                // The title already indicates it's a Quest node
             }
             
             // Set the new details dictionary to trigger UI update
@@ -151,6 +165,12 @@ public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
             // Also refresh the title
             UpdateTitle();
             OnPropertyChanged(nameof(Title));
+            
+            // Re-detect player node status in case the quest node changed
+            if (_castedData.QuestNode?.Chunk != null)
+            {
+                DetectPlayerNodeFromQuestNode(_castedData.QuestNode.Chunk);
+            }
         }
         catch (System.Exception ex)
         {
@@ -182,6 +202,28 @@ public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
         {
             var loggerService = Locator.Current.GetService<ILoggerService>();
             loggerService?.Error($"Error updating scnQuestNode {UniqueId} title: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Re-detect player node status from the nested quest node
+    /// </summary>
+    private void DetectPlayerNodeFromQuestNode(questNodeDefinition questNode)
+    {
+        try
+        {
+            // Use the protected method from base class to check for player node indicators
+            IsPlayerNode = CheckForPlayerNodeRecursively(questNode);
+            
+            // Notify UI of changes
+            OnPropertyChanged(nameof(IsPlayerNode));
+        }
+        catch (System.Exception)
+        {
+            // If detection fails, assume it's not a player node
+            IsPlayerNode = false;
+            
+            OnPropertyChanged(nameof(IsPlayerNode));
         }
     }
 
