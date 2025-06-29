@@ -77,6 +77,10 @@ public class questRandomizerNodeDefinitionWrapper : questDisableableNodeDefiniti
         Output.Add(connector);
         _castedData.OutputWeights.Add(0);
 
+        // SYNC FIX: Update property panel and graph editor without regenerating connectors
+        TriggerPropertyChanged(nameof(Output));
+        OnPropertyChanged(nameof(Data));
+
         return connector;
     }
 

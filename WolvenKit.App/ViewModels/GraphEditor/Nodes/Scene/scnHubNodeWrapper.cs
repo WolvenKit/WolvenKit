@@ -11,6 +11,12 @@ public class scnHubNodeWrapper : BaseSceneViewModel<scnHubNode>, IDynamicInputNo
 
     internal override void GenerateSockets()
     {
+        // Add fixed input sockets
+        Input.Clear();
+        Input.Add(new SceneInputConnectorViewModel("In", "In", UniqueId, 0));
+        Input.Add(new SceneInputConnectorViewModel("CutDestination", "CutDestination", UniqueId, 1));  // Added CutDestination input socket
+        
+        // Generate output sockets
         for (var i = 0; i < _castedData.OutputSockets.Count; i++)
         {
             Output.Add(new SceneOutputConnectorViewModel($"Out{i}", $"Out{i}", UniqueId, _castedData.OutputSockets[i]));
@@ -24,8 +30,19 @@ public class scnHubNodeWrapper : BaseSceneViewModel<scnHubNode>, IDynamicInputNo
 
         Input.Add(input);
 
+        // SYNC FIX: Update property panel and graph editor without regenerating connectors
+        TriggerPropertyChanged(nameof(Input));
+        OnPropertyChanged(nameof(Data));
+
         return input;
     }
 
-    public void RemoveInput() => Input.Remove(Input[^1]);
+    public void RemoveInput() 
+    {
+        Input.Remove(Input[^1]);
+        
+        // SYNC FIX: Update property panel and graph editor without regenerating connectors
+        TriggerPropertyChanged(nameof(Input));
+        OnPropertyChanged(nameof(Data));
+    }
 }

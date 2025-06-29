@@ -1,0 +1,35 @@
+<!--
+    Scene Editor Converters Resource Dictionary
+    ===========================================
+    
+    This resource dictionary contains all converters specific to the Scene Editor feature.
+    It should be referenced by any view that is part of the Scene Editor functionality.
+    
+    Usage:
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/WolvenKit;component/Resources/Converters/SceneEditorConverters.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    
+    Included Converters:
+    - RedTypeToChunkViewModelConverter: Converts RED types to ChunkViewModel for property editing
+    - RedTypeToChunkViewModelCollectionConverter: Wraps a single ChunkViewModel in a collection for RedTreeView
+    - PathTypeToThicknessConverter: Maps connection path types to visual thickness for SceneGraphView
+-->
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:WolvenKit.Converters">
+    
+    <!-- Scene Editor specific converters -->
+    <converters:RedTypeToChunkViewModelConverter x:Key="RedTypeToChunkViewModelConverter" />
+    <converters:RedTypeToChunkViewModelCollectionConverter x:Key="RedTypeToChunkViewModelCollectionConverter" />
+    
+    <!-- Path type converter for connection thickness in scene graph -->
+    <converters:PathTypeToThicknessConverter x:Key="PathTypeToThicknessConverter" 
+                                           ThinThickness="1.5" 
+                                           ThickThickness="3.0" />
+</ResourceDictionary> 

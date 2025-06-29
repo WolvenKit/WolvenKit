@@ -1,4 +1,5 @@
-﻿using WolvenKit.RED4.Types;
+﻿using WolvenKit.App.Extensions;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 
@@ -6,6 +7,7 @@ public class questSendAICommandNodeDefinitionWrapper : questAICommandNodeBaseWra
 {
     public questSendAICommandNodeDefinitionWrapper(questSendAICommandNodeDefinition questAICommandNodeBase) : base(questAICommandNodeBase)
     {
+        Details.AddRange(NodeProperties.GetPropertiesFor(questAICommandNodeBase));
     }
 
     internal override void CreateDefaultSockets()

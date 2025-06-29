@@ -19,6 +19,7 @@ using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
+using WolvenKit.App.Services;
 
 namespace WolvenKit.App.ViewModels.GraphEditor;
 
@@ -182,9 +183,33 @@ public partial class RedGraph : IDisposable
         }
 
         GraphStateSave();
+        
+        // Mark document as dirty since we modified the data
+        DocumentViewModel?.SetIsDirty(true);
     }
 
-    public void RemoveNodes(IList<object> nodes)
+    public void DuplicateNode(NodeViewModel node)
+    {
+        if (!Nodes.Contains(node))
+        {
+            return;
+        }
+
+        if (GraphType == RedGraphType.Scene && node is BaseSceneViewModel sceneNode)
+        {
+            DuplicateSceneNode(sceneNode);
+        }
+
+        if (GraphType == RedGraphType.Quest && node is BaseQuestViewModel questNode)
+        {
+            DuplicateQuestNode(questNode);
+        }
+        
+        // Mark document as dirty since we modified the data
+        DocumentViewModel?.SetIsDirty(true);
+    }
+
+    public void RemoveNodes(IEnumerable<object> nodes)
     {
         var removableNodes = new List<NodeViewModel>();
         foreach (var node in nodes)
@@ -233,9 +258,13 @@ public partial class RedGraph : IDisposable
         var graph = new GeometryGraph();
         var msaglNodes = new Dictionary<uint, Node>();
 
+        // Extra height for external node ID (font + margin + padding)
+        const double nodeIdExtraHeight = 35;
+
         foreach (var node in Nodes)
         {
-            var msaglNode = new Node(CurveFactory.CreateRectangle(node.Size.Width, node.Size.Height, new Microsoft.Msagl.Core.Geometry.Point()))
+            var layoutHeight = node.Size.Height + nodeIdExtraHeight;
+            var msaglNode = new Node(CurveFactory.CreateRectangle(node.Size.Width, layoutHeight, new Microsoft.Msagl.Core.Geometry.Point()))
             {
                 UserData = node
             };
@@ -266,14 +295,16 @@ public partial class RedGraph : IDisposable
         foreach (var node in graph.Nodes)
         {
             var nvm = (NodeViewModel)node.UserData;
+            // Offset the Y position to account for the extra height added for node ID spacing
             nvm.Location = new System.Windows.Point(
                 node.Center.X - graph.BoundingBox.Center.X - (nvm.Size.Width / 2) + xOffset,
-                node.Center.Y - graph.BoundingBox.Center.Y - (nvm.Size.Height / 2) + yOffset);
+                node.Center.Y - graph.BoundingBox.Center.Y - (nvm.Size.Height / 2) + yOffset + (nodeIdExtraHeight / 2));
 
+            // Calculate bounds including the node ID space
             maxX = Math.Max(maxX, nvm.Location.X + nvm.Size.Width);
             minX = Math.Min(minX, nvm.Location.X);
-            maxY = Math.Max(maxY, nvm.Location.Y + nvm.Size.Height);
-            minY = Math.Min(minY, nvm.Location.Y);
+            maxY = Math.Max(maxY, nvm.Location.Y + nvm.Size.Height + nodeIdExtraHeight);
+            minY = Math.Min(minY, nvm.Location.Y - nodeIdExtraHeight);
         }
 
         return new System.Windows.Rect(minX, minY, maxX - minX, maxY - minY);
@@ -413,6 +444,18 @@ public partial class RedGraph : IDisposable
                 };
 
                 File.WriteAllText(statePath, JsonConvert.SerializeObject(jRoot));
+            }
+        }
+    }
+
+    private void NotifyNodesUpdated(params uint[] nodeIds)
+    {
+        foreach (var nodeId in nodeIds)
+        {
+            var nodeVm = Nodes.FirstOrDefault(n => n.UniqueId == nodeId);
+            if (nodeVm != null)
+            {
+                NodePropertyUpdateService.NotifyPropertyUpdated((RedBaseClass)nodeVm.Data);
             }
         }
     }

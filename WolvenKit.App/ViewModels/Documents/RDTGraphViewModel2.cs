@@ -12,7 +12,7 @@ public partial class RDTGraphViewModel2 : RedDocumentTabViewModel
 {
     private readonly INodeWrapperFactory _nodeWrapperFactory;
 
-    protected readonly IRedType _data;
+    protected IRedType _data;
 
     [ObservableProperty]
     private RedGraph _mainGraph;
@@ -48,6 +48,12 @@ public partial class RDTGraphViewModel2 : RedDocumentTabViewModel
     public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.MainFile;
 
     public List<RedGraph> History { get; } = new();
+
+    public void UpdateDataAndReload(IRedType newData)
+    {
+        _data = newData;
+        Load();
+    }
 
     public override void Load()
     {

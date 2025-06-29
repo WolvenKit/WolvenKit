@@ -25,6 +25,7 @@ using WolvenKit.App.Models.Nodify;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Exceptions;
@@ -330,6 +331,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         Parent.CalculateIsDefault();
 
+        // Always try to notify for graph sync, regardless of Tab state
+        NotifyPropertyUpdateForGraphSync();
+
         if (Tab is not null)
         {
             if (Parent.Data is IRedArray arr)
@@ -341,6 +345,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     arr[index] = Data;
                     Tab.Parent.SetIsDirty(true);
                     Parent.NotifyChain(nameof(Data));
+                    
+                    // Notify property update service for graph sync
+                    NotifyPropertyUpdateForGraphSync();
                 }
 
                 Parent.CalculateDescriptor();
@@ -377,6 +384,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
                 Tab.Parent.SetIsDirty(true);
                 Parent.NotifyChain(nameof(Data));
+                
+                // Notify property update service for graph sync
+                NotifyPropertyUpdateForGraphSync();
             }
             else
             {
@@ -396,6 +406,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
                     Tab.Parent.SetIsDirty(true);
                     Parent.NotifyChain(nameof(Data));
+                    
+                    // Notify property update service for graph sync
+                    NotifyPropertyUpdateForGraphSync();
                 }
             }
         }
@@ -734,7 +747,46 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    public string ResolvedType => ResolvedPropertyType is not null ? GetTypeRedName(ResolvedPropertyType) ?? ResolvedPropertyType.Name : "";
+        public string ResolvedType
+    {
+        get
+        {
+            if (ResolvedPropertyType is null)
+            {
+                return "";
+            }
+
+            var baseResolvedType = GetTypeRedName(ResolvedPropertyType) ?? ResolvedPropertyType.Name;
+
+            // Special case for scnQuestNode to show the quest node type in the resolved type
+            if (Data is IRedBaseHandle handle && handle.GetValue() is scnQuestNode questNode)
+            {
+                if (questNode.QuestNode?.Chunk != null)
+                {
+                    var questNodeType = NodeProperties.GetNameFromClass(questNode.QuestNode.Chunk);
+
+                    // Show the condition type for pause condition nodes
+                    if (questNode.QuestNode.Chunk is questPauseConditionNodeDefinition pauseCondition)
+                    {
+                        if (pauseCondition.Condition?.Chunk != null)
+                        {
+                            var conditionType = NodeProperties.GetNameFromClass(pauseCondition.Condition.Chunk);
+
+                            return $"scnQuestNode → {questNodeType} → {conditionType}";
+                        }
+
+                        return $"scnQuestNode → {questNodeType} → <No Condition>";
+                    }
+
+                    return $"scnQuestNode → {questNodeType}";
+                }
+
+                return "scnQuestNode → <No Quest Node>";
+            }
+
+            return baseResolvedType;
+        }
+    }
 
     // Controls if value text is being displayed or not
     public bool TypesDiffer => PropertyType != ResolvedPropertyType;
@@ -743,6 +795,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     // Used in view for conditional colouring
     public bool DisplayAsArrayItem => IsInArray && Name != DisplayName;
+
+    // Used in view for muting scene event descriptors
+    public bool ShouldMuteDescriptor => ResolvedData is scnSceneEvent;
 
     // Used in view
     public bool ShowScrollToMaterial => ResolvedData is CMeshMaterialEntry || (ResolvedData is CName && Parent?.Name == "chunkMaterials");
@@ -1184,6 +1239,99 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
             if (Data is IRedArray arr)
             {
+                // Special handling for scnActorDef arrays - just calculate correct actor ID
+                if (arr.InnerType == typeof(scnActorDef))
+                {
+                    var newActor = new scnActorDef();
+                    
+                    // Calculate the next actor ID based on current array count
+                    uint nextActorId = (uint)arr.Count;
+                    newActor.ActorId.Id = nextActorId;
+                    
+                    InsertChild(-1, newActor);
+                    return;
+                }
+                
+                // Special handling for scnPlayerActorDef arrays - calculate ID continuing after actors
+                if (arr.InnerType == typeof(scnPlayerActorDef) && GetRootModel().ResolvedData is scnSceneResource scene)
+                {
+                    var newPlayerActor = new scnPlayerActorDef();
+                    
+                    // Calculate the next actor ID continuing after regular actors
+                    // Total ID = actors.Count + playerActors.Count
+                    uint nextActorId = (uint)(scene.Actors.Count + arr.Count);
+                    newPlayerActor.ActorId.Id = nextActorId;
+                    
+                    InsertChild(-1, newPlayerActor);
+                    return;
+                }
+                
+                // Special handling for scnPropDef arrays - calculate correct prop ID
+                if (arr.InnerType == typeof(scnPropDef))
+                {
+                    var newProp = new scnPropDef();
+                    
+                    // Calculate the next prop ID based on current array count (0, 1, 2, etc.)
+                    uint nextPropId = (uint)arr.Count;
+                    newProp.PropId.Id = nextPropId;
+                    
+                    InsertChild(-1, newProp);
+                    return;
+                }
+                
+                // Special handling for screenplay lines - itemId: 0, 257, 513, 769, etc.
+                if (arr.InnerType == typeof(scnscreenplayDialogLine))
+                {
+                    var newLine = new scnscreenplayDialogLine();
+                    
+                    // Calculate itemId: 0 + lineIndex * 256
+                    uint itemId = (uint)arr.Count * 256;
+                    newLine.ItemId.Id = itemId;
+                    
+                    InsertChild(-1, newLine);
+                    return;
+                }
+                
+                // Special handling for screenplay options - itemId: 2, 258, 514, 770, etc.
+                if (arr.InnerType == typeof(scnscreenplayChoiceOption))
+                {
+                    var newOption = new scnscreenplayChoiceOption();
+                    
+                    // Calculate itemId: 2 + optionIndex * 256
+                    uint itemId = 2 + (uint)arr.Count * 256;
+                    newOption.ItemId.Id = itemId;
+                    
+                    InsertChild(-1, newOption);
+                    return;
+                }
+                
+                // Special handling for scnPerformerSymbol arrays - just calculate correct performer ID
+                if (arr.InnerType == typeof(scnPerformerSymbol))
+                {
+                    var newPerformer = new scnPerformerSymbol();
+                    
+                    // Calculate the next performer ID based on current array count
+                    // Formula: performerId = 1 + performerIndex * 256
+                    uint performerId = 1 + (uint)arr.Count * 256;
+                    newPerformer.PerformerId.Id = performerId;
+                    
+                    InsertChild(-1, newPerformer);
+                    return;
+                }
+                
+                // Special handling for scnCinematicAnimSetSRRefId arrays - auto-assign next available index
+                if (arr.InnerType == typeof(scnCinematicAnimSetSRRefId))
+                {
+                    var newAnimSetRefId = new scnCinematicAnimSetSRRefId();
+                    
+                    // Calculate the next index - start from 0 and increment
+                    uint nextIndex = (uint)arr.Count;
+                    newAnimSetRefId.Id = nextIndex;
+                    
+                    InsertChild(-1, newAnimSetRefId);
+                    return;
+                }
+
                 var innerType = arr.InnerType;
                 if (innerType.IsValueType)
                 {
@@ -2133,6 +2281,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
             Parent.RecalculateProperties();
 
+            // Notify for graph sync when array items are deleted
+            NotifyPropertyUpdateForGraphSync();
+
             if (!Tab.HasActiveSearch)
             {
                 newSelectionIndex = Math.Min(newSelectionIndex, Parent.TVProperties.Count) - 1;
@@ -2219,7 +2370,19 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             _loggerService.Warning($"Something went wrong while trying to delete the selection : {ex}");
         }
 
-        RecalculateProperties();
+        // Lightweight fix: renumber remaining children and notify once
+        if (Data is IRedArray)
+        {
+            for (int i = 0; i < TVProperties.Count; i++)
+                TVProperties[i].PropertyName = $"[{i}]";
+        }
+
+        // Notify Syncfusion once – grid updates rows safely
+        NotifyChain(nameof(TVProperties));
+        
+        // Notify for graph sync when array items are deleted
+        NotifyPropertyUpdateForGraphSync();
+        
         var newSelectionIndex = Math.Min(indices.First(), TVProperties.Count) - 1;
         newSelectionIndex = Math.Max(0, newSelectionIndex);
         newSelectionIndex = Math.Min(newSelectionIndex, TVProperties.Count - 1);
@@ -2409,11 +2572,27 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             Data = defaultValue;
             RecalculateProperties(Data);
             Parent.CalculateIsDefault();
+            
+            // Notify for graph sync when object is reset to default
+            NotifyPropertyUpdateForGraphSync();
             return;
         }
 
-        Data = new RedDummy();
+        // Create a proper default value based on the property type
+        try 
+        {
+            Data = RedTypeFactory.CreateAndInitRedType(PropertyType);
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Warning($"Could not create default value for type {PropertyType.Name}, falling back to RedDummy: {ex.Message}");
+            Data = new RedDummy();
+        }
+        
         RecalculateProperties(Data);
+        
+        // Notify for graph sync when object is reset
+        NotifyPropertyUpdateForGraphSync();
     }
 
     /// <summary>
@@ -2543,6 +2722,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
 
             Tab?.Parent.SetIsDirty(true);
+            
+            // Notify for graph sync when chunk is pasted
+            NotifyPropertyUpdateForGraphSync();
         }
         catch (Exception ex)
         {
@@ -2595,6 +2777,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         Parent.InsertChild(index, newData);
 
         Tab?.Parent.SetIsDirty(true);
+        
+        // Notify for graph sync when items are duplicated
+        Parent.NotifyPropertyUpdateForGraphSync();
 
         var newSibling = Parent.GetChildNode(Math.Min(index, Parent.TVProperties.Count - 1));
 
@@ -2819,6 +3004,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
                 index++;
             }
+            
+            // Notify for graph sync when items are pasted
+            NotifyPropertyUpdateForGraphSync();
         }
         catch (Exception ex) { _loggerService.Error(ex); }
     }
@@ -2892,17 +3080,48 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             return;
         }
-        CalculateDisplayName();
+        
+        try
+        {
+            CalculateDisplayName();
+        }
+        catch (Exception ex)
+        {
+            _loggerService?.Error($"Failed to calculate display name: {ex.Message}");
+        }
 
         _propertiesLoaded = true;
-        OnPropertyChanged(nameof(ResolvedData));
+        
+        try
+        {
+            OnPropertyChanged(nameof(ResolvedData));
+        }
+        catch (Exception ex)
+        {
+            _loggerService?.Error($"Failed to notify ResolvedData changed: {ex.Message}");
+        }
 
-        Properties.Clear();
+        try
+        {
+            Properties.Clear();
+        }
+        catch (Exception ex)
+        {
+            _loggerService?.Error($"Failed to clear properties: {ex.Message}");
+            return; // If we can't clear properties, we can't continue
+        }
 
         // Let SFTreeView clear its items first else the ScrollBar calculations are of...
         // Can't use NotificationSubscriptionMode.CollectionChanged neither since SF never attaches to the event...
         // TVProperties also doesn't need to be Observable but doesn't matter really...
-        OnPropertyChanged(nameof(TVProperties));
+        try
+        {
+            OnPropertyChanged(nameof(TVProperties));
+        }
+        catch (Exception ex)
+        {
+            _loggerService?.Error($"Failed to notify TVProperties changed: {ex.Message}");
+        }
 
         var isreadonly = IsReadOnly;
         if (Parent is not null)
@@ -2911,6 +3130,19 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         var obj = Data;
+        
+        // Check for required services
+        if (_chunkViewmodelFactory == null)
+        {
+            _loggerService?.Error("ChunkViewmodelFactory is null, cannot calculate properties");
+            return;
+        }
+        
+        if (_appViewModel == null)
+        {
+            _loggerService?.Error("AppViewModel is null, cannot calculate properties");
+            return;
+        }
 
         switch (obj)
         {
@@ -2934,6 +3166,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     return;
                 }
                 obj = TweakDBService.GetRecord(tdb);
+                if (obj is null)
+                {
+                    return;
+                }
                 isreadonly = true;
                 break;
             }
@@ -3006,15 +3242,41 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
                     var t = redClass.GetProperty(name) ?? new RedDummy();
 
-                    Properties.Add(_chunkViewmodelFactory.ChunkViewModel(t, propertyInfo.RedName.NotNull(), _appViewModel,
-                        this, isreadonly));
+                    try
+                    {
+                        var childViewModel = _chunkViewmodelFactory.ChunkViewModel(t, propertyInfo.RedName.NotNull(), _appViewModel,
+                            this, isreadonly);
+                        if (childViewModel != null)
+                        {
+                            Properties.Add(childViewModel);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _loggerService?.Error($"Failed to create child ChunkViewModel for property {propertyInfo.RedName}: {ex.Message}");
+                    }
                 }
 
                 foreach (var dp in dps)
                 {
-                    ArgumentNullException.ThrowIfNull(dp);
-                    Properties.Add(_chunkViewmodelFactory.ChunkViewModel(redClass.GetProperty(dp).NotNull(), dp, _appViewModel,
-                        this, isreadonly));
+                    try
+                    {
+                        ArgumentNullException.ThrowIfNull(dp);
+                        var dynamicProperty = redClass.GetProperty(dp);
+                        if (dynamicProperty != null)
+                        {
+                            var childViewModel = _chunkViewmodelFactory.ChunkViewModel(dynamicProperty, dp, _appViewModel,
+                                this, isreadonly);
+                            if (childViewModel != null)
+                            {
+                                Properties.Add(childViewModel);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _loggerService?.Error($"Failed to create child ChunkViewModel for dynamic property {dp}: {ex.Message}");
+                    }
                 }
 
                 break;
@@ -3156,11 +3418,22 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                         var pis = Data.GetType().GetProperties(s_defaultLookup);
                         foreach (var pi in pis)
                         {
-                            var value = Data is not null ? pi.GetValue(Data) : null;
-                            if (value is IRedType irt)
+                            try
                             {
-                                Properties.Add(_chunkViewmodelFactory.ChunkViewModel(irt, pi.Name, _appViewModel,
-                                    this, isreadonly));
+                                var value = Data is not null ? pi.GetValue(Data) : null;
+                                if (value is IRedType irt)
+                                {
+                                    var childViewModel = _chunkViewmodelFactory.ChunkViewModel(irt, pi.Name, _appViewModel,
+                                        this, isreadonly);
+                                    if (childViewModel != null)
+                                    {
+                                        Properties.Add(childViewModel);
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                _loggerService?.Error($"Failed to create child ChunkViewModel for property {pi.Name}: {ex.Message}");
                             }
                         }
 
@@ -3175,7 +3448,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                                 nodeChunk.CalculateProperties();
                                 Properties.Add(nodeChunk);
                             }
-                            catch (Exception ex) { _loggerService.Error(ex); }
+                            catch (Exception ex) { _loggerService?.Error(ex); }
                         }
 
                         break;
@@ -3185,7 +3458,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 break;
             }
         }
-        OnPropertyChanged(nameof(TVProperties));
+        
+        try
+        {
+            OnPropertyChanged(nameof(TVProperties));
+        }
+        catch (Exception ex)
+        {
+            _loggerService?.Error($"Failed to notify TVProperties changed at end of CalculateProperties: {ex.Message}");
+        }
     }
 
     private void CalculateIsDefault()
@@ -3543,6 +3824,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             // re-number children
             ReindexChildren();
             Tab?.Parent.SetIsDirty(true);
+            
+            // Notify for graph sync when child is inserted
+            NotifyPropertyUpdateForGraphSync();
 
             if (Properties.Count > index && Tab is not null)
             {
@@ -3782,6 +4066,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             CalculateProperties();
             OnPropertyChanged(nameof(Data));
             Tab?.Parent.SetIsDirty(true);
+            
+            // Notify for graph sync when handle is set
+            NotifyPropertyUpdateForGraphSync();
         }
     }
 
@@ -3854,6 +4141,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         IsDeleteReady = false;
         Tab?.Parent.SetIsDirty(true);
         RecalculateProperties();
+        
+        // Notify for graph sync when array is cleared
+        NotifyPropertyUpdateForGraphSync();
 
         DeleteAllCommand.NotifyCanExecuteChanged();
     }
@@ -4012,6 +4302,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         Tab?.Parent.SetIsDirty(true);
         RecalculateProperties();
+        
+        // Notify for graph sync when selection is deleted
+        NotifyPropertyUpdateForGraphSync();
     }
 
     private void DeleteFullSelection(List<IRedType> l, IRedArray a)
@@ -4030,6 +4323,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         Tab?.Parent.SetIsDirty(true);
         RecalculateProperties();
+        
+        // Notify for graph sync when selection is deleted
+        NotifyPropertyUpdateForGraphSync();
     }
 
     private void AddToCopiedChunks(IRedType elem)
@@ -4828,6 +5124,38 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             appearanceNode.RecalculateProperties();
             Tab?.Parent.SetIsDirty(true);
         }
+    }
+
+    /// <summary>
+    /// Notify the property update service for graph synchronization
+    /// </summary>
+    private void NotifyPropertyUpdateForGraphSync()
+    {
+        // Find the root node data to notify about
+        var rootNodeData = GetRootNodeData();
+        if (rootNodeData != null)
+        {
+            NodePropertyUpdateService.NotifyPropertyUpdated(rootNodeData);
+        }
+    }
+    
+    /// <summary>
+    /// Get the root node data (scene graph node) that this property belongs to
+    /// </summary>
+    private RedBaseClass? GetRootNodeData()
+    {
+        // Walk up the tree to find a scene graph node
+        var current = this;
+        while (current != null)
+        {
+            if (current.Data is scnSceneGraphNode sceneNode)
+            {
+                return sceneNode;
+            }
+            current = current.Parent;
+        }
+        
+        return null;
     }
 
     public override string ToString()
