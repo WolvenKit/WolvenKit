@@ -5,11 +5,13 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using WolvenKit.Helpers;
+using WolvenKit.Modkit.Resources;
 
 namespace WolvenKit.Views.Editors
 {
     public partial class TrimmingTextBox : UserControl
     {
+        /// <summary>Identifies the <see cref="Text"/> dependency property.</summary>
         public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register(
                 nameof(Text),
@@ -17,6 +19,7 @@ namespace WolvenKit.Views.Editors
                 typeof(TrimmingTextBox),
                 new FrameworkPropertyMetadata(string.Empty));
 
+        /// <summary>Identifies the <see cref="Background"/> dependency property.</summary>
         public static new readonly DependencyProperty BackgroundProperty =
             DependencyProperty.Register(
                 nameof(Background),
@@ -25,6 +28,7 @@ namespace WolvenKit.Views.Editors
                 new FrameworkPropertyMetadata(
                     Application.Current.FindResource("BackgroundColor_Control") as Brush)); // Use resource as default value
 
+        /// <summary>Identifies the <see cref="Tooltip"/> dependency property.</summary>
         public static readonly DependencyProperty TooltipProperty =
             DependencyProperty.Register(
                 nameof(Tooltip),
@@ -62,12 +66,10 @@ namespace WolvenKit.Views.Editors
             set => SetValue(TooltipProperty, value);
         }
 
+
         private ScrollViewer _scrollViewer;
 
-        public TrimmingTextBox()
-        {
-            InitializeComponent();
-        }
+        public TrimmingTextBox() => InitializeComponent();
 
         private void FetchScrollViewer()
         {
@@ -96,6 +98,34 @@ namespace WolvenKit.Views.Editors
             OnChange?.Invoke(this, EventArgs.Empty);
         }
 
+        private void RefreshContextMenu(object sender, ContextMenuEventArgs contextMenuEventArgs)
+        {
+            CutMenuItem.SetCurrentValue(IsEnabledProperty, RealTextBox.SelectionLength > 0);
+            CopyMenuItem.SetCurrentValue(IsEnabledProperty, RealTextBox.SelectionLength > 0);
+            PasteMenuItem.SetCurrentValue(IsEnabledProperty, Clipboard.ContainsText());
+
+            if (string.IsNullOrWhiteSpace(Text) ||
+                (!ArchiveXlHelper.HasSubstitution(Text) && !ArchiveXlHelper.CouldHaveSubstitution(Text)))
+            {
+                DynamicPathMenuItem.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+                DynamicSeparator.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+                return;
+            }
+
+            DynamicSeparator.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+            DynamicPathMenuItem.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+            if (ArchiveXlHelper.HasSubstitution(Text))
+            {
+                DynamicPathMenuItem.SetCurrentValue(HeaderedItemsControl.HeaderProperty,
+                    "Resolve dynamic substitution");
+            }
+            else
+            {
+                DynamicPathMenuItem.SetCurrentValue(HeaderedItemsControl.HeaderProperty,
+                    "Convert to dynamic substitution");
+            }
+        }
+        
         private void RefreshScrollViewer()
         {
             FetchScrollViewer();
@@ -115,6 +145,74 @@ namespace WolvenKit.Views.Editors
         }
 
         public new event EventHandler OnKeyUp;
-        private void RealTextBox_OnKeyUp(object sender, KeyEventArgs e) => OnKeyUp?.Invoke(sender, e);
+
+        private void RealTextBox_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            // custom undo/redo handling
+            if (!(e.Key == Key.Z && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control))
+            {
+                OnKeyUp?.Invoke(sender, e);
+                return;
+            }
+
+            if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+            {
+                // Ctrl+Shift+Z for redo
+                if (RealTextBox.CanRedo)
+                {
+                    RealTextBox.Redo();
+                }
+                else
+                {
+                    var previous = Text;
+                    RealTextBox.SetCurrentValue(TextBox.TextProperty, _previousValue);
+                    _previousValue = previous;
+                }
+            }
+            else
+            {
+                // Ctrl+Z for undo
+                if (RealTextBox.CanUndo)
+                {
+                    RealTextBox.Undo();
+                }
+                else
+                {
+                    var previous = Text;
+                    RealTextBox.SetCurrentValue(TextBox.TextProperty, _previousValue);
+                    _previousValue = previous;
+                }
+            }
+
+            e.Handled = true;
+            OnKeyUp?.Invoke(sender, e);
+        }
+
+        private void Cut_Click(object sender, RoutedEventArgs e) => RealTextBox.Cut();
+
+        private void Copy_Click(object sender, RoutedEventArgs e) => RealTextBox.Copy();
+
+        private void Paste_Click(object sender, RoutedEventArgs e) => RealTextBox.Paste();
+
+        private string _previousValue = string.Empty;
+
+        private void MakeDynamic_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(Text))
+            {
+                return;
+            }
+
+            if (!ArchiveXlHelper.HasSubstitution(Text))
+            {
+                _previousValue = Text;
+                RealTextBox.SetCurrentValue(TextBox.TextProperty, ArchiveXlHelper.MakeDynamic(Text));
+            }
+            else if (App.Helpers.ArchiveXlHelper.GetFirstExistingPath(Text) is string s)
+            {
+                _previousValue = Text;
+                RealTextBox.SetCurrentValue(TextBox.TextProperty, s);
+            }
+        }
     }
 }
