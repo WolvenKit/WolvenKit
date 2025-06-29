@@ -3166,6 +3166,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     return;
                 }
                 obj = TweakDBService.GetRecord(tdb);
+                if (obj is null)
+                {
+                    return;
+                }
                 isreadonly = true;
                 break;
             }
