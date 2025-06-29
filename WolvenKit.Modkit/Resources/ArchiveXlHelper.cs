@@ -57,10 +57,30 @@ public partial class ArchiveXlHelper
         return new CResourceReference<IMaterial>(baseMaterialPath.Replace(s_materialWildcard, substitutionValue)[1..]);
 
     }
-    
-    
 
-    private static readonly Dictionary<string, List<string>> s_substitutionMap =
+    public static string MakeDynamic(string staticPath)
+    {
+        if (string.IsNullOrEmpty(staticPath) || HasSubstitution(staticPath))
+        {
+            return staticPath;
+        }
+
+        var text = Regex.Replace(staticPath, s_genderPartialRegex, "_{gender}_");
+
+        foreach (var kvp in SubstitutionMap)
+        {
+            foreach (var partial in kvp.Value)
+            {
+                text = text.Replace($"_{partial}_", "_{" + kvp.Key + "}_");
+                text = text.Replace($"_{partial}.", "_{" + kvp.Key + "}.");
+            }
+        }
+
+        return $"*{text}";
+    }
+
+
+    public static readonly Dictionary<string, List<string>> SubstitutionMap =
         new()
         {
             { "camera", ["fpp", "tpp"] }, //
@@ -74,8 +94,29 @@ public partial class ArchiveXlHelper
     [GeneratedRegex(@"(?<=\{)\w+(?=\})")]
     private static partial Regex s_substitutionRegex();
 
+    /// <summary>
+    /// Will match w, m, wa, ma, pwa and pma, as long as it's between to underscores.
+    /// </summary>
+    private static readonly string s_genderPartialRegex = @"(?<=_)p?[wm]a?(?=_)";
+
     public static bool HasSubstitution(string s) => s_substitutionRegex().IsMatch(s);
 
+    /// <summary>
+    /// Could the string have substitution? 
+    /// </summary>
+    /// <param name="s"></param>
+    /// <returns></returns>
+    public static bool CouldHaveSubstitution(string s)
+    {
+        if (Regex.IsMatch(s, s_genderPartialRegex))
+        {
+            return true;
+        }
+
+        return SubstitutionMap.SelectMany(kvp => kvp.Value)
+            .Any(partial => s.Contains($"_{partial}_") || s.Contains($"_{partial}."));
+    }
+    
     public static string? GetValuesForInvalidSubstitution(string? s)
     {
         if (s is null || !HasSubstitution(s))
@@ -97,7 +138,7 @@ public partial class ArchiveXlHelper
         
         foreach (Match match in s_substitutionRegex().Matches(s))
         {
-            if (s_substitutionMap.ContainsKey(match.Value))
+            if (SubstitutionMap.ContainsKey(match.Value))
             {
                 continue;
             }
@@ -112,7 +153,7 @@ public partial class ArchiveXlHelper
         
 
         return
-            $"Invalid substitutions used: [{string.Join(',', invalidSubstitutions)}]. Valid substitutions are: [{string.Join(',', s_substitutionMap.Keys)}] ";
+            $"Invalid substitutions used: [{string.Join(',', invalidSubstitutions)}]. Valid substitutions are: [{string.Join(',', SubstitutionMap.Keys)}] ";
     }
 
 
@@ -139,9 +180,9 @@ public partial class ArchiveXlHelper
             }
 
             var (key, value) = (keyValue[0].Replace("&", ""), keyValue[1]);
-            if (!s_substitutionMap.TryGetValue(key, out var values))
+            if (!SubstitutionMap.TryGetValue(key, out var values))
             {
-                result.Add($"Bad key '{key}' ([ {string.Join(", ", s_substitutionMap.Keys)} ])");
+                result.Add($"Bad key '{key}' ([ {string.Join(", ", SubstitutionMap.Keys)} ])");
             }
             else if (!values.Contains(value))
             {
