@@ -29,7 +29,85 @@ public class DocumentTools
         _projectManager = projectManager;
     }
 
+    #region journalFile
+    
+    private static readonly List<string> s_journalJournalsByPath = [];
+    
+    public IEnumerable<string?> GetAllJournalPaths(bool forceCacheRefresh)
+    {
+        if (_projectManager.ActiveProject is not { } activeProject)
+        {
+            return [];
+        }
+        
+        if (forceCacheRefresh)
+        {
+            s_journalJournalsByPath.Clear();
+        }
+        
+        if (s_journalJournalsByPath.Count > 0)
+        {
+            s_journalJournalsByPath.Order();
+        }
+        
+        s_journalJournalsByPath.AddRange(CollectProjectFiles(".journal"));
+    
+        List<string> journalIDs = [];
+        
+        foreach (var journal in s_journalJournalsByPath)
+        {
+            if (activeProject.GetAbsolutePath(journal) is string absolutePath && File.Exists(absolutePath))
+            {
+                if (_cr2WTools.ReadCr2W(absolutePath) is CR2WFile cr2W)
+                {
+                    journalIDs.AddRange(GetJournalIDs(cr2W).Where(id => !journalIDs.Contains(id)));
+                }
+            }
+        }
+    
+        return journalIDs;
+    }
 
+    private List<string> GetJournalIDs(CR2WFile? cr2W)
+    {
+        if (cr2W?.RootChunk is not gameJournalResource journalResource)
+        {
+            return [];
+        }
+
+        if (journalResource.Entry.Chunk == null)
+        {
+            return [];
+        }
+
+        List<string> entriesIDs = [];
+        if (journalResource.Entry.Chunk is gameJournalContainerEntry journalEntry)
+        {
+            ProcessJournalEntries(journalEntry.Entries, entriesIDs, "");
+        }    
+        return entriesIDs;
+    }
+
+    private void ProcessJournalEntries(IList<CHandle<gameJournalEntry>> entries, List<string> entriesIDs, string currentPath)
+    {
+        foreach (var entry in entries)
+        {
+            if (entry.Chunk != null)
+            {
+                string entryId = entry.Chunk.Id.ToString();
+                string entryPath = string.IsNullOrEmpty(currentPath) ? entryId : $"{currentPath}/{entryId}";
+            
+                entriesIDs.Add(entryPath);
+            
+                if (entry.Chunk is gameJournalContainerEntry containerEntry)
+                {
+                    ProcessJournalEntries(containerEntry.Entries, entriesIDs, entryPath);
+                }
+            }
+        }
+    }
+    #endregion
+    
     # region appfile
 
     public static List<string> GetAllComponentNames(List<appearanceAppearanceDefinition> appearances) => appearances
