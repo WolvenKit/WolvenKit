@@ -19,11 +19,17 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            
         <StackPanel
             x:Name="Breadcrumb"
-            Grid.Row="0"
+                Grid.Column="0"
             VerticalAlignment="Center"
             Orientation="Horizontal" />
+        </Grid>
 
         <graphEditor:GraphEditorView
             x:Name="Editor"

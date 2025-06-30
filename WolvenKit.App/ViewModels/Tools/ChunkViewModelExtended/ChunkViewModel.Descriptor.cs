@@ -100,6 +100,86 @@ public partial class ChunkViewModel
             case null:
             case RedDummy:
                 return;
+            
+            case scnPlaySkAnimEvent playSkAnimEvent:
+            {
+                var startTime = $"[{playSkAnimEvent.StartTime}ms] ";
+                var animDetails = "";
+                
+                if (playSkAnimEvent.AnimName?.GetValue() is scnAnimName animName && 
+                    animName.Unk1 is not null && animName.Unk1.Count > 0)
+                {
+                    var unk1Details = string.Join(", ", animName.Unk1.Select(u => (string?)u ?? "").Take(3));
+                    if (!string.IsNullOrEmpty(unk1Details))
+                    {
+                        animDetails = $" - {unk1Details}";
+                    }
+                }
+                
+                Descriptor = $"{startTime}scnPlaySkAnimEvent{animDetails}";
+                return;
+            }
+            case scnAudioEvent audioEvent:
+            {
+                var startTime = $"[{audioEvent.StartTime}ms] ";
+                var audioName = audioEvent.AudioEventName.GetResolvedText();
+                var audioDetails = !string.IsNullOrEmpty(audioName) ? $" - {audioName}" : "";
+                
+                Descriptor = $"{startTime}scnAudioEvent{audioDetails}";
+                return;
+            }
+            case scnAudioDurationEvent audioDurationEvent:
+            {
+                var startTime = $"[{audioDurationEvent.StartTime}ms] ";
+                var audioName = audioDurationEvent.AudioEventName.GetResolvedText();
+                var audioDetails = !string.IsNullOrEmpty(audioName) ? $" - {audioName}" : "";
+                
+                Descriptor = $"{startTime}scnAudioDurationEvent{audioDetails}";
+                return;
+            }
+            case scneventsVFXEvent vfxEvent:
+            {
+                var startTime = $"[{vfxEvent.StartTime}ms] ";
+                var effectDetails = GetVFXEffectDetails(vfxEvent.EffectEntry);
+                
+                Descriptor = $"{startTime}scneventsVFXEvent{effectDetails}";
+                return;
+            }
+            case scneventsVFXDurationEvent vfxDurationEvent:
+            {
+                var startTime = $"[{vfxDurationEvent.StartTime}ms] ";
+                var effectDetails = GetVFXEffectDetails(vfxDurationEvent.EffectEntry);
+                
+                Descriptor = $"{startTime}scneventsVFXDurationEvent{effectDetails}";
+                return;
+            }
+            case scneventsVFXBraindanceEvent vfxBraindanceEvent:
+            {
+                var startTime = $"[{vfxBraindanceEvent.StartTime}ms] ";
+                var effectDetails = GetVFXEffectDetails(vfxBraindanceEvent.EffectEntry);
+                
+                Descriptor = $"{startTime}scneventsVFXBraindanceEvent{effectDetails}";
+                return;
+            }
+            case scnPlayVideoEvent playVideoEvent:
+            {
+                var startTime = $"[{playVideoEvent.StartTime}ms] ";
+                var videoPath = playVideoEvent.VideoPath.ToString();
+                var videoDetails = !string.IsNullOrEmpty(videoPath) ? $" - {System.IO.Path.GetFileName(videoPath)}" : "";
+                
+                Descriptor = $"{startTime}scnPlayVideoEvent{videoDetails}";
+                return;
+            }
+            case scnSceneEvent sceneEvent:
+            {
+                // Fallback for other scene events - just show start time
+                var startTime = $"[{sceneEvent.StartTime}ms] ";
+                var eventType = sceneEvent.GetType().Name;
+                
+                Descriptor = $"{startTime}{eventType}";
+                return;
+            }
+            
             case worldStreamingSectorDescriptor:
                 // handled by default name resolution below
                 break;
@@ -640,6 +720,52 @@ public partial class ChunkViewModel
         Descriptor ??= "";
     }
 
+    private string GetVFXEffectDetails(scnEffectEntry effectEntry)
+    {
+        if (effectEntry == null)
+        {
+            return "";
+        }
+            
+        // First try to use EffectName if available
+        if (effectEntry.EffectName != CName.Empty)
+        {
+            var effectName = effectEntry.EffectName.GetResolvedText();
+            if (!string.IsNullOrEmpty(effectName))
+            {
+                return $" - {effectName}";
+            }
+        }
+        
+        // If no effect name, try to resolve through EffectInstanceId
+        if (effectEntry.EffectInstanceId != null && GetRootModel().ResolvedData is scnSceneResource sceneResource)
+        {
+            var instanceId = effectEntry.EffectInstanceId.Id;
+            var effectId = effectEntry.EffectInstanceId.EffectId.Id;
+            
+            // Find the effect definition
+            var effectDef = sceneResource.EffectDefinitions
+                .FirstOrDefault(e => e.Id.Id == effectId);
+                
+            if (effectDef != null)
+            {
+                var effectPath = effectDef.Effect.DepotPath.GetResolvedText();
+                if (!string.IsNullOrEmpty(effectPath))
+                {
+                    var filename = System.IO.Path.GetFileNameWithoutExtension(effectPath);
+                    return $" - {filename}";
+                }
+            }
+            
+            // If we have instance ID but no effect definition, show instance/effect IDs
+            if (instanceId != uint.MaxValue && effectId != uint.MaxValue)
+            {
+                return $" - Instance:{instanceId}/Effect:{effectId}";
+            }
+        }
+        
+        return "";
+    }
 
     /// <summary>
     /// Property names for descriptor field

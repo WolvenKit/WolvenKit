@@ -465,6 +465,12 @@
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.FilterableDropdownRedRefEditor>
 
+                <converters:RedEditorTemplateSelector.FilterableDropdownIntegerEditor>
+                    <DataTemplate>
+                        <editors:ScnActorIdDropdown DataContext="{Binding}" />
+                    </DataTemplate>
+                </converters:RedEditorTemplateSelector.FilterableDropdownIntegerEditor>
+
 
                 <converters:RedEditorTemplateSelector.RedNodeRefEditor>
                     <DataTemplate>

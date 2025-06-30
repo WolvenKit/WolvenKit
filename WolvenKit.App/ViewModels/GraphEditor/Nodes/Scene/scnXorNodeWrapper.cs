@@ -24,8 +24,19 @@ public class scnXorNodeWrapper : BaseSceneViewModel<scnXorNode>, IDynamicInputNo
 
         Input.Add(input);
 
+        // SYNC FIX: Update property panel and graph editor without regenerating connectors
+        TriggerPropertyChanged(nameof(Input));
+        OnPropertyChanged(nameof(Data));
+
         return input;
     }
 
-    public void RemoveInput() => Input.Remove(Input[^1]);
+    public void RemoveInput() 
+    {
+        Input.Remove(Input[^1]);
+        
+        // SYNC FIX: Update property panel and graph editor without regenerating connectors
+        TriggerPropertyChanged(nameof(Input));
+        OnPropertyChanged(nameof(Data));
+    }
 }

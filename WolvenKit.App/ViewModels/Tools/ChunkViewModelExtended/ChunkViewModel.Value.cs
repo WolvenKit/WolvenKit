@@ -491,10 +491,6 @@ public partial class ChunkViewModel
                 Value = $"[{nodeDef.Sockets.Count}]";
                 IsValueExtrapolated = true;
                 return;
-            case scnSceneWorkspotInstanceId sceneWorkspotInstance when sceneWorkspotInstance.Id != 0:
-                Value = $"{sceneWorkspotInstance.Id}";
-                IsValueExtrapolated = sceneWorkspotInstance.Id != 0;
-                break;
             case scnNotablePoint scnNotablePoint when scnNotablePoint.NodeId.Id != 0:
                 Value = $"NodeId: {scnNotablePoint.NodeId.Id}";
                 IsValueExtrapolated = true;
@@ -502,6 +498,100 @@ public partial class ChunkViewModel
             case scnActorId scnActorId:
                 Value = $"{scnActorId.Id}";
                 IsValueExtrapolated = scnActorId.Id != 0;
+                break;
+            case scnPerformerId scnPerformerId when GetRootModel().ResolvedData is scnSceneResource sceneForPerformer:
+                Value = $"{scnPerformerId.Id}";
+                IsValueExtrapolated = scnPerformerId.Id != 0;
+                
+                if (sceneForPerformer.DebugSymbols?.PerformersDebugSymbols != null)
+                {
+                    var performerSymbol = sceneForPerformer.DebugSymbols.PerformersDebugSymbols
+                        .FirstOrDefault(p => p.PerformerId.Id == scnPerformerId.Id);
+                    if (performerSymbol != null)
+                    {
+                        string? performerName = null;
+                        if (performerSymbol.EntityRef?.Names != null && performerSymbol.EntityRef.Names.Count > 0)
+                        {
+                            performerName = performerSymbol.EntityRef.Names[0].GetResolvedText();
+                        }
+                        
+                        if (string.IsNullOrEmpty(performerName) && performerSymbol.EntityRef?.Reference != null)
+                        {
+                            var referenceString = performerSymbol.EntityRef.Reference.ToString();
+                            if (!string.IsNullOrEmpty(referenceString) && referenceString != "NodeRef")
+                            {
+                                performerName = referenceString.StartsWith("#") ? referenceString.Substring(1) : referenceString;
+                            }
+                        }
+                        
+                        if (!string.IsNullOrEmpty(performerName))
+                        {
+                            Value = $"{scnPerformerId.Id}: {performerName}";
+                        }
+                    }
+                }
+                break;
+            case scnSceneWorkspotInstanceId sceneWorkspotInstance when GetRootModel().ResolvedData is scnSceneResource sceneForWorkspot:
+                 Value = $"{sceneWorkspotInstance.Id}";
+                 IsValueExtrapolated = sceneWorkspotInstance.Id != 0;
+                 
+                 var matchingWorkspotInstance = sceneForWorkspot.WorkspotInstances
+                     .FirstOrDefault(w => w.WorkspotInstanceId.Id == sceneWorkspotInstance.Id);
+                 if (matchingWorkspotInstance != null)
+                 {
+                     var instanceDataId = matchingWorkspotInstance.DataId.Id;
+                     var workspotResource = sceneForWorkspot.Workspots
+                         .FirstOrDefault(w => w.Chunk is scnWorkspotData workspotData && workspotData.DataId.Id == instanceDataId);
+                     
+                     if (workspotResource?.Chunk is scnWorkspotData_ExternalWorkspotResource externalWorkspot)
+                     {
+                         var workspotPath = externalWorkspot.WorkspotResource.DepotPath.GetResolvedText();
+                         if (!string.IsNullOrEmpty(workspotPath))
+                         {
+                             var filename = System.IO.Path.GetFileNameWithoutExtension(workspotPath);
+                             Value = $"{sceneWorkspotInstance.Id}: {filename}";
+                         }
+                     }
+                 }
+                 break;
+            case scnEffectInstanceId scnEffectInstance when GetRootModel().ResolvedData is scnSceneResource sceneForEffect:
+                Value = $"{scnEffectInstance.Id}";
+                IsValueExtrapolated = scnEffectInstance.Id != 0;
+                
+                var effectInstance = sceneForEffect.EffectInstances
+                    .FirstOrDefault(e => e.EffectInstanceId.Id == scnEffectInstance.Id);
+                if (effectInstance != null)
+                {
+                    var effectId = effectInstance.EffectInstanceId.EffectId.Id;
+                    var effectDef = sceneForEffect.EffectDefinitions
+                        .FirstOrDefault(e => e.Id.Id == effectId);
+                    
+                    if (effectDef != null)
+                    {
+                        var effectPath = effectDef.Effect.DepotPath.GetResolvedText();
+                        if (!string.IsNullOrEmpty(effectPath))
+                        {
+                            var filename = System.IO.Path.GetFileNameWithoutExtension(effectPath);
+                            Value = $"{scnEffectInstance.Id}: {filename}";
+                        }
+                    }
+                }
+                break;
+            case scnPropId scnPropId when GetRootModel().ResolvedData is scnSceneResource sceneForProp:
+                Value = $"{scnPropId.Id}";
+                IsValueExtrapolated = scnPropId.Id != 0;
+                
+                // Add friendly prop name if available
+                var propDefinition = sceneForProp.Props
+                    .FirstOrDefault(p => p.PropId.Id == scnPropId.Id);
+                if (propDefinition != null)
+                {
+                    var propName = propDefinition.PropName.ToString();
+                    if (!string.IsNullOrEmpty(propName))
+                    {
+                        Value = $"{scnPropId.Id}: {propName}";
+                    }
+                }
                 break;
             case scnPlayerActorDef playerActorDef:
                 Value = $"NodeId: {playerActorDef.SpecCharacterRecordId.GetResolvedText()}";
@@ -759,9 +849,6 @@ public partial class ChunkViewModel
             case scnlocVariantId variantId:
                 Value = variantId.Ruid.ToString();
                 break;
-            case scnPerformerId performerId:
-                Value = performerId.Id.ToString();
-                break;
             case CArray<CName> cNames:
                 Value = StringHelper.Stringify(cNames);
                 IsValueExtrapolated = cNames.Count != 0;
@@ -830,8 +917,78 @@ public partial class ChunkViewModel
                 Value = scnWorkspotSymbol.WsEditorEventId.ToString();
                 IsValueExtrapolated = scnWorkspotSymbol.WsEditorEventId != 0;
                 break;
+            case scnCinematicAnimSetSRRefId cinematicAnimSetRefId when GetRootModel().ResolvedData is scnSceneResource sceneForAnimSetRef:
+                var animSetId = cinematicAnimSetRefId.Id;
+                Value = ((uint)animSetId).ToString();
+                
+                // Try to show the animation set file name if available
+                var animSetIdValue = (uint)animSetId;
+                if (sceneForAnimSetRef.ResouresReferences?.CinematicAnimSets != null && 
+                    animSetIdValue < sceneForAnimSetRef.ResouresReferences.CinematicAnimSets.Count)
+                {
+                    var animSet = sceneForAnimSetRef.ResouresReferences.CinematicAnimSets[(int)animSetIdValue];
+                    var animSetPath = animSet.AsyncAnimSet.DepotPath.GetResolvedText();
+                    
+                    if (!string.IsNullOrEmpty(animSetPath))
+                    {
+                        var filename = System.IO.Path.GetFileNameWithoutExtension(animSetPath);
+                        Value = $"{animSetIdValue}: {filename}.anims";
+                        IsValueExtrapolated = true;
+                    }
+                }
+                break;
             case scnCinematicAnimSetSRRefId cinematicAnimSetRefId:
+                // Fallback case when not in a scene context
                 Value = cinematicAnimSetRefId.Id.ToString();
+                break;
+            case scnLipsyncAnimSetSRRefId lipsyncAnimSetRefId when GetRootModel().ResolvedData is scnSceneResource sceneForLipsyncAnimSetRef:
+                var lipsyncAnimSetId = lipsyncAnimSetRefId.Id;
+                Value = ((uint)lipsyncAnimSetId).ToString();
+                
+                // Try to show the lipsync animation set file name if available
+                var lipsyncAnimSetIdValue = (uint)lipsyncAnimSetId;
+                if (sceneForLipsyncAnimSetRef.ResouresReferences?.LipsyncAnimSets != null && 
+                    lipsyncAnimSetIdValue < sceneForLipsyncAnimSetRef.ResouresReferences.LipsyncAnimSets.Count)
+                {
+                    var animSet = sceneForLipsyncAnimSetRef.ResouresReferences.LipsyncAnimSets[(int)lipsyncAnimSetIdValue];
+                    var animSetPath = animSet.AsyncRefLipsyncAnimSet.DepotPath.GetResolvedText();
+                    
+                    if (!string.IsNullOrEmpty(animSetPath))
+                    {
+                        var filename = System.IO.Path.GetFileNameWithoutExtension(animSetPath);
+                        Value = $"{lipsyncAnimSetIdValue}: {filename}.anims";
+                        IsValueExtrapolated = true;
+                    }
+                }
+                break;
+            case scnLipsyncAnimSetSRRefId lipsyncAnimSetRefId:
+                // Fallback case when not in a scene context
+                Value = lipsyncAnimSetRefId.Id.ToString();
+                break;
+
+            case scnDynamicAnimSetSRRefId dynamicAnimSetRefId when GetRootModel().ResolvedData is scnSceneResource sceneForDynamicAnimSetRef:
+                var dynamicAnimSetId = dynamicAnimSetRefId.Id;
+                Value = ((uint)dynamicAnimSetId).ToString();
+                
+                // Try to show the dynamic animation set file name if available
+                var dynamicAnimSetIdValue = (uint)dynamicAnimSetId;
+                if (sceneForDynamicAnimSetRef.ResouresReferences?.DynamicAnimSets != null && 
+                    dynamicAnimSetIdValue < sceneForDynamicAnimSetRef.ResouresReferences.DynamicAnimSets.Count)
+                {
+                    var animSet = sceneForDynamicAnimSetRef.ResouresReferences.DynamicAnimSets[(int)dynamicAnimSetIdValue];
+                    var animSetPath = animSet.AsyncAnimSet.DepotPath.GetResolvedText();
+                    
+                    if (!string.IsNullOrEmpty(animSetPath))
+                    {
+                        var filename = System.IO.Path.GetFileNameWithoutExtension(animSetPath);
+                        Value = $"{dynamicAnimSetIdValue}: {filename}.anims";
+                        IsValueExtrapolated = true;
+                    }
+                }
+                break;
+            case scnDynamicAnimSetSRRefId dynamicAnimSetRefId:
+                // Fallback case when not in a scene context
+                Value = dynamicAnimSetRefId.Id.ToString();
                 break;
             case scnlocSignature locSignature:
                 Value = locSignature.Val.ToString();
