@@ -16,7 +16,10 @@ using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.Models;
+using WolvenKit.App.Interaction;
 using Splat;
+using WolvenKit.Views.Dialogs;
+using AdonisUI.Controls;
 
 namespace WolvenKit.Views.Documents
 {
@@ -411,6 +414,71 @@ namespace WolvenKit.Views.Documents
         }
 
         /// <summary>
+        /// Search for a node by its ID and navigate to it
+        /// </summary>
+        public bool SearchAndNavigateToNode(uint nodeId)
+        {
+            var viewModel = DataContext as SceneGraphViewModel;
+            if (viewModel?.MainGraph?.Nodes == null)
+                return false;
+
+            // Find the node with the specified ID
+            var targetNode = viewModel.MainGraph.Nodes.FirstOrDefault(n => n.UniqueId == nodeId);
+            if (targetNode == null)
+                return false;
+
+            // Select the node
+            SceneGraphEditor?.Editor?.SelectedItems.Clear();
+            SceneGraphEditor?.Editor?.SelectedItems.Add(targetNode);
+            NodeSelectionService.Instance.SelectedNode = targetNode;
+
+            // Center view on the node
+            CenterViewOnSelectedNode(viewModel.MainGraph, targetNode);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Shows a dialog to go directly to a node by its ID
+        /// </summary>
+        public void ShowGoToNodeDialog()
+        {
+            var dialog = new InputDialogView("Go to Node", "");
+
+            if (dialog.ViewModel is not InputDialogViewModel vm ||
+                dialog.ShowDialog(Application.Current.MainWindow) != true)
+            {
+                return;
+            }
+
+            if (uint.TryParse(vm.Text?.Trim(), out var nodeId))
+            {
+                if (!SearchAndNavigateToNode(nodeId))
+                {
+                    MessageBoxModel messageBox = new()
+                    {
+                        Text = $"Node with ID {nodeId} not found.",
+                        Caption = "Go to Node",
+                        Icon = AdonisUI.Controls.MessageBoxImage.Information,
+                        Buttons = new[] { MessageBoxButtons.Ok() }
+                    };
+                    AdonisUI.Controls.MessageBox.Show(Application.Current.MainWindow, messageBox);
+                }
+            }
+            else
+            {
+                MessageBoxModel messageBox = new()
+                {
+                    Text = "Please enter a valid numeric Node ID.",
+                    Caption = "Invalid Input",
+                    Icon = AdonisUI.Controls.MessageBoxImage.Warning,
+                    Buttons = new[] { MessageBoxButtons.Ok() }
+                };
+                AdonisUI.Controls.MessageBox.Show(Application.Current.MainWindow, messageBox);
+            }
+        }
+
+        /// <summary>
         /// Handles keyboard shortcuts for node deletion and navigation
         /// </summary>
         private void SceneGraphView_OnPreviewKeyDown(object sender, KeyEventArgs e)
@@ -474,6 +542,14 @@ namespace WolvenKit.Views.Documents
             {
                 OpenNewNodeDialog(viewModel.MainGraph);
                 e.Handled = true;
+            }
+
+            // Shortcut: Ctrl+G to open "go to node" dialog
+            if (e.Key == Key.G && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+            {
+                ShowGoToNodeDialog();
+                e.Handled = true;
+                return;
             }
 
             // Shortcut: Arrow keys for smart graph walk based on spatial positioning
