@@ -105,7 +105,8 @@
                                       Style="{StaticResource SpacedWolvenKitTabControl}"
                                       ItemContainerStyle="{StaticResource SpacedTabItemStyle}"
                                       ItemsSource="{Binding Tabs}"
-                                      SelectedItem="{Binding SelectedTab, Mode=TwoWay}">
+                                      SelectedItem="{Binding SelectedTab, Mode=TwoWay}"
+                                      EnableLabelEdit="False">
                 <syncfusion:TabControlExt.ItemTemplate>
                     <DataTemplate DataType="{x:Type documents:SceneTabDefinition}">
                         <StackPanel Orientation="Horizontal">
