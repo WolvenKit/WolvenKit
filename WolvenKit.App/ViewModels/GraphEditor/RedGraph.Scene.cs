@@ -488,12 +488,12 @@ public partial class RedGraph
                 }
             }
             
-            // 1026 Failsafe Cleanup: When Cut Control FALSE socket disconnects from Cancel socket (1,0),
+            // 1026 Failsafe Cleanup: When Cut Control FALSE socket disconnects from any cut destination socket,
             // also remove the hidden connection to (1026,0) on the same destination node
             var sourceNodeForDisconnect = Nodes.FirstOrDefault(n => n.UniqueId == sceneSource.OwnerId) as BaseSceneViewModel;
             if (sourceNodeForDisconnect is scnCutControlNodeWrapper && 
                 sceneSource.Data.Stamp.Name == 1 && // FALSE socket of Cut Control
-                sceneTarget.NameId == 1 && sceneTarget.Ordinal == 0) // Cancel socket (1,0)
+                IsCutDestinationSocket(sceneTarget)) // Any cut destination socket
             {
                 // Remove the hidden connection to (1026,0)
                 for (var j = sceneSource.Data.Destinations.Count - 1; j >= 0; j--)
@@ -565,12 +565,12 @@ public partial class RedGraph
         socketData.Destinations.Add(input);
         Connections.Add(new SceneConnectionViewModel(sceneSource, sceneTarget));
         
-        // 1026 Failsafe: When Cut Control FALSE socket connects to Cancel socket (1,0),
+        // 1026 Failsafe: When Cut Control FALSE socket connects to any cut destination socket,
         // automatically add hidden connection to (1026,0) on the same destination node
         var sourceNode = Nodes.FirstOrDefault(n => n.UniqueId == sceneSource.OwnerId) as BaseSceneViewModel;
         if (sourceNode is scnCutControlNodeWrapper && 
             socketData.Stamp.Name == 1 && // FALSE socket of Cut Control
-            sceneTarget.NameId == 1 && sceneTarget.Ordinal == 0) // Cancel socket (1,0)
+            IsCutDestinationSocket(sceneTarget)) // Any cut destination socket
         {
             var hiddenInput = new scnInputSocketId
             {
@@ -805,12 +805,12 @@ public partial class RedGraph
         {
             sceneSource.Data.Destinations.Remove(sceneDestination);
             
-            // 1026 Failsafe Cleanup: When Cut Control FALSE socket disconnects from Cancel socket (1,0),
+            // 1026 Failsafe Cleanup: When Cut Control FALSE socket disconnects from any cut destination socket,
             // also remove the hidden connection to (1026,0) on the same destination node
             var sourceNode = Nodes.FirstOrDefault(n => n.UniqueId == sceneSource.OwnerId) as BaseSceneViewModel;
             if (sourceNode is scnCutControlNodeWrapper && 
                 sceneSource.Data.Stamp.Name == 1 && // FALSE socket of Cut Control
-                sceneTarget.NameId == 1 && sceneTarget.Ordinal == 0) // Cancel socket (1,0)
+                IsCutDestinationSocket(sceneTarget)) // Any cut destination socket
             {
                 // Remove the hidden connection to (1026,0)
                 for (var j = sceneSource.Data.Destinations.Count - 1; j >= 0; j--)
@@ -933,6 +933,13 @@ public partial class RedGraph
     /// <param name="socketOrdinal">The socket ordinal coordinate</param>
     private void EnsureInputSocket(BaseSceneViewModel targetNode, ushort socketName, ushort socketOrdinal)
     {
+        // Skip creating visible sockets for (1026,0) - these should remain hidden data-only connections
+        // They are automatically created by Cut Control failsafe logic and should not clutter the UI
+        if (socketName == 1026 && socketOrdinal == 0)
+        {
+            return; // (1026,0) connections exist only as hidden data, no visible socket needed
+        }
+
         // Check if socket already exists
         var existingSocket = targetNode.Input
             .Cast<SceneInputConnectorViewModel>()
@@ -949,9 +956,24 @@ public partial class RedGraph
             // Deletion markers can dynamically create any input socket
             deletionMarker.AddInputWithCoordinates(socketName, socketOrdinal);
         }
+        else if (targetNode is scnHubNodeWrapper hubNode)
+        {
+            // Hub nodes can create sockets with arbitrary coordinates
+            hubNode.AddInputWithCoordinates(socketName, socketOrdinal);
+        }
+        else if (targetNode is scnAndNodeWrapper andNode)
+        {
+            // And nodes can create sockets with arbitrary coordinates
+            andNode.AddInputWithCoordinates(socketName, socketOrdinal);
+        }
+        else if (targetNode is scnXorNodeWrapper xorNode)
+        {
+            // Xor nodes can create sockets with arbitrary coordinates
+            xorNode.AddInputWithCoordinates(socketName, socketOrdinal);
+        }
         else if (targetNode is IDynamicInputNode dynamicInput)
         {
-            // Other dynamic input nodes - add standard input
+            // Other dynamic input nodes - add standard input (limited capability)
             dynamicInput.AddInput();
         }
         else
@@ -964,6 +986,33 @@ public partial class RedGraph
             
             _loggerService?.Info($"Created missing input socket ({socketName},{socketOrdinal}) on node {targetNode.UniqueId}");
         }
+    }
+
+    /// <summary>
+    /// Determines if a socket is a cut destination socket that should trigger failsafe logic
+    /// </summary>
+    /// <param name="socket">The input socket to check</param>
+    /// <returns>True if this is a cut destination socket</returns>
+    private bool IsCutDestinationSocket(SceneInputConnectorViewModel socket)
+    {
+        // Check for cut destination patterns based on socket coordinates and target node type
+        var targetNode = Nodes.FirstOrDefault(n => n.UniqueId == socket.OwnerId) as BaseSceneViewModel;
+        
+        if (targetNode == null) return false;
+
+        // Pattern 1: Cancel socket (1,0) - traditional scene nodes
+        if (socket.NameId == 1 && socket.Ordinal == 0)
+        {
+            return true;
+        }
+
+        // Pattern 2: Quest node cut destination (0,0) - quest nodes use this for cut destination
+        if (socket.NameId == 0 && socket.Ordinal == 0 && targetNode.Data is scnQuestNode)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -1086,7 +1135,11 @@ public partial class RedGraph
                     }
                     else
                     {
-                        _loggerService?.Warning($"Could not find input socket ({destination.IsockStamp.Name},{destination.IsockStamp.Ordinal}) on node {destination.NodeId.Id} in file: {title}");
+                        // Skip logging warnings for (1026,0) - these are intentionally hidden failsafe connections
+                        if (!(destination.IsockStamp.Name == 1026 && destination.IsockStamp.Ordinal == 0))
+                        {
+                            _loggerService?.Warning($"Could not find input socket ({destination.IsockStamp.Name},{destination.IsockStamp.Ordinal}) on node {destination.NodeId.Id} in file: {title}");
+                        }
                     }
                 }
             }
@@ -1196,7 +1249,11 @@ public partial class RedGraph
                     }
                     else
                     {
-                        _loggerService?.Warning($"Could not find input socket ({destination.IsockStamp.Name},{destination.IsockStamp.Ordinal}) on node {destination.NodeId.Id} in file: {title}");
+                        // Skip logging warnings for (1026,0) - these are intentionally hidden failsafe connections
+                        if (!(destination.IsockStamp.Name == 1026 && destination.IsockStamp.Ordinal == 0))
+                        {
+                            _loggerService?.Warning($"Could not find input socket ({destination.IsockStamp.Name},{destination.IsockStamp.Ordinal}) on node {destination.NodeId.Id} in file: {title}");
+                        }
                     }
                 }
             }
