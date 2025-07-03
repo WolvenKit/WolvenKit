@@ -241,7 +241,8 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
                         baseName += $" {Options[socket.Stamp.Ordinal]}";
                     }
 
-                    var output = new SceneOutputConnectorViewModel($"({socket.Stamp.Name},{socket.Stamp.Ordinal})", $"({socket.Stamp.Name},{socket.Stamp.Ordinal})", UniqueId, socket);
+                    var nameAndTitle = $"({socket.Stamp.Name},{socket.Stamp.Ordinal})";
+                    var output = new SceneOutputConnectorViewModel(nameAndTitle, nameAndTitle, UniqueId, socket.Stamp.Name, socket.Stamp.Ordinal, socket);
                     output.Subtitle = baseName;
                     Output.Add(output);
                     // Explicit subscription to guarantee property panel sync
@@ -252,7 +253,8 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
             {
                 // Virtual socket - only add ordinal for choice options (socketNameId == 0)
                 var baseName = socketNameId == 0 ? $"{socketName}_0" : socketName;
-                var output = new SceneOutputConnectorViewModel($"({socketNameId},0)", $"({socketNameId},0)", UniqueId);
+                var nameAndTitle = $"({socketNameId},0)";
+                var output = new SceneOutputConnectorViewModel(nameAndTitle, nameAndTitle, UniqueId, socketNameId, 0);
                 output.Subtitle = baseName;
                 Output.Add(output);
                 // Explicit subscription to guarantee property panel sync (even for virtual sockets)
@@ -458,7 +460,8 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
         }
 
         // Create and insert the new connector at the correct position
-        var newConnector = new SceneOutputConnectorViewModel($"Out{insertPosition}", choiceText, UniqueId, newOutputSocket);
+        var nameAndTitle = $"({newOutputSocket.Stamp.Name},{newOutputSocket.Stamp.Ordinal})";
+        var newConnector = new SceneOutputConnectorViewModel(nameAndTitle, choiceText, UniqueId, newOutputSocket.Stamp.Name, newOutputSocket.Stamp.Ordinal, newOutputSocket);
         Output.Insert(insertPosition, newConnector);
 
         // Note: Subscription to destination changes happens automatically via Output.CollectionChanged

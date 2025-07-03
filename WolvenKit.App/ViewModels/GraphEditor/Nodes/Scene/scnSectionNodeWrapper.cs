@@ -652,7 +652,8 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>, IDynami
         {
             var socket = _castedData.OutputSockets[i];
             var label = GetSocketLabel(i, socket.Stamp.Name, socket.Stamp.Ordinal);
-            var connectorVM = new SceneOutputConnectorViewModel($"({socket.Stamp.Name},{socket.Stamp.Ordinal})", $"({socket.Stamp.Name},{socket.Stamp.Ordinal})", UniqueId, socket);
+            var nameAndTitle = $"({socket.Stamp.Name},{socket.Stamp.Ordinal})";
+            var connectorVM = new SceneOutputConnectorViewModel(nameAndTitle, nameAndTitle, UniqueId, socket.Stamp.Name, socket.Stamp.Ordinal, socket);
             connectorVM.Subtitle = label;
             Output.Add(connectorVM);
             // Subscribe to destination changes so property panel shows connection counts
@@ -743,7 +744,8 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>, IDynami
 
         // Create label using our new method
         var label = GetSocketLabel(newIndex, newName, newOrdinal);
-        var output = new SceneOutputConnectorViewModel($"({newName},{newOrdinal})", $"({newName},{newOrdinal})", UniqueId, outputSocket);
+        var nameAndTitle = $"({newName},{newOrdinal})";
+        var output = new SceneOutputConnectorViewModel(nameAndTitle, nameAndTitle, UniqueId, newName, newOrdinal, outputSocket);
         output.Subtitle = label;
         Output.Add(output);
 

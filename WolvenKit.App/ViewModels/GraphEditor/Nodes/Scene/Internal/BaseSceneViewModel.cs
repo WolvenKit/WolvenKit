@@ -422,7 +422,8 @@ public abstract class BaseSceneViewModel<T> : BaseSceneViewModel where T : scnSc
                 {
                     // Only add ordinal suffix if there are multiple sockets with the same name
                     var baseName = sockets.Count > 1 ? $"{socketName}_{socket.Stamp.Ordinal}" : socketName;
-                    var output = new SceneOutputConnectorViewModel($"({socket.Stamp.Name},{socket.Stamp.Ordinal})", $"({socket.Stamp.Name},{socket.Stamp.Ordinal})", UniqueId, socket);
+                    var nameAndTitle = $"({socket.Stamp.Name},{socket.Stamp.Ordinal})";
+                    var output = new SceneOutputConnectorViewModel(nameAndTitle, nameAndTitle, UniqueId, socket.Stamp.Name, socket.Stamp.Ordinal, socket);
                     output.Subtitle = baseName;
                     Output.Add(output);
                     // Explicit subscription to guarantee property panel sync
@@ -432,7 +433,8 @@ public abstract class BaseSceneViewModel<T> : BaseSceneViewModel where T : scnSc
             else
             {
                 // Virtual socket - no ordinal suffix needed for static sockets
-                var output = new SceneOutputConnectorViewModel($"({socketNameId},0)", $"({socketNameId},0)", UniqueId);
+                var nameAndTitle = $"({socketNameId},0)";
+                var output = new SceneOutputConnectorViewModel(nameAndTitle, nameAndTitle, UniqueId, socketNameId, 0);
                 output.Subtitle = socketName;
                 Output.Add(output);
                 // Explicit subscription to guarantee property panel sync (even for virtual sockets)

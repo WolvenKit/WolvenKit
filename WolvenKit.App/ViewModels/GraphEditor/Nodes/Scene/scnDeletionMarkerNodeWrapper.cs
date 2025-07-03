@@ -21,7 +21,8 @@ public class scnDeletionMarkerNodeWrapper : BaseSceneViewModel<scnDeletionMarker
         {
             var socket = _castedData.OutputSockets[i];
             var label = GetOutputSocketLabel(socket.Stamp.Name, socket.Stamp.Ordinal);
-            var connectorVM = new SceneOutputConnectorViewModel($"({socket.Stamp.Name},{socket.Stamp.Ordinal})", $"({socket.Stamp.Name},{socket.Stamp.Ordinal})", UniqueId, socket);
+            var nameAndTitle = $"({socket.Stamp.Name},{socket.Stamp.Ordinal})";
+            var connectorVM = new SceneOutputConnectorViewModel(nameAndTitle, nameAndTitle, UniqueId, socket.Stamp.Name, socket.Stamp.Ordinal, socket);
             connectorVM.Subtitle = label;
             Output.Add(connectorVM);
             SubscribeToSocketDestinations(connectorVM);

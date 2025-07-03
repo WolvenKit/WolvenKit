@@ -533,18 +533,13 @@ public partial class RedGraph
             var ownerNodeVM = Nodes.FirstOrDefault(n => n.UniqueId == sceneSource.OwnerId);
             if (ownerNodeVM is BaseSceneViewModel { Data: scnSceneGraphNode ownerNodeData })
             {
-                var coordsStr = sceneSource.Title.Trim('(', ')');
-                var parts = coordsStr.Split(',');
-                if (parts.Length == 2 && ushort.TryParse(parts[0], out var name) && ushort.TryParse(parts[1], out var ordinal))
+                socketData = new scnOutputSocket
                 {
-                    socketData = new scnOutputSocket
-                    {
-                        Stamp = new scnOutputSocketStamp { Name = name, Ordinal = ordinal },
-                        Destinations = new CArray<scnInputSocketId>()
-                    };
-                    ownerNodeData.OutputSockets.Add(socketData);
-                    sceneSource.Data = socketData;
-                }
+                    Stamp = new scnOutputSocketStamp { Name = sceneSource.NameId, Ordinal = sceneSource.Ordinal },
+                    Destinations = new CArray<scnInputSocketId>()
+                };
+                ownerNodeData.OutputSockets.Add(socketData);
+                sceneSource.Data = socketData;
             }
         }
         

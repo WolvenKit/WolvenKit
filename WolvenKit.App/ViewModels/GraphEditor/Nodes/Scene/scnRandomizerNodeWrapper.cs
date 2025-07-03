@@ -85,7 +85,8 @@ public class scnRandomizerNodeWrapper : BaseSceneViewModel<scnRandomizerNode>, I
         for (var i = 0; i < _castedData.OutputSockets.Count; i++)
         {
             var socket = _castedData.OutputSockets[i];
-            var output = new SceneOutputConnectorViewModel($"({socket.Stamp.Name},{socket.Stamp.Ordinal})", $"({socket.Stamp.Name},{socket.Stamp.Ordinal})", UniqueId, socket);
+            var nameAndTitle = $"({socket.Stamp.Name},{socket.Stamp.Ordinal})";
+            var output = new SceneOutputConnectorViewModel(nameAndTitle, nameAndTitle, UniqueId, socket.Stamp.Name, socket.Stamp.Ordinal, socket);
             output.Subtitle = names[i];
             Output.Add(output);
         }
@@ -93,12 +94,12 @@ public class scnRandomizerNodeWrapper : BaseSceneViewModel<scnRandomizerNode>, I
 
     public BaseConnectorViewModel AddOutput()
     {
-        var index = (ushort)Output.Count;
-        var outputSocket = new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = index } };
-
+        var outputSocket = new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = (ushort)Output.Count } };
         _castedData.OutputSockets.Add(outputSocket);
 
-        var output = new SceneOutputConnectorViewModel($"Out{index}", $"Out{index}", UniqueId, outputSocket);
+        var index = (ushort)Output.Count;
+        var nameAndTitle = $"({outputSocket.Stamp.Name},{outputSocket.Stamp.Ordinal})";
+        var output = new SceneOutputConnectorViewModel(nameAndTitle, $"Out{index}", UniqueId, outputSocket.Stamp.Name, outputSocket.Stamp.Ordinal, outputSocket);
         Output.Add(output);
 
         _castedData.NumOutSockets = (uint)Output.Count;

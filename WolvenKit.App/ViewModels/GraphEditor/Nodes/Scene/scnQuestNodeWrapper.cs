@@ -92,7 +92,8 @@ public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
                 name = _castedData.OutputSockets.Count == 1 ? "Out" : $"Out_{i}";
             }
 
-            var output = new SceneOutputConnectorViewModel($"({socket.Stamp.Name},{socket.Stamp.Ordinal})", $"({socket.Stamp.Name},{socket.Stamp.Ordinal})", UniqueId, socket);
+            var nameAndTitle = $"({socket.Stamp.Name},{socket.Stamp.Ordinal})";
+            var output = new SceneOutputConnectorViewModel(nameAndTitle, nameAndTitle, UniqueId, socket.Stamp.Name, socket.Stamp.Ordinal, socket);
             output.Subtitle = name;
             Output.Add(output);
         }
