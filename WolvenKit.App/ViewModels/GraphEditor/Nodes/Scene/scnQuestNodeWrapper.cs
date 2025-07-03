@@ -50,33 +50,51 @@ public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
 
     internal override void GenerateSockets()
     {
-        /*var inSockets = new[] { "CutDestination", "In" };
-        for (ushort i = 0; i < inSockets.Length; i++)
-        {
-            var name = inSockets[i];
-            if (_castedData.IsockMappings.Count > i)
-            {
-                name = _castedData.IsockMappings[i].GetResolvedText()!;
-            }
-
-            Input.Add(new SceneInputConnectorViewModel(name, name, UniqueId, i));
-        }*/
-
+        // Generate input sockets dynamically from the IsockMappings
         for (ushort i = 0; i < _castedData.IsockMappings.Count; i++)
         {
-            var name = _castedData.IsockMappings[i].GetResolvedText()!;
-            Input.Add(new SceneInputConnectorViewModel(name, name, UniqueId, i));
+            var mappingName = _castedData.IsockMappings[i].GetResolvedText();
+            if (string.IsNullOrEmpty(mappingName))
+            {
+                // Fallback for empty mappings
+                mappingName = $"Input_{i}";
+            }
+
+            // The NameId for quest nodes is always 0, the ordinal 'i' is the index into the mapping array.
+            var input = new SceneInputConnectorViewModel(mappingName, mappingName, UniqueId, 0, i);
+            input.Subtitle = $"(0,{i})";
+            Input.Add(input);
         }
 
         for (var i = 0; i < _castedData.OutputSockets.Count; i++)
         {
-            var name = $"Out{i}";
+            var socket = _castedData.OutputSockets[i];
+            string name;
+            
+            // Check if there's a mapping label for this output
             if (_castedData.OsockMappings.Count > i)
             {
-                name = _castedData.OsockMappings[i].GetResolvedText()!;
+                var mappingText = _castedData.OsockMappings[i].GetResolvedText();
+                if (!string.IsNullOrEmpty(mappingText))
+                {
+                    // Use just the mapping label
+                    name = mappingText;
+                }
+                else
+                {
+                    // Fallback if mapping is empty
+                    name = _castedData.OutputSockets.Count == 1 ? "Out" : $"Out_{i}";
+                }
+            }
+            else
+            {
+                // No mapping - use simple naming
+                name = _castedData.OutputSockets.Count == 1 ? "Out" : $"Out_{i}";
             }
 
-            Output.Add(new SceneOutputConnectorViewModel(name, name, UniqueId, _castedData.OutputSockets[i]));
+            var output = new SceneOutputConnectorViewModel($"({socket.Stamp.Name},{socket.Stamp.Ordinal})", $"({socket.Stamp.Name},{socket.Stamp.Ordinal})", UniqueId, socket);
+            output.Subtitle = name;
+            Output.Add(output);
         }
     }
 
@@ -115,7 +133,7 @@ public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
 
         _castedData.QuestNode.Chunk.Id = (ushort)_castedData.NodeId.Id;
         _castedData.QuestNode.Chunk.Sockets ??= new CArray<CHandle<graphGraphSocketDefinition>>();
-        _castedData.QuestNode.Chunk.Sockets.Add(new questSocketDefinition { Name = "CutDestination", Type = Enums.questSocketType.CutDestination });
+        _castedData.QuestNode.Chunk.Sockets.Add(new questSocketDefinition { Name = "Cancel", Type = Enums.questSocketType.CutDestination });
         _castedData.QuestNode.Chunk.Sockets.Add(new questSocketDefinition { Name = "In", Type = Enums.questSocketType.Input });
         _castedData.QuestNode.Chunk.Sockets.Add(new questSocketDefinition { Name = "Out", Type = Enums.questSocketType.Output });
     }

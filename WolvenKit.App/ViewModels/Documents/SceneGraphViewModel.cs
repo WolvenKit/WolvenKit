@@ -14,6 +14,7 @@ using WolvenKit.RED4.Types;
 using Splat;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.Generic;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 
 namespace WolvenKit.App.ViewModels.Documents
 {
@@ -27,6 +28,7 @@ namespace WolvenKit.App.ViewModels.Documents
     public partial class SceneGraphViewModel : RedDocumentTabViewModel, IDisposable
     {
         private bool _disposed = false;
+        private readonly ILoggerService? _logger = Locator.Current.GetService<ILoggerService>();
 
         public RDTDataViewModel RDTViewModel { get; }
         public RedGraph MainGraph { get; }
@@ -51,10 +53,16 @@ namespace WolvenKit.App.ViewModels.Documents
             var gameController = Locator.Current.GetService<IGameControllerFactory>() ?? throw new ArgumentNullException(nameof(IGameControllerFactory));
 
             RDTViewModel = new RDTDataViewModel(data, parent, appViewModel, chunkViewmodelFactory, settingsManager, gameController);
-            MainGraph = RedGraph.GenerateSceneGraph(parent.Header, data);
+            MainGraph = RedGraph.GenerateSceneGraph(parent.Header, data, parent);
             
             // Set document reference for property change syncing
             MainGraph.DocumentViewModel = parent;
+
+            // Ensure all nodes have DocumentViewModel reference for dirty tracking
+            foreach (var node in MainGraph.Nodes)
+            {
+                node.DocumentViewModel = parent;
+            }
 
             CreateTabs();
             
@@ -123,6 +131,7 @@ namespace WolvenKit.App.ViewModels.Documents
             var rootChunk = RDTViewModel.GetRootChunk();
             if (rootChunk == null)
             {
+                _logger?.Warning($"[PANEL] No root chunk found for tab '{tab.Header}'");
                 SelectedTabContent = null;
                 return;
             }

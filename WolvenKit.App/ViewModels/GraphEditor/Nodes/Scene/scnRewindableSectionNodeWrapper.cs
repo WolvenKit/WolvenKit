@@ -11,6 +11,22 @@ public class scnRewindableSectionNodeWrapper : BaseSceneViewModel<scnRewindableS
     
     public scnRewindableSectionNodeWrapper(scnRewindableSectionNode scnSceneGraphNode, scnSceneResource scnSceneResource) : base(scnSceneGraphNode)
     {
+        InputSocketNames.Add(0, "In");
+        InputSocketNames.Add(1, "Cancel");
+        InputSocketNames.Add(2, "Pause");
+        InputSocketNames.Add(3, "ForwardNormal");
+        InputSocketNames.Add(4, "ForwardSlow");
+        InputSocketNames.Add(5, "ForwardFast");
+        InputSocketNames.Add(6, "BackwardNormal");
+        InputSocketNames.Add(7, "BackwardSlow");
+        InputSocketNames.Add(8, "BackwardFast");
+        InputSocketNames.Add(9, "ForwardVeryFast");
+        InputSocketNames.Add(10, "BackwardVeryFast");
+
+        OutputSocketNames.Add(0, "CancelFwd");
+        OutputSocketNames.Add(1, "TransmitSignal");
+        //OutputSocketNames.Add(2, "StopWork");
+
         _sceneResource = scnSceneResource;
         PopulateDetails();
     }
@@ -70,40 +86,5 @@ public class scnRewindableSectionNodeWrapper : BaseSceneViewModel<scnRewindableS
 
     }
 
-    internal override void GenerateSockets()
-    {
-        Input.Clear();
-        Input.Add(new SceneInputConnectorViewModel("In", "In", UniqueId, 0));
-        Input.Add(new SceneInputConnectorViewModel("CutDestination", "CutDestination", UniqueId, 1));
 
-        Output.Clear();
-        for (var i = 0; i < _castedData.OutputSockets.Count; i++)
-        {
-            var socket = _castedData.OutputSockets[i];
-            var label = GetSocketLabel(i, socket.Stamp.Name, socket.Stamp.Ordinal);
-            var connectorVM = new SceneOutputConnectorViewModel($"Out{i}", label, UniqueId, socket);
-            connectorVM.Subtitle = $"({socket.Stamp.Name},{socket.Stamp.Ordinal})";
-            Output.Add(connectorVM);
-        }
-    }
-    
-    private string GetSocketLabel(int index, ushort name, ushort ordinal)
-    {
-        if (index == 0) return "OnEnd";
-        if (index == 1) return "OnCut";
-        
-        // Detect which pattern for correct Event number
-        if (name == index && ordinal == 0)
-        {
-            return $"Event{index - 2}";  // Direct: Event0, Event1...
-        } 
-        else if (name == 2)
-        {
-            return $"Event{ordinal}";     // Ordinal: Event0, Event1...
-        }
-        else
-        {
-            return $"Custom[{name},{ordinal}]"; // Edge case
-        }
-    }
 }

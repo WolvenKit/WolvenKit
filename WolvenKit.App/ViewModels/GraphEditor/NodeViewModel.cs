@@ -18,6 +18,8 @@ namespace WolvenKit.App.ViewModels.GraphEditor;
 
 public abstract partial class NodeViewModel : ObservableObject, IDisposable
 {
+    private readonly ILoggerService? _logger = Locator.Current.GetService<ILoggerService>();
+    
     public abstract uint UniqueId { get; }
 
     [ObservableProperty]
@@ -56,6 +58,12 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
     /// </summary>
     public RedDocumentViewModel? DocumentViewModel { get; set; }
 
+    /// <summary>
+    /// Flag to indicate if this node is being created during initial graph loading
+    /// When true, socket changes won't mark the document as dirty
+    /// </summary>
+    public bool IsInitialLoad { get; set; } = true;
+
     protected NodeViewModel(RedBaseClass data)
     {
         Data = data;
@@ -72,6 +80,9 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
         
         // Listen for property updates from the property panel
         NodePropertyUpdateService.NodePropertyUpdated += OnNodePropertyUpdated;
+        
+        // Centralized auto-subscribe: whenever outputs are added, subscribe to their destinations
+        Output.CollectionChanged += OnOutputCollectionChanged;
     }
 
     protected virtual void DataOnPropertyChanging(object? sender, PropertyChangingEventArgs e)
@@ -81,8 +92,11 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
 
     protected virtual void DataOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        // Mark document as dirty when any property changes
-        DocumentViewModel?.SetIsDirty(true);
+        // Mark document as dirty when any property changes (but not during initial loading)
+        if (!IsInitialLoad)
+        {
+            DocumentViewModel?.SetIsDirty(true);
+        }
         
         // Update visual aspects that might be affected by property changes
         UpdateFromPropertyChange(e.PropertyName);
@@ -146,6 +160,9 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
         TriggerPropertyChanged(nameof(Output));
         TriggerPropertyChanged(nameof(Input));
         
+        // Ensure all output connectors are subscribed for property panel sync
+        EnsureSocketSubscriptions();
+        
         // Notify other properties that might be affected
         OnPropertyChanged(nameof(Details));
     }
@@ -159,6 +176,19 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
     public void TriggerPropertyChanged(string propertyName)
     {
         OnPropertyChanged(propertyName);
+
+        // Ensure the Node Properties panel reflects the latest socket list
+        if (propertyName is nameof(Input) or nameof(Output))
+        {
+            // Notify that underlying data may have changed to refresh property panel bindings
+            OnPropertyChanged(nameof(Data));
+
+            // Mark the document dirty because socket topology changed (but not during initial loading)
+            if (!IsInitialLoad)
+            {
+                DocumentViewModel?.SetIsDirty(true);
+            }
+        }
     }
 
     /// <summary>
@@ -203,6 +233,9 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
         OnPropertyChanged(nameof(Output));
         OnPropertyChanged(nameof(Input));
         
+        // Ensure all output connectors are subscribed for property panel sync
+        EnsureSocketSubscriptions();
+        
         // Refresh details if implemented by derived class
         if (this is IRefreshableDetails refreshable)
         {
@@ -241,7 +274,7 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
                 // Unsubscribe from socket destination changes
                 foreach (var output in Output.OfType<SceneOutputConnectorViewModel>())
                 {
-                    if (output.Data.Destinations is INotifyCollectionChanged notifyCollection)
+                    if (output.Data?.Destinations is INotifyCollectionChanged notifyCollection)
                     {
                         notifyCollection.CollectionChanged -= OnSocketDestinationsChanged;
                     }
@@ -263,7 +296,7 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
     /// </summary>
     protected void SubscribeToSocketDestinations(OutputConnectorViewModel connector)
     {
-        if (connector is SceneOutputConnectorViewModel sceneConnector)
+        if (connector is SceneOutputConnectorViewModel sceneConnector && sceneConnector.Data != null)
         {
             var socket = sceneConnector.Data;
             
@@ -284,5 +317,95 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
     {        
         // Only refresh the property panel, don't regenerate connectors
         OnPropertyChanged(nameof(Data));
+        
+        // Update UI collections so the Node Properties panel shows connection counts
+        TriggerPropertyChanged(nameof(Output));
+        
+        // Mark document dirty because a connection was added/removed (but not during initial loading)
+        if (!IsInitialLoad)
+        {
+            DocumentViewModel?.SetIsDirty(true);
+        }
+    }
+
+    /// <summary>
+    /// Helper method for dynamic socket operations to notify UI and mark document dirty
+    /// </summary>
+    protected void NotifySocketsChanged()
+    {        
+        if (DocumentViewModel != null)
+        {
+            var sceneGraphTab = DocumentViewModel.TabItemViewModels
+                .OfType<SceneGraphViewModel>()
+                .FirstOrDefault();
+                
+            if (sceneGraphTab?.MainGraph is RedGraph graph)
+            {
+                // Use reflection to call InvalidateConverterCacheForNode (same as destinations)
+                var invalidateMethod = graph.GetType().GetMethod("InvalidateConverterCacheForNode", 
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                if (invalidateMethod != null)
+                {
+                    invalidateMethod.Invoke(graph, new object[] { UniqueId });
+                }
+            }
+        }
+        
+        if (Data is INotifyPropertyChanged notifyData)
+        {
+            // Try reflection approach for non-ObservableObject types
+            var propertyChangedField = Data.GetType()
+                .GetField("PropertyChanged", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            
+            if (propertyChangedField?.GetValue(Data) is PropertyChangedEventHandler handler)
+            {
+                handler.Invoke(Data, new PropertyChangedEventArgs("OutputSockets"));
+            }
+
+        }
+
+         
+        TriggerPropertyChanged(nameof(Output));
+         
+        // Only mark dirty if this is not during initial loading
+        if (!IsInitialLoad)
+        {
+            if (DocumentViewModel == null)
+            {
+                _logger?.Error($"[SYNC] ERROR: DocumentViewModel is NULL on node {UniqueId} ({GetType().Name}) - cannot mark dirty!");
+                return;
+            }
+            DocumentViewModel?.SetIsDirty(true);
+        }
+
+    }
+
+    /// <summary>
+    /// Handles when output connectors are added/removed to automatically subscribe to destination changes
+    /// </summary>
+    private void OnOutputCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.NewItems != null)
+        {
+            foreach (var item in e.NewItems)
+            {
+                if (item is SceneOutputConnectorViewModel output)
+                {
+                    SubscribeToSocketDestinations(output);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Ensures all output connectors are subscribed to destination changes
+    /// for property panel synchronization
+    /// </summary>
+    private void EnsureSocketSubscriptions()
+    {
+        foreach (var output in Output.OfType<SceneOutputConnectorViewModel>())
+        {
+            SubscribeToSocketDestinations(output);
+        }
     }
 }

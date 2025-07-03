@@ -7,36 +7,41 @@ public class scnXorNodeWrapper : BaseSceneViewModel<scnXorNode>, IDynamicInputNo
 {
     public scnXorNodeWrapper(scnXorNode scnXorNode) : base(scnXorNode)
     {
+        InputSocketNames.Add(0, "In");
+        InputSocketNames.Add(1, "Cancel");
+        
+        OutputSocketNames.Add(0, "Out");
     }
 
     internal override void GenerateSockets()
     {
-        for (var i = 0; i < _castedData.OutputSockets.Count; i++)
-        {
-            Output.Add(new SceneOutputConnectorViewModel($"Out{i}", $"Out{i}", UniqueId, _castedData.OutputSockets[i]));
-        }
+        // Generate base sockets from dictionaries
+        base.GenerateSockets();
     }
 
     public BaseConnectorViewModel AddInput()
     {
         var index = (ushort)Input.Count;
-        var input = new SceneInputConnectorViewModel($"In{index}", $"In{index}", UniqueId, index);
+        var input = new SceneInputConnectorViewModel($"In{index}", $"In{index}", UniqueId, 0, index);
+        input.Subtitle = $"(0,{index})";
 
         Input.Add(input);
 
-        // SYNC FIX: Update property panel and graph editor without regenerating connectors
-        TriggerPropertyChanged(nameof(Input));
-        OnPropertyChanged(nameof(Data));
+        // Notify UI and mark document dirty
+        NotifySocketsChanged();
 
         return input;
     }
 
     public void RemoveInput() 
     {
-        Input.Remove(Input[^1]);
-        
-        // SYNC FIX: Update property panel and graph editor without regenerating connectors
-        TriggerPropertyChanged(nameof(Input));
-        OnPropertyChanged(nameof(Data));
+        // Only remove if we have more than the base socket count
+        if (Input.Count > InputSocketNames.Count)
+        {
+            Input.Remove(Input[^1]);
+            
+            // Notify UI and mark document dirty
+            NotifySocketsChanged();
+        }
     }
 }

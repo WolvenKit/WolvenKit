@@ -338,14 +338,14 @@
                                     Background="Transparent">
                                     <nodify:NodeInput.Header>
                                         <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Title}" 
+                                                      VerticalAlignment="Center" />
                                             <TextBlock Text="{Binding Subtitle}" 
-                                                      Margin="0,0,4,0"
+                                                      Margin="4,0,0,0"
                                                       VerticalAlignment="Center"
                                                       FontSize="10"
                                                       Foreground="#777777"
                                                       FontFamily="Consolas" />
-                                            <TextBlock Text="{Binding Title}" 
-                                                      VerticalAlignment="Center" />
                                         </StackPanel>
                                     </nodify:NodeInput.Header>
                                 </nodify:NodeInput>
@@ -360,13 +360,13 @@
                                     IsConnected="{Binding IsConnected}">
                                     <nodify:NodeOutput.Header>
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding Subtitle}" 
-                                                      Margin="0,0,4,0"
-                                                      VerticalAlignment="Center"
-                                                      FontSize="10"
-                                                      Foreground="#777777"
-                                                      FontFamily="Consolas" />
                                             <TextBlock Text="{Binding Title}" 
+                                                      VerticalAlignment="Center"
+                                                      FontFamily="Consolas"
+                                                      FontSize="10"
+                                                      Foreground="#777777" />
+                                            <TextBlock Text="{Binding Subtitle}" 
+                                                      Margin="4,0,0,0"
                                                       VerticalAlignment="Center" />
                                         </StackPanel>
                                     </nodify:NodeOutput.Header>

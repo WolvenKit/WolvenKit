@@ -7,43 +7,51 @@ public class scnAndNodeWrapper : BaseSceneViewModel<scnAndNode>, IDynamicInputNo
 {
     public scnAndNodeWrapper(scnAndNode scnSceneGraphNode) : base(scnSceneGraphNode)
     {
+        InputSocketNames.Add(0, "In");
+        InputSocketNames.Add(1, "Cancel");
+
+        OutputSocketNames.Add(0, "Out");
     }
 
     internal override void GenerateSockets()
     {
-        for (ushort i = 0; i < _castedData.NumInSockets; i++)
+        // First generate base sockets from dictionaries
+        base.GenerateSockets();
+        
+        // Then add any additional dynamic input sockets beyond the base ones
+        for (ushort i = (ushort)InputSocketNames.Count; i < _castedData.NumInSockets; i++)
         {
-            Input.Add(new SceneInputConnectorViewModel($"In{i}", $"In{i}", UniqueId, i));
-        }
-
-        for (var i = 0; i < _castedData.OutputSockets.Count; i++)
-        {
-            Output.Add(new SceneOutputConnectorViewModel($"Out{i}", $"Out{i}", UniqueId, _castedData.OutputSockets[i]));
+            var input = new SceneInputConnectorViewModel($"In{i}", $"In{i}", UniqueId, 0, i);
+            input.Subtitle = $"(0,{i})";
+            Input.Add(input);
         }
     }
 
     public BaseConnectorViewModel AddInput()
     {
         var index = (ushort)Input.Count;
-        var input = new SceneInputConnectorViewModel($"In{index}", $"In{index}", UniqueId, index);
+        var input = new SceneInputConnectorViewModel($"In{index}", $"In{index}", UniqueId, 0, index);
+        input.Subtitle = $"(0,{index})";
 
         Input.Add(input);
         _castedData.NumInSockets++;
 
-        // SYNC FIX: Update property panel and graph editor without regenerating connectors
-        TriggerPropertyChanged(nameof(Input));
-        OnPropertyChanged(nameof(Data));
+        // Notify UI and mark document dirty
+        NotifySocketsChanged();
 
         return input;
     }
 
     public void RemoveInput()
     {
-        Input.Remove(Input[^1]);
-        _castedData.NumInSockets--;
-        
-        // SYNC FIX: Update property panel and graph editor without regenerating connectors
-        TriggerPropertyChanged(nameof(Input));
-        OnPropertyChanged(nameof(Data));
+        // Only remove if we have more than the base socket count
+        if (Input.Count > InputSocketNames.Count)
+        {
+            Input.Remove(Input[^1]);
+            _castedData.NumInSockets--;
+            
+            // Notify UI and mark document dirty
+            NotifySocketsChanged();
+        }
     }
 }

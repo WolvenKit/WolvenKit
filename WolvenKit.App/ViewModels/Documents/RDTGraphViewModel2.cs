@@ -73,7 +73,7 @@ public partial class RDTGraphViewModel2 : RedDocumentTabViewModel
 
             if (_data is scnSceneResource sceneResource)
             {
-                mainGraph = RedGraph.GenerateSceneGraph(Parent.Header, sceneResource);
+                mainGraph = RedGraph.GenerateSceneGraph(Parent.Header, sceneResource, Parent);
             }
         }
         catch (Exception)
