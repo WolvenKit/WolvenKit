@@ -527,7 +527,32 @@ public partial class RedGraph
             return;
         }
 
-
+        var socketData = sceneSource.Data;
+        if (socketData == null)
+        {
+            var ownerNodeVM = Nodes.FirstOrDefault(n => n.UniqueId == sceneSource.OwnerId);
+            if (ownerNodeVM is BaseSceneViewModel { Data: scnSceneGraphNode ownerNodeData })
+            {
+                var coordsStr = sceneSource.Title.Trim('(', ')');
+                var parts = coordsStr.Split(',');
+                if (parts.Length == 2 && ushort.TryParse(parts[0], out var name) && ushort.TryParse(parts[1], out var ordinal))
+                {
+                    socketData = new scnOutputSocket
+                    {
+                        Stamp = new scnOutputSocketStamp { Name = name, Ordinal = ordinal },
+                        Destinations = new CArray<scnInputSocketId>()
+                    };
+                    ownerNodeData.OutputSockets.Add(socketData);
+                    sceneSource.Data = socketData;
+                }
+            }
+        }
+        
+        if (socketData == null)
+        {
+            _loggerService?.Error("Could not create socket data for connection.");
+            return;
+        }
 
         var input = new scnInputSocketId
         {
@@ -542,14 +567,14 @@ public partial class RedGraph
             }
         };
 
-        sceneSource.Data!.Destinations.Add(input);
+        socketData.Destinations.Add(input);
         Connections.Add(new SceneConnectionViewModel(sceneSource, sceneTarget));
         
         // 1026 Failsafe: When Cut Control FALSE socket connects to Cancel socket (1,0),
         // automatically add hidden connection to (1026,0) on the same destination node
         var sourceNode = Nodes.FirstOrDefault(n => n.UniqueId == sceneSource.OwnerId) as BaseSceneViewModel;
         if (sourceNode is scnCutControlNodeWrapper && 
-            sceneSource.Data.Stamp.Name == 1 && // FALSE socket of Cut Control
+            socketData.Stamp.Name == 1 && // FALSE socket of Cut Control
             sceneTarget.NameId == 1 && sceneTarget.Ordinal == 0) // Cancel socket (1,0)
         {
             var hiddenInput = new scnInputSocketId
@@ -566,10 +591,10 @@ public partial class RedGraph
             };
             
             // Add the hidden connection to data only (not to UI Connections)
-            sceneSource.Data.Destinations.Add(hiddenInput);
+            socketData.Destinations.Add(hiddenInput);
         }
         
-        RefreshCVM(sceneSource.Data);
+        RefreshCVM(socketData);
         
         // Invalidate converter cache for affected nodes to force ChunkViewModel regeneration
         InvalidateConverterCacheForNode(sceneSource.OwnerId);
