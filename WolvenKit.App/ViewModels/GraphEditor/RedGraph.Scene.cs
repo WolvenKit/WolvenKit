@@ -589,11 +589,17 @@ public partial class RedGraph
         {
             foreach (SceneOutputConnectorViewModel output in node.Output)
             {
-                foreach (var destination in output.Data!.Destinations)
+                if (output.Data == null)
+                {
+                    continue;
+                }
+                
+                foreach (var destination in output.Data.Destinations)
                 {
                     if (destination.NodeId != null && 
                         destination.NodeId.Id == sceneTarget.OwnerId && 
-                        node.Output.Count > 0)
+                        destination.IsockStamp.Name == sceneTarget.NameId &&
+                        destination.IsockStamp.Ordinal == sceneTarget.Ordinal)
                     {
                         sceneTarget.IsConnected = true;
                         return;

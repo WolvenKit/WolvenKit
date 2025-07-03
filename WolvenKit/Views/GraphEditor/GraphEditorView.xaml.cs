@@ -360,7 +360,7 @@ public partial class GraphEditorView : UserControl
             infoItem.Click += (_, _) => {
                 try
                 {
-                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/quest/deletion-markers") { UseShellExecute = true });
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("https://wiki.redmodding.org/wolvenkit/wolvenkit-app/editor/scene-editor") { UseShellExecute = true });
                 }
                 catch (Exception)
                 {
