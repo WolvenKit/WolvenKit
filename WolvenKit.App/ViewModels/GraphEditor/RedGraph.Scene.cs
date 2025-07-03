@@ -29,7 +29,7 @@ public partial class RedGraph
         return s_sceneNodeTypes;
     }
 
-    public void CreateSceneNode(Type type, System.Windows.Point point)
+    public uint CreateSceneNode(Type type, System.Windows.Point point)
     {
         var instance = InternalCreateSceneNode(type);
         var wrappedInstance = WrapSceneNode(instance);
@@ -44,6 +44,8 @@ public partial class RedGraph
         Nodes.Add(wrappedInstance);
         
         DocumentViewModel?.SetIsDirty(true);
+        
+        return instance.NodeId.Id;
     }
 
     private scnSceneGraphNode InternalCreateSceneNode(Type type)
@@ -67,8 +69,16 @@ public partial class RedGraph
                 }
             });
 
+            // Create default choice option with populated caption
+            choiceNode.Options.Add(new scnChoiceNodeOption
+            {
+                Caption = "Default Option",
+            });
+
             choiceNode.OutputSockets =
             [
+                // Choice option socket (name=0, ordinal=0) for the default option
+                new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = 0 } },
                 new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 1, Ordinal = 0 } },
                 new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 2, Ordinal = 0 } },
                 new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 3, Ordinal = 0 } },

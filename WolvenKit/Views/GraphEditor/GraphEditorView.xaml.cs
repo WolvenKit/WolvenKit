@@ -149,6 +149,9 @@ public partial class GraphEditorView : UserControl
         nodifyEditor.ContextMenu ??= new ContextMenu();
         nodifyEditor.ContextMenu.Items.Clear();
 
+        // Get the mouse position in graph coordinates for placing new nodes at cursor location
+        var mousePosition = GetMousePositionInGraph(nodifyEditor);
+
         if (Source.GraphType == RedGraphType.Scene)
         {
             var nodeTypes = Source.GetSceneNodeTypes();
@@ -168,7 +171,8 @@ public partial class GraphEditorView : UserControl
                         _appViewModel.CloseDialogCommand.Execute(null);
                         if (model is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
                         {
-                            Source.CreateSceneNode(selectedType, ViewportLocation);
+                            var nodeId = Source.CreateSceneNode(selectedType, mousePosition);
+                            SelectNodeById(nodeId);
                         }
                     }
                 });
@@ -178,7 +182,11 @@ public partial class GraphEditorView : UserControl
 
             foreach (var nodeType in nodeTypes)
             {
-                addMenu.Items.Add(CreateMenuItem(GetCleanTypeName(nodeType.Name), () => Source.CreateSceneNode(nodeType, ViewportLocation)));
+                addMenu.Items.Add(CreateMenuItem(GetCleanTypeName(nodeType.Name), () => 
+                {
+                    var nodeId = Source.CreateSceneNode(nodeType, mousePosition);
+                    SelectNodeById(nodeId);
+                }));
             }
 
             nodifyEditor.ContextMenu.Items.Add(addMenu);
@@ -203,7 +211,7 @@ public partial class GraphEditorView : UserControl
                         _appViewModel.CloseDialogCommand.Execute(null);
                         if (model is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
                         {
-                            Source.CreateQuestNode(selectedType, ViewportLocation);
+                            Source.CreateQuestNode(selectedType, mousePosition);
                         }
                     }
                 });
@@ -213,7 +221,7 @@ public partial class GraphEditorView : UserControl
 
             foreach (var nodeType in nodeTypes)
             {
-                addMenu.Items.Add(CreateMenuItem(GetCleanTypeName(nodeType.Name), () => Source.CreateQuestNode(nodeType, ViewportLocation)));
+                addMenu.Items.Add(CreateMenuItem(GetCleanTypeName(nodeType.Name), () => Source.CreateQuestNode(nodeType, mousePosition)));
             }
 
             nodifyEditor.ContextMenu.Items.Add(addMenu);
@@ -524,6 +532,57 @@ public partial class GraphEditorView : UserControl
         foreach (var connection in connectionsToRemove)
         {
             Source.RemoveSceneConnectionPublic(connection);
+        }
+    }
+
+    /// <summary>
+    /// Selects a node by its ID
+    /// </summary>
+    private void SelectNodeById(uint nodeId)
+    {
+        if (Source?.Nodes == null || Editor == null) return;
+
+        // Find the node with the specified ID
+        var targetNode = Source.Nodes.FirstOrDefault(n => n.UniqueId == nodeId);
+
+        if (targetNode != null)
+        {
+            // Clear current selection
+            Editor.SelectedItems.Clear();
+            
+            // Select the target node
+            Editor.SelectedItems.Add(targetNode);
+            
+            // Update the NodeSelectionService
+            NodeSelectionService.Instance.SelectedNode = targetNode;
+        }
+    }
+
+    /// <summary>
+    /// Get the mouse position in graph coordinates for placing new nodes
+    /// </summary>
+    private System.Windows.Point GetMousePositionInGraph(NodifyEditor editor)
+    {
+        try
+        {
+            // Get mouse position relative to the editor
+            var mousePos = Mouse.GetPosition(editor);
+            
+            // Convert to graph coordinates by accounting for viewport offset and zoom
+            var graphX = (mousePos.X / editor.ViewportZoom) + editor.ViewportLocation.X;
+            var graphY = (mousePos.Y / editor.ViewportZoom) + editor.ViewportLocation.Y;
+            
+            return new System.Windows.Point(graphX, graphY);
+        }
+        catch
+        {
+            // Fallback to viewport center if mouse position can't be determined
+            var viewport = editor.ViewportLocation;
+            var size = editor.ViewportSize;
+            return new System.Windows.Point(
+                viewport.X + size.Width / 2,
+                viewport.Y + size.Height / 2
+            );
         }
     }
 }

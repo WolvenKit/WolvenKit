@@ -608,7 +608,8 @@ namespace WolvenKit.Views.Documents
                         {
                             // Create new node at current viewport center
                             var viewportCenter = GetViewportCenter();
-                            graph.CreateSceneNode(selectedType, viewportCenter);
+                            var nodeId = graph.CreateSceneNode(selectedType, viewportCenter);
+                            SelectNodeById(nodeId);
                         }
                     }
                 });
@@ -665,6 +666,30 @@ namespace WolvenKit.Views.Documents
         {
             // Forward the event to the underlying GraphEditorView's Connection_OnRightClick method
             SceneGraphEditor?.Connection_OnRightClick(sender, e);
+        }
+
+        /// <summary>
+        /// Selects a node by its ID
+        /// </summary>
+        private void SelectNodeById(uint nodeId)
+        {
+            var viewModel = DataContext as SceneGraphViewModel;
+            if (viewModel?.MainGraph?.Nodes == null || SceneGraphEditor?.Editor == null) return;
+
+            // Find the node with the specified ID
+            var targetNode = viewModel.MainGraph.Nodes.FirstOrDefault(n => n.UniqueId == nodeId);
+
+            if (targetNode != null)
+            {
+                // Clear current selection
+                SceneGraphEditor.Editor.SelectedItems.Clear();
+                
+                // Select the target node
+                SceneGraphEditor.Editor.SelectedItems.Add(targetNode);
+                
+                // Update the NodeSelectionService
+                NodeSelectionService.Instance.SelectedNode = targetNode;
+            }
         }
     }
 } 

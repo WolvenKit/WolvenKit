@@ -238,7 +238,7 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
                     
                     if (socketNameId == 0 && socket.Stamp.Ordinal < Options.Count)
                     {
-                        baseName += $" {Options[socket.Stamp.Ordinal]}";
+                        baseName = $"({baseName}) {Options[socket.Stamp.Ordinal]}";
                     }
 
                     var nameAndTitle = $"({socket.Stamp.Name},{socket.Stamp.Ordinal})";
