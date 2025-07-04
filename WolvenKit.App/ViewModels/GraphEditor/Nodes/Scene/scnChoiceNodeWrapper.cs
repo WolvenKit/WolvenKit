@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.GraphEditor;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
@@ -10,7 +11,7 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 
-public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
+public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>, IRefreshableDetails
 {
     private readonly scnSceneResource _sceneResource;
 
@@ -129,6 +130,9 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
         // Update title as well
         UpdateTitle();
         OnPropertyChanged(nameof(Title));
+        
+        // Regenerate sockets to update choice text display when properties change
+        GenerateSockets();
     }
 
     /// <summary>
@@ -277,6 +281,17 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
             var option = _castedData.Options[i];
             string choiceText;
 
+            // First, check if there's a meaningful caption set - prefer this over screenplay entries
+            var hasMeaningfulCaption = option.Caption != CName.Empty && 
+                                      !string.IsNullOrEmpty(option.Caption.GetResolvedText());
+
+            if (hasMeaningfulCaption)
+            {
+                choiceText = option.Caption.GetResolvedText()!;
+                Options.Add(choiceText);
+                continue;
+            }
+
             // Try to get text from screenplay/localization store
             try
             {
@@ -313,25 +328,8 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
                 // Continue to fallbacks if there's any error accessing screenplay/loc data
             }
 
-            // Fallback to caption if no localized text found
-            if (option.Caption != CName.Empty)
-            {
-                var captionString = option.Caption.GetResolvedText();
-                if (!string.IsNullOrEmpty(captionString))
-                {
-                    choiceText = $"{captionString}";
-                }
-                else
-                {
-                    choiceText = $"[unresolved]";
-                }
-            }
-            else
-            {
-                // Final fallback to choice index and ID
-                choiceText = $"Choice {i + 1} [ID:{option.ScreenplayOptionId.Id}]";
-            }
-
+            // Final fallback to choice index and ID
+            choiceText = $"Choice {i + 1} [ID:{option.ScreenplayOptionId.Id}]";
             Options.Add(choiceText);
         }
     }
