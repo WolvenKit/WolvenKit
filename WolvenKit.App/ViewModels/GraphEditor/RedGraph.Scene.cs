@@ -531,9 +531,6 @@ public partial class RedGraph
         
         nodeWrapper.GenerateSockets();
         
-        // Clear the flag after initial loading is complete
-        nodeWrapper.IsInitialLoad = false;
-
         return nodeWrapper;
     }
 
@@ -546,9 +543,6 @@ public partial class RedGraph
         
         nodeWrapper.GenerateSockets();
         
-        // Clear the flag after initial loading is complete
-        nodeWrapper.IsInitialLoad = false;
-
         return nodeWrapper;
     }
 
@@ -1293,6 +1287,12 @@ public partial class RedGraph
             }
         }
 
+        // Clear the initial loading flag for all nodes now that the graph is fully loaded
+        foreach (var node in graph.Nodes)
+        {
+            node.IsInitialLoad = false;
+        }
+
         return graph;
     }
 
@@ -1405,6 +1405,12 @@ public partial class RedGraph
                     }
                 }
             }
+        }
+
+        // Clear the initial loading flag for all nodes now that the graph is fully loaded
+        foreach (var node in graph.Nodes)
+        {
+            node.IsInitialLoad = false;
         }
 
         return graph;
