@@ -17,7 +17,15 @@ public abstract class BaseQuestViewModel : GraphEditor.NodeViewModel, IRefreshab
 
     protected BaseQuestViewModel(graphGraphNodeDefinition graphGraphNodeDefinition) : base(graphGraphNodeDefinition)
     {
-        UniqueId = (uint)graphGraphNodeDefinition.GetHashCode();
+        // Use the actual quest node ID if available, otherwise fall back to hash code
+        if (graphGraphNodeDefinition is questNodeDefinition questNode)
+        {
+            UniqueId = questNode.Id;
+        }
+        else
+        {
+            UniqueId = (uint)graphGraphNodeDefinition.GetHashCode();
+        }
         Title = FormatQuestNodeName(graphGraphNodeDefinition.GetType().Name);
         Background = GetBackgroundForNodeType(graphGraphNodeDefinition);
         ContentBackground = GetContentBackgroundForNodeType(graphGraphNodeDefinition);
@@ -128,7 +136,7 @@ public abstract class BaseQuestViewModel : GraphEditor.NodeViewModel, IRefreshab
         if (Data is questNodeDefinition questNode)
         {
             var formattedName = FormatQuestNodeName(questNode.GetType().Name);
-            Title = $"[{questNode.Id}] {formattedName}";
+            Title = formattedName; // ID is now shown separately via NodeIdText
         }
     }
 

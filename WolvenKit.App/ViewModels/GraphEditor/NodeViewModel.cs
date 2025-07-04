@@ -143,7 +143,7 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
         if (typeName.EndsWith("Node"))
             typeName = typeName[..^4];
             
-        Title = typeName; // ID is now shown separately via NodeIdText
+        Title = typeName;
     }
 
     /// <summary>

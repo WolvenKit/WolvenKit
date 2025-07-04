@@ -56,7 +56,7 @@ public abstract class BaseSceneViewModel : NodeViewModel, IRefreshableDetails
         // Detect if this is a player node
         DetectPlayerNode(scnSceneGraphNode);
         
-        Title = Data.GetType().Name[3..^4]; // ID is now shown separately via NodeIdText
+        Title = Data.GetType().Name[3..^4];
         Background = GraphNodeColors.GetBackgroundForSceneNodeType(scnSceneGraphNode);
         ContentBackground = GraphNodeColors.GetContentBackgroundForSceneNodeType(scnSceneGraphNode);
         
@@ -67,7 +67,7 @@ public abstract class BaseSceneViewModel : NodeViewModel, IRefreshableDetails
     protected override void UpdateTitle()
     {
         // Format scene node titles properly  
-        Title = Data.GetType().Name[3..^4]; // ID is now shown separately via NodeIdText
+        Title = Data.GetType().Name[3..^4];
         
         // Notable point information is now shown in the visual indicator bar, not in the title
         

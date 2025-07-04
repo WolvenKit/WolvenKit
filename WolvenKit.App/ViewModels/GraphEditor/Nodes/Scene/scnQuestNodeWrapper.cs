@@ -25,13 +25,13 @@ public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
         if (_castedData.QuestNode?.Chunk != null)
         {
             var questNodeType = NodeProperties.GetNameFromClass(_castedData.QuestNode.Chunk);
-            Title = questNodeType; // ID is now shown separately via NodeIdText
+            Title = questNodeType;
             Background = GraphNodeColors.GetBackgroundForQuestNodeType(_castedData.QuestNode.Chunk);
             ContentBackground = GraphNodeColors.GetContentBackgroundForQuestNodeType(_castedData.QuestNode.Chunk);
         }
         else
         {
-            Title = "Quest"; // ID is now shown separately via NodeIdText
+            Title = "Quest";
         }
 
         // Get properties but exclude the redundant "Type" since it's already shown in the title
@@ -208,11 +208,11 @@ public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
             if (_castedData.QuestNode?.Chunk != null)
             {
                 var questNodeType = NodeProperties.GetNameFromClass(_castedData.QuestNode.Chunk);
-                Title = questNodeType; // ID is now shown separately via NodeIdText
+                Title = questNodeType;
             }
             else
             {
-                Title = "Quest"; // ID is now shown separately via NodeIdText
+                Title = "Quest";
             }
 
             // Notable point suffix is now handled by base class
