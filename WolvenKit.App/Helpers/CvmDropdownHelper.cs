@@ -294,18 +294,17 @@ public abstract class CvmDropdownHelper
                         // Try first name in Names array first (most reliable)
                         if (performerSymbol.EntityRef.Names.Count > 0)
                         {
-                            var firstName = performerSymbol.EntityRef.Names[0].GetResolvedText() ?? "";
-                            if (!string.IsNullOrEmpty(firstName))
+                            if (performerSymbol.EntityRef.Names[0] != "None")
                             {
-                                performerName = firstName;
+                                performerName = performerSymbol.EntityRef.Names[0]!;
                             }
                         }
                         
                         // If Names didn't work, try Reference (NodeRef)
                         if (performerName == $"Performer {performerIdValue}")
                         {
-                            var referenceString = performerSymbol.EntityRef.Reference.ToString() ?? "";
-                            if (!string.IsNullOrEmpty(referenceString) && referenceString != "NodeRef")
+                            var referenceString = performerSymbol.EntityRef.Reference.GetResolvedText() ?? "";
+                            if (!string.IsNullOrEmpty(referenceString) && referenceString != "0")
                             {
                                 // Remove the # prefix if present
                                 performerName = referenceString.StartsWith("#") ? referenceString.Substring(1) : referenceString;
@@ -315,20 +314,18 @@ public abstract class CvmDropdownHelper
                         // Try SceneActorContextName
                         if (performerName == $"Performer {performerIdValue}")
                         {
-                            var sceneActorContextName = performerSymbol.EntityRef.SceneActorContextName.GetResolvedText() ?? "";
-                            if (!string.IsNullOrEmpty(sceneActorContextName))
+                            if (performerSymbol.EntityRef.SceneActorContextName != "None")
                             {
-                                performerName = sceneActorContextName;
+                                performerName = performerSymbol.EntityRef.SceneActorContextName!;
                             }
                         }
                         
                         // Try DynamicEntityUniqueName
                         if (performerName == $"Performer {performerIdValue}")
                         {
-                            var dynamicEntityName = performerSymbol.EntityRef.DynamicEntityUniqueName.GetResolvedText() ?? "";
-                            if (!string.IsNullOrEmpty(dynamicEntityName))
+                            if (performerSymbol.EntityRef.DynamicEntityUniqueName != "None")
                             {
-                                performerName = dynamicEntityName;
+                                performerName = performerSymbol.EntityRef.DynamicEntityUniqueName!;
                             }
                         }
                         

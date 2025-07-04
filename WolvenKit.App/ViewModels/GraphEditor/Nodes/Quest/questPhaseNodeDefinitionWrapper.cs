@@ -34,7 +34,6 @@ public class questPhaseNodeDefinitionWrapper : questEmbeddedGraphNodeDefinitionW
         _nodeWrapperFactory = nodeWrapperFactory;
         _archiveManager = archiveManager;
 
-        // ID is now shown separately via NodeIdText
         if (_castedData.PhaseResource.DepotPath != ResourcePath.Empty && _castedData.PhaseResource.DepotPath.IsResolvable)
         {
             Details.Add("Filename", Path.GetFileName(_castedData.PhaseResource.DepotPath.GetResolvedText())!);

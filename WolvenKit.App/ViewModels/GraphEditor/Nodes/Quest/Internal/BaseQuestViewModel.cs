@@ -136,7 +136,7 @@ public abstract class BaseQuestViewModel : GraphEditor.NodeViewModel, IRefreshab
         if (Data is questNodeDefinition questNode)
         {
             var formattedName = FormatQuestNodeName(questNode.GetType().Name);
-            Title = formattedName; // ID is now shown separately via NodeIdText
+            Title = formattedName;
         }
     }
 

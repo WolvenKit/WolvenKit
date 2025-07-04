@@ -33,7 +33,6 @@ public class questSceneNodeDefinitionWrapper : questSignalStoppingNodeDefinition
         _archiveManager = archiveManager;
         _gameController = gameController;
 
-        // ID is now shown separately via NodeIdText
         if (_castedData.SceneFile.DepotPath != ResourcePath.Empty && _castedData.SceneFile.DepotPath.IsResolvable)
         {
             Details.Add("Filename", Path.GetFileName(_castedData.SceneFile.DepotPath.GetResolvedText())!);

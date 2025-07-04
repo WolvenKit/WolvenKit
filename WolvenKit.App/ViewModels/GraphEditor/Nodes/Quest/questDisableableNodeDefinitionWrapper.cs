@@ -6,6 +6,5 @@ public class questDisableableNodeDefinitionWrapper<T> : questNodeDefinitionWrapp
 {
     public questDisableableNodeDefinitionWrapper(T questDisableableNodeDefinition) : base(questDisableableNodeDefinition)
     {
-        // ID is now shown separately via NodeIdText
     }
 }
