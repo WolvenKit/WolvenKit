@@ -33,7 +33,6 @@ using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
 using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace WolvenKit.App.Scripting;
 
@@ -285,19 +284,18 @@ public class AppScriptFunctions : ScriptFunctions
     }
 
     /// <summary>
-    /// Retrieves a stringified list of project files. Pass this to TypeHelper.ParseJson to avoid [object Object] issues.
+    /// Retrieves a list of files from the project
     /// </summary>
-    /// <param name="folderType">string parameter folderType = "archive", "resources", or "raw"</param>
-    public string GetProjectFiles(string folderType)
+    /// <param name="folderType">string parameter folderType = "archive" or "raw"</param>
+    /// <returns></returns>
+    public List<string> GetProjectFiles(string folderType)
     {
-        // this used to be List<string>, but deserializing that would result in [object Object] in the wscript layer.
-        // Not sure why this happens and why we never ran into it, but this works at least...
-        List<string> result = [];
+        var result = new List<string>();
 
         if (_projectManager.ActiveProject == null)
         {
             _loggerService.Error("No project loaded");
-            return JsonSerializer.Serialize(result.ToArray());
+            return result;
         }
 
         if (GetBaseFolder(folderType) is string baseFolder)
@@ -306,7 +304,7 @@ public class AppScriptFunctions : ScriptFunctions
                 .Select(file => Path.GetRelativePath(baseFolder, file)));
         }
 
-        return JsonSerializer.Serialize(result.ToArray());
+        return result;
     }
 
     private string? GetBaseFolder(string folderType)
