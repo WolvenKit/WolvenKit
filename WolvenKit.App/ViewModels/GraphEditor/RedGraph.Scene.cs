@@ -8,6 +8,7 @@ using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
 using WolvenKit.App.Services;
+using WolvenKit.Core.Extensions;
 
 
 namespace WolvenKit.App.ViewModels.GraphEditor;
@@ -61,7 +62,10 @@ public partial class RedGraph
 
         if (sceneGraphNode is scnChoiceNode choiceNode)
         {
-            ((scnSceneResource)_data).NotablePoints.Add(new scnNotablePoint
+            var sceneResource = (scnSceneResource)_data;
+            
+            // Add notablePoint for choice nodes
+            sceneResource.NotablePoints.Add(new scnNotablePoint
             {
                 NodeId = new scnNodeId
                 {
@@ -69,11 +73,74 @@ public partial class RedGraph
                 }
             });
 
-            // Create default choice option with populated caption
+            // Create proper screenplay entries for the default choice option
+            var random = new Random();
+            var cruid = (CRUID)random.NextCRUID();
+            
+            // first id is always 2, don't know why
+            var id = (CUInt32)2;
+            if (sceneResource.ScreenplayStore.Options.Count > 0)
+            {
+                // needs to be 256 higher, if lower the previous text is used, if higher nothing is shown...
+                id = sceneResource.ScreenplayStore.Options[^1].ItemId.Id + 256;
+            }
+
+            sceneResource.LocStore.VpEntries.Add(new scnlocLocStoreEmbeddedVariantPayloadEntry
+            {
+                Content = "Default Option",
+                VariantId = new scnlocVariantId
+                {
+                    Ruid = cruid
+                }
+            });
+
+            sceneResource.LocStore.VdEntries.Add(new scnlocLocStoreEmbeddedVariantDescriptorEntry
+            {
+                LocstringId = new scnlocLocstringId
+                {
+                    Ruid = cruid - 4
+                },
+                VariantId = new scnlocVariantId
+                {
+                    Ruid = cruid
+                },
+                VpeIndex = (uint)(sceneResource.LocStore.VpEntries.Count - 1),
+                Signature = new scnlocSignature
+                {
+                    Val = 3
+                }
+            });
+
+            sceneResource.ScreenplayStore.Options.Add(new scnscreenplayChoiceOption
+            {
+                LocstringId = new scnlocLocstringId
+                {
+                    Ruid = cruid - 4
+                },
+                ItemId = new scnscreenplayItemId
+                {
+                    Id = id
+                },
+                Usage = new scnscreenplayOptionUsage
+                {
+                    PlayerGenderMask = new scnGenderMask
+                    {
+                        Mask = 3 // both
+                    }
+                }
+            });
+
+            // Create default choice option with proper screenplay reference
             choiceNode.Options.Add(new scnChoiceNodeOption
             {
-                Caption = "Default Option",
+                ScreenplayOptionId = new scnscreenplayItemId()
+                {
+                    Id = id
+                }
             });
+
+            // Refresh the property panel to show the new notablePoint AND screenplay entries
+            RefreshSceneResourcePropertiesInTabs();
 
             choiceNode.OutputSockets =
             [
@@ -194,7 +261,10 @@ public partial class RedGraph
             }
         }
 
-        // 6. Remove the original node from the graph data
+        // 6. Remove notablePoint if this was a choice node
+        RemoveNotablePointForNode(node.UniqueId);
+
+        // 7. Remove the original node from the graph data
         var graph = sceneResource.SceneGraph.Chunk?.Graph;
         if (graph != null)
         {
@@ -206,7 +276,7 @@ public partial class RedGraph
                 }
             }
 
-            // 7. Add the deletion marker node to the graph data
+            // 8. Add the deletion marker node to the graph data
             graph.Add(new CHandle<scnSceneGraphNode>(deletionMarker));
         }
         else
@@ -215,7 +285,7 @@ public partial class RedGraph
             return;
         }
 
-        // 8. Generate input sockets based on incoming connections and update destination data
+        // 9. Generate input sockets based on incoming connections and update destination data
         markerWrapper.GenerateSockets();
         
         // Create a mapping from original input socket coordinates to deletion marker socket coordinates
@@ -264,13 +334,13 @@ public partial class RedGraph
             }
         }
 
-        // 9. Remove the original node from UI
+        // 10. Remove the original node from UI
         Nodes.Remove(node);
         
-        // 10. Add the deletion marker wrapper to UI
+        // 11. Add the deletion marker wrapper to UI
         Nodes.Add(markerWrapper);
         
-        // 11. Recreate connections
+        // 12. Recreate connections
         Connections.Clear();  // Clear all UI connections
         
         // Rebuild all connections
@@ -310,7 +380,7 @@ public partial class RedGraph
             }
         }
         
-        // 12. Update properties in the nodes collection
+        // 13. Update properties in the nodes collection
         if (GetSceneNodesChunkViewModel() is { } nodes)
         {
             nodes.RecalculateProperties();
@@ -333,6 +403,9 @@ public partial class RedGraph
         {
             Disconnect(outputConnectorViewModel);
         }
+
+        // Remove notablePoint if this was a choice node
+        RemoveNotablePointForNode(node.UniqueId);
 
         var graph = ((scnSceneResource)_data).SceneGraph.Chunk!.Graph!;
         for (var i = graph.Count - 1; i >= 0; i--)
@@ -730,6 +803,69 @@ public partial class RedGraph
         }
     }
 
+    /// <summary>
+    /// Removes a notablePoint from the scnSceneResource if it exists for the given node ID
+    /// </summary>
+    /// <param name="nodeId">The node ID to remove from notablePoints</param>
+    private void RemoveNotablePointForNode(uint nodeId)
+    {
+        var sceneResource = (scnSceneResource)_data;
+        var notablePointToRemove = sceneResource.NotablePoints
+            .FirstOrDefault(np => np.NodeId.Id == nodeId);
+            
+        if (notablePointToRemove != null)
+        {
+            sceneResource.NotablePoints.Remove(notablePointToRemove);
+            
+            // Refresh the property panel to show the removal
+            RefreshSceneResourcePropertiesInTabs();
+        }
+    }
+
+    /// <summary>
+    /// Refreshes the property panel to show changes to root scnSceneResource properties
+    /// </summary>
+    public void RefreshSceneResourcePropertiesInTabs()
+    {
+        // Invalidate converter cache for the root scnSceneResource
+        var cacheService = new ConverterCacheService();
+        cacheService.InvalidateConverterCache((scnSceneResource)_data);
+        
+        // Force refresh of the tab content in SceneGraphViewModel
+        if (DocumentViewModel != null)
+        {
+            var sceneGraphTab = DocumentViewModel.TabItemViewModels
+                .OfType<SceneGraphViewModel>()
+                .FirstOrDefault();
+                
+            if (sceneGraphTab?.SelectedTab != null)
+            {
+                // Directly recreate the tab content with fresh filtered data
+                var freshRootChunk = sceneGraphTab.RDTViewModel.GetRootChunk();
+                if (freshRootChunk != null)
+                {
+                    // Force fresh calculation of properties
+                    freshRootChunk.RecalculateProperties();
+                    freshRootChunk.ForceLoadPropertiesRecursive();
+                    
+                    // Apply the filter to get fresh filtered content
+                    var freshFilteredList = new List<ChunkViewModel>(
+                        freshRootChunk.TVProperties.Where(c => sceneGraphTab.SelectedTab.Filter(c))
+                    );
+                    
+                    // Expand the first level of items by default
+                    foreach (var item in freshFilteredList)
+                    {
+                        item.IsExpanded = true;
+                    }
+                    
+                    // Directly set the new content
+                    sceneGraphTab.SelectedTabContent = freshFilteredList;
+                }
+            }
+        }
+    }
+
     private ChunkViewModel? GetSceneNodesChunkViewModel()
     {
         if (DocumentViewModel?.GetMainFile() is not RDTDataViewModel dataViewModel)
@@ -744,6 +880,8 @@ public partial class RedGraph
 
         return nodes;
     }
+
+
 
     private bool IsChildOf(ChunkViewModel child, ChunkViewModel potentialParent)
     {

@@ -84,11 +84,62 @@
         <!-- Toolbar -->
         <Border Grid.Row="0" Background="{StaticResource ContentBackground}" BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,0,0,1" Padding="8,4">
             <StackPanel Orientation="Horizontal">
-                <iconPacks:PackIconMaterial Kind="GraphOutline" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                <TextBlock Text="Scene Editor - Node-based workflow" 
+                <iconPacks:PackIconMaterial Kind="InformationOutline" VerticalAlignment="Center" Margin="0,0,8,0" Width="12" Height="12"/>
+                <TextBlock Text="{Binding SceneTitleWithCategory}" 
+                           VerticalAlignment="Center" 
+                           Foreground="White" 
+                           FontSize="11" 
+                           FontWeight="Medium"
+                           Margin="0,0,16,0"/>
+                <TextBlock Text="Total Nodes:" 
                            VerticalAlignment="Center" 
                            Foreground="Gray" 
-                           FontSize="11" />
+                           FontSize="10" 
+                           Margin="0,0,4,0"/>
+                <TextBlock Text="{Binding TotalNodes}" 
+                           VerticalAlignment="Center" 
+                           Foreground="White" 
+                           FontSize="10" 
+                           Margin="0,0,16,0"/>
+                <TextBlock Text="Actors:" 
+                           VerticalAlignment="Center" 
+                           Foreground="Gray" 
+                           FontSize="10" 
+                           Margin="0,0,4,0"/>
+                <TextBlock Text="{Binding TotalActors}" 
+                           VerticalAlignment="Center" 
+                           Foreground="White" 
+                           FontSize="10" 
+                           Margin="0,0,16,0"/>
+                <TextBlock Text="Props:" 
+                           VerticalAlignment="Center" 
+                           Foreground="Gray" 
+                           FontSize="10" 
+                           Margin="0,0,4,0"/>
+                <TextBlock Text="{Binding TotalProps}" 
+                           VerticalAlignment="Center" 
+                           Foreground="White" 
+                           FontSize="10" 
+                           Margin="0,0,16,0"/>
+                <TextBlock Text="Choices:" 
+                           VerticalAlignment="Center" 
+                           Foreground="Gray" 
+                           FontSize="10" 
+                           Margin="0,0,4,0"/>
+                <TextBlock Text="{Binding TotalChoices}" 
+                           VerticalAlignment="Center" 
+                           Foreground="White" 
+                           FontSize="10" 
+                           Margin="0,0,16,0"/>
+                <TextBlock Text="Dialogues:" 
+                           VerticalAlignment="Center" 
+                           Foreground="Gray" 
+                           FontSize="10" 
+                           Margin="0,0,4,0"/>
+                <TextBlock Text="{Binding TotalDialogues}" 
+                           VerticalAlignment="Center" 
+                           Foreground="White" 
+                           FontSize="10" />
             </StackPanel>
         </Border>
 

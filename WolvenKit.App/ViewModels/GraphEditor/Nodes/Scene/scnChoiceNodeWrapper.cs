@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using WolvenKit.App.ViewModels.Documents;
+using WolvenKit.App.ViewModels.GraphEditor;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
@@ -234,11 +236,11 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
                 foreach (var socket in sockets)
                 {
                     // Only add ordinal suffix for choice options (socketNameId == 0) or if there are multiple of the same type
-                    var baseName = (socketNameId == 0 || sockets.Count > 1) ? $"{socketName}_{socket.Stamp.Ordinal}" : socketName;
+                    var baseName = (socketNameId == 0 || sockets.Count > 1) ? $"({socketName}_{socket.Stamp.Ordinal + 1})" : socketName;
                     
                     if (socketNameId == 0 && socket.Stamp.Ordinal < Options.Count)
                     {
-                        baseName = $"({baseName}) {Options[socket.Stamp.Ordinal]}";
+                        baseName += $" {Options[socket.Stamp.Ordinal]}";
                     }
 
                     var nameAndTitle = $"({socket.Stamp.Name},{socket.Stamp.Ordinal})";
@@ -252,7 +254,7 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
             else
             {
                 // Virtual socket - only add ordinal for choice options (socketNameId == 0)
-                var baseName = socketNameId == 0 ? $"{socketName}_0" : socketName;
+                var baseName = socketNameId == 0 ? $"({socketName}_1)" : socketName;
                 var nameAndTitle = $"({socketNameId},0)";
                 var output = new SceneOutputConnectorViewModel(nameAndTitle, nameAndTitle, UniqueId, socketNameId, 0);
                 output.Subtitle = baseName;
@@ -299,7 +301,7 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
 
                         if (vpEntry != null && !string.IsNullOrEmpty(vpEntry.Content))
                         {
-                            choiceText = $"[{vdEntry.LocaleId.ToEnumString()}] {vpEntry.Content}";
+                            choiceText = vpEntry.Content;
                             Options.Add(choiceText);
                             continue;
                         }
@@ -449,7 +451,7 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
 
                     if (vpEntry != null && !string.IsNullOrEmpty(vpEntry.Content))
                     {
-                        choiceText = $"[{vdEntry.LocaleId.ToEnumString()}] {vpEntry.Content}";
+                        choiceText = vpEntry.Content;
                     }
                 }
             }
@@ -461,12 +463,27 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
 
         // Create and insert the new connector at the correct position
         var nameAndTitle = $"({newOutputSocket.Stamp.Name},{newOutputSocket.Stamp.Ordinal})";
-        var newConnector = new SceneOutputConnectorViewModel(nameAndTitle, choiceText, UniqueId, newOutputSocket.Stamp.Name, newOutputSocket.Stamp.Ordinal, newOutputSocket);
+        var socketSubtitle = $"(Option_{newChoiceOrdinal + 1}) {choiceText}";
+        var newConnector = new SceneOutputConnectorViewModel(nameAndTitle, nameAndTitle, UniqueId, newOutputSocket.Stamp.Name, newOutputSocket.Stamp.Ordinal, newOutputSocket);
+        newConnector.Subtitle = socketSubtitle;
         Output.Insert(insertPosition, newConnector);
 
         // Note: Subscription to destination changes happens automatically via Output.CollectionChanged
         // Notify UI and mark document dirty
         NotifySocketsChanged();
+        
+        // Refresh the property panel to show the new screenplay/localization entries
+        if (DocumentViewModel != null)
+        {
+            var sceneGraphTab = DocumentViewModel.TabItemViewModels
+                .OfType<SceneGraphViewModel>()
+                .FirstOrDefault();
+                
+            if (sceneGraphTab?.MainGraph is RedGraph graph)
+            {
+                graph.RefreshSceneResourcePropertiesInTabs();
+            }
+        }
     }
 
     /// <summary>
@@ -508,5 +525,18 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
         }
 
         NotifySocketsChanged();
+        
+        // Refresh the property panel to show the removed screenplay/localization entries
+        if (DocumentViewModel != null)
+        {
+            var sceneGraphTab = DocumentViewModel.TabItemViewModels
+                .OfType<SceneGraphViewModel>()
+                .FirstOrDefault();
+                
+            if (sceneGraphTab?.MainGraph is RedGraph graph)
+            {
+                graph.RefreshSceneResourcePropertiesInTabs();
+            }
+        }
     }
 }
