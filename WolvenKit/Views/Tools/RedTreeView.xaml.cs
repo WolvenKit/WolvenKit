@@ -1483,7 +1483,11 @@ namespace WolvenKit.Views.Tools
 
         #endregion
 
-       
+
+        public event EventHandler<List<ChunkViewModel>> SelectionChanged;
+
+        private void OnSelectionChanged(object sender, ItemSelectionChangedEventArgs e) =>
+            SelectionChanged?.Invoke(this, SelectedItems?.OfType<ChunkViewModel>().ToList() ?? []);
     }
     
 }

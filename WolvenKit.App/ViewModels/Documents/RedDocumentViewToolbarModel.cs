@@ -102,7 +102,6 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         if (CurrentTab is RDTDataViewModel rtdViewModel)
         {
             RootChunk = rtdViewModel.GetRootChunk();
-            rtdViewModel.PropertyChanged += OnRtdModelPropertyChanged;
             if (rtdViewModel.SelectedChunk is ChunkViewModel cvm)
             {
                 SelectedChunk = cvm;
@@ -124,10 +123,13 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         }
 
         SelectedChunk = (ChunkViewModel?)dataViewModel.SelectedChunk;
-        SelectedChunks.Clear();
-        if (dataViewModel.SelectedChunks is IList list)
+        if (e.PropertyName is nameof(RDTDataViewModel.SelectedChunks))
         {
-            SelectedChunks.AddRange(list.OfType<ChunkViewModel>());
+            SelectedChunks.Clear();
+            if (dataViewModel.SelectedChunks is IList list)
+            {
+                SelectedChunks.AddRange(list.OfType<ChunkViewModel>());
+            }
         }
 
         RefreshMeshMenuItems();
@@ -202,8 +204,22 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
     public void SetCurrentTab(RedDocumentTabViewModel? value)
     {
+        if (CurrentTab is RDTDataViewModel oldTab)
+        {
+            oldTab.OnChunkSelectionChanged -= OnTabSelectionChanged;
+        }
         CurrentTab = value;
+        if (CurrentTab is RDTDataViewModel newTab)
+        {
+            newTab.OnChunkSelectionChanged += OnTabSelectionChanged;
+        }
         RefreshMenuVisibility();
+    }
+
+    private void OnTabSelectionChanged(object? sender, List<ChunkViewModel> e)
+    {
+        SelectedChunks.Clear();
+        SelectedChunks.AddRange(e);
     }
 
     // Editor level is required for view binding (updating colour of eye icon)

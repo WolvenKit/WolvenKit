@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -67,6 +68,9 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     private void SubscribeToChunkPropertyChanges()
     {
+        SelectedChunks ??= [];
+        SelectedChunks.CollectionChanged += SelectedChunks_OnChanged;
+        
         if (GetRootChunk() is not ChunkViewModel cvm || cvm.ResolvedData is not inkTextureAtlas ||
             cvm.GetPropertyChild("slots", "0") is not ChunkViewModel firstSlot || firstSlot.ResolvedData is not inkTextureSlot slot ||
             slot.Texture.DepotPath != ResourcePath.Empty)
@@ -76,6 +80,11 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
         firstSlot.PropertyChanged += WaitForTexturePath;
     }
+
+    public event EventHandler<List<ChunkViewModel>>? OnChunkSelectionChanged;
+
+    private void SelectedChunks_OnChanged(object? sender, NotifyCollectionChangedEventArgs e) =>
+        OnChunkSelectionChanged?.Invoke(this, SelectedChunks?.ToList() ?? []);
 
     public event EventHandler? OnReloadRequired;
 
@@ -136,7 +145,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     [ObservableProperty] private ChunkViewModel? _selectedChunk;
 
-    [ObservableProperty] private List<ChunkViewModel>? _selectedChunks;
+    [ObservableProperty] private ObservableCollection<ChunkViewModel>? _selectedChunks = [];
 
     [ObservableProperty] private ChunkViewModel? _rootChunk;
 
@@ -389,6 +398,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     public void ClearSelection()
     {
         foreach (var cvm in SelectedChunks ?? [])
+
         {
             cvm.IsSelected = false;
         }
@@ -412,7 +422,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         chunk.IsSelected = true;
 
         selectedChunks.Add(chunk);
-        SelectedChunks = selectedChunks;
+        SelectedChunks = new ObservableCollection<ChunkViewModel>(selectedChunks);
         SelectedChunk = chunk;
     }
 
@@ -440,7 +450,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
             previousSelection.Add(chunk);
         }
 
-        SelectedChunks = previousSelection;
+        SelectedChunks = new ObservableCollection<ChunkViewModel>(previousSelection);
 
         SelectedChunk = chunk;
     }

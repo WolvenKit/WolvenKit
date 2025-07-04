@@ -748,16 +748,13 @@
                             Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
-                
+
                 <!-- Mesh only -->
 
-                <Separator
-                    Visibility="{Binding Path=PlacementTarget.Tag.IsMaterial,
-                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
-                                         Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <Separator Visibility="{Binding Path=PlacementTarget.Tag.IsMaterial, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <!-- Mesh: Material only -->
-                
+
                 <!-- Rename Material -->
                 <MenuItem
                     Visibility="{Binding Path=PlacementTarget.Tag.IsMaterial,
@@ -848,7 +845,7 @@
                             Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
-                
+
                 <!--
                     For arrays of indexables: Renumber Indices of child nodes, starting at 0
                     Useful if you paste a bunch of material definitions from multiple sources
@@ -871,7 +868,7 @@
                 </MenuItem>
 
                 <!-- /Mesh only -->
-                
+
                 <!-- Generate CRUID -->
                 <MenuItem
                     Visibility="{Binding Path=IsEnabled,
@@ -2026,6 +2023,7 @@
         ShowLines="True"
         VirtualizingPanel.IsVirtualizing="True"
         VirtualizingPanel.ScrollUnit="Pixel"
+        SelectionChanged="OnSelectionChanged"
         VirtualizingPanel.VirtualizationMode="Recycling">
         <!--
             LoadOnDemandCommand="{Binding OnDemandLoadingCommand}"

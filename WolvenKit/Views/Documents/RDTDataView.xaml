@@ -88,7 +88,8 @@
             SelectedItem="{Binding SelectedChunk,
                                    Mode=TwoWay}"
             SelectedItems="{Binding SelectedChunks,
-                                    Mode=TwoWay}" />
+                                    Mode=TwoWay}"
+            SelectionChanged="RedTreeView_OnSelectionChanged" />
 
         <!-- Grid Splitter -->
         <syncfusion:SfGridSplitter

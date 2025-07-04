@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Windows;
 using Microsoft.Extensions.Options;
@@ -7,6 +8,7 @@ using Splat;
 using WolvenKit.App;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Events;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Views.Editors;
 
 namespace WolvenKit.Views.Documents
@@ -134,6 +136,16 @@ namespace WolvenKit.Views.Documents
             }
 
             ViewModel?.OnCNameValueChanged(args);
+        }
+
+        private void RedTreeView_OnSelectionChanged(object sender, List<ChunkViewModel> e)
+        {
+            if (ViewModel is not RDTDataViewModel viewModel)
+            {
+                return;
+            }
+
+            viewModel.SetSelection(e);
         }
     }
 }

@@ -128,7 +128,6 @@ namespace WolvenKit.Views.Documents
             {
                 _currentTab = value;
                 ViewModel?.SetCurrentTab(value);
-                ViewModel?.RefreshMenuVisibility();
             }
         }
 
