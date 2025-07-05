@@ -30,7 +30,7 @@ public class entEntityTemplatePreProcessor : IPreProcessor
             rp.Chunks.Add(entEntityTemplate.Entity!);
         }
 
-        foreach (var component in entEntityTemplate.Components)
+        foreach (var component in entEntityTemplate.Components ?? Enumerable.Empty<entIComponent>())
         {
             rp.Chunks.Add(component);
         }
