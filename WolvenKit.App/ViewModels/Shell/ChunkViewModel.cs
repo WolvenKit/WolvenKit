@@ -602,6 +602,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 data = irt;
             }
+            else if (Data is inkWidgetReference iwr)
+            {
+                // need to add XPath somewhere in the data structure
+            }
 
             //_resolvedDataCache = data;
             //this.RaisePropertyChanged("ResolvedData");
