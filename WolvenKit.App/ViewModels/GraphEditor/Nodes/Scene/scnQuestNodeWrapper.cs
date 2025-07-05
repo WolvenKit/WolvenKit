@@ -25,7 +25,17 @@ public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
         if (_castedData.QuestNode?.Chunk != null)
         {
             var questNodeType = NodeProperties.GetNameFromClass(_castedData.QuestNode.Chunk);
-            Title = questNodeType;
+            
+            if (_castedData.QuestNode.Chunk is questVehicleNodeDefinition vehicleNode &&
+                vehicleNode.Type?.Chunk is questSetImmovable_NodeType)
+            {
+                Title = "Immovable Vehicle";
+            }
+            else
+            {
+                Title = questNodeType;
+            }
+            
             Background = GraphNodeColors.GetBackgroundForQuestNodeType(_castedData.QuestNode.Chunk);
             ContentBackground = GraphNodeColors.GetContentBackgroundForQuestNodeType(_castedData.QuestNode.Chunk);
         }
@@ -208,7 +218,16 @@ public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
             if (_castedData.QuestNode?.Chunk != null)
             {
                 var questNodeType = NodeProperties.GetNameFromClass(_castedData.QuestNode.Chunk);
-                Title = questNodeType;
+                
+                if (_castedData.QuestNode.Chunk is questVehicleNodeDefinition vehicleNode &&
+                    vehicleNode.Type?.Chunk is questSetImmovable_NodeType)
+                {
+                    Title = "Vehicle (Immovable)";
+                }
+                else
+                {
+                    Title = questNodeType;
+                }
             }
             else
             {

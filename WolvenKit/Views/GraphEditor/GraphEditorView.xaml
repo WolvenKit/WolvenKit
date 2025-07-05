@@ -8,6 +8,8 @@
     xmlns:nodes="clr-namespace:WolvenKit.App.ViewModels.GraphEditor;assembly=WolvenKit.App"
     xmlns:nodify="https://miroiu.github.io/nodify"
     xmlns:scene="clr-namespace:WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;assembly=WolvenKit.App"
+    xmlns:sceneInternal="clr-namespace:WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;assembly=WolvenKit.App"
+    xmlns:quest="clr-namespace:WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;assembly=WolvenKit.App"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     mc:Ignorable="d"
@@ -108,6 +110,86 @@
             ItemsDragCompletedCommand="{Binding ElementName=uc,
                                                 Path=Source.ItemsDragCompletedCommand}">
             <nodify:NodifyEditor.Resources>
+                <!-- Quest Connector Templates - Show socket labels in normal font -->
+                <DataTemplate DataType="{x:Type quest:QuestInputConnectorViewModel}">
+                    <nodify:NodeInput
+                        Anchor="{Binding Anchor, Mode=OneWayToSource}"
+                        IsConnected="{Binding IsConnected}"
+                        Margin="0,2,0,2"
+                        Background="Transparent">
+                        <nodify:NodeInput.Header>
+                            <TextBlock Text="{Binding Title}" 
+                                      VerticalAlignment="Center"
+                                      FontSize="14"
+                                      FontWeight="Normal"
+                                      Foreground="{DynamicResource TextFillColorPrimary}" />
+                        </nodify:NodeInput.Header>
+                    </nodify:NodeInput>
+                </DataTemplate>
+                
+                <DataTemplate DataType="{x:Type quest:QuestOutputConnectorViewModel}">
+                    <nodify:NodeOutput
+                        Anchor="{Binding Anchor, Mode=OneWayToSource}"
+                        IsConnected="{Binding IsConnected}"
+                        Margin="0,2,0,2"
+                        Background="Transparent">
+                        <nodify:NodeOutput.Header>
+                            <TextBlock Text="{Binding Title}" 
+                                      VerticalAlignment="Center"
+                                      FontSize="14"
+                                      FontWeight="Normal"
+                                      Foreground="{DynamicResource TextFillColorPrimary}" />
+                        </nodify:NodeOutput.Header>
+                    </nodify:NodeOutput>
+                </DataTemplate>
+                
+                <!-- Scene Connector Templates - Show coordinate system with small grey text -->
+                <DataTemplate DataType="{x:Type sceneInternal:SceneInputConnectorViewModel}">
+                    <nodify:NodeInput
+                        Anchor="{Binding Anchor, Mode=OneWayToSource}"
+                        IsConnected="{Binding IsConnected}"
+                        Margin="0,2,0,2"
+                        Background="Transparent">
+                        <nodify:NodeInput.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Title}" 
+                                          VerticalAlignment="Center"
+                                          FontFamily="Consolas"
+                                          FontSize="10"
+                                          Foreground="#777777" />
+                                <TextBlock Text="{Binding Subtitle}" 
+                                          Margin="4,0,0,0"
+                                          VerticalAlignment="Center"
+                                          FontSize="11"
+                                          FontWeight="Normal" />
+                            </StackPanel>
+                        </nodify:NodeInput.Header>
+                    </nodify:NodeInput>
+                </DataTemplate>
+                
+                <DataTemplate DataType="{x:Type sceneInternal:SceneOutputConnectorViewModel}">
+                    <nodify:NodeOutput
+                        Anchor="{Binding Anchor, Mode=OneWayToSource}"
+                        IsConnected="{Binding IsConnected}"
+                        Margin="0,2,0,2"
+                        Background="Transparent">
+                        <nodify:NodeOutput.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Title}" 
+                                          VerticalAlignment="Center"
+                                          FontFamily="Consolas"
+                                          FontSize="10"
+                                          Foreground="#777777" />
+                                <TextBlock Text="{Binding Subtitle}" 
+                                          Margin="4,0,0,0"
+                                          VerticalAlignment="Center"
+                                          FontSize="11"
+                                          FontWeight="Normal" />
+                            </StackPanel>
+                        </nodify:NodeOutput.Header>
+                    </nodify:NodeOutput>
+                </DataTemplate>
+                
                 <DataTemplate x:Key="HeaderTemplate">
                     <StackPanel>
                         <!-- Node ID and pills positioned above with negative margin -->
@@ -197,17 +279,20 @@
                                             <DataTrigger Binding="{Binding Title}" Value="Randomizer">
                                                 <Setter Property="Text" Value="🎲" />
                                             </DataTrigger>
-                                            <DataTrigger Binding="{Binding Title}" Value="CutControl">
+                                            <DataTrigger Binding="{Binding Title}" Value="Scene CutControl">
                                                 <Setter Property="Text" Value="✂️" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Title}" Value="Quest CutControl">
+                                                <Setter Property="Text" Value="↪️" />
                                             </DataTrigger>
                                             <DataTrigger Binding="{Binding Title}" Value="InterruptManager">
                                                 <Setter Property="Text" Value="⚠️" />
                                             </DataTrigger>
                                             <DataTrigger Binding="{Binding Title}" Value="DeletionMarker">
-                                                <Setter Property="Text" Value="🗑️" />
+                                                <Setter Property="Text" Value="👻" />
                                             </DataTrigger>
                                             <DataTrigger Binding="{Binding Title}" Value="FlowControl">
-                                                <Setter Property="Text" Value="🎛️" />
+                                                <Setter Property="Text" Value="🚦" />
                                             </DataTrigger>
                                             
                                             <!-- Quest Nodes (for scnQuestNode) -->
@@ -426,17 +511,20 @@
                                                 <DataTrigger Binding="{Binding Title}" Value="Randomizer">
                                                     <Setter Property="Text" Value="🎲" />
                                                 </DataTrigger>
-                                                <DataTrigger Binding="{Binding Title}" Value="CutControl">
+                                                <DataTrigger Binding="{Binding Title}" Value="Scene CutControl">
                                                     <Setter Property="Text" Value="✂️" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Title}" Value="Quest CutControl">
+                                                    <Setter Property="Text" Value="↪️" />
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Title}" Value="InterruptManager">
                                                     <Setter Property="Text" Value="⚠️" />
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Title}" Value="DeletionMarker">
-                                                    <Setter Property="Text" Value="🗑️" />
+                                                    <Setter Property="Text" Value="👻" />
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Title}" Value="FlowControl">
-                                                    <Setter Property="Text" Value="🎛️" />
+                                                    <Setter Property="Text" Value="🚦" />
                                                 </DataTrigger>
                                                 
                                                 <!-- Quest Nodes (for scnQuestNode) -->
@@ -491,8 +579,11 @@
                                                 <DataTrigger Binding="{Binding Title}" Value="TriggerManager">
                                                     <Setter Property="Text" Value="🔘" />
                                                 </DataTrigger>
-                                                <DataTrigger Binding="{Binding Title}" Value="Vehicle">
+                                                                                                                                            <DataTrigger Binding="{Binding Title}" Value="Vehicle">
                                                     <Setter Property="Text" Value="🚗" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Title}" Value="Vehicle (Immovable)">
+                                                    <Setter Property="Text" Value="🗿" />
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Title}" Value="UseWorkspot">
                                                     <Setter Property="Text" Value="💼" />
@@ -744,12 +835,15 @@
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="{Binding Title}" 
                                                       VerticalAlignment="Center"
+                                                      FontSize="14"
+                                                      FontWeight="Normal"
+                                                      Foreground="{DynamicResource TextFillColorPrimary}" />
+                                            <TextBlock Text="{Binding Subtitle}" 
+                                                      Margin="4,0,0,0"
+                                                      VerticalAlignment="Center"
                                                       FontFamily="Consolas"
                                                       FontSize="10"
                                                       Foreground="#777777" />
-                                            <TextBlock Text="{Binding Subtitle}" 
-                                                      Margin="4,0,0,0"
-                                                      VerticalAlignment="Center" />
                                         </StackPanel>
                                     </nodify:NodeOutput.Header>
                                 </nodify:NodeOutput>

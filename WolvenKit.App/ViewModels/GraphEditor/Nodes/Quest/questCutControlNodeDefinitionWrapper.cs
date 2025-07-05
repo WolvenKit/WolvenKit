@@ -7,6 +7,7 @@ public class questCutControlNodeDefinitionWrapper : questDisableableNodeDefiniti
 {
     public questCutControlNodeDefinitionWrapper(questCutControlNodeDefinition questDisableableNodeDefinition) : base(questDisableableNodeDefinition)
     {
+        Title = "Quest CutControl";
         Details.AddRange(NodeProperties.GetPropertiesFor(questDisableableNodeDefinition));
     }
 
