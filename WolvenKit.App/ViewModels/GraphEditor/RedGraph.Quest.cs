@@ -100,7 +100,7 @@ public partial class RedGraph
         {
             s_questNodeTypes = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(x => x.GetTypes())
-                .Where(x => typeof(graphGraphNodeDefinition).IsAssignableFrom(x) && !x.IsAbstract)
+                .Where(x => typeof(questNodeDefinition).IsAssignableFrom(x) && !x.IsAbstract)
                 .ToList();
         }
 
@@ -133,6 +133,13 @@ public partial class RedGraph
         if (instance is questNodeDefinition nodeDefinition)
         {
             nodeDefinition.Id = ++_currentQuestNodeId;
+            
+            // Special initialization for certain quest node types
+            if (nodeDefinition is questFactsDBManagerNodeDefinition factsDBNode)
+            {
+                // Initialize the Type property with questSetVar_NodeType (the only implementation)
+                factsDBNode.Type = new CHandle<questIFactsDBManagerNodeType>(new questSetVar_NodeType());
+            }
         }
 
         return questNode;

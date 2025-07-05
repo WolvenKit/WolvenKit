@@ -36,8 +36,8 @@ public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
                 Title = questNodeType;
             }
             
-            Background = GraphNodeColors.GetBackgroundForQuestNodeType(_castedData.QuestNode.Chunk);
-            ContentBackground = GraphNodeColors.GetContentBackgroundForQuestNodeType(_castedData.QuestNode.Chunk);
+            Background = GraphNodeStyling.GetBackgroundForQuestNodeType(_castedData.QuestNode.Chunk);
+            ContentBackground = GraphNodeStyling.GetContentBackgroundForQuestNodeType(_castedData.QuestNode.Chunk);
         }
         else
         {

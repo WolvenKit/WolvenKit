@@ -57,8 +57,8 @@ public abstract class BaseSceneViewModel : NodeViewModel, IRefreshableDetails
         DetectPlayerNode(scnSceneGraphNode);
         
         Title = Data.GetType().Name[3..^4];
-        Background = GraphNodeColors.GetBackgroundForSceneNodeType(scnSceneGraphNode);
-        ContentBackground = GraphNodeColors.GetContentBackgroundForSceneNodeType(scnSceneGraphNode);
+        Background = GraphNodeStyling.GetBackgroundForSceneNodeType(scnSceneGraphNode);
+        ContentBackground = GraphNodeStyling.GetContentBackgroundForSceneNodeType(scnSceneGraphNode);
         
         // Check if this is a simple node type that should have uniform colors
         UpdateBackgroundsBasedOnNodeType(scnSceneGraphNode);

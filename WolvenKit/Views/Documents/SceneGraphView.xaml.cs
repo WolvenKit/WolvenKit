@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.GraphEditor;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 using WolvenKit.App.Services;
@@ -591,15 +592,36 @@ namespace WolvenKit.Views.Documents
                 var appViewModel = Locator.Current.GetService<AppViewModel>();
                 if (appViewModel == null) return;
 
-                // Get node types for scene graphs
-                var nodeTypes = graph.GetSceneNodeTypes();
-                var types = nodeTypes
-                    .Select(x => new TypeEntry(GetCleanTypeName(x.Name), "", x))
+                // Get scene node types
+                var sceneNodeTypes = graph.GetSceneNodeTypes();
+                
+                // Separate DynamicSceneGraph from regular scene types (move to end)
+                var regularSceneTypes = sceneNodeTypes.Where(x => x.Name != "DynamicSceneGraphNode").ToList();
+                var dynamicSceneTypes = sceneNodeTypes.Where(x => x.Name == "DynamicSceneGraphNode").ToList();
+                
+                var sceneTypes = regularSceneTypes
+                    .Select(x => new TypeEntry(GraphNodeStyling.GetTitleForNodeType(x), "Scene", x))
                     .OrderBy(x => x.Name)
                     .ToList();
 
+                // Get quest node types that can be embedded in scene graphs
+                var questNodeTypes = graph.GetQuestNodeTypesForScene();
+                var questTypes = questNodeTypes
+                    .Select(x => new TypeEntry(GraphNodeStyling.GetTitleForNodeType(x), "Quest", x))
+                    .OrderBy(x => x.Name)
+                    .ToList();
+
+                // Combine both types
+                var allTypes = new List<TypeEntry>();
+                allTypes.AddRange(sceneTypes);
+                allTypes.AddRange(questTypes);
+                
+                // Add DynamicSceneGraph at the end
+                allTypes.AddRange(dynamicSceneTypes
+                    .Select(x => new TypeEntry(GraphNodeStyling.GetTitleForNodeType(x), "Scene", x)));
+
                 // Create and show the type selector dialog
-                await appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
+                await appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(allTypes)
                 {
                     DialogHandler = model =>
                     {
@@ -620,27 +642,7 @@ namespace WolvenKit.Views.Documents
             }
         }
 
-        /// <summary>
-        /// Get clean type name for display in dialog
-        /// </summary>
-        private string GetCleanTypeName(string typeName)
-        {
-            if (typeName.StartsWith("scn"))
-            {
-                typeName = typeName[3..];
-            }
 
-            if (typeName.EndsWith("NodeDefinition"))
-            {
-                typeName = typeName[..^14];
-            }
-            else if (typeName.EndsWith("Node"))
-            {
-                typeName = typeName[..^4];
-            }
-
-            return typeName;
-        }
 
         /// <summary>
         /// Get the center point of the current viewport for placing new nodes

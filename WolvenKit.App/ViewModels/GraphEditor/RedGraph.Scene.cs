@@ -9,6 +9,7 @@ using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
 using WolvenKit.App.Services;
 using WolvenKit.Core.Extensions;
+using static WolvenKit.RED4.Types.Enums;
 
 
 namespace WolvenKit.App.ViewModels.GraphEditor;
@@ -30,9 +31,55 @@ public partial class RedGraph
         return s_sceneNodeTypes;
     }
 
+    /// <summary>
+    /// Get quest node types that can be embedded in scene graphs via scnQuestNode
+    /// </summary>
+    public List<Type> GetQuestNodeTypesForScene()
+    {
+        // Get all quest node types that inherit from questNodeDefinition
+        return AppDomain.CurrentDomain.GetAssemblies()
+            .SelectMany(x => x.GetTypes())
+            .Where(x => typeof(questNodeDefinition).IsAssignableFrom(x) && !x.IsAbstract)
+            .ToList();
+    }
+
     public uint CreateSceneNode(Type type, System.Windows.Point point)
     {
-        var instance = InternalCreateSceneNode(type);
+        scnSceneGraphNode instance;
+        
+        // Check if this is a quest node type - if so, create a scnQuestNode wrapper
+        if (typeof(questNodeDefinition).IsAssignableFrom(type))
+        {
+            instance = InternalCreateSceneQuestNode(type);
+        }
+        else
+        {
+            instance = InternalCreateSceneNode(type);
+        }
+        
+        var wrappedInstance = WrapSceneNode(instance);
+        wrappedInstance.Location = point;
+
+        ((scnSceneResource)_data).SceneGraph.Chunk!.Graph.Add(new CHandle<scnSceneGraphNode>(instance));
+        if (GetSceneNodesChunkViewModel() is { } nodes)
+        {
+            nodes.RecalculateProperties();
+        }
+
+        Nodes.Add(wrappedInstance);
+        
+        DocumentViewModel?.SetIsDirty(true);
+        
+        return instance.NodeId.Id;
+    }
+
+    /// <summary>
+    /// Create a composite scene node with preset configuration
+    /// </summary>
+    public uint CreateCompositeSceneNode(string presetName, Type questNodeType, System.Windows.Point point)
+    {
+        scnSceneGraphNode instance = CreateCompositeQuestNode(presetName, questNodeType);
+        
         var wrappedInstance = WrapSceneNode(instance);
         wrappedInstance.Location = point;
 
@@ -52,15 +99,15 @@ public partial class RedGraph
     private scnSceneGraphNode InternalCreateSceneNode(Type type)
     {
         var instance = System.Activator.CreateInstance(type);
-        if (instance is not scnSceneGraphNode sceneGraphNode)
+        if (instance is not scnSceneGraphNode sceneNode)
         {
-            throw new Exception();
+            throw new Exception($"Failed to create scene node of type {type.Name}");
         }
 
-        sceneGraphNode.NodeId.Id = ++_currentSceneNodeId;
-        sceneGraphNode.OutputSockets.Add(new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = 0 } });
+        sceneNode.NodeId = new scnNodeId { Id = ++_currentSceneNodeId };
+        sceneNode.OutputSockets.Add(new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = 0 } });
 
-        if (sceneGraphNode is scnChoiceNode choiceNode)
+        if (sceneNode is scnChoiceNode choiceNode)
         {
             var sceneResource = (scnSceneResource)_data;
             
@@ -69,7 +116,7 @@ public partial class RedGraph
             {
                 NodeId = new scnNodeId
                 {
-                    Id = sceneGraphNode.NodeId.Id
+                    Id = sceneNode.NodeId.Id
                 }
             });
 
@@ -155,20 +202,85 @@ public partial class RedGraph
             ];
         }
 
-        if (sceneGraphNode is scnQuestNode questNode)
+        if (sceneNode is scnQuestNode questNode)
         {
             questNode.IsockMappings.Add("Cancel");
             questNode.IsockMappings.Add("In");
             questNode.OsockMappings.Add("Out");
         }
 
-        if (sceneGraphNode is scnRandomizerNode randomizerNode)
+        if (sceneNode is scnRandomizerNode randomizerNode)
         {
             randomizerNode.NumOutSockets = 1;
             randomizerNode.Weights[0] = 1;
         }
 
-        return sceneGraphNode;
+        return sceneNode;
+    }
+
+    /// <summary>
+    /// Create a scnQuestNode that wraps a quest node type
+    /// </summary>
+    private scnQuestNode InternalCreateSceneQuestNode(Type questNodeType)
+    {
+        // Create the quest node instance
+        var questInstance = System.Activator.CreateInstance(questNodeType);
+        if (questInstance is not questNodeDefinition questNode)
+        {
+            throw new Exception($"Failed to create quest node of type {questNodeType.Name}");
+        }
+
+        // Special initialization for certain quest node types
+        if (questNode is questFactsDBManagerNodeDefinition factsDBNode)
+        {
+            // Initialize the Type property with questSetVar_NodeType (the only implementation)
+            factsDBNode.Type = new CHandle<questIFactsDBManagerNodeType>(new questSetVar_NodeType());
+        }
+
+        // Create the wrapper scene node and get its ID
+        var sceneNodeId = ++_currentSceneNodeId;
+        var sceneQuestNode = new scnQuestNode
+        {
+            NodeId = new scnNodeId { Id = sceneNodeId },
+            QuestNode = new CHandle<questNodeDefinition>(questNode)
+        };
+
+        // Set quest node ID to match the scene node ID
+        questNode.Id = (ushort)sceneNodeId;
+
+        // Initialize socket mappings (as done in the existing code)
+        sceneQuestNode.IsockMappings.Add("Cancel");
+        sceneQuestNode.IsockMappings.Add("In");
+        sceneQuestNode.OsockMappings.Add("Out");
+
+        // Add default output socket
+        sceneQuestNode.OutputSockets.Add(new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = 0 } });
+
+        return sceneQuestNode;
+    }
+
+    /// <summary>
+    /// Create a composite quest node with pre-configured values for common use cases
+    /// </summary>
+    private scnQuestNode CreateCompositeQuestNode(string presetName, Type questNodeType)
+    {
+        // Create the basic quest node first
+        var questNode = InternalCreateSceneQuestNode(questNodeType);
+        
+        // Apply the preset configuration
+        if (presetName == "DebugWarning" && questNode.QuestNode?.Chunk is questUIManagerNodeDefinition uiManagerNode)
+        {
+            var warningNodeType = new questWarningMessage_NodeType
+            {
+                Message = "Example Debug",
+                Duration = 3.0f,
+                Show = true,
+                Type = gameSimpleMessageType.Neutral
+            };
+            uiManagerNode.Type = new CHandle<questIUIManagerNodeType>(warningNodeType);
+        }
+        
+        return questNode;
     }
 
     /// <summary>

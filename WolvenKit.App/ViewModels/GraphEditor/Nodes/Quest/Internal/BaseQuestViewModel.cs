@@ -64,7 +64,7 @@ public abstract class BaseQuestViewModel : GraphEditor.NodeViewModel, IRefreshab
         {
             if (Application.Current?.Resources != null)
             {
-                return GraphNodeColors.GetBackgroundForQuestNodeType(questNode);
+                return GraphNodeStyling.GetBackgroundForQuestNodeType(questNode);
             }
             
             return new SolidColorBrush((Color)ColorConverter.ConvertFromString("#33666666"));
@@ -79,7 +79,7 @@ public abstract class BaseQuestViewModel : GraphEditor.NodeViewModel, IRefreshab
         {
             if (Application.Current?.Resources != null)
             {
-                return GraphNodeColors.GetContentBackgroundForQuestNodeType(questNode);
+                return GraphNodeStyling.GetContentBackgroundForQuestNodeType(questNode);
             }
             
             return new SolidColorBrush((Color)ColorConverter.ConvertFromString("#11666666"));
