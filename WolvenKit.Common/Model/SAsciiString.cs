@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Text;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Model
 {
@@ -7,10 +8,7 @@ namespace WolvenKit.Common.Model
     {
         private readonly byte[] _strBytes;
 
-        public SAsciiString(string input)
-        {
-            _strBytes = Encoding.ASCII.GetBytes(input);
-        }
+        public SAsciiString(string input) => _strBytes = Encoding.ASCII.GetBytes(input);
 
         public override string ToString() => Encoding.ASCII.GetString(_strBytes);
 

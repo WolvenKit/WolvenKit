@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.FunctionalTests.Model
 {

@@ -4,248 +4,164 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Xml.Linq;
-using ReactiveUI;
+using CommunityToolkit.Mvvm.ComponentModel;
+using WolvenKit.App.Helpers;
+using WolvenKit.App.Interaction;
+using WolvenKit.App.Models;
+using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
-using WolvenKit.Core;
-using WolvenKit.Core.Compression;
+using WolvenKit.Core.Exceptions;
+using WolvenKit.Core.Extensions;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Models;
-using WolvenKit.Modkit.RED4.Serialization;
-using WolvenKit.ProjectManagement.Project;
-using WolvenKit.RED4.TweakDB;
+using WolvenKit.Helpers;
+using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Pools;
 
-namespace WolvenKit.Functionality.Controllers
+namespace WolvenKit.App.Controllers;
+
+public class RED4Controller : ObservableObject, IGameController
 {
-    public class RED4Controller : ReactiveObject, IGameController
+    #region fields
+
+    public const string GameVersion = "1.6.1";
+
+    private readonly ILoggerService _loggerService;
+    private readonly INotificationService _notificationService;
+    private readonly IProjectManager _projectManager;
+    private readonly ISettingsManager _settingsManager;
+    private readonly IHashService _hashService;
+    private readonly IModTools _modTools;
+    private readonly IAppArchiveManager _archiveManager;
+    private readonly IProgressService<double> _progressService;
+    private readonly IPluginService _pluginService;
+    private readonly Red4ParserService _parserService;
+    private readonly IModifierViewStateService _modifierService;
+
+    private bool _initialized = false;
+
+    #endregion
+
+    public RED4Controller(
+        ILoggerService loggerService,
+        INotificationService notificationService,
+        IProjectManager projectManager,
+        ISettingsManager settingsManager,
+        IHashService hashService,
+        IModTools modTools,
+        IAppArchiveManager gameArchiveManager,
+        IProgressService<double> progressService,
+        IPluginService pluginService,
+        IModifierViewStateService modifierService,
+        Red4ParserService parserService)
     {
-        #region fields
+        _notificationService = notificationService;
+        _loggerService = loggerService;
+        _projectManager = projectManager;
+        _settingsManager = settingsManager;
+        _hashService = hashService;
+        _modTools = modTools;
+        _archiveManager = gameArchiveManager;
+        _progressService = progressService;
+        _pluginService = pluginService;
+        _modifierService = modifierService;
+        _parserService = parserService;
+    }
 
-        public const string GameVersion = "1.5.0";
-
-        private readonly ILoggerService _loggerService;
-        private readonly INotificationService _notificationService;
-        private readonly IProjectManager _projectManager;
-        private readonly ISettingsManager _settingsManager;
-        private readonly IHashService _hashService;
-        private readonly IModTools _modTools;
-        private readonly IArchiveManager _archiveManager;
-        private readonly IProgressService<double> _progressService;
-        private readonly IPluginService _pluginService;
-
-        private bool _initialized = false;
-
-        #endregion
-
-        public RED4Controller(
-            ILoggerService loggerService,
-            INotificationService notificationService,
-            IProjectManager projectManager,
-            ISettingsManager settingsManager,
-            IHashService hashService,
-            IModTools modTools,
-            IArchiveManager gameArchiveManager,
-            IProgressService<double> progressService,
-            IPluginService pluginService
-            )
+    public async Task HandleStartup()
+    {
+        if (!_initialized)
         {
-            _notificationService = notificationService;
-            _loggerService = loggerService;
-            _projectManager = projectManager;
-            _settingsManager = settingsManager;
-            _hashService = hashService;
-            _modTools = modTools;
-            _archiveManager = gameArchiveManager;
-            _progressService = progressService;
-            _pluginService = pluginService;
+            _initialized = true;
+            _progressService.IsIndeterminate = true;
+
+            // load archives
+            await LoadArchiveManager();
+
+            _progressService.IsIndeterminate = false;
+            _progressService.Completed();
         }
+    }
 
-        #region Methods
+    // TODO: Move this somewhere else
+    private void LoadCustomHashes()
+    {
+        ResourcePath physMatLibPath = "base\\physics\\physicsmaterials.physmatlib";
+        ResourcePath presetPath = "engine\\physics\\collision_presets.json";
 
-        public Task HandleStartup()
+        var physMatLib = _archiveManager.Lookup(physMatLibPath);
+        if (physMatLib.HasValue)
         {
-            if (!_initialized)
-            {
-                _initialized = true;
+            using MemoryStream ms = new();
+            physMatLib.Value.Extract(ms);
+            ms.Position = 0;
 
-                // load archives
-                var todo = new List<Func<IArchiveManager>>()
+            if (_parserService.TryReadRed4File(ms, out var file))
+            {
+                var root = (physicsMaterialLibraryResource)file.RootChunk;
+
+                foreach (var physMat in root.Unk1)
                 {
-                    LoadArchiveManager,
-                };
-                Parallel.ForEach(todo, _ => Task.Run(_));
-
-                // requires oodle
-                InitializeBk();
-                InitializeRedDB();
-
-                // export soundbanksinfo
-
+                    if (!physMat.IsResolvable)
+                    {
+                        continue;
+                    }
+                    
+                    CNamePool.AddOrGetHash(physMat.GetResolvedText()!);
+                }
             }
-
-            return Task.CompletedTask;
         }
 
-        private void InitializeBk()
+        var preset = _archiveManager.Lookup(presetPath);
+        if (preset.HasValue)
         {
-            string[] binkhelpers = { @"Resources\Media\t1.kark", @"Resources\Media\t2.kark", @"Resources\Media\t3.kark", @"Resources\Media\t4.kark", @"Resources\Media\t5.kark" };
+            using MemoryStream ms = new();
+            preset.Value.Extract(ms);
+            ms.Position = 0;
 
-            if (string.IsNullOrEmpty(_settingsManager.GetRED4GameRootDir()))
+            if (_parserService.TryReadRed4File(ms, out var file))
             {
-                Trace.WriteLine("That worked to cancel Loading oodle! :D");
+                var root = (JsonResource)file.RootChunk;
+                var res = (physicsCollisionPresetsResource)root.Root.Chunk.NotNull();
+
+                foreach (var presetEntry in res.Presets)
+                {
+                    if (presetEntry is not { Name: { IsResolvable: true } name })
+                    {
+                        continue;
+                    }
+
+                    CNamePool.AddOrGetHash(name.GetResolvedText()!);
+                }
+            }
+        }
+    }
+
+    private Task LoadArchiveManager()
+    {
+        return Task.Run(() =>
+        {
+            if (_archiveManager.IsManagerLoaded)
+            {
                 return;
             }
-
-            foreach (var path in binkhelpers)
+            if (_settingsManager.CP77ExecutablePath is null)
             {
-                switch (path)
-                {
-                    case @"Resources\Media\t1.kark":
-                        if (!File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "test.exe")))
-                        {
-                            _ = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "test.exe"), true,
-                                false);
-                        }
-
-                        break;
-
-                    case @"Resources\Media\t2.kark":
-                        if (!File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "testconv.exe")))
-                        {
-                            _ = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "testconv.exe"), true,
-                                false);
-                        }
-
-                        break;
-
-                    case @"Resources\Media\t3.kark":
-                        if (!File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "testc.exe")))
-                        {
-                            _ = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "testc.exe"), true,
-                                false);
-                        }
-
-                        break;
-
-                    case @"Resources\Media\t4.kark":
-                        if (!File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "radutil.dll")))
-                        {
-                            _ = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "radutil.dll"), true,
-                                false);
-                        }
-
-                        break;
-
-                    case @"Resources\Media\t5.kark":
-                        if (!File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "bink2make.dll")))
-                        {
-                            _ = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "bink2make.dll"), true,
-                                false);
-                        }
-
-                        break;
-                }
-            }
-        }
-
-        private void InitializeRedDB()
-        {
-            var resourcePath = Path.GetFullPath(Path.Combine("Resources", "red.kark"));
-            var destinationPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "red.db");
-
-            var (hash, size) = CommonFunctions.HashFileSHA512(resourcePath);
-
-            if (!File.Exists(destinationPath))
-            {
-                OodleTask(resourcePath, destinationPath, true, false);
-                _settingsManager.ReddbHash = hash;
-                _settingsManager.Save();
-            }
-            else
-            {
-                if (!hash.Equals(_settingsManager.ReddbHash))
-                {
-                    _loggerService.Info($"old hash: {_settingsManager.ReddbHash}, new hash: {hash}. Updating reddb");
-                    OodleTask(resourcePath, destinationPath, true, false);
-                    _settingsManager.ReddbHash = hash;
-                    _settingsManager.Save();
-                }
-            }
-        }
-
-        private static int OodleTask(string path, string outpath, bool decompress, bool compress)
-        {
-            if (string.IsNullOrEmpty(path))
-            {
-                return 0;
-            }
-
-            if (string.IsNullOrEmpty(outpath))
-            {
-                outpath = Path.ChangeExtension(path, ".kark");
-            }
-
-            if (decompress)
-            {
-                var file = File.ReadAllBytes(path);
-                using var ms = new MemoryStream(file);
-                using var br = new BinaryReader(ms);
-
-                var oodleCompression = br.ReadBytes(4);
-                if (!(oodleCompression.SequenceEqual(new byte[] { 0x4b, 0x41, 0x52, 0x4b })))
-                {
-                    throw new NotImplementedException();
-                }
-
-                var size = br.ReadUInt32();
-
-                var buffer = br.ReadBytes(file.Length - 8);
-
-                var unpacked = new byte[size];
-                var unpackedSize = Oodle.Decompress(buffer, unpacked);
-
-                using var msout = new MemoryStream();
-                using var bw = new BinaryWriter(msout);
-                bw.Write(unpacked);
-
-                File.WriteAllBytes($"{outpath}", msout.ToArray());
-            }
-
-            if (compress)
-            {
-                var inbuffer = File.ReadAllBytes(path);
-                IEnumerable<byte> outBuffer = new List<byte>();
-
-                var r = Oodle.Compress(inbuffer, ref outBuffer, true);
-
-                File.WriteAllBytes(outpath, outBuffer.ToArray());
-            }
-
-            return 1;
-        }
-
-        private IArchiveManager LoadArchiveManager()
-        {
-            if (_archiveManager != null && _archiveManager.IsManagerLoaded)
-            {
-                return _archiveManager;
+                return;
             }
 
             _loggerService.Info("Loading Archive Manager ... ");
             try
             {
-                var sw = new Stopwatch();
-                sw.Start();
-
                 _archiveManager.LoadGameArchives(new FileInfo(_settingsManager.CP77ExecutablePath));
-
-                sw.Stop();
-                var ms = sw.ElapsedMilliseconds;
             }
             catch (Exception e)
             {
@@ -257,299 +173,880 @@ namespace WolvenKit.Functionality.Controllers
                 _loggerService.Success("Finished loading Archive Manager.");
             }
 
-#pragma warning disable 162
-            return _archiveManager;
-#pragma warning restore 162
+            LoadCustomHashes();
+        });
+    }
+
+    #region Packing
+
+    public async Task<bool> InstallProjectHotAsync()
+    {
+        if (_projectManager.ActiveProject is not Cp77Project currentProject)
+        {
+            return false;
         }
 
-        /// <summary>
-        /// packs redengine files in the mod project and installs it into the game mod directory
-        /// </summary>
-        /// <returns></returns>
-        public async Task<bool> PackAndInstallProject()
+        // check if plugin is installed
+        if (!_pluginService.IsInstalled(EPlugin.redhottools))
         {
-            _progressService.IsIndeterminate = true;
+            _notificationService.Error("The Red Hot Tools plugin is not installed and is needed for this functionality.\nYou can install the plugin from the WolvenKit settings,");
+        }
 
-            if (!await PackProject())
-            {
-                _progressService.IsIndeterminate = false;
-                return await Task.FromResult(false);
-            }
+        var hotDirectory = Path.Combine(_settingsManager.GetRED4GameRootDir(), "archive", "pc", "hot");
 
-            InstallMod();
+        // create hot directory
+        if (!Directory.Exists(hotDirectory))
+        {
+            Directory.CreateDirectory(hotDirectory);
+            _loggerService.Info($"Created hot directory at {hotDirectory}");
+        }
 
+        var gameDirectoryInfo = new DirectoryInfo(_settingsManager.GetRED4GameRootDir());
+        var packedDirectoryInfo = new DirectoryInfo(currentProject.PackedRootDirectory);
+
+        if (!await PackProjectFilesAsync(new LaunchProfile { Install = true }, currentProject))
+        {
+            return false;
+        }
+
+        if (!_modTools.InstallFiles(packedDirectoryInfo, gameDirectoryInfo, true))
+        {
+            return false;
+        }
+        
+        // Clean all residual files
+        CleanAll();
+
+        _loggerService.Success($"{currentProject.ModName} packed into {hotDirectory}");
+        _notificationService.Success($"{currentProject.ModName} packed into {hotDirectory}");
+
+        return true;
+    }
+
+    /// <summary>
+    /// cleans the packed directory
+    /// </summary>
+    /// <returns></returns>
+    public bool CleanAll(bool isPostBuild = false)
+    {
+        _progressService.IsIndeterminate = true;
+        // checks
+        if (_projectManager.ActiveProject is not Cp77Project cp77Proj)
+        {
+            var errorMessage = "Cannot perform clean all on project (no project/not cyberpunk project)!";
             _progressService.IsIndeterminate = false;
+            _loggerService.Error(errorMessage);
+            _notificationService.Error(errorMessage);
+            return false;
+        }
+        
+        // perform cleanup
+        if (!Cleanup(cp77Proj, new LaunchProfile() { CleanAll = true }, isPostBuild))
+        {
+            var errorMessage = "An error occured during clean all. Some files may not be removed.";
+            _progressService.IsIndeterminate = false;
+            _loggerService.Error(errorMessage);
+            _notificationService.Error(errorMessage);
+            return false;
+        }
+
+        _progressService.IsIndeterminate = false;
+
+        var successMessage = $"{cp77Proj.Name} packed directory all cleaned.";
+        _loggerService.Success(successMessage);
+        _notificationService.Success(successMessage);
+
+        return true;
+    }
+
+    private static bool IsSpecialExtension(string fileName)
+    {
+        return Path.GetExtension(fileName) switch
+        {
+            ".xl" or ".script" or ".ws" or ".tweak" => true,
+            _ => false,
+        };
+    }
+    private static bool IsCDPRScript(string fileName)
+    {
+        return Path.GetExtension(fileName) switch
+        {
+            ".script" or ".ws" => true,
+            _ => false,
+        };
+    }
+
+    private static List<string> GetArchiveXlFiles(Cp77Project cp77Proj) =>
+        Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*.xl", SearchOption.AllDirectories).ToList();
+
+    private static List<string> GetResourceFiles(Cp77Project cp77Proj) => Directory
+        .EnumerateFiles(cp77Proj.ResourcesDirectory, "*.*", SearchOption.AllDirectories)
+        .Where(name => !IsSpecialExtension(name))
+        .Where(x => Path.GetFileName(x) != "info.json").ToList();
+
+    private static List<string> GetREDmodScriptFiles(Cp77Project cp77Proj) =>
+        Directory.EnumerateFiles(Path.Combine(cp77Proj.ResourcesDirectory, "scripts"), "*.*", SearchOption.AllDirectories).Where(name => IsCDPRScript(name)).ToList();
+
+    private static List<string> GetREDmodTweakFiles(Cp77Project cp77Proj) =>
+        Directory.EnumerateFiles(Path.Combine(cp77Proj.ResourcesDirectory, "tweaks"), "*.tweak", SearchOption.AllDirectories).ToList();
+
+    /// <summary>
+    /// Pack mod with options
+    /// </summary>
+    /// <returns></returns>
+    public async Task<bool> LaunchProjectAsync(LaunchProfile options)
+    {
+        _progressService.IsIndeterminate = true;
+
+        // checks
+        if (_projectManager.ActiveProject is not Cp77Project cp77Proj)
+        {
+            _progressService.IsIndeterminate = false;
+            _loggerService.Error("Cannot pack project (no project/not cyberpunk project)!");
+            _notificationService.Error("Cannot pack project (no project/not cyberpunk project)!");
+            return false;
+        }
+
+        if (!options.IsRedmod && Directory.EnumerateFiles(cp77Proj.SoundDirectory).Any())
+        {
+            _loggerService.Warning("This project contains custom sound files but is packed as legacy mod!");
+            _notificationService.Warning($"This project contains custom sound files and needs to be packed as a REDmod!");
+
+            //_progressService.IsIndeterminate = false;
+            //return false;
+        }
+        if (!options.IsRedmod && Directory.EnumerateFiles(cp77Proj.ResourcesDirectory).Any(x => IsCDPRScript(x)))
+        {
+            _loggerService.Warning("This project contains script files but is packed as legacy mod!");
+            _notificationService.Warning($"This project contains script files and needs to be packed as a REDmod!");
+
+            //_progressService.IsIndeterminate = false;
+            //return false;
+        }
+
+        // backup
+        if (options.CreateBackup && !CreateZipfile(cp77Proj, true))
+        {
+            _progressService.IsIndeterminate = false;
+            _loggerService.Error("Creating backup failed, aborting.");
+            _notificationService.Error("Creating backup failed, aborting.");
+            return false;
+        }
+        
+        // cleanup
+        if (!await Task.Run(() => Cleanup(cp77Proj, options)))
+        {
+            _progressService.IsIndeterminate = false;
+            _loggerService.Error("Cleanup failed, aborting.");
+            _notificationService.Error("Cleanup failed, aborting.");
+            return false;
+        }
+
+        // CleanAll will return true when the options disable it, so check here  
+        if (options.CleanAll)
+        {
+            _loggerService.Info($"{cp77Proj.Name} files cleaned up.");
+        }
+        
+        // Pack it up
+        if (!await PackProjectFilesAsync(options, cp77Proj))
+        {
+            return false;
+        }
+        
+        // backup
+        if (options.CreateZipFile && !CreateZipfile(cp77Proj, false))
+        {
+            _progressService.IsIndeterminate = false;
+            _loggerService.Error("Failed to bundle up your .archive, aborting.");
+            _notificationService.Error("Creating backup failed, aborting.");
+            return false;
+        }
+
+        // Now install it
+        if (options.Install && !await InstallProjectFiles(options, cp77Proj))
+        {
+            return false;
+        }
+
+        if (options.CleanAllPostBuild && !await Task.Run(() => Cleanup(cp77Proj, options, true)))
+        {
+            _loggerService.Warning("Failed to clean your project after build. The next build might fail.");
+        }
+
+        _progressService.IsIndeterminate = false;
+
+        // launch game
+        if (!options.LaunchGame)
+        {
             return true;
         }
 
-        /// <summary>
-        /// pack mod to mod workspace folder
-        /// </summary>
-        /// <returns></returns>
-        public async Task<bool> PackProject()
+        if (_settingsManager.GetRED4GameLaunchCommand() is not string launchCommand || string.IsNullOrEmpty(launchCommand))
         {
-
-            if (_projectManager.ActiveProject is not Cp77Project cp77Proj)
-            {
-                _loggerService.Error("Can't pack project (no project/not cyberpunk project)!");
-                return await Task.FromResult(false);
-            }
-
-            // cleanup
-            try
-            {
-                var archives = Directory.GetFiles(cp77Proj.PackedArchiveDirectory, "*.archive");
-                foreach (var archive in archives)
-                {
-                    File.Delete(archive);
-                }
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error(e);
-            }
-
-            // pack mod
-            var modfiles = Directory.GetFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
-            if (modfiles.Any())
-            {
-                _modTools.Pack(
-                    new DirectoryInfo(cp77Proj.ModDirectory),
-                    new DirectoryInfo(cp77Proj.PackedArchiveDirectory),
-                    cp77Proj.Name);
-                _loggerService.Info("Packing archives complete!");
-            }
-            _loggerService.Success($"{cp77Proj.Name} packed into {cp77Proj.PackedArchiveDirectory}");
-
-
-            // compile tweak files
-            CompileTweakFiles(cp77Proj);
-
-            var activeMod = _projectManager.ActiveProject;
-
-            // create mod zip file
-            var zipPathRoot = new DirectoryInfo(activeMod.PackedRootDirectory).Parent.FullName;
-            var zipPath = Path.Combine(zipPathRoot, $"{activeMod.Name}.zip");
-            try
-            {
-                if (File.Exists(zipPath))
-                {
-                    File.Delete(zipPath);
-                }
-                ZipFile.CreateFromDirectory(activeMod.PackedRootDirectory, zipPath);
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error(e);
-            }
-            _loggerService.Success($"{cp77Proj.Name} zip available at {zipPath}");
-
-            return await Task.FromResult(true);
+            throw new WolvenKitException(0x5001, "No game executable set");
         }
 
-        private void CompileTweakFiles(Cp77Project cp77Proj)
+        var arguments = $"{_settingsManager.GetRED4GameLaunchOptions()} {options.GameArguments ?? ""}";
+
+        // Shift prevents save game load (CET doesn't initialize
+        if (!_modifierService.IsShiftKeyPressed && options.LoadLastSave && ISettingsManager.GetLastSaveName() is string lastSavegame)
         {
-            try
+            arguments = $"{arguments} -save={lastSavegame}";            
+        }
+        else if (!_modifierService.IsShiftKeyPressed && options.LoadSaveName is string savegame)
+        {
+            arguments = $"{arguments} -save={savegame}";
+        }
+
+        // -save can come from the launch options, or from the user settings 
+        if (arguments.Contains("-save"))
+        {
+            _loggerService.Warning("Warning: Loading a save via start-up options may break CET entity spawn!");
+        }
+        try
+        {
+            Process.Start(new ProcessStartInfo
             {
-                Directory.Delete(cp77Proj.PackedTweakDirectory, true);
+                FileName = launchCommand,
+                Arguments = arguments,
+                ErrorDialog = true,
+                UseShellExecute = true,
+            });
+        }
+        catch (Exception)
+        {
+            throw new WolvenKitException(0x5002, "Failed to launch game executable");
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// At this point, all necessary files should be present inside ModDir/packed. This method only copies them to the game dir.
+    /// </summary>
+    private async Task<bool> InstallProjectFiles(LaunchProfile options, Cp77Project cp77Proj)
+    {
+        if (!options.Install)
+        {
+            _notificationService.Success($"{cp77Proj.Name} packed!");
+            return true;
+        }
+
+        var installPath = options.DeployWithRedmod ? $"mods/{cp77Proj.ModName}" : "archive/pc/mod";
+
+        if (!InstallMod(cp77Proj))
+        {
+            _progressService.IsIndeterminate = false;
+            _loggerService.Error("Installing mod failed, aborting.");
+            _notificationService.Error("Installing mod failed, aborting.");
+            return false;
+        }
+
+        _notificationService.Success($"{cp77Proj.Name} installed!");
+
+        var successString = options.DeployWithRedmod ? "deployed as REDmod" : "installed";
+        _loggerService.Success($"{cp77Proj.Name} {successString} to {_settingsManager.GetRED4GameRootDir()}/{installPath}");
+
+        if (!options.DeployWithRedmod || await DeployRedmod())
+        {
+            return true;
+        }
+
+        _progressService.IsIndeterminate = false;
+        _loggerService.Error("Redmod deploy failed, aborting.");
+        _notificationService.Error("Redmod deploy failed, aborting.");
+        return false;
+
+
+    }
+
+    /// <summary>
+    /// This method will move everything into ModDirectory/packed.
+    /// </summary>
+    private async Task<bool> PackProjectFilesAsync(LaunchProfile options, Cp77Project cp77Proj)
+    {        
+        // copy files to packed dir
+        // pack archives
+        var archives = Directory.EnumerateFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories).ToList();
+        if (archives.Count != 0)
+        {
+            var invalidFiles = archives
+                .Select(f => Path.GetRelativePath(cp77Proj.ModDirectory, f))
+                .Where(f => f.Any(char.IsUpper) || f.Any(char.IsWhiteSpace)).ToList();
+            if (invalidFiles.Count != 0)
+            {
+                _loggerService.Error("Capital letters and/or whitespaces found (this may cause issues):");
+                foreach (var filePath in invalidFiles)
+                {
+                    _loggerService.Error($"\t {filePath}");
+                }
             }
-            catch (Exception e)
+            
+            if (!await Task.Run(() => PackArchives(cp77Proj, options)))
             {
-                _loggerService.Error(e);
+                _progressService.IsIndeterminate = false;
+                _loggerService.Error("Packing archives failed, aborting.");
+                _notificationService.Error("Packing archives failed, aborting.");
+                return false;
             }
 
-            var tweakFiles = Directory.GetFiles(cp77Proj.TweakDirectory, "*.tweak", SearchOption.AllDirectories);
-            foreach (var f in tweakFiles)
+            _loggerService.Info($"{cp77Proj.Name} archives packed into {cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)}");
+        }
+
+        // pack archiveXL files
+        var files = GetArchiveXlFiles(cp77Proj);
+        if (files.Count != 0)
+        {
+            if (!PackArchiveXlFiles(cp77Proj, files, options))
             {
-                var text = File.ReadAllText(f);
-                var folder = Path.GetDirectoryName(Path.GetRelativePath(cp77Proj.TweakDirectory, f));
-                var outDirectory = Path.Combine(cp77Proj.PackedTweakDirectory, folder);
-                if (!Directory.Exists(outDirectory))
-                {
-                    Directory.CreateDirectory(outDirectory);
-                }
-                var filename = Path.GetFileNameWithoutExtension(f) + ".bin";
-                var outPath = Path.Combine(outDirectory, filename);
+                _progressService.IsIndeterminate = false;
+                _loggerService.Error("Packing archiveXL files failed, aborting.");
+                _notificationService.Error("Packing archiveXL files failed, aborting.");
+                return false;
+            }
 
-                try
-                {
-                    if (!Serialization.Deserialize(text, out var dict))
-                    {
-                        continue;
-                    }
-                    var db = new TweakDB();
-                    //flats
-                    foreach (var (key, value) in dict.Flats)
-                    {
-                        db.Add(key, value);
-                    }
-                    //groups
-                    foreach (var (key, value) in dict.Groups)
-                    {
-                        db.Add(key, value);
-                    }
+            _loggerService.Info($"{cp77Proj.Name} archiveXL files packed into {cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)}");
+        }
 
-                    using var ms = new MemoryStream();
-                    using var writer = new TweakDBWriter(ms);
-                    writer.WriteFile(db);
-                    File.WriteAllBytes(outPath, ms.ToArray());
-                }
-                catch (Exception e)
+        // pack generic resources excluding script and tweak files
+        files = GetResourceFiles(cp77Proj);
+        if (files.Count != 0)
+        {
+            if (!PackResources(cp77Proj, files))
+            {
+                _progressService.IsIndeterminate = false;
+                _loggerService.Error("Packing other resource files failed, aborting.");
+                _notificationService.Error("Packing other resource files failed, aborting.");
+                return false;
+            }
+
+            _loggerService.Info($"{cp77Proj.Name} resource files packed into {cp77Proj.PackedRootDirectory}");
+        }
+
+        // pack redmod files
+        if (!options.IsRedmod)
+        {
+            return true;
+        }
+
+        if (!PackRedmodFiles(cp77Proj))
+        {
+            _progressService.IsIndeterminate = false;
+            _loggerService.Error("Packing redmod files failed, aborting.");
+            _notificationService.Error("Packing redmod files failed, aborting.");
+            return false;
+        }
+
+        _loggerService.Info($"{cp77Proj.Name} redmod files packed into {cp77Proj.PackedRedModDirectory}");
+        return true;
+    }
+
+    private bool Cleanup(Cp77Project cp77Proj, LaunchProfile options, bool isPostBuild = false)
+    {
+        if (!options.CleanAll && !(isPostBuild && options.CleanAllPostBuild))
+        {
+            return true;
+        }
+
+        var result = true; //base condition -- if packed/ is already empty, then the command is 'successful'.
+
+        //top level directories
+        var dirs = Directory.GetDirectories(cp77Proj.PackedRootDirectory, "*", SearchOption.TopDirectoryOnly);
+        for (var i = 0; i < dirs.Count(); i++)
+        {
+            result = SafeDirectoryDelete(dirs[i], true);
+        }
+
+        //top level files
+        var files = Directory.GetFiles(cp77Proj.PackedRootDirectory, "*", SearchOption.TopDirectoryOnly);
+        for (var i = 0; i < files.Count(); i++)
+        {
+            result = SafeFileDelete(files[i]);
+        }
+
+        return result;
+       
+    }
+
+    private bool SafeDirectoryDelete(string path, bool recursive = true)
+    {
+        try
+        {
+            if (Directory.Exists(path))
+            {
+                Directory.Delete(path, recursive);
+            }
+            return true;
+        }
+        catch (Exception e)
+        {
+            _loggerService.Error(e);
+            return false;
+        }
+    }
+
+    private bool SafeFileDelete(string path)
+    {
+        try
+        {
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+            return true;
+        }
+        catch (Exception e)
+        {
+            _loggerService.Error(e);
+            return false;
+        }
+    }
+
+    private bool PackArchives(Cp77Project cp77Proj, LaunchProfile options) => 
+        _modTools.Pack(new DirectoryInfo(cp77Proj.ModDirectory), new DirectoryInfo(cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)), cp77Proj.ModName);
+
+    private static bool PackResources(Cp77Project cp77Proj, IEnumerable<string> files)
+    {
+        //All such files goes into the root of the cp77Proj.PackedRootDirectory
+        foreach (var file in files)
+        {
+            var fileName = Path.GetFileName(file);
+            var fileRelativeDir = Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(file).NotNull());
+            var fileOutputDir = Path.Combine(cp77Proj.PackedRootDirectory, fileRelativeDir);
+            var fileOutputPath = Path.Combine(fileOutputDir, fileName);
+            if (!Directory.Exists(fileOutputDir))
+            {
+                Directory.CreateDirectory(fileOutputDir);
+            }
+
+            // copy files, with overwriting
+            File.Copy(file, fileOutputPath, true);
+        }
+        return true;
+    }
+    
+    private static bool PackArchiveXlFiles(Cp77Project cp77Proj, IEnumerable<string> archiveXlFiles, LaunchProfile options)
+    {
+        foreach (var f in archiveXlFiles)
+        {
+            var outDirectory = cp77Proj.GetPackedArchiveDirectory(options.IsRedmod);
+            if (!Directory.Exists(outDirectory))
+            {
+                Directory.CreateDirectory(outDirectory);
+            }
+            var filename = Path.GetFileName(f);
+            var outPath = Path.Combine(outDirectory, filename);
+            File.Copy(f, outPath, true);
+        }
+        return true;
+    }
+    
+    private bool PackRedmodFiles(Cp77Project cp77Proj)
+    {
+        // write info.json file if it not exists
+        var modinfo = Path.Combine(cp77Proj.PackedRedModDirectory, "info.json");
+
+        if (File.Exists(modinfo))
+        {
+            File.Delete(modinfo);
+        }
+
+        if (!File.Exists(modinfo))
+        {
+            JsonSerializerOptions jsonoptions = new()
+            {
+                WriteIndented = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+            var jsonString = JsonSerializer.Serialize(cp77Proj.GetInfo(), jsonoptions);
+            File.WriteAllText(modinfo, jsonString);
+        }
+
+        // sounds
+        if (PackSoundFiles())
+        {
+            _loggerService.Info($"{cp77Proj.Name} redmod sound files packed into {cp77Proj.PackedRedModDirectory}");
+        }
+
+        // tweaks
+        var files = GetREDmodTweakFiles(cp77Proj);
+        if (files.Count != 0)
+        {
+            foreach (var file in files)
+            {
+                var fileName = Path.GetFileName(file);
+                var fileRelativeDir = Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(file).NotNull());
+                var fileOutputDir = Path.Combine(cp77Proj.PackedRedModDirectory, fileRelativeDir);
+                var fileOutputPath = Path.Combine(fileOutputDir, fileName);
+                if (!Directory.Exists(fileOutputDir))
                 {
-                    _loggerService.Error(e);
-                    continue;
+                    Directory.CreateDirectory(fileOutputDir);
                 }
+
+                // copy files, with overwriting
+                File.Copy(file, fileOutputPath, true);
+            }
+            _loggerService.Info($"{cp77Proj.Name} redmod tweak files packed into {cp77Proj.PackedRedModDirectory}");
+        }
+
+        // scripts
+        files = GetREDmodScriptFiles(cp77Proj);
+        if (files.Count != 0)
+        {
+            foreach (var file in files)
+            {
+                var fileName = Path.GetFileName(file);
+                var fileRelativeDir = Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(file).NotNull());
+                var fileOutputDir = Path.Combine(cp77Proj.PackedRedModDirectory, fileRelativeDir);
+                var fileOutputPath = Path.Combine(fileOutputDir, fileName);
+                if (!Directory.Exists(fileOutputDir))
+                {
+                    Directory.CreateDirectory(fileOutputDir);
+                }
+
+                // copy files, with overwriting
+                File.Copy(file, fileOutputPath, true);
             }
         }
 
-        /// <summary>
-        /// Copies the contents of the "packed" folder into the game mod directory
-        /// </summary>
-        public void InstallMod()
-        {
-            var activeMod = _projectManager.ActiveProject;
-            var logPath = Path.Combine(activeMod.ProjectDirectory, "install_log.xml");
+        _loggerService.Info($"{cp77Proj.Name} redmod script files packed into {cp77Proj.PackedRedModDirectory}");
 
-            try
+        return true;
+    }
+    
+    private bool PackSoundFiles()
+    {
+        if (_projectManager.ActiveProject is null)
+        {
+            return false;
+        }
+
+        // nothing to pack if no info.json file exists
+        var path = Path.Combine(_projectManager.ActiveProject.PackedRedModDirectory, "info.json");
+        if (!File.Exists(path))
+        {
+            return false;
+        }
+
+        // read info
+        var modProj = _projectManager.ActiveProject;
+        List<string> files = new();
+        try
+        {
+            JsonSerializerOptions options = new()
             {
-                //Check if we have installed this mod before. If so do a little cleanup.
-                if (File.Exists(logPath))
+                WriteIndented = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                IgnoreReadOnlyProperties = true,
+            };
+            var info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(path), options).NotNull();
+            if (info.CustomSounds.Count == 0)
+            {
+                // nothing to do
+                return false;
+            }
+
+            foreach (var e in info.CustomSounds)
+            {
+                if (!string.IsNullOrEmpty(e.File))
                 {
-                    var log = XDocument.Load(logPath);
-                    var dirs = log.Root.Element("Files")?.Descendants("Directory").ToList();
-                    if (dirs != null)
+                    files.Add(e.File);
+
+                    var rawFile = Path.Combine(modProj.SoundDirectory, e.File);
+                    var packedFile = Path.Combine(modProj.PackedSoundsDirectory, e.File);
+                    if (File.Exists(rawFile))
                     {
-                        //Loop throught dirs and delete the old files in them.
-                        foreach (var d in dirs)
+                        File.Copy(rawFile, packedFile, true);
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            _loggerService.Error(e);
+            return false;
+        }
+
+        return true;
+    }
+
+    private bool CreateZipfile(Cp77Project cp77Proj, bool isBackup)
+    {
+        var zipPathRoot = new DirectoryInfo(cp77Proj.PackedRootDirectory).Parent?.FullName;
+        if (zipPathRoot is null)
+        {
+            return false;
+        }
+
+        var suffix = isBackup ? "_previousBuild" : "";
+        var zipPath = Path.Combine(zipPathRoot, $"{cp77Proj.Name}{suffix}.zip");
+        try
+        {
+            if (File.Exists(zipPath))
+            {
+                File.Delete(zipPath);
+            }
+            ZipFile.CreateFromDirectory(cp77Proj.PackedRootDirectory, zipPath);
+        }
+        catch (Exception e)
+        {
+            _loggerService.Error(e);
+            return false;
+        }
+        _loggerService.Info($"{cp77Proj.Name} zip available at {zipPath}");
+        return true;
+    }
+
+    private bool InstallMod(Cp77Project activeMod)
+    {
+        var logPath = Path.Combine(activeMod.ProjectDirectory, "install_log.xml");
+
+        try
+        {
+            //Check if we have installed this mod before. If so do a little cleanup.
+            if (File.Exists(logPath))
+            {
+                var log = XDocument.Load(logPath);
+                if (log is null || log.Root is null)
+                {
+                    return false;
+                }
+
+                var dirs = log.Root.Element("Files")?.Descendants("Directory").ToList();
+                if (dirs != null)
+                {
+                    //Loop throught dirs and delete the old files in them.
+                    foreach (var d in dirs)
+                    {
+                        foreach (var f in d.Elements("file"))
                         {
-                            foreach (var f in d.Elements("file"))
+                            if (File.Exists(f.Value))
                             {
-                                if (File.Exists(f.Value))
-                                {
-                                    File.Delete(f.Value);
-                                    Debug.WriteLine("File delete: " + f.Value);
-                                }
-                            }
-                        }
-                        //Delete the empty directories.
-                        foreach (var d in dirs)
-                        {
-                            if (d.Attribute("Path") != null
-                                && Directory.Exists(d.Attribute("Path").Value)
-                                && !Directory.GetFiles(d.Attribute("Path").Value, "*", SearchOption.AllDirectories).Any())
-                            {
-                                Directory.Delete(d.Attribute("Path").Value, true);
-                                Debug.WriteLine("Directory delete: " + d.Attribute("Path").Value);
+                                File.Delete(f.Value);
+                                Debug.WriteLine("File delete: " + f.Value);
                             }
                         }
                     }
-                    //Delete the old install log. We will make a new one so this is not needed anymore.
-                    File.Delete(logPath);
+                    //Delete the empty directories.
+                    foreach (var d in dirs)
+                    {
+                        var p = d.Attribute("Path");
+                        if (p is not null)
+                        {
+                            if (Directory.Exists(p.Value) && !Directory.GetFiles(p.Value, "*", SearchOption.AllDirectories).Any())
+                            {
+                                Directory.Delete(p.Value, true);
+                                Debug.WriteLine("Directory delete: " + p.Value);
+                            }
+                        }
+
+                    }
                 }
+                //Delete the old install log. We will make a new one so this is not needed anymore.
+                File.Delete(logPath);
+            }
 
-                var installlog = new XDocument(
-                    new XElement("InstalLog",
-                        new XAttribute("Project", activeMod.Name),
-                        new XAttribute("Build_date", DateTime.Now.ToString())
-                        ));
-                var fileroot = new XElement("Files");
+            XDocument installlog = new(
+                new XElement("InstalLog",
+                    new XAttribute("Project", activeMod.Name),
+                    new XAttribute("Build_date", DateTime.Now.ToString())
+                    ));
+            XElement fileroot = new("Files");
 
-                //Copy and log the files.
-                var packedmoddir = activeMod.PackedRootDirectory;
-                if (!Directory.Exists(packedmoddir))
+            //Copy and log the files.
+            var packedmoddir = activeMod.PackedRootDirectory;
+            if (!Directory.Exists(packedmoddir))
+            {
+                _loggerService.Error("Failed to install the mod! The packed directory doesn't exist!");
+                return false;
+            }
+
+            fileroot.Add(Commonfunctions.DirectoryCopy(packedmoddir, _settingsManager.GetRED4GameRootDir(), true));
+
+            if (installlog.Root is null)
+            {
+                return false;
+            }
+
+            installlog.Root.Add(fileroot);
+            installlog.Save(logPath);
+        }
+        catch (Exception ex)
+        {
+            //If we screwed up something. Log it.
+            _loggerService.Error(ex);
+            return false;
+        }
+
+        return true;
+    }
+
+    private Task<bool> DeployRedmod()
+    {
+        if (!_pluginService.IsInstalled(EPlugin.redmod))
+        {
+            return Task.FromResult(false);
+        }
+
+        // compile with redmod
+
+        var redmodPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod");
+        var executablePath = Path.Combine(redmodPath, "bin", "redMod.exe");
+        if (!File.Exists(executablePath))
+        {
+            return Task.FromResult(false);
+        }
+
+        var rttiSchemaPath = Path.Combine(redmodPath, "metadata.json");
+        var args = $"deploy -root=\"{_settingsManager.GetRED4GameRootDir()}\"";
+
+        var workingDir = Path.Combine(redmodPath, "bin");
+        _loggerService.Info($"WorkDir: {workingDir}");
+        _loggerService.Info($"Running commandlet: {args}");
+        return ProcessUtil.RunProcessAsync(executablePath, args, workingDir);
+
+    }
+
+    #endregion
+
+    /// <Inheritdoc />
+    public async Task<bool> AddFileToModModalAsync(ulong hash)
+    {
+        var scope = _archiveManager.IsModBrowserActive ? ArchiveManagerScope.Mods : ArchiveManagerScope.Basegame;
+        return await AddFileToModModalAsync(hash, scope);
+    }
+
+    /// <Inheritdoc />
+    public async Task<bool> AddFileToModModalAsync(ulong hash, ArchiveManagerScope searchScope)
+    {
+        var file = _archiveManager.Lookup(hash);
+        return file.HasValue && await AddFileToModModalAsync(file.Value, searchScope);
+    }
+
+    /// <Inheritdoc />
+    public async Task<bool> AddFileToModModalAsync(IGameFile file)
+    {
+        var scope = _archiveManager.IsModBrowserActive ? ArchiveManagerScope.Mods : ArchiveManagerScope.Basegame;
+        return await AddFileToModModalAsync(file, scope);
+    }
+
+    /// <Inheritdoc />
+    public async Task<bool> AddFileToModModalAsync(IGameFile file, ArchiveManagerScope searchScope)
+    {
+        if (_projectManager.ActiveProject is null)
+        {
+            return false;
+        }
+
+        FileInfo diskPathInfo = new(Path.Combine(_projectManager.ActiveProject.ModDirectory, file.Name));
+        if (diskPathInfo.Exists)
+        {
+            var response = await Interactions.ShowMessageBoxAsync(
+                $"File exists in project. Overwrite existing file?",
+                "Add file",
+                WMessageBoxButtons.YesNo);
+
+            switch (response)
+            {
+                case WMessageBoxResult.OK:
+                case WMessageBoxResult.Yes:
                 {
-                    _loggerService.Error("Failed to install the mod! The packed directory doesn't exist!");
-                    return;
+                    await Task.Run(() => AddToMod(file));
+                    break;
                 }
 
-                fileroot.Add(Commonfunctions.DirectoryCopy(packedmoddir, _settingsManager.GetRED4GameRootDir(), true));
+                case WMessageBoxResult.None:
+                    break;
+                case WMessageBoxResult.Cancel:
+                    break;
+                case WMessageBoxResult.No:
+                    break;
+                case WMessageBoxResult.Custom:
+                    break;
+                default:
+                    break;
+            }
+        }
+        else
+        {
+            await Task.Run(() => AddToMod(file));
+        }
 
-                //var packeddlcdir = Path.Combine(ActiveMod.ProjectDirectory, "packed", "DLC");
-                //if (Directory.Exists(packeddlcdir))
-                //    fileroot.Add(Commonfunctions.DirectoryCopy(packeddlcdir, MainController.Get().Configuration.CP77GameDlcDir, true));
+        return true;
+    }
 
-                installlog.Root.Add(fileroot);
-                installlog.Save(logPath);
+    /// <Inheritdoc />
+    public bool AddToMod(ulong hash)
+    {
+        var scope = _archiveManager.IsModBrowserActive ? ArchiveManagerScope.Mods : ArchiveManagerScope.Basegame;
+        return AddToMod(hash, scope);
+    }
 
-                _loggerService.Success($"{activeMod.Name} installed!");
-                _notificationService.Success($"{activeMod.Name} installed!");
+    /// <Inheritdoc />
+    public bool AddToMod(ulong hash, ArchiveManagerScope searchScope)
+    {
+        var file = _archiveManager.Lookup(hash, searchScope);
+        return file.HasValue && AddToMod(file.Value, searchScope);
+    }
+
+    /// <Inheritdoc />
+    public bool AddToMod(IGameFile file)
+    {
+        var scope = _archiveManager.IsModBrowserActive ? ArchiveManagerScope.Mods : ArchiveManagerScope.Basegame;
+        return AddToMod(file, scope);
+    }
+
+    /// <Inheritdoc />
+    public bool AddToMod(IGameFile file, ArchiveManagerScope searchScope)
+    {
+        if (_projectManager.ActiveProject is null)
+        {
+            return false;
+        }
+
+        if (Cp77Project.GameType is not GameType.Cyberpunk2077)
+        {
+            throw new WolvenKitException(-1, "This doesn't seem to be a Cyberpunk project!");
+        }
+
+        var fileName = file.Name;
+        if (file.Name == file.Key.ToString() && file.GuessedExtension != null)
+        {
+            fileName += file.GuessedExtension;
+        }
+
+        FileInfo diskPathInfo = new(Path.Combine(_projectManager.ActiveProject.ModDirectory, fileName));
+        if (diskPathInfo.Directory == null)
+        {
+            return false;
+        }
+
+        if (File.Exists(diskPathInfo.FullName))
+        {
+            using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
+            file.Extract(fs);
+            _loggerService.Info($"Overwrote existing file with game file: {file.Name}");
+        }
+        else
+        {
+            Directory.CreateDirectory(diskPathInfo.Directory.FullName);
+            try
+            {
+                using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
+                file.Extract(fs);
+                _loggerService.Info($"Added game file to project: {file.Name}");
             }
             catch (Exception ex)
             {
-                //If we screwed up something. Log it.
+                File.Delete(diskPathInfo.FullName);
                 _loggerService.Error(ex);
             }
+
         }
 
-        public void AddToMod(ulong hash)
-        {
-            var file = _archiveManager.Lookup(hash);
-            if (file.HasValue)
-            {
-                AddToMod(file.Value);
-            }
-        }
-
-        private void AddToMod(IGameFile file)
-        {
-            var project = _projectManager.ActiveProject;
-            switch (project.GameType)
-            {
-                case GameType.Witcher3:
-                {
-                    //if (project is Tw3Project witcherProject)
-                    //{
-                    //    var diskPathInfo = new FileInfo(Path.Combine(witcherProject.ModCookedDirectory, file.Name));
-                    //    if (diskPathInfo.Directory == null)
-                    //    {
-                    //        break;
-                    //    }
-
-                    //    Directory.CreateDirectory(diskPathInfo.Directory.FullName);
-                    //    using var fs = new FileStream(diskPathInfo.FullName, FileMode.Create);
-                    //    file.Extract(fs);
-                    //}
-                    break;
-                }
-                case GameType.Cyberpunk2077:
-                {
-                    if (project is Cp77Project cyberpunkProject)
-                    {
-                        var diskPathInfo = new FileInfo(Path.Combine(cyberpunkProject.ModDirectory, file.Name));
-                        if (diskPathInfo.Directory == null)
-                        {
-                            break;
-                        }
-
-                        if (File.Exists(diskPathInfo.FullName))
-                        {
-                            if (MessageBox.Show($"The file {file.Name} already exists in project - overwrite it with game file?", $"Confirm overwrite: {file.Name}", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                            {
-                                using var fs = new FileStream(diskPathInfo.FullName, FileMode.Create);
-                                file.Extract(fs);
-                                _loggerService.Success($"Overwrote existing file with game file: {file.Name}");
-                            }
-                            else
-                            {
-                                _loggerService.Info($"Declined to overwrite existing file: {file.Name}");
-                            }
-                        }
-                        else
-                        {
-                            Directory.CreateDirectory(diskPathInfo.Directory.FullName);
-                            using var fs = new FileStream(diskPathInfo.FullName, FileMode.Create);
-                            file.Extract(fs);
-                            _loggerService.Success($"Added game file to project: {file.Name}");
-                        }
-                    }
-
-                    break;
-                }
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
-        #endregion Methods
+        return true;
     }
 }

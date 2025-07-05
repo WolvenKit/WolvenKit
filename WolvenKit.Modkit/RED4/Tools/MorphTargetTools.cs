@@ -2,15 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using SharpGLTF.Schema2;
+using SharpGLTF.Validation;
 using WolvenKit.Common.DDS;
-using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
+using WolvenKit.Modkit.RED4.Animation;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.Modkit.RED4.Tools;
+using WolvenKit.Modkit.RED4.Tools.Common;
 using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.Types;
 using Vec3 = System.Numerics.Vector3;
 using Vec4 = System.Numerics.Vector4;
@@ -19,114 +22,87 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-        public bool ExportMorphTargets(Stream targetStream, FileInfo outfile, List<Archive> archives, string modFolder, bool isGLBinary = true)
+        public bool ExportMorphTargets(
+            CR2WFile cr2w,
+            FileInfo outfile,
+            bool isGLBinary = true,
+            bool exportTextures = false,
+            ValidationMode vMode = ValidationMode.TryFix
+        )
         {
-            var cr2w = _wolvenkitFileService.ReadRed4File(targetStream);
-            if (cr2w == null || cr2w.RootChunk is not MorphTargetMesh morphBlob || morphBlob.Blob.Chunk is not rendRenderMorphTargetMeshBlob blob || blob.BaseBlob.Chunk is not rendRenderMeshBlob rendblob)
+            if (cr2w is not { RootChunk: MorphTargetMesh morphBlob } || morphBlob.Blob.Chunk is not rendRenderMorphTargetMeshBlob blob || blob.BaseBlob.Chunk is not rendRenderMeshBlob rendBlob)
             {
+                _loggerService.Error("Morphtarget: does not look like a valid morphtarget");
                 return false;
             }
 
-            RawArmature Rig = null;
+            RawArmature? rig = null;
+
+            if (TryFindFile(morphBlob.BaseMesh.DepotPath, out var result) == FindFileResult.NoError && 
+                result.File is { RootChunk: CMesh { RenderResourceBlob.Chunk: rendRenderMeshBlob } baseMeshBlob })
             {
-                var hash = FNV1A64HashAlgorithm.HashString(morphBlob.BaseMesh.DepotPath);
-                var meshStream = new MemoryStream();
-                foreach (var ar in archives)
-                {
-                    if (ar.Files.ContainsKey(hash))
-                    {
-                        ExtractSingleToStream(ar, hash, meshStream);
-                        break;
-                    }
-                }
-                var meshCr2w = _wolvenkitFileService.ReadRed4File(meshStream);
-                if (meshCr2w != null && meshCr2w.RootChunk is MorphTargetMesh tBlob1 && tBlob1.Blob.Chunk is rendRenderMorphTargetMeshBlob tBlob2 && tBlob2.BaseBlob.Chunk is rendRenderMeshBlob tBlob3)
-                {
-                    Rig = MeshTools.GetOrphanRig(tBlob3, meshCr2w);
-                }
+                rig = MeshTools.GetOrphanRig(baseMeshBlob);
             }
 
-            using var meshbuffer = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
+            using var meshBuffer = new MemoryStream(rendBlob.RenderBuffer.Buffer.GetBytes());
 
-            var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
+            var meshesInfo = MeshTools.GetMeshesinfo(rendBlob, result.File?.RootChunk as CMesh);
 
-            var expMeshes = MeshTools.ContainRawMesh(meshbuffer, meshesinfo, true);
+            var expMeshes = MeshTools.ContainRawMesh(meshBuffer, meshesInfo, true);
 
-            var diffsbuffer = new MemoryStream();
-            var mappingbuffer = new MemoryStream();
-            var texbuffer = new MemoryStream();
-
-            if (blob.DiffsBuffer is not null)
-            {
-                diffsbuffer = new MemoryStream(blob.DiffsBuffer.Buffer.GetBytes());
-
-                //targetStream.Seek(cr2w.Buffers[blob.DiffsBuffer.Buffer - 1].Offset, SeekOrigin.Begin);
-                //targetStream.DecompressAndCopySegment(diffsbuffer, cr2w.Buffers[blob.DiffsBuffer.Buffer - 1].DiskSize, cr2w.Buffers[blob.DiffsBuffer.Buffer - 1].MemSize);
-            }
-
-            if (blob.MappingBuffer is not null)
-            {
-                mappingbuffer = new MemoryStream(blob.MappingBuffer.Buffer.GetBytes());
-
-                //targetStream.Seek(cr2w.Buffers[blob.MappingBuffer.Buffer - 1].Offset, SeekOrigin.Begin);
-                //targetStream.DecompressAndCopySegment(mappingbuffer, cr2w.Buffers[blob.MappingBuffer.Buffer - 1].DiskSize, cr2w.Buffers[blob.MappingBuffer.Buffer - 1].MemSize);
-            }
-
-            if (blob.TextureDiffsBuffer is not null)
-            {
-                texbuffer = new MemoryStream(blob.TextureDiffsBuffer.Buffer.GetBytes());
-
-                //targetStream.Seek(cr2w.Buffers[blob.TextureDiffsBuffer.Buffer - 1].Offset, SeekOrigin.Begin);
-                //targetStream.DecompressAndCopySegment(texbuffer, cr2w.Buffers[blob.TextureDiffsBuffer.Buffer - 1].DiskSize, cr2w.Buffers[blob.TextureDiffsBuffer.Buffer - 1].MemSize);
-            }
+            var diffsBuffer = blob.DiffsBuffer is not null ? new MemoryStream(blob.DiffsBuffer.Buffer.GetBytes()) : new MemoryStream();
+            var mappingBuffer = blob.MappingBuffer is not null ? new MemoryStream(blob.MappingBuffer.Buffer.GetBytes()) : new MemoryStream();
+            var texBuffer = blob.TextureDiffsBuffer is not null ? new MemoryStream(blob.TextureDiffsBuffer.Buffer.GetBytes()) : new MemoryStream();
 
             var targetsInfo = GetTargetInfos(cr2w, expMeshes.Count);
+
+            ArgumentNullException.ThrowIfNull(targetsInfo.NumVertexDiffsInEachChunk);
+            ArgumentNullException.ThrowIfNull(targetsInfo.NumVertexDiffsMappingInEachChunk);
+            ArgumentNullException.ThrowIfNull(targetsInfo.TargetStartsInVertexDiffs);
+            ArgumentNullException.ThrowIfNull(targetsInfo.TargetStartsInVertexDiffsMapping);
+            ArgumentNullException.ThrowIfNull(targetsInfo.Names);
+            ArgumentNullException.ThrowIfNull(targetsInfo.TargetPositionDiffOffset);
+            ArgumentNullException.ThrowIfNull(targetsInfo.TargetPositionDiffScale);
 
             var expTargets = new List<RawTargetContainer[]>();
 
             for (var i = 0; i < targetsInfo.NumTargets; i++)
             {
-                var temp_NumVertexDiffsInEachChunk = new uint[expMeshes.Count];
-                var temp_NumVertexDiffsMappingInEachChunk = new uint[expMeshes.Count];
+                var tempNumVertexDiffsInEachChunk = new uint[expMeshes.Count];
+                var tempNumVertexDiffsMappingInEachChunk = new uint[expMeshes.Count];
                 for (var e = 0; e < expMeshes.Count; e++)
                 {
-                    temp_NumVertexDiffsInEachChunk[e] = targetsInfo.NumVertexDiffsInEachChunk[i, e];
-                    temp_NumVertexDiffsMappingInEachChunk[e] = targetsInfo.NumVertexDiffsMappingInEachChunk[i, e];
+                    tempNumVertexDiffsInEachChunk[e] = targetsInfo.NumVertexDiffsInEachChunk[i, e];
+                    tempNumVertexDiffsMappingInEachChunk[e] = targetsInfo.NumVertexDiffsMappingInEachChunk[i, e];
                 }
-                expTargets.Add(ContainRawTargets(diffsbuffer, mappingbuffer, temp_NumVertexDiffsInEachChunk, temp_NumVertexDiffsMappingInEachChunk, targetsInfo.TargetStartsInVertexDiffs[i], targetsInfo.TargetStartsInVertexDiffsMapping[i], targetsInfo.TargetPositionDiffOffset[i], targetsInfo.TargetPositionDiffScale[i], expMeshes.Count));
+                expTargets.Add(ContainRawTarget(diffsBuffer, mappingBuffer, tempNumVertexDiffsInEachChunk, tempNumVertexDiffsMappingInEachChunk, targetsInfo.TargetStartsInVertexDiffs[i], targetsInfo.TargetStartsInVertexDiffsMapping[i], targetsInfo.TargetPositionDiffOffset[i], targetsInfo.TargetPositionDiffScale[i], expMeshes.Count));
             }
 
-            var textureStreams = ContainTextureStreams(blob, texbuffer);
-            var model = RawTargetsToGLTF(expMeshes, expTargets, targetsInfo.Names, Rig);
+            // Only add textures to list if the setting is checked in the export
+            var textureStreams = exportTextures ? ContainTextureStreams(blob, texBuffer) : [];
+                
+            var model = RawTargetsToGLTF(expMeshes, expTargets, targetsInfo.Names, rig);
 
             if (WolvenTesting.IsTesting)
             {
                 return true;
             }
 
-            if (isGLBinary)
-            {
-                model.SaveGLB(outfile.FullName);
-            }
-            else
-            {
-                model.SaveGLTF(outfile.FullName);
-            }
+            model.Save(GLTFHelper.PrepareFilePath(outfile.FullName, isGLBinary), new WriteSettings(vMode));
 
-            var dir = new DirectoryInfo(outfile.FullName.Replace(Path.GetExtension(outfile.FullName), string.Empty) + "_Textures");
-
-            if (textureStreams.Count > 0)
+            if (textureStreams.Count == 0)
             {
-                Directory.CreateDirectory(dir.FullName);
+                return true;
             }
+            
+            var dir = new DirectoryInfo(outfile.FullName.Replace(Path.GetExtension(outfile.FullName), string.Empty) + "_textures");
+
+            Directory.CreateDirectory(dir.FullName);
 
             for (var i = 0; i < textureStreams.Count; i++)
             {
-                File.WriteAllBytes(dir.FullName + "\\" + Path.GetFileNameWithoutExtension(outfile.FullName) + i + ".dds", textureStreams[i].ToArray());
+                File.WriteAllBytes(Path.Combine(dir.FullName, $"{Path.GetFileNameWithoutExtension(outfile.FullName)}_{i}.dds"), textureStreams[i].ToArray());
             }
-
-            targetStream.Dispose();
-            targetStream.Close();
 
             return true;
         }
@@ -134,185 +110,213 @@ namespace WolvenKit.Modkit.RED4
         private static TargetsInfo GetTargetInfos(CR2WFile cr2w, int subMeshC)
         {
             var morphBlob = (MorphTargetMesh)cr2w.RootChunk;
-            var rendMorphBlob = (rendRenderMorphTargetMeshBlob)morphBlob.Blob.Chunk;
+            var rendMorphBlob = (rendRenderMorphTargetMeshBlob)morphBlob.Blob.Chunk.NotNull();
 
-            uint NumTargets = rendMorphBlob.Header.NumTargets;
+            uint numTargets = rendMorphBlob.Header.NumTargets;
 
-            var NumVertexDiffsInEachChunk = new uint[NumTargets, subMeshC];
-            uint NumDiffs = rendMorphBlob.Header.NumDiffs;
-            uint NumDiffsMapping = rendMorphBlob.Header.NumDiffsMapping;
-            var NumVertexDiffsMappingInEachChunk = new uint[NumTargets, subMeshC];
-            var TargetStartsInVertexDiffs = new uint[NumTargets];
-            var TargetStartsInVertexDiffsMapping = new uint[NumTargets];
-            var TargetPositionDiffOffset = new Vec4[NumTargets];
-            var TargetPositionDiffScale = new Vec4[NumTargets];
-            for (var i = 0; i < NumTargets; i++)
+            if (numTargets == 0)
             {
-                for (var e = 0; e < subMeshC; e++)
+                if (morphBlob.Targets.Count == 0)
                 {
-                    NumVertexDiffsInEachChunk[i, e] = rendMorphBlob.Header.NumVertexDiffsInEachChunk[i][e];
-                    NumVertexDiffsMappingInEachChunk[i, e] = rendMorphBlob.Header.NumVertexDiffsMappingInEachChunk[i][e];
+                    throw new ArgumentOutOfRangeException("blob.header.numTargets", rendMorphBlob.Header.NumTargets,
+                        "`numTargets` is 0 and there are no `targets` defined, this doesn't look like a valid .morphtarget");
                 }
 
-                TargetStartsInVertexDiffs[i] = rendMorphBlob.Header.TargetStartsInVertexDiffs[i];
-                TargetStartsInVertexDiffsMapping[i] = rendMorphBlob.Header.TargetStartsInVertexDiffsMapping[i];
-
-
-                var o = rendMorphBlob.Header.TargetPositionDiffOffset[i];
-                TargetPositionDiffOffset[i] = new Vec4(o.X, o.Y, o.Z, o.W);
-                var s = rendMorphBlob.Header.TargetPositionDiffScale[i];
-                TargetPositionDiffScale[i] = new Vec4(s.X, s.Y, s.Z, s.W);
+                numTargets = (uint)morphBlob.Targets.Count;
             }
 
-            var Names = new string[NumTargets];
-            var RegionNames = new string[NumTargets];
-            string BaseMesh = morphBlob.BaseMesh.DepotPath;
-            string BaseTexture = morphBlob.BaseTexture.DepotPath;
-
-            for (var i = 0; i < NumTargets; i++)
+            var numVertexDiffsInEachChunk = new uint[numTargets, subMeshC];
+            uint numDiffs = rendMorphBlob.Header.NumDiffs;
+            uint numDiffsMapping = rendMorphBlob.Header.NumDiffsMapping;
+            var numVertexDiffsMappingInEachChunk = new uint[numTargets, subMeshC];
+            var targetStartsInVertexDiffs = new uint[numTargets];
+            var targetStartsInVertexDiffsMapping = new uint[numTargets];
+            var targetPositionDiffOffset = new Vec4[numTargets];
+            var targetPositionDiffScale = new Vec4[numTargets];
+            for (var i = 0; i < numTargets; i++)
             {
-                Names[i] = morphBlob.Targets[i].Name;
-                RegionNames[i] = morphBlob.Targets[i].RegionName;
+                var diffs = rendMorphBlob.Header.NumVertexDiffsInEachChunk[i];
+                var maps = rendMorphBlob.Header.NumVertexDiffsMappingInEachChunk[i];
+
+                for (var e = 0; e < subMeshC; e++)
+                {
+                    numVertexDiffsInEachChunk[i, e] = diffs[e];
+                    numVertexDiffsMappingInEachChunk[i, e] = maps[e];
+                }
+
+                targetStartsInVertexDiffs[i] = rendMorphBlob.Header.TargetStartsInVertexDiffs[i];
+                targetStartsInVertexDiffsMapping[i] = rendMorphBlob.Header.TargetStartsInVertexDiffsMapping[i];
+
+                var o = rendMorphBlob.Header.TargetPositionDiffOffset[i];
+                targetPositionDiffOffset[i] = new Vec4(o.X, o.Y, o.Z, o.W);
+
+                var s = rendMorphBlob.Header.TargetPositionDiffScale[i];
+                targetPositionDiffScale[i] = new Vec4(s.X, s.Y, s.Z, s.W);
+            }
+
+            var names = new string[numTargets];
+            var regionNames = new string[numTargets];
+            string baseMesh = morphBlob.BaseMesh.DepotPath.GetResolvedText().NotNull();
+            var baseTexture = morphBlob.BaseTexture.DepotPath.GetResolvedText();
+
+            for (var i = 0; i < numTargets; i++)
+            {
+                var target = morphBlob.Targets[i];
+
+                names[i] = $"{target.Name}_{target.RegionName}";
+                regionNames[i] = target.RegionName.ToString().NotNull();
             }
 
             var targetsInfo = new TargetsInfo()
             {
-                NumVertexDiffsInEachChunk = NumVertexDiffsInEachChunk,
-                NumDiffs = NumDiffs,
-                NumDiffsMapping = NumDiffsMapping,
-                NumVertexDiffsMappingInEachChunk = NumVertexDiffsMappingInEachChunk,
-                TargetStartsInVertexDiffs = TargetStartsInVertexDiffs,
-                TargetStartsInVertexDiffsMapping = TargetStartsInVertexDiffsMapping,
-                TargetPositionDiffOffset = TargetPositionDiffOffset,
-                TargetPositionDiffScale = TargetPositionDiffScale,
-                Names = Names,
-                RegionNames = RegionNames,
-                NumTargets = NumTargets,
-                BaseMesh = BaseMesh,
-                BaseTexture = BaseTexture,
+                NumVertexDiffsInEachChunk = numVertexDiffsInEachChunk,
+                NumDiffs = numDiffs,
+                NumDiffsMapping = numDiffsMapping,
+                NumVertexDiffsMappingInEachChunk = numVertexDiffsMappingInEachChunk,
+                TargetStartsInVertexDiffs = targetStartsInVertexDiffs,
+                TargetStartsInVertexDiffsMapping = targetStartsInVertexDiffsMapping,
+                TargetPositionDiffOffset = targetPositionDiffOffset,
+                TargetPositionDiffScale = targetPositionDiffScale,
+                Names = names,
+                RegionNames = regionNames,
+                NumTargets = numTargets,
+                BaseMesh = baseMesh,
+                BaseTexture = baseTexture,
             };
 
             return targetsInfo;
         }
 
-        private static RawTargetContainer[] ContainRawTargets(MemoryStream diffsbuffer, MemoryStream mappingbuffer, uint[] numVertexDiffsInEachChunk, uint[] numVertexDiffsMappingInEachChunk, uint targetStartsInVertexDiffs, uint targetStartsInVertexDiffsMapping, Vec4 targetPositionDiffOffset, Vec4 targetPositionDiffScale, int subMeshC)
+        private RawTargetContainer[] ContainRawTarget(MemoryStream diffsBuffer, MemoryStream mappingBuffer, uint[] numVertexDiffsInEachChunk, uint[] numVertexDiffsMappingInEachChunk, uint targetStartsInVertexDiffs, uint targetStartsInVertexDiffsMapping, Vec4 targetPositionDiffOffset, Vec4 targetPositionDiffScale, int subMeshC)
         {
-            var rawtarget = new RawTargetContainer[subMeshC];
+            const int diffByteWidth = 12;
+            const int mappingByteWidth = 2;
+            const int mappingCountAlignedMultiplier = 2; // Count is stored as half actual, and we align to even rounded up
 
-            var diffsbr = new BinaryReader(diffsbuffer);
-            var mappingbr = new BinaryReader(mappingbuffer);
+            var baseDiffsStartPositionForTarget = targetStartsInVertexDiffs * diffByteWidth;
+            var baseMappingsStartPositionForTarget = targetStartsInVertexDiffsMapping * mappingCountAlignedMultiplier * mappingByteWidth;
 
-            for (var i = 0; i < subMeshC; i++)
+            var rawTarget = new RawTargetContainer[subMeshC];
+
+            var diffsBr = new BinaryReader(diffsBuffer);
+            var mappingBr = new BinaryReader(mappingBuffer);
+
+            for (var subMeshIndex = 0; subMeshIndex < subMeshC; subMeshIndex++)
             {
-                var diffsCount = numVertexDiffsInEachChunk[i];
-                var vertexDelta = new TargetVec3[diffsCount];
-                var normalDelta = new Vec3[diffsCount];
-                var tangentDelta = new Vec3[diffsCount];
+                var diffsCount = numVertexDiffsInEachChunk[subMeshIndex];
+                var storedMapsCount = numVertexDiffsMappingInEachChunk[subMeshIndex];
 
-                if (i == 0)
+                if (storedMapsCount == 0 && diffsCount != 0)
                 {
-                    diffsbuffer.Position = targetStartsInVertexDiffs * 12;
-                }
-                else
-                {
-                    diffsbuffer.Position = targetStartsInVertexDiffs * 12;
+                    _loggerService.Warning($"Submesh {subMeshIndex} will be exported with 0 diffs: numVertexDiffsMappingInEachChunk[{subMeshIndex}] == 0, so we ignore the numVertexDiffsInEachChunk[{subMeshIndex}] == {diffsCount} (it's probably a bookkeeping error.)");
 
-                    for (var eye = 0; eye < i; eye++)
-                    {
-                        diffsbuffer.Position += numVertexDiffsInEachChunk[eye] * 12;
-                    }
+                    // Normal export handles this case, so let's use that to avoid
+                    // missing any logic that should be applied for a valid 0 diff
+                    // both here and in following chunks
+                    numVertexDiffsInEachChunk[subMeshIndex] = diffsCount = 0;
                 }
 
-                for (var e = 0; e < diffsCount; e++)
+                var unevenDivisionOffset = diffsCount % 2;
+
+                var actualMapsCount = (storedMapsCount * 2) - unevenDivisionOffset;
+
+                if (actualMapsCount != diffsCount)
                 {
-                    if (diffsbr.BaseStream.Position < (diffsbr.BaseStream.Length - 3))
-                    {
-                        var v = Converters.TenBitUnsigned(diffsbr.ReadUInt32());
-
-                        var x = (v.X * targetPositionDiffScale.X) + targetPositionDiffOffset.X;
-                        var y = (v.Y * targetPositionDiffScale.Y) + targetPositionDiffOffset.Y;
-                        var z = (v.Z * targetPositionDiffScale.Z) + targetPositionDiffOffset.Z;
-
-                        vertexDelta[e] = new TargetVec3(x, z, -y);
-                        var n = Converters.TenBitShifted(diffsbr.ReadUInt32());
-                        normalDelta[e] = new Vec3(n.X, n.Z, -n.Y);
-                        var t = Converters.TenBitShifted(diffsbr.ReadUInt32());
-                        tangentDelta[e] = new Vec3(t.X, t.Z, -t.Y);
-                    }
+                    throw new ArgumentOutOfRangeException($"Submesh {subMeshIndex} mapping count {actualMapsCount} doesn't match diff count {diffsCount}! Can't export this.");
                 }
 
-                var vertexMapping = new ushort[diffsCount];
+                var positionDeltas = new TargetVec3[diffsCount];
+                var normalDeltas = new Vec3[diffsCount];
+                var tangentDeltas = new Vec3[diffsCount];
+                var vertexMapping = new ushort[actualMapsCount];
 
-                if (i == 0)
-                {
-                    mappingbuffer.Position = targetStartsInVertexDiffsMapping * 4;
-                }
-                else
-                {
-                    mappingbuffer.Position = targetStartsInVertexDiffsMapping * 4;
+                diffsBuffer.Position = baseDiffsStartPositionForTarget;
+                mappingBuffer.Position = baseMappingsStartPositionForTarget;
 
-                    for (var eye = 0; eye < i; eye++)
-                    {
-                        mappingbuffer.Position += numVertexDiffsMappingInEachChunk[eye] * 4;
-                    }
-                }
-
-                for (var e = 0; e < diffsCount; e++)
+                for (var preceding = 0; preceding < subMeshIndex; preceding++)
                 {
-                    if (mappingbr.BaseStream.Position < (mappingbr.BaseStream.Length - 1))
-                    {
-                        vertexMapping[e] = mappingbr.ReadUInt16();
-                    }
+                    diffsBuffer.Position += numVertexDiffsInEachChunk[preceding] * diffByteWidth;
+
+                    // Skip previous data as aligned, NOT actual maps count
+                    mappingBuffer.Position += numVertexDiffsMappingInEachChunk[preceding] * mappingCountAlignedMultiplier * mappingByteWidth;
                 }
 
-                rawtarget[i] = new RawTargetContainer()
+                for (var diffIndex = 0; diffIndex < diffsCount; diffIndex++)
                 {
-                    vertexDelta = vertexDelta,
-                    normalDelta = normalDelta,
-                    tangentDelta = tangentDelta,
+                    var positionDelta = Converters.TenBitUnsigned(diffsBr.ReadUInt32());
+                    var normalDelta = Converters.TenBitShifted(diffsBr.ReadUInt32());
+                    var tangentDelta = Converters.TenBitShifted(diffsBr.ReadUInt32());
+
+                    var dequantizedPositionDeltaX = (positionDelta.X * targetPositionDiffScale.X) + targetPositionDiffOffset.X;
+                    var dequantizedPositionDeltaY = (positionDelta.Y * targetPositionDiffScale.Y) + targetPositionDiffOffset.Y;
+                    var dequantizedPositionDeltaZ = (positionDelta.Z * targetPositionDiffScale.Z) + targetPositionDiffOffset.Z;
+
+                    // LHCS Zup to RHCS Yup
+                    positionDeltas[diffIndex] = new TargetVec3(dequantizedPositionDeltaX, dequantizedPositionDeltaZ, -dequantizedPositionDeltaY);
+                    normalDeltas[diffIndex] = new Vec3(normalDelta.X, normalDelta.Z, -normalDelta.Y);
+                    tangentDeltas[diffIndex] = new Vec3(tangentDelta.X, tangentDelta.Z, -tangentDelta.Y);
+                }
+
+                for (var mapIdx = 0; mapIdx < actualMapsCount; mapIdx++)
+                {
+                    vertexMapping[mapIdx] = mappingBr.ReadUInt16();
+                }
+
+                rawTarget[subMeshIndex] = new RawTargetContainer()
+                {
+                    vertexDelta = positionDeltas,
+                    normalDelta = normalDeltas,
+                    tangentDelta = tangentDeltas,
                     vertexMapping = vertexMapping,
                     diffsCount = diffsCount
                 };
             }
 
-            return rawtarget;
+            return rawTarget;
         }
 
         private static List<MemoryStream> ContainTextureStreams(rendRenderMorphTargetMeshBlob blob, MemoryStream texbuffer)
         {
             var textureStreams = new List<MemoryStream>();
 
-            var Count = blob.Header.TargetTextureDiffsData.Count;
+            var count = blob.Header.TargetTextureDiffsData.Count;
             var texCount = 0;
-            var TargetDiffsDataOffset = new List<uint>();
-            var TargetDiffsDataSize = new List<uint>();
-            var TargetDiffsMipLevelCounts = new List<uint>();
-            var TargetDiffsWidth = new List<uint>();
+            var targetDiffsDataOffset = new List<uint>();
+            var targetDiffsDataSize = new List<uint>();
+            var targetDiffsMipLevelCounts = new List<uint>();
+            var targetDiffsWidth = new List<uint>();
 
-            for (var i = 0; i < Count; i++)
+            for (var i = 0; i < count; i++)
             {
-                if (blob.Header.TargetTextureDiffsData[i].TargetDiffsDataSize.Count == 0)
+                var diff = blob.Header.TargetTextureDiffsData[i];
+
+                if (diff.TargetDiffsDataSize.Count == 0)
                 {
                     break;
                 }
 
-                TargetDiffsDataOffset.Add(blob.Header.TargetTextureDiffsData[i].TargetDiffsDataOffset[0]);
-                TargetDiffsDataSize.Add(blob.Header.TargetTextureDiffsData[i].TargetDiffsDataSize[0]);
-                TargetDiffsMipLevelCounts.Add(blob.Header.TargetTextureDiffsData[i].TargetDiffsMipLevelCounts[0]);
-                TargetDiffsWidth.Add(blob.Header.TargetTextureDiffsData[i].TargetDiffsWidth[0]);
+                if (diff.TargetDiffsDataSize[0] == 0)
+                {
+                    continue;
+                }
+
+                targetDiffsDataOffset.Add(diff.TargetDiffsDataOffset[0]);
+                targetDiffsDataSize.Add(diff.TargetDiffsDataSize[0]);
+                targetDiffsMipLevelCounts.Add(diff.TargetDiffsMipLevelCounts[0]);
+                targetDiffsWidth.Add(diff.TargetDiffsWidth[0]);
                 texCount++;
             }
 
-            var texbr = new BinaryReader(texbuffer);
+            var texBr = new BinaryReader(texbuffer);
             for (var i = 0; i < texCount; i++)
             {
-                texbuffer.Position = TargetDiffsDataOffset[i];
-                var bytes = texbr.ReadBytes((int)TargetDiffsDataSize[i]);
+                texbuffer.Position = targetDiffsDataOffset[i];
+                var bytes = texBr.ReadBytes((int)targetDiffsDataSize[i]);
 
                 var ms = new MemoryStream();
                 var metadata = new DDSMetadata(
-                    TargetDiffsWidth[i], TargetDiffsWidth[i],
-                    1, 1, TargetDiffsMipLevelCounts[i], 0, 0, DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, 16, true);
+                    targetDiffsWidth[i], targetDiffsWidth[i],
+                    1, 1, targetDiffsMipLevelCounts[i], 0, 0, DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, 16, true);
                 DDSUtils.GenerateAndWriteHeader(ms, metadata);
                 var bw = new BinaryWriter(ms);
                 bw.Write(bytes);
@@ -322,7 +326,7 @@ namespace WolvenKit.Modkit.RED4
             return textureStreams;
         }
 
-        private static ModelRoot RawTargetsToGLTF(List<RawMeshContainer> meshes, List<RawTargetContainer[]> expTargets, string[] names, RawArmature rig)
+        private static ModelRoot RawTargetsToGLTF(List<RawMeshContainer> meshes, List<RawTargetContainer[]> expTargets, string[] names, RawArmature? rig)
         {
             var model = ModelRoot.CreateModel();
             var mat = model.CreateMaterial("Default");
@@ -341,6 +345,17 @@ namespace WolvenKit.Modkit.RED4
             var mIndex = -1;
             foreach (var mesh in meshes)
             {
+                ArgumentNullException.ThrowIfNull(mesh.positions);
+                ArgumentNullException.ThrowIfNull(mesh.normals);
+                ArgumentNullException.ThrowIfNull(mesh.tangents);
+                ArgumentNullException.ThrowIfNull(mesh.colors0);
+                ArgumentNullException.ThrowIfNull(mesh.colors1);
+                ArgumentNullException.ThrowIfNull(mesh.texCoords0);
+                ArgumentNullException.ThrowIfNull(mesh.texCoords1);
+                ArgumentNullException.ThrowIfNull(mesh.boneindices);
+                ArgumentNullException.ThrowIfNull(mesh.weights);
+                ArgumentNullException.ThrowIfNull(mesh.indices);
+
                 ++mIndex;
                 for (var i = 0; i < mesh.positions.Length; i++)
                 {
@@ -378,7 +393,7 @@ namespace WolvenKit.Modkit.RED4
                 for (var i = 0; i < mesh.texCoords0.Length; i++)
                 {
                     bw.Write(mesh.texCoords0[i].X);
-                    bw.Write(mesh.texCoords0[i].Y);
+                    bw.Write((mesh.texCoords0[i].Y * -1) + 1); // Flip UV Y like mesh export does
                 }
                 for (var i = 0; i < mesh.texCoords1.Length; i++)
                 {
@@ -429,17 +444,22 @@ namespace WolvenKit.Modkit.RED4
                     bw.Write(Convert.ToUInt16(mesh.indices[i + 0]));
                     bw.Write(Convert.ToUInt16(mesh.indices[i + 2]));
                 }
-                for (var i = 0; i < expTargets.Count; i++)
+                foreach (var t in expTargets)
                 {
-                    var mappings = expTargets[i][mIndex].vertexMapping.ToList();
+                    ArgumentNullException.ThrowIfNull(t[mIndex].vertexMapping);
+
+                    var mappings = t[mIndex].vertexMapping.NotNull().ToList();
                     for (ushort e = 0; e < mesh.positions.Length; e++)
                     {
                         if (mappings.Contains(e))
                         {
                             var idx = mappings.IndexOf(e);
-                            bw.Write(expTargets[i][mIndex].vertexDelta[idx].X);
-                            bw.Write(expTargets[i][mIndex].vertexDelta[idx].Y);
-                            bw.Write(expTargets[i][mIndex].vertexDelta[idx].Z);
+
+                            var vd = t[mIndex].vertexDelta.NotNull();
+
+                            bw.Write(vd[idx].X);
+                            bw.Write(vd[idx].Y);
+                            bw.Write(vd[idx].Z);
                         }
                         else
                         {
@@ -453,9 +473,12 @@ namespace WolvenKit.Modkit.RED4
                         if (mappings.Contains(e))
                         {
                             var idx = mappings.IndexOf(e);
-                            bw.Write(expTargets[i][mIndex].normalDelta[idx].X);
-                            bw.Write(expTargets[i][mIndex].normalDelta[idx].Y);
-                            bw.Write(expTargets[i][mIndex].normalDelta[idx].Z);
+
+                            var nd = t[mIndex].normalDelta.NotNull();
+
+                            bw.Write(nd[idx].X);
+                            bw.Write(nd[idx].Y);
+                            bw.Write(nd[idx].Z);
                         }
                         else
                         {
@@ -469,9 +492,12 @@ namespace WolvenKit.Modkit.RED4
                         if (mappings.Contains(e))
                         {
                             var idx = mappings.IndexOf(e);
-                            bw.Write(expTargets[i][mIndex].tangentDelta[idx].X);
-                            bw.Write(expTargets[i][mIndex].tangentDelta[idx].Y);
-                            bw.Write(expTargets[i][mIndex].tangentDelta[idx].Z);
+
+                            var td = t[mIndex].tangentDelta.NotNull();
+
+                            bw.Write(td[idx].X);
+                            bw.Write(td[idx].Y);
+                            bw.Write(td[idx].Z);
                         }
                         else
                         {
@@ -483,67 +509,78 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
             var buffer = model.UseBuffer(ms.ToArray());
-            var BuffViewoffset = 0;
+            var buffViewOffset = 0;
 
             foreach (var mesh in meshes)
             {
+                ArgumentNullException.ThrowIfNull(mesh.positions);
+                ArgumentNullException.ThrowIfNull(mesh.normals);
+                ArgumentNullException.ThrowIfNull(mesh.tangents);
+                ArgumentNullException.ThrowIfNull(mesh.colors0);
+                ArgumentNullException.ThrowIfNull(mesh.colors1);
+                ArgumentNullException.ThrowIfNull(mesh.texCoords0);
+                ArgumentNullException.ThrowIfNull(mesh.texCoords1);
+                ArgumentNullException.ThrowIfNull(mesh.boneindices);
+                ArgumentNullException.ThrowIfNull(mesh.weights);
+                ArgumentNullException.ThrowIfNull(mesh.indices);
+
                 var mes = model.CreateMesh(mesh.name);
                 var prim = mes.CreatePrimitive();
                 prim.Material = mat;
                 {
                     var acc = model.CreateAccessor();
-                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.positions.Length * 12);
+                    var buff = model.UseBufferView(buffer, buffViewOffset, mesh.positions.Length * 12);
                     acc.SetData(buff, 0, mesh.positions.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
                     prim.SetVertexAccessor("POSITION", acc);
-                    BuffViewoffset += mesh.positions.Length * 12;
+                    buffViewOffset += mesh.positions.Length * 12;
                 }
                 if (mesh.normals.Length > 0)
                 {
                     var acc = model.CreateAccessor();
-                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.normals.Length * 12);
+                    var buff = model.UseBufferView(buffer, buffViewOffset, mesh.normals.Length * 12);
                     acc.SetData(buff, 0, mesh.normals.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
                     prim.SetVertexAccessor("NORMAL", acc);
-                    BuffViewoffset += mesh.normals.Length * 12;
+                    buffViewOffset += mesh.normals.Length * 12;
                 }
                 if (mesh.tangents.Length > 0)
                 {
                     var acc = model.CreateAccessor();
-                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.tangents.Length * 16);
+                    var buff = model.UseBufferView(buffer, buffViewOffset, mesh.tangents.Length * 16);
                     acc.SetData(buff, 0, mesh.tangents.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
                     prim.SetVertexAccessor("TANGENT", acc);
-                    BuffViewoffset += mesh.tangents.Length * 16;
+                    buffViewOffset += mesh.tangents.Length * 16;
                 }
                 if (mesh.colors0.Length > 0)
                 {
                     var acc = model.CreateAccessor();
-                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.colors0.Length * 16);
+                    var buff = model.UseBufferView(buffer, buffViewOffset, mesh.colors0.Length * 16);
                     acc.SetData(buff, 0, mesh.colors0.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
                     prim.SetVertexAccessor("COLOR_0", acc);
-                    BuffViewoffset += mesh.colors0.Length * 16;
+                    buffViewOffset += mesh.colors0.Length * 16;
                 }
                 if (mesh.colors1.Length > 0)
                 {
                     var acc = model.CreateAccessor();
-                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.colors1.Length * 16);
+                    var buff = model.UseBufferView(buffer, buffViewOffset, mesh.colors1.Length * 16);
                     acc.SetData(buff, 0, mesh.colors1.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
                     prim.SetVertexAccessor("COLOR_1", acc);
-                    BuffViewoffset += mesh.colors1.Length * 16;
+                    buffViewOffset += mesh.colors1.Length * 16;
                 }
                 if (mesh.texCoords0.Length > 0)
                 {
                     var acc = model.CreateAccessor();
-                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.texCoords0.Length * 8);
+                    var buff = model.UseBufferView(buffer, buffViewOffset, mesh.texCoords0.Length * 8);
                     acc.SetData(buff, 0, mesh.texCoords0.Length, DimensionType.VEC2, EncodingType.FLOAT, false);
                     prim.SetVertexAccessor("TEXCOORD_0", acc);
-                    BuffViewoffset += mesh.texCoords0.Length * 8;
+                    buffViewOffset += mesh.texCoords0.Length * 8;
                 }
                 if (mesh.texCoords1.Length > 0)
                 {
                     var acc = model.CreateAccessor();
-                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.texCoords1.Length * 8);
+                    var buff = model.UseBufferView(buffer, buffViewOffset, mesh.texCoords1.Length * 8);
                     acc.SetData(buff, 0, mesh.texCoords1.Length, DimensionType.VEC2, EncodingType.FLOAT, false);
                     prim.SetVertexAccessor("TEXCOORD_1", acc);
-                    BuffViewoffset += mesh.texCoords1.Length * 8;
+                    buffViewOffset += mesh.texCoords1.Length * 8;
                 }
                 if (mesh.weightCount > 0)
                 {
@@ -551,43 +588,43 @@ namespace WolvenKit.Modkit.RED4
                     {
                         {
                             var acc = model.CreateAccessor();
-                            var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.positions.Length * 8);
+                            var buff = model.UseBufferView(buffer, buffViewOffset, mesh.positions.Length * 8);
                             acc.SetData(buff, 0, mesh.positions.Length, DimensionType.VEC4, EncodingType.UNSIGNED_SHORT, false);
                             prim.SetVertexAccessor("JOINTS_0", acc);
-                            BuffViewoffset += mesh.positions.Length * 8;
+                            buffViewOffset += mesh.positions.Length * 8;
                         }
                         {
                             var acc = model.CreateAccessor();
-                            var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.positions.Length * 16);
+                            var buff = model.UseBufferView(buffer, buffViewOffset, mesh.positions.Length * 16);
                             acc.SetData(buff, 0, mesh.positions.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
                             prim.SetVertexAccessor("WEIGHTS_0", acc);
-                            BuffViewoffset += mesh.positions.Length * 16;
+                            buffViewOffset += mesh.positions.Length * 16;
                         }
                         if (mesh.weightCount > 4)
                         {
                             {
                                 var acc = model.CreateAccessor();
-                                var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.positions.Length * 8);
+                                var buff = model.UseBufferView(buffer, buffViewOffset, mesh.positions.Length * 8);
                                 acc.SetData(buff, 0, mesh.positions.Length, DimensionType.VEC4, EncodingType.UNSIGNED_SHORT, false);
                                 prim.SetVertexAccessor("JOINTS_1", acc);
-                                BuffViewoffset += mesh.positions.Length * 8;
+                                buffViewOffset += mesh.positions.Length * 8;
                             }
                             {
                                 var acc = model.CreateAccessor();
-                                var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.positions.Length * 16);
+                                var buff = model.UseBufferView(buffer, buffViewOffset, mesh.positions.Length * 16);
                                 acc.SetData(buff, 0, mesh.positions.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
                                 prim.SetVertexAccessor("WEIGHTS_1", acc);
-                                BuffViewoffset += mesh.positions.Length * 16;
+                                buffViewOffset += mesh.positions.Length * 16;
                             }
                         }
                     }
                 }
                 {
                     var acc = model.CreateAccessor();
-                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.indices.Length * 2);
+                    var buff = model.UseBufferView(buffer, buffViewOffset, mesh.indices.Length * 2);
                     acc.SetData(buff, 0, mesh.indices.Length, DimensionType.SCALAR, EncodingType.UNSIGNED_SHORT, false);
                     prim.SetIndexAccessor(acc);
-                    BuffViewoffset += mesh.indices.Length * 2;
+                    buffViewOffset += mesh.indices.Length * 2;
                 }
                 var nod = model.UseScene(0).CreateNode(mesh.name);
                 nod.Mesh = mes;
@@ -597,33 +634,33 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 var obj = new { targetNames = names }; // anonymous variable/obj
-                mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
+                mes.Extras = JsonSerializer.SerializeToNode(obj, Gltf.SerializationOptions());
 
                 for (var i = 0; i < expTargets.Count; i++)
                 {
                     var dict = new Dictionary<string, Accessor>();
                     {
                         var acc = model.CreateAccessor();
-                        var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.positions.Length * 12);
+                        var buff = model.UseBufferView(buffer, buffViewOffset, mesh.positions.Length * 12);
                         acc.SetData(buff, 0, mesh.positions.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
                         dict.Add("POSITION", acc);
-                        BuffViewoffset += mesh.positions.Length * 12;
+                        buffViewOffset += mesh.positions.Length * 12;
                     }
                     if (mesh.normals.Length > 0)
                     {
                         var acc = model.CreateAccessor();
-                        var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.normals.Length * 12);
+                        var buff = model.UseBufferView(buffer, buffViewOffset, mesh.normals.Length * 12);
                         acc.SetData(buff, 0, mesh.normals.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
                         dict.Add("NORMAL", acc);
-                        BuffViewoffset += mesh.normals.Length * 12;
+                        buffViewOffset += mesh.normals.Length * 12;
                     }
                     if (mesh.tangents.Length > 0)
                     {
                         var acc = model.CreateAccessor();
-                        var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.tangents.Length * 12);
+                        var buff = model.UseBufferView(buffer, buffViewOffset, mesh.tangents.Length * 12);
                         acc.SetData(buff, 0, mesh.tangents.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
                         dict.Add("TANGENT", acc);
-                        BuffViewoffset += mesh.tangents.Length * 12;
+                        buffViewOffset += mesh.tangents.Length * 12;
                     }
                     prim.SetMorphTargetAccessors(i, dict);
                 }

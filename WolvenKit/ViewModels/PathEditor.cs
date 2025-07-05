@@ -1,5 +1,8 @@
+using System;
+using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Data;
+using System.Windows.Input;
 using Syncfusion.Windows.PropertyGrid;
 
 namespace WolvenKit.Controls
@@ -7,6 +10,8 @@ namespace WolvenKit.Controls
     //Custom Editor for folder type properties.
     public abstract class FolderPathEditorBase : ITypeEditor
     {
+        public PathEditorFilter[] Filters { get; set; }
+
         protected PathEditorView _wrappedControl;
         public void Attach(PropertyViewItem property, PropertyItem info)
         {
@@ -36,6 +41,9 @@ namespace WolvenKit.Controls
 
         public abstract object Create(PropertyInfo propertyInfo);
         public void Detach(PropertyViewItem property) { }
+        public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+
+        public object Create(PropertyDescriptor PropertyDescriptor) => throw new System.NotImplementedException();
     }
 
 
@@ -44,7 +52,7 @@ namespace WolvenKit.Controls
     {
         public override object Create(PropertyInfo propertyInfo)
         {
-            _wrappedControl = new PathEditorView(true, true);
+            _wrappedControl = new PathEditorView(true, true, Filters);
             return _wrappedControl;
         }
     }
@@ -54,7 +62,7 @@ namespace WolvenKit.Controls
     {
         public override object Create(PropertyInfo propertyInfo)
         {
-            _wrappedControl = new PathEditorView(true, false);
+            _wrappedControl = new PathEditorView(true, false, Filters);
             return _wrappedControl;
         }
     }
@@ -64,7 +72,7 @@ namespace WolvenKit.Controls
     {
         public override object Create(PropertyInfo propertyInfo)
         {
-            _wrappedControl = new PathEditorView(false, true);
+            _wrappedControl = new PathEditorView(false, true, Filters);
             return _wrappedControl;
         }
     }
@@ -74,62 +82,8 @@ namespace WolvenKit.Controls
     {
         public override object Create(PropertyInfo propertyInfo)
         {
-            _wrappedControl = new PathEditorView(false, false);
+            _wrappedControl = new PathEditorView(false, false, Filters);
             return _wrappedControl;
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-    //public class PathEditor : ITypeEditor
-    //{
-    //    AddPathDialogView _addPathDialogView;
-
-    //    public void Attach(PropertyViewItem property, PropertyItem info)
-    //    {
-    //        if (info.CanWrite)
-    //        {
-    //            var binding = new Binding("Value")
-    //            {
-    //                Mode = BindingMode.TwoWay,
-    //                Source = info,
-    //                ValidatesOnExceptions = true,
-    //                ValidatesOnDataErrors = true
-    //            };
-    //            BindingOperations.SetBinding(_addPathDialogView, AddPathDialogView.TextProperty, binding);
-    //        }
-    //        else
-    //        {
-    //            _addPathDialogView.IsEnabled = false;
-    //            var binding = new Binding("Value")
-    //            {
-    //                Source = info,
-    //                ValidatesOnExceptions = true,
-    //                ValidatesOnDataErrors = true
-    //            };
-    //            BindingOperations.SetBinding(_addPathDialogView, AddPathDialogView.TextProperty, binding);
-    //        }
-    //    }
-    //    public object Create(PropertyInfo PropertyInfo)
-    //    {
-    //        _addPathDialogView = new AddPathDialogView
-    //        {
-
-    //        };
-    //        return _addPathDialogView;
-    //    }
-
-    //    public void Detach(PropertyViewItem property)
-    //    {
-
-    //    }
-    //}
 }

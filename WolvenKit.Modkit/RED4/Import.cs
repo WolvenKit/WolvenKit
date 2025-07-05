@@ -2,20 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using SixLabors.ImageSharp;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using DynamicData.Kernel;
 using WolvenKit.Common;
-using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Core.Extensions;
+using WolvenKit.Helpers;
 using WolvenKit.Modkit.Extensions;
 using WolvenKit.Modkit.RED4.MLMask;
-using WolvenKit.RED4;
+using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
+using static WolvenKit.Modkit.RED4.MLMask.MLMASK;
+using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -30,9 +33,11 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="rawRelative"></param>
         /// <param name="args"></param>
         /// <param name="outDir">can be a depotpath, or if null the parent directory of the rawfile</param>
+        /// <param name="showVerboseLogOutput"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public bool Import(RedRelativePath rawRelative, GlobalImportArgs args, DirectoryInfo outDir = null)
+        public async Task<bool> Import(RedRelativePath rawRelative, GlobalImportArgs args, DirectoryInfo? outDir = null,
+            bool showVerboseLogOutput = false)
         {
             #region checks
 
@@ -47,8 +52,6 @@ namespace WolvenKit.Modkit.RED4
 
             #endregion
 
-            //var rawRelative = new RedRelativePath(inDir, rawFile.GetRelativePath(inDir));
-
             // check if the file can be directly imported
             // if not, rebuild buffers
             if (!Enum.TryParse(rawRelative.Extension, true, out ERawFileFormat extAsEnum))
@@ -56,31 +59,64 @@ namespace WolvenKit.Modkit.RED4
                 return RebuildBuffer(rawRelative, outDir);
             }
 
+            var gltfImportArgs = args.Get<GltfImportArgs>();
+            gltfImportArgs.ShowVerboseLogOutput = showVerboseLogOutput;
+
+            var commonImportArgs = args.Get<CommonImportArgs>();
+            
             // import files
-            switch (extAsEnum)
+            return extAsEnum switch
             {
-                case ERawFileFormat.bmp:
-                case ERawFileFormat.jpg:
-                case ERawFileFormat.png:
-                case ERawFileFormat.tiff:
-                case ERawFileFormat.tga:
-                case ERawFileFormat.dds:
-                    return HandleTextures(rawRelative, outDir, args);
-                case ERawFileFormat.fbx:
-                case ERawFileFormat.gltf:
-                case ERawFileFormat.glb:
-                    return ImportGltf(rawRelative, outDir, args.Get<GltfImportArgs>());
-                case ERawFileFormat.masklist:
-                    return ImportMlmask(rawRelative, outDir);
-                case ERawFileFormat.ttf:
-                    return ImportTtf(rawRelative, outDir, args.Get<CommonImportArgs>());
-                case ERawFileFormat.wav:
-                    return ImportWav(rawRelative, outDir, args.Get<OpusImportArgs>());
-                case ERawFileFormat.csv:
-                    return ImportCsv(rawRelative, outDir, args);
-                default:
-                    throw new ArgumentOutOfRangeException();
+                ERawFileFormat.bmp or ERawFileFormat.jpg or ERawFileFormat.png or ERawFileFormat.tiff or ERawFileFormat.tga or ERawFileFormat.dds or ERawFileFormat.cube => HandleTextures(rawRelative, outDir, args),
+                ERawFileFormat.gltf or ERawFileFormat.glb => ImportGltf(rawRelative, outDir, gltfImportArgs),
+                ERawFileFormat.fbx => ImportFbx(rawRelative, outDir, commonImportArgs),
+                ERawFileFormat.masklist => ImportMlmask(rawRelative, outDir),
+                ERawFileFormat.ttf => ImportTtf(rawRelative, outDir, commonImportArgs),
+                ERawFileFormat.wav => ImportWav(rawRelative, outDir, args.Get<OpusImportArgs>()),
+                ERawFileFormat.csv => ImportCsv(rawRelative, outDir, args),
+                ERawFileFormat.re => await ImportAnims(rawRelative, outDir, args.Get<ReImportArgs>()),
+                _ => throw new ArgumentOutOfRangeException(),
+            };
+        }
+
+        private void EnsureFolder(string path)
+        {
+            var directoryName = Path.GetDirectoryName(path);
+            if (directoryName?.Length > 0)
+            {
+                Directory.CreateDirectory(directoryName);
             }
+        }
+
+        private bool ImportFbx(RedRelativePath rawRelative, DirectoryInfo outDir, CommonImportArgs commonImportArgs)
+        {
+            _loggerService.Warning($"Use WolvenKit or REDmod to import fbx.");
+            return false;
+        }
+
+        private Task<bool> ImportAnims(RedRelativePath rawRelative, DirectoryInfo outDir, ReImportArgs importArgs)
+        {
+            var ext = rawRelative.Extension;
+            if (Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
+            {
+                var redModPath = importArgs.RedMod;
+                if (File.Exists(redModPath))
+                {
+                    importArgs.Input = rawRelative.FullPath;
+                    var args = importArgs.GetReImportArgs();
+                    var workingDir = Path.GetDirectoryName(redModPath);
+
+                    _loggerService.Info($"WorkDir: {workingDir}");
+                    _loggerService.Info($"Running commandlet: {args}");
+                    return ProcessUtil.RunProcessAsync(redModPath, args, workingDir);
+                }
+                else
+                {
+                    _loggerService.Error("redMod.exe not found");
+                }
+            }
+
+            return Task.FromResult(false);
         }
 
         private bool ImportCsv(RedRelativePath rawRelative, DirectoryInfo outDir, GlobalImportArgs args)
@@ -93,8 +129,10 @@ namespace WolvenKit.Modkit.RED4
                 // create redfile
                 var red = new CR2WFile();
 
-                var c2dArray = RedTypeManager.Create<C2dArray>();
-                c2dArray.CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC;
+                var c2dArray = new C2dArray
+                {
+                    CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC
+                };
 
                 // from csv
                 using (var infs = new FileStream(rawRelative.FullPath, FileMode.Open))
@@ -109,23 +147,26 @@ namespace WolvenKit.Modkit.RED4
                 var outpath = new RedRelativePath(rawRelative)
                     .ChangeBaseDir(outDir)
                     .ChangeExtension("");
+                EnsureFolder(outpath.FullPath);
                 using var fs = new FileStream(outpath.FullPath, FileMode.Create, FileAccess.ReadWrite);
-                using var writer = new CR2WWriter(fs);
+                using var writer = new CR2WWriter(fs) { LoggerService = _loggerService };
                 writer.WriteFile(red);
+
+                return true;
             }
 
-            return true;
+            return false;
         }
 
         private bool ImportWav(RedRelativePath rawRelative, DirectoryInfo outDir, OpusImportArgs opusImportArgs)
         {
-            _loggerService.Success($"Use WolvenKit to import opus.");
+            _loggerService.Warning($"Use WolvenKit to import opus.");
             return false;
         }
 
         private bool ImportMlmask(RedRelativePath rawRelative, DirectoryInfo outDir)
         {
-            var mlmask = new MLMASK();
+            var mlmask = new MLMASK(new MlMaskContainer(), _loggerService);
             var ext = rawRelative.Extension;
             if (Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
             {
@@ -186,7 +227,8 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            _loggerService.Warning($"No existing redfile found to rebuild for {rawRelative.Name}");
+            _loggerService.Warning($"No existing redfile found to rebuild for {rawRelative.Name}, check the wiki for more information:");
+            _loggerService.Info("\t https://wiki.redmodding.org/wolvenkit/wolvenkit-app/usage/import-export/models#importing-mesh-files");
             return false;
 
             bool RebuildTexture(string redparent)
@@ -216,7 +258,7 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="args"></param>
         /// <param name="outDir">must match the relative paths in indir!</param>
         /// <returns></returns>
-        public bool ImportFolder(DirectoryInfo inDir, GlobalImportArgs args, DirectoryInfo outDir = null)
+        public async Task<bool> ImportFolder(DirectoryInfo inDir, GlobalImportArgs args, DirectoryInfo? outDir = null)
         {
             #region checks
 
@@ -244,6 +286,7 @@ namespace WolvenKit.Modkit.RED4
                 .Where(_ => Enum.GetNames<ERawFileFormat>().Contains(_.TrimmedExtension().ToLower()))
                 .ToList();
             var failsCount = 0;
+
             foreach (var fi in rawFilesList)
             {
                 var ext = fi.TrimmedExtension();
@@ -254,7 +297,7 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 var redrelative = new RedRelativePath(inDir, fi.GetRelativePath(inDir));
-                if (!Import(redrelative, args, outDir))
+                if (!await Import(redrelative, args, outDir))
                 {
                     failsCount++;
                 }
@@ -267,423 +310,236 @@ namespace WolvenKit.Modkit.RED4
 
         private bool ImportTtf(RedRelativePath rawRelative, DirectoryInfo outDir, CommonImportArgs args)
         {
-            if (args.Keep)
+            var inbuffer = File.ReadAllBytes(rawRelative.FullName);
+
+            // create redengine file
+            var red = new CR2WFile();
+            var font = new rendFont
             {
-                var buffer = new FileInfo(rawRelative.FullName);
-                var redfile = FindRedFile(rawRelative, outDir);
+                CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC,
+                FontBuffer = new DataBuffer(inbuffer)
+            };
 
-                if (string.IsNullOrEmpty(redfile))
-                {
-                    _loggerService.Warning($"No existing redfile found to rebuild for {rawRelative.Name}");
-                    return false;
-                }
+            // add chunk
+            red.RootChunk = font;
 
-                using var fileStream = new FileStream(redfile, FileMode.Open, FileAccess.ReadWrite);
-                var result = Rebuild(fileStream, new List<FileInfo>() { buffer });
+            // write to file
+            var outpath = new RedRelativePath(rawRelative)
+                .ChangeBaseDir(outDir)
+                .ChangeExtension(ERedExtension.fnt.ToString());
+            EnsureFolder(outpath.FullPath);
+            using var fs = new FileStream(outpath.FullPath, FileMode.Create, FileAccess.Write);
+            using var writer = new CR2WWriter(fs) { LoggerService = _loggerService };
+            writer.WriteFile(red);
 
-                if (result)
-                {
-                    _loggerService.Success($"Rebuilt {redfile} with buffers");
-                }
-                else
-                {
-                    _loggerService.Error($"Failed to rebuild {redfile} with buffers");
-                }
-
-                return result;
-            }
-            else
-            {
-                var inbuffer = File.ReadAllBytes(rawRelative.FullName);
-
-                // create redengine file
-                var red = new CR2WFile();
-                var font = new rendFont
-                {
-                    CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC,
-                    FontBuffer = new DataBuffer(inbuffer)
-                };
-
-                // add chunk
-                red.RootChunk = font;
-
-                // write to file
-                var redpath = Path.ChangeExtension(rawRelative.FullName, ECookedFileFormat.fnt.ToString());
-                if (redpath == null)
-                {
-                    return false;
-                }
-
-                using var fs = new FileStream(redpath, FileMode.Create, FileAccess.Write);
-                using var writer = new CR2WWriter(fs);
-                writer.WriteFile(red);
-
-                return true;
-            }
+            return true;
         }
 
+        // app: texture group is set from filename in args
+        // cli: TODO
         private bool ImportXbm(RedRelativePath rawRelative, DirectoryInfo outDir, XbmImportArgs args)
         {
-            var rawExt = rawRelative.Extension;
-            var redfile = "";
-            var infile = rawRelative.FullName;
+            var infilePath = rawRelative.FullName;
 
-            CR2WFile cr2w = null;
-
-            // checks
-            if (args.Keep)
+            if (ImportExportArgs.IsCLI && args.Keep)
             {
-                redfile = FindRedFile(rawRelative, outDir, ERedExtension.xbm.ToString());
+                var redfile = FindRedFile(rawRelative, outDir, ERedExtension.xbm.ToString());
 
                 if (string.IsNullOrEmpty(redfile))
                 {
-                    _loggerService.Warning($"No existing redfile found to rebuild for {rawRelative.Name}");
+                    _loggerService.Warning($"No existing redfile found to rebuild for {rawRelative.Name}, check the wiki for more information:");
+                    _loggerService.Info("\t https://wiki.redmodding.org/wolvenkit/wolvenkit-app/usage/import-export/models#importing-mesh-files");
                     return false;
                 }
 
                 using var redstream = new FileStream(redfile, FileMode.Open);
                 using var fileReader = new BinaryReader(redstream);
 
-                cr2w = _wolvenkitFileService.ReadRed4File(fileReader);
+                var cr2w = _parserService.ReadRed4File(fileReader);
                 if (cr2w == null || cr2w.RootChunk is not CBitmapTexture xbm || xbm.RenderTextureResource == null || xbm.RenderTextureResource.RenderResourceBlobPC.Chunk is not rendRenderTextureBlobPC)
                 {
                     return false;
                 }
+
+                args = new XbmImportArgs(xbm.Setup);
             }
 
-            using var ms = new MemoryStream();
-
-            // convert to dds if not already
-            if (rawExt != EUncookExtension.dds.ToString())
+            var extension = Path.GetExtension(infilePath);
+            if (args.TextureGroup != GpuWrapApieTextureGroup.TEXG_Generic_LUT && extension == ".cube")
             {
-                if (!Enum.TryParse(rawExt, true, out EUncookExtension extAsEnum))
+                _loggerService.Error("Wrong import settings. cube files only work with \"TextureGroup = TEXG_Generic_LUT\"");
+                return false;
+            }
+
+            if (args.TextureGroup == GpuWrapApieTextureGroup.TEXG_Generic_LUT && extension != ".cube" && extension != ".dds")
+            {
+                _loggerService.Error($"Wrong import settings. LUT import only works with dds or cube. Got \"{extension}\"");
+                return false;
+            }
+
+            var image = RedImage.LoadFromFile(infilePath);
+            if (image == null)
+            {
+                _loggerService.Error($"\"{infilePath}\" could not be loaded!");
+                return false;
+            }
+
+            if (image.Metadata.Width % 2 != 0 || image.Metadata.Height % 2 != 0)
+            {
+                if (args.Compression != ETextureCompression.TCM_None)
                 {
-                    _loggerService.Warning($"Can not convert file to dds: {rawRelative.Name}");
+                    _loggerService.Error("Image dimension (width and/or height) is an odd number. To import regardless, set Compression to TCM_None at own risk.");
                     return false;
                 }
 
-                DXGI_FORMAT? format;
-
-                if (args.Keep)
+                if (args.TextureGroup != GpuWrapApieTextureGroup.TEXG_Generic_Data)
                 {
-                    var xbm = (CBitmapTexture)cr2w.RootChunk;
-
-                    var compression = Enums.ETextureCompression.TCM_None;
-                    if (xbm.Setup.Compression?.Value != null)
-                    {
-                        compression = xbm.Setup.Compression.Value.Value;
-                    }
-
-                    var rawfmt = Enums.ETextureRawFormat.TRF_TrueColor;
-                    if (xbm.Setup.RawFormat?.Value != null)
-                    {
-                        rawfmt = xbm.Setup.RawFormat.Value.Value;
-                    }
-
-                    format = CommonFunctions.GetDXGIFormat(compression, rawfmt, _loggerService);
+                    _loggerService.Warning("Image dimension (width and/or height) is an odd number. Texture might not work as expected.");
                 }
-                else
-                {
-                    // TODO
-                    if (rawExt == EUncookExtension.tga.ToString())
-                    {
-                        var md = Texconv.GetMetadataFromTGAFile(infile);
-                        format = md.Format;
-                    }
-                    else if (rawExt == EUncookExtension.png.ToString())
-                    {
-                        using (var stream = new FileStream(infile, FileMode.Open, FileAccess.Read, FileShare.Read))
-                        {
-                            // need to figure out how to decide format/etc from png header
-                            //var image = Png.Open(stream);
-                            //image.Header.ColorType;
-                            //var md = new DDSMetadata(new DirectXTexSharp.TexMetadata(), image.Header.BitDepth, true);
-
-                            //format = md.Format;
-                            format = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
-                        }
-                    }
-                    else
-                    {
-                        _loggerService.Error($"Direct {rawExt} import is not supported yet.");
-                        return false;
-                    }
-                }
-
-                using var fs = new FileStream(infile, FileMode.Open);
-                var ddsbuffer = Texconv.ConvertToDds(fs, extAsEnum, format);
-                ms.Write(ddsbuffer);
             }
-            else
+
+            // create resource
+            var bitmap = image.SaveToXBM(args, true);
+
+            var outpath = new RedRelativePath(rawRelative)
+                .ChangeBaseDir(outDir)
+                .ChangeExtension(ERedExtension.xbm.ToString());
+            if (!File.Exists(outpath.FullPath))
             {
-                using var fs = new FileStream(infile, FileMode.Open);
-                fs.Seek(0, SeekOrigin.Begin);
-                fs.CopyTo(ms);
+                EnsureFolder(outpath.FullPath);
             }
+            using var fs = new FileStream(outpath.FullPath, FileMode.Create, FileAccess.ReadWrite);
+            using var writer = new CR2WWriter(fs) { LoggerService = _loggerService };
+            writer.WriteFile(new CR2WFile { RootChunk = bitmap });
 
-            // read dds metadata
-            ms.Seek(0, SeekOrigin.Begin);
-
-            var span = new Span<byte>(new byte[148]);
-            ms.Read(span);
-
-            var metadata = Texconv.GetMetadataFromDDSMemory(span.ToArray());
-
-            // create xbm
-            if (args.Keep)
-            {
-                var xbm = (CBitmapTexture)cr2w.RootChunk;
-                if (!Equals((uint)xbm.Width, metadata.Width) || !Equals((uint)xbm.Height, metadata.Height))
-                {
-                    _loggerService.Error($"Resolution doesn't match. Aborting.");
-                    return false;
-                }
-
-                var rend = (rendRenderTextureBlobPC)xbm.RenderTextureResource.RenderResourceBlobPC.Chunk;
-                rend.TextureData.Buffer = RedBuffer.CreateBuffer(rend.TextureData.Buffer.Flags, ms.ToByteArray().Skip(148).ToArray());
-
-                using var fs = new FileStream(redfile, FileMode.Create, FileAccess.ReadWrite);
-                using var writer = new CR2WWriter(fs);
-                writer.WriteFile(cr2w);
-
-                return true;
-            }
-            else
-            {
-                var width = metadata.Width;
-                var height = metadata.Height;
-                var mipCount = metadata.Mipscount;
-                var slicecount = metadata.Slicecount;
-                var alignment = metadata.Bpp;
-                var fmt = metadata.Format;
-                var textureDataSize = ms.Length - 148; //GetBlockSize(width, fmt);
-
-                // create cr2wfile
-                cr2w = new CR2WFile();
-
-                // xbm chunk
-                var xbm = RedTypeManager.Create<CBitmapTexture>();
-                xbm.CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC;
-                xbm.Width = width;
-                xbm.Height = height;
-
-                SetTextureGroupSetup(xbm.Setup, cr2w);
-
-                // blob chunk
-                var blob = RedTypeManager.Create<rendRenderTextureBlobPC>();
-
-                xbm.RenderTextureResource = new rendRenderTextureResource
-                {
-                    RenderResourceBlobPC = blob
-                };
-
-                // create rendRenderTextureBlobPC chunk
-
-                // header
-                var header = RedTypeManager.Create<rendRenderTextureBlobHeader>();
-                header.Version = 2;
-                header.Flags = 1;
-
-                header.SizeInfo = RedTypeManager.Create<rendRenderTextureBlobSizeInfo>();
-                header.SizeInfo.Width = (ushort)width;
-                header.SizeInfo.Height = (ushort)height;
-
-                header.TextureInfo = RedTypeManager.Create<rendRenderTextureBlobTextureInfo>();
-                header.TextureInfo.TextureDataSize = (uint)textureDataSize;
-                header.TextureInfo.SliceSize = (uint)textureDataSize;
-                header.TextureInfo.DataAlignment = alignment;
-                header.TextureInfo.SliceCount = (ushort)slicecount;
-                header.TextureInfo.MipCount = (byte)mipCount;
-
-                // header.TextureInfo
-                var mipMapInfo = new CArray<rendRenderTextureBlobMipMapInfo>();
-                //var mipMapInfo = RedTypeManager.Create<CArray<rendRenderTextureBlobMipMapInfo>>();
-                {
-                    ms.Seek(148, SeekOrigin.Begin);
-
-                    var mipsizeH = height;
-                    var mipsizeW = width;
-                    var offset = 0;
-                    for (var i = 0; i < metadata.Mipscount; i++)
-                    {
-                        // slicepitch
-                        var slicepitch = Texconv.ComputeSlicePitch((int)mipsizeW, (int)mipsizeH, fmt);
-
-                        //rowpitch
-                        var rowpitch = Texconv.ComputeRowPitch((int)mipsizeW, (int)mipsizeH, fmt);
-
-                        var info = RedTypeManager.Create<rendRenderTextureBlobMipMapInfo>();
-                        info.Layout = new rendRenderTextureBlobMemoryLayout()
-                        {
-                            RowPitch = (uint)rowpitch,
-                            SlicePitch = (uint)slicepitch
-                        };
-                        info.Placement = new rendRenderTextureBlobPlacement()
-                        {
-                            Offset = (uint)offset,
-                            Size = (uint)slicepitch
-                        };
-
-                        offset += slicepitch;
-
-                        mipMapInfo.Add(info);
-
-                        mipsizeH = Math.Max(4, mipsizeH / 2);
-                        mipsizeW = Math.Max(4, mipsizeW / 2);
-                    }
-                }
-                header.MipMapInfo = mipMapInfo;
-
-                blob.Header = header;
-
-                // texdata buffer ref
-
-                // add chunks
-                cr2w.RootChunk = xbm;
-
-                // write
-                blob.TextureData = new SerializationDeferredDataBuffer
-                {
-                    Buffer = RedBuffer.CreateBuffer(131072, ms.ToByteArray().Skip(148).ToArray())
-                };
-
-                var outpath = new RedRelativePath(rawRelative)
-                    .ChangeBaseDir(outDir)
-                    .ChangeExtension(ERedExtension.xbm.ToString());
-                if (!File.Exists(outpath.FullPath))
-                {
-                    Directory.CreateDirectory(outpath.ToFileInfo().Directory.FullName);
-                }
-
-                using var fs = new FileStream(outpath.FullPath, FileMode.Create, FileAccess.ReadWrite);
-                using var writer = new CR2WWriter(fs);
-                writer.WriteFile(cr2w);
-            }
-
-#pragma warning disable CS0162 // Unreachable code detected
             return true;
-#pragma warning restore CS0162 // Unreachable code detected
-
-            #region local functions
-#pragma warning disable CS8321 // Local function is declared but never used
-
-            void SetTextureGroupSetup(STextureGroupSetup setup, CR2WFile cr2w)
-            {
-                // first check the user-texture group
-                //var (compression, rawformat, flags) = CommonFunctions.GetRedFormatsFromTextureGroup(args.TextureGroup);
-
-
-
-                setup.Group = args.TextureGroup;
-                setup.Compression = Enums.ETextureCompression.TCM_None;
-                setup.RawFormat = Enums.ETextureRawFormat.TRF_TrueColor;
-                setup.IsGamma = args.IsGamma;
-
-                //if (flags is CommonFunctions.ETexGroupFlags.Both or CommonFunctions.ETexGroupFlags.CompressionOnly)
-                //{
-                //    setup.Compression = new CEnum<Enums.ETextureCompression>(cr2w, setup.ParentVar as CVariable, "setup")
-                //    {
-                //        IsSerialized = true,
-                //        Value = compression
-                //    };
-                //}
-
-                //if (flags is CommonFunctions.ETexGroupFlags.Both or CommonFunctions.ETexGroupFlags.RawFormatOnly)
-                //{
-                //    setup.RawFormat = new CEnum<Enums.ETextureRawFormat>(cr2w, setup.ParentVar as CVariable, "rawFormat")
-                //    {
-                //        IsSerialized = true,
-                //        Value = rawformat
-                //    };
-                //}
-
-                //// if that didn't work, interpret the filename suffix
-                //if (rawRelative.Name.Contains('_'))
-                //{
-                //    // try interpret suffix
-                //    switch (rawRelative.Name.Split('_').Last())
-                //    {
-                //        case "d":
-                //        case "d01":
-
-                //            break;
-                //        case "e":
-
-                //            break;
-                //        case "r":
-                //        case "r01":
-
-                //            break;
-                //    }
-                //}
-
-                // if that also didn't work, just use default or skip
-                //TODO
-            }
-
-#pragma warning restore CS8321 // Local function is declared but never used
-            #endregion
-
         }
 
         private bool ImportGltf(RedRelativePath rawRelative, DirectoryInfo outDir, GltfImportArgs args)
         {
-            if (args.Keep)
+            var maybeType = TypeFromFileExt(rawRelative.Name);
+
+            var (internalExt, importFormat) = GetImportExtensionAndFormat(args, maybeType);
+
+            // Drops the .glb/.gltf, and either adds or replaces the already present type ext
+            var possibleRedPath =
+                Path.ChangeExtension(Path.ChangeExtension(Path.Join(outDir.FullName, rawRelative.RelativePath), null), internalExt);
+
+            var maybeMatchingRedFile =
+                File.Exists(possibleRedPath)
+                ? Optional.Some<string>(possibleRedPath)
+                : Optional.None<string>();
+
+            string redfile;
+
+            if (args.BaseMesh.FirstOrDefault() is FileEntry m)
             {
-                var redfile = FindRedFile(rawRelative, outDir, $".{args.importFormat.ToString().ToLower()}");
-
-                if (string.IsNullOrEmpty(redfile))
+                if (_archiveManager.Lookup(m.NameHash64).Value
+                    is Core.Interfaces.IGameFile file)
                 {
-                    _loggerService.Warning($"No existing redfile found to rebuild for {rawRelative.Name}");
+                    var name = rawRelative.NameWithoutExtension.ToLower() + ".mesh";
+                    var rr = new RedRelativePath(rawRelative);
+                    rr.ChangeBaseDir(outDir);
+                    var path = Path.GetDirectoryName(rr.FullName) ?? throw new DirectoryNotFoundException();
+                    var outpath = Path.Combine(path, name);
+                    EnsureFolder(outpath);
+                    using var fs = new FileStream(outpath, FileMode.Create);
+                    file.Extract(fs);
+
+                    redfile = FindRedFile(rr, outDir, internalExt);
+
+                }
+                else
+                {
+                    _loggerService.Error($"Could not open base mesh {m.FileName}");
                     return false;
-                }
-
-                var redfileName = Path.GetFileName(redfile);
-                using var redFs = new FileStream(redfile, FileMode.Open, FileAccess.ReadWrite);
-                try
-                {
-                    var result = false;
-                    switch (args.importFormat)
-                    {
-                        case GltfImportAsFormat.Mesh:
-                            result = ImportMesh(rawRelative.ToFileInfo(), redFs, args.Archives, args.validationMode, args.importMaterialOnly);
-                            break;
-                        case GltfImportAsFormat.Morphtarget:
-                            result = ImportMorphTargets(rawRelative.ToFileInfo(), redFs, args.Archives, args.validationMode);
-                            break;
-                    }
-
-                    if (result)
-                    {
-                        _loggerService.Success($"Rebuilt with buffers: {redfileName} ");
-                    }
-                    else
-                    {
-                        _loggerService.Error($"Failed to rebuild with buffers: {redfileName}");
-                    }
-                    return result;
-                }
-                catch (Exception e)
-                {
-                    _loggerService.Error(e);
-                    return false;
-                }
-                finally
-                {
-                    redFs.Close();
                 }
 
             }
+            else if (args.Keep)
+            {
+                if (!maybeMatchingRedFile.HasValue)
+                {
+                    _loggerService.Warning($"No existing redfile found to rebuild for {rawRelative.Name} (tried {possibleRedPath})");
+                    _loggerService.Warning($"Check the wiki for more information:");
+                    _loggerService.Info("\t https://wiki.redmodding.org/wolvenkit/wolvenkit-app/usage/import-export/models#importing-mesh-files");
+                    return false;
+                }
+
+                redfile = maybeMatchingRedFile.Value;
+            }
+            else
+            {
+                _loggerService.Warning($"{rawRelative.Name} - Direct mesh importing is not implemented");
+                return false;
+            }
+
+            var redfileName = Path.GetFileName(redfile);
+            using var redFs = new FileStream(redfile, FileMode.Open, FileAccess.ReadWrite);
+            try
+            {
+                var result = false;
+                switch (importFormat)
+                {
+                    case GltfImportAsFormat.Mesh:
+                        result = ImportMesh(rawRelative.ToFileInfo(), redFs, args);
+                        break;
+                    case GltfImportAsFormat.Morphtarget:
+                        result = ImportMorphTargets(rawRelative.ToFileInfo(), redFs, args);
+                        break;
+                    case GltfImportAsFormat.Anims:
+                        result = ImportAnims(rawRelative.ToFileInfo(), redFs, args);
+                        break;
+                    case GltfImportAsFormat.MeshWithRig:
+                        result = ImportMesh(rawRelative.ToFileInfo(), redFs, args);
+                        break;
+                    case GltfImportAsFormat.Rig:
+                        result = ImportRig(rawRelative.ToFileInfo(), redFs, args);
+                        break;
+                    case GltfImportAsFormat.PhysicalScene:
+                        result = ImportMesh(rawRelative.ToFileInfo(), redFs, args);
+                        break;
+                    default:
+                        break;
+                }
+
+                if (result)
+                {
+                    _loggerService.Success($"Rebuilt with buffers: {redfileName} (as {importFormat})");
+                }
+                else
+                {
+                    _loggerService.Error($"Failed to rebuild with buffers: {redfileName} (as {importFormat})");
+                }
+                return result;
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error(e);
+                return false;
+            }
+            finally
+            {
+                redFs.Close();
+            }
 
 
-            _loggerService.Warning($"{rawRelative.Name} - Direct mesh importing is not implemented");
-            return false;
         }
 
+        private static (string, GltfImportAsFormat) GetImportExtensionAndFormat(GltfImportArgs args, Optional<string> maybeType) =>
+            args.ImportFormat switch
+            {
+                GltfImportAsFormat.MeshWithRig => ($".mesh", args.ImportFormat),
+                GltfImportAsFormat.Anims => ($".anims", GltfImportAsFormat.Anims),
+                _ => (maybeType.HasValue ? maybeType.Value : ".mesh", args.ImportFormat), 
+            };
+
+
+#pragma warning disable IDE0072 // Add missing cases
         private static ECookedFileFormat FromRawExtension(ERawFileFormat rawextension) =>
             rawextension switch
             {
-                ERawFileFormat.fbx => ECookedFileFormat.mesh,
+                //ERawFileFormat.fbx => ECookedFileFormat.mesh,
                 ERawFileFormat.gltf => ECookedFileFormat.mesh,
                 ERawFileFormat.glb => ECookedFileFormat.mesh,
                 ERawFileFormat.ttf => ECookedFileFormat.fnt,
@@ -696,8 +552,9 @@ namespace WolvenKit.Modkit.RED4
                 //ERawFileFormat.wav => expr,
                 _ => throw new ArgumentOutOfRangeException(nameof(rawextension), rawextension, null)
             };
+#pragma warning restore IDE0072 // Add missing cases
 
-        private static string FindRedFile(RedRelativePath rawRelPath, DirectoryInfo outDir, string overrideExt = null)
+        private static string FindRedFile(RedRelativePath rawRelPath, DirectoryInfo outDir, string? overrideExt = null)
         {
             var ext = rawRelPath.Extension;
             if (!Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))

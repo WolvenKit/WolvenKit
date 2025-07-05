@@ -1,109 +1,26 @@
 using System;
-using System.Diagnostics;
-using System.IO;
-using System.Net.Http;
-using System.Net.NetworkInformation;
-using System.Reactive.Linq;
-using System.Runtime.InteropServices;
+using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
-using Microsoft.Web.WebView2.Core;
-using Octokit;
+using System.Xml;
+using ICSharpCode.AvalonEdit.Highlighting;
+using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using ReactiveUI;
 using Splat;
 using Syncfusion.SfSkinManager;
 using Syncfusion.Themes.MaterialDark.WPF;
-using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Helpers;
-using WolvenKit.Functionality.Services;
-using WolvenKit.ViewModels.Shell;
+using WolvenKit.App.Helpers;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Core.Helpers;
 using WolvenKit.Views.Shell;
 
 namespace WolvenKit
 {
     public static class Initializations
     {
-        [DllImport("WebView2Loader.dll", CallingConvention = CallingConvention.StdCall)]
-        private static extern int GetAvailableCoreWebView2BrowserVersionString(string browserExecutableFolder, out string version);
-
-        public static bool IsMissingWebView2() => GetAvailableCoreWebView2BrowserVersionString(null, out var edgeVersion) != 0 || edgeVersion == null;
-
-        public static async Task InitializeWebview2(ILoggerService _loggerService)
-        {
-            // check prerequisites
-            // check Webview2
-            //var keyName = @"SOFTWARE\Wow6432Node\Microsoft\EdgeUpdate\ClientState\{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}";
-            //var keyvalue = "pv";
-            //StaticReferences.IsWebView2Enabled = Models.Commonfunctions.RegistryValueExists(Microsoft.Win32.RegistryHive.LocalMachine, keyName, keyvalue);
-            StaticReferences.IsWebView2Enabled = !IsMissingWebView2();
-
-            if (!StaticReferences.IsWebView2Enabled)
-            {
-                try
-                {
-                    var bootstrapperLink = @"https://go.microsoft.com/fwlink/p/?LinkId=2124703";
-
-                    var host = new Uri(bootstrapperLink).Host;
-                    var reply = new Ping().Send(host, 3000);
-                    if (reply.Status != IPStatus.Success)
-                    {
-                        return;
-                    }
-
-                    var bootstrapper = Path.Combine(Path.GetTempPath(), "MicrosoftEdgeWebview2Setup.exe");
-                    if (!File.Exists(bootstrapper))
-                    {
-                        // download
-                        HttpClient client = new();
-                        var response = await client.GetAsync(new Uri(bootstrapperLink));
-                        response.EnsureSuccessStatusCode();
-
-                        await using var fs = new FileStream(bootstrapper, System.IO.FileMode.Create);
-                        await response.Content.CopyToAsync(fs);
-                    }
-
-                    var result = AdonisUI.Controls.MessageBox.Show(
-                        "This App requires the Microsoft Webview 2 runtime to properly work.\r\nClick OK to run the 'WebView2 Runtime installer' and close the app. Please restart afterwards.",
-                        "Microsoft Webview 2 runtime not installed",
-                        AdonisUI.Controls.MessageBoxButton.OKCancel,
-                        AdonisUI.Controls.MessageBoxImage.Error,
-                        AdonisUI.Controls.MessageBoxResult.OK);
-                    if (result == AdonisUI.Controls.MessageBoxResult.OK)
-                    {
-                        // install runtime with MicrosoftEdgeWebview2Setup.exe /silent /install
-                        var psi = new ProcessStartInfo
-                        {
-                            FileName = bootstrapper,
-                            //Arguments = $"/silent /install"
-                        };
-                        var p = Process.Start(psi);
-
-                        //System.Windows.Forms.Application.Restart();
-                        System.Windows.Application.Current.Shutdown();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    _loggerService.Error(ex);
-                    return;
-                }
-            }
-
-            var webViewData = ISettingsManager.GetWebViewDataPath();
-            Directory.CreateDirectory(webViewData);
-            WebView2Helper.objCoreWebView2Environment = await CoreWebView2Environment.CreateAsync(null, webViewData, null);
-        }
-
-        /// <summary>
-        /// Initialize Github RPC
-        /// </summary>
-        public static void InitializeGitHub() =>
-            StaticReferences.Githubclient =
-                new GitHubClient(new ProductHeaderValue("WolvenKit"))
-                {
-                    Credentials = Github_Helpers.GhubAuth("wolvenbot", "botwolven1")
-                };
-
         /// <summary>
         /// Initialize everything related to Theming.
         /// </summary>
@@ -112,33 +29,50 @@ namespace WolvenKit
             var settingsManager = Locator.Current.GetService<ISettingsManager>();
 
             HandyControl.Themes.ThemeManager.Current.SetCurrentValue(HandyControl.Themes.ThemeManager.ApplicationThemeProperty, HandyControl.Themes.ApplicationTheme.Dark);
-            //var themeResources = new HandyControl.Themes.ThemeResources { AccentColor = HandyControl.Tools.ResourceHelper.GetResource<Brush>("MahApps.Brushes.Accent3") };
-            var themeSettings = new MaterialDarkThemeSettings
+            if (settingsManager.UiScale == 0)
             {
-                PrimaryBackground = new SolidColorBrush(settingsManager.GetThemeAccent()),
-                BodyFontSize = 11,
-                HeaderFontSize = 14,
-                SubHeaderFontSize = 13,
-                TitleFontSize = 13,
-                SubTitleFontSize = 12,
-                BodyAltFontSize = 11,
-                FontFamily = new FontFamily("Segoe UI")
-            };
-            SfSkinManager.RegisterThemeSettings("MaterialDark", themeSettings);
-            SfSkinManager.ApplyStylesOnApplication = true;
+                settingsManager.UiScale = (int)(100.0 * ComputeScaleFromResolution(SystemParameters.PrimaryScreenHeight));
+            }
+            RegisterTheme(settingsManager);
+        }
+
+        public static void InitializeSyntaxHighlighting()
+        {
+            var customHighlightNames = new string[] { "JavaScript-DarkMode", "YAML" };
+
+            foreach (var customHighlightName in customHighlightNames)
+            {
+                // Load our custom highlighting definition
+                IHighlightingDefinition customHighlighting;
+                using var s = Assembly.GetExecutingAssembly().GetManifestResourceStream($"WolvenKit.Resources.SyntaxHighlighting.{customHighlightName}.xshd");
+                if (s == null)
+                {
+                    throw new InvalidOperationException("Could not find embedded resource");
+                }
+
+                using XmlReader reader = new XmlTextReader(s);
+                var hlXshdDef = HighlightingLoader.LoadXshd(reader);
+                customHighlighting = HighlightingLoader.Load(hlXshdDef, HighlightingManager.Instance);
+
+                // and register it in the HighlightingManager
+                HighlightingManager.Instance.RegisterHighlighting(hlXshdDef.Name, hlXshdDef.Extensions.ToArray(), customHighlighting);
+            }
         }
 
         public static void InitializeLicenses()
         {
-            Ab3d.Licensing.PowerToys.LicenseHelper.SetLicense(licenseOwner: "WolvenKit", licenseType: "FreeNonCommercialLicense-TeamDeveloperLicense", license: "9E18-4A3E-3951-8E9C-3686-ACE4-685B-6145-5799-42A9-F82C-C195-5495-5907-4F8D-38B7-661D-386C-5461-9B7C-70AE-46DC-F3CA-1B12");
-            Ab3d.Licensing.DXEngine.LicenseHelper.SetLicense(licenseOwner: "WolvenKit", licenseType: "FreeNonCommercialLicense-TeamDeveloperLicense", license: "F564-4078-3E78-F218-D27F-B191-4A32-AD76-2002-F1B1-EE27-7B15-5316-4CEA-5281-FF84-5B56-BECD-12CA-F307-E847-E014-7378-032C");
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDM1MDYwQDMxMzkyZTMxMmUzMGNBRjJJdnZoVnJjaklqMTVNL0FNR0JJR3dqR0Fac21YalpQOVEyTkd6bms9");
+            const string v_28_1_37 =
+                "MzY1NDE3MkAzMjM4MmUzMDJlMzBWTW0zT1RINnoxU1hvQU1BeElmM2JtNWdHaVJVMlFsSm1idVE1aFB4cTZZPQ==";
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(v_28_1_37);
         }
 
-        public static /*async Task*/ void InitializeShell(ISettingsManager settings)
+        public static void InitializeShell(ISettingsManager settingsManager)
         {
             // Set service locator.
             var mainWindow = Locator.Current.GetService<IViewFor<AppViewModel>>();
+
+            GcHelper.CleanupMemory();
+
             if (mainWindow is MainView window)
             {
                 window.Show();
@@ -146,28 +80,67 @@ namespace WolvenKit
 
             if (WolvenDBG.EnableTheming)
             {
-                ThemeInnerInit(settings);
+                RegisterTheme(settingsManager);
             }
         }
 
-        private static void ThemeInnerInit(ISettingsManager settings)
+        private static void RegisterTheme(ISettingsManager settingsManager)
         {
-            ControlzEx.Theming.ThemeManager.Current.ChangeTheme(System.Windows.Application.Current,
-                ControlzEx.Theming.RuntimeThemeGenerator.Current.GenerateRuntimeTheme("Dark", settings.GetThemeAccent(), false));
-            var themeSettings = new MaterialDarkThemeSettings
-            {
-                PrimaryBackground = new SolidColorBrush(settings.GetThemeAccent()),
-                BodyFontSize = 11,
-                HeaderFontSize = 14,
-                SubHeaderFontSize = 13,
-                TitleFontSize = 13,
-                SubTitleFontSize = 12,
-                BodyAltFontSize = 11,
-                FontFamily = new FontFamily("Segoe UI")
-            };
+            var themeSettings = BuildTheme(settingsManager);
 
             SfSkinManager.RegisterThemeSettings("MaterialDark", themeSettings);
-            //  SfSkinManager.SetTheme(StaticReferences.GlobalShell, new FluentTheme() { ThemeName = "MaterialDark", ShowAcrylicBackground = true });
+            SfSkinManager.ApplyStylesOnApplication = true;
+        }
+
+        // NOTE: used for debug environment
+        public static void UpdateTheme(ISettingsManager settingsManager)
+        {
+            var window = Application.Current.MainWindow;
+            // NOTE: trick SfSkinManager to unregister current ThemeSettings.
+            var theme = SfSkinManager.GetTheme(window);
+
+            theme.ThemeName = "";
+            var themeSettings = BuildTheme(settingsManager);
+
+            SfSkinManager.RegisterThemeSettings("MaterialDark", themeSettings);
+            SfSkinManager.ApplyStylesOnApplication = true;
+            SfSkinManager.SetTheme(window, new Theme("MaterialDark"));
+            window.InvalidateVisual();
+            window.UpdateLayout();
+            window.Visibility = Visibility.Collapsed;
+
+            Task.Delay(1000).ContinueWith(_ =>
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    window.InvalidateVisual();
+                    window.UpdateLayout();
+                    window.Visibility = Visibility.Visible;
+                });
+            });
+        }
+
+        private static IThemeSetting BuildTheme(ISettingsManager settingsManager)
+        {
+            return new MaterialDarkThemeSettings
+            {
+                PrimaryBackground = new SolidColorBrush(settingsManager.GetThemeAccent()),
+                BodyFontSize = 11 * settingsManager.UiScalePercentage,
+                HeaderFontSize = 14 * settingsManager.UiScalePercentage,
+                SubHeaderFontSize = 13 * settingsManager.UiScalePercentage,
+                TitleFontSize = 13 * settingsManager.UiScalePercentage,
+                SubTitleFontSize = 12 * settingsManager.UiScalePercentage,
+                BodyAltFontSize = 11 * settingsManager.UiScalePercentage,
+                FontFamily = new FontFamily("Segoe UI")
+            };
+        }
+
+        private static double ComputeScaleFromResolution(double height)
+        {
+            var scale = height / 1080.0;
+
+            scale = Math.Clamp(scale, 1.0, 4.0);
+            return scale;
         }
     }
 }

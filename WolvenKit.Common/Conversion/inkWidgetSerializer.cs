@@ -3,25 +3,23 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Conversion
 {
     public class inkWidgetSerializer : IXmlSerializable
     {
-        public inkWidget Root;
+        public inkWidget? Root;
 
         public inkWidgetSerializer()
         {
 
         }
 
-        public inkWidgetSerializer(inkWidget widget)
-        {
-            Root = widget;
-        }
+        public inkWidgetSerializer(inkWidget widget) => Root = widget;
 
-        public XmlSchema GetSchema() => null;
+        public XmlSchema? GetSchema() => null;
 
         public void ReadXml(XmlReader reader) => throw new NotImplementedException();
 
@@ -41,10 +39,10 @@ namespace WolvenKit.Common.Conversion
 
             if (widget is inkCompoundWidget compoundWidget)
             {
-                var imc = (inkMultiChildren)compoundWidget.Children.GetValue();
+                var imc = (inkMultiChildren)compoundWidget.Children.GetValue().NotNull();
                 foreach (var childHandle in imc.Children)
                 {
-                    var child = (inkWidget)childHandle.GetValue();
+                    var child = (inkWidget)childHandle.GetValue().NotNull();
                     WriteWidget(writer, child);
                 }
             }
@@ -61,14 +59,13 @@ namespace WolvenKit.Common.Conversion
 
             var childSets = new List<IRedType>();
 
-            var pis = RedReflection.GetTypeInfo(value.GetType()).PropertyInfos;
-            pis.Sort((a, b) => a.Name.CompareTo(b.Name));
+            var pis = RedReflection.GetTypeInfo(value).PropertyInfos.Sort((a, b) => a.Name.CompareTo(b.Name));
             pis.ForEach((pi) =>
             {
                 var name = !string.IsNullOrEmpty(pi.RedName) ? pi.RedName : pi.Name;
                 var propertyValue = ((RedBaseClass)value).GetProperty(name);
 
-                if (!RedReflection.IsDefault(value.GetType(), pi, propertyValue))
+                if (!pi.IsDefault(propertyValue))
                 {
                     var propertyName = pi.RedName;
                     switch (propertyName)
@@ -84,7 +81,7 @@ namespace WolvenKit.Common.Conversion
                     switch (propertyValue)
                     {
                         case IRedBaseHandle handle:
-                            var resolvedValue = handle.GetValue();
+                            var resolvedValue = handle.GetValue().NotNull();
                             if (resolvedValue is inkWidget widget)
                             {
                                 writer.WriteAttributeString(property + propertyName + "Path", widget.GetPath());
@@ -139,7 +136,7 @@ namespace WolvenKit.Common.Conversion
                             //writer.WriteAttributeString(property + propertyName + ".Y", vector2.Y.ToString());
                             break;
                         default:
-                            writer.WriteAttributeString(property + propertyName, propertyValue.ToString());
+                            writer.WriteAttributeString(property + propertyName, propertyValue?.ToString());
                             break;
                     }
                 }
@@ -154,13 +151,11 @@ namespace WolvenKit.Common.Conversion
                         writer.WriteStartElement("effects");
                         foreach (var handle in effects)
                         {
-                            var effect = handle.GetValue();
-                            if (effect != null)
-                            {
-                                writer.WriteStartElement(effect.GetType().Name);
-                                WriteWidgetAttributes(writer, effect);
-                                writer.WriteEndElement();
-                            }
+                            var effect = handle.GetValue().NotNull();
+
+                            writer.WriteStartElement(effect.GetType().Name);
+                            WriteWidgetAttributes(writer, effect);
+                            writer.WriteEndElement();
                         }
                         writer.WriteEndElement();
                         break;
@@ -169,13 +164,11 @@ namespace WolvenKit.Common.Conversion
                         writer.WriteStartElement("secondaryControllers");
                         foreach (var handle in controllers)
                         {
-                            var controller = handle.GetValue();
-                            if (controller != null)
-                            {
-                                writer.WriteStartElement(controller.GetType().Name);
-                                WriteWidgetAttributes(writer, controller);
-                                writer.WriteEndElement();
-                            }
+                            var controller = handle.GetValue().NotNull();
+
+                            writer.WriteStartElement(controller.GetType().Name);
+                            WriteWidgetAttributes(writer, controller);
+                            writer.WriteEndElement();
                         }
                         writer.WriteEndElement();
                         break;
@@ -184,15 +177,15 @@ namespace WolvenKit.Common.Conversion
                         writer.WriteStartElement("userData");
                         foreach (var handle in ary)
                         {
-                            var item = handle.GetValue();
-                            if (item != null)
-                            {
-                                writer.WriteStartElement(item.GetType().Name);
-                                WriteWidgetAttributes(writer, item);
-                                writer.WriteEndElement();
-                            }
+                            var item = handle.GetValue().NotNull();
+
+                            writer.WriteStartElement(item.GetType().Name);
+                            WriteWidgetAttributes(writer, item);
+                            writer.WriteEndElement();
                         }
                         writer.WriteEndElement();
+                        break;
+                    default:
                         break;
                 }
             }

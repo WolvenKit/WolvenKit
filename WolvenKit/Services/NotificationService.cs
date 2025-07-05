@@ -2,6 +2,7 @@ using System;
 using System.Windows;
 using System.Windows.Threading;
 using HandyControl.Controls;
+using WolvenKit.App.Helpers;
 using WolvenKit.Common.Services;
 
 namespace WolvenKit.Services
@@ -37,6 +38,8 @@ namespace WolvenKit.Services
                 case ENotificationCategory.Desktop:
                     ShowNotificationInDesktop(message, ENotificationType.Info);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(NotificationCategory), NotificationCategory, null);
             }
         }
 
@@ -50,6 +53,8 @@ namespace WolvenKit.Services
                 case ENotificationCategory.Desktop:
                     ShowNotificationInDesktop(message, ENotificationType.Success);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(NotificationCategory), NotificationCategory, null);
             }
         }
 
@@ -63,6 +68,8 @@ namespace WolvenKit.Services
                 case ENotificationCategory.Desktop:
                     ShowNotificationInDesktop(message, ENotificationType.Warning);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(NotificationCategory), NotificationCategory, null);
             }
         }
 
@@ -76,6 +83,8 @@ namespace WolvenKit.Services
                 case ENotificationCategory.Desktop:
                     ShowNotificationInDesktop(message, ENotificationType.Error);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(NotificationCategory), NotificationCategory, null);
             }
         }
 
@@ -89,6 +98,8 @@ namespace WolvenKit.Services
                 case ENotificationCategory.Desktop:
                     ShowNotificationInDesktop(message, ENotificationType.Fatal);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(NotificationCategory), NotificationCategory, null);
             }
         }
 
@@ -117,6 +128,8 @@ namespace WolvenKit.Services
                 case ENotificationCategory.Desktop:
                     AskInDesktop(message, isConfirmedFunc);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(NotificationCategory), NotificationCategory, null);
             }
 
         }
@@ -140,7 +153,7 @@ namespace WolvenKit.Services
                 ENotificationType.Fatal => () => Growl.FatalGlobal(message),
                 _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
             };
-            Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, action);
+            DispatcherHelper.RunOnMainThread(action, DispatcherPriority.Background);
         }
 
         private static void ShowNotificationInApp(string message, ENotificationType type)
@@ -154,7 +167,7 @@ namespace WolvenKit.Services
                 ENotificationType.Fatal => () => Growl.Fatal(message),
                 _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
             };
-            Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, action);
+            DispatcherHelper.RunOnMainThread(action, DispatcherPriority.Background);
         }
 
         #endregion

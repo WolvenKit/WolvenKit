@@ -5,7 +5,9 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using Microsoft.Win32;
 using Semver;
+using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.Core
 {
@@ -25,13 +27,25 @@ namespace WolvenKit.Core
             }
         }
 
+        public static SemVersion GetAssemblyVersion(Assembly? assembly)
+        {
+            if (assembly == null)
+            {
+                throw new ArgumentNullException(nameof(assembly));
+            }
+
+            var infoAttr = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+
+            return infoAttr != null ? SemVersion.Parse(infoAttr.InformationalVersion, SemVersionStyles.Strict) : SemVersion.Parse("1.0.0", SemVersionStyles.Strict);
+        }
+
         public static SemVersion GetAssemblyVersion(string assemblyName)
         {
             var runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
             var paths = new List<string>(runtimeAssemblies);
             if (paths == null)
             {
-                return SemVersion.Parse("1.0.0");
+                return SemVersion.Parse("1.0.0", SemVersionStyles.Strict);
             }
             var resolver = new PathAssemblyResolver(paths);
             var mlc = new MetadataLoadContext(resolver);
@@ -53,7 +67,7 @@ namespace WolvenKit.Core
 
                         if (t == nameof(AssemblyInformationalVersionAttribute))
                         {
-                            productVersion = (string)a.ConstructorArguments.First().Value;
+                            productVersion = a.ConstructorArguments.First().Value as string;
                             break;
                         }
                     }
@@ -64,7 +78,7 @@ namespace WolvenKit.Core
                     }
                 }
 
-                var version = SemVersion.Parse(productVersion);
+                var version = SemVersion.Parse(productVersion.NotNull(), SemVersionStyles.Strict);
                 return version;
             }
         }
@@ -77,18 +91,23 @@ namespace WolvenKit.Core
 
         public static (string, long) HashFileSHA512(string filepath)
         {
-            using (var shaM = SHA512.Create())
-            {
-                using var fileStream = File.OpenRead(filepath);
-                var hash1 = shaM.ComputeHash(fileStream);
-                var hashStr = BitConverter.ToString(hash1).Replace("-", "").ToLowerInvariant();
-                return (hashStr, fileStream.Length);
-            }
+            using var shaM = SHA512.Create();
+            using var fileStream = File.OpenRead(filepath);
+            var hash1 = shaM.ComputeHash(fileStream);
+            var hashStr = BitConverter.ToString(hash1).Replace("-", "").ToLowerInvariant();
+            return (hashStr, fileStream.Length);
         }
 
         // Display a byte array in a readable format.
         public static string PrettyByteArray(IEnumerable<byte> array) => array.Aggregate("", (current, t) => current + $"{t:X2}");
 
-
+        public static bool AreLongPathsEnabled()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return Registry.GetValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 0) is 1;
+            }
+            return true;
+        }
     }
 }

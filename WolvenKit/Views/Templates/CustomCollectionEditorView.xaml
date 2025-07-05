@@ -1,0 +1,35 @@
+<UserControl
+    x:Class="WolvenKit.Controls.CustomCollectionEditorView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    mc:Ignorable="d"
+    d:DesignWidth="200"
+    d:DesignHeight="50">
+    <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock
+            x:Name="filePathTextBox"
+            Grid.Column="0"
+            Padding="{DynamicResource WolvenKitMarginTinyLeft}"
+            VerticalAlignment="Center"
+            Text="{Binding Text}" />
+
+        <Button
+            Grid.Column="1"
+            Padding="2"
+            VerticalAlignment="Stretch"
+            Click="ButtonBase_OnClick">
+            <templates:IconBox
+                IconPack="Codicons"
+                Kind="Ellipsis"
+                Margin="{DynamicResource WolvenKitMarginTinyHorizontal}" />
+        </Button>
+    </Grid>
+</UserControl>

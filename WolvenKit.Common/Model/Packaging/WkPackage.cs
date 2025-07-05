@@ -14,8 +14,8 @@ namespace WolvenKit.Common.Model.Packaging
         #region Fields
 
         public string RootFolder;
-        private readonly XDocument Assembly;
-        private readonly string Icon;
+        private readonly XDocument? Assembly;
+        private readonly string? Icon;
 
         #endregion Fields
 
@@ -25,10 +25,7 @@ namespace WolvenKit.Common.Model.Packaging
         /// Collects the info and the files from an already created WolveKit package.
         /// </summary>
         /// <param name="Path"></param>
-        public WKPackage(string Path)
-        {
-            //TODO: Finish this once we crate the installer or whatever.
-        }
+        public WKPackage(string Path) => RootFolder = Path;//TODO: Finish this once we crate the installer or whatever.
 
         /// <summary>
         /// Creates a WolveKit package.
@@ -87,7 +84,7 @@ namespace WolvenKit.Common.Model.Packaging
             foreach (var filename in files)
             {
                 var fi = new FileInfo(filename);
-                var entryName = filename.Substring(folderOffset);
+                var entryName = filename[folderOffset..];
                 entryName = ZipEntry.CleanName(entryName);
                 var newEntry = new ZipEntry(entryName) { DateTime = fi.LastWriteTime, Size = fi.Length };
                 zipStream.PutNextEntry(newEntry);
@@ -151,27 +148,27 @@ namespace WolvenKit.Common.Model.Packaging
             var rootnode = new XElement("package", new XAttribute("version", version), new XAttribute("name", name));
             var authorelement = new XElement("author", new XElement("displayName", Author.Item1));
             var metadataelement = new XElement("metadata");
-            if (Author.Item2 != null || Author.Item2 != "")
+            //if (Author.Item2 is not null or not "")
             {
                 authorelement.Add(new XElement("actionLink", Author.Item2));
             }
 
-            if (Author.Item3 != null || Author.Item3 != "")
+            //if (Author.Item3 is not null or not "")
             {
                 authorelement.Add(new XElement("web", Author.Item3));
             }
 
-            if (Author.Item4 != null || Author.Item4 != "")
+            //if (Author.Item4 is not null or not "")
             {
                 authorelement.Add(new XElement("facebook", Author.Item4));
             }
 
-            if (Author.Item5 != null || Author.Item5 != "")
+            //if (Author.Item5 is not null or not "")
             {
                 authorelement.Add(new XElement("twitter", Author.Item5));
             }
 
-            if (Author.Item6 != null || Author.Item6 != "")
+            //if (Author.Item6 is not null or not "")
             {
                 authorelement.Add(new XElement("youtube", Author.Item6));
             }

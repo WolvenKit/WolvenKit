@@ -1,49 +1,30 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using DynamicData;
+using WolvenKit.App.Models;
 using WolvenKit.Common;
-using WolvenKit.Common.Model;
+using WolvenKit.Core.Interfaces;
 
-namespace WolvenKit.Functionality.Controllers
+namespace WolvenKit.App.Controllers;
+
+public class MockGameController : IGameController
 {
-    public class MockGameController : IGameController
-    {
-        public MockGameController()
-        {
-            _rootCache = new SourceList<RedFileSystemModel>();
-        }
+    public bool AddToMod(IGameFile file) => throw new NotImplementedException();
+    public Task<bool> AddFileToModModalAsync(IGameFile file) => throw new NotImplementedException();
 
+    public Task<bool> AddFileToModModalAsync(IGameFile file, ArchiveManagerScope searchScope) =>
+        throw new NotImplementedException();
 
-        #region Methods
+    public Task<bool> AddFileToModModalAsync(ulong hash) => throw new NotImplementedException();
 
-        private readonly SourceList<RedFileSystemModel> _rootCache;
+    public Task<bool> AddFileToModModalAsync(ulong hash, ArchiveManagerScope searchScope) =>
+        throw new NotImplementedException();
 
-        public bool IsManagerLoaded { get; set; } = true;
+    public bool AddToMod(ulong hash, ArchiveManagerScope searchScope) => throw new NotImplementedException();
 
-        public IObservable<IChangeSet<RedFileSystemModel>> ConnectHierarchy() => _rootCache.Connect();
-
-        public List<IArchiveManager> GetArchiveManagers(bool loadmods) => new List<IArchiveManager>();
-
-        public void AddToMod(IGameFile file) => throw new NotImplementedException();
-        public void AddToMod(ulong hash) => throw new NotImplementedException();
-
-        public List<string> GetAvaliableClasses() => new List<string>();
-
-        public async Task HandleStartup() => await Task.CompletedTask;//Nothing to do here :)
-
-        public Task<bool> PackProject() =>
-            //Nothing to do here :)
-            Task.FromResult(true);
-
-        public void InstallMod()
-        {
-        }
-
-        public Task<bool> PackAndInstallProject() =>
-            //Nothing to do here :)
-            new Task<bool>(new Func<bool>(() => true));
-
-        #endregion Methods
-    }
+    public bool AddToMod(IGameFile file, ArchiveManagerScope searchScope) => throw new NotImplementedException();
+    public bool AddToMod(ulong hash) => throw new NotImplementedException();
+    public async Task HandleStartup() => await Task.CompletedTask;
+    public Task<bool> LaunchProjectAsync(LaunchProfile profile) => throw new NotImplementedException();
+    public Task<bool> InstallProjectHotAsync() => throw new NotImplementedException();
+    public bool CleanAll(bool isPostBuild = false) => throw new NotImplementedException();
 }

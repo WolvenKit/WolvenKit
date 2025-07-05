@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.IO;
-using WolvenKit.RED4.Types.Exceptions;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -25,14 +27,21 @@ namespace WolvenKit.Modkit.RED4
         /// <returns></returns>
         private bool Rebuild(Stream redfileStream, IEnumerable<byte[]> buffersenumerable)
         {
-            var isResource = _wolvenkitFileService.IsCR2WFile(redfileStream);
+            var isResource = _parserService.IsCR2WFile(redfileStream);
             if (!isResource)
             {
                 return false;
             }
 
-            using var reader = new CR2WReader(redfileStream);
-            _ = reader.ReadFile(out var cr2w, false);
+            //using var reader = new CR2WReader(redfileStream);
+            //reader.ParsingError += args => args is InvalidDefaultValueEventArgs;
+            //_ = reader.ReadFile(out var cr2w, false);
+
+            if (!_parserService.TryReadRed4File(redfileStream, out var cr2w))
+            {
+                _loggerService.Error("Could not read file");
+                return false;
+            }
 
             var existingBuffers = cr2w.GetBuffers();
             var buffers = buffersenumerable.ToList();
@@ -49,7 +58,7 @@ namespace WolvenKit.Modkit.RED4
 
             // write cr2w
             redfileStream.Seek(0, SeekOrigin.Begin);
-            using var writer = new CR2WWriter(redfileStream);
+            using var writer = new CR2WWriter(redfileStream) { LoggerService = _loggerService };
             writer.WriteFile(cr2w);
 
             return true;
@@ -62,22 +71,31 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="buffers"></param>
         /// <returns></returns>
         /// <exception cref="FileNotFoundException"></exception>
-        private bool Rebuild(Stream redfileStream, IEnumerable<FileInfo> buffers) => throw new TodoException();/*AppendBuffersToFile(redfileStream);
+        private bool Rebuild(Stream redfileStream, IEnumerable<FileInfo> buffers)
+        {
+            AppendBuffersToFile(redfileStream);
 
             return true;
 
             void AppendBuffersToFile(Stream fileStream)
             {
-                var isResource = _wolvenkitFileService.IsCr2wFile(redfileStream);
+                var isResource = _parserService.IsCR2WFile(redfileStream);
                 if (!isResource)
                 {
                     return;
                 }
 
-                using var reader = new CR2WReader(redfileStream);
-                _ = reader.ReadFile(out var cr2w, false);
+                //using var reader = new CR2WReader(redfileStream);
+                //reader.ParsingError += args => args is InvalidDefaultValueEventArgs;
+                //_ = reader.ReadFile(out var cr2w, false);
 
-                var existingBuffers = cr2w.Debug.BufferInfos.ToList();
+                if (!_parserService.TryReadRed4File(redfileStream, out var cr2w))
+                {
+                    _loggerService.Error("Could not read file");
+                    return;
+                }
+
+                var existingBuffers = cr2w.GetBuffers();
 
                 // sort buffers numerically
                 var bufferlist = buffers.ToList();
@@ -87,6 +105,7 @@ namespace WolvenKit.Modkit.RED4
                         .OrderBy(_ => int.Parse(Path.GetExtension(_.FullName.Remove(_.FullName.Length - 7))[1..]))
                         .ToList();
                 }
+
                 if (bufferlist.All(_ => _.Extension == ".dds"))
                 {
                     // ml_w_knife__combat__grip1_01_masksset_0.dds
@@ -94,6 +113,11 @@ namespace WolvenKit.Modkit.RED4
                         .OrderBy(n => Regex.Replace(n.Name, @"\d+", n => n.Value.PadLeft(4, '0')))
                         //.OrderBy(_ => int.Parse(Path.GetExtension(_.FullName.Remove(_.FullName.Length - 4))[1..]))
                         .ToList();
+                }
+
+                if (bufferlist.Count != existingBuffers.Count)
+                {
+                    throw new NotSupportedException("Rebuild: Adding/Removing buffers is not supported");
                 }
 
                 for (var i = 0; i < bufferlist.Count; i++)
@@ -110,18 +134,12 @@ namespace WolvenKit.Modkit.RED4
                         continue;
                     }
 
-                    uint flags = 0;
-                    if (i < existingBuffers.Count)
-                    {
-                        flags = existingBuffers[i].flags;
-                    }
-
-                    cr2w.Buffers.Add(RedBuffer.CreateBuffer(flags, inbuffer));
+                    existingBuffers[i].SetBytes(inbuffer);
                 }
 
                 // write cr2w
                 redfileStream.Seek(0, SeekOrigin.Begin);
-                using var writer = new CR2WWriter(redfileStream);
+                using var writer = new CR2WWriter(redfileStream) { LoggerService = _loggerService };
                 writer.WriteFile(cr2w);
             }
 
@@ -151,6 +169,9 @@ namespace WolvenKit.Modkit.RED4
                                 fs.Seek(128, SeekOrigin.Begin);
                                 return br.ReadBytes((int)fs.Length - 128);
                             }
+
+                        default:
+                            break;
                     }
                 }
                 else
@@ -159,7 +180,8 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 return Array.Empty<byte>();
-            }*/
+            }
+        }
 
         /// <summary>
         /// Rebuilds a single raw buffer into its redfile
@@ -167,7 +189,7 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="rawRelativePath"></param>
         /// <param name="outDir"></param>
         /// <returns></returns>
-        public bool RebuildBuffer(RedRelativePath rawRelativePath, DirectoryInfo outDir = null)
+        public bool RebuildBuffer(RedRelativePath rawRelativePath, DirectoryInfo outDir)
         {
             var ext = rawRelativePath.Extension;
             // only buffers can be rebuilt
@@ -211,22 +233,24 @@ namespace WolvenKit.Modkit.RED4
             }
 
             // get all other buffers
-            var buffers = rawRelativePath.ToFileInfo().Directory
-                .GetFiles($"{rawRedFilePath.Name}.*.buffer", SearchOption.TopDirectoryOnly);
-
-            using var fileStream = new FileStream(redRelative.FullPath, FileMode.Open, FileAccess.ReadWrite);
-            var r = Rebuild(fileStream, buffers);
-
-            if (r)
+            var dir = rawRelativePath.ToFileInfo().Directory;
+            if (dir is not null)
             {
-                _loggerService.Success($"Succesfully rebuilt {redRelative.FullPath} with raw buffers");
-            }
-            else
-            {
-                _loggerService.Error($"Failed to rebuild {redRelative.FullPath} with raw buffers.");
-            }
+                var buffers = dir.GetFiles($"{rawRedFilePath.Name}.*.buffer", SearchOption.TopDirectoryOnly);
+                using var fileStream = new FileStream(redRelative.FullPath, FileMode.Open, FileAccess.ReadWrite);
+                var r = Rebuild(fileStream, buffers);
+                if (r)
+                {
+                    _loggerService.Success($"Succesfully rebuilt {redRelative.FullPath} with raw buffers");
+                }
+                else
+                {
+                    _loggerService.Error($"Failed to rebuild {redRelative.FullPath} with raw buffers.");
+                }
 
-            return r;
+                return r;
+            }
+            return false;
         }
 
         /// <summary>
@@ -236,7 +260,7 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="outDir"></param>
         /// <returns></returns>
         /// <exception cref="FileNotFoundException"></exception>
-        public bool RebuildFolder(DirectoryInfo inDir, DirectoryInfo outDir = null)
+        public bool RebuildFolder(DirectoryInfo inDir, DirectoryInfo outDir)
         {
             if (outDir is not { Exists: true })
             {
@@ -286,6 +310,7 @@ namespace WolvenKit.Modkit.RED4
                 _progressService.Report(progress / (float)buffersDict.Count);
             }
 
+            _progressService.Completed();
             _loggerService.Info($"Rebuilt {buffersDict.Count - failsCount}/{buffersDict.Count} file(s)");
             return true;
 

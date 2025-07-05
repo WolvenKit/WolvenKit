@@ -1,0 +1,690 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	public partial class gameuiWorldMapMenuGameController : gameuiMappinsContainerController
+	{
+		[Ordinal(16)] 
+		[RED("settingsRecordID")] 
+		public TweakDBID SettingsRecordID
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("selectedMappin")] 
+		public CWeakHandle<gameuiBaseWorldMapMappinController> SelectedMappin
+		{
+			get => GetPropertyValue<CWeakHandle<gameuiBaseWorldMapMappinController>>();
+			set => SetPropertyValue<CWeakHandle<gameuiBaseWorldMapMappinController>>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("playerOnTop")] 
+		public CBool PlayerOnTop
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("entityPreviewLibraryID")] 
+		public CName EntityPreviewLibraryID
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("entityPreviewSpawnContainer")] 
+		public inkCompoundWidgetReference EntityPreviewSpawnContainer
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("floorPlanSpawnContainer")] 
+		public inkCompoundWidgetReference FloorPlanSpawnContainer
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(22)] 
+		[RED("compassWidget")] 
+		public inkWidgetReference CompassWidget
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(23)] 
+		[RED("districtsContainer")] 
+		public inkCompoundWidgetReference DistrictsContainer
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(24)] 
+		[RED("subdistrictsContainer")] 
+		public inkCompoundWidgetReference SubdistrictsContainer
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(25)] 
+		[RED("mappinOutlinesContainer")] 
+		public inkCompoundWidgetReference MappinOutlinesContainer
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(26)] 
+		[RED("groupOutlinesContainer")] 
+		public inkCompoundWidgetReference GroupOutlinesContainer
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(27)] 
+		[RED("tooltipContainer")] 
+		public inkCompoundWidgetReference TooltipContainer
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(28)] 
+		[RED("tooltipOffset")] 
+		public inkMargin TooltipOffset
+		{
+			get => GetPropertyValue<inkMargin>();
+			set => SetPropertyValue<inkMargin>(value);
+		}
+
+		[Ordinal(29)] 
+		[RED("tooltipDistrictOffset")] 
+		public inkMargin TooltipDistrictOffset
+		{
+			get => GetPropertyValue<inkMargin>();
+			set => SetPropertyValue<inkMargin>(value);
+		}
+
+		[Ordinal(30)] 
+		[RED("districtView")] 
+		public CEnum<gameuiEWorldMapDistrictView> DistrictView
+		{
+			get => GetPropertyValue<CEnum<gameuiEWorldMapDistrictView>>();
+			set => SetPropertyValue<CEnum<gameuiEWorldMapDistrictView>>(value);
+		}
+
+		[Ordinal(31)] 
+		[RED("hoveredDistrict")] 
+		public CEnum<gamedataDistrict> HoveredDistrict
+		{
+			get => GetPropertyValue<CEnum<gamedataDistrict>>();
+			set => SetPropertyValue<CEnum<gamedataDistrict>>(value);
+		}
+
+		[Ordinal(32)] 
+		[RED("hoveredSubDistrict")] 
+		public CEnum<gamedataDistrict> HoveredSubDistrict
+		{
+			get => GetPropertyValue<CEnum<gamedataDistrict>>();
+			set => SetPropertyValue<CEnum<gamedataDistrict>>(value);
+		}
+
+		[Ordinal(33)] 
+		[RED("selectedDistrict")] 
+		public CEnum<gamedataDistrict> SelectedDistrict
+		{
+			get => GetPropertyValue<CEnum<gamedataDistrict>>();
+			set => SetPropertyValue<CEnum<gamedataDistrict>>(value);
+		}
+
+		[Ordinal(34)] 
+		[RED("canChangeCustomFilter")] 
+		public CBool CanChangeCustomFilter
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(35)] 
+		[RED("isZoomToMappinEnabled")] 
+		public CBool IsZoomToMappinEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(36)] 
+		[RED("preloaderWidget")] 
+		public inkWidgetReference PreloaderWidget
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(37)] 
+		[RED("gameTimeText")] 
+		public inkTextWidgetReference GameTimeText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(38)] 
+		[RED("fastTravelInstructions")] 
+		public inkWidgetReference FastTravelInstructions
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(39)] 
+		[RED("filterSelector")] 
+		public inkWidgetReference FilterSelector
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(40)] 
+		[RED("filterSelectorWarning")] 
+		public inkWidgetReference FilterSelectorWarning
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(41)] 
+		[RED("filterText")] 
+		public inkTextWidgetReference FilterText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(42)] 
+		[RED("districtIconImageContainer")] 
+		public inkWidgetReference DistrictIconImageContainer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(43)] 
+		[RED("districtIconImage")] 
+		public inkImageWidgetReference DistrictIconImage
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(44)] 
+		[RED("districtNameText")] 
+		public inkTextWidgetReference DistrictNameText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(45)] 
+		[RED("subdistrictNameText")] 
+		public inkTextWidgetReference SubdistrictNameText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(46)] 
+		[RED("locationAndGangsContainer")] 
+		public inkWidgetReference LocationAndGangsContainer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(47)] 
+		[RED("gangsInfoContainer")] 
+		public inkWidgetReference GangsInfoContainer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(48)] 
+		[RED("gangsList")] 
+		public inkCompoundWidgetReference GangsList
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(49)] 
+		[RED("questContainer")] 
+		public inkWidgetReference QuestContainer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(50)] 
+		[RED("questName")] 
+		public inkTextWidgetReference QuestName
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(51)] 
+		[RED("openInJournalButton")] 
+		public inkWidgetReference OpenInJournalButton
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(52)] 
+		[RED("objectiveName")] 
+		public inkTextWidgetReference ObjectiveName
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(53)] 
+		[RED("objectiveBackground")] 
+		public inkWidgetReference ObjectiveBackground
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(54)] 
+		[RED("objectiveFrame")] 
+		public inkWidgetReference ObjectiveFrame
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(55)] 
+		[RED("topShadow")] 
+		public inkWidgetReference TopShadow
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(56)] 
+		[RED("rightAxisZoomThreshold")] 
+		public CFloat RightAxisZoomThreshold
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(57)] 
+		[RED("customFilters")] 
+		public inkWidgetReference CustomFilters
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(58)] 
+		[RED("filtersList")] 
+		public inkVerticalPanelWidgetReference FiltersList
+		{
+			get => GetPropertyValue<inkVerticalPanelWidgetReference>();
+			set => SetPropertyValue<inkVerticalPanelWidgetReference>(value);
+		}
+
+		[Ordinal(59)] 
+		[RED("filterLeftArrow")] 
+		public inkWidgetReference FilterLeftArrow
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(60)] 
+		[RED("filterRightArrow")] 
+		public inkWidgetReference FilterRightArrow
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(61)] 
+		[RED("quickFilterIndicators")] 
+		public CArray<inkWidgetReference> QuickFilterIndicators
+		{
+			get => GetPropertyValue<CArray<inkWidgetReference>>();
+			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
+		}
+
+		[Ordinal(62)] 
+		[RED("customFiltersListAnimationDelay")] 
+		public CFloat CustomFiltersListAnimationDelay
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(63)] 
+		[RED("cameraMode")] 
+		public CEnum<gameuiEWorldMapCameraMode> CameraMode
+		{
+			get => GetPropertyValue<CEnum<gameuiEWorldMapCameraMode>>();
+			set => SetPropertyValue<CEnum<gameuiEWorldMapCameraMode>>(value);
+		}
+
+		[Ordinal(64)] 
+		[RED("menuEventDispatcher")] 
+		public CWeakHandle<inkMenuEventDispatcher> MenuEventDispatcher
+		{
+			get => GetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>();
+			set => SetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>(value);
+		}
+
+		[Ordinal(65)] 
+		[RED("tooltipController")] 
+		public CWeakHandle<WorldMapTooltipContainer> TooltipController
+		{
+			get => GetPropertyValue<CWeakHandle<WorldMapTooltipContainer>>();
+			set => SetPropertyValue<CWeakHandle<WorldMapTooltipContainer>>(value);
+		}
+
+		[Ordinal(66)] 
+		[RED("gameTimeTextParams")] 
+		public CHandle<textTextParameterSet> GameTimeTextParams
+		{
+			get => GetPropertyValue<CHandle<textTextParameterSet>>();
+			set => SetPropertyValue<CHandle<textTextParameterSet>>(value);
+		}
+
+		[Ordinal(67)] 
+		[RED("previousHoveredDistrict")] 
+		public CEnum<gamedataDistrict> PreviousHoveredDistrict
+		{
+			get => GetPropertyValue<CEnum<gamedataDistrict>>();
+			set => SetPropertyValue<CEnum<gamedataDistrict>>(value);
+		}
+
+		[Ordinal(68)] 
+		[RED("currentHoveredDistrict")] 
+		public CEnum<gamedataDistrict> CurrentHoveredDistrict
+		{
+			get => GetPropertyValue<CEnum<gamedataDistrict>>();
+			set => SetPropertyValue<CEnum<gamedataDistrict>>(value);
+		}
+
+		[Ordinal(69)] 
+		[RED("showedSubdistrictGangs")] 
+		public CBool ShowedSubdistrictGangs
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(70)] 
+		[RED("player")] 
+		public CWeakHandle<gameObject> Player
+		{
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
+		}
+
+		[Ordinal(71)] 
+		[RED("audioSystem")] 
+		public CWeakHandle<gameGameAudioSystem> AudioSystem
+		{
+			get => GetPropertyValue<CWeakHandle<gameGameAudioSystem>>();
+			set => SetPropertyValue<CWeakHandle<gameGameAudioSystem>>(value);
+		}
+
+		[Ordinal(72)] 
+		[RED("journalManager")] 
+		public CWeakHandle<gameJournalManager> JournalManager
+		{
+			get => GetPropertyValue<CWeakHandle<gameJournalManager>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
+		}
+
+		[Ordinal(73)] 
+		[RED("mappinSystem")] 
+		public CWeakHandle<gamemappinsMappinSystem> MappinSystem
+		{
+			get => GetPropertyValue<CWeakHandle<gamemappinsMappinSystem>>();
+			set => SetPropertyValue<CWeakHandle<gamemappinsMappinSystem>>(value);
+		}
+
+		[Ordinal(74)] 
+		[RED("mapBlackboard")] 
+		public CWeakHandle<gameIBlackboard> MapBlackboard
+		{
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
+		}
+
+		[Ordinal(75)] 
+		[RED("mapDefinition")] 
+		public CHandle<UI_MapDef> MapDefinition
+		{
+			get => GetPropertyValue<CHandle<UI_MapDef>>();
+			set => SetPropertyValue<CHandle<UI_MapDef>>(value);
+		}
+
+		[Ordinal(76)] 
+		[RED("trackedObjective")] 
+		public CWeakHandle<gameJournalQuestObjectiveBase> TrackedObjective
+		{
+			get => GetPropertyValue<CWeakHandle<gameJournalQuestObjectiveBase>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalQuestObjectiveBase>>(value);
+		}
+
+		[Ordinal(77)] 
+		[RED("trackedQuest")] 
+		public CWeakHandle<gameJournalQuest> TrackedQuest
+		{
+			get => GetPropertyValue<CWeakHandle<gameJournalQuest>>();
+			set => SetPropertyValue<CWeakHandle<gameJournalQuest>>(value);
+		}
+
+		[Ordinal(78)] 
+		[RED("mappinsPositions")] 
+		public CArray<Vector3> MappinsPositions
+		{
+			get => GetPropertyValue<CArray<Vector3>>();
+			set => SetPropertyValue<CArray<Vector3>>(value);
+		}
+
+		[Ordinal(79)] 
+		[RED("lastRightAxisYAmount")] 
+		public CFloat LastRightAxisYAmount
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(80)] 
+		[RED("justOpenedQuestJournal")] 
+		public CBool JustOpenedQuestJournal
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(81)] 
+		[RED("initMappinFocus")] 
+		public CHandle<MapMenuUserData> InitMappinFocus
+		{
+			get => GetPropertyValue<CHandle<MapMenuUserData>>();
+			set => SetPropertyValue<CHandle<MapMenuUserData>>(value);
+		}
+
+		[Ordinal(82)] 
+		[RED("currentQuickFilterIndex")] 
+		public CInt32 CurrentQuickFilterIndex
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(83)] 
+		[RED("currentCustomFilterIndex")] 
+		public CInt32 CurrentCustomFilterIndex
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(84)] 
+		[RED("spawnedCustomFilterIndex")] 
+		public CInt32 SpawnedCustomFilterIndex
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(85)] 
+		[RED("gangsAsyncSpawnRequests")] 
+		public CArray<CWeakHandle<inkAsyncSpawnRequest>> GangsAsyncSpawnRequests
+		{
+			get => GetPropertyValue<CArray<CWeakHandle<inkAsyncSpawnRequest>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<inkAsyncSpawnRequest>>>(value);
+		}
+
+		[Ordinal(86)] 
+		[RED("customFiltersList")] 
+		public CArray<CWeakHandle<WorldMapFiltersListItem>> CustomFiltersList
+		{
+			get => GetPropertyValue<CArray<CWeakHandle<WorldMapFiltersListItem>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<WorldMapFiltersListItem>>>(value);
+		}
+
+		[Ordinal(87)] 
+		[RED("animationProxy")] 
+		public CHandle<inkanimProxy> AnimationProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(88)] 
+		[RED("entityAttached")] 
+		public CBool EntityAttached
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(89)] 
+		[RED("readyToZoom")] 
+		public CBool ReadyToZoom
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(90)] 
+		[RED("isHoveringOverFilters")] 
+		public CBool IsHoveringOverFilters
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(91)] 
+		[RED("isPanning")] 
+		public CBool IsPanning
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(92)] 
+		[RED("isZooming")] 
+		public CBool IsZooming
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(93)] 
+		[RED("pressedRMB")] 
+		public CBool PressedRMB
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(94)] 
+		[RED("startedFastTraveling")] 
+		public CBool StartedFastTraveling
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public gameuiWorldMapMenuGameController()
+		{
+			EntityPreviewSpawnContainer = new inkCompoundWidgetReference();
+			FloorPlanSpawnContainer = new inkCompoundWidgetReference();
+			CompassWidget = new inkWidgetReference();
+			DistrictsContainer = new inkCompoundWidgetReference();
+			SubdistrictsContainer = new inkCompoundWidgetReference();
+			MappinOutlinesContainer = new inkCompoundWidgetReference();
+			GroupOutlinesContainer = new inkCompoundWidgetReference();
+			TooltipContainer = new inkCompoundWidgetReference();
+			TooltipOffset = new inkMargin();
+			TooltipDistrictOffset = new inkMargin();
+			HoveredDistrict = Enums.gamedataDistrict.Invalid;
+			HoveredSubDistrict = Enums.gamedataDistrict.Invalid;
+			SelectedDistrict = Enums.gamedataDistrict.Invalid;
+			CanChangeCustomFilter = true;
+			PreloaderWidget = new inkWidgetReference();
+			GameTimeText = new inkTextWidgetReference();
+			FastTravelInstructions = new inkWidgetReference();
+			FilterSelector = new inkWidgetReference();
+			FilterSelectorWarning = new inkWidgetReference();
+			FilterText = new inkTextWidgetReference();
+			DistrictIconImageContainer = new inkWidgetReference();
+			DistrictIconImage = new inkImageWidgetReference();
+			DistrictNameText = new inkTextWidgetReference();
+			SubdistrictNameText = new inkTextWidgetReference();
+			LocationAndGangsContainer = new inkWidgetReference();
+			GangsInfoContainer = new inkWidgetReference();
+			GangsList = new inkCompoundWidgetReference();
+			QuestContainer = new inkWidgetReference();
+			QuestName = new inkTextWidgetReference();
+			OpenInJournalButton = new inkWidgetReference();
+			ObjectiveName = new inkTextWidgetReference();
+			ObjectiveBackground = new inkWidgetReference();
+			ObjectiveFrame = new inkWidgetReference();
+			TopShadow = new inkWidgetReference();
+			RightAxisZoomThreshold = 0.800000F;
+			CustomFilters = new inkWidgetReference();
+			FiltersList = new inkVerticalPanelWidgetReference();
+			FilterLeftArrow = new inkWidgetReference();
+			FilterRightArrow = new inkWidgetReference();
+			QuickFilterIndicators = new();
+			MappinsPositions = new();
+			GangsAsyncSpawnRequests = new();
+			CustomFiltersList = new();
+
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
+	}
+}

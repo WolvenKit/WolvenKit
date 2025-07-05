@@ -1,7 +1,9 @@
 using System;
+using System.ComponentModel;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media;
 using Syncfusion.Windows.PropertyGrid;
 using Syncfusion.Windows.Tools.Controls;
@@ -15,17 +17,21 @@ namespace WolvenKit.Converters
     {
         public static ITypeEditor GetPropertyEditor(Type PropertyType)
         {
-            if (PropertyType.IsAssignableTo(typeof(BaseStringType)))
+            if (PropertyType.IsAssignableTo(typeof(CString)))
             {
-                return new TextEditor();
+                return new StringEditor();
+            }
+            if (PropertyType.IsAssignableTo(typeof(CName)))
+            {
+                return new CNameEditor();
+            }
+            if (PropertyType.IsAssignableTo(typeof(NodeRef)))
+            {
+                return new NodeRefEditor();
             }
             if (PropertyType.IsAssignableTo(typeof(IRedPrimitive<ulong>)))
             {
                 return new UlongEditor();
-            }
-            if (PropertyType.IsAssignableTo(typeof(IRedInteger)))
-            {
-                return new IntegerEditor();
             }
             if (PropertyType.IsAssignableTo(typeof(FixedPoint)))
             {
@@ -35,6 +41,10 @@ namespace WolvenKit.Converters
             {
                 return new FloatEditor();
             }
+            if (PropertyType.IsAssignableTo(typeof(IRedInteger)))
+            {
+                return new IntegerEditor();
+            }
             if (PropertyType.IsAssignableTo(typeof(IRedPrimitive<bool>)))
             {
                 return new BoolEditor();
@@ -43,18 +53,20 @@ namespace WolvenKit.Converters
             {
                 return new EnumEditor();
             }
+            /*
             if (PropertyType.IsAssignableTo(typeof(IRedBaseHandle)))
             {
                 return new ChunkPtrEditor();
             }
+            */
             if (PropertyType.IsAssignableTo(typeof(IRedRef)))
             {
                 return new RefEditor();
             }
-            if (PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
-            {
-                return new CurveEditor();
-            }
+            //if (PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
+            //{
+            //    return new CurveEditor();
+            //}
             if (PropertyType.IsAssignableTo(typeof(CColor)))
             {
                 return new ColorEditor();
@@ -62,6 +74,7 @@ namespace WolvenKit.Converters
 
             return null;
         }
+        /*
         public class BaseTypeEditor : ITypeEditor
         {
             private RedBaseTypeEditor _editor;
@@ -80,14 +93,18 @@ namespace WolvenKit.Converters
             public object Create(PropertyInfo propertyInfo)
             {
                 _editor = new RedBaseTypeEditor();
-
                 return _editor;
             }
+
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+            
             public void Detach(PropertyViewItem property)
             {
 
             }
         }
+        */
 
         public class ColorEditor : ITypeEditor
         {
@@ -124,52 +141,56 @@ namespace WolvenKit.Converters
 
                 return _editor;
             }
+
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+
             public void Detach(PropertyViewItem property)
             {
 
             }
         }
 
-        public class CurveEditor : ITypeEditor
-        {
-            private RedCurveEditor _editor;
-
-            public void Attach(PropertyViewItem property, PropertyItem info)
-            {
-                if (info.CanWrite)
-                {
-                    var binding = new Binding("Value")
-                    {
-                        Mode = BindingMode.TwoWay,
-                        Source = info,
-                        ValidatesOnExceptions = true,
-                        ValidatesOnDataErrors = true,
-                    };
-                    BindingOperations.SetBinding(_editor, RedCurveEditor.RedCurveProperty, binding);
-                }
-                else
-                {
-                    _editor.SetCurrentValue(UIElement.IsEnabledProperty, false);
-                    var binding = new Binding("Value")
-                    {
-                        Source = info,
-                        ValidatesOnExceptions = true,
-                        ValidatesOnDataErrors = true
-                    };
-                    BindingOperations.SetBinding(_editor, RedCurveEditor.RedCurveProperty, binding);
-                }
-            }
-            public object Create(PropertyInfo propertyInfo)
-            {
-                _editor = new RedCurveEditor();
-
-                return _editor;
-            }
-            public void Detach(PropertyViewItem property)
-            {
-
-            }
-        }
+        //public class CurveEditor : ITypeEditor
+        //{
+        //    private RedCurveEditor _editor;
+        //
+        //    public void Attach(PropertyViewItem property, PropertyItem info)
+        //    {
+        //        if (info.CanWrite)
+        //        {
+        //            var binding = new Binding("Value")
+        //            {
+        //                Mode = BindingMode.TwoWay,
+        //                Source = info,
+        //                ValidatesOnExceptions = true,
+        //                ValidatesOnDataErrors = true,
+        //            };
+        //            BindingOperations.SetBinding(_editor, RedCurveEditor.RedCurveProperty, binding);
+        //        }
+        //        else
+        //        {
+        //            _editor.SetCurrentValue(UIElement.IsEnabledProperty, false);
+        //            var binding = new Binding("Value")
+        //            {
+        //                Source = info,
+        //                ValidatesOnExceptions = true,
+        //                ValidatesOnDataErrors = true
+        //            };
+        //            BindingOperations.SetBinding(_editor, RedCurveEditor.RedCurveProperty, binding);
+        //        }
+        //    }
+        //    public object Create(PropertyInfo propertyInfo)
+        //    {
+        //        _editor = new RedCurveEditor();
+        //
+        //        return _editor;
+        //    }
+        //    public void Detach(PropertyViewItem property)
+        //    {
+        //
+        //    }
+        //}
 
         public class RefEditor : ITypeEditor
         {
@@ -206,12 +227,17 @@ namespace WolvenKit.Converters
 
                 return _editor;
             }
+
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+
             public void Detach(PropertyViewItem property)
             {
 
             }
         }
 
+        /*
         public class ChunkPtrEditor : ITypeEditor
         {
             private HandleTemplateView _editor;
@@ -244,14 +270,18 @@ namespace WolvenKit.Converters
             public object Create(PropertyInfo propertyInfo)
             {
                 _editor = new HandleTemplateView();
-
                 return _editor;
             }
+            
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+            
             public void Detach(PropertyViewItem property)
             {
 
             }
         }
+        */
 
         public class EnumEditor : ITypeEditor
         {
@@ -288,6 +318,10 @@ namespace WolvenKit.Converters
 
                 return _editor;
             }
+
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+
             public void Detach(PropertyViewItem property)
             {
 
@@ -329,13 +363,107 @@ namespace WolvenKit.Converters
 
                 return _editor;
             }
+
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+
             public void Detach(PropertyViewItem property)
             {
 
             }
         }
 
-        public class TextEditor : ITypeEditor
+        public class CNameEditor : ITypeEditor
+        {
+            private RedCNameEditor _editor;
+
+            public void Attach(PropertyViewItem property, PropertyItem info)
+            {
+                if (info.CanWrite)
+                {
+                    var binding = new Binding("Value")
+                    {
+                        Mode = BindingMode.TwoWay,
+                        Source = info,
+                        ValidatesOnExceptions = true,
+                        ValidatesOnDataErrors = true,
+                    };
+                    BindingOperations.SetBinding(_editor, RedCNameEditor.RedStringProperty, binding);
+                }
+                else
+                {
+                    _editor.SetCurrentValue(UIElement.IsEnabledProperty, false);
+                    var binding = new Binding("Value")
+                    {
+                        Source = info,
+                        ValidatesOnExceptions = true,
+                        ValidatesOnDataErrors = true
+                    };
+                    BindingOperations.SetBinding(_editor, RedCNameEditor.RedStringProperty, binding);
+                }
+            }
+            public object Create(PropertyInfo propertyInfo)
+            {
+                _editor = new RedCNameEditor();
+
+                return _editor;
+            }
+
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+
+            public void Detach(PropertyViewItem property)
+            {
+
+            }
+        }
+
+        public class NodeRefEditor : ITypeEditor
+        {
+            private RedNodeRefEditor _editor;
+
+            public void Attach(PropertyViewItem property, PropertyItem info)
+            {
+                if (info.CanWrite)
+                {
+                    var binding = new Binding("Value")
+                    {
+                        Mode = BindingMode.TwoWay,
+                        Source = info,
+                        ValidatesOnExceptions = true,
+                        ValidatesOnDataErrors = true,
+                    };
+                    BindingOperations.SetBinding(_editor, RedNodeRefEditor.RedNodeRefProperty, binding);
+                }
+                else
+                {
+                    _editor.SetCurrentValue(UIElement.IsEnabledProperty, false);
+                    var binding = new Binding("Value")
+                    {
+                        Source = info,
+                        ValidatesOnExceptions = true,
+                        ValidatesOnDataErrors = true
+                    };
+                    BindingOperations.SetBinding(_editor, RedNodeRefEditor.RedNodeRefProperty, binding);
+                }
+            }
+            public object Create(PropertyInfo propertyInfo)
+            {
+                _editor = new RedNodeRefEditor();
+
+                return _editor;
+            }
+
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+
+            public void Detach(PropertyViewItem property)
+            {
+
+            }
+        }
+
+        public class StringEditor : ITypeEditor
         {
             private RedStringEditor _editor;
 
@@ -370,6 +498,10 @@ namespace WolvenKit.Converters
 
                 return _editor;
             }
+
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+
             public void Detach(PropertyViewItem property)
             {
 
@@ -411,6 +543,10 @@ namespace WolvenKit.Converters
 
                 return _editor;
             }
+
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+
             public void Detach(PropertyViewItem property)
             {
 
@@ -452,6 +588,10 @@ namespace WolvenKit.Converters
 
                 return _editor;
             }
+
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+
             public void Detach(PropertyViewItem property)
             {
 
@@ -493,6 +633,10 @@ namespace WolvenKit.Converters
 
                 return _editor;
             }
+
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+
             public void Detach(PropertyViewItem property)
             {
 
@@ -534,6 +678,10 @@ namespace WolvenKit.Converters
 
                 return _editor;
             }
+
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+
             public void Detach(PropertyViewItem property)
             {
 
@@ -577,6 +725,10 @@ namespace WolvenKit.Converters
 
                 return _editor;
             }
+
+            public object Create(PropertyDescriptor PropertyDescriptor) => throw new NotImplementedException();
+            public bool ShouldPropertyGridTryToHandleKeyDown(Key key) => true;
+
             public void Detach(PropertyViewItem property)
             {
 

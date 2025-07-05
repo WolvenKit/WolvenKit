@@ -55,25 +55,25 @@ namespace CP77.Common.Image
             for (var i = 0; i < blocks.Length; i++)
             {
                 //This could be a lot neater
-                dataRaw[xOffset + 0 + (yOffset + 0) * width] = (byte)(blocks[i].R(0) * 255.0f);
-                dataRaw[xOffset + 1 + (yOffset + 0) * width] = (byte)(blocks[i].R(1) * 255.0f);
-                dataRaw[xOffset + 2 + (yOffset + 0) * width] = (byte)(blocks[i].R(2) * 255.0f);
-                dataRaw[xOffset + 3 + (yOffset + 0) * width] = (byte)(blocks[i].R(3) * 255.0f);
+                dataRaw[xOffset + 0 + ((yOffset + 0) * width)] = (byte)(blocks[i].R(0) * 255.0f);
+                dataRaw[xOffset + 1 + ((yOffset + 0) * width)] = (byte)(blocks[i].R(1) * 255.0f);
+                dataRaw[xOffset + 2 + ((yOffset + 0) * width)] = (byte)(blocks[i].R(2) * 255.0f);
+                dataRaw[xOffset + 3 + ((yOffset + 0) * width)] = (byte)(blocks[i].R(3) * 255.0f);
 
-                dataRaw[xOffset + 0 + (yOffset + 1) * width] = (byte)(blocks[i].R(4) * 255.0f);
-                dataRaw[xOffset + 1 + (yOffset + 1) * width] = (byte)(blocks[i].R(5) * 255.0f);
-                dataRaw[xOffset + 2 + (yOffset + 1) * width] = (byte)(blocks[i].R(6) * 255.0f);
-                dataRaw[xOffset + 3 + (yOffset + 1) * width] = (byte)(blocks[i].R(7) * 255.0f);
+                dataRaw[xOffset + 0 + ((yOffset + 1) * width)] = (byte)(blocks[i].R(4) * 255.0f);
+                dataRaw[xOffset + 1 + ((yOffset + 1) * width)] = (byte)(blocks[i].R(5) * 255.0f);
+                dataRaw[xOffset + 2 + ((yOffset + 1) * width)] = (byte)(blocks[i].R(6) * 255.0f);
+                dataRaw[xOffset + 3 + ((yOffset + 1) * width)] = (byte)(blocks[i].R(7) * 255.0f);
 
-                dataRaw[xOffset + 0 + (yOffset + 2) * width] = (byte)(blocks[i].R(8) * 255.0f);
-                dataRaw[xOffset + 1 + (yOffset + 2) * width] = (byte)(blocks[i].R(9) * 255.0f);
-                dataRaw[xOffset + 2 + (yOffset + 2) * width] = (byte)(blocks[i].R(10) * 255.0f);
-                dataRaw[xOffset + 3 + (yOffset + 2) * width] = (byte)(blocks[i].R(11) * 255.0f);
+                dataRaw[xOffset + 0 + ((yOffset + 2) * width)] = (byte)(blocks[i].R(8) * 255.0f);
+                dataRaw[xOffset + 1 + ((yOffset + 2) * width)] = (byte)(blocks[i].R(9) * 255.0f);
+                dataRaw[xOffset + 2 + ((yOffset + 2) * width)] = (byte)(blocks[i].R(10) * 255.0f);
+                dataRaw[xOffset + 3 + ((yOffset + 2) * width)] = (byte)(blocks[i].R(11) * 255.0f);
 
-                dataRaw[xOffset + 0 + (yOffset + 3) * width] = (byte)(blocks[i].R(12) * 255.0f);
-                dataRaw[xOffset + 1 + (yOffset + 3) * width] = (byte)(blocks[i].R(13) * 255.0f);
-                dataRaw[xOffset + 2 + (yOffset + 3) * width] = (byte)(blocks[i].R(14) * 255.0f);
-                dataRaw[xOffset + 3 + (yOffset + 3) * width] = (byte)(blocks[i].R(15) * 255.0f);
+                dataRaw[xOffset + 0 + ((yOffset + 3) * width)] = (byte)(blocks[i].R(12) * 255.0f);
+                dataRaw[xOffset + 1 + ((yOffset + 3) * width)] = (byte)(blocks[i].R(13) * 255.0f);
+                dataRaw[xOffset + 2 + ((yOffset + 3) * width)] = (byte)(blocks[i].R(14) * 255.0f);
+                dataRaw[xOffset + 3 + ((yOffset + 3) * width)] = (byte)(blocks[i].R(15) * 255.0f);
 
                 xOffset += 4;
                 if (xOffset == width)
@@ -115,7 +115,7 @@ namespace CP77.Common.Image
                 if (red_0 > red_1)
                 {
                     index--;
-                    return (fred_0 * ((float)7 - index) + fred_1 * index) / 7.0f;
+                    return ((fred_0 * ((float)7 - index)) + (fred_1 * index)) / 7.0f;
                 }
                 else
                 {
@@ -130,11 +130,11 @@ namespace CP77.Common.Image
                     }
 
                     index--;
-                    return (fred_0 * ((float)5 - index) + fred_1 * index) / 5.0f;
+                    return ((fred_0 * ((float)5 - index)) + (fred_1 * index)) / 5.0f;
                 }
             }
 
-            private uint GetIndex(int offset) => (uint)(data >> (3 * offset + 16)) & 0x07;
+            private uint GetIndex(int offset) => (uint)(data >> ((3 * offset) + 16)) & 0x07;
 
             [FieldOffset(0)] private readonly ulong data;
 

@@ -1,0 +1,128 @@
+<UserControl
+    x:Class="WolvenKit.Views.Templates.IconBox"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WolvenKit.Views.Templates"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    mc:Ignorable="d"
+    d:DesignHeight="120"
+    d:DesignWidth="120">
+    <UserControl.Resources>
+        <DataTemplate x:Key="EmptyTemplate" />
+
+        <!-- https://pictogrammers.com/library/mdi/ -->
+        <DataTemplate x:Key="MaterialTemplate">
+            <iconPacks:PackIconMaterial
+                Kind="{Binding Kind}"
+                Foreground="{Binding Foreground,
+                                     FallbackValue=White}"
+                DataContext="{Binding RelativeSource={RelativeSource FindAncestor,
+                                                                     AncestorType={x:Type local:IconBox}}}"
+                RotationAngle="{Binding RotationAngle}" />
+        </DataTemplate>
+
+        <!-- https://fonts.google.com/icons -->
+        <DataTemplate x:Key="MaterialDesignTemplate">
+            <iconPacks:PackIconMaterialDesign
+                Kind="{Binding Kind}"
+                Foreground="{Binding Foreground,
+                                     FallbackValue=White}"
+                DataContext="{Binding RelativeSource={RelativeSource FindAncestor,
+                                                                     AncestorType={x:Type local:IconBox}}}"
+                RotationAngle="{Binding RotationAngle}" />
+        </DataTemplate>
+
+        <!-- https://microsoft.github.io/vscode-codicons/dist/codicon.html -->
+        <DataTemplate x:Key="CodiconsTemplate">
+            <iconPacks:PackIconCodicons
+                Kind="{Binding Kind}"
+                Foreground="{Binding Foreground,
+                                     FallbackValue=White}"
+                DataContext="{Binding RelativeSource={RelativeSource FindAncestor,
+                                                                     AncestorType={x:Type local:IconBox}}}"
+                RotationAngle="{Binding RotationAngle}" />
+        </DataTemplate>
+
+        <!-- deprecated - https://forkaweso.me/Fork-Awesome/cheatsheet/ -->
+        <DataTemplate x:Key="ForkAwesomeTemplate">
+            <iconPacks:PackIconForkAwesome
+                Kind="{Binding Kind}"
+                Foreground="{Binding Foreground,
+                                     FallbackValue=White}"
+                DataContext="{Binding RelativeSource={RelativeSource FindAncestor,
+                                                                     AncestorType={x:Type local:IconBox}}}"
+                RotationAngle="{Binding RotationAngle}" />
+        </DataTemplate>
+
+        <!-- https://iconscout.com/unicons/solid-icons -->
+        <DataTemplate x:Key="UniconsTemplate">
+            <iconPacks:PackIconUnicons
+                Kind="{Binding Kind}"
+                Foreground="{Binding Foreground,
+                                     FallbackValue=White}"
+                DataContext="{Binding RelativeSource={RelativeSource FindAncestor,
+                                                                     AncestorType={x:Type local:IconBox}}}"
+                RotationAngle="{Binding RotationAngle}" />
+        </DataTemplate>
+
+        <!-- https://icons.getbootstrap.com -->
+        <DataTemplate x:Key="BootstrapTemplate">
+            <iconPacks:PackIconBootstrapIcons
+                Kind="{Binding Kind}"
+                Foreground="{Binding Foreground,
+                                     FallbackValue=White}"
+                DataContext="{Binding RelativeSource={RelativeSource FindAncestor,
+                                                                     AncestorType={x:Type local:IconBox}}}"
+                RotationAngle="{Binding RotationAngle}" />
+        </DataTemplate>
+
+        <!-- https://vaadin.com/docs/latest/components/icons/default-icons -->
+        <DataTemplate x:Key="VaadinTemplate">
+            <iconPacks:PackIconVaadinIcons
+                Kind="{Binding Kind}"
+                Foreground="{Binding Foreground,
+                                     FallbackValue=White}"
+                DataContext="{Binding RelativeSource={RelativeSource FindAncestor,
+                                                                     AncestorType={x:Type local:IconBox}}}"
+                RotationAngle="{Binding RotationAngle}" />
+        </DataTemplate>
+
+        <!-- https://icongr.am/octicons -->
+        <DataTemplate x:Key="OcticonsTemplate">
+            <iconPacks:PackIconOcticons
+                Kind="{Binding Kind}"
+                Foreground="{Binding Foreground,
+                                     FallbackValue=White}"
+                DataContext="{Binding RelativeSource={RelativeSource FindAncestor,
+                                                                     AncestorType={x:Type local:IconBox}}}"
+                RotationAngle="{Binding RotationAngle}" />
+        </DataTemplate>
+
+        <local:IconPackSelector
+            x:Key="IconPackSelector"
+            EmptyTemplate="{StaticResource EmptyTemplate}"
+            MaterialTemplate="{StaticResource MaterialTemplate}"
+            MaterialDesignTemplate="{StaticResource MaterialDesignTemplate}"
+            CodiconsTemplate="{StaticResource CodiconsTemplate}"
+            ForkAwesomeTemplate="{StaticResource ForkAwesomeTemplate}"
+            UniconsTemplate="{StaticResource UniconsTemplate}"
+            BootstrapTemplate="{StaticResource BootstrapTemplate}"
+            VaadinTemplate="{StaticResource VaadinTemplate}"
+            OcticonsTemplate="{StaticResource OcticonsTemplate}" />
+    </UserControl.Resources>
+
+    <Viewbox
+        Width="{Binding Size}"
+        Height="{Binding Size}"
+        Margin="{Binding Margin}"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:IconBox}}"
+        Stretch="Uniform">
+        <ContentControl
+            Content="{Binding IconPack}"
+            ContentTemplateSelector="{StaticResource IconPackSelector}" />
+    </Viewbox>
+</UserControl>

@@ -3,14 +3,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using SharpGLTF.Schema2;
-using SharpGLTF.Validation;
+using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Exceptions;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4.GeneralStructs;
+using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
-using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.Types;
+using Mat4 = System.Numerics.Matrix4x4;
+using Quat = System.Numerics.Quaternion;
 using Vec2 = System.Numerics.Vector2;
 using Vec3 = System.Numerics.Vector3;
 using Vec4 = System.Numerics.Vector4;
@@ -19,160 +24,581 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-        public bool ImportMesh(FileInfo inGltfFile, Stream inmeshStream, List<Archive> archives = null, ValidationMode vmode = ValidationMode.Strict, bool importMaterialOnly = false, Stream outStream = null)
+        //WIP does not do the thing yet
+        public bool ImportRig(FileInfo inGltfFile, Stream rigStream, GltfImportArgs args)
         {
-            var cr2w = _wolvenkitFileService.ReadRed4File(inmeshStream);
+            var cr2w = _parserService.ReadRed4File(rigStream);
 
-            if (cr2w == null || cr2w.RootChunk is not CMesh meshBlob || meshBlob.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
+            if (cr2w is not { RootChunk: animRig rig })
             {
                 return false;
             }
 
-            if (File.Exists(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")))
+            var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.ValidationMode));
+
+            //VerifyGLTF(model);
+
+            List<LogicalChildOfRoot> armature;
+
+            var joints = new List<(Node Joint, Mat4 InverseBindMatrix)>();
+            var jointlist = new List<Node>();
+            var jointnames = new List<string>();
+            var jointparentnames = new List<string>();
+            var ibm = new List<Mat4>();
+            var wm = new List<Mat4>();
+
+
+            if (model.LogicalSkins.Count > 0)
             {
-                if (archives != null)
+                armature = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => (LogicalChildOfRoot)model.LogicalSkins[0]).ToList();
+                joints = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_)).ToList();
+                jointlist = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).Joint).ToList();
+                jointnames = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).Joint.Name).ToList();
+                jointparentnames = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).Joint.VisualParent.Name).ToList();
+                ibm = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).InverseBindMatrix).ToList();
+                wm = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).Joint.WorldMatrix).ToList();
+            }
+            else
+            {
+                if (model.LogicalNodes.Count > 0)
                 {
-                    WriteMatToMesh(ref cr2w, File.ReadAllText(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")), archives);
+                    armature = Enumerable.Range(0, model.LogicalNodes.Count).Select(_ => (LogicalChildOfRoot)model.LogicalNodes[_]).ToList();
+                    jointlist = Enumerable.Range(0, armature.Count).Select(_ => (Node)armature[_]).ToList();
+                    jointnames = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_]).Name).ToList();
+                    jointparentnames = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_]).VisualParent is null
+                                                                        ? "firstbone" : ((Node)armature[_]).VisualParent.Name).ToList();
+                    wm = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_]).WorldMatrix).ToList();
+
+                    for (var i = 0; i < wm.Count; i++)
+                    {
+                        var temp = new Mat4();
+                        Mat4.Invert(wm[i], out temp);
+                        ibm.Add(temp);
+                    }
+                    //ibm = Enumerable.Range(0, wm.Count).Select(_ => Mat4.Invert( wm[_], out ibm[_] )).ToList();
+                    joints = Enumerable.Range(0, armature.Count).Select(_ => (jointlist[_], ibm[_])).ToList();
                 }
-                if (importMaterialOnly)
+            }
+
+            int[]? GetLevels(string root = "Root")
+            {
+                var rootIndex = jointnames.IndexOf("Root");
+                var treeLevel = new int[jointnames.Count];
+
+                if (jointparentnames[rootIndex].Contains("Armature"))
+                {
+                    void rec(string parent, int level)
+                    {
+                        var tIndex = Enumerable.Range(0, jointnames.Count).Where(i => jointparentnames[i] == parent).ToList();
+                        foreach (var ind in tIndex)
+                        {
+                            treeLevel[ind] = level;
+                            rec(jointnames[ind], level + 1);
+                        }
+                    }
+                    rec(root, 0);
+                    return treeLevel;
+                }
+                return null;
+            }
+
+            Mat4.Invert(joints[1].Joint.WorldMatrix, out var inversedWorldMatrix);
+            Mat4.Invert(joints[1].Joint.LocalMatrix, out var inversedLocalMatrix);
+
+            var oriRotM = Mat4.CreateFromQuaternion(joints[1].Joint.LocalTransform.Rotation);
+            var oriScaM = Mat4.CreateScale(joints[1].Joint.LocalTransform.Scale);
+            var oriTraM = Mat4.CreateTranslation(joints[1].Joint.LocalTransform.Translation);
+
+            var rotM = oriScaM * joints[1].InverseBindMatrix * oriTraM;
+            Mat4.Invert(rotM, out rotM);
+
+            var manualTRS = oriTraM * oriRotM * oriScaM;
+            Mat4.Invert(manualTRS, out var inversedManualTRS);
+
+            var manualRotM = oriScaM * inversedManualTRS * oriTraM;
+            Mat4.Invert(manualRotM, out manualRotM);
+
+            var inv2 = oriTraM * rotM * oriScaM;
+
+            var localInvRotM = oriScaM * inversedLocalMatrix * oriTraM;
+            Mat4.Invert(localInvRotM, out localInvRotM);
+
+            var rotationVector = Quat.CreateFromRotationMatrix(rotM);
+            var manualRotationVector = Quat.CreateFromRotationMatrix(manualRotM);
+            var localRotationVector = Quat.CreateFromRotationMatrix(localInvRotM);
+
+            var levels = GetLevels("Root");
+            if (levels is not null)
+            {
+                for (var i = 0; i < rig.BoneNames.Count; i++)
+                {
+                    var currentBone = rig.BoneNames[i];
+                    var index = jointnames.IndexOf(currentBone.ToString().NotNull());
+                    var parindex = jointnames.IndexOf(jointlist[index].VisualParent.Name);
+                    var transform = rig.BoneTransforms[i].NotNull();
+
+                    {
+                        /*
+                        transform.Rotation.I = jointlist[index].LocalTransform.Rotation.X;
+                        transform.Rotation.J = -jointlist[index].LocalTransform.Rotation.Z;
+                        transform.Rotation.K = jointlist[index].LocalTransform.Rotation.Y;
+                        transform.Rotation.R = jointlist[index].LocalTransform.Rotation.W;
+
+                        transform.Scale.W = 1;
+                        transform.Scale.X = jointlist[index].LocalTransform.Scale.X;
+                        transform.Scale.Y = jointlist[index].LocalTransform.Scale.Y;
+                        transform.Scale.Z = jointlist[index].LocalTransform.Scale.Z;
+
+                        transform.Translation.W = i == 0 ? 1 : 0;
+                        transform.Translation.X = jointlist[index].LocalTransform.Translation.X;
+                        transform.Translation.Y = -jointlist[index].LocalTransform.Translation.Z;
+                        transform.Translation.Z = jointlist[index].LocalTransform.Translation.Y;
+                        */
+                    } //gotta figure out those rotations
+
+                    var oriR = transform.Rotation;
+                    var oriRquat = new Quat(oriR.I, oriR.J, oriR.K, oriR.R);
+                    var newR = jointlist[index].LocalTransform.Rotation;
+                    var parR = jointlist[index].VisualParent.LocalTransform.Rotation;
+
+                    var oriT = transform.Translation;
+                    var oriTvec = new Vec4(oriT.X, oriT.Y, oriT.Z, oriT.W);
+                    var newT = jointlist[index].LocalTransform.Translation;
+                    var parT = jointlist[index].VisualParent.LocalTransform.Translation;
+
+                    var herewegoagane = parR * newR;
+
+
+                    var quatM = Mat4.CreateFromQuaternion(oriRquat);
+
+                    var d = newR - oriRquat + new Quat(0, 0, 0, 1);
+                    var p = newR * oriRquat;
+                    var e = d == p;
+                    var esmall = (d - p).Length() < 0.001;
+
+                    var level = levels[index];
+
+                    {/*
+                        var nya = System.Numerics.Vector3.Transform(tr, parR);
+
+                        //var rr = jointlist[index].VisualParent.VisualParent.LocalTransform.Rotation;
+                        var nye = System.Numerics.Vector3.Transform(tr, parR * rr);
+                        var rrr = jointlist[index].VisualParent.VisualParent.VisualParent.LocalTransform.Rotation;
+                        var ya = System.Numerics.Vector3.Transform(tr, parR * rr * rrr);
+
+                        var (r, s, t) = (new Quat(), new Vec3(), new Vec3());
+                        var tinverse = new Mat4();
+                        Mat4.Invert(jointlist[index].VisualParent.WorldMatrix, out tinverse);
+                        Mat4.Decompose(tinverse, out s, out r, out t);
+
+                        var yaya = System.Numerics.Vector3.Transform(tr, r * parR);*/
+                    }
+
+                    /*Mat4 TRSFromRig(QsTransform parTr)
+                    {
+                        var (r, s, t) = (parTr.Rotation, parTr.Scale, parTr.Translation);
+
+                        var R = Mat4.CreateFromQuaternion(new Quat(r.R, r.I, r.J, r.K));
+                        var S = Mat4.CreateScale(new Vec3(s.X, s.Y, s.Z));
+                        var T = Mat4.CreateTranslation(new Vec3(t.X, t.Y, t.Z));
+                        var M = T * R * S;
+                        return M;
+                    }
+
+                    if (index > -1 && parindex > -1)
+                    {
+                        var parM = TRSFromRig(rig.BoneTransforms[parindex]);
+                        Mat4.Invert(parM, out var parMinv);
+                        var M = TRSFromRig(rig.BoneTransforms[index]);
+                        Mat4.Invert(jointlist[index].VisualParent.WorldMatrix, out var tinverse);
+                        Mat4.Decompose(parMinv * M, out var s, out var r, out var t);
+                    }*/
+
+                    Quat AllOriginalRotations(int i)
+                    {
+                        var wquat = transform.Rotation;
+                        var quat = new Quat(wquat.I, wquat.J, wquat.K, wquat.R);
+                        return (rig.BoneNames[i] == "Root") ? quat : AllOriginalRotations(rig.BoneParentIndexes[i]) * quat;
+                    }
+
+                    var oriAllR = AllOriginalRotations(i);
+                    var oriParAllR = oriAllR * Quat.Inverse(oriRquat);
+                    var yetatr = Vec4.Transform(newT, oriAllR);
+
+                    Quat AllRotations(Node node)
+                    {
+                        var quat = node.LocalTransform.Rotation;
+                        return (node.Name == "Root") ? quat : AllRotations(node.VisualParent) * quat;
+                    }
+
+                    var infinya = AllRotations(jointlist[index]);
+                    var finit = Vec4.Transform(newT, infinya);
+                    var aynifni = Vec4.Transform(newT, Quat.Inverse(infinya));
+
+
+                    var before = transform.Translation.DeepCopy();
+
+                    //level = 0;
+
+                    var x90 = Quat.CreateFromAxisAngle(Vec3.UnitX, (float)Math.PI / 2);
+                    var y90 = Quat.CreateFromAxisAngle(Vec3.UnitY, (float)Math.PI / 2);
+                    var z90 = Quat.CreateFromAxisAngle(Vec3.UnitZ, (float)Math.PI / 2);
+
+
+                    //works only for the rig of the kusanagi bike
+                    transform.Translation = level == 1 ? Vec4.Transform(newT, x90) :
+                                                        level is 3 or
+                                                        4 ? Vec4.Transform(newT, new Quat(0, 1, 0, 0) * x90) :
+                                                        level == 5 ? Vec4.Transform(newT, x90) :
+                                                        level == 6 ? Vec4.Transform(newT, z90) :
+                                                        level == 8 ? Vec4.Transform(newT, y90 * new Quat(0, 0, 0, 1)) : // Quat(0, 0, 0, 1) is z90 * z90
+                                                        new Vec4(newT.X, newT.Y, newT.Z, 0);
+
+                    transform.Translation.W = i == 0 ? 1 : 0;
+
+                    /*
+                    transform.Translation.X = level == 6 ? -newT.Y :
+                                                          level == 8 ? newT.Z :
+                                                          newT.X;
+                    transform.Translation.Y = level == 1 ? newT.Z :
+                                                          level == 3 ? -newT.Z :
+                                                          level == 4 ? -newT.Z :
+                                                          level == 5 ? -newT.Z :
+                                                          level == 6 ? newT.X :
+                                                          level == 8 ? -newT.Y :
+                                                          newT.Y;
+                    transform.Translation.Z = level == 1 ? newT.Y :
+                                                          level == 3 ? -newT.Y :
+                                                          level == 4 ? -newT.Y :
+                                                          level == 5 ? newT.Y :
+                                                          level == 8 ? newT.X :
+                                                          newT.Z;
+                    */
+
+                    var after = transform.Translation;
+                }
+            }
+            var ms = new MemoryStream();
+            using var writer = new CR2WWriter(ms, Encoding.UTF8, true) { LoggerService = _loggerService };
+            writer.WriteFile(cr2w);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            rigStream.SetLength(0);
+            ms.CopyTo(rigStream);
+
+            return true;
+        }
+
+
+        public bool ImportMesh(FileInfo inGltfFile, Stream inMeshStream, GltfImportArgs args)
+        {
+            var cr2w = _parserService.ReadRed4File(inMeshStream);
+
+            if (cr2w is not { RootChunk: CMesh meshBlob } || meshBlob.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendBlob)
+            {
+                return false;
+            }
+
+            // https://github.com/WolvenKit/WolvenKit/issues/1870
+            rendBlob.Header.OpacityMicromaps.Clear();
+            
+            var originalRig = args.Rig?.FirstOrDefault();
+
+            if (File.Exists(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")) && (args.ImportMaterialOnly || args.ImportMaterials))
+            {
+                WriteMatToMesh(ref cr2w, File.ReadAllText(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")));
+                if (args.ImportMaterialOnly)
                 {
                     var matOnlyStream = new MemoryStream();
 
                     //cr2w.Write(new BinaryWriter(matOnlyStream));
-                    using var writer = new CR2WWriter(matOnlyStream);
+                    using var writer = new CR2WWriter(matOnlyStream) { LoggerService = _loggerService };
                     writer.WriteFile(cr2w);
 
 
                     matOnlyStream.Seek(0, SeekOrigin.Begin);
-                    if (outStream != null)
+                    //if (outStream != null)
+                    //{
+                    //    matOnlyStream.CopyTo(outStream);
+                    //}
+                    //else
                     {
-                        matOnlyStream.CopyTo(outStream);
-                    }
-                    else
-                    {
-                        inmeshStream.SetLength(0);
-                        matOnlyStream.CopyTo(inmeshStream);
+                        inMeshStream.SetLength(0);
+                        matOnlyStream.CopyTo(inMeshStream);
                     }
                     return true;
                 }
 
             }
 
-            var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(vmode));
+            var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.ValidationMode));
 
-            VerifyGLTF(model);
-            var Meshes = new List<RawMeshContainer>();
-
-            for (var i = 0; i < model.LogicalMeshes.Count; i++)
+            if (model.LogicalSkins.Count > 0 && originalRig != null)
             {
-                Meshes.Add(GltfMeshToRawContainer(model.LogicalMeshes[i]));
-            }
-            var max = new Vec3(Meshes[0].positions[0].X, Meshes[0].positions[0].Y, Meshes[0].positions[0].Z);
-            var min = new Vec3(Meshes[0].positions[0].X, Meshes[0].positions[0].Y, Meshes[0].positions[0].Z);
+                var jointArray = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint).ToArray();
 
-            for (var e = 0; e < Meshes.Count; e++)
-            {
-                for (var i = 0; i < Meshes[e].positions.Length; i++)
+                if (cr2w.RootChunk is CMesh root)
                 {
-                    if (Meshes[e].positions[i].X >= max.X)
+                    for (var i = 0; i < root.BoneNames.Count; i++)
                     {
-                        max.X = Meshes[e].positions[i].X;
-                    }
+                        var foundBone = jointArray.FirstOrDefault(x => root.BoneNames[i] == x.Name);
+                        if (foundBone is not null)
+                        {
+                            System.Numerics.Matrix4x4.Invert(foundBone.WorldMatrix, out var inversedWorldMatrix);
 
-                    if (Meshes[e].positions[i].Y >= max.Y)
-                    {
-                        max.Y = Meshes[e].positions[i].Y;
-                    }
-
-                    if (Meshes[e].positions[i].Z >= max.Z)
-                    {
-                        max.Z = Meshes[e].positions[i].Z;
-                    }
-
-                    if (Meshes[e].positions[i].X <= min.X)
-                    {
-                        min.X = Meshes[e].positions[i].X;
-                    }
-
-                    if (Meshes[e].positions[i].Y <= min.Y)
-                    {
-                        min.Y = Meshes[e].positions[i].Y;
-                    }
-
-                    if (Meshes[e].positions[i].Z <= min.Z)
-                    {
-                        min.Z = Meshes[e].positions[i].Z;
+                            root.BoneRigMatrices[i] = inversedWorldMatrix;
+                            root.BoneRigMatrices[i].NotNull().W.Y = -inversedWorldMatrix.M43;
+                            root.BoneRigMatrices[i].NotNull().W.Z = inversedWorldMatrix.M42;
+                            //component Y and -Z are being swapped in vector W
+                            //should probably figure out why
+                        }
                     }
                 }
             }
 
-            // updating bounding box
-            meshBlob.BoundingBox.Min.X = min.X;
-            meshBlob.BoundingBox.Min.Y = min.Y;
-            meshBlob.BoundingBox.Min.Z = min.Z;
-            meshBlob.BoundingBox.Max.X = max.X;
-            meshBlob.BoundingBox.Max.Y = max.Y;
-            meshBlob.BoundingBox.Max.Z = max.Z;
+            VerifyGLTF(model, args);
 
-            var QuantScale = new Vec4((max.X - min.X) / 2, (max.Y - min.Y) / 2, (max.Z - min.Z) / 2, 0);
-            var QuantTrans = new Vec4((max.X + min.X) / 2, (max.Y + min.Y) / 2, (max.Z + min.Z) / 2, 1);
-
-
-            var newRig = MeshTools.GetOrphanRig(rendblob, cr2w);
-            RawArmature oldRig = null;
-            if (model.LogicalSkins.Count != 0)
+            var meshes = new List<RawMeshContainer>();
+            foreach (var node in model.LogicalNodes)
             {
-                oldRig = new RawArmature
+                if (node.Mesh != null)
                 {
-                    BoneCount = model.LogicalSkins[0].JointsCount,
-                    Names = new string[model.LogicalSkins[0].JointsCount]
-                };
-
-                for (var i = 0; i < model.LogicalSkins[0].JointsCount; i++)
+                    meshes.Add(GltfMeshToRawContainer(node, args));
+                }
+                else if (args.FillEmpty)
                 {
-                    oldRig.Names[i] = model.LogicalSkins[0].GetJoint(i).Joint.Name;
+                    meshes.Add(CreateEmptyMesh(node.Name));
                 }
             }
-            MeshTools.UpdateMeshJoints(ref Meshes, newRig, oldRig);
+            meshes = meshes.OrderBy(mesh => mesh.name).ToList();
 
-            UpdateSkinningParamCloth(ref Meshes, ref cr2w);
+            var max = new Vec3(float.MinValue, float.MinValue, float.MinValue);
+            var min = new Vec3(float.MaxValue, float.MaxValue, float.MaxValue);
 
-            var expMeshes = new List<Re4MeshContainer>();
-
-            for (var i = 0; i < Meshes.Count; i++)
+            foreach (var p in meshes)
             {
-                expMeshes.Add(RawMeshToRE4Mesh(Meshes[i], QuantScale, QuantTrans));
+                ArgumentNullException.ThrowIfNull(p.positions);
+                foreach (var q in p.positions.ToList())
+                {
+                    max.X = Math.Max(q.X, max.X);
+                    max.Y = Math.Max(q.Y, max.Y);
+                    max.Z = Math.Max(q.Z, max.Z);
+                }
             }
 
-            var meshBuffer = new MemoryStream();
-            var meshesInfo = BufferWriter(expMeshes, ref meshBuffer);
-
-            meshesInfo.quantScale = QuantScale;
-            meshesInfo.quantTrans = QuantTrans;
-
-            var ms = GetEditedCr2wFile(cr2w, meshesInfo, meshBuffer);
-
-            ms.Seek(0, SeekOrigin.Begin);
-            if (outStream != null)
+            foreach (var p in meshes)
             {
-                ms.CopyTo(outStream);
+                ArgumentNullException.ThrowIfNull(p.positions);
+                foreach (var q in p.positions.ToList())
+                {
+                    min.X = Math.Min(q.X, min.X);
+                    min.Y = Math.Min(q.Y, min.Y);
+                    min.Z = Math.Min(q.Z, min.Z);
+                }
+            }
+
+            // GarmentSupport not accounted here. Might be an issue?
+            // TODO: https://github.com/WolvenKit/WolvenKit/issues/1504 
+            meshBlob.BoundingBox.Min = new Vector4 { X = min.X, Y = min.Y, Z = min.Z, W = 1f };
+            meshBlob.BoundingBox.Max = new Vector4 { X = max.X, Y = max.Y, Z = max.Z, W = 1f };
+
+            var quantScale = new Vec4((max.X - min.X) / 2, (max.Y - min.Y) / 2, (max.Z - min.Z) / 2, 0);
+            var quantTrans = new Vec4((max.X + min.X) / 2, (max.Y + min.Y) / 2, (max.Z + min.Z) / 2, 1);
+            
+
+            RawArmature? incomingJoints = null;
+            RawArmature? existingJoints = null;
+            if (originalRig != null)
+            {
+
+                using var msss = new MemoryStream(rendBlob.RenderBuffer.Buffer.GetBytes());
+
+                var meshesinfo = MeshTools.GetMeshesinfo(rendBlob, cr2w.RootChunk as CMesh);
+
+                var expMeshesss = MeshTools.ContainRawMesh(msss, meshesinfo, true);
+
+                foreach (var mesh in meshes)
+                {
+                    ArgumentNullException.ThrowIfNull(mesh.boneindices);
+                    Array.Clear(mesh.boneindices, 0, mesh.boneindices.Length);
+                }
+
+                incomingJoints = MeshTools.GetOrphanRig(meshBlob);
+
+                using var msr = new MemoryStream();
+                originalRig.Extract(msr);
+                existingJoints = RIG.ProcessRig(_parserService.ReadRed4File(msr));
             }
             else
             {
-                inmeshStream.SetLength(0);
-                ms.CopyTo(inmeshStream);
+                existingJoints = MeshTools.GetOrphanRig(meshBlob);
+                if (model.LogicalSkins.Count > 0 && model.LogicalSkins[0].JointsCount > 0)
+                {
+                    incomingJoints = new RawArmature
+                    {
+                        BoneCount = model.LogicalSkins[0].JointsCount,
+                        Names = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray()
+                    };
+                }
+            }
+
+
+            try
+            {
+                MeshTools.UpdateMeshJoints(ref meshes, existingJoints, incomingJoints);
+            }
+            catch (WolvenKitException e)
+            {
+                throw new WolvenKitException(e.ErrorCode,
+                    $"You're trying to import bones into a mesh that doesn't have them. Wolvenkit can't create bones — please remove them in Blender, or import into a different file: {e.Message}");
+            }
+
+            UpdateSkinningParamCloth(ref meshes, ref cr2w, args);
+
+            UpdateGarmentSupportParameters(meshes, meshBlob, args.ImportGarmentSupport, args.IgnoreGarmentSupportUVParam);
+
+            var expMeshes = meshes.Select(_ => RawMeshToRE4Mesh(_, quantScale, quantTrans)).ToList();
+
+            var meshBuffer = new MemoryStream();
+            var meshesInfo = BufferWriter(expMeshes, ref meshBuffer, args);
+
+            meshesInfo.quantScale = quantScale;
+            meshesInfo.quantTrans = quantTrans;
+
+            MemoryStream ms;
+
+            if (originalRig != null)
+            {
+                var tt = model.LogicalSkins.Count >= 2
+                    ? Enumerable.Range(0, model.LogicalSkins[1].JointsCount).Select(_ => model.LogicalSkins[1].GetJoint(_).Joint.WorldMatrix).ToArray()
+                    : null;
+
+                var tJointNames = model.LogicalSkins.Count >= 2 ?
+                    Enumerable.Range(0, model.LogicalSkins[1].JointsCount).Select(_ => model.LogicalSkins[1].GetJoint(_).Joint.Name).ToArray()
+                    : null;
+                ms = GetEditedCr2wFile(cr2w, meshesInfo, meshBuffer, tt, tJointNames);
+            }
+            else
+            {
+                ms = GetEditedCr2wFile(cr2w, meshesInfo, meshBuffer);
+            }
+
+            ms.Seek(0, SeekOrigin.Begin);
+            //if (outStream != null)
+            //{
+            //    ms.CopyTo(outStream);
+            //}
+            //else
+            {
+                inMeshStream.SetLength(0);
+                ms.CopyTo(inMeshStream);
             }
             return true;
         }
 
-        private static RawMeshContainer GltfMeshToRawContainer(Mesh mesh)
+        private static RawMeshContainer CreateEmptyMesh(string name)
         {
             var meshContainer = new RawMeshContainer
             {
-                name = mesh.Name
+                boneindices = new ushort[3, 0],
+                colors0 = new Vec4[3],
+                colors1 = Array.Empty<Vec4>(),
+                garmentMorph = Array.Empty<Vec3>(),
+                indices = new uint[3],
+                materialNames = null,
+                name = name,
+                normals = new Vec3[3],
+                positions = new Vec3[3],
+                tangents = new Vec4[3],
+                texCoords0 = new Vec2[3],
+                texCoords1 = new Vec2[3],
+                weightCount = 0,
+                weights = new float[3, 0]
             };
 
+            meshContainer.indices[0] = 2;
+            meshContainer.indices[1] = 0;
+            meshContainer.indices[2] = 1;
+
+            meshContainer.texCoords0[0] = new Vec2(1, 1);
+            meshContainer.texCoords0[1] = new Vec2(0, 0);
+            meshContainer.texCoords0[2] = new Vec2(1, 0);
+
+            for (var i = 0; i < 3; i++)
+            {
+                meshContainer.colors0[i] = new Vec4(1, 1, 1, 1);
+                meshContainer.normals[i] = new Vec3(0, 0, 1);
+                meshContainer.positions[i] = new Vec3(0, 0, 0);
+                meshContainer.tangents[i] = new Vec4(1, 0, 0, -1);
+                meshContainer.texCoords1[i] = new Vec2(0, 1);
+            }
+
+            return meshContainer;
+        }
+
+        // TODO: https://github.com/WolvenKit/WolvenKit/issues/1505
+        // Maintaining compatibility but need to review if we really want to support empties via nodes
+        private RawMeshContainer GltfMeshToRawContainer(Node node, GltfImportArgs args)
+        {
+            if (node.Mesh != null)
+            {
+                return GltfMeshToRawContainer(node.Mesh, args);
+            }
+
+            if (args.ShowVerboseLogOutput)
+            {
+                _loggerService.Warning($"Node {node.Name} has no mesh, creating empty mesh (this is probably wrong.)");
+            }
+
+            return CreateEmptyMesh(node.Name);
+
+        }
+
+        private RawMeshContainer GltfMeshToRawContainer(Mesh mesh, GltfImportArgs args)
+        {
             var accessors = mesh.Primitives[0].VertexAccessors.Keys.ToList();
+
+            var parenting = mesh.VisualParents.ToList();
+
+            if (parenting.Count > 1)
+            {
+                throw new ArgumentException($"Mesh {mesh.Name} has more than one parent node! Duplicate the mesh instead of sharing it.");
+            }
+
+            var node = parenting[0];
+
+            if (mesh.Name != node.Name && args.ShowVerboseLogOutput)
+            {
+                _loggerService.Warning($"Mesh name `{mesh.Name}` does not match parent node name `{node.Name}`. Using {(args.OverrideMeshNameWithNodeName ? "NODE" : "MESH")} name.");
+            }
+
+            var meshContainer = new RawMeshContainer
+            {
+                name = args.OverrideMeshNameWithNodeName ? node.Name : mesh.Name,
+
+                // Copying PNT w/ RHS to LHS Y+ to Z+
+                positions = mesh.Primitives[0].GetVertices("POSITION").AsVector3Array().ToList().AsParallel().Select(p => new Vec3(p.X, -p.Z, p.Y)).ToArray(),
+                normals = mesh.Primitives[0].GetVertices("NORMAL").AsVector3Array().ToList().AsParallel().Select(p => new Vec3(p.X, -p.Z, p.Y)).ToArray(),
+                tangents = mesh.Primitives[0].GetVertices("TANGENT").AsVector4Array().ToList().AsParallel().Select(p => new Vec4(p.X, -p.Z, p.Y, p.W)).ToArray(),
+
+                // Blender glTF omits alpha if possible
+                colors0 = accessors.Contains("COLOR_0")
+                            ? (mesh.Primitives[0].GetVertices("COLOR_0").Attribute.Dimensions == DimensionType.VEC4
+                                ? mesh.Primitives[0].GetVertices("COLOR_0").AsVector4Array().ToArray()
+                                : mesh.Primitives[0].GetVertices("COLOR_0").AsVector3Array().Select(vec3 => new Vec4(vec3, 1)).ToArray())
+                            : [],
+                colors1 = accessors.Contains("COLOR_1")
+                            ? (mesh.Primitives[0].GetVertices("COLOR_1").Attribute.Dimensions == DimensionType.VEC4
+                                ? mesh.Primitives[0].GetVertices("COLOR_1").AsVector4Array().ToArray()
+                                : mesh.Primitives[0].GetVertices("COLOR_1").AsVector3Array().Select(vec3 => new Vec4(vec3, 1)).ToArray())
+                            : [],
+
+                texCoords0 = accessors.Contains("TEXCOORD_0") ? mesh.Primitives[0].GetVertices("TEXCOORD_0").AsVector2Array().ToArray() : Array.Empty<Vec2>(),
+                texCoords1 = accessors.Contains("TEXCOORD_1") ? mesh.Primitives[0].GetVertices("TEXCOORD_1").AsVector2Array().ToArray() : Array.Empty<Vec2>(),
+
+                garmentSupportWeight = accessors.Contains("_GARMENTSUPPORTWEIGHT") ? mesh.Primitives[0].GetVertices("_GARMENTSUPPORTWEIGHT").AsVector4Array().ToArray() : Array.Empty<Vec4>(),
+                garmentSupportCap = accessors.Contains("_GARMENTSUPPORTCAP") ? mesh.Primitives[0].GetVertices("_GARMENTSUPPORTCAP").AsVector4Array().ToArray() : Array.Empty<Vec4>()
+            };
 
             var indicesList = mesh.Primitives[0].GetIndices().ToList();
 
@@ -203,91 +629,53 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-
-            var verticesList = mesh.Primitives[0].GetVertices("POSITION").AsVector3Array().ToList();
-            var normalsList = mesh.Primitives[0].GetVertices("NORMAL").AsVector3Array().ToList();
-            var tangentsList = mesh.Primitives[0].GetVertices("TANGENT").AsVector4Array().ToList();
-
-            var vertCount = verticesList.Count;
-            meshContainer.positions = new Vec3[verticesList.Count];
-            meshContainer.normals = new Vec3[normalsList.Count];
-            meshContainer.tangents = new Vec4[tangentsList.Count];
-
-            // changing orientation of geomerty, Y+ Z+ RHS-LHS BS
-            for (var i = 0; i < vertCount; i++)
+            var jointCount = 0;
+            var weightCount = 0;
+            foreach (var accessor in accessors)
             {
-                meshContainer.positions[i] = new Vec3(verticesList[i].X, -verticesList[i].Z, verticesList[i].Y);
-                meshContainer.normals[i] = new Vec3(normalsList[i].X, -normalsList[i].Z, normalsList[i].Y);
-                meshContainer.tangents[i] = new Vec4(tangentsList[i].X, -tangentsList[i].Z, tangentsList[i].Y, tangentsList[i].W);
+                if (accessor.StartsWith("JOINTS_"))
+                {
+                    jointCount++;
+                }
+
+                if (accessor.StartsWith("WEIGHTS_"))
+                {
+                    weightCount++;
+                }
             }
 
-            meshContainer.colors0 = new Vec4[vertCount];
-            if (accessors.Contains("COLOR_0"))
+            if (jointCount != weightCount)
             {
-                meshContainer.colors0 = mesh.Primitives[0].GetVertices("COLOR_0").AsVector4Array().ToArray();
+                throw new Exception("Number of JOINTS does not match the number of WEIGHTS");
             }
 
-            meshContainer.colors1 = new Vec4[vertCount];
-            if (accessors.Contains("COLOR_1"))
-            {
-                meshContainer.colors1 = mesh.Primitives[0].GetVertices("COLOR_1").AsVector4Array().ToArray();
-            }
+            var joints0 = accessors.Contains("JOINTS_0") ? mesh.Primitives[0].GetVertices("JOINTS_0").AsVector4Array().ToList() : null;
 
-            meshContainer.texCoords0 = new Vec2[vertCount];
-            if (accessors.Contains("TEXCOORD_0"))
-            {
-                meshContainer.texCoords0 = mesh.Primitives[0].GetVertices("TEXCOORD_0").AsVector2Array().ToArray();
-            }
+            var joints1 = accessors.Contains("JOINTS_1") ? mesh.Primitives[0].GetVertices("JOINTS_1").AsVector4Array().ToList() : null;
 
-            meshContainer.texCoords1 = new Vec2[vertCount];
-            if (accessors.Contains("TEXCOORD_1"))
-            {
-                meshContainer.texCoords1 = mesh.Primitives[0].GetVertices("TEXCOORD_1").AsVector2Array().ToArray();
-            }
+            var weights0 = accessors.Contains("WEIGHTS_0") ? mesh.Primitives[0].GetVertices("WEIGHTS_0").AsVector4Array().ToList() : null;
 
-            var joints0 = new List<Vec4>();
-            if (accessors.Contains("JOINTS_0"))
-            {
-                joints0 = mesh.Primitives[0].GetVertices("JOINTS_0").AsVector4Array().ToList();
-            }
-
-            var joints1 = new List<Vec4>();
-            if (accessors.Contains("JOINTS_1"))
-            {
-                joints1 = mesh.Primitives[0].GetVertices("JOINTS_1").AsVector4Array().ToList();
-            }
-
-            var weights0 = new List<Vec4>();
-            if (accessors.Contains("WEIGHTS_0"))
-            {
-                weights0 = mesh.Primitives[0].GetVertices("WEIGHTS_0").AsVector4Array().ToList();
-            }
-
-            var weights1 = new List<Vec4>();
-            if (accessors.Contains("WEIGHTS_1"))
-            {
-                weights1 = mesh.Primitives[0].GetVertices("WEIGHTS_1").AsVector4Array().ToList();
-            }
+            var weights1 = accessors.Contains("WEIGHTS_1") ? mesh.Primitives[0].GetVertices("WEIGHTS_1").AsVector4Array().ToList() : null;
 
             meshContainer.weightCount = 0;
 
-            if (joints0.Count != 0)
+            if (joints0 != null)
             {
                 meshContainer.weightCount += 4;
             }
 
-            if (joints1.Count != 0)
+            if (joints1 != null)
             {
                 meshContainer.weightCount += 4;
             }
 
-
+            var vertCount = meshContainer.positions.Length;
             meshContainer.boneindices = new ushort[vertCount, meshContainer.weightCount];
             meshContainer.weights = new float[vertCount, meshContainer.weightCount];
 
             for (var i = 0; i < vertCount; i++)
             {
-                if (joints0.Count != 0)
+                if (joints0 != null && weights0 is not null && i < joints0.Count)
                 {
                     meshContainer.boneindices[i, 0] = (ushort)joints0[i].X;
                     meshContainer.boneindices[i, 1] = (ushort)joints0[i].Y;
@@ -299,7 +687,7 @@ namespace WolvenKit.Modkit.RED4
                     meshContainer.weights[i, 2] = weights0[i].Z;
                     meshContainer.weights[i, 3] = weights0[i].W;
                 }
-                if (joints1.Count != 0)
+                if (joints1 != null && weights1 is not null && i < joints1.Count)
                 {
                     meshContainer.boneindices[i, 4] = (ushort)joints1[i].X;
                     meshContainer.boneindices[i, 5] = (ushort)joints1[i].Y;
@@ -313,141 +701,199 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            meshContainer.garmentMorph = Array.Empty<Vec3>();
-            if (mesh.Primitives[0].MorphTargetsCount > 0)
-            {
-                meshContainer.garmentMorph = new Vec3[vertCount];
-                var idx = mesh.Primitives[0].GetMorphTargetAccessors(0).Keys.ToList().IndexOf("POSITION");
-                var extraDataList = mesh.Primitives[0].GetMorphTargetAccessors(0).Values.ToList()[idx].AsVector3Array().ToList();
+            meshContainer.garmentMorph = [];
 
-                for (var i = 0; i < extraDataList.Count; i++)
+            if (mesh.Extras?.Deserialize<MeshExtras>() is { } extras)
+            {
+                if (extras.TargetNames != null)
                 {
-                    meshContainer.garmentMorph[i] = new Vec3(extraDataList[i].X, -extraDataList[i].Z, extraDataList[i].Y);
+                    ExtractMorphTargets(meshContainer, mesh, extras, args);
                 }
             }
 
             return meshContainer;
         }
 
+        private static void ExtractMorphTargets(RawMeshContainer meshContainer, Mesh mesh, MeshExtras extras, GltfImportArgs args)
+        {
+            if (extras.TargetNames == null)
+            {
+                return;
+            }
+
+            if (extras.TargetNames.Length != mesh.Primitives[0].MorphTargetsCount)
+            {
+                throw new Exception($"{nameof(MeshExtras)} targetNames count doesn't match morphTarget count");
+            }
+
+            for (var i = 0; i < extras.TargetNames.Length; i++)
+            {
+                if (args.ImportGarmentSupport && extras.TargetNames[i] is "GarmentSupport")
+                {
+                    meshContainer.garmentMorph = GetVector3List(i, "POSITION").Select(p => new Vec3(p.X, -p.Z, p.Y)).ToArray();
+                }
+            }
+
+            return;
+
+            List<Vec3> GetVector3List(int morphTargetIndex, string attributeKey)
+            {
+                var idx = mesh.Primitives[0].GetMorphTargetAccessors(morphTargetIndex).Keys.ToList().IndexOf(attributeKey);
+                var extraDataList = mesh.Primitives[0].GetMorphTargetAccessors(morphTargetIndex).Values.ToList()[idx].AsVector3Array().ToList();
+
+                return extraDataList;
+            }
+        }
+
         private static Re4MeshContainer RawMeshToRE4Mesh(RawMeshContainer mesh, Vec4 qScale, Vec4 qTrans)
         {
-            var Re4Mesh = new Re4MeshContainer
+            var re4Mesh = new Re4MeshContainer
             {
                 name = mesh.name
             };
 
+            ArgumentNullException.ThrowIfNull(mesh.positions);
+            ArgumentNullException.ThrowIfNull(mesh.normals);
+            ArgumentNullException.ThrowIfNull(mesh.tangents);
+            ArgumentNullException.ThrowIfNull(mesh.texCoords0);
+            ArgumentNullException.ThrowIfNull(mesh.texCoords1);
+            ArgumentNullException.ThrowIfNull(mesh.colors0);
+            ArgumentNullException.ThrowIfNull(mesh.boneindices);
+            ArgumentNullException.ThrowIfNull(mesh.weights);
+            ArgumentNullException.ThrowIfNull(mesh.garmentMorph);
+            ArgumentNullException.ThrowIfNull(mesh.indices);
+
             var vertCount = mesh.positions.Length;
-            Re4Mesh.ExpVerts = new short[vertCount, 3];
+            re4Mesh.ExpVerts = new short[vertCount, 3];
 
             for (var i = 0; i < vertCount; i++)
             {
-                var x = (mesh.positions[i].X - qTrans.X) / qScale.X;
-                var y = (mesh.positions[i].Y - qTrans.Y) / qScale.Y;
-                var z = (mesh.positions[i].Z - qTrans.Z) / qScale.Z;
-                Re4Mesh.ExpVerts[i, 0] = Convert.ToInt16(x * 32767);
-                Re4Mesh.ExpVerts[i, 1] = Convert.ToInt16(y * 32767);
-                Re4Mesh.ExpVerts[i, 2] = Convert.ToInt16(z * 32767);
+                var x = qScale.X != 0 ? (mesh.positions[i].X - qTrans.X) / qScale.X : 0;
+                var y = qScale.Y != 0 ? (mesh.positions[i].Y - qTrans.Y) / qScale.Y : 0;
+                var z = qScale.Z != 0 ? (mesh.positions[i].Z - qTrans.Z) / qScale.Z : 0;
+                re4Mesh.ExpVerts[i, 0] = Convert.ToInt16(x * 32767);
+                re4Mesh.ExpVerts[i, 1] = Convert.ToInt16(y * 32767);
+                re4Mesh.ExpVerts[i, 2] = Convert.ToInt16(z * 32767);
             }
 
-            // managing normals
-            Re4Mesh.Nor32s = new uint[vertCount];
+            // converting normals struct
+            re4Mesh.Nor32s = new uint[vertCount];
             for (var i = 0; i < vertCount; i++)
             {
-                var v = new Vec4(mesh.normals[i], 0); // for normal w == 0
-                Re4Mesh.Nor32s[i] = Converters.Vec4ToU32(v);
+                var v = mesh.normals[i]; // for normal w == 0
+                re4Mesh.Nor32s[i] = Converters.Vec3ToU32(v);
             }
 
-            // managing tangents
-            Re4Mesh.Tan32s = new uint[vertCount];
+            // converting tangents struct
+            re4Mesh.Tan32s = new uint[vertCount];
             for (var i = 0; i < vertCount; i++)
             {
                 var v = mesh.tangents[i]; // for tangents w == 1 or -1
-                Re4Mesh.Tan32s[i] = Converters.Vec4ToU32(v);
+                re4Mesh.Tan32s[i] = Converters.Vec4ToU32(v);
             }
 
-            Re4Mesh.uv0s = new ushort[vertCount, 2];
+            re4Mesh.uv0s = new ushort[vertCount, 2];
             for (var i = 0; i < mesh.texCoords0.Length; i++)
             {
-                Re4Mesh.uv0s[i, 0] = Converters.converthf(mesh.texCoords0[i].X);
-                Re4Mesh.uv0s[i, 1] = Converters.converthf(mesh.texCoords0[i].Y);
+                re4Mesh.uv0s[i, 0] = Converters.converthf(mesh.texCoords0[i].X);
+                re4Mesh.uv0s[i, 1] = Converters.converthf((mesh.texCoords0[i].Y * -1) + 1);
             }
 
-            Re4Mesh.uv1s = new ushort[vertCount, 2];
+            re4Mesh.uv1s = new ushort[vertCount, 2];
             for (var i = 0; i < mesh.texCoords1.Length; i++)
             {
-                Re4Mesh.uv1s[i, 0] = Converters.converthf(mesh.texCoords1[i].X);
-                Re4Mesh.uv1s[i, 1] = Converters.converthf(mesh.texCoords1[i].Y);
+                re4Mesh.uv1s[i, 0] = Converters.converthf(mesh.texCoords1[i].X);
+                re4Mesh.uv1s[i, 1] = Converters.converthf(mesh.texCoords1[i].Y);
             }
 
-            Re4Mesh.colors = new byte[vertCount, 4];
+            re4Mesh.colors = new byte[vertCount, 4];
             for (var i = 0; i < mesh.colors0.Length; i++)
             {
-                Re4Mesh.colors[i, 0] = Convert.ToByte(mesh.colors0[i].X * 255);
-                Re4Mesh.colors[i, 1] = Convert.ToByte(mesh.colors0[i].Y * 255);
-                Re4Mesh.colors[i, 2] = Convert.ToByte(mesh.colors0[i].Z * 255);
-                Re4Mesh.colors[i, 3] = Convert.ToByte(mesh.colors0[i].W * 255);
+                re4Mesh.colors[i, 0] = Convert.ToByte(mesh.colors0[i].X * 255);
+                re4Mesh.colors[i, 1] = Convert.ToByte(mesh.colors0[i].Y * 255);
+                re4Mesh.colors[i, 2] = Convert.ToByte(mesh.colors0[i].Z * 255);
+                re4Mesh.colors[i, 3] = Convert.ToByte(mesh.colors0[i].W * 255);
             }
 
-            Re4Mesh.weightcount = mesh.weightCount;
+            re4Mesh.weightcount = mesh.weightCount;
 
-            Re4Mesh.boneindices = new byte[vertCount, Re4Mesh.weightcount];
+            re4Mesh.boneindices = new byte[vertCount, re4Mesh.weightcount];
             for (var i = 0; i < vertCount; i++)
             {
-                for (var e = 0; e < Re4Mesh.weightcount; e++)
+                for (var e = 0; e < re4Mesh.weightcount; e++)
                 {
-                    Re4Mesh.boneindices[i, e] = Convert.ToByte(mesh.boneindices[i, e]); // mesh.boneindices are supposed to be processed
+                    re4Mesh.boneindices[i, e] = Convert.ToByte(mesh.boneindices[i, e]); // mesh.boneindices are supposed to be processed
                 }
             }
             // (updated according to the mesh bones rather than rig bones) before putting here
 
-            Re4Mesh.weights = new byte[vertCount, Re4Mesh.weightcount];
+            re4Mesh.weights = new byte[vertCount, re4Mesh.weightcount];
             for (var i = 0; i < vertCount; i++)
             {
-                for (var e = 0; e < Re4Mesh.weightcount; e++)
+                for (var e = 0; e < re4Mesh.weightcount; e++)
                 {
-                    Re4Mesh.weights[i, e] = Convert.ToByte(mesh.weights[i, e] * 255);
+                    re4Mesh.weights[i, e] = Convert.ToByte(mesh.weights[i, e] * 255);
                 }
                 // weight summing can cause problems here, sometimes sum >= 256, idk how to fix them yet
             }
 
             // extradata/ morphoffsetbs
-            Re4Mesh.garmentMorph = new ushort[0, 0];
+            re4Mesh.garmentMorph = new ushort[0, 0];
             if (mesh.garmentMorph.Length > 0)
             {
-                Re4Mesh.garmentMorph = new ushort[vertCount, 3];
+                re4Mesh.garmentMorph = new ushort[vertCount, 3];
                 for (var i = 0; i < vertCount; i++)
                 {
-                    Re4Mesh.garmentMorph[i, 0] = Converters.converthf(mesh.garmentMorph[i].X);
-                    Re4Mesh.garmentMorph[i, 1] = Converters.converthf(mesh.garmentMorph[i].Y);
-                    Re4Mesh.garmentMorph[i, 2] = Converters.converthf(mesh.garmentMorph[i].Z);
+                    re4Mesh.garmentMorph[i, 0] = Converters.converthf(mesh.garmentMorph[i].X);
+                    re4Mesh.garmentMorph[i, 1] = Converters.converthf(mesh.garmentMorph[i].Y);
+                    re4Mesh.garmentMorph[i, 2] = Converters.converthf(mesh.garmentMorph[i].Z);
                 }
             }
 
-            Re4Mesh.indices = new ushort[mesh.indices.Length];
+            re4Mesh.indices = new ushort[mesh.indices.Length];
             for (var i = 0; i < mesh.indices.Length; i++)
             {
-                Re4Mesh.indices[i] = Convert.ToUInt16(mesh.indices[i]);
+                if (mesh.indices[i] <= ushort.MaxValue)
+                {
+                    re4Mesh.indices[i] = Convert.ToUInt16(mesh.indices[i]);
+                }
+                else
+                {
+                    throw new Exception($"Too many vertices ({mesh.indices[i]}) in submesh - max is {ushort.MaxValue}");
+                }
             }
 
-            return Re4Mesh;
+            return re4Mesh;
         }
 
-        private static MeshesInfo BufferWriter(List<Re4MeshContainer> expMeshes, ref MemoryStream ms)
+        private static MeshesInfo BufferWriter(List<Re4MeshContainer> expMeshes, ref MemoryStream ms, GltfImportArgs args)
         {
             var meshesInfo = new MeshesInfo(expMeshes.Count);
 
             var bw = new BinaryWriter(ms);
             for (var i = 0; i < expMeshes.Count; i++)
             {
-                var vertCount = expMeshes[i].ExpVerts.Length / 3;
+                var expMesh = expMeshes[i];
+
+                ArgumentNullException.ThrowIfNull(expMesh.ExpVerts);
+                ArgumentNullException.ThrowIfNull(expMesh.garmentMorph);
+                ArgumentNullException.ThrowIfNull(expMesh.boneindices);
+                ArgumentNullException.ThrowIfNull(expMesh.weights);
+                ArgumentNullException.ThrowIfNull(expMesh.uv0s);
+                ArgumentNullException.ThrowIfNull(expMesh.Nor32s);
+                ArgumentNullException.ThrowIfNull(expMesh.Tan32s);
+                ArgumentNullException.ThrowIfNull(expMesh.colors);
+                ArgumentNullException.ThrowIfNull(expMesh.uv1s);
+
+                var vertCount = expMesh.ExpVerts.Length / 3;
 
                 meshesInfo.vertCounts[i] = (uint)vertCount;
                 meshesInfo.posnOffsets[i] = (uint)ms.Position;
 
-                meshesInfo.vpStrides[i] = (expMeshes[i].weightcount * 2) + 8;
-                meshesInfo.weightCounts[i] = expMeshes[i].weightcount;
+                meshesInfo.vpStrides[i] = (expMesh.weightcount * 2) + 8;
+                meshesInfo.weightCounts[i] = expMesh.weightcount;
 
-                if (expMeshes[i].garmentMorph.Length > 0)
+                if (expMesh.garmentMorph.Length > 0)
                 {
                     meshesInfo.garmentSupportExists[i] = true;
                     meshesInfo.vpStrides[i] += 8;
@@ -455,25 +901,25 @@ namespace WolvenKit.Modkit.RED4
 
                 for (var e = 0; e < vertCount; e++)
                 {
-                    bw.Write(expMeshes[i].ExpVerts[e, 0]);
-                    bw.Write(expMeshes[i].ExpVerts[e, 1]);
-                    bw.Write(expMeshes[i].ExpVerts[e, 2]);
+                    bw.Write(expMesh.ExpVerts[e, 0]);
+                    bw.Write(expMesh.ExpVerts[e, 1]);
+                    bw.Write(expMesh.ExpVerts[e, 2]);
                     bw.Write((short)32767);
-                    for (var eye = 0; eye < expMeshes[i].weightcount; eye++)
+                    for (var eye = 0; eye < expMesh.weightcount; eye++)
                     {
-                        bw.Write(expMeshes[i].boneindices[e, eye]);
+                        bw.Write(expMesh.boneindices[e, eye]);
                     }
 
-                    for (var eye = 0; eye < expMeshes[i].weightcount; eye++)
+                    for (var eye = 0; eye < expMesh.weightcount; eye++)
                     {
-                        bw.Write(expMeshes[i].weights[e, eye]);
+                        bw.Write(expMesh.weights[e, eye]);
                     }
 
                     if (meshesInfo.garmentSupportExists[i])
                     {
-                        bw.Write(expMeshes[i].garmentMorph[e, 0]);
-                        bw.Write(expMeshes[i].garmentMorph[e, 1]);
-                        bw.Write(expMeshes[i].garmentMorph[e, 2]);
+                        bw.Write(expMesh.garmentMorph[e, 0]);
+                        bw.Write(expMesh.garmentMorph[e, 1]);
+                        bw.Write(expMesh.garmentMorph[e, 2]);
                         bw.Write((ushort)0);
                     }
                 }
@@ -488,8 +934,8 @@ namespace WolvenKit.Modkit.RED4
                 meshesInfo.tex0Offsets[i] = (uint)ms.Position;
                 for (var e = 0; e < vertCount; e++)
                 {
-                    bw.Write(expMeshes[i].uv0s[e, 0]);
-                    bw.Write(expMeshes[i].uv0s[e, 1]);
+                    bw.Write(expMesh.uv0s[e, 0]);
+                    bw.Write(expMesh.uv0s[e, 1]);
                 }
 
                 // 16 bytes Padding between uv0 and normals, if required
@@ -500,8 +946,8 @@ namespace WolvenKit.Modkit.RED4
                 meshesInfo.normalOffsets[i] = (uint)ms.Position;
                 for (var e = 0; e < vertCount; e++)
                 {
-                    bw.Write(expMeshes[i].Nor32s[e]);
-                    bw.Write(expMeshes[i].Tan32s[e]);
+                    bw.Write(expMesh.Nor32s[e]);
+                    bw.Write(expMesh.Tan32s[e]);
                 }
 
                 // 16 bytes Padding between nors/tans and colors/uv1s, if required
@@ -513,10 +959,10 @@ namespace WolvenKit.Modkit.RED4
                 for (var e = 0; e < vertCount; e++)
                 {
 
-                    bw.Write(expMeshes[i].colors[e, 0]);
-                    bw.Write(expMeshes[i].colors[e, 1]);
-                    bw.Write(expMeshes[i].colors[e, 2]);
-                    bw.Write(expMeshes[i].colors[e, 3]);
+                    bw.Write(expMesh.colors[e, 0]);
+                    bw.Write(expMesh.colors[e, 1]);
+                    bw.Write(expMesh.colors[e, 2]);
+                    bw.Write(expMesh.colors[e, 3]);
 
 
                     // Temp fix for improved lighting geomertry
@@ -526,8 +972,8 @@ namespace WolvenKit.Modkit.RED4
                     bw.Write((byte)0);
                     bw.Write((byte)0);
                     */
-                    bw.Write(expMeshes[i].uv1s[e, 0]);
-                    bw.Write(expMeshes[i].uv1s[e, 1]);
+                    bw.Write(expMesh.uv1s[e, 0]);
+                    bw.Write(expMesh.uv1s[e, 1]);
                 }
 
                 // 16 bytes Padding if necessary
@@ -560,13 +1006,17 @@ namespace WolvenKit.Modkit.RED4
             meshesInfo.indexBufferOffset = (uint)ms.Position;
             for (var i = 0; i < expMeshes.Count; i++)
             {
-                var indCount = expMeshes[i].indices.Length;
+                var mesh = expMeshes[i];
+
+                ArgumentNullException.ThrowIfNull(mesh.indices);
+
+                var indCount = mesh.indices.Length;
                 meshesInfo.indCounts[i] = (uint)indCount;
 
                 meshesInfo.indicesOffsets[i] = (uint)ms.Position;
                 for (var e = 0; e < indCount; e++)
                 {
-                    bw.Write(expMeshes[i].indices[e]);
+                    bw.Write(mesh.indices[e]);
                 }
             }
             meshesInfo.indexBufferSize = (uint)ms.Length - meshesInfo.indexBufferOffset;
@@ -574,27 +1024,32 @@ namespace WolvenKit.Modkit.RED4
 
             for (var i = 0; i < meshesInfo.meshCount; i++)
             {
-                if (expMeshes[i].name.Contains("LOD"))
+                var mesh = expMeshes[i];
+
+                ArgumentNullException.ThrowIfNull(mesh.name);
+
+                if (mesh.name.Contains("LOD"))
                 {
-                    var idx = expMeshes[i].name.IndexOf("LOD_");
-                    if (idx < expMeshes[i].name.Length - 1)
+                    var idx = mesh.name.IndexOf("LOD_", StringComparison.Ordinal);
+                    if (idx < mesh.name.Length - 1)
                     {
-                        meshesInfo.LODLvl[i] = Convert.ToUInt32(expMeshes[i].name.Substring(idx + 4, 1));
+                        var lod = Convert.ToUInt32(mesh.name.Substring(idx + 4, 1));
+                        meshesInfo.LODLvl[i] = lod;
                     }
                 }
                 else
                 {
                     meshesInfo.LODLvl[i] = 1;
                 }
-
             }
 
             return meshesInfo;
         }
 
-        private static MemoryStream GetEditedCr2wFile(CR2WFile cr2w, MeshesInfo info, MemoryStream buffer)
+        private MemoryStream GetEditedCr2wFile(CR2WFile cr2w, MeshesInfo info, MemoryStream buffer, Mat4[]? inverseBindMatrices = null, string[]? boneNames = null)
+        //private static MemoryStream GetEditedCr2wFile(CR2WFile cr2w, MeshesInfo info, MemoryStream buffer)
         {
-            rendRenderMeshBlob blob = null;
+            rendRenderMeshBlob? blob = null;
             if (cr2w.RootChunk is CMesh obj1 && obj1.RenderResourceBlob.Chunk is rendRenderMeshBlob obj2)
             {
                 blob = obj2;
@@ -605,26 +1060,23 @@ namespace WolvenKit.Modkit.RED4
                 blob = obj5;
             }
 
-            // removing BS topology data which causes a lot of issues with improved facial lighting geomerty, vertex colors uroborus and what not
-            var Count = blob.Header.Topology.Count;
+            ArgumentNullException.ThrowIfNull(blob, nameof(blob));
 
-            for (var i = 0; i < Count; i++)
+            // removing BS topology data which causes a lot of issues with improved facial lighting geometry, vertex colors uroborus and what not
+            if (blob.Header.Topology is not null)
             {
-                blob.Header.Topology.Remove(blob.Header.Topology[0]);
-            }
-            for (var i = 0; i < info.meshCount; i++)
-            {
-                blob.Header.Topology.Add(RedTypeManager.Create<rendTopologyData>());
-            }
-
-            //dependent RenderLOD's removal and addition
-            Count = blob.Header.RenderLODs.Count;
-            if (Count > 1)
-            {
-                for (var i = 0; i < Count; i++)
+                blob.Header.Topology.Clear();
+                for (var i = 0; i < info.meshCount; i++)
                 {
-                    blob.Header.RenderLODs.Remove(blob.Header.RenderLODs[0]);
+                    blob.Header.Topology.Add(new rendTopologyData());
                 }
+            }
+
+            // dependent RenderLOD's removal and addition
+            if (blob.Header.RenderLODs is not null)
+            {
+                blob.Header.RenderLODs.Clear();
+
                 blob.Header.RenderLODs.Add(0f);
                 if (info.LODLvl.ToList().Contains(2))
                 {
@@ -639,269 +1091,237 @@ namespace WolvenKit.Modkit.RED4
                     blob.Header.RenderLODs.Add(9f);
                 }
             }
-            if (cr2w.RootChunk is CMesh cmeshblob)
+            if (cr2w.RootChunk is CMesh cMeshBlob)
             {
-                Count = cmeshblob.LodLevelInfo.Count;
-                if (Count > 1)
+                if (cMeshBlob.LodLevelInfo is not null)
                 {
-                    for (var i = 0; i < Count; i++)
-                    {
-                        cmeshblob.LodLevelInfo.Remove(cmeshblob.LodLevelInfo[0]);
-                    }
-                    cmeshblob.LodLevelInfo.Add(0f);
+                    cMeshBlob.LodLevelInfo.Clear();
+
+                    cMeshBlob.LodLevelInfo.Add(0f);
                     if (info.LODLvl.ToList().Contains(2))
                     {
-                        cmeshblob.LodLevelInfo.Add(3f);
+                        cMeshBlob.LodLevelInfo.Add(3f);
                     }
                     if (info.LODLvl.ToList().Contains(4))
                     {
-                        cmeshblob.LodLevelInfo.Add(6f);
+                        cMeshBlob.LodLevelInfo.Add(6f);
                     }
                     if (info.LODLvl.ToList().Contains(8))
                     {
-                        cmeshblob.LodLevelInfo.Add(9f);
+                        cMeshBlob.LodLevelInfo.Add(9f);
                     }
                 }
             }
+
+            //source mesh renderMasks for updation 
+            var renderMasks = blob.Header.RenderChunkInfos.Select(s => s.RenderMask).ToList();
+
             // removing existing rendChunks
-            Count = blob.Header.RenderChunkInfos.Count;
-            for (var i = 0; i < Count; i++)
-            {
-                blob.Header.RenderChunkInfos.Remove(blob.Header.RenderChunkInfos[0]);
-            }
+            blob.Header.RenderChunkInfos.Clear();
 
             // adding new rendChunks
             for (var i = 0; i < info.meshCount; i++)
             {
-                var chunk = RedTypeManager.Create<rendChunk>();
+                var chunk = new rendChunk
+                {
+                    LodMask = (byte)info.LODLvl[i],
+                    RenderMask = renderMasks[i >= renderMasks.Count ? 0 : i],
+                    // based upon VertexBlock, subject to change, incremental will be good, for weightcount ++ etc
+                    // VertexFactory is really important to be taken care of properly
+                    VertexFactory = 2,
+                    NumIndices = info.indCounts[i],
+                    NumVertices = (ushort)info.vertCounts[i],
+                    ChunkIndices = new rendIndexBufferChunk
+                    {
+                        Pe = Enums.GpuWrapApieIndexBufferChunkType.IBCT_IndexUShort,
+                        TeOffset = info.indicesOffsets[i] - info.indexBufferOffset
+                    },
+                    ChunkVertices = new rendVertexBufferChunk()
+                };
 
-                chunk.LodMask = Convert.ToByte(info.LODLvl[i]);
-
-                chunk.RenderMask = Enums.EMeshChunkFlags.MCF_RenderInScene | Enums.EMeshChunkFlags.MCF_RenderInShadows;
-
-                // vertexfactory is really important to be taken care of properly
-                // based upon VertexBlock, subject to change, incremental will be good, for weightcount ++ etc
-                chunk.VertexFactory = Convert.ToByte(2);
-
-                chunk.NumIndices = info.indCounts[i];
-                chunk.NumVertices = Convert.ToUInt16(info.vertCounts[i]);
-
-                chunk.ChunkIndices = RedTypeManager.Create<rendIndexBufferChunk>();
-                chunk.ChunkIndices.Pe = Enums.GpuWrapApieIndexBufferChunkType.IBCT_IndexUShort;
-                chunk.ChunkIndices.TeOffset = info.indicesOffsets[i] - info.indexBufferOffset;
-
-
-                chunk.ChunkVertices = RedTypeManager.Create<rendVertexBufferChunk>();
                 chunk.ChunkVertices.ByteOffsets.Add(info.posnOffsets[i]);
                 chunk.ChunkVertices.ByteOffsets.Add(info.tex0Offsets[i]);
                 chunk.ChunkVertices.ByteOffsets.Add(info.normalOffsets[i]);
                 chunk.ChunkVertices.ByteOffsets.Add(info.colorOffsets[i]);
                 chunk.ChunkVertices.ByteOffsets.Add(info.unknownOffsets[i]);
 
-                chunk.ChunkVertices.VertexLayout = RedTypeManager.Create<GpuWrapApiVertexLayoutDesc>();
-
-                // fishy hash and slotmask, subject to change
-                chunk.ChunkVertices.VertexLayout.Hash = 0;
-                chunk.ChunkVertices.VertexLayout.SlotMask = 0;
-
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(info.vpStrides[i]));
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(4));
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(8));
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(8));
-                if (info.unknownOffsets[i] == 0)
+                chunk.ChunkVertices.VertexLayout = new GpuWrapApiVertexLayoutDesc
                 {
-                    chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(0));
-                }
-                else
-                {
-                    chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(4));
-                }
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(0));
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(0));
-                if (info.weightCounts[i] == 0)
-                {
-                    chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(48));
-                }
-                else
-                {
-                    chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(64));
-                }
+                    //hash is not understood/no-interest, subject to change
+                    Hash = 0
+                };
 
-
-                var elementCount = 0;
-
-                // Position                                                                                                                              // bs way of setting up index names
-                chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                // fishy
-                //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(0);
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(0);
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Position;
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Short4N;
-                elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
+                // Position
+                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                {
+                    StreamIndex = 0,
+                    UsageIndex = 0,
+                    Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Position,
+                    Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Short4N
+                    //StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex
+                });
 
                 // Joint0
                 if (info.weightCounts[i] > 0)
                 {
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                    // fishy
-                    //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(0);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(0);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_SkinIndices;
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4;
-                    elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                    {
+                        StreamIndex = 0,
+                        UsageIndex = 0,
+                        Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_SkinIndices,
+                        Type = Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4
+                        //StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex
+                    });
 
-                    // subject to change, maybe, vertfactory is weird
+                    // subject to change, maybe, VertexFactory is weird
                     chunk.VertexFactory++;
                 }
+
                 // joint1
                 if (info.weightCounts[i] > 4)
                 {
-                    // bs way of setting up index names
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                    // fishy
-                    //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(0);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(1);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_SkinIndices;
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4;
-                    elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                    {
+                        StreamIndex = 0,
+                        UsageIndex = 1,
+                        Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_SkinIndices,
+                        Type = Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4
+                        //StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex
+                    });
 
-                    // subject to change, maybe, vertfactory is weird
+                    // subject to change, maybe, VertexFactory is weird
                     chunk.VertexFactory++;
                 }
 
                 // weight0
                 if (info.weightCounts[i] > 0)
                 {
-                    // bs way of setting up index names
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                    // fishy
-                    //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(0);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(0);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_SkinWeights;
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4N;
-                    elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                    {
+                        StreamIndex = 0,
+                        UsageIndex = 0,
+                        Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_SkinWeights,
+                        Type = Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4N
+                        //StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex
+                    });
                 }
                 // weight1
                 if (info.weightCounts[i] > 4)
                 {
-                    // bs way of setting up index names
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                    // fishy
-                    //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(0);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(1);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_SkinWeights;
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4N;
-                    elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                    {
+                        StreamIndex = 0,
+                        UsageIndex = 1,
+                        Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_SkinWeights,
+                        Type = Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4N
+                        //StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex
+                    });
                 }
 
                 // tx0coords
-                chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                // fishy
-                //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(1);
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(0);
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_TexCoord;
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Float16_2;
-                elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
+                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                {
+                    StreamIndex = 1,
+                    UsageIndex = 0,
+                    Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_TexCoord,
+                    Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Float16_2
+                    //StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex
+                });
 
                 // normals
-                chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                // fishy
-                //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(2);
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(0);
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Normal;
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Dec4;
-                elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
+                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                {
+                    StreamIndex = 2,
+                    UsageIndex = 0,
+                    Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Normal,
+                    Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Dec4
+                    //StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex
+                });
 
                 // tangents
-                chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                // fishy
-                //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(2);
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(0);
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Tangent;
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Dec4;
-                elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
+                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                {
+                    StreamIndex = 2,
+                    UsageIndex = 0,
+                    Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Tangent,
+                    Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Dec4
+                    //StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex
+                });
 
                 // color
-                chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                // fishy
-                //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(3);
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(0);
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Color;
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Color;
-                elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
+                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                {
+                    StreamIndex = 3,
+                    UsageIndex = 0,
+                    Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Color,
+                    Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Color
+                    //StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex
+                });
 
                 // tx1coords
-                chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                // fishy
-                //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(3);
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(1);
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_TexCoord;
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Float16_2;
-                elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
+                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                {
+                    StreamIndex = 3,
+                    UsageIndex = 1,
+                    Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_TexCoord,
+                    Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Float16_2
+                    //StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex
+                });
 
                 // extra data/ morphoffsets
                 if (info.garmentSupportExists[i])
                 {
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                    // fishy
-                    //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(0);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(0);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_ExtraData;
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Float16_4;
-                    elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                    {
+                        // fishy
+                        StreamIndex = 0,
+                        UsageIndex = 0,
+                        Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_ExtraData,
+                        Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Float16_4
+                        //StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex
+                    });
 
-                    // subject to change, maybe, vertfactory is weird, extra data ads 2 to this
+                    // subject to change, maybe, VertexFactory is weird, extra data ads 2 to this
                     chunk.VertexFactory += 2;
                 }
 
                 // instanceTransforms
-                for (var e = 0; e < 3; e++)
+                for (byte e = 0; e < 3; e++)
                 {
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                    // fishy
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerInstance;
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(7);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(e);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_InstanceTransform;
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Float4;
-                    elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                    {
+                        StreamIndex = 7,
+                        UsageIndex = e,
+                        Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_InstanceTransform,
+                        Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Float4,
+                        StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerInstance
+                    });
                 }
 
                 // instanceSkinningDatas
                 if (info.weightCounts[i] > 0)
                 {
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                    // fishy
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerInstance;
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(7);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(0);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_InstanceSkinningData;
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_UInt4;
-                    elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                    {
+                        StreamIndex = 7,
+                        UsageIndex = 0,
+                        Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_InstanceSkinningData,
+                        Type = Enums.GpuWrapApiVertexPackingePackingType.PT_UInt4,
+                        StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerInstance
+                    });
                 }
 
                 // LightBlockerIntensity
                 if (info.unknownOffsets[i] != 0)
                 {
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                    // fishy
-                    //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(4);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(0);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_LightBlockerIntensity;
-                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Float1;
-                    elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                    {
+                        StreamIndex = 4,
+                        UsageIndex = 0,
+                        Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_LightBlockerIntensity,
+                        Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Float1,
+                        // StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex
+                    });
 
                     // for lightblocker its 24, after testing some files, somtimes unknownoffsets[4] is used for destruction indices and some paint instead of lightblocker, so this needs to be taken care of
                     chunk.VertexFactory += 24;
@@ -909,14 +1329,35 @@ namespace WolvenKit.Modkit.RED4
 
 
                 // Invalid, Required
-                chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                // fishy
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_Invalid;
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(0);
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(0);
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Invalid;
-                chunk.ChunkVertices.VertexLayout.Elements[elementCount].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Invalid;
-                elementCount = chunk.ChunkVertices.VertexLayout.Elements.Count;
+                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                {
+                    StreamIndex = 0,
+                    UsageIndex = 0,
+                    Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Invalid,
+                    Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Invalid,
+                    StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_Invalid
+                });
+
+                chunk.ChunkVertices.VertexLayout.SlotStrides = new CStatic<CUInt8>(8);
+                for (var j = 0; j < 8; j++)
+                {
+                    chunk.ChunkVertices.VertexLayout.SlotStrides.Add(0);
+                }
+
+                foreach (var element in chunk.ChunkVertices.VertexLayout.Elements)
+                {
+                    chunk.ChunkVertices.VertexLayout.SlotStrides[element.StreamIndex] += GetDataSize(element.Type);
+                }
+
+                var slotMask = 0;
+                for (var j = 0; j < chunk.ChunkVertices.VertexLayout.SlotStrides.Count; j++)
+                {
+                    if (chunk.ChunkVertices.VertexLayout.SlotStrides[j] > 0)
+                    {
+                        slotMask |= (1 << j);
+                    }
+                }
+                chunk.ChunkVertices.VertexLayout.SlotMask = (uint)slotMask;
 
                 // Adding Chunk
                 blob.Header.RenderChunkInfos.Add(chunk);
@@ -935,36 +1376,86 @@ namespace WolvenKit.Modkit.RED4
 
             blob.RenderBuffer.Buffer.SetBytes(buffer.ToArray());
 
-            //cr2w.Buffers[p].DiskSize = zsize;
-            //cr2w.Buffers[p].Crc32 = crc;
-            //cr2w.Buffers[p].MemSize = (UInt32)buffer.Length;
-            //var off = cr2w.Buffers[p].Offset;
-            //cr2w.Buffers[p].Offset = 0;
-            //cr2w.Buffers[p].ReadData(new BinaryReader(compressed));
-            //cr2w.Buffers[p].Offset = off;
+            if (cr2w.RootChunk is CMesh root && inverseBindMatrices != null)
+            {
+                for (var i = 0; i < blob.Header.BonePositions.Count; i++)
+                {
+                    if (boneNames is not null)
+                    {
+                        var index = Array.FindIndex(boneNames, x => x.Contains(root.BoneNames[i].ToString().NotNull()) && x.Length == root.BoneNames[i].Length);
+
+                        var position = blob.Header.BonePositions[i].NotNull();
+
+                        position.X = inverseBindMatrices[index].M41;
+                        position.Y = -inverseBindMatrices[index].M43;
+                        position.Z = inverseBindMatrices[index].M42;
+                        position.W = inverseBindMatrices[index].M44;
+                        //position = root.BoneRigMatrices[i].W;
+                    }
+                }
+            }
 
             var ms = new MemoryStream();
-            using var writer = new CR2WWriter(ms, Encoding.UTF8, true);
+            using var writer = new CR2WWriter(ms, Encoding.UTF8, true) { LoggerService = _loggerService };
             writer.WriteFile(cr2w);
 
             return ms;
         }
 
-        private static void VerifyGLTF(ModelRoot model)
-        {
-            if (model.LogicalMeshes.Count == 0)
+        private static CUInt8 GetDataSize(Enums.GpuWrapApiVertexPackingePackingType type) =>
+            type switch
             {
-                throw new Exception("Provided glTF doesn't contain any 3D Geomerty");
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Invalid => 0,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Float1 => 4,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Float2 => 8,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Float3 => 12,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Float4 => 16,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Float16_2 => 4,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Float16_4 => 8,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_UShort1 => 2,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_UShort2 => 4,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_UShort4 => 8,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_UShort4N => 8,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Short1 => 2,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Short2 => 4,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Short4 => 8,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Short4N => 8,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_UInt1 => 4,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_UInt2 => 8,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_UInt3 => 12,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_UInt4 => 16,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Int1 => 4,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Int2 => 8,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Int3 => 12,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Int4 => 16,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Color => 4,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_UByte1 => 1,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_UByte1F => 1,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4 => 4,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4N => 4,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Byte4N => 4,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Dec4 => 4,
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Index16 => throw new NotImplementedException(),
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Index32 => throw new NotImplementedException(),
+                Enums.GpuWrapApiVertexPackingePackingType.PT_Max => throw new NotImplementedException(),
+                _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+            };
+
+        private static void VerifyGLTF(ModelRoot model, GltfImportArgs args)
+        {
+            if (model.LogicalMeshes.Count < 1)
+            {
+                throw new Exception("Provided glTF doesn't contain any 3D Meshes");
             }
-            if (model.LogicalSkins.Count > 1)
+            /*if (model.LogicalSkins.Count > 1)
             {
                 throw new Exception($"Armature Count: {model.LogicalSkins.Count}, Only 1 Armature is allowed");
-            }
+            }*/
 
-            var LODs = new List<uint>();
-            for (var i = 0; i < model.LogicalMeshes.Count; i++)
+            var lods = new List<uint>();
+            foreach (var m in model.LogicalMeshes)
             {
-                var accessors = model.LogicalMeshes[i].Primitives[0].VertexAccessors.Keys.ToList();
+                var accessors = m.Primitives[0].VertexAccessors.Keys.ToList();
 
                 if (!accessors.Contains("POSITION"))
                 {
@@ -978,61 +1469,69 @@ namespace WolvenKit.Modkit.RED4
                 {
                     throw new Exception("One or more Geometry in provided GLTF doesn't contain Tangents data. Tangents must be included within glTF files.");
                 }
-                if (model.LogicalMeshes[i].Primitives[0].GetIndices().ToList().Count < 3)
+                if (m.Primitives[0].GetIndices().ToList().Count < 3)
                 {
                     throw new Exception("One or more Geometry in provided GLTF doesn't contain any Triangle primitives");
                 }
-                var name = model.LogicalMeshes[i].Name;
-                uint LOD = 0;
+                var name = m.Name;
+                uint lod = 0;
 
                 if (name.Contains("LOD"))
                 {
-                    try
+                    var idx = name.IndexOf("LOD_");
+                    if (idx < name.Length - 1)
                     {
-                        var idx = name.IndexOf("LOD_");
-                        if (idx < name.Length - 1)
+                        if (!uint.TryParse(name.AsSpan(idx + 4, 1), out lod))
                         {
-                            LOD = Convert.ToUInt32(name.Substring(idx + 4, 1));
-                            LODs.Add(LOD);
+                            throw new Exception("Invalid Geometry/sub mesh name: " + name + " , Character after \"LOD_\" should be 1 or 2 or 4 or 8, Representing the Level of Detail (LOD) of the submesh.");
                         }
-                    }
-                    catch
-                    {
-                        throw new Exception("Invalid Geometry/sub mesh name: " + name + " , Character after \"LOD_\" should be 1 or 2 or 4 or 8, Representing the Level of Detail (LOD) of the submesh.");
-                    }
-                    if (LOD is not 1 and not 2 and not 4 and not 8)
-                    {
-                        throw new Exception("Invalid Geometry/sub mesh name: " + name + " , Character after \"LOD_\"  should be 1 or 2 or 4 or 8, Representing the Level of Detail (LOD) of the submesh.");
+
+                        if (lod is not 1 and not 2 and not 4 and not 8)
+                        {
+                            throw new Exception("Invalid Geometry/sub mesh name: " + name + " , Character after \"LOD_\"  should be 1 or 2 or 4 or 8, Representing the Level of Detail (LOD) of the submesh.");
+                        }
+
+                        lods.Add(lod);
                     }
                 }
                 else
                 {
-                    LODs.Add(1);
+                    lods.Add(1);
                 }
             }
-            if (!LODs.Contains(1))
+            if (!lods.Contains(1))
             {
                 throw new Exception("None of the Geometry/submeshes are of 1 Level of Detail or (LOD 1) in provided GLTF");
             }
         }
-        private static void UpdateSkinningParamCloth(ref List<RawMeshContainer> meshes, ref CR2WFile cr2w)
+        private static void UpdateSkinningParamCloth(ref List<RawMeshContainer> meshes, ref CR2WFile cr2w, GltfImportArgs args)
         {
-            var cmesh = (CMesh)cr2w.RootChunk;
+            var cMesh = (CMesh)cr2w.RootChunk;
 
-            var LODLvl = new uint[meshes.Count];
+            var lodLvl = new uint[meshes.Count];
             for (var i = 0; i < meshes.Count; i++)
             {
-                if (meshes[i].name.Contains("LOD"))
+                var mesh = meshes[i];
+
+                ArgumentNullException.ThrowIfNull(mesh.name);
+
+                if (mesh.name.Contains("LOD"))
                 {
-                    var idx = meshes[i].name.IndexOf("LOD_");
-                    if (idx < meshes[i].name.Length - 1)
+                    var idx = mesh.name.IndexOf("LOD_", StringComparison.Ordinal);
+                    if (idx < mesh.name.Length - 1)
                     {
-                        LODLvl[i] = Convert.ToUInt32(meshes[i].name.Substring(idx + 4, 1));
+                        if (!uint.TryParse(mesh.name.AsSpan(idx + 4, 1), out var lod) || lod is not 1 and not 2 and not 4 and not 8)
+                        {
+                            throw new Exception(
+                                $"Invalid submesh name: {mesh.name}, Character after \"LOD_\" should be 1 or 2 or 4 or 8 to indicate submesh Level of Detail");
+                        }
+
+                        lodLvl[i] = lod;
                     }
                 }
                 else
                 {
-                    LODLvl[i] = 1;
+                    lodLvl[i] = 1;
                 }
 
             }
@@ -1063,24 +1562,31 @@ namespace WolvenKit.Modkit.RED4
             cr2w.Chunks.OfType<rendRenderMeshBlob>().First().RenderBuffer.Pointer = meshBufferIdx + 1;
             cr2w.Chunks.OfType<CMesh>().First().LocalMaterialBuffer.RawData.Pointer = materialBufferIdx + 1;*/
 
-            var clothBlob = cmesh.Parameters.FirstOrDefault(x => x.Chunk is meshMeshParamCloth);
-            var clothGraphicalBlob = cmesh.Parameters.FirstOrDefault(x => x.Chunk is meshMeshParamCloth_Graphical);
+            var clothBlob = cMesh.Parameters.FirstOrDefault(x => x is not null && x.Chunk is meshMeshParamCloth);
+            var clothGraphicalBlob = cMesh.Parameters.FirstOrDefault(x => x is not null && x.Chunk is meshMeshParamCloth_Graphical);
 
             if (clothBlob != null)
             {
-                var blob = (meshMeshParamCloth)clothBlob.Chunk;
+                var blob = (meshMeshParamCloth)clothBlob.Chunk.NotNull();
                 blob.Chunks = new CArray<meshPhxClothChunkData>();
-                for (var i = 0; i < meshes.Count; i++)
+                foreach (var mesh in meshes)
                 {
+                    ArgumentNullException.ThrowIfNull(mesh.name);
+                    ArgumentNullException.ThrowIfNull(mesh.positions);
+                    ArgumentNullException.ThrowIfNull(mesh.indices);
+                    ArgumentNullException.ThrowIfNull(mesh.weights);
+                    ArgumentNullException.ThrowIfNull(mesh.boneindices);
+                    ArgumentNullException.ThrowIfNull(mesh.normals);
+
                     var chunk = new meshPhxClothChunkData();
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
-                        for (var e = 0; e < meshes[i].positions.Length; e++)
+                        for (var e = 0; e < mesh.positions.Length; e++)
                         {
-                            bw.Write(meshes[i].positions[e].X);
-                            bw.Write(meshes[i].positions[e].Y);
-                            bw.Write(meshes[i].positions[e].Z);
+                            bw.Write(mesh.positions[e].X);
+                            bw.Write(mesh.positions[e].Y);
+                            bw.Write(mesh.positions[e].Z);
                         }
 
                         chunk.Positions = new DataBuffer(buffer.ToArray());
@@ -1088,65 +1594,65 @@ namespace WolvenKit.Modkit.RED4
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
-                        for (var e = 0; e < meshes[i].indices.Length; e++)
+                        foreach (var i in mesh.indices)
                         {
-                            bw.Write(Convert.ToUInt16(meshes[i].indices[e]));
+                            bw.Write(Convert.ToUInt16(i));
                         }
 
                         chunk.Indices = new DataBuffer(buffer.ToArray());
                     }
-                    if (meshes[i].weightCount > 0)
+                    if (mesh.weightCount > 0)
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
-                        for (var e = 0; e < meshes[i].positions.Length; e++)
+                        for (var e = 0; e < mesh.positions.Length; e++)
                         {
-                            bw.Write(meshes[i].weights[e, 0]);
-                            bw.Write(meshes[i].weights[e, 1]);
-                            bw.Write(meshes[i].weights[e, 2]);
-                            bw.Write(meshes[i].weights[e, 3]);
+                            bw.Write(mesh.weights[e, 0]);
+                            bw.Write(mesh.weights[e, 1]);
+                            bw.Write(mesh.weights[e, 2]);
+                            bw.Write(mesh.weights[e, 3]);
                         }
 
                         chunk.SkinWeights = new DataBuffer(buffer.ToArray());
                     }
-                    if (meshes[i].weightCount > 0)
+                    if (mesh.weightCount > 0)
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
-                        for (var e = 0; e < meshes[i].positions.Length; e++)
+                        for (var e = 0; e < mesh.positions.Length; e++)
                         {
-                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 0]));
-                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 1]));
-                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 2]));
-                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 3]));
+                            bw.Write(Convert.ToByte(mesh.boneindices[e, 0]));
+                            bw.Write(Convert.ToByte(mesh.boneindices[e, 1]));
+                            bw.Write(Convert.ToByte(mesh.boneindices[e, 2]));
+                            bw.Write(Convert.ToByte(mesh.boneindices[e, 3]));
                         }
 
                         chunk.SkinIndices = new DataBuffer(buffer.ToArray());
                     }
-                    if (meshes[i].weightCount > 4)
+                    if (mesh.weightCount > 4)
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
-                        for (var e = 0; e < meshes[i].positions.Length; e++)
+                        for (var e = 0; e < mesh.positions.Length; e++)
                         {
-                            bw.Write(meshes[i].weights[e, 4]);
-                            bw.Write(meshes[i].weights[e, 5]);
-                            bw.Write(meshes[i].weights[e, 6]);
-                            bw.Write(meshes[i].weights[e, 7]);
+                            bw.Write(mesh.weights[e, 4]);
+                            bw.Write(mesh.weights[e, 5]);
+                            bw.Write(mesh.weights[e, 6]);
+                            bw.Write(mesh.weights[e, 7]);
                         }
 
                         chunk.SkinWeightsExt = new DataBuffer(buffer.ToArray());
                     }
-                    if (meshes[i].weightCount > 4)
+                    if (mesh.weightCount > 4)
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
-                        for (var e = 0; e < meshes[i].positions.Length; e++)
+                        for (var e = 0; e < mesh.positions.Length; e++)
                         {
-                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 4]));
-                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 5]));
-                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 6]));
-                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 7]));
+                            bw.Write(Convert.ToByte(mesh.boneindices[e, 4]));
+                            bw.Write(Convert.ToByte(mesh.boneindices[e, 5]));
+                            bw.Write(Convert.ToByte(mesh.boneindices[e, 6]));
+                            bw.Write(Convert.ToByte(mesh.boneindices[e, 7]));
                         }
 
                         chunk.SkinIndicesExt = new DataBuffer(buffer.ToArray());
@@ -1154,69 +1660,76 @@ namespace WolvenKit.Modkit.RED4
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
-                        for (var e = 0; e < meshes[i].normals.Length; e++)
+                        for (var e = 0; e < mesh.normals.Length; e++)
                         {
-                            bw.Write(meshes[i].normals[e].X);
-                            bw.Write(meshes[i].normals[e].Y);
-                            bw.Write(meshes[i].normals[e].Z);
+                            bw.Write(mesh.normals[e].X);
+                            bw.Write(mesh.normals[e].Y);
+                            bw.Write(mesh.normals[e].Z);
                         }
 
                         chunk.Normals = new DataBuffer(buffer.ToArray());
                     }
                     blob.Chunks.Add(chunk);
-                    meshes[i].weightCount = 0;
+                    mesh.weightCount = 0;
                 }
                 blob.LodChunkIndices = new CArray<CArray<CUInt16>>
                 {
                     new()
                 };
-                if (LODLvl.Contains(2U))
+                if (lodLvl.Contains(2U))
                 {
                     blob.LodChunkIndices.Add(new CArray<CUInt16>());
                 }
-                if (LODLvl.Contains(4U))
+                if (lodLvl.Contains(4U))
                 {
                     blob.LodChunkIndices.Add(new CArray<CUInt16>());
                 }
-                if (LODLvl.Contains(8U))
+                if (lodLvl.Contains(8U))
                 {
                     blob.LodChunkIndices.Add(new CArray<CUInt16>());
                 }
-                for (ushort i = 0; i < LODLvl.Length; i++)
+                for (ushort i = 0; i < lodLvl.Length; i++)
                 {
-                    if (LODLvl[i] == 1)
+                    if (lodLvl[i] == 1)
                     {
-                        blob.LodChunkIndices[0].Add(i);
+                        blob.LodChunkIndices[0].NotNull().Add(i);
                     }
-                    if (LODLvl[i] == 2)
+                    if (lodLvl[i] == 2)
                     {
-                        blob.LodChunkIndices[1].Add(i);
+                        blob.LodChunkIndices[1].NotNull().Add(i);
                     }
-                    if (LODLvl[i] == 4)
+                    if (lodLvl[i] == 4)
                     {
-                        blob.LodChunkIndices[2].Add(i);
+                        blob.LodChunkIndices[2].NotNull().Add(i);
                     }
-                    if (LODLvl[i] == 8)
+                    if (lodLvl[i] == 8)
                     {
-                        blob.LodChunkIndices[3].Add(i);
+                        blob.LodChunkIndices[3].NotNull().Add(i);
                     }
                 }
             }
             if (clothGraphicalBlob != null)
             {
-                var blob = (meshMeshParamCloth_Graphical)clothGraphicalBlob.Chunk;
+                var blob = (meshMeshParamCloth_Graphical)clothGraphicalBlob.Chunk.NotNull();
                 blob.Chunks = new CArray<meshGfxClothChunkData>();
-                for (var i = 0; i < meshes.Count; i++)
+                foreach (var mesh in meshes)
                 {
-                    var chunk = RedTypeManager.Create<meshGfxClothChunkData>();
+                    ArgumentNullException.ThrowIfNull(mesh.name);
+                    ArgumentNullException.ThrowIfNull(mesh.positions);
+                    ArgumentNullException.ThrowIfNull(mesh.indices);
+                    ArgumentNullException.ThrowIfNull(mesh.weights);
+                    ArgumentNullException.ThrowIfNull(mesh.boneindices);
+                    ArgumentNullException.ThrowIfNull(mesh.colors1);
+
+                    var chunk = new meshGfxClothChunkData();
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
-                        for (var e = 0; e < meshes[i].positions.Length; e++)
+                        for (var e = 0; e < mesh.positions.Length; e++)
                         {
-                            bw.Write(meshes[i].positions[e].X);
-                            bw.Write(meshes[i].positions[e].Y);
-                            bw.Write(meshes[i].positions[e].Z);
+                            bw.Write(mesh.positions[e].X);
+                            bw.Write(mesh.positions[e].Y);
+                            bw.Write(mesh.positions[e].Z);
                         }
 
                         chunk.Positions = new DataBuffer(buffer.ToArray());
@@ -1224,121 +1737,245 @@ namespace WolvenKit.Modkit.RED4
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
-                        for (var e = 0; e < meshes[i].indices.Length; e++)
+                        foreach (var i in mesh.indices)
                         {
-                            bw.Write(Convert.ToUInt16(meshes[i].indices[e]));
+                            bw.Write(Convert.ToUInt16(i));
                         }
 
                         chunk.Indices = new DataBuffer(buffer.ToArray());
                     }
-                    if (meshes[i].weightCount > 0)
+                    if (mesh.weightCount > 0)
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
-                        for (var e = 0; e < meshes[i].positions.Length; e++)
+                        for (var e = 0; e < mesh.positions.Length; e++)
                         {
-                            bw.Write(meshes[i].weights[e, 0]);
-                            bw.Write(meshes[i].weights[e, 1]);
-                            bw.Write(meshes[i].weights[e, 2]);
-                            bw.Write(meshes[i].weights[e, 3]);
+                            bw.Write(mesh.weights[e, 0]);
+                            bw.Write(mesh.weights[e, 1]);
+                            bw.Write(mesh.weights[e, 2]);
+                            bw.Write(mesh.weights[e, 3]);
                         }
 
                         chunk.SkinWeights = new DataBuffer(buffer.ToArray());
                     }
-                    if (meshes[i].weightCount > 0)
+                    if (mesh.weightCount > 0)
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
-                        for (var e = 0; e < meshes[i].positions.Length; e++)
+                        for (var e = 0; e < mesh.positions.Length; e++)
                         {
-                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 0]));
-                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 1]));
-                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 2]));
-                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 3]));
+                            bw.Write(Convert.ToByte(mesh.boneindices[e, 0]));
+                            bw.Write(Convert.ToByte(mesh.boneindices[e, 1]));
+                            bw.Write(Convert.ToByte(mesh.boneindices[e, 2]));
+                            bw.Write(Convert.ToByte(mesh.boneindices[e, 3]));
                         }
 
                         chunk.SkinIndices = new DataBuffer(buffer.ToArray());
                     }
-                    if (meshes[i].weightCount > 4)
+                    if (mesh.weightCount > 4)
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
-                        for (var e = 0; e < meshes[i].positions.Length; e++)
+                        for (var e = 0; e < mesh.positions.Length; e++)
                         {
-                            bw.Write(meshes[i].weights[e, 4]);
-                            bw.Write(meshes[i].weights[e, 5]);
-                            bw.Write(meshes[i].weights[e, 6]);
-                            bw.Write(meshes[i].weights[e, 7]);
+                            bw.Write(mesh.weights[e, 4]);
+                            bw.Write(mesh.weights[e, 5]);
+                            bw.Write(mesh.weights[e, 6]);
+                            bw.Write(mesh.weights[e, 7]);
                         }
 
                         chunk.SkinWeightsExt = new DataBuffer(buffer.ToArray());
                     }
-                    if (meshes[i].weightCount > 4)
+                    if (mesh.weightCount > 4)
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);
-                        for (var e = 0; e < meshes[i].positions.Length; e++)
+                        for (var e = 0; e < mesh.positions.Length; e++)
                         {
-                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 4]));
-                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 5]));
-                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 6]));
-                            bw.Write(Convert.ToByte(meshes[i].boneindices[e, 7]));
+                            bw.Write(Convert.ToByte(mesh.boneindices[e, 4]));
+                            bw.Write(Convert.ToByte(mesh.boneindices[e, 5]));
+                            bw.Write(Convert.ToByte(mesh.boneindices[e, 6]));
+                            bw.Write(Convert.ToByte(mesh.boneindices[e, 7]));
                         }
 
                         chunk.SkinIndicesExt = new DataBuffer(buffer.ToArray());
                     }
                     {
                         chunk.Simulation = new CArray<CUInt16>();
-                        var z = 0;
-                        for (ushort e = 0; e < meshes[i].colors1.Length; e++)
+                        for (ushort e = 0; e < mesh.colors1.Length; e++)
                         {
-                            if (meshes[i].colors1[e].X > 0.01f)
+                            if (mesh.colors1[e].X > 0.01f)
                             {
-                                var val = e;
-                                chunk.Simulation.Add(val);
-                                z++;
+                                chunk.Simulation.Add(e);
                             }
                         }
                     }
                     blob.Chunks.Add(chunk);
-                    meshes[i].weightCount = 0;
+                    mesh.weightCount = 0;
                 }
                 blob.LodChunkIndices = new CArray<CArray<CUInt16>>
                 {
                     new()
                 };
-                if (LODLvl.Contains(2U))
+                if (lodLvl.Contains(2U))
                 {
                     blob.LodChunkIndices.Add(new CArray<CUInt16>());
                 }
-                if (LODLvl.Contains(4U))
+                if (lodLvl.Contains(4U))
                 {
                     blob.LodChunkIndices.Add(new CArray<CUInt16>());
                 }
-                if (LODLvl.Contains(8U))
+                if (lodLvl.Contains(8U))
                 {
                     blob.LodChunkIndices.Add(new CArray<CUInt16>());
                 }
-                for (ushort i = 0; i < LODLvl.Length; i++)
+                for (ushort i = 0; i < lodLvl.Length; i++)
                 {
-                    if (LODLvl[i] == 1)
+                    if (lodLvl[i] == 1)
                     {
-                        blob.LodChunkIndices[0].Add(i);
+                        blob.LodChunkIndices[0].NotNull().Add(i);
                     }
-                    if (LODLvl[i] == 2)
+                    if (lodLvl[i] == 2)
                     {
-                        blob.LodChunkIndices[1].Add(i);
+                        blob.LodChunkIndices[1].NotNull().Add(i);
                     }
-                    if (LODLvl[i] == 4)
+                    if (lodLvl[i] == 4)
                     {
-                        blob.LodChunkIndices[2].Add(i);
+                        blob.LodChunkIndices[2].NotNull().Add(i);
                     }
-                    if (LODLvl[i] == 8)
+                    if (lodLvl[i] == 8)
                     {
-                        blob.LodChunkIndices[3].Add(i);
+                        blob.LodChunkIndices[3].NotNull().Add(i);
                     }
                 }
             }
         }
+
+        #region Parameter: GarmentSupport
+
+        private void UpdateGarmentSupportParameters(List<RawMeshContainer> meshes, CMesh cMesh, bool importGarmentSupport = true, bool ignoreGarmentSupportUVParam = true)
+        {
+            for (var i = cMesh.Parameters.Count - 1; i >= 0; i--)
+            {
+                if (cMesh.Parameters[i] is { Chunk: meshMeshParamGarmentSupport } or { Chunk: garmentMeshParamGarment })
+                {
+                    cMesh.Parameters.RemoveAt(i);
+                }
+            }
+
+            if (!importGarmentSupport)
+            {
+                return;
+            }
+
+            var missingMorphData = new List<string>();
+            foreach (var rawMeshContainer in meshes)
+            {
+                if (rawMeshContainer.garmentMorph?.Length == 0)
+                {
+                    missingMorphData.Add(rawMeshContainer.name!);
+                }
+            }
+
+            if (missingMorphData.Count == meshes.Count)
+            {
+                _loggerService.Warning("Garment support is enabled, but the model doesn't contain any morph data. Please ensure all meshes have garment morph data before enabling garment support. Skipping GS Parameters!");
+                return;
+            }
+                
+            // Not sure if valid or not. Parameters where removed before, so I kept it this way. Remove below if needed - Seb E. Roth
+            if (missingMorphData.Count > 0)
+            {
+                _loggerService.Warning($"Garment support is enabled, but the following submeshes do not have garment morph data: {string.Join(", ", missingMorphData)}. Please ensure all meshes have garment morph data before enabling garment support. Skipping GS Parameters!");
+                return;
+            }
+
+            var meshMeshParamGarmentSupportData = new meshMeshParamGarmentSupport
+            {
+                ChunkCapVertices = [],
+                CustomMorph = true
+            };
+            cMesh.Parameters.Add(meshMeshParamGarmentSupportData);
+
+            var garmentMeshParamGarmentData = new garmentMeshParamGarment
+            {
+                Chunks = []
+            };
+            cMesh.Parameters.Add(garmentMeshParamGarmentData);
+
+            foreach (var mesh in meshes)
+            {
+                UpdateGarmentSupportParameters(mesh, meshMeshParamGarmentSupportData, garmentMeshParamGarmentData, ignoreGarmentSupportUVParam);
+            }
+        }
+
+        private static void UpdateGarmentSupportParameters(RawMeshContainer mesh, meshMeshParamGarmentSupport garmentMeshBlobChunk, garmentMeshParamGarment garmentBlobChunk, bool ignoreGarmentSupportUVParam = true)
+        {
+            ArgumentNullException.ThrowIfNull(mesh.positions, nameof(mesh));
+            ArgumentNullException.ThrowIfNull(mesh.indices, nameof(mesh));
+            ArgumentNullException.ThrowIfNull(mesh.garmentMorph, nameof(mesh));
+            ArgumentNullException.ThrowIfNull(mesh.texCoords0, nameof(mesh));
+
+            var vertBuffer = new MemoryStream();
+            var vertBw = new BinaryWriter(vertBuffer);
+
+            var indBuffer = new MemoryStream();
+            var indBw = new BinaryWriter(indBuffer);
+
+            var morphBuffer = new MemoryStream();
+            var morphBw = new BinaryWriter(morphBuffer);
+
+            var flagBuffer = new MemoryStream();
+            var flagBw = new BinaryWriter(flagBuffer);
+
+            var uvBuffer = new MemoryStream();
+            var uvBw = new BinaryWriter(uvBuffer);
+
+            var capVertices = new CArray<CUInt32>();
+
+            for (var v = 0; v < mesh.positions.Length; v++)
+            {
+                vertBw.Write(mesh.positions[v].X);
+                vertBw.Write(mesh.positions[v].Y);
+                vertBw.Write(mesh.positions[v].Z);
+
+                morphBw.Write(mesh.garmentMorph[v].X);
+                morphBw.Write(mesh.garmentMorph[v].Y);
+                morphBw.Write(mesh.garmentMorph[v].Z);
+
+                var vertexHasValidCap = mesh.garmentSupportCap?.Length > v && mesh.garmentSupportCap[v].X >= .5f;
+                flagBw.Write(Convert.ToByte(mesh.garmentSupportWeight?.Length > v ? mesh.garmentSupportWeight[v].X * 255 : 0));
+                flagBw.Write(Convert.ToByte(vertexHasValidCap ? 1 : 0));
+                flagBw.Write((byte)0);
+                flagBw.Write((byte)0);
+                if (vertexHasValidCap)
+                {
+                    capVertices.Add(Convert.ToUInt32(v));
+                }
+
+                uvBw.Write(mesh.texCoords0[v].X);
+                uvBw.Write(1 - mesh.texCoords0[v].Y);
+            }
+
+            foreach (var i in mesh.indices)
+            {
+                indBw.Write(Convert.ToUInt16(i));
+            }
+
+            garmentMeshBlobChunk.ChunkCapVertices.Add(capVertices);
+
+            garmentBlobChunk.Chunks.Add(new garmentMeshParamGarmentChunkData
+            {
+                GarmentFlags = new DataBuffer(flagBuffer.ToArray()),
+                Indices = new DataBuffer(indBuffer.ToArray()),
+                MorphOffsets = new DataBuffer(morphBuffer.ToArray()),
+                Vertices = new DataBuffer(vertBuffer.ToArray()),
+                Uv = ignoreGarmentSupportUVParam ? null : new DataBuffer(uvBuffer.ToArray()),
+                NumVertices = Convert.ToUInt32(mesh.positions.Length),
+                LodMask = 1
+            });
+        }
+
+        #endregion Parameter: GarmentSupport
     }
 }

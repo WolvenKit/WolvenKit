@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 
@@ -27,12 +28,15 @@ public class RedFileDto
     {
         var list = new List<RedBaseClass>();
         var comp = ReferenceEqualityComparer.Instance;
-
-        foreach (var propTuple in Data.RootChunk.GetEnumerator())
+        if (Data is null)
         {
-            if (propTuple.value is IRedBaseHandle handle)
+            return list;
+        }
+        foreach (var (propPath, value) in Data.RootChunk.GetEnumerator())
+        {
+            if (value is IRedBaseHandle handle)
             {
-                var subCls = handle.GetValue();
+                var subCls = handle.GetValue().NotNull();
                 if (!Contains(subCls))
                 {
                     list.Add(subCls);
@@ -42,11 +46,11 @@ public class RedFileDto
 
         foreach (var embeddedFile in Data.EmbeddedFiles)
         {
-            foreach (var propTuple in embeddedFile.Content.GetEnumerator())
+            foreach (var (propPath, value) in embeddedFile.Content.GetEnumerator())
             {
-                if (propTuple.value is IRedBaseHandle handle)
+                if (value is IRedBaseHandle handle)
                 {
-                    var subCls = handle.GetValue();
+                    var subCls = handle.GetValue().NotNull();
                     if (!Contains(subCls))
                     {
                         list.Add(subCls);
@@ -72,5 +76,5 @@ public class RedFileDto
     }
 
     public JsonHeader Header { get; set; } = new();
-    public CR2WFile Data { get; set; }
+    public CR2WFile? Data { get; set; }
 }

@@ -1,19 +1,19 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+using EFCore.BulkExtensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Database;
-using WolvenKit.Common.Services;
-using WolvenKit.Modkit.RED4;
-using WolvenKit.RED4.Archive.IO;
-using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.Core.Compression;
+using WolvenKit.RED4;
+using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Utility
 {
@@ -28,227 +28,143 @@ namespace WolvenKit.Utility
         public void aGenerateDB()
         {
             ArgumentNullException.ThrowIfNull(s_bm);
-            using var db = new RedDBContext();
-
-            var sw = new Stopwatch();
-            var parser = _host.Services.GetRequiredService<Red4ParserService>();
-            var hashService = _host.Services.GetRequiredService<IHashService>();
-            var allFiles = s_bm.Archives.Items
-                                .SelectMany(x => x.Files.Values)
-                                .ToList();
-
-            Console.WriteLine($"collect all models...");
-            sw.Restart();
-            var dblist = new Dictionary<ulong, RedFile>();
-            foreach (var file in allFiles)
-            {
-                if (dblist.ContainsKey(file.Key))
-                {
-                    continue;
-                }
-                var redFile = new RedFile() { RedFileId = file.Key, Name = file.Name };
-                dblist.Add(redFile.RedFileId, redFile);
-            }
-
-            sw.Stop();
-            Console.WriteLine($"collect all models: {sw.ElapsedMilliseconds}ms");
-
-            // add to DB
-            Console.WriteLine($"add to DB...");
-            sw.Restart();
-            foreach (var (_, redFile) in dblist)
-            {
-                db.Add(redFile);
-            }
-            db.SaveChanges();
-            sw.Stop();
-            Console.WriteLine($"add to DB: {sw.ElapsedMilliseconds}ms");
-        }
-
-        private void CleanDataBase()
-        {
-            var sw = new Stopwatch();
+            RedDBContext.ClearDatabase();
 
             using var db = new RedDBContext();
-
-            Console.WriteLine($"clean database...");
-            sw.Start();
-            if (db.Files != null && db.Files.Any())
+            foreach (var archive in s_bm.GetGameArchives().Reverse())
             {
-                db.Files.RemoveRange(db.Files);
+                db.Add(new RedArchive { Name = archive.Name, Source = archive.Source.ToString() });
             }
             db.SaveChanges();
-
-            sw.Stop();
-            Console.WriteLine($"clean database: {sw.ElapsedMilliseconds}ms");
         }
+
+        private record ArchiveRecord(string Name, EArchiveSource Source);
 
         [TestMethod]
-        public void bAddArchiveNames()
+        public void bGetAllFiles()
         {
             ArgumentNullException.ThrowIfNull(s_bm);
-            using var db = new RedDBContext();
-            var parser = _host.Services.GetRequiredService<Red4ParserService>();
-            var hashService = _host.Services.GetRequiredService<IHashService>();
+            var infoDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory, "infodump");
 
-            foreach (var item in db.Files)
-            {
-                var file = s_bm.Lookup(item.RedFileId);
-                if (file.HasValue)
-                {
-                    item.Archive = Path.GetFileNameWithoutExtension(file.Value.Archive.Name);
-                }
-            }
-            db.SaveChanges();
-        }
+            var importDict = new Dictionary<ArchiveRecord, ConcurrentDictionary<ulong, ulong[]>>();
+            ParseDump(Path.Combine(infoDir, "content"), EArchiveSource.Base);
+            ParseDump(Path.Combine(infoDir, "ep1"), EArchiveSource.EP1);
 
-        /// <summary>
-        /// You can use the resources_XXX zip and extract it to <resultDir> to speed up the generation
-        /// </summary>
-        [TestMethod]
-        public void cSetUses()
-        {
-            var sw = new Stopwatch();
-            var parser = _host.Services.GetRequiredService<Red4ParserService>();
-            var hashService = _host.Services.GetRequiredService<IHashService>();
-            var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
-            Directory.CreateDirectory(resultDir);
             using var db = new RedDBContext();
 
-            // set uses files
-            Console.WriteLine($"set uses files...");
-            sw.Restart();
-
-            var excludedExtensions = new List<string>() { ".wem", ".bin", ".bnk", ".opuspak", ".opusinfo", ".bk2", ".dat" };
-
-            // Run Test
-            foreach (var (ext, files) in s_groupedFiles.Where(_ => !excludedExtensions.Contains(_.Key)))
+            var files = new List<RedFile>();
+            if (db.Archives is not null)
             {
-                var dbDict = new ConcurrentDictionary<ulong, ulong[]>();
-
-                var dataFile = Path.Combine(resultDir, $"{ext[1..]}.txt");
-                if (File.Exists(dataFile))
+                foreach (var dbArchive in db.Archives)
                 {
-                    var lines = File.ReadAllLines(dataFile);
-                    foreach (var line in lines)
+                    if (s_bm.GetGameArchives().FirstOrDefault(x => x.Name == dbArchive.Name && x.Source.ToString() == dbArchive.Source) is not Archive archive)
                     {
-                        var keysplits = line.Split(": ");
-                        var key = ulong.Parse(keysplits[0]);
-                        var uses = keysplits[1].Split(',').Select(x => ulong.Parse(x)).ToArray();
-
-                        dbDict.AddOrUpdate(key, uses, (key, values) => uses);
+                        throw new Exception();
                     }
-                }
-                else
-                {
-                    Parallel.ForEach(files, file =>
+
+                    var fileImports = importDict
+                        .Where(x => x.Key.Name == archive.Name && x.Key.Source == archive.Source)
+                        .Select(x => x.Value)
+                        .First();
+
+                    foreach (var (hash, file) in archive.Files)
                     {
-                        var hash = file.Key;
-                        var archive = file.Archive as Archive;
+                        var dbFile = new RedFile { ArchiveId = dbArchive.Id, Hash = hash };
 
-                        try
+                        if (fileImports.TryGetValue(hash, out var fileImport))
                         {
-                            using var originalMemoryStream = new MemoryStream();
-                            ModTools.ExtractSingleToStream(archive, hash, originalMemoryStream);
-
-                            using var reader = new CR2WReader(originalMemoryStream);
-
-                            if (parser.TryReadRed4FileHeaders(originalMemoryStream, out var cr2w))
+                            dbFile.Uses = new List<RedFileUse>();
+                            foreach (var import in fileImport)
                             {
-                                var rawImports = cr2w.GetImports();
-                                if (rawImports.Any())
-                                {
-                                    var imports = rawImports.Select(x => x.GetRedHash()).ToArray();
-                                    dbDict.AddOrUpdate(hash, imports, (key, oldValue) => imports);
-                                }
-                            }
-                            else
-                            {
-
+                                dbFile.Uses.Add(new RedFileUse { Hash = import });
                             }
                         }
-                        catch (Exception)
-                        {
 
+                        files.Add(dbFile);
+                    }
+                }
+            }
+
+            var fileUses = new List<RedFileUse>();
+            using (var transaction = db.Database.BeginTransaction())
+            {
+                db.BulkInsert(files, new BulkConfig { SetOutputIdentity = true });
+                foreach (var entity in files)
+                {
+                    if (entity.Uses != null)
+                    {
+                        foreach (var subEntity in entity.Uses)
+                        {
+                            subEntity.RedFileId = entity.Id;
+                        }
+                        fileUses.AddRange(entity.Uses);
+                    }
+                }
+                db.BulkInsert(fileUses);
+                transaction.Commit();
+            }
+
+            db.SaveChanges();
+
+
+            void ParseDump(string infoDir, EArchiveSource source)
+            {
+                foreach (var archiveInfoDir in Directory.GetDirectories(infoDir))
+                {
+                    var fileImports = new ConcurrentDictionary<ulong, ulong[]>();
+                    Parallel.ForEach(Directory.GetFiles(archiveInfoDir), infoFile =>
+                    {
+                        var data = JsonSerializer.Deserialize<DataCollection>(File.ReadAllText(infoFile))!;
+
+                        var imports = GetImports(data);
+                        if (imports.Count > 0)
+                        {
+                            fileImports.TryAdd(data.Hash, imports.ToArray());
                         }
                     });
 
-                    using var strw = new StringWriter();
-                    foreach (var (key, uses) in dbDict)
-                    {
-                        strw.WriteLine($"{key}: {string.Join(",", uses)}");
-                    }
-                    File.WriteAllText(Path.Combine(resultDir, $"{ext[1..]}.txt"), strw.ToString());
-                }
-
-                foreach (var info in dbDict)
-                {
-                    var hash = info.Key;
-                    var dbfile = db.Find(typeof(RedFile), hash);
-                    if (dbfile is RedFile redfile)
-                    {
-                        redfile.Uses = info.Value;
-                    }
+                    importDict.Add(new ArchiveRecord(Path.GetFileName(archiveInfoDir), source), fileImports);
                 }
             }
 
-            sw.Stop();
-            Console.WriteLine($"set uses files: {sw.ElapsedMilliseconds}ms");
+            HashSet<ulong> GetImports(DataCollection dc)
+            {
+                var result = new HashSet<ulong>();
 
-            db.SaveChanges();
+                if (dc.Imports != null)
+                {
+                    foreach (var import in dc.Imports)
+                    {
+                        result.Add(FNV1A64HashAlgorithm.HashString(import));
+                    }
+                }
+
+                if (dc.Buffers != null)
+                {
+                    foreach (var buffer in dc.Buffers)
+                    {
+                        result.UnionWith(GetImports(buffer));
+                    }
+                }
+
+                return result;
+            }
         }
 
         [TestMethod]
-        public void dSetusedBy()
-        {
-            var sw = new Stopwatch();
-            var parser = _host.Services.GetRequiredService<Red4ParserService>();
-            var hashService = _host.Services.GetRequiredService<IHashService>();
-
-            using var db = new RedDBContext();
-
-            // set usedby files
-            Console.WriteLine($"set usedby files...");
-            sw.Restart();
-            foreach (var file in db.Files)
-            {
-                var hash = file.RedFileId;
-                var usedBy = db.Files.Where(x => x.Uses.Contains(hash));
-
-                if (usedBy.Any())
-                {
-                    file.UsedBy = usedBy.Select(x => x.RedFileId).ToArray();
-                }
-
-            }
-            sw.Stop();
-            Console.WriteLine($"set usedby files: {sw.ElapsedMilliseconds}ms");
-        }
-
-        [TestMethod]
-        public void _TestWhere()
+        public void cCompress()
         {
             using var db = new RedDBContext();
 
-            var judy = db.Files
-                .Where(x => x.Name.Contains("judy"))
-                .ToList();
-
-            foreach (var item in judy)
+            if (!File.Exists(db.DbPath))
             {
-                var hash = item.RedFileId;
-                var x = db.Files
-                    .Where(delegate (RedFile x)
-                    {
-                        return x.Uses != null && x.Uses.Contains(hash);
-                    })
-                    .ToList();
-
-                var uses = item.Uses != null ? string.Join('-', item.Uses) : "";
-                var usedby = string.Join('-', x.Select(_ => _.RedFileId));
-                Console.WriteLine($"{item.RedFileId}, {item.Archive}, {item.Name}, {uses}, {usedby}");
+                throw new Exception();
             }
-        }
 
+            var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
+
+            var buffer = RedBuffer.CreateBuffer(0, File.ReadAllBytes(db.DbPath));
+            File.WriteAllBytes(Path.Combine(resultDir, "red.kark"), buffer.GetCompressedBytes(Oodle.CompressionLevel.Optimal5));
+        }
     }
 }

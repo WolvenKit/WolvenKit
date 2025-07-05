@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.Common
 {
@@ -38,7 +39,7 @@ namespace WolvenKit.Common
             return instance.DumpElement(element);
         }
 
-        private bool AlreadyTouched(object value)
+        private bool AlreadyTouched(object? value)
         {
             if (value == null)
             {
@@ -56,9 +57,9 @@ namespace WolvenKit.Common
             return false;
         }
 
-        private string DumpElement(object element)
+        private string DumpElement(object? element)
         {
-            if (element == null || element is ValueType || element is string)
+            if (element is null or ValueType or string)
             {
                 Write(FormatValue(element));
             }
@@ -72,12 +73,11 @@ namespace WolvenKit.Common
                     _level++;
                 }
 
-                var enumerableElement = element as IEnumerable;
-                if (enumerableElement != null)
+                if (element is IEnumerable enumerableElement)
                 {
                     foreach (var item in enumerableElement)
                     {
-                        if (item is IEnumerable && !(item is string))
+                        if (item is IEnumerable and not string)
                         {
                             _level++;
                             DumpElement(item);
@@ -104,7 +104,8 @@ namespace WolvenKit.Common
                         var fieldInfo = memberInfo as FieldInfo;
                         var propertyInfo = memberInfo as PropertyInfo;
 
-                        if (fieldInfo == null && propertyInfo == null)
+                        // TODO check this
+                        if (fieldInfo == null || propertyInfo == null)
                         {
                             continue;
                         }
@@ -131,7 +132,7 @@ namespace WolvenKit.Common
                             }
                             else
                             {
-                                Write("{{{0}}} <-- bidirectional reference found", value.GetType().FullName);
+                                Write("{{{0}}} <-- bidirectional reference found", value?.GetType().FullName);
                             }
 
                             _level--;
@@ -148,16 +149,16 @@ namespace WolvenKit.Common
             return _stringBuilder.ToString();
         }
 
-        private string FormatValue(object o)
+        private string FormatValue(object? o)
         {
             if (o == null)
             {
-                return ("null");
+                return "null";
             }
 
-            if (o is DateTime)
+            if (o is DateTime time)
             {
-                return (((DateTime)o).ToShortDateString());
+                return time.ToShortDateString();
             }
 
             if (o is string)
@@ -165,25 +166,25 @@ namespace WolvenKit.Common
                 return string.Format("\"{0}\"", o);
             }
 
-            if (o is char && (char)o == '\0')
+            if (o is char c && c == '\0')
             {
                 return string.Empty;
             }
 
-            if (o is ValueType)
+            if (o is ValueType t)
             {
-                return (o.ToString());
+                return t.ToString().NotNull();
             }
 
             if (o is IEnumerable)
             {
-                return ("...");
+                return "...";
             }
 
-            return ("{ }");
+            return "{ }";
         }
 
-        private void Write(string value, params object[] args)
+        private void Write(string value, params object?[] args)
         {
             var space = new string(' ', _level * _indentSize);
 

@@ -4,345 +4,325 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reactive;
-using System.Reactive.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using DynamicData;
-using Microsoft.WindowsAPICodePack.Dialogs;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using Splat;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Helpers;
-using WolvenKit.Functionality.ProjectManagement;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Functionality.WKitGlobal;
-using WolvenKit.Interaction;
-using WolvenKit.ViewModels.HomePage;
-using WolvenKit.ViewModels.Shell;
+using DynamicData.Binding;
+using Microsoft.Win32;
+using WolvenKit.App.Extensions;
+using WolvenKit.App.Helpers;
+using WolvenKit.App.Interaction;
+using WolvenKit.App.Models.ProjectManagement;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Shell;
 
-namespace WolvenKit.ViewModels.Shared
+namespace WolvenKit.App.ViewModels.HomePage.Pages;
+
+public partial class WelcomePageViewModel : PageViewModel
 {
-    public class WelcomePageViewModel : PageViewModel
+    #region Fields
+
+    private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
+    private readonly AppViewModel _mainViewModel;
+    private readonly ISettingsManager _settingsManager;
+
+
+    private readonly ReadOnlyObservableCollection<RecentlyUsedItemModel> _recentlyUsedItems;
+
+    private Dictionary<string, int> _sortMode = new()
     {
-        #region Fields
+        {"Last opened", 0},
+        {"Last opened (Desc)", 1},
+        {"Created", 2},
+        {"Created (Desc)", 3},
+        {"Name", 4},
+        {"Name (Desc)", 5},
+    };
 
-        private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
-        private readonly IProjectManager _projectManager;
-        private readonly AppViewModel _mainViewModel;
+    #endregion Fields
 
-        private readonly ReadOnlyObservableCollection<RecentlyUsedItemModel> _recentlyUsedItems;
+    #region Constructors
 
-        private readonly ISettingsManager _settingsManager;
+    public WelcomePageViewModel(IRecentlyUsedItemsService recentlyUsedItemsService, AppViewModel mainViewModel, ISettingsManager settingsManager)
+    {
+        _recentlyUsedItemsService = recentlyUsedItemsService;
+        _mainViewModel = mainViewModel;
+        _settingsManager = settingsManager;
 
-        #endregion Fields
+        _selectedPinnedOrder = _settingsManager.PinnedOrder;
+        _selectedRecentOrder = _settingsManager.RecentOrder;
 
-        #region Constructors
+        recentlyUsedItemsService.Items
+            .Connect()
+            //.ObserveOn(RxApp.MainThreadScheduler)
+            .Bind(out _recentlyUsedItems)
+            .Subscribe(OnRecentlyUsedItemsChanged);
+    }
 
-        public WelcomePageViewModel(
-            IRecentlyUsedItemsService recentlyUsedItemsService,
-            ISettingsManager settingsManager,
-            IProjectManager projectManager
-            )
+    private void OnRecentlyUsedItemsChanged(IChangeSet<RecentlyUsedItemModel, string> obj)
+    {
+        ConvertRecentProjects();
+
+        var changeSet = _recentlyUsedItems
+            .ToObservableChangeSet();
+
+        changeSet
+            .WhenAnyPropertyChanged()
+            .Subscribe(_ => ConvertRecentProjects());
+    }
+
+    #endregion Constructors
+
+    #region Properties
+
+    public string DiscordLink = "https://discord.gg/Epkq79kd96";
+    public string OpenCollectiveLink = "https://opencollective.com/redmodding";
+    public string PatreonLink = "https://www.patreon.com/m/RedModdingTools";
+    public string TwitterLink = "https://twitter.com/ModdingRed";
+    public string YoutubeLink = "https://www.youtube.com/channel/UCl3JpsP49JgYLMYAYQvoaLg";
+
+    [ObservableProperty]
+    private ObservableCollection<FancyProjectObject> _fancyPinnedProjects = new();
+
+    [ObservableProperty]
+    private ObservableCollection<FancyProjectObject> _fancyProjects = new();
+
+    [ObservableProperty]
+    private List<RecentlyUsedItemModel> _pinnedItems = new();
+
+    [ObservableProperty]
+    private bool _showPinned;
+
+    [ObservableProperty]
+    private int _selectedPinnedOrder;
+
+    [ObservableProperty]
+    private string _pinnedFilter = "";
+
+    [ObservableProperty]
+    private int _selectedRecentOrder;
+
+    [ObservableProperty]
+    private string _recentFilter = "";
+
+    public Dictionary<string, int> SortMode => _sortMode;
+
+    #endregion Properties
+
+    #region commands
+
+    [RelayCommand]
+    private void OpenProject(string s)
+    {
+        _mainViewModel.OpenProjectCommand.Execute(s);
+
+        // clear filters
+        RecentFilter = string.Empty;
+        PinnedFilter = string.Empty;
+    }
+
+    [RelayCommand]
+    private void DeleteProject(string s)
+    {
+        _mainViewModel.DeleteProjectFromRecentCommand.Execute(s);
+    }
+
+    [RelayCommand]
+    private void NewProject()
+    {
+        _mainViewModel.NewProjectCommand.SafeExecute();
+    }
+
+    [RelayCommand]
+    private void OpenLink(string link)
+    {
+        var ps = new ProcessStartInfo(link)
         {
+            UseShellExecute = true,
+            Verb = "open"
+        };
+        Process.Start(ps);
+    }
 
-            _mainViewModel = Locator.Current.GetService<AppViewModel>();
-
-            _projectManager = projectManager;
-            _recentlyUsedItemsService = recentlyUsedItemsService;
-            _settingsManager = settingsManager;
-
-            CloseHomePage = new RelayCommand(ExecuteHome, CanHome);
-            PinItem = new DelegateCommand<string>(OnPinItemExecute);
-            UnpinItem = new DelegateCommand<string>(OnUnpinItemExecute);
-            OpenInExplorer = new DelegateCommand<string>(OnOpenInExplorerExecute);
-
-            OpenProjectCommand = ReactiveCommand.Create<string>(s =>
-            {
-                _mainViewModel.OpenProjectCommand.Execute(s).Subscribe();
-            });
-            DeleteProjectCommand = ReactiveCommand.Create<string>(s =>
-            {
-                _mainViewModel.DeleteProjectCommand.Execute(s).Subscribe();
-            });
-            NewProjectCommand = ReactiveCommand.Create(() =>
-            {
-                _mainViewModel.NewProjectCommand.Execute().Subscribe();
-            });
-
-            recentlyUsedItemsService.Items
-                .Connect()
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Bind(out _recentlyUsedItems)
-                .Subscribe(OnRecentlyUsedItemsChanged);
+    [RelayCommand]
+    private async Task OpenInExplorer(string parameter)
+    {
+        if (string.IsNullOrEmpty(parameter))
+        {
+            return;
         }
 
-        private void OnRecentlyUsedItemsChanged(IChangeSet<RecentlyUsedItemModel, string> obj) => ConvertRecentProjects();
-
-        #endregion Constructors
-
-        #region Properties
-
-
-        public string DiscordLink = "https://discord.gg/tKZXma5SaA";
-        public string OpenCollectiveLink = "https://opencollective.com/redmodding";
-        public string PatreonLink = "https://www.patreon.com/m/RedModdingTools";
-        public string TwitterLink = "https://twitter.com/ModdingRed";
-        public string YoutubeLink = "https://www.youtube.com/channel/UCl3JpsP49JgYLMYAYQvoaLg";
-
-
-        [Reactive] public ObservableCollection<FancyProjectObject> FancyProjects { get; set; } = new();
-
-        [Reactive] public List<RecentlyUsedItemModel> PinnedItems { get; private set; } = new();
-
-        // Close HomePage (Navigates to Project Editor
-        public ICommand CloseHomePage { get; private set; }
-
-        public ReactiveCommand<string, Unit> OpenProjectCommand { get; }
-        public ReactiveCommand<string, Unit> DeleteProjectCommand { get; }
-        public ReactiveCommand<Unit, Unit> NewProjectCommand { get; }
-        public ICommand OpenInExplorer { get; private set; }
-        public ICommand PinItem { get; private set; }
-        public ICommand SettingsCommand { get; private set; }
-        public ICommand TutorialsCommand { get; private set; }
-        public ICommand UnpinItem { get; private set; }
-        public ICommand WikiCommand { get; private set; }
-        public readonly ReactiveCommand<string, Unit> OpenLinkCommand = ReactiveCommand.Create<string>(
-            link =>
-            {
-                var ps = new ProcessStartInfo(link)
-                {
-                    UseShellExecute = true,
-                    Verb = "open"
-                };
-                Process.Start(ps);
-            });
-
-
-        #endregion Properties
-
-        #region Methods
-
-#pragma warning disable AsyncFixer03 // Avoid fire & forget async void methods
-#pragma warning disable AvoidAsyncVoid
-
-        private async void OnOpenInExplorerExecute(string parameter)
-#pragma warning restore AsyncFixer03 // Avoid fire & forget async void methods
-#pragma warning restore AvoidAsyncVoid
+        if (!File.Exists(parameter))
         {
-            if (!File.Exists(parameter))
-            {
-                parameter = await LocateMissingProjectAsync(parameter);
-            }
-
-            if (string.IsNullOrEmpty(parameter))
-            {
-                return;
-            }
-
-            Process.Start("explorer.exe", $"/select, \"{parameter}\"");
+            parameter = await LocateMissingProjectAsync(parameter);
         }
 
+        Commonfunctions.ShowFileInExplorer(parameter);
+    }
 
-        private async Task<string> LocateMissingProjectAsync(string parameter)
+    [RelayCommand]
+    private void PinItem(string parameter) => _recentlyUsedItemsService.PinItem(parameter);
+
+    [RelayCommand]
+    private void CloseHomePage() => _mainViewModel.CloseModalCommand.Execute(null);
+
+    [RelayCommand]
+    private void UnpinItem(string parameter)
+    {
+        //Argument.IsNotNullOrWhitespace(() => parameter);
+        //_recentlyUsedItemsService.UnpinItem(parameter);
+    }
+
+    #endregion
+
+
+    private async Task<string> LocateMissingProjectAsync(string parameter)
+    {
+        var result = await Interactions.ShowMessageBoxAsync("The file doesn't seem to exist. Would you like to locate it?", "Project not found");
+        var delete = false;
+        switch (result)
         {
-            var result = await Interactions.ShowMessageBoxAsync("The file doesn't seem to exist. Would you like to locate it?", "Project not found");
-            var delete = false;
-            switch (result)
+            case WMessageBoxResult.OK:
+            case WMessageBoxResult.Yes:
+                delete = true;
+                break;
+            case WMessageBoxResult.None:
+            case WMessageBoxResult.Cancel:
+            case WMessageBoxResult.No:
+            case WMessageBoxResult.Custom:
+            default:
+                break;
+        }
+        if (!delete)
+        {
+            var items = _recentlyUsedItemsService.Items.Items
+                .Where(_ => _.Name == parameter)
+                .ToList();
+            if (items.Count > 0)
             {
-                case WMessageBoxResult.OK:
-                case WMessageBoxResult.Yes:
-                    delete = true;
-                    break;
-            }
-            if (!delete)
-            {
-                var items = _recentlyUsedItemsService.Items.Items
-                    .Where(_ => _.Name == parameter)
-                    .ToList();
-                if (items.Count > 0)
+                var f = items.FirstOrDefault();
+                if (f is not null)
                 {
-                    _recentlyUsedItemsService.RemoveItem(items.FirstOrDefault());
-                }
-                return "";
-            }
-            else
-            {
-                var dlg = new CommonOpenFileDialog
-                {
-                    AllowNonFileSystemItems = false,
-                    Multiselect = false,
-                    IsFolderPicker = false,
-                    Title = "Locate the WolvenKit project"
-                };
-                dlg.Filters.Add(new CommonFileDialogFilter("Cyberpunk 2077 Project", "*.cpmodproj"));
-
-                if (dlg.ShowDialog() != CommonFileDialogResult.Ok)
-                {
-                    return "";
-                }
-
-                var file = dlg.FileName;
-                if (string.IsNullOrEmpty(file))
-                {
-                    return "";
-                }
-
-                parameter = file;
-
-                var items = _recentlyUsedItemsService.Items.Items
-                    .Where(_ => Path.GetFileName(_.Name) == Path.GetFileName(parameter))
-                    .ToList();
-                if (items.Count > 0)
-                {
-                    var item = items.First();
-                    _recentlyUsedItemsService.AddItem(new RecentlyUsedItemModel(parameter, item.DateTime, item.Modified));
-                    _recentlyUsedItemsService.RemoveItem(item);
-                    return parameter;
+                    _recentlyUsedItemsService.RemoveItem(f);
                 }
             }
-
             return "";
         }
-
-        private void ConvertRecentProjects() // Converts Recent projects for the homepage.
+        else
         {
-            DispatcherHelper.RunOnMainThread(() =>
+            var dlg = new OpenFileDialog
             {
-                FancyProjects.Clear();
-            });
+                Multiselect = false,
+                Title = "Locate the WolvenKit project",
+                Filter = "Cyberpunk 2077 Project|*.cpmodproj"
+            };
 
-            var sorted = _recentlyUsedItems.ToList();
-            sorted.Sort(delegate (RecentlyUsedItemModel a, RecentlyUsedItemModel b)
+            if (dlg.ShowDialog() != true)
             {
-                DateTime ad, bd;
-                if (a.Modified != default(DateTime))
-                {
-                    ad = a.Modified;
-                }
-                else
-                {
-                    ad = a.DateTime;
-                }
-
-                if (b.Modified != default(DateTime))
-                {
-                    bd = b.Modified;
-                }
-                else
-                {
-                    bd = b.DateTime;
-                }
-
-                return bd.CompareTo(ad);
-            });
-
-            foreach (var item in sorted)
-            {
-                var fi = new FileInfo(item.Name);
-
-                var n = item.Name;
-                var cd = item.Modified != default ? item.Modified : item.DateTime;
-                var p = item.Name;
-
-                var newfo = fi.Name.Split('.');
-                var newfi = fi.Directory + "\\" + newfo[0] + "\\" + "img.png";
-
-                var IsThere = File.Exists(newfi);
-                File.GetLastWriteTime(item.Name);
-
-                FancyProjectObject NewItem;
-                if (Path.GetExtension(item.Name).TrimStart('.') == EProjectType.cpmodproj.ToString())
-                {
-                    if (!IsThere)
-                    { newfi = "pack://application:,,,/Resources/Media/Images/Application/V Male Logo Cropped.png"; }
-                    NewItem = new FancyProjectObject(fi.Name, cd, "Cyberpunk 2077", p, newfi);
-                    DispatcherHelper.RunOnMainThread(() =>
-                    {
-                        FancyProjects.Add(NewItem);
-                    });
-                }
-                if (Path.GetExtension(item.Name).TrimStart('.') == EProjectType.w3modproj.ToString())
-                {
-                    if (!IsThere)
-                    { newfi = "pack://application:,,,/Resources/Media/Images/Application/tw3proj.png"; }
-
-                    NewItem = new FancyProjectObject(n, cd, "The Witcher 3", p, newfi);
-                    DispatcherHelper.RunOnMainThread(() =>
-                    {
-                        FancyProjects.Add(NewItem);
-                    });
-                }
-            }
-        }
-        private void OnPinItemExecute(string parameter) => _recentlyUsedItemsService.PinItem(parameter);
-
-        private bool CanHome() => true;
-
-        private void ExecuteHome()
-        {
-            var main = Locator.Current.GetService<AppViewModel>();
-            main.CloseModalCommand.Execute(null);
-        }
-
-        //private void OnRecentlyUsedItemsServiceUpdated(object sender, EventArgs e)
-        //{
-        //    UpdateRecentlyUsedItems();
-        //    UpdatePinnedItem();
-        //}
-
-        private void OnUnpinItemExecute(string parameter)
-        {
-            //Argument.IsNotNullOrWhitespace(() => parameter);
-
-            //_recentlyUsedItemsService.UnpinItem(parameter);
-        }
-
-        //private void UpdatePinnedItem() => PinnedItems = new List<RecentlyUsedItem>(_recentlyUsedItemsService.PinnedItems);
-
-        //private void UpdateRecentlyUsedItems()
-        //{
-        //    //RecentlyUsedItems = new List<RecentlyUsedItem>(_recentlyUsedItemsService.Items);
-        //    //ConvertRecentProjects();
-        //}
-
-        #endregion Methods
-
-        #region Classes
-
-        public class FancyProjectObject : ReactiveObject
-        {
-            #region Constructors
-
-            public FancyProjectObject(string name, DateTime createdate, string type, string path, string image)
-            {
-                Name = name;
-                CreationDate = createdate;
-                Type = type;
-                ProjectPath = path;
-                Image = image;
-                SafeName = Path.GetFileNameWithoutExtension(name);
+                return "";
             }
 
-            #endregion Constructors
+            var file = dlg.FileName;
+            if (string.IsNullOrEmpty(file))
+            {
+                return "";
+            }
 
-            #region Properties
+            parameter = file;
 
-            public DateTime CreationDate { get; set; }
-            public string Image { get; set; }
-            public DateTime LastEditDate { get; set; }
-            public string Name { get; set; }
-
-            public string ProjectColor => ((uint)string.GetHashCode(ProjectPath) % 7).ToString();
-
-            public string SafeName { get; set; }
-            public string ProjectPath { get; set; }
-            public string Type { get; set; }
-
-            #endregion Properties
+            var items = _recentlyUsedItemsService.Items.Items
+                .Where(_ => Path.GetFileName(_.Name) == Path.GetFileName(parameter))
+                .ToList();
+            if (items.Count > 0)
+            {
+                var item = items.First();
+                _recentlyUsedItemsService.AddItem(new RecentlyUsedItemModel(parameter, item.DateTime, item.LastOpened));
+                _recentlyUsedItemsService.RemoveItem(item);
+                return parameter;
+            }
         }
 
-        #endregion Classes
+        return "";
     }
+
+    private void ConvertRecentProjects() // Converts Recent projects for the homepage.
+    {
+        RefreshPinnedProjects();
+        RefreshRecentProjects();
+    }
+
+    private void RefreshPinnedProjects() =>
+        DispatcherHelper.RunOnMainThread(() =>
+        {
+            _settingsManager.PinnedOrder = SelectedPinnedOrder;
+
+            FancyPinnedProjects.Clear();
+            FancyPinnedProjects.AddRange(GetSortedItems(true, SelectedPinnedOrder, PinnedFilter));
+
+            ShowPinned = _recentlyUsedItems.Count(x => x.IsPinned) > 0;
+        });
+
+    private void RefreshRecentProjects() =>
+        DispatcherHelper.RunOnMainThread(() =>
+        {
+            _settingsManager.RecentOrder = SelectedRecentOrder;
+
+            FancyProjects.Clear();
+            FancyProjects.AddRange(GetSortedItems(false, SelectedRecentOrder, RecentFilter));
+        });
+
+    private List<FancyProjectObject> GetSortedItems(bool isPinned, int order, string filter)
+    {
+        var result = new List<FancyProjectObject>();
+
+        var pinnedItems = _recentlyUsedItems.Where(x => x.IsPinned == isPinned);
+
+        if (!string.IsNullOrEmpty(filter))
+        {
+            pinnedItems = pinnedItems.Where(x => x.Name.Contains(filter, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        pinnedItems = order switch
+        {
+            0 => pinnedItems.OrderBy(x => x.LastOpened),
+            1 => pinnedItems.OrderByDescending(x => x.LastOpened),
+            2 => pinnedItems.OrderBy(x => x.DateTime),
+            3 => pinnedItems.OrderByDescending(x => x.DateTime),
+            4 => pinnedItems.OrderBy(x => x.Name),
+            5 => pinnedItems.OrderByDescending(x => x.Name),
+            _ => pinnedItems
+        };
+
+        foreach (var item in pinnedItems)
+        {
+            var fi = new FileInfo(item.Name);
+
+            var cd = item.LastOpened != default ? item.LastOpened : item.DateTime;
+            var path = item.Name;
+
+            var newfo = fi.Name.Split('.');
+            var image = fi.Directory + "\\" + newfo[0] + "\\" + "img.png";
+
+            if (Path.GetExtension(item.Name).TrimStart('.') == EProjectType.cpmodproj.ToString())
+            {
+                if (!File.Exists(image))
+                {
+                    image = "pack://application:,,,/Resources/Media/Images/Application/V Male Logo Cropped.png";
+                }
+
+                var newItem = new FancyProjectObject(item, fi.Name, cd, "Cyberpunk 2077", path, image);
+
+                result.Add(newItem);
+            }
+        }
+
+        return result;
+    }
+
+    partial void OnSelectedPinnedOrderChanged(int value) => RefreshPinnedProjects();
+    partial void OnSelectedRecentOrderChanged(int value) => RefreshRecentProjects();
+    partial void OnPinnedFilterChanged(string value) => RefreshPinnedProjects();
+    partial void OnRecentFilterChanged(string value) => RefreshRecentProjects();
 }

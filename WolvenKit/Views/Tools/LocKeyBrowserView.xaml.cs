@@ -3,7 +3,8 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using ReactiveUI;
-using WolvenKit.ViewModels.Tools;
+using WolvenKit.App.ViewModels.Tools;
+using static WolvenKit.Modkit.RED4.Serialization.Serialization;
 
 namespace WolvenKit.Views.Tools
 {
@@ -27,13 +28,17 @@ namespace WolvenKit.Views.Tools
         {
             if (e.Key == Key.Enter)
             {
-                TextBox tBox = (TextBox)sender;
-                DependencyProperty prop = TextBox.TextProperty;
+                var tBox = (TextBox)sender;
+                var prop = TextBox.TextProperty;
 
-                BindingExpression binding = BindingOperations.GetBindingExpression(tBox, prop);
-                if (binding != null)
-                { binding.UpdateSource(); }
+                BindingOperations.GetBindingExpression(tBox, prop)?.UpdateSource();
             }
         }
+
+        private void primaryKeyBtn_Click(object sender, System.Windows.RoutedEventArgs e) => Clipboard.SetDataObject(primaryKeyTextBox.Text);
+
+        private void secondaryKeyBtn_Click(object sender, System.Windows.RoutedEventArgs e) => Clipboard.SetDataObject(secondaryKeyTextBox.Text);
+
+        private void contentBtn_Click(object sender, System.Windows.RoutedEventArgs e) => Clipboard.SetDataObject(contentTextBox.Text);
     }
 }

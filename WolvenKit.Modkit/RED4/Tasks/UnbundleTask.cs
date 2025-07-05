@@ -1,153 +1,147 @@
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4;
+using WolvenKit.RED4.Archive;
 
-namespace CP77Tools.Tasks
+namespace CP77Tools.Tasks;
+
+public record UnbundleTaskOptions
 {
-    public partial class ConsoleFunctions
+    public DirectoryInfo? outpath { get; init; }
+    public string? gamepath { get; set; }
+    public string? hash { get; init; }
+    public string? pattern { get; init; }
+    public string? regex { get; init; }
+    public bool DEBUG_decompress { get; init; }
+}
+
+public partial class ConsoleFunctions
+{
+    public int UnbundleTask(FileSystemInfo[] paths, UnbundleTaskOptions options)
     {
-
-        #region Methods
-
-        public void UnbundleTask(string[] path, string outpath,
-            string hash, string pattern, string regex, bool DEBUG_decompress = false)
+        if (paths.Length < 1 && string.IsNullOrEmpty(options.gamepath))
         {
-            if (path == null || path.Length < 1)
-            {
-                _loggerService.Warning("Please fill in an input path.");
-                return;
-            }
-
-            Parallel.ForEach(path, file =>
-            {
-                UnbundleTaskInner(file, outpath, hash, pattern, regex, DEBUG_decompress);
-            });
+            _loggerService.Error("Please fill in an input path.");
+            return ERROR_BAD_ARGUMENTS;
         }
 
-        private void UnbundleTaskInner(string path, string outpath,
-            string hash, string pattern, string regex, bool DEBUG_decompress = false)
+        if (options.outpath == null)
         {
-            #region checks
+            _loggerService.Error("Please fill in an output path.");
+            return ERROR_BAD_ARGUMENTS;
+        }
 
-            if (string.IsNullOrEmpty(path))
+        if (!string.IsNullOrEmpty(options.gamepath) && Directory.Exists(options.gamepath))
+        {
+            var exePath = new FileInfo(Path.Combine(options.gamepath, "bin", "x64", "Cyberpunk2077.exe"));
+            _archiveManager.LoadGameArchives(exePath);
+        }
+
+        var result = 0;
+        foreach (var path in paths)
+        {
+            if (!path.Exists)
             {
-                _loggerService.Warning("Please fill in an input path.");
-                return;
+                _loggerService.Error($"\"{path.FullName}\" could not be found!");
+                result += ERROR_BAD_ARGUMENTS;
+                continue;
             }
 
-            var inputFileInfo = new FileInfo(path);
-            var inputDirInfo = new DirectoryInfo(path);
-
-            if (!inputFileInfo.Exists && !inputDirInfo.Exists)
+            switch (path)
             {
-                _loggerService.Warning("Input path does not exist.");
-                return;
-            }
-
-            if (inputFileInfo.Exists && inputFileInfo.Extension != ".archive")
-            {
-                _loggerService.Warning("Input file is not an .archive.");
-                return;
-            }
-            else if (inputDirInfo.Exists && inputDirInfo.GetFiles().All(_ => _.Extension != ".archive"))
-            {
-                _loggerService.Warning("No .archive file to process in the input directory.");
-                return;
-            }
-
-            var isDirectory = !inputFileInfo.Exists;
-            var basedir = inputFileInfo.Exists ? new FileInfo(path).Directory : inputDirInfo;
-
-            #endregion checks
-
-            List<FileInfo> archiveFileInfos;
-            if (isDirectory)
-            {
-                _archiveManager.LoadFromFolder(basedir);
-                // TODO: use the manager here?
-                archiveFileInfos = _archiveManager.Archives.Items.Select(_ => new FileInfo(_.ArchiveAbsolutePath)).ToList();
-            }
-            else
-            {
-                archiveFileInfos = new List<FileInfo> { inputFileInfo };
-            }
-
-            foreach (var fileInfo in archiveFileInfos)
-            {
-                // get outdirectory
-                DirectoryInfo outDir;
-                if (string.IsNullOrEmpty(outpath))
-                {
-                    outDir = new DirectoryInfo(Path.Combine(
-                        basedir.FullName,
-                        fileInfo.Name.Replace(".archive", "")));
-                }
-                else
-                {
-                    outDir = new DirectoryInfo(outpath);
-                    if (!outDir.Exists)
+                case FileInfo file:
+                    if (file.Extension != ".archive")
                     {
-                        outDir = new DirectoryInfo(outpath);
+                        _loggerService.Error("Input file is not an .archive.");
+                        return ERROR_BAD_ARGUMENTS;
                     }
-
-                    if (inputDirInfo.Exists)
+                    _archiveManager.LoadModArchive(file.FullName, false);
+                    break;
+                case DirectoryInfo directory:
+                    var archiveFileInfos = directory.GetFiles().Where(_ => _.Extension == ".archive").ToList();
+                    if (archiveFileInfos.Count == 0)
                     {
-                        outDir = new DirectoryInfo(Path.Combine(
-                            outDir.FullName,
-                            fileInfo.Name.Replace(".archive", "")));
+                        _loggerService.Error("No .archive file to process in the input directory");
+                        return ERROR_BAD_ARGUMENTS;
                     }
-                }
+                    _archiveManager.LoadAdditionalModArchives(directory.FullName, false);
+                    break;
+                default:
+                    _loggerService.Error($"\"{path.FullName}\" is not a valid file or directory name.");
+                    break;
+            }
+        }
 
-                // read archive
-                var ar = Red4ParserServiceExtensions.ReadArchive(fileInfo.FullName, _hashService);
+        result += UnbundleTaskInner(options);
+        
+        return result > 0 ? ERROR_COMPLETED_WITH_ERRORS : 0;
+    }
 
-                var isHash = ulong.TryParse(hash, out var hashNumber);
+    private int UnbundleTaskInner(UnbundleTaskOptions options)
+    {
+        // get outdirectory
+        var outDir = options.outpath!;
+        if (!outDir.Exists)
+        {
+            outDir = Directory.CreateDirectory(outDir.FullName);
+        }
 
-                // run
-                if (!isHash && File.Exists(hash))
+        var result = 0;
+        foreach (var gameArchive in _archiveManager.Archives.Items)
+        {
+            // TODO[ModKit]
+            if (gameArchive is not Archive ar)
+            {
+                continue;
+            }
+
+            var isHash = ulong.TryParse(options.hash, out var hashNumber);
+
+            // run
+            if (!isHash && File.Exists(options.hash))
+            {
+                var hashlist = File.ReadAllLines(options.hash)
+                    .ToList().Select(_ => ulong.TryParse(_, out var res) ? res : 0);
+                _loggerService.Info($"Extracing all files from the hashlist ({hashlist.Count()}hashes) ...");
+
+                foreach (var hashNum in hashlist)
                 {
-                    var hashlist = File.ReadAllLines(hash)
-                        .ToList().Select(_ => ulong.TryParse(_, out var res) ? res : 0);
-                    _loggerService.Info($"Extracing all files from the hashlist ({hashlist.Count()}hashes) ...");
-                    foreach (var hashNum in hashlist)
-                    {
-                        var r = ModTools.ExtractSingle(ar, hashNum, outDir, DEBUG_decompress);
-                        if (r > 0)
-                        {
-                            _loggerService.Success($" {ar.ArchiveAbsolutePath}: Extracted one file: {hashNum}");
-                        }
-                        else
-                        {
-                            _loggerService.Info($" {ar.ArchiveAbsolutePath}: No file found with hash {hashNum}");
-                        }
-                    }
-
-                    _loggerService.Success($"Bulk extraction from hashlist file completed.");
-                }
-                else if (isHash && hashNumber != 0)
-                {
-                    var r = ModTools.ExtractSingle(ar, hashNumber, outDir, DEBUG_decompress);
+                    var r = ModTools.ExtractSingle(ar, hashNum, outDir, options.DEBUG_decompress);
                     if (r > 0)
                     {
-                        _loggerService.Success($" {ar.ArchiveAbsolutePath}: Extracted one file: {hashNumber}");
+                        _loggerService.Success($" {ar.ArchiveAbsolutePath}: Extracted one file: {hashNum}");
                     }
                     else
                     {
-                        _loggerService.Info($" {ar.ArchiveAbsolutePath}: No file found with hash {hashNumber}");
+                        _loggerService.Info($" {ar.ArchiveAbsolutePath}: No file found with hash {hashNum}");
+                        result += 1;
                     }
+                }
+
+                ar.ReleaseFileHandle();
+
+                _loggerService.Success($"Bulk extraction from hashlist file completed.");
+            }
+            else if (isHash && hashNumber != 0)
+            {
+                var r = ModTools.ExtractSingle(ar, hashNumber, outDir, options.DEBUG_decompress);
+                if (r > 0)
+                {
+                    _loggerService.Success($" {ar.ArchiveAbsolutePath}: Extracted one file: {hashNumber}");
                 }
                 else
                 {
-                    _modTools.ExtractAll(ar, outDir, pattern, regex, DEBUG_decompress);
+                    _loggerService.Info($" {ar.ArchiveAbsolutePath}: No file found with hash {hashNumber}");
+                    result += 1;
                 }
             }
-
-            return;
+            else
+            {
+                // TODO return success 
+                _modTools.ExtractAll(ar, outDir, options.pattern, options.regex, options.DEBUG_decompress);
+            }
         }
 
-        #endregion Methods
+        return result > 0 ? ERROR_COMPLETED_WITH_ERRORS : 0;
     }
 }

@@ -1,0 +1,38 @@
+using WolvenKit.RED4.Archive.Buffer;
+using WolvenKit.RED4.Types;
+
+namespace WolvenKit.RED4.Archive.IO;
+
+public class appearanceAppearanceDefinitionReader : RedPackageReader
+{
+    public appearanceAppearanceDefinitionReader(Stream input) : base(input)
+    {
+    }
+
+    public appearanceAppearanceDefinitionReader(BinaryReader reader) : base(reader)
+    {
+    }
+
+    public override EFileReadErrorCodes ReadBuffer(RedBuffer buffer)
+    {
+        Settings.ImportsAsHash = true;
+
+        var code = base.ReadBuffer(buffer);
+        if (code == EFileReadErrorCodes.NoError)
+        {
+            if (buffer.Parent is appearanceAppearanceDefinition appearanceDefinition && buffer.Data is RedPackage rp)
+            {
+                appearanceDefinition.Components = new();
+                foreach (var component in rp.Chunks)
+                {
+                    if (component is entIComponent eic)
+                    {
+                        appearanceDefinition.Components.Add(eic);
+                    }
+                }
+            }
+        }
+
+        return code;
+    }
+}

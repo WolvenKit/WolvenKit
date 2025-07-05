@@ -4,120 +4,137 @@ on:
     - cron: "0 12 * * *"
   workflow_dispatch:
 
+env:
+  FINALOUT: ./publish
+  NAME: WolvenKit
+  MREPO: ${{github.repository}}
+  WINGET_ID: REDModding.WolvenKit.Nightly
+
 jobs:
   check_date:
-    runs-on: windows-2022
+    runs-on: ubuntu-latest
     name: Check latest commit
     outputs:
       should_run: ${{ steps.should_run.outputs.should_run }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
-          ref: develop
+          ref: dev
+
+      - id: should_run
+        name: check latest commit is less than a day
+        run: |
+          myvar=$(git rev-list --after="24 hours" HEAD)
+          if (test ! -z "$myvar"); then HAS_COMMITS='true'; else HAS_COMMITS='false'; fi;
+          echo "$HAS_COMMITS"
+          echo "should_run="$HAS_COMMITS"" >> $GITHUB_OUTPUT
+
+  nightly-wkit-win:
+    needs: check_date
+    if: ${{ needs.check_date.outputs.should_run == 'true' }}
+    runs-on: windows-2022
+
+    steps:
+      ##########################################
+      # SETUP
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          ref: dev
 
       - name: Get commit
         run: |
           $commit = git log -1 --format=%H
           echo "SHA=$commit" >> $env:GITHUB_ENV
-      - run: echo ${{ env.SHA }}
 
-      - id: should_run
-        continue-on-error: true
-        name: check latest commit is less than a day
-        if: ${{ github.event_name == 'schedule' }}
-        run: test -z $(git rev-list  --after="24 hours"  ${{ env.SHA }}) && echo "::set-output name=should_run::false"
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
 
-  nightly-wkit-win:
-    needs: check_date
-    if: ${{ needs.check_date.outputs.should_run != 'false' }}
-    runs-on: windows-2022
+      - name: Get Date
+        run: |
+          $date = Get-Date -Format "yyyy-MM-dd"
+          echo "ISODATE=$date" >> $env:GITHUB_ENV
 
-    steps:
-    # setup
-    - name: checkout
-      uses: actions/checkout@v2
-      with:
-        ref: develop
+      ##########################################
+      # APP
+      - name: Get version
+        uses: naminodarie/get-net-sdk-project-versions-action@v2
+        id: get_version
+        with:
+          proj-path: ./WolvenKit/WolvenKit.csproj
 
-    - name: Get commit
-      run: |
-        $commit = git log -1 --format=%H
-        echo "SHA=$commit" >> $env:GITHUB_ENV
-    - run: echo ${{ env.SHA }}
+      - run: echo "VERSION_APP=${{steps.get_version.outputs.assembly-version}}-nightly.${{env.ISODATE}}" >> $env:GITHUB_ENV
+      - run: echo "PORTABLE=${{env.NAME}}-${{env.VERSION_APP}}.zip" >> $env:GITHUB_ENV
 
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.x
+      # Publish app
+      - run: dotnet publish ./WolvenKit/WolvenKit.csproj -o ./publish/app/ -c Release -p:ApplicationIcon=../WolvenKit/Resources/Media/Images/Icons/Application/TaskBarIcon_Nightly.ico --version-suffix "nightly.${{env.ISODATE}}" -p:InformationalVersion="${{env.VERSION_APP}}" -p:DebugType=None -p:DebugSymbols=false
+      - run: Compress-Archive -Path ./publish/app/* -DestinationPath ${{env.FINALOUT}}/${{env.PORTABLE}}
 
-     # environmental variables
-    - run: echo "PROJ=./WolvenKit/WolvenKit.csproj" >> $env:GITHUB_ENV
-    - run: echo "PROJC=./WolvenKit.CLI/WolvenKit.CLI.csproj" >> $env:GITHUB_ENV
-    - run: echo "OUT=./publish/app/" >> $env:GITHUB_ENV
-    - run: echo "OUTC=./publish/console/" >> $env:GITHUB_ENV
-    - run: echo "FINALOUT=./publish" >> $env:GITHUB_ENV
-    - run: echo "NAME=WolvenKit" >> $env:GITHUB_ENV
-    - run: echo "REF=${{github.ref}}" >> $env:GITHUB_ENV
-    - run: echo "MREPO=${{github.repository}}" >> $env:GITHUB_ENV
+      ##########################################
+      # CONSOLE
 
-    - name: Get version
-      uses: naminodarie/get-net-sdk-project-versions-action@v1
-      id: get-version
-      with:
-        proj-path:  ${{env.PROJ}}
-    - name: Get console version
-      uses: naminodarie/get-net-sdk-project-versions-action@v1
-      id: get-version-cli
-      with:
-        proj-path: ${{env.PROJC}}
-    - name: Get Date
-      run: |
-        $date = Get-Date -Format "yyyy-MM-dd"
-        echo "ISODATE=$date" >> $env:GITHUB_ENV
+      # tag main commit
+      - name: Create Tag
+        id: tag_version
+        uses: rfuzzo/github-tag-action@7b0316b3fb8aa236fdc20bee0614ea6ef99f4bf1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          default_bump: false
+          custom_tag: ${{ env.VERSION_APP }}
+          tag_prefix: ""
 
+      # CLI commit checks
+      - run: git fetch --tags
+      - name: Get CLI commits
+        run: |
+          $commits = (git --no-pager diff --name-only ${{ steps.tag_version.outputs.previous_tag }}) | Out-String
+          $i = 0
+          $commits -Split "`r`n" | ForEach-Object {  if ( $_.StartsWith("WolvenKit.CLI/") -or $_.StartsWith("WolvenKit.Common/") -or $_.StartsWith("WolvenKit.Core/") -or $_.StartsWith("WolvenKit.Modkit/") -or $_.StartsWith("WolvenKit.RED4/") ) { $i = $i + 1  } }
+          if ($i -eq 0) { $b = 'false' } else { $b = 'true' }
+          echo "HAS_CLI_COMMITS=$b" >> $env:GITHUB_ENV
 
-    - run: echo "VERSION=${{steps.get-version.outputs.assembly-version}}-nightly.${{env.ISODATE}}" >> $env:GITHUB_ENV
-    - run: echo "VERSIONC=${{steps.get-version-cli.outputs.assembly-version}}-nightly.${{env.ISODATE}}" >> $env:GITHUB_ENV
+      - name: Get console version
+        if: ${{ env.HAS_CLI_COMMITS == 'true' }}
+        uses: naminodarie/get-net-sdk-project-versions-action@v2
+        id: get_version_cli
+        with:
+          proj-path: ./WolvenKit.CLI/WolvenKit.CLI.csproj
 
-    # Publish app
-    - run: dotnet publish ${{env.PROJ}} -o ${{env.OUT}} -c Release -p:InformationalVersion="${{env.VERSION}}"
+      - name: env cli version
+        if: ${{ env.HAS_CLI_COMMITS == 'true' }}
+        run: echo "VERSION_CLI=${{steps.get_version_cli.outputs.assembly-version}}-nightly.${{env.ISODATE}}" >> $env:GITHUB_ENV
+      - name: env cli name
+        if: ${{ env.HAS_CLI_COMMITS == 'true' }}
+        run: echo "CONSOLE=${{env.NAME}}.Console-${{env.VERSION_CLI}}.zip" >> $env:GITHUB_ENV
 
-    # Publish console
-    - run: dotnet publish ${{env.PROJC}} -o ${{env.OUTC}} -c Release
+      # Publish console
+      - name: publish console
+        if: ${{ env.HAS_CLI_COMMITS == 'true' }}
+        run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o ./publish/console/ -c Release --version-suffix "nightly.${{env.ISODATE}}" -p:DebugType=None -p:DebugSymbols=false
+      - name: zip console
+        if: ${{ env.HAS_CLI_COMMITS == 'true' }}
+        run: Compress-Archive -Path ./publish/console/* -DestinationPath ${{env.FINALOUT}}/${{env.CONSOLE}}
 
-    - run: echo "PORTABLE=${{env.NAME}}-${{env.VERSION}}.zip" >> $env:GITHUB_ENV
-    - run: echo "CONSOLE=${{env.NAME}}.Console-${{env.VERSIONC}}.zip" >> $env:GITHUB_ENV
-    # - run: echo "INSTALLER=${{env.NAME}}-installer-${{env.VERSION}}.exe" >> $env:GITHUB_ENV
+      ##########################################
+      # INSTALLER
 
-    # Create assets
-    # create zip
-    - run: Compress-Archive -Path ${{env.OUT}}* -DestinationPath ${{env.FINALOUT}}/${{env.PORTABLE}}
-    - run: Compress-Archive -Path ${{env.OUTC}}* -DestinationPath ${{env.FINALOUT}}/${{env.CONSOLE}}
-    # create installer
-    # - run: .\Installers\ISCC\ISCC.exe /O"${{env.FINALOUT}}" /dMyAppBaseDir=".${{env.OUT}}" .\Installers\installer.iss
+      - name: create installer
+        run: ISCC /O"${{env.FINALOUT}}" /dMyAppBaseDir="..\publish\app\" /dMyAppName="WolvenKit Nightly" /dMyAppId="WolvenKit-Nightly" .\Installers\installer.iss
 
-    # PORTABLE
-    #- uses: actions/upload-artifact@v2
-    #  with:
-    #    name: ${{env.NAME}}-${{env.VERSION}}
-    #    path: ${{env.OUT}}
-    # INSTALLER
-    #- uses: actions/upload-artifact@v2
-    #  with:
-    #    name: ${{env.NAME}}-installer-${{env.VERSION}}
-    #    path: ${{env.FINALOUT}}/${{env.INSTALLER}}
-    # CONSOLE
-    #- uses: actions/upload-artifact@v2
-    #  with:
-    #   name: ${{env.NAME}}.Console-${{env.VERSIONC}}
-    #    path: ${{env.OUTC}}
+      ##########################################
+      # RELEASE
 
-    # RELEASE
-    - name: Release
-      run: |
-          gh release create ${{ env.VERSION }} -n "${{ env.MESSAGE }}" -t "${{ env.VERSION }}" -R ${{ env.REPO }} ${{ env.FILES }}
-      env:
-        MESSAGE: "This is a beta release so you may encounter bugs. Please report them. The latest commit this release is based on is: [#${{env.SHA}}](https://github.com/${{env.MREPO}}/commit/${{env.SHA}})"
-        FILES: ${{env.FINALOUT}}/${{env.PORTABLE}} ${{env.FINALOUT}}/${{env.CONSOLE}}
-        REPO: WolvenKit/WolvenKit-nightly-releases
-        GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+      - name: Release dispatch
+        id: release_dispatch
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.VERSION_APP }}
+          generate_release_notes: false
+          files: |
+            ${{ env.FINALOUT }}/*.zip
+            ${{ env.FINALOUT }}/*.exe
+          repository: WolvenKit/WolvenKit-nightly-releases
+          token: ${{ secrets.RELEASE_TOKEN }}
+          body: "This is a beta release so you may encounter bugs. Please report them.\n${{ steps.tag_version.outputs.changelog }}"

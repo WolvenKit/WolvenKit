@@ -1,0 +1,190 @@
+<Window
+    x:Class="WolvenKit.Views.Dialogs.Windows.MaterialsRepositoryView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dialogs="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=dialogs:MaterialsRepositoryViewModel}"
+    Title="Depot Generator"
+    Width="{DynamicResource WolvenKitDialogWidth}"
+    Height="{DynamicResource WolvenKitMaterialsRepositoryHeight}"
+    SizeToContent="WidthAndHeight"
+    ShowInTaskbar="False"
+    WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <hc:ThemeResources
+                    AccentColor="{StaticResource MahApps.Brushes.AccentBase}"
+                    RequestedTheme="Dark" />
+                <hc:Theme />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid
+        Background="{DynamicResource RegionBrush}"
+        DataContext="{Binding RelativeSource={RelativeSource FindAncestor,
+                                                             AncestorType={x:Type hc:Window}}}">
+        <StackPanel
+            Margin="{DynamicResource WolvenKitMargin}"
+            HorizontalAlignment="Stretch">
+            <Grid Margin="{DynamicResource WolvenKitMarginBottom}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock
+                    Grid.Column="0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Text="Depot Path" />
+
+                <TextBox
+                    x:Name="MaterialsTextBox"
+                    Grid.Column="1"
+                    Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                    IsReadOnly="True"
+                    PreviewMouseDown="MaterialsButton_Click"
+                    ToolTip="The Depot Path is the output folder for extracted files" />
+            </Grid>
+
+            <Button
+                x:Name="OpenMaterialRepositoryButton"
+                Height="{DynamicResource WolvenKitButtonHeight}"
+                Margin="{DynamicResource WolvenKitMarginBottom}"
+                HorizontalAlignment="Stretch">
+                <StackPanel Orientation="Horizontal">
+                    <templates:IconBox
+                        IconPack="Codicons"
+                        Kind="FolderOpened"
+                        Margin="0"
+                        Size="{DynamicResource WolvenKitIconTiny}"
+                        Foreground="{StaticResource WolvenKitTan}" />
+
+                    <TextBlock
+                        Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                        VerticalAlignment="Center"
+                        Text="Open Depot Folder" />
+                </StackPanel>
+            </Button>
+
+            <Grid Margin="{DynamicResource WolvenKitMarginBottom}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition MinWidth="{DynamicResource WolvenKitMaterialsRepositoryButtonWidth}" />
+                    <ColumnDefinition MinWidth="{DynamicResource WolvenKitMaterialsRepositoryComboBoxWidth}" />
+                    <ColumnDefinition Width="6*" />
+                </Grid.ColumnDefinitions>
+
+                <Button
+                    x:Name="GenerateMaterialsButton"
+                    Grid.Column="0"
+                    Height="{DynamicResource WolvenKitButtonHeight}"
+                    Margin="{DynamicResource WolvenKitMarginSmallRight}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Top"
+                    ToolTip="Extracts all material files from archives and exports textures to selected format">
+                    <StackPanel Orientation="Horizontal">
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="FolderImage"
+                            Margin="0"
+                            Size="{DynamicResource WolvenKitIconTiny}"
+                            Foreground="{StaticResource WolvenKitPurple}" />
+
+                        <TextBlock
+                            Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                            VerticalAlignment="Center"
+                            Text="Generate Materials" />
+                    </StackPanel>
+                </Button>
+
+                <ComboBox
+                    x:Name="MaterialExtensionCombobox"
+                    Grid.Column="1"
+                    Height="{DynamicResource WolvenKitButtonHeight}"
+                    Margin="{DynamicResource WolvenKitMarginSmallRight}"
+                    VerticalAlignment="Top">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <Border
+                    Grid.Column="2"
+                    Style="{StaticResource BorderTipWarning}">
+                    <TextBlock
+                        Text="Requires 12.3 GB disk space using PNG, or up to 56.2 GB using other formats. Generating materials is extremely resource intensive!"
+                        TextWrapping="Wrap" />
+                </Border>
+            </Grid>
+
+            <Grid Margin="{DynamicResource WolvenKitMarginBottom}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition MinWidth="{DynamicResource WolvenKitMaterialsRepositoryButtonWidth}" />
+                    <ColumnDefinition MinWidth="{DynamicResource WolvenKitMaterialsRepositoryComboBoxWidth}" />
+                    <ColumnDefinition Width="6*" />
+                </Grid.ColumnDefinitions>
+
+                <Button
+                    x:Name="UnbundleGameButton"
+                    Grid.Column="0"
+                    Height="{DynamicResource WolvenKitButtonHeight}"
+                    Margin="{DynamicResource WolvenKitMarginSmallRight}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Top"
+                    ToolTip="Extracts all game files from archives">
+                    <StackPanel Orientation="Horizontal">
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ArchiveArrowUp"
+                            Margin="0"
+                            Size="{DynamicResource WolvenKitIconTiny}"
+                            Foreground="{StaticResource WolvenKitPurple}" />
+
+                        <TextBlock
+                            Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                            VerticalAlignment="Center"
+                            Text="Unbundle Game" />
+                    </StackPanel>
+                </Button>
+
+                <Border
+                    Grid.Column="1"
+                    Grid.ColumnSpan="2"
+                    Style="{StaticResource BorderTipWarning}">
+                    <TextBlock
+                        Text="Requires 71.2 GB disk space and is extremely resource intensive. Not necessary for most modding workflows."
+                        TextWrapping="Wrap" />
+                </Border>
+            </Grid>
+
+            <Button
+                x:Name="MigrateDepotButton"
+                Height="{DynamicResource WolvenKitButtonHeight}"
+                HorizontalAlignment="Stretch"
+                ToolTip="Migrates depot files to the newest version">
+                <StackPanel Orientation="Horizontal">
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="Check"
+                        Margin="0"
+                        Size="{DynamicResource WolvenKitIconTiny}"
+                        Foreground="{StaticResource WolvenKitGreen}" />
+
+                    <TextBlock
+                        Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                        VerticalAlignment="Center"
+                        Text="Migrate Files" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

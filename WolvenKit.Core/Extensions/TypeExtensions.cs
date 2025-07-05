@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.CR2W
         {
             if (t.IsGenericType)
             {
-                var typenamewithoutarity = t.Name.Substring(0, t.Name.LastIndexOf("`", StringComparison.InvariantCulture));
+                var typenamewithoutarity = t.Name[..t.Name.LastIndexOf("`", StringComparison.InvariantCulture)];
                 var flags = "";
                 if (typenamewithoutarity == "CArray")
                 {

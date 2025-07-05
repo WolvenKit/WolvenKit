@@ -80,7 +80,7 @@ namespace WolvenKit.Modkit.RED4.Serialization
 
             private static string SerializeJson(Dictionary<string, IRedType> dict) => JsonSerializer.Serialize(dict, s_options);
 
-            private static Dictionary<string, IRedType> DeserializeJson(string text) => JsonSerializer.Deserialize<Dictionary<string, IRedType>>(text, s_options);
+            //private static Dictionary<string, IRedType> DeserializeJson(string text) => JsonSerializer.Deserialize<Dictionary<string, IRedType>>(text, s_options);
 
             /// <summary>
             /// Tries to convert the specified string representation to its IType equivalent.
@@ -89,7 +89,7 @@ namespace WolvenKit.Modkit.RED4.Serialization
             /// <param name="value">A json string containing the value to convert.</param>
             /// <param name="flat"></param>
             /// <returns>true if value was converted successfully; otherwise, false.</returns>
-            public static bool TryParseJsonFlat(string type, string value, out IRedType flat)
+            public static bool TryParseJsonFlat(string type, string value, out IRedType? flat)
             {
                 flat = null;
 
@@ -138,6 +138,20 @@ namespace WolvenKit.Modkit.RED4.Serialization
                             jsonvalue = $"{jsonvalue}]";
                         }
                         break;
+                    case ETweakType.TweakDBID:
+                    case ETweakType.CFloat:
+                    case ETweakType.CBool:
+                    case ETweakType.CUint8:
+                    case ETweakType.CUint16:
+                    case ETweakType.CUint32:
+                    case ETweakType.CUint64:
+                    case ETweakType.CInt8:
+                    case ETweakType.CInt16:
+                    case ETweakType.CInt32:
+                    case ETweakType.CInt64:
+                    case ETweakType.LocKey:
+                    default:
+                        break;
                 }
 
                 if (!TryParseJsonFlat(GetTypeFromEnum(enumType), jsonvalue, out var ivalue))
@@ -156,7 +170,7 @@ namespace WolvenKit.Modkit.RED4.Serialization
             /// <param name="value">A json string containing the value to convert.</param>
             /// <param name="result"></param>
             /// <returns>true if value was converted successfully; otherwise, false.</returns>
-            private static bool TryParseJsonFlat(Type type, string value, out IRedType result)
+            private static bool TryParseJsonFlat(Type type, string value, out IRedType? result)
             {
                 if (value == null)
                 {
@@ -264,7 +278,7 @@ namespace WolvenKit.Modkit.RED4.Serialization
                 _ => throw new ArgumentOutOfRangeException(nameof(enumType))
             };
 
-        private static string GetTypeStrFromRedTypeStr(string redtype)
+        private static string? GetTypeStrFromRedTypeStr(string redtype)
         {
             if (!Enum.TryParse<ERedType>(redtype.Replace(":", ""), out var type))
             {
@@ -275,7 +289,7 @@ namespace WolvenKit.Modkit.RED4.Serialization
             return tweakType.ToString();
         }
 
-        public static Type GetTypeFromRedTypeStr(string redtype)
+        public static Type? GetTypeFromRedTypeStr(string? redtype)
         {
             if (string.IsNullOrEmpty(redtype))
             {
@@ -305,6 +319,10 @@ namespace WolvenKit.Modkit.RED4.Serialization
                 if (splits.Length > 1 && splits[0].Equals("array"))
                 {
                     var innertype = GetTypeFromRedTypeStr(redtype.Replace("array:", ""));
+                    if (innertype == null)
+                    {
+                        throw new InvalidDataException();
+                    }
                     var outer = Activator.CreateInstance(
                         typeof(CArray<>).MakeGenericType(innertype),
                         BindingFlags.Instance | BindingFlags.Public,

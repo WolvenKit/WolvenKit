@@ -1,64 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Splat;
-using WolvenKit.Common.Services;
-using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Documents;
-using YamlDotNet.Serialization;
-using WolvenKit.Models;
 
-namespace WolvenKit.ViewModels.Documents
+namespace WolvenKit.App.ViewModels.Documents;
+
+public class TweakXLDocumentViewModel : DocumentViewModel
 {
-    public class TweakXLDocumentViewModel : RedDocumentViewModel
+    public TweakXLDocumentViewModel(string path) : base(path)
     {
-
-        private TweakDBService _tdbs;
-
-        public TweakXLDocumentViewModel(string path) : base(path)
-        {
-            _tdbs = Locator.Current.GetService<TweakDBService>();
-        }
-
-        public override bool OpenFile(string path)
-        {
-            _isInitialized = false;
-
-            try
-            {
-                using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                {
-                    using var reader = new StreamReader(stream);
-
-                    var deserializer = new DeserializerBuilder()
-                        .WithTypeConverter(new TweakXLYamlTypeConverter())
-                        .Build();
-
-                    var file = deserializer.Deserialize<TweakXLFile>(reader);
-
-                    FilePath = path;
-                    _isInitialized = true;
-
-                    TabItemViewModels.Add(new RDTDataViewModel(file, this));
-
-                    SelectedIndex = 0;
-
-                    SelectedTabItemViewModel = TabItemViewModels.FirstOrDefault();
-                }
-
-                return true;
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error(e);
-                // Not processing this catch in any other way than rejecting to initialize this
-                _isInitialized = false;
-            }
-
-            return false;
-        }
+        //_isInitialized = OpenTweakFile(path);
     }
+
+    public override Task Save(object parameter) => throw new NotImplementedException();
+    protected override void SaveAs(SaveAsParameters saveParams) => throw new NotImplementedException();
+    public override bool Reload(bool parameter) => throw new NotImplementedException();
 }

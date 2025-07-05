@@ -260,6 +260,9 @@ paket-files/
 .idea/
 *.sln.iml
 
+# VSCode
+.vscode
+
 #macOS
 .DS_Store
 
@@ -284,3 +287,4 @@ WolvenKit.IrrlichtLime/Release-x64
 Libs/Irrlicht.dll
 WolvenKit.IrrlichtLime/Release-x86
 msbuild.binlog
+!texconv.pdb

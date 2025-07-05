@@ -1,21 +1,18 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Reactive.Disposables;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using Newtonsoft.Json;
+using Microsoft.Extensions.Options;
 using ReactiveUI;
-using Syncfusion.UI.Xaml.TreeView;
-using WolvenKit.Common.Conversion;
-using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Documents;
-using WolvenKit.ViewModels.Shell;
+using Splat;
+using WolvenKit.App;
+using WolvenKit.App.ViewModels.Documents;
+using WolvenKit.App.ViewModels.Events;
+using WolvenKit.Views.Editors;
 
 namespace WolvenKit.Views.Documents
 {
     /// <summary>
+    /// Tree view for RDTData
     /// Interaction logic for RDTDataView.xaml
     /// </summary>
     public partial class RDTDataView : ReactiveUserControl<RDTDataViewModel>
@@ -39,23 +36,31 @@ namespace WolvenKit.Views.Documents
 
             this.WhenActivated(disposables =>
             {
+                var globals = Locator.Current.GetService<IOptions<Globals>>();
+                if (globals.Value.ENABLE_NODE_EDITOR)
+                {
+                    Editor.LayoutNodes();
+                }
 
-                this.OneWayBind(ViewModel,
-                       viewmodel => viewmodel.Chunks,
-                       view => view.RedTreeView.ItemsSource)
-                   .DisposeWith(disposables);
-                this.Bind(ViewModel,
-                      viewmodel => viewmodel.SelectedChunk,
-                      view => view.RedTreeView.SelectedItem)
-                  .DisposeWith(disposables);
-                this.OneWayBind(ViewModel,
-                      viewmodel => viewmodel.SelectedChunk,
-                      view => view.CustomPG.DataContext)
-                  .DisposeWith(disposables);
-                this.OneWayBind(ViewModel,
-                      viewmodel => viewmodel.SelectedChunk,
-                      view => view.CustomPG.ViewModel)
-                  .DisposeWith(disposables);
+                //ViewModel.Nodes.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
+                //{
+                //    LayoutNodes();
+                //};
+
+                //ViewModel.References.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
+                //{
+                //    LayoutNodes();
+                //};
+
+                /*if (Globals.ENABLE_NODE_EDITOR)
+                {
+                    ViewModel.LayoutNodes = () => Editor.LayoutNodes();
+                }*/
+
+                //Editor.ItemsUpdated += (object sender, RoutedEventArgs e) =>
+                //{
+                //    LayoutNodes();
+                //};
 
                 //ViewModel.SelectedChunk.IsExpanded = true;
 
@@ -94,11 +99,13 @@ namespace WolvenKit.Views.Documents
                 //   .DisposeWith(disposables);
 
             });
+            
 
 
             //PropertyGrid.CustomEditorCollection = CustomEditorCollection;
             //MainTreeGrid.RequestTreeItems += TreeGrid_RequestTreeItems;
         }
+
         //public ICommand AddItemToArrayCommand { get; private set; }
         //public ICommand ExportChunkCommand { get; private set; }
 
@@ -117,5 +124,16 @@ namespace WolvenKit.Views.Documents
         //}
 
 
+        private void AutolayoutNodes_MenuItem(object sender, RoutedEventArgs e) => Editor.LayoutNodes();
+
+        private void RedTypeView_OnValueChanged(object sender, EventArgs e)
+        {
+            if (sender is not RedCNameEditor || e is not ValueChangedEventArgs args)
+            {
+                return;
+            }
+
+            ViewModel?.OnCNameValueChanged(args);
+        }
     }
 }

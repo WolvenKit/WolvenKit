@@ -2,7 +2,7 @@ using System;
 using System.Reactive.Disposables;
 using ReactiveUI;
 using Splat;
-using WolvenKit.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Shell;
 
 namespace WolvenKit.Views.Shell
 {
@@ -26,15 +26,6 @@ namespace WolvenKit.Views.Shell
                 this.OneWayBind(ViewModel,
                         x => x.IsIndeterminate,
                         x => x.StatusBarProgressBar.IsIndeterminate)
-                    .DisposeWith(disposables);
-
-                this.OneWayBind(ViewModel,
-                        viewModel => viewModel._settingsManager.IsUpdateAvailable,
-                        view => view.StatusBarItemUpdate.IsEnabled)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.CheckForUpdatesCommand,
-                        view => view.UpdateButton)
                     .DisposeWith(disposables);
             });
 

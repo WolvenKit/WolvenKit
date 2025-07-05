@@ -39,13 +39,16 @@ namespace WolvenKit.Common.Services
             }
         }
 
+        public void Completed() => Status = EStatus.Ready;
+
 #pragma warning disable CS0067
+        public event EventHandler<double>? ProgressChanged;
 
-        public event EventHandler<double> ProgressChanged;
-
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 #pragma warning restore CS0067 
 
-        public bool IsIndeterminate { get; set; }
+        public bool IsIndeterminate { get; set; } // unused
+
+        public EStatus Status { get; set; } // unused
     }
 }

@@ -1,8 +1,10 @@
 using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using WolvenKit.Common;
 
 namespace WolvenKit.Interfaces.Extensions
@@ -11,22 +13,26 @@ namespace WolvenKit.Interfaces.Extensions
     {
         public static string FirstCharToLower(this string input)
         {
-            switch (input)
+            return input switch
             {
-                case null:
-                    throw new ArgumentNullException(nameof(input));
-                case "":
-                    throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input));
-                default:
-                    return input.First().ToString().ToLower() + input.Substring(1);
-            }
+                null => throw new ArgumentNullException(nameof(input)),
+                "" => throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input)),
+                _ => input.First().ToString().ToLower() + input[1..],
+            };
         }
 
         public static string FirstCharToUpper(this string input) => input switch
         {
             null => throw new ArgumentNullException(nameof(input)),
             "" => throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input)),
-            _ => input.First().ToString().ToUpper() + input.Substring(1)
+            _ => input.First().ToString().ToUpper() + input[1..]
+        };
+
+        public static string CapitalizeEachWord(this string input) => input switch
+        {
+            null => throw new ArgumentNullException(nameof(input)),
+            "" => throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input)),
+            _ => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(input.ToLower()),
         };
 
         // https://stackoverflow.com/a/3695190
@@ -44,7 +50,8 @@ namespace WolvenKit.Interfaces.Extensions
         public static string GetHashMD5(this string input)
         {
             var encodedPassword = new UTF8Encoding().GetBytes(input);
-            var hash = ((HashAlgorithm)CryptoConfig.CreateFromName("MD5")).ComputeHash(encodedPassword);
+            var hash = (CryptoConfig.CreateFromName("MD5") as HashAlgorithm)?.ComputeHash(encodedPassword);
+            ArgumentNullException.ThrowIfNull(hash);
             var encoded = BitConverter.ToString(hash)
                .Replace("-", string.Empty)
                .ToLower();
@@ -53,7 +60,7 @@ namespace WolvenKit.Interfaces.Extensions
 
         public static (string, bool, EProjectFolders) GetModRelativePath(this string fullpath, string activeModFileDirectory)
         {
-            var relativePath = fullpath.Substring(activeModFileDirectory.Length + 1);
+            var relativePath = fullpath[(activeModFileDirectory.Length + 1)..];
             bool isDLC;
             var projectfolder = EProjectFolders.Cooked;
 
@@ -70,26 +77,26 @@ namespace WolvenKit.Interfaces.Extensions
                 throw new NotImplementedException();
             }
 
-            relativePath = relativePath.Substring(4);
+            relativePath = relativePath[4..];
 
             if (relativePath.StartsWith(EProjectFolders.Cooked.ToString()))
             {
-                relativePath = relativePath.Substring(EProjectFolders.Cooked.ToString().Length + 1);
+                relativePath = relativePath[(EProjectFolders.Cooked.ToString().Length + 1)..];
                 projectfolder = EProjectFolders.Cooked;
             }
 
             if (relativePath.StartsWith(EProjectFolders.Uncooked.ToString()))
             {
-                relativePath = relativePath.Substring(EProjectFolders.Uncooked.ToString().Length + 1);
+                relativePath = relativePath[(EProjectFolders.Uncooked.ToString().Length + 1)..];
                 projectfolder = EProjectFolders.Uncooked;
             }
             else if (relativePath.StartsWith(EArchiveType.SoundCache.ToString()))
             {
-                relativePath = relativePath.Substring(EArchiveType.SoundCache.ToString().Length + 1);
+                relativePath = relativePath[(EArchiveType.SoundCache.ToString().Length + 1)..];
             }
             else if (relativePath.StartsWith(EArchiveType.Speech.ToString()))
             {
-                relativePath = relativePath.Substring(EArchiveType.Speech.ToString().Length + 1);
+                relativePath = relativePath[(EArchiveType.Speech.ToString().Length + 1)..];
             }
 
             return (relativePath, isDLC, projectfolder);
@@ -117,10 +124,35 @@ namespace WolvenKit.Interfaces.Extensions
             var result = target;
             while (result.StartsWith(trimString))
             {
-                result = result.Substring(trimString.Length);
+                result = result[trimString.Length..];
             }
 
             return result;
         }
+
+        public static bool IsNullOrEmptyOrEndsWith(this string? target, string value) =>
+            string.IsNullOrEmpty(target) || target.EndsWith(value);
+
+        public static bool IsEmptyOrEndsWith(this string target, string value) =>
+            target == "" || target.EndsWith(value);
+        
+        /// <summary>
+        /// Generates redengine friendly file path. 
+        /// </summary>
+        public static string ToFilePath(this string target) => string.Join(Path.DirectorySeparatorChar,
+            target.Split(Path.DirectorySeparatorChar).Select(s => s.ToFileName()));
+
+        /// <summary>
+        /// Generates redengine friendly file name 
+        /// </summary>
+        public static string ToFileName(this string target) =>
+            new string(target.Where(c => !Path.GetInvalidFileNameChars().Contains(c)).ToArray()).Trim()
+                .Replace(" ", "_").ToLower();
+
+        /// <summary>
+        /// Capitalizes each word in the string, replacing underscores with spaces
+        /// </summary>
+        public static string ToHumanFriendlyString(this string? target) =>
+            string.IsNullOrEmpty(target) ? "" : target.Replace("_", " ").CapitalizeEachWord();
     }
 }

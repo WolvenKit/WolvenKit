@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
+using WolvenKit.Common.DDS;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Extensions
 {
@@ -21,23 +22,21 @@ namespace WolvenKit.Common.Extensions
                 Replace("\\*", ".*").
                 Replace("\\?", ".") + "$";
 
-        public static EUncookExtension FromMlMaskExtension(this EMlmaskUncookExtension mlmaskUncookExtension) => mlmaskUncookExtension switch
-        {
-            EMlmaskUncookExtension.dds => EUncookExtension.dds,
-            EMlmaskUncookExtension.png => EUncookExtension.png,
-            _ => throw new ArgumentOutOfRangeException(nameof(mlmaskUncookExtension), mlmaskUncookExtension, null),
-        };
-
-        public static EMlmaskUncookExtension ToMlmaskUncookExtension(this EUncookExtension uncookExtension) => uncookExtension switch
-        {
-            EUncookExtension.dds => EMlmaskUncookExtension.dds,
-            EUncookExtension.png => EMlmaskUncookExtension.png,
-            // default to png
-            EUncookExtension.tga => EMlmaskUncookExtension.png,
-            EUncookExtension.bmp => EMlmaskUncookExtension.png,
-            EUncookExtension.jpg => EMlmaskUncookExtension.png,
-            EUncookExtension.tiff => EMlmaskUncookExtension.png,
-            _ => throw new ArgumentOutOfRangeException(nameof(uncookExtension), uncookExtension, null),
-        };
+        public static DXGI_FORMAT ToDirectXTexFormat(this Enums.ETextureRawFormat textureRawFormat, bool isGamma = false) =>
+            textureRawFormat switch
+            {
+                Enums.ETextureRawFormat.TRF_Invalid => DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM,
+                Enums.ETextureRawFormat.TRF_TrueColor => isGamma
+                    ? DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM_SRGB
+                    : DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM,
+                Enums.ETextureRawFormat.TRF_DeepColor => DXGI_FORMAT.DXGI_FORMAT_R16G16B16A16_UNORM,
+                Enums.ETextureRawFormat.TRF_Grayscale => DXGI_FORMAT.DXGI_FORMAT_R8_UNORM,
+                Enums.ETextureRawFormat.TRF_HDRFloat => DXGI_FORMAT.DXGI_FORMAT_R32G32B32A32_FLOAT,
+                Enums.ETextureRawFormat.TRF_HDRHalf => DXGI_FORMAT.DXGI_FORMAT_R16G16B16A16_FLOAT,
+                Enums.ETextureRawFormat.TRF_HDRFloatGrayscale => DXGI_FORMAT.DXGI_FORMAT_R32_FLOAT,
+                Enums.ETextureRawFormat.TRF_R8G8 => DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM,
+                Enums.ETextureRawFormat.TRF_Grayscale_Font => DXGI_FORMAT.DXGI_FORMAT_A8_UNORM,
+                _ => throw new ArgumentOutOfRangeException(nameof(textureRawFormat), textureRawFormat, null)
+            };
     }
 }

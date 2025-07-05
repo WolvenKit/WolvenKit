@@ -1,49 +1,89 @@
-using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using DynamicData;
 using DynamicData.Kernel;
-using WolvenKit.Common.Model;
-using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common
 {
     /// <summary>
     /// Top-level game bundle/archive manager
     /// </summary>
-    public interface IArchiveManager
+    public interface IArchiveManager : INotifyPropertyChanged
     {
         #region Properties
 
         SourceCache<IGameArchive, string> Archives { get; set; }
-        SourceCache<IGameArchive, string> ModArchives { get; set; }
-        //SourceCache<IGameFile, ulong> Items { get; }
-        RedFileSystemModel RootNode { get; set; }
-        public List<RedFileSystemModel> ModRoots { get; }
 
-        //IEnumerable<string> AutocompleteSource { get; }
-        IEnumerable<string> Extensions { get; set; }
-        //IEnumerable<IGameFile> FileList { get; }
-        EArchiveType TypeName { get; }
+        IGameArchive? ProjectArchive { get; set; }
+
+        public bool IsManagerLoading { get; }
 
         public bool IsManagerLoaded { get; }
-        bool IsModBrowserActive { get; set; }
 
         #endregion Properties
 
-        public void LoadGameArchives(FileInfo executable, bool rebuildtree = true);
-        public void LoadArchive(string path, bool ispatch = false);
-        public void LoadModArchive(string filename);
-        public void LoadModsArchives(DirectoryInfo modsDir, DirectoryInfo dlcDir);
+        public void LoadGameArchives(FileInfo executable);
+        public void LoadArchive(string path, EArchiveSource source = EArchiveSource.Unknown);
+        public void LoadModArchive(string filename, bool analyzeFiles = true, bool forceResdcan = false);
+        public void LoadModArchives(FileInfo executable, bool analyzeFiles = true, string[]? ignoredArchives = null);
+        public void LoadAdditionalModArchives(string archiveBasePath, bool analyzeFiles = true, string[]? ignoredArchives = null);
 
-        public Dictionary<string, IEnumerable<FileEntry>> GetGroupedFiles();
-        public IEnumerable<FileEntry> GetFiles();
-        void LoadFromFolder(DirectoryInfo archivedir);
+        public string[] GetIgnoredArchiveNames();
 
-        RedFileSystemModel LookupDirectory(string fullpath, bool expandAll = false);
+        public Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles();
+        public Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles(ArchiveManagerScope searchScope);
+
+        /// <summary>
+        /// Checks if a file with the given hash exists in the ArchiveManager's current scope.
+        /// </summary>
+        /// <param name="hash">Unique hash of the file</param>
+        /// <returns>An optional with the matching file</returns>
         public Optional<IGameFile> Lookup(ulong hash);
 
-        public IObservable<IChangeSet<RedFileSystemModel>> ConnectGameRoot();
-        public IObservable<IChangeSet<RedFileSystemModel>> ConnectModRoot();
+        /// <summary>
+        /// Checks if a file with the given resourcePath exists in the specified search scope.
+        /// </summary>
+        /// <param name="path">ResourcePath</param>
+        /// <param name="searchScope">BaseGame, Mod or Everywhere</param>
+        /// <returns>An optional with the matching file</returns>
+        public Optional<IGameFile> Lookup(ResourcePath path, ArchiveManagerScope searchScope);
+
+        /// <summary>
+        /// Checks if a file with the given resourcePath exists in the ArchiveManager's current scope.
+        /// </summary>
+        /// <param name="path">ResourcePath</param>
+        /// <returns>An optional with the matching file</returns>
+        public Optional<IGameFile> Lookup(ResourcePath path);
+
+        /// <summary>
+        /// Checks if a file with the given hash exists in the specified search scope.
+        /// </summary>
+        /// <param name="hash">Unique hash of the file</param>
+        /// <param name="searchScope">BaseGame, Mod or Everywhere</param>
+        /// <returns>An optional with the matching file</returns>
+        public Optional<IGameFile> Lookup(ulong hash, ArchiveManagerScope searchScope);
+
+        /// <summary>
+        /// Gets all files including the search string under the given scope.
+        /// </summary>
+        /// <param name="search">search string</param>
+        /// <param name="searchScope">BaseGame, Mod or Everywhere</param>
+        /// <returns>An optional with the matching file</returns>
+        public List<IGameFile> Search(string search, ArchiveManagerScope searchScope);
+        
+        public IGameFile? GetGameFile(ResourcePath path, bool includeMods = true, bool includeProject = true);
+        public CR2WFile? GetCR2WFile(ResourcePath path, bool includeMods = true, bool includeProject = true);
+
+        public bool IsInitialized { get; }
+        public void Initialize(FileInfo executable, bool scanArchives = false);
+        
+        IEnumerable<IGameArchive> GetModArchives();
+        IEnumerable<IGameArchive> GetBaseArchives();
+        IEnumerable<IGameArchive> GetEp1Archives();
+        IEnumerable<IGameArchive> GetGameArchives();
     }
 }

@@ -2,378 +2,450 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.Extensions.DependencyModel;
 using SharpGLTF.Schema2;
-using SharpGLTF.Validation;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Exceptions;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4.GeneralStructs;
+using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.Modkit.RED4.Tools;
+using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
+
 using Vec3 = System.Numerics.Vector3;
 using Vec4 = System.Numerics.Vector4;
+
+using TargetAccessor = System.Collections.Generic.IReadOnlyDictionary<string, SharpGLTF.Schema2.Accessor>;
+
 
 namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-        public bool ImportMorphTargets(FileInfo inGltfFile, Stream intargetStream, List<Archive> archives, ValidationMode vmode = ValidationMode.Strict, Stream outStream = null)
+        #region importapi
+
+        public bool ImportMorphTargets(FileInfo inGltfFile, Stream inTargetStream, GltfImportArgs args/*, Stream outStream = null*/)
         {
-            var cr2w = _wolvenkitFileService.ReadRed4File(intargetStream);
-            if (cr2w == null || cr2w.RootChunk is not MorphTargetMesh blob || blob.Blob.Chunk is not rendRenderMorphTargetMeshBlob renderblob || renderblob.BaseBlob.Chunk is not rendRenderMeshBlob rendblob)
+            if (args.FillEmpty)
+            {
+                throw new NotImplementedException("FillEmpty not supported for morphtarget import! Should it be?");
+            }
+
+            var cr2w = _parserService.ReadRed4File(inTargetStream);
+            if (cr2w is not { RootChunk: MorphTargetMesh targetRoot } 
+                || targetRoot.Blob.Chunk is not rendRenderMorphTargetMeshBlob renderBlob 
+                || renderBlob.BaseBlob.Chunk is not rendRenderMeshBlob)
             {
                 return false;
             }
 
-            RawArmature newRig = null;
+            RawArmature? newRig = null;
+            
+            if (TryFindFile(targetRoot.BaseMesh.DepotPath, out var result) == FindFileResult.NoError &&
+                result.File is { RootChunk: CMesh { RenderResourceBlob.Chunk: rendRenderMeshBlob } mesh })
             {
-                var hash = FNV1A64HashAlgorithm.HashString(blob.BaseMesh.DepotPath);
-                var meshStream = new MemoryStream();
-                foreach (var ar in archives)
-                {
-                    if (ar.Files.ContainsKey(hash))
-                    {
-                        ExtractSingleToStream(ar, hash, meshStream);
-                        break;
-                    }
-                }
-                var meshCr2w = _wolvenkitFileService.ReadRed4File(meshStream);
-                if (meshCr2w != null && meshCr2w.RootChunk is CMesh mesh && mesh.RenderResourceBlob.Chunk is rendRenderMeshBlob rendBlob)
-                {
-                    newRig = MeshTools.GetOrphanRig(rendBlob, meshCr2w);
-                }
+                newRig = MeshTools.GetOrphanRig(mesh);
             }
 
-            var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(vmode));
-            VerifyGLTF(model);
+            var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.ValidationMode));
+            VerifyGLTF(model, args);
 
-            var submeshCount = model.LogicalMeshes.Count;
+            // Quick validations and GarmentSupport vs. real targets handling first...
 
-            if (submeshCount == 0)
+            var subMeshesCount = model.LogicalMeshes.Count;
+
+            var gsAndTargetsPerSubmesh = model.LogicalMeshes.Select(submesh => {
+                var targets = Enumerable.Range(0, submesh.Primitives[0].MorphTargetsCount).Select(t =>
+                    submesh.Primitives[0].GetMorphTargetAccessors(t)
+                );
+
+                var hasGS = submesh.Primitives[0].GetVertexAccessor("_GARMENTSUPPORTWEIGHT") != null &&
+                            submesh.Primitives[0].GetVertexAccessor("_GARMENTSUPPORTCAP") != null;
+
+                var gsCount = hasGS ? 1 : 0;
+
+                return (gs: targets.Take(gsCount).ToArray(), real: targets.Skip(gsCount).ToArray());
+            });
+
+            var garmentSupportPerSubmesh = gsAndTargetsPerSubmesh.Select(_ => _.gs).ToArray();
+            var realTargetsPerSubmesh = gsAndTargetsPerSubmesh.Select(_ => _.real).ToArray();
+
+            var hasAtMostOneGsPerSubmesh = garmentSupportPerSubmesh.All(gs => gs.Length <= 1);
+
+            if (!hasAtMostOneGsPerSubmesh)
             {
-                throw new Exception("No submeshes found in model file.");
+                throw new ArgumentException("Multiple GarmentSupport targets per submesh are not allowed!");
             }
 
-            using var diffsBuffer = new MemoryStream();
-            using var mappingsBuffer = new MemoryStream();
+            _loggerService.Debug($"{garmentSupportPerSubmesh.Count(gs => gs.Length == 1)} out of {subMeshesCount} submeshes have GarmentSupport");
 
-            // Deserialize mappings buffer
-            /*if (renderblob.MappingBuffer.IsSerialized)
-            {
-                intargetStream.Seek(cr2w.Buffers[mappingsBufferId].Offset, SeekOrigin.Begin);
-                intargetStream.DecompressAndCopySegment(mappingsBuffer, cr2w.Buffers[mappingsBufferId].DiskSize, cr2w.Buffers[mappingsBufferId].MemSize);
-            }*/
+            var targetCounts = realTargetsPerSubmesh.Select(targets => targets.Length);
+            var targetCountsMatch = targetCounts.All(count => count == targetCounts.First());
 
-            // Zero out some values that will be set later
-            renderblob.Header.NumDiffs = 0;
-            for (var i = 0; i < renderblob.Header.TargetStartsInVertexDiffs.Count; i++)
+            if (!targetCountsMatch)
             {
-                renderblob.Header.TargetStartsInVertexDiffs[i] = 0;
+                throw new ArgumentException($"All submeshes don't have the same number of morph targets! (GarmentSupport targets excluded.)");
             }
 
-            for (var i = 0; i < renderblob.Header.TargetStartsInVertexDiffsMapping.Count; i++)
-            {
-                renderblob.Header.TargetStartsInVertexDiffsMapping[i] = 0;
-            }
-
-            SetTargets(cr2w, model, renderblob, diffsBuffer, mappingsBuffer);
-            renderblob.DiffsBuffer.Buffer.SetBytes(diffsBuffer.ToArray());
-            renderblob.MappingBuffer.Buffer.SetBytes(mappingsBuffer.ToArray());
-
-            VerifyGLTF(model);
-            var Meshes = new List<RawMeshContainer>();
-
-            for (var i = 0; i < model.LogicalMeshes.Count; i++)
-            {
-                Meshes.Add(GltfMeshToRawContainer(model.LogicalMeshes[i]));
-            }
-            var max = new Vec3(Meshes[0].positions[0].X, Meshes[0].positions[0].Y, Meshes[0].positions[0].Z);
-            var min = new Vec3(Meshes[0].positions[0].X, Meshes[0].positions[0].Y, Meshes[0].positions[0].Z);
-
-            for (var e = 0; e < Meshes.Count; e++)
-            {
-                for (var i = 0; i < Meshes[e].positions.Length; i++)
-                {
-                    if (Meshes[e].positions[i].X >= max.X)
-                    {
-                        max.X = Meshes[e].positions[i].X;
-                    }
-
-                    if (Meshes[e].positions[i].Y >= max.Y)
-                    {
-                        max.Y = Meshes[e].positions[i].Y;
-                    }
-
-                    if (Meshes[e].positions[i].Z >= max.Z)
-                    {
-                        max.Z = Meshes[e].positions[i].Z;
-                    }
-
-                    if (Meshes[e].positions[i].X <= min.X)
-                    {
-                        min.X = Meshes[e].positions[i].X;
-                    }
-
-                    if (Meshes[e].positions[i].Y <= min.Y)
-                    {
-                        min.Y = Meshes[e].positions[i].Y;
-                    }
-
-                    if (Meshes[e].positions[i].Z <= min.Z)
-                    {
-                        min.Z = Meshes[e].positions[i].Z;
-                    }
-                }
-            }
-
-
-            // updating bounding box
-
-            blob.BoundingBox.Min.X = min.X;
-            blob.BoundingBox.Min.Y = min.Y;
-            blob.BoundingBox.Min.Z = min.Z;
-            blob.BoundingBox.Max.X = max.X;
-            blob.BoundingBox.Max.Y = max.Y;
-            blob.BoundingBox.Max.Z = max.Z;
-
-            var QuantScale = new Vec4((max.X - min.X) / 2, (max.Y - min.Y) / 2, (max.Z - min.Z) / 2, 0);
-            var QuantTrans = new Vec4((max.X + min.X) / 2, (max.Y + min.Y) / 2, (max.Z + min.Z) / 2, 1);
-
-
-            RawArmature oldRig = null;
-            if (model.LogicalSkins.Count != 0)
-            {
-                oldRig = new RawArmature
-                {
-                    Names = new string[model.LogicalSkins[0].JointsCount]
-                };
-
-                for (var i = 0; i < model.LogicalSkins[0].JointsCount; i++)
-                {
-                    oldRig.Names[i] = model.LogicalSkins[0].GetJoint(i).Joint.Name;
-                }
-            }
-            MeshTools.UpdateMeshJoints(ref Meshes, newRig, oldRig);
-
-            var expMeshes = new List<Re4MeshContainer>();
-
-            for (var i = 0; i < Meshes.Count; i++)
-            {
-                expMeshes.Add(RawMeshToRE4Mesh(Meshes[i], QuantScale, QuantTrans));
-            }
-
-            var meshBuffer = new MemoryStream();
-            var meshesInfo = BufferWriter(expMeshes, ref meshBuffer);
-
-            meshesInfo.quantScale = QuantScale;
-            meshesInfo.quantTrans = QuantTrans;
-
-            var ms = GetEditedCr2wFile(cr2w, meshesInfo, meshBuffer);
-
-            ms.Seek(0, SeekOrigin.Begin);
-            if (outStream != null)
-            {
-                ms.CopyTo(outStream);
-            }
-            else
-            {
-                intargetStream.SetLength(0);
-                ms.CopyTo(intargetStream);
-            }
-            return true;
-        }
-
-        private (Vec4 scale, Vec4 offset) CalculateTargetQuant(ModelRoot model, int morphTargetId)
-        {
-            var logicalMesh = model.LogicalMeshes[0].Primitives[0];
-            var morphTarget = logicalMesh.GetMorphTargetAccessors(morphTargetId);
-            var morphVertices = morphTarget["POSITION"].AsVector3Array();
-
-            var max = new Vec3(morphVertices[0].X, -morphVertices[0].Z, morphVertices[0].Y);
-            var min = new Vec3(morphVertices[0].X, -morphVertices[0].Z, morphVertices[0].Y);
-
-            for (var i = 0; i < model.LogicalMeshes.Count; i++)
-            {
-                morphVertices = model.LogicalMeshes[i].Primitives[0].GetMorphTargetAccessors(morphTargetId)["POSITION"].AsVector3Array();
-                var maxX = morphVertices.Max(l => l.X);
-                var maxY = morphVertices.Max(l => -l.Z);
-                var maxZ = morphVertices.Max(l => l.Y);
-
-                if (maxX > max.X)
-                {
-                    max.X = maxX;
-                }
-
-                if (maxY > max.Y)
-                {
-                    max.Y = maxY;
-                }
-
-                if (maxZ > max.Z)
-                {
-                    max.Z = maxZ;
-                }
-
-                var minX = morphVertices.Min(l => l.X);
-                var minY = morphVertices.Min(l => -l.Z);
-                var minZ = morphVertices.Min(l => l.Y);
-
-                if (minX < min.X)
-                {
-                    min.X = minX;
-                }
-
-                if (minY < min.Y)
-                {
-                    min.Y = minY;
-                }
-
-                if (minZ < min.Z)
-                {
-                    min.Z = minZ;
-                }
-            }
-
-            var quantScale = new Vec4(max.X - min.X, max.Y - min.Y, max.Z - min.Z, 0);
-            var quantOffset = new Vec4(min.X, min.Y, min.Z, 1);
-
-            return (quantScale, quantOffset);
-
-        }
-
-        private uint GetVertexCountInMorphTarget(ModelRoot model, int morphTargetId)
-        {
-            uint count = 0;
-            for (var i = 0; i < model.LogicalMeshes.Count; i++)
-            {
-                count += (uint)model.LogicalMeshes[i].Primitives[0].GetMorphTargetAccessors(morphTargetId)["POSITION"].AsVector3Array().Where(l => l.X != 0 && l.Y != 0 && l.Z != 0).Count();
-            }
-
-            return count;
-        }
-
-        private void SetTargets(CR2WFile cr2w, ModelRoot model, rendRenderMorphTargetMeshBlob blob, Stream diffsBuffer, Stream mappingsBuffer)
-        {
-
-            // Validate that all submeshes contain the same number of morph targets
-            var morphTargetCount = model.LogicalMeshes[0].Primitives[0].MorphTargetsCount;
-            if (model.LogicalMeshes.Any(l => l.Primitives[0].MorphTargetsCount != morphTargetCount))
-            {
-                throw new Exception("All submeshes must have the same number of morph targets.");
-            }
+            var morphTargetCount = targetCounts.First();
 
             if (morphTargetCount == 0)
             {
-                throw new Exception("Mesh contains no morph targets to import.");
+                throw new ArgumentException("Mesh contains no morph targets to import.");
             }
 
-            // Set global headers for blob
-            blob.Header.NumTargets = (uint)morphTargetCount;
+            // Ok, moving on to importing...
 
-            // Write buffer positions for all the morph targets
-            for (var morphTarget = 0; morphTarget < morphTargetCount; morphTarget++)
+            var rawMeshes = new List<RawMeshContainer>();
+
+            for (var i = 0; i < subMeshesCount; i++)
             {
-                blob.Header.TargetStartsInVertexDiffs[morphTarget] = (uint)morphTarget;
-                blob.Header.TargetStartsInVertexDiffsMapping[morphTarget] = (uint)morphTarget;
+                var submesh = model.LogicalMeshes[i];
+                var rawMesh = GltfMeshToRawContainer(submesh, args);
 
-                for (var i = 0; i < morphTarget; i++)
-                {
-                    var vertexCount = GetVertexCountInMorphTarget(model, i);
-                    blob.Header.TargetStartsInVertexDiffs[morphTarget] += vertexCount - 1;
-                    blob.Header.TargetStartsInVertexDiffsMapping[morphTarget] += vertexCount - 1;
-                }
+                // Substitute whatever mesh import did with what we know to be the GarmentSupport (or none)
+                rawMesh.garmentMorph = garmentSupportPerSubmesh[i].Select(gs =>
+                    gs["POSITION"].AsVector3Array().Select(p => new Vec3(p.X, -p.Z, p.Y)).ToArray()
+                ).FirstOrDefault([]);
+
+                rawMeshes.Add(rawMesh);
             }
+
+            var rawMeshesSorted = rawMeshes.OrderBy(r => r.name).ToList();
+
+            // TODO: Calculated without GarmentSupport for now because that's what mesh import does
+            // TODO: https://github.com/WolvenKit/WolvenKit/issues/1504 
+            var (maxBound, minBound) = WholeModelAdditiveBoundsZup(rawMeshesSorted, realTargetsPerSubmesh);
+
+            targetRoot.BoundingBox.Max = new Vector4 { X = maxBound.X, Y = maxBound.Y, Z = maxBound.Z, W = 1f };
+            targetRoot.BoundingBox.Min = new Vector4 { X = minBound.X, Y = minBound.Y, Z = minBound.Z, W = 1f };
+
+            // The /2 is because this one is stored in a signed int16... *sigh*
+            var baseQuantOffset = new Vec4((maxBound.X + minBound.X) / 2f, (maxBound.Y + minBound.Y) / 2f, (maxBound.Z + minBound.Z) / 2f, 0f);
+            var baseQuantScale = new Vec4((maxBound.X - minBound.X) / 2f, (maxBound.Y - minBound.Y) / 2f, (maxBound.Z - minBound.Z) / 2f, 0f);
+
+            RawArmature? oldRig = null;
+            if (model.LogicalSkins.Count > 0 && model.LogicalSkins[0].JointsCount > 0)
+            {
+                oldRig = new RawArmature
+                {
+                    BoneCount = model.LogicalSkins[0].JointsCount,
+                    Names = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray()
+                };
+            }
+
+            try
+            {
+                MeshTools.UpdateMeshJoints(ref rawMeshesSorted, newRig, oldRig);
+            }
+            catch (WolvenKitException e)
+            {
+                throw new WolvenKitException(e.ErrorCode,
+                    $"You're trying to import bones into a morphtarget that doesn't have them. Wolvenkit can't create bones — please remove them in Blender, or import into a different file: {e.Message}");
+            }
+            
+
+            // Finish up creating the baseBlob (not the base mesh!)
+
+            var red4Meshes = rawMeshesSorted.Select(_ => RawMeshToRE4Mesh(_, baseQuantScale, baseQuantOffset)).ToList();
+
+            var meshBuffer = new MemoryStream();
+            var meshesInfo = BufferWriter(red4Meshes, ref meshBuffer, args);
+
+            // And then finally the targets
+
+            meshesInfo.quantScale = baseQuantScale;
+            meshesInfo.quantTrans = baseQuantOffset;
+
+            var diffsBuffer = new MemoryStream();
+            var mappingsBuffer = new MemoryStream();
+
+            renderBlob.Header.NumDiffs = 0;
+            renderBlob.Header.NumDiffsMapping = 0;
+            renderBlob.Header.NumVertexDiffsInEachChunk = new CArray<CArray<CUInt32>>(morphTargetCount);
+            renderBlob.Header.NumVertexDiffsMappingInEachChunk = new CArray<CArray<CUInt32>>(morphTargetCount);
+            renderBlob.Header.TargetStartsInVertexDiffs = new CArray<CUInt32>(morphTargetCount);
+            renderBlob.Header.TargetStartsInVertexDiffsMapping = new CArray<CUInt32>(morphTargetCount);
+            renderBlob.Header.TargetPositionDiffOffset = new CArray<Vector4>(morphTargetCount);
+            renderBlob.Header.TargetPositionDiffScale = new CArray<Vector4>(morphTargetCount);
+
+            for (var i = 0; i < morphTargetCount; i++)
+            {
+                renderBlob.Header.NumVertexDiffsInEachChunk[i] = new CArray<CUInt32>(subMeshesCount);
+                renderBlob.Header.NumVertexDiffsMappingInEachChunk[i] = new CArray<CUInt32>(subMeshesCount);
+
+                renderBlob.Header.TargetStartsInVertexDiffs[i] = 0;
+                renderBlob.Header.TargetStartsInVertexDiffsMapping[i] = 0;
+
+                renderBlob.Header.TargetPositionDiffOffset[i] = new Vec4(0f, 0f, 0f, 0);
+                renderBlob.Header.TargetPositionDiffScale[i] = new Vec4(1f, 1f, 1f, 0);
+            }
+
+            // Do the thing
+            
+            ConvertAndSetTargetsData(cr2w, realTargetsPerSubmesh, renderBlob, diffsBuffer, mappingsBuffer);
+
+            // Well most of the thing, this part of the thing is here instead
+            renderBlob.DiffsBuffer.Buffer.SetBytes(diffsBuffer.ToArray());
+            renderBlob.MappingBuffer.Buffer.SetBytes(mappingsBuffer.ToArray());
+
+            // Fill out the rest (render data mostly)
+            var ms = GetEditedCr2wFile(cr2w, meshesInfo, meshBuffer);
+
+            ms.Seek(0, SeekOrigin.Begin);
+            inTargetStream.SetLength(0);
+            ms.CopyTo(inTargetStream);
+ 
+            return true;
+        }
+
+        #endregion
+        #region targetimport
+
+        // Inverse, export transform is (mostly) in `ContainRawTarget()`
+        private void ConvertAndSetTargetsData(CR2WFile cr2w, TargetAccessor[][] morphTargetsPerSubmesh, rendRenderMorphTargetMeshBlob blob, Stream diffsBuffer, Stream mappingsBuffer)
+        {
+            uint subMeshCount = Convert.ToUInt32(morphTargetsPerSubmesh.Length);
+            uint morphTargetCount = Convert.ToUInt32(morphTargetsPerSubmesh[0].Length);
 
             var diffsWriter = new BinaryWriter(diffsBuffer);
             var mappingsWriter = new BinaryWriter(mappingsBuffer);
 
-            for (var i = 0; i < morphTargetCount; i++)
+            for (var targetIndex = 0; targetIndex < morphTargetCount; targetIndex++)
             {
+                var (targetQuantScale, targetQuantOffset) = TargetwiseQuantizationZup(morphTargetsPerSubmesh, targetIndex);
 
-                // Write scale and offsets
-                var (scale, offset) = CalculateTargetQuant(model, i);
-                blob.Header.TargetPositionDiffOffset[i].X = offset.X;
-                blob.Header.TargetPositionDiffOffset[i].Y = offset.Y;
-                blob.Header.TargetPositionDiffOffset[i].Z = offset.Z;
-                blob.Header.TargetPositionDiffScale[i].X = scale.X;
-                blob.Header.TargetPositionDiffScale[i].Y = scale.Y;
-                blob.Header.TargetPositionDiffScale[i].Z = scale.Z;
+                blob.Header.TargetPositionDiffOffset[targetIndex] = targetQuantOffset; 
+                blob.Header.TargetPositionDiffScale[targetIndex] = targetQuantScale;
 
-
-                for (var subMeshId = 0; subMeshId < model.LogicalMeshes.Count; subMeshId++)
+                for (var subMeshIndex = 0; subMeshIndex < subMeshCount; subMeshIndex++)
                 {
-                    var logicalMesh = model.LogicalMeshes[subMeshId].Primitives[0];
-                    var morphTarget = logicalMesh.GetMorphTargetAccessors(i);
+                    var morphTarget = morphTargetsPerSubmesh[subMeshIndex][targetIndex];
 
                     if (!morphTarget.ContainsKey("TANGENT"))
                     {
-                        throw new Exception($"Morph target {i} does not contain any tangents. Did you remember to export them?");
+                        throw new Exception($"Morph target {targetIndex} is missing TANGENT data. Use the cp77 Blender plugin or ensure they're exported.");
                     }
 
                     if (!morphTarget.ContainsKey("NORMAL"))
                     {
-                        throw new Exception($"Morph target {i} does not contain any normals. Did you remember to export them?");
+                        throw new Exception($"Morph target {targetIndex} is missing NORMAL data. Use the cp77 Blender plugin or ensure they're exported.");
                     }
 
-                    var vertices = morphTarget["POSITION"].AsVector3Array();
-                    var normals = morphTarget["NORMAL"].AsVector3Array();
-                    var tangents = morphTarget["TANGENT"].AsVector3Array();
+                    var positionDeltas = morphTarget["POSITION"].AsVector3Array();
+                    var normalDeltas = morphTarget["NORMAL"].AsVector3Array();
+                    var tangentDeltas = morphTarget["TANGENT"].AsVector3Array();
 
-                    var mappings = new List<ushort>();
-                    var deltaCount = 0;
+                    var mappingsInSubmesh = new List<ushort>();
+                    uint actionableDiffCountInSubmesh = 0;
+                    var diffsWithOnlyNormalOrTangentCount = 0;
 
-                    for (var x = 0; x < vertices.Count; x++)
+                    for (var diffIndex = 0; diffIndex < positionDeltas.Count; diffIndex++)
                     {
-                        var vertexDelta = vertices[x];
-                        var normalsDelta = normals[x];
-                        var tangentsDelta = tangents[x];
+                        var positionDelta = positionDeltas[diffIndex];
+                        var normalDelta = normalDeltas[diffIndex];
+                        var tangentDelta = tangentDeltas[diffIndex];
 
-                        if (vertexDelta.X == 0 && vertexDelta.Y == 0 && vertexDelta.Z == 0)
+                        var hasPositionDelta = positionDelta.X != 0 || positionDelta.Y != 0 || positionDelta.Z != 0;
+                        var hasNormalDelta = normalDelta.X != 0 || normalDelta.Y != 0 || normalDelta.Z != 0;
+                        var hasTangentDelta = tangentDelta.X != 0 || tangentDelta.Y != 0 || tangentDelta.Z != 0;
+
+                        if (!hasPositionDelta)
                         {
-                            continue;
+                            if (!hasNormalDelta && !hasTangentDelta)
+                            {
+                                continue;
+                            }
+
+                            diffsWithOnlyNormalOrTangentCount += 1;   // Dunno if this is actually relevant info?
                         }
 
+                        mappingsInSubmesh.Add((ushort)diffIndex);
 
-                        // Mappings
-                        mappings.Add((ushort)x);
+                        actionableDiffCountInSubmesh += 1;
 
-                        deltaCount++;
+                        // GLTF's RHCS Y up -> Red4 LHCS Z up
+                        var zUpPositionDelta = new TargetVec3(positionDelta.X, -positionDelta.Z, positionDelta.Y);
+                        var zUpNormalDelta = new Vec3(normalDelta.X, -normalDelta.Z, normalDelta.Y);
+                        var zUpTangentDelta = new Vec3(tangentDelta.X, -tangentDelta.Z, tangentDelta.Y);
 
-                        var convertX = (vertexDelta.X - offset.X) / scale.X;
-                        var convertY = (vertexDelta.Y - offset.Z) / scale.Z;
-                        var convertZ = (vertexDelta.Z - -offset.Y) / scale.Y;
+                        // Quant already converted earlier
+                        var zUpQuantizedPositionDelta =
+                            new TargetVec3(
+                                targetQuantScale.X != 0 ? ((zUpPositionDelta.X - targetQuantOffset.X) / targetQuantScale.X) : 0,
+                                targetQuantScale.Y != 0 ? ((zUpPositionDelta.Y - targetQuantOffset.Y) / targetQuantScale.Y) : 0,
+                                targetQuantScale.Z != 0 ? ((zUpPositionDelta.Z - targetQuantOffset.Z) / targetQuantScale.Z) : 0);
 
-                        // Position
-                        var output = Converters.Vec3ToU32(new TargetVec3(convertX, -convertZ, convertY), 1);
+                        // NB different encoding for position!
+                        var positionAs10BitUnsignedInt = Converters.Vec3ToU32(zUpQuantizedPositionDelta, 1);
+                        var normalAs10BitShiftedInt = Converters.Vec3ToU32(zUpNormalDelta);
+                        var tangentAs10BitShiftedInt = Converters.Vec3ToU32(zUpTangentDelta);
 
-                        diffsWriter.Write(output);
-
-                        // Normal
-                        output = Converters.Vec4ToU32(new Vec4(normalsDelta.X, -normalsDelta.Z, normalsDelta.Y, 1f));
-                        diffsWriter.Write(output);
-
-                        // Tangent
-                        output = Converters.Vec4ToU32(new Vec4(tangentsDelta.X, -tangentsDelta.Z, tangentsDelta.Y, 1f));
-                        diffsWriter.Write(output);
+                        // 4 + 4 + 4 bytes per diff, no padding
+                        diffsWriter.Write(positionAs10BitUnsignedInt);
+                        diffsWriter.Write(normalAs10BitShiftedInt);
+                        diffsWriter.Write(tangentAs10BitShiftedInt);
                     }
 
-                    // Write mappings
-                    foreach (var mapping in mappings)
+                    // 2 bytes per mapping
+                    foreach (var mapping in mappingsInSubmesh)
                     {
                         mappingsWriter.Write(mapping);
                     }
 
-                    // Padding?
-                    foreach (var mapping in mappings)
+                    var oddDiffCountNeedsMappingsPadding = mappingsInSubmesh.Count % 2 != 0;
+
+                    if (oddDiffCountNeedsMappingsPadding)
                     {
                         mappingsWriter.Write((ushort)0);
                     }
 
-                    blob.Header.NumVertexDiffsInEachChunk[i][subMeshId] = (uint)deltaCount;
-                    blob.Header.NumVertexDiffsMappingInEachChunk[i][subMeshId] = (uint)deltaCount;
-                    blob.Header.NumDiffs += (uint)deltaCount;
+                    // Fun story
+                    var mappingCountHalvedRoundedUpForRE4 =
+                        oddDiffCountNeedsMappingsPadding
+                            ? (uint)(mappingsInSubmesh.Count / 2) + 1
+                            : (uint)(mappingsInSubmesh.Count / 2);
+
+                    blob.Header.NumVertexDiffsInEachChunk[targetIndex][subMeshIndex] = actionableDiffCountInSubmesh;
+                    blob.Header.NumVertexDiffsMappingInEachChunk[targetIndex][subMeshIndex] = mappingCountHalvedRoundedUpForRE4;
+
+                    _loggerService.Debug($"Target {targetIndex} submesh {subMeshIndex} ({positionDeltas.Count} vertices): {actionableDiffCountInSubmesh} diffs applied (of which {diffsWithOnlyNormalOrTangentCount} diffs with only normal/tangent, no position)");
                 }
             }
+
+            // Set rest of blob-level stuff computed from the import.
+            // (This should really be immutable or returned but here we are.)
+
+            blob.Header.NumTargets = morphTargetCount;
+
+            blob.Header.NumDiffs = 0;
+            blob.Header.NumDiffsMapping = 0;
+
+            // Reduce into totals and subtotals... f# where art thou
+            for (var targetIndex = (int)morphTargetCount - 1; targetIndex >= 0; targetIndex--)
+            {
+                blob.Header.TargetStartsInVertexDiffs[targetIndex] = 0;
+                blob.Header.TargetStartsInVertexDiffsMapping[targetIndex] = 0;
+
+                uint diffCountInTarget = 0;
+                uint mappingCountInTarget = 0;
+
+                for (var subMeshIndex = 0; subMeshIndex < subMeshCount; subMeshIndex++)
+                {
+                    diffCountInTarget += blob.Header.NumVertexDiffsInEachChunk[targetIndex][subMeshIndex];
+                    mappingCountInTarget += blob.Header.NumVertexDiffsMappingInEachChunk[targetIndex][subMeshIndex];
+                }
+
+                blob.Header.NumDiffs += diffCountInTarget;
+                blob.Header.NumDiffsMapping += mappingCountInTarget;
+
+                for (var higherTargetIndex = targetIndex + 1; higherTargetIndex < morphTargetCount; higherTargetIndex++)
+                {
+                    blob.Header.TargetStartsInVertexDiffs[higherTargetIndex] += diffCountInTarget;
+                    blob.Header.TargetStartsInVertexDiffsMapping[higherTargetIndex] += mappingCountInTarget;
+                }
+            }
+
+            return;
         }
+
+        #endregion
+        #region boundsandquantizationhelpers
+
+        // This is calculated including possible GarmentSupport, may need to revisit.
+        // TODO: https://github.com/WolvenKit/WolvenKit/issues/1504 
+        private (Vec3 maxBounds, Vec3 minBounds) WholeModelAdditiveBoundsZup(List<RawMeshContainer> rawMeshes, TargetAccessor[][] morphTargetsPerSubmesh)
+        {
+            var modelMax = new Vec3(float.MinValue, float.MinValue, float.MinValue);
+            var modelMin = new Vec3(float.MaxValue, float.MaxValue, float.MaxValue);
+
+            for (var subMeshIndex = 0; subMeshIndex < rawMeshes.Count; subMeshIndex++)
+            {
+                var (submeshAdditiveMax, submeshAdditiveMin) = SubmeshwiseAdditiveBoundsZup(morphTargetsPerSubmesh, subMeshIndex);
+
+                var subMeshPositions = rawMeshes[subMeshIndex].positions;
+                ArgumentNullException.ThrowIfNull(subMeshPositions);
+
+                foreach (var position in subMeshPositions)
+                {
+                    modelMax.X = Math.Max(modelMax.X, position.X + submeshAdditiveMax.X);
+                    modelMax.Y = Math.Max(modelMax.Y, position.Y + submeshAdditiveMax.Y);
+                    modelMax.Z = Math.Max(modelMax.Z, position.Z + submeshAdditiveMax.Z);
+
+                    modelMin.X = Math.Min(modelMin.X, position.X + submeshAdditiveMin.X);
+                    modelMin.Y = Math.Min(modelMin.Y, position.Y + submeshAdditiveMin.Y);
+                    modelMin.Z = Math.Min(modelMin.Z, position.Z + submeshAdditiveMin.Z);
+                }
+            }
+
+            return (modelMax, modelMin);
+        }
+
+        // Is this info already in the GLTF? Yes
+        // Can I somehow get the POSITION.min/.max values with SharpGLTF? Also y-- no. Definitely no.
+        // Are we therefore looping through all the vertices for like the 15th time? We sure are!
+        private (Vec3 additiveMax, Vec3 additiveMin) SubmeshwiseAdditiveBoundsZup(TargetAccessor[][] morphTargetsPerSubmesh, int subMeshIndex)
+        {
+            var morphTargetCount = morphTargetsPerSubmesh[subMeshIndex].Length;
+
+            var maxDeltasPerTarget = new Vec3[morphTargetCount];
+            var minDeltasPerTarget = new Vec3[morphTargetCount];
+
+            // Need to flip to LHCS Zup here (...and again later)
+            for (var targetIndex = 0; targetIndex < morphTargetCount; targetIndex++)
+            {
+                var positionDeltas = morphTargetsPerSubmesh[subMeshIndex][targetIndex]["POSITION"].AsVector3Array();
+
+                maxDeltasPerTarget[targetIndex] = new Vec3( positionDeltas.Max(l => l.X), positionDeltas.Max(l => -l.Z), positionDeltas.Max(l => l.Y));
+                minDeltasPerTarget[targetIndex] = new Vec3( positionDeltas.Min(l => l.X), positionDeltas.Min(l => -l.Z), positionDeltas.Min(l => l.Y));
+            }
+
+            var cumulativeMax = new Vec3(
+                maxDeltasPerTarget.Select(v => v.X > 0 ? v.X : 0).Sum(),
+                maxDeltasPerTarget.Select(v => v.Y > 0 ? v.Y : 0).Sum(),
+                maxDeltasPerTarget.Select(v => v.Z > 0 ? v.Z : 0).Sum()
+            );
+
+            var cumulativeMin = new Vec3(
+                minDeltasPerTarget.Select(v => v.X < 0 ? v.X : 0).Sum(),
+                minDeltasPerTarget.Select(v => v.Y < 0 ? v.Y : 0).Sum(),
+                minDeltasPerTarget.Select(v => v.Z < 0 ? v.Z : 0).Sum()
+            );
+
+            return (cumulativeMax, cumulativeMin);
+        }
+
+
+        // Quantization for each target across all submeshes
+        private (Vec4 scale, Vec4 offset) TargetwiseQuantizationZup(TargetAccessor[][] morphTargetsPerSubmesh, int targetIndex)
+        {
+            var max = new Vec3(float.MinValue, float.MinValue, float.MinValue);
+            var min = new Vec3(float.MaxValue, float.MaxValue, float.MaxValue);
+
+            foreach (var submesh in morphTargetsPerSubmesh)
+            {
+                var morphPositionDeltas = submesh[targetIndex]["POSITION"].AsVector3Array();
+
+                max.X = Math.Max(max.X, morphPositionDeltas.Max(l => l.X));
+                max.Y = Math.Max(max.Y, morphPositionDeltas.Max(l => -l.Z));
+                max.Z = Math.Max(max.Z, morphPositionDeltas.Max(l => l.Y));
+
+                min.X = Math.Min(min.X, morphPositionDeltas.Min(l => l.X));
+                min.Y = Math.Min(min.Y, morphPositionDeltas.Min(l => -l.Z));
+                min.Z = Math.Min(min.Z, morphPositionDeltas.Min(l => l.Y));
+            }
+
+            var quantScale = new Vec4(max.X - min.X, max.Y - min.Y, max.Z - min.Z, 0);
+            var quantOffset = new Vec4(min.X, min.Y, min.Z, 0);
+
+            return (quantScale, quantOffset);
+        }
+
+        #endregion
+
     }
 }

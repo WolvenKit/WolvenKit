@@ -1,6 +1,9 @@
 using System;
+using System.Reflection;
 using System.Text.Json.Serialization;
 using Semver;
+using WolvenKit.Core;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Conversion;
 
@@ -13,11 +16,12 @@ public sealed class DataTypes
 
 public class JsonHeader
 {
-    public SemVersion WolvenKitVersion { get; set; } = "8.5.0";
-    public SemVersion WKitJsonVersion { get; set; } = "0.0.1";
+    public SemVersion WolvenKitVersion { get; set; } = CommonFunctions.GetAssemblyVersion(Assembly.GetEntryAssembly());
+    public SemVersion WKitJsonVersion { get; set; } = SemVersion.Parse(Constants.RedJsonVersion, SemVersionStyles.Strict);
+    public int GameVersion { get; set; } = (int)Enums.gameGameVersion.Current;
     public string ExportedDateTime { get; set; } = DateTime.UtcNow.ToString("o");
     public string DataType { get; set; } = DataTypes.Custom;
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public string ArchiveFileName { get; set; }
+    public string? ArchiveFileName { get; set; }
 }

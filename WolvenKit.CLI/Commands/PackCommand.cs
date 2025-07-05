@@ -1,37 +1,43 @@
 using System.CommandLine;
-using System.CommandLine.Invocation;
+using System.CommandLine.NamingConventionBinder;
+using System.IO;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WolvenKit.Core.Interfaces;
 
-namespace CP77Tools.Commands
+namespace CP77Tools.Commands;
+
+internal class PackCommand : CommandBase
 {
-    public class PackCommand : Command
+    private const string s_description = "Pack resource files into an .archive file.";
+    private const string s_name = "pack";
+
+    public PackCommand() : base(s_name, s_description)
     {
-        #region Fields
+        AddArgument(new Argument<DirectoryInfo[]>("path", "Input folder or folders."));
 
-        private new const string Description = "Pack the contents of a folder into an .archive file.";
-        private new const string Name = "pack";
+        // deprecated. keep for backwards compatibility
+        AddOption(new Option<DirectoryInfo[]>(new[] { "--path", "-p" }, "[Deprecated] Input folder or folders."));
 
-        #endregion Fields
+        // TODO revert to DirectoryInfo once System.Commandline is updated https://github.com/dotnet/command-line-api/issues/1872
+        AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output directory to create all archives.\nIf not specified, will output in the same directory."));
 
-        #region Constructors
+        SetInternalHandler(CommandHandler.Create<DirectoryInfo[], string, IHost>(Action));
+    }
 
-        public PackCommand() : base(Name, Description)
+    private int Action(DirectoryInfo[] path, string outpath, IHost host)
+    {
+        var serviceProvider = host.Services;
+        var logger = serviceProvider.GetRequiredService<ILoggerService>();
+
+        if (path == null || path.Length < 1)
         {
-            AddOption(new Option<string[]>(new[] { "--path", "-p" }, "Input path. Must be a folder/list of folders."));
-            AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output directory to create archive.\nIf not specified, will output in the same directory."));
-
-            Handler = CommandHandler.Create<string[], string, IHost>(Action);
+            logger.Error("Please fill in an input path.");
+            return ConsoleFunctions.ERROR_BAD_ARGUMENTS;
         }
 
-        private void Action(string[] path, string outpath, IHost host)
-        {
-            var serviceProvider = host.Services;
-            var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-            consoleFunctions.PackTask(path, outpath);
-        }
-
-        #endregion Constructors
+        var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
+        return consoleFunctions.PackTask(path, string.IsNullOrEmpty(outpath) ? null : new DirectoryInfo(outpath));
     }
 }

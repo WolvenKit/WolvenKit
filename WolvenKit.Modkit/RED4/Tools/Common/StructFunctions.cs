@@ -29,7 +29,7 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
             }
             else
             {
-                value = Convert.ToSingle(Math.Pow(2, pow - 15)) * (1 + sp / 1024f);
+                value = Convert.ToSingle(Math.Pow(2, pow - 15)) * (1 + (sp / 1024f));
             }
 
             if (sign == 1)
@@ -53,7 +53,7 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
             {
                 value = 65504;      // if number provided is > Half.Max or < Half.Min then normalized
             }
-            if (value >= 0 && value <= (float)0.000060975552)
+            if (value is >= 0 and <= ((float)0.000060975552))
             {
                 pow = 0;
                 sp = Convert.ToUInt16(value * 1024 * Math.Pow(2, 14));
@@ -67,13 +67,13 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
                     sp = 55; // sp can be anything in this case i randomly put 55
                 }
             }
-            else if (value >= (float)0.00006103515625 && value <= 65504)
+            else if (value is >= ((float)0.00006103515625) and <= 65504)
             {
                 short temp1 = 14;
-                var temp2 = Convert.ToUInt64((value * Math.Pow(2, temp1) - 1) * 1024);
+                var temp2 = Convert.ToUInt64(((value * Math.Pow(2, temp1)) - 1) * 1024);
                 for (; temp2 > 1023; temp1--)
                 {
-                    temp2 = Convert.ToUInt64((value * Math.Pow(2, temp1 - 1) - 1) * 1024);
+                    temp2 = Convert.ToUInt64(((value * Math.Pow(2, temp1 - 1)) - 1) * 1024);
                 }
                 sp = Convert.ToUInt16(temp2);
                 var temp3 = Convert.ToUInt16((-1 * temp1) + 15);
@@ -82,53 +82,80 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
             var U16 = Convert.ToUInt16(sign | sp | pow);
             return U16;
         }
-        public static Vector4 TenBitShifted(uint U32)
+        public static Vector4 TenBitShifted(uint u32)
         {
-            var X = Convert.ToSingle(U32 & 0x3ff);
-            var Y = Convert.ToSingle((U32 >> 10) & 0x3ff);
-            var Z = Convert.ToSingle((U32 >> 20) & 0x3ff);
-            var W = Convert.ToSingle((U32) >> 30);
-            var dequant = 1f / 1023f;
-            X = (X * 2 * dequant) - 1f;
-            Y = (Y * 2 * dequant) - 1f;
-            Z = (Z * 2 * dequant) - 1f;
-            W = W / 3f;
-            return new Vector4(X, Y, Z, W);
-        }
-        public static TargetVec4 TenBitUnsigned(uint U32)
-        {
-            var X = Convert.ToSingle(U32 & 0x3ff);
-            var Y = Convert.ToSingle((U32 >> 10) & 0x3ff);
-            var Z = Convert.ToSingle((U32 >> 20) & 0x3ff);
-            var W = Convert.ToSingle((U32) >> 30);
+            var dequant  = 1f / 1023f;
 
-            return new TargetVec4(X / 1023f, Y / 1023f, Z / 1023f, W / 3f);
-        }
+            var x = Convert.ToSingle(u32 & 0x3ff);
+            var y = Convert.ToSingle((u32 >> 10) & 0x3ff);
+            var z = Convert.ToSingle((u32 >> 20) & 0x3ff);
+            x = (x * 2 * dequant) - 1f;
+            y = (y * 2 * dequant) - 1f;
+            z = (z * 2 * dequant) - 1f;
 
-        public static Vector4 TenBitsigned(uint U32)
-        {
-            var X = Convert.ToInt16(U32 & 0x3ff);
-            var Y = Convert.ToInt16((U32 >> 10) & 0x3ff);
-            var Z = Convert.ToInt16((U32 >> 20) & 0x3ff);
-            var W = Convert.ToByte((U32) >> 30);
-
-            if (X > 511)
+            // this is... crap, but for testing its enough
+            var w = (u32 >> 30) switch
             {
-                X = (short)(-1 * (X - 512));
+                0 => 1f,
+                3 => -1f,
+                _ => 0f // just for normals, doesn't matter there
+            };
+
+            return new Vector4(x, y, z, w);
+        }
+        public static TargetVec4 TenBitUnsigned(uint u32)
+        {
+            var x = Convert.ToSingle(u32 & 0x3ff);
+            var y = Convert.ToSingle((u32 >> 10) & 0x3ff);
+            var z = Convert.ToSingle((u32 >> 20) & 0x3ff);
+            var w = Convert.ToSingle((u32) >> 30);
+
+            return new TargetVec4(x / 1023f, y / 1023f, z / 1023f, w / 3f);
+        }
+
+        public static Vector4 TenBitsigned(uint u32)
+        {
+            var x = Convert.ToInt16(u32 & 0x3ff);
+            var y = Convert.ToInt16((u32 >> 10) & 0x3ff);
+            var z = Convert.ToInt16((u32 >> 20) & 0x3ff);
+            var w = Convert.ToByte((u32) >> 30);
+
+            if (x > 511)
+            {
+                x = (short)(-1 * (x - 512));
             }
 
-            if (Y > 511)
+            if (y > 511)
             {
-                Y = (short)(-1 * (Y - 512));
+                y = (short)(-1 * (y - 512));
             }
 
-            if (Z > 511)
+            if (z > 511)
             {
-                Z = (short)(-1 * (Z - 512));
+                z = (short)(-1 * (z - 512));
             }
 
-            return new Vector4(X / 512f, Y / 512f, Z / 512f, W / 3f);
+            return new Vector4(x / 512f, y / 512f, z / 512f, w / 3f);
         }
+
+        public static uint Vec3ToU32(Vector3 v) // reversing for 10bit nors and tans
+        {
+            v.X = Math.Clamp(v.X, -1f, 1f);
+            v.Y = Math.Clamp(v.Y, -1f, 1f);
+            v.Z = Math.Clamp(v.Z, -1f, 1f);
+            var quant = 1023f;
+            var a = Convert.ToUInt32((v.X + 1f) * quant * 0.5f);
+            a = Math.Clamp(a, 0, 1023);
+            var b = Convert.ToUInt32((v.Y + 1f) * quant * 0.5f);
+            b = Math.Clamp(b, 0, 1023);
+            b <<= 10;
+            var c = Convert.ToUInt32((v.Z + 1f) * quant * 0.5f);
+            c = Math.Clamp(c, 0, 1023);
+            c <<= 20;
+
+            return a | b | c;
+        }
+
         public static uint Vec4ToU32(Vector4 v) // reversing for 10bit nors and tans
         {
             v.X = Math.Clamp(v.X, -1f, 1f);
@@ -143,14 +170,17 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
             var c = Convert.ToUInt32((v.Z + 1f) * quant * 0.5f);
             c = Math.Clamp(c, 0, 1023);
             c <<= 20;
-            uint d = 0; // for tangents in bits its 00000000000000000000000000000000
-            if (v.W == 0)
-            {
-                d = 1073741824;  // for normals in bits its 01000000000000000000000000000000
-            }
 
-            var U32 = a | b | c | d;
-            return U32;
+            // still crap, but...
+            uint d = v.W switch
+            {
+                1f => 0,
+                -1f => 3,
+                _ => throw new InvalidOperationException()
+            };
+            d <<= 30;
+            
+            return a | b | c | d;
         }
 
         public static uint Vec3ToU32(TargetVec3 v, ushort w = 1)
@@ -172,13 +202,13 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         public static float CalculateRealPart(Quaternion Q)
         {
             float w;
-            if ((Q.X * Q.X + Q.Y * Q.Y + Q.Z * Q.Z) >= 1f)
+            if (((Q.X * Q.X) + (Q.Y * Q.Y) + (Q.Z * Q.Z)) >= 1f)
             {
-                w = (float)Math.Sqrt((Q.X * Q.X + Q.Y * Q.Y + Q.Z * Q.Z) - 1f);
+                w = (float)Math.Sqrt((Q.X * Q.X) + (Q.Y * Q.Y) + (Q.Z * Q.Z) - 1f);
             }
             else
             {
-                w = (float)Math.Sqrt(1f - (Q.X * Q.X + Q.Y * Q.Y + Q.Z * Q.Z));
+                w = (float)Math.Sqrt(1f - ((Q.X * Q.X) + (Q.Y * Q.Y) + (Q.Z * Q.Z)));
             }
 
             return w;

@@ -39,34 +39,23 @@ namespace WolvenKit.Views.Editors
         public static readonly DependencyProperty ZProperty = DependencyProperty.Register(
             nameof(Z), typeof(CFloat), typeof(RedVector3Editor), new PropertyMetadata(default(CFloat)));
 
-        public string XText
+        // Bound to the editor
+        public double XValue
         {
-            get => GetValueFromXValue();
-            set => SetXValue(value);
+            get => (double)X;
+            set => SetValue(XProperty, (CFloat)value);
         }
 
-        public string YText
+        public double YValue
         {
-            get => GetValueFromYValue();
-            set => SetYValue(value);
+            get => (double)Y;
+            set => SetValue(YProperty, (CFloat)value);
         }
 
-        public string ZText
+        public double ZValue
         {
-            get => GetValueFromZValue();
-            set => SetZValue(value);
+            get => (double)Z;
+            set => SetValue(ZProperty, (CFloat)value);
         }
-
-        private void SetXValue(string value) => SetCurrentValue(XProperty, (CFloat)float.Parse(value));
-        private void SetYValue(string value) => SetCurrentValue(YProperty, (CFloat)float.Parse(value));
-        private void SetZValue(string value) => SetCurrentValue(ZProperty, (CFloat)float.Parse(value));
-
-        private string GetValueFromXValue() => ((float)X).ToString("R");
-        private string GetValueFromYValue() => ((float)Y).ToString("R");
-        private string GetValueFromZValue() => ((float)Z).ToString("R");
-
-
-        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e) => e.Handled = float.TryParse(e.Text, out var _);
-
     }
 }

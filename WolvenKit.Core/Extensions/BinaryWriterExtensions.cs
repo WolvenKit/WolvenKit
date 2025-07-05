@@ -42,24 +42,24 @@ namespace WolvenKit.Core.Extensions
             var bytes = new List<int>();
             var left = c;
 
-            for (var i = 0; (left > 0); i++)
+            for (var i = 0; left > 0; i++)
             {
                 if (i == 0)
                 {
                     bytes.Add(left & 63);
-                    left = left >> 6;
+                    left >>= 6;
                 }
                 else
                 {
                     bytes.Add(left & 255);
-                    left = left >> 7;
+                    left >>= 7;
                 }
             }
 
             for (var i = 0; i < bytes.Count; i++)
             {
-                var last = (i == bytes.Count - 1);
-                var cleft = (bytes.Count - 1) - i;
+                var last = i == bytes.Count - 1;
+                var cleft = bytes.Count - 1 - i;
 
                 if (!last)
                 {
@@ -92,7 +92,7 @@ namespace WolvenKit.Core.Extensions
         /// </summary>
         /// <param name="writer">The writer.</param>
         /// <param name="value">The string to write.</param>
-        public static void WriteLengthPrefixedString(this BinaryWriter writer, string value)
+        public static void WriteLengthPrefixedString(this BinaryWriter writer, string? value)
         {
             if (string.IsNullOrEmpty(value))
             {
@@ -201,7 +201,7 @@ namespace WolvenKit.Core.Extensions
             }
         }
 
-        public static void WriteNullTerminatedString(this BinaryWriter bw, string text, Encoding encoding = null)
+        public static void WriteNullTerminatedString(this BinaryWriter bw, string text, Encoding? encoding = null)
         {
             encoding ??= Encoding.UTF8;
 

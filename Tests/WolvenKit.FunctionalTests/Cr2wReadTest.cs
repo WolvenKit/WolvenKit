@@ -3,14 +3,17 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
-using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using WolvenKit.RED4.Archive.IO;
+using WolvenKit.Common.Model;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.FunctionalTests.Model;
-using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.Types;
 
 #if IS_PARALLEL
 using System.Threading.Tasks;
@@ -26,7 +29,8 @@ namespace WolvenKit.FunctionalTests
         [ClassInitialize]
         public static void SetupClass(TestContext context) => Setup(context);
 
-        private const bool DECOMPRESS_BUFFERS = false;
+        private const bool TEST_EXISTING = true;
+        private const bool DECOMPRESS_BUFFERS = true;
 
         #endregion Methods
 
@@ -96,6 +100,9 @@ namespace WolvenKit.FunctionalTests
         public void Read_charcustpreset() => Test_Extension(".charcustpreset");
 
         [TestMethod]
+        public void Read_chromaset() => Test_Extension(".chromaset");
+
+        [TestMethod]
         public void Read_cminimap() => Test_Extension(".cminimap");
 
         [TestMethod]
@@ -111,7 +118,7 @@ namespace WolvenKit.FunctionalTests
         public void Read_cookedanims() => Test_Extension(".cookedanims");
 
         [TestMethod]
-        public void Read_cookedapp() => Test_Extension(".cookedapp");
+        public void Read_cookedprefab() => Test_Extension(".cookedprefab");
 
         [TestMethod]
         public void Read_credits() => Test_Extension(".credits");
@@ -133,6 +140,9 @@ namespace WolvenKit.FunctionalTests
 
         [TestMethod]
         public void Read_devices() => Test_Extension(".devices");
+
+        [TestMethod]
+        public void Read_dlcManifest() => Test_Extension(".dlc_manifest");
 
         [TestMethod]
         public void Read_dtex() => Test_Extension(".dtex");
@@ -311,10 +321,6 @@ namespace WolvenKit.FunctionalTests
         [TestMethod]
         public void Read_mt() => Test_Extension(".mt");
 
-        // removed in 1.3
-        //[TestMethod]
-        //public void Read_navmesh() => Test_Extension(".navmesh");
-
         [TestMethod]
         public void Read_null_areas() => Test_Extension(".null_areas");
 
@@ -385,10 +391,10 @@ namespace WolvenKit.FunctionalTests
         public void Read_spatial_representation() => Test_Extension(".spatial_representation");
 
         [TestMethod]
-        public void Read_streamingquerydata() => Test_Extension(".streamingquerydata");
+        public void Read_streamingblock() => Test_Extension(".streamingblock");
 
         [TestMethod]
-        public void Read_streamingblock() => Test_Extension(".streamingblock");
+        public void Read_streamingquerydata() => Test_Extension(".streamingquerydata");
 
         [TestMethod]
         public void Read_streamingsector() => Test_Extension(".streamingsector");
@@ -440,22 +446,22 @@ namespace WolvenKit.FunctionalTests
 
         #endregion test methods
 
-        private static IEnumerable<ReadTestResult> Read_Archive_Items(IEnumerable<FileEntry> files)
+        private static IEnumerable<ReadTestResult> Read_Archive_Items(IEnumerable<IGameFile> files)
         {
             ArgumentNullException.ThrowIfNull(s_bm);
             var results = new ConcurrentBag<ReadTestResult>();
 
             var filesGroups = files.Select((f, i) => new { Value = f, Index = i })
-                .GroupBy(item => item.Value.Archive.ArchiveAbsolutePath);
+                .GroupBy(item => item.Value.GetArchive<Archive>().ArchiveAbsolutePath);
 
             foreach (var fileGroup in filesGroups)
             {
                 var fileList = fileGroup.ToList();
 
-                var ar = s_bm.Archives.Lookup(fileGroup.Key).Value as Archive;
-
-                using var fs = new FileStream(fileGroup.Key, FileMode.Open, FileAccess.Read, FileShare.Read);
-                using var mmf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.Read, HandleInheritability.None, false);
+                if (s_bm.Archives.Lookup(fileGroup.Key).Value is not Archive ar)
+                {
+                    continue;
+                }
 
 #if IS_PARALLEL
                 Parallel.ForEach(fileList, tmpFile =>
@@ -463,14 +469,20 @@ namespace WolvenKit.FunctionalTests
                 foreach (var tmpFile in fileList)
 #endif
                 {
-                    var file = tmpFile.Value;
+                    if (tmpFile.Value is not FileEntry file)
+                    {
+                        throw new InvalidGameContextException();
+                    }
+
                     try
                     {
                         using var ms = new MemoryStream();
-                        ar?.CopyFileToStream(ms, file.NameHash64, false, mmf);
+                        ar.ExtractFile(file, ms);
                         ms.Seek(0, SeekOrigin.Begin);
 
                         using var reader = new CR2WReader(ms);
+                        reader.ParsingError += TypeGlobal.OnParsingError;
+
                         var readResult = reader.ReadFile(out var c, DECOMPRESS_BUFFERS);
 
                         switch (readResult)
@@ -490,12 +502,12 @@ namespace WolvenKit.FunctionalTests
                                     FileEntry = file,
                                     Success = false,
                                     ReadResult = ReadTestResult.ReadResultType.UnsupportedVersion,
-                                    Message = $"Unsupported Version ({c.MetaData.Version})"
+                                    Message = $"Unsupported Version ({c!.MetaData.Version})"
                                 });
                                 break;
 
                             case EFileReadErrorCodes.NoError:
-                                c.MetaData.FileName = file.NameOrHash;
+                                c!.MetaData.FileName = file.NameOrHash;
 
                                 var res = ReadTestResult.ReadResultType.NoError;
                                 var msg = "";
@@ -538,6 +550,8 @@ namespace WolvenKit.FunctionalTests
 #else
                 }
 #endif
+
+                ar.ReleaseFileHandle();
             }
 
             return results;
@@ -545,27 +559,51 @@ namespace WolvenKit.FunctionalTests
 
         private static void Test_Extension(string extension)
         {
+            ArgumentNullException.ThrowIfNull(s_bm);
             var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
             Directory.CreateDirectory(resultDir);
 
             // Run Test
-            var results = Read_Archive_Items(s_groupedFiles[extension]).ToList();
+            List<ReadTestResult> results = new();
+            List<IGameFile> filesToTest = new();
+            var resultPath = Path.Combine(resultDir, $"{extension[1..]}.csv");
+            if (File.Exists(resultPath) && TEST_EXISTING)
+            {
+                foreach (var line in File.ReadAllLines(resultPath)
+                             .Skip(1)
+                             .Where(_ => !string.IsNullOrEmpty(_)))
+                {
+                    var hashStr = line.Split(',').First();
+                    if (ulong.TryParse(hashStr, out var hash) || ulong.TryParse(hashStr.TrimStart('0', 'x'), NumberStyles.HexNumber, null, out hash))
+                    {
+                        if (s_bm.Lookup(hash).Value is FileEntry entry)
+                        {
+                            filesToTest.Add(entry);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                filesToTest = s_groupedFiles[extension].ToList();
+            }
+
+            results = Read_Archive_Items(filesToTest).ToList();
+
+            // Evaluate
+            var successCount = results.Count(r => r.Success);
 
             // Write
             if (s_writeToFile)
             {
                 if (results.Any(r => !r.Success))
                 {
-                    var resultPath = Path.Combine(resultDir, $"{extension[1..]}.csv");
                     var csv = TestResultAsCsv(results.Where(r => !r.Success));
                     File.WriteAllText(resultPath, csv);
-                    Console.Write(csv);
                 }
             }
 
             // Logging
-            // Evaluate
-            var successCount = results.Count(r => r.Success);
             var totalCount = s_groupedFiles[extension].Count();
             var sb = new StringBuilder();
             var msg = "";

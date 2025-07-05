@@ -1,29 +1,45 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Platforms>x64</Platforms>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows10.0.17763</TargetFramework>
     <AssemblyName>WolvenKit</AssemblyName>
     <RootNamespace>WolvenKit</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
     <UseWpf>true</UseWpf>
     <XamlDebuggingInformation>true</XamlDebuggingInformation>
-      <ProjectGuid>{283EA282-F15F-4978-8FF4-43EFE7A9EF69}</ProjectGuid>
+    <ProjectGuid>{283EA282-F15F-4978-8FF4-43EFE7A9EF69}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-      <ApplicationIcon>Resources\Media\Images\Icons\Application\TaskBarIcon.ico</ApplicationIcon>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <ApplicationIcon>Resources\Media\Images\Icons\Application\TaskBarIcon.ico</ApplicationIcon>
     <PublishSingleFile>false</PublishSingleFile>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <SelfContained>true</SelfContained>
-    <DebugType>embedded</DebugType>
+    <Description>WPF</Description>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <Product>WolvenKit</Product>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Nullable>Disable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <InterceptorsPreviewNamespaces>
+      $(InterceptorsPreviewNamespaces);Microsoft.Extensions.Configuration.Binder.SourceGeneration</InterceptorsPreviewNamespaces>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <VersionPrefix>8.16.2</VersionPrefix>
+    <VersionSuffix>$(VersionSuffix)</VersionSuffix>
+    <InformationalVersion>8.16.2</InformationalVersion>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>$(NoWarn);SA1652</NoWarn>
     <NoWarn>$(NoWarn);CA1416</NoWarn>
     <NoWarn>$(NoWarn);SYSLIB0001</NoWarn>
-    <AssemblyVersion>8.6.0</AssemblyVersion>
-    <InformationalVersion>8.6.0</InformationalVersion>
-    <Description>WPF</Description>
-    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-      <Product>WolvenKit</Product>
-      <ApplicationManifest>app.manifest</ApplicationManifest>
+    <NoWarn>$(NoWarn);IDE0010</NoWarn>
+    <NoWarn>$(NoWarn);IDE0072</NoWarn>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
 
@@ -33,125 +49,96 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ControlzEx" Version="5.0.1" />
-    <PackageReference Include="AdonisUI" Version="1.17.1" />
-    <PackageReference Include="AdonisUI.ClassicTheme" Version="1.17.1" />
-    <PackageReference Include="Fluent.Ribbon" Version="9.0.3" />
-    <PackageReference Include="Ab3d.DXEngine.Wpf" Version="5.0.8000" />
-    <PackageReference Include="Ab3d.DXEngine" Version="5.0.8000" />
-    <PackageReference Include="Ab3d.PowerToys" Version="10.0.8000" />
-    <PackageReference Include="Discord.Net" Version="3.3.2" />
-    <PackageReference Include="DrawStringLineHeight" Version="1.0.0" />
-    <PackageReference Include="Feather.Controls" Version="1.0.3" />
-    <PackageReference Include="Feather.Core" Version="1.0.0" />
-    <PackageReference Include="HelixToolkit.SharpDX.Assimp" Version="2.20.2" />
-    <PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" Version="2.20.2" />
+    <PackageReference Include="AvalonEdit" />
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+    <PackageReference Include="Nodify" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" />
+    <PackageReference Include="ReactiveMarbles.ObservableEvents.SourceGenerator" />
+    <PackageReference Include="Serilog.Sinks.Async" />
+    <PackageReference Include="SharpVectors.Wpf" />
+    <PackageReference Include="Splat" />
+    <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Splat.Microsoft.Extensions.Logging" />
+    <PackageReference Include="Serilog.Sinks.Console" />
+    <PackageReference Include="Serilog.Sinks.File" />
 
-    <PackageReference Include="ReactiveUI" Version="17.1.17" />
-    <PackageReference Include="ReactiveUI.Events.WPF" Version="15.1.1" />
-    <PackageReference Include="ReactiveUI.Fody" Version="17.1.17" />
-    <PackageReference Include="ReactiveUI.WPF" Version="17.1.17" />
-    <PackageReference Include="ScottPlot.WPF" Version="4.1.33" />
-    <PackageReference Include="Splat" Version="14.1.45" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
-    <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="14.1.45" />
-    <PackageReference Include="Splat.Microsoft.Extensions.Logging" Version="14.1.45" />
-
-    <PackageReference Include="MahApps.Metro" Version="2.4.9" />
-    <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
-    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.1108.44" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
-    <PackageReference Include="NodeNetwork" Version="6.0.0" />
-    <PackageReference Include="NodeNetworkToolkit" Version="6.0.0" />
-    <PackageReference Include="Octokit" Version="0.50.0" />
-    <PackageReference Include="Syncfusion.Edit.WPF" Version="19.4.0.38" />
-
-    <PackageReference Include="Syncfusion.Tools.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.SfInput.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.SfImageEditor.WPF" Version="19.4.0.38" />
-
-    <PackageReference Include="Syncfusion.SfProgressBar.WPF" Version="19.4.0.38" />
-
-    <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="19.4.0.38" />
-
-    <PackageReference Include="Syncfusion.SfBarcode.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.SfHubTile.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.SfKanban.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.SfRadialMenu.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.SfTextInputLayout.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.SfTreeNavigator.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.SfTreeView.WPF" Version="19.4.0.38" />
-
-    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.Themes.MaterialDark.WPF" Version="19.4.0.38" />
-
-
-
-    <PackageReference Include="AvalonEdit" Version="6.1.3.50" />
-    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
-    <PackageReference Include="SharpVectors.Reloaded" Version="1.7.7" />
-    <PackageReference Include="System.Security.Permissions" Version="6.0.0" />
-    <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" NoWarn="NU1701" />
-    <PackageReference Include="HandyControls" Version="3.3.11" />
-    
-    <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
-    
-    <PackageReference Include="WpfAnalyzers" Version="4.0.2" PrivateAssets="all">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="ReactiveUI" />
+    <PackageReference Include="ReactiveUI.WPF" />
   </ItemGroup>
 
 
   <ItemGroup>
-    <Compile Remove="Functionality\Behavior\**" />
+    <PackageReference Include="AdonisUI" />
+    <PackageReference Include="AdonisUI.ClassicTheme" />
+    <PackageReference Include="MahApps.Metro" />
+    <PackageReference Include="MahApps.Metro.IconPacks" />
+    <PackageReference Include="HandyControls" />
+    <PackageReference Include="WpfAnalyzers" PrivateAssets="all">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+
+    <PackageReference Include="DrawStringLineHeight" />
+    <PackageReference Include="PixiEditor.ColorPicker" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Syncfusion.Edit.WPF" />
+    <PackageReference Include="Syncfusion.PropertyGrid.WPF" />
+    <PackageReference Include="Syncfusion.SfAccordion.WPF" />
+    <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" />
+    <PackageReference Include="Syncfusion.SfGrid.WPF" />
+    <PackageReference Include="Syncfusion.SfHubTile.WPF" />
+    <PackageReference Include="Syncfusion.SfImageEditor.WPF" />
+    <PackageReference Include="Syncfusion.SfInput.WPF" />
+    <PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" />
+    <PackageReference Include="Syncfusion.SfProgressBar.WPF" />
+    <PackageReference Include="Syncfusion.SfRadialMenu.WPF" />
+    <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" />
+    <PackageReference Include="Syncfusion.SfSkinManager.WPF" />
+    <PackageReference Include="Syncfusion.SfTextInputLayout.WPF" />
+    <PackageReference Include="Syncfusion.SfTreeNavigator.WPF" />
+    <PackageReference Include="Syncfusion.SfTreeView.WPF" />
+    <PackageReference Include="Syncfusion.Themes.MaterialDark.WPF" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" />
+    <PackageReference Include="System.Private.Uri" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="lib\**" />
     <Compile Remove="NewFolder1\**" />
     <Compile Remove="Resources\Styles\CustomBase\**" />
     <Compile Remove="Resources\Styles\Custom\**" />
-    <Compile Remove="Views\Wizards\PublishWizard\**" />
-    <EmbeddedResource Remove="Functionality\Behavior\**" />
     <EmbeddedResource Remove="lib\**" />
     <EmbeddedResource Remove="NewFolder1\**" />
     <EmbeddedResource Remove="Resources\Styles\CustomBase\**" />
     <EmbeddedResource Remove="Resources\Styles\Custom\**" />
-    <EmbeddedResource Remove="Views\Wizards\PublishWizard\**" />
-    <None Remove="Functionality\Behavior\**" />
     <None Remove="lib\**" />
     <None Remove="NewFolder1\**" />
     <None Remove="Resources\Styles\CustomBase\**" />
     <None Remove="Resources\Styles\Custom\**" />
-    <None Remove="Views\Wizards\PublishWizard\**" />
-    <Page Remove="Functionality\Behavior\**" />
     <Page Remove="lib\**" />
     <Page Remove="NewFolder1\**" />
     <Page Remove="Resources\Styles\CustomBase\**" />
     <Page Remove="Resources\Styles\Custom\**" />
-    <Page Remove="Views\Wizards\PublishWizard\**" />
+    <Compile Remove="Converters\BooleanConverter.cs" />
+    <Compile Remove="GridVirtualizingCellsControl.xaml.cs" />
+    <Page Remove="GridVirtualizingCellsControl.xaml" />
+      <Compile Remove="Converters\BindingProxy.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Views\Templates\RedFixedPointEditor.cs" />
-    <Compile Remove="Views\Wizards\PublishWizardView.xaml.cs" />
   </ItemGroup>
-    <ItemGroup>
-    <Content Include="Ab3d.DirectX.Client.Settings.dll">
+  <ItemGroup>
+    <Content Include="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Ab3d.PowerToys.Assimp.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assimp32.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assimp64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="AssimpNet.dll">
+    <Content Include="DockStatesDefault.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Obsolete.dll">
@@ -208,21 +195,10 @@
     <Content Include="Resources\Media\Images\Icons\Files\tweak.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Media\t1.kark">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Content Include="Resources\TemplateFiles\**\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Media\t2.kark">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Media\t3.kark">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Media\t4.kark">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Media\t5.kark">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+
     <Resource Include="Resources\Media\Images\Application\Sammy_Alpha_Mask.png" />
     <Resource Include="Resources\Media\Images\Application\Sammy_Grayscale.png" />
     <Resource Include="Resources\Media\Images\Application\Sammy_Home.png" />
@@ -385,7 +361,6 @@
     <Resource Include="Resources\Media\Images\Application\cloud.png" />
     <Resource Include="Resources\Media\Images\Application\CpProj.png" />
   </ItemGroup>
-
 
 
   <ItemGroup>
@@ -1060,6 +1035,8 @@
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -1067,6 +1044,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Update="Views\Templates\RedBoolEditor.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Templates\RedChunkMaskEditor.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Templates\RedCNameEditor.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\Templates\RedUlongEditor.xaml.cs">
@@ -1092,537 +1075,535 @@
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-     </None>
+    </None>
     <Content Include="Resources\Media\Images\Icons\Files\buffer.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\camcurveset.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\cellmap.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\cfoilage.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\charcustpreset.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\cminimap.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\cminimapedit.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\community.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\conversations.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\conversationsedit.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\cookedanims.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\cookedapp.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\cooked_mlsetup.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\credits.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\csv.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\cubemap.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\curveset.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\dat.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\datedit.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\default.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\Devices.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\dtex.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\Effect.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\ent.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\envparam.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\envprob a.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\envprob b.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\envprobe.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\envprob_b.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\es.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\facialcustom.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\facialsetup.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\fb2tl.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\file.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\flyr.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\fnt.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\folbrush.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\folderclosed.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\folderdefault.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\folderopened.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\foldest.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\font.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\formation.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\fp.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\gamedef.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\garmentlayerparams.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\genericanimdb.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\geometry_cache.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\grassmask.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\guiconfig.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\hitrepresentation.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\hp.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\hud.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\ies.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\inkanim.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\inkatlas.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\inkcharcustomization.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\inkfontfamily.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\inkfullscreencomposition.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\inkgamesettings.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\inkhud.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\inklayers.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\inkmenu.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\inkshapecollection.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\inkstyle.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\inktypography.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\inkwidget.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\Interaction.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\joke.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\journal.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\journaldesc.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\json.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\json2.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\lane_connections.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\lane_polygons.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\lane_spots.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\lights.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\location.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\locopaths.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\loot.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\mappins.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\materialinstance2.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\menu.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\mesh.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\mi.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\mlsetup.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\morphtarget.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\mt.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\navconfig.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\navgraph.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\naviobstacles.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\navmesh.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\navtile.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\null_areas.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\opusinfo.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\opuspak.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\osupak.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\particle.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\phys.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\physicalscene.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\physmatlib.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\poimappins.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\poimappinsedit.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\popup.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\psrep.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\quest.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\questphase.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\redapex.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\redcloth.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\reddest.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\reddlc.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\redexp.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\redfur.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\redgame.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\redicsv.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\redswf.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\redwpset.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\regionset.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\remt.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\reslist.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\rig.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\sav.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\scene.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\scenerid.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\scenesversions.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\smartobject.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\smartobjects.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\sp.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\spatial_representation.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\spawntree.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\srt.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\streamingquerydata.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\streamingsector.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\streamingsector_inplace.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\streamingworld.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\subs.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\terrainsetup.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\texarray.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\traffic_collisions.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\traffic_persistent.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\traffic_persistent3.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\Usm.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\VoiceTags.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\w2em.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\w2ent.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\w2fnt.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\w2je.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\w2job.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\w2l.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\w2mesh.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\w2mg.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\w2mi.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\w2p.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\w2qm.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\w2ragdoll.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\w2rig.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\w2scene.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\w2sf.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\w2steer.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\w2ter.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\w2w.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\w3app.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\w3dyng.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\w3fac.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\W3Occulsion.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\w3simplex.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\wem.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\wizdef.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\workspot.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\workspot2.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\xbm.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\xcube.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\xml.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-     </Content>
+    </Content>
 
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Ab3d.DirectX.Client.Settings.dll" />
-    <None Remove="Ab3d.PowerToys.Assimp.dll" />
-    <None Remove="Assimp32.dll" />
-    <None Remove="Assimp64.dll" />
-    <None Remove="AssimpNet.dll" />
+    <None Remove="appsettings.json" />
     <None Remove="distraction_generic.bk2" />
+    <None Remove="DockStatesDefault.xml" />
     <None Remove="Obsolete.dll" />
+    <None Remove="Resources\launchprofiles.json" />
     <None Remove="Resources\Media\bkmk.kark" />
     <None Remove="Resources\Media\Images\Application\.cpmodproj.png" />
     <None Remove="Resources\Media\Images\Application\.w3modproj.png" />
@@ -1776,11 +1757,6 @@
     <None Remove="Resources\Media\Images\Icons\Files\wizdef.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\workspot2.svg" />
     <None Remove="Resources\Media\rau.kark" />
-    <None Remove="Resources\Media\t1.kark" />
-    <None Remove="Resources\Media\t2.kark" />
-    <None Remove="Resources\Media\t3.kark" />
-    <None Remove="Resources\Media\t4.kark" />
-    <None Remove="Resources\Media\t5.kark" />
     <None Remove="Resources\Media\test.kark" />
     <None Remove="Resources\Media\testc.kark" />
     <None Remove="Resources\Media\testconv.kark" />
@@ -1795,42 +1771,65 @@
     <None Remove="Resources\SkyboxTextures\skyrender0003.bmp" />
     <None Remove="Resources\SkyboxTextures\skyrender0004.bmp" />
     <None Remove="Resources\SkyboxTextures\skyrender0005.bmp" />
+    <None Remove="Resources\SyntaxHighlighting\JavaScript-DarkMode.xshd" />
+    <None Remove="Resources\SyntaxHighlighting\YAML.xshd" />
     <None Remove="sample.mp4" />
     <None Remove="SplashScreen1.png" />
     <None Remove="TaskBarIcon.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <Page Remove="Views\Wizards\PublishWizardView.xaml" />
+    <EmbeddedResource Include="Resources\SyntaxHighlighting\JavaScript-DarkMode.xshd" />
+    <EmbeddedResource Include="Resources\SyntaxHighlighting\YAML.xshd">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Ab3d.DirectX.Client.Settings">
-      <HintPath>Ab3d.DirectX.Client.Settings.dll</HintPath>
-    </Reference>
-    <Reference Include="Ab3d.PowerToys.Assimp">
-    </Reference>
-    <Reference Include="AssimpNet">
-    </Reference>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
   <ItemGroup>
     <SplashScreen Include="SplashScreen1.png" />
   </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <Page Update="PathIcon.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
-    <Page Update="Views\Dialogs\PluginsToolView.xaml">
+    <Page Update="Views\HomePage\Pages\ModsView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Dialogs\SoundModdingView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\HomePage\Pages\PluginsToolView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Views\Templates\CustomCollectionEditorView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="Views\Templates\PathEditorView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
-    <Page Update="Views\Templates\HandleTemplateView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-    </Page>
     <Page Update="Views\Templates\RedBoolEditor.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Templates\RedChunkMaskEditor.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Templates\RedCNameEditor.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
@@ -1859,4 +1858,14 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+
+  <Target Name="RemoveDuplicateAnalyzers" BeforeTargets="CoreCompile">
+    <!-- Work around https://github.com/dotnet/wpf/issues/6792 -->
+
+    <ItemGroup>
+      <FilteredAnalyzer Include="@(Analyzer-&gt;Distinct())" />
+      <Analyzer Remove="@(Analyzer)" />
+      <Analyzer Include="@(FilteredAnalyzer)" />
+    </ItemGroup>
+  </Target>
 </Project>

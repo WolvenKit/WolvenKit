@@ -1,0 +1,114 @@
+<reactiveUi:ReactiveUserControl
+    x:Class="WolvenKit.Views.Tools.AudioPlayerView"
+    x:TypeArguments="tools:AudioPlayerViewModel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:tools="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    mc:Ignorable="d"
+    d:DesignWidth="800"
+    d:DesignHeight="450">
+    <Border
+        Width="auto"
+        Height="auto"
+        BorderBrush="{DynamicResource MahApps.Brushes.Accent4}"
+        BorderThickness="1">
+        <Grid
+            Margin="5"
+            VerticalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Title -->
+            <StackPanel
+                Grid.Row="0"
+                Margin="{DynamicResource WolvenKitMargin}"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <TextBlock
+                    FontWeight="Bold"
+                    Text="{Binding FileName}" />
+            </StackPanel>
+
+            <!-- Waveform -->
+            <ContentPresenter
+                Grid.Row="1"
+                Content="{Binding Visualization}" />
+
+            <!-- Buttons -->
+            <StackPanel
+                Grid.Row="2"
+                Margin="{DynamicResource WolvenKitMarginVertical}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+                <!--<Button
+                    Margin="2"
+                    Padding="4"
+                    HorizontalAlignment="Right"
+                    Command="{Binding OpenFileCommand}"
+                    ToolTip="Open">
+                    Open
+                </Button>-->
+
+                <Button
+                    x:Name="PlayButton"
+                    Height="Auto"
+                    Margin="0"
+                    Padding="0"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    Command="{Binding PlayCommand}">
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="Play"
+                        Size="{DynamicResource WolvenKitIconTiny}"
+                        Foreground="{StaticResource WolvenKitGreen}" />
+                </Button>
+
+                <Button
+                    x:Name="PauseButton"
+                    Height="Auto"
+                    Margin="0"
+                    Padding="0"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    Command="{Binding PauseCommand}">
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="Pause"
+                        Size="{DynamicResource WolvenKitIconTiny}"
+                        Foreground="{StaticResource WolvenKitCyan}" />
+                </Button>
+
+                <Button
+                    x:Name="StopButton"
+                    Height="Auto"
+                    Margin="0"
+                    Padding="0"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    Command="{Binding StopCommand}">
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="Stop"
+                        Size="{DynamicResource WolvenKitIconTiny}"
+                        Foreground="{StaticResource WolvenKitRed}" />
+                </Button>
+
+                <ComboBox
+                    Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                    DisplayMemberPath="Name"
+                    ItemsSource="{Binding Visualizations}"
+                    SelectedItem="{Binding SelectedVisualization,
+                                           Mode=TwoWay}" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</reactiveUi:ReactiveUserControl>

@@ -2,37 +2,34 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using ReactiveUI;
+using CommunityToolkit.Mvvm.ComponentModel;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Common.Model
 {
-    public class RedFileSystemModel : ReactiveObject
+    public partial class RedFileSystemModel : ObservableObject
     {
-        public RedFileSystemModel(string fullname)
-        {
-            FullName = fullname;
-        }
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(Extension))]
+        private bool _isExpanded;
 
-        public string Name => Path.GetFileName(FullName);
+        private string? _name;
 
-        public string FullName { get; set; }
+        public RedFileSystemModel(string fullname) => FullName = fullname;
+
+        public string Name => _name ??= new DirectoryInfo(FullName).Name;
+
+        public string FullName { get; }
 
         public ConcurrentDictionary<string, RedFileSystemModel> Directories { get; } = new();
 
         public IEnumerable<RedFileSystemModel> RedFileSystemModels => Directories.Values.OrderBy(x => x.Name);
 
-        public List<ulong> Files { get; } = new();
+        public ConcurrentQueue<IGameFile> Files { get; } = new();
 
         public string Extension => IsExpanded
             ? nameof(ECustomImageKeys.OpenDirImageKey)
             : nameof(ECustomImageKeys.ClosedDirImageKey);
 
-        private bool _isExpanded;
-
-        public bool IsExpanded
-        {
-            get => _isExpanded;
-            set => this.RaiseAndSetIfChanged(ref _isExpanded, value);
-        }
     }
 }

@@ -1,137 +1,60 @@
-using System;
-using DynamicData.Binding;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using WolvenKit.Common;
+using System.IO;
+using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Models;
+using System.Text.RegularExpressions;
+using WolvenKit.RED4.CR2W;
 
-namespace WolvenKit.ViewModels.Tools
+namespace WolvenKit.App.ViewModels.Tools;
+
+/// <summary>
+/// ImportExportItem ViewModel
+/// </summary>
+public abstract partial class ImportExportItemViewModel : ObservableObject, ISelectableViewModel
 {
-    /// <summary>
-    /// ImportExportItem ViewModel
-    /// </summary>
-    public abstract class ImportExportItemViewModel : ReactiveObject, ISelectableViewModel
+    protected ImportExportItemViewModel(string baseFile, ImportExportArgs properties)
     {
-        public ImportExportItemViewModel()
-        {
+        BaseFile = baseFile;
+        _properties = properties;
 
-        }
+        _propertiesDisplay = _properties.ToString();
 
-
-        /// <summary>
-        /// BaseFile "FileModel"
-        /// </summary>
-        protected FileModel BaseFile { get; set; }
-
-        /// <summary>
-        /// Properties
-        /// </summary>
-        [Reactive] public ImportExportArgs Properties { get; set; }
-
-        public string ExportTaskIdentifier => Properties.ToString();
-
-        public string Extension => BaseFile.GetExtension();
-        public string FullName => BaseFile.FullName;
-        public string Name => BaseFile.Name;
-
-        [Reactive] public bool IsChecked { get; set; }
-
-        public EExportState ExportState => BaseFile.IsImportable ? EExportState.Importable : EExportState.Exportable;
-
-        public FileModel GetBaseFile() => BaseFile;
+        Properties.PropertyChanged += Properties_PropertyChanged;
     }
 
-    public class ImportableItemViewModel : ImportExportItemViewModel
+    private void Properties_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        public ImportableItemViewModel(FileModel model)
+        if (e.PropertyName == nameof(XbmImportArgs.TextureGroup) && Properties is XbmImportArgs xbmImportArgs)
         {
-            BaseFile = model;
-            Properties = DecideImportOptions(model);
-
-            Properties.WhenAnyPropertyChanged().Subscribe(v =>
-            {
-                this.RaisePropertyChanged(nameof(Properties));
-            });
+            Properties = CommonFunctions.TextureSetupFromTextureGroup(xbmImportArgs.TextureGroup);
         }
-
-        private ImportArgs DecideImportOptions(FileModel model)
-        {
-            _ = Enum.TryParse(model.GetExtension(), out ERawFileFormat rawFileFormat);
-
-            return rawFileFormat switch
-            {
-                ERawFileFormat.tga => new XbmImportArgs(),
-                ERawFileFormat.dds => new XbmImportArgs(),
-                ERawFileFormat.fbx => new CommonImportArgs(),
-                ERawFileFormat.glb => new GltfImportArgs(),
-                ERawFileFormat.gltf => new GltfImportArgs(),
-                ERawFileFormat.ttf => new FntImportArgs(),
-                ERawFileFormat.wav => new OpusImportArgs(),
-                ERawFileFormat.bmp => new XbmImportArgs(),
-                ERawFileFormat.jpg => new XbmImportArgs(),
-                ERawFileFormat.png => new XbmImportArgs(),
-                ERawFileFormat.tiff => new XbmImportArgs(),
-                ERawFileFormat.masklist => new MlmaskImportArgs(),
-                _ => new CommonImportArgs()
-            };
-        }
+        PropertiesDisplay = Properties.ToString();
     }
 
-    public class ConvertableItemViewModel : ImportExportItemViewModel
+    public string BaseFile { get; set; }
+
+    [ObservableProperty] private ImportExportArgs _properties;
+
+    [ObservableProperty] private bool _isChecked;
+
+    [ObservableProperty] private string? _propertiesDisplay;
+
+    public string Extension => Path.GetExtension(BaseFile).TrimStart('.');
+    public string Name => Path.GetFileName(BaseFile);
+
+    [GeneratedRegex(@"^.*source\\(archive|raw)\\")]
+    private static partial Regex ProjectSubfolderRegex();
+
+    // This is used by ExportView.xaml and TextureImportView.xaml
+    public string FullPath => ProjectSubfolderRegex().Replace(BaseFile, string.Empty);
+
+    public void SetProperties(ImportExportArgs args)
     {
-        public ConvertableItemViewModel(FileModel model)
-        {
-            BaseFile = model;
-            Properties = DecideConverOptions(model);
+        Properties.PropertyChanged -= Properties_PropertyChanged;
+        
+        Properties = args;
+        PropertiesDisplay = Properties.ToString();
 
-            Properties.WhenAnyPropertyChanged().Subscribe(v =>
-            {
-                this.RaisePropertyChanged(nameof(Properties));
-            });
-        }
-
-        private ConvertArgs DecideConverOptions(FileModel model) => new CommonConvertArgs();
-    }
-
-    public class ExportableItemViewModel : ImportExportItemViewModel
-    {
-        public ExportableItemViewModel(FileModel model)
-        {
-            BaseFile = model;
-            Properties = DecideExportOptions(model);
-
-            Properties.WhenAnyPropertyChanged().Subscribe(v =>
-            {
-                this.RaisePropertyChanged(nameof(Properties));
-            });
-        }
-
-        private ExportArgs DecideExportOptions(FileModel model)
-        {
-            _ = Enum.TryParse(model.GetExtension(), out ECookedFileFormat fileFormat);
-
-            return fileFormat switch
-            {
-                ECookedFileFormat.opusinfo => new OpusExportArgs(),
-                ECookedFileFormat.mesh => new MeshExportArgs(),
-                ECookedFileFormat.xbm => new XbmExportArgs(),
-                ECookedFileFormat.wem => new WemExportArgs(),
-                ECookedFileFormat.csv => new CommonExportArgs(),
-                //ECookedFileFormat.json => new CommonExportArgs(),
-                ECookedFileFormat.mlmask => new MlmaskExportArgs(),
-                ECookedFileFormat.cubemap => new CommonExportArgs(),
-                ECookedFileFormat.envprobe => new CommonExportArgs(),
-                ECookedFileFormat.texarray => new CommonExportArgs(),
-                ECookedFileFormat.ent => new EntityExportArgs(),
-                ECookedFileFormat.fnt => new FntExportArgs(),
-                ECookedFileFormat.morphtarget => new MorphTargetExportArgs(),
-                //ECookedFileFormat.ent => new EntityExportArgs(),
-                //ECookedFileFormat.app => new EntityExportArgs(),
-                ECookedFileFormat.anims => new AnimationExportArgs(),
-                _ => throw new ArgumentOutOfRangeException()
-            };
-        }
+        Properties.PropertyChanged += Properties_PropertyChanged;
     }
 }

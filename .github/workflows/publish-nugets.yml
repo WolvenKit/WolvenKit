@@ -4,20 +4,39 @@ on:
 
 jobs:   
 
-  check-console-win:
+  publish-nugets:
     runs-on: windows-latest
 
     steps:
     - name: checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 6.x
+        dotnet-version: 8.x
 
-    - name: build
-      run: dotnet build .\WolvenKit.CLI\WolvenKit.CLI.csproj
-    - name: pack
-      run: dotnet pack .\WolvenKit.CLI\WolvenKit.CLI.csproj --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
-    - name: publish package to NuGet
-      run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+    # Pack and upload nugets for Core, Types, Modkit and CLI
+    - run: dotnet pack .\WolvenKit.Core\WolvenKit.Core.csproj
+    - name: Core
+      continue-on-error: true
+      run: dotnet nuget push .\WolvenKit.Core\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+    
+    - run: dotnet pack .\WolvenKit.RED4\WolvenKit.RED4.csproj
+    - name: RED4
+      continue-on-error: true
+      run: dotnet nuget push .\WolvenKit.RED4\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+
+    - run: dotnet pack .\WolvenKit.Modkit\WolvenKit.Modkit.csproj
+    - name: Modkit
+      continue-on-error: true
+      run: dotnet nuget push .\WolvenKit.Modkit\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+
+    - run: dotnet pack .\WolvenKit.CLI\WolvenKit.CLI.csproj
+    - name: CLI
+      continue-on-error: true
+      run: dotnet nuget push .\WolvenKit.CLI\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+
+    - run: dotnet pack .\WolvenKit.Common\WolvenKit.Common.csproj
+    - name: Common
+      continue-on-error: true
+      run: dotnet nuget push .\WolvenKit.Common\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate

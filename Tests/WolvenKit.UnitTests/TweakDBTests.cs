@@ -144,8 +144,10 @@ namespace WolvenKit.UnitTests
             db.Add("FirstItem", (CBool)true);
             db.Add("SecondItem", (CInt32)500);
 
-            var record = RedTypeManager.Create<gamedataPhotoModeBackground_Record>();
-            record.Locked = true;
+            var record = new gamedataPhotoModeBackground_Record
+            {
+                Locked = true
+            };
 
             db.Add("PhotoModeBackgrounds.bg_new_bg", record);
 

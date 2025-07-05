@@ -1,48 +1,58 @@
+using System;
 using System.CommandLine;
-using System.CommandLine.Invocation;
+using System.CommandLine.NamingConventionBinder;
+using System.IO;
 using System.Threading.Tasks;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WolvenKit.Common;
+using WolvenKit.Core.Interfaces;
 
-namespace CP77Tools.Commands
+namespace CP77Tools.Commands;
+
+[Obsolete("Use ConvertCommand")]
+internal class CR2WCommand : CommandBase
 {
-    public class CR2WCommand : Command
+    private const string s_description = "[DEPRECATED] cr2w file conversion command.";
+    private const string s_name = "cr2w";
+
+    public CR2WCommand() : base(s_name, s_description)
     {
-        #region Fields
+        AddArgument(new Argument<FileSystemInfo[]>("path", "Input path to a CR2W file or folder."));
 
-        private new const string Description = "Target a specific CR2W (extracted) and dump file info.";
-        private new const string Name = "cr2w";
+        // deprecated. keep for backwards compatibility
+        AddOption(new Option<FileSystemInfo[]>(new[] { "--path", "-p" }, "[Deprecated] Input path to a CR2W file or folder."));
 
-        #endregion Fields
+        // TODO revert to DirectoryInfo once System.Commandline is updated https://github.com/dotnet/command-line-api/issues/1872
+        AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output directory path."));
+        AddOption(new Option<bool>(new[] { "--deserialize", "-d" }, "Create a CR2W file from json."));
+        AddOption(new Option<bool>(new[] { "--serialize", "-s" }, "Serialize the CR2W file to json."));
 
-        #region Constructors
+        AddOption(new Option<string>(new[] { "--pattern", "-w" }, "Search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized"));
+        AddOption(new Option<string>(new[] { "--regex", "-r" }, "Regex search pattern."));
 
-        public CR2WCommand() : base(Name, Description)
+        SetInternalHandler(CommandHandler.Create<FileSystemInfo[], string, bool, bool, string, string, IHost>(Action));
+    }
+
+    private Task<int> Action(FileSystemInfo[] path, string outpath, bool deserialize, bool serialize, string pattern, string regex, IHost host)
+    {
+        var serviceProvider = host.Services;
+        var logger = serviceProvider.GetRequiredService<ILoggerService>();
+
+        if (path is null || path.Length < 1)
         {
-            AddOption(new Option<string[]>(new[] { "--path", "-p" }, "Input path to a CR2W file or folder."));
-            AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output path."));
-            AddOption(new Option<bool>(new[] { "--deserialize", "-d" }, "Create a CR2W file from json or xml"));
-            AddOption(new Option<bool>(new[] { "--serialize", "-s" }, "Serialize the CR2W file to json or xml."));
-            AddOption(new Option<string>(new[] { "--pattern", "-w" },
-                "Use optional search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized"));
-            AddOption(new Option<string>(new[] { "--regex", "-r" }, "Use optional regex pattern."));
-            AddOption(new Option<ETextConvertFormat>(new[] { "--format", "-ft" },
-                "Use optional serialization format. Options are json and xml"));
-
-            Handler = CommandHandler
-                .Create<string[], string, bool, bool, string, string, ETextConvertFormat, IHost>(Action);
+            logger.Error("Please fill in an input path.");
+            return Task.FromResult(ConsoleFunctions.ERROR_BAD_ARGUMENTS);
         }
 
-        private async Task Action(string[] path, string outpath, bool deserialize, bool serialize, string pattern,
-            string regex, ETextConvertFormat format, IHost host)
+        if (!deserialize && !serialize)
         {
-            var serviceProvider = host.Services;
-            var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-            await consoleFunctions.Cr2wTask(path, outpath, deserialize, serialize, pattern, regex, format);
+            logger.Error("Please specify either -s or -d.");
+            return Task.FromResult(ConsoleFunctions.ERROR_INVALID_COMMAND_LINE);
         }
 
-        #endregion Constructors
+        var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
+        return consoleFunctions.Cr2wTask(path, string.IsNullOrEmpty(outpath) ? null : new DirectoryInfo(outpath), deserialize, serialize, pattern, regex, ETextConvertFormat.json);
     }
 }

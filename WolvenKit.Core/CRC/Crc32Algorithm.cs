@@ -10,24 +10,21 @@ namespace WolvenKit.Core.CRC
     /// </summary>
     public class Crc32Algorithm : HashAlgorithm
     {
-        private uint _currentCrc;
-
         private readonly bool _isBigEndian = true;
 
         /// <summary>
         /// Get the current hash value as a UInt32 value;
         /// </summary>
-        public uint HashUInt32 => _currentCrc;
+        public uint HashUInt32 { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Crc32Algorithm"/> class.
         /// </summary>
-        public Crc32Algorithm()
-        {
+        public Crc32Algorithm() =>
 #if !NETCORE13
             HashSizeValue = 32;
 #endif
-        }
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Crc32Algorithm"/> class.
@@ -35,10 +32,7 @@ namespace WolvenKit.Core.CRC
         /// <param name="isBigEndian">Should return bytes result as big endian or little endian</param>
         // Crc32 by dariogriffo uses big endian, so, we need to be compatible and return big endian as default
         public Crc32Algorithm(bool isBigEndian = true)
-            : this()
-        {
-            _isBigEndian = isBigEndian;
-        }
+            : this() => _isBigEndian = isBigEndian;
 
         /// <summary>
         /// Computes CRC-32 from multiple buffers.
@@ -56,12 +50,12 @@ namespace WolvenKit.Core.CRC
         {
             if (input == null)
             {
-                throw new ArgumentNullException("input");
+                throw new ArgumentNullException(nameof(input));
             }
 
             if (offset < 0 || length < 0 || offset + length > input.Length)
             {
-                throw new ArgumentOutOfRangeException("length");
+                throw new ArgumentOutOfRangeException(nameof(length));
             }
 
             return AppendInternal(initial, input, offset, length);
@@ -130,7 +124,7 @@ namespace WolvenKit.Core.CRC
         /// <summary>
         /// Resets internal state of the algorithm. Used internally.
         /// </summary>
-        public override void Initialize() => _currentCrc = 0;
+        public override void Initialize() => HashUInt32 = 0;
 
         /// <summary>
 		/// Appends CRC-32 from multiple buffers, using the currently stored hash value.
@@ -155,7 +149,7 @@ namespace WolvenKit.Core.CRC
         /// <summary>
         /// Appends CRC-32 from given buffer
         /// </summary>
-        protected override void HashCore(byte[] input, int offset, int length) => _currentCrc = AppendInternal(_currentCrc, input, offset, length);
+        protected override void HashCore(byte[] input, int offset, int length) => HashUInt32 = AppendInternal(HashUInt32, input, offset, length);
 
         /// <summary>
         /// Computes CRC-32 from <see cref="HashCore"/>
@@ -164,15 +158,15 @@ namespace WolvenKit.Core.CRC
         {
             if (_isBigEndian)
             {
-                return new[] { (byte)(_currentCrc >> 24), (byte)(_currentCrc >> 16), (byte)(_currentCrc >> 8), (byte)_currentCrc };
+                return new[] { (byte)(HashUInt32 >> 24), (byte)(HashUInt32 >> 16), (byte)(HashUInt32 >> 8), (byte)HashUInt32 };
             }
             else
             {
-                return new[] { (byte)_currentCrc, (byte)(_currentCrc >> 8), (byte)(_currentCrc >> 16), (byte)(_currentCrc >> 24) };
+                return new[] { (byte)HashUInt32, (byte)(HashUInt32 >> 8), (byte)(HashUInt32 >> 16), (byte)(HashUInt32 >> 24) };
             }
         }
 
-        private static readonly SafeProxy _proxy = new SafeProxy();
+        private static readonly SafeProxy _proxy = new();
 
         private static uint AppendInternal(uint initial, byte[] input, int offset, int length)
         {

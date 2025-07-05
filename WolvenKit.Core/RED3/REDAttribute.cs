@@ -22,10 +22,7 @@ namespace WolvenKit.RED3.CR2W.Reflection
         /// <param name="flags">
         /// Values needed for types such as <see cref="TDynArray{T}"/>, <see cref="Static{T}"/>, or <see cref="Array"/>.
         /// </param>
-        public REDAttribute(params int[] flags)
-        {
-            Flags = flags;
-        }
+        public REDAttribute(params int[] flags) => Flags = flags;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="REDAttribute"/> class.
@@ -46,14 +43,24 @@ namespace WolvenKit.RED3.CR2W.Reflection
 
         #region Properties
 
-        public int[] Flags { get; private set; }
-        public string Name { get; private set; }
+        public int[]? Flags { get; private set; }
+        public string? Name { get; private set; }
 
         #endregion Properties
 
         #region Methods
 
-        public override string ToString() => $"{Name} [{string.Join(",", Flags)}]";
+        public override string ToString()
+        {
+            if (Flags == null)
+            {
+                return $"{Name}";
+            }
+            else
+            {
+                return $"{Name} [{string.Join(",", Flags)}]";
+            }
+        }
 
         #endregion Methods
     }
@@ -69,10 +76,7 @@ namespace WolvenKit.RED3.CR2W.Reflection
         /// <summary>
         /// Initializes a new instance of the <see cref="REDBufferAttribute"/> class.
         /// </summary>
-        public REDBufferAttribute(bool isIgnored = false)
-        {
-            IsIgnored = isIgnored;
-        }
+        public REDBufferAttribute(bool isIgnored = false) => IsIgnored = isIgnored;
 
         #endregion Constructors
 
@@ -103,10 +107,7 @@ namespace WolvenKit.RED3.CR2W.Reflection
         /// <param name="keywords">
         /// Meta values registered in the rtti and additional information for parsing such as enumtype, fixedlayout classes etc.
         /// </param>
-        public REDMetaAttribute(params EREDMetaInfo[] keywords)
-        {
-            Keywords = keywords;
-        }
+        public REDMetaAttribute(params EREDMetaInfo[] keywords) => Keywords = keywords;
 
         #endregion Constructors
 

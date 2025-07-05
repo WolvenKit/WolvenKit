@@ -1,92 +1,51 @@
 using System;
 using System.Windows;
-using System.Windows.Input;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using Splat;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Services;
-using WolvenKit.ViewModels.Shell;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Core.Extensions;
 
-namespace WolvenKit.ViewModels.HomePage
+namespace WolvenKit.App.ViewModels.HomePage;
+
+public enum EHomePage
 {
-    public class HomePageViewModel : ReactiveObject
+    Welcome,
+    Mods,
+    Plugins,
+    Settings,
+    Wiki,
+    Github,
+    Website
+}
+
+public partial class HomePageViewModel : ObservableObject
+{
+    private readonly AppViewModel _appViewModel;
+    private readonly ISettingsManager _settingsManager;
+
+    public HomePageViewModel(AppViewModel appViewModel, ISettingsManager settingsManager)
     {
-        // #needs_MVVM
-
-        #region Fields
-
-        private readonly ISettingsManager _settingsManager;
-
-        #endregion Fields
-
-        #region Constructors
-
-        public HomePageViewModel(ISettingsManager settingsManager)
-        {
-            _settingsManager = settingsManager;
-
-            CloseHomePage = new RelayCommand(ExecuteHome, CanHome);
-            RestoreWindow = new RelayCommand(ExecuteRestoreWindow);
-            MinimizeWindow = new RelayCommand(ExecuteMinimizeWindow);
-
-            CurrentWindowState = WindowState.Normal;
-        }
-
-        #endregion Constructors
-
-        #region Properties
-
-        [Reactive] public int SelectedIndex { get; set; }
-
-        // Close HomePage (Navigates to Project Editor
-        public ICommand CloseHomePage { get; private set; }
-
-
-        // Restore Shell Window.
-        public ICommand RestoreWindow { get; set; }
-
-        public ICommand SwitchItemCmd { get; private set; }
-
-        public WindowState CurrentWindowState { get; set; }
-
-        // Minimize Shell Window
-        public ICommand MinimizeWindow { get; set; }
-
-        public string VersionNumber => _settingsManager.GetVersionNumber();
-
-        #endregion Properties
-
-        #region Methods
-
-        public void ExecuteMinimizeWindow()
-        {
-            SystemCommands.MinimizeWindow((System.Windows.Window)Locator.Current.GetService<IViewFor<AppViewModel>>());
-            CurrentWindowState = WindowState.Minimized;
-        }
-
-        private void ExecuteRestoreWindow()
-        {
-            if (CurrentWindowState == WindowState.Maximized)
-            {
-                SystemCommands.RestoreWindow((System.Windows.Window)Locator.Current.GetService<IViewFor<AppViewModel>>());
-                CurrentWindowState = WindowState.Normal;
-            }
-            else
-            {
-                SystemCommands.MaximizeWindow((System.Windows.Window)Locator.Current.GetService<IViewFor<AppViewModel>>());
-                CurrentWindowState = WindowState.Maximized;
-            }
-        }
-
-        private bool CanHome() => true;
-
-        private void ExecuteHome()
-        {
-            var main = Locator.Current.GetService<AppViewModel>();
-            main.CloseModalCommand.Execute(null);
-        }
-
-        #endregion Methods
+        _appViewModel = appViewModel;
+        _settingsManager = settingsManager;
+        
+        CurrentWindowState = WindowState.Normal;
     }
+
+    [ObservableProperty]
+    private int _selectedIndex;
+
+    public WindowState CurrentWindowState { get; set; }
+
+    public string VersionNumber => _settingsManager.GetVersionNumber();
+
+
+    [RelayCommand]
+    private void CloseHomePage()
+    {
+        _appViewModel.CloseModalCommand.Execute(null);
+    }
+
+    public void NavigateTo(EHomePage page) => SelectedIndex = (int)page;
+
 }

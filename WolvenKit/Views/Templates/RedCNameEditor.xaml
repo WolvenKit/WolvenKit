@@ -1,0 +1,91 @@
+<UserControl
+    x:Class="WolvenKit.Views.Editors.RedCNameEditor"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
+    xmlns:local="clr-namespace:WolvenKit.Views.Editors"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignWidth="400"
+    d:DesignHeight="100">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Style
+                x:Key="CNameStyle"
+                TargetType="TextBox">
+                <Style.Triggers>
+                    <DataTrigger
+                        Binding="{Binding IsValid}"
+                        Value="True">
+                        <!-- <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Frame_Active}" /> -->
+                        <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
+                    </DataTrigger>
+
+                    <DataTrigger
+                        Binding="{Binding HasWarning}"
+                        Value="True">
+                        <!--<Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Yellow}" />-->
+                        <Setter Property="Background" Value="{StaticResource BackgroundColor_Yellow_Dark}" />
+                    </DataTrigger>
+
+                    <DataTrigger
+                        Binding="{Binding HasError}"
+                        Value="True">
+                        <!--<Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Red}" />-->
+                        <Setter Property="Background" Value="{StaticResource BackgroundColor_Red_Dark}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid
+        Margin="0"
+        DataContext="{Binding RelativeSource={RelativeSource FindAncestor,
+                                                             AncestorType={x:Type local:RedCNameEditor}}}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="{DynamicResource WolvenKitRedEditorHashWidth}" />
+        </Grid.ColumnDefinitions>
+
+        <TextBox
+            x:Name="TextBox"
+            Grid.Column="0"
+            Margin="0"
+            Padding="{DynamicResource WolvenKitMarginTinyHorizontal}"
+            VerticalContentAlignment="Center"
+            BorderThickness="0"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+            Style="{StaticResource CNameStyle}"
+            helpers:TextBoxBehavior.TripleClickSelectAll="True"
+            helpers:TextBoxBehavior.IsValid="{Binding IsValid}"
+            Text="{Binding Text,
+                           UpdateSourceTrigger=PropertyChanged,
+                           Mode=TwoWay}"
+            ToolTip="{Binding TextBoxToolTip,
+                              UpdateSourceTrigger=PropertyChanged,
+                              Mode=TwoWay}"
+            GotFocus="OnTextboxFocusGained"
+            KeyDown="OnTextboxKeyDown"
+            LostFocus="OnTextboxFocusLost" />
+
+        <TextBox
+            x:Name="HashBox"
+            Grid.Column="1"
+            Margin="0"
+            Padding="{DynamicResource WolvenKitMarginTinyHorizontal}"
+            VerticalContentAlignment="Center"
+            Background="{StaticResource ContentBackgroundAlt}"
+            BorderBrush="{StaticResource BorderAlt}"
+            BorderThickness="1,0,0,0"
+            Foreground="#666666"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+            helpers:TextBoxBehavior.TripleClickSelectAll="True"
+            PreviewTextInput="HashBox_OnPreviewTextInput"
+            DataObject.Pasting="HashBox_OnPasting"
+            Text="{Binding Hash,
+                           UpdateSourceTrigger=PropertyChanged,
+                           Mode=TwoWay}" />
+    </Grid>
+</UserControl>

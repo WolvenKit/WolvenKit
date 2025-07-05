@@ -1,128 +1,67 @@
 using System;
 using System.IO;
-using System.Reactive;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Models.Docking;
-using WolvenKit.ViewModels.Shell;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using WolvenKit.App.Models.Docking;
+using WolvenKit.App.ViewModels.Shell;
 
-namespace WolvenKit.ViewModels.Documents
+namespace WolvenKit.App.ViewModels.Documents;
+
+public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewModel
 {
-    public abstract class DocumentViewModel : PaneViewModel, IDocumentViewModel
+    protected bool _isInitialized;
+
+    public DocumentViewModel(string path) : base(Path.GetFileName(path), path)
     {
-        #region fields
+        _filePath = path;
 
-        protected bool _isInitialized;
+        State = DockState.Document;
+        SideInDockedMode = DockSide.Tabbed;
+        CanSerialize = false;
 
-        #endregion fields
-
-        #region ctors
-
-        public DocumentViewModel(string path) : this()
+        if (File.Exists(path))
         {
-            Header = Path.GetFileName(path);
-            ContentId = path;
+            LastWriteTime = File.GetLastWriteTime(path);
         }
 
-        private DocumentViewModel()
-        {
-            State = DockState.Document;
-            SideInDockedMode = DockSide.Tabbed;
-
-            Close = ReactiveCommand.Create(() => { });
-        }
-
-        #endregion ctors
-
-        #region commands
-
-        private ICommand _saveAsCommand = null;
-        /// <summary>Gets a command to save this document's content into another file in the file system.</summary>
-        public ICommand SaveAsCommand
-        {
-            get
-            {
-                if (_saveAsCommand == null)
-                {
-                    _saveAsCommand = new DelegateCommand<object>((p) => OnSaveAs(p), (p) => CanSaveAs(p));
-                }
-
-                return _saveAsCommand;
-            }
-        }
-
-        private ICommand _saveCommand = null;
-
-        /// <summary>Gets a command to save this document's content into the file system.</summary>
-        public ICommand SaveCommand
-        {
-            get
-            {
-                if (_saveCommand == null)
-                {
-                    _saveCommand = new DelegateCommand<object>((p) => OnSave(p), (p) => CanSave(p));
-                }
-
-                return _saveCommand;
-            }
-        }
-
-        public ReactiveCommand<Unit, Unit> Close { get; set; }
-
-        #endregion commands
-
-        #region Properties
-
-        [Reactive] public string FilePath { get; set; }
-
-        [Reactive] public bool IsDirty { get; protected set; }
-
-
-
-        #endregion Properties
-
-        #region methods
-
-        public void SetIsDirty(bool b)
-        {
-            IsDirty = b;
-            Header = GetHeader();
-        }
-
-        private string GetHeader() =>
-            // not sure this is that useful
-            //if (FilePath == null)
-            //{
-            //    return "Noname" + (IsDirty ? "*" : "");
-            //}
-
-            Path.GetFileName(ContentId) + (IsDirty ? "*" : "");
-
-
-        /// <summary>
-        /// Attempts to read the contents of a wolvenkit file
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns>True if file read was successful, otherwise false</returns>
-        public abstract Task<bool> OpenFileAsync(string path);
-
-        public abstract bool OpenFile(string path);
-
-        private bool CanClose() => true;
-
-        private bool CanSave(object parameter) => true/*IsDirty*/;
-
-        private bool CanSaveAs(object parameter) => true/*IsDirty*/;
-
-        public abstract Task OnSave(object parameter);
-
-        private void OnSaveAs(object parameter) => throw new NotImplementedException();
-
-        #endregion methods
-
-
+        OpenedAt = DateTime.Now;
     }
+
+    [ObservableProperty] private string _filePath;
+    [ObservableProperty] private bool _isReadOnly;
+    [ObservableProperty] private bool _showToolbar;
+
+    public DateTime OpenedAt { get; init; }
+
+    private bool _isDirty;
+
+    public bool IsDirty
+    {
+        get => _isDirty;
+        protected set => SetProperty(ref _isDirty, value);
+    }
+
+    public bool IsInitialized() => _isInitialized;
+
+    public void SetIsDirty(bool b)
+    {
+        IsDirty = b;
+        Header = GetHeader();
+    }
+
+    public DateTime LastWriteTime { get; protected set; } = DateTime.MaxValue;
+
+    private string GetHeader() => Path.GetFileName(ContentId) + (IsDirty ? "*" : "");
+
+
+    [RelayCommand]
+    public abstract Task Save(object parameter);
+
+    [RelayCommand]
+    protected abstract void SaveAs(SaveAsParameters saveParams);
+        
+    public abstract bool Reload(bool force);
+
+
 }

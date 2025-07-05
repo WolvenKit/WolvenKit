@@ -1,18 +1,19 @@
 #define IS_PARALLEL
-// #undef IS_PARALLEL
 
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using WolvenKit.RED4.Archive.IO;
-using WolvenKit.RED4.CR2W.Archive;
-using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
+using WolvenKit.Common.Model;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.FunctionalTests.Model;
+using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.Archive.IO;
+using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
+using WolvenKit.RED4.Types;
 
 #if IS_PARALLEL
 using System.Threading.Tasks;
@@ -38,6 +39,8 @@ namespace WolvenKit.FunctionalTests
         //    Test_Extension();
         //}
 
+        [TestMethod]
+        public void Write_bin() => Test_Extension(".bin");
 
         [TestMethod]
         public void Write_acousticdata() => Test_Extension(".acousticdata");
@@ -76,9 +79,6 @@ namespace WolvenKit.FunctionalTests
         public void Write_bikecurveset() => Test_Extension(".bikecurveset");
 
         [TestMethod]
-        public void Write_bin() => Test_Extension(".bin");
-
-        [TestMethod]
         public void Write_bk2() => Test_Extension(".bk2");
 
         [TestMethod]
@@ -97,6 +97,9 @@ namespace WolvenKit.FunctionalTests
         public void Write_charcustpreset() => Test_Extension(".charcustpreset");
 
         [TestMethod]
+        public void Write_chromaset() => Test_Extension(".chromaset");
+
+        [TestMethod]
         public void Write_cminimap() => Test_Extension(".cminimap");
 
         [TestMethod]
@@ -112,7 +115,7 @@ namespace WolvenKit.FunctionalTests
         public void Write_cookedanims() => Test_Extension(".cookedanims");
 
         [TestMethod]
-        public void Write_cookedapp() => Test_Extension(".cookedapp");
+        public void Write_cookedprefab() => Test_Extension(".cookedprefab");
 
         [TestMethod]
         public void Write_credits() => Test_Extension(".credits");
@@ -134,6 +137,9 @@ namespace WolvenKit.FunctionalTests
 
         [TestMethod]
         public void Write_devices() => Test_Extension(".devices");
+
+        [TestMethod]
+        public void Write_dlcManifest() => Test_Extension(".dlc_manifest");
 
         [TestMethod]
         public void Write_dtex() => Test_Extension(".dtex");
@@ -445,7 +451,7 @@ namespace WolvenKit.FunctionalTests
 
             // Run Test
             List<WriteTestResult> results = new();
-            List<FileEntry> filesToTest = new();
+            List<IGameFile> filesToTest = new();
             var resultPath = Path.Combine(resultDir, $"write.{extension[1..]}.csv");
             if (File.Exists(resultPath) && TEST_EXISTING)
             {
@@ -502,38 +508,43 @@ namespace WolvenKit.FunctionalTests
             }
         }
 
-        private static IEnumerable<WriteTestResult> Write_Archive_Items(IEnumerable<FileEntry> files)
+        private static IEnumerable<WriteTestResult> Write_Archive_Items(IEnumerable<IGameFile> files)
         {
             ArgumentNullException.ThrowIfNull(s_bm);
             var results = new ConcurrentBag<WriteTestResult>();
 
             var filesGroups = files.Select((f, i) => new { Value = f, Index = i })
-                .GroupBy(item => item.Value.Archive.ArchiveAbsolutePath);
+                .GroupBy(item => item.Value.GetArchive().ArchiveAbsolutePath);
 
             foreach (var fileGroup in filesGroups)
             {
                 var fileList = fileGroup.ToList();
 
-                var ar = s_bm.Archives.Lookup(fileGroup.Key).Value as Archive;
-                ArgumentNullException.ThrowIfNull(ar);
-
-                using var fs = new FileStream(fileGroup.Key, FileMode.Open, FileAccess.Read, FileShare.Read);
-                using var mmf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.Read, HandleInheritability.None, false);
+                if (s_bm.Archives.Lookup(fileGroup.Key).Value is not Archive ar)
+                {
+                    continue;
+                }
 
 #if IS_PARALLEL
                 Parallel.ForEach(fileList, tmpFile =>
 #else
-            foreach (var tmpFile in fileList)
+                foreach (var tmpFile in fileList)
 #endif
                 {
-                    var file = tmpFile.Value;
+                    if (tmpFile.Value is not FileEntry file)
+                    {
+                        throw new InvalidGameContextException();
+                    }
+
                     try
                     {
                         using var originalStream = new MemoryStream();
-                        ar.CopyFileToStream(originalStream, file.NameHash64, false, mmf);
+                        ar.ExtractFile(file, originalStream);
                         originalStream.Seek(0, SeekOrigin.Begin);
 
                         using var originalReader = new CR2WReader(originalStream, Encoding.UTF8, true);
+                        originalReader.ParsingError += TypeGlobal.OnParsingError;
+
                         var readResult = originalReader.ReadFile(out var cr2wFile, DECOMPRESS_BUFFERS);
 
                         switch (readResult)
@@ -553,13 +564,13 @@ namespace WolvenKit.FunctionalTests
                                     FileEntry = file,
                                     Success = false,
                                     WriteResult = WriteTestResult.WriteResultType.UnsupportedVersion,
-                                    Message = $"Unsupported Version ()"
+                                    Message = $"Unsupported Version ({cr2wFile!.MetaData.Version})"
                                 });
                                 break;
 
                             case EFileReadErrorCodes.NoError:
                             {
-                                cr2wFile.MetaData.FileName = file.NameOrHash;
+                                cr2wFile!.MetaData.FileName = file.NameOrHash;
 
                                 using var writeStream = new MemoryStream();
                                 using var writer = new CR2WWriter(writeStream, Encoding.UTF8, true);
@@ -588,7 +599,12 @@ namespace WolvenKit.FunctionalTests
                                 if (!isBinaryEqual && WRITE_FAILED)
 #pragma warning disable CS0162
                                 {
-                                    var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
+                                    var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory, file.Extension[1..]);
+                                    if (!Directory.Exists(resultDir))
+                                    {
+                                        Directory.CreateDirectory(resultDir);
+                                    }
+
                                     var filename = Path.Combine(resultDir, Path.GetFileName(cr2wFile.MetaData.FileName));
 
                                     using var oFile = new FileStream($"{filename}.o.bin", FileMode.OpenOrCreate, FileAccess.Write);
@@ -648,8 +664,10 @@ namespace WolvenKit.FunctionalTests
 #if IS_PARALLEL
                 });
 #else
-            }
+                }
 #endif
+
+                ar.ReleaseFileHandle();
             }
             return results;
         }

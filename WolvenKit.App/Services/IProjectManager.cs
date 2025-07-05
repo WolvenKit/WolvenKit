@@ -1,17 +1,17 @@
+using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
-using WolvenKit.ProjectManagement.Project;
+using WolvenKit.App.Models.ProjectManagement.Project;
 
-namespace WolvenKit.Functionality.Services
+namespace WolvenKit.App.Services;
+
+public interface IProjectManager : INotifyPropertyChanged
 {
-    public interface IProjectManager
-    {
-        public bool IsProjectLoaded { get; set; }
+    bool IsProjectLoaded { get; set; }
 
-        EditorProject ActiveProject { get; set; }
+    Cp77Project? ActiveProject { get; set; }
 
-        Task<bool> SaveAsync();
+    Task<bool> SaveAsync();
 
-        Task<bool> LoadAsync(string location);
-
-    }
+    Task<Cp77Project?> LoadAsync(string location);
 }

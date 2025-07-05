@@ -1,31 +1,11 @@
-using System.Reactive;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace WolvenKit.ViewModels.Dialogs
+namespace WolvenKit.App.ViewModels.Dialogs;
+
+public partial class RenameDialogViewModel : DialogViewModel
 {
-    public class RenameDialogViewModel : DialogViewModel
-    {
-        public RenameDialogViewModel()
-        {
-            CloseCommand = ReactiveCommand.Create(() => { });
-            OkCommand = ReactiveCommand.Create(() =>
-            {
+    [ObservableProperty] private string? _text;
+    [ObservableProperty] private bool? _enableRefactoring;
 
-            });
-            CancelCommand = ReactiveCommand.Create(() =>
-            {
-
-            });
-
-            Title = "Rename";
-        }
-        [Reactive] public string Text { get; set; }
-
-        public string Title { get; set; }
-
-        public ReactiveCommand<Unit, Unit> CloseCommand { get; set; }
-        public ReactiveCommand<Unit, Unit> CancelCommand { get; set; }
-        public ReactiveCommand<Unit, Unit> OkCommand { get; set; }
-    }
+    public string Title { get; set; } = "Rename";
 }

@@ -1,0 +1,42 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	public partial class NewLocationNotification : JournalNotification
+	{
+		[Ordinal(20)] 
+		[RED("districtName")] 
+		public inkTextWidgetReference DistrictName
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("districtIcon")] 
+		public inkImageWidgetReference DistrictIcon
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(22)] 
+		[RED("districtFluffIcon")] 
+		public inkImageWidgetReference DistrictFluffIcon
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		public NewLocationNotification()
+		{
+			DistrictName = new inkTextWidgetReference();
+			DistrictIcon = new inkImageWidgetReference();
+			DistrictFluffIcon = new inkImageWidgetReference();
+
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
+	}
+}

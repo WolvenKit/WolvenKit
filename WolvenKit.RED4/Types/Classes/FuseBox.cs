@@ -1,0 +1,84 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	public partial class FuseBox : InteractiveMasterDevice
+	{
+		[Ordinal(98)] 
+		[RED("isShortGlitchActive")] 
+		public CBool IsShortGlitchActive
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(99)] 
+		[RED("shortGlitchDelayID")] 
+		public gameDelayID ShortGlitchDelayID
+		{
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
+		}
+
+		[Ordinal(100)] 
+		[RED("numberOfComponentsToON")] 
+		public CInt32 NumberOfComponentsToON
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(101)] 
+		[RED("numberOfComponentsToOFF")] 
+		public CInt32 NumberOfComponentsToOFF
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(102)] 
+		[RED("indexesOfComponentsToOFF")] 
+		public CArray<CInt32> IndexesOfComponentsToOFF
+		{
+			get => GetPropertyValue<CArray<CInt32>>();
+			set => SetPropertyValue<CArray<CInt32>>(value);
+		}
+
+		[Ordinal(103)] 
+		[RED("mesh")] 
+		public CHandle<entMeshComponent> Mesh
+		{
+			get => GetPropertyValue<CHandle<entMeshComponent>>();
+			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
+		}
+
+		[Ordinal(104)] 
+		[RED("componentsON")] 
+		public CArray<CHandle<entIPlacedComponent>> ComponentsON
+		{
+			get => GetPropertyValue<CArray<CHandle<entIPlacedComponent>>>();
+			set => SetPropertyValue<CArray<CHandle<entIPlacedComponent>>>(value);
+		}
+
+		[Ordinal(105)] 
+		[RED("componentsOFF")] 
+		public CArray<CHandle<entIPlacedComponent>> ComponentsOFF
+		{
+			get => GetPropertyValue<CArray<CHandle<entIPlacedComponent>>>();
+			set => SetPropertyValue<CArray<CHandle<entIPlacedComponent>>>(value);
+		}
+
+		public FuseBox()
+		{
+			ControllerTypeName = "FuseBoxController";
+			ShortGlitchDelayID = new gameDelayID();
+			IndexesOfComponentsToOFF = new();
+			ComponentsON = new();
+			ComponentsOFF = new();
+
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
+	}
+}

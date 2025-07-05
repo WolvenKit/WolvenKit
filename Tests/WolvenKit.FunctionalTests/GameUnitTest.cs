@@ -6,15 +6,17 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ProtoBuf.Meta;
 using Serilog;
+using Splat.Microsoft.Extensions.DependencyInjection;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Tools;
+using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 
@@ -24,7 +26,7 @@ namespace WolvenKit.FunctionalTests
     public class GameUnitTest
     {
         internal const string s_testResultsDirectory = "_CR2WTestResults";
-        internal static Dictionary<string, IEnumerable<FileEntry>> s_groupedFiles = new();
+        internal static Dictionary<string, IEnumerable<IGameFile>> s_groupedFiles = new();
         internal static IArchiveManager? s_bm;
         internal static bool s_writeToFile;
         private const string s_gameDirectorySetting = "GameDirectory";
@@ -38,10 +40,12 @@ namespace WolvenKit.FunctionalTests
                         .AddScoped<IProgressService<double>, ProgressService<double>>()
                         .AddSingleton<IHashService, HashService>()
 
+                        .AddScoped<IHookService, HookService>()
                         .AddScoped<Red4ParserService>()
                         .AddScoped<MeshTools>()
                         .AddSingleton<IArchiveManager, ArchiveManager>()
                         .AddSingleton<IModTools, ModTools>()
+                        .UseMicrosoftDependencyResolver()
                         )
                 .Build();
 
@@ -78,7 +82,7 @@ namespace WolvenKit.FunctionalTests
             s_config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
-            s_writeToFile = bool.Parse(s_config.GetSection(s_writeToFileSetting).Value);
+            s_writeToFile = bool.Parse(s_config.GetSection(s_writeToFileSetting).Value!);
 
             // overrides hardcoded appsettings.json
             var cp77Dir = Environment.GetEnvironmentVariable("CP77_DIR", EnvironmentVariableTarget.User);
@@ -108,25 +112,21 @@ namespace WolvenKit.FunctionalTests
 
             if (!Oodle.Load())
             {
-                Assert.Fail("Could not load oo2ext_7_win64.dll.");
+                Assert.Fail($"Could not load {Core.Constants.Oodle}.");
             }
 
             #endregion
 
             //protobuf
-            RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
+            //RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
 
 
             //var hashService = _host.Services.GetRequiredService<IHashService>();
             s_bm = _host.Services.GetRequiredService<IArchiveManager>();
 
-            var archivedir = new DirectoryInfo(Path.Combine(gameDirectory.FullName, "archive", "pc", "content"));
-            s_bm.LoadFromFolder(archivedir);
-            s_groupedFiles = s_bm.GetGroupedFiles();
-
-            var keyes = s_groupedFiles.Keys.ToList();
-            var keystring = string.Join(',', keyes);
-            //Console.WriteLine(keystring);
+            var exePath = new FileInfo(Path.Combine(gameDirectory.FullName, "bin", "x64", "Cyberpunk2077.exe"));
+            s_bm.LoadGameArchives(exePath);
+            s_groupedFiles = s_bm.GetGroupedFiles(ArchiveManagerScope.Basegame);
         }
 
     }

@@ -1,351 +1,361 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
+using System.Linq;
 using System.Windows.Media.Imaging;
-using System.Windows.Media.Media3D;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using WolvenKit.App.Extensions;
+using WolvenKit.App.Models;
+using WolvenKit.App.Models.Docking;
+using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
-using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Ab4d;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Extensions;
-using WolvenKit.Functionality.Helpers;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Models;
-using WolvenKit.Models.Docking;
-using WolvenKit.Modkit.RED4;
+using WolvenKit.Core.Extensions;
+using WolvenKit.Core.Interfaces;
+using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Documents;
-using static WolvenKit.ViewModels.Documents.RDTMeshViewModel;
-using WolvenKit.Modkit.RED4.Tools;
+using static WolvenKit.App.ViewModels.Documents.RDTMeshViewModel;
+using Path = System.IO.Path;
 
-namespace WolvenKit.ViewModels.Tools
+namespace WolvenKit.App.ViewModels.Tools;
+
+public partial class PropertiesViewModel : ToolViewModel
 {
-    public class PropertiesViewModel : ToolViewModel
+    #region fields
+
+    private readonly ILoggerService _loggerService;
+    private readonly ISettingsManager _settingsManager;
+    private readonly IArchiveManager _archiveManager;
+    private readonly IProjectManager _projectManager;
+    private readonly MeshTools _meshTools;
+    private readonly IModTools _modTools;
+    private readonly Red4ParserService _parser;
+
+    public const string ToolContentId = "Properties_Tool";
+    public const string ToolTitle = "File Information";
+
+    public enum TexturePreviewExtensions { xbm, envprobe, mesh, cubemap, xcube, texarray, inkatlas };
+
+    public enum MeshPreviewExtensions { mesh, ent, w2mesh, physicalscene, morphtarget };
+    public enum AudioPreviewExtensions { wem };
+
+    public EffectsManager EffectsManager { get; }
+
+    public SharpDX.BoundingBox ModelGroupBounds { get; set; } = new();
+
+    public Camera Camera { get; }
+
+    public SmartElement3DCollection ModelGroup { get; set; } = new();
+
+    public uint SelectedLOD { get; set; } = 1;
+
+    #endregion
+
+    /// <summary>
+    /// Constructor PropertiesViewModel
+    /// </summary>
+    /// <param name="projectManager"></param>
+    /// <param name="loggerService"></param>
+    /// <param name="meshTools"></param>
+    public PropertiesViewModel(
+        IProjectManager projectManager,
+        IArchiveManager archiveManager,
+        ILoggerService loggerService,
+        ISettingsManager settingsManager,
+        MeshTools meshTools,
+        IModTools modTools,
+        Red4ParserService parserService
+    ) : base(ToolTitle)
     {
-        #region fields
+        _settingsManager = settingsManager;
+        _projectManager = projectManager;
+        _loggerService = loggerService;
+        _archiveManager = archiveManager;
+        _meshTools = meshTools;
+        _modTools = modTools;
+        _parser = parserService;
 
-        private readonly ILoggerService _loggerService;
-        private readonly ISettingsManager _settingsManager;
-        private readonly IProjectManager _projectManager;
-        private readonly MeshTools _meshTools;
-        private readonly IModTools _modTools;
-        private readonly Red4ParserService _parser;
+        SetupToolDefaults();
+        SideInDockedMode = DockSide.Left;
 
-        public const string ToolContentId = "Properties_Tool";
-        public const string ToolTitle = "File Information";
+        SetToNullAndResetVisibility();
 
-        public enum TexturePreviewExtensions { xbm, envprobe, mesh };
-        public enum MeshPreviewExtensions { mesh, ent, w2mesh, physicalscene };
-        public enum AudioPreviewExtensions { wem };
 
-        public EffectsManager EffectsManager { get; }
-
-        public SharpDX.BoundingBox ModelGroupBounds { get; set; } = new();
-
-        public HelixToolkit.Wpf.SharpDX.Camera Camera { get; }
-
-        public SmartElement3DCollection ModelGroup { get; set; } = new();
-
-        public uint SelectedLOD { get; set; } = 1;
-
-        #endregion
-
-        /// <summary>
-        /// Constructor PropertiesViewModel
-        /// </summary>
-        /// <param name="projectManager"></param>
-        /// <param name="loggerService"></param>
-        /// <param name="meshTools"></param>
-        public PropertiesViewModel(
-            IProjectManager projectManager,
-            ILoggerService loggerService,
-            ISettingsManager settingsManager,
-            MeshTools meshTools,
-            IModTools modTools,
-            Red4ParserService parserService
-        ) : base(ToolTitle)
+        EffectsManager = new DefaultEffectsManager();
+        Camera = new PerspectiveCamera()
         {
-            _settingsManager = settingsManager;
-            _projectManager = projectManager;
-            _loggerService = loggerService;
-            _meshTools = meshTools;
-            _modTools = modTools;
-            _parser = parserService;
+            FarPlaneDistance = 1E+8,
+            LookDirection = new System.Windows.Media.Media3D.Vector3D(1f, -1f, -1f),
+        };
+    }
 
-            SetupToolDefaults();
-            SideInDockedMode = DockSide.Left;
+    #region properties
 
-            SetToNullAndResetVisibility();
+    [ObservableProperty] private AudioObject? _audioObject;
 
-            PreviewAudioCommand = ReactiveCommand.Create<string, string>(str => str);
+    [ObservableProperty] private int _selectedIndex;
 
-            EffectsManager = new DefaultEffectsManager();
-            Camera = new HelixToolkit.Wpf.SharpDX.PerspectiveCamera()
-            {
-                FarPlaneDistance = 1E+8,
-                LookDirection = new System.Windows.Media.Media3D.Vector3D(1f, -1f, -1f),
-            };
+    [ObservableProperty] private FileSystemModel? _pE_SelectedItem;
+
+    /// <summary>
+    /// Selected Item from Asset Browser If Available.
+    /// </summary>
+    [ObservableProperty] private IFileSystemViewModel? _aB_SelectedItem;
+
+    /// <summary>
+    /// Decides if Asset browser Selected File info should be visible.
+    /// </summary>
+    [ObservableProperty] private bool _aB_FileInfoVisible;
+
+    /// <summary>
+    /// Decides if Project Explorer Selected file info should be Visible.
+    /// </summary>
+    [ObservableProperty] private bool _pE_FileInfoVisible;
+
+    /// <summary>
+    /// Decides if the mesh previewer Tab should be visible or not.
+    /// </summary>
+    [ObservableProperty] private bool _isMeshPreviewVisible;
+
+    [ObservableProperty] private bool _isAudioPreviewVisible;
+    [ObservableProperty] private bool _isImagePreviewVisible;
+    [ObservableProperty] private bool _isVideoPreviewVisible;
+
+    [ObservableProperty] private string? _exeCommand;
+
+    [ObservableProperty] private string? _loadedModelPath;
+
+    [ObservableProperty] private BitmapSource? _loadedBitmapFrame;
+
+    #endregion properties
+
+    #region commands
+
+    [RelayCommand]
+    private void PreviewAudio(AudioObject obj)
+    {
+        AudioObject = obj;
+    }
+
+    /// <summary>
+    /// Called from Assetbrowser
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    public void ExecuteSelectFile(IFileSystemViewModel model)
+    {
+        if (State is DockState.AutoHidden or DockState.Hidden || !_settingsManager.ShowFilePreview ||
+            model is not RedFileViewModel selectedItem)
+        {
+            return;
         }
 
-        #region properties
-        [Reactive] public int SelectedIndex { get; set; }
+        AB_SelectedItem = model;
+        AB_FileInfoVisible = true;
+        PE_FileInfoVisible = false;
 
-        [Reactive] public FileModel PE_SelectedItem { get; set; }
+        SelectedIndex = 0;
+        IsMeshPreviewVisible = false;
+        IsAudioPreviewVisible = false;
+        IsImagePreviewVisible = false;
+        IsVideoPreviewVisible = false;
 
-        /// <summary>
-        /// Selected Item from Asset Browser If Available.
-        /// </summary>
-        [Reactive] public IFileSystemViewModel AB_SelectedItem { get; set; }
+        var extension = model.DisplayExtension;
 
-        /// <summary>
-        /// Decides if Asset browser Selected File info should be visible.
-        /// </summary>
-        [Reactive] public bool AB_FileInfoVisible { get; set; }
-
-        /// <summary>
-        /// Decides if Project Explorer Selected file info should be Visible.
-        /// </summary>
-        [Reactive] public bool PE_FileInfoVisible { get; set; }
-
-        /// <summary>
-        /// Decides if the mesh previewer Tab should be visible or not.
-        /// </summary>
-        [Reactive] public bool IsMeshPreviewVisible { get; set; }
-
-        [Reactive] public bool IsAudioPreviewVisible { get; set; }
-        [Reactive] public bool IsImagePreviewVisible { get; set; }
-        [Reactive] public bool IsVideoPreviewVisible { get; set; }
-
-        [Reactive] public string ExeCommand { get; set; }
-
-        [Reactive] public string LoadedModelPath { get; set; }
-
-        [Reactive] public BitmapSource LoadedBitmapFrame { get; set; }
-
-        #endregion properties
-
-        #region commands
-
-        public ReactiveCommand<string, string> PreviewAudioCommand { get; set; }
-
-        public ICommand FileSelectedCommand { get; private set; }
-
-        private bool CanOpenFile(FileModel model) => model != null;
-
-        public async Task ExecuteSelectFile(IFileSystemViewModel model)
+        if (!Enum.TryParse<TexturePreviewExtensions>(extension, true, out _) &&
+            !Enum.TryParse<MeshPreviewExtensions>(extension, true, out _) &&
+            !Enum.TryParse<AudioPreviewExtensions>(extension, true, out _))
         {
-            if (model == null)
+            return;
+        }
+
+        CR2WFile? cr2W = null;
+        using (var stream = new MemoryStream())
+        {
+            var selectedGameFile = selectedItem.GetGameFile();
+            selectedGameFile.Extract(stream);
+            if (!_parser.TryReadRed4File(stream, out cr2W))
             {
-                return;
-            }
-
-            if (State is DockState.AutoHidden or DockState.Hidden)
-            {
-                return;
-            }
-
-            AB_SelectedItem = model;
-            AB_FileInfoVisible = true;
-            PE_FileInfoVisible = false;
-
-            SelectedIndex = 0;
-            IsMeshPreviewVisible = false;
-            IsAudioPreviewVisible = false;
-            IsImagePreviewVisible = false;
-            IsVideoPreviewVisible = false;
-
-            if (!_settingsManager.ShowFilePreview)
-            {
-                return;
-            }
-
-            if (model is not RedFileViewModel selectedItem)
-            {
-                return;
-            }
-
-            var extension = Path.GetExtension(model.FullName).TrimStart('.');
-
-            if (Enum.TryParse<TexturePreviewExtensions>(extension, true, out _) ||
-                Enum.TryParse<MeshPreviewExtensions>(extension, true, out _) ||
-                Enum.TryParse<AudioPreviewExtensions>(extension, true, out _))
-            {
-                CR2WFile cr2w = null;
-                using (var stream = new MemoryStream())
-                {
-                    var selectedGameFile = selectedItem.GetGameFile();
-                    selectedGameFile.Extract(stream);
-                    _parser.TryReadRed4File(stream, out cr2w);
-                }
-                if (cr2w != null)
-                {
-                    await ExecuteSelectFile(cr2w, model.FullName);
-                }
+                PreviewAudioStream(stream, model.FullName);
             }
         }
 
-        public async Task ExecuteSelectFile(FileModel model)
+        if (cr2W != null)
         {
-            if (model == null)
-            {
-                return;
-            }
+            PreviewCr2wFile(cr2W);
+        }
+    }
 
-            if (State is DockState.AutoHidden or DockState.Hidden)
-            {
-                return;
-            }
-
-            PE_SelectedItem = model;
-            PE_FileInfoVisible = true;
-            AB_FileInfoVisible = false;
-
-            SelectedIndex = 0;
-            IsMeshPreviewVisible = false;
-            IsAudioPreviewVisible = false;
-            IsImagePreviewVisible = false;
-            IsVideoPreviewVisible = false;
-
-            if (!_settingsManager.ShowFilePreview)
-            {
-                return;
-            }
-
-            if (model.IsDirectory)
-            {
-                return;
-            }
-
-            var extension = Path.GetExtension(model.FullName).TrimStart('.');
-
-            if (Enum.TryParse<TexturePreviewExtensions>(extension, true, out _) ||
-                Enum.TryParse<MeshPreviewExtensions>(extension, true, out _) ||
-                Enum.TryParse<AudioPreviewExtensions>(extension, true, out _))
-            {
-                CR2WFile cr2w = null;
-                using (var stream = new FileStream(model.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan))
-                {
-                    if (!_parser.TryReadRed4File(stream, out cr2w))
-                    {
-                        await ExecuteSelectFile(stream, model.FullName);
-                    }
-                }
-                if (cr2w != null)
-                {
-                    await ExecuteSelectFile(cr2w, model.FullName);
-                }
-            }
+    /// <summary>
+    /// Called from PropertyExplorer
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    public void ExecuteSelectFile(FileSystemModel model)
+    {
+        if (State is DockState.AutoHidden or DockState.Hidden || !_settingsManager.ShowFilePreview || model.IsDirectory)
+        {
+            return;
         }
 
-        public async Task ExecuteSelectFile(Stream stream, string filename)
+        PE_SelectedItem = model;
+        PE_FileInfoVisible = true;
+        AB_FileInfoVisible = false;
+
+        SelectedIndex = 0;
+        IsMeshPreviewVisible = false;
+        IsAudioPreviewVisible = false;
+        IsImagePreviewVisible = false;
+        IsVideoPreviewVisible = false;
+
+        var extension = Path.GetExtension(model.FullName).TrimStart('.');
+
+        if (!Enum.TryParse<TexturePreviewExtensions>(extension, true, out _) &&
+            !Enum.TryParse<MeshPreviewExtensions>(extension, true, out _) &&
+            !Enum.TryParse<AudioPreviewExtensions>(extension, true, out _) &&
+            !Enum.TryParse<EUncookExtension>(extension, true, out _))
         {
-            var extension = Path.GetExtension(filename).TrimStart('.');
-
-            if (Enum.IsDefined(typeof(EConvertableOutput), extension))
-            {
-
-            }
-
-            if (Enum.TryParse<AudioPreviewExtensions>(extension, true, out _))
-            {
-                IsAudioPreviewVisible = true;
-                SelectedIndex = 2;
-
-                PreviewAudioCommand.SafeExecute(filename);
-            }
-
-            // textures
-            if (Enum.TryParse<EUncookExtension>(extension, true, out _))
-            {
-                var q = await ImageDecoder.RenderToBitmapSource(filename);
-                if (q != null)
-                {
-                    var g = BitmapFrame.Create(q);
-                    LoadImage(g);
-                    IsImagePreviewVisible = true;
-                    SelectedIndex = 3;
-                }
-            }
+            return;
         }
 
-        public Task ExecuteSelectFile(CR2WFile cr2w, string filename)
+        CR2WFile? cr2WFile = null;
+        using (var stream = new FileStream(model.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096,
+                   FileOptions.SequentialScan))
         {
-            //if (string.Equals(extension, ERedExtension.bk2.ToString(),
-            //   System.StringComparison.OrdinalIgnoreCase))
-            //{
-            //    IsVideoPreviewVisible = true;
-            //    SetExeCommand?.Invoke("test.exe | test2.bk2 /J /I2 /P");
-            //}
-
-            if (cr2w.RootChunk is CMesh cmesh)
+            if (!_parser.TryReadRed4File(stream, out cr2WFile))
             {
-                LoadModel(cmesh);
+                PreviewPhysicalFile(model.FullName);
             }
-
-            if (cr2w.RootChunk is CBitmapTexture cbt &&
-                cbt.RenderTextureResource.RenderResourceBlobPC != null &&
-                cbt.RenderTextureResource.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
+            else if (extension == "inkatlas" && cr2WFile.RootChunk is inkTextureAtlas atlas &&
+                     atlas.Slots.FirstOrDefault() is inkTextureSlot slot && slot.Texture.DepotPath != ResourcePath.Empty &&
+                     _archiveManager.GetGameFile(slot.Texture.DepotPath) is { } gameFile)
             {
-                SetupImage(cbt);
+                using var stream2 = new MemoryStream();
+                gameFile.Extract(stream2);
+                _parser.TryReadRed4File(stream2, out cr2WFile);
             }
+        }
+        if (cr2WFile != null)
+        {
+            PreviewCr2wFile(cr2WFile);
+        }
+    }
 
-            if (cr2w.RootChunk is CMesh cm &&
-                cm.RenderResourceBlob.GetValue() is rendRenderTextureBlobPC)
-            {
+    /// <summary>
+    /// Internal
+    /// </summary>
+    /// <param name="stream"></param>
+    /// <param name="filename"></param>
+    /// <returns></returns>
+    private void PreviewAudioStream(Stream stream, string filename)
+    {
+        var extension = Path.GetExtension(filename).TrimStart('.');
+        stream.Seek(0, SeekOrigin.Begin);
+
+        if (Enum.TryParse<AudioPreviewExtensions>(extension, true, out _))
+        {
+            IsAudioPreviewVisible = true;
+            SelectedIndex = 2;
+
+            AudioObject = new AudioObject(Path.GetFileNameWithoutExtension(filename), stream.ToByteArray());
+        }
+    }
+
+    /// <summary>
+    /// Internal
+    /// </summary>
+    /// <param name="filename"></param>
+    /// <returns></returns>
+    private void PreviewPhysicalFile(string filename)
+    {
+        var extension = Path.GetExtension(filename).TrimStart('.');
+
+        if (Enum.TryParse<AudioPreviewExtensions>(extension, true, out _))
+        {
+            IsAudioPreviewVisible = true;
+            SelectedIndex = 2;
+
+            AudioObject = new AudioObject(Path.GetFileNameWithoutExtension(filename), File.ReadAllBytes(filename));
+        }
+        else if (Enum.TryParse<EUncookExtension>(extension, true, out var ext))
+        {
+            SetupRawImage(filename, ext);
+        }
+    }
+
+    private void PreviewCr2wFile(CR2WFile cr2w)
+    {
+        switch (cr2w.RootChunk)
+        {
+            case CMesh cm when cm.RenderResourceBlob?.GetValue() is rendRenderTextureBlobPC:
                 SetupImage(cm);
-            }
-
-            if (cr2w.RootChunk is CReflectionProbeDataResource crpdr &&
-                crpdr.TextureData.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
-            {
+                break;
+            case CMesh or MorphTargetMesh:
+                LoadModel(cr2w.RootChunk);
+                break;
+            case CBitmapTexture cbt when
+                cbt.RenderTextureResource.RenderResourceBlobPC?.GetValue() is rendRenderTextureBlobPC:
+                SetupImage(cbt);
+                break;
+            case CCubeTexture cct when
+                cct.RenderTextureResource.RenderResourceBlobPC?.GetValue() is rendRenderTextureBlobPC:
+                SetupImage(cct);
+                break;
+            case CTextureArray cta when
+                cta.RenderTextureResource.RenderResourceBlobPC?.GetValue() is rendRenderTextureBlobPC:
+                SetupImage(cta);
+                break;
+            case CReflectionProbeDataResource crpdr when
+                crpdr.TextureData.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC:
                 SetupImage(crpdr);
-            }
-
-            return Task.CompletedTask;
+                break;
+            default:
+                break;
         }
+    }
 
-        public void SetupImage(RedBaseClass cls)
+    public void SetupImage(RedBaseClass cls)
+    {
+        var image = RedImage.FromRedClass(cls);
+
+        var bitmapImage = new BitmapImage();
+        bitmapImage.BeginInit();
+        bitmapImage.StreamSource = new MemoryStream(image.GetPreview(true));
+        bitmapImage.EndInit();
+
+        LoadedBitmapFrame = bitmapImage;
+
+        IsImagePreviewVisible = true;
+        SelectedIndex = 3;
+    }
+
+    public void SetupRawImage(string fileName, EUncookExtension ext)
+    {
+        var image = RedImage.LoadFromFile(fileName);
+        if (image == null)
         {
-            using var ddsstream = new MemoryStream();
-            try
-            {
-                if (ModTools.ConvertRedClassToDdsStream(cls, ddsstream, out _))
-                {
-                    _ = LoadImageFromStream(ddsstream);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                //throw;
-            }
+            _loggerService.Error($"\"{fileName}\" could not be loaded!");
+            return;
         }
 
-        public async Task LoadImageFromStream(Stream stream)
-        {
-            var qa = await ImageDecoder.RenderToBitmapSourceDds(stream);
-            if (qa != null)
-            {
-                //Image = qa;
-                LoadedBitmapFrame = new TransformedBitmap(qa, new ScaleTransform(1, -1));
+        var bitmapImage = new BitmapImage();
+        bitmapImage.BeginInit();
+        bitmapImage.StreamSource = new MemoryStream(image.GetPreview(false));
+        bitmapImage.EndInit();
 
-                IsImagePreviewVisible = true;
-                SelectedIndex = 3;
-            }
-        }
+        LoadedBitmapFrame = bitmapImage;
+        IsImagePreviewVisible = true;
+        SelectedIndex = 3;
+    }
 
-        public void LoadModel(RedBaseClass cls)
+    public void LoadModel(RedBaseClass cls)
+    {
+        try
         {
             var meshes = MakePreviewMesh(cls);
 
@@ -361,157 +371,148 @@ namespace WolvenKit.ViewModels.Tools
             ModelGroupBounds = bounds;
             ModelGroup.Reset(meshes);
         }
-
-        public void LoadImage(BitmapSource p0) => LoadedBitmapFrame = p0;
-
-        #endregion commands
-
-        #region methods
-
-        private bool _showWireFrame;
-
-        public bool ShowWireFrame
+        catch
         {
-            get
-            {
-                return _showWireFrame;
-            }
-            set
-            {
-                _showWireFrame = value;
-                foreach (var model in ModelGroup)
-                {
-                    if (model is SubmeshComponent mesh)
-                    {
-                        mesh.FillMode = _showWireFrame ? SharpDX.Direct3D11.FillMode.Wireframe : SharpDX.Direct3D11.FillMode.Solid;
-                    }
-                }
-            }
+
         }
 
-        public List<SubmeshComponent> MakePreviewMesh(RedBaseClass cls, ulong chunkMask = ulong.MaxValue)
-        {
-            rendRenderMeshBlob rendblob = null;
-
-            if (cls is CMesh cMesh && cMesh.RenderResourceBlob != null && cMesh.RenderResourceBlob.Chunk is rendRenderMeshBlob blob)
-            {
-                rendblob = blob;
-            }
-
-            if (rendblob == null)
-            {
-                return new List<SubmeshComponent>();
-            }
-
-            using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
-
-            var meshesinfo = MeshTools.GetMeshesinfo(rendblob);
-
-            var expMeshes = MeshTools.ContainRawMesh(ms, meshesinfo, false, ulong.MaxValue);
-
-            var list = new List<SubmeshComponent>();
-
-            var index = 0;
-            var material = new PBRMaterial()
-            {
-                EnableAutoTangent = true,
-                RenderShadowMap = true,
-                AlbedoColor = new SharpDX.Color4(0.5f, 0.5f, 0.5f, 1f),
-                //EnableTessellation = true
-            };
-            foreach (var mesh in expMeshes)
-            {
-
-                var positions = new Vector3Collection(mesh.positions.Length);
-                for (var i = 0; i < mesh.positions.Length; i++)
-                {
-                    positions.Add(mesh.positions[i].ToVector3());
-                }
-
-                var indices = new IntCollection(mesh.indices.Length);
-                for (var i = 0; i < mesh.indices.Length; i++)
-                {
-                    indices.Add((int)mesh.indices[i]);
-                }
-
-                Vector3Collection normals;
-                if (mesh.normals.Length > 0)
-                {
-                    normals = new Vector3Collection(mesh.normals.Length);
-                    for (var i = 0; i < mesh.normals.Length; i++)
-                    {
-                        normals.Add(mesh.normals[i].ToVector3());
-                    }
-                }
-                else
-                {
-                    ComputeNormals(positions, indices, out normals);
-                }
-
-                var sm = new SubmeshComponent()
-                {
-                    Name = $"submesh_{index:D2}_LOD_{meshesinfo.LODLvl[index]:D2}",
-                    LOD = meshesinfo.LODLvl[index],
-                    IsRendering = (chunkMask & 1UL << index) > 0 && meshesinfo.LODLvl[index] == SelectedLOD,
-                    EnabledWithMask = (chunkMask & 1UL << index) > 0,
-                    Geometry = new HelixToolkit.SharpDX.Core.MeshGeometry3D()
-                    {
-                        Positions = positions,
-                        Indices = indices,
-                        Normals = normals
-                    },
-                    DepthBias = -index * 2,
-                    Material = material,
-                    FillMode = ShowWireFrame ? SharpDX.Direct3D11.FillMode.Wireframe : SharpDX.Direct3D11.FillMode.Solid
-                };
-
-                list.Add(sm);
-                index++;
-            }
-
-            return list;
-        }
-
-
-        /// <summary>
-        /// Resets stuff each time a new item is selected.
-        /// </summary>
-        public void SetToNullAndResetVisibility()
-        {
-            // Asset Browser
-            AB_SelectedItem = null;
-            AB_FileInfoVisible = false;
-
-            // Project Explorer
-            PE_SelectedItem = null;
-            PE_FileInfoVisible = false;
-
-            IsAudioPreviewVisible = false;
-            IsMeshPreviewVisible = false;
-            IsImagePreviewVisible = false;
-        }
-
-        /// <summary>
-        /// Initialize Syncfusion specific defaults that are specific to this tool window.
-        /// </summary>
-        private void SetupToolDefaults() => ContentId = ToolContentId;
-
-        #endregion
-
-
-        #region AudioPreview
-
-        /// <summary>
-        /// Working directory for audio preview.
-        /// </summary>
-        //private const string wdir = "lib\\vgmstream\\AudioWorkingDir\\";
-
-        /// <summary>
-        /// audio file list for opuspak type files with multiple wems inside. (not visually implemented)
-        /// </summary>
-        public List<TextBlock> AudioFileList { get; set; } = new List<TextBlock>();
-
-
-        #endregion AudioPreview
     }
+
+    public void LoadImage(BitmapSource p0) => LoadedBitmapFrame = p0;
+
+    #endregion commands
+
+    #region methods
+
+    private bool _showWireFrame;
+
+    public bool ShowWireFrame
+    {
+        get => _showWireFrame;
+        set
+        {
+            _showWireFrame = value;
+            foreach (var model in ModelGroup)
+            {
+                if (model is SubmeshComponent mesh)
+                {
+                    mesh.FillMode = _showWireFrame ? SharpDX.Direct3D11.FillMode.Wireframe : SharpDX.Direct3D11.FillMode.Solid;
+                }
+            }
+        }
+    }
+
+    private List<SubmeshComponent> MakePreviewMesh(RedBaseClass cls, ulong chunkMask = ulong.MaxValue)
+    {
+        var rendblob = cls switch
+        {
+            CMesh { RenderResourceBlob.Chunk: rendRenderMeshBlob blob } => blob,
+            MorphTargetMesh mt when mt.Blob.Chunk is rendRenderMorphTargetMeshBlob mtBlob &&
+                                    mtBlob.BaseBlob.Chunk is rendRenderMeshBlob blob2 => blob2,
+            _ => null
+        };
+
+        if (rendblob == null)
+        {
+            return [];
+        }
+
+        using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
+
+        var meshesinfo = MeshTools.GetMeshesinfo(rendblob);
+
+        var expMeshes = MeshTools.ContainRawMesh(ms, meshesinfo, false, ulong.MaxValue);
+
+        var list = new List<SubmeshComponent>();
+
+        var index = 0;
+        var material = new PBRMaterial()
+        {
+            EnableAutoTangent = true,
+            RenderShadowMap = true,
+            AlbedoColor = new SharpDX.Color4(0.5f, 0.5f, 0.5f, 1f),
+            //EnableTessellation = true
+        };
+        foreach (var mesh in expMeshes)
+        {
+            ArgumentNullException.ThrowIfNull(mesh.positions);
+            ArgumentNullException.ThrowIfNull(mesh.indices);
+            ArgumentNullException.ThrowIfNull(mesh.normals);
+
+            var positions = new Vector3Collection(mesh.positions.Length);
+            for (var i = 0; i < mesh.positions.Length; i++)
+            {
+                positions.Add(mesh.positions[i].ToVector3());
+            }
+
+            var indices = new IntCollection(mesh.indices.Length);
+            for (var i = 0; i < mesh.indices.Length; i++)
+            {
+                indices.Add((int)mesh.indices[i]);
+            }
+
+            Vector3Collection normals;
+            if (mesh.normals.Length > 0)
+            {
+                normals = new Vector3Collection(mesh.normals.Length);
+                for (var i = 0; i < mesh.normals.Length; i++)
+                {
+                    normals.Add(mesh.normals[i].ToVector3());
+                }
+            }
+            else
+            {
+                ComputeNormals(positions, indices, out normals);
+            }
+
+            var sm = new SubmeshComponent()
+            {
+                Name = $"submesh_{index:D2}_LOD_{meshesinfo.LODLvl[index]:D2}",
+                LOD = meshesinfo.LODLvl[index],
+                IsRendering = (chunkMask & 1UL << index) > 0 && meshesinfo.LODLvl[index] == SelectedLOD,
+                EnabledWithMask = (chunkMask & 1UL << index) > 0,
+                Geometry = new MeshGeometry3D()
+                {
+                    Positions = positions,
+                    Indices = indices,
+                    Normals = normals
+                },
+                DepthBias = -index * 2,
+                Material = material,
+                FillMode = ShowWireFrame ? SharpDX.Direct3D11.FillMode.Wireframe : SharpDX.Direct3D11.FillMode.Solid
+            };
+
+            list.Add(sm);
+            index++;
+        }
+
+        return list;
+    }
+
+
+    /// <summary>
+    /// Resets stuff each time a new item is selected.
+    /// </summary>
+    public void SetToNullAndResetVisibility()
+    {
+        // Asset Browser
+        AB_SelectedItem = null;
+        AB_FileInfoVisible = false;
+
+        // Project Explorer
+        PE_SelectedItem = null;
+        PE_FileInfoVisible = false;
+
+        IsAudioPreviewVisible = false;
+        IsMeshPreviewVisible = false;
+        IsImagePreviewVisible = false;
+    }
+
+    /// <summary>
+    /// Initialize Syncfusion specific defaults that are specific to this tool window.
+    /// </summary>
+    private void SetupToolDefaults() => ContentId = ToolContentId;
+
+    #endregion
+
 }

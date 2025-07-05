@@ -1,473 +1,275 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using WolvenKit.Common;
 using WolvenKit.Common.DDS;
-using WolvenKit.Common.Services;
+using WolvenKit.Common.Model.Arguments;
+using WolvenKit.RED4.Archive;
 using static WolvenKit.RED4.Types.Enums;
 
-namespace WolvenKit.RED4.CR2W
+namespace WolvenKit.RED4.CR2W;
+
+public static class CommonFunctions
 {
-    public static class CommonFunctions
+    public static string? GetResourceClassesFromExtension(ERedExtension extension)
     {
-        public static string[] GetResourceClassesFromExtension(ERedExtension extension)
+        foreach (var fileType in FileTypeHelper.FileTypes)
         {
-            try
+            if (fileType.Extension == extension)
             {
-                return s_extensionsToClass[extension].Split(',');
-            }
-            catch (KeyNotFoundException)
-            {
-                return null;
+                return fileType.RootType.Name;
             }
         }
 
-        public static ERedExtension[] GetExtensionFromResourceClass(string resourceClass)
-        {
-            try
-            {
-                return s_classToExtensions[resourceClass].Split(',').Select(x => Enum.Parse<ERedExtension>(x)).ToArray();
-            }
-            catch (KeyNotFoundException)
-            {
-                return null;
-            }
-        }
-
-        private static readonly Dictionary<ERedExtension, string> s_extensionsToClass = new()
-        {
-            { ERedExtension.json, "JsonResource" },
-            { ERedExtension.voicetags, "locVoiceTagListResource" },
-            { ERedExtension.scene, "scnSceneResource" },
-            { ERedExtension.audio_metadata, "audioCookedMetadataResource" },
-            { ERedExtension.xbm, "CBitmapTexture" },
-            { ERedExtension.app, "appearanceAppearanceResource" },
-            { ERedExtension.curveset, "CurveSet" },
-            { ERedExtension.behavior, "AIbehaviorResource" },
-            { ERedExtension.anims, "animAnimSet" },
-            { ERedExtension.w2mesh, "CMesh" },
-            { ERedExtension.particle, "CParticleSystem" },
-            { ERedExtension.mesh, "CMesh" },
-            { ERedExtension.csv, "C2dArray" },
-            { ERedExtension.hp, "CHairProfile" },
-            { ERedExtension.fp, "CFoliageProfile" },
-            { ERedExtension.sp, "CSkinProfile" },
-            { ERedExtension.inkfontfamily, "inkFontFamilyResource" },
-            { ERedExtension.es, "gameEffectSet" },
-            { ERedExtension.mltemplate, "Multilayer_LayerTemplate" },
-            { ERedExtension.aiarch, "AIArchetype" },
-            { ERedExtension.charcustpreset, "gameuiCharacterCustomizationUiPreset" },
-            { ERedExtension.garmentlayerparams, "garmentGarmentLayerParams" },
-            { ERedExtension.effect, "worldEffect" },
-            { ERedExtension.fnt, "rendFont" },
-            { ERedExtension.rig, "animRig" },
-            { ERedExtension.ent, "entEntityTemplate" },
-            { ERedExtension.env, "worldEnvironmentDefinition" },
-            { ERedExtension.dtex, "DynamicTexture" },
-            { ERedExtension.inkcharcustomization, "gameuiCharacterCustomizationInfoResource" },
-            { ERedExtension.inkenginesettings, "inkEngineSettingsResource" },
-            { ERedExtension.w2mi, "CMaterialInstance" },
-            { ERedExtension.inkshapecollection, "inkShapeCollectionResource" },
-            { ERedExtension.inkfullscreencomposition, "inkFullscreenCompositionResource" },
-            { ERedExtension.mlmask, "Multilayer_Mask" },
-            { ERedExtension.actionanimdb, "animActionAnimDatabase" },
-            { ERedExtension.inkanim, "inkanimAnimationLibraryResource" },
-            { ERedExtension.bk2, "" },
-            { ERedExtension.inkatlas, "inkTextureAtlas" },
-            { ERedExtension.inktypography, "inkTypographyResource" },
-            { ERedExtension.archetypes, "AIArchetypeSet" },
-            { ERedExtension.texarray, "CTextureArray" },
-            { ERedExtension.inkgamesettings, "inkGameSettingsResource" },
-            { ERedExtension.envparam, "worldEnvironmentAreaParameters" },
-            { ERedExtension.facialsetup, "animFacialSetup" },
-            { ERedExtension.xcube, "CCubeTexture" },
-            { ERedExtension.inkwidget, "inkWidgetLibraryResource" },
-            { ERedExtension.curveresset, "CurveResourceSet" },
-            { ERedExtension.mlsetup, "Multilayer_Setup" },
-            { ERedExtension.gradient, "CGradient" },
-            { ERedExtension.regionset, "CTextureRegionSet" },
-            { ERedExtension.interaction, "gameinteractionsInteractionDescriptorResource" },
-            { ERedExtension.acousticdata, "worldAcousticDataResource" },
-            { ERedExtension.envprobe, "CReflectionProbeDataResource" },
-            { ERedExtension.smartobjects, "gameSmartObjectsCompiledResource" },
-            { ERedExtension.null_areas, "worldTrafficNullAreaCollisionResource" },
-            { ERedExtension.psrep, "gamePersistentStateDataResource" },
-            { ERedExtension.streamingsector, "worldStreamingSector" },
-            { ERedExtension.spatial_representation, "worldTrafficPersistentSpatialResource" },
-            { ERedExtension.areas, "gameAreaResource" },
-            { ERedExtension.location, "gameLocationResource" },
-            { ERedExtension.lane_connections, "worldTrafficPersistentLaneConnectionsResource" },
-            { ERedExtension.streamingworld, "worldStreamingWorld" },
-            { ERedExtension.lane_polygons, "worldTrafficPersistentLanePolygonResource" },
-            { ERedExtension.devices, "gameDeviceResource" },
-            { ERedExtension.locopaths, "navLocomotionPathResource" },
-            { ERedExtension.loot, "gameLootResource" },
-            { ERedExtension.geometry_cache, "physicsGeometryCache" },
-            { ERedExtension.traffic_persistent, "worldTrafficPersistentResource" },
-            { ERedExtension.poimappins, "gamePointOfInterestMappinResource" },
-            { ERedExtension.lane_spots, "worldTrafficLanesSpotsResource" },
-            { ERedExtension.mappins, "gameMappinResource" },
-            { ERedExtension.mi, "CMaterialInstance" },
-            { ERedExtension.streamingsector_inplace, "worldStreamingSectorInplaceContent" },
-            { ERedExtension.cfoliage, "worldFoliageCompiledResource" },
-            { ERedExtension.folbrush, "worldFoliageBrush" },
-            { ERedExtension.conversations, "scnInterestingConversationsResource" },
-            { ERedExtension.physicalscene, "CPhysicsDecorationResource" },
-            { ERedExtension.smartobject, "gameSmartObjectResource" },
-            { ERedExtension.animgraph, "animAnimGraph" },
-            { ERedExtension.cminimap, "minimapEncodedShapes" },
-            { ERedExtension.cubemap, "CCubeTexture" },
-            { ERedExtension.lights, "CDistantLightsResource" },
-            { ERedExtension.terrainsetup, "CTerrainSetup" },
-            { ERedExtension.genericanimdb, "animGenericAnimDatabase" },
-            { ERedExtension.inkhud, "inkHudEntriesResource" },
-            { ERedExtension.fb2tl, "worldAutoFoliageMapping" },
-            { ERedExtension.traffic_collisions, "worldTrafficCollisionResource" },
-            { ERedExtension.gidata, "CGIDataResource" },
-            { ERedExtension.cookedanims, "animAnimSetupResource" },
-            { ERedExtension.cookedapp, "appearanceCookedAppearanceData" },
-            { ERedExtension.workspot, "workWorkspotResource" },
-            { ERedExtension.phys, "physicsSystemResource" },
-            { ERedExtension.morphtarget, "MorphTargetMesh" },
-            { ERedExtension.camcurveset, "gameCameraCurveSet" },
-            { ERedExtension.facialcustom, "animFacialCustomizationSet" },
-            { ERedExtension.hitrepresentation, "gameHitRepresentationResource" },
-            { ERedExtension.community, "communityCommunityTemplate" },
-            { ERedExtension.scenerid, "scnRidResource" },
-            { ERedExtension.questphase, "questQuestPhaseResource" },
-            { ERedExtension.gamedef, "gsmGameDefinition" },
-            { ERedExtension.quest, "questQuestResource" },
-            { ERedExtension.inkstyle, "inkStyleResource" },
-            { ERedExtension.audiovehcurveset, "vehicleAudioVehicleCurveSet" },
-            { ERedExtension.journaldesc, "gameJournalDescriptorResource" },
-            { ERedExtension.cooked_mlsetup, "CookedMultilayer_Setup" },
-            { ERedExtension.vehcurveset, "gameVehicleCurveSet" },
-            { ERedExtension.reslist, "redResourceListResource,worldWorldListResource" },
-            { ERedExtension.matlib, "CMaterialLayerLibrary" },
-            { ERedExtension.reps, "CParticleSystem" },
-            { ERedExtension.credits, "inkCreditsResource" },
-            { ERedExtension.inklayers, "inkLayersResource" },
-            { ERedExtension.inkmenu, "inkMenuResource" },
-            { ERedExtension.scenesversions, "scnScenesVersions" },
-            { ERedExtension.foldest, "worldFoliageDestructionResource" },
-            { ERedExtension.physmatlib, "physicsMaterialLibraryResource" },
-            { ERedExtension.bikecurveset, "vehicleBikeCurveSet" },
-            { ERedExtension.vehcommoncurveset, "gameVehicleCommonCurveSet" },
-            { ERedExtension.game, "gsmGameDefinition" },
-            { ERedExtension.journal, "gameJournalResource" },
-            { ERedExtension.lipmap, "animLipsyncMapping" },
-            { ERedExtension.mt, "CMaterialTemplate" },
-            { ERedExtension.ies, "CIESDataResource" },
-            { ERedExtension.remt, "CMaterialTemplate" },
-            { ERedExtension.ccstate, "gameuiCharacterCustomizationPreset" },
-            { ERedExtension.streamingblock, "worldStreamingBlock" },
-
-        };
-
-        private static readonly Dictionary<string, string> s_classToExtensions = new()
-        {
-            { "JsonResource", "json" },
-            { "locVoiceTagListResource", "voicetags" },
-            { "scnSceneResource", "scene" },
-            { "audioCookedMetadataResource", "audio_metadata" },
-            { "CBitmapTexture", "xbm" },
-            { "appearanceAppearanceResource", "app" },
-            { "CurveSet", "curveset" },
-            { "AIbehaviorResource", "behavior" },
-            { "animAnimSet", "anims" },
-            { "CMesh", "w2mesh,mesh" },
-            { "CParticleSystem", "particle,reps" },
-            { "C2dArray", "csv" },
-            { "CHairProfile", "hp" },
-            { "CFoliageProfile", "fp" },
-            { "CSkinProfile", "sp" },
-            { "inkFontFamilyResource", "inkfontfamily" },
-            { "gameEffectSet", "es" },
-            { "Multilayer_LayerTemplate", "mltemplate" },
-            { "AIArchetype", "aiarch" },
-            { "gameuiCharacterCustomizationUiPreset", "charcustpreset" },
-            { "garmentGarmentLayerParams", "garmentlayerparams" },
-            { "worldEffect", "effect" },
-            { "rendFont", "fnt" },
-            { "animRig", "rig" },
-            { "entEntityTemplate", "ent" },
-            { "worldEnvironmentDefinition", "env" },
-            { "DynamicTexture", "dtex" },
-            { "gameuiCharacterCustomizationInfoResource", "inkcharcustomization" },
-            { "CMaterialInstance", "w2mi,mi" },
-            { "inkShapeCollectionResource", "inkshapecollection" },
-            { "inkFullscreenCompositionResource", "inkfullscreencomposition" },
-            { "Multilayer_Mask", "mlmask" },
-            { "animActionAnimDatabase", "actionanimdb" },
-            { "inkanimAnimationLibraryResource", "inkanim" },
-            { "inkTextureAtlas", "inkatlas" },
-            { "inkTypographyResource", "inktypography" },
-            { "AIArchetypeSet", "archetypes" },
-            { "CTextureArray", "texarray" },
-            { "inkGameSettingsResource", "inkgamesettings" },
-            { "worldEnvironmentAreaParameters", "envparam" },
-            { "animFacialSetup", "facialsetup" },
-            { "CCubeTexture", "xcube,cubemap" },
-            { "inkWidgetLibraryResource", "inkwidget" },
-            { "CurveResourceSet", "curveresset" },
-            { "Multilayer_Setup", "mlsetup" },
-            { "CGradient", "gradient" },
-            { "CTextureRegionSet", "regionset" },
-            { "gameinteractionsInteractionDescriptorResource", "interaction" },
-            { "worldAcousticDataResource", "acousticdata" },
-            { "CReflectionProbeDataResource", "envprobe" },
-            { "gameSmartObjectsCompiledResource", "smartobjects" },
-            { "worldTrafficNullAreaCollisionResource", "null_areas" },
-            { "gamePersistentStateDataResource", "psrep" },
-            { "worldStreamingSector", "streamingsector" },
-            { "worldTrafficPersistentSpatialResource", "spatial_representation" },
-            { "gameAreaResource", "areas" },
-            { "gameLocationResource", "location" },
-            { "worldTrafficPersistentLaneConnectionsResource", "lane_connections" },
-            { "worldStreamingWorld", "streamingworld" },
-            { "worldTrafficPersistentLanePolygonResource", "lane_polygons" },
-            { "gameDeviceResource", "devices" },
-            { "navLocomotionPathResource", "locopaths" },
-            { "gameLootResource", "loot" },
-            { "physicsGeometryCache", "geometry_cache" },
-            { "worldTrafficPersistentResource", "traffic_persistent" },
-            { "gamePointOfInterestMappinResource", "poimappins" },
-            { "worldTrafficLanesSpotsResource", "lane_spots" },
-            { "gameMappinResource", "mappins" },
-            { "worldStreamingSectorInplaceContent", "streamingsector_inplace" },
-            { "worldFoliageCompiledResource", "cfoliage" },
-            { "worldFoliageBrush", "folbrush" },
-            { "scnInterestingConversationsResource", "conversations" },
-            { "CPhysicsDecorationResource", "physicalscene" },
-            { "gameSmartObjectResource", "smartobject" },
-            { "animAnimGraph", "animgraph" },
-            { "minimapEncodedShapes", "cminimap" },
-            { "CDistantLightsResource", "lights" },
-            { "CTerrainSetup", "terrainsetup" },
-            { "animGenericAnimDatabase", "genericanimdb" },
-            { "inkHudEntriesResource", "inkhud" },
-            { "worldAutoFoliageMapping", "fb2tl" },
-            { "worldTrafficCollisionResource", "traffic_collisions" },
-            { "CGIDataResource", "gidata" },
-            { "animAnimSetupResource", "cookedanims" },
-            { "appearanceCookedAppearanceData", "cookedapp" },
-            { "workWorkspotResource", "workspot" },
-            { "physicsSystemResource", "phys" },
-            { "MorphTargetMesh", "morphtarget" },
-            { "gameCameraCurveSet", "camcurveset" },
-            { "animFacialCustomizationSet", "facialcustom" },
-            { "gameHitRepresentationResource", "hitrepresentation" },
-            { "communityCommunityTemplate", "community" },
-            { "scnRidResource", "scenerid" },
-            { "questQuestPhaseResource", "questphase" },
-            { "gsmGameDefinition", "gamedef,game" },
-            { "questQuestResource", "quest" },
-            { "inkStyleResource", "inkstyle" },
-            { "vehicleAudioVehicleCurveSet", "audiovehcurveset" },
-            { "gameJournalDescriptorResource", "journaldesc" },
-            { "CookedMultilayer_Setup", "cooked_mlsetup" },
-            { "gameVehicleCurveSet", "vehcurveset" },
-            { "redResourceListResource,worldWorldListResource", "reslist" },
-            { "CMaterialLayerLibrary", "matlib" },
-            { "inkCreditsResource", "credits" },
-            { "inkLayersResource", "inklayers" },
-            { "inkMenuResource", "inkmenu" },
-            { "scnScenesVersions", "scenesversions" },
-            { "worldFoliageDestructionResource", "foldest" },
-            { "physicsMaterialLibraryResource", "physmatlib" },
-            { "vehicleBikeCurveSet", "bikecurveset" },
-            { "gameVehicleCommonCurveSet", "vehcommoncurveset" },
-            { "gameJournalResource", "journal" },
-            { "animLipsyncMapping", "lipmap" },
-            { "CMaterialTemplate", "mt,remt" },
-            { "CIESDataResource", "ies" },
-            { "gameuiCharacterCustomizationPreset", "ccstate" },
-            { "worldStreamingBlock", "streamingblock" },
-            { "inkEngineSettingsResource", "inkenginesettings" },
-
-        };
-
-
-        #region Methods
-
-        /// <summary>
-        ///  Gets the DXGI format for CP77 dds buffers from a given ETextureCompression and ETextureRawFormat
-        /// </summary>
-        /// <param name="compression"></param>
-        /// <param name="rawFormat"></param>
-        /// <param name="logger"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public static DXGI_FORMAT GetDXGIFormat(ETextureCompression compression, ETextureRawFormat rawFormat, ILoggerService logger)
-        {
-            switch (compression)
-            {
-                case ETextureCompression.TCM_QualityR:
-                    return DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM;
-
-                case ETextureCompression.TCM_QualityRG:
-                case ETextureCompression.TCM_Normalmap:
-                    return DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM;
-
-                case ETextureCompression.TCM_QualityColor:
-                    return DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM;
-
-                case ETextureCompression.TCM_DXTNoAlpha:
-                case ETextureCompression.TCM_Normals_DEPRECATED:
-                    return DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM;
-
-                case ETextureCompression.TCM_DXTAlphaLinear:
-                case ETextureCompression.TCM_DXTAlpha:
-                case ETextureCompression.TCM_NormalsHigh_DEPRECATED:
-                    return DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM;
-
-                case ETextureCompression.TCM_None:
-                {
-                    switch (rawFormat)
-                    {
-                        case ETextureRawFormat.TRF_Invalid:
-                        case ETextureRawFormat.TRF_TrueColor:
-                            return DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
-
-                        case ETextureRawFormat.TRF_DeepColor:
-                            return DXGI_FORMAT.DXGI_FORMAT_R10G10B10A2_UNORM;
-
-                        case ETextureRawFormat.TRF_HDRFloat:
-                            return DXGI_FORMAT.DXGI_FORMAT_R32G32B32A32_FLOAT;
-
-                        case ETextureRawFormat.TRF_HDRHalf:
-                            return DXGI_FORMAT.DXGI_FORMAT_R16G16B16A16_FLOAT;
-
-                        case ETextureRawFormat.TRF_HDRFloatGrayscale:
-                            return DXGI_FORMAT.DXGI_FORMAT_R16_FLOAT;
-
-                        case ETextureRawFormat.TRF_R8G8:
-                            return DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM;
-
-                        case ETextureRawFormat.TRF_Grayscale:
-                            return DXGI_FORMAT.DXGI_FORMAT_R8_UINT;
-
-                        case ETextureRawFormat.TRF_AlphaGrayscale:
-                            return DXGI_FORMAT.DXGI_FORMAT_A8_UNORM;
-
-                        case ETextureRawFormat.TRF_Grayscale_Font:
-                        //throw new NotImplementedException($"{nameof(GetDXGIFormat)}: TRF_Grayscale_Font");
-                        case ETextureRawFormat.TRF_R32UI:
-                            //return DXGI_FORMAT.R32_UINT;
-                            //throw new NotImplementedException($"{nameof(GetDXGIFormat)}: TRF_R32UI");
-                            logger.Warning($"Unknown texture format: {rawFormat.ToString()}");
-                            return DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
-                        default:
-                            throw new ArgumentOutOfRangeException(nameof(rawFormat), rawFormat, null);
-                    }
-                }
-
-                case ETextureCompression.TCM_RGBE:
-                case ETextureCompression.TCM_Normals:
-                case ETextureCompression.TCM_NormalsHigh:
-                case ETextureCompression.TCM_NormalsGloss_DEPRECATED:
-                case ETextureCompression.TCM_NormalsGloss:
-                case ETextureCompression.TCM_TileMap:
-                case ETextureCompression.TCM_HalfHDR_Unsigned:
-                case ETextureCompression.TCM_HalfHDR:
-                case ETextureCompression.TCM_HalfHDR_Signed:
-                case ETextureCompression.TCM_Max:
-                {
-                    logger.Warning($"Unknown texture compression format: {compression.ToString()}");
-                    return DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM;
-                }
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(compression), compression, null);
-            }
-        }
-
-        /// <summary>
-        /// Deprecated
-        /// </summary>
-        /// <param name="DXGIFormat"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public static (ETextureCompression, ETextureRawFormat) GetRedFormatsFromDxgiFormat(DXGI_FORMAT DXGIFormat)
-        {
-            switch (DXGIFormat)
-            {
-                case DXGI_FORMAT.DXGI_FORMAT_R32G32B32A32_FLOAT:
-                    return (ETextureCompression.TCM_None, ETextureRawFormat.TRF_HDRFloat);
-
-                case DXGI_FORMAT.DXGI_FORMAT_R16G16B16A16_FLOAT:
-                    return (ETextureCompression.TCM_None, ETextureRawFormat.TRF_HDRHalf);
-
-                case DXGI_FORMAT.DXGI_FORMAT_R10G10B10A2_UNORM:
-                    return (ETextureCompression.TCM_None, ETextureRawFormat.TRF_DeepColor);
-
-                case DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM:
-                    throw new NotImplementedException($"{nameof(GetRedFormatsFromDxgiFormat)}: R8G8B8A8_UNORM");
-                case DXGI_FORMAT.DXGI_FORMAT_R32_UINT:
-                    throw new NotImplementedException($"{nameof(GetRedFormatsFromDxgiFormat)}: R32_UINT");
-                case DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM:
-                    return (ETextureCompression.TCM_None, ETextureRawFormat.TRF_R8G8);
-
-                case DXGI_FORMAT.DXGI_FORMAT_R16_FLOAT:
-                    return (ETextureCompression.TCM_None, ETextureRawFormat.TRF_HDRFloatGrayscale);
-
-                case DXGI_FORMAT.DXGI_FORMAT_R8_UINT:
-                    return (ETextureCompression.TCM_None, ETextureRawFormat.TRF_Grayscale);
-
-                case DXGI_FORMAT.DXGI_FORMAT_A8_UNORM:
-                    return (ETextureCompression.TCM_None, ETextureRawFormat.TRF_AlphaGrayscale);
-
-                case DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM:
-                    return (ETextureCompression.TCM_DXTNoAlpha, ETextureRawFormat.TRF_Invalid);
-
-                case DXGI_FORMAT.DXGI_FORMAT_BC2_UNORM:
-                    throw new NotImplementedException($"{nameof(GetRedFormatsFromDxgiFormat)}: BC2_UNORM");
-                case DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM:
-                    return (ETextureCompression.TCM_DXTAlpha, ETextureRawFormat.TRF_Invalid);
-
-                case DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM:
-                    return (ETextureCompression.TCM_QualityR, ETextureRawFormat.TRF_Invalid);
-
-                case DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM:
-                    return (ETextureCompression.TCM_Normalmap, ETextureRawFormat.TRF_Invalid);
-
-                case DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM:
-                    return (ETextureCompression.TCM_QualityColor, ETextureRawFormat.TRF_Invalid);
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(DXGIFormat), DXGIFormat, null);
-            }
-        }
-
-        public static (ETextureCompression, ETextureRawFormat)
-            GetRedFormatsFromTextureGroup(GpuWrapApieTextureGroup textureGroup)
-        {
-            switch (textureGroup)
-            {
-                case GpuWrapApieTextureGroup.TEXG_Generic_Grayscale:
-                    return (ETextureCompression.TCM_QualityR, ETextureRawFormat.TRF_Invalid);
-
-                case GpuWrapApieTextureGroup.TEXG_Generic_Normal: //TODO: support TCM_Normals_DEPRECATED?
-                    return (ETextureCompression.TCM_Normalmap, ETextureRawFormat.TRF_Invalid);
-
-                case GpuWrapApieTextureGroup.TEXG_Generic_Color:
-                case GpuWrapApieTextureGroup.TEXG_Generic_Data:
-                case GpuWrapApieTextureGroup.TEXG_Generic_UI:
-                case GpuWrapApieTextureGroup.TEXG_Generic_Font:
-                case GpuWrapApieTextureGroup.TEXG_Generic_LUT:
-                case GpuWrapApieTextureGroup.TEXG_Generic_MorphBlend:
-                case GpuWrapApieTextureGroup.TEXG_Multilayer_Color:
-                case GpuWrapApieTextureGroup.TEXG_Multilayer_Normal:
-                case GpuWrapApieTextureGroup.TEXG_Multilayer_Grayscale:
-                case GpuWrapApieTextureGroup.TEXG_Multilayer_Microblend:
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(textureGroup), textureGroup, null);
-            }
-        }
-
-
-
-
-        #endregion Methods
+        return null;
     }
+
+    public static ERedExtension[] GetExtensionFromResourceClass(string resourceClass)
+    {
+        var ext = new List<ERedExtension>();
+        foreach (var fileType in FileTypeHelper.FileTypes)
+        {
+            if (fileType.RootType.Name == resourceClass)
+            {
+                ext.Add(fileType.Extension);
+            }
+        }
+
+        return ext.ToArray();
+    }
+
+    /// <summary>
+    /// Sets RawFormat, Compression, IsGamma, GenerateMipMaps and IsStreamable from the TextureGroup
+    /// </summary>
+    /// <param name="textureGroup"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
+    public static XbmImportArgs TextureSetupFromTextureGroup(GpuWrapApieTextureGroup textureGroup)
+    {
+        var outSetup = new XbmImportArgs(textureGroup);
+        
+
+        switch (textureGroup)
+        {
+            case GpuWrapApieTextureGroup.TEXG_Generic_Color:
+            case GpuWrapApieTextureGroup.TEXG_Multilayer_Color:
+            case GpuWrapApieTextureGroup.TEXG_Multilayer_Microblend:
+                outSetup.RawFormat = ETextureRawFormat.TRF_TrueColor;
+                outSetup.Compression = ETextureCompression.TCM_QualityColor;
+                outSetup.GenerateMipMaps = true;
+                outSetup.IsStreamable = true;
+                break;
+
+            case GpuWrapApieTextureGroup.TEXG_Generic_Normal:
+            case GpuWrapApieTextureGroup.TEXG_Multilayer_Normal:
+                outSetup.RawFormat = ETextureRawFormat.TRF_TrueColor;
+                outSetup.Compression = ETextureCompression.TCM_Normalmap;
+                outSetup.GenerateMipMaps = true;
+                outSetup.IsStreamable = true;
+                break;
+
+            case GpuWrapApieTextureGroup.TEXG_Generic_Data:
+                outSetup.RawFormat = ETextureRawFormat.TRF_TrueColor;
+                outSetup.Compression = ETextureCompression.TCM_None;
+                outSetup.GenerateMipMaps = false;
+                outSetup.IsStreamable = true;
+                break;
+
+            case GpuWrapApieTextureGroup.TEXG_Generic_UI:
+                outSetup.RawFormat = ETextureRawFormat.TRF_TrueColor;
+                outSetup.Compression = ETextureCompression.TCM_DXTAlpha;
+                outSetup.GenerateMipMaps = false;
+                outSetup.IsStreamable = false;
+                break;
+
+            case GpuWrapApieTextureGroup.TEXG_Generic_Grayscale:
+            case GpuWrapApieTextureGroup.TEXG_Multilayer_Grayscale:
+                outSetup.RawFormat = ETextureRawFormat.TRF_Grayscale;
+                outSetup.Compression = ETextureCompression.TCM_QualityR;
+                outSetup.GenerateMipMaps = true;
+                outSetup.IsStreamable = true;
+                break;
+
+            case GpuWrapApieTextureGroup.TEXG_Generic_Font:
+                outSetup.RawFormat = ETextureRawFormat.TRF_Grayscale_Font;
+                outSetup.Compression = ETextureCompression.TCM_None;
+                outSetup.GenerateMipMaps = false;
+                outSetup.IsStreamable = false;
+                break;
+
+            case GpuWrapApieTextureGroup.TEXG_Generic_LUT:
+                outSetup.RawFormat = ETextureRawFormat.TRF_DeepColor;
+                outSetup.Compression = ETextureCompression.TCM_None;
+                outSetup.GenerateMipMaps = false;
+                outSetup.IsStreamable = false;
+                break;
+            case GpuWrapApieTextureGroup.TEXG_Generic_MorphBlend:
+                break;
+            default:
+                throw new ArgumentException("Unknown texture group");
+        }
+
+        return outSetup;
+    }
+
+    /// <summary>
+    /// Sets RawFormat, Compression and PixelSize from DXGI_FORMAT
+    /// </summary>
+    /// <param name="texFormat"></param>
+    /// <returns></returns>
+    public static (ETextureRawFormat, ETextureCompression, int) MapGpuToEngineTextureFormat(DXGI_FORMAT texFormat)
+    {
+        ETextureRawFormat outRawFormat;
+        ETextureCompression outCompression;
+        int outPixelSize;
+
+#pragma warning disable IDE0010 // Add missing cases
+        switch (texFormat)
+        {
+            case DXGI_FORMAT.DXGI_FORMAT_R32G32B32A32_FLOAT:
+                outRawFormat = ETextureRawFormat.TRF_HDRFloat;
+                outCompression = ETextureCompression.TCM_HalfHDR_Unsigned;
+                outPixelSize = 16;
+                break;
+
+            case DXGI_FORMAT.DXGI_FORMAT_R16G16B16A16_FLOAT:
+                outRawFormat = ETextureRawFormat.TRF_HDRHalf;
+                outCompression = ETextureCompression.TCM_HalfHDR_Unsigned;
+                outPixelSize = 8;
+                break;
+
+            case DXGI_FORMAT.DXGI_FORMAT_R16G16B16A16_UNORM:
+                outRawFormat = ETextureRawFormat.TRF_DeepColor;
+                outCompression = ETextureCompression.TCM_QualityColor;
+                outPixelSize = 8;
+                break;
+
+            case DXGI_FORMAT.DXGI_FORMAT_R32_FLOAT:
+                outRawFormat = ETextureRawFormat.TRF_HDRFloatGrayscale;
+                outCompression = ETextureCompression.TCM_QualityR;
+                outPixelSize = 4;
+                break;
+
+            case DXGI_FORMAT.DXGI_FORMAT_A8_UNORM:
+                //case DXGI_FORMAT.L8_UNORM:    //TODO
+                // Load as gray scale image
+                outRawFormat = ETextureRawFormat.TRF_Grayscale;
+                outCompression = ETextureCompression.TCM_QualityR;
+                outPixelSize = 1;
+                break;
+
+            case DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM:
+                outRawFormat = ETextureRawFormat.TRF_TrueColor;
+                outCompression = ETextureCompression.TCM_QualityColor;
+                outPixelSize = 4;
+                break;
+
+            case DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM: //do I need this?
+                outRawFormat = ETextureRawFormat.TRF_R8G8;
+                outCompression = ETextureCompression.TCM_None;
+                outPixelSize = 2;
+                break;
+
+            default:
+                // Load as True Color image
+                outRawFormat = ETextureRawFormat.TRF_TrueColor;
+                outCompression = ETextureCompression.TCM_QualityColor;
+                outPixelSize = 4;
+                break;
+        }
+#pragma warning restore IDE0010 // Add missing cases
+
+        return (outRawFormat, outCompression, outPixelSize);
+    }
+
+    public static DXGI_FORMAT GetDXGIFormat(ETextureCompression compression, ETextureRawFormat rawFormat, bool isGamma)
+    {
+        return compression switch
+        {
+            ETextureCompression.TCM_None => rawFormat switch
+            {
+                //case ETextureRawFormat.TRF_Invalid:
+                //    return DXGI_FORMAT.R8G8B8A8_UNORM;
+                ETextureRawFormat.TRF_TrueColor => isGamma ? DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM,
+                ETextureRawFormat.TRF_Grayscale => DXGI_FORMAT.DXGI_FORMAT_R8_UNORM,
+                ETextureRawFormat.TRF_Grayscale_Font => DXGI_FORMAT.DXGI_FORMAT_A8_UNORM,
+                ETextureRawFormat.TRF_HDRFloat => DXGI_FORMAT.DXGI_FORMAT_R32G32B32A32_FLOAT,
+                ETextureRawFormat.TRF_HDRHalf => DXGI_FORMAT.DXGI_FORMAT_R16G16B16A16_FLOAT,
+                ETextureRawFormat.TRF_DeepColor => DXGI_FORMAT.DXGI_FORMAT_R16G16B16A16_UNORM,
+                ETextureRawFormat.TRF_HDRFloatGrayscale => DXGI_FORMAT.DXGI_FORMAT_R32_FLOAT,
+                ETextureRawFormat.TRF_R8G8 => DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM,
+                ETextureRawFormat.TRF_R32UI => DXGI_FORMAT.DXGI_FORMAT_R32_UINT,
+
+                ETextureRawFormat.TRF_Invalid => throw new NotImplementedException(),
+                ETextureRawFormat.TRF_Max => throw new NotImplementedException(),
+                _ => throw new ArgumentOutOfRangeException(),
+            },
+            ETextureCompression.TCM_DXTNoAlpha => isGamma ? DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM,
+            ETextureCompression.TCM_DXTAlpha => isGamma ? DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM,
+            ETextureCompression.TCM_DXTAlphaLinear => isGamma ? DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM,
+            ETextureCompression.TCM_RGBE => DXGI_FORMAT.DXGI_FORMAT_R32G32B32A32_FLOAT,
+            ETextureCompression.TCM_Normalmap => DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM,
+            ETextureCompression.TCM_Normals_DEPRECATED => DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM,
+            ETextureCompression.TCM_NormalsHigh_DEPRECATED => DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM,
+            ETextureCompression.TCM_NormalsGloss_DEPRECATED => DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM,
+            ETextureCompression.TCM_QualityR => DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM,
+            ETextureCompression.TCM_QualityRG => DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM,
+            ETextureCompression.TCM_QualityColor => isGamma ? DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM,
+            ETextureCompression.TCM_HalfHDR_Unsigned => DXGI_FORMAT.DXGI_FORMAT_BC6H_UF16,
+            ETextureCompression.TCM_HalfHDR_Signed => DXGI_FORMAT.DXGI_FORMAT_BC6H_SF16,
+
+            ETextureCompression.TCM_TileMap => throw new NotImplementedException(),
+            ETextureCompression.TCM_Max => throw new NotImplementedException(),
+            ETextureCompression.TCM_Normals => throw new NotImplementedException(),
+            ETextureCompression.TCM_NormalsHigh => throw new NotImplementedException(),
+            ETextureCompression.TCM_NormalsGloss => throw new NotImplementedException(),
+            ETextureCompression.TCM_HalfHDR => throw new NotImplementedException(),
+            _ => throw new ArgumentOutOfRangeException(),
+        };
+    }
+
+    private static readonly char[] s_digitChars = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+
+    /// <summary>
+    /// Tries to guess the texture's type from its name by using CDPR's naming conventions
+    /// </summary>
+    /// <param name="fileName">Name of file without extension</param>
+    /// <returns>the GpuWrapApieTextureGroup</returns>
+    public static GpuWrapApieTextureGroup GetTextureGroupFromFileName(string fileName)
+    {
+        //remove trailing digits - filenames like _n01.xbm  
+        fileName = fileName.TrimEnd(s_digitChars);
+
+        return fileName switch
+        {
+            _ when fileName.EndsWith("_n") || fileName.EndsWith("nm") => GpuWrapApieTextureGroup.TEXG_Generic_Normal,
+            _ when fileName.EndsWith("_r") || fileName.EndsWith("_m") => GpuWrapApieTextureGroup.TEXG_Generic_Grayscale,
+            _ when fileName.EndsWith("_data") => GpuWrapApieTextureGroup.TEXG_Generic_Data,
+            _ when fileName.EndsWith("_lut") => GpuWrapApieTextureGroup.TEXG_Generic_LUT,
+            _ => GpuWrapApieTextureGroup.TEXG_Generic_Color
+        };
+    }
+    
+    /// <summary>
+    /// Tries to guess if PremultiplyAlpha should be checked from file name
+    /// </summary>
+    /// <param name="fileName">Name of file without extension</param>
+    /// <returns>true/false for assignment to import settings</returns>
+    public static bool ShouldPremultiplyAlpha(string fileName)
+    {
+        //remove trailing digits - filenames like _n01.xbm - and convert to lower case
+        fileName = fileName.TrimEnd(s_digitChars).ToLower();
+
+        // corresponds to greyscale textures - roughness and maps
+        if (fileName.EndsWith("_r") || fileName.EndsWith("_m"))
+        {
+            return false;
+        }
+
+        // what else could we possibly check for?
+        var partialsToCheck = new List<string> { "decal", "icon", "icons", "overlay", "alpha" };
+
+        // check if we have a match (filename has already been toLower)
+        return partialsToCheck.Any(partial => fileName.Contains($"_{partial}") || fileName.Contains($"{partial}_"));
+    }
+
 }

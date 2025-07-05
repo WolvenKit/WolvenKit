@@ -1,42 +1,50 @@
-using System.Reactive;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using ReactiveUI;
-using WolvenKit.Models.Docking;
+using System;
+using CommunityToolkit.Mvvm.Input;
+using WolvenKit.App.Models.Docking;
 
-namespace WolvenKit.ViewModels.Documents
+namespace WolvenKit.App.ViewModels.Documents;
+
+public class SaveAsParameters
 {
-    public interface IDocumentViewModel : IDockElement
+    public object OriginalObject { get; set; }
+    public string AbsoluteFilePath { get; set; }
+    public bool SkipOnSaveHook { get; set; }
+
+    public SaveAsParameters(object originalObject, string absoluteFilePath, bool skipOnSaveHook = false)
     {
-        #region Properties
-
-        /// <summary>
-        /// Gets the current path of the file being managed in this document viewmodel.
-        /// </summary>
-        string FilePath { get; set; }
-
-        /// <summary>
-        /// Gets a command to save this document's content into another file in the file system.
-        /// </summary>
-        ICommand SaveAsCommand { get; }
-
-        /// <summary>
-        /// Gets a command to save this document's content into the file system.
-        /// </summary>
-        ICommand SaveCommand { get; }
-
-        public ReactiveCommand<Unit, Unit> Close { get; set; }
-
-        string ContentId { get; }
-
-        #endregion Properties
-
-        #region Methods
-
-        Task<bool> OpenFileAsync(string path);
-
-        bool OpenFile(string path);
-
-        #endregion Methods
+        OriginalObject = originalObject;
+        AbsoluteFilePath = absoluteFilePath;
+        SkipOnSaveHook = skipOnSaveHook;
     }
+}
+
+public interface IDocumentViewModel : IDockElement
+{
+    /// <summary>
+    /// Gets the current path of the file being managed in this document viewmodel.
+    /// </summary>
+    string? FilePath { get; set; }
+    bool IsReadOnly { get; set; }
+
+    /// <summary>
+    /// Set in constructor to keep track of which tabs were opened most recently
+    /// </summary>
+    DateTime OpenedAt { get; init; }
+
+    public bool IsDirty
+    {
+        get;
+    }
+    
+    DateTime LastWriteTime { get; }
+
+    IAsyncRelayCommand<object> SaveCommand { get; }
+    IRelayCommand<SaveAsParameters> SaveAsCommand { get; }
+    
+    //public ICommand Close { get; set; }
+
+    string ContentId { get; }
+
+    bool IsInitialized();
+    bool Reload(bool force);
 }

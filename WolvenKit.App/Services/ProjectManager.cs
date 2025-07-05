@@ -1,224 +1,308 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reactive;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using WolvenKit.App.Models.ProjectManagement;
+using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.Common;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.ProjectManagement;
-using WolvenKit.ProjectManagement.Project;
+using WolvenKit.Core.Interfaces;
 
-namespace WolvenKit.Functionality.Services
+namespace WolvenKit.App.Services;
+
+/// <summary>
+/// Singleton Service
+/// </summary>
+public partial class ProjectManager : ObservableObject, IProjectManager
 {
-    /// <summary>
-    /// Singleton Service
-    /// </summary>
-    public class ProjectManager : ReactiveObject, IProjectManager
+    private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
+    private readonly INotificationService _notificationService;
+    private readonly ILoggerService _loggerService;
+    private readonly IHashService _hashService;
+    private readonly IArchiveManager _archiveManager;
+    private readonly ISettingsManager _settingsManager;
+
+    public ProjectManager(
+        IRecentlyUsedItemsService recentlyUsedItemsService,
+        INotificationService notificationService,
+        ILoggerService loggerService,
+        IHashService hashService,
+        IArchiveManager archiveManager,
+        ISettingsManager settingsManager
+    )
     {
-        private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
-        private readonly INotificationService _notificationService;
-        private readonly ILoggerService _loggerService;
+        _recentlyUsedItemsService = recentlyUsedItemsService;
+        _notificationService = notificationService;
+        _loggerService = loggerService;
+        _hashService = hashService;
+        _archiveManager = archiveManager;
+        _settingsManager = settingsManager;
+    }
 
-        public ProjectManager(
-            IRecentlyUsedItemsService recentlyUsedItemsService,
-            INotificationService notificationService,
-            ILoggerService loggerService
-        )
+    #region properties
+
+    [ObservableProperty]
+    private bool _isProjectLoaded;
+
+    [ObservableProperty]
+    private Cp77Project? _activeProject;
+
+    partial void OnActiveProjectChanging(Cp77Project? value)
+    {
+        IsProjectLoaded = false;
+        if (ActiveProject == null)
         {
-            _recentlyUsedItemsService = recentlyUsedItemsService;
-            _notificationService = notificationService;
-            _loggerService = loggerService;
-
-            this.WhenAnyValue(x => x.ActiveProject).Subscribe(async _ =>
-            {
-                if (IsProjectLoaded)
-                {
-                    await SaveAsync();
-                }
-            });
+            return;
         }
 
-        #region properties
+        Save();
+    }
 
-        [Reactive] public bool IsProjectLoaded { get; set; }
+    #endregion
 
-        [Reactive] public EditorProject ActiveProject { get; set; }
+    #region commands
 
-        #endregion
+    public AsyncRelayCommand<string>? OpenProjectCommand { get; set; }
 
-        #region commands
+    #endregion
 
-        public ReactiveCommand<string, Unit> OpenProjectCommand { get; set; }
+    #region methods
 
-
-        #endregion
-
-
-
-
-
-
-
-        #region methods
-
-        public async Task<bool> SaveAsync() => await Save();
-
-        public async Task<bool> LoadAsync(string location)
+    public async Task<Cp77Project?> LoadAsync(string location)
+    {
+        await ReadFromLocationAsync(location).ContinueWith(x =>
         {
-            IsProjectLoaded = false;
-            await ReadFromLocationAsync(location).ContinueWith(_ =>
+            if (x is not { IsCompletedSuccessfully: true, Result: not null })
             {
-                if (_.IsCompletedSuccessfully)
-                {
-                    if (_.Result == null)
-                    {
-                    }
-                    else
-                    {
-                        ActiveProject = _.Result;
-                        IsProjectLoaded = true;
+                return;
+            }
 
-                        if (_recentlyUsedItemsService.Items.Items.All(item => item.Name != location))
-                        {
-                            _recentlyUsedItemsService.AddItem(new RecentlyUsedItemModel(location, DateTime.Now, DateTime.Now));
-                        }
-                    }
-                }
-                else
-                {
+         
+            ActiveProject = x.Result;
+            _archiveManager.ProjectArchive = x.Result.AsArchive();
+            IsProjectLoaded = true;
 
-                }
-            });
+            var recentItem = _recentlyUsedItemsService.Items.Items.FirstOrDefault(item => item.Name == location);
+            if (recentItem == null)
+            {
+                recentItem = new RecentlyUsedItemModel(location, DateTime.Now, DateTime.Now);
+                _recentlyUsedItemsService.AddItem(recentItem);
+            }
+            else
+            {
+                recentItem.LastOpened = DateTime.Now;
+            }
+
+            _settingsManager.LastUsedProjectPath = x.Result.Location;
+
+        });
 
 
-            return true;
+        return ActiveProject;
+    }
+
+    private async Task<Cp77Project?> ReadFromLocationAsync(string location)
+    {
+        try
+        {
+            FileInfo fi = new(location);
+            if (!fi.Exists)
+            {
+                return null;
+            }
+
+            var project = fi.Extension switch
+            {
+                Cp77Project.ProjectFileExtension => await Load(location),
+                _ => null
+            };
+
+            return project;
+        }
+        catch (IOException ex)
+        {
+            _notificationService.Error(ex.Message);
         }
 
-        private async Task<EditorProject> ReadFromLocationAsync(string location)
+        return null;
+    }
+
+    private async Task<Cp77Project?> Load(string path)
+    {
+        try
         {
-            try
+            await using FileStream lf = new(path, FileMode.Open, FileAccess.Read);
+            XmlSerializer ser = new(typeof(CP77Mod));
+            if (ser.Deserialize(lf) is not CP77Mod obj)
             {
-                var fi = new FileInfo(location);
-                if (!fi.Exists)
-                {
-                    return null;
-                }
-
-                var project = fi.Extension switch
-                {
-                    //".w3modproj" => await Load<Tw3Project>(location),
-                    ".cpmodproj" => await Load<Cp77Project>(location),
-                    _ => null
-                };
-
-                return await Task.FromResult(project);
-            }
-            catch (IOException ex)
-            {
-                _notificationService.Error(ex.Message);
+                return null;
             }
 
+            if (obj.Name is null)
+            {
+                _loggerService.Error($"Failed to load project: project has no name");
+                return null;
+            }
+
+            obj.ModName ??= obj.Name;
+
+            var openProjectFiles =
+                (obj.OpenProjectFiles ?? []).Distinct().ToDictionary(x => DateTime.Now, x => x);
+            Cp77Project project = new(path, obj.Name, obj.ModName, openProjectFiles)
+            {
+                Author = obj.Author,
+                Email = obj.Email,
+                Description = obj.Description,
+                Version = obj.Version,
+            };
+
+            if (_hashService is HashServiceExt hashService)
+            {
+                hashService.LoadProjectCache(project);
+            }
+
+            // fix legacy folders
+            MoveLegacyFolder(new DirectoryInfo(Path.Combine(project.FileDirectory, "tweaks")), project);
+            MoveLegacyFolder(new DirectoryInfo(Path.Combine(project.FileDirectory, "scripts")), project);
+            MoveLegacyFolder(new DirectoryInfo(Path.Combine(project.FileDirectory, "archiveXL")), project);
+
+            // fix legacy yaml tweaks
+            MoveLegacyYamlTweaks(project);
+
+            return project;
+        }
+        catch (Exception e)
+        {
+            _loggerService.Error($"Failed to load project.");
+            _loggerService.Error(e);
             return null;
         }
+    }
 
-        private async Task<EditorProject> Load<T>(string path) where T : EditorProject
+    private void MoveLegacyYamlTweaks(Cp77Project project)
+    {
+        var yamlFiles = Directory.GetFiles(project.ResourcesDirectory, "*.yaml", SearchOption.TopDirectoryOnly);
+        foreach (var file in yamlFiles)
         {
+            var fileName = Path.GetFileName(file);
+            var destPath = Path.Combine(project.ResourceTweakDirectory, fileName);
             try
             {
-                await using var lf = new FileStream(path, FileMode.Open, FileAccess.Read);
-                var ser = new XmlSerializer(typeof(CP77Mod));
-                if (ser.Deserialize(lf) is not CP77Mod obj)
-                {
-                    return null;
-                }
-
-                //if (typeof(T) == typeof(Tw3Project))
-                //{
-                //    return new Tw3Project(path)
-                //    {
-                //        Author = obj.Author,
-                //        Email = obj.Email,
-                //        Name = obj.Name,
-                //        Version = obj.Version,
-                //    };
-                //}
-                /*else*/
-                if (typeof(T) == typeof(Cp77Project))
-                {
-                    return new Cp77Project(path)
-                    {
-                        Author = obj.Author,
-                        Email = obj.Email,
-                        Name = obj.Name,
-                        Version = obj.Version,
-                    };
-                }
-                return null;
+                File.Move(file, destPath);
+                _loggerService.Info($"Yaml tweak file was moved to the new location: {fileName}");
             }
             catch (Exception e)
             {
-                _loggerService.Error($"Failed to load project.");
-                _loggerService.Error(e);
-                return null;
+                _loggerService.Error($"Could not move file. Error: {e}");
             }
-        }
-
-        private async Task<bool> Save()
-        {
-            try
-            {
-                if (!Directory.Exists(ActiveProject.ProjectDirectory))
-                {
-                    Directory.CreateDirectory(ActiveProject.ProjectDirectory);
-                }
-
-                await using var fs = new FileStream(ActiveProject.Location, FileMode.Create, FileAccess.Write);
-                var ser = new XmlSerializer(typeof(CP77Mod));
-                ser.Serialize(fs, new CP77Mod(ActiveProject));
-
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error($"Failed to save project");
-                _loggerService.Error(e);
-                return false;
-            }
-
-            return true;
-        }
-
-        #endregion
-
-
-
-
-
-
-
-
-        public class CP77Mod
-        {
-            public CP77Mod()
-            {
-
-            }
-            public CP77Mod(EditorProject project)
-            {
-                Author = project.Author;
-                Email = project.Email;
-                Name = project.Name;
-                Version = project.Version;
-            }
-
-            public string Author { get; set; }
-
-            public string Email { get; set; }
-
-            public string Name { get; set; }
-
-            public string Version { get; set; }
+            
         }
     }
+
+    private void MoveLegacyFolder(DirectoryInfo dir, Cp77Project result)
+    {
+        if (dir.Exists)
+        {
+            var files = dir.GetFiles("*", SearchOption.AllDirectories);
+            foreach (var f in files)
+            {
+                try
+                {
+                    var relPath = Path.GetRelativePath(dir.FullName, f.FullName);
+                    f.MoveTo(Path.Combine(result.ResourcesDirectory, relPath));
+                }
+                catch (Exception)
+                {
+                    _loggerService.Error($"Could not move {f.FullName}");
+                }
+            }
+
+            try
+            {
+                dir.Delete();
+            }
+            catch (Exception)
+            {
+                _loggerService.Error($"Could not delete {dir.FullName}");
+            }
+
+        }
+    }
+
+    public async Task<bool> SaveAsync()
+    {
+        if (ActiveProject is null)
+        {
+            return false;
+        }
+
+        try
+        {
+            if (!Directory.Exists(ActiveProject.ProjectDirectory))
+            {
+                Directory.CreateDirectory(ActiveProject.ProjectDirectory);
+            }
+
+            await using FileStream fs = new(ActiveProject.Location, FileMode.Create, FileAccess.Write);
+            XmlSerializer ser = new(typeof(CP77Mod));
+            ser.Serialize(fs, new CP77Mod(ActiveProject));
+
+            if (_hashService is HashServiceExt hashService)
+            {
+                hashService.SaveProjectCache(ActiveProject);
+            }
+
+            await fs.FlushAsync();
+        }
+        catch (Exception e)
+        {
+            _loggerService.Error($"Failed to save project");
+            _loggerService.Error(e);
+            return false;
+        }
+
+        return true;
+    }
+    
+
+    public bool Save()
+    {
+        if (ActiveProject is null)
+        {
+            return false;
+        }
+
+        try
+        {
+            if (!Directory.Exists(ActiveProject.ProjectDirectory))
+            {
+                Directory.CreateDirectory(ActiveProject.ProjectDirectory);
+            }
+
+            using FileStream fs = new(ActiveProject.Location, FileMode.Create, FileAccess.Write);
+            XmlSerializer ser = new(typeof(CP77Mod));
+            ser.Serialize(fs, new CP77Mod(ActiveProject));
+
+            if (_hashService is HashServiceExt hashService)
+            {
+                hashService.SaveProjectCache(ActiveProject);
+            }
+
+            fs.Flush();
+        }
+        catch (Exception e)
+        {
+            _loggerService.Error($"Failed to save project");
+            _loggerService.Error(e);
+            return false;
+        }
+
+        return true;
+    }
+
+    #endregion
 }

@@ -1,0 +1,20 @@
+<UserControl
+    x:Class="WolvenKit.Views.Editors.RedVectorColorEditor"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WolvenKit.Views.Editors"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    mc:Ignorable="d"
+    d:DesignWidth="400"
+    d:DesignHeight="64">
+    <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedVectorColorEditor}}}">
+        <syncfusion:ColorPickerPalette
+            Margin="{DynamicResource WolvenKitMarginTiny}"
+            syncfusion:FocusManagerHelper.FocusedElement="True"
+            GenerateThemeVariants="False"
+            SelectedCommand="{Binding SelectedVectorColorCommand}"
+            Color="{Binding Color}" />
+    </Grid>
+</UserControl>

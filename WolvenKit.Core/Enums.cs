@@ -21,8 +21,11 @@ namespace WolvenKit.Common
     public enum EWolvenKitFile
     {
         Cr2w,
-        Redscript,
-        Tweak
+        TweakXl,
+        ArchiveXl,
+        WScript,
+        RedScript,
+        CETLua
     }
 
     public enum ERedScriptExtension
@@ -34,8 +37,13 @@ namespace WolvenKit.Common
 
     public enum ETweakExtension
     {
-        tweak,
-        yaml
+        yaml,
+        yml
+    }
+
+    public enum EWScriptExtension
+    {
+        wscript
     }
 
     public enum EUpdateChannel
@@ -47,7 +55,7 @@ namespace WolvenKit.Common
     public enum ETextConvertFormat
     {
         json,
-        xml
+        //xml
     }
 
     public enum EVanillaArchives
@@ -86,141 +94,6 @@ namespace WolvenKit.Common
         memoryresident_1_general
     }
 
-    public enum ERedExtension
-    {
-        acousticdata,
-        actionanimdb,
-        aiarch,
-        animgraph,
-        anims,
-        app,
-        archetypes,
-        areas,
-        audio_metadata,
-        audiovehcurveset,
-        behavior,
-        bikecurveset,
-        bk2,
-        bnk,
-        camcurveset,
-        ccstate,
-        cfoliage,
-        charcustpreset,
-        cminimap,
-        community,
-        conversations,
-        cooked_mlsetup,
-        cookedanims,
-        cookedapp,
-        credits,
-        csv,
-        cubemap,
-        curveresset,
-        curveset,
-        dat,
-        devices,
-        dtex,
-        effect,
-        ent,
-        env,
-        envparam,
-        envprobe,
-        es,
-        facialcustom,
-        facialsetup,
-        fb2tl,
-        fnt,
-        folbrush,
-        foldest,
-        fp,
-        game,
-        gamedef,
-        garmentlayerparams,
-        genericanimdb,
-        geometry_cache,
-        gidata,
-        gradient,
-        hitrepresentation,
-        hp,
-        ies,
-        inkanim,
-        inkatlas,
-        inkcharcustomization,
-        inkenginesettings,
-        inkfontfamily,
-        inkfullscreencomposition,
-        inkgamesettings,
-        inkhud,
-        inklayers,
-        inkmenu,
-        inkshapecollection,
-        inkstyle,
-        inktypography,
-        inkwidget,
-        interaction,
-        journal,
-        journaldesc,
-        json,
-        lane_connections,
-        lane_polygons,
-        lane_spots,
-        lights,
-        lipmap,
-        location,
-        locopaths,
-        loot,
-        mappins,
-        matlib,
-        mesh,
-        mi,
-        mlmask,
-        mlsetup,
-        mltemplate,
-        morphtarget,
-        mt,
-        null_areas,
-        opusinfo,
-        opuspak,
-        particle,
-        phys,
-        physicalscene,
-        physmatlib,
-        poimappins,
-        psrep,
-        quest,
-        questphase,
-        regionset,
-        remt,
-        reps,
-        reslist,
-        rig,
-        scene,
-        scenerid,
-        scenesversions,
-        smartobject,
-        smartobjects,
-        sp,
-        spatial_representation,
-        streamingblock,
-        streamingquerydata,
-        streamingsector,
-        streamingsector_inplace,
-        streamingworld,
-        terrainsetup,
-        texarray,
-        traffic_collisions,
-        traffic_persistent,
-        vehcommoncurveset,
-        vehcurveset,
-        voicetags,
-        w2mesh,
-        w2mi,
-        wem,
-        workspot,
-        xbm,
-        xcube
-    }
-
     public enum Logtype
     {
         Normal,
@@ -228,7 +101,16 @@ namespace WolvenKit.Common
         Important,
         Success,
         Warning,
-        Wcc
+        Debug
+    }
+
+    public enum EArchiveSource
+    {
+        Unknown,
+        Base,
+        EP1,
+        Mod,
+        Project
     }
 
     public enum EArchiveType
@@ -243,6 +125,16 @@ namespace WolvenKit.Common
         Shader,
     }
 
+    // Target scope for archive manager
+    public enum ArchiveManagerScope
+    {
+        Basegame,
+        Mods,
+        BasegameAndMods,
+        LocalProject,
+        Everywhere
+    }
+
     /// <summary>
     /// Possible file extensions of cooked redengine files
     /// </summary>
@@ -250,6 +142,7 @@ namespace WolvenKit.Common
     {
         wem,
         mesh,
+        w2mesh,
         xbm,
         csv,
         //app,
@@ -257,13 +150,16 @@ namespace WolvenKit.Common
         //json,
         mlmask,
         cubemap,
+        xcube,
         envprobe,
         texarray,
         morphtarget,
         fnt,
         opusinfo,
         anims,
-        ent
+        //ent,
+        inkatlas,
+        physicalscene
     }
 
     /// <summary>
@@ -283,7 +179,9 @@ namespace WolvenKit.Common
         ttf,
         wav,
         masklist,
-        csv
+        csv,
+        re,
+        cube
     }
 
     public enum EConvertableOutput
@@ -301,17 +199,17 @@ namespace WolvenKit.Common
 
     public enum EConvertableFileFormat
     {
-        gltf,
-        glb,
-        x,
-        stp,
-        obj,
-        stl,
-        ply,
-        assbin,
-        assxml,
-        x3d,
-        fbx,
+        //gltf,
+        //glb,
+        //x,
+        //stp,
+        //obj,
+        //stl,
+        //ply,
+        //assbin,
+        //assxml,
+        //x3d,
+        //fbx,
 
     }
 
@@ -338,7 +236,8 @@ namespace WolvenKit.Common
         bmp,
         jpg,
         png,
-        tiff
+        tiff,
+        cube
     }
 
     /// <summary>
@@ -390,6 +289,13 @@ namespace WolvenKit.Common
         Raw
     }
 
+    public enum EBool : byte
+    {
+        False,
+        True,
+        Automatic
+    }
+
     /// IMPORT FLAGS
     [System.Flags]
     public enum EImportFlags
@@ -401,4 +307,36 @@ namespace WolvenKit.Common
         HashedPath = 0x8,
         Inplace = 0x10,     // done
     };
+
+    public enum EGameLanguage
+    {
+        ar_ar,
+        cz_cz,
+        de_de,
+        en_us,
+        es_es,
+        es_mx,
+        fr_fr,
+        hu_hu,
+        it_it,
+        jp_jp,
+        kr_kr,
+        pl_pl,
+        pt_br,
+        ru_ru,
+        th_th,
+        tr_tr,
+        zh_cn,
+        zh_tw,
+        ua_ua
+    }
+
+    public enum LoggerVerbosity
+    {
+        Quiet,
+        Minimal,
+        Normal,
+        Detailed,
+        Diagnostic,
+    }
 }

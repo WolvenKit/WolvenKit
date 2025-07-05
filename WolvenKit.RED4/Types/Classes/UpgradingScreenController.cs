@@ -1,0 +1,93 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	public partial class UpgradingScreenController : CraftingMainLogicController
+	{
+		[Ordinal(51)] 
+		[RED("itemNameUpgrade")] 
+		public inkTextWidgetReference ItemNameUpgrade
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(52)] 
+		[RED("arrowComparison")] 
+		public inkWidgetReference ArrowComparison
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(53)] 
+		[RED("itemTooltipControllerLeft")] 
+		public CWeakHandle<AGenericTooltipController> ItemTooltipControllerLeft
+		{
+			get => GetPropertyValue<CWeakHandle<AGenericTooltipController>>();
+			set => SetPropertyValue<CWeakHandle<AGenericTooltipController>>(value);
+		}
+
+		[Ordinal(54)] 
+		[RED("itemTooltipControllerRight")] 
+		public CWeakHandle<AGenericTooltipController> ItemTooltipControllerRight
+		{
+			get => GetPropertyValue<CWeakHandle<AGenericTooltipController>>();
+			set => SetPropertyValue<CWeakHandle<AGenericTooltipController>>(value);
+		}
+
+		[Ordinal(55)] 
+		[RED("tooltipDataLeft")] 
+		public CHandle<MinimalItemTooltipData> TooltipDataLeft
+		{
+			get => GetPropertyValue<CHandle<MinimalItemTooltipData>>();
+			set => SetPropertyValue<CHandle<MinimalItemTooltipData>>(value);
+		}
+
+		[Ordinal(56)] 
+		[RED("tooltipDataRight")] 
+		public CHandle<MinimalItemTooltipData> TooltipDataRight
+		{
+			get => GetPropertyValue<CHandle<MinimalItemTooltipData>>();
+			set => SetPropertyValue<CHandle<MinimalItemTooltipData>>(value);
+		}
+
+		[Ordinal(57)] 
+		[RED("WeaponAreas")] 
+		public CArray<CEnum<gamedataItemType>> WeaponAreas
+		{
+			get => GetPropertyValue<CArray<CEnum<gamedataItemType>>>();
+			set => SetPropertyValue<CArray<CEnum<gamedataItemType>>>(value);
+		}
+
+		[Ordinal(58)] 
+		[RED("EquipAreas")] 
+		public CArray<CEnum<gamedataEquipmentArea>> EquipAreas
+		{
+			get => GetPropertyValue<CArray<CEnum<gamedataEquipmentArea>>>();
+			set => SetPropertyValue<CArray<CEnum<gamedataEquipmentArea>>>(value);
+		}
+
+		[Ordinal(59)] 
+		[RED("DELAYED_TOOLTIP_RIGHT")] 
+		public CFloat DELAYED_TOOLTIP_RIGHT
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public UpgradingScreenController()
+		{
+			MaxIngredientCount = 8;
+			ItemNameUpgrade = new inkTextWidgetReference();
+			ArrowComparison = new inkWidgetReference();
+			WeaponAreas = new();
+			EquipAreas = new();
+			DELAYED_TOOLTIP_RIGHT = 0.150000F;
+
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
+	}
+}
