@@ -18,6 +18,8 @@
             Text="{Binding Text,
                            UpdateSourceTrigger=PropertyChanged,
                            Mode=TwoWay}"
+            GotFocus="OnTextboxFocusGained"
+            LostFocus="OnTextboxFocusLost"
             TextWrapping="Wrap" />
     </Grid>
 </UserControl>
