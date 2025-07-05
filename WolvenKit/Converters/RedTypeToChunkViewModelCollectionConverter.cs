@@ -81,6 +81,11 @@ namespace WolvenKit.Converters
                 {
                     chunkViewModel = factory.ChunkViewModel(redData, combinedScene.RDTViewModel, appViewModel);
                 }
+                // If we have a QuestPhaseGraphViewModel, use its RDTViewModel as the tab reference
+                else if (currentTab is QuestPhaseGraphViewModel combinedQuestPhase && combinedQuestPhase.RDTViewModel != null)
+                {
+                    chunkViewModel = factory.ChunkViewModel(redData, combinedQuestPhase.RDTViewModel, appViewModel);
+                }
                 // If we have an RDTDataViewModel directly, use it
                 else if (currentTab is RDTDataViewModel rdtTab)
                 {

@@ -445,7 +445,7 @@ public partial class GraphEditorView : UserControl
             node.ContextMenu.Items.Add(new Separator());
         }
 
-                node.ContextMenu.Items.Add(CreateMenuItem("Destroy Node", "CloseBoxOutline", "WolvenKitRed", () => Source.RemoveNode(nvm)));
+        node.ContextMenu.Items.Add(CreateMenuItem("Destroy Node", "CloseBoxOutline", "WolvenKitRed", () => Source.RemoveNode(nvm)));
 
         // Add deletion markers info for scene graphs for now
         if (Source.GraphType == RedGraphType.Scene)

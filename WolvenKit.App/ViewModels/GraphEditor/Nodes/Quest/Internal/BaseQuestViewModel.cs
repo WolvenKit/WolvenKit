@@ -113,6 +113,23 @@ public abstract class BaseQuestViewModel : GraphEditor.NodeViewModel, IRefreshab
     }
 
     /// <summary>
+    /// Override RefreshFromData for quest nodes to avoid breaking connections
+    /// Quest nodes don't need socket regeneration during property sync
+    /// </summary>
+    public override void RefreshFromData()
+    {
+        // Update title
+        UpdateTitle();
+        OnPropertyChanged(nameof(Title));
+        
+        // DON'T regenerate sockets for quest nodes
+        OnPropertyChanged(nameof(Data));
+        
+        // Refresh details
+        RefreshDetails();
+    }
+
+    /// <summary>
     /// Populate quest node details into the provided dictionary
     /// </summary>
     protected virtual void PopulateDetailsInto(Dictionary<string, string> details)
