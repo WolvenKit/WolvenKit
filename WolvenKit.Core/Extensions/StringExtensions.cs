@@ -16,7 +16,7 @@ namespace WolvenKit.Interfaces.Extensions
             return input switch
             {
                 null => throw new ArgumentNullException(nameof(input)),
-                "" => throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input)),
+                "" => input,
                 _ => input.First().ToString().ToLower() + input[1..],
             };
         }
@@ -24,14 +24,14 @@ namespace WolvenKit.Interfaces.Extensions
         public static string FirstCharToUpper(this string input) => input switch
         {
             null => throw new ArgumentNullException(nameof(input)),
-            "" => throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input)),
+            "" => input,
             _ => input.First().ToString().ToUpper() + input[1..]
         };
 
         public static string CapitalizeEachWord(this string input) => input switch
         {
             null => throw new ArgumentNullException(nameof(input)),
-            "" => throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input)),
+            "" => input,
             _ => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(input.ToLower()),
         };
 
