@@ -53,6 +53,10 @@
                 <docV:SceneGraphView DataContext="{Binding}" />
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type docVM:QuestPhaseGraphViewModel}">
+                <docV:QuestPhaseGraphView DataContext="{Binding}" />
+            </DataTemplate>
+
         </Grid.Resources>
 
         <Grid.RowDefinitions>

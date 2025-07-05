@@ -5140,11 +5140,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     }
     
     /// <summary>
-    /// Get the root node data (scene graph node) that this property belongs to
+    /// Get the root node data (scene or quest graph node) that this property belongs to
     /// </summary>
     private RedBaseClass? GetRootNodeData()
     {
-        // Walk up the tree to find a scene graph node
+        // Walk up the tree to find a scene or quest graph node
         var current = this;
         while (current != null)
         {
@@ -5152,6 +5152,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 return sceneNode;
             }
+            
+            // Also check for quest nodes
+            if (current.Data is questNodeDefinition questNode)
+            {
+                return questNode;
+            }
+            
             current = current.Parent;
         }
         
