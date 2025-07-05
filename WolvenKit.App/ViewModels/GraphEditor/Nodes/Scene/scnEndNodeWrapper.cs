@@ -26,8 +26,8 @@ public class scnEndNodeWrapper : BaseSceneViewModel<scnEndNode>
 
     public scnEndNodeWrapper(scnEndNode scnEndNode, scnExitPoint exitPoint) : base(scnEndNode)
     {
+        InputSocketNames.Add(0, "In");
+
         _scnExitPoint = exitPoint;
     }
-
-    internal override void GenerateSockets() => Input.Add(new SceneInputConnectorViewModel("In", "In", UniqueId, 0));
 }

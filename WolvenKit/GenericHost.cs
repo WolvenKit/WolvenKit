@@ -91,6 +91,7 @@ namespace WolvenKit
                     services.AddSingleton<IPluginService, PluginService>();
                     services.AddSingleton<IModifierViewStateService, ModifierViewStateService>();
                     services.AddSingleton<IWatcherService, WatcherService>();
+                    services.AddSingleton<INodeSelectionService, NodeSelectionService>();
 
                     // factories
                     services.AddTransient<IPageViewModelFactory, PageViewModelFactory>();

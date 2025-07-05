@@ -6,6 +6,5 @@ public class questDisableableNodeDefinitionWrapper<T> : questNodeDefinitionWrapp
 {
     public questDisableableNodeDefinitionWrapper(T questDisableableNodeDefinition) : base(questDisableableNodeDefinition)
     {
-        Title = $"[{_castedData.Id}] {Title}";
     }
 }

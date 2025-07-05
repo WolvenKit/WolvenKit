@@ -2,13 +2,28 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Xml;
 using Splat;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Services;
+using WolvenKit.Core.Interfaces;
+using WolvenKit.Core.Services;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes;
+
+internal static class DictionaryExtensions
+{
+    public static void AddRange<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, Dictionary<TKey, TValue> other)
+        where TKey : notnull
+    {
+        foreach (var kvp in other)
+        {
+            dictionary[kvp.Key] = kvp.Value;
+        }
+    }
+}
 
 internal class NodeProperties
 {
@@ -23,6 +38,33 @@ internal class NodeProperties
         {
             return details;
         }
+
+        // Try curated properties first (existing manual logic)
+        var hasCuratedProperties = TryGetCuratedProperties(node, details, scnSceneResource);
+        
+        // Always try smart discovery to supplement curated properties (if we have room)
+        if (details.Count < 8) // Only add smart properties if we have room
+        {
+            var autoDiscovered = GetSmartAutoDiscoveredProperties(node);
+            
+            // Add smart properties that aren't already covered
+            foreach (var kvp in autoDiscovered)
+            {
+                if (!details.ContainsKey(kvp.Key) && details.Count < 8)
+                {
+                    details[kvp.Key] = kvp.Value;
+                }
+            }
+        }
+        
+        return LimitAndPrioritizeProperties(details);
+    }
+
+    private static bool TryGetCuratedProperties(questNodeDefinition? node, Dictionary<string, string> details, scnSceneResource? scnSceneResource = null)
+    {
+        if (node == null) return false;
+
+        var initialCount = details.Count;
 
         if (node is questPauseConditionNodeDefinition pauseCondCasted)
         {
@@ -721,6 +763,24 @@ internal class NodeProperties
                 details["Prefetch Only"] = changeAppearanceNodeCasted?.PrefetchOnly == true ? "True" : "False";
             }
         }
+        else if (node is questPuppetAIManagerNodeDefinition puppetAIManagerCasted)
+        {
+            details["Entries Count"] = puppetAIManagerCasted?.Entries?.Count.ToString() ?? "0";
+
+            if (puppetAIManagerCasted?.Entries != null)
+            {
+                int counter = 1;
+                foreach (var entry in puppetAIManagerCasted.Entries)
+                {
+                    if (counter > 3) break; // Limit to first 3 entries to avoid overwhelming details
+
+                    details[$"#{counter} Entity Ref"] = ParseGameEntityReference(entry?.EntityReference);
+                    details[$"#{counter} AI Tier"] = entry?.AiTier.ToEnumString() ?? "Unknown";
+
+                    counter++;
+                }
+            }
+        }
         else if (node is questMovePuppetNodeDefinition movePuppetManagerCasted)
         {
             details["Entity Reference"] = ParseGameEntityReference(movePuppetManagerCasted?.EntityReference);
@@ -729,6 +789,68 @@ internal class NodeProperties
             if (movePuppetManagerCasted?.NodeParams?.Chunk is questMoveOnSplineParams splineParams)
             {
                 details["Spline Node Ref"] = splineParams?.SplineNodeRef.GetResolvedText()!;
+            }
+        }
+        else if (node is questPhoneManagerNodeDefinition phoneManagerCasted)
+        {
+            details["Manager"] = GetNameFromClass(phoneManagerCasted?.Type?.Chunk);
+
+            if (phoneManagerCasted?.Type?.Chunk is questCallContact_NodeType callContactCasted)
+            {
+                details.AddRange(ParseJournalPath(callContactCasted?.Caller?.Chunk, "Caller"));
+                details.AddRange(ParseJournalPath(callContactCasted?.Addressee?.Chunk, "Addressee"));
+                details["Phase"] = callContactCasted?.Phase.ToEnumString()!;
+                details["Mode"] = callContactCasted?.Mode.ToEnumString()!;
+                details["Apply Phone Restriction"] = callContactCasted?.ApplyPhoneRestriction == true ? "True" : "False";
+                details["Is Rejectable"] = callContactCasted?.IsRejectable == true ? "True" : "False";
+                details["Show Avatar"] = callContactCasted?.ShowAvatar == true ? "True" : "False";
+                details["Visuals"] = callContactCasted?.Visuals.ToEnumString()!;
+            }
+            if (phoneManagerCasted?.Type?.Chunk is questSendMessage_NodeType sendMessageCasted)
+            {
+                details.AddRange(ParseJournalPath(sendMessageCasted?.Msg?.Chunk, "Message"));
+                details["Send Notification"] = sendMessageCasted?.SendNotification == true ? "True" : "False";
+            }
+            if (phoneManagerCasted?.Type?.Chunk is questOpenMessage_NodeType openMessageCasted)
+            {
+                details.AddRange(ParseJournalPath(openMessageCasted?.Msg?.Chunk, "Message"));
+            }
+            if (phoneManagerCasted?.Type?.Chunk is questCloseMessage_NodeType closeMessageCasted)
+            {
+                details.AddRange(ParseJournalPath(closeMessageCasted?.Msg?.Chunk, "Message"));
+            }
+            if (phoneManagerCasted?.Type?.Chunk is questSetPhoneStatus_NodeType setStatusCasted)
+            {
+                details["Status"] = setStatusCasted?.Status.ToEnumString()!;
+                details["Custom Status"] = setStatusCasted?.CustomStatus.ToString()!;
+            }
+            if (phoneManagerCasted?.Type?.Chunk is questSetPhoneRestriction_NodeType setRestrictionCasted)
+            {
+                details["Apply Phone Restriction"] = setRestrictionCasted?.ApplyPhoneRestriction == true ? "True" : "False";
+                details["Forced Apply"] = setRestrictionCasted?.ForcedApply == true ? "True" : "False";
+                details["Forced Apply Source"] = setRestrictionCasted?.ForcedApplySource.ToString()!;
+            }
+            if (phoneManagerCasted?.Type?.Chunk is questMinimize_NodeType minimizeCasted)
+            {
+                details["Minimize"] = minimizeCasted?.Minimize == true ? "True" : "False";
+            }
+            if (phoneManagerCasted?.Type?.Chunk is questAddRemoveContact_NodeType addRemoveContactCasted)
+            {
+                if (addRemoveContactCasted?.Params != null && addRemoveContactCasted.Params.Count > 0)
+                {
+                    var firstParam = addRemoveContactCasted.Params[0];
+                    details.AddRange(ParseJournalPath(firstParam?.Contact?.Chunk, "Contact"));
+                    details["Add Contact"] = firstParam?.AddContact == true ? "True" : "False";
+                    details["Send Notification"] = firstParam?.SendNotification == true ? "True" : "False";
+                    if (addRemoveContactCasted.Params.Count > 1)
+                    {
+                        details["Contacts Count"] = addRemoveContactCasted.Params.Count.ToString();
+                    }
+                }
+            }
+            if (phoneManagerCasted?.Type?.Chunk is questRemoveAllContacts_NodeType removeAllContactsCasted)
+            {
+                details["Excluded Contacts Count"] = removeAllContactsCasted?.ExcludedContacts?.Count.ToString() ?? "0";
             }
         }
         else if (node is questVehicleNodeDefinition vehicleNodeCasted)
@@ -758,7 +880,410 @@ internal class NodeProperties
             }
         }
 
-        return details;
+        // Return true if we found curated properties (more than just the initial "Type")
+        return details.Count > initialCount;
+    }
+
+    private static Dictionary<string, string> GetSmartAutoDiscoveredProperties(questNodeDefinition? node)
+    {
+        var properties = new Dictionary<string, string>();
+        
+        if (node == null) return properties;
+
+        try
+        {
+            // Generic recursive discovery - explores all interesting nested objects
+            var visited = new HashSet<object>();
+            DiscoverPropertiesRecursively(node, properties, "", visited, maxDepth: 5);
+            
+
+        }
+        catch (Exception ex)
+        {
+            var loggerService = Locator.Current.GetService<ILoggerService>();
+            loggerService?.Warning($"Error in smart property discovery for {node.GetType().Name}: {ex.Message}");
+        }
+
+        return properties;
+    }
+    
+    private static void DiscoverPropertiesRecursively(object obj, Dictionary<string, string> properties, string prefix, HashSet<object> visited, int maxDepth)
+    {
+        if (obj == null || properties.Count >= 8 || maxDepth <= 0 || visited.Contains(obj)) 
+            return;
+        
+        visited.Add(obj);
+        
+        var objType = obj.GetType();
+        var allProperties = objType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+        foreach (var prop in allProperties)
+        {
+            if (properties.Count >= 8) break;
+            
+            try
+            {
+                var value = prop.GetValue(obj);
+                if (value == null) continue;
+                
+                // Check if this is a simple property we want to display
+                if (IsSimpleDisplayProperty(prop, value))
+                {
+                    var formattedValue = FormatPropertyValue(value);
+                    if (!string.IsNullOrEmpty(formattedValue) && !IsDefaultValue(value))
+                    {
+                        var displayName = string.IsNullOrEmpty(prefix) ? GetDisplayName(prop.Name) : $"{prefix} {GetDisplayName(prop.Name)}";
+                        if (!properties.ContainsKey(displayName))
+                        {
+                            properties[displayName] = formattedValue;
+                        }
+                    }
+                }
+                // Check if this is a nested object we should explore
+                else if (IsNestedObjectToExplore(prop, value))
+                {
+                    var nestedPrefix = string.IsNullOrEmpty(prefix) ? GetDisplayName(prop.Name) : $"{prefix} {GetDisplayName(prop.Name)}";
+                    
+                    // Handle CHandle<T> by getting the chunk
+                    if (IsHandleType(value) && TryGetChunkFromHandle(value, out var chunk) && chunk != null)
+                    {
+                        DiscoverPropertiesRecursively(chunk, properties, nestedPrefix, visited, maxDepth - 1);
+                    }
+                    else if (!IsHandleType(value))
+                    {
+                        DiscoverPropertiesRecursively(value, properties, nestedPrefix, visited, maxDepth - 1);
+                    }
+                }
+            }
+            catch
+            {
+                // Skip properties that can't be accessed
+                continue;
+            }
+        }
+        
+        visited.Remove(obj);
+    }
+    
+    private static bool IsSimpleDisplayProperty(PropertyInfo prop, object value)
+    {
+        var name = prop.Name;
+        var type = prop.PropertyType;
+
+        if (name.Contains("Id") && name != "Id" || // Catches actorId, performerId etc. but not a simple "Id"
+            name.Contains("Socket") ||
+            name.StartsWith("Unk") ||
+            name.Contains("Internal") ||
+            name == "Chunk" ||
+            name == "version")
+        {
+            return false;
+        }
+
+        if (
+            // Identity & Naming (What is this thing called?)
+            name.EndsWith("Name") || name.EndsWith("Label") || name.EndsWith("Path") || name.EndsWith("Tag") ||
+
+            // Facts & Journal (What game state does it touch?)
+            name.Contains("Fact") || name.Contains("Journal") || name.Contains("Mappin") || name.Contains("Objective") ||
+            
+            // Actions & States (What is its current state or the action it performs?)
+            name.Contains("Action") || name.Contains("State") || name.Contains("Mode") || name.Contains("Phase") || name.Contains("Type") ||
+            
+            // Quantifiable Values (How much/many/long?)
+            name.Contains("Duration") || name.Contains("Time") || name.Contains("Count") || name.Contains("Value") || name.Contains("Percent") || 
+            name.Contains("Quantity") || name.Contains("Weight") || name.Contains("Priority") || name.Contains("Distance") || name.Contains("Speed") ||
+            
+            // Subjects & Targets (Who/what is this node acting upon?)
+            name.Contains("Actor") || name.Contains("Puppet") || name.Contains("Performer") || name.Contains("Player") ||
+            name.Contains("Target") || name.Contains("Source") || name.Contains("Destination") ||
+            name.Contains("Vehicle") || name.Contains("Weapon") || name.Contains("Item") || name.Contains("Reward") ||
+            name.Contains("Entity") || name.Contains("Object") ||
+
+            // Common Flags (Is it on or off?)
+            name.Contains("Enable") || name.Contains("Show") || name.Contains("Assign") || name.Contains("Skip") || 
+            name.Contains("Play") || name.Contains("Stop") || name.Contains("Block") ||
+            
+            // Miscellaneous high-value properties
+            name.Contains("Appearance") || name.Contains("Context") || name.Contains("Slot") || 
+            name.Contains("Effect") || name.Contains("Event") || name.Contains("Prereq")
+        )
+        {
+            return IsSimpleValueType(type);
+        }
+
+        // Fallback for any other simple types that weren't keyword-matched
+        return IsSimpleValueType(type);
+    }
+
+    
+    private static bool IsSimpleValueType(Type type)
+    {
+        return type == typeof(bool) || 
+               type == typeof(string) || 
+               type.IsEnum || 
+               typeof(IRedEnum).IsAssignableFrom(type) ||
+               type == typeof(CName) ||
+               type == typeof(CUInt32) || 
+               type == typeof(CInt32) ||
+               type == typeof(CFloat) ||
+               type == typeof(CDouble) ||
+               // References and IDs
+               type == typeof(NodeRef) ||
+               type == typeof(TweakDBID) ||
+               type == typeof(CRUID) ||
+               type == typeof(CResourceAsyncReference<>) ||
+               type == typeof(CResourceReference<>) ||
+               // Spatial types
+               type == typeof(Vector3) ||
+               type == typeof(Vector4) ||
+               type == typeof(Transform) ||
+               type == typeof(Quaternion) ||
+               type == typeof(EulerAngles) ||
+               type == typeof(CColor) ||
+               type == typeof(HDRColor) ||
+               // Check for generic types (like CResourceReference<T>)
+               (type.IsGenericType && (
+                   type.GetGenericTypeDefinition() == typeof(CResourceAsyncReference<>) ||
+                   type.GetGenericTypeDefinition() == typeof(CResourceReference<>)
+               ));
+    }
+    
+    private static bool IsNestedObjectToExplore(PropertyInfo prop, object value)
+    {
+        var name = prop.Name;
+        var type = prop.PropertyType;
+
+        // Avoid exploring things we've already identified as simple display values
+        if (IsSimpleValueType(type))
+        {
+            return false;
+        }
+
+        if (
+            // Common Suffixes for container objects
+            name.EndsWith("Params") || name.EndsWith("Data") || name.EndsWith("Condition") || 
+            name.EndsWith("Operation") || name.EndsWith("Provider") || name.EndsWith("Listener") ||
+            name.EndsWith("Definition") ||
+            
+            // Specific high-value nested properties
+            name == "type" || // Lowercase 'type' is very common for holding the main logic object
+            name == "subtype" ||
+            name == "event" ||
+            name == "config" ||
+            name.Contains("Manager") || // e.g. questCharacterManagerNodeDefinition
+            name.Contains("Settings") ||
+            name.Contains("Override") ||
+            
+            // References are almost always objects to explore
+            name.EndsWith("Ref") || name.EndsWith("Reference") ||
+            name == "entityRef" || name == "EntityRef" ||
+            
+            // A handle to another resource is a primary exploration target
+            IsHandleType(value)
+        )
+        {
+            return true;
+        }
+
+        return false;
+    }
+    
+    private static bool IsHandleType(object value)
+    {
+        var type = value.GetType();
+        return type.IsGenericType && type.GetGenericTypeDefinition().Name.Contains("Handle");
+    }
+    
+    private static bool TryGetChunkFromHandle(object handle, out object? chunk)
+    {
+        chunk = null;
+        try
+        {
+            var chunkProperty = handle.GetType().GetProperty("Chunk");
+            if (chunkProperty != null)
+            {
+                chunk = chunkProperty.GetValue(handle);
+                return chunk != null;
+            }
+        }
+        catch { }
+        return false;
+    }
+
+
+
+    private static string FormatPropertyValue(object? value)
+    {
+        if (value == null) return "";
+
+        return value switch
+        {
+            bool b => b ? "True" : "False",
+            CName cname => cname.GetResolvedText() ?? "",
+            CUInt32 cuint => cuint.ToString(),
+            CInt32 cint => cint.ToString(),
+            CFloat cfloat => cfloat.ToString(),
+            CDouble cdouble => cdouble.ToString(),
+            string str => str,
+            IRedEnum redEnum => redEnum.ToEnumString(),
+            Enum enumVal => enumVal.ToString(),
+            // References and IDs
+            NodeRef nodeRef => nodeRef.GetResolvedText() ?? nodeRef.ToString(),
+            TweakDBID tweakId => tweakId.GetResolvedText() ?? tweakId.ToString(),
+            CRUID cruid => cruid.ToString(),
+            // Spatial types - formatted for readability
+            Vector3 vec3 => $"({vec3.X:F2}, {vec3.Y:F2}, {vec3.Z:F2})",
+            Vector4 vec4 => $"({vec4.X:F2}, {vec4.Y:F2}, {vec4.Z:F2}, {vec4.W:F2})",
+            Transform transform => $"Pos: ({transform.Position.X:F1}, {transform.Position.Y:F1}, {transform.Position.Z:F1})",
+            Quaternion quat => $"({quat.I:F2}, {quat.J:F2}, {quat.K:F2}, {quat.R:F2})",
+            EulerAngles euler => $"({euler.Pitch:F1}°, {euler.Yaw:F1}°, {euler.Roll:F1}°)",
+            CColor color => $"RGB({color.Red}, {color.Green}, {color.Blue}, {color.Alpha})",
+            HDRColor hdrColor => $"HDR({hdrColor.Red:F2}, {hdrColor.Green:F2}, {hdrColor.Blue:F2}, {hdrColor.Alpha:F2})",
+            // Resource references
+            var resRef when resRef.GetType().IsGenericType && 
+                           (resRef.GetType().GetGenericTypeDefinition() == typeof(CResourceAsyncReference<>) ||
+                            resRef.GetType().GetGenericTypeDefinition() == typeof(CResourceReference<>)) =>
+                GetResourceReferencePath(resRef),
+            _ => value.ToString() ?? ""
+        };
+    }
+    
+    private static string GetResourceReferencePath(object resourceRef)
+    {
+        try
+        {
+            var depotPathProperty = resourceRef.GetType().GetProperty("DepotPath");
+            if (depotPathProperty?.GetValue(resourceRef) is ResourcePath depotPath)
+            {
+                var resolved = depotPath.GetResolvedText();
+                if (!string.IsNullOrEmpty(resolved))
+                {
+                    // Show just the filename for readability
+                    return System.IO.Path.GetFileName(resolved);
+                }
+            }
+            return resourceRef.ToString() ?? "";
+        }
+        catch
+        {
+            return resourceRef.ToString() ?? "";
+        }
+    }
+
+    private static bool IsDefaultValue(object? value)
+    {
+        if (value == null) return true;
+
+        return value switch
+        {
+            bool b => !b, // false is default for bools
+            string str => string.IsNullOrEmpty(str),
+            CName cname => cname == CName.Empty || string.IsNullOrEmpty(cname.GetResolvedText()),
+            CUInt32 cuint => cuint == 0,
+            CInt32 cint => cint == 0,
+            CFloat cfloat => cfloat == 0.0f,
+            CDouble cdouble => cdouble == 0.0,
+            Enum enumVal => enumVal.ToString() == "0" || enumVal.ToString().Contains("None"),
+            IRedEnum redEnum => redEnum.ToEnumString().Contains("None") || redEnum.ToEnumString() == "0",
+            // References and IDs
+            NodeRef nodeRef => nodeRef == NodeRef.Empty || string.IsNullOrEmpty(nodeRef.GetResolvedText()),
+            TweakDBID tweakId => tweakId == TweakDBID.Empty || string.IsNullOrEmpty(tweakId.GetResolvedText()),
+            CRUID cruid => cruid == 0,
+            // Spatial types - check for zero/identity values
+            Vector3 vec3 => vec3.X == 0 && vec3.Y == 0 && vec3.Z == 0,
+            Vector4 vec4 => vec4.X == 0 && vec4.Y == 0 && vec4.Z == 0 && vec4.W == 0,
+            Transform transform => IsDefaultTransform(transform),
+            Quaternion quat => quat.I == 0 && quat.J == 0 && quat.K == 0 && quat.R == 1, // Identity quaternion
+            EulerAngles euler => euler.Pitch == 0 && euler.Yaw == 0 && euler.Roll == 0,
+            CColor color => color.Red == 0 && color.Green == 0 && color.Blue == 0 && color.Alpha == 0,
+            HDRColor hdrColor => hdrColor.Red == 0 && hdrColor.Green == 0 && hdrColor.Blue == 0 && hdrColor.Alpha == 0,
+            // Resource references
+            var resRef when resRef.GetType().IsGenericType && 
+                           (resRef.GetType().GetGenericTypeDefinition() == typeof(CResourceAsyncReference<>) ||
+                            resRef.GetType().GetGenericTypeDefinition() == typeof(CResourceReference<>)) =>
+                IsDefaultResourceReference(resRef),
+            _ => false
+        };
+    }
+    
+    private static bool IsDefaultTransform(Transform transform)
+    {
+        // Check if position is zero and rotation is identity
+        return transform.Position.X == 0 && transform.Position.Y == 0 && transform.Position.Z == 0 &&
+               transform.Orientation.I == 0 && transform.Orientation.J == 0 && 
+               transform.Orientation.K == 0 && transform.Orientation.R == 1;
+    }
+    
+    private static bool IsDefaultResourceReference(object resourceRef)
+    {
+        try
+        {
+            var depotPathProperty = resourceRef.GetType().GetProperty("DepotPath");
+            if (depotPathProperty?.GetValue(resourceRef) is ResourcePath depotPath)
+            {
+                var resolved = depotPath.GetResolvedText();
+                return string.IsNullOrEmpty(resolved);
+            }
+            return true;
+        }
+        catch
+        {
+            return true;
+        }
+    }
+
+    private static string GetDisplayName(string propertyName)
+    {
+        // Convert camelCase/PascalCase to readable format
+        var result = System.Text.RegularExpressions.Regex.Replace(propertyName, "([A-Z])", " $1").Trim();
+        
+        // Capitalize first letter
+        if (result.Length > 0)
+        {
+            result = char.ToUpper(result[0]) + result.Substring(1);
+        }
+
+        return result;
+    }
+
+    private static Dictionary<string, string> LimitAndPrioritizeProperties(Dictionary<string, string> properties)
+    {
+        const int maxProperties = 8;
+        
+        if (properties.Count <= maxProperties)
+        {
+            return properties;
+        }
+
+        // Prioritize certain properties and limit to max count
+        var prioritized = new Dictionary<string, string>();
+        
+        // Always keep "Type" first
+        if (properties.ContainsKey("Type"))
+        {
+            prioritized["Type"] = properties["Type"];
+        }
+
+        // Add high-priority properties
+        var highPriority = new[] { "Name", "Path", "Duration", "Action", "Value", "Count", "Mode", "State" };
+        foreach (var priority in highPriority)
+        {
+            var key = properties.Keys.FirstOrDefault(k => k.Contains(priority));
+            if (key != null && !prioritized.ContainsKey(key) && prioritized.Count < maxProperties)
+            {
+                prioritized[key] = properties[key];
+            }
+        }
+
+        // Fill remaining slots with other properties
+        foreach (var kvp in properties.Where(p => !prioritized.ContainsKey(p.Key)))
+        {
+            if (prioritized.Count >= maxProperties) break;
+            prioritized[kvp.Key] = kvp.Value;
+        }
+
+        return prioritized;
     }
 
     private static Dictionary<string, string> GetPropertiesForConditions(questIBaseCondition? node, string logicalCondIndex = "")
@@ -992,7 +1517,7 @@ internal class NodeProperties
         return str;
     }
 
-    private static string GetNameFromClass(RedBaseClass? node)
+    public static string GetNameFromClass(RedBaseClass? node)
     {
         string name = "";
 

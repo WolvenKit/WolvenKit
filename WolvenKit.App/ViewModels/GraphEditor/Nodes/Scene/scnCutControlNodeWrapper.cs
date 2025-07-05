@@ -7,5 +7,11 @@ public class scnCutControlNodeWrapper : BaseSceneViewModel<scnCutControlNode>
 {
     public scnCutControlNodeWrapper(scnCutControlNode scnSceneGraphNode) : base(scnSceneGraphNode)
     {
+        Title = "Scene CutControl";
+        
+        InputSocketNames.Add(0, "In");
+
+        OutputSocketNames.Add(0, "True");
+        OutputSocketNames.Add(1, "False");
     }
 }

@@ -7,5 +7,8 @@ public class scnInterruptManagerNodeWrapper : BaseSceneViewModel<scnInterruptMan
 {
     public scnInterruptManagerNodeWrapper(scnInterruptManagerNode scnSceneGraphNode) : base(scnSceneGraphNode)
     {
+        InputSocketNames.Add(0, "In");
+
+        OutputSocketNames.Add(0, "Out");
     }
 }

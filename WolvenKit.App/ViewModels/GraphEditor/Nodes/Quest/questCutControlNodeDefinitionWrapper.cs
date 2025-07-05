@@ -1,4 +1,5 @@
-﻿using WolvenKit.RED4.Types;
+﻿using WolvenKit.App.Extensions;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 
@@ -6,6 +7,8 @@ public class questCutControlNodeDefinitionWrapper : questDisableableNodeDefiniti
 {
     public questCutControlNodeDefinitionWrapper(questCutControlNodeDefinition questDisableableNodeDefinition) : base(questDisableableNodeDefinition)
     {
+        Title = "Quest CutControl";
+        Details.AddRange(NodeProperties.GetPropertiesFor(questDisableableNodeDefinition));
     }
 
     internal override void CreateDefaultSockets()
