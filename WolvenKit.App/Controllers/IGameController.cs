@@ -11,35 +11,31 @@ public interface IGameController
     /// Finds a file in the currently active scope and adds it to the mod
     /// </summary>
     /// <param name="hash">Unique hash of the file</param>
-    /// <param name="fileExtension">File extension. Will optionally filter child files.</param>
     /// <returns>bool success</returns>
-    public bool AddToMod(ulong hash, string? fileExtension = null);
+    public bool AddToMod(ulong hash);
 
     /// <summary>
     /// Finds a file in the dedicated search scope and adds it to the mod
     /// </summary>
     /// <param name="hash">Unique hash of the file</param>
     /// <param name="searchScope">Scope to search in. Defaults to Basegame</param>
-    /// <param name="fileExtension">File extension. Will optionally filter child files.</param>
     /// <returns>bool success</returns>
-    public bool AddToMod(ulong hash, ArchiveManagerScope searchScope, string? fileExtension = null);
+    public bool AddToMod(ulong hash, ArchiveManagerScope searchScope);
 
     /// <summary>
     /// Adds file to the mod's directory, creating the necessary folders. 
     /// </summary>
     /// <param name="file">the file in question</param>
     /// <param name="searchScope">Search scope. Defaults to ArchiveManagerScope.Basegame</param>
-    /// <param name="fileExtension">File extension. Will optionally filter child files.</param>
     /// <returns>bool success</returns>
-    public bool AddToMod(IGameFile file, ArchiveManagerScope searchScope, string? fileExtension = null);
+    public bool AddToMod(IGameFile file, ArchiveManagerScope searchScope);
 
     /// <summary>
     /// Adds file to the mod's directory, creating the necessary folders. Will pass the currently active scope.
     /// </summary>
     /// <param name="file">the file in question</param>
-    /// <param name="fileExtension">File extension. Will optionally filter child files.</param>
     /// <returns>bool success</returns>
-    public bool AddToMod(IGameFile file, string? fileExtension = null);
+    public bool AddToMod(IGameFile file);
 
     /// <summary>
     /// Adds file to the current modal, using the active scope.

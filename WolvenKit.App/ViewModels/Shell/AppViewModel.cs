@@ -1334,20 +1334,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         });
     }
 
-    private void RunComplexNewFileAction(NewFileViewModel file)
-    {
-        if (file.SelectedFile?.Type is null)
-        {
-            return;
-        }
-
-        // ArchiveXL stuff not implemented yet
-        if (file.SelectedFile?.Type is EWolvenKitFile.Complex_NPV)
-        {
-            Interactions.ShowNpvCreationDialogue();
-        }
-    }
-
     private static async Task OpenFromNewFileAsync(NewFileViewModel file)
     {
         if (file.SelectedFile is null || file.FullPath is null)

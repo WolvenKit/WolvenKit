@@ -125,11 +125,6 @@ public partial class NewFileViewModel : DialogViewModel
 
         switch (SelectedFile?.Type)
         {
-            case EWolvenKitFile.Complex_NPV:
-            case EWolvenKitFile.Complex_XL_Control:
-            case EWolvenKitFile.Complex_XL_Item:
-                RequiresFilePath = false;
-                break;
             case null:
             case EWolvenKitFile.Cr2w:
             case EWolvenKitFile.TweakXl:
@@ -172,10 +167,6 @@ public partial class NewFileViewModel : DialogViewModel
             EWolvenKitFile.RedScript => _projectManager.ActiveProject.ResourcesDirectory,
             EWolvenKitFile.CETLua => _projectManager.ActiveProject.ResourcesDirectory,
             EWolvenKitFile.WScript => throw new NotImplementedException(),
-            // Will be handled by subsequent dialogue
-            EWolvenKitFile.Complex_NPV => "",
-            EWolvenKitFile.Complex_XL_Control => "",
-            EWolvenKitFile.Complex_XL_Item => "",
             
             _ => throw new ArgumentOutOfRangeException(nameof(type)),
         };

@@ -49,17 +49,5 @@
 			</AddFileModel>
 		</Files>
 	</FileCategoryModel>
-	  <FileCategoryModel>
-		  <Name>NPV</Name>
-		  <Files>
-			  <AddFileModel>
-				  <Name>NPV</Name>
-				  <Description>An NPV head</Description>
-				  <Extension>npv.mesh</Extension>
-				  <Type>Complex_NPV</Type>
-				  <Template>NPV Head</Template>
-			  </AddFileModel>
-		  </Files>
-	  </FileCategoryModel>
   </Categories>
 </WolvenKitFileDefinitions>
