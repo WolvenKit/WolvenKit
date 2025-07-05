@@ -203,7 +203,21 @@
 
             <!-- Right Panel: Graph Editor -->
             <Grid Grid.Column="2">
-                <graphEditor:GraphEditorView Source="{Binding MainGraph}" x:Name="QuestPhaseGraphEditor" />
+                <graphEditor:GraphEditorView Source="{Binding MainGraph}" x:Name="QuestPhaseGraphEditor" NodeDoubleClick="Editor_OnNodeDoubleClick" />
+                
+                <!-- Breadcrumb Navigation (Floating) -->
+                <Border HorizontalAlignment="Left" 
+                        VerticalAlignment="Top" 
+                        Margin="12,12,0,0"
+                        Background="#DD2A2A2A" 
+                        BorderBrush="#FF404040" 
+                        BorderThickness="1" 
+                        CornerRadius="4"
+                        Padding="8,4">
+                    <StackPanel x:Name="Breadcrumb" Orientation="Horizontal" VerticalAlignment="Center">
+                        <!-- Breadcrumb elements will be dynamically added here -->
+                    </StackPanel>
+                </Border>
                 
                 <!-- Loading Overlay -->
                 <Border Background="#AA000000" 
