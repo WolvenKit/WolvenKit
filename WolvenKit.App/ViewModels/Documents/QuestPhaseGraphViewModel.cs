@@ -29,6 +29,9 @@ namespace WolvenKit.App.ViewModels.Documents
         public RDTDataViewModel RDTViewModel { get; }
         public RedGraph MainGraph { get; }
         public ObservableCollection<QuestPhaseTabDefinition> Tabs { get; } = new();
+        
+        // Navigation history for nested graphs
+        public ObservableCollection<RedGraph> History { get; } = new();
 
         [ObservableProperty]
         private QuestPhaseTabDefinition? _selectedTab;
@@ -93,6 +96,9 @@ namespace WolvenKit.App.ViewModels.Documents
                 MainGraph.DocumentViewModel = parent;
             }
 
+            // Initialize navigation history with the main graph
+            History.Add(MainGraph);
+            
             CreateTabs();
             
             // Set the first tab as selected

@@ -21,6 +21,9 @@ using WolvenKit.App.Interaction;
 using Splat;
 using WolvenKit.Views.Dialogs;
 using AdonisUI.Controls;
+using WolvenKit.Views.GraphEditor;
+using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Documents
 {
@@ -32,15 +35,39 @@ namespace WolvenKit.Views.Documents
         // Navigation memory: tracks which child was last visited from each node in each direction
         private readonly Dictionary<(uint nodeId, Key direction), uint> _navigationMemory = new();
         private readonly List<uint> _navigationHistory = new();
+        
+        // Viewport position tracking for subgraph navigation - remembers where we were in each graph
+        private readonly Dictionary<RedGraph, System.Windows.Point> _viewportPositions = new();
 
         public QuestPhaseGraphView()
         {
             InitializeComponent();
             DataContextChanged += OnDataContextChanged;
+            
+            // Add keyboard shortcut for subgraph navigation (Tab key)
+            KeyDown += OnKeyDown;
         }
 
+        /// <summary>
+        /// Handle keyboard shortcuts for nested graph navigation
+        /// </summary>
+        private void OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Tab)
+            {
+                HandleSubGraph();
+                e.Handled = true;
+            }
+        }
+        
         private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
+            // Clear viewport positions when changing documents
+            if (e.OldValue is QuestPhaseGraphViewModel)
+            {
+                _viewportPositions.Clear();
+            }
+
             if (e.NewValue is not QuestPhaseGraphViewModel viewModel) return;
 
             viewModel.MainGraph.Connections.CollectionChanged += (_, _) => UpdateConnectionPathTypes(viewModel.MainGraph);
@@ -50,6 +77,7 @@ namespace WolvenKit.Views.Documents
             {
                 SetupConnectionTemplate();
                 UpdateConnectionPathTypes(viewModel.MainGraph);
+                BuildBreadcrumb(); // Initialize breadcrumb navigation
                 
                 // Add a small delay to ensure smooth loading experience
                 Dispatcher.BeginInvoke(new Action(() =>
@@ -364,7 +392,7 @@ namespace WolvenKit.Views.Documents
                 }
                 
                 // Smooth animated pan
-                AnimateViewportTo(new Point(targetX, targetY), TimeSpan.FromMilliseconds(300));
+                AnimateViewportTo(new System.Windows.Point(targetX, targetY), TimeSpan.FromMilliseconds(300));
             }
             catch (Exception)
             {
@@ -375,7 +403,7 @@ namespace WolvenKit.Views.Documents
         /// <summary>
         /// Animate viewport to target location with smooth easing
         /// </summary>
-        private void AnimateViewportTo(Point targetLocation, TimeSpan duration)
+        private void AnimateViewportTo(System.Windows.Point targetLocation, TimeSpan duration)
         {
             if (QuestPhaseGraphEditor?.Editor == null) return;
             
@@ -406,7 +434,7 @@ namespace WolvenKit.Views.Documents
                 var currentX = startLocation.X + (targetLocation.X - startLocation.X) * easedProgress;
                 var currentY = startLocation.Y + (targetLocation.Y - startLocation.Y) * easedProgress;
                 
-                editor.ViewportLocation = new Point(currentX, currentY);
+                editor.ViewportLocation = new System.Windows.Point(currentX, currentY);
             };
             
             timer.Start();
@@ -610,15 +638,15 @@ namespace WolvenKit.Views.Documents
         /// <summary>
         /// Get the center point of the current viewport for placing new nodes
         /// </summary>
-        private Point GetViewportCenter()
+        private System.Windows.Point GetViewportCenter()
         {
             if (QuestPhaseGraphEditor?.Editor == null)
-                return new Point(0, 0);
+                return new System.Windows.Point(0, 0);
 
             var viewport = QuestPhaseGraphEditor.Editor.ViewportLocation;
             var size = QuestPhaseGraphEditor.Editor.ViewportSize;
             
-            return new Point(
+            return new System.Windows.Point(
                 viewport.X + size.Width / 2,
                 viewport.Y + size.Height / 2
             );
@@ -655,6 +683,252 @@ namespace WolvenKit.Views.Documents
                 // Update the NodeSelectionService
                 NodeSelectionService.Instance.SelectedNode = targetNode;
             }
+        }
+
+        /// <summary>
+        /// Handle double-click on nodes for nested graph navigation
+        /// </summary>
+        private void Editor_OnNodeDoubleClick(object sender, RoutedEventArgs e) => HandleSubGraph();
+
+        /// <summary>
+        /// Handle navigation to subgraphs (phase nodes) or back to parent graphs
+        /// </summary>
+        private void HandleSubGraph()
+        {
+            var viewModel = DataContext as QuestPhaseGraphViewModel;
+            if (viewModel == null || QuestPhaseGraphEditor?.Editor == null)
+                return;
+
+            var selectedNode = QuestPhaseGraphEditor.SelectedNode;
+
+            // Navigation into phase subgraph
+            if (selectedNode is IGraphProvider provider)
+            {
+                var subGraph = provider.Graph;
+                if (subGraph == null)
+                {
+                    Locator.Current.GetService<ILoggerService>()?.Error("SubGraph is not defined!");
+                    return;
+                }
+
+                // Store current viewport position before navigating away
+                var currentGraph = QuestPhaseGraphEditor.Source;
+                if (currentGraph != null)
+                {
+                    _viewportPositions[currentGraph] = QuestPhaseGraphEditor.Editor.ViewportLocation;
+                }
+
+                // Set document reference for property sync
+                if (subGraph.DocumentViewModel == null)
+                {
+                    subGraph.DocumentViewModel = QuestPhaseGraphEditor.Source.DocumentViewModel;
+                }
+
+                // Handle quest phase node state tracking
+                if (selectedNode.Data is questPhaseNodeDefinition ph)
+                {
+                    if (!ph.PhaseResource.IsSet)
+                    {
+                        subGraph.StateParents = QuestPhaseGraphEditor.Source.StateParents + "." + ph.Id;
+                        subGraph.DocumentViewModel = QuestPhaseGraphEditor.Source.DocumentViewModel;
+                    }
+                }
+
+                // Add to navigation history and navigate to subgraph
+                viewModel.History.Add(subGraph);
+                QuestPhaseGraphEditor.SetCurrentValue(GraphEditorView.SourceProperty, subGraph);
+
+                BuildBreadcrumb();
+                return;
+            }
+
+            // Navigation back to parent graph (from input/output nodes)
+            if (selectedNode is questInputNodeDefinitionWrapper or questOutputNodeDefinitionWrapper)
+            {
+                if (viewModel.History.Count > 1)
+                {
+                    // Store current subgraph viewport position before leaving
+                    var currentSubGraph = viewModel.History[^1];
+                    _viewportPositions[currentSubGraph] = QuestPhaseGraphEditor.Editor.ViewportLocation;
+
+                    // Navigate back to parent
+                    viewModel.History.Remove(viewModel.History[^1]);
+                    var parentGraph = viewModel.History[^1];
+                    QuestPhaseGraphEditor.SetCurrentValue(GraphEditorView.SourceProperty, parentGraph);
+
+                    // Restore previous viewport position if we have it
+                    RestoreViewportPosition(parentGraph);
+
+                    BuildBreadcrumb();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Build the breadcrumb navigation showing current graph level
+        /// </summary>
+        private void BuildBreadcrumb()
+        {
+            var viewModel = DataContext as QuestPhaseGraphViewModel;
+            if (viewModel == null)
+                return;
+
+            Breadcrumb.Children.Clear();
+
+            for (var i = 0; i < viewModel.History.Count; i++)
+            {
+                var breadcrumbText = GetBreadcrumbText(viewModel.History[i]);
+                AddBreadcrumbElement(breadcrumbText, viewModel.History[i]);
+
+                if (i < viewModel.History.Count - 1)
+                {
+                    AddBreadcrumbElement(">", null);
+                }
+            }
+
+            void AddBreadcrumbElement(string text, RedGraph graph)
+            {
+                if (Breadcrumb.Children.Count > 0)
+                {
+                    text = " " + text;
+                }
+
+                var textBlock = new TextBlock 
+                { 
+                    Text = text, 
+                    Tag = graph,
+                    Foreground = graph != null ? Brushes.White : Brushes.Gray,
+                    FontWeight = graph != null ? FontWeights.Medium : FontWeights.Normal,
+                    Cursor = graph != null ? Cursors.Hand : Cursors.Arrow,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+
+                if (graph != null)
+                {
+                    textBlock.PreviewMouseDown += BreadcrumbElement_OnPreviewMouseDown;
+                    
+                    // Add hover effects
+                    textBlock.MouseEnter += (s, e) => textBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF6B35"));
+                    textBlock.MouseLeave += (s, e) => textBlock.Foreground = Brushes.White;
+                }
+
+                Breadcrumb.Children.Add(textBlock);
+            }
+        }
+
+        /// <summary>
+        /// Get the appropriate breadcrumb text for a graph level
+        /// </summary>
+        private string GetBreadcrumbText(RedGraph graph)
+        {
+            if (graph == null)
+                return "";
+
+            var baseTitle = graph.Title;
+            
+            // Check if this is a phase node without a phaseResource file path
+            if (graph.StateParents?.Contains(".") == true)
+            {
+                var parts = graph.StateParents.Split('.');
+                if (parts.Length > 1)
+                {
+                    var nodeId = parts[^1]; // Get the last part (node ID)
+                    
+                    // Check if the graph has a phaseResource file path
+                    // If the baseTitle is just "Phase" or similar generic title, add the node ID
+                    if (baseTitle == "Phase" || string.IsNullOrEmpty(baseTitle) || baseTitle.StartsWith("questPhaseNodeDefinition"))
+                    {
+                        return $"Phase [{nodeId}]";
+                    }
+                }
+            }
+            
+            return baseTitle;
+        }
+
+        /// <summary>
+        /// Restore the saved viewport position for a graph, or center it if visiting for the first time
+        /// </summary>
+        private void RestoreViewportPosition(RedGraph graph)
+        {
+            if (graph == null || QuestPhaseGraphEditor?.Editor == null)
+                return;
+
+            if (_viewportPositions.TryGetValue(graph, out var savedPosition))
+            {
+                // Animate to the saved position smoothly
+                AnimateViewportTo(savedPosition, TimeSpan.FromMilliseconds(400));
+            }
+            else
+            {
+                // First time visiting this graph - center it nicely
+                // Add a small delay to ensure the graph is loaded
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    if (graph.Nodes?.Count > 0)
+                    {
+                        // Calculate the center of all nodes
+                        var minX = graph.Nodes.Min(n => n.Location.X);
+                        var maxX = graph.Nodes.Max(n => n.Location.X);
+                        var minY = graph.Nodes.Min(n => n.Location.Y);
+                        var maxY = graph.Nodes.Max(n => n.Location.Y);
+                        
+                        var centerX = (minX + maxX) / 2;
+                        var centerY = (minY + maxY) / 2;
+                        
+                        var viewportSize = QuestPhaseGraphEditor.Editor.ViewportSize;
+                        var targetPosition = new System.Windows.Point(
+                            centerX - viewportSize.Width / 2,
+                            centerY - viewportSize.Height / 2
+                        );
+                        
+                        AnimateViewportTo(targetPosition, TimeSpan.FromMilliseconds(400));
+                    }
+                }), System.Windows.Threading.DispatcherPriority.Background);
+            }
+        }
+
+        /// <summary>
+        /// Handle clicking on breadcrumb elements to navigate to that level
+        /// </summary>
+        private void BreadcrumbElement_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var viewModel = DataContext as QuestPhaseGraphViewModel;
+            if (viewModel == null || QuestPhaseGraphEditor?.Editor == null)
+                return;
+
+            if (sender is not TextBlock { Tag: RedGraph graph } block)
+                return;
+
+            if (viewModel.History.Count == 1)
+                return;
+
+            if (block.Text.Trim() == ">")
+                return;
+
+            // Store current viewport position before navigating away
+            var currentGraph = QuestPhaseGraphEditor.Source;
+            if (currentGraph != null)
+            {
+                _viewportPositions[currentGraph] = QuestPhaseGraphEditor.Editor.ViewportLocation;
+            }
+
+            // Navigate to the selected graph level
+            QuestPhaseGraphEditor.SetCurrentValue(GraphEditorView.SourceProperty, graph);
+
+            // Remove all history entries after the selected one
+            for (var i = viewModel.History.Count - 1; i >= 0; i--)
+            {
+                if (ReferenceEquals(viewModel.History[i], graph))
+                    break;
+                
+                viewModel.History.RemoveAt(i);
+            }
+
+            // Restore the viewport position for the target graph
+            RestoreViewportPosition(graph);
+
+            BuildBreadcrumb();
         }
     }
 } 
