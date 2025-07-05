@@ -494,6 +494,8 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
     public ITweakXLItem? ReadTweakXL(IParser parser, string? id = null/*, Type? type = null*/)
     {
         var _tdbs = _tweakDBService;
+        var i = 0;
+        
         if (parser.TryConsume<SequenceStart>(out var _))
         {
             var tweak = new TweakXLSequence();
@@ -505,7 +507,6 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
             //{
             //    tweak.Type = type.Name;
             //}
-            var i = 0;
             while (!parser.TryConsume<SequenceEnd>(out var _))
             {
                 if (ReadTweakXL(parser, id + "_inline" + i) is not {} item)
@@ -542,6 +543,7 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
                     //{
                     //    propertyID = id + "." + propertyID;
                     //}
+
                     // eventually ITweakXLItem
                     IRedType? propertyValue = null;
 
@@ -590,20 +592,21 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
                             {
                                 ((TweakXLSequence)propertyValue).Type = type1.Name;
                             }
-                            //if (type != null)
-                            //{
-                            //    ((TweakXLSequence)propertyValue).Type = type;
-                            //}
-                            var i = 0;
-                            while (!parser.TryConsume<SequenceEnd>(out var _))
+                        }
+
+                        //if (type != null)
+                        //{
+                        //    ((TweakXLSequence)propertyValue).Type = type;
+                        //}
+                        while (!parser.TryConsume<SequenceEnd>(out var _))
+                        {
+                            if (ReadTweakXL(parser, id + "_inline" + i) is not { } item)
                             {
-                                if (ReadTweakXL(parser, id + "_inline" + i) is not { } item)
-                                {
-                                    continue;
-                                }
-                                ((TweakXLSequence)propertyValue).Items.Add(item);
-                                i++;
+                                continue;
                             }
+
+                            ((TweakXLSequence)propertyValue).Items.Add(item);
+                            i++;
                         }
                     }
 
