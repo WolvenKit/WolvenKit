@@ -32,6 +32,8 @@
         <!-- TOP FILE SELECTOR -->
         <syncfusion:SfDataGrid
             x:Name="Categories"
+            Grid.Row="0"
+            Grid.Column="0"
             HeaderRowHeight="{DynamicResource WolvenKitTreeGridRowHeaderHeight}"
             RowHeight="{DynamicResource WolvenKitNewFileRowHeight}"
             ColumnSizer="AutoLastColumnFill"

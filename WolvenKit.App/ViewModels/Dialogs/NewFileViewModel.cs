@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
@@ -22,6 +23,8 @@ public partial class NewFileViewModel : DialogViewModel
     public delegate Task ReturnHandler(NewFileViewModel? file);
     public ReturnHandler? FileHandler;
     private readonly IProjectManager _projectManager;
+
+    [ObservableProperty] private bool _requiresFilePath;
 
     public NewFileViewModel(IProjectManager projectManager)
     {
@@ -76,14 +79,25 @@ public partial class NewFileViewModel : DialogViewModel
     private string? _fileName;
     partial void OnFileNameChanged(string? value)
     {
-        if (SelectedFile is not null && value is not null)
+        WhyNotCreate = "";
+
+        if (SelectedFile is null || value is null)
         {
-            FullPath = Path.Combine(GetDefaultDir(SelectedFile.Type), value);
-            WhyNotCreate = File.Exists(FullPath) ? "Filename already in use" : "";
+            return;
+        }
+
+        if (value.Contains(Path.PathSeparator))
+        {
+            FullPath = value;
         }
         else
         {
-            WhyNotCreate = "";
+            FullPath = Path.Combine(GetDefaultDir(SelectedFile.Type), value);
+        }
+
+        if (File.Exists(FullPath) && !Directory.Exists(FullPath))
+        {
+            WhyNotCreate = "Filename already in use";
         }
     }
 
@@ -109,7 +123,26 @@ public partial class NewFileViewModel : DialogViewModel
             return;
         }
 
-#pragma warning disable IDE0072 // Add missing cases
+        switch (SelectedFile?.Type)
+        {
+            case null:
+            case EWolvenKitFile.Cr2w:
+            case EWolvenKitFile.TweakXl:
+            case EWolvenKitFile.ArchiveXl:
+            case EWolvenKitFile.WScript:
+            case EWolvenKitFile.RedScript:
+            case EWolvenKitFile.CETLua:
+            default:
+                RequiresFilePath = true;
+                break;
+        }
+
+        if (!RequiresFilePath)
+        {
+            FileName = null;
+            return;
+        }
+
         FileName = SelectedFile?.Type switch
         {
             EWolvenKitFile.TweakXl => Path.Combine("r6", "tweaks", project.Name, $"untitled.{value.Extension.NotNull().ToLower()}"),
@@ -118,7 +151,6 @@ public partial class NewFileViewModel : DialogViewModel
             EWolvenKitFile.CETLua => Path.Combine("bin", "x64", "plugins", "cyber_engine_tweaks", "mods", project.Name, $"init.{value.Extension.NotNull().ToLower()}"),
             _ => $"{value.Name.NotNull().Split(' ').First()}1.{value.Extension.NotNull().ToLower()}",
         };
-#pragma warning restore IDE0072 // Add missing cases
     }
 
     [ObservableProperty] private string? _whyNotCreate;
@@ -126,7 +158,6 @@ public partial class NewFileViewModel : DialogViewModel
     private string GetDefaultDir(EWolvenKitFile type)
     {
         ArgumentNullException.ThrowIfNull(_projectManager.ActiveProject);
-
 
         return type switch
         {
@@ -136,16 +167,16 @@ public partial class NewFileViewModel : DialogViewModel
             EWolvenKitFile.RedScript => _projectManager.ActiveProject.ResourcesDirectory,
             EWolvenKitFile.CETLua => _projectManager.ActiveProject.ResourcesDirectory,
             EWolvenKitFile.WScript => throw new NotImplementedException(),
+            
             _ => throw new ArgumentOutOfRangeException(nameof(type)),
         };
 
 
     }
 
-    private bool CanExecuteOk()
-    {
-        return !IsCreating && FileName is not null && !string.IsNullOrEmpty(FileName) && !File.Exists(FullPath);
-    }
+    private bool CanExecuteOk() => !IsCreating &&
+                                   (!RequiresFilePath ||
+                                    (FileName is not null && !string.IsNullOrEmpty(FileName) && !File.Exists(FullPath)));
 
     [RelayCommand(CanExecute = nameof(CanExecuteOk))]
     private void Ok()

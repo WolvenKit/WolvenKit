@@ -139,6 +139,8 @@ public static class Interactions
     public static Func<bool> ShowLaunchProfilesView { get; set; } = () => throw new NotImplementedException();
     public static Func<bool> ShowMaterialRepositoryView { get; set; } = () => throw new NotImplementedException();
 
+    public static Func<bool> ShowNpvCreationDialogue { get; set; } = () => throw new NotImplementedException();
+
     public static Func<(IEnumerable<IDisplayable>?, IEnumerable<IDisplayable>?), IEnumerable<IDisplayable>> ShowCollectionView { get; set; } 
         = _ => throw new NotImplementedException();
 

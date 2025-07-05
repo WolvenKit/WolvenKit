@@ -1,0 +1,659 @@
+<Window
+    x:Class="WolvenKit.Views.Dialogs.Windows.NpvCreationDialogView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    xmlns:viewModels="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
+    mc:Ignorable="d"
+    d:DesignHeight="540"
+    d:DesignWidth="650"
+    d:DataContext="{d:DesignInstance}"
+    Title="Configure your NPV"
+    Width="650"
+    Height="850"
+    Background="{StaticResource ContentBackgroundAlt3}"
+    KeyDown="OnKeyDown"
+    WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <x:Array
+            x:Key="SharedListBoxItems"
+            Type="system:String">
+            <system:String>01</system:String>
+            <system:String>02</system:String>
+            <system:String>03</system:String>
+            <system:String>04</system:String>
+            <system:String>05</system:String>
+            <system:String>06</system:String>
+            <system:String>07</system:String>
+            <system:String>08</system:String>
+            <system:String>09</system:String>
+            <system:String>10</system:String>
+            <system:String>11</system:String>
+            <system:String>12</system:String>
+            <system:String>13</system:String>
+            <system:String>14</system:String>
+            <system:String>15</system:String>
+            <system:String>16</system:String>
+            <system:String>17</system:String>
+            <system:String>18</system:String>
+            <system:String>19</system:String>
+            <system:String>20</system:String>
+            <system:String>21</system:String>
+            <system:String>22</system:String>
+        </x:Array>
+
+        <Style
+            x:Key="LinkStyle"
+            TargetType="Hyperlink">
+            <Setter Property="Foreground" Value="{StaticResource WolvenKitCyan}" />
+        </Style>
+        <ObjectDataProvider
+            x:Key="NpvBodyGenderProvider"
+            MethodName="GetValues"
+            ObjectType="{x:Type system:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="viewModels:NpvBodyGender" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TabControl Height="Auto">
+
+
+            <TabItem Header="Tab2">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Description text: Page 1 -->
+                    <Border Grid.Row="0">
+                        <StackPanel
+                            VerticalAlignment="Center"
+                            Orientation="Vertical">
+                            <TextBlock
+                                Padding="0,0,0,5"
+                                FontSize="20"
+                                Text="Appearance options" />
+                            <TextBlock
+                                Height="25"
+                                Padding="0,5,0,0"
+                                Text="From the list, select which items you want to include." />
+                            <TextBlock>
+                                <Hyperlink
+                                    Style="{StaticResource LinkStyle}"
+                                    NavigateUri="https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/npcs/npv-v-as-custom-npc"
+                                    RequestNavigate="Hyperlink_RequestNavigate">
+                                    Click here
+                                </Hyperlink>
+                                <Run Text="to open the wiki tutorial page" />
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Grid: Page 1 -->
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="200" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="10" />
+                        </Grid.RowDefinitions>
+
+                        <!-- Cyberware -->
+                        <Border
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Margin="0,10,0,10">
+                            <Label>Cyberware</Label>
+                        </Border>
+                        <Border
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Width="200"
+                            Margin="0,5,0,0"
+                            HorizontalAlignment="Left">
+                            <ComboBox
+                                x:Name="Combobox_Cyberware"
+                                ItemsSource="{Binding Path=CyberwareOptions}" />
+                        </Border>
+
+                        <!-- Tattoos -->
+                        <Border
+                            Grid.Row="4"
+                            Grid.Column="0"
+                            Margin="0,10,0,10">
+                            <Label>Tattoos</Label>
+                        </Border>
+                        <Border
+                            Grid.Row="4"
+                            Grid.Column="1"
+                            Width="200"
+                            Margin="0,5,0,0"
+                            HorizontalAlignment="Left">
+                            <ComboBox
+                                x:Name="Combobox_Tattoos"
+                                ItemsSource="{Binding Path=TattooOptions}" />
+                        </Border>
+
+                        <!-- Scars -->
+                        <Border
+                            Grid.Row="6"
+                            Grid.Column="0"
+                            Margin="0,10,0,10">
+                            <Label>Scars</Label>
+                        </Border>
+                        <Border
+                            Grid.Row="6"
+                            Grid.Column="1"
+                            Width="200"
+                            Margin="0,5,0,0"
+                            HorizontalAlignment="Left">
+                            <ComboBox
+                                x:Name="Combobox_Scars"
+                                ItemsSource="{Binding Path=ScarOptions}" />
+                        </Border>
+
+                        <!-- Piercings -->
+                        <Border
+                            Grid.Row="08"
+                            Grid.Column="0"
+                            Margin="0,10,0,10">
+                            <Label>Piercings</Label>
+                        </Border>
+                        <Border
+                            Grid.Row="08"
+                            Grid.Column="1"
+                            Width="200"
+                            Margin="0,5,0,0"
+                            HorizontalAlignment="Left">
+                            <ComboBox
+                                Name="Combobox_Piercings"
+                                ItemsSource="{Binding Path=PiercingOptions}"
+                                SelectedIndex="0" />
+                        </Border>
+
+                        <!-- Eye make-up -->
+                        <Border
+                            Grid.Row="10"
+                            Grid.Column="0"
+                            Margin="0,10,0,10">
+                            <Label>Eye Make-up</Label>
+                        </Border>
+                        <Border
+                            Grid.Row="10"
+                            Grid.Column="1"
+                            Width="200"
+                            Margin="0,5,0,0"
+                            HorizontalAlignment="Left">
+                            <ComboBox
+                                Name="Combobox_eye_makeup"
+                                ItemsSource="{Binding Path=EyeMakeUpColorOptions}"
+                                SelectedIndex="0" />
+                        </Border>
+                        <Border
+                            Grid.Row="10"
+                            Grid.Column="2"
+                            Width="200"
+                            Margin="5,5,0,0"
+                            HorizontalAlignment="Left">
+                            <ComboBox
+                                Name="Combobox_eye_makeup_style"
+                                ItemsSource="{Binding Path=EyeMakeUpStyleOptions}"
+                                SelectedIndex="0" />
+                        </Border>
+
+                        <!-- Lip make-up -->
+                        <Border
+                            Grid.Row="12"
+                            Grid.Column="0"
+                            Margin="0,10,0,10">
+                            <Label>Lip Make-up</Label>
+                        </Border>
+                        <Border
+                            Grid.Row="12"
+                            Grid.Column="1"
+                            Width="200"
+                            Margin="0,5,0,0"
+                            HorizontalAlignment="Left">
+                            <ComboBox
+                                Name="Combobox_lip_makeup"
+                                ItemsSource="{Binding Path=LipMakeUpColorOptions}"
+                                SelectedIndex="0" />
+                        </Border>
+                        <Border
+                            Grid.Row="12"
+                            Grid.Column="2"
+                            Width="200"
+                            Margin="5,5,0,0"
+                            HorizontalAlignment="Left">
+                            <ComboBox
+                                Name="Combobox_lip_makeup_style"
+                                ItemsSource="{Binding Path=LipMakeUpStyleOptions}"
+                                SelectedIndex="0" />
+                        </Border>
+
+                        <!-- Freckles -->
+                        <Border
+                            Grid.Row="14"
+                            Grid.Column="0"
+                            Margin="0,10,0,10">
+                            <Label>Cheek Make-up / Freckles</Label>
+                        </Border>
+                        <Border
+                            Grid.Row="14"
+                            Grid.Column="1"
+                            Width="200"
+                            Margin="0,5,0,0"
+                            HorizontalAlignment="Left">
+                            <ComboBox
+                                Name="Combobox_freckles"
+                                ItemsSource="{Binding Path=CheekMakeupColorOptions}"
+                                SelectedIndex="0" />
+                        </Border>
+                        <Border
+                            Grid.Row="14"
+                            Grid.Column="2"
+                            Width="200"
+                            Margin="5,5,0,0"
+                            HorizontalAlignment="Left">
+                            <ComboBox
+                                Name="Combobox_cheek_make_up_style"
+                                ItemsSource="{Binding Path=CheekMakeupStyleOptions}"
+                                SelectedIndex="0" />
+                        </Border>
+                        <Border
+                            Grid.Row="14"
+                            Grid.Column="2"
+                            Width="200"
+                            Margin="5,5,0,0"
+                            HorizontalAlignment="Left">
+                            <ComboBox
+                                Name="Combobox_blemish_style"
+                                ItemsSource="{Binding Path=CheekMakeupStyleOptions}"
+                                SelectedIndex="0" />
+                        </Border>
+
+                        <!-- Blemishes -->
+                        <Border
+                            Grid.Row="16"
+                            Grid.Column="0"
+                            Margin="0,10,0,10">
+                            <Label>Blemishes</Label>
+                        </Border>
+                        <Border
+                            Grid.Row="16"
+                            Grid.Column="1"
+                            Width="200"
+                            Margin="0,5,0,0"
+                            HorizontalAlignment="Left">
+                            <ComboBox
+                                Name="Combobox_blemishes"
+                                ItemsSource="{Binding Path=BlemishOptions}"
+                                SelectedIndex="0" />
+                        </Border>
+
+                        <!-- Eye Color -->
+                        <Border
+                            Grid.Row="18"
+                            Grid.Column="0"
+                            Margin="0,10,0,10">
+                            <Label>Eye Color</Label>
+                        </Border>
+                        <Border
+                            Grid.Row="18"
+                            Grid.Column="1"
+                            Width="200"
+                            Margin="0,5,0,0"
+                            HorizontalAlignment="Left">
+                            <ComboBox
+                                Name="Combobox_eye_color"
+                                ItemsSource="{Binding Path=EyeColorOptions}"
+                                SelectedIndex="0" />
+                        </Border>
+
+                        <!-- Eyebrows -->
+                        <Border
+                            Grid.Row="20"
+                            Grid.Column="0"
+                            Margin="0,10,0,10">
+                            <Label>Eyebrows</Label>
+                        </Border>
+                        <Border
+                            Grid.Row="20"
+                            Grid.Column="1"
+                            Width="200"
+                            Margin="0,5,0,0"
+                            HorizontalAlignment="Left">
+                            <ComboBox
+                                Name="Combobox_eyebrow_color"
+                                ItemsSource="{Binding Path=EyebrowColorOptions}"
+                                SelectedIndex="0" />
+                        </Border>
+                        <Border
+                            Grid.Row="20"
+                            Grid.Column="2"
+                            Width="200"
+                            Margin="5,5,0,0"
+                            HorizontalAlignment="Left">
+                            <ComboBox
+                                Name="Combobox_eyebrow_style"
+                                ItemsSource="{Binding Path=EyebrowStyleOptions}"
+                                SelectedIndex="0" />
+                        </Border>
+
+                        <!-- Beard -->
+                        <Border
+                            Grid.Row="22"
+                            Grid.Column="0"
+                            Margin="0,10,0,10">
+                            <Label>Beard (mascV only)</Label>
+                        </Border>
+                        <Border
+                            Grid.Row="22"
+                            Grid.Column="1"
+                            Width="200"
+                            Margin="0,5,0,0"
+                            HorizontalAlignment="Left">
+                            <ComboBox
+                                Name="Combobox_beard_color"
+                                ItemsSource="{Binding Path=BeardColorOptions}"
+                                SelectedIndex="0" />
+                        </Border>
+                        <Border
+                            Grid.Row="22"
+                            Grid.Column="1"
+                            Width="200"
+                            Margin="0,5,0,0"
+                            HorizontalAlignment="Left">
+                            <ComboBox
+                                Name="Combobox_beard_style"
+                                ItemsSource="{Binding Path=BeardStyleOptions}"
+                                SelectedIndex="0" />
+                        </Border>
+
+                    </Grid>
+                </Grid>
+
+            </TabItem>
+
+
+            <TabItem Header="Tab1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Description text: Page 1 -->
+                    <Border
+                        Name="DescriptionText1"
+                        Grid.Row="0">
+                        <StackPanel
+                            VerticalAlignment="Center"
+                            Orientation="Vertical">
+                            <TextBlock
+                                Padding="0,0,0,5"
+                                FontSize="20"
+                                Text="Configure your NPV" />
+                            <TextBlock
+                                Height="25"
+                                Padding="0,5,0,0"
+                                Text="Enter the exact values from character creation." />
+                            <TextBlock>
+                                <Hyperlink
+                                    Style="{StaticResource LinkStyle}"
+                                    NavigateUri="https://www.nexusmods.com/cyberpunk2077/mods/3850"
+                                    RequestNavigate="Hyperlink_RequestNavigate">
+                                    Click here
+                                </Hyperlink>
+                                <Run Text="to open AppearanceChangeUnlocker on Nexus" />
+                            </TextBlock>
+                            <TextBlock>
+                                <Hyperlink
+                                    Style="{StaticResource LinkStyle}"
+                                    NavigateUri="https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/npcs/npv-v-as-custom-npc"
+                                    RequestNavigate="Hyperlink_RequestNavigate">
+                                    Click here
+                                </Hyperlink>
+                                <Run Text="to open the wiki tutorial page" />
+                            </TextBlock>
+                            <TextBlock>
+                                <Hyperlink
+                                    Style="{StaticResource LinkStyle}"
+                                    NavigateUri="https://noraleedoes.neocities.org/npv/npv_part_picker"
+                                    RequestNavigate="Hyperlink_RequestNavigate">
+                                    Click here
+                                </Hyperlink>
+                                <Run Text="to open Nora's NPV part picker" />
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Grid: Page 1 -->
+                    <Grid Grid.Row="1">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="400" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50" />
+                            <RowDefinition Height="55" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                            <RowDefinition Height="40" />
+                        </Grid.RowDefinitions>
+
+                        <!-- Destination file path -->
+                        <Border
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Margin="0,10,0,10">
+                            <Label>Target folder</Label>
+                        </Border>
+                        <Border
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Margin="0,10,0,5">
+                            <TextBox Name="TextBox_FilePath" />
+                        </Border>
+
+                        <!-- Body Gender -->
+                        <Border
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Margin="0,0,0,10">
+                            <Label>Body Gender</Label>
+                        </Border>
+                        <Border
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Width="200"
+                            Margin="0,5,0,0"
+                            HorizontalAlignment="Left">
+                            <ListBox
+                                x:Name="Combobox_BodyGender"
+                                ItemsSource="{Binding Source={StaticResource NpvBodyGenderProvider}}" />
+                        </Border>
+
+                        <!-- Eyes -->
+                        <Border
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Margin="0,0,0,10">
+                            <Label>Eyes</Label>
+                        </Border>
+                        <Border
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Width="200"
+                            Margin="5"
+                            HorizontalAlignment="Left">
+                            <ComboBox
+                                Name="Combobox_Eyes"
+                                ItemsSource="{StaticResource SharedListBoxItems}"
+                                SelectedIndex="0" />
+                        </Border>
+
+                        <!-- Nose -->
+                        <Border
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Margin="0,0,0,10">
+                            <Label>Nose</Label>
+                        </Border>
+                        <Border
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Width="200"
+                            Margin="5"
+                            HorizontalAlignment="Left">
+                            <ComboBox
+                                Name="Combobox_Nose"
+                                ItemsSource="{StaticResource SharedListBoxItems}"
+                                SelectedIndex="0" />
+                        </Border>
+
+                        <!-- Mouth -->
+                        <Border
+                            Grid.Row="4"
+                            Grid.Column="0"
+                            Margin="0,0,0,10">
+                            <Label>Mouth</Label>
+                        </Border>
+                        <Border
+                            Grid.Row="4"
+                            Grid.Column="1"
+                            Width="200"
+                            Margin="5"
+                            HorizontalAlignment="Left">
+                            <ComboBox
+                                Name="Combobox_Mouth"
+                                ItemsSource="{StaticResource SharedListBoxItems}"
+                                SelectedIndex="0" />
+                        </Border>
+
+                        <!-- Jaw -->
+                        <Border
+                            Grid.Row="5"
+                            Grid.Column="0"
+                            Margin="0,0,0,10">
+                            <Label>Jaw</Label>
+                        </Border>
+                        <Border
+                            Grid.Row="5"
+                            Grid.Column="1"
+                            Width="200"
+                            Margin="5"
+                            HorizontalAlignment="Left">
+                            <ComboBox
+                                Name="Combobox_Jaw"
+                                ItemsSource="{StaticResource SharedListBoxItems}"
+                                SelectedIndex="0" />
+                        </Border>
+
+                        <!-- Ears -->
+                        <Border
+                            Grid.Row="6"
+                            Grid.Column="0"
+                            Margin="0,0,0,10">
+                            <Label>Ears</Label>
+                        </Border>
+                        <Border
+                            Grid.Row="6"
+                            Grid.Column="1"
+                            Width="200"
+                            Margin="5"
+                            HorizontalAlignment="Left">
+                            <ComboBox
+                                Name="Combobox_Ears"
+                                ItemsSource="{StaticResource SharedListBoxItems}"
+                                SelectedIndex="0" />
+                        </Border>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+        <!-- Button Row -->
+        <Grid
+            Grid.Row="1"
+            Grid.ColumnSpan="2"
+            Height="28"
+            Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Button
+                x:Name="CancelButton"
+                Grid.Column="0"
+                Margin="0,0"
+                Style="{StaticResource DialogButtonStyle}"
+                Click="OnNextButtonClick"
+                Content="Cancel" />
+
+            <Button
+                x:Name="NextButton"
+                Grid.Column="2"
+                Margin="10,0"
+                Style="{StaticResource DialogButtonStyle}"
+                IsEnabled="{Binding PageComplete}"
+                Click="OnOkButtonClick"
+                Content="Next" />
+
+            <Button
+                x:Name="OkButton"
+                Grid.Column="3"
+                Margin="0,0"
+                Background="{StaticResource WolvenKitRed}"
+                Style="{StaticResource DialogButtonStyle}"
+                IsEnabled="{Binding CanSave}"
+                Click="OnOkButtonClick"
+                Content="Save" />
+        </Grid>
+    </Grid>
+</Window>

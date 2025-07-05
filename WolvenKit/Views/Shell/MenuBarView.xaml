@@ -45,6 +45,7 @@
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
                 FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="File">
+
                 <MenuItem
                     x:Name="MenuItemNewFile"
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
@@ -96,6 +97,19 @@
                                 Kind="TerminalTmux"
                                 Size="{DynamicResource WolvenKitIconTiny}"
                                 Foreground="{StaticResource WolvenKitYellow}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <MenuItem
+                        x:Name="MenuItemNewNpc"
+                        Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                        Header="New NPC">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="Material"
+                                Kind="AccountPlus"
+                                Size="{DynamicResource WolvenKitIconTiny}"
+                                Foreground="{StaticResource WolvenKitCyan}" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>

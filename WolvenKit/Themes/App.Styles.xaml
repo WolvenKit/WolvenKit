@@ -2241,6 +2241,15 @@
     </Style>
 
     <Style
+        x:Key="DialogButtonStyle"
+        BasedOn="{StaticResource {x:Type Button}}"
+        TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource BackgroundColor_Button_Active}" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="Margin" Value="10,0,0,0" />
+        <Setter Property="Padding" Value="12,0" />
+    </Style>
+    <Style
         x:Key="SearchBarStyle"
         BasedOn="{StaticResource SearchBarPlus}"
         TargetType="{x:Type hc:SearchBar}">
