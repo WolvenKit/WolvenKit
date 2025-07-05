@@ -36,7 +36,6 @@ public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
     public string GetRED4GameLegacyModDir();
     public string GetRED4GameModDir();
 
-
     public static string GetAppData()
     {
         var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit");
@@ -196,4 +195,6 @@ public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
     int NumFilesToReopen { get; set; }
 
     bool ShowVerboseLogOutput { get; set; }
+
+    bool IsDiscordRPCEnabled { get; set; }
 }
