@@ -1863,7 +1863,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(ShowPropertiesCommand))]
     [NotifyCanExecuteChangedFor(nameof(NewPhotoModeFilesCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateInkatlasCommand))]
-    [NotifyCanExecuteChangedFor(nameof(AddArchiveXlFilesCommand))]
     [NotifyCanExecuteChangedFor(nameof(AddAxlControlFilesCommand))]
     [NotifyCanExecuteChangedFor(nameof(AddArchiveXlItemFilesCommand))]
     private Cp77Project? _activeProject;
