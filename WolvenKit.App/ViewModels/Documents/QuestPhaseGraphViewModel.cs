@@ -49,6 +49,8 @@ namespace WolvenKit.App.ViewModels.Documents
         
         public int TotalNodes => CalculateTotalNodes();
         
+        public int TotalPhaseNodes => CalculatePhaseNodes();
+        
         public int TotalPhasePrefabs => _questPhaseData.PhasePrefabs?.Count ?? 0;
         
         public int TotalInplacePhases => _questPhaseData.InplacePhases?.Count ?? 0;
@@ -173,14 +175,60 @@ namespace WolvenKit.App.ViewModels.Documents
                     total += CountNodesInPhaseGraph(phasePrefab);
                 }
             }
+
+            // Count nodes in phase nodes within the graph
+            if (_questPhaseData.Graph?.Chunk?.Nodes != null)
+            {
+                foreach (var nodeHandle in _questPhaseData.Graph.Chunk.Nodes)
+                {
+                    if (nodeHandle.Chunk is questPhaseNodeDefinition phaseNode)
+                    {
+                        // Count nodes in phase graphs
+                        if (phaseNode.PhaseGraph?.Chunk != null)
+                        {
+                            total += phaseNode.PhaseGraph.Chunk.Nodes?.Count ?? 0;
+                        }
+
+                        // Count nodes in phase instance prefabs
+                        if (phaseNode.PhaseInstancePrefabs != null)
+                        {
+                            foreach (var instancePrefab in phaseNode.PhaseInstancePrefabs)
+                            {
+                                total += CountNodesInPrefab(instancePrefab);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            return total;
+        }
+
+        private int CalculatePhaseNodes()
+        {
+            int total = 0;
+            
+            // Count phase nodes in the main graph
+            if (_questPhaseData.Graph?.Chunk?.Nodes != null)
+            {
+                total += _questPhaseData.Graph.Chunk.Nodes.Count(
+                    nodeHandle => nodeHandle.Chunk is questPhaseNodeDefinition);
+            }
             
             return total;
         }
 
         private int CountNodesInPhaseGraph(questQuestPrefabEntry phasePrefab)
         {
-            // This would need to be implemented based on how phase prefabs contain nested graphs
-            // For now, return 0 - this can be expanded when we understand the phase structure better
+            // Count nodes in phase prefabs - this is a simplified implementation
+            // In a full implementation, we might need to load the referenced resource
+            return 0;
+        }
+
+        private int CountNodesInPrefab(questQuestPrefabEntry prefab)
+        {
+            // Count nodes in prefabs - this is a simplified implementation
+            // In a full implementation, we might need to load the referenced resource
             return 0;
         }
 

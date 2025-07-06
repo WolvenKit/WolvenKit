@@ -1,6 +1,10 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -29,8 +33,21 @@ namespace WolvenKit.Views.Documents
 {
     /// <summary>
     /// Interaction logic for QuestPhaseGraphView.xaml
+    /// Handles quest phase graph visualization, node selection, automatic deselection
+    /// when switching between quest phase and scene documents to avoid selection confusion,
+    /// and selection restoration when returning to previously viewed documents.
+    /// 
+    /// Selection persistence:
+    /// - Stores last selected node ID when switching away from quest phase documents
+    /// - Restores selection when switching back to quest phase documents
+    /// - Cleans up selection cache when documents are closed
+    /// 
+    /// Memory leak protection:
+    /// - Document switching: CleanupEventSubscription() -> EstablishEventSubscription() 
+    /// - Document closing: DockedViews.CollectionChanged -> Dispose() when document removed
+    /// - App shutdown: Finalizer -> Dispose(false) -> Cleanup fallback
     /// </summary>
-    public partial class QuestPhaseGraphView : UserControl
+    public partial class QuestPhaseGraphView : UserControl, IDisposable
     {
         // Navigation memory: tracks which child was last visited from each node in each direction
         private readonly Dictionary<(uint nodeId, Key direction), uint> _navigationMemory = new();
@@ -39,6 +56,15 @@ namespace WolvenKit.Views.Documents
         // Viewport position tracking for subgraph navigation - remembers where we were in each graph
         private readonly Dictionary<RedGraph, System.Windows.Point> _viewportPositions = new();
 
+        // Document switching tracking for node deselection
+        private AppViewModel? _appViewModel;
+        private IDocumentViewModel? _lastActiveDocument;
+        private bool _disposed = false;
+        private IDocumentViewModel? _currentDocument; // Track current document for disposal detection
+        
+        // Node selection persistence across document switches
+        private static readonly Dictionary<string, (uint nodeId, int graphLevel)> _documentNodeSelections = new();
+
         public QuestPhaseGraphView()
         {
             InitializeComponent();
@@ -46,6 +72,139 @@ namespace WolvenKit.Views.Documents
             
             // Add keyboard shortcut for subgraph navigation (Tab key)
             KeyDown += OnKeyDown;
+        }
+
+        /// <summary>
+        /// Establish event subscription for document switching detection
+        /// </summary>
+        private void EstablishEventSubscription()
+        {
+            if (_disposed) return; // Don't establish subscription if disposed
+            
+            // Clean up any existing subscription first
+            CleanupEventSubscription();
+            
+            _appViewModel = Locator.Current.GetService<AppViewModel>();
+            if (_appViewModel != null)
+            {
+                _appViewModel.PropertyChanged += OnAppViewModelPropertyChanged;
+                _lastActiveDocument = _appViewModel.ActiveDocument;
+            }
+        }
+
+        /// <summary>
+        /// Clean up event subscription
+        /// </summary>
+        private void CleanupEventSubscription()
+        {
+            if (_appViewModel != null)
+            {
+                _appViewModel.PropertyChanged -= OnAppViewModelPropertyChanged;
+                _appViewModel.DockedViews.CollectionChanged -= OnDockedViewsCollectionChanged;
+                _appViewModel = null;
+            }
+        }
+
+        /// <summary>
+        /// Monitor document closing by watching DockedViews collection changes
+        /// </summary>
+        private void MonitorDocumentClosing()
+        {
+            if (_appViewModel == null) return;
+
+            // Get the current document from our DataContext
+            var viewModel = DataContext as QuestPhaseGraphViewModel;
+            _currentDocument = viewModel?.Parent;
+
+            if (_currentDocument != null)
+            {
+                // Subscribe to DockedViews changes to detect document removal
+                _appViewModel.DockedViews.CollectionChanged += OnDockedViewsCollectionChanged;
+            }
+        }
+
+        /// <summary>
+        /// Handle DockedViews collection changes to detect document closing
+        /// </summary>
+        private void OnDockedViewsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (_disposed || e.Action != NotifyCollectionChangedAction.Remove)
+                return;
+
+            // Check if our current document was removed (closed)
+            if (e.OldItems != null && _currentDocument != null)
+            {
+                foreach (var removedItem in e.OldItems)
+                {
+                    if (ReferenceEquals(removedItem, _currentDocument))
+                    {
+                        // Clean up selection cache for closed document
+                        CleanupSelectionCache(_currentDocument);
+                        
+                        Dispose();
+                        return;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Clean up selection cache for a specific document
+        /// </summary>
+        private void CleanupSelectionCache(IDocumentViewModel? document)
+        {
+            if (document == null) return;
+
+            var documentKey = GetDocumentKey(document);
+            if (documentKey != null)
+            {
+                _documentNodeSelections.Remove(documentKey);
+            }
+        }
+
+
+
+        /// <summary>
+        /// Dispose pattern implementation
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Protected dispose method
+        /// </summary>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed && disposing)
+            {
+                // Clean up managed resources
+                CleanupEventSubscription();
+                
+                // Clear viewport positions to prevent memory leaks
+                _viewportPositions.Clear();
+                
+                // Clear document references
+                _currentDocument = null;
+                _lastActiveDocument = null;
+                
+                // Clean up event handlers (safe to unsubscribe even if not subscribed)
+                DataContextChanged -= OnDataContextChanged;
+                KeyDown -= OnKeyDown;
+                
+                _disposed = true;
+                Locator.Current.GetService<ILoggerService>()?.Info("[QuestPhaseGraphView] View disposed successfully - all resources cleaned up");
+            }
+        }
+
+        /// <summary>
+        /// Finalizer - cleanup if Dispose wasn't called
+        /// </summary>
+        ~QuestPhaseGraphView()
+        {
+            Dispose(false);
         }
 
         /// <summary>
@@ -62,13 +221,22 @@ namespace WolvenKit.Views.Documents
         
         private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            // Clear viewport positions when changing documents
+            if (_disposed) return; // Don't process if disposed
+            
+            // Clean up old subscription when switching contexts
             if (e.OldValue is QuestPhaseGraphViewModel)
             {
                 _viewportPositions.Clear();
+                CleanupEventSubscription();
             }
 
             if (e.NewValue is not QuestPhaseGraphViewModel viewModel) return;
+
+            // Establish event subscription when we have a valid quest phase document
+            EstablishEventSubscription();
+            
+            // Monitor document closing by watching DockedViews collection
+            MonitorDocumentClosing();
 
             viewModel.MainGraph.Connections.CollectionChanged += (_, _) => UpdateConnectionPathTypes(viewModel.MainGraph);
             viewModel.MainGraph.Nodes.CollectionChanged += (_, _) => UpdateConnectionPathTypes(viewModel.MainGraph);
@@ -85,6 +253,267 @@ namespace WolvenKit.Views.Documents
                     viewModel.SetGraphLoaded();
                 }), System.Windows.Threading.DispatcherPriority.Background);
             }), System.Windows.Threading.DispatcherPriority.Loaded);
+        }
+
+
+
+        /// <summary>
+        /// Handle document switching to deselect nodes when switching between quest phase and scene documents
+        /// </summary>
+        private void OnAppViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (_disposed || e.PropertyName != nameof(AppViewModel.ActiveDocument) || _appViewModel == null)
+                return;
+
+            var currentDocument = _appViewModel.ActiveDocument;
+            
+            // Debug logging to see if method is being called
+            var fromType = _lastActiveDocument != null ? 
+                (IsQuestPhaseDocument(_lastActiveDocument) ? "QuestPhase" : 
+                 IsSceneDocument(_lastActiveDocument) ? "Scene" : "Other") : "None";
+            var toType = currentDocument != null ? 
+                (IsQuestPhaseDocument(currentDocument) ? "QuestPhase" : 
+                 IsSceneDocument(currentDocument) ? "Scene" : "Other") : "None";
+            
+            // Store current selection when switching away from quest phase documents
+            if (IsQuestPhaseDocument(_lastActiveDocument))
+            {
+                StoreCurrentSelection(_lastActiveDocument);
+            }
+            
+            // Check if we should deselect based on document switching
+            if (ShouldDeselect(_lastActiveDocument, currentDocument))
+            {
+                // Clear node selection in editor
+                if (QuestPhaseGraphEditor?.Editor?.SelectedItems != null)
+                {
+                    QuestPhaseGraphEditor.Editor.SelectedItems.Clear();
+                }
+                
+                // Clear NodeSelectionService - this is crucial for property panel
+                NodeSelectionService.Instance.SelectedNode = null;
+            }
+
+
+
+            // Restore selection when switching to quest phase documents FROM graph documents
+            // (Only restore if we're coming from a graph document where selection was cleared)
+            if (IsQuestPhaseDocument(currentDocument) && IsGraphDocument(_lastActiveDocument))
+            {
+                // Use a delay to ensure the view and graph are ready
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    RestoreSelectionIfReady(currentDocument);
+                }), DispatcherPriority.Background);
+            }
+
+            _lastActiveDocument = currentDocument;
+        }
+
+        /// <summary>
+        /// Determine if we should deselect nodes based on document switching
+        /// Clear selection when switching between any graph documents (quest phase or scene) to prevent property panel confusion
+        /// </summary>
+        private bool ShouldDeselect(IDocumentViewModel? fromDocument, IDocumentViewModel? toDocument)
+        {
+            // Don't deselect if staying in the same document
+            if (fromDocument == toDocument)
+                return false;
+
+            // Check if we're switching away from a graph document (quest phase OR scene)
+            var switchingAwayFromGraph = IsQuestPhaseDocument(fromDocument) || IsSceneDocument(fromDocument);
+            
+            // Check if we're switching to a graph document (quest phase OR scene)  
+            var switchingToGraph = IsQuestPhaseDocument(toDocument) || IsSceneDocument(toDocument);
+
+            // Deselect if switching between any graph documents to clear property panel
+            return switchingAwayFromGraph && switchingToGraph;
+        }
+
+        /// <summary>
+        /// Check if a document is a quest phase document
+        /// </summary>
+        private bool IsQuestPhaseDocument(IDocumentViewModel? document)
+        {
+            if (document is not RedDocumentViewModel redDoc)
+                return false;
+
+            return redDoc.TabItemViewModels.Any(tab => tab is QuestPhaseGraphViewModel);
+        }
+
+        /// <summary>
+        /// Check if a document is a scene document
+        /// </summary>
+        private bool IsSceneDocument(IDocumentViewModel? document)
+        {
+            if (document is not RedDocumentViewModel redDoc)
+                return false;
+
+            return redDoc.TabItemViewModels.Any(tab => tab is SceneGraphViewModel);
+        }
+
+        /// <summary>
+        /// Check if a document is any graph document (quest phase or scene)
+        /// </summary>
+        private bool IsGraphDocument(IDocumentViewModel? document)
+        {
+            return IsQuestPhaseDocument(document) || IsSceneDocument(document);
+        }
+
+        /// <summary>
+        /// Store the currently selected node for the given document
+        /// </summary>
+        private void StoreCurrentSelection(IDocumentViewModel? document)
+        {
+            if (document == null) return;
+
+            var documentKey = GetDocumentKey(document);
+            if (documentKey == null) return;
+
+            var currentSelectedNode = NodeSelectionService.Instance.SelectedNode;
+            if (currentSelectedNode != null)
+            {
+                // Get the current graph level from the document's quest phase view model
+                var graphLevel = GetCurrentGraphLevel(document);
+                
+                // Store the selected node ID and graph level
+                _documentNodeSelections[documentKey] = (currentSelectedNode.UniqueId, graphLevel);
+            }
+            // If no selection, don't store anything - let previous selection remain if it exists
+        }
+
+        /// <summary>
+        /// Restore selection only if the view is ready and this is the active document
+        /// </summary>
+        private void RestoreSelectionIfReady(IDocumentViewModel? activeDocument)
+        {
+            if (activeDocument == null || _disposed) return;
+
+            // Check if this view's document matches the active document
+            var viewModel = DataContext as QuestPhaseGraphViewModel;
+            if (viewModel?.Parent != activeDocument)
+            {
+                return;
+            }
+
+            // Check if the graph is ready
+            if (viewModel.MainGraph?.Nodes == null)
+            {
+                return;
+            }
+
+            RestoreSelection(activeDocument);
+        }
+
+        /// <summary>
+        /// Restore the previously selected node for the given document
+        /// </summary>
+        private void RestoreSelection(IDocumentViewModel? document)
+        {
+            if (document == null || _disposed) return;
+
+            var documentKey = GetDocumentKey(document);
+            if (documentKey != null && _documentNodeSelections.TryGetValue(documentKey, out var selection))
+            {
+                var (nodeId, graphLevel) = selection;
+                
+                // Navigate to the correct graph level first
+                var navigated = NavigateToGraphLevel(document, graphLevel);
+                if (!navigated)
+                {
+                    // Fallback: Try to find the node in the root graph
+                    // This handles cases where subgraph context is lost during document switching
+                    var restored = SearchAndNavigateToNode(nodeId);
+                    if (!restored)
+                    {
+                        // Node doesn't exist anywhere, remove from cache
+                        _documentNodeSelections.Remove(documentKey);
+                    }
+                    return;
+                }
+
+                // Now try to select the node at the correct graph level
+                var restoredAtLevel = SearchAndNavigateToNode(nodeId);
+                if (!restoredAtLevel)
+                {
+                    // Fallback: Navigate back to root and try there
+                    NavigateToGraphLevel(document, 0);
+                    var restoredAtRoot = SearchAndNavigateToNode(nodeId);
+                    if (!restoredAtRoot)
+                    {
+                        // Node no longer exists anywhere, remove from cache
+                        _documentNodeSelections.Remove(documentKey);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get a unique key for a document (using file path)
+        /// </summary>
+        private string? GetDocumentKey(IDocumentViewModel? document)
+        {
+            return document?.FilePath;
+        }
+
+        /// <summary>
+        /// Get the current graph level for the document (0 = root, 1+ = subgraph levels)
+        /// </summary>
+        private int GetCurrentGraphLevel(IDocumentViewModel? document)
+        {
+            if (document is not RedDocumentViewModel redDoc) return 0;
+
+            // Find the quest phase view model for this document
+            var questPhaseViewModel = redDoc.TabItemViewModels.OfType<QuestPhaseGraphViewModel>().FirstOrDefault();
+            if (questPhaseViewModel?.History == null) return 0;
+
+            // Return the current graph level (History count - 1, where 0 is root)
+            return questPhaseViewModel.History.Count - 1;
+        }
+
+        /// <summary>
+        /// Navigate to the specified graph level (0 = root, 1+ = subgraph levels)
+        /// Note: Can only navigate to previous levels or stay at current level
+        /// </summary>
+        private bool NavigateToGraphLevel(IDocumentViewModel? document, int targetLevel)
+        {
+            if (document is not RedDocumentViewModel redDoc) return false;
+
+            // Find the quest phase view model for this document
+            var questPhaseViewModel = redDoc.TabItemViewModels.OfType<QuestPhaseGraphViewModel>().FirstOrDefault();
+            if (questPhaseViewModel?.History == null) return false;
+
+            var currentLevel = questPhaseViewModel.History.Count - 1;
+
+            // If we're already at the target level, no navigation needed
+            if (currentLevel == targetLevel) return true;
+
+            // If target level is deeper than current, we can't navigate there without specific path
+            if (targetLevel > currentLevel) return false;
+
+            // Navigate back to the target level by removing history entries
+            while (questPhaseViewModel.History.Count - 1 > targetLevel)
+            {
+                if (questPhaseViewModel.History.Count <= 1) break; // Don't remove the root graph
+
+                // Remove the last history entry and navigate to the previous level
+                questPhaseViewModel.History.RemoveAt(questPhaseViewModel.History.Count - 1);
+                var parentGraph = questPhaseViewModel.History[^1];
+                
+                // Update the current graph
+                if (QuestPhaseGraphEditor != null)
+                {
+                    QuestPhaseGraphEditor.SetCurrentValue(GraphEditorView.SourceProperty, parentGraph);
+                    
+                    // Restore viewport position if available
+                    RestoreViewportPosition(parentGraph);
+                    
+                    // Update breadcrumb
+                    BuildBreadcrumb();
+                }
+            }
+
+            return questPhaseViewModel.History.Count - 1 == targetLevel;
         }
 
         private void SetupConnectionTemplate()
@@ -193,7 +622,7 @@ namespace WolvenKit.Views.Documents
         /// <summary>
         /// Smart navigation with memory - cycles through multiple connections in the same direction
         /// </summary>
-        private WolvenKit.App.ViewModels.GraphEditor.NodeViewModel FindNextNodeInDirection(
+        private WolvenKit.App.ViewModels.GraphEditor.NodeViewModel? FindNextNodeInDirection(
             RedGraph graph, 
             WolvenKit.App.ViewModels.GraphEditor.NodeViewModel currentNode, 
             Key direction)
@@ -294,7 +723,7 @@ namespace WolvenKit.Views.Documents
         /// <summary>
         /// Fallback spatial navigation for unconnected nodes
         /// </summary>
-        private WolvenKit.App.ViewModels.GraphEditor.NodeViewModel GetNearestNodeInDirection(
+        private WolvenKit.App.ViewModels.GraphEditor.NodeViewModel? GetNearestNodeInDirection(
             RedGraph graph, 
             WolvenKit.App.ViewModels.GraphEditor.NodeViewModel currentNode, 
             Key direction)
@@ -445,22 +874,31 @@ namespace WolvenKit.Views.Documents
         /// </summary>
         public bool SearchAndNavigateToNode(uint nodeId)
         {
+            if (_disposed) return false; // Don't operate on disposed view
+            
             var viewModel = DataContext as QuestPhaseGraphViewModel;
             if (viewModel?.MainGraph?.Nodes == null)
+            {
                 return false;
+            }
 
-            // Find the node with the specified ID
-            var targetNode = viewModel.MainGraph.Nodes.FirstOrDefault(n => n.UniqueId == nodeId);
+            // Get the currently active graph (might be root or subgraph)
+            var currentGraph = QuestPhaseGraphEditor?.Source ?? viewModel.MainGraph;
+
+            // Find the node with the specified ID in the current graph
+            var targetNode = currentGraph.Nodes.FirstOrDefault(n => n.UniqueId == nodeId);
             if (targetNode == null)
+            {
                 return false;
+            }
 
             // Select the node
-            QuestPhaseGraphEditor?.Editor?.SelectedItems.Clear();
-            QuestPhaseGraphEditor?.Editor?.SelectedItems.Add(targetNode);
+            QuestPhaseGraphEditor?.Editor?.SelectedItems?.Clear();
+            QuestPhaseGraphEditor?.Editor?.SelectedItems?.Add(targetNode);
             NodeSelectionService.Instance.SelectedNode = targetNode;
 
             // Center view on the node
-            CenterViewOnSelectedNode(viewModel.MainGraph, targetNode);
+            CenterViewOnSelectedNode(currentGraph, targetNode);
 
             return true;
         }
@@ -470,6 +908,8 @@ namespace WolvenKit.Views.Documents
         /// </summary>
         public void ShowGoToNodeDialog()
         {
+            if (_disposed) return; // Don't operate on disposed view
+            
             var dialog = new InputDialogView("Go to Node", "");
 
             if (dialog.ViewModel is not InputDialogViewModel vm ||
@@ -482,26 +922,20 @@ namespace WolvenKit.Views.Documents
             {
                 if (!SearchAndNavigateToNode(nodeId))
                 {
-                    MessageBoxModel messageBox = new()
-                    {
-                        Text = $"Node with ID {nodeId} not found.",
-                        Caption = "Go to Node",
-                        Icon = AdonisUI.Controls.MessageBoxImage.Information,
-                        Buttons = new[] { MessageBoxButtons.Ok() }
-                    };
-                    AdonisUI.Controls.MessageBox.Show(Application.Current.MainWindow, messageBox);
+                    Interactions.ShowMessageBox(
+                        $"Node with ID {nodeId} not found.",
+                        "Go to Node",
+                        WMessageBoxButtons.Ok,
+                        WMessageBoxImage.Information);
                 }
             }
             else
             {
-                MessageBoxModel messageBox = new()
-                {
-                    Text = "Please enter a valid numeric Node ID.",
-                    Caption = "Invalid Input",
-                    Icon = AdonisUI.Controls.MessageBoxImage.Warning,
-                    Buttons = new[] { MessageBoxButtons.Ok() }
-                };
-                AdonisUI.Controls.MessageBox.Show(Application.Current.MainWindow, messageBox);
+                Interactions.ShowMessageBox(
+                    "Please enter a valid numeric Node ID.",
+                    "Invalid Input",
+                    WMessageBoxButtons.Ok,
+                    WMessageBoxImage.Warning);
             }
         }
 
@@ -533,9 +967,21 @@ namespace WolvenKit.Views.Documents
                     }
                     else
                     {
-                        // Del: Hard delete for quest nodes (no soft delete/deletion markers)
-                        var nodeViewModels = selectedNodes.Cast<object>().ToList();
-                        viewModel.MainGraph.RemoveNodes(nodeViewModels);
+                        // Del: Smart delete - soft delete normal nodes, hard delete deletion markers
+                        foreach (var node in selectedNodes)
+                        {
+                            // If it's already a deletion marker, destroy it completely
+                            if (node is questDeletionMarkerNodeDefinitionWrapper)
+                            {
+                                var nodeAsObject = (object)node;
+                                viewModel.MainGraph.RemoveNodes(new List<object> { nodeAsObject });
+                            }
+                            else
+                            {
+                                // Normal node: replace with deletion marker (soft delete)
+                                viewModel.MainGraph.ReplaceNodeWithQuestDeletionMarker(node);
+                            }
+                        }
                     }
                     e.Handled = true;
                 }
@@ -582,8 +1028,8 @@ namespace WolvenKit.Views.Documents
                     UpdateNavigationMemory(currentNode.UniqueId, e.Key, next.UniqueId);
                     
                     // Update selection in editor
-                    QuestPhaseGraphEditor?.Editor?.SelectedItems.Clear();
-                    QuestPhaseGraphEditor?.Editor?.SelectedItems.Add(next);
+                    QuestPhaseGraphEditor?.Editor?.SelectedItems?.Clear();
+                    QuestPhaseGraphEditor?.Editor?.SelectedItems?.Add(next);
                     NodeSelectionService.Instance.SelectedNode = next;
                     
                     // Auto-scroll graph view to keep selected node visible
@@ -675,10 +1121,10 @@ namespace WolvenKit.Views.Documents
             if (targetNode != null)
             {
                 // Clear current selection
-                QuestPhaseGraphEditor.Editor.SelectedItems.Clear();
+                QuestPhaseGraphEditor.Editor?.SelectedItems?.Clear();
                 
                 // Select the target node
-                QuestPhaseGraphEditor.Editor.SelectedItems.Add(targetNode);
+                QuestPhaseGraphEditor.Editor?.SelectedItems?.Add(targetNode);
                 
                 // Update the NodeSelectionService
                 NodeSelectionService.Instance.SelectedNode = targetNode;
@@ -701,13 +1147,19 @@ namespace WolvenKit.Views.Documents
 
             var selectedNode = QuestPhaseGraphEditor.SelectedNode;
 
+            // Special handling for scene nodes - offer to open in Scene Editor
+            if (selectedNode is questSceneNodeDefinitionWrapper sceneNode)
+            {
+                HandleSceneNodeRedirect(sceneNode);
+                return;
+            }
+
             // Navigation into phase subgraph
             if (selectedNode is IGraphProvider provider)
             {
                 var subGraph = provider.Graph;
                 if (subGraph == null)
                 {
-                    Locator.Current.GetService<ILoggerService>()?.Error("SubGraph is not defined!");
                     return;
                 }
 
@@ -765,6 +1217,79 @@ namespace WolvenKit.Views.Documents
         }
 
         /// <summary>
+        /// Handle scene node redirect - ask user if they want to open in Scene Editor
+        /// </summary>
+        private void HandleSceneNodeRedirect(questSceneNodeDefinitionWrapper sceneNode)
+        {
+            if (sceneNode.Data is not questSceneNodeDefinition sceneData)
+            {
+                return;
+            }
+
+            if (sceneData.SceneFile.DepotPath == ResourcePath.Empty || !sceneData.SceneFile.DepotPath.IsResolvable)
+            {
+                return;
+            }
+
+            var scenePath = sceneData.SceneFile.DepotPath.GetResolvedText();
+            var sceneFileName = System.IO.Path.GetFileName(scenePath);
+
+            // Show dialog asking user if they want to open in Scene Editor
+            var result = Interactions.ShowQuestionYesNo((
+                $"This quest node references a scene file:\n\n{sceneFileName}\n\nWould you like to open this scene in the Scene Editor instead of viewing it within the quest graph? (Recommended)",
+                "Open Scene in Scene Editor?"));
+
+            if (result)
+            {
+                // Open the scene file in Scene Editor and automatically switch to it
+                try
+                {
+                    var appViewModel = Locator.Current.GetService<AppViewModel>();
+                    if (appViewModel != null)
+                    {
+                        // Open the file
+                        appViewModel.OpenFileFromDepotPath(sceneData.SceneFile.DepotPath);
+                        
+                        // Ensure the tab is selected by finding and activating the newly opened document
+                        // Add a small delay to allow the file to be fully loaded before switching
+                        Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            try
+                            {
+                                var scenePathString = sceneData.SceneFile.DepotPath.GetResolvedText();
+                                if (scenePathString != null)
+                                {
+                                    var targetDocument = appViewModel.DockedViews
+                                        .OfType<RedDocumentViewModel>()
+                                        .FirstOrDefault(doc => doc.RelativePath == scenePathString);
+                                    
+                                    if (targetDocument != null)
+                                    {
+                                        appViewModel.ActiveDocument = targetDocument;
+                                    }
+                                }
+                            }
+                            catch (Exception)
+                            {
+                                // Tab switching failed, but file was opened - not critical
+                            }
+                        }), System.Windows.Threading.DispatcherPriority.Background);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Fallback to showing error message
+                    Interactions.ShowMessageBox(
+                        $"Failed to open scene file:\n{ex.Message}",
+                        "Error Opening Scene",
+                        WMessageBoxButtons.Ok,
+                        WMessageBoxImage.Error);
+                }
+            }
+            // If user clicked No, do nothing (don't load the scene subgraph)
+        }
+
+        /// <summary>
         /// Build the breadcrumb navigation showing current graph level
         /// </summary>
         private void BuildBreadcrumb()
@@ -786,7 +1311,7 @@ namespace WolvenKit.Views.Documents
                 }
             }
 
-            void AddBreadcrumbElement(string text, RedGraph graph)
+            void AddBreadcrumbElement(string text, RedGraph? graph)
             {
                 if (Breadcrumb.Children.Count > 0)
                 {
