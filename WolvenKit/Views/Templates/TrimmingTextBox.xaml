@@ -37,6 +37,7 @@
                 ScrollViewer.CanContentScroll="False"
                 TextChanged="RealTextBox_OnTextChanged"
                 KeyUp="RealTextBox_OnKeyUp"
+                LostFocus="RealTextBox_OnFocusLost"
                 ContextMenuOpening="RefreshContextMenu"
                 DataObject.Pasting="RealTextBox_OnPasting">
                 <TextBox.ContextMenu>
