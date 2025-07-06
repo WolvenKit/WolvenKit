@@ -148,8 +148,8 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>, IRefresha
         
         // Check if sockets are in sync with choice data
         var choiceOutputs = Output.OfType<SceneOutputConnectorViewModel>()
-            .Where(o => o.Data != null && o.Data.Stamp.Name == 0)
-            .OrderBy(o => o.Data.Stamp.Ordinal)
+            .Where(o => o?.Data != null && o.Data.Stamp.Name == 0)
+            .OrderBy(o => o?.Data?.Stamp.Ordinal)
             .ToList();
             
         var expectedChoiceSocketCount = _castedData.OutputSockets.Count(s => s.Stamp.Name == 0);
@@ -157,7 +157,7 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>, IRefresha
         // If socket count doesn't match or we have virtual sockets that need real ones, do full regeneration
         if (choiceOutputs.Count != expectedChoiceSocketCount || 
             choiceOutputs.Count != Options.Count ||
-            choiceOutputs.Any(s => s.Data == null))
+            choiceOutputs.Any(s => s?.Data == null))
         {
             // Sockets are out of sync, need full regeneration
             GenerateSockets();
@@ -168,9 +168,12 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>, IRefresha
         for (int i = 0; i < choiceOutputs.Count && i < Options.Count; i++)
         {
             var socket = choiceOutputs[i];
-            var ordinal = socket.Data.Stamp.Ordinal;
-            var baseName = $"(Option_{ordinal + 1}) {Options[i]}";
-            socket.Subtitle = baseName;
+            if (socket?.Data != null)
+            {
+                var ordinal = socket.Data.Stamp.Ordinal;
+                var baseName = $"(Option_{ordinal + 1}) {Options[i]}";
+                socket.Subtitle = baseName;
+            }
         }
     }
 
