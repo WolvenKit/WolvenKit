@@ -14,6 +14,9 @@ using WolvenKit.RED4.Types;
 using Splat;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.Generic;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
+using WolvenKit.Core.Extensions;
+using System.IO;
 
 namespace WolvenKit.App.ViewModels.Documents
 {
@@ -27,6 +30,8 @@ namespace WolvenKit.App.ViewModels.Documents
     public partial class SceneGraphViewModel : RedDocumentTabViewModel, IDisposable
     {
         private bool _disposed = false;
+        private readonly ILoggerService? _logger = Locator.Current.GetService<ILoggerService>();
+        private readonly scnSceneResource _sceneData;
 
         public RDTDataViewModel RDTViewModel { get; }
         public RedGraph MainGraph { get; }
@@ -43,18 +48,57 @@ namespace WolvenKit.App.ViewModels.Documents
 
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.MainFile;
 
+        // Scene statistics properties
+        public string FileName => Path.GetFileNameWithoutExtension(Parent?.Header ?? "Unknown");
+        
+        public string SceneCategory
+        {
+            get
+            {
+                var category = _sceneData.SceneCategoryTag.ToEnumString();
+                return category != "other" ? category : string.Empty;
+            }
+        }
+
+        public string SceneTitleWithCategory
+        {
+            get
+            {
+                var category = SceneCategory;
+                return string.IsNullOrEmpty(category) ? FileName : $"{FileName} ({category})";
+            }
+        }
+
+        public int TotalNodes => _sceneData.SceneGraph?.Chunk?.Graph?.Count ?? 0;
+        
+        public int TotalActors => (_sceneData.Actors?.Count ?? 0) + (_sceneData.PlayerActors?.Count ?? 0);
+        
+        public int TotalProps => _sceneData.Props?.Count ?? 0;
+        
+        public int TotalChoices => _sceneData.ScreenplayStore?.Options?.Count ?? 0;
+        
+        public int TotalDialogues => _sceneData.ScreenplayStore?.Lines?.Count ?? 0;
+
         public SceneGraphViewModel(scnSceneResource data, RedDocumentViewModel parent, IChunkViewmodelFactory chunkViewmodelFactory, INodeWrapperFactory nodeWrapperFactory)
             : base(parent, "Scene Editor")
         {
+            _sceneData = data;
+            
             var appViewModel = Locator.Current.GetService<AppViewModel>() ?? throw new ArgumentNullException(nameof(AppViewModel));
             var settingsManager = Locator.Current.GetService<ISettingsManager>() ?? throw new ArgumentNullException(nameof(ISettingsManager));
             var gameController = Locator.Current.GetService<IGameControllerFactory>() ?? throw new ArgumentNullException(nameof(IGameControllerFactory));
 
             RDTViewModel = new RDTDataViewModel(data, parent, appViewModel, chunkViewmodelFactory, settingsManager, gameController);
-            MainGraph = RedGraph.GenerateSceneGraph(parent.Header, data);
+            MainGraph = RedGraph.GenerateSceneGraph(parent.Header, data, parent);
             
             // Set document reference for property change syncing
             MainGraph.DocumentViewModel = parent;
+
+            // Ensure all nodes have DocumentViewModel reference for dirty tracking
+            foreach (var node in MainGraph.Nodes)
+            {
+                node.DocumentViewModel = parent;
+            }
 
             CreateTabs();
             
@@ -123,6 +167,7 @@ namespace WolvenKit.App.ViewModels.Documents
             var rootChunk = RDTViewModel.GetRootChunk();
             if (rootChunk == null)
             {
+                _logger?.Warning($"[PANEL] No root chunk found for tab '{tab.Header}'");
                 SelectedTabContent = null;
                 return;
             }

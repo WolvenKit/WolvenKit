@@ -10,6 +10,11 @@ public class scnRandomizerNodeWrapper : BaseSceneViewModel<scnRandomizerNode>, I
 {
     public scnRandomizerNodeWrapper(scnRandomizerNode scnRandomizerNode) : base(scnRandomizerNode)
     {
+        InputSocketNames.Add(0, "In");
+        InputSocketNames.Add(1, "Cancel");
+
+        OutputSocketNames.Add(0, "Out");
+
         PopulateDetails();
     }
 
@@ -55,8 +60,12 @@ public class scnRandomizerNodeWrapper : BaseSceneViewModel<scnRandomizerNode>, I
     internal override void GenerateSockets()
     {
         Input.Clear();
-        Input.Add(new SceneInputConnectorViewModel("In", "In", UniqueId, 0));
-        Input.Add(new SceneInputConnectorViewModel("CutDestination", "CutDestination", UniqueId, 1));  // Added CutDestination input socket
+        foreach (var (socketNameId, socketName) in InputSocketNames)
+        {
+            var input = new SceneInputConnectorViewModel(socketName, socketName, UniqueId, socketNameId, 0);
+            input.Subtitle = $"({socketNameId},0)";
+            Input.Add(input);
+        }
 
         var names = new string[_castedData.NumOutSockets];
 
@@ -72,33 +81,61 @@ public class scnRandomizerNodeWrapper : BaseSceneViewModel<scnRandomizerNode>, I
             names[i] = $"[{chance:0.00}%] Out{i}";
         }
 
+        Output.Clear();
         for (var i = 0; i < _castedData.OutputSockets.Count; i++)
         {
-            Output.Add(new SceneOutputConnectorViewModel(names[i], names[i], UniqueId, _castedData.OutputSockets[i]));
+            var socket = _castedData.OutputSockets[i];
+            var nameAndTitle = $"({socket.Stamp.Name},{socket.Stamp.Ordinal})";
+            var output = new SceneOutputConnectorViewModel(nameAndTitle, nameAndTitle, UniqueId, socket.Stamp.Name, socket.Stamp.Ordinal, socket);
+            output.Subtitle = names[i];
+            Output.Add(output);
         }
     }
 
     public BaseConnectorViewModel AddOutput()
     {
-        var index = (ushort)Output.Count;
-        var outputSocket = new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = index } };
-
+        var outputSocket = new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = (ushort)Output.Count } };
         _castedData.OutputSockets.Add(outputSocket);
 
-        var output = new SceneOutputConnectorViewModel($"Out{index}", $"Out{index}", UniqueId, outputSocket);
+        var index = (ushort)Output.Count;
+        var nameAndTitle = $"({outputSocket.Stamp.Name},{outputSocket.Stamp.Ordinal})";
+        var output = new SceneOutputConnectorViewModel(nameAndTitle, $"Out{index}", UniqueId, outputSocket.Stamp.Name, outputSocket.Stamp.Ordinal, outputSocket);
         Output.Add(output);
 
         _castedData.NumOutSockets = (uint)Output.Count;
 
-        // SOCKET SYNC FIX: Subscribe to destination changes for property panel sync
-        SubscribeToSocketDestinations(output);
-
-        // SYNC FIX: Update property panel and graph editor without regenerating connectors
-        TriggerPropertyChanged(nameof(Output));
-        OnPropertyChanged(nameof(Data));
+        // Note: Subscription to destination changes happens automatically via Output.CollectionChanged
+        // Notify UI and mark document dirty
+        NotifySocketsChanged();
 
         return output;
     }
 
-    public void RemoveOutput() => throw new System.NotImplementedException();
+    public void RemoveOutput()
+    {
+        if (_castedData.OutputSockets.Count > 1) // Keep at least one output
+        {
+            var lastSocket = _castedData.OutputSockets[^1];
+            
+            // Only remove if it has no connections
+            if (lastSocket.Destinations.Count == 0)
+            {
+                _castedData.OutputSockets.RemoveAt(_castedData.OutputSockets.Count - 1);
+                Output.RemoveAt(Output.Count - 1);
+                
+                // Update the counter
+                _castedData.NumOutSockets = (uint)Output.Count;
+                
+                // Update weights array if needed
+                if (_castedData.Weights.Count > _castedData.NumOutSockets)
+                {
+                    _castedData.Weights.RemoveAt(_castedData.Weights.Count - 1);
+                }
+                
+                // Notify UI and mark document dirty
+                NotifySocketsChanged();
+            }
+        }
+    }
+
 }

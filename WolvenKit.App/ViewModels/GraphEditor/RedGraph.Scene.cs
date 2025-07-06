@@ -8,6 +8,8 @@ using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
 using WolvenKit.App.Services;
+using WolvenKit.Core.Extensions;
+using static WolvenKit.RED4.Types.Enums;
 
 
 namespace WolvenKit.App.ViewModels.GraphEditor;
@@ -29,9 +31,32 @@ public partial class RedGraph
         return s_sceneNodeTypes;
     }
 
-    public void CreateSceneNode(Type type, System.Windows.Point point)
+    /// <summary>
+    /// Get quest node types that can be embedded in scene graphs via scnQuestNode
+    /// </summary>
+    public List<Type> GetQuestNodeTypesForScene()
     {
-        var instance = InternalCreateSceneNode(type);
+        // Get all quest node types that inherit from questNodeDefinition
+        return AppDomain.CurrentDomain.GetAssemblies()
+            .SelectMany(x => x.GetTypes())
+            .Where(x => typeof(questNodeDefinition).IsAssignableFrom(x) && !x.IsAbstract)
+            .ToList();
+    }
+
+    public uint CreateSceneNode(Type type, System.Windows.Point point)
+    {
+        scnSceneGraphNode instance;
+        
+        // Check if this is a quest node type - if so, create a scnQuestNode wrapper
+        if (typeof(questNodeDefinition).IsAssignableFrom(type))
+        {
+            instance = InternalCreateSceneQuestNode(type);
+        }
+        else
+        {
+            instance = InternalCreateSceneNode(type);
+        }
+        
         var wrappedInstance = WrapSceneNode(instance);
         wrappedInstance.Location = point;
 
@@ -42,31 +67,132 @@ public partial class RedGraph
         }
 
         Nodes.Add(wrappedInstance);
+        
+        DocumentViewModel?.SetIsDirty(true);
+        
+        return instance.NodeId.Id;
+    }
+
+    /// <summary>
+    /// Create a composite scene node with preset configuration
+    /// </summary>
+    public uint CreateCompositeSceneNode(string presetName, Type questNodeType, System.Windows.Point point)
+    {
+        scnSceneGraphNode instance = CreateCompositeQuestNode(presetName, questNodeType);
+        
+        var wrappedInstance = WrapSceneNode(instance);
+        wrappedInstance.Location = point;
+
+        ((scnSceneResource)_data).SceneGraph.Chunk!.Graph.Add(new CHandle<scnSceneGraphNode>(instance));
+        if (GetSceneNodesChunkViewModel() is { } nodes)
+        {
+            nodes.RecalculateProperties();
+        }
+
+        Nodes.Add(wrappedInstance);
+        
+        DocumentViewModel?.SetIsDirty(true);
+        
+        return instance.NodeId.Id;
     }
 
     private scnSceneGraphNode InternalCreateSceneNode(Type type)
     {
         var instance = System.Activator.CreateInstance(type);
-        if (instance is not scnSceneGraphNode sceneGraphNode)
+        if (instance is not scnSceneGraphNode sceneNode)
         {
-            throw new Exception();
+            throw new Exception($"Failed to create scene node of type {type.Name}");
         }
 
-        sceneGraphNode.NodeId.Id = ++_currentSceneNodeId;
-        sceneGraphNode.OutputSockets.Add(new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = 0 } });
+        sceneNode.NodeId = new scnNodeId { Id = ++_currentSceneNodeId };
+        sceneNode.OutputSockets.Add(new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = 0 } });
 
-        if (sceneGraphNode is scnChoiceNode choiceNode)
+        if (sceneNode is scnChoiceNode choiceNode)
         {
-            ((scnSceneResource)_data).NotablePoints.Add(new scnNotablePoint
+            var sceneResource = (scnSceneResource)_data;
+            
+            // Add notablePoint for choice nodes
+            sceneResource.NotablePoints.Add(new scnNotablePoint
             {
                 NodeId = new scnNodeId
                 {
-                    Id = sceneGraphNode.NodeId.Id
+                    Id = sceneNode.NodeId.Id
                 }
             });
 
+            // Create proper screenplay entries for the default choice option
+            var random = new Random();
+            var cruid = (CRUID)random.NextCRUID();
+            
+            // first id is always 2, don't know why
+            var id = (CUInt32)2;
+            if (sceneResource.ScreenplayStore.Options.Count > 0)
+            {
+                // needs to be 256 higher, if lower the previous text is used, if higher nothing is shown...
+                id = sceneResource.ScreenplayStore.Options[^1].ItemId.Id + 256;
+            }
+
+            sceneResource.LocStore.VpEntries.Add(new scnlocLocStoreEmbeddedVariantPayloadEntry
+            {
+                Content = "Default Option",
+                VariantId = new scnlocVariantId
+                {
+                    Ruid = cruid
+                }
+            });
+
+            sceneResource.LocStore.VdEntries.Add(new scnlocLocStoreEmbeddedVariantDescriptorEntry
+            {
+                LocstringId = new scnlocLocstringId
+                {
+                    Ruid = cruid - 4
+                },
+                VariantId = new scnlocVariantId
+                {
+                    Ruid = cruid
+                },
+                VpeIndex = (uint)(sceneResource.LocStore.VpEntries.Count - 1),
+                Signature = new scnlocSignature
+                {
+                    Val = 3
+                }
+            });
+
+            sceneResource.ScreenplayStore.Options.Add(new scnscreenplayChoiceOption
+            {
+                LocstringId = new scnlocLocstringId
+                {
+                    Ruid = cruid - 4
+                },
+                ItemId = new scnscreenplayItemId
+                {
+                    Id = id
+                },
+                Usage = new scnscreenplayOptionUsage
+                {
+                    PlayerGenderMask = new scnGenderMask
+                    {
+                        Mask = 3 // both
+                    }
+                }
+            });
+
+            // Create default choice option with proper screenplay reference
+            choiceNode.Options.Add(new scnChoiceNodeOption
+            {
+                ScreenplayOptionId = new scnscreenplayItemId()
+                {
+                    Id = id
+                }
+            });
+
+            // Refresh the property panel to show the new notablePoint AND screenplay entries
+            RefreshSceneResourcePropertiesInTabs();
+
             choiceNode.OutputSockets =
             [
+                // Choice option socket (name=0, ordinal=0) for the default option
+                new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = 0 } },
                 new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 1, Ordinal = 0 } },
                 new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 2, Ordinal = 0 } },
                 new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 3, Ordinal = 0 } },
@@ -76,20 +202,118 @@ public partial class RedGraph
             ];
         }
 
-        if (sceneGraphNode is scnQuestNode questNode)
+        if (sceneNode is scnQuestNode questNode)
         {
-            questNode.IsockMappings.Add("CutDestination");
+            questNode.IsockMappings.Add("Cancel");
             questNode.IsockMappings.Add("In");
             questNode.OsockMappings.Add("Out");
         }
 
-        if (sceneGraphNode is scnRandomizerNode randomizerNode)
+        if (sceneNode is scnRandomizerNode randomizerNode)
         {
             randomizerNode.NumOutSockets = 1;
             randomizerNode.Weights[0] = 1;
         }
 
-        return sceneGraphNode;
+        return sceneNode;
+    }
+
+    /// <summary>
+    /// Create a scnQuestNode that wraps a quest node type
+    /// </summary>
+    private scnQuestNode InternalCreateSceneQuestNode(Type questNodeType)
+    {
+        // Create the quest node instance
+        var questInstance = System.Activator.CreateInstance(questNodeType);
+        if (questInstance is not questNodeDefinition questNode)
+        {
+            throw new Exception($"Failed to create quest node of type {questNodeType.Name}");
+        }
+
+        // Special initialization for certain quest node types
+        if (questNode is questFactsDBManagerNodeDefinition factsDBNode)
+        {
+            // Initialize the Type property with questSetVar_NodeType (the only implementation)
+            factsDBNode.Type = new CHandle<questIFactsDBManagerNodeType>(new questSetVar_NodeType());
+        }
+
+        // Create the wrapper scene node and get its ID
+        var sceneNodeId = ++_currentSceneNodeId;
+        var sceneQuestNode = new scnQuestNode
+        {
+            NodeId = new scnNodeId { Id = sceneNodeId },
+            QuestNode = new CHandle<questNodeDefinition>(questNode)
+        };
+
+        // Set quest node ID to match the scene node ID
+        questNode.Id = (ushort)sceneNodeId;
+
+        // Initialize socket mappings (as done in the existing code)
+        sceneQuestNode.IsockMappings.Add("Cancel");
+        sceneQuestNode.IsockMappings.Add("In");
+        sceneQuestNode.OsockMappings.Add("Out");
+
+        // Add default output socket
+        sceneQuestNode.OutputSockets.Add(new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = 0 } });
+
+        return sceneQuestNode;
+    }
+
+    /// <summary>
+    /// Create a composite quest node with pre-configured values for common use cases
+    /// </summary>
+    private scnQuestNode CreateCompositeQuestNode(string presetName, Type questNodeType)
+    {
+        // Create the basic quest node first
+        var questNode = InternalCreateSceneQuestNode(questNodeType);
+        
+        // Apply the preset configuration
+        if (presetName == "DebugWarning" && questNode.QuestNode?.Chunk is questUIManagerNodeDefinition uiManagerNode)
+        {
+            var warningNodeType = new questWarningMessage_NodeType
+            {
+                Message = "Example Debug",
+                Duration = 3.0f,
+                Show = true,
+                Type = gameSimpleMessageType.Neutral
+            };
+            uiManagerNode.Type = new CHandle<questIUIManagerNodeType>(warningNodeType);
+        }
+        
+        return questNode;
+    }
+
+    /// <summary>
+    /// Maps original socket coordinates to deletion marker coordinates based on common patterns
+    /// </summary>
+    /// <param name="originalCoords">Original socket coordinates (name, ordinal)</param>
+    /// <returns>Mapped deletion marker coordinates</returns>
+    private static (ushort name, ushort ordinal) MapToDeleteionMarkerCoordinates((ushort name, ushort ordinal) originalCoords)
+    {
+        // Handle special cases first
+        if (originalCoords.name == 1026)
+        {
+            // Keep 1026 sockets as-is (Cut Control failsafe pattern)
+            return originalCoords;
+        }
+        
+        // Map common input patterns to deletion marker 666-based coordinates
+        return originalCoords switch
+        {
+            // Standard input patterns
+            (0, 0) => (666, 0),    // Main input -> (666,0)
+            (1, 0) => (666, 1),    // Cancel input -> (666,1) - most common pattern
+            (2, 0) => (666, 2),    // Additional inputs
+            (3, 0) => (666, 3),
+            
+            // Handle ordinal variations  
+            (0, var ord) => (666, ord),
+            (1, var ord) => (666, (ushort)(ord + 1)), // Offset by 1 to avoid collision with (0,0)->(666,0)
+            (2, var ord) => (666, (ushort)(ord + 2)), // Offset by 2
+            
+            // Default: map to 666 with preserved ordinal
+            _ => (666, originalCoords.ordinal)
+        };
     }
 
     /// <summary>
@@ -115,9 +339,10 @@ public partial class RedGraph
         deletionMarker.NodeId.Id = node.UniqueId;
 
         // 2. Match output sockets count with the original node to maintain connections
+        // Use 666 naming convention for deletion marker sockets
         while (deletionMarker.OutputSockets.Count < (node.Data as scnSceneGraphNode)?.OutputSockets.Count)
         {
-            deletionMarker.OutputSockets.Add(new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = (ushort)deletionMarker.OutputSockets.Count, Ordinal = 0 } });
+            deletionMarker.OutputSockets.Add(new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 666, Ordinal = (ushort)deletionMarker.OutputSockets.Count } });
         }
 
         // 3. Copy all the destination connections to the marker node
@@ -148,7 +373,10 @@ public partial class RedGraph
             }
         }
 
-        // 6. Remove the original node from the graph data
+        // 6. Remove notablePoint if this was a choice node
+        RemoveNotablePointForNode(node.UniqueId);
+
+        // 7. Remove the original node from the graph data
         var graph = sceneResource.SceneGraph.Chunk?.Graph;
         if (graph != null)
         {
@@ -160,7 +388,7 @@ public partial class RedGraph
                 }
             }
 
-            // 7. Add the deletion marker node to the graph data
+            // 8. Add the deletion marker node to the graph data
             graph.Add(new CHandle<scnSceneGraphNode>(deletionMarker));
         }
         else
@@ -169,26 +397,62 @@ public partial class RedGraph
             return;
         }
 
-        // 8. Generate input sockets based on incoming connections
+        // 9. Generate input sockets based on incoming connections and update destination data
         markerWrapper.GenerateSockets();
         
-        // Add enough input sockets for all incoming connections
-        var maxOrdinal = incomingConnections.Count > 0 ? 
-            incomingConnections.Max(c => c.target.Ordinal) : 
-            0;
-            
-        while (markerWrapper.Input.Count <= maxOrdinal)
+        // Create a mapping from original input socket coordinates to deletion marker socket coordinates
+        var socketMapping = new Dictionary<(ushort name, ushort ordinal), (ushort name, ushort ordinal)>();
+        
+        // Add input sockets for all incoming connections and build mapping
+        foreach (var incomingConn in incomingConnections)
         {
-            markerWrapper.AddInput();
+            var originalCoords = (incomingConn.target.NameId, incomingConn.target.Ordinal);
+            if (!socketMapping.ContainsKey(originalCoords))
+            {
+                // Map original coordinates to deletion marker coordinates
+                (ushort newName, ushort newOrdinal) = MapToDeleteionMarkerCoordinates(originalCoords);
+                socketMapping[originalCoords] = (newName, newOrdinal);
+                
+                // Create the input socket with the mapped coordinates
+                markerWrapper.AddInputWithCoordinates(newName, newOrdinal);
+            }
+        }
+        
+        // Update destination data in all output sockets to point to deletion marker's 666-based coordinates
+        foreach (var nodeViewModel in Nodes)
+        {
+            if (nodeViewModel is BaseSceneViewModel sceneNodeViewModel)
+            {
+                foreach (var output in sceneNodeViewModel.Output.OfType<SceneOutputConnectorViewModel>())
+                {
+                    if (output.Data == null) continue;
+                    
+                    for (int i = 0; i < output.Data.Destinations.Count; i++)
+                    {
+                        var dest = output.Data.Destinations[i];
+                                                 if (dest.NodeId.Id == node.UniqueId) // Points to the node being replaced
+                         {
+                             var originalCoords = (dest.IsockStamp.Name, dest.IsockStamp.Ordinal);
+                             if (socketMapping.TryGetValue(originalCoords, out var newCoords))
+                             {
+                                 // Update to deletion marker coordinates
+                                 dest.NodeId.Id = markerWrapper.UniqueId;
+                                 dest.IsockStamp.Name = newCoords.name;
+                                 dest.IsockStamp.Ordinal = newCoords.ordinal;
+                             }
+                         }
+                    }
+                }
+            }
         }
 
-        // 9. Remove the original node from UI
+        // 10. Remove the original node from UI
         Nodes.Remove(node);
         
-        // 10. Add the deletion marker wrapper to UI
+        // 11. Add the deletion marker wrapper to UI
         Nodes.Add(markerWrapper);
         
-        // 11. Recreate connections
+        // 12. Recreate connections
         Connections.Clear();  // Clear all UI connections
         
         // Rebuild all connections
@@ -198,6 +462,8 @@ public partial class RedGraph
             {
                 foreach (var output in sceneNodeViewModel.Output.OfType<SceneOutputConnectorViewModel>())
                 {
+                    if (output.Data == null) continue;
+                    
                     foreach (var destination in output.Data.Destinations)
                     {
                         if (destination.NodeId == null) continue;
@@ -206,8 +472,9 @@ public partial class RedGraph
                         if (targetNode != null)
                         {
                             int socketIndex;
-                            if (targetNode is scnQuestNodeWrapper)
+                            if (targetNode is scnQuestNodeWrapper || targetNode is scnDeletionMarkerNodeWrapper)
                             {
+                                // Quest nodes and deletion marker nodes use ordinal for socket indexing
                                 socketIndex = destination.IsockStamp.Ordinal;
                             }
                             else
@@ -225,7 +492,7 @@ public partial class RedGraph
             }
         }
         
-        // 12. Update properties in the nodes collection
+        // 13. Update properties in the nodes collection
         if (GetSceneNodesChunkViewModel() is { } nodes)
         {
             nodes.RecalculateProperties();
@@ -248,6 +515,9 @@ public partial class RedGraph
         {
             Disconnect(outputConnectorViewModel);
         }
+
+        // Remove notablePoint if this was a choice node
+        RemoveNotablePointForNode(node.UniqueId);
 
         var graph = ((scnSceneResource)_data).SceneGraph.Chunk!.Graph!;
         for (var i = graph.Count - 1; i >= 0; i--)
@@ -311,6 +581,10 @@ public partial class RedGraph
 
             nodeWrapper = new scnEndNodeWrapper(endNode, endPoint);
         }
+        else if (node is scnFlowControlNode flowControl)
+        {
+            nodeWrapper = new scnFlowControlNodeWrapper(flowControl);
+        }
         else if (node is scnHubNode hubNode)
         {
             nodeWrapper = new scnHubNodeWrapper(hubNode);
@@ -364,11 +638,11 @@ public partial class RedGraph
             nodeWrapper = new scnSceneGraphNodeWrapper(node);
         }
 
+        // Set document reference for property change syncing BEFORE generating sockets
+        nodeWrapper.DocumentViewModel = DocumentViewModel;
+        
         nodeWrapper.GenerateSockets();
         
-        // Set document reference for property change syncing
-        nodeWrapper.DocumentViewModel = DocumentViewModel;
-
         return nodeWrapper;
     }
 
@@ -376,11 +650,11 @@ public partial class RedGraph
     {
         var nodeWrapper = new DynamicSceneViewModel(node);
 
+        // Set document reference for property change syncing BEFORE generating sockets
+        nodeWrapper.DocumentViewModel = DocumentViewModel;
+        
         nodeWrapper.GenerateSockets();
         
-        // Set document reference for property change syncing
-        nodeWrapper.DocumentViewModel = DocumentViewModel;
-
         return nodeWrapper;
     }
 
@@ -394,21 +668,31 @@ public partial class RedGraph
                 continue;
             }
 
-            for (var j = sceneSource.Data.Destinations.Count - 1; j >= 0; j--)
+            for (var j = sceneSource.Data!.Destinations.Count - 1; j >= 0; j--)
             {
-                if (sceneSource.Data.Destinations[j].NodeId.Id == sceneTarget.OwnerId)
-                {
-                    // Determine target type (quest vs scene)
-                    var tgtNode = Nodes.FirstOrDefault(n => n is BaseSceneViewModel bsvm && bsvm.UniqueId == sceneTarget.OwnerId) as BaseSceneViewModel;
-                    bool isQuest = tgtNode is scnQuestNodeWrapper;
-
-                    bool sameSocket = isQuest
-                        ? sceneSource.Data.Destinations[j].IsockStamp.Ordinal == sceneTarget.Ordinal
-                        : sceneSource.Data.Destinations[j].IsockStamp.Name == sceneTarget.Ordinal;
-
-                    if (sameSocket)
+                if (sceneSource.Data.Destinations[j].NodeId.Id == sceneTarget.OwnerId &&
+                    sceneSource.Data.Destinations[j].IsockStamp.Ordinal == sceneTarget.Ordinal)
                 {
                     sceneSource.Data.Destinations.RemoveAt(j);
+                }
+            }
+            
+            // 1026 Failsafe Cleanup: When Cut Control FALSE socket disconnects from any cut destination socket,
+            // also remove the hidden connection to (1026,0) on the same destination node
+            var sourceNodeForDisconnect = Nodes.FirstOrDefault(n => n.UniqueId == sceneSource.OwnerId) as BaseSceneViewModel;
+            if (sourceNodeForDisconnect is scnCutControlNodeWrapper && 
+                sceneSource.Data.Stamp.Name == 1 && // FALSE socket of Cut Control
+                IsCutDestinationSocket(sceneTarget)) // Any cut destination socket
+            {
+                // Remove the hidden connection to (1026,0)
+                for (var j = sceneSource.Data.Destinations.Count - 1; j >= 0; j--)
+                {
+                    var dest = sceneSource.Data.Destinations[j];
+                    if (dest.NodeId.Id == sceneTarget.OwnerId &&
+                        dest.IsockStamp.Name == 1026 && dest.IsockStamp.Ordinal == 0)
+                    {
+                        sceneSource.Data.Destinations.RemoveAt(j);
+                        break;
                     }
                 }
             }
@@ -432,20 +716,26 @@ public partial class RedGraph
             return;
         }
 
-        // Determine the Name and Ordinal values based on target node type
-        ushort name = 0;
-        ushort ordinal = sceneTarget.Ordinal;
-        
-        // Get the target node from the nodes collection
-        var targetNode = Nodes.FirstOrDefault(n => n is BaseSceneViewModel bsvm && bsvm.UniqueId == sceneTarget.OwnerId) as BaseSceneViewModel;
-        
-        if (targetNode is not scnQuestNodeWrapper)
+        var socketData = sceneSource.Data;
+        if (socketData == null)
         {
-            // For scene nodes: Name determines the socket type
-            // Socket index 0 = Name 0 (normal input)
-            // Socket index 1 = Name 1 (cut input)
-            name = sceneTarget.Ordinal;
-            ordinal = 0; // Scene nodes always use ordinal 0
+            var ownerNodeVM = Nodes.FirstOrDefault(n => n.UniqueId == sceneSource.OwnerId);
+            if (ownerNodeVM is BaseSceneViewModel { Data: scnSceneGraphNode ownerNodeData })
+            {
+                socketData = new scnOutputSocket
+                {
+                    Stamp = new scnOutputSocketStamp { Name = sceneSource.NameId, Ordinal = sceneSource.Ordinal },
+                    Destinations = new CArray<scnInputSocketId>()
+                };
+                ownerNodeData.OutputSockets.Add(socketData);
+                sceneSource.Data = socketData;
+            }
+        }
+        
+        if (socketData == null)
+        {
+            _loggerService?.Error("Could not create socket data for connection.");
+            return;
         }
 
         var input = new scnInputSocketId
@@ -456,14 +746,39 @@ public partial class RedGraph
             },
             IsockStamp = new scnInputSocketStamp
             {
-                Name = name,
-                Ordinal = ordinal
+                Name = sceneTarget.NameId,
+                Ordinal = sceneTarget.Ordinal
             }
         };
 
-        sceneSource.Data.Destinations.Add(input);
+        socketData.Destinations.Add(input);
         Connections.Add(new SceneConnectionViewModel(sceneSource, sceneTarget));
-        RefreshCVM(sceneSource.Data);
+        
+        // 1026 Failsafe: When Cut Control FALSE socket connects to any cut destination socket,
+        // automatically add hidden connection to (1026,0) on the same destination node
+        var sourceNode = Nodes.FirstOrDefault(n => n.UniqueId == sceneSource.OwnerId) as BaseSceneViewModel;
+        if (sourceNode is scnCutControlNodeWrapper && 
+            socketData.Stamp.Name == 1 && // FALSE socket of Cut Control
+            IsCutDestinationSocket(sceneTarget)) // Any cut destination socket
+        {
+            var hiddenInput = new scnInputSocketId
+            {
+                NodeId = new scnNodeId
+                {
+                    Id = sceneTarget.OwnerId
+                },
+                IsockStamp = new scnInputSocketStamp
+                {
+                    Name = 1026,
+                    Ordinal = 0
+                }
+            };
+            
+            // Add the hidden connection to data only (not to UI Connections)
+            socketData.Destinations.Add(hiddenInput);
+        }
+        
+        RefreshCVM(socketData);
         
         // Invalidate converter cache for affected nodes to force ChunkViewModel regeneration
         InvalidateConverterCacheForNode(sceneSource.OwnerId);
@@ -483,11 +798,17 @@ public partial class RedGraph
         {
             foreach (SceneOutputConnectorViewModel output in node.Output)
             {
+                if (output.Data == null)
+                {
+                    continue;
+                }
+                
                 foreach (var destination in output.Data.Destinations)
                 {
                     if (destination.NodeId != null && 
                         destination.NodeId.Id == sceneTarget.OwnerId && 
-                        node.Output.Count > 0)
+                        destination.IsockStamp.Name == sceneTarget.NameId &&
+                        destination.IsockStamp.Ordinal == sceneTarget.Ordinal)
                     {
                         sceneTarget.IsConnected = true;
                         return;
@@ -588,6 +909,69 @@ public partial class RedGraph
         }
     }
 
+    /// <summary>
+    /// Removes a notablePoint from the scnSceneResource if it exists for the given node ID
+    /// </summary>
+    /// <param name="nodeId">The node ID to remove from notablePoints</param>
+    private void RemoveNotablePointForNode(uint nodeId)
+    {
+        var sceneResource = (scnSceneResource)_data;
+        var notablePointToRemove = sceneResource.NotablePoints
+            .FirstOrDefault(np => np.NodeId.Id == nodeId);
+            
+        if (notablePointToRemove != null)
+        {
+            sceneResource.NotablePoints.Remove(notablePointToRemove);
+            
+            // Refresh the property panel to show the removal
+            RefreshSceneResourcePropertiesInTabs();
+        }
+    }
+
+    /// <summary>
+    /// Refreshes the property panel to show changes to root scnSceneResource properties
+    /// </summary>
+    public void RefreshSceneResourcePropertiesInTabs()
+    {
+        // Invalidate converter cache for the root scnSceneResource
+        var cacheService = new ConverterCacheService();
+        cacheService.InvalidateConverterCache((scnSceneResource)_data);
+        
+        // Force refresh of the tab content in SceneGraphViewModel
+        if (DocumentViewModel != null)
+        {
+            var sceneGraphTab = DocumentViewModel.TabItemViewModels
+                .OfType<SceneGraphViewModel>()
+                .FirstOrDefault();
+                
+            if (sceneGraphTab?.SelectedTab != null)
+            {
+                // Directly recreate the tab content with fresh filtered data
+                var freshRootChunk = sceneGraphTab.RDTViewModel.GetRootChunk();
+                if (freshRootChunk != null)
+                {
+                    // Force fresh calculation of properties
+                    freshRootChunk.RecalculateProperties();
+                    freshRootChunk.ForceLoadPropertiesRecursive();
+                    
+                    // Apply the filter to get fresh filtered content
+                    var freshFilteredList = new List<ChunkViewModel>(
+                        freshRootChunk.TVProperties.Where(c => sceneGraphTab.SelectedTab.Filter(c))
+                    );
+                    
+                    // Expand the first level of items by default
+                    foreach (var item in freshFilteredList)
+                    {
+                        item.IsExpanded = true;
+                    }
+                    
+                    // Directly set the new content
+                    sceneGraphTab.SelectedTabContent = freshFilteredList;
+                }
+            }
+        }
+    }
+
     private ChunkViewModel? GetSceneNodesChunkViewModel()
     {
         if (DocumentViewModel?.GetMainFile() is not RDTDataViewModel dataViewModel)
@@ -602,6 +986,8 @@ public partial class RedGraph
 
         return nodes;
     }
+
+
 
     private bool IsChildOf(ChunkViewModel child, ChunkViewModel potentialParent)
     {
@@ -666,39 +1052,45 @@ public partial class RedGraph
     private void RemoveSceneConnection(SceneConnectionViewModel sceneConnection)
     {
         var sceneSource = (SceneOutputConnectorViewModel)sceneConnection.Source;
-        var sceneDestination = sceneSource.Data.Destinations.FirstOrDefault(x => x.NodeId != null && x.NodeId.Id == sceneConnection.Target.OwnerId);
-
-        if (sceneDestination != null)
-        {
-            // Determine if this destination maps to the specified socket
-            var tgtNode = Nodes.FirstOrDefault(n => n is BaseSceneViewModel bsvm && bsvm.UniqueId == ((SceneInputConnectorViewModel)sceneConnection.Target).OwnerId) as BaseSceneViewModel;
-            bool isQuest = tgtNode is scnQuestNodeWrapper;
-
-            bool sameSocket = isQuest
-                ? sceneDestination.IsockStamp.Ordinal == ((SceneInputConnectorViewModel)sceneConnection.Target).Ordinal
-                : sceneDestination.IsockStamp.Name == ((SceneInputConnectorViewModel)sceneConnection.Target).Ordinal;
-
-            if (!sameSocket)
-            {
-                sceneDestination = null; // different socket; keep connection
-            }
-        }
+        var sceneTarget = (SceneInputConnectorViewModel)sceneConnection.Target;
+        var sceneDestination = sceneSource.Data!.Destinations.FirstOrDefault(x => x.NodeId.Id == sceneTarget.OwnerId);
 
         if (sceneDestination != null)
         {
             sceneSource.Data.Destinations.Remove(sceneDestination);
+            
+            // 1026 Failsafe Cleanup: When Cut Control FALSE socket disconnects from any cut destination socket,
+            // also remove the hidden connection to (1026,0) on the same destination node
+            var sourceNode = Nodes.FirstOrDefault(n => n.UniqueId == sceneSource.OwnerId) as BaseSceneViewModel;
+            if (sourceNode is scnCutControlNodeWrapper && 
+                sceneSource.Data.Stamp.Name == 1 && // FALSE socket of Cut Control
+                IsCutDestinationSocket(sceneTarget)) // Any cut destination socket
+            {
+                // Remove the hidden connection to (1026,0)
+                for (var j = sceneSource.Data.Destinations.Count - 1; j >= 0; j--)
+                {
+                    var dest = sceneSource.Data.Destinations[j];
+                    if (dest.NodeId.Id == sceneTarget.OwnerId &&
+                        dest.IsockStamp.Name == 1026 && dest.IsockStamp.Ordinal == 0)
+                    {
+                        sceneSource.Data.Destinations.RemoveAt(j);
+                        break;
+                    }
+                }
+            }
+            
             sceneSource.IsConnected = sceneSource.Data.Destinations.Count > 0;
-            UpdateTargetNode((SceneInputConnectorViewModel)sceneConnection.Target);
+            UpdateTargetNode(sceneTarget);
 
             Connections.Remove(sceneConnection);
             RefreshCVM(sceneSource.Data);
             
             // Invalidate converter cache for affected nodes to force ChunkViewModel regeneration
             InvalidateConverterCacheForNode(sceneSource.OwnerId);
-            InvalidateConverterCacheForNode(((SceneInputConnectorViewModel)sceneConnection.Target).OwnerId);
+            InvalidateConverterCacheForNode(sceneTarget.OwnerId);
             
             // Restore general property sync (but don't let it regenerate sockets)
-            NotifyNodesUpdated(sceneSource.OwnerId, ((SceneInputConnectorViewModel)sceneConnection.Target).OwnerId);
+            NotifyNodesUpdated(sceneSource.OwnerId, sceneTarget.OwnerId);
             
             // Mark document as dirty since we modified connections
             DocumentViewModel?.SetIsDirty(true);
@@ -787,8 +1179,239 @@ public partial class RedGraph
         return false;
     }
 
+    /// <summary>
+    /// Ensures that a node has the required input socket, creating it if necessary
+    /// </summary>
+    /// <param name="targetNode">The node that needs the input socket</param>
+    /// <param name="socketName">The socket name coordinate</param>
+    /// <param name="socketOrdinal">The socket ordinal coordinate</param>
+    private void EnsureInputSocket(BaseSceneViewModel targetNode, ushort socketName, ushort socketOrdinal)
+    {
+        // Skip creating visible sockets for (1026,0) - these should remain hidden data-only connections
+        // They are automatically created by Cut Control failsafe logic and should not clutter the UI
+        if (socketName == 1026 && socketOrdinal == 0)
+        {
+            return; // (1026,0) connections exist only as hidden data, no visible socket needed
+        }
+
+        // Check if socket already exists
+        var existingSocket = targetNode.Input
+            .Cast<SceneInputConnectorViewModel>()
+            .FirstOrDefault(x => x.NameId == socketName && x.Ordinal == socketOrdinal);
+
+        if (existingSocket != null)
+        {
+            return; // Socket already exists
+        }
+
+        // Handle different node types
+        if (targetNode is scnDeletionMarkerNodeWrapper deletionMarker)
+        {
+            // Deletion markers can dynamically create any input socket
+            deletionMarker.AddInputWithCoordinates(socketName, socketOrdinal);
+        }
+        else if (targetNode is scnHubNodeWrapper hubNode)
+        {
+            // Hub nodes can create sockets with arbitrary coordinates
+            hubNode.AddInputWithCoordinates(socketName, socketOrdinal);
+        }
+        else if (targetNode is scnAndNodeWrapper andNode)
+        {
+            // And nodes can create sockets with arbitrary coordinates
+            andNode.AddInputWithCoordinates(socketName, socketOrdinal);
+        }
+        else if (targetNode is scnXorNodeWrapper xorNode)
+        {
+            // Xor nodes can create sockets with arbitrary coordinates
+            xorNode.AddInputWithCoordinates(socketName, socketOrdinal);
+        }
+        else if (targetNode is IDynamicInputNode dynamicInput)
+        {
+            // Other dynamic input nodes - add standard input (limited capability)
+            dynamicInput.AddInput();
+        }
+        else
+        {
+            // For static nodes, create a basic input socket manually if possible
+            var label = GetInputSocketLabel(socketName, socketOrdinal);
+            var input = new SceneInputConnectorViewModel($"({socketName},{socketOrdinal})", $"({socketName},{socketOrdinal})", targetNode.UniqueId, socketName, socketOrdinal);
+            input.Subtitle = label;
+            targetNode.Input.Add(input);
+            
+            _loggerService?.Info($"Created missing input socket ({socketName},{socketOrdinal}) on node {targetNode.UniqueId}");
+        }
+    }
+
+    /// <summary>
+    /// Determines if a socket is a cut destination socket that should trigger failsafe logic
+    /// </summary>
+    /// <param name="socket">The input socket to check</param>
+    /// <returns>True if this is a cut destination socket</returns>
+    private bool IsCutDestinationSocket(SceneInputConnectorViewModel socket)
+    {
+        // Check for cut destination patterns based on socket coordinates and target node type
+        var targetNode = Nodes.FirstOrDefault(n => n.UniqueId == socket.OwnerId) as BaseSceneViewModel;
+        
+        if (targetNode == null) return false;
+
+        // Pattern 1: Cancel socket (1,0) - traditional scene nodes
+        if (socket.NameId == 1 && socket.Ordinal == 0)
+        {
+            return true;
+        }
+
+        // Pattern 2: Quest node cut destination (0,0) - quest nodes use this for cut destination
+        if (socket.NameId == 0 && socket.Ordinal == 0 && targetNode.Data is scnQuestNode)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Gets a human-readable label for an input socket based on its coordinates
+    /// </summary>
+    /// <param name="name">Socket name coordinate</param>
+    /// <param name="ordinal">Socket ordinal coordinate</param>
+    /// <returns>Human-readable socket label</returns>
+    private static string GetInputSocketLabel(ushort name, ushort ordinal)
+    {
+        return (name, ordinal) switch
+        {
+            (0, 0) => "In",
+            (1, 0) => "Cancel",
+            (666, 0) => "In",
+            (666, 1) => "In1",
+            (666, var ord) => $"In{ord}",
+            (1026, 0) => "Failsafe",
+            (1026, var ord) => $"Failsafe{ord}",
+            _ => $"In_{name}_{ordinal}"
+        };
+    }
+
+    public static RedGraph GenerateSceneGraph(string title, scnSceneResource sceneResource, RedDocumentViewModel doc)
+    {
+        var graph = new RedGraph(title, sceneResource, doc);
+
+        var nodeCache = new Dictionary<uint, BaseSceneViewModel>();
+        foreach (var nodeHandle in sceneResource.SceneGraph.Chunk!.Graph)
+        {
+            var node = nodeHandle.GetValue();
+            if (node is null)
+            {
+                throw new Exception("Empty nodes aren't supported!");
+            }
+
+            var nvm = node switch
+            {
+                DynamicBaseClass dynamicBaseClass => graph.WrapDynamicSceneNode(dynamicBaseClass),
+                scnSceneGraphNode scnSceneGraphNode => graph.WrapSceneNode(scnSceneGraphNode),
+                _ => throw new Exception($"Node of type \"{node.GetType()}\" isn't supported!")
+            };
+
+            if (!nodeCache.ContainsKey(nvm.UniqueId))
+            {
+                nodeCache.Add(nvm.UniqueId, nvm);
+                graph.Nodes.Add(nvm);
+
+                graph._currentSceneNodeId = Math.Max(graph._currentSceneNodeId, nvm.UniqueId);
+            }
+            else
+            {
+                _loggerService?.Warning("Duplicate node ID: " + nvm.UniqueId.ToString() + ". Some nodes may be missing in graph view. File: " + title);
+            }
+        }
+
+        // Socket Discovery Phase: Ensure all necessary sockets exist before creating connections
+        foreach (var node in graph.Nodes)
+        {
+            var sceneNode = (BaseSceneViewModel)node;
+
+            foreach (var outputConnector in sceneNode.Output)
+            {
+                var sceneOutputConnector = (SceneOutputConnectorViewModel)outputConnector;
+
+                if (sceneOutputConnector.Data == null)
+                {
+                    continue;
+                }
+                
+                foreach (var destination in sceneOutputConnector.Data!.Destinations)
+                {
+                    if (!nodeCache.TryGetValue(destination.NodeId.Id, out var targetNode))
+                    {
+                        continue; // Skip if target node doesn't exist
+                    }
+
+                    // Check if target node has the required input socket
+                    var existingSocket = targetNode.Input
+                        .Cast<SceneInputConnectorViewModel>()
+                        .FirstOrDefault(x => x.NameId == destination.IsockStamp.Name && x.Ordinal == destination.IsockStamp.Ordinal);
+
+                    // If socket doesn't exist, try to create it
+                    if (existingSocket == null)
+                    {
+                        graph.EnsureInputSocket(targetNode, destination.IsockStamp.Name, destination.IsockStamp.Ordinal);
+                    }
+                }
+            }
+        }
+
+        // Connection Creation Phase: Now that all sockets exist, create the connections
+        foreach (var node in graph.Nodes)
+        {
+            var sceneNode = (BaseSceneViewModel)node;
+
+            foreach (var outputConnector in sceneNode.Output)
+            {
+                var sceneOutputConnector = (SceneOutputConnectorViewModel)outputConnector;
+
+                if (sceneOutputConnector.Data == null)
+                {
+                    continue;
+                }
+                
+                foreach (var destination in sceneOutputConnector.Data!.Destinations)
+                {
+                    if (!nodeCache.TryGetValue(destination.NodeId.Id, out var targetNode))
+                    {
+                        continue; // Skip if target node doesn't exist
+                    }
+
+                    var sceneInputConnector = targetNode.Input
+                        .Cast<SceneInputConnectorViewModel>()
+                        .FirstOrDefault(x => x.NameId == destination.IsockStamp.Name && x.Ordinal == destination.IsockStamp.Ordinal);
+
+                    if (sceneInputConnector != null)
+                    {
+                        graph.Connections.Add(new SceneConnectionViewModel(outputConnector, sceneInputConnector));
+                    }
+                    else
+                    {
+                        // Skip logging warnings for (1026,0) - these are intentionally hidden failsafe connections
+                        if (!(destination.IsockStamp.Name == 1026 && destination.IsockStamp.Ordinal == 0))
+                        {
+                            _loggerService?.Warning($"Could not find input socket ({destination.IsockStamp.Name},{destination.IsockStamp.Ordinal}) on node {destination.NodeId.Id} in file: {title}");
+                        }
+                    }
+                }
+            }
+        }
+
+        // Clear the initial loading flag for all nodes now that the graph is fully loaded
+        foreach (var node in graph.Nodes)
+        {
+            node.IsInitialLoad = false;
+        }
+
+        return graph;
+    }
+
+    // Overload for backward compatibility when document is not available
     public static RedGraph GenerateSceneGraph(string title, scnSceneResource sceneResource)
     {
+        // Create a graph without document reference - used for sub-graphs like quest scene nodes
         var graph = new RedGraph(title, sceneResource);
 
         var nodeCache = new Dictionary<uint, BaseSceneViewModel>();
@@ -820,6 +1443,7 @@ public partial class RedGraph
             }
         }
 
+        // Socket Discovery Phase: Ensure all necessary sockets exist before creating connections
         foreach (var node in graph.Nodes)
         {
             var sceneNode = (BaseSceneViewModel)node;
@@ -828,62 +1452,77 @@ public partial class RedGraph
             {
                 var sceneOutputConnector = (SceneOutputConnectorViewModel)outputConnector;
 
-                foreach (var destination in sceneOutputConnector.Data.Destinations)
+                if (sceneOutputConnector.Data == null)
                 {
-                        nodeCache.TryGetValue(destination.NodeId.Id, out var targetNode);
-                        if (targetNode is null)
-                        {
-                            _loggerService?.Error($"NodeId {destination.NodeId.Id} is missing. Delete all existing connections to this NodeId");
-                            continue;
-                        }
-                        if (targetNode is IDynamicInputNode dynamicInputNode)
-                        {
-                            int requiredIndex = destination.IsockStamp.Ordinal;
-                            if (targetNode is not scnQuestNodeWrapper)
-                            {
-                                requiredIndex = destination.IsockStamp.Name;
-                            }
-                            while (dynamicInputNode.Input.Count <= requiredIndex)
-                            {
-                                dynamicInputNode.AddInput();
-                            }
-                        }
+                    continue;
+                }
+                
+                foreach (var destination in sceneOutputConnector.Data!.Destinations)
+                {
+                    if (!nodeCache.TryGetValue(destination.NodeId.Id, out var targetNode))
+                    {
+                        continue; // Skip if target node doesn't exist
+                    }
 
-                        int destIndexCheck = destination.IsockStamp.Ordinal;
-                        if (targetNode is not scnQuestNodeWrapper)
-                        {
-                            destIndexCheck = destination.IsockStamp.Name;
-                        }
+                    // Check if target node has the required input socket
+                    var existingSocket = targetNode.Input
+                        .Cast<SceneInputConnectorViewModel>()
+                        .FirstOrDefault(x => x.NameId == destination.IsockStamp.Name && x.Ordinal == destination.IsockStamp.Ordinal);
 
-                        if (destIndexCheck >= targetNode.Input.Count)
-                        {
-                            _loggerService?.Warning($"Output isock ordinal ({destination.IsockStamp.Ordinal}) of node {sceneNode.UniqueId} is higher than node {targetNode.UniqueId} input max ordinal ({targetNode.Input.Count - 1}). Some connections may be missing in graph view. File: " + title);
-                            continue;
-                        }
-
-                        // For scene nodes (not quest nodes), use Name field to determine socket index
-                        // Quest nodes use Ordinal, scene nodes use Name for socket mapping
-                        int socketIndex = destination.IsockStamp.Ordinal;
-                        
-                        // Check if this is a scene-specific node (not a quest node)
-                        if (targetNode is not scnQuestNodeWrapper)
-                        {
-                            // For scene nodes:
-                            // Name 0 = Normal input (socket index 0)
-                            // Name 1 = Cut input (socket index 1)
-                            socketIndex = destination.IsockStamp.Name;
-                            
-                            // Validate socket index
-                            if (socketIndex >= targetNode.Input.Count)
-                            {
-                                _loggerService?.Warning($"Scene node connection name ({destination.IsockStamp.Name}) of node {sceneNode.UniqueId} is higher than node {targetNode.UniqueId} input count ({targetNode.Input.Count}). Some connections may be missing in graph view. File: " + title);
-                                continue;
-                            }
-                        }
-
-                        graph.Connections.Add(new SceneConnectionViewModel(outputConnector, targetNode.Input[socketIndex]));
+                    // If socket doesn't exist, try to create it
+                    if (existingSocket == null)
+                    {
+                        graph.EnsureInputSocket(targetNode, destination.IsockStamp.Name, destination.IsockStamp.Ordinal);
+                    }
                 }
             }
+        }
+
+        // Connection Creation Phase: Now that all sockets exist, create the connections
+        foreach (var node in graph.Nodes)
+        {
+            var sceneNode = (BaseSceneViewModel)node;
+
+            foreach (var outputConnector in sceneNode.Output)
+            {
+                var sceneOutputConnector = (SceneOutputConnectorViewModel)outputConnector;
+
+                if (sceneOutputConnector.Data == null)
+                {
+                    continue;
+                }
+                
+                foreach (var destination in sceneOutputConnector.Data!.Destinations)
+                {
+                    if (!nodeCache.TryGetValue(destination.NodeId.Id, out var targetNode))
+                    {
+                        continue; // Skip if target node doesn't exist
+                    }
+
+                    var sceneInputConnector = targetNode.Input
+                        .Cast<SceneInputConnectorViewModel>()
+                        .FirstOrDefault(x => x.NameId == destination.IsockStamp.Name && x.Ordinal == destination.IsockStamp.Ordinal);
+
+                    if (sceneInputConnector != null)
+                    {
+                        graph.Connections.Add(new SceneConnectionViewModel(outputConnector, sceneInputConnector));
+                    }
+                    else
+                    {
+                        // Skip logging warnings for (1026,0) - these are intentionally hidden failsafe connections
+                        if (!(destination.IsockStamp.Name == 1026 && destination.IsockStamp.Ordinal == 0))
+                        {
+                            _loggerService?.Warning($"Could not find input socket ({destination.IsockStamp.Name},{destination.IsockStamp.Ordinal}) on node {destination.NodeId.Id} in file: {title}");
+                        }
+                    }
+                }
+            }
+        }
+
+        // Clear the initial loading flag for all nodes now that the graph is fully loaded
+        foreach (var node in graph.Nodes)
+        {
+            node.IsInitialLoad = false;
         }
 
         return graph;
@@ -908,5 +1547,14 @@ public partial class RedGraph
         }
     }
 
+    private RedGraph(string title, scnSceneResource data, RedDocumentViewModel doc) : this(title, (IRedType)data)
+    {
+        DocumentViewModel = doc;
+    }
 
+    // Constructor overload for backward compatibility when document is not available
+    private RedGraph(string title, scnSceneResource data) : this(title, (IRedType)data)
+    {
+        DocumentViewModel = null; // Sub-graphs don't have document reference
+    }
 }

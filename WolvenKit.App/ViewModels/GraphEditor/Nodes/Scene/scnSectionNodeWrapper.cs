@@ -6,12 +6,14 @@ using System.Linq;
 using System.Collections.Generic;
 using Splat;
 using System;
+using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 
 public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>, IDynamicOutputNode
 {
     private readonly scnSceneResource _sceneResource;
+    private readonly ILoggerService? _logger = Locator.Current.GetService<ILoggerService>();
     
     public scnSectionNodeWrapper(scnSectionNode scnSectionNode, scnSceneResource scnSceneResource) : base(scnSectionNode)
     {
@@ -634,23 +636,27 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>, IDynami
         return $"Unknown [{performerId}]";
     }
 
-    internal override void GenerateSockets()
+        internal override void GenerateSockets()
     {        
         Input.Clear();
-        Input.Add(new SceneInputConnectorViewModel("In", "In", UniqueId, 0));
-        Input.Add(new SceneInputConnectorViewModel("CutDestination", "CutDestination", UniqueId, 1));
+        var mainInput = new SceneInputConnectorViewModel("In", "In", UniqueId, 0, 0);
+        mainInput.Subtitle = "(0,0)";
+        Input.Add(mainInput);
+        
+        var cancelInput = new SceneInputConnectorViewModel("Cancel", "Cancel", UniqueId, 1, 0);
+        cancelInput.Subtitle = "(1,0)";
+        Input.Add(cancelInput);
 
         Output.Clear();
         for (var i = 0; i < _castedData.OutputSockets.Count; i++)
         {
             var socket = _castedData.OutputSockets[i];
             var label = GetSocketLabel(i, socket.Stamp.Name, socket.Stamp.Ordinal);
-            var connectorVM = new SceneOutputConnectorViewModel($"Out{i}", label, UniqueId, socket);
-            // Restore subtitle with coordinates for technical reference
-            connectorVM.Subtitle = $"({socket.Stamp.Name},{socket.Stamp.Ordinal})";
+            var nameAndTitle = $"({socket.Stamp.Name},{socket.Stamp.Ordinal})";
+            var connectorVM = new SceneOutputConnectorViewModel(nameAndTitle, nameAndTitle, UniqueId, socket.Stamp.Name, socket.Stamp.Ordinal, socket);
+            connectorVM.Subtitle = label;
             Output.Add(connectorVM);
-            
-            // Subscribe to destination changes for property panel sync
+            // Subscribe to destination changes so property panel shows connection counts
             SubscribeToSocketDestinations(connectorVM);
         }
     }
@@ -658,7 +664,7 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>, IDynami
     private string GetSocketLabel(int index, ushort name, ushort ordinal)
     {
         if (index == 0) return "OnEnd";
-        if (index == 1) return "OnCut";
+        if (index == 1) return "OnCancel";
         
         // For event sockets, show just the event number (coordinates now in subtitle)
         int eventNumber;
@@ -674,8 +680,8 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>, IDynami
         }
         else
         {
-            // Edge case - show as custom
-            return $"Out({name},{ordinal})";
+            // Edge case - show with Event_N_O format
+            return $"Event_{name}_{ordinal}";
         }
 
         return $"Event{eventNumber}";
@@ -698,7 +704,7 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>, IDynami
         }
         else
         {
-            return $"Out({name},{ordinal})"; // Edge case
+            return $"Event_{name}_{ordinal}"; // Edge case with Event_N_O format
         }
     }
 
@@ -738,20 +744,14 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>, IDynami
 
         // Create label using our new method
         var label = GetSocketLabel(newIndex, newName, newOrdinal);
-        var output = new SceneOutputConnectorViewModel($"Out{newIndex}", label, UniqueId, outputSocket);
-        // Restore subtitle with coordinates for technical reference
-        output.Subtitle = $"({newName},{newOrdinal})";
+        var nameAndTitle = $"({newName},{newOrdinal})";
+        var output = new SceneOutputConnectorViewModel(nameAndTitle, nameAndTitle, UniqueId, newName, newOrdinal, outputSocket);
+        output.Subtitle = label;
         Output.Add(output);
 
-        // Subscribe to destination changes for property panel sync
-        SubscribeToSocketDestinations(output);
-
-        // Update property panel and graph editor without regenerating connectors
-        TriggerPropertyChanged(nameof(Output));
-        OnPropertyChanged(nameof(Data));
-
-        // Mark document as dirty
-        DocumentViewModel?.SetIsDirty(true);
+        // Note: Subscription to destination changes happens automatically via Output.CollectionChanged
+        // Notify UI and mark document dirty
+        NotifySocketsChanged();
 
         return output;
     }
@@ -768,12 +768,8 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>, IDynami
                 _castedData.OutputSockets.RemoveAt(_castedData.OutputSockets.Count - 1);
                 Output.RemoveAt(Output.Count - 1);
                                 
-                // Update property panel and graph editor without regenerating connectors
-                TriggerPropertyChanged(nameof(Output));
-                OnPropertyChanged(nameof(Data));
-                
-                // Mark document as dirty
-                DocumentViewModel?.SetIsDirty(true);
+                // Notify UI and mark document dirty
+                NotifySocketsChanged();
             }
         }
     }

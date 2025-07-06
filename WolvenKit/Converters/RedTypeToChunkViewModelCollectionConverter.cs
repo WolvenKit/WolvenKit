@@ -37,8 +37,8 @@ namespace WolvenKit.Converters
 
             try
             {
-                // Use global cache to avoid creating new ChunkViewModel on every selection change
-                var result = s_globalCache.GetValue(redData, CreateChunkViewModelCollection);
+                // Always create fresh ChunkViewModel to ensure correct document context
+                var result = CreateChunkViewModelCollection(redData);
                 return result;
             }
             catch (Exception ex)

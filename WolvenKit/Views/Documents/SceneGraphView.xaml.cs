@@ -10,13 +10,17 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.GraphEditor;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.Models;
+using WolvenKit.App.Interaction;
 using Splat;
+using WolvenKit.Views.Dialogs;
+using AdonisUI.Controls;
 
 namespace WolvenKit.Views.Documents
 {
@@ -411,6 +415,71 @@ namespace WolvenKit.Views.Documents
         }
 
         /// <summary>
+        /// Search for a node by its ID and navigate to it
+        /// </summary>
+        public bool SearchAndNavigateToNode(uint nodeId)
+        {
+            var viewModel = DataContext as SceneGraphViewModel;
+            if (viewModel?.MainGraph?.Nodes == null)
+                return false;
+
+            // Find the node with the specified ID
+            var targetNode = viewModel.MainGraph.Nodes.FirstOrDefault(n => n.UniqueId == nodeId);
+            if (targetNode == null)
+                return false;
+
+            // Select the node
+            SceneGraphEditor?.Editor?.SelectedItems.Clear();
+            SceneGraphEditor?.Editor?.SelectedItems.Add(targetNode);
+            NodeSelectionService.Instance.SelectedNode = targetNode;
+
+            // Center view on the node
+            CenterViewOnSelectedNode(viewModel.MainGraph, targetNode);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Shows a dialog to go directly to a node by its ID
+        /// </summary>
+        public void ShowGoToNodeDialog()
+        {
+            var dialog = new InputDialogView("Go to Node", "");
+
+            if (dialog.ViewModel is not InputDialogViewModel vm ||
+                dialog.ShowDialog(Application.Current.MainWindow) != true)
+            {
+                return;
+            }
+
+            if (uint.TryParse(vm.Text?.Trim(), out var nodeId))
+            {
+                if (!SearchAndNavigateToNode(nodeId))
+                {
+                    MessageBoxModel messageBox = new()
+                    {
+                        Text = $"Node with ID {nodeId} not found.",
+                        Caption = "Go to Node",
+                        Icon = AdonisUI.Controls.MessageBoxImage.Information,
+                        Buttons = new[] { MessageBoxButtons.Ok() }
+                    };
+                    AdonisUI.Controls.MessageBox.Show(Application.Current.MainWindow, messageBox);
+                }
+            }
+            else
+            {
+                MessageBoxModel messageBox = new()
+                {
+                    Text = "Please enter a valid numeric Node ID.",
+                    Caption = "Invalid Input",
+                    Icon = AdonisUI.Controls.MessageBoxImage.Warning,
+                    Buttons = new[] { MessageBoxButtons.Ok() }
+                };
+                AdonisUI.Controls.MessageBox.Show(Application.Current.MainWindow, messageBox);
+            }
+        }
+
+        /// <summary>
         /// Handles keyboard shortcuts for node deletion and navigation
         /// </summary>
         private void SceneGraphView_OnPreviewKeyDown(object sender, KeyEventArgs e)
@@ -476,6 +545,14 @@ namespace WolvenKit.Views.Documents
                 e.Handled = true;
             }
 
+            // Shortcut: Ctrl+G to open "go to node" dialog
+            if (e.Key == Key.G && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+            {
+                ShowGoToNodeDialog();
+                e.Handled = true;
+                return;
+            }
+
             // Shortcut: Arrow keys for smart graph walk based on spatial positioning
             if (e.Key is Key.Left or Key.Right or Key.Up or Key.Down)
             {
@@ -515,15 +592,36 @@ namespace WolvenKit.Views.Documents
                 var appViewModel = Locator.Current.GetService<AppViewModel>();
                 if (appViewModel == null) return;
 
-                // Get node types for scene graphs
-                var nodeTypes = graph.GetSceneNodeTypes();
-                var types = nodeTypes
-                    .Select(x => new TypeEntry(GetCleanTypeName(x.Name), "", x))
+                // Get scene node types
+                var sceneNodeTypes = graph.GetSceneNodeTypes();
+                
+                // Separate DynamicSceneGraph from regular scene types (move to end)
+                var regularSceneTypes = sceneNodeTypes.Where(x => x.Name != "DynamicSceneGraphNode").ToList();
+                var dynamicSceneTypes = sceneNodeTypes.Where(x => x.Name == "DynamicSceneGraphNode").ToList();
+                
+                var sceneTypes = regularSceneTypes
+                    .Select(x => new TypeEntry(GraphNodeStyling.GetTitleForNodeType(x), "Scene", x))
                     .OrderBy(x => x.Name)
                     .ToList();
 
+                // Get quest node types that can be embedded in scene graphs
+                var questNodeTypes = graph.GetQuestNodeTypesForScene();
+                var questTypes = questNodeTypes
+                    .Select(x => new TypeEntry(GraphNodeStyling.GetTitleForNodeType(x), "Quest", x))
+                    .OrderBy(x => x.Name)
+                    .ToList();
+
+                // Combine both types
+                var allTypes = new List<TypeEntry>();
+                allTypes.AddRange(sceneTypes);
+                allTypes.AddRange(questTypes);
+                
+                // Add DynamicSceneGraph at the end
+                allTypes.AddRange(dynamicSceneTypes
+                    .Select(x => new TypeEntry(GraphNodeStyling.GetTitleForNodeType(x), "Scene", x)));
+
                 // Create and show the type selector dialog
-                await appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
+                await appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(allTypes)
                 {
                     DialogHandler = model =>
                     {
@@ -532,7 +630,8 @@ namespace WolvenKit.Views.Documents
                         {
                             // Create new node at current viewport center
                             var viewportCenter = GetViewportCenter();
-                            graph.CreateSceneNode(selectedType, viewportCenter);
+                            var nodeId = graph.CreateSceneNode(selectedType, viewportCenter);
+                            SelectNodeById(nodeId);
                         }
                     }
                 });
@@ -543,27 +642,7 @@ namespace WolvenKit.Views.Documents
             }
         }
 
-        /// <summary>
-        /// Get clean type name for display in dialog
-        /// </summary>
-        private string GetCleanTypeName(string typeName)
-        {
-            if (typeName.StartsWith("scn"))
-            {
-                typeName = typeName[3..];
-            }
 
-            if (typeName.EndsWith("NodeDefinition"))
-            {
-                typeName = typeName[..^14];
-            }
-            else if (typeName.EndsWith("Node"))
-            {
-                typeName = typeName[..^4];
-            }
-
-            return typeName;
-        }
 
         /// <summary>
         /// Get the center point of the current viewport for placing new nodes
@@ -589,6 +668,30 @@ namespace WolvenKit.Views.Documents
         {
             // Forward the event to the underlying GraphEditorView's Connection_OnRightClick method
             SceneGraphEditor?.Connection_OnRightClick(sender, e);
+        }
+
+        /// <summary>
+        /// Selects a node by its ID
+        /// </summary>
+        private void SelectNodeById(uint nodeId)
+        {
+            var viewModel = DataContext as SceneGraphViewModel;
+            if (viewModel?.MainGraph?.Nodes == null || SceneGraphEditor?.Editor == null) return;
+
+            // Find the node with the specified ID
+            var targetNode = viewModel.MainGraph.Nodes.FirstOrDefault(n => n.UniqueId == nodeId);
+
+            if (targetNode != null)
+            {
+                // Clear current selection
+                SceneGraphEditor.Editor.SelectedItems.Clear();
+                
+                // Select the target node
+                SceneGraphEditor.Editor.SelectedItems.Add(targetNode);
+                
+                // Update the NodeSelectionService
+                NodeSelectionService.Instance.SelectedNode = targetNode;
+            }
         }
     }
 } 

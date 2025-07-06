@@ -15,6 +15,9 @@ public abstract class BaseSceneViewModel : NodeViewModel, IRefreshableDetails
     
     public override uint UniqueId => ((scnSceneGraphNode)Data).NodeId.Id;
 
+    public Dictionary<ushort, string> InputSocketNames = new();
+    public Dictionary<ushort, string> OutputSocketNames = new();
+
     public Brush Background { get; protected set; }
     public Brush ContentBackground { get; protected set; }
 
@@ -53,9 +56,9 @@ public abstract class BaseSceneViewModel : NodeViewModel, IRefreshableDetails
         // Detect if this is a player node
         DetectPlayerNode(scnSceneGraphNode);
         
-        Title = Data.GetType().Name[3..^4]; // ID is now shown separately via NodeIdText
-        Background = GraphNodeColors.GetBackgroundForSceneNodeType(scnSceneGraphNode);
-        ContentBackground = GraphNodeColors.GetContentBackgroundForSceneNodeType(scnSceneGraphNode);
+        Title = Data.GetType().Name[3..^4];
+        Background = GraphNodeStyling.GetBackgroundForSceneNodeType(scnSceneGraphNode);
+        ContentBackground = GraphNodeStyling.GetContentBackgroundForSceneNodeType(scnSceneGraphNode);
         
         // Check if this is a simple node type that should have uniform colors
         UpdateBackgroundsBasedOnNodeType(scnSceneGraphNode);
@@ -64,7 +67,7 @@ public abstract class BaseSceneViewModel : NodeViewModel, IRefreshableDetails
     protected override void UpdateTitle()
     {
         // Format scene node titles properly  
-        Title = Data.GetType().Name[3..^4]; // ID is now shown separately via NodeIdText
+        Title = Data.GetType().Name[3..^4];
         
         // Notable point information is now shown in the visual indicator bar, not in the title
         
@@ -398,19 +401,45 @@ public abstract class BaseSceneViewModel<T> : BaseSceneViewModel where T : scnSc
     internal override void GenerateSockets()
     {
         Input.Clear();
-        Input.Add(new SceneInputConnectorViewModel("In", "In", UniqueId, 0));
-        
-        // Add Cut input socket for all scene nodes by default (except End nodes)
-        // Quest nodes handle their own sockets differently
-        // Start nodes CAN receive Cut connections (1 found in data), End nodes cannot (0 found)
-        if (Data is not scnEndNode)
+        foreach (var (socketNameId, socketName) in InputSocketNames)
         {
-            Input.Add(new SceneInputConnectorViewModel("CutDestination", "CutDestination", UniqueId, 1));
+            var input = new SceneInputConnectorViewModel(socketName, socketName, UniqueId, socketNameId, 0);
+            input.Subtitle = $"({socketNameId},0)";
+            Input.Add(input);
         }
 
-        for (var i = 0; i < _castedData.OutputSockets.Count; i++)
+        Output.Clear();
+        foreach (var (socketNameId, socketName) in OutputSocketNames)
         {
-            Output.Add(new SceneOutputConnectorViewModel($"Out{i}", $"Out{i}", UniqueId, _castedData.OutputSockets[i]));
+            var sockets = _castedData.OutputSockets
+                .Where(x => x.Stamp.Name == socketNameId)
+                .OrderBy(x => (ushort)x.Stamp.Ordinal)
+                .ToList();
+
+            if (sockets.Count > 0)
+            {
+                foreach (var socket in sockets)
+                {
+                    // Only add ordinal suffix if there are multiple sockets with the same name
+                    var baseName = sockets.Count > 1 ? $"{socketName}_{socket.Stamp.Ordinal}" : socketName;
+                    var nameAndTitle = $"({socket.Stamp.Name},{socket.Stamp.Ordinal})";
+                    var output = new SceneOutputConnectorViewModel(nameAndTitle, nameAndTitle, UniqueId, socket.Stamp.Name, socket.Stamp.Ordinal, socket);
+                    output.Subtitle = baseName;
+                    Output.Add(output);
+                    // Explicit subscription to guarantee property panel sync
+                    SubscribeToSocketDestinations(output);
+                }
+            }
+            else
+            {
+                // Virtual socket - no ordinal suffix needed for static sockets
+                var nameAndTitle = $"({socketNameId},0)";
+                var output = new SceneOutputConnectorViewModel(nameAndTitle, nameAndTitle, UniqueId, socketNameId, 0);
+                output.Subtitle = socketName;
+                Output.Add(output);
+                // Explicit subscription to guarantee property panel sync (even for virtual sockets)
+                SubscribeToSocketDestinations(output);
+            }
         }
     }
 }

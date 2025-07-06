@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Documents;
+using WolvenKit.App.ViewModels.GraphEditor;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 
-public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
+public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>, IRefreshableDetails
 {
     private readonly scnSceneResource _sceneResource;
 
@@ -16,6 +19,19 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
 
     public scnChoiceNodeWrapper(scnChoiceNode scnSceneGraphNode, scnSceneResource scnSceneResource) : base(scnSceneGraphNode, scnSceneResource)
     {
+        InputSocketNames.Add(0, "In");
+        InputSocketNames.Add(1, "Cancel");
+        InputSocketNames.Add(2, "ReactivateGroup");
+        InputSocketNames.Add(3, "TimeLimitedFinish");
+
+        OutputSocketNames.Add(0, "Option");
+        OutputSocketNames.Add(1, "AnyOption");
+        OutputSocketNames.Add(2, "Immediate");
+        OutputSocketNames.Add(3, "OnCancel");
+        OutputSocketNames.Add(4, "NoOption");
+        OutputSocketNames.Add(5, "WhenDisplayed");
+        OutputSocketNames.Add(6, "Reminder");
+
         _sceneResource = scnSceneResource;
         
         // Populate initial details
@@ -114,6 +130,9 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
         // Update title as well
         UpdateTitle();
         OnPropertyChanged(nameof(Title));
+        
+        // Regenerate sockets to update choice text display when properties change
+        GenerateSockets();
     }
 
     /// <summary>
@@ -200,105 +219,57 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
     {
         GetChoices();
 
-        // --- Synchronize INPUT connectors (they are static: In, CutDestination) ---
-        string[] inputNames = { "In", "CutDestination" };
-        for (int i = 0; i < inputNames.Length; i++)
+        Input.Clear();
+        foreach (var (socketNameId, socketName) in InputSocketNames)
         {
-            if (i < Input.Count)
-            {
-                // Update existing
-                var existingInput = Input[i];
-                if (existingInput.Name != inputNames[i])
-                {
-                    Input[i] = new SceneInputConnectorViewModel(inputNames[i], inputNames[i], UniqueId, (ushort)i);
-                }
-            }
-            else
-            {
-                Input.Add(new SceneInputConnectorViewModel(inputNames[i], inputNames[i], UniqueId, (ushort)i));
-            }
+            var input = new SceneInputConnectorViewModel(socketName, socketName, UniqueId, socketNameId, 0);
+            input.Subtitle = $"({socketNameId},0)";
+            Input.Add(input);
         }
 
-        // Remove excess inputs
-        while (Input.Count > inputNames.Length)
+        Output.Clear();
+        foreach (var (socketNameId, socketName) in OutputSocketNames)
         {
-            Input.RemoveAt(Input.Count - 1);
-        }
+            var sockets = _castedData.OutputSockets
+                .Where(x => x.Stamp.Name == socketNameId)
+                .OrderBy(x => (ushort)x.Stamp.Ordinal)
+                .ToList();
 
-        // Synchronize the Output collection with the underlying socket list while keeping
-        // existing connector instances alive whenever possible to preserve established
-        // connections in the graph editor.
-
-        int desiredCount = _castedData.OutputSockets.Count;
-
-        // Ensure the collection has the correct size
-        // 1. Update or create connectors up to desiredCount
-        for (var i = 0; i < desiredCount; i++)
-        {
-            var socket = _castedData.OutputSockets[i];
-
-            // Determine the proper title for this socket
-            var socketName = socket.Stamp.Name;
-            var socketOrdinal = socket.Stamp.Ordinal;
-
-            string title;
-
-            if (socketName == 0)
+            if (sockets.Count > 0)
             {
-                // Choice outputs: ordinal maps to option index
-                var choiceIndex = (int)socketOrdinal;
-                title = choiceIndex < Options.Count ? Options[choiceIndex] : $"Choice {choiceIndex + 1}";
-            }
-            else
-            {
-                // Static control-flow outputs
-                var labelIndex = ((ushort)socketName) switch
+                foreach (var socket in sockets)
                 {
-                    1 => (ushort)(_castedData.Options.Count + 0), // AnyOption
-                    2 => (ushort)(_castedData.Options.Count + 1), // Immediate
-                    3 => (ushort)(_castedData.Options.Count + 2), // OnCut
-                    4 => (ushort)(_castedData.Options.Count + 3), // NoOption
-                    5 => (ushort)(_castedData.Options.Count + 4), // WhenDisplayed
-                    6 => (ushort)(_castedData.Options.Count + 5), // Reminder
-                    _ => (ushort)ushort.MaxValue
-                };
-
-                title = (labelIndex != ushort.MaxValue && labelIndex < Options.Count)
-                    ? Options[labelIndex]
-                    : $"Out {socketName}";
-            }
-
-            if (i < Output.Count)
-            {
-                // Update existing connector if it references the same socket; otherwise replace
-                var existing = Output[i] as SceneOutputConnectorViewModel;
-
-                if (existing == null || existing.Data != socket)
-                {
-                    // Replace the connector but *do not* clear the whole collection
-                    Output[i] = new SceneOutputConnectorViewModel($"Out{i}", title, UniqueId, socket);
-                }
-                else
-                {
-                    // Same connector; replace if title mismatches because Title is immutable
-                    if (existing.Title != title)
+                    // Only add ordinal suffix for choice options (socketNameId == 0) or if there are multiple of the same type
+                    var baseName = (socketNameId == 0 || sockets.Count > 1) ? $"({socketName}_{socket.Stamp.Ordinal + 1})" : socketName;
+                    
+                    if (socketNameId == 0 && socket.Stamp.Ordinal < Options.Count)
                     {
-                        Output[i] = new SceneOutputConnectorViewModel($"Out{i}", title, UniqueId, socket);
+                        baseName += $" {Options[socket.Stamp.Ordinal]}";
                     }
+
+                    var nameAndTitle = $"({socket.Stamp.Name},{socket.Stamp.Ordinal})";
+                    var output = new SceneOutputConnectorViewModel(nameAndTitle, nameAndTitle, UniqueId, socket.Stamp.Name, socket.Stamp.Ordinal, socket);
+                    output.Subtitle = baseName;
+                    Output.Add(output);
+                    // Explicit subscription to guarantee property panel sync
+                    SubscribeToSocketDestinations(output);
                 }
             }
             else
             {
-                // Need to add a new connector
-                Output.Add(new SceneOutputConnectorViewModel($"Out{i}", title, UniqueId, socket));
+                // Virtual socket - only add ordinal for choice options (socketNameId == 0)
+                var baseName = socketNameId == 0 ? $"({socketName}_1)" : socketName;
+                var nameAndTitle = $"({socketNameId},0)";
+                var output = new SceneOutputConnectorViewModel(nameAndTitle, nameAndTitle, UniqueId, socketNameId, 0);
+                output.Subtitle = baseName;
+                Output.Add(output);
+                // Explicit subscription to guarantee property panel sync (even for virtual sockets)
+                SubscribeToSocketDestinations(output);
             }
         }
 
-        // 2. Remove any excess connectors at the end
-        while (Output.Count > desiredCount)
-        {
-            Output.RemoveAt(Output.Count - 1);
-        }
+        // Notify UI and mark document dirty
+        NotifySocketsChanged();
     }
 
     private void GetChoices()
@@ -309,6 +280,17 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
         {
             var option = _castedData.Options[i];
             string choiceText;
+
+            // First, check if there's a meaningful caption set - prefer this over screenplay entries
+            var hasMeaningfulCaption = option.Caption != CName.Empty && 
+                                      !string.IsNullOrEmpty(option.Caption.GetResolvedText());
+
+            if (hasMeaningfulCaption)
+            {
+                choiceText = option.Caption.GetResolvedText()!;
+                Options.Add(choiceText);
+                continue;
+            }
 
             // Try to get text from screenplay/localization store
             try
@@ -334,7 +316,7 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
 
                         if (vpEntry != null && !string.IsNullOrEmpty(vpEntry.Content))
                         {
-                            choiceText = $"[{vdEntry.LocaleId.ToEnumString()}] {vpEntry.Content}";
+                            choiceText = vpEntry.Content;
                             Options.Add(choiceText);
                             continue;
                         }
@@ -346,35 +328,10 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
                 // Continue to fallbacks if there's any error accessing screenplay/loc data
             }
 
-            // Fallback to caption if no localized text found
-            if (option.Caption != CName.Empty)
-            {
-                var captionString = option.Caption.GetResolvedText();
-                if (!string.IsNullOrEmpty(captionString))
-                {
-                    choiceText = $"{captionString}";
-                }
-                else
-                {
-                    choiceText = $"[unresolved]";
-                }
-            }
-            else
-            {
-                // Final fallback to choice index and ID
-                choiceText = $"Choice {i + 1} [ID:{option.ScreenplayOptionId.Id}]";
-            }
-
+            // Final fallback to choice index and ID
+            choiceText = $"Choice {i + 1} [ID:{option.ScreenplayOptionId.Id}]";
             Options.Add(choiceText);
         }
-
-        // Add the standard control flow socket labels  
-        Options.Add("AnyOption");
-        Options.Add("Immediate");
-        Options.Add("OnCut");
-        Options.Add("NoOption");
-        Options.Add("WhenDisplayed");
-        Options.Add("Reminder");
     }
 
     public void AddChoice()
@@ -492,7 +449,7 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
 
                     if (vpEntry != null && !string.IsNullOrEmpty(vpEntry.Content))
                     {
-                        choiceText = $"[{vdEntry.LocaleId.ToEnumString()}] {vpEntry.Content}";
+                        choiceText = vpEntry.Content;
                     }
                 }
             }
@@ -503,17 +460,81 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>
         }
 
         // Create and insert the new connector at the correct position
-        var newConnector = new SceneOutputConnectorViewModel($"Out{insertPosition}", choiceText, UniqueId, newOutputSocket);
+        var nameAndTitle = $"({newOutputSocket.Stamp.Name},{newOutputSocket.Stamp.Ordinal})";
+        var socketSubtitle = $"(Option_{newChoiceOrdinal + 1}) {choiceText}";
+        var newConnector = new SceneOutputConnectorViewModel(nameAndTitle, nameAndTitle, UniqueId, newOutputSocket.Stamp.Name, newOutputSocket.Stamp.Ordinal, newOutputSocket);
+        newConnector.Subtitle = socketSubtitle;
         Output.Insert(insertPosition, newConnector);
 
-        // SOCKET SYNC FIX: Subscribe to destination changes for property panel sync
-        SubscribeToSocketDestinations(newConnector);
+        // Note: Subscription to destination changes happens automatically via Output.CollectionChanged
+        // Notify UI and mark document dirty
+        NotifySocketsChanged();
+        
+        // Refresh the property panel to show the new screenplay/localization entries
+        if (DocumentViewModel != null)
+        {
+            var sceneGraphTab = DocumentViewModel.TabItemViewModels
+                .OfType<SceneGraphViewModel>()
+                .FirstOrDefault();
+                
+            if (sceneGraphTab?.MainGraph is RedGraph graph)
+            {
+                graph.RefreshSceneResourcePropertiesInTabs();
+            }
+        }
+    }
 
-        // SYNC FIX: Update property panel and graph editor without regenerating connectors
-        TriggerPropertyChanged(nameof(Output));
-        OnPropertyChanged(nameof(Data));
+    /// <summary>
+    /// Removes the last choice option (if at least two exist) and associated socket/data.
+    /// </summary>
+    public void RemoveChoice()
+    {
+        if (_castedData.Options.Count <= 1)
+            return;
 
-        // Mark document as dirty
-        DocumentViewModel?.SetIsDirty(true);
+        int lastIdx = _castedData.Options.Count - 1;
+        var option = _castedData.Options[lastIdx];
+        _castedData.Options.RemoveAt(lastIdx);
+
+        // Remove screenplay option
+        var spOpt = _sceneResource.ScreenplayStore.Options.FirstOrDefault(o => o.ItemId.Id == option.ScreenplayOptionId.Id);
+        if (spOpt != null)
+        {
+            _sceneResource.ScreenplayStore.Options.Remove(spOpt);
+            var vd = _sceneResource.LocStore.VdEntries.FirstOrDefault(v => v.LocstringId.Ruid == spOpt.LocstringId.Ruid);
+            if (vd != null)
+            {
+                var vp = _sceneResource.LocStore.VpEntries.FirstOrDefault(p => p.VariantId.Ruid == vd.VariantId.Ruid);
+                if (vp != null) _sceneResource.LocStore.VpEntries.Remove(vp);
+                _sceneResource.LocStore.VdEntries.Remove(vd);
+            }
+        }
+
+        // Remove corresponding socket (name 0 highest ordinal)
+        var socket = _castedData.OutputSockets.Where(s => s.Stamp.Name == 0).OrderByDescending(s => s.Stamp.Ordinal).FirstOrDefault();
+        if (socket != null && socket.Destinations.Count == 0)
+        {
+            int si = _castedData.OutputSockets.IndexOf(socket);
+            if (si >= 0)
+            {
+                _castedData.OutputSockets.RemoveAt(si);
+                if (si < Output.Count) Output.RemoveAt(si);
+            }
+        }
+
+        NotifySocketsChanged();
+        
+        // Refresh the property panel to show the removed screenplay/localization entries
+        if (DocumentViewModel != null)
+        {
+            var sceneGraphTab = DocumentViewModel.TabItemViewModels
+                .OfType<SceneGraphViewModel>()
+                .FirstOrDefault();
+                
+            if (sceneGraphTab?.MainGraph is RedGraph graph)
+            {
+                graph.RefreshSceneResourcePropertiesInTabs();
+            }
+        }
     }
 }
