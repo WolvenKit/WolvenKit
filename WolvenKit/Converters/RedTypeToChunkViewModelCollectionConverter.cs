@@ -208,6 +208,36 @@ namespace WolvenKit.Converters
                         }
                     }
                 }
+                // For all quest node types in quest graphs, expand everything one level except sockets
+                else if (redData is questNodeDefinition)
+                {
+                    try
+                    {
+                        // Auto-expand all properties one level deep, but exclude sockets
+                        foreach (var property in rootChunk.TVProperties ?? Enumerable.Empty<ChunkViewModel>())
+                        {
+                            // Skip socket properties to keep them collapsed
+                            if (property.Name.Equals("sockets", StringComparison.OrdinalIgnoreCase))
+                            {
+                                continue;
+                            }
+                            
+                            try
+                            {
+                                property.CalculateProperties();
+                                property.IsExpanded = true;
+                            }
+                            catch (Exception ex)
+                            {
+                                LoggerService?.Error($"Failed to expand property '{property.Name}' for quest node: {ex.Message}");
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        LoggerService?.Error($"Failed to auto-expand quest node properties: {ex.Message}");
+                    }
+                }
             }
             catch (Exception ex)
             {

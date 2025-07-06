@@ -101,6 +101,16 @@
                            Foreground="White" 
                            FontSize="10" 
                            Margin="0,0,16,0"/>
+                <TextBlock Text="Phase Nodes:" 
+                           VerticalAlignment="Center" 
+                           Foreground="Gray" 
+                           FontSize="10" 
+                           Margin="0,0,4,0"/>
+                <TextBlock Text="{Binding TotalPhaseNodes}" 
+                           VerticalAlignment="Center" 
+                           Foreground="White" 
+                           FontSize="10" 
+                           Margin="0,0,16,0"/>
                 <TextBlock Text="Phase Prefabs:" 
                            VerticalAlignment="Center" 
                            Foreground="Gray" 
