@@ -362,8 +362,7 @@
                                          Mode=OneWay,
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=CreateNewDirectoryCommand}"
-                    Header="Create new folder"
-                    InputGestureText="F7">
+                    Header="Create new folder">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
@@ -674,6 +673,10 @@
         </ResourceDictionary>
 
     </UserControl.Resources>
+
+    <UserControl.InputBindings>
+        <KeyBinding Key="F7" Command="{Binding CreateNewDirectoryCommand}" />
+    </UserControl.InputBindings>
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
         <Grid.RowDefinitions>
