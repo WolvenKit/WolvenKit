@@ -65,7 +65,13 @@ public partial class ArchiveXlHelper
             return staticPath;
         }
 
-        var text = Regex.Replace(staticPath, s_genderPartialRegex, "{gender}");
+        var text = staticPath;
+
+        var match = Regex.Match(staticPath, s_genderPartialRegex);
+        if (match is { Success: true })
+        {
+            text = Regex.Replace(staticPath, s_genderPartialRegex, @"_$1{gender}$3_");
+        }
 
         foreach (var kvp in SubstitutionMap)
         {
@@ -97,7 +103,7 @@ public partial class ArchiveXlHelper
     /// <summary>
     /// Will match w, m, wa, ma, pwa and pma, as long as it's between to underscores.
     /// </summary>
-    private static readonly string s_genderPartialRegex = @"(?<=_)p?([wm])a?(?=[_\.])";
+    private static readonly string s_genderPartialRegex = @"_(p?)([wm])(a?)[._]";
 
     public static bool HasSubstitution(string s) => s_substitutionRegex().IsMatch(s);
 
