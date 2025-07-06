@@ -67,6 +67,7 @@ namespace WolvenKit.Views.Editors
         }
 
 
+
         private ScrollViewer _scrollViewer;
 
         public TrimmingTextBox() => InitializeComponent();
@@ -90,7 +91,7 @@ namespace WolvenKit.Views.Editors
             StartTrimming.SetCurrentValue(VisibilityProperty, _scrollViewer.HorizontalOffset > 0 ? Visibility.Visible : Visibility.Hidden);
             EndTrimming.SetCurrentValue(VisibilityProperty, Math.Abs(_scrollViewer.ScrollableWidth - _scrollViewer.HorizontalOffset) > 1 ? Visibility.Visible : Visibility.Hidden);
         }
-
+           
         public event EventHandler OnChange;
         private void RealTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
@@ -213,6 +214,14 @@ namespace WolvenKit.Views.Editors
                 _previousValue = Text;
                 RealTextBox.SetCurrentValue(TextBox.TextProperty, s);
             }
+
+            OnFocusLost?.Invoke(this, EventArgs.Empty);
         }
+
+
+        public event EventHandler OnFocusLost;
+
+        private void RealTextBox_OnFocusLost(object sender, RoutedEventArgs e) =>
+            OnFocusLost?.Invoke(this, EventArgs.Empty);
     }
 }
