@@ -675,6 +675,10 @@
 
     </UserControl.Resources>
 
+    <UserControl.InputBindings>
+        <KeyBinding Key="F7" Command="{Binding CreateNewDirectoryCommand}" />
+    </UserControl.InputBindings>
+
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

@@ -838,6 +838,17 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private void CreateNewDirectory(FileSystemModel? value)
     {
         var model = value ?? SelectedItem;
+        if (model is null)
+        {
+            return;
+        }
+
+        // if a file is selected, go up to parent directory
+        if (!model.IsDirectory)
+        {
+            model = model.Parent;
+        }
+
         if (model?.IsDirectory != true)
         {
             return;
