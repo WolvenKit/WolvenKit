@@ -42,6 +42,10 @@ namespace WolvenKit.Views.Documents
     /// - Restores selection when switching back to quest phase documents
     /// - Cleans up selection cache when documents are closed
     /// 
+    /// Navigation:
+    /// - Respects GraphEditorState system for viewport positioning
+    /// - Auto-centers on phase node when navigating back to parent
+    /// 
     /// Memory leak protection:
     /// - Document switching: CleanupEventSubscription() -> EstablishEventSubscription() 
     /// - Document closing: DockedViews.CollectionChanged -> Dispose() when document removed
@@ -53,8 +57,9 @@ namespace WolvenKit.Views.Documents
         private readonly Dictionary<(uint nodeId, Key direction), uint> _navigationMemory = new();
         private readonly List<uint> _navigationHistory = new();
         
-        // Viewport position tracking for subgraph navigation - remembers where we were in each graph
-        private readonly Dictionary<RedGraph, System.Windows.Point> _viewportPositions = new();
+        // Zoom preservation: tracks zoom level when entering each phase
+        private readonly Dictionary<RedGraph, double> _phaseEntryZoomLevels = new();
+
 
         // Document switching tracking for node deselection
         private AppViewModel? _appViewModel;
@@ -183,8 +188,8 @@ namespace WolvenKit.Views.Documents
                 // Clean up managed resources
                 CleanupEventSubscription();
                 
-                // Clear viewport positions to prevent memory leaks
-                _viewportPositions.Clear();
+                // Clear zoom level tracking to prevent memory leaks
+                _phaseEntryZoomLevels.Clear();
                 
                 // Clear document references
                 _currentDocument = null;
@@ -226,7 +231,6 @@ namespace WolvenKit.Views.Documents
             // Clean up old subscription when switching contexts
             if (e.OldValue is QuestPhaseGraphViewModel)
             {
-                _viewportPositions.Clear();
                 CleanupEventSubscription();
             }
 
@@ -504,9 +508,6 @@ namespace WolvenKit.Views.Documents
                 if (QuestPhaseGraphEditor != null)
                 {
                     QuestPhaseGraphEditor.SetCurrentValue(GraphEditorView.SourceProperty, parentGraph);
-                    
-                    // Restore viewport position if available
-                    RestoreViewportPosition(parentGraph);
                     
                     // Update breadcrumb
                     BuildBreadcrumb();
@@ -1163,17 +1164,16 @@ namespace WolvenKit.Views.Documents
                     return;
                 }
 
-                // Store current viewport position before navigating away
-                var currentGraph = QuestPhaseGraphEditor.Source;
-                if (currentGraph != null)
+                // Store current zoom level before entering the phase
+                if (QuestPhaseGraphEditor?.Editor != null)
                 {
-                    _viewportPositions[currentGraph] = QuestPhaseGraphEditor.Editor.ViewportLocation;
+                    _phaseEntryZoomLevels[subGraph] = QuestPhaseGraphEditor.Editor.ViewportZoom;
                 }
 
                 // Set document reference for property sync
                 if (subGraph.DocumentViewModel == null)
                 {
-                    subGraph.DocumentViewModel = QuestPhaseGraphEditor.Source.DocumentViewModel;
+                    subGraph.DocumentViewModel = QuestPhaseGraphEditor?.Source.DocumentViewModel;
                 }
 
                 // Handle quest phase node state tracking
@@ -1181,16 +1181,26 @@ namespace WolvenKit.Views.Documents
                 {
                     if (!ph.PhaseResource.IsSet)
                     {
-                        subGraph.StateParents = QuestPhaseGraphEditor.Source.StateParents + "." + ph.Id;
-                        subGraph.DocumentViewModel = QuestPhaseGraphEditor.Source.DocumentViewModel;
+                        subGraph.StateParents = QuestPhaseGraphEditor?.Source.StateParents + "." + ph.Id;
+                        subGraph.DocumentViewModel = QuestPhaseGraphEditor?.Source.DocumentViewModel;
                     }
                 }
 
+                // Show loading overlay for subgraph navigation
+                viewModel.IsGraphLoading = true;
+
                 // Add to navigation history and navigate to subgraph
                 viewModel.History.Add(subGraph);
-                QuestPhaseGraphEditor.SetCurrentValue(GraphEditorView.SourceProperty, subGraph);
+                QuestPhaseGraphEditor?.SetCurrentValue(GraphEditorView.SourceProperty, subGraph);
 
                 BuildBreadcrumb();
+                
+                // Hide loading overlay - let GraphEditorState handle viewport positioning
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    viewModel.SetGraphLoaded();
+                }), System.Windows.Threading.DispatcherPriority.Background);
+                
                 return;
             }
 
@@ -1199,19 +1209,24 @@ namespace WolvenKit.Views.Documents
             {
                 if (viewModel.History.Count > 1)
                 {
-                    // Store current subgraph viewport position before leaving
-                    var currentSubGraph = viewModel.History[^1];
-                    _viewportPositions[currentSubGraph] = QuestPhaseGraphEditor.Editor.ViewportLocation;
+                    // Show loading overlay for navigation back
+                    viewModel.IsGraphLoading = true;
 
                     // Navigate back to parent
+                    var currentSubGraph = viewModel.History[^1];
                     viewModel.History.Remove(viewModel.History[^1]);
                     var parentGraph = viewModel.History[^1];
                     QuestPhaseGraphEditor.SetCurrentValue(GraphEditorView.SourceProperty, parentGraph);
 
-                    // Restore previous viewport position if we have it
-                    RestoreViewportPosition(parentGraph);
-
                     BuildBreadcrumb();
+                    
+                    // Hide loading overlay and auto-center on phase node we came from
+                    Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        // Auto-center on the phase node in the parent graph
+                        AutoCenterOnPhaseNodeInParent(parentGraph, currentSubGraph);
+                        viewModel.SetGraphLoaded();
+                    }), System.Windows.Threading.DispatcherPriority.Loaded);
                 }
             }
         }
@@ -1371,47 +1386,7 @@ namespace WolvenKit.Views.Documents
             return baseTitle;
         }
 
-        /// <summary>
-        /// Restore the saved viewport position for a graph, or center it if visiting for the first time
-        /// </summary>
-        private void RestoreViewportPosition(RedGraph graph)
-        {
-            if (graph == null || QuestPhaseGraphEditor?.Editor == null)
-                return;
 
-            if (_viewportPositions.TryGetValue(graph, out var savedPosition))
-            {
-                // Animate to the saved position smoothly
-                AnimateViewportTo(savedPosition, TimeSpan.FromMilliseconds(400));
-            }
-            else
-            {
-                // First time visiting this graph - center it nicely
-                // Add a small delay to ensure the graph is loaded
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    if (graph.Nodes?.Count > 0)
-                    {
-                        // Calculate the center of all nodes
-                        var minX = graph.Nodes.Min(n => n.Location.X);
-                        var maxX = graph.Nodes.Max(n => n.Location.X);
-                        var minY = graph.Nodes.Min(n => n.Location.Y);
-                        var maxY = graph.Nodes.Max(n => n.Location.Y);
-                        
-                        var centerX = (minX + maxX) / 2;
-                        var centerY = (minY + maxY) / 2;
-                        
-                        var viewportSize = QuestPhaseGraphEditor.Editor.ViewportSize;
-                        var targetPosition = new System.Windows.Point(
-                            centerX - viewportSize.Width / 2,
-                            centerY - viewportSize.Height / 2
-                        );
-                        
-                        AnimateViewportTo(targetPosition, TimeSpan.FromMilliseconds(400));
-                    }
-                }), System.Windows.Threading.DispatcherPriority.Background);
-            }
-        }
 
         /// <summary>
         /// Handle clicking on breadcrumb elements to navigate to that level
@@ -1431,11 +1406,23 @@ namespace WolvenKit.Views.Documents
             if (block.Text.Trim() == ">")
                 return;
 
-            // Store current viewport position before navigating away
-            var currentGraph = QuestPhaseGraphEditor.Source;
-            if (currentGraph != null)
+
+            // Show loading overlay for breadcrumb navigation
+            viewModel.IsGraphLoading = true;
+
+            // Check if we're navigating "up" (to a parent level) and get the subgraph we're coming from
+            var currentGraph = viewModel.History[^1]; // The current deepest level
+            var isNavigatingUp = viewModel.History.IndexOf(graph) < viewModel.History.IndexOf(currentGraph);
+            RedGraph? childGraph = null;
+            
+            if (isNavigatingUp)
             {
-                _viewportPositions[currentGraph] = QuestPhaseGraphEditor.Editor.ViewportLocation;
+                // Find the immediate child of the target graph in the navigation path
+                var targetIndex = viewModel.History.IndexOf(graph);
+                if (targetIndex >= 0 && targetIndex + 1 < viewModel.History.Count)
+                {
+                    childGraph = viewModel.History[targetIndex + 1];
+                }
             }
 
             // Navigate to the selected graph level
@@ -1450,10 +1437,126 @@ namespace WolvenKit.Views.Documents
                 viewModel.History.RemoveAt(i);
             }
 
-            // Restore the viewport position for the target graph
-            RestoreViewportPosition(graph);
-
             BuildBreadcrumb();
+            
+            // Hide loading overlay and auto-center if navigating up
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                if (isNavigatingUp && childGraph != null)
+                {
+                    AutoCenterOnPhaseNodeInParent(graph, childGraph);
+                }
+                viewModel.SetGraphLoaded();
+            }), System.Windows.Threading.DispatcherPriority.Loaded);
+        }
+
+
+
+        /// <summary>
+        /// Auto-center the viewport on the phase node that contains the subgraph we came from
+        /// </summary>
+        private void AutoCenterOnPhaseNodeInParent(RedGraph parentGraph, RedGraph subGraph)
+        {
+            if (parentGraph?.Nodes == null || QuestPhaseGraphEditor?.Editor == null)
+                return;
+
+            // Find the phase node that contains this subgraph
+            var phaseNode = parentGraph.Nodes
+                .OfType<questPhaseNodeDefinitionWrapper>()
+                .FirstOrDefault(node => ReferenceEquals(node.Graph, subGraph));
+
+            // If reference equality fails, try to find by StateParents
+            if (phaseNode == null && !string.IsNullOrEmpty(subGraph.StateParents))
+            {
+                var stateParentParts = subGraph.StateParents.Split('.');
+                if (stateParentParts.Length > 0)
+                {
+                    // Get the last part which should be the node ID
+                    var nodeIdString = stateParentParts[^1];
+                    if (uint.TryParse(nodeIdString, out var nodeId))
+                    {
+                        phaseNode = parentGraph.Nodes
+                            .OfType<questPhaseNodeDefinitionWrapper>()
+                            .FirstOrDefault(node => node.Data is questPhaseNodeDefinition phaseData && phaseData.Id == nodeId);
+                    }
+                }
+            }
+            if (phaseNode != null)
+            {
+                // Force center on the phase node with original zoom and select it - delay to ensure it runs after GraphEditorState
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    ForceCenterOnNodeWithZoom(phaseNode, subGraph);
+                    
+                    // Auto-select the phase node to provide visual feedback
+                    QuestPhaseGraphEditor?.Editor?.SelectedItems?.Clear();
+                    QuestPhaseGraphEditor?.Editor?.SelectedItems?.Add(phaseNode);
+                    NodeSelectionService.Instance.SelectedNode = phaseNode;
+                }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+            }
+        }
+
+        /// <summary>
+        /// Force center the viewport on a specific node (always centers, even if node is already visible)
+        /// </summary>
+        private void ForceCenterOnNode(WolvenKit.App.ViewModels.GraphEditor.NodeViewModel targetNode)
+        {
+            if (QuestPhaseGraphEditor?.Editor == null || targetNode == null)
+                return;
+
+            try
+            {
+                var editor = QuestPhaseGraphEditor.Editor;
+                var nodeLocation = targetNode.Location;
+                var viewportSize = editor.ViewportSize;
+                
+                // Calculate target viewport location to center the node
+                var targetX = nodeLocation.X - (viewportSize.Width / 2) + (targetNode.Size.Width / 2);
+                var targetY = nodeLocation.Y - (viewportSize.Height / 2) + (targetNode.Size.Height / 2);
+                
+                // Directly set the viewport location (no animation for immediate effect)
+                editor.ViewportLocation = new System.Windows.Point(targetX, targetY);
+            }
+            catch (Exception)
+            {
+                // Silently handle any viewport manipulation errors
+            }
+        }
+
+        /// <summary>
+        /// Force center and restore zoom for a phase node when navigating back from subgraph
+        /// </summary>
+        private void ForceCenterOnNodeWithZoom(WolvenKit.App.ViewModels.GraphEditor.NodeViewModel targetNode, RedGraph subGraph)
+        {
+            if (QuestPhaseGraphEditor?.Editor == null || targetNode == null)
+                return;
+
+            try
+            {
+                var editor = QuestPhaseGraphEditor.Editor;
+                
+                // Restore the zoom level from when we entered the phase
+                if (_phaseEntryZoomLevels.TryGetValue(subGraph, out var originalZoom))
+                {
+                    editor.ViewportZoom = originalZoom;
+                    // Clean up the stored zoom level
+                    _phaseEntryZoomLevels.Remove(subGraph);
+                }
+                
+                var nodeLocation = targetNode.Location;
+                var viewportSize = editor.ViewportSize;
+                
+                // Calculate target viewport location to center the node
+                var targetX = nodeLocation.X - (viewportSize.Width / 2) + (targetNode.Size.Width / 2);
+                var targetY = nodeLocation.Y - (viewportSize.Height / 2) + (targetNode.Size.Height / 2);
+                
+                // Directly set the viewport location (no animation for immediate effect)
+                editor.ViewportLocation = new System.Windows.Point(targetX, targetY);
+            }
+            catch (Exception)
+            {
+                // Silently handle any viewport manipulation errors
+            }
         }
     }
 } 
