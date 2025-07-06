@@ -12,6 +12,7 @@ using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common.Extensions;
+using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
@@ -25,16 +26,19 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private readonly IProjectManager _projectManager;
     private readonly ISettingsManager _settingsManager;
     private readonly IModifierViewStateService? _modifierViewStateService;
+    private readonly CRUIDService _cruidService;
 
     public RedDocumentViewToolbarModel(
         ISettingsManager settingsManager,
         IModifierViewStateService modifierSvc,
-        IProjectManager projectManager
+        IProjectManager projectManager,
+        CRUIDService cruidService
     )
     {
         _modifierViewStateService = modifierSvc;
         _projectManager = projectManager;
         _settingsManager = settingsManager;
+        _cruidService = cruidService;
 
         modifierSvc.ModifierStateChanged += OnModifierChanged;
         modifierSvc.PropertyChanged += (_, args) => OnPropertyChanged(args.PropertyName);
@@ -109,7 +113,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             }
         }
 
-        RefreshMeshMenuItems();
+        RefreshContextMenuItems();
     }
 
     private void OnRtdModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -130,7 +134,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             SelectedChunks.AddRange(list.OfType<ChunkViewModel>());
         }
 
-        RefreshMeshMenuItems();
+        RefreshContextMenuItems();
 
         SelectedChunk ??= RootChunk;
 
@@ -187,7 +191,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
     public List<ChunkViewModel> SelectedChunks { get; } = [];
 
-    private void RefreshMeshMenuItems()
+    private void RefreshContextMenuItems()
     {
 
         IsShiftKeyDown = _modifierViewStateService?.IsShiftKeyPressed ?? false;
@@ -197,6 +201,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             return;
         }
 
+        RegenerateAllCRUIDsCommand.NotifyCanExecuteChanged();
         ConvertPreloadMaterialsCommand.NotifyCanExecuteChanged();
     }
 
@@ -242,13 +247,91 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
     #region appFile
 
+    // Disable command if "regenerate CRUID" menu item is shown
+    private bool CanRegenerateAllCRUIDs() => IsInEntOrAppFile() && SelectedChunk?.ResolvedData is CArray<entIComponent>
+        or entIComponent or appearanceAppearanceDefinition
+        or CArray<CHandle<appearanceAppearanceDefinition>> or appearanceAppearanceResource or entEntityTemplate;
+
+    [RelayCommand(CanExecute = nameof(CanRegenerateAllCRUIDs))]
+    private void RegenerateAllCRUIDs()
+    {
+        var chunk = SelectedChunk ??= RootChunk;
+        var componentChunks = CollectComponents();
+
+        if (chunk is null || componentChunks.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var cvm in componentChunks)
+        {
+            if (cvm.GetPropertyChild("id") is not ChunkViewModel { Data: CRUID } idChunk)
+            {
+                continue;
+            }
+
+            idChunk.Data = _cruidService.GenerateNewCRUID();
+            idChunk.RecalculateProperties();
+            cvm.RecalculateProperties();
+        }
+
+        var parent = componentChunks.First().Parent ?? SelectedChunk;
+        while (parent is not null && parent != SelectedChunk && parent.Parent is not null)
+        {
+            parent.RecalculateProperties();
+            parent = parent.Parent;
+        }
+
+        parent?.Tab?.Parent.SetIsDirty(true);
+
+        return;
+
+        List<ChunkViewModel> CollectComponents()
+        {
+            if (chunk is null)
+            {
+                return [];
+            }
+
+            switch (chunk.ResolvedData)
+            {
+                case CArray<entIComponent>:
+                    return [.. chunk.Properties];
+                case entIComponent:
+                    return [chunk];
+                case appearanceAppearanceDefinition:
+                    return chunk.GetPropertyChild("components")?.Properties.ToList() ?? [];
+                case CArray<CHandle<appearanceAppearanceDefinition>>:
+                    var appearances = chunk.Properties
+                        .Where(x => x.ResolvedData is appearanceAppearanceDefinition)
+                        .Select(x => x.GetPropertyChild("components")).ToList() ?? [];
+
+                    foreach (var chunkViewModel in appearances)
+                    {
+                        chunkViewModel?.CalculateProperties();
+                    }
+
+                    return appearances
+                        .SelectMany(x => x?.Properties ?? [])
+                        .ToList() ?? [];
+                case appearanceAppearanceResource:
+                    return chunk.GetPropertyChild("appearances")
+                        ?.Properties.Where(x => x.ResolvedData is appearanceAppearanceDefinition)
+                        .SelectMany(x => x.Properties)
+                        .ToList() ?? [];
+                case entEntityTemplate:
+                    return chunk.GetPropertyChild("components")?.Properties.ToList() ?? [];
+                default: return [];
+            }
+        }
+    }
+    
     /*
      * Regenerate visual controllers
      */
-    private bool CanRegenerateVisualControllers() => ContentType is RedDocumentItemType.Ent ||
-                                                     ContentType is RedDocumentItemType.App;
-    
-    [RelayCommand(CanExecute = nameof(CanRegenerateVisualControllers))]
+    private bool IsInEntOrAppFile() => ContentType is RedDocumentItemType.Ent or RedDocumentItemType.App;
+
+    [RelayCommand(CanExecute = nameof(IsInEntOrAppFile))]
     private void RegenerateVisualControllers()
     {
         if (SelectedChunk is { Name: "components", Data: CArray<entIComponent> })

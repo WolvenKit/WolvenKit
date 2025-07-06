@@ -24,6 +24,7 @@ using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common;
+using WolvenKit.Common.Services;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
@@ -79,7 +80,8 @@ namespace WolvenKit.Views.Documents
             DataContext = new RedDocumentViewToolbarModel(
                 _settingsManager,
                 _modifierStateService,
-                _projectManager) { CurrentTab = _currentTab };
+                _projectManager,
+                Locator.Current.GetService<CRUIDService>()!) { CurrentTab = _currentTab };
             ViewModel = DataContext as RedDocumentViewToolbarModel;
 
             _modifierStateService.ModifierStateChanged += OnModifierStateChanged;
@@ -209,26 +211,32 @@ namespace WolvenKit.Views.Documents
         
         private async void OnFileValidationClick(object _, RoutedEventArgs e)
         {
-            // in .app or root entity: warn with >5 appearances, because this can take a while 
-            if (ViewModel?.RootChunk is ChunkViewModel cvm
-                && ((cvm.ResolvedData is appearanceAppearanceResource app && app.Appearances.Count > 5) ||
-                    (cvm.ResolvedData is entEntityTemplate ent && ent.Appearances.Count > 5)))
+            try
             {
-                if (Interactions.ShowQuestionYesNo((
-                        "Run file validation now? (Wolvenkit will be unresponsive)",
-                        "Validate files now?")))
+                // in .app or root entity: warn with >5 appearances, because this can take a while 
+                if (ViewModel?.RootChunk is ChunkViewModel cvm
+                    && ((cvm.ResolvedData is appearanceAppearanceResource app && app.Appearances.Count > 5) ||
+                        (cvm.ResolvedData is entEntityTemplate ent && ent.Appearances.Count > 5)))
                 {
-                    return;
+                    if (!Interactions.ShowQuestionYesNo((
+                            "Run file validation now? (Wolvenkit will be unresponsive)",
+                            "Validate files now?")))
+                    {
+                        return;
+                    }
                 }
-            }
-            
-            // This needs to be inside the DispatcherHelper, or the UI button will make everything explode
-            DispatcherHelper.RunOnMainThread(() =>
-            {
-                _loggerService.Info("Running file validation, please wait. The UI will be unresponsive.");
-            });
 
-            await RunFileValidationAsync();
+                // This needs to be inside the DispatcherHelper, or the UI button will make everything explode
+                DispatcherHelper.RunOnMainThread(() =>
+                    _loggerService.Info("Running file validation, please wait. The UI will be unresponsive."));
+
+                await RunFileValidationAsync();
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error("Error while running file validation:");
+                _loggerService.Error(ex);
+            }
         }
 
         private void OnGenerateMissingMaterialsClick(object _, RoutedEventArgs e)
@@ -1162,8 +1170,17 @@ namespace WolvenKit.Views.Documents
                 cvm.RecalculateProperties();
             }
         }
-        
-        
 
+        private void OnFileValidationMenuClicked(object sender, RoutedEventArgs e)
+        {
+            if (!ModifierViewStateService.IsShiftBeingHeld)
+            {
+                return;
+            }
+
+            e.Handled = true;
+            OnFileValidationClick(sender, e);
+        }
+        
     }
 }
