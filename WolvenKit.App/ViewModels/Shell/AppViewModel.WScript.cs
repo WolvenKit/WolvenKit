@@ -66,6 +66,8 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
     private static readonly string[] s_packIgnoredExtensions = ["bin"];
 
+    private static readonly string[] s_resourceFileExtensions = ["xl", "yaml", "yml"];
+
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private async Task RunFileValidationOnProject()
     {
@@ -103,18 +105,21 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
                 Path.GetExtension(f.FileName.Replace(".json", "")))) 
             .ToList();
 
-        if (shiftKeyDown && filesToValidate.Count > 0)
-        {
-            _loggerService.Info("Shift key down: only analyzing resource files (ignoring project files).");
-            filesToValidate.Clear();
-        }
-        
-        var resourceFilesToValidate = ActiveProject.ResourceFiles.Where(f => f.EndsWith(".xl")).ToList();
+        var resourceFilesToValidate = ActiveProject.ResourceFiles
+            .Where(f => s_resourceFileExtensions.Contains(f.Split(".").LastOrDefault() ?? "")).ToList();
 
         if (ctrlKeyDown && resourceFilesToValidate.Count > 0)
         {
-            _loggerService.Info("Ctrl key down: only analyzing project files (ignoring resources).");
+            _loggerService.Info(
+                $"Ctrl key down: analyzing {filesToValidate.Count} project files (ignoring resources).");
             resourceFilesToValidate.Clear();
+        }
+
+        if (shiftKeyDown && filesToValidate.Count > 0)
+        {
+            _loggerService.Info(
+                $"Shift key down: analyzing {resourceFilesToValidate.Count} resource files (ignoring project files).");
+            filesToValidate.Clear();
         }
         
         var totalFileCount = filesToValidate.Count + resourceFilesToValidate.Count;
