@@ -64,6 +64,8 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
     private static readonly string[] s_ignoredExtensions = { ".xbm", ".mlmask", };
 
+    private static readonly string[] s_packIgnoredExtensions = { "bin" };
+
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private async Task RunFileValidationOnProject()
     {
@@ -125,7 +127,8 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
         foreach (var file in filesToValidate)
         {
-            if (!redExtensions.Contains(file.Extension.TrimStart('.').ToLower()))
+            var fileExtension = file.Extension.TrimStart('.').ToLower();
+            if (!redExtensions.Contains(fileExtension) && !s_packIgnoredExtensions.Contains(fileExtension))
             {
                 _loggerService.Warning($"{file.FileName} has an unsupported extension and will not be packed!");
                 continue;
