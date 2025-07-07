@@ -1370,6 +1370,28 @@ namespace WolvenKit.Views.Tools
 
         }
 
+        private void OnSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
+        {
+            if (sender is not SfTreeView treeView)
+                return;
+
+            var selectedChunks = treeView.SelectedItems?.OfType<ChunkViewModel>().ToList() ?? new List<ChunkViewModel>();
+            
+            // Update the dependency properties
+            SetCurrentValue(SelectedItemsProperty, new ObservableCollection<object>(selectedChunks));
+            SetCurrentValue(SelectedItemProperty, selectedChunks.LastOrDefault());
+
+            // Update the RDTDataViewModel
+            if (selectedChunks.Count > 0)
+            {
+                _rdtDataViewModel?.SetSelection(selectedChunks);
+            }
+            else
+            {
+                _rdtDataViewModel?.ClearSelection();
+            }
+        }
+
         private void OnDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (SelectedItem is null)

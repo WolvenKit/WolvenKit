@@ -2020,6 +2020,7 @@
         SelectedItems="{Binding ElementName=redTreeView,
                                 Path=SelectedItems,
                                 Mode=TwoWay}"
+        SelectionChanged="OnSelectionChanged"
         MouseDoubleClick="OnDoubleClick"
         MouseRightButtonDown="OnMouseRightButtonDown"
         SelectionMode="Extended"

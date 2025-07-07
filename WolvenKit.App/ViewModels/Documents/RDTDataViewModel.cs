@@ -58,10 +58,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         if (SelectedChunk == null && Chunks.Count > 0)
         {
             SelectedChunk = Chunks[0];
-            if (SelectedChunks is IList lst)
-            {
-                lst.Add(Chunks[0]);
-            }
+            SelectedChunks.Add(Chunks[0]);
         }
     }
 
@@ -136,7 +133,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     [ObservableProperty] private ChunkViewModel? _selectedChunk;
 
-    [ObservableProperty] private List<ChunkViewModel>? _selectedChunks;
+    [ObservableProperty] private ObservableCollection<object> _selectedChunks = new();
 
     [ObservableProperty] private ChunkViewModel? _rootChunk;
 
@@ -157,7 +154,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     public bool HasActiveSearch { get; set; }
 
-    public int NumSelectedItems => SelectedChunks?.Count ?? 0;
+    public int NumSelectedItems => SelectedChunks.OfType<ChunkViewModel>().Count();
 
     public delegate void LayoutNodesDelegate();
 
@@ -388,19 +385,19 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     public void ClearSelection()
     {
-        foreach (var cvm in SelectedChunks ?? [])
+        foreach (var cvm in SelectedChunks.OfType<ChunkViewModel>())
         {
             cvm.IsSelected = false;
         }
 
-        SelectedChunks?.Clear();
+        SelectedChunks.Clear();
         SelectedChunk = null;
     }
 
     
     public void AddToSelection(ChunkViewModel? chunk)
     {
-        var selectedChunks = SelectedChunks?.ToList() ?? [];
+        var selectedChunks = SelectedChunks.OfType<ChunkViewModel>().ToList();
         
         ClearSelection();
         if (chunk is null)
@@ -412,7 +409,10 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         chunk.IsSelected = true;
 
         selectedChunks.Add(chunk);
-        SelectedChunks = selectedChunks;
+        foreach (var cvm in selectedChunks)
+        {
+            SelectedChunks.Add(cvm);
+        }
         SelectedChunk = chunk;
     }
 
@@ -421,7 +421,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         if (chunk is not null)
         {
             chunk.IsSelected = false;
-            SelectedChunks?.Remove(chunk);
+            SelectedChunks.Remove(chunk);
         }
         
         SelectedChunk = null;
@@ -429,49 +429,73 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     public void SetSelection(ChunkViewModel chunk, bool addToPrevious = false)
     {
-        var previousSelection = (addToPrevious ? SelectedChunks?.ToList() : []) ?? [];
+        var previousSelection = addToPrevious ? SelectedChunks.OfType<ChunkViewModel>().ToList() : new List<ChunkViewModel>();
         ClearSelection();
 
         ExpandParentNodes(chunk);
         chunk.IsSelected = true;
 
-        if (addToPrevious || previousSelection.Count == 0)
+        if (!previousSelection.Contains(chunk))
         {
             previousSelection.Add(chunk);
         }
 
-        SelectedChunks = previousSelection;
+        foreach (var cvm in previousSelection)
+        {
+            SelectedChunks.Add(cvm);
+        }
 
         SelectedChunk = chunk;
     }
 
 
-    protected override void OnPropertyChanged(PropertyChangedEventArgs e) => base.OnPropertyChanged(e);
-
-    public void SetSelection(List<ChunkViewModel> chunks)
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
-        ClearSelection();
-        if (chunks.Count == 0)
+        // Suppress property change notifications during batch operations
+        if (_suppressPropertyChanges && e.PropertyName == nameof(SelectedChunks))
         {
             return;
         }
         
-        // remove duplicates
-        var uniqueChunks = new HashSet<ChunkViewModel>(chunks);
-        foreach (var cvm in uniqueChunks)
+        base.OnPropertyChanged(e);
+    }
+
+    private bool _suppressPropertyChanges = false;
+    
+    public void SetSelection(List<ChunkViewModel> chunks)
+    {
+        try
         {
-            // cvm.IsSelected = true;
-            ExpandParentNodes(cvm);
+            _suppressPropertyChanges = true;
             
-            if (SelectedChunks is not null && !SelectedChunks.Contains(cvm))
+            ClearSelection();
+            if (chunks.Count == 0)
             {
-                SelectedChunks.Add(cvm);
+                return;
             }
+            
+            // remove duplicates
+            var uniqueChunks = new HashSet<ChunkViewModel>(chunks);
+            
+            foreach (var cvm in uniqueChunks)
+            {
+                cvm.IsSelected = true;
+                ExpandParentNodes(cvm);
+                
+                if (!SelectedChunks.Contains(cvm))
+                {
+                    SelectedChunks.Add(cvm);
+                }
+            }
+
+            SelectedChunk ??= uniqueChunks.LastOrDefault();
         }
-
-
-        SelectedChunk ??= uniqueChunks.LastOrDefault();
-
+        finally
+        {
+            _suppressPropertyChanges = false;
+            // Fire a single property changed event for SelectedChunks to sync everything at once
+            OnPropertyChanged(nameof(SelectedChunks));
+        }
     }
     
     public event EventHandler<string>? OnSectorNodeSelected;
