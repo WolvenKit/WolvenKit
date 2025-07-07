@@ -133,10 +133,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
         SelectedChunk = (ChunkViewModel?)dataViewModel.SelectedChunk;
         SelectedChunks.Clear();
-        if (dataViewModel.SelectedChunks is IList list)
-        {
-            SelectedChunks.AddRange(list.OfType<ChunkViewModel>());
-        }
+        var chunkViewModels = dataViewModel.SelectedChunks?.OfType<ChunkViewModel>().ToList() ?? [];
+        SelectedChunks.AddRange(chunkViewModels);
 
         RefreshContextMenuItems();
 
