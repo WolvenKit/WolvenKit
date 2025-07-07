@@ -556,6 +556,10 @@ namespace WolvenKit.Views.Documents
             // Shortcut: Arrow keys for smart graph walk based on spatial positioning
             if (e.Key is Key.Left or Key.Right or Key.Up or Key.Down)
             {
+                // Don't handle arrow keys if user is editing text
+                if (IsTextEditingControlFocused())
+                    return;
+                
                 var currentNode = NodeSelectionService.Instance.SelectedNode;
                 if (currentNode == null)
                     return;
@@ -668,6 +672,21 @@ namespace WolvenKit.Views.Documents
         {
             // Forward the event to the underlying GraphEditorView's Connection_OnRightClick method
             SceneGraphEditor?.Connection_OnRightClick(sender, e);
+        }
+
+        /// <summary>
+        /// Checks if the currently focused element is a text editing control
+        /// </summary>
+        private bool IsTextEditingControlFocused()
+        {
+            var focusedElement = Keyboard.FocusedElement;
+            
+            // Check for text editing controls
+            return focusedElement is TextBox or 
+                   RichTextBox or 
+                   PasswordBox or
+                   System.Windows.Controls.ComboBox { IsEditable: true } or
+                   System.Windows.Documents.TextElement;
         }
 
         /// <summary>
