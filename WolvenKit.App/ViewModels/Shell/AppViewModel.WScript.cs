@@ -62,9 +62,9 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
     private readonly ScriptFileViewModel? _fileValidationScript;
     private readonly ScriptFileViewModel? _entSpawnerImportScript;
 
-    private static readonly string[] s_ignoredExtensions = { ".xbm", ".mlmask", };
+    private static readonly string[] s_ignoredExtensions = [".xbm", ".mlmask"];
 
-    private static readonly string[] s_packIgnoredExtensions = { "bin" };
+    private static readonly string[] s_packIgnoredExtensions = ["bin"];
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private async Task RunFileValidationOnProject()
@@ -81,6 +81,9 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
+        var shiftKeyDown = ModifierViewStateService.IsShiftBeingHeld;
+        var ctrlKeyDown = ModifierViewStateService.IsCtrlBeingHeld;
+        
         var txtFilesInResources = ActiveProject.ResourceFiles.Where(f => f.EndsWith(".txt"))
             .Select(f => ActiveProject.GetRelativeResourcePath(f).GetResolvedText())
             .Where(f => !string.IsNullOrEmpty(Path.GetExtension(f?.Replace(".txt", ""))))
@@ -100,8 +103,20 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
                 Path.GetExtension(f.FileName.Replace(".json", "")))) 
             .ToList();
 
+        if (shiftKeyDown && filesToValidate.Count > 0)
+        {
+            _loggerService.Info("Shift key down: only analyzing resource files (ignoring project files).");
+            filesToValidate.Clear();
+        }
+        
         var resourceFilesToValidate = ActiveProject.ResourceFiles.Where(f => f.EndsWith(".xl")).ToList();
 
+        if (ctrlKeyDown && resourceFilesToValidate.Count > 0)
+        {
+            _loggerService.Info("Ctrl key down: only analyzing project files (ignoring resources).");
+            resourceFilesToValidate.Clear();
+        }
+        
         var totalFileCount = filesToValidate.Count + resourceFilesToValidate.Count;
 
         if (totalFileCount == 0)
@@ -109,16 +124,20 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             _loggerService.Info("No files to validate - you're funny!");
             return;
         }
-        
-        var result = Interactions.ShowConfirmation((
-            $"This will analyse {totalFileCount} files. This can take up to several minutes. Do you want to proceed?",
-            "Really run file validation?",
-            WMessageBoxImage.Question,
-            WMessageBoxButtons.YesNo));
 
-        if (result != WMessageBoxResult.Yes)
+        // arbitrary cutoff: warn user if more than 5 files
+        if (totalFileCount > 5)
         {
-            return;
+            var result = Interactions.ShowConfirmation((
+                $"This will analyse {totalFileCount} files. This can take up to several minutes. Do you want to proceed?",
+                "Really run file validation?",
+                WMessageBoxImage.Question,
+                WMessageBoxButtons.YesNo));
+
+            if (result != WMessageBoxResult.Yes)
+            {
+                return;
+            }
         }
 
         ScriptService.SuppressLogOutput = true;
