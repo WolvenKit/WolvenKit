@@ -1784,6 +1784,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             .Select(n => n!.Contains('@') ? $"@{n.Split('@').Last()}" : n) // dynamic
             .ToList();
 
+
         var localMatIdxList = mesh.MaterialEntries.Where((mE) =>
             mE.IsLocalInstance && mE.Name.GetResolvedText() is string s && appearanceNames.Contains(s)
         ).Select(me => (int)me.Index).ToList();
@@ -1798,6 +1799,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         if (!suppressLogOutput && numUnusedMaterials == 0)
         {
             _loggerService.Info("No unused materials in current mesh.");
+            return;
         }
 
         IMaterial[] keepLocal = [];
