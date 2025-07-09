@@ -625,8 +625,7 @@ public abstract class CvmDropdownHelper
 
         return parent.ResolvedData switch
         {
-            gameJournalPath when s_questHandleParentNames.Contains(parent.Name) => true,
-            gameJournalPath when cvm.Name is "realPath" => true,
+            gameJournalPath when cvm.Name is "className" or "realPath" && s_questHandleParentNames.Contains(parent.Name) => true,
             #region mesh
 
             CArray<CName> when parent is { Name: "chunkMaterials", Parent.Parent.Parent.ResolvedData: CMesh } =>
