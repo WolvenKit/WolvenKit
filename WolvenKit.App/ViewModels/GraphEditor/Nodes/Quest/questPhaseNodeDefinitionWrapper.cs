@@ -38,6 +38,13 @@ public class questPhaseNodeDefinitionWrapper : questEmbeddedGraphNodeDefinitionW
         {
             Details.Add("Filename", Path.GetFileName(_castedData.PhaseResource.DepotPath.GetResolvedText())!);
         }
+        
+        // Add node count for the phase
+        var nodeCount = GetPhaseNodeCount();
+        if (nodeCount > 0)
+        {
+            Details.Add("Total Nodes", nodeCount.ToString());
+        }
     }
 
     private void GenerateSubGraph()
@@ -126,4 +133,35 @@ public class questPhaseNodeDefinitionWrapper : questEmbeddedGraphNodeDefinitionW
     }
 
     internal override void CreateDefaultSockets() => CreateSocket("CutDestination", Enums.questSocketType.CutDestination);
+
+    /// <summary>
+    /// Get the total count of nodes in this phase graph
+    /// </summary>
+    private int GetPhaseNodeCount()
+    {
+        // Check embedded graph first
+        if (_castedData.PhaseGraph?.Chunk != null)
+        {
+            return _castedData.PhaseGraph.Chunk.Nodes?.Count ?? 0;
+        }
+        
+        // Check external phase resource
+        if (_castedData.PhaseResource.DepotPath != ResourcePath.Empty)
+        {
+            try
+            {
+                var cr2w = _archiveManager.GetCR2WFile(_castedData.PhaseResource.DepotPath);
+                if (cr2w is { RootChunk: questQuestPhaseResource res } && res.Graph?.Chunk != null)
+                {
+                    return res.Graph.Chunk.Nodes?.Count ?? 0;
+                }
+            }
+            catch (Exception)
+            {
+                // Silently fail if we can't load the resource
+            }
+        }
+        
+        return 0;
+    }
 }

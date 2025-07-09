@@ -188,6 +188,21 @@ public partial class RedGraph : IDisposable
         DocumentViewModel?.SetIsDirty(true);
     }
 
+    /// <summary>
+    /// Replace a quest node with a deletion marker (soft delete)
+    /// </summary>
+    /// <param name="node">The quest node to replace</param>
+    public void ReplaceNodeWithQuestDeletionMarker(BaseQuestViewModel node)
+    {
+        if (GraphType != RedGraphType.Quest)
+        {
+            throw new InvalidOperationException("Cannot replace with quest deletion marker on non-quest graph");
+        }
+
+        // Call the quest-specific implementation from the partial class
+        ReplaceNodeWithQuestDeletionMarkerInternal(node);
+    }
+
     public void DuplicateNode(NodeViewModel node)
     {
         if (!Nodes.Contains(node))

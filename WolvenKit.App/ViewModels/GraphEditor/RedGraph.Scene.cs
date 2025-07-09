@@ -1295,7 +1295,7 @@ public partial class RedGraph
         var graph = new RedGraph(title, sceneResource, doc);
 
         var nodeCache = new Dictionary<uint, BaseSceneViewModel>();
-        foreach (var nodeHandle in sceneResource.SceneGraph.Chunk!.Graph)
+        foreach (var nodeHandle in sceneResource.SceneGraph.Chunk?.Graph ?? [])
         {
             var node = nodeHandle.GetValue();
             if (node is null)
@@ -1415,7 +1415,7 @@ public partial class RedGraph
         var graph = new RedGraph(title, sceneResource);
 
         var nodeCache = new Dictionary<uint, BaseSceneViewModel>();
-        foreach (var nodeHandle in sceneResource.SceneGraph.Chunk!.Graph)
+        foreach (var nodeHandle in sceneResource.SceneGraph.Chunk?.Graph ?? [])
         {
             var node = nodeHandle.GetValue();
             if (node is null)

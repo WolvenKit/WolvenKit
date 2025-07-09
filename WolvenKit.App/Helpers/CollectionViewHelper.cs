@@ -103,6 +103,21 @@ namespace WolvenKit.App.Helpers
             };
         }
 
+        // Quest Phase specific filters
+        public static Func<ChunkViewModel, bool> CreateQuestNodePropertiesFilter()
+        {
+            return chunk => chunk.Name == "graph";
+        }
+
+        public static Func<ChunkViewModel, bool> CreateQuestPhaseResourcesFilter()
+        {
+            return chunk => 
+            {
+                return chunk.Name == "phasePrefabs" || 
+                       chunk.Name == "inplacePhases";
+            };
+        }
+
         // Legacy filters for backward compatibility
         public static Func<ChunkViewModel, bool> CreateActorsFilter() => CreateActorsAndPropsFilter();
         public static Func<ChunkViewModel, bool> CreatePerformersFilter() => CreateAssetLibraryFilter();
