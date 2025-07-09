@@ -585,6 +585,23 @@
                 </MenuItem>
 
                 <MenuItem
+                    Style="{StaticResource MenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Header="Generate CRUIDs in selection"
+                    ToolTip="Regenerate component CRUIDs - these ensure component uniqueness across .app and .ent files."
+                    Command="{Binding Path=RegenerateAllCRUIDsCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Dice3"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem
                     Style="{StaticResource ShowAppMenuItemStyle}"
                     Header="Find unused files in project"
                     ToolTip="Will filter by extension: Only file extensions used in any references will be considered"
@@ -739,16 +756,20 @@
                 </MenuItem.Icon>
             </MenuItem>
 
-            <!-- Run file validation -->
+            <!-- File validation submenu -->
             <MenuItem
-                Style="{StaticResource MenuItemStyle}"
-                Header="File Validation">
+                Style="{StaticResource NestedMenuItemStyle}"
+                Header="File Validation"
+                PreviewMouseDown="OnFileValidationMenuClicked">
+
                 <MenuItem.Icon>
                     <templates:IconBox
                         IconPack="Material"
                         Kind="TextSearch"
                         Foreground="White" />
                 </MenuItem.Icon>
+
+                <!-- Run WScript -->
                 <MenuItem
                     Style="{StaticResource MenuItemStyle}"
                     Header="Run WScript"
@@ -760,6 +781,8 @@
                             Foreground="{StaticResource WolvenKitGreen}" />
                     </MenuItem.Icon>
                 </MenuItem>
+
+                <!-- Find broken references -->
                 <MenuItem
                     Style="{StaticResource MenuItemStyle}"
                     Header="Find broken references"
