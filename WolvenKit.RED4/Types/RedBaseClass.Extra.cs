@@ -61,15 +61,15 @@ public partial class RedBaseClass
 
             result = child;
 
+
             // we'll look in the child's properties next
-            if (result is RedBaseClass rbc)
+
+            currentProps = result switch
             {
-                currentProps = rbc._properties;
-            }
-            else
-            {
-                currentProps = null;
-            }
+                IRedHandle ira => ira.GetValue()?._properties,
+                RedBaseClass rbc => rbc._properties,
+                _ => null
+            };
 
             if (arrPath.Length == 1)
             {
@@ -84,10 +84,12 @@ public partial class RedBaseClass
                 if (currentProps?.TryGetValue(arrayProp, out var grandChild) == true)
                 {
                     result = grandChild;
-                    if (result is RedBaseClass rbc2)
+                    currentProps = result switch
                     {
-                        currentProps = rbc2._properties;
-                    }
+                        IRedHandle handle => handle.GetValue()?._properties,
+                        RedBaseClass rbc2 => rbc2._properties,
+                        _ => currentProps
+                    };
 
                     continue;
                 }
@@ -110,11 +112,11 @@ public partial class RedBaseClass
 
                 switch (result)
                 {
-                    case RedBaseClass subCls:
-                        currentProps = subCls._properties;
-                        continue;
                     case IRedBaseHandle handle:
                         currentProps = handle.GetValue()?._properties;
+                        continue;
+                    case RedBaseClass subCls:
+                        currentProps = subCls._properties;
                         continue;
                     case IRedBufferWrapper { Data: RedPackage redPackage }:
                     {
@@ -131,8 +133,6 @@ public partial class RedBaseClass
                         break;
                 }
             }
-
-
         }
 
         return (true, result);
