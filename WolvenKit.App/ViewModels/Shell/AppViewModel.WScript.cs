@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -61,6 +62,12 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
     private readonly ScriptFileViewModel? _fileValidationScript;
     private readonly ScriptFileViewModel? _entSpawnerImportScript;
 
+    private static readonly string[] s_ignoredExtensions = [".xbm", ".mlmask"];
+
+    private static readonly string[] s_packIgnoredExtensions = ["bin"];
+
+    private static readonly string[] s_resourceFileExtensions = ["xl", "yaml", "yml"];
+
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private async Task RunFileValidationOnProject()
     {
@@ -76,6 +83,9 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
+        var shiftKeyDown = ModifierViewStateService.IsShiftBeingHeld;
+        var ctrlKeyDown = ModifierViewStateService.IsCtrlBeingHeld;
+        
         var txtFilesInResources = ActiveProject.ResourceFiles.Where(f => f.EndsWith(".txt"))
             .Select(f => ActiveProject.GetRelativeResourcePath(f).GetResolvedText())
             .Where(f => !string.IsNullOrEmpty(Path.GetExtension(f?.Replace(".txt", ""))))
@@ -88,17 +98,51 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             txtFilesInResources.ForEach(f => _loggerService.Warning($"\t{f}"));
         }
 
-        var filesToValidate = projArchive.Files.Values.Where(f => f.Extension is not ".xbm" and not ".mlmask").ToList();
-        
-        var result = Interactions.ShowConfirmation((
-            $"This will analyse {filesToValidate.Count} files. This can take up to several minutes. Do you want to proceed?",
-            "Really run file validation?",
-            WMessageBoxImage.Question,
-            WMessageBoxButtons.YesNo));
+        var filesToValidate = projArchive.Files.Values
+            .Where(f => !s_ignoredExtensions.Contains(f.Extension.ToLower()))
+            // no *.ext.json
+            .Where(f => !f.Extension.Contains("json") || string.IsNullOrEmpty(
+                Path.GetExtension(f.FileName.Replace(".json", "")))) 
+            .ToList();
 
-        if (result != WMessageBoxResult.Yes)
+        var resourceFilesToValidate = ActiveProject.ResourceFiles
+            .Where(f => s_resourceFileExtensions.Contains(f.Split(".").LastOrDefault() ?? "")).ToList();
+
+        if (ctrlKeyDown && resourceFilesToValidate.Count > 0)
         {
+            _loggerService.Info(
+                $"Ctrl key down: analyzing {filesToValidate.Count} project files (ignoring resources).");
+            resourceFilesToValidate.Clear();
+        }
+
+        if (shiftKeyDown && filesToValidate.Count > 0)
+        {
+            _loggerService.Info(
+                $"Shift key down: analyzing {resourceFilesToValidate.Count} resource files (ignoring project files).");
+            filesToValidate.Clear();
+        }
+        
+        var totalFileCount = filesToValidate.Count + resourceFilesToValidate.Count;
+
+        if (totalFileCount == 0)
+        {
+            _loggerService.Info("No files to validate - you're funny!");
             return;
+        }
+
+        // arbitrary cutoff: warn user if more than 5 files
+        if (totalFileCount > 5)
+        {
+            var result = Interactions.ShowConfirmation((
+                $"This will analyse {totalFileCount} files. This can take up to several minutes. Do you want to proceed?",
+                "Really run file validation?",
+                WMessageBoxImage.Question,
+                WMessageBoxButtons.YesNo));
+
+            if (result != WMessageBoxResult.Yes)
+            {
+                return;
+            }
         }
 
         ScriptService.SuppressLogOutput = true;
@@ -107,7 +151,8 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
         foreach (var file in filesToValidate)
         {
-            if (!redExtensions.Contains(file.Extension.TrimStart('.').ToLower()))
+            var fileExtension = file.Extension.TrimStart('.').ToLower();
+            if (!redExtensions.Contains(fileExtension) && !s_packIgnoredExtensions.Contains(fileExtension))
             {
                 _loggerService.Warning($"{file.FileName} has an unsupported extension and will not be packed!");
                 continue;
@@ -123,6 +168,28 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             await _scriptService.ExecuteAsync(code);
         }
 
+        if (ActiveDocument is null)
+        {
+            _loggerService.Error("Please open a file (any file) to verify resource files. This is a dirty hack.");
+        }
+        // hijack active document's file path to verify resource files
+        else
+        {
+            var activeDocumentPath = ActiveDocument.FilePath;
+            foreach (var file in resourceFilesToValidate)
+            {
+                _loggerService.Info($"Scanning {ActiveProject.GetRelativePath(file)}");
+
+                ActiveDocument.FilePath = Path.Join(ActiveProject.ResourcesDirectory, file);
+                await _scriptService.ExecuteAsync(code);
+            }
+
+            ActiveDocument.FilePath = activeDocumentPath;
+        }
+
+
+        ScriptService.SuppressLogOutput = false; 
+        
         // This should never happen, but better safe than sorry
         if (FileHelper.GetMostRecentlyChangedFile(Path.Combine(ISettingsManager.GetAppData(), "Logs"), "*.txt") is not FileInfo fI)
         {
@@ -140,8 +207,6 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         {
             _loggerService.Error($"Failed to open log file: {ex.Message}");
         }
-
-        ScriptService.SuppressLogOutput = false;
     }
 
 
