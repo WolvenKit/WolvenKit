@@ -11,6 +11,25 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Helpers;
 
+internal class MultilayerProperties
+{
+    public string[]? MetalLevelsIn { get; set; }
+    public string[]? MetalLevelsOut { get; set; }
+    public string[]? RoughLevelsIn { get; set; }
+    public string[]? RoughLevelsOut { get; set; }
+    public string[]? Overrides { get; set; }
+    public string[]? NormalScale { get; set; }
+
+    public void Reset()
+    {
+        MetalLevelsIn = null;
+        MetalLevelsOut = null;
+        RoughLevelsIn = null;
+        RoughLevelsOut = null;
+        Overrides = null;
+        NormalScale = null;
+    }
+}
 public class DocumentTools
 {
     private readonly ILoggerService _loggerService;
@@ -239,7 +258,7 @@ public class DocumentTools
         switch (appFile.Scope)
         {
             case ArchiveManagerScope.Mods:
-                appAppearances = GetAppearanceNamesFromApp(_archiveManager.GetCR2WFile(appFile.FileName, true));
+                appAppearances = GetAppearanceNamesFromApp(_archiveManager.GetCR2WFile(appFile.FileName));
                 break;
             case ArchiveManagerScope.Basegame:
                 appAppearances = GetAppearanceNamesFromApp(_archiveManager.GetCR2WFile(appFile.FileName, false));
@@ -293,7 +312,7 @@ public class DocumentTools
             return meshAppearances;
         }
 
-        var meshFile = _archiveManager.GetGameFile(relativeMeshFilePath, true, true);
+        var meshFile = _archiveManager.GetGameFile(relativeMeshFilePath);
 
         if (meshFile is null)
         {
@@ -304,7 +323,7 @@ public class DocumentTools
         switch (meshFile.Scope)
         {
             case ArchiveManagerScope.Mods:
-                meshAppearances = GetAppearanceNamesFromMesh(_archiveManager.GetCR2WFile(meshFile.FileName, true));
+                meshAppearances = GetAppearanceNamesFromMesh(_archiveManager.GetCR2WFile(meshFile.FileName));
                 break;
             case ArchiveManagerScope.Basegame:
                 meshAppearances = GetAppearanceNamesFromMesh(_archiveManager.GetCR2WFile(meshFile.FileName, false));
@@ -457,6 +476,9 @@ public class DocumentTools
     # region cvmDropdown
     private static readonly List<string> s_materialShaders = [];
 
+    private static readonly List<string> s_multilayerMaterials = [];
+    private static readonly List<string> s_microblendMaterials = [];
+
     public IEnumerable<string?> GetAllBaseMaterials(bool forceCacheRefresh)
     {
         if (forceCacheRefresh)
@@ -476,6 +498,50 @@ public class DocumentTools
             .Select(s => s.FileName).Distinct());
 
         return s_materialShaders.Order();
+    }
+
+    public IEnumerable<string?> GetAllMultilayerTemplates(bool forceCacheRefresh)
+    {
+        if (forceCacheRefresh)
+        {
+            s_multilayerMaterials.Clear();
+        }
+
+        if (s_multilayerMaterials.Count > 0)
+        {
+            return s_multilayerMaterials.Order();
+        }
+
+        s_multilayerMaterials.AddRange(
+            _archiveManager.Search(".mltemplate", ArchiveManagerScope.Everywhere).Select(s => s.FileName).Distinct());
+        s_multilayerMaterials.AddRange(_projectManager.ActiveProject?.Files.Where(f => f.EndsWith(".mltemplate")) ??
+                                       []);
+
+        return s_multilayerMaterials.Order().Distinct();
+    }
+
+    public IEnumerable<string?> GetAllMicroblends(bool forceCacheRefresh)
+    {
+        if (forceCacheRefresh)
+        {
+            s_microblendMaterials.Clear();
+        }
+
+        if (s_microblendMaterials.Count > 0)
+        {
+            return s_microblendMaterials.Order();
+        }
+
+        s_microblendMaterials.AddRange(
+            _archiveManager.Search("base\\surfaces\\microblends", ArchiveManagerScope.Everywhere)
+                .Select(s => s.FileName)
+                .Where(s => s.EndsWith(".xbm"))
+                .Distinct());
+
+        s_microblendMaterials.AddRange(_projectManager.ActiveProject?.Files
+            .Where(f => f.Contains("microblend") && f.EndsWith(".xbm")) ?? []);
+
+        return s_multilayerMaterials.Order().Distinct();
     }
 
 
@@ -545,7 +611,7 @@ public class DocumentTools
             return _cr2WTools.ReadCr2W(s);
         }
 
-        return _archiveManager.GetCR2WFile(relativePath, true, true);
+        return _archiveManager.GetCR2WFile(relativePath);
     }
 
     public List<string> GetMaterialKeys(IRedType cvmResolvedData, string materialPath, bool forceCacheRefresh)
@@ -571,16 +637,9 @@ public class DocumentTools
             List<CMaterialParameter> templateMaterials = [];
 
             var matMaterials = template.Parameters[2];
-            for (var i = 0; i < matMaterials.Count; i++)
-            {
-                if (matMaterials[i] is not IRedHandle<CMaterialParameter> entry ||
-                    entry.GetValue() is not CMaterialParameter material)
-                {
-                    continue;
-                }
-
-                templateMaterials.Add(material);
-            }
+            templateMaterials.AddRange(matMaterials.OfType<IRedHandle<CMaterialParameter>>()
+                .Select(e => e.GetValue())
+                .OfType<CMaterialParameter>());
 
             s_materialProperties.TryAdd(materialPath, templateMaterials);
 
@@ -605,5 +664,78 @@ public class DocumentTools
 
         return activeProject.Files.Where(f => f.EndsWith(fileExtension)).Select(s => s.Replace(s_archiveString, ""))
             .ToList();
+    }
+
+
+    private static readonly Dictionary<string, MultilayerProperties> s_multilayerPropertiesCache = [];
+
+    public string[] GetMultilayerProperties(string materialPath, string propertyKey, bool forceCacheRefresh)
+    {
+        if (!s_multilayerPropertiesCache.TryGetValue(materialPath, out var mlProperties))
+        {
+            if (!forceCacheRefresh)
+            {
+                return [];
+            }
+
+            mlProperties = new MultilayerProperties();
+            s_multilayerPropertiesCache.Add(materialPath, mlProperties);
+        }
+        else if (forceCacheRefresh)
+        {
+            mlProperties.Reset();
+        }
+
+        switch (propertyKey)
+        {
+            case "metalLevelsIn":
+                mlProperties.MetalLevelsIn ??=
+                    GetMultilayerPropertiesFromFile(materialPath, propertyKey);
+                return mlProperties.MetalLevelsIn;
+            case "metalLevelsOut":
+                mlProperties.MetalLevelsOut ??=
+                    GetMultilayerPropertiesFromFile(materialPath, propertyKey);
+                return mlProperties.MetalLevelsOut;
+            case "roughnessLevelsIn":
+                mlProperties.RoughLevelsIn ??=
+                    GetMultilayerPropertiesFromFile(materialPath, propertyKey);
+                return mlProperties.RoughLevelsIn;
+            case "roughnessLevelsOut":
+                mlProperties.RoughLevelsOut ??=
+                    GetMultilayerPropertiesFromFile(materialPath, propertyKey);
+                return mlProperties.RoughLevelsOut;
+            case "colorScale":
+                mlProperties.Overrides ??=
+                    GetMultilayerPropertiesFromFile(materialPath, propertyKey);
+                return mlProperties.Overrides;
+            case "normalStrength":
+                mlProperties.NormalScale ??=
+                    GetMultilayerPropertiesFromFile(materialPath, propertyKey);
+                return mlProperties.NormalScale;
+            default:
+                return [];
+        }
+    }
+
+    private string[] GetMultilayerPropertiesFromFile(string materialPath, string propertyKey)
+    {
+        if (ReadCr2WFromRelativePath(materialPath) is not { RootChunk: Multilayer_LayerTemplate template })
+        {
+            return [];
+        }
+
+        var ret = propertyKey switch
+        {
+            "metalLevelsIn" => template.Overrides.MetalLevelsIn.Select(i => i.ToString()),
+            "metalLevelsOut" => template.Overrides.MetalLevelsOut.Select(i => i.ToString()),
+            "roughnessLevelsIn" => template.Overrides.RoughLevelsIn.Select(i => i.ToString()),
+            "roughnessLevelsOut" => template.Overrides.RoughLevelsOut.Select(i => i.ToString()),
+            "colorScale" => template.Overrides.ColorScale.Select(i => i.ToString()),
+            "normalStrength" => template.Overrides.NormalStrength.Select(i => i.ToString()),
+            _ => [],
+        };
+
+
+        return ret.Where(s => !string.IsNullOrEmpty(s)).Select(s => s!).ToArray();
     }
 }
