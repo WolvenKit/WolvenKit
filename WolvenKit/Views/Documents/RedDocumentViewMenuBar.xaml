@@ -472,6 +472,25 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <!-- Clear chunk materials: If you have multiple appearances selected in a .mesh -->
+                <MenuItem
+                    Style="{StaticResource ShowMeshMenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Header="Clear chunk materials"
+                    ToolTip="Clear chunk materials (for dynamic expansion)"
+                    Command="{Binding Path=ClearChunkMaterialsCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Graph"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+
                 <!-- Delete unused materials: Only display without SHIFT -->
                 <MenuItem
                     Header="Delete unused materials"
