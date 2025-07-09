@@ -2,6 +2,11 @@ namespace WolvenKit.RED4.Types;
 
 public partial class scnSceneResource
 {
+    partial void PostConstruct()
+    {
+        SceneGraph ??= new CHandle<scnSceneGraph>() { Chunk = new scnSceneGraph() };
+    }
+
     /// <summary>
     /// Adds an actor to the scene with automatic ID calculation and performer debug symbol creation
     /// </summary>
