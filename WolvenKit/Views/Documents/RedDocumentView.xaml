@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:docV="clr-namespace:WolvenKit.Views.Documents"
     xmlns:docVM="clr-namespace:WolvenKit.App.ViewModels.Documents;assembly=WolvenKit.App"
+    xmlns:graphEditor="clr-namespace:WolvenKit.Views.GraphEditor"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
@@ -47,6 +48,11 @@
             <DataTemplate DataType="{x:Type docVM:RDTGraphViewModel2}">
                 <docV:RDTGraphView2 ViewModel="{Binding}" />
             </DataTemplate>
+
+            <DataTemplate DataType="{x:Type docVM:SceneGraphViewModel}">
+                <docV:SceneGraphView DataContext="{Binding}" />
+            </DataTemplate>
+
         </Grid.Resources>
 
         <Grid.RowDefinitions>

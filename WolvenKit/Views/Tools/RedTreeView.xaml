@@ -70,6 +70,13 @@
                         <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
                     </DataTrigger>
                     <DataTrigger
+                        Binding="{Binding ShouldMuteDescriptor,
+                                          Mode=OneWay,
+                                          UpdateSourceTrigger=PropertyChanged}"
+                        Value="True">
+                        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+                    </DataTrigger>
+                    <DataTrigger
                         Binding="{Binding IsReadOnly}"
                         Value="True">
                         <Setter Property="FontStyle" Value="Italic" />

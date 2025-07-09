@@ -52,7 +52,9 @@ namespace WolvenKit.Views.Editors
             {
                 if (cvm != null)
                 {
-                    cvm.Data = (CFloat)float.Parse(value);
+                    var oldValue = cvm.Data;
+                    var newValue = (CFloat)float.Parse(value);
+                    cvm.Data = newValue;
                 }
                 else
                 {
