@@ -155,7 +155,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         SettingsManager.WhenPropertyChanged(settings => settings.UiScale)
             .Subscribe(_ => OnUiScaleChanged());
 
+        SettingsManager.WhenPropertyChanged(settings => settings.IsDiscordRPCEnabled)
+            .Subscribe(_ => OnDiscordRPCChanged());
+
         UpdateTitle();
+        OnDiscordRPCChanged();
 
         ShowFirstTimeSetup();
 
@@ -269,6 +273,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     private void OnUiScaleChanged() => UpdateScalesResource();
+
+    private void OnDiscordRPCChanged() => DiscordHelper.DiscordRPCEnabled = SettingsManager.IsDiscordRPCEnabled;
 
     #region init
 
