@@ -54,8 +54,8 @@ public abstract class CvmDropdownHelper
     [
         "metalLevelsIn",
         "metalLevelsOut",
-        "roughnessLevelsIn",
-        "roughnessLevelsOut",
+        "roughLevelsIn",
+        "roughLevelsOut",
         "colorScale",
         "normalStrength",
         "microblend"
