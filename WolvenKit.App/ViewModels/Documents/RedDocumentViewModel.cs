@@ -339,6 +339,19 @@ public partial class RedDocumentViewModel : DocumentViewModel
             return;
         }
 
+        if (cls is questQuestPhaseResource questPhaseResource)
+        {
+            var combinedQuestPhaseTab = new QuestPhaseGraphViewModel(questPhaseResource, this, _chunkViewmodelFactory, _nodeWrapperFactory);
+            TabItemViewModels.Insert(0, combinedQuestPhaseTab);
+
+            if (_globals.Value.ENABLE_NODE_EDITOR)
+            {
+                TabItemViewModels.Add(new RDTGraphViewModel2(questPhaseResource, this, _nodeWrapperFactory));
+            }
+
+            return;
+        }
+
         if (_globals.Value.ENABLE_NODE_EDITOR && cls is graphGraphResource)
         {
             TabItemViewModels.Add(new RDTGraphViewModel2(cls, this, _nodeWrapperFactory));

@@ -81,6 +81,11 @@ namespace WolvenKit.Converters
                 {
                     chunkViewModel = factory.ChunkViewModel(redData, combinedScene.RDTViewModel, appViewModel);
                 }
+                // If we have a QuestPhaseGraphViewModel, use its RDTViewModel as the tab reference
+                else if (currentTab is QuestPhaseGraphViewModel combinedQuestPhase && combinedQuestPhase.RDTViewModel != null)
+                {
+                    chunkViewModel = factory.ChunkViewModel(redData, combinedQuestPhase.RDTViewModel, appViewModel);
+                }
                 // If we have an RDTDataViewModel directly, use it
                 else if (currentTab is RDTDataViewModel rdtTab)
                 {
@@ -201,6 +206,36 @@ namespace WolvenKit.Converters
                         {
                             LoggerService?.Error($"Failed to expand factsDB property: {ex.Message}");
                         }
+                    }
+                }
+                // For all quest node types in quest graphs, expand everything one level except sockets
+                else if (redData is questNodeDefinition)
+                {
+                    try
+                    {
+                        // Auto-expand all properties one level deep, but exclude sockets
+                        foreach (var property in rootChunk.TVProperties ?? Enumerable.Empty<ChunkViewModel>())
+                        {
+                            // Skip socket properties to keep them collapsed
+                            if (property.Name.Equals("sockets", StringComparison.OrdinalIgnoreCase))
+                            {
+                                continue;
+                            }
+                            
+                            try
+                            {
+                                property.CalculateProperties();
+                                property.IsExpanded = true;
+                            }
+                            catch (Exception ex)
+                            {
+                                LoggerService?.Error($"Failed to expand property '{property.Name}' for quest node: {ex.Message}");
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        LoggerService?.Error($"Failed to auto-expand quest node properties: {ex.Message}");
                     }
                 }
             }
