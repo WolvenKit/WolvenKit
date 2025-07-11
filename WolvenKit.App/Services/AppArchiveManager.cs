@@ -180,7 +180,7 @@ public class AppArchiveManager : ArchiveManager, IAppArchiveManager
         _modCache.Edit(innerCache =>
         {
             innerCache.Clear();
-            innerCache.Add(ModRoots);
+            innerCache.Add([.. ModRoots]);
         });
 
         if (analyzeFiles)
@@ -206,7 +206,7 @@ public class AppArchiveManager : ArchiveManager, IAppArchiveManager
         _modCache.Edit(innerCache =>
         {
             innerCache.Clear();
-            innerCache.Add(ModRoots);
+            innerCache.Add([.. ModRoots]);
         });
     }
 
