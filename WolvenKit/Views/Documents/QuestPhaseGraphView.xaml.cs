@@ -946,8 +946,11 @@ namespace WolvenKit.Views.Documents
         private void QuestPhaseGraphView_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             var viewModel = DataContext as QuestPhaseGraphViewModel;
-            if (viewModel?.MainGraph == null)
+            if (viewModel?.MainGraph == null || QuestPhaseGraphEditor?.Source == null)
                 return;
+
+            // Get the currently displayed graph (could be main graph or a subgraph)
+            var currentGraph = QuestPhaseGraphEditor.Source;
 
             // Shortcut: Delete key to soft delete, Shift+Delete for hard delete
             if (e.Key == Key.Delete)
@@ -964,7 +967,7 @@ namespace WolvenKit.Views.Documents
                     {
                         // Shift+Del: Hard delete (permanent removal)
                         var nodeViewModels = selectedNodes.Cast<object>().ToList();
-                        viewModel.MainGraph.RemoveNodes(nodeViewModels);
+                        currentGraph.RemoveNodes(nodeViewModels);
                     }
                     else
                     {
@@ -977,13 +980,13 @@ namespace WolvenKit.Views.Documents
                                 // - Signal-stopping nodes get replaced with deletion markers
                                 // - Non-signal-stopping nodes get hard deleted
                                 // - Deletion markers always get hard deleted
-                                viewModel.MainGraph.ReplaceNodeWithQuestDeletionMarker(questNode);
+                                currentGraph.ReplaceNodeWithQuestDeletionMarker(questNode);
                             }
                             else
                             {
                                 // Non-quest nodes get hard deleted
                                 var nodeAsObject = (object)node;
-                                viewModel.MainGraph.RemoveNodes(new List<object> { nodeAsObject });
+                                currentGraph.RemoveNodes(new List<object> { nodeAsObject });
                             }
                         }
                     }
@@ -997,7 +1000,7 @@ namespace WolvenKit.Views.Documents
                 var selectedNode = NodeSelectionService.Instance.SelectedNode;
                 if (selectedNode != null)
                 {
-                    viewModel.MainGraph.DuplicateNode(selectedNode);
+                    currentGraph.DuplicateNode(selectedNode);
                     e.Handled = true;
                 }
             }
@@ -1005,7 +1008,7 @@ namespace WolvenKit.Views.Documents
             // Shortcut: Ctrl+N to open new node dialog
             if (e.Key == Key.N && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
             {
-                OpenNewNodeDialog(viewModel.MainGraph);
+                OpenNewNodeDialog(currentGraph);
                 e.Handled = true;
             }
 
@@ -1024,7 +1027,7 @@ namespace WolvenKit.Views.Documents
                 if (currentNode == null)
                     return;
 
-                var next = FindNextNodeInDirection(viewModel.MainGraph, currentNode, e.Key);
+                var next = FindNextNodeInDirection(currentGraph, currentNode, e.Key);
 
                 if (next != null)
                 {
@@ -1037,7 +1040,7 @@ namespace WolvenKit.Views.Documents
                     NodeSelectionService.Instance.SelectedNode = next;
                     
                     // Auto-scroll graph view to keep selected node visible
-                    CenterViewOnSelectedNode(viewModel.MainGraph, next);
+                    CenterViewOnSelectedNode(currentGraph, next);
                     
                     e.Handled = true;
                 }
@@ -1117,10 +1120,13 @@ namespace WolvenKit.Views.Documents
         private void SelectNodeById(uint nodeId)
         {
             var viewModel = DataContext as QuestPhaseGraphViewModel;
-            if (viewModel?.MainGraph?.Nodes == null || QuestPhaseGraphEditor?.Editor == null) return;
+            if (viewModel?.MainGraph?.Nodes == null || QuestPhaseGraphEditor?.Editor == null || QuestPhaseGraphEditor?.Source == null) return;
 
-            // Find the node with the specified ID
-            var targetNode = viewModel.MainGraph.Nodes.FirstOrDefault(n => n.UniqueId == nodeId);
+            // Use the currently displayed graph instead of always using main graph
+            var currentGraph = QuestPhaseGraphEditor.Source;
+
+            // Find the node with the specified ID in the current graph
+            var targetNode = currentGraph.Nodes.FirstOrDefault(n => n.UniqueId == nodeId);
 
             if (targetNode != null)
             {
