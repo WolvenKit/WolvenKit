@@ -968,19 +968,22 @@ namespace WolvenKit.Views.Documents
                     }
                     else
                     {
-                        // Del: Smart delete - soft delete normal nodes, hard delete deletion markers
+                        // Del: Smart delete based on node type
                         foreach (var node in selectedNodes)
                         {
-                            // If it's already a deletion marker, destroy it completely
-                            if (node is questDeletionMarkerNodeDefinitionWrapper)
+                            if (node is BaseQuestViewModel questNode)
                             {
-                                var nodeAsObject = (object)node;
-                                viewModel.MainGraph.RemoveNodes(new List<object> { nodeAsObject });
+                                // ReplaceNodeWithQuestDeletionMarker now handles the logic internally:
+                                // - Signal-stopping nodes get replaced with deletion markers
+                                // - Non-signal-stopping nodes get hard deleted
+                                // - Deletion markers always get hard deleted
+                                viewModel.MainGraph.ReplaceNodeWithQuestDeletionMarker(questNode);
                             }
                             else
                             {
-                                // Normal node: replace with deletion marker (soft delete)
-                                viewModel.MainGraph.ReplaceNodeWithQuestDeletionMarker(node);
+                                // Non-quest nodes get hard deleted
+                                var nodeAsObject = (object)node;
+                                viewModel.MainGraph.RemoveNodes(new List<object> { nodeAsObject });
                             }
                         }
                     }

@@ -459,32 +459,55 @@ public partial class GraphEditorView : UserControl
 
             if (!(questViewModel is questStartNodeDefinitionWrapper || questViewModel is questEndNodeDefinitionWrapper))
             {
-                // Smart delete: if it's already a deletion marker, offer to destroy it completely
-                string deleteLabel = questViewModel is questDeletionMarkerNodeDefinitionWrapper ? "Destroy Deletion Marker" : "Delete Node";
-                string deleteIcon = questViewModel is questDeletionMarkerNodeDefinitionWrapper ? "CloseBoxOutline" : "Delete";
-                
-                node.ContextMenu.Items.Add(CreateMenuItem(
-                    deleteLabel,
-                    deleteIcon,
-                    "WolvenKitRed",
-                    () => {
-                        if (questViewModel is questDeletionMarkerNodeDefinitionWrapper)
-                        {
-                            // Hard delete for deletion markers
-                            Source.RemoveNode(questViewModel);
-                        }
-                        else
-                        {
-                            // Soft delete for normal quest nodes
-                            Source.ReplaceNodeWithQuestDeletionMarker(questViewModel);
-                        }
-                    }));
+                // Check if this node type should use a deletion marker
+                bool shouldUseDeletionMarker = questViewModel.Data is questSignalStoppingNodeDefinition
+                    || questViewModel.Data.GetType() == typeof(questSwitchNodeDefinition)
+                    || questViewModel.Data.GetType() == typeof(questFlowControlNodeDefinition);
+
+                if (questViewModel is questDeletionMarkerNodeDefinitionWrapper)
+                {
+                    // Deletion markers can always be destroyed
+                    node.ContextMenu.Items.Add(CreateMenuItem(
+                        "Destroy Deletion Marker",
+                        "CloseBoxOutline",
+                        "WolvenKitRed",
+                        () => Source.RemoveNode(questViewModel)));
+                }
+                else if (shouldUseDeletionMarker)
+                {
+                    // Signal-stopping nodes: show both Delete (soft) and Destroy (hard)
+                    node.ContextMenu.Items.Add(CreateMenuItem(
+                        "Delete Node",
+                        "Delete",
+                        "WolvenKitRed",
+                        () => Source.ReplaceNodeWithQuestDeletionMarker(questViewModel)));
+                    
+                    node.ContextMenu.Items.Add(CreateMenuItem(
+                        "Destroy Node",
+                        "CloseBoxOutline",
+                        "WolvenKitRed",
+                        () => Source.RemoveNode(questViewModel)));
+                }
+                else
+                {
+                    // Non-signal-stopping nodes: only show Destroy
+                    node.ContextMenu.Items.Add(CreateMenuItem(
+                        "Destroy Node",
+                        "CloseBoxOutline",
+                        "WolvenKitRed",
+                        () => Source.RemoveNode(questViewModel)));
+                }
             }
             
             node.ContextMenu.Items.Add(new Separator());
         }
 
-        node.ContextMenu.Items.Add(CreateMenuItem("Destroy Node", "CloseBoxOutline", "WolvenKitRed", () => Source.RemoveNode(nvm)));
+        // For other node types that aren't scene or quest specific, show destroy option
+        if (!(Source.GraphType == RedGraphType.Scene && node.DataContext is BaseSceneViewModel) &&
+            !(Source.GraphType == RedGraphType.Quest && node.DataContext is BaseQuestViewModel))
+        {
+            node.ContextMenu.Items.Add(CreateMenuItem("Destroy Node", "CloseBoxOutline", "WolvenKitRed", () => Source.RemoveNode(nvm)));
+        }
 
         // Add deletion markers info for scene graphs for now
         if (Source.GraphType == RedGraphType.Scene)

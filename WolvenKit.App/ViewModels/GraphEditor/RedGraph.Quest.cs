@@ -146,6 +146,27 @@ public partial class RedGraph
     }
 
     /// <summary>
+    /// Determines if a quest node should use a deletion marker when deleted
+    /// </summary>
+    private static bool ShouldUseDeletionMarker(BaseQuestViewModel node)
+    {
+        // Check if it's a signal-stopping node (blocks quest progression)
+        if (node.Data is questSignalStoppingNodeDefinition)
+        {
+            return true;
+        }
+        
+        // Additional nodes that should use deletion markers for safety
+        var criticalTypes = new[]
+        {
+            typeof(questSwitchNodeDefinition),
+            typeof(questFlowControlNodeDefinition)
+        };
+        
+        return criticalTypes.Contains(node.Data.GetType());
+    }
+
+    /// <summary>
     /// Replace a quest node with a deletion marker node that preserves all connections
     /// </summary>
     /// <param name="node">The quest node to replace with a deletion marker</param>
