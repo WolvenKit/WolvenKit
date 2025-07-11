@@ -239,4 +239,35 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
         _loggerService.Success("Done! Now import the .png files via Import Tool.");
     }
+
+    private bool CanGenerateMinimalQuestFiles() => _projectManager.ActiveProject is not null && _archiveManager.IsManagerLoaded;
+
+    [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
+    private void GenerateMinimalQuestFiles()
+    {
+        if (_projectManager.ActiveProject is not Cp77Project activeProject)
+            return;
+
+        var dialogModel = Interactions.ShowGenerateQuestDialogue(activeProject);
+        if (dialogModel is null)
+            return;
+        
+        if (SettingsManager.ModderName is not string modderName || modderName == string.Empty)
+        {
+            Interactions.ShowMessageBox(
+                "Please set a name in the preferences (Home -> Settings -> General -> Your Name) before using this feature",
+                "Configure your settings!");
+            return;
+        }
+        var options = new QuestGenerationOptions
+        {
+            ModName = dialogModel.ModName,
+            TargetRoot = Path.Combine(activeProject.ModDirectory, "mod"),
+            ModderName = SettingsManager.ModderName.ToLower(),
+        };
+
+        _templateFileTools.GenerateMinimalQuest(options);
+
+        _loggerService.Success($"Minimal quest files generated for {options.ModName}!");
+    }
 }
