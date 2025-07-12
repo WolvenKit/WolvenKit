@@ -103,6 +103,7 @@
             GotFocus="RefreshValidityAndTooltip"
             OnPaste="TrimmingTextbox_OnTextUpdate"
             OnKeyUp="TrimmingTextbox_OnKeyUp"
+            OnFocusLost="TrimmingTextbox_OnFocusLost"
             Tooltip="{Binding Path=TextBoxToolTip}"
             Text="{Binding DepotPath,
                            UpdateSourceTrigger=PropertyChanged,
