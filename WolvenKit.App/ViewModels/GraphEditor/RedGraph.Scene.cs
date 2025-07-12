@@ -317,6 +317,51 @@ public partial class RedGraph
     }
 
     /// <summary>
+    /// Determines if a scene node should use a deletion marker when deleted
+    /// </summary>
+    private static bool ShouldUseDeletionMarker(BaseSceneViewModel node)
+    {
+        // For scnQuestNode, check the contained quest node using the same logic as quest nodes
+        if (node.Data is scnQuestNode scnQuestNode && scnQuestNode.QuestNode?.Chunk != null)
+        {
+            var questNode = scnQuestNode.QuestNode.Chunk;
+            
+            // Check if the contained quest node is signal-stopping
+            if (questNode is questSignalStoppingNodeDefinition)
+            {
+                return true;
+            }
+            
+            // Additional quest node types that should use deletion markers for safety
+            var criticalQuestTypes = new[]
+            {
+                typeof(questSwitchNodeDefinition),
+                typeof(questFlowControlNodeDefinition)
+            };
+            
+            if (criticalQuestTypes.Contains(questNode.GetType()))
+            {
+                return true;
+            }
+        }
+        
+        // For pure scene nodes, manually list which ones should use deletion markers
+        var criticalSceneTypes = new[]
+        {
+            typeof(scnAndNode),
+            typeof(scnSectionNode),
+            typeof(scnChoiceNode),
+            typeof(scnHubNode),
+            typeof(scnXorNode),
+            typeof(scnRewindableSectionNode),
+            typeof(scnInterruptManagerNode),
+            typeof(scnFlowControlNode)
+        };
+        
+        return criticalSceneTypes.Contains(node.Data.GetType());
+    }
+
+    /// <summary>
     /// Replace a node with a deletion marker node that preserves all connections
     /// </summary>
     /// <param name="node">The node to replace with a deletion marker</param>
@@ -331,6 +376,16 @@ public partial class RedGraph
         if (node.Data is scnDeletionMarkerNode)
         {
             _loggerService?.Warning("Cannot replace a deletion marker with another deletion marker");
+            return;
+        }
+
+        // Check if this node type should use a deletion marker
+        if (!ShouldUseDeletionMarker(node))
+        {
+            // Non-critical nodes get hard deleted
+            RemoveSceneNode(node);
+            GraphStateSave();
+            DocumentViewModel?.SetIsDirty(true);
             return;
         }
 
