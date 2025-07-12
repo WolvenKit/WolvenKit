@@ -79,8 +79,8 @@ public partial class GraphEditorView : UserControl
     public NodeViewModel SelectedNode
     {
         get => _selectedNode;
-        set 
-        { 
+        set
+        {
             if (SetField(ref _selectedNode, value))
             {
                 // Update the global selection service
@@ -296,11 +296,11 @@ public partial class GraphEditorView : UserControl
                 SelectNodeById(nodeId);
             }, -15);
             debugMenu.Items.Add(debugWarningMenuItem);
-            
+
             addMenu.Items.Add(debugMenu);
             AddNodeToMenu(debugMenu, "scnDeletionMarkerNode", typeMap, mousePosition);
             AddNodeToMenu(debugMenu, "questPlaceholderNodeDefinition", typeMap, mousePosition);
-            
+
 
             nodifyEditor.ContextMenu.Items.Add(addMenu);
         }
@@ -385,7 +385,7 @@ public partial class GraphEditorView : UserControl
         {
             // Check if it's a section node for specific labeling
             string addLabel = dynamicOutputNode is scnSectionNodeWrapper ? "Add Event Socket" : "Add Output";
-            
+
             node.ContextMenu.Items.Add(CreateMenuItem(addLabel, "PlusCircle", () => dynamicOutputNode.AddOutput()));
             node.ContextMenu.Items.Add(new Separator());
         }
@@ -411,7 +411,7 @@ public partial class GraphEditorView : UserControl
                 () => sceneNode.AddSceneToProject()));
             node.ContextMenu.Items.Add(new Separator());
         }
-        
+
         node.ContextMenu.Items.Add(CreateMenuItem("Duplicate Node", "ContentDuplicate", "WolvenKitYellow", () => Source.DuplicateNode(nvm)));
 
         if (Source.GraphType == RedGraphType.Scene && node.DataContext is BaseSceneViewModel sceneViewModel)
@@ -421,13 +421,13 @@ public partial class GraphEditorView : UserControl
                 "LinkOff",
                 "WolvenKitYellow",
                 () => DetachNode(sceneViewModel)));
-            
+
             if (!(sceneViewModel is scnStartNodeWrapper || sceneViewModel is scnEndNodeWrapper))
             {
                 // Smart delete: if it's already a deletion marker, offer to destroy it completely
                 string deleteLabel = sceneViewModel is scnDeletionMarkerNodeWrapper ? "Destroy Deletion Marker" : "Delete Node";
                 string deleteIcon = sceneViewModel is scnDeletionMarkerNodeWrapper ? "CloseBoxOutline" : "Delete";
-                
+
                 node.ContextMenu.Items.Add(CreateMenuItem(
                     deleteLabel,
                     deleteIcon,
@@ -445,7 +445,7 @@ public partial class GraphEditorView : UserControl
                         }
                     }));
             }
-            
+
             node.ContextMenu.Items.Add(new Separator());
         }
 
@@ -462,7 +462,7 @@ public partial class GraphEditorView : UserControl
                 // Smart delete: if it's already a deletion marker, offer to destroy it completely
                 string deleteLabel = questViewModel is questDeletionMarkerNodeDefinitionWrapper ? "Destroy Deletion Marker" : "Delete Node";
                 string deleteIcon = questViewModel is questDeletionMarkerNodeDefinitionWrapper ? "CloseBoxOutline" : "Delete";
-                
+
                 node.ContextMenu.Items.Add(CreateMenuItem(
                     deleteLabel,
                     deleteIcon,
@@ -480,24 +480,82 @@ public partial class GraphEditorView : UserControl
                         }
                     }));
             }
-            
+
             node.ContextMenu.Items.Add(new Separator());
         }
 
-        node.ContextMenu.Items.Add(CreateMenuItem("Destroy Node", "CloseBoxOutline", "WolvenKitRed", () => Source.RemoveNode(nvm)));
+        if (Source.GraphType == RedGraphType.Quest && node.DataContext is BaseQuestViewModel questViewModel)
+        {
+            node.ContextMenu.Items.Add(CreateMenuItem(
+                "Detach Node",
+                "LinkOff",
+                "WolvenKitYellow",
+                () => DetachQuestNode(questViewModel)));
+
+            if (!(questViewModel is questStartNodeDefinitionWrapper || questViewModel is questEndNodeDefinitionWrapper))
+            {
+                // Check if this node type should use a deletion marker
+                bool shouldUseDeletionMarker = questViewModel.Data is questSignalStoppingNodeDefinition
+                    || questViewModel.Data.GetType() == typeof(questSwitchNodeDefinition)
+                    || questViewModel.Data.GetType() == typeof(questFlowControlNodeDefinition);
+
+                if (questViewModel is questDeletionMarkerNodeDefinitionWrapper)
+                {
+                    // Deletion markers can always be destroyed
+                    node.ContextMenu.Items.Add(CreateMenuItem(
+                        "Destroy Deletion Marker",
+                        "CloseBoxOutline",
+                        "WolvenKitRed",
+                        () => Source.RemoveNode(questViewModel)));
+                }
+                else if (shouldUseDeletionMarker)
+                {
+                    // Signal-stopping nodes: show both Delete (soft) and Destroy (hard)
+                    node.ContextMenu.Items.Add(CreateMenuItem(
+                        "Delete Node",
+                        "Delete",
+                        "WolvenKitRed",
+                        () => Source.ReplaceNodeWithQuestDeletionMarker(questViewModel)));
+
+                    node.ContextMenu.Items.Add(CreateMenuItem(
+                        "Destroy Node",
+                        "CloseBoxOutline",
+                        "WolvenKitRed",
+                        () => Source.RemoveNode(questViewModel)));
+                }
+                else
+                {
+                    // Non-signal-stopping nodes: only show Destroy
+                    node.ContextMenu.Items.Add(CreateMenuItem(
+                        "Destroy Node",
+                        "CloseBoxOutline",
+                        "WolvenKitRed",
+                        () => Source.RemoveNode(questViewModel)));
+                }
+            }
+
+            node.ContextMenu.Items.Add(new Separator());
+        }
+
+        // For other node types that aren't scene or quest specific, show destroy option
+        if (!(Source.GraphType == RedGraphType.Scene && node.DataContext is BaseSceneViewModel) &&
+            !(Source.GraphType == RedGraphType.Quest && node.DataContext is BaseQuestViewModel))
+        {
+            node.ContextMenu.Items.Add(CreateMenuItem("Destroy Node", "CloseBoxOutline", "WolvenKitRed", () => Source.RemoveNode(nvm)));
+        }
 
         // Add deletion markers info for scene graphs for now
         if (Source.GraphType == RedGraphType.Scene)
         {
             node.ContextMenu.Items.Add(new Separator());
-            
+
             // Create help item using XAML-defined style
             var infoItem = new MenuItem
             {
                 Header = "What do these mean?",
                 Style = (Style)Resources["HelpMenuItemStyle"]
             };
-            
+
             infoItem.Click += (_, _) => {
                 try
                 {
@@ -508,7 +566,7 @@ public partial class GraphEditorView : UserControl
                     // Silently handle any exceptions when opening the link
                 }
             };
-            
+
             node.ContextMenu.Items.Add(infoItem);
         }
 
@@ -516,7 +574,7 @@ public partial class GraphEditorView : UserControl
 
         e.Handled = true;
     }
-    
+
 
     private static MenuItem CreateAddMenuItem() => new()
     {
@@ -645,12 +703,12 @@ public partial class GraphEditorView : UserControl
             // Clear other selections and select this connection to highlight it
             Editor.SelectedItems.Clear();
             Editor.SelectedItems.Add(connectionViewModel);
-            
+
             // Also set the IsSelected property on the view model for binding
             connectionViewModel.IsSelected = true;
-            
+
             var contextMenu = new ContextMenu();
-            
+
             var deleteMenuItem = CreateMenuItem("Delete Connection", "Delete", "WolvenKitRed", () =>
             {
                 if (Source.GraphType == RedGraphType.Quest)
@@ -667,16 +725,16 @@ public partial class GraphEditorView : UserControl
                         Source.RemoveSceneConnectionPublic(sceneConnection);
                     }
                 }
-                
+
                 Editor.SelectedItems.Clear();
                 connectionViewModel.IsSelected = false;
             });
-            
+
             contextMenu.Items.Add(deleteMenuItem);
-            
+
             connection.ContextMenu = contextMenu;
             contextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);
-            
+
             e.Handled = true;
         }
     }
@@ -689,10 +747,10 @@ public partial class GraphEditorView : UserControl
     private void DetachNode(BaseSceneViewModel node)
     {
         if (Source == null) return;
-        
+
         // Create a list to store all connections that need to be removed
         var connectionsToRemove = new List<SceneConnectionViewModel>();
-        
+
         // Find all connections where this node is the source (output connections)
         foreach (var connection in Source.Connections.OfType<SceneConnectionViewModel>())
         {
@@ -701,7 +759,7 @@ public partial class GraphEditorView : UserControl
                 connectionsToRemove.Add(connection);
             }
         }
-        
+
         // Find all connections where this node is the target (input connections)
         foreach (var connection in Source.Connections.OfType<SceneConnectionViewModel>())
         {
@@ -710,7 +768,7 @@ public partial class GraphEditorView : UserControl
                 connectionsToRemove.Add(connection);
             }
         }
-        
+
         // Remove all the connections in the list
         foreach (var connection in connectionsToRemove)
         {
@@ -724,10 +782,10 @@ public partial class GraphEditorView : UserControl
     private void DetachQuestNode(BaseQuestViewModel node)
     {
         if (Source == null) return;
-        
+
         // Create a list to store all connections that need to be removed
         var connectionsToRemove = new List<QuestConnectionViewModel>();
-        
+
         // Find all connections where this node is the source (output connections)
         foreach (var connection in Source.Connections.OfType<QuestConnectionViewModel>())
         {
@@ -736,7 +794,7 @@ public partial class GraphEditorView : UserControl
                 connectionsToRemove.Add(connection);
             }
         }
-        
+
         // Find all connections where this node is the target (input connections)
         foreach (var connection in Source.Connections.OfType<QuestConnectionViewModel>())
         {
@@ -745,7 +803,7 @@ public partial class GraphEditorView : UserControl
                 connectionsToRemove.Add(connection);
             }
         }
-        
+
         // Remove all the connections in the list
         foreach (var connection in connectionsToRemove)
         {
@@ -767,10 +825,10 @@ public partial class GraphEditorView : UserControl
         {
             // Clear current selection
             Editor.SelectedItems.Clear();
-            
+
             // Select the target node
             Editor.SelectedItems.Add(targetNode);
-            
+
             // Update the NodeSelectionService
             NodeSelectionService.Instance.SelectedNode = targetNode;
         }
@@ -785,11 +843,11 @@ public partial class GraphEditorView : UserControl
         {
             // Get mouse position relative to the editor
             var mousePos = Mouse.GetPosition(editor);
-            
+
             // Convert to graph coordinates by accounting for viewport offset and zoom
             var graphX = (mousePos.X / editor.ViewportZoom) + editor.ViewportLocation.X;
             var graphY = (mousePos.Y / editor.ViewportZoom) + editor.ViewportLocation.Y;
-            
+
             return new System.Windows.Point(graphX, graphY);
         }
         catch

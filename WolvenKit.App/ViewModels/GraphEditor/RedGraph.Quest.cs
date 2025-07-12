@@ -133,7 +133,7 @@ public partial class RedGraph
         if (instance is questNodeDefinition nodeDefinition)
         {
             nodeDefinition.Id = ++_currentQuestNodeId;
-            
+
             // Special initialization for certain quest node types
             if (nodeDefinition is questFactsDBManagerNodeDefinition factsDBNode)
             {
@@ -143,6 +143,27 @@ public partial class RedGraph
         }
 
         return questNode;
+    }
+
+    /// <summary>
+    /// Determines if a quest node should use a deletion marker when deleted
+    /// </summary>
+    private static bool ShouldUseDeletionMarker(BaseQuestViewModel node)
+    {
+        // Check if it's a signal-stopping node (blocks quest progression)
+        if (node.Data is questSignalStoppingNodeDefinition)
+        {
+            return true;
+        }
+
+        // Additional nodes that should use deletion markers for safety
+        var criticalTypes = new[]
+        {
+            typeof(questSwitchNodeDefinition),
+            typeof(questFlowControlNodeDefinition)
+        };
+
+        return criticalTypes.Contains(node.Data.GetType());
     }
 
     /// <summary>
@@ -271,9 +292,9 @@ public partial class RedGraph
                     {
                         targetSocket = markerCutDestSocket;
                     }
-                    
+
                     connection.Destination = new CWeakHandle<graphGraphSocketDefinition>(targetSocket.Data);
-                    
+
                     // Remove from original socket and add to new socket
                     originalSocket.Connections.Remove(connectionHandle);
                     targetSocket.Data.Connections.Add(connectionHandle);
@@ -282,7 +303,7 @@ public partial class RedGraph
                 {
                     // Connection going FROM the original node -> redirect from deletion marker's Out socket
                     connection.Source = new CWeakHandle<graphGraphSocketDefinition>(markerOutSocket.Data);
-                    
+
                     // Remove from original socket and add to new socket
                     originalSocket.Connections.Remove(connectionHandle);
                     markerOutSocket.Data.Connections.Add(connectionHandle);
@@ -305,7 +326,195 @@ public partial class RedGraph
     private void RebuildQuestConnections()
     {
         Connections.Clear();
-        
+
+        // Create socket lookup table for quest input connectors
+        var socketNodeLookup = new Dictionary<graphGraphSocketDefinition, QuestInputConnectorViewModel>();
+        foreach (var nodeViewModel in Nodes.OfType<BaseQuestViewModel>())
+        {
+            foreach (var inputConnector in nodeViewModel.Input.OfType<QuestInputConnectorViewModel>())
+            {
+                socketNodeLookup[inputConnector.Data] = inputConnector;
+            }
+        }
+
+        // Rebuild connections by iterating through output connectors
+        foreach (var nodeViewModel in Nodes.OfType<BaseQuestViewModel>())
+        {
+            foreach (var outputConnector in nodeViewModel.Output.OfType<QuestOutputConnectorViewModel>())
+            {
+                foreach (var connectionHandle in outputConnector.Data.Connections)
+                {
+                    var connection = connectionHandle.Chunk;
+                    if (connection?.Destination?.Chunk != null && socketNodeLookup.TryGetValue(connection.Destination.Chunk, out var targetInput))
+                    {
+                        Connections.Add(new QuestConnectionViewModel(outputConnector, targetInput, connection));
+                    }
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Replace a quest node with a deletion marker node that preserves all connections
+    /// </summary>
+    /// <param name="node">The quest node to replace with a deletion marker</param>
+    private void ReplaceNodeWithQuestDeletionMarkerInternal(BaseQuestViewModel node)
+    {
+        if (_data is not graphGraphDefinition graphDefinition)
+        {
+            _loggerService?.Error("Cannot replace quest node with deletion marker: not a quest graph");
+            return;
+        }
+
+        if (node.Data is questDeletionMarkerNodeDefinition)
+        {
+            _loggerService?.Warning("Cannot replace a deletion marker with another deletion marker");
+            return;
+        }
+
+        if (node.Data is not questNodeDefinition originalQuestNode)
+        {
+            _loggerService?.Error("Cannot replace non-quest node with quest deletion marker");
+            return;
+        }
+
+        // 1. Create a quest deletion marker with the same ID as the node being replaced
+        var deletionMarker = new questDeletionMarkerNodeDefinition
+        {
+            Id = originalQuestNode.Id
+        };
+
+        // 2. Store the ID of the deleted node
+        deletionMarker.DeletedNodeIds.Add(originalQuestNode.Id);
+
+        // 3. Create a node wrapper for the deletion marker (this will create default sockets)
+        var markerWrapper = new questDeletionMarkerNodeDefinitionWrapper(deletionMarker);
+        markerWrapper.Location = node.Location;
+        markerWrapper.DocumentViewModel = DocumentViewModel;
+
+        // 4. Generate the default sockets for the deletion marker (CutDestination, In, Out)
+        markerWrapper.CreateDefaultSockets();
+        markerWrapper.GenerateSockets();
+
+        // 5. Remove the original node from the graph data
+        for (var i = graphDefinition.Nodes.Count - 1; i >= 0; i--)
+        {
+            if (ReferenceEquals(graphDefinition.Nodes[i].Chunk, node.Data))
+            {
+                graphDefinition.Nodes.RemoveAt(i);
+                break;
+            }
+        }
+
+        // 6. Add the deletion marker node to the graph data
+        graphDefinition.Nodes.Add(new CHandle<graphGraphNodeDefinition>(deletionMarker));
+
+        // 7. Replace the node in the UI
+        var nodeIndex = Nodes.IndexOf(node);
+        if (nodeIndex >= 0)
+        {
+            Nodes[nodeIndex] = markerWrapper;
+        }
+        else
+        {
+            Nodes.Remove(node);
+            Nodes.Add(markerWrapper);
+        }
+
+        // 8. Map connections from original node to deletion marker's default sockets
+        MapConnectionsToStandardSockets(originalQuestNode, markerWrapper);
+
+        // 9. Update properties in the nodes collection
+        if (GetQuestNodesChunkViewModel() is { } nodes)
+        {
+            nodes.RecalculateProperties();
+        }
+
+        // Save graph state and mark document as dirty
+        GraphStateSave();
+        DocumentViewModel?.SetIsDirty(true);
+
+        _loggerService?.Info($"Replaced quest node {node.UniqueId} with a deletion marker");
+    }
+
+    /// <summary>
+    /// Maps connections from the original node to the deletion marker's standard sockets (In, Out, CutDestination)
+    /// </summary>
+    /// <param name="originalNode">The original node that was replaced</param>
+    /// <param name="markerWrapper">The deletion marker wrapper with default sockets</param>
+    private void MapConnectionsToStandardSockets(questNodeDefinition originalNode, questDeletionMarkerNodeDefinitionWrapper markerWrapper)
+    {
+        // Get the deletion marker's default sockets
+        var markerInSocket = markerWrapper.Input.FirstOrDefault(s => s.Name == "In") as QuestInputConnectorViewModel;
+        var markerOutSocket = markerWrapper.Output.FirstOrDefault(s => s.Name == "Out") as QuestOutputConnectorViewModel;
+        var markerCutDestSocket = markerWrapper.Input.FirstOrDefault(s => s.Name == "CutDestination") as QuestInputConnectorViewModel;
+
+        if (markerInSocket == null || markerOutSocket == null || markerCutDestSocket == null)
+        {
+            _loggerService?.Error("Failed to find deletion marker's default sockets");
+            return;
+        }
+
+        // Process each socket from the original node
+        foreach (var originalSocketHandle in originalNode.Sockets)
+        {
+            var originalSocket = originalSocketHandle.Chunk;
+            if (originalSocket == null) continue;
+
+            // Process each connection from this socket
+            foreach (var connectionHandle in originalSocket.Connections.ToList())
+            {
+                var connection = connectionHandle.Chunk;
+                if (connection == null) continue;
+
+                // Determine if this is an input or output connection from the original node's perspective
+                bool isInputConnection = ReferenceEquals(connection.Destination.Chunk, originalSocket);
+                bool isOutputConnection = ReferenceEquals(connection.Source.Chunk, originalSocket);
+
+                if (isInputConnection)
+                {
+                    // Connection coming TO the original node -> redirect to deletion marker's In socket
+                    // (unless it's a CutDestination type, then use CutDestination socket)
+                    var targetSocket = markerInSocket; // Default to In socket
+                    if (originalSocket is questSocketDefinition questSocket && questSocket.Type == Enums.questSocketType.CutDestination)
+                    {
+                        targetSocket = markerCutDestSocket;
+                    }
+
+                    connection.Destination = new CWeakHandle<graphGraphSocketDefinition>(targetSocket.Data);
+
+                    // Remove from original socket and add to new socket
+                    originalSocket.Connections.Remove(connectionHandle);
+                    targetSocket.Data.Connections.Add(connectionHandle);
+                }
+                else if (isOutputConnection)
+                {
+                    // Connection going FROM the original node -> redirect from deletion marker's Out socket
+                    connection.Source = new CWeakHandle<graphGraphSocketDefinition>(markerOutSocket.Data);
+
+                    // Remove from original socket and add to new socket
+                    originalSocket.Connections.Remove(connectionHandle);
+                    markerOutSocket.Data.Connections.Add(connectionHandle);
+                }
+            }
+        }
+
+        // Update connection states
+        markerInSocket.IsConnected = markerInSocket.Data.Connections.Count > 0;
+        markerOutSocket.IsConnected = markerOutSocket.Data.Connections.Count > 0;
+        markerCutDestSocket.IsConnected = markerCutDestSocket.Data.Connections.Count > 0;
+
+        // Rebuild UI connections
+        RebuildQuestConnections();
+    }
+
+    /// <summary>
+    /// Rebuilds the quest connections in the UI after socket changes
+    /// </summary>
+    private void RebuildQuestConnections()
+    {
+        Connections.Clear();
+
         // Create socket lookup table for quest input connectors
         var socketNodeLookup = new Dictionary<graphGraphSocketDefinition, QuestInputConnectorViewModel>();
         foreach (var nodeViewModel in Nodes.OfType<BaseQuestViewModel>())
@@ -403,7 +612,7 @@ public partial class RedGraph
         }
 
         nodeWrapper.GenerateSockets();
-        
+
         // Set document reference for property change syncing
         nodeWrapper.DocumentViewModel = DocumentViewModel;
 
@@ -420,7 +629,7 @@ public partial class RedGraph
         }
 
         nodeWrapper.GenerateSockets();
-        
+
         // Set document reference for property change syncing
         nodeWrapper.DocumentViewModel = DocumentViewModel;
 
@@ -479,10 +688,10 @@ public partial class RedGraph
         questTarget.Data.Connections.Add(handle);
 
         Connections.Add(new QuestConnectionViewModel(questSource, questTarget, graphGraphConnectionDefinition));
-        
+
         // Refresh ChunkViewModels representing the involved sockets
         RefreshCVM([questSource.Data, questTarget.Data]);
-        
+
         // Notify UI to refresh affected nodes
         NotifyNodesUpdated(questSource.OwnerId, questTarget.OwnerId);
 
@@ -548,7 +757,7 @@ public partial class RedGraph
         destination.Data.Connections.Add(new CHandle<graphGraphConnectionDefinition>(connection));
 
         Connections.Add(new QuestConnectionViewModel(source, destination, connection));
-        
+
         // Notify UI to refresh affected nodes
         NotifyNodesUpdated(source.OwnerId, destination.OwnerId);
 
@@ -579,7 +788,7 @@ public partial class RedGraph
             }
         }
         Connections.Remove(questConnection);
-        
+
         // Notify UI to refresh affected nodes
         NotifyNodesUpdated(questSource.OwnerId, questDestination.OwnerId);
 
@@ -602,7 +811,7 @@ public partial class RedGraph
         }
 
         var duplicatedData = (questNodeDefinition)cloneable.DeepCopy();
-        
+
         var newNodeId = GetNextAvailableQuestNodeId();
         duplicatedData.Id = newNodeId;
         _currentQuestNodeId = Math.Max(_currentQuestNodeId, newNodeId);
@@ -616,49 +825,49 @@ public partial class RedGraph
         }
 
         var wrappedDuplicate = WrapQuestNode(duplicatedData, false);
-        
+
         wrappedDuplicate.Location = new System.Windows.Point(
-            originalNode.Location.X + 50, 
+            originalNode.Location.X + 50,
             originalNode.Location.Y + 50
         );
 
         ((graphGraphDefinition)_data).Nodes.Add(new CHandle<graphGraphNodeDefinition>(duplicatedData));
-        
+
         if (GetQuestNodesChunkViewModel() is { } nodes)
         {
             nodes.RecalculateProperties();
         }
 
         Nodes.Add(wrappedDuplicate);
-        
+
         _loggerService?.Info($"Duplicated quest node with new ID: {duplicatedData.Id}");
     }
 
     private ushort GetNextAvailableQuestNodeId()
     {
         var questGraph = (graphGraphDefinition)_data;
-        
+
         ushort candidateId = (ushort)(_currentQuestNodeId + 1);
-        
+
         if (candidateId != ushort.MaxValue && !IsQuestNodeIdInUse(candidateId, questGraph))
         {
             return candidateId;
         }
-        
+
         // Fallback: if there's a collision, keep searching
         do
         {
             candidateId++;
         } while (candidateId != ushort.MaxValue && IsQuestNodeIdInUse(candidateId, questGraph));
-        
+
         if (candidateId == ushort.MaxValue)
         {
             _loggerService?.Error("No available quest node IDs remaining!");
         }
-        
+
         return candidateId;
     }
-    
+
     private bool IsQuestNodeIdInUse(ushort nodeId, graphGraphDefinition questGraph)
     {
         foreach (var nodeHandle in questGraph.Nodes)
@@ -668,7 +877,7 @@ public partial class RedGraph
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -741,7 +950,7 @@ public partial class RedGraph
                     {
                         var questInputConnectorViewModel = (QuestInputConnectorViewModel)Connections[i].Target;
 
-                        if (ReferenceEquals(Connections[i].Source, questOutputConnectorViewModel) && 
+                        if (ReferenceEquals(Connections[i].Source, questOutputConnectorViewModel) &&
                             ReferenceEquals(questInputConnectorViewModel.Data, destination))
                         {
                             questInputConnectorViewModel.IsConnected = questInputConnectorViewModel.Data.Connections.Count > 0;

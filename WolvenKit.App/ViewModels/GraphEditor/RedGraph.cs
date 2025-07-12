@@ -183,20 +183,30 @@ public partial class RedGraph : IDisposable
         }
 
         GraphStateSave();
-        
+
         // Mark document as dirty since we modified the data
         DocumentViewModel?.SetIsDirty(true);
     }
 
     /// <summary>
-    /// Replace a quest node with a deletion marker (soft delete)
+    /// Replace a quest node with a deletion marker (soft delete) or hard delete based on node type
     /// </summary>
-    /// <param name="node">The quest node to replace</param>
+    /// <param name="node">The quest node to replace or remove</param>
     public void ReplaceNodeWithQuestDeletionMarker(BaseQuestViewModel node)
     {
         if (GraphType != RedGraphType.Quest)
         {
             throw new InvalidOperationException("Cannot replace with quest deletion marker on non-quest graph");
+        }
+
+        // Check if this node type should use a deletion marker
+        if (!ShouldUseDeletionMarker(node))
+        {
+            // Non-signal-stopping nodes get hard deleted
+            RemoveQuestNode(node);
+            GraphStateSave();
+            DocumentViewModel?.SetIsDirty(true);
+            return;
         }
 
         // Call the quest-specific implementation from the partial class
@@ -219,7 +229,7 @@ public partial class RedGraph : IDisposable
         {
             DuplicateQuestNode(questNode);
         }
-        
+
         // Mark document as dirty since we modified the data
         DocumentViewModel?.SetIsDirty(true);
     }
@@ -449,7 +459,7 @@ public partial class RedGraph : IDisposable
 
                     jNodes.Add(newPerfSet);
                 }
-                
+
                 var jRoot = new JObject
                 {
                     new JProperty("EditorX", Editor != null ? Editor.ViewportLocation.X : 0),
