@@ -50,7 +50,7 @@ public class TemplateFileTools
                              File.Exists(Path.Join(activeProject.ModDirectory, inkatlasRelativePath));
 
         var inkatlasFileName = Path.GetFileNameWithoutExtension(inkatlasRelativePath);
-        
+
         // Copy the xbm file
         var xbmResourcePath = Path.Join("inkatlas", "single_item_template.xbm");
         var xbmDestPath = Path.Join(targetFolderRelativePath, $"{inkatlasFileName}.xbm");
@@ -245,7 +245,7 @@ public class TemplateFileTools
         {
             return;
         }
-        
+
         var absolutePhotomodeFolder = Path.Join(activeProject.ModDirectory, options.TargetDir);
 
         if (!Directory.Exists(absolutePhotomodeFolder))
@@ -472,6 +472,7 @@ public class TemplateFileTools
 
                 continue;
             }
+
             chunk.Entries.Add(new localizationPersistenceOnScreenEntry()
             {
                 SecondaryKey = kvp.Key, FemaleVariant = kvp.Value,
@@ -487,12 +488,620 @@ public class TemplateFileTools
 
         _cr2WTools.WriteCr2W(cr2W, absoluteFilePath);
     }
+
+    public void GenerateMinimalQuest(QuestGenerationOptions options)
+    {
+        // 1. Setup directories and paths
+        var paths = SetupDirectoriesAndPaths(options);
+        if (paths == null) return;
+
+        // 2. Create journal file
+        CreateJournalFile(options, paths);
+
+        // 3. Create quest phase files
+        CreateQuestPhaseFiles(options, paths);
+
+        // 4. Create onscreens localization file
+        CreateOnscreensLocalizationFile(options, paths);
+
+        // 5. Create .archive.xl file in project resources folder
+        CreateArchiveXlFile(options);
+    }
+
+    // Helper to setup directories and return all relevant paths
+    private class MinimalQuestPaths
+    {
+        public string ModDir { get; set; } = string.Empty;
+        public string JournalDir { get; set; } = string.Empty;
+        public string LocalizationDir { get; set; } = string.Empty;
+        public string QuestDir { get; set; } = string.Empty;
+        public string PhasesDir { get; set; } = string.Empty;
+        public string SceneDir { get; set; } = string.Empty;
+        public string JournalPath { get; set; } = string.Empty;
+        public string OnscreensPath { get; set; } = string.Empty;
+        public string RootQuestphasePath { get; set; } = string.Empty;
+        public string SetupPhasePath { get; set; } = string.Empty;
+    }
+
+    private MinimalQuestPaths? SetupDirectoriesAndPaths(QuestGenerationOptions options)
+    {
+        if (string.IsNullOrEmpty(options.ModName) || string.IsNullOrEmpty(options.TargetRoot))
+        {
+            _loggerService.Error("ModName or TargetRoot is empty.");
+            return null;
+        }
+        var modDir = Path.Combine(options.TargetRoot, options.ModName);
+        var journalDir = Path.Combine(modDir, "journal");
+        var localizationDir = Path.Combine(modDir, "localization", "en-us", "onscreens");
+        var questDir = Path.Combine(modDir, "quest");
+        var phasesDir = Path.Combine(questDir, "phases");
+        var sceneDir = Path.Combine(questDir, "scene");
+        Directory.CreateDirectory(journalDir);
+        Directory.CreateDirectory(localizationDir);
+        Directory.CreateDirectory(questDir);
+        Directory.CreateDirectory(phasesDir);
+        Directory.CreateDirectory(sceneDir);
+        return new MinimalQuestPaths
+        {
+            ModDir = modDir,
+            JournalDir = journalDir,
+            LocalizationDir = localizationDir,
+            QuestDir = questDir,
+            PhasesDir = phasesDir,
+            SceneDir = sceneDir,
+            JournalPath = Path.Combine(journalDir, $"{options.ModName}.journal"),
+            OnscreensPath = Path.Combine(localizationDir, $"{options.ModName}.json"),
+            RootQuestphasePath = Path.Combine(questDir, $"{options.ModName}_root.questphase"),
+            SetupPhasePath = Path.Combine(phasesDir, $"{options.ModName}_root_setup.questphase")
+        };
+    }
+
+    private void CreateJournalFile(QuestGenerationOptions options, MinimalQuestPaths paths)
+    {
+        if (!File.Exists(paths.JournalPath))
+        {
+            var journalResource = new gameJournalResource();
+            var rootEntry = new gameJournalRootFolderEntry {  };
+
+            // onscreens folder
+            var onscreensFolder = new gameJournalFolderEntry { Id = "onscreens" };
+            var onscreenGroup = new gameJournalOnscreenGroup { Id = $"{options.ModName}_tutorials" };
+            var onscreenEntry = new gameJournalOnscreen
+            {
+                Id = $"{options.ModName}_popup" ,
+                Tag = "None",
+                Title = new LocalizationString { Value = $"{options.ModName}_popup_title" },
+                Description = new LocalizationString { Value = $"{options.ModName}_popup_description" },
+            };
+            onscreenGroup.Entries.Add(new CHandle<gameJournalEntry>(onscreenEntry));
+            onscreensFolder.Entries.Add(new CHandle<gameJournalEntry>(onscreenGroup));
+
+            // contacts folder
+            var contactsFolder = new gameJournalFolderEntry { Id = "contacts" };
+            var contactEntry = new gameJournalContact
+            {
+                Id = $"{options.ModderName}",
+                Name = new LocalizationString { Value = $"{options.ModName}_{options.ModderName}" },
+                Type = Enums.gameContactType.Texter,
+                UseFlatMessageLayout = true,
+                IsCallableDefault = true
+            };
+            // Phone conversation
+            var phoneConversation = new gameJournalPhoneConversation { Id = $"{options.ModName}_thread_title" };
+            // Phone message
+            var phoneMessage = new gameJournalPhoneMessage
+            {
+                Id = "info1",
+                Delay = 3,
+                IsQuestImportant = false,
+                Sender = Enums.gameMessageSender.NPC,
+                Text = new LocalizationString { Value = $"{options.ModName}_message" },
+            };
+            phoneConversation.Entries.Add(new CHandle<gameJournalEntry>(phoneMessage));
+            contactEntry.Entries.Add(new CHandle<gameJournalEntry>(phoneConversation));
+            contactsFolder.Entries.Add(new CHandle<gameJournalEntry>(contactEntry));
+
+            // Add folders to root
+            rootEntry.Entries.Add(new CHandle<gameJournalEntry>(onscreensFolder));
+            rootEntry.Entries.Add(new CHandle<gameJournalEntry>(contactsFolder));
+            journalResource.Entry = new CHandle<gameJournalEntry>(rootEntry);
+
+            var cr2w = new CR2WFile { RootChunk = journalResource };
+            _cr2WTools.WriteCr2W(cr2w, paths.JournalPath);
+        }
+    }
+
+    // ... Move the quest phase file creation logic into this helper ...
+    private void CreateQuestPhaseFiles(QuestGenerationOptions options, MinimalQuestPaths paths)
+    {
+        if (!File.Exists(paths.RootQuestphasePath))
+        {
+            var cr2w = new CR2WFile { RootChunk = RedTypeManager.Create("questQuestPhaseResource") };
+            _cr2WTools.WriteCr2W(cr2w, paths.RootQuestphasePath);
+        }
+
+        // Add questInputNodeDefinition and questPhaseNodeDefinition to rootQuestphasePath
+        if (_cr2WTools.ReadCr2W(paths.RootQuestphasePath) is { RootChunk: questQuestPhaseResource phaseResource })
+        {
+            // Ensure the graph exists
+            if (phaseResource.Graph == null)
+            {
+                phaseResource.Graph = new CHandle<graphGraphDefinition>(new questGraphDefinition());
+            }
+            if (phaseResource.Graph?.Chunk is graphGraphDefinition graph)
+            {
+                // Only add if not already present
+                bool hasInput = graph.Nodes.Any(n => n.Chunk is questInputNodeDefinition);
+                bool hasPhase = graph.Nodes.Any(n => n.Chunk is questPhaseNodeDefinition);
+                if (!hasInput)
+                {
+                    var inputNode = new questInputNodeDefinition
+                    {
+                        SocketName = "In1",
+                        Id = 1
+                    };
+                    // Add CutDestination socket
+                    inputNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition
+                    {
+                        Name = "CutDestination",
+                        Type = Enums.questSocketType.CutDestination
+                    }));
+                    // Add Out socket
+                    inputNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition
+                    {
+                        Name = "Out",
+                        Type = Enums.questSocketType.Output
+                    }));
+                    graph.Nodes.Add(new CHandle<graphGraphNodeDefinition>(inputNode));
+                }
+                if (!hasPhase)
+                {
+                    var resourcePath = $"mod/{options.ModName}/quest/phases/{options.ModName}_root_setup.questphase";
+                    var phaseNode = new questPhaseNodeDefinition
+                    {
+                        Id = 2,
+                        PhaseResource = new CResourceAsyncReference<questQuestPhaseResource>(resourcePath)
+                    };
+                    
+                    // Add sockets as specified (CutDestination first)
+                    phaseNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "CutDestination", Type = Enums.questSocketType.CutDestination }));
+                    phaseNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "In1", Type = Enums.questSocketType.Input }));
+                    phaseNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "basegame", Type = Enums.questSocketType.Output }));
+                    phaseNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "ifEP1", Type = Enums.questSocketType.Output }));
+                    phaseNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "ifReset", Type = Enums.questSocketType.Output }));
+                    
+                    graph.Nodes.Add(new CHandle<graphGraphNodeDefinition>(phaseNode));
+
+                    // Helper to get a socket by node ID and socket name
+                    graphGraphSocketDefinition GetSocket(ushort nodeId, string socketName)
+                    {
+                        graphGraphNodeDefinition? node = null;
+                        foreach (var n in graph.Nodes)
+                        {
+                            if (n.Chunk is questNodeDefinition qn && qn.Id == nodeId)
+                            {
+                                node = n.Chunk;
+                                break;
+                            }
+                        }
+                        graphGraphSocketDefinition? socket = null;
+                        if (node?.Sockets != null)
+                        {
+                            socket = node.Sockets
+                                .Where(h => h?.Chunk != null)
+                                .Select(h => h.Chunk)
+                                .FirstOrDefault(s => s?.Name == socketName);
+                        }
+                        // Fallback: search all nodes for the socket if not found
+                        if (socket == null)
+                        {
+                            socket = graph.Nodes
+                                .Where(h => h?.Chunk != null && h.Chunk.Sockets != null)
+                                .SelectMany(h => h?.Chunk?.Sockets ?? new CArray<CHandle<graphGraphSocketDefinition>>())
+                                .Where(h => h?.Chunk != null)
+                                .Select(h => h.Chunk)
+                                .FirstOrDefault(s => s?.Name == socketName);
+                        }
+                        if (socket == null)
+                            throw new KeyNotFoundException($"Socket '{socketName}' not found for node {nodeId}.");
+                        return socket;
+                    }
+                    // Helper to connect two sockets
+                    void Connect(ushort fromId, string fromSocket, ushort toId, string toSocket)
+                    {
+                        var from = GetSocket(fromId, fromSocket);
+                        var to = GetSocket(toId, toSocket);
+                        var conn = new graphGraphConnectionDefinition
+                        {
+                            Source = new CWeakHandle<graphGraphSocketDefinition>(from),
+                            Destination = new CWeakHandle<graphGraphSocketDefinition>(to)
+                        };
+                        from.Connections.Add(new CHandle<graphGraphConnectionDefinition>(conn));
+                        to.Connections.Add(new CHandle<graphGraphConnectionDefinition>(conn));
+                    }
+                    // Add connections as specified
+                    Connect(1, "Out", 2, "In1");
+                    Connect(2, "ifReset", 2, "In1");
+                }
+                _cr2WTools.WriteCr2W(new CR2WFile { RootChunk = phaseResource }, paths.RootQuestphasePath);
+            }
+        }
+        if (!File.Exists(paths.SetupPhasePath))
+        {
+            var cr2w = new CR2WFile { RootChunk = RedTypeManager.Create("questQuestPhaseResource") };
+            _cr2WTools.WriteCr2W(cr2w, paths.SetupPhasePath);
+        }
+
+        // Populate setupPhasePath with nodes and connections as in the image
+        if (_cr2WTools.ReadCr2W(paths.SetupPhasePath) is { RootChunk: questQuestPhaseResource setupPhaseResource })
+        {
+            if (setupPhaseResource.Graph == null)
+                setupPhaseResource.Graph = new CHandle<graphGraphDefinition>(new questGraphDefinition());
+            if (setupPhaseResource.Graph.Chunk is questGraphDefinition setupGraph)
+            {
+                // Node creation (IDs and placeholder values)
+                var nodes = new List<graphGraphNodeDefinition>();
+                // [1] Input
+                var inputNode = new questInputNodeDefinition { Id = 1, SocketName = "In1", Sockets = new() };
+                inputNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "CutDestination", Type = Enums.questSocketType.CutDestination }));
+                inputNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "Out", Type = Enums.questSocketType.Output }));
+                nodes.Add(inputNode);
+                // [2] Output (NonTerminating)
+                var outputNode2 = new questOutputNodeDefinition { Id = 2, SocketName = "basegame", Sockets = new(), Type = Enums.questExitType.NonTerminating };
+                outputNode2.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "CutDestination", Type = Enums.questSocketType.CutDestination }));
+                outputNode2.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "In", Type = Enums.questSocketType.Input }));
+                nodes.Add(outputNode2);
+                // [3] Output (NonTerminating)
+                var outputNode3 = new questOutputNodeDefinition { Id = 3, SocketName = "ifEP1",  Sockets = new(), Type = Enums.questExitType.NonTerminating };
+                outputNode3.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "CutDestination", Type = Enums.questSocketType.CutDestination }));
+                outputNode3.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "In", Type = Enums.questSocketType.Input }));
+                nodes.Add(outputNode3);
+                // [4] Output (Terminating)
+                var outputNode4 = new questOutputNodeDefinition { Id = 4, SocketName = "ifReset",  Sockets = new() };
+                outputNode4.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "CutDestination", Type = Enums.questSocketType.CutDestination }));
+                outputNode4.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "In", Type = Enums.questSocketType.Input }));
+                nodes.Add(outputNode4);
+                // [5-8, 12, 14] PauseCondition nodes
+                for (ushort i = 5; i <= 8; i++)
+                {
+                    var pauseNode = new questPauseConditionNodeDefinition { Id = i, Sockets = new() };
+                    pauseNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "CutDestination", Type = Enums.questSocketType.CutDestination }));
+                    pauseNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "In", Type = Enums.questSocketType.Input }));
+                    pauseNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "Out", Type = Enums.questSocketType.Output }));
+                    // Set specific properties for [5] and [6]
+                    if (i == 5)
+                    {
+                        var triggerCondition = new questTriggerCondition
+                        {
+                            IsPlayerActivator = true,
+                            TriggerAreaRef = "#mq000_tr_vs_apartment",
+                            Type = Enums.questTriggerConditionType.IsInside
+                        };
+                        pauseNode.Condition = new CHandle<questIBaseCondition>(triggerCondition);
+                    }
+                    else if (i == 6)
+                    {
+                        var varComparison = new questVarComparison_ConditionType
+                        {
+                            FactName = $"{options.ModName}_active",
+                            ComparisonType = Enums.EComparisonType.Equal,
+                            Value = 0
+                        };
+                        var factsDbCondition = new questFactsDBCondition
+                        {
+                            Type = new CHandle<questIFactsDBConditionType>(varComparison)
+                        };
+                        pauseNode.Condition = new CHandle<questIBaseCondition>(factsDbCondition);
+                    }
+                    else if (i == 7)
+                    {
+                        var deviceConditionType = new questDevice_ConditionType
+                        {
+                            ObjectRef = "#q001_v_room_tv",
+                            DeviceControllerClass = "TVControllerPS",
+                            DeviceConditionFunction = "IsON"
+                        };
+                        var objectCondition = new questObjectCondition
+                        {
+                            Type = new CHandle<questIObjectConditionType>(deviceConditionType)
+                        };
+                        pauseNode.Condition = new CHandle<questIBaseCondition>(objectCondition);
+                    }
+                    else if (i == 8)
+                    {
+                        var realTimeDelayType = new questRealtimeDelay_ConditionType
+                        {
+                            Hours = 0,
+                            Minutes = 0,
+                            Seconds = 0,
+                            Miliseconds = 500
+                        };
+                        var timeCondition = new questTimeCondition
+                        {
+                            Type = new CHandle<questITimeConditionType>(realTimeDelayType)
+                        };
+                        pauseNode.Condition = new CHandle<questIBaseCondition>(timeCondition);
+                    }
+                    nodes.Add(pauseNode);
+                }
+                var pauseNode12 = new questPauseConditionNodeDefinition { Id = 12, Sockets = new() };
+                pauseNode12.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "CutDestination", Type = Enums.questSocketType.CutDestination }));
+                pauseNode12.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "In", Type = Enums.questSocketType.Input }));
+                pauseNode12.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "Out", Type = Enums.questSocketType.Output }));
+                // Set specific properties for [12]
+                {
+                    var varComparison = new questVarComparison_ConditionType
+                    {
+                        FactName = "ep1_active",
+                        ComparisonType = Enums.EComparisonType.GreaterOrEqual,
+                        Value = 1
+                    };
+                    var factsDbCondition = new questFactsDBCondition
+                    {
+                        Type = new CHandle<questIFactsDBConditionType>(varComparison)
+                    };
+                    pauseNode12.Condition = new CHandle<questIBaseCondition>(factsDbCondition);
+                }
+                nodes.Add(pauseNode12);
+                var pauseNode14 = new questPauseConditionNodeDefinition { Id = 14, Sockets = new() };
+                pauseNode14.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "CutDestination", Type = Enums.questSocketType.CutDestination }));
+                pauseNode14.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "In", Type = Enums.questSocketType.Input }));
+                pauseNode14.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "Out", Type = Enums.questSocketType.Output }));
+                // Set specific properties for [14]
+                {
+                    var triggerCondition = new questTriggerCondition
+                    {
+                        IsPlayerActivator = true,
+                        TriggerAreaRef = "#mq000_tr_vs_apartment",
+                        Type = Enums.questTriggerConditionType.IsOutside
+                    };
+                    pauseNode14.Condition = new CHandle<questIBaseCondition>(triggerCondition);
+                }
+                nodes.Add(pauseNode14);
+                // [9] UIManager
+                var uiManagerNode = new questUIManagerNodeDefinition { Id = 9, Sockets = new() };
+                uiManagerNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "CutDestination", Type = Enums.questSocketType.CutDestination }));
+                uiManagerNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "In", Type = Enums.questSocketType.Input }));
+                uiManagerNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "Out", Type = Enums.questSocketType.Output }));
+                // Set properties for UIManager [9]
+                {
+                    var showPopupSubtype = new questShowPopup_NodeSubType
+                    {
+                        Path = new CHandle<gameJournalPath>(new gameJournalPath
+                        {
+                            ClassName = "gameJournalOnscreen",
+                            RealPath = $"onscreens/{options.ModName}_tutorials/{options.ModName}_popup",
+                            FileEntryIndex = 1
+                        }),
+                        CloseAtInput = true,
+                        CloseCurrentPopup = false,
+                        HideInMenu = true,
+                        IgnoreDisabledTutorials = true,
+                        PauseGame = true,
+                        Position = Enums.gamePopupPosition.LowerLeft,
+                        ScreenMode = Enums.questTutorialScreenMode.Fullscreen
+                    };
+                    var tutorialType = new questTutorial_NodeType
+                    {
+                        Subtype = new CHandle<questITutorial_NodeSubType>(showPopupSubtype)
+                    };
+                    uiManagerNode.Type = new CHandle<questIUIManagerNodeType>(tutorialType);
+                }
+                nodes.Add(uiManagerNode);
+                // [10] Journal
+                var journalNode = new questJournalNodeDefinition { Id = 10, Sockets = new() };
+                journalNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "CutDestination", Type = Enums.questSocketType.CutDestination }));
+                journalNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "Active", Type = Enums.questSocketType.Input }));
+                journalNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "Inactive", Type = Enums.questSocketType.Input }));
+                journalNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "Failed", Type = Enums.questSocketType.Input }));
+                journalNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "Succeeded", Type = Enums.questSocketType.Input }));
+                journalNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "Out", Type = Enums.questSocketType.Output }));
+                // Set properties for Journal [10]
+                {
+                    var journalEntryType = new questJournalEntry_NodeType
+                    {
+                        Path = new CHandle<gameJournalPath>(new gameJournalPath
+                        {
+                            ClassName = "gameJournalPhoneMessage",
+                            RealPath =  $"contacts/{options.ModderName}/{options.ModName}_thread_title/info1",
+                            FileEntryIndex = 1
+                        }),
+                        SendNotification = true
+                    };
+                    journalNode.Type = new CHandle<questIJournal_NodeType>(journalEntryType);
+                }
+                nodes.Add(journalNode);
+                // [11] Condition
+                var conditionNode = new questConditionNodeDefinition { Id = 11, Sockets = new() };
+                conditionNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "CutDestination", Type = Enums.questSocketType.CutDestination }));
+                conditionNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "In", Type = Enums.questSocketType.Input }));
+                conditionNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "True", Type = Enums.questSocketType.Output }));
+                conditionNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "False", Type = Enums.questSocketType.Output }));
+                // Set properties for Condition [11]
+                {
+                    var varComparison = new questVarComparison_ConditionType
+                    {
+                        FactName = "ep1_active",
+                        ComparisonType = Enums.EComparisonType.GreaterOrEqual,
+                        Value = 1
+                    };
+                    var factsDbCondition = new questFactsDBCondition
+                    {
+                        Type = new CHandle<questIFactsDBConditionType>(varComparison)
+                    };
+                    conditionNode.Condition = new CHandle<questIBaseCondition>(factsDbCondition);
+                }
+                nodes.Add(conditionNode);
+                // [13] FactDBManager
+                var factDBNode = new questFactsDBManagerNodeDefinition { Id = 13, Sockets = new() };
+                factDBNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "CutDestination", Type = Enums.questSocketType.CutDestination }));
+                factDBNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "In", Type = Enums.questSocketType.Input }));
+                factDBNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "Out", Type = Enums.questSocketType.Output }));
+                // Set properties for FactsDBManager [13]
+                {
+                    var setVarType = new questSetVar_NodeType
+                    {
+                        FactName = $"{options.ModName}_active",
+                        SetExactValue = true,
+                        Value = 1
+                    };
+                    factDBNode.Type = new CHandle<questIFactsDBManagerNodeType>(setVarType);
+                }
+                nodes.Add(factDBNode);
+                // Add all nodes to the graph
+                var nodeHandles = new Dictionary<ushort, graphGraphNodeDefinition>();
+                foreach (var node in nodes)
+                {
+                    setupGraph.Nodes.Add(new CHandle<graphGraphNodeDefinition>(node));
+                    if (node is questNodeDefinition qn && qn.Id != ushort.MaxValue && qn.Id != 0 && !nodeHandles.ContainsKey(qn.Id))
+                    {
+                        nodeHandles[qn.Id] = node;
+                    }
+                }
+                // Helper to get a socket by node ID and socket name
+                graphGraphSocketDefinition GetSocket(ushort nodeId, string socketName)
+                {
+                    graphGraphNodeDefinition? node = null;
+                    nodeHandles.TryGetValue(nodeId, out node);
+                    graphGraphSocketDefinition? socket = null;
+                    if (node?.Sockets != null)
+                    {
+                        socket = node.Sockets
+                            .Where(h => h?.Chunk != null)
+                            .Select(h => h.Chunk)
+                            .FirstOrDefault(s => s?.Name == socketName);
+                    }
+                    // Fallback: search all nodes for the socket if not found
+                    if (socket == null)
+                    {
+                        socket = setupGraph.Nodes
+                            .Where(h => h?.Chunk != null && h.Chunk.Sockets != null)
+                            .SelectMany(h => h?.Chunk?.Sockets ?? new CArray<CHandle<graphGraphSocketDefinition>>())
+                            .Where(h => h?.Chunk != null)
+                            .Select(h => h.Chunk)
+                            .FirstOrDefault(s => s?.Name == socketName);
+                    }
+                    if (socket == null)
+                        throw new KeyNotFoundException($"Socket '{socketName}' not found for node {nodeId}.");
+                    return socket;
+                }
+                // Helper to connect two sockets
+                void Connect(ushort fromId, string fromSocket, ushort toId, string toSocket)
+                {
+                    var from = GetSocket(fromId, fromSocket);
+                    var to = GetSocket(toId, toSocket);
+                    var conn = new graphGraphConnectionDefinition
+                    {
+                        Source = new CWeakHandle<graphGraphSocketDefinition>(from),
+                        Destination = new CWeakHandle<graphGraphSocketDefinition>(to)
+                    };
+                    from.Connections.Add(new CHandle<graphGraphConnectionDefinition>(conn));
+                    to.Connections.Add(new CHandle<graphGraphConnectionDefinition>(conn));
+                }
+                // Connections (precise per user)
+                Connect(1, "Out", 5, "In");
+                Connect(5, "Out", 6, "In");
+                Connect(6, "Out", 7, "In");
+                Connect(7, "Out", 8, "In");
+                Connect(8, "Out", 9, "In");
+                Connect(9, "Out", 10, "Active");
+                Connect(9, "Out", 11, "In");
+                Connect(9, "Out", 13, "In");
+                Connect(10, "Out", 2, "In");
+                Connect(11, "False", 12, "In");
+                Connect(11, "True", 3, "In");
+                Connect(12, "Out", 3, "In");
+                Connect(14, "Out", 4, "In");
+                // Add missing connection: FactsDBManager [13] Out → PauseCondition [14] In
+                Connect(13, "Out", 14, "In");
+                // Save the file
+                _cr2WTools.WriteCr2W(new CR2WFile { RootChunk = setupPhaseResource }, paths.SetupPhasePath);
+            }
+        }
+    }
+
+    private void CreateOnscreensLocalizationFile(QuestGenerationOptions options, MinimalQuestPaths paths)
+    {
+        if (!File.Exists(paths.OnscreensPath))
+        {
+            var modnameUpper = options.ModName.ToUpperInvariant();
+            var onscreenEntries = new localizationPersistenceOnScreenEntries();
+            onscreenEntries.Entries.Add(new localizationPersistenceOnScreenEntry
+            {
+                FemaleVariant = $"{modnameUpper} TITLE",
+                MaleVariant = "",
+                PrimaryKey = 0,
+                SecondaryKey = $"{options.ModName}_popup_title"
+            });
+            onscreenEntries.Entries.Add(new localizationPersistenceOnScreenEntry
+            {
+                FemaleVariant = $"{modnameUpper} DESCRIPTION",
+                MaleVariant = "",
+                PrimaryKey = 0,
+                SecondaryKey = $"{options.ModName}_popup_description"
+            });
+            onscreenEntries.Entries.Add(new localizationPersistenceOnScreenEntry
+            {
+                FemaleVariant = $"{modnameUpper} AUTHOR",
+                MaleVariant = "",
+                PrimaryKey = 0,
+                SecondaryKey = $"{options.ModName}_{options.ModderName}"
+            });
+            onscreenEntries.Entries.Add(new localizationPersistenceOnScreenEntry
+            {
+                FemaleVariant = $"{modnameUpper} THREAD TITLE",
+                MaleVariant = "",
+                PrimaryKey = 0,
+                SecondaryKey = $"{options.ModName}_thread_title"
+            });
+            onscreenEntries.Entries.Add(new localizationPersistenceOnScreenEntry
+            {
+                FemaleVariant = $"{modnameUpper} CONFIRMATION MESSAGE",
+                MaleVariant = "",
+                PrimaryKey = 0,
+                SecondaryKey = $"{options.ModName}_message"
+            });
+
+            var cr2w = new CR2WFile
+            {
+                RootChunk = new JsonResource
+                {
+                    Root = new CHandle<ISerializable>(onscreenEntries)
+                }
+            };
+            _cr2WTools.WriteCr2W(cr2w, paths.OnscreensPath);
+        }
+    }
+
+    private void CreateArchiveXlFile(QuestGenerationOptions options)
+    {
+        if (_projectManager.ActiveProject == null || _projectManager.ActiveProject.ResourcesDirectory == null)
+        {
+            _loggerService.Error("Active project or its resources directory is null. Cannot create .archive.xl file.");
+            return;
+        }
+        var resourcesDir = _projectManager.ActiveProject.ResourcesDirectory;
+        var archiveXlPath = Path.Combine(resourcesDir, $"{options.ModName}.archive.xl");
+        if (!File.Exists(archiveXlPath))
+        {
+            var yaml = $@"quest:
+  phases:
+    - path: mod\{options.ModName}\quest\{options.ModName}_root.questphase
+      parent: cyberpunk2077.quest
+journal:
+  - mod\{options.ModName}\journal\{options.ModName}.journal
+localization:
+  onscreens:
+    en-us: mod\{options.ModName}\localization\en-us\onscreens\{options.ModName}.json
+";
+            File.WriteAllText(archiveXlPath, yaml);
+        }
+    }
 }
 
 public class PhotomodeYamlOptions
 {
     public PhotomodeBodyGender BodyGender { get; init; } = PhotomodeBodyGender.Female;
-
     public string ModderName { get; init; } = "";
     public string NpcName { get; init; } = "";
     public string YamlFileAbsolutePath { get; init; } = "";
@@ -509,9 +1118,15 @@ public class PhotomodeEntAppOptions
     public string AppSourceRelPath { get; init; } = "";
     public string AppDestRelPath { get; init; } = "";
     public string TargetDir { get; init; } = "";
-
     public PhotomodeBodyGender BodyGender { get; init; } = PhotomodeBodyGender.Female;
     public bool WriteAppFile { get; init; }
     public bool WriteEntFile { get; init; }
     public bool IsOverwrite { get; init; }
+}
+
+public class QuestGenerationOptions
+{
+    public string ModName { get; set; } = "modname";
+    public string TargetRoot { get; set; } = string.Empty; // e.g., path to "archive/mod"
+    public string ModderName { get; init; } = "";
 }

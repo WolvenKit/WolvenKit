@@ -98,6 +98,21 @@
                                 Foreground="{StaticResource WolvenKitYellow}" />
                         </MenuItem.Icon>
                     </MenuItem>
+
+                    <!-- Minimal Quest Files -->
+                    <MenuItem
+                        x:Name="MenuItemGenerateMinimalQuest"
+                        Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                        Header="Generate quest files"
+                        ToolTip="Adds minimal quest structure and files">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="Codicons"
+                                Kind="SymbolEvent"
+                                Size="{DynamicResource WolvenKitIconTiny}"
+                                Foreground="{StaticResource WolvenKitYellow}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
 
                 <MenuItem
@@ -515,12 +530,7 @@
                                         Mode=TwoWay,
                                         UpdateSourceTrigger=PropertyChanged}"
                     ToolTip="Toggle interactive file preview for improved performance" />
-                <!-- <MenuItem
-                    x:Name="toolbarLabels"
-                    Header="Show Toolbar Labels"
-                    IsCheckable="True"
-                    IsChecked="True"
-                    Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}" />-->
+                <!-- <MenuItem x:Name="toolbarLabels" Header="Show Toolbar Labels" IsCheckable="True" IsChecked="True" Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}" />-->
 
                 <Separator />
 

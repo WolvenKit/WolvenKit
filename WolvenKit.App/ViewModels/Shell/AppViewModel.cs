@@ -1825,6 +1825,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(RunFileValidationOnProjectCommand))]
     [NotifyCanExecuteChangedFor(nameof(ShowPropertiesCommand))]
     [NotifyCanExecuteChangedFor(nameof(NewPhotoModeFilesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(GenerateMinimalQuestFilesCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateInkatlasCommand))]
     private Cp77Project? _activeProject;
 
@@ -1838,6 +1839,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(RunFileValidationOnProjectCommand))]
     [NotifyCanExecuteChangedFor(nameof(ShowPropertiesCommand))]
     [NotifyCanExecuteChangedFor(nameof(NewPhotoModeFilesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(GenerateMinimalQuestFilesCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateInkatlasCommand))]
     private EAppStatus? _status;
 

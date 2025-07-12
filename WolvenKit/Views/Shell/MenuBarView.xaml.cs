@@ -66,6 +66,10 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     viewModel => viewModel.MainViewModel.SaveAllCommand,
                     view => view.MenuItemSaveAll)
                 .DisposeWith(disposables);
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.GenerateMinimalQuestFilesCommand,
+                    view => view.MenuItemGenerateMinimalQuest)
+                .DisposeWith(disposables);
 
             // Project
             this.BindCommand(ViewModel,
