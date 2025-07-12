@@ -60,7 +60,7 @@ public class ProjectResourceTools
         ".yaml",
         ".yml",
         ".reds",
-        "tweak"
+        ".tweak"
     ];
 
     /// <summary>
