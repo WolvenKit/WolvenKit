@@ -240,8 +240,6 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         _loggerService.Success("Done! Now import the .png files via Import Tool.");
     }
 
-    private bool CanGenerateMinimalQuestFiles() => _projectManager.ActiveProject is not null && _archiveManager.IsManagerLoaded;
-
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private void GenerateMinimalQuestFiles()
     {
