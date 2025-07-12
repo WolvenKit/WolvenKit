@@ -475,41 +475,6 @@ public partial class GraphEditorView : UserControl
 
             if (!(questViewModel is questStartNodeDefinitionWrapper || questViewModel is questEndNodeDefinitionWrapper))
             {
-                // Smart delete: if it's already a deletion marker, offer to destroy it completely
-                string deleteLabel = questViewModel is questDeletionMarkerNodeDefinitionWrapper ? "Destroy Deletion Marker" : "Delete Node";
-                string deleteIcon = questViewModel is questDeletionMarkerNodeDefinitionWrapper ? "CloseBoxOutline" : "Delete";
-
-                node.ContextMenu.Items.Add(CreateMenuItem(
-                    deleteLabel,
-                    deleteIcon,
-                    "WolvenKitRed",
-                    () => {
-                        if (questViewModel is questDeletionMarkerNodeDefinitionWrapper)
-                        {
-                            // Hard delete for deletion markers
-                            Source.RemoveNode(questViewModel);
-                        }
-                        else
-                        {
-                            // Soft delete for normal quest nodes
-                            Source.ReplaceNodeWithQuestDeletionMarker(questViewModel);
-                        }
-                    }));
-            }
-
-            node.ContextMenu.Items.Add(new Separator());
-        }
-
-        if (Source.GraphType == RedGraphType.Quest && node.DataContext is BaseQuestViewModel questViewModel)
-        {
-            node.ContextMenu.Items.Add(CreateMenuItem(
-                "Detach Node",
-                "LinkOff",
-                "WolvenKitYellow",
-                () => DetachQuestNode(questViewModel)));
-
-            if (!(questViewModel is questStartNodeDefinitionWrapper || questViewModel is questEndNodeDefinitionWrapper))
-            {
                 // Check if this node type should use a deletion marker
                 bool shouldUseDeletionMarker = questViewModel.Data is questSignalStoppingNodeDefinition
                     || questViewModel.Data.GetType() == typeof(questSwitchNodeDefinition)
