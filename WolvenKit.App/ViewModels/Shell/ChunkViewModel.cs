@@ -1667,9 +1667,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         var numSubmeshes = blob.Header.RenderChunkInfos.Count;
         var wasDeleted = false;
         var wasAdded = false;
-        foreach (var meshAppearance in mesh.Appearances)
+        foreach (var appearance in mesh.Appearances.Select(a => a.GetValue()).OfType<meshMeshAppearance>())
         {
-            if (meshAppearance.GetValue() is not meshMeshAppearance appearance || appearance.ChunkMaterials.Count == numSubmeshes)
+            if (appearance.ChunkMaterials.Count == numSubmeshes || appearance.ChunkMaterials.Count == 0)
             {
                 continue;
             }
@@ -1709,23 +1709,16 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         int GetIndexOfFirstNonRepeatingMaterial(List<string> materials)
         {
-            int numMaterials = materials.Count;
+            var numMaterials = materials.Count;
 
             var materialCounts = new Dictionary<string, int>();
-            foreach (var material in materials)
+            foreach (var material in materials.Where(material => !materialCounts.TryAdd(material, 1)))
             {
-                if (materialCounts.ContainsKey(material))
-                {
-                    materialCounts[material]++;
-                }
-                else
-                {
-                    materialCounts[material] = 1;
-                }
+                materialCounts[material]++;
             }
 
-            int startIndex = 0;
-            for (int i = 0; i < numMaterials; i++)
+            var startIndex = 0;
+            for (var i = 0; i < numMaterials; i++)
             {
                 if (materialCounts[materials[i]] != 1)
                 {
@@ -1791,6 +1784,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             .Select(n => n!.Contains('@') ? $"@{n.Split('@').Last()}" : n) // dynamic
             .ToList();
 
+
         var localMatIdxList = mesh.MaterialEntries.Where((mE) =>
             mE.IsLocalInstance && mE.Name.GetResolvedText() is string s && appearanceNames.Contains(s)
         ).Select(me => (int)me.Index).ToList();
@@ -1805,6 +1799,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         if (!suppressLogOutput && numUnusedMaterials == 0)
         {
             _loggerService.Info("No unused materials in current mesh.");
+            return;
         }
 
         IMaterial[] keepLocal = [];
@@ -5140,11 +5135,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     }
     
     /// <summary>
-    /// Get the root node data (scene graph node) that this property belongs to
+    /// Get the root node data (scene or quest graph node) that this property belongs to
     /// </summary>
     private RedBaseClass? GetRootNodeData()
     {
-        // Walk up the tree to find a scene graph node
+        // Walk up the tree to find a scene or quest graph node
         var current = this;
         while (current != null)
         {
@@ -5152,6 +5147,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 return sceneNode;
             }
+            
+            // Also check for quest nodes
+            if (current.Data is questNodeDefinition questNode)
+            {
+                return questNode;
+            }
+            
             current = current.Parent;
         }
         

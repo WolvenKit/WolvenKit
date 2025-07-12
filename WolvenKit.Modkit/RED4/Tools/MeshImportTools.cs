@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using SharpGLTF.Schema2;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Exceptions;
@@ -1453,6 +1454,18 @@ namespace WolvenKit.Modkit.RED4
             }*/
 
             var lods = new List<uint>();
+
+            // #2403: LOD_0 is okay for cars, so we're checking before throwing an exception
+            var lodsFromMeshNames = model.LogicalMeshes.Select(x =>
+                {
+                    var matches = Regex.Matches(x.Name, @"\d+");
+                    return matches.Count > 0 ? matches[^1].Value : null;
+                })
+                .Where(x => x is not null)
+                .Distinct()
+                .Select(x => uint.Parse(x!))
+                .ToList();
+            
             foreach (var m in model.LogicalMeshes)
             {
                 var accessors = m.Primitives[0].VertexAccessors.Keys.ToList();
@@ -1486,7 +1499,8 @@ namespace WolvenKit.Modkit.RED4
                             throw new Exception("Invalid Geometry/sub mesh name: " + name + " , Character after \"LOD_\" should be 1 or 2 or 4 or 8, Representing the Level of Detail (LOD) of the submesh.");
                         }
 
-                        if (lod is not 1 and not 2 and not 4 and not 8)
+                        if (lod is not 1 and not 2 and not 4 and not 8
+                            && (lod is not 0 && !lodsFromMeshNames.Contains(lod))) 
                         {
                             throw new Exception("Invalid Geometry/sub mesh name: " + name + " , Character after \"LOD_\"  should be 1 or 2 or 4 or 8, Representing the Level of Detail (LOD) of the submesh.");
                         }
@@ -1508,6 +1522,18 @@ namespace WolvenKit.Modkit.RED4
         {
             var cMesh = (CMesh)cr2w.RootChunk;
 
+            // #2403: LOD_0 is okay for cars, so we're checking
+            var lodsFromMeshNames = meshes.Select(x =>
+                {
+                    var matches = Regex.Matches(x.name ?? "", @"\d+");
+                    return matches.Count > 0 ? matches[^1].Value : null;
+                })
+                .Where(x => x is not null)
+                .Distinct()
+                .Select(x => uint.Parse(x!))
+                .ToList();
+            
+            
             var lodLvl = new uint[meshes.Count];
             for (var i = 0; i < meshes.Count; i++)
             {
@@ -1520,7 +1546,9 @@ namespace WolvenKit.Modkit.RED4
                     var idx = mesh.name.IndexOf("LOD_", StringComparison.Ordinal);
                     if (idx < mesh.name.Length - 1)
                     {
-                        if (!uint.TryParse(mesh.name.AsSpan(idx + 4, 1), out var lod) || lod is not 1 and not 2 and not 4 and not 8)
+                        if (!uint.TryParse(mesh.name.AsSpan(idx + 4, 1), out var lod) ||
+                            (lod is not 1 and not 2 and not 4 and not 8 &&
+                             (lod is not 0 && !lodsFromMeshNames.Contains(lod))))
                         {
                             throw new Exception(
                                 $"Invalid submesh name: {mesh.name}, Character after \"LOD_\" should be 1 or 2 or 4 or 8 to indicate submesh Level of Detail");

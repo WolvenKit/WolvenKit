@@ -8,7 +8,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
-using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common.Extensions;
@@ -159,6 +158,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             .ToList());
     }
 
+    [NotifyCanExecuteChangedFor(nameof(ClearChunkMaterialsCommand))]
     [NotifyCanExecuteChangedFor(nameof(AdjustSubmeshCountCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteDuplicateEntriesCommand))]
     [NotifyCanExecuteChangedFor(nameof(RegenerateVisualControllersCommand))]
@@ -171,6 +171,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(AddDependenciesFullCommand))]
     [ObservableProperty] private bool _isShiftKeyDown;
 
+    [NotifyCanExecuteChangedFor(nameof(ClearChunkMaterialsCommand))]
     [NotifyCanExecuteChangedFor(nameof(AddDependenciesCommand))]
     [NotifyCanExecuteChangedFor(nameof(AddDependenciesFullCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateNewCruidCommand))]
@@ -195,6 +196,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             return;
         }
 
+        ClearChunkMaterialsCommand.NotifyCanExecuteChanged();
         ConvertPreloadMaterialsCommand.NotifyCanExecuteChanged();
     }
 
@@ -401,9 +403,84 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private bool CanDeleteUnusedMaterials() => RootChunk?.ResolvedData is CMesh mesh && mesh.MaterialEntries.Count > 0;
 
     [RelayCommand(CanExecute = nameof(CanDeleteUnusedMaterials))]
-    private void DeleteUnusedMaterials() => RootChunk?.DeleteUnusedMaterialsCommand.Execute(false);
+    private void DeleteUnusedMaterials()
+    {
+        if (RootChunk?.ResolvedData is not CMesh mesh)
+        {
+            return;
+        }
+
+        if (FilePath?.Contains(Path.DirectorySeparatorChar + "he_") == true && mesh.Appearances
+                .Select(appHandle => appHandle.Chunk)
+                .OfType<meshMeshAppearance>().SelectMany(app => app.ChunkMaterials)
+                .Select(s => s.GetResolvedText() ?? "")
+                .FirstOrDefault(s => s is "eyeMat3" or "eyelashes_MAT") is string matName)
+        {
+            var materialNames = mesh.MaterialEntries.Select(s => s.Name.GetResolvedText() ?? "")
+                .Where(s => s.StartsWith("eyelash")).ToList();
+
+            // we have an eye mesh with template materials - ask user for eyelash colour
+            var eyelashColor = Interactions.AskForDropdownOption((materialNames, "Select eye lash colour",
+                "Pick your eye lash colour (things will break if you don't):"));
+            if (!string.IsNullOrEmpty(eyelashColor))
+            {
+                foreach (var app in mesh.Appearances.Select(appHandle => appHandle.Chunk)
+                             .OfType<meshMeshAppearance>())
+                {
+                    var chunkMaterials = new CArray<CName>();
+                    foreach (var chunk in app.ChunkMaterials)
+                    {
+                        if (chunk.GetResolvedText() == matName)
+                        {
+                            chunkMaterials.Add(eyelashColor);
+                        }
+                        else
+                        {
+                            chunkMaterials.Add(chunk);
+                        }
+                    }
+
+                    app.ChunkMaterials = chunkMaterials;
+                }
+            }
+
+            RootChunk.GetPropertyChild("appearances")?.CalculateProperties();
+        }
+
+        RootChunk?.DeleteUnusedMaterialsCommand.Execute(false);
+    } 
 
     #endregion
+
+
+    private bool CanClearChunkMaterials() => SelectedChunks.All(c => c.ResolvedData is meshMeshAppearance);
+
+
+    [RelayCommand(CanExecute = nameof(CanClearChunkMaterials))]
+    private void ClearChunkMaterials()
+    {
+        if (CurrentTab is not RDTDataViewModel viewModel)
+        {
+            return;
+        }
+
+        var selectedMeshAppearances =
+            SelectedChunks.Where(chunk => chunk.ResolvedData is meshMeshAppearance).ToList();
+        if (selectedMeshAppearances.Count != SelectedChunks.Count)
+        {
+            return;
+        }
+
+        foreach (var cvm in selectedMeshAppearances)
+        {
+            ((meshMeshAppearance)cvm.ResolvedData).ChunkMaterials.Clear();
+            cvm.RecalculateProperties();
+        }
+
+        SelectedChunks.LastOrDefault()?.Parent?.RecalculateProperties();
+        SelectedChunks.LastOrDefault()?.Tab?.Parent?.SetIsDirty(true);
+    }
+
     [RelayCommand(CanExecute = nameof(HasMeshAppearances))]
     private void GenerateMissingMaterials()
     {
