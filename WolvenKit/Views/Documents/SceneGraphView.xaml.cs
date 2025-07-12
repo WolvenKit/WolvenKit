@@ -507,20 +507,14 @@ namespace WolvenKit.Views.Documents
                     }
                     else
                     {
-                        // Del: Smart delete - soft delete normal nodes, hard delete deletion markers
+                        // Del: Smart delete based on node type
                         foreach (var node in selectedNodes)
                         {
-                            // If it's already a deletion marker, destroy it completely
-                            if (node is scnDeletionMarkerNodeWrapper)
-                            {
-                                var nodeAsObject = (object)node;
-                                viewModel.MainGraph.RemoveNodes(new List<object> { nodeAsObject });
-                            }
-                            else
-                            {
-                                // Normal node: replace with deletion marker (soft delete)
-                                viewModel.MainGraph.ReplaceNodeWithDeletionMarker(node);
-                            }
+                            // ReplaceNodeWithDeletionMarker now handles the logic internally:
+                            // - Critical scene nodes get replaced with deletion markers
+                            // - Non-critical scene nodes get hard deleted
+                            // - Deletion markers always get hard deleted
+                            viewModel.MainGraph.ReplaceNodeWithDeletionMarker(node);
                         }
                     }
                     e.Handled = true;
