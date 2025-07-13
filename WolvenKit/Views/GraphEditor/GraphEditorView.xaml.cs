@@ -424,26 +424,42 @@ public partial class GraphEditorView : UserControl
             
             if (!(sceneViewModel is scnStartNodeWrapper || sceneViewModel is scnEndNodeWrapper))
             {
-                // Smart delete: if it's already a deletion marker, offer to destroy it completely
-                string deleteLabel = sceneViewModel is scnDeletionMarkerNodeWrapper ? "Destroy Deletion Marker" : "Delete Node";
-                string deleteIcon = sceneViewModel is scnDeletionMarkerNodeWrapper ? "CloseBoxOutline" : "Delete";
-                
-                node.ContextMenu.Items.Add(CreateMenuItem(
-                    deleteLabel,
-                    deleteIcon,
-                    "WolvenKitRed",
-                    () => {
-                        if (sceneViewModel is scnDeletionMarkerNodeWrapper)
-                        {
-                            // Hard delete for deletion markers
-                            Source.RemoveNode(sceneViewModel);
-                        }
-                        else
-                        {
-                            // Soft delete for normal nodes
-                            Source.ReplaceNodeWithDeletionMarker(sceneViewModel);
-                        }
-                    }));
+                // Check if this node type should use a deletion marker
+                bool shouldUseDeletionMarker = ShouldSceneNodeUseDeletionMarker(sceneViewModel);
+
+                if (sceneViewModel is scnDeletionMarkerNodeWrapper)
+                {
+                    // Deletion markers can always be destroyed
+                    node.ContextMenu.Items.Add(CreateMenuItem(
+                        "Destroy Deletion Marker",
+                        "CloseBoxOutline",
+                        "WolvenKitRed",
+                        () => Source.RemoveNode(sceneViewModel)));
+                }
+                else if (shouldUseDeletionMarker)
+                {
+                    // Critical scene nodes: show both Delete (soft) and Destroy (hard)
+                    node.ContextMenu.Items.Add(CreateMenuItem(
+                        "Delete Node",
+                        "Delete",
+                        "WolvenKitRed",
+                        () => Source.ReplaceNodeWithDeletionMarker(sceneViewModel)));
+                    
+                    node.ContextMenu.Items.Add(CreateMenuItem(
+                        "Destroy Node",
+                        "CloseBoxOutline",
+                        "WolvenKitRed",
+                        () => Source.RemoveNode(sceneViewModel)));
+                }
+                else
+                {
+                    // Non-critical scene nodes: only show Destroy
+                    node.ContextMenu.Items.Add(CreateMenuItem(
+                        "Destroy Node",
+                        "CloseBoxOutline",
+                        "WolvenKitRed",
+                        () => Source.RemoveNode(sceneViewModel)));
+                }
             }
             
             node.ContextMenu.Items.Add(new Separator());
@@ -739,6 +755,51 @@ public partial class GraphEditorView : UserControl
         {
             Source.RemoveSceneConnectionPublic(connection);
         }
+    }
+
+    /// <summary>
+    /// Determines if a scene node should use a deletion marker when deleted
+    /// </summary>
+    private static bool ShouldSceneNodeUseDeletionMarker(BaseSceneViewModel node)
+    {
+        // For scnQuestNode, check the contained quest node using the same logic as quest nodes
+        if (node.Data is scnQuestNode scnQuestNode && scnQuestNode.QuestNode?.Chunk != null)
+        {
+            var questNode = scnQuestNode.QuestNode.Chunk;
+            
+            // Check if the contained quest node is signal-stopping
+            if (questNode is questSignalStoppingNodeDefinition)
+            {
+                return true;
+            }
+            
+            // Additional quest node types that should use deletion markers for safety
+            var criticalQuestTypes = new[]
+            {
+                typeof(questSwitchNodeDefinition),
+                typeof(questFlowControlNodeDefinition)
+            };
+            
+            if (criticalQuestTypes.Contains(questNode.GetType()))
+            {
+                return true;
+            }
+        }
+        
+        // For pure scene nodes, manually list which ones should use deletion markers since scene nodes dont have a nice inheritance structure to check compred to quest nodes
+        var criticalSceneTypes = new[]
+        {
+            typeof(scnAndNode),
+            typeof(scnSectionNode),
+            typeof(scnChoiceNode),
+            typeof(scnHubNode),
+            typeof(scnXorNode),
+            typeof(scnRewindableSectionNode),
+            typeof(scnInterruptManagerNode),
+            typeof(scnFlowControlNode)
+        };
+        
+        return criticalSceneTypes.Contains(node.Data.GetType());
     }
 
     /// <summary>
