@@ -18,14 +18,36 @@
                     <hc:ThemeResources />
                     <hc:Theme />
                 </ResourceDictionary.MergedDictionaries>
+
+                <converters:StringToBrushConverter x:Key="StringToBrushConverter" />
                 <Style
                     BasedOn="{StaticResource WolvenkitDialogLabelStyleMedium}"
                     TargetType="{x:Type Label}" />
                 <Style TargetType="{x:Type Grid}">
                     <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
                 </Style>
+
+                <DataTemplate x:Key="DefaultTemplate">
+                    <TextBlock Text="{Binding Key}" />
+                </DataTemplate>
+                <DataTemplate x:Key="ColorTemplate">
+                    <StackPanel Orientation="Horizontal">
+                        <Rectangle
+                            Width="16"
+                            Height="16"
+                            Margin="{StaticResource WolvenKitMarginSmallRight}"
+                            Fill="{Binding Key,
+                                           Converter={StaticResource StringToBrushConverter}}" />
+                        <TextBlock Text="{Binding Key}" />
+
+                    </StackPanel>
+                </DataTemplate>
+
                 <converters:IntToVisibilityConverterInverted x:Key="IntToVisibilityConverterInverted" />
-                <converters:IRedTypeToCNameConverter x:Key="IRedTypeToCNameConverter" />
+                <converters:DropdownTemplateSelector
+                    x:Key="DropdownTemplateSelector"
+                    DefaultTemplate="{StaticResource DefaultTemplate}"
+                    ColorTemplate="{StaticResource ColorTemplate}" />
             </ResourceDictionary>
         </Grid.Resources>
 
@@ -81,10 +103,10 @@
                                   Mode=OneWay}"
             KeyboardNavigation.TabIndex="2"
             SelectedValuePath="Value"
-            DisplayMemberPath="Key"
             SelectedValue="{Binding SelectedOption,
                                     RelativeSource={RelativeSource AncestorType={x:Type editors:FilterableDropdownCNameMenu}},
-                                    Mode=TwoWay}" />
+                                    Mode=TwoWay}"
+            ItemTemplateSelector="{StaticResource DropdownTemplateSelector}" />
 
         <!-- ====================================== -->
         <!-- Refresh button -->
