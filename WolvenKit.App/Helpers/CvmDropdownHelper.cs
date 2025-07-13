@@ -314,7 +314,6 @@ public abstract class CvmDropdownHelper
 
                         return actorOptions;
                     }
-
                     break;
                 }
                 // Special case for scnPerformerId.Id - check if we're editing the Id property of a scnPerformerId
@@ -442,7 +441,6 @@ public abstract class CvmDropdownHelper
 
                         return workspotOptions;
                     }
-
                     break;
                 }
                 // Special case for scnEffectInstanceId.Id - check if we're editing the Id property of a scnEffectInstanceId
@@ -499,7 +497,6 @@ public abstract class CvmDropdownHelper
 
                         return effectOptions;
                     }
-
                     break;
                 }
                 // Special case for scnPropId.Id - check if we're editing the Id property of a scnPropId
@@ -536,7 +533,6 @@ public abstract class CvmDropdownHelper
 
                         return propOptions;
                     }
-
                     break;
                 }
                 // Special case for scnCinematicAnimSetSRRefId.Id - check if we're editing the Id property of a scnCinematicAnimSetSRRefId
