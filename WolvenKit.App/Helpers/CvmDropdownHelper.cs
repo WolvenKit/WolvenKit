@@ -115,7 +115,7 @@ public abstract class CvmDropdownHelper
 
 
     public static Dictionary<string, string> GetDropdownOptions(ChunkViewModel cvm, DocumentTools documentTools,
-        bool forceCacheRefresh = false)
+        bool forceCacheRefresh = false, string? filter = null)
     {
         if (cvm.Parent is not ChunkViewModel parent)
         {
@@ -125,11 +125,14 @@ public abstract class CvmDropdownHelper
         IEnumerable<string?> ret = [];
         switch (parent.ResolvedData)
         {
-            case gameJournalPath when cvm.Name is "className" && parent.Name is not null && s_questHandleParentNames.Contains(parent.Name):
+            case gameJournalPath when cvm.Name is "className" && s_questHandleParentNames.Contains(parent.Name):
                 ret = RedTypeHelper.GetExtendingClassNames(typeof(gameJournalEntry));
                 break;
             case gameJournalPath journalPath when cvm.Name is "realPath":
                 ret = documentTools.GetAllJournalPaths(forceCacheRefresh);
+                break;
+            case gameJournalPath journalPath when cvm.Name is "realPath":
+                ret = documentTools.GetAllJournalPathsAsync(forceCacheRefresh, filter).Result.Select(path => (string?)path);
                 break;
             case entISkinTargetComponent when cvm.Name is "renderingPlaneAnimationParam":
                 ret = s_appFileRenderPlane;

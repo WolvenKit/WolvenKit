@@ -54,6 +54,7 @@
             Style="{StaticResource WolvenkitTextBoxStyle}"
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
             KeyboardNavigation.TabIndex="1"
+            KeyDown="FilterTextBox_KeyDown"
             Text="{Binding FilterText,
                            RelativeSource={RelativeSource AncestorType={x:Type editors:FilterableDropdownRedstringMenu}},
                            Mode=TwoWay}" />

@@ -3,12 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -20,11 +17,9 @@ using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
-using WolvenKit.App.Models;
 using WolvenKit.App.Interaction;
 using Splat;
 using WolvenKit.Views.Dialogs;
-using AdonisUI.Controls;
 using WolvenKit.Views.GraphEditor;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
@@ -68,7 +63,7 @@ namespace WolvenKit.Views.Documents
         private IDocumentViewModel? _currentDocument; // Track current document for disposal detection
 
         // Node selection persistence across document switches
-        private static readonly Dictionary<string, (uint nodeId, int graphLevel)> _documentNodeSelections = new();
+        private static readonly Dictionary<string, (uint nodeId, int graphLevel)> s_documentNodeSelections = new();
 
         public QuestPhaseGraphView()
         {
@@ -84,7 +79,10 @@ namespace WolvenKit.Views.Documents
         /// </summary>
         private void EstablishEventSubscription()
         {
-            if (_disposed) return; // Don't establish subscription if disposed
+            if (_disposed)
+            {
+                return; // Don't establish subscription if disposed
+            }
 
             // Clean up any existing subscription first
             CleanupEventSubscription();
@@ -115,7 +113,10 @@ namespace WolvenKit.Views.Documents
         /// </summary>
         private void MonitorDocumentClosing()
         {
-            if (_appViewModel == null) return;
+            if (_appViewModel == null)
+            {
+                return;
+            }
 
             // Get the current document from our DataContext
             var viewModel = DataContext as QuestPhaseGraphViewModel;
@@ -134,7 +135,9 @@ namespace WolvenKit.Views.Documents
         private void OnDockedViewsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             if (_disposed || e.Action != NotifyCollectionChangedAction.Remove)
+            {
                 return;
+            }
 
             // Check if our current document was removed (closed)
             if (e.OldItems != null && _currentDocument != null)
@@ -158,12 +161,15 @@ namespace WolvenKit.Views.Documents
         /// </summary>
         private void CleanupSelectionCache(IDocumentViewModel? document)
         {
-            if (document == null) return;
+            if (document == null)
+            {
+                return;
+            }
 
             var documentKey = GetDocumentKey(document);
             if (documentKey != null)
             {
-                _documentNodeSelections.Remove(documentKey);
+                s_documentNodeSelections.Remove(documentKey);
             }
         }
 
@@ -207,10 +213,7 @@ namespace WolvenKit.Views.Documents
         /// <summary>
         /// Finalizer - cleanup if Dispose wasn't called
         /// </summary>
-        ~QuestPhaseGraphView()
-        {
-            Dispose(false);
-        }
+        ~QuestPhaseGraphView() => Dispose(false);
 
         /// <summary>
         /// Handle keyboard shortcuts for nested graph navigation
@@ -226,7 +229,10 @@ namespace WolvenKit.Views.Documents
 
         private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (_disposed) return; // Don't process if disposed
+            if (_disposed)
+            {
+                return; // Don't process if disposed
+            }
 
             // Clean up old subscription when switching contexts
             if (e.OldValue is QuestPhaseGraphViewModel)
@@ -234,7 +240,10 @@ namespace WolvenKit.Views.Documents
                 CleanupEventSubscription();
             }
 
-            if (e.NewValue is not QuestPhaseGraphViewModel viewModel) return;
+            if (e.NewValue is not QuestPhaseGraphViewModel viewModel)
+            {
+                return;
+            }
 
             // Establish event subscription when we have a valid quest phase document
             EstablishEventSubscription();
@@ -255,8 +264,8 @@ namespace WolvenKit.Views.Documents
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
                     viewModel.SetGraphLoaded();
-                }), System.Windows.Threading.DispatcherPriority.Background);
-            }), System.Windows.Threading.DispatcherPriority.Loaded);
+                }), DispatcherPriority.Background);
+            }), DispatcherPriority.Loaded);
         }
 
 
@@ -267,7 +276,9 @@ namespace WolvenKit.Views.Documents
         private void OnAppViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (_disposed || e.PropertyName != nameof(AppViewModel.ActiveDocument) || _appViewModel == null)
+            {
                 return;
+            }
 
             var currentDocument = _appViewModel.ActiveDocument;
 
@@ -322,7 +333,9 @@ namespace WolvenKit.Views.Documents
         {
             // Don't deselect if staying in the same document
             if (fromDocument == toDocument)
+            {
                 return false;
+            }
 
             // Check if we're switching away from a graph document (quest phase OR scene)
             var switchingAwayFromGraph = IsQuestPhaseDocument(fromDocument) || IsSceneDocument(fromDocument);
@@ -340,7 +353,9 @@ namespace WolvenKit.Views.Documents
         private bool IsQuestPhaseDocument(IDocumentViewModel? document)
         {
             if (document is not RedDocumentViewModel redDoc)
+            {
                 return false;
+            }
 
             return redDoc.TabItemViewModels.Any(tab => tab is QuestPhaseGraphViewModel);
         }
@@ -351,7 +366,9 @@ namespace WolvenKit.Views.Documents
         private bool IsSceneDocument(IDocumentViewModel? document)
         {
             if (document is not RedDocumentViewModel redDoc)
+            {
                 return false;
+            }
 
             return redDoc.TabItemViewModels.Any(tab => tab is SceneGraphViewModel);
         }
@@ -359,20 +376,24 @@ namespace WolvenKit.Views.Documents
         /// <summary>
         /// Check if a document is any graph document (quest phase or scene)
         /// </summary>
-        private bool IsGraphDocument(IDocumentViewModel? document)
-        {
-            return IsQuestPhaseDocument(document) || IsSceneDocument(document);
-        }
+        private bool IsGraphDocument(IDocumentViewModel? document) =>
+            IsQuestPhaseDocument(document) || IsSceneDocument(document);
 
         /// <summary>
         /// Store the currently selected node for the given document
         /// </summary>
         private void StoreCurrentSelection(IDocumentViewModel? document)
         {
-            if (document == null) return;
+            if (document == null)
+            {
+                return;
+            }
 
             var documentKey = GetDocumentKey(document);
-            if (documentKey == null) return;
+            if (documentKey == null)
+            {
+                return;
+            }
 
             var currentSelectedNode = NodeSelectionService.Instance.SelectedNode;
             if (currentSelectedNode != null)
@@ -381,7 +402,7 @@ namespace WolvenKit.Views.Documents
                 var graphLevel = GetCurrentGraphLevel(document);
 
                 // Store the selected node ID and graph level
-                _documentNodeSelections[documentKey] = (currentSelectedNode.UniqueId, graphLevel);
+                s_documentNodeSelections[documentKey] = (currentSelectedNode.UniqueId, graphLevel);
             }
             // If no selection, don't store anything - let previous selection remain if it exists
         }
@@ -391,11 +412,15 @@ namespace WolvenKit.Views.Documents
         /// </summary>
         private void RestoreSelectionIfReady(IDocumentViewModel? activeDocument)
         {
-            if (activeDocument == null || _disposed) return;
+            if (activeDocument == null || _disposed ||
+                DataContext as QuestPhaseGraphViewModel is not QuestPhaseGraphViewModel viewModel)
+
+            {
+                return;
+            }
 
             // Check if this view's document matches the active document
-            var viewModel = DataContext as QuestPhaseGraphViewModel;
-            if (viewModel?.Parent != activeDocument)
+            if (viewModel.Parent != activeDocument)
             {
                 return;
             }
@@ -414,11 +439,13 @@ namespace WolvenKit.Views.Documents
         /// </summary>
         private void RestoreSelection(IDocumentViewModel? document)
         {
-            if (document == null || _disposed) return;
-
-            var documentKey = GetDocumentKey(document);
-            if (documentKey != null && _documentNodeSelections.TryGetValue(documentKey, out var selection))
+            if (document == null || _disposed || GetDocumentKey(document) is not string documentKey ||
+                string.IsNullOrEmpty(documentKey) ||
+                !s_documentNodeSelections.TryGetValue(documentKey, out var selection))
             {
+                return;
+            }
+
                 var (nodeId, graphLevel) = selection;
 
                 // Navigate to the correct graph level first
@@ -431,23 +458,23 @@ namespace WolvenKit.Views.Documents
                     if (!restored)
                     {
                         // Node doesn't exist anywhere, remove from cache
-                        _documentNodeSelections.Remove(documentKey);
-                    }
-                    return;
+                    s_documentNodeSelections.Remove(documentKey);
                 }
 
-                // Now try to select the node at the correct graph level
-                var restoredAtLevel = SearchAndNavigateToNode(nodeId);
-                if (!restoredAtLevel)
+                return;
+            }
+
+            // Now try to select the node at the correct graph level
+            var restoredAtLevel = SearchAndNavigateToNode(nodeId);
+            if (!restoredAtLevel)
+            {
+                // Fallback: Navigate back to root and try there
+                NavigateToGraphLevel(document, 0);
+                var restoredAtRoot = SearchAndNavigateToNode(nodeId);
+                if (!restoredAtRoot)
                 {
-                    // Fallback: Navigate back to root and try there
-                    NavigateToGraphLevel(document, 0);
-                    var restoredAtRoot = SearchAndNavigateToNode(nodeId);
-                    if (!restoredAtRoot)
-                    {
-                        // Node no longer exists anywhere, remove from cache
-                        _documentNodeSelections.Remove(documentKey);
-                    }
+                    // Node no longer exists anywhere, remove from cache
+                    s_documentNodeSelections.Remove(documentKey);
                 }
             }
         }
@@ -455,21 +482,24 @@ namespace WolvenKit.Views.Documents
         /// <summary>
         /// Get a unique key for a document (using file path)
         /// </summary>
-        private string? GetDocumentKey(IDocumentViewModel? document)
-        {
-            return document?.FilePath;
-        }
+        private string? GetDocumentKey(IDocumentViewModel? document) => document?.FilePath;
 
         /// <summary>
         /// Get the current graph level for the document (0 = root, 1+ = subgraph levels)
         /// </summary>
         private int GetCurrentGraphLevel(IDocumentViewModel? document)
         {
-            if (document is not RedDocumentViewModel redDoc) return 0;
+            if (document is not RedDocumentViewModel redDoc)
+            {
+                return 0;
+            }
 
             // Find the quest phase view model for this document
             var questPhaseViewModel = redDoc.TabItemViewModels.OfType<QuestPhaseGraphViewModel>().FirstOrDefault();
-            if (questPhaseViewModel?.History == null) return 0;
+            if (questPhaseViewModel?.History == null)
+            {
+                return 0;
+            }
 
             // Return the current graph level (History count - 1, where 0 is root)
             return questPhaseViewModel.History.Count - 1;
@@ -481,24 +511,39 @@ namespace WolvenKit.Views.Documents
         /// </summary>
         private bool NavigateToGraphLevel(IDocumentViewModel? document, int targetLevel)
         {
-            if (document is not RedDocumentViewModel redDoc) return false;
+            if (document is not RedDocumentViewModel redDoc)
+            {
+                return false;
+            }
 
             // Find the quest phase view model for this document
             var questPhaseViewModel = redDoc.TabItemViewModels.OfType<QuestPhaseGraphViewModel>().FirstOrDefault();
-            if (questPhaseViewModel?.History == null) return false;
+            if (questPhaseViewModel?.History == null)
+            {
+                return false;
+            }
 
             var currentLevel = questPhaseViewModel.History.Count - 1;
 
             // If we're already at the target level, no navigation needed
-            if (currentLevel == targetLevel) return true;
+            if (currentLevel == targetLevel)
+            {
+                return true;
+            }
 
             // If target level is deeper than current, we can't navigate there without specific path
-            if (targetLevel > currentLevel) return false;
+            if (targetLevel > currentLevel)
+            {
+                return false;
+            }
 
             // Navigate back to the target level by removing history entries
             while (questPhaseViewModel.History.Count - 1 > targetLevel)
             {
-                if (questPhaseViewModel.History.Count <= 1) break; // Don't remove the root graph
+                if (questPhaseViewModel.History.Count <= 1)
+                {
+                    break; // Don't remove the root graph
+                }
 
                 // Remove the last history entry and navigate to the previous level
                 questPhaseViewModel.History.RemoveAt(questPhaseViewModel.History.Count - 1);
@@ -519,19 +564,23 @@ namespace WolvenKit.Views.Documents
 
         private void SetupConnectionTemplate()
         {
-            if (QuestPhaseGraphEditor?.Editor == null) return;
-
-            var questConnectionTemplate = Resources["QuestConnectionTemplate"] as DataTemplate;
-            if (questConnectionTemplate != null)
+            if (QuestPhaseGraphEditor?.Editor == null ||
+                Resources["QuestConnectionTemplate"] is not DataTemplate questConnectionTemplate)
             {
-                QuestPhaseGraphEditor.Editor.SetCurrentValue(Nodify.NodifyEditor.ConnectionTemplateProperty, questConnectionTemplate);
+                return;
             }
+
+            QuestPhaseGraphEditor.Editor.SetCurrentValue(Nodify.NodifyEditor.ConnectionTemplateProperty,
+                questConnectionTemplate);
+
         }
 
-        private void UpdateConnectionPathTypes(RedGraph graph)
+        private void UpdateConnectionPathTypes(RedGraph? graph)
         {
-            if (graph?.Nodes == null || graph.Connections == null)
+            if (graph?.Nodes == null || graph?.Connections == null)
+            {
                 return;
+            }
 
             var pathTypes = CalculateConnectionPathTypes(graph);
 
@@ -541,10 +590,13 @@ namespace WolvenKit.Views.Documents
             }
         }
 
-        private Dictionary<QuestConnectionViewModel, int> CalculateConnectionPathTypes(RedGraph graph)
+        private Dictionary<QuestConnectionViewModel, int> CalculateConnectionPathTypes(RedGraph? graph)
         {
             var connectionTypeMap = new Dictionary<QuestConnectionViewModel, int>();
-            if (graph?.Connections == null) return connectionTypeMap;
+            if (graph?.Connections == null)
+            {
+                return connectionTypeMap;
+            }
 
             const int deadEndNodeThreshold = 4;
             const int deadEndPathType = 1;
@@ -612,7 +664,9 @@ namespace WolvenKit.Views.Documents
                 var targetId = connection.Target.OwnerId;
 
                 if (!adjacencyMap.ContainsKey(sourceId))
+                {
                     adjacencyMap[sourceId] = new List<uint>();
+                }
 
                 adjacencyMap[sourceId].Add(targetId);
             }
@@ -624,29 +678,28 @@ namespace WolvenKit.Views.Documents
         /// Smart navigation with memory - cycles through multiple connections in the same direction
         /// </summary>
         private WolvenKit.App.ViewModels.GraphEditor.NodeViewModel? FindNextNodeInDirection(
-            RedGraph graph,
+            RedGraph? graph,
             WolvenKit.App.ViewModels.GraphEditor.NodeViewModel currentNode,
             Key direction)
         {
-            if (graph?.Nodes == null) return null;
+            if (graph?.Nodes == null)
+            {
+                return null;
+            }
 
             // Get all connected nodes in the specified direction
             var connectedCandidates = GetConnectedNodesInDirection(graph, currentNode, direction);
 
-            if (connectedCandidates.Count > 0)
+            return connectedCandidates.Count switch
             {
+                // No connected nodes, fallback to spatial navigation for any node in that direction
+                <= 0 => GetNearestNodeInDirection(graph, currentNode, direction),
                 // If we have multiple connected options, use memory to cycle through them
-                if (connectedCandidates.Count > 1)
-                {
-                    return GetNextNodeWithMemory(currentNode.UniqueId, direction, connectedCandidates);
-                }
-
+                > 1 => GetNextNodeWithMemory(currentNode.UniqueId, direction, connectedCandidates),
                 // Single connected option
-                return connectedCandidates[0];
-            }
+                _ => connectedCandidates[0]
+            };
 
-            // No connected nodes, fallback to spatial navigation for any node in that direction
-            return GetNearestNodeInDirection(graph, currentNode, direction);
         }
 
         /// <summary>
@@ -674,9 +727,12 @@ namespace WolvenKit.Views.Documents
                 var deltaY = node.Location.Y - currentY;
                 var distance = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
 
-                if (distance < 10) continue;
+                if (distance < 10)
+                {
+                    continue;
+                }
 
-                bool isInDirection = direction switch
+                var isInDirection = direction switch
                 {
                     Key.Right => deltaX > Math.Abs(deltaY) * 0.5,
                     Key.Left => deltaX < -Math.Abs(deltaY) * 0.5,
@@ -735,15 +791,21 @@ namespace WolvenKit.Views.Documents
 
             foreach (var node in graph.Nodes)
             {
-                if (node.UniqueId == currentNode.UniqueId) continue;
+                if (node.UniqueId == currentNode.UniqueId)
+                {
+                    continue;
+                }
 
                 var deltaX = node.Location.X - currentX;
                 var deltaY = node.Location.Y - currentY;
                 var distance = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
 
-                if (distance < 10) continue;
+                if (distance < 10)
+                {
+                    continue;
+                }
 
-                bool isInDirection = direction switch
+                var isInDirection = direction switch
                 {
                     Key.Right => deltaX > Math.Abs(deltaY) * 0.5,
                     Key.Left => deltaX < -Math.Abs(deltaY) * 0.5,
@@ -782,10 +844,13 @@ namespace WolvenKit.Views.Documents
         /// <summary>
         /// Smoothly pan the graph view towards the selected node
         /// </summary>
-        private void CenterViewOnSelectedNode(RedGraph graph, WolvenKit.App.ViewModels.GraphEditor.NodeViewModel targetNode)
+        private void CenterViewOnSelectedNode(RedGraph? graph,
+            WolvenKit.App.ViewModels.GraphEditor.NodeViewModel? targetNode)
         {
             if (QuestPhaseGraphEditor?.Editor == null || graph == null || targetNode == null)
+            {
                 return;
+            }
 
             try
             {
@@ -803,7 +868,9 @@ namespace WolvenKit.Views.Documents
                 var needsPanY = nodeViewportY < margin || nodeViewportY > viewportSize.Height - margin;
 
                 if (!needsPanX && !needsPanY)
+                {
                     return; // Node is already well visible, no need to pan
+                }
 
                 // Calculate target viewport location (center the node more nicely)
                 var targetX = currentViewport.X;
@@ -835,7 +902,10 @@ namespace WolvenKit.Views.Documents
         /// </summary>
         private void AnimateViewportTo(System.Windows.Point targetLocation, TimeSpan duration)
         {
-            if (QuestPhaseGraphEditor?.Editor == null) return;
+            if (QuestPhaseGraphEditor?.Editor == null)
+            {
+                return;
+            }
 
             var editor = QuestPhaseGraphEditor.Editor;
             var startLocation = editor.ViewportLocation;
@@ -846,7 +916,7 @@ namespace WolvenKit.Views.Documents
                 Interval = TimeSpan.FromMilliseconds(16)
             };
 
-            timer.Tick += (sender, e) =>
+            timer.Tick += (_, _) =>
             {
                 var elapsed = DateTime.Now - startTime;
                 var progress = Math.Min(elapsed.TotalMilliseconds / duration.TotalMilliseconds, 1.0);
@@ -875,10 +945,12 @@ namespace WolvenKit.Views.Documents
         /// </summary>
         public bool SearchAndNavigateToNode(uint nodeId)
         {
-            if (_disposed) return false; // Don't operate on disposed view
+            if (_disposed || DataContext is not QuestPhaseGraphViewModel viewModel)
+            {
+                return false; // Don't operate on disposed view
+            }
 
-            var viewModel = DataContext as QuestPhaseGraphViewModel;
-            if (viewModel?.MainGraph?.Nodes == null)
+            if (viewModel.MainGraph?.Nodes == null)
             {
                 return false;
             }
@@ -909,7 +981,10 @@ namespace WolvenKit.Views.Documents
         /// </summary>
         public void ShowGoToNodeDialog()
         {
-            if (_disposed) return; // Don't operate on disposed view
+            if (_disposed)
+            {
+                return; // Don't operate on disposed view
+            }
 
             var dialog = new InputDialogView("Go to Node", "");
 
@@ -947,7 +1022,9 @@ namespace WolvenKit.Views.Documents
         {
             var viewModel = DataContext as QuestPhaseGraphViewModel;
             if (viewModel?.MainGraph == null || QuestPhaseGraphEditor?.Source == null)
+            {
                 return;
+            }
 
             // Get the currently displayed graph (could be main graph or a subgraph)
             var currentGraph = QuestPhaseGraphEditor.Source;
@@ -961,7 +1038,7 @@ namespace WolvenKit.Views.Documents
                     .Where(node => !(node is questStartNodeDefinitionWrapper || node is questEndNodeDefinitionWrapper)) // Can't delete start/end nodes
                     .ToList();
 
-                if (selectedNodes != null && selectedNodes.Count > 0)
+                if (selectedNodes is { Count: > 0 })
                 {
                     if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
                     {
@@ -1022,7 +1099,9 @@ namespace WolvenKit.Views.Documents
             {
                 var currentNode = NodeSelectionService.Instance.SelectedNode;
                 if (currentNode == null)
+                {
                     return;
+                }
 
                 var next = FindNextNodeInDirection(viewModel.MainGraph, currentNode, e.Key);
 
@@ -1047,14 +1126,19 @@ namespace WolvenKit.Views.Documents
         /// <summary>
         /// Open the new node type selector dialog
         /// </summary>
-        private async void OpenNewNodeDialog(RedGraph graph)
+        private async void OpenNewNodeDialog(RedGraph? graph)
         {
-            if (graph?.GraphType != RedGraphType.Quest) return;
+            if (graph?.GraphType != RedGraphType.Quest)
+            {
+                return;
+            }
 
             try
             {
-                var appViewModel = Locator.Current.GetService<AppViewModel>();
-                if (appViewModel == null) return;
+                if (Locator.Current.GetService<AppViewModel>() is not { } appViewModel)
+                {
+                    return;
+                }
 
                 // Get quest node types
                 var questNodeTypes = graph.GetQuestNodeTypes();
@@ -1091,7 +1175,9 @@ namespace WolvenKit.Views.Documents
         private System.Windows.Point GetViewportCenter()
         {
             if (QuestPhaseGraphEditor?.Editor == null)
+            {
                 return new System.Windows.Point(0, 0);
+            }
 
             var viewport = QuestPhaseGraphEditor.Editor.ViewportLocation;
             var size = QuestPhaseGraphEditor.Editor.ViewportSize;
@@ -1116,14 +1202,23 @@ namespace WolvenKit.Views.Documents
         /// </summary>
         private void SelectNodeById(uint nodeId)
         {
-            var viewModel = DataContext as QuestPhaseGraphViewModel;
-            if (viewModel?.MainGraph?.Nodes == null || QuestPhaseGraphEditor?.Editor == null) return;
-
-            // Find the node with the specified ID
-            var targetNode = viewModel.MainGraph.Nodes.FirstOrDefault(n => n.UniqueId == nodeId);
-
-            if (targetNode != null)
+            if (DataContext is not QuestPhaseGraphViewModel viewModel ||
+                viewModel.MainGraph?.Nodes == null ||
+                QuestPhaseGraphEditor?.Editor == null ||
+                QuestPhaseGraphEditor?.Source == null)
             {
+                return;
+            }
+
+            // Use the currently displayed graph instead of always using main graph
+            var currentGraph = QuestPhaseGraphEditor.Source;
+
+            // Find the node with the specified ID in the current graph
+            if (currentGraph.Nodes.FirstOrDefault(n => n.UniqueId == nodeId) is not { } targetNode)
+            {
+                return;
+            }
+
                 // Clear current selection
                 QuestPhaseGraphEditor.Editor?.SelectedItems?.Clear();
 
@@ -1133,7 +1228,6 @@ namespace WolvenKit.Views.Documents
                 // Update the NodeSelectionService
                 NodeSelectionService.Instance.SelectedNode = targetNode;
             }
-        }
 
         /// <summary>
         /// Handle double-click on nodes for nested graph navigation
@@ -1141,13 +1235,15 @@ namespace WolvenKit.Views.Documents
         private void Editor_OnNodeDoubleClick(object sender, RoutedEventArgs e) => HandleSubGraph();
 
         /// <summary>
-        /// Handle navigation to subgraphs (phase nodes) or back to parent graphs
+        /// Handle navigation to sub-graphs (phase nodes) or back to parent graphs
         /// </summary>
         private void HandleSubGraph()
         {
             var viewModel = DataContext as QuestPhaseGraphViewModel;
             if (viewModel == null || QuestPhaseGraphEditor?.Editor == null)
+            {
                 return;
+            }
 
             var selectedNode = QuestPhaseGraphEditor.SelectedNode;
 
@@ -1174,19 +1270,13 @@ namespace WolvenKit.Views.Documents
                 }
 
                 // Set document reference for property sync
-                if (subGraph.DocumentViewModel == null)
-                {
-                    subGraph.DocumentViewModel = QuestPhaseGraphEditor?.Source.DocumentViewModel;
-                }
+                subGraph.DocumentViewModel ??= QuestPhaseGraphEditor?.Source.DocumentViewModel;
 
                 // Handle quest phase node state tracking
-                if (selectedNode.Data is questPhaseNodeDefinition ph)
+                if (selectedNode.Data is questPhaseNodeDefinition { PhaseResource.IsSet: false } ph)
                 {
-                    if (!ph.PhaseResource.IsSet)
-                    {
-                        subGraph.StateParents = QuestPhaseGraphEditor?.Source.StateParents + "." + ph.Id;
-                        subGraph.DocumentViewModel = QuestPhaseGraphEditor?.Source.DocumentViewModel;
-                    }
+                    subGraph.StateParents = QuestPhaseGraphEditor?.Source.StateParents + "." + ph.Id;
+                    subGraph.DocumentViewModel = QuestPhaseGraphEditor?.Source.DocumentViewModel;
                 }
 
                 // Show loading overlay for subgraph navigation
@@ -1202,7 +1292,7 @@ namespace WolvenKit.Views.Documents
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
                     viewModel.SetGraphLoaded();
-                }), System.Windows.Threading.DispatcherPriority.Background);
+                }), DispatcherPriority.Background);
 
                 return;
             }
@@ -1229,7 +1319,7 @@ namespace WolvenKit.Views.Documents
                         // Auto-center on the phase node in the parent graph
                         AutoCenterOnPhaseNodeInParent(parentGraph, currentSubGraph);
                         viewModel.SetGraphLoaded();
-                    }), System.Windows.Threading.DispatcherPriority.Loaded);
+                    }), DispatcherPriority.Loaded);
                 }
             }
         }
@@ -1291,7 +1381,7 @@ namespace WolvenKit.Views.Documents
                             {
                                 // Tab switching failed, but file was opened - not critical
                             }
-                        }), System.Windows.Threading.DispatcherPriority.Background);
+                        }), DispatcherPriority.Background);
                     }
                 }
                 catch (Exception ex)
@@ -1314,7 +1404,9 @@ namespace WolvenKit.Views.Documents
         {
             var viewModel = DataContext as QuestPhaseGraphViewModel;
             if (viewModel == null)
+            {
                 return;
+            }
 
             Breadcrumb.Children.Clear();
 
@@ -1351,8 +1443,10 @@ namespace WolvenKit.Views.Documents
                     textBlock.PreviewMouseDown += BreadcrumbElement_OnPreviewMouseDown;
 
                     // Add hover effects
-                    textBlock.MouseEnter += (s, e) => textBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF6B35"));
-                    textBlock.MouseLeave += (s, e) => textBlock.Foreground = Brushes.White;
+                    textBlock.MouseEnter += (_, _) =>
+                        textBlock.Foreground =
+                            new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFFF6B35"));
+                    textBlock.MouseLeave += (_, _) => textBlock.Foreground = Brushes.White;
                 }
 
                 Breadcrumb.Children.Add(textBlock);
@@ -1362,28 +1456,35 @@ namespace WolvenKit.Views.Documents
         /// <summary>
         /// Get the appropriate breadcrumb text for a graph level
         /// </summary>
-        private string GetBreadcrumbText(RedGraph graph)
+        private string GetBreadcrumbText(RedGraph? graph)
         {
             if (graph == null)
+            {
                 return "";
+            }
 
             var baseTitle = graph.Title;
 
             // Check if this is a phase node without a phaseResource file path
-            if (graph.StateParents?.Contains(".") == true)
+            if (graph.StateParents?.Contains('.') != true)
             {
-                var parts = graph.StateParents.Split('.');
-                if (parts.Length > 1)
-                {
+                return baseTitle;
+            }
+
+            var parts = graph.StateParents.Split('.');
+            if (parts.Length <= 1)
+            {
+                return baseTitle;
+            }
+
                     var nodeId = parts[^1]; // Get the last part (node ID)
 
                     // Check if the graph has a phaseResource file path
                     // If the baseTitle is just "Phase" or similar generic title, add the node ID
-                    if (baseTitle == "Phase" || string.IsNullOrEmpty(baseTitle) || baseTitle.StartsWith("questPhaseNodeDefinition"))
-                    {
-                        return $"Phase [{nodeId}]";
-                    }
-                }
+            if (baseTitle == "Phase" || string.IsNullOrEmpty(baseTitle) ||
+                baseTitle.StartsWith("questPhaseNodeDefinition"))
+            {
+                return $"Phase [{nodeId}]";
             }
 
             return baseTitle;
@@ -1398,16 +1499,24 @@ namespace WolvenKit.Views.Documents
         {
             var viewModel = DataContext as QuestPhaseGraphViewModel;
             if (viewModel == null || QuestPhaseGraphEditor?.Editor == null)
+            {
                 return;
+            }
 
             if (sender is not TextBlock { Tag: RedGraph graph } block)
+            {
                 return;
+            }
 
             if (viewModel.History.Count == 1)
+            {
                 return;
+            }
 
             if (block.Text.Trim() == ">")
+            {
                 return;
+            }
 
 
             // Show loading overlay for breadcrumb navigation
@@ -1435,7 +1544,9 @@ namespace WolvenKit.Views.Documents
             for (var i = viewModel.History.Count - 1; i >= 0; i--)
             {
                 if (ReferenceEquals(viewModel.History[i], graph))
+                {
                     break;
+                }
 
                 viewModel.History.RemoveAt(i);
             }
@@ -1450,10 +1561,8 @@ namespace WolvenKit.Views.Documents
                     AutoCenterOnPhaseNodeInParent(graph, childGraph);
                 }
                 viewModel.SetGraphLoaded();
-            }), System.Windows.Threading.DispatcherPriority.Loaded);
+            }), DispatcherPriority.Loaded);
         }
-
-
 
         /// <summary>
         /// Auto-center the viewport on the phase node that contains the subgraph we came from
@@ -1461,7 +1570,9 @@ namespace WolvenKit.Views.Documents
         private void AutoCenterOnPhaseNodeInParent(RedGraph parentGraph, RedGraph subGraph)
         {
             if (parentGraph?.Nodes == null || QuestPhaseGraphEditor?.Editor == null)
+            {
                 return;
+            }
 
             // Find the phase node that contains this subgraph
             var phaseNode = parentGraph.Nodes
@@ -1495,17 +1606,19 @@ namespace WolvenKit.Views.Documents
                     QuestPhaseGraphEditor?.Editor?.SelectedItems?.Clear();
                     QuestPhaseGraphEditor?.Editor?.SelectedItems?.Add(phaseNode);
                     NodeSelectionService.Instance.SelectedNode = phaseNode;
-                }), System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+                }), DispatcherPriority.ApplicationIdle);
             }
         }
 
         /// <summary>
         /// Force center the viewport on a specific node (always centers, even if node is already visible)
         /// </summary>
-        private void ForceCenterOnNode(WolvenKit.App.ViewModels.GraphEditor.NodeViewModel targetNode)
+        private void ForceCenterOnNode(WolvenKit.App.ViewModels.GraphEditor.NodeViewModel? targetNode)
         {
             if (QuestPhaseGraphEditor?.Editor == null || targetNode == null)
+            {
                 return;
+            }
 
             try
             {
@@ -1532,7 +1645,9 @@ namespace WolvenKit.Views.Documents
         private void ForceCenterOnNodeWithZoom(WolvenKit.App.ViewModels.GraphEditor.NodeViewModel targetNode, RedGraph subGraph)
         {
             if (QuestPhaseGraphEditor?.Editor == null || targetNode == null)
+            {
                 return;
+            }
 
             try
             {
