@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -19,6 +20,7 @@ using WolvenKit.App;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Helpers;
 
 namespace WolvenKit.Views.Tools
@@ -72,24 +74,18 @@ namespace WolvenKit.Views.Tools
 
         private void LogEntries_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
+           
             var filtered = LogEntries.Where(log =>
             {
-                switch (log.Level)
+                return log.Level switch
                 {
-                    case Logtype.Error:
-                        return ViewModel.FilterByLevel[0];
-                    case Logtype.Warning:
-                        return ViewModel.FilterByLevel[1];
-                    case Logtype.Success:
-                        return ViewModel.FilterByLevel[2];
-                    case Logtype.Normal:
-                    case Logtype.Important:
-                        return ViewModel.FilterByLevel[3];
-                    case Logtype.Debug:
-                        return ViewModel.FilterByLevel[4];
-                    default:
-                        return true;
-                }
+                    Logtype.Error => ViewModel?.FilterByLevel[0] == true,
+                    Logtype.Warning => ViewModel?.FilterByLevel[1] == true,
+                    Logtype.Success => ViewModel?.FilterByLevel[2] == true,
+                    Logtype.Normal or Logtype.Important => ViewModel?.FilterByLevel[3] == true,
+                    Logtype.Debug => ViewModel?.FilterByLevel[4] == true,
+                    _ => true
+                };
             });
 
             FilteredLogEntries.Clear();
@@ -178,8 +174,32 @@ namespace WolvenKit.Views.Tools
 
         private void ClearAll_Click(object sender, RoutedEventArgs e) => LogEntries.Clear();
 
-        private void OpenLogFolder_Click(object sender, RoutedEventArgs e) =>
-            Process.Start(new ProcessStartInfo(ISettingsManager.GetLogsDir()) { UseShellExecute = true });
+        private void OpenLogFolder_Click(object sender, RoutedEventArgs e)
+        {
+            // regular click: open log folder 
+            if (!ModifierViewStateService.IsShiftBeingHeld)
+            {
+                Process.Start(new ProcessStartInfo(ISettingsManager.GetLogsDir()) { UseShellExecute = true });
+                return;
+            }
+
+            // should never happen, but better safe than sorry
+            if (FileHelper.GetMostRecentlyChangedFile(Path.Combine(ISettingsManager.GetAppData(), "Logs"), "*.txt") is
+                not FileInfo fI)
+            {
+                return;
+            }
+
+            // shift-click: open most recent log file
+            try
+            {
+                Process.Start(new ProcessStartInfo(fI.FullName) { UseShellExecute = true });
+            }
+            catch (Exception)
+            {
+                throw new WolvenKitException(0, $"Failed to open log file {fI.FullName}");
+            }
+        }
 
         private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e) =>
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri) { UseShellExecute = true });

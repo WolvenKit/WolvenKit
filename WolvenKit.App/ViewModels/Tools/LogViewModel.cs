@@ -141,6 +141,7 @@ public partial class LogViewModel : ToolViewModel
         IsRunningScript = false;
     }
 
+    [ObservableProperty] private bool _isShiftKeyDown = false;
 
     private void SetupToolDefaults() => ContentId = ToolContentId;
 

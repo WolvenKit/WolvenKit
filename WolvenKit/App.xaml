@@ -99,7 +99,7 @@
                 <ResourceDictionary>
                     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
                 </ResourceDictionary>
-                
+
                 <!-- Scene Editor converters - needed globally for cache service -->
                 <ResourceDictionary Source="Resources/Converters/SceneEditorConverters.xaml" />
 
