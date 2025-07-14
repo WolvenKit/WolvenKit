@@ -412,7 +412,8 @@
                 <templates:IconBox
                     IconPack="Codicons"
                     Kind="FolderOpened"
-                    Size="{DynamicResource WolvenKitIconSmall}" />
+                    Size="{DynamicResource WolvenKitIconSmall}"
+                    Foreground="{StaticResource WolvenKitYellow}" />
             </Button>
 
             <Button

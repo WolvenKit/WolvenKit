@@ -123,24 +123,10 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             await _scriptService.ExecuteAsync(code);
         }
 
-        // This should never happen, but better safe than sorry
-        if (FileHelper.GetMostRecentlyChangedFile(Path.Combine(ISettingsManager.GetAppData(), "Logs"), "*.txt") is not FileInfo fI)
-        {
-            _loggerService.Info("Done.");
-            return;
-        }
-
-        _loggerService.Info($"Done. The most recent log file is {fI.FullName}.");
-
-        try
-        {
-            Process.Start(new ProcessStartInfo(fI.FullName) { UseShellExecute = true });
-        }
-        catch (Exception ex)
-        {
-            _loggerService.Error($"Failed to open log file: {ex.Message}");
-        }
-
+        _loggerService.Info("Done.");
+        _loggerService.Info(
+            "To open the most recent log file, shift-click on the 'open folder' button to the right.");
+        
         ScriptService.SuppressLogOutput = false;
     }
 
