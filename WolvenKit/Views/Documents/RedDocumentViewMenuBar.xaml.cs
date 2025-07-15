@@ -61,14 +61,13 @@ namespace WolvenKit.Views.Documents
             _progressService = Locator.Current.GetService<IProgressService<double>>()!;
             _projectExplorer = Locator.Current.GetService<ProjectExplorerViewModel>()!;
             _projectResourceTools = Locator.Current.GetService<ProjectResourceTools>()!;
-            _documentTools = Locator.Current.GetService<DocumentTools>()!;
             _cr2WTools = Locator.Current.GetService<Cr2WTools>()!;
 
             _appViewModel = Locator.Current.GetService<AppViewModel>()!;
 
             // Enforce instance generation and service injection. One would assume that registering a singleton
             // is enough. One would be wrong.
-            Locator.Current.GetService<DocumentTools>();
+            _documentTools = Locator.Current.GetService<DocumentTools>()!;
 
             InitializeComponent();
 
@@ -78,6 +77,7 @@ namespace WolvenKit.Views.Documents
                 _settingsManager,
                 _modifierStateService,
                 _projectManager,
+                _documentTools,
                 Locator.Current.GetService<CRUIDService>()!) { CurrentTab = _currentTab };
             ViewModel = DataContext as RedDocumentViewToolbarModel;
 
