@@ -798,6 +798,14 @@ public abstract class CvmDropdownHelper
     }
 
     /// <summary>
+    /// Show colours in the dropdown menu? (Only for MLSetup so far)
+    /// </summary>
+    public static bool ShouldShowColourInDropdown(ChunkViewModel cvm)
+    {
+        return cvm is { ParentData: Multilayer_Layer, Name: "colorScale" };
+    }
+
+    /// <summary>
     /// Gets the parent path of a ChunkViewModel to determine context
     /// </summary>
     private static string GetParentPath(ChunkViewModel cvm)
