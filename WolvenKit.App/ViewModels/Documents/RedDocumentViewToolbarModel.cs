@@ -365,7 +365,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     /// <summary>
     /// Regenerates visual controllers. Will only work in .ent or .app file.
     /// </summary>
-    [RelayCommand(CanExecute = nameof(CanRegenerateVisualControllers))]
+    [RelayCommand(CanExecute = nameof(IsInEntOrAppFile))]
     private void RegenerateResolvedDependencies()
     {
         if (RootChunk?.ResolvedData is entEntityTemplate template)
@@ -655,7 +655,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private bool CanConvertHairToCCXL() => RootChunk?.ResolvedData is CMesh mesh;
 
     [RelayCommand(CanExecute = nameof(CanConvertHairToCCXL))]
-    private void ConvertHairToCCXL() {
+    private void ConvertHairToCCXL()
+    {
         // This is just to hide the button from the .mi toolbar
     }
 
