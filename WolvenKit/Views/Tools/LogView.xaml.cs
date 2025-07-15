@@ -77,13 +77,13 @@ namespace WolvenKit.Views.Tools
            
             var filtered = LogEntries.Where(log =>
             {
-                return log.Level switch
+                return ViewModel is null || log.Level switch
                 {
-                    Logtype.Error => ViewModel?.FilterByLevel[0] == true,
-                    Logtype.Warning => ViewModel?.FilterByLevel[1] == true,
-                    Logtype.Success => ViewModel?.FilterByLevel[2] == true,
-                    Logtype.Normal or Logtype.Important => ViewModel?.FilterByLevel[3] == true,
-                    Logtype.Debug => ViewModel?.FilterByLevel[4] == true,
+                    Logtype.Error => ViewModel.FilterByLevel[0],
+                    Logtype.Warning => ViewModel.FilterByLevel[1],
+                    Logtype.Success => ViewModel.FilterByLevel[2],
+                    Logtype.Normal or Logtype.Important => ViewModel.FilterByLevel[3],
+                    Logtype.Debug => ViewModel.FilterByLevel[4],
                     _ => true
                 };
             });
