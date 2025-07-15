@@ -334,8 +334,8 @@
                             Tag="{Binding Message}"
                             ToolTip="Copy line">
                             <templates:IconBox
-                                IconPack="Octicons"
-                                Kind="Clippy"
+                                IconPack="Material"
+                                Kind="ClipboardArrowRightOutline"
                                 Margin="{DynamicResource WolvenKitMarginMicroVertical}"
                                 Size="{DynamicResource WolvenKitIconMicro}"
                                 Foreground="White" />
