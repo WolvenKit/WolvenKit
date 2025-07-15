@@ -6,6 +6,8 @@ using System.IO;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DynamicData;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
@@ -21,22 +23,25 @@ namespace WolvenKit.App.ViewModels.Documents;
 
 public partial class RedDocumentViewToolbarModel : ObservableObject
 {
-    
+
     private readonly IProjectManager _projectManager;
     private readonly ISettingsManager _settingsManager;
     private readonly IModifierViewStateService? _modifierViewStateService;
     private readonly CRUIDService _cruidService;
+    private readonly DocumentTools _documentTools;
 
     public RedDocumentViewToolbarModel(
         ISettingsManager settingsManager,
         IModifierViewStateService modifierSvc,
         IProjectManager projectManager,
-        CRUIDService cruidService
+        CRUIDService cruidService,
+        DocumentTools documentTools
     )
     {
         _modifierViewStateService = modifierSvc;
         _projectManager = projectManager;
         _settingsManager = settingsManager;
+        _documentTools = documentTools;
         _cruidService = cruidService;
 
         modifierSvc.ModifierStateChanged += OnModifierChanged;
@@ -101,7 +106,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
         SelectedChunk = null;
         RootChunk = null;
-        
+
         if (CurrentTab is RDTDataViewModel rtdViewModel)
         {
             RootChunk = rtdViewModel.GetRootChunk();
@@ -170,7 +175,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(ConvertHairToCCXLCommand))]
     [ObservableProperty]
     private RedDocumentItemType _contentType;
-    
+
     [NotifyCanExecuteChangedFor(nameof(AddDependenciesCommand))]
     [NotifyCanExecuteChangedFor(nameof(AddDependenciesFullCommand))]
     [ObservableProperty] private bool _isShiftKeyDown;
@@ -325,7 +330,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             }
         }
     }
-    
+
     /*
      * Regenerate visual controllers
      */
@@ -357,8 +362,85 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         RootChunk?.GetPropertyChild("components")?.RegenerateVisualControllerCommand.Execute(null);
     }
 
+    /// <summary>
+    /// Regenerates visual controllers. Will only work in .ent or .app file.
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanRegenerateVisualControllers))]
+    private void RegenerateResolvedDependencies()
+    {
+        if (RootChunk?.ResolvedData is entEntityTemplate template)
+        {
+            var refs = template.FindType(typeof(IRedRef))
+                .Select(f => f.Value).OfType<IRedRef>()
+                .SelectMany(r => _documentTools.CollectDependencies(r))
+                .SelectMany(rr =>
+                    ArchiveXlHelper.ResolveDynamicPaths(rr.DepotPath.GetResolvedText() ?? "",
+                        _projectManager.ActiveProject));
+
+            var refCount = template.ResolvedDependencies.Count;
+
+            template.ResolvedDependencies.Clear();
+            foreach (var path in refs)
+            {
+                template.ResolvedDependencies.Add(new CResourceAsyncReference<CResource>(path));
+            }
+
+            RootChunk.GetPropertyChild("resolvedDependencies")?.RecalculateProperties();
+            RootChunk.RecalculateProperties();
+            RootChunk.Tab?.Parent?.SetIsDirty(template.ResolvedDependencies.Count > 0 || refCount > 0);
+            return;
+        }
+
+        if (RootChunk?.ResolvedData is not appearanceAppearanceResource)
+        {
+            return;
+        }
+
+        List<ChunkViewModel> selectedChunks = [];
+        var isDirty = false;
+
+        // If a single appearance is selected, we only regenerate that one's resolved dependencies
+        if (SelectedChunk?.ResolvedData is appearanceAppearanceDefinition)
+        {
+            selectedChunks.Add(SelectedChunk);
+        }
+        else if (RootChunk?.ResolvedData is appearanceAppearanceResource &&
+                 RootChunk.GetPropertyChild("appearances") is ChunkViewModel appearances)
+        {
+            selectedChunks.AddRange(appearances.Properties);
+        }
+
+        foreach (var appChunk in selectedChunks)
+        {
+            if (appChunk.ResolvedData is not appearanceAppearanceDefinition appearance)
+            {
+                continue;
+            }
+
+            var refCount = appearance.ResolvedDependencies.Count;
+            var refs = appearance.FindType(typeof(IRedRef))
+                .Select(f => f.Value).OfType<IRedRef>()
+                .SelectMany(r => _documentTools.CollectDependencies(r))
+                .SelectMany(rr => ArchiveXlHelper.ResolveDynamicPaths(
+                    rr.DepotPath.GetResolvedText() ?? "",
+                    _projectManager.ActiveProject));
+
+            appearance.ResolvedDependencies.Clear();
+            foreach (var path in refs)
+            {
+                appearance.ResolvedDependencies.Add(new CResourceAsyncReference<CResource>(path));
+            }
+
+            appChunk.GetPropertyChild("resolvedDependencies")?.RecalculateProperties();
+            appChunk.RecalculateProperties();
+
+            isDirty |= appearance.ResolvedDependencies.Count > 0 || refCount > 0;
+        }
+
+        RootChunk?.Tab?.Parent?.SetIsDirty(isDirty);
+    }
     private bool CanChangeAnimationComponent() => RootChunk?.ResolvedData is appearanceAppearanceResource;
-    
+
     /*
      * Convert to photo mode app
      */
@@ -368,13 +450,13 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CanConvertToPhotoModeApp))]
     private void ConvertToPhotoModeApp()
     {
-        // do nothing, we're handling this in view model's click 
+        // do nothing, we're handling this in view model's click
     }
-    
+
     [RelayCommand(CanExecute = nameof(CanChangeAnimationComponent))]
     private void ChangeAnimationComponent()
     {
-        // do nothing, we're handling this in view model's click 
+        // do nothing, we're handling this in view model's click
     }
 
     /*
@@ -386,10 +468,10 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CanDeleteUnusedAnimationComponents))]
     private void DeleteUnusedAnimationComponents()
     {
-        // do nothing, we're handling this in view model's click 
+        // do nothing, we're handling this in view model's click
     }
 
-    
+
     #endregion
 
     #region jsonFile
@@ -531,7 +613,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         }
 
         RootChunk?.DeleteUnusedMaterialsCommand.Execute(false);
-    } 
+    }
 
     #endregion
 
@@ -573,7 +655,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private bool CanConvertHairToCCXL() => RootChunk?.ResolvedData is CMesh mesh;
 
     [RelayCommand(CanExecute = nameof(CanConvertHairToCCXL))]
-    private void ConvertHairToCCXL() { 
+    private void ConvertHairToCCXL() {
         // This is just to hide the button from the .mi toolbar
     }
 

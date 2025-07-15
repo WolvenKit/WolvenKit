@@ -621,6 +621,18 @@
                 </MenuItem>
 
                 <MenuItem
+                    Style="{StaticResource MenuItemStyle}"
+                    Header="Regenerate resolved dependencies"
+                    Command="{Binding Path=RegenerateResolvedDependenciesCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="DatabaseRefreshOutline"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem
                     Style="{StaticResource ShowAppMenuItemStyle}"
                     Header="Find unused files in project"
                     ToolTip="Will filter by extension: Only file extensions used in any references will be considered"
