@@ -19,13 +19,45 @@ namespace WolvenKit.Views.Templates
     public class IconPackSelector : DataTemplateSelector
     {
         public DataTemplate EmptyTemplate { get; set; }
+
+        /// <summary>
+        /// https://pictogrammers.com/library/mdi/
+        /// </summary>
         public DataTemplate MaterialTemplate { get; set; }
+
+        /// <summary>
+        /// https://fonts.google.com/icons
+        /// </summary>
         public DataTemplate MaterialDesignTemplate { get; set; }
+
+        /// <summary>
+        /// https://microsoft.github.io/vscode-codicons/dist/codicon.html
+        /// </summary>
         public DataTemplate CodiconsTemplate { get; set; }
+
+        /// <summary>
+        /// https://forkaweso.me/Fork-Awesome/cheatsheet/
+        /// </summary>
         public DataTemplate ForkAwesomeTemplate { get; set; }
+
+        /// <summary>
+        /// https://iconscout.com/unicons/solid-icons
+        /// </summary>
         public DataTemplate UniconsTemplate { get; set; }
+
+        /// <summary>
+        /// https://icons.getbootstrap.com
+        /// </summary>
         public DataTemplate BootstrapTemplate { get; set; }
+
+        /// <summary>
+        /// https://vaadin.com/docs/latest/components/icons/default-icons
+        /// </summary>
         public DataTemplate VaadinTemplate { get; set; }
+
+        /// <summary>
+        /// https://icongr.am/octicons
+        /// </summary>
         public DataTemplate OcticonsTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
