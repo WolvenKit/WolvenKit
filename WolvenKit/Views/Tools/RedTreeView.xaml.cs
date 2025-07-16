@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -37,7 +38,7 @@ namespace WolvenKit.Views.Tools
         private readonly AppViewModel _appViewModel;
         private readonly ProjectResourceTools _projectResourceTools;
         private readonly ISettingsManager _settingsManager;
-        
+
 
         public RedTreeView()
         {
@@ -46,8 +47,8 @@ namespace WolvenKit.Views.Tools
             _progressService = Locator.Current.GetService<IProgressService<double>>();
             _appViewModel = Locator.Current.GetService<AppViewModel>();
             _projectResourceTools = Locator.Current.GetService<ProjectResourceTools>();
-            _settingsManager = Locator.Current.GetService<ISettingsManager>(); 
-            
+            _settingsManager = Locator.Current.GetService<ISettingsManager>();
+
             InitializeComponent();
 
             TreeView.ApplyTemplate();
@@ -65,7 +66,7 @@ namespace WolvenKit.Views.Tools
         }
 
         /// <summary>
-        /// Called when editor tab gains focus. 
+        /// Called when editor tab gains focus.
         /// </summary>
         private void RedTreeView_Loaded(object sender, RoutedEventArgs e)
         {
@@ -309,12 +310,12 @@ namespace WolvenKit.Views.Tools
         /// <summary>Identifies the <see cref="SelectedItem"/> dependency property.</summary>
         public static readonly DependencyProperty SelectedItemProperty =
             DependencyProperty.Register(
-                nameof(SelectedItem), 
-                typeof(ChunkViewModel), 
+                nameof(SelectedItem),
+                typeof(ChunkViewModel),
                 typeof(RedTreeView),
                 new PropertyMetadata(null, new PropertyChangedCallback(OnSelectedItemChanged))
                 );
-        
+
         private static void OnSelectedItemChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
             if (sender is not RedTreeView view)
@@ -349,12 +350,11 @@ namespace WolvenKit.Views.Tools
         /// <summary>Identifies the <see cref="SelectedItems"/> dependency property.</summary>
         public static readonly DependencyProperty SelectedItemsProperty =
             DependencyProperty.Register(
-                nameof(SelectedItems), 
-                typeof(ObservableCollection<object>), 
-                typeof(RedTreeView), 
+                nameof(SelectedItems), typeof(ObservableCollection<object>),
+                typeof(RedTreeView),
                 new PropertyMetadata(null, new PropertyChangedCallback(OnSelectedItemsChanged))
                 );
-        
+
         private static void OnSelectedItemsChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
             if (sender is not RedTreeView view)
@@ -479,7 +479,7 @@ namespace WolvenKit.Views.Tools
         // Drag & Drop Functionality
 
         #region dragAndDrop
-        
+
         private bool IsAllowDrop(TreeViewItemDragOverEventArgs e)
         {
             var source = e.DraggingNodes.Select(n => n.Content).OfType<ChunkViewModel>()
@@ -682,6 +682,24 @@ namespace WolvenKit.Views.Tools
 
         #endregion
 
+        private static void ReapplySearchAsync(IEnumerable<ChunkViewModel> chunks)
+        {
+            var list = chunks.ToList();
+
+            if (list.Count == 0)
+            {
+                return;
+            }
+
+            Task.Run(() =>
+            {
+                foreach (var cvm in list)
+                {
+                    ReapplySearch(cvm);
+                }
+            });
+        }
+
         #region paste
 
         private bool CanPasteSingleSelection() => HasSingleItemCopied && SelectedItem?.CanPasteSelection(true) == true;
@@ -708,17 +726,32 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
+            var onlyArraysSelected = selectedNodes.All(s => s.IsArray);
+            var groupedNodes = GroupByArrayOrParent(selectedNodes, (cvm) => cvm.CanPasteSelection(useSingle))
+                .Where(group => group.Key.IsArray).ToList();
+
             using (collectionView.DeferRefresh())
             {
-                foreach (var group in GroupByArrayOrParent(selectedNodes, (cvm) => cvm.CanPasteSelection(useSingle))
-                             .Where(group => group.Key.IsArray))
+                foreach (var group in groupedNodes)
                 {
-                    group.Key.DeleteNodes(selectedNodes);
-                    var pasteIndex = group.FirstOrDefault()?.NodeIdxInParent ?? -1;
-                    group.Key.PasteAtIndex(copiedChunks, pasteIndex);
-                    ReapplySearch(group.Key);
+                    if (onlyArraysSelected)
+                    {
+                        // clear out array and paste copied nodes
+                        group.Key.ClearChildren();
+                        group.Key.PasteAtIndex(copiedChunks, -1);
+                    }
+                    else
+                    {
+                        // delete selection, then paste at index
+                        group.Key.DeleteNodes(selectedNodes);
+                        var pasteIndex = group.FirstOrDefault()?.NodeIdxInParent ?? -1;
+                        group.Key.PasteAtIndex(copiedChunks, pasteIndex);
+                    }
                 }
             }
+
+            ReapplySearchAsync(groupedNodes.Select(g => g.Key));
+
         }
 
         /// <summary>
@@ -753,15 +786,16 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            var groupByArrayOrParent = GroupByArrayOrParent(GetSelectedChunks());
+            var groupedNodes = GroupByArrayOrParent(GetSelectedChunks()).Where(g => g.Key.IsArray).ToList();
             using (collectionView.DeferRefresh())
             {
-                foreach (var group in groupByArrayOrParent.Where(g => g.Key.IsArray))
+                foreach (var group in groupedNodes)
                 {
                     group.Key.ClearChildren();
-                    ReapplySearch(group.Key);
                 }
             }
+
+            ReapplySearchAsync(groupedNodes.Select(g => g.Key));
         }
 
         [RelayCommand(CanExecute = nameof(CanPasteSelection))]
@@ -773,18 +807,21 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
+            var groupedNodes = GroupByArrayOrParent(GetSelectedChunks(), cvm => cvm.CanPasteSelection())
+                .Where(group => group.Key.IsArray).ToList();
+
             using (collectionView.DeferRefresh())
             {
-                foreach (var group in GroupByArrayOrParent(GetSelectedChunks(), cvm => cvm.CanPasteSelection())
-                             .Where(group => group.Key.IsArray))
+                foreach (var group in groupedNodes)
                 {
                     group.Key.ClearChildren();
                     group.Key.PasteAtIndex(copiedChunks);
                     group.Key.RecalculateProperties();
-                    ReapplySearch(group.Key);
                 }
-            
             }
+
+
+            ReapplySearchAsync(groupedNodes.Select(g => g.Key));
         }
 
         [RelayCommand(CanExecute = nameof(CanPasteSingleSelection))]
@@ -801,18 +838,20 @@ namespace WolvenKit.Views.Tools
             }
 
             _rdtDataViewModel?.ClearSelection();
-            
+
+            var groupedNodes = GroupByArrayOrParent(selectedChunks, i => i.CanPasteSelection(true))
+                .Where(group => group.Key.IsArray).ToList();
             using (collectionView.DeferRefresh())
             {
-                foreach (var group in GroupByArrayOrParent(selectedChunks, i => i.CanPasteSelection(true))
-                             .Where(group => group.Key.IsArray))
+                foreach (var group in groupedNodes)
                 {
                     group.Key.ClearChildren();
                     group.Key.PasteAtIndex([RedDocumentTabViewModel.CopiedChunk]);
                     group.Key.RecalculateProperties();
-                    ReapplySearch(group.Key);
                 }
             }
+
+            ReapplySearchAsync(groupedNodes.Select(g => g.Key));
         }
 
         private void PasteSelectionInternal(bool pasteSingleSelect = false)
@@ -833,6 +872,7 @@ namespace WolvenKit.Views.Tools
             }
 
             var selectedChunks = GetSelectedChunks();
+            List<ChunkViewModel> refreshSelection = [];
 
             using (collectionView.DeferRefresh())
             {
@@ -847,7 +887,7 @@ namespace WolvenKit.Views.Tools
 
                         cvm = group.Key;
                     }
-                    
+
                     var idx = cvm.IsArray ? -1 : cvm.NodeIdxInParent + 1;
 
                     if (pasteSingleSelect)
@@ -859,11 +899,14 @@ namespace WolvenKit.Views.Tools
                         cvm.PasteAtIndex(copiedChunks, idx);
                     }
 
-                    ReapplySearch(cvm);
+                    refreshSelection.Add(cvm);
                 }
 
-                ReapplySelection(selectedChunks);
+                refreshSelection.AddRange(selectedChunks);
             }
+
+
+            ReapplySearchAsync(refreshSelection.Distinct());
         }
 
         private void ReapplySelection(List<ChunkViewModel> oldSelection)
@@ -948,10 +991,11 @@ namespace WolvenKit.Views.Tools
             }
 
             List<ChunkViewModel> chunksByParent = [];
-            
+
+            var chunks = GetSelectedChunks();
+
             using (collectionView.DeferRefresh())
             {
-                var chunks = GetSelectedChunks();
                 foreach (var cvm in chunks)
                 {
                     if (cvm.DuplicateAsNewChunk() is ChunkViewModel newChunk)
@@ -1135,7 +1179,7 @@ namespace WolvenKit.Views.Tools
             }
 
             return IsHandle(cvm.Data)
-                   // Data can be a RedDummy after the object has been reset 
+                   // Data can be a RedDummy after the object has been reset
                    || cvm.Type.StartsWith("whandle:")
                    || cvm.Type.StartsWith("handle:");
         }
@@ -1189,7 +1233,7 @@ namespace WolvenKit.Views.Tools
             {
                 return;
             }
-            
+
             using (collectionView.DeferRefresh())
             {
                 if (PasteHandle(cvm, (IRedBaseHandle)RedDocumentTabViewModel.CopiedChunk!) != true)
@@ -1198,8 +1242,9 @@ namespace WolvenKit.Views.Tools
                 }
 
                 cvm.SetVisibilityStatusBySearchString(RedDocumentViewToolbarModel.CurrentActiveSearch);
-                ReapplySearch(cvm.Parent);
             }
+
+            ReapplySearch(cvm.Parent);
 
             RefreshContextMenuFlags();
             RefreshSelectedItemsContextMenuFlags();
@@ -1277,11 +1322,12 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
+            var groupedNodes = GetSelectedChunks()
+                .GroupBy(chunk => chunk.Parent).ToList();
+
             using (collectionView.DeferRefresh())
             {
-                foreach (var chunkSiblings in GetSelectedChunks()
-                             .GroupBy(chunk => chunk.Parent)
-                             .Select(group => group.ToList()))
+                foreach (var chunkSiblings in groupedNodes.Select(group => group.ToList()))
                 {
                     if (chunkSiblings.FirstOrDefault() is not ChunkViewModel cvm || cvm.Parent is null)
                     {
@@ -1291,9 +1337,10 @@ namespace WolvenKit.Views.Tools
                     var chunksToDelete = cvm.Parent.TVProperties.Except(chunkSiblings).ToList();
 
                     cvm.DeleteNodesInParent(chunksToDelete);
-                    ReapplySearch(cvm.Parent);
                 }
             }
+
+            ReapplySearchAsync(groupedNodes.Select(g => g.Key));
         }
 
 
@@ -1305,25 +1352,20 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
+            var groupedNodes = GetSelectedChunks().GroupBy(chunk => chunk.Parent).ToList();
+
             using (collectionView.DeferRefresh())
             {
-                foreach (var kvp in GetSelectedChunks()
-                             .GroupBy(chunk => chunk.Parent))
+                foreach (var chunkSiblings in from kvp in groupedNodes where kvp.Any() select kvp.ToList())
                 {
-                    if (!kvp.Any())
-                    {
-                        continue;
-                    }
-
-                    var chunkSiblings = kvp.ToList();
                     chunkSiblings.First().DeleteNodesInParent(chunkSiblings);
-
-                    chunkSiblings.First().Tab?.Parent.SetIsDirty(true);
-
-                    ReapplySearch(kvp.Key);
                 }
             }
+
+            groupedNodes.FirstOrDefault()?.Key.Tab?.Parent.SetIsDirty(true);
+            ReapplySearchAsync(groupedNodes.Select(g => g.Key));
         }
+
         private bool CanGenerateMissingMaterials()
         {
             return SelectedItem is ChunkViewModel
@@ -1378,7 +1420,7 @@ namespace WolvenKit.Views.Tools
                 return;
 
             var selectedChunks = treeView.SelectedItems?.OfType<ChunkViewModel>().ToList() ?? new List<ChunkViewModel>();
-            
+
             // Update the dependency properties
             SetCurrentValue(SelectedItemsProperty, new ObservableCollection<object>(selectedChunks));
             SetCurrentValue(SelectedItemProperty, selectedChunks.LastOrDefault());
@@ -1400,7 +1442,7 @@ namespace WolvenKit.Views.Tools
             {
                 return;
             }
-            
+
             // If the current chunk is not expanded, collapse all of its siblings
             if (!SelectedItem.IsExpanded && SelectedItem.Parent is ChunkViewModel parent)
             {
@@ -1418,7 +1460,7 @@ namespace WolvenKit.Views.Tools
         private ChunkViewModel GetRoot()
         {
             if (ItemsSource is not ListCollectionView selection)
-            {   
+            {
                 return null;
             }
 
@@ -1436,7 +1478,7 @@ namespace WolvenKit.Views.Tools
         {
             SetCurrentValue(ShouldShowArrayOpsProperty,
                 SelectedItem?.IsInArray == true || SelectedItem?.IsArray == true);
-            
+
             if (ItemsSource is not ICollectionView collectionView)
             {
                 foreach (var chunkViewModel in GetSelectedChunks())
@@ -1476,7 +1518,7 @@ namespace WolvenKit.Views.Tools
 
         private void TreeView_OnKeyChanged(object sender, KeyEventArgs e)
         {
-            
+
             if (_isContextMenuOpen)
             {
                 return;
@@ -1498,7 +1540,7 @@ namespace WolvenKit.Views.Tools
                         var scrollMode = ModifierViewStateService.IsShiftBeingHeld ? ScrollUnit.Item : ScrollUnit.Pixel;
                         TreeView.SetCurrentValue(VirtualizingPanel.ScrollUnitProperty, scrollMode);
                     }
-                    
+
                     SetCurrentValue(IsShiftBeingHeldProperty, ModifierViewStateService.IsShiftBeingHeld);
                     SetCurrentValue(IsCtrlBeingHeldProperty, ModifierViewStateService.IsCtrlBeingHeld);
                     break;
@@ -1507,7 +1549,7 @@ namespace WolvenKit.Views.Tools
 
         #endregion
 
-       
+
     }
-    
+
 }
