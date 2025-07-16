@@ -682,7 +682,7 @@ namespace WolvenKit.Views.Tools
 
         #endregion
 
-        private static void ReapplySearchAsync(IEnumerable<ChunkViewModel> chunks)
+        private void ReapplySearchAsync(IEnumerable<ChunkViewModel> chunks)
         {
             var list = chunks.ToList();
 
@@ -691,7 +691,7 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            Task.Run(() =>
+            TreeView.Dispatcher.Invoke(() => 
             {
                 foreach (var cvm in list)
                 {
@@ -1015,37 +1015,34 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            using (collectionView.DeferRefresh())
+            List<ChunkViewModel> chunksByParent = [];
+            foreach (var chunks in GetSelectedChunks().GroupBy(chunk => chunk.Parent))
             {
-                List<ChunkViewModel> chunksByParent = [];
-                foreach (var chunks in GetSelectedChunks().GroupBy(chunk => chunk.Parent))
+                if (!preserveIndex)
                 {
-                    if (!preserveIndex)
+                    foreach (var cvm in chunks.OrderBy(cvm => cvm.NodeIdxInParent))
                     {
-                        foreach (var cvm in chunks.OrderBy(cvm => cvm.NodeIdxInParent))
+                        var newChunk = cvm.DuplicateChunk(cvm.NodeIdxInParent + chunks.Count());
+                        if (newChunk is not null)
                         {
-                            var newChunk = cvm.DuplicateChunk(cvm.NodeIdxInParent + chunks.Count());
-                            if (newChunk is not null)
-                            {
-                                chunksByParent.Add(newChunk);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        foreach (var cvm in chunks)
-                        {
-                            var newChunk = cvm.DuplicateChunk(-1);
-                            if (newChunk is not null)
-                            {
-                                chunksByParent.Add(newChunk);
-                            }
+                            chunksByParent.Add(newChunk);
                         }
                     }
                 }
+                else
+                {
+                    foreach (var cvm in chunks)
+                    {
+                        var newChunk = cvm.DuplicateChunk(-1);
+                        if (newChunk is not null)
+                        {
+                            chunksByParent.Add(newChunk);
+                        }
+                    }
+                }
+            }
 
-                SetSelectedItems(chunksByParent);
-            } // deferRefresh end
+            SetSelectedItems(chunksByParent);
         }
 
         /// <summary>
