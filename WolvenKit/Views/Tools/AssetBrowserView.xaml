@@ -95,6 +95,7 @@
                         <ColumnDefinition Width="50" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Style="{StaticResource ShowInModBrowserOnly}" />
+                        <ColumnDefinition Style="{StaticResource ShowInModBrowserOnly}" />
                     </Grid.ColumnDefinitions>
 
                     <Button
@@ -130,14 +131,51 @@
                         x:Name="FileSearchBar"
                         Grid.Column="3"
                         VerticalAlignment="Center"
-                        Style="{StaticResource SearchBarPlus}"
                         hc:InfoElement.Placeholder="Search all game or mod files, e.g. game !quest judy .ent|.app|.mesh"
                         hc:InfoElement.ShowClearButton="False"
                         FlowDirection="LeftToRight"
-                        SearchStarted="FileSearchBar_SearchStarted" />
+                        SearchStarted="FileSearchBar_SearchStarted">
+                        <hc:SearchBar.Style>
+                            <Style
+                                BasedOn="{StaticResource SearchBarPlus}"
+                                TargetType="{x:Type hc:SearchBar}">
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding IsModBrowserEnabled}"
+                                        Value="True">
+                                        <Setter Property="Grid.ColumnSpan" Value="1" />
+                                    </DataTrigger>
+                                    <DataTrigger
+                                        Binding="{Binding IsModBrowserEnabled}"
+                                        Value="False">
+                                        <Setter Property="Grid.ColumnSpan" Value="3" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </hc:SearchBar.Style>
+                    </hc:SearchBar>
 
+                    <!-- Refresh mod browser -->
                     <Button
                         Grid.Column="4"
+                        Height="Auto"
+                        Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource ButtonDefault}"
+                        Visibility="{Binding IsModBrowserEnabled,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Click="ReloadModBrowserButton_OnClick"
+                        ToolTip="Reload mod browser to show new or removed archives">
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Refresh"
+                            Margin="{DynamicResource WolvenKitMarginMicro}"
+                            Size="{DynamicResource WolvenKitIconTiny}" />
+                    </Button>
+
+                    <!-- Scan mod archives -->
+                    <Button
+                        Grid.Column="5"
                         Height="Auto"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         VerticalAlignment="Center"

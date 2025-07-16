@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Reactive;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -74,7 +73,6 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private readonly ILoggerService _loggerService;
     private readonly IPluginService _pluginService;
     private readonly AppViewModel _appViewModel;
-    private readonly IModifierViewStateService _modifierViewSvc;
 
     private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
 
@@ -93,8 +91,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         ISettingsManager settings,
         IProgressService<double> progressService,
         ILoggerService loggerService,
-        IPluginService pluginService,
-        IModifierViewStateService viewSvc) : base(ToolTitle)
+        IPluginService pluginService) : base(ToolTitle)
     {
         _projectManager = projectManager;
         _notificationService = notificationService;
@@ -105,7 +102,6 @@ public partial class AssetBrowserViewModel : ToolViewModel
         _pluginService = pluginService;
         _loggerService = loggerService;
         _appViewModel = appViewModel;
-        _modifierViewSvc = viewSvc;
         
         ContentId = ToolContentId;
 
@@ -690,7 +686,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         }
 
         // must use "Value" here to force the exact archive
-        var realGameFile = cyberArchive.Files.First(_ => _.Value.Name == fileVm.GetGameFile().Name).Value;
+        var realGameFile = cyberArchive.Files.First(f => f.Value.Name == fileVm.GetGameFile().Name).Value;
         await _gameController.GetController().AddFileToModModalAsync(realGameFile);
     }
 
@@ -752,8 +748,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         try
         {
             foundFiles.AddRange(await Task.Run(CyberEnhancedSearchAsync, cancellationToken));
-            ;
-            
+           
             // If the search includes an .archive file, let's select it
             if (s_SearchByArchiveNameRegex().Match(query) is { Success: true } m)
             {
@@ -814,7 +809,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         Exclude,
     }
 
-    private readonly record struct Term(TermType Type, string Pattern, string NegationPattern);
+    private readonly record struct Term(TermType Type, string Pattern, string? NegationPattern);
 
     // Refinement types
     private interface ISearchRefinement
@@ -827,7 +822,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     private readonly record struct RegexRefinement(Regex Regex) : ISearchRefinement;
 
-    private readonly record struct ArchivePathRefinement(string ArchivePath) : ISearchRefinement;
+    private readonly record struct ArchivePathRefinement(string? ArchivePath) : ISearchRefinement;
 
     private readonly record struct VerbatimRefinement(string Verbatim) : ISearchRefinement;
 
@@ -935,7 +930,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
         if (!string.IsNullOrEmpty(archivePathMatch))
         {
-            return new UsedByRefinement() { FilePath = usingPathMatch };
+            return new UsedByRefinement() { FilePath = usedByPathMatch };
         }
 
         var verbatimMatch = s_isVerbatimRefinement.Match(refinementString).Groups["verbatim"].Value;
@@ -1123,17 +1118,17 @@ public partial class AssetBrowserViewModel : ToolViewModel
     #endregion methods
 
     // On initialization, scanArchives is read from the settings. On scan button click, we always want to scan.
-    public void ScanModArchives(bool scanArchives, string? archiveName = null)
+    public void ScanModArchives(bool? executeScan = null, string? archiveName = null)
     {
         if (_settings.CP77ExecutablePath is null)
         {
             return;
         }
 
+        var scanArchives = executeScan ?? _settings.AnalyzeModArchives;
 
         var ignoredArchives = _settings.ArchiveNamesExcludeFromScan.Split(",", StringSplitOptions.RemoveEmptyEntries)
             .Select(name => name.Replace(".archive", "")).ToArray();
-
         
         if (archiveName is null)
         {
