@@ -1123,17 +1123,17 @@ public partial class AssetBrowserViewModel : ToolViewModel
     #endregion methods
 
     // On initialization, scanArchives is read from the settings. On scan button click, we always want to scan.
-    public void ScanModArchives(bool scanArchives, string? archiveName = null)
+    public void ScanModArchives(bool? executeScan = null, string? archiveName = null)
     {
         if (_settings.CP77ExecutablePath is null)
         {
             return;
         }
 
+        var scanArchives = executeScan ?? _settings.AnalyzeModArchives;
 
         var ignoredArchives = _settings.ArchiveNamesExcludeFromScan.Split(",", StringSplitOptions.RemoveEmptyEntries)
             .Select(name => name.Replace(".archive", "")).ToArray();
-
         
         if (archiveName is null)
         {
