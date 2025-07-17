@@ -9,11 +9,13 @@ public static class DiscordHelper
     public static string DiscordAppID = "897813293480169532";
     public static bool DiscordRPCEnabled = true;
     public static bool DiscordRPCInitizialized = false;
+    public static DateTime Begin;
 
     public static void InitializeDiscordRPC()
     {
         if (DiscordRPCEnabled == true && DiscordRPCInitizialized == false)
         {
+            Begin = DateTime.UtcNow;
             Client = new DiscordRPC.DiscordRpcClient(DiscordAppID);
             Client.OnReady += (sender, e) => Console.WriteLine("Received Ready from user {0}", e.User.Username);
             Client.OnPresenceUpdate += (sender, e) => Console.WriteLine("Received Update! {0}", e.Presence);
@@ -22,7 +24,7 @@ public static class DiscordHelper
         }
     }
 
-    public static void SetDiscordRPCStatus(string details, ILoggerService logger)
+    public static void SetDiscordRPCStatus(string details, string state, ILoggerService logger)
     {
         if (DiscordRPCEnabled == true)
         {
@@ -33,7 +35,8 @@ public static class DiscordHelper
                     Client.SetPresence(new DiscordRPC.RichPresence()
                     {
                         Details = details,
-                        Timestamps = new DiscordRPC.Timestamps() { Start = DateTime.UtcNow },
+                        State = "Project " + state,
+                        Timestamps = new DiscordRPC.Timestamps() { Start = Begin },
                         Assets = new DiscordRPC.Assets() { LargeImageKey = "bigwk", LargeImageText = "WolvenKit", }
                     });
                     Client.Invoke();

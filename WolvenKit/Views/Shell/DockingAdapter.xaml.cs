@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Runtime.Intrinsics.Arm;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -448,6 +449,12 @@ namespace WolvenKit.Views.Shell
                 }
             }
 
+            string proj = "";
+            if (_viewModel?.ActiveProject != null)
+            {
+                proj = _viewModel?.ActiveProject.Name;
+            }
+
             if (e.NewValue is ContentControl content)
             {
                 if (content.Content is IDockElement { IsActive: false } dockElement)
@@ -473,7 +480,12 @@ namespace WolvenKit.Views.Shell
 
                 if (content.Content is string s)
                 {
-                    DiscordHelper.SetDiscordRPCStatus(s, _logger);
+                    DiscordHelper.SetDiscordRPCStatus(s, proj, _logger);
+                }
+
+                if (content.Content is RedDocumentViewModel rdvm)
+                {
+                    DiscordHelper.SetDiscordRPCStatus("Working on " + rdvm.Header, proj, _logger);
                 }
 
                 //if (((IDockElement)content.Content).State == DockState.Document)
@@ -489,6 +501,11 @@ namespace WolvenKit.Views.Shell
                     // Don't activate it
                 }
 
+            }
+
+            if (e.OldValue is ContentControl && e.NewValue == null)
+            {
+                DiscordHelper.SetDiscordRPCStatus("No file", proj, _logger);
             }
 
             _viewModel?.UpdateTitle();

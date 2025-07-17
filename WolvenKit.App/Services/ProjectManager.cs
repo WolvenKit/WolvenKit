@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using WolvenKit.App.Helpers;
+using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.Common;
@@ -172,6 +174,8 @@ public partial class ProjectManager : ObservableObject, IProjectManager
 
             // fix legacy yaml tweaks
             MoveLegacyYamlTweaks(project);
+
+            DiscordHelper.SetDiscordRPCStatus("No file", obj.Name, _loggerService);
 
             return project;
         }
