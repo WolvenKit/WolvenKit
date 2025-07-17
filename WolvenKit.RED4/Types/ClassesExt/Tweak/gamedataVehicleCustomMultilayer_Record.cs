@@ -51,12 +51,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-        [RED("onlyForPlayerVehicleAppearances")]
-        [REDProperty(IsIgnored = true)]
-        public CArray<CName> OnlyForPlayerVehicleAppearances
-        {
-            get => GetPropertyValue<CArray<CName>>();
-            set => SetPropertyValue<CArray<CName>>(value);
-        }
-    }
+		[RED("onlyForPlayerVehicleAppearances")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<CName> OnlyForPlayerVehicleAppearances
+		{
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+	}
 }

@@ -11,15 +11,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-        [RED("leftLightHeight")]
-        [REDProperty(IsIgnored = true)]
-        public CFloat LeftLightHeight
-        {
-            get => GetPropertyValue<CFloat>();
-            set => SetPropertyValue<CFloat>(value);
-        }
+		[RED("leftLightHeight")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat LeftLightHeight
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
 
-        [RED("leftLightMarginRight")]
+		[RED("leftLightMarginRight")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat LeftLightMarginRight
 		{
@@ -35,15 +35,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-        [RED("leftLightWidth")]
-        [REDProperty(IsIgnored = true)]
-        public CFloat LeftLightWidth
-        {
-            get => GetPropertyValue<CFloat>();
-            set => SetPropertyValue<CFloat>(value);
-        }
+		[RED("leftLightWidth")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat LeftLightWidth
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
 
-        [RED("lightsImage")]
+		[RED("lightsImage")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID LightsImage
 		{
@@ -75,15 +75,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-        [RED("rightLightHeight")]
-        [REDProperty(IsIgnored = true)]
-        public CFloat RightLightHeight
-        {
-            get => GetPropertyValue<CFloat>();
-            set => SetPropertyValue<CFloat>(value);
-        }
+		[RED("rightLightHeight")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat RightLightHeight
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
 
-        [RED("rightLightMarginRight")]
+		[RED("rightLightMarginRight")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat RightLightMarginRight
 		{
@@ -99,15 +99,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-        [RED("rightLightWidth")]
-        [REDProperty(IsIgnored = true)]
-        public CFloat RightLightWidth
-        {
-            get => GetPropertyValue<CFloat>();
-            set => SetPropertyValue<CFloat>(value);
-        }
+		[RED("rightLightWidth")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat RightLightWidth
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
 
-        [RED("secondaryImage")]
+		[RED("secondaryImage")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID SecondaryImage
 		{

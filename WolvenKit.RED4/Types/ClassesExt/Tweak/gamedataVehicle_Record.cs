@@ -83,31 +83,31 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-        [RED("canBeActiveVehicle")]
-        [REDProperty(IsIgnored = true)]
-        public CBool CanBeActiveVehicle
-        {
-            get => GetPropertyValue<CBool>();
-            set => SetPropertyValue<CBool>(value);
-        }
+		[RED("canBeActiveVehicle")]
+		[REDProperty(IsIgnored = true)]
+		public CBool CanBeActiveVehicle
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
 
-        [RED("canDeleteUniqueTemplates")]
-        [REDProperty(IsIgnored = true)]
-        public CBool CanDeleteUniqueTemplates
-        {
-            get => GetPropertyValue<CBool>();
-            set => SetPropertyValue<CBool>(value);
-        }
+		[RED("canDeleteUniqueTemplates")]
+		[REDProperty(IsIgnored = true)]
+		public CBool CanDeleteUniqueTemplates
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
 
-        [RED("canOnlySpawnOnValidRoad")]
-        [REDProperty(IsIgnored = true)]
-        public CBool CanOnlySpawnOnValidRoad
-        {
-            get => GetPropertyValue<CBool>();
-            set => SetPropertyValue<CBool>(value);
-        }
+		[RED("canOnlySpawnOnValidRoad")]
+		[REDProperty(IsIgnored = true)]
+		public CBool CanOnlySpawnOnValidRoad
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
 
-        [RED("colorProfilesRestricted")]
+		[RED("colorProfilesRestricted")]
 		[REDProperty(IsIgnored = true)]
 		public CBool ColorProfilesRestricted
 		{
@@ -171,15 +171,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-        [RED("customizeLights")]
-        [REDProperty(IsIgnored = true)]
-        public CBool CustomizeLights
-        {
-            get => GetPropertyValue<CBool>();
-            set => SetPropertyValue<CBool>(value);
-        }
+		[RED("customizeLights")]
+		[REDProperty(IsIgnored = true)]
+		public CBool CustomizeLights
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
 
-        [RED("debugStatusString")]
+		[RED("debugStatusString")]
 		[REDProperty(IsIgnored = true)]
 		public CString DebugStatusString
 		{
@@ -323,15 +323,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-        [RED("hasUniqueCustomization")]
-        [REDProperty(IsIgnored = true)]
-        public CBool HasUniqueCustomization
-        {
-            get => GetPropertyValue<CBool>();
-            set => SetPropertyValue<CBool>(value);
-        }
+		[RED("hasUniqueCustomization")]
+		[REDProperty(IsIgnored = true)]
+		public CBool HasUniqueCustomization
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
 
-        [RED("hasVisualCustomization")]
+		[RED("hasVisualCustomization")]
 		[REDProperty(IsIgnored = true)]
 		public CBool HasVisualCustomization
 		{
@@ -819,15 +819,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-        [RED("visualCustomizationUpdateRequired")]
-        [REDProperty(IsIgnored = true)]
-        public CBool VisualCustomizationUpdateRequired
-        {
-            get => GetPropertyValue<CBool>();
-            set => SetPropertyValue<CBool>(value);
-        }
+		[RED("visualCustomizationUpdateRequired")]
+		[REDProperty(IsIgnored = true)]
+		public CBool VisualCustomizationUpdateRequired
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
 
-        [RED("visualDestruction")]
+		[RED("visualDestruction")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID VisualDestruction
 		{
