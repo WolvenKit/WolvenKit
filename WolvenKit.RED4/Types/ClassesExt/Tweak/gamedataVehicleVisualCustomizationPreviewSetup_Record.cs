@@ -10,8 +10,16 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
 		}
-		
-		[RED("leftLightMarginRight")]
+
+        [RED("leftLightHeight")]
+        [REDProperty(IsIgnored = true)]
+        public CFloat LeftLightHeight
+        {
+            get => GetPropertyValue<CFloat>();
+            set => SetPropertyValue<CFloat>(value);
+        }
+
+        [RED("leftLightMarginRight")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat LeftLightMarginRight
 		{
@@ -26,8 +34,16 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
-		
-		[RED("lightsImage")]
+
+        [RED("leftLightWidth")]
+        [REDProperty(IsIgnored = true)]
+        public CFloat LeftLightWidth
+        {
+            get => GetPropertyValue<CFloat>();
+            set => SetPropertyValue<CFloat>(value);
+        }
+
+        [RED("lightsImage")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID LightsImage
 		{
@@ -58,8 +74,16 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
 		}
-		
-		[RED("rightLightMarginRight")]
+
+        [RED("rightLightHeight")]
+        [REDProperty(IsIgnored = true)]
+        public CFloat RightLightHeight
+        {
+            get => GetPropertyValue<CFloat>();
+            set => SetPropertyValue<CFloat>(value);
+        }
+
+        [RED("rightLightMarginRight")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat RightLightMarginRight
 		{
@@ -74,8 +98,16 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
-		
-		[RED("secondaryImage")]
+
+        [RED("rightLightWidth")]
+        [REDProperty(IsIgnored = true)]
+        public CFloat RightLightWidth
+        {
+            get => GetPropertyValue<CFloat>();
+            set => SetPropertyValue<CFloat>(value);
+        }
+
+        [RED("secondaryImage")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID SecondaryImage
 		{
