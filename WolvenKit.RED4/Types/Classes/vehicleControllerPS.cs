@@ -44,6 +44,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("allowPassengerCameraSwitch")] 
+		public CBool AllowPassengerCameraSwitch
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public vehicleControllerPS()
 		{
 			VehicleDoors = new(6);

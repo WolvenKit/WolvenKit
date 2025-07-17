@@ -21,6 +21,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("controlsListener")] 
+		public CHandle<AimToggleListener> ControlsListener
+		{
+			get => GetPropertyValue<CHandle<AimToggleListener>>();
+			set => SetPropertyValue<CHandle<AimToggleListener>>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("statListener")] 
 		public CHandle<DefaultTransitionStatListener> StatListener
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<DefaultTransitionStatListener>>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("statusEffectListener")] 
 		public CHandle<DefaultTransitionStatusEffectListener> StatusEffectListener
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<DefaultTransitionStatusEffectListener>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("attachmentSlotListener")] 
 		public CHandle<gameAttachmentSlotsScriptListener> AttachmentSlotListener
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameAttachmentSlotsScriptListener>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("sceneTier")] 
 		public CInt32 SceneTier
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("vehicleState")] 
 		public CInt32 VehicleState
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("highLevelState")] 
 		public CInt32 HighLevelState
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("combatGadgetState")] 
 		public CInt32 CombatGadgetState
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("takedownState")] 
 		public CInt32 TakedownState
 		{
@@ -84,20 +92,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("weaponState")] 
 		public CInt32 WeaponState
 		{
 			get => GetPropertyValue<CInt32>();
 			set => SetPropertyValue<CInt32>(value);
-		}
-
-		[Ordinal(11)] 
-		[RED("cameraAimPressed")] 
-		public CBool CameraAimPressed
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(12)] 

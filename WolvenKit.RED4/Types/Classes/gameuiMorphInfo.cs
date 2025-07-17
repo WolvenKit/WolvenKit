@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameuiMorphInfo : gameuiCharacterCustomizationInfo
 	{
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("morphNames")] 
 		public CArray<gameuiIndexedMorphName> MorphNames
 		{

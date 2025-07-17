@@ -150,6 +150,7 @@ namespace WolvenKit.RED4.Types
 
 		public LevelUpNotification()
 		{
+			CustomInputActionName = "NotificationOpenLvlup";
 			LevelUpLabelText = new inkTextWidgetReference();
 			LevelUpValue = new inkTextWidgetReference();
 			LevelUpHolder = new inkWidgetReference();

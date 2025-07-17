@@ -2,17 +2,9 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class PhotoModeListController : inkListController
+	public partial class PhotoModeListController : inkWidgetLogicController
 	{
-		[Ordinal(6)] 
-		[RED("LogoWidget")] 
-		public inkWidgetReference LogoWidget
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(7)] 
+		[Ordinal(1)] 
 		[RED("Panel")] 
 		public inkVerticalPanelWidgetReference Panel
 		{
@@ -20,7 +12,47 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkVerticalPanelWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(2)] 
+		[RED("sliderWidget")] 
+		public inkWidgetReference SliderWidget
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("scrollArea")] 
+		public inkScrollAreaWidgetReference ScrollArea
+		{
+			get => GetPropertyValue<inkScrollAreaWidgetReference>();
+			set => SetPropertyValue<inkScrollAreaWidgetReference>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("menuController")] 
+		public CWeakHandle<gameuiMenuGameController> MenuController
+		{
+			get => GetPropertyValue<CWeakHandle<gameuiMenuGameController>>();
+			set => SetPropertyValue<CWeakHandle<gameuiMenuGameController>>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("scrollController")] 
+		public CWeakHandle<inkScrollController> ScrollController
+		{
+			get => GetPropertyValue<CWeakHandle<inkScrollController>>();
+			set => SetPropertyValue<CWeakHandle<inkScrollController>>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("listController")] 
+		public CWeakHandle<inkListController> ListController
+		{
+			get => GetPropertyValue<CWeakHandle<inkListController>>();
+			set => SetPropertyValue<CWeakHandle<inkListController>>(value);
+		}
+
+		[Ordinal(7)] 
 		[RED("fadeAnim")] 
 		public CHandle<inkanimProxy> FadeAnim
 		{
@@ -28,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(8)] 
 		[RED("isAnimating")] 
 		public CBool IsAnimating
 		{
@@ -36,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(9)] 
 		[RED("animationTime")] 
 		public CFloat AnimationTime
 		{
@@ -44,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(10)] 
 		[RED("animationTarget")] 
 		public CFloat AnimationTarget
 		{
@@ -52,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(11)] 
 		[RED("elementsAnimationTime")] 
 		public CFloat ElementsAnimationTime
 		{
@@ -60,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(12)] 
 		[RED("elementsAnimationDelay")] 
 		public CFloat ElementsAnimationDelay
 		{
@@ -68,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(13)] 
 		[RED("currentElementAnimation")] 
 		public CInt32 CurrentElementAnimation
 		{
@@ -78,8 +110,9 @@ namespace WolvenKit.RED4.Types
 
 		public PhotoModeListController()
 		{
-			LogoWidget = new inkWidgetReference();
 			Panel = new inkVerticalPanelWidgetReference();
+			SliderWidget = new inkWidgetReference();
+			ScrollArea = new inkScrollAreaWidgetReference();
 
 			PostConstruct();
 		}

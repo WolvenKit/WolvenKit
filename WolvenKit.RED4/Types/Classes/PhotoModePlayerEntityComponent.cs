@@ -93,6 +93,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(16)] 
+		[RED("loadingVisualItems")] 
+		public CArray<gameItemID> LoadingVisualItems
+		{
+			get => GetPropertyValue<CArray<gameItemID>>();
+			set => SetPropertyValue<CArray<gameItemID>>(value);
+		}
+
+		[Ordinal(17)] 
 		[RED("itemsLoadingTime")] 
 		public CFloat ItemsLoadingTime
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("muzzleEffectEnabled")] 
 		public CBool MuzzleEffectEnabled
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("customizable")] 
 		public CBool Customizable
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("holsteredArmsShouldBeVisible")] 
 		public CBool HolsteredArmsShouldBeVisible
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("holsteredArmsBeingSpawned")] 
 		public CBool HolsteredArmsBeingSpawned
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("holsteredArmsVisible")] 
 		public CBool HolsteredArmsVisible
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("holsteredArmsItem")] 
 		public gameItemID HolsteredArmsItem
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("cyberwareArmsBeingSpawned")] 
 		public CBool CyberwareArmsBeingSpawned
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("cyberwareArmsVisible")] 
 		public CBool CyberwareArmsVisible
 		{
@@ -164,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("cyberwareArmsItem")] 
 		public gameItemID CyberwareArmsItem
 		{
@@ -181,6 +189,7 @@ namespace WolvenKit.RED4.Types
 			SwapRifleWeaponItemId = new gameItemID();
 			SwapShootgunWeaponItemId = new gameItemID();
 			LoadingItems = new();
+			LoadingVisualItems = new();
 			HolsteredArmsItem = new gameItemID();
 			CyberwareArmsItem = new gameItemID();
 
