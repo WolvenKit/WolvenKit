@@ -153,10 +153,16 @@ public class ImportableItemViewModel : ImportExportItemViewModel
         using MemoryStream stream = new();
         file.Value.Extract(stream);
         if (!parserService.TryReadRed4File(stream, out var cr2WFile) ||
-            cr2WFile.RootChunk is not CBitmapTexture { Setup: { } setup } bitmapTexture ||
+            cr2WFile.RootChunk is not CBitmapTexture { Setup: STextureGroupSetup setup } bitmapTexture ||
             bitmapTexture.RenderTextureResource.RenderResourceBlobPC.Chunk is not rendRenderTextureBlobPC blob)
         {
             return false;
+        }
+
+        // Invalid enum value. Not sure where this is coming from, in the constructors everything is assigned correctly.
+        if (setup.Group.ToString() == "0")
+        {
+            setup.Group = Enums.GpuWrapApieTextureGroup.TEXG_Generic_Color;
         }
 
         args = new XbmImportArgs(setup, blob.Header.TextureInfo.MipCount > 1);
