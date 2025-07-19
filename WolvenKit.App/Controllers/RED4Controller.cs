@@ -284,11 +284,31 @@ public class RED4Controller : ObservableObject, IGameController
         .Where(name => !IsSpecialExtension(name))
         .Where(x => Path.GetFileName(x) != "info.json").ToList();
 
-    private static List<string> GetREDmodScriptFiles(Cp77Project cp77Proj) =>
-        Directory.EnumerateFiles(Path.Combine(cp77Proj.ResourcesDirectory, "scripts"), "*.*", SearchOption.AllDirectories).Where(name => IsCDPRScript(name)).ToList();
+    private static List<string> GetREDmodScriptFiles(Cp77Project cp77Proj)
+    {
+        var absolutePath = Path.Combine(cp77Proj.ResourcesDirectory, "scripts");
+        if (!Directory.Exists(absolutePath))
+        {
+            return [];
+        }
 
-    private static List<string> GetREDmodTweakFiles(Cp77Project cp77Proj) =>
-        Directory.EnumerateFiles(Path.Combine(cp77Proj.ResourcesDirectory, "tweaks"), "*.tweak", SearchOption.AllDirectories).ToList();
+        return Directory
+            .EnumerateFiles(absolutePath, "*.*", SearchOption.AllDirectories)
+            .Where(IsCDPRScript).ToList();
+    }
+
+    private static List<string> GetREDmodTweakFiles(Cp77Project cp77Proj)
+    {
+        var absolutePath = Path.Combine(cp77Proj.ResourcesDirectory, "tweaks");
+        if (!Directory.Exists(absolutePath))
+        {
+            return [];
+        }
+
+        return Directory.EnumerateFiles(absolutePath, "*.tweak",
+            SearchOption.AllDirectories).ToList();
+    }
+    
 
     /// <summary>
     /// Pack mod with options
