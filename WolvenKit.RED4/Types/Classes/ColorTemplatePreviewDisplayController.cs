@@ -101,6 +101,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(17)] 
+		[RED("lightsColorGrey")] 
+		public inkImageWidgetReference LightsColorGrey
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(18)] 
 		[RED("uniqueTemplateImage")] 
 		public inkImageWidgetReference UniqueTemplateImage
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("frameSelected")] 
 		public inkImageWidgetReference FrameSelected
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("genericColor")] 
 		public HDRColor GenericColor
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<HDRColor>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("uniqueColor")] 
 		public HDRColor UniqueColor
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<HDRColor>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("currentTemplate")] 
 		public VehicleVisualCustomizationTemplate CurrentTemplate
 		{
@@ -140,9 +148,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<VehicleVisualCustomizationTemplate>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("canAdd")] 
 		public CBool CanAdd
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(24)] 
+		[RED("lightsColorAvailable")] 
+		public CBool LightsColorAvailable
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
@@ -162,6 +178,7 @@ namespace WolvenKit.RED4.Types
 			TemplateType = new inkImageWidgetReference();
 			CheckboxSquare = new inkRectangleWidgetReference();
 			AddIcon = new inkImageWidgetReference();
+			LightsColorGrey = new inkImageWidgetReference();
 			UniqueTemplateImage = new inkImageWidgetReference();
 			FrameSelected = new inkImageWidgetReference();
 			GenericColor = new HDRColor();

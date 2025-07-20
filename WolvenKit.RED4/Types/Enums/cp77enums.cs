@@ -512,6 +512,12 @@ public static partial class Enums
 		Hover = 1
 	}
 
+	public enum AutoDriveDriveType
+	{
+		GoToDestination = 0,
+		FreeRoam = 1
+	}
+
 	public enum BarType
 	{
 		Armor = 0,
@@ -534,6 +540,13 @@ public static partial class Enums
 		SIERRA = 2,
 		VICTOR = 3,
 		MAX = 4
+	}
+
+	public enum BusySwitchingReason
+	{
+		AVAILABLE = 0,
+		RANDOMIZING = 1,
+		SWAPPING = 2
 	}
 
 	public enum ButtonStatus
@@ -795,6 +808,19 @@ public static partial class Enums
 		Flat = 0,
 		TargetHealth = 1,
 		Invalid = -1
+	}
+
+	public enum DelamainTaxiState
+	{
+		None = 0,
+		Spawned = 1,
+		Parked = 2,
+		Ready = 3,
+		Started = 4,
+		Arrived = 5,
+		Cancelled = 6,
+		Finished = 7,
+		Freeroam = 8
 	}
 
 	public enum DerivedFilterResult
@@ -2906,6 +2932,13 @@ public static partial class Enums
 		ChargeAttack = 6
 	}
 
+	public enum EMenuType
+	{
+		Hub = 0,
+		Pause = 1,
+		All = 2
+	}
+
 	[Flags]
 	public enum EMeshChunkFlags
 	{
@@ -4238,7 +4271,8 @@ public static partial class Enums
 		Reloading = 6,
 		Processing = 7,
 		PreOrder = 8,
-		PreOrderOwned = 9
+		PreOrderOwned = 9,
+		Hidden = 10
 	}
 
 	public enum ExplosiveTriggerDeviceLaserState
@@ -5124,6 +5158,14 @@ public static partial class Enums
 		Regular = 1
 	}
 
+	public enum MuramasaOption
+	{
+		WheelCover = 0,
+		WheelRims = 1,
+		Branding = 2,
+		BackRest = 3
+	}
+
 	public enum NavGenAgentSize
 	{
 		Human = 0,
@@ -5927,7 +5969,10 @@ public static partial class Enums
 		ModalPopup = 7,
 		RadialWheel = 8,
 		VehicleRace = 9,
-		Berserk = 10
+		Berserk = 10,
+		CinematicCamera = 11,
+		Empty = 12,
+		DelamainTaxi = 13
 	}
 
 	public enum UIInGameNotificationType
@@ -6133,6 +6178,13 @@ public static partial class Enums
 	{
 		Default = 0,
 		Police = 1
+	}
+
+	public enum ZoneRelativeToVehicle
+	{
+		Right = 0,
+		Left = 1,
+		Middle = 2
 	}
 
 	public enum aimTypeEnum
@@ -7839,6 +7891,20 @@ public static partial class Enums
 		Invalid = 7
 	}
 
+	public enum gameAutodriveDestinationType
+	{
+		None = 0,
+		PlayerTracked = 1,
+		Quest = 2
+	}
+
+	public enum gameAutodriveLaneValidityResult
+	{
+		OnValidLane = 0,
+		NotOnValidLane = 1,
+		NotOnRoad = 2
+	}
+
 	public enum gameBinkVideoAction : byte
 	{
 		Undefined = 0,
@@ -8317,7 +8383,9 @@ public static partial class Enums
 		CP77_Patch_2_1_Hotfix2 = 2120,
 		CP77_Patch_2_1_Hotfix3 = 2137,
 		CP77_Patch_2_2 = 2200,
-		Current = 2200
+		CP77_Patch_2_2_Hotfix1 = 2210,
+		CP77_Patch_2_3 = 2300,
+		Current = 2300
 	}
 
 	public enum gameGameplayEventFlag
@@ -9197,7 +9265,11 @@ public static partial class Enums
 		Reveal = 7,
 		Boss = 8,
 		Twintone = 9,
-		Police = 10
+		Police = 10,
+		Autodrive = 11,
+		TwintoneNegative = 12,
+		Connection = 13,
+		DelamainTaxi = 14
 	}
 
 	public enum gameSmartObjectInstanceEntryType
@@ -10933,12 +11005,14 @@ public static partial class Enums
 		Zzz16_RelicDeviceSpecialVariant = 138,
 		Zzz17_NCARTVariant = 139,
 		Zzz18_RacingVariant = 140,
-		CPO_PingDoorVariant = 141,
-		CPO_PingGoHereVariant = 142,
-		CPO_PingLootVariant = 143,
-		CPO_RemotePlayerVariant = 144,
-		Count = 145,
-		Invalid = 146
+		Zzz19_DelamainTaxiVariant = 141,
+		Zzz20_DelamainTaxiDestinationVariant = 142,
+		CPO_PingDoorVariant = 143,
+		CPO_PingGoHereVariant = 144,
+		CPO_PingLootVariant = 145,
+		CPO_RemotePlayerVariant = 146,
+		Count = 147,
+		Invalid = 148
 	}
 
 	public enum gamedataMeleeAttackDirection
@@ -15750,6 +15824,9 @@ public static partial class Enums
 		RadialWheel = 1 << 8,
 		VehicleRace = 1 << 9,
 		Berserk = 1 << 10,
+		CinematicCamera = 1 << 11,
+		Empty = 1 << 12,
+		DelamainTaxi = 1 << 13,
 		MAX = 1 << 31
 	}
 
@@ -15886,7 +15963,8 @@ public static partial class Enums
 		Patch2000 = 2,
 		Patch2000_EP1 = 3,
 		Patch2100 = 4,
-		Patch2200 = 5
+		Patch2200 = 5,
+		Patch2300 = 6
 	}
 
 	public enum gameuiTutorialHiddenReason
@@ -16839,7 +16917,8 @@ public static partial class Enums
 		Door = 4,
 		Stairs = 5,
 		Road = 6,
-		Count = 7
+		RoadNoAutodrive = 7,
+		Count = 8
 	}
 
 	public enum moveCirclingDirection
@@ -19529,7 +19608,7 @@ public static partial class Enums
 		EndMove = 1
 	}
 
-	public enum worldTrafficLanePersistentFlags : ushort
+	public enum worldTrafficLanePersistentFlags : short
 	{
 		FromRoadSpline = 1,
 		Bidirectional = 2,
@@ -19545,7 +19624,8 @@ public static partial class Enums
 		Blockade = 2048,
 		Yield = 4096,
 		NoAIDriving = 8192,
-		Highway = 16384
+		Highway = 16384,
+		NoAutodrive = -32768
 	}
 
 	public enum worldTrafficLightColor

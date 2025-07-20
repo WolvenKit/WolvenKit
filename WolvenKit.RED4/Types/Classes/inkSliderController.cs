@@ -212,6 +212,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(27)] 
+		[RED("HACK_isDisabledForHDRCalibrationScreen")] 
+		public CBool HACK_isDisabledForHDRCalibrationScreen
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public inkSliderController()
 		{
 			SlidingAreaRef = new inkWidgetReference();

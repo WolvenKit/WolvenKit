@@ -269,6 +269,30 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(140)] 
+		[RED("shouldForceExitDelamain")] 
+		public CBool ShouldForceExitDelamain
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(141)] 
+		[RED("customMappin")] 
+		public CEnum<gamedataMappinVariant> CustomMappin
+		{
+			get => GetPropertyValue<CEnum<gamedataMappinVariant>>();
+			set => SetPropertyValue<CEnum<gamedataMappinVariant>>(value);
+		}
+
+		[Ordinal(142)] 
+		[RED("hornEnabled")] 
+		public CBool HornEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(143)] 
 		[RED("vehicleControllerPS")] 
 		public CHandle<vehicleControllerPS> VehicleControllerPS
 		{
@@ -282,6 +306,8 @@ namespace WolvenKit.RED4.Types
 			PreviousInteractionState = new();
 			VehicleVisualCustomizationTemplate = new SavedVehicleVisualCustomizationTemplate { GenericData = new GenericTemplatePersistentData() };
 			VehicleApperanceDefinition = new vehicleVisualModdingDefinition();
+			CustomMappin = Enums.gamedataMappinVariant.Invalid;
+			HornEnabled = true;
 
 			PostConstruct();
 		}

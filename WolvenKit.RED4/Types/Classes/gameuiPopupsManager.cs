@@ -348,12 +348,29 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(45)] 
+		[RED("popUpQueue")] 
+		public CArray<CHandle<inkGameNotificationData>> PopUpQueue
+		{
+			get => GetPropertyValue<CArray<CHandle<inkGameNotificationData>>>();
+			set => SetPropertyValue<CArray<CHandle<inkGameNotificationData>>>(value);
+		}
+
+		[Ordinal(46)] 
+		[RED("activePopUp")] 
+		public CBool ActivePopUp
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public gameuiPopupsManager()
 		{
 			BracketsContainer = new inkCompoundWidgetReference();
 			TutorialOverlayContainer = new inkCompoundWidgetReference();
 			TutorialData = new gamePopupData { MessageOverrideDataList = new(), VideoType = Enums.gameVideoType.Unknown };
 			TutorialSettings = new gamePopupSettings { CloseAtInput = true, Position = Enums.gamePopupPosition.Center, Margin = new inkMargin() };
+			PopUpQueue = new();
 
 			PostConstruct();
 		}
