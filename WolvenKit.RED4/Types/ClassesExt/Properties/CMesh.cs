@@ -27,7 +27,7 @@ public partial class CMesh
         set => SetPropertyValue<CDateTime>(value);
     }
 
-    [Ordinal(997)]
+    [OrdinalOverride(After = 26)]
     [RED("geometryHash")]
     public CUInt64 GeometryHash
     {
