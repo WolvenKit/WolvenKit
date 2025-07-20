@@ -45,6 +45,54 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
+		[RED("overrideDisplay")] 
+		public CBool OverrideDisplay
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("icon")] 
+		public CName Icon
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("defaultState")] 
+		public CName DefaultState
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("activeState")] 
+		public CName ActiveState
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("forcedFavorite")] 
+		public CBool ForcedFavorite
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("spawnOnlyOnValidRoad")] 
+		public CBool SpawnOnlyOnValidRoad
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("destructionTimeStamp")] 
 		public EngineTime DestructionTimeStamp
 		{

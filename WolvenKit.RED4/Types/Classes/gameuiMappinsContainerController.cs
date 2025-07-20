@@ -60,12 +60,30 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkLinePatternWidgetReference>(value);
 		}
 
+		[Ordinal(16)] 
+		[RED("gpsDelamainPathWidget")] 
+		public inkLinePatternWidgetReference GpsDelamainPathWidget
+		{
+			get => GetPropertyValue<inkLinePatternWidgetReference>();
+			set => SetPropertyValue<inkLinePatternWidgetReference>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("autodrivePathWidget")] 
+		public inkLinePatternWidgetReference AutodrivePathWidget
+		{
+			get => GetPropertyValue<inkLinePatternWidgetReference>();
+			set => SetPropertyValue<inkLinePatternWidgetReference>(value);
+		}
+
 		public gameuiMappinsContainerController()
 		{
 			Tier = Enums.GameplayTier.Tier1_FullGameplay;
 			SpawnContainerPath = new inkWidgetPath { Names = new() };
 			GpsQuestPathWidget = new inkLinePatternWidgetReference();
 			GpsPlayerTrackedPathWidget = new inkLinePatternWidgetReference();
+			GpsDelamainPathWidget = new inkLinePatternWidgetReference();
+			AutodrivePathWidget = new inkLinePatternWidgetReference();
 
 			PostConstruct();
 		}

@@ -76,9 +76,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(21)] 
+		[RED("enabled")] 
+		public CBool Enabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public TwintoneTemplateGridController()
 		{
 			CanNavigate = true;
+			Enabled = true;
 
 			PostConstruct();
 		}

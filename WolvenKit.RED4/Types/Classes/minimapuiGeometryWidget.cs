@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
 
 		public minimapuiGeometryWidget()
 		{
-			WidgetTemplates = new() { new inkWidgetReference(), new inkWidgetReference(), new inkWidgetReference(), new inkWidgetReference(), new inkWidgetReference(), new inkWidgetReference(), new inkWidgetReference() };
+			WidgetTemplates = new() { new inkWidgetReference(), new inkWidgetReference(), new inkWidgetReference(), new inkWidgetReference(), new inkWidgetReference(), new inkWidgetReference(), new inkWidgetReference(), new inkWidgetReference() };
 			Settings = new minimapuiSettings { ShowTime = 0.300000F, HideTime = 0.250000F };
 
 			PostConstruct();

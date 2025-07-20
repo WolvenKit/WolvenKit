@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("unregisteredVehiclesData")] 
+		public CArray<vehicleGarageComponentVehicleData> UnregisteredVehiclesData
+		{
+			get => GetPropertyValue<CArray<vehicleGarageComponentVehicleData>>();
+			set => SetPropertyValue<CArray<vehicleGarageComponentVehicleData>>(value);
+		}
+
+		[Ordinal(2)] 
 		[RED("unlockedVehicles")] 
 		public CArray<vehicleGarageVehicleID> UnlockedVehicles
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<vehicleGarageVehicleID>>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("unlockedVehicleArray")] 
 		public CArray<vehicleUnlockedVehicle> UnlockedVehicleArray
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<vehicleUnlockedVehicle>>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("uiFavoritedVehicles")] 
 		public CArray<vehicleGarageVehicleID> UiFavoritedVehicles
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<vehicleGarageVehicleID>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("activeVehicles", 3)] 
 		public CStatic<vehicleGarageVehicleID> ActiveVehicles
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CStatic<vehicleGarageVehicleID>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("mountedVehicleData")] 
 		public vehicleGarageComponentVehicleData MountedVehicleData
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<vehicleGarageComponentVehicleData>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("mountedVehicleStolen")] 
 		public CBool MountedVehicleStolen
 		{
@@ -63,6 +71,7 @@ namespace WolvenKit.RED4.Types
 		public vehicleGarageComponentPS()
 		{
 			SpawnedVehiclesData = new();
+			UnregisteredVehiclesData = new();
 			UnlockedVehicles = new();
 			UnlockedVehicleArray = new();
 			UiFavoritedVehicles = new();

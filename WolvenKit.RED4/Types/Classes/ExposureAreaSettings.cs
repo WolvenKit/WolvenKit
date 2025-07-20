@@ -84,6 +84,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(12)] 
+		[RED("exposureCompensationOffset")] 
+		public CFloat ExposureCompensationOffset
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public ExposureAreaSettings()
 		{
 			Enable = true;

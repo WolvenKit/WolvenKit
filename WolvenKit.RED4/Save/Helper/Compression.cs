@@ -323,6 +323,11 @@ public class Compression
                     return new Settings { TableEntriesCount = 0x100, ChunkSize = 0x00040000 };
                 }
 
+                if (MaxEntries == 0x200)
+                {
+                    return new Settings { TableEntriesCount = 0x200, ChunkSize = 0x00040000 };
+                }
+
                 if (MaxEntries == 0x400)
                 {
                     return new Settings { TableEntriesCount = 0x400, ChunkSize = 0x00080000 };
