@@ -9,6 +9,7 @@ using ReactiveUI;
 using Splat;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Converters;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Editors
@@ -44,6 +45,8 @@ namespace WolvenKit.Views.Editors
                 SetCurrentValue(OptionsProperty, CvmDropdownHelper.GetDropdownOptions(vm, _documentTools, false));
                 SetCurrentValue(ShowRefreshButtonProperty, CvmDropdownHelper.ShouldShowRefreshButton(vm));
 
+                SetCurrentValue(ShowRbgColorDropdownProperty, CvmDropdownHelper.ShouldShowColourInDropdown(vm));
+                
                 if (!ShowRefreshButton)
                 {
                     Col3.SetCurrentValue(ColumnDefinition.WidthProperty, new GridLength(0));
@@ -105,6 +108,23 @@ namespace WolvenKit.Views.Editors
         public static readonly DependencyProperty ShowRefreshButtonProperty =
             DependencyProperty.Register(
                 nameof(ShowRefreshButton),
+                typeof(bool),
+                typeof(FilterableDropdownCNameMenu),
+                new PropertyMetadata(false));
+
+        /// <summary>
+        /// Show the refresh button?
+        /// </summary>
+        public bool ShowRbgColorDropdown
+        {
+            get => (bool)GetValue(ShowRbgColorDropdownProperty);
+            set => SetValue(ShowRbgColorDropdownProperty, value);
+        }
+
+        /// <summary>Identifies the <see cref="ShowRbgColorDropdown"/> dependency property.</summary>
+        public static readonly DependencyProperty ShowRbgColorDropdownProperty =
+            DependencyProperty.Register(
+                nameof(ShowRbgColorDropdown),
                 typeof(bool),
                 typeof(FilterableDropdownCNameMenu),
                 new PropertyMetadata(false));
