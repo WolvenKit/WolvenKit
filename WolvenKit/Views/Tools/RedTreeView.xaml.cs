@@ -730,8 +730,6 @@ namespace WolvenKit.Views.Tools
             var groupedNodes = GroupByArrayOrParent(selectedNodes, (cvm) => cvm.CanPasteSelection(useSingle))
                 .Where(group => group.Key.IsArray).ToList();
 
-            using (collectionView.DeferRefresh())
-            {
                 foreach (var group in groupedNodes)
                 {
                     if (onlyArraysSelected)
@@ -742,16 +740,14 @@ namespace WolvenKit.Views.Tools
                     }
                     else
                     {
-                        // delete selection, then paste at index
+                        // delete selection, then paste at index of last selected child
                         group.Key.DeleteNodes(selectedNodes);
-                        var pasteIndex = group.FirstOrDefault()?.NodeIdxInParent ?? -1;
+                        var pasteIndex = group.LastOrDefault()?.NodeIdxInParent ?? -1;
                         group.Key.PasteAtIndex(copiedChunks, pasteIndex);
                     }
                 }
-            }
 
-            ReapplySearchAsync(groupedNodes.Select(g => g.Key));
-
+                ReapplySearchAsync(groupedNodes.Select(g => g.Key));
         }
 
         /// <summary>
@@ -768,6 +764,7 @@ namespace WolvenKit.Views.Tools
             return items
                 .Except(itemParents)
                 .Where((chunk) => callback is null || callback(chunk))
+                .OrderBy(chunk => chunk.NodeIdxInParent)
                 .GroupBy(chunk => chunk.IsArray ? chunk : chunk.Parent);
         }
 
