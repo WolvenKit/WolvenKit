@@ -636,14 +636,13 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             return;
         }
 
-        foreach (var cvm in selectedMeshAppearances)
-        {
-            ((meshMeshAppearance)cvm.ResolvedData).ChunkMaterials.Clear();
-            cvm.RecalculateProperties();
-        }
+        foreach (var cvm in SelectedChunks.Select(c => c.GetPropertyChild("chunkMaterials")).Where(c => c is not null))
 
-        SelectedChunks.LastOrDefault()?.Parent?.RecalculateProperties();
-        SelectedChunks.LastOrDefault()?.Tab?.Parent?.SetIsDirty(true);
+        {
+            cvm!.ClearChildren();
+            cvm.Parent?.RecalculateProperties();
+        }
+        
     }
 
     [RelayCommand(CanExecute = nameof(HasMeshAppearances))]
