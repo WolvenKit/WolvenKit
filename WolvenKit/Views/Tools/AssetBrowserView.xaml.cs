@@ -3,9 +3,11 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using DynamicData;
 using HandyControl.Data;
+using MahApps.Metro.Controls;
 using ReactiveUI;
 using Splat;
 using Syncfusion.UI.Xaml.Grid;
@@ -344,6 +346,17 @@ namespace WolvenKit.Views.Tools
             vm.Refresh();
         }
 
+        private void ReloadModBrowserButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is not AssetBrowserViewModel vm)
+            {
+                return;
+            }
+
+            vm.ScanModArchives();
+            vm.Refresh();
+        }
+
         private void OnModifierStateChanged() => ViewModel?.RefreshModifierStates();
 
         private bool _isMenuOpen;
@@ -369,6 +382,23 @@ namespace WolvenKit.Views.Tools
             if (!_isMenuOpen)
             {
                 _modifierViewSvc.OnKeystateChanged(e);
+            }
+        }
+
+        private void OnModBrowserToggled(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (sender is not ToggleSwitch button)
+            {
+                return;
+            }
+
+            if (button.IsOn)
+            {
+                Grid.SetColumnSpan(FileSearchBar, 3);
+            }
+            else
+            {
+                Grid.SetColumnSpan(FileSearchBar, 1);
             }
         }
     }
