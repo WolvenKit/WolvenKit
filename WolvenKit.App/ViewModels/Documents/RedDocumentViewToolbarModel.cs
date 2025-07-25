@@ -18,6 +18,10 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.Documents;
 
+public class AddDependenciesFullEventArgs : EventArgs
+{
+}
+
 public partial class RedDocumentViewToolbarModel : ObservableObject
 {
     
@@ -233,7 +237,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private bool CanAddDependenciesFull() => HasDependencies() && IsShiftKeyDown;
 
     [RelayCommand(CanExecute = nameof(CanAddDependenciesFull))]
-    private void AddDependenciesFull() => OnAddDependencies?.Invoke(this, EventArgs.Empty);
+    private void AddDependenciesFull() => OnAddDependencies?.Invoke(this, new AddDependenciesFullEventArgs() { });
 
     private bool CanGenerateNewCruid() => SelectedChunk?.PropertyType == typeof(CRUID);
 
