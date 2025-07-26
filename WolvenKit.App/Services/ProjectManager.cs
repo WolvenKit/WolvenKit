@@ -83,7 +83,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
                 return;
             }
 
-         
+
             ActiveProject = x.Result;
             _archiveManager.ProjectArchive = x.Result.AsArchive();
             IsProjectLoaded = true;
@@ -203,7 +203,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
             {
                 _loggerService.Error($"Could not move file. Error: {e}");
             }
-            
+
         }
     }
 
@@ -271,7 +271,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
 
         return true;
     }
-    
+
 
     public bool Save()
     {

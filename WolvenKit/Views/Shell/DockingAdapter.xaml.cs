@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Runtime.Intrinsics.Arm;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -101,7 +102,7 @@ namespace WolvenKit.Views.Shell
                 SaveLayout(Path.Combine(ISettingsManager.GetAppData(), "DockStates.xml"));
             }
         }
-        
+
         private void SaveLayout(string filePath)
         {
             var tmpPath = Path.ChangeExtension(filePath, ".tmp");
@@ -173,8 +174,8 @@ namespace WolvenKit.Views.Shell
 
             File.Delete(appDataLayoutPath);
             _logger.Success("Your custom default layout was reset");
-        }        
-        
+        }
+
         public void LoadDefaultLayout()
         {
             if (DataContext is AppViewModel { ActiveProject: { } project })
@@ -219,7 +220,7 @@ namespace WolvenKit.Views.Shell
                 PART_DockingManager.BeginInit(); // Begin batch updates
 
                 using (var reader = XmlReader.Create(filePath))
-                {              
+                {
 
                     var defaultXmlSerializer = DockingManager.CreateDefaultXmlSerializer(typeof(List<DockingParams>));
                     if (!defaultXmlSerializer.CanDeserialize(reader))
@@ -283,7 +284,7 @@ namespace WolvenKit.Views.Shell
             {
                 PART_DockingManager.EndInit(); // End batch updates
             }
-            
+
 
             return false;
         }
@@ -415,7 +416,7 @@ namespace WolvenKit.Views.Shell
                 }
 
                 vm.State = DockingManager.GetState(contentControl).ToDockState();
-                
+
             }
 
             _viewModel ??= DataContext as AppViewModel;
@@ -448,6 +449,12 @@ namespace WolvenKit.Views.Shell
                 }
             }
 
+            string proj = "";
+            if (_viewModel?.ActiveProject != null)
+            {
+                proj = _viewModel?.ActiveProject.Name;
+            }
+
             if (e.NewValue is ContentControl content)
             {
                 if (content.Content is IDockElement { IsActive: false } dockElement)
@@ -469,7 +476,17 @@ namespace WolvenKit.Views.Shell
                     propertiesViewModel.AB_FileInfoVisible = true;
                     propertiesViewModel.PE_FileInfoVisible = false;
                     propertiesViewModel.ExecuteSelectFile(abvm.RightSelectedItem);
-                } 
+                }
+
+                if (content.Content is string s)
+                {
+                    DiscordHelper.SetDiscordRPCStatus(s, proj, _logger);
+                }
+
+                if (content.Content is RedDocumentViewModel rdvm)
+                {
+                    DiscordHelper.SetDiscordRPCStatus("Working on " + rdvm.Header, proj, _logger);
+                }
 
                 //if (((IDockElement)content.Content).State == DockState.Document)
                 try
@@ -484,10 +501,11 @@ namespace WolvenKit.Views.Shell
                     // Don't activate it
                 }
 
-                var details = content.Content is string s ? s : "";
-                var state = ActiveDocument == null ? "Browsing..." : $"Working on {ActiveDocument.Header}";
+            }
 
-                DiscordHelper.SetDiscordRPCStatus(details, state, _logger);
+            if (e.OldValue is ContentControl && e.NewValue == null)
+            {
+                DiscordHelper.SetDiscordRPCStatus("No file", proj, _logger);
             }
 
             _viewModel?.UpdateTitle();
@@ -553,7 +571,7 @@ namespace WolvenKit.Views.Shell
 
             _mainWindow.Deactivated += OnMainWindowDeactivated;
             _mainWindow.Closing += OnMainWindowClosing;
-            
+
         }
 
         private void OnMainWindowDeactivated(object sender, EventArgs e)
@@ -597,16 +615,7 @@ namespace WolvenKit.Views.Shell
             }
         }
 
-        public void OnActiveProjectChanged()
-        {
-            if (_viewModel?.ActiveProject is { } activeProject)
-            {
-                DiscordHelper.SetDiscordRPCStatus(activeProject.Name,
-                    ActiveDocument == null ? "Browsing..." : $"Working on {ActiveDocument.Header}", _logger);
-            }
-
-            LoadLayoutFromProject();
-        }
+        public void OnActiveProjectChanged() => LoadLayoutFromProject();
 
         /// <summary>
         /// This happens on the very first tool window assignments
@@ -664,7 +673,7 @@ namespace WolvenKit.Views.Shell
             }
 
             newCollection.CollectionChanged += CollectionChanged;
-   
+
             base.OnPropertyChanged(e);
         }
 
@@ -691,7 +700,7 @@ namespace WolvenKit.Views.Shell
                     {
                         SetCurrentValue(ActiveDocumentProperty, null);
                     }
-                    
+
                     // unsubscribe ?
                 }
             }
