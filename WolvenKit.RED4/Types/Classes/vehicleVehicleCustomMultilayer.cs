@@ -5,6 +5,14 @@ namespace WolvenKit.RED4.Types
 	public partial class vehicleVehicleCustomMultilayer : RedBaseClass
 	{
 		[Ordinal(0)] 
+		[RED("onlyForPlayerVehicleAppearances")] 
+		public CArray<CName> OnlyForPlayerVehicleAppearances
+		{
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+
+		[Ordinal(1)] 
 		[RED("affectedComponents")] 
 		public CArray<CName> AffectedComponents
 		{
@@ -12,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("excludedComponents")] 
 		public CArray<CName> ExcludedComponents
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("customMlSetup")] 
 		public redResourceReferenceScriptToken CustomMlSetup
 		{
@@ -28,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("customMlMask")] 
 		public redResourceReferenceScriptToken CustomMlMask
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("coatLayerMin")] 
 		public CFloat CoatLayerMin
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("coatLayerMax")] 
 		public CFloat CoatLayerMax
 		{
@@ -54,6 +62,7 @@ namespace WolvenKit.RED4.Types
 
 		public vehicleVehicleCustomMultilayer()
 		{
+			OnlyForPlayerVehicleAppearances = new();
 			AffectedComponents = new();
 			ExcludedComponents = new();
 			CustomMlSetup = new redResourceReferenceScriptToken();

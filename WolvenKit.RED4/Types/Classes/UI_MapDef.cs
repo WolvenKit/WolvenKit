@@ -36,12 +36,21 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_String>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("minimapLayerHighlightRequest")] 
+		public gamebbScriptID_Variant MinimapLayerHighlightRequest
+		{
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
+		}
+
 		public UI_MapDef()
 		{
 			CurrentLocation = new gamebbScriptID_String();
 			CurrentLocationEnumName = new gamebbScriptID_String();
 			NewLocationDiscovered = new gamebbScriptID_Bool();
 			CurrentState = new gamebbScriptID_String();
+			MinimapLayerHighlightRequest = new gamebbScriptID_Variant();
 
 			PostConstruct();
 		}

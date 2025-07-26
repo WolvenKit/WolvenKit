@@ -104,7 +104,7 @@ public abstract class CvmDropdownHelper
 
 
     public static Dictionary<string, string> GetDropdownOptions(ChunkViewModel cvm, DocumentTools documentTools,
-        bool forceCacheRefresh = false)
+        bool forceCacheRefresh = false, string? filter = null)
     {
         if (cvm.Parent is not ChunkViewModel parent)
         {
@@ -114,8 +114,11 @@ public abstract class CvmDropdownHelper
         IEnumerable<string?> ret = [];
         switch (parent.ResolvedData)
         {
-            case gameJournalPath when cvm.Name is "className" && parent.Name is not null && s_questHandleParentNames.Contains(parent.Name):
+            case gameJournalPath when cvm.Name is "className" && s_questHandleParentNames.Contains(parent.Name):
                 ret = RedTypeHelper.GetExtendingClassNames(typeof(gameJournalEntry));
+                break;
+            case gameJournalPath journalPath when cvm.Name is "realPath":
+                ret = documentTools.GetAllJournalPathsAsync(forceCacheRefresh, filter).Result.Select(path => (string?)path);
                 break;
             case entISkinTargetComponent when cvm.Name is "renderingPlaneAnimationParam":
                 ret = s_appFileRenderPlane;
@@ -622,8 +625,7 @@ public abstract class CvmDropdownHelper
 
         return parent.ResolvedData switch
         {
-            gameJournalPath => cvm.Name is "className" && s_questHandleParentNames.Contains(parent.Name),
-
+            gameJournalPath when cvm.Name is "className" or "realPath" && s_questHandleParentNames.Contains(parent.Name) => true,
             #region mesh
 
             CArray<CName> when parent is { Name: "chunkMaterials", Parent.Parent.Parent.ResolvedData: CMesh } =>
@@ -688,6 +690,16 @@ public abstract class CvmDropdownHelper
     /// </summary>
     public static bool ShouldShowRefreshButton(ChunkViewModel cvm)
     {
+        if (cvm.ParentData is gameJournalPath && cvm.Name is "realPath")
+        {
+            return true;
+        }
+        
+        if (cvm.ParentData is graphGraphNodeDefinition && cvm.Name is "phaseResource" or "sceneFile")
+        {
+            return true;
+        }
+
         return cvm.GetRootModel().ResolvedData switch
         {
             entEntityTemplate when s_appearanceNames.Contains(cvm.Name) => true,

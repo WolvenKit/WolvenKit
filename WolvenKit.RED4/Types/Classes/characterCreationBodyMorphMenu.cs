@@ -430,10 +430,10 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(59)] 
 		[RED("busySwitchingAppearance")] 
-		public CBool BusySwitchingAppearance
+		public CEnum<BusySwitchingReason> BusySwitchingAppearance
 		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
+			get => GetPropertyValue<CEnum<BusySwitchingReason>>();
+			set => SetPropertyValue<CEnum<BusySwitchingReason>>(value);
 		}
 
 		[Ordinal(60)] 

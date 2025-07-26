@@ -108,6 +108,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(22)] 
+		[RED("noAutodrive")] 
+		public CBool NoAutodrive
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public worldTrafficSplineNode()
 		{
 			MaxSlotMaxSpeed = 10.000000F;
@@ -119,6 +127,7 @@ namespace WolvenKit.RED4.Types
 			Lights = new();
 			LaneSamplingAngle = 15.000000F;
 			NoAIDriving = true;
+			NoAutodrive = true;
 
 			PostConstruct();
 		}

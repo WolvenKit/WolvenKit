@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gameuiSwitcherInfo : gameuiCharacterCustomizationInfo
 	{
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("uiSlots")] 
 		public CArray<CName> UiSlots
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("options")] 
 		public CArray<gameuiSwitcherOption> Options
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameuiSwitcherOption>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("switchVisibility")] 
 		public CBool SwitchVisibility
 		{

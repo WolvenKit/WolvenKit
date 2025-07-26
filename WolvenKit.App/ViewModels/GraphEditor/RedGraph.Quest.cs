@@ -140,6 +140,11 @@ public partial class RedGraph
                 // Initialize the Type property with questSetVar_NodeType (the only implementation)
                 factsDBNode.Type = new CHandle<questIFactsDBManagerNodeType>(new questSetVar_NodeType());
             }
+
+            if (nodeDefinition is questInputNodeDefinition inputNode)
+            {
+                inputNode.SocketName = "In1";
+            }
         }
 
         return questNode;

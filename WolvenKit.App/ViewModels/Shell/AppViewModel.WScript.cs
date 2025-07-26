@@ -120,7 +120,14 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
             _loggerService.Info($"Scanning {ActiveProject.GetRelativePath(file.FileName)}");
             ActiveDocument = fileViewModel;
-            await _scriptService.ExecuteAsync(code);
+            try
+            {
+                await _scriptService.ExecuteAsync(code);
+            }
+            catch (Exception err)
+            {
+                _loggerService.Error(err.Message);
+            }
         }
 
         _loggerService.Info("Done.");

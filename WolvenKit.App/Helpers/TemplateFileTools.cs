@@ -587,7 +587,11 @@ public class TemplateFileTools
                 IsCallableDefault = true
             };
             // Phone conversation
-            var phoneConversation = new gameJournalPhoneConversation { Id = $"{options.ModName}_thread_title" };
+            var phoneConversation = new gameJournalPhoneConversation
+            {
+                Id = $"{options.ModName}_thread_title",
+                Title = new LocalizationString { Value = $"{options.ModName}_thread_title"}
+            };
             // Phone message
             var phoneMessage = new gameJournalPhoneMessage
             {
