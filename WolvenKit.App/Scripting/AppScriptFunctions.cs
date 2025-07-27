@@ -298,14 +298,10 @@ public class AppScriptFunctions : ScriptFunctions
             return result;
         }
 
-        if (GetBaseFolder(folderType) is not string baseFolder)
+        if (GetBaseFolder(folderType) is string baseFolder)
         {
-            return result;
-        }
-
-        foreach (var file in Directory.GetFiles(baseFolder, "*.*", SearchOption.AllDirectories))
-        {
-            result.Add(Path.GetRelativePath(baseFolder, file));
+            result.AddRange(Directory.GetFiles(baseFolder, "*.*", SearchOption.AllDirectories)
+                .Select(file => Path.GetRelativePath(baseFolder, file)));
         }
 
         return result;
