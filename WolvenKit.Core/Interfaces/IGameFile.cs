@@ -11,8 +11,14 @@ public interface IGameFile
 {
     #region Properties
 
+    /// <summary>
+    /// Game file's unique hash
+    /// </summary>
     ulong Key { get; }
 
+    /// <summary>
+    /// File name with extension (but without path)
+    /// </summary>
     string Name { get; }
 
     /// <summary>
@@ -21,19 +27,25 @@ public interface IGameFile
     uint Size { get; set; }
 
     /// <summary>
-    /// Compressed asset asize in bytes
+    /// Compressed asset size in bytes
     /// </summary>
     uint ZSize { get; set; }
 
     /// <summary>
-    /// Extension of the file without the dot
+    /// Extension of the file without the dot (e.g. "mesh").
     /// </summary>
     public string Extension { get; }
 
     public string? GuessedExtension { get; }
 
+    /// <summary>
+    /// File's relative path with file name and extension.
+    /// </summary>
     string FileName { get; }
 
+    /// <summary>
+    /// The game file's <see cref="ArchiveManagerScope"/>
+    /// </summary>
     ArchiveManagerScope Scope { get; set; }
 
     #endregion Properties

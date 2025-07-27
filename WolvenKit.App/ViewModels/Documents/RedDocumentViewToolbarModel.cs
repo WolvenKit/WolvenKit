@@ -18,6 +18,10 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.Documents;
 
+public class AddDependenciesFullEventArgs : EventArgs
+{
+}
+
 public partial class RedDocumentViewToolbarModel : ObservableObject
 {
     
@@ -233,7 +237,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private bool CanAddDependenciesFull() => HasDependencies() && IsShiftKeyDown;
 
     [RelayCommand(CanExecute = nameof(CanAddDependenciesFull))]
-    private void AddDependenciesFull() => OnAddDependencies?.Invoke(this, EventArgs.Empty);
+    private void AddDependenciesFull() => OnAddDependencies?.Invoke(this, new AddDependenciesFullEventArgs() { });
 
     private bool CanGenerateNewCruid() => SelectedChunk?.PropertyType == typeof(CRUID);
 
@@ -471,14 +475,13 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             return;
         }
 
-        foreach (var cvm in selectedMeshAppearances)
-        {
-            ((meshMeshAppearance)cvm.ResolvedData).ChunkMaterials.Clear();
-            cvm.RecalculateProperties();
-        }
+        foreach (var cvm in SelectedChunks.Select(c => c.GetPropertyChild("chunkMaterials")).Where(c => c is not null))
 
-        SelectedChunks.LastOrDefault()?.Parent?.RecalculateProperties();
-        SelectedChunks.LastOrDefault()?.Tab?.Parent?.SetIsDirty(true);
+        {
+            cvm!.ClearChildren();
+            cvm.Parent?.RecalculateProperties();
+        }
+        
     }
 
     [RelayCommand(CanExecute = nameof(HasMeshAppearances))]

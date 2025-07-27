@@ -1069,6 +1069,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(234)] 
+		[RED("noMovementModifierData")] 
+		public CArray<CHandle<gameStatModifierData_Deprecated>> NoMovementModifierData
+		{
+			get => GetPropertyValue<CArray<CHandle<gameStatModifierData_Deprecated>>>();
+			set => SetPropertyValue<CArray<CHandle<gameStatModifierData_Deprecated>>>(value);
+		}
+
+		[Ordinal(235)] 
+		[RED("registeredFactListeners")] 
+		public CArray<FactCallbackData> RegisteredFactListeners
+		{
+			get => GetPropertyValue<CArray<FactCallbackData>>();
+			set => SetPropertyValue<CArray<FactCallbackData>>(value);
+		}
+
+		[Ordinal(236)] 
 		[RED("bossThatTargetsPlayer")] 
 		public entEntityID BossThatTargetsPlayer
 		{
@@ -1076,7 +1092,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(235)] 
+		[Ordinal(237)] 
 		[RED("choiceTokenTextLayerId")] 
 		public CUInt32 ChoiceTokenTextLayerId
 		{
@@ -1084,7 +1100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(236)] 
+		[Ordinal(238)] 
 		[RED("choiceTokenTextDrawn")] 
 		public CBool ChoiceTokenTextDrawn
 		{
@@ -1113,6 +1129,8 @@ namespace WolvenKit.RED4.Types
 			DelayEndGracePeriodAfterSpawnEventID = new gameDelayID();
 			FriendlyDevicesHostileToEnemiesLock = new ScriptReentrantRWLock();
 			FriendlyDevicesHostileToEnemies = new();
+			NoMovementModifierData = new();
+			RegisteredFactListeners = new();
 			BossThatTargetsPlayer = new entEntityID();
 
 			PostConstruct();

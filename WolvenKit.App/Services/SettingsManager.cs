@@ -388,6 +388,12 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [ObservableProperty]
     private bool _showVerboseLogOutput;
 
+    [Display(Name = "Enable Discord RPC integration",
+        Description = "Show on Discord that you're currently modding",
+        GroupName = "Interface")]
+    [ObservableProperty]
+    private bool _isDiscordRPCEnabled;
+
     [Display(Name = "Exclude archives from scan by name (comma separated)",
         Description = "Exclude archives from scan if you know that they'll lead to exceptions (only the base name)",
         GroupName = "Interface")]

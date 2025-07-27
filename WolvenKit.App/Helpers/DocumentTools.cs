@@ -8,6 +8,10 @@ using WolvenKit.Common;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
+using System.Threading.Tasks;
+using System;
+using System.Collections.Concurrent;
+
 
 namespace WolvenKit.App.Helpers;
 
@@ -20,6 +24,116 @@ public class DocumentTools
 
     public static Regex PlaceholderRegex { get; } = new Regex(@"^[-=_]+$");
 
+    // Class-level CR2WFile cache
+    private readonly Dictionary<string, CR2WFile?> _cr2wFileCache = new();
+
+    // LFU + TTL cache for filtered results (file path + filter)
+    private readonly Dictionary<(string filePath, string filter), FilteredCacheEntry> _filteredResultsCache = new();
+    private readonly SortedDictionary<int, HashSet<(string filePath, string filter)>> _frequencyMap = new();
+    private readonly Dictionary<(string filePath, string filter), int> _keyFrequency = new();
+    private const int FilteredCacheLimit = 100;
+    private const int FilteredCacheTTLMinutes = 30;
+    private DateTime _lastCleanupTime = DateTime.UtcNow;
+    private const int CleanupIntervalMinutes = 5; // Only cleanup every 5 minutes
+
+    // Cache entry with metadata for LFU + TTL
+    private class FilteredCacheEntry
+    {
+        public List<string> Results { get; set; }
+        public DateTime CachedAt { get; set; }
+
+        public FilteredCacheEntry(List<string> results)
+        {
+            Results = results;
+            CachedAt = DateTime.UtcNow;
+        }
+
+        public bool IsExpired => DateTime.UtcNow.Subtract(CachedAt).TotalMinutes > FilteredCacheTTLMinutes;
+    }
+
+
+
+    // Helper methods for LFU cache operations
+    private void IncrementFrequency((string filePath, string filter) key)
+    {
+        if (!_keyFrequency.ContainsKey(key)) return;
+
+        var oldFreq = _keyFrequency[key];
+        var newFreq = oldFreq + 1;
+
+        // Remove from old frequency bucket
+        if (_frequencyMap.ContainsKey(oldFreq))
+        {
+            _frequencyMap[oldFreq].Remove(key);
+            if (_frequencyMap[oldFreq].Count == 0)
+            {
+                _frequencyMap.Remove(oldFreq);
+            }
+        }
+
+        // Add to new frequency bucket
+        if (!_frequencyMap.ContainsKey(newFreq))
+        {
+            _frequencyMap[newFreq] = new HashSet<(string filePath, string filter)>();
+        }
+        _frequencyMap[newFreq].Add(key);
+        _keyFrequency[key] = newFreq;
+    }
+
+    private void RemoveFromCache((string filePath, string filter) key)
+    {
+        if (_filteredResultsCache.Remove(key))
+        {
+            if (_keyFrequency.TryGetValue(key, out var freq))
+            {
+                if (_frequencyMap.ContainsKey(freq))
+                {
+                    _frequencyMap[freq].Remove(key);
+                    if (_frequencyMap[freq].Count == 0)
+                    {
+                        _frequencyMap.Remove(freq);
+                    }
+                }
+                _keyFrequency.Remove(key);
+            }
+        }
+    }
+
+    private void EvictLeastFrequentlyUsed()
+    {
+        if (_frequencyMap.Count == 0) return;
+
+        var leastFreq = _frequencyMap.First().Key;
+        var leastFreqSet = _frequencyMap[leastFreq];
+        
+        if (leastFreqSet.Count > 0)
+        {
+            var keyToEvict = leastFreqSet.First();
+            RemoveFromCache(keyToEvict);
+        }
+    }
+
+    private void CleanupExpiredEntries()
+    {
+        // Lazy cleanup - only run every 5 minutes
+        var now = DateTime.UtcNow;
+        if (now.Subtract(_lastCleanupTime).TotalMinutes < CleanupIntervalMinutes)
+        {
+            return;
+        }
+        _lastCleanupTime = now;
+
+        var expiredKeys = _filteredResultsCache
+            .Where(kvp => kvp.Value.IsExpired)
+            .Select(kvp => kvp.Key)
+            .ToList();
+
+        foreach (var key in expiredKeys)
+        {
+            RemoveFromCache(key);
+        }
+    }
+
     public DocumentTools(ILoggerService loggerService, Cr2WTools cr2WTools, IArchiveManager archiveManager,
         IProjectManager projectManager)
     {
@@ -29,7 +143,214 @@ public class DocumentTools
         _projectManager = projectManager;
     }
 
+    #region journalFile
 
+    public async Task<List<string>> GetAllJournalPathsAsync(bool forceCacheRefresh, string? filter = null, bool sortAndDistinct = true)
+    {
+        if (_projectManager.ActiveProject is not { } activeProject)
+            return [];
+
+        var journalPaths = CollectProjectFiles(".journal");
+
+        if (forceCacheRefresh)
+        {
+            foreach (var journal in journalPaths)
+            {
+                if (activeProject.GetAbsolutePath(journal) is string absolutePath)
+                {
+                    _cr2wFileCache.Remove(absolutePath);
+                    // Remove all filtered cache entries for this file
+                    foreach (var key in _filteredResultsCache.Keys.Where(k => k.filePath == absolutePath).ToList())
+                    {
+                        RemoveFromCache(key);
+                    }
+                }
+            }
+            // Remove all filtered cache entries for the current filter value
+            if (!string.IsNullOrEmpty(filter))
+            {
+                foreach (var key in _filteredResultsCache.Keys.Where(k => k.filter == filter).ToList())
+                {
+                    RemoveFromCache(key);
+                }
+            }
+        }
+
+        var validJournalPaths = journalPaths
+            .Select(journal => new { journal, absolutePath = activeProject.GetAbsolutePath(journal) })
+            .Where(x => x.absolutePath is not null && File.Exists(x.absolutePath))
+            .ToList();
+
+        var tasks = validJournalPaths.Select(async x =>
+        {
+            if (!_cr2wFileCache.TryGetValue(x.absolutePath!, out var cr2w))
+            {
+                cr2w = _cr2WTools.ReadCr2W(x.absolutePath!);
+                _cr2wFileCache[x.absolutePath!] = cr2w;
+            }
+            return await GetJournalIDsAsync(cr2w, x.absolutePath!, filter);
+        });
+
+        var results = await Task.WhenAll(tasks);
+        IEnumerable<string> allIds = results.SelectMany(ids => ids);
+        if (sortAndDistinct && (string.IsNullOrEmpty(filter) || sortAndDistinct))
+        {
+            allIds = allIds.Distinct().OrderBy(x => x);
+        }
+        return allIds.ToList();
+    }
+
+    private async Task<List<string>> GetJournalIDsAsync(CR2WFile? cr2W, string absoluteFilePath, string? filter = null)
+    {
+        if (cr2W == null || string.IsNullOrEmpty(filter)) return [];
+
+        var filterKey = (absoluteFilePath, filter);
+
+        CleanupExpiredEntries();
+
+        if (_filteredResultsCache.TryGetValue(filterKey, out var cachedFiltered) && !cachedFiltered.IsExpired)
+        {
+            IncrementFrequency(filterKey);
+            return cachedFiltered.Results;
+        }
+
+        var entriesIDs = await ProcessJournalEntries(cr2W, filter);
+
+        _filteredResultsCache[filterKey] = new FilteredCacheEntry(entriesIDs);
+        _keyFrequency[filterKey] = 1;
+
+        if (!_frequencyMap.ContainsKey(1))
+        {
+            _frequencyMap[1] = new HashSet<(string filePath, string filter)>();
+        }
+        _frequencyMap[1].Add(filterKey);
+
+        if (_filteredResultsCache.Count > FilteredCacheLimit)
+        {
+            EvictLeastFrequentlyUsed();
+        }
+
+        return entriesIDs;
+    }
+
+    private async Task<List<string>> ProcessJournalEntries(CR2WFile? cr2W, string filter)
+    {
+        if (cr2W?.RootChunk is not gameJournalResource journalResource || 
+            journalResource.Entry.Chunk is not gameJournalContainerEntry journalEntry)
+        {
+            return [];
+        }
+
+        var rootPath = journalResource.Entry.Chunk?.Id.ToString() ?? "";
+        var entriesIDs = new List<string>(50);
+
+        await ProcessEntries(journalEntry.Entries, entriesIDs, rootPath, filter);
+
+        return entriesIDs;
+    }
+
+    private Task ProcessEntries(IList<CHandle<gameJournalEntry>> entries, List<string> results, string currentPath, string filterStr)
+    {
+        if (entries.Count == 0) return Task.CompletedTask;
+
+        // Use parallel processing for larger entry sets
+        if (entries.Count > 5)
+        {
+            var bag = new System.Collections.Concurrent.ConcurrentBag<string>();
+            System.Threading.Tasks.Parallel.ForEach(entries, entry =>
+            {
+                if (entry.Chunk != null)
+                {
+                    ProcessEntry(entry, currentPath, filterStr, bag);
+                }
+            });
+            results.AddRange(bag);
+        }
+        else
+        {
+            // Sequential processing for small entry sets
+            foreach (var entry in entries)
+            {
+                if (entry.Chunk != null)
+                {
+                    ProcessEntry(entry, currentPath, filterStr, results);
+                }
+            }
+        }
+        return Task.CompletedTask;
+    }
+
+    private void ProcessEntry(CHandle<gameJournalEntry> entry, string currentPath, string filterStr, object results)
+    {
+        var entryId = entry.Chunk!.Id.ToString();
+        var entryPath = string.IsNullOrEmpty(currentPath) ? entryId : $"{currentPath}/{entryId}";
+
+        // Check if this entry matches the filter
+        if (ContainsFilter(entryPath, filterStr))
+        {
+            // Handle both ICollection<string> and ConcurrentBag<string>
+            if (results is ICollection<string> collection)
+            {
+                collection.Add(entryPath);
+            }
+            else if (results is System.Collections.Concurrent.ConcurrentBag<string> bag)
+            {
+                bag.Add(entryPath);
+            }
+        }
+
+        // Always process children if it's a container entry
+        if (entry.Chunk is gameJournalContainerEntry containerEntry)
+        {
+            ProcessContainerChildren(containerEntry.Entries, entryPath, filterStr, results);
+        }
+    }
+
+    private void ProcessContainerChildren(IList<CHandle<gameJournalEntry>> entries, string parentPath, string filterStr, object results)
+    {
+        var stack = new Stack<(IList<CHandle<gameJournalEntry>>, string)>();
+        stack.Push((entries, parentPath));
+
+        while (stack.Count > 0)
+        {
+            var (currentEntries, currentPath) = stack.Pop();
+            foreach (var entry in currentEntries)
+            {
+                if (entry.Chunk == null) continue;
+
+                var entryId = entry.Chunk.Id.ToString();
+                var entryPath = $"{currentPath}/{entryId}";
+
+                // Check if this entry matches the filter
+                if (ContainsFilter(entryPath, filterStr))
+                {
+                    if (results is ICollection<string> collection)
+                    {
+                        collection.Add(entryPath);
+                    }
+                    else if (results is System.Collections.Concurrent.ConcurrentBag<string> bag)
+                    {
+                        bag.Add(entryPath);
+                    }
+                }
+
+                // Always add children to stack if it's a container
+                if (entry.Chunk is gameJournalContainerEntry containerEntry)
+                {
+                    stack.Push((containerEntry.Entries, entryPath));
+                }
+            }
+        }
+    }
+
+    // Optimized filter checking with case-insensitive comparison
+    private static bool ContainsFilter(string text, string filter)
+    {
+        return text.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0;
+    }
+
+    #endregion
+    
     # region appfile
 
     public static List<string> GetAllComponentNames(List<appearanceAppearanceDefinition> appearances) => appearances
