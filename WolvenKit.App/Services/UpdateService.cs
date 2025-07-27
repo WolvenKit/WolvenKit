@@ -99,8 +99,7 @@ objShell.Run ""powershell.exe -ExecutionPolicy Bypass -File """"{scriptPath}""""
 
     public async Task<bool> IsUpdateAvailable()
     {
-        // TODO: MOVE EARLY EXIT WHEN SKIP UPDATE CHECK IS SET TO ONLY BE WHEN ITS AUTOMATICALLY TRIGGERED ON STARTUP
-        if (DesktopBridgeHelper.IsRunningAsPackage() && _settingsManager.SkipUpdateCheck)
+        if (DesktopBridgeHelper.IsRunningAsPackage())
         {
             return false;
         }
@@ -112,15 +111,11 @@ objShell.Run ""powershell.exe -ExecutionPolicy Bypass -File """"{scriptPath}""""
             return false;
         }
         var localVersion = GetLocalVersion();
-
         
-        _loggerService.Info($"Local version: {localVersion}");
-        _loggerService.Info($"Remote version: {remoteVersion}");
-        _loggerService.Info($"Returning: {IsLeftNewerThanRight(remoteVersion, localVersion!)}");
-        return IsLeftNewerThanRight(localVersion!, remoteVersion);
+        return IsLeftNewerThanRight(remoteVersion, localVersion!);
     }
 
-    private bool IsLeftNewerThanRight(SemVersion left, SemVersion right) => right.CompareSortOrderTo(left) <= 0;
+    private bool IsLeftNewerThanRight(SemVersion left, SemVersion right) => right.CompareSortOrderTo(left) == -1;
 
     private SemVersion? GetLocalVersion() => Core.CommonFunctions.GetAssemblyVersion(Constants.AssemblyName);
 

@@ -308,7 +308,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             ShowHomePageSync();
         }
 
-        CheckForUpdatesCommand.SafeExecute(true);
+        if (!SettingsManager.SkipUpdateCheck)
+        {
+            CheckForUpdatesCommand.SafeExecute(true);
+        }
         CheckForScriptUpdatesCommand.SafeExecute();
         CheckForLongPathSupport();
         CheckForOneDrivePath();
@@ -620,9 +623,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     [RelayCommand]
-    private async Task CheckForUpdates(bool silently = true)
+    private async Task CheckForUpdates(bool isDuringStartup = false)
     {
-        if (silently)
+        if (isDuringStartup && !SettingsManager.AlwaysAskBeforeUpdating)
         {
             if (SettingsManager.SkipUpdateCheck)
             {
@@ -637,7 +640,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             : "WolvenKit-nightly-releases";
         if (!await _updateService.IsUpdateAvailable())
         {
-            await Interactions.ShowMessageBoxAsync($"No update available. You are on the latest version.", name, WMessageBoxButtons.Ok);
+            if (!isDuringStartup)
+            {
+                await Interactions.ShowMessageBoxAsync($"No update available. You are on the latest version.", name, WMessageBoxButtons.Ok);
+            }
         }
         else
         {

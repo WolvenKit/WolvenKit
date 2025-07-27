@@ -65,6 +65,7 @@ public class SettingsDto : ISettingsDto
 
         // General
         SkipUpdateCheck = settings.SkipUpdateCheck;
+        AlwaysAskBeforeUpdating = settings.AlwaysAskBeforeUpdating;       
         UpdateChannel = settings.UpdateChannel;
         ShowGuidedTour = settings.ShowGuidedTour;
         ThemeAccentString = settings.ThemeAccentString;
@@ -136,6 +137,7 @@ public class SettingsDto : ISettingsDto
     #region General
 
     public bool SkipUpdateCheck { get; set; }
+    public bool AlwaysAskBeforeUpdating { get; set; }
     public EUpdateChannel UpdateChannel { get; set; }
     public bool ShowGuidedTour { get; set; }
     public string? ThemeAccentString { get; set; }
@@ -206,6 +208,7 @@ public class SettingsDto : ISettingsDto
 
         // General
         settingsManager.SkipUpdateCheck = SkipUpdateCheck;
+        settingsManager.AlwaysAskBeforeUpdating = AlwaysAskBeforeUpdating;      
         settingsManager.UpdateChannel = UpdateChannel;
         settingsManager.ShowGuidedTour = ShowGuidedTour;
         settingsManager.ThemeAccentString = ThemeAccentString;
