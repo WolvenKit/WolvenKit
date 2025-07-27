@@ -211,6 +211,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
         RegenerateAllCRUIDsCommand.NotifyCanExecuteChanged();
         ClearChunkMaterialsCommand.NotifyCanExecuteChanged();
+        RegenerateAllCRUIDsCommand.NotifyCanExecuteChanged();
         ConvertPreloadMaterialsCommand.NotifyCanExecuteChanged();
     }
 
@@ -646,7 +647,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             cvm!.ClearChildren();
             cvm.Parent?.RecalculateProperties();
         }
-        
+
     }
 
     [RelayCommand(CanExecute = nameof(HasMeshAppearances))]
