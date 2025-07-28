@@ -263,31 +263,41 @@ namespace WolvenKit.Views.Documents
 
         private void OnUnDynamifyMaterialsClick(object _, RoutedEventArgs e)
         {
-            if (ViewModel?.RootChunk is not ChunkViewModel cvm || cvm.ResolvedData is not CMesh mesh)
+            if (ViewModel?.RootChunk is not { ResolvedData: CMesh mesh } cvm ||
+                cvm.GetPropertyChild("appearances") is not ChunkViewModel appearances)
             {
                 return;
             }
 
             cvm.ConvertPreloadMaterialsCommand.Execute(null);
 
-            var appearancesByName = cvm.UnDynamifyAppearances();
-            if (appearancesByName.Count == 0)
+            appearances.CalculatePropertiesRecursive();
+
+            var templatesAndValues = ArchiveXlHelper.GetMaterialSubstitutionMap(mesh.Appearances);
+
+            // nothing to do here
+            if (templatesAndValues.Count == 0)
             {
                 return;
             }
 
+            var expandedData = ArchiveXlHelper.ExpandAppearanceTemplate(mesh.Appearances);
+            appearances.Data = ArchiveXlHelper.UnDynamifyChunkNames(expandedData);
+
+            appearances.RecalculateProperties();
+
             cvm.GetPropertyChild("materials")?.CalculateProperties();
             cvm.GetPropertyChild("localMaterialBuffer", "materials")?.CalculateProperties();
 
-            foreach (var (matName, resolvedMatNames) in appearancesByName)
+            // iterate over dictionary and create new materials
+            foreach (var (matName, resolvedMatNames) in templatesAndValues)
             {
                 var material = mesh.MaterialEntries.FirstOrDefault(m => m.Name == $"@{matName}");
                 if (material is null || mesh.LocalMaterialBuffer.Materials.Count < material.Index)
                 {
-                    _loggerService.Warning($"Failed to resolve dynamic material {matName}");
+                    _loggerService.Warning($"Can't un-dynamify material: Failed to resolve {matName}");
                     continue;
                 }
-
 
                 var matInstance = (CMaterialInstance)mesh.LocalMaterialBuffer.Materials[material.Index];
                 var baseMaterialPath = matInstance.BaseMaterial.DepotPath.GetResolvedText() ?? "";
@@ -302,7 +312,6 @@ namespace WolvenKit.Views.Documents
                     {
                         Name = newMatName, Index = maxIndex, IsLocalInstance = material.IsLocalInstance
                     });
-
 
                     var newMaterialInstance = new CMaterialInstance()
                     {
@@ -352,16 +361,10 @@ namespace WolvenKit.Views.Documents
             cvm.DeleteUnusedMaterialsCommand.Execute(true);
             cvm.Tab?.Parent.SetIsDirty(true);
 
+            return;
 
-            string ReplaceMaterialPath(ResourcePath? depotPath, string newMatName)
-            {
-                if (depotPath?.GetResolvedText() is not string s)
-                {
-                    return "";
-                }
-
-                return s.Replace("{material}", newMatName).Replace("*", "");
-            }
+            static string ReplaceMaterialPath(ResourcePath? depotPath, string newMatName) =>
+                (depotPath?.GetResolvedText() ?? "").Replace("{material}", newMatName).Replace("*", "");
         }
 
         private void OnConvertHairToCCXLMaterials(object _, RoutedEventArgs e)

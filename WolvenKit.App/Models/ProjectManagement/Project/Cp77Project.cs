@@ -727,11 +727,11 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
                         if (cr2WFile.RootChunk is C2dArray { CompiledData: CArray<CArray<CString>> data })
                         {
                             // Grab the second string from CompiledData, if it's a depotPath
-                            var filePaths = data
+                            var paths = data
                                 .Where(c => c.Count == 3).Select(cStrings => cStrings[1])
                                 .Where(potentialDepotPath => potentialDepotPath.GetString().Contains(Path.DirectorySeparatorChar))
                                 .Select(potentialDepotPath => (string)potentialDepotPath).ToList();
-                            resourcePaths.AddRange(filePaths);
+                            resourcePaths.AddRange(paths);
                         }
                         else
                         {
@@ -751,7 +751,17 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
                                 // Deal with ArchiveXL substitution
                                 if (refResource.StartsWith(ArchiveXlHelper.ArchiveXLSubstitutionPrefix))
                                 {
-                                    resourcePaths.AddRange(ArchiveXlHelper.ResolveDynamicPaths(refResource));
+                                    if (cr2WFile.RootChunk is CMesh mesh)
+                                    {
+                                        // TODO: should probably limit this to the correct material name only
+                                        resourcePaths.AddRange(
+                                            ArchiveXlHelper.ResolveMaterialSubstitutions(refResource,
+                                                mesh.Appearances));
+                                    }
+                                    else
+                                    {
+                                        resourcePaths.AddRange(ArchiveXlHelper.ResolveDynamicPaths(refResource));
+                                    }
                                 }
                                 else
                                 {
@@ -806,7 +816,9 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
             });
 
             // Get file paths from resource files. Yes, with a regex - parsing them would be way more effort
-            Parallel.ForEach(Files.Where(f => f.EndsWith(".xl") || f.EndsWith(".yaml") || f.EndsWith(".lua")), filePath =>
+            Parallel.ForEach(
+                Files.Where(f => f.EndsWith(".xl") || f.EndsWith(".yaml") || f.EndsWith(".lua") || f.EndsWith(".reds")),
+                filePath =>
             {
                 var absolutePath = Path.Combine(FileDirectory, filePath);
                 if (!File.Exists(absolutePath))
@@ -818,7 +830,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
 
                 // Get anything with double or single slashes, then replace double slashes
                 var refs = ResourceFilePathsRegex().Matches(fileContent).Where(m => m.Success)
-                    .Select(m => m.Value.Replace(@"\\", @"\"))
+                    .Select(m => m.Value.Replace(@"\\", @"\").Replace(@"/", @"\"))
                     .ToList();
                 
                 if (refs.Count <= 0)
@@ -887,7 +899,17 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         return brokenReferences;
     }
 
-    [GeneratedRegex(@"((\w+\\\\?)+\w+\.\w+)")]
+    /// <summary>
+    /// Will match any file paths with forward or backward slashes and a file extension
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// folder/subfolder/atelier_icon.inkatlas
+    /// folder\subfolder\atelier_icon.inkatlas
+    /// folder\\subfolder\\atelier_icon.inkatlas
+    /// </code>
+    /// </example>
+    [GeneratedRegex(@"(((\w+\/)|(\w+\\\\?))+\w+\.\w+)")]
     private static partial Regex ResourceFilePathsRegex();
 
     private int _numEmptyFolders = 0;
