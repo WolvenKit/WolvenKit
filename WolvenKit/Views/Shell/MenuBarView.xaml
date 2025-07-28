@@ -261,19 +261,6 @@
                 </MenuItem>
 
                 <MenuItem
-                    x:Name="ToolbarProjectFindUnusedFilesButton"
-                    Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
-                    Header="Scan for unused project files">
-                    <MenuItem.Icon>
-                        <local:IconBox
-                            IconPack="Material"
-                            Kind="TextSearchVariant"
-                            Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="White" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <MenuItem
                     x:Name="ToolbarCleanupButton"
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
                     Header="Clean up">
@@ -307,6 +294,18 @@
                         </MenuItem.Icon>
                     </MenuItem>
 
+                    <MenuItem
+                        x:Name="ToolbarProjectFindUnusedFilesButton"
+                        Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                        Header="Scan for unused project files">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="Material"
+                                Kind="TextSearchVariant"
+                                Size="{DynamicResource WolvenKitIconTiny}"
+                                Foreground="White" />
+                        </MenuItem.Icon>
+                    </MenuItem>
 
                 </MenuItem>
 
