@@ -648,7 +648,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         else
         {
             if (Interactions.ShowQuestionYesNo((
-                    $"Update available to: {await _updateService.GetLatestVersionString()}\nYou are on the {SettingsManager.UpdateChannel} release channel.\n\nUpdate?",
+                    $"Update available to: {await _updateService.GetLatestVersionTag()}\nYou are on the {SettingsManager.UpdateChannel} release channel.\n\nUpdate now?",
                     name)))
             {
                 await _updateService.UpdateToNewestVersion();

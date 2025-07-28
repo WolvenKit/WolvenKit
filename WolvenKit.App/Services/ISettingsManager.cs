@@ -79,17 +79,6 @@ public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
 
         return dir;
     }
-
-    public static string GetTemp_DownloadsPath()
-    {
-        var dir = Path.Combine(GetAppData(), "Temp_Downloads");
-        if (!Directory.Exists(dir))
-        {
-            Directory.CreateDirectory(dir);
-        }
-
-        return dir;
-    }
     
     public static string GetTemp_AudioPath()
     {
