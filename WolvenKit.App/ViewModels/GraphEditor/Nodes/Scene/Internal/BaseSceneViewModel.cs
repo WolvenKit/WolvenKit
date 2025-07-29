@@ -378,9 +378,8 @@ public abstract class BaseSceneViewModel : NodeViewModel, IRefreshableDetails
         OnPropertyChanged(nameof(Title));
 
         // DON'T regenerate sockets here – counts are unchanged
-        TriggerPropertyChanged(nameof(Output));
-        TriggerPropertyChanged(nameof(Input));
-        OnPropertyChanged(nameof(Data));
+        OnPropertyChanged(nameof(Output));
+        OnPropertyChanged(nameof(Input));
         
         // Refresh details if implemented by derived class (this is important for property sync)
         if (this is IRefreshableDetails refreshable)
