@@ -45,6 +45,11 @@ public class UpdateService : IUpdateService
         }
         
         var tempPath = Path.Join(Path.GetTempPath(), "WolvenKitUpdate");
+        if (Directory.Exists(tempPath))
+        {
+            Directory.Delete(tempPath, true);
+        }
+        
         Directory.CreateDirectory(tempPath);
         var downloadZipPath = Path.Join(tempPath, latestRelease.TagName + ".zip");
         var portableAsset = latestRelease.Assets.First(a => a.Name == $"WolvenKit-{latestRelease.TagName}.zip");
@@ -57,12 +62,13 @@ public class UpdateService : IUpdateService
         }
         catch (HttpRequestException ex)
         {
+            Directory.Delete(tempPath, true);
             _loggerService.Error($"Failed to download update from: {portableAsset.DownloadUrl}");
             _loggerService.Error(ex);
             return;
         }
         
-        if (portableAsset.Digest?.Split(":")[^1] != BitConverter.ToString(SHA256.Create().ComputeHash(File.ReadAllBytes(downloadZipPath))).Replace("-", "").ToLowerInvariant())
+        if (await Task.Run(() => portableAsset.Digest?.Split(":")[^1] != BitConverter.ToString(SHA256.Create().ComputeHash(File.ReadAllBytes(downloadZipPath))).Replace("-", "").ToLowerInvariant()))
         {
             Directory.Delete(tempPath, true);
             _loggerService.Error("Downloaded update asset is invalid! Aborting update.");
@@ -72,36 +78,60 @@ public class UpdateService : IUpdateService
         var unzipPath = Path.Join(tempPath, "unzip");
         Directory.CreateDirectory(unzipPath);
         ZipFile.ExtractToDirectory(downloadZipPath, unzipPath);
+        File.Delete(downloadZipPath);
         
-        var exePath = Environment.ProcessPath ?? Path.Combine(AppContext.BaseDirectory, "WolvenKit.exe");
-        var scriptPath = Path.Combine(tempPath, "update.ps1");
-        var vbsScriptPath = Path.Combine(tempPath, "update.vbs");
-        File.WriteAllText(scriptPath, $@"
-$exePath = ""{exePath}""
-$unzipPath = ""{unzipPath}""
-$rootTempPath = ""{tempPath}""
-
-while (Get-Process -Name (Split-Path $exePath -LeafBase) -ErrorAction SilentlyContinue) {{
-    Start-Sleep -Seconds 1
-}}
-
-Copy-Item -Path ""$unzipPath\*"" -Destination $appBaseDir -Recurse -Force
-
-Start-Process -FilePath $exePath
-
-Remove-Item -Path $rootTempPath -Recurse -Force -ErrorAction SilentlyContinue
-
-");
-        
-        File.WriteAllText(vbsScriptPath, $@"Set objShell = CreateObject(""WScript.Shell"")
-objShell.Run ""powershell.exe -ExecutionPolicy Bypass -File """"{scriptPath}"""""", 0, False
-");
-        Process.Start(new ProcessStartInfo
+        var unpackerExePath = Path.Combine(ISettingsManager.GetAppData(), "Updater" ,"WolvenKit.Unpacker.exe");
+        if (!File.Exists(unpackerExePath))
         {
-            FileName = "wscript.exe",
-            Arguments = $"\"{vbsScriptPath}\"",
-            UseShellExecute = true
-        });
+            if (Directory.Exists(Path.GetDirectoryName(unpackerExePath)!))
+            {
+                Directory.Delete(Path.GetDirectoryName(unpackerExePath)!, true);
+            }
+            Directory.CreateDirectory(Path.GetDirectoryName(unpackerExePath)!);
+            var unpackerReleaseAsset = latestRelease.Assets.FirstOrDefault(a => a.Name == $"WolvenKit.Unpacker-{latestRelease.TagName}.zip");
+            if (unpackerReleaseAsset is null)
+            {
+                Directory.Delete(tempPath, true);
+                _loggerService.Error("Failed to find unpacker release asset! Aborting update.");
+                return;
+            }
+
+            var unpackerZipPath = Path.Join(tempPath, "unpacker.zip");
+            
+            try
+            {
+                var responseAsset = await _httpClient.GetAsync(unpackerReleaseAsset.DownloadUrl);
+                responseAsset.EnsureSuccessStatusCode();
+                await File.WriteAllBytesAsync(unpackerZipPath, await responseAsset.Content.ReadAsByteArrayAsync());
+            }
+            catch (HttpRequestException ex)
+            {
+                Directory.Delete(tempPath, true);
+                _loggerService.Error($"Failed to download unpacker from: {unpackerReleaseAsset.DownloadUrl}");
+                _loggerService.Error(ex);
+                return;
+            }
+            
+            if (await Task.Run(() => unpackerReleaseAsset.Digest?.Split(":")[^1] != BitConverter.ToString(SHA256.Create().ComputeHash(File.ReadAllBytes(unpackerZipPath))).Replace("-", "").ToLowerInvariant()))
+            {
+                Directory.Delete(tempPath, true);
+                _loggerService.Error("Downloaded unpacker asset is invalid! Aborting update.");
+                return;       
+            }
+            
+            ZipFile.ExtractToDirectory(unpackerZipPath, unzipPath);
+            File.Delete(unpackerZipPath);
+        }
+        
+        var wolvenKitExePath = Environment.ProcessPath ?? Path.Combine(AppContext.BaseDirectory, "WolvenKit.exe");
+        var startInfo = new ProcessStartInfo()
+        {
+            FileName = unpackerExePath,
+            Arguments = $"--wolvenkit-exe-path {wolvenKitExePath} --unzipped-path {unzipPath}",
+            UseShellExecute = false,
+            CreateNoWindow = true
+        };
+        Process.Start(startInfo);
         
         Environment.Exit(0);
     }
@@ -121,7 +151,7 @@ objShell.Run ""powershell.exe -ExecutionPolicy Bypass -File """"{scriptPath}""""
         }
         var localVersion = GetLocalVersion();
         
-        return IsLeftNewerThanRight(remoteVersion, localVersion!);
+        return IsLeftNewerThanRight(remoteVersion, localVersion!) || true;
     }
 
     public async Task<string> GetLatestVersionTag()
