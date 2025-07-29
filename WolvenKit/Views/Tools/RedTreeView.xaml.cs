@@ -691,7 +691,7 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            TreeView.Dispatcher.Invoke(() => 
+            TreeView.Dispatcher.Invoke(() =>
             {
                 foreach (var cvm in list)
                 {
@@ -1311,29 +1311,22 @@ namespace WolvenKit.Views.Tools
         [RelayCommand(CanExecute = nameof(CanDeleteSelection))]
         private void DeleteAllButSelection()
         {
-            if (ItemsSource is not ICollectionView collectionView)
-            {
-                return;
-            }
-
             var groupedNodes = GetSelectedChunks()
                 .GroupBy(chunk => chunk.Parent).ToList();
 
-            using (collectionView.DeferRefresh())
+            foreach (var chunkSiblings in groupedNodes.Select(group => group.ToList()))
             {
-                foreach (var chunkSiblings in groupedNodes.Select(group => group.ToList()))
+                if (chunkSiblings.FirstOrDefault() is not ChunkViewModel cvm || cvm.Parent is null)
                 {
-                    if (chunkSiblings.FirstOrDefault() is not ChunkViewModel cvm || cvm.Parent is null)
-                    {
-                        continue;
-                    }
-
-                    var chunksToDelete = cvm.Parent.TVProperties.Except(chunkSiblings).ToList();
-
-                    cvm.DeleteNodesInParent(chunksToDelete);
+                    continue;
                 }
+
+                var chunksToDelete = cvm.Parent.TVProperties.Except(chunkSiblings).ToList();
+
+                cvm.DeleteNodesInParent(chunksToDelete);
             }
 
+            groupedNodes.FirstOrDefault()?.Key.Tab?.Parent.SetIsDirty(true);
             ReapplySearchAsync(groupedNodes.Select(g => g.Key));
         }
 
@@ -1341,19 +1334,11 @@ namespace WolvenKit.Views.Tools
         [RelayCommand(CanExecute = nameof(CanDeleteSelection))]
         private void DeleteSelection()
         {
-            if (ItemsSource is not ICollectionView collectionView)
-            {
-                return;
-            }
-
             var groupedNodes = GetSelectedChunks().GroupBy(chunk => chunk.Parent).ToList();
 
-            using (collectionView.DeferRefresh())
+            foreach (var chunkSiblings in from kvp in groupedNodes where kvp.Any() select kvp.ToList())
             {
-                foreach (var chunkSiblings in from kvp in groupedNodes where kvp.Any() select kvp.ToList())
-                {
-                    chunkSiblings.First().DeleteNodesInParent(chunkSiblings);
-                }
+                chunkSiblings.First().DeleteNodesInParent(chunkSiblings);
             }
 
             groupedNodes.FirstOrDefault()?.Key.Tab?.Parent.SetIsDirty(true);
