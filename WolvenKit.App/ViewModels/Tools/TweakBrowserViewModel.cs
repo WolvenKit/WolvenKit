@@ -119,15 +119,16 @@ public partial class TweakBrowserViewModel : ToolViewModel
 
             case nameof(SelectedFlatEntry):
             {
+                SelectedFlat.Clear();
                 if (SelectedFlatEntry != null && _tweakDB.IsLoaded)
                 {
                     var flat = TweakDBService.GetFlat(SelectedFlatEntry.Item);
                     ArgumentNullException.ThrowIfNull(flat);
-                    SelectedFlat = _chunkViewmodelFactory.ChunkViewModel(flat, flat.GetType().Name, _appViewModel);
-                }
-                else
-                {
-                    SelectedFlat = null;
+
+                    var vm = _chunkViewmodelFactory.ChunkViewModel(flat, flat.GetType().Name, _appViewModel, null, true);
+                    vm.IsExpanded = true;
+
+                    SelectedFlat.Add(vm);
                 }
                 OnPropertyChanged(nameof(SelectedFlat));
                 break;
@@ -135,6 +136,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
 
             case nameof(SelectedQueryEntry):
             {
+                SelectedQuery.Clear();
                 if (SelectedQueryEntry != null && _tweakDB.IsLoaded)
                 {
                     var arr = new CArray<TweakDBID>();
@@ -143,12 +145,10 @@ public partial class TweakBrowserViewModel : ToolViewModel
                         arr.Add(query);
                     }
 
-                    SelectedQuery =
-                        _chunkViewmodelFactory.ChunkViewModel(arr, nameof(CArray<TweakDBID>), _appViewModel);
-                }
-                else
-                {
-                    SelectedQuery = null;
+                    var vm = _chunkViewmodelFactory.ChunkViewModel(arr, nameof(CArray<TweakDBID>), _appViewModel, null, true);
+                    vm.IsExpanded = true;
+
+                    SelectedQuery.Add(vm);
                 }
                 OnPropertyChanged(nameof(SelectedQuery));
                 break;
@@ -193,8 +193,8 @@ public partial class TweakBrowserViewModel : ToolViewModel
     public string GroupTagsHeader => $"GroupTags ({GroupTags.Cast<object>().Count()})";
 
     public ObservableCollection<ChunkViewModel> SelectedRecord { get; set; } = new();
-    [ObservableProperty] private ChunkViewModel? _selectedFlat;
-    [ObservableProperty] private ChunkViewModel? _selectedQuery;
+    public ObservableCollection<ChunkViewModel> SelectedFlat { get; set; } = new();
+    public ObservableCollection<ChunkViewModel> SelectedQuery { get; set; } = new();
     [ObservableProperty] private ChunkViewModel? _selectedGroupTag;
 
     #endregion
