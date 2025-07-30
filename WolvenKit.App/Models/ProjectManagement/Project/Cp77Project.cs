@@ -11,6 +11,7 @@ using WolvenKit.Common;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
@@ -747,10 +748,15 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
                                     ResolveResourcePaths(redRef.DepotPath.GetResolvedText(), cr2WFile));
                             }
 
-                            foreach (var result in cr2WFile.FindType(typeof(IRedString)).Select(r => r.Value)
-                                         .OfType<IRedString>())
+                            // Check redStrings that contain resource paths. This happens inside quest files.
+                            foreach (var result in cr2WFile.FindType(typeof(IRedString))
+                                         .Select(r => r.Value)
+                                         .OfType<IRedString>()
+                                         .Select(r => r.GetString())
+                                         .Where(s => s?.IsFilePath() == true)
+                                    )
                             {
-                                resourcePaths.AddRange(ResolveResourcePaths(result.GetString(), cr2WFile));
+                                resourcePaths.AddRange(ResolveResourcePaths(result, cr2WFile));
                             }
 
                             foreach (var cr2WImport in cr2WFile.Info.Imports)
