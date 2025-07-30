@@ -80,6 +80,14 @@ namespace WolvenKit.Interfaces.Extensions
         public static bool IsEmptyOrEndsWith(this string target, string value) =>
             target == "" || target.EndsWith(value);
         
+        
+        /// <summary>
+        /// Is the string a relative file path?
+        /// </summary>
+        public static bool IsFilePath(this string? target) => !string.IsNullOrEmpty(target) &&
+                                                              target.Contains(Path.DirectorySeparatorChar) &&
+                                                              target.Contains('.');
+
         /// <summary>
         /// Capitalizes each word in the string, replacing underscores with spaces
         /// </summary>

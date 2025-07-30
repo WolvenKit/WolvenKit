@@ -11,6 +11,7 @@ using WolvenKit.Common;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
@@ -37,7 +38,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
     public string Name { get; set; }
 
     /// <summary>
-    /// Relative paths to currently open files. Will be written to <see cref="ProjectFileExtension"/> file. 
+    /// Relative paths to currently open files. Will be written to <see cref="ProjectFileExtension"/> file.
     /// </summary>
     public Dictionary<DateTime, string> OpenProjectFiles { get; set; } = [];
 
@@ -62,7 +63,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
 
 
     /// <summary>
-    /// Returns all files inside <see cref="FileDirectory"/> 
+    /// Returns all files inside <see cref="FileDirectory"/>
     /// </summary>
     public List<string> Files
     {
@@ -81,7 +82,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
 
 
     /// <summary>
-    /// Returns all files inside <see cref="ModDirectory"/> 
+    /// Returns all files inside <see cref="ModDirectory"/>
     /// </summary>
     public List<string> ModFiles
     {
@@ -99,7 +100,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
     }
 
     /// <summary>
-    /// Returns all files inside <see cref="ResourcesDirectory"/> 
+    /// Returns all files inside <see cref="ResourcesDirectory"/>
     /// </summary>
     public List<string> ResourceFiles
     {
@@ -118,7 +119,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
 
 
     /// <summary>
-    /// Returns all files inside <see cref="RawDirectory"/> 
+    /// Returns all files inside <see cref="RawDirectory"/>
     /// </summary>
     public List<string> RawFiles
     {
@@ -147,7 +148,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
             return Directory.Exists(oldDir) ? oldDir : Path.GetDirectoryName(Location).NotNull();
         }
     }
-    
+
     /// <summary>
     /// Absolute path to /source
     /// </summary>
@@ -412,7 +413,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         }
     }
 
-    #endregion    
+    #endregion
 
     /// <summary>
     /// Path to /packed/archive/pc/mod or /packed/mods
@@ -690,8 +691,8 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
     }
 
     public async Task<IDictionary<string, List<string>>> GetAllReferencesAsync(
-        IProgressService<double> progressService, 
-        ILoggerService loggerService, 
+        IProgressService<double> progressService,
+        ILoggerService loggerService,
         List<string> filePaths)
     {
         if (filePaths.Count == 0)
@@ -735,47 +736,33 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
                         }
                         else
                         {
-                            foreach (var result in cr2WFile.FindType(typeof(IRedRef)))
+                            foreach (var redRef in cr2WFile.FindType(typeof(IRedRef)).Select(r => r.Value)
+                                         .OfType<IRedRef>())
                             {
-                                if (result.Value is not IRedRef resourceReference || resourceReference.DepotPath == ResourcePath.Empty)
+                                if (redRef.DepotPath == ResourcePath.Empty)
                                 {
                                     continue;
                                 }
 
-                                var refResource = resourceReference.DepotPath.GetResolvedText();
-                                if (string.IsNullOrEmpty(refResource))
-                                {
-                                    continue;
-                                }
+                                resourcePaths.AddRange(
+                                    ResolveResourcePaths(redRef.DepotPath.GetResolvedText(), cr2WFile));
+                            }
 
-                                // Deal with ArchiveXL substitution
-                                if (refResource.StartsWith(ArchiveXlHelper.ArchiveXLSubstitutionPrefix))
-                                {
-                                    if (cr2WFile.RootChunk is CMesh mesh)
-                                    {
-                                        // TODO: should probably limit this to the correct material name only
-                                        resourcePaths.AddRange(
-                                            ArchiveXlHelper.ResolveMaterialSubstitutions(refResource,
-                                                mesh.Appearances));
-                                    }
-                                    else
-                                    {
-                                        resourcePaths.AddRange(ArchiveXlHelper.ResolveDynamicPaths(refResource));
-                                    }
-                                }
-                                else
-                                {
-                                    resourcePaths.Add(refResource);
-                                }
+                            // Check redStrings that contain resource paths. This happens inside quest files.
+                            foreach (var result in cr2WFile.FindType(typeof(IRedString))
+                                         .Select(r => r.Value)
+                                         .OfType<IRedString>()
+                                         .Select(r => r.GetString())
+                                         .Where(s => s?.IsFilePath() == true)
+                                    )
+                            {
+                                resourcePaths.AddRange(ResolveResourcePaths(result, cr2WFile));
                             }
 
                             foreach (var cr2WImport in cr2WFile.Info.Imports)
                             {
-                                if (cr2WImport.DepotPath != ResourcePath.Empty && cr2WImport.DepotPath.GetResolvedText() is string s &&
-                                    !resourcePaths.Contains(s))
-                                {
-                                    resourcePaths.Add(s);
-                                }
+                                resourcePaths.AddRange(ResolveResourcePaths(cr2WImport.DepotPath.GetResolvedText(),
+                                    cr2WFile));
                             }
                         }
                     }
@@ -785,34 +772,20 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
                         return;
                     }
 
-                    // Resolve dynamic substitutions
-                    var updatedResourcePaths = new List<string>();
-                    foreach (var path in resourcePaths)
-                    {
-                        if (path.StartsWith(ArchiveXlHelper.ArchiveXLSubstitutionPrefix))
-                        {
-                            var resolvedPaths = ArchiveXlHelper.ResolveDynamicPaths(path);
-                            updatedResourcePaths.AddRange(resolvedPaths);
-                        }
-                        else
-                        {
-                            updatedResourcePaths.Add(path);
-                        }
-                    }
-
                     lock (references)
                     {
-                        references.Add(filePath, updatedResourcePaths);
+                        references.Add(filePath, resourcePaths.Distinct().ToList());
                     }
                 }
                 catch (Exception e)
                 {
                     loggerService.Error($"Results will be incomplete: Failed to read {filePath} ({e.Message})");
                 }
-                
+
                 // Update progress
                 var currentProgress = Interlocked.Increment(ref processedFiles) * progressIncrement;
                 progressService?.Report(currentProgress);
+
             });
 
             // Get file paths from resource files. Yes, with a regex - parsing them would be way more effort
@@ -832,7 +805,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
                 var refs = ResourceFilePathsRegex().Matches(fileContent).Where(m => m.Success)
                     .Select(m => m.Value.Replace(@"\\", @"\").Replace(@"/", @"\"))
                     .ToList();
-                
+
                 if (refs.Count <= 0)
                 {
                     return;
@@ -847,9 +820,31 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
                 }
             });
         });
-        
+
         // Order entries by file name
         return references.OrderBy(obj => obj.Key).ToDictionary(obj => obj.Key, obj => obj.Value);
+
+        // Deal with ArchiveXL substitution and empty/falsy strings
+        static IEnumerable<string> ResolveResourcePaths(string? resourcePath, CR2WFile cr2WFile)
+        {
+            if (string.IsNullOrEmpty(resourcePath))
+            {
+                return [];
+            }
+
+            if (!resourcePath.StartsWith(ArchiveXlHelper.ArchiveXLSubstitutionPrefix))
+            {
+                return [resourcePath];
+            }
+
+            if (cr2WFile.RootChunk is not CMesh mesh)
+            {
+                return ArchiveXlHelper.ResolveDynamicPaths(resourcePath);
+            }
+
+            // TODO: We need to pass the correct material name for the substitution here
+            return ArchiveXlHelper.ResolveMaterialSubstitutions(resourcePath, mesh.Appearances);
+        }
     }
 
 
@@ -872,7 +867,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         var totalFiles = references.Count;
         var processedFiles = 0;
         var progressIncrement = totalFiles > 0 ? 100.0 / totalFiles : 100;
-        
+
         await Task.Run(() =>
         {
             Parallel.ForEach(references, (kvp, state) =>
@@ -888,7 +883,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
                         brokenReferences.Add(kvp.Key, pathsNotFound);
                     }
                 }
-                
+
                 // Update progress
                 var currentProgress = Interlocked.Increment(ref processedFiles) * progressIncrement;
                 progressService.IsIndeterminate = false;
@@ -962,4 +957,4 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
             .ToList();
     }
 }
-    
+
