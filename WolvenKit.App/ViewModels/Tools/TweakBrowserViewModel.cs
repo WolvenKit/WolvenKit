@@ -158,12 +158,10 @@ public partial class TweakBrowserViewModel : ToolViewModel
             {
                 if (SelectedGroupTagEntry != null && _tweakDB.IsLoaded)
                 {
-                    var u = TweakDBService.GetGroupTag(SelectedGroupTagEntry.Item);
-                    if (u is not null)
-                    {
-                        SelectedGroupTag =
-                            _chunkViewmodelFactory.ChunkViewModel((CUInt8)u, nameof(CUInt8), _appViewModel);
-                    }
+                    var u = TweakDBService.GetGroupTagAsFlag(SelectedGroupTagEntry.Item);
+
+                    SelectedGroupTag =
+                        _chunkViewmodelFactory.ChunkViewModel((CBitField<InternalEnums.EGroupTag>)u, "Tags", _appViewModel, null, true);
                 }
                 else
                 {
