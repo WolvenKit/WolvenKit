@@ -2400,15 +2400,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             _loggerService.Warning($"Something went wrong while trying to delete the selection : {ex}");
         }
 
-        // Lightweight fix: renumber remaining children and notify once
-        if (Data is IRedArray)
-        {
-            for (int i = 0; i < TVProperties.Count; i++)
-                TVProperties[i].PropertyName = $"[{i}]";
-        }
+        ReindexChildren();
 
         // Notify Syncfusion once – grid updates rows safely
-        NotifyChain(nameof(TVProperties));
+        NotifyChain(nameof(Properties));
 
         // Notify for graph sync when array items are deleted
         NotifyPropertyUpdateForGraphSync();
@@ -2416,9 +2411,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         var newSelectionIndex = Math.Min(indices.First(), TVProperties.Count) - 1;
         newSelectionIndex = Math.Max(0, newSelectionIndex);
         newSelectionIndex = Math.Min(newSelectionIndex, TVProperties.Count - 1);
-        if (newSelectionIndex >= 0)
+        if (newSelectionIndex >= 0 && newSelectionIndex < TVProperties.Count)
         {
             Tab.SetSelection(TVProperties[newSelectionIndex]);
+        }
+        else
+        {
+            Tab.SetSelection(this);
         }
 
         Tab.Parent.SetIsDirty(true);
@@ -2854,6 +2853,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         Parent.CalculateValue();
         Parent.ReindexChildren();
 
+        Parent.NotifyChain(nameof(Data));
+
         IsExpanded = false;
 
         return newSibling;
@@ -2880,6 +2881,18 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             Properties[i].NodeIdxInParent = i;
             Properties[i].CalculateDisplayName();
+
+            // Lightweight fix: renumber remaining children and notify once
+            if (Data is IRedArray)
+            {
+                Properties[i].PropertyName = $"[{i}]";
+            }
+        }
+
+
+        if (Name != "materialEntries")
+        {
+            return;
         }
 
         Parent?.GetPropertyChild("localMaterialBuffer")?.GetPropertyChild("materials")?.RecalculateProperties();
