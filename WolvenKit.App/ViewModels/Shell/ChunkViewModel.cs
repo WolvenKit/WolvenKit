@@ -2409,10 +2409,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         // Notify Syncfusion once – grid updates rows safely
-        NotifyChain(nameof(TVProperties));
+        NotifyChain(nameof(Properties));
 
         // Notify for graph sync when array items are deleted
         NotifyPropertyUpdateForGraphSync();
+
 
         var newSelectionIndex = Math.Min(indices.First(), TVProperties.Count) - 1;
         newSelectionIndex = Math.Max(0, newSelectionIndex);
