@@ -1829,6 +1829,28 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
+        // recreate material definition
+        mesh.MaterialEntries.Clear();
+        var localMaterialIdx = 0;
+        var externalMaterialIdx = 0;
+        for (var i = 0; i < usedMaterialDefinitions.Length; i++)
+        {
+            var t = usedMaterialDefinitions[i];
+            if (t.IsLocalInstance)
+            {
+                t.Index = (CUInt16)localMaterialIdx;
+                localMaterialIdx += 1;
+            }
+            else
+            {
+                t.Index = (CUInt16)externalMaterialIdx;
+                externalMaterialIdx += 1;
+            }
+
+            mesh.MaterialEntries.Add(t);
+        }
+
+
         if (mesh.LocalMaterialBuffer?.Materials is not null)
         {
             mesh.LocalMaterialBuffer.Materials.Clear();
@@ -1847,35 +1869,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
         }
 
-        mesh.MaterialEntries.Clear();
-        var localMaterialIdx = 0;
-        var externalMaterialIdx = 0;
-        for (var i = 0; i < usedMaterialDefinitions.Length; i++)
-        {
-            var t = usedMaterialDefinitions[i];
-            if (t.IsLocalInstance)
-            {
-                t.Index = (CUInt16)localMaterialIdx;
-                localMaterialIdx += 1;
-            }
-            else
-            {
-                t.Index = (CUInt16)externalMaterialIdx;
-                externalMaterialIdx += 1;
-            }
-            t.Index = (CUInt16)i;
-            mesh.MaterialEntries.Add(t);
-        }
-
-        rootChunk.RecalculateProperties();
-        Tab?.Parent.SetIsDirty(true);
-
         rootChunk.GetPropertyChild("materialEntries")?.RecalculateProperties();
 
         rootChunk.GetPropertyChild("localMaterialBuffer")?.GetPropertyChild("materials")?.RecalculateProperties();
         rootChunk.GetPropertyChild("localMaterialBuffer")?.RecalculateProperties();
 
         rootChunk.GetPropertyChild("externalMaterials")?.RecalculateProperties();
+
+        rootChunk.RecalculateProperties();
+        Tab?.Parent.SetIsDirty(true);
 
         if (numUnusedMaterials > 0)
         {
