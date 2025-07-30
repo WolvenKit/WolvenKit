@@ -631,7 +631,20 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             {
                 return;
             }
-            await _updateService.UpdateToNewestVersion();
+
+            if (!await _updateService.IsUpdateAvailable())
+            {
+                return;
+            }
+
+            var updateTask = _updateService.UpdateToNewestVersion();
+            ShowInteraction:
+            var interactionResult = Interactions.ShowMessageBox("WolvenKit is being updated...\nThis will trigger an automatic restart, please stand by...", "WolvenKit", WMessageBoxButtons.Ok, WMessageBoxImage.Information);
+            if (interactionResult == WMessageBoxResult.OK)
+            {
+                goto ShowInteraction;
+            }
+            await updateTask;
             return;
         }
         
