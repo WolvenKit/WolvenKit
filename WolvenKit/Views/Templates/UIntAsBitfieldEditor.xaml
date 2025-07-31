@@ -1,0 +1,29 @@
+﻿<UserControl
+    x:Class="WolvenKit.Views.Templates.UIntAsBitfieldEditor"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WolvenKit.Views.Templates"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type={x:Type local:UIntAsBitfieldEditor}}"
+    d:DesignWidth="400"
+    d:DesignHeight="64">
+    <Grid>
+        <syncfusion:ComboBoxAdv
+            Name="comboboxadv"
+            Padding="{DynamicResource WolvenKitMarginTiny}"
+            Background="#252525"
+            BorderThickness="0"
+            AllowMultiSelect="True"
+            DataContext="{Binding Mode=OneWay,
+                                  RelativeSource={RelativeSource FindAncestor,
+                                                                 AncestorType={x:Type local:UIntAsBitfieldEditor}}}"
+            ItemsSource="{Binding BindingCollection,
+                                  Mode=TwoWay,
+                                  UpdateSourceTrigger=PropertyChanged}"
+            SelectedItems="{Binding SelectedItems}"
+            SelectedValueDelimiter=", " />
+    </Grid>
+</UserControl>

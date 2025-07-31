@@ -1,15 +1,17 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Pools;
+using static WolvenKit.RED4.Types.Enums;
 
 // ReSharper disable once CheckNamespace
 namespace WolvenKit.App.ViewModels.Shell;
@@ -54,6 +56,17 @@ public partial class ChunkViewModel
                 {
                     Value = "";
                 }
+            }
+        }
+        else if (DisplayAsEnumType != null && Data is IRedInteger ri)
+        {
+            if (EnumHelper.IsBitfield(DisplayAsEnumType))
+            {
+                Value = EnumHelper.RedIntToBitfieldString(DisplayAsEnumType, ri);
+            }
+            else
+            {
+                Value = EnumHelper.RedIntToEnumString(DisplayAsEnumType, ri);
             }
         }
         else if (PropertyType.IsAssignableTo(typeof(IRedEnum)) && Data is IRedEnum e)
@@ -690,8 +703,12 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = Value != "";
                 break;
             case CMaterialParameterInfo cInfoPar:
-                Value = cInfoPar.Type.ToString();
+                Value = EnumHelper.RedIntToEnumString(typeof(IMaterialDataProviderDescEParameterType), cInfoPar.Type);
                 IsValueExtrapolated = Value != "";
+                break;
+            case FeatureFlagsMask ffm:
+                Value = EnumHelper.RedIntToBitfieldString(typeof(EFeatureFlagMask), ffm.Flags);
+                IsValueExtrapolated = Value != "" && Value != "None";
                 break;
             case entTemplateAppearance entAppearance:
                 Value = StringHelper.Stringify(entAppearance.AppearanceResource.DepotPath);
