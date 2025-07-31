@@ -518,33 +518,34 @@ public partial class RedGraph
 
     private void RefreshCVM(questSocketDefinition[] sockets)
     {
-        if (GetQuestNodesChunkViewModel() is { } nodes)
+
+        // Find affected nodes and trigger property panel refresh for each
+        var affectedNodeIds = new HashSet<uint>();
+        
+        foreach (var socket in sockets)
         {
-            // Ensure properties are up-to-date before searching
-            nodes.RecalculateProperties();
-            nodes.ForceLoadPropertiesRecursive();
-
-            var list = new List<ChunkViewModel>();
-            foreach (var property in nodes.GetAllProperties())
+            // Find node that owns this socket
+            var ownerNode = Nodes.FirstOrDefault(n => 
+                n.Output.OfType<QuestOutputConnectorViewModel>()
+                    .Any(output => ReferenceEquals(output.Data, socket)) ||
+                n.Input.OfType<QuestInputConnectorViewModel>()
+                    .Any(input => ReferenceEquals(input.Data, socket)));
+                    
+            if (ownerNode != null)
             {
-                foreach (var socket in sockets)
-                {
-                    if (ReferenceEquals(property.Data, socket.Connections))
-                    {
-                        list.Add(property.Parent!);
-                    }
-                }
+                affectedNodeIds.Add(ownerNode.UniqueId);
             }
-            foreach (var model in list)
-            {
-                model.RecalculateProperties();
-                model.NotifyChain(nameof(model.Properties));
-            }
-
-            // Additionally refresh the root nodes collection to ensure UI picks up structural changes
-            nodes.RecalculateProperties();
-            nodes.NotifyChain(nameof(nodes.Properties));
         }
+        
+        // Trigger property panel refresh for affected nodes
+         foreach (var nodeId in affectedNodeIds)
+         {
+             var node = Nodes.FirstOrDefault(n => n.UniqueId == nodeId);
+             if (node != null)
+             {
+                 node.TriggerPropertyChanged(nameof(node.Data));
+             }
+         }
     }
 
     private ChunkViewModel? GetQuestNodesChunkViewModel()
