@@ -133,7 +133,7 @@ public partial class RedGraph
         if (instance is questNodeDefinition nodeDefinition)
         {
             nodeDefinition.Id = ++_currentQuestNodeId;
-            
+
             // Special initialization for certain quest node types
             if (nodeDefinition is questFactsDBManagerNodeDefinition factsDBNode)
             {
@@ -160,14 +160,14 @@ public partial class RedGraph
         {
             return true;
         }
-        
+
         // Additional nodes that should use deletion markers for safety
         var criticalTypes = new[]
         {
             typeof(questSwitchNodeDefinition),
             typeof(questFlowControlNodeDefinition)
         };
-        
+
         return criticalTypes.Contains(node.Data.GetType());
     }
 
@@ -297,9 +297,9 @@ public partial class RedGraph
                     {
                         targetSocket = markerCutDestSocket;
                     }
-                    
+
                     connection.Destination = new CWeakHandle<graphGraphSocketDefinition>(targetSocket.Data);
-                    
+
                     // Remove from original socket and add to new socket
                     originalSocket.Connections.Remove(connectionHandle);
                     targetSocket.Data.Connections.Add(connectionHandle);
@@ -308,7 +308,7 @@ public partial class RedGraph
                 {
                     // Connection going FROM the original node -> redirect from deletion marker's Out socket
                     connection.Source = new CWeakHandle<graphGraphSocketDefinition>(markerOutSocket.Data);
-                    
+
                     // Remove from original socket and add to new socket
                     originalSocket.Connections.Remove(connectionHandle);
                     markerOutSocket.Data.Connections.Add(connectionHandle);
@@ -331,7 +331,7 @@ public partial class RedGraph
     private void RebuildQuestConnections()
     {
         Connections.Clear();
-        
+
         // Create socket lookup table for quest input connectors
         var socketNodeLookup = new Dictionary<graphGraphSocketDefinition, QuestInputConnectorViewModel>();
         foreach (var nodeViewModel in Nodes.OfType<BaseQuestViewModel>())
@@ -429,7 +429,7 @@ public partial class RedGraph
         }
 
         nodeWrapper.GenerateSockets();
-        
+
         // Set document reference for property change syncing
         nodeWrapper.DocumentViewModel = DocumentViewModel;
 
@@ -446,7 +446,7 @@ public partial class RedGraph
         }
 
         nodeWrapper.GenerateSockets();
-        
+
         // Set document reference for property change syncing
         nodeWrapper.DocumentViewModel = DocumentViewModel;
 
@@ -505,10 +505,10 @@ public partial class RedGraph
         questTarget.Data.Connections.Add(handle);
 
         Connections.Add(new QuestConnectionViewModel(questSource, questTarget, graphGraphConnectionDefinition));
-        
+
         // Refresh ChunkViewModels representing the involved sockets
         RefreshCVM([questSource.Data, questTarget.Data]);
-        
+
         // Notify UI to refresh affected nodes
         NotifyNodesUpdated(questSource.OwnerId, questTarget.OwnerId);
 
@@ -574,7 +574,7 @@ public partial class RedGraph
         destination.Data.Connections.Add(new CHandle<graphGraphConnectionDefinition>(connection));
 
         Connections.Add(new QuestConnectionViewModel(source, destination, connection));
-        
+
         // Notify UI to refresh affected nodes
         NotifyNodesUpdated(source.OwnerId, destination.OwnerId);
 
@@ -605,7 +605,7 @@ public partial class RedGraph
             }
         }
         Connections.Remove(questConnection);
-        
+
         // Notify UI to refresh affected nodes
         NotifyNodesUpdated(questSource.OwnerId, questDestination.OwnerId);
 
@@ -628,7 +628,7 @@ public partial class RedGraph
         }
 
         var duplicatedData = (questNodeDefinition)cloneable.DeepCopy();
-        
+
         var newNodeId = GetNextAvailableQuestNodeId();
         duplicatedData.Id = newNodeId;
         _currentQuestNodeId = Math.Max(_currentQuestNodeId, newNodeId);
@@ -642,49 +642,49 @@ public partial class RedGraph
         }
 
         var wrappedDuplicate = WrapQuestNode(duplicatedData, false);
-        
+
         wrappedDuplicate.Location = new System.Windows.Point(
-            originalNode.Location.X + 50, 
+            originalNode.Location.X + 50,
             originalNode.Location.Y + 50
         );
 
         ((graphGraphDefinition)_data).Nodes.Add(new CHandle<graphGraphNodeDefinition>(duplicatedData));
-        
+
         if (GetQuestNodesChunkViewModel() is { } nodes)
         {
             nodes.RecalculateProperties();
         }
 
         Nodes.Add(wrappedDuplicate);
-        
+
         _loggerService?.Info($"Duplicated quest node with new ID: {duplicatedData.Id}");
     }
 
     private ushort GetNextAvailableQuestNodeId()
     {
         var questGraph = (graphGraphDefinition)_data;
-        
+
         ushort candidateId = (ushort)(_currentQuestNodeId + 1);
-        
+
         if (candidateId != ushort.MaxValue && !IsQuestNodeIdInUse(candidateId, questGraph))
         {
             return candidateId;
         }
-        
+
         // Fallback: if there's a collision, keep searching
         do
         {
             candidateId++;
         } while (candidateId != ushort.MaxValue && IsQuestNodeIdInUse(candidateId, questGraph));
-        
+
         if (candidateId == ushort.MaxValue)
         {
             _loggerService?.Error("No available quest node IDs remaining!");
         }
-        
+
         return candidateId;
     }
-    
+
     private bool IsQuestNodeIdInUse(ushort nodeId, graphGraphDefinition questGraph)
     {
         foreach (var nodeHandle in questGraph.Nodes)
@@ -694,7 +694,7 @@ public partial class RedGraph
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -767,7 +767,7 @@ public partial class RedGraph
                     {
                         var questInputConnectorViewModel = (QuestInputConnectorViewModel)Connections[i].Target;
 
-                        if (ReferenceEquals(Connections[i].Source, questOutputConnectorViewModel) && 
+                        if (ReferenceEquals(Connections[i].Source, questOutputConnectorViewModel) &&
                             ReferenceEquals(questInputConnectorViewModel.Data, destination))
                         {
                             questInputConnectorViewModel.IsConnected = questInputConnectorViewModel.Data.Connections.Count > 0;
@@ -808,6 +808,199 @@ public partial class RedGraph
                 }
             }
         }
+    }
+
+    public void CreatePhaseFromSelection(IEnumerable<object> selectedNodes)
+    {
+        var questNodes = selectedNodes.OfType<BaseQuestViewModel>().ToList();
+        if (questNodes.Count < 2)
+        {
+            return;
+        }
+
+        var mainGraphDef = (graphGraphDefinition)_data;
+        var selectedNodeIds = questNodes.Select(x => x.UniqueId).ToHashSet();
+
+        // Find connections between the selection and the outside world
+        var allConnections = Connections.OfType<QuestConnectionViewModel>().ToList();
+        var incomingConnections = allConnections.Where(c => !selectedNodeIds.Contains(c.Source.OwnerId) && selectedNodeIds.Contains(c.Target.OwnerId)).ToList();
+        var outgoingConnections = allConnections.Where(c => selectedNodeIds.Contains(c.Source.OwnerId) && !selectedNodeIds.Contains(c.Target.OwnerId)).ToList();
+
+        // 1. Create the phase node definition and its internal graph
+        var phaseNodeDef = (questPhaseNodeDefinition)InternalCreateQuestNode(typeof(questPhaseNodeDefinition));
+        if (phaseNodeDef.PhaseGraph?.Chunk == null)
+        {
+            phaseNodeDef.PhaseGraph = new CHandle<questGraphDefinition>(new questGraphDefinition());
+        }
+        var phaseGraphDef = phaseNodeDef.PhaseGraph!.Chunk;
+        if (phaseGraphDef == null)
+        {
+            _loggerService?.Error("Could not create internal graph for the new phase.");
+            return;
+        }
+
+        var incomingGroupedBySource = incomingConnections
+            .Where(c => ((QuestInputConnectorViewModel)c.Target).Data.Type != Enums.questSocketType.CutDestination)
+            .GroupBy(c => c.Source)
+            .ToList();
+        var inputNodeDefs = new List<questInputNodeDefinition>();
+        if (incomingGroupedBySource.Count > 0)
+        {
+            if (incomingGroupedBySource.Count == 1)
+            {
+                var inputNodeDef = (questInputNodeDefinition)InternalCreateQuestNode(typeof(questInputNodeDefinition));
+                inputNodeDef.SocketName = "In";
+                phaseGraphDef.Nodes.Add(new CHandle<graphGraphNodeDefinition>(inputNodeDef));
+                inputNodeDefs.Add(inputNodeDef);
+            }
+            else
+            {
+                for (var i = 0; i < incomingGroupedBySource.Count; i++)
+                {
+                    var inputNodeDef = (questInputNodeDefinition)InternalCreateQuestNode(typeof(questInputNodeDefinition));
+                    inputNodeDef.SocketName = $"In{i + 1}";
+                    phaseGraphDef.Nodes.Add(new CHandle<graphGraphNodeDefinition>(inputNodeDef));
+                    inputNodeDefs.Add(inputNodeDef);
+                }
+            }
+        }
+
+        var outgoingGroupedBySource = outgoingConnections.GroupBy(c => c.Source).ToList();
+        var outputNodeDefs = new List<questOutputNodeDefinition>();
+        for (var i = 0; i < outgoingGroupedBySource.Count; i++)
+        {
+            var outputNodeDef = (questOutputNodeDefinition)InternalCreateQuestNode(typeof(questOutputNodeDefinition));
+            outputNodeDef.SocketName = $"Out{i + 1}";
+            phaseGraphDef.Nodes.Add(new CHandle<graphGraphNodeDefinition>(outputNodeDef));
+            outputNodeDefs.Add(outputNodeDef);
+        }
+
+        // 3. Handle CutDestination sockets by adding a corresponding input node to the phase graph
+        var cutDestinationConnections = incomingConnections
+            .Where(c => ((QuestInputConnectorViewModel)c.Target).Data.Type == Enums.questSocketType.CutDestination)
+            .ToList();
+
+        questInputNodeDefinition? internalCutDestInputNodeDef = null;
+        if (cutDestinationConnections.Any())
+        {
+            internalCutDestInputNodeDef = (questInputNodeDefinition)InternalCreateQuestNode(typeof(questInputNodeDefinition));
+            internalCutDestInputNodeDef.SocketName = "CutDestination";
+            phaseGraphDef.Nodes.Add(new CHandle<graphGraphNodeDefinition>(internalCutDestInputNodeDef));
+        }
+
+        // 4. Create the wrapper for the phase node. This will generate its sockets based on the I/O nodes now in its graph.
+        var wrappedPhaseNode = (questPhaseNodeDefinitionWrapper)WrapQuestNode(phaseNodeDef, true);
+        wrappedPhaseNode.Location = new System.Windows.Point(
+            questNodes.Average(n => n.Location.X),
+            questNodes.Average(n => n.Location.Y)
+        );
+        mainGraphDef.Nodes.Add(new CHandle<graphGraphNodeDefinition>(phaseNodeDef));
+        Nodes.Add(wrappedPhaseNode);
+
+        // 5. Move the selected nodes from the main graph into the phase's subgraph
+        foreach (var nodeVM in questNodes)
+        {
+            // Use a reverse for-loop to safely remove items
+            for (int i = mainGraphDef.Nodes.Count - 1; i >= 0; i--)
+            {
+                if (mainGraphDef.Nodes[i].Chunk == nodeVM.Data)
+                {
+                    mainGraphDef.Nodes.RemoveAt(i);
+                }
+            }
+            Nodes.Remove(nodeVM);
+            phaseGraphDef.Nodes.Add(new CHandle<graphGraphNodeDefinition>((graphGraphNodeDefinition)nodeVM.Data));
+        }
+
+        wrappedPhaseNode.RecalculateSockets();
+
+        // 6. Re-wire all the connections
+
+        // Helper to add a connection directly to the data model
+        void AddConnectionToData(QuestOutputConnectorViewModel source, QuestInputConnectorViewModel dest)
+        {
+            var connection = new graphGraphConnectionDefinition
+            {
+                Source = new CWeakHandle<graphGraphSocketDefinition>(source.Data),
+                Destination = new CWeakHandle<graphGraphSocketDefinition>(dest.Data)
+            };
+            var handle = new CHandle<graphGraphConnectionDefinition>(connection);
+            source.Data.Connections.Add(handle);
+            dest.Data.Connections.Add(handle);
+        }
+
+        // Re-route standard incoming connections
+        if (incomingGroupedBySource.Count == 1)
+        {
+            var group = incomingGroupedBySource.First();
+            var inputNodeDef = inputNodeDefs.First();
+            var phaseInSocket = (QuestInputConnectorViewModel)wrappedPhaseNode.Input.First(s => s.Name == "In");
+            var tempWrappedInput = WrapQuestNode(inputNodeDef, true);
+            var internalOutSocket = (QuestOutputConnectorViewModel)tempWrappedInput.Output.First();
+
+            ConnectQuest((QuestOutputConnectorViewModel)group.Key, phaseInSocket);
+            foreach (var conn in group)
+            {
+                AddConnectionToData(internalOutSocket, (QuestInputConnectorViewModel)conn.Target);
+                RemoveQuestConnection(conn);
+            }
+        }
+        else
+        {
+            for (var i = 0; i < incomingGroupedBySource.Count; i++)
+            {
+                var group = incomingGroupedBySource[i];
+                var inputNodeDef = inputNodeDefs[i];
+                var phaseInSocket = (QuestInputConnectorViewModel)wrappedPhaseNode.Input.First(s => s.Name == inputNodeDef.SocketName);
+                var tempWrappedInput = WrapQuestNode(inputNodeDef, true);
+                var internalOutSocket = (QuestOutputConnectorViewModel)tempWrappedInput.Output.First();
+
+                ConnectQuest((QuestOutputConnectorViewModel)group.Key, phaseInSocket);
+                foreach (var conn in group)
+                {
+                    AddConnectionToData(internalOutSocket, (QuestInputConnectorViewModel)conn.Target);
+                    RemoveQuestConnection(conn);
+                }
+            }
+        }
+
+        // Re-route standard outgoing connections
+        for (var i = 0; i < outgoingGroupedBySource.Count; i++)
+        {
+            var group = outgoingGroupedBySource[i];
+            var outputNodeDef = outputNodeDefs[i];
+            var phaseOutSocket = (QuestOutputConnectorViewModel)wrappedPhaseNode.Output.First(s => s.Name == outputNodeDef.SocketName);
+            var tempWrappedOutput = WrapQuestNode(outputNodeDef, true);
+            var internalInSocket = (QuestInputConnectorViewModel)tempWrappedOutput.Input.First();
+
+            AddConnectionToData((QuestOutputConnectorViewModel)group.Key, internalInSocket);
+            foreach (var conn in group)
+            {
+                ConnectQuest(phaseOutSocket, (QuestInputConnectorViewModel)conn.Target);
+                RemoveQuestConnection(conn);
+            }
+        }
+
+        // Re-route CutDestination connections
+        if (cutDestinationConnections.Any())
+        {
+            var phaseCutDestSocket = (QuestInputConnectorViewModel)wrappedPhaseNode.Input.First(s => s.Name == "CutDestination");
+
+            var tempWrappedInternalCutDest = WrapQuestNode(internalCutDestInputNodeDef!, true);
+            var internalCutDestOutSocket = (QuestOutputConnectorViewModel)tempWrappedInternalCutDest.Output.First();
+
+            foreach (var conn in cutDestinationConnections)
+            {
+                ConnectQuest((QuestOutputConnectorViewModel)conn.Source, phaseCutDestSocket);
+                AddConnectionToData(internalCutDestOutSocket, (QuestInputConnectorViewModel)conn.Target);
+                RemoveQuestConnection(conn);
+            }
+        }
+
+        // 7. Refresh the whole graph view
+        RebuildQuestConnections();
+        GraphStateSave();
+        DocumentViewModel?.SetIsDirty(true);
     }
 
     public static RedGraph GenerateQuestGraph(string title, graphGraphDefinition questGraph, INodeWrapperFactory nodeWrapperFactory)
