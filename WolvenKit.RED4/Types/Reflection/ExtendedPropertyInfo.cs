@@ -75,6 +75,7 @@ public class ExtendedPropertyInfo
 
     public Type Type { get; }
     public Type? GenericType { get; }
+    public Type? DisplayEnumType { get; internal set; } = null;
 
     public bool SerializeDefault { get; private set; }
     public object? DefaultValue { get; internal set; }
@@ -107,6 +108,11 @@ public class ExtendedPropertyInfo
         {
             SerializeDefault = redPropertyAttribute.SerializeDefault;
             IsIgnored = redPropertyAttribute.IsIgnored;
+        }
+
+        if (attribute is DisplayAsEnumAttribute enumAttribute)
+        {
+            DisplayEnumType = enumAttribute.EnumType();
         }
     }
 
