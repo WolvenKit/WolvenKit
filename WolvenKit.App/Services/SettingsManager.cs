@@ -73,6 +73,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
 
             // General
             nameof(SkipUpdateCheck),
+            nameof(AlwaysAskBeforeUpdating),
             nameof(ShowGuidedTour),
             nameof(ThemeAccentString),
             nameof(DefaultProjectPath),
@@ -284,9 +285,13 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
 
     #region General
 
-    [Display(Name = "Do not check for updates", GroupName = "General")]
+    [Display(Name = "Do not check for updates on startup", GroupName = "General")]
     [ObservableProperty]
     private bool _skipUpdateCheck;
+    
+    [Display(Name = "Always ask before updating", GroupName = "General")]
+    [ObservableProperty]
+    private bool _alwaysAskBeforeUpdating;
 
     [Display(Name = "Update Channel", GroupName = "General")]
     [ObservableProperty]

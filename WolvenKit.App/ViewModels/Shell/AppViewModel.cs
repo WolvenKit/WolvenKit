@@ -80,7 +80,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly Cr2WTools _cr2WTools;
     private readonly TemplateFileTools _templateFileTools;
     private readonly ProjectResourceTools _projectResourceTools;
-
+    private readonly IUpdateService _updateService;
+    
     // expose to view
     public ISettingsManager SettingsManager { get; init; }
 
@@ -109,7 +110,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         DocumentTools documentTools,
         Cr2WTools cr2WTools,
         TemplateFileTools templateFileTools,
-        ProjectResourceTools projectResourceTools
+        ProjectResourceTools projectResourceTools,
+        IUpdateService updateService
     )
     {
         _documentViewmodelFactory = documentViewmodelFactory;
@@ -132,7 +134,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _cr2WTools = cr2WTools;
         _templateFileTools = templateFileTools;
         _projectResourceTools = projectResourceTools;
-
+        _updateService = updateService;
+        
         _fileValidationScript = _scriptService.GetScripts().ToList()
             .Where(s => s.Name == "run_FileValidation_on_active_tab")
             .Select(s => new ScriptFileViewModel(SettingsManager, ScriptSource.User, s))
@@ -305,7 +308,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             ShowHomePageSync();
         }
 
-        CheckForUpdatesCommand.SafeExecute(true);
+        if (!SettingsManager.SkipUpdateCheck)
+        {
+            CheckForUpdatesCommand.SafeExecute(true);
+        }
         CheckForScriptUpdatesCommand.SafeExecute();
         CheckForLongPathSupport();
         CheckForOneDrivePath();
@@ -617,81 +623,50 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     [RelayCommand]
-    private async Task CheckForUpdates(bool checkForCheckForUpdates)
+    private async Task CheckForUpdates(bool isDuringStartup = false)
     {
-        if (DesktopBridgeHelper.IsRunningAsPackage())
-        {
-            // don't check for updates for packaged apps
-            return;
-        }
-
-        if (checkForCheckForUpdates)
+        if (isDuringStartup && !SettingsManager.AlwaysAskBeforeUpdating)
         {
             if (SettingsManager.SkipUpdateCheck)
             {
                 return;
             }
-        }
 
-
-        // get remote version without GitHub API calls
-        var owner = "WolvenKit";
-        var name = "WolvenKit";
-        switch (SettingsManager.UpdateChannel)
-        {
-            case EUpdateChannel.Nightly:
-                name = "WolvenKit-nightly-releases";
-                break;
-            case EUpdateChannel.Stable:
-            default:
-                break;
-        }
-
-        SemVersion remoteVersion;
-        var githubUrl = $@"https://github.com/{owner}/{name}/releases/latest";
-        try
-        {
-            HttpClient client = new();
-            var response = await client.GetAsync(new Uri(githubUrl));
-            response.EnsureSuccessStatusCode();
-            if (response.RequestMessage?.RequestUri is null)
+            if (!await _updateService.IsUpdateAvailable())
             {
                 return;
             }
-            var version = response.RequestMessage.RequestUri.LocalPath.Split('/').Last();
-            remoteVersion = SemVersion.Parse(version, SemVersionStyles.OptionalMinorPatch);
-        }
-        catch (HttpRequestException ex)
-        {
-            _loggerService.Error($"Failed to respond to updater url: {githubUrl}");
-            _loggerService.Error(ex);
+
+            var updateTask = _updateService.UpdateToNewestVersion();
+            ShowInteraction:
+            var interactionResult = Interactions.ShowMessageBox("WolvenKit is being updated...\nThis will trigger an automatic restart, please stand by...", "WolvenKit", WMessageBoxButtons.Ok, WMessageBoxImage.Information);
+            if (interactionResult == WMessageBoxResult.OK)
+            {
+                goto ShowInteraction;
+            }
+            await updateTask;
             return;
         }
-
-        var thisVersion = Core.CommonFunctions.GetAssemblyVersion(Constants.AssemblyName);
-
-        // if remoteVersion is later than thisVersion
-        if (remoteVersion.CompareSortOrderTo(thisVersion) <= 0)
+        
+        var name = SettingsManager.UpdateChannel == EUpdateChannel.Stable
+            ? "WolvenKit"
+            : "WolvenKit-nightly-releases";
+        if (!await _updateService.IsUpdateAvailable())
         {
-            if (!checkForCheckForUpdates)
+            if (!isDuringStartup)
             {
                 await Interactions.ShowMessageBoxAsync($"No update available. You are on the latest version.", name, WMessageBoxButtons.Ok);
             }
         }
         else
         {
-            // old style update
-            // TODO use inno
-            var url = $"https://github.com/{owner}/{name}/releases/latest";
-
             if (Interactions.ShowQuestionYesNo((
-                    $"Update available: {remoteVersion}\nYou are on the {SettingsManager.UpdateChannel} release channel.\n\nVisit {url} ?",
+                    $"Update available to: {await _updateService.GetLatestVersionTag()}\nYou are on the {SettingsManager.UpdateChannel} release channel.\n\nUpdate now?",
                     name)))
             {
-                Process.Start("explorer", url);
+                await _updateService.UpdateToNewestVersion();
             }
         }
-
     }
 
     [RelayCommand]

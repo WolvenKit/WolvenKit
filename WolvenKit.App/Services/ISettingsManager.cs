@@ -79,7 +79,7 @@ public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
 
         return dir;
     }
-
+    
     public static string GetTemp_AudioPath()
     {
         var dir = Path.Combine(GetAppData(), "Temp_Audio");
