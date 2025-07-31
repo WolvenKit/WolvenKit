@@ -237,11 +237,11 @@
                         Grid.Column="1"
                         HorizontalAlignment="Stretch" />
 
-                    <editors:RedTypeView
+                    <local:RedTreeView
                         Grid.Column="2"
                         BorderBrush="{StaticResource BorderAlt}"
                         BorderThickness="0,1,0,0"
-                        DataContext="{Binding SelectedFlat}" />
+                        ItemsSource="{Binding SelectedFlat}" />
                 </Grid>
             </TabItem>
 
@@ -274,11 +274,11 @@
                         Grid.Column="1"
                         HorizontalAlignment="Stretch" />
 
-                    <editors:RedTypeView
+                    <local:RedTreeView
                         Grid.Column="2"
                         BorderBrush="{StaticResource BorderAlt}"
                         BorderThickness="0,1,0,0"
-                        DataContext="{Binding SelectedQuery}" />
+                        ItemsSource="{Binding SelectedQuery}" />
                 </Grid>
             </TabItem>
 

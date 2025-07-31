@@ -12,4 +12,15 @@ public class InternalEnums
         Embedded = 0x8,     // Load from embedded file
         Inplace = 0x10,     // done / not used in cr2w currently (1.61)
     };
+
+    [System.Flags]
+    public enum EGroupTag
+    {
+        None = 0x0,
+        Abstract = 0x1,
+        NotQueryable = 0x2,
+        CPO = 0x4,
+        Debug = 0x8,
+        DisabledContent = 0x10
+    };
 }

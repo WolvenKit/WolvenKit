@@ -56,6 +56,15 @@ namespace WolvenKit.Common.Services
         public static IRedType? GetFlat(TweakDBID tdb) => s_tweakDb.Flats.GetValue((ulong)tdb);
         public static List<TweakDBID>? GetQuery(TweakDBID tdb) => s_tweakDb.Queries.GetQuery((ulong)tdb);
         public static byte? GetGroupTag(TweakDBID tdb) => s_tweakDb.GroupTags.GetGroupTag((ulong)tdb);
+        public static InternalEnums.EGroupTag GetGroupTagAsFlag(TweakDBID tdb)
+        {
+            if (GetGroupTag(tdb) is { } val)
+            {
+                return (InternalEnums.EGroupTag)val;
+            }
+            
+            return InternalEnums.EGroupTag.None;
+        }
 
         public static bool TryGetType(TweakDBID tweakDBID, [NotNullWhen(true)] out Type? type)
         {

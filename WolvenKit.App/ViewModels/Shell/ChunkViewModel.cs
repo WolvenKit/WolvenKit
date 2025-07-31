@@ -804,7 +804,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                                         (ResolvedData is CName && Parent?.Name == "chunkMaterials");
 
     // Used in view
-    public bool HasValue => !IsValueExtrapolated && !string.IsNullOrEmpty(Value) && Value!.ToLower() != "none";
+    public bool HasValue => !IsValueExtrapolated && 
+                                ((ResolvedData is TweakDBID tweakDbId && tweakDbId != TweakDBID.Empty) || 
+                                (!string.IsNullOrEmpty(Value) && Value!.ToLower() != "none"));
 
     public bool IsArray => PropertyType.IsAssignableTo(typeof(IRedArray)) ||
                            (ResolvedPropertyType is not null && (

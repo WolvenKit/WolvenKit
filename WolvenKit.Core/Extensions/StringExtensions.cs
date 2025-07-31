@@ -79,8 +79,8 @@ namespace WolvenKit.Interfaces.Extensions
 
         public static bool IsEmptyOrEndsWith(this string target, string value) =>
             target == "" || target.EndsWith(value);
-        
-        
+
+
         /// <summary>
         /// Is the string a relative file path?
         /// </summary>
