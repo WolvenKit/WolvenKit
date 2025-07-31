@@ -357,7 +357,8 @@
                                                      Mode=OneWayToSource}"
                                     IsConnected="{Binding IsConnected}"
                                     Margin="0,2,0,2"
-                                    Background="Transparent">
+                                    Background="Transparent"
+                                    Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <nodify:NodeInput.Header>
                                         <StackPanel Orientation="Horizontal">
                                             <!-- Scene nodes: Show Title FIRST and BIG (socket name) -->
@@ -435,7 +436,8 @@
                                 <nodify:NodeOutput
                                     Anchor="{Binding Anchor,
                                                      Mode=OneWayToSource}"
-                                    IsConnected="{Binding IsConnected}">
+                                    IsConnected="{Binding IsConnected}"
+                                    Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <nodify:NodeOutput.Header>
                                         <StackPanel Orientation="Horizontal">
                                             <!-- Scene nodes only: Show Title as coordinate FIRST -->
