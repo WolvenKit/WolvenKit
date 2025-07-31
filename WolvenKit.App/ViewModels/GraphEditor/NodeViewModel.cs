@@ -51,6 +51,31 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
     public ObservableCollection<InputConnectorViewModel> Input { get; } = new();
     public ObservableCollection<OutputConnectorViewModel> Output { get; } = new();
 
+    [ObservableProperty]
+    private bool _showUnusedSockets = true;
+
+    public void UpdateSocketVisibility()
+    {
+        foreach (var input in Input)
+        {
+            input.IsVisible = ShowUnusedSockets || input.IsConnected;
+        }
+
+        foreach (var output in Output)
+        {
+            output.IsVisible = ShowUnusedSockets || output.IsConnected;
+        }
+    }
+
+    partial void OnShowUnusedSocketsChanged(bool value)
+    {
+        UpdateSocketVisibility();
+        if (!IsInitialLoad)
+        {
+            DocumentViewModel?.SetIsDirty(true);
+        }
+    }
+
     public RedBaseClass Data { get; }
     
     /// <summary>
