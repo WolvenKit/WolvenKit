@@ -113,6 +113,21 @@
                                 Foreground="{StaticResource WolvenKitYellow}" />
                         </MenuItem.Icon>
                     </MenuItem>
+
+                    <!-- WorldBuilder prop file -->
+                    <MenuItem
+                        x:Name="MenuItemGenerateWorldBuilderPropFile"
+                        Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                        Header="Generate WorldBuilder prop file"
+                        ToolTip="Generates prop file for WorldBuilder">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="Codicons"
+                                Kind="Globe"
+                                Size="{DynamicResource WolvenKitIconTiny}"
+                                Foreground="{StaticResource WolvenKitYellow}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
 
                 <MenuItem
