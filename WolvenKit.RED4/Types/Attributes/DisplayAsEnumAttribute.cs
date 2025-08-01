@@ -15,8 +15,4 @@ public class DisplayAsEnumAttribute<T> : DisplayAsEnumAttribute where T : struct
     internal DisplayAsEnumAttribute() { }
 
     public override Type EnumType() { return typeof(T); }
-
-    public string? ToString(T enumValue) => Enum.GetName<T>(enumValue);
-
-    public T? ToEnumValue<I>(I val) where I : IBinaryInteger<I> => (T)Enum.ToObject(typeof(T), val);
 }

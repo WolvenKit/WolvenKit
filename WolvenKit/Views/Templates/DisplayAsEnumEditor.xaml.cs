@@ -11,7 +11,7 @@ namespace WolvenKit.Views.Templates
     /// <summary>
     /// Interaction logic for UIntAsEnumEditor.xaml
     /// </summary>
-    public partial class UIntAsEnumEditor : UserControl
+    public partial class DisplayAsEnumEditor : UserControl
     {
         public ObservableCollection<string> BindingCollection { get; set; } = new();
 
@@ -27,7 +27,7 @@ namespace WolvenKit.Views.Templates
             set => SetValue(EnumTypeProperty, value);
         }
         public static readonly DependencyProperty EnumTypeProperty = DependencyProperty.Register(
-            nameof(EnumType), typeof(Type), typeof(UIntAsEnumEditor));
+            nameof(EnumType), typeof(Type), typeof(DisplayAsEnumEditor));
 
         public IRedInteger RedInteger
         {
@@ -35,17 +35,17 @@ namespace WolvenKit.Views.Templates
             set => SetValue(RedIntegerProperty, value);
         }
         public static readonly DependencyProperty RedIntegerProperty = DependencyProperty.Register(
-            nameof(RedInteger), typeof(IRedInteger), typeof(UIntAsEnumEditor), new PropertyMetadata(OnRedIntegerChanged));
+            nameof(RedInteger), typeof(IRedInteger), typeof(DisplayAsEnumEditor), new PropertyMetadata(OnRedIntegerChanged));
         
 
-        public UIntAsEnumEditor()
+        public DisplayAsEnumEditor()
         {
             InitializeComponent();
         }
 
         private static void OnRedIntegerChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is not UIntAsEnumEditor view)
+            if (d is not DisplayAsEnumEditor view)
             {
                 return;
             }
@@ -67,17 +67,13 @@ namespace WolvenKit.Views.Templates
                 view.BindingCollection.Clear();
                 foreach (var ev in Enum.GetValues(enumType))
                 {
-                    var ev64 = Convert.ToUInt64(ev);
-                    if (ev64 > 0)
-                    {
-                        view.BindingCollection.Add(Enum.GetName(enumType, ev));
-                    }
+                    view.BindingCollection.Add(Enum.GetName(enumType, ev));
                 }
             }
         }
 
         private string GetValueFromRedValue() => EnumHelper.RedIntToEnumString(EnumType, RedInteger);
 
-        private void SetRedValue(string value) => SetCurrentValue(RedIntegerProperty, EnumHelper.StringToRedInt(EnumType, value, RedInteger));
+        private void SetRedValue(string value) => SetCurrentValue(RedIntegerProperty, EnumHelper.EnumStringToRedInt(EnumType, value, RedInteger));
     }
 }

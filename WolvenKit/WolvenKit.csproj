@@ -1070,10 +1070,10 @@
     <Compile Update="Views\Templates\RedStringEditor.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Templates\UIntAsBitfieldEditor.xaml.cs">
+    <Compile Update="Views\Templates\DisplayAsBitfieldEditor.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Templates\UIntAsEnumEditor.xaml.cs">
+    <Compile Update="Views\Templates\DisplayAsEnumEditor.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

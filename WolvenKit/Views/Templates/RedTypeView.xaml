@@ -514,13 +514,13 @@
 
                 <converters:RedEditorTemplateSelector.UIntAsBitfieldEditor>
                     <DataTemplate>
-                        <templates:UIntAsBitfieldEditor EnumType="{Binding DisplayAsEnumType, Mode=OneWay}" RedInteger="{Binding Data, Mode=TwoWay}" />
+                        <templates:DisplayAsBitfieldEditor EnumType="{Binding DisplayAsEnumType, Mode=OneWay}" RedInteger="{Binding Data, Mode=TwoWay}" />
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.UIntAsBitfieldEditor>
 
                 <converters:RedEditorTemplateSelector.UIntAsEnumEditor>
                     <DataTemplate>
-                        <templates:UIntAsEnumEditor EnumType="{Binding DisplayAsEnumType, Mode=OneWay}" RedInteger="{Binding Data, Mode=TwoWay}" />
+                        <templates:DisplayAsEnumEditor EnumType="{Binding DisplayAsEnumType, Mode=OneWay}" RedInteger="{Binding Data, Mode=TwoWay}" />
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.UIntAsEnumEditor>
 
