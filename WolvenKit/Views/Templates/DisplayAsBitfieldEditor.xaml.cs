@@ -13,7 +13,7 @@ namespace WolvenKit.Views.Templates
     /// <summary>
     /// Interaction logic for UIntAsBitfieldEditor.xaml
     /// </summary>
-    public partial class UIntAsBitfieldEditor : UserControl
+    public partial class DisplayAsBitfieldEditor : UserControl
     {
         public ObservableCollection<string> SelectedItems { get; set; } = new();
         public ObservableCollection<string> BindingCollection { get; set; } = new();
@@ -24,7 +24,7 @@ namespace WolvenKit.Views.Templates
             set => SetValue(EnumTypeProperty, value);
         }
         public static readonly DependencyProperty EnumTypeProperty = DependencyProperty.Register(
-            nameof(EnumType), typeof(Type), typeof(UIntAsBitfieldEditor));
+            nameof(EnumType), typeof(Type), typeof(DisplayAsBitfieldEditor));
 
         public IRedInteger RedInteger
         {
@@ -32,9 +32,9 @@ namespace WolvenKit.Views.Templates
             set => SetValue(RedIntegerProperty, value);
         }
         public static readonly DependencyProperty RedIntegerProperty = DependencyProperty.Register(
-            nameof(RedInteger), typeof(IRedInteger), typeof(UIntAsBitfieldEditor), new PropertyMetadata(OnRedIntegerChanged));
+            nameof(RedInteger), typeof(IRedInteger), typeof(DisplayAsBitfieldEditor), new PropertyMetadata(OnRedIntegerChanged));
 
-        public UIntAsBitfieldEditor()
+        public DisplayAsBitfieldEditor()
         {
             InitializeComponent();
 
@@ -43,7 +43,7 @@ namespace WolvenKit.Views.Templates
 
         private static void OnRedIntegerChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is not UIntAsBitfieldEditor view)
+            if (d is not DisplayAsBitfieldEditor view)
             {
                 return;
             }

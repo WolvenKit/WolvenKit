@@ -10,7 +10,26 @@ public class EnumHelper
 
     public static string RedIntToEnumString(Type enumType, IRedInteger redInteger) => Enum.GetName(enumType, RedIntToULong(redInteger)) ?? redInteger.ToString(CultureInfo.CurrentCulture);
 
+    // Needs the current IRedInteger object to infer its type
+    public static IRedInteger EnumStringToRedInt(Type enumType, string value, IRedInteger current) => ValueToRedInt(Enum.Parse(enumType, value), current);
+
+    // This could exist outside of this helper class
+    public static IRedInteger ValueToRedInt(object value, IRedInteger current) => current switch
+    {
+        CUInt8 => (CUInt8)Convert.ToByte(value),
+        CUInt16 => (CUInt16)Convert.ToUInt16(value),
+        CUInt32 => (CUInt32)Convert.ToUInt32(value),
+        CUInt64 => (CUInt64)Convert.ToUInt64(value),
+        CInt8 => (CInt8)Convert.ToSByte(value),
+        CInt16 => (CInt16)Convert.ToInt16(value),
+        CInt32 => (CInt32)Convert.ToInt32(value),
+        CInt64 => (CInt64)Convert.ToInt64(value),
+        _ => throw new NotSupportedException("Only integer types are supported")
+    };
+
+
     // Running IRedInteger values through ulong since it's the largest value that fits them all
+    // Used for performing bitfield tests
     public static ulong RedIntToULong(IRedInteger redInteger) => redInteger switch
     {
         CUInt8 u8 => Convert.ToUInt64(u8),
@@ -20,19 +39,7 @@ public class EnumHelper
         _ => 0u
     };
 
-    public static IRedInteger ULongToRedInt(ulong ul, IRedInteger current) => current switch
-    {
-        CUInt8 => (CUInt8)Convert.ToByte(ul),
-        CUInt16 => (CUInt16)Convert.ToUInt16(ul),
-        CUInt32 => (CUInt32)Convert.ToUInt32(ul),
-        CUInt64 => (CUInt64)ul,
-        _ => throw new NotSupportedException()
-    };
-
-    public static ulong StringToULong(Type enumType, string value) => Convert.ToUInt64(Enum.Parse(enumType, value));
-
-    public static IRedInteger StringToRedInt(Type enumType, string value, IRedInteger current) => ULongToRedInt(StringToULong(enumType, value), current);
-
+    
     public static string RedIntToBitfieldString(Type enumType, IRedInteger redInteger) => redInteger switch
     {
         CUInt8 u8 => UIntToBitfieldString<byte>(enumType, u8),
