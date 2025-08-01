@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -240,16 +241,73 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         _loggerService.Success("Done! Now import the .png files via Import Tool.");
     }
 
+    private static readonly List<string> s_worldBuilderPath =
+        ["bin", "x64", "plugins", "cyber_engine_tweaks", "mods", "entSpawner", "data"];
+
+    [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
+    private void GenerateWorldbuilderProp()
+    {
+        if (_projectManager.ActiveProject is not Cp77Project activeProject)
+        {
+            return;
+        }
+
+        var entFiles = activeProject.Files.Where(f => f.EndsWith(".ent")).ToList();
+        if (entFiles.Count == 0)
+        {
+            _loggerService.Warning(
+                "You have no .ent files in your project. Please add some before using this feature.");
+            return;
+        }
+
+        var dict = entFiles.ToDictionary(f => f, f => f.Contains("prop") || f.Contains("amm"));
+
+        if (Interactions.ShowChecklistDialogue((dict, activeProject.ModName, "Select .ent files", "")) is not
+            { } dialogModel)
+        {
+            return;
+        }
+
+        if (dialogModel.SelectedOptions.Count == 0)
+        {
+            return;
+        }
+
+        if (!string.IsNullOrEmpty(SettingsManager.ModderName) &&
+            !s_worldBuilderPath.Contains(SettingsManager.ModderName))
+        {
+            s_worldBuilderPath.Add(SettingsManager.ModderName);
+        }
+
+        var worldbuilderPath = Path.Join([activeProject.ResourcesDirectory, ..s_worldBuilderPath]);
+
+        if (!Directory.Exists(worldbuilderPath))
+        {
+            Directory.CreateDirectory(worldbuilderPath);
+        }
+
+        var propFilePath = Path.Join(worldbuilderPath, dialogModel.FileName);
+        if (!propFilePath.EndsWith(".txt"))
+        {
+            propFilePath += ".txt";
+        }
+
+        File.WriteAllText(propFilePath, string.Join(Environment.NewLine, dialogModel.SelectedOptions));
+    }
+
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private void GenerateMinimalQuestFiles()
     {
         if (_projectManager.ActiveProject is not Cp77Project activeProject)
+        {
             return;
+        }
 
-        var dialogModel = Interactions.ShowGenerateQuestDialogue(activeProject);
-        if (dialogModel is null)
+        if (Interactions.ShowGenerateQuestDialogue(activeProject) is not { } dialogModel)
+        {
             return;
-        
+        }
+
         if (SettingsManager.ModderName is not string modderName || modderName == string.Empty)
         {
             Interactions.ShowMessageBox(
