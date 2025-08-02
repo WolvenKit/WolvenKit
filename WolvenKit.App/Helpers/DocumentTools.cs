@@ -10,7 +10,8 @@ using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 using System.Threading.Tasks;
 using System;
-using System.Collections.Concurrent;
+using WolvenKit.App.Interaction;
+using WolvenKit.Modkit.RED4.Tools;
 
 
 namespace WolvenKit.App.Helpers;
@@ -38,8 +39,11 @@ public class DocumentTools
 {
     private readonly ILoggerService _loggerService;
     private readonly Cr2WTools _cr2WTools;
+    private readonly MeshTools _meshTools;
     private readonly IArchiveManager _archiveManager;
     private readonly IProjectManager _projectManager;
+    private readonly ProjectResourceTools _projectResourceTools;
+    
 
     public static Regex PlaceholderRegex { get; } = new Regex(@"^[-=_]+$");
 
@@ -55,6 +59,17 @@ public class DocumentTools
     private DateTime _lastCleanupTime = DateTime.UtcNow;
     private const int CleanupIntervalMinutes = 5; // Only cleanup every 5 minutes
 
+    public DocumentTools(ILoggerService loggerService, Cr2WTools cr2WTools, IArchiveManager archiveManager,
+        IProjectManager projectManager, MeshTools meshTools, ProjectResourceTools projectResourceTools)
+    {
+        _loggerService = loggerService;
+        _cr2WTools = cr2WTools;
+        _archiveManager = archiveManager;
+        _projectManager = projectManager;
+        _meshTools = meshTools;
+        _projectResourceTools = projectResourceTools;
+    }
+    
     // Cache entry with metadata for LFU + TTL
     private class FilteredCacheEntry
     {
@@ -153,14 +168,6 @@ public class DocumentTools
         }
     }
 
-    public DocumentTools(ILoggerService loggerService, Cr2WTools cr2WTools, IArchiveManager archiveManager,
-        IProjectManager projectManager)
-    {
-        _loggerService = loggerService;
-        _cr2WTools = cr2WTools;
-        _archiveManager = archiveManager;
-        _projectManager = projectManager;
-    }
 
     #region journalFile
 
@@ -454,6 +461,48 @@ public class DocumentTools
 
     private static readonly Dictionary<string, List<string>> s_appAppearancesByPath = [];
 
+    public CR2WFile? GetCr2W(string relativePath, bool preferFromMod = true)
+    {
+        if (_projectManager.ActiveProject is not { } activeProject)
+        {
+            return null;
+        }
+
+        var absolutePath = activeProject.GetAbsolutePath(relativePath);
+
+        if (File.Exists(absolutePath))
+        {
+            return _cr2WTools.ReadCr2W(absolutePath);
+        }
+
+        CR2WFile? ret = null;
+        if (preferFromMod)
+        {
+            ret = _archiveManager.GetCR2WFile(relativePath, true);
+            if (ret is not null)
+            {
+                return ret;
+            }
+
+            if (!Interactions.ShowQuestionYesNo((
+                    "Scan mod archives now?\nDepending on how many mods you have installed, this can take a few moments. Wolvenkit will be unresponsive.",
+                    "Scan mod archives now?")))
+            {
+                return null;
+            }
+
+            _projectResourceTools.ScanModArchives();
+            ret = _archiveManager.GetCR2WFile(relativePath, true);
+            if (ret is not null)
+            {
+                return ret;
+            }
+        }
+
+        ret = _archiveManager.GetCR2WFile(relativePath, false);
+        return ret ?? _archiveManager.GetCR2WFile(relativePath);
+    }
+    
     public List<string> GetAppearanceNamesFromApp(ResourcePath relativeAppResourcePath, bool refreshCache)
     {
         if (relativeAppResourcePath.GetResolvedText() is not string relativeAppFilePath ||
@@ -472,43 +521,16 @@ public class DocumentTools
             return cachedList;
         }
 
-        // initial opening of file
-        if (!refreshCache)
-        {
-            return [];
-        }
-        
         List<string> appAppearances = [];
-
-        if (activeProject.GetAbsolutePath(relativeAppFilePath) is string absolutePath && File.Exists(absolutePath))
+        
+        // initial opening of file
+        if (!refreshCache || GetCr2W(relativeAppFilePath) is not CR2WFile cr2W)
         {
-            if (_cr2WTools.ReadCr2W(absolutePath) is CR2WFile cr2W)
-            {
-                appAppearances = GetAppearanceNamesFromApp(cr2W);
-            }
-
             s_appAppearancesByPath.Add(relativeAppFilePath, appAppearances);
             return appAppearances;
         }
 
-        var appFile = _archiveManager.GetGameFile(relativeAppResourcePath, true, false);
-        if (appFile is null)
-        {
-            s_appAppearancesByPath.Add(relativeAppFilePath, []);
-            return [];
-        }
-
-        switch (appFile.Scope)
-        {
-            case ArchiveManagerScope.Mods:
-                appAppearances = GetAppearanceNamesFromApp(_archiveManager.GetCR2WFile(appFile.FileName));
-                break;
-            case ArchiveManagerScope.Basegame:
-                appAppearances = GetAppearanceNamesFromApp(_archiveManager.GetCR2WFile(appFile.FileName, false));
-                break;
-            default:
-                break;
-        }
+        appAppearances = GetAppearanceNamesFromApp(cr2W);
 
         s_appAppearancesByPath.Add(relativeAppFilePath, appAppearances);
         return appAppearances;
@@ -913,6 +935,44 @@ public class DocumentTools
 
         return activeProject.Files.Where(f => f.EndsWith(fileExtension)).Select(s => s.Replace(s_archiveString, ""))
             .ToList();
+    }
+
+    public void CopyMeshMaterials(string sourcePath, string destPath)
+    {
+        if (_projectManager.ActiveProject is not { } activeProject)
+        {
+            return;
+        }
+
+        var sourceCr2W = GetCr2W(sourcePath);
+        var destCr2W = GetCr2W(destPath);
+
+        if (sourceCr2W is null)
+        {
+            _loggerService.Error($"source file {sourcePath} not found. Can't copy...");
+            return;
+        }
+
+        if (destCr2W is null)
+        {
+            _loggerService.Error($"target file {destCr2W} not found. Can't copy...");
+            return;
+        }
+
+        if (sourceCr2W.RootChunk is not CMesh sourceMesh || destCr2W.RootChunk is not CMesh destMesh)
+        {
+            _loggerService.Error($"source file {sourcePath} or target file {destPath} is not a valid mesh.");
+            return;
+        }
+
+        destMesh.Appearances = sourceMesh.Appearances;
+        destMesh.MaterialEntries = sourceMesh.MaterialEntries;
+        destMesh.LocalMaterialBuffer = sourceMesh.LocalMaterialBuffer;
+        destMesh.ExternalMaterials = sourceMesh.ExternalMaterials;
+        destMesh.PreloadExternalMaterials = sourceMesh.PreloadExternalMaterials;
+        destMesh.PreloadLocalMaterialInstances = sourceMesh.PreloadLocalMaterialInstances;
+
+        _cr2WTools.WriteCr2W(destCr2W, destPath);
     }
 
 
