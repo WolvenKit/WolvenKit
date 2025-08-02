@@ -974,7 +974,6 @@ public class DocumentTools
 
         _cr2WTools.WriteCr2W(destCr2W, destPath);
     }
-}
 
     public List<IRedRef> CollectDependencies(IRedRef redRef)
     {
