@@ -17,11 +17,11 @@ namespace WolvenKit.Views.Dialogs.Windows
 {
     public partial class SelectDropdownEntryWindow : IViewFor<SelectDropdownEntryDialogViewModel>
     {
-        public SelectDropdownEntryWindow(List<string> options, string title, string text)
+        public SelectDropdownEntryWindow(List<string> options, string title, string text, bool showInputBar = false)
         {
             InitializeComponent();
 
-            ViewModel = new SelectDropdownEntryDialogViewModel(options, title, text);
+            ViewModel = new SelectDropdownEntryDialogViewModel(options, title, text, showInputBar);
             DataContext = ViewModel;
 
             Owner = Application.Current.MainWindow;

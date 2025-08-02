@@ -71,12 +71,12 @@ public class ProjectResourceTools
     private readonly SemaphoreSlim _semaphore = new(1, 1);
 
     public ProjectResourceTools(IProjectManager projectManager, IArchiveManager archiveManager,
-        ILoggerService loggerService, ISettingsManager settingsManager, Cr2WTools cr2WTools)
+        ILoggerService loggerService, ISettingsManager settingsServiceManager, Cr2WTools cr2WTools)
     {
         _projectManager = projectManager;
         _archiveManager = archiveManager;
         _loggerService = loggerService;
-        _settingsService = settingsManager;
+        _settingsService = settingsServiceManager;
         _crwWTools = cr2WTools;
     }
 
@@ -957,6 +957,67 @@ public class ProjectResourceTools
 
         Directory.Delete(absoluteFolderPath);
         DeleteEmptyParents(absoluteFolderPath, activeProject);
-    } 
+    }
+
+    public void ScanModArchives(bool? executeScan = null, string? archiveName = null)
+    {
+        if (_settingsService.CP77ExecutablePath is null)
+        {
+            return;
+        }
+
+        var scanArchives = executeScan ?? _settingsService.AnalyzeModArchives;
+
+        var ignoredArchives = _settingsService.ArchiveNamesExcludeFromScan
+            .Split(",", StringSplitOptions.RemoveEmptyEntries)
+            .Select(name => name.Replace(".archive", "")).ToArray();
+
+        if (archiveName is null)
+        {
+            _archiveManager.LoadModArchives(new FileInfo(_settingsService.CP77ExecutablePath), scanArchives,
+                ignoredArchives);
+
+            if (Directory.Exists(_settingsService.ExtraModDirPath))
+            {
+                _archiveManager.LoadAdditionalModArchives(_settingsService.ExtraModDirPath, scanArchives,
+                    ignoredArchives);
+            }
+
+            return;
+        }
+
+        List<string> archivesToScan = [];
+        archivesToScan.AddRange(_archiveManager.GetModArchives()
+            .Where(archive => archive.Name.Contains(archiveName, StringComparison.OrdinalIgnoreCase))
+            .Select(gameArchive => gameArchive.ArchiveAbsolutePath)
+            .Where(absolutePath => !ignoredArchives.Contains(Path.GetFileName(absolutePath).Replace(".archive", ""))));
+
+        if (Directory.Exists(_settingsService.ExtraModDirPath))
+        {
+            archivesToScan.AddRange(Directory
+                .GetFiles(_settingsService.ExtraModDirPath, archiveName, SearchOption.AllDirectories)
+                .Where(absolutePath =>
+                    !ignoredArchives.Contains(Path.GetFileName(absolutePath).Replace(".archive", ""))));
+        }
+
+        if (archivesToScan.Count > 0)
+        {
+            foreach (var absoluteFilepath in archivesToScan)
+            {
+                _archiveManager.LoadModArchive(absoluteFilepath, scanArchives, !scanArchives);
+            }
+
+            return;
+        }
+
+        // If no archives match the filter, scan all archives.
+        _archiveManager.LoadModArchives(new FileInfo(_settingsService.CP77ExecutablePath), scanArchives,
+            ignoredArchives);
+
+        if (Directory.Exists(_settingsService.ExtraModDirPath))
+        {
+            _archiveManager.LoadAdditionalModArchives(_settingsService.ExtraModDirPath, scanArchives);
+        }
+    }
 
 }

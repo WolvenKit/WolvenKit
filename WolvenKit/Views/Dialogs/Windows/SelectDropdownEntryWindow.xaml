@@ -45,14 +45,32 @@
                                              Converter={StaticResource BooleanToVisibilityConverter}}"
                         Text="{Binding Text}" />
 
+
                     <ComboBox
                         x:Name="Dropdown"
                         Height="{StaticResource WolvenKitTabHeight}"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
                         MinWidth="150"
                         ItemsSource="{Binding Options,
                                               Mode=OneWay}"
                         KeyboardNavigation.TabIndex="2"
                         SelectedValue="{Binding SelectedOption}" />
+
+                    <TextBlock
+                        Margin="{DynamicResource WolvenKitMarginSmallBottom}"
+                        Padding="{DynamicResource WolvenKitMarginTinyLeft}"
+                        Visibility="{Binding ShowInputBar,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Text="... or enter by hand" />
+
+                    <TextBox
+                        x:Name="TextBox"
+                        Padding="{DynamicResource WolvenKitMarginTiny}"
+                        VerticalContentAlignment="Center"
+                        FontSize="{DynamicResource WolvenKitFontBody}"
+                        Visibility="{Binding ShowInputBar,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Text="{Binding SelectedOption}" />
 
                 </StackPanel>
             </syncfusion:WizardPage>

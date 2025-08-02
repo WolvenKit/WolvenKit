@@ -163,7 +163,7 @@ namespace WolvenKit.Views.Tools
 
                 Interactions.AskForDropdownOption = (args) =>
                 {
-                    var dialog = new SelectDropdownEntryWindow(args.Item1, args.Item2, args.Item3);
+                    var dialog = new SelectDropdownEntryWindow(args.Item1, args.Item2, args.Item3, args.Item4 ?? false);
 
                     if (dialog.ViewModel is not SelectDropdownEntryDialogViewModel innerVm
                         || dialog.ShowDialog(Application.Current.MainWindow) != true)

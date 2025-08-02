@@ -9,13 +9,23 @@ public partial class SelectDropdownEntryDialogViewModel : DialogViewModel
     [ObservableProperty] private string? _title;
     [ObservableProperty] private string? _text;
     [ObservableProperty] private bool _showText;
+    [ObservableProperty] private bool _showInputBar;
     [ObservableProperty] private List<string>? _options;
     [ObservableProperty] private string _selectedOption;
 
-    public SelectDropdownEntryDialogViewModel(List<string> list, string title = "Pick one!", string text = "")
+    public SelectDropdownEntryDialogViewModel(List<string> list, string title = "Pick one!", string text = "",
+        bool showInputBar = false)
     {
         Options = list;
-        SelectedOption = list.FirstOrDefault() ?? string.Empty;
+        ShowInputBar = showInputBar;
+        if (showInputBar)
+        {
+            SelectedOption = string.Empty;
+        }
+        else
+        {
+            SelectedOption = list.FirstOrDefault() ?? string.Empty;
+        }
         Title = title;
         Text = text;
         ShowText = !string.IsNullOrEmpty(text);
