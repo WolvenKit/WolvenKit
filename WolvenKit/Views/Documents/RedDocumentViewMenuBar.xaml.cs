@@ -261,6 +261,41 @@ namespace WolvenKit.Views.Documents
             cvm.Tab?.Parent.SetIsDirty(true);
         }
 
+        private void OnCopyMaterialsFromMeshClick(object _, RoutedEventArgs e)
+        {
+            if (ViewModel?.CurrentTab?.Parent.IsDirty == true)
+            {
+                Interactions.ShowMessageBox("This will reload your file. Press Ctrl+S to save now.", "Save your file!");
+                return;
+            }
+
+            if (ViewModel?.RootChunk is not ChunkViewModel { ResolvedData: CMesh mesh } || ViewModel.FilePath is null ||
+                _projectManager.ActiveProject is not { } project)
+            {
+                return;
+            }
+
+            var files = project.Files
+                .Where(f => f.EndsWith(".mesh") && f != ViewModel.FilePath)
+                .ToList();
+
+            if (Interactions.AskForDropdownOption((files, "Select .mesh file", "Select .mesh file or pick by hand",
+                    true)) is not string meshFileName || string.IsNullOrEmpty(meshFileName))
+            {
+                return;
+            }
+
+            try
+            {
+                _documentTools.CopyMeshMaterials(meshFileName, ViewModel.FilePath);
+                ViewModel.CurrentTab?.Parent.Reload(true);
+            }
+            catch (Exception err)
+            {
+                _loggerService.Error($"Failed to copy mesh materials: {err.Message}");
+            }
+        }
+        
         private void OnUnDynamifyMaterialsClick(object _, RoutedEventArgs e)
         {
             if (ViewModel?.RootChunk is not ChunkViewModel cvm || cvm.ResolvedData is not CMesh mesh)
@@ -352,6 +387,7 @@ namespace WolvenKit.Views.Documents
             cvm.DeleteUnusedMaterialsCommand.Execute(true);
             cvm.Tab?.Parent.SetIsDirty(true);
 
+            ViewModel.DeleteUnusedMaterialsCommand?.NotifyCanExecuteChanged();
 
             string ReplaceMaterialPath(ResourcePath? depotPath, string newMatName)
             {
