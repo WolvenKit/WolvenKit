@@ -8,8 +8,11 @@ namespace CP77Tools.Tasks
     {
         public int ArchiveTask(FileSystemInfo[] path, string pattern, string regex, bool diff, bool list);
         public int UnbundleTask(FileSystemInfo[] path, UnbundleTaskOptions options);
-        public Task<int> Cr2wTask(FileSystemInfo[] path, DirectoryInfo outpath, bool deserialize, bool serialize, string pattern,
+
+        public Task<int> Cr2wTask(FileSystemInfo[] path, DirectoryInfo outpath, bool deserialize, bool serialize,
+            string pattern,
             string regex, ETextConvertFormat format, bool print);
+
         public int ExportTask(FileSystemInfo[] path, ExportTaskOptions options);
         public Task<int> ImportTask(FileSystemInfo[] path, DirectoryInfo outDir, bool keep);
         public int ConflictsTask(DirectoryInfo path, bool structured);
