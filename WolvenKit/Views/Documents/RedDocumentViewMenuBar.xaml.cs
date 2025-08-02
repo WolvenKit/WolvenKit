@@ -335,7 +335,7 @@ namespace WolvenKit.Views.Documents
                     maxIndex += 1;
                     mesh.MaterialEntries.Add(new CMeshMaterialEntry()
                     {
-                        Name = newMatName, Index = maxIndex, IsLocalInstance = material.IsLocalInstance
+                        Name = $"{matName}_{newMatName}", Index = maxIndex, IsLocalInstance = material.IsLocalInstance
                     });
 
 
