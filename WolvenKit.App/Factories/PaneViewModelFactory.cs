@@ -85,7 +85,7 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         => _propertiesViewModel;
     public AssetBrowserViewModel AssetBrowserViewModel(AppViewModel appViewModel)
         => new(appViewModel, _projectManager, _notificationService, _gameController, _archiveManager, _settingsManager, _progressService,
-            _loggerService, _pluginService);
+            _loggerService, _pluginService, _projectResourceTools);
     public TweakBrowserViewModel TweakBrowserViewModel(AppViewModel appViewModel)
         => new(appViewModel, _chunkViewmodelFactory, _settingsManager, _notificationService, _projectManager, _loggerService, _tweakDbService, _locKeyService);
     public LocKeyBrowserViewModel LocKeyBrowserViewModel() => new(_projectManager, _loggerService, _progressService, _modTools, _gameController, _archiveManager, _locKeyService);
