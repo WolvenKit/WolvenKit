@@ -6,6 +6,7 @@
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:converters="clr-namespace:WolvenKit.Converters"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:layout="clr-namespace:WolvenKit.Layout"
     FocusManager.FocusedElement="{Binding ElementName=originalFilterTextBox}"
     DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
@@ -23,6 +24,7 @@
                     <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
                 </Style>
                 <converters:IntToVisibilityConverterInverted x:Key="IntToVisibilityConverterInverted" />
+
             </ResourceDictionary>
         </Grid.Resources>
 
@@ -75,6 +77,7 @@
             Grid.Column="1"
             MinHeight="{StaticResource WolvenKitRedTreeRowMinHeight}"
             MaxHeight="{StaticResource WolvenKitDialogHeightMedium}"
+            layout:ListAutoWidthBehaviour.AutoWidthToLongestItem="True"
             SelectionMode="Multiple"
             SelectionChanged="ListBox_OnSelectionChanged">
             <ListBox.ItemTemplate>
