@@ -98,7 +98,7 @@ namespace WolvenKit.Modkit.RED4
                 var filename = Path.GetFileName(file);
                 try
                 {
-                    var outputPath = Path.Combine(packedDir.FullName, filename);
+                    var outputPath = Path.Combine(archiveDir.FullName, filename);
                     File.Copy(file, outputPath);
                 }
                 catch (Exception e)
