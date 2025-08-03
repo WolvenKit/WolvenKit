@@ -70,7 +70,7 @@
 
         <!-- ListBox for Options -->
         <ListBox
-            x:Name="originalDropdown"
+            x:Name="multiselectList"
             Grid.Row="2"
             Grid.Column="1"
             MinHeight="{StaticResource WolvenKitRedTreeRowMinHeight}"

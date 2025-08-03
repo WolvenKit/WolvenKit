@@ -65,7 +65,6 @@
 
                     </Grid.RowDefinitions>
 
-
                     <!-- File name -->
                     <Label
                         Grid.Row="0"
@@ -86,7 +85,6 @@
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         LostFocus="FileNameBox_OnLostFocus_"
                         KeyboardNavigation.TabIndex="2" />
-
 
                     <!-- Checklist -->
                     <templates:FilterableChecklistMenu

@@ -12,6 +12,7 @@ using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Interfaces.Extensions;
 using YamlDotNet.RepresentationModel;
+using YamlDotNet.Serialization;
 
 namespace WolvenKit.App.ViewModels.Shell;
 
@@ -241,7 +242,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         _loggerService.Success("Done! Now import the .png files via Import Tool.");
     }
 
-    private static readonly List<string> s_worldBuilderPath =
+    private static readonly List<string> s_worldBuilderDataPath =
         ["bin", "x64", "plugins", "cyber_engine_tweaks", "mods", "entSpawner", "data"];
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
@@ -252,47 +253,79 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
-        var entFiles = activeProject.Files.Where(f => f.EndsWith(".ent")).ToList();
-        if (entFiles.Count == 0)
+        var files = activeProject.Files
+            .Where(f => f.EndsWith(".ent") | f.EndsWith(".mesh"))
+            .OrderBy(Path.GetExtension)
+            .ToList();
+
+        if (files.Count == 0)
         {
-            _loggerService.Warning(
-                "You have no .ent files in your project. Please add some before using this feature.");
+            _loggerService.Warning("You have no .ent or .mesh files in your project, so there's nothing to add.");
             return;
         }
 
-        var dict = entFiles.ToDictionary(f => f, f => f.Contains("prop") || f.Contains("amm"));
+        var dict = files.ToDictionary(f => f, f => f.Contains("prop") || f.Contains("amm"));
 
-        if (Interactions.ShowChecklistDialogue((dict, activeProject.ModName, "Select .ent files", "")) is not
-            { } dialogModel)
+        if (Interactions.ShowChecklistDialogue((dict, activeProject.ModName, "Select files to include",
+                    "Select the files you want to include as World Builder Props.")) is not
+                { } dialogModel || dialogModel.SelectedOptions.Count == 0)
         {
             return;
         }
 
-        if (dialogModel.SelectedOptions.Count == 0)
+        var wbDataFolder = Path.Join([activeProject.ResourcesDirectory, ..s_worldBuilderDataPath]);
+        Directory.CreateDirectory(wbDataFolder);
+
+        var fileName = dialogModel.FileName;
+        if (!fileName.EndsWith(".txt"))
         {
-            return;
+            fileName += ".txt";
         }
 
-        if (!string.IsNullOrEmpty(SettingsManager.ModderName) &&
-            !s_worldBuilderPath.Contains(SettingsManager.ModderName))
+        var subfolder = string.IsNullOrEmpty(SettingsManager.ModderName)
+            ? activeProject.ModName
+            : SettingsManager.ModderName;
+
+        WriteEntData();
+        WriteMeshData();
+
+        return;
+
+        void WriteMeshData()
         {
-            s_worldBuilderPath.Add(SettingsManager.ModderName);
+            var meshes = dialogModel.SelectedOptions.Where(f => f.EndsWith(".mesh")).ToList();
+            if (meshes.Count == 0)
+            {
+                return;
+            }
+
+            var meshFilePath = Path.Join("spawnables", "mesh", "all", subfolder);
+            Directory.CreateDirectory(Path.Join(wbDataFolder, meshFilePath));
+
+            File.WriteAllText(Path.Join(wbDataFolder, meshFilePath, fileName),
+                string.Join(Environment.NewLine, meshes));
+
+            _loggerService.Success(
+                $"{meshes.Count} entries written to {Path.Join([..s_worldBuilderDataPath, meshFilePath, fileName])}");
         }
 
-        var worldbuilderPath = Path.Join([activeProject.ResourcesDirectory, ..s_worldBuilderPath]);
-
-        if (!Directory.Exists(worldbuilderPath))
+        void WriteEntData()
         {
-            Directory.CreateDirectory(worldbuilderPath);
-        }
+            var ents = dialogModel.SelectedOptions.Where(f => f.EndsWith(".ent")).ToList();
+            if (ents.Count == 0)
+            {
+                return;
+            }
 
-        var propFilePath = Path.Join(worldbuilderPath, dialogModel.FileName);
-        if (!propFilePath.EndsWith(".txt"))
-        {
-            propFilePath += ".txt";
-        }
+            var entFolder = Path.Join(wbDataFolder, subfolder, fileName);
+            Directory.CreateDirectory(entFolder);
 
-        File.WriteAllText(propFilePath, string.Join(Environment.NewLine, dialogModel.SelectedOptions));
+            File.WriteAllText(Path.Join(entFolder, fileName), string.Join(Environment.NewLine, ents));
+
+            _loggerService.Success(
+                $"{ents.Count} entries written to {Path.Join([..s_worldBuilderDataPath, subfolder, fileName])}");
+        }
+        
     }
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
