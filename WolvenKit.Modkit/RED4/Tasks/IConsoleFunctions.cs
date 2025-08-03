@@ -18,6 +18,7 @@ namespace CP77Tools.Tasks
         public int ConflictsTask(DirectoryInfo path, bool structured);
         public int OodleTask(FileInfo path, FileInfo outpath, bool decompress, bool compress);
         public int PackTask(DirectoryInfo[] path, DirectoryInfo outpath);
+        public int BuildTask(DirectoryInfo[] paths);
         public int UncookTask(FileSystemInfo[] path, UncookTaskOptions options);
     }
 }
