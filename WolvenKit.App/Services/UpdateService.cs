@@ -36,50 +36,49 @@ public class UpdateService : IUpdateService
         var latestRelease = await GetLatestRelease();
         if (latestRelease is null)
         {
-            return;
+            throw new Exception("Failed to get latest release");
         }
-        
+
         if (!await IsUpdateAvailable(latestRelease))
         {
             return;
         }
-        
+
         var tempPath = Path.Join(Path.GetTempPath(), "WolvenKitUpdate");
         if (Directory.Exists(tempPath))
         {
             Directory.Delete(tempPath, true);
         }
-        
+
         Directory.CreateDirectory(tempPath);
         var downloadZipPath = Path.Join(tempPath, latestRelease.TagName + ".zip");
         var portableAsset = latestRelease.Assets.First(a => a.Name == $"WolvenKit-{latestRelease.TagName}.zip");
-        
+
         try
         {
             var responseAsset = await _httpClient.GetAsync(portableAsset.DownloadUrl);
             responseAsset.EnsureSuccessStatusCode();
             await File.WriteAllBytesAsync(downloadZipPath, await responseAsset.Content.ReadAsByteArrayAsync());
         }
-        catch (HttpRequestException ex)
+        catch (HttpRequestException)
         {
             Directory.Delete(tempPath, true);
             _loggerService.Error($"Failed to download update from: {portableAsset.DownloadUrl}");
-            _loggerService.Error(ex);
-            return;
+            throw;
         }
-        
+
         if (await Task.Run(() => portableAsset.Digest?.Split(":")[^1] != BitConverter.ToString(SHA256.Create().ComputeHash(File.ReadAllBytes(downloadZipPath))).Replace("-", "").ToLowerInvariant()))
         {
             Directory.Delete(tempPath, true);
-            _loggerService.Error("Downloaded update asset is invalid! Aborting update.");
-            return;       
+            _loggerService.Error("Downloaded asset is invalid! Aborting update.");
+            throw new Exception("Downloaded asset is invalid! Aborting update.");
         }
-        
+
         var unzipPath = Path.Join(tempPath, "unzip");
         Directory.CreateDirectory(unzipPath);
         ZipFile.ExtractToDirectory(downloadZipPath, unzipPath);
         File.Delete(downloadZipPath);
-        
+
         var unpackerExePath = Path.Combine(ISettingsManager.GetAppData(), "Updater" ,"WolvenKit.Unpacker.exe");
         if (!File.Exists(unpackerExePath))
         {
@@ -92,37 +91,36 @@ public class UpdateService : IUpdateService
             if (unpackerReleaseAsset is null)
             {
                 Directory.Delete(tempPath, true);
-                _loggerService.Error("Failed to find unpacker release asset! Aborting update.");
-                return;
+                _loggerService.Error("Could not find Unpacker Asset in releases! Aborting update.");
+                throw new Exception("Could not find Unpacker Asset in releases! Aborting update.");
             }
 
             var unpackerZipPath = Path.Join(tempPath, "unpacker.zip");
-            
+
             try
             {
                 var responseAsset = await _httpClient.GetAsync(unpackerReleaseAsset.DownloadUrl);
                 responseAsset.EnsureSuccessStatusCode();
                 await File.WriteAllBytesAsync(unpackerZipPath, await responseAsset.Content.ReadAsByteArrayAsync());
             }
-            catch (HttpRequestException ex)
+            catch (HttpRequestException)
             {
                 Directory.Delete(tempPath, true);
                 _loggerService.Error($"Failed to download unpacker from: {unpackerReleaseAsset.DownloadUrl}");
-                _loggerService.Error(ex);
-                return;
+                throw;
             }
-            
+
             if (await Task.Run(() => unpackerReleaseAsset.Digest?.Split(":")[^1] != BitConverter.ToString(SHA256.Create().ComputeHash(File.ReadAllBytes(unpackerZipPath))).Replace("-", "").ToLowerInvariant()))
             {
                 Directory.Delete(tempPath, true);
                 _loggerService.Error("Downloaded unpacker asset is invalid! Aborting update.");
-                return;       
+                throw new Exception("Downloaded unpacker asset is invalid! Aborting update.");
             }
-            
+
             ZipFile.ExtractToDirectory(unpackerZipPath, unzipPath);
             File.Delete(unpackerZipPath);
         }
-        
+
         var wolvenKitExePath = Environment.ProcessPath ?? Path.Combine(AppContext.BaseDirectory, "WolvenKit.exe");
         var startInfo = new ProcessStartInfo()
         {
@@ -132,7 +130,7 @@ public class UpdateService : IUpdateService
             CreateNoWindow = true
         };
         Process.Start(startInfo);
-        
+
         Environment.Exit(0);
     }
 
@@ -150,6 +148,12 @@ public class UpdateService : IUpdateService
             return false;
         }
         var localVersion = GetLocalVersion();
+        
+        // allow updating to the latest stable when the release channel changes, even if it technically is a downgrade
+        if ((localVersion?.ToString().Contains("nightly") ?? false) && !remoteVersion.ToString().Contains("nightly"))
+        {
+            return true;
+        }
         
         return IsLeftNewerThanRight(remoteVersion, localVersion!) || true;
     }
