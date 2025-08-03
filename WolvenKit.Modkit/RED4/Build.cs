@@ -18,7 +18,7 @@ namespace WolvenKit.Modkit.RED4
         {
             if (!path.Exists)
             {
-                _loggerService.Error($"Building failed. Could not find directory {path}.");
+                _loggerService.Error($"Build failed. Could not find directory: \"{path}\".");
                 return false;
             }
 
@@ -38,7 +38,7 @@ namespace WolvenKit.Modkit.RED4
             }
             catch (Exception)
             {
-                _loggerService.Error("Building failed. Could not find .cpmodproj file.");
+                _loggerService.Error("Build failed. Could not find .cpmodproj file.");
                 return false;
             }
 
@@ -57,7 +57,7 @@ namespace WolvenKit.Modkit.RED4
             }
             catch (Exception e)
             {
-                _loggerService.Error("Building failed. Could not clean previous build:");
+                _loggerService.Error("Build failed. Could not clean previous build:");
                 _loggerService.Error(e.Message);
                 return false;
             }
@@ -75,7 +75,7 @@ namespace WolvenKit.Modkit.RED4
             }
             catch (IOException e)
             {
-                _loggerService.Error("Building failed. Could not create packed/ directories:");
+                _loggerService.Error("Build failed. Could not create \"packed/\" directories:");
                 _loggerService.Error(e.Message);
                 return false;
             }
@@ -84,7 +84,7 @@ namespace WolvenKit.Modkit.RED4
 
             if (!Pack(path, archiveDir, modName))
             {
-                _loggerService.Error("Building failed. Could not create archive file.");
+                _loggerService.Error("Build failed. Could not create archive file.");
                 return false;
             }
 
@@ -155,7 +155,7 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            _loggerService.Error($"Building failed. Could not copy {fileType} files:");
+            _loggerService.Error($"Build failed. Could not copy {fileType} files:");
             foreach (var error in errors)
             {
                 _loggerService.Error($"\t{error.Value}\tin\t{error.Key}");

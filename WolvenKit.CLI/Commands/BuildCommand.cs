@@ -10,12 +10,12 @@ namespace CP77Tools.Commands;
 
 internal class BuildCommand : CommandBase
 {
-    private const string s_description = "Build project(s) like WolvenKit application.";
+    private const string s_description = "Builds all WolvenKit .cpmodproj project(s) found in <paths>.";
     private const string s_name = "build";
 
     public BuildCommand() : base(s_name, s_description)
     {
-        AddArgument(new Argument<DirectoryInfo[]>("paths", "Input folder(s) containing WKit project(s)."));
+        AddArgument(new Argument<DirectoryInfo[]>("paths", "Input folder(s) containing WolvenKit .cpmodproj project(s)."));
 
         SetInternalHandler(CommandHandler.Create<DirectoryInfo[], IHost>(Action));
     }
@@ -27,7 +27,7 @@ internal class BuildCommand : CommandBase
 
         if (paths == null || paths.Length < 1)
         {
-            logger.Error("Please fill in at least one input path.");
+            logger.Error("Input path(s) missing for build.");
             return ConsoleFunctions.ERROR_BAD_ARGUMENTS;
         }
 
