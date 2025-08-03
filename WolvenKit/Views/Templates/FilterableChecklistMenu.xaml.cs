@@ -170,7 +170,7 @@ namespace WolvenKit.Views.Templates
             }
             else
             {
-                control.originalDropdown.SelectedItems.Clear();
+                control.multiselectList.SelectedItems.Clear();
             }
         }
 
@@ -193,35 +193,35 @@ namespace WolvenKit.Views.Templates
                 ? AvailableOptions.ToList()
                 : AvailableOptions.Where(o => o.Contains(FilterText, StringComparison.OrdinalIgnoreCase)).ToList();
 
-            originalDropdown.SetCurrentValue(ItemsControl.ItemsSourceProperty, filtered);
+            multiselectList.SetCurrentValue(ItemsControl.ItemsSourceProperty, filtered);
             UpdateListBoxSelections();
         }
 
         private void UpdateListBoxSelections()
         {
-            if (SelectedOptions == null || originalDropdown.ItemsSource == null)
+            if (SelectedOptions == null || multiselectList.ItemsSource == null)
             {
                 return;
             }
 
             // Temporarily disable selection change handling
-            originalDropdown.SelectionChanged -= ListBox_OnSelectionChanged;
+            multiselectList.SelectionChanged -= ListBox_OnSelectionChanged;
 
             try
             {
-                originalDropdown.SelectedItems.Clear();
-                foreach (var item in originalDropdown.Items)
+                multiselectList.SelectedItems.Clear();
+                foreach (var item in multiselectList.Items)
                 {
                     if (item is string option && SelectedOptions.Contains(option))
                     {
-                        originalDropdown.SelectedItems.Add(item);
+                        multiselectList.SelectedItems.Add(item);
                     }
                 }
             }
             finally
             {
                 // Re-enable selection change handling
-                originalDropdown.SelectionChanged += ListBox_OnSelectionChanged;
+                multiselectList.SelectionChanged += ListBox_OnSelectionChanged;
             }
         }
 
@@ -238,25 +238,19 @@ namespace WolvenKit.Views.Templates
                 return;
             }
 
-            // Create a new collection to trigger property change notification
-            var newSelection = new ObservableCollection<string>();
-
-            foreach (var item in originalDropdown.SelectedItems)
-            {
-                if (item is string option)
-                {
-                    newSelection.Add(option);
-                }
-            }
+            var selectedStrings = multiselectList.SelectedItems.OfType<string>().ToList();
 
             // Only update if different to prevent infinite loops
-            if (newSelection.SequenceEqual(SelectedOptions))
+            if (selectedStrings.SequenceEqual(SelectedOptions))
             {
                 return;
             }
 
+            // Create a new collection to trigger property change notification
+            var newSelection = new ObservableCollection<string>(selectedStrings);
+
             SetCurrentValue(SelectedOptionsProperty, newSelection);
-            SelectionChanged?.Invoke(this, newSelection.ToList());
+            SelectionChanged?.Invoke(this, selectedStrings);
         }
 
         #endregion

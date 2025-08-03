@@ -34,7 +34,6 @@ public partial class ShowChecklistDialog : IViewFor<ShowChecklistDialogViewModel
             checklistOptions[se] = true;
         }
 
-
         ViewModel = new ShowChecklistDialogViewModel(checklistOptions, fileName, title, text);
         DataContext = ViewModel;
 
@@ -57,7 +56,6 @@ public partial class ShowChecklistDialog : IViewFor<ShowChecklistDialogViewModel
 
             // Load last selection if available
             ViewModel.SelectedOptions = checklistOptions.Where(x => x.Value).Select(x => x.Key).ToList();
-
 
             // bind rest of properties
             this.Bind(ViewModel,
