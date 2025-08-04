@@ -38,8 +38,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         ISettingsManager settingsManager,
         IModifierViewStateService modifierSvc,
         IProjectManager projectManager,
-        CRUIDService cruidService,
-        DocumentTools documentTools
+        DocumentTools documentTools,
+        CRUIDService cruidService
     )
     {
         _modifierViewStateService = modifierSvc;
@@ -47,6 +47,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         _settingsManager = settingsManager;
         _documentTools = documentTools;
         _cruidService = cruidService;
+        _documentTools = documentTools;
 
         modifierSvc.ModifierStateChanged += OnModifierChanged;
         modifierSvc.PropertyChanged += (_, args) => OnPropertyChanged(args.PropertyName);
@@ -380,7 +381,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
                 .SelectMany(r => _documentTools.CollectDependencies(r))
                 .SelectMany(rr =>
                     ArchiveXlHelper.ResolveDynamicPaths(rr.DepotPath.GetResolvedText() ?? "",
-                        _projectManager.ActiveProject));
+                        _projectManager.ActiveProject))
+                .Distinct();
 
             var refCount = template.ResolvedDependencies.Count;
 

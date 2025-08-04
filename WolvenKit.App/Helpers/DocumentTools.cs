@@ -937,6 +937,35 @@ public class DocumentTools
             .ToList();
     }
 
+    public List<IRedRef> CollectDependencies(IRedRef redRef)
+    {
+        if (redRef.DepotPath == ResourcePath.Empty || redRef.DepotPath.GetResolvedText() is not string depotPath)
+        {
+            return [];
+        }
+
+        if (!(depotPath.EndsWith(".app") || depotPath.EndsWith(".ent")))
+        {
+            return [redRef];
+        }
+
+        if (ReadCr2WFromRelativePath(depotPath) is not { } cr2W)
+        {
+            _loggerService.Error("failed to read cr2w file: " + depotPath);
+            return [];
+        }
+
+        var refs = cr2W.FindType(typeof(IRedRef))
+            .Select(r => r.Value)
+            .OfType<IRedRef>()
+            .Where(r => r.DepotPath != ResourcePath.Empty)
+            .SelectMany(CollectDependencies)
+            .DistinctBy(r => r.DepotPath.GetResolvedText() ?? "")
+            .ToList();
+
+        return refs;
+    }
+
     public void CopyMeshMaterials(string sourcePath, string destPath)
     {
         if (_projectManager.ActiveProject is not { } activeProject)

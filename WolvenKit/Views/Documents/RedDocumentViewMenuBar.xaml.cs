@@ -77,9 +77,8 @@ namespace WolvenKit.Views.Documents
                 _settingsManager,
                 _modifierStateService,
                 _projectManager,
-                Locator.Current.GetService<CRUIDService>()!,
-                _documentTools
-            ) { CurrentTab = _currentTab };
+                _documentTools,
+                Locator.Current.GetService<CRUIDService>()!) { CurrentTab = _currentTab };
             ViewModel = DataContext as RedDocumentViewToolbarModel;
 
             _modifierStateService.ModifierStateChanged += OnModifierStateChanged;
