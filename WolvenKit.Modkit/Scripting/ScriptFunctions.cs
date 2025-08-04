@@ -192,10 +192,20 @@ public partial class ScriptFunctions
         // remove yaml tags like !include, !append etc.
         yamlText = YamlTagRegex().Replace(yamlText, "");
 
-        // deserialize it
-        var yamlObject = new Deserializer().Deserialize(yamlText);
+        try
+        {
+            // deserialize it
+            var yamlObject = new Deserializer().Deserialize(yamlText);
 
-        return JsonConvert.SerializeObject(yamlObject);
+            return JsonConvert.SerializeObject(yamlObject);
+        }
+        catch (Exception e)
+        {
+            _loggerService.Error("Failed to read YAML: " + e.Message);
+            _loggerService.Error(e);
+        }
+
+        return "";
     }
 
     /// <summary>
@@ -207,12 +217,12 @@ public partial class ScriptFunctions
     {
         var expConverter = new ExpandoObjectConverter();
         var deserializedObject = JsonConvert.DeserializeObject<ExpandoObject>(jsonText, expConverter);
-        
+
         var serializer = new Serializer();
         return serializer.Serialize(deserializedObject);
     }
 
-    [GeneratedRegex(@"(?<=-)\s?\![a-z-]*\s")]
+    [GeneratedRegex(@"(?<=-)\s?\![a-z-]*(?=\s)")]
     private static partial Regex YamlTagRegex();
 }
 
