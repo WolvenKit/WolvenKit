@@ -10,6 +10,7 @@ namespace WolvenKit.Common.Interfaces
 {
     public interface IModTools
     {
+        public bool Build(DirectoryInfo inPath);
         public bool Pack(DirectoryInfo infolder, DirectoryInfo outpath, string? modname = null);
         public bool InstallFiles(DirectoryInfo packedDirectory, DirectoryInfo gameDirectory, bool installToHot = false);
 
