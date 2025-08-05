@@ -91,39 +91,7 @@
                                                         <Style
                                                             x:Key="ProjectIconBackground"
                                                             TargetType="Border">
-                                                            <Setter Property="Background" Value="{StaticResource WolvenKitYellow}" />
-                                                            <Style.Triggers>
-                                                                <DataTrigger
-                                                                    Binding="{Binding ProjectColor}"
-                                                                    Value="1">
-                                                                    <Setter Property="Background" Value="{StaticResource WolvenKitYellow}" />
-                                                                </DataTrigger>
-                                                                <DataTrigger
-                                                                    Binding="{Binding ProjectColor}"
-                                                                    Value="2">
-                                                                    <Setter Property="Background" Value="{StaticResource WolvenKitCyan}" />
-                                                                </DataTrigger>
-                                                                <DataTrigger
-                                                                    Binding="{Binding ProjectColor}"
-                                                                    Value="3">
-                                                                    <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
-                                                                </DataTrigger>
-                                                                <DataTrigger
-                                                                    Binding="{Binding ProjectColor}"
-                                                                    Value="4">
-                                                                    <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
-                                                                </DataTrigger>
-                                                                <DataTrigger
-                                                                    Binding="{Binding ProjectColor}"
-                                                                    Value="5">
-                                                                    <Setter Property="Background" Value="{StaticResource WolvenKitPurple}" />
-                                                                </DataTrigger>
-                                                                <DataTrigger
-                                                                    Binding="{Binding ProjectColor}"
-                                                                    Value="6">
-                                                                    <Setter Property="Background" Value="{StaticResource WolvenKitTan}" />
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
+                                                            <Setter Property="Background" Value="{Binding ProjectColor, UpdateSourceTrigger=PropertyChanged}" />
                                                         </Style>
                                                     </Grid.Resources>
 
