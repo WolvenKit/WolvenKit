@@ -316,6 +316,7 @@ public abstract class CvmDropdownHelper
                     }
                     break;
                 }
+
                 // Special case for scnPerformerId.Id - check if we're editing the Id property of a scnPerformerId
                 case scnPerformerId:
                 {
@@ -692,7 +693,8 @@ public abstract class CvmDropdownHelper
         // This code checks the PARENT MODEL's ResolvedData type - the node CONTAINING the cvm
         return parent.ResolvedData switch
         {
-            gameJournalPath when cvm.Name is "className" or "realPath" && s_questHandleParentNames.Contains(parent.Name) => true,
+            gameJournalPath when s_questHandleParentNames.Contains(parent.Name) => true,
+            gameJournalPath when cvm.Name is "className" or "realPath" => true,
             #region mesh
 
             CArray<CName> when parent is { Name: "chunkMaterials", Parent.Parent.Parent.ResolvedData: CMesh } =>

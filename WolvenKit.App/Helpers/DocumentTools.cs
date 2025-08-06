@@ -1075,5 +1075,78 @@ public class DocumentTools
 
 
         return ret.Where(s => !string.IsNullOrEmpty(s)).Select(s => s!).ToArray();
+
+
+    private static readonly Dictionary<string, MultilayerProperties> s_multilayerPropertiesCache = [];
+
+    public string[] GetMultilayerProperties(string materialPath, string propertyKey, bool forceCacheRefresh)
+    {
+        if (!s_multilayerPropertiesCache.TryGetValue(materialPath, out var mlProperties))
+        {
+            if (!forceCacheRefresh)
+            {
+                return [];
+            }
+
+            mlProperties = new MultilayerProperties();
+            s_multilayerPropertiesCache.Add(materialPath, mlProperties);
+        }
+        else if (forceCacheRefresh)
+        {
+            mlProperties.Reset();
+        }
+
+        switch (propertyKey)
+        {
+            case "metalLevelsIn":
+                mlProperties.MetalLevelsIn ??=
+                    GetMultilayerPropertiesFromFile(materialPath, propertyKey);
+                return mlProperties.MetalLevelsIn;
+            case "metalLevelsOut":
+                mlProperties.MetalLevelsOut ??=
+                    GetMultilayerPropertiesFromFile(materialPath, propertyKey);
+                return mlProperties.MetalLevelsOut;
+            case "roughnessLevelsIn":
+                mlProperties.RoughLevelsIn ??=
+                    GetMultilayerPropertiesFromFile(materialPath, propertyKey);
+                return mlProperties.RoughLevelsIn;
+            case "roughnessLevelsOut":
+                mlProperties.RoughLevelsOut ??=
+                    GetMultilayerPropertiesFromFile(materialPath, propertyKey);
+                return mlProperties.RoughLevelsOut;
+            case "colorScale":
+                mlProperties.Overrides ??=
+                    GetMultilayerPropertiesFromFile(materialPath, propertyKey);
+                return mlProperties.Overrides;
+            case "normalStrength":
+                mlProperties.NormalScale ??=
+                    GetMultilayerPropertiesFromFile(materialPath, propertyKey);
+                return mlProperties.NormalScale;
+            default:
+                return [];
+        }
+    }
+
+    private string[] GetMultilayerPropertiesFromFile(string materialPath, string propertyKey)
+    {
+        if (ReadCr2WFromRelativePath(materialPath) is not { RootChunk: Multilayer_LayerTemplate template })
+        {
+            return [];
+        }
+
+        var ret = propertyKey switch
+        {
+            "metalLevelsIn" => template.Overrides.MetalLevelsIn.Select(i => i.ToString()),
+            "metalLevelsOut" => template.Overrides.MetalLevelsOut.Select(i => i.ToString()),
+            "roughnessLevelsIn" => template.Overrides.RoughLevelsIn.Select(i => i.ToString()),
+            "roughnessLevelsOut" => template.Overrides.RoughLevelsOut.Select(i => i.ToString()),
+            "colorScale" => template.Overrides.ColorScale.Select(i => i.ToString()),
+            "normalStrength" => template.Overrides.NormalStrength.Select(i => i.ToString()),
+            _ => [],
+        };
+
+
+        return ret.Where(s => !string.IsNullOrEmpty(s)).Select(s => s!).ToArray();
+    }
     }
 }
