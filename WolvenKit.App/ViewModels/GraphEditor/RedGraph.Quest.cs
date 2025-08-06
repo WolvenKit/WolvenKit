@@ -520,22 +520,15 @@ public partial class RedGraph
     {
 
         // Find affected nodes and trigger property panel refresh for each
-        var affectedNodeIds = new HashSet<uint>();
-        
-        foreach (var socket in sockets)
-        {
-            // Find node that owns this socket
-            var ownerNode = Nodes.FirstOrDefault(n => 
+        var affectedNodeIds = sockets
+            .Select(socket => Nodes.FirstOrDefault(n => 
                 n.Output.OfType<QuestOutputConnectorViewModel>()
                     .Any(output => ReferenceEquals(output.Data, socket)) ||
                 n.Input.OfType<QuestInputConnectorViewModel>()
-                    .Any(input => ReferenceEquals(input.Data, socket)));
-                    
-            if (ownerNode != null)
-            {
-                affectedNodeIds.Add(ownerNode.UniqueId);
-            }
-        }
+                    .Any(input => ReferenceEquals(input.Data, socket))))
+            .Where(node => node != null)
+            .Select(node => node!.UniqueId)
+            .ToHashSet();
         
         // Trigger property panel refresh for affected nodes
          foreach (var nodeId in affectedNodeIds)
