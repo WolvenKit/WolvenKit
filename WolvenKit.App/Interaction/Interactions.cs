@@ -134,7 +134,7 @@ public static class Interactions
 
     public static Func<(string, Cp77Project), string> AskForFolderPathInput { get; set; } = _ => throw new NotImplementedException();
 
-    public static Func<( List<string>, string?, string?), string> AskForDropdownOption { get; set; } =
+    public static Func<( List<string>, string?, string?, bool?), string> AskForDropdownOption { get; set; } =
         _ => throw new NotImplementedException();
 
     //custom views
