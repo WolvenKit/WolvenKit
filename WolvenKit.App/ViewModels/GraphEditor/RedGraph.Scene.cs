@@ -875,92 +875,15 @@ public partial class RedGraph
 
     private void RefreshCVM(scnOutputSocket socket)
     {
-        if (GetSceneNodesChunkViewModel() is { } nodes)
-        {
-            // Ensure properties are up-to-date before searching
-            nodes.RecalculateProperties();
-            nodes.ForceLoadPropertiesRecursive();
-            
-            var list = new List<ChunkViewModel>();
-            foreach (var cvm in nodes.GetAllProperties())
-            {
-                if (ReferenceEquals(cvm.Data, socket.Destinations))
-                {
-                    list.Add(cvm);                   // the destinations array itself
-                    list.AddRange(cvm.Properties);   // its existing children
-                    if (cvm.Parent != null) list.Add(cvm.Parent);
-                }
-            }
-
-            foreach (var model in list.Distinct())
-            {
-                // --- begin enhanced refresh logic for expanded destinations ---
-                model.RecalculateProperties();
-                // Ensure already expanded branches refresh their children
-                model.ForceLoadPropertiesRecursive();
-
-                // Raise change notifications so WPF rebinds visible TreeViewItems
-                model.NotifyChain(nameof(model.Properties));
-                model.NotifyChain(nameof(model.TVProperties));
-                // --- end enhanced refresh logic ---
-            }
-
-            // Additionally refresh the root nodes collection to ensure UI picks up structural changes
-            nodes.RecalculateProperties();
-            nodes.NotifyChain(nameof(nodes.Properties));
-
-            // Force the property panel to refresh by notifying NodeSelectionService
-            var nodeSelectionService = NodeSelectionService.Instance;
-            var selectedNode = nodeSelectionService.SelectedNode;
-            
-            if (selectedNode != null)
-            {
-                // Check if the selected node's data was updated or if any updated chunk belongs to the selected node
-                bool nodeDataUpdated = list.Any(updatedChunk => 
-                {
-                    // Direct match: the chunk data is the selected node data
-                    if (ReferenceEquals(updatedChunk.Data, selectedNode.Data))
-                    {
-                        return true;
-                    }
-                    
-                    // Parent-child relationship: the updated chunk is a child of the selected node
-                    if (IsChildOf(updatedChunk, selectedNode.Data))
-                    {
-                        return true;
-                    }
-                    
-                    // Property relationship: check if the updated chunk data is a property of the selected node
-                    if (IsPropertyOf(updatedChunk.Data, selectedNode.Data))
-                    {
-                        return true;
-                    }
-                    
-                    return false;
-                });
+        // Find the affected node to trigger property panel refresh
+        var affectedNode = Nodes.FirstOrDefault(n => 
+            n.Output.OfType<SceneOutputConnectorViewModel>()
+                .Any(output => ReferenceEquals(output.Data, socket)));
                 
-                if (nodeDataUpdated)
-                {
-                    // Try a different approach: Force the binding to think the Data property changed
-                    // while the node is still selected, then refresh the selection
-                    
-                    // Step 1: Trigger Data property change while node is still selected
-                    selectedNode.TriggerPropertyChanged(nameof(selectedNode.Data));
-                    
-                    // Step 2: Force NodeSelectionService to re-notify about the same node
-                    // This should make the binding re-evaluate even though it's the same node
-                    var currentNode = selectedNode;
-                    nodeSelectionService.SelectedNode = null;
-                    
-                    // Small delay to ensure UI processes the null selection
-                    System.Threading.Thread.Sleep(1);
-                    
-                    nodeSelectionService.SelectedNode = currentNode;
-                    
-                    // Step 3: Trigger Data change again after restoration
-                    currentNode.TriggerPropertyChanged(nameof(currentNode.Data));
-                }
-            }
+        if (affectedNode != null)
+        {
+            // Trigger property panel refresh
+            affectedNode.TriggerPropertyChanged(nameof(affectedNode.Data));
         }
     }
 
