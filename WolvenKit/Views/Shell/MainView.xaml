@@ -138,7 +138,9 @@
                     <DataTemplate DataType="{x:Type dialogVMs:ScriptManagerViewModel}">
                         <dialogs:ScriptManagerView ViewModel="{Binding}" />
                     </DataTemplate>
-
+                    <DataTemplate DataType="{x:Type dialogVMs:UpdateDialogViewModel}">
+                        <dialogs:UpdateDialog ViewModel="{Binding}" />
+                    </DataTemplate>
                     <Storyboard x:Key="OverlayFadeIn">
                         <DoubleAnimation
                             FillBehavior="HoldEnd"
