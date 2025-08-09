@@ -1,0 +1,61 @@
+<reactiveUi:ReactiveUserControl
+    x:Class="WolvenKit.Views.Dialogs.UpdateDialog"
+    x:TypeArguments="dialogs:UpdateDialogViewModel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dialogs="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=dialogs:UpdateDialogViewModel}"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    Width="{DynamicResource WolvenKitDialogWidthMedium}"
+    Height="600"
+    Background="{StaticResource ContentBackgroundAlt3}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            Grid.Row="0"
+            FontSize="{DynamicResource WolvenKitFontAltTitle}"
+            Text="{Binding Title}" />
+        <TextBlock
+            Grid.Row="1"
+            FontSize="{DynamicResource TextFontSize}"
+            Text="{Binding Body}" />
+
+        <ItemsControl
+            Grid.Row="2"
+            ItemsSource="{Binding Buttons}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel
+                        Margin="0,16,0,0"
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button
+                        MinWidth="88"
+                        Margin="6,0,0,0"
+                        Padding="16,8"
+                        Content="{Binding .}"
+                        Click="OnDynamicButtonClick" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+    </Grid>
+</reactiveUi:ReactiveUserControl>

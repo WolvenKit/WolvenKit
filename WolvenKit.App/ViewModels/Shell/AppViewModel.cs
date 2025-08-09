@@ -81,7 +81,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly TemplateFileTools _templateFileTools;
     private readonly ProjectResourceTools _projectResourceTools;
     private readonly IUpdateService _updateService;
-    
     // expose to view
     public ISettingsManager SettingsManager { get; init; }
 
@@ -625,47 +624,23 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand]
     private async Task CheckForUpdates(bool isDuringStartup = false)
     {
-        if (isDuringStartup && !SettingsManager.AlwaysAskBeforeUpdating)
+        if (isDuringStartup)
         {
             if (SettingsManager.SkipUpdateCheck)
             {
                 return;
             }
-
+            
             if (!await _updateService.IsUpdateAvailable())
             {
                 return;
             }
-
-            var updateTask = _updateService.UpdateToNewestVersion();
-            ShowInteraction:
-            var interactionResult = Interactions.ShowMessageBox("WolvenKit is being updated...\nThis will trigger an automatic restart, please stand by...", "WolvenKit", WMessageBoxButtons.Ok, WMessageBoxImage.Information);
-            if (interactionResult == WMessageBoxResult.OK)
-            {
-                goto ShowInteraction;
-            }
-            await updateTask;
-            return;
-        }
-        
-        var name = SettingsManager.UpdateChannel == EUpdateChannel.Stable
-            ? "WolvenKit"
-            : "WolvenKit-nightly-releases";
-        if (!await _updateService.IsUpdateAvailable())
-        {
-            if (!isDuringStartup)
-            {
-                await Interactions.ShowMessageBoxAsync($"No update available. You are on the latest version.", name, WMessageBoxButtons.Ok);
-            }
+            
+            await SetActiveDialog(new UpdateDialogViewModel(this, _updateService, SettingsManager, _loggerService, !SettingsManager.AlwaysAskBeforeUpdating, true));
         }
         else
         {
-            if (Interactions.ShowQuestionYesNo((
-                    $"Update available to: {await _updateService.GetLatestVersionTag()}\nYou are on the {SettingsManager.UpdateChannel} release channel.\n\nUpdate now?",
-                    name)))
-            {
-                await _updateService.UpdateToNewestVersion();
-            }
+            await SetActiveDialog(new UpdateDialogViewModel(this, _updateService, SettingsManager, _loggerService, false));
         }
     }
 

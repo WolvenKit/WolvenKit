@@ -117,7 +117,7 @@ public class UpdateService : IUpdateService
                 throw new Exception("Downloaded unpacker asset is invalid! Aborting update.");
             }
 
-            ZipFile.ExtractToDirectory(unpackerZipPath, unzipPath);
+            ZipFile.ExtractToDirectory(unpackerZipPath, Path.GetDirectoryName(unpackerExePath)!);
             File.Delete(unpackerZipPath);
         }
 
@@ -144,18 +144,18 @@ public class UpdateService : IUpdateService
         var remoteVersion = await GetRemoteVersion(release);
         if (remoteVersion is null)
         {
-            _loggerService.Error("Failed to get remote version");
             return false;
         }
+
         var localVersion = GetLocalVersion();
-        
+
         // allow updating to the latest stable when the release channel changes, even if it technically is a downgrade
         if ((localVersion?.ToString().Contains("nightly") ?? false) && !remoteVersion.ToString().Contains("nightly"))
         {
             return true;
         }
         
-        return IsLeftNewerThanRight(remoteVersion, localVersion!) || true;
+        return IsLeftNewerThanRight(remoteVersion, localVersion!);
     }
 
     public async Task<string> GetLatestVersionTag()
@@ -166,7 +166,7 @@ public class UpdateService : IUpdateService
     
     private bool IsLeftNewerThanRight(SemVersion left, SemVersion right) => right.CompareSortOrderTo(left) == -1;
 
-    private SemVersion? GetLocalVersion() => Core.CommonFunctions.GetAssemblyVersion(Constants.AssemblyName);
+    public SemVersion? GetLocalVersion() => Core.CommonFunctions.GetAssemblyVersion(Constants.AssemblyName);
 
     private string GetRepositoryName() => _settingsManager.UpdateChannel == EUpdateChannel.Stable
         ? "WolvenKit"
