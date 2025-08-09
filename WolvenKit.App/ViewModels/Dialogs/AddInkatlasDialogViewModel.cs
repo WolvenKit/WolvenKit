@@ -37,7 +37,7 @@ public partial class AddInkatlasDialogViewModel : ObservableObject
     /// <summary>
     /// Remember the last selection
     /// </summary>
-    [ObservableProperty] private bool _rememberValues = false;
+    [ObservableProperty] private bool _rememberValues = true;
 
     /// <summary>
     /// Relative path to inkatlas folder

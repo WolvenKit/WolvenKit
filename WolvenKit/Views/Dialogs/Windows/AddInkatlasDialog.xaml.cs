@@ -91,31 +91,26 @@ public partial class AddInkatlasDialog : IViewFor<AddInkatlasDialogViewModel>
         if (s_lastSourceFolder != "")
         {
             ViewModel.PngSourceDir = s_lastSourceFolder;
-            ViewModel.RememberValues = true;
         }
 
         if (s_lastRelativePath != "")
         {
             ViewModel.RelativePath = s_lastRelativePath;
-            ViewModel.RememberValues = true;
         }
 
         if (s_lastFileName != "")
         {
             ViewModel.InkatlasFileName = s_lastFileName;
-            ViewModel.RememberValues = true;
         }
 
         if (s_lastTileHeight > 0)
         {
             ViewModel.TileHeight = $"{s_lastTileHeight}";
-            ViewModel.RememberValues = true;
         }
 
         if (s_lastTileWidth > 0)
         {
             ViewModel.TileWidth = $"{s_lastTileWidth}";
-            ViewModel.RememberValues = true;
         }
     }
 
