@@ -57,7 +57,6 @@ public partial class UpdateDialogViewModel : DialogViewModel
     
     public UpdateDialogViewModel(AppViewModel appvm, IUpdateService updateService, ISettingsManager settingsManager, ILoggerService loggerService, bool skipPermissionStage = false, bool? updateAvailable = null)
     {
-        loggerService.Info("Created UpdateDialogViewModel");
         _appvm = appvm;
         _updateService = updateService;
         _settingsManager = settingsManager;
@@ -108,7 +107,7 @@ public partial class UpdateDialogViewModel : DialogViewModel
         UpdateExecutingState = false;
         
         Title = "No update available";
-        Body = $"You are already on the latest release ({LatestVersionTag}) for {_settingsManager.UpdateChannel}";
+        Body = $"You are already on the latest release ({_updateService.GetLocalVersion()}) for the {_settingsManager.UpdateChannel} release channel";
         Buttons = new List<string>() { "OK" };
     }
     
@@ -131,7 +130,7 @@ public partial class UpdateDialogViewModel : DialogViewModel
         UpdateExecutingState = true;
         
         Title = "Updating WolvenKit...";
-        Body = $"Updating to version {LatestVersionTag} on the {_settingsManager.UpdateChannel} release channel";
+        Body = $"Updating to version {LatestVersionTag} on the {_settingsManager.UpdateChannel} release channel...";
         Buttons = new List<string>() { };
         
         Task.Run(async () =>

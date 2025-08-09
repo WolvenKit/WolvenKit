@@ -6,41 +6,52 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dialogs="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
     xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
-    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=dialogs:UpdateDialogViewModel}"
     d:DesignWidth="800"
     d:DesignHeight="450"
-    Width="{DynamicResource WolvenKitDialogWidthMedium}"
-    Height="600"
+    MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
+    MaxWidth="{DynamicResource WolvenKitDialogWidth}"
     Background="{StaticResource ContentBackgroundAlt3}">
-    <Grid>
+    <Grid Margin="{DynamicResource WolvenKitMarginSmall}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+        <!-- Title -->
         <TextBlock
             Grid.Row="0"
-            FontSize="{DynamicResource WolvenKitFontAltTitle}"
+            Margin="{DynamicResource WolvenKitMarginSmallBottom}"
+            FontSize="{DynamicResource WolvenKitFontMedium}"
+            FontWeight="Bold"
             Text="{Binding Title}" />
-        <TextBlock
-            Grid.Row="1"
-            FontSize="{DynamicResource TextFontSize}"
-            Text="{Binding Body}" />
 
+        <!-- Body -->
+        <ScrollViewer
+            Grid.Row="1"
+            Margin="{DynamicResource WolvenKitMarginSmallBottom}"
+            VerticalScrollBarVisibility="Auto"
+            Focusable="False">
+            <TextBlock
+                FontSize="{DynamicResource WolvenKitFontBody}"
+                TextWrapping="Wrap"
+                Text="{Binding Body}" />
+        </ScrollViewer>
+
+        <!-- Actions -->
         <ItemsControl
             Grid.Row="2"
+            AlternationCount="1000"
             ItemsSource="{Binding Buttons}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel
-                        Margin="0,16,0,0"
+                        Margin="0"
                         HorizontalAlignment="Right"
                         Orientation="Horizontal" />
                 </ItemsPanelTemplate>
@@ -48,11 +59,64 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Button
-                        MinWidth="88"
-                        Margin="6,0,0,0"
-                        Padding="16,8"
+                        MinWidth="60"
+                        Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                        Padding="12,10"
                         Content="{Binding .}"
-                        Click="OnDynamicButtonClick" />
+                        Click="OnDynamicButtonClick">
+                        <!-- Rounded, balanced padding, primary first -->
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="{x:Null}" />
+                                <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+                                <Setter Property="BorderThickness" Value="1" />
+                                <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginSmallLeft}" />
+                                <Setter Property="MinWidth" Value="60" />
+                                <Setter Property="Padding" Value="12,10" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border
+                                                x:Name="border"
+                                                Padding="5,3"
+                                                Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                CornerRadius="4">
+                                                <ContentPresenter
+                                                    Margin="5"
+                                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                    RecognizesAccessKey="True" />
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="border" Property="Opacity" Value="0.95" />
+                                                </Trigger>
+                                                <Trigger Property="IsPressed" Value="True">
+                                                    <Setter TargetName="border" Property="Opacity" Value="0.9" />
+                                                </Trigger>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter TargetName="border" Property="Opacity" Value="0.6" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+
+                                <!-- Make only the first button the primary action -->
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding (ItemsControl.AlternationIndex),
+                                                          RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
+                                        Value="0">
+                                        <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
+                                        <Setter Property="BorderBrush" Value="{x:Null}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
