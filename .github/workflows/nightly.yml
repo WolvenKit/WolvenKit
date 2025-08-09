@@ -126,7 +126,7 @@ jobs:
       ##########################################
       # UNPACKER
       - name: publish unpacker
-        run: dotnet publish ${{env.PROJU}} -o ./publish/unpacker/ -c Release -p:DebugType=None -p:DebugSymbols=false
+        run: dotnet publish ./WolvenKit.Unpacker/WolvenKit.Unpacker.csproj -o ./publish/unpacker/ -c Release -p:DebugType=None -p:DebugSymbols=false
       - name: zip unpacker
         run: Compress-Archive -Path ./publish/unpacker/* -DestinationPath ${{ env.FINALOUT }}/${{env.NAME}}.Unpacker-${{env.VERSION_APP}}.zip
 
