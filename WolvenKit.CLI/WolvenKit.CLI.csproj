@@ -4,7 +4,7 @@
     <Platforms>x64</Platforms>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
-    <VersionPrefix>8.16.2</VersionPrefix>
+    <VersionPrefix>8.16.3</VersionPrefix>
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 
