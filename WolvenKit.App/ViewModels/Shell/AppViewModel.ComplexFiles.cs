@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -11,6 +12,7 @@ using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Interfaces.Extensions;
 using YamlDotNet.RepresentationModel;
+using YamlDotNet.Serialization;
 
 namespace WolvenKit.App.ViewModels.Shell;
 
@@ -240,16 +242,105 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         _loggerService.Success("Done! Now import the .png files via Import Tool.");
     }
 
+    private static readonly List<string> s_worldBuilderDataPath =
+        ["bin", "x64", "plugins", "cyber_engine_tweaks", "mods", "entSpawner", "data"];
+
+    [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
+    private void GenerateWorldbuilderProp()
+    {
+        if (_projectManager.ActiveProject is not Cp77Project activeProject)
+        {
+            return;
+        }
+
+        var files = activeProject.Files
+            .Where(f => f.EndsWith(".ent") | f.EndsWith(".mesh"))
+            .OrderBy(Path.GetExtension)
+            .ToList();
+
+        if (files.Count == 0)
+        {
+            _loggerService.Warning("You have no .ent or .mesh files in your project, so there's nothing to add.");
+            return;
+        }
+
+        var dict = files.ToDictionary(f => f, f => f.Contains("prop") || f.Contains("amm"));
+
+        if (Interactions.ShowChecklistDialogue((dict, activeProject.ModName, "Select files to include",
+                    "Select the files you want to include as World Builder Props.")) is not
+                { } dialogModel || dialogModel.SelectedOptions.Count == 0)
+        {
+            return;
+        }
+
+        var wbDataFolder = Path.Join([activeProject.ResourcesDirectory, ..s_worldBuilderDataPath]);
+        Directory.CreateDirectory(wbDataFolder);
+
+        var fileName = dialogModel.FileName;
+        if (!fileName.EndsWith(".txt"))
+        {
+            fileName += ".txt";
+        }
+
+        var subfolder = string.IsNullOrEmpty(SettingsManager.ModderName)
+            ? activeProject.ModName
+            : SettingsManager.ModderName;
+
+        WriteEntData();
+        WriteMeshData();
+
+        return;
+
+        void WriteMeshData()
+        {
+            var meshes = dialogModel.SelectedOptions.Where(f => f.EndsWith(".mesh")).ToList();
+            if (meshes.Count == 0)
+            {
+                return;
+            }
+
+            var meshFilePath = Path.Join("spawnables", "mesh", "all", subfolder);
+            Directory.CreateDirectory(Path.Join(wbDataFolder, meshFilePath));
+
+            File.WriteAllText(Path.Join(wbDataFolder, meshFilePath, fileName),
+                string.Join(Environment.NewLine, meshes));
+
+            _loggerService.Success(
+                $"{meshes.Count} entries written to {Path.Join([..s_worldBuilderDataPath, meshFilePath, fileName])}");
+        }
+
+        void WriteEntData()
+        {
+            var ents = dialogModel.SelectedOptions.Where(f => f.EndsWith(".ent")).ToList();
+            if (ents.Count == 0)
+            {
+                return;
+            }
+
+            var entFolder = Path.Join(wbDataFolder, subfolder, fileName);
+            Directory.CreateDirectory(entFolder);
+
+            File.WriteAllText(Path.Join(entFolder, fileName), string.Join(Environment.NewLine, ents));
+
+            _loggerService.Success(
+                $"{ents.Count} entries written to {Path.Join([..s_worldBuilderDataPath, subfolder, fileName])}");
+        }
+        
+    }
+
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private void GenerateMinimalQuestFiles()
     {
         if (_projectManager.ActiveProject is not Cp77Project activeProject)
+        {
             return;
+        }
 
-        var dialogModel = Interactions.ShowGenerateQuestDialogue(activeProject);
-        if (dialogModel is null)
+        if (Interactions.ShowGenerateQuestDialogue(activeProject) is not { } dialogModel)
+        {
             return;
-        
+        }
+
         if (SettingsManager.ModderName is not string modderName || modderName == string.Empty)
         {
             Interactions.ShowMessageBox(

@@ -30,7 +30,6 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
 
             _mainViewModel = Locator.Current.GetService<AppViewModel>();
 
-
             // Home
             this.BindCommand(ViewModel,
                        viewModel => viewModel.MainViewModel.ShowHomePageCommand,
@@ -51,6 +50,16 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     view => view.MenuItemGenerateInkatlas)
                 .DisposeWith(disposables);
             this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.GenerateMinimalQuestFilesCommand,
+                    view => view.MenuItemGenerateMinimalQuest)
+                .DisposeWith(disposables);
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.GenerateWorldbuilderPropCommand,
+                    view => view.MenuItemGenerateWorldBuilderPropFile)
+                .DisposeWith(disposables);
+
+            // Archive
+            this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.ImportArchiveCommand,
                     view => view.MenuItemImportArchive)
                 .DisposeWith(disposables);
@@ -65,10 +74,6 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.SaveAllCommand,
                     view => view.MenuItemSaveAll)
-                .DisposeWith(disposables);
-            this.BindCommand(ViewModel,
-                    viewModel => viewModel.MainViewModel.GenerateMinimalQuestFilesCommand,
-                    view => view.MenuItemGenerateMinimalQuest)
                 .DisposeWith(disposables);
 
             // Project

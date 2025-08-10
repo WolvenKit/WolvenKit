@@ -4,13 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
 using System.Windows.Input;
-using HandyControl.Tools.Extension;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App;
@@ -24,6 +21,7 @@ using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common;
+using WolvenKit.Common.Services;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
@@ -49,8 +47,8 @@ namespace WolvenKit.Views.Documents
         private readonly ProjectResourceTools _projectResourceTools;
         private readonly DocumentTools _documentTools;
         private readonly Cr2WTools _cr2WTools;
-        
-        
+
+
         public RedDocumentViewMenuBar()
         {
             _scriptService = Locator.Current.GetService<AppScriptService>()!;
@@ -71,7 +69,7 @@ namespace WolvenKit.Views.Documents
             // Enforce instance generation and service injection. One would assume that registering a singleton
             // is enough. One would be wrong.
             Locator.Current.GetService<DocumentTools>();
-            
+
             InitializeComponent();
 
             InitializeInstanceObjects();
@@ -79,7 +77,8 @@ namespace WolvenKit.Views.Documents
             DataContext = new RedDocumentViewToolbarModel(
                 _settingsManager,
                 _modifierStateService,
-                _projectManager) { CurrentTab = _currentTab };
+                _projectManager,
+                Locator.Current.GetService<CRUIDService>()!) { CurrentTab = _currentTab };
             ViewModel = DataContext as RedDocumentViewToolbarModel;
 
             _modifierStateService.ModifierStateChanged += OnModifierStateChanged;
@@ -95,7 +94,7 @@ namespace WolvenKit.Views.Documents
                 vm.RefreshMenuVisibility(true);
 
                 vm.OnAddDependencies += OnAddDependencies;
-            }); 
+            });
         }
 
         private void OnModifierStateChanged() => RefreshChildMenuItems();
@@ -168,7 +167,6 @@ namespace WolvenKit.Views.Documents
             {
                 _isRunning = false;
             }
-            
         }
 
         private ChunkViewModel? SelectedChunk => ViewModel?.SelectedChunk;
@@ -178,57 +176,72 @@ namespace WolvenKit.Views.Documents
 
         private async void OnFindBrokenReferencesClick(object _, RoutedEventArgs e)
         {
-            if (_projectManager.ActiveProject is null || CurrentTab?.FilePath is not string s || !File.Exists(s))
+            try
             {
-                return;
-            }
-
-            _loggerService.Info("Scanning file for broken references. This is currently slow as foretold, please hold the line...");
-            var allReferences = await _projectManager.ActiveProject.GetAllReferencesAsync(
-                _progressService,
-                _loggerService,
-                [s.Replace($"{_projectManager.ActiveProject.ModDirectory}{Path.DirectorySeparatorChar}", "")]
-            );
-
-            var brokenReferences = await _projectManager.ActiveProject.ScanForBrokenReferencePathsAsync(
-                _archiveManager,
-                _loggerService,
-                _progressService,
-                allReferences
-            );
-
-            if (brokenReferences.Keys.Count == 0)
-            {
-                _loggerService.Success("No broken references... that we can find!");
-                return;
-            }
-
-            _loggerService.Info("Done!");
-            Interactions.ShowBrokenReferencesList(("Broken references", brokenReferences));
-        }
-        
-        private async void OnFileValidationClick(object _, RoutedEventArgs e)
-        {
-            // in .app or root entity: warn with >5 appearances, because this can take a while 
-            if (ViewModel?.RootChunk is ChunkViewModel cvm
-                && ((cvm.ResolvedData is appearanceAppearanceResource app && app.Appearances.Count > 5) ||
-                    (cvm.ResolvedData is entEntityTemplate ent && ent.Appearances.Count > 5)))
-            {
-                if (Interactions.ShowQuestionYesNo((
-                        "Run file validation now? (Wolvenkit will be unresponsive)",
-                        "Validate files now?")))
+                if (_projectManager.ActiveProject is null || CurrentTab?.FilePath is not string s || !File.Exists(s))
                 {
                     return;
                 }
-            }
-            
-            // This needs to be inside the DispatcherHelper, or the UI button will make everything explode
-            DispatcherHelper.RunOnMainThread(() =>
-            {
-                _loggerService.Info("Running file validation, please wait. The UI will be unresponsive.");
-            });
 
-            await RunFileValidationAsync();
+                _loggerService.Info(
+                    "Scanning file for broken references. This is currently slow as foretold, please hold the line...");
+                var allReferences = await _projectManager.ActiveProject.GetAllReferencesAsync(
+                    _progressService,
+                    _loggerService,
+                    [s.Replace($"{_projectManager.ActiveProject.ModDirectory}{Path.DirectorySeparatorChar}", "")]
+                );
+
+                var brokenReferences = await _projectManager.ActiveProject.ScanForBrokenReferencePathsAsync(
+                    _archiveManager,
+                    _loggerService,
+                    _progressService,
+                    allReferences
+                );
+
+                if (brokenReferences.Keys.Count == 0)
+                {
+                    _loggerService.Success("No broken references... that we can find!");
+                    return;
+                }
+
+                _loggerService.Info("Done!");
+                Interactions.ShowBrokenReferencesList(("Broken references", brokenReferences));
+            }
+            catch (Exception err)
+            {
+                _loggerService.Error("Error while scanning for broken references:");
+                _loggerService.Error(err);
+            }
+        }
+
+        private async void OnFileValidationClick(object _, RoutedEventArgs e)
+        {
+            try
+            {
+                // in .app or root entity: warn with >5 appearances, because this can take a while 
+                if (ViewModel?.RootChunk is ChunkViewModel cvm
+                    && ((cvm.ResolvedData is appearanceAppearanceResource app && app.Appearances.Count > 5) ||
+                        (cvm.ResolvedData is entEntityTemplate ent && ent.Appearances.Count > 5)))
+                {
+                    if (!Interactions.ShowQuestionYesNo((
+                            "Run file validation now? (Wolvenkit will be unresponsive)",
+                            "Validate files now?")))
+                    {
+                        return;
+                    }
+                }
+
+                // This needs to be inside the DispatcherHelper, or the UI button will make everything explode
+                DispatcherHelper.RunOnMainThread(() =>
+                    _loggerService.Info("Running file validation, please wait. The UI will be unresponsive."));
+
+                await RunFileValidationAsync();
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error("Error while running file validation:");
+                _loggerService.Error(ex);
+            }
         }
 
         private void OnGenerateMissingMaterialsClick(object _, RoutedEventArgs e)
@@ -349,42 +362,45 @@ namespace WolvenKit.Views.Documents
 
                 return s.Replace("{material}", newMatName).Replace("*", "");
             }
-
         }
 
         private void OnConvertHairToCCXLMaterials(object _, RoutedEventArgs e)
         {
-
-            if (ViewModel?.RootChunk is not ChunkViewModel cvm || cvm.ResolvedData is not CMesh mesh || _projectManager.ActiveProject is not Cp77Project activeProject)
+            if (ViewModel?.RootChunk is not ChunkViewModel cvm || cvm.ResolvedData is not CMesh mesh ||
+                _projectManager.ActiveProject is not Cp77Project activeProject)
             {
                 return;
             }
 
-            
 
             var dialog = new ConvertHairToCCXLMaterialsDialog(activeProject);
             if (dialog.ShowDialog() != true)
             {
                 return;
             }
-            
+
             if (mesh.Appearances.Count == 0)
             {
                 _loggerService.Info("No appearance found for CCXL, adding an appearance");
-                meshMeshAppearance newMeshApp = new meshMeshAppearance();
-                newMeshApp.Name = "black_carbon";
+                var newMeshApp = new meshMeshAppearance { Name = "black_carbon" };
                 mesh.Appearances.Add(newMeshApp);
-
             }
 
 
             var app = mesh.Appearances.First();
 
-            CName appName = ((meshMeshAppearance)app!).Name;
+            var appName = ((meshMeshAppearance)app!).Name;
 
             var mainHairMiFile = dialog.ViewModel?.SelectedMiFile;
             var mainHairMiType = dialog.ViewModel?.SelectedMiType;
-            var mainMiPath = (CName)(mainHairMiFile!);
+
+            if (mainHairMiType is null || mainHairMiFile is null)
+            {
+                _loggerService.Info("main hair information not selected, aborting conversion");
+                return;
+            }
+
+            var mainMiPath = (CName)(mainHairMiFile);
 
             if (mainHairMiType is "Cap01")
             {
@@ -397,61 +413,55 @@ namespace WolvenKit.Views.Documents
             cvm.GetPropertyChild("externalMaterials")?.CalculateProperties();
 
             ViewModel.ClearMaterialsCommand.Execute(true);
-            
+
             mesh.Appearances.Clear();
 
             app.Chunk!.ChunkMaterials =
-                [
-                appName + "@" + mainHairMiType!.ToLower()
-                ];
+            [
+                appName + "@" + mainHairMiType.ToLower()
+            ];
 
 
             mesh.MaterialEntries.Add(new CMeshMaterialEntry()
             {
-                Name = "@context",
-                Index = (CUInt16)0,
-                IsLocalInstance = true
+                Name = "@context", Index = (CUInt16)0, IsLocalInstance = true
             });
 
             var mainMi = new CMeshMaterialEntry()
             {
-                Name = "@" + mainHairMiType!.ToLower(),
-                Index = (CUInt16)1,
-                IsLocalInstance = true
+                Name = "@" + mainHairMiType.ToLower(), Index = (CUInt16)1, IsLocalInstance = true
             };
 
 
             mesh.MaterialEntries.Add(mainMi);
 
 
-
-
-            CResourceReference<CHairProfile> mainMiValue = new CResourceReference<CHairProfile>(
+            var mainMiValue = new CResourceReference<CHairProfile>(
                 @"*base\characters\common\hair\textures\hair_profiles\{material}.hp",
-                    InternalEnums.EImportFlags.Soft);
+                InternalEnums.EImportFlags.Soft);
 
 
             mesh.LocalMaterialBuffer.Materials.Add(new CMaterialInstance
             {
-                Values = [new CKeyValuePair(mainHairMiType! + "BaseMaterial", mainMiPath)]
+                Values = [new CKeyValuePair(mainHairMiType + "BaseMaterial", mainMiPath)]
             });
 
             mesh.LocalMaterialBuffer.Materials.Add(new CMaterialInstance
-            {
-                BaseMaterial = new CResourceReference<IMaterial>(mainHairMiFile!, InternalEnums.EImportFlags.Default),
-                Values = [new CKeyValuePair("HairProfile", mainMiValue)]
-            }
+                {
+                    BaseMaterial =
+                        new CResourceReference<IMaterial>(mainHairMiFile, InternalEnums.EImportFlags.Default),
+                    Values = [new CKeyValuePair("HairProfile", mainMiValue)]
+                }
             );
-
 
 
             if (dialog.ViewModel?.IsCap is true)
             {
                 app.Chunk!.ChunkMaterials =
-               [
-                appName + "@" + mainHairMiType!.ToLower(),
-                appName + "@cap"
-               ];
+                [
+                    appName + "@" + mainHairMiType.ToLower(),
+                    appName + "@cap"
+                ];
 
                 var capHairMiFile = dialog.ViewModel?.SelectedCapMiFile;
                 var capMiNameType = "Cap";
@@ -462,32 +472,32 @@ namespace WolvenKit.Views.Documents
 
                 mesh.LocalMaterialBuffer.Materials.Insert(0, new CMaterialInstance
                 {
-                    Values = [new CKeyValuePair(mainHairMiType! + "BaseMaterial", mainMiPath),
-                        new CKeyValuePair(capMiNameType! + "BaseMaterial", capMiPath)]
+                    Values =
+                    [
+                        new CKeyValuePair(mainHairMiType + "BaseMaterial", mainMiPath),
+                        new CKeyValuePair(capMiNameType + "BaseMaterial", capMiPath)
+                    ]
                 });
 
 
                 var capMi = new CMeshMaterialEntry()
                 {
-                    Name = "@" + capMiNameType.ToLower(),
-                    Index = (CUInt16)2,
-                    IsLocalInstance = true
+                    Name = "@" + capMiNameType.ToLower(), Index = (CUInt16)2, IsLocalInstance = true
                 };
 
                 mesh.MaterialEntries.Add(capMi);
 
 
-                CResourceReference<ITexture> capValues = new CResourceReference<ITexture>(
+                var capValues = new CResourceReference<ITexture>(
                     @"*base\characters\common\hair\textures\cap_gradiants\hh_cap_grad__{material}.xbm",
-                        InternalEnums.EImportFlags.Soft);
+                    InternalEnums.EImportFlags.Soft);
                 mesh.LocalMaterialBuffer.Materials.Add(new CMaterialInstance
-                {
-                    BaseMaterial = new CResourceReference<IMaterial>(capHairMiFile!, InternalEnums.EImportFlags.Default),
-                    Values = [new CKeyValuePair("GradientMap", capValues)]
-                }
-
+                    {
+                        BaseMaterial =
+                            new CResourceReference<IMaterial>(capHairMiFile!, InternalEnums.EImportFlags.Default),
+                        Values = [new CKeyValuePair("GradientMap", capValues)]
+                    }
                 );
-
             }
 
 
@@ -502,13 +512,17 @@ namespace WolvenKit.Views.Documents
             cvm.Tab?.Parent.SetIsDirty(true);
         }
 
-        private void OnEditorModeClick(EditorDifficultyLevel level) => _settingsManager.DefaultEditorDifficultyLevel = level;
+        private void OnEditorModeClick(EditorDifficultyLevel level) =>
+            _settingsManager.DefaultEditorDifficultyLevel = level;
 
-        private void OnEditorModeClick_Easy(object _, RoutedEventArgs e) => OnEditorModeClick(EditorDifficultyLevel.Easy);
+        private void OnEditorModeClick_Easy(object _, RoutedEventArgs e) =>
+            OnEditorModeClick(EditorDifficultyLevel.Easy);
 
-        private void OnEditorModeClick_Default(object _, RoutedEventArgs e) => OnEditorModeClick(EditorDifficultyLevel.Default);
+        private void OnEditorModeClick_Default(object _, RoutedEventArgs e) =>
+            OnEditorModeClick(EditorDifficultyLevel.Default);
 
-        private void OnEditorModeClick_Advanced(object _, RoutedEventArgs e) => OnEditorModeClick(EditorDifficultyLevel.Advanced);
+        private void OnEditorModeClick_Advanced(object _, RoutedEventArgs e) =>
+            OnEditorModeClick(EditorDifficultyLevel.Advanced);
 
         private string GetTextureDirForDependencies(bool useTextureSubfolder) =>
             ViewModel?.GetTextureDirForDependencies(useTextureSubfolder) ?? "";
@@ -535,7 +549,7 @@ namespace WolvenKit.Views.Documents
             }
 
             RootChunk.ForceLoadPropertiesRecursive();
-            
+
             if (RootChunk.ResolvedData is CMesh)
             {
                 rootChunk.DeleteUnusedMaterialsCommand.Execute(true);
@@ -563,7 +577,7 @@ namespace WolvenKit.Views.Documents
                     }
                 )
                 .ToHashSet();
-            
+
             var destFolder = GetTextureDirForDependencies(true);
             // Use search and replace to fix file paths
 
@@ -580,7 +594,7 @@ namespace WolvenKit.Views.Documents
             {
                 return;
             }
-            
+
             switch (rootChunk.ResolvedData)
             {
                 case CMaterialInstance:
@@ -590,7 +604,8 @@ namespace WolvenKit.Views.Documents
                     await SearchAndReplaceInChildNodesAsync(rootChunk, pathReplacements, "layers");
                     break;
                 case CMesh:
-                    await SearchAndReplaceInChildNodesAsync(rootChunk, pathReplacements, ChunkViewModel.LocalMaterialBufferPath,
+                    await SearchAndReplaceInChildNodesAsync(rootChunk, pathReplacements,
+                        ChunkViewModel.LocalMaterialBufferPath,
                         ChunkViewModel.ExternalMaterialPath);
                     break;
                 default:
@@ -606,13 +621,15 @@ namespace WolvenKit.Views.Documents
             }
         }
 
-        private static async Task SearchAndReplaceInChildNodesAsync(ChunkViewModel cvm, Dictionary<string, string> pathReplacements,
+        private static async Task SearchAndReplaceInChildNodesAsync(ChunkViewModel cvm,
+            Dictionary<string, string> pathReplacements,
             params string[] propertyPaths)
         {
             if (pathReplacements.Count == 0)
             {
                 return;
             }
+
             var isDirty = false;
             var childNodes = new List<ChunkViewModel>();
             var dirtyNodes = new HashSet<ChunkViewModel>();
@@ -660,7 +677,8 @@ namespace WolvenKit.Views.Documents
 
             if (_settingsManager.CP77ExecutablePath is null)
             {
-                throw new WolvenKitException(0x5001, "Can't add dependencies without a game executable path in the settings");
+                throw new WolvenKitException(0x5001,
+                    "Can't add dependencies without a game executable path in the settings");
             }
 
             if (!_archiveManager.IsInitialized)
@@ -672,9 +690,11 @@ namespace WolvenKit.Views.Documents
             _loggerService.Info("Reading mod archive file table, this may take a moment...");
             await Task.Run(() =>
             {
-                var ignoredArchives = _settingsManager.ArchiveNamesExcludeFromScan.Split(",").Select(m => m.Replace(".archive", ""))
+                var ignoredArchives = _settingsManager.ArchiveNamesExcludeFromScan.Split(",")
+                    .Select(m => m.Replace(".archive", ""))
                     .ToArray();
-                _archiveManager.LoadModArchives(new FileInfo(_settingsManager.CP77ExecutablePath), true, ignoredArchives);
+                _archiveManager.LoadModArchives(new FileInfo(_settingsManager.CP77ExecutablePath), true,
+                    ignoredArchives);
 
                 if (_settingsManager.ExtraModDirPath is string extraModDir && !string.IsNullOrEmpty(extraModDir))
                 {
@@ -687,22 +707,32 @@ namespace WolvenKit.Views.Documents
 
         private async void OnAddDependencies(object? _, EventArgs eventArgs)
         {
-            if (_projectManager.ActiveProject is null || ViewModel?.RootChunk is not ChunkViewModel cvm)
+            try
             {
-                return;
+                if (_projectManager.ActiveProject is null || ViewModel?.RootChunk is not ChunkViewModel cvm)
+                {
+                    return;
+                }
+
+                _projectWatcher.Suspend();
+
+                await AddDependenciesToFileAsync(cvm, eventArgs is AddDependenciesFullEventArgs);
             }
-
-            _projectWatcher.Suspend();
-
-            await AddDependenciesToFileAsync(cvm, eventArgs is AddDependenciesFullEventArgs);
-
-            // Project browser will throw an error if we do it immediately - so let's not
-            await Task.Run(async () =>
+            catch (Exception err)
             {
-                await Task.Delay(100);
-                _projectWatcher.Refresh();
-                _projectWatcher.Resume();
-            });
+                _loggerService.Error("Failed to add dependencies:");
+                _loggerService.Error(err);
+            }
+            finally
+            {
+                // Project browser will throw an error if we do it immediately - so let's not
+                await Task.Run(async () =>
+                {
+                    await Task.Delay(100);
+                    _projectWatcher.Refresh();
+                    _projectWatcher.Resume();
+                });
+            }
         }
 
         private List<appearanceAppearanceDefinition> GetAppearancesFromSelectionOrRoot()
@@ -729,6 +759,7 @@ namespace WolvenKit.Views.Documents
 
             return ret;
         }
+
         private void OnDuplicateComponentAsNewClick(object _, RoutedEventArgs e)
         {
             if (RootChunk?.ResolvedData is not appearanceAppearanceResource)
@@ -758,8 +789,8 @@ namespace WolvenKit.Views.Documents
             }
 
             ViewModel?.ClearSelection();
-            
-            
+
+
             foreach (var chunkViewModel in selectedChunks.SelectMany(cvm =>
                          GetComponentsByName(cvm, componentModel.ComponentName)).ToList())
             {
@@ -814,7 +845,6 @@ namespace WolvenKit.Views.Documents
             {
                 chunkViewModel.DeleteNodesInParent([chunkViewModel]);
             }
-
         }
 
         /// <summary>
@@ -859,9 +889,9 @@ namespace WolvenKit.Views.Documents
                     continue;
                 }
 
-                propertyChild!.ClearChildren();
+                propertyChild.ClearChildren();
                 numDeletions += 1;
-                propertyChild!.RecalculateProperties();
+                propertyChild.RecalculateProperties();
             }
 
             if (numDeletions == 0)
@@ -875,7 +905,7 @@ namespace WolvenKit.Views.Documents
             _loggerService.Success($"Cleared '{propertyName}' in {numDeletions} appearances");
             _currentTab?.Parent.SetIsDirty(true);
         }
-        
+
         /// <summary>
         /// Called from view: remove all partsOverrides from appearances
         /// </summary>
@@ -931,10 +961,10 @@ namespace WolvenKit.Views.Documents
                     when cvm.GetPropertyChild("appearances") is ChunkViewModel appearances:
                     appearances.CalculateProperties();
                     ret.AddRange(
-                        appearances.TVProperties.SelectMany(
-                            appearance => GetComponentsByName(appearance, componentName)));
+                        appearances.TVProperties.SelectMany(appearance =>
+                            GetComponentsByName(appearance, componentName)));
                     break;
-                case CArray<CHandle<appearanceAppearanceDefinition>> array:
+                case CArray<CHandle<appearanceAppearanceDefinition>>:
                     ret.AddRange(cvm.GetPropertyChild("appearances")?.TVProperties
                         .SelectMany(handle => GetComponentsByName(handle, componentName)) ?? []);
                     break;
@@ -961,7 +991,7 @@ namespace WolvenKit.Views.Documents
             }
 
             if (dialog.ViewModel is null || string.IsNullOrEmpty(dialog.ViewModel.ComponentName))
-            {   
+            {
                 return;
             }
 
@@ -978,43 +1008,53 @@ namespace WolvenKit.Views.Documents
 
         private async void OnFindUnusedProjectFilesClick(object _, RoutedEventArgs e)
         {
-            if (_projectManager.ActiveProject is null || CurrentTab?.FilePath is not string currentFile || !File.Exists(currentFile))
+            try
             {
-                return;
+                if (_projectManager.ActiveProject is null || CurrentTab?.FilePath is not string currentFile ||
+                    !File.Exists(currentFile))
+                {
+                    return;
+                }
+
+                var relativePath = currentFile.Replace(_projectManager.ActiveProject.ModDirectory, "");
+                _loggerService.Info("Reading references from file...");
+                var referencesInFile = await _projectManager.ActiveProject.GetAllReferencesAsync(
+                    _progressService,
+                    _loggerService,
+                    [relativePath]
+                );
+
+                if (!referencesInFile.TryGetValue(relativePath, out var tmp) || tmp is not List<string> allUsedPaths)
+                {
+                    _loggerService.Warning($"Failed to read used file paths from {relativePath}");
+                    return;
+                }
+
+                var fileExtensions = referencesInFile.Values
+                    .SelectMany(list => list.Select(Path.GetExtension))
+                    .Distinct()
+                    .Where(x => x is not (".json" or ".ent"))
+                    .ToList();
+
+                var allModFiles = _projectManager.ActiveProject.ModFiles
+                    .Where(f => fileExtensions.Contains(Path.GetExtension(f))).ToList();
+                var unusedMeshPaths = allModFiles.Where(f => !allUsedPaths.Contains(f)).ToList();
+
+                if (unusedMeshPaths.Count == 0)
+                {
+                    _loggerService.Success("Nothing found! You're good!");
+                    return;
+                }
+
+                _loggerService.Info("Done!");
+                Interactions.ShowBrokenReferencesList(("Unused files in project",
+                    new Dictionary<string, List<string>>() { { relativePath, unusedMeshPaths } }));
             }
-
-            var relativePath = currentFile.Replace(_projectManager.ActiveProject.ModDirectory, "");
-            _loggerService.Info("Reading references from file...");
-            var referencesInFile = await _projectManager.ActiveProject.GetAllReferencesAsync(
-                _progressService,
-                _loggerService,
-                [relativePath]
-            );
-
-            if (!referencesInFile.TryGetValue(relativePath, out var tmp) || tmp is not List<string> allUsedPaths)
+            catch (Exception ex)
             {
-                _loggerService.Warning($"Failed to read used file paths from {relativePath}");
-                return;
+                _loggerService.Error("Failed to find unused project files:");
+                _loggerService.Error(ex);
             }
-
-            var fileExtensions = referencesInFile.Values
-                .SelectMany(list => list.Select(Path.GetExtension))
-                .Distinct()
-                .Where(x => x is not (".json" or ".ent"))
-                .ToList();
-
-            var allModFiles = _projectManager.ActiveProject.ModFiles.Where(f => fileExtensions.Contains(Path.GetExtension(f))).ToList();
-            var unusedMeshPaths = allModFiles.Where(f => !allUsedPaths.Contains(f)).ToList();
-
-            if (unusedMeshPaths.Count == 0)
-            {
-                _loggerService.Success("Nothing found! You're good!");
-                return;
-            }
-
-            _loggerService.Info("Done!");
-            Interactions.ShowBrokenReferencesList(("Unused files in project",
-                new Dictionary<string, List<string>>() { { relativePath, unusedMeshPaths } }));
         }
 
         private async void OnConnectToEntFileClick(object _, RoutedEventArgs e)
@@ -1075,7 +1115,7 @@ namespace WolvenKit.Views.Documents
                 _loggerService.Error(err);
             }
         }
-        
+
         private MenuItem? _openMenu;
 
         private static readonly List<string> s_facialSetups = [];
@@ -1088,14 +1128,13 @@ namespace WolvenKit.Views.Documents
             }
 
             ViewModel?.RefreshMenuVisibility();
-            
+
             foreach (var item in _openMenu.Items.OfType<MenuItem>())
             {
                 // Force the submenu items to re-evaluate their bindings
                 var bindingExpression = item.GetBindingExpression(VisibilityProperty);
                 bindingExpression?.UpdateTarget();
             }
-            
         }
 
         private void OnMenuClosed(object sender, RoutedEventArgs e) => _openMenu = null;
@@ -1114,7 +1153,7 @@ namespace WolvenKit.Views.Documents
 
         private void OnKeystateChanged(object sender, KeyEventArgs e) => _modifierStateService.OnKeystateChanged(e);
 
-        private void SearchBar_OnKeyDown(object sender, KeyEventArgs e)
+        private void SearchBar_OnKeyDown(object _, KeyEventArgs e)
         {
             switch (e.Key)
             {
@@ -1131,15 +1170,16 @@ namespace WolvenKit.Views.Documents
             }
         }
 
-        private void SearchBar_OnSubmit(object sender, RoutedEventArgs e) => ViewModel?.OnSearchChanged(SearchBar?.Text ?? "");
+        private void SearchBar_OnSubmit(object sender, RoutedEventArgs e) =>
+            ViewModel?.OnSearchChanged(SearchBar?.Text ?? "");
 
-        private void SearchBar_OnClear(object sender, RoutedEventArgs e)
+        private void SearchBar_OnClear(object _, RoutedEventArgs e)
         {
             SearchBar?.Clear();
             SearchBar_OnSubmit(this, e);
         }
 
-        private void SearchBar_OnClick(object sender, MouseButtonEventArgs e)
+        private void SearchBar_OnClick(object _, MouseButtonEventArgs e)
         {
             if (ModifierViewStateService.IsShiftBeingHeld)
             {
@@ -1158,10 +1198,10 @@ namespace WolvenKit.Views.Documents
                 SearchBar_OnClear(this, e);
             }
         }
-     
+
         private void OnChangeAnimationClick(object sender, RoutedEventArgs e)
         {
-            if (RootChunk?.Tab is null || RootChunk?.ResolvedData is not appearanceAppearanceResource app ||
+            if (RootChunk?.Tab is null || RootChunk?.ResolvedData is not appearanceAppearanceResource ||
                 !File.Exists(RootChunk.Tab.FilePath))
             {
                 return;
@@ -1190,8 +1230,16 @@ namespace WolvenKit.Views.Documents
                 cvm.RecalculateProperties();
             }
         }
-        
-        
 
+        private void OnFileValidationMenuClicked(object sender, RoutedEventArgs e)
+        {
+            if (!ModifierViewStateService.IsShiftBeingHeld)
+            {
+                return;
+            }
+
+            e.Handled = true;
+            OnFileValidationClick(sender, e);
+        }
     }
 }

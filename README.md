@@ -41,12 +41,6 @@ Wolvenkit requires the latest .NET 8.0 runtime:
 
 There are multiple ways to install Wolvenkit:
 
-### The WolvenKit.Installer app
-
-The WolvenKit.Installer app is a simple program for managing (installing, updating, removing) different WolvenKit versions similar to the Visual Studio Installer app. 
-
-It is [hosted on github](https://github.com/WolvenKit/WolvenKit.Installer) and you can install it from there. Click here: [![GitHub release (latest by date)](https://img.shields.io/github/v/release/WolvenKit/WolvenKit.Installer)](https://github.com/WolvenKit/WolvenKit.Installer/releases/latest)
-
 ### Portable or Installer
 
 Download either the latest stable version or the current nightly (beta) version from here:

@@ -804,6 +804,12 @@ public class DocumentTools
         {
             ret.AddRange(FilterByType(cvmResolvedData, cachedList));
         }
+        else if (materialPath.EndsWith(".mi") &&
+                 ReadCr2WFromRelativePath(materialPath) is { RootChunk: CMaterialInstance mi } &&
+                 mi.BaseMaterial.DepotPath.GetResolvedText() is string baseMaterial)
+        {
+            ret.AddRange(GetMaterialKeys(cvmResolvedData, baseMaterial, forceCacheRefresh));
+        }
         else if (ReadCr2WFromRelativePath(materialPath) is not { RootChunk: CMaterialTemplate template })
         {
             ret = [];
