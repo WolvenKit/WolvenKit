@@ -50,6 +50,17 @@ public abstract class CvmDropdownHelper
         "meshAppearance", "appearanceName"
     ];
 
+    private static readonly List<string> s_multilayerProperties =
+    [
+        "metalLevelsIn",
+        "metalLevelsOut",
+        "roughLevelsIn",
+        "roughLevelsOut",
+        "colorScale",
+        "normalStrength",
+        "microblend"
+    ];
+
     /// <summary>
     /// Finds the scene resource context, either from the root model or from the current document
     /// </summary>
@@ -219,12 +230,53 @@ public abstract class CvmDropdownHelper
 
             #endregion
 
+            #region mlsetup
+
+            case Multilayer_Layer mlLayer:
+            {
+                if (cvm.Name == "material")
+                {
+                    ret = documentTools.GetAllMultilayerTemplates(forceCacheRefresh);
+                    break;
+                }
+
+                if (cvm.Name == "microblend")
+                {
+                    ret = documentTools.GetAllMicroblends(forceCacheRefresh);
+                    break;
+                }
+
+                if (mlLayer.Material.DepotPath.GetResolvedText() is string materialPath)
+                {
+                    ret = documentTools.GetMultilayerProperties(materialPath, cvm.Name, forceCacheRefresh);
+                }
+
+                break;
+            }
+
+            #endregion
+
             default:
                 break;
         }
 
+        #region scenes
+
+        if (cvm.Name == "id" && ReadSceneOptions() is Dictionary<string, string> dict)
+        {
+            return dict;
+        }
+
+        #endregion
+
+        return (ret ?? []).Distinct().Where(x => !string.IsNullOrEmpty(x)).ToDictionary(x => x!, y => y!);
+
+        Dictionary<string, string>? ReadSceneOptions()
+        {
+            switch (parent.ResolvedData)
+            {
         // Special case for scnActorId.Id - check if we're editing the Id property of a scnActorId
-        if (cvm.Name == "id" && parent.ResolvedData is scnActorId)
+            case scnActorId:
         {
             var scene = GetSceneContext(cvm);
             if (scene != null)
@@ -260,10 +312,12 @@ public abstract class CvmDropdownHelper
                 
                 return actorOptions;
             }
+
+                    break;
         }
 
         // Special case for scnPerformerId.Id - check if we're editing the Id property of a scnPerformerId
-        if (cvm.Name == "id" && parent.ResolvedData is scnPerformerId)
+                case scnPerformerId:
         {
             var scene = GetSceneContext(cvm);
             if (scene != null)
@@ -338,10 +392,12 @@ public abstract class CvmDropdownHelper
                 
                 return performerOptions;
             }
+
+                    break;
         }
 
         // Special case for scnSceneWorkspotInstanceId.Id - check if we're editing the Id property of a scnSceneWorkspotInstanceId
-        if (cvm.Name == "id" && parent.ResolvedData is scnSceneWorkspotInstanceId)
+                case scnSceneWorkspotInstanceId:
         {
             var scene = GetSceneContext(cvm);
             if (scene != null)
@@ -382,10 +438,12 @@ public abstract class CvmDropdownHelper
                 
                 return workspotOptions;
             }
+
+                    break;
         }
 
         // Special case for scnEffectInstanceId.Id - check if we're editing the Id property of a scnEffectInstanceId
-        if (cvm.Name == "id" && parent.ResolvedData is scnEffectInstanceId)
+                case scnEffectInstanceId:
         {
             var scene = GetSceneContext(cvm);
             if (scene != null)
@@ -437,10 +495,12 @@ public abstract class CvmDropdownHelper
                 
                 return effectOptions;
             }
+
+                    break;
         }
 
         // Special case for scnPropId.Id - check if we're editing the Id property of a scnPropId
-        if (cvm.Name == "id" && parent.ResolvedData is scnPropId)
+                case scnPropId:
         {
             var scene = GetSceneContext(cvm);
             if (scene != null)
@@ -473,10 +533,12 @@ public abstract class CvmDropdownHelper
                 
                 return propOptions;
             }
+
+                    break;
         }
 
         // Special case for scnCinematicAnimSetSRRefId.Id - check if we're editing the Id property of a scnCinematicAnimSetSRRefId
-        if (cvm.Name == "id" && parent.ResolvedData is scnCinematicAnimSetSRRefId)
+                case scnCinematicAnimSetSRRefId:
         {
             var scene = GetSceneContext(cvm);
             if (scene != null)
@@ -515,10 +577,12 @@ public abstract class CvmDropdownHelper
                 
                 return animSetOptions;
             }
+
+                    break;
         }
 
         // Special case for scnLipsyncAnimSetSRRefId.Id - check if we're editing the Id property of a scnLipsyncAnimSetSRRefId
-        if (cvm.Name == "id" && parent.ResolvedData is scnLipsyncAnimSetSRRefId)
+                case scnLipsyncAnimSetSRRefId:
         {
             var scene = GetSceneContext(cvm);
             if (scene != null)
@@ -556,10 +620,12 @@ public abstract class CvmDropdownHelper
                 
                 return animSetOptions;
             }
+
+                    break;
         }
 
         // Special case for scnDynamicAnimSetSRRefId.Id - check if we're editing the Id property of a scnDynamicAnimSetSRRefId
-        if (cvm.Name == "id" && parent.ResolvedData is scnDynamicAnimSetSRRefId)
+                case scnDynamicAnimSetSRRefId:
         {
             var scene = GetSceneContext(cvm);
             if (scene != null)
@@ -597,9 +663,13 @@ public abstract class CvmDropdownHelper
                 
                 return animSetOptions;
             }
+
+                    break;
+                }
         }
 
-        return (ret ?? []).Where(x => !string.IsNullOrEmpty(x)).ToDictionary(x => x!, y => y!);
+            return null;
+        }
     }
 
     /// <summary>
@@ -623,9 +693,11 @@ public abstract class CvmDropdownHelper
             }
         }
 
+        // This code checks the PARENT MODEL's ResolvedData type - the node CONTAINING the cvm
         return parent.ResolvedData switch
         {
-            gameJournalPath when cvm.Name is "className" or "realPath" && s_questHandleParentNames.Contains(parent.Name) => true,
+            gameJournalPath when s_questHandleParentNames.Contains(parent.Name) => true,
+            gameJournalPath when cvm.Name is "className" or "realPath" => true,
             #region mesh
 
             CArray<CName> when parent is { Name: "chunkMaterials", Parent.Parent.Parent.ResolvedData: CMesh } =>
@@ -638,21 +710,31 @@ public abstract class CvmDropdownHelper
             #endregion
 
             #region ent 
-            appearanceAppearancePart when cvm.Name is ("appearanceResource" or "resource") => true,
-            entSkinnedMeshComponent when cvm.Name is not null && s_appearanceNames.Contains(cvm.Name) => true,
+
+            appearanceAppearancePart when cvm.Name is "appearanceResource" or "resource" => true,
+            entSkinnedMeshComponent when s_appearanceNames.Contains(cvm.Name) => true,
             entSkinnedMeshComponent when parent.Name == "mesh" => true,
-            entEntityTemplate when cvm.Name is not null && s_appearanceNames.Contains(cvm.Name) => true,
-            entTemplateAppearance when cvm.Name is ("appearanceName" or "appearanceResource") => true,
+            entEntityTemplate when s_appearanceNames.Contains(cvm.Name) => true,
+            entTemplateAppearance when cvm.Name is "appearanceName" or "appearanceResource" => true,
             #endregion
 
             #region app
-            appearanceAppearanceResource when cvm.Name is not null && s_appearanceNames.Contains(cvm.Name) => true,
-            IRedRef when cvm.Name is "resource" && cvm.Parent?.ResolvedData is appearanceAppearancePart => true,
+
+            appearanceAppearanceResource when s_appearanceNames.Contains(cvm.Name) => true,
+            IRedRef when cvm is { Name: "resource", Parent.ResolvedData: appearanceAppearancePart } => true,
+            #endregion
+
+            #region mlsetup
+
+            Multilayer_Layer mlLayer => (cvm.Name is "material" or "microblend") ||
+                                        !string.IsNullOrEmpty(mlLayer.Material.DepotPath.GetResolvedText()),
+
             #endregion
     
             // tags: ent and app
             IRedArray<CName> when parent is { Name: "tags", Parent.ResolvedData: redTagList } => true,
 
+            #region scenes
             // scnActorId.Id dropdown - check if this is an id property in a scnActorId and we have scene context
             scnActorId when cvm.Name == "id" && GetSceneContext(cvm) != null => true,
 
@@ -677,9 +759,11 @@ public abstract class CvmDropdownHelper
             // scnDynamicAnimSetSRRefId.Id dropdown
             scnDynamicAnimSetSRRefId when cvm.Name == "id" && GetSceneContext(cvm) != null => true,
 
+            #endregion
             
             #region questPhase
-            graphGraphNodeDefinition when cvm.Name is ("phaseResource" or "sceneFile") => true,
+
+            graphGraphNodeDefinition when cvm.Name is "phaseResource" or "sceneFile" => true,
             #endregion
             _ => false
         };
@@ -690,16 +774,17 @@ public abstract class CvmDropdownHelper
     /// </summary>
     public static bool ShouldShowRefreshButton(ChunkViewModel cvm)
     {
-        if (cvm.ParentData is gameJournalPath && cvm.Name is "realPath")
-        {
-            return true;
-        }
-        
-        if (cvm.ParentData is graphGraphNodeDefinition && cvm.Name is "phaseResource" or "sceneFile")
+        if (cvm is { ParentData: gameJournalPath, Name: "realPath" })
         {
             return true;
         }
 
+        if (cvm is { ParentData: graphGraphNodeDefinition, Name: "phaseResource" or "sceneFile" })
+        {
+            return true;
+        }
+
+        // This code checks the ROOT MODEL's ResolvedData type - the first node in the tree view
         return cvm.GetRootModel().ResolvedData switch
         {
             entEntityTemplate when s_appearanceNames.Contains(cvm.Name) => true,
@@ -708,8 +793,20 @@ public abstract class CvmDropdownHelper
             entSkinnedMeshComponent when s_appearanceNames.Contains(cvm.Name) => true,
             CMesh when cvm.Parent?.Parent?.Parent?.ResolvedData is CMaterialInstance matInstance &&
                        !string.IsNullOrEmpty(matInstance.BaseMaterial.DepotPath.GetResolvedText()) => true,
+            Multilayer_Setup when cvm.Parent?.ResolvedData is Multilayer_Layer mlLayer =>
+                cvm.Name is "materials" || cvm.Name is "microblend"
+                                        || (!string.IsNullOrEmpty(mlLayer.Material.DepotPath.GetResolvedText()) &&
+                                            s_multilayerProperties.Contains(cvm.Name)),
             _ => false
         };
+    }
+
+    /// <summary>
+    /// Show colours in the dropdown menu? (Only for MLSetup so far)
+    /// </summary>
+    public static bool ShouldShowColourInDropdown(ChunkViewModel cvm)
+    {
+        return cvm is { ParentData: Multilayer_Layer, Name: "colorScale" };
     }
 
     /// <summary>

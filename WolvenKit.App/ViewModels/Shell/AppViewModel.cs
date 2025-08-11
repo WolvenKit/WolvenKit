@@ -1846,6 +1846,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(ShowPropertiesCommand))]
     [NotifyCanExecuteChangedFor(nameof(NewPhotoModeFilesCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateMinimalQuestFilesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(GenerateWorldbuilderPropCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateInkatlasCommand))]
     private EAppStatus? _status;
 

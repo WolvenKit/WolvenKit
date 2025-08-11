@@ -47,6 +47,7 @@ internal class Program
             new ImportCommand(),
             new ExportCommand(),
             new PackCommand(),
+            new BuildCommand(),
 
             new ConvertCommand(),
             new ConflictsCommand(),

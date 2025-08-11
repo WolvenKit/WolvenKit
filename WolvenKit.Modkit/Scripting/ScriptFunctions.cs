@@ -3,6 +3,7 @@ using System.Collections;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using WolvenKit.Common;
@@ -20,7 +21,7 @@ namespace WolvenKit.Modkit.Scripting;
 /// <summary>
 /// TODO
 /// </summary>
-public class ScriptFunctions
+public partial class ScriptFunctions
 {
     protected readonly ILoggerService _loggerService;
     protected readonly IArchiveManager _archiveManager;
@@ -188,10 +189,23 @@ public class ScriptFunctions
     /// <returns>The converted JSON string</returns>
     public virtual string YamlToJson(string yamlText)
     {
-        var deserializer = new Deserializer();
-        var yamlObject = deserializer.Deserialize(yamlText);
+        // remove yaml tags like !include, !append etc.
+        yamlText = YamlTagRegex().Replace(yamlText, "");
 
-        return JsonConvert.SerializeObject(yamlObject);
+        try
+        {
+            // deserialize it
+            var yamlObject = new Deserializer().Deserialize(yamlText);
+
+            return JsonConvert.SerializeObject(yamlObject);
+        }
+        catch (Exception e)
+        {
+            _loggerService.Error("Failed to read YAML: " + e.Message);
+            _loggerService.Error(e);
+        }
+
+        return "";
     }
 
     /// <summary>
@@ -203,10 +217,13 @@ public class ScriptFunctions
     {
         var expConverter = new ExpandoObjectConverter();
         var deserializedObject = JsonConvert.DeserializeObject<ExpandoObject>(jsonText, expConverter);
-        
+
         var serializer = new Serializer();
         return serializer.Serialize(deserializedObject);
     }
+
+    [GeneratedRegex(@"(?<=-)\s?\![a-z-]*(?=\s)")]
+    private static partial Regex YamlTagRegex();
 }
 
 public enum OpenAs
