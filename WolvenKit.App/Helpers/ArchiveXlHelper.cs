@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using HelixToolkit.SharpDX.Core;
+using HelixToolkit.SharpDX.Core;
 using Splat;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
@@ -16,7 +17,7 @@ namespace WolvenKit.App.Helpers;
 
 /// <summary>
 /// This class will resolve ArchiveXL dynamic variant depot paths.
-/// They start with an asterisk <see cref="ArchiveXlHelper.ArchiveXLSubstitutionPrefix"/> and contain substitution wildcards (<see cref="s_keysAndValues"/>).  
+/// They start with an asterisk <see cref="ArchiveXlHelper.ArchiveXLSubstitutionPrefix"/> and contain substitution wildcards (<see cref="s_keysAndValues"/>).
 /// </summary>
 public static partial class ArchiveXlHelper
 {
@@ -30,7 +31,7 @@ public static partial class ArchiveXlHelper
     private static IProjectManager? ProjectManager =>
         s_projectManager ??= Locator.Current.GetService<IProjectManager>();
 
-    
+
     private static readonly Dictionary<string, string[]> s_keysAndValues = new()
     {
         { "{camera}", ["fpp", "tpp"] },
@@ -41,7 +42,7 @@ public static partial class ArchiveXlHelper
     };
 
     /// <summary>
-    /// When parsing yaml, we need to remove prepending tags with bang, as they make the compiler throw up 
+    /// When parsing yaml, we need to remove prepending tags with bang, as they make the compiler throw up
     /// </summary>
     /// <returns></returns>
     [GeneratedRegex(@"(?<=-)\s?\![a-z-]*(?=\s)")]
@@ -68,7 +69,7 @@ public static partial class ArchiveXlHelper
             return null;
         }
     }
-    
+
     private static int CountBraces(string depotPath)
     {
         var openBracesCount = depotPath.Count(c => c == '{');
@@ -145,7 +146,7 @@ public static partial class ArchiveXlHelper
 
     /// <summary>
     /// Returns any existing depot path, or null. If no substitution is used, it will still check for the file's existence
-    /// and return null if it can't be found. 
+    /// and return null if it can't be found.
     /// </summary>
     public static string? GetFirstExistingPath(string? depotPath, Cp77Project? activeProject = null)
     {
@@ -274,7 +275,7 @@ public static partial class ArchiveXlHelper
 
     /// <summary>
     /// Resolves dynamic appearance names and -materials.
-    /// Returns a dictionary of dynamic appearance names with all possible parameters. 
+    /// Returns a dictionary of dynamic appearance names with all possible parameters.
     /// </summary>
     /// <example><code>
     /// { "@neon", [ "red", "blue", "green" ] }
@@ -317,8 +318,8 @@ public static partial class ArchiveXlHelper
     /// @neon => [red, green, blue]
     /// </code>
     /// </example>
-    ///     /// 
-    /// 
+    ///     ///
+    ///
     public static IEnumerable<string> ResolveMaterialSubstitutions(string depotPath,
         CArray<CHandle<meshMeshAppearance>> meshAppearances)
     {
