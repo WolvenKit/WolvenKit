@@ -163,7 +163,9 @@ namespace WolvenKit.Views.Tools
 
                 Interactions.AskForDropdownOption = (args) =>
                 {
-                    var dialog = new SelectDropdownEntryWindow(args.options, args.title, args.text, args.helpLink ?? "",
+                    var dialog = new SelectDropdownEntryWindow(args.options, args.title, args.text,
+                        args.helpLink ?? "",
+                        args.buttonText ?? "",
                         args.showInputBar ?? false);
 
                     if (dialog.ViewModel is not SelectDropdownEntryDialogViewModel innerVm

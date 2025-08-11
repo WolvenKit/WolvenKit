@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System;
 using WolvenKit.App.Interaction;
 using WolvenKit.Modkit.RED4.Tools;
+using WolvenKit.Modkit.Scripting;
 
 
 namespace WolvenKit.App.Helpers;
@@ -43,6 +44,7 @@ public class DocumentTools
     private readonly IArchiveManager _archiveManager;
     private readonly IProjectManager _projectManager;
     private readonly ProjectResourceTools _projectResourceTools;
+    private readonly ISettingsManager _settingsManager;
     
 
     public static Regex PlaceholderRegex { get; } = new Regex(@"^[-=_]+$");
@@ -60,7 +62,8 @@ public class DocumentTools
     private const int CleanupIntervalMinutes = 5; // Only cleanup every 5 minutes
 
     public DocumentTools(ILoggerService loggerService, Cr2WTools cr2WTools, IArchiveManager archiveManager,
-        IProjectManager projectManager, MeshTools meshTools, ProjectResourceTools projectResourceTools)
+        IProjectManager projectManager, MeshTools meshTools, ProjectResourceTools projectResourceTools,
+        ISettingsManager settingsManager)
     {
         _loggerService = loggerService;
         _cr2WTools = cr2WTools;
@@ -68,7 +71,9 @@ public class DocumentTools
         _projectManager = projectManager;
         _meshTools = meshTools;
         _projectResourceTools = projectResourceTools;
+        _settingsManager = settingsManager;
     }
+    
     
     // Cache entry with metadata for LFU + TTL
     private class FilteredCacheEntry
@@ -937,42 +942,291 @@ public class DocumentTools
             .ToList();
     }
 
-    public void CopyMeshMaterials(string sourcePath, string destPath)
+    /// <summary>
+    /// Returns a list of absolute paths to .xl files patching the current mesh.
+    /// If no project files are found, it will search in the base game installation folder.
+    /// </summary>
+    /// <param name="pathToPatch"></param>
+    /// <returns></returns>
+    public List<string> FindPatchFilePaths(string pathToPatch)
     {
+        List<string> ret = [];
+
         if (_projectManager.ActiveProject is not { } activeProject)
+        {
+            return ret;
+        }
+
+        // first, find in all .xl files in project
+        foreach (var path in CollectProjectFiles(".xl"))
+        {
+            var absolutePath = Path.Join(activeProject.FileDirectory, path);
+            if (!File.Exists(absolutePath) || File.ReadAllText(absolutePath) is not string fileContent ||
+                !fileContent.Contains(pathToPatch))
+            {
+                continue;
+            }
+
+            // If file content contains the patch path, add it to the list 
+            ret.Add(absolutePath);
+        }
+
+        if (ret.Count > 0)
+        {
+            return ret;
+        }
+
+        // no files found in mod folder - now get all .xl files in base game installation
+        if (_settingsManager.GetRED4GameModDir() is not string redModDir || string.IsNullOrEmpty(redModDir) ||
+            !Directory.Exists(redModDir))
+        {
+            return [];
+        }
+
+        new DirectoryInfo(redModDir).EnumerateFiles().Where(f => f.Extension == ".xl").ToList().ForEach(fileInfo =>
+        {
+            var absolutePath = fileInfo.FullName;
+            if (!File.Exists(absolutePath) || File.ReadAllText(absolutePath) is not string fileContent ||
+                !fileContent.Contains(pathToPatch))
+
+            {
+                return;
+            }
+
+            ret.Add(absolutePath);
+        });
+
+        if (_settingsManager.GetRED4GameLegacyModDir() is not string modDir || string.IsNullOrEmpty(modDir) ||
+            !Directory.Exists(modDir))
+        {
+            return ret;
+        }
+
+        new DirectoryInfo(modDir).EnumerateFiles().Where(f => f.Extension == ".xl").ToList().ForEach(fileInfo =>
+        {
+            var absolutePath = fileInfo.FullName;
+            if (!File.Exists(absolutePath) || File.ReadAllText(absolutePath) is not string fileContent ||
+                !fileContent.Contains(pathToPatch))
+
+            {
+                return;
+            }
+
+            ret.Add(absolutePath);
+        });
+
+
+        return ret;
+    }
+
+    public List<string> FindPatchMeshPaths(string pathToPatch)
+    {
+        List<string> ret = [];
+
+        var patchFiles = FindPatchFilePaths(pathToPatch);
+
+        foreach (var patchFile in patchFiles)
+        {
+            if (File.ReadAllText(patchFile) is not string yamlText)
+            {
+                continue;
+            }
+
+            if (ArchiveXlHelper.YamlToObject(yamlText) is not Dictionary<object, object> yamlObject ||
+                yamlObject.TryGetValue("resource", out var resource) == false ||
+                resource is not Dictionary<object, object> r ||
+                r.TryGetValue("patch", out var patchValue) != true ||
+                patchValue is not Dictionary<object, object> patchDict)
+            {
+                continue;
+            }
+
+            foreach (var kvp in patchDict)
+            {
+                if (kvp.Key is not string patchMesh || kvp.Value is not List<object> patchedMeshes ||
+                    patchedMeshes.OfType<string>().All(path => path != pathToPatch))
+                {
+                    continue;
+                }
+
+                ret.Add(patchMesh);
+            }
+        }
+
+
+        return ret;
+    }
+
+    public void ClearMeshMaterials(CR2WFile? meshCr2W)
+    {
+        if (meshCr2W?.RootChunk is not CMesh mesh)
         {
             return;
         }
 
-        var sourceCr2W = GetCr2W(sourcePath);
-        var destCr2W = GetCr2W(destPath);
+        mesh.Appearances.Clear();
+        mesh.MaterialEntries.Clear();
+        mesh.LocalMaterialBuffer.Materials.Clear();
+        mesh.ExternalMaterials.Clear();
+        mesh.PreloadExternalMaterials.Clear();
+        mesh.PreloadLocalMaterialInstances.Clear();
+    }
 
+    public bool AppendMeshMaterials(CR2WFile? sourceCr2W, CR2WFile? destCr2W, string sourcePath = "",
+        string destPath = "")
+    {
+        var wasChanged = false;
+        
         if (sourceCr2W is null)
         {
             _loggerService.Error($"source file {sourcePath} not found. Can't copy...");
-            return;
+            return wasChanged;
         }
 
         if (destCr2W is null)
         {
             _loggerService.Error($"target file {destCr2W} not found. Can't copy...");
-            return;
+            return wasChanged;
         }
 
         if (sourceCr2W.RootChunk is not CMesh sourceMesh || destCr2W.RootChunk is not CMesh destMesh)
         {
             _loggerService.Error($"source file {sourcePath} or target file {destPath} is not a valid mesh.");
-            return;
+            return wasChanged;
         }
 
-        destMesh.Appearances = sourceMesh.Appearances;
-        destMesh.MaterialEntries = sourceMesh.MaterialEntries;
-        destMesh.LocalMaterialBuffer = sourceMesh.LocalMaterialBuffer;
-        destMesh.ExternalMaterials = sourceMesh.ExternalMaterials;
-        destMesh.PreloadExternalMaterials = sourceMesh.PreloadExternalMaterials;
-        destMesh.PreloadLocalMaterialInstances = sourceMesh.PreloadLocalMaterialInstances;
 
+        // ReSharper disable ForCanBeConvertedToForeach
+        CArray<CHandle<meshMeshAppearance>> appearances = [];
+        for (var i = 0; i < destMesh.Appearances.Count; i++)
+        {
+            appearances.Add(destMesh.Appearances[i]);
+        }
+
+        for (var i = 0; i < sourceMesh.Appearances.Count; i++)
+        {
+            appearances.Add(sourceMesh.Appearances[i]);
+        }
+
+        wasChanged = wasChanged || destMesh.Appearances.Count != appearances.Count;
+        destMesh.Appearances = appearances;
+
+        CArray<CMeshMaterialEntry> materialEntries = [];
+        for (var i = 0; i < destMesh.MaterialEntries.Count; i++)
+        {
+            materialEntries.Add(destMesh.MaterialEntries[i]);
+        }
+
+        for (var i = 0; i < sourceMesh.MaterialEntries.Count; i++)
+        {
+            materialEntries.Add(sourceMesh.MaterialEntries[i]);
+        }
+
+        wasChanged = wasChanged || destMesh.MaterialEntries.Count != materialEntries.Count;
+        destMesh.MaterialEntries = materialEntries;
+
+        CArray<IMaterial> localMaterials = [];
+        for (var i = 0; i < destMesh.LocalMaterialBuffer.Materials.Count; i++)
+        {
+            localMaterials.Add(destMesh.LocalMaterialBuffer.Materials[i]);
+        }
+
+        for (var i = 0; i < sourceMesh.LocalMaterialBuffer.Materials.Count; i++)
+        {
+            localMaterials.Add(sourceMesh.LocalMaterialBuffer.Materials[i]);
+        }
+
+        wasChanged = wasChanged || destMesh.LocalMaterialBuffer.Materials.Count != localMaterials.Count;
+        destMesh.LocalMaterialBuffer.Materials = localMaterials;
+
+        CArray<CResourceAsyncReference<IMaterial>> externalMaterials = [];
+        for (var i = 0; i < destMesh.ExternalMaterials.Count; i++)
+        {
+            externalMaterials.Add(destMesh.ExternalMaterials[i]);
+        }
+
+        for (var i = 0; i < sourceMesh.ExternalMaterials.Count; i++)
+        {
+            externalMaterials.Add(sourceMesh.ExternalMaterials[i]);
+        }
+
+        wasChanged = wasChanged || destMesh.ExternalMaterials.Count != externalMaterials.Count;
+        destMesh.ExternalMaterials = externalMaterials;
+
+        CArray<CResourceReference<IMaterial>> preloadExternalMaterials = [];
+        for (var i = 0; i < destMesh.PreloadExternalMaterials.Count; i++)
+        {
+            preloadExternalMaterials.Add(destMesh.PreloadExternalMaterials[i]);
+        }
+
+        for (var i = 0; i < sourceMesh.PreloadExternalMaterials.Count; i++)
+        {
+            preloadExternalMaterials.Add(sourceMesh.PreloadExternalMaterials[i]);
+        }
+
+        wasChanged = wasChanged || destMesh.PreloadExternalMaterials.Count != preloadExternalMaterials.Count;
+        destMesh.PreloadExternalMaterials = preloadExternalMaterials;
+
+
+        CArray<CHandle<IMaterial>> preloadLocalMaterialInstances = [];
+        for (var i = 0; i < destMesh.PreloadLocalMaterialInstances.Count; i++)
+        {
+            preloadLocalMaterialInstances.Add(destMesh.PreloadLocalMaterialInstances[i]);
+        }
+
+        for (var i = 0; i < sourceMesh.PreloadLocalMaterialInstances.Count; i++)
+        {
+            preloadLocalMaterialInstances.Add(sourceMesh.PreloadLocalMaterialInstances[i]);
+        }
+
+        wasChanged = wasChanged || destMesh.PreloadLocalMaterialInstances.Count != preloadLocalMaterialInstances.Count;
+        destMesh.PreloadLocalMaterialInstances = preloadLocalMaterialInstances;
+
+        // ReSharper restore ForCanBeConvertedToForeach
+
+        return wasChanged;
+    }
+
+    public bool CopyMeshMaterials(string sourcePath, string destPath)
+    {
+        if (_projectManager.ActiveProject is not { } activeProject)
+        {
+            return false;
+        }
+
+        List<string> meshPaths = [sourcePath];
+        if (sourcePath == SelectDropdownEntryDialogViewModel.ButtonClickResult)
+        {
+            meshPaths = FindPatchMeshPaths(activeProject.GetRelativePath(destPath));
+        }
+
+        var destCr2W = GetCr2W(destPath) ??
+                       throw new InvalidDataException($"target file {destPath} not found. Can't copy...");
+
+
+        if (destCr2W.RootChunk is not CMesh destMesh)
+        {
+            throw new InvalidDataException($"target file {destPath} is not a valid mesh.");
+        }
+
+        ClearMeshMaterials(destCr2W);
+
+        if (!meshPaths.Select(sourceMeshPath =>
+                AppendMeshMaterials(GetCr2W(sourceMeshPath), destCr2W, sourcePath, destPath)).Contains(true))
+        {
+            return false;
+        }
+
+        if (meshPaths.Count == 1)
+        {
+            _loggerService.Success($"Copied materials from {meshPaths}");
+        }
+        else
+        {
+            _loggerService.Success($"Copied materials from the following files: \n\t {string.Join("\n\t", meshPaths)}");
+        }
         _cr2WTools.WriteCr2W(destCr2W, destPath);
+        return true;
     }
 
 

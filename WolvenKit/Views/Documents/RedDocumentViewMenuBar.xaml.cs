@@ -15,6 +15,7 @@ using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Scripting;
 using WolvenKit.App.ViewModels.Shell;
@@ -281,15 +282,29 @@ namespace WolvenKit.Views.Documents
                 .ToList();
 
             if (Interactions.AskForDropdownOption((files, "Select .mesh file", "Select .mesh file",
-                    WikiLinks.MeshMaterials, true)) is not string meshFileName || string.IsNullOrEmpty(meshFileName))
+                    WikiLinks.MeshMaterials, true, "From ArchiveXL patch mesh")) is not string meshFileName ||
+                string.IsNullOrEmpty(meshFileName))
             {
                 return;
             }
 
             try
             {
-                _documentTools.CopyMeshMaterials(meshFileName, ViewModel.FilePath);
-                ViewModel.CurrentTab?.Parent.Reload(true);
+                // Only reload if we wrote anything
+                if (_documentTools.CopyMeshMaterials(meshFileName, ViewModel.FilePath))
+                {
+                    ViewModel.CurrentTab?.Parent.Reload(true);
+                }
+                else if (meshFileName == SelectDropdownEntryDialogViewModel.ButtonClickResult)
+                {
+                    _loggerService.Error(
+                        "Failed to copy mesh materials from patch mesh. Try picking a mesh, or adding the file path directly.");
+                }
+                else
+                {
+                    _loggerService.Error(
+                        "Failed to copy mesh materials: No mesh(es) found, or selected mesh files don't contain any material information.");
+                }
             }
             catch (Exception err)
             {

@@ -49,6 +49,20 @@
                                              Converter={StaticResource BooleanToVisibilityConverter}}"
                         Text="{Binding Text}" />
 
+                    <Button
+                        x:Name="ClickButton"
+                        Width="{DynamicResource WolvenKitDialogWidthSmall}"
+                        Height="Auto"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        Padding="{DynamicResource WolvenKitMarginTiny}"
+                        HorizontalAlignment="Stretch"
+                        Background="{StaticResource BackgroundColor_Button_Active}"
+                        Foreground="White"
+                        Style="{DynamicResource ModernButtonStyle}"
+                        Visibility="{Binding ShowButton,
+                                             Converter={StaticResource StringToVisibilityConverter}}"
+                        Content="{Binding ButtonText}"
+                        Click="OnButtonClick" />
 
                     <editors:FilterableDropdownMenu
                         x:Name="Dropdown"

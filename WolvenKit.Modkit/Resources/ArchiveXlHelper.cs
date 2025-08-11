@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 using WolvenKit.RED4.Types;
+using YamlDotNet.Serialization;
 
 namespace WolvenKit.Modkit.Resources;
 
