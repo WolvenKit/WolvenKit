@@ -8,7 +8,7 @@
     FocusManager.FocusedElement="{Binding ElementName=FilterTextBox}">
     <Grid>
         <Grid.Resources>
-            <ResourceDictionary xmlns:editors="clr-namespace:WolvenKit.Views.Editors">
+            <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
                     <hc:ThemeResources />
                     <hc:Theme />
@@ -25,7 +25,21 @@
         </Grid.Resources>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="{StaticResource WolvenKitDialogLabelColumnWidthMedium}" />
+            <ColumnDefinition>
+                <ColumnDefinition.Style>
+                    <Style TargetType="ColumnDefinition">
+                        <Setter Property="Width" Value="0" />
+                        <Style.Triggers>
+                            <DataTrigger
+                                Binding="{Binding IsShowLabel}"
+                                Value="True">
+                                <Setter Property="Width" Value="{StaticResource WolvenKitDialogLabelColumnWidthMedium}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ColumnDefinition.Style>
+            </ColumnDefinition>
+
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
@@ -79,12 +93,12 @@
                 SelectedValue="{Binding SelectedOption}" />
         </StackPanel>
 
-
         <!-- Original layout elements (with x:Name for toggling) -->
         <TextBox
-            x:Name="originalFilterTextBox"
+            x:Name="filterTextBox"
             Grid.Row="0"
             Grid.Column="1"
+            Grid.ColumnSpan="2"
             Margin="0"
             Foreground="{StaticResource ForegroundColor_Grey_Dark}"
             Visibility="{Binding IsInline,
@@ -95,19 +109,20 @@
                            UpdateSourceTrigger=PropertyChanged}" />
 
         <TextBlock
-            x:Name="originalPlaceholder"
+            x:Name="placeholder"
             Grid.Row="0"
             Grid.Column="1"
             Style="{StaticResource WolvenkitPlaceholderStyle}"
-            Visibility="{Binding ElementName=originalFilterTextBox,
+            Visibility="{Binding ElementName=filterTextBox,
                                  Path=Text.Length,
                                  Converter={StaticResource IntToVisibilityConverterInverted}}"
             Text="Filter" />
 
         <ComboBox
-            x:Name="originalDropdown"
+            x:Name="dropdown"
             Grid.Row="2"
             Grid.Column="1"
+            Grid.ColumnSpan="2"
             Height="{StaticResource WolvenKitTabHeight}"
             Visibility="{Binding IsInline,
                                  Converter={StaticResource InvertBooleanVisibilityConverter}}"

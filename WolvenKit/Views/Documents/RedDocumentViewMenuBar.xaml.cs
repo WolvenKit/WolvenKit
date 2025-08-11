@@ -279,7 +279,7 @@ namespace WolvenKit.Views.Documents
                 .Where(f => f.EndsWith(".mesh") && f != ViewModel.FilePath)
                 .ToList();
 
-            if (Interactions.AskForDropdownOption((files, "Select .mesh file", "Select .mesh file or pick by hand",
+            if (Interactions.AskForDropdownOption((files, "Select .mesh file", "Select .mesh file",
                     true)) is not string meshFileName || string.IsNullOrEmpty(meshFileName))
             {
                 return;

@@ -1,16 +1,9 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reactive.Disposables;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using ReactiveUI;
-using Splat;
-using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
-using WolvenKit.RED4.Types;
 using Window = System.Windows.Window;
 
 namespace WolvenKit.Views.Dialogs.Windows
@@ -30,7 +23,11 @@ namespace WolvenKit.Views.Dialogs.Windows
             {
                 this.Bind(ViewModel,
                         x => x.SelectedOption,
-                        x => x.Dropdown.SelectedItem)
+                        x => x.Dropdown.SelectedOption)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        x => x.OptionsDict,
+                        x => x.Dropdown.Options)
                     .DisposeWith(disposables);
             });
         }

@@ -11,6 +11,7 @@ public partial class SelectDropdownEntryDialogViewModel : DialogViewModel
     [ObservableProperty] private bool _showText;
     [ObservableProperty] private bool _showInputBar;
     [ObservableProperty] private List<string>? _options;
+    [ObservableProperty] private Dictionary<string, string>? _optionsDict;
     [ObservableProperty] private string _selectedOption;
 
     public SelectDropdownEntryDialogViewModel(List<string> list, string title = "Pick one!", string text = "",
@@ -29,5 +30,7 @@ public partial class SelectDropdownEntryDialogViewModel : DialogViewModel
         Title = title;
         Text = text;
         ShowText = !string.IsNullOrEmpty(text);
+
+        OptionsDict = list.ToDictionary(a => a, a => a);
     }
 }

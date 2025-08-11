@@ -4,12 +4,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
     Title="{Binding Title}"
     MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
     MinHeight="{DynamicResource WolvenKitDialogHeightSmall}"
     SizeToContent="WidthAndHeight"
     DataContext="{Binding RelativeSource={RelativeSource Self},
                           Path=ViewModel}"
+    FocusManager.FocusedElement="{Binding ElementName=TextBox}"
     WindowStartupLocation="CenterOwner">
     <Grid
         HorizontalAlignment="Stretch"
@@ -46,15 +48,25 @@
                         Text="{Binding Text}" />
 
 
-                    <ComboBox
+                    <editors:FilterableDropdownMenu
                         x:Name="Dropdown"
-                        Height="{StaticResource WolvenKitTabHeight}"
                         Margin="{DynamicResource WolvenKitMarginBottom}"
-                        MinWidth="150"
-                        ItemsSource="{Binding Options,
-                                              Mode=OneWay}"
-                        KeyboardNavigation.TabIndex="2"
-                        SelectedValue="{Binding SelectedOption}" />
+                        Options="{Binding Options,
+                                          UpdateSourceTrigger=PropertyChanged}"
+                        IsInline="False"
+                        SelectedOption="{Binding SelectedOption}"
+                        KeyboardNavigation.TabIndex="1" />
+
+                    <!-- <ComboBox -->
+                    <!-- x:Name="Dropdown2" -->
+                    <!-- Height="{StaticResource WolvenKitTabHeight}" -->
+                    <!-- MinWidth="150" -->
+                    <!-- Margin="{DynamicResource WolvenKitMarginBottom}" -->
+                    <!-- ItemsSource="{Binding Options, -->
+                    <!-- Mode=OneWay}" -->
+                    <!-- KeyboardNavigation.TabIndex="2" -->
+                    <!-- SelectedValue="{Binding SelectedOption}" /> -->
+
 
                     <TextBlock
                         Margin="{DynamicResource WolvenKitMarginSmallBottom}"
@@ -70,7 +82,8 @@
                         FontSize="{DynamicResource WolvenKitFontBody}"
                         Visibility="{Binding ShowInputBar,
                                              Converter={StaticResource BooleanToVisibilityConverter}}"
-                        Text="{Binding SelectedOption}" />
+                        Text="{Binding SelectedOption}"
+                        KeyboardNavigation.TabIndex="0" />
 
                 </StackPanel>
             </syncfusion:WizardPage>
