@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json;
-using HelixToolkit.SharpDX.Core;
 using HelixToolkit.SharpDX.Core;
 using Splat;
 using WolvenKit.App.Models.ProjectManagement.Project;
