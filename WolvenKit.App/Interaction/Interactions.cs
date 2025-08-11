@@ -156,6 +156,10 @@ public static class Interactions
     public static Func<Cp77Project, AddInkatlasDialogViewModel> ShowGenerateInkatlasDialogue { get; set; } =
         _ => throw new NotImplementedException();
 
+    public static Func<(Dictionary<string, bool> checklistOptions, string fileName, string title, string text),
+            ShowChecklistDialogViewModel>
+        ShowChecklistDialogue { get; set; } = _ => throw new NotImplementedException();
+    
     public static Func<Cp77Project, AddQuestDialogViewModel> ShowGenerateQuestDialogue { get; set; } =
         project => new AddQuestDialogViewModel(project);
 }

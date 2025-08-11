@@ -61,14 +61,13 @@ namespace WolvenKit.Views.Documents
             _progressService = Locator.Current.GetService<IProgressService<double>>()!;
             _projectExplorer = Locator.Current.GetService<ProjectExplorerViewModel>()!;
             _projectResourceTools = Locator.Current.GetService<ProjectResourceTools>()!;
-            _documentTools = Locator.Current.GetService<DocumentTools>()!;
             _cr2WTools = Locator.Current.GetService<Cr2WTools>()!;
 
             _appViewModel = Locator.Current.GetService<AppViewModel>()!;
 
             // Enforce instance generation and service injection. One would assume that registering a singleton
             // is enough. One would be wrong.
-            Locator.Current.GetService<DocumentTools>();
+            _documentTools = Locator.Current.GetService<DocumentTools>()!;
 
             InitializeComponent();
 
@@ -78,6 +77,7 @@ namespace WolvenKit.Views.Documents
                 _settingsManager,
                 _modifierStateService,
                 _projectManager,
+                _documentTools,
                 Locator.Current.GetService<CRUIDService>()!) { CurrentTab = _currentTab };
             ViewModel = DataContext as RedDocumentViewToolbarModel;
 
@@ -263,31 +263,41 @@ namespace WolvenKit.Views.Documents
 
         private void OnUnDynamifyMaterialsClick(object _, RoutedEventArgs e)
         {
-            if (ViewModel?.RootChunk is not ChunkViewModel cvm || cvm.ResolvedData is not CMesh mesh)
+            if (ViewModel?.RootChunk is not { ResolvedData: CMesh mesh } cvm ||
+                cvm.GetPropertyChild("appearances") is not ChunkViewModel appearances)
             {
                 return;
             }
 
             cvm.ConvertPreloadMaterialsCommand.Execute(null);
 
-            var appearancesByName = cvm.UnDynamifyAppearances();
-            if (appearancesByName.Count == 0)
+            appearances.CalculatePropertiesRecursive();
+
+            var templatesAndValues = ArchiveXlHelper.GetMaterialSubstitutionMap(mesh.Appearances);
+
+            // nothing to do here
+            if (templatesAndValues.Count == 0)
             {
                 return;
             }
 
+            var expandedData = ArchiveXlHelper.ExpandAppearanceTemplate(mesh.Appearances);
+            appearances.Data = ArchiveXlHelper.UnDynamifyChunkNames(expandedData);
+
+            appearances.RecalculateProperties();
+
             cvm.GetPropertyChild("materials")?.CalculateProperties();
             cvm.GetPropertyChild("localMaterialBuffer", "materials")?.CalculateProperties();
 
-            foreach (var (matName, resolvedMatNames) in appearancesByName)
+            // iterate over dictionary and create new materials
+            foreach (var (matName, resolvedMatNames) in templatesAndValues)
             {
                 var material = mesh.MaterialEntries.FirstOrDefault(m => m.Name == $"@{matName}");
                 if (material is null || mesh.LocalMaterialBuffer.Materials.Count < material.Index)
                 {
-                    _loggerService.Warning($"Failed to resolve dynamic material {matName}");
+                    _loggerService.Warning($"Can't un-dynamify material: Failed to resolve {matName}");
                     continue;
                 }
-
 
                 var matInstance = (CMaterialInstance)mesh.LocalMaterialBuffer.Materials[material.Index];
                 var baseMaterialPath = matInstance.BaseMaterial.DepotPath.GetResolvedText() ?? "";
@@ -302,7 +312,6 @@ namespace WolvenKit.Views.Documents
                     {
                         Name = newMatName, Index = maxIndex, IsLocalInstance = material.IsLocalInstance
                     });
-
 
                     var newMaterialInstance = new CMaterialInstance()
                     {
@@ -352,16 +361,10 @@ namespace WolvenKit.Views.Documents
             cvm.DeleteUnusedMaterialsCommand.Execute(true);
             cvm.Tab?.Parent.SetIsDirty(true);
 
+            return;
 
-            string ReplaceMaterialPath(ResourcePath? depotPath, string newMatName)
-            {
-                if (depotPath?.GetResolvedText() is not string s)
-                {
-                    return "";
-                }
-
-                return s.Replace("{material}", newMatName).Replace("*", "");
-            }
+            static string ReplaceMaterialPath(ResourcePath? depotPath, string newMatName) =>
+                (depotPath?.GetResolvedText() ?? "").Replace("{material}", newMatName).Replace("*", "");
         }
 
         private void OnConvertHairToCCXLMaterials(object _, RoutedEventArgs e)

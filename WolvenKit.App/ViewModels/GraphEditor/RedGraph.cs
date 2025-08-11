@@ -108,6 +108,11 @@ public partial class RedGraph : IDisposable
             {
                 ConnectScene((SceneOutputConnectorViewModel)output1, (SceneInputConnectorViewModel)input1);
             }
+
+            var sourceNode = Nodes.FirstOrDefault(n => n.UniqueId == output1.OwnerId);
+            sourceNode?.UpdateSocketVisibility();
+            var targetNode = Nodes.FirstOrDefault(n => n.UniqueId == input1.OwnerId);
+            targetNode?.UpdateSocketVisibility();
         }
 
         if (PendingConnection is { Source: InputConnectorViewModel input2, Target: OutputConnectorViewModel output2 })
@@ -121,6 +126,11 @@ public partial class RedGraph : IDisposable
             {
                 ConnectScene((SceneOutputConnectorViewModel)output2, (SceneInputConnectorViewModel)input2);
             }
+
+            var sourceNode = Nodes.FirstOrDefault(n => n.UniqueId == output2.OwnerId);
+            sourceNode?.UpdateSocketVisibility();
+            var targetNode = Nodes.FirstOrDefault(n => n.UniqueId == input2.OwnerId);
+            targetNode?.UpdateSocketVisibility();
         }
     }
 
@@ -143,6 +153,8 @@ public partial class RedGraph : IDisposable
                     }
                 }
             }
+            var sourceNode = Nodes.FirstOrDefault(n => n.UniqueId == outputConnector.OwnerId);
+            sourceNode?.UpdateSocketVisibility();
         }
 
         if (baseConnectorViewModel is InputConnectorViewModel inputConnector)
@@ -162,6 +174,8 @@ public partial class RedGraph : IDisposable
                     }
                 }
             }
+            var targetNode = Nodes.FirstOrDefault(n => n.UniqueId == inputConnector.OwnerId);
+            targetNode?.UpdateSocketVisibility();
         }
     }
 
@@ -347,44 +361,38 @@ public partial class RedGraph : IDisposable
                 var statePath = Path.Combine(proj.ProjectDirectory, "GraphEditorStates", DocumentViewModel.RelativePath + StateParents + ".json");
                 if (File.Exists(statePath))
                 {
-                    Dictionary<uint, System.Windows.Point> nodesLocs = new();
-
                     var jsonData = JObject.Parse(File.ReadAllText(statePath));
                     var nodesArray = jsonData.SelectTokens("Nodes.[*]");
-                    foreach (var node in nodesArray)
-                    {
-                        var nodeID = node.SelectToken("NodeID") as JValue;
-                        var nodeX = node.SelectToken("X") as JValue;
-                        var nodeY = node.SelectToken("Y") as JValue;
 
-                        if (nodeID != null &&  nodeX != null && nodeY != null)
+                    foreach (var nodeToken in nodesArray)
+                    {
+                        var nodeIDValue = nodeToken.SelectToken("NodeID") as JValue;
+                        if (nodeIDValue == null) continue;
+
+                        var nodeId = nodeIDValue.ToObject<uint>();
+                        var targetNode = Nodes.FirstOrDefault(n => n.UniqueId == nodeId);
+                        if (targetNode == null) continue;
+
+                        // Load Location
+                        var nodeX = nodeToken.SelectToken("X") as JValue;
+                        var nodeY = nodeToken.SelectToken("Y") as JValue;
+                        if (nodeX != null && nodeY != null)
                         {
-                            nodesLocs.TryAdd(
-                                nodeID.ToObject<uint>(),
-                                new System.Windows.Point(
-                                    nodeX.ToObject<double>(),
-                                    nodeY.ToObject<double>()
-                                )
+                            targetNode.Location = new System.Windows.Point(
+                                nodeX.ToObject<double>(),
+                                nodeY.ToObject<double>()
                             );
                         }
+
+                        // Load ShowUnusedSockets state, defaulting to true if not present
+                        var showUnusedSocketsValue = nodeToken.SelectToken("ShowUnusedSockets") as JValue;
+                        targetNode.ShowUnusedSockets = showUnusedSocketsValue?.ToObject<bool>() ?? true;
                     }
 
+                    // Update socket visibility after all nodes and connections are loaded
                     foreach (var node in Nodes)
                     {
-                        uint nodeID = 0;
-                        if (node.Data is scnSceneGraphNode n)
-                        {
-                            nodeID = n.NodeId.Id;
-                        }
-                        if (node.Data is questNodeDefinition q)
-                        {
-                            nodeID = q.Id;
-                        }
-
-                        if (nodesLocs.ContainsKey(nodeID))
-                        {
-                            node.Location = nodesLocs[nodeID];
-                        }
+                        node.UpdateSocketVisibility();
                     }
 
                     if (Editor != null)
@@ -408,6 +416,11 @@ public partial class RedGraph : IDisposable
         {
             var rect = ArrangeNodes();
             Editor?.FitToScreen(rect);
+        }
+
+        foreach (var node in Nodes)
+        {
+            node.IsInitialLoad = false;
         }
 
         _allowGraphSave = true;
@@ -454,7 +467,8 @@ public partial class RedGraph : IDisposable
                     JObject newPerfSet = new(
                         new JProperty("NodeID", nodeID),
                         new JProperty("X", node.Location.X),
-                        new JProperty("Y", node.Location.Y)
+                        new JProperty("Y", node.Location.Y),
+                        new JProperty("ShowUnusedSockets", node.ShowUnusedSockets)
                     );
 
                     jNodes.Add(newPerfSet);

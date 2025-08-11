@@ -402,6 +402,13 @@ public partial class GraphEditorView : UserControl
             node.ContextMenu.Items.Add(new Separator());
         }
 
+        var toggleSocketsText = nvm.ShowUnusedSockets ? "Hide Unused Sockets" : "Show Unused Sockets";
+        node.ContextMenu.Items.Add(CreateMenuItem(toggleSocketsText, "Eye", "WolvenKitYellow",() =>
+        {
+            nvm.ShowUnusedSockets = !nvm.ShowUnusedSockets;
+            Source.GraphStateSave();
+        }));
+
         if (node.DataContext is questSceneNodeDefinitionWrapper sceneNode)
         {
             node.ContextMenu.Items.Add(CreateMenuItem(
