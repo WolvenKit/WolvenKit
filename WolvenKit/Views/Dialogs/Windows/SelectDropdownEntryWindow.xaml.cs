@@ -23,8 +23,11 @@ namespace WolvenKit.Views.Dialogs.Windows
         {
             InitializeComponent();
 
-            ViewModel = new SelectDropdownEntryDialogViewModel(options, title, text, showInputBar);
-            ViewModel.SetHelpLink(helpLink);
+            ViewModel = new SelectDropdownEntryDialogViewModel(options, title, text, showInputBar)
+            {
+                HelpLink = helpLink,
+            };
+            
             DataContext = ViewModel;
 
             Owner = Application.Current.MainWindow;
