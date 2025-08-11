@@ -976,35 +976,32 @@ public class DocumentTools
             return ret;
         }
 
+        List<string> filePaths = [];
+
         // no files found in mod folder - now get all .xl files in base game installation
-        if (_settingsManager.GetRED4GameModDir() is not string redModDir || string.IsNullOrEmpty(redModDir) ||
-            !Directory.Exists(redModDir))
+        if (_settingsManager.GetRED4GameModDir() is string redModDir && !string.IsNullOrEmpty(redModDir) &&
+            Directory.Exists(redModDir))
         {
-            return [];
+            filePaths.AddRange(new DirectoryInfo(redModDir).EnumerateFiles().Where(f => f.Extension == ".xl")
+                .Select(f => f.FullName));
         }
 
-        new DirectoryInfo(redModDir).EnumerateFiles().Where(f => f.Extension == ".xl").ToList().ForEach(fileInfo =>
+        if (_settingsManager.GetRED4GameLegacyModDir() is string modDir && !string.IsNullOrEmpty(modDir) &&
+            Directory.Exists(modDir))
         {
-            var absolutePath = fileInfo.FullName;
-            if (!File.Exists(absolutePath) || File.ReadAllText(absolutePath) is not string fileContent ||
-                !fileContent.Contains(pathToPatch))
-
-            {
-                return;
-            }
-
-            ret.Add(absolutePath);
-        });
-
-        if (_settingsManager.GetRED4GameLegacyModDir() is not string modDir || string.IsNullOrEmpty(modDir) ||
-            !Directory.Exists(modDir))
-        {
-            return ret;
+            filePaths.AddRange(new DirectoryInfo(modDir).EnumerateFiles().Where(f => f.Extension == ".xl")
+                .Select(f => f.FullName));
         }
 
-        new DirectoryInfo(modDir).EnumerateFiles().Where(f => f.Extension == ".xl").ToList().ForEach(fileInfo =>
+        if (_settingsManager.ExtraModDirPath is string extraModDir && !string.IsNullOrEmpty(extraModDir) &&
+            Directory.Exists(extraModDir))
         {
-            var absolutePath = fileInfo.FullName;
+            filePaths.AddRange(new DirectoryInfo(extraModDir).EnumerateFiles().Where(f => f.Extension == ".xl")
+                .Select(f => f.FullName));
+        }
+
+        filePaths.ForEach(absolutePath =>
+        {
             if (!File.Exists(absolutePath) || File.ReadAllText(absolutePath) is not string fileContent ||
                 !fileContent.Contains(pathToPatch))
 
