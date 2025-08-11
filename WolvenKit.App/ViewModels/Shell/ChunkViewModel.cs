@@ -1855,24 +1855,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        if (mesh.LocalMaterialBuffer?.Materials is not null)
-        {
-            mesh.LocalMaterialBuffer.Materials.Clear();
-            foreach (var t in keepLocal)
-            {
-                mesh.LocalMaterialBuffer.Materials.Add(DeleteTemplatePaths(t));
-            }
-        }
-
-        if (mesh.ExternalMaterials is not null)
-        {
-            mesh.ExternalMaterials.Clear();
-            foreach (var t in keepExternal)
-            {
-                mesh.ExternalMaterials.Add(t);
-            }
-        }
-
+        // recreate material definition
         mesh.MaterialEntries.Clear();
         var localMaterialIdx = 0;
         var externalMaterialIdx = 0;
@@ -1894,8 +1877,24 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             mesh.MaterialEntries.Add(t);
         }
 
-        rootChunk.RecalculateProperties();
-        Tab?.Parent.SetIsDirty(true);
+
+        if (mesh.LocalMaterialBuffer?.Materials is not null)
+        {
+            mesh.LocalMaterialBuffer.Materials.Clear();
+            foreach (var t in keepLocal)
+            {
+                mesh.LocalMaterialBuffer.Materials.Add(DeleteTemplatePaths(t));
+            }
+        }
+
+        if (mesh.ExternalMaterials is not null)
+        {
+            mesh.ExternalMaterials.Clear();
+            foreach (var t in keepExternal)
+            {
+                mesh.ExternalMaterials.Add(t);
+            }
+        }
 
         rootChunk.GetPropertyChild("materialEntries")?.RecalculateProperties();
 
@@ -1903,6 +1902,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         rootChunk.GetPropertyChild("localMaterialBuffer")?.RecalculateProperties();
 
         rootChunk.GetPropertyChild("externalMaterials")?.RecalculateProperties();
+
+        rootChunk.RecalculateProperties();
+        Tab?.Parent.SetIsDirty(true);
 
         if (numUnusedMaterials > 0)
         {
