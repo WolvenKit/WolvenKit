@@ -29,6 +29,7 @@ using WolvenKit.RED4.Types;
 using WolvenKit.Views.Dialogs.Windows;
 using appearanceAppearanceDefinition = WolvenKit.RED4.Types.appearanceAppearanceDefinition;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+using WikiLinks = WolvenKit.Core.WikiLinks;
 
 namespace WolvenKit.Views.Documents
 {
@@ -280,7 +281,7 @@ namespace WolvenKit.Views.Documents
                 .ToList();
 
             if (Interactions.AskForDropdownOption((files, "Select .mesh file", "Select .mesh file",
-                    true)) is not string meshFileName || string.IsNullOrEmpty(meshFileName))
+                    WikiLinks.MeshMaterials, true)) is not string meshFileName || string.IsNullOrEmpty(meshFileName))
             {
                 return;
             }

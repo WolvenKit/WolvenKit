@@ -28,12 +28,14 @@
 
         <syncfusion:WizardControl
             CancelButtonCancelsWindow="True"
-            FinishButtonClosesWindow="True">
+            FinishButtonClosesWindow="True"
+            Help="OnHelpClicked">
             <syncfusion:WizardPage
                 BackVisibility="Collapsed"
                 CancelVisibility="Visible"
                 FinishVisibility="Visible"
-                HelpVisibility="Collapsed"
+                HelpVisibility="{Binding ShowHelpButton,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                 NextVisibility="Collapsed"
                 PreviewKeyDown="WizardPage_PreviewKeyDown"
                 PageType="Exterior">
@@ -56,17 +58,6 @@
                         IsInline="False"
                         SelectedOption="{Binding SelectedOption}"
                         KeyboardNavigation.TabIndex="1" />
-
-                    <!-- <ComboBox -->
-                    <!-- x:Name="Dropdown2" -->
-                    <!-- Height="{StaticResource WolvenKitTabHeight}" -->
-                    <!-- MinWidth="150" -->
-                    <!-- Margin="{DynamicResource WolvenKitMarginBottom}" -->
-                    <!-- ItemsSource="{Binding Options, -->
-                    <!-- Mode=OneWay}" -->
-                    <!-- KeyboardNavigation.TabIndex="2" -->
-                    <!-- SelectedValue="{Binding SelectedOption}" /> -->
-
 
                     <TextBlock
                         Margin="{DynamicResource WolvenKitMarginSmallBottom}"
