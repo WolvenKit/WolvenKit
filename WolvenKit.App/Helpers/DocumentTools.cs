@@ -1116,12 +1116,28 @@ public class DocumentTools
         {
             materialEntries.Add(destMesh.MaterialEntries[i]);
         }
-
         for (var i = 0; i < sourceMesh.MaterialEntries.Count; i++)
         {
             materialEntries.Add(sourceMesh.MaterialEntries[i]);
         }
 
+        // now reindex properties
+        var localMaterialIndex = 0;
+        var externalMaterialIndex = 0;
+        for (var i = 0; i < materialEntries.Count; i++)
+        {
+            var material = materialEntries[i];
+            if (material.IsLocalInstance)
+            {
+                material.Index = (CUInt16)localMaterialIndex;
+                localMaterialIndex += 1;
+            }
+            else
+            {
+                material.Index = (CUInt16)externalMaterialIndex;
+                externalMaterialIndex += 1;
+            }
+        }
         wasChanged = wasChanged || destMesh.MaterialEntries.Count != materialEntries.Count;
         destMesh.MaterialEntries = materialEntries;
 
