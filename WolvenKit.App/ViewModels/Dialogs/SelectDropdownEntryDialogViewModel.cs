@@ -15,11 +15,21 @@ public partial class SelectDropdownEntryDialogViewModel : DialogViewModel
     [ObservableProperty] private string _selectedOption;
 
     /// <summary>
-    /// Set via <see cref="SetHelpLink(string)"/> to set the help link.
+    /// Set <see cref="HelpLink"/> to not null or empty to show the help button
     /// </summary>
     [ObservableProperty] private bool _showHelpButton = false;
 
-    public string HelpLink { get; private set; } = string.Empty;
+    private string _helpLink = string.Empty;
+
+    public string HelpLink
+    {
+        get => _helpLink;
+        set
+        {
+            _helpLink = value;
+            ShowHelpButton = !string.IsNullOrEmpty(_helpLink);
+        }
+    }
 
     public SelectDropdownEntryDialogViewModel(List<string> list, string title = "Pick one!", string text = "",
         bool showInputBar = false)
@@ -41,10 +51,4 @@ public partial class SelectDropdownEntryDialogViewModel : DialogViewModel
 
         OptionsDict = list.ToDictionary(a => a, a => a);
     }
-
-    public void SetHelpLink(string helpLink)
-    {
-        HelpLink = helpLink;
-        ShowHelpButton = !string.IsNullOrEmpty(helpLink);
-    } 
 }
