@@ -1,20 +1,30 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Input;
 using ReactiveUI;
 using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.Core;
 using Window = System.Windows.Window;
 
 namespace WolvenKit.Views.Dialogs.Windows
 {
     public partial class SelectDropdownEntryWindow : IViewFor<SelectDropdownEntryDialogViewModel>
     {
-        public SelectDropdownEntryWindow(List<string> options, string title, string text, bool showInputBar = false)
+        public SelectDropdownEntryWindow(List<string> options, string title, string text, bool showInputBar = false) :
+            this(options, title, text, "", showInputBar)
+        {
+            // Delegate constructor
+        }
+
+        public SelectDropdownEntryWindow(List<string> options, string title, string text, string helpLink = "",
+            bool showInputBar = false)
         {
             InitializeComponent();
 
             ViewModel = new SelectDropdownEntryDialogViewModel(options, title, text, showInputBar);
+            ViewModel.SetHelpLink(helpLink);
             DataContext = ViewModel;
 
             Owner = Application.Current.MainWindow;
@@ -51,6 +61,16 @@ namespace WolvenKit.Views.Dialogs.Windows
             e.Handled = true;
             DialogResult = true;
             Close();
+        }
+
+        private void OnHelpClicked(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel is not { ShowHelpButton: true, HelpLink: { } helpLink })
+            {
+                return;
+            }
+
+            Process.Start(new ProcessStartInfo { FileName = helpLink, UseShellExecute = true });
         }
     }
 }
