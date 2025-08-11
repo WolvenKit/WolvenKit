@@ -508,7 +508,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
             // we have an eye mesh with template materials - ask user for eyelash colour
             var eyelashColor = Interactions.AskForDropdownOption((materialNames, "Select eye lash colour",
-                "Pick your eye lash colour (things will break if you don't):", string.Empty, false));
+                "Pick your eye lash colour (things will break if you don't):", string.Empty, false, string.Empty));
             
             if (!string.IsNullOrEmpty(eyelashColor))
             {

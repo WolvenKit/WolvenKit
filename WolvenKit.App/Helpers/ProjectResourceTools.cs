@@ -80,18 +80,26 @@ public class ProjectResourceTools
         _crwWTools = cr2WTools;
     }
 
+    private RED4Controller? _red4Controller = null;
     private RED4Controller GetRed4Controller()
     {
+        if (_red4Controller is not null)
+        {
+            return _red4Controller;
+        }
+        
         if (GameControllerFactory.GetInstance() is GameControllerFactory factory)
         {
-            return factory.GetRed4Controller();
+            _red4Controller ??= factory.GetRed4Controller();
+            return _red4Controller;
         }
 
-        return GameControllerFactory.CreateInstance(
+        _red4Controller ??= GameControllerFactory.CreateInstance(
             _projectManager,
             Locator.Current.GetService<RED4Controller>()!,
             Locator.Current.GetService<MockGameController>()!
         ).GetRed4Controller();
+        return _red4Controller;
     }
 
     public string GetAbsolutePath(string fileName, string rootRelativeFolder = "", bool appendModderNameFromSettings = false)

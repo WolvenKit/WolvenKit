@@ -13,19 +13,21 @@ namespace WolvenKit.Views.Dialogs.Windows
     public partial class SelectDropdownEntryWindow : IViewFor<SelectDropdownEntryDialogViewModel>
     {
         public SelectDropdownEntryWindow(List<string> options, string title, string text, bool showInputBar = false) :
-            this(options, title, text, "", showInputBar)
+            this(options, title, text, "", "", showInputBar)
         {
             // Delegate constructor
         }
 
-        public SelectDropdownEntryWindow(List<string> options, string title, string text, string helpLink = "",
+        public SelectDropdownEntryWindow(List<string> options, string title, string text,
+            string helpLink = "",
+            string buttonText = "",
             bool showInputBar = false)
         {
             InitializeComponent();
 
             ViewModel = new SelectDropdownEntryDialogViewModel(options, title, text, showInputBar)
             {
-                HelpLink = helpLink,
+                HelpLink = helpLink, ButtonText = buttonText,
             };
             
             DataContext = ViewModel;
@@ -44,6 +46,7 @@ namespace WolvenKit.Views.Dialogs.Windows
                     .DisposeWith(disposables);
             });
         }
+
 
         public SelectDropdownEntryDialogViewModel ViewModel { get; set; }
         object IViewFor.ViewModel { get => ViewModel; set => ViewModel = (SelectDropdownEntryDialogViewModel)value; }
@@ -74,6 +77,19 @@ namespace WolvenKit.Views.Dialogs.Windows
             }
 
             Process.Start(new ProcessStartInfo { FileName = helpLink, UseShellExecute = true });
+        }
+
+        private void OnButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel is not { ShowButton: true } viewModel)
+            {
+                return;
+            }
+
+            viewModel.SelectedOption = SelectDropdownEntryDialogViewModel.ButtonClickResult;
+            e.Handled = true;
+            DialogResult = true;
+            Close();
         }
     }
 }
