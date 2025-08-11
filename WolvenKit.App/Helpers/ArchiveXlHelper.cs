@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using HelixToolkit.SharpDX.Core;
 using Splat;
+using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
@@ -45,7 +46,7 @@ public static partial class ArchiveXlHelper
         return openBracesCount;
     }
 
-    private static IEnumerable<string> Substitute(string depotPath)
+    private static IEnumerable<string> Substitute(string depotPath, Cp77Project? activeProject = null)
     {
         // Base case: if the string does not contain '{', return the string as the only element in a list
         if (!depotPath.Contains('{'))
@@ -64,29 +65,54 @@ public static partial class ArchiveXlHelper
             return [depotPath];
         }
 
-        // If the key is not in the dictionary, return an empty array. This will result in a warning.
+        // keep a copy of keysAndValues here - we need to modify it
+        var keysAndValues = s_keysAndValues;
+
+        // For {body}: If we get meshes from active project, we'll use these instead of substituting.
+        // The list will only hold "base_body" anyway.
+        if (key == "{body}" && depotPath.Split(key) is string[] { Length: 2 } parts &&
+            activeProject is not null)
+        {
+            if (!s_keysAndValues.TryGetValue(key, out var bodyValues))
+            {
+                bodyValues = [];
+            }
+
+            var bodiesFromProject = activeProject.ModFiles
+                .Where(f => f.StartsWith(parts[0]) && f.EndsWith(parts[1]))
+                .Select(f => f.Replace(parts[0], "").Replace(parts[1], ""))
+                .ToList();
+
+            if (bodiesFromProject.Count > 1)
+            {
+                bodiesFromProject.AddRange(bodyValues);
+                s_keysAndValues[key] = bodiesFromProject.Distinct().ToArray();
+            }
+        }
+
+        // If the key is not in the dictionary, return early. Empty array will result in a warning.
         if (!s_keysAndValues.TryGetValue(key, out var substitutionList))
         {
             return [];
         }
 
+        List<string> results = [];
         // For each value of this key, replace the key in the string with the value and recursively call the function
-        var results = new List<string>();
         foreach (var substitution in substitutionList)
         {
             var newPath = depotPath.Replace(key, substitution);
-            results.AddRange(Substitute(newPath));
+            results.AddRange(Substitute(newPath, activeProject));
         }
 
         // Return the combined results
-        return results;
+        return results.Distinct();
     }
 
     /// <summary>
     /// Returns any existing depot path, or null. If no substitution is used, it will still check for the file's existence
     /// and return null if it can't be found. 
     /// </summary>
-    public static string? GetFirstExistingPath(string? depotPath)
+    public static string? GetFirstExistingPath(string? depotPath, Cp77Project? activeProject = null)
     {
         if (depotPath is null || ProjectManager?.ActiveProject?.ModDirectory is not string pathToArchiveFolder
                               || ProjectManager?.ActiveProject?.FileDirectory is not string pathToGameFiles)
@@ -94,7 +120,7 @@ public static partial class ArchiveXlHelper
             return null;
         }
 
-        var potentialMatches = ResolveDynamicPaths(depotPath);
+        var potentialMatches = ResolveDynamicPaths(depotPath, activeProject);
         return potentialMatches.FirstOrDefault((f) =>
             File.Exists(Path.Combine(pathToArchiveFolder, f)) || File.Exists(Path.Combine(pathToGameFiles, f)));
     }
@@ -103,7 +129,7 @@ public static partial class ArchiveXlHelper
     /// Returns a list with all potential substitutions. If the path doesn't enable substitution, the list will have one element.
     /// To get _any_ existing depot path, use <see cref="GetFirstExistingPath(string?)"/> instead.
     /// </summary>
-    public static IEnumerable<string> ResolveDynamicPaths(string depotPath)
+    public static IEnumerable<string> ResolveDynamicPaths(string depotPath, Cp77Project? activeProject = null)
     {
         if (!depotPath.StartsWith('*'))
         {
@@ -127,7 +153,7 @@ public static partial class ArchiveXlHelper
             return [depotPath];
         }
 
-        return Substitute(depotPath);
+        return Substitute(depotPath, activeProject);
     }
 
     /// <summary>
