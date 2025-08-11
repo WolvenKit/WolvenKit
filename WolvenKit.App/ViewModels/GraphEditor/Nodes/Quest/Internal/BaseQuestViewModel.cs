@@ -322,9 +322,6 @@ public abstract class BaseQuestViewModel : GraphEditor.NodeViewModel, IRefreshab
         UpdateTitle();
         OnPropertyChanged(nameof(Title));
         
-        // DON'T regenerate sockets for quest nodes
-        OnPropertyChanged(nameof(Data));
-        
         // Refresh details
         RefreshDetails();
     }

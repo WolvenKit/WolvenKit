@@ -518,33 +518,27 @@ public partial class RedGraph
 
     private void RefreshCVM(questSocketDefinition[] sockets)
     {
-        if (GetQuestNodesChunkViewModel() is { } nodes)
-        {
-            // Ensure properties are up-to-date before searching
-            nodes.RecalculateProperties();
-            nodes.ForceLoadPropertiesRecursive();
 
-            var list = new List<ChunkViewModel>();
-            foreach (var property in nodes.GetAllProperties())
-            {
-                foreach (var socket in sockets)
-                {
-                    if (ReferenceEquals(property.Data, socket.Connections))
-                    {
-                        list.Add(property.Parent!);
-                    }
-                }
-            }
-            foreach (var model in list)
-            {
-                model.RecalculateProperties();
-                model.NotifyChain(nameof(model.Properties));
-            }
-
-            // Additionally refresh the root nodes collection to ensure UI picks up structural changes
-            nodes.RecalculateProperties();
-            nodes.NotifyChain(nameof(nodes.Properties));
-        }
+        // Find affected nodes and trigger property panel refresh for each
+        var affectedNodeIds = sockets
+            .Select(socket => Nodes.FirstOrDefault(n => 
+                n.Output.OfType<QuestOutputConnectorViewModel>()
+                    .Any(output => ReferenceEquals(output.Data, socket)) ||
+                n.Input.OfType<QuestInputConnectorViewModel>()
+                    .Any(input => ReferenceEquals(input.Data, socket))))
+            .Where(node => node != null)
+            .Select(node => node!.UniqueId)
+            .ToHashSet();
+        
+        // Trigger property panel refresh for affected nodes
+         foreach (var nodeId in affectedNodeIds)
+         {
+             var node = Nodes.FirstOrDefault(n => n.UniqueId == nodeId);
+             if (node != null)
+             {
+                 node.TriggerPropertyChanged(nameof(node.Data));
+             }
+         }
     }
 
     private ChunkViewModel? GetQuestNodesChunkViewModel()

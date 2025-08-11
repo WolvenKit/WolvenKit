@@ -512,18 +512,6 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>, IRefresha
         // Notify UI and mark document dirty
         NotifySocketsChanged();
         
-        // Refresh the property panel to show the new screenplay/localization entries
-        if (DocumentViewModel != null)
-        {
-            var sceneGraphTab = DocumentViewModel.TabItemViewModels
-                .OfType<SceneGraphViewModel>()
-                .FirstOrDefault();
-                
-            if (sceneGraphTab?.MainGraph is RedGraph graph)
-            {
-                graph.RefreshSceneResourcePropertiesInTabs();
-            }
-        }
     }
 
     /// <summary>
@@ -566,17 +554,5 @@ public class scnChoiceNodeWrapper : BaseSceneViewModel<scnChoiceNode>, IRefresha
 
         NotifySocketsChanged();
         
-        // Refresh the property panel to show the removed screenplay/localization entries
-        if (DocumentViewModel != null)
-        {
-            var sceneGraphTab = DocumentViewModel.TabItemViewModels
-                .OfType<SceneGraphViewModel>()
-                .FirstOrDefault();
-                
-            if (sceneGraphTab?.MainGraph is RedGraph graph)
-            {
-                graph.RefreshSceneResourcePropertiesInTabs();
-            }
-        }
-    }
+   }
 }

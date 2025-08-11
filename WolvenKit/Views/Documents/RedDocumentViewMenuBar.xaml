@@ -605,6 +605,18 @@
 
                 <MenuItem
                     Style="{StaticResource MenuItemStyle}"
+                    Header="Regenerate resolved dependencies"
+                    Command="{Binding Path=RegenerateResolvedDependenciesCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="DatabaseRefreshOutline"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem
+                    Style="{StaticResource MenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
                                          RelativeSource={RelativeSource Self},
                                          Mode=OneWay,
