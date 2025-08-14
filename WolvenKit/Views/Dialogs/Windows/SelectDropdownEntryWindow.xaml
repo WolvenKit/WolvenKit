@@ -4,12 +4,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
     Title="{Binding Title}"
     MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
     MinHeight="{DynamicResource WolvenKitDialogHeightSmall}"
     SizeToContent="WidthAndHeight"
     DataContext="{Binding RelativeSource={RelativeSource Self},
                           Path=ViewModel}"
+    FocusManager.FocusedElement="{Binding ElementName=TextBox}"
     WindowStartupLocation="CenterOwner">
     <Grid
         HorizontalAlignment="Stretch"
@@ -26,12 +28,14 @@
 
         <syncfusion:WizardControl
             CancelButtonCancelsWindow="True"
-            FinishButtonClosesWindow="True">
+            FinishButtonClosesWindow="True"
+            Help="OnHelpClicked">
             <syncfusion:WizardPage
                 BackVisibility="Collapsed"
                 CancelVisibility="Visible"
                 FinishVisibility="Visible"
-                HelpVisibility="Collapsed"
+                HelpVisibility="{Binding ShowHelpButton,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                 NextVisibility="Collapsed"
                 PreviewKeyDown="WizardPage_PreviewKeyDown"
                 PageType="Exterior">
@@ -45,14 +49,46 @@
                                              Converter={StaticResource BooleanToVisibilityConverter}}"
                         Text="{Binding Text}" />
 
-                    <ComboBox
+                    <Button
+                        x:Name="ClickButton"
+                        Width="{DynamicResource WolvenKitDialogWidthSmall}"
+                        Height="Auto"
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        Padding="{DynamicResource WolvenKitMarginTiny}"
+                        HorizontalAlignment="Stretch"
+                        Background="{StaticResource BackgroundColor_Button_Active}"
+                        Foreground="White"
+                        Style="{DynamicResource ModernButtonStyle}"
+                        Visibility="{Binding ShowButton,
+                                             Converter={StaticResource StringToVisibilityConverter}}"
+                        Content="{Binding ButtonText}"
+                        Click="OnButtonClick" />
+
+                    <editors:FilterableDropdownMenu
                         x:Name="Dropdown"
-                        Height="{StaticResource WolvenKitTabHeight}"
-                        MinWidth="150"
-                        ItemsSource="{Binding Options,
-                                              Mode=OneWay}"
-                        KeyboardNavigation.TabIndex="2"
-                        SelectedValue="{Binding SelectedOption}" />
+                        Margin="{DynamicResource WolvenKitMarginBottom}"
+                        Options="{Binding Options,
+                                          UpdateSourceTrigger=PropertyChanged}"
+                        IsInline="False"
+                        SelectedOption="{Binding SelectedOption}"
+                        KeyboardNavigation.TabIndex="1" />
+
+                    <TextBlock
+                        Margin="{DynamicResource WolvenKitMarginSmallBottom}"
+                        Padding="{DynamicResource WolvenKitMarginTinyLeft}"
+                        Visibility="{Binding ShowInputBar,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Text="... or enter by hand" />
+
+                    <TextBox
+                        x:Name="TextBox"
+                        Padding="{DynamicResource WolvenKitMarginTiny}"
+                        VerticalContentAlignment="Center"
+                        FontSize="{DynamicResource WolvenKitFontBody}"
+                        Visibility="{Binding ShowInputBar,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Text="{Binding SelectedOption}"
+                        KeyboardNavigation.TabIndex="0" />
 
                 </StackPanel>
             </syncfusion:WizardPage>

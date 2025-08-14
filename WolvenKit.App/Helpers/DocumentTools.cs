@@ -10,17 +10,42 @@ using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 using System.Threading.Tasks;
 using System;
-using System.Collections.Concurrent;
+using WolvenKit.App.Interaction;
+using WolvenKit.Modkit.RED4.Tools;
+using WolvenKit.Modkit.Scripting;
 
 
 namespace WolvenKit.App.Helpers;
 
+internal class MultilayerProperties
+{
+    public string[]? MetalLevelsIn { get; set; }
+    public string[]? MetalLevelsOut { get; set; }
+    public string[]? RoughLevelsIn { get; set; }
+    public string[]? RoughLevelsOut { get; set; }
+    public string[]? Overrides { get; set; }
+    public string[]? NormalScale { get; set; }
+
+    public void Reset()
+    {
+        MetalLevelsIn = null;
+        MetalLevelsOut = null;
+        RoughLevelsIn = null;
+        RoughLevelsOut = null;
+        Overrides = null;
+        NormalScale = null;
+    }
+}
 public class DocumentTools
 {
     private readonly ILoggerService _loggerService;
     private readonly Cr2WTools _cr2WTools;
+    private readonly MeshTools _meshTools;
     private readonly IArchiveManager _archiveManager;
     private readonly IProjectManager _projectManager;
+    private readonly ProjectResourceTools _projectResourceTools;
+    private readonly ISettingsManager _settingsManager;
+    
 
     public static Regex PlaceholderRegex { get; } = new Regex(@"^[-=_]+$");
 
@@ -36,6 +61,20 @@ public class DocumentTools
     private DateTime _lastCleanupTime = DateTime.UtcNow;
     private const int CleanupIntervalMinutes = 5; // Only cleanup every 5 minutes
 
+    public DocumentTools(ILoggerService loggerService, Cr2WTools cr2WTools, IArchiveManager archiveManager,
+        IProjectManager projectManager, MeshTools meshTools, ProjectResourceTools projectResourceTools,
+        ISettingsManager settingsManager)
+    {
+        _loggerService = loggerService;
+        _cr2WTools = cr2WTools;
+        _archiveManager = archiveManager;
+        _projectManager = projectManager;
+        _meshTools = meshTools;
+        _projectResourceTools = projectResourceTools;
+        _settingsManager = settingsManager;
+    }
+    
+    
     // Cache entry with metadata for LFU + TTL
     private class FilteredCacheEntry
     {
@@ -134,14 +173,6 @@ public class DocumentTools
         }
     }
 
-    public DocumentTools(ILoggerService loggerService, Cr2WTools cr2WTools, IArchiveManager archiveManager,
-        IProjectManager projectManager)
-    {
-        _loggerService = loggerService;
-        _cr2WTools = cr2WTools;
-        _archiveManager = archiveManager;
-        _projectManager = projectManager;
-    }
 
     #region journalFile
 
@@ -435,6 +466,48 @@ public class DocumentTools
 
     private static readonly Dictionary<string, List<string>> s_appAppearancesByPath = [];
 
+    public CR2WFile? GetCr2W(string relativePath, bool preferFromMod = true)
+    {
+        if (_projectManager.ActiveProject is not { } activeProject)
+        {
+            return null;
+        }
+
+        var absolutePath = activeProject.GetAbsolutePath(relativePath);
+
+        if (File.Exists(absolutePath))
+        {
+            return _cr2WTools.ReadCr2W(absolutePath);
+        }
+
+        CR2WFile? ret = null;
+        if (preferFromMod)
+        {
+            ret = _archiveManager.GetCR2WFile(relativePath, true);
+            if (ret is not null)
+            {
+                return ret;
+            }
+
+            if (!Interactions.ShowQuestionYesNo((
+                    "Scan mod archives now?\nDepending on how many mods you have installed, this can take a few moments. Wolvenkit will be unresponsive.",
+                    "Scan mod archives now?")))
+            {
+                return null;
+            }
+
+            _projectResourceTools.ScanModArchives();
+            ret = _archiveManager.GetCR2WFile(relativePath, true);
+            if (ret is not null)
+            {
+                return ret;
+            }
+        }
+
+        ret = _archiveManager.GetCR2WFile(relativePath, false);
+        return ret ?? _archiveManager.GetCR2WFile(relativePath);
+    }
+    
     public List<string> GetAppearanceNamesFromApp(ResourcePath relativeAppResourcePath, bool refreshCache)
     {
         if (relativeAppResourcePath.GetResolvedText() is not string relativeAppFilePath ||
@@ -453,43 +526,16 @@ public class DocumentTools
             return cachedList;
         }
 
-        // initial opening of file
-        if (!refreshCache)
-        {
-            return [];
-        }
-        
         List<string> appAppearances = [];
-
-        if (activeProject.GetAbsolutePath(relativeAppFilePath) is string absolutePath && File.Exists(absolutePath))
+        
+        // initial opening of file
+        if (!refreshCache || GetCr2W(relativeAppFilePath) is not CR2WFile cr2W)
         {
-            if (_cr2WTools.ReadCr2W(absolutePath) is CR2WFile cr2W)
-            {
-                appAppearances = GetAppearanceNamesFromApp(cr2W);
-            }
-
             s_appAppearancesByPath.Add(relativeAppFilePath, appAppearances);
             return appAppearances;
         }
 
-        var appFile = _archiveManager.GetGameFile(relativeAppResourcePath, true, false);
-        if (appFile is null)
-        {
-            s_appAppearancesByPath.Add(relativeAppFilePath, []);
-            return [];
-        }
-
-        switch (appFile.Scope)
-        {
-            case ArchiveManagerScope.Mods:
-                appAppearances = GetAppearanceNamesFromApp(_archiveManager.GetCR2WFile(appFile.FileName, true));
-                break;
-            case ArchiveManagerScope.Basegame:
-                appAppearances = GetAppearanceNamesFromApp(_archiveManager.GetCR2WFile(appFile.FileName, false));
-                break;
-            default:
-                break;
-        }
+        appAppearances = GetAppearanceNamesFromApp(cr2W);
 
         s_appAppearancesByPath.Add(relativeAppFilePath, appAppearances);
         return appAppearances;
@@ -536,7 +582,7 @@ public class DocumentTools
             return meshAppearances;
         }
 
-        var meshFile = _archiveManager.GetGameFile(relativeMeshFilePath, true, true);
+        var meshFile = _archiveManager.GetGameFile(relativeMeshFilePath);
 
         if (meshFile is null)
         {
@@ -547,7 +593,7 @@ public class DocumentTools
         switch (meshFile.Scope)
         {
             case ArchiveManagerScope.Mods:
-                meshAppearances = GetAppearanceNamesFromMesh(_archiveManager.GetCR2WFile(meshFile.FileName, true));
+                meshAppearances = GetAppearanceNamesFromMesh(_archiveManager.GetCR2WFile(meshFile.FileName));
                 break;
             case ArchiveManagerScope.Basegame:
                 meshAppearances = GetAppearanceNamesFromMesh(_archiveManager.GetCR2WFile(meshFile.FileName, false));
@@ -700,6 +746,9 @@ public class DocumentTools
     # region cvmDropdown
     private static readonly List<string> s_materialShaders = [];
 
+    private static readonly List<string> s_multilayerMaterials = [];
+    private static readonly List<string> s_microblendMaterials = [];
+
     public IEnumerable<string?> GetAllBaseMaterials(bool forceCacheRefresh)
     {
         if (forceCacheRefresh)
@@ -719,6 +768,50 @@ public class DocumentTools
             .Select(s => s.FileName).Distinct());
 
         return s_materialShaders.Order();
+    }
+
+    public IEnumerable<string?> GetAllMultilayerTemplates(bool forceCacheRefresh)
+    {
+        if (forceCacheRefresh)
+        {
+            s_multilayerMaterials.Clear();
+        }
+
+        if (s_multilayerMaterials.Count > 0)
+        {
+            return s_multilayerMaterials.Order();
+        }
+
+        s_multilayerMaterials.AddRange(
+            _archiveManager.Search(".mltemplate", ArchiveManagerScope.Everywhere).Select(s => s.FileName).Distinct());
+        s_multilayerMaterials.AddRange(_projectManager.ActiveProject?.Files.Where(f => f.EndsWith(".mltemplate")) ??
+                                       []);
+
+        return s_multilayerMaterials.Order().Distinct();
+    }
+
+    public IEnumerable<string?> GetAllMicroblends(bool forceCacheRefresh)
+    {
+        if (forceCacheRefresh)
+        {
+            s_microblendMaterials.Clear();
+        }
+
+        if (s_microblendMaterials.Count > 0)
+        {
+            return s_microblendMaterials.Order();
+        }
+
+        s_microblendMaterials.AddRange(
+            _archiveManager.Search("base\\surfaces\\microblends", ArchiveManagerScope.Everywhere)
+                .Select(s => s.FileName)
+                .Where(s => s.EndsWith(".xbm"))
+                .Distinct());
+
+        s_microblendMaterials.AddRange(_projectManager.ActiveProject?.Files
+            .Where(f => f.Contains("microblend") && f.EndsWith(".xbm")) ?? []);
+
+        return s_multilayerMaterials.Order().Distinct();
     }
 
 
@@ -788,7 +881,7 @@ public class DocumentTools
             return _cr2WTools.ReadCr2W(s);
         }
 
-        return _archiveManager.GetCR2WFile(relativePath, true, true);
+        return _archiveManager.GetCR2WFile(relativePath);
     }
 
     public List<string> GetMaterialKeys(IRedType cvmResolvedData, string materialPath, bool forceCacheRefresh)
@@ -820,16 +913,9 @@ public class DocumentTools
             List<CMaterialParameter> templateMaterials = [];
 
             var matMaterials = template.Parameters[2];
-            for (var i = 0; i < matMaterials.Count; i++)
-            {
-                if (matMaterials[i] is not IRedHandle<CMaterialParameter> entry ||
-                    entry.GetValue() is not CMaterialParameter material)
-                {
-                    continue;
-                }
-
-                templateMaterials.Add(material);
-            }
+            templateMaterials.AddRange(matMaterials.OfType<IRedHandle<CMaterialParameter>>()
+                .Select(e => e.GetValue())
+                .OfType<CMaterialParameter>());
 
             s_materialProperties.TryAdd(materialPath, templateMaterials);
 
@@ -854,5 +940,407 @@ public class DocumentTools
 
         return activeProject.Files.Where(f => f.EndsWith(fileExtension)).Select(s => s.Replace(s_archiveString, ""))
             .ToList();
+    }
+
+    /// <summary>
+    /// Returns a list of absolute paths to .xl files patching the current mesh.
+    /// If no project files are found, it will search in the base game installation folder.
+    /// </summary>
+    /// <param name="pathToPatch"></param>
+    /// <returns></returns>
+    public List<string> FindPatchFilePaths(string pathToPatch)
+    {
+        List<string> ret = [];
+
+        if (_projectManager.ActiveProject is not { } activeProject)
+        {
+            return ret;
+        }
+
+        // first, find in all .xl files in project
+        foreach (var path in CollectProjectFiles(".xl"))
+        {
+            var absolutePath = Path.Join(activeProject.FileDirectory, path);
+            if (!File.Exists(absolutePath) || File.ReadAllText(absolutePath) is not string fileContent ||
+                !fileContent.Contains(pathToPatch))
+            {
+                continue;
+            }
+
+            // If file content contains the patch path, add it to the list 
+            ret.Add(absolutePath);
+        }
+
+        if (ret.Count > 0)
+        {
+            return ret;
+        }
+
+        List<string> filePaths = [];
+
+        // no files found in mod folder - now get all .xl files in base game installation
+        if (_settingsManager.GetRED4GameModDir() is string redModDir && !string.IsNullOrEmpty(redModDir) &&
+            Directory.Exists(redModDir))
+        {
+            filePaths.AddRange(new DirectoryInfo(redModDir).EnumerateFiles().Where(f => f.Extension == ".xl")
+                .Select(f => f.FullName));
+        }
+
+        if (_settingsManager.GetRED4GameLegacyModDir() is string modDir && !string.IsNullOrEmpty(modDir) &&
+            Directory.Exists(modDir))
+        {
+            filePaths.AddRange(new DirectoryInfo(modDir).EnumerateFiles().Where(f => f.Extension == ".xl")
+                .Select(f => f.FullName));
+        }
+
+        if (_settingsManager.ExtraModDirPath is string extraModDir && !string.IsNullOrEmpty(extraModDir) &&
+            Directory.Exists(extraModDir))
+        {
+            filePaths.AddRange(new DirectoryInfo(extraModDir).EnumerateFiles().Where(f => f.Extension == ".xl")
+                .Select(f => f.FullName));
+        }
+
+        filePaths.ForEach(absolutePath =>
+        {
+            if (!File.Exists(absolutePath) || File.ReadAllText(absolutePath) is not string fileContent ||
+                !fileContent.Contains(pathToPatch))
+
+            {
+                return;
+            }
+
+            ret.Add(absolutePath);
+        });
+
+
+        return ret;
+    }
+
+    public List<string> FindPatchMeshPaths(string pathToPatch)
+    {
+        List<string> ret = [];
+
+        var patchFiles = FindPatchFilePaths(pathToPatch);
+
+        foreach (var patchFile in patchFiles)
+        {
+            if (File.ReadAllText(patchFile) is not string yamlText)
+            {
+                continue;
+            }
+
+            if (ArchiveXlHelper.YamlToObject(yamlText) is not Dictionary<object, object> yamlObject ||
+                yamlObject.TryGetValue("resource", out var resource) == false ||
+                resource is not Dictionary<object, object> r ||
+                r.TryGetValue("patch", out var patchValue) != true ||
+                patchValue is not Dictionary<object, object> patchDict)
+            {
+                continue;
+            }
+
+            foreach (var kvp in patchDict)
+            {
+                if (kvp.Key is not string patchMesh || kvp.Value is not List<object> patchedMeshes ||
+                    patchedMeshes.OfType<string>().All(path => path != pathToPatch))
+                {
+                    continue;
+                }
+
+                ret.Add(patchMesh);
+            }
+        }
+
+
+        return ret;
+    }
+
+    public void ClearMeshMaterials(CR2WFile? meshCr2W)
+    {
+        if (meshCr2W?.RootChunk is not CMesh mesh)
+        {
+            return;
+        }
+
+        mesh.Appearances.Clear();
+        mesh.MaterialEntries.Clear();
+        mesh.LocalMaterialBuffer.Materials.Clear();
+        mesh.ExternalMaterials.Clear();
+        mesh.PreloadExternalMaterials.Clear();
+        mesh.PreloadLocalMaterialInstances.Clear();
+    }
+
+    public bool AppendMeshMaterials(CR2WFile? sourceCr2W, CR2WFile? destCr2W, string sourcePath = "",
+        string destPath = "")
+    {
+        var wasChanged = false;
+        
+        if (sourceCr2W is null)
+        {
+            _loggerService.Error($"source file {sourcePath} not found. Can't copy...");
+            return wasChanged;
+        }
+
+        if (destCr2W is null)
+        {
+            _loggerService.Error($"target file {destCr2W} not found. Can't copy...");
+            return wasChanged;
+        }
+
+        if (sourceCr2W.RootChunk is not CMesh sourceMesh || destCr2W.RootChunk is not CMesh destMesh)
+        {
+            _loggerService.Error($"source file {sourcePath} or target file {destPath} is not a valid mesh.");
+            return wasChanged;
+        }
+
+
+        // ReSharper disable ForCanBeConvertedToForeach
+        CArray<CHandle<meshMeshAppearance>> appearances = [];
+        for (var i = 0; i < destMesh.Appearances.Count; i++)
+        {
+            appearances.Add(destMesh.Appearances[i]);
+        }
+
+        for (var i = 0; i < sourceMesh.Appearances.Count; i++)
+        {
+            appearances.Add(sourceMesh.Appearances[i]);
+        }
+
+        wasChanged = wasChanged || destMesh.Appearances.Count != appearances.Count;
+        destMesh.Appearances = appearances;
+
+        CArray<CMeshMaterialEntry> materialEntries = [];
+        for (var i = 0; i < destMesh.MaterialEntries.Count; i++)
+        {
+            materialEntries.Add(destMesh.MaterialEntries[i]);
+        }
+        for (var i = 0; i < sourceMesh.MaterialEntries.Count; i++)
+        {
+            materialEntries.Add(sourceMesh.MaterialEntries[i]);
+        }
+
+        // now reindex properties
+        var localMaterialIndex = 0;
+        var externalMaterialIndex = 0;
+        for (var i = 0; i < materialEntries.Count; i++)
+        {
+            var material = materialEntries[i];
+            if (material.IsLocalInstance)
+            {
+                material.Index = (CUInt16)localMaterialIndex;
+                localMaterialIndex += 1;
+            }
+            else
+            {
+                material.Index = (CUInt16)externalMaterialIndex;
+                externalMaterialIndex += 1;
+            }
+        }
+        wasChanged = wasChanged || destMesh.MaterialEntries.Count != materialEntries.Count;
+        destMesh.MaterialEntries = materialEntries;
+
+        CArray<IMaterial> localMaterials = [];
+        for (var i = 0; i < destMesh.LocalMaterialBuffer.Materials.Count; i++)
+        {
+            localMaterials.Add(destMesh.LocalMaterialBuffer.Materials[i]);
+        }
+
+        for (var i = 0; i < sourceMesh.LocalMaterialBuffer.Materials.Count; i++)
+        {
+            localMaterials.Add(sourceMesh.LocalMaterialBuffer.Materials[i]);
+        }
+
+        wasChanged = wasChanged || destMesh.LocalMaterialBuffer.Materials.Count != localMaterials.Count;
+        destMesh.LocalMaterialBuffer.Materials = localMaterials;
+
+        CArray<CResourceAsyncReference<IMaterial>> externalMaterials = [];
+        for (var i = 0; i < destMesh.ExternalMaterials.Count; i++)
+        {
+            externalMaterials.Add(destMesh.ExternalMaterials[i]);
+        }
+
+        for (var i = 0; i < sourceMesh.ExternalMaterials.Count; i++)
+        {
+            externalMaterials.Add(sourceMesh.ExternalMaterials[i]);
+        }
+
+        wasChanged = wasChanged || destMesh.ExternalMaterials.Count != externalMaterials.Count;
+        destMesh.ExternalMaterials = externalMaterials;
+
+        CArray<CResourceReference<IMaterial>> preloadExternalMaterials = [];
+        for (var i = 0; i < destMesh.PreloadExternalMaterials.Count; i++)
+        {
+            preloadExternalMaterials.Add(destMesh.PreloadExternalMaterials[i]);
+        }
+
+        for (var i = 0; i < sourceMesh.PreloadExternalMaterials.Count; i++)
+        {
+            preloadExternalMaterials.Add(sourceMesh.PreloadExternalMaterials[i]);
+        }
+
+        wasChanged = wasChanged || destMesh.PreloadExternalMaterials.Count != preloadExternalMaterials.Count;
+        destMesh.PreloadExternalMaterials = preloadExternalMaterials;
+
+
+        CArray<CHandle<IMaterial>> preloadLocalMaterialInstances = [];
+        for (var i = 0; i < destMesh.PreloadLocalMaterialInstances.Count; i++)
+        {
+            preloadLocalMaterialInstances.Add(destMesh.PreloadLocalMaterialInstances[i]);
+        }
+
+        for (var i = 0; i < sourceMesh.PreloadLocalMaterialInstances.Count; i++)
+        {
+            preloadLocalMaterialInstances.Add(sourceMesh.PreloadLocalMaterialInstances[i]);
+        }
+
+        wasChanged = wasChanged || destMesh.PreloadLocalMaterialInstances.Count != preloadLocalMaterialInstances.Count;
+        destMesh.PreloadLocalMaterialInstances = preloadLocalMaterialInstances;
+
+        // ReSharper restore ForCanBeConvertedToForeach
+
+        return wasChanged;
+    }
+
+    public bool CopyMeshMaterials(string sourcePath, string destPath)
+    {
+        if (_projectManager.ActiveProject is not { } activeProject)
+        {
+            return false;
+        }
+
+        List<string> meshPaths = [sourcePath];
+        if (sourcePath == SelectDropdownEntryDialogViewModel.ButtonClickResult)
+        {
+            meshPaths = FindPatchMeshPaths(activeProject.GetRelativePath(destPath));
+        }
+
+        var destCr2W = GetCr2W(destPath) ??
+                       throw new InvalidDataException($"target file {destPath} not found. Can't copy...");
+
+
+        if (destCr2W.RootChunk is not CMesh destMesh)
+        {
+            throw new InvalidDataException($"target file {destPath} is not a valid mesh.");
+        }
+
+        ClearMeshMaterials(destCr2W);
+
+        if (!meshPaths.Select(sourceMeshPath =>
+                AppendMeshMaterials(GetCr2W(sourceMeshPath), destCr2W, sourcePath, destPath)).Contains(true))
+        {
+            return false;
+        }
+
+        if (meshPaths.Count == 1)
+        {
+            _loggerService.Success($"Copied materials from {meshPaths}");
+        }
+        else
+        {
+            _loggerService.Success($"Copied materials from the following files: \n\t {string.Join("\n\t", meshPaths)}");
+        }
+        _cr2WTools.WriteCr2W(destCr2W, destPath);
+        return true;
+    }
+
+
+    private static readonly Dictionary<string, MultilayerProperties> s_multilayerPropertiesCache = [];
+
+    public string[] GetMultilayerProperties(string materialPath, string propertyKey, bool forceCacheRefresh)
+    {
+        if (!s_multilayerPropertiesCache.TryGetValue(materialPath, out var mlProperties))
+        {
+            if (!forceCacheRefresh)
+            {
+                return [];
+            }
+
+            mlProperties = new MultilayerProperties();
+            s_multilayerPropertiesCache.Add(materialPath, mlProperties);
+        }
+        else if (forceCacheRefresh)
+        {
+            mlProperties.Reset();
+        }
+
+        switch (propertyKey)
+        {
+            case "metalLevelsIn":
+                mlProperties.MetalLevelsIn ??=
+                    GetMultilayerPropertiesFromFile(materialPath, propertyKey);
+                return mlProperties.MetalLevelsIn;
+            case "metalLevelsOut":
+                mlProperties.MetalLevelsOut ??=
+                    GetMultilayerPropertiesFromFile(materialPath, propertyKey);
+                return mlProperties.MetalLevelsOut;
+            case "roughnessLevelsIn":
+                mlProperties.RoughLevelsIn ??=
+                    GetMultilayerPropertiesFromFile(materialPath, propertyKey);
+                return mlProperties.RoughLevelsIn;
+            case "roughnessLevelsOut":
+                mlProperties.RoughLevelsOut ??=
+                    GetMultilayerPropertiesFromFile(materialPath, propertyKey);
+                return mlProperties.RoughLevelsOut;
+            case "colorScale":
+                mlProperties.Overrides ??=
+                    GetMultilayerPropertiesFromFile(materialPath, propertyKey);
+                return mlProperties.Overrides;
+            case "normalStrength":
+                mlProperties.NormalScale ??=
+                    GetMultilayerPropertiesFromFile(materialPath, propertyKey);
+                return mlProperties.NormalScale;
+            default:
+                return [];
+        }
+    }
+
+    private string[] GetMultilayerPropertiesFromFile(string materialPath, string propertyKey)
+    {
+        if (ReadCr2WFromRelativePath(materialPath) is not { RootChunk: Multilayer_LayerTemplate template })
+        {
+            return [];
+        }
+
+        var ret = propertyKey switch
+        {
+            "metalLevelsIn" => template.Overrides.MetalLevelsIn.Select(i => i.ToString()),
+            "metalLevelsOut" => template.Overrides.MetalLevelsOut.Select(i => i.ToString()),
+            "roughnessLevelsIn" => template.Overrides.RoughLevelsIn.Select(i => i.ToString()),
+            "roughnessLevelsOut" => template.Overrides.RoughLevelsOut.Select(i => i.ToString()),
+            "colorScale" => template.Overrides.ColorScale.Select(i => i.ToString()),
+            "normalStrength" => template.Overrides.NormalStrength.Select(i => i.ToString()),
+            _ => [],
+        };
+
+
+        return ret.Where(s => !string.IsNullOrEmpty(s)).Select(s => s!).ToArray();
+    }
+
+    public List<IRedRef> CollectDependencies(IRedRef redRef)
+    {
+        if (redRef.DepotPath == ResourcePath.Empty || redRef.DepotPath.GetResolvedText() is not string depotPath)
+        {
+            return [];
+        }
+
+        if (!(depotPath.EndsWith(".app") || depotPath.EndsWith(".ent")))
+        {
+            return [redRef];
+        }
+
+        if (ReadCr2WFromRelativePath(depotPath) is not { } cr2W)
+        {
+            _loggerService.Error("failed to read cr2w file: " + depotPath);
+            return [];
+        }
+
+        var refs = cr2W.FindType(typeof(IRedRef))
+            .Select(r => r.Value)
+            .OfType<IRedRef>()
+            .Where(r => r.DepotPath != ResourcePath.Empty)
+            .SelectMany(CollectDependencies)
+            .DistinctBy(r => r.DepotPath.GetResolvedText() ?? "")
+            .ToList();
+
+        return refs;
     }
 }
