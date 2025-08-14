@@ -804,9 +804,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                                         (ResolvedData is CName && Parent?.Name == "chunkMaterials");
 
     // Used in view
-    public bool HasValue => !IsValueExtrapolated && 
-                                ((ResolvedData is TweakDBID tweakDbId && tweakDbId != TweakDBID.Empty) || 
-                                (!string.IsNullOrEmpty(Value) && Value!.ToLower() != "none"));
+    public bool HasValue => !IsValueExtrapolated &&
+                            ((ResolvedData is TweakDBID tweakDbId && tweakDbId != TweakDBID.Empty) ||
+                             (!string.IsNullOrEmpty(Value) && Value!.ToLower() != "none"));
 
     public bool IsArray => PropertyType.IsAssignableTo(typeof(IRedArray)) ||
                            (ResolvedPropertyType is not null && (
@@ -1811,11 +1811,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
 
         var localMatIdxList = mesh.MaterialEntries.Where((mE) =>
-            mE.IsLocalInstance && mE.Name.GetResolvedText() is string s && appearanceNames.Contains(s)
+            mE.IsLocalInstance && mE.Name.GetResolvedText() is string s &&
+            appearanceNames.Contains(s, StringComparer.OrdinalIgnoreCase)
         ).Select(me => (int)me.Index).ToList();
 
         var externalMatIdxList = mesh.MaterialEntries.Where((mE) =>
-            !mE.IsLocalInstance && mE.Name.GetResolvedText() is string s && appearanceNames.Contains(s)
+            !mE.IsLocalInstance && mE.Name.GetResolvedText() is string s &&
+            appearanceNames.Contains(s, StringComparer.OrdinalIgnoreCase)
         ).Select(me => (int)me.Index).ToList();
 
         var numUnusedMaterials = mesh.MaterialEntries.Count - (localMatIdxList.Count + externalMatIdxList.Count);

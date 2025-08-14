@@ -15,6 +15,7 @@ using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Scripting;
 using WolvenKit.App.ViewModels.Shell;
@@ -29,6 +30,7 @@ using WolvenKit.RED4.Types;
 using WolvenKit.Views.Dialogs.Windows;
 using appearanceAppearanceDefinition = WolvenKit.RED4.Types.appearanceAppearanceDefinition;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+using WikiLinks = WolvenKit.Core.WikiLinks;
 
 namespace WolvenKit.Views.Documents
 {
@@ -261,6 +263,55 @@ namespace WolvenKit.Views.Documents
             cvm.Tab?.Parent.SetIsDirty(true);
         }
 
+        private void OnCopyMaterialsFromMeshClick(object _, RoutedEventArgs e)
+        {
+            if (ViewModel?.CurrentTab?.Parent.IsDirty == true)
+            {
+                Interactions.ShowMessageBox("This will reload your file. Press Ctrl+S to save now.", "Save your file!");
+                return;
+            }
+
+            if (ViewModel?.RootChunk is not ChunkViewModel { ResolvedData: CMesh mesh } || ViewModel.FilePath is null ||
+                _projectManager.ActiveProject is not { } project)
+            {
+                return;
+            }
+
+            var files = project.Files
+                .Where(f => f.EndsWith(".mesh") && f != ViewModel.FilePath)
+                .ToList();
+
+            if (Interactions.AskForDropdownOption((files, "Select .mesh file", "Select .mesh file",
+                    WikiLinks.MeshMaterials, true, "From ArchiveXL patch mesh")) is not string meshFileName ||
+                string.IsNullOrEmpty(meshFileName))
+            {
+                return;
+            }
+
+            try
+            {
+                // Only reload if we wrote anything
+                if (_documentTools.CopyMeshMaterials(meshFileName, ViewModel.FilePath))
+                {
+                    ViewModel.CurrentTab?.Parent.Reload(true);
+                }
+                else if (meshFileName == SelectDropdownEntryDialogViewModel.ButtonClickResult)
+                {
+                    _loggerService.Error(
+                        "Failed to copy mesh materials from patch mesh. Try picking a mesh, or adding the file path directly.");
+                }
+                else
+                {
+                    _loggerService.Error(
+                        "Failed to copy mesh materials: No mesh(es) found, or selected mesh files don't contain any material information.");
+                }
+            }
+            catch (Exception err)
+            {
+                _loggerService.Error($"Failed to copy mesh materials: {err.Message}");
+            }
+        }
+        
         private void OnUnDynamifyMaterialsClick(object _, RoutedEventArgs e)
         {
             if (ViewModel?.RootChunk is not { ResolvedData: CMesh mesh } cvm ||
@@ -310,7 +361,7 @@ namespace WolvenKit.Views.Documents
                     maxIndex += 1;
                     mesh.MaterialEntries.Add(new CMeshMaterialEntry()
                     {
-                        Name = newMatName, Index = maxIndex, IsLocalInstance = material.IsLocalInstance
+                        Name = $"{matName}_{newMatName}", Index = maxIndex, IsLocalInstance = material.IsLocalInstance
                     });
 
                     var newMaterialInstance = new CMaterialInstance()
@@ -361,6 +412,7 @@ namespace WolvenKit.Views.Documents
             cvm.DeleteUnusedMaterialsCommand.Execute(true);
             cvm.Tab?.Parent.SetIsDirty(true);
 
+            ViewModel.DeleteUnusedMaterialsCommand?.NotifyCanExecuteChanged();
             return;
 
             static string ReplaceMaterialPath(ResourcePath? depotPath, string newMatName) =>

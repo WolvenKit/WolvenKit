@@ -29,6 +29,8 @@ namespace WolvenKit.Views.Editors
             Options = [];
 
             DataContext = this;
+
+            IsShowLabel = false;
         }
 
         #region properties
@@ -39,9 +41,27 @@ namespace WolvenKit.Views.Editors
             set => SetValue(IsInlineProperty, value);
         }
 
+        /// <summary>Identifies the <see cref="IsInline"/> dependency property.</summary>
         public static readonly DependencyProperty IsInlineProperty =
             DependencyProperty.Register(
                 nameof(IsInline),
+                typeof(bool),
+                typeof(FilterableDropdownMenu),
+                new PropertyMetadata(false, OnPropertyChangedCallback));
+
+        /// <summary>
+        /// Hide label if we don't have a text
+        /// </summary>
+        public bool IsShowLabel
+        {
+            get => (bool)GetValue(IsShowLabelProperty);
+            set => SetValue(IsShowLabelProperty, value);
+        }
+
+        /// <summary>Identifies the <see cref="IsShowLabel"/> dependency property.</summary>
+        public static readonly DependencyProperty IsShowLabelProperty =
+            DependencyProperty.Register(
+                nameof(IsShowLabel),
                 typeof(bool),
                 typeof(FilterableDropdownMenu),
                 new PropertyMetadata(false, OnPropertyChangedCallback));
@@ -52,6 +72,7 @@ namespace WolvenKit.Views.Editors
             set => SetValue(KeyProperty, value);
         }
 
+        /// <summary>Identifies the <see cref="Key"/> dependency property.</summary>
         public static readonly DependencyProperty KeyProperty =
             DependencyProperty.Register(
                 nameof(Key),
@@ -65,6 +86,7 @@ namespace WolvenKit.Views.Editors
             set => SetValue(LabelProperty, value);
         }
 
+        /// <summary>Identifies the <see cref="Label"/> dependency property.</summary>
         public static readonly DependencyProperty LabelProperty =
             DependencyProperty.Register(
                 nameof(Label),
@@ -78,6 +100,7 @@ namespace WolvenKit.Views.Editors
             set => SetValue(ControlNameProperty, value);
         }
 
+        /// <summary>Identifies the <see cref="ControlName"/> dependency property.</summary>
         public static readonly DependencyProperty ControlNameProperty =
             DependencyProperty.Register(
                 nameof(ControlName),
@@ -91,6 +114,7 @@ namespace WolvenKit.Views.Editors
             set => SetValue(FilterTextProperty, value);
         }
 
+        /// <summary>Identifies the <see cref="FilterText"/> dependency property.</summary>
         public static readonly DependencyProperty FilterTextProperty =
             DependencyProperty.Register(
                 nameof(FilterText),
@@ -105,6 +129,7 @@ namespace WolvenKit.Views.Editors
             set => SetValue(SelectedOptionProperty, value);
         }
 
+        /// <summary>Identifies the <see cref="SelectedOption"/> dependency property.</summary>
         public static readonly DependencyProperty SelectedOptionProperty =
             DependencyProperty.Register(
                 nameof(SelectedOption),
@@ -118,6 +143,7 @@ namespace WolvenKit.Views.Editors
             set => SetValue(OptionsProperty, value);
         }
 
+        /// <summary>Identifies the <see cref="Options"/> dependency property.</summary>
         public static readonly DependencyProperty OptionsProperty =
             DependencyProperty.Register(
                 nameof(Options),
@@ -132,6 +158,7 @@ namespace WolvenKit.Views.Editors
             set => SetValue(FilteredOptionsProperty, value);
         }
 
+        /// <summary>Identifies the <see cref="FilteredOptions"/> dependency property.</summary>
         public static readonly DependencyProperty FilteredOptionsProperty =
             DependencyProperty.Register(
                 nameof(FilteredOptions),
@@ -176,6 +203,9 @@ namespace WolvenKit.Views.Editors
                 case nameof(IsInline) when IsInline:
                     dropdownRow.SetCurrentValue(Grid.HeightProperty, 0.0);
                     spacerRow2.SetCurrentValue(Grid.HeightProperty, 0.0);
+                    break;
+                case nameof(Label) when !string.IsNullOrEmpty(Label):
+                    SetCurrentValue(IsShowLabelProperty, true);
                     break;
             }
 
