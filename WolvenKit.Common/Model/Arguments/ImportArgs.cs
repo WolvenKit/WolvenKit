@@ -66,7 +66,7 @@ namespace WolvenKit.Common.Model.Arguments
             get => _textureGroup;
             set => SetProperty(ref _textureGroup, value);
         }
-   
+
         [Category("Image Import Settings")]
         [Display(Name = "Raw Format")]
         public ETextureRawFormat RawFormat { get; set; } = ETextureRawFormat.TRF_TrueColor;
@@ -177,7 +177,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("Import Settings")]
         [Display(Name = "\tIgnore UV param")]
         [Description("Ignores the Garment Support UV param. Fixes a vanilla bug which creates a seam")]
-        public bool IgnoreGarmentSupportUVParam { get; set; }
+        public bool IgnoreGarmentSupportUVParam { get; set; } = true;
 
         /// <summary>
         /// Use object or node name as mesh name
@@ -305,7 +305,7 @@ namespace WolvenKit.Common.Model.Arguments
             }
 
             return string.Join(" | ", stringParts);
-        } 
+        }
     }
 
     public enum GltfImportAsFormat
