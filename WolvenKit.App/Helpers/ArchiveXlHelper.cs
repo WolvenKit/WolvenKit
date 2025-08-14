@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using HelixToolkit.SharpDX.Core;
 using Splat;
 using WolvenKit.App.Models.ProjectManagement.Project;
@@ -13,12 +14,12 @@ namespace WolvenKit.App.Helpers;
 
 /// <summary>
 /// This class will resolve ArchiveXL dynamic variant depot paths.
-/// They start with an asterisk <see cref="ArchiveXlHelper.ArchiveXLSubstitutionPrefix"/> and contain substitution wildcards (<see cref="s_keysAndValues"/>).  
+/// They start with an asterisk <see cref="ArchiveXlHelper.ArchiveXLSubstitutionPrefix"/> and contain substitution wildcards (<see cref="s_keysAndValues"/>).
 /// </summary>
 public static partial class ArchiveXlHelper
 {
     public const string ArchiveXLSubstitutionPrefix = "*";
-    
+
     private static readonly Dictionary<string, string[]> s_keysAndValues = new()
     {
         { "{camera}", ["fpp", "tpp"] },
@@ -142,7 +143,7 @@ public static partial class ArchiveXlHelper
 
     /// <summary>
     /// Returns any existing depot path, or null. If no substitution is used, it will still check for the file's existence
-    /// and return null if it can't be found. 
+    /// and return null if it can't be found.
     /// </summary>
     public static string? GetFirstExistingPath(string? depotPath, Cp77Project? activeProject = null)
     {
@@ -271,7 +272,7 @@ public static partial class ArchiveXlHelper
 
     /// <summary>
     /// Resolves dynamic appearance names and -materials.
-    /// Returns a dictionary of dynamic appearance names with all possible parameters. 
+    /// Returns a dictionary of dynamic appearance names with all possible parameters.
     /// </summary>
     /// <example><code>
     /// { "@neon", [ "red", "blue", "green" ] }
@@ -314,8 +315,8 @@ public static partial class ArchiveXlHelper
     /// @neon => [red, green, blue]
     /// </code>
     /// </example>
-    ///     /// 
-    /// 
+    ///     ///
+    ///
     public static IEnumerable<string> ResolveMaterialSubstitutions(string depotPath,
         CArray<CHandle<meshMeshAppearance>> meshAppearances)
     {
