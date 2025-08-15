@@ -158,7 +158,7 @@ public static partial class ArchiveXlHelper
 
             foreach (var path in activeProject.ModFiles)
             {
-                if (path.StartsWith(pathStart) &&
+                if (!string.IsNullOrEmpty(pathStart) && path.StartsWith(pathStart) &&
                     path.Replace(pathStart, "").Split(Path.DirectorySeparatorChar) is string[]
                     {
                         Length: > 1
