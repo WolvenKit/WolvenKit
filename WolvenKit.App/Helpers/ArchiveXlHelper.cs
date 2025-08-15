@@ -4,11 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using HelixToolkit.SharpDX.Core;
+using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 using Splat;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
+using YamlDotNet.Serialization;
 
 namespace WolvenKit.App.Helpers;
 
@@ -20,6 +23,15 @@ public static partial class ArchiveXlHelper
 {
     public const string ArchiveXLSubstitutionPrefix = "*";
 
+    private static ILoggerService? s_loggerService;
+    private static ILoggerService? LoggerService => s_loggerService ??= Locator.Current.GetService<ILoggerService>();
+
+    private static IProjectManager? s_projectManager;
+
+    private static IProjectManager? ProjectManager =>
+        s_projectManager ??= Locator.Current.GetService<IProjectManager>();
+
+
     private static readonly Dictionary<string, string[]> s_keysAndValues = new()
     {
         { "{camera}", ["fpp", "tpp"] },
@@ -29,11 +41,34 @@ public static partial class ArchiveXlHelper
         { "{body}", ["base_body"] },
     };
 
-    private static ILoggerService? s_loggerService;
-    private static ILoggerService? LoggerService => s_loggerService ??= Locator.Current.GetService<ILoggerService>();
+    /// <summary>
+    /// When parsing yaml, we need to remove prepending tags with bang, as they make the compiler throw up
+    /// </summary>
+    /// <returns></returns>
+    [GeneratedRegex(@"(?<=-)\s?\![a-z-]*(?=\s)")]
+    private static partial Regex YamlTagRegex();
 
-    private static IProjectManager? s_projectManager;
-    private static IProjectManager? ProjectManager => s_projectManager ??= Locator.Current.GetService<IProjectManager>();
+    /// <summary>
+    /// Converts a YAML string to a JSON dictionary
+    /// </summary>
+    /// <param name="yamlText">The YAML string to convert</param>
+    /// <returns>The converted JSON string</returns>
+    public static object? YamlToObject(string yamlText)
+    {
+        // remove yaml tags like !include, !append etc.
+        yamlText = YamlTagRegex().Replace(yamlText, "");
+
+        try
+        {
+            // deserialize it
+            return new Deserializer().Deserialize(yamlText);
+        }
+        catch (Exception ex)
+        {
+            LoggerService?.Error($"Failed to parse YAML: {ex.Message}");
+            return null;
+        }
+    }
 
     private static int CountBraces(string depotPath)
     {

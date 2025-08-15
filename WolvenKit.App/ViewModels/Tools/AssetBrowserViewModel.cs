@@ -73,6 +73,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private readonly ILoggerService _loggerService;
     private readonly IPluginService _pluginService;
     private readonly AppViewModel _appViewModel;
+    private readonly ProjectResourceTools _projectResourceTools;
 
     private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
 
@@ -91,7 +92,8 @@ public partial class AssetBrowserViewModel : ToolViewModel
         ISettingsManager settings,
         IProgressService<double> progressService,
         ILoggerService loggerService,
-        IPluginService pluginService) : base(ToolTitle)
+        IPluginService pluginService,
+        ProjectResourceTools projectResourceTools) : base(ToolTitle)
     {
         _projectManager = projectManager;
         _notificationService = notificationService;
@@ -102,6 +104,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         _pluginService = pluginService;
         _loggerService = loggerService;
         _appViewModel = appViewModel;
+        _projectResourceTools = projectResourceTools;
         
         ContentId = ToolContentId;
 
@@ -1118,58 +1121,6 @@ public partial class AssetBrowserViewModel : ToolViewModel
     #endregion methods
 
     // On initialization, scanArchives is read from the settings. On scan button click, we always want to scan.
-    public void ScanModArchives(bool? executeScan = null, string? archiveName = null)
-    {
-        if (_settings.CP77ExecutablePath is null)
-        {
-            return;
-        }
-
-        var scanArchives = executeScan ?? _settings.AnalyzeModArchives;
-
-        var ignoredArchives = _settings.ArchiveNamesExcludeFromScan.Split(",", StringSplitOptions.RemoveEmptyEntries)
-            .Select(name => name.Replace(".archive", "")).ToArray();
-        
-        if (archiveName is null)
-        {
-            _archiveManager.LoadModArchives(new FileInfo(_settings.CP77ExecutablePath), scanArchives, ignoredArchives);
-
-            if (Directory.Exists(_settings.ExtraModDirPath))
-            {
-                _archiveManager.LoadAdditionalModArchives(_settings.ExtraModDirPath, scanArchives, ignoredArchives);
-            }
-
-            return;
-        }
-
-        List<string> archivesToScan = [];
-        archivesToScan.AddRange(_archiveManager.GetModArchives()
-            .Where(archive => archive.Name.Contains(archiveName, StringComparison.OrdinalIgnoreCase))
-            .Select(gameArchive => gameArchive.ArchiveAbsolutePath)
-            .Where(absolutePath => !ignoredArchives.Contains(Path.GetFileName(absolutePath).Replace(".archive", ""))));
-
-        if (Directory.Exists(_settings.ExtraModDirPath))
-        {
-            archivesToScan.AddRange(Directory.GetFiles(_settings.ExtraModDirPath, archiveName, SearchOption.AllDirectories)
-                .Where(absolutePath => !ignoredArchives.Contains(Path.GetFileName(absolutePath).Replace(".archive", ""))));
-        }
-
-        if (archivesToScan.Count > 0)
-        {
-            foreach (var absoluteFilepath in archivesToScan)
-            {
-                _archiveManager.LoadModArchive(absoluteFilepath, scanArchives, !scanArchives);
-            }
-
-            return;
-        }
-
-        // If no archives match the filter, scan all archives.
-        _archiveManager.LoadModArchives(new FileInfo(_settings.CP77ExecutablePath), scanArchives, ignoredArchives);
-
-        if (Directory.Exists(_settings.ExtraModDirPath))
-        {
-            _archiveManager.LoadAdditionalModArchives(_settings.ExtraModDirPath, scanArchives);
-        }
-    }
+    public void ScanModArchives(bool? executeScan = null, string? archiveName = null) =>
+        _projectResourceTools.ScanModArchives(executeScan, archiveName);
 }
