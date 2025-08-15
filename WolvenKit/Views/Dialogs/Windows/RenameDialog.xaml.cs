@@ -20,10 +20,8 @@ namespace WolvenKit.Views.Dialogs.Windows
         /// </summary>
         public bool ShowRefactorCheckbox { get; private set; }
 
-        /// <summary>
-        /// Refactor checkbox visibility (don't show it for files in raw)
-        /// </summary>
         private bool _refactorDefaultState = true;
+        private bool _refactoringStateChanged = false;
 
         /// <summary>
         /// Preserve checkbox state
@@ -106,17 +104,6 @@ namespace WolvenKit.Views.Dialogs.Windows
             return ShowDialog();
         }
 
-        private void WizardPage_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key != Key.Enter && e.Key != Key.Escape)
-            {
-                return;
-            }
-
-            e.Handled = true;
-            CloseDialogue(e.Key == Key.Enter);
-        }
-
         private void CloseDialogue(bool result)
         {
             SaveRefactoringPreference();
@@ -150,7 +137,7 @@ namespace WolvenKit.Views.Dialogs.Windows
             textBox.CaretIndex = caretIndex;
         }
 
-        private void TextBox_OnKeyDown(object sender, KeyEventArgs e)
+        private void RenameDialogView_OnKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key is Key.Escape or Key.Enter)
             {
@@ -159,7 +146,7 @@ namespace WolvenKit.Views.Dialogs.Windows
                 return;
             }
 
-            if (!ShowRefactorCheckbox || !ModifierViewStateService.IsShiftBeingHeldOnly ||
+            if (_refactoringStateChanged || !ShowRefactorCheckbox || !ModifierViewStateService.IsShiftBeingHeldOnly ||
                 DataContext is not RenameDialogViewModel vm)
             {
                 return;
@@ -170,9 +157,9 @@ namespace WolvenKit.Views.Dialogs.Windows
         }
 
         // Releasing shift will un-invert the refactoring checkbox
-        private void TextBox_OnKeyUp(object sender, KeyEventArgs e)
+        private void RenameDialogView_OnKeyUp(object sender, KeyEventArgs e)
         {
-            if (!ShowRefactorCheckbox || e.Key is not (Key.LeftShift or Key.RightShift) ||
+            if (_refactoringStateChanged || !ShowRefactorCheckbox || e.Key is not (Key.LeftShift or Key.RightShift) ||
                 DataContext is not RenameDialogViewModel vm)
             {
                 return;
@@ -180,5 +167,8 @@ namespace WolvenKit.Views.Dialogs.Windows
 
             vm.EnableRefactoring = _refactorDefaultState;
         }
+
+        private void Refactoring_OnCheckboxChecked(object _, DependencyPropertyChangedEventArgs e) =>
+            _refactoringStateChanged = true;
     }
 }
