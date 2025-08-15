@@ -98,7 +98,11 @@ public static class Interactions
     }
 
     // classic popups
-    public static Func<(string, string, WMessageBoxImage, WMessageBoxButtons), WMessageBoxResult> ShowConfirmation { get; set; } 
+    public static Func<(string, string, WMessageBoxImage, WMessageBoxButtons), WMessageBoxResult> ShowConfirmation
+    {
+        get;
+        set;
+    }
         = _ => throw new NotImplementedException();
 
     public static Func<string, WMessageBoxResult> ShowSaveDialog { get; set; }
@@ -117,7 +121,8 @@ public static class Interactions
 
     public static Func<string, string> Rename { get; set; } = _ => throw new NotImplementedException();
 
-    public static Func<string, Tuple<string, bool>> RenameAndRefactor { get; set; } = _ => throw new NotImplementedException();
+    public static Func<(string currentPath, bool showCheckbox), Tuple<string, bool>> RenameAndRefactor { get; set; } =
+        _ => throw new NotImplementedException();
 
     public static Func<(string, List<string>, Cp77Project), (List<string>, string? moveToPath)> ShowDeleteOrMoveFilesList { get; set; } =
         _ => throw new NotImplementedException();
@@ -143,7 +148,8 @@ public static class Interactions
     public static Func<bool> ShowLaunchProfilesView { get; set; } = () => throw new NotImplementedException();
     public static Func<bool> ShowMaterialRepositoryView { get; set; } = () => throw new NotImplementedException();
 
-    public static Func<(IEnumerable<IDisplayable>?, IEnumerable<IDisplayable>?), IEnumerable<IDisplayable>> ShowCollectionView { get; set; } 
+    public static Func<(IEnumerable<IDisplayable>?, IEnumerable<IDisplayable>?), IEnumerable<IDisplayable>>
+        ShowCollectionView { get; set; }
         = _ => throw new NotImplementedException();
 
     public static Func<string?, string?> ShowSelectSaveView { get; set; } =
@@ -160,7 +166,7 @@ public static class Interactions
     public static Func<(Dictionary<string, bool> checklistOptions, string fileName, string title, string text),
             ShowChecklistDialogViewModel>
         ShowChecklistDialogue { get; set; } = _ => throw new NotImplementedException();
-    
+
     public static Func<Cp77Project, AddQuestDialogViewModel> ShowGenerateQuestDialogue { get; set; } =
         project => new AddQuestDialogViewModel(project);
 }
