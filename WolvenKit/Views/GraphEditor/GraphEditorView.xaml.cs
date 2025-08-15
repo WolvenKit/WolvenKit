@@ -369,6 +369,7 @@ public partial class GraphEditorView : UserControl
         if (SelectedNodes.Count > 1)
         {
             node.ContextMenu.Items.Add(CreateMenuItem("Destroy Nodes", "CloseBoxOutline", "WolvenKitRed", () => Source.RemoveNodes(SelectedNodes)));
+            node.ContextMenu.Items.Add(CreateMenuItem("Create Phase", "FolderOutline", "WolvenKitRed", () => Source.CreatePhaseFromSelection(SelectedNodes)));
             node.ContextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);
 
             e.Handled = true;
