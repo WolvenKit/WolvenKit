@@ -4,8 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using HelixToolkit.SharpDX.Core;
-using System.Text.RegularExpressions;
-using Newtonsoft.Json;
 using Splat;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
