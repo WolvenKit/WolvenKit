@@ -76,6 +76,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gamebbScriptDefinition>>(value);
 		}
 
+		[Ordinal(9)] 
+		[RED("twintoneOverrideShown")] 
+		public CHandle<gamebbScriptDefinition> TwintoneOverrideShown
+		{
+			get => GetPropertyValue<CHandle<gamebbScriptDefinition>>();
+			set => SetPropertyValue<CHandle<gamebbScriptDefinition>>(value);
+		}
+
 		public PlayerVisionModeControllerBBIds()
 		{
 			PostConstruct();

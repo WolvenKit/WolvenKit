@@ -5,30 +5,49 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
-using WolvenKit.Modkit.RED4.Serialization;
+using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Models.ProjectManagement.Project;
 
-public sealed partial class Cp77Project(string location, string name, string modName) : IEquatable<Cp77Project>, ICloneable
+public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
 {
     public const string ProjectFileExtension = ".cpmodproj";
-    
-    public string Name { get; set; } = name;
+
+    public Cp77Project(string location, string name, string modName, Dictionary<DateTime, string> openProjectFiles)
+    {
+        Location = location;
+        Name = name;
+        ModName = modName;
+        OpenProjectFiles = openProjectFiles;
+    }
+
+    public Cp77Project(string location, string name, string modName) : this(location, name, modName, [])
+    {
+        // use other constructor
+    }
+
+    public string Name { get; set; }
+
+    /// <summary>
+    /// Relative paths to currently open files. Will be written to <see cref="ProjectFileExtension"/> file.
+    /// </summary>
+    public Dictionary<DateTime, string> OpenProjectFiles { get; set; } = [];
 
     /// <summary>
     /// Location of active project (the folder containing the .cdproj file)
     /// </summary>
-    public string Location { get; set; } = location;
+    public string Location { get; set; }
 
-    public string ModName { get; set; } = modName;
+    public string ModName { get; set; }
 
     public int ActiveTab { get; set; } = 0;
 
@@ -44,7 +63,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
 
 
     /// <summary>
-    /// Returns all files inside <see cref="FileDirectory"/> 
+    /// Returns all files inside <see cref="FileDirectory"/>
     /// </summary>
     public List<string> Files
     {
@@ -63,7 +82,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
 
 
     /// <summary>
-    /// Returns all files inside <see cref="ModDirectory"/> 
+    /// Returns all files inside <see cref="ModDirectory"/>
     /// </summary>
     public List<string> ModFiles
     {
@@ -80,9 +99,27 @@ public sealed partial class Cp77Project(string location, string name, string mod
         }
     }
 
+    /// <summary>
+    /// Returns all files inside <see cref="ResourcesDirectory"/>
+    /// </summary>
+    public List<string> ResourceFiles
+    {
+        get
+        {
+            if (!Directory.Exists(ResourcesDirectory))
+            {
+                Directory.CreateDirectory(ResourcesDirectory);
+            }
+
+            return Directory.EnumerateFiles(ResourcesDirectory, "*", SearchOption.AllDirectories)
+                .Select(file => file[(ResourcesDirectory.Length + 1)..])
+                .ToList();
+        }
+    }
+
 
     /// <summary>
-    /// Returns all files inside <see cref="RawDirectory"/> 
+    /// Returns all files inside <see cref="RawDirectory"/>
     /// </summary>
     public List<string> RawFiles
     {
@@ -101,7 +138,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
 
 
     /// <summary>
-    /// Path to root level directory (where the .csproj file is)
+    /// Absolute path to root level directory (where the .csproj file is)
     /// </summary>
     public string ProjectDirectory
     {
@@ -112,9 +149,8 @@ public sealed partial class Cp77Project(string location, string name, string mod
         }
     }
 
-
     /// <summary>
-    /// Path to /source/raw
+    /// Absolute path to /source
     /// </summary>
     public string FileDirectory
     {
@@ -137,7 +173,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
     }
 
     /// <summary>
-    /// Path to /source/archive
+    /// Absolute path to /source/archive
     /// </summary>
     public string ModDirectory
     {
@@ -177,7 +213,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
     }
 
     /// <summary>
-    /// Path to /source/raw
+    /// Absolute path to /source/raw
     /// </summary>
     public string RawDirectory
     {
@@ -201,7 +237,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
 
 
     /// <summary>
-    /// Path to /source/customSounds
+    /// Absolute path to /source/customSounds
     /// </summary>
     public string SoundDirectory
     {
@@ -218,7 +254,7 @@ public sealed partial class Cp77Project(string location, string name, string mod
     }
 
     /// <summary>
-    /// Path to /source/resources
+    /// Absolute path to /source/resources
     /// </summary>
     public string ResourcesDirectory
     {
@@ -321,6 +357,64 @@ public sealed partial class Cp77Project(string location, string name, string mod
     }
 
 
+    #region project_state_files
+
+    private const string s_projectFilesDirName = ".projectFiles";
+    private const string s_projectTreeStateFileName = "fileTreeState.json";
+
+    /// <summary>
+    /// Path to <see cref="ProjectDirectory"/>/<see cref="s_projectFilesDirName"/>, where we store temp files
+    /// with interface states (e.g. file tree, open files, etc.)
+    ///
+    /// If we create many more files, we may need to expose this and handle the paths somewhere else
+    /// </summary>
+    private string InterfaceStateFileDirectory
+    {
+        get
+        {
+            var directory = Path.Combine(ProjectDirectory, s_projectFilesDirName);
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            return directory;
+        }
+    }
+
+    /// <summary>
+    /// Path to <see cref="InterfaceStateFileDirectory"/>/<see cref="s_projectTreeStateFileName"/>
+    /// where we store the serialized project explorer tree state
+    /// </summary>
+    public string InterfaceProjectTreeStatePath
+    {
+        get
+        {
+            var oldPath = Path.Combine(ProjectDirectory, s_projectTreeStateFileName);
+            var newPath = Path.Combine(InterfaceStateFileDirectory, s_projectTreeStateFileName);
+            if (File.Exists(oldPath))
+            {
+                if (!File.Exists(newPath))
+                {
+                    File.Move(oldPath, newPath, true);
+                }
+                else
+                {
+                    File.Delete(oldPath);
+                }
+            }
+
+            if (!File.Exists(newPath))
+            {
+                File.WriteAllLines(newPath, ["{}"]);
+            }
+
+            return newPath;
+        }
+    }
+
+    #endregion
+
     /// <summary>
     /// Path to /packed/archive/pc/mod or /packed/mods
     /// </summary>
@@ -395,21 +489,26 @@ public sealed partial class Cp77Project(string location, string name, string mod
         _ = ResourcesDirectory;
     }
 
-    public (string, string) SplitFilePath(string fullPath) => (GetPrefixPath(fullPath), GetRelativePath(fullPath));
+    public (string, string) SplitFilePath(string fullPath) =>
+        (GetAbsoluteSubDirPath(fullPath), GetRelativePath(fullPath));
 
-    public string GetPrefixPath(string absolutePath)
+    /// <returns>The absolute path to the subdirectory containing the file, e.g. C:\CyberpunkFiles\...\source\archive</returns>
+    public string GetAbsoluteSubDirPath(string absolutePath)
     {
-        if (absolutePath.StartsWith(ModDirectory, StringComparison.Ordinal))
+        if (absolutePath.StartsWith(ModDirectory, StringComparison.Ordinal) ||
+            absolutePath.StartsWith(s_relativeModDir))
         {
             return ModDirectory;
         }
 
-        if (absolutePath.StartsWith(RawDirectory, StringComparison.Ordinal))
+        if (absolutePath.StartsWith(RawDirectory, StringComparison.Ordinal) ||
+            absolutePath.StartsWith(s_relativeRawDir))
         {
             return RawDirectory;
         }
 
-        if (absolutePath.StartsWith(PackedRootDirectory, StringComparison.Ordinal))
+        if (absolutePath.StartsWith(PackedRootDirectory, StringComparison.Ordinal) ||
+            absolutePath.StartsWith(s_relativePackedDir))
         {
             return PackedRootDirectory;
         }
@@ -427,12 +526,29 @@ public sealed partial class Cp77Project(string location, string name, string mod
         return "";
     }
 
-    public string GetAbsolutePath(string fullPath)
+    private static bool IsResourceFile(string fileNameOrPath) =>
+        Path.GetExtension(fileNameOrPath) switch
+        {
+            ".xl" => true,
+            ".yaml" => true,
+            ".yml" => true,
+            ".lua" => true,
+            ".reds" => true,
+            _ => false,
+        };
+
+
+    public string GetAbsolutePath(string relativeOrAbsolutePath)
     {
-        var (prefix, relativePath) = SplitFilePath(fullPath);
+        if (Path.IsPathRooted(relativeOrAbsolutePath))
+        {
+            return relativeOrAbsolutePath;
+        }
+
+        var (prefix, relativePath) = SplitFilePath(relativeOrAbsolutePath);
         prefix = prefix.Replace(ProjectDirectory, "");
 
-        if (relativePath == fullPath)
+        if (relativePath == relativeOrAbsolutePath)
         {
             return Path.Join(ModDirectory, prefix, relativePath);
         }
@@ -445,6 +561,36 @@ public sealed partial class Cp77Project(string location, string name, string mod
         return Path.Join(prefix, relativePath);
     }
 
+
+    private static readonly string s_tweakSubfolder = Path.Join("r6", "tweaks");
+
+    public string GetAbsolutePath(string fileName, string? rootRelativeFolder)
+    {
+        rootRelativeFolder ??= "";
+        switch (Path.GetExtension(fileName))
+        {
+            case ".yaml" when string.IsNullOrEmpty(rootRelativeFolder):
+                rootRelativeFolder = s_tweakSubfolder;
+                break;
+            case ".yaml" when !rootRelativeFolder.StartsWith(s_tweakSubfolder):
+                rootRelativeFolder = Path.Join(s_tweakSubfolder, rootRelativeFolder);
+                break;
+            default:
+                break;
+        }
+
+        return Path.GetExtension(fileName) switch
+        {
+            ".xl" => Path.Join(ResourcesDirectory, fileName),
+            ".yaml" => Path.Join(ResourcesDirectory, rootRelativeFolder, fileName),
+            _ => Path.Join(ModDirectory, rootRelativeFolder, fileName)
+        };
+    }
+
+    private const string s_relativeModDir = "wkitmoddir";
+    private const string s_relativeRawDir = "wkitrawdir";
+    private const string s_relativePackedDir = "wkitpackeddir";
+
     public string GetRelativePath(string absolutePath)
     {
         if (absolutePath.Equals(FileDirectory, StringComparison.Ordinal))
@@ -455,20 +601,20 @@ public sealed partial class Cp77Project(string location, string name, string mod
         // hack so that we get proper hashes
         if (absolutePath.Equals(ModDirectory, StringComparison.Ordinal))
         {
-            return "wkitmoddir";
+            return s_relativeModDir;
         }
 
         if (absolutePath.Equals(RawDirectory, StringComparison.Ordinal))
         {
-            return "wkitrawdir";
+            return s_relativeRawDir;
         }
 
         if (absolutePath.Equals(PackedRootDirectory, StringComparison.Ordinal))
         {
-            return "wkitpackeddir";
+            return s_relativePackedDir;
         }
 
-        if (GetPrefixPath(absolutePath) is string s && s != "")
+        if (GetAbsoluteSubDirPath(absolutePath) is string s && s != "")
         {
             return absolutePath[(s.Length + 1)..];
         }
@@ -486,7 +632,10 @@ public sealed partial class Cp77Project(string location, string name, string mod
 
     public object Clone()
     {
-        Cp77Project clone = new(Location, Name, ModName) { Author = Author, Email = Email, Version = Version };
+        Cp77Project clone = new(Location, Name, ModName)
+        {
+            Author = Author, Email = Email, Version = Version, OpenProjectFiles = OpenProjectFiles
+        };
         return clone;
     }
 
@@ -541,19 +690,26 @@ public sealed partial class Cp77Project(string location, string name, string mod
         return relPath;
     }
 
-    public async Task<Dictionary<string, List<string>>> GetAllReferences(IProgressService<double> progressService,
-        ILoggerService loggerService)
+    public async Task<IDictionary<string, List<string>>> GetAllReferencesAsync(
+        IProgressService<double> progressService,
+        ILoggerService loggerService,
+        List<string> filePaths)
     {
-        Dictionary<string, List<string>> references = new();
+        if (filePaths.Count == 0)
+        {
+            filePaths.AddRange(ModFiles);
+        }
+
+        SortedDictionary<string, List<string>> references = new();
 
         progressService?.Report(0);
-        var totalFiles = ModFiles.Count;
+        var totalFiles = filePaths.Count;
         var processedFiles = 0;
         var progressIncrement = totalFiles > 0 ? 100.0 / totalFiles : 100;
 
         await Task.Run(() =>
         {
-            Parallel.ForEach(ModFiles, filePath =>
+            Parallel.ForEach(filePaths, filePath =>
             {
                 try
                 {
@@ -572,45 +728,41 @@ public sealed partial class Cp77Project(string location, string name, string mod
                         if (cr2WFile.RootChunk is C2dArray { CompiledData: CArray<CArray<CString>> data })
                         {
                             // Grab the second string from CompiledData, if it's a depotPath
-                            var filePaths = data
+                            var paths = data
                                 .Where(c => c.Count == 3).Select(cStrings => cStrings[1])
                                 .Where(potentialDepotPath => potentialDepotPath.GetString().Contains(Path.DirectorySeparatorChar))
                                 .Select(potentialDepotPath => (string)potentialDepotPath).ToList();
-                            resourcePaths.AddRange(filePaths);
+                            resourcePaths.AddRange(paths);
                         }
                         else
                         {
-                            foreach (var result in cr2WFile.FindType(typeof(IRedRef)))
+                            foreach (var redRef in cr2WFile.FindType(typeof(IRedRef)).Select(r => r.Value)
+                                         .OfType<IRedRef>())
                             {
-                                if (result.Value is not IRedRef resourceReference || resourceReference.DepotPath == ResourcePath.Empty)
+                                if (redRef.DepotPath == ResourcePath.Empty)
                                 {
                                     continue;
                                 }
 
-                                var refResource = resourceReference.DepotPath.GetResolvedText();
-                                if (string.IsNullOrEmpty(refResource))
-                                {
-                                    continue;
-                                }
+                                resourcePaths.AddRange(
+                                    ResolveResourcePaths(redRef.DepotPath.GetResolvedText(), cr2WFile));
+                            }
 
-                                // Deal with ArchiveXL substitution
-                                if (refResource.StartsWith(ArchiveXlHelper.ArchiveXLSubstitutionPrefix))
-                                {
-                                    resourcePaths.AddRange(ArchiveXlHelper.ResolveDynamicPaths(refResource));
-                                }
-                                else
-                                {
-                                    resourcePaths.Add(refResource);
-                                }
+                            // Check redStrings that contain resource paths. This happens inside quest files.
+                            foreach (var result in cr2WFile.FindType(typeof(IRedString))
+                                         .Select(r => r.Value)
+                                         .OfType<IRedString>()
+                                         .Select(r => r.GetString())
+                                         .Where(s => s?.IsFilePath() == true)
+                                    )
+                            {
+                                resourcePaths.AddRange(ResolveResourcePaths(result, cr2WFile));
                             }
 
                             foreach (var cr2WImport in cr2WFile.Info.Imports)
                             {
-                                if (cr2WImport.DepotPath != ResourcePath.Empty && cr2WImport.DepotPath.GetResolvedText() is string s &&
-                                    !resourcePaths.Contains(s))
-                                {
-                                    resourcePaths.Add(s);
-                                }
+                                resourcePaths.AddRange(ResolveResourcePaths(cr2WImport.DepotPath.GetResolvedText(),
+                                    cr2WFile));
                             }
                         }
                     }
@@ -620,38 +772,26 @@ public sealed partial class Cp77Project(string location, string name, string mod
                         return;
                     }
 
-                    // Resolve dynamic substitutions
-                    var updatedResourcePaths = new List<string>();
-                    foreach (var path in resourcePaths)
-                    {
-                        if (path.StartsWith(ArchiveXlHelper.ArchiveXLSubstitutionPrefix))
-                        {
-                            var resolvedPaths = ArchiveXlHelper.ResolveDynamicPaths(path);
-                            updatedResourcePaths.AddRange(resolvedPaths);
-                        }
-                        else
-                        {
-                            updatedResourcePaths.Add(path);
-                        }
-                    }
-
                     lock (references)
                     {
-                        references.Add(filePath, updatedResourcePaths);
+                        references.Add(filePath, resourcePaths.Distinct().ToList());
                     }
                 }
-                catch
+                catch (Exception e)
                 {
-                    loggerService.Error($"Failed to read {filePath}. Results will be incomplete!");
+                    loggerService.Error($"Results will be incomplete: Failed to read {filePath} ({e.Message})");
                 }
-                
+
                 // Update progress
                 var currentProgress = Interlocked.Increment(ref processedFiles) * progressIncrement;
                 progressService?.Report(currentProgress);
+
             });
 
             // Get file paths from resource files. Yes, with a regex - parsing them would be way more effort
-            Parallel.ForEach(Files.Where(f => f.EndsWith(".xl") || f.EndsWith(".yaml") || f.EndsWith(".lua")), filePath =>
+            Parallel.ForEach(
+                Files.Where(f => f.EndsWith(".xl") || f.EndsWith(".yaml") || f.EndsWith(".lua") || f.EndsWith(".reds")),
+                filePath =>
             {
                 var absolutePath = Path.Combine(FileDirectory, filePath);
                 if (!File.Exists(absolutePath))
@@ -663,9 +803,9 @@ public sealed partial class Cp77Project(string location, string name, string mod
 
                 // Get anything with double or single slashes, then replace double slashes
                 var refs = ResourceFilePathsRegex().Matches(fileContent).Where(m => m.Success)
-                    .Select(m => m.Value.Replace(@"\\", @"\"))
+                    .Select(m => m.Value.Replace(@"\\", @"\").Replace(@"/", @"\"))
                     .ToList();
-                
+
                 if (refs.Count <= 0)
                 {
                     return;
@@ -680,23 +820,54 @@ public sealed partial class Cp77Project(string location, string name, string mod
                 }
             });
         });
-        return references;
-    }
-    
-    
 
-    public async Task<Dictionary<string, List<string>>> ScanForBrokenReferencePathsAsync(IArchiveManager archiveManager,
-        ILoggerService loggerService, IProgressService<double> progressService)
+        // Order entries by file name
+        return references.OrderBy(obj => obj.Key).ToDictionary(obj => obj.Key, obj => obj.Value);
+
+        // Deal with ArchiveXL substitution and empty/falsy strings
+        static IEnumerable<string> ResolveResourcePaths(string? resourcePath, CR2WFile cr2WFile)
+        {
+            if (string.IsNullOrEmpty(resourcePath))
+            {
+                return [];
+            }
+
+            if (!resourcePath.StartsWith(ArchiveXlHelper.ArchiveXLSubstitutionPrefix))
+            {
+                return [resourcePath];
+            }
+
+            if (cr2WFile.RootChunk is not CMesh mesh)
+            {
+                return ArchiveXlHelper.ResolveDynamicPaths(resourcePath);
+            }
+
+            // TODO: We need to pass the correct material name for the substitution here
+            return ArchiveXlHelper.ResolveMaterialSubstitutions(resourcePath, mesh.Appearances);
+        }
+    }
+
+
+    public Task<IDictionary<string, List<string>>> ScanForBrokenReferencePathsAsync(IArchiveManager archiveManager,
+        ILoggerService loggerService, IProgressService<double> progressService) =>
+        ScanForBrokenReferencePathsAsync(archiveManager, loggerService, progressService, new SortedDictionary<string, List<string>>());
+
+    public async Task<IDictionary<string, List<string>>> ScanForBrokenReferencePathsAsync(IArchiveManager archiveManager,
+        ILoggerService loggerService, IProgressService<double> progressService, IDictionary<string, List<string>> references)
     {
-        var references = await GetAllReferences(progressService, loggerService);
-        Dictionary<string, List<string>> brokenReferences = new();
+        if (references.Count == 0)
+        {
+            references.AddRange(await GetAllReferencesAsync(progressService, loggerService, []));
+        }
+
+        SortedDictionary<string, List<string>> brokenReferences = new();
 
         progressService.IsIndeterminate = true;
         progressService.Report(0);
-        var totalFiles = ModFiles.Count;
+        var totalFiles = references.Count;
         var processedFiles = 0;
         var progressIncrement = totalFiles > 0 ? 100.0 / totalFiles : 100;
-        
+
         await Task.Run(() =>
         {
             Parallel.ForEach(references, (kvp, state) =>
@@ -712,17 +883,78 @@ public sealed partial class Cp77Project(string location, string name, string mod
                         brokenReferences.Add(kvp.Key, pathsNotFound);
                     }
                 }
-                
+
                 // Update progress
                 var currentProgress = Interlocked.Increment(ref processedFiles) * progressIncrement;
-                progressService?.Report(currentProgress);
+                progressService.IsIndeterminate = false;
+                progressService.Report(currentProgress);
             });
         });
-        progressService?.Completed();
+        progressService.Completed();
         return brokenReferences;
     }
 
-    [GeneratedRegex(@"((\w+\\\\?)+\w+\.\w+)")]
+    /// <summary>
+    /// Will match any file paths with forward or backward slashes and a file extension
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// folder/subfolder/atelier_icon.inkatlas
+    /// folder\subfolder\atelier_icon.inkatlas
+    /// folder\\subfolder\\atelier_icon.inkatlas
+    /// </code>
+    /// </example>
+    [GeneratedRegex(@"(((\w+\/)|(\w+\\\\?))+\w+\.\w+)")]
     private static partial Regex ResourceFilePathsRegex();
+
+    private int _numEmptyFolders = 0;
+
+    public void DeleteEmptyFolders(ILoggerService loggerService)
+    {
+        _numEmptyFolders = 0;
+        DeleteEmptyFolders(ModDirectory);
+        loggerService.Success($"Deleted {_numEmptyFolders} empty folders");
+    }
+
+    private void DeleteEmptyFolders(string directory)
+    {
+        foreach (var subdirectory in Directory.GetDirectories(directory))
+        {
+            DeleteEmptyFolders(subdirectory);
+
+            if (Directory.GetFiles(subdirectory).Length == 0 && Directory.GetDirectories(subdirectory).Length == 0)
+            {
+                _numEmptyFolders += 1;
+                Directory.Delete(subdirectory);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Gets all folders under a given directory as list. Defaults to mod directory.
+    /// <param name="subdirParam">Pass <see cref="ModDirectory"/>, <see cref="ResourcesDirectory"/>, <see cref="RawDirectory"/></param>
+    /// </summary>
+    public List<string> GetAllFolders(string? subdirParam)
+    {
+        var filesToSearch = ModFiles;
+        var subdirectory = subdirParam ?? ModDirectory;
+
+        if (subdirectory == RawDirectory)
+        {
+            filesToSearch = RawFiles;
+        }
+        else if (subdirectory == ResourcesDirectory)
+        {
+            filesToSearch = ResourceFiles;
+        }
+
+        return filesToSearch
+            .Select(Path.GetDirectoryName)
+            .Where(f => f is not null && f != subdirectory &&
+                        Directory.Exists(Path.Combine(subdirectory, f)))
+            .Select(f => f!)
+            .Distinct()
+            .ToList();
+    }
 }
-    
+

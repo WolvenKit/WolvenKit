@@ -24,14 +24,15 @@ using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
-
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
 using NAudio.Wave;
 using NAudio.Lame;
 using WolvenKit.RED4.Archive.CR2W;
 using Newtonsoft.Json;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Modkit.Exceptions;
+using WolvenKit.Modkit.RED4.Tools.Common;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -516,6 +517,11 @@ namespace WolvenKit.Modkit.RED4
             return InternalUncookBuffers(cr2wFile, relPath, outfile, settings, rawOutDir);
         }
 
+        /// <summary>
+        /// Clears the lookup table for already exported file.
+        /// </summary>
+        public void ClearFileLookup() => _uncookedLookup.Clear();
+
         public bool IsUncooked(string? depotPath, string destName, string relPath)
         {
             if (!string.IsNullOrEmpty(depotPath) &&
@@ -561,7 +567,7 @@ namespace WolvenKit.Modkit.RED4
                     // We're tacking on an extra file ext because ***SharpGLTF*** cuts off the ext
                     // when actually writing to disk way down the line. This way it'll save the
                     // actual type extension we want it to...
-                    var typePreservingOutfile = new FileInfo($"{outfile.FullName}.dummyextguardthatwillberemoved");
+                    var typePreservingOutfile = new FileInfo($"{outfile.FullName}");
 
                     return ExportMorphTargets(cr2wFile, typePreservingOutfile,
                         settings.Get<MorphTargetExportArgs>().IsBinary,
@@ -932,7 +938,16 @@ namespace WolvenKit.Modkit.RED4
 
             var Rig = RIG.ProcessRig(_parserService.ReadRed4File(rigStream));
 
-            MeshTools.UpdateMeshJoints(ref expMeshes, Rig, meshRig);
+            try
+            {
+                MeshTools.UpdateMeshJoints(ref expMeshes, Rig, meshRig);
+            }
+            catch (WolvenKitException e)
+            {
+                _loggerService.Warning("Bone mismatch! The following bones are missing from the target armature:");
+                _loggerService.Warning(e.Message);
+                _loggerService.Warning("Exporting anyway...");
+            }
 
             if (meshExportArgs.withMaterials)
             {
@@ -952,14 +967,7 @@ namespace WolvenKit.Modkit.RED4
                 return true;
             }
 
-            if (meshExportArgs.isGLBinary)
-            {
-                model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
-            }
-            else
-            {
-                model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
-            }
+            model.Save(GLTFHelper.PrepareFilePath(outfile.FullName, meshExportArgs.isGLBinary), new WriteSettings(vmode));
 
             rigStream.Dispose();
             rigStream.Close();
@@ -997,7 +1005,16 @@ namespace WolvenKit.Modkit.RED4
 
                 var meshRig = MeshTools.GetOrphanRig(cMesh);
 
-                MeshTools.UpdateMeshJoints(ref Meshes, expRig, meshRig, meshName);
+                try
+                {
+                    MeshTools.UpdateMeshJoints(ref Meshes, expRig, meshRig, meshName);
+                }
+                catch (WolvenKitException e)
+                {
+                    _loggerService.Warning("Bone mismatch! The following bones are missing from the target armature:");
+                    _loggerService.Warning(e.Message);
+                    _loggerService.Warning("Exporting anyway...");
+                }
 
                 if (meshExportArgs.withMaterials)
                 {
@@ -1021,14 +1038,7 @@ namespace WolvenKit.Modkit.RED4
                 return true;
             }
 
-            if (meshExportArgs.isGLBinary)
-            {
-                model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
-            }
-            else
-            {
-                model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
-            }
+            model.Save(GLTFHelper.PrepareFilePath(outfile.FullName, meshExportArgs.isGLBinary), new WriteSettings(vmode));
 
             return true;
         }
@@ -1201,7 +1211,18 @@ namespace WolvenKit.Modkit.RED4
 
                     var meshRig = MeshTools.GetOrphanRig(cMesh);
 
-                    MeshTools.UpdateMeshJoints(ref meshes, rigsCombined, meshRig, streamName);
+
+                    try
+                    {
+                        MeshTools.UpdateMeshJoints(ref meshes, rigsCombined, meshRig, streamName);
+                    }
+                    catch (WolvenKitException e)
+                    {
+                        _loggerService.Warning(
+                            "Bone mismatch! The following bones are missing from the target armature:");
+                        _loggerService.Warning(e.Message);
+                        _loggerService.Warning("Exporting anyway...");
+                    }
 
                     if (meshExportArgs is { withMaterials: true, MaterialRepo: not null })
                     {
@@ -1216,16 +1237,7 @@ namespace WolvenKit.Modkit.RED4
 
             void SaveMeshes(FileInfo file, ModelRoot modelsAndRigs)
             {
-                var typeExtPreservingFilename = $"{file.FullName}.thisextwillberemoved";
-
-                if (meshExportArgs.isGLBinary)
-                {
-                    modelsAndRigs.SaveGLB(typeExtPreservingFilename, new WriteSettings(validationMode));
-                }
-                else
-                {
-                    modelsAndRigs.SaveGLTF(typeExtPreservingFilename, new WriteSettings(validationMode));
-                }
+                modelsAndRigs.Save(GLTFHelper.PrepareFilePath(file.FullName, meshExportArgs.isGLBinary), new WriteSettings(validationMode));
             }
         }
 

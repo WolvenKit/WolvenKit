@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0-windows</TargetFramework>
-    <Version>8.15.1</Version>
+    <Version>8.16.2</Version>
     <Platforms>x64</Platforms>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <Nullable>enable</Nullable>
@@ -23,6 +23,13 @@
     <None Remove="ViewModels\Shared\**" />
     <Page Remove="ViewModels\Others\**" />
     <Page Remove="ViewModels\Shared\**" />
+  </ItemGroup>
+
+  <!-- Suppress compiler warnings for generated files -->
+  <ItemGroup>
+    <Compile Include="Types\**\*.cs">
+      <NoWarn>8600;8601;8603;8604;8618;8620</NoWarn>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -56,6 +63,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
     <PackageReference Include="Octokit" />
     <PackageReference Include="CommunityToolkit.Mvvm" />
     <PackageReference Include="Discord.Net" />
@@ -77,4 +85,13 @@
     <NoWarn>$(NoWarn);IDE0010</NoWarn>
   </PropertyGroup>
 
+  <Target Name="RemoveDuplicateAnalyzers" BeforeTargets="CoreCompile">
+    <!-- Work around https://github.com/dotnet/wpf/issues/6792 -->
+
+    <ItemGroup>
+        <FilteredAnalyzer Include="@(Analyzer->Distinct())" />
+        <Analyzer Remove="@(Analyzer)" />
+        <Analyzer Include="@(FilteredAnalyzer)" />
+    </ItemGroup>
+  </Target>
 </Project>

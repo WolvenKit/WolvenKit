@@ -95,7 +95,7 @@ namespace WolvenKit.Views.Tools
             {
                 cvm.Tab?.Parent.SetIsDirty(true);
                 cvm.NotifyChain(nameof(ChunkViewModel.Data));
-                cvm.RecalculateProperties(null, false);
+                cvm.RecalculateProperties();
             }
             
             _updateFromColor = false;

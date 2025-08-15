@@ -60,11 +60,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<redTagList>(value);
 		}
 
+		[Ordinal(7)] 
+		[RED("randomizationInfo")] 
+		public gameuiCharacterRandomizationInfo RandomizationInfo
+		{
+			get => GetPropertyValue<gameuiCharacterRandomizationInfo>();
+			set => SetPropertyValue<gameuiCharacterRandomizationInfo>(value);
+		}
+
 		public gameuiIndexedAppearanceDefinition()
 		{
 			Color = new CColor();
 			Actions = new();
 			Tags = new redTagList { Tags = new() };
+			RandomizationInfo = new gameuiCharacterRandomizationInfo { MinRating = 1, MaxRating = 10 };
 
 			PostConstruct();
 		}

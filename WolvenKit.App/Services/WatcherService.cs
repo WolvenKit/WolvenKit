@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -42,11 +43,25 @@ public partial class WatcherService : ObservableObject, IWatcherService
     [ObservableProperty]
     private DispatchedObservableCollection<FileSystemModel> _fileTree = new();
 
-    private readonly List<string> _ignoredExtensions =
+    private static readonly List<string> s_ignoredExtensions =
     [
-        ".TMP",
-        ".PDNSAVE"
+        "tmp",
+        "pdnsave",
+        "bak", // photoshop
+        "blend@", // Blender temp files
+        "blend1", // Blender temp files
     ];
+
+    private static bool HasIgnoredExtension(string? fileName)
+    {
+        var fileExtension = Path.GetExtension(fileName)?.ToUpper();
+        return fileExtension is not null && s_ignoredExtensions.Any(partial =>
+            fileExtension.Contains(partial, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private bool _isWatcherStopped;
+
+    public bool IsWatcherStopped => _isWatcherStopped;
 
     #endregion
 
@@ -75,9 +90,14 @@ public partial class WatcherService : ObservableObject, IWatcherService
         Refresh();
     }
 
+
     public void Resume() => _modsWatcher.EnableRaisingEvents = true;
 
-    public void UnwatchProject(Cp77Project? project) => UnwatchLocation();
+    public void UnwatchProject(Cp77Project? project)
+    {
+        _isWatcherStopped = true;
+        UnwatchLocation();
+    }
 
     private void WatchLocation()
     {
@@ -93,6 +113,8 @@ public partial class WatcherService : ObservableObject, IWatcherService
         Clear();
     }
 
+
+    
     private void Update(CancellationToken cancellationToken)
     {
         while (true)
@@ -111,7 +133,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
             }
 
             var extension = Path.GetExtension(e.Name);
-            if (!string.IsNullOrEmpty(extension) && _ignoredExtensions.Contains(extension.ToUpper()))
+            if (!string.IsNullOrEmpty(extension) && HasIgnoredExtension(e.Name))
             {
                 continue;
             }
@@ -151,6 +173,11 @@ public partial class WatcherService : ObservableObject, IWatcherService
         {
             var timestamp = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
 
+            if (HasIgnoredExtension(e.Name))
+            {
+                return;
+            }
+            
             // Check if delay has passed
             if (e.Ticks > timestamp)
             {
@@ -266,7 +293,10 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
             if (!_fileLookup.TryGetValue(e.Name, out var item))
             {
-                _loggerService?.Error($"Failed to refresh file {e.Name}{Environment.NewLine}Try a manual refresh of the project explorer.");
+                if (!_isWatcherStopped)
+                {
+                    _loggerService?.Warning($"Failed to refresh {e.Name}. This is just a UI glitch!");
+                }
                 return;
             }
 
@@ -369,6 +399,11 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
     private void InternalRefresh()
     {
+        if (string.IsNullOrEmpty(_projectDirectory))
+        {
+            return;
+        }
+        
         ForceStop();
         Clear();
 
@@ -392,7 +427,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
         if (_updateTask != null)
         {
             _updateThreadCancellationTokenSource.Cancel();
-            if (!_updateTask.Wait(1000))
+            if (!_updateTask.IsCanceled && !_updateTask.Wait(1000))
             {
                 throw new Exception();
             }

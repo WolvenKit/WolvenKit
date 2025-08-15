@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <VersionPrefix>8.15.1</VersionPrefix>
+    <VersionPrefix>8.16.2</VersionPrefix>
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 
@@ -37,27 +37,36 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.ClearScript.V8" />
     <PackageReference Include="Microsoft.ClearScript.V8.Native.win-x64" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
     <PackageReference Include="Microsoft.Extensions.Options" />
     <PackageReference Include="NAudio.Lame" />
     <PackageReference Include="NAudio.Vorbis" />
     <PackageReference Include="SharpGLTF.Toolkit" />
     <PackageReference Include="YamlDotNet" />
     <PackageReference Include="NAudio" />
-
+    <PackageReference Include="System.Net.Http" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="opus-tools\opusdec.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <PackagePath>contentFiles\any\any\opus-tools;content\opus-tools</PackagePath>
+	  <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="opus-tools\opusenc.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <PackagePath>contentFiles\any\any\opus-tools;content\opus-tools</PackagePath>
+	  <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="opus-tools\opusinfo.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <PackagePath>contentFiles\any\any\opus-tools;content\opus-tools</PackagePath>
+	  <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
     <Content Include="Resources\soundEvents.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  <PackagePath>contentFiles\any\any\Resources;content\Resources</PackagePath>
+	  <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
   </ItemGroup>
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using WolvenKit.Common.Conversion;
@@ -268,9 +269,9 @@ public class BufferConverterFactory : JsonConverterFactory
         _serializationDeferredDataBufferConverter = new(bufferResolver);
     }
 
-    public override bool CanConvert(Type typeToConvert) => typeof(IRedBufferWrapper).IsAssignableFrom(typeToConvert);
+    public override bool CanConvert(Type typeToConvert) => GetConverter(typeToConvert) != null;
 
-    public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
+    private JsonConverter? GetConverter(Type typeToConvert)
     {
         if (typeToConvert == typeof(DataBuffer))
         {
@@ -285,6 +286,17 @@ public class BufferConverterFactory : JsonConverterFactory
         if (typeToConvert == typeof(SharedDataBuffer))
         {
             return _sharedDataBufferConverter;
+        }
+
+        return null;
+    }
+
+    public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
+    {
+        var converter = GetConverter(typeToConvert);
+        if (converter != null)
+        {
+            return converter;
         }
 
         throw new NotSupportedException("CreateConverter got called on a type that this converter factory doesn't support");
@@ -788,7 +800,7 @@ internal static class BufferHelper
     {
         writer.WriteNumber("Flags", value.Buffer.Flags);
 
-        if (value.Buffer.Data is CookedInstanceTransformsBuffer or CR2WList or RedPackage or worldNodeDataBuffer or WorldTransformsBuffer or CollisionBuffer or CR2WWrapper or FoliageBuffer or AnimFacialSetupBakedDataBuffer or AnimFacialSetupMainPosesDataBuffer or AnimFacialSetupCorrectivePosesDataBuffer)
+        if (value.Buffer.Data is CookedInstanceTransformsBuffer or CR2WList or RedPackage or worldNodeDataBuffer or WorldTransformsBuffer or CollisionBuffer or CR2WWrapper or FoliageBuffer or AnimFacialSetupBakedDataBuffer or AnimFacialSetupMainPosesDataBuffer or AnimFacialSetupCorrectivePosesDataBuffer or RazerChromaAnimationBuffer)
         {
             writer.WriteString("Type", value.Buffer.Data.GetType().AssemblyQualifiedName);
 
@@ -888,7 +900,7 @@ public class CLegacySingleChannelCurveConverterFactory : JsonConverterFactory
 {
     private readonly CLegacySingleChannelCurveConverter _cLegacySingleChannelCurveConverter = new();
 
-    public override bool CanConvert(Type typeToConvert) => typeof(IRedLegacySingleChannelCurve).IsAssignableFrom(typeToConvert) || typeof(IRedCurvePoint).IsAssignableFrom(typeToConvert);
+    public override bool CanConvert(Type typeToConvert) => typeof(IRedLegacySingleChannelCurve).IsAssignableFrom(typeToConvert);
 
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {

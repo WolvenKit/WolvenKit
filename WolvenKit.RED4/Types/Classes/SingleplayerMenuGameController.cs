@@ -109,6 +109,62 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(20)] 
+		[RED("eulaWidget")] 
+		public inkWidgetReference EulaWidget
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("quitGameWidget")] 
+		public inkWidgetReference QuitGameWidget
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(22)] 
+		[RED("sliderWidget")] 
+		public inkWidgetReference SliderWidget
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(23)] 
+		[RED("declineButtonWidget")] 
+		public inkWidgetReference DeclineButtonWidget
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(24)] 
+		[RED("acceptButtonWidget")] 
+		public inkWidgetReference AcceptButtonWidget
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(25)] 
+		[RED("declineButtonText")] 
+		public inkTextWidgetReference DeclineButtonText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(26)] 
+		[RED("acceptButtonText")] 
+		public inkTextWidgetReference AcceptButtonText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(27)] 
 		[RED("onlineSystem")] 
 		public CWeakHandle<gameIOnlineSystem> OnlineSystem
 		{
@@ -116,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIOnlineSystem>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(28)] 
 		[RED("requestHandler")] 
 		public CWeakHandle<inkISystemRequestsHandler> RequestHandler
 		{
@@ -124,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkISystemRequestsHandler>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(29)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
@@ -132,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(30)] 
 		[RED("continueGameTooltipController")] 
 		public CWeakHandle<ContinueGameTooltip> ContinueGameTooltipController
 		{
@@ -140,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ContinueGameTooltip>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(31)] 
 		[RED("expansionHintController")] 
 		public CWeakHandle<inkWidgetLogicController> ExpansionHintController
 		{
@@ -148,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidgetLogicController>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(32)] 
 		[RED("expansionBannerController")] 
 		public CWeakHandle<ExpansionBannerController> ExpansionBannerController
 		{
@@ -156,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ExpansionBannerController>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(33)] 
 		[RED("accountSelectorController")] 
 		public CWeakHandle<inkMenuAccountLogicController> AccountSelectorController
 		{
@@ -164,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkMenuAccountLogicController>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(34)] 
 		[RED("textAnimController")] 
 		public CWeakHandle<inkTextReplaceAnimationController> TextAnimController
 		{
@@ -172,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkTextReplaceAnimationController>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(35)] 
 		[RED("tooltipsManager")] 
 		public CWeakHandle<gameuiTooltipsManager> TooltipsManager
 		{
@@ -180,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameuiTooltipsManager>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(36)] 
 		[RED("uiSystem")] 
 		public CHandle<gameuiGameSystemUI> UiSystem
 		{
@@ -188,7 +244,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameuiGameSystemUI>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(37)] 
+		[RED("patchNotesCheckData")] 
+		public CHandle<PatchNotesCheckData> PatchNotesCheckData
+		{
+			get => GetPropertyValue<CHandle<PatchNotesCheckData>>();
+			set => SetPropertyValue<CHandle<PatchNotesCheckData>>(value);
+		}
+
+		[Ordinal(38)] 
 		[RED("dataSyncStatus")] 
 		public CEnum<servicesCloudSavesQueryStatus> DataSyncStatus
 		{
@@ -196,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<servicesCloudSavesQueryStatus>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(39)] 
 		[RED("savesCount")] 
 		public CInt32 SavesCount
 		{
@@ -204,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(40)] 
 		[RED("savesReady")] 
 		public CBool SavesReady
 		{
@@ -212,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(41)] 
 		[RED("isOffline")] 
 		public CBool IsOffline
 		{
@@ -220,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(42)] 
 		[RED("isModded")] 
 		public CBool IsModded
 		{
@@ -228,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(43)] 
 		[RED("isExpansionHintShown")] 
 		public CBool IsExpansionHintShown
 		{
@@ -236,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(44)] 
 		[RED("isMainMenuShownFirstTime")] 
 		public CBool IsMainMenuShownFirstTime
 		{
@@ -244,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(45)] 
 		[RED("isPatch2NotificationShown")] 
 		public CBool IsPatch2NotificationShown
 		{
@@ -252,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(46)] 
 		[RED("isReloadPopupShown")] 
 		public CBool IsReloadPopupShown
 		{
@@ -260,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(47)] 
 		[RED("isEp1Enabled")] 
 		public CBool IsEp1Enabled
 		{
@@ -268,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(48)] 
 		[RED("gameVersion")] 
 		public CString GameVersion
 		{
@@ -276,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(49)] 
 		[RED("patch2NotificationIntroName")] 
 		public CName Patch2NotificationIntroName
 		{
@@ -284,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(50)] 
 		[RED("patch2NotificationOutroName")] 
 		public CName Patch2NotificationOutroName
 		{
@@ -292,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(51)] 
 		[RED("patch2NotificationAnimProxy")] 
 		public CHandle<inkanimProxy> Patch2NotificationAnimProxy
 		{
@@ -300,9 +364,65 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(52)] 
 		[RED("gameVersionAnim")] 
 		public CHandle<inkanimProxy> GameVersionAnim
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(53)] 
+		[RED("eulaIsAccepted")] 
+		public CBool EulaIsAccepted
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(54)] 
+		[RED("isEulaWindowOpened")] 
+		public CBool IsEulaWindowOpened
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(55)] 
+		[RED("eulaRead")] 
+		public CBool EulaRead
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(56)] 
+		[RED("sliderController")] 
+		public CWeakHandle<inkSliderController> SliderController
+		{
+			get => GetPropertyValue<CWeakHandle<inkSliderController>>();
+			set => SetPropertyValue<CWeakHandle<inkSliderController>>(value);
+		}
+
+		[Ordinal(57)] 
+		[RED("declineButtonController")] 
+		public CWeakHandle<inkButtonController> DeclineButtonController
+		{
+			get => GetPropertyValue<CWeakHandle<inkButtonController>>();
+			set => SetPropertyValue<CWeakHandle<inkButtonController>>(value);
+		}
+
+		[Ordinal(58)] 
+		[RED("acceptButtonController")] 
+		public CWeakHandle<inkButtonController> AcceptButtonController
+		{
+			get => GetPropertyValue<CWeakHandle<inkButtonController>>();
+			set => SetPropertyValue<CWeakHandle<inkButtonController>>(value);
+		}
+
+		[Ordinal(59)] 
+		[RED("eulaAnimationProxy")] 
+		public CHandle<inkanimProxy> EulaAnimationProxy
 		{
 			get => GetPropertyValue<CHandle<inkanimProxy>>();
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
@@ -323,6 +443,13 @@ namespace WolvenKit.RED4.Types
 			ContinuetooltipContainer = new inkCompoundWidgetReference();
 			TooltipsManagerRef = new inkWidgetReference();
 			VersionTextRef = new inkTextWidgetReference();
+			EulaWidget = new inkWidgetReference();
+			QuitGameWidget = new inkWidgetReference();
+			SliderWidget = new inkWidgetReference();
+			DeclineButtonWidget = new inkWidgetReference();
+			AcceptButtonWidget = new inkWidgetReference();
+			DeclineButtonText = new inkTextWidgetReference();
+			AcceptButtonText = new inkTextWidgetReference();
 			Patch2NotificationIntroName = "patch2_notification_intro";
 			Patch2NotificationOutroName = "patch2_notification_outro";
 

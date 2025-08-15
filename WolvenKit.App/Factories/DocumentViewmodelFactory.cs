@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
@@ -24,7 +25,7 @@ public class DocumentViewmodelFactory : IDocumentViewmodelFactory
     private readonly IHookService _hookService;
     private readonly INodeWrapperFactory _nodeWrapperFactory;
     private readonly ISettingsManager _settingsManager;
-    private readonly IHashService _hashService;
+    private readonly Cr2WTools _cr2WTools;
 
 
     public DocumentViewmodelFactory(
@@ -39,7 +40,8 @@ public class DocumentViewmodelFactory : IDocumentViewmodelFactory
         IHookService hookService,
         INodeWrapperFactory nodeWrapperFactory,
         ISettingsManager settingsManager,
-        IHashService hashService
+        IHashService hashService,
+        Cr2WTools cr2WTools
     )
     {
         _tabViewmodelFactory = tabViewmodelFactory;
@@ -53,13 +55,13 @@ public class DocumentViewmodelFactory : IDocumentViewmodelFactory
         _hookService = hookService;
         _nodeWrapperFactory = nodeWrapperFactory;
         _settingsManager = settingsManager;
-        _hashService = hashService;
+        _cr2WTools = cr2WTools;
     }
 
     public RedDocumentViewModel RedDocumentViewModel(CR2WFile file, string path, AppViewModel appViewModel, bool isReadOnly = false)
         => new(file, path, appViewModel, _tabViewmodelFactory, _chunkViewmodelFactory, _projectManager, _loggerService, _globals,
-            _parserService, _archiveManager, _hookService, _nodeWrapperFactory, _hashService,
-            _settingsManager.DefaultEditorDifficultyLevel, isReadOnly);
+            _parserService, _archiveManager, _hookService, _nodeWrapperFactory,
+            _cr2WTools, _settingsManager, isReadOnly);
 
     public WScriptDocumentViewModel WScriptDocumentViewModel(string path) => new(path, _scriptService);
 

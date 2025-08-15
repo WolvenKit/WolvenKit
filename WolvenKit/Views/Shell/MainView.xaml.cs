@@ -2,19 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Reactive.Disposables;
 using System.Windows;
 using AdonisUI.Controls;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common.Services;
-using WolvenKit.Core.Services;
+using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
+using MessageBoxResult = AdonisUI.Controls.MessageBoxResult;
 
 namespace WolvenKit.Views.Shell
 {
@@ -22,7 +25,6 @@ namespace WolvenKit.Views.Shell
 
     public partial class MainView : IViewFor<AppViewModel>
     {
-        private readonly IModifierViewStateService _modifierViewStateService;
         public AppViewModel ViewModel { get; set; }
 
         object IViewFor.ViewModel
@@ -31,23 +33,33 @@ namespace WolvenKit.Views.Shell
             set => ViewModel = (AppViewModel)value;
         }
 
-        public MainView(
-            IModifierViewStateService modifierViewStateService,
-            AppViewModel vm = null
-        )
+        public MainView(ProjectResourceTools projectResourceTools, AppViewModel viewModel = null)
         {
-            _modifierViewStateService = modifierViewStateService;
-            ViewModel = vm ?? Locator.Current.GetService<AppViewModel>();
+            ViewModel = viewModel ?? Locator.Current.GetService<AppViewModel>();
             DataContext = ViewModel;
 
             InitializeComponent();
             
             this.WhenActivated(disposables =>
             {
-                Disposable.Create(dockingAdapter.SaveLayout).DisposeWith(disposables);
+                Disposable.Create(() => dockingAdapter.SaveLayout()).DisposeWith(disposables);
 
                 Interactions.ShowConfirmation = ShowConfirmation;
+                Interactions.ShowSaveDialog = ShowSaveDialog;
+                Interactions.ShowQuestionYesNo = ShowQuestionYesNo;
 
+                Interactions.ShowPopupWithWeblink = ShowConfirmationWithLink;
+                Interactions.ShowDeleteOrDuplicateComponentDialogue = (args) =>
+                {
+                    var dialog = new DeleteOrDuplicateComponentDialog(args.Item1, args.Item2);
+                    if (dialog.ViewModel is not null && dialog.ShowDialog(this) == true)
+                    {
+                        return dialog.ViewModel;
+                    }
+
+                    return null;
+                };
+                
                 Interactions.ShowLaunchProfilesView = () =>
                 {
                     LaunchProfilesView dialog = new();
@@ -60,7 +72,7 @@ namespace WolvenKit.Views.Shell
                     return true;
                 };
 
-                Interactions.ShowSelectSaveView = (string currentSaveGame) =>
+                Interactions.ShowSelectSaveView = currentSaveGame =>
                 {
                     SaveGameSelectionDialog dialog = new(currentSaveGame);
 
@@ -86,16 +98,62 @@ namespace WolvenKit.Views.Shell
                 Interactions.ShowCollectionView = input =>
                 {
                     ChooseCollectionView dialog = new();
-                    dialog.ViewModel.SetAvailableItems(input.Item1);
-                    dialog.ViewModel.SetSelectedItems(input.Item2);
+                    if (input.Item1 is not null)
+                    {
+                        dialog.ViewModel?.SetAvailableItems(input.Item1);
+                    }
+
+                    if (input.Item2 is not null)
+                    {
+                        dialog.ViewModel?.SetSelectedItems(input.Item2);
+                    }
 
                     IEnumerable<IDisplayable> result = null;
-                    if (dialog.ShowDialog(this) == true)
+                    if (dialog.ShowDialog(this) == true && dialog.ViewModel is not null)
                     {
                         result = dialog.ViewModel.SelectedItems;
                     }
 
                     return result;
+                };
+
+                Interactions.ShowPhotoModeDialogue = (p) =>
+                {
+                    var dialog = new CreatePhotoModeAppDialog(p.activeProject, p.settingsManager, projectResourceTools);
+                    if (dialog.ShowDialog() != true)
+                    {
+                        return null;
+                    }
+
+                    return dialog.ViewModel;
+                };
+
+                Interactions.ShowGenerateInkatlasDialogue = (activeProject) =>
+                {
+                    var dialog = new AddInkatlasDialog(activeProject);
+                    if (dialog.ShowDialog() != true)
+                    {
+                        return null;
+                    }
+
+                    return dialog.ViewModel;
+                };
+
+                Interactions.ShowChecklistDialogue = (args) =>
+                {
+                    var dialog = new ShowChecklistDialog(args.checklistOptions, args.fileName, args.title, args.text);
+                    if (dialog.ShowDialog() != true)
+                    {
+                        return null;
+                    }
+
+                    return dialog.ViewModel;
+                };
+
+                Interactions.ShowScriptSettingsView = settings =>
+                {
+                    var dialog = new ScriptSettingsWindow(settings);
+                    return dialog.ShowDialog() == true;
                 };
 
 
@@ -115,9 +173,19 @@ namespace WolvenKit.Views.Shell
             });
         }
 
-        private void FadeOut_Completed(object sender, EventArgs e) => ViewModel.FinishedClosingModal();
+        private void FadeOut_Completed(object sender, EventArgs e) => ViewModel?.FinishedClosingModal();
 
         #region interactions
+
+        private static bool ShowQuestionYesNo((string, string) input)
+        {
+            var messageResult = ShowConfirmation((input.Item1, input.Item2, WMessageBoxImage.Question, WMessageBoxButtons.YesNo));
+            return messageResult == WMessageBoxResult.Yes;
+        }
+
+        // local methods
+        private static AdonisUI.Controls.MessageBoxImage GetAdonisImage(WMessageBoxImage imageParam) =>
+            (AdonisUI.Controls.MessageBoxImage)imageParam;
 
         private static WMessageBoxResult ShowConfirmation((string, string, WMessageBoxImage, WMessageBoxButtons) input)
         {
@@ -134,25 +202,62 @@ namespace WolvenKit.Views.Shell
             return (WMessageBoxResult)AdonisUI.Controls.MessageBox.Show(Application.Current.MainWindow, messageBox);
 
 
-
-            // local methods
-            AdonisUI.Controls.MessageBoxImage GetAdonisImage(WMessageBoxImage imageParam) => (AdonisUI.Controls.MessageBoxImage)imageParam;
-
-            IEnumerable<IMessageBoxButtonModel> GetAdonisButtons(WMessageBoxButtons buttonsParam)
+            static IEnumerable<IMessageBoxButtonModel> GetAdonisButtons(WMessageBoxButtons buttonsParam)
             {
                 return buttonsParam switch
                 {
-                    WMessageBoxButtons.Ok => new IMessageBoxButtonModel[1] { MessageBoxButtons.Ok() },
+                    WMessageBoxButtons.Ok => [MessageBoxButtons.Ok()],
                     WMessageBoxButtons.OkCancel => MessageBoxButtons.OkCancel(),
-                    WMessageBoxButtons.Yes => new IMessageBoxButtonModel[1] { MessageBoxButtons.Yes() },
+                    WMessageBoxButtons.Yes => [MessageBoxButtons.Yes()],
                     WMessageBoxButtons.YesNo => MessageBoxButtons.YesNo(),
                     WMessageBoxButtons.YesNoCancel => MessageBoxButtons.YesNoCancel(),
-                    WMessageBoxButtons.No => new IMessageBoxButtonModel[1] { MessageBoxButtons.No() },
+                    WMessageBoxButtons.No => [MessageBoxButtons.No()],
                     _ => throw new ArgumentOutOfRangeException(nameof(buttons)),
                 };
             }
         }
 
+        /// <inheritdoc cref="Interactions.ShowPopupWithWeblinkAsync"/>
+        private static WMessageBoxResult ShowConfirmationWithLink(
+            (string, string, string, string, WMessageBoxImage) input)
+        {
+            MessageBoxModel messageBox = new()
+            {
+                Text = input.Item1,
+                Caption = input.Item2,
+                Buttons = [MessageBoxButtons.Custom(input.Item4), MessageBoxButtons.Ok()],
+                Icon = GetAdonisImage(input.Item5),
+            };
+
+            var ret = AdonisUI.Controls.MessageBox.Show(Application.Current.MainWindow, messageBox);
+            if (ret == MessageBoxResult.Custom && input.Item3 is string link && !string.IsNullOrEmpty(link))
+            {
+                Process.Start(new ProcessStartInfo { FileName = link, UseShellExecute = true });
+            }
+
+            return (WMessageBoxResult)ret;
+        }
+
+        private static readonly IMessageBoxButtonModel[] s_saveDialogButtons =
+        [
+            MessageBoxButtons.Cancel("Cancel"),
+            MessageBoxButtons.Yes("Save and close"),
+            MessageBoxButtons.No("Close without saving")
+        ];
+
+        private static WMessageBoxResult ShowSaveDialog(string fileName)
+        {
+            MessageBoxModel messageBox = new()
+            {
+                Text = $"The File {fileName} has unsaved changes!",
+                Caption = "Really close your file?",
+                Icon = GetAdonisImage(WMessageBoxImage.Exclamation),
+                Buttons = s_saveDialogButtons
+            };
+
+            return (WMessageBoxResult)AdonisUI.Controls.MessageBox.Show(Application.Current.MainWindow, messageBox);
+        }
+        
         #endregion
 
         private void Overlay_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -165,9 +270,9 @@ namespace WolvenKit.Views.Shell
             }
         }
 
-        protected override async void OnClosing(CancelEventArgs e)
+        protected override void OnClosing(CancelEventArgs e)
         {
-            if (!await dockingAdapter.CloseAll())
+            if (!dockingAdapter.CloseAll())
             {
                 e.Cancel = true;
                 return;
@@ -180,9 +285,14 @@ namespace WolvenKit.Views.Shell
                 pe.StopWatcher();
             }
 
+            if (ViewModel?.GetToolViewModel<PropertiesViewModel>() is { } p)
+            {
+                p.EffectsManager.Dispose();
+            }
+
             if (Locator.Current.GetService<IProjectManager>() is ProjectManager pm)
             {
-                await pm.SaveAsync();
+                pm.Save();
             }
 
             if (Locator.Current.GetService<IHashService>() is HashServiceExt hashServiceExt)

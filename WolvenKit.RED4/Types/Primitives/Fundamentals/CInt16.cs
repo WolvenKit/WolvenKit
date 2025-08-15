@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types;
 
 [RED("Int16")]
 [DebuggerDisplay("{_value,nq}", Type = "CInt16")]
-public readonly struct CInt16 : IRedPrimitive<short>, IEquatable<CInt16>, IRedInteger
+public readonly struct CInt16 : IRedPrimitive<short>, IComparable, IComparable<CInt16>, IEquatable<CInt16>, IRedInteger
 {
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     private readonly short _value;
@@ -45,4 +45,22 @@ public readonly struct CInt16 : IRedPrimitive<short>, IEquatable<CInt16>, IRedIn
 
     public override string ToString() => _value.ToString();
     public string ToString(CultureInfo cultureInfo) => _value.ToString(cultureInfo);
+
+    #region IComparable, IComparable<CInt16>
+
+    public int CompareTo(object? value)
+    {
+        if (value == null)
+        {
+            return 1;
+        }
+        if (value is CInt16 i)
+        {
+            return CompareTo(i);
+        }
+        throw new ArgumentException("Value is not a CInt16", nameof(value));
+    }
+    public int CompareTo(CInt16 value) => _value - value._value;
+
+    #endregion IComparable, IComparable<CInt16>
 }

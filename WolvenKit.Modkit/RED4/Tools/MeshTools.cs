@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using SharpGLTF.Geometry;
 using SharpGLTF.Geometry.VertexTypes;
 using SharpGLTF.Materials;
@@ -10,10 +11,13 @@ using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.Exceptions;
+using WolvenKit.Modkit.RED4.Animation;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
+using WolvenKit.Modkit.RED4.Tools.Common;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
@@ -55,14 +59,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 return true;
             }
 
-            if (meshExportArgs.isGLBinary)
-            {
-                model.SaveGLB(outfile.FullName, new WriteSettings(vMode));
-            }
-            else
-            {
-                model.SaveGLTF(outfile.FullName, new WriteSettings(vMode));
-            }
+            model.Save(GLTFHelper.PrepareFilePath(outfile.FullName, meshExportArgs.isGLBinary), new WriteSettings(vMode));
 
             return true;
         }
@@ -168,14 +165,8 @@ namespace WolvenKit.Modkit.RED4.Tools
                 model.WriteGLB(new WriteSettings(vMode));
                 return true;
             }
-            if (isGLBinary)
-            {
-                model.SaveGLB(outfile.FullName, new WriteSettings(vMode));
-            }
-            else
-            {
-                model.SaveGLTF(outfile.FullName, new WriteSettings(vMode));
-            }
+
+            model.Save(GLTFHelper.PrepareFilePath(outfile.FullName, isGLBinary), new WriteSettings(vMode));
 
             return true;
         }
@@ -215,14 +206,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 return true;
             }
 
-            if (isGLBinary)
-            {
-                model.SaveGLB(outfile.FullName, new WriteSettings(vMode));
-            }
-            else
-            {
-                model.SaveGLTF(outfile.FullName, new WriteSettings(vMode));
-            }
+            model.Save(GLTFHelper.PrepareFilePath(outfile.FullName, isGLBinary), new WriteSettings(vMode));
 
             return true;
         }
@@ -341,7 +325,7 @@ namespace WolvenKit.Modkit.RED4.Tools
 
                 if (cMesh != null)
                 {
-                    if (!cMesh.Parameters.Select(x => x.Chunk).OfType<meshMeshParamGarmentSupport>().Any())
+                    if (!cMesh.Parameters.Any(x => x.Chunk is meshMeshParamGarmentSupport or garmentMeshParamGarment))
                     {
                         meshesInfo.garmentSupportExists[i] = false;
                     }
@@ -468,7 +452,7 @@ namespace WolvenKit.Modkit.RED4.Tools
 
                         // Z up to Y up and LHCS to RHCS
                         var vec1 = Vec3.Normalize(new Vec3(vec0.X, vec0.Z, -vec0.Y));
-                        meshContainer.tangents[i] = new Vec4(vec1.X, vec1.Y, vec1.Z, 1f);
+                        meshContainer.tangents[i] = new Vec4(vec1.X, vec1.Y, vec1.Z, vec0.W);
                     }
                 }
 
@@ -642,8 +626,9 @@ namespace WolvenKit.Modkit.RED4.Tools
             var numLodLevels = 1;
 
             var numSubmeshesPerLod = mesh.Appearances
-                .Where((app) => app.GetValue() is meshMeshAppearance)
-                .Select((app) => ((meshMeshAppearance)app.GetValue()!).ChunkMaterials.Count)
+                .Select((app) => app.GetValue()).OfType<meshMeshAppearance>()
+                .Select((app) => app.ChunkMaterials?.Count ?? 0)
+                .Append(0) // prevent exception if the list is empty
                 .Max();
             try
             {
@@ -670,6 +655,7 @@ namespace WolvenKit.Modkit.RED4.Tools
 
         public static void UpdateMeshJoints(ref List<RawMeshContainer> meshes, RawArmature? existingJoints, RawArmature? incomingJoints, string fileName = "")
         {
+            HashSet<string> bonesNotFound = [];
             // updating mesh bone indices
             if (existingJoints is { BoneCount: > 0 } && incomingJoints is { BoneCount: > 0 })
             {
@@ -681,6 +667,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                     ArgumentNullException.ThrowIfNull(mesh.positions);
                     ArgumentNullException.ThrowIfNull(mesh.boneindices);
 
+
                     for (var e = 0; e < mesh.positions.Length; e++)
                     {
                         for (var eye = 0; eye < mesh.weightCount; eye++)
@@ -691,20 +678,24 @@ namespace WolvenKit.Modkit.RED4.Tools
                                 mesh.boneindices[e, eye] = 0;
                             }
 
+                            var boneName = incomingJoints.Names[mesh.boneindices[e, eye]];
+                            
                             var found = false;
                             for (ushort r = 0; r < existingJoints.BoneCount; r++)
                             {
-                                if (existingJoints.Names[r] == incomingJoints.Names[mesh.boneindices[e, eye]])
+                                if (existingJoints.Names[r] != boneName)
                                 {
-                                    mesh.boneindices[e, eye] = r;
-                                    found = true;
-                                    break;
+                                    continue;
                                 }
+
+                                mesh.boneindices[e, eye] = r;
+                                found = true;
+                                break;
                             }
-                            if (!found)
+
+                            if (!found && !bonesNotFound.Contains(boneName))
                             {
-                                throw new Exception(
-                                    $"Bone: {incomingJoints.Names[mesh.boneindices[e, eye]]} not present in export Rig(s)/Import Mesh {(!fileName.Equals("") ? $"({fileName})" : "")}");
+                                bonesNotFound.Add(boneName);
                             }
                         }
                     }
@@ -719,6 +710,12 @@ namespace WolvenKit.Modkit.RED4.Tools
                         mesh.weightCount = 0;
                     }
                 }
+            }
+
+            if (bonesNotFound.Any())
+            {
+                throw new WolvenKitException(0x2005,
+                    $"\n{string.Join("\n", bonesNotFound)}");
             }
         }
 
@@ -1035,19 +1032,18 @@ namespace WolvenKit.Modkit.RED4.Tools
                     node.Skin = skin;
                 }
 
-                var materialNames = mesh.materialNames.Select((name) => name.Split('@').FirstOrDefault() ?? name).ToArray();
-                
+                var meshExtras = new MeshExtras
+                {
+                    MaterialNames = mesh.materialNames.Select((name) => name.Split('@').FirstOrDefault() ?? name).ToArray()
+                };
+
                 if (mesh.garmentMorph.Length > 0)
                 {
-                    string[] arr = ["GarmentSupport"];
-                    var obj = new { materialNames, targetNames = arr };
-                    mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
+                    meshExtras.TargetNames = ["GarmentSupport"];
                 }
-                else
-                {
-                    var obj = new { materialNames };
-                    mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
-                }
+
+                mes.Extras = JsonSerializer.SerializeToNode(meshExtras, Gltf.SerializationOptions());
+
                 if (mesh.garmentMorph.Length > 0)
                 {
                     var acc = model.CreateAccessor();
@@ -1067,7 +1063,7 @@ namespace WolvenKit.Modkit.RED4.Tools
         public static ModelRoot RawMeshesToGLTF(List<RawMeshContainer> meshes, RawArmature? rig, bool mergeMeshes = false, bool withMaterials = false)
         {
             var model = ModelRoot.CreateModel();
-            model.Extras = SharpGLTF.IO.JsonContent.Serialize(new { ExperimentalMergedMeshes = mergeMeshes });
+            model.Extras = JsonSerializer.SerializeToNode(new { ExperimentalMergedMeshes = mergeMeshes }, Gltf.SerializationOptions());
 
             Skin? skin = null;
             if (rig is { BoneCount: > 0 })

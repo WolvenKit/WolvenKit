@@ -17,7 +17,7 @@ public partial class ListToStringConverter : IValueConverter
             return string.Join(Environment.NewLine, list);
         }
 
-        if (value is not Dictionary<string, List<string>> dict)
+        if (value is not IDictionary<string, List<string>> dict)
         {
             return string.Empty;
         }

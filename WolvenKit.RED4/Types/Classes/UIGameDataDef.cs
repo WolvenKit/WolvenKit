@@ -284,6 +284,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
+		[Ordinal(35)] 
+		[RED("Popup_TwintoneOverride_IsShown")] 
+		public gamebbScriptID_Bool Popup_TwintoneOverride_IsShown
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(36)] 
+		[RED("Popup_FrameSwitcher_IsShown")] 
+		public gamebbScriptID_Bool Popup_FrameSwitcher_IsShown
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
 		public UIGameDataDef()
 		{
 			BreachUIParams = new gamebbScriptID_Variant();
@@ -321,6 +337,8 @@ namespace WolvenKit.RED4.Types
 			Popup_Radio_IsShown = new gamebbScriptID_Bool();
 			Popup_Radio_Enabled = new gamebbScriptID_Bool();
 			Popup_CarColorPicker_IsShown = new gamebbScriptID_Bool();
+			Popup_TwintoneOverride_IsShown = new gamebbScriptID_Bool();
+			Popup_FrameSwitcher_IsShown = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

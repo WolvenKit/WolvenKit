@@ -40,6 +40,31 @@ public partial class ChunkViewModel
                 Descriptor = ((ulong)locKey).ToString();
                 //Value = Locator.Current.GetService<LocKeyService>().GetFemaleVariant(value);
                 return true;
+            case gameuiSwitcherInfo:
+                if (GetPropertyChild("localizedName") is ChunkViewModel loc && !string.IsNullOrEmpty(loc.Descriptor))
+                {
+                    Descriptor = loc.Descriptor;
+                    return true;
+                }
+
+                if (GetPropertyChild("name") is ChunkViewModel name && !string.IsNullOrEmpty(name.Descriptor))
+                {
+                    Descriptor = name.Descriptor;
+                    return true;
+                }
+
+                if (GetPropertyChild("link") is ChunkViewModel link && !string.IsNullOrEmpty(link.Descriptor))
+                {
+                    Descriptor = link.Descriptor;
+                    return true;
+                }
+
+                return false;
+            case gameuiSwitcherOption when GetPropertyChild("localizedName") is ChunkViewModel lName &&
+                                           !string.IsNullOrEmpty(lName.Value):
+
+                Descriptor = lName.Value;
+                return true;
             case IRedString str:
             {
                 var s = str.GetString();
@@ -50,13 +75,6 @@ public partial class ChunkViewModel
 
                 return true;
             }
-            //if (ResolvedData is CMaterialInstance && Parent is not null)
-            //{
-            //    if (Parent.Parent is not null && Parent.Parent.Parent is not null && Parent.Parent.Data is CMesh mesh)
-            //    {
-            //        Descriptor = mesh.MaterialEntries[int.Parse(Name)].Name;
-            //    }
-            //}
             case Vector3 v3:
                 Descriptor = $"{v3.X}, {v3.Y}, {v3.Z}";
                 return true;
@@ -82,13 +100,92 @@ public partial class ChunkViewModel
             case null:
             case RedDummy:
                 return;
+            
+            case scnPlaySkAnimEvent playSkAnimEvent:
+            {
+                var startTime = $"[{playSkAnimEvent.StartTime}ms] ";
+                var animDetails = "";
+                
+                if (playSkAnimEvent.AnimName?.GetValue() is scnAnimName animName && 
+                    animName.Unk1 is not null && animName.Unk1.Count > 0)
+                {
+                    var unk1Details = string.Join(", ", animName.Unk1.Select(u => (string?)u ?? "").Take(3));
+                    if (!string.IsNullOrEmpty(unk1Details))
+                    {
+                        animDetails = $" - {unk1Details}";
+                    }
+                }
+                
+                Descriptor = $"{startTime}scnPlaySkAnimEvent{animDetails}";
+                return;
+            }
+            case scnAudioEvent audioEvent:
+            {
+                var startTime = $"[{audioEvent.StartTime}ms] ";
+                var audioName = audioEvent.AudioEventName.GetResolvedText();
+                var audioDetails = !string.IsNullOrEmpty(audioName) ? $" - {audioName}" : "";
+                
+                Descriptor = $"{startTime}scnAudioEvent{audioDetails}";
+                return;
+            }
+            case scnAudioDurationEvent audioDurationEvent:
+            {
+                var startTime = $"[{audioDurationEvent.StartTime}ms] ";
+                var audioName = audioDurationEvent.AudioEventName.GetResolvedText();
+                var audioDetails = !string.IsNullOrEmpty(audioName) ? $" - {audioName}" : "";
+                
+                Descriptor = $"{startTime}scnAudioDurationEvent{audioDetails}";
+                return;
+            }
+            case scneventsVFXEvent vfxEvent:
+            {
+                var startTime = $"[{vfxEvent.StartTime}ms] ";
+                var effectDetails = GetVFXEffectDetails(vfxEvent.EffectEntry);
+                
+                Descriptor = $"{startTime}scneventsVFXEvent{effectDetails}";
+                return;
+            }
+            case scneventsVFXDurationEvent vfxDurationEvent:
+            {
+                var startTime = $"[{vfxDurationEvent.StartTime}ms] ";
+                var effectDetails = GetVFXEffectDetails(vfxDurationEvent.EffectEntry);
+                
+                Descriptor = $"{startTime}scneventsVFXDurationEvent{effectDetails}";
+                return;
+            }
+            case scneventsVFXBraindanceEvent vfxBraindanceEvent:
+            {
+                var startTime = $"[{vfxBraindanceEvent.StartTime}ms] ";
+                var effectDetails = GetVFXEffectDetails(vfxBraindanceEvent.EffectEntry);
+                
+                Descriptor = $"{startTime}scneventsVFXBraindanceEvent{effectDetails}";
+                return;
+            }
+            case scnPlayVideoEvent playVideoEvent:
+            {
+                var startTime = $"[{playVideoEvent.StartTime}ms] ";
+                var videoPath = playVideoEvent.VideoPath.ToString();
+                var videoDetails = !string.IsNullOrEmpty(videoPath) ? $" - {System.IO.Path.GetFileName(videoPath)}" : "";
+                
+                Descriptor = $"{startTime}scnPlayVideoEvent{videoDetails}";
+                return;
+            }
+            case scnSceneEvent sceneEvent:
+            {
+                // Fallback for other scene events - just show start time
+                var startTime = $"[{sceneEvent.StartTime}ms] ";
+                var eventType = sceneEvent.GetType().Name;
+                
+                Descriptor = $"{startTime}{eventType}";
+                return;
+            }
+            
+            case worldStreamingSectorDescriptor:
+                // handled by default name resolution below
+                break;
             case worldNodeData sst when Parent?.Parent?.ResolvedData is worldStreamingSector wss && sst.NodeIndex < wss.Nodes.Count:
                 Descriptor = $"[{sst.NodeIndex}] {StringHelper.Stringify(wss.Nodes[sst.NodeIndex].Chunk)}";
                 return;
-            case worldStreamingSectorDescriptor wssd:
-                Descriptor = (wssd.Data.DepotPath.GetResolvedText() ?? "")
-                    .Replace(@"base\worlds\03_night_city\_compiled\default\", "").Replace(".streamingsector", "");
-                break;
             case worldNode worldNode when StringHelper.Stringify(worldNode) is string s && s != "":
                 Descriptor = s;
                 return;
@@ -106,6 +203,71 @@ public partial class ChunkViewModel
                 }
 
                 break;
+
+            # region inkanim
+
+            case inkanimScaleInterpolator scaleInt:
+                Descriptor =
+                    $"{StringHelper.Stringify(scaleInt.StartValue)} => {StringHelper.Stringify(scaleInt.EndValue)}";
+                break;
+            case inkanimAnchorInterpolator scaleInt:
+                Descriptor =
+                    $"{StringHelper.Stringify(scaleInt.StartValue)} => {StringHelper.Stringify(scaleInt.EndValue)}";
+                break;
+            case inkanimTransparencyInterpolator transInt:
+                Descriptor = $"{transInt.StartValue} => {transInt.EndValue}";
+                break;
+            case inkanimColorInterpolator transInt:
+                Descriptor =
+                    $"{StringHelper.Stringify(transInt.StartValue)} => {StringHelper.Stringify(transInt.EndValue)}";
+                break;
+            case inkanimEffectInterpolator transInt:
+                Descriptor = $"{transInt.StartValue} => {transInt.EndValue}";
+                break;
+            case inkanimRotationInterpolator transInt:
+                Descriptor = $"{transInt.StartValue} => {transInt.EndValue}";
+                break;
+            case inkanimMarginInterpolator transInt:
+                Descriptor =
+                    $"{StringHelper.Stringify(transInt.StartValue)} => {StringHelper.Stringify(transInt.EndValue)}";
+                break;
+            case inkanimPaddingInterpolator transInt:
+                Descriptor =
+                    $"{StringHelper.Stringify(transInt.StartValue)} => {StringHelper.Stringify(transInt.EndValue)}";
+                break;
+            case inkanimPivotInterpolator transInt:
+                Descriptor =
+                    $"{StringHelper.Stringify(transInt.StartValue)} => {StringHelper.Stringify(transInt.EndValue)}";
+                break;
+            case inkanimShearInterpolator transInt:
+                Descriptor =
+                    $"{StringHelper.Stringify(transInt.StartValue)} => {StringHelper.Stringify(transInt.EndValue)}";
+                break;
+            case inkanimSizeInterpolator transInt:
+                Descriptor =
+                    $"{StringHelper.Stringify(transInt.StartValue)} => {StringHelper.Stringify(transInt.EndValue)}";
+                break;
+            case inkanimTranslationInterpolator transInt:
+                Descriptor =
+                    $"{StringHelper.Stringify(transInt.StartValue)} => {StringHelper.Stringify(transInt.EndValue)}";
+                break;
+            case inkanimShapeBorderTransparencyInterpolator transInt:
+                Descriptor = $"{transInt.StartValue} => {transInt.EndValue}";
+                break;
+            case inkanimShapeFillTransparencyInterpolator transInt:
+                Descriptor = $"{transInt.StartValue} => {transInt.EndValue}";
+                break;
+            case inkanimTextInterpolator transInt:
+                Descriptor = $"{transInt.StartValue} => {transInt.EndValue}";
+                break;
+            case inkanimVideoInterpolator transInt:
+                Descriptor = $"{transInt.StartValue} => {transInt.EndValue}";
+                break;
+            case gameJournalEntry journalEntry:
+                Descriptor = journalEntry.Id.ToString();
+                break;
+            
+            # endregion
             // csv files
             case IRedArray { Count: > 0 } csvAry when Parent is { Name: "compiledData" } && GetRootModel().Data is C2dArray csv:
 
@@ -236,30 +398,6 @@ public partial class ChunkViewModel
             case scnlocLocStoreEmbeddedVariantPayloadEntry locPayloadEmbedded:
                 Descriptor = locPayloadEmbedded.VariantId.Ruid.ToString();
                 break;
-            case CInt8 int8:
-                Descriptor = int8.ToString();
-                break;
-            case CInt16 int16:
-                Descriptor = int16.ToString();
-                break;
-            case CInt32 int32:
-                Descriptor = int32.ToString();
-                break;
-            case CInt64 int64:
-                Descriptor = int64.ToString();
-                break;
-            case CUInt8 int8:
-                Descriptor = int8.ToString();
-                break;
-            case CUInt16 int16:
-                Descriptor = int16.ToString();
-                break;
-            case CUInt32 int32:
-                Descriptor = int32.ToString();
-                break;
-            case CUInt64 int64:
-                Descriptor = int64.ToString();
-                break;
             case scnPropDef propDef:
             {
                 Descriptor = $"{propDef.PropName}";
@@ -305,6 +443,11 @@ public partial class ChunkViewModel
 
                 break;
 
+            case appearanceAppearancePartOverrides partsOverrides
+                when partsOverrides.PartResource.DepotPath.GetResolvedText() is string s && !string.IsNullOrEmpty(s):
+                Descriptor = s;
+                return;
+            
             case scnscreenplayDialogLine scnscreenplayDialogLine:
             {
                 Descriptor = scnscreenplayDialogLine.FemaleLipsyncAnimationName.GetResolvedText() ?? "";
@@ -316,14 +459,14 @@ public partial class ChunkViewModel
 
                 break;
             }
-            // animgraph - something is broken here. Why does the orange text go away? Why do I need the try/catch
-            // around the GetNodename?
+            case CMeshMaterialEntry materialEntry:
+                Descriptor = materialEntry.Name.GetResolvedText() ?? "";
+                break;
             // For local and external materials
-            case CMaterialInstance or CResourceAsyncReference<IMaterial> when NodeIdxInParent > -1
-                                                                              && GetRootModel().GetPropertyFromPath("materialEntries")
-                                                                                      ?.ResolvedData is CArray<CMeshMaterialEntry>
-                                                                                  materialEntries &&
-                                                                              materialEntries.Count > NodeIdxInParent:
+            case CMaterialInstance or CResourceAsyncReference<IMaterial>
+                when NodeIdxInParent > -1
+                     && GetRootModel().GetPropertyFromPath("materialEntries")?.ResolvedData is CArray<CMeshMaterialEntry> materialEntries
+                     && materialEntries.Count > NodeIdxInParent:
             {
                 var isLocalMaterial = ResolvedData is CMaterialInstance;
                 var entry = materialEntries[NodeIdxInParent];
@@ -577,6 +720,52 @@ public partial class ChunkViewModel
         Descriptor ??= "";
     }
 
+    private string GetVFXEffectDetails(scnEffectEntry effectEntry)
+    {
+        if (effectEntry == null)
+        {
+            return "";
+        }
+            
+        // First try to use EffectName if available
+        if (effectEntry.EffectName != CName.Empty)
+        {
+            var effectName = effectEntry.EffectName.GetResolvedText();
+            if (!string.IsNullOrEmpty(effectName))
+            {
+                return $" - {effectName}";
+            }
+        }
+        
+        // If no effect name, try to resolve through EffectInstanceId
+        if (effectEntry.EffectInstanceId != null && GetRootModel().ResolvedData is scnSceneResource sceneResource)
+        {
+            var instanceId = effectEntry.EffectInstanceId.Id;
+            var effectId = effectEntry.EffectInstanceId.EffectId.Id;
+            
+            // Find the effect definition
+            var effectDef = sceneResource.EffectDefinitions
+                .FirstOrDefault(e => e.Id.Id == effectId);
+                
+            if (effectDef != null)
+            {
+                var effectPath = effectDef.Effect.DepotPath.GetResolvedText();
+                if (!string.IsNullOrEmpty(effectPath))
+                {
+                    var filename = System.IO.Path.GetFileNameWithoutExtension(effectPath);
+                    return $" - {filename}";
+                }
+            }
+            
+            // If we have instance ID but no effect definition, show instance/effect IDs
+            if (instanceId != uint.MaxValue && effectId != uint.MaxValue)
+            {
+                return $" - Instance:{instanceId}/Effect:{effectId}";
+            }
+        }
+        
+        return "";
+    }
 
     /// <summary>
     /// Property names for descriptor field
@@ -604,6 +793,7 @@ public partial class ChunkViewModel
         "actorName", // ?
         "sectorHash", // sectors
         "propertyPath", // ?
+        "link", // gameuiSwitcherInfo
     ];
 
     private static readonly string[] s_nonRenamableProperties =

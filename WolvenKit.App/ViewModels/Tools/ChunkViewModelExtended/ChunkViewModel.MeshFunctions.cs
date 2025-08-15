@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using HelixToolkit.SharpDX.Core;
 using WolvenKit.RED4.Types;
 
 // ReSharper disable once CheckNamespace

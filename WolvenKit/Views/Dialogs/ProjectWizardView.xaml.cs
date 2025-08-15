@@ -1,7 +1,5 @@
-using System;
 using System.Reactive.Disposables;
 using System.Windows.Controls;
-using System.Windows.Input;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.Services;
@@ -18,38 +16,8 @@ namespace WolvenKit.Views.Dialogs
         {
             InitializeComponent();
 
-            //this.WhenAnyValue(x => x.ViewModel)
-            //    .BindTo(this, x => x.DataContext);
-
-
             this.WhenActivated(disposables =>
             {
-                _syncModName = true;
-                _autoUpdate = false;
-                
-                //this.Bind(ViewModel,
-                //    vm => vm,
-                //    v => v.DataContext).DisposeWith(disposables);
-
-                //Observable
-                //    .FromEventPattern(wizardControl, nameof(WizardControl.Finish))
-                //    .Subscribe(_ => ViewModel.OkCommand.Execute().Subscribe())
-                //    .DisposeWith(disposables);
-
-                //Observable
-                //    .FromEventPattern(wizardControl, nameof(WizardControl.Cancel))
-                //    .Subscribe(_ => ViewModel.CancelCommand.Execute().Subscribe())
-                //    .DisposeWith(disposables);
-
-                this.Bind(ViewModel,
-                        vm => vm.ProjectName,
-                        v => v.ProjectNameTextBox.Text).DisposeWith(disposables);
-                this.Bind(ViewModel,
-                        vm => vm.ProjectPath,
-                        v => v.ProjectPathTextBox.Text).DisposeWith(disposables);
-                this.Bind(ViewModel,
-                    vm => vm.ModName,
-                    v => v.ModNameTextBox.Text).DisposeWith(disposables);
                 this.Bind(ViewModel,
                         vm => vm.Author,
                         v => v.AuthorTextBox.Text).DisposeWith(disposables);
@@ -59,29 +27,30 @@ namespace WolvenKit.Views.Dialogs
                 this.Bind(ViewModel,
                         vm => vm.Version,
                         v => v.VersionTextBox.Text).DisposeWith(disposables);
-                //this.OneWayBind(ViewModel,
-                //        vm => vm.ProjectType,
-                //        v => v.ProjectypeTextBox.ItemsSource)
-                //    .DisposeWith(disposables);
-                //this.Bind(ViewModel,
-                //        vm => vm.AllFieldsValid,
-                //        v => v.wizardControl.FinishEnabled)
-                //    .DisposeWith(disposables);
-
 
                 this.BindCommand(ViewModel,
                     vm => vm.OpenProjectPathCommand,
                     v => v.ProjectPathButton).DisposeWith(disposables);
 
-                this.BindCommand(ViewModel, x => x.OkCommand, x => x.OkButton)
-               .DisposeWith(disposables);
+                this.BindCommand(ViewModel, 
+                        x => x.OkCommand, 
+                        x => x.OkButton).DisposeWith(disposables);
 
-                this.BindCommand(ViewModel, x => x.CancelCommand, x => x.CancelButton)
-                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel, 
+                        x => x.CancelCommand, 
+                        x => x.CancelButton).DisposeWith(disposables);
 
+                if (ViewModel is null)
+                {
+                    return;
+                }
 
-                ProjectNameTextBox.VerifyData();
-                ModNameTextBox.VerifyData();
+                _syncModName = true;
+                _autoUpdate = false;
+
+                ViewModel.ValidateProjectName();
+                ViewModel.ValidateProjectPath();
+                ViewModel.ValidateModName();
 
                 ReadDefaultValuesFromSettings();
                 VersionTextBox.SetCurrentValue(TextBox.TextProperty, "1.0.0");
@@ -105,60 +74,6 @@ namespace WolvenKit.Views.Dialogs
             {
                 EmailTextBox.SetCurrentValue(TextBox.TextProperty, settings.ModderEmail);
             }
-        }
-
-        private HandyControl.Data.OperationResult<bool> VerifyProjectName(string str)
-        {
-            if (string.IsNullOrEmpty(str))
-            {
-                return HandyControl.Data.OperationResult.Failed("Please enter a Project name!");
-            }
-
-            if (System.IO.Directory.Exists(System.IO.Path.Combine(ProjectPathTextBox.Text, ProjectNameTextBox.Text)))
-            {
-                return HandyControl.Data.OperationResult.Failed("A project with this name already exists!");
-            }
-            
-            return HandyControl.Data.OperationResult.Success();
-        }
-
-        private HandyControl.Data.OperationResult<bool> VerifyModName(string str)
-        {
-            if (string.IsNullOrEmpty(str))
-            {
-                return HandyControl.Data.OperationResult.Failed("Please enter a mod name!");
-            }
-
-            return HandyControl.Data.OperationResult.Success();
-        }
-
-        private HandyControl.Data.OperationResult<bool> VerifyFolder(string str)
-        {
-            if (!System.IO.Directory.Exists(str))
-            {
-                return HandyControl.Data.OperationResult.Failed("Selected path does not exist");
-            }
-
-            ProjectNameTextBox.VerifyData();
-
-            return HandyControl.Data.OperationResult.Success();
-        }
-            
-
-        //private void ButtonClose(object sender, RoutedEventArgs e) => throw new NotImplementedException();
-
-        //private void ButtonMinimize(object sender, RoutedEventArgs e) => throw new NotImplementedException();
-
-        //private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) => throw new NotImplementedException();
-
-        private void ProjectNameTextBox_OnPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (ProjectNameTextBox.Text != ModNameTextBox.Text)
-            {
-                return;
-            }
-
-            ModNameTextBox.SetCurrentValue(TextBox.TextProperty, ProjectNameTextBox.Text);
         }
 
         private void ProjectNameTextBox_OnTextChanged(object sender, TextChangedEventArgs e)

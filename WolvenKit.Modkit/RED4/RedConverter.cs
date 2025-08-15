@@ -117,24 +117,42 @@ namespace WolvenKit.Modkit.RED4
         /// Converts a json string to W2RC file
         /// </summary>
         /// <param name="json"></param>
+        /// <param name="realExtension"></param>
         /// <returns></returns>
         /// <exception cref="InvalidParsingException"></exception>
-        public CR2WFile? ConvertFromJson(string json)
+        public CR2WFile? ConvertFromJson(string json, string realExtension)
         {
-            _hookService.OnImportFromJson(ref json);
+            _hookService.OnImportFromJson(ref json, realExtension);
 
             var dto = RedJsonSerializer.Deserialize<RedFileDto>(json);
 
             return dto is null ? null : dto.Data ?? null;
         }
 
+        /// <inheritdoc cref="ConvertFromJsonAndWriteAsync(FileInfo,DirectoryInfo,string?)"/>
+        public bool ConvertFromJsonAndWrite(string absoluteFilePath, string absoluteDestFolder,
+            string? destFileName = null) =>
+            ConvertFromJsonAndWrite(new FileInfo(absoluteFilePath), new DirectoryInfo(absoluteDestFolder));
+
+        /// <inheritdoc cref="ConvertFromJsonAndWriteAsync(FileInfo,DirectoryInfo,string?)"/>
+        public bool ConvertFromJsonAndWrite(FileInfo fileInfo, DirectoryInfo outputDirInfo,
+            string? destFileName = null) =>
+            Task.Run(() => ConvertFromJsonAndWriteAsync(fileInfo, outputDirInfo)).Result;
+
+        /// <inheritdoc cref="ConvertFromJsonAndWriteAsync(FileInfo,DirectoryInfo,string?)"/>
+        public Task<bool> ConvertFromJsonAndWriteAsync(string absoluteFilePath, string absoluteDestFolder,
+            string? destFileName = null) =>
+            ConvertFromJsonAndWriteAsync(new FileInfo(absoluteFilePath), new DirectoryInfo(absoluteDestFolder));
+        
         /// <summary>
-        /// Creates a redengine file from a given textual representation and saves it to a given outputdirectory
+        /// Creates a redengine file from a given textual representation and saves it to a given output directory
         /// </summary>
-        /// <param name="fileInfo"></param>
-        /// <param name="outputDirInfo"></param>
+        /// <param name="fileInfo">Source file (absolute path)</param>
+        /// <param name="outputDirInfo">Destination dir (absolute path)</param>
+        /// <param name="destFileName">Optional: rename file in target folder</param>
         /// <exception cref="SerializationException"></exception>
-        public async Task<bool> ConvertFromJsonAndWriteAsync(FileInfo fileInfo, DirectoryInfo outputDirInfo)
+        public async Task<bool> ConvertFromJsonAndWriteAsync(FileInfo fileInfo, DirectoryInfo outputDirInfo,
+            string? destFileName = null)
         {
             var convertExtension = Path.GetExtension(fileInfo.Name).TrimStart('.').ToLower();
             if (!Enum.TryParse<ETextConvertFormat>(convertExtension, out var textConvertFormat))
@@ -145,11 +163,11 @@ namespace WolvenKit.Modkit.RED4
             var text = await File.ReadAllTextAsync(fileInfo.FullName);
 
             // get extension from filename //TODO pass?
-            var filenameWithoutConvertExtension = fileInfo.Name[..^convertExtension.Length /*+ 1*/];
-            var ext = Path.GetExtension(filenameWithoutConvertExtension);
+            var redFileName = Path.GetFileNameWithoutExtension(fileInfo.Name);
+            var redExtension = Path.GetExtension(redFileName);
             var w2rc = textConvertFormat switch
             {
-                ETextConvertFormat.json => ConvertFromJson(text),
+                ETextConvertFormat.json => ConvertFromJson(text, redExtension),
                 _ => throw new NotSupportedException(),
             };
             if (w2rc is null)
@@ -157,13 +175,27 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            var outpath = Path.ChangeExtension(Path.Combine(outputDirInfo.FullName, fileInfo.Name), ext);
+            var outPath = Path.Combine(outputDirInfo.FullName, redFileName);
 
-            using var fs2 = new FileStream(outpath, FileMode.Create, FileAccess.ReadWrite);
+            using var fs2 = new FileStream(outPath, FileMode.Create, FileAccess.ReadWrite);
             using var writer = new CR2WWriter(fs2) { LoggerService = _loggerService };
-            writer.WriteFile(w2rc);
+            try
+            {
+                writer.WriteFile(w2rc);
+            }
+            finally
+            {
+                fs2.Close();
+                writer.Close();
+            }
 
-            _loggerService.Success($"Imported {fileInfo.Name} to {outpath}");
+            _loggerService.Success($"Imported {fileInfo.Name} to {outPath}");
+
+            if (destFileName is not null)
+            {
+                File.Move(outPath, Path.Join(outPath, destFileName));
+            }
+
 
             return true;
         }

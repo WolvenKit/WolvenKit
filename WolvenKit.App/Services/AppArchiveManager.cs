@@ -1,6 +1,7 @@
 ﻿using DynamicData;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -17,26 +18,39 @@ using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.App.Services;
 
-public class AppArchiveManager(
-    IHashService hashService,
-    Red4ParserService wolvenkitFileService,
-    ILoggerService logger,
-    IProgressService<double> progress,
-    ISettingsManager settings)
-    : ArchiveManager(hashService, wolvenkitFileService, logger, progress), IAppArchiveManager
+public class AppArchiveManager : ArchiveManager, IAppArchiveManager
 {
+    public AppArchiveManager(
+        IHashService hashService,
+        Red4ParserService wolvenkitFileService,
+        ILoggerService logger,
+        IProgressService<double> progressService,
+        ISettingsManager settings) : base(hashService, wolvenkitFileService, logger, progressService)
+    {
+        _hashService = hashService;
+        _logger = logger;
+        _progressService = progressService;
+        _settings = settings;
+    }
+    
     #region Fields
 
+    private readonly IHashService _hashService;
+    private readonly ILoggerService _logger;
+    private readonly IProgressService<double> _progressService;
+    private readonly ISettingsManager _settings;
+    
     private readonly SourceList<RedFileSystemModel> _rootCache = new();
 
     private readonly SourceList<RedFileSystemModel> _modCache = new();
 
-    private readonly string[] _ignoredArchives =
-        settings.ArchiveNamesExcludeFromScan.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+    private string[] IgnoredArchives =>
+        _settings.ArchiveNamesExcludeFromScan.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
             .Select(archiveName => archiveName.Replace(".archive", "")).ToArray();
 
-    public override string[] GetIgnoredArchiveNames() => _ignoredArchives;
-    
+    public override string[] GetIgnoredArchiveNames() => IgnoredArchives;
+
+    public static bool ArchivesNeedRescan = true;
 
     #endregion Fields
 
@@ -47,6 +61,15 @@ public class AppArchiveManager(
     public RedFileSystemModel? RootNode { get; set; }
 
     public List<RedFileSystemModel> ModRoots { get; set; } = new();
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+        if (e.PropertyName == nameof(IsModBrowserActive) && IsModBrowserActive)
+        {
+            ArchivesNeedRescan = true;
+        }
+    }
 
     #endregion
 
@@ -118,7 +141,7 @@ public class AppArchiveManager(
     }
 
     private string? GetGameDir() =>
-        settings.GetRED4GameExecutablePath() is string executablePath && !string.IsNullOrEmpty(executablePath) &&
+        _settings.GetRED4GameExecutablePath() is string executablePath && !string.IsNullOrEmpty(executablePath) &&
         Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(executablePath))) is string gameDir
             ? gameDir
             : null;
@@ -157,8 +180,13 @@ public class AppArchiveManager(
         _modCache.Edit(innerCache =>
         {
             innerCache.Clear();
-            innerCache.Add(ModRoots);
+            innerCache.Add([.. ModRoots]);
         });
+
+        if (analyzeFiles)
+        {
+            ArchivesNeedRescan = false;
+        }
 
     }
 
@@ -178,7 +206,7 @@ public class AppArchiveManager(
         _modCache.Edit(innerCache =>
         {
             innerCache.Clear();
-            innerCache.Add(ModRoots);
+            innerCache.Add([.. ModRoots]);
         });
     }
 
@@ -198,7 +226,7 @@ public class AppArchiveManager(
             ArgumentNullException.ThrowIfNull(archive.ArchiveRelativePath,
                 $"{nameof(archive.ArchiveRelativePath)}, archive name: ${archive.Name}");
 
-            if (_ignoredArchives.Contains(archive.Name.Replace(".archive", "")))
+            if (IgnoredArchives.Contains(archive.Name.Replace(".archive", "")))
             {
                 continue;
             }

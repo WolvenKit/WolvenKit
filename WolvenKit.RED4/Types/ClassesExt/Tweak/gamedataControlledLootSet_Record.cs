@@ -154,7 +154,15 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CArray<TweakDBID>>();
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
-		
+
+		[RED("rollBackCounterWhenLootIsDestroyed")]
+		[REDProperty(IsIgnored = true)]
+		public CBool RollBackCounterWhenLootIsDestroyed
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		[RED("rollOverDropsPerLevel")]
 		[REDProperty(IsIgnored = true)]
 		public CBool RollOverDropsPerLevel

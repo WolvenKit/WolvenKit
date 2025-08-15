@@ -35,56 +35,90 @@ public partial class RedBaseClass
 
     public (bool, IRedType?) GetFromXPath(string[] xPath)
     {
+        if (xPath.Length == 0)
+        {
+            return (true, this);
+        }
+        
         IRedType? result = this;
         var currentProps = _properties;
-        foreach (var part in xPath)
+
+        foreach (var partial in xPath)
         {
-            if (currentProps == null)
+            // after the loop, we should have currentProps from a base class, and a result
+            if (result == null || currentProps == null)
             {
                 return (false, null);
             }
 
-            var arrPath = part.Split(':');
+            // In case of (nested) lists, we need to process the index structure below
+            var arrPath = partial.Split(':');
 
-            if (arrPath.Length != 2 || !int.TryParse(arrPath[1], out var index))
+            if (!currentProps.TryGetValue(arrPath[0], out var child))
             {
-                index = -1;
+                return (false, null);
             }
 
+            result = child;
 
-            if (currentProps.ContainsKey(arrPath[0]))
+
+            // we'll look in the child's properties next
+
+            currentProps = result switch
             {
-                result = currentProps[arrPath[0]];
+                IRedHandle ira => ira.GetValue()?._properties,
+                RedBaseClass rbc => rbc._properties,
+                _ => null
+            };
 
-                currentProps = null;
+            if (arrPath.Length == 1)
+            {
+                continue;
+            }
 
+            // We have leftover array indices and need to go down
+            arrPath = arrPath.Skip(1).ToArray();
+
+            foreach (var arrayProp in arrPath)
+            {
+                if (currentProps?.TryGetValue(arrayProp, out var grandChild) == true)
+                {
+                    result = grandChild;
+                    currentProps = result switch
+                    {
+                        IRedHandle handle => handle.GetValue()?._properties,
+                        RedBaseClass rbc2 => rbc2._properties,
+                        _ => currentProps
+                    };
+
+                    continue;
+                }
+
+                if (!int.TryParse(arrayProp, out var index) || index < 0)
+                {
+                    return (false, null);
+                }
+
+                // also covers IRedArray
                 if (result is IList lst)
                 {
-                    if (index >= 0)
+                    if (index >= lst.Count)
                     {
-                        if (index >= lst.Count)
-                        {
-                            return (false, null);
-                        }
-
-                        result = (IRedType?)lst[index];
+                        return (false, null);
                     }
-                }
-                
-                if (result is RedBaseClass subCls)
-                {
-                    currentProps = subCls._properties;
+
+                    result = (IRedType?)lst[index];
                 }
 
-                if (result is IRedBaseHandle handle)
+                switch (result)
                 {
-                    var cCls = handle.GetValue();
-                    currentProps = cCls?._properties;
-                }
-
-                if (result is IRedBufferWrapper { Data: RedPackage redPackage })
-                {
-                    if (index >= 0)
+                    case IRedBaseHandle handle:
+                        currentProps = handle.GetValue()?._properties;
+                        continue;
+                    case RedBaseClass subCls:
+                        currentProps = subCls._properties;
+                        continue;
+                    case IRedBufferWrapper { Data: RedPackage redPackage }:
                     {
                         if (index >= redPackage.Chunks.Count)
                         {
@@ -93,13 +127,12 @@ public partial class RedBaseClass
 
                         result = redPackage.Chunks[index];
                         currentProps = ((RedBaseClass)result)._properties;
+                        break;
                     }
+                    default:
+                        break;
                 }
-                
-                continue;
             }
-
-            return (false, null);
         }
 
         return (true, result);

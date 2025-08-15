@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Reactive;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,6 +26,7 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Database;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
@@ -73,7 +73,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private readonly ILoggerService _loggerService;
     private readonly IPluginService _pluginService;
     private readonly AppViewModel _appViewModel;
-    private readonly IModifierViewStateService _modifierViewSvc;
+    private readonly ProjectResourceTools _projectResourceTools;
 
     private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
 
@@ -93,7 +93,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         IProgressService<double> progressService,
         ILoggerService loggerService,
         IPluginService pluginService,
-        IModifierViewStateService viewSvc) : base(ToolTitle)
+        ProjectResourceTools projectResourceTools) : base(ToolTitle)
     {
         _projectManager = projectManager;
         _notificationService = notificationService;
@@ -104,7 +104,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         _pluginService = pluginService;
         _loggerService = loggerService;
         _appViewModel = appViewModel;
-        _modifierViewSvc = viewSvc;
+        _projectResourceTools = projectResourceTools;
         
         ContentId = ToolContentId;
 
@@ -249,16 +249,15 @@ public partial class AssetBrowserViewModel : ToolViewModel
     #region commands
 
     [RelayCommand]
-    private async Task<Unit> LoadAssetBrowser()
+    private async Task LoadAssetBrowser()
     {
         _manuallyLoading = true;
         ShouldShowLoadButton = !_manuallyLoading && !ProjectLoaded && !ArchiveDirNotFound;
         await _gameController.GetRed4Controller().HandleStartup();
-        return Unit.Default;
     }
 
     [RelayCommand]
-    private async Task OpenWolvenKitSettings() => await _appViewModel.ShowHomePage(EHomePage.Settings);
+    private async Task OpenWolvenKitSettings() => await _appViewModel.ShowHomePageAsync(EHomePage.Settings);
 
     [RelayCommand]
     private void AddSearchKey(string value) => SearchBarText += $" {value}:";
@@ -275,7 +274,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
             case WMessageBoxResult.OK:
             case WMessageBoxResult.Yes:
             {
-                await _appViewModel.ShowHomePage(EHomePage.Plugins);
+                await _appViewModel.ShowHomePageAsync(EHomePage.Plugins);
                 break;
             }
 
@@ -333,13 +332,12 @@ public partial class AssetBrowserViewModel : ToolViewModel
                     RightItems.SuppressNotification = false;
                 }
             }
-            catch
+            catch (Exception e)
             {
                 _progressService.IsIndeterminate = false;
-                _loggerService.Error("Something went wrong when searching for uses. It is possible that your WolvenkitResourcesPlugin");
-                _loggerService.Error("  has become corrupted. Try reinstalling it. If that doesn't resolve the problem, please ");
-                _loggerService.Error("  create a ticket under https://github.com/WolvenKit/WolvenKit/issues/ with the following:");
-                throw;
+                _loggerService.Error(e);
+                throw new WolvenKitException(0x3002,
+                    "Internal database query failed - try (re)installing the Wolvenkit Resources Plugin.");
             }
 
             await Task.CompletedTask;
@@ -362,7 +360,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
                 case WMessageBoxResult.OK:
                 case WMessageBoxResult.Yes:
                 {
-                    await _appViewModel.ShowHomePage(EHomePage.Plugins);
+                    await _appViewModel.ShowHomePageAsync(EHomePage.Plugins);
                     break;
                 }
 
@@ -381,34 +379,41 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
         await Task.Run(async () =>
         {
-            using RedDBContext db = new();
-
-            if (RightSelectedItem is RedFileViewModel file && db.Files is not null)
+            try
             {
-                var hash = file.GetGameFile().Key;
+                await using RedDBContext db = new();
 
-#pragma warning disable CS8604 // Possible null reference argument.
-                var uses = await db.Files.Include("Archive").Include("Uses")
-                    .Where(x => x.Archive != null && x.Archive.Name == file.ArchiveName && x.Archive.Source == file.ArchiveSource.ToString() && x.Hash == hash)
-                    .Where(x => x.Uses != null)
-                    .Select(x => x.Uses.Select(y => y.Hash))
-                    .ToListAsync();
-#pragma warning restore CS8604 // Possible null reference argument.
+                if (RightSelectedItem is RedFileViewModel file && db.Files is not null)
+                {
+                    var hash = file.GetGameFile().Key;
 
-                //add all found items to
-                _archiveManager.Archives
-                    .Connect()
-                    .TransformMany(x => x.Files.Values, y => y.Key)
-                    .Filter(x => uses.Any(y => y.Contains(x.Key)))
-                    .Transform(x => new RedFileViewModel(x))
-                    .Bind(out var list)
-                    .Subscribe()
-                    .Dispose();
+                    var uses = await db.Files.Include("Archive").Include("Uses")
+                        .Where(x => x.Archive != null && x.Archive.Name == file.ArchiveName &&
+                                    x.Archive.Source == file.ArchiveSource.ToString() && x.Hash == hash)
+                        .Where(x => x.Uses != null)
+                        .Select(x => x.Uses!.Select(y => y.Hash))
+                        .ToListAsync();
 
-                RightItems.Clear();
-                RightItems.AddRange(list);
+                    //add all found items to asset browser
+                    _archiveManager.Archives
+                        .Connect()
+                        .TransformMany(x => x.Files.Values, y => y.Key)
+                        .Filter(x => uses.Any(y => y.Contains(x.Key)))
+                        .Transform(x => new RedFileViewModel(x))
+                        .Bind(out var list)
+                        .Subscribe()
+                        .Dispose();
+
+                    RightItems.Clear();
+                    RightItems.AddRange(list);
+                }
             }
-
+            catch (Exception e)
+            {
+                _loggerService.Error(e);
+                throw new WolvenKitException(0x3002,
+                    "Internal database query failed - try (re)installing the Wolvenkit Resources Plugin.");       
+            }
             await Task.CompletedTask;
         });
 
@@ -615,7 +620,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         switch (RightSelectedItem)
         {
             case RedFileViewModel fileVm:
-                await _gameController.GetController().AddFileToModModal(fileVm.GetGameFile());
+                await _gameController.GetController().AddFileToModModalAsync(fileVm.GetGameFile());
                 break;
             case RedDirectoryViewModel dirVm:
                 MoveToFolder(dirVm);
@@ -676,7 +681,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     private bool CanAddFromArchive() => RightSelectedItem is RedFileViewModel;
     [RelayCommand(CanExecute = nameof(CanAddFromArchive))]
-    private void AddFromArchive(IGameArchive archive)
+    private async Task AddFromArchive(IGameArchive archive)
     {
         if (archive is not ICyberGameArchive cyberArchive || RightSelectedItem is not RedFileViewModel fileVm)
         {
@@ -684,8 +689,8 @@ public partial class AssetBrowserViewModel : ToolViewModel
         }
 
         // must use "Value" here to force the exact archive
-        var realGameFile = cyberArchive.Files.First(_ => _.Value.Name == fileVm.GetGameFile().Name).Value;
-        _gameController.GetController().AddFileToModModal(realGameFile);
+        var realGameFile = cyberArchive.Files.First(f => f.Value.Name == fileVm.GetGameFile().Name).Value;
+        await _gameController.GetController().AddFileToModModalAsync(realGameFile);
     }
 
     #endregion commands
@@ -746,8 +751,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         try
         {
             foundFiles.AddRange(await Task.Run(CyberEnhancedSearchAsync, cancellationToken));
-            ;
-            
+           
             // If the search includes an .archive file, let's select it
             if (s_SearchByArchiveNameRegex().Match(query) is { Success: true } m)
             {
@@ -808,7 +812,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         Exclude,
     }
 
-    private readonly record struct Term(TermType Type, string Pattern, string NegationPattern);
+    private readonly record struct Term(TermType Type, string Pattern, string? NegationPattern);
 
     // Refinement types
     private interface ISearchRefinement
@@ -821,7 +825,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     private readonly record struct RegexRefinement(Regex Regex) : ISearchRefinement;
 
-    private readonly record struct ArchivePathRefinement(string ArchivePath) : ISearchRefinement;
+    private readonly record struct ArchivePathRefinement(string? ArchivePath) : ISearchRefinement;
 
     private readonly record struct VerbatimRefinement(string Verbatim) : ISearchRefinement;
 
@@ -830,7 +834,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private readonly record struct UsedByRefinement(string FilePath) : ISearchRefinement;
 
     // Refinement type matchers
-    private static readonly Regex s_refinementSeparator = new("\\s+>\\s+", s_regexpOpts, s_regexpSafetyTimeout);
+    private static readonly Regex s_refinementSeparator = new(@"\s*>\s*", s_regexpOpts, s_regexpSafetyTimeout);
     private static readonly Regex s_isHashRefinement = new("^h(?:ash)?:(?<numbers>\\d+)$", s_regexpOpts, s_regexpSafetyTimeout);
     private static readonly Regex s_isRegexRefinement = new("^r(?:egexp?)?:(?<pattern>.*)$", s_regexpOpts, s_regexpSafetyTimeout);
 
@@ -929,7 +933,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
         if (!string.IsNullOrEmpty(archivePathMatch))
         {
-            return new UsedByRefinement() { FilePath = usingPathMatch };
+            return new UsedByRefinement() { FilePath = usedByPathMatch };
         }
 
         var verbatimMatch = s_isVerbatimRefinement.Match(refinementString).Groups["verbatim"].Value;
@@ -1035,7 +1039,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
             RightItems.Clear();
             return;
         }
-
+        
         var searchAsSequentialRefinements =
             s_refinementSeparator
                 .Split(SearchBarText)
@@ -1068,7 +1072,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
             RightItems.Clear();
             return [];
         }
-
+        
         var searchAsSequentialRefinements =
             s_refinementSeparator
                 .Split(SearchBarText)
@@ -1117,58 +1121,6 @@ public partial class AssetBrowserViewModel : ToolViewModel
     #endregion methods
 
     // On initialization, scanArchives is read from the settings. On scan button click, we always want to scan.
-    public void ScanModArchives(bool scanArchives, string? archiveName = null)
-    {
-        if (_settings.CP77ExecutablePath is null)
-        {
-            return;
-        }
-
-
-        var ignoredArchives = _settings.ArchiveNamesExcludeFromScan.Split(",", StringSplitOptions.RemoveEmptyEntries)
-            .Select(name => name.Replace(".archive", "")).ToArray();
-
-        
-        if (archiveName is null)
-        {
-            _archiveManager.LoadModArchives(new FileInfo(_settings.CP77ExecutablePath), scanArchives, ignoredArchives);
-
-            if (Directory.Exists(_settings.ExtraModDirPath))
-            {
-                _archiveManager.LoadAdditionalModArchives(_settings.ExtraModDirPath, scanArchives, ignoredArchives);
-            }
-
-            return;
-        }
-
-        List<string> archivesToScan = [];
-        archivesToScan.AddRange(_archiveManager.GetModArchives()
-            .Where(archive => archive.Name.Contains(archiveName, StringComparison.OrdinalIgnoreCase))
-            .Select(gameArchive => gameArchive.ArchiveAbsolutePath)
-            .Where(absolutePath => !ignoredArchives.Contains(Path.GetFileName(absolutePath).Replace(".archive", ""))));
-
-        if (Directory.Exists(_settings.ExtraModDirPath))
-        {
-            archivesToScan.AddRange(Directory.GetFiles(_settings.ExtraModDirPath, archiveName, SearchOption.AllDirectories)
-                .Where(absolutePath => !ignoredArchives.Contains(Path.GetFileName(absolutePath).Replace(".archive", ""))));
-        }
-
-        if (archivesToScan.Count > 0)
-        {
-            foreach (var absoluteFilepath in archivesToScan)
-            {
-                _archiveManager.LoadModArchive(absoluteFilepath, scanArchives, !scanArchives);
-            }
-
-            return;
-        }
-
-        // If no archives match the filter, scan all archives.
-        _archiveManager.LoadModArchives(new FileInfo(_settings.CP77ExecutablePath), scanArchives, ignoredArchives);
-
-        if (Directory.Exists(_settings.ExtraModDirPath))
-        {
-            _archiveManager.LoadAdditionalModArchives(_settings.ExtraModDirPath, scanArchives);
-        }
-    }
+    public void ScanModArchives(bool? executeScan = null, string? archiveName = null) =>
+        _projectResourceTools.ScanModArchives(executeScan, archiveName);
 }

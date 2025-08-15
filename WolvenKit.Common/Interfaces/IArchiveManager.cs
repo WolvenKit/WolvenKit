@@ -66,6 +66,15 @@ namespace WolvenKit.Common
         /// <param name="searchScope">BaseGame, Mod or Everywhere</param>
         /// <returns>An optional with the matching file</returns>
         public Optional<IGameFile> Lookup(ulong hash, ArchiveManagerScope searchScope);
+
+        /// <summary>
+        /// Gets all files including the search string under the given scope.
+        /// </summary>
+        /// <param name="search">search string</param>
+        /// <param name="searchScope">BaseGame, Mod or Everywhere</param>
+        /// <returns>An optional with the matching file</returns>
+        public List<IGameFile> Search(string search, ArchiveManagerScope searchScope);
+        
         public IGameFile? GetGameFile(ResourcePath path, bool includeMods = true, bool includeProject = true);
         public CR2WFile? GetCR2WFile(ResourcePath path, bool includeMods = true, bool includeProject = true);
 

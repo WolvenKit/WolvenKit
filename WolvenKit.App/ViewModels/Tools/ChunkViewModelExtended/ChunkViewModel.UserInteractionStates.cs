@@ -45,18 +45,70 @@ public partial class ChunkViewModel
 
     public void SetEditorLevel(EditorDifficultyLevel level)
     {
-        _currentEditorDifficultyLevel = level;
-        DifficultyLevelFieldInformation = EditorDifficultyLevelFieldFactory.GetInstance(level);
-        RecalculateProperties();
+        if (DifficultyLevelFieldInformation.Level != level)
+        {
+            DifficultyLevelFieldInformation = EditorDifficultyLevelFieldFactory.GetInstance(level);
+            RecalculateProperties();
+        }
     }
+
+    private bool _isPropertiesInitialized;
+
+    /// <summary>
+    /// If we need a node to be fully initialized (e.g. if we run a search on it)
+    /// Cap it off arbitrarily at recursion level 8 (because why not)
+    /// </summary>
+    public void CalculatePropertiesRecursive(int recursionLevel = 0, int countLimit = 20)
+    {
+        if (_isPropertiesInitialized || recursionLevel > 8)
+        {
+            return;
+        }
+
+        _isPropertiesInitialized = true;
+        CalculateProperties();
+        if (TVProperties.Count > countLimit)
+        {
+            return;
+        }
+
+        foreach (var child in TVProperties)
+        {
+            child.CalculatePropertiesRecursive(recursionLevel + 1, countLimit);
+        }
+    }
+
+    /// <summary>
+    /// Check for quest and scenes types
+    /// Added additional search by propertyTypeName to work inside the graph
+    /// </summary>
+    private bool QuestAndScenesSearchHandler(string searchBoxText)
+    {
+        var result = false;
+        // Checking for a resolved property type for scenes and quests graphs
+        if (ResolvedPropertyType is not null)
+        {
+            result = ResolvedPropertyType.Name.Contains(searchBoxText, StringComparison.OrdinalIgnoreCase);
+        }
+
+        return result;
+    }
+
 
     private EditorDifficultyLevelInformation DifficultyLevelFieldInformation { get; set; }
 
     public void SetVisibilityStatusBySearchString(string searchBoxText)
     {
-        if (ResolvedData is RedDummy || TVProperties.Count == 0)
+        if (ResolvedData is RedDummy)
         {
             CalculateProperties();
+        }
+
+        // some items are still RedDummies even after properties were calculated. Why?
+        if (!string.IsNullOrEmpty(searchBoxText) && ResolvedData is RedDummy)
+        {
+            IsHiddenBySearch = true;
+            return;
         }
         
         foreach (var chunkViewModel in TVProperties)
@@ -64,34 +116,62 @@ public partial class ChunkViewModel
             chunkViewModel.SetVisibilityStatusBySearchString(searchBoxText);
         }
 
-        if (IsHiddenByEditorDifficultyLevel || Parent is null)
+        if (string.IsNullOrEmpty(searchBoxText) || Parent is null)
         {
             IsHiddenBySearch = false;
             return;
         }
 
-        if (TVProperties.Any(c => c is { IsHiddenBySearch: false }))
+        var visibleChildren = TVProperties.Where(c => !c.IsHiddenBySearch).ToList();
+
+        if (visibleChildren.Count != 0)
         {
             IsHiddenBySearch = false;
-            IsExpanded = !string.IsNullOrEmpty(searchBoxText);
+            IsExpanded = true;
             return;
         }
+        
 
-        if (string.IsNullOrEmpty(searchBoxText))
+        var shouldShow = Value?.Contains(searchBoxText, StringComparison.OrdinalIgnoreCase) == true
+                         || Descriptor?.Contains(searchBoxText, StringComparison.OrdinalIgnoreCase) == true
+                         || StringHelper.StringifyRedType(ResolvedData).Contains(searchBoxText, StringComparison.OrdinalIgnoreCase);
+
+        // if it's a ref, search in full depot path
+        shouldShow = shouldShow || (ResolvedData is IRedRef data &&
+                                    data.DepotPath.GetResolvedText()?.Contains(searchBoxText, StringComparison.OrdinalIgnoreCase) == true);
+
+        shouldShow = shouldShow || PropertyType.Name.Contains(searchBoxText, StringComparison.OrdinalIgnoreCase);
+
+        shouldShow = shouldShow || QuestAndScenesSearchHandler(searchBoxText);
+
+        // Hiding cnames that are part of the parent property's description
+        if (shouldShow && ResolvedData is CName cname && cname.GetResolvedText() is string s &&
+            (Parent.Descriptor?.Contains(s) == true || Parent.Value?.Contains(s) == true))
         {
-            IsHiddenBySearch = false;
-            IsExpanded = Parent is not null;
-            return;
+            shouldShow = false;
         }
-
-        IsHiddenBySearch = !(Value?.Contains(searchBoxText, StringComparison.OrdinalIgnoreCase) == true
-                             || Descriptor?.Contains(searchBoxText, StringComparison.OrdinalIgnoreCase) == true
-                             || StringHelper.StringifyRedType(ResolvedData).Contains(searchBoxText, StringComparison.OrdinalIgnoreCase));
+        
+        IsHiddenBySearch = !shouldShow;
 
         if (IsHiddenBySearch)
         {
             IsExpanded = false;
         }
+        else if (shouldShow && visibleChildren.Count < TVProperties.Count)
+        {
+            // For nodes that are visible because they directly match the search, unhide all their children
+            UnhideRecursively();
+        }
+ 
+        
+    }
 
+    private void UnhideRecursively()
+    {
+        IsHiddenBySearch = false;
+        foreach (var child in TVProperties.Where(cvm => cvm.IsHiddenBySearch))
+        {
+            child.UnhideRecursively();
+        }
     }
 }

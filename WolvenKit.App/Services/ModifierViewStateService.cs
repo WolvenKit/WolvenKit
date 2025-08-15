@@ -20,8 +20,12 @@ namespace WolvenKit.App.Services;
 /// _modifierViewStates.ModifierStateChanged += OnModifierStateChanged;
 /// </code>
 /// </example>
-public partial class ModifierViewStateService() : ObservableObject, IModifierViewStateService
+public partial class ModifierViewStateService : ObservableObject, IModifierViewStateService
 {
+    public ModifierViewStateService()
+    {
+    }
+    
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
         base.OnPropertyChanged(e);
@@ -95,6 +99,9 @@ public partial class ModifierViewStateService() : ObservableObject, IModifierVie
     public static bool IsCtrlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
     public static bool IsAltBeingHeld => Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt);
     public static bool IsNoModifierBeingHeld => !IsShiftBeingHeld && !IsCtrlBeingHeld && !IsAltBeingHeld;
+    public static bool IsShiftBeingHeldOnly => IsShiftBeingHeld && !IsCtrlBeingHeld && !IsAltBeingHeld;
+    public static bool IsCtrlBeingHeldOnly => !IsShiftBeingHeld && IsCtrlBeingHeld && !IsAltBeingHeld;
+    public static bool IsAltBeingHeldOnly => !IsShiftBeingHeld && !IsCtrlBeingHeld && IsAltBeingHeld;
 
     private readonly Dictionary<Key, bool> _keyStates = [];
 

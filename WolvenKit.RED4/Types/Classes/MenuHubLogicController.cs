@@ -101,6 +101,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(13)] 
+		[RED("btnGallery")] 
+		public inkWidgetReference BtnGallery
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(14)] 
 		[RED("btnCodex")] 
 		public inkWidgetReference BtnCodex
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("panelInventory")] 
 		public inkWidgetReference PanelInventory
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("panelJournal")] 
 		public inkWidgetReference PanelJournal
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("panelCharacter")] 
 		public inkWidgetReference PanelCharacter
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("menusData")] 
 		public CHandle<MenuDataBuilder> MenusData
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<MenuDataBuilder>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("tooltipsManager")] 
 		public CWeakHandle<gameuiTooltipsManager> TooltipsManager
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameuiTooltipsManager>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("tooltipsManagerRef")] 
 		public inkWidgetReference TooltipsManagerRef
 		{
@@ -170,6 +178,7 @@ namespace WolvenKit.RED4.Types
 			BtnPhone = new inkWidgetReference();
 			BtnTarot = new inkWidgetReference();
 			BtnShard = new inkWidgetReference();
+			BtnGallery = new inkWidgetReference();
 			BtnCodex = new inkWidgetReference();
 			PanelInventory = new inkWidgetReference();
 			PanelJournal = new inkWidgetReference();

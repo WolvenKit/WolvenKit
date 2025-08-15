@@ -23,10 +23,10 @@ using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
-using WolvenKit.App.PhysX;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common.Interfaces;
+using WolvenKit.Common.PhysX;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -212,7 +212,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     }
                     catch (Exception e)
                     {
-                        _loggerService.Error($"Failed to render entity. Please open a ticket: \n${e}");
+                        _loggerService.Error(
+                            $"Failed to render entity. Please ensure that all your component names are unique. If they are, open a ticket: \n${e}");
                     }
 
                     break;
@@ -310,12 +311,22 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             {
                 return;
             }
-
+            
             var newElems = new SmartElement3DCollection();
             value.ForEach(v => newElems.Add(v));
             SelectedAppearance.ModelGroup = newElems;
             OnPropertyChanged(new PropertyChangedEventArgs(nameof(SelectedModelGroup)));
         }
+    }
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(SelectedAppearance) && SelectedAppearance?.ModelGroup is not null)
+        {
+            SelectedModelGroup = SelectedAppearance.ModelGroup.ToList();
+        }
+
+        base.OnPropertyChanged(e);
     }
 
     #endregion
@@ -951,24 +962,26 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         foreach (var handle in mesh.Appearances)
         {
             var app = handle.GetValue();
-            if (app is meshMeshAppearance mmapp &&
-                (mmapp.Name == meshApp || meshApp == "default" && mesh.Appearances.IndexOf(handle) == 0))
+            if (app is not meshMeshAppearance mmApp ||
+                (mmApp.Name != meshApp && (meshApp != "default" || mesh.Appearances.IndexOf(handle) != 0)))
             {
-                foreach (var m in mmapp.ChunkMaterials)
-                {
-                    var name = GetUniqueMaterialName(m.ToString().NotNull(), mesh);
-                    if (materials.TryGetValue(name, out var material))
-                    {
-                        appMaterials.Add(material);
-                    }
-                    else
-                    {
-                        appMaterials.Add(new Material(name));
-                    }
-                }
-
-                break;
+                continue;
             }
+
+            foreach (var m in mmApp.ChunkMaterials)
+            {
+                var name = GetUniqueMaterialName(m.ToString().NotNull(), mesh);
+                if (materials.TryGetValue(name, out var material))
+                {
+                    appMaterials.Add(material);
+                }
+                else
+                {
+                    appMaterials.Add(new Material(name));
+                }
+            }
+
+            break;
         }
 
         if (appMaterials.Count == 0)
@@ -976,7 +989,15 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             appMaterials.Add(defaultMaterial);
         }
 
-        var model = new LoadableModel(epc.Name.ToString().NotNull().Replace(".", ""))
+        var modelName = (epc.Name.ToString() ?? "").Replace(".", "");
+        var counter = 0;
+        while (appModels.ContainsKey(modelName))
+        {
+            counter += 1;
+            modelName = $"{(epc.Name.ToString() ?? "").Replace(".", "")}_DUPLICATE_{counter}";
+        }
+
+        var model = new LoadableModel(modelName)
         {
             ComponentName = (CName)(componentName ?? ""),
             MeshFile = meshFile,
@@ -992,7 +1013,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             EnabledChunks = enabledChunks,
             DepotPath = depotPath
         };
-        appModels.Add(epc.Name.ToString().NotNull(), model);
+
+        appModels.Add(modelName, model);
     }
 
     public void GetResolvedMatrix(IBindable bindable, ref SeparateMatrix matrix, Dictionary<string, LoadableModel> models)
@@ -2412,7 +2434,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         {
             var handle = data.Nodes[handleIndex].NotNull();
             var name = handle.Chunk.NotNull().DebugName.ToString().NotNull();
-            name = "_" + name.Replace("{", "").Replace("}", "").Replace("\\", "_").Replace(".", "_").Replace("!", "").Replace("-", "_") ?? "none";
+            name = "_" + name.Replace(" ", "_").Replace("[", "").Replace("]", "").Replace("{", "").Replace("}", "").Replace("\\", "_").Replace(".", "_").Replace("!", "").Replace("-", "_") ?? "none";
 
             var indexStr = string.Join(", ", transforms.Select(x => buffer.IndexOf(x)));
             var typeStr = handle.Chunk.GetType().Name;
@@ -2665,7 +2687,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                             {
                                 CreateNormals = true
                             };
-                            mb.AddBox(new SharpDX.Vector3(0f, 0f, 0f), simpleShape.Size.X * 2, simpleShape.Size.Z * 2, simpleShape.Size.Y * 2);
+                            mb.AddBox(new SharpDX.Vector3(0f, 0f, 0f), simpleShape.Size.X * 2, simpleShape.Size.Y * 2, simpleShape.Size.Z * 2);
 
                             mb.ComputeNormalsAndTangents(MeshFaces.Default, true);
 
@@ -2802,7 +2824,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                         };
 
                         var shapeMatrix = new Matrix3D();
-                        shapeMatrix.Rotate(ToQuaternion(shape.Rotation));
+                        
+                        var shapeQuat = new System.Numerics.Quaternion(shape.Rotation.I, shape.Rotation.J, shape.Rotation.K, shape.Rotation.R);
+                        var conversionQuat =
+                            System.Numerics.Quaternion.CreateFromAxisAngle(System.Numerics.Vector3.UnitX, -MathF.PI / 2);
+                        var adjustedQuat = conversionQuat * shapeQuat;
+                        
+                        shapeMatrix.Rotate(new System.Windows.Media.Media3D.Quaternion(adjustedQuat.X, adjustedQuat.Y, adjustedQuat.Z, adjustedQuat.W));
                         shapeMatrix.Translate(ToVector3D(shape.Position));
 
                         shapeGroup.Transform = new MatrixTransform3D(shapeMatrix);
@@ -3443,7 +3471,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         }
         catch (Exception e)
         {
-            _loggerService.Error($"Failed to render entity. Please open a ticket: \n${e}");
+            _loggerService.Error(
+                $"Failed to render entity. Please ensure that all your component names are unique. If they are, open a ticket:  \n${e}");
         }
     }
 
@@ -3584,9 +3613,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 }
 
                 var appearanceDefs = aar.Appearances
-                    .Where((handle) => handle?.GetValue() is appearanceAppearanceDefinition)
-                    .Select((handle) => (appearanceAppearanceDefinition)handle.GetValue()!)
-                    .ToDictionary(value => value.Name.GetResolvedText() ?? "");
+                    .Where(handle => handle?.GetValue() is appearanceAppearanceDefinition)
+                    .Select(handle => (appearanceAppearanceDefinition)handle.GetValue()!)
+                    .GroupBy(value => value.Name.GetResolvedText()!)
+                    .ToDictionary(group => group.Key, group => group.First());
 
                 if (!appearanceDefs.TryGetValue(app.AppearanceName.GetResolvedText() ?? "invalid name", out var appDef) ||
                     appDef.CompiledData?.Data is not RedPackage appPkg)

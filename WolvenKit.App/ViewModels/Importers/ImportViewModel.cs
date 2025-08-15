@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Helpers;
@@ -60,6 +61,7 @@ public partial class ImportViewModel : AbstractImportExportViewModel
         _importExportHelper = importExportHelper;
 
         PropertyChanged += ImportExportViewModel_PropertyChanged;
+        _appViewModel.OnInitialProjectLoaded += AppViewModel_OnInitialProjectLoaded;
     }
 
     #region Commands
@@ -107,7 +109,7 @@ public partial class ImportViewModel : AbstractImportExportViewModel
 
     #endregion
 
-    protected override async Task ExecuteProcessBulk(bool all = false)
+    protected override async Task ExecuteProcessBulkAsync(bool all = false)
     {
         if (_gameController.GetController() is not RED4Controller || !Items.Any())
         {
@@ -260,7 +262,7 @@ public partial class ImportViewModel : AbstractImportExportViewModel
         }
 
         var files = Directory.GetFiles(_projectManager.ActiveProject.RawDirectory, "*", SearchOption.AllDirectories)
-            .Where(CanImport);
+            .Where(CanImport).ToList();
 
         // do not refresh if the files are the same
         if(Enumerable.SequenceEqual( Items.Select(x => x.BaseFile), files))
@@ -273,10 +275,18 @@ public partial class ImportViewModel : AbstractImportExportViewModel
         Items.Clear();
         foreach (var filePath in files)
         {
-            if (!Items.Any(x => x.BaseFile.Equals(filePath)))
+            try
             {
-                var vm = await Task.Run(() => new ImportableItemViewModel(filePath, _archiveManager, _projectManager, _parserService));
-                Items.Add(vm);
+                if (!Items.Any(x => x.BaseFile.Equals(filePath)))
+                {
+                    var vm = await Task.Run(() =>
+                        new ImportableItemViewModel(filePath, _archiveManager, _projectManager, _parserService));
+                    Items.Add(vm);
+                }
+            }
+            catch
+            {
+                _loggerService.Error($"Skipping {filePath} (failed to read)");
             }
         }
 
@@ -374,11 +384,17 @@ public partial class ImportViewModel : AbstractImportExportViewModel
         switch (args.PropertyName)
         {
             case nameof(GltfImportArgs.Rig):
+                gltfImportArgs.Rig.Clear();
+                
                 var rig = result.Cast<CollectionItemViewModel<FileEntry>>().Select(x => x.Model).FirstOrDefault();
                 if (rig is not null)
                 {
-                    gltfImportArgs.Rig = new List<FileEntry>() { rig };
-                    _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
+                    gltfImportArgs.Rig.Add(rig);
+                    _notificationService.Success($"Selected Rig was added to MeshWithRig arguments: {rig.Name}");
+                }
+                else
+                {
+                    _notificationService.Success("Rigs were cleared");
                 }
 
                 gltfImportArgs.ImportFormat = GltfImportAsFormat.MeshWithRig;
@@ -400,4 +416,11 @@ public partial class ImportViewModel : AbstractImportExportViewModel
         }
     }
 
+    private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
+    {
+        DispatcherHelper.RunOnMainThread(async () =>
+        {
+            await Refresh();
+        }, DispatcherPriority.ContextIdle);
+    }
 }

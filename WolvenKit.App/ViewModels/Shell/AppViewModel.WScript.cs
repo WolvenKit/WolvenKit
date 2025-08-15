@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -45,6 +46,7 @@ using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Helpers;
+using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -60,6 +62,12 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
     private readonly ScriptFileViewModel? _fileValidationScript;
     private readonly ScriptFileViewModel? _entSpawnerImportScript;
 
+    private static readonly string[] s_ignoredExtensions = [".xbm", ".mlmask"];
+
+    private static readonly string[] s_packIgnoredExtensions = ["bin"];
+
+    private static readonly string[] s_resourceFileExtensions = ["xl", "yaml", "yml"];
+
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private async Task RunFileValidationOnProject()
     {
@@ -69,27 +77,87 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
-        if (_archiveManager.ProjectArchive is not FileSystemArchive projArchive)
+        if (_archiveManager.ProjectArchive is not FileSystemArchive projArchive || ActiveProject is null)
         {
             _loggerService.Error("You need an active project to use this.");
             return;
         }
 
-        var result = Interactions.ShowConfirmation((
-            $"This will analyse {ActiveProject!.Files.Count} files. This can take up to several minutes. Do you want to proceed?",
-            "Really run file validation?",
-            WMessageBoxImage.Question,
-            WMessageBoxButtons.YesNo));
+        var shiftKeyDown = ModifierViewStateService.IsShiftBeingHeld;
+        var ctrlKeyDown = ModifierViewStateService.IsCtrlBeingHeld;
+        
+        var txtFilesInResources = ActiveProject.ResourceFiles.Where(f => f.EndsWith(".txt"))
+            .Select(f => ActiveProject.GetRelativeResourcePath(f).GetResolvedText())
+            .Where(f => !string.IsNullOrEmpty(Path.GetExtension(f?.Replace(".txt", ""))))
+            .ToList();
 
-        if (result != WMessageBoxResult.Yes)
+        if (txtFilesInResources.Count > 0)
         {
+            _loggerService.Warning(
+                "One or more files in your resource folder have duplicate extensions and end in .txt. These won't do anything:");
+            txtFilesInResources.ForEach(f => _loggerService.Warning($"\t{f}"));
+        }
+
+        var filesToValidate = projArchive.Files.Values
+            .Where(f => !s_ignoredExtensions.Contains(f.Extension.ToLower()))
+            // no *.ext.json
+            .Where(f => !f.Extension.Contains("json") || string.IsNullOrEmpty(
+                Path.GetExtension(f.FileName.Replace(".json", "")))) 
+            .ToList();
+
+        var resourceFilesToValidate = ActiveProject.ResourceFiles
+            .Where(f => s_resourceFileExtensions.Contains(f.Split(".").LastOrDefault() ?? "")).ToList();
+
+        if (ctrlKeyDown && resourceFilesToValidate.Count > 0)
+        {
+            _loggerService.Info(
+                $"Ctrl key down: analyzing {filesToValidate.Count} project files (ignoring resources).");
+            resourceFilesToValidate.Clear();
+        }
+
+        if (shiftKeyDown && filesToValidate.Count > 0)
+        {
+            _loggerService.Info(
+                $"Shift key down: analyzing {resourceFilesToValidate.Count} resource files (ignoring project files).");
+            filesToValidate.Clear();
+        }
+        
+        var totalFileCount = filesToValidate.Count + resourceFilesToValidate.Count;
+
+        if (totalFileCount == 0)
+        {
+            _loggerService.Info("No files to validate - you're funny!");
             return;
         }
 
+        // arbitrary cutoff: warn user if more than 5 files
+        if (totalFileCount > 5)
+        {
+            var result = Interactions.ShowConfirmation((
+                $"This will analyse {totalFileCount} files. This can take up to several minutes. Do you want to proceed?",
+                "Really run file validation?",
+                WMessageBoxImage.Question,
+                WMessageBoxButtons.YesNo));
+
+            if (result != WMessageBoxResult.Yes)
+            {
+                return;
+            }
+        }
+
+        ScriptService.SuppressLogOutput = true;
+        var redExtensions = Enum.GetNames<ERedExtension>().ToList();
         var code = await File.ReadAllTextAsync(_fileValidationScript.Path);
 
-        foreach (var (_, file) in projArchive.Files.Where(kvp => kvp.Value.Extension != ".xbm"))
+        foreach (var file in filesToValidate)
         {
+            var fileExtension = file.Extension.TrimStart('.').ToLower();
+            if (!redExtensions.Contains(fileExtension) && !s_packIgnoredExtensions.Contains(fileExtension))
+            {
+                _loggerService.Warning($"{file.FileName} has an unsupported extension and will not be packed!");
+                continue;
+            }
+            
             if (GetRedFile(file) is not { } fileViewModel)
             {
                 continue;
@@ -97,26 +165,21 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
             _loggerService.Info($"Scanning {ActiveProject.GetRelativePath(file.FileName)}");
             ActiveDocument = fileViewModel;
-            await _scriptService.ExecuteAsync(code);
+            try
+            {
+                await _scriptService.ExecuteAsync(code);
+            }
+            catch (Exception err)
+            {
+                _loggerService.Error(err.Message);
+            }
         }
 
-        // This should never happen, but better safe than sorry
-        if (FileHelper.GetMostRecentlyChangedFile(Path.Combine(ISettingsManager.GetAppData(), "Logs"), "*.txt") is not FileInfo fI)
-        {
-            _loggerService.Info("Done.");
-            return;
-        }
-
-        _loggerService.Info($"Done. The most recent log file is {fI.FullName}.");
-
-        try
-        {
-            Process.Start(new ProcessStartInfo(fI.FullName) { UseShellExecute = true });
-        }
-        catch (Exception ex)
-        {
-            _loggerService.Error($"Failed to open log file: {ex.Message}");
-        }
+        _loggerService.Info("Done.");
+        _loggerService.Info(
+            "To open the most recent log file, shift-click on the 'open folder' button to the right.");
+        
+        ScriptService.SuppressLogOutput = false;
     }
 
 
@@ -142,7 +205,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         if (_entSpawnerImportScript is null || !File.Exists(_entSpawnerImportScript.Path))
         {
             _loggerService.Error("You need to update your Wolvenkit Scripts to use this. Please delete any scripts related");
-            _loggerService.Error("to the entity spawner from your script manager's user section, and restart the application.");
+            _loggerService.Error("to the object spawner from your script manager's user section, and restart the application.");
             return;
         }
 
@@ -156,7 +219,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         var openFileDialog = new OpenFileDialog
         {
             Filter = "Json files (*.json)|*.json|All files (*.*)|*.*",
-            Title = "Open entSpawner export",
+            Title = "Open object spawner export file",
             InitialDirectory = GetEntspawnerRelativePath(),
         };
 
@@ -207,5 +270,8 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         {
             _loggerService.Error($"Failed to delete {filePath}. This file is no longer needed.");
         }
+
+        // Check for and reload any modified streaming sector or related files that are currently open
+        ReloadChangedFiles();
     }
 }

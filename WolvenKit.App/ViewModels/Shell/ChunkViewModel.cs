@@ -5,13 +5,11 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using System.Runtime.Serialization;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
@@ -27,12 +25,13 @@ using WolvenKit.App.Models.Nodify;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Core.Services;
+using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.Buffer;
@@ -69,13 +68,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     private readonly ILocKeyService _locKeyService;
     private readonly Red4ParserService _parserService;
     private readonly CRUIDService _cruidService;
-    private readonly IModifierViewStateService _modifierViewStateService;
 
     private static readonly List<string> s_hiddenProperties = new()
     {
         "meshMeshMaterialBuffer.rawDataHeaders",
         "meshMeshMaterialBuffer.rawData",
-        "entEntityTemplate.compiledData", 
+        "entEntityTemplate.compiledData",
         "appearanceAppearanceDefinition.compiledData",
         "inkWidgetLibraryItem.packageData"
     };
@@ -92,8 +90,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public int NodeIdxInParent = -1;
 
-    private EditorDifficultyLevel _currentEditorDifficultyLevel;
-
     #region Constructors
 
     public ChunkViewModel(IRedType data, string name, AppViewModel appViewModel,
@@ -107,10 +103,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         IAppArchiveManager archiveManager,
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
-        IModifierViewStateService modifierViewStateService,
         Red4ParserService parserService,
         CRUIDService cruidService,
-        EditorDifficultyLevel editorLevel,
         ChunkViewModel? parent = null,
         bool isReadOnly = false
     )
@@ -127,7 +121,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         _locKeyService = locKeyService;
         _parserService = parserService;
         _cruidService = cruidService;
-        _modifierViewStateService = modifierViewStateService;
 
         _appViewModel = appViewModel;
         _data = data;
@@ -136,12 +129,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         _displayName = name;
         IsReadOnly = isReadOnly;
 
-        _modifierViewStateService.ModifierStateChanged += OnModifierChanged;
-
-        _currentEditorDifficultyLevel = editorLevel;
-        DifficultyLevelFieldInformation = EditorDifficultyLevelFieldFactory.GetInstance(editorLevel);
-        
-        // If the parent is an array, the numeric index will be passed as property name 
+        DifficultyLevelFieldInformation =
+            EditorDifficultyLevelFieldFactory.GetInstance(_settingsManager.DefaultEditorDifficultyLevel);
+        // If the parent is an array, the numeric index will be passed as property name
         if (IsInArray && int.TryParse(name, out var arrayIndex))
         {
             NodeIdxInParent = arrayIndex;
@@ -151,9 +141,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         if (HasChildren())
         {
-            TempList = new ObservableCollectionExtended<ChunkViewModel>(new[] 
+            TempList = new ObservableCollectionExtended<ChunkViewModel>(new[]
             {
-                chunkViewmodelFactory.ChunkViewModel(new RedDummy(), nameof(RedDummy), _appViewModel, editorLevel, this) 
+                chunkViewmodelFactory.ChunkViewModel(new RedDummy(), nameof(RedDummy), _appViewModel, this)
             });
         }
 
@@ -163,7 +153,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         CalculateUserInteractionStates();
 
         CalculateDisplayName();
-
     }
 
     public ChunkViewModel(IRedType data, RDTDataViewModel tab, AppViewModel appViewModel,
@@ -177,16 +166,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         IAppArchiveManager archiveManager,
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
-        IModifierViewStateService modifierViewStateService,
         Red4ParserService parserService,
         CRUIDService cruidService,
-        EditorDifficultyLevel editorDifficultyLevel, 
         bool isReadOnly = false
-        ) 
+    )
         : this(data, nameof(RDTDataViewModel), appViewModel,
             chunkViewmodelFactory, tabViewmodelFactory, hashService, loggerService, projectManager,
-            gameController, settingsManager, archiveManager, tweakDbService, locKeyService, modifierViewStateService, parserService,
-            cruidService, editorDifficultyLevel, null, isReadOnly)
+            gameController, settingsManager, archiveManager, tweakDbService, locKeyService, parserService,
+            cruidService, null, isReadOnly)
     {
         _tab = tab;
         RelativePath = _tab.Parent.RelativePath;
@@ -204,17 +191,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         IAppArchiveManager archiveManager,
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
-        IModifierViewStateService modifierViewStateService,
         Red4ParserService parserService,
         CRUIDService cruidService,
-        EditorDifficultyLevel editorDifficultyLevel, 
         bool isReadOnly = false
-        ) 
+    )
         : this(export, nameof(ReferenceSocket), appViewModel,
-              chunkViewmodelFactory, tabViewmodelFactory, hashService, loggerService, projectManager,
-              gameController, settingsManager, archiveManager, tweakDbService, locKeyService, modifierViewStateService, parserService,
-              cruidService, editorDifficultyLevel, null, isReadOnly
-              )
+            chunkViewmodelFactory, tabViewmodelFactory, hashService, loggerService, projectManager,
+            gameController, settingsManager, archiveManager, tweakDbService, locKeyService, parserService,
+            cruidService, null, isReadOnly
+        )
     {
         Socket = socket;
         socket.Node = this;
@@ -222,7 +207,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     }
 
     /// <summary>
-    /// Some nodes should have a different display name, for example chunkmaterials. 
+    /// Some nodes should have a different display name, for example chunkmaterials.
     /// </summary>
     private void CalculateDisplayName()
     {
@@ -236,7 +221,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             return;
         }
-        
+
         var (numLodLevels, numSubmeshesPerLod) = MeshTools.GetLodInfo(cMesh);
 
         var lodSuffix = "";
@@ -255,7 +240,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         DisplayName = $"submesh_{Name.PadLeft(2, '0')}{lodSuffix}";
     }
-    
+
     partial void OnIsSelectedChanged(bool value)
     {
         if (IsSelected && !_propertiesLoaded)
@@ -290,22 +275,41 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        // expand / collapse "special" children, e.g. if the parent holds no properties we care for
-        if (ResolvedData is not meshMeshAppearance || TVProperties.FirstOrDefault() is not { Name: "chunkMaterials" } tvPropChild)
+        void InitializeChild(ChunkViewModel? tvPropChild)
         {
-            return;
-        }
+            if (tvPropChild?.ResolvedData is not RedDummy)
+            {
+                return;
+            }
 
-        if (tvPropChild.TVProperties.Count == 1 && tvPropChild.TVProperties.FirstOrDefault()?.ResolvedData is RedDummy)
-        {
-            tvPropChild.RecalculateProperties();
             foreach (var chunkViewModel in tvPropChild.TVProperties)
             {
-                chunkViewModel.RecalculateProperties();
+                if (chunkViewModel.ResolvedData is RedDummy)
+                {
+                    chunkViewModel.RecalculateProperties();
+                }
             }
         }
 
-        tvPropChild.IsExpanded = IsExpanded;
+
+        // expand / collapse "special" children, e.g. if the parent holds no properties we care for
+        switch (ResolvedData)
+        {
+            case meshMeshAppearance when TVProperties.FirstOrDefault() is { Name: "chunkMaterials" } tvPropChild:
+            {
+                InitializeChild(tvPropChild);
+                tvPropChild.IsExpanded = IsExpanded;
+                break;
+            }
+            case CMaterialInstance when GetPropertyChild("values") is ChunkViewModel valueChild:
+            {
+                InitializeChild(valueChild);
+                valueChild.IsExpanded = IsExpanded;
+                break;
+            }
+            default:
+                break;
+        }
     }
 
     partial void OnDataChanged(IRedType value)
@@ -324,6 +328,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         Parent.CalculateIsDefault();
 
+        // Always try to notify for graph sync, regardless of Tab state
+        NotifyPropertyUpdateForGraphSync();
+
         if (Tab is not null)
         {
             if (Parent.Data is IRedArray arr)
@@ -334,7 +341,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 {
                     arr[index] = Data;
                     Tab.Parent.SetIsDirty(true);
-                    Parent.NotifyChain("Data");
+                    Parent.NotifyChain(nameof(Data));
+
+                    // Notify property update service for graph sync
+                    NotifyPropertyUpdateForGraphSync();
                 }
 
                 Parent.CalculateDescriptor();
@@ -343,7 +353,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     Parent.CalculateValue();
                 }
 
-                if (Data is CName && Parent.Parent?.ResolvedData is meshMeshAppearance or redTagList or entVisualTagsSchema)
+                if (Data is CName &&
+                    Parent.Parent?.ResolvedData is meshMeshAppearance or redTagList or entVisualTagsSchema)
                 {
                     Parent.Parent?.CalculateValue();
                 }
@@ -370,7 +381,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 }
 
                 Tab.Parent.SetIsDirty(true);
-                Parent.NotifyChain("Data");
+                Parent.NotifyChain(nameof(Data));
+
+                // Notify property update service for graph sync
+                NotifyPropertyUpdateForGraphSync();
             }
             else
             {
@@ -384,12 +398,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     else
                     {
                         Parent.Data = parentData is IRedRef
-                            ? RedTypeManager.CreateRedType(parentData.RedType, Data)
+                            ? RedTypeFactory.CreateAndInitRedType(parentData.RedType, Data)
                             : throw new Exception();
                     }
 
                     Tab.Parent.SetIsDirty(true);
-                    Parent.NotifyChain("Data");
+                    Parent.NotifyChain(nameof(Data));
+
+                    // Notify property update service for graph sync
+                    NotifyPropertyUpdateForGraphSync();
                 }
             }
         }
@@ -399,7 +416,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             string[] keys =
             {
-                "localMaterialBuffer.materials", "preloadLocalMaterialInstances", "externalMaterials", "preloadExternalMaterials",
+                "localMaterialBuffer.materials", "preloadLocalMaterialInstances", "externalMaterials",
+                "preloadExternalMaterials",
             };
 
             ushort idx = meshMaterialEntry.Index;
@@ -440,21 +458,20 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
            )
         {
             Parent.CalculateDescriptor();
+            Parent.CalculateValue();
             Parent.CalculateIsDefault();
         }
-
-        if (Parent.IsValueExtrapolated)
+        else if (Parent.IsValueExtrapolated)
         {
             Parent.CalculateValue();
         }
 
         if (Parent.Parent?.IsValueExtrapolated is true)
         {
+            Parent.CalculateDescriptor();
             Parent.Parent.CalculateValue();
         }
     }
-
-    
 
     #endregion Constructors
 
@@ -470,8 +487,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     // Tree view properties (for the panel on the left)
     public ObservableCollectionExtended<ChunkViewModel> TVProperties => _propertiesLoaded ? Properties : TempList;
 
+    private List<ChunkViewModel> GetTvProperties()
+    {
+        CalculateProperties();
+        return TVProperties.ToList();
+    }
+
     // DisplayProperties (for the panel on the right)
-    public ObservableCollectionExtended<ChunkViewModel> DisplayProperties => MightHaveChildren() ? Properties : SelfList;
+    public ObservableCollectionExtended<ChunkViewModel> DisplayProperties =>
+        MightHaveChildren() ? Properties : SelfList;
 
     // Fix annoying "Property not found" error spam
     public bool IsDeletable => true;
@@ -480,7 +504,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     // For view style, see PropertyValueStyle in RedTreeView.xml
     [ObservableProperty] private string? _value;
 
-    // First view column (e.g. name). 
+    // First view column (e.g. name).
     // For view style, see PropertyKeyStyle in RedTreeView.xml
     [ObservableProperty] private string? _descriptor;
 
@@ -492,7 +516,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     // For view decoration. Extrapolated values will be darker.
     [ObservableProperty] private bool _isValueExtrapolated;
-    
+
     [ObservableProperty]
     //[NotifyCanExecuteChangedFor(nameof(OpenRefCommand))]
     //[NotifyCanExecuteChangedFor(nameof(AddRefCommand))]
@@ -527,11 +551,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public bool ShouldShowWorldNodeDataImport => Data is worldNodeData;
 
-    public bool ShouldShowExportNodeData => Parent is not null && Parent.Data is DataBuffer rb && rb.Data is worldNodeDataBuffer;
+    public bool ShouldShowExportNodeData =>
+        Parent is not null && Parent.Data is DataBuffer rb && rb.Data is worldNodeDataBuffer;
 
-    public bool ShouldShowTweakXLMenu => (Tab?.NumSelectedItems ?? 1) == 1 && (Data is gamedataTweakDBRecord || Data is TweakDBID ||
-                                                                               Parent?.Data is gamedataTweakDBRecord ||
-                                                                               Parent?.Data is TweakDBID);
+    public bool ShouldShowTweakXLMenu => (Tab?.NumSelectedItems ?? 1) == 1 &&
+                                         (Data is gamedataTweakDBRecord || Data is TweakDBID ||
+                                          Parent?.Data is gamedataTweakDBRecord ||
+                                          Parent?.Data is TweakDBID);
 
     public bool ShouldShowHandleOperations => PropertyType.IsAssignableTo(typeof(IRedBaseHandle)) && !IsArray;
 
@@ -620,12 +646,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 return ibt.GetBrowsableName();
             }
+
             //else if (Data is RedDummy dummy)
             //{
             //    return nameof(RedDummy);
             //}
             return PropertyName;
-            
         }
     }
 
@@ -721,7 +747,46 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    public string ResolvedType => ResolvedPropertyType is not null ? GetTypeRedName(ResolvedPropertyType) ?? ResolvedPropertyType.Name : "";
+    public string ResolvedType
+    {
+        get
+        {
+            if (ResolvedPropertyType is null)
+            {
+                return "";
+            }
+
+            var baseResolvedType = GetTypeRedName(ResolvedPropertyType) ?? ResolvedPropertyType.Name;
+
+            // Special case for scnQuestNode to show the quest node type in the resolved type
+            if (Data is IRedBaseHandle handle && handle.GetValue() is scnQuestNode questNode)
+            {
+                if (questNode.QuestNode?.Chunk != null)
+                {
+                    var questNodeType = NodeProperties.GetNameFromClass(questNode.QuestNode.Chunk);
+
+                    // Show the condition type for pause condition nodes
+                    if (questNode.QuestNode.Chunk is questPauseConditionNodeDefinition pauseCondition)
+                    {
+                        if (pauseCondition.Condition?.Chunk != null)
+                        {
+                            var conditionType = NodeProperties.GetNameFromClass(pauseCondition.Condition.Chunk);
+
+                            return $"scnQuestNode → {questNodeType} → {conditionType}";
+                        }
+
+                        return $"scnQuestNode → {questNodeType} → <No Condition>";
+                    }
+
+                    return $"scnQuestNode → {questNodeType}";
+                }
+
+                return "scnQuestNode → <No Quest Node>";
+            }
+
+            return baseResolvedType;
+        }
+    }
 
     // Controls if value text is being displayed or not
     public bool TypesDiffer => PropertyType != ResolvedPropertyType;
@@ -731,19 +796,28 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     // Used in view for conditional colouring
     public bool DisplayAsArrayItem => IsInArray && Name != DisplayName;
 
-    // Used in view
-    public bool ShowScrollToMaterial => ResolvedData is CMeshMaterialEntry || (ResolvedData is CName && Parent?.Name == "chunkMaterials");
+    // Used in view for muting scene event descriptors
+    public bool ShouldMuteDescriptor => ResolvedData is scnSceneEvent;
 
     // Used in view
-    public bool HasValue => !IsValueExtrapolated && !string.IsNullOrEmpty(Value) && Value!.ToLower() != "none";
+    public bool ShowScrollToMaterial => ResolvedData is CMeshMaterialEntry ||
+                                        (ResolvedData is CName && Parent?.Name == "chunkMaterials");
+
+    // Used in view
+    public bool HasValue => !IsValueExtrapolated &&
+                            ((ResolvedData is TweakDBID tweakDbId && tweakDbId != TweakDBID.Empty) ||
+                             (!string.IsNullOrEmpty(Value) && Value!.ToLower() != "none"));
 
     public bool IsArray => PropertyType.IsAssignableTo(typeof(IRedArray)) ||
                            (ResolvedPropertyType is not null && (
                                ResolvedPropertyType.IsAssignableTo(typeof(IList))
                                || ResolvedPropertyType.IsAssignableTo(typeof(CR2WList))
                                || ResolvedPropertyType.IsAssignableTo(typeof(RedPackage))));
-    
-    
+
+    public bool IsCurve => (ResolvedPropertyType is not null &&
+                            ResolvedPropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)));
+
+
     public int PropertyCount
     {
         get
@@ -886,7 +960,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     }
 
 
-
     /// <summary>
     /// Used for view display
     /// </summary>
@@ -894,14 +967,18 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         get
         {
-            var width = IsInArray ? UIHelper.GetTextWidth(DisplayName) : DisplayName.Length;
+            var fontSize = 13 * _settingsManager.UiScalePercentage;
+            var width = IsInArray ? UIHelper.GetTextWidth(DisplayName, fontSize) : DisplayName.Length;
 
             if (Parent is null)
             {
                 return width;
             }
 
-            return Math.Max(width, UIHelper.GetTextWidth(new string('0', Math.Max(2, Parent.PropertyCount.ToString().Length))));
+            var totalIndex = Parent.PropertyCount.ToString().Length;
+            var totalWidth = UIHelper.GetTextWidth(new string('0', Math.Max(2, totalIndex)), fontSize);
+
+            return Math.Max(width, totalWidth);
         }
     }
 
@@ -925,7 +1002,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
 
             return Parent.XPath;
-           
         }
     }
 
@@ -937,46 +1013,52 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 return "SymbolNumeric";
             }
+
             if (PropertyType.IsAssignableTo(typeof(IRedString)))
             {
                 return "SymbolString";
             }
+
             return PropertyType.IsAssignableTo(typeof(IRedArray))
                 ? "SymbolArray"
                 : PropertyType.IsAssignableTo(typeof(IRedEnum))
-                ? "SymbolEnum"
-                : PropertyType.IsAssignableTo(typeof(IRedRef))
-                ? "FileSymlinkFile"
-                : PropertyType.IsAssignableTo(typeof(IRedBitField))
-                ? "SymbolEnum"
-                : PropertyType.IsAssignableTo(typeof(CBool))
-                ? "SymbolBoolean"
-                : PropertyType.IsAssignableTo(typeof(IRedBaseHandle))
-                ? "References"
-                : PropertyType.IsAssignableTo(typeof(DataBuffer)) || PropertyType.IsAssignableTo(typeof(SerializationDeferredDataBuffer))
-                ? "GroupByRefType"
-                : PropertyType.IsAssignableTo(typeof(CResourceAsyncReference<>)) || PropertyType.IsAssignableTo(typeof(CResourceReference<>))
-                ? "RepoPull"
-                : PropertyType.IsAssignableTo(typeof(TweakDBID))
-                ? "DebugBreakpointConditionalUnverified"
-                : PropertyType.IsAssignableTo(typeof(IRedPrimitive))
-                ? "DebugBreakpointDataUnverified"
-                : PropertyType.IsAssignableTo(typeof(WorldTransform))
-                ? "Compass"
-                : PropertyType.IsAssignableTo(typeof(WorldPosition))
-                ? "Move"
-                : PropertyType.IsAssignableTo(typeof(Quaternion))
-                ? "IssueReopened"
-                : PropertyType.IsAssignableTo(typeof(CColor)) ? "SymbolColor" : "SymbolClass";
+                    ? "SymbolEnum"
+                    : PropertyType.IsAssignableTo(typeof(IRedRef))
+                        ? "FileSymlinkFile"
+                        : PropertyType.IsAssignableTo(typeof(IRedBitField))
+                            ? "SymbolEnum"
+                            : PropertyType.IsAssignableTo(typeof(CBool))
+                                ? "SymbolBoolean"
+                                : PropertyType.IsAssignableTo(typeof(IRedBaseHandle))
+                                    ? "References"
+                                    : PropertyType.IsAssignableTo(typeof(DataBuffer)) ||
+                                      PropertyType.IsAssignableTo(typeof(SerializationDeferredDataBuffer))
+                                        ? "GroupByRefType"
+                                        : PropertyType.IsAssignableTo(typeof(CResourceAsyncReference<>)) ||
+                                          PropertyType.IsAssignableTo(typeof(CResourceReference<>))
+                                            ? "RepoPull"
+                                            : PropertyType.IsAssignableTo(typeof(TweakDBID))
+                                                ? "DebugBreakpointConditionalUnverified"
+                                                : PropertyType.IsAssignableTo(typeof(IRedPrimitive))
+                                                    ? "DebugBreakpointDataUnverified"
+                                                    : PropertyType.IsAssignableTo(typeof(WorldTransform))
+                                                        ? "Compass"
+                                                        : PropertyType.IsAssignableTo(typeof(WorldPosition))
+                                                            ? "Move"
+                                                            : PropertyType.IsAssignableTo(typeof(Quaternion))
+                                                                ? "IssueReopened"
+                                                                : PropertyType.IsAssignableTo(typeof(CColor))
+                                                                    ? "SymbolColor"
+                                                                    : "SymbolClass";
         }
     }
 
     public IRedType? ParentData => Parent?.Data switch
-        {
-            IRedBaseHandle handle => handle.GetValue(),
-            CVariant cVariant => cVariant.Value,
-            _ => Parent?.Data
-        };
+    {
+        IRedBaseHandle handle => handle.GetValue(),
+        CVariant cVariant => cVariant.Value,
+        _ => Parent?.Data
+    };
 
     #endregion Properties
 
@@ -1020,6 +1102,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 {
                     txl.Type = type.Name;
                 }
+
                 break;
             case IRedType redType:
                 tdbEntry = Data;
@@ -1042,14 +1125,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     private string GetTXLString(TweakXL txl)
     {
         var serializer = new SerializerBuilder()
-                    .WithTypeConverter(new TweakXLYamlTypeConverter(_locKeyService, _tweakDbService))
-                    .WithIndentedSequences()
-                    .Build();
+            .WithTypeConverter(new TweakXLYamlTypeConverter(_locKeyService, _tweakDbService))
+            .WithIndentedSequences()
+            .Build();
         var yaml = serializer.Serialize(new TweakXLFile { txl });
         return yaml;
     }
 
-    
+
     [RelayCommand]
     private void CopyTXLOverride()
     {
@@ -1091,12 +1174,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             _loggerService.Error(ex);
         }
-        
     }
 
     public bool CanBeDroppedOn(ChunkViewModel target) => PropertyType == target.PropertyType;
 
-    private bool CanOpenRef() => Data is IRedRef r && r.DepotPath != ResourcePath.Empty;   // TODO RelayCommand check notify
+    private bool CanOpenRef() =>
+        Data is IRedRef r && r.DepotPath != ResourcePath.Empty; // TODO RelayCommand check notify
+
     [RelayCommand(CanExecute = nameof(CanOpenRef))]
     private void OpenRef()
     {
@@ -1106,21 +1190,25 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private bool CanAddRef() => Data is IRedRef r && r.DepotPath != ResourcePath.Empty;   // TODO RelayCommand check notify
+    private bool CanAddRef() =>
+        Data is IRedRef r && r.DepotPath != ResourcePath.Empty; // TODO RelayCommand check notify
+
     [RelayCommand(CanExecute = nameof(CanAddRef))]
     private async Task AddRef()
     {
         if (Data is IRedRef r)
         {
-            await _gameController.GetController().AddFileToModModal(r.DepotPath.GetRedHash());
+            await _gameController.GetController().AddFileToModModalAsync(r.DepotPath.GetRedHash());
         }
     }
 
-    private bool CanAddHandle() => PropertyType.IsAssignableTo(typeof(IRedBaseHandle));   // TODO RelayCommand check notify
+    private bool CanAddHandle() =>
+        PropertyType.IsAssignableTo(typeof(IRedBaseHandle)); // TODO RelayCommand check notify
+
     [RelayCommand(CanExecute = nameof(CanAddHandle))]
     private async Task AddHandle()
     {
-        var data = RedTypeManager.CreateRedType(PropertyType);
+        var data = RedTypeFactory.CreateAndInitRedType(PropertyType);
         if (data is IRedBaseHandle handle)
         {
             var types = AppDomain.CurrentDomain.GetAssemblies()
@@ -1131,14 +1219,29 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             var allowCreating = handle.InnerType.IsAssignableTo(typeof(inkWidgetLogicController)) ||
                                 handle.InnerType.IsAssignableTo(typeof(inkIWidgetController));
 
-            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types, allowCreating) { DialogHandler = HandlePointer });
+            if (!allowCreating)
+            {
+                switch (types.Count)
+                {
+                    case 0:
+                        return;
+                    case 1:
+                        HandlePointer((Type)types[0].UserData!);
+                        return;
+                }
+            }
+
+            await _appViewModel.SetActiveDialog(
+                new TypeSelectorDialogViewModel(types, allowCreating) { DialogHandler = HandlePointer });
         }
     }
 
     private bool CanAddItemToArray() =>
         Parent is not null && !IsReadOnly && (PropertyType.IsAssignableTo(typeof(IRedArray)) ||
                                               PropertyType.IsAssignableTo(
-                                                  typeof(IRedLegacySingleChannelCurve))); // TODO RelayCommand check notify
+                                                  typeof(
+                                                      IRedLegacySingleChannelCurve))); // TODO RelayCommand check notify
+
     [RelayCommand(CanExecute = nameof(CanAddItemToArray))]
     private async Task AddItemToArray()
     {
@@ -1153,12 +1256,106 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
             if (Data is IRedArray arr)
             {
+                // Special handling for scnActorDef arrays - just calculate correct actor ID
+                if (arr.InnerType == typeof(scnActorDef))
+                {
+                    var newActor = new scnActorDef();
+
+                    // Calculate the next actor ID based on current array count
+                    uint nextActorId = (uint)arr.Count;
+                    newActor.ActorId.Id = nextActorId;
+
+                    InsertChild(-1, newActor);
+                    return;
+                }
+
+                // Special handling for scnPlayerActorDef arrays - calculate ID continuing after actors
+                if (arr.InnerType == typeof(scnPlayerActorDef) && GetRootModel().ResolvedData is scnSceneResource scene)
+                {
+                    var newPlayerActor = new scnPlayerActorDef();
+
+                    // Calculate the next actor ID continuing after regular actors
+                    // Total ID = actors.Count + playerActors.Count
+                    uint nextActorId = (uint)(scene.Actors.Count + arr.Count);
+                    newPlayerActor.ActorId.Id = nextActorId;
+
+                    InsertChild(-1, newPlayerActor);
+                    return;
+                }
+
+                // Special handling for scnPropDef arrays - calculate correct prop ID
+                if (arr.InnerType == typeof(scnPropDef))
+                {
+                    var newProp = new scnPropDef();
+
+                    // Calculate the next prop ID based on current array count (0, 1, 2, etc.)
+                    uint nextPropId = (uint)arr.Count;
+                    newProp.PropId.Id = nextPropId;
+
+                    InsertChild(-1, newProp);
+                    return;
+                }
+
+                // Special handling for screenplay lines - itemId: 0, 257, 513, 769, etc.
+                if (arr.InnerType == typeof(scnscreenplayDialogLine))
+                {
+                    var newLine = new scnscreenplayDialogLine();
+
+                    // Calculate itemId: 0 + lineIndex * 256
+                    uint itemId = (uint)arr.Count * 256;
+                    newLine.ItemId.Id = itemId;
+
+                    InsertChild(-1, newLine);
+                    return;
+                }
+
+                // Special handling for screenplay options - itemId: 2, 258, 514, 770, etc.
+                if (arr.InnerType == typeof(scnscreenplayChoiceOption))
+                {
+                    var newOption = new scnscreenplayChoiceOption();
+
+                    // Calculate itemId: 2 + optionIndex * 256
+                    uint itemId = 2 + (uint)arr.Count * 256;
+                    newOption.ItemId.Id = itemId;
+
+                    InsertChild(-1, newOption);
+                    return;
+                }
+
+                // Special handling for scnPerformerSymbol arrays - just calculate correct performer ID
+                if (arr.InnerType == typeof(scnPerformerSymbol))
+                {
+                    var newPerformer = new scnPerformerSymbol();
+
+                    // Calculate the next performer ID based on current array count
+                    // Formula: performerId = 1 + performerIndex * 256
+                    uint performerId = 1 + (uint)arr.Count * 256;
+                    newPerformer.PerformerId.Id = performerId;
+
+                    InsertChild(-1, newPerformer);
+                    return;
+                }
+
+                // Special handling for scnCinematicAnimSetSRRefId arrays - auto-assign next available index
+                if (arr.InnerType == typeof(scnCinematicAnimSetSRRefId))
+                {
+                    var newAnimSetRefId = new scnCinematicAnimSetSRRefId();
+
+                    // Calculate the next index - start from 0 and increment
+                    uint nextIndex = (uint)arr.Count;
+                    newAnimSetRefId.Id = nextIndex;
+
+                    InsertChild(-1, newAnimSetRefId);
+                    return;
+                }
+
                 var innerType = arr.InnerType;
                 if (innerType.IsValueType)
                 {
-                    InsertChild(-1, RedTypeManager.CreateRedType(innerType));
+                    InsertChild(-1, RedTypeFactory.CreateAndInitRedType(innerType));
                     return;
                 }
+
                 DialogHandlerDelegate handler = HandleChunk;
                 if (innerType.IsAssignableTo(typeof(IRedBaseHandle)))
                 {
@@ -1191,12 +1388,22 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                         return;
                     }
 
-                    var newItem = RedTypeManager.CreateRedType(type);
+                    IRedType newItem;
+                    if (type == typeof(IRedCurvePoint))
+                    {
+                        newItem = CurvePoint.Create(arr.GetType().GetGenericArguments()[0]);
+                    }
+                    else
+                    {
+                        newItem = RedTypeFactory.CreateAndInitRedType(type);
+                    }
+
                     if (newItem is IRedBaseHandle handle)
                     {
-                        var pointee = RedTypeManager.CreateRedType(handle.InnerType);
+                        var pointee = RedTypeFactory.CreateAndInitRedType(handle.InnerType);
                         handle.SetValue((RedBaseClass)pointee);
                     }
+
                     InsertChild(-1, newItem);
                 }
                 else
@@ -1209,7 +1416,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
         }
 
-        if (PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
+        /*if (PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
         {
             if (!CreateArray())
             {
@@ -1219,12 +1426,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             var curve = (IRedLegacySingleChannelCurve)Data;
 
             var type = curve.ElementType;
-            var newItem = RedTypeManager.CreateRedType(type);
+            var newItem = RedTypeFactory.CreateAndInitRedType(type);
             InsertChild(-1, newItem);
-        }
+        }*/
     }
 
-    private bool CanSaveBufferToDisk() => Data is IRedBufferWrapper { Buffer.MemSize: > 0 };   // TODO RelayCommand check notify
+    private bool CanSaveBufferToDisk() =>
+        Data is IRedBufferWrapper { Buffer.MemSize: > 0 }; // TODO RelayCommand check notify
+
     [RelayCommand(CanExecute = nameof(CanSaveBufferToDisk))]
     private void SaveBufferToDisk()
     {
@@ -1235,8 +1444,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         var dlg = new SaveFileDialog
         {
-            FileName = "buffer.bin",
-            Filter = "bin files (*.bin)|*.bin|All files (*.*)|*.*"
+            FileName = "buffer.bin", Filter = "bin files (*.bin)|*.bin|All files (*.*)|*.*"
         };
         if (dlg.ShowDialog() == true)
         {
@@ -1244,14 +1452,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private bool CanLoadBufferFromDisk() => PropertyType.IsAssignableTo(typeof(IRedBufferWrapper));   // TODO RelayCommand check notify
+    private bool CanLoadBufferFromDisk() =>
+        PropertyType.IsAssignableTo(typeof(IRedBufferWrapper)); // TODO RelayCommand check notify
+
     [RelayCommand(CanExecute = nameof(CanLoadBufferFromDisk))]
     private void LoadBufferFromDisk()
     {
         var dlg = new OpenFileDialog()
         {
-            FileName = "buffer.bin",
-            Filter = "bin files (*.bin)|*.bin|All files (*.*)|*.*"
+            FileName = "buffer.bin", Filter = "bin files (*.bin)|*.bin|All files (*.*)|*.*"
         };
         if (dlg.ShowDialog() != true)
         {
@@ -1281,19 +1490,48 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         Tab?.Parent.SetIsDirty(true);
     }
 
-    private bool CanRegenerateVisualController() => Name == "components" && Data is CArray<entIComponent>; // TODO RelayCommand check notify
+    private bool CanRegenerateVisualController() =>
+        Name == "components" && Data is CArray<entIComponent>; // TODO RelayCommand check notify
 
     [RelayCommand(CanExecute = nameof(CanRegenerateVisualController))]
     private void RegenerateVisualController()
     {
+        switch (ResolvedData)
+        {
+            case appearanceAppearanceDefinition:
+                GetPropertyChild("components")?.RegenerateVisualController();
+                return;
+            case appearanceAppearanceResource:
+            {
+                GetPropertyChild("appearances")?.RegenerateVisualController();
+                return;
+            }
+            case CArray<CHandle<appearanceAppearanceDefinition>>:
+                foreach (var chunkViewModel in TVProperties)
+                {
+                    chunkViewModel.RegenerateVisualController();
+                }
+
+                return;
+        }
+
         if (Data is not CArray<entIComponent> arr)
         {
-            throw new Exception();
+            if (GetRootModel() is ChunkViewModel { ResolvedData: appearanceAppearanceResource } root)
+            {
+                root.RegenerateVisualController();
+                return;
+            }
+
+            _loggerService.Error(
+                "Wrong type to regenerate visual controllers. Please select a component array inside an .app file and re-run!");
+            return;
         }
 
         entVisualControllerComponent? vc = null;
         var list = new CArray<entVisualControllerDependency>();
 
+        var hasChange = false;
         foreach (var component in arr)
         {
             if (component is entMeshComponent mesh &&
@@ -1302,10 +1540,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 list.Add(new entVisualControllerDependency()
                 {
-                    AppearanceName = mesh.MeshAppearance,
-                    ComponentName = mesh.Name,
-                    Mesh = mesh.Mesh
+                    AppearanceName = mesh.MeshAppearance, ComponentName = mesh.Name, Mesh = mesh.Mesh
                 });
+
+                hasChange = true;
             }
 
             if (component is entSkinnedMeshComponent skinnedMesh &&
@@ -1318,6 +1556,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     ComponentName = skinnedMesh.Name,
                     Mesh = skinnedMesh.Mesh
                 });
+                hasChange = true;
             }
 
             if (component is entSkinnedClothComponent skinnedCloth &&
@@ -1332,16 +1571,21 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
                 list.Add(new entVisualControllerDependency()
                 {
-                    AppearanceName = "default",
-                    ComponentName = skinnedCloth.Name,
-                    Mesh = skinnedCloth.PhysicalMesh
+                    AppearanceName = "default", ComponentName = skinnedCloth.Name, Mesh = skinnedCloth.PhysicalMesh
                 });
+                hasChange = true;
             }
 
             if (component is entVisualControllerComponent c3)
             {
                 vc = c3;
+                hasChange = true;
             }
+        }
+
+        if (!hasChange)
+        {
+            return;
         }
 
         if (vc != null)
@@ -1349,9 +1593,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             vc.AppearanceDependency = list;
             RecalculateProperties();
         }
+
+        Tab?.Parent.SetIsDirty(true);
     }
 
-    //  
+    //
     [GeneratedRegex(@"^[-=_]+$")]
     private static partial Regex PlaceholderRegex();
 
@@ -1368,7 +1614,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         HashSet<CString> seen = [];
-        var uniqueEntries = entries.Entries.Where(entry => PlaceholderRegex().IsMatch(entry.SecondaryKey) || seen.Add(entry.SecondaryKey))
+        var uniqueEntries = entries.Entries.Where(entry =>
+                PlaceholderRegex().IsMatch(entry.SecondaryKey) || seen.Add(entry.SecondaryKey))
             .ToList();
 
         var numDuplicates = entries.Entries.Count - uniqueEntries.Count;
@@ -1393,10 +1640,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         _loggerService.Info($"Deleted {numDuplicates} duplicate entries");
     }
 
-    private bool CanDeleteEmptySubmeshes() => ResolvedData is CMesh;
+    private bool CanAdjustSubmeshCount() => ResolvedData is CMesh;
 
-    [RelayCommand(CanExecute = nameof(CanDeleteEmptySubmeshes))]
-    private void DeleteEmptySubmeshes()
+    [RelayCommand(CanExecute = nameof(CanAdjustSubmeshCount))]
+    private void AdjustSubmeshCount()
     {
         if (ResolvedData is not CMesh mesh || mesh.Appearances.Count == 0 ||
             mesh.RenderResourceBlob.GetValue() is not rendRenderMeshBlob blob)
@@ -1435,35 +1682,85 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             blob.Header.RenderChunks.Add(renderChunkInfo);
         }
-        // Find out how many chunk meshes we have 
+
+        // Find out how many chunk meshes we have
         var numSubmeshes = blob.Header.RenderChunkInfos.Count;
         var wasDeleted = false;
-        foreach (var meshAppearance in mesh.Appearances)
+        var wasAdded = false;
+        foreach (var appearance in mesh.Appearances.Select(a => a.GetValue()).OfType<meshMeshAppearance>())
         {
-            if (meshAppearance.GetValue() is not meshMeshAppearance appearance || appearance.ChunkMaterials.Count <= numSubmeshes)
+            if (appearance.ChunkMaterials.Count == numSubmeshes || appearance.ChunkMaterials.Count == 0)
             {
                 continue;
             }
 
             var newMaterials = appearance.ChunkMaterials.Where((_, i) => i < numSubmeshes).ToList();
+            if (newMaterials.Count < numSubmeshes)
+            {
+                var sequenceIndex =
+                    GetIndexOfFirstNonRepeatingMaterial(newMaterials.Select(m => m.GetResolvedText() ?? "").ToList());
+
+                while (newMaterials.Count < numSubmeshes && sequenceIndex < newMaterials.Count + 1)
+                {
+                    newMaterials.Add(newMaterials[sequenceIndex]);
+                    wasAdded = true;
+                    sequenceIndex = (sequenceIndex + 1) % newMaterials.Count;
+                }
+            }
+
             appearance.ChunkMaterials = new CArray<CName>();
             foreach (var t in newMaterials)
             {
                 appearance.ChunkMaterials.Add(t);
             }
+
             wasDeleted = true;
         }
 
-        if (wasDeleted)
+        if (wasAdded || wasDeleted)
         {
-            DeleteUnusedMaterials();
+            _loggerService.Info("Chunk material counts were adjusted. You can now delete unused materials.");
+            Tab?.Parent.SetIsDirty(true);
+        }
+        else if (!wasDeleted)
+        {
+            _loggerService.Info("No changes were made");
+        }
+
+        return;
+
+        int GetIndexOfFirstNonRepeatingMaterial(List<string> materials)
+        {
+            var numMaterials = materials.Count;
+
+            var materialCounts = new Dictionary<string, int>();
+            foreach (var material in materials.Where(material => !materialCounts.TryAdd(material, 1)))
+            {
+                materialCounts[material]++;
+            }
+
+            var startIndex = 0;
+            for (var i = 0; i < numMaterials; i++)
+            {
+                if (materialCounts[materials[i]] != 1)
+                {
+                    continue;
+                }
+
+                startIndex = i;
+                break;
+            }
+
+            return startIndex;
         }
     }
 
 
-    private static IEnumerable<meshMeshAppearance?> CreateAutoGeneratedChunkMaterials(CArray<CHandle<meshMeshAppearance>> appearanceHandles)
+    private static IEnumerable<meshMeshAppearance?> CreateAutoGeneratedChunkMaterials(
+        CArray<CHandle<meshMeshAppearance>> appearanceHandles)
     {
-        var appearances = appearanceHandles.Select((handle) => handle.GetValue() as meshMeshAppearance).Where((i) => i != null).ToList();
+        var appearances = appearanceHandles.Select((handle) => handle.GetValue() as meshMeshAppearance)
+            .Where((i) => i != null).ToList();
         if (appearances.Count == 0)
         {
             return appearances;
@@ -1483,7 +1780,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             appearance.ChunkMaterials ??= [];
             for (var j = 0; j < firstChunkMaterials.Count; j++)
             {
-                var newChunkMaterial = (firstChunkMaterials[j].GetResolvedText() ?? "").Replace(firstAppearanceName, appearanceName);
+                var newChunkMaterial =
+                    (firstChunkMaterials[j].GetResolvedText() ?? "").Replace(firstAppearanceName, appearanceName);
                 appearance.ChunkMaterials.Insert(j, newChunkMaterial);
             }
         }
@@ -1491,23 +1789,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         return appearances;
     }
 
-    public bool CanClearMaterials() => IsShiftKeyPressed && GetRootModel().ResolvedData is CMesh;
-
-    [RelayCommand(CanExecute = nameof(CanClearMaterials))]
-    private void ClearMaterials()
-    {
-        if (ResolvedData is not CMesh mesh)
-        {
-            return;
-        }
-
-        mesh.Appearances.Clear();
-        DeleteUnusedMaterials();
-    }
-
-    public bool CanDeleteUnusedMaterials() => !IsShiftKeyPressed && GetRootModel().ResolvedData is CMesh;
-
-    [RelayCommand(CanExecute = nameof(CanDeleteUnusedMaterials))]
+    [RelayCommand]
     private void DeleteUnusedMaterials(bool suppressLogOutput = false)
     {
         if (GetRootModel() is not { ResolvedData: CMesh mesh } rootChunk)
@@ -1515,27 +1797,31 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-
         rootChunk.ConvertPreloadMaterials();
 
         // Support auto-generated chunk material names (psiberx magic)
         var appearances = CreateAutoGeneratedChunkMaterials(mesh.Appearances);
-        
 
         // Collect material names from appearance chunk materials
         var appearanceNames = appearances
             .SelectMany(mA => mA!.ChunkMaterials.Select(chunkMaterial => chunkMaterial.GetResolvedText()).ToArray())
+            .Where(n => n is not null)
+            .Select(n => n!.Contains('@') ? $"@{n.Split('@').Last()}" : n) // dynamic
             .ToList();
 
+
         var localMatIdxList = mesh.MaterialEntries.Where((mE) =>
-            mE.IsLocalInstance && mE.Name.GetResolvedText() is string s && appearanceNames.Contains(s)
+            mE.IsLocalInstance && mE.Name.GetResolvedText() is string s &&
+            appearanceNames.Contains(s, StringComparer.OrdinalIgnoreCase)
         ).Select(me => (int)me.Index).ToList();
 
         var externalMatIdxList = mesh.MaterialEntries.Where((mE) =>
-            !mE.IsLocalInstance && mE.Name.GetResolvedText() is string s && appearanceNames.Contains(s)
+            !mE.IsLocalInstance && mE.Name.GetResolvedText() is string s &&
+            appearanceNames.Contains(s, StringComparer.OrdinalIgnoreCase)
         ).Select(me => (int)me.Index).ToList();
 
         var numUnusedMaterials = mesh.MaterialEntries.Count - (localMatIdxList.Count + externalMatIdxList.Count);
+        var numTemplateProperties = 0;
 
         if (!suppressLogOutput && numUnusedMaterials == 0)
         {
@@ -1544,9 +1830,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         IMaterial[] keepLocal = [];
-        CHandle<IMaterial>[] keepLocalPreload = [];
         CResourceAsyncReference<IMaterial>[] keepExternal = [];
-        CResourceReference<IMaterial>[] keepExternalPreload = [];
 
         if (mesh.LocalMaterialBuffer?.Materials is not null && mesh.LocalMaterialBuffer.Materials.Count > 0)
         {
@@ -1559,38 +1843,21 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             keepExternal = mesh.ExternalMaterials
                 .Where((material, i) => externalMatIdxList.Contains(i)).ToArray();
         }
-        
+
         var usedMaterialDefinitions = mesh.MaterialEntries.Where(me =>
             (me.IsLocalInstance && localMatIdxList.Contains(me.Index)) ||
             (!me.IsLocalInstance && externalMatIdxList.Contains(me.Index))
         ).ToArray();
 
-        if (keepLocal.Length + keepExternal.Length + keepLocalPreload.Length + keepExternalPreload.Length !=
-            usedMaterialDefinitions.Length &&
-            !_appViewModel.ShowConfirmationDialog("Not all remaining materials match up. Continue? (You need to validate by hand)",
+        if (keepLocal.Length + keepExternal.Length != usedMaterialDefinitions.Length &&
+            !_appViewModel.ShowConfirmationDialog(
+                "Not all remaining materials match up. Continue? (You need to validate by hand)",
                 "Really delete materials?"))
         {
             return;
         }
 
-        if (mesh.LocalMaterialBuffer?.Materials is not null)
-        {
-            mesh.LocalMaterialBuffer.Materials.Clear();
-            foreach (var t in keepLocal)
-            {
-                mesh.LocalMaterialBuffer.Materials.Add(t);
-            }
-        }
-
-        if (mesh.ExternalMaterials is not null)
-        {
-            mesh.ExternalMaterials.Clear();
-            foreach (var t in keepExternal)
-            {
-                mesh.ExternalMaterials.Add(t);
-            }    
-        }
-
+        // recreate material definition
         mesh.MaterialEntries.Clear();
         var localMaterialIdx = 0;
         var externalMaterialIdx = 0;
@@ -1607,12 +1874,29 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 t.Index = (CUInt16)externalMaterialIdx;
                 externalMaterialIdx += 1;
             }
+
             t.Index = (CUInt16)i;
             mesh.MaterialEntries.Add(t);
         }
 
-        rootChunk.RecalculateProperties();
-        Tab?.Parent.SetIsDirty(true);
+
+        if (mesh.LocalMaterialBuffer?.Materials is not null)
+        {
+            mesh.LocalMaterialBuffer.Materials.Clear();
+            foreach (var t in keepLocal)
+            {
+                mesh.LocalMaterialBuffer.Materials.Add(DeleteTemplatePaths(t));
+            }
+        }
+
+        if (mesh.ExternalMaterials is not null)
+        {
+            mesh.ExternalMaterials.Clear();
+            foreach (var t in keepExternal)
+            {
+                mesh.ExternalMaterials.Add(t);
+            }
+        }
 
         rootChunk.GetPropertyChild("materialEntries")?.RecalculateProperties();
 
@@ -1621,11 +1905,46 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         rootChunk.GetPropertyChild("externalMaterials")?.RecalculateProperties();
 
+        rootChunk.RecalculateProperties();
+        Tab?.Parent.SetIsDirty(true);
+
         if (numUnusedMaterials > 0)
         {
             _loggerService.Info($"Deleted {numUnusedMaterials} unused materials.");
         }
-        
+
+        if (numTemplateProperties > 0)
+        {
+            _loggerService.Info($"Deleted {numTemplateProperties} properties from outdated templates.");
+        }
+
+        return;
+
+        IMaterial DeleteTemplatePaths(IMaterial material)
+        {
+            if (material is not CMaterialInstance matInstance)
+            {
+                return material;
+            }
+
+            CArray<CKeyValuePair> values = [];
+            foreach (var cKeyValuePair in matInstance.Values)
+            {
+                if (cKeyValuePair.Value is not IRedRef reference || reference.DepotPath.GetResolvedText()?.Contains(
+                        "this_is_an_extra_long_path_so_you_can_better_use_010_editor_to_custom_path") is not true)
+                {
+                    values.Add(cKeyValuePair);
+                }
+                else
+                {
+                    numTemplateProperties += 1;
+                }
+            }
+
+            matInstance.Values = values;
+
+            return matInstance;
+        }
     }
 
     public void GenerateMissingMaterials(string baseMaterial, bool isLocal, bool resolveSubstitutions)
@@ -1645,8 +1964,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         // Collect material names from appearance chunk materials
         var undefinedMaterialNames = CreateAutoGeneratedChunkMaterials(mesh.Appearances)
-            .SelectMany(mA => mA!.ChunkMaterials.Select(chunkMaterial => chunkMaterial.GetResolvedText() ?? "").ToArray())
-            .Select((materialName) => materialName.Contains('@') ? $"@{materialName.Split('@').Last()}" : materialName) // dynamic
+            .SelectMany(mA =>
+                mA!.ChunkMaterials.Select(chunkMaterial => chunkMaterial.GetResolvedText() ?? "").ToArray())
+            .Select((materialName) =>
+                materialName.Contains('@') ? $"@{materialName.Split('@').Last()}" : materialName) // dynamic
             .Where((chunkMaterialName) => !definedMaterialNames.Contains(chunkMaterialName))
             .ToHashSet().ToList();
 
@@ -1661,7 +1982,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         foreach (var materialName in undefinedMaterialNames)
         {
             matIdx += 1;
-            var material = new CMeshMaterialEntry() { Name = materialName, Index = (CUInt16)matIdx, IsLocalInstance = isLocal };
+            var material = new CMeshMaterialEntry()
+            {
+                Name = materialName, Index = (CUInt16)matIdx, IsLocalInstance = isLocal
+            };
             mesh.MaterialEntries.Add(material);
         }
 
@@ -1674,6 +1998,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             return this;
         }
+
+        CalculateProperties();
 
         if (TVProperties.FirstOrDefault(prop => prop.Name == propertyNames[0]) is not ChunkViewModel cvm)
         {
@@ -1704,7 +2030,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             return;
         }
-        
+
         // Make sure these are initialized
         mesh.LocalMaterialBuffer ??= new meshMeshMaterialBuffer { Materials = [], };
         mesh.LocalMaterialBuffer.Materials ??= [];
@@ -1745,7 +2071,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         GetPropertyChild("preloadExternalMaterials")?.RecalculateProperties();
         GetPropertyChild("externalMaterials")?.RecalculateProperties();
-        
+
         Tab?.Parent.SetIsDirty(true);
     }
 
@@ -1791,10 +2117,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    
+
     // Dynamic Properties
 
-    private bool CanCreateDynamicProperty() => ResolvedData is IDynamicClass;   // TODO RelayCommand check notify
+    private bool CanCreateDynamicProperty() => ResolvedData is IDynamicClass; // TODO RelayCommand check notify
+
     [RelayCommand(CanExecute = nameof(CanCreateDynamicProperty))]
     private async Task CreateDynamicProperty()
     {
@@ -1814,6 +2141,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 .Where(p => typeof(inkWidgetReference).IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
                 .Select(x => new TypeEntry(x.Name, "", x))
                 .ToList();
+
             await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
             {
                 DialogHandler = HandleNewDynamicProperty
@@ -1829,7 +2157,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             && selectedType is not null && ResolvedData is RedBaseClass rbc)
         {
             var propertyName = Interactions.Rename("");
-            var instance = RedTypeManager.CreateRedType(selectedType);
+            var instance = RedTypeFactory.CreateAndInitRedType(selectedType);
             rbc.AddDynamicProperty(propertyName, selectedType);
             rbc.SetProperty(propertyName, instance);
             //if (Data is IRedBaseHandle handle)
@@ -1841,7 +2169,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private bool CanRenameDynamicClass() => ResolvedData is IDynamicClass;   // TODO RelayCommand check notify
+    private bool CanRenameDynamicClass() => ResolvedData is IDynamicClass; // TODO RelayCommand check notify
+
     [RelayCommand(CanExecute = nameof(CanRenameDynamicClass))]
     private void RenameDynamicClass()
     {
@@ -1853,24 +2182,25 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private bool CanAddItemToCompiledData() =>
-        ResolvedPropertyType is not null && PropertyType.IsAssignableTo(typeof(IRedBufferPointer)); // TODO RelayCommand check notify
+    private bool CanAddItemToCompiledData()
+    {
+        return ResolvedPropertyType is not null &&
+               PropertyType.IsAssignableTo(typeof(IRedBufferPointer)); // TODO RelayCommand check notify
+    }
+
     [RelayCommand(CanExecute = nameof(CanAddItemToCompiledData))]
     private async Task AddItemToCompiledData()
     {
         ArgumentNullException.ThrowIfNull(ResolvedPropertyType);
         if (Data is RedDummy)
         {
-            Data = RedTypeManager.CreateRedType(ResolvedPropertyType);
+            Data = RedTypeFactory.CreateAndInitRedType(ResolvedPropertyType);
             if (Data is IRedBufferPointer ptr)
             {
-                ptr.SetValue(new RedBuffer
-                {
-                    Data = new RedPackage { Chunks = new List<RedBaseClass>() }
-                });
+                ptr.SetValue(new RedBuffer { Data = new RedPackage { Chunks = new List<RedBaseClass>() } });
             }
-
         }
+
         if (Data is DataBuffer { Data: null } db2)
         {
             if (Parent?.Data is worldStreamingSector)
@@ -1916,14 +2246,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     $"You can't create new items for {Data.RedType} yet. Please create a ticket and tell us what you need here.");
             }
 
-            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
-            {
-                DialogHandler = HandleChunk
-            });
+            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types) { DialogHandler = HandleChunk });
         }
     }
 
-    private bool CanDeleteItem() => !IsReadOnly && IsInArray && Tab is not null && Data is not null;   // TODO RelayCommand check notify
+    private bool CanDeleteItem() =>
+        !IsReadOnly && IsInArray && Tab is not null && Data is not null; // TODO RelayCommand check notify
+
     [RelayCommand(CanExecute = nameof(CanDeleteItem))]
     private void DeleteItem()
     {
@@ -1965,7 +2294,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
                     break;
                 }
-                case IRedBufferPointer db when db.GetValue().Data is RedPackage pkg && !pkg.Chunks.Remove((RedBaseClass)Data):
+                case IRedBufferPointer db
+                    when db.GetValue().Data is RedPackage pkg && !pkg.Chunks.Remove((RedBaseClass)Data):
                     _loggerService.Error("Unable to delete chunk");
                     return;
                 case IRedBufferPointer db2 when db2.GetValue().Data is CR2WList list:
@@ -1979,14 +2309,18 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     _loggerService.Error("Unknown collection - unable to delete chunk");
                     return;
             }
-            
+
             Parent.RecalculateProperties();
+
+            // Notify for graph sync when array items are deleted
+            NotifyPropertyUpdateForGraphSync();
 
             if (!Tab.HasActiveSearch)
             {
                 newSelectionIndex = Math.Min(newSelectionIndex, Parent.TVProperties.Count) - 1;
                 newSelectionIndex = Math.Max(0, newSelectionIndex);
-                if (Parent.TVProperties.Count > 0 && newSelectionIndex > 0 && newSelectionIndex < Parent.TVProperties.Count)
+                if (Parent.TVProperties.Count > 0 && newSelectionIndex > 0 &&
+                    newSelectionIndex < Parent.TVProperties.Count)
                 {
                     Tab.SetSelection(Parent.TVProperties[newSelectionIndex]);
                 }
@@ -1995,26 +2329,31 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     Tab.SetSelection(Parent.TVProperties.LastOrDefault() ?? Parent);
                 }
             }
+
             Tab.Parent.SetIsDirty(true);
         }
-        catch (Exception ex) { _loggerService.Error(ex); }        
+        catch (Exception ex) { _loggerService.Error(ex); }
     }
 
-    private bool CanImportWorldNodeData() => Data is worldNodeData && PropertyCount > 0;   // TODO RelayCommand check notify
+    private bool CanImportWorldNodeData() =>
+        Data is worldNodeData && PropertyCount > 0; // TODO RelayCommand check notify
+
     [RelayCommand(CanExecute = nameof(CanImportWorldNodeData))]
-    private Task ImportWorldNodeDataAsync() => ImportWorldNodeDataTask(true);
+    private async Task ImportWorldNodeData() => await ImportWorldNodeDataAsync(true);
 
-    [RelayCommand(CanExecute = nameof(CanImportWorldNodeData))]   // TODO RelayCommand check notify
-    private Task ImportWorldNodeDataWithoutCoordsAsync() => ImportWorldNodeDataTask(false);
-
-    private bool CanAddToProject() => PropertyType.IsAssignableTo(typeof(IRedRef));
-
-    [RelayCommand(CanExecute = nameof(CanAddToProject))]
-    private Task AddToProject() => AddToProjectTask();
+    [RelayCommand(CanExecute = nameof(CanImportWorldNodeData))] // TODO RelayCommand check notify
+    private async Task ImportWorldNodeDataWithoutCoords() => await ImportWorldNodeDataAsync(false);
 
     public void DeleteNodesInParent(List<ChunkViewModel> nodes)
     {
         ArgumentNullException.ThrowIfNull(Parent);
+        ArgumentNullException.ThrowIfNull(Tab);
+
+        Parent.DeleteNodes(nodes);
+    }
+
+    public void DeleteNodes(List<ChunkViewModel> nodes)
+    {
         ArgumentNullException.ThrowIfNull(Tab);
 
         if (nodes.Count == 0) // Exception was seen in the wild, better catch this
@@ -2023,10 +2362,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         var indices = nodes.Select(_ => _.NodeIdxInParent).ToList();
-        
+
         try
         {
-            switch (Parent.Data)
+            switch (Data)
             {
                 case IRedBufferPointer db3 when db3.GetValue().Data is IRedArray dict:
                 {
@@ -2057,7 +2396,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     _loggerService.Warning($"Parent.Data is RedDummy");
                     return;
                 default:
-                    _loggerService.Warning($"Unsupported type : {Parent.Data.NotNull().GetType().Name}");
+                    _loggerService.Warning($"Unsupported type : {Data.NotNull().GetType().Name}");
                     return;
             }
         }
@@ -2066,19 +2405,33 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             _loggerService.Warning($"Something went wrong while trying to delete the selection : {ex}");
         }
 
-        Parent.RecalculateProperties();
-        var newSelectionIndex = Math.Min(indices.First(), Parent.TVProperties.Count) - 1;
+        ReindexChildren();
+
+        // Notify Syncfusion once – grid updates rows safely
+        NotifyChain(nameof(Properties));
+
+        // Notify for graph sync when array items are deleted
+        NotifyPropertyUpdateForGraphSync();
+
+
+        var newSelectionIndex = Math.Min(indices.First(), TVProperties.Count) - 1;
         newSelectionIndex = Math.Max(0, newSelectionIndex);
-        newSelectionIndex = Math.Min(newSelectionIndex, Parent.TVProperties.Count - 1);
-        if (newSelectionIndex >= 0)
+        newSelectionIndex = Math.Min(newSelectionIndex, TVProperties.Count - 1);
+        if (newSelectionIndex >= 0 && newSelectionIndex < TVProperties.Count)
         {
-            Tab.SetSelection(Parent.TVProperties[newSelectionIndex]);
+            Tab.SetSelection(TVProperties[newSelectionIndex]);
+        }
+        else
+        {
+            Tab.SetSelection(this);
         }
 
         Tab.Parent.SetIsDirty(true);
     }
-    
-    private bool CanDeleteSelection() => IsInArray && Tab is not null && Parent is not null;   // TODO RelayCommand check notify
+
+    private bool CanDeleteSelection() =>
+        IsInArray && Tab is not null && Parent is not null; // TODO RelayCommand check notify
+
     [RelayCommand(CanExecute = nameof(CanDeleteSelection))]
     private void DeleteSelection()
     {
@@ -2102,16 +2455,18 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             .Select(_ => _)
             .ToList());
     }
-    
+
     private bool CanExportNodeData() =>
         IsInArray && Parent?.Data is DataBuffer rb && Parent?.Parent?.Data is worldStreamingSector &&
         rb.Data is worldNodeDataBuffer; // TODO RelayCommand check notify
+
     [RelayCommand(CanExecute = nameof(CanExportNodeData))]
     private void ExportNodeData()
     {
         try
         {
-            if (Parent?.Data is DataBuffer rb && Parent?.Parent?.Data is worldStreamingSector && rb.Data is worldNodeDataBuffer wndb)
+            if (Parent?.Data is DataBuffer rb && Parent?.Parent?.Data is worldStreamingSector &&
+                rb.Data is worldNodeDataBuffer wndb)
             {
                 WriteObjectToJSON(wndb.ToList());
             }
@@ -2122,7 +2477,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private bool CanExportChunk() => PropertyCount > 0;   // TODO RelayCommand check notify
+    private bool CanExportChunk() => PropertyCount > 0; // TODO RelayCommand check notify
+
     [RelayCommand(CanExecute = nameof(CanExportChunk))]
     private void ExportChunk()
     {
@@ -2131,6 +2487,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             filename = Descriptor;
         }
+
         Stream myStream;
         var saveFileDialog = new SaveFileDialog
         {
@@ -2163,7 +2520,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private bool CanOpenChunk() => Data is RedBaseClass && Parent is not null && Tab is not null;   // TODO RelayCommand check notify
+    private bool CanOpenChunk() =>
+        Data is RedBaseClass && Parent is not null && Tab is not null; // TODO RelayCommand check notify
+
     [RelayCommand(CanExecute = nameof(CanOpenChunk))]
     private void OpenChunk()
     {
@@ -2173,11 +2532,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        var redDocumentTabViewModel = _tabViewmodelFactory.RDTDataViewModel(cls, Tab.Parent, _appViewModel, _chunkViewmodelFactory);
+        var redDocumentTabViewModel =
+            _tabViewmodelFactory.RDTDataViewModel(cls, Tab.Parent, _appViewModel, _chunkViewmodelFactory);
         Tab.Parent.TabItemViewModels.Add(redDocumentTabViewModel);
     }
 
-    private bool CanRenameProperty() => Parent is not null && Parent.ResolvedData is IDynamicClass;   // TODO RelayCommand check notify
+    private bool CanRenameProperty() =>
+        Parent is not null && Parent.ResolvedData is IDynamicClass; // TODO RelayCommand check notify
+
     [RelayCommand(CanExecute = nameof(CanRenameProperty))]
     private void RenameProperty()
     {
@@ -2192,10 +2554,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
         }
         catch (Exception ex) { _loggerService.Error(ex); }
-
     }
 
-    private bool CanDeleteProperty() => Parent is not null && Parent.ResolvedData is IDynamicClass;   // TODO RelayCommand check notify
+    private bool CanDeleteProperty() =>
+        Parent is not null && Parent.ResolvedData is IDynamicClass; // TODO RelayCommand check notify
+
     [RelayCommand(CanExecute = nameof(CanDeleteProperty))]
     private void DeleteProperty()
     {
@@ -2211,11 +2574,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         catch (Exception ex) { _loggerService.Error(ex); }
     }
 
-    public Task<bool> SearchAndReplaceAsync(string searchText, string replaceText) =>
-        Task.FromResult(SearchAndReplaceInternal(searchText, replaceText));
-    public bool SearchAndReplace(string searchText, string replaceText) => SearchAndReplaceInternal(searchText, replaceText);
+    private bool CanCopyHandle() => Data is IRedBaseHandle; // TODO RelayCommand check notify
 
-    private bool CanCopyHandle() => Data is IRedBaseHandle;   // TODO RelayCommand check notify
     [RelayCommand(CanExecute = nameof(CanCopyHandle))]
     private void CopyHandle()
     {
@@ -2229,64 +2589,25 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         catch (Exception ex) { _loggerService.Error(ex); }
     }
 
-    protected bool IsHandle() =>
-        PropertyType.IsAssignableTo(typeof(IRedBaseHandle)) && (
-        PropertyType.GetGenericTypeDefinition() == typeof(CHandle<>) ||
-        PropertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>));
-
-    private bool CanPasteHandle()
+    public static bool IsHandle(IRedType? irb, bool weakHandleOnly = false)
     {
-        if (RedDocumentTabViewModel.CopiedChunk is not IRedBaseHandle || Parent is { Data: worldNodeData })
+        var propertyType = irb?.GetType();
+        if (propertyType?.IsAssignableTo(typeof(IRedBaseHandle)) != true)
         {
             return false;
         }
 
-        return IsHandle();
-    } // TODO RelayCommand check notify
-    
-    [RelayCommand(CanExecute = nameof(CanPasteHandle))]
-    private void PasteHandle()
-    {
-        if (RedDocumentTabViewModel.CopiedChunk is not IRedBaseHandle sourceHandle)
+        var gt = propertyType.GetGenericTypeDefinition();
+        if (weakHandleOnly)
         {
-            return;
+            return gt == typeof(CWeakHandle<>);
         }
 
-        switch (Data)
-        {
-            case IRedBaseHandle destinationHandle:
-            {
-                if (destinationHandle.InnerType.IsAssignableFrom(sourceHandle.GetValue().NotNull().GetType()))
-                {
-                    destinationHandle.SetValue(sourceHandle.GetValue());
-                    RecalculateProperties(destinationHandle);
-                    RedDocumentTabViewModel.CopiedChunk = null;
-                }
-
-                break;
-            }
-            case RedDummy:
-            case null:
-            {
-                if (PropertyType.GetGenericTypeDefinition() == typeof(CHandle<>))
-                {
-                    Data = CHandle.Parse(sourceHandle.InnerType, sourceHandle.GetValue());
-                    RecalculateProperties(Data);
-                    RedDocumentTabViewModel.CopiedChunk = null;
-                }
-                else if (PropertyType.GetGenericTypeDefinition() == typeof(CWeakHandle<>))
-                {
-                    Data = CWeakHandle.Parse(sourceHandle.InnerType, sourceHandle.GetValue());
-                    RecalculateProperties(Data);
-                    RedDocumentTabViewModel.CopiedChunk = null;
-                }
-
-                break;
-            }
-        }
+        return gt == typeof(CWeakHandle<>) || gt == typeof(CHandle<>);
     }
 
     private bool CanResetObject() => Parent != null;
+
     [RelayCommand(CanExecute = nameof(CanResetObject))]
     private void ResetObject()
     {
@@ -2295,53 +2616,58 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        IRedType data = new RedDummy();
-        if (ParentData is RedBaseClass redBaseClass)
+        if (ParentData is RedBaseClass redBaseClass &&
+            redBaseClass.GetPropertyDefaultValue(PropertyName) is IRedType defaultValue)
         {
-            var defaultValue = redBaseClass.GetPropertyDefaultValue(PropertyName);
-            if (defaultValue != null)
-            {
-                data = defaultValue;
-            }
+            Data = defaultValue;
+            RecalculateProperties(Data);
+            Parent.CalculateIsDefault();
+
+            // Notify for graph sync when object is reset to default
+            NotifyPropertyUpdateForGraphSync();
+            return;
         }
 
-        Data = data;
+        // Create a proper default value based on the property type
+        try
+        {
+            Data = RedTypeFactory.CreateAndInitRedType(PropertyType);
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Warning(
+                $"Could not create default value for type {PropertyType.Name}, falling back to RedDummy: {ex.Message}");
+            Data = new RedDummy();
+        }
+
         RecalculateProperties(Data);
+
+        // Notify for graph sync when object is reset
+        NotifyPropertyUpdateForGraphSync();
     }
 
-    private bool CanCopyChunk() => IsInArray;   // TODO RelayCommand check notify
-    [RelayCommand(CanExecute = nameof(CanCopyChunk))]
-    private void CopyChunk()
+    /// <summary>
+    /// Handles data copy for pasting into another node.
+    /// </summary>
+    /// <param name="copyAsHandle">Copy reference instead of data?</param>
+    public IRedType? CopyData(bool copyAsHandle = false)
     {
         try
         {
-            RedDocumentTabViewModel.CopiedChunk = Data is IRedCloneable irc ? (IRedType)irc.DeepCopy() : Data;
-            RefreshContextMenuFlags();
+            return Data switch
+            {
+                IRedBaseHandle baseHandle when copyAsHandle => baseHandle,
+                IRedCloneable irc => (IRedType)irc.DeepCopy(),
+                _ => Data
+            };
         }
-        catch (Exception ex) { _loggerService.Error(ex); }
+        catch (Exception ex)
+        {
+            _loggerService.Error(ex);
+        }
+
+        return null;
     }
-
-    private bool CanPasteChunks()
-    {
-        if (RedDocumentTabViewModel.CopiedChunk is null)
-        {
-            return false;
-        }
-
-        Type? innerType = null;
-        if (ResolvedData is IRedArray arr)
-        {
-            innerType = arr.InnerType;
-        }
-        else if (Parent is { ResolvedData: IRedArray pArr })
-        {
-            innerType = pArr.InnerType;
-        }
-
-        return innerType != null &&
-               CheckTypeCompatibility(innerType, RedDocumentTabViewModel.CopiedChunk.GetType()) != TypeCompability.None;
-    } // TODO RelayCommand check notify
-
 
     // Visibility check: ShouldShowRenumberArrayIndexProperties
     private bool CanReindexChildDataIndexProperties()
@@ -2390,21 +2716,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         CalculateValue();
     }
 
-    [RelayCommand(CanExecute = nameof(CanPasteChunks))]
-    private void ClearAndPasteChunk()
-    {
-        var isExpanded = IsExpanded;
-        DeleteAll();
-        PasteChunk();
-        if (!IsCtrlKeyPressed)
-        {
-            SetChildExpansionStates(false);
-        }
-
-        IsExpanded = isExpanded;
-    }
-    
-    [RelayCommand(CanExecute = nameof(CanPasteChunks))]
     private void PasteChunk()
     {
         try
@@ -2462,16 +2773,21 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
 
             Tab?.Parent.SetIsDirty(true);
+
+            // Notify for graph sync when chunk is pasted
+            NotifyPropertyUpdateForGraphSync();
         }
         catch (Exception ex)
-        { 
+        {
             _loggerService.Error(ex);
         }
     }
 
     private bool CanDeleteAll() =>
         !IsReadOnly &&
-        (IsArray && PropertyCount > 0 || IsInArray && Parent is not null && Parent.PropertyCount > 0); // TODO RelayCommand check notify
+        (IsArray && PropertyCount > 0 ||
+         IsInArray && Parent is not null && Parent.PropertyCount > 0); // TODO RelayCommand check notify
+
     [RelayCommand(CanExecute = nameof(CanDeleteAll))]
     private void DeleteAll()
     {
@@ -2485,19 +2801,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-
-    public Task DuplicateChunkAsync()
-    {
-        DuplicateChunk();
-        return Task.CompletedTask;
-    }
-    
     private bool CanDuplicateChunk() => IsInArray && Parent is not null; // TODO RelayCommand check notify
 
     [RelayCommand(CanExecute = nameof(CanDuplicateChunk))]
     private void DuplicateChunk() => DuplicateChunk(-1);
 
-    private ChunkViewModel? DuplicateChunk(int index)
+    public ChunkViewModel? DuplicateChunk(int index, bool pasteAsNew = false)
     {
         if (Parent is null || Data is RedDummy)
         {
@@ -2521,10 +2830,20 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         Tab?.Parent.SetIsDirty(true);
 
-        // Unless shift key is pressed, we want to regenerate CRUIDs
-        if (IsShiftKeyPressed || Parent.GetChildNode(index) is not ChunkViewModel newSibling)
+        // Notify for graph sync when items are duplicated
+        Parent.NotifyPropertyUpdateForGraphSync();
+
+        var newSibling = Parent.GetChildNode(Math.Min(index, Parent.TVProperties.Count - 1));
+
+        if (newSibling is not null && pasteAsNew)
         {
-            return null;
+            newSibling.AdjustPropertiesAfterPasteAsNewItem();
+        }
+
+        // Unless shift key is pressed, we want to regenerate CRUIDs
+        if (IsShiftKeyPressed || newSibling is null)
+        {
+            return newSibling;
         }
 
         newSibling.RecalculateProperties();
@@ -2540,38 +2859,21 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         Parent.CalculateValue();
         Parent.ReindexChildren();
 
+        Parent.NotifyChain(nameof(Data));
+
         IsExpanded = false;
 
         return newSibling;
     }
 
-    public Task DuplicateChunkAsNewAsync()
+    public ChunkViewModel? DuplicateAsNewChunk()
     {
-        DuplicateAsNewChunk();
-        return Task.CompletedTask;
-    }
-
-    
-    [RelayCommand(CanExecute = nameof(CanDuplicateChunk))]
-    private void DuplicateAsNewChunk()
-    {
-        if (Parent is null || DuplicateChunk(Parent.Properties.Count) is not ChunkViewModel newChunk)
+        if (Parent is null)
         {
-            return;
+            return null;
         }
 
-        try
-        {
-            Tab?.RemoveFromSelection(this);
-            newChunk.AdjustPropertiesAfterPasteAsNewItem();
-
-            Tab?.AddToSelection(newChunk);
-            Parent.RecalculateProperties();
-        }
-        catch (Exception ex)
-        {
-            _loggerService.Error($"Failed to recalculate properties after duplicating an entry: {ex}");
-        }
+        return DuplicateChunk(Parent.Properties.Count, true);
     }
 
     private void ReindexChildren()
@@ -2585,16 +2887,29 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             Properties[i].NodeIdxInParent = i;
             Properties[i].CalculateDisplayName();
+
+            // Lightweight fix: renumber remaining children and notify once
+            if (Data is IRedArray)
+            {
+                Properties[i].PropertyName = $"[{i}]";
+            }
+        }
+
+
+        if (Name != "materialEntries")
+        {
+            return;
         }
 
         Parent?.GetPropertyChild("localMaterialBuffer")?.GetPropertyChild("materials")?.RecalculateProperties();
     }
-    
-    private bool CanCopySelection() => IsInArray && Parent is not null;   // TODO RelayCommand check notify
+
+    public bool CanCopySelection() => (IsInArray && Parent is not null) || IsHandle(Data);
+
     [RelayCommand(CanExecute = nameof(CanCopySelection))]
     private void CopySelection()
     {
-        if (Parent is not { } || Tab is not { SelectedChunks: IList lst })
+        if (Parent is null || Tab is not { SelectedChunks: IList lst })
         {
             return;
         }
@@ -2613,7 +2928,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             // can't be merged with next block; will cause compiler errors
             if (Parent.Data is IRedBufferPointer)
             {
-                RedDocumentTabViewModel.CopiedChunks.Clear();
+                RedDocumentTabViewModel.ClearCopiedChunks();
                 foreach (var i in fullselection)
                 {
                     AddToCopiedChunks(i);
@@ -2621,7 +2936,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
             else if (Parent.Data is IRedArray)
             {
-                RedDocumentTabViewModel.CopiedChunks.Clear();
+                RedDocumentTabViewModel.ClearCopiedChunks();
                 foreach (var i in fullselection)
                 {
                     AddToCopiedChunks(i);
@@ -2644,10 +2959,23 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         RefreshContextMenuFlags();
     }
 
-
-    private bool CanPasteSelection()
+    public bool CanPasteSelection(bool singleSelectOnly = false)
     {
-        if (RedDocumentTabViewModel.CopiedChunks.Count == 0 ||
+        if (singleSelectOnly && RedDocumentTabViewModel.CopiedChunk is null)
+        {
+            return false;
+        }
+
+        if (IsHandle(Data) && singleSelectOnly)
+        {
+            return IsHandle(RedDocumentTabViewModel.CopiedChunk);
+        }
+
+        var copiedChunks = singleSelectOnly
+            ? [RedDocumentTabViewModel.CopiedChunk!]
+            : RedDocumentTabViewModel.GetCopiedChunks();
+
+        if (copiedChunks.Count == 0 ||
             (ResolvedData is not IRedArray && Parent is not { ResolvedData: IRedArray }))
         {
             return false;
@@ -2663,10 +2991,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             innerType = pArr.InnerType;
         }
 
-        return RedDocumentTabViewModel.CopiedChunks.All(c => CheckTypeCompatibility(innerType!, c.GetType()) != TypeCompability.None);
-    } // TODO RelayCommand check notify
+        return innerType is not null &&
+               copiedChunks.All(c => CheckTypeCompatibility(innerType, c.GetType()) != TypeCompability.None);
+    }
 
-    private bool CanCopyArrayContents() => Properties.Count > 0 && !Properties[0].IsArray;
+    private bool CanCopyArrayContents() => IsArray && Properties.Count > 0 && !Properties[0].IsArray;
 
     [RelayCommand(CanExecute = nameof(CanCopyArrayContents))]
     private void CopyArrayContents()
@@ -2675,43 +3004,26 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             .Select(_ => _.Data.NotNull())
             .ToList();
 
-        RedDocumentTabViewModel.CopiedChunks.Clear();
+        RedDocumentTabViewModel.ClearCopiedChunks();
         foreach (var i in fullselection)
         {
             AddToCopiedChunks(i);
         }
     }
 
-    [RelayCommand(CanExecute = nameof(CanPasteSelection))]
-    private void ClearAndPasteSelection()
+    public void PasteAtIndex(List<IRedType> copiedData, int insertAtIndex = -1)
     {
-        DeleteAll();
-        PasteSelection();
-    }
+        // this is technically unnecessary, but we don't have root nodes that are arrays anyway
 
-    [RelayCommand(CanExecute = nameof(CanPasteSelection))]
-    private void OverwriteSelectionWithPaste()
-    {
-        var insertAtIndex = -1;
-        if (Tab?.SelectedChunks is IList lst)
+        if (copiedData.Count == 0)
         {
-            insertAtIndex = lst.OfType<ChunkViewModel>().Where(chunk => chunk.IsSelected).FirstOrDefault()?.NodeIdxInParent ?? -1;
-            DeleteSelection();
+            return;
         }
 
-        PasteSelectionInternal(insertAtIndex);
-    }
-    
-    [RelayCommand(CanExecute = nameof(CanPasteSelection))]
-    private void PasteSelection() => PasteSelectionInternal(-1);
-
-
-    private void PasteSelectionInternal(int insertAtIndex = -1)
-    {
-        ArgumentNullException.ThrowIfNull(Parent);
-
-        if (RedDocumentTabViewModel.CopiedChunks.Count == 0)
+        if (IsInArray)
         {
+            ArgumentNullException.ThrowIfNull(Parent);
+            Parent.PasteAtIndex(copiedData, NodeIdxInParent + 1);
             return;
         }
 
@@ -2722,11 +3034,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         try
         {
-            var index = insertAtIndex >= 0 ? insertAtIndex : Parent.GetIndexOf(this) + 1;
+            var index = insertAtIndex < 0 ? Properties.Count : insertAtIndex;
 
-            for (var i = 0; i < RedDocumentTabViewModel.CopiedChunks.Count; i++)
+            for (var i = 0; i < copiedData.Count; i++)
             {
-                var e = RedDocumentTabViewModel.CopiedChunks[i];
+                var e = copiedData[i];
 
                 if (ResolvedData is IRedBufferPointer db)
                 {
@@ -2752,23 +3064,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
                 if (PropertyType.IsAssignableTo(typeof(IRedArray)))
                 {
-                    if (InsertChild(-1, e))
-                    {
-                        //RDTDataViewModel.CopiedChunk = null;
-                    }
-                }
+                    // index boundary checking will happen in insertChild
 
-                if (Parent.ResolvedData is IRedBufferPointer)
-                {
-                    if (Parent.InsertChild(index, e))
-                    {
-                        //RDTDataViewModel.CopiedChunk = null;
-                    }
-                }
-
-                if (Parent.PropertyType.IsAssignableTo(typeof(IRedArray)))
-                {
-                    if (Parent.InsertChild(index, e))
+                    if (InsertChild(index, e))
                     {
                         //RDTDataViewModel.CopiedChunk = null;
                     }
@@ -2776,6 +3074,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
                 index++;
             }
+
+            // Notify for graph sync when items are pasted
+            NotifyPropertyUpdateForGraphSync();
         }
         catch (Exception ex) { _loggerService.Error(ex); }
     }
@@ -2789,14 +3090,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             return;
         }
-        
+
         Data = _cruidService.GenerateNewCRUID();
     }
 
     #endregion
 
     #region methods
- 
 
     private string? GetNodeName(CWeakHandle<animAnimNode_Base>? linkNode)
     {
@@ -2809,12 +3109,39 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             return t.Name.Split("_").LastOrDefault();
         }
+
         if (linkNode.InnerType is { Name: not null })
         {
             return linkNode.InnerType.Name?.Split("_").LastOrDefault();
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// Names of properties to initialize, even if they are handles
+    /// </summary>
+    private static List<string> s_InitializeAnyway =
+    [
+        "appearances", "externalMaterials"
+    ];
+
+    public void ForceLoadPropertiesRecursive()
+    {
+        if (IsHandle(Data, true) && !s_InitializeAnyway.Contains(Parent?.Name ?? ""))
+        {
+            return;
+        }
+
+        if (Properties.Count == 0 || Data is RedDummy)
+        {
+            CalculateProperties();
+        }
+
+        foreach (var child in Properties)
+        {
+            child.ForceLoadPropertiesRecursive();
+        }
     }
 
     public void CalculateProperties()
@@ -2824,25 +3151,68 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        CalculateDisplayName();
-        
-        _propertiesLoaded = true;
-        OnPropertyChanged(nameof(ResolvedData));
+        try
+        {
+            CalculateDisplayName();
+        }
+        catch (Exception ex)
+        {
+            _loggerService?.Error($"Failed to calculate display name: {ex.Message}");
+        }
 
-        Properties.Clear();
-        
+        _propertiesLoaded = true;
+
+        try
+        {
+            OnPropertyChanged(nameof(ResolvedData));
+        }
+        catch (Exception ex)
+        {
+            _loggerService?.Error($"Failed to notify ResolvedData changed: {ex.Message}");
+        }
+
+        try
+        {
+            Properties.Clear();
+        }
+        catch (Exception ex)
+        {
+            _loggerService?.Error($"Failed to clear properties: {ex.Message}");
+            return; // If we can't clear properties, we can't continue
+        }
+
         // Let SFTreeView clear its items first else the ScrollBar calculations are of...
         // Can't use NotificationSubscriptionMode.CollectionChanged neither since SF never attaches to the event...
         // TVProperties also doesn't need to be Observable but doesn't matter really...
-        OnPropertyChanged(nameof(TVProperties));
+        try
+        {
+            OnPropertyChanged(nameof(TVProperties));
+        }
+        catch (Exception ex)
+        {
+            _loggerService?.Error($"Failed to notify TVProperties changed: {ex.Message}");
+        }
 
         var isreadonly = IsReadOnly;
         if (Parent is not null)
         {
             isreadonly = Parent.IsReadOnly;
         }
-        
+
         var obj = Data;
+
+        // Check for required services
+        if (_chunkViewmodelFactory == null)
+        {
+            _loggerService?.Error("ChunkViewmodelFactory is null, cannot calculate properties");
+            return;
+        }
+
+        if (_appViewModel == null)
+        {
+            _loggerService?.Error("AppViewModel is null, cannot calculate properties");
+            return;
+        }
 
         switch (obj)
         {
@@ -2861,11 +3231,17 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 if (obj is not null)
                 {
                     Properties.Add(_chunkViewmodelFactory.ChunkViewModel(obj, nameof(TweakDBID), _appViewModel,
-                        _settingsManager.DefaultEditorDifficultyLevel, this, true));
+                        this, true));
                     OnPropertyChanged(nameof(TVProperties));
                     return;
-                } 
+                }
+
                 obj = TweakDBService.GetRecord(tdb);
+                if (obj is null)
+                {
+                    return;
+                }
+
                 isreadonly = true;
                 break;
             }
@@ -2900,7 +3276,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     }
 
                     Properties.Add(_chunkViewmodelFactory.ChunkViewModel(
-                        t, i.ToString(), _appViewModel, _currentEditorDifficultyLevel, this, isreadonly
+                        t, i.ToString(), _appViewModel, this, isreadonly
                     ));
                 }
 
@@ -2913,7 +3289,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     var name = i == 0 ? "Key" : "Value";
                     var data = i == 0 ? kvp.Key : kvp.Value;
                     Properties.Add(_chunkViewmodelFactory.ChunkViewModel(
-                        data, name, _appViewModel, _currentEditorDifficultyLevel, this, isreadonly
+                        data, name, _appViewModel, this, isreadonly
                     ));
                 }
 
@@ -2921,7 +3297,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             }
             case RedBaseClass redClass:
             {
-                var pis = GetTypeInfo(redClass).PropertyInfos.Sort((a, b) => string.Compare(a.Name, b.Name, StringComparison.Ordinal));
+                var pis = GetTypeInfo(redClass).PropertyInfos
+                    .Sort((a, b) => string.Compare(a.Name, b.Name, StringComparison.Ordinal));
 
                 var dps = redClass.GetDynamicPropertyNames();
                 dps.Sort();
@@ -2937,16 +3314,46 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     ArgumentNullException.ThrowIfNull(name);
 
                     var t = redClass.GetProperty(name) ?? new RedDummy();
-                    
-                    Properties.Add(_chunkViewmodelFactory.ChunkViewModel(t, propertyInfo.RedName.NotNull(), _appViewModel,
-                        _currentEditorDifficultyLevel, this, isreadonly));
+
+                    try
+                    {
+                        var childViewModel = _chunkViewmodelFactory.ChunkViewModel(t, propertyInfo.RedName.NotNull(),
+                            _appViewModel,
+                            this, isreadonly);
+                        if (childViewModel != null)
+                        {
+                            Properties.Add(childViewModel);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _loggerService?.Error(
+                            $"Failed to create child ChunkViewModel for property {propertyInfo.RedName}: {ex.Message}");
+                    }
                 }
 
                 foreach (var dp in dps)
                 {
-                    ArgumentNullException.ThrowIfNull(dp);
-                    Properties.Add(_chunkViewmodelFactory.ChunkViewModel(redClass.GetProperty(dp).NotNull(), dp, _appViewModel,
-                        _currentEditorDifficultyLevel, this, isreadonly));
+                    try
+                    {
+                        ArgumentNullException.ThrowIfNull(dp);
+                        var dynamicProperty = redClass.GetProperty(dp);
+                        if (dynamicProperty != null)
+                        {
+                            var childViewModel = _chunkViewmodelFactory.ChunkViewModel(dynamicProperty, dp,
+                                _appViewModel,
+                                this, isreadonly);
+                            if (childViewModel != null)
+                            {
+                                Properties.Add(childViewModel);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _loggerService?.Error(
+                            $"Failed to create child ChunkViewModel for dynamic property {dp}: {ex.Message}");
+                    }
                 }
 
                 break;
@@ -2955,8 +3362,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 for (var i = 0; i < PropertyCount; i++)
                 {
-                    Properties.Add(_chunkViewmodelFactory.ChunkViewModel(p4.Chunks[i], nameof(RedPackage), _appViewModel,
-                        _currentEditorDifficultyLevel, this, isreadonly));
+                    Properties.Add(_chunkViewmodelFactory.ChunkViewModel(p4.Chunks[i], nameof(RedPackage),
+                        _appViewModel,
+                        this, isreadonly));
                 }
 
                 break;
@@ -2971,8 +3379,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                         var value = pi.GetValue(sddb.Data);
                         if (value is IRedType irt)
                         {
-                            Properties.Add(_chunkViewmodelFactory.ChunkViewModel(irt, pi.Name, _appViewModel, _currentEditorDifficultyLevel,
-                                this, isreadonly));
+                            Properties.Add(_chunkViewmodelFactory.ChunkViewModel(irt, pi.Name, _appViewModel, this,
+                                isreadonly));
                         }
                     }
                 }
@@ -2984,15 +3392,16 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 for (var i = 0; i < PropertyCount; i++)
                 {
                     Properties.Add(_chunkViewmodelFactory.ChunkViewModel(p42.Chunks[i], i.ToString(), _appViewModel,
-                        _currentEditorDifficultyLevel, this, isreadonly));
+                        this, isreadonly));
                 }
 
                 break;
             }
             case SharedDataBuffer { Data: IParseableBuffer ipb }:
             {
-                Properties.Add(_chunkViewmodelFactory.ChunkViewModel(ipb.Data.NotNull(), ipb.Data.GetType().Name, _appViewModel,
-                    _currentEditorDifficultyLevel, this, isreadonly));
+                Properties.Add(_chunkViewmodelFactory.ChunkViewModel(ipb.Data.NotNull(), ipb.Data.GetType().Name,
+                    _appViewModel,
+                    this, isreadonly));
                 break;
             }
             case DataBuffer { Data: RedPackage p43 }:
@@ -3000,7 +3409,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 for (var i = 0; i < PropertyCount; i++)
                 {
                     Properties.Add(_chunkViewmodelFactory.ChunkViewModel(p43.Chunks[i], i.ToString(), _appViewModel,
-                        _currentEditorDifficultyLevel, this, isreadonly));
+                        this, isreadonly));
                 }
 
                 break;
@@ -3010,7 +3419,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 for (var i = 0; i < PropertyCount; i++)
                 {
                     Properties.Add(_chunkViewmodelFactory.ChunkViewModel(cl.Files[i].RootChunk, i.ToString(),
-                        _appViewModel, _currentEditorDifficultyLevel, this, isreadonly));
+                        _appViewModel, this, isreadonly));
                 }
 
                 break;
@@ -3020,7 +3429,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 foreach (var thing in list.OfType<IRedType>())
                 {
                     var child = _chunkViewmodelFactory.ChunkViewModel(thing, Properties.Count.ToString(), _appViewModel,
-                        _currentEditorDifficultyLevel, this, isreadonly);
+                        this, isreadonly);
                     Properties.Add(child);
                 }
 
@@ -3036,8 +3445,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     var value = pi.GetValue(db.Data);
                     if (value is IRedType irt)
                     {
-                        Properties.Add(_chunkViewmodelFactory.ChunkViewModel(irt, pi.Name, _appViewModel,
-                            _settingsManager.DefaultEditorDifficultyLevel, this, isreadonly));
+                        Properties.Add(
+                            _chunkViewmodelFactory.ChunkViewModel(irt, pi.Name, _appViewModel, this, isreadonly));
                     }
                 }
 
@@ -3055,7 +3464,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                         {
                             if (ibd.GetPropertyValue(name) is IRedType t)
                             {
-                                Properties.Add(_chunkViewmodelFactory.ChunkViewModel(t, name, _appViewModel, _currentEditorDifficultyLevel,
+                                Properties.Add(_chunkViewmodelFactory.ChunkViewModel(t, name, _appViewModel,
                                     this,
                                     isreadonly));
                             }
@@ -3067,8 +3476,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     {
                         foreach (var thing in list)
                         {
-                            Properties.Add(_chunkViewmodelFactory.ChunkViewModel((IRedType)thing, "Element", _appViewModel,
-                                _currentEditorDifficultyLevel, this, isreadonly));
+                            Properties.Add(_chunkViewmodelFactory.ChunkViewModel((IRedType)thing, "Element",
+                                _appViewModel,
+                                this, isreadonly));
                         }
 
                         break;
@@ -3078,7 +3488,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                         foreach (var (name, thing) in dict)
                         {
                             Properties.Add(_chunkViewmodelFactory.ChunkViewModel((IRedType)thing, name, _appViewModel,
-                                _currentEditorDifficultyLevel,
                                 this, isreadonly));
                         }
 
@@ -3089,27 +3498,41 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                         var pis = Data.GetType().GetProperties(s_defaultLookup);
                         foreach (var pi in pis)
                         {
-                            var value = Data is not null ? pi.GetValue(Data) : null;
-                            if (value is IRedType irt)
+                            try
                             {
-                                Properties.Add(_chunkViewmodelFactory.ChunkViewModel(irt, pi.Name, _appViewModel,
-                                    _currentEditorDifficultyLevel,
-                                    this, isreadonly));
+                                var value = Data is not null ? pi.GetValue(Data) : null;
+                                if (value is IRedType irt)
+                                {
+                                    var childViewModel = _chunkViewmodelFactory.ChunkViewModel(irt, pi.Name,
+                                        _appViewModel,
+                                        this, isreadonly);
+                                    if (childViewModel != null)
+                                    {
+                                        Properties.Add(childViewModel);
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                _loggerService?.Error(
+                                    $"Failed to create child ChunkViewModel for property {pi.Name}: {ex.Message}");
                             }
                         }
 
-                        if (Data is worldNodeData sst && Tab is { } dvm && dvm.Chunks[0].Data is worldStreamingSector wss &&
+                        if (Data is worldNodeData sst && Tab is { } dvm &&
+                            dvm.Chunks[0].Data is worldStreamingSector wss &&
                             sst.NodeIndex < wss.Nodes.Count)
                         {
                             try
                             {
-                                var nodeChunk = _chunkViewmodelFactory.ChunkViewModel(wss.Nodes[sst.NodeIndex].NotNull(), "Node",
+                                var nodeChunk = _chunkViewmodelFactory.ChunkViewModel(
+                                    wss.Nodes[sst.NodeIndex].NotNull(), "Node",
                                     _appViewModel,
-                                    _currentEditorDifficultyLevel, this, isreadonly);
+                                    this, isreadonly);
                                 nodeChunk.CalculateProperties();
                                 Properties.Add(nodeChunk);
                             }
-                            catch (Exception ex) { _loggerService.Error(ex); }
+                            catch (Exception ex) { _loggerService?.Error(ex); }
                         }
 
                         break;
@@ -3119,7 +3542,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 break;
             }
         }
-        OnPropertyChanged(nameof(TVProperties));
+
+        try
+        {
+            OnPropertyChanged(nameof(TVProperties));
+        }
+        catch (Exception ex)
+        {
+            _loggerService?.Error($"Failed to notify TVProperties changed at end of CalculateProperties: {ex.Message}");
+        }
     }
 
     private void CalculateIsDefault()
@@ -3134,8 +3565,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         IsDefault = IsDefault || ResolvedData switch
         {
-            entSkinnedMeshComponent skinnedMeshComponent => string.IsNullOrEmpty(skinnedMeshComponent.Mesh.DepotPath.GetResolvedText()),
-            entMeshComponent meshComponent => string.IsNullOrEmpty(meshComponent.Mesh.DepotPath.GetResolvedText()),
+            entSkinnedMeshComponent skinnedMeshComponent => string.IsNullOrEmpty(skinnedMeshComponent.Mesh.DepotPath
+                                                                .GetResolvedText()) ||
+                                                            skinnedMeshComponent.ChunkMask == 0,
+            entMeshComponent meshComponent => string.IsNullOrEmpty(meshComponent.Mesh.DepotPath.GetResolvedText()) ||
+                                              meshComponent.ChunkMask == 0,
             Multilayer_Layer layer => ((float)layer.Opacity) == 0.0,
             _ => IsDefault
         };
@@ -3148,6 +3582,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             return child.NodeIdxInParent;
         }
+
         // It should never come to this now, should it?
         for (var i = 0; i < Properties.Count; i++)
         {
@@ -3157,6 +3592,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 return i;
             }
         }
+
         return -1;
     }
 
@@ -3213,6 +3649,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     oldIndex = i;
                     break;
                 }
+
                 i++;
             }
 
@@ -3248,12 +3685,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         if (iraType.IsGenericType)
         {
             var arrayType = iraType.GetGenericTypeDefinition();
-            if (arrayType == typeof(CArray<>) || (arrayType == typeof(CStatic<>) && ira.Count < ira.MaxSize))
+            if (arrayType == typeof(CArray<>) || arrayType == typeof(CLegacySingleChannelCurve<>) ||
+                (arrayType == typeof(CStatic<>) && ira.Count < ira.MaxSize))
             {
                 if (index == -1 || index > ira.Count)
                 {
                     index = ira.Count;
                 }
+
                 ira.Insert(index, item);
 
                 return true;
@@ -3269,6 +3708,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 index = ira.Count;
             }
+
             ira.Insert(index, item);
 
             return true;
@@ -3279,8 +3719,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private TypeCompability CheckTypeCompatibility(Type destType, Type srcType)
+    private TypeCompability CheckTypeCompatibility(Type? destType, Type? srcType)
     {
+        if (destType is null || srcType is null)
+        {
+            return TypeCompability.None;
+        }
+
         if (destType.IsAssignableFrom(srcType))
         {
             return TypeCompability.Assignable;
@@ -3293,7 +3738,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         if (srcType.IsAssignableTo(typeof(IRedBaseHandle)) &&
-            srcType.GetGenericArguments()[0].IsAssignableTo(destType))
+            srcType.GetGenericArguments()[0].IsAssignableFrom(destType))
         {
             return TypeCompability.HandleToClass;
         }
@@ -3344,8 +3789,22 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     /// <returns>ChunkViewModel or null</returns>
     public ChunkViewModel? GetChildNode(int index)
     {
-        if (!IsArray || Properties is not ObservableCollectionExtended<ChunkViewModel> children ||
-            index >= children.Count)
+        if (!IsArray)
+        {
+            return null;
+        }
+
+        if (Properties is not ObservableCollectionExtended<ChunkViewModel> children)
+        {
+            return null;
+        }
+
+        if (Properties.Count == 0)
+        {
+            CalculateProperties();
+        }
+
+        if (index >= children.Count)
         {
             return null;
         }
@@ -3355,6 +3814,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     public bool InsertChild(int index, IRedType item)
     {
+        ArgumentNullException.ThrowIfNull(item);
+        var isEmpty = Properties.Count == 0;
         try
         {
             if (ResolvedData is IRedArray ira)
@@ -3411,7 +3872,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                         throw new ArgumentOutOfRangeException();
                 }
             }
-            else if (ResolvedData is IRedLegacySingleChannelCurve curve && curve.ElementType.IsAssignableTo(item.GetType()))
+            else if (ResolvedData is IRedLegacySingleChannelCurve curve &&
+                     curve.ElementType.IsAssignableTo(item.GetType()))
             {
                 curve.Add(0F, item);
             }
@@ -3425,6 +3887,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                         {
                             index = pkg.Chunks.Count;
                         }
+
                         pkg.Chunks.Insert(index, rbc);
                     }
                     else if (db.GetValue().Data is CR2WList list)
@@ -3434,10 +3897,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                             index = list.Files.Count;
                         }
 
-                        list.Files.Insert(index, new CR2WFile()
-                        {
-                            RootChunk = rbc
-                        });
+                        list.Files.Insert(index, new CR2WFile() { RootChunk = rbc });
                     }
                 }
                 else
@@ -3450,30 +3910,32 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 return false;
             }
 
-            //Name = null;
-            //PropertyCount = -1;
-            //CalculateDescriptor();
-            //PropertiesLoaded = false;
-            //CalculateProperties();
-            //Tab.File.SetIsDirty(true);
-
             RecalculateProperties(item);
 
             // re-number children
             ReindexChildren();
             Tab?.Parent.SetIsDirty(true);
 
-            if (Properties.Count > index && Tab is not null)
+            // Notify for graph sync when child is inserted
+            NotifyPropertyUpdateForGraphSync();
+
+            if (isEmpty)
             {
-                var chunkModel = Properties.LastOrDefault(x => x.NodeIdxInParent == index);
-                if (chunkModel is not null)
-                {
-                    Tab.AddToSelection(chunkModel);
-                }
+                IsExpanded = true;
             }
+
+            if (Properties.Count > index && Tab is not null &&
+                Properties.LastOrDefault(x => x.NodeIdxInParent == index) is { } chunkModel)
+            {
+                Tab.AddToSelection(chunkModel);
+            }
+
             return true;
         }
-        catch (Exception ex) { _loggerService.Error(ex); }
+        catch (Exception ex)
+        {
+            _loggerService.Error(ex);
+        }
 
         return false;
     }
@@ -3497,12 +3959,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 return;
         }
 
-        OnPropertyChanged("Data");
-        
+        OnPropertyChanged(nameof(Data));
+
         RecalculateProperties();
         CalculateValue();
         CalculateDescriptor();
     }
+
     /*
      * QOL: Increment index property in new child
      */
@@ -3544,14 +4007,35 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    public void RecalculateProperties(IRedType? selectChild = null, bool expand = true)
+
+    public void RecalculateProperties(IRedType selectChild)
+    {
+        RecalculateProperties();
+
+        if (!IsExpanded ||
+            Properties.FirstOrDefault(p =>
+                    p.Data is not RedDummy && p.Data.GetHashCode() == selectChild.GetHashCode()) is not
+                ChunkViewModel prop)
+        {
+            return;
+        }
+
+        if (Tab is RDTDataViewModel dvm)
+        {
+            dvm.SelectedChunk = prop;
+        }
+    }
+
+    public void RecalculateProperties()
     {
         PropertyCount = -1;
         // might not be needed
         _propertiesLoaded = false;
-        //_resolvedDataCache = null;
+        var isExpanded = IsExpanded;
+
         CalculateProperties();
         CalculateDescriptor();
+        CalculateValue();
 
         if (IsArray)
         {
@@ -3560,30 +4044,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         OnPropertyChanged(nameof(Data));
 
-        IsExpanded = expand;
-
         if (IsSelected)
         {
             RefreshContextMenuFlags();
-        }
-
-        if (!expand || selectChild is null)
-        {
-            return;
-        }
-
-        if (Properties.FirstOrDefault(p => p.Data is not RedDummy && p.Data.GetHashCode() == selectChild.GetHashCode()) is not
-            ChunkViewModel prop)
-        {
-            return;
-        }
-
-        prop.IsExpanded = true;
-        prop.SetChildExpansionStates(true);
-
-        if (Tab is RDTDataViewModel dvm)
-        {
-            dvm.SelectedChunk = prop;
         }
     }
 
@@ -3592,7 +4055,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         get => new List<ReferenceSocket>(new ReferenceSocket[] { Socket.NotNull() });
         set
         {
-
         }
     }
 
@@ -3601,13 +4063,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     //private bool CanOpenSelf() => RelativePath != CName.Empty && _tab == null;
     //private void ExecuteOpenSelf() => Locator.Current.GetService<AppViewModel>().NotNull().OpenFileFromDepotPath(RelativePath);
 
-    private ChunkViewModel GetRootModel()
+    public ChunkViewModel GetRootModel()
     {
         var result = this;
         while (result.Parent != null)
         {
             result = result.Parent;
         }
+
         return result;
     }
 
@@ -3618,7 +4081,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         var result = this;
         foreach (var part in parts)
         {
-            if (result?.TVProperties.Count == 1 && result.TVProperties.FirstOrDefault()?.ResolvedData is RedDummy)
+            if (result?.GetTvProperties().Count == 1 && result.TVProperties.FirstOrDefault()?.ResolvedData is RedDummy)
             {
                 result.RecalculateProperties();
             }
@@ -3629,9 +4092,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         return result;
     }
 
+    /// <summary>
+    /// Used to save expansion states. No need to calculate properties - anything not calculated is not expanded.
+    /// </summary>
+    /// <returns></returns>
     public IEnumerable<ChunkViewModel> GetAllProperties()
     {
-        foreach (var property in Properties)
+        foreach (var property in Properties.ToList())
         {
             yield return property;
 
@@ -3655,38 +4122,52 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     public void HandlePointer(DialogViewModel? sender)
     {
         _appViewModel.CloseDialogCommand.Execute(null);
-        if (sender is TypeSelectorDialogViewModel { SelectedEntry: TypeEntry selectedEntry } && selectedEntry.UserData is Type selectedType)
+        if (sender is TypeSelectorDialogViewModel { SelectedEntry: TypeEntry selectedEntry } &&
+            selectedEntry.UserData is Type selectedType)
         {
-            var instance = RedTypeManager.Create(selectedType);
-            if (instance is DynamicBaseClass dbc)
-            {
-                dbc.ClassName = selectedEntry.Name;
-            }
-
-            var data = RedTypeManager.CreateRedType(PropertyType);
-            if (data is IRedBaseHandle handle)
-            {
-                handle.SetValue(instance);
-                Data = data;
-
-                if (Parent?.ResolvedData is RedBaseClass rbc)
-                {
-                    rbc.SetProperty(PropertyName, Data);
-                }
-
-                PropertyCount = -1;
-                // might not be needed
-                CalculateDescriptor();
-                _propertiesLoaded = false;
-                CalculateProperties();
-                OnPropertyChanged(nameof(Data));
-                Tab?.Parent.SetIsDirty(true);
-            }
+            HandlePointer(selectedType, selectedEntry.Name);
         }
         else
         {
             _loggerService.Error("Could not create handle");
-        } 
+        }
+    }
+
+    private void HandlePointer(Type type, string customName = "")
+    {
+        var instance = RedTypeFactory.CreateAndInit(type);
+        if (instance is DynamicBaseClass dbc)
+        {
+            if (string.IsNullOrEmpty(customName))
+            {
+                throw new ArgumentNullException(nameof(customName), "The name of DynamicClass needs to be set");
+            }
+
+            dbc.ClassName = customName;
+        }
+
+        var data = RedTypeFactory.CreateAndInitRedType(PropertyType);
+        if (data is IRedBaseHandle handle)
+        {
+            handle.SetValue(instance);
+            Data = data;
+
+            if (Parent?.ResolvedData is RedBaseClass rbc)
+            {
+                rbc.SetProperty(PropertyName, Data);
+            }
+
+            PropertyCount = -1;
+            // might not be needed
+            CalculateDescriptor();
+            _propertiesLoaded = false;
+            CalculateProperties();
+            OnPropertyChanged(nameof(Data));
+            Tab?.Parent.SetIsDirty(true);
+
+            // Notify for graph sync when handle is set
+            NotifyPropertyUpdateForGraphSync();
+        }
     }
 
     public void HandleCKeyValuePair(DialogViewModel? sender)
@@ -3707,7 +4188,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         _appViewModel.CloseDialogCommand.Execute(null);
         if (sender is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
         {
-            var instance = RedTypeManager.CreateRedType(selectedType);
+            var instance = RedTypeFactory.CreateAndInitRedType(selectedType);
             if (!InsertChild(-1, instance))
             {
                 _loggerService.Error("Unable to insert child");
@@ -3718,12 +4199,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     public void HandleChunkPointer(DialogViewModel? sender)
     {
         _appViewModel.CloseDialogCommand.Execute(null);
-        if (sender is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType } && Data is IRedArray arr)
+        if (sender is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType } &&
+            Data is IRedArray arr)
         {
-            var newItem = RedTypeManager.CreateRedType(arr.InnerType);
+            var newItem = RedTypeFactory.CreateAndInitRedType(arr.InnerType);
             if (newItem is IRedBaseHandle handle)
             {
-                var instance = RedTypeManager.Create(selectedType);
+                var instance = RedTypeFactory.CreateAndInit(selectedType);
                 handle.SetValue(instance);
                 if (!InsertChild(-1, newItem))
                 {
@@ -3755,24 +4237,18 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             return;
         }
+
         IsDeleteReady = false;
         Tab?.Parent.SetIsDirty(true);
         RecalculateProperties();
 
+        // Notify for graph sync when array is cleared
+        NotifyPropertyUpdateForGraphSync();
+
         DeleteAllCommand.NotifyCanExecuteChanged();
     }
 
-    private Task AddToProjectTask()
-    {
-        if (PropertyType.IsAssignableTo(typeof(IRedRef)))
-        {
-            ProjectResourceHelper.AddToProject(((IRedRef)ResolvedData).DepotPath);
-        }
-
-        return Task.CompletedTask;
-    }
-
-    private Task<bool> ImportWorldNodeDataTask(bool updatecoords)
+    private async Task<bool> ImportWorldNodeDataAsync(bool updatecoords)
     {
         var openFileDialog = new OpenFileDialog
         {
@@ -3786,17 +4262,18 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             try
             {
-                return AddFromJSON(openFileDialog, updatecoords);
+                return await AddFromJsonAsync(openFileDialog, updatecoords);
             }
             catch (Exception ex)
             {
                 _loggerService.Error(ex);
             }
         }
-        return Task.FromResult(false);
+
+        return false;
     }
 
-    public async Task<bool> AddFromJSON(OpenFileDialog openFileDialog, bool updatecoords)
+    public async Task<bool> AddFromJsonAsync(OpenFileDialog openFileDialog, bool updatecoords)
     {
         ArgumentNullException.ThrowIfNull(Data);
 
@@ -3859,7 +4336,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         ArgumentNullException.ThrowIfNull(Tab);
         _appViewModel.SaveFileCommand.SafeExecute();
 
-        await Refresh();
+        await RefreshAsync();
 
         _loggerService.Success($"Successfully imported from JSON");
         return true;
@@ -3903,9 +4380,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private void DeleteFullSelection(List<int> l, IRedArray a)
+    private void DeleteFullSelection(List<int> indices, IRedArray a)
     {
-        var sortedList = l.OrderByDescending(x => x).ToList();
+        var sortedList = indices.OrderByDescending(x => x).ToList();
+
+        if (sortedList is [-1])
+        {
+            a.Clear();
+            return;
+        }
 
         foreach (var i in sortedList)
         {
@@ -3920,7 +4403,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         Tab?.Parent.SetIsDirty(true);
-        Parent?.RecalculateProperties();
+        RecalculateProperties();
+
+        // Notify for graph sync when selection is deleted
+        NotifyPropertyUpdateForGraphSync();
     }
 
     private void DeleteFullSelection(List<IRedType> l, IRedArray a)
@@ -3938,7 +4424,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         Tab?.Parent.SetIsDirty(true);
-        Parent?.RecalculateProperties();
+        RecalculateProperties();
+
+        // Notify for graph sync when selection is deleted
+        NotifyPropertyUpdateForGraphSync();
     }
 
     private void AddToCopiedChunks(IRedType elem)
@@ -3947,11 +4436,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             if (elem.GetType().IsValueType)
             {
-                RedDocumentTabViewModel.CopiedChunks.Add(elem);
+                RedDocumentTabViewModel.AddToCopiedChunks(elem);
             }
             else if (elem is IRedCloneable irc)
             {
-                RedDocumentTabViewModel.CopiedChunks.Add((IRedType)irc.DeepCopy());
+                RedDocumentTabViewModel.AddToCopiedChunks((IRedType)irc.DeepCopy());
             }
             else if (elem is worldNodeData)
             {
@@ -3961,7 +4450,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 var copied = RedJsonSerializer.Deserialize<worldNodeData>(tr);
                 if (copied is not null)
                 {
-                    RedDocumentTabViewModel.CopiedChunks.Add(copied);
+                    RedDocumentTabViewModel.AddToCopiedChunks(copied);
                 }
             }
             else
@@ -4000,17 +4489,17 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         var poslist =
             json.Select(j =>
                 new Vec3()
-            {
-                X = float.Parse(
-                    ((JsonElement)j[5])[0].GetRawText()
+                {
+                    X = float.Parse(
+                        ((JsonElement)j[5])[0].GetRawText()
                     ),
-                Y = float.Parse(
-                    ((JsonElement)j[5])[1].GetRawText()
+                    Y = float.Parse(
+                        ((JsonElement)j[5])[1].GetRawText()
                     ),
-                Z = float.Parse(
-                    ((JsonElement)j[5])[2].GetRawText()
+                    Z = float.Parse(
+                        ((JsonElement)j[5])[2].GetRawText()
                     )
-            }
+                }
             ).ToList();
 
         //minX + (maxX - minX)/2 == (maxX + minX)/2;
@@ -4052,7 +4541,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
             var v = new Vec4()
             {
-                X = float.Parse(posandrot.x), Y = float.Parse(posandrot.y), Z = float.Parse(posandrot.z), W = float.Parse(posandrot.w)
+                X = float.Parse(posandrot.x),
+                Y = float.Parse(posandrot.y),
+                Z = float.Parse(posandrot.z),
+                W = float.Parse(posandrot.w)
             };
             poslist.Add(v);
         }
@@ -4076,15 +4568,18 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         // it really can't be null anymore
         var v = new Vec4
         {
-            X = float.Parse(posAndRot.x), Y = float.Parse(posAndRot.y), Z = float.Parse(posAndRot.z), W = float.Parse(posAndRot.w)
-            };
+            X = float.Parse(posAndRot.x),
+            Y = float.Parse(posAndRot.y),
+            Z = float.Parse(posAndRot.z),
+            W = float.Parse(posAndRot.w)
+        };
 
         var euler = new Vec3
         {
             X = (float)(Math.PI / 180) * float.Parse(posAndRot.yaw),
             Y = (float)(Math.PI / 180) * float.Parse(posAndRot.pitch),
             Z = (float)(Math.PI / 180) * float.Parse(posAndRot.roll)
-            };
+        };
 
         var q = line.isunreal ? FixRotation2(euler) : FixRotation(euler);
 
@@ -4166,13 +4661,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             var pos = line.pos;
             var rot = line.rot;
-            var v = new Vec4()
-            {
-                X = pos.x,
-                Y = pos.y,
-                Z = pos.z,
-                W = pos.w
-            };
+            var v = new Vec4() { X = pos.x, Y = pos.y, Z = pos.z, W = pos.w };
             poslist.Add(v);
 
             var euler = new Vec3()
@@ -4209,7 +4698,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         return w;
     }
 
-    public async Task Refresh()
+    public async Task RefreshAsync()
     {
         var document = _appViewModel.ActiveDocument;
 
@@ -4229,7 +4718,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             * Mat4.CreateFromAxisAngle(Vec3.UnitY, euler.Z)
             * Mat4.CreateFromAxisAngle(Vec3.UnitX, euler.Y)
             * Mat4.CreateFromAxisAngle(Vec3.UnitZ, euler.X)
-            );
+        );
 
     public static Quat FixRotation2(Vec3 euler) =>
         Quat.CreateFromRotationMatrix(
@@ -4238,7 +4727,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             * Mat4.CreateFromAxisAngle(-Vec3.UnitX, euler.Y)
             * Mat4.CreateFromAxisAngle(Vec3.UnitY, euler.Z)
             * Mat4.CreateFromAxisAngle(-Vec3.UnitZ, euler.X)
-            );
+        );
 
 
     private static Vec4 UpdateCoords(Vec4 pos, Vec4 center)
@@ -4301,7 +4790,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             wen.AppearanceName = string.IsNullOrEmpty(line.app) ? "default" : line.app;
             wen.DebugName = Path.GetFileNameWithoutExtension(line.template_path) + "_" + index.ToString();
 
-            current.QuestPrefabRefHash = Convert.ToUInt64(current.GetHashCode()); // Add hash to make object interactible and persistent
+            current.QuestPrefabRefHash =
+                Convert.ToUInt64(current.GetHashCode()); // Add hash to make object interactible and persistent
 
             if (line.isdoor is bool b && b)
             {
@@ -4353,7 +4843,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         SetCoords(current, index, line, updatecoords, pos, rot);
     }
 
-    private void SetCoords(worldNodeData current, int index, Prop line, bool updatecoords = true, Vec4 pos = default, Quat rot = default)
+    private void SetCoords(worldNodeData current, int index, Prop line, bool updatecoords = true, Vec4 pos = default,
+        Quat rot = default)
     {
         if (pos == default || rot == default)
         {
@@ -4402,6 +4893,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 db0.Lookup[current.NodeIndex] = new();
             }
+
             db0.Lookup[current.NodeIndex].Add(current);
         }
 
@@ -4441,11 +4933,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     private void GetLines(Child c, List<Child> props)
     {
-        var v = new Child(c.name, c.pos, c.rot)
-        {
-            path = c.path,
-            app = c.app
-        };
+        var v = new Child(c.name, c.pos, c.rot) { path = c.path, app = c.app };
         props.Add(v);
         if (c.childs is not null)
         {
@@ -4470,7 +4958,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             var sm = _settingsManager;
             am.LoadModArchives(new FileInfo(sm.CP77ExecutablePath.NotNull()), sm.AnalyzeModArchives,
                 sm.ArchiveNamesExcludeFromScan.Split(",").Select(s => s.Replace(".archive", "")).ToArray());
-            
+
             var af = am.GetGroupedFiles();
 
             var tempbool = am.IsModBrowserActive;
@@ -4495,6 +4983,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 {
                     line.center = center;
                 }
+
                 var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
 
                 var scale = GetScale(line);
@@ -4546,7 +5035,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                         }
                         else
                         {
-                            var foundmesh = meshList.Where(x => x.FileName.Contains(spm)).Select(_ => _.FileName).ToList();
+                            var foundmesh = meshList.Where(x => x.FileName.Contains(spm)).Select(_ => _.FileName)
+                                .ToList();
                             if (foundmesh.Count > 0)
                             {
                                 line.template_path = foundmesh.Last();
@@ -4591,6 +5081,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 line.center = center;
             }
+
             AddEntity(tr, line, updatecoords);
         }
     }
@@ -4608,6 +5099,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 line.center = center;
             }
+
             line.isunreal = true;
             AddMesh(tr, line, updatecoords);
         }
@@ -4632,6 +5124,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             {
                 line.center = center;
             }
+
             AddEntity(tr, line, updatecoords);
         }
     }
@@ -4664,7 +5157,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             ArgumentNullException.ThrowIfNull(scala.y);
             ArgumentNullException.ThrowIfNull(scala.z);
 
-            return new Vec3(float.Parse(scala.x) * factor, float.Parse(scala.y) * factor, float.Parse(scala.z) * factor);
+            return new Vec3(float.Parse(scala.x) * factor, float.Parse(scala.y) * factor,
+                float.Parse(scala.z) * factor);
         }
     }
 
@@ -4731,5 +5225,50 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             appearanceNode.RecalculateProperties();
             Tab?.Parent.SetIsDirty(true);
         }
+    }
+
+    /// <summary>
+    /// Notify the property update service for graph synchronization
+    /// </summary>
+    private void NotifyPropertyUpdateForGraphSync()
+    {
+        // Find the root node data to notify about
+        var rootNodeData = GetRootNodeData();
+        if (rootNodeData != null)
+        {
+            NodePropertyUpdateService.NotifyPropertyUpdated(rootNodeData);
+        }
+    }
+
+    /// <summary>
+    /// Get the root node data (scene or quest graph node) that this property belongs to
+    /// </summary>
+    private RedBaseClass? GetRootNodeData()
+    {
+        // Walk up the tree to find a scene or quest graph node
+        var current = this;
+        while (current != null)
+        {
+            if (current.Data is scnSceneGraphNode sceneNode)
+            {
+                return sceneNode;
+            }
+
+            // Also check for quest nodes
+            if (current.Data is questNodeDefinition questNode)
+            {
+                return questNode;
+            }
+
+            current = current.Parent;
+        }
+
+        return null;
+    }
+
+    public override string ToString()
+    {
+        var parentString = Parent is null ? "" : $" in {Parent.Descriptor}";
+        return $"{Name}: {PropertyType.Name} ({Descriptor} {Value}){parentString}";
     }
 }

@@ -73,13 +73,19 @@ public partial class CR2WReader
     public EFileReadErrorCodes ReadFile(out CR2WFile? file, bool parseBuffer = true)
     {
         var result = ReadFileInfo(out var info);
-        if (result == EFileReadErrorCodes.NoCr2w)
+        if (result == EFileReadErrorCodes.NoCr2w || info is null)
         {
             file = null;
-            return result;
+            return EFileReadErrorCodes.NoCr2w;
         }
 
-        file = new CR2WFile() { Info = info! };
+        if (info.StringDict.Count == 0)
+        {
+            file = null;
+            return EFileReadErrorCodes.Malformed;
+        }
+
+        file = new CR2WFile() { Info = info };
 
         if (result == EFileReadErrorCodes.UnsupportedVersion)
         {
@@ -89,17 +95,18 @@ public partial class CR2WReader
         _outputFile = new CR2WFile();
         _parseBuffer = parseBuffer;
 
-        _cr2wFile.Info = info!;
-        _cr2wFile.MetaData.Version = _cr2wFile.Info.FileHeader.version;
-        _cr2wFile.MetaData.BuildVersion = _cr2wFile.Info.FileHeader.buildVersion;
-        _cr2wFile.MetaData.ObjectsEnd = _cr2wFile.Info.FileHeader.objectsEnd;
+        _cr2wFile.Info = info;
+        _cr2wFile.MetaData.Version = info.FileHeader.version;
+        _cr2wFile.MetaData.BuildVersion = info.FileHeader.buildVersion;
+        _cr2wFile.MetaData.ObjectsEnd = info.FileHeader.objectsEnd;
 
         // use 1 as 0 is always empty
-        _cr2wFile.MetaData.HashVersion = IdentifyHash(_cr2wFile.Info.StringDict[1], _cr2wFile.Info.NameInfo[1].hash);
+        _cr2wFile.MetaData.HashVersion = IdentifyHash(info.StringDict[1], info.NameInfo[1].hash);
         if (_cr2wFile.MetaData.HashVersion == EHashVersion.Unknown)
         {
-            throw new Exception();
+            throw new InvalidDataException("Failed to identify hash version");
         }
+       
 
         #region Read Data
 

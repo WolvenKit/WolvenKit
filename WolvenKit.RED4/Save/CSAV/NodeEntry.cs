@@ -19,7 +19,6 @@ public class NodeEntry
     public bool WritesOwnTrailingSize { get; set; }
     public int SizeChange { get; set; }
     public List<NodeEntry> Children { get; set; }
-    private NodeEntry _nextNode;
 
     public NodeEntry? Parent { get; set; }
     public NodeEntry? PreviousNode { get; set; }

@@ -5,7 +5,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Models.Docking;
 using WolvenKit.App.ViewModels.Shell;
-using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 
 namespace WolvenKit.App.ViewModels.Documents;
 
@@ -25,11 +24,15 @@ public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewMo
         {
             LastWriteTime = File.GetLastWriteTime(path);
         }
+
+        OpenedAt = DateTime.Now;
     }
 
     [ObservableProperty] private string _filePath;
     [ObservableProperty] private bool _isReadOnly;
     [ObservableProperty] private bool _showToolbar;
+
+    public DateTime OpenedAt { get; init; }
 
     private bool _isDirty;
 
@@ -38,8 +41,6 @@ public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewMo
         get => _isDirty;
         protected set => SetProperty(ref _isDirty, value);
     }
-
-    [ObservableProperty] private EditorDifficultyLevel _editorDifficultyLevel;
 
     public bool IsInitialized() => _isInitialized;
 
@@ -58,8 +59,8 @@ public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewMo
     public abstract Task Save(object parameter);
 
     [RelayCommand]
-    public abstract void SaveAs(object parameter);
-
+    protected abstract void SaveAs(SaveAsParameters saveParams);
+        
     public abstract bool Reload(bool force);
 
 

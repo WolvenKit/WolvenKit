@@ -18,12 +18,14 @@ using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
+using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
+using WolvenKit.Views.Templates;
 using RowColumnIndex = Syncfusion.UI.Xaml.ScrollAxis.RowColumnIndex;
 
 namespace WolvenKit.Views.Tools
@@ -47,7 +49,7 @@ namespace WolvenKit.Views.Tools
         public static readonly DependencyProperty FlatItemSourceProperty =
             DependencyProperty.Register(nameof(FlatItemSource), typeof(ObservableCollection<FileSystemModel>),
                 typeof(ProjectExplorerView), new PropertyMetadata(null));
-        
+
         public ObservableCollection<FileSystemModel> FlatItemSource
         {
             get => (ObservableCollection<FileSystemModel>)GetValue(FlatItemSourceProperty);
@@ -80,8 +82,8 @@ namespace WolvenKit.Views.Tools
             TreeGrid.NodeExpanded += TreeGrid_OnNodeExpanded;
             TreeGrid.NodeCollapsing += TreeGrid_OnNodeCollapsing;
             TreeGrid.NodeCollapsed += TreeGrid_OnNodeCollapsed;
-            
-            
+
+
             this.WhenActivated(disposables =>
             {
                 if (DataContext is ProjectExplorerViewModel vm)
@@ -89,7 +91,7 @@ namespace WolvenKit.Views.Tools
                     SetCurrentValue(ViewModelProperty, vm);
                     vm.OnProjectChanged += ResetUiElements;
                 }
-                
+
                 AddKeyUpEvent();
 
                 Interactions.DeleteFiles = _ =>
@@ -133,10 +135,9 @@ namespace WolvenKit.Views.Tools
 
                 Interactions.Rename = input => ShowRenameDialog(input).Text;
 
-
-                Interactions.AskForTextInput = title =>
+                Interactions.AskForTextInput = (args) =>
                 {
-                    var dialog = new InputDialogView() { Title = title };
+                    var dialog = new InputDialogView(args.Item1, args.Item2);
 
                     if (dialog.ViewModel is not InputDialogViewModel innerVm
                         || dialog.ShowDialog(Application.Current.MainWindow) != true)
@@ -159,7 +160,23 @@ namespace WolvenKit.Views.Tools
 
                     return innerVm.Text;
                 };
-               
+
+                Interactions.AskForDropdownOption = (args) =>
+                {
+                    var dialog = new SelectDropdownEntryWindow(args.options, args.title, args.text,
+                        args.helpLink ?? "",
+                        args.buttonText ?? "",
+                        args.showInputBar ?? false);
+
+                    if (dialog.ViewModel is not SelectDropdownEntryDialogViewModel innerVm
+                        || dialog.ShowDialog(Application.Current.MainWindow) != true)
+                    {
+                        return "";
+                    }
+
+                    return innerVm.SelectedOption;
+                };
+
                 //EventBindings
                 Observable
                     .FromEventPattern(TreeGrid, nameof(TreeGrid.CellDoubleTapped))
@@ -175,7 +192,7 @@ namespace WolvenKit.Views.Tools
                         viewModel => viewModel.ToggleFlatModeCommand,
                         view => view.ToggleFlatModeButton)
                     .DisposeWith(disposables);
-                
+
                 this.BindCommand(ViewModel,
                     viewModel => viewModel.OpenRootFolderCommand,
                     view => view.OpenFolderButton);
@@ -204,6 +221,7 @@ namespace WolvenKit.Views.Tools
             if (dialog.ViewModel is not null)
             {
                 dialog.ViewModel.Text = input;
+                dialog.ViewModel.Title = "Enter new file name";
             }
 
             if (dialog.ViewModel is not RenameDialogViewModel innerVm
@@ -244,7 +262,7 @@ namespace WolvenKit.Views.Tools
             _currentFolderQuery = "";
             // Set search bar to empty if it wasn't 
             PESearchBar?.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, "");
-            
+
             // now handle the grids
             if (TreeGridFlat.View is not null)
             {
@@ -276,10 +294,12 @@ namespace WolvenKit.Views.Tools
         private void ExpandAllNodes(TreeNode node)
         {
             TreeGrid.ExpandAllNodes(node);
-            if (ViewModel != null)
+            if (ViewModel != null && string.IsNullOrEmpty(_currentFolderQuery))
             {
                 RecursiveStateSave(node.ChildNodes);
             }
+
+            return;
 
             void RecursiveStateSave(TreeNodes childNodes)
             {
@@ -296,11 +316,13 @@ namespace WolvenKit.Views.Tools
 
         private void CollapseAllNodes(TreeNode node)
         {
-            if (ViewModel != null)
+            if (ViewModel != null && string.IsNullOrEmpty(_currentFolderQuery))
             {
                 RecursiveStateSave(node.ChildNodes);
             }
             TreeGrid.CollapseAllNodes(node);
+
+            return;
             void RecursiveStateSave(TreeNodes childNodes)
             {
                 foreach (var childNode in childNodes)
@@ -440,7 +462,7 @@ namespace WolvenKit.Views.Tools
             {
                 return;
             }
-            if (e.Key == Key.F2 )
+            if (e.Key == Key.F2)
             {
                 ViewModel?.RenameFileCommand.SafeExecute(null);
                 return;
@@ -488,11 +510,11 @@ namespace WolvenKit.Views.Tools
                 }
             }
 
-            if (e.Action != NotifyCollectionChangedAction.Remove || e.OldItems == null)
+            if (e.Action != NotifyCollectionChangedAction.Remove || e.OldItems == null || !string.IsNullOrEmpty(_currentFolderQuery))
             {
                 return;
             }
-
+            
             foreach (var item in e.OldItems)
             {
                 if (item is not TreeNode { Item: FileSystemModel { IsDirectory: true } fileSystemModel })
@@ -659,66 +681,58 @@ namespace WolvenKit.Views.Tools
 
         private async void RowDragDropController_Drop(object sender, TreeGridRowDropEventArgs e)
         {
-            e.Handled = _isDragging; // which should be true at this point
-            
             // this should all be somewhere else, right?
             try
             {
-                if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Handled = _isDragging; // which should be true at this point
+                if (e.TargetNode.Item is not FileSystemModel targetFile || ViewModel is not ProjectExplorerViewModel vm)
                 {
-                    if (e.TargetNode.Item is not FileSystemModel targetFile)
-                    {
-                        return;
-                    }
-
-                    var targetDirectory = Path.GetDirectoryName(targetFile.FullName);
-                    if (File.GetAttributes(targetFile.FullName).HasFlag(FileAttributes.Directory))
-                    {
-                        targetDirectory = targetFile.FullName;
-                    }
-
-                    var files = new List<string>((string[])e.Data.GetData(DataFormats.FileDrop) ?? []);
-                    await ProcessFileAction(files, targetDirectory);
+                    return;
                 }
-                else if (e.Data.GetDataPresent("Nodes"))
+
+
+                var selectedFilePaths =
+                    vm.SelectedItems?.OfType<FileSystemModel>().Select(fsm => fsm.FullName).ToList() ?? []; 
+
+                var files = new List<string>();
+
+                if (e.Data.GetDataPresent(DataFormats.FileDrop) &&
+                    e.Data.GetData(DataFormats.FileDrop) is string[] fileDropData
+                   )
                 {
-                    if (e.Data.GetData("Nodes") is not ObservableCollection<TreeNode> treeNodes
-                        || treeNodes.Count == 0
-                        || e.TargetNode.Item is not FileSystemModel targetFile)
-                    {
-                        return;
-                    }
-
-                    var targetDirectory = Path.GetDirectoryName(targetFile.FullName);
-                    if (File.GetAttributes(targetFile.FullName).HasFlag(FileAttributes.Directory))
-                    {
-                        targetDirectory = targetFile.FullName;
-                    }
-
-                    var files = new List<string>();
-                    foreach (var node in treeNodes)
-                    {
-                        if (node.Item is FileSystemModel sourceFile)
-                        {
-                            files.Add(sourceFile.FullName);
-                        }
-                    }
-                    
-                    // 1146: addresses "prevent self-drag-and-drop" 
-                    if (files.Count > 0 && files[0] == targetDirectory)
-                    {
-                        return;
-                    }
-
-                    await ProcessFileAction(files, targetDirectory);
+                    files.AddRange(fileDropData);
                 }
+                else if (e.Data.GetDataPresent("Nodes") &&
+                         e.Data.GetData("Nodes") is ObservableCollection<TreeNode> treeNodes)
+                {
+                    files.AddRange(treeNodes.Select(n => n.Item).OfType<FileSystemModel>().Select(fsm => fsm.FullName));
+                }
+
+                // If items are selected: ignore anything that isn't
+                if (selectedFilePaths.Count > 0)
+                {
+                    files = files.Where(p => selectedFilePaths.Contains(p, StringComparer.OrdinalIgnoreCase)).ToList();
+                }
+
+                // if dragged on file, use file's parent directory as target dir
+                var targetDirectory = Directory.Exists(targetFile.FullName)
+                    ? targetFile.FullName
+                    : Path.GetDirectoryName(targetFile.FullName);
+
+                // 1146: addresses "prevent self-drag-and-drop" 
+                if (files.Count == 0 || files[0] == targetDirectory)
+                {
+                    return;
+                }
+
+                await ProcessFileAction(files, targetDirectory);
             }
             catch (Exception error)
             {
                 Console.WriteLine(error.Message);
             }
         }
-        private void RowDragDropController_Dropped(object sender, TreeGridRowDroppedEventArgs e) => 
+        private void RowDragDropController_Dropped(object sender, TreeGridRowDroppedEventArgs e) =>
             _isDragging = false;
 
         /// <summary>
@@ -781,7 +795,37 @@ namespace WolvenKit.Views.Tools
             // If we have 0 - 10 files, we'll show one dialogue. Otherwise, we'll ask for each file individually.
             var isOverwrite = existingFiles.Count == 0;
             var isAskIndividually = existingFiles.Count > 10;
+            var skipDialogue = false;
 
+            // We're copying or moving a file on itself - offer rename operation
+            if (fileMap.Count == 1 && existingFiles.Count == 1 &&
+                ViewModel?.ActiveProject is Cp77Project project &&
+                targetDirectory == Path.GetDirectoryName(fileMap.Keys.First()))
+            {
+                var filePath = fileMap.Keys.First();
+                var relativePath = filePath.Replace($"{project.ModDirectory}{Path.DirectorySeparatorChar}", "");
+                var destPath = Interactions.Rename(relativePath);
+                if (string.IsNullOrEmpty(destPath))
+                {
+                    // user cancelled dialogue
+                    return;
+                }
+
+                if (destPath != relativePath)
+                {
+                    fileMap[filePath] = filePath.Replace(relativePath, destPath);
+                    existingFiles.Clear();
+                }
+                else
+                {
+                    // we can't overwrite a file with itself, so we'll create a copy
+                    isCopy = true;
+                    skipDialogue = true;
+                }
+            }
+
+
+            // 1 - 10 files: Show a single dialogue that asks for confirmation
             if (existingFiles.Count is < 10 and > 0)
             {
                 var messageBoxResult = await Interactions.ShowMessageBoxAsync(
@@ -803,7 +847,7 @@ namespace WolvenKit.Views.Tools
                 var canWriteToTargetFile =
                     !File.Exists(targetFile)
                     || isOverwrite
-                    || (isAskIndividually && await Interactions.ShowMessageBoxAsync(
+                    || (!skipDialogue && isAskIndividually && await Interactions.ShowMessageBoxAsync(
                         $"Overwrite the following file? {targetFile}",
                         "File Overwrite Confirmation",
                         WMessageBoxButtons.YesNo) == WMessageBoxResult.Yes);
@@ -1087,9 +1131,17 @@ namespace WolvenKit.Views.Tools
             ViewModel?.ModifierStateService.RefreshModifierStates();
         }
 
-        private void Main_OnKeystateChanged(object sender, KeyEventArgs e)
+        private void Main_OnKeystateChanged(object sender, KeyEventArgs e) => ViewModel?.OnKeyStateChanged(e);
+
+        private void TreeIcon_Loaded(object sender, RoutedEventArgs e)
         {
-            ViewModel?.ModifierStateService.OnKeystateChanged(e);
+            // NOTE: Margin="0" is not applied using XAML. This is likely due
+            //       to the use of virtualization and DataTemplate. This
+            //       workaround to define expected values after view is loaded.
+            var view = sender as IconBox;
+
+            view.SetCurrentValue(IconBox.MarginProperty, new Thickness(0));
+            view.SetResourceReference(IconBox.SizeProperty, "WolvenKitIconNano");
         }
     }
 }

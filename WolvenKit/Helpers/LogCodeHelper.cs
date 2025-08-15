@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WolvenKit.Core;
 
 namespace WolvenKit.Helpers;
 
@@ -23,8 +24,14 @@ public static class LogCodeHelper
             "https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/textures-and-luts/images-importing-editing-exporting#all-images-must-be-the-same-size");
         s_mapping.Add(0x2004, // morphtarget: no chunks
             "https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/npcs/a-new-head-for-v#step-6-optional-disabling-the-character-creator");
+        s_mapping.Add(0x2005, // mesh: bone mismatch
+            "https://wiki.redmodding.org/cyberpunk-2077-modding/for-mod-creators-theory/3d-modelling/troubleshooting-your-mesh-edits#bones-not-found-in-import-mesh-es");
 
         // 3: modKit stuff
+        s_mapping.Add(0x3001,
+            "https://wiki.redmodding.org/cyberpunk-2077-modding/for-mod-creators/core-mods-explained/archivexl/archivexl-resource-patching");
+        s_mapping.Add(0x3002,
+            "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/error-codes##id-0x3002-resources-plugin");
 
         // 4: project stuff
         s_mapping.Add(0x4001, "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/settings#additional-mod-directory");
@@ -34,7 +41,7 @@ public static class LogCodeHelper
         // 5: everything else
         s_mapping.Add(0x5000, "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/error-codes#id-0x5000-invalid-settings");
         s_mapping.Add(0x5001, "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/error-codes#id-0x5001-invalid-game-file-executable");
-        s_mapping.Add(0x5002, "https://github.com/WolvenKit/Wolvenkit/issues");
+        s_mapping.Add(0x5002, Constants.IssueTrackerUrl);
         
     }
 

@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using Microsoft.Win32;
 using Semver;
+using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.Core
 {
@@ -77,7 +78,7 @@ namespace WolvenKit.Core
                     }
                 }
 
-                var version = SemVersion.Parse(productVersion, SemVersionStyles.Strict);
+                var version = SemVersion.Parse(productVersion.NotNull(), SemVersionStyles.Strict);
                 return version;
             }
         }

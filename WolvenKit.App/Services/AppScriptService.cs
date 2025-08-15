@@ -44,7 +44,7 @@ public partial class AppScriptService : ScriptService
         _settingsManager = settingsManager;
         _hookService = hookService;
 
-        _wkit = new AppScriptFunctions(_loggerService, projectManager, archiveManager, red4ParserService, modTools, importExportHelper, gameController, geometryCacheService);
+        _wkit = new AppScriptFunctions(_loggerService, projectManager, archiveManager, red4ParserService, modTools, importExportHelper, gameController, geometryCacheService, settingsManager);
         _ui = new UiScriptFunctions(this);
         
         DefaultHostObject = new() { { "wkit", _wkit } };

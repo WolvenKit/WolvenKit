@@ -1,5 +1,6 @@
 ﻿<reactiveUi:ReactiveUserControl
     x:Class="WolvenKit.Views.Documents.RDTGraphView2"
+    x:TypeArguments="documents:RDTGraphViewModel2"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,26 +8,33 @@
     xmlns:graphEditor="clr-namespace:WolvenKit.Views.GraphEditor"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
-    d:DesignHeight="450"
+    mc:Ignorable="d"
     d:DesignWidth="800"
-    x:TypeArguments="documents:RDTGraphViewModel2"
-    mc:Ignorable="d">
+    d:DesignHeight="450"
+    BorderBrush="{StaticResource BorderAlt}"
+    BorderThickness="1,0,1,1">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            
         <StackPanel
             x:Name="Breadcrumb"
-            Grid.Row="0"
+                Grid.Column="0"
             VerticalAlignment="Center"
             Orientation="Horizontal" />
+        </Grid>
 
         <graphEditor:GraphEditorView
             x:Name="Editor"
             Grid.Row="1"
             Source="{Binding MainGraph}"
-            NodeDoubleClick="Editor_OnNodeDoubleClick"/>
+            NodeDoubleClick="Editor_OnNodeDoubleClick" />
     </Grid>
 </reactiveUi:ReactiveUserControl>

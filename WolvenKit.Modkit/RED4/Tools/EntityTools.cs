@@ -1,15 +1,13 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using SharpGLTF.Schema2;
-using WolvenKit.Common.Conversion;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4.Tools;
+using WolvenKit.Modkit.RED4.Tools.Common;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
 
@@ -266,7 +264,7 @@ namespace WolvenKit.Modkit.RED4
                         }
                     }
 
-                    root.SaveGLB(outfile.FullName);
+                    root.Save(GLTFHelper.PrepareFilePath(outfile.FullName, true));
                     return true;
                 }
             }

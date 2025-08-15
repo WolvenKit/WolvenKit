@@ -80,12 +80,15 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(ModderEmail),
 
             // Interface
+            nameof(UiScale),
             nameof(ShowFilePreview),
             nameof(ShowAdvancedOptions),
             nameof(RefactoringCheckboxDefaultValue),
             nameof(ShowRedmodInRibbon),
             nameof(UseValidatingEditor),
             nameof(ReopenLastProject),
+            nameof(NumFilesToReopen),
+            nameof(ReopenFiles),
             nameof(ShowVerboseLogOutput)
             )
           .Subscribe(_ =>
@@ -311,7 +314,47 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
 
     #endregion
 
+    #region Project
+
+    [Display(Name = "Open last project on launch?",
+        Description = "Will re-open the last project",
+        GroupName = "Project")]
+    [ObservableProperty]
+    private bool _reopenLastProject;
+
+    [Display(Name = "Re-open files on project open?",
+        Description = "Deactivate to disable",
+        GroupName = "Project")]
+    [ObservableProperty]
+    private bool _reopenFiles;
+
+    [Display(Name = "Number of files to reopen",
+        Description = "Increase the number at your own risk!",
+        GroupName = "Project")]
+    [ObservableProperty]
+    private int _numFilesToReopen;
+
+    #endregion
+    
     #region Interface
+
+    private int _uiScale;
+
+    [Display(Name = "Scale UI (%)",
+        Description = "Resize fonts/icons to improve interface for your screen resolution.",
+        GroupName = "Interface")]
+    public int UiScale
+    {
+        get => _uiScale;
+        set
+        {
+            if (value is < 100 or > 900)
+            {
+                value = 100;
+            }
+            SetProperty(ref _uiScale, value);
+        }
+    }
 
     [Display(Name = "Show File Preview", GroupName = "Interface")]
     [ObservableProperty]
@@ -339,17 +382,17 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [ObservableProperty]
     private bool _useValidatingEditor;
 
-    [Display(Name = "Open last project on launch?",
-        Description = "Will re-open the last project",
-        GroupName = "Interface")]
-    [ObservableProperty]
-    private bool _reopenLastProject;
-
     [Display(Name = "Show verbose log output",
         Description = "Will give you all the information",
         GroupName = "Interface")]
     [ObservableProperty]
     private bool _showVerboseLogOutput;
+
+    [Display(Name = "Enable Discord RPC integration",
+        Description = "Show on Discord that you're currently modding",
+        GroupName = "Interface")]
+    [ObservableProperty]
+    private bool _isDiscordRPCEnabled;
 
     [Display(Name = "Exclude archives from scan by name (comma separated)",
         Description = "Exclude archives from scan if you know that they'll lead to exceptions (only the base name)",

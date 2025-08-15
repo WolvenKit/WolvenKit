@@ -3,41 +3,29 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:converters="clr-namespace:Wolvenkit.App.Converters;assembly=WolvenKit.App"
-    Title="{Binding Title, RelativeSource={RelativeSource Self}}"
+    Title="{Binding Title}"
+    MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
+    MinHeight="{DynamicResource WolvenKitDialogHeight}"
+    MaxHeight="{Binding MaxHeight,
+                        RelativeSource={RelativeSource Self}}"
     SizeToContent="WidthAndHeight"
-    Padding="8"
     WindowStartupLocation="CenterOwner">
-
     <Grid
-        Margin="5,5,2,5"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch"
         hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
-
         <Grid.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
                     <hc:ThemeResources />
                     <hc:Theme />
                 </ResourceDictionary.MergedDictionaries>
+
                 <converters:ListToStringConverter x:Key="ListToStringConverter" />
-
-                <Style x:Key="TextBlockHeaderStyle" TargetType="{x:Type TextBlock}">
-                    <Setter Property="FontSize" Value="30" />
-                    <Setter Property="Margin" Value="0 20 0 10" />
-                    <Setter Property="Foreground" Value="{StaticResource WolvenKitCyan}" />
-                </Style>
-                <Style x:Key="TextBlockTextStyle" TargetType="{x:Type TextBlock}">
-                    <Setter Property="FontSize" Value="16" />
-                    <Setter Property="Margin" Value="0 2 " />
-                </Style>
             </ResourceDictionary>
-
         </Grid.Resources>
-
 
         <syncfusion:WizardControl
             CancelButtonCancelsWindow="True"
@@ -55,49 +43,66 @@
                 NextVisibility="Visible"
                 PreviewKeyDown="WizardPage_PreviewKeyDown"
                 PageType="Exterior">
-                <Grid
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="800" />
-                    </Grid.ColumnDefinitions>
+                <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" MinHeight="{DynamicResource WolvenKitFieldHeight}" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <StackPanel Grid.Row="0" Orientation="Vertical">
-                        <TextBlock Text="{Binding FilesCount, StringFormat='The following {0} files don\'t seem to be used by anything'}" />
-                    </StackPanel>
+                    <TextBlock
+                        Grid.Row="0"
+                        Margin="{DynamicResource WolvenKitMarginSmallVertical}"
+                        Foreground="{StaticResource WolvenKitYellow}"
+                        FontSize="{DynamicResource WolvenKitFontMedium}"
+                        FontWeight="Bold"
+                        TextWrapping="Wrap">
+                        This feature is experimental!
+                    </TextBlock>
 
-                    <StackPanel Grid.Row="1" Orientation="Vertical">
-                        <TextBox x:Name="ContentTextBox"
-                                 Background="{StaticResource BackgroundColor_Frame_Background}"
-                                 Height="Auto"
-                                 Width="Auto"
-                                 MinHeight="100"
-                                 MaxHeight="400"
-                                 AcceptsReturn="True"
-                                 TextWrapping="WrapWithOverflow"
-                                 VerticalScrollBarVisibility="Auto"
-                                 VerticalAlignment="Top"
-                                 VerticalContentAlignment="Top"
-                                 KeyUp="DeleteFilesTextbox_OnKeyUp"
-                                 Text="{Binding Files, Converter={StaticResource ListToStringConverter}, Mode=TwoWay}" />
-                    </StackPanel>
+                    <TextBlock
+                        Grid.Row="1"
+                        Margin="{DynamicResource WolvenKitMarginSmallBottom}"
+                        FontSize="{DynamicResource WolvenKitFontBody}">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="The following {0} files don't seem to be used by anything:">
+                                <Binding Path="FilesCount" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
 
-                    <StackPanel Grid.Row="2" Orientation="Vertical">
-                        <TextBlock Style="{StaticResource TextBlockHeaderStyle}">This feature is experimental!</TextBlock>
-                        <TextBlock Style="{StaticResource TextBlockTextStyle}">The button "Delete unused files" will send all files that you leave in the list above to the recycle bin.</TextBlock>
-                        <TextBlock Style="{StaticResource TextBlockTextStyle}">Usage detection might or might not be accurate.</TextBlock>
-                    </StackPanel>
+                    <TextBox
+                        x:Name="ContentTextBox"
+                        Grid.Row="2"
+                        VerticalContentAlignment="Top"
+                        Background="{StaticResource BackgroundColor_Frame_Background}"
+                        FontSize="{DynamicResource WolvenKitFontBody}"
+                        AcceptsReturn="True"
+                        TextWrapping="WrapWithOverflow"
+                        VerticalScrollBarVisibility="Auto"
+                        KeyUp="DeleteFilesTextbox_OnKeyUp"
+                        Text="{Binding Files,
+                                       Converter={StaticResource ListToStringConverter},
+                                       Mode=TwoWay}" />
 
+                    <StackPanel
+                        Grid.Row="3"
+                        Orientation="Vertical">
+                        <TextBlock
+                            FontSize="{DynamicResource WolvenKitFontBody}"
+                            TextWrapping="Wrap">
+                            The button "Delete unused files" will send all files that you leave in the list above to the recycle bin.
+                        </TextBlock>
+
+                        <TextBlock
+                            FontSize="{DynamicResource WolvenKitFontBody}"
+                            TextWrapping="Wrap">
+                            Usage detection might or might not be accurate.
+                        </TextBlock>
+                    </StackPanel>
                 </Grid>
             </syncfusion:WizardPage>
         </syncfusion:WizardControl>
-
     </Grid>
-
-
 </Window>

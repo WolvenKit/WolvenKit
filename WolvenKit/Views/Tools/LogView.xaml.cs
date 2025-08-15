@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -11,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Navigation;
 using DynamicData;
 using HandyControl.Tools.Extension;
+using MahApps.Metro.Controls;
 using ReactiveUI;
 using Serilog.Events;
 using Splat;
@@ -18,6 +20,7 @@ using WolvenKit.App;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Helpers;
 
 namespace WolvenKit.Views.Tools
@@ -71,24 +74,18 @@ namespace WolvenKit.Views.Tools
 
         private void LogEntries_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
+           
             var filtered = LogEntries.Where(log =>
             {
-                switch (log.Level)
+                return ViewModel is null || log.Level switch
                 {
-                    case Logtype.Error:
-                        return ViewModel.FilterByLevel[0];
-                    case Logtype.Warning:
-                        return ViewModel.FilterByLevel[1];
-                    case Logtype.Success:
-                        return ViewModel.FilterByLevel[2];
-                    case Logtype.Normal:
-                    case Logtype.Important:
-                        return ViewModel.FilterByLevel[3];
-                    case Logtype.Debug:
-                        return ViewModel.FilterByLevel[4];
-                    default:
-                        return true;
-                }
+                    Logtype.Error => ViewModel.FilterByLevel[0],
+                    Logtype.Warning => ViewModel.FilterByLevel[1],
+                    Logtype.Success => ViewModel.FilterByLevel[2],
+                    Logtype.Normal or Logtype.Important => ViewModel.FilterByLevel[3],
+                    Logtype.Debug => ViewModel.FilterByLevel[4],
+                    _ => true
+                };
             });
 
             FilteredLogEntries.Clear();
@@ -177,8 +174,32 @@ namespace WolvenKit.Views.Tools
 
         private void ClearAll_Click(object sender, RoutedEventArgs e) => LogEntries.Clear();
 
-        private void OpenLogFolder_Click(object sender, RoutedEventArgs e) =>
-            Process.Start(new ProcessStartInfo(ISettingsManager.GetLogsDir()) { UseShellExecute = true });
+        private void OpenLogFolder_Click(object sender, RoutedEventArgs e)
+        {
+            // regular click: open log folder 
+            if (!ModifierViewStateService.IsShiftBeingHeld)
+            {
+                Process.Start(new ProcessStartInfo(ISettingsManager.GetLogsDir()) { UseShellExecute = true });
+                return;
+            }
+
+            // should never happen, but better safe than sorry
+            if (FileHelper.GetMostRecentlyChangedFile(Path.Combine(ISettingsManager.GetAppData(), "Logs"), "*.txt") is
+                not FileInfo fI)
+            {
+                return;
+            }
+
+            // shift-click: open most recent log file
+            try
+            {
+                Process.Start(new ProcessStartInfo(fI.FullName) { UseShellExecute = true });
+            }
+            catch (Exception)
+            {
+                throw new WolvenKitException(0, $"Failed to open log file {fI.FullName}");
+            }
+        }
 
         private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e) =>
             Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri) { UseShellExecute = true });
@@ -199,11 +220,6 @@ namespace WolvenKit.Views.Tools
 
         private void ScrollToBottom_OnClick(object sender, RoutedEventArgs e) => _scrollViewer?.ScrollToBottom();
 
-        private void LogView_OnKeyUp(object sender, KeyEventArgs e)
-        {
-            // TODO: Implement scrolling and copy
-        }
-
         private void ScrollViewer_OnKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.PageUp)
@@ -213,6 +229,46 @@ namespace WolvenKit.Views.Tools
             else if (e.Key == Key.PageDown)
             {
                 _scrollViewer?.PageDown();
+            }
+        }
+
+        private void LogView_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            // TODO: Implement scrolling and copy
+        }
+
+        private void LogView_OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var breakpoint = (double)FindResource("WolvenKitLogBreakpointWidth");
+
+            if (e.NewSize.Width > breakpoint && LogLevelFilter.Orientation != Orientation.Horizontal)
+            {
+                LogPanelButtons.Children.Remove(LogLevelFilter);
+                LogViewHeader.Children.Add(LogLevelFilter);
+
+                LogLevelFilter.SetCurrentValue(Grid.ColumnProperty, 0);
+                LogLevelFilter.SetCurrentValue(HorizontalAlignmentProperty, HorizontalAlignment.Left);
+                LogLevelFilter.SetCurrentValue(VerticalAlignmentProperty, VerticalAlignment.Center);
+                LogLevelFilter.SetCurrentValue(StackPanel.OrientationProperty, Orientation.Horizontal);
+                ChangeMargin((Thickness)FindResource("WolvenKitMarginTinyRight"));
+            }
+            else if (e.NewSize.Width <= breakpoint && LogLevelFilter.Orientation != Orientation.Vertical)
+            {
+                LogViewHeader.Children.Remove(LogLevelFilter);
+                LogPanelButtons.Children.Add(LogLevelFilter);
+
+                LogLevelFilter.ClearValue(Grid.ColumnProperty);
+                LogLevelFilter.SetCurrentValue(HorizontalAlignmentProperty, HorizontalAlignment.Center);
+                LogLevelFilter.SetCurrentValue(VerticalAlignmentProperty, VerticalAlignment.Top);
+                LogLevelFilter.SetCurrentValue(StackPanel.OrientationProperty, Orientation.Vertical);
+                ChangeMargin((Thickness)FindResource("WolvenKitMarginTinyTop"));
+            }
+
+            return;
+
+            void ChangeMargin(Thickness margin)
+            {
+                LogLevelFilter.FindChildren<Button>().ForEach(button => button.SetCurrentValue(MarginProperty, margin));
             }
         }
     }

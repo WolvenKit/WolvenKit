@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Extensions
 {
@@ -24,39 +26,32 @@ namespace WolvenKit.Common.Extensions
             return dic[str];
         }
         
-        private static IList MergeLists(IList coll1, IList coll2)
+        /// <summary>
+        /// Merges two dictionaries with Lists
+        /// In case of conflicts, the values of the second dictionary will be used.
+        /// </summary>
+        /// <param name="me"></param>
+        /// <param name="others"></param>
+        /// <returns>The merged dictionary</returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public static T MergeWith<T, TK, E>(this T me, params IDictionary<TK, List<E>>[] others)
+            where T : IDictionary<TK, List<E>>
         {
-            foreach (var o in coll2)
+            // go through multiple param dictionaries
+            foreach (var otherDict in others)
             {
-                coll1.Add(o);
-            }
-
-            return coll1;
-        }
-
-        // Merges two dictionaries with lists
-        public static T MergeRange<T, TK, TV>(this T me, params IDictionary<TK, TV>[] others)
-            where T : IDictionary<TK, TV>, new()
-        {
-            var newMap = new T();
-            foreach (var src in others)
-            {
-                foreach (var p in src)
+                foreach (var (secondKey, secondValue) in otherDict)
                 {
-                    if (me.TryGetValue(p.Key, out var val))
+                    // check if key is in the first dictionary
+                    if (me.TryGetValue(secondKey, out var firstValue))
                     {
-                        if (val is IList coll && p.Value is IList coll2)
-                        {
-                            me[p.Key] = (TV)MergeLists(coll, coll2);
-                        }
-                        else
-                        {
-                            throw new ArgumentOutOfRangeException(nameof(me), "This method only support lists");
-                        }
+                        // and set it to the concatenated lists
+                        me[secondKey] = [.. firstValue, .. secondValue];
                     }
+                    // if not, add it
                     else
                     {
-                        me[p.Key] = p.Value;
+                        me[secondKey] = secondValue;
                     }
                 }
             }
@@ -64,5 +59,37 @@ namespace WolvenKit.Common.Extensions
             return me;
         }
 
+        /// <summary>
+        /// Merges two dictionaries with IEnumerables
+        /// In case of conflicts, the values of the second dictionary will be used.
+        /// </summary>
+        /// <param name="me"></param>
+        /// <param name="others"></param>
+        /// <returns>The merged dictionary</returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public static T MergeWith<T, TK, E>(this T me, params IDictionary<TK, IEnumerable<E>>[] others)
+            where T : IDictionary<TK, IEnumerable<E>>
+        {
+            // go through multiple param dictionaries
+            foreach (var otherDict in others)
+            {
+                foreach (var (secondKey, secondValue) in otherDict)
+                {
+                    // check if key is in the first dictionary
+                    if (me.TryGetValue(secondKey, out var firstValue))
+                    {
+                        // and set it to the concatenated lists
+                        me[secondKey] = firstValue.Concat(secondValue);
+                    }
+                    // if not, add it
+                    else
+                    {
+                        me[secondKey] = secondValue;
+                    }
+                }
+            }
+
+            return me;
+        }
     }
 }

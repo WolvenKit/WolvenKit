@@ -179,7 +179,7 @@ public class RED4Controller : ObservableObject, IGameController
 
     #region Packing
 
-    public async Task<bool> InstallProjectHot()
+    public async Task<bool> InstallProjectHotAsync()
     {
         if (_projectManager.ActiveProject is not Cp77Project currentProject)
         {
@@ -204,7 +204,7 @@ public class RED4Controller : ObservableObject, IGameController
         var gameDirectoryInfo = new DirectoryInfo(_settingsManager.GetRED4GameRootDir());
         var packedDirectoryInfo = new DirectoryInfo(currentProject.PackedRootDirectory);
 
-        if (!await PackProjectFiles(new LaunchProfile { Install = true }, currentProject))
+        if (!await PackProjectFilesAsync(new LaunchProfile { Install = true }, currentProject))
         {
             return false;
         }
@@ -276,10 +276,6 @@ public class RED4Controller : ObservableObject, IGameController
         };
     }
 
-    private static List<string> GetScriptFiles(Cp77Project cp77Proj)
-        => Directory.EnumerateFiles(cp77Proj.ResourceScriptsDirectory, "*.*", SearchOption.AllDirectories).Where(name => IsCDPRScript(name))
-            .ToList();
-
     private static List<string> GetArchiveXlFiles(Cp77Project cp77Proj) =>
         Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*.xl", SearchOption.AllDirectories).ToList();
 
@@ -288,14 +284,37 @@ public class RED4Controller : ObservableObject, IGameController
         .Where(name => !IsSpecialExtension(name))
         .Where(x => Path.GetFileName(x) != "info.json").ToList();
 
-    private static List<string> GetTweakFiles(Cp77Project cp77Proj) =>
-        Directory.EnumerateFiles(cp77Proj.ResourcesDirectory, "*.tweak", SearchOption.AllDirectories).ToList();
+    private static List<string> GetREDmodScriptFiles(Cp77Project cp77Proj)
+    {
+        var absolutePath = Path.Combine(cp77Proj.ResourcesDirectory, "scripts");
+        if (!Directory.Exists(absolutePath))
+        {
+            return [];
+        }
+
+        return Directory
+            .EnumerateFiles(absolutePath, "*.*", SearchOption.AllDirectories)
+            .Where(IsCDPRScript).ToList();
+    }
+
+    private static List<string> GetREDmodTweakFiles(Cp77Project cp77Proj)
+    {
+        var absolutePath = Path.Combine(cp77Proj.ResourcesDirectory, "tweaks");
+        if (!Directory.Exists(absolutePath))
+        {
+            return [];
+        }
+
+        return Directory.EnumerateFiles(absolutePath, "*.tweak",
+            SearchOption.AllDirectories).ToList();
+    }
+    
 
     /// <summary>
     /// Pack mod with options
     /// </summary>
     /// <returns></returns>
-    public async Task<bool> LaunchProject(LaunchProfile options)
+    public async Task<bool> LaunchProjectAsync(LaunchProfile options)
     {
         _progressService.IsIndeterminate = true;
 
@@ -348,10 +367,9 @@ public class RED4Controller : ObservableObject, IGameController
         {
             _loggerService.Info($"{cp77Proj.Name} files cleaned up.");
         }
-
         
         // Pack it up
-        if (!await PackProjectFiles(options, cp77Proj))
+        if (!await PackProjectFilesAsync(options, cp77Proj))
         {
             return false;
         }
@@ -364,7 +382,6 @@ public class RED4Controller : ObservableObject, IGameController
             _notificationService.Error("Creating backup failed, aborting.");
             return false;
         }
-
 
         // Now install it
         if (options.Install && !await InstallProjectFiles(options, cp77Proj))
@@ -425,6 +442,9 @@ public class RED4Controller : ObservableObject, IGameController
         return true;
     }
 
+    /// <summary>
+    /// At this point, all necessary files should be present inside ModDir/packed. This method only copies them to the game dir.
+    /// </summary>
     private async Task<bool> InstallProjectFiles(LaunchProfile options, Cp77Project cp77Proj)
     {
         if (!options.Install)
@@ -433,8 +453,9 @@ public class RED4Controller : ObservableObject, IGameController
             return true;
         }
 
-        // install files: is always true (abort condition above)
-        if (!options.DeployWithRedmod && !InstallMod(cp77Proj))
+        var installPath = options.DeployWithRedmod ? $"mods/{cp77Proj.ModName}" : "archive/pc/mod";
+
+        if (!InstallMod(cp77Proj))
         {
             _progressService.IsIndeterminate = false;
             _loggerService.Error("Installing mod failed, aborting.");
@@ -442,41 +463,38 @@ public class RED4Controller : ObservableObject, IGameController
             return false;
         }
 
-        _loggerService.Success($"{cp77Proj.Name} installed to {_settingsManager.GetRED4GameRootDir()}");
         _notificationService.Success($"{cp77Proj.Name} installed!");
 
-        // deploy redmod
-        if (!options.DeployWithRedmod)
+        var successString = options.DeployWithRedmod ? "deployed as REDmod" : "installed";
+        _loggerService.Success($"{cp77Proj.Name} {successString} to {_settingsManager.GetRED4GameRootDir()}/{installPath}");
+
+        if (!options.DeployWithRedmod || await DeployRedmod())
         {
             return true;
         }
 
-        if (!await DeployRedmod())
-        {
-            _progressService.IsIndeterminate = false;
-            _loggerService.Error("Redmod deploy failed, aborting.");
-            _notificationService.Error("Redmod deploy failed, aborting.");
-            return false;
-        }
+        _progressService.IsIndeterminate = false;
+        _loggerService.Error("Redmod deploy failed, aborting.");
+        _notificationService.Error("Redmod deploy failed, aborting.");
+        return false;
 
-        _loggerService.Success($"{_projectManager.ActiveProject?.Name} Redmod deployed!");
 
-        return true;
     }
 
-    private async Task<bool> PackProjectFiles(LaunchProfile options, Cp77Project cp77Proj)
+    /// <summary>
+    /// This method will move everything into ModDirectory/packed.
+    /// </summary>
+    private async Task<bool> PackProjectFilesAsync(LaunchProfile options, Cp77Project cp77Proj)
     {
-        if (options is { CreateZipFile: false, Install: false })
-        {
-            return true;
-        }
+        // NOTE: this implementation is partially duplicated in "WolvenKit.Modkit\RED4\Build.cs".
+        //       Changing the code below should be mirrored there too.
         
         // copy files to packed dir
         // pack archives
-        var modfiles = Directory.EnumerateFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories).ToList();
-        if (modfiles.Any())
+        var archives = Directory.EnumerateFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories).ToList();
+        if (archives.Count != 0)
         {
-            var invalidFiles = modfiles
+            var invalidFiles = archives
                 .Select(f => Path.GetRelativePath(cp77Proj.ModDirectory, f))
                 .Where(f => f.Any(char.IsUpper) || f.Any(char.IsWhiteSpace)).ToList();
             if (invalidFiles.Count != 0)
@@ -514,7 +532,7 @@ public class RED4Controller : ObservableObject, IGameController
             _loggerService.Info($"{cp77Proj.Name} archiveXL files packed into {cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)}");
         }
 
-        // pack resources
+        // pack generic resources excluding script and tweak files
         files = GetResourceFiles(cp77Proj);
         if (files.Count != 0)
         {
@@ -530,7 +548,7 @@ public class RED4Controller : ObservableObject, IGameController
         }
 
         // pack redmod files
-        if (!options.DeployWithRedmod && !(options is { CreateZipFile: true, IsRedmod: true }))
+        if (!options.IsRedmod)
         {
             return true;
         }
@@ -650,15 +668,14 @@ public class RED4Controller : ObservableObject, IGameController
     private bool PackRedmodFiles(Cp77Project cp77Proj)
     {
         // write info.json file if it not exists
-        var modinfo = Path.Combine(cp77Proj.ResourcesDirectory, "info.json");
-        var modInfoJsonPath = Path.Combine(cp77Proj.PackedRedModDirectory, "info.json");
+        var modinfo = Path.Combine(cp77Proj.PackedRedModDirectory, "info.json");
 
         if (File.Exists(modinfo))
         {
-            File.Copy(modinfo, modInfoJsonPath, true);
+            File.Delete(modinfo);
         }
-        
-        if (!File.Exists(modInfoJsonPath))
+
+        if (!File.Exists(modinfo))
         {
             JsonSerializerOptions jsonoptions = new()
             {
@@ -667,7 +684,7 @@ public class RED4Controller : ObservableObject, IGameController
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
             var jsonString = JsonSerializer.Serialize(cp77Proj.GetInfo(), jsonoptions);
-            File.WriteAllText(modInfoJsonPath, jsonString);
+            File.WriteAllText(modinfo, jsonString);
         }
 
         // sounds
@@ -677,7 +694,7 @@ public class RED4Controller : ObservableObject, IGameController
         }
 
         // tweaks
-        var files = GetTweakFiles(cp77Proj);
+        var files = GetREDmodTweakFiles(cp77Proj);
         if (files.Count != 0)
         {
             foreach (var file in files)
@@ -698,25 +715,23 @@ public class RED4Controller : ObservableObject, IGameController
         }
 
         // scripts
-        files = GetScriptFiles(cp77Proj);
-        if (files.Count == 0)
+        files = GetREDmodScriptFiles(cp77Proj);
+        if (files.Count != 0)
         {
-            return true;
-        }
-
-        foreach (var file in files)
-        {
-            var fileName = Path.GetFileName(file);
-            var fileRelativeDir = Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(file).NotNull());
-            var fileOutputDir = Path.Combine(cp77Proj.PackedRedModDirectory, fileRelativeDir);
-            var fileOutputPath = Path.Combine(fileOutputDir, fileName);
-            if (!Directory.Exists(fileOutputDir))
+            foreach (var file in files)
             {
-                Directory.CreateDirectory(fileOutputDir);
-            }
+                var fileName = Path.GetFileName(file);
+                var fileRelativeDir = Path.GetRelativePath(cp77Proj.ResourcesDirectory, Path.GetDirectoryName(file).NotNull());
+                var fileOutputDir = Path.Combine(cp77Proj.PackedRedModDirectory, fileRelativeDir);
+                var fileOutputPath = Path.Combine(fileOutputDir, fileName);
+                if (!Directory.Exists(fileOutputDir))
+                {
+                    Directory.CreateDirectory(fileOutputDir);
+                }
 
-            // copy files, with overwriting
-            File.Copy(file, fileOutputPath, true);
+                // copy files, with overwriting
+                File.Copy(file, fileOutputPath, true);
+            }
         }
 
         _loggerService.Info($"{cp77Proj.Name} redmod script files packed into {cp77Proj.PackedRedModDirectory}");
@@ -751,6 +766,12 @@ public class RED4Controller : ObservableObject, IGameController
                 IgnoreReadOnlyProperties = true,
             };
             var info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(path), options).NotNull();
+            if (info.CustomSounds.Count == 0)
+            {
+                // nothing to do
+                return false;
+            }
+
             foreach (var e in info.CustomSounds)
             {
                 if (!string.IsNullOrEmpty(e.File))
@@ -894,46 +915,49 @@ public class RED4Controller : ObservableObject, IGameController
         }
 
         // compile with redmod
-        var redmodPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
-        if (File.Exists(redmodPath))
-        {
-            var rttiSchemaPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "metadata.json");
-            var args = $"deploy -root=\"{_settingsManager.GetRED4GameRootDir()}\"";
 
-            _loggerService.Info($"WorkDir: {redmodPath}");
-            _loggerService.Info($"Running commandlet: {args}");
-            var workingDir = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin");
-            return ProcessUtil.RunProcessAsync(redmodPath, args, workingDir);
+        var redmodPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod");
+        var executablePath = Path.Combine(redmodPath, "bin", "redMod.exe");
+        if (!File.Exists(executablePath))
+        {
+            return Task.FromResult(false);
         }
 
-        return Task.FromResult(true);
+        var rttiSchemaPath = Path.Combine(redmodPath, "metadata.json");
+        var args = $"deploy -root=\"{_settingsManager.GetRED4GameRootDir()}\"";
+
+        var workingDir = Path.Combine(redmodPath, "bin");
+        _loggerService.Info($"WorkDir: {workingDir}");
+        _loggerService.Info($"Running commandlet: {args}");
+        return ProcessUtil.RunProcessAsync(executablePath, args, workingDir);
+
     }
 
     #endregion
 
     /// <Inheritdoc />
-    public Task<bool> AddFileToModModal(ulong hash)
+    public async Task<bool> AddFileToModModalAsync(ulong hash)
     {
         var scope = _archiveManager.IsModBrowserActive ? ArchiveManagerScope.Mods : ArchiveManagerScope.Basegame;
-        return AddFileToModModal(hash, scope);
+        return await AddFileToModModalAsync(hash, scope);
     }
 
     /// <Inheritdoc />
-    public async Task<bool> AddFileToModModal(ulong hash, ArchiveManagerScope searchScope)
+    public async Task<bool> AddFileToModModalAsync(ulong hash, ArchiveManagerScope searchScope)
     {
         var file = _archiveManager.Lookup(hash);
-        return file.HasValue && await AddFileToModModal(file.Value, searchScope);
+        return file.HasValue && await AddFileToModModalAsync(file.Value, searchScope);
     }
 
     /// <Inheritdoc />
-    public Task<bool> AddFileToModModal(IGameFile file)
+    public async Task<bool> AddFileToModModalAsync(IGameFile file)
     {
         var scope = _archiveManager.IsModBrowserActive ? ArchiveManagerScope.Mods : ArchiveManagerScope.Basegame;
-        return AddFileToModModal(file, scope);
+        return await AddFileToModModalAsync(file, scope);
     }
 
     /// <Inheritdoc />
-    public async Task<bool> AddFileToModModal(IGameFile file, ArchiveManagerScope searchScope)
+    public async Task<bool> AddFileToModModalAsync(IGameFile file, ArchiveManagerScope searchScope)
     {
         if (_projectManager.ActiveProject is null)
         {

@@ -73,12 +73,15 @@ public class SettingsDto : ISettingsDto
         ModderEmail = settings.ModderEmail;
 
         // Interface
+        UiScale = settings.UiScale;
         ShowFilePreview = settings.ShowFilePreview;
         ShowAdvancedOptions = settings.ShowAdvancedOptions;
         RefactoringCheckboxDefaultValue = settings.RefactoringCheckboxDefaultValue;
         ShowRedmodInRibbon = settings.ShowRedmodInRibbon;
         UseValidatingEditor = settings.UseValidatingEditor;
         ReopenLastProject = settings.ReopenLastProject;
+        NumFilesToReopen = settings.NumFilesToReopen;
+        ReopenFiles = settings.ReopenFiles;
         ShowVerboseLogOutput = settings.ShowVerboseLogOutput;
         ArchiveNamesExcludeFromScan = settings.ArchiveNamesExcludeFromScan;
 
@@ -144,13 +147,19 @@ public class SettingsDto : ISettingsDto
 
     #region Interface
 
+    // Default to 0 to automatically scale on first launch
+    public int UiScale { get; set; }
     public bool ShowFilePreview { get; set; }
     public bool ShowAdvancedOptions { get; set; }
     public bool RefactoringCheckboxDefaultValue { get; set; }
     public bool ShowRedmodInRibbon { get; set; }
     public bool UseValidatingEditor { get; set; } = true;
     public bool ReopenLastProject { get; set; }
+
+    public int NumFilesToReopen { get; set; } = 3;
+    public bool ReopenFiles { get; set; } = true;
     public bool ShowVerboseLogOutput { get; set; }
+    public bool IsDiscordRPCEnabled { get; set; } = true;
     public string ArchiveNamesExcludeFromScan { get; set; } = "basegame_AMM_Props";
 
     #endregion
@@ -205,13 +214,17 @@ public class SettingsDto : ISettingsDto
         settingsManager.ModderEmail = ModderEmail;
 
         // Interface
+        settingsManager.UiScale = UiScale;
         settingsManager.ShowFilePreview = ShowFilePreview;
         settingsManager.ShowAdvancedOptions = ShowAdvancedOptions;
         settingsManager.RefactoringCheckboxDefaultValue = RefactoringCheckboxDefaultValue;
         settingsManager.ShowRedmodInRibbon = ShowRedmodInRibbon;
         settingsManager.UseValidatingEditor = UseValidatingEditor;
         settingsManager.ReopenLastProject = ReopenLastProject;
+        settingsManager.ReopenFiles = ReopenFiles;
+        settingsManager.NumFilesToReopen = NumFilesToReopen;
         settingsManager.ShowVerboseLogOutput = ShowVerboseLogOutput;
+        settingsManager.IsDiscordRPCEnabled = IsDiscordRPCEnabled;
         settingsManager.ArchiveNamesExcludeFromScan = ArchiveNamesExcludeFromScan;
 
         return settingsManager;

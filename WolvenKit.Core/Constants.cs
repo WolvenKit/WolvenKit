@@ -10,5 +10,7 @@ namespace WolvenKit.Core
 
         public const string IsSuccess = "IsSuccess";
         public const string InfoCode = "InfoCode";
+
+        public const string IssueTrackerUrl = "https://github.com/WolvenKit/Wolvenkit/issues";
     }
 }

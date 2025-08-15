@@ -19,6 +19,7 @@ using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
+using WolvenKit.App.Services;
 
 namespace WolvenKit.App.ViewModels.GraphEditor;
 
@@ -107,6 +108,11 @@ public partial class RedGraph : IDisposable
             {
                 ConnectScene((SceneOutputConnectorViewModel)output1, (SceneInputConnectorViewModel)input1);
             }
+
+            var sourceNode = Nodes.FirstOrDefault(n => n.UniqueId == output1.OwnerId);
+            sourceNode?.UpdateSocketVisibility();
+            var targetNode = Nodes.FirstOrDefault(n => n.UniqueId == input1.OwnerId);
+            targetNode?.UpdateSocketVisibility();
         }
 
         if (PendingConnection is { Source: InputConnectorViewModel input2, Target: OutputConnectorViewModel output2 })
@@ -120,6 +126,11 @@ public partial class RedGraph : IDisposable
             {
                 ConnectScene((SceneOutputConnectorViewModel)output2, (SceneInputConnectorViewModel)input2);
             }
+
+            var sourceNode = Nodes.FirstOrDefault(n => n.UniqueId == output2.OwnerId);
+            sourceNode?.UpdateSocketVisibility();
+            var targetNode = Nodes.FirstOrDefault(n => n.UniqueId == input2.OwnerId);
+            targetNode?.UpdateSocketVisibility();
         }
     }
 
@@ -142,6 +153,8 @@ public partial class RedGraph : IDisposable
                     }
                 }
             }
+            var sourceNode = Nodes.FirstOrDefault(n => n.UniqueId == outputConnector.OwnerId);
+            sourceNode?.UpdateSocketVisibility();
         }
 
         if (baseConnectorViewModel is InputConnectorViewModel inputConnector)
@@ -161,6 +174,8 @@ public partial class RedGraph : IDisposable
                     }
                 }
             }
+            var targetNode = Nodes.FirstOrDefault(n => n.UniqueId == inputConnector.OwnerId);
+            targetNode?.UpdateSocketVisibility();
         }
     }
 
@@ -182,9 +197,58 @@ public partial class RedGraph : IDisposable
         }
 
         GraphStateSave();
+        
+        // Mark document as dirty since we modified the data
+        DocumentViewModel?.SetIsDirty(true);
     }
 
-    public void RemoveNodes(IList<object> nodes)
+    /// <summary>
+    /// Replace a quest node with a deletion marker (soft delete) or hard delete based on node type
+    /// </summary>
+    /// <param name="node">The quest node to replace or remove</param>
+    public void ReplaceNodeWithQuestDeletionMarker(BaseQuestViewModel node)
+    {
+        if (GraphType != RedGraphType.Quest)
+        {
+            throw new InvalidOperationException("Cannot replace with quest deletion marker on non-quest graph");
+        }
+
+        // Check if this node type should use a deletion marker
+        if (!ShouldUseDeletionMarker(node))
+        {
+            // Non-signal-stopping nodes get hard deleted
+            RemoveQuestNode(node);
+            GraphStateSave();
+            DocumentViewModel?.SetIsDirty(true);
+            return;
+        }
+
+        // Call the quest-specific implementation from the partial class
+        ReplaceNodeWithQuestDeletionMarkerInternal(node);
+    }
+
+    public void DuplicateNode(NodeViewModel node)
+    {
+        if (!Nodes.Contains(node))
+        {
+            return;
+        }
+
+        if (GraphType == RedGraphType.Scene && node is BaseSceneViewModel sceneNode)
+        {
+            DuplicateSceneNode(sceneNode);
+        }
+
+        if (GraphType == RedGraphType.Quest && node is BaseQuestViewModel questNode)
+        {
+            DuplicateQuestNode(questNode);
+        }
+        
+        // Mark document as dirty since we modified the data
+        DocumentViewModel?.SetIsDirty(true);
+    }
+
+    public void RemoveNodes(IEnumerable<object> nodes)
     {
         var removableNodes = new List<NodeViewModel>();
         foreach (var node in nodes)
@@ -233,9 +297,13 @@ public partial class RedGraph : IDisposable
         var graph = new GeometryGraph();
         var msaglNodes = new Dictionary<uint, Node>();
 
+        // Extra height for external node ID (font + margin + padding)
+        const double nodeIdExtraHeight = 35;
+
         foreach (var node in Nodes)
         {
-            var msaglNode = new Node(CurveFactory.CreateRectangle(node.Size.Width, node.Size.Height, new Microsoft.Msagl.Core.Geometry.Point()))
+            var layoutHeight = node.Size.Height + nodeIdExtraHeight;
+            var msaglNode = new Node(CurveFactory.CreateRectangle(node.Size.Width, layoutHeight, new Microsoft.Msagl.Core.Geometry.Point()))
             {
                 UserData = node
             };
@@ -266,14 +334,16 @@ public partial class RedGraph : IDisposable
         foreach (var node in graph.Nodes)
         {
             var nvm = (NodeViewModel)node.UserData;
+            // Offset the Y position to account for the extra height added for node ID spacing
             nvm.Location = new System.Windows.Point(
                 node.Center.X - graph.BoundingBox.Center.X - (nvm.Size.Width / 2) + xOffset,
-                node.Center.Y - graph.BoundingBox.Center.Y - (nvm.Size.Height / 2) + yOffset);
+                node.Center.Y - graph.BoundingBox.Center.Y - (nvm.Size.Height / 2) + yOffset + (nodeIdExtraHeight / 2));
 
+            // Calculate bounds including the node ID space
             maxX = Math.Max(maxX, nvm.Location.X + nvm.Size.Width);
             minX = Math.Min(minX, nvm.Location.X);
-            maxY = Math.Max(maxY, nvm.Location.Y + nvm.Size.Height);
-            minY = Math.Min(minY, nvm.Location.Y);
+            maxY = Math.Max(maxY, nvm.Location.Y + nvm.Size.Height + nodeIdExtraHeight);
+            minY = Math.Min(minY, nvm.Location.Y - nodeIdExtraHeight);
         }
 
         return new System.Windows.Rect(minX, minY, maxX - minX, maxY - minY);
@@ -291,44 +361,38 @@ public partial class RedGraph : IDisposable
                 var statePath = Path.Combine(proj.ProjectDirectory, "GraphEditorStates", DocumentViewModel.RelativePath + StateParents + ".json");
                 if (File.Exists(statePath))
                 {
-                    Dictionary<uint, System.Windows.Point> nodesLocs = new();
-
                     var jsonData = JObject.Parse(File.ReadAllText(statePath));
                     var nodesArray = jsonData.SelectTokens("Nodes.[*]");
-                    foreach (var node in nodesArray)
-                    {
-                        var nodeID = node.SelectToken("NodeID") as JValue;
-                        var nodeX = node.SelectToken("X") as JValue;
-                        var nodeY = node.SelectToken("Y") as JValue;
 
-                        if (nodeID != null &&  nodeX != null && nodeY != null)
+                    foreach (var nodeToken in nodesArray)
+                    {
+                        var nodeIDValue = nodeToken.SelectToken("NodeID") as JValue;
+                        if (nodeIDValue == null) continue;
+
+                        var nodeId = nodeIDValue.ToObject<uint>();
+                        var targetNode = Nodes.FirstOrDefault(n => n.UniqueId == nodeId);
+                        if (targetNode == null) continue;
+
+                        // Load Location
+                        var nodeX = nodeToken.SelectToken("X") as JValue;
+                        var nodeY = nodeToken.SelectToken("Y") as JValue;
+                        if (nodeX != null && nodeY != null)
                         {
-                            nodesLocs.TryAdd(
-                                nodeID.ToObject<uint>(),
-                                new System.Windows.Point(
-                                    nodeX.ToObject<double>(),
-                                    nodeY.ToObject<double>()
-                                )
+                            targetNode.Location = new System.Windows.Point(
+                                nodeX.ToObject<double>(),
+                                nodeY.ToObject<double>()
                             );
                         }
+
+                        // Load ShowUnusedSockets state, defaulting to true if not present
+                        var showUnusedSocketsValue = nodeToken.SelectToken("ShowUnusedSockets") as JValue;
+                        targetNode.ShowUnusedSockets = showUnusedSocketsValue?.ToObject<bool>() ?? true;
                     }
 
+                    // Update socket visibility after all nodes and connections are loaded
                     foreach (var node in Nodes)
                     {
-                        uint nodeID = 0;
-                        if (node.Data is scnSceneGraphNode n)
-                        {
-                            nodeID = n.NodeId.Id;
-                        }
-                        if (node.Data is questNodeDefinition q)
-                        {
-                            nodeID = q.Id;
-                        }
-
-                        if (nodesLocs.ContainsKey(nodeID))
-                        {
-                            node.Location = nodesLocs[nodeID];
-                        }
+                        node.UpdateSocketVisibility();
                     }
 
                     if (Editor != null)
@@ -352,6 +416,11 @@ public partial class RedGraph : IDisposable
         {
             var rect = ArrangeNodes();
             Editor?.FitToScreen(rect);
+        }
+
+        foreach (var node in Nodes)
+        {
+            node.IsInitialLoad = false;
         }
 
         _allowGraphSave = true;
@@ -398,7 +467,8 @@ public partial class RedGraph : IDisposable
                     JObject newPerfSet = new(
                         new JProperty("NodeID", nodeID),
                         new JProperty("X", node.Location.X),
-                        new JProperty("Y", node.Location.Y)
+                        new JProperty("Y", node.Location.Y),
+                        new JProperty("ShowUnusedSockets", node.ShowUnusedSockets)
                     );
 
                     jNodes.Add(newPerfSet);
@@ -413,6 +483,18 @@ public partial class RedGraph : IDisposable
                 };
 
                 File.WriteAllText(statePath, JsonConvert.SerializeObject(jRoot));
+            }
+        }
+    }
+
+    private void NotifyNodesUpdated(params uint[] nodeIds)
+    {
+        foreach (var nodeId in nodeIds)
+        {
+            var nodeVm = Nodes.FirstOrDefault(n => n.UniqueId == nodeId);
+            if (nodeVm != null)
+            {
+                NodePropertyUpdateService.NotifyPropertyUpdated((RedBaseClass)nodeVm.Data);
             }
         }
     }

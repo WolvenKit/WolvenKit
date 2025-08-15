@@ -46,6 +46,7 @@ public class AppScriptFunctions : ScriptFunctions
     private readonly ImportExportHelper _importExportHelper;
     private readonly IGameControllerFactory _gameController;
     private readonly GeometryCacheService _geometryCacheService;
+    private readonly ISettingsManager _settingsManager;
 
     public AppViewModel? AppViewModel;
 
@@ -57,7 +58,8 @@ public class AppScriptFunctions : ScriptFunctions
         IModTools modTools,
         ImportExportHelper importExportHelper,
         IGameControllerFactory gameController,
-        GeometryCacheService geometryCacheService)
+        GeometryCacheService geometryCacheService,
+        ISettingsManager settingsManager)
         : base(loggerService, archiveManager, parserService)
     {
         _projectManager = projectManager;
@@ -65,6 +67,8 @@ public class AppScriptFunctions : ScriptFunctions
         _importExportHelper = importExportHelper;
         _gameController = gameController;
         _geometryCacheService = geometryCacheService;
+        _settingsManager = settingsManager;
+        
     }
 
     /// <summary>
@@ -78,40 +82,36 @@ public class AppScriptFunctions : ScriptFunctions
     }
 
     /// <summary>
-    /// Add the specified cr2w file to the project from the game archives.
+    /// Add the specified <see cref="CR2WFile"/> or <see cref="IGameFile"/> file to the project.
     /// </summary>
     /// <param name="path">The file to write to</param>
-    /// <param name="cr2w">File to be saved</param>
-    public virtual void SaveToProject(string path, CR2WFile cr2w)
+    /// <param name="file"><see cref="CR2WFile"/> or <see cref="IGameFile"/> to be saved</param>
+    /// <exception cref="NotSupportedException">Unsupported type of file</exception>
+    public virtual void SaveToProject(string path, object file)
     {
         if (_projectManager.ActiveProject is null)
         {
             return;
         }
-        SaveAs(Path.Combine(_projectManager.ActiveProject.ModDirectory, path), s =>
-        {
-            using FileStream fs = new(s, FileMode.Create);
-            using var writer = new CR2WWriter(fs) { LoggerService = _loggerService };
-            writer.WriteFile(cr2w);
-        });
-    }
 
-    /// <summary>
-    /// Add the specified gameFile file to the project from the game archives.
-    /// </summary>
-    /// <param name="path">The file to write to</param>
-    /// <param name="gameFile">File to be saved</param>
-    public virtual void SaveToProject(string path, IGameFile gameFile)
-    {
-        if (_projectManager.ActiveProject is null)
+        Action<string> callback = file switch
         {
-            return;
-        }
-        SaveAs(Path.Combine(_projectManager.ActiveProject.ModDirectory, path), s =>
-        {
-            using FileStream fs = new(s, FileMode.Create);
-            gameFile.Extract(fs);
-        });
+            CR2WFile cr2w => s =>
+            {
+                using FileStream fs = new(s, FileMode.Create);
+                using var writer = new CR2WWriter(fs) { LoggerService = _loggerService };
+                writer.WriteFile(cr2w);
+            },
+            IGameFile gameFile => s =>
+            {
+                using FileStream fs = new(s, FileMode.Create);
+                gameFile.Extract(fs);
+            },
+            null => throw new ArgumentNullException(nameof(file)),
+            _ => throw new NotSupportedException($"The file type \"{file.GetType()}\" is not supported for SaveToProject")
+        };
+
+        SaveAs(Path.Combine(_projectManager.ActiveProject.ModDirectory, path), callback);
     }
 
     /// <summary>
@@ -298,29 +298,34 @@ public class AppScriptFunctions : ScriptFunctions
             return result;
         }
 
-        string baseFolder;
+        if (GetBaseFolder(folderType) is string baseFolder)
+        {
+            result.AddRange(Directory.GetFiles(baseFolder, "*.*", SearchOption.AllDirectories)
+                .Select(file => Path.GetRelativePath(baseFolder, file)));
+        }
+
+        return result;
+    }
+
+    private string? GetBaseFolder(string folderType)
+    {
+        if (_projectManager.ActiveProject is null)
+        {
+            throw new WolvenKitException(0x4003, "No project loaded");
+        }
 
         switch (folderType)
         {
             case "archive":
-                baseFolder = _projectManager.ActiveProject.ModDirectory;
-                break;
-
+                return _projectManager.ActiveProject.ModDirectory;
             case "raw":
-                baseFolder = _projectManager.ActiveProject.RawDirectory;
-                break;
-
+                return _projectManager.ActiveProject.RawDirectory;
+            case "resources":
+                return _projectManager.ActiveProject.ResourcesDirectory;
             default:
                 _loggerService.Error($"Unsupported folder type \"{folderType}\"");
-                return result;
+                return null;
         }
-
-        foreach (var file in Directory.GetFiles(baseFolder, "*.*", SearchOption.AllDirectories))
-        {
-            result.Add(Path.GetRelativePath(baseFolder, file));
-        }
-
-        return result;
     }
 
     private T ParseExportSettings<T>(ScriptObject scriptSettingsObject) where T : ExportArgs, new()
@@ -456,6 +461,11 @@ public class AppScriptFunctions : ScriptFunctions
 
         return result;
     }
+
+    /// <summary>
+    /// Clears the lookup for exported depot files.
+    /// </summary>
+    public void ClearExportFileLookup() => _importExportHelper.ClearFileLookup();
 
     /// <summary>
     /// Exports a list of files as you would with the export tool.
@@ -707,6 +717,34 @@ public class AppScriptFunctions : ScriptFunctions
 
         var file = new FileInfo(Path.Combine(proj.RawDirectory, filepath));
         return file.Exists;
+    }
+
+    /// <summary>
+    /// Deletes a file from the project, if it exists.
+    /// </summary>
+    /// <param name="filepath">relative filepath to be deleted</param>
+    /// <param name="folderType">project subfolder type (archive|raw|resources)</param>
+    /// <returns>true if the file was deleted</returns>
+    public virtual bool DeleteFile(string filepath, string folderType)
+    {
+        if (_projectManager.ActiveProject is not { } proj)
+        {
+            throw new WolvenKitException(0x4003, "No project loaded");
+        }
+
+        if (GetBaseFolder(folderType) is not string baseFolder || !Directory.Exists(baseFolder))
+        {
+            return false;
+        }
+
+        var absoluteFilePath = Path.GetFullPath(Path.Combine(baseFolder, filepath));
+        if (!absoluteFilePath.StartsWith(proj.ModDirectory) || !File.Exists(absoluteFilePath))
+        {
+            return false;
+        }
+        
+        File.Delete(absoluteFilePath);
+        return !File.Exists(baseFolder);
     }
 
     #region TweakDB
@@ -988,5 +1026,56 @@ public class AppScriptFunctions : ScriptFunctions
         {
             throw new WolvenKitException(0x2000, "String to be hashed cannot be null or empty");
         }
+    }
+
+    /// <summary>
+    /// Pauses the execution of the script for the specified amount of milliseconds.
+    /// </summary>
+    /// <param name="milliseconds">The number of milliseconds to sleep.</param>
+    public virtual void Sleep(int milliseconds)
+    {
+        if (milliseconds < 0)
+        {
+            throw new WolvenKitException(0x2000, "Milliseconds cannot be negative");
+        }
+        Task.Run(async () => await Task.Delay(milliseconds)).Wait();
+    }
+
+    /// <summary>
+    /// Returns the current wolvenkit version
+    /// </summary>
+    /// <retruns>string</retruns>
+    public virtual string ProgramVersion()
+    {
+        return _settingsManager.GetVersionNumber();
+    }
+
+    /// <summary>
+    /// Shows the settings dialog for the supplied data
+    /// </summary>
+    /// <param name="data">A JavaScript object containing data</param>
+    /// <returns>Returns true when the user changed the settings, otherwise it returns false</returns>
+    public virtual bool ShowSettings(ScriptObject data)
+    {
+        var dict = ScriptSettingsDictionary.FromScriptObject(data);
+        if (dict == null)
+        {
+            _loggerService.Error("Failed to process settings");
+            return false;
+        }
+
+        var success = false;
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            success = Interactions.ShowScriptSettingsView(dict);
+        });
+
+        if (!success)
+        {
+            return false;
+        }
+
+        dict.ToScriptObject(data);
+        return true;
     }
 }

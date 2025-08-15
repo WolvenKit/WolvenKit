@@ -5,17 +5,16 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:WolvenKit.Views.Editors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    d:DesignHeight="100"
+    mc:Ignorable="d"
     d:DesignWidth="400"
-    mc:Ignorable="d">
-
+    d:DesignHeight="100">
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedFixedPointEditor}}}">
-
         <TextBox
             x:Name="TextBox"
+            Padding="{DynamicResource WolvenKitMarginTiny}"
+            VerticalContentAlignment="Center"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
             PreviewTextInput="NumberValidationTextBox"
             Text="{Binding Text}" />
-
     </Grid>
 </UserControl>

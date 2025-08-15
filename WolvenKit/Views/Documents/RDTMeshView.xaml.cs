@@ -8,6 +8,7 @@ using ReactiveUI;
 using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Documents
 {
@@ -129,6 +130,17 @@ namespace WolvenKit.Views.Documents
 
         private void CollapseAllChildrenRecursiveMenuItem_OnClick(object sender, RoutedEventArgs e) => 
             _currentNode?.TreeGrid.CollapseAllNodes(_currentNode.TreeNode);
+
+        private void CopyComponentNameMenuItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (_currentNode?.TreeNode is not { } treeNode || treeNode.Item is not IRedMeshComponent comp ||
+                comp.Name.GetResolvedText() is not string s)
+            {
+                return;
+            }
+
+            Clipboard.SetDataObject(s);
+        }
 
         private void ExpandAllChildrenRecursiveMenuItem_OnClick(object sender, RoutedEventArgs e) =>
             _currentNode?.TreeGrid.ExpandAllNodes(_currentNode.TreeNode);

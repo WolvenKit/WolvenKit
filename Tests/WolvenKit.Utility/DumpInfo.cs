@@ -576,7 +576,6 @@ namespace WolvenKit.Utility
 
             var stringHelper = new TweakDBStringHelper();
             stringHelper.Load(tweakDbStrPath);
-            TweakDBIDPool.ResolveHashHandler = stringHelper.GetString;
 
             using var fh = File.OpenRead(s_tweakDbPath);
             using var reader2 = new TweakDBReader(fh);
@@ -591,11 +590,11 @@ namespace WolvenKit.Utility
             var rts = new Dictionary<string, Dictionary<string, string>>();
             foreach (var (id, value) in tweakDb.Flats)
             {
-                if (id.ResolvedText != null)
+                if (stringHelper.GetString(id) is { } resolvedText)
                 {
-                    if (id.ResolvedText.StartsWith("RTDB"))
+                    if (resolvedText.StartsWith("RTDB"))
                     {
-                        var parts = id.ResolvedText.Split('.');
+                        var parts = resolvedText.Split('.');
 
                         var className = $"gamedata{parts[1]}_Record";
                         if (!rts.ContainsKey(className))

@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using Splat;
 using WolvenKit.App.Scripting;
 using WolvenKit.App.Services;
+using WolvenKit.Views.Templates;
 
 namespace WolvenKit.Views.Others;
 
@@ -21,7 +22,7 @@ public class ScriptableMenuItem : MenuItem, IScriptableControl
 
     public string ScriptingName
     {
-        get => (string) GetValue(ScriptingNameProperty);
+        get => (string)GetValue(ScriptingNameProperty);
         set => SetValue(ScriptingNameProperty, value);
     }
 
@@ -55,10 +56,17 @@ public class ScriptableMenuItem : MenuItem, IScriptableControl
 
         MenuItem CreateTree(ScriptFunctionWrapper scriptEntry)
         {
-            var menuItem = new MenuItem { Header = scriptEntry.Name };
+            var menuItem = new MenuItem
+            {
+                Header = scriptEntry.Name,
+            };
+
+            menuItem.SetResourceReference(PaddingProperty, "WolvenKitMarginHorizontal");
+            menuItem.SetResourceReference(FontSizeProperty, "WolvenKitFontSubTitle");
             if (scriptEntry.HasFunction)
             {
                 menuItem.Click += (_, _) => scriptEntry.Execute();
+                menuItem.Icon = new IconBox();
             }
 
             foreach (var child in scriptEntry.Children)

@@ -1,28 +1,28 @@
 <reactiveUi:ReactiveUserControl
     x:Class="WolvenKit.Views.Tools.ProjectExplorerView"
+    x:TypeArguments="tools:ProjectExplorerViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:WolvenKit.Views.Tools"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:tools="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App"
-    x:Name="uc"
-    d:DesignHeight="450"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    xmlns:converters="clr-namespace:WolvenKit.Converters"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=tools:ProjectExplorerViewModel}"
     d:DesignWidth="400"
-    x:TypeArguments="tools:ProjectExplorerViewModel"
+    d:DesignHeight="450"
+    x:Name="uc"
     ContextMenuOpening="OnContextMenuOpen"
     KeyDown="Main_OnKeystateChanged"
-    KeyUp="Main_OnKeystateChanged"
-    mc:Ignorable="d">
-
+    KeyUp="Main_OnKeystateChanged">
     <UserControl.Resources>
-
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <hc:ThemeResources RequestedTheme="Dark" />
@@ -32,246 +32,375 @@
             <DataTemplate x:Key="DragDropTemplate">
                 <Border
                     x:Name="border"
-                    Width="250"
-                    Padding="8"
+                    MinWidth="{DynamicResource WolvenKitDragDropTooltipWidth}"
+                    Padding="{DynamicResource WolvenKitMarginSmall}"
                     Background="{StaticResource ContentBackgroundAlt}"
                     BorderBrush="{StaticResource Border}"
                     BorderThickness="1">
-                    <!--  this should update based on the context  -->
+                    <!-- this should update based on the context -->
                     <TextBlock
-                        FontSize="12"
                         Foreground="#ffffff"
+                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
                         Text="Move file(s) here - hold control to copy" />
                 </Border>
             </DataTemplate>
 
             <ContextMenu
                 x:Key="TreeGridContextMenu"
-                FontSize="11"
+                FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                Style="{DynamicResource WPFContextMenuStyle}"
                 ContextMenuOpening="OnContextMenuOpen"
                 KeyDown="ContextMenu_OnKeyStateChanged"
-                KeyUp="ContextMenu_OnKeyStateChanged"
-                Style="{DynamicResource WPFContextMenuStyle}">
+                KeyUp="ContextMenu_OnKeyStateChanged">
+                <ContextMenu.Resources>
+                    <Style
+                        BasedOn="{StaticResource WPFMenuItemStyle}"
+                        TargetType="MenuItem" />
+                </ContextMenu.Resources>
+
                 <MenuItem
                     Margin="0"
-                    Header="Actions"
-                    Visibility="Collapsed">
+                    Visibility="Collapsed"
+                    Header="Actions">
+                    <MenuItem
+                        Command="{Binding AddAllImportsCommand}"
+                        Header="Add all dependencies">
+                        <MenuItem.Icon>
+                            <templates:IconBox
+                                IconPack="Empty"
+                                Margin="{DynamicResource WolvenKitMarginTiny}"
+                                Size="{DynamicResource WolvenKitIconMilli}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
 
-                    <MenuItem Command="{Binding AddAllImportsCommand}" Header="Add all dependencies" />
-                    <MenuItem Command="{Binding FastRenderCommand}" Header="Fast render" />
+                    <MenuItem
+                        Command="{Binding FastRenderCommand}"
+                        Header="Fast render">
+                        <MenuItem.Icon>
+                            <templates:IconBox
+                                IconPack="Empty"
+                                Margin="{DynamicResource WolvenKitMarginTiny}"
+                                Size="{DynamicResource WolvenKitIconMilli}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
 
-                <MenuItem Command="{Binding OpenInMlsbCommand}" Header="Open in MlSetupbuilder" />
+                <MenuItem
+                    Command="{Binding OpenInMlsbCommand}"
+                    Header="Open in MlSetupBuilder">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Empty"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
+                    </MenuItem.Icon>
+                </MenuItem>
 
                 <Separator />
 
                 <MenuItem
                     x:Name="ConvertToJsonMenuItem"
-                    Command="{Binding ConvertToCommand}"
-                    Header="Convert to JSON"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource {x:Type MenuItem}}"
+                            TargetType="{x:Type MenuItem}">
+                            <Setter Property="Command" Value="{Binding ConvertArchiveFileCommand}" />
+                            <Setter Property="Header" Value="Convert to JSON" />
+                            <Style.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding IsShiftKeyPressed}"
+                                    Value="True">
+                                    <Setter Property="Header" Value="Convert from raw JSON" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
                     <MenuItem.Icon>
-                        <Grid>
-                            <iconPacks:PackIconCodicons
-                                Width="13"
-                                Height="13"
-                                Padding="0,0,0,0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Kind="Json" />
-                        </Grid>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="CodeJson"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
+
                 <MenuItem
                     x:Name="ConvertFromJsonMenuItem"
-                    Command="{Binding ConvertFromCommand}"
-                    Header="Convert from JSON"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource {x:Type MenuItem}}"
+                            TargetType="{x:Type MenuItem}">
+                            <Setter Property="Command" Value="{Binding ConvertRawFileCommand}" />
+                            <Setter Property="Header" Value="Convert from JSON" />
+                            <Style.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding IsShiftKeyPressed}"
+                                    Value="True">
+                                    <Setter Property="Header" Value="Convert game file to JSON" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
                     <MenuItem.Icon>
-                        <Grid>
-                            <iconPacks:PackIconCodicons
-                                Width="13"
-                                Height="13"
-                                Padding="0,0,0,0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Kind="Json" />
-                        </Grid>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="CodeJson"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <Separator />
 
                 <MenuItem
+                    FontSize="{DynamicResource WolvenKitFontBody}"
                     Command="{Binding DeleteFileCommand}"
                     Header="Delete"
                     InputGestureText="Del">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconForkAwesome
-                            Width="13"
-                            Height="13"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Stretch"
-                            Kind="Trash" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Delete"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}"
+                            Foreground="{StaticResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
+
                 <MenuItem
                     Command="{Binding RenameFileCommand}"
                     Header="Rename"
                     InputGestureText="F2">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconForkAwesome
-                            Width="13"
-                            Height="13"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Stretch"
-                            Kind="Pencil" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Pencil"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Command="{Binding CopyFileCommand}" Header="Copy">
+
+                <MenuItem
+                    Command="{Binding CopyFileCommand}"
+                    Header="Copy">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Stretch"
-                            Kind="ContentCopy" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentCopy"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Command="{Binding PasteFileCommand}" Header="Paste">
+
+                <MenuItem
+                    Command="{Binding PasteFileCommand}"
+                    Header="Paste">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Stretch"
-                            Kind="ContentPaste" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentPaste"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <Separator />
 
-                <!--  =======================================================================  -->
-                <!--  Copy commands  -->
-                <!--  =======================================================================  -->
+                <!-- ======================================================================= -->
+                <!-- Copy commands -->
+                <!-- ======================================================================= -->
 
                 <MenuItem
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding CopyRelPathCommand}"
-                    Header="Copy relative path to game file"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    Header="Copy relative path to game file">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Vaadin"
+                            Kind="Copy"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
+                    </MenuItem.Icon>
+                </MenuItem>
 
                 <MenuItem
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding CopyAbsPathToCurrentFileCommand}"
-                    Header="Copy absolute path"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    Header="Copy absolute path">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Vaadin"
+                            Kind="CopyOutline"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
+                    </MenuItem.Icon>
+                </MenuItem>
 
                 <MenuItem
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding CopyAbsPathToCurrentFolderCommand}"
-                    Header="Copy absolute path to containing folder"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    Header="Copy absolute path to containing folder">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Empty"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
+                    </MenuItem.Icon>
+                </MenuItem>
 
                 <MenuItem
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding CopyAbsPathToRawFolderCommand}"
-                    Header="Copy absolute path to raw folder"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    Header="Copy absolute path to raw folder">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Empty"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
+                    </MenuItem.Icon>
+                </MenuItem>
 
                 <MenuItem
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding CopyAbsPathToArchiveFolderCommand}"
-                    Header="Copy absolute path to archive folder"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    Header="Copy absolute path to archive folder">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Empty"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
+                    </MenuItem.Icon>
+                </MenuItem>
 
 
-                <!--  =======================================================================  -->
-                <!--  /Copy commands  -->
-                <!--  =======================================================================  -->
+                <!-- ======================================================================= -->
+                <!-- /Copy commands -->
+                <!-- ======================================================================= -->
 
 
-                <!--  Context menu: Open in Asset Browser  -->
+                <!-- Context menu: Open in Asset Browser -->
                 <MenuItem
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding OpenInAssetBrowserCommand}"
-                    Header="Open in Asset Browser"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    Header="Open in Asset Browser">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconForkAwesome
-                            Width="13"
-                            Height="13"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Stretch"
-                            Kind="ArrowCircleRight" />
+                        <templates:IconBox
+                            IconPack="ForkAwesome"
+                            Kind="ArrowCircleRight"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}"
+                            Foreground="{StaticResource WolvenKitYellow}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!--  Context menu: Replace with original  -->
+                <!-- Context menu: Replace with original -->
                 <MenuItem
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding OverwriteWithGameFileCommand}"
-                    Header="Replace with original"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    Header="Replace with original">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconForkAwesome
-                            Width="13"
-                            Height="13"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Stretch"
-                            Kind="Refresh" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Recycle"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!--  Context menu: Add dependencies  -->
+                <!-- Context menu: Add dependencies -->
                 <MenuItem
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding AddDependenciesCommand}"
-                    Header="Add dependencies"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    Header="Add dependencies">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconForkAwesome
-                            Width="13"
-                            Height="13"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Stretch"
-                            Kind="ArrowCircleDown" />
+                        <templates:IconBox
+                            IconPack="ForkAwesome"
+                            Kind="ArrowCircleDown"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
                 <Separator />
 
-                <!--  Context menu: Create new folder  -->
+                <!-- Context menu: Create new folder -->
                 <MenuItem
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                     Command="{Binding Path=CreateNewDirectoryCommand}"
                     Header="Create new folder"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    InputGestureText="F7">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconForkAwesome
-                            Width="13"
-                            Height="13"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Stretch"
-                            Kind="Folder" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="FolderPlus"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}"
+                            Foreground="{StaticResource WolvenKitTan}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!--  Context menu: Open in Explorer  -->
-                <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in Windows Explorer">
+                <!-- Context menu: Open in Explorer -->
+                <MenuItem
+                    Command="{Binding OpenInFileExplorerCommand}"
+                    Header="Open in Windows Explorer">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial
-                            Width="13"
-                            Height="13"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Stretch"
-                            Kind="FolderOpen" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="FolderOpen"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}"
+                            Foreground="{StaticResource WolvenKitTan}" />
                     </MenuItem.Icon>
                 </MenuItem>
-
             </ContextMenu>
 
             <DataTemplate x:Key="TreeGridCellTemplate">
-                <Grid>
-
+                <Grid
+                    Margin="{DynamicResource WolvenKitMarginRight}"
+                    HorizontalAlignment="Stretch">
                     <Grid.Resources>
-                        <Style x:Key="WolvenKitTreeGridButton" TargetType="{x:Type helpers:TreeGridButton}">
+                        <Style
+                            x:Key="WolvenKitTreeGridButton"
+                            TargetType="{x:Type helpers:TreeGridButton}">
                             <Setter Property="Border.Background" Value="{Binding BorderBrush, RelativeSource={RelativeSource Self}}" />
-                            <Setter Property="Visibility" Value="Collapsed" />
-                            <Setter Property="Border.Padding" Value="5,0" />
+                            <Setter Property="Border.Padding" Value="{DynamicResource WolvenKitMarginTinyHorizontal}" />
+                            <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginTinyLeft}" />
                             <Setter Property="Padding" Value="0" />
-                            <Setter Property="Margin" Value="5,0,0,0" />
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type helpers:TreeGridButton}">
@@ -279,7 +408,9 @@
                                             Padding="{TemplateBinding Border.Padding}"
                                             Background="{TemplateBinding Border.Background}"
                                             CornerRadius="2">
-                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            <ContentPresenter
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center" />
                                         </Border>
                                         <ControlTemplate.Triggers>
                                             <MultiDataTrigger>
@@ -307,12 +438,14 @@
                                     </ControlTemplate>
                                 </Setter.Value>
                             </Setter>
+                            <Setter Property="Visibility" Value="Collapsed" />
                         </Style>
+
                         <Style
                             x:Key="WolvenKitTreeGridButtonDirectory"
                             BasedOn="{StaticResource WolvenKitTreeGridButton}"
                             TargetType="{x:Type helpers:TreeGridButton}">
-                            <Setter Property="Border.Padding" Value="2,0" />
+                            <Setter Property="Border.Padding" Value="{DynamicResource WolvenKitMarginTinyHorizontal}" />
                             <Style.Triggers>
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
@@ -322,7 +455,10 @@
                                 </MultiDataTrigger>
                             </Style.Triggers>
                         </Style>
-                        <Style x:Key="PE_FileIconStyle" TargetType="{x:Type others:FileIcon}">
+
+                        <Style
+                            x:Key="PE_FileIconStyle"
+                            TargetType="{x:Type others:FileIcon}">
                             <Style.Triggers>
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
@@ -336,103 +472,126 @@
                     </Grid.Resources>
 
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="13" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitTreeGridColumnIconWidth}" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
                     <others:FileIcon
-                        Width="13"
-                        Height="19"
-                        Icon="{Binding Extension}"
-                        Style="{StaticResource PE_FileIconStyle}" />
+                        Width="Auto"
+                        Height="{DynamicResource WolvenKitTreeGridIconHeight}"
+                        Style="{StaticResource PE_FileIconStyle}"
+                        Icon="{Binding Extension}" />
+
                     <TextBlock
                         x:Name="TemplateTextBlock"
                         Grid.Column="1"
-                        Margin="5,0,0,2"
-                        VerticalAlignment="Center"
-                        Text="{Binding Path=Name}" />
-                    <TextBlock
-                        x:Name="FileSizeTextBlock"
-                        Grid.Column="1"
-                        Margin="5,0,0,2"
+                        Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         VerticalAlignment="Center"
                         Text="{Binding Path=Name}" />
 
-                    <!--  Open in Windows Explorer - Open file - Delete  -->
+                    <TextBlock
+                        x:Name="FileSizeTextBlock"
+                        Grid.Column="1"
+                        Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                        VerticalAlignment="Center"
+                        Text="{Binding Path=Name}" />
+
+                    <!-- Copy relative path - Open in Windows Explorer - Open file - Delete -->
                     <StackPanel
                         Grid.Column="2"
                         Background="{StaticResource ContentBackground}"
                         Orientation="Horizontal">
 
-                        <!--  Open in Explorer  -->
+                        <!-- Copy relative path -->
+                        <helpers:TreeGridButton
+                            BorderBrush="{StaticResource WolvenKitOrange}"
+                            Style="{StaticResource WolvenKitTreeGridButtonDirectory}"
+                            Command="{Binding ViewModel.CopyRelPathCommand,
+                                              RelativeSource={RelativeSource FindAncestor,
+                                                                             AncestorType={x:Type local:ProjectExplorerView}}}"
+                            CommandParameter="{Binding}"
+                            HoverBackground="{StaticResource WolvenKitOrangeShadow}"
+                            ToolTip="Copy relative path to game file">
+                            <helpers:TreeGridButton.Content>
+                                <templates:IconBox
+                                    IconPack="Material"
+                                    Kind="ContentCopy"
+                                    Size="{DynamicResource WolvenKitIconNano}"
+                                    Foreground="#222"
+                                    Loaded="TreeIcon_Loaded" />
+                            </helpers:TreeGridButton.Content>
+                        </helpers:TreeGridButton>
+
+                        <!-- Open in Explorer -->
                         <helpers:TreeGridButton
                             BorderBrush="{StaticResource WolvenKitYellow}"
-                            Command="{Binding ViewModel.OpenInFileExplorerCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ProjectExplorerView}}}"
+                            Style="{StaticResource WolvenKitTreeGridButtonDirectory}"
+                            Command="{Binding ViewModel.OpenInFileExplorerCommand,
+                                              RelativeSource={RelativeSource FindAncestor,
+                                                                             AncestorType={x:Type local:ProjectExplorerView}}}"
                             CommandParameter="{Binding}"
                             HoverBackground="{StaticResource WolvenKitYellowShadow}"
-                            Style="{StaticResource WolvenKitTreeGridButtonDirectory}"
                             ToolTip="Open in Windows Explorer">
                             <helpers:TreeGridButton.Content>
-                                <iconPacks:PackIconMaterial
-                                    Width="11"
-                                    Height="11"
-                                    Margin="0,0,0,0"
+                                <templates:IconBox
+                                    IconPack="Material"
+                                    Kind="FolderOpen"
+                                    Size="{DynamicResource WolvenKitIconNano}"
                                     Foreground="#222"
-                                    Kind="FolderOpen" />
+                                    Loaded="TreeIcon_Loaded" />
                             </helpers:TreeGridButton.Content>
                         </helpers:TreeGridButton>
 
-                        <!--  Open File  -->
+                        <!-- Open File -->
                         <helpers:TreeGridButton
                             BorderBrush="{StaticResource WolvenKitCyan}"
-                            Command="{Binding ViewModel.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ProjectExplorerView}}}"
+                            Style="{StaticResource WolvenKitTreeGridButton}"
+                            Command="{Binding ViewModel.OpenFileCommand,
+                                              RelativeSource={RelativeSource FindAncestor,
+                                                                             AncestorType={x:Type local:ProjectExplorerView}}}"
                             CommandParameter="{Binding}"
                             HoverBackground="{StaticResource WolvenKitCyanShadow}"
-                            Style="{StaticResource WolvenKitTreeGridButton}"
                             ToolTip="Open this file">
                             <helpers:TreeGridButton.Content>
-                                <iconPacks:PackIconMaterial
-                                    Width="11"
-                                    Height="11"
-                                    Margin="-1,0,0,0"
+                                <templates:IconBox
+                                    IconPack="Material"
+                                    Kind="TabPlus"
+                                    Size="{DynamicResource WolvenKitIconNano}"
                                     Foreground="#222"
-                                    Kind="OpenInNew" />
+                                    Loaded="TreeIcon_Loaded" />
                             </helpers:TreeGridButton.Content>
                         </helpers:TreeGridButton>
 
-                        <!--  Delete  -->
+                        <!-- Delete -->
                         <helpers:TreeGridButton
-                            syncfusion:FocusManagerHelper.FocusedElement="True"
                             BorderBrush="{StaticResource WolvenKitRed}"
-                            Command="{Binding ViewModel.DeleteFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ProjectExplorerView}}}"
-                            HoverBackground="{StaticResource WolvenKitRedShadow}"
                             Style="{StaticResource WolvenKitTreeGridButtonDirectory}"
+                            syncfusion:FocusManagerHelper.FocusedElement="True"
+                            Command="{Binding ViewModel.DeleteFileCommand,
+                                              RelativeSource={RelativeSource FindAncestor,
+                                                                             AncestorType={x:Type local:ProjectExplorerView}}}"
+                            HoverBackground="{StaticResource WolvenKitRedShadow}"
                             ToolTip="Delete this file/folder">
                             <helpers:TreeGridButton.Content>
-                                <iconPacks:PackIconForkAwesome
-                                    Width="15"
-                                    Height="11"
-                                    Margin="-1,0,0,0"
-                                    Kind="Trash" />
+                                <templates:IconBox
+                                    IconPack="Material"
+                                    Kind="Delete"
+                                    Size="{DynamicResource WolvenKitIconNano}"
+                                    Loaded="TreeIcon_Loaded" />
                             </helpers:TreeGridButton.Content>
                         </helpers:TreeGridButton>
-
-                        <helpers:TreeGridButton
-                            Width="0"
-                            Margin="0,0,10,0"
-                            Style="{StaticResource WolvenKitTreeGridButtonDirectory}" />
-
                     </StackPanel>
-
                 </Grid>
             </DataTemplate>
 
             <DataTemplate x:Key="TreeGridCellTemplateSimple">
                 <Grid>
                     <Grid.Resources>
-                        <Style x:Key="PE_FileIconStyle" TargetType="{x:Type others:FileIcon}">
+                        <Style
+                            x:Key="PE_FileIconStyle"
+                            TargetType="{x:Type others:FileIcon}">
                             <Style.Triggers>
                                 <MultiDataTrigger>
                                     <MultiDataTrigger.Conditions>
@@ -444,20 +603,23 @@
                             </Style.Triggers>
                         </Style>
                     </Grid.Resources>
+
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="13" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitTreeGridColumnIconWidth}" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
+
                     <others:FileIcon
-                        Width="13"
-                        Height="19"
-                        Icon="{Binding Extension}"
-                        Style="{StaticResource PE_FileIconStyle}" />
+                        Width="Auto"
+                        Height="{DynamicResource WolvenKitTreeGridIconHeight}"
+                        Style="{StaticResource PE_FileIconStyle}"
+                        Icon="{Binding Extension}" />
+
                     <TextBlock
                         x:Name="TemplateTextBlock"
                         Grid.Column="1"
-                        Margin="5,0,0,2"
+                        Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         VerticalAlignment="Center"
                         Text="{Binding Path=Name}"
                         TextTrimming="CharacterEllipsis" />
@@ -469,9 +631,10 @@
                 BasedOn="{StaticResource SyncfusionTabItemExtStyle}"
                 TargetType="{x:Type syncfusion:TabItemExt}">
                 <Setter Property="Background" Value="Transparent" />
-                <Setter Property="Foreground" Value="White" />
-                <Setter Property="BorderThickness" Value="0,0,0,2" />
                 <Setter Property="BorderBrush" Value="{StaticResource WolvenKitRedShadow}" />
+                <Setter Property="BorderThickness" Value="0,0,0,2" />
+                <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
+                <Setter Property="Foreground" Value="White" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type syncfusion:TabItemExt}">
@@ -480,12 +643,13 @@
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}">
                                 <TextBlock
-                                    Margin="6,0"
+                                    Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Foreground="{TemplateBinding Foreground}"
                                     Text="{TemplateBinding Header}" />
                             </Border>
+
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsSelected" Value="False">
                                     <Setter Property="Foreground" Value="White" />
@@ -507,30 +671,13 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-
-            <Style TargetType="{x:Type Button}" x:Key="HideOnShift" BasedOn="{StaticResource ButtonDefault}">
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding IsShiftKeyPressed}" Value="False">
-                        <Setter Property="Visibility" Value="Visible" />
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding IsShiftKeyPressed}" Value="True">
-                        <Setter Property="Visibility" Value="Collapsed" />
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-            <Style TargetType="{x:Type Button}" x:Key="UnhideOnShift" BasedOn="{StaticResource ButtonDefault}">
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding IsShiftKeyPressed}" Value="False">
-                        <Setter Property="Visibility" Value="Collapsed" />
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding IsShiftKeyPressed}" Value="True">
-                        <Setter Property="Visibility" Value="Visible" />
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
         </ResourceDictionary>
 
     </UserControl.Resources>
+
+    <UserControl.InputBindings>
+        <KeyBinding Key="F7" Command="{Binding CreateNewDirectoryCommand}" />
+    </UserControl.InputBindings>
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
         <Grid.RowDefinitions>
@@ -541,35 +688,39 @@
 
         <syncfusion:TabControlExt
             Name="tabControl"
-            Height="25"
             Margin="0,0,0,0"
+            BorderThickness="0,0,0,1"
+            Style="{StaticResource WolvenKitTabControl}"
             AllowDragDrop="False"
             AllowDrop="False"
-            BorderThickness="0,0,0,1"
             CloseButtonType="Hide"
+            EnableLabelEdit="False"
             SelectedIndex="{Binding SelectedTabIndex}"
             ShowTabItemContextMenu="False"
-            Style="{StaticResource WolvenKitTabControl}"
             TabListContextMenuOptions="Default">
-
-            <syncfusion:TabItemExt>
+            <syncfusion:TabItemExt Header="SOURCE">
                 <syncfusion:TabItemExt.Style>
-                    <Style BasedOn="{StaticResource SyncfusionTabItemExtStyle}" TargetType="{x:Type syncfusion:TabItemExt}">
+                    <Style
+                        BasedOn="{StaticResource SyncfusionTabItemExtStyle}"
+                        TargetType="{x:Type syncfusion:TabItemExt}">
                         <Setter Property="Background" Value="{StaticResource WolvenKitRedShadow}" />
+                        <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
                         <Setter Property="FontWeight" Value="Normal" />
+                        <Setter Property="Height" Value="{DynamicResource WolvenKitTabHeight}" />
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type syncfusion:TabItemExt}">
                                     <Border Background="{TemplateBinding Background}">
                                         <TextBlock
-                                            Margin="6,0"
+                                            Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
-                                            FontSize="11"
-                                            FontWeight="Normal"
                                             Foreground="White"
+                                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                                            FontWeight="Normal"
                                             Text="SOURCE" />
                                     </Border>
+
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsSelected" Value="True">
                                             <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
@@ -589,26 +740,37 @@
                     </Style>
                 </syncfusion:TabItemExt.Style>
             </syncfusion:TabItemExt>
-            <syncfusion:TabItemExt Header="archive" Style="{StaticResource WolvenKitPESourceTabs}" />
-            <syncfusion:TabItemExt Header="raw" Style="{StaticResource WolvenKitPESourceTabs}" />
-            <syncfusion:TabItemExt>
+
+            <syncfusion:TabItemExt
+                Style="{StaticResource WolvenKitPESourceTabs}"
+                Header="archive" />
+
+            <syncfusion:TabItemExt
+                Style="{StaticResource WolvenKitPESourceTabs}"
+                Header="raw" />
+
+            <syncfusion:TabItemExt Header="RESOURCES">
                 <syncfusion:TabItemExt.Style>
-                    <Style BasedOn="{StaticResource SyncfusionTabItemExtStyle}" TargetType="{x:Type syncfusion:TabItemExt}">
+                    <Style
+                        BasedOn="{StaticResource SyncfusionTabItemExtStyle}"
+                        TargetType="{x:Type syncfusion:TabItemExt}">
                         <Setter Property="Background" Value="{StaticResource WolvenKitCyanShadow}" />
+                        <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
                         <Setter Property="FontWeight" Value="Normal" />
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type syncfusion:TabItemExt}">
                                     <Border Background="{TemplateBinding Background}">
                                         <TextBlock
-                                            Margin="6,0"
+                                            Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
-                                            FontSize="11"
-                                            FontWeight="Normal"
                                             Foreground="Black"
+                                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                                            FontWeight="Normal"
                                             Text="RESOURCES" />
                                     </Border>
+
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsSelected" Value="True">
                                             <Setter Property="Background" Value="{StaticResource WolvenKitCyan}" />
@@ -628,7 +790,6 @@
                     </Style>
                 </syncfusion:TabItemExt.Style>
             </syncfusion:TabItemExt>
-
         </syncfusion:TabControlExt>
 
         <Border
@@ -637,110 +798,113 @@
             BorderBrush="{StaticResource BorderBrush}"
             BorderThickness="0,0,0,1">
             <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
+
+                <Grid.Resources>
+                    <Style TargetType="{x:Type templates:IconBox}">
+                        <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginTiny}" />
+                        <Setter Property="Size" Value="{DynamicResource WolvenKitIconTiny}" />
+                    </Style>
+                </Grid.Resources>
+
                 <hc:SearchBar
                     x:Name="PESearchBar"
+                    Grid.Row="0"
                     Grid.Column="0"
-                    Height="30"
-                    Margin="3"
-                    VerticalAlignment="Top"
-                    hc:InfoElement.Necessary="True"
-                    hc:InfoElement.Placeholder="Search"
+                    Grid.ColumnSpan="2"
+                    Margin="{DynamicResource WolvenKitMarginTiny}"
                     Background="Transparent"
                     BorderBrush="{StaticResource MahApps.Brushes.Gray.SemiTransparent}"
-                    BorderThickness="0,0,0,0"
+                    BorderThickness="0"
+                    Style="{StaticResource SearchBarExtendBaseStyle}"
+                    hc:InfoElement.Necessary="True"
+                    hc:InfoElement.Placeholder="Search"
+                    hc:InfoElement.ShowClearButton="True"
                     FlowDirection="LeftToRight"
-                    SearchStarted="PESearchBar_OnSearchStarted"
-                    ShowClearButton="True"
-                    Style="{StaticResource SearchBarExtendBaseStyle}" />
+                    SearchStarted="PESearchBar_OnSearchStarted" />
+
                 <StackPanel
-                    Grid.Column="1"
-                    Margin="0,0,3,0"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Margin="{DynamicResource WolvenKitMarginTinyFooter}"
                     Orientation="Horizontal">
                     <Button
-                        Margin="3,0,0,0"
+                        Height="Auto"
+                        Padding="0"
                         Click="ExpandAll_OnClick"
-                        Style="{StaticResource HideOnShift}"
                         ToolTip="Expand All">
-                        <iconPacks:PackIconCodicons
-                            Width="13"
-                            Height="13"
+                        <templates:IconBox
+                            IconPack="Material"
                             Kind="ExpandAll" />
                     </Button>
+
                     <Button
-                        Margin="3,0,0,0"
+                        Height="Auto"
+                        Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                        Padding="0"
                         Click="CollapseAll_OnClick"
-                        Style="{StaticResource HideOnShift}"
                         ToolTip="Collapse All">
-                        <iconPacks:PackIconCodicons
-                            Width="13"
-                            Height="13"
+                        <templates:IconBox
+                            IconPack="Material"
                             Kind="CollapseAll" />
                     </Button>
+
                     <Button
-                        Margin="3,0,0,0"
+                        Height="Auto"
+                        Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                        Padding="0"
+                        IsEnabled="{Binding HasSelectedItem}"
                         Click="ExpandChildren_OnClick"
-                        Style="{StaticResource UnhideOnShift}"
-                        IsEnabled="{Binding HasSelectedItem}"
                         ToolTip="Expand Children">
-                        <iconPacks:PackIconBootstrapIcons
-                            Width="13"
-                            Height="13"
-                            Kind="ArrowsExpand" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ArrowExpandVertical" />
                     </Button>
+
                     <Button
-                        Margin="3,0,0,0"
-                        Click="CollapseChildren_OnClick"
-                        Style="{StaticResource UnhideOnShift}"
+                        Height="Auto"
+                        Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                        Padding="0"
                         IsEnabled="{Binding HasSelectedItem}"
+                        Click="CollapseChildren_OnClick"
                         ToolTip="Collapse Children">
-                        <iconPacks:PackIconBootstrapIcons
-                            Width="13"
-                            Height="13"
-                            Kind="ArrowsCollapse" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ArrowCollapseVertical" />
                     </Button>
+
                     <Button
-                        Margin="3,0,0,0"
+                        Height="Auto"
+                        Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                        Padding="0"
                         IsEnabled="{Binding CanScrollToOpenFile}"
                         Click="ScrollToOpenFile_OnClick"
                         ToolTip="Scroll to open file">
-                        <iconPacks:Material
-                            Width="13"
-                            Height="13"
-                            Kind="Crosshairs" />
-                    </Button>
-                    <Button
-                        x:Name="RefreshButton"
-                        Margin="3,0,0,0"
-                        ToolTip="Refresh all Files">
-                        <iconPacks:PackIconCodicons
-                            Width="13"
-                            Height="13"
-                            Foreground="CornflowerBlue"
-                            Kind="Refresh" />
-                    </Button>
-                    <Button
-                        x:Name="OpenFolderButton"
-                        Margin="3,0,0,0"
-                        ToolTip="Open Root Folder">
-                        <iconPacks:PackIconCodicons
-                            Width="13"
-                            Height="13"
-                            Foreground="Yellow"
-                            Kind="RootFolderOpened" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="FileEye" />
                     </Button>
 
                     <ToggleButton
                         x:Name="ToggleFlatModeButton"
-                        Margin="3,0,0,0"
+                        Height="Auto"
+                        Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                        Padding="0"
                         hc:VisualElement.HighlightBackground="{StaticResource WolvenKitRed}"
                         IsChecked="{Binding IsFlatModeEnabled}"
                         ToolTip="Toggle Flat File List">
                         <ToggleButton.Style>
-                            <Style BasedOn="{StaticResource {x:Type ToggleButton}}" TargetType="ToggleButton">
+                            <Style
+                                BasedOn="{StaticResource {x:Type ToggleButton}}"
+                                TargetType="ToggleButton">
                                 <Style.Triggers>
                                     <Trigger Property="IsChecked" Value="True">
                                         <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
@@ -748,59 +912,98 @@
                                 </Style.Triggers>
                             </Style>
                         </ToggleButton.Style>
-                        <iconPacks:PackIconCodicons
-                            Width="13"
-                            Height="13"
-                            Kind="ListFlat" />
+
+                        <ToggleButton.Resources>
+                            <converters:TreeFlatIconConverter x:Key="TreeFlatIconConverter" />
+                        </ToggleButton.Resources>
+
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="{Binding IsChecked,
+                                           ElementName=ToggleFlatModeButton,
+                                           Converter={StaticResource TreeFlatIconConverter}}" />
                     </ToggleButton>
+                </StackPanel>
+
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="{DynamicResource WolvenKitMarginTinyFooter}"
+                    Orientation="Horizontal">
+                    <Button
+                        x:Name="RefreshButton"
+                        Height="Auto"
+                        Padding="0"
+                        ToolTip="Refresh all Files">
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Refresh"
+                            Foreground="{StaticResource WolvenKitPurple}" />
+                    </Button>
+
+                    <Button
+                        x:Name="OpenFolderButton"
+                        Height="Auto"
+                        Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                        Padding="0"
+                        ToolTip="Open Root Folder">
+                        <templates:IconBox
+                            IconPack="Codicons"
+                            Kind="RootFolderOpened"
+                            Foreground="{StaticResource WolvenKitYellow}" />
+                    </Button>
                 </StackPanel>
             </Grid>
         </Border>
 
-        <!--  Hierarchical Tree View  -->
+        <!-- Hierarchical Tree View -->
         <syncfusion:SfTreeGrid
             Name="TreeGrid"
             Grid.Row="2"
-            Margin="0,0,0,0"
+            Margin="0"
+            BorderThickness="0"
+            Visibility="{Binding IsFlatModeEnabled,
+                                 Converter={StaticResource BoolInvertConverter}}"
+            HeaderRowHeight="3"
+            RowHeight="{DynamicResource WolvenKitTreeGridRowHeight}"
+            ColumnSizer="Star"
             AllowDraggingRows="True"
             AllowDrop="True"
             AllowEditing="False"
             AllowFiltering="False"
             AllowResizingColumns="False"
             AutoGenerateColumns="False"
-            BorderThickness="0"
             ChildPropertyName="Children"
-            ColumnSizer="Star"
             ContextMenu="{StaticResource TreeGridContextMenu}"
             CurrentCellBorderBrush="White"
             CurrentCellBorderThickness="0"
             FilterLevel="Extended"
-            HeaderRowHeight="3"
             NodeExpanded="TreeGrid_OnNodeExpanded"
             NodeCollapsed="TreeGrid_OnNodeCollapsed"
             IsReadOnly="True"
             LiveNodeUpdateMode="AllowDataShaping"
             RowDragDropTemplate="{StaticResource DragDropTemplate}"
             RowDropIndicatorMode="Line"
-            RowHeight="19"
             SelectedItem="{Binding SelectedItem}"
-            SelectedItems="{Binding SelectedItems, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            SelectedItems="{Binding SelectedItems,
+                                    UpdateSourceTrigger=PropertyChanged,
+                                    Mode=TwoWay}"
             SelectionMode="Extended"
             SelfRelationRootValue="0"
             VirtualizingPanel.IsVirtualizing="True"
             VirtualizingPanel.ScrollUnit="Pixel"
-            VirtualizingPanel.VirtualizationMode="Recycling"
-            Visibility="{Binding IsFlatModeEnabled, Converter={StaticResource BoolInvertConverter}}">
-
+            VirtualizingPanel.VirtualizationMode="Recycling">
             <syncfusion:SfTreeGrid.Resources>
                 <Style TargetType="syncfusion:TreeGridCell">
                     <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="BorderThickness" Value="0" />
                 </Style>
+
                 <Style TargetType="syncfusion:TreeGridExpanderCell">
                     <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="BorderThickness" Value="0" />
                 </Style>
+
                 <Style TargetType="syncfusion:TreeGridHeaderRowControl">
                     <Setter Property="Background" Value="Transparent" />
                     <Setter Property="BorderBrush" Value="Transparent" />
@@ -809,7 +1012,9 @@
             </syncfusion:SfTreeGrid.Resources>
 
             <syncfusion:SfTreeGrid.SortColumnDescriptions>
-                <syncfusion:SortColumnDescription ColumnName="Name" SortDirection="Ascending" />
+                <syncfusion:SortColumnDescription
+                    ColumnName="Name"
+                    SortDirection="Ascending" />
             </syncfusion:SfTreeGrid.SortColumnDescriptions>
 
             <syncfusion:SfTreeGrid.Columns>
@@ -822,19 +1027,23 @@
             </syncfusion:SfTreeGrid.Columns>
         </syncfusion:SfTreeGrid>
 
-        <!--  Flat Tree View  -->
+        <!-- Flat Tree View -->
         <syncfusion:SfTreeGrid
             Name="TreeGridFlat"
             Grid.Row="2"
-            Margin="0,0,0,0"
+            Margin="0"
+            BorderThickness="0"
+            Visibility="{Binding IsFlatModeEnabled,
+                                 Converter={StaticResource BooleanToVisibilityConverter}}"
+            HeaderRowHeight="{DynamicResource WolvenKitTreeGridRowHeaderHeight}"
+            RowHeight="{DynamicResource WolvenKitTreeGridRowHeight}"
+            ColumnSizer="Star"
             AllowEditing="False"
             AllowFiltering="True"
             AllowResizingColumns="True"
             AllowSorting="True"
             AutoExpandMode="AllNodesExpanded"
             AutoGenerateColumns="False"
-            BorderThickness="0"
-            ColumnSizer="Star"
             ContextMenu="{StaticResource TreeGridContextMenu}"
             ContextMenuOpening="OnContextMenuOpen"
             CurrentCellBorderBrush="White"
@@ -842,29 +1051,30 @@
             ExpandStateMappingName="IsExpanded"
             ExpanderColumn="False"
             FilterLevel="Extended"
-            HeaderRowHeight="28"
             IsReadOnly="True"
             LiveNodeUpdateMode="AllowDataShaping"
             ParentPropertyName="Hash"
-            RowHeight="19"
             SelectedItem="{Binding SelectedItem}"
-            SelectedItems="{Binding SelectedItems, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            SelectedItems="{Binding SelectedItems,
+                                    UpdateSourceTrigger=PropertyChanged,
+                                    Mode=TwoWay}"
             SelectionMode="Extended"
             SelfRelationRootValue="0"
             VirtualizingPanel.IsVirtualizing="True"
             VirtualizingPanel.ScrollUnit="Pixel"
-            VirtualizingPanel.VirtualizationMode="Recycling"
-            Visibility="{Binding IsFlatModeEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
+            VirtualizingPanel.VirtualizationMode="Recycling">
 
             <syncfusion:SfTreeGrid.Resources>
                 <Style TargetType="syncfusion:TreeGridCell">
                     <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="BorderThickness" Value="0" />
                 </Style>
+
                 <Style TargetType="syncfusion:TreeGridExpanderCell">
                     <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="BorderThickness" Value="0" />
                 </Style>
+
                 <Style TargetType="syncfusion:TreeGridHeaderRowControl">
                     <Setter Property="Background" Value="Transparent" />
                     <Setter Property="BorderBrush" Value="Transparent" />
@@ -873,12 +1083,23 @@
             </syncfusion:SfTreeGrid.Resources>
 
             <syncfusion:SfTreeGrid.SortColumnDescriptions>
-                <syncfusion:SortColumnDescription ColumnName="Name" SortDirection="Ascending" />
-                <syncfusion:SortColumnDescription ColumnName="GameRelativePath" SortDirection="Ascending" />
-                <syncfusion:SortColumnDescription ColumnName="Extension" SortDirection="Ascending" />
-                <syncfusion:SortColumnDescription ColumnName="FileSizeStr" SortDirection="Ascending" />
+                <syncfusion:SortColumnDescription
+                    ColumnName="Name"
+                    SortDirection="Ascending" />
+
+                <syncfusion:SortColumnDescription
+                    ColumnName="GameRelativePath"
+                    SortDirection="Ascending" />
+
+                <syncfusion:SortColumnDescription
+                    ColumnName="Extension"
+                    SortDirection="Ascending" />
+
+                <syncfusion:SortColumnDescription
+                    ColumnName="FileSizeStr"
+                    SortDirection="Ascending" />
             </syncfusion:SfTreeGrid.SortColumnDescriptions>
-            
+
             <syncfusion:SfTreeGrid.Columns>
                 <syncfusion:TreeGridTextColumn
                     Width="220"
@@ -887,18 +1108,21 @@
                     ImmediateUpdateColumnFilter="True"
                     MappingName="Name"
                     TextTrimming="CharacterEllipsis" />
+
                 <syncfusion:TreeGridTextColumn
                     HeaderText="Path"
                     MappingName="GameRelativePath"
                     ImmediateUpdateColumnFilter="True"
                     ShowToolTip="True"
                     TextTrimming="CharacterEllipsis" />
+
                 <syncfusion:TreeGridTextColumn
                     Width="70"
                     AllowResizing="False"
                     ImmediateUpdateColumnFilter="True"
                     HeaderText="Kind"
                     MappingName="Extension" />
+
                 <syncfusion:TreeGridTextColumn
                     Width="70"
                     AllowResizing="False"
@@ -912,13 +1136,13 @@
         <TextBlock
             x:Name="LoadingText"
             Grid.Row="2"
-            Text="Loading..."
+            Grid.RowSpan="2"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            FontSize="30"
-            Foreground="Gray"
             Background="Transparent"
+            Foreground="Gray"
+            FontSize="{DynamicResource WolvenKitFontHuge}"
             Opacity="0.8"
-            Grid.RowSpan="2" />
+            Text="Loading..." />
     </Grid>
 </reactiveUi:ReactiveUserControl>

@@ -10,14 +10,14 @@ namespace WolvenKit.Views.Dialogs
 {
     public partial class InputDialogView : IViewFor<InputDialogViewModel>
     {
-        public InputDialogView(string dialogTitle = "")
+        public InputDialogView(string dialogTitle = "", string defaultValue = "")
         {
             DialogTitle = dialogTitle;
             
             InitializeComponent();
             Loaded += (s, e) => TextBox.Focus();
 
-            ViewModel = Locator.Current.GetService<InputDialogViewModel>();
+            ViewModel = new InputDialogViewModel(dialogTitle, defaultValue);
             DataContext = ViewModel;
 
             this.WhenActivated(disposables =>
@@ -26,6 +26,11 @@ namespace WolvenKit.Views.Dialogs
                         x => x.Text,
                         x => x.TextBox.Text)
                     .DisposeWith(disposables);
+
+                if (defaultValue != "")
+                {
+                    TextBox.SelectAll();
+                }
             });
         }
 

@@ -10,6 +10,7 @@ using DynamicData.Kernel;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Services;
+using WolvenKit.Common.Tools;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
@@ -19,19 +20,27 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.CR2W.Archive
 {
-    public partial class ArchiveManager(
-        IHashService hashService,
-        Red4ParserService wolvenkitFileService,
-        ILoggerService logger,
-        IProgressService<double> progress
-    ) : ObservableObject, IArchiveManager
+    public partial class ArchiveManager : ObservableObject, IArchiveManager
     {
+        public ArchiveManager(
+            IHashService hashService,
+            Red4ParserService wolvenkitFileService,
+            ILoggerService logger,
+            IProgressService<double> progressService
+        )
+        {
+            _hashService = hashService;
+            _wolvenkitFileService = wolvenkitFileService;
+            _logger = logger;
+            _progressService = progressService;
+        }
+        
         #region Fields
 
-        protected readonly IHashService _hashService = hashService;
-        protected readonly Red4ParserService _wolvenkitFileService = wolvenkitFileService;
-        protected readonly ILoggerService _logger = logger;
-        protected readonly IProgressService<double> _progressService = progress;
+        private readonly IHashService _hashService;
+        private readonly Red4ParserService _wolvenkitFileService;
+        private readonly ILoggerService _logger;
+        private readonly IProgressService<double> _progressService;
         
         [ObservableProperty] private bool _isManagerLoading;
         [ObservableProperty] private bool _isManagerLoaded;
@@ -510,29 +519,43 @@ namespace WolvenKit.RED4.CR2W.Archive
             Dictionary<string, IEnumerable<IGameFile>> ret = [];
             
             // project files
-            if (searchScope is (ArchiveManagerScope.LocalProject or ArchiveManagerScope.Everywhere) && ProjectArchive is not null)
+            if (searchScope is ArchiveManagerScope.LocalProject or ArchiveManagerScope.Everywhere && ProjectArchive is not null)
             {
-                ret.MergeRange(ProjectArchive.Files.Values
+                ret.MergeWith(ProjectArchive.Files.Values
                     .GroupBy(gameFile => gameFile.Extension)
-                    .ToDictionary(gameFiles => gameFiles.Key, gameFiles => gameFiles.Select(x => x))); 
+                    .ToDictionary(gameFiles => gameFiles.Key, gameFiles =>
+                        gameFiles.Select(x =>
+                        {
+                            x.Scope = ArchiveManagerScope.LocalProject;
+                            return x;
+                        })
+                    )); 
             }
             
             // base game files
             if (searchScope is ArchiveManagerScope.Basegame or ArchiveManagerScope.Everywhere or ArchiveManagerScope.BasegameAndMods)
             {
-                ret.MergeRange(GetGameArchives()
+                ret.MergeWith(GetGameArchives()
                     .SelectMany(archive => archive.Files.Values)
                     .GroupBy(gameFile => gameFile.Extension)
-                    .ToDictionary(gameFiles => gameFiles.Key, gameFiles => gameFiles.Select(x => x)));
+                    .ToDictionary(gameFiles => gameFiles.Key, gameFiles => gameFiles.Select(x =>
+                    {
+                        x.Scope = ArchiveManagerScope.Basegame;
+                        return x;
+                    })));
             }
             
             // mods
             if (searchScope is ArchiveManagerScope.Mods or ArchiveManagerScope.BasegameAndMods or ArchiveManagerScope.Everywhere)
             {
-                ret.MergeRange(  GetModArchives()
+                ret.MergeWith(  GetModArchives()
                     .SelectMany(archive => archive.Files.Values)
                     .GroupBy(gameFile => gameFile.Extension)
-                    .ToDictionary(gameFiles => gameFiles.Key, gameFiles => gameFiles.Select(x => x)));
+                    .ToDictionary(gameFiles => gameFiles.Key, gameFiles => gameFiles.Select(x =>
+                    {
+                        x.Scope = ArchiveManagerScope.Mods;
+                        return x;
+                    })));
             }
 
             return ret;
@@ -602,6 +625,22 @@ namespace WolvenKit.RED4.CR2W.Archive
             return Optional<IGameFile>.None;
         }
 
+        public List<IGameFile> Search(string search, ArchiveManagerScope searchScope) =>
+            Archives
+                .Items
+                .Where(x => searchScope switch
+                {
+                    ArchiveManagerScope.Basegame => x.Source is EArchiveSource.Base,
+                    ArchiveManagerScope.Mods => x.Source is EArchiveSource.Mod,
+                    ArchiveManagerScope.Everywhere => true,
+                    _ => false,
+                })
+                .SelectMany(x => x.Files.Values)
+                .Where(file => file.FileName.Contains(search))
+                .GroupBy(x => x.Key)
+                .Select(x => x.First())
+                .ToList();
+
         public IGameFile? GetGameFile(ResourcePath path, bool includeMods = true, bool includeProject = true)
         {
             var filePath = path.GetResolvedText() ?? "";
@@ -609,6 +648,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             // check if the file is in the project archive
             if (includeProject && ProjectArchive != null && ProjectArchive.Files.TryGetValue(path, out var projectFile))
             {
+                projectFile.Scope = ArchiveManagerScope.LocalProject;
                 return projectFile;
             }
 
@@ -625,6 +665,7 @@ namespace WolvenKit.RED4.CR2W.Archive
 
                 if (modFile != null)
                 {
+                    modFile.Scope = ArchiveManagerScope.Mods;
                     return modFile;
                 }
             }
@@ -636,6 +677,12 @@ namespace WolvenKit.RED4.CR2W.Archive
                 .Select(x => x[path] ?? x[fileHash])
                 .FirstOrDefault();
 
+
+            if (baseFile != null)
+            {
+                baseFile.Scope = ArchiveManagerScope.Basegame;
+            }
+            
             return baseFile; // this can be null
         }
 

@@ -88,7 +88,7 @@ public partial class ChunkViewModel
             return this;
         }
 
-        switch (Data)
+        switch (ResolvedData)
         {
             // .mi file
             case CMaterialInstance when GetTvPropertyFromPath("values") is ChunkViewModel child:
@@ -181,8 +181,26 @@ public partial class ChunkViewModel
                 });
 
                 newThread.Start();
-                break;  
+                break;
+            // .inkcharactercustomization
+            case gameuiSwitcherInfo when GetPropertyFromPath("options") is ChunkViewModel child:
+                ExpandAndSelect(child, true);
+                break;
+            // .inkcharactercustomization
+            case gameuiOptionsGroup when GetPropertyFromPath("options") is ChunkViewModel child:
+                ExpandAndSelect(child, true);
+                break;
+
+            // .questphase
+            case questQuestPhaseResource when GetPropertyFromPath("graph") is ChunkViewModel child:
+                ExpandAndSelect(child, true);
+                break;
+                
             default:
+                if (TVProperties.Count == 1)
+                {
+                    ExpandAndSelect(TVProperties[0], true);
+                }
                 break;
         }
 
@@ -262,6 +280,22 @@ public partial class ChunkViewModel
 
                     break;
                 }
+                case gameEntitySpawnerComponent when GetTvPropertyFromPath("slotDataArray") is ChunkViewModel sda:
+                    sda.IsExpanded = isExpanded;
+                    sda.ExpansionStateChangedFromParent = isExpanded;
+                    break;
+
+                case IRedArray<gameEntitySpawnerSlotData> when Name is "slotDataArray":
+                    IsExpanded = true;
+                    ExpansionStateChangedFromParent = true;
+                    break;
+                /*
+                 * .anim file
+                 */
+                case animAnimSetEntry when _recursionLevel == 0 || !isExpanded:
+                    treeViewProperties.FirstOrDefault(prop => prop.Name == "animation")
+                        ?.SetChildExpansionStatesInternal(isExpanded, _recursionLevel);
+                    break; 
                 case localizationPersistenceOnScreenEntries when treeViewProperties.Count == 1:
                 case localizationPersistenceSubtitleEntries when treeViewProperties.Count == 1:
                 // .visualTags (.app file and nested under .ent.visualTagSchema)
@@ -283,7 +317,6 @@ public partial class ChunkViewModel
                     chunkNames.IsExpanded = this.IsExpanded;
                     chunkNames.ExpansionStateChangedFromParent = IsExpanded;
                     break;
-
                 // inkatlas
                 case CArrayBase<inkTextureSlot>:
                     foreach (var childNode in treeViewProperties)
@@ -327,15 +360,10 @@ public partial class ChunkViewModel
                     treeViewProperties.FirstOrDefault(prop => prop.Name == "slots")
                         ?.SetChildExpansionStatesInternal(isExpanded, _recursionLevel);
                     break;
-                /*
-                 * effect slots
-                 *     - slots
-                 */
                 case CHandle<entEffectDesc> when _recursionLevel == 0 || !isExpanded:
                     treeViewProperties.FirstOrDefault(prop => prop.Name == "compiledEffectInfo")
                         ?.SetChildExpansionStatesInternal(isExpanded, _recursionLevel);
                     break;
-
                 // Components array, or array of effect descriptors
                 case CArray<entIComponent> when _recursionLevel == 0 || !isExpanded:
                 case CArray<CHandle<entEffectDesc>> when _recursionLevel == 0 || !isExpanded:
@@ -456,7 +484,8 @@ public partial class ChunkViewModel
                     or CArray<CHandle<meshMeshAppearance>>
                     or CArray<IMaterial>
                     or CArray<CHandle<appearanceAppearanceDefinition>>
-                    or CArray<CHandle<entEffectDesc>>:
+                    or CArray<CHandle<entEffectDesc>>
+                    or IRedArray:
                 {
                     if (recursionLevel == 99)
                     {
@@ -493,5 +522,10 @@ public partial class ChunkViewModel
         {
             chunkViewModel.IsExpanded = false;
         }
+    }
+
+    private void ExpandChildNodesByType()
+    {
+        throw new NotImplementedException();
     }
 }

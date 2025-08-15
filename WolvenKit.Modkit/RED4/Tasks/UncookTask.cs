@@ -44,12 +44,6 @@ public partial class ConsoleFunctions
             return ERROR_BAD_ARGUMENTS;
         }
 
-        if (options.meshExportType != null && string.IsNullOrEmpty(options.meshExportMaterialRepo))
-        {
-            _loggerService.Error("When using --mesh-export-type, the --outpath or the --mesh-export-material-repo must be specified.");
-            return ERROR_INVALID_COMMAND_LINE;
-        }
-
         if (options.gamepath is { Exists: true })
         {
             var exePath = new FileInfo(Path.Combine(options.gamepath.ToString(), "bin", "x64", "Cyberpunk2077.exe"));
@@ -74,7 +68,7 @@ public partial class ConsoleFunctions
                         _loggerService.Error("Input file is not an .archive.");
                         return ERROR_BAD_ARGUMENTS;
                     }
-                    _archiveManager.LoadModArchive(file.FullName);
+                    _archiveManager.LoadModArchive(file.FullName, false);
                     break;
                 case DirectoryInfo directory:
                     var archiveFileInfos = directory.GetFiles().Where(_ => _.Extension == ".archive").ToList();

@@ -9,6 +9,7 @@ using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Pools;
 
 namespace WolvenKit.RED4.Archive.IO;
 
@@ -39,6 +40,8 @@ public class ArchiveWriter
         ".dat",
         ".opuspak"
     };
+
+    private static string s_soundBanksFile = "soundbanks.json";
 
     private readonly IHashService _hashService;
 
@@ -99,7 +102,7 @@ public class ArchiveWriter
                 var sanitizedPath = ResourcePath.SanitizePath(relPath);
                 hash = FNV1A64HashAlgorithm.HashString(sanitizedPath);
 
-                if (!TweakDBIDPool.IsNative(sanitizedPath))
+                if (!ResourcePathPool.IsNative(sanitizedPath))
                 {
                     customPaths.Add(sanitizedPath);
                 }
@@ -201,7 +204,7 @@ public class ArchiveWriter
             {
                 readStatus = reader.ReadFileInfo(out info, _loggerService);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 _loggerService.Error($"Could not read \"{fileInfo.FullName}\".");
                 return false;
@@ -262,14 +265,14 @@ public class ArchiveWriter
             {
                 fileStream.Seek(0, SeekOrigin.Begin);
 
-                if (s_alignedFiles.Contains(fileInfo.Extension.ToLower()))
+                if (s_alignedFiles.Contains(fileInfo.Extension.ToLower()) || fileInfo.FullName.EndsWith(s_soundBanksFile, StringComparison.CurrentCultureIgnoreCase))
                 {
                     bw.PadUntilPage();
                 }
 
                 var offset = (ulong)bw.BaseStream.Position;
 
-                if (s_uncompressedFiles.Contains(fileInfo.Extension.ToLower()))
+                if (s_uncompressedFiles.Contains(fileInfo.Extension.ToLower()) || fileInfo.FullName.EndsWith(s_soundBanksFile, StringComparison.CurrentCultureIgnoreCase))
                 {
                     fileStream.CopyTo(outStream);
                     var size = (uint)fileStream.Length;

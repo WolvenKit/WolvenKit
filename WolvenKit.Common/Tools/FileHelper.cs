@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Helpers;
@@ -35,21 +37,31 @@ public class FileHelper
         return true;
     }
 
-    public static bool SafeDelete(string filePath, ILoggerService? logger = null)
+    public static bool SafeDelete(string path, ILoggerService? logger = null)
     {
-        if (!File.Exists(filePath))
+        if (File.Exists(path))
         {
-            return true;
+            try
+            {
+                File.Delete(path);
+            }
+            catch (Exception)
+            {
+                logger?.Error($"Error while deleting file \"{path}\"");
+                return false;
+            }
         }
-
-        try
+        else if (Directory.Exists(path))
         {
-            File.Delete(filePath);
-        }
-        catch (Exception)
-        {
-            logger?.Error($"Error while deleting \"{filePath}\"");
-            return false;
+            try
+            {
+                Directory.Delete(path, true); // true allows recursive deletion
+            }
+            catch (Exception)
+            {
+                logger?.Error($"Error while deleting directory \"{path}\"");
+                return false;
+            }
         }
 
         return true;
@@ -70,71 +82,34 @@ public class FileHelper
         return true;
     }
 
-    public static void MoveRecursively(string sourceDir, string destinationDir, bool overwrite, ILoggerService? logger = null)
+    public static void MoveRecursively(string sourceDirAbsPath, string destDirAbsPath, bool overwrite, string projectRootFolder,
+        ILoggerService? logger = null)
     {
-        if (Path.GetDirectoryName(destinationDir) == sourceDir)
+        // Abort if something is dragged on its own parent (this happens to mana a lot because she can't click) 
+        if (sourceDirAbsPath.Equals(Path.GetDirectoryName(destDirAbsPath), StringComparison.OrdinalIgnoreCase))
         {
             return;
         }
-        try
+        
+        var tempId = Guid.NewGuid();
+        var tempFolderRoot = $"{projectRootFolder}{Path.DirectorySeparatorChar}{tempId}";
+        var destDirTemp = destDirAbsPath.ToLower().Replace(projectRootFolder.ToLower(), tempFolderRoot);
+        Directory.CreateDirectory(string.Join(Path.DirectorySeparatorChar, destDirAbsPath.Split(Path.DirectorySeparatorChar)[..^1]));
+        Directory.CreateDirectory(string.Join(Path.DirectorySeparatorChar,destDirTemp.Split(Path.DirectorySeparatorChar)[..^1]));
+        Directory.Move(sourceDirAbsPath, destDirTemp);
+        
+        foreach (var file in Directory.EnumerateFiles(destDirTemp, "*", SearchOption.AllDirectories))
         {
-            if (!Directory.EnumerateFiles(sourceDir).Any())
-            {
-                if (Directory.Exists(destinationDir))
-                {
-                    Directory.Delete(sourceDir);
-                    return;
-                }
-
-                Directory.Move(sourceDir, destinationDir);
-                return;
-            } 
+            var newFileName = file.Replace(destDirTemp, destDirAbsPath);
+            Directory.CreateDirectory(string.Join(Path.DirectorySeparatorChar, newFileName.Split(Path.DirectorySeparatorChar)[..^1]));
             
-            // Ensure the destination directory exists
-            if (!Directory.Exists(destinationDir))
+            if(!(File.Exists(newFileName) && !overwrite))
             {
-                Directory.CreateDirectory(destinationDir);
+                File.Move(file, newFileName, overwrite);   
             }
-
-            // Move all files
-            var files = Directory.GetFiles(sourceDir, "*", SearchOption.AllDirectories);
-            foreach (var file in files)
-            {
-                var relativePath = Path.GetRelativePath(sourceDir, file);
-                var destFile = Path.Combine(destinationDir, relativePath);
-                var destDir = Path.GetDirectoryName(destFile);
-
-                if (destDir is not null && !Directory.Exists(destDir))
-                {
-                    Directory.CreateDirectory(destDir);
-                }
-
-                if (File.Exists(destFile) && !overwrite)
-                {
-                    logger?.Info($"Skipping existing file {destFile}");
-                    continue;
-                }
-
-                File.Move(file, destFile, true); // true allows overwriting of files
-            }
-
-            // Move all directories by recursively calling this method
-            var directories = Directory.GetDirectories(sourceDir, "*", SearchOption.AllDirectories);
-            foreach (var directory in directories)
-            {
-                var relativePath = Path.GetRelativePath(sourceDir, directory);
-                var destDir = Path.Combine(destinationDir, relativePath);
-                MoveRecursively(directory, destDir, overwrite, logger);
-            }
-
-            // Optionally, remove the source directory if it's now empty
-            Directory.Delete(sourceDir, true); // true allows recursive deletion
         }
-        catch (IOException e)
-        {
-            logger?.Error($"Error when trying to move {sourceDir}");
-            logger?.Error(e);
-        }
+        
+        Directory.Delete(tempFolderRoot, true);
     }
 
     public static FileInfo? GetMostRecentlyChangedFile(string directoryPath, string searchPattern)
@@ -147,4 +122,33 @@ public class FileHelper
         return new DirectoryInfo(directoryPath).GetFiles(searchPattern).MaxBy(f => f.LastWriteTime);
     }
     
+    public static string SanitizePath(string path)
+    {
+        char[] additionalInvalidChars = { '?', '*', '"', '<', '>', '|', '\\', '/' };
+        var invalidCharacters = Path.GetInvalidPathChars().Concat(additionalInvalidChars).Distinct().ToArray();
+        var inputPath = path;
+        var inputPathArray = new List<string>();
+        foreach (var part in inputPath.Split(Path.DirectorySeparatorChar))
+        {
+            var outputPart = part.Trim();
+            if (string.IsNullOrEmpty(outputPart))
+            {
+                continue;
+            }
+            outputPart = new string(outputPart.Select(c => invalidCharacters.Contains(c) ? '_' : c).ToArray());
+
+            if (new Regex(@"^\.{3,}$").IsMatch(outputPart))
+            {
+                throw new Exception($"Pattern \"{outputPart}{Path.DirectorySeparatorChar}\" is not a valid relative path traversal method, consider using {'"' + @" \..\ " + '"'}.");
+            }
+            inputPathArray.Add(outputPart);
+        }
+
+        if (inputPathArray.Count == 0)
+        {
+            throw new Exception($"Path \"{path}\" is empty after sanitation");
+        }
+        inputPath = string.Join(Path.DirectorySeparatorChar, inputPathArray);
+        return inputPath;
+    }
 }

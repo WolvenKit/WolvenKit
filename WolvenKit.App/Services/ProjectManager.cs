@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -149,7 +150,9 @@ public partial class ProjectManager : ObservableObject, IProjectManager
 
             obj.ModName ??= obj.Name;
 
-            Cp77Project project = new(path, obj.Name, obj.ModName)
+            var openProjectFiles =
+                (obj.OpenProjectFiles ?? []).Distinct().ToDictionary(x => DateTime.Now, x => x);
+            Cp77Project project = new(path, obj.Name, obj.ModName, openProjectFiles)
             {
                 Author = obj.Author,
                 Email = obj.Email,
@@ -264,6 +267,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
 
         return true;
     }
+    
 
     public bool Save()
     {

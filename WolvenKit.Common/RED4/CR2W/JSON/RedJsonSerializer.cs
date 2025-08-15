@@ -76,7 +76,8 @@ public static class RedJsonSerializer
                 new RedFileDtoConverter(s_classResolver),
 
                 new ParseableBufferConverter(),
-                new CollisionShapeConverter()
+                new CollisionShapeConverter(),
+                new RazerChromaAnimationBufferConverter()
             }
         };
     }

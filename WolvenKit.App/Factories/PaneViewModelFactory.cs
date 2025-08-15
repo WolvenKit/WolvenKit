@@ -34,6 +34,7 @@ public class PaneViewModelFactory : IPaneViewModelFactory
 
     private readonly PropertiesViewModel _propertiesViewModel;
     private readonly IModifierViewStateService _modifierSvc;
+    private readonly ProjectResourceTools _projectResourceTools;
 
     public PaneViewModelFactory(
         IProjectManager projectManager,
@@ -52,6 +53,7 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         PropertiesViewModel propertiesViewModel,
         ImportExportHelper importExportHelper,
         AppScriptService appScriptService,
+        ProjectResourceTools projectResourceTools,
         IModifierViewStateService modifierSvc
         )
     {
@@ -72,17 +74,18 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         _importExportHelper = importExportHelper;
         _appScriptService = appScriptService;
         _modifierSvc = modifierSvc;
+        _projectResourceTools = projectResourceTools;
     }
 
     public LogViewModel LogViewModel() => new(_loggerService, _appScriptService, _settingsManager);
     public ProjectExplorerViewModel ProjectExplorerViewModel(AppViewModel appViewModel)
         => new(appViewModel, _projectManager, _loggerService, _progressService, _modTools,
-            _gameController, _pluginService, _settingsManager, _modifierSvc, _archiveManager);
+            _gameController, _pluginService, _settingsManager, _modifierSvc, _archiveManager, _projectResourceTools);
     public PropertiesViewModel PropertiesViewModel()
         => _propertiesViewModel;
     public AssetBrowserViewModel AssetBrowserViewModel(AppViewModel appViewModel)
         => new(appViewModel, _projectManager, _notificationService, _gameController, _archiveManager, _settingsManager, _progressService,
-            _loggerService, _pluginService, _modifierSvc);
+            _loggerService, _pluginService, _projectResourceTools);
     public TweakBrowserViewModel TweakBrowserViewModel(AppViewModel appViewModel)
         => new(appViewModel, _chunkViewmodelFactory, _settingsManager, _notificationService, _projectManager, _loggerService, _tweakDbService, _locKeyService);
     public LocKeyBrowserViewModel LocKeyBrowserViewModel() => new(_projectManager, _loggerService, _progressService, _modTools, _gameController, _archiveManager, _locKeyService);

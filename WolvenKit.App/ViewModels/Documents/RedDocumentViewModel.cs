@@ -3,28 +3,23 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Options;
 using WolvenKit.App.Factories;
 using WolvenKit.App.Helpers;
-using WolvenKit.App.Interaction;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
-using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Helpers;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
@@ -49,13 +44,15 @@ public partial class RedDocumentViewModel : DocumentViewModel
     private readonly IArchiveManager _archiveManager;
     private readonly IHookService _hookService;
     private readonly INodeWrapperFactory _nodeWrapperFactory;
-    private readonly IHashService _hashService;
+    private readonly Cr2WTools _cr2WTools;
+
 
     private readonly AppViewModel _appViewModel;
 
     protected readonly HashSet<string> _embedHashSet;
 
     private readonly string _path;
+    private bool _suppressNextReload;
 
     public RedDocumentViewModel(CR2WFile file, string path, AppViewModel appViewModel,
         IDocumentTabViewmodelFactory documentTabViewmodelFactory,
@@ -67,8 +64,8 @@ public partial class RedDocumentViewModel : DocumentViewModel
         IArchiveManager archiveManager,
         IHookService hookService,
         INodeWrapperFactory nodeWrapperFactory,
-        IHashService hashService,
-        EditorDifficultyLevel editorMode,
+        Cr2WTools cr2WTools,
+        ISettingsManager settingsManager,
         bool isReadyOnly = false) : base(path)
     {
         _documentTabViewmodelFactory = documentTabViewmodelFactory;
@@ -80,7 +77,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
         _archiveManager = archiveManager;
         _hookService = hookService;
         _nodeWrapperFactory = nodeWrapperFactory;
-        _hashService = hashService;
+        _cr2WTools = cr2WTools;
 
         _appViewModel = appViewModel;
         _embedHashSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
@@ -92,19 +89,20 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
         _path = path;
 
-
         _extension = Path.GetExtension(path) != "" ? Path.GetExtension(path)[1..] : "";
 
         Cr2wFile = file;
         IsReadOnly = isReadyOnly;
-        EditorDifficultyLevel = editorMode;
         _isInitialized = true;
+
         PopulateItems();
     }
 
     #region properties
-
+    
     public CR2WFile Cr2wFile { get; set; }
+
+    public event EventHandler? OnSaveCompleted;
 
     [ObservableProperty] private ObservableCollection<RedDocumentTabViewModel> _tabItemViewModels = new();
 
@@ -190,116 +188,85 @@ public partial class RedDocumentViewModel : DocumentViewModel
         await Task.CompletedTask;
     }
 
-    public void SaveSync(object? parameter)
+    protected override void SaveAs(SaveAsParameters saveParams)
     {
-        var ms = new MemoryStream();
-        var file = GetMainFile();
-
-        try
+        var cr2W = Cr2wFile;
+        if (!saveParams.SkipOnSaveHook && _hookService is AppHookService appHookService &&
+            !appHookService.OnSave(FilePath, ref cr2W))
         {
-            // if we're in a text view, use a normal StreamWriter, else use the CR2W one
-            if (file is RDTTextViewModel textViewModel)
-            {
-                using var tw = new StreamWriter(ms, null, -1, true);
-                var text = textViewModel.Text;
-                tw.Write(text);
-            }
-            else if (file is not null && Cr2wFile != null)
-            {
-                var cr2w = Cr2wFile;
-                if (_hookService is AppHookService appHookService && !appHookService.OnSave(FilePath, ref cr2w))
-                {
-                    _loggerService.Error($"Error while processing onSave hooks");
-                    return;
-                }
-
-                SaveHashedValues(cr2w);
-
-                using var writer = new CR2WWriter(ms, Encoding.UTF8, true) { LoggerService = _loggerService };
-                writer.WriteFile(cr2w);
-            }
-        }
-        catch (Exception e)
-        {
-            _loggerService.Error($"Error while saving {FilePath}");
-            _loggerService.Error(e);
-
-            return;
+            _loggerService.Error($"Error while processing onSave hooks");
         }
 
-        if (FileHelper.SafeWrite(ms, FilePath, _loggerService))
+        if (!SaveSync(saveParams.OriginalObject, saveParams.AbsoluteFilePath))
         {
-            LastWriteTime = File.GetLastWriteTime(FilePath);
+            throw new Exception($"Failed to save {saveParams.AbsoluteFilePath}");
+        }
+    }
+
+    public bool SaveSync(object? _, string? filePath = null)
+    {
+        filePath ??= FilePath;
+        var cr2w = Cr2wFile;
+
+        if (_hookService is AppHookService appHookService && !appHookService.OnSave(FilePath, ref cr2w))
+        {
+            _loggerService.Error($"Error while processing onSave hooks");
+            return false;
         }
 
+        _suppressNextReload = true;
+
+        if (GetMainFile() is null || !_cr2WTools.WriteCr2W(cr2w, filePath))
+        {
+            _suppressNextReload = false; // Clear on failure
+            return false;
+        }
+
+        LastWriteTime = File.GetLastWriteTime(filePath);
         SetIsDirty(false);
-        _loggerService.Success($"Saved file {FilePath}");
+        OnSaveCompleted?.Invoke(this, EventArgs.Empty);
+        return true;
     }
 
-    private void SaveHashedValues(CR2WFile file)
-    {
-        if (_hashService is not HashServiceExt hashService)
-        {
-            return;
-        }
-        
-        foreach (var (path, value) in file.RootChunk.GetEnumerator())
-        {
-            if (value is IRedRef redRef && redRef.DepotPath != ResourcePath.Empty)
-            {
-                if (!redRef.DepotPath.TryGetResolvedText(out var refPath))
-                {
-                    continue;
-                }
-
-                hashService.AddResourcePath(refPath);
-            }
-
-            if (value is TweakDBID tweakDbId && tweakDbId != TweakDBID.Empty)
-            {
-                if (!tweakDbId.TryGetResolvedText(out var tweakName))
-                {
-                    continue;
-                }
-
-                hashService.AddTweakName(tweakName);
-            }
-        }
-    }
-
-    public override void SaveAs(object parameter) => throw new NotImplementedException();
 
     public override bool Reload(bool force)
     {
+        if (_suppressNextReload)
+        {
+            _suppressNextReload = false; // Consume the flag
+            // This reload was triggered by our own save.
+            // We just need to update the timestamp and dirty state, not rebuild the UI.
+            SetIsDirty(false);
+            LastWriteTime = File.GetLastWriteTime(FilePath);
+            return true;
+        }
+
         if (!File.Exists(FilePath) || (!force && IsDirty))
         {
             return false;
         }
 
-
-        using var fs = File.Open(FilePath, FileMode.Open);
-        if (!_parserService.TryReadRed4File(fs, out var cr2wFile))
+        // If we got here, it means the files were different, or an error occurred during comparison.
+        // Proceed with the original, destructive reload.
+        try
+        {
+            var cr2WFile = _cr2WTools.ReadCr2W(FilePath);
+            Cr2wFile = cr2WFile;
+        }
+        catch (Exception)
         {
             return false;
         }
-
-        Cr2wFile = cr2wFile;
         PopulateItems();
 
         SetIsDirty(false);
         LastWriteTime = File.GetLastWriteTime(FilePath);
 
         return true;
-
     }
 
     public RedDocumentTabViewModel? GetMainFile()
     {
-        if (SelectedTabItemViewModel is RDTTextViewModel textVM)
-        {
-            return textVM;
-        }
-
         return TabItemViewModels
             .OfType<RDTDataViewModel>()
             .FirstOrDefault(x => x.DocumentItemType == ERedDocumentItemType.MainFile);
@@ -309,7 +276,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
     {
         if (cls is CBitmapTexture xbm)
         {
-            TabItemViewModels.Add(_documentTabViewmodelFactory. RDTTextureViewModel(xbm, this));
+            TabItemViewModels.Add(_documentTabViewmodelFactory.RDTTextureViewModel(xbm, this));
         }
         if (cls is CCubeTexture cube)
         {
@@ -359,7 +326,33 @@ public partial class RedDocumentViewModel : DocumentViewModel
         {
             TabItemViewModels.Add(_documentTabViewmodelFactory.RDTMeshViewModel(wsb, this));
         }
-        if (_globals.Value.ENABLE_NODE_EDITOR && cls is graphGraphResource or scnSceneResource)
+        if (cls is scnSceneResource sceneResource)
+        {
+            var combinedSceneTab = new SceneGraphViewModel(sceneResource, this, _chunkViewmodelFactory, _nodeWrapperFactory);
+            TabItemViewModels.Insert(0, combinedSceneTab);
+
+            if (_globals.Value.ENABLE_NODE_EDITOR)
+            {
+                TabItemViewModels.Add(new RDTGraphViewModel2(sceneResource, this, _nodeWrapperFactory));
+            }
+
+            return;
+        }
+
+        if (cls is questQuestPhaseResource questPhaseResource)
+        {
+            var combinedQuestPhaseTab = new QuestPhaseGraphViewModel(questPhaseResource, this, _chunkViewmodelFactory, _nodeWrapperFactory);
+            TabItemViewModels.Insert(0, combinedQuestPhaseTab);
+
+            if (_globals.Value.ENABLE_NODE_EDITOR)
+            {
+                TabItemViewModels.Add(new RDTGraphViewModel2(questPhaseResource, this, _nodeWrapperFactory));
+            }
+
+            return;
+        }
+
+        if (_globals.Value.ENABLE_NODE_EDITOR && cls is graphGraphResource)
         {
             TabItemViewModels.Add(new RDTGraphViewModel2(cls, this, _nodeWrapperFactory));
         }
@@ -416,7 +409,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
             rootTab = _documentTabViewmodelFactory.RDTDataViewModel(Cr2wFile.RootChunk, this, _appViewModel, _chunkViewmodelFactory);
             rootTab.OnSectorNodeSelected += OnSectorNodeSelected;
         }
-        
+
         TabItemViewModels.Clear();
 
         TabItemViewModels.Add(rootTab);
@@ -454,12 +447,12 @@ public partial class RedDocumentViewModel : DocumentViewModel
         {
             existingPath = ArchiveXlHelper.GetFirstExistingPath(existingPath);
         }
-        
+
         if (string.IsNullOrEmpty(existingPath))
         {
             return null;
         }
-        
+
         lock (Files)
         {
             if (!Files.ContainsKey(existingPath))

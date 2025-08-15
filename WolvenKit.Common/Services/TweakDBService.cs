@@ -5,14 +5,13 @@ using System.IO;
 using System.Threading.Tasks;
 using WolvenKit.Common.Model;
 using WolvenKit.RED4.TweakDB;
-using WolvenKit.RED4.TweakDB.Helper;
 using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Pools;
 
 namespace WolvenKit.Common.Services
 {
     public class TweakDBService : ITweakDBService
     {
-        private static readonly TweakDBStringHelper s_stringHelper = new();
         private static TweakDB s_tweakDb = new();
 
         private bool _isLoading;
@@ -51,12 +50,21 @@ namespace WolvenKit.Common.Services
 
         public static bool Exists(TweakDBID key) => s_tweakDb.Flats.Exists(key) || s_tweakDb.Records.Exists(key);
 
-        public string? GetString(ulong key) => s_stringHelper.GetString(key);
-        public static string? GetStringFromKey(ulong key) => s_stringHelper.GetString(key);
+        public string? GetString(ulong key) => TweakDBIDPool.ResolveHash(key);
+        public static string? GetStringFromKey(ulong key) => TweakDBIDPool.ResolveHash(key);
 
         public static IRedType? GetFlat(TweakDBID tdb) => s_tweakDb.Flats.GetValue((ulong)tdb);
         public static List<TweakDBID>? GetQuery(TweakDBID tdb) => s_tweakDb.Queries.GetQuery((ulong)tdb);
         public static byte? GetGroupTag(TweakDBID tdb) => s_tweakDb.GroupTags.GetGroupTag((ulong)tdb);
+        public static InternalEnums.EGroupTag GetGroupTagAsFlag(TweakDBID tdb)
+        {
+            if (GetGroupTag(tdb) is { } val)
+            {
+                return (InternalEnums.EGroupTag)val;
+            }
+            
+            return InternalEnums.EGroupTag.None;
+        }
 
         public static bool TryGetType(TweakDBID tweakDBID, [NotNullWhen(true)] out Type? type)
         {

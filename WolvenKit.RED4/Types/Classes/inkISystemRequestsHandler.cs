@@ -156,6 +156,38 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCloudSaveUploadFinish>(value);
 		}
 
+		[Ordinal(19)] 
+		[RED("ScreenshotsForLoadReady")] 
+		public inkGameScreenshotsRequestResult ScreenshotsForLoadReady
+		{
+			get => GetPropertyValue<inkGameScreenshotsRequestResult>();
+			set => SetPropertyValue<inkGameScreenshotsRequestResult>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("FavoritesLoadedReady")] 
+		public inkFavoriteLoadResult FavoritesLoadedReady
+		{
+			get => GetPropertyValue<inkFavoriteLoadResult>();
+			set => SetPropertyValue<inkFavoriteLoadResult>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("DeleteSreenshotComplete")] 
+		public inkDeleteScreenshotResult DeleteSreenshotComplete
+		{
+			get => GetPropertyValue<inkDeleteScreenshotResult>();
+			set => SetPropertyValue<inkDeleteScreenshotResult>(value);
+		}
+
+		[Ordinal(22)] 
+		[RED("MarketingConsentPopupTypeResult")] 
+		public inkMarketingConsentPopupTypeResult MarketingConsentPopupTypeResult
+		{
+			get => GetPropertyValue<inkMarketingConsentPopupTypeResult>();
+			set => SetPropertyValue<inkMarketingConsentPopupTypeResult>(value);
+		}
+
 		public inkISystemRequestsHandler()
 		{
 			PostConstruct();

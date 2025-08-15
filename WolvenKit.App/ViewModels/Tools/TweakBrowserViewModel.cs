@@ -11,10 +11,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SharpDX.Win32;
 using WolvenKit.App.Factories;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
@@ -53,6 +51,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
 
     public string Extension { get; set; } = "tweak";
 
+    [ObservableProperty] private bool _isLoading = true;
 
     [ObservableProperty] private string _searchText = string.Empty;
     [ObservableProperty] private bool _showNonResolvableEntries;
@@ -70,7 +69,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
 
     public TweakBrowserViewModel(
         AppViewModel appViewModel,
-        IChunkViewmodelFactory chunkViewmodelFactory, 
+        IChunkViewmodelFactory chunkViewmodelFactory,
         ISettingsManager settingsManager,
         INotificationService notificationService,
         IProjectManager projectManager,
@@ -110,7 +109,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
                 {
                     var vm = _chunkViewmodelFactory.ChunkViewModel(
                         TweakDBService.GetRecord(SelectedRecordEntry.Item).NotNull(), SelectedRecordEntry.DisplayName, _appViewModel,
-                        _settingsManager.DefaultEditorDifficultyLevel, null, true);
+                        null, true);
                     vm.IsExpanded = true;
                     SelectedRecord.Add(vm);
                 }
@@ -120,16 +119,16 @@ public partial class TweakBrowserViewModel : ToolViewModel
 
             case nameof(SelectedFlatEntry):
             {
+                SelectedFlat.Clear();
                 if (SelectedFlatEntry != null && _tweakDB.IsLoaded)
                 {
                     var flat = TweakDBService.GetFlat(SelectedFlatEntry.Item);
                     ArgumentNullException.ThrowIfNull(flat);
-                    SelectedFlat = _chunkViewmodelFactory.ChunkViewModel(flat, flat.GetType().Name, _appViewModel,
-                        _settingsManager.DefaultEditorDifficultyLevel);
-                }
-                else
-                {
-                    SelectedFlat = null;
+
+                    var vm = _chunkViewmodelFactory.ChunkViewModel(flat, flat.GetType().Name, _appViewModel, null, true);
+                    vm.IsExpanded = true;
+
+                    SelectedFlat.Add(vm);
                 }
                 OnPropertyChanged(nameof(SelectedFlat));
                 break;
@@ -137,6 +136,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
 
             case nameof(SelectedQueryEntry):
             {
+                SelectedQuery.Clear();
                 if (SelectedQueryEntry != null && _tweakDB.IsLoaded)
                 {
                     var arr = new CArray<TweakDBID>();
@@ -145,12 +145,10 @@ public partial class TweakBrowserViewModel : ToolViewModel
                         arr.Add(query);
                     }
 
-                    SelectedQuery = _chunkViewmodelFactory.ChunkViewModel(arr, nameof(CArray<TweakDBID>), _appViewModel,
-                        _settingsManager.DefaultEditorDifficultyLevel);
-                }
-                else
-                {
-                    SelectedQuery = null;
+                    var vm = _chunkViewmodelFactory.ChunkViewModel(arr, nameof(CArray<TweakDBID>), _appViewModel, null, true);
+                    vm.IsExpanded = true;
+
+                    SelectedQuery.Add(vm);
                 }
                 OnPropertyChanged(nameof(SelectedQuery));
                 break;
@@ -160,12 +158,10 @@ public partial class TweakBrowserViewModel : ToolViewModel
             {
                 if (SelectedGroupTagEntry != null && _tweakDB.IsLoaded)
                 {
-                    var u = TweakDBService.GetGroupTag(SelectedGroupTagEntry.Item);
-                    if (u is not null)
-                    {
-                        SelectedGroupTag = _chunkViewmodelFactory.ChunkViewModel((CUInt8)u, nameof(CUInt8), _appViewModel,
-                            _settingsManager.DefaultEditorDifficultyLevel);
-                    }
+                    var u = TweakDBService.GetGroupTagAsFlag(SelectedGroupTagEntry.Item);
+
+                    SelectedGroupTag =
+                        _chunkViewmodelFactory.ChunkViewModel((CBitField<InternalEnums.EGroupTag>)u, "Tags", _appViewModel, null, true);
                 }
                 else
                 {
@@ -184,8 +180,6 @@ public partial class TweakBrowserViewModel : ToolViewModel
 
     #region Properties
 
-    [ObservableProperty] private Visibility _loadVisibility = Visibility.Visible;
-
     [ObservableProperty] private ICollectionView _records = new CollectionView(new List<object>());
     [ObservableProperty] private ICollectionView _flats = new CollectionView(new List<object>());
     [ObservableProperty] private ICollectionView _queries = new CollectionView(new List<object>());
@@ -199,8 +193,8 @@ public partial class TweakBrowserViewModel : ToolViewModel
     public string GroupTagsHeader => $"GroupTags ({GroupTags.Cast<object>().Count()})";
 
     public ObservableCollection<ChunkViewModel> SelectedRecord { get; set; } = new();
-    [ObservableProperty] private ChunkViewModel? _selectedFlat;
-    [ObservableProperty] private ChunkViewModel? _selectedQuery;
+    public ObservableCollection<ChunkViewModel> SelectedFlat { get; set; } = new();
+    public ObservableCollection<ChunkViewModel> SelectedQuery { get; set; } = new();
     [ObservableProperty] private ChunkViewModel? _selectedGroupTag;
 
     #endregion
@@ -258,7 +252,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
 
             Refresh();
 
-            LoadVisibility = Visibility.Collapsed;
+            IsLoading = false;
             _notificationService.Success($"Tweak Browser is initialized");
         });
 
@@ -273,7 +267,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
     private void Refresh()
     {
         SelectedRecordEntry = null;
-        
+
         Records.Refresh();
         OnPropertyChanged(nameof(Records));
         OnPropertyChanged(nameof(RecordsHeader));
@@ -381,7 +375,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
             _loggerService.Error($"Failed to create TweakXL yaml. Error: {ex}");
             throw;
         }
-        
+
     }
 
     private RelayCommand? _copyName;
@@ -431,7 +425,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
                     IsInlineRecord = s_inlineRegex.IsMatch(Item.ResolvedText);
                 }
 
-                if( TweakDBService.TryGetType(Item, out var type))
+                if (TweakDBService.TryGetType(Item, out var type))
                 {
                     RecordTypeName = type.Name[8..^7];
                 }

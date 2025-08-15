@@ -8,12 +8,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
-using DynamicData.Kernel;
 using HandyControl.Tools.Extension;
 using Splat;
 using WolvenKit.App.Services;
-using WolvenKit.Common;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Modkit.Resources;
 using WolvenKit.RED4.Types;
 
@@ -38,10 +35,9 @@ namespace WolvenKit.Views.Editors
         private readonly IAppArchiveManager _archiveManager;
 
         // We need this to update after onPaste
-        private DispatcherTimer _updateTimer;
+        private readonly DispatcherTimer _updateTimer;
 
         public IEnumerable<InternalEnums.EImportFlags> EnumValues => Enum.GetValues(typeof(InternalEnums.EImportFlags)).Cast<InternalEnums.EImportFlags>();
-
 
         public RedRefEditor()
         {
@@ -51,10 +47,10 @@ namespace WolvenKit.Views.Editors
 
             FlagsComboBox.SelectionChanged += FlagsComboBox_OnSelectionChanged;
 
-            // Initialize the DispatcherTimer
+            // Set a timer to trigger a validity check 500 ms after init
             _updateTimer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromMilliseconds(500) // Set the delay interval (e.g., 500 milliseconds)
+                Interval = TimeSpan.FromMilliseconds(500)
             };
             _updateTimer.Tick += OnUpdateTimerTick;
         }
@@ -64,8 +60,10 @@ namespace WolvenKit.Views.Editors
             get => (IRedRef)GetValue(RedRefProperty);
             set => SetValue(RedRefProperty, value);
         }
+
+        /// <summary>Identifies the <see cref="RedRef"/> dependency property.</summary>
         public static readonly DependencyProperty RedRefProperty = DependencyProperty.Register(
-            nameof(RedRef), typeof(IRedRef), typeof(RedRefEditor), new PropertyMetadata(default(IRedRef), OnRedRefChanged));
+            nameof(RedRef), typeof(IRedRef), typeof(RedRefEditor), new PropertyMetadata(null, OnRedRefChanged));
 
         private static void OnRedRefChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -74,8 +72,7 @@ namespace WolvenKit.Views.Editors
                 return;
             }
 
-            view.OnPropertyChanged(nameof(DepotPath));
-            view.OnPropertyChanged(nameof(Hash));
+            view.OnPropertyChanged(nameof(RedRef));
         }
 
         public FileScope Scope
@@ -84,6 +81,7 @@ namespace WolvenKit.Views.Editors
             set => SetValue(ScopeProperty, value);
         }
 
+        /// <summary>Identifies the <see cref="Scope"/> dependency property.</summary>
         public static readonly DependencyProperty ScopeProperty = DependencyProperty.Register(
             nameof(Scope),
             typeof(FileScope),
@@ -102,9 +100,13 @@ namespace WolvenKit.Views.Editors
 
         public string DepotPath
         {
-            get => RedRef.DepotPath;
+            get => RedRef?.DepotPath ?? ResourcePath.Empty;
             set
             {
+                if (RedRef is null)
+                {
+                    return;
+                }
                 if (!string.IsNullOrEmpty(value.Trim()))
                 {
                     SetValue(RedRefProperty, (IRedRef)RedTypeManager.CreateRedType(RedRef.RedType, (ResourcePath)value, RedRef.Flags));
@@ -120,16 +122,21 @@ namespace WolvenKit.Views.Editors
         {
             get
             {
+                var numericHash = RedRef?.DepotPath.GetRedHash() ?? 0; 
                 if (_settingsManager.ShowResourcePathAsHex)
                 {
-                    return RedRef.DepotPath.GetRedHash().ToString("X");
+                    return numericHash.ToString("X");
                 }
 
-                return RedRef.DepotPath.GetRedHash().ToString();
-                
+                return numericHash.ToString();
+
             }
             set
             {
+                if (RedRef is null)
+                {
+                    return;
+                }
                 if (_settingsManager.ShowResourcePathAsHex)
                 {
                     SetValue(RedRefProperty, (IRedRef)RedTypeManager.CreateRedType(RedRef.RedType, (ResourcePath)ulong.Parse(value, NumberStyles.HexNumber), RedRef.Flags));
@@ -140,6 +147,8 @@ namespace WolvenKit.Views.Editors
                 }
             }
         }
+
+        public string TypeName => RedRef?.RedType ?? nameof(RedDummy);
 
         private void HashBox_OnPreviewTextInput(object sender, TextCompositionEventArgs e)
         {
@@ -188,20 +197,35 @@ namespace WolvenKit.Views.Editors
             }
         }
 
+        /// <summary>Identifies the <see cref="TextBoxToolTip"/> dependency property.</summary>
         public static readonly DependencyProperty TextBoxToolTipProperty = DependencyProperty.Register(
             nameof(TextBoxToolTip), typeof(string), typeof(RedRefEditor), new PropertyMetadata(default(string)));
 
         public string TextBoxToolTip
         {
-            get => TextBoxToolTip;
+            get => (string)GetValue(TextBoxToolTipProperty);
             set => SetValue(TextBoxToolTipProperty, value);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            if (propertyName != nameof(RedRef))
+            {
+                return;
+            }
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TypeName)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DepotPath)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Hash)));
+        }
 
         private void RefreshValidityAndTooltip(object sender, RoutedEventArgs e)
         {
+            RecalculateFlags();
+            
             if (_settingsManager?.UseValidatingEditor != true || RedRef?.DepotPath == ResourcePath.Empty ||
                 RedRef?.DepotPath.GetResolvedText() is not string filePath || filePath.Trim().IsNullOrEmpty())
             {
@@ -220,7 +244,7 @@ namespace WolvenKit.Views.Editors
                     return;
                 }
 
-                if (App.Helpers.ArchiveXlHelper.GetFirstExistingPath(filePath) is not string s)
+                if (App.Helpers.ArchiveXlHelper.GetFirstExistingPath(filePath) is null)
                 {
                     SetCurrentValue(ScopeProperty, FileScope.NotFoundWarning);
                     SetCurrentValue(TextBoxToolTipProperty, "Substitution couldn't be resolved (ignore this if everything works)");
@@ -254,6 +278,7 @@ namespace WolvenKit.Views.Editors
         {
             _updateSender = sender;
             _updateTimer.Stop();
+            
             _updateTimer.Start();
         }
 
@@ -263,7 +288,7 @@ namespace WolvenKit.Views.Editors
             _updateTimer.Stop();
             RefreshValidityAndTooltip(_updateSender, new RoutedEventArgs());
         }
-        
+
         public void TrimmingTextbox_OnKeyUp(object sender, EventArgs e)
         {
             if (e is not KeyEventArgs { Key: Key.Enter or Key.Tab })
@@ -273,5 +298,27 @@ namespace WolvenKit.Views.Editors
 
             RefreshValidityAndTooltip(sender, new RoutedEventArgs());
         }
+
+        private void RecalculateFlags()
+        {
+            if (RedRef is null || RedRef.DepotPath == ResourcePath.Empty ||
+                RedRef.DepotPath.GetResolvedText() is not string depotPath)
+            {
+                return;
+            }
+
+            if (ArchiveXlHelper.HasSubstitution(depotPath))
+            {
+                FlagsComboBox.SetCurrentValue(System.Windows.Controls.Primitives.Selector.SelectedItemProperty,
+                    InternalEnums.EImportFlags.Soft);
+            }
+            else
+            {
+                FlagsComboBox.SetCurrentValue(System.Windows.Controls.Primitives.Selector.SelectedItemProperty,
+                    InternalEnums.EImportFlags.Default);
+            }
+        }
+
+        private void TrimmingTextbox_OnFocusLost(object sender, EventArgs e) => RecalculateFlags();
     }
 }
