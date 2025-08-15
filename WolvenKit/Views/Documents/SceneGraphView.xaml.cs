@@ -1,6 +1,10 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,22 +25,46 @@ using WolvenKit.App.Interaction;
 using Splat;
 using WolvenKit.Views.Dialogs;
 using AdonisUI.Controls;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Views.Documents
 {
     /// <summary>
     /// Interaktionslogik für SceneGraphView.xaml
     /// </summary>
-    public partial class SceneGraphView : UserControl
+    public partial class SceneGraphView : UserControl, IDisposable
     {
         // Navigation memory: tracks which child was last visited from each node in each direction
         private readonly Dictionary<(uint nodeId, Key direction), uint> _navigationMemory = new();
         private readonly List<uint> _navigationHistory = new();
+        
+        // Selection persistence across document switches
+        private static readonly Dictionary<string, uint> s_documentNodeSelections = new();
+        private static AppViewModel? s_globalAppViewModel;
+        private static IDocumentViewModel? s_lastActiveDocument;
+        private static bool s_selectionManagerInitialized = false;
+        
+        private bool _disposed = false;
 
         public SceneGraphView()
         {
             InitializeComponent();
             DataContextChanged += OnDataContextChanged;
+            Loaded += OnViewLoaded;
+        }
+
+        private void OnViewLoaded(object sender, RoutedEventArgs e)
+        {
+            var viewModel = DataContext as SceneGraphViewModel;
+            var document = viewModel?.Parent;
+            
+            if (document != null)
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    RestoreSelectionIfReady(document);
+                }), System.Windows.Threading.DispatcherPriority.Background);
+            }
         }
 
         private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -45,6 +73,9 @@ namespace WolvenKit.Views.Documents
 
             viewModel.MainGraph.Connections.CollectionChanged += (_, _) => UpdateConnectionPathTypes(viewModel.MainGraph);
             viewModel.MainGraph.Nodes.CollectionChanged += (_, _) => UpdateConnectionPathTypes(viewModel.MainGraph);
+
+            // Initialize centralized selection manager
+            InitializeGlobalSelectionManager();
 
             Dispatcher.BeginInvoke(new Action(() =>
             {
@@ -55,6 +86,9 @@ namespace WolvenKit.Views.Documents
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
                     viewModel.SetGraphLoaded();
+                    
+                    // Restore selection after graph is loaded
+                    RestoreSelectionIfReady(viewModel.Parent);
                 }), System.Windows.Threading.DispatcherPriority.Background);
             }), System.Windows.Threading.DispatcherPriority.Loaded);
         }
@@ -172,7 +206,7 @@ namespace WolvenKit.Views.Documents
             WolvenKit.App.ViewModels.GraphEditor.NodeViewModel currentNode, 
             Key direction)
         {
-            if (graph?.Nodes == null) return null;
+            if (graph?.Nodes == null) return null!;
 
             // Get all connected nodes in the specified direction
             var connectedCandidates = GetConnectedNodesInDirection(graph, currentNode, direction);
@@ -429,8 +463,11 @@ namespace WolvenKit.Views.Documents
                 return false;
 
             // Select the node
-            SceneGraphEditor?.Editor?.SelectedItems.Clear();
-            SceneGraphEditor?.Editor?.SelectedItems.Add(targetNode);
+            if (SceneGraphEditor?.Editor != null)
+            {
+                SceneGraphEditor.Editor.SelectedItems?.Clear();
+                SceneGraphEditor.Editor.SelectedItems?.Add(targetNode);
+            }
             NodeSelectionService.Instance.SelectedNode = targetNode;
 
             // Center view on the node
@@ -566,8 +603,11 @@ namespace WolvenKit.Views.Documents
                     UpdateNavigationMemory(currentNode.UniqueId, e.Key, next.UniqueId);
                     
                     // Update selection in editor
-                    SceneGraphEditor?.Editor?.SelectedItems.Clear();
-                    SceneGraphEditor?.Editor?.SelectedItems.Add(next);
+                    if (SceneGraphEditor?.Editor != null)
+                    {
+                        SceneGraphEditor.Editor.SelectedItems?.Clear();
+                        SceneGraphEditor.Editor.SelectedItems?.Add(next);
+                    }
                     NodeSelectionService.Instance.SelectedNode = next;
                     
                     // Auto-scroll graph view to keep selected node visible
@@ -694,17 +734,210 @@ namespace WolvenKit.Views.Documents
             // Find the node with the specified ID
             var targetNode = viewModel.MainGraph.Nodes.FirstOrDefault(n => n.UniqueId == nodeId);
 
-            if (targetNode != null)
+            if (targetNode != null && SceneGraphEditor?.Editor != null)
             {
                 // Clear current selection
-                SceneGraphEditor.Editor.SelectedItems.Clear();
+                SceneGraphEditor.Editor.SelectedItems?.Clear();
                 
                 // Select the target node
-                SceneGraphEditor.Editor.SelectedItems.Add(targetNode);
+                SceneGraphEditor.Editor.SelectedItems?.Add(targetNode);
                 
                 // Update the NodeSelectionService
                 NodeSelectionService.Instance.SelectedNode = targetNode;
             }
         }
+
+        #region Selection Persistence
+
+        /// <summary>
+        /// Check if a document is a scene document
+        /// </summary>
+        private static bool IsSceneDocument(IDocumentViewModel? document)
+        {
+            return document?.FilePath?.EndsWith(".scene", StringComparison.OrdinalIgnoreCase) == true;
+        }
+
+        /// <summary>
+        /// Initialize the global selection manager (only once across all instances)
+        /// </summary>
+        private static void InitializeGlobalSelectionManager()
+        {
+            if (s_selectionManagerInitialized)
+            {
+                return;
+            }
+
+            s_globalAppViewModel = Locator.Current.GetService<AppViewModel>();
+            if (s_globalAppViewModel != null)
+            {
+                s_globalAppViewModel.PropertyChanged += OnGlobalAppViewModelPropertyChanged;
+                s_lastActiveDocument = s_globalAppViewModel.ActiveDocument;
+                s_selectionManagerInitialized = true;
+            }
+        }
+
+        /// <summary>
+        /// Global event handler for document switches (handles ALL scene documents)
+        /// </summary>
+        private static void OnGlobalAppViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != nameof(AppViewModel.ActiveDocument) || s_globalAppViewModel == null)
+            {
+                return;
+            }
+
+            var newActiveDocument = s_globalAppViewModel.ActiveDocument;
+
+            // Save selection for the document we're leaving (if it's a scene document)
+            if (s_lastActiveDocument != null && IsSceneDocument(s_lastActiveDocument) && !ReferenceEquals(s_lastActiveDocument, newActiveDocument))
+            {
+                SaveCurrentSelectionStatic(s_lastActiveDocument);
+            }
+
+            s_lastActiveDocument = newActiveDocument;
+
+            // Restore selection for the document we're entering (if it's a scene document)
+            if (newActiveDocument != null && IsSceneDocument(newActiveDocument))
+            {
+                RestoreSelectionStatic(newActiveDocument);
+            }
+        }
+
+
+
+        /// <summary>
+        /// Static method to save current selection (called by global event handler)
+        /// </summary>
+        private static void SaveCurrentSelectionStatic(IDocumentViewModel document)
+        {
+            var documentKey = document.FilePath;
+            if (documentKey == null)
+            {
+                return;
+            }
+
+            var currentSelectedNode = NodeSelectionService.Instance.SelectedNode;
+            if (currentSelectedNode != null)
+            {
+                s_documentNodeSelections[documentKey] = currentSelectedNode.UniqueId;
+            }
+            else
+            {
+                s_documentNodeSelections.Remove(documentKey);
+            }
+        }
+
+        /// <summary>
+        /// Static method to restore selection (called by global event handler)
+        /// </summary>
+        private static void RestoreSelectionStatic(IDocumentViewModel document)
+        {
+            var documentKey = document.FilePath;
+            if (documentKey == null)
+            {
+                return;
+            }
+
+            // Check if we have a saved selection for this document
+            if (!s_documentNodeSelections.TryGetValue(documentKey, out var nodeId))
+            {
+                NodeSelectionService.Instance.SelectedNode = null;
+                return;
+            }
+
+            // The actual UI selection will be handled by the individual view when it gets activated
+        }
+
+        /// <summary>
+        /// Get a unique key for the document and scene resource
+        /// </summary>
+        private string? GetDocumentKey(IDocumentViewModel? document)
+        {
+            return document?.FilePath;
+        }
+
+
+
+        /// <summary>
+        /// Restore selection only if the view is ready and this is the active document
+        /// </summary>
+        private void RestoreSelectionIfReady(IDocumentViewModel? activeDocument)
+        {
+            if (activeDocument == null || _disposed ||
+                DataContext as SceneGraphViewModel is not SceneGraphViewModel viewModel)
+            {
+                return;
+            }
+
+            RestoreSelection(activeDocument);
+        }
+
+        /// <summary>
+        /// Restore the previously selected node for the given document
+        /// </summary>
+        private void RestoreSelection(IDocumentViewModel? document)
+        {
+            var viewModel = DataContext as SceneGraphViewModel;
+            if (viewModel?.MainGraph?.Nodes == null || SceneGraphEditor?.Editor == null)
+            {
+                return;
+            }
+
+            if (document == null || _disposed || GetDocumentKey(document) is not string documentKey ||
+                string.IsNullOrEmpty(documentKey))
+            {
+                SceneGraphEditor.Editor.SelectedItems?.Clear();
+                NodeSelectionService.Instance.SelectedNode = null;
+                return;
+            }
+
+            // Check if we have a saved selection for this document
+            if (!s_documentNodeSelections.TryGetValue(documentKey, out var nodeId))
+            {
+                SceneGraphEditor.Editor.SelectedItems?.Clear();
+                NodeSelectionService.Instance.SelectedNode = null;
+                return;
+            }
+
+            // Try to restore the saved selection
+            var targetNode = viewModel.MainGraph.Nodes.FirstOrDefault(n => n.UniqueId == nodeId);
+            if (targetNode != null)
+            {
+                SceneGraphEditor.Editor.SelectedItems?.Clear();
+                NodeSelectionService.Instance.SelectedNode = null;
+                
+                SceneGraphEditor.Editor.SelectedItems?.Add(targetNode);
+                NodeSelectionService.Instance.SelectedNode = targetNode;
+                
+                // Force property change notifications to update property panel
+                if (targetNode is INotifyPropertyChanged notifyPropertyChanged)
+                {
+                    targetNode.TriggerPropertyChanged(nameof(targetNode.Data));
+                }
+
+                CenterViewOnSelectedNode(viewModel.MainGraph, targetNode);
+            }
+            else
+            {
+                s_documentNodeSelections.Remove(documentKey);
+                SceneGraphEditor.Editor.SelectedItems?.Clear();
+                NodeSelectionService.Instance.SelectedNode = null;
+            }
+        }
+
+        /// <summary>
+        /// Dispose pattern implementation
+        /// </summary>
+        public void Dispose()
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            _disposed = true;
+        }
+
+        #endregion
     }
 } 
