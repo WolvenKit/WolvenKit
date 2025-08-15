@@ -4,6 +4,7 @@ using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types.Exceptions;
+using WolvenKit.RED4.Types.Pools;
 
 namespace WolvenKit.RED4.Archive.IO;
 
@@ -35,7 +36,7 @@ public class ArchiveReader
                     var lxrs = ReadLxrsFooter(br);
                     foreach (var s in lxrs.FileInfos)
                     {
-                        hashService.AddCustom(s);
+                        ResourcePathPool.AddOrGetHash(s);
                     }
                 }
             }
@@ -233,7 +234,7 @@ public class ArchiveReader
 
     private FileEntry ReadFileEntry(BinaryReader br, IHashService hashService)
     {
-        var fileEntry = new FileEntry(hashService)
+        var fileEntry = new FileEntry
         {
             NameHash64 = br.ReadUInt64(),
             Timestamp = DateTime.FromFileTime(br.ReadInt64()),

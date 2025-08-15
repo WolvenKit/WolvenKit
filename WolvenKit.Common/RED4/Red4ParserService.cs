@@ -159,7 +159,7 @@ namespace WolvenKit.RED4.CR2W
                 // TODO: Shouldn't be done here...
                 stream.Seek(0, SeekOrigin.Begin);
                 using var reader = new CR2WReader(stream, Encoding.Default, true);
-                return reader.ReadFileInfo(out info) == EFileReadErrorCodes.NoError;
+                return reader.ReadFileInfo(out info, _loggerService) == EFileReadErrorCodes.NoError;
             }
             catch (Exception e)
             {
@@ -183,7 +183,7 @@ namespace WolvenKit.RED4.CR2W
                 // TODO: Shouldn't be done here...
                 br.BaseStream.Seek(0, SeekOrigin.Begin);
                 using var reader = new CR2WReader(br);
-                return reader.ReadFileInfo(out info) == EFileReadErrorCodes.NoError;
+                return reader.ReadFileInfo(out info, _loggerService) == EFileReadErrorCodes.NoError;
             }
             catch (Exception e)
             {

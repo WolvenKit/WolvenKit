@@ -2,12 +2,14 @@
 using System.IO;
 using WolvenKit.App.Controllers;
 using WolvenKit.Common;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 
 public class questSceneNodeDefinitionWrapper : questSignalStoppingNodeDefinitionWrapper<questSceneNodeDefinition>, IGraphProvider
 {
+    private readonly ILoggerService _loggerService;
     private readonly IArchiveManager _archiveManager;
     private readonly IGameControllerFactory _gameController;
 
@@ -25,15 +27,16 @@ public class questSceneNodeDefinitionWrapper : questSignalStoppingNodeDefinition
         }
     }
 
-    public questSceneNodeDefinitionWrapper(questSceneNodeDefinition nodeDefinition, IGameControllerFactory gameController, IArchiveManager archiveManager) : base(nodeDefinition)
+    public questSceneNodeDefinitionWrapper(questSceneNodeDefinition nodeDefinition, ILoggerService loggerService, IGameControllerFactory gameController, IArchiveManager archiveManager) : base(nodeDefinition)
     {
+        _loggerService = loggerService;
         _archiveManager = archiveManager;
         _gameController = gameController;
 
-        Title = $"{Title} [{nodeDefinition.Id}]";
         if (_castedData.SceneFile.DepotPath != ResourcePath.Empty && _castedData.SceneFile.DepotPath.IsResolvable)
         {
             Details.Add("Filename", Path.GetFileName(_castedData.SceneFile.DepotPath.GetResolvedText())!);
+            Details.Add("Scene location", _castedData.SceneLocation.NodeRef.GetResolvedText()!);
         }
     }
 
@@ -50,10 +53,16 @@ public class questSceneNodeDefinitionWrapper : questSignalStoppingNodeDefinition
         if (_castedData.SceneFile.DepotPath != ResourcePath.Empty)
         {
             var cr2w = _archiveManager.GetCR2WFile(_castedData.SceneFile.DepotPath);
-
-            if (cr2w!.RootChunk is not scnSceneResource res)
+            if (cr2w == null)
             {
-                throw new Exception();
+                _loggerService.Error($"The file \"{_castedData.SceneFile.DepotPath}\" could not be found!");
+                return;
+            }
+
+            if (cr2w.RootChunk is not scnSceneResource res)
+            {
+                _loggerService.Error($"The file \"{_castedData.SceneFile.DepotPath}\" could not be opened!");
+                return;
             }
 
             var fileName = ((ulong)_castedData.SceneFile.DepotPath).ToString();

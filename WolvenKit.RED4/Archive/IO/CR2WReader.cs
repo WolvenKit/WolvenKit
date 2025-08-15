@@ -100,6 +100,23 @@ public partial class CR2WReader : Red4Reader
 
             var propRedType = RedReflection.GetRedTypeFromCSType(prop.Type, prop.Flags);
 
+            if (redTypeName.GetResolvedText() is string s && propRedType != redTypeName)
+            {
+                if (TryReadValue(s, size, out value))
+                {
+                    var args = new InvalidRTTIEventArgs(fullName, propRedType, s, value);
+                    if (!HandleParsingError(args))
+                    {
+                        throw new InvalidRTTIException(fullName, propRedType, s);
+                    }
+
+                    SetProperty(cls, prop.RedName, args.Value);
+                    return true;
+                }
+            }
+
+            _reader.BaseStream.Position = dataStartPos;
+
             if (TryReadValue(propRedType, size, out value))
             {
                 if (!typeInfo.SerializeDefault && !prop.SerializeDefault && prop.IsDefault(value))
@@ -115,31 +132,15 @@ public partial class CR2WReader : Red4Reader
                 return true;
             }
 
-            _reader.BaseStream.Position = dataStartPos;
+            _reader.BaseStream.Position = dataStartPos + size;
 
             if (propRedType == redTypeName)
             {
                 LoggerService?.Warning($"Can't read data for \"{fullName}\" (\"{propRedType}\"). Skipping");
-
-                _reader.BaseStream.Position += size;
-                return true;
-            }
-
-            if (TryReadValue(redTypeName!, size, out value))
-            {
-                var args = new InvalidRTTIEventArgs(fullName, propRedType, redTypeName, value);
-                if (!HandleParsingError(args))
-                {
-                    throw new InvalidRTTIException(fullName, propRedType, redTypeName);
-                }
-
-                SetProperty(cls, prop.RedName, args.Value);
                 return true;
             }
 
             LoggerService?.Warning($"Invalid RedType detected for \"{fullName}\". \"{redTypeName}\" instead of \"{propRedType}\". Skipping");
-
-            _reader.BaseStream.Position += size;
             return true;
         }
 

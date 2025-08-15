@@ -44,6 +44,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("displayType")] 
+		public CUInt32 DisplayType
+		{
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
 		public gameuiSetupScrollBarForAttributeEvent()
 		{
 			PostConstruct();

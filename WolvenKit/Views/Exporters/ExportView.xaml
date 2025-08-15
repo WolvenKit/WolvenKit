@@ -1,279 +1,307 @@
 ﻿<reactiveUi:ReactiveUserControl
     x:Class="WolvenKit.Views.Exporters.ExportView"
+    x:TypeArguments="vm:ExportViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:layout="clr-namespace:WolvenKit.Layout"
-    xmlns:local="clr-namespace:WolvenKit.Views.Importers"
-    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:vm="clr-namespace:WolvenKit.App.ViewModels.Exporters;assembly=WolvenKit.App"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=vm:ExportViewModel}"
-    x:TypeArguments="vm:ExportViewModel"
-    mc:Ignorable="d">
-
+    d:DesignWidth="800"
+    d:DesignHeight="600">
     <Grid Background="{DynamicResource ContentBackgroundAlt2}">
+        <Grid.Resources>
+            <!-- TODO: refactor all button styles -->
+            <Style
+                x:Key="ButtonStyle"
+                TargetType="{x:Type Button}">
+                <Setter Property="Border.Background" Value="{DynamicResource ContentBackground}" />
+                <Setter Property="Border.Padding" Value="{DynamicResource WolvenKitMarginSmall}" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0" />
+
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border
+                                Padding="{TemplateBinding Border.Padding}"
+                                Background="{TemplateBinding Border.Background}"
+                                CornerRadius="3">
+                                <ContentPresenter
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt5}" />
+                    </Trigger>
+
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="templates:IconBox.Opacity" Value="0.4" />
+                    </Trigger>
+
+                    <MultiTrigger>
+                        <MultiTrigger.Conditions>
+                            <Condition Property="IsMouseOver" Value="True" />
+                            <Condition Property="IsPressed" Value="True" />
+                        </MultiTrigger.Conditions>
+
+                        <Setter Property="Border.Background" Value="{StaticResource ContentBackgroundAlt}" />
+                    </MultiTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!--  Top Toolbar  -->
+        <!-- Top Toolbar -->
         <Grid
             Grid.Row="0"
-            Margin="8"
+            Margin="{DynamicResource WolvenKitMarginSmall}"
             Background="{DynamicResource ContentBackgroundAlt2}">
-
             <StackPanel Orientation="Horizontal">
-
-                <!--  ProcessSelectedCommand  -->
+                <!-- ProcessSelectedCommand -->
                 <Button
-                    Padding="4"
+                    Margin="{DynamicResource WolvenKitMarginTinyRight}"
                     VerticalAlignment="Center"
-                    Background="{DynamicResource ContentBackground}"
-                    BorderBrush="{DynamicResource ContentBackgroundAlt}"
-                    BorderThickness="1"
+                    Style="{StaticResource ButtonStyle}"
                     Command="{Binding ProcessSelectedCommand}"
-                    FontSize="14"
-                    Style="{DynamicResource ButtonCustom}"
                     ToolTip="Export selected files to the engine format">
-
                     <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconCodicons
-                            Width="13"
-                            Height="13"
-                            Margin="2"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Foreground="Green"
-                            Kind="DebugStart" />
+                        <templates:IconBox
+                            IconPack="Codicons"
+                            Kind="Play"
+                            Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                            Foreground="{StaticResource WolvenKitGreen}" />
 
                         <TextBlock
-                            Margin="1"
-                            FontSize="14"
+                            VerticalAlignment="Center"
+                            FontSize="{DynamicResource WolvenKitFontBody}"
                             Text="Export Selected" />
                     </StackPanel>
-
                 </Button>
 
-                <!--  ProcessAllCommand  -->
+                <!-- ProcessAllCommand -->
                 <Button
-                    Padding="4"
+                    Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                    Padding="{DynamicResource WolvenKitMarginSmall}"
                     VerticalAlignment="Center"
-                    Background="{DynamicResource ContentBackground}"
-                    BorderBrush="{DynamicResource ContentBackgroundAlt}"
-                    BorderThickness="1"
+                    Style="{StaticResource ButtonStyle}"
                     Command="{Binding ProcessAllCommand}"
-                    FontSize="14"
-                    Style="{DynamicResource ButtonCustom}"
                     ToolTip="Export all files to the engine format">
-
                     <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconCodicons
-                            Width="13"
-                            Height="13"
-                            Margin="2"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Foreground="Green"
-                            Kind="RunAll" />
+                        <templates:IconBox
+                            IconPack="Codicons"
+                            Kind="RunAll"
+                            Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                            Foreground="{StaticResource WolvenKitGreen}" />
 
                         <TextBlock
-                            Margin="1"
-                            FontSize="14"
+                            VerticalAlignment="Center"
+                            FontSize="{DynamicResource WolvenKitFontBody}"
                             Text="Export All" />
                     </StackPanel>
-
                 </Button>
 
-                <Separator />
-
-                <!--  Refresh Files  -->
+                <!-- Refresh Files -->
                 <Button
-                    Padding="4"
+                    Padding="{DynamicResource WolvenKitMarginSmall}"
                     VerticalAlignment="Center"
-                    Background="{DynamicResource ContentBackground}"
-                    BorderBrush="{DynamicResource ContentBackgroundAlt}"
-                    BorderThickness="1"
+                    Style="{StaticResource ButtonStyle}"
                     Command="{Binding RefreshCommand}"
-                    Style="{DynamicResource ButtonCustom}"
-                    ToolTip="Reload all files">
-
+                    ToolTip="Refresh all files">
                     <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconCodicons
-                            Width="13"
-                            Height="13"
-                            Margin="2"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Foreground="CornflowerBlue"
-                            Kind="Refresh" />
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Refresh"
+                            Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                            Foreground="{StaticResource WolvenKitPurple}" />
 
                         <TextBlock
-                            Margin="1"
-                            FontSize="14"
+                            VerticalAlignment="Center"
+                            FontSize="{DynamicResource WolvenKitFontBody}"
                             Text="Refresh" />
                     </StackPanel>
-
                 </Button>
 
-                <Separator />
+                <Separator Margin="{DynamicResource WolvenKitMarginTinyHorizontal}" />
 
-                <!--  ImportSettingsCommand  -->
-                <Button
-                    Padding="4"
+                <TextBlock
+                    Margin="{DynamicResource WolvenKitMarginTinyRight}"
                     VerticalAlignment="Center"
-                    Background="{DynamicResource ContentBackground}"
-                    BorderBrush="{DynamicResource ContentBackgroundAlt}"
-                    BorderThickness="1"
+                    FontSize="{DynamicResource WolvenKitFontBody}"
+                    Text="Settings:" />
+
+                <!-- ImportSettingsCommand -->
+                <Button
+                    Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                    VerticalAlignment="Center"
+                    Style="{StaticResource ButtonStyle}"
                     Command="{Binding ImportSettingsCommand}"
-                    FontSize="12"
-                    Style="{DynamicResource ButtonCustom}"
                     ToolTip="Reset import settings on selected files">
-                    <TextBlock
-                        Margin="1"
-                        FontSize="14"
-                        Text="Reset Settings" />
+                    <templates:IconBox
+                        IconPack="ForkAwesome"
+                        Kind="Recycle"
+                        Margin="0"
+                        Size="{DynamicResource WolvenKitIconTiny}" />
                 </Button>
 
-                <!--  CopyArgumentsTemplateToCommand  -->
+                <!-- CopyArgumentsTemplateToCommand -->
                 <Button
-                    Padding="4"
+                    Margin="{DynamicResource WolvenKitMarginTinyRight}"
                     VerticalAlignment="Center"
-                    Background="{DynamicResource ContentBackground}"
-                    BorderBrush="{DynamicResource ContentBackgroundAlt}"
-                    BorderThickness="1"
+                    Style="{StaticResource ButtonStyle}"
                     Command="{Binding CopyArgumentsTemplateToCommand}"
-                    FontSize="12"
-                    Style="{DynamicResource ButtonCustom}"
                     ToolTip="Copy export settings from selected file">
-
-                    <StackPanel Orientation="Horizontal">
-
-                        <iconPacks:PackIconForkAwesome
-                            Width="13"
-                            Height="13"
-                            Margin="2"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="FilesOutline" />
-
-                        <TextBlock
-                            Margin="1"
-                            FontSize="14"
-                            Text="Copy Settings" />
-
-                    </StackPanel>
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="ContentCopy"
+                        Margin="0"
+                        Size="{DynamicResource WolvenKitIconTiny}" />
                 </Button>
 
-                <!--  PasteArgumentsTemplateToCommand  -->
+                <!-- PasteArgumentsTemplateToCommand -->
                 <Button
-                    Padding="4"
                     VerticalAlignment="Center"
-                    Background="{DynamicResource ContentBackground}"
-                    BorderBrush="{DynamicResource ContentBackgroundAlt}"
-                    BorderThickness="1"
+                    Style="{StaticResource ButtonStyle}"
                     Command="{Binding PasteArgumentsTemplateToCommand}"
-                    FontSize="12"
-                    Style="{DynamicResource ButtonCustom}"
                     ToolTip="Paste export settings to all selected files">
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconForkAwesome
-                            Width="13"
-                            Height="13"
-                            Margin="2"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Kind="FilesOutline" />
-                        <TextBlock
-                            Margin="1"
-                            FontSize="14"
-                            Text="Paste Settings" />
-                    </StackPanel>
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="ContentPaste"
+                        Margin="0"
+                        Size="{DynamicResource WolvenKitIconTiny}" />
                 </Button>
-
             </StackPanel>
         </Grid>
 
-        <!--  Main Grid  -->
-        <Grid Grid.Row="1" Margin="8">
-
+        <!-- Main Grid -->
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="3" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-            <!--  Data Grid Exports  -->
+            <!-- Placeholder: no files to export -->
+            <Border
+                Grid.Column="0"
+                Width="Auto"
+                Height="Auto"
+                BorderBrush="{StaticResource BorderAlt}"
+                BorderThickness="0,1,0,0"
+                Visibility="{Binding Path=HasItems,
+                                     Converter={StaticResource InvertBooleanVisibilityConverter}}">
+                <Grid VerticalAlignment="Center">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock
+                            Width="Auto"
+                            Margin="{DynamicResource WolvenKitMargin}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="#7EFFFFFF"
+                            FontSize="{DynamicResource WolvenKitFontHuge}"
+                            TextWrapping="Wrap"
+                            Text="No files to export" />
+
+                        <TextBlock
+                            Width="Auto"
+                            Margin="{DynamicResource WolvenKitMargin}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="#7EFFFFFF"
+                            FontSize="{DynamicResource WolvenKitFontMedium}"
+                            TextWrapping="Wrap"
+                            Text="Add files to your project to export them" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Data Grid Exports -->
             <syncfusion:SfDataGrid
                 x:Name="ExportGrid"
-                Grid.Row="1"
+                Grid.Column="0"
+                Height="Auto"
+                BorderThickness="0,1,0,0"
+                Visibility="{Binding Path=HasItems,
+                                     Converter={StaticResource BooleanToVisibilityConverter}}"
+                HeaderRowHeight="{DynamicResource WolvenKitTreeGridRowHeaderHeight}"
+                RowHeight="{DynamicResource WolvenKitTreeGridRowHeight}"
+                ColumnSizer="Auto"
                 AllowEditing="False"
                 AllowFiltering="True"
                 AllowResizingColumns="True"
                 AllowSorting="True"
                 AutoGenerateColumns="False"
-                BorderThickness="0,1,0,1"
-                ColumnSizer="Auto"
                 FilterRowPosition="FixedTop"
                 SelectionChanged="ExportGrid_SelectionChanged"
                 SelectionMode="Extended">
-
-
                 <syncfusion:SfDataGrid.Resources>
                     <DataTemplate x:Key="TemplateToolTip">
-                        <TextBlock Text="{Binding Path=FullPath}" />
+                        <TextBlock
+                            Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                            VerticalAlignment="Center"
+                            Text="{Binding Path=FullPath}" />
+                    </DataTemplate>
+
+                    <DataTemplate x:Key="FileNameTemplate">
+                        <TextBlock
+                            Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                            VerticalAlignment="Center"
+                            Text="{Binding Path=Name}" />
                     </DataTemplate>
                 </syncfusion:SfDataGrid.Resources>
 
                 <syncfusion:SfDataGrid.Columns>
-
-                    <syncfusion:GridCheckBoxColumn
-                        Width="50"
-                        HeaderText="#"
-                        MappingName="IsChecked">
-                        <syncfusion:GridCheckBoxColumn.HeaderTemplate>
-                            <DataTemplate>
-                                <CheckBox Command="layout:SFDataGridCommands.CheckAndUnCheck" CommandParameter="{Binding ElementName=ExportGrid}" />
-                            </DataTemplate>
-                        </syncfusion:GridCheckBoxColumn.HeaderTemplate>
-                    </syncfusion:GridCheckBoxColumn>
+                    <syncfusion:GridCheckBoxSelectorColumn
+                        Width="{DynamicResource WolvenKitIconBig}"
+                        MappingName="SelectorColumn" />
 
                     <syncfusion:GridTextColumn
                         AllowFiltering="True"
-                        ColumnSizer="Star"
                         FilterRowCondition="Contains"
                         FilterRowEditorType="TextBoxExt"
                         HeaderText="Name"
-                        ShowToolTip="True"
-                        ToolTipTemplate="{StaticResource TemplateToolTip}"
                         HorizontalHeaderContentAlignment="Left"
-                        MappingName="Name" />
+                        MappingName="BaseFile"
+                        TextAlignment="Right"
+                        TextWrapping="NoWrap"
+                        ShowToolTip="True"
+                        CellTemplate="{StaticResource FileNameTemplate}"
+                        ToolTipTemplate="{StaticResource TemplateToolTip}" />
 
                     <syncfusion:GridTextColumn
+                        ColumnSizer="AutoLastColumnFill"
                         AllowFiltering="False"
                         AllowSorting="False"
-                        ColumnSizer="AutoLastColumnFill"
                         FilterRowCondition="Contains"
                         HeaderText="Export Task"
                         HorizontalHeaderContentAlignment="Left"
                         MappingName="PropertiesDisplay" />
-
                 </syncfusion:SfDataGrid.Columns>
-
             </syncfusion:SfDataGrid>
 
-            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
+            <GridSplitter
+                Grid.Column="1"
+                HorizontalAlignment="Stretch" />
 
-            <!--  Properties  -->
-            <!--  CollectionEditorOpening="PropertyGrid_CollectionEditorOpening"  -->
+            <!-- Properties -->
+            <!-- CollectionEditorOpening="PropertyGrid_CollectionEditorOpening" -->
             <syncfusion:PropertyGrid
                 x:Name="OverlayPropertyGrid"
                 Grid.Column="2"
+                BorderThickness="0,1,0,0"
                 AutoGeneratingPropertyGridItem="OverlayPropertyGrid_AutoGeneratingPropertyGridItem"
                 ButtonPanelVisibility="Hidden"
                 CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
@@ -283,9 +311,6 @@
                 ReadOnlyBackground="{DynamicResource ContentBackgroundAlt}"
                 SearchBoxVisibility="Hidden"
                 SortDirection="{x:Null}" />
-
         </Grid>
-
     </Grid>
-
 </reactiveUi:ReactiveUserControl>

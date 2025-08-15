@@ -91,17 +91,18 @@ namespace WolvenKit.Modkit.RED4.Opus
 
         //public OpusInfo() => OpusCount = 0;
 
-        public void WriteAllOpusFromPaks(Stream[] opuspaks, DirectoryInfo outdir) // thou shall not be used
+        public void WriteAllOpusFromPak(int pakIndex, Stream opuspak, DirectoryInfo outdir)
         {
-            var brs = new BinaryReader[opuspaks.Length];
-            for (var i = 0; i < opuspaks.Length; i++)
-            {
-                brs[i] = new BinaryReader(opuspaks[i]);
-            }
+            var br = new BinaryReader(opuspak);
             for (uint i = 0; i < OpusCount; i++)
             {
-                opuspaks[PackIndices[i]].Position = OpusOffsets[i] + RiffOpusOffsets[i];
-                var bytes = brs[PackIndices[i]].ReadBytes(Convert.ToInt32(OpusStreamLengths[i] - RiffOpusOffsets[i]));
+                if (PackIndices[i] != pakIndex)
+                {
+                    continue;
+                }
+
+                opuspak.Position = OpusOffsets[i] + RiffOpusOffsets[i];
+                var bytes = br.ReadBytes(Convert.ToInt32(OpusStreamLengths[i] - RiffOpusOffsets[i]));
                 var name = OpusHashes[i] + ".opus";
                 File.WriteAllBytes(Path.Combine(outdir.FullName, name), bytes);
             }
@@ -128,7 +129,7 @@ namespace WolvenKit.Modkit.RED4.Opus
             p?.WaitForExit();
         }
 
-        public void WriteOpusToPak(MemoryStream opus, Stream pak, uint hash, MemoryStream wav)
+        public Stream WriteOpusToPak(MemoryStream opus, Stream pak, uint hash, MemoryStream wav)
         {
             var br = new BinaryReader(pak);
             pak.Position = 0;
@@ -179,7 +180,7 @@ namespace WolvenKit.Modkit.RED4.Opus
                 }
             }
 
-            pak = ms;
+            return ms;
             //File.WriteAllBytes(@"C:\Users\Abhinav\Desktop\mod\sfx_container_1280.opuspak",ms.ToArray());
         }
 

@@ -11,16 +11,15 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Documents.DocumentStructures;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DynamicData.Binding;
+using Microsoft.VisualBasic.FileIO;
 using Microsoft.Win32;
 using Semver;
-using SharpGLTF.Schema2;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Factories;
@@ -36,12 +35,14 @@ using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Exporters;
 using WolvenKit.App.ViewModels.HomePage;
 using WolvenKit.App.ViewModels.Importers;
+using WolvenKit.App.ViewModels.Scripting;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Extensions;
-using WolvenKit.Common.Model.Database;
+using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
@@ -50,7 +51,10 @@ using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
+using FileSystem = Microsoft.VisualBasic.FileIO.FileSystem;
 using NativeMethods = WolvenKit.App.Helpers.NativeMethods;
+using Rect = System.Windows.Rect;
+using Thickness = System.Windows.Thickness;
 
 namespace WolvenKit.App.ViewModels.Shell;
 
@@ -64,17 +68,21 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly ILoggerService _loggerService;
     private readonly IProjectManager _projectManager;
     private readonly IGameControllerFactory _gameControllerFactory;
-    private readonly ISettingsManager _settingsManager;
     private readonly INotificationService _notificationService;
     private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
     private readonly IProgressService<double> _progressService;
-    private readonly IWatcherService _watcherService;
     private readonly IPluginService _pluginService;
     private readonly IArchiveManager _archiveManager;
-    private readonly IHashService _hashService;
     private readonly ITweakDBService _tweakDBService;
     private readonly Red4ParserService _parser;
     private readonly AppScriptService _scriptService;
+    private readonly DocumentTools _documentTools;
+    private readonly Cr2WTools _cr2WTools;
+    private readonly TemplateFileTools _templateFileTools;
+    private readonly ProjectResourceTools _projectResourceTools;
+
+    // expose to view
+    public ISettingsManager SettingsManager { get; init; }
 
     /// <summary>
     /// Class constructor
@@ -91,13 +99,17 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         INotificationService notificationService,
         IRecentlyUsedItemsService recentlyUsedItemsService,
         IProgressService<double> progressService,
-        IWatcherService watcherService,
         IPluginService pluginService,
         IArchiveManager archiveManager,
         IHashService hashService,
         ITweakDBService tweakDBService,
         Red4ParserService parserService,
-        AppScriptService scriptService
+        AppScriptService scriptService,
+        IModTools modTools,
+        DocumentTools documentTools,
+        Cr2WTools cr2WTools,
+        TemplateFileTools templateFileTools,
+        ProjectResourceTools projectResourceTools
     )
     {
         _documentViewmodelFactory = documentViewmodelFactory;
@@ -107,251 +119,377 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _projectManager = projectManager;
         _loggerService = loggerService;
         _gameControllerFactory = gameControllerFactory;
-        _settingsManager = settingsManager;
+        SettingsManager = settingsManager;
         _notificationService = notificationService;
         _recentlyUsedItemsService = recentlyUsedItemsService;
         _progressService = progressService;
-        _watcherService = watcherService;
         _pluginService = pluginService;
         _archiveManager = archiveManager;
-        _hashService = hashService;
         _tweakDBService = tweakDBService;
         _parser = parserService;
         _scriptService = scriptService;
+        _documentTools = documentTools;
+        _cr2WTools = cr2WTools;
+        _templateFileTools = templateFileTools;
+        _projectResourceTools = projectResourceTools;
+
+        _fileValidationScript = _scriptService.GetScripts().ToList()
+            .Where(s => s.Name == "run_FileValidation_on_active_tab")
+            .Select(s => new ScriptFileViewModel(SettingsManager, ScriptSource.User, s))
+            .FirstOrDefault();
+
+        _entSpawnerImportScript = _scriptService.GetScripts().ToList()
+            .Where(s => s.Name == "run_object_spawner_on_active_tab")
+            .Select(s => new ScriptFileViewModel(SettingsManager, ScriptSource.User, s))
+            .FirstOrDefault();
+
+        if (hashService is HashServiceExt hashServiceExt)
+        {
+            hashServiceExt.LoadGlobalCache();
+        }
 
         _scriptService.SetAppViewModel(this);
 
         _progressService.PropertyChanged += ProgressService_PropertyChanged;
-        
+
+        SettingsManager.WhenPropertyChanged(settings => settings.UiScale)
+            .Subscribe(_ => OnUiScaleChanged());
+
+        SettingsManager.WhenPropertyChanged(settings => settings.IsDiscordRPCEnabled)
+            .Subscribe(_ => OnDiscordRPCChanged());
+
         UpdateTitle();
+        OnDiscordRPCChanged();
 
         ShowFirstTimeSetup();
+
+        ClearMaterialCache();
 
         DockedViews.CollectionChanged += DockedViews_OnCollectionChanged;
     }
 
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+        if (e.PropertyName == nameof(ActiveDocument))
+        {
+            _lastActiveDocument = ActiveDocument;
+        }
+    }
+
+    private void ClearMaterialCache()
+    {
+        if (!Directory.Exists(ISettingsManager.GetTemp_OBJPath()))
+        {
+            return;
+        }
+
+        var files = Directory.GetFiles(ISettingsManager.GetTemp_OBJPath());
+        List<string> failedToDelete = [];
+        foreach (var file in files)
+        {
+            try
+            {
+                File.Delete(file);
+            }
+            catch
+            {
+                failedToDelete.Add(file);
+            }
+        }
+
+        if (!failedToDelete.Any())
+        {
+            return;
+        }
+
+        _loggerService.Error("Failed to delete parts of the texture cache!");
+        _loggerService.Error("This can indicate broken files or textures. To fix this, close Wolvenkit and delete the following files:");
+        var filenames = string.Join("\n\t", failedToDelete);
+        _loggerService.Error($"\t{filenames}");
+    }
+
+    public event EventHandler? OpenDocumentChanged;
     private void DockedViews_OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        if (e.OldItems != null)
+        foreach (var dockElement in (e.OldItems ?? Array.Empty<object>()).OfType<IDockElement>())
         {
-            foreach (var item in e.OldItems)
-            {
-                if (item is not IDockElement dockElement)
-                {
-                    continue;
-                }
-
-                dockElement.PropertyChanged -= DockedView_OnPropertyChanged;
-                DockedViewVisibleChanged?.Invoke(sender, new DockedViewVisibleChangedEventArgs(dockElement));
-            }
+            dockElement.PropertyChanged -= DockedView_OnPropertyChanged;
+            DockedViewVisibleChanged?.Invoke(sender, new DockedViewVisibleChangedEventArgs(dockElement));
         }
 
-        if (e.NewItems != null)
+        foreach (var dockElement in (e.NewItems ?? Array.Empty<object>()).OfType<IDockElement>())
         {
-            foreach (var item in e.NewItems)
-            {
-                if (item is not IDockElement dockElement)
-                {
-                    continue;
-                }
-
-                DockedViewVisibleChanged?.Invoke(sender, new DockedViewVisibleChangedEventArgs(dockElement));
-                dockElement.PropertyChanged += DockedView_OnPropertyChanged;
-            }
+            DockedViewVisibleChanged?.Invoke(sender, new DockedViewVisibleChangedEventArgs(dockElement));
+            dockElement.PropertyChanged += DockedView_OnPropertyChanged;
         }
+
+        OpenDocumentChanged?.Invoke(this, EventArgs.Empty);
+
     }
 
-    public class DockedViewVisibleChangedEventArgs
+    public class DockedViewVisibleChangedEventArgs(IDockElement element)
     {
-        public DockedViewVisibleChangedEventArgs(IDockElement element)
-        {
-            Element = element;
-        }
-
-        public IDockElement Element { get; }
+        public IDockElement Element { get; } = element;
     }
+
 
     public event EventHandler<DockedViewVisibleChangedEventArgs>? DockedViewVisibleChanged;
 
     private void DockedView_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == "IsVisible")
+        if (e.PropertyName != nameof(IDockElement.IsVisible) || sender is not IDockElement dockElement)
         {
-            if (sender is not IDockElement dockElement)
-            {
-                return;
-            }
-
-            DockedViewVisibleChanged?.Invoke(sender, new DockedViewVisibleChangedEventArgs(dockElement));
+            return;
         }
+
+        DockedViewVisibleChanged?.Invoke(sender, new DockedViewVisibleChangedEventArgs(dockElement));
     }
 
     private void ProgressService_PropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(IProgressService<double>.Status))
+        if (e.PropertyName != nameof(IProgressService<double>.Status))
         {
-            DispatcherHelper.RunOnMainThread(() =>
-            {
-                TaskStatus = _progressService.Status;
-                switch (TaskStatus)
-                {
-                    case EStatus.Running:
-                        Status = EAppStatus.Busy;
-                        break;
-                    case EStatus.Ready:
-                        Status = EAppStatus.Ready;
-                        break;
-                    default:
-                        break;
-                }
-            }, DispatcherPriority.ContextIdle);
+            return;
         }
+
+        DispatcherHelper.RunOnMainThread(() =>
+        {
+            TaskStatus = _progressService.Status;
+            switch (TaskStatus)
+            {
+                case EStatus.Running:
+                    Status = EAppStatus.Busy;
+                    break;
+                case EStatus.Ready:
+                    Status = EAppStatus.Ready;
+                    break;
+                default:
+                    break;
+            }
+        }, DispatcherPriority.ContextIdle);
+
     }
+
+    private void OnUiScaleChanged() => UpdateScalesResource();
+
+    private void OnDiscordRPCChanged() => DiscordHelper.DiscordRPCEnabled = SettingsManager.IsDiscordRPCEnabled;
 
     #region init
 
     partial void OnStatusChanged(EAppStatus? value)
     {
-        if (value == EAppStatus.Loaded)
-        {
-            HandleActivation();
-        }
-    }
-
-    private void HandleActivation()
-    {
-        var thisVersion = Core.CommonFunctions.GetAssemblyVersion(Constants.AssemblyName);
-        if (thisVersion.ToString().Contains("nightly") && _settingsManager.UpdateChannel != EUpdateChannel.Nightly)
-        {
-            _settingsManager.UpdateChannel = EUpdateChannel.Nightly;
-        }
-
-        _pluginService.Init();
-        if (!TryLoadingArguments())
-        {
-            ShowHomePageSync();
-        }    
-
-        CheckForUpdatesCommand.SafeExecute(true);
-        CheckForScriptUpdatesCommand.SafeExecute();
-        CheckForLongPathSupport();
-    }
-
-    public bool AddDockedPane(string paneString)
-    {
-        if (Enum.TryParse<EDockedViews>(paneString, out var pane))
-        {
-            switch (pane)
-            {
-                case EDockedViews.LogViewModel:
-                    DockedViews.Add(_paneViewModelFactory.LogViewModel());
-                    return true;
-                case EDockedViews.ProjectExplorerViewModel:
-                    DockedViews.Add(_paneViewModelFactory.ProjectExplorerViewModel(this));
-                    return true;
-                case EDockedViews.PropertiesViewModel:
-                    DockedViews.Add(_paneViewModelFactory.PropertiesViewModel());
-                    return true;
-                case EDockedViews.AssetBrowserViewModel:
-                    DockedViews.Add(_paneViewModelFactory.AssetBrowserViewModel(this));
-                    return true;
-                case EDockedViews.TweakBrowserViewModel:
-                    DockedViews.Add(_paneViewModelFactory.TweakBrowserViewModel(this));
-                    return true;
-                case EDockedViews.LocKeyBrowserViewModel:
-                    DockedViews.Add(_paneViewModelFactory.LocKeyBrowserViewModel());
-                    return true;
-                case EDockedViews.ImportViewModel:
-                {
-                    var vm = _paneViewModelFactory.ImportViewModel(this);
-                    vm.State = DockState.Dock;
-                    vm.SideInDockedMode = DockSide.Right;
-                    DockedViews.Add(vm);
-                    return true;
-                }
-                case EDockedViews.ExportViewModel:
-                {
-                    var vm = _paneViewModelFactory.ExportViewModel(this);
-                    vm.State = DockState.Dock;
-                    vm.SideInDockedMode = DockSide.Right;
-                    DockedViews.Add(vm);
-                    return true;
-                }
-                case EDockedViews.HashToolViewModel:
-                {
-                    var vm = _paneViewModelFactory.HashToolViewModel();
-                    vm.State = DockState.Dock;
-                    vm.SideInDockedMode = DockSide.Right;
-                    DockedViews.Add(vm);
-                    return true;
-                }
-                default:
-                    break;
-            }
-        }
-
-        return false;
-    }
-
-    private bool TryLoadingArguments()
-    {
-        var args = Environment.GetCommandLineArgs();
-
-        if (args.Length != 2)
-        {
-            return false;
-        }
-
-        var filePath = args[1];
-
-        if (!File.Exists(filePath))
-        {
-            var message = $"Sorry, '{filePath}' could not be found";
-            _loggerService.Error(message);
-            MessageBox.Show(message);
-            return false;
-        }
-
-        if (Path.GetExtension(filePath) == ".cpmodproj")
-        {
-            _ = OpenProjectAsync(filePath);
-            return true;
-        }
-
-        // open files
-        if (Enum.TryParse<ERedExtension>(Path.GetExtension(filePath)[1..], out var _))
-        {
-            _ = OpenFileAsync(FileModel.Create(filePath, ActiveProject.NotNull())); // TODO
-            return true;
-        }
-
-        var message2 = $"Sorry, {Path.GetExtension(filePath)} files aren't supported by WolvenKit";
-        _loggerService.Error(message2);
-        MessageBox.Show(message2);
-        return false;
-    }
-
-    private void ShowFirstTimeSetup()
-    {
-        if (!_settingsManager.IsHealthy())
-        {
-            var setupWasOk = Interactions.ShowFirstTimeSetup();
-        }
-    }
-
-    private void CheckForLongPathSupport()
-    {
-        if (Core.NativeMethods.RtlAreLongPathsEnabled() != 0)
+        if (value != EAppStatus.Loaded)
         {
             return;
         }
 
-        var text = "Long path support is disabled in your OS!" + Environment.NewLine +
-                   "Please do so to ensure that WolvenKit works properly." + Environment.NewLine + Environment.NewLine +
-                   "For more informations:" + Environment.NewLine +
-                   "https://wiki.redmodding.org/wolvenkit/help/faq/long-file-path-support";
+        OnAppLoaded?.Invoke(this, EventArgs.Empty);
+        HandleActivation();
+    }
 
-        DispatcherHelper.RunOnMainThread(() => Interactions.ShowConfirmation((text, "Long path support", WMessageBoxImage.Warning, WMessageBoxButtons.Ok)));
+    public event EventHandler? OnAppLoaded;
+
+    private void HandleActivation()
+    {
+        var thisVersion = Core.CommonFunctions.GetAssemblyVersion(Constants.AssemblyName);
+        if (thisVersion.ToString().Contains("nightly") && SettingsManager.UpdateChannel != EUpdateChannel.Nightly)
+        {
+            SettingsManager.UpdateChannel = EUpdateChannel.Nightly;
+        }
+
+        _pluginService.Init();
+        if (!OpenFileFromLaunchArgs())
+        {
+            ShowHomePageSync();
+        }
+
+        CheckForUpdatesCommand.SafeExecute(true);
+        CheckForScriptUpdatesCommand.SafeExecute();
+        CheckForLongPathSupport();
+        CheckForOneDrivePath();
+    }
+
+    public bool AddDockedPane(string paneString)
+    {
+        if (!Enum.TryParse<EDockedViews>(paneString, out var pane))
+        {
+            return false;
+        }
+
+        switch (pane)
+        {
+            case EDockedViews.LogViewModel:
+                DockedViews.Add(_paneViewModelFactory.LogViewModel());
+                return true;
+            case EDockedViews.ProjectExplorerViewModel:
+                DockedViews.Add(_paneViewModelFactory.ProjectExplorerViewModel(this));
+                return true;
+            case EDockedViews.PropertiesViewModel:
+                DockedViews.Add(_paneViewModelFactory.PropertiesViewModel());
+                return true;
+            case EDockedViews.AssetBrowserViewModel:
+                DockedViews.Add(_paneViewModelFactory.AssetBrowserViewModel(this));
+                return true;
+            case EDockedViews.TweakBrowserViewModel:
+                DockedViews.Add(_paneViewModelFactory.TweakBrowserViewModel(this));
+                return true;
+            case EDockedViews.LocKeyBrowserViewModel:
+                DockedViews.Add(_paneViewModelFactory.LocKeyBrowserViewModel());
+                return true;
+            case EDockedViews.ImportViewModel:
+            {
+                var vm = _paneViewModelFactory.ImportViewModel(this);
+                vm.State = DockState.Dock;
+                vm.SideInDockedMode = DockSide.Right;
+                DockedViews.Add(vm);
+                return true;
+            }
+            case EDockedViews.ExportViewModel:
+            {
+                var vm = _paneViewModelFactory.ExportViewModel(this);
+                vm.State = DockState.Dock;
+                vm.SideInDockedMode = DockSide.Right;
+                DockedViews.Add(vm);
+                return true;
+            }
+            case EDockedViews.HashToolViewModel:
+            {
+                var vm = _paneViewModelFactory.HashToolViewModel();
+                vm.State = DockState.Dock;
+                vm.SideInDockedMode = DockSide.Right;
+                DockedViews.Add(vm);
+                return true;
+            }
+            default:
+                break;
+        }
+
+        return false;
+    }
+
+    private bool OpenFileFromLaunchArgs()
+    {
+        var args = Environment.GetCommandLineArgs().Skip(1).ToArray();
+
+        var ret = false;
+        string? projectPathToOpen = null;
+
+        // Will be overwritten if the launch args contain a project path
+        if (args.Contains("-reopenProject") && SettingsManager.LastUsedProjectPath is string projectPath)
+        {
+            projectPathToOpen = projectPath;
+        }
+
+        List<string> invalidFilePaths = new();
+
+        foreach (var filePath in args.Where(f => !string.IsNullOrEmpty(Path.GetExtension(f))))
+        {
+            if (!File.Exists(filePath))
+            {
+                invalidFilePaths.Add($"  not found:     {filePath}");
+                continue;
+            }
+
+            if (Path.GetExtension(filePath) == Cp77Project.ProjectFileExtension)
+            {
+                projectPathToOpen = filePath;
+                continue;
+            }
+
+            // open files
+            if (Enum.TryParse<ERedExtension>(Path.GetExtension(filePath)[1..], out var _))
+            {
+                RequestFileOpen(filePath);
+                ret = true;
+            }
+            else
+            {
+                invalidFilePaths.Add($"  not supported: {filePath}");
+            }
+        }
+
+
+        if (projectPathToOpen is not null && File.Exists(projectPathToOpen))
+        {
+            _ = OpenProjectAsync(projectPathToOpen);
+            ret = true;
+        }
+
+        if (invalidFilePaths.Count <= 0)
+        {
+            return ret;
+        }
+
+        var message = $"Not all file paths from the command line could be processed:\n\t{string.Join("\n\t", invalidFilePaths)}";
+        _loggerService.Error(message);
+        MessageBox.Show(message);
+
+        return ret;
+    }
+
+    private void ShowFirstTimeSetup()
+    {
+        if (SettingsManager.IsHealthy())
+        {
+            return;
+        }
+
+        if (!Interactions.ShowFirstTimeSetup())
+        {
+            _loggerService.Debug(
+                "Setup failed. Please create a ticket under https://github.com/WolvenKit/WolvenKit/issues to help us solve this.");
+        }
+    }
+
+    private static void CheckForOneDrivePath()
+    {
+        if (!FilePathHelper.IsOneDrivePath(Assembly.GetExecutingAssembly().Location))
+        {
+            return;
+        }
+
+        List<string> warningText =
+        [
+            "Hey, choom!",
+            "",
+            "Don't run Wolvenkit from inside your OneDrive folder!",
+            "This can cause all kinds of issues!"
+        ];
+
+        DispatcherHelper.RunOnMainThread(() => _ = Interactions.ShowConfirmation((
+            string.Join('\n', warningText),
+            "Onedrive Warning",
+            WMessageBoxImage.Warning,
+            WMessageBoxButtons.Ok
+        )));
+    }
+
+    private static void CheckForLongPathSupport()
+    {
+        if (Core.CommonFunctions.AreLongPathsEnabled())
+        {
+            return;
+        }
+
+        List<string> warningText =
+        [
+            "Hey, choom! This is just a heads-up:",
+            "",
+            "You don't have long path support enabled in your OS.",
+            "This can cause issues when packing your mods.",
+            "",
+            "Click the 'Open Wiki' button to see a solution."
+        ];
+
+        DispatcherHelper.RunOnMainThread(() => _ = Interactions.ShowPopupWithWeblink((
+            string.Join('\n', warningText),
+            "Long path support",
+            "https://wiki.redmodding.org/wolvenkit/help/faq/long-file-path-support",
+            "Open Wiki",
+            WMessageBoxImage.Warning
+        )));
     }
 
     #endregion init
@@ -366,35 +504,55 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(PackInstallModCommand))]
     [NotifyCanExecuteChangedFor(nameof(PackInstallRunCommand))]
     [NotifyCanExecuteChangedFor(nameof(PackInstallRedModRunCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ScanForBrokenReferencePathsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(DeleteEmptyFoldersCommand))]
+    [NotifyCanExecuteChangedFor(nameof(FindUnusedFilesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ImportFromEntitySpawnerCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RunFileValidationOnProjectCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CheckForScriptUpdatesCommand))]
     private EStatus _taskStatus;
-    private bool CanStartTask() => TaskStatus == EStatus.Ready;
+
+    private bool CanStartTask() => TaskStatus == EStatus.Ready && ActiveProject is not null;
 
     [RelayCommand(CanExecute = nameof(CanStartTask))]
-    private async Task PackMod() => await LaunchAsync(new LaunchProfile() { CreateBackup = true });
+    private async Task PackMod() => await LaunchAsync(new LaunchProfile() { CreateZipFile = true });
 
     [RelayCommand(CanExecute = nameof(CanStartTask))]
-    private async Task PackRedMod() => await LaunchAsync(new LaunchProfile() { CreateBackup = true, IsRedmod = true });
+    private async Task PackRedMod() => await LaunchAsync(new LaunchProfile() { CreateZipFile = true, IsRedmod = true });
 
     [RelayCommand(CanExecute = nameof(CanStartTask))]
     private async Task PackInstallMod() => await LaunchAsync(new LaunchProfile() { Install = true });
 
     [RelayCommand(CanExecute = nameof(CanStartTask))]
-    private async Task PackInstallRedMod() => await LaunchAsync(new LaunchProfile() { Install = true, IsRedmod = true });
+    private async Task PackInstallRedMod()
+    {
+        await LaunchAsync(new LaunchProfile()
+        {
+            Install = true,
+            IsRedmod = true,
+            DeployWithRedmod = ModifierViewStateService.IsShiftBeingHeld
+        });
+    }
 
     [RelayCommand(CanExecute = nameof(CanStartTask))]
-    private async Task PackInstallRun() => await LaunchAsync(new LaunchProfile() { Install = true, LaunchGame = true });
+    private async Task PackInstallRun()
+    {
+        await LaunchAsync(new LaunchProfile() { Install = true, LaunchGame = true });
+    }
 
     [RelayCommand(CanExecute = nameof(CanStartTask))]
-    private async Task PackInstallRedModRun() => await LaunchAsync(new LaunchProfile() { Install = true, LaunchGame = true, IsRedmod = true, DeployWithRedmod = true });
-
+    private async Task PackInstallRedModRun()
+    {
+        await LaunchAsync(new LaunchProfile() { Install = true, LaunchGame = true, IsRedmod = true, DeployWithRedmod = true });
+    }
 
     [RelayCommand]
     private async Task CheckForScriptUpdates()
     {
         // check remote version (no github API call)
-        HttpClient _client = new();
+        HttpClient client = new();
         var hashUrl = $@"https://wolvenkit.github.io/Wolvenkit-Resources/hash.txt";
-        var response = await _client.GetAsync(new Uri(hashUrl));
+        var response = await client.GetAsync(new Uri(hashUrl));
 
         try
         {
@@ -412,7 +570,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         FileInfo hashPath = new(Path.Combine("Resources", "scripthash.txt"));
         if (hashPath.Exists)
         {
-            localHash = File.ReadAllText(hashPath.FullName);
+            localHash = await File.ReadAllTextAsync(hashPath.FullName);
         }
 
         // check hash
@@ -435,17 +593,17 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
         Directory.CreateDirectory(resourceDir.FullName);
 
-        // download zipfile
+        // download zip file
         var contentUrl = $@"https://wolvenkit.github.io/Wolvenkit-Resources/scripts.zip";
-        response = await _client.GetAsync(new Uri(contentUrl));
+        response = await client.GetAsync(new Uri(contentUrl));
         try
         {
             response.EnsureSuccessStatusCode();
         }
         catch (HttpRequestException ex)
         {
-            _loggerService.Error($"Failed to respond to url: {contentUrl}");
-            _loggerService.Error(ex);
+            _loggerService.Warning($"Failed update scripts from {contentUrl}");
+            _loggerService.Warning($"\t{ex.Message}");
             return;
         }
 
@@ -454,7 +612,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         ZipArchive zipArchive = new(zip);
         zipArchive.ExtractToDirectory(resourceDir.FullName, true);
 
-        File.WriteAllText(hashPath.FullName, remoteHash);
+        await File.WriteAllTextAsync(hashPath.FullName, remoteHash);
         _scriptService.RefreshUIScripts();
     }
 
@@ -469,7 +627,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         if (checkForCheckForUpdates)
         {
-            if (_settingsManager.SkipUpdateCheck)
+            if (SettingsManager.SkipUpdateCheck)
             {
                 return;
             }
@@ -479,7 +637,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         // get remote version without GitHub API calls
         var owner = "WolvenKit";
         var name = "WolvenKit";
-        switch (_settingsManager.UpdateChannel)
+        switch (SettingsManager.UpdateChannel)
         {
             case EUpdateChannel.Nightly:
                 name = "WolvenKit-nightly-releases";
@@ -490,13 +648,13 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
 
         SemVersion remoteVersion;
-        var githuburl = $@"https://github.com/{owner}/{name}/releases/latest";
+        var githubUrl = $@"https://github.com/{owner}/{name}/releases/latest";
         try
         {
-            HttpClient _client = new();
-            var response = await _client.GetAsync(new Uri(githuburl));
+            HttpClient client = new();
+            var response = await client.GetAsync(new Uri(githubUrl));
             response.EnsureSuccessStatusCode();
-            if (response?.RequestMessage?.RequestUri is null)
+            if (response.RequestMessage?.RequestUri is null)
             {
                 return;
             }
@@ -505,7 +663,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
         catch (HttpRequestException ex)
         {
-            _loggerService.Error($"Failed to respond to updater url: {githuburl}");
+            _loggerService.Error($"Failed to respond to updater url: {githubUrl}");
             _loggerService.Error(ex);
             return;
         }
@@ -525,8 +683,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             // old style update
             // TODO use inno
             var url = $"https://github.com/{owner}/{name}/releases/latest";
-            var res = await Interactions.ShowMessageBoxAsync($"Update available: {remoteVersion}\nYou are on the {_settingsManager.UpdateChannel} release channel.\n\nVisit {url} ?", name, WMessageBoxButtons.OkCancel);
-            if (res == WMessageBoxResult.OK)
+
+            if (Interactions.ShowQuestionYesNo((
+                    $"Update available: {remoteVersion}\nYou are on the {SettingsManager.UpdateChannel} release channel.\n\nVisit {url} ?",
+                    name)))
             {
                 Process.Start("explorer", url);
             }
@@ -535,7 +695,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     [RelayCommand]
-    private void DeleteProject(string parameter)
+    private void DeleteProjectFromRecent(string parameter)
     {
         try
         {
@@ -556,104 +716,111 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand]
     private async Task OpenProjectAsync(string location)
     {
-        // switch from one active project to another
-
-        if (_projectManager.ActiveProject is not null && !string.IsNullOrEmpty(location))
+        // "Open Project" button was pushed
+        if (string.IsNullOrWhiteSpace(location))
         {
-            if (_projectManager.ActiveProject.Location == location)
+            var dlg = new OpenFileDialog
+            {
+                Multiselect = false,
+                Title = "Locate the WolvenKit project",
+                Filter = "Cyberpunk 2077 Project|*.cpmodproj",
+                InitialDirectory = SettingsManager.DefaultProjectPath ?? SettingsManager.LastUsedProjectPath
+            };
+
+            if (dlg.ShowDialog() != true || dlg.FileName is not string result || string.IsNullOrEmpty(result))
             {
                 return;
             }
+
+            location = result;
         }
 
-        try
+        if (_projectManager.ActiveProject?.Location == location)
         {
-
-            if (string.IsNullOrWhiteSpace(location) || !File.Exists(location))
-            {
-                // file was moved or deleted
-                if (_recentlyUsedItemsService.Items.Items.Any(_ => _.Name == location))
-                {
-                    // would you like to locate it?
-                    //TODO
-                    //location = await ProjectHelpers.LocateMissingProjectAsync(location);
-                    //location = "";
-                    //if (string.IsNullOrEmpty(location))
-                    {
-                        // user canceled locating a project
-                        DeleteProject(location);
-                        return;
-                    }
-                }
-                // open an existing project
-                else
-                {
-                    var dlg = new OpenFileDialog
-                    {
-                        Multiselect = false,
-                        Title = "Locate the WolvenKit project",
-                        Filter = "Cyberpunk 2077 Project|*.cpmodproj"
-                    };
-
-                    if (dlg.ShowDialog() != true)
-                    {
-                        return;
-                    }
-
-                    var result = dlg.FileName;
-                    if (string.IsNullOrEmpty(result))
-                    {
-                        return;
-                    }
-
-                    location = result;
-                }
-            }
-
-            // one last check
-            if (!File.Exists(location))
-            {
-                return;
-            }
-
-            CloseModalCommand.SafeExecute(null);
-
-            var p = await _projectManager.LoadAsync(location);
-            if (p is null)
-            {
-                return;
-            }
-            ActiveProject = p;
-
-            // If the assets can't be found, stop here and notify the user in the log
-            if (!File.Exists(_settingsManager.CP77ExecutablePath))
-            {
-                UpdateTitle();
-                _loggerService.Warning($"Cyberpunk 2077 executable path is not set. Asset browser disabled.");
-                return;
-            }
-
-            await _gameControllerFactory.GetController().HandleStartup().ContinueWith(_ =>
-            {
-                UpdateTitle();
-                _notificationService.Success($"Project {Path.GetFileNameWithoutExtension(location)} loaded!");
-            }, TaskContinuationOptions.OnlyOnRanToCompletion);
-        }
-        catch (Exception e)
-        {
-            // TODO: Are we intentionally swallowing this?
-            //Log.Error(ex, "Failed to open file");
-            _loggerService.Error(e);
+            CloseModal();
+            return;
         }
 
-        return;
+        if (File.Exists(location))
+        {
+            CloseModal();
+            await LoadProjectFromPathAsync(location);
+            return;
+        }
+
+        // file was moved or deleted
+        if (_recentlyUsedItemsService.Items.Items.All(x => x.Name != location))
+        {
+            throw new WolvenKitException(0x5002,
+                "Failed to load project. Please open a github issue and attach a zip so that we can fix it!");
+        }
+
+        // We have an existing project, but it was moved or deleted.
+        // Would you like to locate it?
+        var res = Interactions.ShowConfirmation(("Do you want to locate your missing project?", "Project file missing",
+            WMessageBoxImage.Question, WMessageBoxButtons.YesNo));
+
+        if (res is not (WMessageBoxResult.OK or WMessageBoxResult.Yes))
+        {
+            return;
+        }
+
+        var dlg2 = new OpenFileDialog
+        {
+            Multiselect = false,
+            Title = "Locate the WolvenKit project",
+            Filter = "Cyberpunk 2077 Project|*.cpmodproj",
+            InitialDirectory = SettingsManager.DefaultProjectPath ?? SettingsManager.LastUsedProjectPath
+        };
+
+        if (dlg2.ShowDialog() != true || dlg2.FileName is not string filePath || string.IsNullOrEmpty(filePath))
+        {
+            return;
+        }
+
+        // We have to re-create the recent project entry
+        DeleteProjectFromRecent(filePath);
+
+        if (File.Exists(filePath))
+        {
+            CloseModal();
+            await _projectManager.LoadAsync(filePath);
+        }
+    }
+
+    public event EventHandler? OnInitialProjectLoaded;
+
+    private async Task LoadProjectFromPathAsync(string location)
+    {
+        var p = await _projectManager.LoadAsync(location);
+        if (p is null)
+        {
+            return;
+        }
+
+        ActiveProject = p;
+
+        // If the assets can't be found, stop here and notify the user in the log
+        if (!File.Exists(SettingsManager.CP77ExecutablePath))
+        {
+            UpdateTitle();
+            _loggerService.Warning($"Cyberpunk 2077 executable path is not set. Asset browser disabled.");
+            return;
+        }
+
+        await _gameControllerFactory.GetController().HandleStartup().ContinueWith(_ =>
+        {
+            UpdateTitle();
+            _notificationService.Success($"Project {Path.GetFileNameWithoutExtension(location)} loaded!");
+            OnInitialProjectLoaded?.Invoke(this, EventArgs.Empty);
+        }, TaskContinuationOptions.OnlyOnRanToCompletion);
     }
 
     [RelayCommand]
     private async Task NewProject()
     {
         //IsOverlayShown = false;
-        await SetActiveDialog(new ProjectWizardViewModel(_settingsManager)
+        await SetActiveDialog(new ProjectWizardViewModel(SettingsManager)
         {
             FileHandler = NewProject
         });
@@ -678,8 +845,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             var newProjectName = project.ProjectName.NotNull().Trim();
             var newModName = project.ModName.NotNull().Trim();
-            var projectLocation = Path.Combine(project.ProjectPath.NotNull(), newProjectName, newProjectName + ".cpmodproj");
-            Cp77Project np = new(projectLocation, newProjectName, newModName, _hashService)
+            var projectLocation = Path.Combine(project.ProjectPath.NotNull(), newProjectName,
+                $"{newProjectName}{Cp77Project.ProjectFileExtension}"
+            );
+
+            Cp77Project np = new(projectLocation, newProjectName, newModName, [])
             {
                 Author = project.Author,
                 Email = project.Email,
@@ -692,20 +862,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             await _projectManager.SaveAsync();
             np.CreateDefaultDirectories();
 
-            await _projectManager.LoadAsync(projectLocation);
-
-            DispatcherHelper.RunOnMainThread(() => ActiveProject = _projectManager.ActiveProject);
-
-            // If the assets can't be found, stop here and notify the user in the log
-            if (!File.Exists(_settingsManager.CP77ExecutablePath))
-            {
-                _loggerService.Warning($"Cyberpunk 2077 executable path is not set. Asset browser disabled.");
-            }
-            else
-            {
-                await _gameControllerFactory.GetController().HandleStartup();
-                _notificationService.Success("Project " + project.ProjectName + " loaded!");
-            }
+            await LoadProjectFromPathAsync(projectLocation);
         }
         catch (Exception ex)
         {
@@ -715,15 +872,15 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     [RelayCommand]
-    private void SelectFile(FileModel model) => GetToolViewModel<PropertiesViewModel>().ExecuteSelectFile(model);
+    private void SelectFile(FileSystemModel model) => GetToolViewModel<PropertiesViewModel>().ExecuteSelectFile(model);
 
-    private bool CanSaveFile() => ActiveDocument is not null && !ActiveDocument.IsReadOnly;
+    private bool CanSaveFile() => ActiveDocument is not null;
     [RelayCommand(CanExecute = nameof(CanSaveFile))]
     private void SaveFile() => Save(ActiveDocument.NotNull());
 
     private bool CanReloadFile() => ActiveDocument is not null;
     [RelayCommand(CanExecute = nameof(CanReloadFile))]
-    public void ReloadFile()
+    private void ReloadFile()
     {
         if (ActiveDocument == null)
         {
@@ -732,9 +889,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         if (ActiveDocument is DocumentViewModel { IsDirty: true })
         {
-            var result = Interactions.ShowConfirmation(($"The file {ActiveDocument.FilePath} has unsaved changes. Do you want to reload it?",
+            var result = Interactions.ShowConfirmation((
+                $"The file {ActiveDocument.FilePath} has unsaved changes. Do you really want to reload it?",
                 "File Modified",
-                WMessageBoxImage.Question,
+                WMessageBoxImage.Warning,
                 WMessageBoxButtons.YesNo));
 
             if (result == WMessageBoxResult.No)
@@ -742,39 +900,251 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 return;
             }
         }
-        
+
         ActiveDocument.Reload(true);
     }
 
     [RelayCommand(CanExecute = nameof(CanSaveFile))]
-    private void SaveAs() => Save(ActiveDocument.NotNull(), true);
+    private void SaveAs()
+    {
+        if (_projectManager.ActiveProject is null)
+        {
+            Interactions.ShowConfirmation((s_noProjectText, s_noProjectTitle, WMessageBoxImage.Warning, WMessageBoxButtons.Ok));
+            return;
+        }
 
-    private bool CanSaveAll() => DockedViews.OfType<IDocumentViewModel>().Count() > 0;
+        Save(ActiveDocument.NotNull(), true);
+    }
+
+    private bool CanSaveAll() => CanSaveFile() || DockedViews.OfType<IDocumentViewModel>().Any();
     [RelayCommand(CanExecute = nameof(CanSaveAll))]
     private void SaveAll()
     {
-        foreach (var file in DockedViews.OfType<IDocumentViewModel>())
+        if (_projectManager.ActiveProject is null)
+        {
+            Interactions.ShowConfirmation((s_noProjectText, s_noProjectTitle, WMessageBoxImage.Warning, WMessageBoxButtons.Ok));
+            return;
+        }
+
+        foreach (var file in DockedViews.OfType<IDocumentViewModel>().Where(f => f.IsDirty))
         {
             Save(file);
         }
     }
 
+    public async Task<bool> AreDirtyFilesHandledBeforeLaunch()
+    {
+        var dirtyFiles = DockedViews.OfType<IDocumentViewModel>().Where(tab => tab.IsDirty).ToList();
+        if (dirtyFiles.Count == 0)
+        {
+            return true;
+        }
+
+        var response = await Interactions.ShowMessageBoxAsync(
+            "You have un-saved files. Save them before installing mod?",
+            "Save changes?",
+            WMessageBoxButtons.YesNoCancel);
+        switch (response)
+        {
+            case WMessageBoxResult.Cancel:
+                return false;
+            case WMessageBoxResult.No:
+            case WMessageBoxResult.Custom:
+            case WMessageBoxResult.None:
+                break;
+            case WMessageBoxResult.OK:
+            case WMessageBoxResult.Yes:
+            default:
+                SaveAll();
+                break;
+        }
+
+        return true;
+    }
+
     private bool CanShowHomePage() => !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanShowHomePage))]
-    private async Task ShowHomePage()
-    {
-        await ShowHomePage(EHomePage.Welcome);
-    }
+    private async Task ShowHomePage() => await ShowHomePageAsync(EHomePage.Welcome);
 
     private bool CanShowSettings() => !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanShowSettings))]
-    private async Task ShowSettings()
+    private async Task ShowSettings() => await ShowHomePageAsync(EHomePage.Settings);
+
+    private bool CanShowProjectActions() => !IsDialogShown && ActiveProject is not null && Status is EAppStatus.Ready;
+
+    [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
+    private async Task ScanForBrokenReferencePaths()
     {
-        await ShowHomePage(EHomePage.Settings);
+        _loggerService.Info($"Scanning {ActiveProject!.ModFiles.Count} files. Please wait...");
+        _progressService.IsIndeterminate = true;
+        var brokenReferences = await ActiveProject!.ScanForBrokenReferencePathsAsync(_archiveManager, _loggerService, _progressService);
+
+        if (brokenReferences.Keys.Count == 0)
+        {
+            _loggerService.Info("No broken references in project... that we can find");
+            _notificationService.ShowNotification("No broken references in project... that we can find", ENotificationType.Success,
+                ENotificationCategory.App);
+            return;
+        }
+
+        _loggerService.Info("Done scanning");
+        Interactions.ShowBrokenReferencesList(("Broken references", brokenReferences));
     }
 
-    private bool CanShowProjectSettings() => !IsDialogShown && ActiveProject != null;
-    [RelayCommand(CanExecute = nameof(CanShowProjectSettings))]
+    [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
+    private void DeleteEmptyFolders() => _projectManager.ActiveProject?.DeleteEmptyFolders(_loggerService);
+
+    [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
+    private void DeleteEmptyMeshes()
+    {
+        if (_projectManager.ActiveProject is not Cp77Project activeProject)
+        {
+            return;
+        }
+
+        _progressService.IsIndeterminate = true;
+        var meshes = activeProject.ModFiles.Where(fileName => fileName.EndsWith(".mesh"))
+            .Where(fileName => new FileInfo(activeProject.GetAbsolutePath(fileName)).Length < 20000)
+            .Where(meshFilePath =>
+            {
+                var cr2w = _cr2WTools.ReadCr2W(activeProject.GetAbsolutePath(meshFilePath));
+                if (cr2w?.RootChunk is not CMesh mesh || mesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob blob)
+                {
+                    return false;
+                }
+
+                // anything with 3 verts counts as empty
+                var isNotEmpty = blob.Header.RenderChunkInfos.Count(rendChunk => rendChunk.NumVertices > 3) > 0;
+                return !isNotEmpty;
+            }).ToList();
+
+        _progressService.IsIndeterminate = false;
+        if (meshes.Count == 0)
+        {
+            return;
+        }
+
+        if (!Interactions.ShowQuestionYesNo((
+                $"The following meshes seem to be empty:\n{string.Join('\n', meshes)}", "Delete empty meshes?")))
+        {
+            return;
+        }
+
+        _progressService.IsIndeterminate = true;
+        foreach (var absolutePath in meshes.Select(mesh => activeProject.GetAbsolutePath(mesh)).Where(File.Exists))
+        {
+            File.Delete(absolutePath);
+        }
+
+        _progressService.IsIndeterminate = false;
+
+        if (!Interactions.ShowQuestionYesNo(("Try to clean up references in files?", "Delete references?")))
+        {
+            return;
+        }
+
+        _progressService.IsIndeterminate = true;
+        var changedFilePaths = AppFileHelper.DeleteMeshComponentsByReference(_cr2WTools, activeProject, meshes);
+
+        var appFilePaths = activeProject.ModFiles.Where(f => f.EndsWith(".app")).ToList();
+        changedFilePaths.AddRange(AppFileHelper.DeleteUnusedAnimComponents(_cr2WTools, activeProject, appFilePaths));
+        _progressService.IsIndeterminate = false;
+        if (changedFilePaths.Count == 0)
+        {
+            return;
+        }
+
+        _loggerService.Success("Cleaned up references to your meshes in the following files:\n\t" +
+                               string.Join("\n\t", changedFilePaths));
+    }
+
+    [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
+    private async Task FindUnusedFiles()
+    {
+        _loggerService.Info($"Scanning {ActiveProject!.ModFiles.Count} files. Please wait...");
+
+        var allReferencePaths = await ActiveProject!.GetAllReferencesAsync(_progressService, _loggerService, []);
+        _loggerService.Info($"Scanning {ActiveProject!.Files.Count(f => f.StartsWith("archive"))} files. Please wait...");
+
+        var referencesHashSet = new HashSet<string>(allReferencePaths.SelectMany((r) => r.Value));
+
+        var potentiallyUnusedFiles = ActiveProject!.ModFiles
+            .Where(f => !referencesHashSet.Contains(ActiveProject.GetRelativePath(f))) // they're used
+            .Where(f => !_archiveManager.Lookup(f, ArchiveManagerScope.Basegame).HasValue) // they overwrite basegame files
+            .Where(f => !ActiveProject.GetRelativePath(f)
+                .StartsWith(@"base\characters\appearances\main_npc\npv")) // npv apps
+            .ToList();
+
+        if (potentiallyUnusedFiles.Count == 0)
+        {
+            _notificationService.ShowNotification("No un-used files in project", ENotificationType.Success, ENotificationCategory.App);
+            return;
+        }
+
+        // Filter out files by type
+
+        // potentiallyUnusedFiles.Where(f => _archiveManager.Lookup(f, ArchiveManagerScope.LocalProject).)
+
+
+        _progressService.Completed();
+        var (deleteFiles, moveToPath) =
+            Interactions.ShowDeleteOrMoveFilesList(("Delete or move un-used files?", potentiallyUnusedFiles, ActiveProject));
+
+        if (deleteFiles.Count == 0)
+        {
+            _notificationService.ShowNotification("No un-used files in project", ENotificationType.Success, ENotificationCategory.App);
+            return;
+        }
+
+        List<string> failedDeletions = [];
+        foreach (var filePath in deleteFiles)
+        {
+            try
+            {
+                var absolutePath = ActiveProject.GetAbsolutePath(filePath);
+                if (string.IsNullOrEmpty(moveToPath))
+                {
+                    FileSystem.DeleteFile(absolutePath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+
+                    while (Path.GetDirectoryName(absolutePath) is string parentDir &&
+                           !Directory.EnumerateFileSystemEntries(parentDir).Any())
+                    {
+                        Directory.Delete(parentDir);
+                        absolutePath = parentDir;
+                    }
+                }
+                else
+                {
+                    var destPath = ActiveProject.GetAbsolutePath(moveToPath);
+                    if (!Directory.Exists(moveToPath))
+                    {
+                        Directory.CreateDirectory(moveToPath);
+                    }
+
+                    File.Move(absolutePath, destPath);
+                }
+
+            }
+            catch
+            {
+                failedDeletions.Add(filePath);
+            }
+        }
+
+        if (failedDeletions.Count == 0)
+        {
+            _loggerService.Info($"Processed {deleteFiles.Count} files.");
+            return;
+        }
+
+        _loggerService.Warning($"Deleted {deleteFiles.Count - failedDeletions.Count} files. The following files failed to process:");
+        foreach (var failedDeletion in failedDeletions)
+        {
+            _loggerService.Warning($"  {failedDeletion}");
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private async Task ShowProjectSettings()
     {
         CloseModalCommand.Execute(null);
@@ -787,7 +1157,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [ObservableProperty]
     private int? _selectedGameCommandIdx;
 
-    public record GameLaunchCommand(string Name, EGameLaunchCommand Command);
     public enum EGameLaunchCommand
     {
         Launch,
@@ -795,9 +1164,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     [RelayCommand]
-    private void LaunchGame(string stridx)
+    private void LaunchGame(string strIdx)
     {
-        if (!int.TryParse(stridx, out var idx))
+        if (!int.TryParse(strIdx, out var idx))
         {
             return;
         }
@@ -810,8 +1179,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 {
                     Process.Start(new ProcessStartInfo
                     {
-                        FileName = _settingsManager.GetRED4GameLaunchCommand(),
-                        Arguments = _settingsManager.GetRED4GameLaunchOptions() ?? "",
+                        FileName = SettingsManager.GetRED4GameLaunchCommand(),
+                        Arguments = SettingsManager.GetRED4GameLaunchOptions(),
                         ErrorDialog = true,
                         UseShellExecute = true,
                     });
@@ -825,11 +1194,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             case EGameLaunchCommand.SteamLaunch:
                 try
                 {
-                    var steamrunid = "steam://rungameid/1091500";
+                    var steamRunId = "steam://rungameid/1091500";
 
                     Process.Start(new ProcessStartInfo
                     {
-                        FileName = steamrunid,
+                        FileName = steamRunId,
                         ErrorDialog = true,
                         UseShellExecute = true
                     });
@@ -865,7 +1234,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         //};
     }
 
-    public async Task OpenSoundModdingView(SoundModdingViewModel? file)
+    private async Task OpenSoundModdingView(SoundModdingViewModel? file)
     {
         CloseModalCommand.Execute(null);
         if (file == null)
@@ -880,29 +1249,22 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private async Task ShowScriptManager()
     {
         CloseModalCommand.Execute(null);
-        await SetActiveDialog(new ScriptManagerViewModel(this, _scriptService, _settingsManager, _loggerService));
+        await SetActiveDialog(new ScriptManagerViewModel(this, _scriptService, SettingsManager, _loggerService));
     }
 
     private bool CanShowPlugin() => !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanShowPlugin))]
-    private async Task ShowPlugin()
-    {
-        await ShowHomePage(EHomePage.Plugins);
-    }
+    private async Task ShowPlugin() => await ShowHomePageAsync(EHomePage.Plugins);
 
     private bool CanShowModsView() => !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanShowModsView))]
-    private async Task ShowModsView()
-    {
-        await ShowHomePage(EHomePage.Mods);
-    }
+    private async Task ShowModsView() => await ShowHomePageAsync(EHomePage.Mods);
 
     private bool CanNewFile(string inputDir) => ActiveProject is not null && !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanNewFile))]
     private async Task NewFile(string? inputDir)
     {
-        var vm = _dialogViewModelFactory.NewFileViewModel();
-        if (vm != null)
+        if (_dialogViewModelFactory.NewFileViewModel() is NewFileViewModel vm)
         {
             vm.FileHandler = OpenFromNewFile;
             await SetActiveDialog(vm);
@@ -913,6 +1275,51 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         //});
     }
 
+    private bool CanImportArchive(string inputDir) => ActiveProject is not null && !IsDialogShown;
+
+    [RelayCommand(CanExecute = nameof(CanImportArchive))]
+    private async Task ImportArchive(string? inputDir)
+    {
+        var vm = new OpenFileViewModel(SettingsManager, _projectManager, _loggerService)
+        {
+            Title = "Import .archive",
+            Filter = "Archive files (*.archive)|*.archive"
+        };
+
+        if (await vm.OpenFile() is not string result)
+        {
+            return;
+        }
+
+        var assetBrowser = GetToolViewModel<AssetBrowserViewModel>();
+
+        if (!assetBrowser.IsVisible)
+        {
+            assetBrowser.IsVisible = true;
+        }
+
+        if (!assetBrowser.IsModBrowserActive())
+        {
+            assetBrowser.ToggleModBrowserCommand.Execute(null);
+        }
+        else
+        {
+            await assetBrowser.LoadAssetBrowserCommand.ExecuteAsync(null);
+        }
+
+        if (assetBrowser.RightItems.FirstOrDefault(f => f.FullName.Contains(result)) is FileSystemViewModel mod)
+        {
+            assetBrowser.ShowFile(new FileSystemModel(null, result, mod.FullName, true));
+        }
+        else
+        {
+            assetBrowser.SearchBarText = $"archive:{result}";
+            await assetBrowser.PerformSearch($"archive:{result}");
+        }
+
+        return;
+    }
+
     private async Task OpenFromNewFile(NewFileViewModel? file)
     {
         CloseModalCommand.Execute(null);
@@ -921,25 +1328,18 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
-        _watcherService.IsSuspended = true;
-
-        await Task.Run(() => OpenFromNewFileTask(file)).ContinueWith(async (result) =>
+        await Task.Run(() => OpenFromNewFileAsync(file)).ContinueWith(async (_) =>
         {
-            _watcherService.IsSuspended = false;
             if (file.FullPath is not null)
             {
-                await RequestFileOpen(file.FullPath);
+                await Task.Run(() => RequestFileOpen(file.FullPath));
             }
         });
     }
 
-    private static async Task OpenFromNewFileTask(NewFileViewModel file)
+    private static async Task OpenFromNewFileAsync(NewFileViewModel file)
     {
-        if (file.SelectedFile is null)
-        {
-            return;
-        }
-        if (file.FullPath is null)
+        if (file.SelectedFile is null || file.FullPath is null)
         {
             return;
         }
@@ -957,7 +1357,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 {
                     await using var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream($"WolvenKit.App.Resources.{file.SelectedFile.Template}").NotNull();
                     stream = new FileStream(file.FullPath, FileMode.Create, FileAccess.Write);
-                    resource.CopyTo(stream);
+                    await resource.CopyToAsync(stream);
                 }
                 else
                 {
@@ -975,25 +1375,25 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 {
                     await using var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream($"WolvenKit.App.Resources.{file.SelectedFile.Template}").NotNull();
                     stream = new FileStream(file.FullPath, FileMode.Create, FileAccess.Write);
-                    resource.CopyTo(stream);
+                    await resource.CopyToAsync(stream);
                 }
                 else
                 {
                     stream = File.Create(file.FullPath);
                 }
                 break;
-            }  
+            }
             case EWolvenKitFile.Cr2w:
                 var redType = file.SelectedFile.Name;
                 if (!string.IsNullOrEmpty(redType))
                 {
-                    CR2WFile cr2w = new()
+                    CR2WFile cr2W = new()
                     {
                         RootChunk = RedTypeManager.Create(redType)
                     };
                     stream = new FileStream(file.FullPath, FileMode.Create, FileAccess.Write);
                     using CR2WWriter writer = new(stream);
-                    writer.WriteFile(cr2w);
+                    writer.WriteFile(cr2W);
                 }
                 break;
             case EWolvenKitFile.WScript:
@@ -1002,31 +1402,32 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 break;
         }
 
-        stream?.Dispose();
+        if (stream is not null)
+        {
+            await stream.DisposeAsync();
+        }
     }
 
     [RelayCommand]
-    public async Task OpenFileAsync(FileModel model)
+    public async Task OpenFileAsync(FileSystemModel model)
     {
         if (model.IsDirectory)
         {
-            model.IsExpanded = !model.IsExpanded;
+            return;
         }
-        else if (!model.IsDirectory)
+
+        _progressService.IsIndeterminate = true;
+        try
         {
-            _progressService.IsIndeterminate = true;
-            try
-            {
-                await RequestFileOpen(model.FullName);
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error(e.Message);
-            }
-            finally
-            {
-                _progressService.IsIndeterminate = false;
-            }
+            await Task.Run(() => RequestFileOpen(model.FullName));
+        }
+        catch (Exception e)
+        {
+            _loggerService.Error(e.Message);
+        }
+        finally
+        {
+            _progressService.IsIndeterminate = false;
         }
     }
 
@@ -1067,85 +1468,42 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     {
         for (var i = DockedViews.Count - 1; i >= 0; i--)
         {
-            if (DockedViews[i] is not IDocumentViewModel documentViewModel)
+            if (DockedViews[i] is not IDocumentViewModel documentViewModel || !File.Exists(documentViewModel.FilePath) ||
+                File.GetLastWriteTime(documentViewModel.FilePath) <= documentViewModel.LastWriteTime)
             {
                 continue;
             }
 
-            if (File.Exists(documentViewModel.FilePath) &&
-                File.GetLastWriteTime(documentViewModel.FilePath) > documentViewModel.LastWriteTime)
-            {
-                var result = Interactions.ShowConfirmation(($"The file {documentViewModel.FilePath} has been modified externally. Do you want to reload it?",
-                    "File Modified",
-                    WMessageBoxImage.Question,
-                    WMessageBoxButtons.YesNo));
+            var result = Interactions.ShowConfirmation((
+                $"The file {documentViewModel.FilePath} has been modified externally. Do you want to reload it?",
+                "File Modified",
+                WMessageBoxImage.Question,
+                WMessageBoxButtons.YesNo));
 
-                if (result == WMessageBoxResult.Yes)
-                {
-                    documentViewModel.Reload(true);
-                }
+            if (result == WMessageBoxResult.Yes)
+            {
+                documentViewModel.Reload(true);
             }
         }
     }
 
     [RelayCommand]
-    private async Task OpenRedFileAsync(FileEntry file)
+    private async Task OpenRedFileAsync(FileEntry? file)
     {
-        if (file is not null)
+        if (file is null)
         {
-            _progressService.IsIndeterminate = true;
-            try
-            {
-                await using MemoryStream stream = new();
-                await file.ExtractAsync(stream);
-                if (OpenStream(stream, file.FileName, out var redfile))
-                {
-                    var fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(redfile, file.FileName, this, file.Archive is not FileSystemArchive);
-                    if (!DockedViews.Contains(fileViewModel))
-                    {
-                        DockedViews.Add(fileViewModel);
-                    }
-
-                    ActiveDocument = fileViewModel;
-                    UpdateTitle();
-                }
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error(e.Message);
-            }
-            finally
-            {
-                _progressService.IsIndeterminate = false;
-            }
-        }
-    }
-
-    public bool OpenFileFromProject(ResourcePath path)
-    {
-        if (path == 0)
-        {
-            return false;
+            return;
         }
 
-        if (_archiveManager.ProjectArchive is not FileSystemArchive projArchive)
+        _progressService.IsIndeterminate = true;
+        try
         {
-            return false;
-        }
-
-        foreach (var (hash, file) in projArchive.Files)
-        {
-            if (path != hash)
-            {
-                continue;
-            }
-
-            using MemoryStream stream = new();
-            file.Extract(stream);
-
+            await using MemoryStream stream = new();
+            await file.ExtractAsync(stream);
             if (OpenStream(stream, file.FileName, out var redfile))
             {
-                var fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(redfile, Path.Combine(projArchive.Project.ModDirectory, file.FileName), this, false);
+                var fileViewModel =
+                    _documentViewmodelFactory.RedDocumentViewModel(redfile, file.FileName, this, file.Archive is not FileSystemArchive);
                 if (!DockedViews.Contains(fileViewModel))
                 {
                     DockedViews.Add(fileViewModel);
@@ -1153,24 +1511,79 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
                 ActiveDocument = fileViewModel;
                 UpdateTitle();
-
-                return true;
             }
+        }
+        catch (Exception e)
+        {
+            _loggerService.Error(e.Message);
+        }
+        finally
+        {
+            _progressService.IsIndeterminate = false;
+        }
+    }
+
+    private bool OpenFileFromProject(ResourcePath path)
+    {
+        if (path == 0 || _archiveManager.ProjectArchive is not FileSystemArchive projArchive)
+        {
+            return false;
+        }
+
+        foreach (var (hash, file) in projArchive.Files)
+        {
+            if (path != hash || GetRedFile(file) is not { } fileViewModel)
+            {
+                continue;
+            }
+
+            if (!DockedViews.Contains(fileViewModel))
+            {
+                DockedViews.Add(fileViewModel);
+            }
+
+            ActiveDocument = fileViewModel;
+            UpdateTitle();
+
+            return true;
+
         }
 
         return false;
+    }
+
+    private RedDocumentViewModel? GetRedFile(IGameFile file)
+    {
+        if (_archiveManager.ProjectArchive is not FileSystemArchive projArchive)
+        {
+            return null;
+        }
+
+        using MemoryStream stream = new();
+        file.Extract(stream);
+
+        if (OpenStream(stream, file.FileName, out var redFile))
+        {
+            return _documentViewmodelFactory.RedDocumentViewModel(redFile,
+                Path.Combine(projArchive.Project.ModDirectory, file.FileName),
+                this);
+        }
+
+        return null;
     }
 
     public void OpenFileFromDepotPath(ResourcePath path)
     {
         foreach (var file in DockedViews.OfType<IDocumentViewModel>())
         {
-            if (file.FilePath == path)
+            if (file is not RedDocumentViewModel redDocumentViewModel || redDocumentViewModel.RelativePath != path)
             {
-                ActiveDocument = file;
-                UpdateTitle();
-                return;
+                continue;
             }
+
+            ActiveDocument = file;
+            UpdateTitle();
+            return;
         }
 
         if (OpenFileFromProject(path))
@@ -1178,76 +1591,78 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
-        // it should be resolved by this point, but check just in case
-        if (!_hashService.Contains(path) && !ResourcePath.IsNullOrEmpty(path))
-        {
-            _hashService.AddCustom(path.GetResolvedText().NotNull());
-        }
-
         OpenFileFromHash(path);
     }
 
-    public void OpenFileFromHash(ResourcePath hash)
+    private void OpenFileFromHash(ResourcePath hash)
     {
-        if (hash != 0)
+        if (hash == 0)
         {
-            _progressService.IsIndeterminate = true;
-            try
-            {
-                var file = _archiveManager.Lookup(hash);
-                if (file.HasValue && file.Value is FileEntry fe)
-                {
-                    using MemoryStream stream = new();
-                    fe.Extract(stream);
+            return;
+        }
 
-                    if (OpenStream(stream, fe.FileName, out var redfile))
-                    {
-                        var resourcePath = hash.GetResolvedText() ?? $"{Path.GetFileNameWithoutExtension(fe.FileName)}{fe.Extension}";
-                        var fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(redfile, resourcePath, this, true);
-                        if (!DockedViews.Contains(fileViewModel))
-                        {
-                            DockedViews.Add(fileViewModel);
-                        }
+        _progressService.IsIndeterminate = true;
 
-                        ActiveDocument = fileViewModel;
-                        UpdateTitle();
+        using MemoryStream stream = new();
+        try
+        {
+            var file = _archiveManager.Lookup(hash);
+            if (file is not { HasValue: true, Value: FileEntry fe })
+            {
+                return;
+            }
 
-                    }
-                }
-            }
-            catch (Exception e)
+            fe.Extract(stream);
+
+            if (!OpenStream(stream, fe.FileName, out var redfile))
             {
-                _loggerService.Error(e.Message);
+                return;
             }
-            finally
+
+            var resourcePath = hash.GetResolvedText() ?? $"{Path.GetFileNameWithoutExtension(fe.FileName)}{fe.Extension}";
+            var fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(redfile, resourcePath, this, true);
+            if (!DockedViews.Contains(fileViewModel))
             {
-                _progressService.IsIndeterminate = false;
+                DockedViews.Add(fileViewModel);
             }
+
+            ActiveDocument = fileViewModel;
+            UpdateTitle();
+        }
+        catch (Exception e)
+        {
+            _loggerService.Error(e.Message);
+        }
+        finally
+        {
+            _progressService.IsIndeterminate = false;
+            stream.Close();
         }
     }
 
     public bool HasActiveProject() => ActiveProject is not null;
 
-
     [RelayCommand]
-    private Task CleanAllAsync() => Task.Run(() => _gameControllerFactory.GetController().CleanAll());
+    private async Task CleanAllAsync()
+    {
+        await Task.Run(() => _gameControllerFactory.GetController().CleanAll());
+    }
 
     private async Task LaunchAsync(LaunchProfile profile)
     {
-        _watcherService.IsSuspended = true;
-        await _gameControllerFactory.GetController().LaunchProject(profile);
-        _watcherService.IsSuspended = false;
-        _watcherService.QueueRefresh();
+        if (!await AreDirtyFilesHandledBeforeLaunch())
+        {
+            return;
+        }
+
+        await _gameControllerFactory.GetController().LaunchProjectAsync(profile);
     }
 
     [RelayCommand]
-    private Task HotInstallModAsync() => Task.Run(() => _gameControllerFactory.GetController().PackProjectHot());
+    private async Task HotInstallModAsync() => await _gameControllerFactory.GetController().InstallProjectHotAsync();
 
     [RelayCommand]
-    private void LaunchOptions()
-    {
-        Interactions.ShowLaunchProfilesView();
-    }
+    private void LaunchOptions() => Interactions.ShowLaunchProfilesView();
 
     [RelayCommand]
     private void ShowTextureImporter()
@@ -1273,12 +1688,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         DockedViews.Add(vm);
     }
 
-    public string CyberpunkBlenderAddonLink = "https://github.com/WolvenKit/Cyberpunk-Blender-add-on";
-    public string WolvenKitSetupLink = "https://wiki.redmodding.org/wolvenkit/getting-started/setup";
-    public string WolvenKitCreatingAModLink = "https://wiki.redmodding.org/wolvenkit/getting-started/creating-a-mod";
-    public string DiscordInvitationLink = "https://discord.gg/Epkq79kd96";
-    public string AboutWolvenKitLink = "https://wiki.redmodding.org/wolvenkit/about";
-
 
     [RelayCommand]
     private void OpenExternalLink(string link)
@@ -1298,26 +1707,25 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             return result;
         }
-        else
+
+        var newVm = typeof(T) switch
         {
-            var newvm = typeof(T) switch
-            {
-                Type t when t == typeof(LogViewModel) => (T)(_paneViewModelFactory.LogViewModel() as IDockElement),
-                Type t when t == typeof(ProjectExplorerViewModel) => (T)(_paneViewModelFactory.ProjectExplorerViewModel(this) as IDockElement),
-                Type t when t == typeof(PropertiesViewModel) => (T)(_paneViewModelFactory.PropertiesViewModel() as IDockElement),
-                Type t when t == typeof(AssetBrowserViewModel) => (T)(_paneViewModelFactory.AssetBrowserViewModel(this) as IDockElement),
-                Type t when t == typeof(TweakBrowserViewModel) => (T)(_paneViewModelFactory.TweakBrowserViewModel(this) as IDockElement),
-                Type t when t == typeof(LocKeyBrowserViewModel) => (T)(_paneViewModelFactory.LocKeyBrowserViewModel() as IDockElement),
+            Type t when t == typeof(LogViewModel) => (T)(_paneViewModelFactory.LogViewModel() as IDockElement),
+            Type t when t == typeof(ProjectExplorerViewModel) => (T)(_paneViewModelFactory.ProjectExplorerViewModel(this) as IDockElement),
+            Type t when t == typeof(PropertiesViewModel) => (T)(_paneViewModelFactory.PropertiesViewModel() as IDockElement),
+            Type t when t == typeof(AssetBrowserViewModel) => (T)(_paneViewModelFactory.AssetBrowserViewModel(this) as IDockElement),
+            Type t when t == typeof(TweakBrowserViewModel) => (T)(_paneViewModelFactory.TweakBrowserViewModel(this) as IDockElement),
+            Type t when t == typeof(LocKeyBrowserViewModel) => (T)(_paneViewModelFactory.LocKeyBrowserViewModel() as IDockElement),
 
-                Type t when t == typeof(ImportViewModel) => (T)(_paneViewModelFactory.LogViewModel() as IDockElement),
-                Type t when t == typeof(ExportViewModel) => (T)(_paneViewModelFactory.LogViewModel() as IDockElement),
+            Type t when t == typeof(ImportViewModel) => (T)(_paneViewModelFactory.ImportViewModel(this) as IDockElement),
+            Type t when t == typeof(ExportViewModel) => (T)(_paneViewModelFactory.ExportViewModel(this) as IDockElement),
 
-                _ => throw new NotImplementedException(),
-            };
+            _ => throw new NotImplementedException(),
+        };
 
-            DockedViews.Add(newvm);
-            return newvm;
-        }
+        DockedViews.Add(newVm);
+        return newVm;
+
     }
 
 
@@ -1340,16 +1748,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand]
     private void CloseModal()
     {
-        if (IsDialogShown)
-        {
-            ShouldDialogShow = false;
-        }
-
-        if (IsOverlayShown)
-        {
-            ShouldOverlayShow = false;
-        }
+        CloseDialog();
+        CloseOverlay();
     }
+
+
     public void FinishedClosingModal()
     {
         if (!ShouldDialogShow)
@@ -1376,9 +1779,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     #region properties
 
     public bool IsUpdateAvailable { get; set; }
-
-    [ObservableProperty]
-    private EAppStatus? _status;
 
     [ObservableProperty]
     private string? _title;
@@ -1410,13 +1810,16 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [ObservableProperty]
     private ObservableObject? _activeOverlay;
 
-    [ObservableProperty] 
+    [ObservableProperty]
     private DialogViewModel? _activeDialog;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SaveFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(SaveAsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SaveAllCommand))]
     private IDocumentViewModel? _activeDocument;
+
+    private IDocumentViewModel? _lastActiveDocument;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(ShowProjectSettingsCommand))]
@@ -1424,17 +1827,41 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(NewFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(ShowLogCommand))]
     [NotifyCanExecuteChangedFor(nameof(ShowProjectExplorerCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ImportFromEntitySpawnerCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RunFileValidationOnProjectCommand))]
     [NotifyCanExecuteChangedFor(nameof(ShowPropertiesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(NewPhotoModeFilesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(GenerateMinimalQuestFilesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(GenerateInkatlasCommand))]
     private Cp77Project? _activeProject;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(ShowProjectSettingsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ShowSoundModdingToolCommand))]
+    [NotifyCanExecuteChangedFor(nameof(NewFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ShowLogCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ShowProjectExplorerCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ImportFromEntitySpawnerCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RunFileValidationOnProjectCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ShowPropertiesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(NewPhotoModeFilesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(GenerateMinimalQuestFilesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(GenerateWorldbuilderPropCommand))]
+    [NotifyCanExecuteChangedFor(nameof(GenerateInkatlasCommand))]
+    private EAppStatus? _status;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SaveAllCommand))]
     private ObservableCollection<IDockElement> _dockedViews = new();
 
+    private double _uiScalePercentage => SettingsManager.UiScale / 100.0;
+
     #endregion properties
 
     #region methods
 
+    // TODO: Fix installer
+    /*
     private static (SemVersion?, string) GetInstallerPackage()
     {
         using var p = new Process();
@@ -1462,7 +1889,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
         return (semVersion, path);
     }
-    public void ShowHomePageSync(EHomePage page = EHomePage.Welcome)
+    */
+
+    private void ShowHomePageSync(EHomePage page = EHomePage.Welcome)
     {
         var homePage = _pageViewModelFactory.HomePageViewModel(this);
         homePage.SelectedIndex = (int)page;
@@ -1472,7 +1901,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         ShouldOverlayShow = true;
     }
 
-    public async Task ShowHomePage(EHomePage page)
+    public async Task ShowHomePageAsync(EHomePage page)
     {
         var homePage = _pageViewModelFactory.HomePageViewModel(this);
         homePage.SelectedIndex = (int)page;
@@ -1488,24 +1917,17 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         await Task.Run(OnAfterDialogRendered);
     }
 
-    private void OnAfterOverlayRendered()
-    {
-        DispatcherHelper.RunOnMainThread(() =>
+    private void OnAfterOverlayRendered() => DispatcherHelper.RunOnMainThread(() =>
         {
             IsOverlayShown = true;
             ShouldOverlayShow = true;
         }, DispatcherPriority.Render);
-    }
-    private void OnAfterDialogRendered()
-    {
-        DispatcherHelper.RunOnMainThread(() =>
+
+    private void OnAfterDialogRendered() => DispatcherHelper.RunOnMainThread(() =>
         {
             IsDialogShown = true;
             ShouldDialogShow = true;
         }, DispatcherPriority.Render);
-    }
-
-    private void LogExtended(Exception ex) => _loggerService.Error($"Message: {ex.Message}\nSource: {ex.Source}\nStackTrace: {ex.StackTrace}");
 
     [MemberNotNull(nameof(Title))]
     public void UpdateTitle()
@@ -1566,10 +1988,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
-        var dbPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb_ep1.bin");
+        var dbPath = Path.Combine(SettingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb_ep1.bin");
         if (!File.Exists(dbPath))
         {
-            dbPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin");
+            dbPath = Path.Combine(SettingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin");
         }
 
         await _tweakDBService.LoadDB(dbPath);
@@ -1596,7 +2018,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             case EWolvenKitFile.Cr2w:
                 if (OpenFile(fullPath, out var file))
                 {
-                    fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(file, fullPath, this, false);
+                    fileViewModel = _documentViewmodelFactory.RedDocumentViewModel(file, fullPath, this);
                     result = fileViewModel.IsInitialized();
                 }
                 break;
@@ -1626,14 +2048,29 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         return null;
     }
 
+
+    private const string s_noProjectText = "You need to have a Wolvenkit project to save files. See the wiki for more detes:\n" +
+                                           "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/usage/wolvenkit-projects";
+
+    private const string s_noProjectTitle = "No Wolvenkit project";
+
     /// <summary>
     /// Saves a document and resets the dirty flag.
     /// </summary>
     /// <param name="fileToSave"></param>
     /// <param name="saveAsDialogRequested"></param>
-    public void Save(IDocumentViewModel fileToSave, bool saveAsDialogRequested = false)
+    private void Save(IDocumentViewModel fileToSave, bool saveAsDialogRequested = false)
     {
-        if (fileToSave is RedDocumentViewModel && _projectManager.ActiveProject is null)
+        var isWscript = fileToSave is WScriptDocumentViewModel;
+
+        // Do not allow saving of anything that's not wscript without a project. Bad user!
+        if (_projectManager.ActiveProject is null && !isWscript)
+        {
+            Interactions.ShowConfirmation((s_noProjectText, s_noProjectTitle, WMessageBoxImage.Warning, WMessageBoxButtons.Ok));
+            return;
+        }
+
+        if (fileToSave is RedDocumentViewModel && _projectManager.ActiveProject is null && !isWscript)
         {
             return;
         }
@@ -1643,12 +2080,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             {
                 RedDocumentViewModel red =>
                     saveAsDialogRequested ||
-                    red.FilePath == null ||
+                    string.IsNullOrEmpty(red.FilePath) ||
                     !Directory.Exists(Path.GetDirectoryName(Path.Combine(_projectManager.ActiveProject!.ModDirectory, red.RelativePath)))
                 ,
                 WScriptDocumentViewModel wScript =>
                     saveAsDialogRequested ||
-                    wScript.FilePath == null ||
+                    string.IsNullOrEmpty(wScript.FilePath) ||
                     !Directory.Exists(ISettingsManager.GetWScriptDir()),
                 _ => false,
             };
@@ -1671,26 +2108,122 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 dlg.FileName = fileToSave.FilePath is not null ? Path.GetFileName(fileToSave.FilePath) : Path.GetFileName(fileToSave.ContentId);
                 dlg.InitialDirectory = Path.GetDirectoryName(fileToSave.FilePath);
             }
-            _watcherService.IsSuspended = true;
+
             if (dlg.ShowDialog().GetValueOrDefault())
             {
                 fileToSave.FilePath = dlg.FileName;
                 fileToSave.SaveCommand.SafeExecute();
             }
-            _watcherService.IsSuspended = false;
-            _watcherService.QueueRefresh();
         }
         else
         {
             fileToSave.SaveCommand.SafeExecute();
         }
-
     }
 
     private bool IsInRawFolder(string path) => _projectManager.ActiveProject is not null && path.Contains(_projectManager.ActiveProject.RawDirectory);
     private bool IsInResourceFolder(string path) => _projectManager.ActiveProject is not null && path.Contains(_projectManager.ActiveProject.ResourcesDirectory);
 
-    public Task RequestFileOpen(string fullpath)
+    private void OpenRedengineFile(string fullpath, string ext)
+    {
+        var trimmedExt = ext.TrimStart('.').ToUpper();
+        var type = EWolvenKitFile.Cr2w;
+
+        var isRedEngineFile = Enum.GetNames<ERedExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal)) || trimmedExt == "";
+        if (isRedEngineFile)
+        {
+            type = EWolvenKitFile.Cr2w;
+        }
+
+        var isTweakFile = Enum.GetNames<ETweakExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal));
+        if (isTweakFile)
+        {
+            type = EWolvenKitFile.TweakXl;
+            isRedEngineFile = true;
+        }
+
+        var isWScriptFile = Enum.GetNames<EWScriptExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal));
+        if (isWScriptFile)
+        {
+            type = EWolvenKitFile.WScript;
+            isRedEngineFile = true;
+        }
+
+        if (!isRedEngineFile)
+        {
+            return;
+        }
+
+        DispatcherHelper.RunOnMainThread(async void () =>
+        {
+            try
+            {
+                if (await Open(fullpath, type) is not IDocumentViewModel document)
+                {
+                    return;
+                }
+
+                if (!DockedViews.Contains(document))
+                {
+                    DockedViews.Add(document);
+                }
+
+                ActiveDocument = document;
+                UpdateTitle();
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error($"Could not open file: {e.Message}");
+
+                _loggerService.Error(
+                    $"Please open a ticket (with the file attached) under {Core.Constants.IssueTrackerUrl}");
+            }
+        });
+    }
+
+    private static void OpenAudioFile()
+    {
+        // commented for testing
+
+        //var z = (AudioToolViewModel)ServiceLocator.Default.ResolveType<AudioToolViewModel>();
+        //ExecuteAudioTool();
+        //z.AddAudioItem(full);
+    }
+
+    private void ShellExecute(string fullpath)
+    {
+        try
+        {
+            ProcessStartInfo proc = new(fullpath.ToEscapedPath()) { UseShellExecute = true };
+            Process.Start(proc);
+        }
+        catch (Win32Exception)
+        {
+            // eat this: no default app set for filetype
+            _loggerService.Error($"No default program set in Windows to open file extension {Path.GetExtension(fullpath)}");
+        }
+    }
+
+    private static void PolymorphExecute(string path, string extension)
+    {
+        File.WriteAllBytes(Path.GetTempPath() + "asd." + extension, [0x01]);
+        StringBuilder programName = new();
+        _ = NativeMethods.FindExecutable("asd." + extension, Path.GetTempPath(), programName);
+        if (programName.ToString().ToUpper().Contains(".EXE"))
+        {
+            Process.Start(programName.ToString(), path.ToEscapedPath());
+        }
+        else
+        {
+            throw new InvalidFileTypeException("Invalid file type");
+        }
+    }
+
+
+    /// <param name="fullpath">Absolute path of the file</param>
+    /// <param name="ignoreIgnoredExtension">Sometimes, we need to open files for internal script use. Set this flag to true for this case.</param>
+    /// <exception cref="InvalidFileTypeException"></exception>
+    public void RequestFileOpen(string fullpath, bool ignoreIgnoredExtension = false)
     {
         var ext = Path.GetExtension(fullpath).ToLower();
 
@@ -1698,10 +2231,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         var delimiter = "|";
         //string[] ignoredExtensions = _settingsManager.TreeViewIgnoredExtensions.ToLower().Split(delimiter);
         //bool isAnIgnoredExtension = Array.Exists(ignoredExtensions, extension => extension.Equals(ext));
-        var isAnIgnoredExtension = (_settingsManager.TreeViewIgnoredExtensions ?? "").Split(delimiter).Any(entry => entry.ToLower().Trim().Equals(ext));
-        if (isAnIgnoredExtension)
+        var isAnIgnoredExtension = (SettingsManager.TreeViewIgnoredExtensions ?? "").Split(delimiter)
+            .Any(entry => entry.ToLower().Trim().Equals(ext));
+        if (isAnIgnoredExtension && !ignoreIgnoredExtension)
         {
-            ShellExecute();
+            ShellExecute(fullpath);
         }
         // double click
         else
@@ -1747,14 +2281,20 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 case ".reds":
                 case ".yaml":
                 case ".tweak":
-                    ShellExecute();
+                    ShellExecute(fullpath);
                     break;
-
                 // double file formats
                 case ".csv":
                 case ".json":
-                    return (IsInRawFolder(fullpath) || IsInResourceFolder(fullpath) ) ? Task.Run(ShellExecute) : Task.Run(OpenRedengineFile);
-
+                    if (IsInRawFolder(fullpath) || IsInResourceFolder(fullpath))
+                    {
+                        ShellExecute(fullpath);
+                    }
+                    else
+                    {
+                        OpenRedengineFile(fullpath, ext);
+                    }
+                    break;
                 // VIDEO
                 case ".bk2":
                     break;
@@ -1762,109 +2302,25 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 // AUDIO
 
                 case ".wem":
-                    return Task.Run(OpenAudioFile);
-
+                    OpenAudioFile();
+                    break;
                 case ".subs":
-                    return Task.Run(() => PolymorphExecute(fullpath, ".txt"));
-
+                    PolymorphExecute(fullpath, ".txt");
+                    break;
                 case ".usm":
                 {
                     // TODO: port winforms
                     //if (!File.Exists(fullpath) || Path.GetExtension(fullpath) != ".usm")
                     //    return;
-                    //var usmplayer = new frmUsmPlayer(fullpath);
-                    //usmplayer.Show(dockPanel, DockState.Document);
+                    //var usmPlayer = new frmUsmPlayer(fullpath);
+                    //usmPlayer.Show(dockPanel, DockState.Document);
                     break;
                 }
                 //case ".BNK":
-                // TODO SPLIT WEMS TO PLAYLIST FROM BNK
-                case "":
+                // TODO SPLIT WEMs TO PLAYLIST FROM BNK
                 default:
-                    return Task.Run(OpenRedengineFile);
-            }
-        }
-
-        return Task.Run(() => true);
-
-        void OpenRedengineFile()
-        {
-            var trimmedExt = ext.TrimStart('.')?.ToUpper() ?? "";
-            var type = EWolvenKitFile.Cr2w;
-
-            var isRedEngineFile = Enum.GetNames<ERedExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal)) || trimmedExt == "";
-            if (isRedEngineFile)
-            {
-                type = EWolvenKitFile.Cr2w;
-            }
-
-            var isTweakFile = Enum.GetNames<ETweakExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal));
-            if (isTweakFile)
-            {
-                type = EWolvenKitFile.TweakXl;
-                isRedEngineFile = true;
-            }
-
-            var isWScriptFile = Enum.GetNames<EWScriptExtension>().Any(x => x.ToUpper().Equals(trimmedExt, StringComparison.Ordinal));
-            if (isWScriptFile)
-            {
-                type = EWolvenKitFile.WScript;
-                isRedEngineFile = true;
-            }
-
-            if (isRedEngineFile)
-            {
-                DispatcherHelper.RunOnMainThread(async () =>
-                {
-                    var document = await Open(fullpath, type);
-                    if (document is not null)
-                    {
-                        if (!DockedViews.Contains(document))
-                        {
-                            DockedViews.Add(document);
-                        }
-
-                        ActiveDocument = document;
-                        UpdateTitle();
-                    }
-                });
-            }
-        }
-
-        void OpenAudioFile()
-        {
-            // commented for testing
-
-            //var z = (AudioToolViewModel)ServiceLocator.Default.ResolveType<AudioToolViewModel>();
-            //ExecuteAudioTool();
-            //z.AddAudioItem(full);
-        }
-
-        void ShellExecute()
-        {
-            try
-            {
-                ProcessStartInfo proc = new(fullpath.ToEscapedPath()) { UseShellExecute = true };
-                Process.Start(proc);
-            }
-            catch (Win32Exception)
-            {
-                // eat this: no default app set for filetype
-                _loggerService.Error($"No default prgram set in Windows to open file extension {Path.GetExtension(fullpath)}");
-            }
-        }
-
-        void PolymorphExecute(string path, string extension)
-        {
-            File.WriteAllBytes(Path.GetTempPath() + "asd." + extension, new byte[] { 0x01 });
-            StringBuilder programname = new();
-            _ = NativeMethods.FindExecutable("asd." + extension, Path.GetTempPath(), programname);
-            if (programname.ToString().ToUpper().Contains(".EXE"))
-            {
-                Process.Start(programname.ToString(), path.ToEscapedPath());
-            }
-            else
-            {
-                throw new InvalidFileTypeException("Invalid file type");
+                    OpenRedengineFile(fullpath, ext);
+                    break;
             }
         }
     }
@@ -1879,23 +2335,350 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     public void SetLaunchProfiles(ObservableCollection<LaunchProfileViewModel> launchProfiles)
     {
-        _settingsManager.LaunchProfiles ??= new();
+        SettingsManager.LaunchProfiles.Clear();
+        var profiles = launchProfiles
+            .Where(item => !SettingsManager.LaunchProfiles.ContainsKey(item.Name))
+            .ToDictionary(item => item.Name, item => item.Profile);
 
-        _settingsManager.LaunchProfiles.Clear();
-        var _launchProfiles = new Dictionary<string, LaunchProfile>();
-
-        foreach (var item in launchProfiles)
-        {
-            if (!_settingsManager.LaunchProfiles.ContainsKey(item.Name))
-            {
-                _launchProfiles.Add(item.Name, item.Profile);
-            }
-        }
-
-        _settingsManager.LaunchProfiles = _launchProfiles;
-        _settingsManager.Save();
+        SettingsManager.LaunchProfiles = profiles;
+        SettingsManager.Save();
 
     }
 
+    private void UpdateScalesResource()
+    {
+        // NOTE: keep in sync with App.Sizes.xaml
+        var resources = System.Windows.Application.Current.Resources;
+
+        // Fonts
+        resources["WolvenKitFontAltTitle"] = Math.Round(10 * _uiScalePercentage);
+        resources["WolvenKitFontSubTitle"] = Math.Round(12 * _uiScalePercentage);
+        resources["WolvenKitFontBody"] = Math.Round(14 * _uiScalePercentage);
+        resources["WolvenKitFontMedium"] = Math.Round(16 * _uiScalePercentage);
+        resources["WolvenKitFontTitle"] = Math.Round(18 * _uiScalePercentage);
+        resources["WolvenKitFontHeader"] = Math.Round(20 * _uiScalePercentage);
+        resources["WolvenKitFontHuge"] = Math.Round(24 * _uiScalePercentage);
+        resources["WolvenKitFontMega"] = Math.Round(36 * _uiScalePercentage);
+        resources["WolvenKitFontGiga"] = Math.Round(58 * _uiScalePercentage);
+
+        // Icons
+        resources["WolvenKitIconPico"] = Math.Round(8 * _uiScalePercentage);
+        resources["WolvenKitIconNano"] = Math.Round(10 * _uiScalePercentage);
+        resources["WolvenKitIconMicro"] = Math.Round(12 * _uiScalePercentage);
+        resources["WolvenKitIconMilli"] = Math.Round(14 * _uiScalePercentage);
+        resources["WolvenKitIconTiny"] = Math.Round(16 * _uiScalePercentage);
+        resources["WolvenKitIconSmall"] = Math.Round(18 * _uiScalePercentage);
+        resources["WolvenKitIcon"] = Math.Round(20 * _uiScalePercentage);
+        resources["WolvenKitIconBig"] = Math.Round(26 * _uiScalePercentage);
+        resources["WolvenKitIconHuge"] = Math.Round(36 * _uiScalePercentage);
+
+        // Layouts
+        resources["WolvenKitMargin"] = new Thickness(15).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginLeft"] = new Thickness(15, 0, 0, 0).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginRight"] = new Thickness(0, 0, 15, 0).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginTop"] = new Thickness(0, 15, 0, 0).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginBottom"] = new Thickness(0, 0, 0, 15).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginHorizontal"] = new Thickness(15, 0, 15, 0).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginVertical"] = new Thickness(0, 15, 0, 15).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginLeftBottom"] = new Thickness(15, 0, 0, 15).Mul(_uiScalePercentage).Round();
+
+        resources["WolvenKitMarginSmall"] = new Thickness(8).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginSmallLeft"] = new Thickness(8, 0, 0, 0).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginSmallRight"] = new Thickness(0, 0, 8, 0).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginSmallTop"] = new Thickness(0, 8, 0, 0).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginSmallBottom"] = new Thickness(0, 0, 0, 8).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginSmallHorizontal"] = new Thickness(8, 0, 8, 0).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginSmallVertical"] = new Thickness(0, 8, 0, 8).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginSmallHeader"] = new Thickness(8, 8, 8, 0).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginSmallFooter"] = new Thickness(8, 0, 8, 8).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginSmallLeftSide"] = new Thickness(8, 8, 0, 8).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginSmallRightSide"] = new Thickness(0, 8, 8, 8).Mul(_uiScalePercentage).Round();
+
+        resources["WolvenKitMarginTiny"] = new Thickness(4).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginTinyRight"] = new Thickness(0, 0, 4, 0).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginTinyTop"] = new Thickness(0, 4, 0, 0).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginTinyBottom"] = new Thickness(0, 0, 0, 4).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginTinyHorizontal"] = new Thickness(4, 0, 4, 0).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginTinyVertical"] = new Thickness(0, 4, 0, 4).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginTinyHeader"] = new Thickness(4, 4, 4, 0).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginTinyFooter"] = new Thickness(4, 0, 4, 4).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginTinyLeftSide"] = new Thickness(4, 4, 0, 4).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginTinyRightSide"] = new Thickness(0, 4, 4, 4).Mul(_uiScalePercentage).Round();
+
+        resources["WolvenKitMarginMicro"] = new Thickness(2).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginMicroLeft"] = new Thickness(2, 0, 0, 0).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginMicroHorizontal"] = new Thickness(2, 0, 2, 0).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginMicroVertical"] = new Thickness(0, 2, 0, 2).Mul(_uiScalePercentage).Round();
+
+        resources["WolvenKitSmallRadius"] = new CornerRadius(5).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitRadius"] = new CornerRadius(10).Mul(_uiScalePercentage).Round();
+
+        resources["WolvenKitColumnTiny"] = new GridLength(5).Mul(_uiScalePercentage).Round();
+
+        resources["WolvenKitRowText"] = new GridLength(20).Mul(_uiScalePercentage).Round();
+
+        // Views
+        resources["WolvenKitDividerHeight"] = Math.Round(45 * _uiScalePercentage);
+
+        resources["WolvenKitDataGridRowHeight"] = Math.Round(24 * _uiScalePercentage);
+
+        resources["WolvenKitTreeGridColumnIconWidth"] = new GridLength(13).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitTreeGridIconHeight"] = Math.Round(13 * _uiScalePercentage);
+        resources["WolvenKitTreeGridRowHeight"] = Math.Round(20 * _uiScalePercentage);
+        resources["WolvenKitTreeGridRowHeaderHeight"] = Math.Round(28 * _uiScalePercentage);
+        resources["WolvenKitTreeGridCheckboxWidth"] = Math.Round(32 * _uiScalePercentage);
+
+        resources["WolvenKitTreeRowHeight"] = Math.Round(24 * _uiScalePercentage);
+        resources["WolvenKitTreeRowHeaderHeight"] = Math.Round(30 * _uiScalePercentage);
+
+        resources["WolvenKitTabHeight"] = Math.Round(25 * _uiScalePercentage);
+
+        resources["WolvenKitPropertyColumnWidth"] = new GridLength(100).Mul(_uiScalePercentage).Round();
+
+        resources["WolvenKitContextMenuColumnIconWidth"] = new GridLength(13).Mul(_uiScalePercentage).Round();
+
+        resources["WolvenKitDragDropTooltipWidth"] = Math.Round(250 * _uiScalePercentage);
+
+        resources["WolvenKitWizardNavBarMinHeight"] = Math.Round(44 * _uiScalePercentage);
+
+        resources["WolvenKitFieldHeight"] = Math.Round(120 * _uiScalePercentage);
+
+        resources["WolvenKitButtonHeight"] = Math.Round(32 * _uiScalePercentage);
+
+        resources["WolvenKitGridSize"] = new Rect(0, 0, 48, 48).Mul(_uiScalePercentage).Round();
+
+        // HomePageView
+        resources["WolvenKitHomeSideBarWidth"] = Math.Round(200 * _uiScalePercentage).ToString();
+        resources["WolvenKitHomeSideBarLength"] = new GridLength(200).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitHomeButtonWidth"] = Math.Round(160 * _uiScalePercentage);
+        resources["WolvenKitHomeButtonHeight"] = Math.Round(44 * _uiScalePercentage);
+        resources["WolvenKitHomeVersionMargin"] = new Thickness(6).Mul(_uiScalePercentage).Round();
+
+        resources["WolvenKitHomeSharedHeaderWidth"] = Math.Round(140 * _uiScalePercentage);
+        resources["WolvenKitHomeSharedButtonHeight"] = Math.Round(40 * _uiScalePercentage);
+        resources["WolvenKitHomeSharedPaddingLeft"] = new Thickness(10, 0, 0, 0).Mul(_uiScalePercentage).Round();
+
+        // WelcomePageView
+        resources["WolvenKitWelcomeRightLength"] = new GridLength(380).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitWelcomeOrderWidth"] = Math.Round(140 * _uiScalePercentage);
+        resources["WolvenKitWelcomeCardSammyWidth"] = new GridLength(70).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitWelcomeCardSammyHeight"] = Math.Round(70 * _uiScalePercentage);
+        resources["WolvenKitWelcomeCardSammyClipHeight"] = Math.Round(50 * _uiScalePercentage);
+        resources["WolvenKitWelcomeTogglePadding"] = new Thickness(10, 5, 10, 5).Mul(_uiScalePercentage).Round();
+
+        resources["WolvenKitWelcomeButtonWidth"] = Math.Round(250 * _uiScalePercentage);
+        resources["WolvenKitWelcomeButtonHeight"] = Math.Round(100 * _uiScalePercentage);
+        resources["WolvenKitWelcomeButtonMargin"] = new Thickness(0, 0, 0, 8).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitWelcomeButtonPadding"] = new Thickness(25, 0, 25, 0).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitWelcomeStackHeight"] = Math.Round(70 * _uiScalePercentage);
+        resources["WolvenKitWelcomeStackMargin"] = new Thickness(0, 4, 50, 0).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitWelcomeSocialButtonHeight"] = Math.Round(50 * _uiScalePercentage);
+
+        // SettingsPageView
+        resources["WolvenKitSettingsGridLabelWidth"] = new GridLength(200).Mul(_uiScalePercentage).Round();
+
+        // PluginsToolView
+        resources["WolvenKitPluginsToolIconButtonSize"] = Math.Round(50 * _uiScalePercentage);
+        resources["WolvenKitPluginsToolButtonWidth"] = Math.Round(110 * _uiScalePercentage);
+        resources["WolvenKitPluginsToolButtonHeight"] = Math.Round(20 * _uiScalePercentage);
+        resources["WolvenKitPluginsToolProgressBarHeight"] = Math.Round(10 * _uiScalePercentage);
+
+        // LogView
+        resources["WolvenKitLogScriptMinWidth"] = Math.Round(240 * _uiScalePercentage);
+        resources["WolvenKitLogLineMinHeight"] = Math.Round(16 * _uiScalePercentage);
+        resources["WolvenKitLogBreakpointWidth"] = Math.Round(504 * _uiScalePercentage);
+
+        // BackStageView
+        resources["WolvenKitBackStageBgMargin"] = new Thickness(5, 55, 5, 5).Mul(_uiScalePercentage).Round();
+
+        // DockingAdapter
+        resources["WolvenKitDockingAdapterViewport"] = new Rect(0, 0, 90, 90).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitDockingAdapterSammy"] = new Rect(0, 0, 70, 80).Mul(_uiScalePercentage).Round();
+
+        // MenuBarView
+        resources["WolvenKitMenuBarItemMarginHorizontal"] = new Thickness(4, 2, 4, 2).Mul(_uiScalePercentage).Round();
+
+        // RibbonView
+        resources["WolvenKitRibbonMenuIconMargin"] = new Thickness(0, 2, 4, 2).Mul(_uiScalePercentage).Round();
+
+        // StatusBarView
+        resources["WolvenKitStatusBarRowHeight"] = new GridLength(25).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitStatusBarProgressBarWidth"] = Math.Round(200 * _uiScalePercentage);
+        resources["WolvenKitStatusBarProgressBarHeight"] = Math.Round(16 * _uiScalePercentage);
+
+        // AudioPlayerView
+        resources["WolvenKitAudioPlayerVisualizationWidth"] = Math.Round(200 * _uiScalePercentage);
+
+        // LocKeyBrowserView
+        resources["WolvenKitLocKeyBrowserKeyLength"] = new GridLength(110).Mul(_uiScalePercentage).Round();
+
+        // TweakBrowserView
+        resources["WolvenKitTweakBrowserTabColumnWidth"] = new GridLength(300).Mul(_uiScalePercentage).Round();
+
+        // RedTreeView
+        resources["WolvenKitRedTreeIconColumnWidth"] = new GridLength(20).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitRedTreeArrayColumnWidthLvl0"] = new GridLength(218).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitRedTreeArrayColumnWidthLvl1"] = new GridLength(200).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitRedTreeArrayColumnWidthLvl2"] = new GridLength(180).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitRedTreeArrayColumnWidthLvl3"] = new GridLength(160).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitRedTreeArrayColumnWidthLvl4"] = new GridLength(140).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitRedTreeArrayColumnWidthLvl5"] = new GridLength(120).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitRedTreeArrayColumnWidthLvl6"] = new GridLength(100).Mul(_uiScalePercentage).Round();
+
+        // DialogView
+        resources["WolvenKitDialogWidthSmall"] = Math.Round(480 * _uiScalePercentage);
+        resources["WolvenKitDialogHeightSmall"] = Math.Round(190 * _uiScalePercentage);
+        resources["WolvenKitDialogWidth"] = Math.Round(640 * _uiScalePercentage);
+        resources["WolvenKitDialogHeight"] = Math.Round(320 * _uiScalePercentage);
+        resources["WolvenKitDialogWidthMedium"] = Math.Round(800 * _uiScalePercentage);
+        resources["WolvenKitDialogHeightMedium"] = Math.Round(600 * _uiScalePercentage);
+        resources["WolvenKitDialogWidthLarge"] = Math.Round(1024 * _uiScalePercentage);
+        resources["WolvenKitDialogHeightLarge"] = Math.Round(768 * _uiScalePercentage);
+        resources["WolvenKitDialogLabelColumnWidth"] = new GridLength(112).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitDialogLabelColumnWidthMedium"] = new GridLength(140).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitDialogSammySize"] = Math.Round(40 * _uiScalePercentage);
+
+        // FirstSetupView
+        resources["WolvenKitFirstSetupWidth"] = Math.Round(720 * _uiScalePercentage);
+        resources["WolvenKitFirstSetupHeight"] = Math.Round(278 * _uiScalePercentage);
+
+        // MaterialsRepositoryDialog
+        resources["WolvenKitMaterialsRepositoryHeight"] = Math.Round(354 * _uiScalePercentage);
+        resources["WolvenKitMaterialsRepositoryButtonWidth"] = Math.Round(180 * _uiScalePercentage);
+        resources["WolvenKitMaterialsRepositoryComboBoxWidth"] = Math.Round(80 * _uiScalePercentage);
+
+        // MaterialsRepositoryDialog
+        resources["WolvenKitSaveGameSelectionColumnWidth"] = Math.Round(160 * _uiScalePercentage);
+        resources["WolvenKitSaveGameSelectionRowHeight"] = Math.Round(64 * _uiScalePercentage);
+        resources["WolvenKitSaveGameSelectionImageWidth"] = Math.Round(100 * _uiScalePercentage);
+        resources["WolvenKitSaveGameSelectionImageHeight"] = Math.Round(56 * _uiScalePercentage);
+
+        // NewFileView
+        resources["WolvenKitNewFileRowHeight"] = Math.Round(42 * _uiScalePercentage);
+        resources["WolvenKitNewFileIconWidth"] = new GridLength(36).Mul(_uiScalePercentage).Round();
+
+        // ScriptManagerView
+        resources["WolvenKitScriptManagerFileNameWidth"] = Math.Round(248 * _uiScalePercentage);
+        resources["WolvenKitScriptManagerRowHeight"] = Math.Round(24 * _uiScalePercentage);
+
+        // SoundModdingView
+        resources["WolvenKitSoundModdingLabelWidth"] = new GridLength(64).Mul(_uiScalePercentage).Round();
+
+        // CurveEditorWindow
+        resources["WolvenKitCurveEditorMargin"] = new Thickness(38).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitCurveEditorCanvasMargin"] = new Thickness(48, 0, 12, 30).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitCurveEditorRangeWidth"] = Math.Round(98 * _uiScalePercentage);
+        resources["WolvenKitCurveEditorRangeLength"] = new GridLength(98).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitCurveEditorPointSize"] = Math.Round(8 * _uiScalePercentage);
+
+        // Red...Editor
+        resources["WolvenKitRedEditorHashWidth"] = new GridLength(166).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitRedEditorComponentWidth"] = new GridLength(24).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitRedEditorTrimmingWidth"] = new GridLength(16).Mul(_uiScalePercentage).Round();
+
+        // RedTreeView
+        resources["WolvenKitRedTreeRowMinHeight"] = Math.Round(27 * _uiScalePercentage);
+        resources["WolvenKitRedTreeMarginDeleteTop"] = new Thickness(0, 6, 0, 0).Mul(_uiScalePercentage).Round();
+
+        // RedDocument...View
+        resources["WolvenKitRedDocumentSearchBarWidth"] = Math.Round(248 * _uiScalePercentage);
+
+        // RDTInkAtlasView
+        resources["WolvenKitInkAtlasComboWidth"] = Math.Round(100 * _uiScalePercentage);
+        resources["WolvenKitInkAtlasPropertyWidth"] = new GridLength(100).Mul(_uiScalePercentage).Round();
+    }
+
     #endregion methods
+
+    /// <summary>
+    /// Checks if the document has unsaved changes and prompts the user if necessary.
+    /// </summary>
+    /// <returns>false on user abort - do not save in that case</returns>
+    public static async Task<bool> CanCloseDocumentAsync(IDocumentViewModel vm)
+    {
+        if (vm.IsReadOnly || !vm.IsDirty)
+        {
+            return true;
+        }
+
+        switch (await Interactions.ShowSaveDialogueAsync(vm.Header.TrimEnd('*')))
+        {
+            case WMessageBoxResult.Yes: // Save and close
+                vm.SaveCommand.Execute(null);
+                return true;
+            case WMessageBoxResult.No: // Close without saving
+                return true;
+            default: // Cancel
+                return false;
+        }
+    }
+
+    /// <summary>
+    /// Checks if the document has unsaved changes and prompts the user if necessary.
+    /// </summary>
+    /// <returns>false on user abort - do not save in that case</returns>
+    public static bool CanCloseDocument(IDocumentViewModel vm)
+    {
+        if (vm.IsReadOnly || !vm.IsDirty)
+        {
+            return true;
+        }
+
+        switch (Interactions.ShowSaveDialogue(vm.Header.TrimEnd('*')))
+        {
+            case WMessageBoxResult.Yes: // Save and close
+                vm.SaveCommand.Execute(null);
+                return true;
+            case WMessageBoxResult.No: // Close without saving
+                return true;
+            default: // Cancel
+                return false;
+        }
+    }
+
+    /// <summary>
+    /// Closes a document by removing it from the DockedViews.
+    /// </summary>
+    /// <param name="vm">Document to close</param>
+    /// <param name="skipSaveCheck">If we check from docking adapter, we can update the view faster </param>
+    /// <returns></returns>
+    public async Task<bool> CloseDocumentAsync(IDocumentViewModel vm, bool skipSaveCheck = false)
+    {
+        if (!skipSaveCheck && !await CanCloseDocumentAsync(vm))
+        {
+            return false;
+        }
+
+        CloseFile(vm);
+        return true;
+    }
+
+    /// <summary>
+    /// Closes a document by removing it from the DockedViews.
+    /// </summary>
+    /// <param name="vm">Document to close</param>
+    /// <param name="skipSaveCheck">If we check from docking adapter, we can update the view faster </param>
+    /// <returns></returns>
+    public bool CloseDocument(IDocumentViewModel vm, bool skipSaveCheck = false)
+    {
+        if (!skipSaveCheck && !CanCloseDocument(vm))
+        {
+            return false;
+        }
+
+        CloseFile(vm);
+        return true;
+    }
+
+    public void CloseLastActiveDocument()
+    {
+        if ((ActiveDocument ?? _lastActiveDocument) is not IDocumentViewModel documentToClose ||
+            !CloseDocument(documentToClose))
+        {
+            return;
+        }
+
+        ActiveDocument = null;
+        _lastActiveDocument = null;
+    }
 }

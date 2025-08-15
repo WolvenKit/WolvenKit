@@ -454,6 +454,18 @@ public partial class CR2WWriter
 
             buffer.SetBytes(newData);
         }
+
+        if (buffer.Data is RazerChromaAnimationBuffer razerChromaAnimationBuffer)
+        {
+            using var ms = new MemoryStream();
+            using var razerChromaAnimationBufferWriter = new RazerChromaAnimationBufferWriter(ms);
+
+            razerChromaAnimationBufferWriter.WriteBuffer(razerChromaAnimationBuffer);
+
+            var newData = ms.ToArray();
+
+            buffer.SetBytes(newData);
+        }
     }
 
     private CR2WBufferInfo WriteBuffer(BinaryWriter writer, RedBuffer buffer)

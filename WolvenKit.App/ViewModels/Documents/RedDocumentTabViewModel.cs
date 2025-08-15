@@ -1,11 +1,40 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Win32;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.Documents;
+
+public enum RedDocumentItemType
+{
+    Mesh,
+    App,
+    Ent,
+    Xbm,
+    Mlmask,
+    Mlsetup,
+    Morphtarget,
+    Mltemplate,
+    Anims,
+    Workspot,
+    Inkatlas,
+    Questphase,
+    Scene,
+    Mi,
+    Csv,
+    Json,
+    Sector,
+    Other,
+    None,
+}
 
 public abstract partial class RedDocumentTabViewModel : ObservableObject
 {
@@ -13,6 +42,7 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
     {
         _parent = parent;
         FilePath = parent.FilePath;
+        RelativeFilePath = parent.RelativePath;
         Header = header;
 
         PropertyChanged += RedDocumentTabViewModel_PropertyChanged;
@@ -20,88 +50,238 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
 
     private void RedDocumentTabViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(RDTDataViewModel.IsEmbeddedFile))
+        switch (e.PropertyName)
         {
-            DeleteEmbeddedFileCommand.NotifyCanExecuteChanged();
-            RenameEmbeddedFileCommand.NotifyCanExecuteChanged();
+            case nameof(RDTDataViewModel.IsEmbeddedFile):
+                DeleteEmbeddedFileCommand.NotifyCanExecuteChanged();
+                RenameEmbeddedFileCommand.NotifyCanExecuteChanged();
+                break;
+            case nameof(RDTDataViewModel.SelectedChunk):
+                OnSelected();
+                break;
+            case nameof(RDTDataViewModel.CurrentSearch):
+                OnSearchChanged();
+                break;
+            default:
+                break;
         }
     }
+
+    private string GetFilePathExtensionString()
+    {
+        var extension = Path.GetExtension(FilePath);
+        return extension.StartsWith('.') ? extension[1..] : extension;
+    }
+
+    public virtual RedDocumentItemType GetContentType() =>
+        Enum.TryParse(GetFilePathExtensionString(), true, out RedDocumentItemType type)
+            ? type
+            : RedDocumentItemType.Other;
+
 
     public abstract ERedDocumentItemType DocumentItemType { get; }
     public string Header { get; set; }
     public string FilePath { get; set; }
+    public string RelativeFilePath { get; }
 
     [ObservableProperty] private RedDocumentViewModel _parent;
 
     [ObservableProperty] private bool _canClose;
 
 
-    public static IRedType? CopiedChunk;
-
-    public static List<IRedType> CopiedChunks { get; } = new();
-
     private bool CanDeleteEmbeddedFile() => this is RDTDataViewModel data && data.IsEmbeddedFile;
     [RelayCommand(CanExecute = nameof(CanDeleteEmbeddedFile))]
     private void DeleteEmbeddedFile()
     {
-        if (this is RDTDataViewModel datavm)
+        if (this is not RDTDataViewModel datavm)
         {
-            
-            for (var i = 0; i < Parent.Cr2wFile.EmbeddedFiles.Count; i++)
+            return;
+        }
+
+        for (var i = 0; i < Parent.Cr2wFile.EmbeddedFiles.Count; i++)
+        {
+            var file = Parent.Cr2wFile.EmbeddedFiles[i];
+            if (file.Content == datavm.GetData())
             {
-                var file = Parent.Cr2wFile.EmbeddedFiles[i];
-                if (file.Content == datavm.GetData())
-                {
-                    Parent.Cr2wFile.EmbeddedFiles.Remove(file);
-                    break;
-                }
+                Parent.Cr2wFile.EmbeddedFiles.Remove(file);
+                break;
             }
-            for (var i = 0; i < Parent.TabItemViewModels.Count; i++)
+        }
+
+        for (var i = 0; i < Parent.TabItemViewModels.Count; i++)
+        {
+            var vm = Parent.TabItemViewModels[i];
+            if (vm == this)
             {
-                var vm = Parent.TabItemViewModels[i];
-                if (vm == this)
-                {
-                    Parent.TabItemViewModels.Remove(this);
-                    Parent.SetIsDirty(true);
-                    break;
-                }
+                Parent.TabItemViewModels.Remove(this);
+                Parent.SetIsDirty(true);
+                break;
             }
         }
     }
+
+    #region copiedChunks
+
+    public static bool IsLastCopyOperationSingle;
+
+    private static IRedType? s_copiedChunk;
+
+    public static IRedType? CopiedChunk
+    {
+        get => s_copiedChunk;
+        set
+        {
+            s_copiedChunk = value;
+            IsLastCopyOperationSingle = value is not null;
+            OnCopiedChunkChanged?.Invoke(null, EventArgs.Empty);
+        }
+    }
+
+    private static List<IRedType> CopiedChunks { get; } = [];
+    public static event EventHandler? OnCopiedChunkChanged;
+
+    public static List<IRedType> GetCopiedChunks(bool includeSingleCopy = false)
+    {
+        var ret = CopiedChunks;
+        if (ret.Count == 0 && includeSingleCopy && CopiedChunk is not null)
+        {
+            ret.Add(CopiedChunk);
+        }
+
+        return ret;
+    }
+
+    public static void SetCopiedChunks(List<IRedType> chunks)
+    {
+        if (chunks.Count == 0)
+        {
+            return;
+        }
+
+        IsLastCopyOperationSingle = chunks.Count == 1;
+        if (chunks.Count == 1)
+        {
+            s_copiedChunk = chunks.FirstOrDefault();
+        }
+        else
+        {
+            CopiedChunks.Clear();
+            CopiedChunks.AddRange(chunks);
+        }
+
+        OnCopiedChunkChanged?.Invoke(null, EventArgs.Empty);
+    }
+
+    public static void AddToCopiedChunks(IRedType chunk)
+    {
+        CopiedChunks.Add(chunk);
+        IsLastCopyOperationSingle = false;
+        OnCopiedChunkChanged?.Invoke(null, EventArgs.Empty);
+    }
+    
+    public static void ClearCopiedChunks()
+    {
+        CopiedChunks.Clear();
+        OnCopiedChunkChanged?.Invoke(null, EventArgs.Empty);
+    }
+
+    #endregion
 
     private bool CanRenameEmbeddedFile() => this is RDTDataViewModel data && data.IsEmbeddedFile;
     [RelayCommand(CanExecute = nameof(CanRenameEmbeddedFile))]
     private void RenameEmbeddedFile()
     {
-        if (this is RDTDataViewModel datavm)
+        if (this is not RDTDataViewModel datavm)
         {
-            CR2WEmbedded? embeddedFile = null;
-            for (var i = 0; i < Parent.Cr2wFile.EmbeddedFiles.Count; i++)
-            {
-                var file = Parent.Cr2wFile.EmbeddedFiles[i];
-                if (file.Content == datavm.GetData())
-                {
-                    embeddedFile = (CR2WEmbedded)file;
-                }
-            }
-            if (embeddedFile != null)
-            {
-                var newfilename = Interactions.Rename(embeddedFile.FileName.GetResolvedText()!);
+            return;
+        }
 
-                if (string.IsNullOrEmpty(newfilename))
-                {
-                    return;
-                }
-
-                datavm.FilePath = newfilename;
-                embeddedFile.FileName = newfilename;
-                Parent.SetIsDirty(true);
+        CR2WEmbedded? embeddedFile = null;
+        for (var i = 0; i < Parent.Cr2wFile.EmbeddedFiles.Count; i++)
+        {
+            var file = Parent.Cr2wFile.EmbeddedFiles[i];
+            if (file.Content == datavm.GetData())
+            {
+                embeddedFile = (CR2WEmbedded)file;
             }
         }
+
+        if (embeddedFile == null)
+        {
+            return;
+        }
+
+        var newfilename = Interactions.Rename(embeddedFile.FileName.GetResolvedText()!);
+
+        if (string.IsNullOrEmpty(newfilename))
+        {
+            return;
+        }
+
+        datavm.FilePath = newfilename;
+        embeddedFile.FileName = newfilename;
+        Parent.SetIsDirty(true);
     }
 
-    public virtual void OnSelected()
+    private bool CanExtractEmbeddedFile() => this is RDTDataViewModel data && data.IsEmbeddedFile;
+    [RelayCommand(CanExecute = nameof(CanRenameEmbeddedFile))]
+    private void ExtractEmbeddedFile()
     {
+        if (this is not RDTDataViewModel datavm)
+        {
+            return;
+        }
 
+        var embeddedFile = Parent.Cr2wFile.EmbeddedFiles
+            .Where(file => ReferenceEquals(file.Content, datavm.GetData())).Cast<CR2WEmbedded>().FirstOrDefault();
+
+        if (embeddedFile == null)
+        {
+            return;
+        }
+
+        var fileName = Path.GetFileName(embeddedFile.FileName.GetResolvedText()!);
+
+        var dlg = new SaveFileDialog { FileName = fileName, Filter = "All files (*.*)|*.*" };
+
+        if (Path.GetDirectoryName(Parent.FilePath) is { } parentPath && Directory.Exists(parentPath))
+        {
+            dlg.InitialDirectory = parentPath;
+        }
+        else if (Parent.GetActiveProject() is { } project)
+        {
+            dlg.InitialDirectory = project.ModDirectory;
+        }
+
+        if (!dlg.ShowDialog().GetValueOrDefault())
+        {
+            return;
+        }
+
+        using var fs = File.Open(dlg.FileName, FileMode.OpenOrCreate);
+        using var cw = new CR2WWriter(fs);
+
+        cw.WriteFile(new CR2WFile { RootChunk = embeddedFile.Content });
     }
+
+
+    public static event EventHandler? OnSelectionChanged;
+    public virtual void OnSelected() => OnSelectionChanged?.Invoke(this, EventArgs.Empty);
+
+    // Do nothing, overwrite in inheriting classes
+    public virtual void Load()
+    {
+    }
+
+    // Do nothing, overwrite in inheriting classes
+    public virtual void Unload()
+    {
+    }
+
+    // Do nothing, overwrite in inheriting classes
+    public virtual void OnSearchChanged()
+    {
+    }
+
+
 }

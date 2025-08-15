@@ -11,6 +11,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
+		[RED("appearancesToColorTemplate")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID AppearancesToColorTemplate
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
 		[RED("archetypeName")]
 		[REDProperty(IsIgnored = true)]
 		public CName ArchetypeName
@@ -74,6 +82,38 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
 		}
+
+		[RED("canBeActiveVehicle")]
+		[REDProperty(IsIgnored = true)]
+		public CBool CanBeActiveVehicle
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[RED("canDeleteUniqueTemplates")]
+		[REDProperty(IsIgnored = true)]
+		public CBool CanDeleteUniqueTemplates
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[RED("canOnlySpawnOnValidRoad")]
+		[REDProperty(IsIgnored = true)]
+		public CBool CanOnlySpawnOnValidRoad
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[RED("colorProfilesRestricted")]
+		[REDProperty(IsIgnored = true)]
+		public CBool ColorProfilesRestricted
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
 		
 		[RED("crowdMemberSettings")]
 		[REDProperty(IsIgnored = true)]
@@ -99,6 +139,46 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 		
+		[RED("customizationMenuType")]
+		[REDProperty(IsIgnored = true)]
+		public CName CustomizationMenuType
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+		
+		[RED("customizationPreview")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID CustomizationPreview
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("customizationPreviewGlow")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID CustomizationPreviewGlow
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("customizeCarRims")]
+		[REDProperty(IsIgnored = true)]
+		public CBool CustomizeCarRims
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[RED("customizeLights")]
+		[REDProperty(IsIgnored = true)]
+		public CBool CustomizeLights
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		[RED("debugStatusString")]
 		[REDProperty(IsIgnored = true)]
 		public CString DebugStatusString
@@ -129,6 +209,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<gamedataLocKeyWrapper>();
 			set => SetPropertyValue<gamedataLocKeyWrapper>(value);
+		}
+		
+		[RED("displayOverride")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID DisplayOverride
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
 		[RED("driving")]
@@ -171,6 +259,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
+		[RED("excludedComponentsCustomization")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<CName> ExcludedComponentsCustomization
+		{
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+		
+		[RED("excludedComponentsGeneric")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<CName> ExcludedComponentsGeneric
+		{
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+		
 		[RED("fxCollision")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID FxCollision
@@ -203,6 +307,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
+		[RED("genericCustomizationMask")]
+		[REDProperty(IsIgnored = true)]
+		public CResourceAsyncReference<CResource> GenericCustomizationMask
+		{
+			get => GetPropertyValue<CResourceAsyncReference<CResource>>();
+			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
+		}
+		
 		[RED("hasSideWindows")]
 		[REDProperty(IsIgnored = true)]
 		public CBool HasSideWindows
@@ -210,7 +322,15 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
-		
+
+		[RED("hasUniqueCustomization")]
+		[REDProperty(IsIgnored = true)]
+		public CBool HasUniqueCustomization
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		[RED("hasVisualCustomization")]
 		[REDProperty(IsIgnored = true)]
 		public CBool HasVisualCustomization
@@ -467,6 +587,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
+		[RED("twintoneModelName")]
+		[REDProperty(IsIgnored = true)]
+		public CName TwintoneModelName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+		
 		[RED("type")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID Type
@@ -690,7 +818,15 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
-		
+
+		[RED("visualCustomizationUpdateRequired")]
+		[REDProperty(IsIgnored = true)]
+		public CBool VisualCustomizationUpdateRequired
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		[RED("visualDestruction")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID VisualDestruction

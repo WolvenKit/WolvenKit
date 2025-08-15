@@ -7,6 +7,7 @@ using SharpDX.Direct3D11;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
@@ -46,6 +47,7 @@ public partial class RedImage : IDisposable
     public static ILoggerService? LoggerService { private get; set; }
 
     private static Device? s_device;
+    private static readonly object s_deviceLock = new();
     private static bool s_deviceNotSupported;
 
     private ScratchImage _scratchImage;
@@ -146,16 +148,19 @@ public partial class RedImage : IDisposable
             }
         }
 
-        if (s_device.DeviceRemovedReason != 0)
+        if (s_device.DeviceRemovedReason == 0)
         {
-            LoggerService?.Warning($"Error while getting GPU instance. Reason: {s_device.DeviceRemovedReason}");
-            LoggerService?.Warning("Fallback to software compression. Please try restarting WolvenKit to fix this issue.");
-            s_device.Dispose();
-            s_device = null;
-
-            // Don't try again until WolvenKit is restarted
-            s_deviceNotSupported = true;
+            return s_device;
         }
+
+        LoggerService?.Warning($"Error while getting GPU instance. Reason: {s_device.DeviceRemovedReason}");
+        LoggerService?.Warning("Falling back to software compression.");
+        LoggerService?.Warning("To fix this, restart WolvenKit. If that doesn't help, update or clean install your GPU driver.");
+        s_device.Dispose();
+        s_device = null;
+
+        // Don't try again until WolvenKit is restarted
+        s_deviceNotSupported = true;
 
         return s_device;
     }
@@ -166,12 +171,7 @@ public partial class RedImage : IDisposable
     {
         var fileName = Path.GetFileName(filePath);
         var extension = Path.GetExtension(filePath);
-        if (string.IsNullOrEmpty(extension))
-        {
-            LoggerService?.Error($"[RedImage] \"{fileName}\" has no extension!");
-            return null;
-        }
-
+        
         try
         {
             switch (extension.ToUpper())
@@ -190,17 +190,19 @@ public partial class RedImage : IDisposable
                     return LoadFromDDSFile(filePath);
                 case ".CUBE":
                     return CreateFromLutCube(File.ReadAllLines(filePath));
+                case "":
+                    LoggerService?.Error($"[RedImage] \"{fileName}\" has no extension!");
+                    return null;
                 default:
                 {
-                    LoggerService?.Error($"[RedImage] \"{fileName}\" has an unsupported extension!");
+                    LoggerService?.Error($"[RedImage] Extension {extension} from \"{fileName}\" is not supported!");
                     return null;
                 }
             }
         }
         catch (Exception)
         {
-            LoggerService?.Error($"[RedImage] \"{fileName}\" contains invalid data!");
-            return null;
+            throw new WolvenKitException(0x2001, $"[RedImage] \"{fileName}\" contains invalid data or has an invalid color space!");
         }
     }
 
@@ -392,24 +394,24 @@ public partial class RedImage : IDisposable
         }
     }
 
-    private byte[] SaveToWICMemory(Guid wicCodec)
+    private byte[] SaveToWICMemory(Guid wicCodec, int imageIndex = 0)
     {
         byte[] buffer;
         if (_metadata.Format == DXGI_FORMAT.R8G8_UNORM)
         {
             var img = InternalScratchImage.Convert(DXGI_FORMAT.R8G8B8A8_UNORM, TEX_FILTER_FLAGS.FORCE_WIC, 0.5F);
-            buffer = SaveToMemory(img.SaveToWICMemory(0, WIC_FLAGS.NONE, wicCodec));
+            buffer = SaveToMemory(img.SaveToWICMemory(imageIndex, WIC_FLAGS.NONE, wicCodec));
             img.Dispose();
         }
         else
         {
-            buffer = SaveToMemory(InternalScratchImage.SaveToWICMemory(0, WIC_FLAGS.NONE, wicCodec));
+            buffer = SaveToMemory(InternalScratchImage.SaveToWICMemory(imageIndex, WIC_FLAGS.NONE, wicCodec));
         }
 
         return buffer;
     }
 
-    public byte[] GetPreview(bool flip)
+    public byte[] GetPreview(bool flip, int imageIndex = 0)
     {
         if (TexHelper.Instance.IsCompressed(_metadata.Format))
         {
@@ -444,7 +446,7 @@ public partial class RedImage : IDisposable
                 InternalScratchImage = InternalScratchImage.FlipRotate(TEX_FR_FLAGS.FLIP_VERTICAL);
             }
 
-            return SaveToWICMemory(TexHelper.Instance.GetWICCodec(WICCodecs.PNG));
+            return SaveToWICMemory(TexHelper.Instance.GetWICCodec(WICCodecs.PNG), imageIndex);
         }
     }
 
@@ -513,7 +515,10 @@ public partial class RedImage : IDisposable
                 or DXGI_FORMAT.BC7_UNORM_SRGB &&
             device != null)
         {
-            InternalScratchImage = InternalScratchImage.Compress(device.NativePointer, format, TEX_COMPRESS_FLAGS.DEFAULT, 1.0F);
+            lock (s_deviceLock)
+            {
+                InternalScratchImage = InternalScratchImage.Compress(device.NativePointer, format, TEX_COMPRESS_FLAGS.DEFAULT, 1.0F);
+            }
         }
         else
         {
@@ -718,7 +723,10 @@ public partial class RedImage : IDisposable
             var device = GetDevice();
             if ((DXGI_FORMAT)outImageFormat is DXGI_FORMAT.BC6H_UF16 or DXGI_FORMAT.BC6H_SF16 or DXGI_FORMAT.BC7_UNORM or DXGI_FORMAT.BC7_UNORM_SRGB && device != null)
             {
-                img = img.Compress(device.NativePointer, (DXGI_FORMAT)outImageFormat, TEX_COMPRESS_FLAGS.DEFAULT, 1.0F);
+                lock (s_deviceLock)
+                {
+                    img = img.Compress(device.NativePointer, (DXGI_FORMAT)outImageFormat, TEX_COMPRESS_FLAGS.DEFAULT, 1.0F);
+                }
             }
             else
             {

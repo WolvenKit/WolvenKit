@@ -29,8 +29,14 @@ namespace WolvenKit.Modkit.RED4
 
             var matData = new MaterialExtractor(this, _archiveManager, matRepo, exportArgs, _loggerService)
                 .GenerateMaterialData(cr2w);
-            matData.Appearances = info.appearances;
+            // ArchiveXL dynamic variants
+            matData.Appearances = new Dictionary<string, string[]>();
 
+            foreach (var matDataAppearance in info.appearances)
+            {
+                matData.Appearances.Add(matDataAppearance.Key, matDataAppearance.Value
+                    .Select((materialName) => materialName.Split('@').FirstOrDefault() ?? materialName).ToArray());
+            }
             return matData;
         }
 
@@ -45,7 +51,7 @@ namespace WolvenKit.Modkit.RED4
                 matData.MaterialTemplates.ForEach(m => consMatData.MaterialTemplates.Add(m));
                 foreach (var app in matData.Appearances)
                 {
-                    consMatData.Appearances.TryAdd(app.Key, app.Value);
+                    consMatData.Appearances.TryAdd(app.Key.Split('@').FirstOrDefault() ?? app.Key, app.Value);
                 }
             }
 
@@ -55,6 +61,9 @@ namespace WolvenKit.Modkit.RED4
 
         }
 
+        /// <summary>
+        /// Used during mesh export via Export Tool, writes material to json
+        /// </summary>
         private void ParseMaterials(CR2WFile cr2w, FileInfo outfile, string matRepo, MeshesInfo info, EUncookExtension eUncookExtension = EUncookExtension.dds)
         {
             var matData = SetupMaterial(cr2w, matRepo, info, eUncookExtension);
@@ -345,7 +354,7 @@ namespace WolvenKit.Modkit.RED4
                     return (null, resultDict, cMaterialInstance.EnableMask);
                 }
 
-                var file = LoadFile(path.ToString().NotNull());
+                var file = LoadFile(path.GetResolvedText().NotNull());
                 if (file.RootChunk is not CMaterialInstance mi)
                 {
                     throw new Exception("Invalid .mi file");
@@ -356,7 +365,7 @@ namespace WolvenKit.Modkit.RED4
             }
             baseMaterials.Reverse();
 
-            var spath = path.ToString().NotNull();
+            var spath = path.GetResolvedText().NotNull();
             CMaterialTemplate mt;
             if (mts.TryGetValue(spath, out var mt1))
             {

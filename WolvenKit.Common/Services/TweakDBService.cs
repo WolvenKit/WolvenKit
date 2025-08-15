@@ -2,21 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Reflection;
 using System.Threading.Tasks;
 using WolvenKit.Common.Model;
 using WolvenKit.RED4.TweakDB;
-using WolvenKit.RED4.TweakDB.Helper;
 using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Pools;
 
 namespace WolvenKit.Common.Services
 {
     public class TweakDBService : ITweakDBService
     {
-        private const string s_tweakdbstr = "WolvenKit.Common.Resources.tweakdbstr.kark";
-        private const string s_userStrs = "userStrs.kark";
-
-        private static readonly TweakDBStringHelper s_stringHelper = new();
         private static TweakDB s_tweakDb = new();
 
         private bool _isLoading;
@@ -24,27 +19,6 @@ namespace WolvenKit.Common.Services
         public bool IsLoaded { get; set; }
         public event EventHandler? Loaded;
 
-        public TweakDBService()
-        {
-            var resourceStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(s_tweakdbstr);
-            ArgumentNullException.ThrowIfNull(resourceStream);
-
-            s_stringHelper.LoadFromStream(resourceStream);
-
-            var userStrsPath = Path.Combine(Path.GetDirectoryName(AppContext.BaseDirectory) ?? throw new InvalidOperationException(), s_userStrs);
-            if (File.Exists(userStrsPath))
-            {
-                s_stringHelper.Load(userStrsPath);
-            }
-
-            userStrsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit", s_userStrs);
-            if (File.Exists(userStrsPath))
-            {
-                s_stringHelper.Load(userStrsPath);
-            }
-
-            TweakDBIDPool.ResolveHashHandler = s_stringHelper.GetString;
-        }
 
         private void OnLoadDB() => Loaded?.Invoke(this, EventArgs.Empty);
 
@@ -76,11 +50,21 @@ namespace WolvenKit.Common.Services
 
         public static bool Exists(TweakDBID key) => s_tweakDb.Flats.Exists(key) || s_tweakDb.Records.Exists(key);
 
-        public string? GetString(ulong key) => s_stringHelper.GetString(key);
+        public string? GetString(ulong key) => TweakDBIDPool.ResolveHash(key);
+        public static string? GetStringFromKey(ulong key) => TweakDBIDPool.ResolveHash(key);
 
         public static IRedType? GetFlat(TweakDBID tdb) => s_tweakDb.Flats.GetValue((ulong)tdb);
         public static List<TweakDBID>? GetQuery(TweakDBID tdb) => s_tweakDb.Queries.GetQuery((ulong)tdb);
         public static byte? GetGroupTag(TweakDBID tdb) => s_tweakDb.GroupTags.GetGroupTag((ulong)tdb);
+        public static InternalEnums.EGroupTag GetGroupTagAsFlag(TweakDBID tdb)
+        {
+            if (GetGroupTag(tdb) is { } val)
+            {
+                return (InternalEnums.EGroupTag)val;
+            }
+            
+            return InternalEnums.EGroupTag.None;
+        }
 
         public static bool TryGetType(TweakDBID tweakDBID, [NotNullWhen(true)] out Type? type)
         {
@@ -100,7 +84,7 @@ namespace WolvenKit.Common.Services
                 return true;
             }
 
-            type = null; 
+            type = null;
             return false;
         }
 

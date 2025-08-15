@@ -34,7 +34,7 @@ public partial class ConsoleFunctions
         if (!string.IsNullOrEmpty(options.gamepath) && Directory.Exists(options.gamepath))
         {
             var exePath = new FileInfo(Path.Combine(options.gamepath, "bin", "x64", "Cyberpunk2077.exe"));
-            _archiveManager.LoadGameArchives(exePath, false);
+            _archiveManager.LoadGameArchives(exePath);
         }
 
         var result = 0;
@@ -55,7 +55,7 @@ public partial class ConsoleFunctions
                         _loggerService.Error("Input file is not an .archive.");
                         return ERROR_BAD_ARGUMENTS;
                     }
-                    _archiveManager.LoadModArchive(file.FullName);
+                    _archiveManager.LoadModArchive(file.FullName, false);
                     break;
                 case DirectoryInfo directory:
                     var archiveFileInfos = directory.GetFiles().Where(_ => _.Extension == ".archive").ToList();
@@ -87,7 +87,7 @@ public partial class ConsoleFunctions
         }
 
         var result = 0;
-        foreach (var gameArchive in _archiveManager.ModArchives.Items)
+        foreach (var gameArchive in _archiveManager.Archives.Items)
         {
             // TODO[ModKit]
             if (gameArchive is not Archive ar)

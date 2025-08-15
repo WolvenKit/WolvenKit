@@ -1,10 +1,14 @@
 using System.CommandLine;
+using System.CommandLine.NamingConventionBinder;
 using System.IO;
+using System.Linq;
 using CP77Tools.Tasks;
+using DynamicData.Kernel;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WolvenKit.CLI;
 using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Interfaces;
 
@@ -12,7 +16,7 @@ namespace CP77Tools.Commands;
 
 internal class UncookCommand : CommandBase
 {
-    private const string s_description = "Target an archive to uncook files fom.";
+    private const string s_description = "Target an archive to uncook files from.";
     private const string s_name = "uncook";
     public UncookCommand() : base(s_name, s_description)
     {
@@ -42,42 +46,54 @@ internal class UncookCommand : CommandBase
         AddOption(new Option<string>(new[] { "--mesh-export-material-repo" }, "Location of the material repo, if not specified, it uses the outpath."));
         AddOption(new Option<bool>(new[] { "--mesh-export-lod-filter" }, "Filter out lod models."));
         AddOption(new Option<bool>(new[] { "--mesh-export-experimental-merged-export" }, "[EXPERIMENTAL] Merged mesh export. (Only supports Default or WithMaterials, re-import not supported)"));
+        AddOption(new Option<string>(new[] { "--opus-hashes" }, "Comma-separated list of hashes to export from .opusinfo."));
 
-        SetInternalHandler(CommandHandlerEx.Create<FileSystemInfo[], string, string, string, EUncookExtension?, ulong, string, string, bool, ECookedFileFormat[], 
-        bool?, MeshExporterType?, MeshExportType?, string, bool?, bool?, IHost>(Action));
+        SetInternalHandler(CommandHandler.Create(Action));
     }
 
-    private int Action(FileSystemInfo[] path, string outpath, string gamepath, string raw, EUncookExtension? uext, ulong hash, string pattern,
-        string regex, bool unbundle, ECookedFileFormat[] forcebuffers, bool? serialize, MeshExporterType? meshExporterType, MeshExportType? meshExportType, string meshExportMaterialRepo, 
-        bool? meshExportLodFilter, bool? meshExportExperimentalMergedExport, IHost host)
+    private record UncookArguments : UncookTaskOptions
+    {
+        public FileSystemInfo[] path { get; init; }
+        public new string outpath { get; init; }
+        public new string gamepath { get; init; }
+        public new string raw { get; init; }
+        public new string opusHashes { get; init; }
+    }
+
+    private int Action(UncookArguments args, IHost host)
     {
         var serviceProvider = host.Services;
         var logger = serviceProvider.GetRequiredService<ILoggerService>();
 
-        if ((path == null || path.Length < 1) && string.IsNullOrEmpty(gamepath))
+        if ((args.path == null || args.path.Length < 1) && args.gamepath == null)
         {
             logger.Error("Please fill in an input path.");
             return ConsoleFunctions.ERROR_BAD_ARGUMENTS;
         }
 
-        var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-        return consoleFunctions.UncookTask(path, new UncookTaskOptions
+        var options = args as UncookTaskOptions;
+        options.outpath = string.IsNullOrEmpty(args.outpath) ? null : new DirectoryInfo(args.outpath);
+        options.gamepath = string.IsNullOrEmpty(args.gamepath) ? null : new DirectoryInfo(args.gamepath);
+        options.raw = string.IsNullOrEmpty(args.raw) ? null : new DirectoryInfo(args.raw);
+
+        if (string.IsNullOrEmpty(args.opusHashes))
         {
-            outpath = string.IsNullOrEmpty(outpath) ? null : new DirectoryInfo(outpath),
-            rawOutDir = raw,
-            gamepath = gamepath,
-            uext = uext,
-            hash = hash,
-            pattern = pattern,
-            regex = regex,
-            unbundle = unbundle,
-            forcebuffers = forcebuffers,
-            serialize = serialize,
-            meshExporterType = meshExporterType,
-            meshExportType = meshExportType,
-            meshExportMaterialRepo = meshExportMaterialRepo,
-            meshExportLodFilter = meshExportLodFilter,
-            meshExportExperimentalMergedExport = meshExportExperimentalMergedExport
-        });
+            options.opusHashes = null;
+        }
+        else
+        {
+            var split = args.opusHashes.Split(",");
+            if (split.Length == 1 && split[0] == "*")
+            {
+                options.opusExportAll = true;
+            }
+            else
+            {
+                options.opusHashes = split.Select((hash, i) => uint.Parse(hash)).AsList();
+            }
+        }
+
+        var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
+        return consoleFunctions.UncookTask(args.path, options);
     }
 }

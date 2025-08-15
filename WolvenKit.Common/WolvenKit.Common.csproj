@@ -1,16 +1,31 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-      <TargetFramework>net8.0</TargetFramework>
-      <Version>8.13.0</Version>
-      <Platforms>x64</Platforms>
-      <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-	  <Nullable>enable</Nullable>
-      <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <TargetFramework>net8.0</TargetFramework>
+    <Version>8.16.2</Version>
+    <Platforms>x64</Platforms>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageId>WolvenKit.Common</PackageId>
+    <Product>WolvenKit.Common</Product>
+    <Description>Common functions for the WolvenKit Mod Editor.</Description>
 
+    <Company>WolvenKit</Company>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/WolvenKit/WolvenKit</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/WolvenKit/WolvenKit</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>wolvenkit, cyberpunk2077</PackageTags>
+
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageOutputPath>./nupkg</PackageOutputPath>
+    <NoWarn>NU5100;NU5104</NoWarn>
+  </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="Extensions\PropertyGridEditors\**" />
@@ -39,16 +54,36 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="lib\texconv.dll">
+	<Content Include="lib\DirectXTexNet.dll">
+	  <PackagePath>contentFiles\any\any;content</PackagePath>
+	  <PackageCopyToOutput>true</PackageCopyToOutput>
+	</Content>
+	<Content Include="lib\texconv.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        <Pack>true</Pack>
-        <PackagePath>lib\net6.0</PackagePath>
+	  <PackagePath>contentFiles\any\any\lib;content\lib</PackagePath>
+	  <PackageCopyToOutput>true</PackageCopyToOutput>
     </Content>
+	<Content Include="lib\DirectXTexNetImpl.dll">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <PackagePath>contentFiles\any\any\lib;content\lib</PackagePath>
+	  <PackageCopyToOutput>true</PackageCopyToOutput>
+	</Content>
+	<Content Include="lib\Ijwhost.dll">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <PackagePath>contentFiles\any\any\lib;content\lib</PackagePath>
+	  <PackageCopyToOutput>true</PackageCopyToOutput>
+	</Content>
+	<Content Include="lib\COPYING">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <PackagePath>contentFiles\any\any\lib;content\lib</PackagePath>
+	  <PackageCopyToOutput>true</PackageCopyToOutput>
+	</Content>
   </ItemGroup>
 
   <ItemGroup>
-	<PackageReference Include="DynamicData" />
-	<PackageReference Include="SharpDX.Direct3D11" />
+    <PackageReference Include="DynamicData" />
+    <PackageReference Include="SharpDX.Direct3D11" />
+    <PackageReference Include="SharpDX.Mathematics" />
     <PackageReference Include="SharpGLTF.Core" />
     <PackageReference Include="SharpZipLib" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
@@ -56,6 +91,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="System.Net.Http" />
+    <PackageReference Include="System.Text.RegularExpressions" />
   </ItemGroup>
 
   <ItemGroup>
@@ -69,15 +106,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="lib\DirectXTexNetImpl.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="lib\Ijwhost.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="lib\COPYING">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Resources\tweakdb.str">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>

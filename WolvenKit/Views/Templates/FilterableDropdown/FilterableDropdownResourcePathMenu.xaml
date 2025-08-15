@@ -1,0 +1,113 @@
+﻿<templates:FilterableDropdownMenuBase
+    x:Class="WolvenKit.Views.Editors.FilterableDropdownResourcePathMenu"
+    x:TypeArguments="types:IRedRef"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:converters="clr-namespace:WolvenKit.Converters"
+    xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    xmlns:types="clr-namespace:WolvenKit.RED4.Types;assembly=WolvenKit.RED4"
+    FocusManager.FocusedElement="{Binding ElementName=FilterTextBox}">
+    <Grid>
+        <Grid.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <hc:ThemeResources />
+                    <hc:Theme />
+                </ResourceDictionary.MergedDictionaries>
+                <converters:IntToVisibilityConverterInverted x:Key="IntToVisibilityConverterInverted" />
+            </ResourceDictionary>
+        </Grid.Resources>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" MinWidth="{StaticResource WolvenKitPluginsToolIconButtonSize}" MaxWidth="{StaticResource WolvenKitLabelWidthLarge}" />
+            <ColumnDefinition Width="*" MinWidth="{StaticResource WolvenKitLabelWidth}" />
+            <ColumnDefinition x:Name="Col3" Width="{StaticResource WolvenKitButtonGridWidth}" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition x:Name="FilterRow" Height="Auto" />
+            <RowDefinition x:Name="PlaceholderRow" Height="5" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- ====================================== -->
+        <!-- Filter -->
+        <!-- ====================================== -->
+        <TextBox
+            x:Name="FilterTextBox"
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="0"
+            Padding="{DynamicResource WolvenKitMarginHorizontal}"
+            Foreground="{StaticResource ForegroundColor_Grey_Dark}"
+            Style="{StaticResource WolvenkitTextBoxStyle}"
+            helpers:TextBoxBehavior.TripleClickSelectAll="True"
+            KeyboardNavigation.TabIndex="1"
+            Text="{Binding FilterText,
+                           RelativeSource={RelativeSource AncestorType={x:Type editors:FilterableDropdownResourcePathMenu}},
+                           Mode=TwoWay}" />
+        <!-- Placeholder text -->
+        <TextBlock
+            x:Name="Placeholder"
+            Grid.Row="0"
+            Grid.Column="0"
+            Style="{StaticResource WolvenkitPlaceholderStyle}"
+            Visibility="{Binding ElementName=FilterTextBox,
+                                 Path=Text.Length,
+                                 Converter={StaticResource IntToVisibilityConverterInverted}}"
+            Text="Filter" />
+
+        <!-- ====================================== -->
+        <!-- Dropdown -->
+        <!-- ====================================== -->
+        <ComboBox
+            x:Name="Dropdown"
+            Grid.Row="0"
+            Grid.Column="1"
+            Height="{StaticResource WolvenKitTabHeight}"
+            ItemsSource="{Binding FilteredOptions,
+                                  RelativeSource={RelativeSource AncestorType={x:Type editors:FilterableDropdownResourcePathMenu}},
+                                  Mode=OneWay}"
+            KeyboardNavigation.TabIndex="2"
+            SelectedValuePath="Value"
+            DisplayMemberPath="Key"
+            SelectedValue="{Binding SelectedOption,
+                                    RelativeSource={RelativeSource AncestorType={x:Type editors:FilterableDropdownResourcePathMenu}},
+                                    Mode=TwoWay}" />
+
+        <!-- ====================================== -->
+        <!-- Refresh button -->
+        <!-- ====================================== -->
+
+        <Button
+            x:Name="RefreshButton"
+            Grid.Row="0"
+            Grid.Column="2"
+            Width="{StaticResource WolvenKitButtonWidth}"
+            Margin="0"
+            Padding="0"
+            Click="RefreshButton_OnClick">
+            <StackPanel Orientation="Horizontal">
+                <templates:IconBox
+                    IconPack="Material"
+                    Kind="Cached"
+                    Margin="{DynamicResource WolvenKitMarginMicro}"
+                    Size="{DynamicResource WolvenKitIconSmall}"
+                    Foreground="{StaticResource WolvenKitCyan}" />
+            </StackPanel>
+        </Button>
+
+        <!-- ====================================== -->
+        <!-- CName editor -->
+        <!-- ====================================== -->
+        <editors:RedRefEditor
+            x:Name="RedRefEditor"
+            Grid.Row="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            RedRef="{Binding Data,
+                             Mode=TwoWay}" />
+    </Grid>
+</templates:FilterableDropdownMenuBase>

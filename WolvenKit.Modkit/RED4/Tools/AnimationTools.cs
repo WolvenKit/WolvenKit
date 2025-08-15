@@ -4,14 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
-using NAudio.MediaFoundation;
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4.Animation;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
-using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
@@ -21,9 +19,12 @@ using static WolvenKit.Modkit.RED4.Animation.Const;
 using static WolvenKit.Modkit.RED4.Animation.Fun;
 using static WolvenKit.Modkit.RED4.Animation.Gltf;
 
-using Quat = System.Numerics.Quaternion;
-using Vec3 = System.Numerics.Vector3;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Modkit.RED4.Tools.Common;
+
+using JointsTranslationsAtTimes = System.Collections.Generic.Dictionary<ushort, System.Collections.Generic.Dictionary<float, System.Numerics.Vector3>>;
+using JointsRotationsAtTimes = System.Collections.Generic.Dictionary<ushort, System.Collections.Generic.Dictionary<float, System.Numerics.Quaternion>>;
+using JointsScalesAtTimes = System.Collections.Generic.Dictionary<ushort, System.Collections.Generic.Dictionary<float, System.Numerics.Vector3>>;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -48,19 +49,12 @@ namespace WolvenKit.Modkit.RED4
             var model = ModelRoot.CreateModel();
             GetAnimation(animsFile, result.File!, outfile.Name, ref model, true, additiveAddRelative, incRootMotion);
 
-            if (isGLBinary)
-            {
-                model.SaveGLB($"{outfile.FullName}.anims", new WriteSettings(vmode));
-            }
-            else
-            {
-                model.SaveGLTF($"{outfile.FullName}.anims", new WriteSettings(vmode));
-            }
+            model.Save(GLTFHelper.PrepareFilePath(outfile.FullName, isGLBinary), new WriteSettings(vmode));
 
             return true;
         }
 
-        public bool GetAnimation(CR2WFile animsFile, CR2WFile rigFile, string animsFileName, ref ModelRoot model, bool includeRig = true, bool additiveAddRelative = true, bool incRootMotion = true)
+        public bool GetAnimation(CR2WFile animsFile, CR2WFile rigFile, string animsFileName, ref ModelRoot gltfModel, bool includeRig = true, bool additiveAddRelative = true, bool incRootMotion = true)
         {
 
             if (animsFile.RootChunk is not animAnimSet anims)
@@ -87,17 +81,23 @@ namespace WolvenKit.Modkit.RED4
                 {
                     return false;
                 }
-                var skin = model.CreateSkin("Armature");
-                skin.BindJoints(RIG.ExportNodes(ref model, rig).Values.ToArray());
+                var skin = gltfModel.CreateSkin("Armature");
+                skin.BindJoints(RIG.ExportNodes(ref gltfModel, rig).Values.ToArray());
             }
 
-            var rigFileName = anims.Rig.DepotPath.GetResolvedText() ?? "<unknown rig depotpath??>";
+            var gltfSkin = gltfModel.LogicalSkins.FirstOrDefault(_ => _.Name is "Armature");
+            ArgumentNullException.ThrowIfNull(gltfSkin);
 
+            var rigFileName = anims.Rig.DepotPath.GetResolvedText() ?? "<unknown rig depotpath??>";
             _loggerService.Info($"{animsFileName}: Found {anims.Animations.Count} animations to export, using rig {rigFileName}");
+
+            _loggerService.Info($"{animsFileName}: Root motion export: {(incRootMotion ? "enabled" : "disabled")}");
 
             var stats = new
             {
                 AdditiveAnims = 0,
+                RootMotions = 0,
+                RootMotionConflicts = 0,
                 SimdAnims = 0,
             };
 
@@ -108,55 +108,207 @@ namespace WolvenKit.Modkit.RED4
 
                 var animAnimDes = anim.Chunk.Animation.Chunk;
 
-                if (animAnimDes.MotionExtraction != null && animAnimDes.MotionExtraction.Chunk != null && !incRootMotion)
-                {
-                    _loggerService.Debug($"{animsFileName}: {animAnimDes.Name}: contains root motion but it's not exported!");
-                }
+                stats = stats with {
+                    AdditiveAnims = stats.AdditiveAnims + (animAnimDes.AnimationType == animAnimationType.Normal ? 0 : 1),
+                };
 
-                stats = animAnimDes.AnimationType == animAnimationType.Normal ? stats : stats with { AdditiveAnims = stats.AdditiveAnims + 1 };
+                // Buffer decoding
+
+                AnimationBufferData bufferData;
 
                 if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferSimd animBuffSimd)
                 {
                     stats = stats with { SimdAnims = stats.SimdAnims + 1 };
 
-                    MemoryStream deferredBuffer;
-                    if (animBuffSimd.InplaceCompressedBuffer != null)
-                    {
-                        deferredBuffer = new MemoryStream(animBuffSimd.InplaceCompressedBuffer.Buffer.GetBytes());
-                    }
-                    else if (animBuffSimd.DataAddress != null && animBuffSimd.DataAddress.UnkIndex != uint.MaxValue)
-                    {
-                        var dataAddr = animBuffSimd.DataAddress;
-                        var bytes = new byte[dataAddr.ZeInBytes];
-                        animDataBuffers[(int)(uint)dataAddr.UnkIndex].Seek(dataAddr.FsetInBytes, SeekOrigin.Begin);
-                        // bytesRead can be smaller then the bytes requested
-                        var bytesRead = animDataBuffers[(int)(uint)dataAddr.UnkIndex].Read(bytes, 0, (int)(uint)dataAddr.ZeInBytes);
-                        deferredBuffer = new MemoryStream(bytes);
-                    }
-                    else
-                    {
-                        deferredBuffer = new MemoryStream(animBuffSimd.DefferedBuffer.Buffer.GetBytes());
-                    }
-                    deferredBuffer.Seek(0, SeekOrigin.Begin);
-                    _loggerService.Debug($"{animsFileName}: Exporting SIMD animation {animAnimDes.Name} with {animBuffSimd.NumFrames * animBuffSimd.NumJoints} S/R/T transforms and {animBuffSimd.NumFrames * animBuffSimd.NumTracks} tracks");
-                    SIMD.AddAnimationSIMD(ref model, animBuffSimd, animAnimDes.Name!, deferredBuffer, animAnimDes, additiveAddRelative, incRootMotion);
+                    SIMD.DecodeSimdAnimationData(out bufferData, ref gltfModel, ref animBuffSimd, ref animDataBuffers, animAnimDes.Name!, animAnimDes, _loggerService);
                 }
                 else if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferCompressed)
                 {
-                    CompressedBuffer.ExportAsAnimationToModel(ref model, animAnimDes, additiveAddRelative, incRootMotion);
+                    CompressedBuffer.DecodeAnimationData(out bufferData, animAnimDes, _loggerService);
                 }
+                else
+                {
+                    throw new InvalidDataException("Unsupported animation buffer type, can't proceed!");
+                }
+
+                // Root motion
+
+                JointsTranslationsAtTimes rootMotionTranslations = [];
+                JointsRotationsAtTimes rootMotionRotations = [];
+
+                var motionEx = animAnimDes.MotionExtraction?.Chunk;
+
+                var rootMotionType = incRootMotion
+                    ? ROOT_MOTION.DecodeRootMotion(out rootMotionTranslations, out rootMotionRotations, ref motionEx, _loggerService)
+                    : RootMotionType.Unknown;
+
+                if (rootMotionType is not RootMotionType.None and not RootMotionType.Unknown)
+                {
+                    stats = stats with { RootMotions = stats.RootMotions + 1 };
+
+                    bufferData.ConstTranslations.TryGetValue(RootJointIndex, out var rootCTs);
+                    bufferData.ConstRotations.TryGetValue(RootJointIndex, out var rootCRs);
+                    bufferData.ConstScales.TryGetValue(RootJointIndex, out var rootCSs);
+                    bufferData.Translations.TryGetValue(RootJointIndex, out var rootTs);
+                    bufferData.Rotations.TryGetValue(RootJointIndex, out var rootRs);
+                    bufferData.Scales.TryGetValue(RootJointIndex,out var rootSs);
+
+                    rootMotionTranslations.TryGetValue(RootJointIndex, out var rmRootTranslations);
+                    rootMotionRotations.TryGetValue(RootJointIndex, out var rmRootRotations);
+
+                    if (rootMotionTranslations.Count > 1 || (rootMotionTranslations.Count == 1 && rmRootTranslations is null) ||
+                        rootMotionRotations.Count > 1 || (rootMotionRotations.Count == 1 && rmRootRotations is null))
+                    {
+                        // One of the RM encodings leaves this possibility open
+                        _loggerService.Warning($"{animsFileName}: {animAnimDes.Name}: Root Motion encoded in joints outside `root` joint {RootJointIndex}! Only `root` RM will be exported.");
+                    }
+                    if (rootCTs?.Count > 0 || rootCRs?.Count > 0 || rootCSs?.Count > 0 || rootTs?.Count > 0 || rootRs?.Count > 0 || rootSs?.Count > 0)
+                    {
+                        _loggerService.Debug($"{animsFileName}: {animAnimDes.Name}: Ignoring non-Root Motion root joint transforms.");
+                        stats = stats with { RootMotionConflicts = stats.RootMotionConflicts + 1 };
+                    }
+
+                    bufferData.ConstTranslations.Remove(RootJointIndex);
+                    bufferData.ConstRotations.Remove(RootJointIndex);
+                    bufferData.ConstScales.Remove(RootJointIndex);
+
+                    bufferData.Translations.Remove(RootJointIndex);
+                    bufferData.Rotations.Remove(RootJointIndex);
+                    bufferData.Scales.Remove(RootJointIndex);
+
+                    // Root Motion only ever has T/R, as seen above
+                    bufferData.Translations.Add(RootJointIndex, rmRootTranslations ?? []);
+                    bufferData.Rotations.Add(RootJointIndex, rmRootRotations ?? []);
+                }
+
+                // All the data is gathered, time to encode it into glTF
+
+                var gltfAnim = gltfModel.CreateAnimation(animAnimDes.Name);
+
+                // TODO: https://github.com/WolvenKit/WolvenKit/issues/1630 Scale handling review
+                var exportAdditiveToBind = additiveAddRelative && animAnimDes.AnimationType != animAnimationType.Normal;
+
+                for (ushort jointIdx = 0; jointIdx < bufferData.JointsCountActual; jointIdx++)
+                {
+                    var node = gltfSkin.GetJoint(jointIdx).Joint;
+
+                    // We *could* do some heuristics to see if we have essentially 0 translations, but for now..
+                    var jointLocalTranslation = node.LocalTransform.Translation;
+                    // ...just in case these two have been stored non-normalized
+                    var jointLocalRotation = RQuaternionNormalize(node.LocalTransform.Rotation);
+                    var jointLocalScale = SVectorNormalize(node.LocalTransform.Scale);
+
+                    bufferData.ConstTranslations.TryGetValue(jointIdx, out var jointConstTranslations);
+                    bufferData.ConstRotations.TryGetValue(jointIdx, out var jointConstRotations);
+                    bufferData.ConstScales.TryGetValue(jointIdx, out var jointConstScales);
+                    bufferData.Translations.TryGetValue(jointIdx, out var jointTranslations);
+                    bufferData.Rotations.TryGetValue(jointIdx, out var jointRotations);
+                    bufferData.Scales.TryGetValue(jointIdx, out var jointScales);
+                    
+                    var (hasTranslationsToExport, translationConflict, exportTranslations, translationInterpolation) = (jointTranslations ?? [], jointConstTranslations ?? []) switch {
+                        ({Count: >= 1} linear, {Count: >= 1} step) => (true, true, linear, GLTF_SAMPLER_LINEAR),
+                        ({Count: >= 1} linear, {Count: 0} step) => (true, false, linear, GLTF_SAMPLER_LINEAR),
+                        ({Count: 0} linear, {Count: >= 1} step) => (true, false, step, GLTF_SAMPLER_CONST),
+                        _ => (false, false, [], GLTF_SAMPLER_CONST),
+                    };
+                    
+                    var (hasRotationsToExport, rotationConflict, exportRotations, rotationInterpolation) = (jointRotations ?? [], jointConstRotations ?? []) switch {
+                        ({Count: >= 1} linear, {Count: >= 1} step) => (true, true, linear, GLTF_SAMPLER_LINEAR),
+                        ({Count: >= 1} linear, {Count: 0} step) => (true, false, linear, GLTF_SAMPLER_LINEAR),
+                        ({Count: 0} linear, {Count: >= 1} step) => (true, false, step, GLTF_SAMPLER_CONST),
+                        _ => (false, false, [], GLTF_SAMPLER_CONST),
+                    };
+                    
+                    var (hasScalesToExport, scaleConflict, exportScales, scaleInterpolation) = (jointScales ?? [], jointConstScales ?? []) switch {
+                        ({Count: >= 1} linear, {Count: >= 1} step) => (true, true, linear, GLTF_SAMPLER_LINEAR),
+                        ({Count: >= 1} linear, {Count: 0} step) => (true, false, linear, GLTF_SAMPLER_LINEAR),
+                        ({Count: 0} linear, {Count: >= 1} step) => (true, false, step, GLTF_SAMPLER_CONST),
+                        _ => (false, false, [], GLTF_SAMPLER_CONST),
+                    };
+
+                    if (translationConflict || rotationConflict || scaleConflict)
+                    {
+                        _loggerService.Warning($"{animsFileName}: {animAnimDes.Name}: {node.Name} ({jointIdx}): Joint has both LINEAR and STEP transforms! Only exporting LINEAR.");
+                    }
+
+                    if (hasTranslationsToExport)
+                    {
+                        gltfAnim.CreateTranslationChannel(
+                            node,
+                            exportAdditiveToBind
+                                ? exportTranslations.Select((t) => (t.Key, jointLocalTranslation + t.Value)).ToDictionary()
+                                : exportTranslations,
+                            translationInterpolation
+                        );
+                    }
+
+                    if (hasRotationsToExport)
+                    {
+                        gltfAnim.CreateRotationChannel(
+                            node,
+                            exportAdditiveToBind
+                                ? exportRotations.Select((t) => (t.Key, RQuaternionNormalize(jointLocalRotation * t.Value))).ToDictionary()
+                                : exportRotations,
+                            rotationInterpolation
+                        );
+                    }
+
+                    if (hasScalesToExport)
+                    {
+                        gltfAnim.CreateScaleChannel(
+                            node,
+                            exportAdditiveToBind
+                                ? exportScales.Select((t) => (t.Key, SVectorNormalize(jointLocalScale * t.Value))).ToDictionary()
+                                : exportScales,
+                            scaleInterpolation
+                        );
+                    }
+                }
+
+                // glTF doesn't support everything we need for anims, so stuff it in extras
+
+                var animExtras = new AnimationExtrasForGltf {
+                    Schema = CurrentSchema(),
+                    AnimationType = animAnimDes.AnimationType.ToString(),
+                    RootMotionType = rootMotionType.ToString(),
+                    FrameClamping = animAnimDes.FrameClamping,
+                    FrameClampingStartFrame = animAnimDes.FrameClampingStartFrame,
+                    FrameClampingEndFrame = animAnimDes.FrameClampingEndFrame,
+                    NumExtraJoints = bufferData.NumExtraJoints,
+                    NumExtraTracks = bufferData.NumExtraTracks,
+                    ConstTrackKeys = bufferData.ConstTrackKeys,
+                    TrackKeys = bufferData.TrackKeys,
+                    FallbackFrameIndices = bufferData.FallbackFrameIndices,
+                    OptimizationHints = new AnimationOptimizationHints {
+                        PreferSIMD = bufferData.IsSimd,
+                        MaxRotationCompression = bufferData.CompressionUsed,
+                    },
+                };
+
+                // -.-
+                //
+                // TODO https://github.com/WolvenKit/WolvenKit/issues/1693 Anime JSON Format Cleanup if and when SharpGLTF Updates
+                //
+                // Can switch to system Json when SharpGLTF support released (maybe in .31)
+                // Right now it's not possible to add an empty array to a JsonContent.
+                // Can work around that elsewhere but... just don't implement your own
+                // JSON parser, kids.
+                gltfAnim.Extras = JsonSerializer.SerializeToNode(animExtras, Gltf.SerializationOptions());
             }
 
+            if (stats.RootMotionConflicts > 0)
+            {
+                _loggerService.Warning($"{animsFileName}: {stats.RootMotionConflicts} animations had regular root joint transforms in addition to Root Motion. Only exporting Root Motion. Re-importing with Root Motion will delete the non-RM. This is probably correct, but you can additionally export without Root Motion to get the regular transforms.");
+            }
             if (stats.SimdAnims > 0)
             {
                 _loggerService.Info($"{animsFileName}: Exported {stats.SimdAnims} SIMD animations. They can only be imported back as regular animations, so you may want to simplify them when editing, or omit them from the re-import to keep the old ones."); 
             }
-
             if (stats.AdditiveAnims > 0)
             {
                 if (additiveAddRelative)
                 {
-                    _loggerService.Info($"{animsFileName}: Exported {stats.AdditiveAnims} additive animations already added to the bind pose. Reimport will strip the bind pose again.");
+                    _loggerService.Info($"{animsFileName}: Exported {stats.AdditiveAnims} additive animations added on top of the local transform.");
                 }
                 else
                 {
@@ -189,12 +341,13 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            var rig = RIG.ProcessRig(result.File!);
-            if (rig is null || rig.BoneCount < 1)
+            var maybeRig = RIG.ProcessRig(result.File!);
+            if (maybeRig is null || maybeRig.BoneCount < 1)
             {
                 _loggerService.Error($"{gltfFileName}: couldn't process rig from {rigFileName}, can't import anims!");
                 return false;
             }
+            RawArmature rig = maybeRig;
 
             var model = ModelRoot.Load(gltfFile.FullName, new ReadSettings(ValidationMode.TryFix));
 
@@ -223,7 +376,13 @@ namespace WolvenKit.Modkit.RED4
         {
             _loggerService.Info($"{gltfFileName}: found {model.LogicalAnimations.Count} animations to import");
 
-            var (simdCount, additiveCount, additiveStrippedCount) = (0, 0, 0);
+            var stats = new {
+                Additives = 0,
+                AdditivesStripped = 0,
+                RootMotions = 0,
+                RootTransformsStripped = 0,
+                SIMDs = 0,
+            };
 
             var newAnimSetEntries = new CArray<CHandle<animAnimSetEntry>>();
             var newAnimChunks = new CArray<animAnimDataChunk>();
@@ -238,8 +397,9 @@ namespace WolvenKit.Modkit.RED4
                     throw new InvalidOperationException($"{gltfFileName}: animation `{incomingAnim.Name}` appears more than once, can't import!");
                 }
 
-                // Can switch to system Json when SharpGLTF support released (maybe in .31)
-                if (incomingAnim.Extras.Content is null)
+                // Prep and metadata
+
+                if (incomingAnim.Extras is null)
                 {
                     throw new InvalidOperationException($"{gltfFileName}: animation `{incomingAnim.Name}` has no extra data, can't import!");
                 }
@@ -260,36 +420,40 @@ namespace WolvenKit.Modkit.RED4
                     _loggerService.Debug($"{gltfFileName}: new: `{incomingAnim.Name}` not found in animset, treating as new animation!");
                 }
 
-                var keyframeTranslations = new Dictionary<AnimationInterpolationMode, Dictionary<ushort, List<(float, Vec3)>>> {
-                    [AnimationInterpolationMode.STEP] = new (),
-                    [AnimationInterpolationMode.LINEAR] = new (),
-                };
-
-                var keyframeRotations = new Dictionary<AnimationInterpolationMode, Dictionary<ushort, List<(float, Quat)>>> {
-                    [AnimationInterpolationMode.STEP] = new (),
-                    [AnimationInterpolationMode.LINEAR] = new (),
-                };
-
-                var keyframeScales = new Dictionary<AnimationInterpolationMode, Dictionary<ushort, List<(float, Vec3)>>> {
-                    [AnimationInterpolationMode.STEP] = new (),
-                    [AnimationInterpolationMode.LINEAR] = new (),
-                };
-
                 var incomingAnimationType = (animAnimationType)Enum.Parse(typeof(animAnimationType), extras.AnimationType);
 
                 var stripLocalFromAdditives = incomingAnimationType != animAnimationType.Normal &&
                                               importArgs.AdditiveStripLocalTransform;
 
-                additiveCount += incomingAnimationType != animAnimationType.Normal ? 1 : 0;
-                additiveStrippedCount += stripLocalFromAdditives ? 1 : 0;
-                simdCount += extras.OptimizationHints.PreferSIMD ? 1 : 0;
+                stats = stats with {
+                    Additives = incomingAnimationType != animAnimationType.Normal ? stats.Additives + 1 : stats.Additives,
+                    AdditivesStripped = stripLocalFromAdditives ? stats.AdditivesStripped + 1 : stats.AdditivesStripped,
+                    SIMDs = extras.OptimizationHints.PreferSIMD ? stats.SIMDs + 1 : stats.SIMDs,
+                };
+
+                // Ok, process incoming data
+
+                var keyframeTranslations = new Dictionary<AnimationInterpolationMode, JointsTranslationsAtTimes> {
+                    [AnimationInterpolationMode.STEP] = [],
+                    [AnimationInterpolationMode.LINEAR] = []
+                };
+
+                var keyframeRotations = new Dictionary<AnimationInterpolationMode, JointsRotationsAtTimes> {
+                    [AnimationInterpolationMode.STEP] = [],
+                    [AnimationInterpolationMode.LINEAR] = [],
+                };
+
+                var keyframeScales = new Dictionary<AnimationInterpolationMode, JointsScalesAtTimes> {
+                    [AnimationInterpolationMode.STEP] = [],
+                    [AnimationInterpolationMode.LINEAR] = [],
+                };
 
                 foreach (var chan in incomingAnim.Channels)
                 {
-                    var idx = Array.IndexOf(rig.Names.NotNull(), chan.TargetNode.Name);
-                    if (idx < 0)
+                    var jointIdx = Array.IndexOf(rig.Names.NotNull(), chan.TargetNode.Name);
+                    if (jointIdx < 0)
                     {
-                        throw new Exception($"{gltfFileName} ${incomingAnim.Name}: Invalid Joint Transform, joint {chan.TargetNode.Name} not present in the associated rig {rigFileName}");
+                        throw new Exception($"{gltfFileName} ${incomingAnim.Name}: Invalid Joint Transform, glTF joint {chan.TargetNode.Name} not present in the associated rig {rigFileName}");
                     }
 
                     switch (chan.TargetNodePath)
@@ -298,39 +462,40 @@ namespace WolvenKit.Modkit.RED4
                             var translationSampler = chan.GetTranslationSampler();
                             var typedTranslations = keyframeTranslations[translationSampler.InterpolationMode] ?? throw new Exception($"{gltfFileName} ${incomingAnim.Name}: Unsupported interpolation mode {translationSampler.InterpolationMode}!");
 
-                            var translations = stripLocalFromAdditives
-                                ?  translationSampler.GetLinearKeys().Select(_ => (_.Key, _.Value - chan.TargetNode.LocalTransform.Translation)).ToList()
-                                : translationSampler.GetLinearKeys().ToList();
+                            var localTranslation = chan.TargetNode.LocalTransform.Translation;
 
-                            typedTranslations.Add((ushort)idx, translations);
+                            var translations = stripLocalFromAdditives
+                                ?  translationSampler.GetLinearKeys().Select(_ => (_.Key, _.Value - localTranslation)).ToDictionary()
+                                : translationSampler.GetLinearKeys().ToDictionary();
+
+                            typedTranslations.Add((ushort)jointIdx, translations);
                             break;
 
                         case PropertyPath.rotation:
                             var rotationSampler = chan.GetRotationSampler();
                             var typedRotations = keyframeRotations[rotationSampler.InterpolationMode] ?? throw new Exception($"{gltfFileName} ${incomingAnim.Name}: Unsupported interpolation mode {rotationSampler.InterpolationMode}!");
 
-                            var rotations = stripLocalFromAdditives
-                                ? rotationSampler.GetLinearKeys().Select(_ => (_.Key, _.Value / chan.TargetNode.LocalTransform.Rotation)).ToList()
-                                : rotationSampler.GetLinearKeys().ToList();
+                            var localRotation = RQuaternionNormalize(chan.TargetNode.LocalTransform.Rotation);
 
-                            typedRotations.Add((ushort)idx, rotations);
+                            var rotations = stripLocalFromAdditives
+                                ? rotationSampler.GetLinearKeys().Select(_ => (_.Key, RQuaternionNormalize(RQuaternionNormalize(_.Value) / localRotation))).ToDictionary()
+                                : rotationSampler.GetLinearKeys().Select(_ => (_.Key, RQuaternionNormalize(_.Value))).ToDictionary();
+
+                            typedRotations.Add((ushort)jointIdx, rotations);
                             break;
 
                         case PropertyPath.scale:
                             var scaleSampler = chan.GetScaleSampler();
                             var typedScales = keyframeScales[scaleSampler.InterpolationMode] ?? throw new Exception($"{gltfFileName} ${incomingAnim.Name}: Unsupported interpolation mode {scaleSampler.InterpolationMode}!");
 
-                            var localScale = WithEpsilon(chan.TargetNode.LocalTransform.Scale, Scale1to1);
+                            var localScale = SVectorNormalize(chan.TargetNode.LocalTransform.Scale);
 
                             var scales = stripLocalFromAdditives
                                 ? scaleSampler.GetLinearKeys().Select(_ =>
-                                    (_.Key, Value: WithEpsilon(_.Value, Scale1to1) / localScale)).ToList()
-                                // TODO: https://github.com/WolvenKit/WolvenKit/issues/1630 Scale handling review
-                                //      It's possible we shouldn't be normalizing here, but I think this might be safer
-                                : scaleSampler.GetLinearKeys().Select(_ =>
-                                    (_.Key, Value: WithEpsilon(_.Value, Scale1to1))).ToList();
+                                    (_.Key, Value: SVectorNormalize(SVectorNormalize(_.Value) / localScale))).ToDictionary()
+                                : scaleSampler.GetLinearKeys().Select(_ => (_.Key, Value: SVectorNormalize(_.Value))).ToDictionary();
 
-                            typedScales.Add((ushort)idx, scales);
+                            typedScales.Add((ushort)jointIdx, scales);
                             break;
 
                         case PropertyPath.weights:
@@ -340,158 +505,81 @@ namespace WolvenKit.Modkit.RED4
                     }
                 }
   
-                // We could validate there's only one of each const but not 100% that's a requirement
-                var constKeyTranslations = keyframeTranslations[AnimationInterpolationMode.STEP];
-                var constKeyRotations = keyframeRotations[AnimationInterpolationMode.STEP];
-                var constKeyScales = keyframeScales[AnimationInterpolationMode.STEP];
+                // ROOT MOTION
 
-                var keyTranslations = keyframeTranslations[AnimationInterpolationMode.LINEAR];
-                var keyRotations = keyframeRotations[AnimationInterpolationMode.LINEAR];
-                var keyScales = keyframeScales[AnimationInterpolationMode.LINEAR];
-
-                // TODO umm do we need to remove root motion if it was present in the original anim?
-
-                var constAnimKeys = new List<animKey?>();
-                var animKeys = new List<animKey?>();
-                var animKeysRaw = new List<animKey?>();
-
-                var rotationCompressionAllowed = extras.OptimizationHints.MaxRotationCompression != AnimationEncoding.Uncompressed;
-
-                for (ushort jointIdx = 0; jointIdx < (ushort)rig.BoneCount; ++jointIdx) {
-
-                    // Const keyframes are all similarly encoded, S, R and T
-
-                    // Order of SRT doesn't seem to matter
-                    foreach (var (time, value) in constKeyRotations.GetValueOrDefault(jointIdx, new ()))
-                    {
-                        constAnimKeys.Add(new animKeyRotation() { Idx = jointIdx, Time = time, Rotation = RQuaternionZupLhs(value), });
-                    }
-                    foreach (var (time, value) in constKeyTranslations.GetValueOrDefault(jointIdx, new ()))
-                    {
-                        constAnimKeys.Add(new animKeyPosition() { Idx = jointIdx, Time = time, Position = TRVectorZupLhs(value), });
-                    }
-                    foreach (var (time, value) in constKeyScales.GetValueOrDefault(jointIdx, new ()))
-                    {
-                        constAnimKeys.Add(new animKeyScale() { Idx = jointIdx, Time = time, Scale = SVectorZupLhs( value ), });
-                    }
-
-                    // For linear keyframes, T and S are always 'raw' but R can optionally be compressed
-
-                    foreach (var (time, value) in keyTranslations.GetValueOrDefault(jointIdx, new ()))
-                    {
-                        animKeysRaw.Add(new animKeyPosition() { Idx = jointIdx, Time = time, Position = TRVectorZupLhs( value ), });
-                    }
-                    foreach (var (time, value) in keyScales.GetValueOrDefault(jointIdx, new ()))
-                    {
-                        animKeysRaw.Add(new animKeyScale() { Idx = jointIdx, Time = time, Scale = SVectorZupLhs(value), });
-                    }
-
-                    var preferredStorage = rotationCompressionAllowed ? animKeys : animKeysRaw;
-
-                    foreach (var (time, value) in keyRotations.GetValueOrDefault(jointIdx, new ()))
-                    {
-                        preferredStorage.Add(new animKeyRotation() { Idx = jointIdx, Time = time, Rotation = RQuaternionZupLhs(value), });
-                    }
-                }
-
-                // -.-
-                var fallbackIndices = extras.FallbackFrameIndices?.Select(_ =>
-                    (CUInt16)_
-                ).ToList() ?? new List<CUInt16>();
-
-                var constTrackKeys = extras.ConstTrackKeys?.Select<AnimConstTrackKeySerializable, animKeyTrack?>(_ =>
-                    new animKeyTrack() {
-                        TrackIndex = _.TrackIndex,
-                        Time = _.Time,
-                        Value = _.Value,
-                    }
-                ).ToList() ?? new List<animKeyTrack?>();
-
-                var trackKeys = extras.TrackKeys?.Select<AnimTrackKeySerializable, animKeyTrack?>(_ =>
-                    new animKeyTrack() {
-                        TrackIndex = _.TrackIndex,
-                        Time = _.Time,
-                        Value = _.Value,
-                    }
-                ).ToList() ?? new List<animKeyTrack?>();
-
-                // TODO: https://github.com/WolvenKit/WolvenKit/issues/1630 Scale handling review
-                //
-                // There's three ways 'constant scale' could be understood:
-                //
-                // 1. Each joint maintains the scale of the bind, i.e. 1
-                // 2. Every joint maintains same scale S throughout anim
-                // 3. Each joint  maintains separate scale S' throughout anim
-                //
-                // Using the first definition here. Not sure it's the right one, need to test,
-                // but I think it's safe enough to be conservative initially.
-                var allScales1 =
-                    keyScales.All(j => j.Value.All(s => EqWithEpsilon(s.Item2, Scale1to1))) &&
-                    constKeyScales.All(j => j.Value.All(s => EqWithEpsilon(s.Item2, Scale1to1)));
+                // TODO https://github.com/WolvenKit/WolvenKit/issues/1752 Full Entity Update Support (Model, Rig, Anims, Ent...)
+                //      For now we just use the rig data, but this should be updated properly.
+                var numJoints = Convert.ToUInt16(rig.BoneCount);
+                var numExtraJoints = extras.NumExtraJoints;
+                var jointsCountActual = Convert.ToUInt16(numJoints - numExtraJoints);
+                var numTracks = Convert.ToUInt16(rig.ReferenceTracks?.Length ?? 0);
+                var numExtraTracks = extras.NumExtraTracks;
+                var tracksCountActual = Convert.ToUInt16(numTracks - numExtraTracks);
 
                 // Have all the raw data in hand now, let's mangle it into CR2W
 
-                var compressed = new animAnimationBufferCompressed()
-                {
+                // For now just dump the data always into `AnimationDataChunk`s, it seems
+                // to work okay regardless of the original buffer type — but presumably those
+                // exist for a reason, so it may be necessary to add support.
+
+                // Currently SIMD not supported
+
+                var incomingAnimData = new AnimationBufferData {
                     Duration = incomingAnim.Duration,
-                    NumFrames = FramesToAccommodateDuration(incomingAnim.Duration),
-                    NumExtraJoints = extras.NumExtraJoints,
-                    NumExtraTracks = extras.NumExtraTracks,
-                    NumJoints = Convert.ToUInt16(rig.BoneCount),
-                    NumTracks = Convert.ToUInt16(rig.ReferenceTracks?.Length ?? 0),
-                    NumConstAnimKeys = Convert.ToUInt32(constAnimKeys.Count),
-                    NumAnimKeysRaw = Convert.ToUInt32(animKeysRaw.Count),
-                    NumAnimKeys = Convert.ToUInt32(animKeys.Count),
-                    NumConstTrackKeys = Convert.ToUInt32(constTrackKeys.Count),
-                    NumTrackKeys = Convert.ToUInt32(trackKeys.Count),
-                    IsScaleConstant = allScales1,
-                    HasRawRotations = !rotationCompressionAllowed,
-
-                    FallbackFrameIndices = new CArray<CUInt16>(fallbackIndices),
-
-                    // These are internal only, they'll be packed into a buffer...
-                    ConstAnimKeys = new (constAnimKeys),
-                    AnimKeysRaw = new (animKeysRaw),
-                    AnimKeys = new (animKeys),
-
-                    ConstTrackKeys = new (constTrackKeys),
-                    TrackKeys = new (trackKeys),
-
-                    TempBuffer = new (),
+                    FrameCount = FramesToAccommodateDuration(incomingAnim.Duration),
+                    Translations = keyframeTranslations[AnimationInterpolationMode.LINEAR],
+                    ConstTranslations = keyframeTranslations[AnimationInterpolationMode.STEP],
+                    Rotations = keyframeRotations[AnimationInterpolationMode.LINEAR],
+                    ConstRotations = keyframeRotations[AnimationInterpolationMode.STEP],
+                    Scales = keyframeScales[AnimationInterpolationMode.LINEAR],
+                    ConstScales = keyframeScales[AnimationInterpolationMode.STEP],
+                    TrackKeys = extras.TrackKeys ?? [],
+                    ConstTrackKeys = extras.ConstTrackKeys ?? [],
+                    FallbackFrameIndices = extras.FallbackFrameIndices ?? [],
+                    NumJoints = numJoints,
+                    NumExtraJoints = numExtraJoints,
+                    JointsCountActual = jointsCountActual,
+                    NumTracks = numTracks,
+                    NumExtraTracks = numExtraTracks,
+                    TracksCountActual = tracksCountActual,
+                    IsSimd = false,
+                    CompressionUsed = extras.OptimizationHints.MaxRotationCompression,
                 };
 
-                // ...specifically TempBuffer, here.
-                compressed.WriteBuffer();
+                // Backfill from original where we must, for now
+                var oldAnimDesc = oldAnim?.Animation?.Chunk;
+
+                // Sneak out Root Motion
+                var incomingRootMotionType = (RootMotionType)Enum.Parse(typeof(RootMotionType), extras.RootMotionType);
+                var (rootMotionType, rootTransformsStripped) = ROOT_MOTION.ExtractRootMotion(out var rootMotion, ref incomingAnimData, ref oldAnimDesc, incomingRootMotionType, incomingAnim.Name, _loggerService);
+
+                stats = stats with {
+                        RootMotions = (rootMotionType is RootMotionType.None or RootMotionType.Unknown) ? stats.RootMotions : stats.RootMotions + 1,
+                        RootTransformsStripped = rootTransformsStripped ? stats.RootTransformsStripped + 1 : stats.RootTransformsStripped
+                    };
 
                 // These could also be written to a single chunk (or fewer chunks)
                 // but for now we'll do a chunk per animation.
                 //
                 // Might have some kind of streaming optimization potential chunk count vs. size?
-                compressed.DataAddress.UnkIndex = (uint)newAnimChunks.Count;
-                compressed.DataAddress.FsetInBytes = 0;
-                compressed.DataAddress.ZeInBytes = compressed.TempBuffer.Buffer.MemSize;
-
-                // For now just dump the data always into `AnimationDataChunk`s,
-                // may need to handle `InplaceCompressedBuffer` and `DefferedBuffer` (sic)
-                // separately if this doesn't work for those reliably...
-                var newAnimDataChunk = new animAnimDataChunk()
-                {
-                    Buffer = new SerializationDeferredDataBuffer(compressed.TempBuffer.Buffer.GetBytes())
+                var chunkDataAddress = new animAnimDataAddress {
+                    UnkIndex = (uint)newAnimChunks.Count,
+                    FsetInBytes = 0,
+                    ZeInBytes = 0,
                 };
 
-                // Backfill from original where possible, for now
-                var oldAnimDesc = oldAnim?.Animation?.Chunk;
+                CompressedBuffer.EncodeAnimationData(out var newAnimDataChunk, out var newCompressedBuffer, ref incomingAnimData, chunkDataAddress, _loggerService);
 
                 var newAnimDesc = new animAnimation()
                 {
                     Name = incomingAnim.Name,
-                    AnimBuffer = new(compressed),
-                    Duration = incomingAnim.Duration,
+                    AnimBuffer = new(newCompressedBuffer),
+                    Duration = incomingAnimData.Duration,
                     AnimationType = incomingAnimationType,
                     FrameClamping = extras.FrameClamping,
                     FrameClampingStartFrame = Convert.ToSByte(extras.FrameClampingStartFrame),
                     FrameClampingEndFrame = Convert.ToSByte(extras.FrameClampingEndFrame),
-                    MotionExtraction = new((animIMotionExtraction?)(oldAnimDesc?.MotionExtraction?.Chunk?.DeepCopy())),
+                    MotionExtraction = new(rootMotion),
                 };
 
                 // I hate C#
@@ -539,17 +627,21 @@ namespace WolvenKit.Modkit.RED4
             anims.AnimationDataChunks = newAnimChunks;
             anims.Animations = newAnimSetEntries;
 
-            if (simdCount > 0)
+            if (stats.SIMDs > 0)
             {
-                _loggerService.Warning($"{gltfFileName}: EXPERIMENTAL: SIMD anims are not fully supported, converted {simdCount} to normal anims. These mostly work ok, but if you have trouble, you can omit them from the animset to keep the existing SIMD versions.");
+                _loggerService.Warning($"{gltfFileName}: Encoding: SIMD anims are not fully supported, converted {stats.SIMDs} to normal anims. These mostly work ok, but if you have trouble, you can omit them from the animset to keep the existing SIMD versions.");
             }
-            if (additiveStrippedCount > 0)
+            if (stats.AdditivesStripped > 0)
             {
-                _loggerService.Info($"{gltfFileName}: stripped local transform from all {additiveStrippedCount} additive animations");
+                _loggerService.Info($"{gltfFileName}: Additive: stripped local transform from all {stats.AdditivesStripped} additive animations");
             }
-            if (additiveCount != additiveStrippedCount)
+            if (stats.Additives != stats.AdditivesStripped)
             {
-                _loggerService.Warning($"{gltfFileName}: additive animations present but were not stripped of local transform, make sure this is what you want");
+                _loggerService.Warning($"{gltfFileName}: Additive: additive animations present but were not stripped of local transform, make sure this is what you want");
+            }
+            if (stats.RootMotions > 0)
+            {
+                _loggerService.Info($"{gltfFileName}: Root Motion: {stats.RootMotions} animations with Root Motion extracted.");
             }
 
             _loggerService.Success($"{gltfFileName}: total: {newAnimSetEntries.Count} animations ({updatedAnims.Count} updated, {newAnimsImported.Count} new, {originalAnimsNotInImport.Count} originals kept)");
@@ -565,6 +657,9 @@ namespace WolvenKit.Modkit.RED4
                 {
                     animAnimationBufferCompressed compressed => compressed.DataAddress,
                     animAnimationBufferSimd simd => simd.DataAddress,
+                    // TODO https://github.com/WolvenKit/WolvenKit/issues/1660
+                    //      Implement Copying for Anime InplaceBuffers and Direct SerializedBuffers.
+                    //      Can steal code from export, but better to refactor it properly.
                     _ => throw new Exception("Unexpected animation buffer type"),
                 };
 

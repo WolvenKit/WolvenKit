@@ -24,10 +24,15 @@ public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewMo
         {
             LastWriteTime = File.GetLastWriteTime(path);
         }
+
+        OpenedAt = DateTime.Now;
     }
 
     [ObservableProperty] private string _filePath;
     [ObservableProperty] private bool _isReadOnly;
+    [ObservableProperty] private bool _showToolbar;
+
+    public DateTime OpenedAt { get; init; }
 
     private bool _isDirty;
 
@@ -35,14 +40,6 @@ public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewMo
     {
         get => _isDirty;
         protected set => SetProperty(ref _isDirty, value);
-    }
-
-    private bool _isSimpleViewEnabled;
-
-    public bool IsSimpleViewEnabled
-    {
-        get => _isSimpleViewEnabled;
-        set => SetProperty(ref _isSimpleViewEnabled, value);
     }
 
     public bool IsInitialized() => _isInitialized;
@@ -62,8 +59,9 @@ public abstract partial class DocumentViewModel : PaneViewModel, IDocumentViewMo
     public abstract Task Save(object parameter);
 
     [RelayCommand]
-    public abstract void SaveAs(object parameter);
-
-
+    protected abstract void SaveAs(SaveAsParameters saveParams);
+        
     public abstract bool Reload(bool force);
+
+
 }

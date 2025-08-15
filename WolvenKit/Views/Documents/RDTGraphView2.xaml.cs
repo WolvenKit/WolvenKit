@@ -2,12 +2,13 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using ReactiveUI;
-using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
-using WolvenKit.App.ViewModels.GraphEditor;
-using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
-using WolvenKit.Views.GraphEditor;
 using Splat;
+using WolvenKit.App.ViewModels.GraphEditor;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.Types;
+using WolvenKit.Views.GraphEditor;
 
 namespace WolvenKit.Views.Documents;
 /// <summary>
@@ -46,6 +47,20 @@ public partial class RDTGraphView2
             {
                 Locator.Current.GetService<ILoggerService>().Error("SubGraph is not defined!");
                 return;
+            }
+
+            if (subGraph.DocumentViewModel == null)
+            {
+                subGraph.DocumentViewModel = Editor.Source.DocumentViewModel;
+            }
+
+            if (Editor.SelectedNode.Data is questPhaseNodeDefinition ph)
+            {
+                if (!ph.PhaseResource.IsSet)
+                {
+                    subGraph.StateParents = Editor.Source.StateParents + "." + ph.Id;
+                    subGraph.DocumentViewModel = Editor.Source.DocumentViewModel;
+                }
             }
 
             ViewModel!.History.Add(subGraph);

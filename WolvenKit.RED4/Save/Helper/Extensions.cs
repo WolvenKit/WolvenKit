@@ -4,7 +4,7 @@ public static class Extensions
 {
     private static Dictionary<ulong, string> _tweakList = new Dictionary<ulong, string>();
     private static Dictionary<ulong, string> _factsList = new Dictionary<ulong, string>();
-    private static bool _tweaksLoaded;
+    //private static bool _tweaksLoaded;
     private static bool _factsLoaded;
 
     private static void LoadTweaks()
@@ -24,7 +24,7 @@ public static class Extensions
         //     _tweakList.TryAdd(id, str);
         // }
 
-        _tweaksLoaded = true;
+        //_tweaksLoaded = true;
     }
 
     private static void LoadFacts()

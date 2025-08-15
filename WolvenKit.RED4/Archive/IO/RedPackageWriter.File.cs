@@ -226,11 +226,6 @@ public partial class RedPackageWriter
         {
             if (Settings.ImportsAsHash)
             {
-                if (reff.DepotPath.IsResolvable)
-                {
-                    ImportHandler.AddPathHandler?.Invoke(reff.DepotPath!);
-                }
-                
                 refDesc.Add(new RedPackageImportHeader
                 {
                     offset = (uint)refData.Count + position,
@@ -248,10 +243,9 @@ public partial class RedPackageWriter
                     sync = reff.Flag > 0
                 });
 
-                if (reff.DepotPath.IsResolvable)
-                {
-                    refData.AddRange(Encoding.UTF8.GetBytes(reff.DepotPath!));
-                }
+                NotResolvableException.ThrowIfNotResolvable(reff.DepotPath);
+
+                refData.AddRange(Encoding.UTF8.GetBytes(reff.DepotPath!));
             }
         }
         return (refData.ToArray(), refDesc);

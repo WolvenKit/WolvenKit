@@ -8,8 +8,6 @@ namespace WolvenKit.RED4.Archive;
 public class Archive : ICyberGameArchive, IDisposable
 {
     private MemoryMappedFile? _mmf;
-    private bool _bulkExtract;
-    private int _handleCount;
 
     private bool _disposed;
 

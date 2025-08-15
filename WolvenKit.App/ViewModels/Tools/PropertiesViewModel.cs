@@ -1,27 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Input;
+using System.Linq;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
-using SharpDX.DirectWrite;
 using WolvenKit.App.Extensions;
-using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.Docking;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
-using WolvenKit.Common.DDS;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
@@ -37,6 +30,7 @@ public partial class PropertiesViewModel : ToolViewModel
 
     private readonly ILoggerService _loggerService;
     private readonly ISettingsManager _settingsManager;
+    private readonly IArchiveManager _archiveManager;
     private readonly IProjectManager _projectManager;
     private readonly MeshTools _meshTools;
     private readonly IModTools _modTools;
@@ -45,8 +39,9 @@ public partial class PropertiesViewModel : ToolViewModel
     public const string ToolContentId = "Properties_Tool";
     public const string ToolTitle = "File Information";
 
-    public enum TexturePreviewExtensions { xbm, envprobe, mesh, cubemap, xcube, texarray };
-    public enum MeshPreviewExtensions { mesh, ent, w2mesh, physicalscene };
+    public enum TexturePreviewExtensions { xbm, envprobe, mesh, cubemap, xcube, texarray, inkatlas };
+
+    public enum MeshPreviewExtensions { mesh, ent, w2mesh, physicalscene, morphtarget };
     public enum AudioPreviewExtensions { wem };
 
     public EffectsManager EffectsManager { get; }
@@ -69,6 +64,7 @@ public partial class PropertiesViewModel : ToolViewModel
     /// <param name="meshTools"></param>
     public PropertiesViewModel(
         IProjectManager projectManager,
+        IArchiveManager archiveManager,
         ILoggerService loggerService,
         ISettingsManager settingsManager,
         MeshTools meshTools,
@@ -79,6 +75,7 @@ public partial class PropertiesViewModel : ToolViewModel
         _settingsManager = settingsManager;
         _projectManager = projectManager;
         _loggerService = loggerService;
+        _archiveManager = archiveManager;
         _meshTools = meshTools;
         _modTools = modTools;
         _parser = parserService;
@@ -98,12 +95,12 @@ public partial class PropertiesViewModel : ToolViewModel
     }
 
     #region properties
-    
+
     [ObservableProperty] private AudioObject? _audioObject;
-    
+
     [ObservableProperty] private int _selectedIndex;
 
-    [ObservableProperty] private FileModel? _pE_SelectedItem;
+    [ObservableProperty] private FileSystemModel? _pE_SelectedItem;
 
     /// <summary>
     /// Selected Item from Asset Browser If Available.
@@ -145,9 +142,6 @@ public partial class PropertiesViewModel : ToolViewModel
         AudioObject = obj;
     }
 
-
-    private bool CanOpenFile(FileModel model) => model != null;
-
     /// <summary>
     /// Called from Assetbrowser
     /// </summary>
@@ -155,12 +149,8 @@ public partial class PropertiesViewModel : ToolViewModel
     /// <returns></returns>
     public void ExecuteSelectFile(IFileSystemViewModel model)
     {
-        if (model == null)
-        {
-            return;
-        }
-
-        if (State is DockState.AutoHidden or DockState.Hidden)
+        if (State is DockState.AutoHidden or DockState.Hidden || !_settingsManager.ShowFilePreview ||
+            model is not RedFileViewModel selectedItem)
         {
             return;
         }
@@ -175,36 +165,29 @@ public partial class PropertiesViewModel : ToolViewModel
         IsImagePreviewVisible = false;
         IsVideoPreviewVisible = false;
 
-        if (!_settingsManager.ShowFilePreview)
-        {
-            return;
-        }
-
-        if (model is not RedFileViewModel selectedItem)
-        {
-            return;
-        }
-
         var extension = model.DisplayExtension;
 
-        if (Enum.TryParse<TexturePreviewExtensions>(extension, true, out _) ||
-            Enum.TryParse<MeshPreviewExtensions>(extension, true, out _) ||
-            Enum.TryParse<AudioPreviewExtensions>(extension, true, out _))
+        if (!Enum.TryParse<TexturePreviewExtensions>(extension, true, out _) &&
+            !Enum.TryParse<MeshPreviewExtensions>(extension, true, out _) &&
+            !Enum.TryParse<AudioPreviewExtensions>(extension, true, out _))
         {
-            CR2WFile? cr2w = null;
-            using (var stream = new MemoryStream())
+            return;
+        }
+
+        CR2WFile? cr2W = null;
+        using (var stream = new MemoryStream())
+        {
+            var selectedGameFile = selectedItem.GetGameFile();
+            selectedGameFile.Extract(stream);
+            if (!_parser.TryReadRed4File(stream, out cr2W))
             {
-                var selectedGameFile = selectedItem.GetGameFile();
-                selectedGameFile.Extract(stream);
-                if (!_parser.TryReadRed4File(stream, out cr2w))
-                {
-                    PreviewStream(stream, model.FullName);
-                }
+                PreviewAudioStream(stream, model.FullName);
             }
-            if (cr2w != null)
-            {
-                PreviewCr2wFile(cr2w);
-            }
+        }
+
+        if (cr2W != null)
+        {
+            PreviewCr2wFile(cr2W);
         }
     }
 
@@ -213,14 +196,9 @@ public partial class PropertiesViewModel : ToolViewModel
     /// </summary>
     /// <param name="model"></param>
     /// <returns></returns>
-    public void ExecuteSelectFile(FileModel model)
+    public void ExecuteSelectFile(FileSystemModel model)
     {
-        if (model == null)
-        {
-            return;
-        }
-
-        if (State is DockState.AutoHidden or DockState.Hidden)
+        if (State is DockState.AutoHidden or DockState.Hidden || !_settingsManager.ShowFilePreview || model.IsDirectory)
         {
             return;
         }
@@ -235,35 +213,36 @@ public partial class PropertiesViewModel : ToolViewModel
         IsImagePreviewVisible = false;
         IsVideoPreviewVisible = false;
 
-        if (!_settingsManager.ShowFilePreview)
-        {
-            return;
-        }
-
-        if (model.IsDirectory)
-        {
-            return;
-        }
-
         var extension = Path.GetExtension(model.FullName).TrimStart('.');
 
-        if (Enum.TryParse<TexturePreviewExtensions>(extension, true, out _) ||
-            Enum.TryParse<MeshPreviewExtensions>(extension, true, out _) ||
-            Enum.TryParse<AudioPreviewExtensions>(extension, true, out _) ||
-            Enum.TryParse<EUncookExtension>(extension, true, out _))
+        if (!Enum.TryParse<TexturePreviewExtensions>(extension, true, out _) &&
+            !Enum.TryParse<MeshPreviewExtensions>(extension, true, out _) &&
+            !Enum.TryParse<AudioPreviewExtensions>(extension, true, out _) &&
+            !Enum.TryParse<EUncookExtension>(extension, true, out _))
         {
-            CR2WFile? cr2w = null;
-            using (var stream = new FileStream(model.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan))
+            return;
+        }
+
+        CR2WFile? cr2WFile = null;
+        using (var stream = new FileStream(model.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096,
+                   FileOptions.SequentialScan))
+        {
+            if (!_parser.TryReadRed4File(stream, out cr2WFile))
             {
-                if (!_parser.TryReadRed4File(stream, out cr2w))
-                {
-                    PreviewPhysicalFile(model.FullName);
-                }
+                PreviewPhysicalFile(model.FullName);
             }
-            if (cr2w != null)
+            else if (extension == "inkatlas" && cr2WFile.RootChunk is inkTextureAtlas atlas &&
+                     atlas.Slots.FirstOrDefault() is inkTextureSlot slot && slot.Texture.DepotPath != ResourcePath.Empty &&
+                     _archiveManager.GetGameFile(slot.Texture.DepotPath) is { } gameFile)
             {
-                PreviewCr2wFile(cr2w);
+                using var stream2 = new MemoryStream();
+                gameFile.Extract(stream2);
+                _parser.TryReadRed4File(stream2, out cr2WFile);
             }
+        }
+        if (cr2WFile != null)
+        {
+            PreviewCr2wFile(cr2WFile);
         }
     }
 
@@ -273,7 +252,7 @@ public partial class PropertiesViewModel : ToolViewModel
     /// <param name="stream"></param>
     /// <param name="filename"></param>
     /// <returns></returns>
-    private void PreviewStream(Stream stream, string filename)
+    private void PreviewAudioStream(Stream stream, string filename)
     {
         var extension = Path.GetExtension(filename).TrimStart('.');
         stream.Seek(0, SeekOrigin.Begin);
@@ -290,7 +269,6 @@ public partial class PropertiesViewModel : ToolViewModel
     /// <summary>
     /// Internal
     /// </summary>
-    /// <param name="stream"></param>
     /// <param name="filename"></param>
     /// <returns></returns>
     private void PreviewPhysicalFile(string filename)
@@ -312,42 +290,32 @@ public partial class PropertiesViewModel : ToolViewModel
 
     private void PreviewCr2wFile(CR2WFile cr2w)
     {
-        if (cr2w.RootChunk is CMesh cmesh)
+        switch (cr2w.RootChunk)
         {
-            LoadModel(cmesh);
-        }
-
-        if (cr2w.RootChunk is CBitmapTexture cbt &&
-            cbt.RenderTextureResource.RenderResourceBlobPC != null &&
-            cbt.RenderTextureResource.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
-        {
-            SetupImage(cbt);
-        }
-
-        if (cr2w.RootChunk is CCubeTexture cct &&
-            cct.RenderTextureResource.RenderResourceBlobPC != null &&
-            cct.RenderTextureResource.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
-        {
-            SetupImage(cct);
-        }
-
-        if (cr2w.RootChunk is CTextureArray cta &&
-            cta.RenderTextureResource.RenderResourceBlobPC != null &&
-            cta.RenderTextureResource.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
-        {
-            SetupImage(cta);
-        }
-
-        if (cr2w.RootChunk is CMesh cm && cm.RenderResourceBlob != null &&
-            cm.RenderResourceBlob.GetValue() is rendRenderTextureBlobPC)
-        {
-            SetupImage(cm);
-        }
-
-        if (cr2w.RootChunk is CReflectionProbeDataResource crpdr &&
-            crpdr.TextureData.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
-        {
-            SetupImage(crpdr);
+            case CMesh cm when cm.RenderResourceBlob?.GetValue() is rendRenderTextureBlobPC:
+                SetupImage(cm);
+                break;
+            case CMesh or MorphTargetMesh:
+                LoadModel(cr2w.RootChunk);
+                break;
+            case CBitmapTexture cbt when
+                cbt.RenderTextureResource.RenderResourceBlobPC?.GetValue() is rendRenderTextureBlobPC:
+                SetupImage(cbt);
+                break;
+            case CCubeTexture cct when
+                cct.RenderTextureResource.RenderResourceBlobPC?.GetValue() is rendRenderTextureBlobPC:
+                SetupImage(cct);
+                break;
+            case CTextureArray cta when
+                cta.RenderTextureResource.RenderResourceBlobPC?.GetValue() is rendRenderTextureBlobPC:
+                SetupImage(cta);
+                break;
+            case CReflectionProbeDataResource crpdr when
+                crpdr.TextureData.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC:
+                SetupImage(crpdr);
+                break;
+            default:
+                break;
         }
     }
 
@@ -434,18 +402,19 @@ public partial class PropertiesViewModel : ToolViewModel
         }
     }
 
-    public List<SubmeshComponent> MakePreviewMesh(RedBaseClass cls, ulong chunkMask = ulong.MaxValue)
+    private List<SubmeshComponent> MakePreviewMesh(RedBaseClass cls, ulong chunkMask = ulong.MaxValue)
     {
-        rendRenderMeshBlob? rendblob = null;
-
-        if (cls is CMesh cMesh && cMesh.RenderResourceBlob != null && cMesh.RenderResourceBlob.Chunk is rendRenderMeshBlob blob)
+        var rendblob = cls switch
         {
-            rendblob = blob;
-        }
+            CMesh { RenderResourceBlob.Chunk: rendRenderMeshBlob blob } => blob,
+            MorphTargetMesh mt when mt.Blob.Chunk is rendRenderMorphTargetMeshBlob mtBlob &&
+                                    mtBlob.BaseBlob.Chunk is rendRenderMeshBlob blob2 => blob2,
+            _ => null
+        };
 
         if (rendblob == null)
         {
-            return new List<SubmeshComponent>();
+            return [];
         }
 
         using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());

@@ -1,3 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+
 namespace WolvenKit.Core.Extensions
 {
     public static class EnumExtensions
@@ -43,6 +48,25 @@ namespace WolvenKit.Core.Extensions
         //        return Enum.ToObject(enumType, 0);
         //    }
         //}
+
+        /// <summary>
+        /// Gets the description attribute from an enum. Will fall back to empty string.
+        /// </summary>
+        /// <example>
+        /// public enum EnumOptions
+        /// {
+        ///     [Display(Description = "Option 1")]
+        ///     OptionOne= 1
+        ///  }
+        /// </example>
+        public static string GetDescriptionFromEnumValue(this Enum value)
+        {
+            var attribute = value.GetType()
+                .GetField(value.ToString())
+                ?.GetCustomAttributes(typeof(DisplayAttribute), false)
+                .SingleOrDefault() as DisplayAttribute;
+            return attribute?.Description ?? value?.ToString() ?? string.Empty;
+        }
 
         #endregion Methods
     }

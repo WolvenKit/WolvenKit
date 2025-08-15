@@ -17,9 +17,9 @@ jobs:
     outputs:
       should_run: ${{ steps.should_run.outputs.should_run }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
-          ref: main
+          ref: dev
 
       - id: should_run
         name: check latest commit is less than a day
@@ -35,13 +35,12 @@ jobs:
     runs-on: windows-2022
 
     steps:
-
       ##########################################
       # SETUP
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
-          ref: main
+          ref: dev
 
       - name: Get commit
         run: |
@@ -49,9 +48,9 @@ jobs:
           echo "SHA=$commit" >> $env:GITHUB_ENV
 
       - name: Setup .NET Core
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 7.x
+          dotnet-version: 8.x
 
       - name: Get Date
         run: |
@@ -61,7 +60,7 @@ jobs:
       ##########################################
       # APP
       - name: Get version
-        uses: naminodarie/get-net-sdk-project-versions-action@v1.1.2
+        uses: naminodarie/get-net-sdk-project-versions-action@v2
         id: get_version
         with:
           proj-path: ./WolvenKit/WolvenKit.csproj
@@ -70,13 +69,13 @@ jobs:
       - run: echo "PORTABLE=${{env.NAME}}-${{env.VERSION_APP}}.zip" >> $env:GITHUB_ENV
 
       # Publish app
-      - run: dotnet publish ./WolvenKit/WolvenKit.csproj -o ./publish/app/ -c Release --version-suffix "nightly.${{env.ISODATE}}" -p:InformationalVersion="${{env.VERSION_APP}}"
+      - run: dotnet publish ./WolvenKit/WolvenKit.csproj -o ./publish/app/ -c Release -p:ApplicationIcon=../WolvenKit/Resources/Media/Images/Icons/Application/TaskBarIcon_Nightly.ico --version-suffix "nightly.${{env.ISODATE}}" -p:InformationalVersion="${{env.VERSION_APP}}" -p:DebugType=None -p:DebugSymbols=false
       - run: Compress-Archive -Path ./publish/app/* -DestinationPath ${{env.FINALOUT}}/${{env.PORTABLE}}
 
       ##########################################
       # CONSOLE
 
-       # tag main commit
+      # tag main commit
       - name: Create Tag
         id: tag_version
         uses: rfuzzo/github-tag-action@7b0316b3fb8aa236fdc20bee0614ea6ef99f4bf1
@@ -98,7 +97,7 @@ jobs:
 
       - name: Get console version
         if: ${{ env.HAS_CLI_COMMITS == 'true' }}
-        uses: naminodarie/get-net-sdk-project-versions-action@v1.1.2
+        uses: naminodarie/get-net-sdk-project-versions-action@v2
         id: get_version_cli
         with:
           proj-path: ./WolvenKit.CLI/WolvenKit.CLI.csproj
@@ -113,20 +112,11 @@ jobs:
       # Publish console
       - name: publish console
         if: ${{ env.HAS_CLI_COMMITS == 'true' }}
-        run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o ./publish/console/ -c Release --version-suffix "nightly.${{env.ISODATE}}"
+        run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o ./publish/console/ -c Release --version-suffix "nightly.${{env.ISODATE}}" -p:DebugType=None -p:DebugSymbols=false
       - name: zip console
         if: ${{ env.HAS_CLI_COMMITS == 'true' }}
         run: Compress-Archive -Path ./publish/console/* -DestinationPath ${{env.FINALOUT}}/${{env.CONSOLE}}
 
-      # Pack and upload prerelease nugets
-      - name: pack cli
-        if: ${{ env.HAS_CLI_COMMITS == 'true' }}
-        run: dotnet pack ./WolvenKit.CLI/WolvenKit.CLI.csproj --version-suffix "nightly.${{env.ISODATE}}"
-      - name: push nuget
-        continue-on-error: true
-        if: ${{ env.HAS_CLI_COMMITS == 'true' }}
-        run: dotnet nuget push .\WolvenKit.CLI\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
-      
       ##########################################
       # INSTALLER
 
@@ -136,11 +126,9 @@ jobs:
       ##########################################
       # RELEASE
 
-     
-
       - name: Release dispatch
         id: release_dispatch
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.VERSION_APP }}
           generate_release_notes: false
@@ -150,5 +138,3 @@ jobs:
           repository: WolvenKit/WolvenKit-nightly-releases
           token: ${{ secrets.RELEASE_TOKEN }}
           body: "This is a beta release so you may encounter bugs. Please report them.\n${{ steps.tag_version.outputs.changelog }}"
-          
-    

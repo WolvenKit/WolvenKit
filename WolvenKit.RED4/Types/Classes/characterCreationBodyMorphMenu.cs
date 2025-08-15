@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(9)] 
+		[RED("colorPickerContentWrapper")] 
+		public inkWidgetReference ColorPickerContentWrapper
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("colorPickerBG")] 
 		public inkWidgetReference ColorPickerBG
 		{
@@ -36,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("colorPickerClose")] 
 		public inkWidgetReference ColorPickerClose
 		{
@@ -44,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("scrollWidget")] 
 		public inkWidgetReference ScrollWidget
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("scrollArea")] 
 		public inkScrollAreaWidgetReference ScrollArea
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkScrollAreaWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("optionList")] 
 		public CWeakHandle<inkCompoundWidget> OptionList
 		{
@@ -68,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkCompoundWidget>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("slider")] 
 		public inkWidgetReference Slider
 		{
@@ -76,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("previousPageBtn")] 
 		public inkWidgetReference PreviousPageBtn
 		{
@@ -84,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("previousPageBtnBg")] 
 		public inkImageWidgetReference PreviousPageBtnBg
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("previousPageBtnText")] 
 		public inkTextWidgetReference PreviousPageBtnText
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("nextPageBtnBg")] 
 		public inkImageWidgetReference NextPageBtnBg
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("nextPageBtnText")] 
 		public inkTextWidgetReference NextPageBtnText
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("backConfirmation")] 
 		public inkWidgetReference BackConfirmation
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("backConfirmationWidget")] 
 		public inkWidgetReference BackConfirmationWidget
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("ConfirmationConfirmBtn")] 
 		public inkWidgetReference ConfirmationConfirmBtn
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("ConfirmationCloseBtn")] 
 		public inkWidgetReference ConfirmationCloseBtn
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("preset1Group")] 
 		public inkWidgetReference Preset1Group
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("preset2Group")] 
 		public inkWidgetReference Preset2Group
 		{
@@ -164,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("preset3Group")] 
 		public inkWidgetReference Preset3Group
 		{
@@ -172,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("randomizeGroup")] 
 		public inkWidgetReference RandomizeGroup
 		{
@@ -180,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("presetsLabel")] 
 		public inkWidgetReference PresetsLabel
 		{
@@ -188,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("preset1")] 
 		public inkWidgetReference Preset1
 		{
@@ -196,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("preset2")] 
 		public inkWidgetReference Preset2
 		{
@@ -204,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("preset3")] 
 		public inkWidgetReference Preset3
 		{
@@ -212,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("randomize")] 
 		public inkWidgetReference Randomize
 		{
@@ -220,7 +228,47 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
+		[RED("randomizeBg")] 
+		public inkImageWidgetReference RandomizeBg
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(35)] 
+		[RED("randomizationSettingsButton")] 
+		public inkWidgetReference RandomizationSettingsButton
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(36)] 
+		[RED("randomizationSettingsWidget")] 
+		public inkWidgetReference RandomizationSettingsWidget
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(37)] 
+		[RED("randomizationSettingsController")] 
+		public CWeakHandle<gameuiCharacterRandomizationController> RandomizationSettingsController
+		{
+			get => GetPropertyValue<CWeakHandle<gameuiCharacterRandomizationController>>();
+			set => SetPropertyValue<CWeakHandle<gameuiCharacterRandomizationController>>(value);
+		}
+
+		[Ordinal(38)] 
+		[RED("randomizationSettingsButtonBg")] 
+		public inkImageWidgetReference RandomizationSettingsButtonBg
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(39)] 
 		[RED("preset1Thumbnail")] 
 		public inkImageWidgetReference Preset1Thumbnail
 		{
@@ -228,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(40)] 
 		[RED("preset2Thumbnail")] 
 		public inkImageWidgetReference Preset2Thumbnail
 		{
@@ -236,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(41)] 
 		[RED("preset3Thumbnail")] 
 		public inkImageWidgetReference Preset3Thumbnail
 		{
@@ -244,15 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(36)] 
-		[RED("randomizThumbnail")] 
-		public inkImageWidgetReference RandomizThumbnail
-		{
-			get => GetPropertyValue<inkImageWidgetReference>();
-			set => SetPropertyValue<inkImageWidgetReference>(value);
-		}
-
-		[Ordinal(37)] 
+		[Ordinal(42)] 
 		[RED("preset1Bg")] 
 		public inkImageWidgetReference Preset1Bg
 		{
@@ -260,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(43)] 
 		[RED("preset2Bg")] 
 		public inkImageWidgetReference Preset2Bg
 		{
@@ -268,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(44)] 
 		[RED("preset3Bg")] 
 		public inkImageWidgetReference Preset3Bg
 		{
@@ -276,15 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(40)] 
-		[RED("randomizBg")] 
-		public inkImageWidgetReference RandomizBg
-		{
-			get => GetPropertyValue<inkImageWidgetReference>();
-			set => SetPropertyValue<inkImageWidgetReference>(value);
-		}
-
-		[Ordinal(41)] 
+		[Ordinal(45)] 
 		[RED("navigationButtons")] 
 		public inkWidgetReference NavigationButtons
 		{
@@ -292,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(46)] 
 		[RED("hideColorPickerNextFrame")] 
 		public CBool HideColorPickerNextFrame
 		{
@@ -300,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(47)] 
 		[RED("colorPickerOwner")] 
 		public CWeakHandle<inkWidget> ColorPickerOwner
 		{
@@ -308,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(48)] 
 		[RED("animationProxy")] 
 		public CHandle<inkanimProxy> AnimationProxy
 		{
@@ -316,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(49)] 
 		[RED("confirmAnimationProxy")] 
 		public CHandle<inkanimProxy> ConfirmAnimationProxy
 		{
@@ -324,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(50)] 
 		[RED("optionListAnimationProxy")] 
 		public CHandle<inkanimProxy> OptionListAnimationProxy
 		{
@@ -332,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(51)] 
 		[RED("optionsListInitialized")] 
 		public CBool OptionsListInitialized
 		{
@@ -340,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(52)] 
 		[RED("introPlayed")] 
 		public CBool IntroPlayed
 		{
@@ -348,7 +380,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(53)] 
 		[RED("navigationControllers")] 
 		public CArray<CWeakHandle<inkDiscreteNavigationController>> NavigationControllers
 		{
@@ -356,7 +388,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<inkDiscreteNavigationController>>>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(54)] 
+		[RED("presetsNavigationControllers")] 
+		public CArray<CWeakHandle<inkDiscreteNavigationController>> PresetsNavigationControllers
+		{
+			get => GetPropertyValue<CArray<CWeakHandle<inkDiscreteNavigationController>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<inkDiscreteNavigationController>>>(value);
+		}
+
+		[Ordinal(55)] 
 		[RED("menuListController")] 
 		public CWeakHandle<inkListController> MenuListController
 		{
@@ -364,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkListController>>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(56)] 
 		[RED("cachedCursor")] 
 		public CWeakHandle<inkWidget> CachedCursor
 		{
@@ -372,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(57)] 
 		[RED("updatingFinalizedState")] 
 		public CBool UpdatingFinalizedState
 		{
@@ -380,7 +420,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(58)] 
 		[RED("editMode")] 
 		public CEnum<gameuiCharacterCustomizationEditTag> EditMode
 		{
@@ -388,15 +428,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameuiCharacterCustomizationEditTag>>(value);
 		}
 
-		[Ordinal(54)] 
-		[RED("randomizing")] 
-		public CBool Randomizing
+		[Ordinal(59)] 
+		[RED("busySwitchingAppearance")] 
+		public CEnum<BusySwitchingReason> BusySwitchingAppearance
 		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
+			get => GetPropertyValue<CEnum<BusySwitchingReason>>();
+			set => SetPropertyValue<CEnum<BusySwitchingReason>>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(60)] 
 		[RED("scrollController")] 
 		public CWeakHandle<inkScrollController> ScrollController
 		{
@@ -404,7 +444,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkScrollController>>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(61)] 
 		[RED("sliderController")] 
 		public CWeakHandle<inkSliderController> SliderController
 		{
@@ -412,7 +452,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkSliderController>>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(62)] 
 		[RED("inputDisabled")] 
 		public CBool InputDisabled
 		{
@@ -420,7 +460,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(63)] 
+		[RED("introComplete")] 
+		public CBool IntroComplete
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(64)] 
 		[RED("isPresetHoveredOver")] 
 		public CBool IsPresetHoveredOver
 		{
@@ -428,11 +476,52 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(65)] 
+		[RED("randomizationSettingsNavController")] 
+		public CWeakHandle<inkDiscreteNavigationController> RandomizationSettingsNavController
+		{
+			get => GetPropertyValue<CWeakHandle<inkDiscreteNavigationController>>();
+			set => SetPropertyValue<CWeakHandle<inkDiscreteNavigationController>>(value);
+		}
+
+		[Ordinal(66)] 
+		[RED("randomizationNavController")] 
+		public CWeakHandle<inkDiscreteNavigationController> RandomizationNavController
+		{
+			get => GetPropertyValue<CWeakHandle<inkDiscreteNavigationController>>();
+			set => SetPropertyValue<CWeakHandle<inkDiscreteNavigationController>>(value);
+		}
+
+		[Ordinal(67)] 
+		[RED("maxColorPickerHeight")] 
+		public CFloat MaxColorPickerHeight
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(68)] 
+		[RED("minColorPickerHeight")] 
+		public CFloat MinColorPickerHeight
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(69)] 
+		[RED("colorPickerHeightPerRow")] 
+		public CFloat ColorPickerHeightPerRow
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public characterCreationBodyMorphMenu()
 		{
 			DefaultPreviewSlot = "UI_Skin";
 			OptionsList = new inkCompoundWidgetReference();
 			ColorPicker = new inkWidgetReference();
+			ColorPickerContentWrapper = new inkWidgetReference();
 			ColorPickerBG = new inkWidgetReference();
 			ColorPickerClose = new inkWidgetReference();
 			ScrollWidget = new inkWidgetReference();
@@ -456,16 +545,22 @@ namespace WolvenKit.RED4.Types
 			Preset2 = new inkWidgetReference();
 			Preset3 = new inkWidgetReference();
 			Randomize = new inkWidgetReference();
+			RandomizeBg = new inkImageWidgetReference();
+			RandomizationSettingsButton = new inkWidgetReference();
+			RandomizationSettingsWidget = new inkWidgetReference();
+			RandomizationSettingsButtonBg = new inkImageWidgetReference();
 			Preset1Thumbnail = new inkImageWidgetReference();
 			Preset2Thumbnail = new inkImageWidgetReference();
 			Preset3Thumbnail = new inkImageWidgetReference();
-			RandomizThumbnail = new inkImageWidgetReference();
 			Preset1Bg = new inkImageWidgetReference();
 			Preset2Bg = new inkImageWidgetReference();
 			Preset3Bg = new inkImageWidgetReference();
-			RandomizBg = new inkImageWidgetReference();
 			NavigationButtons = new inkWidgetReference();
 			NavigationControllers = new();
+			PresetsNavigationControllers = new();
+			MaxColorPickerHeight = 1400.000000F;
+			MinColorPickerHeight = 200.000000F;
+			ColorPickerHeightPerRow = 200.000000F;
 
 			PostConstruct();
 		}

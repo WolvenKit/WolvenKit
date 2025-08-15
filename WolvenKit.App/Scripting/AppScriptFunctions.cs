@@ -21,6 +21,9 @@ using WolvenKit.Common.Conversion;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Common.Services;
+using WolvenKit.Core.Exceptions;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.Archive;
@@ -39,11 +42,11 @@ namespace WolvenKit.App.Scripting;
 public class AppScriptFunctions : ScriptFunctions
 {
     private readonly IProjectManager _projectManager;
-    private readonly IWatcherService _watcherService;
     private readonly IModTools _modTools;
     private readonly ImportExportHelper _importExportHelper;
     private readonly IGameControllerFactory _gameController;
     private readonly GeometryCacheService _geometryCacheService;
+    private readonly ISettingsManager _settingsManager;
 
     public AppViewModel? AppViewModel;
 
@@ -52,68 +55,63 @@ public class AppScriptFunctions : ScriptFunctions
         IProjectManager projectManager,
         IArchiveManager archiveManager,
         Red4ParserService parserService,
-        IWatcherService watcherService,
         IModTools modTools,
         ImportExportHelper importExportHelper,
         IGameControllerFactory gameController,
-        GeometryCacheService geometryCacheService)
+        GeometryCacheService geometryCacheService,
+        ISettingsManager settingsManager)
         : base(loggerService, archiveManager, parserService)
     {
         _projectManager = projectManager;
-        _watcherService = watcherService;
         _modTools = modTools;
         _importExportHelper = importExportHelper;
         _gameController = gameController;
         _geometryCacheService = geometryCacheService;
+        _settingsManager = settingsManager;
+        
     }
 
     /// <summary>
     /// Turn on/off updates to the project tree, useful for when making lots of changes to the project structure.
     /// </summary>
     /// <param name="suspend">bool for if updates are suspended</param>
+    [Obsolete]
     public void SuspendFileWatcher(bool suspend)
     {
-        if (_watcherService != null && _watcherService.IsSuspended != suspend)
-        {
-            _watcherService.IsSuspended = suspend;
-        }
+
     }
 
     /// <summary>
-    /// Add the specified cr2w file to the project from the game archives.
+    /// Add the specified <see cref="CR2WFile"/> or <see cref="IGameFile"/> file to the project.
     /// </summary>
     /// <param name="path">The file to write to</param>
-    /// <param name="cr2w">File to be saved</param>
-    public virtual void SaveToProject(string path, CR2WFile cr2w)
+    /// <param name="file"><see cref="CR2WFile"/> or <see cref="IGameFile"/> to be saved</param>
+    /// <exception cref="NotSupportedException">Unsupported type of file</exception>
+    public virtual void SaveToProject(string path, object file)
     {
         if (_projectManager.ActiveProject is null)
         {
             return;
         }
-        SaveAs(Path.Combine(_projectManager.ActiveProject.ModDirectory, path), s =>
-        {
-            using FileStream fs = new(s, FileMode.Create);
-            using var writer = new CR2WWriter(fs) { LoggerService = _loggerService };
-            writer.WriteFile(cr2w);
-        });
-    }
 
-    /// <summary>
-    /// Add the specified gameFile file to the project from the game archives.
-    /// </summary>
-    /// <param name="path">The file to write to</param>
-    /// <param name="gameFile">File to be saved</param>
-    public virtual void SaveToProject(string path, IGameFile gameFile)
-    {
-        if (_projectManager.ActiveProject is null)
+        Action<string> callback = file switch
         {
-            return;
-        }
-        SaveAs(Path.Combine(_projectManager.ActiveProject.ModDirectory, path), s =>
-        {
-            using FileStream fs = new(s, FileMode.Create);
-            gameFile.Extract(fs);
-        });
+            CR2WFile cr2w => s =>
+            {
+                using FileStream fs = new(s, FileMode.Create);
+                using var writer = new CR2WWriter(fs) { LoggerService = _loggerService };
+                writer.WriteFile(cr2w);
+            },
+            IGameFile gameFile => s =>
+            {
+                using FileStream fs = new(s, FileMode.Create);
+                gameFile.Extract(fs);
+            },
+            null => throw new ArgumentNullException(nameof(file)),
+            _ => throw new NotSupportedException($"The file type \"{file.GetType()}\" is not supported for SaveToProject")
+        };
+
+        SaveAs(Path.Combine(_projectManager.ActiveProject.ModDirectory, path), callback);
     }
 
     /// <summary>
@@ -164,7 +162,7 @@ public class AppScriptFunctions : ScriptFunctions
         catch (Exception ex)
         {
             File.Delete(diskPathInfo.FullName);
-            _loggerService.Error(ex);
+            _loggerService.Error(ex.Message);
         }
     }
 
@@ -213,7 +211,7 @@ public class AppScriptFunctions : ScriptFunctions
             using var ms = new MemoryStream();
             gameFile.Extract(ms);
             ms.Position = 0;
-            
+
             using var cr = new CR2WReader(ms);
 
             if (cr.ReadFile(out var cr2wFile) != EFileReadErrorCodes.NoError)
@@ -300,29 +298,34 @@ public class AppScriptFunctions : ScriptFunctions
             return result;
         }
 
-        string baseFolder;
+        if (GetBaseFolder(folderType) is string baseFolder)
+        {
+            result.AddRange(Directory.GetFiles(baseFolder, "*.*", SearchOption.AllDirectories)
+                .Select(file => Path.GetRelativePath(baseFolder, file)));
+        }
+
+        return result;
+    }
+
+    private string? GetBaseFolder(string folderType)
+    {
+        if (_projectManager.ActiveProject is null)
+        {
+            throw new WolvenKitException(0x4003, "No project loaded");
+        }
 
         switch (folderType)
         {
             case "archive":
-                baseFolder = _projectManager.ActiveProject.ModDirectory;
-                break;
-
+                return _projectManager.ActiveProject.ModDirectory;
             case "raw":
-                baseFolder = _projectManager.ActiveProject.RawDirectory;
-                break;
-
+                return _projectManager.ActiveProject.RawDirectory;
+            case "resources":
+                return _projectManager.ActiveProject.ResourcesDirectory;
             default:
                 _loggerService.Error($"Unsupported folder type \"{folderType}\"");
-                return result;
+                return null;
         }
-
-        foreach (var file in Directory.GetFiles(baseFolder, "*.*", SearchOption.AllDirectories))
-        {
-            result.Add(Path.GetRelativePath(baseFolder, file));
-        }
-
-        return result;
     }
 
     private T ParseExportSettings<T>(ScriptObject scriptSettingsObject) where T : ExportArgs, new()
@@ -352,8 +355,7 @@ public class AppScriptFunctions : ScriptFunctions
             {
                 if (scriptSettingsObject[name] is not IList lstValue)
                 {
-                    _loggerService.Error($"Setting \"{name}\" needs to be a array of strings");
-                    throw new NotSupportedException();
+                    throw new WolvenKitException(0x2000, $"Setting \"{name}\" needs to be a array of strings");
                 }
 
                 var lst = new List<FileEntry>();
@@ -362,8 +364,7 @@ public class AppScriptFunctions : ScriptFunctions
                 {
                     if (entry is not string entryStr)
                     {
-                        _loggerService.Error($"Setting \"{name}\" needs to be a array of strings");
-                        throw new NotSupportedException();
+                        throw new WolvenKitException(0x2000, $"Setting \"{name}\" needs to be a array of strings");
                     }
 
                     ResourcePath resourcePath;
@@ -376,7 +377,7 @@ public class AppScriptFunctions : ScriptFunctions
                         resourcePath = entryStr;
                     }
 
-                    var fileEntry = _archiveManager.Archives.Items
+                    var fileEntry = _archiveManager.GetGameArchives()
                         .SelectMany(x => x.Files.Values)
                         .Cast<FileEntry>()
                         .FirstOrDefault(x => x.NameHash64 == resourcePath);
@@ -460,6 +461,11 @@ public class AppScriptFunctions : ScriptFunctions
 
         return result;
     }
+
+    /// <summary>
+    /// Clears the lookup for exported depot files.
+    /// </summary>
+    public void ClearExportFileLookup() => _importExportHelper.ClearFileLookup();
 
     /// <summary>
     /// Exports a list of files as you would with the export tool.
@@ -579,7 +585,7 @@ public class AppScriptFunctions : ScriptFunctions
 
         if (_archiveManager.ProjectArchive is not FileSystemArchive projectArchive)
         {
-            throw new Exception();
+            throw new WolvenKitException(0x4003, "No project loaded");
         }
 
         foreach (var (fileHash, file) in projectArchive.Files)
@@ -696,6 +702,138 @@ public class AppScriptFunctions : ScriptFunctions
 
         return false;
     }
+
+    /// <summary>
+    /// Check if file exists in the project Raw folder
+    /// </summary>
+    /// <param name="filepath">relative filepath to be checked</param>
+    /// <returns></returns>
+    public virtual bool FileExistsInRaw(string filepath)
+    {
+        if (_projectManager.ActiveProject is not { } proj)
+        {
+            throw new WolvenKitException(0x4003, "No project loaded");
+        }
+
+        var file = new FileInfo(Path.Combine(proj.RawDirectory, filepath));
+        return file.Exists;
+    }
+
+    /// <summary>
+    /// Deletes a file from the project, if it exists.
+    /// </summary>
+    /// <param name="filepath">relative filepath to be deleted</param>
+    /// <param name="folderType">project subfolder type (archive|raw|resources)</param>
+    /// <returns>true if the file was deleted</returns>
+    public virtual bool DeleteFile(string filepath, string folderType)
+    {
+        if (_projectManager.ActiveProject is not { } proj)
+        {
+            throw new WolvenKitException(0x4003, "No project loaded");
+        }
+
+        if (GetBaseFolder(folderType) is not string baseFolder || !Directory.Exists(baseFolder))
+        {
+            return false;
+        }
+
+        var absoluteFilePath = Path.GetFullPath(Path.Combine(baseFolder, filepath));
+        if (!absoluteFilePath.StartsWith(proj.ModDirectory) || !File.Exists(absoluteFilePath))
+        {
+            return false;
+        }
+        
+        File.Delete(absoluteFilePath);
+        return !File.Exists(baseFolder);
+    }
+
+    #region TweakDB
+
+    /// <summary>
+    /// Loads all records as TweakDBID paths.
+    /// </summary>
+    /// <returns></returns>
+    public virtual IEnumerable GetRecords() => ConvertTDBToPath(TweakDBService.GetRecords());
+
+    /// <summary>
+    /// Loads all flats as TweakDBID paths.
+    /// </summary>
+    /// <returns></returns>
+    public virtual IEnumerable GetFlats() => ConvertTDBToPath(TweakDBService.GetFlats());
+
+    /// <summary>
+    /// Loads all queries as TweakDBID paths.
+    /// </summary>
+    /// <returns></returns>
+    public virtual IEnumerable GetQueries() => ConvertTDBToPath(TweakDBService.GetQueries());
+
+    /// <summary>
+    /// Loads all group tags as TweakDBID paths.
+    /// </summary>
+    /// <returns></returns>
+    public virtual IEnumerable GetGroupTags() => ConvertTDBToPath(TweakDBService.GetGroupTags());
+
+    /// <summary>
+    /// Loads a record by its TweakDBID path.
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns>record as a JSON string, null when not found</returns>
+    public virtual string? GetRecord(string path) => ConvertTDBToJson(TweakDBService.GetRecord(path));
+
+    /// <summary>
+    /// Loads a flat by its TweakDBID path.
+    /// </summary>
+    /// <returns>flat as a JSON string, null when not found</returns>
+    public virtual string? GetFlat(string path) => ConvertTDBToJson(TweakDBService.GetFlat(path));
+
+    /// <summary>
+    /// Loads flats of a query by its TweakDBID path.
+    /// </summary>
+    /// <returns>a list of flats as TweakDBID paths, empty when not found</returns>
+    public virtual IEnumerable GetQuery(string path) => ConvertTDBToPath(TweakDBService.GetQuery(path));
+
+    /// <summary>
+    /// Loads a group tag by its TweakDBID path.
+    /// </summary>
+    /// <returns>flat as a JSON string, null when not found</returns>
+    public virtual byte? GetGroupTag(string path) => TweakDBService.GetGroupTag(path);
+
+    /// <summary>
+    /// Whether TweakDBID path exists as a flat or a record?
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    public virtual bool HasTDBID(string path) => TweakDBService.Exists(path);
+
+    /// <summary>
+    /// Tries to get TweakDBID path from its hash.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns>path of the hash, null when undefined</returns>
+    public virtual string? GetTDBIDPath(ulong key) => TweakDBService.GetStringFromKey(key);
+
+    private List<string> ConvertTDBToPath(List<TweakDBID>? ids)
+    {
+        if (ids == null)
+        {
+            return [];
+        }
+        return ids.Select(id => id.ResolvedText)
+                  .NotNull()
+                  .Cast<string>()
+                  .ToList();
+    }
+
+    private string? ConvertTDBToJson(object? tdb)
+    {
+        if (tdb == null)
+        {
+            return null;
+        }
+        return RedJsonSerializer.Serialize(tdb);
+    }
+
+    #endregion
 
     /// <summary>
     /// Displays a message box
@@ -830,14 +968,12 @@ public class AppScriptFunctions : ScriptFunctions
     {
         if (!ulong.TryParse(sectorHashStr, out var sectorHash))
         {
-            _loggerService.Error($"\"{nameof(sectorHashStr)}\" needs to be a ulong");
-            throw new Exception();
+            throw new WolvenKitException(0x2000, "No project loaded");
         }
 
         if (!ulong.TryParse(entryHashStr, out var entryHash))
         {
-            _loggerService.Error($"\"{nameof(entryHashStr)}\" needs to be a ulong");
-            throw new Exception();
+            throw new WolvenKitException(0x2000, "No project loaded");
         }
 
         var cacheEntry = _geometryCacheService.GetEntry(sectorHash, entryHash);
@@ -848,5 +984,98 @@ public class AppScriptFunctions : ScriptFunctions
         }
 
         return JsonSerializer.Serialize((object)cacheEntry, new JsonSerializerOptions { IncludeFields = true, WriteIndented = true });
+    }
+
+    /// <summary>
+    /// Creates a new instance of the given class, and returns it converted to a JSON string
+    /// </summary>
+    /// <param name="className">Name of the class</param>
+    /// <returns></returns>
+    public virtual object? CreateInstanceAsJSON(string className)
+    {
+        if (string.IsNullOrEmpty(className) == false)
+        {
+            var data = RedTypeManager.CreateRedType(className);
+            return RedJsonSerializer.Serialize(data);
+        }
+        else
+        {
+            throw new WolvenKitException(0x2000, "className cannot be null or empty");
+        }
+    }
+
+    /// <summary>
+    /// Returns the hashcode for a given string
+    /// </summary>
+    /// <param name="data">String to be hashed</param>
+    /// <param name="method">Hash method to use. Can be "fnv1a64" or "default" (Uses the String objects built in hash function)</param>
+    /// <returns></returns>
+    public virtual ulong? HashString(string data, string method)
+    {
+        if (string.IsNullOrEmpty(data) == false)
+        {
+            switch (method)
+            {
+                case "fnv1a64":
+                    return FNV1A64HashAlgorithm.HashString(data);
+                default:
+                    return (ulong)data.GetHashCode();
+            }
+        }
+        else
+        {
+            throw new WolvenKitException(0x2000, "String to be hashed cannot be null or empty");
+        }
+    }
+
+    /// <summary>
+    /// Pauses the execution of the script for the specified amount of milliseconds.
+    /// </summary>
+    /// <param name="milliseconds">The number of milliseconds to sleep.</param>
+    public virtual void Sleep(int milliseconds)
+    {
+        if (milliseconds < 0)
+        {
+            throw new WolvenKitException(0x2000, "Milliseconds cannot be negative");
+        }
+        Task.Run(async () => await Task.Delay(milliseconds)).Wait();
+    }
+
+    /// <summary>
+    /// Returns the current wolvenkit version
+    /// </summary>
+    /// <retruns>string</retruns>
+    public virtual string ProgramVersion()
+    {
+        return _settingsManager.GetVersionNumber();
+    }
+
+    /// <summary>
+    /// Shows the settings dialog for the supplied data
+    /// </summary>
+    /// <param name="data">A JavaScript object containing data</param>
+    /// <returns>Returns true when the user changed the settings, otherwise it returns false</returns>
+    public virtual bool ShowSettings(ScriptObject data)
+    {
+        var dict = ScriptSettingsDictionary.FromScriptObject(data);
+        if (dict == null)
+        {
+            _loggerService.Error("Failed to process settings");
+            return false;
+        }
+
+        var success = false;
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            success = Interactions.ShowScriptSettingsView(dict);
+        });
+
+        if (!success)
+        {
+            return false;
+        }
+
+        dict.ToScriptObject(data);
+        return true;
     }
 }

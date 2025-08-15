@@ -2,8 +2,6 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using DynamicData.Kernel;
-using WolvenKit.App.Models;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
@@ -143,7 +141,7 @@ public class ImportableItemViewModel : ImportExportItemViewModel
 
         // first get the texture group from the vanilla file
 
-        var relPath = Path.ChangeExtension(FileModel.GetRelativeName(fileName, activeProject), "xbm");
+        var relPath = Path.ChangeExtension(activeProject.GetRelativePath(fileName), "xbm");
         var hash = FNV1A64HashAlgorithm.HashString(relPath);
         var file = archiveManager.Lookup(hash);
         if (!file.HasValue)
@@ -161,16 +159,24 @@ public class ImportableItemViewModel : ImportExportItemViewModel
             return false;
         }
 
-        args = new XbmImportArgs()
-        {
-            TextureGroup = setup.Group,
-            IsGamma = setup.IsGamma,
-            RawFormat = setup.RawFormat,
-            Compression = setup.Compression,
-            GenerateMipMaps = blob.Header.TextureInfo.MipCount > 1,
-            IsStreamable = setup.IsStreamable,
-        };
+        args = new XbmImportArgs(setup, blob.Header.TextureInfo.MipCount > 1);
+        args.PremultiplyAlpha = CheckForAlphaMask(fileName);
         return true;
 
+    }
+
+    private static bool CheckForAlphaMask(string fileName)
+    {
+        try
+        {
+            using var image = System.Drawing.Image.FromFile(fileName);
+            return image.PixelFormat is System.Drawing.Imaging.PixelFormat.Format32bppArgb
+                or System.Drawing.Imaging.PixelFormat.Format32bppPArgb
+                or System.Drawing.Imaging.PixelFormat.Format64bppArgb or System.Drawing.Imaging.PixelFormat.Format64bppPArgb;
+        }
+        catch
+        {
+            return false;
+        }
     }
 }

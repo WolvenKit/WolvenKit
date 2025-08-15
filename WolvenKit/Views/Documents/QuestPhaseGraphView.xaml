@@ -1,0 +1,274 @@
+<UserControl x:Class="WolvenKit.Views.Documents.QuestPhaseGraphView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:documents="clr-namespace:WolvenKit.App.ViewModels.Documents;assembly=WolvenKit.App"
+             xmlns:local="clr-namespace:WolvenKit.Views.Documents"
+             xmlns:graphEditor="clr-namespace:WolvenKit.Views.GraphEditor"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:shell="clr-namespace:WolvenKit.App.ViewModels.Shell;assembly=WolvenKit.App"
+             xmlns:tools="clr-namespace:WolvenKit.Views.Tools"
+             xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
+             xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+             xmlns:nodify="https://miroiu.github.io/nodify"
+             xmlns:questNodes="clr-namespace:WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;assembly=WolvenKit.App"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance documents:QuestPhaseGraphViewModel, IsDesignTimeCreatable=False}"
+             d:DesignHeight="800" d:DesignWidth="1200"
+             PreviewKeyDown="QuestPhaseGraphView_OnPreviewKeyDown">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Merge Scene Editor specific converters (reused for quest phase) -->
+                <ResourceDictionary Source="/WolvenKit;component/Resources/Converters/SceneEditorConverters.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+        <Style x:Key="SpacedWolvenKitTabControl" 
+               BasedOn="{StaticResource WolvenKitTabControl}"
+               TargetType="{x:Type syncfusion:TabControlExt}">
+            <Setter Property="TabItemSelectedBackground" Value="{StaticResource WolvenKitRedShadow}" />
+            <Setter Property="TabItemHoverBackground" Value="{StaticResource WolvenKitRed}" />
+            <Setter Property="TabItemSelectedBorderBrush" Value="{StaticResource WolvenKitRedShadow}" />
+            <Setter Property="TabItemHoverBorderBrush" Value="{StaticResource WolvenKitRed}" />
+        </Style>
+        
+        <Style x:Key="SpacedTabItemStyle" 
+               TargetType="{x:Type syncfusion:TabItemExt}"
+               BasedOn="{StaticResource SyncfusionTabItemExtStyle}">
+            <Setter Property="Padding" Value="12,8,12,8"/>
+            <Setter Property="Margin" Value="0,0,2,0"/>
+        </Style>
+        
+        <!-- Quest Connection Template with Variable Thickness -->
+        <DataTemplate x:Key="QuestConnectionTemplate" DataType="{x:Type questNodes:QuestConnectionViewModel}">
+            <nodify:Connection
+                Source="{Binding Source.Anchor}"
+                SourceOffset="7,0"
+                SourceOffsetMode="Static"
+                Target="{Binding Target.Anchor}"
+                TargetOffset="7,0"
+                TargetOffsetMode="Static"
+                IsSelectable="True"
+                IsSelected="{Binding IsSelected}"
+                MouseRightButtonDown="Connection_OnRightClick">
+                <nodify:Connection.Style>
+                    <Style TargetType="{x:Type nodify:BaseConnection}">
+                        <Setter Property="Cursor" Value="Hand" />
+                        <Setter Property="Stroke" Value="#FF7F7F7F" />
+                        <Setter Property="Opacity" Value="1.0" />
+                        <Setter Property="StrokeThickness" 
+                                Value="{Binding PathType, Converter={StaticResource PathTypeToThicknessConverter}}" />
+
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Stroke" Value="{StaticResource WolvenKitYellow}" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Stroke" Value="{StaticResource WolvenKitGreen}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </nodify:Connection.Style>
+            </nodify:Connection>
+        </DataTemplate>
+        
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <!-- Toolbar -->
+        <Border Grid.Row="0" Background="{StaticResource ContentBackground}" BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,0,0,1" Padding="8,4">
+            <StackPanel Orientation="Horizontal">
+                <iconPacks:PackIconMaterial Kind="InformationOutline" VerticalAlignment="Center" Margin="0,0,8,0" Width="12" Height="12"/>
+                <TextBlock Text="{Binding FileName}" 
+                           VerticalAlignment="Center" 
+                           Foreground="White" 
+                           FontSize="11" 
+                           FontWeight="Medium"
+                           Margin="0,0,16,0"/>
+                <TextBlock Text="Total Nodes:" 
+                           VerticalAlignment="Center" 
+                           Foreground="Gray" 
+                           FontSize="10" 
+                           Margin="0,0,4,0"/>
+                <TextBlock Text="{Binding TotalNodes}" 
+                           VerticalAlignment="Center" 
+                           Foreground="White" 
+                           FontSize="10" 
+                           Margin="0,0,16,0"/>
+                <TextBlock Text="Phase Nodes:" 
+                           VerticalAlignment="Center" 
+                           Foreground="Gray" 
+                           FontSize="10" 
+                           Margin="0,0,4,0"/>
+                <TextBlock Text="{Binding TotalPhaseNodes}" 
+                           VerticalAlignment="Center" 
+                           Foreground="White" 
+                           FontSize="10" 
+                           Margin="0,0,16,0"/>
+                <TextBlock Text="Phase Prefabs:" 
+                           VerticalAlignment="Center" 
+                           Foreground="Gray" 
+                           FontSize="10" 
+                           Margin="0,0,4,0"/>
+                <TextBlock Text="{Binding TotalPhasePrefabs}" 
+                           VerticalAlignment="Center" 
+                           Foreground="White" 
+                           FontSize="10" 
+                           Margin="0,0,16,0"/>
+                <TextBlock Text="Inplace Phases:" 
+                           VerticalAlignment="Center" 
+                           Foreground="Gray" 
+                           FontSize="10" 
+                           Margin="0,0,4,0"/>
+                <TextBlock Text="{Binding TotalInplacePhases}" 
+                           VerticalAlignment="Center" 
+                           Foreground="White" 
+                           FontSize="10" />
+            </StackPanel>
+        </Border>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Left Panel: Curated Tab Control -->
+            <syncfusion:TabControlExt Grid.Column="0" 
+                                      Style="{StaticResource SpacedWolvenKitTabControl}"
+                                      ItemContainerStyle="{StaticResource SpacedTabItemStyle}"
+                                      ItemsSource="{Binding Tabs}"
+                                      SelectedItem="{Binding SelectedTab, Mode=TwoWay}"
+                                      EnableLabelEdit="False">
+                <syncfusion:TabControlExt.ItemTemplate>
+                    <DataTemplate DataType="{x:Type documents:QuestPhaseTabDefinition}">
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconMaterial Kind="{Binding Icon}" VerticalAlignment="Center" Margin="0,0,8,0" />
+                            <TextBlock Text="{Binding Header}" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </DataTemplate>
+                </syncfusion:TabControlExt.ItemTemplate>
+                <syncfusion:TabControlExt.ContentTemplate>
+                    <DataTemplate DataType="{x:Type documents:QuestPhaseTabDefinition}">
+                        <Grid>
+                            <!-- Traditional tree view layout for all tabs except Node Properties -->
+                            <Grid>
+                                <Grid.Style>
+                                    <Style TargetType="Grid">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                        <Style.Triggers>
+                                            <!-- Hide traditional view for Node Properties tab -->
+                                            <DataTrigger Binding="{Binding Header}" Value="Node Properties">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Style>
+                                
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="3*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="2*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!-- RedTreeView bound directly to the filtered ICollectionView -->
+                                <tools:RedTreeView Grid.Column="0" 
+                                                   ItemsSource="{Binding DataContext.SelectedTabContent, RelativeSource={RelativeSource AncestorType={x:Type local:QuestPhaseGraphView}}}"
+                                                   SelectedItem="{Binding DataContext.RDTViewModel.SelectedChunk, RelativeSource={RelativeSource AncestorType={x:Type local:QuestPhaseGraphView}}, Mode=TwoWay}"
+                                                   SelectedItems="{Binding DataContext.RDTViewModel.SelectedChunks, RelativeSource={RelativeSource AncestorType={x:Type local:QuestPhaseGraphView}}, Mode=TwoWay}"/>
+                                
+                                <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch" Background="#FF404040"/>
+                                
+                                <editors:RedTypeView Grid.Column="2" DataContext="{Binding DataContext.RDTViewModel.SelectedChunk, RelativeSource={RelativeSource AncestorType={x:Type local:QuestPhaseGraphView}}}"/>
+                            </Grid>
+                            
+                            <!-- Node Properties tab shows our custom selection-driven view -->
+                            <local:NodePropertiesView>
+                                <local:NodePropertiesView.Style>
+                                    <Style TargetType="local:NodePropertiesView">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Header}" Value="Node Properties">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </local:NodePropertiesView.Style>
+                            </local:NodePropertiesView>
+                        </Grid>
+                    </DataTemplate>
+                </syncfusion:TabControlExt.ContentTemplate>
+            </syncfusion:TabControlExt>
+
+            <!-- Grid Splitter -->
+            <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch" Background="#FF404040"/>
+
+            <!-- Right Panel: Graph Editor -->
+            <Grid Grid.Column="2">
+                <graphEditor:GraphEditorView Source="{Binding MainGraph}" x:Name="QuestPhaseGraphEditor" NodeDoubleClick="Editor_OnNodeDoubleClick" />
+                
+                <!-- Breadcrumb Navigation (Floating) -->
+                <Border HorizontalAlignment="Left" 
+                        VerticalAlignment="Top" 
+                        Margin="12,12,0,0"
+                        Background="#DD2A2A2A" 
+                        BorderBrush="#FF404040" 
+                        BorderThickness="1" 
+                        CornerRadius="4"
+                        Padding="8,4">
+                    <StackPanel x:Name="Breadcrumb" Orientation="Horizontal" VerticalAlignment="Center">
+                        <!-- Breadcrumb elements will be dynamically added here -->
+                    </StackPanel>
+                </Border>
+                
+                <!-- Loading Overlay -->
+                <Border Background="#AA000000" 
+                        Visibility="{Binding IsGraphLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <iconPacks:PackIconMaterial Kind="GraphOutline" 
+                                                    Foreground="{StaticResource WolvenKitYellow}"
+                                                    Width="48" 
+                                                    Height="48" 
+                                                    HorizontalAlignment="Center"
+                                                    Margin="0,0,0,16">
+                            <iconPacks:PackIconMaterial.RenderTransform>
+                                <RotateTransform x:Name="LoadingRotation" />
+                            </iconPacks:PackIconMaterial.RenderTransform>
+                            <iconPacks:PackIconMaterial.Triggers>
+                                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                    <BeginStoryboard>
+                                        <Storyboard RepeatBehavior="Forever">
+                                            <DoubleAnimation 
+                                                Storyboard.TargetProperty="RenderTransform.Angle"
+                                                From="0" To="360" Duration="0:0:2" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </iconPacks:PackIconMaterial.Triggers>
+                        </iconPacks:PackIconMaterial>
+                        
+                        <TextBlock Text="Loading quest phase graph..." 
+                                   Foreground="White" 
+                                   FontSize="16" 
+                                   FontWeight="Medium"
+                                   HorizontalAlignment="Center"/>
+                        
+                        <TextBlock Text="Building nodes and connections" 
+                                   Foreground="Gray" 
+                                   FontSize="12" 
+                                   HorizontalAlignment="Center"
+                                   Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl> 

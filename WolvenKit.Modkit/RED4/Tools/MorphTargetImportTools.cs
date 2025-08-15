@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyModel;
 using SharpGLTF.Schema2;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
@@ -137,7 +138,16 @@ namespace WolvenKit.Modkit.RED4
                 };
             }
 
-            MeshTools.UpdateMeshJoints(ref rawMeshesSorted, newRig, oldRig);
+            try
+            {
+                MeshTools.UpdateMeshJoints(ref rawMeshesSorted, newRig, oldRig);
+            }
+            catch (WolvenKitException e)
+            {
+                throw new WolvenKitException(e.ErrorCode,
+                    $"You're trying to import bones into a morphtarget that doesn't have them. Wolvenkit can't create bones — please remove them in Blender, or import into a different file: {e.Message}");
+            }
+            
 
             // Finish up creating the baseBlob (not the base mesh!)
 
@@ -260,8 +270,8 @@ namespace WolvenKit.Modkit.RED4
 
                         // GLTF's RHCS Y up -> Red4 LHCS Z up
                         var zUpPositionDelta = new TargetVec3(positionDelta.X, -positionDelta.Z, positionDelta.Y);
-                        var zUpNormalDelta = new Vec4(normalDelta.X, -normalDelta.Z, normalDelta.Y, 0f);
-                        var zUpTangentDelta = new Vec4(tangentDelta.X, -tangentDelta.Z, tangentDelta.Y, 0f);
+                        var zUpNormalDelta = new Vec3(normalDelta.X, -normalDelta.Z, normalDelta.Y);
+                        var zUpTangentDelta = new Vec3(tangentDelta.X, -tangentDelta.Z, tangentDelta.Y);
 
                         // Quant already converted earlier
                         var zUpQuantizedPositionDelta =
@@ -272,8 +282,8 @@ namespace WolvenKit.Modkit.RED4
 
                         // NB different encoding for position!
                         var positionAs10BitUnsignedInt = Converters.Vec3ToU32(zUpQuantizedPositionDelta, 1);
-                        var normalAs10BitShiftedInt = Converters.Vec4ToU32(zUpNormalDelta);
-                        var tangentAs10BitShiftedInt = Converters.Vec4ToU32(zUpTangentDelta);
+                        var normalAs10BitShiftedInt = Converters.Vec3ToU32(zUpNormalDelta);
+                        var tangentAs10BitShiftedInt = Converters.Vec3ToU32(zUpTangentDelta);
 
                         // 4 + 4 + 4 bytes per diff, no padding
                         diffsWriter.Write(positionAs10BitUnsignedInt);

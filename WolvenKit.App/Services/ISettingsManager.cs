@@ -1,10 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Media;
+using WolvenKit.App.Models;
+using System.Windows.Media.Imaging;
+using DynamicData.Kernel;
 
 namespace WolvenKit.App.Services;
-
 
 public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
 {
@@ -31,10 +36,20 @@ public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
     public string GetRED4GameLegacyModDir();
     public string GetRED4GameModDir();
 
-
     public static string GetAppData()
     {
         var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit");
+        if (!Directory.Exists(dir))
+        {
+            Directory.CreateDirectory(dir);
+        }
+
+        return dir;
+    }
+
+    public static string GetLogsDir()
+    {
+        var dir = Path.Combine(GetAppData(), "Logs");
         if (!Directory.Exists(dir))
         {
             Directory.CreateDirectory(dir);
@@ -120,15 +135,66 @@ public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
         return dir;
     }
 
+    public static string GetSaveDirectory() =>
+        Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+            "Saved Games", "CD Projekt Red", "Cyberpunk 2077");
 
+    public static List<SaveGame> GetSaveGames()
+    {
+        var saveDir = ISettingsManager.GetSaveDirectory();
+        if (!Directory.Exists(saveDir))
+        {
+            return [];
+        }
+
+        return Directory.GetDirectories(saveDir)
+            .Select(folder => new { Folder = folder, Save = Path.Combine(folder, "sav.dat") })
+            .Where(x => File.Exists(x.Save))
+            .Select(x => new SaveGame(
+                new DirectoryInfo(x.Folder).Name,
+                Path.Combine(x.Folder, "screenshot.png"),
+                x.Save,
+                new DirectoryInfo(x.Folder).LastWriteTime))
+            .OrderByDescending(x => x.LastModified)
+            .AsList();
+    }
+
+    public static string? GetLastSaveName()
+    {
+        var saveDir = ISettingsManager.GetSaveDirectory();
+        if (!Directory.Exists(saveDir))
+        {
+            return null;
+        }
+
+        var saveDirectoryNames = Directory.GetDirectories(saveDir)
+            .Select(folder => new { Folder = folder, Save = Path.Combine(folder, "sav.dat") })
+            .Where(x => File.Exists(x.Save))
+            .Select(x => new { DirName = new DirectoryInfo(x.Folder).Name, LastModified = new DirectoryInfo(x.Folder).LastWriteTime })
+            .OrderByDescending(x => x.LastModified)
+            .Select(x => x.DirName);
+
+        return saveDirectoryNames.FirstOrDefault();
+    }
     Color GetThemeAccent();
 
     void SetThemeAccent(Color color);
 
     string GetVersionNumber();
 
-    /// <summary>
-    /// For "simple" editor view: hides fields that the user shouldn't edit 
-    /// </summary>
-    bool IsNoobFilterDefaultEnabled();
+    string LastLaunchProfile { get; set; }
+
+    bool ShowRedmodInRibbon { get; set; }
+
+    bool UseValidatingEditor { get; set; }
+
+    bool ReopenLastProject { get; set; }
+
+    bool ReopenFiles { get; set; }
+    int NumFilesToReopen { get; set; }
+
+    bool ShowVerboseLogOutput { get; set; }
+
+    bool IsDiscordRPCEnabled { get; set; }
 }

@@ -35,7 +35,7 @@ public static class RedJsonSerializer
                     NumberHandlingResolver
                 }
             },
-            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+            Encoder = JavaScriptEncoder.Default,
             WriteIndented = true,
             MaxDepth = 2048,
             Converters =
@@ -76,7 +76,8 @@ public static class RedJsonSerializer
                 new RedFileDtoConverter(s_classResolver),
 
                 new ParseableBufferConverter(),
-                new CollisionShapeConverter()
+                new CollisionShapeConverter(),
+                new RazerChromaAnimationBufferConverter()
             }
         };
     }

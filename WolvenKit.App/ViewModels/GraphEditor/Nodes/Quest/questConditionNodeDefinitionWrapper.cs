@@ -1,4 +1,5 @@
-﻿using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
+﻿using WolvenKit.App.Extensions;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
@@ -7,7 +8,7 @@ public class questConditionNodeDefinitionWrapper : questDisableableNodeDefinitio
 {
     public questConditionNodeDefinitionWrapper(questConditionNodeDefinition questDisableableNodeDefinition) : base(questDisableableNodeDefinition)
     {
-        if (questDisableableNodeDefinition.Condition?.Chunk != null)
+        /*if (questDisableableNodeDefinition.Condition?.Chunk != null)
         {
             var (suffix, details) = QuestConditionHelper.GetDetails(questDisableableNodeDefinition.Condition.Chunk);
 
@@ -16,7 +17,9 @@ public class questConditionNodeDefinitionWrapper : questDisableableNodeDefinitio
             {
                 Details.Add(detail.Key, detail.Value);
             }
-        }
+        }*/
+
+        Details.AddRange(NodeProperties.GetPropertiesFor(questDisableableNodeDefinition));
     }
 
     internal override void CreateDefaultSockets()

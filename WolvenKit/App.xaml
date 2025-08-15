@@ -7,13 +7,12 @@
     xmlns:exporters="clr-namespace:WolvenKit.Views.Exporters"
     xmlns:exportvms="clr-namespace:WolvenKit.App.ViewModels.Exporters;assembly=WolvenKit.App"
     xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:importers="clr-namespace:WolvenKit.Views.Importers"
     xmlns:importvms="clr-namespace:WolvenKit.App.ViewModels.Importers;assembly=WolvenKit.App"
     xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:tools="clr-namespace:WolvenKit.Views.Tools"
     xmlns:toolvm="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App">
-
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -39,12 +38,6 @@
                         </Grid>
                     </DataTemplate>
 
-
-                    <!--<DataTemplate DataType="{x:Type toolvm:ImportExportViewModel}">
-                        <Grid>
-                            <tools:ImportExportView />
-                        </Grid>
-                    </DataTemplate>-->
                     <DataTemplate DataType="{x:Type importvms:ImportViewModel}">
                         <Grid>
                             <importers:ImportView />
@@ -75,11 +68,6 @@
                             <documents:RedDocumentView />
                         </Grid>
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type docvm:ScriptDocumentViewModel}">
-                        <Grid>
-                            <documents:ScriptDocumentView />
-                        </Grid>
-                    </DataTemplate>
                     <DataTemplate DataType="{x:Type docvm:WScriptDocumentViewModel}">
                         <Grid>
                             <documents:WScriptDocumentView />
@@ -93,45 +81,32 @@
 
                 </ResourceDictionary>
 
-                <!--  Global Styles  -->
+                <!-- Global Styles -->
                 <ResourceDictionary>
-                    <Style x:Key="SidePanelContainerBorderStyle" TargetType="Border">
-                        <Setter Property="Margin" Value="0,16,20,-106" />
-                        <Setter Property="Padding" Value="16,10,6,16" />
+                    <Style
+                        x:Key="SidePanelContainerBorderStyle"
+                        TargetType="Border">
                         <Setter Property="Background" Value="Transparent" />
                         <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Gray.SemiTransparent}" />
                         <Setter Property="BorderThickness" Value="1" />
                         <Setter Property="DockPanel.Dock" Value="Right" />
-                    </Style>
-
-                    <!--  Menu icon  -->
-                    <Style x:Key="ContextMenuIconStyleCodicons" TargetType="{x:Type iconPacks:PackIconCodicons}">
-                        <Setter Property="Width" Value="13" />
-                        <Setter Property="Height" Value="13" />
-                        <Setter Property="Padding" Value="0,0,0,0" />
-                        <Setter Property="HorizontalAlignment" Value="Center" />
-                        <Setter Property="VerticalAlignment" Value="Center" />
-                    </Style>
-
-                    <!--  Menu icon  -->
-                    <Style x:Key="ContextMenuIconStyleMaterial" TargetType="{x:Type iconPacks:PackIconMaterial}">
-                        <Setter Property="Width" Value="13" />
-                        <Setter Property="Height" Value="13" />
-                        <Setter Property="Padding" Value="0,0,0,0" />
-                        <Setter Property="HorizontalAlignment" Value="Center" />
-                        <Setter Property="VerticalAlignment" Value="Center" />
+                        <Setter Property="Margin" Value="0,16,20,-106" />
+                        <Setter Property="Padding" Value="16,10,6,16" />
                     </Style>
                 </ResourceDictionary>
 
-                <!--  Converters  -->
+                <!-- Converters -->
                 <ResourceDictionary>
-
                     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
                 </ResourceDictionary>
+                
+                <!-- Scene Editor converters - needed globally for cache service -->
+                <ResourceDictionary Source="Resources/Converters/SceneEditorConverters.xaml" />
 
-                <!--  Resource Dictionaries  -->
+                <!-- Resource Dictionaries -->
                 <ResourceDictionary Source="pack://application:,,,/WolvenKit;Component/Themes/App.Icons.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/WolvenKit;Component/Themes/App.Styles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/WolvenKit;Component/Themes/App.Sizes.xaml" />
 
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.Crimson.xaml" />
 
@@ -141,7 +116,7 @@
                 <ResourceDictionary Source="pack://application:,,,/AdonisUI;component/ColorSchemes/Dark.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml" />
 
-                <!--  Theme setting  -->
+                <!-- Theme setting -->
                 <hc:ThemeResources RequestedTheme="Dark" />
                 <hc:Theme />
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/WizardControl/WizardControl.xaml" />
@@ -170,19 +145,17 @@
 
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/CardView/CardView.xaml" />
 
-                <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml" />
-
                 <ResourceDictionary Source="pack://application:,,,/Resources/Styles/CustomHandyStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <Style
                 x:Key="MessageBoxPrimaryButtonStyle"
                 BasedOn="{StaticResource {x:Type Button}}"
-                TargetType="Button">
+                TargetType="{x:Type Button}">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Margin" Value="5,0" />
                 <Setter Property="MinWidth" Value="88" />
                 <Setter Property="Visibility" Value="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                <Setter Property="Margin" Value="5,0" />
-                <Setter Property="Background" Value="Transparent" />
             </Style>
 
             <DrawingBrush
@@ -208,7 +181,31 @@
 
             <SolidColorBrush x:Key="AccentColorBrush" Color="Black" />
 
-        </ResourceDictionary>
+            <ControlTemplate x:Key="ValidationErrorTemplate">
+                <StackPanel>
+                    <AdornedElementPlaceholder x:Name="textBox" />
+                    <TextBlock
+                        x:Name="ValidationText"
+                        MaxWidth="{Binding ActualWidth,
+                                           RelativeSource={RelativeSource TemplatedParent}}"
+                        Margin="150,0,60,0"
+                        Padding="4"
+                        Background="DarkRed"
+                        FontSize="12"
+                        Visibility="Visible"
+                        Text="{Binding ElementName=textBox,
+                                       Path=AdornedElement.(Validation.Errors)[0].ErrorContent}"
+                        TextAlignment="Center"
+                        TextWrapping="Wrap" />
+                </StackPanel>
+            </ControlTemplate>
 
+            <Style
+                BasedOn="{StaticResource SyncfusionWizardNavigationAreaStyle}"
+                TargetType="{x:Type syncfusion:WizardNavigationArea}">
+                <Setter Property="MinHeight" Value="{DynamicResource WolvenKitWizardNavBarMinHeight}" />
+                <Setter Property="Padding" Value="{DynamicResource WolvenKitMarginSmallVertical}" />
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -100,6 +100,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<PlayerVisionModeControllerRefreshPolicyEnum>>(value);
 		}
 
+		[Ordinal(12)] 
+		[RED("twintoneOverrideShown")] 
+		public CEnum<PlayerVisionModeControllerRefreshPolicyEnum> TwintoneOverrideShown
+		{
+			get => GetPropertyValue<CEnum<PlayerVisionModeControllerRefreshPolicyEnum>>();
+			set => SetPropertyValue<CEnum<PlayerVisionModeControllerRefreshPolicyEnum>>(value);
+		}
+
 		public PlayerVisionModeControllerRefreshPolicy()
 		{
 			PostConstruct();

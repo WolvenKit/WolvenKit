@@ -1,10 +1,12 @@
+using System;
 using System.Windows.Input;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.Tools.Controls;
+using WolvenKit.App.Interaction;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
-using WolvenKit.App.ViewModels.Shell;
-using WolvenKit.Views.Shell;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 
 namespace WolvenKit.Views.Documents
 {
@@ -18,33 +20,32 @@ namespace WolvenKit.Views.Documents
 
             this.WhenActivated(disposables =>
             {
-                if (DataContext is RedDocumentViewModel vm)
+                if (DataContext is not RedDocumentViewModel vm)
                 {
-                    SetCurrentValue(ViewModelProperty, vm);
+                    return;
                 }
-            });
-        }
 
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            base.OnKeyDown(e);
+                SetCurrentValue(ViewModelProperty, vm);
+                RedDocumentViewToolbar.CurrentTab = vm.SelectedTabItemViewModel;
+            });
         }
 
         private void TabControl_OnSelectedItemChangedEvent(object sender, SelectedItemChangedEventArgs e)
         {
-            if (e.NewSelectedItem.DataContext is RDTMeshViewModel meshViewModel)
+            
+            if (e?.NewSelectedItem?.DataContext is RedDocumentTabViewModel newTab)
             {
-                meshViewModel.Load();
+                RedDocumentViewToolbar.CurrentTab = newTab;
+                newTab.Load();
+            }
+            else
+            {
+                RedDocumentViewToolbar.CurrentTab = null;
             }
 
-            if (e.NewSelectedItem.DataContext is RDTGraphViewModel graphViewModel)
+            if (e?.OldSelectedItem?.DataContext is RedDocumentTabViewModel oldTab)
             {
-                graphViewModel.Load();
-            }
-
-            if (e.NewSelectedItem.DataContext is RDTGraphViewModel2 graphViewModel2)
-            {
-                graphViewModel2.Load();
+                oldTab.Unload();
             }
         }
 
@@ -54,15 +55,17 @@ namespace WolvenKit.Views.Documents
             {
                 return;
             }
+            var settingsManager = Locator.Current.GetService<ISettingsManager>();
+            var newEditorLevel = settingsManager.DefaultEditorDifficultyLevel switch
+            {
+                EditorDifficultyLevel.None => EditorDifficultyLevel.Easy,
+                EditorDifficultyLevel.Easy => EditorDifficultyLevel.Default,
+                EditorDifficultyLevel.Default => EditorDifficultyLevel.Advanced,
+                EditorDifficultyLevel.Advanced => EditorDifficultyLevel.Easy,
+                _ => EditorDifficultyLevel.None
+            };
 
-            vm.IsSimpleViewEnabled = !vm.IsSimpleViewEnabled;
-
-            // Send a message to update filtered items source
-            MessageBus.Current.SendMessage("UpdateFilteredItemsSource", "Command");
-
-
-            // var mainWindow = Locator.Current.GetService<AppViewModel>();
-            // mainWindow?.ReloadFile();
+            settingsManager.DefaultEditorDifficultyLevel = newEditorLevel;
         }
     }
 }

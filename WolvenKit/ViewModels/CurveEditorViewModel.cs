@@ -172,7 +172,7 @@ namespace WolvenKit.ViewModels
             get
             {
                 var (nx, ny) = ToWorldCoordinates(Cursor.X, Cursor.Y);
-                return $"T : {Math.Round(nx, 2)} | V : {Math.Round(ny, 2)}";
+                return $"T = {nx:N2} | V = {ny:N2}";
             }
         }
 

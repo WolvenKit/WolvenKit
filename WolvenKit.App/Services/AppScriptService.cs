@@ -3,11 +3,13 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.ClearScript.V8;
+using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Scripting;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
@@ -33,7 +35,6 @@ public partial class AppScriptService : ScriptService
         IProjectManager projectManager, 
         IArchiveManager archiveManager,
         Red4ParserService red4ParserService,
-        IWatcherService watcherService,
         IModTools modTools,
         ImportExportHelper importExportHelper,
         IHookService hookService,
@@ -43,7 +44,7 @@ public partial class AppScriptService : ScriptService
         _settingsManager = settingsManager;
         _hookService = hookService;
 
-        _wkit = new AppScriptFunctions(_loggerService, projectManager, archiveManager, red4ParserService, watcherService, modTools, importExportHelper, gameController, geometryCacheService);
+        _wkit = new AppScriptFunctions(_loggerService, projectManager, archiveManager, red4ParserService, modTools, importExportHelper, gameController, geometryCacheService, settingsManager);
         _ui = new UiScriptFunctions(this);
         
         DefaultHostObject = new() { { "wkit", _wkit } };
@@ -52,7 +53,21 @@ public partial class AppScriptService : ScriptService
         RefreshUIScripts();
     }
 
-    public async Task ExecuteAsync(string code) => await ExecuteAsync(code, DefaultHostObject);
+
+    private ProjectExplorerViewModel? _projectExplorerViewModel = null;
+
+    private ProjectExplorerViewModel? GetProjectExplorerViewModel()
+    {
+        _projectExplorerViewModel ??= Locator.Current.GetService<ProjectExplorerViewModel>();
+        return _projectExplorerViewModel;
+    }
+
+    public async Task ExecuteAsync(string code)
+    {
+        GetProjectExplorerViewModel()?.SuspendFileWatcher();
+        await ExecuteAsync(code, DefaultHostObject);
+        GetProjectExplorerViewModel()?.ResumeFileWatcher();
+    }
 
     public void SetAppViewModel(AppViewModel appViewModel) => _wkit.AppViewModel = appViewModel;
 

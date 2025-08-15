@@ -1,27 +1,27 @@
 ﻿using System.Collections.Concurrent;
-using System.Text;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Core.Helpers;
 
-namespace WolvenKit.RED4.Types;
+namespace WolvenKit.RED4.Types.Pools;
 
 public static class NodeRefPool
 {
-    //public static ILoggerService? Logger;
+    private static readonly BasePool s_pool;
 
-    private static readonly ConcurrentDictionary<string, ulong> s_pool = new();
-    private static readonly ConcurrentDictionary<ulong, string> s_poolReverse = new();
-
-    private static readonly ConcurrentDictionary<string, ulong> s_aliasLookup = new();
-
-    public static string? ResolveHash(ulong hash)
+    static NodeRefPool()
     {
-        if (s_poolReverse.TryGetValue(hash, out var value))
-        {
-            return value;
-        }
-
-        return null;
+        s_pool = new BasePool(null, s => FNV1A64HashAlgorithm.HashStringWithoutAliases(s));
     }
+
+    private static readonly ConcurrentDictionary<ReadOnlyMemory<char>, ReadOnlyMemory<char>> s_poolAliases = new(MemorySequenceEqualComparator.Instance);
+
+    public static string? ResolveHash(ulong hash) => s_pool.ResolveHash(hash);
+
+    public static bool IsNative(string value) => s_pool.IsNative(value);
+    public static bool IsNative(ulong value) => s_pool.IsNative(value);
+
+    public static bool IsRuntime(string value) => s_pool.IsRuntime(value);
+    public static bool IsRuntime(ulong value) => s_pool.IsRuntime(value);
 
     public static ulong AddOrGetHash(string value)
     {
@@ -30,84 +30,104 @@ public static class NodeRefPool
             return 0;
         }
 
-        ulong hash;
-        if (value[0] == '$')
+        var (newRuntime, hash) = s_pool.AddOrGetHash(value);
+        if (newRuntime)
         {
-            if (!s_pool.TryGetValue(value.Replace("#", ""), out hash))
-            {
-                var tmpFull = "$";
-                var tmpHash = "$";
-
-                var parts = value.Split('/');
-                for (var i = 1; i < parts.Length; i++)
-                {
-                    var part = parts[i];
-
-                    string? alias = null;
-                    if (part.Contains(';'))
-                    {
-                        var tmp = part.Split(';');
-
-                        part = tmp[0];
-                        alias = tmp[1][1..];
-                    }
-
-                    tmpFull += $"/{part}";
-
-                    if (part[0] == '#')
-                    {
-                        part = part[1..];
-                        alias = part;
-                    }
-
-                    tmpHash += $"/{part}";
-                    hash = FNV1A64HashAlgorithm.HashString(tmpHash, Encoding.UTF8, false, true);
-
-                    s_pool.TryAdd(tmpFull, hash);
-                    s_poolReverse.TryAdd(hash, tmpFull);
-
-                    if (alias != null)
-                    {
-                        s_aliasLookup.AddOrUpdate(alias, hash, (_, _) => hash);
-                    }
-                }
-            }
-        }
-        //else if (value[0] == '#')
-        //{
-        //    if (!s_aliasLookup.TryGetValue(value.Substring(1), out hash))
-        //    {
-        //        Logger?.Warning($"Couldn't resolve NodeRef for alias \"{value}\"");
-        //    }
-        //}
-        else if (!s_pool.TryGetValue(value, out hash))
-        {
-            hash = FNV1A64HashAlgorithm.HashString(value, Encoding.UTF8, false, true);
-
-            s_pool.TryAdd(value, hash);
-            s_poolReverse.TryAdd(hash, value);
+            CacheAliases(value);
         }
 
         return hash;
     }
 
-    //public static bool IsAlias(string text)
-    //{
-    //    if (text.StartsWith('#'))
-    //    {
-    //        text = text.Substring(1);
-    //    }
-    //
-    //    return s_aliasLookup.ContainsKey(text);
-    //}
-    //
-    //public static string? ResolveAlias(string? text)
-    //{
-    //    if (text == null || !s_aliasLookup.TryGetValue(text, out var value))
-    //    {
-    //        return null;
-    //    }
-    //
-    //    return s_poolReverse[value];
-    //}
+    public static void SetNative(LookupTable lookupTable)
+    {
+        s_pool.SetNative(lookupTable);
+        foreach (var (_, value) in lookupTable)
+        {
+            CacheAliases(value);
+        }
+    }
+
+    #region Alias
+
+    public static ReadOnlyMemory<char>? ResolveAliasToMemory(ReadOnlyMemory<char> aliasName) =>
+        s_poolAliases.GetValueOrDefault(aliasName, null);
+
+    public static string? ResolveAliasToString(ReadOnlyMemory<char> aliasName)
+    {
+        var memory = ResolveAliasToMemory(aliasName);
+        return memory != null ? new string(memory.Value.Span) : null;
+    }
+
+    public static ulong? ResolveAliasToHash(ReadOnlyMemory<char> aliasName)
+    {
+        var memory = ResolveAliasToMemory(aliasName);
+        return memory != null ? FNV1A64HashAlgorithm.HashStringWithoutAliases(memory.Value.Span) : null;
+    }
+
+    private static void CacheAliases(string value)
+    {
+        if (value[0] != '$' || !value.Contains('#'))
+        {
+            return;
+        }
+
+        var nextAliasPos = value.IndexOf('#');
+
+        if (nextAliasPos == 0)
+        {
+            throw new InvalidOperationException("Alias shouldn't be first in the string!");
+        }
+
+        while (nextAliasPos != -1)
+        {
+            // We have to handle 2 cases:
+            // $/test/#important/123/456 - simple syntax
+            // $/test/important;#alias/123/456 - semicolon syntax (named alias)
+
+            var semicolonSyntax = value[nextAliasPos - 1] == ';';
+
+            var (aliasName, aliasPath) = !semicolonSyntax ?
+                HandleSimpleAlias(value, nextAliasPos) :
+                HandleSemicolonAlias(value, nextAliasPos);
+
+            s_poolAliases.TryAdd(aliasName, aliasPath);
+
+            nextAliasPos = value.IndexOf('#', nextAliasPos + 1);
+        }
+    }
+
+    private static (ReadOnlyMemory<char> Name, ReadOnlyMemory<char> Path) HandleSimpleAlias(string value, int aliasPosition)
+    {
+        // Handling simple syntax
+        // $/test/#important/123/456
+
+        var memory = value.AsMemory();
+
+        var indexOfSlash = value.IndexOf('/', aliasPosition);
+        var nameEndPosition = indexOfSlash != -1 ? indexOfSlash : value.Length;
+
+        var name = memory[(aliasPosition + 1)..nameEndPosition];
+        var path = memory[..nameEndPosition];
+
+        return (name, path);
+    }
+
+    private static (ReadOnlyMemory<char> Name, ReadOnlyMemory<char> Path) HandleSemicolonAlias(string value, int aliasPosition)
+    {
+        // Handling semicolon syntax
+        // $/test/important;#alias/123/456
+
+        var memory = value.AsMemory();
+
+        var indexOfSlash = value.IndexOf('/', aliasPosition);
+        var nameEndPosition = indexOfSlash != -1 ? indexOfSlash : value.Length;
+
+        var name = memory[(aliasPosition + 1)..nameEndPosition];
+        var path = memory[..(aliasPosition - 1)];
+
+        return (name, path);
+    }
+
+    #endregion Alias
 }

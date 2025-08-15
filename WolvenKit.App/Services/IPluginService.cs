@@ -53,7 +53,7 @@ public enum EPlugin
     red4ext,
     [Id("TweakXL", "psiberx/cp2077-tweak-xl", @"TweakXL-.*\.zip", "Cyberpunk 2077 mod that allows you to modify TweakDB.")]
     tweakXL,
-    [Id("RedHotTools", "psiberx/cp2077-red-hot-tools", @"RedHotTools-.*\.zip", "Hot reload archives, scripts and tweaks.")]
+    [Id("RedHotTools", "psiberx/cp2077-red-hot-tools", @"RedHotTools-(?!.*-CET\.zip$).*", "Hot reload archives, scripts and tweaks.")]
     redhottools,
 }
 

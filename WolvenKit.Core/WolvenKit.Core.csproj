@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Version>8.13.0</Version>
+    <Version>8.16.2</Version>
     <Platforms>x64</Platforms>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <Nullable>enable</Nullable>
@@ -10,64 +10,73 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
-    <PropertyGroup>
-        <PackageId>WolvenKit.Core</PackageId>
-        <Product>WolvenKit.Core</Product>
-        <Description>Core file formats for the WolvenKit Mod Editor.</Description>
+  <PropertyGroup>
+    <PackageId>WolvenKit.Core</PackageId>
+    <Product>WolvenKit.Core</Product>
+    <Description>Core file formats for the WolvenKit Mod Editor.</Description>
 
-        <Company>WolvenKit</Company>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageProjectUrl>https://github.com/WolvenKit/WolvenKit</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/WolvenKit/WolvenKit</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        <PackageTags>wolvenkit, cyberpunk2077</PackageTags>
+    <Company>WolvenKit</Company>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/WolvenKit/WolvenKit</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/WolvenKit/WolvenKit</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>wolvenkit, cyberpunk2077</PackageTags>
 
-        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-        <PackageOutputPath>./nupkg</PackageOutputPath>
-    </PropertyGroup>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageOutputPath>./nupkg</PackageOutputPath>
+	<NoWarn>NU5100</NoWarn>
+  </PropertyGroup>
 
-    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
-        <DefineConstants>_WINDOWS</DefineConstants>
-    </PropertyGroup>
-    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))"> 
-        <DefineConstants>_LINUX</DefineConstants>
-    </PropertyGroup>
-    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-        <DefineConstants>_OSX</DefineConstants>
-    </PropertyGroup>
+  <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+    <DefineConstants>_WINDOWS</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+    <DefineConstants>_LINUX</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+    <DefineConstants>_OSX</DefineConstants>
+  </PropertyGroup>
 
 
   <ItemGroup>
-    <ContentWithTargetPath Include="lib\kraken.dll">
+    <Content Include="lib\kraken.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <TargetPath>kraken.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="lib\libkraken.so">
+	  <PackagePath>contentFiles\any\any;content</PackagePath>
+	  <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <Content Include="lib\libkraken.so">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <TargetPath>libkraken.so</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="lib\libkraken.dylib">
+	  <PackagePath>contentFiles\any\any;content</PackagePath>
+	  <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <Content Include="lib\libkraken.dylib">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <TargetPath>libkraken.dylib</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="lib\wwtools.dll">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        <TargetPath>wwtools.dll</TargetPath>
-    </ContentWithTargetPath>
-    <ContentWithTargetPath Include="lib\libwwtools.so">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        <TargetPath>libwwtools.so</TargetPath>
-    </ContentWithTargetPath>
-    </ItemGroup>
+	  <PackagePath>contentFiles\any\any;content</PackagePath>
+	  <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <Content Include="lib\wwtools.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>wwtools.dll</TargetPath>
+	  <PackagePath>contentFiles\any\any;content</PackagePath>
+	  <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+    <Content Include="lib\libwwtools.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <TargetPath>libwwtools.so</TargetPath>
+	  <PackagePath>contentFiles\any\any;content</PackagePath>
+	  <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+  </ItemGroup>
 
-    <ItemGroup>
-	    <PackageReference Include="CommunityToolkit.Mvvm" />
-	    <PackageReference Include="Microsoft.Build.Framework" />
-	    <PackageReference Include="semver" />
-        <PackageReference Include="System.Reflection.MetadataLoadContext" />
-        <PackageReference Include="Serilog" />
-    </ItemGroup>
-
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="semver" />
+    <PackageReference Include="System.Reflection.MetadataLoadContext" />
+    <PackageReference Include="Serilog" />
+  </ItemGroup>
 
 
 </Project>

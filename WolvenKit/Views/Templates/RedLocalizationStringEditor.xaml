@@ -1,0 +1,75 @@
+﻿<UserControl
+    x:Class="WolvenKit.Views.Editors.RedLocalizationStringEditor"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WolvenKit.Views.Editors"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignWidth="800"
+    d:DesignHeight="450">
+    <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedLocalizationStringEditor}}}">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" SharedSizeGroup="TextBlock" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Border
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            Grid.Column="0"
+            BorderBrush="{StaticResource BorderAlt}"
+            BorderThickness="0,0,1,0" />
+
+        <Border
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            BorderBrush="{StaticResource BorderAlt}"
+            BorderThickness="0,0,0,1" />
+
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="{DynamicResource WolvenKitMarginTiny}"
+            Padding="0,0,0,1"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+            Text="Unk1" />
+
+        <TextBox
+            x:Name="TextBox"
+            Grid.Row="0"
+            Grid.Column="1"
+            Margin="0,0,0,1"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+            PreviewTextInput="NumberValidationTextBox"
+            Text="{Binding Unk1,
+                           UpdateSourceTrigger=PropertyChanged}" />
+
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="{DynamicResource WolvenKitMarginTiny}"
+            Padding="0,0,0,1"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+            Text="Value" />
+
+        <TextBox
+            Grid.Row="1"
+            Grid.Column="1"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+            KeyboardNavigation.TabIndex="2"
+            Text="{Binding Value,
+                           Mode=TwoWay,
+                           UpdateSourceTrigger=PropertyChanged}" />
+    </Grid>
+</UserControl>

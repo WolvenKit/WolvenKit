@@ -5,49 +5,76 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:WolvenKit.Views.Editors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    d:DesignHeight="100"
+    mc:Ignorable="d"
     d:DesignWidth="400"
-    mc:Ignorable="d">
-
+    d:DesignHeight="100">
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedWorldPositionEditor}}}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="{DynamicResource WolvenKitRedEditorComponentWidth}" />
             <ColumnDefinition />
-            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="{DynamicResource WolvenKitRedEditorComponentWidth}" />
             <ColumnDefinition />
-            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="{DynamicResource WolvenKitRedEditorComponentWidth}" />
             <ColumnDefinition />
-            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="{DynamicResource WolvenKitRedEditorComponentWidth}" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
+
+        <Border
+            Grid.Column="0"
+            BorderBrush="{StaticResource BorderAlt}"
+            BorderThickness="0,0,1,0" />
         <TextBlock
             Grid.Column="0"
+            Margin="{DynamicResource WolvenKitMarginTiny}"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
             Text="X" />
         <TextBox
             Grid.Column="1"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
             PreviewTextInput="NumberValidationTextBox"
             Text="{Binding XText}" />
+
+        <Border
+            Grid.Column="2"
+            BorderBrush="{StaticResource BorderAlt}"
+            BorderThickness="1,0,1,0" />
         <TextBlock
             Grid.Column="2"
+            Margin="{DynamicResource WolvenKitMarginTiny}"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
             Text="Y" />
         <TextBox
             Grid.Column="3"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
             PreviewTextInput="NumberValidationTextBox"
             Text="{Binding YText}" />
+
+        <Border
+            Grid.Column="4"
+            BorderBrush="{StaticResource BorderAlt}"
+            BorderThickness="1,0,1,0" />
+
         <TextBlock
             Grid.Column="4"
+            Margin="{DynamicResource WolvenKitMarginTiny}"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
             Text="Z" />
         <TextBox
             Grid.Column="5"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
             PreviewTextInput="NumberValidationTextBox"
             Text="{Binding ZText}" />
 
+        <Border
+            Grid.Column="6"
+            BorderBrush="{StaticResource BorderAlt}"
+            BorderThickness="1,0,0,0" />
     </Grid>
 </UserControl>

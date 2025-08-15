@@ -256,6 +256,27 @@ public static class Oodle
 
         return result;
     }
+    
+    public static unsafe long Decompress(byte* inputBuffer, long inputBufferSize, byte* outputBuffer, long outputBufferSize)
+    {
+        int result;
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            result = CompressionSettings.Get().UseOodle
+                ? OodleLib.OodleLZ_Decompress(inputBuffer, inputBufferSize, outputBuffer, outputBufferSize)
+                : KrakenNative.Decompress(inputBuffer, inputBufferSize, outputBuffer, outputBufferSize);
+        }
+        else
+        {
+            result = RuntimeInformation.IsOSPlatform(OSPlatform.OSX)
+                ? KrakenNative.Decompress(inputBuffer, inputBufferSize, outputBuffer, outputBufferSize)
+                : RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
+                    ? KrakenNative.Decompress(inputBuffer, inputBufferSize, outputBuffer, outputBufferSize)
+                    : throw new NotImplementedException();
+        }
+
+        return result;
+    }
 
     /// <summary>
     /// Decompresses and copies a segment of zsize bytes from a stream to another stream
@@ -373,8 +394,7 @@ public static class Oodle
     /// <returns></returns>
     public static int GetCompressedBufferSizeNeeded(int count)
     {
-        var n = (((count + 0x3ffff + ((uint)((count + 0x3ffff) >> 0x3f) & 0x3ffff))
-                 >> 0x12) * 0x112) + count;
+        var n = (((count + 0x3ffff + ((uint)((count + 0x3ffff) >> 0x1f) & 0x3ffff)) >> 0x12) * 0x112) + count;
         //var n  = OodleNative.GetCompressedBufferSizeNeeded((long)count);
         return (int)n;
     }
@@ -462,12 +482,9 @@ public static class Oodle
                 {
                     var programName = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey + item)?.GetValue("DisplayName");
                     var installLocation = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey + item)?.GetValue("InstallLocation");
-                    if (programName?.ToString() is string n && installLocation?.ToString() is string l)
+                    if (programName?.ToString() is string n && installLocation?.ToString() is string l && n.Contains(gameName))
                     {
-                        if (n.Contains(gameName) || n.Contains(gameName))
-                        {
-                            exePath = Directory.GetFiles(l, exeName, SearchOption.AllDirectories).First();
-                        }
+                        exePath = Directory.GetFiles(l, exeName, SearchOption.AllDirectories).First();
                     }
 
                     strDelegate(exePath);

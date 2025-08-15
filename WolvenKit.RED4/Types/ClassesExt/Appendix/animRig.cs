@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using WolvenKit.RED4.IO;
 
 namespace WolvenKit.RED4.Types;
@@ -9,7 +8,7 @@ public partial class animRig : IRedAppendix
     [REDProperty(IsIgnored = true)]
     public CArray<CInt16> BoneParentIndexes
     {
-        get => GetPropertyValue<CArray<CInt16>>();
+        get => GetPropertyValue<CArray<CInt16>>()!; // set in PostConstruct, so not nullable
         set => SetPropertyValue<CArray<CInt16>>(value);
     }
 
@@ -17,7 +16,7 @@ public partial class animRig : IRedAppendix
     [REDProperty(IsIgnored = true)]
     public CArray<QsTransform> BoneTransforms
     {
-        get => GetPropertyValue<CArray<QsTransform>>();
+        get => GetPropertyValue<CArray<QsTransform>>()!; // set in PostConstruct, so not nullable
         set => SetPropertyValue<CArray<QsTransform>>(value);
     }
 

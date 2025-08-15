@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Helpers;
@@ -28,11 +30,10 @@ using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.App.ViewModels.Importers;
 
-public partial class ImportViewModel : AbstractImportViewModel
+public partial class ImportViewModel : AbstractImportExportViewModel
 {
     private readonly AppViewModel _appViewModel;
     private readonly ILoggerService _loggerService;
-    private readonly IWatcherService _watcherService;
     private readonly IProjectManager _projectManager;
     private readonly IProgressService<double> _progressService;
     private readonly IGameControllerFactory _gameController;
@@ -41,11 +42,10 @@ public partial class ImportViewModel : AbstractImportViewModel
 
     public ImportViewModel(
         AppViewModel appViewModel,
-        IArchiveManager archiveManager, 
+        IAppArchiveManager archiveManager, 
         INotificationService notificationService, 
         ISettingsManager settingsManager,
         ILoggerService loggerService,
-        IWatcherService watcherService,
         IProjectManager projectManager,
         IProgressService<double> progressService,
         IGameControllerFactory gameController,
@@ -54,29 +54,14 @@ public partial class ImportViewModel : AbstractImportViewModel
     {
         _appViewModel = appViewModel;
         _loggerService = loggerService;
-        _watcherService = watcherService;
         _projectManager = projectManager;
         _progressService = progressService;
         _gameController = gameController;
         _parserService = parserService;
         _importExportHelper = importExportHelper;
 
-        PropertyChanged += ExportViewModel_PropertyChanged;
-    }
-
-    private async void ExportViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(IsActive))
-        {
-            if (IsActive)
-            {
-                if (_refreshtask is null || (_refreshtask is not null && _refreshtask.IsCompleted))
-                {
-                    _refreshtask = LoadFilesAsync();
-                    await _refreshtask;
-                }
-            }
-        }
+        PropertyChanged += ImportExportViewModel_PropertyChanged;
+        _appViewModel.OnInitialProjectLoaded += AppViewModel_OnInitialProjectLoaded;
     }
 
     #region Commands
@@ -124,9 +109,9 @@ public partial class ImportViewModel : AbstractImportViewModel
 
     #endregion
 
-    protected override async Task ExecuteProcessBulk(bool all = false)
+    protected override async Task ExecuteProcessBulkAsync(bool all = false)
     {
-        if (_gameController.GetController() is not RED4Controller)
+        if (_gameController.GetController() is not RED4Controller || !Items.Any())
         {
             return;
         }
@@ -137,45 +122,46 @@ public partial class ImportViewModel : AbstractImportViewModel
             return;
         }
 
-        if (!Items.Any())
-        {
-            return;
-        }
-
         IsProcessing = true;
-        _watcherService.IsSuspended = true;
         var progress = 0;
         _progressService.Report(0.1);
 
         var total = 0;
-        var sucessful = 0;
+        var successful = 0;
 
         //prepare a list of failed items
         var failedItems = new List<string>();
 
         var toBeImported = Items
-            .Where(_ => all || _.IsChecked)
+            .Where(importExportItem => importExportItem.IsChecked ||
+                                       (all && (VisibleItemPaths.Count == 0 || VisibleItemPaths.Contains(importExportItem.BaseFile))))
             .Where(x => !x.Extension.Equals(ERawFileFormat.wav.ToString()))
             .Cast<ImportableItemViewModel>()
             .ToList();
 
         total = toBeImported.Count;
-        foreach (var item in toBeImported)
+        await Parallel.ForEachAsync(toBeImported, async (item, cancellationToken) =>
         {
+            await Application.Current.Dispatcher.InvokeAsync(() => _appViewModel.SaveFile(item.BaseFile));
             if (await ImportSingleAsync(item, projectArchive))
             {
-                sucessful++;
+                Interlocked.Increment(ref successful);
             }
-            else // not successful
+            else
             {
-                failedItems.Add(item.BaseFile);
+                lock (failedItems)
+                {
+                    failedItems.Add(item.BaseFile);
+                }
             }
 
             Interlocked.Increment(ref progress);
             _progressService.Report(progress / (float)total);
-        }
+        });
 
-        await ImportWavs(Items.Where(_ => all || _.IsChecked)
+        await ImportWavs(Items.Where(importExportItem => importExportItem.IsChecked ||
+                                                         (all && (VisibleItemPaths.Count == 0 ||
+                                                                  VisibleItemPaths.Contains(importExportItem.BaseFile))))
             .Where(x => x.Extension.Equals(ERawFileFormat.wav.ToString()))
             .Select(x => x.BaseFile)
             .ToList()
@@ -183,15 +169,14 @@ public partial class ImportViewModel : AbstractImportViewModel
 
         IsProcessing = false;
 
-        _watcherService.IsSuspended = false;
         _progressService.IsIndeterminate = false;
 
-        if (sucessful > 0)
+        if (successful > 0)
         {
             _notificationService.Success(
-                $"{sucessful}/{total} files have been processed and are available in the Project Explorer's 'archive' section");
+                $"{successful}/{total} files have been processed and are available in the Project Explorer's 'archive' section");
             _loggerService.Success(
-                $"{sucessful}/{total} files have been processed and are available in the Project Explorer's 'archive' section");
+                $"{successful}/{total} files have been processed and are available in the Project Explorer's 'archive' section");
         }
 
         //We format the list of failed export/import items here
@@ -200,11 +185,15 @@ public partial class ImportViewModel : AbstractImportViewModel
             var failedItemsErrorString = $"The following items failed:\n{string.Join("\n", failedItems)}";
             _notificationService.Error(failedItemsErrorString); //notify once only 
             _loggerService.Error(failedItemsErrorString);
+            if (failedItems.Any(s => s.EndsWith(".mesh")))
+            {
+                _loggerService.Error("You can try exporting them without material or garment support, or use the experimental exporter.");
+            }
         }
 
         _progressService.Completed();
 
-        _appViewModel.ReloadChangedFiles();
+        await Application.Current.Dispatcher.InvokeAsync(() => _appViewModel.ReloadChangedFiles());
     }
 
     private Task<bool> ImportWavs(List<string> wavs)
@@ -273,7 +262,7 @@ public partial class ImportViewModel : AbstractImportViewModel
         }
 
         var files = Directory.GetFiles(_projectManager.ActiveProject.RawDirectory, "*", SearchOption.AllDirectories)
-            .Where(CanImport);
+            .Where(CanImport).ToList();
 
         // do not refresh if the files are the same
         if(Enumerable.SequenceEqual( Items.Select(x => x.BaseFile), files))
@@ -286,10 +275,18 @@ public partial class ImportViewModel : AbstractImportViewModel
         Items.Clear();
         foreach (var filePath in files)
         {
-            if (!Items.Any(x => x.BaseFile.Equals(filePath)))
+            try
             {
-                var vm = await Task.Run(() => new ImportableItemViewModel(filePath, _archiveManager, _projectManager, _parserService));
-                Items.Add(vm);
+                if (!Items.Any(x => x.BaseFile.Equals(filePath)))
+                {
+                    var vm = await Task.Run(() =>
+                        new ImportableItemViewModel(filePath, _archiveManager, _projectManager, _parserService));
+                    Items.Add(vm);
+                }
+            }
+            catch
+            {
+                _loggerService.Error($"Skipping {filePath} (failed to read)");
             }
         }
 
@@ -304,7 +301,7 @@ public partial class ImportViewModel : AbstractImportViewModel
     private static bool CanImport(string filePath)
     {
         var fileExtension = Path.GetExtension(filePath).TrimStart('.');
-        if (!Enum.TryParse<ERawFileFormat>(fileExtension, out var _))
+        if (!Enum.TryParse<ERawFileFormat>(fileExtension.ToLower(), out var _))
         {
             return false;
         }
@@ -364,14 +361,10 @@ public partial class ImportViewModel : AbstractImportViewModel
                 break;
         }
 
-        List<IDisplayable> selectedItems = new();
-        if (selectedEntries is not null)
-        {
-            selectedItems = selectedEntries
-                .Select(_ => new CollectionItemViewModel<FileEntry>(_))
-                .Cast<IDisplayable>()
-                .ToList();
-        }
+        List<IDisplayable> selectedItems = selectedEntries
+            .Select(_ => new CollectionItemViewModel<FileEntry>(_))
+            .Cast<IDisplayable>()
+            .ToList();
 
         var availableItems = _archiveManager
             .GetGroupedFiles()[$".{fetchExtension}"]
@@ -388,36 +381,46 @@ public partial class ImportViewModel : AbstractImportViewModel
         }
 
         var result = Interactions.ShowCollectionView(a);
-        if (result is not null)
+        switch (args.PropertyName)
         {
-            switch (args.PropertyName)
-            {
-                case nameof(GltfImportArgs.Rig):
-                    var rig = result.Cast<CollectionItemViewModel<FileEntry>>().Select(x => x.Model).FirstOrDefault();
-                    if (rig is not null)
-                    {
-                        gltfImportArgs.Rig = new List<FileEntry>() { rig };
-                        _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
-                    }
+            case nameof(GltfImportArgs.Rig):
+                gltfImportArgs.Rig.Clear();
+                
+                var rig = result.Cast<CollectionItemViewModel<FileEntry>>().Select(x => x.Model).FirstOrDefault();
+                if (rig is not null)
+                {
+                    gltfImportArgs.Rig.Add(rig);
+                    _notificationService.Success($"Selected Rig was added to MeshWithRig arguments: {rig.Name}");
+                }
+                else
+                {
+                    _notificationService.Success("Rigs were cleared");
+                }
 
-                    gltfImportArgs.ImportFormat = GltfImportAsFormat.MeshWithRig;
-                    break;
+                gltfImportArgs.ImportFormat = GltfImportAsFormat.MeshWithRig;
+                break;
 
-                case nameof(GltfImportArgs.BaseMesh):
-                    var mesh = result.Cast<CollectionItemViewModel<FileEntry>>().Select(x => x.Model).FirstOrDefault();
-                    if (mesh is not null)
-                    {
-                        gltfImportArgs.BaseMesh = new List<FileEntry>() { };
-                        _notificationService.Success($"Selected Mesh was added to Mesh arguments.");
-                    }
+            case nameof(GltfImportArgs.BaseMesh):
+                var mesh = result.Cast<CollectionItemViewModel<FileEntry>>().Select(x => x.Model).FirstOrDefault();
+                if (mesh is not null)
+                {
+                    gltfImportArgs.BaseMesh = new List<FileEntry>() { };
+                    _notificationService.Success($"Selected Mesh was added to Mesh arguments.");
+                }
 
-                    gltfImportArgs.ImportFormat = GltfImportAsFormat.Mesh;
-                    break;
+                gltfImportArgs.ImportFormat = GltfImportAsFormat.Mesh;
+                break;
 
-                default:
-                    break;
-            }
+            default:
+                break;
         }
     }
 
+    private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
+    {
+        DispatcherHelper.RunOnMainThread(async () =>
+        {
+            await Refresh();
+        }, DispatcherPriority.ContextIdle);
+    }
 }

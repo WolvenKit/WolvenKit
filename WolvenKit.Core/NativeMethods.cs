@@ -14,7 +14,4 @@ public static class NativeMethods
 
     [DllImport("kernel32.dll")]
     internal static extern bool FreeLibrary(IntPtr hModule);
-
-    [DllImport("ntdll")]
-    public static extern byte RtlAreLongPathsEnabled();
 }

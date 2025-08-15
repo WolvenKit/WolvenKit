@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using WolvenKit.Core.Extensions;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
@@ -12,7 +13,7 @@ public partial class CR2WReader
     private CR2WFile _cr2wFile => (CR2WFile)_outputFile;
     private bool _parseBuffer;
 
-    public EFileReadErrorCodes ReadFileInfo(out CR2WFileInfo? info)
+    public EFileReadErrorCodes ReadFileInfo(out CR2WFileInfo? info, ILoggerService? logger = null)
     {
         var id = BaseStream.ReadStruct<uint>();
         if (id != CR2WFile.MAGIC)
@@ -60,7 +61,7 @@ public partial class CR2WReader
 
         foreach (var importInfo in info.ImportInfo)
         {
-            var import = ReadImport(importInfo, info.StringDict);
+            var import = ReadImport(importInfo, info.StringDict, logger);
 
             info.Imports.Add(import);
             _importsList.Add(import);
@@ -72,13 +73,19 @@ public partial class CR2WReader
     public EFileReadErrorCodes ReadFile(out CR2WFile? file, bool parseBuffer = true)
     {
         var result = ReadFileInfo(out var info);
-        if (result == EFileReadErrorCodes.NoCr2w)
+        if (result == EFileReadErrorCodes.NoCr2w || info is null)
         {
             file = null;
-            return result;
+            return EFileReadErrorCodes.NoCr2w;
         }
 
-        file = new CR2WFile() { Info = info! };
+        if (info.StringDict.Count == 0)
+        {
+            file = null;
+            return EFileReadErrorCodes.Malformed;
+        }
+
+        file = new CR2WFile() { Info = info };
 
         if (result == EFileReadErrorCodes.UnsupportedVersion)
         {
@@ -88,17 +95,18 @@ public partial class CR2WReader
         _outputFile = new CR2WFile();
         _parseBuffer = parseBuffer;
 
-        _cr2wFile.Info = info!;
-        _cr2wFile.MetaData.Version = _cr2wFile.Info.FileHeader.version;
-        _cr2wFile.MetaData.BuildVersion = _cr2wFile.Info.FileHeader.buildVersion;
-        _cr2wFile.MetaData.ObjectsEnd = _cr2wFile.Info.FileHeader.objectsEnd;
+        _cr2wFile.Info = info;
+        _cr2wFile.MetaData.Version = info.FileHeader.version;
+        _cr2wFile.MetaData.BuildVersion = info.FileHeader.buildVersion;
+        _cr2wFile.MetaData.ObjectsEnd = info.FileHeader.objectsEnd;
 
         // use 1 as 0 is always empty
-        _cr2wFile.MetaData.HashVersion = IdentifyHash(_cr2wFile.Info.StringDict[1], _cr2wFile.Info.NameInfo[1].hash);
+        _cr2wFile.MetaData.HashVersion = IdentifyHash(info.StringDict[1], info.NameInfo[1].hash);
         if (_cr2wFile.MetaData.HashVersion == EHashVersion.Unknown)
         {
-            throw new Exception();
+            throw new InvalidDataException("Failed to identify hash version");
         }
+       
 
         #region Read Data
 
@@ -185,12 +193,17 @@ public partial class CR2WReader
 
     private CName ReadName(CR2WNameInfo info, Dictionary<uint, string> stringDict) => !stringDict.ContainsKey(info.offset) ? throw new TodoException() : stringDict[info.offset];
 
-    private CR2WImport ReadImport(CR2WImportInfo info, IDictionary<uint, string> stringDict)
+    private CR2WImport ReadImport(CR2WImportInfo info, IDictionary<uint, string> stringDict, ILoggerService? logger = null)
     {
+        if (!stringDict.TryGetValue(info.offset, out var depotPath))
+        {
+            logger?.Error($"Failed to read info for {info.className} (no offset ${info.offset} in list)");
+        }
+        
         var ret = new CR2WImport
         {
             ClassName = _namesList[info.className]!,
-            DepotPath = stringDict[info.offset],
+            DepotPath = depotPath ?? string.Empty,
             Flags = (InternalEnums.EImportFlags)info.flags
         };
 

@@ -26,9 +26,7 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Tools;
-using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Services;
 using WolvenKit.ViewModels;
 using WolvenKit.Views.Dialogs;
@@ -39,7 +37,6 @@ using WolvenKit.Views.HomePage.Pages;
 using WolvenKit.Views.Importers;
 using WolvenKit.Views.Shell;
 using WolvenKit.Views.Tools;
-using WolvenKit.Views.Wizards;
 
 namespace WolvenKit
 {
@@ -64,8 +61,8 @@ namespace WolvenKit
                 .ConfigureServices((hostContext, services) =>
                 {
                     // services
-                    services.AddSingleton(typeof(ISettingsManager), SettingsManager.Load());    
-                    services.AddSingleton<IHashService, HashService>();                         // can this be transient?
+                    services.AddSingleton(typeof(ISettingsManager), SettingsManager.Load());
+                    services.AddSingleton<IHashService, HashServiceExt>();                      // can this be transient?
                     services.AddSingleton<CRUIDService>();                                      // can this be transient?
                     services.AddSingleton<MySink>();                                            // can this be transient?
                     services.AddSingleton<ILoggerService, SerilogWrapper>();                    // can this be transient?
@@ -78,12 +75,13 @@ namespace WolvenKit
 
                     services.AddTransient<INotificationService, NotificationService>();
                     services.AddSingleton<IProgressService<double>, ProgressService<double>>();
+                    services.AddSingleton<AppIdleStateService>();
                     services.AddTransient<Red4ParserService>();
-                    services.AddSingleton<IArchiveManager, ArchiveManager>();
+                    services.AddSingleton<IAppArchiveManager, AppArchiveManager>();
+                    services.AddSingleton<IArchiveManager>(provider => provider.GetService<IAppArchiveManager>());
                     services.AddTransient<ILocKeyService, LocKeyServiceExt>();                  // can this be transient?
                     services.AddSingleton<IRecentlyUsedItemsService, RecentlyUsedItemsService>();
                     services.AddSingleton<IProjectManager, ProjectManager>();
-                    services.AddSingleton<IWatcherService, WatcherService>();
                     services.AddTransient<GeometryCacheService>();
                     services.AddTransient<MeshTools>();
                     services.AddTransient<IModTools, ModTools>();
@@ -92,6 +90,8 @@ namespace WolvenKit
                     services.AddTransient<IGameControllerFactory, GameControllerFactory>();
                     services.AddSingleton<IPluginService, PluginService>();
                     services.AddSingleton<IModifierViewStateService, ModifierViewStateService>();
+                    services.AddSingleton<IWatcherService, WatcherService>();
+                    services.AddSingleton<INodeSelectionService, NodeSelectionService>();
 
                     // factories
                     services.AddTransient<IPageViewModelFactory, PageViewModelFactory>();
@@ -127,8 +127,14 @@ namespace WolvenKit
                     services.AddTransient<SearchAndReplaceDialogViewModel>();
                     services.AddTransient<IViewFor<SearchAndReplaceDialogViewModel>, SearchAndReplaceDialog>();
 
+                    services.AddTransient<CreateMaterialsDialogViewModel>();
+                    services.AddTransient<IViewFor<CreateMaterialsDialogViewModel>, CreateMaterialsDialog>();
+
                     services.AddTransient<RenameDialogViewModel>();
                     services.AddTransient<IViewFor<RenameDialogViewModel>, RenameDialog>();
+
+                    services.AddTransient<SaveGameSelectionDialogModel>();
+                    services.AddTransient<IViewFor<SaveGameSelectionDialogModel>, SaveGameSelectionDialog>();
 
                     services.AddTransient<LaunchProfilesViewModel>();
                     services.AddTransient<IViewFor<LaunchProfilesViewModel>, LaunchProfilesView>();
@@ -144,9 +150,6 @@ namespace WolvenKit
 
                     services.AddTransient<FirstSetupViewModel>();
                     services.AddTransient<IViewFor<FirstSetupViewModel>, FirstSetupView>();
-
-                    services.AddTransient<InstallerWizardViewModel>();
-                    services.AddTransient<IViewFor<InstallerWizardViewModel>, InstallerWizardView>();
 
                     services.AddTransient<ProjectWizardViewModel>();
                     services.AddTransient<IViewFor<ProjectWizardViewModel>, ProjectWizardView>();
@@ -195,6 +198,10 @@ namespace WolvenKit
                     services.AddTransient<HashToolViewModel>();
                     services.AddTransient<IViewFor<HashToolViewModel>, HashToolView>();
 
+                    services.AddSingleton<DocumentTools>();
+                    services.AddSingleton<TemplateFileTools>();
+                    services.AddSingleton<Cr2WTools>();
+                    services.AddSingleton<ProjectResourceTools>();
                     #endregion
 
                     #region homepage

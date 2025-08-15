@@ -13,18 +13,16 @@ namespace WolvenKit.Views.Templates
     /// </summary>
     public partial class BitfieldTemplateView : UserControl
     {
+        private ObservableCollection<string> _selectedItems;
+
         public BitfieldTemplateView()
         {
             InitializeComponent();
-            //SelectedItems.CollectionChanged += CollectionChanged;
+
             comboboxadv.SelectionChanged += CollectionChanged;
         }
 
-        public ObservableCollection<string> SelectedItems
-        {
-            get => GetValueFromRedValue();
-            set => SetRedValue(value);
-        }
+        public ObservableCollection<string> SelectedItems => _selectedItems ??= new ObservableCollection<string>(RedBitfield?.ToBitFieldString().Split(", ") ?? []);
 
         public ObservableCollection<string> BindingCollection { get; set; } = new();
 
@@ -66,7 +64,6 @@ namespace WolvenKit.Views.Templates
                         view.SelectedItems.Add(s);
                     }
                 }
-                //view.SelectedItems = ienum.ToEnumString();
             }
         }
 
@@ -74,19 +71,15 @@ namespace WolvenKit.Views.Templates
 
         private void SetRedValue(string value)
         {
-            //var redBitfield = (IRedBitField)RedTypeManager.CreateRedType(RedBitfield.GetType());
-            var redBitfield = CBitField.Parse(RedBitfield.GetInnerType(), value);
-            SetCurrentValue(RedBitfieldProperty, redBitfield);
-            //foreach (var value in values)
-            //{
-            //    var e = (Enum)Enum.Parse(RedBitfield.GetInnerType(), value);
-            //    redBitfield = e;
-            //}
-            //SetCurrentValue(RedBitfieldProperty, Enum.Parse(RedBitfield.GetInnerType(), value));
+            if (string.IsNullOrEmpty(value))
+            {
+                SetCurrentValue(RedBitfieldProperty, (IRedBitField)RedTypeManager.CreateRedType(RedBitfield.RedType));
+            }
+            else
+            {
+                var redBitfield = CBitField.Parse(RedBitfield.GetInnerType(), value);
+                SetCurrentValue(RedBitfieldProperty, redBitfield);
+            }
         }
-
-        private void SetRedValue(ObservableCollection<string> value) => SetRedValue(string.Join(", ", value));//Type type = typeof(CBitField<>).MakeGenericType(RedBitfield.GetInnerType());//SetCurrentValue(RedBitfieldProperty, (IRedBitField)System.Activator.CreateInstance(type, value.ToList()));
-
-        private ObservableCollection<string> GetValueFromRedValue() => new ObservableCollection<string>(RedBitfield?.ToBitFieldString().Split(", ") ?? Array.Empty<string>());
     }
 }

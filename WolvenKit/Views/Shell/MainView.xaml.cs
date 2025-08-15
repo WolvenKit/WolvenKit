@@ -2,20 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using System.Windows;
 using AdonisUI.Controls;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common.Services;
+using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
-using WolvenKit.Views.Exporters;
-using WolvenKit.Views.Importers;
+using MessageBoxResult = AdonisUI.Controls.MessageBoxResult;
 
 namespace WolvenKit.Views.Shell
 {
@@ -31,32 +33,55 @@ namespace WolvenKit.Views.Shell
             set => ViewModel = (AppViewModel)value;
         }
 
-        public MainView(AppViewModel vm = null)
+        public MainView(ProjectResourceTools projectResourceTools, AppViewModel viewModel = null)
         {
-            ViewModel = vm ?? Locator.Current.GetService<AppViewModel>();
+            ViewModel = viewModel ?? Locator.Current.GetService<AppViewModel>();
             DataContext = ViewModel;
 
             InitializeComponent();
             
             this.WhenActivated(disposables =>
             {
-                Disposable.Create(dockingAdapter.SaveLayout).DisposeWith(disposables);
+                Disposable.Create(() => dockingAdapter.SaveLayout()).DisposeWith(disposables);
 
-                Interactions.ShowConfirmation = input =>
+                Interactions.ShowConfirmation = ShowConfirmation;
+                Interactions.ShowSaveDialog = ShowSaveDialog;
+                Interactions.ShowQuestionYesNo = ShowQuestionYesNo;
+
+                Interactions.ShowPopupWithWeblink = ShowConfirmationWithLink;
+                Interactions.ShowDeleteOrDuplicateComponentDialogue = (args) =>
                 {
-                    return ShowConfirmation(input);
-                };
+                    var dialog = new DeleteOrDuplicateComponentDialog(args.Item1, args.Item2);
+                    if (dialog.ViewModel is not null && dialog.ShowDialog(this) == true)
+                    {
+                        return dialog.ViewModel;
+                    }
 
+                    return null;
+                };
+                
                 Interactions.ShowLaunchProfilesView = () =>
                 {
                     LaunchProfilesView dialog = new();
 
-                    if (dialog.ShowDialog(this) == true)
+                    if (dialog.ViewModel is not null && dialog.ShowDialog(this) == true)
                     {
                         ViewModel.SetLaunchProfiles(dialog.ViewModel.LaunchProfiles);
                     }
 
                     return true;
+                };
+
+                Interactions.ShowSelectSaveView = currentSaveGame =>
+                {
+                    SaveGameSelectionDialog dialog = new(currentSaveGame);
+
+                    if (dialog.ShowDialog(this) == true)
+                    {
+                        return dialog.ViewModel?.SelectedEntry?.DirName;
+                    }
+
+                    return null;
                 };
 
                 Interactions.ShowMaterialRepositoryView = () =>
@@ -73,16 +98,62 @@ namespace WolvenKit.Views.Shell
                 Interactions.ShowCollectionView = input =>
                 {
                     ChooseCollectionView dialog = new();
-                    dialog.ViewModel.SetAvailableItems(input.Item1);
-                    dialog.ViewModel.SetSelectedItems(input.Item2);
+                    if (input.Item1 is not null)
+                    {
+                        dialog.ViewModel?.SetAvailableItems(input.Item1);
+                    }
+
+                    if (input.Item2 is not null)
+                    {
+                        dialog.ViewModel?.SetSelectedItems(input.Item2);
+                    }
 
                     IEnumerable<IDisplayable> result = null;
-                    if (dialog.ShowDialog(this) == true)
+                    if (dialog.ShowDialog(this) == true && dialog.ViewModel is not null)
                     {
                         result = dialog.ViewModel.SelectedItems;
                     }
 
                     return result;
+                };
+
+                Interactions.ShowPhotoModeDialogue = (p) =>
+                {
+                    var dialog = new CreatePhotoModeAppDialog(p.activeProject, p.settingsManager, projectResourceTools);
+                    if (dialog.ShowDialog() != true)
+                    {
+                        return null;
+                    }
+
+                    return dialog.ViewModel;
+                };
+
+                Interactions.ShowGenerateInkatlasDialogue = (activeProject) =>
+                {
+                    var dialog = new AddInkatlasDialog(activeProject);
+                    if (dialog.ShowDialog() != true)
+                    {
+                        return null;
+                    }
+
+                    return dialog.ViewModel;
+                };
+
+                Interactions.ShowChecklistDialogue = (args) =>
+                {
+                    var dialog = new ShowChecklistDialog(args.checklistOptions, args.fileName, args.title, args.text);
+                    if (dialog.ShowDialog() != true)
+                    {
+                        return null;
+                    }
+
+                    return dialog.ViewModel;
+                };
+
+                Interactions.ShowScriptSettingsView = settings =>
+                {
+                    var dialog = new ScriptSettingsWindow(settings);
+                    return dialog.ShowDialog() == true;
                 };
 
 
@@ -102,9 +173,19 @@ namespace WolvenKit.Views.Shell
             });
         }
 
-        private void FadeOut_Completed(object sender, EventArgs e) => ViewModel.FinishedClosingModal();
+        private void FadeOut_Completed(object sender, EventArgs e) => ViewModel?.FinishedClosingModal();
 
         #region interactions
+
+        private static bool ShowQuestionYesNo((string, string) input)
+        {
+            var messageResult = ShowConfirmation((input.Item1, input.Item2, WMessageBoxImage.Question, WMessageBoxButtons.YesNo));
+            return messageResult == WMessageBoxResult.Yes;
+        }
+
+        // local methods
+        private static AdonisUI.Controls.MessageBoxImage GetAdonisImage(WMessageBoxImage imageParam) =>
+            (AdonisUI.Controls.MessageBoxImage)imageParam;
 
         private static WMessageBoxResult ShowConfirmation((string, string, WMessageBoxImage, WMessageBoxButtons) input)
         {
@@ -115,32 +196,68 @@ namespace WolvenKit.Views.Shell
 
             MessageBoxModel messageBox = new()
             {
-                Text = text,
-                Caption = caption,
-                Icon = GetAdonisImage(image),
-                Buttons = GetAdonisButtons(buttons)
+                Text = text, Caption = caption, Icon = GetAdonisImage(image), Buttons = GetAdonisButtons(buttons)
             };
 
             return (WMessageBoxResult)AdonisUI.Controls.MessageBox.Show(Application.Current.MainWindow, messageBox);
 
-            // local methods
-            AdonisUI.Controls.MessageBoxImage GetAdonisImage(WMessageBoxImage image) => (AdonisUI.Controls.MessageBoxImage)image;
 
-            IEnumerable<IMessageBoxButtonModel> GetAdonisButtons(WMessageBoxButtons buttons)
+            static IEnumerable<IMessageBoxButtonModel> GetAdonisButtons(WMessageBoxButtons buttonsParam)
             {
-                return buttons switch
+                return buttonsParam switch
                 {
-                    WMessageBoxButtons.Ok => new IMessageBoxButtonModel[1] { MessageBoxButtons.Ok() },
+                    WMessageBoxButtons.Ok => [MessageBoxButtons.Ok()],
                     WMessageBoxButtons.OkCancel => MessageBoxButtons.OkCancel(),
-                    WMessageBoxButtons.Yes => new IMessageBoxButtonModel[1] { MessageBoxButtons.Yes() },
+                    WMessageBoxButtons.Yes => [MessageBoxButtons.Yes()],
                     WMessageBoxButtons.YesNo => MessageBoxButtons.YesNo(),
                     WMessageBoxButtons.YesNoCancel => MessageBoxButtons.YesNoCancel(),
-                    WMessageBoxButtons.No => new IMessageBoxButtonModel[1] { MessageBoxButtons.No() },
+                    WMessageBoxButtons.No => [MessageBoxButtons.No()],
                     _ => throw new ArgumentOutOfRangeException(nameof(buttons)),
                 };
             }
         }
 
+        /// <inheritdoc cref="Interactions.ShowPopupWithWeblinkAsync"/>
+        private static WMessageBoxResult ShowConfirmationWithLink(
+            (string, string, string, string, WMessageBoxImage) input)
+        {
+            MessageBoxModel messageBox = new()
+            {
+                Text = input.Item1,
+                Caption = input.Item2,
+                Buttons = [MessageBoxButtons.Custom(input.Item4), MessageBoxButtons.Ok()],
+                Icon = GetAdonisImage(input.Item5),
+            };
+
+            var ret = AdonisUI.Controls.MessageBox.Show(Application.Current.MainWindow, messageBox);
+            if (ret == MessageBoxResult.Custom && input.Item3 is string link && !string.IsNullOrEmpty(link))
+            {
+                Process.Start(new ProcessStartInfo { FileName = link, UseShellExecute = true });
+            }
+
+            return (WMessageBoxResult)ret;
+        }
+
+        private static readonly IMessageBoxButtonModel[] s_saveDialogButtons =
+        [
+            MessageBoxButtons.Cancel("Cancel"),
+            MessageBoxButtons.Yes("Save and close"),
+            MessageBoxButtons.No("Close without saving")
+        ];
+
+        private static WMessageBoxResult ShowSaveDialog(string fileName)
+        {
+            MessageBoxModel messageBox = new()
+            {
+                Text = $"The File {fileName} has unsaved changes!",
+                Caption = "Really close your file?",
+                Icon = GetAdonisImage(WMessageBoxImage.Exclamation),
+                Buttons = s_saveDialogButtons
+            };
+
+            return (WMessageBoxResult)AdonisUI.Controls.MessageBox.Show(Application.Current.MainWindow, messageBox);
+        }
+        
         #endregion
 
         private void Overlay_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -153,31 +270,37 @@ namespace WolvenKit.Views.Shell
             }
         }
 
-        protected override async void OnClosing(CancelEventArgs e)
+        protected override void OnClosing(CancelEventArgs e)
         {
-            if (!await dockingAdapter.CloseAll())
+            if (!dockingAdapter.CloseAll())
             {
                 e.Cancel = true;
                 return;
             }
 
             dockingAdapter.SaveLayout();
-            var projectManager = Locator.Current.GetService<IProjectManager>();
-            if (projectManager is ProjectManager pm)
+            if (ViewModel?.GetToolViewModel<ProjectExplorerViewModel>() is { } pe)
             {
-                await pm.SaveAsync();
+                pe.SaveProjectExplorerTabIfDirty();
+                pe.StopWatcher();
             }
-            if (Locator.Current.GetService<IWatcherService>() is WatcherService ws)
+
+            if (ViewModel?.GetToolViewModel<PropertiesViewModel>() is { } p)
             {
-                ws.ForceStopTimer();
+                p.EffectsManager.Dispose();
             }
-            var hashService = Locator.Current.GetService<IHashService>();
-            if (hashService is HashService hs)
+
+            if (Locator.Current.GetService<IProjectManager>() is ProjectManager pm)
             {
-                hs.SaveUserHashes();
+                pm.Save();
             }
-            var cruidService = Locator.Current.GetService<CRUIDService>();
-            if (cruidService is { } cs)
+
+            if (Locator.Current.GetService<IHashService>() is HashServiceExt hashServiceExt)
+            {
+                hashServiceExt.SaveGlobalCache();
+            }
+
+            if (Locator.Current.GetService<CRUIDService>() is { } cs)
             {
                 cs.SaveUserCRUIDS();
             }

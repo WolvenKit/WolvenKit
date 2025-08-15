@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 namespace WolvenKit.App.ViewModels.Dialogs;
 
 /// <summary>
-/// A simple "search and replace" dialog.
+/// A simple "search and replace" dialog. Needs to register in GenericHost via AddTransient.
 /// </summary>
 public partial class SearchAndReplaceDialogViewModel() : ObservableObject
 {
@@ -22,10 +22,19 @@ public partial class SearchAndReplaceDialogViewModel() : ObservableObject
     /// <summary>
     ///Ignore case
     /// </summary>
-    [ObservableProperty] private bool _ignoreCase = false;
+    [ObservableProperty] private bool _rememberValues;
 
     /// <summary>
-    ///Ignore case
+    /// Whole word only?
     /// </summary>
-    [ObservableProperty] private bool _rememberValues = false;
+    [ObservableProperty] private bool _isWholeWord;
+
+    /// <summary>
+    /// Regular expression?
+    /// </summary>
+    [ObservableProperty] private bool _isRegex;
+    
+    
+
+    public void SwapFields() => (SearchText, ReplaceText) = (ReplaceText, SearchText);
 }

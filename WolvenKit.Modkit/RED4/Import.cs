@@ -33,9 +33,11 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="rawRelative"></param>
         /// <param name="args"></param>
         /// <param name="outDir">can be a depotpath, or if null the parent directory of the rawfile</param>
+        /// <param name="showVerboseLogOutput"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task<bool> Import(RedRelativePath rawRelative, GlobalImportArgs args, DirectoryInfo? outDir = null)
+        public async Task<bool> Import(RedRelativePath rawRelative, GlobalImportArgs args, DirectoryInfo? outDir = null,
+            bool showVerboseLogOutput = false)
         {
             #region checks
 
@@ -57,14 +59,19 @@ namespace WolvenKit.Modkit.RED4
                 return RebuildBuffer(rawRelative, outDir);
             }
 
+            var gltfImportArgs = args.Get<GltfImportArgs>();
+            gltfImportArgs.ShowVerboseLogOutput = showVerboseLogOutput;
+
+            var commonImportArgs = args.Get<CommonImportArgs>();
+            
             // import files
             return extAsEnum switch
             {
                 ERawFileFormat.bmp or ERawFileFormat.jpg or ERawFileFormat.png or ERawFileFormat.tiff or ERawFileFormat.tga or ERawFileFormat.dds or ERawFileFormat.cube => HandleTextures(rawRelative, outDir, args),
-                ERawFileFormat.gltf or ERawFileFormat.glb => ImportGltf(rawRelative, outDir, args.Get<GltfImportArgs>()),
-                ERawFileFormat.fbx => ImportFbx(rawRelative, outDir, args.Get<CommonImportArgs>()),
+                ERawFileFormat.gltf or ERawFileFormat.glb => ImportGltf(rawRelative, outDir, gltfImportArgs),
+                ERawFileFormat.fbx => ImportFbx(rawRelative, outDir, commonImportArgs),
                 ERawFileFormat.masklist => ImportMlmask(rawRelative, outDir),
-                ERawFileFormat.ttf => ImportTtf(rawRelative, outDir, args.Get<CommonImportArgs>()),
+                ERawFileFormat.ttf => ImportTtf(rawRelative, outDir, commonImportArgs),
                 ERawFileFormat.wav => ImportWav(rawRelative, outDir, args.Get<OpusImportArgs>()),
                 ERawFileFormat.csv => ImportCsv(rawRelative, outDir, args),
                 ERawFileFormat.re => await ImportAnims(rawRelative, outDir, args.Get<ReImportArgs>()),
@@ -354,19 +361,7 @@ namespace WolvenKit.Modkit.RED4
                     return false;
                 }
 
-                args = new XbmImportArgs
-                {
-                    //AllowTextureDowngrade = xbm.Setup.AllowTextureDowngrade,
-                    //AlphaToCoverageThreshold = xbm.Setup.AlphaToCoverageThreshold,
-                    Compression = Enum.Parse<ETextureCompression>(xbm.Setup.Compression.ToString()),
-                    GenerateMipMaps = xbm.Setup.HasMipchain,
-                    IsGamma = xbm.Setup.IsGamma,
-                    //IsStreamable = xbm.Setup.IsStreamable,
-                    //PlatformMipBiasConsole = xbm.Setup.PlatformMipBiasConsole,
-                    //PlatformMipBiasPC = xbm.Setup.PlatformMipBiasPC,
-                    RawFormat = Enum.Parse<ETextureRawFormat>(xbm.Setup.RawFormat.ToString()),
-                    TextureGroup = xbm.Setup.Group
-                };
+                args = new XbmImportArgs(xbm.Setup);
             }
 
             var extension = Path.GetExtension(infilePath);
@@ -437,21 +432,8 @@ namespace WolvenKit.Modkit.RED4
 
             string redfile;
 
-            if (args.SelectBase)
+            if (args.BaseMesh.FirstOrDefault() is FileEntry m)
             {
-                if (args.BaseMesh is null)
-                {
-                    _loggerService.Warning($"Please select a base mesh");
-                    return false;
-                }
-
-                var m = args.BaseMesh.FirstOrDefault();
-                if (m is null)
-                {
-                    _loggerService.Error($"Could not find any base mesh.");
-                    return false;
-                }
-
                 if (_archiveManager.Lookup(m.NameHash64).Value
                     is Core.Interfaces.IGameFile file)
                 {
@@ -544,23 +526,14 @@ namespace WolvenKit.Modkit.RED4
 
         }
 
-        private static (string, GltfImportAsFormat) GetImportExtensionAndFormat(GltfImportArgs args,
-            Optional<string> maybeType)
-        {
-            // Anything but .mesh should have a value
-            if (!maybeType.HasValue)
-            {
-                return ($".mesh", args.ImportFormat);
-            }
-           
-            return args.ImportFormat switch
+        private static (string, GltfImportAsFormat) GetImportExtensionAndFormat(GltfImportArgs args, Optional<string> maybeType) =>
+            args.ImportFormat switch
             {
                 GltfImportAsFormat.MeshWithRig => ($".mesh", args.ImportFormat),
                 GltfImportAsFormat.Anims => ($".anims", GltfImportAsFormat.Anims),
-                _ => ($".{args.ImportFormat.ToString().ToLower()}", args.ImportFormat)
+                _ => (maybeType.HasValue ? maybeType.Value : ".mesh", args.ImportFormat), 
             };
-        }
-            
+
 
 #pragma warning disable IDE0072 // Add missing cases
         private static ECookedFileFormat FromRawExtension(ERawFileFormat rawextension) =>

@@ -325,6 +325,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(49)] 
+		[RED("playerObject")] 
+		public CWeakHandle<gameObject> PlayerObject
+		{
+			get => GetPropertyValue<CWeakHandle<gameObject>>();
+			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
+		}
+
+		[Ordinal(50)] 
 		[RED("visionModeSystem")] 
 		public CWeakHandle<gameVisionModeSystem> VisionModeSystem
 		{
@@ -332,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameVisionModeSystem>>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(51)] 
 		[RED("scanningCtrl")] 
 		public CWeakHandle<gameScanningController> ScanningCtrl
 		{
@@ -340,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameScanningController>>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(52)] 
 		[RED("uiSystem")] 
 		public CHandle<gameuiGameSystemUI> UiSystem
 		{
@@ -348,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameuiGameSystemUI>>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(53)] 
 		[RED("contextHelpOverlay")] 
 		public CBool ContextHelpOverlay
 		{
@@ -356,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(54)] 
 		[RED("quickHackDescriptionVisibility")] 
 		public CUInt32 QuickHackDescriptionVisibility
 		{
@@ -364,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(55)] 
 		[RED("buffListListener")] 
 		public CHandle<redCallbackObject> BuffListListener
 		{
@@ -372,7 +380,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(56)] 
 		[RED("memoryBoard")] 
 		public CWeakHandle<gameIBlackboard> MemoryBoard
 		{
@@ -380,7 +388,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(57)] 
 		[RED("memoryBoardDef")] 
 		public CHandle<UI_PlayerBioMonitorDef> MemoryBoardDef
 		{
@@ -388,7 +396,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_PlayerBioMonitorDef>>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(58)] 
 		[RED("memoryPercentListener")] 
 		public CHandle<redCallbackObject> MemoryPercentListener
 		{
@@ -396,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(59)] 
 		[RED("quickhackBarArray")] 
 		public CArray<CWeakHandle<inkCompoundWidget>> QuickhackBarArray
 		{
@@ -404,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<inkCompoundWidget>>>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(60)] 
 		[RED("maxQuickhackBars")] 
 		public CInt32 MaxQuickhackBars
 		{
@@ -412,7 +420,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(61)] 
 		[RED("listController")] 
 		public CWeakHandle<inkListController> ListController
 		{
@@ -420,7 +428,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkListController>>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(62)] 
 		[RED("data")] 
 		public CArray<CHandle<QuickhackData>> Data
 		{
@@ -428,7 +436,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<QuickhackData>>>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(63)] 
 		[RED("selectedData")] 
 		public CHandle<QuickhackData> SelectedData
 		{
@@ -436,7 +444,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<QuickhackData>>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(64)] 
 		[RED("active")] 
 		public CBool Active
 		{
@@ -444,7 +452,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(65)] 
+		[RED("shouldReveal")] 
+		public CBool ShouldReveal
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(66)] 
 		[RED("memorySpendAnimation")] 
 		public CHandle<inkanimProxy> MemorySpendAnimation
 		{
@@ -452,7 +468,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(67)] 
 		[RED("memorySpendCounter")] 
 		public CInt32 MemorySpendCounter
 		{
@@ -460,7 +476,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(68)] 
 		[RED("memorySpendIndex")] 
 		public CInt32 MemorySpendIndex
 		{
@@ -468,7 +484,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(69)] 
 		[RED("selectedMemoryLoop")] 
 		public CArray<CHandle<inkanimProxy>> SelectedMemoryLoop
 		{
@@ -476,7 +492,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<inkanimProxy>>>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(70)] 
 		[RED("inkIntroAnimProxy")] 
 		public CHandle<inkanimProxy> InkIntroAnimProxy
 		{
@@ -484,7 +500,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(71)] 
 		[RED("inkVulnerabilityAnimProxy")] 
 		public CHandle<inkanimProxy> InkVulnerabilityAnimProxy
 		{
@@ -492,7 +508,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(72)] 
 		[RED("inkWarningAnimProxy")] 
 		public CHandle<inkanimProxy> InkWarningAnimProxy
 		{
@@ -500,7 +516,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(73)] 
 		[RED("inkRecompileAnimProxy")] 
 		public CHandle<inkanimProxy> InkRecompileAnimProxy
 		{
@@ -508,7 +524,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(72)] 
+		[Ordinal(74)] 
 		[RED("inkReductionAnimProxy")] 
 		public CHandle<inkanimProxy> InkReductionAnimProxy
 		{
@@ -516,7 +532,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(73)] 
+		[Ordinal(75)] 
 		[RED("HACK_wasPlayedOnTarget")] 
 		public CBool HACK_wasPlayedOnTarget
 		{
@@ -524,7 +540,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(74)] 
+		[Ordinal(76)] 
 		[RED("inkMemoryWarningTransitionAnimProxy")] 
 		public CHandle<inkanimProxy> InkMemoryWarningTransitionAnimProxy
 		{
@@ -532,7 +548,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(75)] 
+		[Ordinal(77)] 
 		[RED("lastMemoryWarningTransitionAnimName")] 
 		public CName LastMemoryWarningTransitionAnimName
 		{
@@ -540,7 +556,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(76)] 
+		[Ordinal(78)] 
 		[RED("hasActiveUpload")] 
 		public CBool HasActiveUpload
 		{
@@ -548,7 +564,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(77)] 
+		[Ordinal(79)] 
 		[RED("lastCompiledTarget")] 
 		public entEntityID LastCompiledTarget
 		{
@@ -556,7 +572,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(78)] 
+		[Ordinal(80)] 
 		[RED("statPoolListenersIndexes")] 
 		public CArray<CInt32> StatPoolListenersIndexes
 		{
@@ -564,7 +580,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CInt32>>(value);
 		}
 
-		[Ordinal(79)] 
+		[Ordinal(81)] 
 		[RED("chunkBlackboard")] 
 		public CWeakHandle<gameIBlackboard> ChunkBlackboard
 		{
@@ -572,7 +588,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(80)] 
+		[Ordinal(82)] 
 		[RED("nameCallbackID")] 
 		public CHandle<redCallbackObject> NameCallbackID
 		{
@@ -580,7 +596,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(81)] 
+		[Ordinal(83)] 
 		[RED("uiScannerChangeTargetTooltipVisibilityCallback")] 
 		public CHandle<redCallbackObject> UiScannerChangeTargetTooltipVisibilityCallback
 		{
@@ -588,7 +604,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(82)] 
+		[Ordinal(84)] 
+		[RED("uiScannerActiveTabCallback")] 
+		public CHandle<redCallbackObject> UiScannerActiveTabCallback
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(85)] 
 		[RED("lastFillCells")] 
 		public CInt32 LastFillCells
 		{
@@ -596,7 +620,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(83)] 
+		[Ordinal(86)] 
 		[RED("lastUsedCells")] 
 		public CInt32 LastUsedCells
 		{
@@ -604,7 +628,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(84)] 
+		[Ordinal(87)] 
 		[RED("lastMaxCells")] 
 		public CInt32 LastMaxCells
 		{
@@ -612,20 +636,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(85)] 
+		[Ordinal(88)] 
 		[RED("axisInputConsumed")] 
 		public CBool AxisInputConsumed
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(86)] 
-		[RED("playerObject")] 
-		public CWeakHandle<gameObject> PlayerObject
-		{
-			get => GetPropertyValue<CWeakHandle<gameObject>>();
-			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
 		public QuickhacksListGameController()

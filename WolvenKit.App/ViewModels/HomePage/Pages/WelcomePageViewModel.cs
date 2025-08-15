@@ -77,7 +77,7 @@ public partial class WelcomePageViewModel : PageViewModel
 
     #region Properties
 
-    public string DiscordLink = "https://discord.gg/tKZXma5SaA";
+    public string DiscordLink = "https://discord.gg/Epkq79kd96";
     public string OpenCollectiveLink = "https://opencollective.com/redmodding";
     public string PatreonLink = "https://www.patreon.com/m/RedModdingTools";
     public string TwitterLink = "https://twitter.com/ModdingRed";
@@ -117,12 +117,16 @@ public partial class WelcomePageViewModel : PageViewModel
     private void OpenProject(string s)
     {
         _mainViewModel.OpenProjectCommand.Execute(s);
+
+        // clear filters
+        RecentFilter = string.Empty;
+        PinnedFilter = string.Empty;
     }
 
     [RelayCommand]
     private void DeleteProject(string s)
     {
-        _mainViewModel.DeleteProjectCommand.Execute(s);
+        _mainViewModel.DeleteProjectFromRecentCommand.Execute(s);
     }
 
     [RelayCommand]
@@ -168,7 +172,6 @@ public partial class WelcomePageViewModel : PageViewModel
     private void UnpinItem(string parameter)
     {
         //Argument.IsNotNullOrWhitespace(() => parameter);
-
         //_recentlyUsedItemsService.UnpinItem(parameter);
     }
 

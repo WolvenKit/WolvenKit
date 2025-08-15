@@ -14,7 +14,6 @@ using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
-using Application = System.Windows.Application;
 
 namespace WolvenKit.App.ViewModels.Documents;
 
@@ -22,9 +21,10 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
 {
     public inkWidgetLibraryResource library;
 
-
-
     public RDTWidgetViewModel(inkWidgetLibraryResource data, RedDocumentViewModel file) : base(file, "Widget Preview") => library = data;
+
+
+    [ObservableProperty] public bool _isLoaded;
 
     [ObservableProperty] private Dictionary<object, inkTextWidget> _textWidgets = new();
 
@@ -50,10 +50,15 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
 
     [ObservableProperty] private bool _isDragging;
 
+    [ObservableProperty] private bool _isPixelGridSnappingEnabled;
 
+    [ObservableProperty] private double _gridZoom = 1.0;
+
+    [ObservableProperty] private System.Windows.Point _gridOffset = new(0.0, 0.0);
 
     public async Task LoadResources()
     {
+        IsLoaded = false;
         await Task.Run(async () =>
         {
             var tasks = new List<Task>
@@ -63,7 +68,7 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
 
             foreach (var f in library.ExternalDependenciesForInternalItems)
             {
-                var itemPath = f.DepotPath.ToString().NotNull();
+                var itemPath = f.DepotPath.GetResolvedText().NotNull();
                 if (Path.GetExtension(itemPath) == ".inkatlas")
                 {
                     tasks.Add(LoadInkAtlasAsync(itemPath));
@@ -80,6 +85,8 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
 
             await Task.WhenAll(tasks);
         });
+
+        IsLoaded = true;
     }
 
     public Task LoadAnimations()
@@ -266,6 +273,11 @@ public partial class RDTWidgetViewModel : RedDocumentTabViewModel
                 var y = Math.Round(part.ClippingRectInUVCoords.Top * image.Metadata.Height);
                 var width = Math.Round(part.ClippingRectInUVCoords.Right * image.Metadata.Width) - x;
                 var height = Math.Round(part.ClippingRectInUVCoords.Bottom * image.Metadata.Height) - y;
+
+                if (width == 0 || height == 0)
+                {
+                    continue;
+                }
 
                 var partImage = await Task.Run(() => ImageDecoder.CreateBitmapImage(image.Crop((int)x, (int)y, (int)width, (int)height), false));
 

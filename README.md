@@ -8,7 +8,7 @@
 ![GitHub all releases](https://img.shields.io/github/downloads/WolvenKit/WolvenKit/total)
 ![GitHub issues](https://img.shields.io/github/issues/WolvenKit/WolvenKit)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/WolvenKit/WolvenKit)
-<a href="https://discord.gg/cp77modding"><img src="https://img.shields.io/discord/717692382849663036.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2"></a>
+<a href="https://discord.gg/Epkq79kd96"><img src="https://img.shields.io/discord/717692382849663036.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2"></a>
 
 > ⚠️ This repository focuses on REDengine 4 for Cyberpunk 2077. For WolvenKit for <em>The Witcher 3: Wild Hunt</em> please see: https://github.com/WolvenKit/WolvenKit-7
 
@@ -40,12 +40,6 @@ Wolvenkit requires the latest .NET 8.0 runtime:
 ----------
 
 There are multiple ways to install Wolvenkit:
-
-### The WolvenKit.Installer app
-
-The WolvenKit.Installer app is a simple program for managing (installing, updating, removing) different WolvenKit versions similar to the Visual Studio Installer app. 
-
-It is [hosted on github](https://github.com/WolvenKit/WolvenKit.Installer) and you can install it from there. Click here: [![GitHub release (latest by date)](https://img.shields.io/github/v/release/WolvenKit/WolvenKit.Installer)](https://github.com/WolvenKit/WolvenKit.Installer/releases/latest)
 
 ### Portable or Installer
 
@@ -98,7 +92,7 @@ Developer | Role | Email
 
 WolvenKit is a direct result of the hard work and continuous support, financial and otherwise, of the many researchers, programmers, artists, contributors, and companies that have helped with this project. Without their outstanding work and generous support, we never would have been able to create WolvenKit for Cyberpunk 2077. A very special thank you goes out to...
 
-<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg" alt="JetBrains Logo (Main) logo." width="100" height="100">
+<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.png" alt="JetBrains logo." height="64">
 
 - [JetBrains](https://www.jetbrains.com) who supplied open source licences for our developers
 - [Syncfusion](https://www.syncfusion.com/company/about-us) who supplied an open source licence for the WPF controls we use

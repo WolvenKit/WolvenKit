@@ -1,3 +1,4 @@
+using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types.Exceptions;
@@ -6,8 +7,6 @@ using WolvenKit.RED4.Types.Pools;
 namespace WolvenKit.RED4.Archive;
 public class FileEntry : ICyberGameFile
 {
-    private IHashService? _hashService;
-
     #region Constructors
 
     public FileEntry()
@@ -15,10 +14,7 @@ public class FileEntry : ICyberGameFile
 
     }
 
-    public FileEntry(IHashService hashService) => _hashService = hashService;
-
     public FileEntry(
-        IHashService hashService,
         ulong hash,
         DateTime datetime,
         uint flags,
@@ -28,8 +24,6 @@ public class FileEntry : ICyberGameFile
         uint resourceDependenciesEnd,
         byte[] sha1hash)
     {
-        _hashService = hashService;
-
         NameHash64 = hash;
         Timestamp = datetime;
         NumInlineBufferSegments = flags;
@@ -58,6 +52,8 @@ public class FileEntry : ICyberGameFile
     public uint ZSize { get; set; }
     public string GuessedExtension { get; set; }
 
+    public ArchiveManagerScope Scope { get; set; }
+
     public ulong Key => NameHash64;
     public string Name => GetNameString(NameHash64.ToString())!;
     public string BytesAsString => BitConverter.ToString(SHA1Hash);
@@ -81,8 +77,6 @@ public class FileEntry : ICyberGameFile
 
         return ext;
     }
-
-    public void SetHashService(IHashService hashService) => _hashService = hashService;
 
 
     public void Extract(Stream output) => Extract(output, false);

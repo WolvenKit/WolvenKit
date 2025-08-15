@@ -1,37 +1,36 @@
 <reactiveUi:ReactiveUserControl
     x:Class="WolvenKit.Views.Documents.RedDocumentView"
+    x:TypeArguments="docVM:RedDocumentViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:converters="clr-namespace:WolvenKit.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:docV="clr-namespace:WolvenKit.Views.Documents"
     xmlns:docVM="clr-namespace:WolvenKit.App.ViewModels.Documents;assembly=WolvenKit.App"
+    xmlns:graphEditor="clr-namespace:WolvenKit.Views.GraphEditor"
     xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type={x:Type docVM:RedDocumentViewModel}}"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
-    x:TypeArguments="docVM:RedDocumentViewModel"
-    mc:Ignorable="d">
-
+    d:DesignWidth="600">
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
-
         <Grid.Resources>
-
             <DataTemplate DataType="{x:Type docVM:RDTDataViewModel}">
                 <docV:RDTDataView ViewModel="{Binding}" />
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type docVM:RDTTextureViewModel}">
-                <docV:RDTTextureView ViewModel="{Binding}" />
+            <DataTemplate DataType="{x:Type docVM:RDTInkTextureAtlasViewModel}">
+                <docV:RDTInkAtlasView DataContext="{Binding}" />
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type docVM:RDTTextViewModel}">
-                <docV:RDTTextView ViewModel="{Binding}" />
+            <DataTemplate DataType="{x:Type docVM:RDTLayeredPreviewViewModel}">
+                <docV:RDTLayeredTextureView DataContext="{Binding}" />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type docVM:RDTTextureViewModel}">
+                <docV:RDTTextureView DataContext="{Binding}" />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type docVM:RDTMeshViewModel}">
@@ -50,119 +49,158 @@
                 <docV:RDTGraphView2 ViewModel="{Binding}" />
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type docVM:SceneGraphViewModel}">
+                <docV:SceneGraphView DataContext="{Binding}" />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type docVM:QuestPhaseGraphViewModel}">
+                <docV:QuestPhaseGraphView DataContext="{Binding}" />
+            </DataTemplate>
+
         </Grid.Resources>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <docV:RedDocumentViewMenuBar
+            x:Name="RedDocumentViewToolbar"
+            Grid.Row="0"
+            ViewModel="{Binding}" />
+
         <syncfusion:TabControlExt
             x:Name="TabControl"
-            Margin="-3,-2,-3,-3"
+            Grid.Row="1"
+            Margin="0"
             Padding="0"
+            Style="{StaticResource WolvenKitTabControl}"
             AllowDragDrop="True"
-            BorderThickness="0,0,0,0"
             CloseButtonType="Hide"
             EnableLabelEdit="False"
             IsNewButtonEnabled="True"
-            ItemsSource="{Binding TabItemViewModels, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-            SelectedIndex="{Binding SelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            SelectedItem="{Binding SelectedTabItemViewModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            ItemsSource="{Binding TabItemViewModels,
+                                  Mode=OneWay,
+                                  UpdateSourceTrigger=PropertyChanged}"
+            SelectedIndex="{Binding SelectedIndex,
+                                    Mode=TwoWay,
+                                    UpdateSourceTrigger=PropertyChanged}"
+            SelectedItem="{Binding SelectedTabItemViewModel,
+                                   Mode=TwoWay,
+                                   UpdateSourceTrigger=PropertyChanged}"
             ShowTabItemContextMenu="False"
-            Style="{StaticResource WolvenKitTabControl}"
             TabPanelBackground="#313131"
             Tag="{Binding}">
-
-            
             <syncfusion:TabControlExt.NewTabButtonTemplate>
                 <DataTemplate>
                     <Button
-                        Margin="0"
-                        Padding="5,5"
+                        Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                        Padding="{DynamicResource WolvenKitMarginTiny}"
                         Background="Transparent"
-                        Command="{Binding Tag.NewEmbeddedFileCommand, RelativeSource={RelativeSource AncestorType=syncfusion:TabControlExt}}"
+                        Command="{Binding Tag.NewEmbeddedFileCommand,
+                                          RelativeSource={RelativeSource AncestorType=syncfusion:TabControlExt}}"
                         ToolTip="New Embedded File">
                         <Button.Content>
-                            <iconPacks:PackIconCodicons
-                                Width="11"
-                                Height="11"
-                                Padding="0,0,0,0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Kind="Add" />
+                            <templates:IconBox
+                                IconPack="Codicons"
+                                Kind="Add"
+                                Margin="0"
+                                Size="{DynamicResource WolvenKitIconMicro}"
+                                Foreground="White" />
                         </Button.Content>
                     </Button>
                 </DataTemplate>
             </syncfusion:TabControlExt.NewTabButtonTemplate>
-            
-            
-            
+
             <syncfusion:TabControlExt.ItemTemplate>
                 <DataTemplate>
-                    <Grid Margin="-5" Tag="{Binding}">
-                        
-                        <TextBlock
-                            Padding="5"
-                            Text="{Binding Header}"
-                            ToolTip="{Binding FilePath}"
-                            Mouse.MouseDown="OnToggleNoobFilter" />
-
+                    <Grid
+                        Margin="0"
+                        Tag="{Binding}">
                         <Grid.ContextMenu>
                             <ContextMenu DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
+                                <ContextMenu.Resources>
+                                    <Style TargetType="{x:Type templates:IconBox}">
+                                        <Setter Property="Opacity" Value="1.0" />
+
+                                        <Style.Triggers>
+                                            <DataTrigger
+                                                Binding="{Binding Path=IsEnabled,
+                                                                  RelativeSource={RelativeSource AncestorType={x:Type MenuItem}}}"
+                                                Value="False">
+                                                <Setter Property="Opacity" Value="0.5" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ContextMenu.Resources>
+
                                 <TextBlock
+                                    MinHeight="{DynamicResource WolvenKitIconSmall}"
+                                    Margin="{DynamicResource WolvenKitMarginTinyVertical}"
+                                    Background="Transparent"
                                     Foreground="Gray"
+                                    Visibility="{Binding Path=PlacementTarget.Tag.IsEmbeddedFile,
+                                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                                     IsEnabled="False"
-                                    Text="{Binding Path=PlacementTarget.Tag.FilePath, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                                    Visibility="{Binding Path=PlacementTarget.Tag.IsEmbeddedFile, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    Text="{Binding Path=PlacementTarget.Tag.RelativeFilePath,
+                                                   RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
                                 <MenuItem
-                                    Command="{Binding PlacementTarget.Tag.RenameEmbeddedFileCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                                    Header="Rename Embedded File"
-                                    Visibility="{Binding Path=PlacementTarget.Tag.IsEmbeddedFile, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    Visibility="{Binding Path=PlacementTarget.Tag.IsEmbeddedFile,
+                                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                                    Command="{Binding PlacementTarget.Tag.RenameEmbeddedFileCommand,
+                                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                    Header="Rename Embedded File">
                                     <MenuItem.Icon>
-                                        <iconPacks:PackIconCodicons
-                                            Width="13"
-                                            Height="13"
-                                            Padding="0,0,0,0"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            Kind="Edit" />
+                                        <templates:IconBox
+                                            IconPack="Material"
+                                            Kind="Pencil"
+                                            Foreground="White" />
                                     </MenuItem.Icon>
                                 </MenuItem>
+
                                 <MenuItem
-                                    Command="{Binding PlacementTarget.Tag.DeleteEmbeddedFileCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                                    Header="Delete Embedded File"
-                                    Visibility="{Binding Path=PlacementTarget.Tag.IsEmbeddedFile, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    Visibility="{Binding Path=PlacementTarget.Tag.IsEmbeddedFile,
+                                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                                    Command="{Binding PlacementTarget.Tag.ExtractEmbeddedFileCommand,
+                                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                    Header="Extract Embedded File">
                                     <MenuItem.Icon>
-                                        <iconPacks:PackIconCodicons
-                                            Width="13"
-                                            Height="13"
-                                            Padding="0,0,0,0"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            Kind="Trash" />
+                                        <templates:IconBox
+                                            IconPack="Codicons"
+                                            Kind="Save"
+                                            Foreground="{StaticResource WolvenKitCyan}" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+
+                                <MenuItem
+                                    Visibility="{Binding Path=PlacementTarget.Tag.IsEmbeddedFile,
+                                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
+                                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                                    Command="{Binding PlacementTarget.Tag.DeleteEmbeddedFileCommand,
+                                                      RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                    Header="Delete Embedded File">
+                                    <MenuItem.Icon>
+                                        <templates:IconBox
+                                            IconPack="Material"
+                                            Kind="Delete"
+                                            Foreground="{StaticResource WolvenKitRed}" />
                                     </MenuItem.Icon>
                                 </MenuItem>
                             </ContextMenu>
                         </Grid.ContextMenu>
-                        
+
+                        <TextBlock
+                            Padding="{DynamicResource WolvenKitMarginTiny}"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                            Mouse.MouseDown="OnToggleNoobFilter"
+                            Text="{Binding Header}"
+                            ToolTip="{Binding FilePath}" />
                     </Grid>
                 </DataTemplate>
             </syncfusion:TabControlExt.ItemTemplate>
-
-            <!-- <syncfusion:TabControlExt.ContextMenu>
-                <ContextMenu DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
-                    <MenuItem Command="{Binding PlacementTarget.Tag.NewEmbeddedFileCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Header="New Embedded File">
-                        <MenuItem.Icon>
-                            <iconPacks:PackIconCodicons
-                                Width="13"
-                                Height="13"
-                                Padding="0,0,0,0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Kind="Add" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                </ContextMenu>
-            </syncfusion:TabControlExt.ContextMenu>-->
-
         </syncfusion:TabControlExt>
-
-
     </Grid>
-
 </reactiveUi:ReactiveUserControl>

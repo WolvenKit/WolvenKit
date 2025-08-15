@@ -23,6 +23,7 @@ public static class BufferHelper
         s_bufferReaders.Add("worldSharedDataBuffer.buffer", typeof(WorldSharedDataBufferReader));
         s_bufferReaders.Add("worldStreamingSector.transforms", typeof(worldNodeDataReader));
         s_bufferReaders.Add("worldCollisionNode.compiledData", typeof(CollisionReader));
+        s_bufferReaders.Add("worldFoliageDestructionNode.compiledData", typeof(CollisionReader));
         //s_bufferReaders.Add("physicsGeometryCache.bufferTableSectors", typeof(GeometryCacheReader));
         //s_bufferReaders.Add("physicsGeometryCache.alwaysLoadedSectorDDB", typeof(GeometryCacheReader));
         s_bufferReaders.Add("CGIDataResource.data", typeof(CGIDataReader));
@@ -31,6 +32,8 @@ public static class BufferHelper
         s_bufferReaders.Add("animFacialSetup.bakedData", typeof(AnimFacialSetupBakedDataReader));
         s_bufferReaders.Add("animFacialSetup.mainPosesData", typeof(AnimFacialSetupMainPosesDataReader));
         s_bufferReaders.Add("animFacialSetup.correctivePosesData", typeof(AnimFacialSetupCorrectivePosesDataReader));
+
+        s_bufferReaders.Add("gameRazerChromaAnimation.buffer", typeof(RazerChromaAnimationBufferReader));
 
         s_bufferReaders.Add("CPhysicsDecorationResource.unk2", typeof(UnkPhysicsReader));
 

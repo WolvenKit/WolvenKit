@@ -148,6 +148,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
+		[Ordinal(43)] 
+		[RED("cinematicCameraBBId")] 
+		public CHandle<redCallbackObject> CinematicCameraBBId
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
 		public PhoneHotkeyController()
 		{
 			HotkeyBackground = new inkImageWidgetReference();

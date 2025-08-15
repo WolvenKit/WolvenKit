@@ -1,4 +1,5 @@
 using System.Collections;
+using WolvenKit.RED4.Archive.Buffer;
 
 namespace WolvenKit.RED4.Types;
 
@@ -34,50 +35,104 @@ public partial class RedBaseClass
 
     public (bool, IRedType?) GetFromXPath(string[] xPath)
     {
-        IRedType? result = null;
-        var currentProps = _properties;
-        foreach (var part in xPath)
+        if (xPath.Length == 0)
         {
-            if (currentProps == null)
+            return (true, this);
+        }
+        
+        IRedType? result = this;
+        var currentProps = _properties;
+
+        foreach (var partial in xPath)
+        {
+            // after the loop, we should have currentProps from a base class, and a result
+            if (result == null || currentProps == null)
             {
                 return (false, null);
             }
 
-            var arrPath = part.Split(':');
-            if (currentProps.ContainsKey(arrPath[0]))
+            // In case of (nested) lists, we need to process the index structure below
+            var arrPath = partial.Split(':');
+
+            if (!currentProps.TryGetValue(arrPath[0], out var child))
             {
-                result = currentProps[arrPath[0]];
+                return (false, null);
+            }
 
-                currentProps = null;
+            result = child;
 
+
+            // we'll look in the child's properties next
+
+            currentProps = result switch
+            {
+                IRedHandle ira => ira.GetValue()?._properties,
+                RedBaseClass rbc => rbc._properties,
+                _ => null
+            };
+
+            if (arrPath.Length == 1)
+            {
+                continue;
+            }
+
+            // We have leftover array indices and need to go down
+            arrPath = arrPath.Skip(1).ToArray();
+
+            foreach (var arrayProp in arrPath)
+            {
+                if (currentProps?.TryGetValue(arrayProp, out var grandChild) == true)
+                {
+                    result = grandChild;
+                    currentProps = result switch
+                    {
+                        IRedHandle handle => handle.GetValue()?._properties,
+                        RedBaseClass rbc2 => rbc2._properties,
+                        _ => currentProps
+                    };
+
+                    continue;
+                }
+
+                if (!int.TryParse(arrayProp, out var index) || index < 0)
+                {
+                    return (false, null);
+                }
+
+                // also covers IRedArray
                 if (result is IList lst)
                 {
-                    if (arrPath.Length == 2 && int.TryParse(arrPath[1], out var index))
+                    if (index >= lst.Count)
                     {
-                        if (index >= lst.Count)
+                        return (false, null);
+                    }
+
+                    result = (IRedType?)lst[index];
+                }
+
+                switch (result)
+                {
+                    case IRedBaseHandle handle:
+                        currentProps = handle.GetValue()?._properties;
+                        continue;
+                    case RedBaseClass subCls:
+                        currentProps = subCls._properties;
+                        continue;
+                    case IRedBufferWrapper { Data: RedPackage redPackage }:
+                    {
+                        if (index >= redPackage.Chunks.Count)
                         {
                             return (false, null);
                         }
 
-                        result = (IRedType?)lst[index];
+                        result = redPackage.Chunks[index];
+                        currentProps = ((RedBaseClass)result)._properties;
+                        break;
                     }
+                    default:
+                        break;
                 }
-
-                if (result is RedBaseClass subCls)
-                {
-                    currentProps = subCls._properties;
-                }
-
-                if (result is IRedBaseHandle handle)
-                {
-                    var cCls = handle.GetValue();
-                    currentProps = cCls?._properties;
-                }
-
-                continue;
             }
-
-            return (false, null);
         }
 
         return (true, result);
@@ -90,7 +145,7 @@ public partial class RedBaseClass
     public IEnumerable<(string propPath, IRedType value)> GetEnumerator(string rootName = "root")
     {
         var queue = new Queue<(RedBaseClass, string)>();
-        var visited = new List<RedBaseClass>();
+        var visited = new Dictionary<RedBaseClass, byte>(ReferenceEqualityComparer.Instance);
 
         foreach (var tuple in InternalFindType(this))
         {
@@ -104,7 +159,7 @@ public partial class RedBaseClass
             {
                 var (cls1, path) = queue.Dequeue();
 
-                if (visited.Contains(cls1))
+                if (!visited.TryAdd(cls1, 0))
                 {
                     continue;
                 }
@@ -118,8 +173,6 @@ public partial class RedBaseClass
                         yield return tuple;
                     }
                 }
-
-                visited.Add(cls1);
             }
         }
 
@@ -155,6 +208,19 @@ public partial class RedBaseClass
                 {
                     queue.Enqueue((handle.GetValue()!, propPath));
                 }
+            }
+
+            if (value is IRedBufferWrapper { Data: RedPackage redPackage })
+            {
+                for (var i = 0; i < redPackage.Chunks.Count; i++)
+                {
+                    queue.Enqueue((redPackage.Chunks[i], $"{propPath}:{i}"));
+                }
+            }
+
+            if (value is CKeyValuePair cKeyValuePair)
+            {
+                yield return ($"{propPath}.Value", cKeyValuePair.Value);
             }
         }
     }

@@ -1,14 +1,16 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text.Json;
-using WolvenKit.Common.FNV1A;
+using System.Threading.Tasks;
 using WolvenKit.Common.Model;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
+using WolvenKit.Core.Helpers;
+using WolvenKit.Core.Unmanaged;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Pools;
 
@@ -19,16 +21,13 @@ namespace WolvenKit.Common.Services
         #region Fields
 
         private const string s_used = "WolvenKit.Common.Resources.usedhashes.kark";
-        private const string s_unused = "WolvenKit.Common.Resources.unusedhashes.kark";
-        private const string s_noderefs = "WolvenKit.Common.Resources.noderefs.kark";
-        private const string s_userHashes = "user_hashes.txt";
+        private const string s_nodeRefs = "WolvenKit.Common.Resources.noderefs.kark";
+        private const string s_tweakDbStr = "WolvenKit.Common.Resources.tweakdbstr.kark";
         private const string s_missing = "WolvenKit.Common.Resources.missinghashes.json";
 
+        private static readonly int _maxDoP = Environment.ProcessorCount > 2 ? (Environment.ProcessorCount - 2) : 1;
+
         private readonly Dictionary<ulong, SAsciiString> _hashes = new();
-        private readonly Dictionary<ulong, SAsciiString> _additionalhashes = new();
-        private readonly Dictionary<ulong, SAsciiString> _userHashes = new();
-        private readonly Dictionary<ulong, SAsciiString> _projectHashes = new();
-        private readonly Dictionary<ulong, SAsciiString> _noderefs = new();
 
         private Dictionary<ulong, string> _missing = new();
 
@@ -36,50 +35,31 @@ namespace WolvenKit.Common.Services
 
         #region Constructors
 
-        public HashService()
-        {
-            Load();
-
-            ImportHandler.AddPathHandler = AddProjectPath;
-            ResourcePathPool.ResolveHashHandler = Get;
-        }
+        public HashService() => Load();
 
         #endregion Constructors
 
         #region Methods
 
-        private bool IsAdditionalLoaded;/*() => _additionalhashes.Count > 0;*/
-
-        public IEnumerable<ulong> GetAllHashes()
-        {
-            // load additional
-            LoadAdditional();
-            return _hashes.Keys.Concat(_userHashes.Keys).Concat(_additionalhashes.Keys);
-        }
+        public IEnumerable<ulong> GetAllHashes() => _hashes.Keys;
 
         public IEnumerable<ulong> GetMissingHashes() => _missing.Keys;
 
         public bool Contains(ulong key, bool checkUserHashes = true)
         {
-            if (_hashes.ContainsKey(key))
+            if (ResourcePathPool.IsNative(key))
             {
                 return true;
             }
-            if (checkUserHashes && _userHashes.ContainsKey(key))
+
+            if (checkUserHashes && ResourcePathPool.IsRuntime(key))
             {
                 return true;
             }
+
             if (_missing.ContainsKey(key))
             {
                 return false;
-            }
-
-
-            // load additional
-            LoadAdditional();
-            if (_additionalhashes.ContainsKey(key))
-            {
-                return true;
             }
 
             return false;
@@ -96,147 +76,96 @@ namespace WolvenKit.Common.Services
 
         public string? Get(ulong key)
         {
-            if (_hashes.TryGetValue(key, out var value))
+            if (ResourcePathPool.ResolveHash(key) is { } value)
             {
-                return value.ToString();
-            }
-
-            if (_userHashes.TryGetValue(key, out var value2))
-            {
-                return value2.ToString();
-            }
-
-            if (_projectHashes.TryGetValue(key, out var value3))
-            {
-                return value3.ToString();
-            }
-
-            // load additional
-            LoadAdditional();
-            if (_additionalhashes.TryGetValue(key, out var value4))
-            {
-                return value4.ToString();
+                return value;
             }
 
             return null;
         }
 
-        public void AddCustom(ulong hash, string path)
-        {
-            if (!Contains(hash))
-            {
-                _userHashes.Add(hash, new SAsciiString(path));
-            }
-        }
-
-        public void AddCustom(string path)
-        {
-            var hash = FNV1A64HashAlgorithm.HashString(path);
-            if (!Contains(hash))
-            {
-                _userHashes.Add(hash, new SAsciiString(path));
-            }
-        }
-
-        public void ClearProjectHashes() => _projectHashes.Clear();
-
-        public void AddProjectPath(string path)
-        {
-            if (string.IsNullOrEmpty(path))
-            {
-                return;
-            }
-
-            var hash = FNV1A64HashAlgorithm.HashString(path);
-
-            if (_hashes.ContainsKey(hash))
-            {
-                return;
-            }
-
-            if (_userHashes.ContainsKey(hash))
-            {
-                return;
-            }
-
-            if (_projectHashes.ContainsKey(hash))
-            {
-                return;
-            }
-
-            _projectHashes.Add(hash, new SAsciiString(path));
-        }
-
-        public List<string> GetProjectHashes() => _projectHashes.Select(pair => pair.Value.ToString()).ToList();
-
-
-        private void LoadAdditional()
-        {
-            if (IsAdditionalLoaded)
-            {
-                return;
-            }
-
-            //LoadEmbeddedHashes(s_unused, _additionalhashes);
-            IsAdditionalLoaded = true;
-        }
-
         private void Load()
         {
-            ReadHashes(DecompressEmbeddedFile(s_used), _hashes);
-            ReadNodeRefs(DecompressEmbeddedFile(s_noderefs));
-
-            LoadAdditional();
-
-            // user hashes
-            LoadUserHashesFrom(Path.GetDirectoryName(AppContext.BaseDirectory).NotNull());
-            LoadUserHashesFrom(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit"));
-
+            var hashesMemory = DecompressEmbeddedFile(s_used);
+            ReadHashes(hashesMemory.GetStream());
+            
+            hashesMemory.Dispose();
+            
+            var nodeRefsMemory = DecompressEmbeddedFile(s_nodeRefs);
+            ReadNodeRefs(nodeRefsMemory.GetStream());
+            
+            nodeRefsMemory.Dispose();
+            
+            var tweakNamesMemory = DecompressEmbeddedFile(s_tweakDbStr);
+            ReadTweakNames(tweakNamesMemory.GetStream());
+            
+            tweakNamesMemory.Dispose();
+            
             LoadMissingHashes();
         }
-
-        private void LoadUserHashesFrom(string path)
-        {
-            var userHashesPath = Path.Combine(path ?? throw new InvalidOperationException(), s_userHashes);
-            if (File.Exists(userHashesPath))
-            {
-                using var userFs = new FileStream(userHashesPath, FileMode.Open, FileAccess.Read);
-                ReadHashes(userFs, _userHashes);
-            }
-        }
-
-        public void SaveUserHashes()
-        {
-            SaveUserHashesTo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit"));
-        }
-
-        private void SaveUserHashesTo(string path)
-        {
-            var userHashesPath = Path.Combine(path ?? throw new InvalidOperationException(), s_userHashes);
-            File.WriteAllLines(userHashesPath, _userHashes.Select(x => x.Value.ToString()).ToArray());
-        }
-
-        private MemoryStream DecompressEmbeddedFile(string resourceName)
+        
+        private static unsafe UnmanagedMemory DecompressEmbeddedFile(string resourceName)
         {
             using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName).NotNull();
 
             // read KARK header
             var oodleCompression = stream.ReadStruct<uint>();
+            
             if (oodleCompression != Oodle.KARK)
             {
-                throw new DecompressionException($"Incorrect hash file.");
+                throw new DecompressionException("Incorrect hash file.");
             }
 
-            var outputsize = stream.ReadStruct<uint>();
+            var outputSize = stream.ReadStruct<uint>();
 
+            var compressedBufferLength = (int)(stream.Length - (sizeof(uint) * 2));
+            using var compressedBuffer = UnmanagedMemory.Allocate(compressedBufferLength);
+            var decompressedBuffer = UnmanagedMemory.Allocate((int) outputSize);
+            
             // read the rest of the stream
-            var outputbuffer = new byte[outputsize];
+            var read = stream.Read(compressedBuffer.GetSpan());
 
-            var inbuffer = stream.ToByteArray(true);
+            if (read != compressedBufferLength)
+            {
+                throw new InvalidOperationException("Read less bytes than expected!");
+            }
 
-            Oodle.Decompress(inbuffer, outputbuffer);
+            Oodle.Decompress(
+                compressedBuffer.Pointer, compressedBuffer.Size,
+                decompressedBuffer.Pointer, decompressedBuffer.Size);
+            
+            return decompressedBuffer;
+        }
 
-            return new MemoryStream(outputbuffer);
+        private void ProcessLinesConcurrently(Stream memoryStream, Action<string> lineAction)
+        {
+            var collection = new BlockingCollection<string>();
+
+            var readerTask = Task.Run(() =>
+            {
+                using var sr = new StreamReader(memoryStream);
+                
+                while (true)
+                {
+                    var nextLine = sr.ReadLine();
+
+                    if (nextLine == null)
+                    {
+                        break;
+                    }
+
+                    collection.Add(nextLine);
+                }
+                
+                collection.CompleteAdding();
+            });
+
+            Parallel.ForEach(collection.GetConsumingEnumerable(), new ParallelOptions
+            {
+                MaxDegreeOfParallelism = _maxDoP,
+            }, lineAction);
+
+            readerTask.Wait();
         }
 
         private void LoadMissingHashes()
@@ -245,40 +174,63 @@ namespace WolvenKit.Common.Services
             _missing = JsonSerializer.Deserialize<Dictionary<ulong, string>>(stream).NotNull();
         }
 
-        private void ReadHashes(Stream memoryStream, IDictionary<ulong, SAsciiString> hashDict)
+        private void ReadHashes(Stream memoryStream)
         {
-            using var sr = new StreamReader(memoryStream);
-            string? line;
-            while ((line = sr.ReadLine()) is not null)
-            {
-                var hash = FNV1A64HashAlgorithm.HashString(line);
-                if (_hashes.ContainsKey(hash))
-                {
-                    continue;
-                }
-                if (_additionalhashes.ContainsKey(hash))
-                {
-                    continue;
-                }
-                if (_userHashes.ContainsKey(hash))
-                {
-                    continue;
-                }
+            var collection = new List<string>();
 
-                if (!hashDict.ContainsKey(hash))
+            using var sr = new StreamReader(memoryStream);
+            while (true)
+            {
+                var nextLine = sr.ReadLine();
+                if (nextLine == null)
                 {
-                    hashDict.Add(hash, new SAsciiString(line));
+                    break;
                 }
+                collection.Add(nextLine);
             }
+
+            var lookupTable = new LookupTable(collection, _maxDoP, ResourcePath.CalculateHash);
+
+            ResourcePathPool.SetNative(lookupTable);
         }
 
         private void ReadNodeRefs(Stream memoryStream)
         {
+            var collection = new List<string>();
+
             using var sr = new StreamReader(memoryStream);
-            while (sr.ReadLine() is { } line)
+            while (true)
             {
-                NodeRefPool.AddOrGetHash(line);
+                var nextLine = sr.ReadLine();
+                if (nextLine == null)
+                {
+                    break;
+                }
+                collection.Add(nextLine);
             }
+
+            var lookupTable = new LookupTable(collection, _maxDoP, ResourcePath.CalculateHash);
+
+            NodeRefPool.SetNative(lookupTable);
+        }
+
+        private void ReadTweakNames(Stream memoryStream)
+        {
+            var collection = new List<string>();
+
+            using var br = new BinaryReader(memoryStream);
+
+            // skip header
+            br.BaseStream.Position = 20;
+
+            while (br.BaseStream.Position < br.BaseStream.Length)
+            {
+                collection.Add(br.ReadLengthPrefixedString());
+            }
+
+            var lookupTable = new LookupTable(collection, _maxDoP, TweakDBID.CalculateHash);
+
+            TweakDBIDPool.SetNative(lookupTable);
         }
 
         #endregion Methods

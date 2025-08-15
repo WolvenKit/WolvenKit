@@ -25,6 +25,8 @@ public partial class ScriptService : ObservableObject
     [ObservableProperty]
     private bool _isRunning;
 
+    public static bool SuppressLogOutput { get; set; }
+    
     public ScriptService(ILoggerService loggerService) => _loggerService = loggerService;
 
     public async Task ExecuteAsync(string code, Dictionary<string, object>? hostObjects = null, List<string>? searchPaths = null)
@@ -51,7 +53,15 @@ public partial class ScriptService : ObservableObject
         }
         catch (Exception ex2)
         {
-            _loggerService?.Error(ex2);
+            if (ex2.Message == "Script execution interrupted by host" ||
+                ex2.Message == "Script execution was interrupted")
+            {
+                _loggerService?.Info("User interrupted execution of script");
+            }
+            else
+            {
+                _loggerService?.Error(ex2);
+            }
         }
 
         if (_mainEngine != null)
@@ -63,7 +73,10 @@ public partial class ScriptService : ObservableObject
         IsRunning = false;
 
         sw.Stop();
-        _loggerService?.Info($"Execution time: {sw.Elapsed}");
+        if (!SuppressLogOutput)
+        {
+            _loggerService?.Info($"Execution time: {sw.Elapsed}");
+        }
     }
 
     public void Stop()
@@ -128,6 +141,7 @@ public partial class ScriptService : ObservableObject
             if (!scriptFile.Reload(_loggerService))
             {
                 _scriptCache.Remove(file, out _);
+                continue;
             }
 
             result.Add(scriptFile);

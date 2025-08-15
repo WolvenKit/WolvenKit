@@ -2,22 +2,15 @@
     x:Class="WolvenKit.Views.Dialogs.Windows.FirstSetupView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     Title="First Setup"
-    MinWidth="700"
-    MinHeight="200"
+    MinWidth="{DynamicResource WolvenKitFirstSetupWidth}"
+    MinHeight="{DynamicResource WolvenKitFirstSetupHeight}"
     SizeToContent="WidthAndHeight"
     WindowStartupLocation="CenterOwner">
-
-    <Grid
-        Margin="1"
-        HorizontalAlignment="Stretch"
-        VerticalAlignment="Stretch">
-
+    <Grid>
         <Grid.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
@@ -30,7 +23,6 @@
             x:Name="WizardControl"
             CancelButtonCancelsWindow="True"
             FinishButtonClosesWindow="True">
-
             <syncfusion:WizardPage
                 BackVisibility="Collapsed"
                 CancelVisibility="Collapsed"
@@ -38,111 +30,125 @@
                 HelpVisibility="Collapsed"
                 NextVisibility="Collapsed"
                 PageType="Exterior">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="{DynamicResource WolvenKitColumnTiny}" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="{DynamicResource WolvenKitColumnTiny}" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
 
-                <Grid HorizontalAlignment="Left">
-                    <StackPanel>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
 
-                        <StackPanel Orientation="Horizontal">
-                            <hc:TextBox
-                                x:Name="cp77ExeTxtb"
-                                Width="700"
-                                Margin="0"
-                                VerticalAlignment="Center"
-                                hc:InfoElement.Necessary="True"
-                                hc:InfoElement.Placeholder="Enter full path : Cyberpunk 2077\bin\x64\Cyberpunk2077.exe"
-                                hc:InfoElement.Title="Game Executable Path (.exe)"
-                                hc:InfoElement.TitlePlacement="Left"
-                                hc:InfoElement.TitleWidth="150"
-                                Style="{StaticResource TextBoxExtendCustom}"
-                                TextChanged="Field_TextChanged"
-                                VerifyFunc="VerifyFile" />
-                            <Button
-                                x:Name="cp77ExeButton"
-                                Grid.Column="1"
-                                Width="50"
-                                Height="34"
-                                Margin="0,10,0,0"
-                                BorderBrush="{DynamicResource BorderBrush}"
-                                BorderThickness="1"
-                                Style="{DynamicResource WPFFlatButtonStyle}">
+                    <!-- Game Executable Path -->
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Margin="0,10,0,0"
+                        VerticalAlignment="Center">
+                        Game Executable Path (.exe)
+                    </TextBlock>
 
-                                <iconPacks:PackIconCodicons
-                                    Grid.Row="0"
-                                    Width="15"
-                                    Height="15"
-                                    Margin="0,0,0,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                    Kind="FolderOpened"
-                                    Spin="False"
-                                    SpinAutoReverse="False" />
-                            </Button>
-                        </StackPanel>
+                    <hc:TextBox
+                        x:Name="cp77ExeTxtb"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource TextBoxExtendCustom}"
+                        hc:InfoElement.Necessary="True"
+                        hc:InfoElement.Placeholder="Enter full path : Cyberpunk 2077\bin\x64\Cyberpunk2077.exe"
+                        Text="{Binding CP77ExePath,
+                                       Mode=TwoWay,
+                                       UpdateSourceTrigger=PropertyChanged,
+                                       ValidatesOnDataErrors=True,
+                                       ValidatesOnNotifyDataErrors=True}"
+                        Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}"
+                        TextChanged="Field_TextChanged" />
 
+                    <Button
+                        x:Name="cp77ExeButton"
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Margin="0,10,0,0"
+                        BorderBrush="{DynamicResource BorderBrush}"
+                        BorderThickness="1"
+                        Style="{DynamicResource WPFFlatButtonStyle}">
+                        <templates:IconBox
+                            IconPack="Codicons"
+                            Kind="FolderOpened"
+                            Size="{DynamicResource WolvenKitIconTiny}" />
+                    </Button>
+
+                    <TextBlock
+                        x:Name="ValidationText"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="{DynamicResource WolvenKitMarginSmallHorizontal}"
+                        Padding="{DynamicResource WolvenKitMarginSmall}"
+                        Background="DarkRed"
+                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                        Visibility="Collapsed"
+                        Text="TEMP"
+                        TextAlignment="Center"
+                        TextWrapping="Wrap" />
+
+                    <!-- Depot Path -->
+                    <TextBlock
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        VerticalAlignment="Center">
+                        Depot Path
+                    </TextBlock>
+
+                    <hc:TextBox
+                        x:Name="matdepotxtb"
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        Margin="{DynamicResource WolvenKitMarginSmallHorizontal}"
+                        Style="{StaticResource TextBoxExtend}"
+                        hc:InfoElement.Necessary="False"
+                        hc:InfoElement.Placeholder="Enter full path : Depot Path (Can be any new folder)"
+                        Text="{Binding MaterialDepotPath,
+                                       Mode=TwoWay,
+                                       UpdateSourceTrigger=PropertyChanged,
+                                       ValidatesOnDataErrors=True,
+                                       ValidatesOnNotifyDataErrors=True}"
+                        TextChanged="Field_TextChanged"
+                        Validation.ErrorTemplate="{StaticResource ValidationErrorTemplate}" />
+
+                    <Button
+                        x:Name="matdepotButton"
+                        Grid.Row="4"
+                        Grid.Column="2"
+                        BorderBrush="{DynamicResource BorderBrush}"
+                        BorderThickness="1"
+                        Style="{DynamicResource WPFFlatButtonStyle}">
+                        <templates:IconBox
+                            IconPack="Codicons"
+                            Kind="FolderOpened" />
+                    </Button>
+
+                    <!-- Help -->
+                    <Button
+                        x:Name="helpButton"
+                        Grid.Row="5"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        Margin="{DynamicResource WolvenKitMarginVertical}"
+                        HorizontalAlignment="Right">
                         <TextBlock
-                            x:Name="ValidationText"
-                            MaxWidth="{Binding ActualWidth, ElementName=cp77ExeTxtb}"
-                            Margin="150,0,60,0"
-                            Padding="4"
-                            Background="DarkRed"
-                            FontSize="12"
-                            Text="TEMP"
-                            TextAlignment="Center"
-                            TextWrapping="Wrap"
-                            Visibility="Collapsed" />
-
-                        <StackPanel Orientation="Horizontal">
-
-                            <hc:TextBox
-                                x:Name="matdepotxtb"
-                                Width="690"
-                                Margin="0,10,10,0"
-                                hc:InfoElement.Necessary="False"
-                                hc:InfoElement.Placeholder="Enter full path : Depot Path (Can be any new folder)"
-                                hc:InfoElement.Title="Depot Path"
-                                hc:InfoElement.TitlePlacement="Left"
-                                hc:InfoElement.TitleWidth="150"
-                                Style="{StaticResource TextBoxExtend}"
-                                TextChanged="Field_TextChanged"
-                                VerifyFunc="VerifyFolder"
-                                Visibility="Visible" />
-                            <Button
-                                x:Name="matdepotButton"
-                                Grid.Column="1"
-                                Width="50"
-                                Height="34"
-                                Margin="0,10,0,0"
-                                BorderBrush="{DynamicResource BorderBrush}"
-                                BorderThickness="1"
-                                Style="{DynamicResource WPFFlatButtonStyle}">
-
-                                <iconPacks:PackIconCodicons
-                                    Grid.Row="0"
-                                    Width="15"
-                                    Height="15"
-                                    Margin="0,0,0,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                    Kind="FolderOpened"
-                                    Spin="False"
-                                    SpinAutoReverse="False" />
-                            </Button>
-                        </StackPanel>
-
-                        <StackPanel Margin="0,30" VerticalAlignment="Bottom">
-                            <Button x:Name="helpButton" HorizontalAlignment="Right">
-                                <TextBlock Margin="12,0" Text="Get Help with WolvenKit" />
-                            </Button>
-                        </StackPanel>
-
-                    </StackPanel>
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Text="Get Help with WolvenKit" />
+                    </Button>
                 </Grid>
-
             </syncfusion:WizardPage>
-
         </syncfusion:WizardControl>
     </Grid>
-
 </Window>

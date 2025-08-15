@@ -21,22 +21,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(7)] 
-		[RED("availableCurrentItemTypesList")] 
-		public CArray<CEnum<gamedataItemType>> AvailableCurrentItemTypesList
-		{
-			get => GetPropertyValue<CArray<CEnum<gamedataItemType>>>();
-			set => SetPropertyValue<CArray<CEnum<gamedataItemType>>>(value);
-		}
-
-		[Ordinal(8)] 
-		[RED("availableCurrentItemsList")] 
-		public CArray<CWeakHandle<gameItemData>> AvailableCurrentItemsList
-		{
-			get => GetPropertyValue<CArray<CWeakHandle<gameItemData>>>();
-			set => SetPropertyValue<CArray<CWeakHandle<gameItemData>>>(value);
-		}
-
-		[Ordinal(9)] 
 		[RED("swapMeleeWeaponItemId")] 
 		public gameItemID SwapMeleeWeaponItemId
 		{
@@ -44,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(8)] 
 		[RED("swapHangunWeaponItemId")] 
 		public gameItemID SwapHangunWeaponItemId
 		{
@@ -52,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(9)] 
 		[RED("swapRifleWeaponItemId")] 
 		public gameItemID SwapRifleWeaponItemId
 		{
@@ -60,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(10)] 
 		[RED("swapShootgunWeaponItemId")] 
 		public gameItemID SwapShootgunWeaponItemId
 		{
@@ -68,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(11)] 
 		[RED("fakePuppet")] 
 		public CWeakHandle<gamePuppet> FakePuppet
 		{
@@ -76,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamePuppet>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(12)] 
 		[RED("mainPuppet")] 
 		public CWeakHandle<PlayerPuppet> MainPuppet
 		{
@@ -84,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(13)] 
 		[RED("currentPuppet")] 
 		public CWeakHandle<PlayerPuppet> CurrentPuppet
 		{
@@ -92,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(14)] 
 		[RED("TS")] 
 		public CHandle<gameTransactionSystem> TS
 		{
@@ -100,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameTransactionSystem>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(15)] 
 		[RED("loadingItems")] 
 		public CArray<gameItemID> LoadingItems
 		{
@@ -108,7 +92,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameItemID>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(16)] 
+		[RED("loadingVisualItems")] 
+		public CArray<gameItemID> LoadingVisualItems
+		{
+			get => GetPropertyValue<CArray<gameItemID>>();
+			set => SetPropertyValue<CArray<gameItemID>>(value);
+		}
+
+		[Ordinal(17)] 
 		[RED("itemsLoadingTime")] 
 		public CFloat ItemsLoadingTime
 		{
@@ -116,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(18)] 
 		[RED("muzzleEffectEnabled")] 
 		public CBool MuzzleEffectEnabled
 		{
@@ -124,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(19)] 
 		[RED("customizable")] 
 		public CBool Customizable
 		{
@@ -132,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(20)] 
 		[RED("holsteredArmsShouldBeVisible")] 
 		public CBool HolsteredArmsShouldBeVisible
 		{
@@ -140,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(21)] 
 		[RED("holsteredArmsBeingSpawned")] 
 		public CBool HolsteredArmsBeingSpawned
 		{
@@ -148,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(22)] 
 		[RED("holsteredArmsVisible")] 
 		public CBool HolsteredArmsVisible
 		{
@@ -156,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(23)] 
 		[RED("holsteredArmsItem")] 
 		public gameItemID HolsteredArmsItem
 		{
@@ -164,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(24)] 
 		[RED("cyberwareArmsBeingSpawned")] 
 		public CBool CyberwareArmsBeingSpawned
 		{
@@ -172,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(25)] 
 		[RED("cyberwareArmsVisible")] 
 		public CBool CyberwareArmsVisible
 		{
@@ -180,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(26)] 
 		[RED("cyberwareArmsItem")] 
 		public gameItemID CyberwareArmsItem
 		{
@@ -192,13 +184,12 @@ namespace WolvenKit.RED4.Types
 		{
 			UsedWeaponItemId = new gameItemID();
 			CurrentWeaponInSlot = new gameItemID();
-			AvailableCurrentItemTypesList = new();
-			AvailableCurrentItemsList = new();
 			SwapMeleeWeaponItemId = new gameItemID();
 			SwapHangunWeaponItemId = new gameItemID();
 			SwapRifleWeaponItemId = new gameItemID();
 			SwapShootgunWeaponItemId = new gameItemID();
 			LoadingItems = new();
+			LoadingVisualItems = new();
 			HolsteredArmsItem = new gameItemID();
 			CyberwareArmsItem = new gameItemID();
 

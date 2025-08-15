@@ -4,6 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
@@ -14,7 +17,6 @@ using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
-using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Modkit.RED4.Opus;
@@ -22,51 +24,34 @@ using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.App.ViewModels.Exporters;
 
-public partial class ExportViewModel : AbstractExportViewModel
+public partial class ExportViewModel : AbstractImportExportViewModel
 {
     private readonly AppViewModel _appViewModel;
     private readonly ILoggerService _loggerService;
-    private readonly IWatcherService _watcherService;
     private readonly IProjectManager _projectManager;
     private readonly IProgressService<double> _progressService;
     private readonly ImportExportHelper _importExportHelper;
 
+    [ObservableProperty] private bool _hasItems;
+
     public ExportViewModel(
         AppViewModel appViewModel,
-        IArchiveManager archiveManager,
+        IAppArchiveManager archiveManager,
         INotificationService notificationService,
         ISettingsManager settingsManager,
         ILoggerService loggerService,
-        IWatcherService watcherService,
         IProjectManager projectManager,
         IProgressService<double> progressService,
         ImportExportHelper importExportHelper) : base(archiveManager, notificationService, settingsManager, "Export Tool", "Export Tool")
     {
         _appViewModel = appViewModel;
         _loggerService = loggerService;
-        _watcherService = watcherService;
         _projectManager = projectManager;
         _progressService = progressService;
         _importExportHelper = importExportHelper;
 
-        PropertyChanged += ExportViewModel_PropertyChanged;
-    }
-
-
-
-    private async void ExportViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(IsActive))
-        {
-            if (IsActive)
-            {
-                if (_refreshtask is null || (_refreshtask is not null && _refreshtask.IsCompleted))
-                {
-                    _refreshtask = LoadFilesAsync();
-                    await _refreshtask;
-                }
-            }
-        }
+        PropertyChanged += ImportExportViewModel_PropertyChanged;
+        _appViewModel.OnInitialProjectLoaded += AppViewModel_OnInitialProjectLoaded;
     }
 
     #region Commands
@@ -90,8 +75,13 @@ public partial class ExportViewModel : AbstractExportViewModel
 
     #endregion
 
-    protected override async Task ExecuteProcessBulk(bool all = false)
+    protected override async Task ExecuteProcessBulkAsync(bool all = false)
     {
+        if (!Items.Any())
+        {
+            return;
+        }
+        
         if (_archiveManager.ProjectArchive is not FileSystemArchive projectArchive)
         {
             _loggerService.Error("No project loaded!");
@@ -99,48 +89,54 @@ public partial class ExportViewModel : AbstractExportViewModel
         }
 
         IsProcessing = true;
-        _watcherService.IsSuspended = true;
         var progress = 0;
         _progressService.Report(0.1);
 
         var total = 0;
-        var sucessful = 0;
+        var successful = 0;
+
+        _importExportHelper.ClearFileLookup();
 
         //prepare a list of failed items
         var failedItems = new List<string>();
 
         var toBeExported = Items
-            .Where(_ => all || _.IsChecked)
+            .Where(importExportItem => importExportItem.IsChecked ||
+                                       (all && (VisibleItemPaths.Count == 0 || VisibleItemPaths.Contains(importExportItem.BaseFile))))
             .Cast<ExportableItemViewModel>()
             .ToList();
         total = toBeExported.Count;
-        foreach (var item in toBeExported)
+
+        await Parallel.ForEachAsync(toBeExported, async (item, cancellationToken) =>
         {
-            _appViewModel.SaveFile(item.BaseFile);
+            await Application.Current.Dispatcher.InvokeAsync(() => _appViewModel.SaveFile(item.BaseFile));
+
             if (await ExportSingleAsync(item, projectArchive))
             {
-                sucessful++;
+                Interlocked.Increment(ref successful);
             }
             else
             {
-                failedItems.Add(item.BaseFile);
+                lock (failedItems)
+                {
+                    failedItems.Add(item.BaseFile);
+                }
             }
 
             Interlocked.Increment(ref progress);
             _progressService.Report(progress / (float)total);
-        }
+        });
 
         IsProcessing = false;
 
-        _watcherService.IsSuspended = false;
         _progressService.IsIndeterminate = false;
 
-        if (sucessful > 0)
+        if (successful > 0)
         {
             _notificationService.Success(
-                $"{sucessful}/{total} files have been processed and are available in the Project Explorer's 'raw' section");
+                $"{successful}/{total} files have been processed and are available in the Project Explorer's 'raw' section");
             _loggerService.Success(
-                $"{sucessful}/{total} files have been processed and are available in the Project Explorer's 'raw' section");
+                $"{successful}/{total} files have been processed and are available in the Project Explorer's 'raw' section");
         }
 
         //We format the list of failed export/import items here
@@ -202,9 +198,13 @@ public partial class ExportViewModel : AbstractExportViewModel
                 Items.Add(vm);
             }
         }
+        
+            ProcessAllCommand.NotifyCanExecuteChanged();
+       
 
-        ProcessAllCommand.NotifyCanExecuteChanged();
         _progressService.IsIndeterminate = false;
+        
+        HasItems = Items.Any();
     }
 
     private static bool CanExport(string x) => Enum.TryParse<ECookedFileFormat>(Path.GetExtension(x).TrimStart('.'), out var _);
@@ -255,7 +255,7 @@ public partial class ExportViewModel : AbstractExportViewModel
         }
 
 
-        var info = OpusTools.GetOpusInfo(_archiveManager, opusExportArgs.UseMod);
+        var info = OpusTools.GetOpusInfo(_archiveManager, opusExportArgs.UseProject);
         if (info == null)
         {
             return;
@@ -313,43 +313,76 @@ public partial class ExportViewModel : AbstractExportViewModel
         }
 
         var availableItems = _archiveManager
-            .GetGroupedFiles()[$".{fetchExtension}"]
-            .Cast<FileEntry>()
-            .Select(_ => new CollectionItemViewModel<FileEntry>(_)).GroupBy(x => x.Name)
-            .Select(x => x.First());
+            .GetGroupedFiles(ArchiveManagerScope.Everywhere)[$".{fetchExtension}"]
+            .Select(x => (FileEntry)x)
+            .Select(_ => new CollectionItemViewModel<FileEntry>(_));
 
         // open dialogue
         var result = Interactions.ShowCollectionView((availableItems, selectedItems));
-        if (result is not null)
+        if (result is null)
         {
-            switch (args.PropertyName)
-            {
-                case nameof(MeshExportArgs.MultiMeshMeshes):
-                    meshExportArgs.MultiMeshMeshes = result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).ToList();
+            return;
+        }
+
+        switch (args.PropertyName)
+        {
+            case nameof(MeshExportArgs.MultiMeshMeshes):
+                meshExportArgs.MultiMeshMeshes =
+                    result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).ToList();
+                if (meshExportArgs.MultiMeshMeshes.Count != 0)
+                {
                     _notificationService.Success($"Selected Meshes were added to MultiMesh arguments.");
                     meshExportArgs.meshExportType = MeshExportType.Multimesh;
-                    break;
+                }
+                else
+                {
+                    _notificationService.Success("MultiMesh arguments were cleared.");
+                }
 
-                case nameof(MeshExportArgs.MultiMeshRigs):
-                    meshExportArgs.MultiMeshRigs = result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).ToList();
+                break;
+
+            case nameof(MeshExportArgs.MultiMeshRigs):
+                meshExportArgs.MultiMeshRigs =
+                    result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).ToList();
+                if (meshExportArgs.MultiMeshRigs.Count != 0)
+                {
                     _notificationService.Success($"Selected Rigs were added to MultiMesh arguments.");
                     meshExportArgs.meshExportType = MeshExportType.Multimesh;
-                    break;
+                }
+                else
+                {
+                    _notificationService.Success($"Selected Rigs were cleared.");
+                }
 
-                case nameof(MeshExportArgs.Rig):
-                    var rig = result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).FirstOrDefault();
-                    if (rig is not null)
-                    {
-                        meshExportArgs.Rig = new List<FileEntry>() { rig };
-                        _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
-                    }
+                break;
+
+            case nameof(MeshExportArgs.Rig):
+                meshExportArgs.Rig.Clear();
+
+                var rig = result.Cast<CollectionItemViewModel<FileEntry>>().Select(_ => _.Model).FirstOrDefault();
+                if (rig is not null)
+                {
+                    meshExportArgs.Rig.Add(rig);
+                    _notificationService.Success($"Selected Rig was added to WithRig arguments: {rig.Name}");
                     meshExportArgs.meshExportType = MeshExportType.WithRig;
-                    break;
+                }
+                else
+                {
+                    _notificationService.Success($"Selected Rig was cleared");
+                }
 
-                default:
-                    break;
-            }
+                break;
+
+            default:
+                break;
         }
     }
 
+    private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
+    {
+        DispatcherHelper.RunOnMainThread(async () =>
+        {
+            await Refresh();
+        }, DispatcherPriority.ContextIdle);
+    }
 }

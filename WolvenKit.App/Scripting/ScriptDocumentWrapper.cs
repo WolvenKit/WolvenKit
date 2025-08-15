@@ -22,13 +22,12 @@ public class ScriptDocumentWrapper
         _documentViewModel = documentViewModel;
         _appViewModel = appViewModel;
 
-        FilePath = _documentViewModel.FilePath;
-
         if (documentViewModel is RedDocumentViewModel redDocumentViewModel)
         {
             RelativePath = redDocumentViewModel.RelativePath;
         }
 
+        FilePath = _documentViewModel.FilePath ?? Path.Combine(Path.GetTempPath(), Path.GetTempFileName());
         FileName = Path.GetFileName(FilePath);
         Extension = Path.GetExtension(FilePath).Replace(".", "");
 

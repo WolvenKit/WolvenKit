@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Splat;
 using WolvenKit.App.Factories;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.Nodify;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Core.Extensions;
@@ -15,11 +17,13 @@ public partial class ResourcePathWrapper : ObservableObject, INode<ReferenceSock
 {
     private readonly AppViewModel _appViewModel;
     private readonly IChunkViewmodelFactory _chunkViewmodelFactory;
+    private readonly ISettingsManager? _settingsManager;
 
     public ResourcePathWrapper(RDTDataViewModel vm, ReferenceSocket socket, AppViewModel appViewModel, IChunkViewmodelFactory chunkViewmodelFactory)
     {
         _appViewModel = appViewModel;
         _chunkViewmodelFactory = chunkViewmodelFactory;
+        _settingsManager = Locator.Current.GetService<ISettingsManager>();
 
         DataViewModel = vm;
         _socket = socket;
@@ -69,14 +73,21 @@ public partial class ResourcePathWrapper : ObservableObject, INode<ReferenceSock
     [RelayCommand(CanExecute = nameof(CanLoadRef))]
     private void LoadRef()
     {
-        var cr2w = DataViewModel.Parent.GetFileFromDepotPathOrCache(Socket.File);
-        if (cr2w != null && cr2w.RootChunk != null)
+        if (Socket.File.GetResolvedText() is not string path || ArchiveXlHelper.GetFirstExistingPath(path) is not string existingPath)
         {
-            var chunk = _chunkViewmodelFactory.ChunkViewModel(cr2w.RootChunk, Socket, _appViewModel);
-            chunk.Location = Location;
-            DataViewModel.Nodes.Remove(this);
-            DataViewModel.Nodes.Add(chunk);
-            DataViewModel.LookForReferences(chunk);
+            return;
         }
+
+        var cr2w = DataViewModel.Parent.GetFileFromDepotPathOrCache(existingPath);
+        if (cr2w is not { RootChunk: not null })
+        {
+            return;
+        }
+
+        var chunk = _chunkViewmodelFactory.ChunkViewModel(cr2w.RootChunk, Socket, _appViewModel);
+        chunk.Location = Location;
+        DataViewModel.Nodes.Remove(this);
+        DataViewModel.Nodes.Add(chunk);
+        DataViewModel.LookForReferences(chunk);
     }
 }

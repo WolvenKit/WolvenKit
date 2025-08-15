@@ -125,6 +125,16 @@ namespace WolvenKit.Common
         Shader,
     }
 
+    // Target scope for archive manager
+    public enum ArchiveManagerScope
+    {
+        Basegame,
+        Mods,
+        BasegameAndMods,
+        LocalProject,
+        Everywhere
+    }
+
     /// <summary>
     /// Possible file extensions of cooked redengine files
     /// </summary>
@@ -132,6 +142,7 @@ namespace WolvenKit.Common
     {
         wem,
         mesh,
+        w2mesh,
         xbm,
         csv,
         //app,
@@ -316,6 +327,16 @@ namespace WolvenKit.Common
         th_th,
         tr_tr,
         zh_cn,
-        zh_tw
+        zh_tw,
+        ua_ua
+    }
+
+    public enum LoggerVerbosity
+    {
+        Quiet,
+        Minimal,
+        Normal,
+        Detailed,
+        Diagnostic,
     }
 }

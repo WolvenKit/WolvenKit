@@ -1,20 +1,165 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:sfskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
-    xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
     xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf">
 
     <ResourceDictionary.MergedDictionaries>
-        <sfskin:ResourceDictionaryProvider DictionaryName="Common" ThemeName="MaterialDark" />
-        <sfskin:ResourceDictionaryProvider DictionaryName="Brushes" ThemeName="MaterialDark" />
+        <sfskin:ResourceDictionaryProvider
+            DictionaryName="Common"
+            ThemeName="MaterialDark" />
+
+        <sfskin:ResourceDictionaryProvider
+            DictionaryName="Brushes"
+            ThemeName="MaterialDark" />
         <ResourceDictionary Source="/Syncfusion.Themes.MaterialDark.WPF;component/DockingManager/DockingManager.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/basic/colors/dark.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
+    <!-- Colors -->
+    <Color x:Key="WolvenKitRedColor">#DF2935</Color>
+    <Color x:Key="WolvenKitRedShadowColor">#951C2D</Color>
+    <Color x:Key="WolvenKitGreenColor">#28DE55</Color>
+    <Color x:Key="WolvenKitGreenShadowColor">#1C9435</Color>
+    <Color x:Key="WolvenKitCyanColor">#52F1FF</Color>
+    <Color x:Key="WolvenKitCyanShadowColor">#4D8C9A</Color>
+    <Color x:Key="WolvenKitYellowColor">#FFEA0A</Color>
+    <Color x:Key="WolvenKitYellowShadowColor">#ABA108</Color>
+    <Color x:Key="WolvenKitPurpleColor">CornflowerBlue</Color>
+    <Color x:Key="WolvenKitDarkPinkColor">#AA336A</Color>
+    <Color x:Key="WolvenKitTanColor">#D0A467</Color>
+    <Color x:Key="WolvenKitOrangeColor">#FFA359</Color>
+    <Color x:Key="WolvenKitOrangeShadowColor">#8C5A31</Color>
+
+    <Color x:Key="WolvenKitCyanShadow50Color">#7F4D8C9A</Color>
+    <Color x:Key="WolvenKitCyanShadow25Color">#203a40</Color>
+    <Color x:Key="WolvenKitRedShadow50Color">#7F951C2D</Color>
+    <Color x:Key="WolvenKitRedShadow25Color">#7F520e17</Color>
+    <Color x:Key="WolvenKitYellowShadow50Color">#7FABA108</Color>
+    <Color x:Key="WolvenKitYellowShadow25Color">#7F403c09</Color>
+
+    <Color x:Key="WolvenKitGraphGridColor">#0DFFFFFF</Color>
+    <Color x:Key="WolvenKitGraphAxisColor">Black</Color>
+    <Color x:Key="WolvenKitGraphLabelColor">White</Color>
+    <Color x:Key="WolvenKitGraphCurveColor">White</Color>
+
+    <Color x:Key="WolvenKitLabelColor">White</Color>
+
+    <!-- Quest Node Colors - Header backgrounds -->
+    <Color x:Key="QuestStartNodeHeaderColor">#33228B22</Color>
+    <Color x:Key="QuestEndNodeHeaderColor">#33B22222</Color>
+    <Color x:Key="QuestInputNodeHeaderColor">#332288B2</Color>
+    <Color x:Key="QuestOutputNodeHeaderColor">#33B28822</Color>
+    <Color x:Key="QuestConditionNodeHeaderColor">#33B2B222</Color>
+    <Color x:Key="QuestPhaseNodeHeaderColor">#33B222B2</Color>
+    <Color x:Key="QuestSceneNodeHeaderColor">#3322B2B2</Color>
+    <Color x:Key="QuestRandomizerNodeHeaderColor">#33B2AA22</Color>
+    <Color x:Key="QuestFlowControlNodeHeaderColor">#3355AA22</Color>
+    <Color x:Key="QuestSwitchNodeHeaderColor">#33AA2255</Color>
+    <Color x:Key="QuestLogicalAndNodeHeaderColor">#332255AA</Color>
+    <Color x:Key="QuestLogicalXorNodeHeaderColor">#33AA5522</Color>
+    <Color x:Key="QuestLogicalHubNodeHeaderColor">#3355AA55</Color>
+    <Color x:Key="QuestFactsDBManagerNodeHeaderColor">#33D2443A</Color>
+    <Color x:Key="QuestItemManagerNodeHeaderColor">#3377AA22</Color>
+    <Color x:Key="QuestCharacterManagerNodeHeaderColor">#33AA7722</Color>
+    <Color x:Key="QuestUIManagerNodeHeaderColor">#332277AA</Color>
+    <Color x:Key="QuestAudioNodeHeaderColor">#33AA2277</Color>
+    <Color x:Key="QuestJournalNodeHeaderColor">#3377AA77</Color>
+    <Color x:Key="QuestPauseConditionNodeHeaderColor">#55FF6600</Color>
+    <Color x:Key="QuestSceneManagerNodeHeaderColor">#3322B2B2</Color>
+    <Color x:Key="QuestRenderFxManagerNodeHeaderColor">#33B2AA22</Color>
+    <Color x:Key="QuestSpawnManagerNodeHeaderColor">#33AA22B2</Color>
+    <Color x:Key="QuestTriggerManagerNodeHeaderColor">#33B222AA</Color>
+    <Color x:Key="QuestEntityManagerNodeHeaderColor">#3322AAB2</Color>
+    <Color x:Key="QuestEnvironmentManagerNodeHeaderColor">#33AAB222</Color>
+    <Color x:Key="QuestEventManagerNodeHeaderColor">#33B2B2AA</Color>
+    <Color x:Key="QuestMappinManagerNodeHeaderColor">#33AA77B2</Color>
+    <Color x:Key="QuestRewardManagerNodeHeaderColor">#33B277AA</Color>
+    <Color x:Key="QuestTimeManagerNodeHeaderColor">#3377B2AA</Color>
+    <Color x:Key="QuestVisionModesManagerNodeHeaderColor">#33AA77AA</Color>
+    <Color x:Key="QuestVoicesetManagerNodeHeaderColor">#3377AAAA</Color>
+    <Color x:Key="QuestFXManagerNodeHeaderColor">#33B2AA22</Color>
+    <Color x:Key="QuestPuppetAIManagerNodeHeaderColor">#33AA2255</Color>
+    <Color x:Key="QuestCrowdManagerNodeHeaderColor">#335522AA</Color>
+    <Color x:Key="QuestInteractiveObjectManagerNodeHeaderColor">#3355AAB2</Color>
+    <Color x:Key="QuestPhoneManagerNodeHeaderColor">#33B25522</Color>
+    <Color x:Key="QuestUseWorkspotNodeHeaderColor">#334CAF50</Color>
+    <Color x:Key="QuestWorldDataManagerNodeHeaderColor">#33A0522D</Color>
+    <Color x:Key="QuestDefaultNodeHeaderColor">#33666666</Color>
+
+    <!-- Quest Node Colors - Content backgrounds -->
+    <Color x:Key="QuestStartNodeContentColor">#11228B22</Color>
+    <Color x:Key="QuestEndNodeContentColor">#11B22222</Color>
+    <Color x:Key="QuestInputNodeContentColor">#112288B2</Color>
+    <Color x:Key="QuestOutputNodeContentColor">#11B28822</Color>
+    <Color x:Key="QuestConditionNodeContentColor">#11B2B222</Color>
+    <Color x:Key="QuestPhaseNodeContentColor">#11B222B2</Color>
+    <Color x:Key="QuestSceneNodeContentColor">#1122B2B2</Color>
+    <Color x:Key="QuestRandomizerNodeContentColor">#11B2AA22</Color>
+    <Color x:Key="QuestFlowControlNodeContentColor">#1155AA22</Color>
+    <Color x:Key="QuestSwitchNodeContentColor">#11AA2255</Color>
+    <Color x:Key="QuestLogicalAndNodeContentColor">#112255AA</Color>
+    <Color x:Key="QuestLogicalXorNodeContentColor">#11AA5522</Color>
+    <Color x:Key="QuestLogicalHubNodeContentColor">#1155AA55</Color>
+    <Color x:Key="QuestFactsDBManagerNodeContentColor">#11D2443A</Color>
+    <Color x:Key="QuestItemManagerNodeContentColor">#1177AA22</Color>
+    <Color x:Key="QuestCharacterManagerNodeContentColor">#11AA7722</Color>
+    <Color x:Key="QuestUIManagerNodeContentColor">#112277AA</Color>
+    <Color x:Key="QuestAudioNodeContentColor">#11AA2277</Color>
+    <Color x:Key="QuestJournalNodeContentColor">#1177AA77</Color>
+    <Color x:Key="QuestPauseConditionNodeContentColor">#22FF6600</Color>
+    <Color x:Key="QuestSceneManagerNodeContentColor">#1122B2B2</Color>
+    <Color x:Key="QuestRenderFxManagerNodeContentColor">#11B2AA22</Color>
+    <Color x:Key="QuestSpawnManagerNodeContentColor">#11AA22B2</Color>
+    <Color x:Key="QuestTriggerManagerNodeContentColor">#11B222AA</Color>
+    <Color x:Key="QuestEntityManagerNodeContentColor">#1122AAB2</Color>
+    <Color x:Key="QuestEnvironmentManagerNodeContentColor">#11AAB222</Color>
+    <Color x:Key="QuestEventManagerNodeContentColor">#11B2B2AA</Color>
+    <Color x:Key="QuestMappinManagerNodeContentColor">#11AA77B2</Color>
+    <Color x:Key="QuestRewardManagerNodeContentColor">#11B277AA</Color>
+    <Color x:Key="QuestTimeManagerNodeContentColor">#1177B2AA</Color>
+    <Color x:Key="QuestVisionModesManagerNodeContentColor">#11AA77AA</Color>
+    <Color x:Key="QuestVoicesetManagerNodeContentColor">#1177AAAA</Color>
+    <Color x:Key="QuestFXManagerNodeContentColor">#11B2AA22</Color>
+    <Color x:Key="QuestPuppetAIManagerNodeContentColor">#11AA2255</Color>
+    <Color x:Key="QuestCrowdManagerNodeContentColor">#115522AA</Color>
+    <Color x:Key="QuestInteractiveObjectManagerNodeContentColor">#1155AAB2</Color>
+    <Color x:Key="QuestPhoneManagerNodeContentColor">#11B25522</Color>
+    <Color x:Key="QuestUseWorkspotNodeContentColor">#114CAF50</Color>
+    <Color x:Key="QuestWorldDataManagerNodeContentColor">#11A0522D</Color>
+    <Color x:Key="QuestDefaultNodeContentColor">#11666666</Color>
+
+    <!-- Scene Node Colors - Header backgrounds -->
+    <Color x:Key="SceneStartNodeHeaderColor">#33228B22</Color>
+    <Color x:Key="SceneEndNodeHeaderColor">#33B22222</Color>
+    <Color x:Key="SceneChoiceNodeHeaderColor">#332288B2</Color>
+    <Color x:Key="SceneQuestNodeHeaderColor">#33B2B222</Color>
+    <Color x:Key="SceneSectionNodeHeaderColor">#33B222B2</Color>
+    <Color x:Key="SceneRandomizerNodeHeaderColor">#3322B2B2</Color>
+    <Color x:Key="SceneHubNodeHeaderColor">#33B2AA22</Color>
+    <Color x:Key="SceneAndNodeHeaderColor">#3355AA22</Color>
+    <Color x:Key="SceneXorNodeHeaderColor">#33AA2255</Color>
+    <Color x:Key="SceneDefaultNodeHeaderColor">#33444444</Color>
+
+    <!-- Scene Node Colors - Content backgrounds -->
+    <Color x:Key="SceneStartNodeContentColor">#11228B22</Color>
+    <Color x:Key="SceneEndNodeContentColor">#11B22222</Color>
+    <Color x:Key="SceneChoiceNodeContentColor">#112288B2</Color>
+    <Color x:Key="SceneQuestNodeContentColor">#11B2B222</Color>
+    <Color x:Key="SceneSectionNodeContentColor">#11B222B2</Color>
+    <Color x:Key="SceneRandomizerNodeContentColor">#1122B2B2</Color>
+    <Color x:Key="SceneHubNodeContentColor">#11B2AA22</Color>
+    <Color x:Key="SceneAndNodeContentColor">#1155AA22</Color>
+    <Color x:Key="SceneXorNodeContentColor">#11AA2255</Color>
+    <Color x:Key="SceneDefaultNodeContentColor">#11444444</Color>
+
+    <!-- Brushes -->
     <SolidColorBrush x:Key="CustomSliderForegroundBrush" Color="#FF1E91EA" />
     <SolidColorBrush x:Key="CustomSliderBackgroundBrush" Color="#55ffffff" />
     <SolidColorBrush x:Key="CustomSliderHighlightBrush" Color="#FFEFEFEF" />
@@ -23,18 +168,10 @@
     <SolidColorBrush x:Key="WolvenKitSammyRedShaded" Color="#B71C34" />
     <SolidColorBrush x:Key="WolvenKitSammyBlack" Color="#292929" />
 
-    <Color x:Key="WolvenKitRedColor">#DF2935</Color>
-    <Color x:Key="WolvenKitRedShadowColor">#951C2D</Color>
-    <Color x:Key="WolvenKitCyanColor">#52F1FF</Color>
-    <Color x:Key="WolvenKitCyanShadowColor">#4D8C9A</Color>
-    <Color x:Key="WolvenKitYellowColor">#FFEA0A</Color>
-    <Color x:Key="WolvenKitYellowShadowColor">#ABA108</Color>
-    <Color x:Key="WolvenKitPurpleColor">#5760B3</Color>
-    <Color x:Key="WolvenKitDarkPinkColor">#AA336A</Color>
-    <Color x:Key="WolvenKitTanColor">#D0A467</Color>
-
     <SolidColorBrush x:Key="WolvenKitRed" Color="{StaticResource WolvenKitRedColor}" />
     <SolidColorBrush x:Key="WolvenKitRedShadow" Color="{StaticResource WolvenKitRedShadowColor}" />
+    <SolidColorBrush x:Key="WolvenKitGreen" Color="{StaticResource WolvenKitGreenColor}" />
+    <SolidColorBrush x:Key="WolvenKitGreenShadow" Color="{StaticResource WolvenKitGreenShadowColor}" />
     <SolidColorBrush x:Key="WolvenKitCyan" Color="{StaticResource WolvenKitCyanColor}" />
     <SolidColorBrush x:Key="WolvenKitCyanShadow" Color="{StaticResource WolvenKitCyanShadowColor}" />
     <SolidColorBrush x:Key="WolvenKitYellow" Color="{StaticResource WolvenKitYellowColor}" />
@@ -42,32 +179,226 @@
     <SolidColorBrush x:Key="WolvenKitPurple" Color="{StaticResource WolvenKitPurpleColor}" />
     <SolidColorBrush x:Key="WolvenKitDarkPink" Color="{StaticResource WolvenKitDarkPinkColor}" />
     <SolidColorBrush x:Key="WolvenKitTan" Color="{StaticResource WolvenKitTanColor}" />
+    <SolidColorBrush x:Key="WolvenKitOrange" Color="{StaticResource WolvenKitOrangeColor}" />
+    <SolidColorBrush x:Key="WolvenKitOrangeShadow" Color="{StaticResource WolvenKitOrangeShadowColor}" />
 
     <SolidColorBrush x:Key="WolvenKitRed50" Color="#7FDF2935" />
-    <SolidColorBrush x:Key="WolvenKitRedShadow50" Color="#7F951C2D" />
+    <SolidColorBrush x:Key="WolvenKitRedShadow50" Color="{StaticResource WolvenKitRedShadow50Color}" />
     <SolidColorBrush x:Key="WolvenKitCyan50" Color="#7F52F1FF" />
-    <SolidColorBrush x:Key="WolvenKitCyanShadow50" Color="#7F4D8C9A" />
+    <SolidColorBrush x:Key="WolvenKitCyanShadow50" Color="{StaticResource WolvenKitCyanShadow50Color}" />
+    <SolidColorBrush x:Key="WolvenKitCyanShadow25" Color="{StaticResource WolvenKitCyanShadow25Color}" />
     <SolidColorBrush x:Key="WolvenKitYellow50" Color="#7FFFEA0A" />
-    <SolidColorBrush x:Key="WolvenKitYellowShadow50" Color="#7FABA108" />
-    <SolidColorBrush x:Key="WolvenKitPurple50" Color="#7F5760B3" />
+    <SolidColorBrush x:Key="WolvenKitYellowShadow50" Color="{StaticResource WolvenKitYellowShadow50Color}" />
+    <SolidColorBrush x:Key="WolvenKitPurple50" Color="#7F6495ED" />
+    <SolidColorBrush x:Key="WolvenKitTan25" Color="#FFA7967D" />
     <SolidColorBrush x:Key="WolvenKitTan50" Color="#7FD0A467" />
+
+    <SolidColorBrush x:Key="ForegroundColor" Color="#EBEBEB" />
+    <SolidColorBrush x:Key="ForegroundColor_Grey_Light" Color="#cacaca" />
+    <SolidColorBrush x:Key="ForegroundColor_Grey1" Color="#ababab" />
+    <SolidColorBrush x:Key="ForegroundColor_Grey_Dark" Color="#969696" />
+    <SolidColorBrush x:Key="ForegroundColor_Grey_Inactive" Color="#555555" />
+
+    <!-- e.g. the hash box -->
+    <SolidColorBrush x:Key="ForegroundColor_Control_Secondary" Color="#666666" />
+
+    <SolidColorBrush x:Key="ForegroundColor_Cyan" Color="{StaticResource WolvenKitCyanColor}" />
+    <SolidColorBrush x:Key="ForegroundColor_Yellow" Color="{StaticResource WolvenKitYellowColor}" />
+    <SolidColorBrush x:Key="ForegroundColor_Red" Color="{StaticResource WolvenKitRedColor}" />
+
+    <SolidColorBrush x:Key="BackgroundColor_Cyan" Color="{StaticResource WolvenKitCyanShadow50Color}" />
+    <SolidColorBrush x:Key="BackgroundColor_Yellow" Color="{StaticResource WolvenKitYellowShadow50Color}" />
+    <SolidColorBrush x:Key="BackgroundColor_Yellow_Dark" Color="{StaticResource WolvenKitYellowShadow25Color}" />
+    <SolidColorBrush x:Key="BackgroundColor_Red" Color="{StaticResource WolvenKitRedShadow50Color}" />
+    <SolidColorBrush x:Key="BackgroundColor_Red_Dark" Color="{StaticResource WolvenKitRedShadow25Color}" />
+
+    <SolidColorBrush x:Key="BackgroundColor_Control" Color="#252525" />
+    <SolidColorBrush x:Key="BackgroundColor_Frame_Active" Color="#313131" />
+    <SolidColorBrush x:Key="BackgroundColor_Frame_Background" Color="#1F1F1F" />
+
+    <SolidColorBrush x:Key="BackgroundColor_Button_Inactive" Color="#969696" />
+    <SolidColorBrush x:Key="BackgroundColor_Button_Active" Color="#313131" />
+
+    <!-- Graph and Curve Editors -->
+    <SolidColorBrush x:Key="WolvenKitGraphGrid" Color="{StaticResource WolvenKitGraphGridColor}" />
+    <SolidColorBrush x:Key="WolvenKitGraphAxis" Color="{StaticResource WolvenKitGraphAxisColor}" />
+    <SolidColorBrush x:Key="WolvenKitGraphLabel" Color="{StaticResource WolvenKitGraphLabelColor}" />
+    <SolidColorBrush x:Key="WolvenKitGraphCurve" Color="{StaticResource WolvenKitGraphCurveColor}" />
+
+    <!-- Dialog Label styles -->
+    <Style
+        x:Key="WolvenkitDialogLabelStyle"
+        BasedOn="{StaticResource {x:Type Label}}"
+        TargetType="{x:Type Label}">
+        <Setter Property="Foreground" Value="{StaticResource WolvenKitLabelColor}" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="Width" Value="{StaticResource WolvenKitDialogLabelColumnWidth}" />
+    </Style>
+
+    <Style
+        x:Key="WolvenkitDialogLabelStyleMedium"
+        BasedOn="{StaticResource WolvenkitDialogLabelStyle}"
+        TargetType="{x:Type Label}">
+        <Setter Property="Width" Value="{StaticResource WolvenKitDialogLabelColumnWidthMedium}" />
+    </Style>
+
+    <!-- Placeholder texts -->
+    <Style
+        x:Key="WolvenkitPlaceholderStyle"
+        BasedOn="{StaticResource {x:Type TextBlock}}"
+        TargetType="{x:Type TextBlock}">
+        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Inactive}" />
+        <Setter Property="IsHitTestVisible" Value="False" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="10,0" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
 
     <Style
         x:Key="WolvenKitTabControl"
         BasedOn="{StaticResource SyncfusionDocumentTabControlExtStyle}"
         TargetType="{x:Type syncfusion:TabControlExt}">
-        <Setter Property="TabItemSelectedBackground" Value="{StaticResource WolvenKitRed}" />
-        <Setter Property="TabItemSelectedBorderBrush" Value="{StaticResource WolvenKitRedShadow}" />
+        <Setter Property="BorderThickness" Value="0" />
         <Setter Property="TabItemHoverBackground" Value="{StaticResource WolvenKitRedShadow}" />
         <Setter Property="TabItemHoverBorderBrush" Value="{StaticResource WolvenKitRedShadow}" />
+        <Setter Property="TabItemSelectedBackground" Value="{StaticResource WolvenKitRed}" />
+        <Setter Property="TabItemSelectedBorderBrush" Value="{StaticResource WolvenKitRedShadow}" />
         <Setter Property="TabItemSelectedForeground" Value="White" />
         <Setter Property="TabPanelBackground" Value="{StaticResource ContentBackgroundAlt2}" />
-        <Setter Property="BorderThickness" Value="0" />
 
-        <!--  Setter Property="TabPanelBackground" Value="#313131" /  -->
+        <!-- Setter Property="TabPanelBackground" Value="#313131" / -->
     </Style>
 
-    <Style x:Key="TextBoxTCSA" TargetType="{x:Type TextBox}">
+    <!--
+        Global style for nested syncfusion combobox, e.g. in ChunkMask editor.
+        Doesn't work for base dropdown background yet
+    -->
+    <Style
+        BasedOn="{StaticResource {x:Type syncfusion:ComboBoxAdv}}"
+        TargetType="{x:Type syncfusion:ComboBoxAdv}">
+        <Setter Property="Background" Value="#252525" />
+    </Style>
+
+    <!-- Give all textboxes the same background -->
+    <Style
+        x:Key="WolvenkitTextBoxStyle"
+        BasedOn="{StaticResource {x:Type TextBox}}"
+        TargetType="{x:Type TextBox}">
+        <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
+        <Setter Property="BorderBrush" Value="{StaticResource ContentBackgroundAlt3}" />
+    </Style>
+
+    <!-- Menu Bar Entry Style -->
+    <Style
+        x:Key="WolvenKitToolBarItem"
+        TargetType="{x:Type MenuItem}">
+        <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
+        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+        <Setter Property="Margin" Value="3,4,3,0" />
+        <Setter Property="Padding" Value="0,1,2,2" />
+
+        <Style.Triggers>
+            <DataTrigger
+                Binding="{Binding Path=IsEnabled,
+                                  RelativeSource={RelativeSource Self}}"
+                Value="False">
+                <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
+                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Inactive}" />
+            </DataTrigger>
+
+            <DataTrigger
+                Binding="{Binding Path=IsEnabled,
+                                  RelativeSource={RelativeSource Self}}"
+                Value="False">
+                <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
+                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Inactive}" />
+            </DataTrigger>
+
+            <DataTrigger
+                Binding="{Binding Path=IsFocused,
+                                  RelativeSource={RelativeSource Self}}"
+                Value="False">
+                <Setter Property="Background" Value="{StaticResource BackgroundColor_Frame_Active}" />
+                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Light}" />
+            </DataTrigger>
+
+            <DataTrigger
+                Binding="{Binding Path=IsMouseOver,
+                                  RelativeSource={RelativeSource Self}}"
+                Value="False">
+                <Setter Property="Background" Value="{StaticResource BackgroundColor_Frame_Active}" />
+                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Light}" />
+            </DataTrigger>
+
+            <DataTrigger
+                Binding="{Binding Path=IsPressed,
+                                  RelativeSource={RelativeSource Self}}"
+                Value="False">
+                <Setter Property="Background" Value="{StaticResource BackgroundColor_Frame_Background}" />
+                <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style
+        x:Key="ValidatingControlStyle"
+        BasedOn="{StaticResource WolvenkitTextBoxStyle}"
+        TargetType="{x:Type TextBox}">
+        <Style.Triggers>
+            <DataTrigger
+                Binding="{Binding Path=IsValid}"
+                Value="True">
+                <Setter Property="BorderBrush" Value="{StaticResource ContentBackgroundAlt3}" />
+            </DataTrigger>
+
+            <DataTrigger
+                Binding="{Binding Path=IsValid}"
+                Value="False">
+                <Setter Property="BorderBrush" Value="{DynamicResource BackgroundColor_Yellow}" />
+            </DataTrigger>
+        </Style.Triggers>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Border
+                        Name="border"
+                        Background="{StaticResource ContentBackgroundAlt2}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="1">
+                        <ScrollViewer x:Name="PART_ContentHost" />
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsFocused}" Value="True" />
+                                <Condition Binding="{Binding Path=IsValid}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+
+                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource BackgroundColor_Yellow}" />
+                            <Setter TargetName="border" Property="BorderThickness" Value="2" />
+                        </MultiDataTrigger>
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}" Value="True" />
+                                <Condition Binding="{Binding Path=IsValid}" Value="False" />
+                            </MultiDataTrigger.Conditions>
+
+                            <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource ForegroundColor_Yellow}" />
+                            <Setter TargetName="border" Property="BorderThickness" Value="2" />
+                        </MultiDataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        x:Key="TextBoxTCSA"
+        BasedOn="{StaticResource {x:Type TextBox}}"
+        TargetType="{x:Type TextBox}">
         <Setter Property="helpers:TextBoxBehavior.TripleClickSelectAll" Value="True" />
     </Style>
 
@@ -100,8 +431,10 @@
         </GradientStopCollection>
     </LinearGradientBrush>
 
-    <!--  Position Slider Control  -->
-    <ControlTemplate x:Key="PositionSliderThumbTemplate" TargetType="{x:Type Thumb}">
+    <!-- Position Slider Control -->
+    <ControlTemplate
+        x:Key="PositionSliderThumbTemplate"
+        TargetType="{x:Type Thumb}">
         <Grid
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
@@ -117,20 +450,26 @@
                 StrokeThickness="2.5"
                 UseLayoutRounding="True" />
         </Grid>
+
         <ControlTemplate.Triggers>
             <Trigger Property="IsDragging" Value="true">
                 <Setter TargetName="grip" Property="Fill" Value="{StaticResource CustomSliderForegroundBrush}" />
                 <Setter TargetName="grip" Property="Stroke" Value="{StaticResource CustomSliderForegroundBrush}" />
             </Trigger>
+
             <Trigger Property="IsEnabled" Value="false">
                 <Setter TargetName="grip" Property="Visibility" Value="Hidden" />
             </Trigger>
+
             <Trigger Property="IsKeyboardFocused" Value="true">
                 <Setter TargetName="grip" Property="Fill" Value="{StaticResource CustomSliderForegroundBrush}" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-    <ControlTemplate x:Key="PositionSliderTemplate" TargetType="{x:Type Slider}">
+
+    <ControlTemplate
+        x:Key="PositionSliderTemplate"
+        TargetType="{x:Type Slider}">
         <Border
             x:Name="border"
             Background="Transparent"
@@ -139,22 +478,24 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="{TemplateBinding MinHeight}" />
                 </Grid.RowDefinitions>
+
                 <DockPanel LastChildFill="True">
                     <Border
                         x:Name="PART_SelectionRange"
                         Height="3"
-                        ClipToBounds="True"
-                        Visibility="Visible">
+                        Visibility="Visible"
+                        ClipToBounds="True">
                         <Rectangle
                             Margin="10,0,-10,0"
                             Fill="{StaticResource CustomSliderForegroundBrush}"
                             RadiusX="1"
                             RadiusY="1" />
                     </Border>
+
                     <Border
                         Height="3"
-                        ClipToBounds="True"
-                        Visibility="Visible">
+                        Visibility="Visible"
+                        ClipToBounds="True">
                         <Rectangle
                             Margin="20,0,10,0"
                             Fill="{StaticResource CustomSliderBackgroundBrush}"
@@ -162,6 +503,7 @@
                             RadiusY="1" />
                     </Border>
                 </DockPanel>
+
                 <Track x:Name="PART_Track">
                     <Track.Thumb>
                         <Thumb
@@ -177,24 +519,29 @@
             </Grid>
         </Border>
     </ControlTemplate>
-    <Style x:Key="PositionSliderStyle" TargetType="{x:Type Slider}">
-        <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
+
+    <Style
+        x:Key="PositionSliderStyle"
+        TargetType="{x:Type Slider}">
+        <Setter Property="AutoToolTipPlacement" Value="None" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="MinHeight" Value="20" />
-        <Setter Property="MaxHeight" Value="20" />
         <Setter Property="Height" Value="20" />
-        <Setter Property="Minimum" Value="0" />
-        <Setter Property="AutoToolTipPlacement" Value="None" />
         <Setter Property="IsMoveToPointEnabled" Value="True" />
-        <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="SelectionStart" Value="0" />
+        <Setter Property="MaxHeight" Value="20" />
+        <Setter Property="MinHeight" Value="20" />
+        <Setter Property="Minimum" Value="0" />
         <Setter Property="SelectionEnd" Value="{Binding Path=Value, RelativeSource={RelativeSource Self}}" />
+        <Setter Property="SelectionStart" Value="0" />
+        <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
         <Setter Property="Template" Value="{StaticResource PositionSliderTemplate}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
-    <!--  Custom Slider Control  -->
-    <ControlTemplate x:Key="CustomSliderThumbTemplate" TargetType="{x:Type Thumb}">
+    <!-- Custom Slider Control -->
+    <ControlTemplate
+        x:Key="CustomSliderThumbTemplate"
+        TargetType="{x:Type Thumb}">
         <Grid
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
@@ -202,7 +549,8 @@
             <Rectangle
                 x:Name="grip"
                 Width="8"
-                Height="{Binding Path=Height, RelativeSource={RelativeSource TemplatedParent}}"
+                Height="{Binding Path=Height,
+                                 RelativeSource={RelativeSource TemplatedParent}}"
                 Fill="{StaticResource CustomSliderForegroundBrush}"
                 RadiusX="3"
                 RadiusY="3"
@@ -210,19 +558,25 @@
                 StrokeThickness="0"
                 UseLayoutRounding="True" />
         </Grid>
+
         <ControlTemplate.Triggers>
             <Trigger Property="IsDragging" Value="true">
                 <Setter TargetName="grip" Property="Fill" Value="{StaticResource CustomSliderHighlightBrush}" />
             </Trigger>
+
             <Trigger Property="IsEnabled" Value="false">
                 <Setter TargetName="grip" Property="Fill" Value="{StaticResource CustomSliderBackgroundBrush}" />
             </Trigger>
+
             <Trigger Property="IsKeyboardFocused" Value="true">
                 <Setter TargetName="grip" Property="Fill" Value="{StaticResource CustomSliderForegroundBrush}" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-    <ControlTemplate x:Key="CustomSliderTemplate" TargetType="{x:Type Slider}">
+
+    <ControlTemplate
+        x:Key="CustomSliderTemplate"
+        TargetType="{x:Type Slider}">
         <Border
             x:Name="border"
             Background="Transparent"
@@ -231,22 +585,24 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="{TemplateBinding MinHeight}" />
                 </Grid.RowDefinitions>
+
                 <DockPanel LastChildFill="True">
                     <Border
                         x:Name="PART_SelectionRange"
                         Height="3"
-                        ClipToBounds="True"
-                        Visibility="Visible">
+                        Visibility="Visible"
+                        ClipToBounds="True">
                         <Rectangle
                             Margin="4,0,-4,0"
                             Fill="{StaticResource CustomSliderForegroundBrush}"
                             RadiusX="1"
                             RadiusY="1" />
                     </Border>
+
                     <Border
                         Height="3"
-                        ClipToBounds="True"
-                        Visibility="Visible">
+                        Visibility="Visible"
+                        ClipToBounds="True">
                         <Rectangle
                             x:Name="PART_NegativeSelection"
                             Margin="8,0,4,0"
@@ -255,6 +611,7 @@
                             RadiusY="1" />
                     </Border>
                 </DockPanel>
+
                 <Track x:Name="PART_Track">
                     <Track.Thumb>
                         <Thumb
@@ -271,58 +628,71 @@
         </Border>
 
         <ControlTemplate.Triggers>
-            <DataTrigger Binding="{Binding ElementName=Thumb, Path=IsDragging}" Value="True">
+            <DataTrigger
+                Binding="{Binding ElementName=Thumb,
+                                  Path=IsDragging}"
+                Value="True">
                 <Setter TargetName="PART_NegativeSelection" Property="Fill" Value="{StaticResource CustomSliderHighlightBrush}" />
             </DataTrigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-    <Style x:Key="CustomSliderStyle" TargetType="{x:Type Slider}">
-        <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
+
+    <Style
+        x:Key="CustomSliderStyle"
+        TargetType="{x:Type Slider}">
+        <Setter Property="AutoToolTipPlacement" Value="None" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="MinHeight" Value="26" />
-        <Setter Property="MaxHeight" Value="26" />
         <Setter Property="Height" Value="26" />
-        <Setter Property="Minimum" Value="0" />
-        <Setter Property="IsSnapToTickEnabled" Value="True" />
-        <Setter Property="SmallChange" Value="0.01" />
-        <Setter Property="LargeChange" Value="0.01" />
-        <Setter Property="TickFrequency" Value="0.01" />
-        <Setter Property="AutoToolTipPlacement" Value="None" />
         <Setter Property="IsMoveToPointEnabled" Value="True" />
-        <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="SelectionStart" Value="{Binding Path=Minimum, RelativeSource={RelativeSource Self}}" />
+        <Setter Property="IsSnapToTickEnabled" Value="True" />
+        <Setter Property="LargeChange" Value="0.01" />
+        <Setter Property="MaxHeight" Value="26" />
+        <Setter Property="MinHeight" Value="26" />
+        <Setter Property="Minimum" Value="0" />
         <Setter Property="SelectionEnd" Value="{Binding Path=Value, RelativeSource={RelativeSource Self}}" />
+        <Setter Property="SelectionStart" Value="{Binding Path=Minimum, RelativeSource={RelativeSource Self}}" />
+        <Setter Property="SmallChange" Value="0.01" />
+        <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false" />
         <Setter Property="Template" Value="{StaticResource CustomSliderTemplate}" />
+        <Setter Property="TickFrequency" Value="0.01" />
+        <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
-    <Style x:Key="NetworkProgressBarStyle" TargetType="{x:Type ProgressBar}">
+    <Style
+        x:Key="NetworkProgressBarStyle"
+        TargetType="{x:Type ProgressBar}">
+        <Setter Property="Background" Value="{StaticResource CustomSliderBackgroundBrush}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Height" Value="3" />
         <Setter Property="Margin" Value="10,0" />
-        <Setter Property="Minimum" Value="0" />
         <Setter Property="Maximum" Value="1" />
-        <Setter Property="Background" Value="{StaticResource CustomSliderBackgroundBrush}" />
+        <Setter Property="Minimum" Value="0" />
     </Style>
 
-    <Style x:Key="ModernToggleButtonStyle" TargetType="ToggleButton">
+    <Style
+        x:Key="ModernToggleButtonStyle"
+        TargetType="ToggleButton">
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="#22FFFFFF" />
             </Trigger>
+
             <Trigger Property="IsPressed" Value="True">
                 <Setter Property="Background" Value="#44FFFFFF" />
             </Trigger>
+
             <Trigger Property="IsChecked" Value="True">
                 <Setter Property="Background" Value="#44FFFFFF" />
             </Trigger>
         </Style.Triggers>
+
+        <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Width" Value="45" />
+        <Setter Property="Foreground" Value="{StaticResource CustomSliderHighlightBrush}" />
         <Setter Property="Height" Value="45" />
         <Setter Property="Padding" Value="12" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{StaticResource CustomSliderHighlightBrush}" />
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
@@ -338,23 +708,30 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="Width" Value="45" />
     </Style>
 
-    <Style x:Key="ModernButtonStyle" TargetType="{x:Type Button}">
+    <Style
+        x:Key="ModernButtonStyle"
+        TargetType="{x:Type Button}">
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="#22FFFFFF" />
+                <Setter Property="Foreground" Value="{StaticResource CustomSliderHighlightBrush}" />
             </Trigger>
+
             <Trigger Property="IsPressed" Value="True">
                 <Setter Property="Background" Value="#44FFFFFF" />
+                <Setter Property="Foreground" Value="{StaticResource CustomSliderHighlightBrush}" />
             </Trigger>
         </Style.Triggers>
+
+        <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Width" Value="45" />
+        <Setter Property="Foreground" Value="{StaticResource CustomSliderHighlightBrush}" />
         <Setter Property="Height" Value="45" />
         <Setter Property="Padding" Value="12" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{StaticResource CustomSliderHighlightBrush}" />
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -370,17 +747,22 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="Width" Value="45" />
     </Style>
 
-    <Style x:Key="ControlsGridStyle" TargetType="{x:Type Grid}">
-        <Setter Property="VerticalAlignment" Value="Bottom" />
-        <Setter Property="Height" Value="250" />
+    <Style
+        x:Key="ControlsGridStyle"
+        TargetType="{x:Type Grid}">
         <Setter Property="Background" Value="{DynamicResource ShadedBackgroundBrush}" />
+        <Setter Property="Height" Value="250" />
+        <Setter Property="VerticalAlignment" Value="Bottom" />
     </Style>
 
-    <!--  Custom Scrollbar Control  -->
-    <!--  Scrollbar Thumbs  -->
-    <Style x:Key="ScrollThumbs" TargetType="{x:Type Thumb}">
+    <!-- Custom Scrollbar Control -->
+    <!-- Scrollbar Thumbs -->
+    <Style
+        x:Key="ScrollThumbs"
+        TargetType="{x:Type Thumb}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
@@ -391,6 +773,7 @@
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
                             Fill="Transparent" />
+
                         <Border
                             x:Name="Rectangle1"
                             Width="Auto"
@@ -400,10 +783,11 @@
                             Background="{TemplateBinding Background}"
                             CornerRadius="5" />
                     </Grid>
+
                     <ControlTemplate.Triggers>
                         <Trigger Property="Tag" Value="Horizontal">
-                            <Setter TargetName="Rectangle1" Property="Width" Value="Auto" />
                             <Setter TargetName="Rectangle1" Property="Height" Value="7" />
+                            <Setter TargetName="Rectangle1" Property="Width" Value="Auto" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -411,12 +795,14 @@
         </Setter>
     </Style>
 
-    <!--  ScrollBars  -->
-    <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
-        <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
-        <Setter Property="Foreground" Value="#8c8c8c" />
+    <!-- ScrollBars -->
+    <Style
+        x:Key="{x:Type ScrollBar}"
+        TargetType="{x:Type ScrollBar}">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Width" Value="8" />
+        <Setter Property="Foreground" Value="#8c8c8c" />
+        <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ScrollBar}">
@@ -439,6 +825,7 @@
                                     Background="{TemplateBinding Foreground}"
                                     Style="{DynamicResource ScrollThumbs}" />
                             </Track.Thumb>
+
                             <Track.IncreaseRepeatButton>
                                 <RepeatButton
                                     x:Name="PageUp"
@@ -446,6 +833,7 @@
                                     Focusable="false"
                                     Opacity="0" />
                             </Track.IncreaseRepeatButton>
+
                             <Track.DecreaseRepeatButton>
                                 <RepeatButton
                                     x:Name="PageDown"
@@ -460,6 +848,7 @@
                         <Trigger SourceName="Thumb" Property="IsMouseOver" Value="true">
                             <Setter TargetName="Thumb" Property="Background" Value="{DynamicResource ButtonSelectBrush}" />
                         </Trigger>
+
                         <Trigger SourceName="Thumb" Property="IsDragging" Value="true">
                             <Setter TargetName="Thumb" Property="Background" Value="{DynamicResource DarkBrush}" />
                         </Trigger>
@@ -467,154 +856,283 @@
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter TargetName="Thumb" Property="Visibility" Value="Collapsed" />
                         </Trigger>
+
                         <Trigger Property="Orientation" Value="Horizontal">
+                            <Setter Property="Height" Value="8" />
+                            <Setter Property="Width" Value="Auto" />
+
                             <Setter TargetName="GridRoot" Property="LayoutTransform">
                                 <Setter.Value>
                                     <RotateTransform Angle="-90" />
                                 </Setter.Value>
                             </Setter>
+
                             <Setter TargetName="PART_Track" Property="LayoutTransform">
                                 <Setter.Value>
                                     <RotateTransform Angle="-90" />
                                 </Setter.Value>
                             </Setter>
-                            <Setter Property="Width" Value="Auto" />
-                            <Setter Property="Height" Value="8" />
-                            <Setter TargetName="Thumb" Property="Tag" Value="Horizontal" />
+
                             <Setter TargetName="PageDown" Property="Command" Value="ScrollBar.PageLeftCommand" />
                             <Setter TargetName="PageUp" Property="Command" Value="ScrollBar.PageRightCommand" />
+                            <Setter TargetName="Thumb" Property="Tag" Value="Horizontal" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="Width" Value="8" />
     </Style>
 
-
-    <Style x:Key="FileIconImageStyle" TargetType="Image">
+    <Style
+        x:Key="FileIconImageStyle"
+        TargetType="Image">
         <Setter Property="Visibility" Value="Visible" />
         <Style.Triggers>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="tweak">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="tweak">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/tweak.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="yaml">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="yaml">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/tweak.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="yml">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="yml">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/tweak.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="xl">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="xl">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/tweak.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="reds">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="reds">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/reds.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="fbx">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="fbx">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="streamingblock">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="streamingblock">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/streamingblock.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="inkenginesettings">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="inkenginesettings">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inkenginesettings.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="ccstate">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="ccstate">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/ccstate.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="x">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="x">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="stp">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="stp">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="obj">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="obj">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="stl">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="stl">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="ply">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="ply">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="assxml">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="assxml">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="assbin">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="assbin">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="x3d">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="x3d">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="glb">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="glb">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="gltf">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="gltf">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="tga">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="tga">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xbm.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="dds">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="dds">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xbm.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="bmp">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="bmp">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xbm.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="jpg">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="jpg">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xbm.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="jpeg">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="jpeg">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xbm.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="png">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="png">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xbm.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="Wav">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="Wav">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/wem.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="Mp3">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="Mp3">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/wem.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="png">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="png">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xbm.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w2cent">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w2cent">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/entity.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w2phase">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w2phase">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/quest_phase.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w2beh">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w2beh">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/behavior_graph3.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w2behtree ">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w2behtree ">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/behavior_graph3.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="env">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="env">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/env.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="gidata">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="gidata">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/gidata.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="gradient">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="gradient">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/gradient.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="lipmap">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="lipmap">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/lipmap.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="mlmask">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="mlmask">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mlmask.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="masklist">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="masklist">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mlmask.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="mltemplate">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="mltemplate">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mltemplate.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w2animev">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w2animev">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2animev.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/default.svg}" />
             </DataTrigger>
             <!--DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="OpenDirImageKey">
@@ -653,533 +1171,1061 @@
             <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="DlcUncookedImageKey">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folderclosed.svg}" />
             </DataTrigger-->
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="aiarch">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="aiarch">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/aiarch.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="animgraph">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="animgraph">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/animgraph.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="anims">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="anims">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/anims.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="apb">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="apb">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/apb.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="archetypes">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="archetypes">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/archetypes.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="areas">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="areas">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/areas.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="audio_metadata">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="audio_metadata">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/audio_metadata.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="audiovehcurveset">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="audiovehcurveset">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/audiovehcurveset.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="behavior">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="behavior">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/behavior.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="bikecurveset">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="bikecurveset">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/bikecurveset.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="bk2">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="bk2">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/bk2.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="blend">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="blend">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/blend.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="bnk">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="bnk">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/bnk.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="buffer">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="buffer">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/buffer.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="camcurveset">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="camcurveset">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/camcurveset.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="cfoliage">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="cfoliage">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/cfoliage.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="cminimap">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="cminimap">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/cminimap.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="community">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="community">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/community.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="conversations">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="conversations">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/conversations.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="cooked_mlsetup">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="cooked_mlsetup">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/cooked_mlsetup.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="cookedanims">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="cookedanims">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/cookedanims.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="cookedapp">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="cookedapp">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/cookedapp.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="credits">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="credits">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/credits.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="cubemap">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="cubemap">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/cubemap.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="curveset">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="curveset">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/curveset.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="dat">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="dat">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/dat.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="devices">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="devices">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/devices.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="dtex">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="dtex">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/dtex.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="effect">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="effect">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/effect.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="envparam">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="envparam">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/envparam.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="envprobe">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="envprobe">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/envprobe.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="es">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="es">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/es.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="facialcustom">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="facialcustom">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/facialcustom.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="facialsetup">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="facialsetup">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/facialsetup.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="fb2tl">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="fb2tl">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/fb2tl.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="flyr">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="flyr">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/flyr.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="fnt">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="fnt">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/fnt.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="folbrush">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="folbrush">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/folbrush.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="foldest">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="foldest">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/foldest.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="font">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="font">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/font.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="formation">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="formation">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/formation.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="fp">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="fp">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/fp.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="gamedef">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="gamedef">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/gamedef.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="garmentlayerparams">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="garmentlayerparams">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/garmentlayerparams.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="genericanimdb">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="genericanimdb">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/genericanimdb.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="geometry_cache">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="geometry_cache">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/geometry_cache.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="grassmask">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="grassmask">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/grassmask.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="hitrepresentation">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="hitrepresentation">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/hitrepresentation.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="hp">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="hp">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/hp.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="ies">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="ies">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/ies.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="inkanim">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="inkanim">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inkanim.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="inkatlas">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="inkatlas">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inkatlas.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="inkcharcustomization">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="inkcharcustomization">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inkcharcustomization.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="inkfontfamily">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="inkfontfamily">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inkfontfamily.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="inkfullscreencomposition">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="inkfullscreencomposition">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inkfullscreencomposition.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="inkgamesettings">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="inkgamesettings">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inkgamesettings.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="inkhud">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="inkhud">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inkhud.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="inklayers">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="inklayers">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inklayers.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="inkmenu">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="inkmenu">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inkmenu.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="inkshapecollection">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="inkshapecollection">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inkshapecollection.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="inkstyle">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="inkstyle">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inkstyle.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="inktypography">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="inktypography">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inktypography.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="inkwidget">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="inkwidget">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inkwidget.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="interaction">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="interaction">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/interaction.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="journal">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="journal">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/journal.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="journaldesc">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="journaldesc">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/journaldesc.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="json">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="json">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/json.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="lane_connections">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="lane_connections">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/lane_connections.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="lane_polygons">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="lane_polygons">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/lane_polygons.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="lane_spots">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="lane_spots">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/lane_spots.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="lights">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="lights">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/lights.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="location">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="location">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/location.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="locopaths">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="locopaths">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/locopaths.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="loot">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="loot">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/loot.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="mappins">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="mappins">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mappins.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="menu">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="menu">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/menu.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="mesh">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="mesh">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="mi">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="mi">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mi.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="morphtarget">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="morphtarget">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/morphtarget.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="mt">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="mt">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mt.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="navconfig">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="navconfig">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/navconfig.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="naviobstacles">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="naviobstacles">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/naviobstacles.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="navmesh">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="navmesh">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/navmesh.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="navtile">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="navtile">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/navtile.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="null_areas">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="null_areas">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/null_areas.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="opuspak">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="opuspak">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/opuspak.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="particle">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="particle">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/particle.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="phys">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="phys">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/phys.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="physicalscene">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="physicalscene">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/physicalscene.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="physmatlib">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="physmatlib">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/physmatlib.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="poimappins">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="poimappins">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/poimappins.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="popup">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="popup">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/popup.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="psrep">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="psrep">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/psrep.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="quest">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="quest">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/quest.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="questphase">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="questphase">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/questphase.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="redapex">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="redapex">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/redapex.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="redcloth">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="redcloth">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/redcloth.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="reddlc">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="reddlc">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/reddlc.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="redexp">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="redexp">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/redexp.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="redfur">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="redfur">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/redfur.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="redgame">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="redgame">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/redgame.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="regionset">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="regionset">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/regionset.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="remt">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="remt">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/remt.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="reslist">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="reslist">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/reslist.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="rig">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="rig">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/rig.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="sav">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="sav">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/sav.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="scene">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="scene">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/scene.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="scenerid">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="scenerid">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/scenerid.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="scenesversions">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="scenesversions">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/scenesversions.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w3simplex">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w3simplex">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w3simplex.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="smartobject">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="smartobject">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/smartobject.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="smartobjects">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="smartobjects">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/smartobjects.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="sp">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="sp">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/sp.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="spawntree">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="spawntree">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/spawntree.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="srt">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="srt">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/srt.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="streamingquerydata">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="streamingquerydata">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/streamingquerydata.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="streamingsector">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="streamingsector">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/streamingsector.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="streamingsector_inplace">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="streamingsector_inplace">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/streamingsector_inplace.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="streamingworld">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="streamingworld">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/streamingworld.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="subs">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="subs">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/subs.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="swf">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="swf">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/swf.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="terrainsetup">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="terrainsetup">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/terrainsetup.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="texarray">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="texarray">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/texarray.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="textarray">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="textarray">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/textarray.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="traffic_collisions">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="traffic_collisions">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/traffic_collisions.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="traffic_persistent">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="traffic_persistent">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/traffic_persistent.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w2l">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w2l">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2l.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="usm">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="usm">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/usm.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="voicetags">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="voicetags">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/voicetags.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w2mesh">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w2mesh">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2mesh.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w2mi">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w2mi">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2mi.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w2mg">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w2mg">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2mg.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w3occulsion">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w3occulsion">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w3occulsion.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w3dyng">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w3dyng">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w3dyng.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="wem">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="wem">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/wem.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="workspot">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="workspot">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/workspot.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="xbm">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="xbm">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xbm.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="xcube">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="xcube">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xcube.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="xml">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="xml">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/xml.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w2sf">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w2sf">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2sf.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w2steer">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w2steer">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2steer.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w2ter">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w2ter">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2ter.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w2w">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w2w">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2w.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="wizdef">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="wizdef">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/wizdef.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w2ragdoll">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w2ragdoll">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2ragdoll.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="app">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="app">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/app.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="spatial_representation">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="spatial_representation">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/spatial_representation.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="mlsetup">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="mlsetup">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mlsetup.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="opusinfo">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="opusinfo">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/opusinfo.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w3fac">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w3fac">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w3fac.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="actionanimdb">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="actionanimdb">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/actionanimdb.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="acousticdata">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="acousticdata">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/acousticdata.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="cellmap">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="cellmap">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/cellmap.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="csv">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="csv">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/csv.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="ent">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="ent">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/ent.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="guiconfig">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="guiconfig">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/guiconfig.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="hud">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="hud">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/hud.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="navgraph">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="navgraph">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/navgraph.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="reddest">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="reddest">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/reddest.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="redicsv">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="redicsv">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/redicsv.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="redswf">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="redswf">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/redswf.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="redwpset">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="redwpset">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/redwpset.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w2em">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w2em">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2em.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w2ent">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w2ent">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2ent.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w2fnt">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w2fnt">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2fnt.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w2je">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w2je">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2je.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w2job">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w2job">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2job.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w2p">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w2p">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2p.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w2qm">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w2qm">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2qm.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w2rig">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w2rig">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2rig.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w2scene">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w2scene">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w2scene.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="w3app">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="w3app">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/w3app.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="bin">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="bin">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/default.svg}" />
             </DataTrigger>
 
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="script">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="script">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/default.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="ws">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="ws">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/default.svg}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="tweak">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="tweak">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/tweak.svg}" />
             </DataTrigger>
 
@@ -1189,54 +2235,239 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    <Style x:Key="FileIconIconStyle" TargetType="{x:Type iconPacks:PackIconControl}">
+
+    <Style
+        x:Key="FileIconIconStyle"
+        TargetType="{x:Type iconPacks:PackIconControl}">
         <Setter Property="Visibility" Value="Visible" />
         <Style.Triggers>
-            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="archive">
+            <DataTrigger
+                Binding="{Binding Icon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="archive">
+                <Setter Property="Foreground" Value="{StaticResource WolvenKitRed}" />
                 <Setter Property="Kind" Value="{x:Static iconPacks:PackIconForkAwesomeKind.Archive}" />
-                <Setter Property="Foreground" Value="{StaticResource WolvenKitRed}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding FullIcon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="ModDirectoryTop">
+            <DataTrigger
+                Binding="{Binding FullIcon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="ModDirectoryTop">
+                <Setter Property="Foreground" Value="{StaticResource WolvenKitRed}" />
                 <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.Folder}" />
-                <Setter Property="Foreground" Value="{StaticResource WolvenKitRed}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding FullIcon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="ModDirectoryTopOpen">
+            <DataTrigger
+                Binding="{Binding FullIcon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="ModDirectoryTopOpen">
+                <Setter Property="Foreground" Value="{StaticResource WolvenKitRed}" />
                 <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.FolderOpen}" />
-                <Setter Property="Foreground" Value="{StaticResource WolvenKitRed}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding FullIcon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="RawDirectoryTop">
+            <DataTrigger
+                Binding="{Binding FullIcon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="RawDirectoryTop">
+                <Setter Property="Foreground" Value="{StaticResource WolvenKitTan}" />
                 <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.Folder}" />
-                <Setter Property="Foreground" Value="{StaticResource WolvenKitTan}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding FullIcon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="RawDirectoryTopOpen">
-                <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.FolderOpen}" />
+            <DataTrigger
+                Binding="{Binding FullIcon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="RawDirectoryTopOpen">
                 <Setter Property="Foreground" Value="{StaticResource WolvenKitTan}" />
+                <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.FolderOpen}" />
             </DataTrigger>
 
-            <DataTrigger Binding="{Binding FullIcon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="ResourceDirectoryTop">
+            <DataTrigger
+                Binding="{Binding FullIcon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="ResourceDirectoryTop">
+                <Setter Property="Foreground" Value="{StaticResource WolvenKitCyan}" />
                 <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.Folder}" />
-                <Setter Property="Foreground" Value="{StaticResource WolvenKitCyan}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding FullIcon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="ResourceDirectoryTopOpen">
-                <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.FolderOpen}" />
+            <DataTrigger
+                Binding="{Binding FullIcon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="ResourceDirectoryTopOpen">
                 <Setter Property="Foreground" Value="{StaticResource WolvenKitCyan}" />
+                <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.FolderOpen}" />
             </DataTrigger>
 
-            <DataTrigger Binding="{Binding FullIcon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="ClosedDirImageKey">
+            <DataTrigger
+                Binding="{Binding FullIcon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="ClosedDirImageKey">
+                <Setter Property="Foreground" Value="{StaticResource WolvenKitTan}" />
                 <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.Folder}" />
-                <Setter Property="Foreground" Value="{StaticResource WolvenKitTan}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding FullIcon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="OpenDirImageKey">
-                <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.FolderOpen}" />
+            <DataTrigger
+                Binding="{Binding FullIcon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="OpenDirImageKey">
                 <Setter Property="Foreground" Value="{StaticResource WolvenKitTan}" />
+                <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.FolderOpen}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding FullIcon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="OpenDirImageKeyOpen">
-                <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.FolderOpen}" />
+            <DataTrigger
+                Binding="{Binding FullIcon,
+                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Value="OpenDirImageKeyOpen">
                 <Setter Property="Foreground" Value="{StaticResource WolvenKitTan}" />
+                <Setter Property="Kind" Value="{x:Static iconPacks:PackIconMaterialKind.FolderOpen}" />
             </DataTrigger>
             <Trigger Property="Kind" Value="{x:Null}">
                 <Setter Property="Visibility" Value="Collapsed" />
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <Style
+        x:Key="SearchBarButtonStyle"
+        BasedOn="{StaticResource {x:Type Button}}"
+        TargetType="Button">
+        <Setter Property="BorderBrush" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Dark}" />
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Light}" />
+            </Trigger>
+
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Light}" />
+            </Trigger>
+
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Light}" />
+            </Trigger>
+
+            <DataTrigger
+                Binding="{Binding Path=(Validation.HasError),
+                                  RelativeSource={RelativeSource Self}}"
+                Value="True">
+                <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey_Light}" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style
+        x:Key="SearchBarStyle"
+        BasedOn="{StaticResource SearchBarPlus}"
+        TargetType="{x:Type hc:SearchBar}">
+        <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BackgroundColor_Frame_Active}" />
+        <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
+
+        <Style.Resources>
+            <Style
+                BasedOn="{StaticResource SearchBarButtonStyle}"
+                TargetType="Button" />
+        </Style.Resources>
+    </Style>
+
+    <!-- Quest Node Header Brushes -->
+    <SolidColorBrush x:Key="QuestStartNodeHeader" Color="{StaticResource QuestStartNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestEndNodeHeader" Color="{StaticResource QuestEndNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestInputNodeHeader" Color="{StaticResource QuestInputNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestOutputNodeHeader" Color="{StaticResource QuestOutputNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestConditionNodeHeader" Color="{StaticResource QuestConditionNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestPhaseNodeHeader" Color="{StaticResource QuestPhaseNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestSceneNodeHeader" Color="{StaticResource QuestSceneNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestRandomizerNodeHeader" Color="{StaticResource QuestRandomizerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestFlowControlNodeHeader" Color="{StaticResource QuestFlowControlNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestSwitchNodeHeader" Color="{StaticResource QuestSwitchNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestLogicalAndNodeHeader" Color="{StaticResource QuestLogicalAndNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestLogicalXorNodeHeader" Color="{StaticResource QuestLogicalXorNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestLogicalHubNodeHeader" Color="{StaticResource QuestLogicalHubNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestFactsDBManagerNodeHeader" Color="{StaticResource QuestFactsDBManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestItemManagerNodeHeader" Color="{StaticResource QuestItemManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestCharacterManagerNodeHeader" Color="{StaticResource QuestCharacterManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestUIManagerNodeHeader" Color="{StaticResource QuestUIManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestAudioNodeHeader" Color="{StaticResource QuestAudioNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestJournalNodeHeader" Color="{StaticResource QuestJournalNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestPauseConditionNodeHeader" Color="{StaticResource QuestPauseConditionNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestSceneManagerNodeHeader" Color="{StaticResource QuestSceneManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestRenderFxManagerNodeHeader" Color="{StaticResource QuestRenderFxManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestSpawnManagerNodeHeader" Color="{StaticResource QuestSpawnManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestTriggerManagerNodeHeader" Color="{StaticResource QuestTriggerManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestEntityManagerNodeHeader" Color="{StaticResource QuestEntityManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestEnvironmentManagerNodeHeader" Color="{StaticResource QuestEnvironmentManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestEventManagerNodeHeader" Color="{StaticResource QuestEventManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestMappinManagerNodeHeader" Color="{StaticResource QuestMappinManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestRewardManagerNodeHeader" Color="{StaticResource QuestRewardManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestTimeManagerNodeHeader" Color="{StaticResource QuestTimeManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestVisionModesManagerNodeHeader" Color="{StaticResource QuestVisionModesManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestVoicesetManagerNodeHeader" Color="{StaticResource QuestVoicesetManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestFXManagerNodeHeader" Color="{StaticResource QuestFXManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestPuppetAIManagerNodeHeader" Color="{StaticResource QuestPuppetAIManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestCrowdManagerNodeHeader" Color="{StaticResource QuestCrowdManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestInteractiveObjectManagerNodeHeader" Color="{StaticResource QuestInteractiveObjectManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestPhoneManagerNodeHeader" Color="{StaticResource QuestPhoneManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestUseWorkspotNodeHeader" Color="{StaticResource QuestUseWorkspotNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestWorldDataManagerNodeHeader" Color="{StaticResource QuestWorldDataManagerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="QuestDefaultNodeHeader" Color="{StaticResource QuestDefaultNodeHeaderColor}" />
+
+    <!-- Quest Node Content Brushes -->
+    <SolidColorBrush x:Key="QuestStartNodeContent" Color="{StaticResource QuestStartNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestEndNodeContent" Color="{StaticResource QuestEndNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestInputNodeContent" Color="{StaticResource QuestInputNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestOutputNodeContent" Color="{StaticResource QuestOutputNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestConditionNodeContent" Color="{StaticResource QuestConditionNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestPhaseNodeContent" Color="{StaticResource QuestPhaseNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestSceneNodeContent" Color="{StaticResource QuestSceneNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestRandomizerNodeContent" Color="{StaticResource QuestRandomizerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestFlowControlNodeContent" Color="{StaticResource QuestFlowControlNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestSwitchNodeContent" Color="{StaticResource QuestSwitchNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestLogicalAndNodeContent" Color="{StaticResource QuestLogicalAndNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestLogicalXorNodeContent" Color="{StaticResource QuestLogicalXorNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestLogicalHubNodeContent" Color="{StaticResource QuestLogicalHubNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestFactsDBManagerNodeContent" Color="{StaticResource QuestFactsDBManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestItemManagerNodeContent" Color="{StaticResource QuestItemManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestCharacterManagerNodeContent" Color="{StaticResource QuestCharacterManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestUIManagerNodeContent" Color="{StaticResource QuestUIManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestAudioNodeContent" Color="{StaticResource QuestAudioNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestJournalNodeContent" Color="{StaticResource QuestJournalNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestPauseConditionNodeContent" Color="{StaticResource QuestPauseConditionNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestSceneManagerNodeContent" Color="{StaticResource QuestSceneManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestRenderFxManagerNodeContent" Color="{StaticResource QuestRenderFxManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestSpawnManagerNodeContent" Color="{StaticResource QuestSpawnManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestTriggerManagerNodeContent" Color="{StaticResource QuestTriggerManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestEntityManagerNodeContent" Color="{StaticResource QuestEntityManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestEnvironmentManagerNodeContent" Color="{StaticResource QuestEnvironmentManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestEventManagerNodeContent" Color="{StaticResource QuestEventManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestMappinManagerNodeContent" Color="{StaticResource QuestMappinManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestRewardManagerNodeContent" Color="{StaticResource QuestRewardManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestTimeManagerNodeContent" Color="{StaticResource QuestTimeManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestVisionModesManagerNodeContent" Color="{StaticResource QuestVisionModesManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestVoicesetManagerNodeContent" Color="{StaticResource QuestVoicesetManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestFXManagerNodeContent" Color="{StaticResource QuestFXManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestPuppetAIManagerNodeContent" Color="{StaticResource QuestPuppetAIManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestCrowdManagerNodeContent" Color="{StaticResource QuestCrowdManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestInteractiveObjectManagerNodeContent" Color="{StaticResource QuestInteractiveObjectManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestPhoneManagerNodeContent" Color="{StaticResource QuestPhoneManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestUseWorkspotNodeContent" Color="{StaticResource QuestUseWorkspotNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestWorldDataManagerNodeContent" Color="{StaticResource QuestWorldDataManagerNodeContentColor}" />
+    <SolidColorBrush x:Key="QuestDefaultNodeContent" Color="{StaticResource QuestDefaultNodeContentColor}" />
+
+    <!-- Scene Node Header Brushes -->
+    <SolidColorBrush x:Key="SceneStartNodeHeader" Color="{StaticResource SceneStartNodeHeaderColor}" />
+    <SolidColorBrush x:Key="SceneEndNodeHeader" Color="{StaticResource SceneEndNodeHeaderColor}" />
+    <SolidColorBrush x:Key="SceneChoiceNodeHeader" Color="{StaticResource SceneChoiceNodeHeaderColor}" />
+    <SolidColorBrush x:Key="SceneQuestNodeHeader" Color="{StaticResource SceneQuestNodeHeaderColor}" />
+    <SolidColorBrush x:Key="SceneSectionNodeHeader" Color="{StaticResource SceneSectionNodeHeaderColor}" />
+    <SolidColorBrush x:Key="SceneRandomizerNodeHeader" Color="{StaticResource SceneRandomizerNodeHeaderColor}" />
+    <SolidColorBrush x:Key="SceneHubNodeHeader" Color="{StaticResource SceneHubNodeHeaderColor}" />
+    <SolidColorBrush x:Key="SceneAndNodeHeader" Color="{StaticResource SceneAndNodeHeaderColor}" />
+    <SolidColorBrush x:Key="SceneXorNodeHeader" Color="{StaticResource SceneXorNodeHeaderColor}" />
+    <SolidColorBrush x:Key="SceneDefaultNodeHeader" Color="{StaticResource SceneDefaultNodeHeaderColor}" />
+
+    <!-- Scene Node Content Brushes -->
+    <SolidColorBrush x:Key="SceneStartNodeContent" Color="{StaticResource SceneStartNodeContentColor}" />
+    <SolidColorBrush x:Key="SceneEndNodeContent" Color="{StaticResource SceneEndNodeContentColor}" />
+    <SolidColorBrush x:Key="SceneChoiceNodeContent" Color="{StaticResource SceneChoiceNodeContentColor}" />
+    <SolidColorBrush x:Key="SceneQuestNodeContent" Color="{StaticResource SceneQuestNodeContentColor}" />
+    <SolidColorBrush x:Key="SceneSectionNodeContent" Color="{StaticResource SceneSectionNodeContentColor}" />
+    <SolidColorBrush x:Key="SceneRandomizerNodeContent" Color="{StaticResource SceneRandomizerNodeContentColor}" />
+    <SolidColorBrush x:Key="SceneHubNodeContent" Color="{StaticResource SceneHubNodeContentColor}" />
+    <SolidColorBrush x:Key="SceneAndNodeContent" Color="{StaticResource SceneAndNodeContentColor}" />
+    <SolidColorBrush x:Key="SceneXorNodeContent" Color="{StaticResource SceneXorNodeContentColor}" />
+    <SolidColorBrush x:Key="SceneDefaultNodeContent" Color="{StaticResource SceneDefaultNodeContentColor}" />
 </ResourceDictionary>

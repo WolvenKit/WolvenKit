@@ -200,7 +200,7 @@ public partial class ModsViewModel : PageViewModel
             {
                 case WMessageBoxResult.OK:
                 case WMessageBoxResult.Yes:
-                    await _appViewModel.ShowHomePage(EHomePage.Plugins);
+                    await _appViewModel.ShowHomePageAsync(EHomePage.Plugins);
                     break;
                 case WMessageBoxResult.None:
                 case WMessageBoxResult.Cancel:
@@ -212,25 +212,6 @@ public partial class ModsViewModel : PageViewModel
         }
     }
     
-    [RelayCommand]
-    private void LaunchGameFromLastSave()
-    {
-        try
-        {
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = _settings.GetRED4GameLaunchCommand(),
-                Arguments = $"{_settings.GetRED4GameLaunchOptions()} -modded",
-                ErrorDialog = true,
-            });
-        }
-        catch (Exception ex)
-        {
-            _logger.Error("Launch: error launching game! Please check your executable path in Settings.");
-            _logger.Info($"Launch: error debug info: {ex.Message}");
-        }
-    }
-
     [RelayCommand]
     private void Remove()
     {
@@ -277,7 +258,7 @@ public partial class ModsViewModel : PageViewModel
             {
                 case WMessageBoxResult.OK:
                 case WMessageBoxResult.Yes:
-                    await _appViewModel.ShowHomePage(EHomePage.Plugins);
+                    await _appViewModel.ShowHomePageAsync(EHomePage.Plugins);
                     break;
                 case WMessageBoxResult.None:
                 case WMessageBoxResult.Cancel:

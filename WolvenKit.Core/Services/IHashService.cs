@@ -8,8 +8,6 @@ namespace WolvenKit.Common.Services
 
         string? Get(ulong key);
 
-        void AddCustom(string path);
-
         public IEnumerable<ulong> GetAllHashes();
 
         public IEnumerable<ulong> GetMissingHashes();

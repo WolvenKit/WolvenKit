@@ -85,6 +85,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(11)] 
+		[RED("custoImage")] 
+		public inkImageWidgetReference CustoImage
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(12)] 
 		[RED("priceWrapper")] 
 		public inkWidgetReference PriceWrapper
 		{
@@ -92,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("priceText")] 
 		public inkTextWidgetReference PriceText
 		{
@@ -100,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("discountWrapper")] 
 		public inkWidgetReference DiscountWrapper
 		{
@@ -108,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("discountText")] 
 		public inkTextWidgetReference DiscountText
 		{
@@ -116,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("originalPriceWrapper")] 
 		public inkWidgetReference OriginalPriceWrapper
 		{
@@ -124,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("originalPriceText")] 
 		public inkTextWidgetReference OriginalPriceText
 		{
@@ -132,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("discountImageWrapper")] 
 		public inkWidgetReference DiscountImageWrapper
 		{
@@ -140,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("howToUnlockWrapper")] 
 		public inkWidgetReference HowToUnlockWrapper
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("howToUnlockText")] 
 		public inkTextWidgetReference HowToUnlockText
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("offerRecord")] 
 		public CWeakHandle<gamedataVehicleOffer_Record> OfferRecord
 		{
@@ -164,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamedataVehicleOffer_Record>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("price")] 
 		public CInt32 Price
 		{
@@ -172,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("discount")] 
 		public CFloat Discount
 		{
@@ -192,6 +200,7 @@ namespace WolvenKit.RED4.Types
 			ScrollControllerWidget = new inkWidgetReference();
 			GunImage = new inkImageWidgetReference();
 			RocketImage = new inkImageWidgetReference();
+			CustoImage = new inkImageWidgetReference();
 			PriceWrapper = new inkWidgetReference();
 			PriceText = new inkTextWidgetReference();
 			DiscountWrapper = new inkWidgetReference();

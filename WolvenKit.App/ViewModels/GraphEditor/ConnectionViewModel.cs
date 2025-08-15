@@ -1,7 +1,11 @@
 ﻿namespace WolvenKit.App.ViewModels.GraphEditor;
 
-public class ConnectionViewModel
+using CommunityToolkit.Mvvm.ComponentModel;
+
+public partial class ConnectionViewModel : ObservableObject
 {
+    [ObservableProperty] private bool _isSelected;
+
     public ConnectionViewModel(OutputConnectorViewModel source, InputConnectorViewModel target)
     {
         Source = source;

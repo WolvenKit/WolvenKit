@@ -1,36 +1,29 @@
-﻿using System.Collections.Concurrent;
-using WolvenKit.Core.CRC;
+﻿using WolvenKit.Core.Helpers;
 
-namespace WolvenKit.RED4.Types;
+namespace WolvenKit.RED4.Types.Pools;
 
 public static class TweakDBIDPool
 {
-    private static readonly ConcurrentDictionary<string, ulong> s_pool = new();
-    private static readonly ConcurrentDictionary<ulong, string> s_poolReverse = new();
+    private static readonly BasePool s_pool;
 
-    public static string? ResolveHash(ulong hash)
+    static TweakDBIDPool()
     {
-        if (s_poolReverse.TryGetValue(hash, out var value))
-        {
-            return value;
-        }
-
-        return ResolveHashHandler?.Invoke(hash);
+        s_pool = new BasePool(null, TweakDBID.CalculateHash);
     }
+
+    public static string? ResolveHash(ulong hash) => s_pool.ResolveHash(hash);
+
+    public static bool IsNative(string value) => s_pool.IsNative(value);
+    public static bool IsNative(ulong value) => s_pool.IsNative(value);
+
+    public static bool IsRuntime(string value) => s_pool.IsRuntime(value);
+    public static bool IsRuntime(ulong value) => s_pool.IsRuntime(value);
 
     public static ulong AddOrGetHash(string value)
     {
-        if (!s_pool.TryGetValue(value, out var hash))
-        {
-            hash = Crc32Algorithm.Compute(value) + ((ulong)value.Length << 32);
-
-            s_pool.TryAdd(value, hash);
-            s_poolReverse.TryAdd(hash, value);
-        }
-
+        var (_, hash) = s_pool.AddOrGetHash(value);
         return hash;
     }
 
-    public delegate string? ExtResolveHash(ulong hash);
-    public static ExtResolveHash? ResolveHashHandler;
+    public static void SetNative(LookupTable lookupTable) => s_pool.SetNative(lookupTable);
 }

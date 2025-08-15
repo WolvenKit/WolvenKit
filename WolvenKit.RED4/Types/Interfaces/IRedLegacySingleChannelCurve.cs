@@ -17,7 +17,7 @@ public interface IRedLegacySingleChannelCurve<T> : IRedLegacySingleChannelCurve,
     public void Add(CFloat point, T value);
 }
 
-public interface IRedCurvePoint
+public interface IRedCurvePoint : IRedType, IRedCloneable
 {
     public CFloat GetPoint();
     public void SetPoint(CFloat point);

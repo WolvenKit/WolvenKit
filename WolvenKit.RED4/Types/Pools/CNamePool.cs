@@ -1,45 +1,30 @@
-﻿using System.Collections.Concurrent;
-using System.Text;
-using WolvenKit.Common.FNV1A;
+﻿using WolvenKit.Core.Helpers;
 
 namespace WolvenKit.RED4.Types.Pools;
 
 public static class CNamePool
 {
-    private static readonly ConcurrentDictionary<string, ulong> s_pool = new();
-    private static readonly ConcurrentDictionary<ulong, string> s_poolReverse = new();
+    private static readonly BasePool s_pool;
 
     static CNamePool()
     {
-        AddOrGetHash("None");
+        s_pool = new BasePool(null, CName.CalculateHash);
+        s_pool.SetNative(new LookupTable([0], ["None"]));
     }
 
-    public static string? ResolveHash(ulong hash)
-    {
-        if (s_poolReverse.TryGetValue(hash, out var value))
-        {
-            return value;
-        }
+    public static string? ResolveHash(ulong hash) => s_pool.ResolveHash(hash);
 
-        return ResolveHashHandler?.Invoke(hash);
-    }
+    public static bool IsNative(string value) => s_pool.IsNative(value);
+    public static bool IsNative(ulong value) => s_pool.IsNative(value);
+
+    public static bool IsRuntime(string value) => s_pool.IsRuntime(value);
+    public static bool IsRuntime(ulong value) => s_pool.IsRuntime(value);
 
     public static ulong AddOrGetHash(string value)
     {
-        if (!s_pool.TryGetValue(value, out var hash))
-        {
-            if (value != "None")
-            {
-                hash = FNV1A64HashAlgorithm.HashString(value, Encoding.UTF8, false, true);
-            }
-
-            s_pool.TryAdd(value, hash);
-            s_poolReverse.TryAdd(hash, value);
-        }
-
+        var (_, hash) = s_pool.AddOrGetHash(value);
         return hash;
     }
 
-    public delegate string? ExtResolveHash(ulong hash);
-    public static ExtResolveHash? ResolveHashHandler;
+    public static void SetNative(LookupTable lookupTable) => s_pool.SetNative(lookupTable);
 }

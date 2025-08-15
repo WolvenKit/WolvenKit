@@ -1,118 +1,186 @@
 <reactiveUi:ReactiveUserControl
     x:Class="WolvenKit.Views.Tools.TweakBrowserView"
+    x:TypeArguments="tools:TweakBrowserViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:converters="clr-namespace:WolvenKit.App.Converters;assembly=WolvenKit.App"
-    xmlns:converters1="clr-namespace:WolvenKit.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:local="clr-namespace:WolvenKit.Views.Tools"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     xmlns:tools="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App"
+    mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=tools:TweakBrowserViewModel}"
-    d:DesignHeight="450"
     d:DesignWidth="800"
-    x:TypeArguments="tools:TweakBrowserViewModel"
-    mc:Ignorable="d">
+    d:DesignHeight="450">
     <Grid Background="{StaticResource ContentBackground}">
-        <Grid.Resources>
-            <converters:StringPathToItemStringConverter x:Key="stringPathToItemStringConverter" />
-            <converters1:TweakDBIDConverter x:Key="TweakDBIDConverter" />
-        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+
+        <!-- Search and filters -->
         <Border
-            Margin="0,-2,0,0"
+            Grid.Row="0"
             Background="{StaticResource ContentBackgroundAlt2}"
             BorderBrush="{StaticResource BorderAlt}"
-            BorderThickness="1,1,0,1">
+            BorderThickness="0,0,0,1">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
+
                 <hc:SearchBar
                     Grid.Row="0"
-                    Margin="3"
-                    VerticalAlignment="Top"
+                    Margin="{DynamicResource WolvenKitMarginTinyHeader}"
+                    Style="{StaticResource SearchBarPlus}"
+                    IsEnabled="{Binding Path=IsLoading,
+                                        Converter={StaticResource InvertBooleanConverter}}"
                     hc:InfoElement.Placeholder="Search all TweakDB Records"
+                    hc:InfoElement.ShowClearButton="True"
                     FlowDirection="LeftToRight"
                     IsRealTime="True"
                     KeyUp="TextBox_KeyEnterUpdate"
-                    ShowClearButton="False"
-                    Style="{StaticResource SearchBarPlus}"
                     Text="{Binding SearchText}" />
-                <Expander Grid.Row="1" Header="Filter...">
-                    <Grid>
+
+                <Grid
+                    Grid.Row="1"
+                    Margin="{DynamicResource WolvenKitMarginTinyFooter}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <CheckBox
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        IsEnabled="{Binding Path=IsLoading,
+                                            Converter={StaticResource InvertBooleanConverter}}"
+                        IsChecked="{Binding ShowNonResolvableEntries}">
+                        Show non-resolvable entries
+                    </CheckBox>
+
+                    <Grid
+                        Grid.Row="0"
+                        Grid.Column="1">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <CheckBox
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            IsChecked="{Binding ShowNonResolvableEntries}">
-                            Show non-resolvable entries
-                        </CheckBox>
-                        <StackPanel
-                            Grid.Row="0"
+
+                        <Label Grid.Column="0">Filter record type:</Label>
+
+                        <ComboBox
                             Grid.Column="1"
-                            Orientation="Horizontal">
-                            <Label>Filter record type:</Label>
-                            <ComboBox
-                                Width="300"
-                                IsEditable="True"
-                                IsTextSearchEnabled="True"
-                                ItemsSource="{Binding RecordTypes}"
-                                SelectedItem="{Binding SelectedRecordType}" />
-                        </StackPanel>
-                        <CheckBox
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            IsChecked="{Binding ShowInlineEntries}">
-                            Show inline records
-                        </CheckBox>
+                            IsEnabled="{Binding Path=IsLoading,
+                                                Converter={StaticResource InvertBooleanConverter}}"
+                            IsEditable="True"
+                            IsTextSearchEnabled="True"
+                            ItemsSource="{Binding RecordTypes}"
+                            SelectedItem="{Binding SelectedRecordType}" />
                     </Grid>
-                </Expander>
+
+                    <CheckBox
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        IsEnabled="{Binding Path=IsLoading,
+                                            Converter={StaticResource InvertBooleanConverter}}"
+                        IsChecked="{Binding ShowInlineEntries}">
+                        Show inline records
+                    </CheckBox>
+                </Grid>
             </Grid>
         </Border>
-        <TabControl Grid.Row="1">
-            <TabItem d:Header="Records (12345)" Header="{Binding RecordsHeader}">
+
+        <!-- Loading -->
+        <Border
+            d:Visibility="Hidden"
+            x:Name="LoadingBorder"
+            Grid.Row="1"
+            Background="{StaticResource ContentBackgroundAlt3}"
+            BorderBrush="Black"
+            BorderThickness="0"
+            Visibility="{Binding Path=IsLoading,
+                                 Converter={StaticResource BooleanVisibilityConverter}}">
+            <Grid>
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Foreground="#7EFFFFFF"
+                    FontSize="{DynamicResource WolvenKitFontHuge}"
+                    FontWeight="Bold"
+                    Text="Loading TweakDB Browser..."
+                    TextWrapping="Wrap" />
+            </Grid>
+        </Border>
+
+        <TabControl
+            Grid.Row="1"
+            Margin="-2"
+            Visibility="{Binding Path=IsLoading,
+                                 Converter={StaticResource InvertBooleanVisibilityConverter}}">
+            <TabItem
+                d:Header="Records (12345)"
+                Header="{Binding RecordsHeader}">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="300" />
-                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitTweakBrowserTabColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitColumnTiny}" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
                     <ListBox
-                        Margin="-3,0,0,-3"
                         d:ItemsSource="{d:SampleData}"
                         d:SelectedIndex="1"
-                        BorderThickness="1,0,0,1"
+                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderThickness="0,1,0,0"
                         ItemsSource="{Binding Records}"
-                        SelectedItem="{Binding SelectedRecordEntry, Mode=TwoWay}">
+                        SelectedItem="{Binding SelectedRecordEntry,
+                                               Mode=TwoWay}">
                         <ListBox.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Command="{Binding ConvertToYAML}" Header="Add TweakXL Override" />
+                                <MenuItem
+                                    Command="{Binding CopyName}"
+                                    Header="Copy Tweak Name">
+                                    <MenuItem.Icon>
+                                        <templates:IconBox
+                                            IconPack="Material"
+                                            Kind="ContentCopy"
+                                            Size="{DynamicResource WolvenKitIconTiny}" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+
+                                <MenuItem
+                                    Command="{Binding ConvertToYAML}"
+                                    Header="Add TweakXL Override">
+                                    <MenuItem.Icon>
+                                        <templates:IconBox
+                                            IconPack="Codicons"
+                                            Kind="SaveAs"
+                                            Size="{DynamicResource WolvenKitIconTiny}"
+                                            Foreground="{StaticResource WolvenKitCyan}" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
                             </ContextMenu>
                         </ListBox.ContextMenu>
+
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Margin="2,0" Text="{Binding DisplayName}" />
+                                <TextBlock
+                                    Margin="{DynamicResource WolvenKitMarginMicroHorizontal}"
+                                    Text="{Binding DisplayName}" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
+
                         <!--<ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                                 <Style.Triggers>
@@ -127,114 +195,129 @@
                             </Style>
                         </ListBox.ItemContainerStyle>-->
                     </ListBox>
+
                     <syncfusion:SfGridSplitter
                         Grid.Column="1"
-                        Margin="0,-2,0,-3"
                         HorizontalAlignment="Stretch" />
-                    <local:RedTreeView Grid.Column="2" ItemsSource="{Binding SelectedRecord}" />
+
+                    <local:RedTreeView
+                        Grid.Column="2"
+                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderThickness="0,1,0,0"
+                        ItemsSource="{Binding SelectedRecord}" />
                 </Grid>
             </TabItem>
-            <TabItem d:Header="Flats (12345)" Header="{Binding FlatsHeader}">
+
+            <TabItem
+                d:Header="Flats (12345)"
+                Header="{Binding FlatsHeader}">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="300" />
-                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitTweakBrowserTabColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitColumnTiny}" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
                     <ListBox
-                        Margin="-3,0,0,-3"
-                        BorderThickness="1,0,0,1"
+                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderThickness="0,1,0,0"
                         ItemsSource="{Binding Flats}"
-                        SelectedItem="{Binding SelectedFlatEntry, Mode=TwoWay}">
+                        SelectedItem="{Binding SelectedFlatEntry,
+                                               Mode=TwoWay}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Margin="2,0" Text="{Binding DisplayName}" />
+                                <TextBlock
+                                    Margin="{DynamicResource WolvenKitMarginMicroHorizontal}"
+                                    Text="{Binding DisplayName}" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
+
                     <syncfusion:SfGridSplitter
                         Grid.Column="1"
-                        Margin="0,-2,0,-3"
                         HorizontalAlignment="Stretch" />
-                    <editors:RedTypeView Grid.Column="2" DataContext="{Binding SelectedFlat}" />
+
+                    <local:RedTreeView
+                        Grid.Column="2"
+                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderThickness="0,1,0,0"
+                        ItemsSource="{Binding SelectedFlat}" />
                 </Grid>
             </TabItem>
-            <TabItem d:Header="Queries (12345)" Header="{Binding QueriesHeader}">
+
+            <TabItem
+                d:Header="Queries (12345)"
+                Header="{Binding QueriesHeader}">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="300" />
-                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitTweakBrowserTabColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitColumnTiny}" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
                     <ListBox
-                        Margin="-3,0,0,-3"
-                        BorderThickness="1,0,0,1"
+                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderThickness="0,1,0,0"
                         ItemsSource="{Binding Queries}"
-                        SelectedItem="{Binding SelectedQueryEntry, Mode=TwoWay}">
+                        SelectedItem="{Binding SelectedQueryEntry,
+                                               Mode=TwoWay}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Margin="2,0" Text="{Binding DisplayName}" />
+                                <TextBlock
+                                    Margin="{DynamicResource WolvenKitMarginMicroHorizontal}"
+                                    Text="{Binding DisplayName}" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
+
                     <syncfusion:SfGridSplitter
                         Grid.Column="1"
-                        Margin="0,-2,0,-3"
                         HorizontalAlignment="Stretch" />
-                    <editors:RedTypeView Grid.Column="2" DataContext="{Binding SelectedQuery}" />
+
+                    <local:RedTreeView
+                        Grid.Column="2"
+                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderThickness="0,1,0,0"
+                        ItemsSource="{Binding SelectedQuery}" />
                 </Grid>
             </TabItem>
-            <TabItem d:Header="Groups (12345)" Header="{Binding GroupTagsHeader}">
+
+            <TabItem
+                d:Header="Groups (12345)"
+                Header="{Binding GroupTagsHeader}">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="300" />
-                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitTweakBrowserTabColumnWidth}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitColumnTiny}" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
                     <ListBox
-                        Margin="-3,0,0,-3"
-                        BorderThickness="1,0,0,1"
+                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderThickness="0,1,0,0"
                         ItemsSource="{Binding GroupTags}"
-                        SelectedItem="{Binding SelectedGroupTagEntry, Mode=TwoWay}">
+                        SelectedItem="{Binding SelectedGroupTagEntry,
+                                               Mode=TwoWay}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Margin="2,0" Text="{Binding DisplayName}" />
+                                <TextBlock
+                                    Margin="{DynamicResource WolvenKitMarginMicroHorizontal}"
+                                    Text="{Binding DisplayName}" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
+
                     <syncfusion:SfGridSplitter
                         Grid.Column="1"
-                        Margin="0,-2,0,-3"
                         HorizontalAlignment="Stretch" />
-                    <editors:RedTypeView Grid.Column="2" DataContext="{Binding SelectedGroupTag}" />
+
+                    <editors:RedTypeView
+                        Grid.Column="2"
+                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderThickness="0,1,0,0"
+                        DataContext="{Binding SelectedGroupTag}" />
                 </Grid>
             </TabItem>
         </TabControl>
-
-        <Border
-            x:Name="LoadingBorder"
-            Grid.RowSpan="3"
-            d:Visibility="Hidden"
-            Background="{StaticResource ContentBackgroundAlt3}"
-            BorderBrush="Black"
-            BorderThickness="0"
-            Visibility="{Binding Path=LoadVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-            <Grid>
-                <StackPanel VerticalAlignment="Center">
-                    <TextBlock
-                        Margin="0,75,0,0"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        FontSize="24"
-                        FontWeight="Bold"
-                        Foreground="#7EFFFFFF"
-                        Text="Loading TweakDB Browser..."
-                        TextWrapping="Wrap" />
-                </StackPanel>
-            </Grid>
-        </Border>
     </Grid>
 </reactiveUi:ReactiveUserControl>

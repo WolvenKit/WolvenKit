@@ -32,7 +32,7 @@ public partial class MaterialsRepositoryViewModel : DialogWindowViewModel
 
     private readonly ISettingsManager _settingsManager;
     private readonly ILoggerService _loggerService;
-    private readonly IArchiveManager _archiveManager;
+    private readonly IAppArchiveManager _archiveManager;
     private readonly IGameControllerFactory _gameControllerFactory;
     private readonly IProgressService<double> _progress;
     private readonly IModTools _modTools;
@@ -40,7 +40,7 @@ public partial class MaterialsRepositoryViewModel : DialogWindowViewModel
     public MaterialsRepositoryViewModel(
         ISettingsManager settingsManager,
         ILoggerService loggerService,
-        IArchiveManager archiveManager,
+        IAppArchiveManager archiveManager,
         IGameControllerFactory gameControllerFactory,
         IProgressService<double> progress,
         IModTools modTools)

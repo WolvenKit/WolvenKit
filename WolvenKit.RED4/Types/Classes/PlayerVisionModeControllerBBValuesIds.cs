@@ -76,6 +76,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
+		[Ordinal(9)] 
+		[RED("twintoneOverrideShown")] 
+		public gamebbScriptID_Bool TwintoneOverrideShown
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
 		public PlayerVisionModeControllerBBValuesIds()
 		{
 			Kerenzikov = new gamebbScriptID_Int32();
@@ -87,6 +95,7 @@ namespace WolvenKit.RED4.Types
 			BraindanceActive = new gamebbScriptID_Bool();
 			VeryHardLanding = new gamebbScriptID_Int32();
 			IsBriefingActive = new gamebbScriptID_Bool();
+			TwintoneOverrideShown = new gamebbScriptID_Bool();
 
 			PostConstruct();
 		}

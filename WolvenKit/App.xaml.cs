@@ -1,9 +1,11 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using DynamicData.Binding;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ReactiveUI;
@@ -16,6 +18,7 @@ using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Helpers;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.Views.Dialogs.Windows;
 
@@ -26,10 +29,13 @@ namespace WolvenKit
         // Determines if the application is in design mode.
         //public static bool IsInDesignMode => !(Current is App) || (bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue;
 
+        private ISettingsManager _settingsManager;
+        private ILoggerService _loggerService;
+
         // Constructor #1
         static AppImpl()
         {
-            
+
         }
 
         // Constructor #2
@@ -42,8 +48,8 @@ namespace WolvenKit
             SetupExceptionHandling();
 
             // load oodle
-            var settingsManager = Locator.Current.GetService<ISettingsManager>();
-            if (settingsManager.IsHealthy() && !Oodle.Load(settingsManager?.GetRED4OodleDll()))
+            _settingsManager = Locator.Current.GetService<ISettingsManager>();
+            if (_settingsManager?.IsHealthy() == true && !Oodle.Load(_settingsManager.GetRED4OodleDll()))
             {
                 throw new FileNotFoundException($"{Core.Constants.Oodle} not found.");
             }
@@ -52,33 +58,40 @@ namespace WolvenKit
         // Application OnStartup Override.
         protected override void OnStartup(StartupEventArgs e)
         {
-            Interactions.ShowFirstTimeSetup = () => {
+            Interactions.ShowFirstTimeSetup = () =>
+            {
                 var dialog = new FirstSetupView();
 
                 var result = dialog.ShowDialog() == true;
                 return result;
             };
 
-            var settings = Locator.Current.GetService<ISettingsManager>();
-            var loggerService = Locator.Current.GetService<ILoggerService>();
+            _settingsManager ??= Locator.Current.GetService<ISettingsManager>();
 
-            loggerService.Info("Starting application");
-            loggerService.Info($"Version: {settings.GetVersionNumber()}");
+            _loggerService = Locator.Current.GetService<ILoggerService>();
 
-            loggerService.Debug("Initializing red database");
+            _loggerService.Info("Starting application");
+            _loggerService.Info($"Version: {_settingsManager.GetVersionNumber()}");
+
+            _loggerService.Debug("Initializing red database");
             Initializations.InitializeThemeHelper();
 
             Initializations.InitializeSyntaxHighlighting();
 
             // main app viewmodel
-            loggerService.Debug("Initializing Shell");
-            Initializations.InitializeShell(settings);
+            _loggerService.Debug("Initializing Shell");
+            Initializations.InitializeShell(_settingsManager);
 
 
-            loggerService.Debug("Initializing Discord RPC API");
+            _loggerService.Debug("Initializing Discord RPC API");
             DiscordHelper.InitializeDiscordRPC();
 
-            RedImage.LoggerService = loggerService;
+            RedImage.LoggerService = _loggerService;
+
+            _settingsManager
+                .WhenPropertyChanged(settings => settings.UiScale)
+                .Skip(1)
+                .Subscribe(_ => OnUiScaleChanged());
 
             base.OnStartup(e);
         }
@@ -109,7 +122,9 @@ namespace WolvenKit
             Container = _host.Services;
             Container.UseMicrosoftDependencyResolver();
 
-            var path = Path.Combine(ISettingsManager.GetAppData(), "applog.txt");
+            MoveOldLogs();
+
+            var path = Path.Combine(ISettingsManager.GetLogsDir(), "applog.txt");
             var outputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}";
 
             Log.Logger = new LoggerConfiguration()
@@ -130,6 +145,45 @@ namespace WolvenKit
                         flushToDiskInterval: TimeSpan.FromMinutes(1)), // Write once per minute.
                     bufferSize: 1000)
                 .CreateLogger();
+        }
+
+        private void MoveOldLogs()
+        {
+            var logFolder = ISettingsManager.GetLogsDir();
+
+            var existingLogs = Directory.GetFiles(logFolder, "*.txt");
+
+            foreach (var file in Directory.GetFiles(ISettingsManager.GetAppData(), "applog*.txt", SearchOption.TopDirectoryOnly))
+            {
+                var fileName = Path.GetFileName(file);
+                var destFileName = Path.Combine(logFolder, fileName);
+
+                var rotatingIndex = 1;
+
+                while (existingLogs.Contains(destFileName))
+                {
+                    destFileName = Path.Combine(logFolder, $"{fileName.Replace(".txt", "")}_{rotatingIndex:D3}.txt");
+                    rotatingIndex++;
+                }
+
+                FileHelper.SafeMove(file, destFileName);
+            }
+        }
+
+        private void OnUiScaleChanged()
+        {
+            DispatcherHelper.RunOnMainThread(async () =>
+            {
+#if DEBUG
+                // NOTE: Allow dynamic scaling to speed-up workflow when working on UI.
+                //       You might need to restart manually in some cases.
+                Initializations.UpdateTheme(_settingsManager);
+                await Task.CompletedTask;
+#else
+                await Interactions.ShowMessageBoxAsync("WolvenKit will restart to apply UI changes.", "Restart to scale UI", WMessageBoxButtons.Ok);
+                ProcessHelper.Restart(Current);
+#endif
+            });
         }
 
         //https://stackoverflow.com/a/46804709/16407587
@@ -215,7 +269,18 @@ namespace WolvenKit
             }
             finally
             {
-                _logger.Error(exception);
+                var isInner = false;
+                while (exception != null)
+                {
+                    if (isInner)
+                    {
+                        _logger.Error("--------- InnerException ---------");
+                    }
+                    _logger.Error(exception);
+
+                    exception = exception.InnerException;
+                    isInner = true;
+                }
                 //Application.Current.Shutdown();
             }
         }

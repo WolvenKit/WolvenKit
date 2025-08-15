@@ -1,22 +1,23 @@
 <reactiveUi:ReactiveUserControl
     x:Class="WolvenKit.Views.Tools.LogView"
+    x:TypeArguments="tools:LogViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:WolvenKit.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
-    xmlns:sfgrid="clr-namespace:Syncfusion.UI.Xaml.Grid;assembly=Syncfusion.SfGrid.WPF"
-    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:tools="clr-namespace:WolvenKit.App.ViewModels.Tools;assembly=WolvenKit.App"
+    xmlns:tools1="clr-namespace:WolvenKit.Views.Tools"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=tools:LogViewModel}"
-    d:DesignHeight="450"
     d:DesignWidth="800"
-    x:TypeArguments="tools:LogViewModel"
-    mc:Ignorable="d">
-
+    d:DesignHeight="450"
+    x:Name="uc"
+    MinWidth="348"
+    SizeChanged="LogView_OnSizeChanged">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -27,81 +28,404 @@
     </UserControl.Resources>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
         <Grid.Resources>
-            <converters:LogColorConverter x:Key="Converter" />
-            <!--<Style TargetType="sfgrid:VirtualizingCellsControl" x:Key="CustomRowStyle">
-                <Setter Property="Foreground" Value="{Binding Path=Level, Converter={StaticResource Converter}}" />
-            </Style>-->
+            <converters:NullVisibilityConverter x:Key="NullVisibilityConverter" />
+
+            <Style
+                x:Key="LogLevelButtonStyle"
+                BasedOn="{StaticResource WPFButtonStyle}"
+                TargetType="{x:Type Button}">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Focusable" Value="False" />
+                <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginTinyRight}" />
+
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#10FFFFFF" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
         </Grid.Resources>
 
-        <!--  <syncfusion:SfDataGrid x:Name="ListView"  -->
-        <!--  AutoGenerateColumns="False"  -->
-        <!--  ColumnSizer="AutoLastColumnFill"  -->
-        <!--  AllowResizingColumns="True"  -->
-        <!--  AllowFiltering="True"  -->
-        <!--  AllowEditing="False"  -->
-        <!--  AllowSorting="True"  -->
-        <!--  ItemsSource="{Binding LogEntries}"  -->
-        <!--  RowStyle="{StaticResource CustomRowStyle}"  -->
-        <!--  >  -->
-        <!--     <syncfusion:SfDataGrid.Columns> -->
-        <!--    -->
-        <!--         <syncfusion:GridTextColumn MappingName="Level" /> -->
-        <!--    -->
-        <!--         <syncfusion:GridTextColumn MappingName="Message" /> -->
-        <!--    -->
-        <!--     </syncfusion:SfDataGrid.Columns> -->
-        <!-- </syncfusion:SfDataGrid> -->
+        <Grid
+            x:Name="LogViewHeader"
+            Grid.Row="0"
+            Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
 
-        <RichTextBox
-            x:Name="LogRichTextBox"
-            Margin="0"
-            Padding="0,4"
-            Background="#131313"
-            BorderThickness="0"
-            IsReadOnly="True"
-            VerticalScrollBarVisibility="Visible" />
+            <StackPanel
+                x:Name="LogLevelFilter"
+                Grid.Column="0"
+                Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+                <Button
+                    x:Name="FilterErrorButton"
+                    Style="{StaticResource LogLevelButtonStyle}"
+                    Command="{Binding ToggleFilterLevelCommand}"
+                    CommandParameter="0"
+                    ToolTip="Error">
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="AlphaEBox"
+                        Margin="{DynamicResource WolvenKitMarginMicro}"
+                        Size="{DynamicResource WolvenKitIconTiny}"
+                        Foreground="{StaticResource WolvenKitRed}" />
+                </Button>
 
-        <hc:UniformSpacingPanel
+                <Button
+                    x:Name="FilterWarningButton"
+                    Style="{StaticResource LogLevelButtonStyle}"
+                    Command="{Binding ToggleFilterLevelCommand}"
+                    CommandParameter="1"
+                    ToolTip="Warning">
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="AlphaWBox"
+                        Margin="{DynamicResource WolvenKitMarginMicro}"
+                        Size="{DynamicResource WolvenKitIconTiny}"
+                        Foreground="{StaticResource WolvenKitYellow}" />
+                </Button>
+
+                <Button
+                    x:Name="FilterSuccessButton"
+                    Style="{StaticResource LogLevelButtonStyle}"
+                    Command="{Binding ToggleFilterLevelCommand}"
+                    CommandParameter="2"
+                    ToolTip="Success">
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="AlphaSBox"
+                        Margin="{DynamicResource WolvenKitMarginMicro}"
+                        Size="{DynamicResource WolvenKitIconTiny}"
+                        Foreground="{StaticResource WolvenKitGreen}" />
+                </Button>
+
+                <Button
+                    x:Name="FilterInfoButton"
+                    Style="{StaticResource LogLevelButtonStyle}"
+                    Command="{Binding ToggleFilterLevelCommand}"
+                    CommandParameter="3"
+                    ToolTip="Normal / Important">
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="AlphaIBox"
+                        Margin="{DynamicResource WolvenKitMarginMicro}"
+                        Size="{DynamicResource WolvenKitIconTiny}" />
+                </Button>
+
+                <Button
+                    x:Name="FilterDebugButton"
+                    Style="{StaticResource LogLevelButtonStyle}"
+                    Command="{Binding ToggleFilterLevelCommand}"
+                    CommandParameter="4"
+                    ToolTip="Debug">
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="AlphaDBox"
+                        Margin="{DynamicResource WolvenKitMarginMicro}"
+                        Size="{DynamicResource WolvenKitIconTiny}"
+                        Foreground="{StaticResource WolvenKitPurple}" />
+                </Button>
+            </StackPanel>
+
+            <Grid
+                x:Name="ScriptShortcutGrid"
+                Grid.Column="2"
+                Margin="{DynamicResource WolvenKitMarginTinyBottom}"
+                HorizontalAlignment="Right">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" MinWidth="240" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Button
+                    x:Name="UpdateButton"
+                    Grid.Column="0"
+                    Height="Auto"
+                    Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                    Padding="0"
+                    HorizontalAlignment="Right"
+                    ToolTip="Update scripts"
+                    Command="{Binding UpdateScriptsCommand}">
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="Refresh"
+                        Size="{DynamicResource WolvenKitIconTiny}"
+                        Foreground="{StaticResource WolvenKitPurple}" />
+                </Button>
+
+                <ComboBox
+                    x:Name="ScriptFileComboBox"
+                    Grid.Column="1"
+                    Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                    IsEditable="False"
+                    IsReadOnly="True"
+                    ItemsSource="{Binding ScriptFiles.View}"
+                    SelectedItem="{Binding SelectedScriptFile}"
+                    ToolTip="Select script">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel
+                                Orientation="Vertical"
+                                ToolTip="{Binding HoverInfo}">
+                                <TextBlock Text="{Binding Name}" />
+
+                                <TextBlock
+                                    x:Name="Info"
+                                    Text="{Binding SelectInfo}" />
+                            </StackPanel>
+
+                            <DataTemplate.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                     AncestorType=ComboBoxItem}}"
+                                    Value="{x:Null}">
+                                    <Setter TargetName="Info" Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+
+                    <ComboBox.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate>
+                                    <Border
+                                        Padding="15,0,0,7"
+                                        BorderBrush="White"
+                                        BorderThickness="0,0,0,1">
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBlock
+                                                FontSize="{DynamicResource WolvenKitFontBody}"
+                                                Text="{Binding Name}" />
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+                        </GroupStyle>
+                    </ComboBox.GroupStyle>
+                </ComboBox>
+
+                <Button
+                    x:Name="RunButton"
+                    Grid.Column="2"
+                    Height="Auto"
+                    Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                    Padding="0"
+                    Visibility="{Binding IsRunningScript,
+                                         Converter={StaticResource InvertBooleanVisibilityConverter}}"
+                    IsEnabled="{Binding CanRunScript}"
+                    Command="{Binding RunScriptCommand}"
+                    ToolTip="Reload and run">
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="Play"
+                        Size="{DynamicResource WolvenKitIconTiny}"
+                        Foreground="{StaticResource WolvenKitGreen}" />
+                </Button>
+
+                <Button
+                    x:Name="StopButton"
+                    Grid.Column="3"
+                    Height="Auto"
+                    Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                    Padding="0"
+                    Visibility="{Binding IsRunningScript,
+                                         Converter={StaticResource BooleanVisibilityConverter}}"
+                    Command="{Binding StopScriptCommand}"
+                    ToolTip="Stop running script">
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="Stop"
+                        Size="{DynamicResource WolvenKitIconTiny}"
+                        Foreground="{StaticResource WolvenKitRed}" />
+                </Button>
+            </Grid>
+        </Grid>
+
+        <ItemsControl
             Grid.Row="1"
-            Margin="0,5,5,5"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Bottom"
-            FlowDirection="RightToLeft"
-            Orientation="Horizontal"
-            Spacing="15"
-            Visibility="Visible">
+            Grid.Column="0"
+            ItemsSource="{Binding ElementName=uc,
+                                  Path=FilteredLogEntries}"
+            KeyUp="LogView_OnKeyUp"
+            ScrollViewer.CanContentScroll="True"
+            VirtualizingPanel.ScrollUnit="Pixel"
+            VirtualizingStackPanel.VirtualizationMode="Recycling">
+            <ItemsControl.Resources>
+                <DataTemplate DataType="{x:Type tools1:LogEntry}">
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.Style>
+                            <Style TargetType="{x:Type Grid}">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <SolidColorBrush Opacity="0.10" Color="Gray" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+
+                        <TextBox
+                            Grid.Column="0"
+                            MinHeight="{DynamicResource WolvenKitLogLineMinHeight}"
+                            Margin="0"
+                            Padding="0"
+                            VerticalAlignment="Center"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Foreground="{Binding TextColor}"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                            FontFamily="Consolas"
+                            IsReadOnly="True"
+                            Text="{Binding Path=Message}"
+                            TextWrapping="Wrap" />
+
+                        <TextBlock
+                            Grid.Column="1"
+                            Padding="{DynamicResource WolvenKitMarginMicroHorizontal}"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                            Visibility="{Binding Uri,
+                                                 Converter={StaticResource NullVisibilityConverter}}">
+                            <Hyperlink
+                                NavigateUri="{Binding Uri}"
+                                RequestNavigate="Hyperlink_OnRequestNavigate"
+                                ToolTip="{Binding Uri}">
+                                More Info
+                            </Hyperlink>
+                        </TextBlock>
+
+                        <Button
+                            Grid.Column="2"
+                            Padding="{DynamicResource WolvenKitMarginRight}"
+                            VerticalAlignment="Bottom"
+                            BorderThickness="1"
+                            Style="{StaticResource MahApps.Styles.Button.Chromeless}"
+                            Click="CopyLine_OnClick"
+                            Tag="{Binding Message}"
+                            ToolTip="Copy line">
+                            <templates:IconBox
+                                IconPack="Material"
+                                Kind="ClipboardArrowRightOutline"
+                                Margin="{DynamicResource WolvenKitMarginMicroVertical}"
+                                Size="{DynamicResource WolvenKitIconMicro}"
+                                Foreground="White" />
+                        </Button>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.Resources>
+
+            <ItemsControl.Template>
+                <ControlTemplate>
+                    <ScrollViewer
+                        Background="#131313"
+                        Loaded="ScrollViewer_Loaded"
+                        PreviewKeyDown="ScrollViewer_OnKeyDown">
+                        <ItemsPresenter />
+                    </ScrollViewer>
+                </ControlTemplate>
+            </ItemsControl.Template>
+
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+
+        <StackPanel
+            x:Name="LogPanelButtons"
+            Grid.Row="1"
+            Grid.Column="1"
+            Orientation="Vertical">
+            <ToggleButton
+                BorderThickness="1"
+                Checked="AutoScroll_OnChecked"
+                IsChecked="True"
+                Unchecked="AutoScroll_OnUnchecked">
+                <ToggleButton.Style>
+                    <Style
+                        BasedOn="{StaticResource MahApps.Styles.Button.Chromeless}"
+                        TargetType="{x:Type ToggleButton}">
+                        <Setter Property="Foreground" Value="Red" />
+                        <Setter Property="ToolTip" Value="Disable autoscroll" />
+                        <Style.Triggers>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter Property="Foreground" Value="Gray" />
+                                <Setter Property="ToolTip" Value="Enable autoscroll" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ToggleButton.Style>
+
+                <templates:IconBox
+                    IconPack="MaterialDesign"
+                    Kind="Repeat"
+                    Size="{DynamicResource WolvenKitIconSmall}" />
+            </ToggleButton>
+
             <Button
                 BorderThickness="1"
-                Click="Button_Click"
-                Style="{StaticResource MahApps.Styles.Button.Chromeless}">
-                <iconPacks:PackIconCodicons
-                    Width="15"
-                    Height="15"
-                    Kind="ClearAll" />
+                Style="{StaticResource MahApps.Styles.Button.Chromeless}"
+                Click="ScrollToBottom_OnClick"
+                ToolTip="Scroll to bottom">
+                <templates:IconBox
+                    IconPack="MaterialDesign"
+                    Kind="VerticalAlignBottom"
+                    Size="{DynamicResource WolvenKitIconSmall}" />
             </Button>
 
             <Button
                 BorderThickness="1"
-                Click="Button_Click"
                 Style="{StaticResource MahApps.Styles.Button.Chromeless}"
-                Visibility="Collapsed">
-                <iconPacks:PackIconOcticons
-                    Width="15"
-                    Height="15"
-                    Kind="Clippy" />
+                Click="OpenLogFolder_Click"
+                ToolTip="Open log folder. Hold SHIFT to open most recent log file.">
+                <templates:IconBox
+                    IconPack="Codicons"
+                    Kind="FolderOpened"
+                    Size="{DynamicResource WolvenKitIconSmall}"
+                    Foreground="{StaticResource WolvenKitYellow}" />
             </Button>
 
             <Button
                 BorderThickness="1"
-                Click="Button_Click"
                 Style="{StaticResource MahApps.Styles.Button.Chromeless}"
-                Visibility="Collapsed">
-                <iconPacks:PackIconUnicons
-                    Width="15"
-                    Height="15"
-                    Kind="PaintTool" />
+                Click="ClearAll_Click"
+                ToolTip="Clear log">
+                <templates:IconBox
+                    IconPack="Codicons"
+                    Kind="ClearAll"
+                    Size="{DynamicResource WolvenKitIconSmall}" />
             </Button>
-        </hc:UniformSpacingPanel>
+        </StackPanel>
     </Grid>
 </reactiveUi:ReactiveUserControl>

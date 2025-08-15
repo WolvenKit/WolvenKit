@@ -23,7 +23,7 @@ public partial class ScriptManagerViewModel : DialogViewModel
     private readonly ISettingsManager _settingsManager;
     private readonly ILoggerService _loggerService;
 
-    
+
     public ScriptManagerViewModel(AppViewModel appViewModel, AppScriptService scriptService, ISettingsManager settingsManager, ILoggerService loggerService)
     {
         _appViewModel = appViewModel;
@@ -35,7 +35,6 @@ public partial class ScriptManagerViewModel : DialogViewModel
     }
 
     public ObservableCollection<ScriptViewModel> Scripts { get; } = new();
-
 
     public void AddScript(string fileName, ScriptType type)
     {
@@ -170,7 +169,7 @@ public partial class ScriptManagerViewModel : DialogViewModel
             File.Copy(scriptFile.Path, localFilePath, true);
         }
 
-        await _appViewModel.RequestFileOpen(localFilePath);
+        _appViewModel.RequestFileOpen(localFilePath);
         _appViewModel.CloseModalCommand.Execute(null);
     }
 
@@ -180,7 +179,6 @@ public partial class ScriptManagerViewModel : DialogViewModel
         {
             return;
         }
-
         var code = File.ReadAllText(scriptFile.Path);
 
         await _scriptService.ExecuteAsync(code);

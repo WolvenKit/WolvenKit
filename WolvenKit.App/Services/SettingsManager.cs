@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Text.Json;
@@ -8,8 +7,10 @@ using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData.Binding;
 using WolvenKit.App.Models;
+using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common;
 using WolvenKit.Core;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.App.Services;
@@ -23,6 +24,13 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
 
     private readonly string _assemblyVersion;
 
+
+    private static readonly JsonSerializerOptions s_options = new()
+    {
+        WriteIndented = true,
+        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+    };
+
     /// <summary>
     /// Default constructor.
     /// </summary>
@@ -31,35 +39,61 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
         _assemblyVersion = CommonFunctions.GetAssemblyVersion(Constants.AssemblyName).ToString();
 
         _ = this.WhenAnyPropertyChanged(
-            nameof(ShowGuidedTour),
-            nameof(MaterialRepositoryPath),
-            nameof(ThemeAccentString),
-            nameof(SkipUpdateCheck),
+            nameof(ReddbHash),
+            nameof(InstallerHash),
+
+            nameof(LastUsedProjectPath),
+            nameof(LastLaunchProfile),
+
+            nameof(PinnedOrder),
+            nameof(RecentOrder),
+
+            // Cyberpunk
             nameof(CP77ExecutablePath),
             nameof(CP77LaunchCommand),
             nameof(CP77LaunchOptions),
-            nameof(ShowFilePreview),
-            nameof(ReddbHash),
-            nameof(InstallerHash),
-            nameof(TreeViewGroups),
-            nameof(TreeViewGroupSize),
-            nameof(TreeViewIgnoredExtensions),
-            nameof(ShowAdvancedOptions),
+            nameof(MaterialRepositoryPath),
+            nameof(AnalyzeModArchives),
+            nameof(ExtraModDirPath),
+
+            // Display
             nameof(ShowCNameAsHex),
             nameof(ShowResourcePathAsHex),
             nameof(ShowNodeRefAsHex),
             nameof(ShowTweakDBIDAsHex),
             nameof(ShowReferenceGraph),
-            nameof(EnableNoobFilterByDefault),
             nameof(GameLanguage),
-            nameof(AnalyzeModArchives),
-            nameof(ExtraModDirPath),
-            nameof(LastUsedProjectPath),
-            nameof(PinnedOrder),
-            nameof(RecentOrder)
+            nameof(ShowGraphEditorNodeProperties),
+
+            // FileEditor
+            nameof(TreeViewGroups),
+            nameof(TreeViewGroupSize),
+            nameof(DefaultEditorDifficultyLevel),
+            nameof(TreeViewIgnoredExtensions),
+
+            // General
+            nameof(SkipUpdateCheck),
+            nameof(ShowGuidedTour),
+            nameof(ThemeAccentString),
+            nameof(DefaultProjectPath),
+            nameof(ModderName),
+            nameof(ModderEmail),
+
+            // Interface
+            nameof(UiScale),
+            nameof(ShowFilePreview),
+            nameof(ShowAdvancedOptions),
+            nameof(RefactoringCheckboxDefaultValue),
+            nameof(ShowRedmodInRibbon),
+            nameof(UseValidatingEditor),
+            nameof(ReopenLastProject),
+            nameof(NumFilesToReopen),
+            nameof(ReopenFiles),
+            nameof(ShowVerboseLogOutput)
             )
           .Subscribe(_ =>
           {
+
               if (_isLoaded)
               {
                   Save();
@@ -79,6 +113,11 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             : new SettingsManager();
 
         settings._isLoaded = true;
+
+        if (dto?.IsDirty == true)
+        {
+            settings.Save();
+        }
         return settings;
     }
 
@@ -89,12 +128,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             return;
         }
 
-        var options = new JsonSerializerOptions
-        {
-            WriteIndented = true,
-            DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
-        };
-        var json = JsonSerializer.Serialize(new SettingsDto(this), options);
+        var json = JsonSerializer.Serialize(new SettingsDto(this), s_options);
         File.WriteAllText(GetConfigurationPath(), json);
         // _loggerService.Info("Settings saved.");
     }
@@ -108,27 +142,22 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
 
     private static SettingsDto? LoadFromFile()
     {
+        if (!File.Exists(GetConfigurationPath()))
+        {
+            return null;
+        }
         try
         {
-            if (File.Exists(GetConfigurationPath()))
-            {
-                var options = new JsonSerializerOptions
-                {
-                    WriteIndented = true,
-                    DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
-                };
-                var jsonString = File.ReadAllText(GetConfigurationPath());
-                var dto = JsonSerializer.Deserialize<SettingsDto>(jsonString, options);
+            var jsonString = File.ReadAllText(GetConfigurationPath());
+            var dto = JsonSerializer.Deserialize<SettingsDto>(jsonString, s_options);
 
-                return dto;
-            }
+            return dto;
         }
         catch (Exception)
         {
             return null;
         }
 
-        return null;
     }
 
     #endregion lifecycle
@@ -137,26 +166,42 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
 
     [Display(Name = "Settings Version", GroupName = "General")]
     [ObservableProperty]
-#pragma warning disable CS0657 // Not a valid attribute location for this declaration
-    [property: Browsable(false)]
-#pragma warning restore CS0657 // Not a valid attribute location for this declaration
+    [property: System.ComponentModel.Browsable(false)]
     private int _settingsVersion;
 
-    [Display(Name = "Do not check for updates", GroupName = "General")]
     [ObservableProperty]
-    private bool _skipUpdateCheck;
+    [property: System.ComponentModel.Browsable(false)]
+    private string? _reddbHash;
 
-    [Display(Name = "Update Channel", GroupName = "General")]
     [ObservableProperty]
-    private EUpdateChannel _updateChannel;  // deprecated
+    [property: System.ComponentModel.Browsable(false)]
+    private string? _installerHash;
 
-    [Display(Name = "Show Guided Tour", GroupName = "General")]
     [ObservableProperty]
-    private bool _showGuidedTour = true;
+    [property: System.ComponentModel.Browsable(false)]
+    private Dictionary<string, LaunchProfile> _launchProfiles = [];
 
-    [Display(Name = "Theme Accent", GroupName = "General")]
     [ObservableProperty]
-    private string? _themeAccentString;
+    [property: System.ComponentModel.Browsable(false)]
+    private Dictionary<string, bool>? _scriptStatus;
+
+    [ObservableProperty]
+    [property: System.ComponentModel.Browsable(false)]
+    private string? _lastUsedProjectPath;
+
+    [ObservableProperty]
+    [property: System.ComponentModel.Browsable(false)]
+    private string? _lastLaunchProfile;
+
+    [ObservableProperty]
+    [property: System.ComponentModel.Browsable(false)]
+    private int _pinnedOrder;
+
+    [ObservableProperty]
+    [property: System.ComponentModel.Browsable(false)]
+    private int _recentOrder;
+
+    #region Cyberpunk
 
     [Display(Name = "Game Executable Path (.exe)", GroupName = "Cyberpunk")]
     [ObservableProperty]
@@ -171,44 +216,21 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [ObservableProperty]
     private string? _cP77LaunchOptions;
 
-    [Display(Name = "Show File Preview", GroupName = "Cyberpunk")]
-    [ObservableProperty]
-    private bool _showFilePreview = true;
-
-    [ObservableProperty]
-#pragma warning disable CS0657 // Not a valid attribute location for this declaration
-    [property: Browsable(false)]
-#pragma warning restore CS0657 // Not a valid attribute location for this declaration
-    private string? _reddbHash;
-
-    [ObservableProperty]
-#pragma warning disable CS0657 // Not a valid attribute location for this declaration
-    [property: Browsable(false)]
-#pragma warning restore CS0657 // Not a valid attribute location for this declaration
-    private string? _installerHash;
-
     [Display(Name = "Depot Path", GroupName = "Cyberpunk")]
     [ObservableProperty]
     private string? _materialRepositoryPath;
 
-    [Display(Name = "Group Large Collections", GroupName = "File Editor")]
+    [Display(Name = "Analyze mods", Description = "Scan installed mods for file paths when opening mod browser", GroupName = "Cyberpunk")]
     [ObservableProperty]
-    private bool _treeViewGroups;
+    private bool _analyzeModArchives;
 
-    [Display(Name = "Group Size", GroupName = "File Editor")]
+    [Display(Name = "Additional Mod directory", Description = "Path to an optional directory containing mod archives", GroupName = "Cyberpunk")]
     [ObservableProperty]
-    private uint _treeViewGroupSize = 100;
+    private string? _extraModDirPath;
 
-    [Display(Name = "Default to simple mode", GroupName = "File Editor")] [ObservableProperty]
-    private bool _enableNoobFilterByDefault;
+    #endregion
 
-    [Display(Name = "Ignored Extensions (Open using System Editor. Syntax: .ext1|.ext2)", GroupName = "File Editor")]
-    [ObservableProperty]
-    private string? _treeViewIgnoredExtensions = "";
-
-    [Display(Name = "Show advanced Options", GroupName = "Import / Export")]
-    [ObservableProperty]
-    private bool _showAdvancedOptions;
+    #region Display
 
     [Display(Name = "Show CName hashes as hex", GroupName = "Display")]
     [ObservableProperty]
@@ -230,47 +252,155 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [ObservableProperty]
     private bool _showReferenceGraph;
 
-    [Display(Name = "Game language used for LocKeys", GroupName = "Display")] 
+    [Display(Name = "Game language used for LocKeys", GroupName = "Display")]
     [ObservableProperty]
-    private EGameLanguage _gameLanguage;
+    private EGameLanguage _gameLanguage = EGameLanguage.en_us;
 
+    [Display(Name = "Show Graph Editor Node Properties", GroupName = "Display")]
     [ObservableProperty]
-#pragma warning disable CS0657 // Not a valid attribute location for this declaration
-    [property: Browsable(false)]
-#pragma warning restore CS0657 // Not a valid attribute location for this declaration
-    private Dictionary<string, LaunchProfile>? _launchProfiles;
+    private bool _showGraphEditorNodeProperties = true;
 
-    [ObservableProperty]
-#pragma warning disable CS0657 // Not a valid attribute location for this declaration
-    [property: Browsable(false)]
-#pragma warning restore CS0657 // Not a valid attribute location for this declaration
-    private Dictionary<string, bool>? _scriptStatus;
+    #endregion
 
-    [Display(Name = "Analyze mods", Description = "Check mod archives for file names and invalid files", GroupName = "Cyberpunk")] 
-    [ObservableProperty]
-    private bool _analyzeModArchives;
+    #region FileEditor
 
-    [Display(Name = "Additional Mod directory", Description = "Path to an optional directory containing mod archives", GroupName = "Cyberpunk")]
+    [Display(Name = "Group Large Collections", GroupName = "File Editor")]
     [ObservableProperty]
-    private string? _extraModDirPath;
+    private bool _treeViewGroups;
 
+    [Display(Name = "Group Size", GroupName = "File Editor")]
     [ObservableProperty]
-#pragma warning disable CS0657 // Not a valid attribute location for this declaration
-    [property: Browsable(false)]
-#pragma warning restore CS0657 // Not a valid attribute location for this declaration
-    private string? _lastUsedProjectPath;
+    private uint _treeViewGroupSize = 100;
 
+    [Display(Name = "Editor default mode (recommended: Easy)", GroupName = "File Editor")]
     [ObservableProperty]
-#pragma warning disable CS0657 // Not a valid attribute location for this declaration
-    [property: Browsable(false)]
-#pragma warning restore CS0657 // Not a valid attribute location for this declaration
-    private int _pinnedOrder;
+    private EditorDifficultyLevel _defaultEditorDifficultyLevel;
 
+    [Display(Name = "Ignored Extensions (Open using System Editor. Syntax: .ext1|.ext2)", GroupName = "File Editor")]
     [ObservableProperty]
-#pragma warning disable CS0657 // Not a valid attribute location for this declaration
-    [property: Browsable(false)]
-#pragma warning restore CS0657 // Not a valid attribute location for this declaration
-    private int _recentOrder;
+    private string? _treeViewIgnoredExtensions = "";
+
+    #endregion
+
+    #region General
+
+    [Display(Name = "Do not check for updates", GroupName = "General")]
+    [ObservableProperty]
+    private bool _skipUpdateCheck;
+
+    [Display(Name = "Update Channel", GroupName = "General")]
+    [ObservableProperty]
+    private EUpdateChannel _updateChannel;  // deprecated
+
+    [Display(Name = "Show Guided Tour", GroupName = "General")]
+    [ObservableProperty]
+    private bool _showGuidedTour = true;
+
+    [Display(Name = "Theme Accent", GroupName = "General")]
+    [ObservableProperty]
+    private string? _themeAccentString;
+
+    [Display(Name = "Default project path", Description = "Path to the directory where you store your mods", GroupName = "General")]
+    [ObservableProperty]
+    private string? _defaultProjectPath;
+
+    [Display(Name = "Your name", Description = "Will be used for project properties on creation", GroupName = "General")]
+    [ObservableProperty]
+    private string? _modderName;
+
+    [Display(Name = "Your e-Mail", Description = "Will be used for project properties on creation", GroupName = "General")]
+    [ObservableProperty]
+    private string? _modderEmail;
+
+    #endregion
+
+    #region Project
+
+    [Display(Name = "Open last project on launch?",
+        Description = "Will re-open the last project",
+        GroupName = "Project")]
+    [ObservableProperty]
+    private bool _reopenLastProject;
+
+    [Display(Name = "Re-open files on project open?",
+        Description = "Deactivate to disable",
+        GroupName = "Project")]
+    [ObservableProperty]
+    private bool _reopenFiles;
+
+    [Display(Name = "Number of files to reopen",
+        Description = "Increase the number at your own risk!",
+        GroupName = "Project")]
+    [ObservableProperty]
+    private int _numFilesToReopen;
+
+    #endregion
+    
+    #region Interface
+
+    private int _uiScale;
+
+    [Display(Name = "Scale UI (%)",
+        Description = "Resize fonts/icons to improve interface for your screen resolution.",
+        GroupName = "Interface")]
+    public int UiScale
+    {
+        get => _uiScale;
+        set
+        {
+            if (value is < 100 or > 900)
+            {
+                value = 100;
+            }
+            SetProperty(ref _uiScale, value);
+        }
+    }
+
+    [Display(Name = "Show File Preview", GroupName = "Interface")]
+    [ObservableProperty]
+    private bool _showFilePreview = true;
+
+    [Display(Name = "Import/Export: Show advanced Options", GroupName = "Interface")]
+    [ObservableProperty]
+    private bool _showAdvancedOptions;
+
+    [Display(Name = "Update references on rename",
+        Description = "When renaming or moving a file or folder, should Wolvenkit try to update all references to it?",
+        GroupName = "Interface")]
+    [ObservableProperty]
+    private bool _refactoringCheckboxDefaultValue;
+
+    [Display(Name = "Show REDmod in Ribbon",
+        Description = "Display 'Pack as REDmod' and 'Install as REDMod' in the ribbon?",
+        GroupName = "Interface")]
+    [ObservableProperty]
+    private bool _showRedmodInRibbon;
+
+    [Display(Name = "Use validating editor?",
+        Description = "Editor fields validate themselves (or try to). Disable this if you run into editor performance issues.",
+        GroupName = "Interface")]
+    [ObservableProperty]
+    private bool _useValidatingEditor;
+
+    [Display(Name = "Show verbose log output",
+        Description = "Will give you all the information",
+        GroupName = "Interface")]
+    [ObservableProperty]
+    private bool _showVerboseLogOutput;
+
+    [Display(Name = "Enable Discord RPC integration",
+        Description = "Show on Discord that you're currently modding",
+        GroupName = "Interface")]
+    [ObservableProperty]
+    private bool _isDiscordRPCEnabled;
+
+    [Display(Name = "Exclude archives from scan by name (comma separated)",
+        Description = "Exclude archives from scan if you know that they'll lead to exceptions (only the base name)",
+        GroupName = "Interface")]
+    [ObservableProperty]
+    private string _archiveNamesExcludeFromScan = "basegame_AMM_Props";
+
+    #endregion
 
     #endregion properties
 
@@ -288,7 +418,10 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     public void SetThemeAccent(Color color) => ThemeAccentString = color.ToString();
     public string GetRED4GameRootDir()
     {
-        ArgumentNullException.ThrowIfNull(CP77ExecutablePath);
+        if (CP77ExecutablePath is null)
+        {
+            throw new WolvenKitException(0x4002, "Your Cyberpunk game executable isn't set");
+        }
 
         var fi = new FileInfo(CP77ExecutablePath);
 
@@ -299,7 +432,8 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
 
     public string GetRED4GameExecutablePath() => CP77ExecutablePath.NotNull();
 
-    public string GetRED4GameLaunchCommand() => CP77LaunchCommand ?? "";
+    // If no launch command is set, use the executable path
+    public string GetRED4GameLaunchCommand() => CP77LaunchCommand ?? CP77ExecutablePath ?? "";
 
     public string GetRED4GameLaunchOptions() => CP77LaunchOptions ?? "";
 
@@ -331,9 +465,6 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             : Path.Combine(GetRED4GameRootDir(), "bin", "x64", Core.Constants.Oodle);
 
     public bool IsHealthy() => File.Exists(CP77ExecutablePath) && File.Exists(GetRED4OodleDll());
-
-    public bool IsNoobFilterDefaultEnabled() => EnableNoobFilterByDefault;
-
 
     #endregion methods
 }

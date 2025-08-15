@@ -3,6 +3,7 @@ using System.Text;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.Buffer;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
@@ -53,29 +54,32 @@ public partial class RedPackageReader : Red4Reader
 
                 var propRedType = RedReflection.GetRedTypeFromCSType(prop.Type, prop.Flags);
 
+                if (redTypeName.GetResolvedText() is string s && propRedType != redTypeName)
+                {
+                    if (TryReadValue(varName, s, compiledPropertyData, out value))
+                    {
+                        var args = new InvalidRTTIEventArgs(fullName, propRedType, s, value);
+                        if (!HandleParsingError(args))
+                        {
+                            throw new InvalidRTTIException(fullName, propRedType, s);
+                        }
+
+                        SetProperty(cls, prop.RedName, args.Value);
+                        continue;
+                    }
+                }
+
+                _reader.BaseStream.Position = dataStartPos;
+
                 if (TryReadValue(varName, propRedType, compiledPropertyData, out value))
                 {
                     SetProperty(cls, prop.RedName, value);
                     continue;
                 }
 
-                _reader.BaseStream.Position = dataStartPos;
-
                 if (propRedType == redTypeName)
                 {
                     LoggerService?.Warning($"Can't read data for \"{fullName}\" (\"{propRedType}\"). Skipping");
-                    continue;
-                }
-
-                if (TryReadValue(varName, redTypeName, compiledPropertyData, out value))
-                {
-                    var args = new InvalidRTTIEventArgs(fullName, propRedType, redTypeName!, value);
-                    if (!HandleParsingError(args))
-                    {
-                        throw new InvalidRTTIException(fullName, propRedType, redTypeName!);
-                    }
-
-                    SetProperty(cls, prop.RedName, args.Value);
                     continue;
                 }
 

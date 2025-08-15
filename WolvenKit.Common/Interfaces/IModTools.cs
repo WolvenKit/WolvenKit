@@ -10,9 +10,12 @@ namespace WolvenKit.Common.Interfaces
 {
     public interface IModTools
     {
+        public bool Build(DirectoryInfo inPath);
         public bool Pack(DirectoryInfo infolder, DirectoryInfo outpath, string? modname = null);
+        public bool InstallFiles(DirectoryInfo packedDirectory, DirectoryInfo gameDirectory, bool installToHot = false);
 
-        public Task<bool> Import(RedRelativePath rawRelative, GlobalImportArgs args, DirectoryInfo? outDir = null);
+        public Task<bool> Import(RedRelativePath rawRelative, GlobalImportArgs args, DirectoryInfo? outDir = null,
+            bool showVerboseLogOutput = false);
         public Task<bool> ImportFolder(DirectoryInfo inDir, GlobalImportArgs args, DirectoryInfo? outDir = null);
 
 
@@ -58,10 +61,22 @@ namespace WolvenKit.Common.Interfaces
         public Task ConvertToJsonAsync(Stream stream, string infile, bool skipHeader = false);
         public Task<bool> ConvertToJsonAndWriteAsync(string infile, DirectoryInfo outputDirInfo);
 
-        public Task<bool> ConvertFromJsonAndWriteAsync(FileInfo fileInfo, DirectoryInfo outputDirInfo);
+        public bool ConvertFromJsonAndWrite(string absoluteFilePath, string absoluteDestFolder,
+            string? destFileName = null);
+
+        public bool ConvertFromJsonAndWrite(FileInfo fileInfo, DirectoryInfo outputDirInfo,
+            string? destFileName = null);
+
+        public Task<bool> ConvertFromJsonAndWriteAsync(string absoluteFilePath, string absoluteDestFolder,
+            string? destFileName = null);
+
+        public Task<bool> ConvertFromJsonAndWriteAsync(FileInfo fileInfo, DirectoryInfo outputDirInfo,
+            string? destFileName = null);
 
         public bool ExportEntity(CR2WFile entFile, CName appearance, FileInfo outfile);
         public bool ExportMaterials(CR2WFile cr2w, FileInfo outfile, MeshExportArgs meshExportArgs);
+
+        public void ClearFileLookup();
     }
 
 }

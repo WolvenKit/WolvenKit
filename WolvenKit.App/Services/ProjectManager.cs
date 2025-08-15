@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,13 +24,15 @@ public partial class ProjectManager : ObservableObject, IProjectManager
     private readonly ILoggerService _loggerService;
     private readonly IHashService _hashService;
     private readonly IArchiveManager _archiveManager;
+    private readonly ISettingsManager _settingsManager;
 
     public ProjectManager(
         IRecentlyUsedItemsService recentlyUsedItemsService,
         INotificationService notificationService,
         ILoggerService loggerService,
         IHashService hashService,
-        IArchiveManager archiveManager
+        IArchiveManager archiveManager,
+        ISettingsManager settingsManager
     )
     {
         _recentlyUsedItemsService = recentlyUsedItemsService;
@@ -37,11 +40,10 @@ public partial class ProjectManager : ObservableObject, IProjectManager
         _loggerService = loggerService;
         _hashService = hashService;
         _archiveManager = archiveManager;
+        _settingsManager = settingsManager;
     }
 
     #region properties
-
-    public event EventHandler<ActiveProjectChangedEventArgs>? ActiveProjectChanged;
 
     [ObservableProperty]
     private bool _isProjectLoaded;
@@ -49,19 +51,15 @@ public partial class ProjectManager : ObservableObject, IProjectManager
     [ObservableProperty]
     private Cp77Project? _activeProject;
 
-    partial void OnActiveProjectChanged(Cp77Project? value)
+    partial void OnActiveProjectChanging(Cp77Project? value)
     {
-        if (value is not null)
+        IsProjectLoaded = false;
+        if (ActiveProject == null)
         {
-            if (IsProjectLoaded)
-            {
-                Save();
-            }
-
-            ActiveProjectChangedEventArgs args = new(value);
-            ActiveProjectChanged?.Invoke(this, args);
+            return;
         }
-       
+
+        Save();
     }
 
     #endregion
@@ -76,42 +74,31 @@ public partial class ProjectManager : ObservableObject, IProjectManager
 
     public async Task<Cp77Project?> LoadAsync(string location)
     {
-        if (IsProjectLoaded)
-        {
-            await SaveAsync();
-        }
-
-        IsProjectLoaded = false;
         await ReadFromLocationAsync(location).ContinueWith(x =>
         {
-            if (x.IsCompletedSuccessfully)
+            if (x is not { IsCompletedSuccessfully: true, Result: not null })
             {
-                if (x.Result == null)
-                {
+                return;
+            }
 
-                }
-                else
-                {
-                    ActiveProject = x.Result;
-                    _archiveManager.ProjectArchive = x.Result.AsArchive();
-                    IsProjectLoaded = true;
+         
+            ActiveProject = x.Result;
+            _archiveManager.ProjectArchive = x.Result.AsArchive();
+            IsProjectLoaded = true;
 
-                    var recentItem = _recentlyUsedItemsService.Items.Items.FirstOrDefault(item => item.Name == location);
-                    if (recentItem == null)
-                    {
-                        recentItem = new RecentlyUsedItemModel(location, DateTime.Now, DateTime.Now);
-                        _recentlyUsedItemsService.AddItem(recentItem);
-                    }
-                    else
-                    {
-                        recentItem.LastOpened = DateTime.Now;
-                    }
-                }
+            var recentItem = _recentlyUsedItemsService.Items.Items.FirstOrDefault(item => item.Name == location);
+            if (recentItem == null)
+            {
+                recentItem = new RecentlyUsedItemModel(location, DateTime.Now, DateTime.Now);
+                _recentlyUsedItemsService.AddItem(recentItem);
             }
             else
             {
-
+                recentItem.LastOpened = DateTime.Now;
             }
+
+            _settingsManager.LastUsedProjectPath = x.Result.Location;
+
         });
 
 
@@ -130,7 +117,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
 
             var project = fi.Extension switch
             {
-                ".cpmodproj" => await Load(location),
+                Cp77Project.ProjectFileExtension => await Load(location),
                 _ => null
             };
 
@@ -163,7 +150,9 @@ public partial class ProjectManager : ObservableObject, IProjectManager
 
             obj.ModName ??= obj.Name;
 
-            Cp77Project project = new(path, obj.Name, obj.ModName, _hashService)
+            var openProjectFiles =
+                (obj.OpenProjectFiles ?? []).Distinct().ToDictionary(x => DateTime.Now, x => x);
+            Cp77Project project = new(path, obj.Name, obj.ModName, openProjectFiles)
             {
                 Author = obj.Author,
                 Email = obj.Email,
@@ -171,21 +160,10 @@ public partial class ProjectManager : ObservableObject, IProjectManager
                 Version = obj.Version,
             };
 
-            if (_hashService is HashService hashService)
+            if (_hashService is HashServiceExt hashService)
             {
-                hashService.ClearProjectHashes();
-
-                var projectHashesFile = Path.Combine(project.ProjectDirectory, "project_hashes.txt");
-                if (File.Exists(projectHashesFile))
-                {
-                    var paths = await File.ReadAllLinesAsync(projectHashesFile);
-                    foreach (var p in paths)
-                    {
-                        hashService.AddProjectPath(p);
-                    }
-                }
+                hashService.LoadProjectCache(project);
             }
-
 
             // fix legacy folders
             MoveLegacyFolder(new DirectoryInfo(Path.Combine(project.FileDirectory, "tweaks")), project);
@@ -273,13 +251,9 @@ public partial class ProjectManager : ObservableObject, IProjectManager
             XmlSerializer ser = new(typeof(CP77Mod));
             ser.Serialize(fs, new CP77Mod(ActiveProject));
 
-            if (_hashService is HashService hashService)
+            if (_hashService is HashServiceExt hashService)
             {
-                var projectHashes = hashService.GetProjectHashes();
-                if (projectHashes.Count > 0)
-                {
-                    await File.WriteAllLinesAsync(Path.Combine(ActiveProject.ProjectDirectory, "project_hashes.txt"), projectHashes);
-                }
+                hashService.SaveProjectCache(ActiveProject);
             }
 
             await fs.FlushAsync();
@@ -293,6 +267,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
 
         return true;
     }
+    
 
     public bool Save()
     {
@@ -312,13 +287,9 @@ public partial class ProjectManager : ObservableObject, IProjectManager
             XmlSerializer ser = new(typeof(CP77Mod));
             ser.Serialize(fs, new CP77Mod(ActiveProject));
 
-            if (_hashService is HashService hashService)
+            if (_hashService is HashServiceExt hashService)
             {
-                var projectHashes = hashService.GetProjectHashes();
-                if (projectHashes.Count > 0)
-                {
-                    File.WriteAllLines(Path.Combine(ActiveProject.ProjectDirectory, "project_hashes.txt"), projectHashes);
-                }
+                hashService.SaveProjectCache(ActiveProject);
             }
 
             fs.Flush();
@@ -334,11 +305,4 @@ public partial class ProjectManager : ObservableObject, IProjectManager
     }
 
     #endregion
-}
-
-public class ActiveProjectChangedEventArgs : EventArgs
-{
-    public Cp77Project Project { get; set; }
-
-    public ActiveProjectChangedEventArgs(Cp77Project project) => Project = project;
 }

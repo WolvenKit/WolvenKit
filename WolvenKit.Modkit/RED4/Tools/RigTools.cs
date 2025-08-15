@@ -194,7 +194,7 @@ namespace WolvenKit.Modkit.RED4.RigFile
             var armature = model.UseScene(0).CreateNode("Armature");
             for (var i = 0; i < srcBones.BoneCount; i++)
             {
-                if (srcBones.Parent[i] > -1)
+                if (srcBones.Parent[i] > -1 && bonesMapping.ContainsKey(srcBones.Parent[i]))
                 {
                     var bone = bonesMapping[srcBones.Parent[i]].CreateNode(srcBones.Names[i]);
                     if (srcBones.AposeLSExits)

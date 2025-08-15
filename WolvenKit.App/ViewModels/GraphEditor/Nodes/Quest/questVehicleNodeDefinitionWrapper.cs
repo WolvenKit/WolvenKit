@@ -1,4 +1,5 @@
-﻿using WolvenKit.RED4.Types;
+﻿using WolvenKit.App.Extensions;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 
@@ -6,6 +7,12 @@ public class questVehicleNodeDefinitionWrapper : questSignalStoppingNodeDefiniti
 {
     public questVehicleNodeDefinitionWrapper(questVehicleNodeDefinition questSignalStoppingNodeDefinition) : base(questSignalStoppingNodeDefinition)
     {
+        if (questSignalStoppingNodeDefinition.Type?.Chunk is questSetImmovable_NodeType)
+        {
+            Title = "Vehicle (Immovable)";
+        }
+        
+        Details.AddRange(NodeProperties.GetPropertiesFor(questSignalStoppingNodeDefinition));
     }
 
     internal override void CreateDefaultSockets()

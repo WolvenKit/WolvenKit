@@ -12,7 +12,7 @@ public partial class RDTGraphViewModel2 : RedDocumentTabViewModel
 {
     private readonly INodeWrapperFactory _nodeWrapperFactory;
 
-    protected readonly IRedType _data;
+    protected IRedType _data;
 
     [ObservableProperty]
     private RedGraph _mainGraph;
@@ -49,7 +49,13 @@ public partial class RDTGraphViewModel2 : RedDocumentTabViewModel
 
     public List<RedGraph> History { get; } = new();
 
-    public void Load()
+    public void UpdateDataAndReload(IRedType newData)
+    {
+        _data = newData;
+        Load();
+    }
+
+    public override void Load()
     {
         MainGraph.Dispose();
 
@@ -67,7 +73,7 @@ public partial class RDTGraphViewModel2 : RedDocumentTabViewModel
 
             if (_data is scnSceneResource sceneResource)
             {
-                mainGraph = RedGraph.GenerateSceneGraph(Parent.Header, sceneResource);
+                mainGraph = RedGraph.GenerateSceneGraph(Parent.Header, sceneResource, Parent);
             }
         }
         catch (Exception)

@@ -1,29 +1,22 @@
 using System;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 using DynamicData;
 using HandyControl.Data;
+using MahApps.Metro.Controls;
 using ReactiveUI;
 using Splat;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.ScrollAxis;
 using Syncfusion.UI.Xaml.TreeGrid;
-using WolvenKit.App.Extensions;
-using WolvenKit.App.Models;
-using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Tools;
-using WolvenKit.Common.DDS;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
-using WolvenKit.Core.Interfaces;
-using WolvenKit.Functionality.Helpers;
-using WolvenKit.RED4.CR2W;
+using WolvenKit.Core.Services;
 
 namespace WolvenKit.Views.Tools
 {
@@ -31,10 +24,22 @@ namespace WolvenKit.Views.Tools
     {
         private string _currentFolderQuery = "";
 
+
+        private readonly IModifierViewStateService _modifierViewSvc;
+        
+
+        // ReSharper disable once MemberCanBePrivate.Global - used in view model
+        public bool IsModBrowserEnabled { get; set; } = false;
+
         public AssetBrowserView()
         {
             InitializeComponent();
 
+            // modifier key state awareness
+            _modifierViewSvc = Locator.Current.GetService<IModifierViewStateService>();
+            _modifierViewSvc.ModifierStateChanged += OnModifierStateChanged;
+
+            
             this.WhenActivated(disposables =>
             {
                 if (DataContext is AssetBrowserViewModel vm)
@@ -46,6 +51,11 @@ namespace WolvenKit.Views.Tools
                       viewModel => viewModel.SearchBarText,
                       view => view.FileSearchBar.Text)
                   .DisposeWith(disposables);
+
+                this.Bind(ViewModel,
+                        viewModel => viewModel.IsModBrowserEnabled,
+                        view => view.IsModBrowserEnabled)
+                    .DisposeWith(disposables);
 
                 // left navigation
                 this.OneWayBind(ViewModel,
@@ -66,6 +76,10 @@ namespace WolvenKit.Views.Tools
                         viewModel => viewModel.RightSelectedItem,
                         view => view.RightFileView.SelectedItem)
                     .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        viewModel => viewModel.RightSelectedItems,
+                        view => view.RightFileView.SelectedItems)
+                    .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.FindUsesCommand,
                         view => view.RightContextMenuFindUsesMenuItem)
@@ -83,6 +97,10 @@ namespace WolvenKit.Views.Tools
                       view => view.RightContextMenuCopyPathMenuItem)
                   .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
+                        viewModel => viewModel.CopyRelPathFileNameCommand,
+                        view => view.RightContextMenuCopyNameMenuItem)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
                       viewModel => viewModel.OpenFileOnlyCommand,
                       view => view.OpenFileOnly)
                   .DisposeWith(disposables);
@@ -99,6 +117,7 @@ namespace WolvenKit.Views.Tools
 
         }
 
+
         #region Methods
 
         private bool FilterNodes(object o) => o is RedFileSystemModel data && data.Name.Contains(_currentFolderQuery);
@@ -108,38 +127,41 @@ namespace WolvenKit.Views.Tools
         #region leftNavigation
 
         private void LeftNavigation_KeyDown(object sender, KeyEventArgs e)
-        {            
-            if(e.Key == Key.Right)
-            {                 
-                if(CanNodeExpand())
-                { 
-                    if(!IsNodeExpanded())
-                    { 
+        {
+            switch (e.Key)
+            {
+                case Key.Right when CanNodeExpand():
+                {
+                    if (!IsNodeExpanded())
+                    {
                         ExpandNode();
                     }
                     else
                     {
                         // select first child node
-                        LeftNavigation.SetCurrentValue(SfGridBase.SelectedIndexProperty, LeftNavigation.SelectedIndex+1);
+                        LeftNavigation.SetCurrentValue(SfGridBase.SelectedIndexProperty, LeftNavigation.SelectedIndex + 1);
                     }
+
+                    break;
                 }
-            }
-            else if (e.Key == Key.Left)
-            {
-                if(CanNodeExpand() && IsNodeExpanded())
-                { 
+                case Key.Left when CanNodeExpand() && IsNodeExpanded():
                     CollapseNode();
-                }
-                else
+                    break;
+                case Key.Left:
                 {
                     // select parent node
                     var node = LeftNavigation.GetNodeAtRowIndex(LeftNavigation.SelectedIndex+1);
-                    if((node != null) && (node.ParentNode != null))
+                    if (node?.ParentNode == null)
                     {
-                       var newIndex = LeftNavigation.ResolveToRowIndex(node.ParentNode);
-                        LeftNavigation.SetCurrentValue(SfGridBase.SelectedIndexProperty, newIndex-1);
+                        return;
                     }
+
+                    var newIndex = LeftNavigation.ResolveToRowIndex(node.ParentNode);
+                    LeftNavigation.SetCurrentValue(SfGridBase.SelectedIndexProperty, newIndex - 1);
+                    break;
                 }
+                default:
+                    break;
             }
         }
 
@@ -150,33 +172,30 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            if (!e.AddedItems.Any())
+            if (e.AddedItems.FirstOrDefault() is not TreeGridRowInfo { RowData: RedFileSystemModel model } rowInfo)
             {
                 return;
             }
 
-            if (e.AddedItems.First() is TreeGridRowInfo { RowData: RedFileSystemModel model } rowInfo)
-            {
-                vm.RightItems.Clear();
+            vm.RightItems.Clear();
 
-                vm.RightItems.AddRange(model.Directories
-                    .Select(h => new RedDirectoryViewModel(h.Value))
-                    .OrderBy(_ => Regex.Replace(_.Name, @"\d+", n => n.Value.PadLeft(16, '0'))));
-                vm.RightItems.AddRange(model.Files
-                    .Select(h => new RedFileViewModel(h))
-                    .OrderBy(_ => Regex.Replace(_.Name, @"\d+", n => n.Value.PadLeft(16, '0'))));
+            vm.RightItems.AddRange(model.Directories
+                .Select(h => new RedDirectoryViewModel(h.Value))
+                .OrderBy(el => Regex.Replace(el.Name, @"\d+", n => n.Value.PadLeft(16, '0'))));
+            vm.RightItems.AddRange(model.Files
+                .Select(h => new RedFileViewModel(h))
+                .OrderBy(el => Regex.Replace(el.Name, @"\d+", n => n.Value.PadLeft(16, '0'))));
 
-                LeftNavigation.ScrollInView(new RowColumnIndex(rowInfo.RowIndex, 0));
-            }
+            LeftNavigation.ScrollInView(new RowColumnIndex(rowInfo.RowIndex, 0));
         }
 
-        private void FolderSearchBar_OnSearchStarted(object sender, FunctionEventArgs<string> e)
+        private void FolderSearchBar_OnSearchStarted(object _, FunctionEventArgs<string> e)
         {
             // expand all
             LeftNavigation.ExpandAllNodes();
             _currentFolderQuery = e.Info;
 
-            // filter programmatially
+            // filter programmatically
             LeftNavigation.View.Filter = FilterNodes;
             LeftNavigation.View.RefreshFilter();
         }
@@ -193,7 +212,7 @@ namespace WolvenKit.Views.Tools
             LeftNavigation.ExpandNode(selectedIndex + 1);
         }
 
-        private void ExpandAll_OnClick(object sender, RoutedEventArgs e) => ExpandAllNodes();
+        private void ExpandAll_OnClick(object _, RoutedEventArgs e) => ExpandAllNodes();
 
         public void ExpandAllNodes() => LeftNavigation.ExpandAllNodes();
 
@@ -245,40 +264,44 @@ namespace WolvenKit.Views.Tools
 
             foreach (var item in e.AddedItems)
             {
-                if (item is GridRowInfo info && info.RowData is FileSystemViewModel fsvm)
+                if (item is not GridRowInfo { RowData: FileSystemViewModel fsvm } info)
                 {
-                    fsvm.IsChecked = true;
-
-                    RightFileView.ScrollInView(new RowColumnIndex(info.RowIndex, 0));
+                    continue;
                 }
+
+                fsvm.IsChecked = true;
+
+                RightFileView.ScrollInView(new RowColumnIndex(info.RowIndex, 0));
             }
 
             foreach (var item in e.RemovedItems)
             {
-                if (item is GridRowInfo info && info.RowData is FileSystemViewModel fsvm)
+                if (item is GridRowInfo { RowData: FileSystemViewModel fsvm })
                 {
                     fsvm.IsChecked = false;
                 }
             }
 
-            var propertiesViewModel = Locator.Current.GetService<PropertiesViewModel>();
+            if (vm.RightSelectedItems.Count > 0)
+            {
+                if (vm.RightSelectedItems[^1] is not IFileSystemViewModel fileSystemViewModel)
+                {
+                    return;
+                }
 
-            propertiesViewModel.ExecuteSelectFile(vm.RightSelectedItem);
+                Locator.Current.GetService<PropertiesViewModel>()?.ExecuteSelectFile(fileSystemViewModel);
+            }
 
             vm.UpdateSearchInArchives();
         }
 
-        //private void AddFromSelectedArchiveItem_Click(object sender, RoutedEventArgs e)
-        //{
-        //}
-
-        private void RightFileView_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void RightFileView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var selectedIndex = LeftNavigation.SelectedIndex;
             LeftNavigation.ExpandNode(selectedIndex + 1);
         }
 
-        private void VidPreviewMenuItem_Click(object sender, RoutedEventArgs e)
+        private void VidPreviewMenuItem_Click(object _, RoutedEventArgs e)
         {
             // not implemented
 
@@ -288,21 +311,94 @@ namespace WolvenKit.Views.Tools
 
         private void FileSearchBar_SearchStarted(object sender, FunctionEventArgs<string> e) => ViewModel?.PerformSearch(e.Info);
 
-        private void LeftNavigation_RequestTreeItems(object sender, TreeGridRequestTreeItemsEventArgs args)
-        {
-            if (args.ParentItem == null)
+        private void LeftNavigation_RequestTreeItems(object _, TreeGridRequestTreeItemsEventArgs args) =>
+            args.ChildItems = args.ParentItem switch
             {
-                args.ChildItems = ViewModel.LeftItems;
+                null => ViewModel?.LeftItems,
+                RedFileSystemModel childFolders => childFolders.Directories.Values.OrderBy(x => x.Name).ToList(),
+                _ => args.ChildItems
+            };
+
+
+        [GeneratedRegex(@"(?<=archive:)([^><|&]+)")]
+        private static partial Regex ArchiveSearchRegex();
+
+        private void ScanModArchivesButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is not AssetBrowserViewModel vm)
+            {
+                return;
             }
 
+            if (vm.LeftSelectedItem is RedFileSystemModel fs && fs.Name.EndsWith(".archive", StringComparison.OrdinalIgnoreCase))
+            {
+                vm.ScanModArchives(true, fs.Name);
+            }
+            else if (vm.SearchBarText is string s && ArchiveSearchRegex().Match(s) is { Success: true } match)
+            {
+                vm.ScanModArchives(true, match.Value.Trim());
+            }
             else
             {
-                var childFolders = args.ParentItem as RedFileSystemModel;
+                vm.ScanModArchives(true, null);
+            }
 
-                if (childFolders is not null)
-                {
-                    args.ChildItems = childFolders.Directories.Values.OrderBy(x => x.Name).ToList();
-                }
+            vm.Refresh();
+        }
+
+        private void ReloadModBrowserButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is not AssetBrowserViewModel vm)
+            {
+                return;
+            }
+
+            vm.ScanModArchives();
+            vm.Refresh();
+        }
+
+        private void OnModifierStateChanged() => ViewModel?.RefreshModifierStates();
+
+        private bool _isMenuOpen;
+
+        private void ContextMenu_OnOpened(object sender, RoutedEventArgs e)
+        {
+            _isMenuOpen = true;
+            ViewModel?.RefreshModifierStates();
+        }
+
+        private void ContextMenu_OnClosed(object sender, RoutedEventArgs e) => _isMenuOpen = false;
+
+        private void ContextMenu_OnKeyChange(object sender, KeyEventArgs e)
+        {
+            if (_isMenuOpen)
+            {
+                _modifierViewSvc.OnKeystateChanged(e);
+            }
+        }
+
+        private void AssetBrowser_OnKeyChange(object sender, KeyEventArgs e)
+        {
+            if (!_isMenuOpen)
+            {
+                _modifierViewSvc.OnKeystateChanged(e);
+            }
+        }
+
+        private void OnModBrowserToggled(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (sender is not ToggleSwitch button)
+            {
+                return;
+            }
+
+            if (button.IsOn)
+            {
+                Grid.SetColumnSpan(FileSearchBar, 3);
+            }
+            else
+            {
+                Grid.SetColumnSpan(FileSearchBar, 1);
             }
         }
     }

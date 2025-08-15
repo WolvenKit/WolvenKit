@@ -590,6 +590,18 @@ public class Red4Writer : IDisposable
     // TODO
     public virtual void Write(IRedLegacySingleChannelCurve instance)
     {
+        var genericType = instance.GetType().GetGenericTypeDefinition();
+        var innerType = instance.GetType().GetGenericArguments()[0];
+
+        var method = GetMethod("Write", 1, new[] { genericType });
+        ArgumentNullException.ThrowIfNull(method);
+        var generic = method.MakeGenericMethod(innerType);
+
+        generic.Invoke(this, new object[] { instance });
+    }
+
+    public virtual void Write<T>(CLegacySingleChannelCurve<T> instance) where T : IRedType
+    {
         _writer.Write((uint)instance.Count);
         foreach (var curvePoint in instance)
         {

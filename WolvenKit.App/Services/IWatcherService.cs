@@ -1,16 +1,23 @@
-using DynamicData;
 using WolvenKit.App.Models;
+using WolvenKit.App.Models.ProjectManagement.Project;
 
 namespace WolvenKit.App.Services;
 
 public interface IWatcherService
 {
-    public bool IsSuspended { get; set; }
+    public DispatchedObservableCollection<FileSystemModel> FileTree { get; }
+    public DispatchedObservableCollection<FileSystemModel> FileList { get; }
     
-    public IObservableCache<FileModel, ulong> Files { get; }
+    public void Refresh();
 
-    public FileModel? LastSelect { get; set; }
-    public void QueueRefresh();
+    public void ForceStop();
 
-    public FileModel? GetFileModelFromHash(ulong hash);
+    public void Suspend();
+    public void Resume();
+
+    public void UnwatchProject(Cp77Project? project);
+    public void WatchProject(Cp77Project project);
+
+    public bool IsWatcherStopped { get; }
+
 }

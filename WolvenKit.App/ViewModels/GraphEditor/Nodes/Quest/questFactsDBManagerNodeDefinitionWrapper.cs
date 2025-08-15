@@ -1,4 +1,4 @@
-﻿using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
+﻿using WolvenKit.App.Extensions;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
@@ -27,12 +27,14 @@ public class questFactsDBManagerNodeDefinitionWrapper : questDisableableNodeDefi
 
     public questFactsDBManagerNodeDefinitionWrapper(questFactsDBManagerNodeDefinition graphGraphNodeDefinition) : base(graphGraphNodeDefinition)
     {
-        if (_castedData.Type?.Chunk is questSetVar_NodeType setVar)
+        /*if (_castedData.Type?.Chunk is questSetVar_NodeType setVar)
         {
             Title += " - Set";
             Details["Name"] = setVar.FactName;
             Details["Value"] = setVar.Value.ToString();
-        }
+        }*/
+
+        Details.AddRange(NodeProperties.GetPropertiesFor(graphGraphNodeDefinition));
     }
 
     internal override void CreateDefaultSockets()

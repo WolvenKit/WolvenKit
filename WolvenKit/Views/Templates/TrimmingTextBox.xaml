@@ -1,0 +1,151 @@
+﻿<UserControl
+    x:Class="WolvenKit.Views.Editors.TrimmingTextBox"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
+    mc:Ignorable="d"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    x:Name="UserControl"
+    Background="{Binding ElementName=UserControl,
+                         Path=Background}"
+    BorderBrush="{Binding ElementName=UserControl,
+                          Path=BorderBrush}">
+    <Grid>
+        <Border
+            Background="{Binding ElementName=UserControl,
+                                 Path=Background}"
+            BorderBrush="{Binding ElementName=UserControl,
+                                  Path=BorderBrush}"
+            BorderThickness="1">
+            <TextBox
+                x:Name="RealTextBox"
+                Padding="{DynamicResource WolvenKitMarginTinyLeft}"
+                Background="{Binding ElementName=UserControl,
+                                     Path=Background,
+                                     UpdateSourceTrigger=PropertyChanged}"
+                FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                helpers:TextBoxBehavior.TripleClickSelectAll="True"
+                Text="{Binding ElementName=UserControl,
+                               Path=Text,
+                               Mode=TwoWay,
+                               UpdateSourceTrigger=PropertyChanged}"
+                ToolTip="{Binding ElementName=UserControl,
+                                  Path=Tooltip}"
+                ScrollViewer.CanContentScroll="False"
+                TextChanged="RealTextBox_OnTextChanged"
+                KeyUp="RealTextBox_OnKeyUp"
+                LostFocus="RealTextBox_OnFocusLost"
+                ContextMenuOpening="RefreshContextMenu"
+                DataObject.Pasting="RealTextBox_OnPasting">
+                <TextBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem
+                            x:Name="CutMenuItem"
+                            Header="Cut"
+                            Click="Cut_Click" />
+                        <MenuItem
+                            x:Name="CopyMenuItem"
+                            Header="Copy"
+                            Click="Copy_Click" />
+                        <MenuItem
+                            x:Name="PasteMenuItem"
+                            Header="Paste"
+                            Click="Paste_Click" />
+
+                        <Separator x:Name="DynamicSeparator">
+                            <Separator.Style>
+                                <Style
+                                    BasedOn="{StaticResource {x:Type Separator}}"
+                                    TargetType="Separator">
+                                    <Style.Triggers>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding ShowMakeDynamic}" Value="False" />
+                                                <Condition Binding="{Binding ShowRemoveDynamic}" Value="False" />
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </MultiDataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Separator.Style>
+                        </Separator>
+
+                        <MenuItem
+                            x:Name="DynamicPathMenuItem"
+                            Header="Add dynamic substitution"
+                            ContextMenuOpening="RefreshContextMenu"
+                            Click="MakeDynamic_Click">
+                            <MenuItem.Style>
+                                <Style
+                                    BasedOn="{StaticResource {x:Type MenuItem}}"
+                                    TargetType="MenuItem">
+                                    <Style.Triggers>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding ShowMakeDynamic}" Value="False" />
+                                                <Condition Binding="{Binding ShowRemoveDynamic}" Value="False" />
+                                            </MultiDataTrigger.Conditions>
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </MultiDataTrigger>
+                                    </Style.Triggers>
+
+                                </Style>
+                            </MenuItem.Style>
+                        </MenuItem>
+                    </ContextMenu>
+                </TextBox.ContextMenu>
+            </TextBox>
+        </Border>
+
+        <Grid IsHitTestVisible="False">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{DynamicResource WolvenKitRedEditorTrimmingWidth}" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="{DynamicResource WolvenKitRedEditorTrimmingWidth}" />
+            </Grid.ColumnDefinitions>
+
+            <Grid
+                x:Name="StartTrimming"
+                Grid.Column="0"
+                Visibility="Hidden">
+                <Rectangle>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                            <GradientStop Offset="0.0" Color="Black" />
+                            <GradientStop Offset="1.0" Color="#292929" />
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+
+                <TextBox
+                    Padding="0"
+                    Background="Transparent"
+                    Foreground="White"
+                    Text="…" />
+            </Grid>
+
+            <Grid
+                x:Name="EndTrimming"
+                Grid.Column="2"
+                Visibility="Hidden">
+                <Rectangle>
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                            <GradientStop Offset="0.0" Color="#292929" />
+                            <GradientStop Offset="1.0" Color="Black" />
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+
+                <TextBox
+                    Padding="{DynamicResource WolvenKitMarginMicroLeft}"
+                    Background="Transparent"
+                    Foreground="White"
+                    Text="…" />
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

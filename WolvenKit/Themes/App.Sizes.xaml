@@ -1,0 +1,253 @@
+<!-- NOTE: keep in sync with AppViewModel::UpdateScalesResource() -->
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:system="clr-namespace:System;assembly=netstandard">
+
+    <!-- Fonts -->
+    <system:Double x:Key="WolvenKitFontAltTitle">10</system:Double>
+    <system:Double x:Key="WolvenKitFontSubTitle">12</system:Double>
+    <system:Double x:Key="WolvenKitFontBody">14</system:Double>
+    <system:Double x:Key="WolvenKitFontMedium">16</system:Double>
+    <system:Double x:Key="WolvenKitFontTitle">18</system:Double>
+    <system:Double x:Key="WolvenKitFontHeader">20</system:Double>
+    <system:Double x:Key="WolvenKitFontHuge">24</system:Double>
+    <system:Double x:Key="WolvenKitFontMega">36</system:Double>
+    <system:Double x:Key="WolvenKitFontGiga">58</system:Double>
+
+    <!-- Icons -->
+    <system:Double x:Key="WolvenKitIconPico">8</system:Double>
+    <system:Double x:Key="WolvenKitIconNano">10</system:Double>
+    <system:Double x:Key="WolvenKitIconMicro">12</system:Double>
+    <system:Double x:Key="WolvenKitIconMilli">14</system:Double>
+    <system:Double x:Key="WolvenKitIconTiny">16</system:Double>
+    <system:Double x:Key="WolvenKitIconSmall">18</system:Double>
+    <system:Double x:Key="WolvenKitIcon">20</system:Double>
+    <system:Double x:Key="WolvenKitIconBig">26</system:Double>
+    <system:Double x:Key="WolvenKitIconHuge">36</system:Double>
+
+    <!-- Layouts -->
+    <Thickness x:Key="WolvenKitMargin">15</Thickness>
+    <Thickness x:Key="WolvenKitMarginLeft">15,0,0,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginRight">0,0,15,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginTop">0,15,0,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginBottom">0,0,0,15</Thickness>
+    <Thickness x:Key="WolvenKitMarginHorizontal">15,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginVertical">0,15</Thickness>
+    <Thickness x:Key="WolvenKitMarginLeftBottom">15,0,0,15</Thickness>
+
+    <Thickness x:Key="WolvenKitMarginSmall">8</Thickness>
+    <Thickness x:Key="WolvenKitMarginSmallLeft">8,0,0,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginSmallRight">0,0,8,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginSmallTop">0,8,0,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginSmallBottom">0,0,0,8</Thickness>
+    <Thickness x:Key="WolvenKitMarginSmallHorizontal">8,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginSmallVertical">0,8</Thickness>
+    <Thickness x:Key="WolvenKitMarginSmallHeader">8,8,8,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginSmallFooter">8,0,8,8</Thickness>
+    <Thickness x:Key="WolvenKitMarginSmallLeftSide">8,8,0,8</Thickness>
+    <Thickness x:Key="WolvenKitMarginSmallRightSide">0,8,8,8</Thickness>
+
+    <Thickness x:Key="WolvenKitMarginTiny">4</Thickness>
+    <Thickness x:Key="WolvenKitMarginTinyLeft">4,0,0,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginTinyRight">0,0,4,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginTinyTop">0,4,0,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginTinyBottom">0,0,0,4</Thickness>
+    <Thickness x:Key="WolvenKitMarginTinyHorizontal">4,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginTinyVertical">0,4</Thickness>
+    <Thickness x:Key="WolvenKitMarginTinyHeader">4,4,4,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginTinyFooter">4,0,4,4</Thickness>
+    <Thickness x:Key="WolvenKitMarginTinyLeftSide">4,4,0,4</Thickness>
+    <Thickness x:Key="WolvenKitMarginTinyRightSide">0,4,4,4</Thickness>
+
+    <Thickness x:Key="WolvenKitMarginMicro">2</Thickness>
+    <Thickness x:Key="WolvenKitMarginMicroLeft">2,0,0,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginMicroHorizontal">2,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginMicroVertical">0,2</Thickness>
+
+    <CornerRadius x:Key="WolvenKitSmallRadius">5</CornerRadius>
+    <CornerRadius x:Key="WolvenKitRadius">10</CornerRadius>
+
+    <GridLength x:Key="WolvenKitColumnTiny">5</GridLength>
+
+    <GridLength x:Key="WolvenKitRowText">20</GridLength>
+
+    <!-- Views -->
+    <system:Double x:Key="WolvenKitDividerHeight">45</system:Double>
+
+    <system:Double x:Key="WolvenKitDataGridRowHeight">24</system:Double>
+
+    <GridLength x:Key="WolvenKitTreeGridColumnIconWidth">13</GridLength>
+    <system:Double x:Key="WolvenKitTreeGridIconHeight">13</system:Double>
+    <system:Double x:Key="WolvenKitTreeGridRowHeight">20</system:Double>
+    <system:Double x:Key="WolvenKitTreeGridRowHeaderHeight">28</system:Double>
+    <system:Double x:Key="WolvenKitTreeGridCheckboxWidth">32</system:Double>
+
+    <system:Double x:Key="WolvenKitTreeRowHeight">24</system:Double>
+    <system:Double x:Key="WolvenKitTreeRowHeaderHeight">30</system:Double>
+
+    <system:Double x:Key="WolvenKitTabHeight">25</system:Double>
+
+    <GridLength x:Key="WolvenKitPropertyColumnWidth">100</GridLength>
+
+    <GridLength x:Key="WolvenKitContextMenuColumnIconWidth">13</GridLength>
+
+    <system:Double x:Key="WolvenKitDragDropTooltipWidth">250</system:Double>
+
+    <system:Double x:Key="WolvenKitWizardNavBarMinHeight">44</system:Double>
+
+    <system:Double x:Key="WolvenKitFieldHeight">120</system:Double>
+
+    <system:Double x:Key="WolvenKitButtonHeight">32</system:Double>
+    <system:Double x:Key="WolvenKitButtonWidth">32</system:Double>
+    <GridLength x:Key="WolvenKitButtonGridWidth">32</GridLength>
+
+    <Rect x:Key="WolvenKitGridSize">0,0,48,48</Rect>
+
+    <!-- HomePageView -->
+    <system:String x:Key="WolvenKitHomeSideBarWidth">200</system:String>
+    <GridLength x:Key="WolvenKitHomeSideBarLength">200</GridLength>
+    <system:Double x:Key="WolvenKitHomeButtonWidth">160</system:Double>
+    <system:Double x:Key="WolvenKitHomeButtonHeight">44</system:Double>
+    <Thickness x:Key="WolvenKitHomeVersionMargin">6</Thickness>
+
+    <system:Double x:Key="WolvenKitHomeSharedHeaderWidth">140</system:Double>
+    <system:Double x:Key="WolvenKitHomeSharedButtonHeight">40</system:Double>
+    <Thickness x:Key="WolvenKitHomeSharedPaddingLeft">10,0,0,0</Thickness>
+
+    <!-- WelcomePageView -->
+    <GridLength x:Key="WolvenKitWelcomeRightLength">380</GridLength>
+    <system:Double x:Key="WolvenKitWelcomeOrderWidth">140</system:Double>
+    <GridLength x:Key="WolvenKitWelcomeCardSammyWidth">70</GridLength>
+    <system:Double x:Key="WolvenKitWelcomeCardSammyHeight">70</system:Double>
+    <system:Double x:Key="WolvenKitWelcomeCardSammyClipHeight">50</system:Double>
+    <Thickness x:Key="WolvenKitWelcomeTogglePadding">10,5</Thickness>
+
+    <system:Double x:Key="WolvenKitWelcomeButtonWidth">250</system:Double>
+    <system:Double x:Key="WolvenKitWelcomeButtonHeight">100</system:Double>
+    <Thickness x:Key="WolvenKitWelcomeButtonMargin">0,0,0,8</Thickness>
+    <Thickness x:Key="WolvenKitWelcomeButtonPadding">25,0,25,0</Thickness>
+    <system:Double x:Key="WolvenKitWelcomeStackHeight">70</system:Double>
+    <Thickness x:Key="WolvenKitWelcomeStackMargin">0,4,50,0</Thickness>
+    <system:Double x:Key="WolvenKitWelcomeSocialButtonHeight">50</system:Double>
+
+    <!-- SettingsPageView -->
+    <GridLength x:Key="WolvenKitSettingsGridLabelWidth">200</GridLength>
+
+    <!-- PluginsToolView -->
+    <system:Double x:Key="WolvenKitPluginsToolIconButtonSize">50</system:Double>
+    <system:Double x:Key="WolvenKitPluginsToolButtonWidth">110</system:Double>
+    <system:Double x:Key="WolvenKitPluginsToolButtonHeight">20</system:Double>
+    <system:Double x:Key="WolvenKitPluginsToolProgressBarHeight">10</system:Double>
+
+    <!-- LogView -->
+    <system:Double x:Key="WolvenKitLogScriptMinWidth">240</system:Double>
+    <system:Double x:Key="WolvenKitLogLineMinHeight">16</system:Double>
+    <system:Double x:Key="WolvenKitLogBreakpointWidth">504</system:Double>
+
+    <!-- BackStageView -->
+    <Thickness x:Key="WolvenKitBackStageBgMargin">5,55,5,5</Thickness>
+
+    <!-- DockingAdapter -->
+    <Rect x:Key="WolvenKitDockingAdapterViewport">0,0,90,90</Rect>
+    <Rect x:Key="WolvenKitDockingAdapterSammy">0,0,70,80</Rect>
+
+    <!-- MenuBarView -->
+    <Thickness x:Key="WolvenKitMenuBarItemMarginHorizontal">4,2</Thickness>
+
+    <!-- RibbonView -->
+    <Thickness x:Key="WolvenKitRibbonMenuIconMargin">0,2,4,2</Thickness>
+
+    <!-- StatusBarView -->
+    <GridLength x:Key="WolvenKitStatusBarRowHeight">25</GridLength>
+    <system:Double x:Key="WolvenKitStatusBarProgressBarWidth">200</system:Double>
+    <system:Double x:Key="WolvenKitStatusBarProgressBarHeight">16</system:Double>
+
+    <!-- AudioPlayerView -->
+    <system:Double x:Key="WolvenKitAudioPlayerVisualizationWidth">200</system:Double>
+
+    <!-- LocKeyBrowserView -->
+    <GridLength x:Key="WolvenKitLocKeyBrowserKeyLength">110</GridLength>
+
+    <!-- TweakBrowserView -->
+    <GridLength x:Key="WolvenKitTweakBrowserTabColumnWidth">300</GridLength>
+
+    <!-- RedTreeView -->
+    <GridLength x:Key="WolvenKitRedTreeIconColumnWidth">20</GridLength>
+    <GridLength x:Key="WolvenKitRedTreeArrayColumnWidthLvl0">218</GridLength>
+    <GridLength x:Key="WolvenKitRedTreeArrayColumnWidthLvl1">200</GridLength>
+    <GridLength x:Key="WolvenKitRedTreeArrayColumnWidthLvl2">180</GridLength>
+    <GridLength x:Key="WolvenKitRedTreeArrayColumnWidthLvl3">160</GridLength>
+    <GridLength x:Key="WolvenKitRedTreeArrayColumnWidthLvl4">140</GridLength>
+    <GridLength x:Key="WolvenKitRedTreeArrayColumnWidthLvl5">120</GridLength>
+    <GridLength x:Key="WolvenKitRedTreeArrayColumnWidthLvl6">100</GridLength>
+
+    <!-- DialogView -->
+    <system:Double x:Key="WolvenKitDialogWidthSmall">480</system:Double>
+    <system:Double x:Key="WolvenKitDialogHeightSmall">190</system:Double>
+    <system:Double x:Key="WolvenKitDialogWidth">640</system:Double>
+    <system:Double x:Key="WolvenKitDialogHeight">320</system:Double>
+    <system:Double x:Key="WolvenKitDialogWidthMedium">800</system:Double>
+    <system:Double x:Key="WolvenKitDialogHeightMedium">600</system:Double>
+    <system:Double x:Key="WolvenKitDialogWidthLarge">1024</system:Double>
+    <system:Double x:Key="WolvenKitDialogHeightLarge">768</system:Double>
+
+    <GridLength x:Key="WolvenKitDialogLabelColumnWidth">112</GridLength>
+    <GridLength x:Key="WolvenKitDialogLabelColumnWidthMedium">140</GridLength>
+    <GridLength x:Key="WolvenKitDialogLabelColumnWidthLarge">180</GridLength>
+
+    <system:Double x:Key="WolvenKitLabelWidth">112</system:Double>
+    <system:Double x:Key="WolvenKitLabelWidthMedium">140</system:Double>
+    <system:Double x:Key="WolvenKitLabelWidthLarge">180</system:Double>
+
+    <system:Double x:Key="WolvenKitDialogSammySize">40</system:Double>
+
+    <!-- FirstSetupView -->
+    <system:Double x:Key="WolvenKitFirstSetupWidth">720</system:Double>
+    <system:Double x:Key="WolvenKitFirstSetupHeight">278</system:Double>
+
+    <!-- MaterialsRepositoryDialog -->
+    <system:Double x:Key="WolvenKitMaterialsRepositoryHeight">354</system:Double>
+    <system:Double x:Key="WolvenKitMaterialsRepositoryButtonWidth">180</system:Double>
+    <system:Double x:Key="WolvenKitMaterialsRepositoryComboBoxWidth">80</system:Double>
+
+    <!-- SaveGameSelectionDialog -->
+    <system:Double x:Key="WolvenKitSaveGameSelectionColumnWidth">160</system:Double>
+    <system:Double x:Key="WolvenKitSaveGameSelectionRowHeight">64</system:Double>
+    <system:Double x:Key="WolvenKitSaveGameSelectionImageWidth">100</system:Double>
+    <system:Double x:Key="WolvenKitSaveGameSelectionImageHeight">56</system:Double>
+
+    <!-- NewFileView -->
+    <system:Double x:Key="WolvenKitNewFileRowHeight">42</system:Double>
+    <GridLength x:Key="WolvenKitNewFileIconWidth">36</GridLength>
+
+    <!-- ScriptManagerView -->
+    <system:Double x:Key="WolvenKitScriptManagerFileNameWidth">248</system:Double>
+    <system:Double x:Key="WolvenKitScriptManagerRowHeight">24</system:Double>
+
+    <!-- SoundModdingView -->
+    <GridLength x:Key="WolvenKitSoundModdingLabelWidth">64</GridLength>
+
+    <!-- CurveEditorWindow -->
+    <Thickness x:Key="WolvenKitCurveEditorMargin">38</Thickness>
+    <Thickness x:Key="WolvenKitCurveEditorCanvasMargin">48,0,12,30</Thickness>
+    <system:Double x:Key="WolvenKitCurveEditorRangeWidth">98</system:Double>
+    <GridLength x:Key="WolvenKitCurveEditorRangeLength">98</GridLength>
+    <system:Double x:Key="WolvenKitCurveEditorPointSize">8</system:Double>
+
+    <!-- Red...Editor -->
+    <GridLength x:Key="WolvenKitRedEditorHashWidth">166</GridLength>
+    <GridLength x:Key="WolvenKitRedEditorComponentWidth">24</GridLength>
+    <GridLength x:Key="WolvenKitRedEditorTrimmingWidth">16</GridLength>
+
+    <!-- RedTreeView -->
+    <system:Double x:Key="WolvenKitRedTreeRowMinHeight">27</system:Double>
+    <Thickness x:Key="WolvenKitRedTreeMarginDeleteTop">0,6,0,0</Thickness>
+
+    <!-- RedDocument...View -->
+    <system:Double x:Key="WolvenKitRedDocumentSearchBarWidth">248</system:Double>
+
+    <!-- RDTInkAtlasView -->
+    <system:Double x:Key="WolvenKitInkAtlasComboWidth">100</system:Double>
+    <GridLength x:Key="WolvenKitInkAtlasPropertyWidth">100</GridLength>
+</ResourceDictionary>

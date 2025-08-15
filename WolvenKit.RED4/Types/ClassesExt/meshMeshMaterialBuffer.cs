@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace WolvenKit.RED4.Types;
 
 public partial class meshMeshMaterialBuffer
@@ -13,6 +7,11 @@ public partial class meshMeshMaterialBuffer
     public CArray<IMaterial> Materials
     {
         get => GetPropertyValue<CArray<IMaterial>>();
-        set => SetPropertyValue<CArray<IMaterial>>(value);
+        set => SetPropertyValue(value);
+    }
+
+    partial void PostConstruct()
+    {
+        Materials = new CArray<IMaterial>();
     }
 }

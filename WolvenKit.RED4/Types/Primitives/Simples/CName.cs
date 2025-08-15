@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.RED4.Types.Pools;
 
 namespace WolvenKit.RED4.Types;
@@ -31,6 +32,8 @@ public readonly struct CName : IRedString, IRedPrimitive<string>, IEquatable<CNa
 
     [Obsolete("Use GetRedHash instead")]
     public uint GetOldRedHash() => (uint)(_hash & 0xFFFFFFFF);
+
+    public static ulong CalculateHash(string name) => name is "None" or "" ? 0 : FNV1A64HashAlgorithm.HashString(name);
 
     public static implicit operator CName(string value) => new(CNamePool.AddOrGetHash(value));
     public static implicit operator string?(CName value) => value.GetResolvedText();
@@ -100,5 +103,6 @@ public readonly struct CName : IRedString, IRedPrimitive<string>, IEquatable<CNa
     public string? GetString() => this;
     public override string? ToString() => GetString();
 
-    public static bool IsNullOrEmpty([NotNullWhen(false)] CName name) => name == CName.Empty ? true : string.IsNullOrEmpty(name.ToString());
+    public static bool IsNullOrEmpty([NotNullWhen(false)] CName name) =>
+        name == CName.Empty || string.IsNullOrEmpty(name.ToString());
 }

@@ -91,7 +91,7 @@ namespace WolvenKit.RED4.Types
 			VirtualCameraName = "Component";
 			Params = new WorldRenderAreaSettings { AreaParameters = new() };
 			BackgroundColor = new CColor();
-			StreamingDistance = 1.000000F;
+			StreamingDistance = 100.000000F;
 
 			PostConstruct();
 		}

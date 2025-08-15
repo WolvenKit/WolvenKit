@@ -6,7 +6,7 @@ public partial class CMaterialInstance
     [RED("metadata")]
     public SerializationDeferredDataBuffer Metadata
     {
-        get => GetPropertyValue<SerializationDeferredDataBuffer>();
+        get => GetPropertyValue<SerializationDeferredDataBuffer>()!; // set in PostConstruct, so not nullable
         set => SetPropertyValue<SerializationDeferredDataBuffer>(value);
     }
 }

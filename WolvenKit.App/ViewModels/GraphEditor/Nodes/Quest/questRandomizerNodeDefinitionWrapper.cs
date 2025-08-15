@@ -1,4 +1,5 @@
 ﻿using System;
+using WolvenKit.App.Extensions;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
 using WolvenKit.RED4.Types;
 
@@ -8,8 +9,10 @@ public class questRandomizerNodeDefinitionWrapper : questDisableableNodeDefiniti
 {
     public questRandomizerNodeDefinitionWrapper(questRandomizerNodeDefinition questRandomizerNodeDefinition) : base(questRandomizerNodeDefinition)
     {
-        Title = $"{Title} [{questRandomizerNodeDefinition.Id}]";
-        Details.Add("Type", questRandomizerNodeDefinition.Mode.ToEnumString());
+        //Title = $"{Title} [{questRandomizerNodeDefinition.Id}]";
+        //Details.Add("Type", questRandomizerNodeDefinition.Mode.ToEnumString());
+
+        Details.AddRange(NodeProperties.GetPropertiesFor(questRandomizerNodeDefinition));
     }
 
     internal override void GenerateSockets()
@@ -73,6 +76,10 @@ public class questRandomizerNodeDefinitionWrapper : questDisableableNodeDefiniti
         
         Output.Add(connector);
         _castedData.OutputWeights.Add(0);
+
+        // SYNC FIX: Update property panel and graph editor without regenerating connectors
+        TriggerPropertyChanged(nameof(Output));
+        OnPropertyChanged(nameof(Data));
 
         return connector;
     }

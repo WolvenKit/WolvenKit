@@ -100,6 +100,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(14)] 
+		[RED("isVisible")] 
+		public CBool IsVisible
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public characterCreationBodyMorphColorOption()
 		{
 			OptionLabel = new inkTextWidgetReference();

@@ -2,12 +2,10 @@ using System;
 using System.CommandLine;
 using System.CommandLine.Builder;
 using System.CommandLine.Hosting;
-using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
-using System.Threading.Tasks;
 using CP77Tools.Commands;
 using CP77Tools.Tasks;
-using Microsoft.Build.Framework;
+using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Compression;
 
@@ -29,7 +27,7 @@ internal class Program
             return ConsoleFunctions.ERROR_GENERAL_ERROR;
         }
 
-        if (Core.NativeMethods.RtlAreLongPathsEnabled() == 0)
+        if (!Core.CommonFunctions.AreLongPathsEnabled())
         {
             // TODO: Use logger for that. Tried it as middleware but doesn't get called at all then -.-
             var text = "Long path support is disabled in your OS!" + Environment.NewLine +
@@ -49,6 +47,7 @@ internal class Program
             new ImportCommand(),
             new ExportCommand(),
             new PackCommand(),
+            new BuildCommand(),
 
             new ConvertCommand(),
             new ConflictsCommand(),

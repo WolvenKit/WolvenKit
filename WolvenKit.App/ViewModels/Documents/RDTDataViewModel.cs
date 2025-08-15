@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using WolvenKit.App.Factories;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.Nodify;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Events;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.Extensions;
@@ -20,7 +22,6 @@ using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.Documents;
-
 
 public partial class RDTDataViewModel : RedDocumentTabViewModel
 {
@@ -49,31 +50,55 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
         _data = data;
 
-        IsSimpleViewEnabled = Parent.IsSimpleViewEnabled;
+        Nodes.Add(new ResourcePathWrapper(this, new ReferenceSocket(Chunks[0].RelativePath), _appViewModel, _chunkViewmodelFactory));
+        _nodePaths.Add(Chunks[0].RelativePath);
 
-        parent.PropertyChanged += RDTDataViewModel_PropertyChanged;
+        SubscribeToChunkPropertyChanges();
         
         if (SelectedChunk == null && Chunks.Count > 0)
         {
             SelectedChunk = Chunks[0];
-            if (SelectedChunks is IList lst)
-            {
-                lst.Add(Chunks[0]);
-            }
+            SelectedChunks.Add(Chunks[0]);
         }
-
-        Nodes.Add(new ResourcePathWrapper(this, new ReferenceSocket(Chunks[0].RelativePath), _appViewModel, _chunkViewmodelFactory));
-        _nodePaths.Add(Chunks[0].RelativePath);
     }
 
-    private void RDTDataViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    private void SubscribeToChunkPropertyChanges()
     {
-        if (e.PropertyName != nameof(RedDocumentViewModel.IsSimpleViewEnabled))
+        if (GetRootChunk() is not ChunkViewModel cvm || cvm.ResolvedData is not inkTextureAtlas ||
+            cvm.GetPropertyChild("slots", "0") is not ChunkViewModel firstSlot || firstSlot.ResolvedData is not inkTextureSlot slot ||
+            slot.Texture.DepotPath != ResourcePath.Empty)
         {
             return;
         }
 
-        IsSimpleViewEnabled = Parent.IsSimpleViewEnabled;
+        firstSlot.PropertyChanged += WaitForTexturePath;
+    }
+
+    public event EventHandler? OnReloadRequired;
+
+    private void WaitForTexturePath(object? sender, PropertyChangedEventArgs evt)
+    {
+        if (sender is not ChunkViewModel cvm || evt.PropertyName != nameof(cvm.Value) || string.IsNullOrEmpty(cvm.Value))
+        {
+            return;
+        }
+
+        cvm.PropertyChanged -= WaitForTexturePath;
+        OnReloadRequired?.Invoke(this, EventArgs.Empty);
+    }
+
+    public ChunkViewModel? GetRootChunk() => Chunks.FirstOrDefault();
+
+    public override RedDocumentItemType GetContentType()
+    {
+        return GetRootChunk()?.ResolvedData switch
+        {
+            CMesh => RedDocumentItemType.Mesh,
+            appearanceAppearanceResource => RedDocumentItemType.App,
+            entEntityTemplate => RedDocumentItemType.Ent,
+            CMaterialInstance => RedDocumentItemType.Mi,
+            _ => base.GetContentType()
+        };
     }
 
     public RDTDataViewModel(string header, IRedType data, RedDocumentViewModel file, AppViewModel appViewModel,
@@ -92,29 +117,23 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     {
         get
         {
-            if (_chunks == null || _chunks.Count == 0)
+            if (_chunks.Count == 0 && _data is not RedDummy)
             {
-                _chunks = _data is null ? new() : new List<ChunkViewModel>
-                {
-                    GenerateChunks()
-                };
+                _chunks.Add(GenerateChunks());
             }
             return _chunks;
         }
         set => _chunks = value;
     }
 
-    public virtual ChunkViewModel GenerateChunks() => _chunkViewmodelFactory.ChunkViewModel(_data, this, _appViewModel/*, Parent.IsReadOnly*/);
+    public virtual ChunkViewModel GenerateChunks() => _chunkViewmodelFactory.ChunkViewModel(_data, this, _appViewModel);
 
     [ObservableProperty]
     private bool _isEmbeddedFile;
 
-    [ObservableProperty] private object? _selectedChunk;
+    [ObservableProperty] private ChunkViewModel? _selectedChunk;
 
-    [ObservableProperty] private object? _selectedChunks;
-
-    [ObservableProperty] private bool _IsSimpleViewEnabled;
-
+    [ObservableProperty] private ObservableCollection<object> _selectedChunks = new();
 
     [ObservableProperty] private ChunkViewModel? _rootChunk;
 
@@ -124,24 +143,35 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     [ObservableProperty] private IRedRef? _selectedImport;
 
+    [ObservableProperty] private string? _currentSearch;
+
     public bool ShowReferenceGraph => _settingsManager.ShowReferenceGraph;
+
+    /// <summary>
+    /// If this is not empty, force nodes and all of their children to recalculate properties after tab switch
+    /// </summary>
+    public List<ChunkViewModel> DirtyChunks { get; set; } = [];
+
+    public bool HasActiveSearch { get; set; }
+
+    public int NumSelectedItems => SelectedChunks.OfType<ChunkViewModel>().Count();
 
     public delegate void LayoutNodesDelegate();
 
     public LayoutNodesDelegate? LayoutNodes;
-
+    
 
     #endregion
 
     #region commands
     
     [RelayCommand]
-    private Task OpenImport(ICR2WImport input)
+    private async Task OpenImport(ICR2WImport input)
     {
         var depotpath = input.DepotPath;
-        var key = FNV1A64HashAlgorithm.HashString(depotpath.ToString().NotNull());
+        var key = FNV1A64HashAlgorithm.HashString(depotpath.GetResolvedText().NotNull());
 
-        return _gameController.GetController().AddFileToModModal(key);
+        await _gameController.GetController().AddFileToModModalAsync(key);
     }
 
     #endregion
@@ -150,7 +180,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     public void LookForReferences(ChunkViewModel cvm)
     {
-        if (cvm.Data is null)
+        if (cvm.Data is RedDummy)
         {
             return;
         }
@@ -169,10 +199,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
             }
         }
 
-        if (LayoutNodes != null)
-        {
-            LayoutNodes();
-        }
+        LayoutNodes?.Invoke();
     }
 
     public void LookForReferences(ChunkViewModel cvm, RedBaseClass data, string xpath)
@@ -300,6 +327,14 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     public override void OnSelected()
     {
+        base.OnSelected();
+        RefreshDirtyChunks();
+
+        if (SelectedChunk is ChunkViewModel { ResolvedData: worldNode } cvm)
+        {
+            OnSectorNodeSelected?.Invoke(this, $"{cvm.NodeIdxInParent}");
+        }
+        
         // if tweak file, deserialize from text
         // read tweakXL file
         // TODO fix TweakXLDocumentViewModel
@@ -328,34 +363,56 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         //}
     }
 
-    public void ClearSelection()
+    private void RefreshDirtyChunks()
     {
-        if (SelectedChunks is IList lst)
+        if (DirtyChunks.Count == 0)
         {
-            foreach (var obj in lst.OfType<ChunkViewModel>())
-            {
-                obj.IsSelected = false;
-            }
-
-            lst.Clear();
+            return;
         }
 
+        foreach (var chunkViewModel in DirtyChunks)
+        {
+            foreach (var childProp in chunkViewModel.TVProperties)
+            {
+                childProp.RecalculateProperties();
+            }
+            chunkViewModel.RecalculateProperties();
+        }
+
+        DirtyChunks.Clear();
+        
+    }
+
+    public void ClearSelection()
+    {
+        foreach (var cvm in SelectedChunks.OfType<ChunkViewModel>())
+        {
+            cvm.IsSelected = false;
+        }
+
+        SelectedChunks.Clear();
         SelectedChunk = null;
     }
 
+    
     public void AddToSelection(ChunkViewModel? chunk)
     {
+        var selectedChunks = SelectedChunks.OfType<ChunkViewModel>().ToList();
+        
+        ClearSelection();
         if (chunk is null)
         {
             return;
         }
 
+        ExpandParentNodes(chunk);
         chunk.IsSelected = true;
-        if (SelectedChunks is IList lst)
-        {
-            lst.Add(chunk);
-        }
 
+        selectedChunks.Add(chunk);
+        foreach (var cvm in selectedChunks)
+        {
+            SelectedChunks.Add(cvm);
+        }
         SelectedChunk = chunk;
     }
 
@@ -364,45 +421,169 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         if (chunk is not null)
         {
             chunk.IsSelected = false;
+            SelectedChunks.Remove(chunk);
         }
-
-        if (SelectedChunks is IList lst && chunk is not null)
-        {
-            lst.Remove(chunk);
-        }
-
+        
         SelectedChunk = null;
     }
 
-
-    public void SetSelection(ChunkViewModel chunk)
+    public void SetSelection(ChunkViewModel chunk, bool addToPrevious = false)
     {
+        var previousSelection = addToPrevious ? SelectedChunks.OfType<ChunkViewModel>().ToList() : new List<ChunkViewModel>();
         ClearSelection();
-        SelectedChunk = chunk;
-        if (SelectedChunks is IList lst)
+
+        ExpandParentNodes(chunk);
+        chunk.IsSelected = true;
+
+        if (!previousSelection.Contains(chunk))
         {
-            lst.Add(chunk);
+            previousSelection.Add(chunk);
         }
+
+        foreach (var cvm in previousSelection)
+        {
+            SelectedChunks.Add(cvm);
+        }
+
+        SelectedChunk = chunk;
     }
 
-    public void SetSelection(List<ChunkViewModel> chunks)
-    {
-        ClearSelection();
 
-        // should never happen, but alas, it's nullable
-        if (SelectedChunks is not IList lst)
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        // Suppress property change notifications during batch operations
+        if (_suppressPropertyChanges && e.PropertyName == nameof(SelectedChunks))
         {
             return;
-        }     
+        }
+        
+        base.OnPropertyChanged(e);
+    }
 
-        foreach (var chunkViewModel in chunks)
+    private bool _suppressPropertyChanges = false;
+    
+    public void SetSelection(List<ChunkViewModel> chunks)
+    {
+        try
         {
-            lst.Add(chunkViewModel);
-            chunkViewModel.IsSelected = true;
-            SelectedChunk = chunkViewModel;
+            _suppressPropertyChanges = true;
+            
+            ClearSelection();
+            if (chunks.Count == 0)
+            {
+                return;
+            }
+            
+            // remove duplicates
+            var uniqueChunks = new HashSet<ChunkViewModel>(chunks);
+            
+            foreach (var cvm in uniqueChunks)
+            {
+                cvm.IsSelected = true;
+                ExpandParentNodes(cvm);
+                
+                if (!SelectedChunks.Contains(cvm))
+                {
+                    SelectedChunks.Add(cvm);
+                }
+            }
+
+            SelectedChunk ??= uniqueChunks.LastOrDefault();
+        }
+        finally
+        {
+            _suppressPropertyChanges = false;
+            // Fire a single property changed event for SelectedChunks to sync everything at once
+            OnPropertyChanged(nameof(SelectedChunks));
+        }
+    }
+    
+    public event EventHandler<string>? OnSectorNodeSelected;
+
+    /// <summary>
+    /// For .streamingsector files, called when a mesh is selected in the other tab 
+    /// </summary>
+    /// <param name="selectedIndex"></param>
+    /// <returns></returns>
+    public ChunkViewModel? FindWorldNode(int? selectedIndex)
+    {
+        if (selectedIndex is not int idx)
+        {
+            return null;
+        }
+
+        var root = RootChunk ?? _chunks.FirstOrDefault();
+
+        // ReSharper disable once UseNullPropagation this does not help readability
+        if (root is null)
+        {
+            return null;
+        }
+
+        var worldNodeArray = root.Properties.FirstOrDefault(chunk =>
+            chunk is { IsArray: true, Name: "nodes", ResolvedData: CArray<CHandle<worldNode>> });
+        if (worldNodeArray is null)
+        {
+            return null;
+        }
+
+        root.IsExpanded = true;
+        worldNodeArray.IsExpanded = true;
+
+        return worldNodeArray?.GetChildNode(idx);
+    }
+    
+    #endregion
+
+    private static void ExpandParentNodes(ChunkViewModel cvm)
+    {
+        if (cvm.Parent is null)
+        {
+            return;
+        }
+
+        cvm.Parent.IsExpanded = true;
+        ExpandParentNodes(cvm.Parent);
+    }
+
+    public void ScrollToNode(ChunkViewModel? selectedNode, bool addToSelection = false)
+    {
+        if (selectedNode is null)
+        {
+            return;
+        }
+
+        SetSelection(selectedNode, addToSelection);
+    }
+
+    // A material was renamed
+    public void OnCNameValueChanged(ValueChangedEventArgs args)
+    {
+        if (args.RedType == typeof(CMeshMaterialEntry))
+        {
+            GetRootChunk()?.OnMaterialNameChange(args.OldValue, args.NewValue);
         }
     }
 
-    
-    #endregion
+    public static event EventHandler<List<ChunkViewModel>>? OnSearchStringChanged;
+    public void OnSearchChanged(string searchBoxText)
+    {
+        HasActiveSearch = !string.IsNullOrEmpty(searchBoxText);
+        foreach (var chunkViewModel in Chunks)
+        {
+            if (ModifierViewStateService.IsShiftBeingHeld)
+            {
+                chunkViewModel.CalculatePropertiesRecursive(0, 1024);
+            }
+            chunkViewModel.SetVisibilityStatusBySearchString(searchBoxText);
+        }
+
+        CurrentSearch = searchBoxText;
+
+        OnSearchStringChanged?.Invoke(this, Chunks);
+        if (string.IsNullOrEmpty(searchBoxText) && SelectedChunk is ChunkViewModel selectedChunk)
+        {
+            ScrollToNode(selectedChunk);
+        }
+    }
 }

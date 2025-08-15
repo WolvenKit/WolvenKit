@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using WolvenKit.Common;
@@ -8,13 +9,13 @@ namespace CP77Tools.Tasks;
 
 public record UncookTaskOptions
 {
-    public DirectoryInfo? outpath { get; init; }
-    public string? rawOutDir { get; init; }
-    public string? gamepath { get; set; }
-    public EUncookExtension? uext { get; init; }
-    public ulong hash { get; init; }
+    public DirectoryInfo? outpath { get; set; }
+    public DirectoryInfo? gamepath { get; set; }
+    public DirectoryInfo? raw { get; set; }
     public string? pattern { get; init; }
     public string? regex { get; init; }
+    public EUncookExtension? uext { get; init; }
+    public ulong hash { get; init; }
     public bool unbundle { get; init; }
     public ECookedFileFormat[]? forcebuffers { get; init; }
     public bool? serialize { get; init; }
@@ -23,13 +24,15 @@ public record UncookTaskOptions
     public string? meshExportMaterialRepo { get; init; }
     public bool? meshExportLodFilter { get; init; }
     public bool? meshExportExperimentalMergedExport { get; init; }
+    public List<uint>? opusHashes { get; set; }
+    public bool? opusExportAll { get; set; }
 }
 
 public partial class ConsoleFunctions
 {
     public int UncookTask(FileSystemInfo[] paths, UncookTaskOptions options)
     {
-        if (paths.Length < 1 && string.IsNullOrEmpty(options.gamepath))
+        if (paths.Length < 1 && options.gamepath == null)
         {
             _loggerService.Error("Please fill in an input path.");
             return ERROR_BAD_ARGUMENTS;
@@ -41,16 +44,10 @@ public partial class ConsoleFunctions
             return ERROR_BAD_ARGUMENTS;
         }
 
-        if (options.meshExportType != null && string.IsNullOrEmpty(options.meshExportMaterialRepo) && options.outpath is null)
+        if (options.gamepath is { Exists: true })
         {
-            _loggerService.Error("When using --mesh-export-type, the --outpath or the --mesh-export-material-repo must be specified.");
-            return ERROR_INVALID_COMMAND_LINE;
-        }
-
-        if (!string.IsNullOrEmpty(options.gamepath) && Directory.Exists(options.gamepath))
-        {
-            var exePath = new FileInfo(Path.Combine(options.gamepath, "bin", "x64", "Cyberpunk2077.exe"));
-            _archiveManager.LoadGameArchives(exePath, false);
+            var exePath = new FileInfo(Path.Combine(options.gamepath.ToString(), "bin", "x64", "Cyberpunk2077.exe"));
+            _archiveManager.LoadGameArchives(exePath);
         }
 
         var result = 0;
@@ -71,7 +68,7 @@ public partial class ConsoleFunctions
                         _loggerService.Error("Input file is not an .archive.");
                         return ERROR_BAD_ARGUMENTS;
                     }
-                    _archiveManager.LoadModArchive(file.FullName);
+                    _archiveManager.LoadModArchive(file.FullName, false);
                     break;
                 case DirectoryInfo directory:
                     var archiveFileInfos = directory.GetFiles().Where(_ => _.Extension == ".archive").ToList();
@@ -102,18 +99,10 @@ public partial class ConsoleFunctions
             outDir = Directory.CreateDirectory(outDir.FullName);
         }
 
-        DirectoryInfo? rawOutDirInfo;
-        if (string.IsNullOrEmpty(options.rawOutDir))
+        var rawOutDirInfo = options.raw ?? outDir;
+        if (!rawOutDirInfo.Exists)
         {
-            rawOutDirInfo = outDir;
-        }
-        else
-        {
-            rawOutDirInfo = new DirectoryInfo(options.rawOutDir);
-            if (!rawOutDirInfo.Exists)
-            {
-                rawOutDirInfo = new DirectoryInfo(options.rawOutDir);
-            }
+            rawOutDirInfo = Directory.CreateDirectory(rawOutDirInfo.FullName);
         }
 
         var exportArgs = new GlobalExportArgs().Register(
@@ -138,7 +127,7 @@ public partial class ConsoleFunctions
                 _loggerService.Error("When using --mesh-exporter-type REDMod isn't supported");
                 return ERROR_BAD_ARGUMENTS;
             }
-            
+
             exportArgs.Get<MeshExportArgs>().MeshExporter = options.meshExporterType.Value;
         }
 
@@ -159,6 +148,10 @@ public partial class ConsoleFunctions
 
         exportArgs.Get<GeneralExportArgs>().MaterialRepositoryPath = string.IsNullOrEmpty(options.meshExportMaterialRepo) ? outDir.FullName : options.meshExportMaterialRepo;
         exportArgs.Get<MeshExportArgs>().MaterialRepo = string.IsNullOrEmpty(options.meshExportMaterialRepo) ? outDir.FullName : options.meshExportMaterialRepo;
+
+        exportArgs.Get<OpusExportArgs>().UseMod = true;
+        exportArgs.Get<OpusExportArgs>().SelectedForExport = options.opusHashes ?? [];
+        exportArgs.Get<OpusExportArgs>().ExportAll = options.opusExportAll ?? false;
 
         var result = 0;
         foreach (var gameArchive in _archiveManager.Archives.Items)

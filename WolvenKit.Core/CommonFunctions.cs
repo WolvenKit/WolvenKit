@@ -5,7 +5,9 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using Microsoft.Win32;
 using Semver;
+using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.Core
 {
@@ -76,7 +78,7 @@ namespace WolvenKit.Core
                     }
                 }
 
-                var version = SemVersion.Parse(productVersion, SemVersionStyles.Strict);
+                var version = SemVersion.Parse(productVersion.NotNull(), SemVersionStyles.Strict);
                 return version;
             }
         }
@@ -99,6 +101,13 @@ namespace WolvenKit.Core
         // Display a byte array in a readable format.
         public static string PrettyByteArray(IEnumerable<byte> array) => array.Aggregate("", (current, t) => current + $"{t:X2}");
 
-
+        public static bool AreLongPathsEnabled()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return Registry.GetValue(@"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled", 0) is 1;
+            }
+            return true;
+        }
     }
 }

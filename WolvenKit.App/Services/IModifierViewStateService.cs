@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -9,6 +10,15 @@ namespace WolvenKit.Core.Services;
 
 public interface IModifierViewStateService: INotifyPropertyChanged
 {
+    public static List<Key> ModifierKeys =
+    [
+        Key.LeftShift,
+        Key.RightShift,
+        Key.LeftCtrl,
+        Key.RightCtrl,
+        Key.LeftAlt,
+        Key.RightAlt
+    ];
     public abstract void RefreshModifierStates(bool skipUpdate = false);
     public abstract bool GetModifierState(ModifierKeys key, bool noOtherModifiersPressed = false);
     void OnKeystateChanged(KeyEventArgs? e);

@@ -20,8 +20,12 @@ namespace WolvenKit.App.Services;
 /// _modifierViewStates.ModifierStateChanged += OnModifierStateChanged;
 /// </code>
 /// </example>
-public partial class ModifierViewStateService() : ObservableObject, IModifierViewStateService
+public partial class ModifierViewStateService : ObservableObject, IModifierViewStateService
 {
+    public ModifierViewStateService()
+    {
+    }
+    
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
         base.OnPropertyChanged(e);
@@ -91,16 +95,19 @@ public partial class ModifierViewStateService() : ObservableObject, IModifierVie
     [ObservableProperty]
     private bool _isCtrlKeyPressedOnly;
 
-    private static bool IsShiftBeingHeld => Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
-    private static bool IsCtrlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
-    private static bool IsAltBeingHeld => Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt);
+    public static bool IsShiftBeingHeld => Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
+    public static bool IsCtrlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+    public static bool IsAltBeingHeld => Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt);
+    public static bool IsNoModifierBeingHeld => !IsShiftBeingHeld && !IsCtrlBeingHeld && !IsAltBeingHeld;
+    public static bool IsShiftBeingHeldOnly => IsShiftBeingHeld && !IsCtrlBeingHeld && !IsAltBeingHeld;
+    public static bool IsCtrlBeingHeldOnly => !IsShiftBeingHeld && IsCtrlBeingHeld && !IsAltBeingHeld;
+    public static bool IsAltBeingHeldOnly => !IsShiftBeingHeld && !IsCtrlBeingHeld && IsAltBeingHeld;
 
     private readonly Dictionary<Key, bool> _keyStates = [];
 
     public void OnKeystateChanged(KeyEventArgs? e)
     {
-        if (e?.Key is not (Key.RightCtrl or Key.LeftCtrl or Key.LeftShift or Key.RightShift or Key.LeftAlt
-            or Key.RightAlt))
+        if (e is null || !IModifierViewStateService.ModifierKeys.Contains(e.Key))
         {
             return;
         }
@@ -119,16 +126,17 @@ public partial class ModifierViewStateService() : ObservableObject, IModifierVie
         IsNoModifierPressed = !IsShiftBeingHeld && !IsCtrlBeingHeld && !IsAltBeingHeld;
 
         IsCtrlKeyPressed = IsCtrlBeingHeld;
+        IsShiftKeyPressed = IsShiftBeingHeld;
+        IsAltKeyPressed = IsAltBeingHeld;
+
         IsCtrlKeyPressedOnly = IsCtrlBeingHeld && !IsShiftBeingHeld && !IsAltBeingHeld;
         _keyStates[Key.LeftCtrl] = IsCtrlBeingHeld;
         _keyStates[Key.RightCtrl] = IsCtrlBeingHeld;
 
-        IsShiftKeyPressed = IsShiftBeingHeld;
         IsShiftKeyPressedOnly = IsShiftBeingHeld && !IsCtrlBeingHeld && !IsAltBeingHeld;
         _keyStates[Key.LeftShift] = IsShiftBeingHeld;
         _keyStates[Key.RightShift] = IsShiftBeingHeld;
 
-        IsAltKeyPressed = IsAltBeingHeld;
         IsAltKeyPressedOnly = IsAltBeingHeld && !IsCtrlBeingHeld && !IsShiftBeingHeld;
         _keyStates[Key.LeftAlt] = IsAltBeingHeld;
         _keyStates[Key.RightAlt] = IsAltBeingHeld;

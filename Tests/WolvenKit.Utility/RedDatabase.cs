@@ -31,7 +31,7 @@ namespace WolvenKit.Utility
             RedDBContext.ClearDatabase();
 
             using var db = new RedDBContext();
-            foreach (var archive in s_bm.Archives.Items.Reverse())
+            foreach (var archive in s_bm.GetGameArchives().Reverse())
             {
                 db.Add(new RedArchive { Name = archive.Name, Source = archive.Source.ToString() });
             }
@@ -57,7 +57,7 @@ namespace WolvenKit.Utility
             {
                 foreach (var dbArchive in db.Archives)
                 {
-                    if (s_bm.Archives.Items.FirstOrDefault(x => x.Name == dbArchive.Name && x.Source.ToString() == dbArchive.Source) is not Archive archive)
+                    if (s_bm.GetGameArchives().FirstOrDefault(x => x.Name == dbArchive.Name && x.Source.ToString() == dbArchive.Source) is not Archive archive)
                     {
                         throw new Exception();
                     }

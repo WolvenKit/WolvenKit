@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 using SharpGLTF.Schema2;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
@@ -297,6 +300,9 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
+            // https://github.com/WolvenKit/WolvenKit/issues/1870
+            rendBlob.Header.OpacityMicromaps.Clear();
+            
             var originalRig = args.Rig?.FirstOrDefault();
 
             if (File.Exists(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")) && (args.ImportMaterialOnly || args.ImportMaterials))
@@ -438,11 +444,19 @@ namespace WolvenKit.Modkit.RED4
             }
 
 
-            MeshTools.UpdateMeshJoints(ref meshes, existingJoints, incomingJoints);
+            try
+            {
+                MeshTools.UpdateMeshJoints(ref meshes, existingJoints, incomingJoints);
+            }
+            catch (WolvenKitException e)
+            {
+                throw new WolvenKitException(e.ErrorCode,
+                    $"You're trying to import bones into a mesh that doesn't have them. Wolvenkit can't create bones — please remove them in Blender, or import into a different file: {e.Message}");
+            }
 
             UpdateSkinningParamCloth(ref meshes, ref cr2w, args);
 
-            UpdateGarmentSupportParameters(meshes, cr2w, args.ImportGarmentSupport);
+            UpdateGarmentSupportParameters(meshes, meshBlob, args.ImportGarmentSupport, args.IgnoreGarmentSupportUVParam);
 
             var expMeshes = meshes.Select(_ => RawMeshToRE4Mesh(_, quantScale, quantTrans)).ToList();
 
@@ -527,13 +541,18 @@ namespace WolvenKit.Modkit.RED4
         // Maintaining compatibility but need to review if we really want to support empties via nodes
         private RawMeshContainer GltfMeshToRawContainer(Node node, GltfImportArgs args)
         {
-            if (node.Mesh == null)
+            if (node.Mesh != null)
             {
-                _loggerService.Warning($"Node {node.Name} has no mesh, creating empty mesh (this is probably wrong.)");
-                return CreateEmptyMesh(node.Name);
+                return GltfMeshToRawContainer(node.Mesh, args);
             }
 
-            return GltfMeshToRawContainer(node.Mesh, args);
+            if (args.ShowVerboseLogOutput)
+            {
+                _loggerService.Warning($"Node {node.Name} has no mesh, creating empty mesh (this is probably wrong.)");
+            }
+
+            return CreateEmptyMesh(node.Name);
+
         }
 
         private RawMeshContainer GltfMeshToRawContainer(Mesh mesh, GltfImportArgs args)
@@ -549,7 +568,7 @@ namespace WolvenKit.Modkit.RED4
 
             var node = parenting[0];
 
-            if (mesh.Name != node.Name)
+            if (mesh.Name != node.Name && args.ShowVerboseLogOutput)
             {
                 _loggerService.Warning($"Mesh name `{mesh.Name}` does not match parent node name `{node.Name}`. Using {(args.OverrideMeshNameWithNodeName ? "NODE" : "MESH")} name.");
             }
@@ -683,19 +702,48 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            meshContainer.garmentMorph = Array.Empty<Vec3>();
-            // TODO: https://github.com/WolvenKit/WolvenKit/issues/1506
-            //       Mesh Import Needs to Actually Check it's Working with GarmentSupport Targets.
-            //       For now we'll keep assuming GS is at index 0
-            if (mesh.Primitives[0].MorphTargetsCount > 0)
-            {
-                var idx = mesh.Primitives[0].GetMorphTargetAccessors(0).Keys.ToList().IndexOf("POSITION");
-                var extraDataList = mesh.Primitives[0].GetMorphTargetAccessors(0).Values.ToList()[idx].AsVector3Array().ToList();
+            meshContainer.garmentMorph = [];
 
-                meshContainer.garmentMorph = extraDataList.Select(p => new Vec3(p.X, -p.Z, p.Y)).ToArray();
+            if (mesh.Extras?.Deserialize<MeshExtras>() is { } extras)
+            {
+                if (extras.TargetNames != null)
+                {
+                    ExtractMorphTargets(meshContainer, mesh, extras, args);
+                }
             }
 
             return meshContainer;
+        }
+
+        private static void ExtractMorphTargets(RawMeshContainer meshContainer, Mesh mesh, MeshExtras extras, GltfImportArgs args)
+        {
+            if (extras.TargetNames == null)
+            {
+                return;
+            }
+
+            if (extras.TargetNames.Length != mesh.Primitives[0].MorphTargetsCount)
+            {
+                throw new Exception($"{nameof(MeshExtras)} targetNames count doesn't match morphTarget count");
+            }
+
+            for (var i = 0; i < extras.TargetNames.Length; i++)
+            {
+                if (args.ImportGarmentSupport && extras.TargetNames[i] is "GarmentSupport")
+                {
+                    meshContainer.garmentMorph = GetVector3List(i, "POSITION").Select(p => new Vec3(p.X, -p.Z, p.Y)).ToArray();
+                }
+            }
+
+            return;
+
+            List<Vec3> GetVector3List(int morphTargetIndex, string attributeKey)
+            {
+                var idx = mesh.Primitives[0].GetMorphTargetAccessors(morphTargetIndex).Keys.ToList().IndexOf(attributeKey);
+                var extraDataList = mesh.Primitives[0].GetMorphTargetAccessors(morphTargetIndex).Values.ToList()[idx].AsVector3Array().ToList();
+
+                return extraDataList;
+            }
         }
 
         private static Re4MeshContainer RawMeshToRE4Mesh(RawMeshContainer mesh, Vec4 qScale, Vec4 qTrans)
@@ -733,8 +781,8 @@ namespace WolvenKit.Modkit.RED4
             re4Mesh.Nor32s = new uint[vertCount];
             for (var i = 0; i < vertCount; i++)
             {
-                var v = new Vec4(mesh.normals[i], 0); // for normal w == 0
-                re4Mesh.Nor32s[i] = Converters.Vec4ToU32(v);
+                var v = mesh.normals[i]; // for normal w == 0
+                re4Mesh.Nor32s[i] = Converters.Vec3ToU32(v);
             }
 
             // converting tangents struct
@@ -987,7 +1035,6 @@ namespace WolvenKit.Modkit.RED4
                     if (idx < mesh.name.Length - 1)
                     {
                         var lod = Convert.ToUInt32(mesh.name.Substring(idx + 4, 1));
-                        lod = args.ReplaceLod && lod == 0 ? 8 : lod;
                         meshesInfo.LODLvl[i] = lod;
                     }
                 }
@@ -1407,6 +1454,18 @@ namespace WolvenKit.Modkit.RED4
             }*/
 
             var lods = new List<uint>();
+
+            // #2403: LOD_0 is okay for cars, so we're checking before throwing an exception
+            var lodsFromMeshNames = model.LogicalMeshes.Select(x =>
+                {
+                    var matches = Regex.Matches(x.Name, @"\d+");
+                    return matches.Count > 0 ? matches[^1].Value : null;
+                })
+                .Where(x => x is not null)
+                .Distinct()
+                .Select(x => uint.Parse(x!))
+                .ToList();
+            
             foreach (var m in model.LogicalMeshes)
             {
                 var accessors = m.Primitives[0].VertexAccessors.Keys.ToList();
@@ -1440,9 +1499,8 @@ namespace WolvenKit.Modkit.RED4
                             throw new Exception("Invalid Geometry/sub mesh name: " + name + " , Character after \"LOD_\" should be 1 or 2 or 4 or 8, Representing the Level of Detail (LOD) of the submesh.");
                         }
 
-                        lod = args.ReplaceLod && lod == 0 ? 8 : lod;
-
-                        if (lod is not 1 and not 2 and not 4 and not 8)
+                        if (lod is not 1 and not 2 and not 4 and not 8
+                            && (lod is not 0 && !lodsFromMeshNames.Contains(lod))) 
                         {
                             throw new Exception("Invalid Geometry/sub mesh name: " + name + " , Character after \"LOD_\"  should be 1 or 2 or 4 or 8, Representing the Level of Detail (LOD) of the submesh.");
                         }
@@ -1464,6 +1522,18 @@ namespace WolvenKit.Modkit.RED4
         {
             var cMesh = (CMesh)cr2w.RootChunk;
 
+            // #2403: LOD_0 is okay for cars, so we're checking
+            var lodsFromMeshNames = meshes.Select(x =>
+                {
+                    var matches = Regex.Matches(x.name ?? "", @"\d+");
+                    return matches.Count > 0 ? matches[^1].Value : null;
+                })
+                .Where(x => x is not null)
+                .Distinct()
+                .Select(x => uint.Parse(x!))
+                .ToList();
+            
+            
             var lodLvl = new uint[meshes.Count];
             for (var i = 0; i < meshes.Count; i++)
             {
@@ -1476,16 +1546,12 @@ namespace WolvenKit.Modkit.RED4
                     var idx = mesh.name.IndexOf("LOD_", StringComparison.Ordinal);
                     if (idx < mesh.name.Length - 1)
                     {
-                        if (!uint.TryParse(mesh.name.AsSpan(idx + 4, 1), out var lod))
+                        if (!uint.TryParse(mesh.name.AsSpan(idx + 4, 1), out var lod) ||
+                            (lod is not 1 and not 2 and not 4 and not 8 &&
+                             (lod is not 0 && !lodsFromMeshNames.Contains(lod))))
                         {
-                            throw new Exception("Invalid Geometry/sub mesh name: " + mesh.name + " , Character after \"LOD_\" should be 1 or 2 or 4 or 8, Representing the Level of Detail (LOD) of the submesh.");
-                        }
-                        
-                        lod = args.ReplaceLod && lod == 0 ? 8 : lod;
-
-                        if (lod is not 1 and not 2 and not 4 and not 8)
-                        {
-                            throw new Exception("Invalid Geometry/sub mesh name: " + mesh.name + " , Character after \"LOD_\"  should be 1 or 2 or 4 or 8, Representing the Level of Detail (LOD) of the submesh.");
+                            throw new Exception(
+                                $"Invalid submesh name: {mesh.name}, Character after \"LOD_\" should be 1 or 2 or 4 or 8 to indicate submesh Level of Detail");
                         }
 
                         lodLvl[i] = lod;
@@ -1813,75 +1879,70 @@ namespace WolvenKit.Modkit.RED4
             }
         }
 
-        private static void UpdateGarmentSupportParameters(List<RawMeshContainer> meshes, CR2WFile cr2w, bool importGarmentSupport = true)
+        #region Parameter: GarmentSupport
+
+        private void UpdateGarmentSupportParameters(List<RawMeshContainer> meshes, CMesh cMesh, bool importGarmentSupport = true, bool ignoreGarmentSupportUVParam = true)
         {
-            if (importGarmentSupport && cr2w.RootChunk is CMesh cMesh)
+            for (var i = cMesh.Parameters.Count - 1; i >= 0; i--)
             {
-
-                if (meshes.All(x => x.garmentMorph?.Length > 0))
+                if (cMesh.Parameters[i] is { Chunk: meshMeshParamGarmentSupport } or { Chunk: garmentMeshParamGarment })
                 {
-                    var garmentMeshBlobChunk = GetParameter_meshMeshParamGarmentSupport(cMesh);
-
-                    var garmentBlobChunk = GetParameter_garmentMeshParamGarment(cMesh);
-
-                    foreach (var mesh in meshes)
-                    {
-                        WriteToGarmentSupportParameters(mesh, garmentMeshBlobChunk, garmentBlobChunk);
-                    }
-                }
-                else
-                {
-                    RemoveGarmentSupportParameters(cMesh);
+                    cMesh.Parameters.RemoveAt(i);
                 }
             }
+
+            if (!importGarmentSupport)
+            {
+                return;
+            }
+
+            var missingMorphData = new List<string>();
+            foreach (var rawMeshContainer in meshes)
+            {
+                if (rawMeshContainer.garmentMorph?.Length == 0)
+                {
+                    missingMorphData.Add(rawMeshContainer.name!);
+                }
+            }
+
+            if (missingMorphData.Count == meshes.Count)
+            {
+                _loggerService.Warning("Garment support is enabled, but the model doesn't contain any morph data. Please ensure all meshes have garment morph data before enabling garment support. Skipping GS Parameters!");
+                return;
+            }
+                
+            // Not sure if valid or not. Parameters where removed before, so I kept it this way. Remove below if needed - Seb E. Roth
+            if (missingMorphData.Count > 0)
+            {
+                _loggerService.Warning($"Garment support is enabled, but the following submeshes do not have garment morph data: {string.Join(", ", missingMorphData)}. Please ensure all meshes have garment morph data before enabling garment support. Skipping GS Parameters!");
+                return;
+            }
+
+            var meshMeshParamGarmentSupportData = new meshMeshParamGarmentSupport
+            {
+                ChunkCapVertices = [],
+                CustomMorph = true
+            };
+            cMesh.Parameters.Add(meshMeshParamGarmentSupportData);
+
+            var garmentMeshParamGarmentData = new garmentMeshParamGarment
+            {
+                Chunks = []
+            };
+            cMesh.Parameters.Add(garmentMeshParamGarmentData);
+
+            foreach (var mesh in meshes)
+            {
+                UpdateGarmentSupportParameters(mesh, meshMeshParamGarmentSupportData, garmentMeshParamGarmentData, ignoreGarmentSupportUVParam);
+            }
         }
 
-        private static meshMeshParamGarmentSupport GetParameter_meshMeshParamGarmentSupport(CMesh cMesh)
-        {
-            var garmentMeshBlob = cMesh.Parameters.FirstOrDefault(x => x is not null && x.Chunk is meshMeshParamGarmentSupport);
-            if (garmentMeshBlob == null)
-            {
-                garmentMeshBlob = new CHandle<meshMeshParameter>( new meshMeshParamGarmentSupport() );
-                cMesh.Parameters.Add(garmentMeshBlob);
-            }
-
-            if (garmentMeshBlob.Chunk is not meshMeshParamGarmentSupport garmentMeshBlobChunk)
-            {
-                garmentMeshBlobChunk = new meshMeshParamGarmentSupport();
-                garmentMeshBlob.Chunk = garmentMeshBlobChunk;
-            }
-
-            garmentMeshBlobChunk.ChunkCapVertices = new CArray<CArray<CUInt32>>();
-            garmentMeshBlobChunk.CustomMorph = true;
-
-            return garmentMeshBlobChunk;
-        }
-
-        private static garmentMeshParamGarment GetParameter_garmentMeshParamGarment(CMesh cMesh)
-        {
-            var garmentBlob = cMesh.Parameters.FirstOrDefault(x => x is not null && x.Chunk is garmentMeshParamGarment);
-            if (garmentBlob == null)
-            {
-                garmentBlob = new CHandle<meshMeshParameter> ( new garmentMeshParamGarment() );
-                cMesh.Parameters.Add(garmentBlob);
-            }
-
-            if (garmentBlob.Chunk is not garmentMeshParamGarment garmentBlobChunk)
-            {
-                garmentBlobChunk = new garmentMeshParamGarment();
-                garmentBlob.Chunk = garmentBlobChunk;
-            }
-
-            garmentBlobChunk.Chunks = new CArray<garmentMeshParamGarmentChunkData>();
-
-            return garmentBlobChunk;
-        }
-
-        private static void WriteToGarmentSupportParameters(RawMeshContainer mesh, meshMeshParamGarmentSupport garmentMeshBlobChunk, garmentMeshParamGarment garmentBlobChunk)
+        private static void UpdateGarmentSupportParameters(RawMeshContainer mesh, meshMeshParamGarmentSupport garmentMeshBlobChunk, garmentMeshParamGarment garmentBlobChunk, bool ignoreGarmentSupportUVParam = true)
         {
             ArgumentNullException.ThrowIfNull(mesh.positions, nameof(mesh));
             ArgumentNullException.ThrowIfNull(mesh.indices, nameof(mesh));
             ArgumentNullException.ThrowIfNull(mesh.garmentMorph, nameof(mesh));
+            ArgumentNullException.ThrowIfNull(mesh.texCoords0, nameof(mesh));
 
             var vertBuffer = new MemoryStream();
             var vertBw = new BinaryWriter(vertBuffer);
@@ -1894,6 +1955,9 @@ namespace WolvenKit.Modkit.RED4
 
             var flagBuffer = new MemoryStream();
             var flagBw = new BinaryWriter(flagBuffer);
+
+            var uvBuffer = new MemoryStream();
+            var uvBw = new BinaryWriter(uvBuffer);
 
             var capVertices = new CArray<CUInt32>();
 
@@ -1916,6 +1980,9 @@ namespace WolvenKit.Modkit.RED4
                 {
                     capVertices.Add(Convert.ToUInt32(v));
                 }
+
+                uvBw.Write(mesh.texCoords0[v].X);
+                uvBw.Write(1 - mesh.texCoords0[v].Y);
             }
 
             foreach (var i in mesh.indices)
@@ -1931,23 +1998,12 @@ namespace WolvenKit.Modkit.RED4
                 Indices = new DataBuffer(indBuffer.ToArray()),
                 MorphOffsets = new DataBuffer(morphBuffer.ToArray()),
                 Vertices = new DataBuffer(vertBuffer.ToArray()),
+                Uv = ignoreGarmentSupportUVParam ? null : new DataBuffer(uvBuffer.ToArray()),
                 NumVertices = Convert.ToUInt32(mesh.positions.Length),
                 LodMask = 1
             });
         }
 
-        private static void RemoveGarmentSupportParameters(CMesh cMesh)
-        {
-            var garmentMeshBlob = cMesh.Parameters.FirstOrDefault(x => x is not null && x.Chunk is meshMeshParamGarmentSupport);
-            if (garmentMeshBlob != null)
-            {
-                cMesh.Parameters.Remove(garmentMeshBlob);
-            }
-            var garmentBlob = cMesh.Parameters.FirstOrDefault(x => x is not null && x.Chunk is garmentMeshParamGarment);
-            if (garmentBlob != null)
-            {
-                cMesh.Parameters.Remove(garmentBlob);
-            }
-        }
+        #endregion Parameter: GarmentSupport
     }
 }
