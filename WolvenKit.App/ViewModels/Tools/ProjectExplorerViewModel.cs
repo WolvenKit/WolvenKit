@@ -878,7 +878,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        StopWatcher();
         var (prefixPath, relativePath) = _projectManager.ActiveProject.SplitFilePath(absolutePath);
 
         if (absolutePath.StartsWith(_projectManager.ActiveProject.ModDirectory))
@@ -891,13 +890,16 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             absolutePath.StartsWith(_projectManager.ActiveProject.ModDirectory)
         ));
 
-        if (string.IsNullOrEmpty(newRelativePath))
+        if (string.IsNullOrEmpty(newRelativePath) || newRelativePath == relativePath)
         {
             return;
         }
 
+        StopWatcher();
+
         await _projectResourceTools.MoveAndRefactorAsync(relativePath, newRelativePath, prefixPath, refactor);
         _appViewModel.ReloadChangedFiles();
+
         ResumeFileWatcher();
     }
 
