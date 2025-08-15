@@ -691,8 +691,9 @@ public class ProjectResourceTools
                         await File.WriteAllLinesAsync(absoluteFilePath, newFileContent);
                     }
                 }
-                catch (Exception)
+                catch (Exception err)
                 {
+                    _loggerService.Error(err.Message);
                     failedFiles.Add(absoluteFilePath.RelativePath(activeProject.ResourcesDirectory));
                 }
             });
