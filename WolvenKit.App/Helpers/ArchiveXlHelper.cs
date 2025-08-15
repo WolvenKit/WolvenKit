@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using HelixToolkit.SharpDX.Core;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json;
+using HelixToolkit.SharpDX.Core;
 using Splat;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
@@ -16,7 +15,7 @@ namespace WolvenKit.App.Helpers;
 
 /// <summary>
 /// This class will resolve ArchiveXL dynamic variant depot paths.
-/// They start with an asterisk <see cref="ArchiveXlHelper.ArchiveXLSubstitutionPrefix"/> and contain substitution wildcards (<see cref="s_keysAndValues"/>).  
+/// They start with an asterisk <see cref="ArchiveXlHelper.ArchiveXLSubstitutionPrefix"/> and contain substitution wildcards (<see cref="s_keysAndValues"/>).
 /// </summary>
 public static partial class ArchiveXlHelper
 {
@@ -30,7 +29,7 @@ public static partial class ArchiveXlHelper
     private static IProjectManager? ProjectManager =>
         s_projectManager ??= Locator.Current.GetService<IProjectManager>();
 
-    
+
     private static readonly Dictionary<string, string[]> s_keysAndValues = new()
     {
         { "{camera}", ["fpp", "tpp"] },
@@ -41,7 +40,7 @@ public static partial class ArchiveXlHelper
     };
 
     /// <summary>
-    /// When parsing yaml, we need to remove prepending tags with bang, as they make the compiler throw up 
+    /// When parsing yaml, we need to remove prepending tags with bang, as they make the compiler throw up
     /// </summary>
     /// <returns></returns>
     [GeneratedRegex(@"(?<=-)\s?\![a-z-]*(?=\s)")]
@@ -68,7 +67,7 @@ public static partial class ArchiveXlHelper
             return null;
         }
     }
-    
+
     private static int CountBraces(string depotPath)
     {
         var openBracesCount = depotPath.Count(c => c == '{');
@@ -89,26 +88,12 @@ public static partial class ArchiveXlHelper
             return [depotPath];
         }
 
-        // Find the first key in the string
-        var start = depotPath.IndexOf('{');
-        var end = depotPath.IndexOf('}');
-        var key = depotPath.Substring(start, end - start + 1);
-
-        // TODO: We need to parse the yaml for this
-        if (key.Contains("variant"))
-        {
-            return [depotPath];
-        }
-
-        // keep a copy of keysAndValues here - we need to modify it
-        var keysAndValues = s_keysAndValues;
-
         // For {body}: If we get meshes from active project, we'll use these instead of substituting.
         // The list will only hold "base_body" anyway.
-        if (key == "{body}" && depotPath.Split(key) is string[] { Length: 2 } parts &&
+        if (depotPath.Contains("{body}") && depotPath.Split("{body}") is string[] { Length: 2 } parts &&
             activeProject is not null)
         {
-            if (!s_keysAndValues.TryGetValue(key, out var bodyValues))
+            if (!s_keysAndValues.TryGetValue("{body}", out var bodyValues))
             {
                 bodyValues = [];
             }
@@ -121,31 +106,77 @@ public static partial class ArchiveXlHelper
             if (bodiesFromProject.Count > 1)
             {
                 bodiesFromProject.AddRange(bodyValues);
-                s_keysAndValues[key] = bodiesFromProject.Distinct().ToArray();
+                s_keysAndValues["body"] = bodiesFromProject.Distinct().ToArray();
             }
         }
 
-        // If the key is not in the dictionary, return early. Empty array will result in a warning.
-        if (!s_keysAndValues.TryGetValue(key, out var substitutionList))
-        {
-            return [];
-        }
 
         List<string> results = [];
-        // For each value of this key, replace the key in the string with the value and recursively call the function
-        foreach (var substitution in substitutionList)
+
+        var placeholders = PlaceholderPattern().Matches(depotPath);
+        foreach (var placeholder in placeholders.Where(p => p.Success))
         {
-            var newPath = depotPath.Replace(key, substitution);
-            results.AddRange(Substitute(newPath, activeProject));
+            var key = placeholder.Value;
+
+            // If the key is not in the dictionary, return early. Empty array will result in a warning.
+            if (key.Contains("variant") || !s_keysAndValues.TryGetValue(key, out var substitutionList))
+            {
+                if (placeholders.Count == 1 && activeProject is not null)
+                {
+                    results.AddRange(ExtractVariants());
+                }
+
+                continue;
+            }
+
+            // For each value of this key, replace the key in the string with the value and recursively call the function
+            foreach (var substitution in substitutionList)
+            {
+                var newPath = depotPath.Replace(key, substitution);
+                results.AddRange(Substitute(newPath, activeProject));
+            }
         }
 
-        // Return the combined results
+        if (results.Count == 0)
+        {
+            results.Add(depotPath);
+        }
+
         return results.Distinct();
+
+        List<string> ExtractVariants()
+        {
+            var parts1 = depotPath.Split("{");
+            var parts2 = depotPath.Split("}");
+            if (parts1.Length != 2 || parts2.Length != 2)
+            {
+                return [depotPath];
+            }
+
+            var pathStart = parts1[0];
+            HashSet<string> variantMatches = [];
+
+            foreach (var path in activeProject.ModFiles)
+            {
+                if (!string.IsNullOrEmpty(pathStart) && path.StartsWith(pathStart) &&
+                    path.Replace(pathStart, "").Split(Path.DirectorySeparatorChar) is string[]
+                    {
+                        Length: > 1
+                    } variantParts)
+                {
+                    variantMatches.Add(variantParts[0]);
+                }
+            }
+
+            return variantMatches.Distinct()
+                .Select((variant) => PlaceholderPattern().Replace(depotPath, variant)).ToList();
+        }
+
     }
 
     /// <summary>
     /// Returns any existing depot path, or null. If no substitution is used, it will still check for the file's existence
-    /// and return null if it can't be found. 
+    /// and return null if it can't be found.
     /// </summary>
     public static string? GetFirstExistingPath(string? depotPath, Cp77Project? activeProject = null)
     {
@@ -162,7 +193,7 @@ public static partial class ArchiveXlHelper
 
     /// <summary>
     /// Returns a list with all potential substitutions. If the path doesn't enable substitution, the list will have one element.
-    /// To get _any_ existing depot path, use <see cref="GetFirstExistingPath(string?)"/> instead.
+    /// To get _any_ existing depot path, use <see cref="GetFirstExistingPath(string,Cp77Project)"/> instead.
     /// </summary>
     public static IEnumerable<string> ResolveDynamicPaths(string depotPath, Cp77Project? activeProject = null)
     {
@@ -274,7 +305,7 @@ public static partial class ArchiveXlHelper
 
     /// <summary>
     /// Resolves dynamic appearance names and -materials.
-    /// Returns a dictionary of dynamic appearance names with all possible parameters. 
+    /// Returns a dictionary of dynamic appearance names with all possible parameters.
     /// </summary>
     /// <example><code>
     /// { "@neon", [ "red", "blue", "green" ] }
@@ -317,8 +348,8 @@ public static partial class ArchiveXlHelper
     /// @neon => [red, green, blue]
     /// </code>
     /// </example>
-    ///     /// 
-    /// 
+    ///     ///
+    ///
     public static IEnumerable<string> ResolveMaterialSubstitutions(string depotPath,
         CArray<CHandle<meshMeshAppearance>> meshAppearances)
     {
@@ -340,4 +371,47 @@ public static partial class ArchiveXlHelper
             .Select(materialName => depotPath.Replace("{material}", materialName))
             .ToList();
     }
+
+    public static string ReplaceInDynamicPath(string dynamicPathStr, string newPathStr)
+    {
+        // Find all {placeholders} in the original string
+        var placeholderPattern = PlaceholderPattern();
+        var matches = placeholderPattern.Matches(dynamicPathStr);
+
+        // Split the original string into literal and placeholder parts
+        var splitPattern = PlaceholderSplitPattern();
+        var originalParts = splitPattern.Split(dynamicPathStr);
+
+        var newPath = newPathStr;
+
+        // Reconstruct the updated string, replacing matching literals with placeholders
+        var index = 0;
+        foreach (var part in originalParts)
+        {
+            if (placeholderPattern.IsMatch(part))
+            {
+                // Find the corresponding literal in the updated string and replace it with the placeholder
+                var nextLiteral = index + 1 < originalParts.Length ? originalParts[index + 1] : null;
+                if (nextLiteral != null && newPath.Contains(nextLiteral))
+                {
+                    newPath = newPath.Replace(nextLiteral, part + nextLiteral);
+                }
+                else
+                {
+                    // If the next literal is not found, just replace the matching part
+                    newPath = newPath.Replace(part.Trim('{', '}'), part);
+                }
+            }
+
+            index++;
+        }
+
+        return newPath;
+    }
+
+    [GeneratedRegex(@"\{[^}]+\}")]
+    private static partial Regex PlaceholderPattern();
+
+    [GeneratedRegex(@"(\{[^}]+\})")]
+    private static partial Regex PlaceholderSplitPattern();
 }

@@ -130,10 +130,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     }
 
     /// <summary>
-    /// Whenever the document changes, save open file paths to <see cref="Cp77Project.ProjectFileExtension"/> file 
+    /// Whenever the document changes, save open file paths to <see cref="Cp77Project.ProjectFileExtension"/> file
     /// </summary>
     private void OnOpenDocumentChanged(object? sender, EventArgs e) => SaveOpenFilePaths();
-    
+
     private void Svc_ThreadIdleTenSeconds(object? sender, EventArgs e)
     {
         SaveProjectExplorerExpansionStateIfDirty();
@@ -143,9 +143,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
     {
         RefreshProjectData();
-        
+
         CheckForOneDriveInPath();
-        
+
         // On first project load, we're already initialized, so this won't fire
         Refresh();
         OnProjectChanged?.Invoke();
@@ -176,7 +176,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
     }
     public event Action? OnProjectChanged;
-    
+
     private void ProjectManager_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName != nameof(ProjectManager.ActiveProject))
@@ -187,7 +187,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         RefreshProjectData();
     }
 
-    // When opening projects from launch args, change detection for dependent objects isn't working yet. 
+    // When opening projects from launch args, change detection for dependent objects isn't working yet.
     private void RefreshProjectData()
     {
         // Save changes in active project
@@ -197,7 +197,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             SaveProjectExplorerExpansionStateIfDirty();
             _projectWatcher.UnwatchProject(ActiveProject);
         }
-        
+
         OnProjectChanged?.Invoke();
 
         DispatcherHelper.RunOnMainThread(() =>
@@ -450,8 +450,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     [GeneratedRegex(@".*\.\S+\.glb$")]
     private static partial Regex TypedGlbRegex();
-    
-    
+
+
     /// <summary>
     /// Copies the path to an item in clipboard
     /// </summary>
@@ -535,7 +535,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         if (activeItemPath is not null)
         {
             Clipboard.SetDataObject(activeItemPath);
-        }  
+        }
     }
 
     private bool CanCopyRelPath() => IsShowRelativePath;
@@ -647,7 +647,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         return _archiveManager.GetGameFile(m.GameRelativePath, false, false) != null;
     }
-    
+
     /// <summary>
     /// Reimports the game file to replace the current one
     /// </summary>
@@ -864,7 +864,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         Directory.CreateDirectory(newFolderPath);
     }
 
-   
+
 
     /// <summary>
     /// Renames selected node. Works for files and directories.
@@ -878,7 +878,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        StopWatcher();
         var (prefixPath, relativePath) = _projectManager.ActiveProject.SplitFilePath(absolutePath);
 
         if (absolutePath.StartsWith(_projectManager.ActiveProject.ModDirectory))
@@ -886,15 +885,21 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             relativePath = absolutePath[(_projectManager.ActiveProject.ModDirectory.Length + 1)..];
         }
 
-        var (newRelativePath, refactor) = Interactions.RenameAndRefactor(relativePath);
+        var (newRelativePath, refactor) = Interactions.RenameAndRefactor((
+            relativePath,
+            absolutePath.StartsWith(_projectManager.ActiveProject.ModDirectory)
+        ));
 
-        if (string.IsNullOrEmpty(newRelativePath))
+        if (string.IsNullOrEmpty(newRelativePath) || newRelativePath == relativePath)
         {
             return;
         }
 
+        StopWatcher();
+
         await _projectResourceTools.MoveAndRefactorAsync(relativePath, newRelativePath, prefixPath, refactor);
         _appViewModel.ReloadChangedFiles();
+
         ResumeFileWatcher();
     }
 
@@ -942,7 +947,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
 
         var selection = SelectedItems.NotNull().OfType<FileSystemModel>().Where(m => IsInArchiveFolder(m)).ToList();
-        
+
         if (!IsShiftKeyPressed)
         {
             await ConvertToJsonInternal(selection);
@@ -1102,7 +1107,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 _loggerService.Error($"Something went _really_ wrong when trying to parse {file}:");
                 throw;
             }
-        } 
+        }
 
         _appViewModel.ReloadChangedFiles();
 
@@ -1232,7 +1237,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private void RestoreProjectState(Cp77Project project)
     {
-        
+
         // read tree state from file
         if (File.Exists(project.InterfaceProjectTreeStatePath))
         {
@@ -1246,7 +1251,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             ExpansionStateDictionary = [];
         }
 
-        // Abort if user doesn't want to reopen any files 
+        // Abort if user doesn't want to reopen any files
         if (!_settingsManager.ReopenFiles || _settingsManager.NumFilesToReopen == 0 ||
             project.OpenProjectFiles.Count == 0)
         {
@@ -1415,7 +1420,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 "Failed to resume file watcher. Please hit the refresh button in the project browser.");
             _loggerService.Error("If that doesn't solve the problem, restart WolvenKit.");
         }
-        
+
     }
 
     public void OnKeyStateChanged(KeyEventArgs e)
