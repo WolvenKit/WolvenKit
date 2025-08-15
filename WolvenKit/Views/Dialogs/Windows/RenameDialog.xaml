@@ -24,7 +24,8 @@
 
         <syncfusion:WizardControl
             CancelButtonCancelsWindow="True"
-            FinishButtonClosesWindow="True">
+            FinishButtonClosesWindow="True"
+            Finish="WizardControl_OnFinish">
             <syncfusion:WizardPage
                 BackVisibility="Collapsed"
                 CancelVisibility="Visible"
@@ -36,7 +37,11 @@
                 <StackPanel
                     Margin="{DynamicResource WolvenKitMarginTiny}"
                     Orientation="Vertical">
-                    <hc:TextBox x:Name="TextBox" TextChanged="TextBox_TextChanged" />
+                    <hc:TextBox
+                        x:Name="TextBox"
+                        TextChanged="TextBox_TextChanged"
+                        KeyDown="TextBox_OnKeyDown"
+                        KeyUp="TextBox_OnKeyUp" />
 
                     <StackPanel
                         Margin="{DynamicResource WolvenKitMarginSmallVertical}"
