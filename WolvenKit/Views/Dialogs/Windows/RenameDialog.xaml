@@ -32,7 +32,8 @@
                 FinishVisibility="Visible"
                 HelpVisibility="Collapsed"
                 NextVisibility="Collapsed"
-                PreviewKeyDown="WizardPage_PreviewKeyDown"
+                PreviewKeyDown="RenameDialogView_OnKeyDown"
+                PreviewKeyUp="RenameDialogView_OnKeyUp"
                 PageType="Exterior">
                 <StackPanel
                     Margin="{DynamicResource WolvenKitMarginTiny}"
@@ -40,8 +41,8 @@
                     <hc:TextBox
                         x:Name="TextBox"
                         TextChanged="TextBox_TextChanged"
-                        KeyDown="TextBox_OnKeyDown"
-                        KeyUp="TextBox_OnKeyUp" />
+                        KeyDown="RenameDialogView_OnKeyDown"
+                        KeyUp="RenameDialogView_OnKeyUp" />
 
                     <StackPanel
                         Margin="{DynamicResource WolvenKitMarginSmallVertical}"
@@ -60,7 +61,8 @@
                                                  Converter={StaticResource BooleanToVisibilityConverter}}"
                             IsChecked="{Binding Path=EnableRefactoring,
                                                 Mode=TwoWay}"
-                            ToolTip="Try updating references to this file? This will edit other files in your project." />
+                            ToolTip="Try updating references to this file? This will edit other files in your project."
+                            IsEnabledChanged="Refactoring_OnCheckboxChecked" />
                     </StackPanel>
                 </StackPanel>
             </syncfusion:WizardPage>
