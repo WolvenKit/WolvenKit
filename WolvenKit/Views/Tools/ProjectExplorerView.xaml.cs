@@ -129,7 +129,7 @@ namespace WolvenKit.Views.Tools
 
                 Interactions.RenameAndRefactor = input =>
                 {
-                    var result = ShowRenameDialog(input);
+                    var result = ShowRenameDialog(input.currentPath, input.showCheckbox);
                     return new Tuple<string, bool>(result.Text, result.EnableRefactoring);
                 };
 
@@ -215,9 +215,9 @@ namespace WolvenKit.Views.Tools
             });
         }
 
-        private static (string Text, bool EnableRefactoring) ShowRenameDialog(string input)
+        private static (string Text, bool EnableRefactoring) ShowRenameDialog(string input, bool showCheckbox = false)
         {
-            var dialog = new RenameDialog(true);
+            var dialog = new RenameDialog(showCheckbox);
             if (dialog.ViewModel is not null)
             {
                 dialog.ViewModel.Text = input;
@@ -260,7 +260,7 @@ namespace WolvenKit.Views.Tools
             LoadingText.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
 
             _currentFolderQuery = "";
-            // Set search bar to empty if it wasn't 
+            // Set search bar to empty if it wasn't
             PESearchBar?.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, "");
 
             // now handle the grids
@@ -514,7 +514,7 @@ namespace WolvenKit.Views.Tools
             {
                 return;
             }
-            
+
             foreach (var item in e.OldItems)
             {
                 if (item is not TreeNode { Item: FileSystemModel { IsDirectory: true } fileSystemModel })
@@ -692,7 +692,7 @@ namespace WolvenKit.Views.Tools
 
 
                 var selectedFilePaths =
-                    vm.SelectedItems?.OfType<FileSystemModel>().Select(fsm => fsm.FullName).ToList() ?? []; 
+                    vm.SelectedItems?.OfType<FileSystemModel>().Select(fsm => fsm.FullName).ToList() ?? [];
 
                 var files = new List<string>();
 
@@ -719,7 +719,7 @@ namespace WolvenKit.Views.Tools
                     ? targetFile.FullName
                     : Path.GetDirectoryName(targetFile.FullName);
 
-                // 1146: addresses "prevent self-drag-and-drop" 
+                // 1146: addresses "prevent self-drag-and-drop"
                 if (files.Count == 0 || files[0] == targetDirectory)
                 {
                     return;
