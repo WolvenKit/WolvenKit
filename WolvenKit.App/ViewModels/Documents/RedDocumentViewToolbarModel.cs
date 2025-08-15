@@ -428,7 +428,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
                 .SelectMany(r => _documentTools.CollectDependencies(r))
                 .SelectMany(rr => ArchiveXlHelper.ResolveDynamicPaths(
                     rr.DepotPath.GetResolvedText() ?? "",
-                    _projectManager.ActiveProject));
+                    _projectManager.ActiveProject))
+                .Distinct();
 
             appearance.ResolvedDependencies.Clear();
             foreach (var path in refs)
@@ -436,7 +437,12 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
                 appearance.ResolvedDependencies.Add(new CResourceAsyncReference<CResource>(path));
             }
 
-            appChunk.GetPropertyChild("resolvedDependencies")?.RecalculateProperties();
+            if (appChunk.GetPropertyChild("resolvedDependencies") is ChunkViewModel depChild)
+            {
+                depChild.Data = appearance.ResolvedDependencies;
+                depChild.RecalculateProperties();
+            }
+            
             appChunk.RecalculateProperties();
 
             isDirty |= appearance.ResolvedDependencies.Count > 0 || refCount > 0;
@@ -592,7 +598,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             // we have an eye mesh with template materials - ask user for eyelash colour
             var eyelashColor = Interactions.AskForDropdownOption((materialNames, "Select eye lash colour",
                 "Pick your eye lash colour (things will break if you don't):", string.Empty, false, string.Empty));
-            
+
             if (!string.IsNullOrEmpty(eyelashColor))
             {
                 foreach (var app in mesh.Appearances.Select(appHandle => appHandle.Chunk)
