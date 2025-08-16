@@ -9,16 +9,35 @@ public class PxCollectionWriter : IDisposable
     private readonly BinaryWriter _writer;
 
     public PxCollectionWriter(Stream stream) => _writer = new BinaryWriter(stream, Encoding.UTF8, true);
-
+    
     public void WriteBuffer(physicsMaterialLibraryResource resource)
     {
+        if (resource.DefaultMaterial?.Chunk == null || resource.MaterialNames == null || resource.MaterialValues == null)
+        {
+            throw new ArgumentException("Default material, Material names or Material values are not set in the physicsMaterialLibraryResource.");
+        }
+
+        if (resource.MaterialNames.Count != resource.MaterialValues.Count)
+        {
+            throw new ArgumentException("Material names and Material values count mismatch in the physicsMaterialLibraryResource.");
+        }
+
         var dict = new SortedDictionary<string, physicsMaterialResource>(StringComparer.Ordinal);
 
         dict.Add("", resource.DefaultMaterial!);
         for (var i = 0; i < resource.MaterialNames.Count; i++)
         {
-            var name = resource.MaterialNames[i].GetResolvedText()!;
-            var material = resource.MaterialValues[i].Chunk!;
+            var name = resource.MaterialNames[i].GetResolvedText();
+            if (name == null)
+            {
+                throw new ArgumentException($"Material name at index {i} is null in the physicsMaterialLibraryResource.");
+            }
+
+            var material = resource.MaterialValues[i].Chunk;
+            if (material == null)
+            {
+                throw new ArgumentException($"Material value at index {i} is null in the physicsMaterialLibraryResource.");
+            }
 
             dict.Add(name, material);
         }
@@ -38,7 +57,7 @@ public class PxCollectionWriter : IDisposable
         _writer.Write(matList.Count); // nbManifestEntries
         for (var i = 0; i < matList.Count; i++) // manifestEntries
         {
-            _writer.Write(80 * i);
+            _writer.Write(80 * i); // offset
             _writer.Write((ushort)9); // PxConcreteType.eMATERIAL
             _writer.Write([0xCD, 0xCD]); // Padding
         }
@@ -51,8 +70,8 @@ public class PxCollectionWriter : IDisposable
         _writer.Write(matList.Count); // nbExportReferences
         for (var i = 0; i < matList.Count; i++)
         {
-            _writer.Write(matList[i].Id);
-            _writer.Write(i);
+            _writer.Write(matList[i].Id); // Id
+            _writer.Write(i); // ObjIndex
             _writer.Write([0xCD, 0xCD, 0xCD, 0xCD]); // Padding
         }
         Pad();
@@ -60,17 +79,17 @@ public class PxCollectionWriter : IDisposable
         _writer.Write(matList.Count); // nbInternalPtrReferences
         for (var i = 0; i < matList.Count; i++)
         {
-            _writer.Write((ulong)(0x80000001 + i));
-            _writer.Write(i);
+            _writer.Write((ulong)(0x80000001 + i)); // Reference
+            _writer.Write(i); // ObjIndex
             _writer.Write([0xCD, 0xCD, 0xCD, 0xCD]); // Padding
         }
 
         _writer.Write(matList.Count); // internalIdxReferences
         for (var i = 0; i < matList.Count; i++)
         {
-            _writer.Write((ushort)i);
+            _writer.Write((ushort)i); // Reference
             _writer.Write([0xCD, 0xCD]); // Padding
-            _writer.Write(i);
+            _writer.Write(i); // ObjIndex
         }
         Pad();
 
@@ -78,15 +97,15 @@ public class PxCollectionWriter : IDisposable
         {
             var material = matList[i];
 
-            _writer.Write([0x78, 0x56, 0x34, 0x12]);
+            _writer.Write([0x78, 0x56, 0x34, 0x12]); // magic header
             _writer.Write(0); // unknown
             _writer.Write((ushort)9); // PxConcreteType.eMATERIAL
             _writer.Write((ushort)3); // unknown, version?
             _writer.Write([0xCD, 0xCD, 0xCD, 0xCD]); // Padding
 
-            _writer.Write([0x78, 0x56, 0x34, 0x12]);
+            _writer.Write([0x78, 0x56, 0x34, 0x12]); // magic header
             _writer.Write(0); // unknown
-            _writer.Write([0x78, 0x56, 0x34, 0x12]);
+            _writer.Write([0x78, 0x56, 0x34, 0x12]); // magic header
             _writer.Write(0); // unknown
 
             _writer.Write(1); // unknown, refCount?
@@ -115,8 +134,8 @@ public class PxCollectionWriter : IDisposable
             _writer.Write((byte)0); // PxCombineMode.eAVERAGE
             _writer.Write([0xCD]); // Padding
 
-            _writer.Write((ulong)(0x80000001 + i));
-            _writer.Write((ushort)i); // unknown
+            _writer.Write((ulong)(0x80000001 + i)); // NxMaterial / PxMaterial / Reference
+            _writer.Write((ushort)i); // MaterialIndex
             _writer.Write([0xCD, 0xCD, 0xCD, 0xCD, 0xCD, 0xCD]); // Padding
         }
 
