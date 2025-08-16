@@ -466,6 +466,18 @@ public partial class CR2WWriter
 
             buffer.SetBytes(newData);
         }
+
+        if (buffer.Parent is physicsMaterialLibraryResource physicsMaterialLibraryResource)
+        {
+            using var ms = new MemoryStream();
+            using var pxCollectionWriter = new PxCollectionWriter(ms);
+
+            pxCollectionWriter.WriteBuffer(physicsMaterialLibraryResource);
+
+            var newData = ms.ToArray();
+
+            buffer.SetBytes(newData);
+        }
     }
 
     private CR2WBufferInfo WriteBuffer(BinaryWriter writer, RedBuffer buffer)
