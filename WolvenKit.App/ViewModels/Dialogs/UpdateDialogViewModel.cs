@@ -50,16 +50,6 @@ public partial class UpdateDialogViewModel : DialogViewModel
         }
     }
 
-    public string Footer
-    {
-        get => _footer;
-        set
-        {
-            _footer = value;
-            OnPropertyChanged();
-        }
-    }
-
     public List<string> Buttons
     {
         get => _buttons;
@@ -74,7 +64,6 @@ public partial class UpdateDialogViewModel : DialogViewModel
 
     private string _title;
     private string _body;
-    private string _footer;
     private List<string> _buttons;
     
     public UpdateDialogViewModel(AppViewModel appvm, IUpdateService updateService, ISettingsManager settingsManager, ILoggerService loggerService, bool skipPermissionStage = false, bool? updateAvailable = null)
@@ -86,7 +75,6 @@ public partial class UpdateDialogViewModel : DialogViewModel
         
         _title = "Update";
         _body = "";
-        _footer = "";
         _buttons = new List<string>() { "Ok" };
 
         LatestVersionTag = "";
@@ -153,8 +141,7 @@ public partial class UpdateDialogViewModel : DialogViewModel
         UpdateExecutingState = true;
         
         Title = "Updating WolvenKit...";
-        Body = $"Updating to version {LatestVersionTag} on the {_settingsManager.UpdateChannel} release channel...";
-        Footer = "Wolvenkit will restart when the update is complete.";
+        Body = $"Updating to version {LatestVersionTag} on the {_settingsManager.UpdateChannel} release channel...\nWolvenKit will restart as part of the update process.";
         Buttons = new List<string>() { };
         
         Task.Run(async () =>

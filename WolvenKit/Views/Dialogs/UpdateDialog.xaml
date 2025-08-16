@@ -18,13 +18,7 @@
     Padding="{DynamicResource WolvenKitMargin}"
     Background="{StaticResource ContentBackgroundAlt3}">
     <Grid Margin="{DynamicResource WolvenKitMarginSmall}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="50" />
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -33,27 +27,15 @@
         <!-- Title -->
         <TextBlock
             Grid.Row="0"
-            Margin="{DynamicResource WolvenKitMarginVertical}"
+            Margin="{DynamicResource WolvenKitMarginSmall}"
             FontSize="{DynamicResource WolvenKitFontHeader}"
             FontWeight="Bold"
             Text="{Binding Title}" />
 
-        <hc:LoadingCircle
-            Grid.Row="0"
-            Grid.Column="1"
-            Width="{DynamicResource WolvenKitIcon}"
-            Height="{DynamicResource WolvenKitIcon}"
-            Margin="{DynamicResource WolvenKitMarginVertical}"
-            Foreground="{StaticResource WolvenKitCyan}"
-            Visibility="{Binding UpdateExecutingState,
-                                 Converter={StaticResource BooleanToVisibilityConverter}}" />
-
         <!-- Body -->
         <ScrollViewer
             Grid.Row="1"
-            Grid.Column="0"
-            Grid.ColumnSpan="2"
-            Margin="{DynamicResource WolvenKitMarginVertical}"
+            Margin="{DynamicResource WolvenKitMarginSmall}"
             VerticalScrollBarVisibility="Auto"
             Focusable="False">
             <TextBlock
@@ -62,24 +44,21 @@
                 Text="{Binding Body}" />
         </ScrollViewer>
 
-
-
-        <!-- Footer -->
-        <TextBlock
-            Grid.Row="3"
-            Grid.Column="0"
-            Grid.ColumnSpan="2"
-            Margin="{DynamicResource WolvenKitMarginVertical}"
-            FontSize="{DynamicResource WolvenKitFontMedium}"
-            Visibility="{Binding UpdateExecutingState,
-                                 Converter={StaticResource BooleanToVisibilityConverter}}"
-            Text="{Binding Footer}" />
-
         <!-- Actions -->
+        <StackPanel
+            Grid.Row="2"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+            <hc:LoadingCircle
+                Width="{DynamicResource WolvenKitIcon}"
+                Height="{DynamicResource WolvenKitIcon}"
+                Margin="{DynamicResource WolvenKitMarginSmall}"
+                Foreground="{StaticResource WolvenKitRed}"
+                Visibility="{Binding UpdateExecutingState,
+                                     Converter={StaticResource BooleanToVisibilityConverter}}" />
+        </StackPanel>
         <ItemsControl
-            Grid.Row="4"
-            Grid.Column="0"
-            Grid.ColumnSpan="2"
+            Grid.Row="2"
             AlternationCount="1000"
             ItemsSource="{Binding Buttons}">
             <ItemsControl.ItemsPanel>
@@ -154,6 +133,5 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-
     </Grid>
 </reactiveUi:ReactiveUserControl>
