@@ -17,18 +17,19 @@ public partial class UpdateDialogViewModel : DialogViewModel
     
     public bool NoUpdateAvailableState { get; set; }
     public bool AskForPermissionState { get; set; }
-
-    private bool _updateExecutingState = false;
-
-    public bool UpdateExecutingState
+    public bool UpdateExecutingState { get; set; }
+    
+    private bool _showLoadingSpinner = false;
+    public bool ShowLoadingSpinner
     {
-        get => _updateExecutingState;
+        get => _showLoadingSpinner;
         set
         {
-            _updateExecutingState = value;
+            _showLoadingSpinner = value;
             OnPropertyChanged();
         }
     }
+    
 
     public string Title
     {
@@ -140,6 +141,8 @@ public partial class UpdateDialogViewModel : DialogViewModel
         AskForPermissionState = false;
         UpdateExecutingState = true;
         
+        ShowLoadingSpinner = true;
+        
         Title = "Updating WolvenKit...";
         Body = $"Updating to version {LatestVersionTag} on the {_settingsManager.UpdateChannel} release channel...\nWolvenKit will restart as part of the update process.";
         Buttons = new List<string>() { };
@@ -152,6 +155,7 @@ public partial class UpdateDialogViewModel : DialogViewModel
             }
             catch (Exception ex)
             {
+                ShowLoadingSpinner = false;
                 Title = "Update failed";
                 Body = $"Failed to update with error: {ex.Message}";
                 Buttons = new List<string>() { "OK", "Retry" };

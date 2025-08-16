@@ -54,7 +54,7 @@
                 Height="{DynamicResource WolvenKitIcon}"
                 Margin="{DynamicResource WolvenKitMarginSmall}"
                 Foreground="{StaticResource WolvenKitRed}"
-                Visibility="{Binding UpdateExecutingState,
+                Visibility="{Binding ShowLoadingSpinner,
                                      Converter={StaticResource BooleanToVisibilityConverter}}" />
         </StackPanel>
         <ItemsControl
