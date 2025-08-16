@@ -105,25 +105,19 @@
 
                 <Button
                     x:Name="CheckForUpdateButton"
-                    Width="16"
-                    Height="16"
-                    Margin="{DynamicResource WolvenKitMarginLeft}"
+                    Margin="{DynamicResource WolvenKitHomeVersionMargin}"
                     Padding="0"
-                    HorizontalAlignment="Stretch"
-                    Background="{StaticResource ContentBackgroundAlt}"
+                    Background="Transparent"
                     BorderThickness="0">
-
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-
-                        <iconPacks:PackIconMaterial
+                        <templates:IconBox
+                            IconPack="Material"
                             Kind="Update"
-                            Width="{DynamicResource WolvenKitIconSmall}"
-                            Height="{DynamicResource WolvenKitIconSmall}"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Center" />
+                            Margin="0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Size="{DynamicResource WolvenKitIconMilli}"
+                            Foreground="{StaticResource WolvenKitRed}" />
                     </Grid>
                 </Button>
 
