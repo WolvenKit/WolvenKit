@@ -15,8 +15,13 @@
     d:DesignHeight="450"
     MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
     MaxWidth="{DynamicResource WolvenKitDialogWidth}"
+    Padding="{DynamicResource WolvenKitMargin}"
     Background="{StaticResource ContentBackgroundAlt3}">
     <Grid Margin="{DynamicResource WolvenKitMarginSmall}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="50" />
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -33,9 +38,21 @@
             FontWeight="Bold"
             Text="{Binding Title}" />
 
+        <hc:LoadingCircle
+            Grid.Row="0"
+            Grid.Column="1"
+            Width="{DynamicResource WolvenKitIcon}"
+            Height="{DynamicResource WolvenKitIcon}"
+            Margin="{DynamicResource WolvenKitMarginVertical}"
+            Foreground="{StaticResource WolvenKitCyan}"
+            Visibility="{Binding UpdateExecutingState,
+                                 Converter={StaticResource BooleanToVisibilityConverter}}" />
+
         <!-- Body -->
         <ScrollViewer
             Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
             Margin="{DynamicResource WolvenKitMarginVertical}"
             VerticalScrollBarVisibility="Auto"
             Focusable="False">
@@ -45,15 +62,13 @@
                 Text="{Binding Body}" />
         </ScrollViewer>
 
-        <hc:LoadingCircle
-            Grid.Row="2"
-            Margin="{DynamicResource WolvenKitMarginVertical}"
-            Visibility="{Binding UpdateExecutingState,
-                                 Converter={StaticResource BooleanToVisibilityConverter}}" />
+
 
         <!-- Footer -->
         <TextBlock
             Grid.Row="3"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
             Margin="{DynamicResource WolvenKitMarginVertical}"
             FontSize="{DynamicResource WolvenKitFontMedium}"
             Visibility="{Binding UpdateExecutingState,
@@ -63,6 +78,8 @@
         <!-- Actions -->
         <ItemsControl
             Grid.Row="4"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
             AlternationCount="1000"
             ItemsSource="{Binding Buttons}">
             <ItemsControl.ItemsPanel>

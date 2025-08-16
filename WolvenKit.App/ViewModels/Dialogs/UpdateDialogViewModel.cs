@@ -154,7 +154,7 @@ public partial class UpdateDialogViewModel : DialogViewModel
         
         Title = "Updating WolvenKit...";
         Body = $"Updating to version {LatestVersionTag} on the {_settingsManager.UpdateChannel} release channel...";
-        Footer = "Wolvenkit will close when the update is complete.";
+        Footer = "Wolvenkit will restart when the update is complete.";
         Buttons = new List<string>() { };
         
         Task.Run(async () =>
