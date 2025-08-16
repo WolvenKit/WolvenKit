@@ -61,7 +61,7 @@ public partial class UpdateDialogViewModel : DialogViewModel
         }
     }
 
-    private string LatestVersionTag;
+    private string _latestVersionTag;
 
     private string _title;
     private string _body;
@@ -78,14 +78,14 @@ public partial class UpdateDialogViewModel : DialogViewModel
         _body = "";
         _buttons = new List<string>() { "Ok" };
 
-        LatestVersionTag = "";
+        _latestVersionTag = "";
         #pragma warning disable CS4014
         InitializeState(skipPermissionStage, updateAvailable);
     }
 
     private async Task InitializeState(bool skipPermissionStage = false, bool? updateAvailable = null)
     {
-        LatestVersionTag = await _updateService.GetLatestVersionTag();
+        _latestVersionTag = await _updateService.GetLatestVersionTag();
         updateAvailable ??= await _updateService.IsUpdateAvailable();
         
         if (!(bool)updateAvailable)
@@ -131,7 +131,7 @@ public partial class UpdateDialogViewModel : DialogViewModel
         
         Title = "Update available";
         Body =
-            $"An update to version {LatestVersionTag} is available on the {_settingsManager.UpdateChannel} release channel";
+            $"An update to version {_latestVersionTag} is available on the {_settingsManager.UpdateChannel} release channel";
         Buttons = new List<string>() { "Update", "Ignore" };
     }
     
@@ -144,7 +144,7 @@ public partial class UpdateDialogViewModel : DialogViewModel
         ShowLoadingSpinner = true;
         
         Title = "Updating WolvenKit...";
-        Body = $"Updating to version {LatestVersionTag} on the {_settingsManager.UpdateChannel} release channel...\nWolvenKit will restart as part of the update process.";
+        Body = $"Updating to version {_latestVersionTag} on the {_settingsManager.UpdateChannel} release channel...\nWolvenKit will restart as part of the update process.";
         Buttons = new List<string>() { };
         
         Task.Run(async () =>
