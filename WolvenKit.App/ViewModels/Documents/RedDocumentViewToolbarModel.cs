@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -98,6 +98,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
                 or RedDocumentItemType.Inkatlas
                 or RedDocumentItemType.Questphase
                 or RedDocumentItemType.Scene
+                or RedDocumentItemType.Physmatlib
                 or RedDocumentItemType.Ent => true,
             RedDocumentItemType.Xbm
                 or RedDocumentItemType.Mlmask
@@ -177,6 +178,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(RegenerateVisualControllersCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateMissingMaterialsCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertHairToCCXLCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RegenerateIdsCommand))]
     [ObservableProperty]
     private RedDocumentItemType _contentType;
 
@@ -629,6 +631,17 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
     #endregion
 
+    #region phymatlibFile
+
+    /*
+     * Delete duplicate entries
+     */
+    private bool CanRegenerateIds() => ContentType is RedDocumentItemType.Physmatlib;
+
+    [RelayCommand(CanExecute = nameof(CanRegenerateIds))]
+    private void RegenerateIds() => RootChunk?.RegenerateIdsCommand.Execute(null);
+
+    #endregion
 
     private bool CanClearChunkMaterials() => SelectedChunks.All(c => c.ResolvedData is meshMeshAppearance);
 

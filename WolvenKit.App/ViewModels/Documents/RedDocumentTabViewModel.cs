@@ -32,6 +32,7 @@ public enum RedDocumentItemType
     Csv,
     Json,
     Sector,
+    Physmatlib,
     Other,
     None,
 }
