@@ -21,20 +21,22 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <!-- Title -->
         <TextBlock
             Grid.Row="0"
-            Margin="{DynamicResource WolvenKitMarginSmallBottom}"
-            FontSize="{DynamicResource WolvenKitFontMedium}"
+            Margin="{DynamicResource WolvenKitMarginVertical}"
+            FontSize="{DynamicResource WolvenKitFontHeader}"
             FontWeight="Bold"
             Text="{Binding Title}" />
 
         <!-- Body -->
         <ScrollViewer
             Grid.Row="1"
-            Margin="{DynamicResource WolvenKitMarginSmallBottom}"
+            Margin="{DynamicResource WolvenKitMarginVertical}"
             VerticalScrollBarVisibility="Auto"
             Focusable="False">
             <TextBlock
@@ -43,9 +45,24 @@
                 Text="{Binding Body}" />
         </ScrollViewer>
 
+        <hc:LoadingCircle
+            Grid.Row="2"
+            Margin="{DynamicResource WolvenKitMarginVertical}"
+            Visibility="{Binding UpdateExecutingState,
+                                 Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+        <!-- Footer -->
+        <TextBlock
+            Grid.Row="3"
+            Margin="{DynamicResource WolvenKitMarginVertical}"
+            FontSize="{DynamicResource WolvenKitFontMedium}"
+            Visibility="{Binding UpdateExecutingState,
+                                 Converter={StaticResource BooleanToVisibilityConverter}}"
+            Text="{Binding Footer}" />
+
         <!-- Actions -->
         <ItemsControl
-            Grid.Row="2"
+            Grid.Row="4"
             AlternationCount="1000"
             ItemsSource="{Binding Buttons}">
             <ItemsControl.ItemsPanel>

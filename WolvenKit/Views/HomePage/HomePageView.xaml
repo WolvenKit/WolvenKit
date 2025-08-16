@@ -102,6 +102,31 @@
                     Kind="Versions"
                     Size="{DynamicResource WolvenKitIcon}"
                     Foreground="{StaticResource WolvenKitRed}" />
+
+                <Button
+                    x:Name="CheckForUpdateButton"
+                    Width="16"
+                    Height="16"
+                    Margin="{DynamicResource WolvenKitMarginLeft}"
+                    Padding="0"
+                    HorizontalAlignment="Stretch"
+                    Background="{StaticResource ContentBackgroundAlt}"
+                    BorderThickness="0">
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <iconPacks:PackIconMaterial
+                            Kind="Update"
+                            Width="{DynamicResource WolvenKitIconSmall}"
+                            Height="{DynamicResource WolvenKitIconSmall}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center" />
+                    </Grid>
+                </Button>
+
             </StackPanel>
         </Grid>
 

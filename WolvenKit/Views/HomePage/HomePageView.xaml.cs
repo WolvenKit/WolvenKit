@@ -29,6 +29,10 @@ namespace WolvenKit.Views.HomePage
                         viewModel => viewModel.CloseHomePageCommand,
                         view => view.ToEditorButton)
                     .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.CheckForUpdatesCommand,
+                        view => view.CheckForUpdateButton)
+                    .DisposeWith(disposables);
             });
 
         }
