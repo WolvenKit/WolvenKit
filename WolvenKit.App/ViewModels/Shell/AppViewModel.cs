@@ -640,7 +640,15 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
         else
         {
-            await SetActiveDialog(new UpdateDialogViewModel(this, _updateService, SettingsManager, _loggerService, false));
+            try
+            {
+                await SetActiveDialog(new UpdateDialogViewModel(this, _updateService, SettingsManager, _loggerService,
+                    false));
+            }
+            catch
+            {
+                // Error gets logged in update service - nothing to do here
+            }
         }
     }
 
