@@ -688,6 +688,15 @@ public class RedClassConverter : CustomRedConverter<RedBaseClass>
             var valInfo = typeInfo.PropertyInfos.FirstOrDefault(x => x.RedName == key);
             if (valInfo == null)
             {
+                var fullName = $"{clsType}.{key}";
+                if (RedJsonPatches.RenamedProperties.TryGetValue(fullName, out var value))
+                {
+                    valInfo = typeInfo.PropertyInfos.FirstOrDefault(x => x.RedName == value);
+                }
+            }
+            
+            if (valInfo == null)
+            {
                 reader.Read();
 
                 if (reader.TokenType != JsonTokenType.StartObject)
