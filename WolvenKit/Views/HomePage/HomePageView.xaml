@@ -102,6 +102,25 @@
                     Kind="Versions"
                     Size="{DynamicResource WolvenKitIcon}"
                     Foreground="{StaticResource WolvenKitRed}" />
+
+                <Button
+                    x:Name="CheckForUpdateButton"
+                    Margin="{DynamicResource WolvenKitHomeVersionMargin}"
+                    Padding="0"
+                    Background="Transparent"
+                    BorderThickness="0">
+                    <Grid>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Update"
+                            Margin="0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Size="{DynamicResource WolvenKitIconMilli}"
+                            Foreground="{StaticResource WolvenKitRed}" />
+                    </Grid>
+                </Button>
+
             </StackPanel>
         </Grid>
 

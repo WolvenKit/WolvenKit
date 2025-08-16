@@ -48,4 +48,7 @@ public partial class HomePageViewModel : ObservableObject
 
     public void NavigateTo(EHomePage page) => SelectedIndex = (int)page;
 
+    [RelayCommand]
+    private void CheckForUpdates() => _appViewModel.CheckForUpdatesCommand.Execute(false);
+    
 }
