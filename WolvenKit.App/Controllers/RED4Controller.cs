@@ -108,7 +108,7 @@ public class RED4Controller : ObservableObject, IGameController
             {
                 var root = (physicsMaterialLibraryResource)file.RootChunk;
 
-                foreach (var physMat in root.Unk1)
+                foreach (var physMat in root.MaterialNames)
                 {
                     if (!physMat.IsResolvable)
                     {

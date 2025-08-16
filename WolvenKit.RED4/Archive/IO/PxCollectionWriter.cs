@@ -15,10 +15,10 @@ public class PxCollectionWriter : IDisposable
         var dict = new SortedDictionary<string, physicsMaterialResource>(StringComparer.Ordinal);
 
         dict.Add("", resource.DefaultMaterial!);
-        for (var i = 0; i < resource.Unk1.Count; i++)
+        for (var i = 0; i < resource.MaterialNames.Count; i++)
         {
-            var name = resource.Unk1[i].GetResolvedText()!;
-            var material = resource.Unk2[i].Chunk!;
+            var name = resource.MaterialNames[i].GetResolvedText()!;
+            var material = resource.MaterialValues[i].Chunk!;
 
             dict.Add(name, material);
         }

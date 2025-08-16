@@ -1650,23 +1650,23 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        if (physicsMaterialLibraryResource.Unk1.Count != physicsMaterialLibraryResource.Unk2.Count)
+        if (physicsMaterialLibraryResource.MaterialNames.Count != physicsMaterialLibraryResource.MaterialValues.Count)
         {
             _loggerService.Error("Unk1 and Unk2 arrays have different sizes, cannot regenerate IDs. Please check the file.");
             return;
         }
 
         physicsMaterialLibraryResource.DefaultMaterial.Chunk!.Id = 8318271712852409784;
-        for (var i = 0; i < physicsMaterialLibraryResource.Unk1.Count; i++)
+        for (var i = 0; i < physicsMaterialLibraryResource.MaterialNames.Count; i++)
         {
-            var name = physicsMaterialLibraryResource.Unk1[i].GetResolvedText();
+            var name = physicsMaterialLibraryResource.MaterialNames[i].GetResolvedText();
             if (name is null)
             {
                 _loggerService.Error("Unk1 array contains unresolvable names, cannot regenerate IDs. Please check the file.");
                 return;
             }
 
-            var material = physicsMaterialLibraryResource.Unk2[i].Chunk;
+            var material = physicsMaterialLibraryResource.MaterialValues[i].Chunk;
             if (material is null)
             {
                 _loggerService.Error("Unk2 array contains null materials, cannot regenerate IDs. Please check the file.");
