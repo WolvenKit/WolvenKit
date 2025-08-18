@@ -66,7 +66,7 @@ public class ProjectResourceTools
     /// <summary>
     /// Extensions of files that we don't need to update
     /// </summary>
-    private static readonly List<string> s_fileExtensionsWithoutPaths = [".xbm", ".mlmask"];
+    private static readonly List<string> s_fileExtensionsWithoutPaths = [".xbm", ".mlmask", ".txt"];
 
     private readonly SemaphoreSlim _semaphore = new(1, 1);
 
