@@ -57,6 +57,7 @@ public static class PhotomodeEntityAnimations
         @"base\animations\vehicle\generic\generic_bike.anims",
         @"base\animations\ui\photomode\photomode__female__idle.anims",
         @"base\animations\ui\photomode\photomode__female__action.anims",
+        @"base\animations\ui\photomode\photomode__v_female__natural.anims",
     ];
 
     public static readonly List<string> RootComponentMale =
@@ -103,6 +104,7 @@ public static class PhotomodeEntityAnimations
         @"base\animations\vehicle\generic\generic_bike.anims",
         @"base\animations\ui\photomode\photomode__male__action.anims",
         @"base\animations\ui\photomode\photomode__male__idle.anims",
+        @"base\animations\ui\photomode\photomode__v__natural.anims",
     ];
 
     public static readonly List<string> RootComponentBig =
@@ -145,6 +147,7 @@ public static class PhotomodeEntityAnimations
         @"base\animations\vehicle\generic\generic_bike.anims",
         @"base\animations\ui\photomode\photomode__male_big__action.anims",
         @"base\animations\ui\photomode\photomode__male_big__idle.anims",
+        @"base\animations\ui\photomode\photomode__v__natural.anims",
     ];
 
     public static readonly List<string> RootComponentMassive =
@@ -152,7 +155,10 @@ public static class PhotomodeEntityAnimations
         @"base\animations\ui\photomode\photomode_male_massive_idle.anims",
     ];
 
-    public static readonly List<string> RootComponentCat = [];
+    public static readonly List<string> RootComponentCat =
+    [
+        @"base\animations\ui\photomode\photomode__iguana__idle.anims",
+    ];
 
     public static readonly List<string> CharacterEntityAnimationSetupFemale =
     [
