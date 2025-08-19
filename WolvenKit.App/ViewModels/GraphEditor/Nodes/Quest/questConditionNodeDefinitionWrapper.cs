@@ -19,7 +19,26 @@ public class questConditionNodeDefinitionWrapper : questDisableableNodeDefinitio
             }
         }*/
 
-        Details.AddRange(NodeProperties.GetPropertiesFor(questDisableableNodeDefinition));
+        if (questDisableableNodeDefinition.Condition?.Chunk != null)
+        {
+            var semantic = QuestConditionHelper.GetSemanticConditionDisplay(questDisableableNodeDefinition.Condition.Chunk);
+            var hasCond = semantic.TryGetValue("Condition", out var condText);
+            var isGeneric = !hasCond || string.IsNullOrWhiteSpace(condText) || condText.TrimEnd().EndsWith(" condition");
+
+            if (!isGeneric)
+            {
+                Details.AddRange(semantic);
+            }
+            else
+            {
+                // Fall back to comprehensive node property discovery for full detail list
+                Details.AddRange(NodeProperties.GetPropertiesFor(questDisableableNodeDefinition));
+            }
+        }
+        else
+        {
+            Details.AddRange(NodeProperties.GetPropertiesFor(questDisableableNodeDefinition));
+        }
     }
 
     internal override void CreateDefaultSockets()
