@@ -9,6 +9,7 @@ using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 
@@ -44,16 +45,9 @@ public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
             Title = "Quest";
         }
 
-        // Get properties but exclude the redundant "Type" since it's already shown in the title
-        var questNodeDetails = NodeProperties.GetPropertiesFor(_castedData.QuestNode?.Chunk, scnSceneResource);
-        foreach (var kvp in questNodeDetails)
-        {
-            // Skip the "Type" entry as it's redundant with the title for scene quest nodes
-            if (kvp.Key != "Type")
-            {
-                Details[kvp.Key] = kvp.Value;
-            }
-        }
+        // Populate details using the same semantic pipeline as quest graph nodes
+        // This avoids mixing old-style details with the new semantic formatting
+        RefreshDetails();
 
         Title += NodeProperties.SetNameFromNotablePoints(scnSceneGraphNode.NodeId.Id, scnSceneResource);
     }
@@ -171,16 +165,57 @@ public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
             // Get details from the nested quest node
             if (_castedData.QuestNode?.Chunk != null)
             {
-                var questNodeDetails = NodeProperties.GetPropertiesFor(_castedData.QuestNode.Chunk, sceneResource);
-                foreach (var kvp in questNodeDetails)
+                // Check if this is a condition node that should use semantic formatting
+                questIBaseCondition? condition = null;
+                
+                if (_castedData.QuestNode.Chunk is questPauseConditionNodeDefinition pauseCondition)
                 {
-                    // Skip the "Type" entry as it's redundant with the title for scene quest nodes
-                    if (kvp.Key != "Type")
-                    {
-                        tempDetails[kvp.Key] = kvp.Value;
-                    }
+                    condition = pauseCondition.Condition?.Chunk;
+                }
+                else if (_castedData.QuestNode.Chunk is questConditionNodeDefinition conditionNode)
+                {
+                    condition = conditionNode.Condition?.Chunk;
                 }
                 
+                if (condition != null)
+                {
+                    var semanticDetails = QuestConditionHelper.GetSemanticConditionDisplay(condition);
+
+                    // Fallback to legacy details when semantic output is generic/placeholder
+                    var hasCond = semanticDetails.TryGetValue("Condition", out var condText);
+                    var isGeneric = !hasCond || string.IsNullOrWhiteSpace(condText) || condText.TrimEnd().EndsWith(" condition");
+
+                    if (!isGeneric)
+                    {
+                        foreach (var kvp in semanticDetails)
+                        {
+                            tempDetails[kvp.Key] = kvp.Value;
+                        }
+                    }
+                    else
+                    {
+                        // Use the full node property discovery, which also reflects nested condition fields
+                        var legacy = NodeProperties.GetPropertiesFor(_castedData.QuestNode.Chunk, sceneResource);
+                        foreach (var kvp in legacy)
+                        {
+                            if (kvp.Key != "Type")
+                            {
+                                tempDetails[kvp.Key] = kvp.Value;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    var questNodeDetails = NodeProperties.GetPropertiesFor(_castedData.QuestNode.Chunk, sceneResource);
+                    foreach (var kvp in questNodeDetails)
+                    {
+                        if (kvp.Key != "Type")
+                        {
+                            tempDetails[kvp.Key] = kvp.Value;
+                        }
+                    }
+                }
             }
             else
             {

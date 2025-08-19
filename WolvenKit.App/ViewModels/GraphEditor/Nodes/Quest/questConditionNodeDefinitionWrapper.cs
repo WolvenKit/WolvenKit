@@ -19,6 +19,24 @@ public class questConditionNodeDefinitionWrapper : questDisableableNodeDefinitio
             }
         }*/
 
+        if (questDisableableNodeDefinition.Condition?.Chunk == null)
+        {
+            Details.AddRange(NodeProperties.GetPropertiesFor(questDisableableNodeDefinition));
+            return;
+        }
+
+        // Prefer semantic, fall back to generic details if semantic is missing or generic
+        var semantic = QuestConditionHelper.GetSemanticConditionDisplay(questDisableableNodeDefinition.Condition.Chunk);
+        var hasCond = semantic.TryGetValue("Condition", out var condText);
+        var isGeneric = !hasCond || string.IsNullOrWhiteSpace(condText) || condText.TrimEnd().EndsWith(" condition");
+
+        if (!isGeneric)
+        {
+            Details.AddRange(semantic);
+            return;
+        }
+
+        // Fall back to comprehensive node property discovery for full detail list
         Details.AddRange(NodeProperties.GetPropertiesFor(questDisableableNodeDefinition));
     }
 

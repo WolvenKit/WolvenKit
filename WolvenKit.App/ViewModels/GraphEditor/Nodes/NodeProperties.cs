@@ -7,6 +7,7 @@ using System.Xml;
 using Splat;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.Types;
@@ -47,10 +48,12 @@ internal class NodeProperties
         {
             var autoDiscovered = GetSmartAutoDiscoveredProperties(node);
             
-            // Add smart properties that aren't already covered
+            // Add smart properties that aren't already covered (check both key and value to avoid duplicates)
             foreach (var kvp in autoDiscovered)
             {
-                if (!details.ContainsKey(kvp.Key) && details.Count < 8)
+                if (!details.ContainsKey(kvp.Key) && 
+                    !IsValueAlreadyPresent(details, kvp.Value) && 
+                    details.Count < 8)
                 {
                     details[kvp.Key] = kvp.Value;
                 }
@@ -58,6 +61,19 @@ internal class NodeProperties
         }
         
         return LimitAndPrioritizeProperties(details);
+    }
+
+    // Expose legacy condition property listing for fallbacks when semantic formatting is too generic
+    public static Dictionary<string, string> GetLegacyConditionProperties(questIBaseCondition? condition)
+    {
+        var raw = GetPropertiesForConditions(condition);
+        return LimitAndPrioritizeProperties(raw);
+    }
+
+    private static bool IsValueAlreadyPresent(Dictionary<string, string> details, string value)
+    {
+        // Check if any existing property has the same value to avoid duplicates
+        return details.Values.Any(existingValue => string.Equals(existingValue, value, StringComparison.OrdinalIgnoreCase));
     }
 
     private static bool TryGetCuratedProperties(questNodeDefinition? node, Dictionary<string, string> details, scnSceneResource? scnSceneResource = null)
@@ -68,19 +84,26 @@ internal class NodeProperties
 
         if (node is questPauseConditionNodeDefinition pauseCondCasted)
         {
-            details.AddRange(GetPropertiesForConditions(pauseCondCasted?.Condition?.Chunk));
+            // Use semantic condition display for better readability
+            var semanticDetails = QuestConditionHelper.GetSemanticConditionDisplay(pauseCondCasted?.Condition?.Chunk);
+            details.AddRange(semanticDetails);
         }
         else if (node is questConditionNodeDefinition condCasted)
         {
-            details.AddRange(GetPropertiesForConditions(condCasted?.Condition?.Chunk));
+            // Use semantic condition display for better readability
+            var semanticDetails = QuestConditionHelper.GetSemanticConditionDisplay(condCasted?.Condition?.Chunk);
+            details.AddRange(semanticDetails);
         }
         else if (node is questSwitchNodeDefinition switchCasted)
         {
-            int counter = 1;
             foreach (var cond in switchCasted.Conditions)
             {
-                details.AddRange(GetPropertiesForConditions(cond?.Condition?.Chunk, "Socket " + cond?.SocketId + " "));
-                counter++;
+                var socketPrefix = $"Socket {cond?.SocketId}";
+                var semanticDetails = QuestConditionHelper.GetSemanticConditionDisplay(cond?.Condition?.Chunk);
+                foreach (var kvp in semanticDetails)
+                {
+                    details[$"{socketPrefix} {kvp.Key}"] = kvp.Value;
+                }
             }
         }
         else if (node is questFactsDBManagerNodeDefinition factDBManagerCasted)

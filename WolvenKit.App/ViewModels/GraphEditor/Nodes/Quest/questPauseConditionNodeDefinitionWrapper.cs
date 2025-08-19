@@ -8,18 +8,18 @@ public class questPauseConditionNodeDefinitionWrapper : questSignalStoppingNodeD
 {
     public questPauseConditionNodeDefinitionWrapper(questPauseConditionNodeDefinition graphGraphNodeDefinition) : base(graphGraphNodeDefinition)
     {
-        /*if (graphGraphNodeDefinition.Condition?.Chunk != null)
+        // Use semantic condition display for details only, don't modify title
+        if (graphGraphNodeDefinition.Condition?.Chunk != null)
         {
-            var (suffix, details) = QuestConditionHelper.GetDetails(graphGraphNodeDefinition.Condition.Chunk);
-
-            Title += " " + graphGraphNodeDefinition.Condition.Chunk.GetType().Name[5..^9] + suffix;
-            foreach (var detail in details)
-            {
-                Details.Add(detail.Key, detail.Value);
-            }
-        }*/
-
-        Details.AddRange(NodeProperties.GetPropertiesFor(graphGraphNodeDefinition));
+            // Get semantic condition details
+            var semanticDetails = QuestConditionHelper.GetSemanticConditionDisplay(graphGraphNodeDefinition.Condition.Chunk);
+            Details.AddRange(semanticDetails);
+        }
+        else
+        {
+            // Fallback to general properties if no condition
+            Details.AddRange(NodeProperties.GetPropertiesFor(graphGraphNodeDefinition));
+        }
     }
 
     internal override void CreateDefaultSockets()
