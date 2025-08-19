@@ -177,6 +177,10 @@ public abstract class CvmDropdownHelper
                     { ResolvedData: entEntityTemplate { Entity.Chunk: not gameObject } }:
                 ret = s_meshEntityTags;
                 break;
+            case entEntityTemplate template when cvm.Name is "defaultAppearance":
+                ret = template.Appearances.Select(a => a.Name.GetResolvedText()).Where(s => !string.IsNullOrEmpty(s))
+                    .ToList();
+                break;
             #endregion
 
             #region questPhaseFile
@@ -720,7 +724,8 @@ public abstract class CvmDropdownHelper
             entSkinnedMeshComponent when s_appearanceNames.Contains(cvm.Name) => true,
             entSkinnedMeshComponent when parent.Name == "mesh" => true,
             entEntityTemplate when s_appearanceNames.Contains(cvm.Name) => true,
-            entTemplateAppearance when cvm.Name is "appearanceName" or "appearanceResource" => true,
+            entEntityTemplate => cvm.Name is "defaultAppearance",
+            entTemplateAppearance => cvm.Name is "appearanceName" or "appearanceResource",
             #endregion
 
             #region app
