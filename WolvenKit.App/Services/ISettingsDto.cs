@@ -56,7 +56,7 @@ public interface ISettingsDto
 
     #region General
 
-    public bool SkipUpdateCheck { get; set; }
+    public bool AutoUpdateOnStartup { get; set; }
     public bool AlwaysAskBeforeUpdating { get; set; }
     public EUpdateChannel UpdateChannel { get; set; }
     public bool ShowGuidedTour { get; set; }

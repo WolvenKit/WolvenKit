@@ -72,7 +72,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(TreeViewIgnoredExtensions),
 
             // General
-            nameof(SkipUpdateCheck),
+            nameof(AutoUpdateOnStartup),
             nameof(AlwaysAskBeforeUpdating),
             nameof(ShowGuidedTour),
             nameof(ThemeAccentString),
@@ -285,11 +285,11 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
 
     #region General
 
-    [Display(Name = "Do not check for updates on startup", GroupName = "General")]
+    [Display(Name = "Auto Update On Startup", GroupName = "General")]
     [ObservableProperty]
-    private bool _skipUpdateCheck;
+    private bool _autoUpdateOnStartup;
     
-    [Display(Name = "Always ask before updating", GroupName = "General")]
+    [Display(Name = "Always Ask Before Updating", GroupName = "General")]
     [ObservableProperty]
     private bool _alwaysAskBeforeUpdating;
 

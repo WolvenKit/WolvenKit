@@ -307,7 +307,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             ShowHomePageSync();
         }
 
-        if (!SettingsManager.SkipUpdateCheck)
+        if (SettingsManager.AutoUpdateOnStartup)
         {
             CheckForUpdatesCommand.SafeExecute(true);
         }
@@ -626,7 +626,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     {
         if (isDuringStartup)
         {
-            if (SettingsManager.SkipUpdateCheck)
+            if (!SettingsManager.AutoUpdateOnStartup)
             {
                 return;
             }
@@ -641,8 +641,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         else
         {
             SettingsManager.Save();
-            await SetActiveDialog(new UpdateDialogViewModel(this, _updateService, SettingsManager, _loggerService,
-                false));
+            await SetActiveDialog(new UpdateDialogViewModel(this, _updateService, SettingsManager, _loggerService));
         }
     }
 

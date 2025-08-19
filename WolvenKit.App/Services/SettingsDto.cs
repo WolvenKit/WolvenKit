@@ -64,7 +64,7 @@ public class SettingsDto : ISettingsDto
         TreeViewIgnoredExtensions = settings.TreeViewIgnoredExtensions;
 
         // General
-        SkipUpdateCheck = settings.SkipUpdateCheck;
+        AutoUpdateOnStartup = settings.AutoUpdateOnStartup;
         AlwaysAskBeforeUpdating = settings.AlwaysAskBeforeUpdating;       
         UpdateChannel = settings.UpdateChannel;
         ShowGuidedTour = settings.ShowGuidedTour;
@@ -136,7 +136,7 @@ public class SettingsDto : ISettingsDto
 
     #region General
 
-    public bool SkipUpdateCheck { get; set; }
+    public bool AutoUpdateOnStartup { get; set; } = true;
     public bool AlwaysAskBeforeUpdating { get; set; }
     public EUpdateChannel UpdateChannel { get; set; }
     public bool ShowGuidedTour { get; set; }
@@ -207,7 +207,7 @@ public class SettingsDto : ISettingsDto
         settingsManager.TreeViewIgnoredExtensions = TreeViewIgnoredExtensions;
 
         // General
-        settingsManager.SkipUpdateCheck = SkipUpdateCheck;
+        settingsManager.AutoUpdateOnStartup = AutoUpdateOnStartup;
         settingsManager.AlwaysAskBeforeUpdating = AlwaysAskBeforeUpdating;      
         settingsManager.UpdateChannel = UpdateChannel;
         settingsManager.ShowGuidedTour = ShowGuidedTour;
@@ -272,7 +272,7 @@ public class SettingsDto : ISettingsDto
 
             SettingsVersion = 4;
         }
-
+        
         SettingsVersion = s_currentSettingsVersion;
 
         IsDirty = true;
