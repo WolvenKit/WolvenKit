@@ -220,7 +220,7 @@ namespace WolvenKit.Views.Documents
         {
             try
             {
-                // in .app or root entity: warn with >5 appearances, because this can take a while 
+                // in .app or root entity: warn with >5 appearances, because this can take a while
                 if (ViewModel?.RootChunk is ChunkViewModel cvm
                     && ((cvm.ResolvedData is appearanceAppearanceResource app && app.Appearances.Count > 5) ||
                         (cvm.ResolvedData is entEntityTemplate ent && ent.Appearances.Count > 5)))
@@ -277,8 +277,7 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            var files = project.Files
-                .Where(f => f.EndsWith(".mesh") && f != ViewModel.FilePath)
+            var files = _documentTools.CollectProjectFiles(".mesh").Where(f => f != ViewModel.FilePath)
                 .ToList();
 
             if (Interactions.AskForDropdownOption((files, "Select .mesh file", "Select .mesh file",
@@ -311,7 +310,7 @@ namespace WolvenKit.Views.Documents
                 _loggerService.Error($"Failed to copy mesh materials: {err.Message}");
             }
         }
-        
+
         private void OnUnDynamifyMaterialsClick(object _, RoutedEventArgs e)
         {
             if (ViewModel?.RootChunk is not { ResolvedData: CMesh mesh } cvm ||
@@ -595,7 +594,7 @@ namespace WolvenKit.Views.Documents
             Path.Join("ep1", "fx"),
             "engine",
         ];
-        
+
         private async Task AddDependenciesToFileAsync(ChunkViewModel _, bool addBasegameFiles = false)
         {
             if (RootChunk is not ChunkViewModel rootChunk)
@@ -640,7 +639,7 @@ namespace WolvenKit.Views.Documents
             {
                 return;
             }
-            
+
             var pathReplacements = await _projectResourceTools.AddDependenciesToProjectPathAsync(
                 destFolder, materialDependencies
             );
