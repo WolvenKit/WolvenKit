@@ -179,6 +179,8 @@ public partial class RedPackageReader : Red4Reader
             {
                 buf.GetValue().ParentTypes.Add($"{cls.GetType().Name}.{varName}");
                 buf.GetValue().Parent = cls;
+
+                ParseBuffer(buf.GetValue());
             }
 
             if (internalValue is SharedDataBuffer shared)

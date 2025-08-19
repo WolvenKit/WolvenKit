@@ -36,7 +36,7 @@ public class ProjectResourceTools
     private readonly Cr2WTools _crwWTools;
 
     /// <summary>
-    /// File extensions from source/archive that require updating of resource files  
+    /// File extensions from source/archive that require updating of resource files
     /// </summary>
     private static readonly List<string> s_replaceInResourceFileExtensions =
     [
@@ -50,7 +50,7 @@ public class ProjectResourceTools
     ];
 
     /// <summary>
-    /// File extensions in resources that we want to update  
+    /// File extensions in resources that we want to update
     /// </summary>
     private static readonly List<string> s_resourceFileExtensions =
     [
@@ -64,9 +64,9 @@ public class ProjectResourceTools
     ];
 
     /// <summary>
-    /// Extensions of files that we don't need to update 
+    /// Extensions of files that we don't need to update
     /// </summary>
-    private static readonly List<string> s_fileExtensionsWithoutPaths = [".xbm", ".mlmask"];
+    private static readonly List<string> s_fileExtensionsWithoutPaths = [".xbm", ".mlmask", ".txt"];
 
     private readonly SemaphoreSlim _semaphore = new(1, 1);
 
@@ -87,7 +87,7 @@ public class ProjectResourceTools
         {
             return _red4Controller;
         }
-        
+
         if (GameControllerFactory.GetInstance() is GameControllerFactory factory)
         {
             _red4Controller ??= factory.GetRed4Controller();
@@ -113,7 +113,7 @@ public class ProjectResourceTools
         {
             rootRelativeFolder = AppendPersonalDirectory(rootRelativeFolder);
         }
-        
+
         return activeProject.GetAbsolutePath(fileName, rootRelativeFolder);
 
     }
@@ -121,7 +121,7 @@ public class ProjectResourceTools
     public string AppendPersonalDirectory(params string[] filePathParts)
     {
         var filePath = Path.Join(filePathParts);
-        if (_settingsService.ModderName is string modderName && modderName != "" && !filePath.Contains(modderName)) 
+        if (_settingsService.ModderName is string modderName && modderName != "" && !filePath.Contains(modderName))
         {
             filePath = Path.Join(filePath, modderName.ToFileName());
         }
@@ -306,7 +306,7 @@ public class ProjectResourceTools
         {
             return;
         }
-        
+
         var refPathHash = HashHelper.CalculateDepotPathHash(resourcePath);
 
         // we can't add it
@@ -354,7 +354,7 @@ public class ProjectResourceTools
             File.Delete(targetAbsoluteFile);
         }
 
-        
+
         if (!Directory.Exists(targetAbsolutePath))
         {
             Directory.CreateDirectory(targetAbsolutePath);
@@ -376,35 +376,13 @@ public class ProjectResourceTools
             return;
         }
 
-        var originalSourcePath = sourcePath; 
-        
+        var originalSourcePath = sourcePath;
+
         var sourceRelPath = sourcePath;
         var destRelPath = destPath;
 
         var projectRootPath = string.Join(Path.DirectorySeparatorChar,
             absoluteFolderPrefix.ToLower().Split(Path.DirectorySeparatorChar)[..^1]);
-
-        string ToAbsolutePath(string relativePath)
-        {
-            var inputPath = relativePath;
-            if (Regex.IsMatch(inputPath, @"^\.+\\"))
-            {
-                inputPath = new Uri(new Uri(absoluteFolderPrefix), new Uri(inputPath, UriKind.Relative)).LocalPath;
-            }
-
-            if (!Path.IsPathRooted(inputPath))
-            {
-                return Path.Join(absoluteFolderPrefix, inputPath);
-            }
-
-            if (inputPath.StartsWith(string.Join(Path.DirectorySeparatorChar, projectRootPath),
-                    StringComparison.CurrentCultureIgnoreCase))
-            {
-                return inputPath;
-            }
-
-            throw new InvalidDataException($"{relativePath} is not a valid path");
-        }
 
         string destAbsPath;
         string sourceFileOrDirAbsPath;
@@ -486,7 +464,7 @@ public class ProjectResourceTools
         {
             return;
         }
-        
+
         var fileReplacements = new Dictionary<string, string>();
 
         foreach (var sourceAbsPath in files)
@@ -542,9 +520,31 @@ public class ProjectResourceTools
         }
 
         await ReplacePathInProjectAsync(activeProject, successfulReplacements);
-        
+        return;
+
+        string ToAbsolutePath(string relativePath)
+        {
+            var inputPath = relativePath;
+            if (Regex.IsMatch(inputPath, @"^\.+\\"))
+            {
+                inputPath = new Uri(new Uri(absoluteFolderPrefix), new Uri(inputPath, UriKind.Relative)).LocalPath;
+            }
+
+            if (!Path.IsPathRooted(inputPath))
+            {
+                return Path.Join(absoluteFolderPrefix, inputPath);
+            }
+
+            if (inputPath.StartsWith(string.Join(Path.DirectorySeparatorChar, projectRootPath),
+                    StringComparison.CurrentCultureIgnoreCase))
+            {
+                return inputPath;
+            }
+
+            throw new InvalidDataException($"{relativePath} is not a valid path");
+        }
     }
-   
+
 
     /// <summary>
     /// Deletes all empty directories in a tree (directories not containing files), finally deleting the root if it's empty
@@ -562,8 +562,8 @@ public class ProjectResourceTools
         }
 
         // if the directory has no children, delete it
-        if (Directory.GetDirectories(directoryPath, "*", SearchOption.AllDirectories).Length == 0 && 
-              Directory.GetFiles(directoryPath, "*", SearchOption.AllDirectories).Length == 0)
+        if (Directory.GetDirectories(directoryPath, "*", SearchOption.AllDirectories).Length == 0 &&
+            Directory.GetFiles(directoryPath, "*", SearchOption.AllDirectories).Length == 0)
         {
             Directory.Delete(directoryPath, true);
         }
@@ -618,7 +618,7 @@ public class ProjectResourceTools
         Task[] tasks = [ReplaceInResourceFilesAsync(), ReplaceInCr2WFilesAsync()];
 
         await Task.WhenAll(tasks);
-        
+
         if (failedFiles.Count <= 0)
         {
             return;
@@ -628,14 +628,14 @@ public class ProjectResourceTools
         failedFiles.ForEach((path) => _loggerService.Error($"  {path}"));
 
         return;
-        
+
         async Task ReplaceInResourceFilesAsync()
         {
             var resourceFiles = Directory.GetFiles(activeProject.ResourcesDirectory, "*.*", SearchOption.AllDirectories)
                 .Where(f => Path.GetExtension(f) is string s && s_resourceFileExtensions.Contains(s.ToLower()))
                 .ToList();
 
-            // add ext.json files from raw folder 
+            // add ext.json files from raw folder
             resourceFiles.AddRange(Directory.GetFiles(activeProject.RawDirectory, "*.json", SearchOption.AllDirectories)
                 .Where(f => f.EndsWith(".json") && f.HasTwoExtensions()));
 
@@ -691,8 +691,9 @@ public class ProjectResourceTools
                         await File.WriteAllLinesAsync(absoluteFilePath, newFileContent);
                     }
                 }
-                catch (Exception)
+                catch (Exception err)
                 {
+                    _loggerService.Error(err.Message);
                     failedFiles.Add(absoluteFilePath.RelativePath(activeProject.ResourcesDirectory));
                 }
             });
@@ -768,7 +769,7 @@ public class ProjectResourceTools
             });
 
             await Task.WhenAll(cr2WTasks);
-      
+
             return;
 
             CR2WFile ReplacePathInFile(CR2WFile cr2W, string oldPathStr, string newPathStr, out bool wasModified)
@@ -852,12 +853,19 @@ public class ProjectResourceTools
                     foreach (var result in refs)
                     {
                         if (result.Value is not IRedRef resourceReference ||
-                            resourceReference.DepotPath == ResourcePath.Empty)
+                            resourceReference.DepotPath == ResourcePath.Empty ||
+                            resourceReference.DepotPath.GetResolvedText() is not string depotPath)
                         {
                             continue;
                         }
 
-                        if (resourceReference.DepotPath.GetResolvedText() != oldPathStr)
+                        if (depotPath.StartsWith(ArchiveXlHelper.ArchiveXLSubstitutionPrefix) && ArchiveXlHelper
+                                .ResolveDynamicPaths(depotPath, activeProject).Contains(oldPathStr))
+                        {
+                            // handle dynamic substitution
+                            newPathStr = ArchiveXlHelper.ReplaceInDynamicPath(depotPath, newPathStr);
+                        }
+                        else if (depotPath != oldPathStr)
                         {
                             continue;
                         }
@@ -924,8 +932,8 @@ public class ProjectResourceTools
                 }
             }
 
-  
-             
+
+
         }
     }
 

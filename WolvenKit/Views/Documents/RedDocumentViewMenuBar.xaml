@@ -234,6 +234,23 @@
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
+
+            <!-- PhysMatLib file: .physmatlib -->
+            <Style
+                x:Key="ShowPhysMatLibMenuItemStyle"
+                BasedOn="{StaticResource MenuItemStyle}"
+                TargetType="{x:Type MenuItem}">
+                <Setter Property="Visibility" Value="Collapsed" />
+
+                <Style.Triggers>
+                    <DataTrigger
+                        Binding="{Binding Path=ContentType,
+                                          UpdateSourceTrigger=PropertyChanged}"
+                        Value="{x:Static documents:RedDocumentItemType.Physmatlib}">
+                        <Setter Property="Visibility" Value="Visible" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
         </Grid.Resources>
 
         <Menu
@@ -798,6 +815,19 @@
                     <templates:IconBox
                         IconPack="Material"
                         Kind="Dice3"
+                        Foreground="White" />
+                </MenuItem.Icon>
+            </MenuItem>
+
+            <!-- Regenerate Ids: .phymatlib -->
+            <MenuItem
+                Style="{StaticResource ShowPhysMatLibMenuItemStyle}"
+                Header="Regenerate Ids"
+                Command="{Binding Path=RegenerateIdsCommand}">
+                <MenuItem.Icon>
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="CogRefresh"
                         Foreground="White" />
                 </MenuItem.Icon>
             </MenuItem>

@@ -108,13 +108,13 @@ public class RED4Controller : ObservableObject, IGameController
             {
                 var root = (physicsMaterialLibraryResource)file.RootChunk;
 
-                foreach (var physMat in root.Unk1)
+                foreach (var physMat in root.MaterialNames)
                 {
                     if (!physMat.IsResolvable)
                     {
                         continue;
                     }
-                    
+
                     CNamePool.AddOrGetHash(physMat.GetResolvedText()!);
                 }
             }
@@ -213,7 +213,7 @@ public class RED4Controller : ObservableObject, IGameController
         {
             return false;
         }
-        
+
         // Clean all residual files
         CleanAll();
 
@@ -239,7 +239,7 @@ public class RED4Controller : ObservableObject, IGameController
             _notificationService.Error(errorMessage);
             return false;
         }
-        
+
         // perform cleanup
         if (!Cleanup(cp77Proj, new LaunchProfile() { CleanAll = true }, isPostBuild))
         {
@@ -308,7 +308,7 @@ public class RED4Controller : ObservableObject, IGameController
         return Directory.EnumerateFiles(absolutePath, "*.tweak",
             SearchOption.AllDirectories).ToList();
     }
-    
+
 
     /// <summary>
     /// Pack mod with options
@@ -352,7 +352,7 @@ public class RED4Controller : ObservableObject, IGameController
             _notificationService.Error("Creating backup failed, aborting.");
             return false;
         }
-        
+
         // cleanup
         if (!await Task.Run(() => Cleanup(cp77Proj, options)))
         {
@@ -362,18 +362,18 @@ public class RED4Controller : ObservableObject, IGameController
             return false;
         }
 
-        // CleanAll will return true when the options disable it, so check here  
+        // CleanAll will return true when the options disable it, so check here
         if (options.CleanAll)
         {
             _loggerService.Info($"{cp77Proj.Name} files cleaned up.");
         }
-        
+
         // Pack it up
         if (!await PackProjectFilesAsync(options, cp77Proj))
         {
             return false;
         }
-        
+
         // backup
         if (options.CreateZipFile && !CreateZipfile(cp77Proj, false))
         {
@@ -412,14 +412,14 @@ public class RED4Controller : ObservableObject, IGameController
         // Shift prevents save game load (CET doesn't initialize
         if (!_modifierService.IsShiftKeyPressed && options.LoadLastSave && ISettingsManager.GetLastSaveName() is string lastSavegame)
         {
-            arguments = $"{arguments} -save={lastSavegame}";            
+            arguments = $"{arguments} -save={lastSavegame}";
         }
         else if (!_modifierService.IsShiftKeyPressed && options.LoadSaveName is string savegame)
         {
             arguments = $"{arguments} -save={savegame}";
         }
 
-        // -save can come from the launch options, or from the user settings 
+        // -save can come from the launch options, or from the user settings
         if (arguments.Contains("-save"))
         {
             _loggerService.Warning("Warning: Loading a save via start-up options may break CET entity spawn!");
@@ -488,7 +488,7 @@ public class RED4Controller : ObservableObject, IGameController
     {
         // NOTE: this implementation is partially duplicated in "WolvenKit.Modkit\RED4\Build.cs".
         //       Changing the code below should be mirrored there too.
-        
+
         // copy files to packed dir
         // pack archives
         var archives = Directory.EnumerateFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories).ToList();
@@ -505,7 +505,7 @@ public class RED4Controller : ObservableObject, IGameController
                     _loggerService.Error($"\t {filePath}");
                 }
             }
-            
+
             if (!await Task.Run(() => PackArchives(cp77Proj, options)))
             {
                 _progressService.IsIndeterminate = false;
@@ -589,7 +589,7 @@ public class RED4Controller : ObservableObject, IGameController
         }
 
         return result;
-       
+
     }
 
     private bool SafeDirectoryDelete(string path, bool recursive = true)
@@ -626,7 +626,7 @@ public class RED4Controller : ObservableObject, IGameController
         }
     }
 
-    private bool PackArchives(Cp77Project cp77Proj, LaunchProfile options) => 
+    private bool PackArchives(Cp77Project cp77Proj, LaunchProfile options) =>
         _modTools.Pack(new DirectoryInfo(cp77Proj.ModDirectory), new DirectoryInfo(cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)), cp77Proj.ModName);
 
     private static bool PackResources(Cp77Project cp77Proj, IEnumerable<string> files)
@@ -648,7 +648,7 @@ public class RED4Controller : ObservableObject, IGameController
         }
         return true;
     }
-    
+
     private static bool PackArchiveXlFiles(Cp77Project cp77Proj, IEnumerable<string> archiveXlFiles, LaunchProfile options)
     {
         foreach (var f in archiveXlFiles)
@@ -664,7 +664,7 @@ public class RED4Controller : ObservableObject, IGameController
         }
         return true;
     }
-    
+
     private bool PackRedmodFiles(Cp77Project cp77Proj)
     {
         // write info.json file if it not exists
@@ -738,7 +738,7 @@ public class RED4Controller : ObservableObject, IGameController
 
         return true;
     }
-    
+
     private bool PackSoundFiles()
     {
         if (_projectManager.ActiveProject is null)
@@ -844,27 +844,34 @@ public class RED4Controller : ObservableObject, IGameController
                     //Loop throught dirs and delete the old files in them.
                     foreach (var d in dirs)
                     {
-                        foreach (var f in d.Elements("file"))
+                        foreach (var f in d.Elements("file").Where(f => File.Exists(f.Value)))
                         {
-                            if (File.Exists(f.Value))
+                            try
                             {
                                 File.Delete(f.Value);
-                                Debug.WriteLine("File delete: " + f.Value);
                             }
+                            catch (IOException)
+                            {
+                                _loggerService.Error(
+                                    "Failed to delete old file. Is Cyberpunk still running in the background?.");
+                                return false;
+                            }
+
+                            Debug.WriteLine("File deleted: " + f.Value);
                         }
                     }
                     //Delete the empty directories.
-                    foreach (var d in dirs)
+                    foreach (var path in dirs.Select(el => el.Attribute("Path")?.Value)
+                                 .OfType<string>()
+                                 .Where(Directory.Exists))
                     {
-                        var p = d.Attribute("Path");
-                        if (p is not null)
+                        if (Directory.GetFiles(path, "*", SearchOption.AllDirectories).Any())
                         {
-                            if (Directory.Exists(p.Value) && !Directory.GetFiles(p.Value, "*", SearchOption.AllDirectories).Any())
-                            {
-                                Directory.Delete(p.Value, true);
-                                Debug.WriteLine("Directory delete: " + p.Value);
-                            }
+                            continue;
                         }
+
+                        Directory.Delete(path, true);
+                        Debug.WriteLine("Directory deleted: " + path);
 
                     }
                 }

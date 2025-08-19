@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -98,6 +98,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
                 or RedDocumentItemType.Inkatlas
                 or RedDocumentItemType.Questphase
                 or RedDocumentItemType.Scene
+                or RedDocumentItemType.Physmatlib
                 or RedDocumentItemType.Ent => true,
             RedDocumentItemType.Xbm
                 or RedDocumentItemType.Mlmask
@@ -177,6 +178,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(RegenerateVisualControllersCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateMissingMaterialsCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertHairToCCXLCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RegenerateIdsCommand))]
     [ObservableProperty]
     private RedDocumentItemType _contentType;
 
@@ -428,7 +430,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
                 .SelectMany(r => _documentTools.CollectDependencies(r))
                 .SelectMany(rr => ArchiveXlHelper.ResolveDynamicPaths(
                     rr.DepotPath.GetResolvedText() ?? "",
-                    _projectManager.ActiveProject));
+                    _projectManager.ActiveProject))
+                .Distinct();
 
             appearance.ResolvedDependencies.Clear();
             foreach (var path in refs)
@@ -436,7 +439,12 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
                 appearance.ResolvedDependencies.Add(new CResourceAsyncReference<CResource>(path));
             }
 
-            appChunk.GetPropertyChild("resolvedDependencies")?.RecalculateProperties();
+            if (appChunk.GetPropertyChild("resolvedDependencies") is ChunkViewModel depChild)
+            {
+                depChild.Data = appearance.ResolvedDependencies;
+                depChild.RecalculateProperties();
+            }
+            
             appChunk.RecalculateProperties();
 
             isDirty |= appearance.ResolvedDependencies.Count > 0 || refCount > 0;
@@ -592,7 +600,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             // we have an eye mesh with template materials - ask user for eyelash colour
             var eyelashColor = Interactions.AskForDropdownOption((materialNames, "Select eye lash colour",
                 "Pick your eye lash colour (things will break if you don't):", string.Empty, false, string.Empty));
-            
+
             if (!string.IsNullOrEmpty(eyelashColor))
             {
                 foreach (var app in mesh.Appearances.Select(appHandle => appHandle.Chunk)
@@ -623,6 +631,17 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
     #endregion
 
+    #region phymatlibFile
+
+    /*
+     * Delete duplicate entries
+     */
+    private bool CanRegenerateIds() => ContentType is RedDocumentItemType.Physmatlib;
+
+    [RelayCommand(CanExecute = nameof(CanRegenerateIds))]
+    private void RegenerateIds() => RootChunk?.RegenerateIdsCommand.Execute(null);
+
+    #endregion
 
     private bool CanClearChunkMaterials() => SelectedChunks.All(c => c.ResolvedData is meshMeshAppearance);
 
