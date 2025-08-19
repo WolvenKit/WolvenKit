@@ -45,7 +45,7 @@ public class DocumentTools
     private readonly IProjectManager _projectManager;
     private readonly ProjectResourceTools _projectResourceTools;
     private readonly ISettingsManager _settingsManager;
-    
+
 
     public static Regex PlaceholderRegex { get; } = new Regex(@"^[-=_]+$");
 
@@ -73,8 +73,8 @@ public class DocumentTools
         _projectResourceTools = projectResourceTools;
         _settingsManager = settingsManager;
     }
-    
-    
+
+
     // Cache entry with metadata for LFU + TTL
     private class FilteredCacheEntry
     {
@@ -144,7 +144,7 @@ public class DocumentTools
 
         var leastFreq = _frequencyMap.First().Key;
         var leastFreqSet = _frequencyMap[leastFreq];
-        
+
         if (leastFreqSet.Count > 0)
         {
             var keyToEvict = leastFreqSet.First();
@@ -266,7 +266,7 @@ public class DocumentTools
 
     private async Task<List<string>> ProcessJournalEntries(CR2WFile? cr2W, string filter)
     {
-        if (cr2W?.RootChunk is not gameJournalResource journalResource || 
+        if (cr2W?.RootChunk is not gameJournalResource journalResource ||
             journalResource.Entry.Chunk is not gameJournalContainerEntry journalEntry)
         {
             return [];
@@ -381,13 +381,13 @@ public class DocumentTools
     }
 
     #endregion
-    
+
     # region appfile
 
     public static List<string> GetAllComponentNames(List<appearanceAppearanceDefinition> appearances) => appearances
         .SelectMany(app => app.Components)
             .Select(c => c.Name.GetResolvedText() ?? "").Where(c => !string.IsNullOrEmpty(c)).Distinct().ToList();
-    
+
     public List<string> ConnectAppToEntFile(string absoluteAppFilePath, string absoluteEntFilePath,
         bool clearExistingEntries = false)
     {
@@ -507,7 +507,7 @@ public class DocumentTools
         ret = _archiveManager.GetCR2WFile(relativePath, false);
         return ret ?? _archiveManager.GetCR2WFile(relativePath);
     }
-    
+
     public List<string> GetAppearanceNamesFromApp(ResourcePath relativeAppResourcePath, bool refreshCache)
     {
         if (relativeAppResourcePath.GetResolvedText() is not string relativeAppFilePath ||
@@ -527,7 +527,7 @@ public class DocumentTools
         }
 
         List<string> appAppearances = [];
-        
+
         // initial opening of file
         if (!refreshCache || GetCr2W(relativeAppFilePath) is not CR2WFile cr2W)
         {
@@ -631,10 +631,10 @@ public class DocumentTools
             .Where(s => !PlaceholderRegex.IsMatch(s))
             .ToList();
     }
-    
+
     /// <summary>
     /// Sets facial animations. Normally, we'd be defaulting to female because who has masc characters anyway,
-    /// yet in this case we have big/massive, who all default to the male animset. 
+    /// yet in this case we have big/massive, who all default to the male animset.
     /// </summary>
     public void SetFacialAnimations(string absoluteAppFilePath, PhotomodeBodyGender bodyGender)
     {
@@ -817,6 +817,31 @@ public class DocumentTools
 
     private static readonly Dictionary<string, List<CMaterialParameter>> s_materialProperties = [];
 
+    public IList<string> GetFilesByType(IRedType cvmResolvedData)
+    {
+        if (cvmResolvedData is not CKeyValuePair kvp)
+        {
+            return [];
+        }
+
+        return kvp.Value switch
+        {
+            CFloat => [],
+            CResourceReference<ITexture> => CollectProjectFiles(".xbm"),
+            CResourceReference<Multilayer_Setup> => CollectProjectFiles(".mlsetup"),
+            CResourceReference<Multilayer_Mask> => CollectProjectFiles(".mlmask"),
+            CColor => [],
+            CResourceReference<CGradient> => [],
+            Vector4 => [],
+            CName => [],
+            CResourceReference<CFoliageProfile> => CollectProjectFiles(".fp"), // ?
+            CResourceReference<CHairProfile> => CollectProjectFiles(".hp"),
+            CResourceReference<CSkinProfile> => CollectProjectFiles(".sp"),
+            CResourceReference<CTerrainSetup> => [],
+            _ => []
+        };
+    }
+
     private static List<string> FilterByType(IRedType cvmResolvedData, List<CMaterialParameter> templateMaterials)
     {
         if (cvmResolvedData is not CKeyValuePair kvp)
@@ -919,7 +944,7 @@ public class DocumentTools
 
             s_materialProperties.TryAdd(materialPath, templateMaterials);
 
-            // return only those parameters which match the kvp's type 
+            // return only those parameters which match the kvp's type
             ret = FilterByType(cvmResolvedData, templateMaterials);
         }
 
@@ -967,7 +992,7 @@ public class DocumentTools
                 continue;
             }
 
-            // If file content contains the patch path, add it to the list 
+            // If file content contains the patch path, add it to the list
             ret.Add(absolutePath);
         }
 
@@ -1073,7 +1098,7 @@ public class DocumentTools
         string destPath = "")
     {
         var wasChanged = false;
-        
+
         if (sourceCr2W is null)
         {
             _loggerService.Error($"source file {sourcePath} not found. Can't copy...");

@@ -232,9 +232,13 @@ public abstract class CvmDropdownHelper
             case CMaterialInstance when cvm.Name is "baseMaterial":
                 ret = documentTools.GetAllBaseMaterials(forceCacheRefresh);
                 break;
-            case CKeyValuePair when parent.Parent?.Parent?.ResolvedData is CMaterialInstance matInstance &&
+            case CKeyValuePair when cvm.Name == "Key" &&
+                                    parent.Parent?.Parent?.ResolvedData is CMaterialInstance matInstance &&
                                     matInstance.BaseMaterial.DepotPath.GetResolvedText() is string materialPath:
                 ret = documentTools.GetMaterialKeys(parent.ResolvedData, materialPath, forceCacheRefresh);
+                break;
+            case CKeyValuePair cvp when cvm.Name == "Value":
+                ret = documentTools.GetFilesByType(parent.ResolvedData);
                 break;
 
             #endregion
