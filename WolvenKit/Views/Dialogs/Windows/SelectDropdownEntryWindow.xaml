@@ -11,7 +11,7 @@
     SizeToContent="WidthAndHeight"
     DataContext="{Binding RelativeSource={RelativeSource Self},
                           Path=ViewModel}"
-    FocusManager.FocusedElement="{Binding ElementName=Dropdown}"
+    FocusManager.FocusedElement="{Binding ElementName=TextBox}"
     WindowStartupLocation="CenterOwner">
     <Grid
         HorizontalAlignment="Stretch"
