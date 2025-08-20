@@ -248,15 +248,37 @@ public partial class RedGraph
         // Set quest node ID to match the scene node ID
         questNode.Id = (ushort)sceneNodeId;
 
-        // Initialize socket mappings (as done in the existing code)
-        sceneQuestNode.IsockMappings.Add("Cancel");
-        sceneQuestNode.IsockMappings.Add("In");
-        sceneQuestNode.OsockMappings.Add("Out");
-
-        // Add default output socket
-        sceneQuestNode.OutputSockets.Add(new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = 0 } });
+        // Initialize socket mappings and output sockets based on quest node type
+        ConfigureQuestNodeSockets(sceneQuestNode, questNode);
 
         return sceneQuestNode;
+    }
+
+    /// <summary>
+    /// Configure socket mappings and output sockets based on quest node type
+    /// </summary>
+    private void ConfigureQuestNodeSockets(scnQuestNode sceneQuestNode, questNodeDefinition questNode)
+    {
+        // Default socket mappings
+        sceneQuestNode.IsockMappings.Add("Cancel");
+        sceneQuestNode.IsockMappings.Add("In");
+
+        // Configure output sockets based on quest node type
+        switch (questNode)
+        {
+            case questConditionNodeDefinition:
+                // Condition nodes have two outputs: True (0,0) and False (0,1)
+                sceneQuestNode.OsockMappings.Add("True");
+                sceneQuestNode.OsockMappings.Add("False");
+                sceneQuestNode.OutputSockets.Add(new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = 0 } });
+                sceneQuestNode.OutputSockets.Add(new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = 1 } });
+                break;
+            default:
+                // Default case: single output socket
+                sceneQuestNode.OsockMappings.Add("Out");
+                sceneQuestNode.OutputSockets.Add(new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = 0 } });
+                break;
+        }
     }
 
     /// <summary>
