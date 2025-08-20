@@ -688,12 +688,13 @@ namespace WolvenKit.Views.Documents
             var childNodes = new List<ChunkViewModel>();
             var dirtyNodes = new HashSet<ChunkViewModel>();
 
-            foreach (var propertyPath in propertyPaths)
+            cvm.CalculateProperties();
+
+            foreach (var child in propertyPaths.Select(cvm.GetPropertyFromPath).OfType<ChunkViewModel>())
             {
-                if (cvm.GetPropertyFromPath(propertyPath) is ChunkViewModel child)
-                {
-                    childNodes.AddRange(child.TVProperties);
-                }
+                child.CalculateProperties();
+                childNodes.AddRange(child.TVProperties);
+
             }
 
             // await replacements
@@ -710,6 +711,7 @@ namespace WolvenKit.Views.Documents
                     dirtyNodes.Add(childNode);
                     isDirty = true;
                 }
+
             }));
 
             // Wait for dirty nodes to refresh themselves

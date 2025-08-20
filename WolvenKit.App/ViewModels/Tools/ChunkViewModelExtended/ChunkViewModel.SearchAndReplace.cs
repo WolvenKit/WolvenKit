@@ -27,7 +27,7 @@ public partial class ChunkViewModel
     /// <param name="isRegex"></param>
     /// <returns></returns>
     public Task<int> SearchAndReplaceAsync(string searchText, string replaceText, bool isWholeWord, bool isRegex) =>
-        Task.FromResult(SearchAndReplaceInternal(searchText, replaceText, isWholeWord, isRegex));
+        Task.FromResult(SearchAndReplaceInternal(searchText, replaceText, isWholeWord, isRegex, true));
 
     ///<inheritdoc cref="SearchAndReplaceAsync"/>
     public int SearchAndReplace(string searchText, string replaceText, bool isWholeWord, bool isRegex) =>
@@ -49,15 +49,16 @@ public partial class ChunkViewModel
     /// <param name="replace"></param>
     /// <param name="isWholeWord"></param>
     /// <param name="isRegex"></param>
-    /// <param name="ignoreCache"></param>
+    /// <param name="ignoreCache">Ignore cache for async search/replace</param>
     /// <returns></returns>
-    private int SearchAndReplaceInternal(string search, string replace, bool isWholeWord, bool isRegex)
+    private int SearchAndReplaceInternal(string search, string replace, bool isWholeWord, bool isRegex,
+        bool ignoreCache = false)
     {
         NumReplacedEntries = 0;
         var isExpanded = IsExpanded;
 
         // SearchAndReplaceInProperties can influence the expansion state, even if nothing was changed
-        var hasReplacement = SearchAndReplaceInProperties(search, replace, isWholeWord, isRegex);
+        var hasReplacement = SearchAndReplaceInProperties(search, replace, isWholeWord, isRegex, ignoreCache);
         IsExpanded = isExpanded;
 
         if (!hasReplacement)
@@ -73,11 +74,12 @@ public partial class ChunkViewModel
 
 
     // Level 1 (will call itself recursively, so let's abort here if we can)
-    private bool SearchAndReplaceInProperties(string search, string replace, bool isWholeWord, bool isRegex)
+    private bool SearchAndReplaceInProperties(string search, string replace, bool isWholeWord, bool isRegex,
+        bool ignoreCache)
     {
         var properties = Properties.ToList();
 
-        if (s_resolvedHashes.Contains(GetHashCode()))
+        if (!ignoreCache && s_resolvedHashes.Contains(GetHashCode()))
         {
             return false;
         }
@@ -91,7 +93,7 @@ public partial class ChunkViewModel
         var scopedLocalData = Data;
         // ReSharper disable once LocalVariableHidesMember
         var scopedResolvedData = ResolvedData;
-        
+
         switch (ResolvedData)
         {
             case RedDummy:
@@ -141,7 +143,7 @@ public partial class ChunkViewModel
                 _loggerService.Debug($"Search and replace: failed to replace ${Data.GetType().Name} with ${newType.GetType().Name}");
             }
         }
-        
+
         wasChanged = ReplaceInFields(search, replace, isWholeWord, isRegex) || wasChanged;
 
         // Now, replace in child properties
@@ -155,7 +157,7 @@ public partial class ChunkViewModel
             }
             try
             {
-                if (t.SearchAndReplaceInProperties(search, replace, isWholeWord, isRegex))
+                if (t.SearchAndReplaceInProperties(search, replace, isWholeWord, isRegex, ignoreCache))
                 {
                     NumReplacedEntries += t.NumReplacedEntries;
                     wasChanged = true;
@@ -188,7 +190,7 @@ public partial class ChunkViewModel
         {
             return input;
         }
-        
+
         if (isWholeWord)
         {
             if (input != searchOrPattern)
@@ -225,7 +227,7 @@ public partial class ChunkViewModel
     {
         // ReSharper disable once UnusedVariable Keep this for debugging
         var original = reference;
-        
+
         outReference = reference;
         if (reference.DepotPath.GetResolvedText() is not string depotPath)
         {
@@ -257,7 +259,7 @@ public partial class ChunkViewModel
         {
             return false;
         }
-        
+
         outReference = (IRedRef)constructor.Invoke([(ResourcePath)newValue]);
         NumReplacedEntries += 1;
         return true;
@@ -278,7 +280,7 @@ public partial class ChunkViewModel
             case IRedEnum:
             case IRedBufferWrapper:
             case IRedBitField:
-            case meshMeshMaterialBuffer: 
+            case meshMeshMaterialBuffer:
                 return false;
             case CName cname:
                 if (string.IsNullOrEmpty(cname.GetResolvedText()))
@@ -335,7 +337,7 @@ public partial class ChunkViewModel
                             {
                                 redArray[i] = newType;
                                 wasChanged = true;
-                            } 
+                            }
                             break;
                         default:
                             break;
@@ -393,7 +395,7 @@ public partial class ChunkViewModel
                 }
 
                 return wasChanged;
-            
+
             case IRedBaseHandle handle when handle.GetValue() is IRedType handleValue:
 
             {
@@ -410,7 +412,7 @@ public partial class ChunkViewModel
 
                 if (SearchAndReplaceInReference(search, replace, isWholeWord, isRegex, materialInstance.BaseMaterial, out var newMaterial))
                 {
-                   
+
                     DispatcherHelper.RunOnMainThread(() =>  materialInstance.BaseMaterial = (CResourceReference<IMaterial>)newMaterial);
                     wasChanged = true;
                 }
@@ -496,7 +498,7 @@ public partial class ChunkViewModel
                                 $"Can't replace in {propertyName} ({propInfo.GetType().Name}) can't be assigned to {prop.GetType().Name})");
                         }
 
-                        continue;       
+                        continue;
                     }
 
 
@@ -525,12 +527,12 @@ public partial class ChunkViewModel
                 }
 
                 _loggerService.Info($"Search&Replace not yet implemented for {original.GetType().Name}");
-                
+
                 return false;
             }
         }
     }
-    
+
 
     /// <summary>
     /// Without this, some items in CKeyValueArrays are being left out. I guess I'm leaving this in!
