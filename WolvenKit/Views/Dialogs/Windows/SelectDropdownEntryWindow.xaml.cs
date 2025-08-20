@@ -4,6 +4,7 @@ using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Input;
 using ReactiveUI;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Core;
 using Window = System.Windows.Window;
@@ -29,7 +30,7 @@ namespace WolvenKit.Views.Dialogs.Windows
             {
                 HelpLink = helpLink, ButtonText = buttonText,
             };
-            
+
             DataContext = ViewModel;
 
             Owner = Application.Current.MainWindow;
@@ -90,6 +91,17 @@ namespace WolvenKit.Views.Dialogs.Windows
             e.Handled = true;
             DialogResult = true;
             Close();
+        }
+
+        private void FilterDropdown_OnFocusLost(object sender, RoutedEventArgs e)
+        {
+            if (ModifierViewStateService.IsShiftBeingHeld && ViewModel?.ShowButton == true)
+            {
+                ClickButton.Focus();
+                return;
+            }
+
+            TextBox.Focus();
         }
     }
 }

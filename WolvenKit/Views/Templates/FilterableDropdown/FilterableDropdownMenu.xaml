@@ -5,7 +5,7 @@
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:converters="clr-namespace:WolvenKit.Converters"
-    FocusManager.FocusedElement="{Binding ElementName=FilterTextBox}">
+    GotFocus="OnFocusGained">
     <Grid>
         <Grid.Resources>
             <ResourceDictionary>
@@ -72,30 +72,32 @@
                                  Converter={StaticResource BooleanToVisibilityConverter}}"
             Orientation="Horizontal">
             <TextBox
-                x:Name="FilterTextBox"
+                x:Name="FilterTextBox_Inline"
                 Width="150"
                 Margin="0,0,5,0"
                 Foreground="{StaticResource ForegroundColor_Grey_Dark}"
                 helpers:TextBoxBehavior.TripleClickSelectAll="True"
-                KeyboardNavigation.TabIndex="1"
+                KeyDown="FilterTextbox_OnKeyDown"
                 Text="{Binding FilterText,
                                UpdateSourceTrigger=PropertyChanged}" />
 
             <ComboBox
-                x:Name="Dropdown"
+                x:Name="Dropdown_Inline"
                 Height="{StaticResource WolvenKitTabHeight}"
                 MinWidth="150"
+                helpers:ComboBoxBehavior.ArrowKeysChangeSelection="True"
                 ItemsSource="{Binding FilteredOptions,
                                       Mode=OneWay}"
-                KeyboardNavigation.TabIndex="2"
                 SelectedValuePath="Value"
                 DisplayMemberPath="Key"
+                KeyDown="Dropdown_OnKeyDown"
+                PreviewKeyDown="Dropdown_OnPreviewKeyDown"
                 SelectedValue="{Binding SelectedOption}" />
         </StackPanel>
 
         <!-- Original layout elements (with x:Name for toggling) -->
         <TextBox
-            x:Name="filterTextBox"
+            x:Name="FilterTextBox"
             Grid.Row="0"
             Grid.Column="1"
             Grid.ColumnSpan="2"
@@ -104,33 +106,38 @@
             Visibility="{Binding IsInline,
                                  Converter={StaticResource InvertBooleanVisibilityConverter}}"
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
-            KeyboardNavigation.TabIndex="1"
+            LostFocus="FilterTextbox_OnFocusLost"
+            KeyDown="FilterTextbox_OnKeyDown"
             Text="{Binding FilterText,
                            UpdateSourceTrigger=PropertyChanged}" />
 
         <TextBlock
-            x:Name="placeholder"
+            x:Name="Placeholder"
             Grid.Row="0"
             Grid.Column="1"
             Style="{StaticResource WolvenkitPlaceholderStyle}"
-            Visibility="{Binding ElementName=filterTextBox,
+            Visibility="{Binding ElementName=FilterTextBox,
                                  Path=Text.Length,
                                  Converter={StaticResource IntToVisibilityConverterInverted}}"
+            LostFocus="FilterTextbox_OnFocusLost"
+            KeyDown="FilterTextbox_OnKeyDown"
             Text="Filter" />
 
         <ComboBox
-            x:Name="dropdown"
+            x:Name="Dropdown"
             Grid.Row="2"
             Grid.Column="1"
             Grid.ColumnSpan="2"
             Height="{StaticResource WolvenKitTabHeight}"
             Visibility="{Binding IsInline,
                                  Converter={StaticResource InvertBooleanVisibilityConverter}}"
+            helpers:ComboBoxBehavior.ArrowKeysChangeSelection="True"
             ItemsSource="{Binding FilteredOptions,
                                   Mode=OneWay}"
-            KeyboardNavigation.TabIndex="2"
             SelectedValuePath="Value"
             DisplayMemberPath="Key"
+            KeyDown="Dropdown_OnKeyDown"
+            PreviewKeyDown="Dropdown_OnPreviewKeyDown"
             SelectedValue="{Binding SelectedOption}" />
     </Grid>
 </UserControl>

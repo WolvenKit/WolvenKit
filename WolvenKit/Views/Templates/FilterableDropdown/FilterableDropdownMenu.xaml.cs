@@ -3,11 +3,14 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using WolvenKit.App.Helpers;
+using WolvenKit.App.Services;
 
 namespace WolvenKit.Views.Editors
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <example>
     /// Two-way binding doesn't work, needs to bind like this:
@@ -65,7 +68,7 @@ namespace WolvenKit.Views.Editors
                 typeof(bool),
                 typeof(FilterableDropdownMenu),
                 new PropertyMetadata(false, OnPropertyChangedCallback));
-        
+
         public string Key
         {
             get => (string)GetValue(KeyProperty);
@@ -167,9 +170,13 @@ namespace WolvenKit.Views.Editors
                 new PropertyMetadata(null, OnPropertyChangedCallback));
 
         #endregion
-        
+
+        private ComboBox DropdownControl => IsInline ? Dropdown_Inline : Dropdown;
+        private TextBox FilterTextboxControl => IsInline ? FilterTextBox_Inline : FilterTextBox;
+
         private void UpdateFilteredOptions()
         {
+            var refreshDropdown = DropdownControl.IsDropDownOpen;
             if (Options == null)
             {
                 SetCurrentValue(FilteredOptionsProperty, new List<KeyValuePair<string, string>>());
@@ -180,6 +187,23 @@ namespace WolvenKit.Views.Editors
                     .Where(o => string.IsNullOrEmpty(FilterText) || o.Key.Contains(FilterText))
                     .ToList());
             }
+
+            // if (!refreshDropdown)
+            // {
+            //     return;
+            // }
+            //
+            // DropdownControl.SetCurrentValue(ComboBox.IsDropDownOpenProperty, false);
+            //
+            // if (FilteredOptions.Count == 1)
+            // {
+            //     SetCurrentValue(SelectedOptionProperty, FilteredOptions[0].Key);
+            // }
+            // else
+            // {
+            //     DropdownControl.SetCurrentValue(ComboBox.IsDropDownOpenProperty, true);
+            // }
+
         }
 
         private static void OnPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -200,9 +224,14 @@ namespace WolvenKit.Views.Editors
                 case (nameof(Options)) or (nameof(FilterText)):
                     UpdateFilteredOptions();
                     break;
-                case nameof(IsInline) when IsInline:
-                    dropdownRow.SetCurrentValue(Grid.HeightProperty, 0.0);
-                    spacerRow2.SetCurrentValue(Grid.HeightProperty, 0.0);
+                case nameof(IsInline):
+                    FilterTextboxControl.SetCurrentValue(KeyboardNavigation.TabIndexProperty, 1);
+                    DropdownControl.SetCurrentValue(KeyboardNavigation.TabIndexProperty, 2);
+                    if (IsInline)
+                    {
+                        dropdownRow.SetCurrentValue(Grid.HeightProperty, 0.0);
+                        spacerRow2.SetCurrentValue(Grid.HeightProperty, 0.0);
+                    }
                     break;
                 case nameof(Label) when !string.IsNullOrEmpty(Label):
                     SetCurrentValue(IsShowLabelProperty, true);
@@ -210,6 +239,139 @@ namespace WolvenKit.Views.Editors
             }
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #region focus
+
+        /// <summary>
+        /// If gaining/losing focus from the outside
+        /// </summary>
+        private bool _hasFocus = false;
+
+        public event RoutedEventHandler FocusLost;
+
+        private void OnFocusGained(object sender, RoutedEventArgs e)
+        {
+            if (_hasFocus || IsChildFocused)
+            {
+                return;
+            }
+
+            _hasFocus = true;
+            FilterTextboxControl.Focus();
+        }
+
+        private bool IsChildFocused => FilterTextboxControl.IsFocused || DropdownControl.IsFocused ||
+                                       DropdownControl.IsDropDownOpen;
+
+        private void OnFocusLost(object sender, RoutedEventArgs e)
+        {
+            _hasFocus = !IsChildFocused;
+            if (!_hasFocus)
+            {
+                FocusLost?.Invoke(this, e);
+            }
+        }
+
+        private void FocusDropdown()
+        {
+            DropdownControl.SetCurrentValue(ComboBox.IsDropDownOpenProperty, true);
+            DropdownControl.Focus();
+        }
+
+        /// <summary>
+        /// React to Tab key in text box: Open and focus dropdown
+        /// </summary>
+        private void FilterTextbox_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            // if (e.Key != System.Windows.Input.Key.Tab)
+            // {
+            //     return;
+            // }
+            //
+            // e.Handled = true;
+            // FocusDropdown();
+        }
+
+
+        private string GetKeyString(KeyEventArgs e)
+        {
+            if (!KeyboardHelper.IsAllowedFilePathChar(e.Key))
+            {
+                return string.Empty;
+            }
+
+            if (KeyboardHelper.Stringify(e.Key) is not string { Length: 1 } s)
+            {
+                return string.Empty;
+            }
+
+            return s;
+        }
+
+        private void SetFilterText(string text)
+        {
+            SetCurrentValue(FilterTextProperty, text);
+            FilterTextboxControl.CaretIndex = FilterTextboxControl.Text.Length;
+            FocusDropdown();
+        }
+
+        private void Dropdown_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case System.Windows.Input.Key.Tab when ModifierViewStateService.IsShiftBeingHeld:
+                {
+                    DropdownControl.SetCurrentValue(ComboBox.IsDropDownOpenProperty, false);
+                    FilterTextboxControl.Focus();
+                    break;
+                }
+                case System.Windows.Input.Key.Delete:
+                case System.Windows.Input.Key.Back when ModifierViewStateService.IsShiftBeingHeld:
+                    SetFilterText("");
+                    break;
+                case System.Windows.Input.Key.Back when !string.IsNullOrEmpty(FilterText):
+                    SetFilterText(FilterText[..^1]);
+                    break;
+                case System.Windows.Input.Key.A when ModifierViewStateService.IsCtrlBeingHeld:
+                    SetFilterText("");
+                    break;
+                default:
+                    if (GetKeyString(e) is string keyString)
+                    {
+                        SetFilterText(FilterText + keyString);
+                    }
+
+                    return;
+            }
+
+            e.Handled = true;
+        }
+
+        /// <summary>
+        /// React to Tab key in dropdown: Shift+Tab focuses textbox, tab closes dropdown and releases focus
+        /// </summary>
+        private void Dropdown_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (DropdownControl.IsDropDownOpen)
+            {
+                return;
+            }
+
+            Dropdown_OnPreviewKeyDown(sender, e);
+        }
+
+        #endregion
+
+        private void FilterTextbox_OnFocusLost(object sender, RoutedEventArgs e)
+        {
+            if (ModifierViewStateService.IsShiftBeingHeld)
+            {
+                return;
+            }
+
+            e.Handled = true;
+            FocusDropdown();
         }
     }
 }

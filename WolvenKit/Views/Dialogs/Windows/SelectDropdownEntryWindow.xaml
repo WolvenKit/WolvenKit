@@ -71,7 +71,8 @@
                                           UpdateSourceTrigger=PropertyChanged}"
                         IsInline="False"
                         SelectedOption="{Binding SelectedOption}"
-                        KeyboardNavigation.TabIndex="1" />
+                        KeyboardNavigation.TabIndex="1"
+                        FocusLost="FilterDropdown_OnFocusLost" />
 
                     <TextBlock
                         Margin="{DynamicResource WolvenKitMarginSmallBottom}"
@@ -88,7 +89,7 @@
                         Visibility="{Binding ShowInputBar,
                                              Converter={StaticResource BooleanToVisibilityConverter}}"
                         Text="{Binding SelectedOption}"
-                        KeyboardNavigation.TabIndex="0" />
+                        KeyboardNavigation.TabIndex="2" />
 
                 </StackPanel>
             </syncfusion:WizardPage>
