@@ -77,9 +77,10 @@
                 Margin="0,0,5,0"
                 Foreground="{StaticResource ForegroundColor_Grey_Dark}"
                 helpers:TextBoxBehavior.TripleClickSelectAll="True"
-                KeyDown="FilterTextbox_OnKeyDown"
                 Text="{Binding FilterText,
-                               UpdateSourceTrigger=PropertyChanged}" />
+                               UpdateSourceTrigger=PropertyChanged}"
+                TabIndex="-1"
+                LostFocus="FilterTextbox_OnFocusLost" />
 
             <ComboBox
                 x:Name="Dropdown_Inline"
@@ -92,7 +93,9 @@
                 DisplayMemberPath="Key"
                 KeyDown="Dropdown_OnKeyDown"
                 PreviewKeyDown="Dropdown_OnPreviewKeyDown"
-                SelectedValue="{Binding SelectedOption}" />
+                SelectedValue="{Binding SelectedOption}"
+                LostFocus="OnFocusLost"
+                TabIndex="-1" />
         </StackPanel>
 
         <!-- Original layout elements (with x:Name for toggling) -->
@@ -107,7 +110,7 @@
                                  Converter={StaticResource InvertBooleanVisibilityConverter}}"
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
             LostFocus="FilterTextbox_OnFocusLost"
-            KeyDown="FilterTextbox_OnKeyDown"
+            TabIndex="-1"
             Text="{Binding FilterText,
                            UpdateSourceTrigger=PropertyChanged}" />
 
@@ -119,8 +122,6 @@
             Visibility="{Binding ElementName=FilterTextBox,
                                  Path=Text.Length,
                                  Converter={StaticResource IntToVisibilityConverterInverted}}"
-            LostFocus="FilterTextbox_OnFocusLost"
-            KeyDown="FilterTextbox_OnKeyDown"
             Text="Filter" />
 
         <ComboBox
@@ -136,8 +137,10 @@
                                   Mode=OneWay}"
             SelectedValuePath="Value"
             DisplayMemberPath="Key"
+            TabIndex="-1"
             KeyDown="Dropdown_OnKeyDown"
             PreviewKeyDown="Dropdown_OnPreviewKeyDown"
-            SelectedValue="{Binding SelectedOption}" />
+            SelectedValue="{Binding SelectedOption}"
+            LostFocus="OnFocusLost" />
     </Grid>
 </UserControl>

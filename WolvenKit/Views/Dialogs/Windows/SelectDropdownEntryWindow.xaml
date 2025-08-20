@@ -11,7 +11,7 @@
     SizeToContent="WidthAndHeight"
     DataContext="{Binding RelativeSource={RelativeSource Self},
                           Path=ViewModel}"
-    FocusManager.FocusedElement="{Binding ElementName=TextBox}"
+    FocusManager.FocusedElement="{Binding ElementName=Dropdown}"
     WindowStartupLocation="CenterOwner">
     <Grid
         HorizontalAlignment="Stretch"
@@ -62,6 +62,7 @@
                         Visibility="{Binding ShowButton,
                                              Converter={StaticResource StringToVisibilityConverter}}"
                         Content="{Binding ButtonText}"
+                        TabIndex="-1"
                         Click="OnButtonClick" />
 
                     <editors:FilterableDropdownMenu
@@ -71,7 +72,7 @@
                                           UpdateSourceTrigger=PropertyChanged}"
                         IsInline="False"
                         SelectedOption="{Binding SelectedOption}"
-                        KeyboardNavigation.TabIndex="1"
+                        KeyboardNavigation.TabIndex="-1"
                         FocusLost="FilterDropdown_OnFocusLost" />
 
                     <TextBlock
@@ -89,7 +90,7 @@
                         Visibility="{Binding ShowInputBar,
                                              Converter={StaticResource BooleanToVisibilityConverter}}"
                         Text="{Binding SelectedOption}"
-                        KeyboardNavigation.TabIndex="2" />
+                        KeyboardNavigation.TabIndex="-1" />
 
                 </StackPanel>
             </syncfusion:WizardPage>
