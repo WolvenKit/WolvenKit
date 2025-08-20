@@ -1225,6 +1225,13 @@ public class DocumentTools
         return wasChanged;
     }
 
+    /// <summary>
+    /// Will copy materials from source path to dest path.
+    /// </summary>
+    /// <param name="sourcePath">Relative path for material source; this can be <see cref="SelectDropdownEntryDialogViewModel.ButtonClickResult"/></param>
+    /// <param name="destPath">Relative path for dest file (the one where materials should be replaced)</param>
+    /// <returns></returns>
+    /// <exception cref="InvalidDataException"></exception>
     public bool CopyMeshMaterials(string sourcePath, string destPath)
     {
         if (_projectManager.ActiveProject is not { } activeProject)
@@ -1238,9 +1245,7 @@ public class DocumentTools
             meshPaths = FindPatchMeshPaths(activeProject.GetRelativePath(destPath));
         }
 
-        var destCr2W = GetCr2W(destPath) ??
-                       throw new InvalidDataException($"target file {destPath} not found. Can't copy...");
-
+        var destCr2W = GetCr2W(destPath) ?? throw new InvalidDataException($"target {destPath} not found, can't copy");
 
         if (destCr2W.RootChunk is not CMesh destMesh)
         {
@@ -1249,6 +1254,7 @@ public class DocumentTools
 
         ClearMeshMaterials(destCr2W);
 
+        // No materials were written
         if (!meshPaths.Select(sourceMeshPath =>
                 AppendMeshMaterials(GetCr2W(sourceMeshPath), destCr2W, sourcePath, destPath)).Contains(true))
         {
