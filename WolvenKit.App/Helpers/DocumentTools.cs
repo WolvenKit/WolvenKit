@@ -977,28 +977,21 @@ public class DocumentTools
     {
         List<string> ret = [];
 
-        if (_projectManager.ActiveProject is not { } activeProject)
+        if (_projectManager.ActiveProject is { } activeProject)
         {
-            return ret;
-        }
-
-        // first, find in all .xl files in project
-        foreach (var path in CollectProjectFiles(".xl"))
-        {
-            var absolutePath = Path.Join(activeProject.FileDirectory, path);
-            if (!File.Exists(absolutePath) || File.ReadAllText(absolutePath) is not string fileContent ||
-                !fileContent.Contains(pathToPatch))
+            // first, find in all .xl files in project
+            foreach (var path in CollectProjectFiles(".xl"))
             {
-                continue;
+                var absolutePath = Path.Join(activeProject.FileDirectory, path);
+                if (!File.Exists(absolutePath) || File.ReadAllText(absolutePath) is not string fileContent ||
+                    !fileContent.Contains(pathToPatch))
+                {
+                    continue;
+                }
+
+                // If file content contains the patch path, add it to the list
+                ret.Add(absolutePath);
             }
-
-            // If file content contains the patch path, add it to the list
-            ret.Add(absolutePath);
-        }
-
-        if (ret.Count > 0)
-        {
-            return ret;
         }
 
         List<string> filePaths = [];
@@ -1025,7 +1018,7 @@ public class DocumentTools
                 .Select(f => f.FullName));
         }
 
-        filePaths.ForEach(absolutePath =>
+        filePaths.Distinct().ToList().ForEach(absolutePath =>
         {
             if (!File.Exists(absolutePath) || File.ReadAllText(absolutePath) is not string fileContent ||
                 !fileContent.Contains(pathToPatch))
