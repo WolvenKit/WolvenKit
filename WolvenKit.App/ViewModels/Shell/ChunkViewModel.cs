@@ -2873,7 +2873,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         Tab?.Parent.SetIsDirty(true);
 
-        // Notify for graph sync when items are duplicated
         Parent.NotifyPropertyUpdateForGraphSync();
 
         var newSibling = Parent.GetChildNode(Math.Min(index, Parent.TVProperties.Count - 1));
@@ -2905,6 +2904,26 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         Parent.NotifyChain(nameof(Data));
 
         IsExpanded = false;
+
+        if (IsInGraphEditorContext())
+        {
+            // Invalidate converter cache for the selected graph node to prevent stale ChunkViewModels
+            try
+            {
+                var selectedNode = WolvenKit.App.Services.NodeSelectionService.Instance.SelectedNode;
+                if (selectedNode?.Data is WolvenKit.RED4.Types.RedBaseClass selectedNodeData)
+                {
+                    var assemblyQualifiedName = "WolvenKit.Converters.RedTypeToChunkViewModelCollectionConverter, WolvenKit";
+                    var converterType = System.Type.GetType(assemblyQualifiedName);
+                    var invalidateCacheMethod = converterType?.GetMethod("InvalidateCache", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+                    invalidateCacheMethod?.Invoke(null, new object[] { selectedNodeData });
+                }
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error($"Failed to refresh graph editor property panel after duplicating chunk '{Name}': {ex.Message}");
+            }
+        }
 
         return newSibling;
     }
@@ -5280,6 +5299,36 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         if (rootNodeData != null)
         {
             NodePropertyUpdateService.NotifyPropertyUpdated(rootNodeData);
+        }
+    }
+
+
+
+    /// <summary>
+    /// Determines if we're currently in a graph editor context (scene or quest editor)
+    /// </summary>
+    private bool IsInGraphEditorContext()
+    {
+        try
+        {
+            // Check if there's a selected node in the NodeSelectionService. This service is only used by graph editors (scene/quest)
+            var selectedNode = WolvenKit.App.Services.NodeSelectionService.Instance.SelectedNode;
+            if (selectedNode == null)
+            {
+                return false;
+            }
+
+            var rootNodeData = GetRootNodeData();
+            if (rootNodeData == null)
+            {
+                return false;
+            }
+
+            return rootNodeData is scnSceneGraphNode or questNodeDefinition;
+        }
+        catch
+        {
+            return false;
         }
     }
 
