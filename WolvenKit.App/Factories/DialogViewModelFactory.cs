@@ -23,5 +23,5 @@ public class DialogViewModelFactory : IDialogViewModelFactory
 
     }
     public SoundModdingViewModel SoundModdingViewModel() => new(_notificationService, _loggerService, _projectManager);
-    public NewFileViewModel NewFileViewModel() => new(_projectManager);
+    public NewFileViewModel NewFileViewModel() => new(_projectManager, _loggerService);
 }
