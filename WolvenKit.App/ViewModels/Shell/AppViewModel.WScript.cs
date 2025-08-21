@@ -85,7 +85,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
         var shiftKeyDown = ModifierViewStateService.IsShiftBeingHeld;
         var ctrlKeyDown = ModifierViewStateService.IsCtrlBeingHeld;
-        
+
         var txtFilesInResources = ActiveProject.ResourceFiles.Where(f => f.EndsWith(".txt"))
             .Select(f => ActiveProject.GetRelativeResourcePath(f).GetResolvedText())
             .Where(f => !string.IsNullOrEmpty(Path.GetExtension(f?.Replace(".txt", ""))))
@@ -102,7 +102,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             .Where(f => !s_ignoredExtensions.Contains(f.Extension.ToLower()))
             // no *.ext.json
             .Where(f => !f.Extension.Contains("json") || string.IsNullOrEmpty(
-                Path.GetExtension(f.FileName.Replace(".json", "")))) 
+                Path.GetExtension(f.FileName.Replace(".json", ""))))
             .ToList();
 
         var resourceFilesToValidate = ActiveProject.ResourceFiles
@@ -115,13 +115,13 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             resourceFilesToValidate.Clear();
         }
 
-        if (shiftKeyDown && filesToValidate.Count > 0)
+        if (shiftKeyDown && resourceFilesToValidate.Count > 0)
         {
             _loggerService.Info(
                 $"Shift key down: analyzing {resourceFilesToValidate.Count} resource files (ignoring project files).");
             filesToValidate.Clear();
         }
-        
+
         var totalFileCount = filesToValidate.Count + resourceFilesToValidate.Count;
 
         if (totalFileCount == 0)
@@ -157,14 +157,13 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
                 _loggerService.Warning($"{file.FileName} has an unsupported extension and will not be packed!");
                 continue;
             }
-            
+
             if (GetRedFile(file) is not { } fileViewModel)
             {
                 continue;
             }
 
             _loggerService.Info($"Scanning {ActiveProject.GetRelativePath(file.FileName)}");
-            ActiveDocument = fileViewModel;
             try
             {
                 await _scriptService.ExecuteAsync(code);
@@ -175,10 +174,41 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             }
         }
 
+        if (ActiveDocument is null)
+        {
+            ScriptService.SuppressLogOutput = false;
+            _loggerService.Info("Resource file validation needs an active document!");
+            return;
+        }
+
+        foreach (var file in resourceFilesToValidate)
+        {
+            var fileExtension = (file.Split(".").LastOrDefault() ?? "").TrimStart('.').ToLower();
+            if (!s_resourceFileExtensions.Contains(fileExtension))
+            {
+                _loggerService.Warning($"Skipping resource file {file}");
+                continue;
+            }
+
+            var originalFilePath = ActiveDocument.FilePath;
+            ActiveDocument.FilePath = $"resources\\{file}";
+
+            try
+            {
+                await _scriptService.ExecuteAsync(code);
+            }
+            catch (Exception err)
+            {
+                _loggerService.Error(err.Message);
+            }
+
+            ActiveDocument.FilePath = originalFilePath;
+        }
+
         _loggerService.Info("Done.");
         _loggerService.Info(
             "To open the most recent log file, shift-click on the 'open folder' button to the right.");
-        
+
         ScriptService.SuppressLogOutput = false;
     }
 
