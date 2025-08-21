@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -45,7 +45,7 @@ public partial class GraphEditorView : UserControl
         view.Dispatcher.BeginInvoke(new Action(() =>
         {
             UpdateView(view);
-            view.Source?.ArrangeNodes();
+            //view.Source?.ArrangeNodes();
         }), DispatcherPriority.ContextIdle);
     }
 
