@@ -131,6 +131,37 @@
                 </Style.Triggers>
             </Style>
 
+            <!-- Mesh menu style -->
+            <Style
+                x:Key="ShowInMeshFileMenuStyle"
+                BasedOn="{StaticResource MenuItemStyle}"
+                TargetType="{x:Type MenuItem}">
+                <Setter Property="Visibility" Value="Collapsed" />
+
+                <Style.Triggers>
+                    <DataTrigger
+                        Binding="{Binding Path=HasItems,
+                                          RelativeSource={RelativeSource Self}}"
+                        Value="True">
+                        <Setter Property="Icon">
+                            <Setter.Value>
+                                <templates:IconBox
+                                    IconPack="Material"
+                                    Kind="Palette"
+                                    Foreground="{StaticResource WolvenKitYellow}" />
+                            </Setter.Value>
+                        </Setter>
+                    </DataTrigger>
+
+                    <DataTrigger
+                        Binding="{Binding Path=ContentType,
+                                          UpdateSourceTrigger=PropertyChanged}"
+                        Value="{x:Static documents:RedDocumentItemType.Mesh}">
+                        <Setter Property="Visibility" Value="Visible" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
             <!-- Clean up: .mesh / .json -->
             <Style
                 x:Key="ShowCleanUpMenuItemStyle"
@@ -262,6 +293,7 @@
             KeyUp="OnKeystateChanged"
             ContextMenuOpening="OnMenuOpened"
             ContextMenuClosing="OnMenuClosed">
+
             <!-- Editor Mode -->
             <MenuItem
                 Foreground="{Binding EditorLevel,
@@ -306,6 +338,7 @@
                             Foreground="{StaticResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
+                <!-- Editor Mode end -->
             </MenuItem>
 
             <!-- Materials: mesh files -->
@@ -314,6 +347,25 @@
                 Header="Materials"
                 SubmenuOpened="OnMenuOpened"
                 SubmenuClosed="OnMenuClosed">
+
+                <!-- Copy materials from other mesh -->
+                <MenuItem
+                    Style="{StaticResource MenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Header="Copy materials from other mesh"
+                    Click="OnCopyMaterialsFromMeshClick">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="FileArrowLeftRight"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <!-- Generate missing materials -->
                 <MenuItem
                     Style="{StaticResource MenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
@@ -331,38 +383,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <MenuItem
-                    Style="{StaticResource MenuItemStyle}"
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Header="Copy materials from other mesh"
-                    Click="OnCopyMaterialsFromMeshClick">
-                    <MenuItem.Icon>
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="FileArrowLeftRight"
-                            Foreground="White" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <MenuItem
-                    Style="{StaticResource MenuItemStyle}"
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Header="Un-dynamify materials"
-                    Click="OnUnDynamifyMaterialsClick">
-                    <MenuItem.Icon>
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="ArrowUpBox"
-                            Foreground="White" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
+                <!-- Scroll to material -->
                 <MenuItem
                     Style="{StaticResource MenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
@@ -379,6 +400,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <!-- Toggle "EnableMask" -->
                 <MenuItem
                     Style="{StaticResource MenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
@@ -395,6 +417,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <!-- Toggle "IsLocalInstance" -->
                 <MenuItem
                     Style="{StaticResource MenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
@@ -411,6 +434,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <!-- Add material dependencies -->
                 <MenuItem
                     Style="{StaticResource ShowMeshMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
@@ -428,6 +452,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <!-- Add all material dependencies -->
                 <MenuItem
                     Style="{StaticResource ShowMeshMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
@@ -444,6 +469,34 @@
                             Foreground="White" />
                     </MenuItem.Icon>
                 </MenuItem>
+
+                <!-- end Materials: mesh files -->
+            </MenuItem>
+
+            <!-- ArchiveXL: mesh files -->
+            <MenuItem
+                Style="{StaticResource ShowInMeshFileMenuStyle}"
+                Header="ArchiveXL"
+                SubmenuOpened="OnMenuOpened"
+                SubmenuClosed="OnMenuClosed">
+
+                <!-- Un-dynamify materials -->
+                <MenuItem
+                    Style="{StaticResource MenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Header="Un-dynamify materials"
+                    Click="OnUnDynamifyMaterialsClick">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ArrowUpBox"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
                 <!-- Generate CCXL Materials for hairs -->
                 <MenuItem
                     Style="{StaticResource ShowMeshMenuItemStyle}"
@@ -462,6 +515,7 @@
                             Foreground="White" />
                     </MenuItem.Icon>
                 </MenuItem>
+
             </MenuItem>
 
             <!-- Clean up: .mesh / .json / .app -->
