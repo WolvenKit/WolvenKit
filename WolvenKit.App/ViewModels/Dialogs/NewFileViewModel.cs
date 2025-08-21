@@ -11,6 +11,7 @@ using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Core.Extensions;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
 
@@ -22,10 +23,12 @@ public partial class NewFileViewModel : DialogViewModel
     public delegate Task ReturnHandler(NewFileViewModel? file);
     public ReturnHandler? FileHandler;
     private readonly IProjectManager _projectManager;
+    private readonly ILoggerService _loggerService;
 
-    public NewFileViewModel(IProjectManager projectManager)
+    public NewFileViewModel(IProjectManager projectManager, ILoggerService loggerService)
     {
         _projectManager = projectManager;
+        _loggerService = loggerService;
 
         Title = "Create new file";
 
@@ -58,7 +61,7 @@ public partial class NewFileViewModel : DialogViewModel
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            _loggerService.Error(e);
             throw;
         }
     }
