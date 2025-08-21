@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -595,79 +596,119 @@ namespace WolvenKit.Views.Documents
             "engine",
         ];
 
+        private readonly SemaphoreSlim _semaphore = new(1, 1); //  only one thread/task can enter
+
         private async Task AddDependenciesToFileAsync(ChunkViewModel _, bool addBasegameFiles = false)
         {
-            if (RootChunk is not ChunkViewModel rootChunk)
+            if (RootChunk is not ChunkViewModel rootChunk || RootChunk.ResolvedData is not CMesh)
             {
                 return;
             }
 
-            RootChunk.ForceLoadPropertiesRecursive();
-
-            if (RootChunk.ResolvedData is CMesh)
+            // Wait asynchronously to acquire the semaphore
+            if (!await _semaphore.WaitAsync(200))
             {
+                _loggerService.Error("Already on it! Please wait...");
+                return;
+            }
+
+            try
+            {
+                RootChunk.ForceLoadPropertiesRecursive();
                 rootChunk.DeleteUnusedMaterialsCommand.Execute(true);
-            }
 
-            await LoadAndAnalyzeModArchivesAsync();
+                await LoadAndAnalyzeModArchivesAsync();
 
-            var materialDependencies = await rootChunk.GetMaterialRefsFromFile();
+                var materialDependencies = await rootChunk.GetMaterialRefsFromFile();
 
-            // Filter files: Ignore base game files unless shift key is pressed
-            materialDependencies = materialDependencies
-                .Where(refPathHash =>
-                    {
-                        var hasModFile = _archiveManager.Lookup(refPathHash, ArchiveManagerScope.Mods) is
-                            { HasValue: true };
-                        var gameFileOpt = _archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame);
-
-                        // Only files from mods. Filter out anything that overwrites basegame files.
-                        if (hasModFile && !gameFileOpt.HasValue)
+                // Filter files: Ignore base game files unless shift key is pressed
+                materialDependencies = materialDependencies
+                    .Where(refPathHash =>
                         {
-                            return true;
+                            var hasModFile = _archiveManager.Lookup(refPathHash, ArchiveManagerScope.Mods) is
+                                { HasValue: true };
+                            var gameFileOpt = _archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame);
+
+                            // Only files from mods. Filter out anything that overwrites basegame files.
+                            if (hasModFile && !gameFileOpt.HasValue)
+                            {
+                                return true;
+                            }
+
+                            return addBasegameFiles && gameFileOpt.HasValue && !IsIgnoredDependency(gameFileOpt.Value);
                         }
+                    )
+                    .ToHashSet();
 
-                        return addBasegameFiles && gameFileOpt.HasValue && !IsIgnoredDependency(gameFileOpt.Value);
+                if (materialDependencies.Count == 0)
+                {
+                    _loggerService.Info(
+                        "Didn't find any dependencies to add.\n" +
+                        "To include base game files, hold shift while clicking the menu entry."
+                    );
+                    return;
+                }
+
+                var destFolder = GetTextureDirForDependencies(true);
+
+                // Use search and replace to fix file paths
+                if (string.IsNullOrEmpty(destFolder))
+                {
+                    return;
+                }
+
+                var pathReplacements = await _projectResourceTools.AddDependenciesToProjectPathAsync(
+                    destFolder, materialDependencies
+                );
+
+                // Nothing to replace in file - give user output
+                if (pathReplacements.Count is 0)
+                {
+                    if (materialDependencies.Count > 0)
+                    {
+                        _loggerService.Info(
+                            "Didn't find any dependencies to add.\n" +
+                            "To include base game files, hold shift while clicking the menu entry." +
+                            "If modded files could not be resolved, click the scan button in the mod browser " +
+                            "(to the right of the search bar)."
+                        );
                     }
-                )
-                .ToHashSet();
+                    else
+                    {
+                        _loggerService.Success(
+                            "No dependencies left to replace. To double-check, run file validation now."
+                        );
+                    }
 
-            var destFolder = GetTextureDirForDependencies(true);
-            // Use search and replace to fix file paths
+                    return;
+                }
 
-            if (string.IsNullOrEmpty(destFolder))
-            {
-                return;
+                switch (rootChunk.ResolvedData)
+                {
+                    case CMaterialInstance:
+                        await SearchAndReplaceInChildNodesAsync(rootChunk, pathReplacements, "values");
+                        break;
+                    case Multilayer_Setup:
+                        await SearchAndReplaceInChildNodesAsync(rootChunk, pathReplacements, "layers");
+                        break;
+                    case CMesh:
+                        await SearchAndReplaceInChildNodesAsync(rootChunk, pathReplacements,
+                            ChunkViewModel.LocalMaterialBufferPath,
+                            ChunkViewModel.ExternalMaterialPath,
+                            ChunkViewModel.PreloadMaterialPath,
+                            ChunkViewModel.PreloadExternalMaterialPath
+                        );
+                        break;
+                    default:
+                        break;
+                }
             }
-
-            var pathReplacements = await _projectResourceTools.AddDependenciesToProjectPathAsync(
-                destFolder, materialDependencies
-            );
-
-            if (pathReplacements.Count is 0)
+            finally
             {
-                return;
-            }
-
-            switch (rootChunk.ResolvedData)
-            {
-                case CMaterialInstance:
-                    await SearchAndReplaceInChildNodesAsync(rootChunk, pathReplacements, "values");
-                    break;
-                case Multilayer_Setup:
-                    await SearchAndReplaceInChildNodesAsync(rootChunk, pathReplacements, "layers");
-                    break;
-                case CMesh:
-                    await SearchAndReplaceInChildNodesAsync(rootChunk, pathReplacements,
-                        ChunkViewModel.LocalMaterialBufferPath,
-                        ChunkViewModel.ExternalMaterialPath);
-                    break;
-                default:
-                    break;
+                _semaphore.Release();
             }
 
             return;
-
             bool IsIgnoredDependency(IGameFile gameFile)
             {
                 return _ignoredDependencyPartials.Contains(gameFile.Extension) ||
@@ -738,7 +779,10 @@ namespace WolvenKit.Views.Documents
             if (!_archiveManager.IsInitialized)
             {
                 _loggerService.Info("Loading mod archives... this can take a moment. Wolvenkit will be unresponsive.");
+                _loggerService.Info("Please wait... process will continue after the scan is complete.");
                 _archiveManager.Initialize(new FileInfo(_settingsManager.CP77ExecutablePath));
+
+                _loggerService.Info("Scan complete.");
             }
 
             _loggerService.Info("Reading mod archive file table, this may take a moment...");
@@ -787,6 +831,7 @@ namespace WolvenKit.Views.Documents
                     _projectWatcher.Resume();
                 });
             }
+
         }
 
         private List<appearanceAppearanceDefinition> GetAppearancesFromSelectionOrRoot()

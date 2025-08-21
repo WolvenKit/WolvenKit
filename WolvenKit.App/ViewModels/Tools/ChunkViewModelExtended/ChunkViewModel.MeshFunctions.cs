@@ -11,7 +11,8 @@ public partial class ChunkViewModel
 {
     public const string LocalMaterialBufferPath = "localMaterialBuffer.materials";
     public const string ExternalMaterialPath = "externalMaterials";
-    public const string PreloadMaterialPath = "preloadLocalMaterials";
+    public const string PreloadMaterialPath = "preloadLocalMaterialInstances";
+    public const string PreloadExternalMaterialPath = "preloadExternalMaterials";
     public const string MaterialEntryDefinitionPath = "materialEntries";
 
     private ChunkViewModel? FindMaterialDefinition(bool isLocal, CName? name, int? index)
