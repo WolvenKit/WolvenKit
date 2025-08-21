@@ -1757,8 +1757,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             wasDeleted = true;
         }
 
+
+
         if (wasAdded || wasDeleted)
         {
+            GetPropertyChild("appearances")?.RecalculateProperties();
             _loggerService.Info("Chunk material counts were adjusted. You can now delete unused materials.");
             Tab?.Parent.SetIsDirty(true);
         }
