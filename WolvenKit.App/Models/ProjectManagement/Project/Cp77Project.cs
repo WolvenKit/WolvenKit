@@ -872,15 +872,18 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         {
             Parallel.ForEach(references, (kvp, state) =>
             {
-                var pathsNotFound = kvp.Value
-                    .Where(filePath => !ModFiles.Contains(filePath) && archiveManager.GetGameFile(filePath, true, true) is null)
+                // path is either not in the project/game, or it is the file itself
+                var pathsWithError = kvp.Value
+                    .Where(filePath => filePath == kvp.Key || (!ModFiles.Contains(filePath) &&
+                                                               archiveManager.GetGameFile(filePath, true,
+                                                                   true) is null))
                     .ToList();
 
-                if (pathsNotFound.Count > 0)
+                if (pathsWithError.Count > 0)
                 {
                     lock (brokenReferences)
                     {
-                        brokenReferences.Add(kvp.Key, pathsNotFound);
+                        brokenReferences.Add(kvp.Key, pathsWithError);
                     }
                 }
 
