@@ -147,8 +147,8 @@
                             <Setter.Value>
                                 <templates:IconBox
                                     IconPack="Material"
-                                    Kind="Palette"
-                                    Foreground="{StaticResource WolvenKitYellow}" />
+                                    Kind="SizeXl"
+                                    Foreground="{StaticResource ForegroundColor}" />
                             </Setter.Value>
                         </Setter>
                     </DataTrigger>
@@ -214,7 +214,6 @@
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
-
 
             <!-- App file: .app -->
             <Style
