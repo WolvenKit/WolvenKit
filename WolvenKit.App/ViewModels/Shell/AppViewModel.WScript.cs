@@ -146,26 +146,26 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             filesToValidate.Clear();
         }
 
-        var totalFileCount = filesToValidate.Count + resourceFilesToValidate.Count;
+        List<string> allFiles = [..filesToValidate.Select(x => x.FileName), ..resourceFilesToValidate];
 
-        if (totalFileCount == 0)
+
+        if (allFiles.Count == 0)
         {
             _loggerService.Info("No files to validate - you're funny!");
             return;
         }
 
-        if (ActiveDocument is null && resourceFilesToValidate.Count > 0)
+        if (ActiveDocument is null)
         {
-            ScriptService.SuppressLogOutput = false;
-            _loggerService.Info("Resource file validation needs an active document!");
+            _loggerService.Info("File validation needs an active document!");
             return;
         }
 
         // arbitrary cutoff: warn user if more than 5 files
-        if (totalFileCount > 5)
+        if (allFiles.Count > 5)
         {
             var result = Interactions.ShowConfirmation((
-                $"This will analyse {totalFileCount} files. This can take up to several minutes. Do you want to proceed?",
+                $"This will analyse {allFiles.Count} files and can take up to several minutes. Do you want to proceed?",
                 "Really run file validation?",
                 WMessageBoxImage.Question,
                 WMessageBoxButtons.YesNo));
@@ -176,14 +176,10 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             }
         }
 
-        var code = await File.ReadAllTextAsync(_fileValidationScript.Path);
-
-        await ValidateFilesAsync(code);
-
-
+        await ValidateFilesAsync();
         return;
 
-        async Task ValidateFilesAsync(string fileCode, CancellationToken cancellationToken = default)
+        async Task ValidateFilesAsync(CancellationToken cancellationToken = default)
         {
             _scanCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
             FileValidationRunning = true;
@@ -194,41 +190,36 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
             try
             {
-                foreach (var file in filesToValidate)
+                foreach (var filePath in allFiles.Distinct())
                 {
-                    var fileExtension = file.Extension.TrimStart('.').ToLower();
-                    if (!redExtensions.Contains(fileExtension) && !s_packIgnoredExtensions.Contains(fileExtension))
+                    var fileExtension = (filePath.Split(".").LastOrDefault() ?? "").TrimStart('.').ToLower();
+
+                    var filePathPrefix = "archive";
+                    if (resourceFilesToValidate.Contains(filePath))
+                    {
+                        if (!s_resourceFileExtensions.Contains(fileExtension))
+                        {
+                            continue;
+                        }
+
+                        filePathPrefix = "resources";
+                    }
+                    else if (!redExtensions.Contains(fileExtension) ||
+                             s_packIgnoredExtensions.Contains(fileExtension) ||
+                             filesToValidate.FirstOrDefault(f => f.FileName == filePath) is not IGameFile file ||
+                             GetRedFile(file) is null)
                     {
                         continue;
                     }
 
-                    if (GetRedFile(file) is not { } fileViewModel)
-                    {
-                        continue;
-                    }
+                    var originalFilePath = ActiveDocument.FilePath;
+                    ActiveDocument.FilePath = $"{filePathPrefix}\\{ActiveProject.GetRelativePath(filePath)}";
 
-                    _loggerService.Info($"Scanning {ActiveProject.GetRelativePath(file.FileName)}");
-
-                    // Wrap it into an extra layer of async, because checking the token in the script service
-                    // will lead to a "wkit is not defined" exception in the script layer
-                    await Task.Run(async () => await _scriptService.ExecuteAsync(code),
-                        _scanCancellationTokenSource.Token);
-                }
-
-                foreach (var file in resourceFilesToValidate)
-                {
-                    var fileExtension = (file.Split(".").LastOrDefault() ?? "").TrimStart('.').ToLower();
-                    if (!s_resourceFileExtensions.Contains(fileExtension))
-                    {
-                        // _loggerService.Warning($"Skipping resource file {file}");
-                        continue;
-                    }
-
-                    var originalFilePath = ActiveDocument!.FilePath;
-                    ActiveDocument.FilePath = $"resources\\{file}";
+                    _loggerService.Info($"Scanning {ActiveDocument.FilePath}");
 
                     try
                     {
+                        var code = await File.ReadAllTextAsync(_fileValidationScript.Path);
                         // Wrap it into an extra layer of async, because checking the token in the script service
                         // will lead to a "wkit is not defined" exception in the script layer
                         await Task.Run(async () => await _scriptService.ExecuteAsync(code),
