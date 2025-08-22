@@ -16,6 +16,7 @@ using WolvenKit.App;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
+using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Helpers;
@@ -92,6 +93,16 @@ namespace WolvenKit
                 .WhenPropertyChanged(settings => settings.UiScale)
                 .Skip(1)
                 .Subscribe(_ => OnUiScaleChanged());
+
+            // offload hashes to reduce blocking load time (~5 seconds)
+            _ = Task.Run(async () =>
+            {
+                var hashService = Locator.Current.GetService<IHashService>();
+                if (hashService != null)
+                {
+                    await hashService.LoadAsync();
+                }
+            });
 
             base.OnStartup(e);
         }

@@ -31,15 +31,15 @@ namespace WolvenKit.Common.Services
 
         private Dictionary<ulong, string> _missing = new();
 
+        private volatile bool _isLoaded;
+
+        public bool IsLoaded => _isLoaded;
+
         #endregion Fields
 
-        #region Constructors
-
-        public HashService() => Load();
-
-        #endregion Constructors
-
         #region Methods
+
+        public Task LoadAsync() => Task.Run(Load);
 
         public IEnumerable<ulong> GetAllHashes() => _hashes.Keys;
 
@@ -102,6 +102,8 @@ namespace WolvenKit.Common.Services
             tweakNamesMemory.Dispose();
             
             LoadMissingHashes();
+
+            _isLoaded = true;
         }
         
         private static unsafe UnmanagedMemory DecompressEmbeddedFile(string resourceName)
