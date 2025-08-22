@@ -116,6 +116,10 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     view => view.ToolbarProjectRunFileValidationButton)
                 .DisposeWith(disposables);
             this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.CancelFileValidationCommand,
+                    view => view.ToolbarProjectCancelFileValidationButton)
+                .DisposeWith(disposables);
+            this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.ImportFromEntitySpawnerCommand,
                     view => view.ToolbarImportEntitySpawnerButton)
                 .DisposeWith(disposables);
@@ -223,7 +227,7 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                    viewModel => viewModel.MainViewModel.ShowModsViewCommand,
                    view => view.MenuItemShowModsView)
                .DisposeWith(disposables);
-            
+
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
                     view => view.MenuItemCyberpunkBlenderAddonLink,

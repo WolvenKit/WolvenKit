@@ -12,11 +12,13 @@ using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.CSharp.RuntimeBinder;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using Semver;
@@ -68,9 +70,31 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
     private static readonly string[] s_resourceFileExtensions = ["xl", "yaml", "yml"];
 
+    [NotifyCanExecuteChangedFor(nameof(CancelFileValidationCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RunFileValidationOnProjectCommand))]
+    [ObservableProperty]
+    private bool _fileValidationRunning = false;
+
+    private CancellationTokenSource? _scanCancellationTokenSource;
+
+    private bool CanCancelFileValidation => CanShowProjectActions() && FileValidationRunning;
+
+    [RelayCommand(CanExecute = nameof(CanCancelFileValidation))]
+    private void CancelFileValidation()
+    {
+        _scanCancellationTokenSource?.Cancel();
+        FileValidationRunning = false;
+    }
+
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private async Task RunFileValidationOnProject()
     {
+        if (FileValidationRunning || _scanCancellationTokenSource is not null)
+        {
+            CancelFileValidation();
+            _loggerService.Info("Cancelled current run of file validation");
+        }
+
         if (_fileValidationScript is null || !File.Exists(_fileValidationScript.Path))
         {
             _loggerService.Error("You need to update your Wolvenkit Scripts to use this. Please restart the application.");
@@ -130,6 +154,13 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
+        if (ActiveDocument is null && resourceFilesToValidate.Count > 0)
+        {
+            ScriptService.SuppressLogOutput = false;
+            _loggerService.Info("Resource file validation needs an active document!");
+            return;
+        }
+
         // arbitrary cutoff: warn user if more than 5 files
         if (totalFileCount > 5)
         {
@@ -145,73 +176,93 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             }
         }
 
-        ScriptService.SuppressLogOutput = true;
-        var redExtensions = Enum.GetNames<ERedExtension>().ToList();
         var code = await File.ReadAllTextAsync(_fileValidationScript.Path);
 
-        foreach (var file in filesToValidate)
+        await ValidateFilesAsync(code);
+
+
+        return;
+
+        async Task ValidateFilesAsync(string fileCode, CancellationToken cancellationToken = default)
         {
-            var fileExtension = file.Extension.TrimStart('.').ToLower();
-            if (!redExtensions.Contains(fileExtension) && !s_packIgnoredExtensions.Contains(fileExtension))
-            {
-                _loggerService.Warning($"{file.FileName} has an unsupported extension and will not be packed!");
-                continue;
-            }
+            _scanCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            FileValidationRunning = true;
 
-            if (GetRedFile(file) is not { } fileViewModel)
-            {
-                continue;
-            }
+            ScriptService.SuppressLogOutput = true;
+            ScriptService.AbortOnRerun = true;
+            var redExtensions = Enum.GetNames<ERedExtension>().ToList();
 
-            _loggerService.Info($"Scanning {ActiveProject.GetRelativePath(file.FileName)}");
             try
             {
-                await _scriptService.ExecuteAsync(code);
+                foreach (var file in filesToValidate)
+                {
+                    var fileExtension = file.Extension.TrimStart('.').ToLower();
+                    if (!redExtensions.Contains(fileExtension) && !s_packIgnoredExtensions.Contains(fileExtension))
+                    {
+                        continue;
+                    }
+
+                    if (GetRedFile(file) is not { } fileViewModel)
+                    {
+                        continue;
+                    }
+
+                    _loggerService.Info($"Scanning {ActiveProject.GetRelativePath(file.FileName)}");
+
+                    // Wrap it into an extra layer of async, because checking the token in the script service
+                    // will lead to a "wkit is not defined" exception in the script layer
+                    await Task.Run(async () => await _scriptService.ExecuteAsync(code),
+                        _scanCancellationTokenSource.Token);
+                }
+
+                foreach (var file in resourceFilesToValidate)
+                {
+                    var fileExtension = (file.Split(".").LastOrDefault() ?? "").TrimStart('.').ToLower();
+                    if (!s_resourceFileExtensions.Contains(fileExtension))
+                    {
+                        // _loggerService.Warning($"Skipping resource file {file}");
+                        continue;
+                    }
+
+                    var originalFilePath = ActiveDocument!.FilePath;
+                    ActiveDocument.FilePath = $"resources\\{file}";
+
+                    try
+                    {
+                        // Wrap it into an extra layer of async, because checking the token in the script service
+                        // will lead to a "wkit is not defined" exception in the script layer
+                        await Task.Run(async () => await _scriptService.ExecuteAsync(code),
+                            _scanCancellationTokenSource.Token);
+                    }
+                    finally
+                    {
+                        ActiveDocument.FilePath = originalFilePath;
+                    }
+                }
+
+                _loggerService.Success("File validation complete.");
+            }
+            catch (OperationCanceledException)
+            {
+                _loggerService.Info("File validation was cancelled.");
             }
             catch (Exception err)
             {
                 _loggerService.Error(err.Message);
             }
-        }
-
-        if (ActiveDocument is null)
-        {
-            ScriptService.SuppressLogOutput = false;
-            _loggerService.Info("Resource file validation needs an active document!");
-            return;
-        }
-
-        foreach (var file in resourceFilesToValidate)
-        {
-            var fileExtension = (file.Split(".").LastOrDefault() ?? "").TrimStart('.').ToLower();
-            if (!s_resourceFileExtensions.Contains(fileExtension))
+            finally
             {
-                _loggerService.Warning($"Skipping resource file {file}");
-                continue;
+                _scanCancellationTokenSource.Dispose();
+                _scanCancellationTokenSource = null;
+                ScriptService.SuppressLogOutput = false;
+                ScriptService.AbortOnRerun = false;
+                FileValidationRunning = false;
             }
 
-            var originalFilePath = ActiveDocument.FilePath;
-            ActiveDocument.FilePath = $"resources\\{file}";
-
-            try
-            {
-                await _scriptService.ExecuteAsync(code);
-            }
-            catch (Exception err)
-            {
-                _loggerService.Error(err.Message);
-            }
-
-            ActiveDocument.FilePath = originalFilePath;
+            _loggerService.Info(
+                "To open the most recent log file, shift-click on the 'open folder' button to the right.");
         }
-
-        _loggerService.Info("Done.");
-        _loggerService.Info(
-            "To open the most recent log file, shift-click on the 'open folder' button to the right.");
-
-        ScriptService.SuppressLogOutput = false;
     }
-
 
     private readonly string EntspawnerExportRelPath =
         Path.Join("bin", "x64", "plugins", "cyber_engine_tweaks", "mods", "entSpawner", "export");
