@@ -45,7 +45,7 @@ namespace WolvenKit.App.Services
         public void ClearSelection()
         {
             SelectedProperty = null;
-            SelectedProperties.Clear();
+            SelectedProperties?.Clear();
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

@@ -22,11 +22,11 @@ namespace WolvenKit.App.Services
                 if (_selectedNode != value)
                 {
                     _selectedNode = value;
-                    
+
                     // Clear the properties selection when node changes to prevent 
                     // properties from previous node persisting in the panel
-                    NodePropertiesSelectionService.Instance.ClearSelection();
-                    
+                    NodePropertiesSelectionService.Instance?.ClearSelection();
+
                     OnPropertyChanged();
                 }
             }
@@ -44,4 +44,4 @@ namespace WolvenKit.App.Services
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
-} 
+}

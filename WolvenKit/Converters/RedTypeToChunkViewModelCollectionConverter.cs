@@ -28,6 +28,14 @@ namespace WolvenKit.Converters
         /// </summary>
         private static readonly ConditionalWeakTable<RedBaseClass, List<ChunkViewModel>> s_globalCache = new();
         
+        /// <summary>
+        /// Invalidates the cache for a specific data object, forcing fresh conversion
+        /// </summary>
+        public static void InvalidateCache(RedBaseClass redData)
+        {
+            s_globalCache.Remove(redData);
+        }
+        
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value is not RedBaseClass redData)
@@ -250,4 +258,4 @@ namespace WolvenKit.Converters
             throw new NotSupportedException("RedTypeToChunkViewModelCollectionConverter is one-way only");
         }
     }
-} 
+}
