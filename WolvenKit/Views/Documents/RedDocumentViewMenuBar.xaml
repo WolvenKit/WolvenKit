@@ -355,11 +355,31 @@
                                          Mode=OneWay,
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                     Header="Copy materials from other mesh"
+                    Command="{Binding CopyMeshMaterialsCommand}"
                     Click="OnCopyMaterialsFromMeshClick">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
                             Kind="FileArrowLeftRight"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <!-- Copy materials from XL patch mesh -->
+                <MenuItem
+                    Style="{StaticResource ShowMeshMenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Header="Copy materials from XL patch mesh"
+                    Command="{Binding CopyPatchMeshMaterialsCommand}"
+                    Click="OnCopyMaterialsFromMeshClick">
+
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="SizeXl"
                             Foreground="White" />
                     </MenuItem.Icon>
                 </MenuItem>

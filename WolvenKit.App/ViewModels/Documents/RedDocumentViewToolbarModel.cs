@@ -184,6 +184,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
     [NotifyCanExecuteChangedFor(nameof(AddDependenciesCommand))]
     [NotifyCanExecuteChangedFor(nameof(AddDependenciesFullCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyMeshMaterialsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyPatchMeshMaterialsCommand))]
     [ObservableProperty] private bool _isShiftKeyDown;
 
     [NotifyCanExecuteChangedFor(nameof(ClearChunkMaterialsCommand))]
@@ -237,9 +239,26 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
     private bool HasDependencies() => ContentType is RedDocumentItemType.Mesh or RedDocumentItemType.Mi or RedDocumentItemType.Mlsetup;
 
+    public EventHandler? OnCopyMeshMaterials;
     public event EventHandler? OnAddDependencies;
 
     #region commands
+
+    private bool CanCopyMeshMaterials() => ContentType is RedDocumentItemType.Mesh && !IsShiftKeyDown;
+
+    [RelayCommand(CanExecute = nameof(CanCopyMeshMaterials))]
+    private void CopyMeshMaterials()
+    {
+        /* Only needed for visibility toggle */
+    }
+
+    private bool CanCopyPatchMeshMaterials() => ContentType is RedDocumentItemType.Mesh && IsShiftKeyDown;
+
+    [RelayCommand(CanExecute = nameof(CanCopyPatchMeshMaterials))]
+    private void CopyPatchMeshMaterials()
+    {
+        /* Only needed for visibility toggle */
+    }
 
     private bool CanAddDependencies() => HasDependencies() && !IsShiftKeyDown;
 
@@ -444,7 +463,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
                 depChild.Data = appearance.ResolvedDependencies;
                 depChild.RecalculateProperties();
             }
-            
+
             appChunk.RecalculateProperties();
 
             isDirty |= appearance.ResolvedDependencies.Count > 0 || refCount > 0;

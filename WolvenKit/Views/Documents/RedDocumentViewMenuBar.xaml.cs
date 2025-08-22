@@ -280,9 +280,16 @@ namespace WolvenKit.Views.Documents
             var files = _documentTools.CollectProjectFiles(".mesh").Where(f => f != ViewModel.FilePath)
                 .ToList();
 
-            if (Interactions.AskForDropdownOption((files, "Select .mesh file", "Select .mesh file",
-                    WikiLinks.MeshMaterials, true, "From ArchiveXL patch mesh")) is not string meshFileName ||
-                string.IsNullOrEmpty(meshFileName))
+            string? meshFileName = null;
+            if (ModifierViewStateService.IsShiftBeingHeld)
+            {
+                meshFileName = SelectDropdownEntryDialogViewModel.ButtonClickResult;
+            }
+
+            meshFileName ??= Interactions.AskForDropdownOption((files, "Select .mesh file", "Select .mesh file",
+                WikiLinks.MeshMaterials, true, "From ArchiveXL patch mesh"));
+
+            if (string.IsNullOrEmpty(meshFileName))
             {
                 return;
             }
