@@ -124,6 +124,13 @@ jobs:
         run: ISCC /O"${{env.FINALOUT}}" /dMyAppBaseDir="..\publish\app\" /dMyAppName="WolvenKit Nightly" /dMyAppId="WolvenKit-Nightly" .\Installers\installer.iss
 
       ##########################################
+      # UNPACKER
+      - name: publish unpacker
+        run: dotnet publish ./WolvenKit.Unpacker/WolvenKit.Unpacker.csproj -o ./publish/unpacker/ -c Release -p:DebugType=None -p:DebugSymbols=false
+      - name: zip unpacker
+        run: Compress-Archive -Path ./publish/unpacker/* -DestinationPath ${{ env.FINALOUT }}/${{env.NAME}}.Unpacker-${{env.VERSION_APP}}.zip
+
+      ##########################################
       # RELEASE
 
       - name: Release dispatch

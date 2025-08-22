@@ -8,6 +8,7 @@ on:
 env:
   PROJ: ./WolvenKit/WolvenKit.csproj
   PROJC: ./WolvenKit.CLI/WolvenKit.CLI.csproj
+  PROJU: ./WolvenKit.Unpacker/WolvenKit.Unpacker.csproj
   ARTIFACT_CLI_LIN: wolvenkit-cli-linux
 
 jobs:
@@ -82,6 +83,13 @@ jobs:
         run: dotnet publish ${{env.PROJC}} -o .\publish_cli -r win-x64 -c Release --no-self-contained -p:DebugType=None -p:DebugSymbols=false
 
       ##########################################
+      # UNPACKER
+      
+      # Publish unpacker to .\publish_unpacker
+      - name: publish unpacker
+        run: dotnet publish ${{env.PROJU}} -o .\publish_unpacker -c Release -p:DebugType=None -p:DebugSymbols=false
+
+      ##########################################
       # Download artifacts to .\download
       - name: Download artifacts
         uses: actions/download-artifact@v4
@@ -99,6 +107,7 @@ jobs:
       - run: Compress-Archive -Path .\publish\* -DestinationPath ${{ env.OUT_DIR }}/${{env.NAME}}-${{env.VERSION_APP}}.zip
       - run: Compress-Archive -Path .\publish_cli\* -DestinationPath ${{ env.OUT_DIR }}/${{env.NAME}}.Console-${{steps.get_version_cli.outputs.assembly-version}}.zip
       - run: Compress-Archive -Path ".\download\${{env.ARTIFACT_CLI_LIN}}\*" -DestinationPath ${{ env.OUT_DIR }}/${{env.NAME}}.ConsoleLinux-${{steps.get_version_cli.outputs.assembly-version}}.zip
+      - run: Compress-Archive -Path .\publish_unpacker\* -DestinationPath ${{ env.OUT_DIR }}/${{env.NAME}}.Unpacker-${{env.VERSION_APP}}.zip
 
       ##########################################
       # RELEASE
