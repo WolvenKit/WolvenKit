@@ -1249,7 +1249,20 @@ namespace WolvenKit.Views.Documents
 
         private void SearchBar_OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            if (SearchBar?.Text == "")
+            if (SearchBar is null)
+            {
+                return;
+            }
+
+            // HandyControl searchbar has no OnPaste -.-
+            if (e.Changes.FirstOrDefault()?.AddedLength > 1)
+            {
+                SearchBar.SetCurrentValue(TextBox.TextProperty, SearchBar.Text.Trim());
+                SearchBar.CaretIndex = SearchBar.Text.Length;
+                return;
+            }
+
+            if (SearchBar.Text == "")
             {
                 SearchBar_OnClear(this, e);
             }
