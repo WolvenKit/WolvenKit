@@ -50,7 +50,9 @@ public partial class AppScriptService : ScriptService
         DefaultHostObject = new() { { "wkit", _wkit } };
 
         RegisterHooks();
-        RefreshUIScripts();
+
+        // Improve FCP (~500 ms)
+        _ = Task.Run(RefreshUIScripts);
     }
 
 

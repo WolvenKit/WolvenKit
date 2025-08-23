@@ -18,10 +18,13 @@ public class CRUIDService
 
     private const string s_used = "WolvenKit.Common.Resources.basecruids.kark";
 
+    private volatile bool _isLoaded;
     private List<ulong> _baseCRUIDS = new();
     private List<ulong> _additionalCRUIDS = new();
     
     private readonly Random _random = new();
+
+    public bool IsLoaded => _isLoaded;
 
     #endregion
 
@@ -29,24 +32,12 @@ public class CRUIDService
 
     public CRUIDService()
     {
-        Load();
         s_Instance = this;
     }
 
     #endregion Constructors
 
     #region Private Methods
-
-    private void Load()
-    {
-        _baseCRUIDS = JsonSerializer.Deserialize<List<ulong>>(DecompressEmbeddedFile(s_used)).NotNull();
-
-        var userFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit", "user_cruids.json");
-        if (File.Exists(userFile))
-        {
-            _additionalCRUIDS = JsonSerializer.Deserialize<List<ulong>>(File.ReadAllText(userFile)).NotNull();
-        }
-    }
 
     private MemoryStream DecompressEmbeddedFile(string resourceName)
     {
@@ -76,7 +67,20 @@ public class CRUIDService
     #region Public Methods
 
     public static CRUID GenerateRandomCRUID() => s_Instance?.GenerateNewCRUID() ?? new CRUID();
-    
+
+    public void Load()
+    {
+        _baseCRUIDS = JsonSerializer.Deserialize<List<ulong>>(DecompressEmbeddedFile(s_used)).NotNull();
+
+        var userFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit", "user_cruids.json");
+        if (File.Exists(userFile))
+        {
+            _additionalCRUIDS = JsonSerializer.Deserialize<List<ulong>>(File.ReadAllText(userFile)).NotNull();
+        }
+
+        _isLoaded = true;
+    }
+
     public void SaveUserCRUIDS()
     {
         var dataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit");

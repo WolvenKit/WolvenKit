@@ -94,7 +94,7 @@ namespace WolvenKit
                 .Skip(1)
                 .Subscribe(_ => OnUiScaleChanged());
 
-            // offload hashes to reduce blocking load time (~5 seconds)
+            // Improve FCP (~5 000 ms)
             _ = Task.Run(async () =>
             {
                 var hashService = Locator.Current.GetService<IHashService>();
@@ -102,6 +102,13 @@ namespace WolvenKit
                 {
                     await hashService.LoadAsync();
                 }
+            });
+
+            // Improve FCP (~250 ms)
+            _ = Task.Run(() =>
+            {
+                var cruidService = Locator.Current.GetService<CRUIDService>();
+                cruidService?.Load();
             });
 
             base.OnStartup(e);
