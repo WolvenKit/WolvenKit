@@ -83,7 +83,6 @@ namespace WolvenKit
             _loggerService.Debug("Initializing Shell");
             Initializations.InitializeShell(_settingsManager);
 
-
             _loggerService.Debug("Initializing Discord RPC API");
             DiscordHelper.InitializeDiscordRPC();
 

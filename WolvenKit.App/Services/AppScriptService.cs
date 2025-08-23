@@ -23,7 +23,7 @@ namespace WolvenKit.App.Services;
 public partial class AppScriptService : ScriptService
 {
     private readonly AppScriptFunctions _wkit;
-    
+
     private readonly ISettingsManager _settingsManager;
     private readonly IHookService _hookService;
 
@@ -31,8 +31,8 @@ public partial class AppScriptService : ScriptService
 
     public AppScriptService(
         ISettingsManager settingsManager,
-        ILoggerService loggerService, 
-        IProjectManager projectManager, 
+        ILoggerService loggerService,
+        IProjectManager projectManager,
         IArchiveManager archiveManager,
         Red4ParserService red4ParserService,
         IModTools modTools,
@@ -46,7 +46,7 @@ public partial class AppScriptService : ScriptService
 
         _wkit = new AppScriptFunctions(_loggerService, projectManager, archiveManager, red4ParserService, modTools, importExportHelper, gameController, geometryCacheService, settingsManager);
         _ui = new UiScriptFunctions(this);
-        
+
         DefaultHostObject = new() { { "wkit", _wkit } };
 
         RegisterHooks();

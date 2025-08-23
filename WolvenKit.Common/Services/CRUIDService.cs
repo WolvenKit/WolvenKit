@@ -13,7 +13,7 @@ namespace WolvenKit.Common.Services;
 public class CRUIDService
 {
     private static CRUIDService? s_Instance;
-    
+
     #region Fields
 
     private const string s_used = "WolvenKit.Common.Resources.basecruids.kark";
@@ -21,7 +21,7 @@ public class CRUIDService
     private volatile bool _isLoaded;
     private List<ulong> _baseCRUIDS = new();
     private List<ulong> _additionalCRUIDS = new();
-    
+
     private readonly Random _random = new();
 
     public bool IsLoaded => _isLoaded;
@@ -94,7 +94,7 @@ public class CRUIDService
         while (true)
         {
             var value = _random.NextCRUID();
-            
+
             if (!_baseCRUIDS.Contains(value) && !_additionalCRUIDS.Contains(value))
             {
                 _additionalCRUIDS.Add(value);
