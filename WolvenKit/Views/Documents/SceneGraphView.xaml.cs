@@ -528,6 +528,10 @@ namespace WolvenKit.Views.Documents
             // Shortcut: Delete key to soft delete, Shift+Delete for hard delete
             if (e.Key == Key.Delete)
             {
+                // Don't handle delete key if user is editing text
+                if (IsTextEditingControlFocused())
+                    return;
+
                 // Use SelectedNodes from underlying GraphEditor
                 var selectedNodes = SceneGraphEditor?.Editor?.SelectedItems?
                     .OfType<BaseSceneViewModel>()
@@ -940,4 +944,4 @@ namespace WolvenKit.Views.Documents
 
         #endregion
     }
-} 
+}

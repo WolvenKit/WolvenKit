@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -1032,6 +1033,10 @@ namespace WolvenKit.Views.Documents
             // Shortcut: Delete key to soft delete, Shift+Delete for hard delete
             if (e.Key == Key.Delete)
             {
+                // Don't handle delete key if user is editing text
+                if (IsTextEditingControlFocused())
+                    return;
+
                 // Use SelectedNodes from underlying GraphEditor
                 var selectedNodes = QuestPhaseGraphEditor?.Editor?.SelectedItems?
                     .OfType<BaseQuestViewModel>()
@@ -1100,6 +1105,10 @@ namespace WolvenKit.Views.Documents
             // Shortcut: Arrow keys for smart graph walk based on spatial positioning
             if (e.Key is Key.Left or Key.Right or Key.Up or Key.Down)
             {
+                // Don't handle arrow keys if user is editing text
+                if (IsTextEditingControlFocused())
+                    return;
+
                 var currentNode = NodeSelectionService.Instance.SelectedNode;
                 if (currentNode == null)
                 {
@@ -1679,5 +1688,20 @@ namespace WolvenKit.Views.Documents
                 // Silently handle any viewport manipulation errors
             }
         }
+
+        /// <summary>
+        /// Checks if the currently focused element is a text editing control
+        /// </summary>
+        private bool IsTextEditingControlFocused()
+        {
+            var focusedElement = Keyboard.FocusedElement;
+
+            // Check for text editing controls
+            return focusedElement is TextBox or
+                   RichTextBox or
+                   PasswordBox or
+                   System.Windows.Controls.ComboBox { IsEditable: true } or
+                   System.Windows.Documents.TextElement;
+        }
     }
-} 
+}
