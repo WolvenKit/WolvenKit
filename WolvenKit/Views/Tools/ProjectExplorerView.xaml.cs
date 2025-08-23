@@ -108,8 +108,8 @@ namespace WolvenKit.Views.Tools
 
                 Interactions.ShowDeleteOrMoveFilesList = (args) =>
                 {
-                    var list = args.Item2.Order(new FilePathStringComparer());
-                    var dialog = new DeleteOrMoveFilesListDialogView(args.Item1, list.ToList(), args.Item3);
+                    var list = args.files.Order(new FilePathStringComparer());
+                    var dialog = new DeleteOrMoveFilesListDialogView(args.title, list.ToList(), args.currentProject);
 
                     if (dialog.ShowDialog(Application.Current.MainWindow) != true ||
                         dialog.ViewModel is not DeleteOrMoveFilesListDialogViewModel viewModel)

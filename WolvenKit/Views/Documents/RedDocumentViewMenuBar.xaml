@@ -678,30 +678,6 @@
 
                 <MenuItem
                     Style="{StaticResource MenuItemStyle}"
-                    Header="Regenerate visual controllers"
-                    Command="{Binding Path=RegenerateVisualControllersCommand}">
-                    <MenuItem.Icon>
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="CogRefresh"
-                            Foreground="White" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <MenuItem
-                    Style="{StaticResource MenuItemStyle}"
-                    Header="Regenerate resolved dependencies"
-                    Command="{Binding Path=RegenerateResolvedDependenciesCommand}">
-                    <MenuItem.Icon>
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="DatabaseRefreshOutline"
-                            Foreground="White" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <MenuItem
-                    Style="{StaticResource MenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
                                          RelativeSource={RelativeSource Self},
                                          Mode=OneWay,
@@ -717,17 +693,53 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <!-- App/ent file: dependencies -->
                 <MenuItem
                     Style="{StaticResource ShowAppMenuItemStyle}"
-                    Header="Find unused files in project"
-                    ToolTip="Will filter by extension: Only file extensions used in any references will be considered"
-                    Click="OnFindUnusedProjectFilesClick">
+                    Header="Dependencies">
                     <MenuItem.Icon>
                         <templates:IconBox
-                            IconPack="Material"
-                            Kind="TextSearchVariant"
-                            Foreground="White" />
+                            IconPack="Empty"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
+
+                    <MenuItem
+                        Style="{StaticResource ShowAppMenuItemStyle}"
+                        Header="Find unused files in project"
+                        ToolTip="Will only check files that can be used in .app files!"
+                        Click="OnFindUnusedAppDependenciesClick">
+                        <MenuItem.Icon>
+                            <templates:IconBox
+                                IconPack="Material"
+                                Kind="TextSearchVariant"
+                                Foreground="White" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <MenuItem
+                        Style="{StaticResource MenuItemStyle}"
+                        Header="Regenerate visual controllers"
+                        Command="{Binding Path=RegenerateVisualControllersCommand}">
+                        <MenuItem.Icon>
+                            <templates:IconBox
+                                IconPack="Material"
+                                Kind="CogRefresh"
+                                Foreground="White" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <MenuItem
+                        Style="{StaticResource MenuItemStyle}"
+                        Header="Regenerate resolved dependencies"
+                        Command="{Binding Path=RegenerateResolvedDependenciesCommand}">
+                        <MenuItem.Icon>
+                            <templates:IconBox
+                                IconPack="Material"
+                                Kind="DatabaseRefreshOutline"
+                                Foreground="White" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
 
                 <!-- App file: edit components -->
@@ -820,7 +832,6 @@
                                 Foreground="{StaticResource WolvenKitRed}" />
                         </MenuItem.Icon>
                     </MenuItem>
-
                 </MenuItem>
 
                 <!-- Connect to .ent file -->
@@ -832,6 +843,24 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="Connection"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <!-- Set LOD level 0 in all components -->
+                <MenuItem
+                    Style="{StaticResource MenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Header="Force LOD level 0"
+                    ToolTip="Disables Level Of Detail switching for visual components (impacts performance!)"
+                    Command="{Binding Path=ForceLodLevelZeroCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Hail"
                             Foreground="White" />
                     </MenuItem.Icon>
                 </MenuItem>
