@@ -302,7 +302,7 @@ namespace WolvenKit.Modkit.RED4
 
             // https://github.com/WolvenKit/WolvenKit/issues/1870
             rendBlob.Header.OpacityMicromaps.Clear();
-            
+
             var originalRig = args.Rig?.FirstOrDefault();
 
             if (File.Exists(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")) && (args.ImportMaterialOnly || args.ImportMaterials))
@@ -399,13 +399,13 @@ namespace WolvenKit.Modkit.RED4
             }
 
             // GarmentSupport not accounted here. Might be an issue?
-            // TODO: https://github.com/WolvenKit/WolvenKit/issues/1504 
+            // TODO: https://github.com/WolvenKit/WolvenKit/issues/1504
             meshBlob.BoundingBox.Min = new Vector4 { X = min.X, Y = min.Y, Z = min.Z, W = 1f };
             meshBlob.BoundingBox.Max = new Vector4 { X = max.X, Y = max.Y, Z = max.Z, W = 1f };
 
             var quantScale = new Vec4((max.X - min.X) / 2, (max.Y - min.Y) / 2, (max.Z - min.Z) / 2, 0);
             var quantTrans = new Vec4((max.X + min.X) / 2, (max.Y + min.Y) / 2, (max.Z + min.Z) / 2, 1);
-            
+
 
             RawArmature? incomingJoints = null;
             RawArmature? existingJoints = null;
@@ -1114,7 +1114,7 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            //source mesh renderMasks for updation 
+            //source mesh renderMasks for updation
             var renderMasks = blob.Header.RenderChunkInfos.Select(s => s.RenderMask).ToList();
 
             // removing existing rendChunks
@@ -1446,6 +1446,10 @@ namespace WolvenKit.Modkit.RED4
         {
             if (model.LogicalMeshes.Count < 1)
             {
+                if (args.ImportSkipEmptyGeometry)
+                {
+                    return;
+                }
                 throw new Exception("Provided glTF doesn't contain any 3D Meshes");
             }
             /*if (model.LogicalSkins.Count > 1)
@@ -1465,26 +1469,35 @@ namespace WolvenKit.Modkit.RED4
                 .Distinct()
                 .Select(x => uint.Parse(x!))
                 .ToList();
-            
+
             foreach (var m in model.LogicalMeshes)
             {
                 var accessors = m.Primitives[0].VertexAccessors.Keys.ToList();
+                var meshIsEmpty = false;
 
                 if (!accessors.Contains("POSITION"))
                 {
-                    throw new Exception("One or more Geometry in provided GLTF doesn't contain Vertices");
+                    meshIsEmpty = true;
+                    if (!args.ImportSkipEmptyGeometry)
+                    {
+                        throw new Exception("One or more Geometry in provided GLTF doesn't contain Vertices");
+                    }
                 }
-                if (!accessors.Contains("NORMAL"))
+
+                if (!accessors.Contains("NORMAL") && !meshIsEmpty)
                 {
                     throw new Exception("One or more Geometry in provided GLTF doesn't contain Normals data. Normals must be included within glTF files.");
                 }
-                if (!accessors.Contains("TANGENT"))
+
+                if (!accessors.Contains("TANGENT") && !meshIsEmpty)
                 {
                     throw new Exception("One or more Geometry in provided GLTF doesn't contain Tangents data. Tangents must be included within glTF files.");
                 }
-                if (m.Primitives[0].GetIndices().ToList().Count < 3)
+
+                if (m.Primitives[0].GetIndices().ToList().Count < 3 && !meshIsEmpty && !args.ImportSkipEmptyGeometry)
                 {
-                    throw new Exception("One or more Geometry in provided GLTF doesn't contain any Triangle primitives");
+                    throw new InvalidDataException(
+                        "One or more Geometry in provided GLTF doesn't contain any Triangle primitives");
                 }
                 var name = m.Name;
                 uint lod = 0;
@@ -1500,7 +1513,7 @@ namespace WolvenKit.Modkit.RED4
                         }
 
                         if (lod is not 1 and not 2 and not 4 and not 8
-                            && (lod is not 0 && !lodsFromMeshNames.Contains(lod))) 
+                            && (lod is not 0 && !lodsFromMeshNames.Contains(lod)))
                         {
                             throw new Exception("Invalid Geometry/sub mesh name: " + name + " , Character after \"LOD_\"  should be 1 or 2 or 4 or 8, Representing the Level of Detail (LOD) of the submesh.");
                         }
@@ -1532,8 +1545,8 @@ namespace WolvenKit.Modkit.RED4
                 .Distinct()
                 .Select(x => uint.Parse(x!))
                 .ToList();
-            
-            
+
+
             var lodLvl = new uint[meshes.Count];
             for (var i = 0; i < meshes.Count; i++)
             {
@@ -1910,7 +1923,7 @@ namespace WolvenKit.Modkit.RED4
                 _loggerService.Warning("Garment support is enabled, but the model doesn't contain any morph data. Please ensure all meshes have garment morph data before enabling garment support. Skipping GS Parameters!");
                 return;
             }
-                
+
             // Not sure if valid or not. Parameters where removed before, so I kept it this way. Remove below if needed - Seb E. Roth
             if (missingMorphData.Count > 0)
             {
