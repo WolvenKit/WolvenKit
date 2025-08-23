@@ -446,7 +446,7 @@
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"
-                            Kind="Graph"
+                            Kind="PackageVariantClosedPlus"
                             Foreground="White" />
                     </MenuItem.Icon>
                 </MenuItem>
