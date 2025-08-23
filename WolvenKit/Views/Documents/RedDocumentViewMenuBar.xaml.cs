@@ -80,7 +80,8 @@ namespace WolvenKit.Views.Documents
                 _modifierStateService,
                 _projectManager,
                 _documentTools,
-                Locator.Current.GetService<CRUIDService>()!) { CurrentTab = _currentTab };
+                Locator.Current.GetService<CRUIDService>()!,
+                _loggerService) { CurrentTab = _currentTab };
             ViewModel = DataContext as RedDocumentViewToolbarModel;
 
             _modifierStateService.ModifierStateChanged += OnModifierStateChanged;
@@ -1062,7 +1063,10 @@ namespace WolvenKit.Views.Documents
             }
         }
 
-        private async void OnFindUnusedProjectFilesClick(object _, RoutedEventArgs e)
+        private static readonly string[] s_appFileExtensions =
+            [".mesh", ".rig", ".animgraph", ".effect", ".facialsetup", ".morphtarget"];
+
+        private async void OnFindUnusedAppDependenciesClick(object _, RoutedEventArgs e)
         {
             try
             {
@@ -1073,7 +1077,8 @@ namespace WolvenKit.Views.Documents
                 }
 
                 var relativePath = currentFile.Replace(_projectManager.ActiveProject.ModDirectory, "");
-                _loggerService.Info("Reading references from file...");
+
+                _loggerService.Info("Reading references from .app file...");
                 var referencesInFile = await _projectManager.ActiveProject.GetAllReferencesAsync(
                     _progressService,
                     _loggerService,
@@ -1086,25 +1091,23 @@ namespace WolvenKit.Views.Documents
                     return;
                 }
 
-                var fileExtensions = referencesInFile.Values
-                    .SelectMany(list => list.Select(Path.GetExtension))
-                    .Distinct()
-                    .Where(x => x is not (".json" or ".ent"))
-                    .ToList();
-
                 var allModFiles = _projectManager.ActiveProject.ModFiles
-                    .Where(f => fileExtensions.Contains(Path.GetExtension(f))).ToList();
-                var unusedMeshPaths = allModFiles.Where(f => !allUsedPaths.Contains(f)).ToList();
+                    .Where(f => s_appFileExtensions.Contains(Path.GetExtension(f))).ToList();
 
-                if (unusedMeshPaths.Count == 0)
+                var unusedPaths = allModFiles.Where(f => !allUsedPaths.Contains(f)).ToList();
+
+                _loggerService.Info(
+                    $"Found {allModFiles.Count} files with extensions [{string.Join(", ", s_appFileExtensions)}] (used: {allModFiles.Count - unusedPaths.Count})");
+
+                if (unusedPaths.Count == 0)
                 {
-                    _loggerService.Success("Nothing found! You're good!");
+                    _loggerService.Success("No unused files in project! You're good!");
                     return;
                 }
 
                 _loggerService.Info("Done!");
-                Interactions.ShowBrokenReferencesList(("Unused files in project",
-                    new Dictionary<string, List<string>>() { { relativePath, unusedMeshPaths } }));
+                Interactions.ShowBrokenReferencesList(("Unused files in project (extensions: ",
+                    new Dictionary<string, List<string>>() { { relativePath, unusedPaths } }));
             }
             catch (Exception ex)
             {

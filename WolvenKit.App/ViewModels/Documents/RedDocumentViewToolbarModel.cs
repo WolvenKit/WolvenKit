@@ -14,6 +14,7 @@ using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
@@ -33,13 +34,15 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private readonly IModifierViewStateService? _modifierViewStateService;
     private readonly CRUIDService _cruidService;
     private readonly DocumentTools _documentTools;
+    private readonly ILoggerService _loggerService;
 
     public RedDocumentViewToolbarModel(
         ISettingsManager settingsManager,
         IModifierViewStateService modifierSvc,
         IProjectManager projectManager,
         DocumentTools documentTools,
-        CRUIDService cruidService
+        CRUIDService cruidService,
+        ILoggerService loggerService
     )
     {
         _modifierViewStateService = modifierSvc;
@@ -47,6 +50,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         _settingsManager = settingsManager;
         _cruidService = cruidService;
         _documentTools = documentTools;
+        _loggerService = loggerService;
 
         modifierSvc.ModifierStateChanged += OnModifierChanged;
         modifierSvc.PropertyChanged += (_, args) => OnPropertyChanged(args.PropertyName);
@@ -369,7 +373,77 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     }
 
     /// <summary>
-    /// Regenerates visual controllers. Will only work in .ent or .app file.
+    /// Sets the LOD levels of all visual components to 0.
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(IsInEntOrAppFile))]
+    private void ForceLodLevelZero()
+    {
+        if (RootChunk is null)
+        {
+            return;
+        }
+
+
+        List<entIVisualComponent> components = [];
+        List<ChunkViewModel?> chunksToRefresh = [];
+        switch (RootChunk.ResolvedData)
+        {
+            case entEntityTemplate template:
+                components.AddRange(template.Components.OfType<entIVisualComponent>());
+                chunksToRefresh.Add(RootChunk.GetPropertyChild("components"));
+                break;
+            case appearanceAppearanceResource app
+                when RootChunk.GetPropertyChild("appearances") is ChunkViewModel appearances:
+            {
+                appearances.CalculateProperties();
+                foreach (var appearanceCvm in appearances.Properties)
+                {
+                    appearanceCvm.CalculateProperties();
+                    var componentChild = appearanceCvm.GetPropertyChild("components");
+                    if (componentChild is null)
+                    {
+                        continue;
+                    }
+
+                    componentChild.CalculateProperties();
+                    chunksToRefresh.AddRange(componentChild.Properties);
+                    chunksToRefresh.Add(componentChild);
+                    chunksToRefresh.Add(appearanceCvm);
+                }
+
+                components.AddRange(app.Appearances
+                    .Select(a => a.Chunk?.Components ?? [])
+                    .SelectMany(c => c.OfType<entIVisualComponent>()));
+
+                break;
+            }
+        }
+
+        var lodLevelsChanged = 0;
+        foreach (var comp in components.Where(c => c.ForceLODLevel != 0))
+        {
+            comp.ForceLODLevel = 0;
+            lodLevelsChanged += 1;
+        }
+
+        if (lodLevelsChanged == 0)
+        {
+            _loggerService.Info($"No LOD levels left to change.");
+            return;
+        }
+
+        foreach (var cvm in chunksToRefresh.Where(c => c is not null))
+        {
+            cvm!.RecalculateProperties();
+        }
+
+        _loggerService.Success($"Changed LOD level for {lodLevelsChanged} components.");
+        RootChunk.Tab?.Parent.SetIsDirty(true);
+    }
+
+    /// <summary>
+    /// Regenerates resolved dependencies. Will only work in .ent or .app file.
+    /// Logic is courtesy of psiberx.
     /// </summary>
     [RelayCommand(CanExecute = nameof(IsInEntOrAppFile))]
     private void RegenerateResolvedDependencies()
@@ -444,7 +518,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
                 depChild.Data = appearance.ResolvedDependencies;
                 depChild.RecalculateProperties();
             }
-            
+
             appChunk.RecalculateProperties();
 
             isDirty |= appearance.ResolvedDependencies.Count > 0 || refCount > 0;
