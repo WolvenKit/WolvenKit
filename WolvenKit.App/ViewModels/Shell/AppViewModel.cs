@@ -134,7 +134,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _templateFileTools = templateFileTools;
         _projectResourceTools = projectResourceTools;
         _updateService = updateService;
-        
+
         _fileValidationScript = _scriptService.GetScripts().ToList()
             .Where(s => s.Name == "run_FileValidation_on_active_tab")
             .Select(s => new ScriptFileViewModel(SettingsManager, ScriptSource.User, s))
@@ -540,16 +540,13 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     [RelayCommand(CanExecute = nameof(CanStartTask))]
-    private async Task PackInstallRun()
-    {
-        await LaunchAsync(new LaunchProfile() { Install = true, LaunchGame = true });
-    }
+    private async Task PackInstallRun() => await LaunchAsync(new LaunchProfile() { Install = true, LaunchGame = true });
 
     [RelayCommand(CanExecute = nameof(CanStartTask))]
-    private async Task PackInstallRedModRun()
+    private async Task PackInstallRedModRun() => await LaunchAsync(new LaunchProfile()
     {
-        await LaunchAsync(new LaunchProfile() { Install = true, LaunchGame = true, IsRedmod = true, DeployWithRedmod = true });
-    }
+        Install = true, LaunchGame = true, IsRedmod = true, DeployWithRedmod = true
+    });
 
     [RelayCommand]
     private async Task CheckForScriptUpdates()
@@ -630,12 +627,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             {
                 return;
             }
-            
+
             if (!await _updateService.IsUpdateAvailable())
             {
                 return;
             }
-            
+
             await SetActiveDialog(new UpdateDialogViewModel(this, _updateService, SettingsManager, _loggerService, !SettingsManager.AlwaysAskBeforeUpdating, true));
         }
         else
@@ -958,8 +955,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             .Where(fileName => new FileInfo(activeProject.GetAbsolutePath(fileName)).Length < 20000)
             .Where(meshFilePath =>
             {
-                var cr2w = _cr2WTools.ReadCr2W(activeProject.GetAbsolutePath(meshFilePath));
-                if (cr2w?.RootChunk is not CMesh mesh || mesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob blob)
+                var cr2W = _cr2WTools.ReadCr2W(activeProject.GetAbsolutePath(meshFilePath));
+                if (cr2W.RootChunk is not CMesh mesh || mesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob blob)
                 {
                     return false;
                 }
@@ -1012,6 +1009,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private async Task FindUnusedFiles()
     {
+        if (ActiveProject!.ModFiles.Count > 15 && Interactions.ShowQuestionYesNo((
+                $"This will scan {ActiveProject!.ModFiles.Count} files and can take a while. Proceed?",
+                "Scan for unused references now?")) is false)
+        {
+            return;
+        }
         _loggerService.Info($"Scanning {ActiveProject!.ModFiles.Count} files. Please wait...");
 
         var allReferencePaths = await ActiveProject!.GetAllReferencesAsync(_progressService, _loggerService, []);
@@ -1267,8 +1270,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             assetBrowser.SearchBarText = $"archive:{result}";
             await assetBrowser.PerformSearch($"archive:{result}");
         }
-
-        return;
     }
 
     private async Task OpenFromNewFile(NewFileViewModel? file)
@@ -1594,10 +1595,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     public bool HasActiveProject() => ActiveProject is not null;
 
     [RelayCommand]
-    private async Task CleanAllAsync()
-    {
-        await Task.Run(() => _gameControllerFactory.GetController().CleanAll());
-    }
+    private async Task CleanAllAsync() => await Task.Run(() => _gameControllerFactory.GetController().CleanAll());
 
     private async Task LaunchAsync(LaunchProfile profile)
     {
@@ -2299,7 +2297,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private void UpdateScalesResource()
     {
         // NOTE: keep in sync with App.Sizes.xaml
-        var resources = System.Windows.Application.Current.Resources;
+        var resources = Application.Current.Resources;
 
         // Fonts
         resources["WolvenKitFontAltTitle"] = Math.Round(10 * _uiScalePercentage);

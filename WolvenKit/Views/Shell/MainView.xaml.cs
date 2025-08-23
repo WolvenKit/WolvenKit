@@ -39,13 +39,13 @@ namespace WolvenKit.Views.Shell
             DataContext = ViewModel;
 
             InitializeComponent();
-            
+
             this.WhenActivated(disposables =>
             {
                 Disposable.Create(() => dockingAdapter.SaveLayout()).DisposeWith(disposables);
 
                 Interactions.ShowConfirmation = ShowConfirmation;
-                Interactions.ShowSaveDialog = ShowSaveDialog;
+                Interactions.ShowSaveUnsavedChangesDialog = ShowSaveUnsavedChangesDialog;
                 Interactions.ShowQuestionYesNo = ShowQuestionYesNo;
 
                 Interactions.ShowPopupWithWeblink = ShowConfirmationWithLink;
@@ -59,7 +59,7 @@ namespace WolvenKit.Views.Shell
 
                     return null;
                 };
-                
+
                 Interactions.ShowLaunchProfilesView = () =>
                 {
                     LaunchProfilesView dialog = new();
@@ -245,7 +245,7 @@ namespace WolvenKit.Views.Shell
             MessageBoxButtons.No("Close without saving")
         ];
 
-        private static WMessageBoxResult ShowSaveDialog(string fileName)
+        private static WMessageBoxResult ShowSaveUnsavedChangesDialog(string fileName)
         {
             MessageBoxModel messageBox = new()
             {
@@ -257,7 +257,7 @@ namespace WolvenKit.Views.Shell
 
             return (WMessageBoxResult)AdonisUI.Controls.MessageBox.Show(Application.Current.MainWindow, messageBox);
         }
-        
+
         #endregion
 
         private void Overlay_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -309,7 +309,8 @@ namespace WolvenKit.Views.Shell
 
         // This is called before this.WhenActivated
         private void ChromelessWindow_Loaded(object sender, RoutedEventArgs e) { }
-        // This is never called 
+
+        // This is never called
         private void ChromelessWindow_Closing(object sender, CancelEventArgs e) { }
     }
 }
