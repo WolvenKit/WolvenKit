@@ -131,7 +131,7 @@ public class scnRandomizerNodeWrapper : BaseSceneViewModel<scnRandomizerNode>, I
             var nameAndTitle = $"({socket.Stamp.Name},{socket.Stamp.Ordinal})";
             var output = new SceneOutputConnectorViewModel(nameAndTitle, nameAndTitle, UniqueId, socket.Stamp.Name, socket.Stamp.Ordinal, socket);
             
-            // Calculate percentage for this socket
+            // Calculate percentage and set subtitle with proper format: (name,ordinal) [percentage%] OutX
             if (i < _castedData.Weights.Count && total > 0)
             {
                 var chance = (float)_castedData.Weights[i] / total * 100;
@@ -151,34 +151,17 @@ public class scnRandomizerNodeWrapper : BaseSceneViewModel<scnRandomizerNode>, I
         var outputSocket = new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = (ushort)Output.Count } };
         _castedData.OutputSockets.Add(outputSocket);
 
-        var index = (ushort)Output.Count;
-        var nameAndTitle = $"({outputSocket.Stamp.Name},{outputSocket.Stamp.Ordinal})";
-        var output = new SceneOutputConnectorViewModel(nameAndTitle, $"Out{index}", UniqueId, outputSocket.Stamp.Name, outputSocket.Stamp.Ordinal, outputSocket);
-        
+        var newSocketIndex = _castedData.OutputSockets.Count - 1;
         _castedData.NumOutSockets = (uint)(_castedData.OutputSockets.Count);
 
-        // Add a default weight for the new output if needed
-        if (_castedData.Weights.Count < _castedData.NumOutSockets)
+        // Set weight to 1 for the new output in the fixed-size array
+        if (newSocketIndex < _castedData.Weights.Count)
         {
-            _castedData.Weights.Add(1); // Default weight of 1
+            _castedData.Weights[newSocketIndex] = 1;
         }
 
-        // Calculate and set the percentage subtitle
-        var total = 0;
-        for (var i = 0; i < Math.Min(_castedData.NumOutSockets, _castedData.Weights.Count); i++)
-        {
-            total += _castedData.Weights[i];
-        }
-        
-        if (index < _castedData.Weights.Count && total > 0)
-        {
-            var chance = (float)_castedData.Weights[index] / total * 100;
-            output.Subtitle = $"[{chance:0.00}%] Out{index}";
-        }
-        else
-        {
-            output.Subtitle = $"[0.00%] Out{index}";
-        }
+        var nameAndTitle = $"({outputSocket.Stamp.Name},{outputSocket.Stamp.Ordinal})";
+        var output = new SceneOutputConnectorViewModel(nameAndTitle, nameAndTitle, UniqueId, outputSocket.Stamp.Name, outputSocket.Stamp.Ordinal, outputSocket);
         
         Output.Add(output);
 
@@ -204,16 +187,18 @@ public class scnRandomizerNodeWrapper : BaseSceneViewModel<scnRandomizerNode>, I
             // Only remove if it has no connections
             if (lastSocket.Destinations.Count == 0)
             {
+                var removedIndex = _castedData.OutputSockets.Count - 1;
+                
                 _castedData.OutputSockets.RemoveAt(_castedData.OutputSockets.Count - 1);
                 Output.RemoveAt(Output.Count - 1);
                 
                 // Update the counter
                 _castedData.NumOutSockets = (uint)Output.Count;
                 
-                // Update weights array if needed
-                if (_castedData.Weights.Count > _castedData.NumOutSockets)
+                // Reset the weight to 0 for the removed socket in the fixed-size array
+                if (removedIndex < _castedData.Weights.Count)
                 {
-                    _castedData.Weights.RemoveAt(_castedData.Weights.Count - 1);
+                    _castedData.Weights[removedIndex] = 0;
                 }
                 
                 // Update all socket percentages since totals changed
