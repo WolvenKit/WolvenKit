@@ -21,7 +21,7 @@ public class UpdateService : IUpdateService
     private readonly ILoggerService _loggerService;
     private readonly ISettingsManager _settingsManager;
     private readonly HttpClient _httpClient;
-    
+
     public UpdateService(ILoggerService loggerService, ISettingsManager settingsManager)
     {
         _loggerService = loggerService;
@@ -30,7 +30,7 @@ public class UpdateService : IUpdateService
         _httpClient.DefaultRequestHeaders.Add("User-Agent", "WolvenKit");
         _httpClient.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
     }
-    
+
     public async Task UpdateToNewestVersion()
     {
         var latestRelease = await GetLatestRelease();
@@ -125,7 +125,7 @@ public class UpdateService : IUpdateService
         var startInfo = new ProcessStartInfo()
         {
             FileName = unpackerExePath,
-            Arguments = $"--wolvenkit-exe-path {wolvenKitExePath} --unzipped-path {unzipPath}",
+            Arguments = $"--wolvenkit-exe-path \"{wolvenKitExePath}\" --unzipped-path \"{unzipPath}\"",
             UseShellExecute = false,
             CreateNoWindow = true
         };
@@ -154,16 +154,16 @@ public class UpdateService : IUpdateService
         {
             return true;
         }
-        
+
         return IsLeftNewerThanRight(remoteVersion, localVersion!);
     }
 
     public async Task<string> GetLatestVersionTag()
     {
         var latestRelease = await GetLatestRelease();
-        return latestRelease?.TagName ?? "0.0.0"; 
+        return latestRelease?.TagName ?? "0.0.0";
     }
-    
+
     private bool IsLeftNewerThanRight(SemVersion left, SemVersion right) => right.CompareSortOrderTo(left) == -1;
 
     public SemVersion? GetLocalVersion() => Core.CommonFunctions.GetAssemblyVersion(Constants.AssemblyName);
@@ -171,7 +171,7 @@ public class UpdateService : IUpdateService
     private string GetRepositoryName() => _settingsManager.UpdateChannel == EUpdateChannel.Stable
         ? "WolvenKit"
         : "WolvenKit-nightly-releases";
-    
+
     private async Task<MinimalGithubRelease?> GetLatestRelease()
     {
         try
@@ -189,7 +189,7 @@ public class UpdateService : IUpdateService
             return null;
         }
     }
-    
+
     private async Task<SemVersion?> GetRemoteVersion(MinimalGithubRelease? release = null)
     {
         var latestRelease = release ?? await GetLatestRelease();
@@ -197,6 +197,6 @@ public class UpdateService : IUpdateService
         {
             return null;
         }
-        return SemVersion.Parse(latestRelease.TagName, SemVersionStyles.OptionalMinorPatch);  
+        return SemVersion.Parse(latestRelease.TagName, SemVersionStyles.OptionalMinorPatch);
     }
 }
