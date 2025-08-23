@@ -201,6 +201,10 @@ public class QuestConditionHelper
         {
             return $"Wait {tick.TickCount} ticks";
         }
+        else if (time.Type?.Chunk is questTimePeriod_ConditionType timePeriod)
+        {
+            return FormatTimePeriodCondition(timePeriod);
+        }
         return "Time condition";
     }
 
@@ -1336,5 +1340,28 @@ public class QuestConditionHelper
             
             _ => $"Content {content.Type?.Chunk?.GetType().Name.Replace("questContent", "").Replace("_ConditionType", "")} condition"
         };
+    }
+
+    private static string FormatTimePeriodCondition(questTimePeriod_ConditionType timePeriod)
+    {
+        var beginTime = FormatGameTime(timePeriod.Begin);
+        var endTime = FormatGameTime(timePeriod.End);
+        
+        return $"Time between {beginTime} and {endTime}";
+    }
+
+    private static string FormatGameTime(GameTime? gameTime)
+    {
+        if (gameTime == null)
+        {
+            return "00:00";
+        }
+
+        // GameTime is represented in seconds since midnight
+        var totalSeconds = gameTime.Seconds;
+        var hours = (totalSeconds / 3600) % 24;
+        var minutes = (totalSeconds % 3600) / 60;
+        
+        return $"{hours:D2}:{minutes:D2}";
     }
 }
