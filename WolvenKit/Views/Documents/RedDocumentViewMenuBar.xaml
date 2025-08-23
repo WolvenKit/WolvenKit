@@ -162,7 +162,7 @@
                 </Style.Triggers>
             </Style>
 
-            <!-- Clean up: .mesh / .json -->
+            <!-- Clean up: .mesh / .json / .app -->
             <Style
                 x:Key="ShowCleanUpMenuItemStyle"
                 BasedOn="{StaticResource HasNestedMenuItemStyle}"
@@ -544,6 +544,20 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <!-- .app file: find unused files in project -->
+                <MenuItem
+                    Style="{StaticResource ShowAppMenuItemStyle}"
+                    Header="Find unused files in project"
+                    ToolTip="Will only check files that can be used in .app files!"
+                    Click="OnFindUnusedAppDependenciesClick">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="FolderSearchOutline"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
                 <MenuItem
                     Style="{StaticResource ShowMeshMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
@@ -557,7 +571,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- Clear chunk materials: If you have multiple appearances selected in a .mesh -->
+                <!-- .mesh file: Clear chunk materials (if you have multiple appearances selected) -->
                 <MenuItem
                     Style="{StaticResource ShowMeshMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
@@ -575,12 +589,10 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-
-                <!-- Delete unused materials: Only display without SHIFT -->
+                <!-- .mesh file: Delete unused materials (Only display without SHIFT) -->
                 <MenuItem
                     Header="Delete unused materials"
                     Command="{Binding Path=DeleteUnusedMaterialsCommand}">
-
                     <MenuItem.Style>
                         <Style
                             BasedOn="{StaticResource NestedMenuItemStyle}"
@@ -605,7 +617,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- Clear materials: only display with SHIFT key held down -->
+                <!-- .mesh file: Clear materials (only display with SHIFT key held down) -->
                 <MenuItem
                     Header="Clear all materials"
                     Command="{Binding Path=ClearMaterialsCommand}">
@@ -634,6 +646,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <!-- .mesh file: Adjust submesh counts -->
                 <MenuItem
                     Style="{StaticResource ShowMeshMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
@@ -649,6 +662,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <!-- .json file: Delete duplicate entries -->
                 <MenuItem
                     Style="{StaticResource ShowJsonMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
@@ -666,7 +680,7 @@
                 </MenuItem>
             </MenuItem>
 
-            <!-- Appearances: .ent -->
+            <!-- Appearances (.app) / Components (.ent) -->
             <MenuItem Style="{StaticResource ShowComponentsAppearancesMenuItemStyle}">
                 <!-- Header: Apparances / Components is set in style -->
                 <MenuItem.Icon>
@@ -676,6 +690,7 @@
                         Foreground="White" />
                 </MenuItem.Icon>
 
+                <!-- .ent/.app: generate CRUIDs (for selected components) -->
                 <MenuItem
                     Style="{StaticResource MenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
@@ -693,7 +708,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- App/ent file: dependencies -->
+                <!-- .app: submenu "Dependencies" (.ent has own submenu) -->
                 <MenuItem
                     Style="{StaticResource ShowAppMenuItemStyle}"
                     Header="Dependencies">
@@ -704,19 +719,7 @@
                             Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
 
-                    <MenuItem
-                        Style="{StaticResource ShowAppMenuItemStyle}"
-                        Header="Find unused files in project"
-                        ToolTip="Will only check files that can be used in .app files!"
-                        Click="OnFindUnusedAppDependenciesClick">
-                        <MenuItem.Icon>
-                            <templates:IconBox
-                                IconPack="Material"
-                                Kind="TextSearchVariant"
-                                Foreground="White" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-
+                    <!-- .app: Regenerate visual controllers -->
                     <MenuItem
                         Style="{StaticResource MenuItemStyle}"
                         Header="Regenerate visual controllers"
@@ -729,6 +732,7 @@
                         </MenuItem.Icon>
                     </MenuItem>
 
+                    <!-- .app: Regenerate resolved dependencies -->
                     <MenuItem
                         Style="{StaticResource MenuItemStyle}"
                         Header="Regenerate resolved dependencies"
@@ -742,7 +746,7 @@
                     </MenuItem>
                 </MenuItem>
 
-                <!-- App file: edit components -->
+                <!-- App file: edit components submenu -->
                 <MenuItem
                     Style="{StaticResource ShowAppMenuItemStyle}"
                     Header="Edit components">
@@ -834,7 +838,7 @@
                     </MenuItem>
                 </MenuItem>
 
-                <!-- Connect to .ent file -->
+                <!-- .app file: Connect to .ent -->
                 <MenuItem
                     Style="{StaticResource ShowAppMenuItemStyle}"
                     Header="Connect to .ent file"
@@ -847,7 +851,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- Set LOD level 0 in all components -->
+                <!-- .app/.ent file: Set LOD level 0 in all components -->
                 <MenuItem
                     Style="{StaticResource MenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
@@ -865,7 +869,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- Select animation path -->
+                <!-- .app file: Select animation path -->
                 <MenuItem
                     Style="{StaticResource MenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
@@ -884,7 +888,7 @@
                 </MenuItem>
             </MenuItem>
 
-            <!-- CRUID -->
+            <!-- .app/.ent: CRUID -->
             <MenuItem
                 Style="{StaticResource MenuItemStyle}"
                 Visibility="{Binding Path=IsEnabled,
@@ -914,7 +918,7 @@
                 </MenuItem.Icon>
             </MenuItem>
 
-            <!-- File validation submenu -->
+            <!-- File validation submenu. Run WScript directly with shift-click. -->
             <MenuItem
                 Style="{StaticResource NestedMenuItemStyle}"
                 Header="File Validation"
