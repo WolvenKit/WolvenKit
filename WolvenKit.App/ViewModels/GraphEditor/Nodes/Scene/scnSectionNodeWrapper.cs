@@ -15,7 +15,7 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>, IDynami
     private readonly scnSceneResource _sceneResource;
     private readonly ILoggerService? _logger = Locator.Current.GetService<ILoggerService>();
     
-    public scnSectionNodeWrapper(scnSectionNode scnSectionNode, scnSceneResource scnSceneResource) : base(scnSectionNode)
+    public scnSectionNodeWrapper(scnSectionNode scnSectionNode, scnSceneResource scnSceneResource) : base(scnSectionNode, scnSceneResource)
     {
         _sceneResource = scnSceneResource;
         EnsureStandardSockets();
