@@ -180,14 +180,6 @@ namespace WolvenKit.Common.Model.Arguments
         public bool IgnoreGarmentSupportUVParam { get; set; } = true;
 
         /// <summary>
-        /// Imports garment support data from GLB.
-        /// </summary>
-        [Category("Import Settings")]
-        [Display(Name = "\tIgnore empty geometry")]
-        [Description("Skip empty geometry on import? This will influence submesh order.")]
-        public bool ImportSkipEmptyGeometry { get; set; } = false;
-
-        /// <summary>
         /// Use object or node name as mesh name
         /// </summary>
         [Category("Compatibility Settings")]
