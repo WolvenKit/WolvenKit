@@ -23,38 +23,88 @@ public class scnRandomizerNodeWrapper : BaseSceneViewModel<scnRandomizerNode>, I
         // Create a new dictionary to trigger UI update (WPF needs reference change)
         var newDetails = new Dictionary<string, string>();
         
-        // Temporarily set Details to new dictionary so PopulateDetails can populate it
-        var originalDetails = Details;
+        // Populate the new dictionary
+        PopulateDetails(newDetails);
+        
+        // Set the new dictionary to trigger UI update
         Details = newDetails;
         
-        try
-        {
-            PopulateDetails();
-            
-            // Update title as well
-            UpdateTitle();
-            OnPropertyChanged(nameof(Title));
-        }
-        catch (Exception)
-        {
-            // If population fails, restore original details
-            Details = originalDetails;
-        }
+        // Update socket percentages
+        UpdateSocketPercentages();
+        
+        // Update title as well
+        UpdateTitle();
+        OnPropertyChanged(nameof(Title));
     }
 
-    private void PopulateDetails()
+    private void PopulateDetails(Dictionary<string, string>? detailsDict = null)
     {
-        Details["Mode"] = _castedData?.Mode.ToEnumString()!;
+        var targetDetails = detailsDict ?? Details;
+        
+        targetDetails["Mode"] = _castedData?.Mode.ToEnumString()!;
 
+        // Build output weights string with percentages
         var outputWeights = "";
-        if (_castedData?.Weights != null)
+        if (_castedData?.Weights != null && _castedData.NumOutSockets > 0)
         {
-            foreach (var p in _castedData.Weights)
+            // Calculate total weight for percentage calculation
+            var total = 0;
+            for (var i = 0; i < Math.Min(_castedData.NumOutSockets, _castedData.Weights.Count); i++)
             {
-                outputWeights += (outputWeights != "" ? ", " : "") + p.ToString();
+                total += _castedData.Weights[i];
+            }
+
+            // Build the weights string with percentages
+            if (total > 0)
+            {
+                for (var i = 0; i < Math.Min(_castedData.NumOutSockets, _castedData.Weights.Count); i++)
+                {
+                    var weight = _castedData.Weights[i];
+                    var percentage = (float)weight / total * 100;
+                    outputWeights += (outputWeights != "" ? ", " : "") + $"{weight} ({percentage:0.00}%)";
+                }
+            }
+            else
+            {
+                // If total is 0, just show the raw weights
+                for (var i = 0; i < Math.Min(_castedData.NumOutSockets, _castedData.Weights.Count); i++)
+                {
+                    outputWeights += (outputWeights != "" ? ", " : "") + _castedData.Weights[i].ToString();
+                }
             }
         }
-        Details["Output Weights"] = outputWeights;
+        
+        targetDetails["Output Weights"] = outputWeights;
+    }
+
+    private void UpdateSocketPercentages()
+    {
+        if (_castedData == null || Output == null || Output.Count == 0)
+            return;
+
+        // Calculate total weight
+        var total = 0;
+        for (var i = 0; i < Math.Min(_castedData.NumOutSockets, _castedData.Weights.Count); i++)
+        {
+            total += _castedData.Weights[i];
+        }
+
+        // Update socket subtitles with percentages
+        for (var i = 0; i < Math.Min(Output.Count, _castedData.NumOutSockets); i++)
+        {
+            if (i < _castedData.Weights.Count && total > 0)
+            {
+                var chance = (float)_castedData.Weights[i] / total * 100;
+                Output[i].Subtitle = $"[{chance:0.00}%] Out{i}";
+            }
+            else
+            {
+                Output[i].Subtitle = $"[0.00%] Out{i}";
+            }
+        }
+        
+        // Notify that output collection has been updated
+        OnPropertyChanged(nameof(Output));
     }
 
     internal override void GenerateSockets()
@@ -67,18 +117,11 @@ public class scnRandomizerNodeWrapper : BaseSceneViewModel<scnRandomizerNode>, I
             Input.Add(input);
         }
 
-        var names = new string[_castedData.NumOutSockets];
-
+        // Calculate total weight for percentage calculation
         var total = 0;
-        for (var i = 0; i < _castedData.NumOutSockets; i++)
+        for (var i = 0; i < Math.Min(_castedData.NumOutSockets, _castedData.Weights.Count); i++)
         {
             total += _castedData.Weights[i];
-        }
-
-        for (var i = 0; i < _castedData.NumOutSockets; i++)
-        {
-            var chance = (float)_castedData.Weights[i] / total * 100;
-            names[i] = $"[{chance:0.00}%] Out{i}";
         }
 
         Output.Clear();
@@ -87,7 +130,18 @@ public class scnRandomizerNodeWrapper : BaseSceneViewModel<scnRandomizerNode>, I
             var socket = _castedData.OutputSockets[i];
             var nameAndTitle = $"({socket.Stamp.Name},{socket.Stamp.Ordinal})";
             var output = new SceneOutputConnectorViewModel(nameAndTitle, nameAndTitle, UniqueId, socket.Stamp.Name, socket.Stamp.Ordinal, socket);
-            output.Subtitle = names[i];
+            
+            // Calculate percentage for this socket
+            if (i < _castedData.Weights.Count && total > 0)
+            {
+                var chance = (float)_castedData.Weights[i] / total * 100;
+                output.Subtitle = $"[{chance:0.00}%] Out{i}";
+            }
+            else
+            {
+                output.Subtitle = $"[0.00%] Out{i}";
+            }
+            
             Output.Add(output);
         }
     }
@@ -100,9 +154,39 @@ public class scnRandomizerNodeWrapper : BaseSceneViewModel<scnRandomizerNode>, I
         var index = (ushort)Output.Count;
         var nameAndTitle = $"({outputSocket.Stamp.Name},{outputSocket.Stamp.Ordinal})";
         var output = new SceneOutputConnectorViewModel(nameAndTitle, $"Out{index}", UniqueId, outputSocket.Stamp.Name, outputSocket.Stamp.Ordinal, outputSocket);
+        
+        _castedData.NumOutSockets = (uint)(_castedData.OutputSockets.Count);
+
+        // Add a default weight for the new output if needed
+        if (_castedData.Weights.Count < _castedData.NumOutSockets)
+        {
+            _castedData.Weights.Add(1); // Default weight of 1
+        }
+
+        // Calculate and set the percentage subtitle
+        var total = 0;
+        for (var i = 0; i < Math.Min(_castedData.NumOutSockets, _castedData.Weights.Count); i++)
+        {
+            total += _castedData.Weights[i];
+        }
+        
+        if (index < _castedData.Weights.Count && total > 0)
+        {
+            var chance = (float)_castedData.Weights[index] / total * 100;
+            output.Subtitle = $"[{chance:0.00}%] Out{index}";
+        }
+        else
+        {
+            output.Subtitle = $"[0.00%] Out{index}";
+        }
+        
         Output.Add(output);
 
-        _castedData.NumOutSockets = (uint)Output.Count;
+        // Update all socket percentages since totals changed
+        UpdateSocketPercentages();
+        
+        // Refresh details to show updated weights
+        RefreshDetails();
 
         // Note: Subscription to destination changes happens automatically via Output.CollectionChanged
         // Notify UI and mark document dirty
@@ -131,6 +215,12 @@ public class scnRandomizerNodeWrapper : BaseSceneViewModel<scnRandomizerNode>, I
                 {
                     _castedData.Weights.RemoveAt(_castedData.Weights.Count - 1);
                 }
+                
+                // Update all socket percentages since totals changed
+                UpdateSocketPercentages();
+                
+                // Refresh details to show updated weights
+                RefreshDetails();
                 
                 // Notify UI and mark document dirty
                 NotifySocketsChanged();
