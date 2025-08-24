@@ -1,4 +1,5 @@
-﻿using WolvenKit.App.Extensions;
+﻿using System.Collections.Generic;
+using WolvenKit.App.Extensions;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
@@ -7,8 +8,13 @@ public class questCheckpointNodeDefinitionWrapper : questSignalStoppingNodeDefin
 {
     public questCheckpointNodeDefinitionWrapper(questCheckpointNodeDefinition questSignalStoppingNodeDefinition) : base(questSignalStoppingNodeDefinition)
     {
-        Details.Add("Debug String", questSignalStoppingNodeDefinition.DebugString);
-        Details.AddRange(NodeProperties.GetPropertiesFor(questSignalStoppingNodeDefinition));
+        RefreshDetails();
+    }
+
+    protected override void PopulateDetailsInto(Dictionary<string, string> details)
+    {
+        details.Add("Debug String", _castedData.DebugString);
+        base.PopulateDetailsInto(details);
     }
 
     internal override void CreateDefaultSockets()

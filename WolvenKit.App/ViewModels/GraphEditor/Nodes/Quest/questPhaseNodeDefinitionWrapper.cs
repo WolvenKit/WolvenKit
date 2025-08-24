@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using WolvenKit.App.Factories;
 using WolvenKit.Common;
@@ -34,16 +35,23 @@ public class questPhaseNodeDefinitionWrapper : questEmbeddedGraphNodeDefinitionW
         _nodeWrapperFactory = nodeWrapperFactory;
         _archiveManager = archiveManager;
 
+        RefreshDetails();
+    }
+
+    protected override void PopulateDetailsInto(Dictionary<string, string> details)
+    {
+        details.Add("Type", "Phase");
+        
         if (_castedData.PhaseResource.DepotPath != ResourcePath.Empty && _castedData.PhaseResource.DepotPath.IsResolvable)
         {
-            Details.Add("Filename", Path.GetFileName(_castedData.PhaseResource.DepotPath.GetResolvedText())!);
+            details.Add("Phase Resource", Path.GetFileName(_castedData.PhaseResource.DepotPath.GetResolvedText())!);
         }
         
         // Add node count for the phase
         var nodeCount = GetPhaseNodeCount();
         if (nodeCount > 0)
         {
-            Details.Add("Total Nodes", nodeCount.ToString());
+            details.Add("Total Nodes", nodeCount.ToString());
         }
     }
 
