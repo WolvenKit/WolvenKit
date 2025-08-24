@@ -236,7 +236,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// Fills empty sub meshes with dummy data
         /// </summary>
         [Category("Import Settings")]
-        [Display(Name = "Preserve Submesh Order")]
+        [Display(Name = "Preserve empty submeshes")]
         [Description("Empty submesh slots will be filled with placeholder data, preserving the original submesh-material order.")]
         public bool FillEmpty { get; set; } = false;
 
