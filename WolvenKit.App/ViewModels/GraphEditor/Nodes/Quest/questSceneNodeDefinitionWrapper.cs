@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using WolvenKit.App.Controllers;
 using WolvenKit.Common;
@@ -33,10 +34,17 @@ public class questSceneNodeDefinitionWrapper : questSignalStoppingNodeDefinition
         _archiveManager = archiveManager;
         _gameController = gameController;
 
+        RefreshDetails();
+    }
+
+    protected override void PopulateDetailsInto(Dictionary<string, string> details)
+    {
+        details.Add("Type", "Scene");
+        
         if (_castedData.SceneFile.DepotPath != ResourcePath.Empty && _castedData.SceneFile.DepotPath.IsResolvable)
         {
-            Details.Add("Filename", Path.GetFileName(_castedData.SceneFile.DepotPath.GetResolvedText())!);
-            Details.Add("Scene location", _castedData.SceneLocation.NodeRef.GetResolvedText()!);
+            details.Add("Scene File", Path.GetFileName(_castedData.SceneFile.DepotPath.GetResolvedText())!);
+            details.Add("Scene location", _castedData.SceneLocation.NodeRef.GetResolvedText()!);
         }
     }
 

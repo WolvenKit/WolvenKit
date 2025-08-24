@@ -87,14 +87,15 @@ public partial class RedGraph : IDisposable
 
     public void Connect()
     {
+        // When dragging TO a node (Target), only create dynamic INPUT if the node supports it
         if (PendingConnection.Target is IDynamicInputNode dynIn)
         {
             PendingConnection.Target = dynIn.AddInput();
         }
-
-        if (PendingConnection.Target is IDynamicOutputNode dynOut)
+        // If target is a node that doesn't support dynamic inputs, don't proceed with connection
+        else if (PendingConnection.Target is IGraphProvider targetNode && PendingConnection.Source is BaseConnectorViewModel)
         {
-            PendingConnection.Target = dynOut.AddOutput();
+            return;
         }
 
         if (PendingConnection is { Source: OutputConnectorViewModel output1, Target: InputConnectorViewModel input1 })

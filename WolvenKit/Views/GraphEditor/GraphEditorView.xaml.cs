@@ -400,6 +400,12 @@ public partial class GraphEditorView : UserControl
             node.ContextMenu.Items.Add(new Separator());
         }
 
+        if (node.DataContext is questSwitchNodeDefinitionWrapper switchNode)
+        {
+            node.ContextMenu.Items.Add(CreateMenuItem("Add Case", "PlusCircle", () => switchNode.AddCondition()));
+            node.ContextMenu.Items.Add(new Separator());
+        }
+
         if (node.DataContext is IGraphProvider graphProvider)
         {
             node.ContextMenu.Items.Add(CreateMenuItem("Recalculate sockets", "Play", "WolvenKitGreen", () => Source.RecalculateSockets(graphProvider)));

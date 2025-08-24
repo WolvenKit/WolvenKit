@@ -1,4 +1,5 @@
-﻿using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
+﻿using System.Collections.Generic;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
@@ -7,7 +8,13 @@ public class questOutputNodeDefinitionWrapper : questIONodeDefinitionWrapper<que
 {
     public questOutputNodeDefinitionWrapper(questOutputNodeDefinition questOutputNodeDefinition) : base(questOutputNodeDefinition)
     {
-        Details.Add("Type", questOutputNodeDefinition.Type.ToEnumString());
+        RefreshDetails();
+    }
+
+    protected override void PopulateDetailsInto(Dictionary<string, string> details)
+    {
+        details.Add("Type", _castedData.Type.ToEnumString());
+        base.PopulateDetailsInto(details);
     }
 
     internal override void GenerateSockets()

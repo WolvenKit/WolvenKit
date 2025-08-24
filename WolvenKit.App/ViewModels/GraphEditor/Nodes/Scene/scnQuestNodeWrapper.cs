@@ -205,6 +205,19 @@ public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
                         }
                     }
                 }
+                else if (_castedData.QuestNode.Chunk is questCheckpointNodeDefinition checkpointNode)
+                {
+                    tempDetails["Debug String"] = checkpointNode.DebugString;
+                    
+                    var questNodeDetails = NodeProperties.GetPropertiesFor(_castedData.QuestNode.Chunk, sceneResource);
+                    foreach (var kvp in questNodeDetails)
+                    {
+                        if (kvp.Key != "Type")
+                        {
+                            tempDetails[kvp.Key] = kvp.Value;
+                        }
+                    }
+                }
                 else
                 {
                     var questNodeDetails = NodeProperties.GetPropertiesFor(_castedData.QuestNode.Chunk, sceneResource);
