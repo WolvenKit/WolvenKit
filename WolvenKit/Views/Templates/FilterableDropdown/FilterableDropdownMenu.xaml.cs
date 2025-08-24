@@ -202,7 +202,6 @@ namespace WolvenKit.Views.Editors
                     break;
                 case nameof(IsInline) when IsInline:
                     dropdownRow.SetCurrentValue(Grid.HeightProperty, 0.0);
-                    spacerRow2.SetCurrentValue(Grid.HeightProperty, 0.0);
                     break;
                 case nameof(Label) when !string.IsNullOrEmpty(Label):
                     SetCurrentValue(IsShowLabelProperty, true);
