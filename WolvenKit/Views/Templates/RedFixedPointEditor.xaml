@@ -9,6 +9,10 @@
     d:DesignWidth="400"
     d:DesignHeight="100">
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedFixedPointEditor}}}">
+        <Grid.RowDefinitions>
+            <RowDefinition MinHeight="{DynamicResource WolvenKitRedEditorRowMinHeight}" />
+        </Grid.RowDefinitions>
+
         <TextBox
             x:Name="TextBox"
             Padding="{DynamicResource WolvenKitMarginTiny}"

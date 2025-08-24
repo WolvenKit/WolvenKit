@@ -12,6 +12,10 @@
     d:DesignWidth="800"
     x:Name="uc">
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedCurvePointEditor}}}">
+        <Grid.RowDefinitions>
+            <RowDefinition MinHeight="{DynamicResource WolvenKitRedEditorRowMinHeight}" />
+        </Grid.RowDefinitions>
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" SharedSizeGroup="TextBox" />

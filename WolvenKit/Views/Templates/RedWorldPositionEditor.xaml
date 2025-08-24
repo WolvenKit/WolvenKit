@@ -9,6 +9,10 @@
     d:DesignWidth="400"
     d:DesignHeight="100">
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedWorldPositionEditor}}}">
+        <Grid.RowDefinitions>
+            <RowDefinition MinHeight="{DynamicResource WolvenKitRedEditorRowMinHeight}" />
+        </Grid.RowDefinitions>
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="{DynamicResource WolvenKitRedEditorComponentWidth}" />
             <ColumnDefinition />

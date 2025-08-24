@@ -2521,6 +2521,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         resources["WolvenKitCurveEditorPointSize"] = Math.Round(8 * _uiScalePercentage);
 
         // Red...Editor
+        resources["WolvenKitRedEditorRowMinHeight"] = Math.Round(27 * _uiScalePercentage);
         resources["WolvenKitRedEditorHashWidth"] = new GridLength(166).Mul(_uiScalePercentage).Round();
         resources["WolvenKitRedEditorComponentWidth"] = new GridLength(24).Mul(_uiScalePercentage).Round();
         resources["WolvenKitRedEditorTrimmingWidth"] = new GridLength(16).Mul(_uiScalePercentage).Round();
