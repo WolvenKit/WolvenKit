@@ -99,7 +99,7 @@
                 <ResourceDictionary>
                     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
                 </ResourceDictionary>
-                
+
                 <!-- Scene Editor converters - needed globally for cache service -->
                 <ResourceDictionary Source="Resources/Converters/SceneEditorConverters.xaml" />
 
@@ -147,6 +147,11 @@
 
                 <ResourceDictionary Source="pack://application:,,,/Resources/Styles/CustomHandyStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <!-- Default texts -->
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
+            </Style>
 
             <Style
                 x:Key="MessageBoxPrimaryButtonStyle"
