@@ -98,14 +98,14 @@ namespace WolvenKit.Views.Shell
                 Interactions.ShowCollectionView = input =>
                 {
                     ChooseCollectionView dialog = new();
-                    if (input.Item1 is not null)
+                    if (input.availableItems is not null)
                     {
-                        dialog.ViewModel?.SetAvailableItems(input.Item1);
+                        dialog.ViewModel?.SetAvailableItems(input.availableItems);
                     }
 
-                    if (input.Item2 is not null)
+                    if (input.selectedItems is not null)
                     {
-                        dialog.ViewModel?.SetSelectedItems(input.Item2);
+                        dialog.ViewModel?.SetSelectedItems(input.selectedItems);
                     }
 
                     IEnumerable<IDisplayable> result = null;
@@ -141,8 +141,12 @@ namespace WolvenKit.Views.Shell
 
                 Interactions.ShowChecklistDialogue = (args) =>
                 {
-                    var dialog = new ShowChecklistDialog(args.checklistOptions, args.inputFieldText, args.title,
-                        args.text);
+                    var dialog = new ShowChecklistDialog(
+                        args.checklistOptions,
+                        args.title,
+                        args.text,
+                        args.inputFieldLabel,
+                        args.inputFieldDefaultValue);
                     if (dialog.ShowDialog() != true)
                     {
                         return null;

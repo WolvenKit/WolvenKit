@@ -745,7 +745,12 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             }).Distinct().Order().ToDictionary(x => x, x => false);
 
         var dialogModel =
-            Interactions.ShowChecklistDialogue((existingChunks, "Select chunk to delete", string.Empty, string.Empty));
+            Interactions.ShowChecklistDialogue((
+                existingChunks,
+                "Select chunk to delete",
+                string.Empty,
+                string.Empty,
+                string.Empty));
         var chunksToDelete = dialogModel.SelectedOptions
             .Select(s =>
             {
@@ -763,7 +768,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         }
 
         var wasChanged = false;
-        foreach (var app in mesh.Appearances.Select(m => m.Chunk)
+        foreach (var app in mesh.Appearances.Select(m => m?.Chunk)
                      .OfType<meshMeshAppearance>())
         {
             var chunkMaterials = app.ChunkMaterials.Where((_, i) => !chunksToDelete.Contains(i)).ToList();

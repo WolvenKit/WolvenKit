@@ -20,14 +20,14 @@ public partial class ShowChecklistDialog : IViewFor<ShowChecklistDialogViewModel
     private static List<string> s_lastSelection = [];
     private static string s_lastInputFieldText = "";
 
-    public ShowChecklistDialog(Dictionary<string, bool> checklistOptions, string inputFieldText, string title,
-        string text)
+    public ShowChecklistDialog(Dictionary<string, bool> checklistOptions, string title,
+        string text, string inputFieldLabel, string inputFieldDefaultValue)
     {
         InitializeComponent();
 
-        if (s_lastInputFieldText != "" && inputFieldText != "")
+        if (s_lastInputFieldText != "" && inputFieldLabel != "")
         {
-            inputFieldText = s_lastInputFieldText;
+            inputFieldDefaultValue = s_lastInputFieldText;
         }
 
         foreach (var se in s_lastSelection.Where(checklistOptions.ContainsKey))
@@ -35,7 +35,8 @@ public partial class ShowChecklistDialog : IViewFor<ShowChecklistDialogViewModel
             checklistOptions[se] = true;
         }
 
-        ViewModel = new ShowChecklistDialogViewModel(checklistOptions, inputFieldText, title, text);
+        ViewModel = new ShowChecklistDialogViewModel(checklistOptions, title, text, inputFieldLabel,
+            inputFieldDefaultValue);
         DataContext = ViewModel;
 
         this.WhenActivated(disposables =>

@@ -266,8 +266,12 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
         var dict = files.ToDictionary(f => f, f => f.Contains("prop") || f.Contains("amm"));
 
-        if (Interactions.ShowChecklistDialogue((dict, "Select files to include",
-                    "Select the files you want to include as World Builder Props.", activeProject.ModName)) is not
+        if (Interactions.ShowChecklistDialogue((
+                    dict,
+                    "Select files to include",
+                    "Select the files you want to make available to World Builder.",
+                    "WorldBuilder file name",
+                    activeProject.ModName)) is not
                 { } dialogModel || dialogModel.SelectedOptions.Count == 0)
         {
             return;
