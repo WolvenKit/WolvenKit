@@ -744,13 +744,16 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
                 return ret;
             }).Distinct().Order().ToDictionary(x => x, x => false);
 
-        var dialogModel =
-            Interactions.ShowChecklistDialogue((
+        if (Interactions.ShowChecklistDialogue((
                 existingChunks,
                 "Select chunk to delete",
                 string.Empty,
                 string.Empty,
-                string.Empty));
+                string.Empty)) is not { } dialogModel || dialogModel.SelectedOptions.Count == 0)
+        {
+            return;
+        }
+
         var chunksToDelete = dialogModel.SelectedOptions
             .Select(s =>
             {

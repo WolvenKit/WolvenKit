@@ -224,7 +224,7 @@ public static class Interactions
         string text,
         string inputFieldLabel,
         string inputFieldDefaultValue
-        ), ShowChecklistDialogViewModel> ShowChecklistDialogue { get; set; } = _ => throw new NotImplementedException();
+        ), ShowChecklistDialogViewModel?> ShowChecklistDialogue { get; set; } = _ => throw new NotImplementedException();
 
     /// <summary>
     /// Shows dialogue to generate default quest files. Complex logic inside dialogue model.
