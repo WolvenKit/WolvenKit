@@ -221,7 +221,18 @@ public abstract class CvmDropdownHelper
                 ret = documentTools.GetAppearanceNamesFromMesh(morphtargetMeshComp.MorphResource.DepotPath,
                     forceCacheRefresh);
                 break;
-
+            // properties _inside_ components
+            case IRedRef when cvm.Name is "mesh" && cvm.Parent?.ResolvedData is entSkinnedMeshComponent meshComp:
+                ret = documentTools.CollectProjectFiles(".mesh");
+                break;
+            case CName
+                when cvm is
+                {
+                    Name: "meshAppearance",
+                    Parent.ResolvedData: entSkinnedMeshComponent { Mesh.DepotPath: { } meshDepotPath }
+                } && !string.IsNullOrEmpty(meshDepotPath.ToString()):
+                ret = documentTools.GetAppearanceNamesFromMesh(meshDepotPath, forceCacheRefresh);
+                break;
             #endregion
 
             #region mesh
