@@ -141,7 +141,8 @@ namespace WolvenKit.Views.Shell
 
                 Interactions.ShowChecklistDialogue = (args) =>
                 {
-                    var dialog = new ShowChecklistDialog(args.checklistOptions, args.fileName, args.title, args.text);
+                    var dialog = new ShowChecklistDialog(args.checklistOptions, args.inputFieldText, args.title,
+                        args.text);
                     if (dialog.ShowDialog() != true)
                     {
                         return null;

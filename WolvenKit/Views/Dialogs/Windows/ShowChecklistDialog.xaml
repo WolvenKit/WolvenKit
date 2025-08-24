@@ -77,13 +77,14 @@
                         Content="Worldbuilder file name" />
 
                     <TextBox
-                        x:Name="FileNameBox"
+                        x:Name="TextInputBox"
                         Grid.Row="0"
                         Grid.Column="1"
                         Grid.ColumnSpan="2"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
+                        Visibility="{Binding ShowInputField,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        LostFocus="FileNameBox_OnLostFocus_"
                         KeyboardNavigation.TabIndex="2" />
 
                     <!-- Checklist -->

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using WolvenKit.App.Services;
 
 namespace WolvenKit.Views.Templates
 {
@@ -239,6 +240,19 @@ namespace WolvenKit.Views.Templates
             }
 
             var selectedStrings = multiselectList.SelectedItems.OfType<string>().ToList();
+
+            // Shift-click to select/deselect all
+            if (ModifierViewStateService.IsShiftBeingHeld)
+            {
+                if (selectedStrings.Count == 0)
+                {
+                    selectedStrings = AvailableOptions.ToList();
+                }
+                else
+                {
+                    selectedStrings.Clear();
+                }
+            }
 
             // Only update if different to prevent infinite loops
             if (selectedStrings.SequenceEqual(SelectedOptions))

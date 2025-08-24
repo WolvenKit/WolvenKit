@@ -218,7 +218,7 @@ public static class Interactions
     /// <summary>
     /// Shows dialogue to pick from a list of options.
     /// </summary>
-    public static Func<(Dictionary<string, bool> checklistOptions, string fileName, string title, string text),
+    public static Func<(Dictionary<string, bool> checklistOptions, string title, string text, string inputFieldText),
             ShowChecklistDialogViewModel>
         ShowChecklistDialogue { get; set; } = _ => throw new NotImplementedException();
 
