@@ -238,7 +238,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("Import Settings")]
         [Display(Name = "Preserve empty submeshes")]
         [Description("Empty submesh slots will be filled with placeholder data, preserving the original submesh-material order.")]
-        public bool FillEmpty { get; set; } = true;
+        public bool FillEmpty { get; set; } = false;
 
         /// <summary>
         /// Selected Rig for Mesh WithRig Export. ALWAYS USE THE FIRST ENTRY IN THE LIST.
