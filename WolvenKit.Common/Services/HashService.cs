@@ -39,7 +39,27 @@ namespace WolvenKit.Common.Services
 
         #region Methods
 
-        public Task LoadAsync() => Task.Run(Load);
+        public void Load()
+        {
+            var hashesMemory = DecompressEmbeddedFile(s_used);
+            ReadHashes(hashesMemory.GetStream());
+
+            hashesMemory.Dispose();
+
+            var nodeRefsMemory = DecompressEmbeddedFile(s_nodeRefs);
+            ReadNodeRefs(nodeRefsMemory.GetStream());
+
+            nodeRefsMemory.Dispose();
+
+            var tweakNamesMemory = DecompressEmbeddedFile(s_tweakDbStr);
+            ReadTweakNames(tweakNamesMemory.GetStream());
+
+            tweakNamesMemory.Dispose();
+
+            LoadMissingHashes();
+
+            _isLoaded = true;
+        }
 
         public IEnumerable<ulong> GetAllHashes() => _hashes.Keys;
 
@@ -82,28 +102,6 @@ namespace WolvenKit.Common.Services
             }
 
             return null;
-        }
-
-        private void Load()
-        {
-            var hashesMemory = DecompressEmbeddedFile(s_used);
-            ReadHashes(hashesMemory.GetStream());
-
-            hashesMemory.Dispose();
-
-            var nodeRefsMemory = DecompressEmbeddedFile(s_nodeRefs);
-            ReadNodeRefs(nodeRefsMemory.GetStream());
-
-            nodeRefsMemory.Dispose();
-
-            var tweakNamesMemory = DecompressEmbeddedFile(s_tweakDbStr);
-            ReadTweakNames(tweakNamesMemory.GetStream());
-
-            tweakNamesMemory.Dispose();
-
-            LoadMissingHashes();
-
-            _isLoaded = true;
         }
 
         private static unsafe UnmanagedMemory DecompressEmbeddedFile(string resourceName)

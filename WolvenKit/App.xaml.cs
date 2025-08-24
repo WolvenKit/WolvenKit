@@ -94,13 +94,10 @@ namespace WolvenKit
                 .Subscribe(_ => OnUiScaleChanged());
 
             // Improve FCP (~5 000 ms)
-            _ = Task.Run(async () =>
+            _ = Task.Run(() =>
             {
                 var hashService = Locator.Current.GetService<IHashService>();
-                if (hashService != null)
-                {
-                    await hashService.LoadAsync();
-                }
+                hashService?.Load();
             });
 
             // Improve FCP (~250 ms)

@@ -7,7 +7,7 @@ namespace WolvenKit.Common.Services
     {
         bool IsLoaded { get; }
 
-        Task LoadAsync();
+        void Load();
 
         bool Contains(ulong key, bool checkUserHashes = true);
 
