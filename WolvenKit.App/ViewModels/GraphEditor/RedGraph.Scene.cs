@@ -187,7 +187,7 @@ public partial class RedGraph
             });
 
             // Refresh the property panel to show the new notablePoint AND screenplay entries
-            RefreshSceneResourcePropertiesInTabs();
+            RefreshSpecificProperties("notablePoints");
 
             choiceNode.OutputSockets =
             [
@@ -654,6 +654,9 @@ public partial class RedGraph
                     }
                 };
                 sceneResource.ExitPoints.Add(endPoint);
+                
+                // Refresh the property panel to show the new exitPoint
+                RefreshSpecificProperties("exitPoints");
             }
 
             nodeWrapper = new scnEndNodeWrapper(endNode, endPoint);
@@ -702,6 +705,9 @@ public partial class RedGraph
                     }
                 };
                 sceneResource.EntryPoints.Add(entryPoint);
+                
+                // Refresh the property panel to show the new entryPoint
+                RefreshSpecificProperties("entryPoints");
             }
 
             nodeWrapper = new scnStartNodeWrapper(startNode, entryPoint);
@@ -924,12 +930,75 @@ public partial class RedGraph
             sceneResource.NotablePoints.Remove(notablePointToRemove);
             
             // Refresh the property panel to show the removal
-            RefreshSceneResourcePropertiesInTabs();
+            RefreshSpecificProperties("notablePoints");
         }
     }
 
     /// <summary>
-    /// Refreshes the property panel to show changes to root scnSceneResource properties
+    /// Refreshes specific property collections in the property panel without doing a full scene refresh.
+    /// This is much faster than RefreshSceneResourcePropertiesInTabs() for large scenes.
+    /// </summary>
+    /// <param name="propertyNames">Names of the properties to refresh (e.g., "entryPoints", "exitPoints", "notablePoints")</param>
+    public void RefreshSpecificProperties(params string[] propertyNames)
+    {
+        if (DocumentViewModel == null) return;
+        
+        var sceneGraphTab = DocumentViewModel.TabItemViewModels
+            .OfType<SceneGraphViewModel>()
+            .FirstOrDefault();
+            
+        if (sceneGraphTab?.SelectedTab == null) return;
+        
+        var rootChunk = sceneGraphTab.RDTViewModel.GetRootChunk();
+        if (rootChunk == null) return;
+        
+        // Only invalidate cache for specific properties we're updating
+        var cacheService = new ConverterCacheService();
+        
+        // Find and refresh only the specific property ChunkViewModels
+        bool needsTabRefresh = false;
+        foreach (var propertyName in propertyNames)
+        {
+            var propertyChunk = rootChunk.TVProperties.FirstOrDefault(p => p.Name == propertyName);
+            if (propertyChunk != null)
+            {
+                // Invalidate cache for this specific property
+                if (propertyChunk.Data is RedBaseClass redData)
+                {
+                    cacheService.InvalidateConverterCache(redData);
+                }
+                
+                // Force recalculation of this property only
+                propertyChunk.RecalculateProperties();
+                
+                // Check if this property is visible in current tab
+                if (sceneGraphTab.SelectedTab.Filter(propertyChunk))
+                {
+                    needsTabRefresh = true;
+                }
+            }
+        }
+        
+        // Only refresh the tab content if one of the updated properties is visible in current tab
+        if (needsTabRefresh)
+        {
+            var filteredList = new List<ChunkViewModel>(
+                rootChunk.TVProperties.Where(c => sceneGraphTab.SelectedTab.Filter(c))
+            );
+            
+            // Expand the first level of items by default
+            foreach (var item in filteredList)
+            {
+                item.IsExpanded = true;
+            }
+            
+            sceneGraphTab.SelectedTabContent = filteredList;
+        }
+    }
+
+    /// <summary>
+    /// Refreshes the property panel to show changes to root scnSceneResource properties.
+    /// WARNING: This method is slow for large scenes. Consider using RefreshSpecificProperties() instead.
     /// </summary>
     public void RefreshSceneResourcePropertiesInTabs()
     {
