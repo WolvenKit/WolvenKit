@@ -8,7 +8,9 @@
     mc:Ignorable="d"
     d:DesignWidth="240"
     d:DesignHeight="48">
-    <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor,
+    <Grid
+        Background="{StaticResource BackgroundColor_Control}"
+        DataContext="{Binding RelativeSource={RelativeSource FindAncestor,
                                                              AncestorType={x:Type local:RedBoolEditor}}}">
         <Grid.RowDefinitions>
             <RowDefinition MinHeight="{DynamicResource WolvenKitRedEditorRowMinHeight}" />
