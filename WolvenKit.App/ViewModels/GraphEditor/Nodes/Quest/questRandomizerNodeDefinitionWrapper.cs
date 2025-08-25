@@ -40,6 +40,18 @@ public class questRandomizerNodeDefinitionWrapper : questDisableableNodeDefiniti
         UpdateSocketPercentages();
     }
 
+    /// <summary>
+    /// Override to detect external changes to output weights and update socket labels
+    /// </summary>
+    public override void RefreshFromData()
+    {
+        // Call base implementation for standard quest node refresh
+        base.RefreshFromData();
+        
+        // Update socket percentages when data changes externally
+        UpdateSocketPercentages();
+    }
+
     private void PopulateRandomizerDetails(Dictionary<string, string> details)
     {
         // Add mode
@@ -91,8 +103,7 @@ public class questRandomizerNodeDefinitionWrapper : questDisableableNodeDefiniti
 
     private void UpdateSocketPercentages()
     {
-        // Quest graphs don't use socket subtitles - percentages are only shown in details panel
-        // No need to update socket subtitles for quest randomizer nodes
+        GenerateSockets();
     }
 
     internal override void GenerateSockets()
@@ -123,7 +134,6 @@ public class questRandomizerNodeDefinitionWrapper : questDisableableNodeDefiniti
                 if (socketDefinition.Type == Enums.questSocketType.Output ||
                     socketDefinition.Type == Enums.questSocketType.CutSource)
                 {
-                    // Show percentage in the socket name itself, no subtitle
                     var displayName = name;
                     if (outputIndex < _castedData.OutputWeights.Count && total > 0)
                     {
