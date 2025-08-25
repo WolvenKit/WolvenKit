@@ -185,17 +185,15 @@ public class DocumentTools
 
         if (forceCacheRefresh)
         {
-            foreach (var journal in journalPaths)
+            foreach (var journalPath in journalPaths)
             {
-                if (activeProject.GetAbsolutePath(journal) is string absolutePath)
+                _cr2wFileCache.Remove(journalPath);
+                // Remove all filtered cache entries for this file
+                foreach (var key in _filteredResultsCache.Keys.Where(k => k.filePath == journalPath).ToList())
                 {
-                    _cr2wFileCache.Remove(absolutePath);
-                    // Remove all filtered cache entries for this file
-                    foreach (var key in _filteredResultsCache.Keys.Where(k => k.filePath == absolutePath).ToList())
-                    {
-                        RemoveFromCache(key);
-                    }
+                    RemoveFromCache(key);
                 }
+
             }
             // Remove all filtered cache entries for the current filter value
             if (!string.IsNullOrEmpty(filter))
@@ -207,19 +205,19 @@ public class DocumentTools
             }
         }
 
-        var validJournalPaths = journalPaths
-            .Select(journal => new { journal, absolutePath = activeProject.GetAbsolutePath(journal) })
-            .Where(x => x.absolutePath is not null && File.Exists(x.absolutePath))
+        var validJournalPaths = journalPaths.ToDictionary(x => x, x => activeProject.GetAbsolutePath(x))
+            .Where(kvp => File.Exists(kvp.Value))
             .ToList();
 
         var tasks = validJournalPaths.Select(async x =>
         {
-            if (!_cr2wFileCache.TryGetValue(x.absolutePath!, out var cr2w))
+            if (!_cr2wFileCache.TryGetValue(x.Value!, out var cr2w))
             {
-                cr2w = _cr2WTools.ReadCr2W(x.absolutePath!);
-                _cr2wFileCache[x.absolutePath!] = cr2w;
+                cr2w = _cr2WTools.ReadCr2W(x.Value!);
+                _cr2wFileCache[x.Key] = cr2w;
             }
-            return await GetJournalIDsAsync(cr2w, x.absolutePath!, filter);
+
+            return await GetJournalIDsAsync(cr2w, x.Value!, filter);
         });
 
         var results = await Task.WhenAll(tasks);
