@@ -25,17 +25,17 @@ public class questRandomizerNodeDefinitionWrapper : questDisableableNodeDefiniti
     {
         // Create a new Details dictionary to trigger UI updates
         var tempDetails = new Dictionary<string, string>();
-        
+
         // Populate the new dictionary with randomizer-specific details
         PopulateRandomizerDetails(tempDetails);
-        
+
         // Replace the Details dictionary to trigger WPF binding updates
         Details = tempDetails;
-        
+
         // Also refresh the title
         UpdateTitle();
         OnPropertyChanged(nameof(Title));
-        
+
         // Update socket percentages
         UpdateSocketPercentages();
     }
@@ -47,9 +47,41 @@ public class questRandomizerNodeDefinitionWrapper : questDisableableNodeDefiniti
     {
         // Call base implementation for standard quest node refresh
         base.RefreshFromData();
-        
+
         // Update socket percentages when data changes externally
         UpdateSocketPercentages();
+    }
+
+    private void UpdateSocketPercentages()
+    {
+        if (_castedData == null || Output == null || Output.Count == 0)
+            return;
+
+        // Calculate total weight
+        var total = 0;
+        foreach (var weight in _castedData.OutputWeights)
+        {
+            total += weight;
+        }
+
+        // Update socket subtitles with percentages (without regenerating sockets)
+        var outputIndex = 0;
+        foreach (var output in Output.OfType<QuestOutputConnectorViewModel>())
+        {
+            if (outputIndex < _castedData.OutputWeights.Count && total > 0)
+            {
+                var chance = (float)_castedData.OutputWeights[outputIndex] / total * 100;
+                output.Subtitle = $"[{chance:0.00}%] {output.Name}";
+            }
+            else
+            {
+                output.Subtitle = $"[0.00%] {output.Name}";
+            }
+            outputIndex++;
+        }
+
+        // Notify that output collection has been updated
+        OnPropertyChanged(nameof(Output));
     }
 
     private void PopulateRandomizerDetails(Dictionary<string, string> details)
@@ -101,10 +133,7 @@ public class questRandomizerNodeDefinitionWrapper : questDisableableNodeDefiniti
         }
     }
 
-    private void UpdateSocketPercentages()
-    {
-        GenerateSockets();
-    }
+
 
     internal override void GenerateSockets()
     {
@@ -134,18 +163,20 @@ public class questRandomizerNodeDefinitionWrapper : questDisableableNodeDefiniti
                 if (socketDefinition.Type == Enums.questSocketType.Output ||
                     socketDefinition.Type == Enums.questSocketType.CutSource)
                 {
-                    var displayName = name;
+                    var connector = new QuestOutputConnectorViewModel(name, "", UniqueId, socketDefinition);
+
+                    // Set percentage in subtitle with socket name (like scene randomizer)
                     if (outputIndex < _castedData.OutputWeights.Count && total > 0)
                     {
                         var chance = (float)_castedData.OutputWeights[outputIndex] / total * 100;
-                        displayName = $"[{chance:0.00}%] {name}";
+                        connector.Subtitle = $"[{chance:0.00}%] {name}";
                     }
                     else
                     {
-                        displayName = $"[0.00%] {name}";
+                        connector.Subtitle = $"[0.00%] {name}";
                     }
 
-                    Output.Add(new QuestOutputConnectorViewModel(name, displayName, UniqueId, socketDefinition));
+                    Output.Add(connector);
                     outputIndex++;
                 }
             }
@@ -177,26 +208,28 @@ public class questRandomizerNodeDefinitionWrapper : questDisableableNodeDefiniti
         }
 
         var socket = CreateSocket($"Out{cnt}", Enums.questSocketType.Output);
-        
+
         // Add a default weight of 1 instead of 0 to avoid division by zero
         _castedData.OutputWeights.Add(1);
 
-        // Calculate percentage for the new output
+        // Create connector with subtitle for percentage  
+        var connector = new QuestOutputConnectorViewModel($"Out{cnt}", "", UniqueId, socket);
+
+        // Calculate percentage for the new output and set subtitle
         var total = 0;
         foreach (var weight in _castedData.OutputWeights)
         {
             total += weight;
         }
-        
+
         var chance = total > 0 ? (float)1 / total * 100 : 0f;
-        var displayName = $"[{chance:0.00}%] Out{cnt}";
-        
-        var connector = new QuestOutputConnectorViewModel($"Out{cnt}", displayName, UniqueId, socket);
+        connector.Subtitle = $"[{chance:0.00}%] Out{cnt}";
+
         Output.Add(connector);
 
-        // Regenerate all sockets to update percentages
-        GenerateSockets();
-        
+        // Update all existing socket percentages without regenerating
+        UpdateSocketPercentages();
+
         // Refresh details to show updated weights
         RefreshDetails();
 
