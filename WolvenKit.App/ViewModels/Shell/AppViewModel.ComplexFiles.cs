@@ -52,7 +52,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         var relativeInkatlasFilePath = GetRelativePath(inkatlasFileName);
 
         ProjectExplorerViewModel.SuspendFileWatcherStatic();
-        
+
         /*
          * Copy and connect .app and .ent file
          */
@@ -266,8 +266,12 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
         var dict = files.ToDictionary(f => f, f => f.Contains("prop") || f.Contains("amm"));
 
-        if (Interactions.ShowChecklistDialogue((dict, activeProject.ModName, "Select files to include",
-                    "Select the files you want to include as World Builder Props.")) is not
+        if (Interactions.ShowChecklistDialogue((
+                    dict,
+                    "Select files to include",
+                    "Select the files you want to make available to World Builder.",
+                    "WorldBuilder file name",
+                    activeProject.ModName)) is not
                 { } dialogModel || dialogModel.SelectedOptions.Count == 0)
         {
             return;
@@ -276,7 +280,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         var wbDataFolder = Path.Join([activeProject.ResourcesDirectory, ..s_worldBuilderDataPath]);
         Directory.CreateDirectory(wbDataFolder);
 
-        var fileName = dialogModel.FileName;
+        var fileName = dialogModel.InputFieldText;
         if (!fileName.EndsWith(".txt"))
         {
             fileName += ".txt";
@@ -325,7 +329,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             _loggerService.Success(
                 $"{ents.Count} entries written to {Path.Join([..s_worldBuilderDataPath, subfolder, fileName])}");
         }
-        
+
     }
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]

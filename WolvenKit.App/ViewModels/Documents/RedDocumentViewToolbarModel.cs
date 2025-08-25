@@ -217,6 +217,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
         ClearChunkMaterialsCommand.NotifyCanExecuteChanged();
         RegenerateAllCRUIDsCommand.NotifyCanExecuteChanged();
+        DeleteChunkByIndexCommand.NotifyCanExecuteChanged();
         ConvertPreloadMaterialsCommand.NotifyCanExecuteChanged();
     }
 
@@ -716,6 +717,87 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private void RegenerateIds() => RootChunk?.RegenerateIdsCommand.Execute(null);
 
     #endregion
+
+
+    private bool CanDeleteChunkMaterialByIndex() => RootChunk?.ResolvedData is CMesh mesh && mesh.Appearances.Count > 0;
+
+    [RelayCommand(CanExecute = nameof(CanDeleteChunkMaterialByIndex))]
+    private void DeleteChunkByIndex()
+    {
+        if (RootChunk?.ResolvedData is not CMesh mesh)
+        {
+            return;
+        }
+
+        var existingChunks = mesh.Appearances.Select(m => m.Chunk)
+            .OfType<meshMeshAppearance>()
+            .SelectMany(a =>
+            {
+                var materialIndex = 0;
+                List<string> ret = [];
+                foreach (var cm in a.ChunkMaterials)
+                {
+                    ret.Add($"submesh_{materialIndex.ToString().PadLeft(2, '0')}");
+                    materialIndex += 1;
+                }
+
+                return ret;
+            }).Distinct().Order().ToDictionary(x => x, x => false);
+
+        if (Interactions.ShowChecklistDialogue((
+                existingChunks,
+                "Select chunk to delete",
+                string.Empty,
+                string.Empty,
+                string.Empty)) is not { } dialogModel || dialogModel.SelectedOptions.Count == 0)
+        {
+            return;
+        }
+
+        var chunksToDelete = dialogModel.SelectedOptions
+            .Select(s =>
+            {
+                if (int.TryParse(s.Split('_').LastOrDefault(), out var idx))
+                {
+                    return idx;
+                }
+
+                return -1;
+            }).Where(i => i >= 0).ToList();
+
+        if (chunksToDelete.Count == 0)
+        {
+            return;
+        }
+
+        var wasChanged = false;
+        foreach (var app in mesh.Appearances.Select(m => m?.Chunk)
+                     .OfType<meshMeshAppearance>())
+        {
+            var chunkMaterials = app.ChunkMaterials.Where((_, i) => !chunksToDelete.Contains(i)).ToList();
+            if (chunkMaterials.Count == app.ChunkMaterials.Count)
+            {
+                continue;
+            }
+
+            wasChanged = true;
+            app.ChunkMaterials = new CArray<CName>(chunkMaterials);
+        }
+
+        if (!wasChanged || RootChunk.GetPropertyChild("appearances") is not ChunkViewModel appearanceChild)
+        {
+            return;
+        }
+
+        RootChunk.Tab?.Parent.SetIsDirty(true);
+
+        foreach (var app in appearanceChild.Properties)
+        {
+            app.RecalculateProperties();
+        }
+
+        appearanceChild.RecalculateProperties();
+    }
 
     private bool CanClearChunkMaterials() => SelectedChunks.All(c => c.ResolvedData is meshMeshAppearance);
 

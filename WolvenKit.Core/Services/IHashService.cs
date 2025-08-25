@@ -1,9 +1,14 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace WolvenKit.Common.Services
 {
     public interface IHashService
     {
+        bool IsLoaded { get; }
+
+        void Load();
+
         bool Contains(ulong key, bool checkUserHashes = true);
 
         string? Get(ulong key);

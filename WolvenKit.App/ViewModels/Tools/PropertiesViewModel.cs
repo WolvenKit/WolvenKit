@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HelixToolkit.SharpDX.Core;
@@ -31,9 +33,6 @@ public partial class PropertiesViewModel : ToolViewModel
     private readonly ILoggerService _loggerService;
     private readonly ISettingsManager _settingsManager;
     private readonly IArchiveManager _archiveManager;
-    private readonly IProjectManager _projectManager;
-    private readonly MeshTools _meshTools;
-    private readonly IModTools _modTools;
     private readonly Red4ParserService _parser;
 
     public const string ToolContentId = "Properties_Tool";
@@ -46,7 +45,7 @@ public partial class PropertiesViewModel : ToolViewModel
 
     public EffectsManager EffectsManager { get; }
 
-    public SharpDX.BoundingBox ModelGroupBounds { get; set; } = new();
+    public SharpDX.BoundingBox ModelGroupBounds { get; set; }
 
     public Camera Camera { get; }
 
@@ -56,35 +55,22 @@ public partial class PropertiesViewModel : ToolViewModel
 
     #endregion
 
-    /// <summary>
-    /// Constructor PropertiesViewModel
-    /// </summary>
-    /// <param name="projectManager"></param>
-    /// <param name="loggerService"></param>
-    /// <param name="meshTools"></param>
     public PropertiesViewModel(
-        IProjectManager projectManager,
         IArchiveManager archiveManager,
         ILoggerService loggerService,
         ISettingsManager settingsManager,
-        MeshTools meshTools,
-        IModTools modTools,
         Red4ParserService parserService
     ) : base(ToolTitle)
     {
         _settingsManager = settingsManager;
-        _projectManager = projectManager;
         _loggerService = loggerService;
         _archiveManager = archiveManager;
-        _meshTools = meshTools;
-        _modTools = modTools;
         _parser = parserService;
 
         SetupToolDefaults();
         SideInDockedMode = DockSide.Left;
 
         SetToNullAndResetVisibility();
-
 
         EffectsManager = new DefaultEffectsManager();
         Camera = new PerspectiveCamera()
@@ -174,7 +160,7 @@ public partial class PropertiesViewModel : ToolViewModel
             return;
         }
 
-        CR2WFile? cr2W = null;
+        CR2WFile? cr2W;
         using (var stream = new MemoryStream())
         {
             var selectedGameFile = selectedItem.GetGameFile();
@@ -223,7 +209,7 @@ public partial class PropertiesViewModel : ToolViewModel
             return;
         }
 
-        CR2WFile? cr2WFile = null;
+        CR2WFile? cr2WFile;
         using (var stream = new FileStream(model.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096,
                    FileOptions.SequentialScan))
         {
@@ -314,8 +300,6 @@ public partial class PropertiesViewModel : ToolViewModel
                 crpdr.TextureData.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC:
                 SetupImage(crpdr);
                 break;
-            default:
-                break;
         }
     }
 
@@ -373,9 +357,8 @@ public partial class PropertiesViewModel : ToolViewModel
         }
         catch
         {
-
+            // ignored
         }
-
     }
 
     public void LoadImage(BitmapSource p0) => LoadedBitmapFrame = p0;
