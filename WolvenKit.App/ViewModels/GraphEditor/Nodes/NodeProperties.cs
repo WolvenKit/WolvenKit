@@ -96,9 +96,13 @@ internal class NodeProperties
         }
         else if (node is questSwitchNodeDefinition switchCasted)
         {
-            foreach (var cond in switchCasted.Conditions)
+            // Show total conditions count right after the type
+            details["Total Cases"] = switchCasted.Conditions.Count.ToString();
+            
+            var conditionsToShow = switchCasted.Conditions.Take(8).ToList();
+            foreach (var cond in conditionsToShow)
             {
-                var socketPrefix = $"Socket {cond?.SocketId}";
+                var socketPrefix = $"Case {cond?.SocketId}";
                 var semanticDetails = QuestConditionHelper.GetSemanticConditionDisplay(cond?.Condition?.Chunk);
                 foreach (var kvp in semanticDetails)
                 {

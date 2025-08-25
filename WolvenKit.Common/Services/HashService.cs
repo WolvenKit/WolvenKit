@@ -31,15 +31,35 @@ namespace WolvenKit.Common.Services
 
         private Dictionary<ulong, string> _missing = new();
 
+        private volatile bool _isLoaded;
+
+        public bool IsLoaded => _isLoaded;
+
         #endregion Fields
 
-        #region Constructors
-
-        public HashService() => Load();
-
-        #endregion Constructors
-
         #region Methods
+
+        public void Load()
+        {
+            var hashesMemory = DecompressEmbeddedFile(s_used);
+            ReadHashes(hashesMemory.GetStream());
+
+            hashesMemory.Dispose();
+
+            var nodeRefsMemory = DecompressEmbeddedFile(s_nodeRefs);
+            ReadNodeRefs(nodeRefsMemory.GetStream());
+
+            nodeRefsMemory.Dispose();
+
+            var tweakNamesMemory = DecompressEmbeddedFile(s_tweakDbStr);
+            ReadTweakNames(tweakNamesMemory.GetStream());
+
+            tweakNamesMemory.Dispose();
+
+            LoadMissingHashes();
+
+            _isLoaded = true;
+        }
 
         public IEnumerable<ulong> GetAllHashes() => _hashes.Keys;
 
@@ -84,33 +104,13 @@ namespace WolvenKit.Common.Services
             return null;
         }
 
-        private void Load()
-        {
-            var hashesMemory = DecompressEmbeddedFile(s_used);
-            ReadHashes(hashesMemory.GetStream());
-            
-            hashesMemory.Dispose();
-            
-            var nodeRefsMemory = DecompressEmbeddedFile(s_nodeRefs);
-            ReadNodeRefs(nodeRefsMemory.GetStream());
-            
-            nodeRefsMemory.Dispose();
-            
-            var tweakNamesMemory = DecompressEmbeddedFile(s_tweakDbStr);
-            ReadTweakNames(tweakNamesMemory.GetStream());
-            
-            tweakNamesMemory.Dispose();
-            
-            LoadMissingHashes();
-        }
-        
         private static unsafe UnmanagedMemory DecompressEmbeddedFile(string resourceName)
         {
             using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName).NotNull();
 
             // read KARK header
             var oodleCompression = stream.ReadStruct<uint>();
-            
+
             if (oodleCompression != Oodle.KARK)
             {
                 throw new DecompressionException("Incorrect hash file.");
@@ -121,7 +121,7 @@ namespace WolvenKit.Common.Services
             var compressedBufferLength = (int)(stream.Length - (sizeof(uint) * 2));
             using var compressedBuffer = UnmanagedMemory.Allocate(compressedBufferLength);
             var decompressedBuffer = UnmanagedMemory.Allocate((int) outputSize);
-            
+
             // read the rest of the stream
             var read = stream.Read(compressedBuffer.GetSpan());
 
@@ -133,7 +133,7 @@ namespace WolvenKit.Common.Services
             Oodle.Decompress(
                 compressedBuffer.Pointer, compressedBuffer.Size,
                 decompressedBuffer.Pointer, decompressedBuffer.Size);
-            
+
             return decompressedBuffer;
         }
 
@@ -144,7 +144,7 @@ namespace WolvenKit.Common.Services
             var readerTask = Task.Run(() =>
             {
                 using var sr = new StreamReader(memoryStream);
-                
+
                 while (true)
                 {
                     var nextLine = sr.ReadLine();
@@ -156,7 +156,7 @@ namespace WolvenKit.Common.Services
 
                     collection.Add(nextLine);
                 }
-                
+
                 collection.CompleteAdding();
             });
 

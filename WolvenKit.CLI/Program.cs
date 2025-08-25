@@ -5,8 +5,10 @@ using System.CommandLine.Hosting;
 using System.CommandLine.Parsing;
 using CP77Tools.Commands;
 using CP77Tools.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
 
 namespace WolvenKit.CLI;
@@ -34,7 +36,7 @@ internal class Program
                        "Please do so to ensure that WolvenKit works properly." + Environment.NewLine + Environment.NewLine +
                        "For more informations:" + Environment.NewLine +
                        "https://wiki.redmodding.org/wolvenkit/help/faq/long-file-path-support" + Environment.NewLine + Environment.NewLine;
-            
+
             Console.Error.Write(text);
         }
 
@@ -69,6 +71,17 @@ internal class Program
         var parser = new CommandLineBuilder(rootCommand)
             .UseDefaults()
             .UseHost(GenericHost.CreateHostBuilder)
+            .AddMiddleware(context =>
+            {
+                var host = context.GetHost();
+                var servicesProvider = host.Services;
+
+                var hashService = servicesProvider.GetRequiredService<IHashService>();
+                hashService.Load();
+
+                var cruidService = servicesProvider.GetRequiredService<CRUIDService>();
+                cruidService.Load();
+            })
             .Build();
 
         ImportExportArgs.IsCLI = true;

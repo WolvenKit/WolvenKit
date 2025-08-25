@@ -159,6 +159,17 @@
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
 
+            <!-- Default texts -->
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
+            </Style>
+
+            <!-- See https://help.syncfusion.com/wpf/autocomplete/textbox-customization -->
+            <Style TargetType="{x:Type syncfusion:SfTextBoxExt}">
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+            </Style>
+
             <Style
                 x:Key="MessageBoxPrimaryButtonStyle"
                 BasedOn="{StaticResource {x:Type Button}}"

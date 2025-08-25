@@ -18,15 +18,16 @@ namespace WolvenKit.Views.Dialogs.Windows;
 public partial class ShowChecklistDialog : IViewFor<ShowChecklistDialogViewModel>
 {
     private static List<string> s_lastSelection = [];
-    private static string s_lastFileName = "";
+    private static string s_lastInputFieldText = "";
 
-    public ShowChecklistDialog(Dictionary<string, bool> checklistOptions, string fileName, string title, string text)
+    public ShowChecklistDialog(Dictionary<string, bool> checklistOptions, string title,
+        string text, string inputFieldLabel, string inputFieldDefaultValue)
     {
         InitializeComponent();
 
-        if (s_lastFileName != "")
+        if (s_lastInputFieldText != "" && inputFieldLabel != "")
         {
-            fileName = s_lastFileName;
+            inputFieldDefaultValue = s_lastInputFieldText;
         }
 
         foreach (var se in s_lastSelection.Where(checklistOptions.ContainsKey))
@@ -34,7 +35,8 @@ public partial class ShowChecklistDialog : IViewFor<ShowChecklistDialogViewModel
             checklistOptions[se] = true;
         }
 
-        ViewModel = new ShowChecklistDialogViewModel(checklistOptions, fileName, title, text);
+        ViewModel = new ShowChecklistDialogViewModel(checklistOptions, title, text, inputFieldLabel,
+            inputFieldDefaultValue);
         DataContext = ViewModel;
 
         this.WhenActivated(disposables =>
@@ -45,7 +47,7 @@ public partial class ShowChecklistDialog : IViewFor<ShowChecklistDialogViewModel
                     x => x.FilterableChecklistMenu.CheckboxOptionsAndStates)
                 .DisposeWith(disposables);
 
-            // bind to selectedoptions
+            // bind to selectedOptions
             this.Bind(ViewModel,
                     x => x.SelectedOptions,
                     x => x.FilterableChecklistMenu.SelectedOptions,
@@ -59,8 +61,8 @@ public partial class ShowChecklistDialog : IViewFor<ShowChecklistDialogViewModel
 
             // bind rest of properties
             this.Bind(ViewModel,
-                    x => x.FileName,
-                    x => x.FileNameBox.Text)
+                    x => x.InputFieldText,
+                    x => x.TextInputBox.Text)
                 .DisposeWith(disposables);
 
             this.Bind(ViewModel,
@@ -91,12 +93,12 @@ public partial class ShowChecklistDialog : IViewFor<ShowChecklistDialogViewModel
         if (ViewModel?.RememberValues != true)
         {
             s_lastSelection.Clear();
-            s_lastFileName = "";
+            s_lastInputFieldText = "";
             return;
         }
 
         s_lastSelection = ViewModel.SelectedOptions.ToList();
-        s_lastFileName = ViewModel.FileName;
+        s_lastInputFieldText = ViewModel.InputFieldText;
     }
 
     private void WizardPage_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -113,19 +115,6 @@ public partial class ShowChecklistDialog : IViewFor<ShowChecklistDialogViewModel
     }
 
     private void WizardControl_OnFinish(object sender, RoutedEventArgs e) => SaveLastSelection();
-
-    private void FileNameBox_OnLostFocus_(object sender, RoutedEventArgs e)
-    {
-        if (ViewModel is null || string.IsNullOrEmpty(ViewModel.FileName))
-        {
-            return;
-        }
-
-        if (!ViewModel.FileName.EndsWith(".txt"))
-        {
-            ViewModel.FileName += ".txt";
-        }
-    }
 
     private void ChecklistMenu_OnSelectionChanged(object _, List<string> selection)
     {

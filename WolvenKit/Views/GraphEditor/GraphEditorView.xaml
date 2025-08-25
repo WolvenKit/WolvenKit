@@ -44,6 +44,10 @@
                       Viewport="0,0,20,20"
                       ViewportUnits="Absolute"
                       Stretch="None">
+            <DrawingBrush.Transform>
+                <ScaleTransform ScaleX="{DynamicResource WolvenKitGridScale}"
+                               ScaleY="{DynamicResource WolvenKitGridScale}" />
+            </DrawingBrush.Transform>
             <DrawingBrush.Drawing>
                 <GeometryDrawing Brush="Transparent">
                     <GeometryDrawing.Pen>
@@ -67,6 +71,10 @@
                       Viewport="0,0,160,160"
                       ViewportUnits="Absolute"
                       Stretch="None">
+            <DrawingBrush.Transform>
+                <ScaleTransform ScaleX="{DynamicResource WolvenKitGridScale}"
+                               ScaleY="{DynamicResource WolvenKitGridScale}" />
+            </DrawingBrush.Transform>
             <DrawingBrush.Drawing>
                 <GeometryDrawing Brush="Transparent">
                     <GeometryDrawing.Pen>

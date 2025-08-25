@@ -110,7 +110,7 @@ public partial class ChunkViewModel
             IsHiddenBySearch = true;
             return;
         }
-        
+
         foreach (var chunkViewModel in TVProperties)
         {
             chunkViewModel.SetVisibilityStatusBySearchString(searchBoxText);
@@ -130,11 +130,13 @@ public partial class ChunkViewModel
             IsExpanded = true;
             return;
         }
-        
 
         var shouldShow = Value?.Contains(searchBoxText, StringComparison.OrdinalIgnoreCase) == true
                          || Descriptor?.Contains(searchBoxText, StringComparison.OrdinalIgnoreCase) == true
-                         || StringHelper.StringifyRedType(ResolvedData).Contains(searchBoxText, StringComparison.OrdinalIgnoreCase);
+                         || StringHelper.StringifyRedType(ResolvedData)
+                             .Contains(searchBoxText, StringComparison.OrdinalIgnoreCase)
+                         || (ResolvedData is IRedHashHolder hashed && hashed.GetRedHash().ToString()
+                             .Contains(searchBoxText, StringComparison.OrdinalIgnoreCase));
 
         // if it's a ref, search in full depot path
         shouldShow = shouldShow || (ResolvedData is IRedRef data &&
@@ -150,7 +152,7 @@ public partial class ChunkViewModel
         {
             shouldShow = false;
         }
-        
+
         IsHiddenBySearch = !shouldShow;
 
         if (IsHiddenBySearch)
@@ -162,8 +164,8 @@ public partial class ChunkViewModel
             // For nodes that are visible because they directly match the search, unhide all their children
             UnhideRecursively();
         }
- 
-        
+
+
     }
 
     private void UnhideRecursively()

@@ -2540,6 +2540,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         // RDTInkAtlasView
         resources["WolvenKitInkAtlasComboWidth"] = Math.Round(100 * _uiScalePercentage);
         resources["WolvenKitInkAtlasPropertyWidth"] = new GridLength(100).Mul(_uiScalePercentage).Round();
+
+        // Graph Editor Grid Scale
+        var gridScale = Math.Clamp(SystemParameters.PrimaryScreenHeight / 2160.0, 0.5, 4.0) * 1.5;
+        resources["WolvenKitGridScale"] = gridScale;
     }
 
     #endregion methods

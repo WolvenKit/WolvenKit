@@ -57,29 +57,33 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
         _activeProject = activeProject;
         _settingsManager = settingsManager;
         _projectResourceTools = projectResourceTools;
-        
+
         PhotomodeAppOptions.AddRange<string>(
             activeProject.ModFiles
-                .Where(fp => fp.EndsWith(".app"))
+                .Where(fp => fp.EndsWith(".app") && !fp.Contains(s_photomodeSubDir))
         );
 
         PhotomodeEntOptions.AddRange<string>(
             activeProject.ModFiles
-                .Where(fp => fp.EndsWith(".ent"))
+                .Where(fp => fp.EndsWith(".ent") && !fp.Contains(s_photomodeSubDir))
         );
 
         if (string.IsNullOrEmpty(SelectedApp))
         {
-            SelectedApp = PhotomodeAppOptions.FirstOrDefault(f => f.Contains($"{AppFileName}.")) ??
-                          PhotomodeAppOptions.FirstOrDefault(f => f.Contains(s_photomodeSubDir)) ??
+            SelectedApp = PhotomodeAppOptions.FirstOrDefault(f => f.Contains($"{AppFileName}.app")) ??
                           PhotomodeAppOptions.FirstOrDefault() ?? "";
         }
 
         if (string.IsNullOrEmpty(SelectedEnt))
         {
-            SelectedEnt = PhotomodeEntOptions.FirstOrDefault(f => f.Contains($"{EntFileName}.")) ??
-                          PhotomodeEntOptions.FirstOrDefault(f => f.Contains(s_photomodeSubDir)) ??
+            SelectedEnt = PhotomodeEntOptions.FirstOrDefault(f => f.Contains($"{EntFileName}.ent")) ??
                           PhotomodeEntOptions.FirstOrDefault() ?? "";
+        }
+
+        if (string.IsNullOrEmpty(PhotomodeRelativeFolder) && Directory.GetDirectories(activeProject.ModDirectory)
+                .FirstOrDefault(d => d.EndsWith(s_photomodeSubDir)) is string subDir)
+        {
+            PhotomodeRelativeFolder = subDir;
         }
     }
 
@@ -100,7 +104,7 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
         UpdateEntFileNameAndCheckbox();
 
         UpdateNpcName();
-        
+
         UpdatePhotoModeDirectory();
 
         SetJsonFileName();

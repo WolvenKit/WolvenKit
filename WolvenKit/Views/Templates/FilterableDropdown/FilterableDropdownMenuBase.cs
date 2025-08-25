@@ -6,6 +6,7 @@ using System.Windows;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
 
@@ -259,7 +260,7 @@ public abstract class FilterableDropdownMenuBase<T> : ReactiveUserControl<ChunkV
             return;
         }
 
-        // If the dropdown has only one value and CVM is empty, we can default to the only option. 
+        // If the dropdown has only one value and CVM is empty, we can default to the only option.
         if (_useDefaultOption && Options.Count == 1 && string.IsNullOrEmpty(SelectedOption))
         {
             SetCurrentValue(SelectedOptionProperty, Options.First().Key);
@@ -275,6 +276,11 @@ public abstract class FilterableDropdownMenuBase<T> : ReactiveUserControl<ChunkV
         if (DataContext is not ChunkViewModel vm)
         {
             return;
+        }
+
+        if (ModifierViewStateService.IsCtrlBeingHeld)
+        {
+            SetCurrentValue(FilterTextProperty, string.Empty);
         }
 
         _optionsInitialized = true;

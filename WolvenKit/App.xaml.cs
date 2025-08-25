@@ -16,6 +16,7 @@ using WolvenKit.App;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
+using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Helpers;
@@ -82,7 +83,6 @@ namespace WolvenKit
             _loggerService.Debug("Initializing Shell");
             Initializations.InitializeShell(_settingsManager);
 
-
             _loggerService.Debug("Initializing Discord RPC API");
             DiscordHelper.InitializeDiscordRPC();
 
@@ -92,6 +92,20 @@ namespace WolvenKit
                 .WhenPropertyChanged(settings => settings.UiScale)
                 .Skip(1)
                 .Subscribe(_ => OnUiScaleChanged());
+
+            // Improve FCP (~5 000 ms)
+            _ = Task.Run(() =>
+            {
+                var hashService = Locator.Current.GetService<IHashService>();
+                hashService?.Load();
+            });
+
+            // Improve FCP (~250 ms)
+            _ = Task.Run(() =>
+            {
+                var cruidService = Locator.Current.GetService<CRUIDService>();
+                cruidService?.Load();
+            });
 
             base.OnStartup(e);
         }

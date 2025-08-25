@@ -7,3 +7,8 @@ public interface IRedRef : IRedType
     public bool IsSet { get; }
     public uint GetPersistentHash();
 }
+
+public interface IRedHashHolder
+{
+    public ulong GetRedHash();
+}
