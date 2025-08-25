@@ -286,7 +286,7 @@ public abstract class FilterableDropdownMenuBase<T> : ReactiveUserControl<ChunkV
         _optionsInitialized = true;
 
         SetCurrentValue(OptionsProperty,
-            CvmDropdownHelper.GetDropdownOptions(vm, _documentTools, true));
+            CvmDropdownHelper.GetDropdownOptions(vm, _documentTools, true, FilterText));
 
         RecalculateFilteredOptions();
     }
