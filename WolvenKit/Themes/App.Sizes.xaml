@@ -236,6 +236,7 @@
     <system:Double x:Key="WolvenKitCurveEditorPointSize">8</system:Double>
 
     <!-- Red...Editor -->
+    <system:Double x:Key="WolvenKitRedEditorRowMinHeight">27</system:Double>
     <GridLength x:Key="WolvenKitRedEditorHashWidth">166</GridLength>
     <GridLength x:Key="WolvenKitRedEditorComponentWidth">24</GridLength>
     <GridLength x:Key="WolvenKitRedEditorTrimmingWidth">16</GridLength>

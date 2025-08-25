@@ -19,7 +19,6 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData.Binding;
 using Microsoft.VisualBasic.FileIO;
 using Microsoft.Win32;
-using Semver;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Factories;
@@ -545,7 +544,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanStartTask))]
     private async Task PackInstallRedModRun() => await LaunchAsync(new LaunchProfile()
     {
-        Install = true, LaunchGame = true, IsRedmod = true, DeployWithRedmod = true
+        Install = true,
+        LaunchGame = true,
+        IsRedmod = true,
+        DeployWithRedmod = true
     });
 
     [RelayCommand]
@@ -2393,6 +2395,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         resources["WolvenKitFieldHeight"] = Math.Round(120 * _uiScalePercentage);
 
         resources["WolvenKitButtonHeight"] = Math.Round(32 * _uiScalePercentage);
+        resources["WolvenKitButtonWidth"] = Math.Round(32 * _uiScalePercentage);
+        resources["WolvenKitButtonGridWidth"] = new GridLength(32).Mul(_uiScalePercentage).Round();
 
         resources["WolvenKitGridSize"] = new Rect(0, 0, 48, 48).Mul(_uiScalePercentage).Round();
 
@@ -2521,6 +2525,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         resources["WolvenKitCurveEditorPointSize"] = Math.Round(8 * _uiScalePercentage);
 
         // Red...Editor
+        resources["WolvenKitRedEditorRowMinHeight"] = Math.Round(27 * _uiScalePercentage);
         resources["WolvenKitRedEditorHashWidth"] = new GridLength(166).Mul(_uiScalePercentage).Round();
         resources["WolvenKitRedEditorComponentWidth"] = new GridLength(24).Mul(_uiScalePercentage).Round();
         resources["WolvenKitRedEditorTrimmingWidth"] = new GridLength(16).Mul(_uiScalePercentage).Round();

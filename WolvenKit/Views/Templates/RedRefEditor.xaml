@@ -56,8 +56,8 @@
         </Grid.Resources>
 
         <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
+            <RowDefinition MinHeight="{DynamicResource WolvenKitRedEditorRowMinHeight}" />
+            <RowDefinition MinHeight="{DynamicResource WolvenKitRedEditorRowMinHeight}" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>

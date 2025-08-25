@@ -11,6 +11,10 @@
     d:DesignHeight="64"
     KeyboardNavigation.TabNavigation="Local">
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedVector2Editor}}}">
+        <Grid.RowDefinitions>
+            <RowDefinition MinHeight="{DynamicResource WolvenKitRedEditorRowMinHeight}" />
+        </Grid.RowDefinitions>
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="{DynamicResource WolvenKitRedEditorComponentWidth}" />
             <ColumnDefinition />

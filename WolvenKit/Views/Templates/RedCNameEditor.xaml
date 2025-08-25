@@ -44,6 +44,10 @@
         Margin="0"
         DataContext="{Binding RelativeSource={RelativeSource FindAncestor,
                                                              AncestorType={x:Type local:RedCNameEditor}}}">
+        <Grid.RowDefinitions>
+            <RowDefinition MinHeight="{DynamicResource WolvenKitRedEditorRowMinHeight}" />
+        </Grid.RowDefinitions>
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="{DynamicResource WolvenKitRedEditorHashWidth}" />

@@ -10,6 +10,10 @@
     d:DesignWidth="400"
     d:DesignHeight="64">
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedVectorColorEditor}}}">
+        <Grid.RowDefinitions>
+            <RowDefinition MinHeight="{DynamicResource WolvenKitRedEditorRowMinHeight}" />
+        </Grid.RowDefinitions>
+
         <syncfusion:ColorPickerPalette
             Margin="{DynamicResource WolvenKitMarginTiny}"
             syncfusion:FocusManagerHelper.FocusedElement="True"

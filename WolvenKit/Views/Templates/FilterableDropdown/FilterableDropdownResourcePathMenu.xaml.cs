@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Reactive.Disposables;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using ReactiveUI;
-using Splat;
-using WolvenKit.App.Helpers;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
 using WolvenKit.Views.Templates;
@@ -34,10 +28,10 @@ namespace WolvenKit.Views.Editors
 
                 _useDefaultOption = !IsExcludedFromAutoPopulation(vm);
                 InitializePropertyValues(vm);
-                
+
                 if (!ShowRefreshButton)
                 {
-                    Col3.SetCurrentValue(ColumnDefinition.WidthProperty, new GridLength(0));
+                    ColumnRefreshButton.SetCurrentValue(ColumnDefinition.WidthProperty, new GridLength(0));
                 }
 
                 // If we don't have any options, no reason to show the dropdown - disable these UI elements
@@ -45,10 +39,8 @@ namespace WolvenKit.Views.Editors
                 if (Options.Count == 0 && !ShowRefreshButton)
                 {
                     FilterRow.SetCurrentValue(RowDefinition.HeightProperty, new GridLength(0));
-                    PlaceholderRow.SetCurrentValue(RowDefinition.HeightProperty, new GridLength(0));
-                    Placeholder.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-                    Dropdown.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
                     FilterTextBox.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+                    Dropdown.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
                 }
 
                 if (vm.Data is not IRedRef redRef)

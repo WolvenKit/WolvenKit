@@ -146,6 +146,17 @@
                 <ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.MaterialDark.WPF;Component/CardView/CardView.xaml" />
 
                 <ResourceDictionary Source="pack://application:,,,/Resources/Styles/CustomHandyStyles.xaml" />
+
+                <!-- SfTextBoxExt, common placeholder style -->
+                <ResourceDictionary>
+                    <DataTemplate x:Key="PlaceholderTemplate">
+                        <TextBlock
+                            Padding="3,0,0,0"
+                            VerticalAlignment="Center"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                            Text="{Binding}" />
+                    </DataTemplate>
+                </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
 
             <!-- Default texts -->

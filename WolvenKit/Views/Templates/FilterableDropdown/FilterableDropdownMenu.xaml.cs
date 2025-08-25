@@ -7,7 +7,7 @@ using System.Windows.Controls;
 namespace WolvenKit.Views.Editors
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <example>
     /// Two-way binding doesn't work, needs to bind like this:
@@ -65,7 +65,7 @@ namespace WolvenKit.Views.Editors
                 typeof(bool),
                 typeof(FilterableDropdownMenu),
                 new PropertyMetadata(false, OnPropertyChangedCallback));
-        
+
         public string Key
         {
             get => (string)GetValue(KeyProperty);
@@ -167,7 +167,7 @@ namespace WolvenKit.Views.Editors
                 new PropertyMetadata(null, OnPropertyChangedCallback));
 
         #endregion
-        
+
         private void UpdateFilteredOptions()
         {
             if (Options == null)
@@ -202,7 +202,6 @@ namespace WolvenKit.Views.Editors
                     break;
                 case nameof(IsInline) when IsInline:
                     dropdownRow.SetCurrentValue(Grid.HeightProperty, 0.0);
-                    spacerRow2.SetCurrentValue(Grid.HeightProperty, 0.0);
                     break;
                 case nameof(Label) when !string.IsNullOrEmpty(Label):
                     SetCurrentValue(IsShowLabelProperty, true);
