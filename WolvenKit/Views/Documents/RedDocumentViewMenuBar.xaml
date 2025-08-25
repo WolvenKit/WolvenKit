@@ -571,7 +571,24 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="Graph"
-                            Foreground="White" />
+                            Foreground="{StaticResource WolvenKitRed}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem
+                    Style="{StaticResource ShowMeshMenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Header="Delete chunk by submesh index"
+                    ToolTip="If you deleted submeshes"
+                    Command="{Binding Path=DeleteChunkByIndexCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="FilterVariantRemove"
+                            Foreground="{StaticResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
 

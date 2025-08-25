@@ -11,25 +11,30 @@ namespace WolvenKit.App.ViewModels.Dialogs;
 
 public partial class ShowChecklistDialogViewModel : ObservableObject
 {
-    public ShowChecklistDialogViewModel(Dictionary<string, bool> checklistOptions, string fileName, string title,
-        string text)
+    public ShowChecklistDialogViewModel(Dictionary<string, bool> checklistOptions, string title,
+        string text, string inputFieldHeader, string inputFieldValue)
     {
         Title = title;
-        FileName = fileName;
+        InputFieldText = inputFieldValue;
+        InputFieldHeader = inputFieldHeader;
         Text = text;
         ChecklistOptions = checklistOptions;
         SelectedOptions = checklistOptions.Where(x => x.Value).Select(x => x.Key).ToList();
+        ShowInputField = !string.IsNullOrEmpty(inputFieldHeader);
     }
 
     [ObservableProperty] private Dictionary<string, bool> _checklistOptions = [];
 
     [ObservableProperty] private List<string> _selectedOptions = [];
 
-    [ObservableProperty] private string _fileName = "";
+    [ObservableProperty] private string _inputFieldText = "";
+    [ObservableProperty] private string _inputFieldHeader = "";
 
     [ObservableProperty] private string _title = "";
 
     [ObservableProperty] private string _text = "";
 
     [ObservableProperty] private bool _rememberValues = true;
+
+    [ObservableProperty] private bool _showInputField = false;
 }
