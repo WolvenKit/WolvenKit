@@ -13,6 +13,10 @@
         Background="#252525"
         DataContext="{Binding RelativeSource={RelativeSource FindAncestor,
                                                              AncestorType={x:Type local:RedIntegerEditor}}}">
+        <Grid.RowDefinitions>
+            <RowDefinition MinHeight="{DynamicResource WolvenKitRedEditorRowMinHeight}" />
+        </Grid.RowDefinitions>
+
         <syncfusion:UpDown
             x:Name="UpDown"
             Margin="{DynamicResource WolvenKitMarginTiny}"

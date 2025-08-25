@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
@@ -37,7 +36,7 @@ namespace WolvenKit.Views.Editors
 
                 if (!ShowRefreshButton)
                 {
-                    Col3.SetCurrentValue(ColumnDefinition.WidthProperty, new GridLength(0));
+                    ColumnRefreshButton.SetCurrentValue(ColumnDefinition.WidthProperty, new GridLength(0));
                 }
 
                 if (Options.Count != 0 || ShowRefreshButton)
@@ -50,13 +49,13 @@ namespace WolvenKit.Views.Editors
                     .Subscribe(tuple =>
                     {
                         var (filter, filteredOptions) = tuple;
-                        
+
                         if (IsJournalEntryField(vm))
                         {
                             // For journal entries, always show and enable the dropdown
                             Dropdown.SetCurrentValue(VisibilityProperty, Visibility.Visible);
                             Dropdown.SetCurrentValue(IsEnabledProperty, true);
-                            
+
                             if (string.IsNullOrWhiteSpace(filter))
                             {
                                 Dropdown.SetCurrentValue(ComboBox.TextProperty, "Type to search journal entries...");
@@ -100,27 +99,23 @@ namespace WolvenKit.Views.Editors
 
                 if (!ShowRefreshButton)
                 {
-                    Col3.SetCurrentValue(ColumnDefinition.WidthProperty, new GridLength(0));
+                    ColumnRefreshButton.SetCurrentValue(ColumnDefinition.WidthProperty, new GridLength(0));
                 }
 
                 // For journal entries, always show the filter UI even if no options are loaded initially
                 if (IsJournalEntryField(vm))
                 {
                     // Always show filter UI for journal entries
-                    Row1.SetCurrentValue(RowDefinition.HeightProperty, GridLength.Auto);
-                    Row2.SetCurrentValue(RowDefinition.HeightProperty, new GridLength(5));
-                    Placeholder.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-                    Dropdown.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+                    FilterRow.SetCurrentValue(RowDefinition.HeightProperty, GridLength.Auto);
                     FilterTextBox.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+                    Dropdown.SetCurrentValue(VisibilityProperty, Visibility.Visible);
                 }
                 else if (Options.Count == 0 && !ShowRefreshButton)
                 {
                     // For non-journal entries, hide UI if no options
-                    Row1.SetCurrentValue(RowDefinition.HeightProperty, new GridLength(0));
-                    Row2.SetCurrentValue(RowDefinition.HeightProperty, new GridLength(0));
-                    Placeholder.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-                    Dropdown.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+                    FilterRow.SetCurrentValue(RowDefinition.HeightProperty, new GridLength(0));
                     FilterTextBox.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+                    Dropdown.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
                 }
 
                 SetDropdownValueFromDataContext();
