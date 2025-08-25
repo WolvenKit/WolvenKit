@@ -7,7 +7,8 @@ namespace WolvenKit.RED4.Types;
 
 [RED("CName")]
 [DebuggerDisplay("{GetResolvedText()}", Type = "CName")]
-public readonly struct CName : IRedString, IRedPrimitive<string>, IEquatable<CName>, IComparable<CName>, IComparable
+public readonly struct CName : IRedString, IRedPrimitive<string>, IEquatable<CName>, IComparable<CName>, IComparable,
+    IRedHashHolder
 {
     public static CName Empty = 0;
 

@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.Types;
 
 [RED("ResourcePath")]
 [DebuggerDisplay("{GetResolvedText()}", Type = "ResourcePath")]
-public readonly struct ResourcePath : IRedString, IRedPrimitive<string>, IEquatable<ResourcePath>, IComparable<ResourcePath>, IComparable
+public readonly struct ResourcePath : IRedString, IRedPrimitive<string>, IEquatable<ResourcePath>, IComparable<ResourcePath>, IComparable, IRedHashHolder
 {
     public static readonly char DirectorySeparatorChar = '\\';
 
