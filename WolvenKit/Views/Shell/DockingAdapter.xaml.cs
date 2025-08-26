@@ -23,7 +23,6 @@ using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Layout;
 using DockState = WolvenKit.App.Models.Docking.DockState;
 
@@ -36,11 +35,10 @@ namespace WolvenKit.Views.Shell
     /// </summary>
     public partial class DockingAdapter : UserControl
     {
-        private ILoggerService _logger;
+        private readonly ILoggerService _logger;
 
         private AppViewModel _viewModel;
         private Window _mainWindow;
-        private IModifierViewStateService _modifierViewStateService;
         private bool _stateChanged;
 
         private readonly bool _debuggingLayouts = false;
@@ -48,7 +46,6 @@ namespace WolvenKit.Views.Shell
         public DockingAdapter()
         {
             _logger = Locator.Current.GetService<ILoggerService>();
-            _modifierViewStateService = Locator.Current.GetService<IModifierViewStateService>();
 
             InitializeComponent();
             G_Dock = this;
@@ -70,8 +67,12 @@ namespace WolvenKit.Views.Shell
         }
 
         // Using a DependencyProperty as the backing store for ActiveDocument.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ActiveDocumentProperty =
-            DependencyProperty.Register(nameof(ActiveDocument), typeof(IDocumentViewModel), typeof(DockingAdapter), new PropertyMetadata(null, new PropertyChangedCallback(OnActiveDocumentChanged)));
+        public static readonly DependencyProperty ActiveDocumentProperty = DependencyProperty.Register(
+            nameof(ActiveDocument),
+            typeof(IDocumentViewModel),
+            typeof(DockingAdapter),
+            new PropertyMetadata(null, OnActiveDocumentChanged)
+        );
 
         public object ItemsSource
         {
@@ -263,7 +264,6 @@ namespace WolvenKit.Views.Shell
                     {
                         _logger.Warning($"ViewModel for \"{dockingParam.Name}\" could not be found!");
                     }
-
                 }
 
                 // Now load layout
@@ -449,11 +449,8 @@ namespace WolvenKit.Views.Shell
                 }
             }
 
-            string proj = "";
-            if (_viewModel?.ActiveProject != null)
-            {
-                proj = _viewModel?.ActiveProject.Name;
-            }
+            var projectName = _viewModel?.ActiveProject?.ModName ?? string.Empty;
+
 
             if (e.NewValue is ContentControl content)
             {
@@ -463,29 +460,32 @@ namespace WolvenKit.Views.Shell
                 }
 
                 var propertiesViewModel = Locator.Current.GetService<PropertiesViewModel>();
-                if (content.Content is ProjectExplorerViewModel { SelectedItem: not null } pevm)
+                switch (content.Content)
                 {
-                    //propertiesViewModel.SetToNullAndResetVisibility();
-                    propertiesViewModel.PE_FileInfoVisible = true;
-                    propertiesViewModel.AB_FileInfoVisible = false;
-                    propertiesViewModel.ExecuteSelectFile(pevm.SelectedItem);
-                }
-                else if (content.Content is AssetBrowserViewModel { RightSelectedItem: not null } abvm)
-                {
-                    //propertiesViewModel.SetToNullAndResetVisibility();
-                    propertiesViewModel.AB_FileInfoVisible = true;
-                    propertiesViewModel.PE_FileInfoVisible = false;
-                    propertiesViewModel.ExecuteSelectFile(abvm.RightSelectedItem);
-                }
-
-                if (content.Content is string s)
-                {
-                    DiscordHelper.SetDiscordRPCStatus(s, proj, _logger);
+                    case ProjectExplorerViewModel { SelectedItem: not null } pevm:
+                        //propertiesViewModel.SetToNullAndResetVisibility();
+                        propertiesViewModel.PE_FileInfoVisible = true;
+                        propertiesViewModel.AB_FileInfoVisible = false;
+                        propertiesViewModel.ExecuteSelectFile(pevm.SelectedItem);
+                        break;
+                    case AssetBrowserViewModel { RightSelectedItem: not null } abvm:
+                        //propertiesViewModel.SetToNullAndResetVisibility();
+                        propertiesViewModel.AB_FileInfoVisible = true;
+                        propertiesViewModel.PE_FileInfoVisible = false;
+                        propertiesViewModel.ExecuteSelectFile(abvm.RightSelectedItem);
+                        break;
                 }
 
-                if (content.Content is RedDocumentViewModel rdvm)
+                // DO NOT MERGE THESE SWITCH CASES
+                // Both of them have to run
+                switch (content.Content)
                 {
-                    DiscordHelper.SetDiscordRPCStatus("Working on " + rdvm.Header, proj, _logger);
+                    case string s:
+                        DiscordHelper.SetDiscordRPCStatus(s, projectName);
+                        break;
+                    case RedDocumentViewModel rdvm:
+                        DiscordHelper.SetDiscordRPCStatus("Working on " + rdvm.Header, projectName);
+                        break;
                 }
 
                 //if (((IDockElement)content.Content).State == DockState.Document)
@@ -503,9 +503,9 @@ namespace WolvenKit.Views.Shell
 
             }
 
-            if (e.OldValue is ContentControl && e.NewValue == null)
+            if (e is { OldValue: ContentControl, NewValue: null })
             {
-                DiscordHelper.SetDiscordRPCStatus("No file", proj, _logger);
+                DiscordHelper.SetDiscordRPCStatus("-", projectName);
             }
 
             _viewModel?.UpdateTitle();
@@ -535,12 +535,9 @@ namespace WolvenKit.Views.Shell
 
             for (var i = _viewModel.DockedViews.Count - 1; i >= 0; i--)
             {
-                if (_viewModel.DockedViews[i] is DocumentViewModel doc)
+                if (_viewModel.DockedViews[i] is DocumentViewModel doc && !TryCloseDocument(doc))
                 {
-                    if (!TryCloseDocument(doc))
-                    {
-                        allClosed = false;
-                    }
+                    allClosed = false;
                 }
             }
 
