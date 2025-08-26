@@ -83,10 +83,12 @@ namespace WolvenKit
             _loggerService.Debug("Initializing Shell");
             Initializations.InitializeShell(_settingsManager);
 
-            _loggerService.Debug("Initializing Discord RPC API");
-            DiscordHelper.InitializeDiscordRPC();
-
             RedImage.LoggerService = _loggerService;
+            DiscordHelper.LoggerService = _loggerService;
+
+            _loggerService.Debug("Initializing Discord RPC API");
+            DiscordHelper.SetEnabled(_settingsManager.IsDiscordRPCEnabled);
+            DiscordHelper.InitializeDiscordRPC();
 
             _settingsManager
                 .WhenPropertyChanged(settings => settings.UiScale)

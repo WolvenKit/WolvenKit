@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,7 +6,6 @@ using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Helpers;
-using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.Common;
@@ -153,7 +151,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
             obj.ModName ??= obj.Name;
 
             var openProjectFiles =
-                (obj.OpenProjectFiles ?? []).Distinct().ToDictionary(x => DateTime.Now, x => x);
+                (obj.OpenProjectFiles ?? []).Distinct().ToDictionary(_ => DateTime.Now, x => x);
             Cp77Project project = new(path, obj.Name, obj.ModName, openProjectFiles)
             {
                 Author = obj.Author,
@@ -175,7 +173,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
             // fix legacy yaml tweaks
             MoveLegacyYamlTweaks(project);
 
-            DiscordHelper.SetDiscordRPCStatus("No file", obj.Name, _loggerService);
+            DiscordHelper.SetDiscordRPCStatus(string.Empty, project.ModName);
 
             return project;
         }

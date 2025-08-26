@@ -275,7 +275,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private void OnUiScaleChanged() => UpdateScalesResource();
 
-    private void OnDiscordRPCChanged() => DiscordHelper.DiscordRPCEnabled = SettingsManager.IsDiscordRPCEnabled;
+    private void OnDiscordRPCChanged() => DiscordHelper.SetEnabled(SettingsManager.IsDiscordRPCEnabled);
 
     #region init
 
