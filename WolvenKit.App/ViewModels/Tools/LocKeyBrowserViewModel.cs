@@ -2,15 +2,12 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Data;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Services;
-using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
-using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.Types;
@@ -91,16 +88,49 @@ public partial class LocKeyBrowserViewModel : ToolViewModel
 
     public void SetupLocKeys()
     {
-        LocKeys = new(_locKeyService.GetEntries().Select(x => new LocKeyViewModel(x.PrimaryKey, x.SecondaryKey, x.FemaleVariant)));
+        LocKeys = new ObservableCollection<LocKeyViewModel>(_locKeyService.GetEntries()
+            .Select(x => new LocKeyViewModel(x.PrimaryKey, x.SecondaryKey, x.FemaleVariant)));
         OnPropertyChanged(nameof(LocKeys));
     }
 
+    private static bool MatchesFilter(localizationPersistenceOnScreenEntry entry, string filter)
+    {
+        var valueOnly = false;
+        var keyOnly = false;
+
+        var matchesKey = false;
+        var matchesValue = false;
+        if (filter.Contains(':', StringComparison.OrdinalIgnoreCase))
+        {
+            valueOnly = filter.Contains("value:", StringComparison.OrdinalIgnoreCase);
+            keyOnly = filter.Contains("key:", StringComparison.OrdinalIgnoreCase);
+            filter = (filter.Split(':').LastOrDefault() ?? "").Trim();
+        }
+
+        matchesKey = entry.SecondaryKey.ToString().Contains(filter, StringComparison.InvariantCultureIgnoreCase);
+        if (keyOnly)
+        {
+            return matchesKey;
+        }
+
+        matchesValue = entry.FemaleVariant.ToString().Contains(filter, StringComparison.InvariantCultureIgnoreCase)
+                       || (entry.MaleVariant.ToString() is string s && !string.IsNullOrEmpty(s) &&
+                           s.Contains(filter, StringComparison.InvariantCultureIgnoreCase));
+        if (valueOnly)
+        {
+            return matchesValue;
+        }
+
+        return matchesKey || matchesValue;
+    }
+
+
     public void SetupLocKeys(string filter)
     {
-        LocKeys = new(
+        LocKeys = new ObservableCollection<LocKeyViewModel>(
             _locKeyService
             .GetEntries()
-            .Where(x => x.FemaleVariant.ToString().Contains(filter, StringComparison.InvariantCultureIgnoreCase))
+            .Where(x => MatchesFilter(x, filter))
             .Select(x => new LocKeyViewModel(x.PrimaryKey, x.SecondaryKey, x.FemaleVariant)));
         OnPropertyChanged(nameof(LocKeys));
     }
@@ -113,5 +143,5 @@ public partial class LocKeyBrowserViewModel : ToolViewModel
 
     public string SelectedContent => SelectedLocKey?.Content ?? "";
     public string SelectedPrimaryKey => SelectedLocKey?.PrimaryKey.ToString() ?? "";
-    public string SelectedSecondaryKey => SelectedLocKey?.SecondaryKey.ToString() ?? "";
+    public string SelectedSecondaryKey => SelectedLocKey?.SecondaryKey ?? "";
 }
