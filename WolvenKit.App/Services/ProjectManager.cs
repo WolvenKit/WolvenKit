@@ -89,7 +89,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
             if (recentItem == null)
             {
                 recentItem = new RecentlyUsedItemModel(location, DateTime.Now, DateTime.Now,
-                    x.Result.ProjectColor);
+                    x.Result.ProjectColor, x.Result.Location);
                 _recentlyUsedItemsService.AddOrUpdateItem(recentItem);
             }
             else
