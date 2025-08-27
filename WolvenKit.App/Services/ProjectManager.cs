@@ -25,7 +25,6 @@ public partial class ProjectManager : ObservableObject, IProjectManager
     private readonly IHashService _hashService;
     private readonly IArchiveManager _archiveManager;
     private readonly ISettingsManager _settingsManager;
-    private readonly IRecentlyUsedItemsService _itemsSvc;
 
     public ProjectManager(
         IRecentlyUsedItemsService recentlyUsedItemsService,
@@ -33,8 +32,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
         ILoggerService loggerService,
         IHashService hashService,
         IArchiveManager archiveManager,
-        ISettingsManager settingsManager,
-        IRecentlyUsedItemsService itemsSvc
+        ISettingsManager settingsManager
     )
     {
         _recentlyUsedItemsService = recentlyUsedItemsService;
@@ -43,7 +41,6 @@ public partial class ProjectManager : ObservableObject, IProjectManager
         _hashService = hashService;
         _archiveManager = archiveManager;
         _settingsManager = settingsManager;
-        _itemsSvc = itemsSvc;
     }
 
     #region properties
@@ -265,7 +262,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
 
             await fs.FlushAsync();
 
-            _itemsSvc.AddOrUpdateItem(new RecentlyUsedItemModel(ActiveProject));
+            _recentlyUsedItemsService.AddOrUpdateItem(new RecentlyUsedItemModel(ActiveProject));
         }
         catch (Exception e)
         {
