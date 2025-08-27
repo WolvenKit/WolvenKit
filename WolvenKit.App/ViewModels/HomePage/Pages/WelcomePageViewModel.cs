@@ -197,55 +197,49 @@ public partial class WelcomePageViewModel : PageViewModel
         }
         if (!delete)
         {
-            var items = _recentlyUsedItemsService.Items.Items
-                .Where(_ => _.Name == parameter)
-                .ToList();
-            if (items.Count > 0)
-            {
-                var f = items.FirstOrDefault();
-                if (f is not null)
+            if (_recentlyUsedItemsService.Items.Items
+                    .FirstOrDefault(it => it.Name == parameter) is RecentlyUsedItemModel f)
                 {
                     _recentlyUsedItemsService.RemoveItem(f);
                 }
-            }
             return "";
         }
-        else
+
+        var dlg = new OpenFileDialog
         {
-            var dlg = new OpenFileDialog
-            {
-                Multiselect = false,
-                Title = "Locate the WolvenKit project",
-                Filter = "Cyberpunk 2077 Project|*.cpmodproj"
-            };
+            Multiselect = false,
+            Title = "Locate the WolvenKit project",
+            Filter = "Cyberpunk 2077 Project|*.cpmodproj"
+        };
 
-            if (dlg.ShowDialog() != true)
-            {
-                return "";
-            }
-
-            var file = dlg.FileName;
-            if (string.IsNullOrEmpty(file))
-            {
-                return "";
-            }
-
-            parameter = file;
-
-            var items = _recentlyUsedItemsService.Items.Items
-                .Where(_ => Path.GetFileName(_.Name) == Path.GetFileName(parameter))
-                .ToList();
-            if (items.Count > 0)
-            {
-                var item = items.First();
-                _recentlyUsedItemsService.AddItem(new RecentlyUsedItemModel(parameter, item.DateTime, item.LastOpened));
-                _recentlyUsedItemsService.RemoveItem(item);
-                return parameter;
-            }
+        if (dlg.ShowDialog() != true)
+        {
+            return "";
         }
 
-        return "";
+        var file = dlg.FileName;
+        if (string.IsNullOrEmpty(file))
+        {
+            return "";
+        }
+
+        parameter = file;
+
+        var existing = _recentlyUsedItemsService.Items.Items
+            .FirstOrDefault(f => Path.GetFileName(f.Name) == Path.GetFileName(parameter));
+
+        if (existing is RecentlyUsedItemModel item)
+        {
+            _recentlyUsedItemsService.AddOrUpdateItem(new RecentlyUsedItemModel(parameter, item.DateTime,
+                item.LastOpened,
+                item.Color, item.AbsolutePath));
+            _recentlyUsedItemsService.RemoveItem(item);
+        }
+
+        return parameter;
     }
+
+    public void Refresh() => ConvertRecentProjects();
 
     private void ConvertRecentProjects() // Converts Recent projects for the homepage.
     {

@@ -81,7 +81,6 @@ public partial class ProjectManager : ObservableObject, IProjectManager
                 return;
             }
 
-
             ActiveProject = x.Result;
             _archiveManager.ProjectArchive = x.Result.AsArchive();
             IsProjectLoaded = true;
@@ -89,14 +88,16 @@ public partial class ProjectManager : ObservableObject, IProjectManager
             var recentItem = _recentlyUsedItemsService.Items.Items.FirstOrDefault(item => item.Name == location);
             if (recentItem == null)
             {
-                recentItem = new RecentlyUsedItemModel(location, DateTime.Now, DateTime.Now);
-                _recentlyUsedItemsService.AddItem(recentItem);
+                recentItem = new RecentlyUsedItemModel(location, DateTime.Now, DateTime.Now,
+                    x.Result.ProjectColor, x.Result.Location);
+                _recentlyUsedItemsService.AddOrUpdateItem(recentItem);
             }
             else
             {
                 recentItem.LastOpened = DateTime.Now;
             }
 
+            recentItem.Color = x.Result.ProjectColor;
             _settingsManager.LastUsedProjectPath = x.Result.Location;
 
         });
@@ -158,6 +159,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
                 Email = obj.Email,
                 Description = obj.Description,
                 Version = obj.Version,
+                ProjectColor = ColorHelper.CreateFromHexOrNull(obj.ProjectColor) ?? ColorHelper.GetRandomColor(0.5),
             };
 
             if (_hashService is HashServiceExt hashService)
@@ -259,6 +261,8 @@ public partial class ProjectManager : ObservableObject, IProjectManager
             }
 
             await fs.FlushAsync();
+
+            _recentlyUsedItemsService.AddOrUpdateItem(new RecentlyUsedItemModel(ActiveProject));
         }
         catch (Exception e)
         {
