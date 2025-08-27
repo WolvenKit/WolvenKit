@@ -38,13 +38,23 @@ public class RecentlyUsedItemsService : IRecentlyUsedItemsService
 
     public void AddOrUpdateItem(RecentlyUsedItemModel itemModel)
     {
-        _recentlyUsedItems.Edit(innerCache => innerCache.AddOrUpdate(itemModel));
+        _recentlyUsedItems.Edit(innerCache =>
+        {
+            innerCache.AddOrUpdate(itemModel);
+            innerCache.Refresh();
+        });
+        _recentlyUsedItems.Refresh();
         Save();
     }
 
     public void RemoveItem(RecentlyUsedItemModel itemModel)
     {
-        _recentlyUsedItems.Edit(innerCache => innerCache.Remove(itemModel));
+        _recentlyUsedItems.Edit(innerCache =>
+        {
+            innerCache.Remove(itemModel);
+            innerCache.Refresh();
+        });
+        _recentlyUsedItems.Refresh();
         Save();
     }
 
