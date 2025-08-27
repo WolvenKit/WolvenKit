@@ -177,18 +177,20 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
             return;
         }
 
-        if (SelectedEnt.Contains("photo"))
+        if (!SelectedEnt.Contains("photo"))
         {
-            NpcName = Path.GetFileNameWithoutExtension(SelectedEnt).Split("photo").First().ToHumanFriendlyString();
+            NpcName = Path.GetFileNameWithoutExtension(SelectedEnt).ToHumanFriendlyString();
         }
         else if (SelectedApp.Contains("photo"))
         {
-            NpcName = Path.GetFileNameWithoutExtension(SelectedApp).Split("photo").First().ToHumanFriendlyString();
+            NpcName = Path.GetFileNameWithoutExtension(SelectedApp).ToHumanFriendlyString();
         }
         else
         {
             NpcName = _activeProject.ModName.ToHumanFriendlyString();
         }
+
+        NpcName = NpcName.Replace("NPV", "").Replace("NPC", "").Trim();
     }
 
     private void SetXlFileName()
@@ -208,8 +210,7 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
         else if (string.IsNullOrEmpty(XlFileName))
         {
             XlFileName = $"{_activeProject.ModName.ToFileName()}.archive.xl";
-            IsCreateXlFile =
-                !File.Exists(Path.Join(_activeProject.ModDirectory, PhotomodeRelativeFolder, XlFileName));
+            IsCreateXlFile = !File.Exists(Path.Join(_activeProject.ResourcesDirectory, XlFileName));
         }
     }
 
@@ -226,7 +227,7 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
         {
             YamlFileName = $"{NpcName.ToFileName()}_npc.yaml";
             IsCreateYamlFile =
-                !File.Exists(Path.Join(_activeProject.ModDirectory, PhotomodeRelativeFolder, YamlFileName));
+                !File.Exists(Path.Join(_activeProject.ResourcesDirectory, PhotomodeRelativeFolder, YamlFileName));
         }
     }
 
