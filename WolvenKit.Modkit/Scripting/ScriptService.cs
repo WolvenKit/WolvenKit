@@ -26,15 +26,24 @@ public partial class ScriptService : ObservableObject
     private bool _isRunning;
 
     public static bool SuppressLogOutput { get; set; }
-    
+    public static bool AbortOnRerun { get; set; }
+
     public ScriptService(ILoggerService loggerService) => _loggerService = loggerService;
 
     public async Task ExecuteAsync(string code, Dictionary<string, object>? hostObjects = null, List<string>? searchPaths = null)
     {
         if (_mainEngine != null)
         {
-            _loggerService?.Warning("Another script is already running");
-            return;
+            if (AbortOnRerun)
+            {
+                _mainEngine.Dispose();
+                _mainEngine = null;
+            }
+            else
+            {
+                _loggerService?.Warning("Another script is already running");
+                return;
+            }
         }
 
         IsRunning = true;

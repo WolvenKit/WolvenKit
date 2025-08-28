@@ -12,11 +12,13 @@ using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.CSharp.RuntimeBinder;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using Semver;
@@ -68,9 +70,31 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
     private static readonly string[] s_resourceFileExtensions = ["xl", "yaml", "yml"];
 
+    [NotifyCanExecuteChangedFor(nameof(CancelFileValidationCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RunFileValidationOnProjectCommand))]
+    [ObservableProperty]
+    private bool _fileValidationRunning = false;
+
+    private CancellationTokenSource? _scanCancellationTokenSource;
+
+    private bool CanCancelFileValidation => CanShowProjectActions() && FileValidationRunning;
+
+    [RelayCommand(CanExecute = nameof(CanCancelFileValidation))]
+    private void CancelFileValidation()
+    {
+        _scanCancellationTokenSource?.Cancel();
+        FileValidationRunning = false;
+    }
+
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private async Task RunFileValidationOnProject()
     {
+        if (FileValidationRunning || _scanCancellationTokenSource is not null)
+        {
+            CancelFileValidation();
+            _loggerService.Info("Cancelled current run of file validation");
+        }
+
         if (_fileValidationScript is null || !File.Exists(_fileValidationScript.Path))
         {
             _loggerService.Error("You need to update your Wolvenkit Scripts to use this. Please restart the application.");
@@ -122,19 +146,26 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             filesToValidate.Clear();
         }
 
-        var totalFileCount = filesToValidate.Count + resourceFilesToValidate.Count;
+        List<string> allFiles = [..filesToValidate.Select(x => x.FileName), ..resourceFilesToValidate];
 
-        if (totalFileCount == 0)
+
+        if (allFiles.Count == 0)
         {
             _loggerService.Info("No files to validate - you're funny!");
             return;
         }
 
+        if (ActiveDocument is null)
+        {
+            _loggerService.Info("File validation needs an active document!");
+            return;
+        }
+
         // arbitrary cutoff: warn user if more than 5 files
-        if (totalFileCount > 5)
+        if (allFiles.Count > 5)
         {
             var result = Interactions.ShowConfirmation((
-                $"This will analyse {totalFileCount} files. This can take up to several minutes. Do you want to proceed?",
+                $"This will analyse {allFiles.Count} files and can take up to several minutes. Do you want to proceed?",
                 "Really run file validation?",
                 WMessageBoxImage.Question,
                 WMessageBoxButtons.YesNo));
@@ -145,73 +176,84 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             }
         }
 
-        ScriptService.SuppressLogOutput = true;
-        var redExtensions = Enum.GetNames<ERedExtension>().ToList();
-        var code = await File.ReadAllTextAsync(_fileValidationScript.Path);
+        await ValidateFilesAsync();
+        return;
 
-        foreach (var file in filesToValidate)
+        async Task ValidateFilesAsync(CancellationToken cancellationToken = default)
         {
-            var fileExtension = file.Extension.TrimStart('.').ToLower();
-            if (!redExtensions.Contains(fileExtension) && !s_packIgnoredExtensions.Contains(fileExtension))
-            {
-                _loggerService.Warning($"{file.FileName} has an unsupported extension and will not be packed!");
-                continue;
-            }
+            _scanCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            FileValidationRunning = true;
 
-            if (GetRedFile(file) is not { } fileViewModel)
-            {
-                continue;
-            }
+            ScriptService.SuppressLogOutput = true;
+            ScriptService.AbortOnRerun = true;
+            var redExtensions = Enum.GetNames<ERedExtension>().ToList();
 
-            _loggerService.Info($"Scanning {ActiveProject.GetRelativePath(file.FileName)}");
             try
             {
-                await _scriptService.ExecuteAsync(code);
+                foreach (var filePath in allFiles.Distinct())
+                {
+                    var fileExtension = (filePath.Split(".").LastOrDefault() ?? "").TrimStart('.').ToLower();
+
+                    var filePathPrefix = "archive";
+                    if (resourceFilesToValidate.Contains(filePath))
+                    {
+                        if (!s_resourceFileExtensions.Contains(fileExtension))
+                        {
+                            continue;
+                        }
+
+                        filePathPrefix = "resources";
+                    }
+                    else if (!redExtensions.Contains(fileExtension) ||
+                             s_packIgnoredExtensions.Contains(fileExtension) ||
+                             filesToValidate.FirstOrDefault(f => f.FileName == filePath) is not IGameFile file ||
+                             GetRedFile(file) is null)
+                    {
+                        continue;
+                    }
+
+                    var originalFilePath = ActiveDocument.FilePath;
+                    ActiveDocument.FilePath = $"{filePathPrefix}\\{ActiveProject.GetRelativePath(filePath)}";
+
+                    _loggerService.Info($"Scanning {ActiveDocument.FilePath}");
+
+                    try
+                    {
+                        var code = await File.ReadAllTextAsync(_fileValidationScript.Path);
+                        // Wrap it into an extra layer of async, because checking the token in the script service
+                        // will lead to a "wkit is not defined" exception in the script layer
+                        await Task.Run(async () => await _scriptService.ExecuteAsync(code),
+                            _scanCancellationTokenSource.Token);
+                    }
+                    finally
+                    {
+                        ActiveDocument.FilePath = originalFilePath;
+                    }
+                }
+
+                _loggerService.Success("File validation complete.");
+            }
+            catch (OperationCanceledException)
+            {
+                _loggerService.Info("File validation was cancelled.");
             }
             catch (Exception err)
             {
                 _loggerService.Error(err.Message);
             }
-        }
-
-        if (ActiveDocument is null)
-        {
-            ScriptService.SuppressLogOutput = false;
-            _loggerService.Info("Resource file validation needs an active document!");
-            return;
-        }
-
-        foreach (var file in resourceFilesToValidate)
-        {
-            var fileExtension = (file.Split(".").LastOrDefault() ?? "").TrimStart('.').ToLower();
-            if (!s_resourceFileExtensions.Contains(fileExtension))
+            finally
             {
-                _loggerService.Warning($"Skipping resource file {file}");
-                continue;
+                _scanCancellationTokenSource.Dispose();
+                _scanCancellationTokenSource = null;
+                ScriptService.SuppressLogOutput = false;
+                ScriptService.AbortOnRerun = false;
+                FileValidationRunning = false;
             }
 
-            var originalFilePath = ActiveDocument.FilePath;
-            ActiveDocument.FilePath = $"resources\\{file}";
-
-            try
-            {
-                await _scriptService.ExecuteAsync(code);
-            }
-            catch (Exception err)
-            {
-                _loggerService.Error(err.Message);
-            }
-
-            ActiveDocument.FilePath = originalFilePath;
+            _loggerService.Info(
+                "To open the most recent log file, shift-click on the 'open folder' button to the right.");
         }
-
-        _loggerService.Info("Done.");
-        _loggerService.Info(
-            "To open the most recent log file, shift-click on the 'open folder' button to the right.");
-
-        ScriptService.SuppressLogOutput = false;
     }
-
 
     private readonly string EntspawnerExportRelPath =
         Path.Join("bin", "x64", "plugins", "cyber_engine_tweaks", "mods", "entSpawner", "export");

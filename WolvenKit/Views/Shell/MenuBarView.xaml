@@ -275,6 +275,40 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <!-- File validation: start/cancel -->
+                <MenuItem
+                    x:Name="ToolbarProjectRunFileValidationButton"
+                    Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                    Visibility="{Binding IsFileValidationRunning,
+                                         Converter={StaticResource InvertBooleanVisibilityConverter}}"
+                    Header="Run File Validation on the entire project"
+                    Command="{Binding RunFileValidationOnEntireProjectCommand}">
+                    <MenuItem.Icon>
+                        <local:IconBox
+                            IconPack="Codicons"
+                            Kind="PlayCircle"
+                            Size="{DynamicResource WolvenKitIconTiny}"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    x:Name="ToolbarProjectCancelFileValidationButton"
+                    Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                    Visibility="{Binding IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding CancelFileValidationCommand}"
+                    Header="Cancel File Validation">
+                    <MenuItem.Icon>
+                        <local:IconBox
+                            IconPack="Material"
+                            Kind="Cancel"
+                            Size="{DynamicResource WolvenKitIconTiny}"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <!-- Submenu: Clean -->
                 <MenuItem
                     x:Name="ToolbarCleanupButton"
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
@@ -324,18 +358,6 @@
 
                 </MenuItem>
 
-                <MenuItem
-                    x:Name="ToolbarProjectRunFileValidationButton"
-                    Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
-                    Header="Run File Validation on the entire project">
-                    <MenuItem.Icon>
-                        <local:IconBox
-                            IconPack="Codicons"
-                            Kind="PlayCircle"
-                            Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="White" />
-                    </MenuItem.Icon>
-                </MenuItem>
             </MenuItem>
 
             <!-- Build -->
