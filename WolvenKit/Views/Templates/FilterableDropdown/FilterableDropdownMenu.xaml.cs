@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -200,8 +200,11 @@ namespace WolvenKit.Views.Editors
                 case (nameof(Options)) or (nameof(FilterText)):
                     UpdateFilteredOptions();
                     break;
-                case nameof(IsInline) when IsInline:
-                    dropdownRow.SetCurrentValue(Grid.HeightProperty, 0.0);
+                case nameof(IsInline):
+                    dropdown.SetCurrentValue(Grid.ColumnSpanProperty, IsInline ? 1 : 2);
+                    dropdown.SetCurrentValue(Grid.ColumnProperty, IsInline ? 2 : 1);
+                    dropdown.SetCurrentValue(Grid.RowProperty, IsInline ? 0 : 1);
+                    filterTextBox.SetCurrentValue(Grid.ColumnSpanProperty, IsInline ? 1 : 2);
                     break;
                 case nameof(Label) when !string.IsNullOrEmpty(Label):
                     SetCurrentValue(IsShowLabelProperty, true);
