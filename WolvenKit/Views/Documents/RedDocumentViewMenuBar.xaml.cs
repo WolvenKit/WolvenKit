@@ -332,37 +332,24 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            var dialogVm = Interactions.ShowChecklistDialogue((otherMeshFiles, "Select target .mesh files",
-                "Copy materials to the following mesh files", string.Empty, string.Empty));
+            var selected = Interactions.ShowChecklistDialogue((otherMeshFiles, "Select target .mesh files",
+                "Copy materials to the following mesh files", string.Empty, string.Empty))?.SelectedOptions;
 
-            if (dialogVm is null || dialogVm.SelectedOptions.Count == 0)
+            if (selected is null || selected.Count == 0)
             {
                 return;
             }
 
-            List<string> failedMeshes = [];
-            foreach (var mesh in dialogVm.SelectedOptions)
-            {
-                if (!_documentTools.CopyMeshMaterials(currentPath, mesh))
-                {
-                    failedMeshes.Add(mesh);
-                }
-            }
+            var failedMeshes = selected.Where(mesh => !_documentTools.CopyMeshMaterials(currentPath, mesh)).ToList();
 
-            var output = dialogVm.SelectedOptions.Count > 1
-                ? $"\n\t- {string.Join("\n\t- ", dialogVm.SelectedOptions)}"
-                : $"{dialogVm.SelectedOptions[0]}";
+            var output = StringHelper.Stringify(selected.Where(s => !failedMeshes.Contains(s)).ToList(), true);
 
             if (failedMeshes.Count > 0)
             {
-                var failedOutput = failedMeshes.Count > 1
-                    ? $"\n\t- {string.Join("\n\t- ", failedMeshes)}"
-                    : $"{failedMeshes[0]}";
-                output = output + "\nMaterial copy failed for:" + failedOutput;
+                output = output + "\nMaterial copy failed for:" + StringHelper.Stringify(failedMeshes, true);
             }
 
-            _loggerService.Success(
-                $"Copied materials from {currentPath} to {output}");
+            _loggerService.Success($"Copied materials from {currentPath} to {output}");
         }
 
         private void UnDynamifyMaterials(ChunkViewModel? cvm)

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using DynamicData;
 using WolvenKit.App.Services;
 
 namespace WolvenKit.Views.Templates
@@ -239,10 +240,7 @@ namespace WolvenKit.Views.Templates
 
         private void ListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (SelectedOptions == null)
-            {
-                return;
-            }
+            SelectedOptions ??= [];
 
             var selectedStrings = multiselectList.SelectedItems.OfType<string>().ToList();
 
@@ -251,17 +249,15 @@ namespace WolvenKit.Views.Templates
             {
                 var skipAddFiltered = selectedStrings.SequenceEqual(FilteredOptions);
                 selectedStrings.Clear();
-                if (skipAddFiltered)
+                if (!skipAddFiltered)
                 {
                     selectedStrings.AddRange(FilteredOptions);
                 }
-
-                return;
             }
 
-            // Only update if different to prevent infinite loops
             if (selectedStrings.SequenceEqual(SelectedOptions))
             {
+                // Only update if different to prevent infinite loops
                 return;
             }
 
@@ -282,5 +278,18 @@ namespace WolvenKit.Views.Templates
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         #endregion
+
+        public void ToggleSelection()
+        {
+            if (SelectedOptions.Count == 0)
+            {
+                SelectedOptions.AddRange(FilteredOptions);
+            }
+            else
+            {
+                SelectedOptions.Clear();
+                UpdateListBoxSelections();
+            }
+        }
     }
 }
