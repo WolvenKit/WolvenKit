@@ -910,27 +910,32 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
     [GeneratedRegex(@"(((\w+\/)|(\w+\\\\?))+\w+\.\w+)")]
     private static partial Regex ResourceFilePathsRegex();
 
-    private int _numEmptyFolders = 0;
-
     public void DeleteEmptyFolders(ILoggerService loggerService)
     {
-        _numEmptyFolders = 0;
-        DeleteEmptyFolders(ModDirectory);
-        loggerService.Success($"Deleted {_numEmptyFolders} empty folders");
+        var numEmptyFolders = DeleteEmptyFolders(ModDirectory);
+        if (numEmptyFolders > 0)
+        {
+            loggerService.Success($"Deleted {numEmptyFolders} empty folders");
+        }
     }
 
-    private void DeleteEmptyFolders(string directory)
+    private static int DeleteEmptyFolders(string directory)
     {
+        var numEmptyFolders = 0;
         foreach (var subdirectory in Directory.GetDirectories(directory))
         {
             DeleteEmptyFolders(subdirectory);
 
-            if (Directory.GetFiles(subdirectory).Length == 0 && Directory.GetDirectories(subdirectory).Length == 0)
+            if (Directory.GetFiles(subdirectory).Length != 0 || Directory.GetDirectories(subdirectory).Length != 0)
             {
-                _numEmptyFolders += 1;
-                Directory.Delete(subdirectory);
+                continue;
             }
+
+            numEmptyFolders += 1;
+            Directory.Delete(subdirectory);
         }
+
+        return numEmptyFolders;
     }
 
     /// <summary>
