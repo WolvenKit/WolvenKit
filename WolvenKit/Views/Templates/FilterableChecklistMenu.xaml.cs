@@ -85,6 +85,7 @@ namespace WolvenKit.Views.Templates
                 typeof(FilterableChecklistMenu),
                 new PropertyMetadata(null, OnAvailableOptionsChanged));
 
+        private static List<string> FilteredOptions { get; set; } = [];
 
         public Dictionary<string, bool> CheckboxOptionsAndStates
         {
@@ -190,11 +191,15 @@ namespace WolvenKit.Views.Templates
                 return;
             }
 
-            var filtered = string.IsNullOrWhiteSpace(FilterText)
-                ? AvailableOptions.ToList()
-                : AvailableOptions.Where(o => o.Contains(FilterText, StringComparison.OrdinalIgnoreCase)).ToList();
+            FilteredOptions.Clear();
 
-            multiselectList.SetCurrentValue(ItemsControl.ItemsSourceProperty, filtered);
+            FilteredOptions.AddRange(string.IsNullOrWhiteSpace(FilterText)
+                ? AvailableOptions
+                : AvailableOptions.Where(o => o.Contains(FilterText, StringComparison.OrdinalIgnoreCase))
+            );
+
+            multiselectList.SetCurrentValue(ItemsControl.ItemsSourceProperty, null);
+            multiselectList.SetCurrentValue(ItemsControl.ItemsSourceProperty, FilteredOptions);
             UpdateListBoxSelections();
         }
 
@@ -244,14 +249,14 @@ namespace WolvenKit.Views.Templates
             // Shift-click to select/deselect all
             if (ModifierViewStateService.IsShiftBeingHeld)
             {
-                if (selectedStrings.Count == 0)
+                var skipAddFiltered = selectedStrings.SequenceEqual(FilteredOptions);
+                selectedStrings.Clear();
+                if (skipAddFiltered)
                 {
-                    selectedStrings = AvailableOptions.ToList();
+                    selectedStrings.AddRange(FilteredOptions);
                 }
-                else
-                {
-                    selectedStrings.Clear();
-                }
+
+                return;
             }
 
             // Only update if different to prevent infinite loops

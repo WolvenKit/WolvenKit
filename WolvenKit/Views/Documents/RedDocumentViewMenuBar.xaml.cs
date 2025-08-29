@@ -303,8 +303,8 @@ namespace WolvenKit.Views.Documents
                 }
                 else
                 {
-                    _loggerService.Error(
-                        "Failed to copy mesh materials: No mesh(es) found, or selected mesh files don't contain any material information.");
+                    _loggerService.Warning(
+                        "Mesh materials were not copied - selected mesh files don't contain any material information, or everything is up-to-date.");
                 }
             }
             catch (Exception err)
@@ -313,9 +313,61 @@ namespace WolvenKit.Views.Documents
             }
         }
 
-        private void OnUnDynamifyMaterialsClick(object _, RoutedEventArgs e)
+        private void OnCopyMaterialsToMeshesClick(object _, RoutedEventArgs e)
         {
-            if (ViewModel?.RootChunk is not { ResolvedData: CMesh mesh } cvm ||
+            if (ViewModel?.FilePath is not string currentPath || _projectManager.ActiveProject is not { } project)
+            {
+                return;
+            }
+
+            var otherMeshFiles =
+                _documentTools.CollectProjectFiles(".mesh")
+                    .Where(f => f != currentPath)
+                    .Distinct()
+                    .ToDictionary(x => x, x => false);
+
+            if (otherMeshFiles.Count == 0)
+            {
+                _loggerService.Info("No other .mesh files found in project.");
+                return;
+            }
+
+            var dialogVm = Interactions.ShowChecklistDialogue((otherMeshFiles, "Select target .mesh files",
+                "Copy materials to the following mesh files", string.Empty, string.Empty));
+
+            if (dialogVm is null || dialogVm.SelectedOptions.Count == 0)
+            {
+                return;
+            }
+
+            List<string> failedMeshes = [];
+            foreach (var mesh in dialogVm.SelectedOptions)
+            {
+                if (!_documentTools.CopyMeshMaterials(currentPath, mesh))
+                {
+                    failedMeshes.Add(mesh);
+                }
+            }
+
+            var output = dialogVm.SelectedOptions.Count > 1
+                ? $"\n\t- {string.Join("\n\t- ", dialogVm.SelectedOptions)}"
+                : $"{dialogVm.SelectedOptions[0]}";
+
+            if (failedMeshes.Count > 0)
+            {
+                var failedOutput = failedMeshes.Count > 1
+                    ? $"\n\t- {string.Join("\n\t- ", failedMeshes)}"
+                    : $"{failedMeshes[0]}";
+                output = output + "\nMaterial copy failed for:" + failedOutput;
+            }
+
+            _loggerService.Success(
+                $"Copied materials from {currentPath} to {output}");
+        }
+
+        private void UnDynamifyMaterials(ChunkViewModel? cvm)
+        {
+            if (cvm?.ResolvedData is not CMesh mesh ||
                 cvm.GetPropertyChild("appearances") is not ChunkViewModel appearances)
             {
                 return;
@@ -413,12 +465,14 @@ namespace WolvenKit.Views.Documents
             cvm.DeleteUnusedMaterialsCommand.Execute(true);
             cvm.Tab?.Parent.SetIsDirty(true);
 
-            ViewModel.DeleteUnusedMaterialsCommand?.NotifyCanExecuteChanged();
+            ViewModel?.DeleteUnusedMaterialsCommand?.NotifyCanExecuteChanged();
             return;
 
             static string ReplaceMaterialPath(ResourcePath? depotPath, string newMatName) =>
                 (depotPath?.GetResolvedText() ?? "").Replace("{material}", newMatName).Replace("*", "");
         }
+
+        private void OnUnDynamifyMaterialsClick(object _, RoutedEventArgs e) => UnDynamifyMaterials(RootChunk);
 
         private void OnConvertHairToCCXLMaterials(object _, RoutedEventArgs e)
         {
@@ -616,6 +670,10 @@ namespace WolvenKit.Views.Documents
 
             try
             {
+                if (rootChunk.ResolvedData is CMesh mesh)
+                {
+                    UnDynamifyMaterials(rootChunk);
+                }
                 RootChunk.ForceLoadPropertiesRecursive();
                 rootChunk.DeleteUnusedMaterialsCommand.Execute(true);
 
@@ -653,12 +711,12 @@ namespace WolvenKit.Views.Documents
 
                 var destFolder = GetTextureDirForDependencies(true);
 
-                // Use search and replace to fix file paths
                 if (string.IsNullOrEmpty(destFolder))
                 {
                     return;
                 }
 
+                // Use search and replace to fix file paths
                 var pathReplacements = await _projectResourceTools.AddDependenciesToProjectPathAsync(
                     destFolder, materialDependencies
                 );

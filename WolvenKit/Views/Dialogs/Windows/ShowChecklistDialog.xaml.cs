@@ -1,15 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using ReactiveUI;
-using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Converters;
-using WolvenKit.Views.Editors;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using Window = System.Windows.Window;
 
