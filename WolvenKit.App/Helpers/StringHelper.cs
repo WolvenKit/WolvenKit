@@ -163,7 +163,7 @@ public abstract partial class StringHelper
         return color.Alpha == 255 ? ret : $"{ret}, A: {color.Alpha}";
     }
 
-    
+
     public static string Stringify(ResourcePath? depotPath, bool getFilenameOnly = false) =>
         StringifyOrNull(depotPath, getFilenameOnly) ?? "";
 
@@ -218,7 +218,7 @@ public abstract partial class StringHelper
     /// </summary>
     [GeneratedRegex(@"(?<=\*\{).*(?=\}$)")]
     private static partial Regex s_archiveXLPropertyRegex();
-    
+
     public static string StringifyMeshAppearance(CResourceAsyncReference<CMesh> mesh, CName? meshAppearance)
     {
         var ret = Stringify(mesh.DepotPath);
@@ -381,6 +381,22 @@ public abstract partial class StringHelper
         }
 
         return s;
+    }
+
+    public static string Stringify(IList<string> list, bool useTab = false)
+    {
+        if (list.Count == 0)
+        {
+            return "";
+        }
+
+        if (list.Count == 1)
+        {
+            return list.FirstOrDefault() ?? "list[0]";
+        }
+
+        var indent = useTab ? "\n\t" : ", ";
+        return $"{indent}{string.Join(indent, list)}";
     }
 
 
