@@ -1259,15 +1259,19 @@ public class DocumentTools
             return false;
         }
 
+        if (!_cr2WTools.WriteCr2W(destCr2W, activeProject.GetAbsolutePath(destPath)))
+        {
+            _loggerService.Error($"Failed writing changes to {destPath}");
+            return false;
+        }
         if (meshPaths.Count == 1)
         {
-            _loggerService.Success($"Copied materials from {meshPaths}");
+            _loggerService.Success($"Copied materials from {meshPaths[0]}");
         }
         else
         {
             _loggerService.Success($"Copied materials from the following files: \n\t {string.Join("\n\t", meshPaths)}");
         }
-        _cr2WTools.WriteCr2W(destCr2W, destPath);
         return true;
     }
 
