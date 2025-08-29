@@ -311,6 +311,8 @@ namespace WolvenKit.Views.Documents
             {
                 _loggerService.Error($"Failed to copy mesh materials: {err.Message}");
             }
+
+            _loggerService.Info($"Did you know? Resource Patching exists! See :\n{WikiLinks.ResourcePatching}");
         }
 
         private void OnCopyMaterialsToMeshesClick(object _, RoutedEventArgs e)
