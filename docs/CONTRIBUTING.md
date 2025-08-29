@@ -122,10 +122,10 @@ per view.
 When the user changes UI scaling, the logic in `WolvenKit.App/ViewModels/Shell/AppViewModel.cs`
 is called to update these values.
 
-**Do** add or remove dynamic entries properly:
-* Follow the current naming contention, it helps keeping things organized in
+**DO** add or remove dynamic entries properly:
+* Follow the current naming convention, it helps keeping things organized in
 the IDE's autocomplete
-* Update `AppViewModel:UpdateScaleResources()` method for the new or removed entries
+* Update `AppViewModel:UpdateScaleResources()` method for the added or removed entries
 
 ### Code Style
 
