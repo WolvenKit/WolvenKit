@@ -601,15 +601,16 @@ namespace WolvenKit.Views.Documents
 
         private async Task AddDependenciesToFileAsync(ChunkViewModel _, bool addBasegameFiles = false)
         {
-            if (RootChunk is not ChunkViewModel rootChunk || RootChunk.ResolvedData is not CMesh)
+            if (RootChunk is not ChunkViewModel rootChunk ||
+                RootChunk.ResolvedData is not (CMesh or Multilayer_Setup or CMaterialInstance))
             {
                 return;
             }
 
             // Wait asynchronously to acquire the semaphore
-            if (!await _semaphore.WaitAsync(200))
+            if (!await _semaphore.WaitAsync(500))
             {
-                _loggerService.Error("Already on it! Please wait...");
+                _loggerService.Info("Already adding dependencies! Please wait for the current run to proceed!");
                 return;
             }
 
