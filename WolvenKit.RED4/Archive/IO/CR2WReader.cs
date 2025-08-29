@@ -75,6 +75,11 @@ public partial class CR2WReader : Red4Reader
         }
     }
 
+    public static readonly List<string> s_ignoreWarningTypes =
+    [
+        "array:rendGradientEntry",
+    ];
+
     public bool ReadVariable(RedBaseClass cls, ExtendedTypeInfo typeInfo)
     {
         var varCName = ReadCName();
@@ -136,18 +141,23 @@ public partial class CR2WReader : Red4Reader
 
             if (propRedType == redTypeName)
             {
-                LoggerService?.Warning($"Can't read data for \"{fullName}\" (\"{propRedType}\"). Skipping");
+                if (!s_ignoreWarningTypes.Contains(propRedType))
+                {
+                    LoggerService?.Warning(
+                        $"Cr2WReader: Can't read data for \"{fullName}\" (\"{propRedType}\"). Skipping");
+                }
                 return true;
             }
 
-            LoggerService?.Warning($"Invalid RedType detected for \"{fullName}\". \"{redTypeName}\" instead of \"{propRedType}\". Skipping");
+            LoggerService?.Warning(
+                $"Cr2WReader: Invalid RedType detected for \"{fullName}\". \"{redTypeName}\" instead of \"{propRedType}\". Skipping");
             return true;
         }
 
         // dynamic stuff
         var redTypeInfos = RedReflection.GetRedTypeInfos(redTypeName!);
         var (hasError, errorRedName) = CheckRedTypeInfos(ref redTypeInfos);
-        
+
         if (hasError)
         {
             LoggerService?.Warning($"Type \"{errorRedName}\" is not known! Non-RTTI property \"{fullName}\" will be ignored");
@@ -157,7 +167,7 @@ public partial class CR2WReader : Red4Reader
         }
 
         var (type, _) = RedReflection.GetCSTypeFromRedType(redTypeName!);
-        
+
         cls.AddDynamicProperty(varName, type);
         value = Read(redTypeInfos, size);
         SetProperty(cls, varName, value);
