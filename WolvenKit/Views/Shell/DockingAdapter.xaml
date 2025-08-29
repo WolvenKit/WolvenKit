@@ -24,7 +24,7 @@
                         <Setter Property="Foreground" Value="{StaticResource WolvenKitRed}" />
                     </Trigger>
                     <Trigger Property="IsKeyboardFocused" Value="True">
-                        <Setter Property="Foreground" Value="#ffffff" />
+                        <Setter Property="Foreground" Value="White" />
                     </Trigger>
                     <Trigger Property="IsPressed" Value="True">
                         <Setter Property="Foreground" Value="{StaticResource WolvenKitRedShadow}" />
@@ -143,8 +143,8 @@
                     <Setter Property="HeaderBackground" Value="{StaticResource ContentBackgroundAlt2}" />
                     <Setter Property="HeaderBorderBrush" Value="{StaticResource ContentBackgroundAlt2}" />
                     <Setter Property="HeaderBorderThickness" Value="0" />
-                    <Setter Property="HeaderForeground" Value="#ffffff" />
-                    <Setter Property="HeaderForegroundSelected" Value="#ffffff" />
+                    <Setter Property="HeaderForeground" Value="White" />
+                    <Setter Property="HeaderForegroundSelected" Value="White" />
                     <Setter Property="HeaderMouseOverBackground" Value="#1f1f1f" />
                     <Setter Property="Margin" Value="0" />
                     <Setter Property="MaximizeButtonTemplate" Value="{StaticResource WolvenKitButtonsTemplate}" />
@@ -155,11 +155,11 @@
                     <Setter Property="SplitterBackground" Value="{StaticResource ContentBackgroundAlt2}" />
                     <Setter Property="TabItemBackgroundSelected" Value="#373737" />
                     <Setter Property="TabItemBorderThickness" Value="0" />
-                    <Setter Property="TabItemForegroundSelected" Value="#ffffff" />
+                    <Setter Property="TabItemForegroundSelected" Value="White" />
                     <Setter Property="TabItemsBackground" Value="{StaticResource ContentBackgroundAlt2}" />
                     <Setter Property="TabItemsBorderBrush" Value="{StaticResource ContentBackgroundAlt2}" />
                     <Setter Property="TabItemsBorderThicknessSelected" Value="0" />
-                    <Setter Property="TabItemsForeground" Value="#ffffff" />
+                    <Setter Property="TabItemsForeground" Value="White" />
                     <Setter Property="TabPanelBackground" Value="{StaticResource ContentBackground}" />
                     <Setter Property="TabPanelBorderBrush" Value="{StaticResource ContentBackground}" />
                     <Setter Property="TabPanelBorderThickness" Value="0" />
@@ -182,13 +182,13 @@
                     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                     <Setter Property="TabItemHoverBackground" Value="{StaticResource ContentBackgroundAlt3}" />
                     <Setter Property="TabItemHoverBorderBrush" Value="{StaticResource ContentBackgroundAlt3}" />
-                    <Setter Property="TabItemHoverForeground" Value="#ffffff" />
+                    <Setter Property="TabItemHoverForeground" Value="White" />
                     <Setter Property="TabItemSelectedBackground" Value="{StaticResource ContentBackgroundAlt2}" />
                     <!-- Setter Property="Margin" Value="-1" / -->
 
                     <Setter Property="TabItemSelectedBackground" Value="#313131" />
                     <Setter Property="TabItemSelectedBorderBrush" Value="{StaticResource BorderAlt}" />
-                    <Setter Property="TabItemSelectedForeground" Value="#ffffff" />
+                    <Setter Property="TabItemSelectedForeground" Value="White" />
                     <Setter Property="TabPanelBackground" Value="{StaticResource ContentBackground}" />
                     <Setter Property="TabPanelBackground" Value="{StaticResource ContentBackgroundAlt2}" />
                 </Style>
@@ -201,7 +201,7 @@
                     <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
                     <Setter Property="BorderBrush" Value="{StaticResource ContentBackgroundAlt2}" />
                     <Setter Property="BorderThickness" Value="1,1,1,0" />
-                    <Setter Property="Foreground" Value="#ffffff" />
+                    <Setter Property="Foreground" Value="White" />
                     <Setter Property="Height" Value="{DynamicResource WolvenKitFontHuge}" />
                     <Setter Property="HoverBackground" Value="{StaticResource ContentBackgroundAlt4}" />
                     <Setter Property="Margin" Value="0" />
@@ -216,7 +216,7 @@
                     <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
 
                     <Setter Property="Background" Value="#313131" />
-                    <Setter Property="Foreground" Value="#ffffff" />
+                    <Setter Property="Foreground" Value="White" />
                 </Style>
             </syncfusion:DockingManager.TabItemStyle>
 

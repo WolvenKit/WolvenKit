@@ -51,6 +51,8 @@
 
     <Color x:Key="WolvenKitLabelColor">White</Color>
 
+    <SolidColorBrush x:Key="WolvenKitLabelBrush" Color="{StaticResource WolvenKitLabelColor}" />
+
     <!-- Quest Node Colors - Header backgrounds -->
     <Color x:Key="QuestStartNodeHeaderColor">#33228B22</Color>
     <Color x:Key="QuestEndNodeHeaderColor">#33B22222</Color>
@@ -230,7 +232,7 @@
         x:Key="WolvenkitDialogLabelStyle"
         BasedOn="{StaticResource {x:Type Label}}"
         TargetType="{x:Type Label}">
-        <Setter Property="Foreground" Value="{StaticResource WolvenKitLabelColor}" />
+        <Setter Property="Foreground" Value="{StaticResource WolvenKitLabelBrush}" />
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="Width" Value="{StaticResource WolvenKitDialogLabelColumnWidth}" />
     </Style>
@@ -240,6 +242,14 @@
         BasedOn="{StaticResource WolvenkitDialogLabelStyle}"
         TargetType="{x:Type Label}">
         <Setter Property="Width" Value="{StaticResource WolvenKitDialogLabelColumnWidthMedium}" />
+    </Style>
+
+    <Style
+        x:Key="WolvenkitTooltipStyle"
+        BasedOn="{StaticResource {x:Type ToolTip}}"
+        TargetType="ToolTip">
+        <Setter Property="Background" Value="Black" />
+        <Setter Property="BorderBrush" Value="Transparent" />
     </Style>
 
     <!-- Placeholder texts -->
@@ -286,6 +296,7 @@
         TargetType="{x:Type TextBox}">
         <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
         <Setter Property="BorderBrush" Value="{StaticResource ContentBackgroundAlt3}" />
+        <Setter Property="Foreground" Value="White" />
     </Style>
 
     <!-- Menu Bar Entry Style -->
@@ -423,7 +434,7 @@
 
     <LinearGradientBrush x:Key="ShadedBackgroundBrush" StartPoint="0,0" EndPoint="0,1">
         <GradientStopCollection>
-            <GradientStop Offset="0.0" Color="#00000000" />
+            <GradientStop Offset="0.0" Color="Black" />
             <GradientStop Offset="0.1" Color="#44000000" />
             <GradientStop Offset="0.2" Color="#66000000" />
             <GradientStop Offset="0.4" Color="#D6000000" />

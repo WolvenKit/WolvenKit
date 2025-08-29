@@ -39,7 +39,7 @@
                     BorderThickness="1">
                     <!-- this should update based on the context -->
                     <TextBlock
-                        Foreground="#ffffff"
+                        Foreground="White"
                         FontSize="{DynamicResource WolvenKitFontSubTitle}"
                         Text="Move file(s) here - hold control to copy" />
                 </Border>
