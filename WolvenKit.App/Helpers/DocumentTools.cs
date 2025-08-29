@@ -961,7 +961,9 @@ public class DocumentTools
             return [];
         }
 
-        return activeProject.Files.Where(f => f.EndsWith(fileExtension)).Select(s => s.Replace(s_archiveString, ""))
+        return activeProject.Files.Where(f => f.EndsWith(fileExtension))
+            .Select(s => s.Replace(s_archiveString, ""))
+            .Distinct()
             .ToList();
     }
 
@@ -1108,6 +1110,13 @@ public class DocumentTools
             return wasChanged;
         }
 
+        var hasMaterials = sourceMesh.Appearances.Count > 0 && sourceMesh.MaterialEntries.Count > 0;
+
+        if (!hasMaterials)
+        {
+            _loggerService.Error($"source file {sourcePath} does not have materials!");
+            return false;
+        }
 
         // ReSharper disable ForCanBeConvertedToForeach
         CArray<CHandle<meshMeshAppearance>> appearances = [];
@@ -1218,6 +1227,10 @@ public class DocumentTools
 
     public bool CopyMeshMaterials(string sourcePath, string destPath)
     {
+        if (sourcePath == destPath || destPath.EndsWith(sourcePath))
+        {
+            return true;
+        }
         if (_projectManager.ActiveProject is not { } activeProject)
         {
             return false;
