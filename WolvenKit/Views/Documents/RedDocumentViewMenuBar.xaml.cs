@@ -1115,13 +1115,14 @@ namespace WolvenKit.Views.Documents
         {
             try
             {
-                if (_projectManager.ActiveProject is null || CurrentTab?.FilePath is not string currentFile ||
+                if (_projectManager.ActiveProject is not { } project ||
+                    CurrentTab?.FilePath is not string currentFile ||
                     !File.Exists(currentFile))
                 {
                     return;
                 }
 
-                var relativePath = currentFile.Replace(_projectManager.ActiveProject.ModDirectory, "");
+                var relativePath = project.GetRelativePath(currentFile);
 
                 _loggerService.Info("Reading references from .app file...");
                 var referencesInFile = await _projectManager.ActiveProject.GetAllReferencesAsync(
