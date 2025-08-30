@@ -7,10 +7,13 @@
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     Title="Generate new inkatlas"
     Width="{StaticResource WolvenKitDialogWidth}"
     MinWidth="{StaticResource WolvenKitDialogWidthSmall}"
     MinHeight="{StaticResource WolvenKitDialogHeightSmall}"
+    Padding="{DynamicResource WolvenKitMarginTop}"
+    Background="{StaticResource BackgroundColor_Control}"
     SizeToContent="WidthAndHeight"
     FocusManager.FocusedElement="{Binding ElementName=FilterableDropdownMenu}"
     DataContext="{Binding RelativeSource={RelativeSource Self},
@@ -27,10 +30,12 @@
                     <hc:ThemeResources />
                     <hc:Theme />
                 </ResourceDictionary.MergedDictionaries>
-
                 <Style
                     BasedOn="{StaticResource WolvenkitDialogLabelStyleMedium}"
-                    TargetType="{x:Type Label}" />
+                    TargetType="{x:Type Label}">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="HorizontalContentAlignment" Value="Left" />
+                </Style>
             </ResourceDictionary>
         </Grid.Resources>
 
@@ -40,6 +45,8 @@
             Finish="WizardControl_OnFinish">
             <syncfusion:WizardPage
                 Height="Auto"
+                Margin="{DynamicResource WolvenKitMarginHorizontal}"
+                Background="{StaticResource BackgroundColor_Control}"
                 BackVisibility="Collapsed"
                 CancelVisibility="Visible"
                 FinishVisibility="Visible"
@@ -53,7 +60,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="{StaticResource WolvenKitDialogLabelColumnWidthMedium}" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="30" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitButtonGridWidth}" />
                     </Grid.ColumnDefinitions>
 
                     <Grid.RowDefinitions>
@@ -85,8 +92,7 @@
                                           UpdateSourceTrigger=PropertyChanged}"
                         SelectedOption="{Binding RelativePath,
                                                  Mode=TwoWay}"
-                        IsInline="True"
-                        KeyboardNavigation.TabIndex="1" />
+                        IsInline="True" />
 
 
                     <TextBox
@@ -96,7 +102,7 @@
                         Grid.ColumnSpan="2"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        KeyboardNavigation.TabIndex="4" />
+                        KeyboardNavigation.TabIndex="-1" />
 
 
                     <!-- File name -->
@@ -106,7 +112,6 @@
                         Width="{StaticResource WolvenKitLabelWidthMedium}"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         HorizontalAlignment="Left"
-                        Background="#252525"
                         BorderThickness="0"
                         Content="Inkatlas file name" />
                     <TextBox
@@ -116,7 +121,7 @@
                         Grid.ColumnSpan="2"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        KeyboardNavigation.TabIndex="5">
+                        KeyboardNavigation.TabIndex="-1">
                         <TextBox.ToolTip>
                             <ToolTip />
                         </TextBox.ToolTip>
@@ -129,7 +134,6 @@
                         Width="{StaticResource WolvenKitLabelWidthMedium}"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         HorizontalAlignment="Left"
-                        Background="#252525"
                         BorderThickness="0"
                         Content="Tile width:" />
 
@@ -140,7 +144,7 @@
                         Grid.ColumnSpan="2"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        KeyboardNavigation.TabIndex="6">
+                        KeyboardNavigation.TabIndex="-1">
                         <TextBox.ToolTip>
                             <ToolTip>
                                 Leave at 0 to disable
@@ -155,7 +159,6 @@
                         Grid.Column="0"
                         Width="{StaticResource WolvenKitLabelWidthMedium}"
                         HorizontalAlignment="Left"
-                        Background="#252525"
                         BorderThickness="0"
                         Content="Tile height:" />
 
@@ -166,7 +169,7 @@
                         Grid.ColumnSpan="2"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        KeyboardNavigation.TabIndex="6">
+                        KeyboardNavigation.TabIndex="-1">
                         <TextBox.ToolTip>
                             <ToolTip>
                                 Leave at 0 to disable
@@ -180,7 +183,6 @@
                         Grid.Column="0"
                         Width="{StaticResource WolvenKitLabelWidthMedium}"
                         HorizontalAlignment="Left"
-                        Background="#252525"
                         BorderThickness="0"
                         Content="PNG raw folder" />
 
@@ -189,7 +191,7 @@
                         x:Name="PngFolderBox"
                         Grid.Row="10"
                         Grid.Column="1"
-                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
+                        Margin="{StaticResource WolvenKitMarginTinyRight}"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         KeyboardNavigation.TabIndex="6">
                         <TextBox.ToolTip>
@@ -202,13 +204,13 @@
                     <Button
                         Grid.Row="10"
                         Grid.Column="2"
-                        Margin="{DynamicResource WolvenKitMarginTinyRight}"
-                        Padding="{DynamicResource WolvenKitMarginTiny}"
+                        Padding="0"
                         syncfusion:FocusManagerHelper.FocusedElement="True"
                         Click="FileButton_Click">
-                        <iconPacks:PackIconMaterial
+                        <templates:IconBox
+                            IconPack="Material"
                             Kind="Folder"
-                            Width="{DynamicResource WolvenKitIconMilli}" />
+                            Size="{DynamicResource WolvenKitIconMicro}" />
                     </Button>
 
 
@@ -217,8 +219,8 @@
                         Grid.Row="12"
                         Grid.Column="0"
                         Width="{StaticResource WolvenKitLabelWidthMedium}"
+                        Margin="{DynamicResource WolvenKitMarginTinyVertical}"
                         HorizontalAlignment="Left"
-                        Background="#252525"
                         BorderThickness="0"
                         Content="Remember values?" />
 
@@ -226,7 +228,8 @@
                         x:Name="RememberValuesCheckBox"
                         Grid.Row="12"
                         Grid.Column="1"
-                        KeyboardNavigation.TabIndex="8" />
+                        Margin="{DynamicResource WolvenKitMarginTinyVertical}"
+                        KeyboardNavigation.TabIndex="-1" />
                 </Grid>
             </syncfusion:WizardPage>
         </syncfusion:WizardControl>

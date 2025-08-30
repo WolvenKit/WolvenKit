@@ -21,19 +21,19 @@ WolvenKit uses **WPF** as framework for its GUI and we are using the **MVVM** pa
 
 * `WolvenKit.csproj` is the WPF UI (it contains the Views)
 * `WolvenKit.App.csproj` is the platform-independent MVVM component (it contains the ViewModels)
-* Prioritize constructor-injection with our DI 
+* Prioritize constructor-injection with our DI
 
 WolvenKit is supposed to be an IDE-like app for developing mods - its UI should **prioritize function over form**. Visual Studio 2022 is considered the model.
 
 #### XAML
-In order to keep consistent rules when formatting XAML, you must install the 
+In order to keep consistent rules when formatting XAML, you must install the
 extension **XAML Styler**. Settings are defined in `Settings.XamlStyler` file.
 It should automatically import settings of this file when opening the solution
 with Visual Studio or Rider.
 
-You can see settings in `Tools` > `Options...` > `XAML Styler`. If you want to 
-change settings, come and ask on Discord first. By default, it should run XAML 
-Styler rules when saving / closing a XAML file. This is related to options in 
+You can see settings in `Tools` > `Options...` > `XAML Styler`. If you want to
+change settings, come and ask on Discord first. By default, it should run XAML
+Styler rules when saving / closing a XAML file. This is related to options in
 category `Misc`.
 
 **Additional rules:**
@@ -41,10 +41,10 @@ category `Misc`.
 > may find files not following these rules. Feel free to fix them when working
 > on them.
 
-**DO** explicitly define `Grid.Row` and `Grid.Column` properties. It makes it 
-easier to understand where a tag is in the grid. It is also easier when 
-updating the layout to only change values instead of adding/removing these 
-properties. Finally, XAML Styler will automatically organize tags based on 
+**DO** explicitly define `Grid.Row` and `Grid.Column` properties. It makes it
+easier to understand where a tag is in the grid. It is also easier when
+updating the layout to only change values instead of adding/removing these
+properties. Finally, XAML Styler will automatically organize tags based on
 rows and columns.
 
 **DO** put a blank line between tags, when such tags are part of a parent:
@@ -64,7 +64,7 @@ rows and columns.
 </Grid>
 ```
 
-**DON'T** put a blank line between `<RowDefinition>`, `<ColumnDefinition>`, 
+**DON'T** put a blank line between `<RowDefinition>`, `<ColumnDefinition>`,
 `<Setter>` tags.
 
 **DO** put a blank line to separate a block of `<Setter>` and
@@ -96,17 +96,17 @@ a `<Setter>` which has children, like for a template:
 </Grid>
 ```
 
-These rules are present to improve readiness of a XAML document. In some 
+These rules are present to improve readiness of a XAML document. In some
 cases, it makes sense to avoid blank lines. For example, when a `<Label>` is
-related to an input tag like `<TextBox>`. It is fine to keep them close to 
+related to an input tag like `<TextBox>`. It is fine to keep them close to
 quickly see and understand the relationship between both tags.
 
 **DO** use `<IconBox>` to show an icon in application. It provides properties
 to select which `IconPack` and `Kind` of icon to draw. You can change the size
-and color with respectively `Size` and `Foreground` properties. It uses a 
+and color with respectively `Size` and `Foreground` properties. It uses a
 default icon size and a white color, which should be good enough in most cases.
 
-**DO** use `WolvenKitFont...`, `WolvenKitIcon...`, `WolvenKitMargin...` and 
+**DO** use `WolvenKitFont...`, `WolvenKitIcon...`, `WolvenKitMargin...` and
 other dynamic resources to draw a responsive UI. You can find plenty of them in
 codebase, for example:
 ```xaml
@@ -115,17 +115,17 @@ codebase, for example:
   FontSize="{DynamicResource WolvenKitFontBody}" />
 ```
 
-**DO** check for existing dynamic resources in 
-`WolvenKit/Themes/App.Sizes.xaml`. It covers a lot of cases and you should find
-what you need. If not, you'll see that specific resources are defined and 
-scoped per view. Follow the current naming convention, it helps organize 
-resources. It is also easier to write them with IDE's autocompletion.
+**DO** check for existing dynamic resources in`WolvenKit/Themes/App.Sizes.xaml`.
 
-**DO** keep in sync `App.Sizes.xaml` and 
-`WolvenKit.App/ViewModels/Shell/AppViewModel.cs` when adding/updating/removing 
-a dynamic resource. `XAML` file is to declare resources for autocompletion and 
-provide default value at a scale of 100% (1920 x 1080). `CS` file is to update 
-resources when scale option was changed by the user.
+Sizes are defined for a display resolution of 1920x1080 (100% scale) and scoped
+per view.
+When the user changes UI scaling, the logic in `WolvenKit.App/ViewModels/Shell/AppViewModel.cs`
+is called to update these values.
+
+**DO** update, add or remove dynamic entries properly:
+* Follow the current naming convention, it helps keeping things organized in
+the IDE's autocomplete
+* Update `AppViewModel:UpdateScaleResources()` method for the updated, added or removed entries
 
 ### Code Style
 
@@ -135,7 +135,7 @@ The solution comes with an **editorconfig** file to use.
 
 The `main` branch is the development branch. Releases are created by **tag**, hotfixes to releases are supposed to be branched-out from the tag. Branches should be created from a GitHub issue and should be focused, small and reviewable.
 
-Please use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#summary) when writing commit messages. Examples: 
+Please use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#summary) when writing commit messages. Examples:
 
 Commit message with description and breaking change footer
 ```
