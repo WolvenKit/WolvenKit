@@ -72,6 +72,7 @@
 
     <GridLength x:Key="WolvenKitRowText">20</GridLength>
 
+
     <!-- Views -->
     <system:Double x:Key="WolvenKitDividerHeight">45</system:Double>
 
@@ -103,6 +104,9 @@
     <GridLength x:Key="WolvenKitButtonGridWidth">32</GridLength>
 
     <Rect x:Key="WolvenKitGridSize">0,0,48,48</Rect>
+
+    <system:Double x:Key="WolvenkitControlMinWidth">100</system:Double>
+    <system:Double x:Key="WolvenkitControlMinWidthTiny">50</system:Double>
 
     <!-- HomePageView -->
     <system:String x:Key="WolvenKitHomeSideBarWidth">200</system:String>

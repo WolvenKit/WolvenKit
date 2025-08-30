@@ -2394,6 +2394,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         resources["WolvenKitFieldHeight"] = Math.Round(120 * _uiScalePercentage);
 
+        resources["WolvenkitControlMinWidth"] = Math.Round(100 * _uiScalePercentage);
+        resources["WolvenkitControlMinWidthTiny"] = Math.Round(50 * _uiScalePercentage);
+
         resources["WolvenKitButtonHeight"] = Math.Round(32 * _uiScalePercentage);
         resources["WolvenKitButtonWidth"] = Math.Round(32 * _uiScalePercentage);
         resources["WolvenKitButtonGridWidth"] = new GridLength(32).Mul(_uiScalePercentage).Round();
