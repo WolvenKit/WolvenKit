@@ -4452,7 +4452,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        foreach (var i in sortedList)
+        // do not delete outside of the bounds of the array
+        foreach (var i in sortedList.Where(i => a.Count >= i))
         {
             try
             {
