@@ -152,8 +152,8 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
 
     private void UpdatePhotoModeDirectory()
     {
-        // Directory was either set by user or from history
-        if (IsPhotoModeDirectoryTouched || !string.IsNullOrEmpty(PhotomodeRelativeFolder))
+        // Directory was set by user
+        if (IsPhotoModeDirectoryTouched)
         {
             return;
         }
