@@ -884,16 +884,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             }
         }
 
-        destFolder = Interactions.AskForTextInput(("Target folder for dependencies", destFolder));
-
-        if (!string.IsNullOrEmpty(destFolder))
-        {
-            return destFolder;
-        }
-
-        var projectName = _projectManager.ActiveProject?.Name ?? "yourProject";
-        var subfolder = _settingsManager.ModderName ?? "YourName";
-        return Path.Join(subfolder, projectName, "dependencies");
+        return Interactions.AskForTextInput(("Target folder for dependencies", destFolder));
     }
 
 }
