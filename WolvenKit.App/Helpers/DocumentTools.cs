@@ -954,6 +954,9 @@ public class DocumentTools
 
     private static readonly string s_archiveString = "archive" + Path.DirectorySeparatorChar;
 
+    /// <summary>
+    /// Returns a list of relative file paths in the current project - matching the current file extension.
+    /// </summary>
     public IList<string> CollectProjectFiles(string fileExtension)
     {
         if (_projectManager.ActiveProject is not { } activeProject)
