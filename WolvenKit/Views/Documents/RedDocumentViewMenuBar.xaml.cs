@@ -817,6 +817,16 @@ namespace WolvenKit.Views.Documents
                     return;
                 }
 
+                if (cvm.ResolvedData is CMesh mesh && mesh.Appearances.Select(a => a.Chunk)
+                        .OfType<meshMeshAppearance>()
+                        .SelectMany(a => a.ChunkMaterials)
+                        .Any(c => (c.ToString() ?? "").Contains('@')))
+                {
+                    await Interactions.ShowPopupAsync("Please run ArchiveXL -> Un-dynamify materials first.",
+                        "Dynamic materials found!");
+                    return;
+                }
+
                 if (ViewModel.CurrentTab?.Parent.IsDirty == true)
                 {
                     await Interactions.ShowPopupAsync("Please save your file before adding dependencies.",
