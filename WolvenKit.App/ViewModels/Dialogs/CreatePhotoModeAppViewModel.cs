@@ -152,22 +152,21 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
 
     private void UpdatePhotoModeDirectory()
     {
-        if (IsPhotoModeDirectoryTouched)
+        // Directory was either set by user or from history
+        if (IsPhotoModeDirectoryTouched || !string.IsNullOrEmpty(PhotomodeRelativeFolder))
         {
             return;
         }
 
         // Dialogue can't even be shown if modder name is not set
-        var photomodeDirectory = Path.Join(_settingsManager.ModderName!.ToFileName(), s_photomodeSubDir);
+        var firstFolderName = _activeProject.Author ?? _settingsManager.ModderName ?? "modded";
+        var photomodeDirectory = Path.Join(firstFolderName.ToFileName(), s_photomodeSubDir);
         if (!string.IsNullOrEmpty(NpcName) && !photomodeDirectory.Contains(NpcName.ToFileName()))
         {
             photomodeDirectory = Path.Join(photomodeDirectory, NpcName.ToFileName());
         }
 
-        if (string.IsNullOrEmpty(PhotomodeRelativeFolder) || !IsPhotoModeDirectoryTouched)
-        {
-            PhotomodeRelativeFolder = photomodeDirectory;
-        }
+        PhotomodeRelativeFolder = photomodeDirectory;
     }
 
     private void UpdateNpcName()

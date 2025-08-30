@@ -200,8 +200,17 @@ namespace WolvenKit.Views.Editors
                 case (nameof(Options)) or (nameof(FilterText)):
                     UpdateFilteredOptions();
                     break;
-                case nameof(IsInline) when IsInline:
-                    dropdownRow.SetCurrentValue(Grid.HeightProperty, 0.0);
+                case nameof(IsInline):
+                    // IsInline => colspan 1 next to dropdown
+                    filterTextBox.SetCurrentValue(Grid.ColumnSpanProperty, IsInline ? 1 : 2);
+
+                    // IsInline => Column 2, row 0 - otherwise, Column 1, row 1
+                    dropdown.SetCurrentValue(Grid.ColumnProperty, IsInline ? 2 : 1);
+                    dropdown.SetCurrentValue(Grid.RowProperty, IsInline ? 0 : 1);
+
+                    // IsInline => colspan 1 next to filterTextbox
+                    dropdown.SetCurrentValue(Grid.ColumnSpanProperty, IsInline ? 1 : 2);
+
                     break;
                 case nameof(Label) when !string.IsNullOrEmpty(Label):
                     SetCurrentValue(IsShowLabelProperty, true);
