@@ -241,8 +241,10 @@ public static class CommonFunctions
 
         return fileName switch
         {
-            _ when fileName.EndsWith("_n") || fileName.EndsWith("nm") => GpuWrapApieTextureGroup.TEXG_Generic_Normal,
-            _ when fileName.EndsWith("_r") || fileName.EndsWith("_m") => GpuWrapApieTextureGroup.TEXG_Generic_Grayscale,
+            _ when fileName.EndsWith("_n") || fileName.EndsWith("nm") || fileName.Contains("normal") =>
+                GpuWrapApieTextureGroup.TEXG_Generic_Normal,
+            _ when fileName.EndsWith("_r") || fileName.EndsWith("_m") || fileName.EndsWith("rm") =>
+                GpuWrapApieTextureGroup.TEXG_Generic_Grayscale,
             _ when fileName.EndsWith("_data") => GpuWrapApieTextureGroup.TEXG_Generic_Data,
             _ when fileName.EndsWith("_lut") => GpuWrapApieTextureGroup.TEXG_Generic_LUT,
             _ when fileName.Contains("_icon") => GpuWrapApieTextureGroup.TEXG_Generic_UI,
