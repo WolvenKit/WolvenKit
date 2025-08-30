@@ -904,14 +904,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             }
         }
 
-
-        if (string.IsNullOrEmpty(destFolder))
-        {
-            destFolder = Interactions.AskForTextInput(("Target folder for dependencies", destFolder));
-        }
-
-        return destFolder;
-
+        return Interactions.AskForTextInput(("Target folder for dependencies", destFolder));
     }
 
 }

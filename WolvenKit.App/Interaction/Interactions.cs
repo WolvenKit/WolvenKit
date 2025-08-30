@@ -79,6 +79,23 @@ public static class Interactions
         return await Task.FromResult(result);
     }
 
+
+    /// <summary>
+    /// Shows a message box with an extra button to open a weblink
+    /// </summary>
+    /// <param name="title">Dialogue title</param>
+    /// <param name="message">Dialogue message (auto-wrapping)</param>
+    /// <returns>result of the task</returns>
+    public static async Task<WMessageBoxResult> ShowPopupAsync(
+        string title,
+        string message)
+    {
+        var result = WMessageBoxResult.None;
+        DispatcherHelper.RunOnMainThread(() =>
+            result = ShowMessageBoxAsync(title, message, WMessageBoxButtons.Ok, WMessageBoxImage.Information).Result);
+        return await Task.FromResult(result);
+    }
+
     /// <summary>
     /// Shows a message box with an extra button to open a weblink
     /// </summary>
