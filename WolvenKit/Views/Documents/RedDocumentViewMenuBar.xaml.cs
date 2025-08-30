@@ -653,12 +653,12 @@ namespace WolvenKit.Views.Documents
 
                 var destFolder = GetTextureDirForDependencies(true);
 
-                // Use search and replace to fix file paths
                 if (string.IsNullOrEmpty(destFolder))
                 {
                     return;
                 }
 
+                // Use search and replace to fix file paths
                 var pathReplacements = await _projectResourceTools.AddDependenciesToProjectPathAsync(
                     destFolder, materialDependencies
                 );
