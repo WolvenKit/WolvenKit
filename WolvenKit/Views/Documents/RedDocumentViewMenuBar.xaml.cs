@@ -655,6 +655,7 @@ namespace WolvenKit.Views.Documents
 
                 if (string.IsNullOrEmpty(destFolder))
                 {
+                    _loggerService.Info("Adding dependencies aborted by user input");
                     return;
                 }
 
@@ -813,6 +814,13 @@ namespace WolvenKit.Views.Documents
             {
                 if (_projectManager.ActiveProject is null || ViewModel?.RootChunk is not ChunkViewModel cvm)
                 {
+                    return;
+                }
+
+                if (ViewModel.CurrentTab?.Parent.IsDirty == true)
+                {
+                    await Interactions.ShowPopupAsync("Please save your file before adding dependencies.",
+                        "Save your file");
                     return;
                 }
 
