@@ -164,6 +164,39 @@
                 <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
             </Style>
 
+            <!-- Don't override TextBlock of ToolTip -->
+            <Style
+                x:Key="{x:Type ToolTip}"
+                BasedOn="{StaticResource WPFToolTipStyle}"
+                TargetType="{x:Type ToolTip}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ToolTip}">
+                            <Border
+                                Margin="0"
+                                Padding="{TemplateBinding Padding}"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{StaticResource MaterialDark.ThemeCornerRadiusVariant1}"
+                                SnapsToDevicePixels="True"
+                                Effect="{StaticResource Default.ShadowDepth3}">
+                                <ContentPresenter
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                    <ContentPresenter.Resources>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="Foreground" Value="Black" />
+                                        </Style>
+                                    </ContentPresenter.Resources>
+                                </ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
             <!-- See https://help.syncfusion.com/wpf/autocomplete/textbox-customization -->
             <Style TargetType="{x:Type syncfusion:SfTextBoxExt}">
                 <Setter Property="BorderThickness" Value="0" />
