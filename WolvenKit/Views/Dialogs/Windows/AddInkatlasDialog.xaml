@@ -12,6 +12,8 @@
     Width="{StaticResource WolvenKitDialogWidth}"
     MinWidth="{StaticResource WolvenKitDialogWidthSmall}"
     MinHeight="{StaticResource WolvenKitDialogHeightSmall}"
+    Padding="{DynamicResource WolvenKitMarginTop}"
+    Background="{StaticResource BackgroundColor_Control}"
     SizeToContent="WidthAndHeight"
     FocusManager.FocusedElement="{Binding ElementName=FilterableDropdownMenu}"
     DataContext="{Binding RelativeSource={RelativeSource Self},
@@ -44,6 +46,7 @@
             <syncfusion:WizardPage
                 Height="Auto"
                 Margin="{DynamicResource WolvenKitMarginHorizontal}"
+                Background="{StaticResource BackgroundColor_Control}"
                 BackVisibility="Collapsed"
                 CancelVisibility="Visible"
                 FinishVisibility="Visible"
