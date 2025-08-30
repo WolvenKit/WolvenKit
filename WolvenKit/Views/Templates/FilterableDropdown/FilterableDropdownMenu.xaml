@@ -4,15 +4,21 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    FocusManager.FocusedElement="{Binding ElementName=filterTextBox}">
+    FocusManager.FocusedElement="{Binding ElementName=filterTextBox}"
+    DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
         <Grid.Resources>
             <ResourceDictionary>
                 <Style
+                    BasedOn="{StaticResource {x:Type Grid}}"
+                    TargetType="{x:Type Grid}">
+                    <Setter Property="Background" Value="Transparent" />
+                </Style>
+                <Style
                     BasedOn="{StaticResource WolvenkitDialogLabelStyleMedium}"
-                    TargetType="{x:Type Label}" />
-                <Style TargetType="{x:Type Grid}">
-                    <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
+                    TargetType="{x:Type Label}">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="HorizontalContentAlignment" Value="Left" />
                 </Style>
             </ResourceDictionary>
 
@@ -33,8 +39,8 @@
                 </ColumnDefinition.Style>
             </ColumnDefinition>
 
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
@@ -42,11 +48,13 @@
             <RowDefinition x:Name="dropdownRow">
                 <RowDefinition.Style>
                     <Style TargetType="RowDefinition">
+                        <Setter Property="MinHeight" Value="{DynamicResource WolvenKitRedEditorRowMinHeight}" />
                         <Style.Triggers>
                             <DataTrigger
                                 Binding="{Binding IsInline}"
                                 Value="True">
                                 <Setter Property="Height" Value="0" />
+                                <Setter Property="MinHeight" Value="0" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -54,22 +62,22 @@
             </RowDefinition>
         </Grid.RowDefinitions>
 
-        <!-- ====================================== -->
-        <!-- Label -->
-        <!-- ====================================== -->
+        <!-- ============================================================================ -->
+        <!-- Label - visibility determined by column via IsShowLabel property -->
+        <!-- ============================================================================ -->
         <Label
             Grid.Row="0"
             Grid.Column="0"
             Width="{StaticResource WolvenKitLabelWidthMedium}"
             HorizontalAlignment="Left"
-            Background="#252525"
             BorderThickness="0"
             Foreground="White"
             FontSize="{DynamicResource WolvenKitFontSubTitle}"
             Content="{Binding Label}" />
 
-
-        <!-- Original layout elements (with x:Name for toggling) -->
+        <!-- ============================================================================ -->
+        <!-- Filter textbox - row, col and colspan are toggled in OnPropertyChanged -->
+        <!-- ============================================================================ -->
         <syncfusion:SfTextBoxExt
             x:Name="filterTextBox"
             Grid.Row="0"
@@ -84,22 +92,11 @@
             Watermark="Filter"
             WatermarkTemplate="{StaticResource PlaceholderTemplate}"
             Text="{Binding FilterText,
-                           UpdateSourceTrigger=PropertyChanged}">
-            <syncfusion:SfTextBoxExt.Style>
-                <Style
-                    BasedOn="{StaticResource {x:Type syncfusion:SfTextBoxExt}}"
-                    TargetType="syncfusion:SfTextBoxExt">
-                    <Style.Triggers>
-                        <DataTrigger
-                            Binding="{Binding IsInline}"
-                            Value="True">
-                            <Setter Property="Grid.ColumnSpan" Value="1" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </syncfusion:SfTextBoxExt.Style>
-        </syncfusion:SfTextBoxExt>
+                           UpdateSourceTrigger=PropertyChanged}" />
 
+        <!-- ============================================================================ -->
+        <!-- Dropdown menu - row, col and colspan are toggled in OnPropertyChanged -->
+        <!-- ============================================================================ -->
         <ComboBox
             x:Name="dropdown"
             Grid.Row="1"
@@ -115,22 +112,6 @@
             KeyboardNavigation.TabIndex="-1"
             SelectedValuePath="Value"
             DisplayMemberPath="Key"
-            SelectedValue="{Binding SelectedOption}">
-            <ComboBox.Style>
-                <Style
-                    BasedOn="{StaticResource {x:Type ComboBox}}"
-                    TargetType="ComboBox">
-                    <Style.Triggers>
-                        <DataTrigger
-                            Binding="{Binding IsInline}"
-                            Value="True">
-                            <Setter Property="Grid.Column" Value="2" />
-                            <Setter Property="Grid.ColumnSpan" Value="1" />
-                            <Setter Property="Grid.Row" Value="0" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ComboBox.Style>
-        </ComboBox>
+            SelectedValue="{Binding SelectedOption}" />
     </Grid>
 </UserControl>

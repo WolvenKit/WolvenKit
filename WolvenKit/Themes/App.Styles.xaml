@@ -288,6 +288,15 @@
         <Setter Property="BorderBrush" Value="{StaticResource ContentBackgroundAlt3}" />
     </Style>
 
+    <!-- Also counts for syncfusion:SfTextBoxExt -->
+    <Style
+        BasedOn="{StaticResource {x:Type syncfusion:SfTextBoxExt}}"
+        TargetType="{x:Type syncfusion:SfTextBoxExt}">
+        <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
+        <Setter Property="BorderBrush" Value="{StaticResource ContentBackgroundAlt3}" />
+        <Setter Property="Foreground" Value="White" />
+    </Style>
+
     <!-- Menu Bar Entry Style -->
     <Style
         x:Key="WolvenKitToolBarItem"
@@ -750,8 +759,10 @@
         <Setter Property="Width" Value="45" />
     </Style>
 
+
     <Style
         x:Key="ControlsGridStyle"
+        BasedOn="{StaticResource {x:Type Grid}}"
         TargetType="{x:Type Grid}">
         <Setter Property="Background" Value="{DynamicResource ShadedBackgroundBrush}" />
         <Setter Property="Height" Value="250" />
