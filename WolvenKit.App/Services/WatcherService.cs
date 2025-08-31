@@ -113,8 +113,11 @@ public partial class WatcherService : ObservableObject, IWatcherService
         Clear();
     }
 
+    private static readonly List<string> s_backupFilePartials =
+    [
+        "_tmp", ".bak", ".bkp"
+    ];
 
-    
     private void Update(CancellationToken cancellationToken)
     {
         while (true)
@@ -162,7 +165,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
             }
             catch (Exception)
             {
-                if (!(e.Name ?? "").Contains("_tmp"))
+                if (e.Name is not null && !s_backupFilePartials.Any(partial => e.Name.Contains(partial)))
                 {
                     _loggerService?.Error($"Project Explorer: something went wrong while changing {e.Name}. You can try a manual refresh.");
                 }
@@ -177,7 +180,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
             {
                 return;
             }
-            
+
             // Check if delay has passed
             if (e.Ticks > timestamp)
             {
@@ -207,7 +210,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
             if (e.RetryCount > 10)
             {
                 // If it still doesn't work after 10 retries... idk
-                _loggerService?.Error($"Failed adding {e.Name} to the project explorer...{Environment.NewLine}Please report this as bug");
+                _loggerService?.Warning($"Project explorer: Failed adding {e.Name}. You can try a manual refresh.");
                 return;
             }
 
@@ -403,7 +406,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
         {
             return;
         }
-        
+
         ForceStop();
         Clear();
 
