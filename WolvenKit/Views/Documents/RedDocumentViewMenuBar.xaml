@@ -491,51 +491,6 @@
                 <!-- end Materials: mesh files -->
             </MenuItem>
 
-            <!-- ArchiveXL: mesh files -->
-            <MenuItem
-                Style="{StaticResource ShowInMeshFileMenuStyle}"
-                Header="ArchiveXL"
-                SubmenuOpened="OnMenuOpened"
-                SubmenuClosed="OnMenuClosed">
-
-                <!-- Un-dynamify materials -->
-                <MenuItem
-                    Style="{StaticResource MenuItemStyle}"
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Header="Un-dynamify materials"
-                    Click="OnUnDynamifyMaterialsClick">
-                    <MenuItem.Icon>
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="ArrowUpBox"
-                            Foreground="White" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <!-- Generate CCXL Materials for hairs -->
-                <MenuItem
-                    Style="{StaticResource ShowMeshMenuItemStyle}"
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Header="Convert hair to CCXL material"
-                    ToolTip="This will run adjust submesh counts first"
-                    Command="{Binding Path=ConvertHairToCCXLCommand}"
-                    Click="OnConvertHairToCCXLMaterials">
-                    <MenuItem.Icon>
-                        <templates:IconBox
-                            IconPack="MaterialDesign"
-                            Kind="SwitchAccessShortcut"
-                            Foreground="White" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-            </MenuItem>
-
             <!-- Clean up: .mesh / .json / .app -->
             <MenuItem
                 Style="{StaticResource ShowCleanUpMenuItemStyle}"
@@ -714,6 +669,51 @@
                             Foreground="{StaticResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
+            </MenuItem>
+
+            <!-- ArchiveXL: mesh files -->
+            <MenuItem
+                Style="{StaticResource ShowInMeshFileMenuStyle}"
+                Header="ArchiveXL"
+                SubmenuOpened="OnMenuOpened"
+                SubmenuClosed="OnMenuClosed">
+
+                <!-- Un-dynamify materials -->
+                <MenuItem
+                    Style="{StaticResource MenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Header="Un-dynamify materials"
+                    Click="OnUnDynamifyMaterialsClick">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ArrowUpBox"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <!-- Generate CCXL Materials for hairs -->
+                <MenuItem
+                    Style="{StaticResource ShowMeshMenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Header="Convert hair to CCXL material"
+                    ToolTip="This will run adjust submesh counts first"
+                    Command="{Binding Path=ConvertHairToCCXLCommand}"
+                    Click="OnConvertHairToCCXLMaterials">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="MaterialDesign"
+                            Kind="SwitchAccessShortcut"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
             </MenuItem>
 
             <!-- Appearances (.app) / Components (.ent) -->
