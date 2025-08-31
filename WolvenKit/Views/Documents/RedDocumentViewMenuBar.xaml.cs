@@ -826,16 +826,13 @@ namespace WolvenKit.Views.Documents
                     "Can't add dependencies without a game executable path in the settings");
             }
 
+            _loggerService.Info("Scanning your mods... this can take a moment. Wolvenkit will be unresponsive.");
+
             if (!_archiveManager.IsInitialized)
             {
-                _loggerService.Info("Loading mod archives... this can take a moment. Wolvenkit will be unresponsive.");
-                _loggerService.Info("Please wait... process will continue after the scan is complete.");
                 _archiveManager.Initialize(new FileInfo(_settingsManager.CP77ExecutablePath));
-
-                _loggerService.Info("Scan complete.");
             }
 
-            _loggerService.Info("Reading mod archive file table, this may take a moment...");
             await Task.Run(() =>
             {
                 var ignoredArchives = _settingsManager.ArchiveNamesExcludeFromScan.Split(",")
@@ -849,7 +846,7 @@ namespace WolvenKit.Views.Documents
                     _archiveManager.LoadAdditionalModArchives(extraModDir, true, ignoredArchives);
                 }
 
-                _loggerService.Info("... Done!");
+                _loggerService.Info("Scan complete.");
             });
         }
 
