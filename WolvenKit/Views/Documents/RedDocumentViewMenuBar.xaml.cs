@@ -322,7 +322,7 @@ namespace WolvenKit.Views.Documents
 
             var otherMeshFiles =
                 _documentTools.CollectProjectFiles(".mesh")
-                    .Where(f => f != currentPath)
+                    .Where(f => !currentPath.EndsWith(f))
                     .Distinct()
                     .ToDictionary(x => x, x => false);
 
