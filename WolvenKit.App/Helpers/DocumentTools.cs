@@ -954,6 +954,9 @@ public class DocumentTools
 
     private static readonly string s_archiveString = "archive" + Path.DirectorySeparatorChar;
 
+    /// <summary>
+    /// Returns a list of relative file paths in the current project - matching the current file extension.
+    /// </summary>
     public IList<string> CollectProjectFiles(string fileExtension)
     {
         if (_projectManager.ActiveProject is not { } activeProject)
@@ -961,7 +964,9 @@ public class DocumentTools
             return [];
         }
 
-        return activeProject.Files.Where(f => f.EndsWith(fileExtension)).Select(s => s.Replace(s_archiveString, ""))
+        return activeProject.Files.Where(f => f.EndsWith(fileExtension))
+            .Select(s => s.Replace(s_archiveString, ""))
+            .Distinct()
             .ToList();
     }
 
@@ -1108,6 +1113,13 @@ public class DocumentTools
             return wasChanged;
         }
 
+        var hasMaterials = sourceMesh.Appearances.Count > 0 && sourceMesh.MaterialEntries.Count > 0;
+
+        if (!hasMaterials)
+        {
+            _loggerService.Error($"source file {sourcePath} does not have materials!");
+            return false;
+        }
 
         // ReSharper disable ForCanBeConvertedToForeach
         CArray<CHandle<meshMeshAppearance>> appearances = [];
@@ -1218,6 +1230,10 @@ public class DocumentTools
 
     public bool CopyMeshMaterials(string sourcePath, string destPath)
     {
+        if (sourcePath == destPath || destPath.EndsWith(sourcePath))
+        {
+            return true;
+        }
         if (_projectManager.ActiveProject is not { } activeProject)
         {
             return false;
@@ -1246,15 +1262,19 @@ public class DocumentTools
             return false;
         }
 
+        if (!_cr2WTools.WriteCr2W(destCr2W, activeProject.GetAbsolutePath(destPath)))
+        {
+            _loggerService.Error($"Failed writing changes to {destPath}");
+            return false;
+        }
         if (meshPaths.Count == 1)
         {
-            _loggerService.Success($"Copied materials from {meshPaths}");
+            _loggerService.Success($"Copied materials from {meshPaths[0]}");
         }
         else
         {
             _loggerService.Success($"Copied materials from the following files: \n\t {string.Join("\n\t", meshPaths)}");
         }
-        _cr2WTools.WriteCr2W(destCr2W, destPath);
         return true;
     }
 

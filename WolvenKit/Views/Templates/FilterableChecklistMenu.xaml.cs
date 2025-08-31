@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using DynamicData;
 using WolvenKit.App.Services;
 
 namespace WolvenKit.Views.Templates
@@ -85,6 +86,7 @@ namespace WolvenKit.Views.Templates
                 typeof(FilterableChecklistMenu),
                 new PropertyMetadata(null, OnAvailableOptionsChanged));
 
+        private static List<string> FilteredOptions { get; set; } = [];
 
         public Dictionary<string, bool> CheckboxOptionsAndStates
         {
@@ -190,11 +192,15 @@ namespace WolvenKit.Views.Templates
                 return;
             }
 
-            var filtered = string.IsNullOrWhiteSpace(FilterText)
-                ? AvailableOptions.ToList()
-                : AvailableOptions.Where(o => o.Contains(FilterText, StringComparison.OrdinalIgnoreCase)).ToList();
+            FilteredOptions.Clear();
 
-            multiselectList.SetCurrentValue(ItemsControl.ItemsSourceProperty, filtered);
+            FilteredOptions.AddRange(string.IsNullOrWhiteSpace(FilterText)
+                ? AvailableOptions
+                : AvailableOptions.Where(o => o.Contains(FilterText, StringComparison.OrdinalIgnoreCase))
+            );
+
+            multiselectList.SetCurrentValue(ItemsControl.ItemsSourceProperty, null);
+            multiselectList.SetCurrentValue(ItemsControl.ItemsSourceProperty, FilteredOptions);
             UpdateListBoxSelections();
         }
 
@@ -234,29 +240,24 @@ namespace WolvenKit.Views.Templates
 
         private void ListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (SelectedOptions == null)
-            {
-                return;
-            }
+            SelectedOptions ??= [];
 
             var selectedStrings = multiselectList.SelectedItems.OfType<string>().ToList();
 
             // Shift-click to select/deselect all
             if (ModifierViewStateService.IsShiftBeingHeld)
             {
-                if (selectedStrings.Count == 0)
+                var skipAddFiltered = selectedStrings.SequenceEqual(FilteredOptions);
+                selectedStrings.Clear();
+                if (!skipAddFiltered)
                 {
-                    selectedStrings = AvailableOptions.ToList();
-                }
-                else
-                {
-                    selectedStrings.Clear();
+                    selectedStrings.AddRange(FilteredOptions);
                 }
             }
 
-            // Only update if different to prevent infinite loops
             if (selectedStrings.SequenceEqual(SelectedOptions))
             {
+                // Only update if different to prevent infinite loops
                 return;
             }
 
@@ -277,5 +278,18 @@ namespace WolvenKit.Views.Templates
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         #endregion
+
+        public void ToggleSelection()
+        {
+            if (SelectedOptions.Count == 0)
+            {
+                SelectedOptions.AddRange(FilteredOptions);
+            }
+            else
+            {
+                SelectedOptions.Clear();
+                UpdateListBoxSelections();
+            }
+        }
     }
 }

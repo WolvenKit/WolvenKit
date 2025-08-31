@@ -20,13 +20,13 @@
     <SolidColorBrush x:Key="LightBrush" Color="#FF333333" />
     <SolidColorBrush x:Key="ShadeBrush" Color="#FF434343" />
 
-    <Color x:Key="TopGradientSelectColor">#FFFFFFFF</Color>
+    <Color x:Key="TopGradientSelectColor">White</Color>
     <Color x:Key="BottomGradientSelectColor">#FF737373</Color>
 
-    <Color x:Key="BlackColor">#FF000000</Color>
-    <Color x:Key="WhiteColor">#FFFFFFFF</Color>
+    <Color x:Key="BlackColor">Black</Color>
+    <Color x:Key="WhiteColor">White</Color>
 
-    <SolidColorBrush x:Key="TextBrush" Color="#FFFFFFFF" />
+    <SolidColorBrush x:Key="TextBrush" Color="White" />
     <SolidColorBrush x:Key="NormalBrush" Color="{StaticResource MainColor}" />
     <SolidColorBrush x:Key="NormalBorderBrush" Color="#FF333333" />
     <SolidColorBrush x:Key="HoverBrush" Color="{StaticResource HoverColor}" />
@@ -2766,7 +2766,7 @@
     <Style TargetType="{x:Type TextBox}">
         <Setter Property="AllowDrop" Value="true" />
         <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}" />
-        <Setter Property="BorderBrush" Value="#FF000000" />
+        <Setter Property="BorderBrush" Value="White" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
         <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
@@ -2886,7 +2886,7 @@
     <Style TargetType="{x:Type PasswordBox}">
         <Setter Property="AllowDrop" Value="true" />
         <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}" />
-        <Setter Property="BorderBrush" Value="#FF000000" />
+        <Setter Property="BorderBrush" Value="White" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
         <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
@@ -3006,7 +3006,7 @@
     <Style TargetType="{x:Type RichTextBox}">
         <Setter Property="AllowDrop" Value="true" />
         <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}" />
-        <Setter Property="BorderBrush" Value="#FF000000" />
+        <Setter Property="BorderBrush" Value="White" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
         <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
@@ -5149,7 +5149,7 @@
         TargetType="{x:Type TextBox}">
         <Setter Property="AllowDrop" Value="true" />
         <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}" />
-        <Setter Property="BorderBrush" Value="#FF000000" />
+        <Setter Property="BorderBrush" Value="White" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="FontSize" Value="10" />
         <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
@@ -5158,7 +5158,7 @@
     </Style>
 
     <LinearGradientBrush x:Key="ToolBarHorizontalBackground" StartPoint="0,0" EndPoint="0,1">
-        <GradientStop Offset="0" Color="#FFFFFF" />
+        <GradientStop Offset="0" Color="White" />
         <GradientStop Offset="0.5" Color="#FFFBFF" />
         <GradientStop Offset="1" Color="#F7F7F7" />
     </LinearGradientBrush>
@@ -5220,7 +5220,7 @@
         </Setter>
     </Style>
     <SolidColorBrush x:Key="ToolBarSubMenuBackground" Color="#FFFDFDFD" />
-    <SolidColorBrush x:Key="ToolBarMenuBorder" Color="#FFFFFFFF" />
+    <SolidColorBrush x:Key="ToolBarMenuBorder" Color="White" />
     <Style
         x:Key="ToolBarThumbStyle"
         TargetType="{x:Type Thumb}">
@@ -5319,7 +5319,7 @@
         </Setter>
     </Style>
     <LinearGradientBrush x:Key="ToolBarVerticalBackground" StartPoint="0,0" EndPoint="1,0">
-        <GradientStop Offset="0" Color="#FFFFFF" />
+        <GradientStop Offset="0" Color="White" />
         <GradientStop Offset="0.5" Color="#FFFBFF" />
         <GradientStop Offset="1" Color="#F7F7F7" />
     </LinearGradientBrush>

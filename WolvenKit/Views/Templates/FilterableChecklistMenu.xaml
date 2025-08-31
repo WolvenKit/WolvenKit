@@ -49,26 +49,18 @@
             Content="{Binding Label}" />
 
         <!-- Filter TextBox -->
-        <TextBox
-            x:Name="originalFilterTextBox"
+        <syncfusion:SfTextBoxExt
             Grid.Row="0"
             Grid.Column="1"
-            Margin="0"
-            Foreground="{StaticResource ForegroundColor_Grey_Dark}"
+            Margin="0,0,1,1"
+            VerticalContentAlignment="Center"
+            FontSize="{DynamicResource WolvenKitFontSubTitle}"
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
-            KeyboardNavigation.TabIndex="1"
+            KeyboardNavigation.TabIndex="-1"
+            Watermark="Filter"
+            WatermarkTemplate="{StaticResource PlaceholderTemplate}"
             Text="{Binding FilterText,
                            UpdateSourceTrigger=PropertyChanged}" />
-
-        <TextBlock
-            x:Name="originalPlaceholder"
-            Grid.Row="0"
-            Grid.Column="1"
-            Style="{StaticResource WolvenkitPlaceholderStyle}"
-            Visibility="{Binding ElementName=originalFilterTextBox,
-                                 Path=Text.Length,
-                                 Converter={StaticResource IntToVisibilityConverterInverted}}"
-            Text="Filter" />
 
         <!-- ListBox for Options -->
         <ListBox

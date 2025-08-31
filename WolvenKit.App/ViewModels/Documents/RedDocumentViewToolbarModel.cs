@@ -75,6 +75,9 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
     public ChunkViewModel? RootChunk { get; private set; }
 
+    /// <summary>
+    /// Absolute file path
+    /// </summary>
     public string? FilePath => CurrentTab?.FilePath;
     public CR2WFile? Cr2WFile => CurrentTab?.Parent.Cr2wFile;
 
@@ -183,11 +186,15 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(GenerateMissingMaterialsCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertHairToCCXLCommand))]
     [NotifyCanExecuteChangedFor(nameof(RegenerateIdsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyMaterialFromMeshCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyMaterialToMeshesCommand))]
     [ObservableProperty]
     private RedDocumentItemType _contentType;
 
     [NotifyCanExecuteChangedFor(nameof(AddDependenciesCommand))]
     [NotifyCanExecuteChangedFor(nameof(AddDependenciesFullCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyMaterialFromMeshCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyMaterialToMeshesCommand))]
     [ObservableProperty] private bool _isShiftKeyDown;
 
     [NotifyCanExecuteChangedFor(nameof(ClearChunkMaterialsCommand))]
@@ -260,6 +267,22 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
     [RelayCommand(CanExecute = nameof(CanGenerateNewCruid))]
     private void GenerateNewCruid() => SelectedChunk?.GenerateCRUIDCommand.Execute(null);
+
+    private bool CanCopyFromMesh() => ContentType is RedDocumentItemType.Mesh && !IsShiftKeyDown;
+
+    [RelayCommand(CanExecute = nameof(CanCopyFromMesh))]
+    private void CopyMaterialFromMesh()
+    {
+        // Do nothing, only required for visibility
+    }
+
+    private bool CanCopyToMeshes() => ContentType is RedDocumentItemType.Mesh && IsShiftKeyDown;
+
+    [RelayCommand(CanExecute = nameof(CanCopyToMeshes))]
+    private void CopyMaterialToMeshes()
+    {
+        // Do nothing, only required for visibility
+    }
 
     #region appFile
 
