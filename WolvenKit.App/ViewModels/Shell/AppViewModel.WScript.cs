@@ -83,6 +83,13 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
+        if (ActiveDocument is null)
+        {
+            ScriptService.SuppressLogOutput = false;
+            _loggerService.Info("Resource file validation needs an active document! Please open any CR2W file!");
+            return;
+        }
+
         var shiftKeyDown = ModifierViewStateService.IsShiftBeingHeld;
         var ctrlKeyDown = ModifierViewStateService.IsCtrlBeingHeld;
 
@@ -172,13 +179,6 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             {
                 _loggerService.Error(err.Message);
             }
-        }
-
-        if (ActiveDocument is null)
-        {
-            ScriptService.SuppressLogOutput = false;
-            _loggerService.Info("Resource file validation needs an active document!");
-            return;
         }
 
         foreach (var file in resourceFilesToValidate)
