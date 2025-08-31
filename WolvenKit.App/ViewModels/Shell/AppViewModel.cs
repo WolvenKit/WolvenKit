@@ -942,6 +942,51 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
+    private void ScanForBrokenFiles()
+    {
+        _loggerService.Info($"Scanning {ActiveProject!.ModFiles.Count} files. Please wait...");
+        _progressService.IsIndeterminate = true;
+
+        List<string> brokenFiles = [];
+        foreach (var relativePath in ActiveProject.ModFiles)
+        {
+            try
+            {
+                var cr2W = _cr2WTools.ReadCr2W(ActiveProject.GetAbsolutePath(relativePath));
+                if (relativePath.EndsWith(".xbm") && (cr2W.RootChunk is not CBitmapTexture tex || !ScanXbmHealth(tex)))
+                {
+                    brokenFiles.Add(relativePath);
+                }
+            }
+            catch (InvalidFileTypeException)
+            {
+                brokenFiles.Add(relativePath);
+            }
+        }
+
+        if (brokenFiles.Count == 0)
+        {
+            _loggerService.Info("All project files are fine!");
+            return;
+        }
+
+        Dictionary<string, List<string>> files = [];
+        files.Add(ActiveProject.ModName, brokenFiles);
+        Interactions.ShowBrokenReferencesList(("Broken references", files));
+        return;
+
+        bool ScanXbmHealth(CBitmapTexture tex)
+        {
+            if (tex.RenderTextureResource?.RenderResourceBlobPC?.Chunk is not rendRenderTextureBlobPC blob)
+            {
+                return false;
+            }
+
+            return blob.Header is not null && blob.TextureData is not null;
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private void DeleteEmptyFolders() => _projectManager.ActiveProject?.DeleteEmptyFolders(_loggerService);
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]

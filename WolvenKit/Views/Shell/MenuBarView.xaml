@@ -262,19 +262,7 @@
 
                 <Separator />
 
-                <MenuItem
-                    x:Name="ToolbarProjectScanFilePathsButton"
-                    Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
-                    Header="Scan project for broken file references">
-                    <MenuItem.Icon>
-                        <local:IconBox
-                            IconPack="Material"
-                            Kind="FileSearchOutline"
-                            Size="{DynamicResource WolvenKitIconTiny}"
-                            Foreground="White" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
+                <!-- Project: Clean up -->
                 <MenuItem
                     x:Name="ToolbarCleanupButton"
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
@@ -282,6 +270,21 @@
                     <MenuItem.Icon>
                         <local:IconBox IconPack="Empty" />
                     </MenuItem.Icon>
+
+                    <MenuItem
+                        x:Name="ToolbarProjectFindUnusedFilesButton"
+                        Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                        Header="Scan for unused files">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="Material"
+                                Kind="TextSearchVariant"
+                                Size="{DynamicResource WolvenKitIconTiny}"
+                                Foreground="White" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <Separator />
 
                     <MenuItem
                         x:Name="ToolbarProjectDeleteEmptyFoldersButton"
@@ -309,21 +312,38 @@
                         </MenuItem.Icon>
                     </MenuItem>
 
-                    <MenuItem
-                        x:Name="ToolbarProjectFindUnusedFilesButton"
-                        Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
-                        Header="Scan for unused project files">
-                        <MenuItem.Icon>
-                            <local:IconBox
-                                IconPack="Material"
-                                Kind="TextSearchVariant"
-                                Size="{DynamicResource WolvenKitIconTiny}"
-                                Foreground="White" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-
                 </MenuItem>
 
+                <Separator />
+
+                <MenuItem
+                    x:Name="ToolbarProjectScanFilePathsButton"
+                    Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                    Header="Scan for broken file references">
+                    <MenuItem.Icon>
+                        <local:IconBox
+                            IconPack="Material"
+                            Kind="FileSearchOutline"
+                            Size="{DynamicResource WolvenKitIconTiny}"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem
+                    x:Name="ToolbarProjectScanForBrokenFilesButton"
+                    Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                    ToolTip="Find broken CR2W files (such as corrupt textures) that will not be caught by other checks"
+                    Header="Scan for broken files">
+                    <MenuItem.Icon>
+                        <local:IconBox
+                            IconPack="Material"
+                            Kind="FileSearchOutline"
+                            Size="{DynamicResource WolvenKitIconTiny}"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <Separator />
                 <MenuItem
                     x:Name="ToolbarProjectRunFileValidationButton"
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
