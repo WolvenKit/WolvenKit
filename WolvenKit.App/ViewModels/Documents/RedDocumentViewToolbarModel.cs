@@ -75,6 +75,9 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
     public ChunkViewModel? RootChunk { get; private set; }
 
+    /// <summary>
+    /// Absolute file path
+    /// </summary>
     public string? FilePath => CurrentTab?.FilePath;
     public CR2WFile? Cr2WFile => CurrentTab?.Parent.Cr2wFile;
 
