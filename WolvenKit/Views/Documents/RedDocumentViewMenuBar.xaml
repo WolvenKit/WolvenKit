@@ -162,6 +162,23 @@
                 </Style.Triggers>
             </Style>
 
+            <!-- Mesh separator style -->
+            <Style
+                x:Key="ShowInMeshFileSeparatorStyle"
+                BasedOn="{StaticResource {x:Type Separator}}"
+                TargetType="{x:Type Separator}">
+                <Setter Property="Visibility" Value="Collapsed" />
+
+                <Style.Triggers>
+                    <DataTrigger
+                        Binding="{Binding Path=ContentType,
+                                          UpdateSourceTrigger=PropertyChanged}"
+                        Value="{x:Static documents:RedDocumentItemType.Mesh}">
+                        <Setter Property="Visibility" Value="Visible" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
             <!-- Clean up: .mesh / .json / .app -->
             <Style
                 x:Key="ShowCleanUpMenuItemStyle"
@@ -383,24 +400,6 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- Generate missing materials -->
-                <MenuItem
-                    Style="{StaticResource MenuItemStyle}"
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Header="Generate missing material entries"
-                    Command="{Binding Path=GenerateMissingMaterialsCommand}"
-                    Click="OnGenerateMissingMaterialsClick">
-                    <MenuItem.Icon>
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="Autorenew"
-                            Foreground="White" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
                 <!-- Scroll to material -->
                 <MenuItem
                     Style="{StaticResource MenuItemStyle}"
@@ -488,10 +487,28 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <!-- Generate missing materials -->
+                <MenuItem
+                    Style="{StaticResource MenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Header="Generate missing material entries"
+                    Command="{Binding Path=GenerateMissingMaterialsCommand}"
+                    Click="OnGenerateMissingMaterialsClick">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Autorenew"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
                 <!-- end Materials: mesh files -->
             </MenuItem>
 
-            <!-- Clean up: .mesh / .json / .app -->
+            <!-- Clean up submenu: .mesh / .json / .app -->
             <MenuItem
                 Style="{StaticResource ShowCleanUpMenuItemStyle}"
                 Header="Clean up"
@@ -529,54 +546,6 @@
                             IconPack="Material"
                             Kind="FolderSearchOutline"
                             Foreground="White" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <MenuItem
-                    Style="{StaticResource ShowMeshMenuItemStyle}"
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Header="Convert preload materials to local"
-                    Command="{Binding Path=ConvertPreloadMaterialsCommand}">
-                    <MenuItem.Icon>
-                        <templates:IconBox IconPack="Empty" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <!-- .mesh file: Clear chunk materials (if you have multiple appearances selected) -->
-                <MenuItem
-                    Style="{StaticResource ShowMeshMenuItemStyle}"
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Header="Clear chunk materials"
-                    ToolTip="Clear chunk materials (for dynamic expansion)"
-                    Command="{Binding Path=ClearChunkMaterialsCommand}">
-                    <MenuItem.Icon>
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="Graph"
-                            Foreground="{StaticResource WolvenKitRed}" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <MenuItem
-                    Style="{StaticResource ShowMeshMenuItemStyle}"
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Header="Delete chunk by submesh index"
-                    ToolTip="If you deleted submeshes"
-                    Command="{Binding Path=DeleteChunkByIndexCommand}">
-                    <MenuItem.Icon>
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="FilterVariantRemove"
-                            Foreground="{StaticResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -650,6 +619,59 @@
                             IconPack="Material"
                             Kind="LayersTriple"
                             Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <Separator Style="{StaticResource ShowInMeshFileSeparatorStyle}" />
+
+                <!-- mesh file: convert preload materials -->
+                <MenuItem
+                    Style="{StaticResource ShowMeshMenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Header="Convert preload materials to local"
+                    Command="{Binding Path=ConvertPreloadMaterialsCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox IconPack="Empty" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+
+                <!-- .mesh file: Clear chunk materials (if you have multiple appearances selected) -->
+                <MenuItem
+                    Style="{StaticResource ShowMeshMenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Header="Clear chunk materials"
+                    ToolTip="Clear chunk materials (for dynamic expansion)"
+                    Command="{Binding Path=ClearChunkMaterialsCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Graph"
+                            Foreground="{StaticResource WolvenKitRed}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <!-- mesh file: delete chunk by submesh index -->
+                <MenuItem
+                    Style="{StaticResource ShowMeshMenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Header="Delete chunk by submesh index"
+                    ToolTip="If you deleted submeshes"
+                    Command="{Binding Path=DeleteChunkByIndexCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="FilterVariantRemove"
+                            Foreground="{StaticResource WolvenKitRed}" />
                     </MenuItem.Icon>
                 </MenuItem>
 
