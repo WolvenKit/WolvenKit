@@ -973,6 +973,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         Dictionary<string, List<string>> files = [];
         files.Add(ActiveProject.ModName, brokenFiles);
         Interactions.ShowBrokenReferencesList(("Broken references", files));
+        _progressService.IsIndeterminate = false;
         return;
 
         bool ScanXbmHealth(CBitmapTexture tex)
