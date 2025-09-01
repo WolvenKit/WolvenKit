@@ -545,23 +545,6 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- .mesh file: Clear chunk materials (if you have multiple appearances selected) -->
-                <MenuItem
-                    Style="{StaticResource ShowMeshMenuItemStyle}"
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Header="Clear chunk materials"
-                    ToolTip="Clear chunk materials (for dynamic expansion)"
-                    Command="{Binding Path=ClearChunkMaterialsCommand}">
-                    <MenuItem.Icon>
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="Graph"
-                            Foreground="{StaticResource WolvenKitRed}" />
-                    </MenuItem.Icon>
-                </MenuItem>
 
                 <MenuItem
                     Style="{StaticResource ShowMeshMenuItemStyle}"
@@ -694,6 +677,26 @@
                             Foreground="White" />
                     </MenuItem.Icon>
                 </MenuItem>
+
+                <!-- .mesh file: Clear chunk materials (if you have multiple appearances selected) -->
+                <MenuItem
+                    Style="{StaticResource ShowMeshMenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Header="Clear chunk materials"
+                    ToolTip="Clear chunk materials (for dynamic expansion)"
+                    Command="{Binding Path=ClearChunkMaterialsCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Graph"
+                            Foreground="{StaticResource WolvenKitRed}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <Separator />
 
                 <!-- Generate CCXL Materials for hairs -->
                 <MenuItem
