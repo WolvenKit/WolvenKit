@@ -90,7 +90,8 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
             nameof(ReopenLastProject),
             nameof(NumFilesToReopen),
             nameof(ReopenFiles),
-            nameof(ShowVerboseLogOutput)
+            nameof(ShowVerboseLogOutput),
+            nameof(IsDiscordRPCEnabled)
             )
           .Subscribe(_ =>
           {
@@ -288,7 +289,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [Display(Name = "Auto Update On Startup", GroupName = "General")]
     [ObservableProperty]
     private bool _autoUpdateOnStartup;
-    
+
     [Display(Name = "Always Ask Before Updating", GroupName = "General")]
     [ObservableProperty]
     private bool _alwaysAskBeforeUpdating;
@@ -340,7 +341,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     private int _numFilesToReopen;
 
     #endregion
-    
+
     #region Interface
 
     private int _uiScale;
