@@ -65,7 +65,7 @@ public class SettingsDto : ISettingsDto
 
         // General
         AutoUpdateOnStartup = settings.AutoUpdateOnStartup;
-        AlwaysAskBeforeUpdating = settings.AlwaysAskBeforeUpdating;       
+        AlwaysAskBeforeUpdating = settings.AlwaysAskBeforeUpdating;
         UpdateChannel = settings.UpdateChannel;
         ShowGuidedTour = settings.ShowGuidedTour;
         ThemeAccentString = settings.ThemeAccentString;
@@ -84,6 +84,7 @@ public class SettingsDto : ISettingsDto
         NumFilesToReopen = settings.NumFilesToReopen;
         ReopenFiles = settings.ReopenFiles;
         ShowVerboseLogOutput = settings.ShowVerboseLogOutput;
+        IsDiscordRPCEnabled = settings.IsDiscordRPCEnabled;
         ArchiveNamesExcludeFromScan = settings.ArchiveNamesExcludeFromScan;
 
         MigrateSettings();
@@ -208,7 +209,7 @@ public class SettingsDto : ISettingsDto
 
         // General
         settingsManager.AutoUpdateOnStartup = AutoUpdateOnStartup;
-        settingsManager.AlwaysAskBeforeUpdating = AlwaysAskBeforeUpdating;      
+        settingsManager.AlwaysAskBeforeUpdating = AlwaysAskBeforeUpdating;
         settingsManager.UpdateChannel = UpdateChannel;
         settingsManager.ShowGuidedTour = ShowGuidedTour;
         settingsManager.ThemeAccentString = ThemeAccentString;
@@ -272,7 +273,7 @@ public class SettingsDto : ISettingsDto
 
             SettingsVersion = 4;
         }
-        
+
         SettingsVersion = s_currentSettingsVersion;
 
         IsDirty = true;
