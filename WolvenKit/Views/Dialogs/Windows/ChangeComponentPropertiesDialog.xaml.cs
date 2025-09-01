@@ -131,14 +131,18 @@ namespace WolvenKit.Views.Dialogs.Windows
 
         private void WizardPage_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key != Key.Enter)
+            if (e.Key is not Key.Enter and not Key.Escape)
             {
                 return;
             }
 
-            SaveLastSelection();
             e.Handled = true;
-            DialogResult = true;
+
+            DialogResult = e.Key == Key.Enter;
+            if (e.Key == Key.Enter)
+            {
+                SaveLastSelection();
+            }
             Close();
         }
 
