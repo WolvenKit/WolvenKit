@@ -79,14 +79,11 @@ public partial class RedPackageReader : Red4Reader
 
                 if (propRedType == redTypeName)
                 {
-                    LoggerService?.Warning(
-                        $"RedPackageReader: Can't read data for \"{fullName}\" (\"{propRedType}\"). Skipping");
-
+                    LoggerService?.Warning($"Can't read data for \"{fullName}\" (\"{propRedType}\"). Skipping");
                     continue;
                 }
 
-                LoggerService?.Warning(
-                    $"RedPackageReader: Invalid RedType detected for \"{fullName}\". \"{redTypeName}\" instead of \"{propRedType}\". Skipping");
+                LoggerService?.Warning($"Invalid RedType detected for \"{fullName}\". \"{redTypeName}\" instead of \"{propRedType}\". Skipping");
                 continue;
             }
 
