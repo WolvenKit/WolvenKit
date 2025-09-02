@@ -32,6 +32,11 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public class CommonExportArgs : ExportArgs
     {
+        /// <summary>
+        /// String Override to display info in datagrid.
+        /// </summary>
+        /// <returns>String</returns>
+        public override string ToString() => "";
     }
 
     public class GeneralExportArgs : ExportArgs
