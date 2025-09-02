@@ -144,7 +144,11 @@ namespace WolvenKit.Common.Model.Arguments
 
     public class InkAtlasExportArgs : ExportArgs
     {
-
+        /// <summary>
+        /// String Override to display info in datagrid.
+        /// </summary>
+        /// <returns>String</returns>
+        public override string ToString() => ".png (folder)";
     }
 
     /// <summary>
@@ -349,7 +353,7 @@ namespace WolvenKit.Common.Model.Arguments
         public bool IsBinary { get => _isBinary; set => SetProperty(ref _isBinary, value); }
 
         /// <summary>
-        /// Additive Animation Relative Positioning Bool, 
+        /// Additive Animation Relative Positioning Bool,
         /// </summary>
         [Category("Export Settings")]
         [Display(Name = "Additive Anims Relative to Local Transform")]
