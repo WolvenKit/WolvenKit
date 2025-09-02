@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Helpers;
@@ -77,6 +78,8 @@ public partial class ProjectWizardViewModel : DialogViewModel, INotifyDataErrorI
     private string? _projectPath = null!;
     
     [ObservableProperty] private string? _author;
+
+    [ObservableProperty] private Color _projectColor = ColorHelper.GetRandomColor();
     
     [ObservableProperty] private string? _email;
     
