@@ -108,7 +108,7 @@ public partial class ChunkViewModel
         else if (PropertyType.IsAssignableTo(typeof(IRedRef)) && Data is IRedRef rr)
         {
             var depotPath = rr.DepotPath;
-            
+
             if (depotPath.IsResolvable)
             {
                 Value = depotPath.GetResolvedText().NotNull();
@@ -124,12 +124,12 @@ public partial class ChunkViewModel
         {
             Value = ibt.GetBrowsableValue();
         }
-        else if (ResolvedData is animPoseLink link && StringHelper.GetNodeName(link.Node) is string s && s != "") 
+        else if (ResolvedData is animPoseLink link && StringHelper.GetNodeName(link.Node) is string s && s != "")
         {
             Value = s;
             IsValueExtrapolated = true;
             return;
-            
+
         }
         else if (ResolvedData is inkTextureSlot inkTextureSlot)
         {
@@ -209,7 +209,7 @@ public partial class ChunkViewModel
             IsValueExtrapolated = true;
             Value = StringHelper.Stringify(sgn.OutputSockets);
         }
-        
+
         switch (ResolvedData)
         {
             case CKeyValuePair kvp:
@@ -299,7 +299,11 @@ public partial class ChunkViewModel
                 Value = StringHelper.Stringify(ary);
                 IsValueExtrapolated = Value != "";
                 break;
-            
+            case vehicleLightComponent vehLight:
+                Value = vehLight.ParentTransform?.Chunk?.BindName ?? "";
+                IsValueExtrapolated = Value != "";
+                break;
+
             case worldCompiledEffectPlacementInfo epI when Parent?.Parent?.ResolvedData is worldCompiledEffectInfo info:
                 if (info.RelativePositions.Count > epI.RelativePositionIndex)
                 {
@@ -502,7 +506,7 @@ public partial class ChunkViewModel
             case scnPerformerId scnPerformerId when GetRootModel().ResolvedData is scnSceneResource sceneForPerformer:
                 Value = $"{scnPerformerId.Id}";
                 IsValueExtrapolated = scnPerformerId.Id != 0;
-                
+
                 if (sceneForPerformer.DebugSymbols?.PerformersDebugSymbols != null)
                 {
                     var performerSymbol = sceneForPerformer.DebugSymbols.PerformersDebugSymbols
@@ -514,7 +518,7 @@ public partial class ChunkViewModel
                         {
                             performerName = performerSymbol.EntityRef.Names[0].GetResolvedText();
                         }
-                        
+
                         if (string.IsNullOrEmpty(performerName) && performerSymbol.EntityRef?.Reference != null)
                         {
                             var referenceString = performerSymbol.EntityRef.Reference.ToString();
@@ -523,7 +527,7 @@ public partial class ChunkViewModel
                                 performerName = referenceString.StartsWith("#") ? referenceString.Substring(1) : referenceString;
                             }
                         }
-                        
+
                         if (!string.IsNullOrEmpty(performerName))
                         {
                             Value = $"{scnPerformerId.Id}: {performerName}";
@@ -534,7 +538,7 @@ public partial class ChunkViewModel
             case scnSceneWorkspotInstanceId sceneWorkspotInstance when GetRootModel().ResolvedData is scnSceneResource sceneForWorkspot:
                  Value = $"{sceneWorkspotInstance.Id}";
                  IsValueExtrapolated = sceneWorkspotInstance.Id != 0;
-                 
+
                  var matchingWorkspotInstance = sceneForWorkspot.WorkspotInstances
                      .FirstOrDefault(w => w.WorkspotInstanceId.Id == sceneWorkspotInstance.Id);
                  if (matchingWorkspotInstance != null)
@@ -542,7 +546,7 @@ public partial class ChunkViewModel
                      var instanceDataId = matchingWorkspotInstance.DataId.Id;
                      var workspotResource = sceneForWorkspot.Workspots
                          .FirstOrDefault(w => w.Chunk is scnWorkspotData workspotData && workspotData.DataId.Id == instanceDataId);
-                     
+
                      if (workspotResource?.Chunk is scnWorkspotData_ExternalWorkspotResource externalWorkspot)
                      {
                          var workspotPath = externalWorkspot.WorkspotResource.DepotPath.GetResolvedText();
@@ -557,7 +561,7 @@ public partial class ChunkViewModel
             case scnEffectInstanceId scnEffectInstance when GetRootModel().ResolvedData is scnSceneResource sceneForEffect:
                 Value = $"{scnEffectInstance.Id}";
                 IsValueExtrapolated = scnEffectInstance.Id != 0;
-                
+
                 var effectInstance = sceneForEffect.EffectInstances
                     .FirstOrDefault(e => e.EffectInstanceId.Id == scnEffectInstance.Id);
                 if (effectInstance != null)
@@ -565,7 +569,7 @@ public partial class ChunkViewModel
                     var effectId = effectInstance.EffectInstanceId.EffectId.Id;
                     var effectDef = sceneForEffect.EffectDefinitions
                         .FirstOrDefault(e => e.Id.Id == effectId);
-                    
+
                     if (effectDef != null)
                     {
                         var effectPath = effectDef.Effect.DepotPath.GetResolvedText();
@@ -580,7 +584,7 @@ public partial class ChunkViewModel
             case scnPropId scnPropId when GetRootModel().ResolvedData is scnSceneResource sceneForProp:
                 Value = $"{scnPropId.Id}";
                 IsValueExtrapolated = scnPropId.Id != 0;
-                
+
                 // Add friendly prop name if available
                 var propDefinition = sceneForProp.Props
                     .FirstOrDefault(p => p.PropId.Id == scnPropId.Id);
@@ -666,7 +670,7 @@ public partial class ChunkViewModel
                     microblend != "base\\surfaces\\microblends\\default.xbm")
                 {
                     Value = $"{Value}, {microblend.Split('\\').Last()}";
-                }                
+                }
                 IsValueExtrapolated = true;
                 break;
             case scnVoicesetComponent voiceset:
@@ -719,7 +723,7 @@ public partial class ChunkViewModel
                 {
                     Value = $"binding: {Value}{bindName}";
                 }
-                
+
                 IsValueExtrapolated = Value != "";
                 break;
             case entVisualControllerDependency controllerDep:
@@ -920,15 +924,15 @@ public partial class ChunkViewModel
             case scnCinematicAnimSetSRRefId cinematicAnimSetRefId when GetRootModel().ResolvedData is scnSceneResource sceneForAnimSetRef:
                 var animSetId = cinematicAnimSetRefId.Id;
                 Value = ((uint)animSetId).ToString();
-                
+
                 // Try to show the animation set file name if available
                 var animSetIdValue = (uint)animSetId;
-                if (sceneForAnimSetRef.ResouresReferences?.CinematicAnimSets != null && 
+                if (sceneForAnimSetRef.ResouresReferences?.CinematicAnimSets != null &&
                     animSetIdValue < sceneForAnimSetRef.ResouresReferences.CinematicAnimSets.Count)
                 {
                     var animSet = sceneForAnimSetRef.ResouresReferences.CinematicAnimSets[(int)animSetIdValue];
                     var animSetPath = animSet.AsyncAnimSet.DepotPath.GetResolvedText();
-                    
+
                     if (!string.IsNullOrEmpty(animSetPath))
                     {
                         var filename = System.IO.Path.GetFileNameWithoutExtension(animSetPath);
@@ -944,15 +948,15 @@ public partial class ChunkViewModel
             case scnLipsyncAnimSetSRRefId lipsyncAnimSetRefId when GetRootModel().ResolvedData is scnSceneResource sceneForLipsyncAnimSetRef:
                 var lipsyncAnimSetId = lipsyncAnimSetRefId.Id;
                 Value = ((uint)lipsyncAnimSetId).ToString();
-                
+
                 // Try to show the lipsync animation set file name if available
                 var lipsyncAnimSetIdValue = (uint)lipsyncAnimSetId;
-                if (sceneForLipsyncAnimSetRef.ResouresReferences?.LipsyncAnimSets != null && 
+                if (sceneForLipsyncAnimSetRef.ResouresReferences?.LipsyncAnimSets != null &&
                     lipsyncAnimSetIdValue < sceneForLipsyncAnimSetRef.ResouresReferences.LipsyncAnimSets.Count)
                 {
                     var animSet = sceneForLipsyncAnimSetRef.ResouresReferences.LipsyncAnimSets[(int)lipsyncAnimSetIdValue];
                     var animSetPath = animSet.AsyncRefLipsyncAnimSet.DepotPath.GetResolvedText();
-                    
+
                     if (!string.IsNullOrEmpty(animSetPath))
                     {
                         var filename = System.IO.Path.GetFileNameWithoutExtension(animSetPath);
@@ -969,15 +973,15 @@ public partial class ChunkViewModel
             case scnDynamicAnimSetSRRefId dynamicAnimSetRefId when GetRootModel().ResolvedData is scnSceneResource sceneForDynamicAnimSetRef:
                 var dynamicAnimSetId = dynamicAnimSetRefId.Id;
                 Value = ((uint)dynamicAnimSetId).ToString();
-                
+
                 // Try to show the dynamic animation set file name if available
                 var dynamicAnimSetIdValue = (uint)dynamicAnimSetId;
-                if (sceneForDynamicAnimSetRef.ResouresReferences?.DynamicAnimSets != null && 
+                if (sceneForDynamicAnimSetRef.ResouresReferences?.DynamicAnimSets != null &&
                     dynamicAnimSetIdValue < sceneForDynamicAnimSetRef.ResouresReferences.DynamicAnimSets.Count)
                 {
                     var animSet = sceneForDynamicAnimSetRef.ResouresReferences.DynamicAnimSets[(int)dynamicAnimSetIdValue];
                     var animSetPath = animSet.AsyncAnimSet.DepotPath.GetResolvedText();
-                    
+
                     if (!string.IsNullOrEmpty(animSetPath))
                     {
                         var filename = System.IO.Path.GetFileNameWithoutExtension(animSetPath);
@@ -1219,7 +1223,7 @@ public partial class ChunkViewModel
         {
             Parent.CalculateValue();
         }
-            
+
 
         // Make sure it's never null
         Value ??= "null";
