@@ -350,9 +350,35 @@ public partial class GraphEditorView : UserControl
 
         nodifyEditor.ContextMenu.Items.Add(CreateMenuItem("Arrange Items", "ViewDashboard", ArrangeNodes));
 
+        nodifyEditor.ContextMenu.Items.Add(CreateMenuItem("Hide/unhide sockets", "Eye", ToggleAllSockets));
+
         nodifyEditor.ContextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);
 
         e.Handled = true;
+    }
+
+    private void ToggleAllSockets()
+    {
+        if (Source?.Nodes == null)
+        {
+            return;
+        }
+
+        // Determine the new state based on the first node
+        var firstNode = Source.Nodes.FirstOrDefault();
+        if (firstNode == null)
+        {
+            return;
+        }
+        var newState = !firstNode.ShowUnusedSockets;
+
+        // Apply the new state to all nodes
+        foreach (var node in Source.Nodes)
+        {
+            node.ShowUnusedSockets = newState;
+        }
+
+        Source.GraphStateSave();
     }
 
     private void Node_ContextMenuOpening(object sender, ContextMenuEventArgs e)
