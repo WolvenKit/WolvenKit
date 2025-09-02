@@ -817,9 +817,9 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- .app: submenu "Dependencies" (.ent has own submenu) -->
+                <!-- .app/.ent: submenu "Dependencies" -->
                 <MenuItem
-                    Style="{StaticResource ShowAppMenuItemStyle}"
+                    Style="{StaticResource ShowComponentsAppearancesMenuItemStyle}"
                     Header="Dependencies">
                     <MenuItem.Icon>
                         <templates:IconBox
@@ -830,7 +830,7 @@
 
                     <!-- .app: Regenerate visual controllers -->
                     <MenuItem
-                        Style="{StaticResource MenuItemStyle}"
+                        Style="{StaticResource ShowAppMenuItemStyle}"
                         Header="Regenerate visual controllers"
                         Command="{Binding Path=RegenerateVisualControllersCommand}">
                         <MenuItem.Icon>
@@ -841,9 +841,9 @@
                         </MenuItem.Icon>
                     </MenuItem>
 
-                    <!-- .app: Regenerate resolved dependencies -->
+                    <!-- .app/.ent: Regenerate resolved dependencies -->
                     <MenuItem
-                        Style="{StaticResource MenuItemStyle}"
+                        Style="{StaticResource ShowComponentsAppearancesMenuItemStyle}"
                         Header="Regenerate resolved dependencies"
                         Command="{Binding Path=RegenerateResolvedDependenciesCommand}">
                         <MenuItem.Icon>
