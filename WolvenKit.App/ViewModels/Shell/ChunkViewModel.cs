@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -445,17 +446,22 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        if ((s_descriptorPropNames.Contains(Name))
-            || ResolvedData is IRedResourceAsyncReference
-            || ResolvedData is IRedResourceReference
-            || (ResolvedData is WorldPosition && Parent.ResolvedData is WorldTransform)
-            || Parent.ResolvedData is IRedResourceAsyncReference
-            || Parent.ResolvedData is CKeyValuePair
-            || Parent.ResolvedData is Multilayer_Layer
-            || Parent.ResolvedData is CMeshMaterialEntry
-            || Parent.ResolvedData is localizationPersistenceOnScreenEntry
-            || Parent.ResolvedData is IRedArray
-           )
+        // refresh parent's default state on chunkmask changes
+        if (Name is "chunkMask")
+        {
+            Parent.CalculateIsDefault();
+        }
+        else if ((s_descriptorPropNames.Contains(Name))
+                 || ResolvedData is IRedResourceAsyncReference
+                 || ResolvedData is IRedResourceReference
+                 || (ResolvedData is WorldPosition && Parent.ResolvedData is WorldTransform)
+                 || Parent.ResolvedData is IRedResourceAsyncReference
+                 || Parent.ResolvedData is CKeyValuePair
+                 || Parent.ResolvedData is Multilayer_Layer
+                 || Parent.ResolvedData is CMeshMaterialEntry
+                 || Parent.ResolvedData is localizationPersistenceOnScreenEntry
+                 || Parent.ResolvedData is IRedArray
+                )
         {
             Parent.CalculateDescriptor();
             Parent.CalculateValue();
@@ -466,11 +472,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             Parent.CalculateValue();
         }
 
-        if (Parent.Parent?.IsValueExtrapolated is true)
+        if (Parent.Parent?.IsValueExtrapolated is not true)
         {
-            Parent.CalculateDescriptor();
-            Parent.Parent.CalculateValue();
+            return;
         }
+
+        Parent.CalculateDescriptor();
+        Parent.Parent.CalculateValue();
     }
 
     #endregion Constructors
