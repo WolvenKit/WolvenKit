@@ -67,17 +67,23 @@ namespace WolvenKit.Interfaces.Extensions
         }
 
         /// <summary>
-        /// Generates redengine friendly file path. 
+        /// Generates redengine friendly file path.
         /// </summary>
         public static string ToFilePath(this string target) => string.Join(Path.DirectorySeparatorChar,
             target.Split(Path.DirectorySeparatorChar).Select(s => s.ToFileName()));
 
         /// <summary>
-        /// Generates redengine friendly file name 
+        /// Generates redengine friendly file name
         /// </summary>
         public static string ToFileName(this string target) =>
             new string(target.Where(c => !Path.GetInvalidFileNameChars().Contains(c)).ToArray()).Trim()
                 .Replace(" ", "_").ToLower();
+
+        /// <summary>
+        /// Is this a file path without invalid characters?
+        /// </summary>
+        public static bool IsSaneFilePath(this string target) =>
+            target.All(c => !Path.GetInvalidFileNameChars().Contains(c));
 
         /// <summary>
         /// Sanitizes a file path by splitting it into segments and joining them on either a forward or backward slash

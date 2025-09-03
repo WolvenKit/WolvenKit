@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
+using WolvenKit.Interfaces.Extensions;
 using YamlDotNet.Core.Tokens;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
@@ -75,13 +76,13 @@ public partial class ProjectWizardViewModel : DialogViewModel, INotifyDataErrorI
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OkCommand))]
     private string? _projectPath = null!;
-    
+
     [ObservableProperty] private string? _author;
-    
+
     [ObservableProperty] private string? _email;
-    
+
     [ObservableProperty] private string? _version;
-    
+
     [ObservableProperty] private ObservableCollection<string> _projectType = new();
 
     [ObservableProperty] private string? _whyNotCreate;
@@ -142,6 +143,10 @@ public partial class ProjectWizardViewModel : DialogViewModel, INotifyDataErrorI
         {
             AddError(nameof(ProjectName), "A project with this name already exists!");
         }
+        else if (!ProjectName.ToFileName().Equals(ProjectName, StringComparison.OrdinalIgnoreCase))
+        {
+            AddError(nameof(ProjectName), "Project name must not contain special characters or spaces!");
+        }
     }
 
     partial void OnModNameChanged(string? value) => ValidateModName();
@@ -169,6 +174,11 @@ public partial class ProjectWizardViewModel : DialogViewModel, INotifyDataErrorI
         else if (!Directory.Exists(ProjectPath))
         {
             AddError(nameof(ProjectPath), "Selected path does not exist");
+        }
+        else if (!ProjectPath.ToFilePath().Equals(ProjectPath.Replace(" ", "_"), StringComparison.OrdinalIgnoreCase))
+        {
+            // We're grudgingly okay with spaces. We are not okay with special characters.
+            AddError(nameof(ProjectPath), "Please do not use special characters in your project path!");
         }
 
         ValidateProjectName();
