@@ -46,7 +46,8 @@ public class ProjectResourceTools
         ".csv",
         ".json",
         ".anims",
-        ".workspot"
+        ".workspot",
+        ".inkcharcustomization"
     ];
 
     /// <summary>
@@ -663,11 +664,12 @@ public class ProjectResourceTools
                         }
 
                         var oldPathStr = activeProject.GetResourcePathFromRoot(oldAbsPath).GetResolvedText()
-                            ?.SanitizeFilePath();
+                            ?.SanitizeFilePath(true);
                         var newPathStr = activeProject.GetResourcePathFromRoot(newAbsPath).GetResolvedText()?
                             .SanitizeFilePath();
 
-                        if (string.IsNullOrEmpty(oldPathStr) || string.IsNullOrEmpty(newPathStr))
+                        if (string.IsNullOrEmpty(oldPathStr) || string.IsNullOrEmpty(newPathStr) ||
+                            oldPathStr == newPathStr)
                         {
                             continue;
                         }
