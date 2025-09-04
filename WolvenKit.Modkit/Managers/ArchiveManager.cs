@@ -34,14 +34,14 @@ namespace WolvenKit.RED4.CR2W.Archive
             _logger = logger;
             _progressService = progressService;
         }
-        
+
         #region Fields
 
         private readonly IHashService _hashService;
         private readonly Red4ParserService _wolvenkitFileService;
         private readonly ILoggerService _logger;
         private readonly IProgressService<double> _progressService;
-        
+
         [ObservableProperty] private bool _isManagerLoading;
         [ObservableProperty] private bool _isManagerLoaded;
 
@@ -115,8 +115,8 @@ namespace WolvenKit.RED4.CR2W.Archive
 
             IsInitialized = true;
         }
-        
-        
+
+
         /// <summary>
         /// Load every non-mod bundle it can find in ..\..\content and ..\..\DLC
         /// </summary>
@@ -307,7 +307,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             }
 
             ignoredArchives ??= [];
-            
+
             IsManagerLoading = true;
             _progressService.IsIndeterminate = true;
 
@@ -322,7 +322,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             var redModModsJson = Path.Combine(di.Parent.Parent.FullName, "r6", "cache", "modded", "mods.json");
             var legacyModlistTxt = Path.Combine(legacyModPath, "modlist.txt");
 
-            
+
             var redModFiles = new List<string>();
             var legacyFiles = new List<string>();
 
@@ -438,10 +438,10 @@ namespace WolvenKit.RED4.CR2W.Archive
             {
                 LoadModArchive(file, analyzeFiles);
                 progress += 1;
-                _progressService.Report(progress / (float)numTotalEntries); 
+                _progressService.Report(progress / (float)numTotalEntries);
             }
 
-            _progressService.Completed(); 
+            _progressService.Completed();
 
             IsManagerLoading = false;
             IsManagerLoaded = true;
@@ -507,7 +507,7 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         #endregion
 
-        public virtual Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles() => 
+        public virtual Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles() =>
             GetGroupedFiles(ArchiveManagerScope.Basegame);
 
         /// <summary>
@@ -517,7 +517,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         public Dictionary<string, IEnumerable<IGameFile>> GetGroupedFiles(ArchiveManagerScope searchScope)
         {
             Dictionary<string, IEnumerable<IGameFile>> ret = [];
-            
+
             // project files
             if (searchScope is ArchiveManagerScope.LocalProject or ArchiveManagerScope.Everywhere && ProjectArchive is not null)
             {
@@ -529,9 +529,9 @@ namespace WolvenKit.RED4.CR2W.Archive
                             x.Scope = ArchiveManagerScope.LocalProject;
                             return x;
                         })
-                    )); 
+                    ));
             }
-            
+
             // base game files
             if (searchScope is ArchiveManagerScope.Basegame or ArchiveManagerScope.Everywhere or ArchiveManagerScope.BasegameAndMods)
             {
@@ -544,7 +544,7 @@ namespace WolvenKit.RED4.CR2W.Archive
                         return x;
                     })));
             }
-            
+
             // mods
             if (searchScope is ArchiveManagerScope.Mods or ArchiveManagerScope.BasegameAndMods or ArchiveManagerScope.Everywhere)
             {
@@ -567,9 +567,9 @@ namespace WolvenKit.RED4.CR2W.Archive
             Lookup((ulong)path, searchScope);
 
         /// <inheritdoc />
-        public Optional<IGameFile> Lookup(ResourcePath path) => Lookup(path, ArchiveManagerScope.Everywhere); 
-        
-        
+        public Optional<IGameFile> Lookup(ResourcePath path) => Lookup(path, ArchiveManagerScope.Everywhere);
+
+
         /// <inheritdoc />
         public Optional<IGameFile> Lookup(ulong hash) => Lookup(hash, ArchiveManagerScope.Everywhere);
 
@@ -577,7 +577,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <inheritdoc />
         public Optional<IGameFile> Lookup(ulong hash, ArchiveManagerScope searchScope)
         {
-            
+
             // Check project archive
             if (searchScope is ArchiveManagerScope.LocalProject or ArchiveManagerScope.Everywhere && ProjectArchive is not null)
             {
@@ -586,7 +586,7 @@ namespace WolvenKit.RED4.CR2W.Archive
                     return Optional<IGameFile>.ToOptional(value);
                 }
             }
-            
+
             if (searchScope is ArchiveManagerScope.Mods or ArchiveManagerScope.BasegameAndMods or ArchiveManagerScope.Everywhere)
             {
                 // first check the mod archives
@@ -644,7 +644,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         public IGameFile? GetGameFile(ResourcePath path, bool includeMods = true, bool includeProject = true)
         {
             var filePath = path.GetResolvedText() ?? "";
-            
+
             // check if the file is in the project archive
             if (includeProject && ProjectArchive != null && ProjectArchive.Files.TryGetValue(path, out var projectFile))
             {
@@ -682,7 +682,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             {
                 baseFile.Scope = ArchiveManagerScope.Basegame;
             }
-            
+
             return baseFile; // this can be null
         }
 
@@ -709,7 +709,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         public IEnumerable<IGameArchive> GetBaseArchives() => Archives.Items.Where(x => x.Source is EArchiveSource.Base);
         public IEnumerable<IGameArchive> GetEp1Archives() => Archives.Items.Where(x => x.Source is EArchiveSource.EP1);
         public IEnumerable<IGameArchive> GetGameArchives() => Archives.Items.Where(x => x.Source is EArchiveSource.EP1 or EArchiveSource.Base);
-            
+
         #endregion methods
     }
 }
