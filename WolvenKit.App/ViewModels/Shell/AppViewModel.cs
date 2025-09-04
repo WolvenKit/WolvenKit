@@ -45,6 +45,7 @@ using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -762,6 +763,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             UpdateTitle();
             _notificationService.Success($"Project {Path.GetFileNameWithoutExtension(location)} loaded!");
+            // https://github.com/WolvenKit/WolvenKit/issues/1962
+            if (!location.IsSaneFilePath())
+            {
+                _notificationService.Warning($"Project path {location} contains invalid characters!");
+            }
+
             OnInitialProjectLoaded?.Invoke(this, EventArgs.Empty);
         }, TaskContinuationOptions.OnlyOnRanToCompletion);
     }
