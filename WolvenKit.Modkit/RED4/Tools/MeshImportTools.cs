@@ -1077,7 +1077,7 @@ namespace WolvenKit.Modkit.RED4
             {
                 if (blob.Header.RenderLODs.Count > info.LODLvl.Distinct().Count())
                 {
-                    blob.Header.RenderLODs = (CArray<CFloat>)blob.Header.RenderLODs.Take(info.LODLvl.Distinct().Count());
+                    blob.Header.RenderLODs = new CArray<CFloat> (blob.Header.RenderLODs.Take(info.LODLvl.Distinct().Count()).ToList());
                 }
 
                 while (blob.Header.RenderLODs.Count < info.LODLvl.Distinct().Count())
@@ -1088,7 +1088,7 @@ namespace WolvenKit.Modkit.RED4
                     }
                     else
                     {
-                        blob.Header.RenderLODs.Add(blob.Header.RenderLODs.Max() + 3f);
+                        blob.Header.RenderLODs.Add(blob.Header.RenderLODs.Max() * 2f);
                     }
                 }
             }
@@ -1096,7 +1096,7 @@ namespace WolvenKit.Modkit.RED4
             {
                 if (cMeshBlob.LodLevelInfo.Count > info.LODLvl.Distinct().Count())
                 {
-                    cMeshBlob.LodLevelInfo = (CArray<CFloat>)cMeshBlob.LodLevelInfo.Take(info.LODLvl.Distinct().Count());
+                    cMeshBlob.LodLevelInfo = new CArray<CFloat> (cMeshBlob.LodLevelInfo.Take(info.LODLvl.Distinct().Count()).ToList());
                 }
 
                 while (cMeshBlob.LodLevelInfo.Count < info.LODLvl.Distinct().Count())
@@ -1107,7 +1107,7 @@ namespace WolvenKit.Modkit.RED4
                     }
                     else
                     {
-                        cMeshBlob.LodLevelInfo.Add(cMeshBlob.LodLevelInfo.Max() + 3f);
+                        cMeshBlob.LodLevelInfo.Add(cMeshBlob.LodLevelInfo.Max() * 2f);
                     }
                 }
             }
