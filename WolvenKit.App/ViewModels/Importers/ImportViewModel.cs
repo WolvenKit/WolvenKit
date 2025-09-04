@@ -42,8 +42,8 @@ public partial class ImportViewModel : AbstractImportExportViewModel
 
     public ImportViewModel(
         AppViewModel appViewModel,
-        IAppArchiveManager archiveManager, 
-        INotificationService notificationService, 
+        IAppArchiveManager archiveManager,
+        INotificationService notificationService,
         ISettingsManager settingsManager,
         ILoggerService loggerService,
         IProjectManager projectManager,
@@ -126,46 +126,55 @@ public partial class ImportViewModel : AbstractImportExportViewModel
         var progress = 0;
         _progressService.Report(0.1);
 
-        var total = 0;
-        var successful = 0;
-
-        //prepare a list of failed items
-        var failedItems = new List<string>();
-
-        var toBeImported = Items
-            .Where(importExportItem => importExportItem.IsChecked ||
-                                       (all && (VisibleItemPaths.Count == 0 || VisibleItemPaths.Contains(importExportItem.BaseFile))))
-            .Where(x => !x.Extension.Equals(ERawFileFormat.wav.ToString()))
+        var importItems = Items
+            .Where(x => x.IsChecked || (all && (VisibleItemPaths.Count == 0 || VisibleItemPaths.Contains(x.BaseFile))))
+            .Where(x => !x.Extension.Equals(nameof(ERawFileFormat.wav)))
             .Cast<ImportableItemViewModel>()
             .ToList();
 
-        total = toBeImported.Count;
-        await Parallel.ForEachAsync(toBeImported, async (item, cancellationToken) =>
+        // Fix https://github.com/WolvenKit/WolvenKit/issues/2343
+        // Group by extension and order based on ImportArgs
+        var importGroups = importItems
+            .GroupBy(x => x.Extension.ToLowerInvariant())
+            .OrderBy(x => x.Key)
+            .ToDictionary(
+                x => x.Key,
+                x => x.OrderBy(GetImportExportProcessingOrder).ToList()
+            );
+
+        var total = importItems.Count;
+        var successful = 0;
+        var failedItems = new List<string>();
+
+        foreach (var importGroup in importGroups)
         {
-            await Application.Current.Dispatcher.InvokeAsync(() => _appViewModel.SaveFile(item.BaseFile));
-            if (await ImportSingleAsync(item, projectArchive))
+            await Parallel.ForEachAsync(importGroup.Value, async (item, _) =>
             {
-                Interlocked.Increment(ref successful);
-            }
-            else
-            {
-                lock (failedItems)
+                await Application.Current.Dispatcher.InvokeAsync(() => _appViewModel.SaveFile(item.BaseFile));
+                if (await ImportSingleAsync(item, projectArchive))
                 {
-                    failedItems.Add(item.BaseFile);
+                    Interlocked.Increment(ref successful);
                 }
-            }
+                else
+                {
+                    lock (failedItems)
+                    {
+                        failedItems.Add(item.BaseFile);
+                    }
+                }
 
-            Interlocked.Increment(ref progress);
-            _progressService.Report(progress / (float)total);
-        });
+                Interlocked.Increment(ref progress);
+                _progressService.Report(progress / (float)total);
+            });
+        }
 
-        await ImportWavs(Items.Where(importExportItem => importExportItem.IsChecked ||
-                                                         (all && (VisibleItemPaths.Count == 0 ||
-                                                                  VisibleItemPaths.Contains(importExportItem.BaseFile))))
-            .Where(x => x.Extension.Equals(ERawFileFormat.wav.ToString()))
+        await ImportWavs(Items.Where(x => x.IsChecked ||
+                                          (all && (VisibleItemPaths.Count == 0 ||
+                                                   VisibleItemPaths.Contains(x.BaseFile))))
+            .Where(x => x.Extension.Equals(nameof(ERawFileFormat.wav)))
             .Select(x => x.BaseFile)
             .ToList()
-            );
+        );
 
         IsProcessing = false;
 
@@ -183,7 +192,7 @@ public partial class ImportViewModel : AbstractImportExportViewModel
         if (failedItems.Count > 0)
         {
             var failedItemsErrorString = $"The following items failed:\n{string.Join("\n", failedItems)}";
-            _notificationService.Error(failedItemsErrorString); //notify once only 
+            _notificationService.Error(failedItemsErrorString); //notify once only
             _loggerService.Error(failedItemsErrorString);
             if (failedItems.Any(s => s.EndsWith(".mesh")))
             {
@@ -253,6 +262,25 @@ public partial class ImportViewModel : AbstractImportExportViewModel
         return false;
     }
 
+    private int GetImportExportProcessingOrder(ImportableItemViewModel item)
+    {
+        if (item.Properties is GltfImportArgs args)
+        {
+            // Import `Mesh` before `Morphtarget` to avoid concurrent file
+            // access.
+            return args.ImportFormat switch
+            {
+                GltfImportAsFormat.Mesh => 0,
+                GltfImportAsFormat.Rig => 0,
+                GltfImportAsFormat.Anims => 0,
+                GltfImportAsFormat.PhysicalScene => 0,
+                GltfImportAsFormat.MeshWithRig => 1,
+                GltfImportAsFormat.Morphtarget => 1,
+                _ => 2,
+            };
+        }
+        return 100;
+    }
 
     protected override async Task LoadFilesAsync()
     {
@@ -385,7 +413,7 @@ public partial class ImportViewModel : AbstractImportExportViewModel
         {
             case nameof(GltfImportArgs.Rig):
                 gltfImportArgs.Rig.Clear();
-                
+
                 var rig = result.Cast<CollectionItemViewModel<FileEntry>>().Select(x => x.Model).FirstOrDefault();
                 if (rig is not null)
                 {
