@@ -72,10 +72,15 @@ namespace WolvenKit.Views.Editors
         {
             var valueString = string.Join(", ", value.OrderBy(ulong.Parse));
             var numericValue = TextToNumber(valueString);
+            var currentValue = (ulong)(CUInt64)RedNumber;
+
+            if (currentValue == numericValue)
+            {
+                return;
+            }
 
             if (ModifierViewStateService.IsShiftBeingHeld)
             {
-                var currentValue = (ulong)(CUInt64)RedNumber;
                 if (numericValue > currentValue || currentValue == 0)
                 {
                     // a box was checked
