@@ -564,7 +564,7 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         /// <inheritdoc />
         public Optional<IGameFile> Lookup(ResourcePath path, ArchiveManagerScope searchScope) =>
-            Lookup(HashHelper.CalculateDepotPathHash(path), searchScope);
+            Lookup((ulong)path, searchScope);
 
         /// <inheritdoc />
         public Optional<IGameFile> Lookup(ResourcePath path) => Lookup(path, ArchiveManagerScope.Everywhere); 
