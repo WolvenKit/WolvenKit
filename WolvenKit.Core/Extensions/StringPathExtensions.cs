@@ -82,8 +82,8 @@ namespace WolvenKit.Interfaces.Extensions
         /// <summary>
         /// Is this a file path without invalid characters?
         /// </summary>
-        public static bool IsSaneFilePath(this string target) => target.All(c =>
-            c == ':' || c == Path.DirectorySeparatorChar || !Path.GetInvalidFileNameChars().Contains(c));
+        public static bool IsSaneFilePath(this string target) =>
+            target.All(c => !Path.GetInvalidPathChars().Contains(c));
 
         /// <summary>
         /// Sanitizes a file path by splitting it into segments and joining them on either a forward or backward slash
