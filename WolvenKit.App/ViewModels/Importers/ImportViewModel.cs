@@ -42,8 +42,8 @@ public partial class ImportViewModel : AbstractImportExportViewModel
 
     public ImportViewModel(
         AppViewModel appViewModel,
-        IAppArchiveManager archiveManager, 
-        INotificationService notificationService, 
+        IAppArchiveManager archiveManager,
+        INotificationService notificationService,
         ISettingsManager settingsManager,
         ILoggerService loggerService,
         IProjectManager projectManager,
@@ -168,13 +168,13 @@ public partial class ImportViewModel : AbstractImportExportViewModel
             });
         }
 
-        await ImportWavs(Items.Where(importExportItem => importExportItem.IsChecked ||
-                                                         (all && (VisibleItemPaths.Count == 0 ||
-                                                                  VisibleItemPaths.Contains(importExportItem.BaseFile))))
-            .Where(x => x.Extension.Equals(ERawFileFormat.wav.ToString()))
+        await ImportWavs(Items.Where(x => x.IsChecked ||
+                                          (all && (VisibleItemPaths.Count == 0 ||
+                                                   VisibleItemPaths.Contains(x.BaseFile))))
+            .Where(x => x.Extension.Equals(nameof(ERawFileFormat.wav)))
             .Select(x => x.BaseFile)
             .ToList()
-            );
+        );
 
         IsProcessing = false;
 
@@ -192,7 +192,7 @@ public partial class ImportViewModel : AbstractImportExportViewModel
         if (failedItems.Count > 0)
         {
             var failedItemsErrorString = $"The following items failed:\n{string.Join("\n", failedItems)}";
-            _notificationService.Error(failedItemsErrorString); //notify once only 
+            _notificationService.Error(failedItemsErrorString); //notify once only
             _loggerService.Error(failedItemsErrorString);
             if (failedItems.Any(s => s.EndsWith(".mesh")))
             {
@@ -413,7 +413,7 @@ public partial class ImportViewModel : AbstractImportExportViewModel
         {
             case nameof(GltfImportArgs.Rig):
                 gltfImportArgs.Rig.Clear();
-                
+
                 var rig = result.Cast<CollectionItemViewModel<FileEntry>>().Select(x => x.Model).FirstOrDefault();
                 if (rig is not null)
                 {
