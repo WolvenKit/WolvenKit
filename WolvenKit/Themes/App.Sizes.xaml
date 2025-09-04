@@ -120,6 +120,8 @@
     <Thickness x:Key="WolvenKitHomeSharedPaddingLeft">10,0,0,0</Thickness>
 
     <!-- WelcomePageView -->
+    <system:Double x:Key="WolvenKitWelcomeLogoMaxHeight">150</system:Double>
+    <system:Double x:Key="WolvenKitWelcomeLeftMinWidth">315</system:Double>
     <GridLength x:Key="WolvenKitWelcomeRightLength">380</GridLength>
     <system:Double x:Key="WolvenKitWelcomeOrderWidth">140</system:Double>
     <GridLength x:Key="WolvenKitWelcomeCardSammyWidth">70</GridLength>
@@ -134,6 +136,8 @@
     <system:Double x:Key="WolvenKitWelcomeStackHeight">70</system:Double>
     <Thickness x:Key="WolvenKitWelcomeStackMargin">0,4,50,0</Thickness>
     <system:Double x:Key="WolvenKitWelcomeSocialButtonHeight">50</system:Double>
+
+    <system:Double x:Key="WolvenKitWelcomeBreakWidth">1250</system:Double>
 
     <!-- SettingsPageView -->
     <GridLength x:Key="WolvenKitSettingsGridLabelWidth">200</GridLength>
