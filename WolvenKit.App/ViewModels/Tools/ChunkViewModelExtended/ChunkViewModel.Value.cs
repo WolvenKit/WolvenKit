@@ -407,6 +407,11 @@ public partial class ChunkViewModel
 
                 break;
 
+            case appearancePartComponentOverrides compOverride
+                when compOverride.MeshAppearance.GetResolvedText() is string s:
+                Value = s == "default" ? string.Empty : s;
+                IsValueExtrapolated = Value != string.Empty;
+                break;
             case meshMeshAppearance { ChunkMaterials: not null } appearance:
                 Value = string.Join(", ", appearance.ChunkMaterials);
                 Value = $"[{appearance.ChunkMaterials.Count}] {Value}";
