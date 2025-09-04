@@ -66,7 +66,7 @@ namespace WolvenKit.Views.Editors
             s_validCharactersRegex(),
             s_placeholderRegex(),
             s_dynamicVariantRegex()
-        ]; 
+        ];
 
         private void RecalculateValidityAndTooltip()
         {
@@ -82,10 +82,12 @@ namespace WolvenKit.Views.Editors
                 hasError = true;
                 TextBoxToolTip = $"Invalid dynamic appearance condition! {invalidConditions}";
             }
-            else if (!s_regularExpressions.Any(r => r.IsMatch(Text)))
+            else if (!s_regularExpressions.Any(r => r.IsMatch(Text)) &&
+                     App.Helpers.ArchiveXlHelper.GetFirstExistingPath(Text) is null) // allow depot paths
             {
                 hasWarning = true;
-                TextBoxToolTip = $"'{Text}' contains invalid characters, or leading/trailing spaces! (Ignore this if everything works)";
+                TextBoxToolTip =
+                    $"'{Text}' contains invalid characters, leading/trailing spaces, or points at an invalid resource! (Ignore this if everything works)";
             }
             else
             {
@@ -111,7 +113,7 @@ namespace WolvenKit.Views.Editors
             }
             OnPropertyChanged(nameof(TextBoxToolTip));
         }
-       
+
         public CName RedString
         {
             get => (CName)GetValue(RedStringProperty);
