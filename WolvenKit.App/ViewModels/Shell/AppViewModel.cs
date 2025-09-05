@@ -307,10 +307,13 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             ShowHomePageSync();
         }
 
+        #if !DEBUG
         if (SettingsManager.AutoUpdateOnStartup)
         {
             CheckForUpdatesCommand.SafeExecute(true);
         }
+        #endif
+
         CheckForScriptUpdatesCommand.SafeExecute();
         CheckForLongPathSupport();
         CheckForOneDrivePath();
