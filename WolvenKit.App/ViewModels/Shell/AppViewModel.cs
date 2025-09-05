@@ -2471,6 +2471,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         resources["WolvenKitHomeSharedPaddingLeft"] = new Thickness(10, 0, 0, 0).Mul(_uiScalePercentage).Round();
 
         // WelcomePageView
+        resources["WolvenKitWelcomeLogoMaxHeight"] = Math.Round(150 * _uiScalePercentage);
+        resources["WolvenKitWelcomeLeftMinWidth"] = Math.Round(315 * _uiScalePercentage);
         resources["WolvenKitWelcomeRightLength"] = new GridLength(380).Mul(_uiScalePercentage).Round();
         resources["WolvenKitWelcomeOrderWidth"] = Math.Round(140 * _uiScalePercentage);
         resources["WolvenKitWelcomeCardSammyWidth"] = new GridLength(70).Mul(_uiScalePercentage).Round();
@@ -2485,6 +2487,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         resources["WolvenKitWelcomeStackHeight"] = Math.Round(70 * _uiScalePercentage);
         resources["WolvenKitWelcomeStackMargin"] = new Thickness(0, 4, 50, 0).Mul(_uiScalePercentage).Round();
         resources["WolvenKitWelcomeSocialButtonHeight"] = Math.Round(50 * _uiScalePercentage);
+
+        resources["WolvenKitWelcomeBreakWidth"] = Math.Round(1250 * _uiScalePercentage);
 
         // SettingsPageView
         resources["WolvenKitSettingsGridLabelWidth"] = new GridLength(200).Mul(_uiScalePercentage).Round();
