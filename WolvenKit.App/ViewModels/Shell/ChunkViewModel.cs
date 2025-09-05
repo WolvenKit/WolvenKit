@@ -86,6 +86,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     private readonly RDTDataViewModel? _tab;
 
     private Flags? _flags;
+    private Type? _displayAsEnumType;
 
     private int _propertyCountCache = -1;
 
@@ -695,6 +696,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             if (type == typeof(RedDummy) || type == propInfo.Type)
             {
                 _flags = propInfo.Flags;
+                _displayAsEnumType = propInfo.DisplayEnumType;
                 type = propInfo.Type;
             }
 
@@ -745,6 +747,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     }
 
     public Flags? Flags => _flags?.Clone();
+
+    // Used for properties that are stored as integer-types but represent enum data
+    // Defined with the DisplayAsEnum attribute
+    public Type? DisplayAsEnumType => _displayAsEnumType;
 
     public string Type
     {

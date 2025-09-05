@@ -45,7 +45,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
-		[RED("vertexFactory")] 
+		[RED("vertexFactory")]
+		[DisplayAsEnum<EMaterialVertexFactory>]
 		public CUInt8 VertexFactory
 		{
 			get => GetPropertyValue<CUInt8>();
