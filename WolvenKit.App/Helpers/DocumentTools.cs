@@ -11,8 +11,10 @@ using WolvenKit.RED4.Types;
 using System.Threading.Tasks;
 using System;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes;
 using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.Modkit.Scripting;
+using CollectionExtensions = HelixToolkit.SharpDX.Core.CollectionExtensions;
 
 
 namespace WolvenKit.App.Helpers;
@@ -115,6 +117,7 @@ public class DocumentTools
         {
             _frequencyMap[newFreq] = new HashSet<(string filePath, string filter)>();
         }
+
         _frequencyMap[newFreq].Add(key);
         _keyFrequency[key] = newFreq;
     }
@@ -133,6 +136,7 @@ public class DocumentTools
                         _frequencyMap.Remove(freq);
                     }
                 }
+
                 _keyFrequency.Remove(key);
             }
         }
@@ -160,6 +164,7 @@ public class DocumentTools
         {
             return;
         }
+
         _lastCleanupTime = now;
 
         var expiredKeys = _filteredResultsCache
@@ -176,7 +181,8 @@ public class DocumentTools
 
     #region journalFile
 
-    public async Task<List<string>> GetAllJournalPathsAsync(bool forceCacheRefresh, string? filter = null, bool sortAndDistinct = true)
+    public async Task<List<string>> GetAllJournalPathsAsync(bool forceCacheRefresh, string? filter = null,
+        bool sortAndDistinct = true)
     {
         if (_projectManager.ActiveProject is not { } activeProject)
             return [];
@@ -193,8 +199,8 @@ public class DocumentTools
                 {
                     RemoveFromCache(key);
                 }
-
             }
+
             // Remove all filtered cache entries for the current filter value
             if (!string.IsNullOrEmpty(filter))
             {
@@ -226,6 +232,7 @@ public class DocumentTools
         {
             allIds = allIds.Distinct().OrderBy(x => x);
         }
+
         return allIds.ToList();
     }
 
@@ -252,6 +259,7 @@ public class DocumentTools
         {
             _frequencyMap[1] = new HashSet<(string filePath, string filter)>();
         }
+
         _frequencyMap[1].Add(filterKey);
 
         if (_filteredResultsCache.Count > FilteredCacheLimit)
@@ -278,7 +286,8 @@ public class DocumentTools
         return entriesIDs;
     }
 
-    private Task ProcessEntries(IList<CHandle<gameJournalEntry>> entries, List<string> results, string currentPath, string filterStr)
+    private Task ProcessEntries(IList<CHandle<gameJournalEntry>> entries, List<string> results, string currentPath,
+        string filterStr)
     {
         if (entries.Count == 0) return Task.CompletedTask;
 
@@ -306,6 +315,7 @@ public class DocumentTools
                 }
             }
         }
+
         return Task.CompletedTask;
     }
 
@@ -335,7 +345,8 @@ public class DocumentTools
         }
     }
 
-    private void ProcessContainerChildren(IList<CHandle<gameJournalEntry>> entries, string parentPath, string filterStr, object results)
+    private void ProcessContainerChildren(IList<CHandle<gameJournalEntry>> entries, string parentPath, string filterStr,
+        object results)
     {
         var stack = new Stack<(IList<CHandle<gameJournalEntry>>, string)>();
         stack.Push((entries, parentPath));
@@ -384,7 +395,7 @@ public class DocumentTools
 
     public static List<string> GetAllComponentNames(List<appearanceAppearanceDefinition> appearances) => appearances
         .SelectMany(app => app.Components)
-            .Select(c => c.Name.GetResolvedText() ?? "").Where(c => !string.IsNullOrEmpty(c)).Distinct().ToList();
+        .Select(c => c.Name.GetResolvedText() ?? "").Where(c => !string.IsNullOrEmpty(c)).Distinct().ToList();
 
     public List<string> ConnectAppToEntFile(string absoluteAppFilePath, string absoluteEntFilePath,
         bool clearExistingEntries = false)
@@ -542,21 +553,17 @@ public class DocumentTools
 
     private static readonly Dictionary<string, List<string>> s_meshAppearancesByPath = [];
 
+    public List<string> GetAppearanceNamesFromMesh(ResourcePath? relativeMeshResourcePath, bool refreshCache) =>
+        GetAppearanceNamesFromMeshString(relativeMeshResourcePath?.GetResolvedText() ?? "", refreshCache);
 
-    public List<string> GetAppearanceNamesFromMesh(ResourcePath? relativeMeshResourcePath, bool refreshCache)
+    public List<string> GetAppearanceNamesFromMeshString(string relativeMeshFilePath, bool refreshCache)
     {
-        if (relativeMeshResourcePath?.GetResolvedText() is not string relativeMeshFilePath ||
-            _projectManager.ActiveProject is not { } activeProject)
+        if (string.IsNullOrEmpty(relativeMeshFilePath) || _projectManager.ActiveProject is not { } activeProject)
         {
             return [];
         }
 
-        if (refreshCache)
-        {
-            s_meshAppearancesByPath.Remove(relativeMeshFilePath);
-        }
-
-        if (s_meshAppearancesByPath.TryGetValue(relativeMeshFilePath, out var cachedList))
+        if (s_meshAppearancesByPath.TryGetValue(relativeMeshFilePath, out var cachedList) && !refreshCache)
         {
             return cachedList;
         }
@@ -566,6 +573,9 @@ public class DocumentTools
         {
             return [];
         }
+
+        // We're recalculating
+        s_meshAppearancesByPath.Remove(relativeMeshFilePath);
 
         List<string> meshAppearances = [];
 
@@ -577,31 +587,52 @@ public class DocumentTools
             }
 
             s_meshAppearancesByPath.Add(relativeMeshFilePath, meshAppearances);
-            return meshAppearances;
         }
-
-        var meshFile = _archiveManager.GetGameFile(relativeMeshFilePath);
-
-        if (meshFile is null)
+        else
         {
-            s_meshAppearancesByPath.Add(relativeMeshFilePath, meshAppearances);
-            return meshAppearances;
+            var meshFile = _archiveManager.GetGameFile(relativeMeshFilePath);
+
+            if (meshFile is null)
+            {
+                s_meshAppearancesByPath.Add(relativeMeshFilePath, meshAppearances);
+                return meshAppearances;
+            }
+
+            if (meshAppearances.Count > 0)
+            {
+                return meshAppearances;
+            }
+
+
+            switch (meshFile.Scope)
+            {
+                case ArchiveManagerScope.Mods:
+                    meshAppearances = GetAppearanceNamesFromMesh(_archiveManager.GetCR2WFile(meshFile.FileName));
+                    break;
+                case ArchiveManagerScope.Basegame:
+                    meshAppearances = GetAppearanceNamesFromMesh(_archiveManager.GetCR2WFile(meshFile.FileName, false));
+                    break;
+                default:
+                    break;
+            }
         }
 
-        switch (meshFile.Scope)
+        // Support ArchiveXL resource patching
+        if (meshAppearances.Count == 0)
         {
-            case ArchiveManagerScope.Mods:
-                meshAppearances = GetAppearanceNamesFromMesh(_archiveManager.GetCR2WFile(meshFile.FileName));
-                break;
-            case ArchiveManagerScope.Basegame:
-                meshAppearances = GetAppearanceNamesFromMesh(_archiveManager.GetCR2WFile(meshFile.FileName, false));
-                break;
-            default:
-                break;
+            FindPatchMeshPaths(relativeMeshFilePath).ForEach(patchFile =>
+            {
+                var patchMeshAppearances = GetAppearanceNamesFromMeshString(patchFile, refreshCache);
+                meshAppearances.AddRange(patchMeshAppearances);
+            });
         }
 
-        s_meshAppearancesByPath.Add(relativeMeshFilePath, meshAppearances);
-        return meshAppearances;
+        if (!s_meshAppearancesByPath.TryAdd(relativeMeshFilePath, meshAppearances) && meshAppearances.Count > 0)
+        {
+            s_meshAppearancesByPath[relativeMeshFilePath].AddRange(meshAppearances);
+        }
+
+        return meshAppearances.Distinct().Order().ToList();
     }
 
     private List<string> GetAppearanceNamesFromMesh(CR2WFile? cr2W)
@@ -713,7 +744,6 @@ public class DocumentTools
 
                 animationsWritten = true;
             }
-
         }
 
         if (!facialAnimWritten && !facialGraphWritten && !animationsWritten)
@@ -742,6 +772,7 @@ public class DocumentTools
     # endregion
 
     # region cvmDropdown
+
     private static readonly List<string> s_materialShaders = [];
 
     private static readonly List<string> s_multilayerMaterials = [];
@@ -970,14 +1001,29 @@ public class DocumentTools
             .ToList();
     }
 
+
+    private static readonly Dictionary<string, List<string>> s_patchMeshPathCache = [];
+
+
     /// <summary>
     /// Returns a list of absolute paths to .xl files patching the current mesh.
     /// If no project files are found, it will search in the base game installation folder.
     /// </summary>
     /// <param name="pathToPatch"></param>
+    /// <param name="clearCache"></param>
     /// <returns></returns>
-    public List<string> FindPatchFilePaths(string pathToPatch)
+    public List<string> FindPatchFilePaths(string pathToPatch, bool clearCache = false)
     {
+        if (clearCache)
+        {
+            s_patchMeshPathCache.Clear();
+        }
+
+        if (s_patchMeshPathCache.TryGetValue(pathToPatch, out var cachedList))
+        {
+            return cachedList;
+        }
+
         List<string> ret = [];
 
         if (_projectManager.ActiveProject is { } activeProject)
@@ -1033,6 +1079,9 @@ public class DocumentTools
             ret.Add(absolutePath);
         });
 
+        ret = ret.Distinct().ToList();
+
+        s_patchMeshPathCache.TryAdd(pathToPatch, ret);
 
         return ret;
     }
@@ -1071,8 +1120,7 @@ public class DocumentTools
             }
         }
 
-
-        return ret;
+        return ret.Distinct().ToList();
     }
 
     public void ClearMeshMaterials(CR2WFile? meshCr2W)
@@ -1141,6 +1189,7 @@ public class DocumentTools
         {
             materialEntries.Add(destMesh.MaterialEntries[i]);
         }
+
         for (var i = 0; i < sourceMesh.MaterialEntries.Count; i++)
         {
             materialEntries.Add(sourceMesh.MaterialEntries[i]);
@@ -1163,6 +1212,7 @@ public class DocumentTools
                 externalMaterialIndex += 1;
             }
         }
+
         wasChanged = wasChanged || destMesh.MaterialEntries.Count != materialEntries.Count;
         destMesh.MaterialEntries = materialEntries;
 
@@ -1234,6 +1284,7 @@ public class DocumentTools
         {
             return true;
         }
+
         if (_projectManager.ActiveProject is not { } activeProject)
         {
             return false;
@@ -1267,6 +1318,7 @@ public class DocumentTools
             _loggerService.Error($"Failed writing changes to {destPath}");
             return false;
         }
+
         if (meshPaths.Count == 1)
         {
             _loggerService.Success($"Copied materials from {meshPaths[0]}");
@@ -1275,6 +1327,7 @@ public class DocumentTools
         {
             _loggerService.Success($"Copied materials from the following files: \n\t {string.Join("\n\t", meshPaths)}");
         }
+
         return true;
     }
 
