@@ -7,6 +7,7 @@ using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
+using WolvenKit.App.Helpers;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.CR2W;
@@ -24,7 +25,7 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
     protected readonly RedBaseClass? _data;
 
     protected readonly RedImage? _redImage;
-    
+
     public delegate void RenderDelegate();
     public RenderDelegate Render;
 
@@ -45,6 +46,13 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
                 try
                 {
                     _redImage = RedImage.FromRedClass(data);
+                }
+                catch (NotImplementedException)
+                {
+                    Image = ImageDecoder.LoadBitmapFromResource("Resources/Media/Images/Placeholders/Error_ImageFormat.png");
+                    IsRendered = true;
+
+                    _loggerService.Error($"Format of the image is invalid or unsupported.");
                 }
                 catch (Exception)
                 {
@@ -91,7 +99,7 @@ public partial class RDTTextureViewModel : RedDocumentTabViewModel
         IsRendered = true;
     }
 
-    private bool IsLut() => 
+    private bool IsLut() =>
         CanReplaceTexture() &&
         _data is CBitmapTexture bitmapTexture &&
         bitmapTexture.Setup.Group == GpuWrapApieTextureGroup.TEXG_Generic_LUT;
