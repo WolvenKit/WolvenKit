@@ -1161,7 +1161,7 @@ public class DocumentTools
             return wasChanged;
         }
 
-        var hasMaterials = sourceMesh.Appearances.Count > 0 && sourceMesh.MaterialEntries.Count > 0;
+        var hasMaterials = sourceMesh.MaterialEntries.Count > 0;
 
         if (!hasMaterials)
         {
