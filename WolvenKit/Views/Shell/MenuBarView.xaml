@@ -9,13 +9,15 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:shell="clr-namespace:WolvenKit.App.ViewModels.Shell;assembly=WolvenKit.App"
     xmlns:local="clr-namespace:WolvenKit.Views.Templates"
-    mc:Ignorable="d">
+    xmlns:core="clr-namespace:WolvenKit.Core;assembly=WolvenKit.Core"
+    mc:Ignorable="d"
+    DataContext="{Binding ViewModel,
+                          RelativeSource={RelativeSource Self}}">
     <UserControl.Resources>
         <ResourceDictionary>
             <Style TargetType="{x:Type local:IconBox}">
                 <Setter Property="Foreground" Value="{StaticResource WolvenKitLabelBrush}" />
                 <Setter Property="Opacity" Value="1.0" />
-
                 <Style.Triggers>
                     <DataTrigger
                         Binding="{Binding Path=IsEnabled,
@@ -846,9 +848,10 @@
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
                 Header="Help">
                 <MenuItem
-                    x:Name="MenuItemWolvenKitSetupLink"
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
-                    Header="Setting up WolvenKit">
+                    Header="Setting up WolvenKit"
+                    Command="{Binding MainViewModel.OpenExternalLinkCommand}"
+                    CommandParameter="{x:Static core:WikiLinks.WolvenKitSetupGuide}">
                     <MenuItem.Icon>
                         <local:IconBox
                             IconPack="Codicons"
@@ -869,8 +872,9 @@
                     </MenuItem.Icon>
 
                     <MenuItem
-                        x:Name="MenuItemWolvenKitCreatingAModLink"
-                        Header="Wolvenkit: Creating a Mod">
+                        Header="Wolvenkit: Creating a Mod"
+                        Command="{Binding MainViewModel.OpenExternalLinkCommand}"
+                        CommandParameter="{x:Static core:WikiLinks.WolvenKitCreatingAModGuide}">
                         <MenuItem.Icon>
                             <local:IconBox
                                 IconPack="Codicons"
@@ -889,8 +893,9 @@
                         </MenuItem.Icon>
 
                         <MenuItem
-                            x:Name="MenuItemCreateNewClothingItemsLink"
-                            Header="Adding new clothes">
+                            Header="Adding new clothes"
+                            Command="{Binding MainViewModel.OpenExternalLinkCommand}"
+                            CommandParameter="{x:Static core:WikiLinks.AddingNewItems}">
                             <MenuItem.Icon>
                                 <local:IconBox
                                     IconPack="Material"
@@ -899,8 +904,9 @@
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem
-                            x:Name="MenuItemCreateNewWeaponsLink"
-                            Header="Adding new weapons">
+                            Header="Adding new weapons"
+                            Command="{Binding MainViewModel.OpenExternalLinkCommand}"
+                            CommandParameter="{x:Static core:WikiLinks.AddingNewItems_Weapons}">
                             <MenuItem.Icon>
                                 <local:IconBox
                                     IconPack="Material"
@@ -919,7 +925,8 @@
                                 Size="{DynamicResource WolvenKitIconTiny}" />
                         </MenuItem.Icon>
                         <MenuItem
-                            x:Name="MenuItemAddNpvLink"
+                            Command="{Binding MainViewModel.OpenExternalLinkCommand}"
+                            CommandParameter="{x:Static core:WikiLinks.NPVs}"
                             Header="V as NPC">
                             <MenuItem.Icon>
                                 <local:IconBox
@@ -930,8 +937,9 @@
                         </MenuItem>
 
                         <MenuItem
-                            x:Name="MenuItemAddNpcLink"
-                            Header="New NPCs for AMM">
+                            Header="New NPCs for AMM"
+                            Command="{Binding MainViewModel.OpenExternalLinkCommand}"
+                            CommandParameter="{x:Static core:WikiLinks.AMM_NPCs}">
                             <MenuItem.Icon>
                                 <local:IconBox
                                     IconPack="Material"
@@ -941,8 +949,9 @@
                         </MenuItem>
 
                         <MenuItem
-                            x:Name="MenuItemCustomTattoosLink"
-                            Header="Custom Tattoos">
+                            Header="Custom Tattoos"
+                            Command="{Binding MainViewModel.OpenExternalLinkCommand}"
+                            CommandParameter="{x:Static core:WikiLinks.Tattoos}">
                             <MenuItem.Icon>
                                 <local:IconBox
                                     IconPack="Material"
@@ -952,8 +961,9 @@
                         </MenuItem>
 
                         <MenuItem
-                            x:Name="MenuItemHairLink"
-                            Header="Hair">
+                            Header="Hair"
+                            Command="{Binding MainViewModel.OpenExternalLinkCommand}"
+                            CommandParameter="{x:Static core:WikiLinks.Hair}">
                             <MenuItem.Icon>
                                 <local:IconBox
                                     IconPack="Material"
@@ -963,8 +973,9 @@
                         </MenuItem>
 
                         <MenuItem
-                            x:Name="MenuItemCCXLLink"
-                            Header="Character Creator Additions">
+                            Header="Character Creator Additions"
+                            Command="{Binding MainViewModel.OpenExternalLinkCommand}"
+                            CommandParameter="{x:Static core:WikiLinks.CCXL}">
                             <MenuItem.Icon>
                                 <local:IconBox
                                     IconPack="Material"
@@ -975,8 +986,9 @@
                     </MenuItem>
 
                     <MenuItem
-                        x:Name="MenuItemWorldBuildingLink"
-                        Header="Changing the world">
+                        Header="Changing the world"
+                        Command="{Binding MainViewModel.OpenExternalLinkCommand}"
+                        CommandParameter="{x:Static core:WikiLinks.WorldEditing}">
                         <MenuItem.Icon>
                             <local:IconBox
                                 IconPack="Material"
@@ -988,8 +1000,9 @@
                     <Separator />
 
                     <MenuItem
-                        x:Name="MenuItemCheatSheetLink"
-                        Header="Cheat Sheets">
+                        Header="Cheat Sheets"
+                        Command="{Binding MainViewModel.OpenExternalLinkCommand}"
+                        CommandParameter="{x:Static core:WikiLinks.CheatSheets}">
                         <MenuItem.Icon>
                             <local:IconBox
                                 IconPack="Material"
@@ -1003,9 +1016,9 @@
                 <Separator />
 
                 <MenuItem
-                    x:Name="MenuItemDiscordInvitationLink"
-                    Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
-                    Header="Discord Invitation">
+                    Header="Discord Invitation"
+                    Command="{Binding MainViewModel.OpenExternalLinkCommand}"
+                    CommandParameter="{x:Static core:WikiLinks.DiscordInvite}">
                     <MenuItem.Icon>
                         <local:IconBox
                             IconPack="Codicons"
@@ -1015,8 +1028,8 @@
                 </MenuItem>
 
                 <MenuItem
-                    x:Name="MenuItemAboutWolvenKitLink"
-                    Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                    Command="{Binding MainViewModel.OpenExternalLinkCommand}"
+                    CommandParameter="{x:Static core:WikiLinks.WolvenkitAbout}"
                     Header="About WolvenKit">
                     <MenuItem.Icon>
                         <local:IconBox
