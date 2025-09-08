@@ -273,7 +273,7 @@ public class ProjectResourceTools
             return;
         }
 
-        var refPathHash = (ulong)resourcePath;
+        var refPathHash = resourcePath.GetRedHash();
         // we can't add it
         if (refPathHash is 0 || GetRed4Controller() is not RED4Controller controller)
         {
@@ -308,7 +308,7 @@ public class ProjectResourceTools
             return;
         }
 
-        var refPathHash = (ulong)resourcePath;
+        var refPathHash = resourcePath.GetRedHash();
 
         // we can't add it
         if (refPathHash is 0 || GetRed4Controller() is not RED4Controller controller)
