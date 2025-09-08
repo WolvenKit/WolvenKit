@@ -2,14 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using WolvenKit.App.Extensions;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.Docking;
 using WolvenKit.App.Services;
@@ -305,17 +304,28 @@ public partial class PropertiesViewModel : ToolViewModel
 
     public void SetupImage(RedBaseClass cls)
     {
-        var image = RedImage.FromRedClass(cls);
+        try
+        {
+            var image = RedImage.FromRedClass(cls);
 
-        var bitmapImage = new BitmapImage();
-        bitmapImage.BeginInit();
-        bitmapImage.StreamSource = new MemoryStream(image.GetPreview(true));
-        bitmapImage.EndInit();
+            var bitmapImage = new BitmapImage();
+            bitmapImage.BeginInit();
+            bitmapImage.StreamSource = new MemoryStream(image.GetPreview(true));
+            bitmapImage.EndInit();
 
-        LoadedBitmapFrame = bitmapImage;
+            LoadedBitmapFrame = bitmapImage;
 
-        IsImagePreviewVisible = true;
-        SelectedIndex = 3;
+            IsImagePreviewVisible = true;
+            SelectedIndex = 3;
+        }
+        catch (NotImplementedException)
+        {
+            LoadedBitmapFrame = ImageDecoder.LoadBitmapFromResource("Resources/Media/Images/Placeholders/Error_ImageFormat.png");
+            IsImagePreviewVisible = true;
+            SelectedIndex = 3;
+
+            _loggerService.Error("Format of the image is invalid or unsupported.");
+        }
     }
 
     public void SetupRawImage(string fileName, EUncookExtension ext)
