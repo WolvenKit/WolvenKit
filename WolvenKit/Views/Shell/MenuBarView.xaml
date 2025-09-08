@@ -13,6 +13,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <Style TargetType="{x:Type local:IconBox}">
+                <Setter Property="Foreground" Value="{StaticResource WolvenKitLabelBrush}" />
                 <Setter Property="Opacity" Value="1.0" />
 
                 <Style.Triggers>
@@ -23,6 +24,23 @@
                         <Setter Property="Opacity" Value="0.5" />
                     </DataTrigger>
                 </Style.Triggers>
+            </Style>
+
+            <Style TargetType="{x:Type MenuItem}">
+                <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
+
+                <Setter Property="HeaderTemplate">
+                    <Setter.Value>
+                        <DataTemplate>
+                            <TextBlock
+                                Margin="{DynamicResource WolvenKitMarginSmallRight}"
+                                VerticalAlignment="Center"
+                                FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                                Text="{Binding}" />
+                        </DataTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginSmallVertical}" />
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -37,13 +55,11 @@
                 x:Name="HomeButton"
                 Margin="1,0"
                 Padding="12,5"
-                FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="HOME" />
 
             <!-- File -->
             <MenuItem
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
-                FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="File">
                 <MenuItem
                     x:Name="MenuItemNewFile"
@@ -214,7 +230,6 @@
             <!-- Project -->
             <MenuItem
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
-                FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="Project">
 
                 <MenuItem
@@ -361,7 +376,6 @@
             <!-- Build -->
             <MenuItem
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
-                FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="Build">
                 <!-- Pack -->
                 <MenuItem
@@ -516,7 +530,6 @@
             <!-- View -->
             <MenuItem
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
-                FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="View">
                 <MenuItem
                     x:Name="ProjectExplorerCheckbox"
@@ -639,7 +652,6 @@
             <!-- Tools -->
             <MenuItem
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
-                FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="Tools">
                 <MenuItem
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
@@ -741,7 +753,6 @@
             <!-- Game -->
             <MenuItem
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
-                FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="Game">
                 <MenuItem
                     x:Name="ToolbarLaunchButton"
@@ -788,7 +799,6 @@
             <!-- Extensions -->
             <MenuItem
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
-                FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="Extensions">
                 <MenuItem
                     x:Name="MenuItemShowPluginTool"
@@ -834,7 +844,6 @@
             <!-- Help -->
             <MenuItem
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
-                FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="Help">
                 <MenuItem
                     x:Name="MenuItemWolvenKitSetupLink"
@@ -853,6 +862,12 @@
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
                     Header="Creating mods">
 
+                    <MenuItem.Icon>
+                        <local:IconBox
+                            IconPack="Empty"
+                            Size="{DynamicResource WolvenKitIconTiny}" />
+                    </MenuItem.Icon>
+
                     <MenuItem
                         x:Name="MenuItemWolvenKitCreatingAModLink"
                         Header="Wolvenkit: Creating a Mod">
@@ -866,6 +881,12 @@
 
                     <!-- Submenu: Adding new items -->
                     <MenuItem Header="Adding new items">
+
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="Empty"
+                                Size="{DynamicResource WolvenKitIconTiny}" />
+                        </MenuItem.Icon>
 
                         <MenuItem
                             x:Name="MenuItemCreateNewClothingItemsLink"
@@ -892,6 +913,11 @@
                     <!-- Submenu: NPCs and V -->
                     <MenuItem Header="NPCs and V">
 
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="Empty"
+                                Size="{DynamicResource WolvenKitIconTiny}" />
+                        </MenuItem.Icon>
                         <MenuItem
                             x:Name="MenuItemAddNpvLink"
                             Header="V as NPC">
