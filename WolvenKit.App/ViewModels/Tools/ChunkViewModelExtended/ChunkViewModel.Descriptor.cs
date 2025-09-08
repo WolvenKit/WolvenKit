@@ -89,7 +89,7 @@ public partial class ChunkViewModel
                 return false;
         }
     }
-    
+
     public void CalculateDescriptor()
     {
         Descriptor = "";
@@ -100,13 +100,12 @@ public partial class ChunkViewModel
             case null:
             case RedDummy:
                 return;
-            
+
             case scnPlaySkAnimEvent playSkAnimEvent:
             {
                 var startTime = $"[{playSkAnimEvent.StartTime}ms] ";
                 var animDetails = "";
-                
-                if (playSkAnimEvent.AnimName?.GetValue() is scnAnimName animName && 
+ if (playSkAnimEvent.AnimName?.GetValue() is scnAnimName animName &&
                     animName.Unk1 is not null && animName.Unk1.Count > 0)
                 {
                     var unk1Details = string.Join(", ", animName.Unk1.Select(u => (string?)u ?? "").Take(3));
@@ -115,7 +114,7 @@ public partial class ChunkViewModel
                         animDetails = $" - {unk1Details}";
                     }
                 }
-                
+
                 Descriptor = $"{startTime}scnPlaySkAnimEvent{animDetails}";
                 return;
             }
@@ -124,7 +123,7 @@ public partial class ChunkViewModel
                 var startTime = $"[{audioEvent.StartTime}ms] ";
                 var audioName = audioEvent.AudioEventName.GetResolvedText();
                 var audioDetails = !string.IsNullOrEmpty(audioName) ? $" - {audioName}" : "";
-                
+
                 Descriptor = $"{startTime}scnAudioEvent{audioDetails}";
                 return;
             }
@@ -133,7 +132,7 @@ public partial class ChunkViewModel
                 var startTime = $"[{audioDurationEvent.StartTime}ms] ";
                 var audioName = audioDurationEvent.AudioEventName.GetResolvedText();
                 var audioDetails = !string.IsNullOrEmpty(audioName) ? $" - {audioName}" : "";
-                
+
                 Descriptor = $"{startTime}scnAudioDurationEvent{audioDetails}";
                 return;
             }
@@ -141,7 +140,7 @@ public partial class ChunkViewModel
             {
                 var startTime = $"[{vfxEvent.StartTime}ms] ";
                 var effectDetails = GetVFXEffectDetails(vfxEvent.EffectEntry);
-                
+
                 Descriptor = $"{startTime}scneventsVFXEvent{effectDetails}";
                 return;
             }
@@ -149,7 +148,7 @@ public partial class ChunkViewModel
             {
                 var startTime = $"[{vfxDurationEvent.StartTime}ms] ";
                 var effectDetails = GetVFXEffectDetails(vfxDurationEvent.EffectEntry);
-                
+
                 Descriptor = $"{startTime}scneventsVFXDurationEvent{effectDetails}";
                 return;
             }
@@ -157,7 +156,7 @@ public partial class ChunkViewModel
             {
                 var startTime = $"[{vfxBraindanceEvent.StartTime}ms] ";
                 var effectDetails = GetVFXEffectDetails(vfxBraindanceEvent.EffectEntry);
-                
+
                 Descriptor = $"{startTime}scneventsVFXBraindanceEvent{effectDetails}";
                 return;
             }
@@ -166,7 +165,7 @@ public partial class ChunkViewModel
                 var startTime = $"[{playVideoEvent.StartTime}ms] ";
                 var videoPath = playVideoEvent.VideoPath.ToString();
                 var videoDetails = !string.IsNullOrEmpty(videoPath) ? $" - {System.IO.Path.GetFileName(videoPath)}" : "";
-                
+
                 Descriptor = $"{startTime}scnPlayVideoEvent{videoDetails}";
                 return;
             }
@@ -175,11 +174,11 @@ public partial class ChunkViewModel
                 // Fallback for other scene events - just show start time
                 var startTime = $"[{sceneEvent.StartTime}ms] ";
                 var eventType = sceneEvent.GetType().Name;
-                
+
                 Descriptor = $"{startTime}{eventType}";
                 return;
             }
-            
+
             case worldStreamingSectorDescriptor:
                 // handled by default name resolution below
                 break;
@@ -266,7 +265,7 @@ public partial class ChunkViewModel
             case gameJournalEntry journalEntry:
                 Descriptor = journalEntry.Id.ToString();
                 break;
-            
+
             # endregion
             // csv files
             case IRedArray { Count: > 0 } csvAry when Parent is { Name: "compiledData" } && GetRootModel().Data is C2dArray csv:
@@ -447,7 +446,7 @@ public partial class ChunkViewModel
                 when partsOverrides.PartResource.DepotPath.GetResolvedText() is string s && !string.IsNullOrEmpty(s):
                 Descriptor = s;
                 return;
-            
+
             case scnscreenplayDialogLine scnscreenplayDialogLine:
             {
                 Descriptor = scnscreenplayDialogLine.FemaleLipsyncAnimationName.GetResolvedText() ?? "";
@@ -508,7 +507,7 @@ public partial class ChunkViewModel
             }
             case LocalizationString localizationString:
             {
-                if (!string.IsNullOrEmpty(localizationString.Value) && 
+                if (!string.IsNullOrEmpty(localizationString.Value) &&
                     localizationString.Value.StartsWith("LocKey#") &&
                     ulong.TryParse(localizationString.Value[7..], out var locKey) &&
                     _locKeyService.GetEntry(locKey) is { } locEntry)
@@ -521,7 +520,7 @@ public partial class ChunkViewModel
 
                     Descriptor = desc;
                 }
-                
+
                 break;
             }
             case entHardTransformBinding tBinding:
@@ -726,7 +725,7 @@ public partial class ChunkViewModel
         {
             return "";
         }
-            
+
         // First try to use EffectName if available
         if (effectEntry.EffectName != CName.Empty)
         {
@@ -736,17 +735,17 @@ public partial class ChunkViewModel
                 return $" - {effectName}";
             }
         }
-        
+
         // If no effect name, try to resolve through EffectInstanceId
         if (effectEntry.EffectInstanceId != null && GetRootModel().ResolvedData is scnSceneResource sceneResource)
         {
             var instanceId = effectEntry.EffectInstanceId.Id;
             var effectId = effectEntry.EffectInstanceId.EffectId.Id;
-            
+
             // Find the effect definition
             var effectDef = sceneResource.EffectDefinitions
                 .FirstOrDefault(e => e.Id.Id == effectId);
-                
+
             if (effectDef != null)
             {
                 var effectPath = effectDef.Effect.DepotPath.GetResolvedText();
@@ -756,14 +755,14 @@ public partial class ChunkViewModel
                     return $" - {filename}";
                 }
             }
-            
+
             // If we have instance ID but no effect definition, show instance/effect IDs
             if (instanceId != uint.MaxValue && effectId != uint.MaxValue)
             {
                 return $" - Instance:{instanceId}/Effect:{effectId}";
             }
         }
-        
+
         return "";
     }
 
@@ -794,6 +793,7 @@ public partial class ChunkViewModel
         "sectorHash", // sectors
         "propertyPath", // ?
         "link", // gameuiSwitcherInfo
+        "id", // quest nodes
     ];
 
     private static readonly string[] s_nonRenamableProperties =
