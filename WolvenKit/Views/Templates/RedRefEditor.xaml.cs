@@ -122,7 +122,7 @@ namespace WolvenKit.Views.Editors
         {
             get
             {
-                var numericHash = RedRef?.DepotPath.GetRedHash() ?? 0; 
+                var numericHash = RedRef?.DepotPath.GetRedHash() ?? 0;
                 if (_settingsManager.ShowResourcePathAsHex)
                 {
                     return numericHash.ToString("X");
@@ -225,7 +225,7 @@ namespace WolvenKit.Views.Editors
         private void RefreshValidityAndTooltip(object sender, RoutedEventArgs e)
         {
             RecalculateFlags();
-            
+
             if (_settingsManager?.UseValidatingEditor != true || RedRef?.DepotPath == ResourcePath.Empty ||
                 RedRef?.DepotPath.GetResolvedText() is not string filePath || filePath.Trim().IsNullOrEmpty())
             {
@@ -278,7 +278,7 @@ namespace WolvenKit.Views.Editors
         {
             _updateSender = sender;
             _updateTimer.Stop();
-            
+
             _updateTimer.Start();
         }
 
@@ -301,7 +301,7 @@ namespace WolvenKit.Views.Editors
 
         private void RecalculateFlags()
         {
-            if (RedRef is null || RedRef.DepotPath == ResourcePath.Empty ||
+            if (!_settingsManager.UseValidatingEditor || RedRef is null || RedRef.DepotPath == ResourcePath.Empty ||
                 RedRef.DepotPath.GetResolvedText() is not string depotPath)
             {
                 return;
