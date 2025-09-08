@@ -6,6 +6,7 @@ using Splat;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Core;
 
 namespace WolvenKit.Views.Shell;
 
@@ -228,29 +229,81 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                    view => view.MenuItemShowModsView)
                .DisposeWith(disposables);
 
+            // WKit Blender Addon
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
                     view => view.MenuItemCyberpunkBlenderAddonLink,
-                    viewModel => viewModel.WikiLinks.CyberpunkBlenderAddon);
+                    viewModel => WikiLinks.CyberpunkBlenderAddon);
 
             // Help
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
                     view => view.MenuItemWolvenKitSetupLink,
-                    viewModel => viewModel.WikiLinks.WolvenKitSetupGuide);
+                    viewModel => WikiLinks.WolvenKitSetupGuide);
+
+            // Creating a mod
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
                     view => view.MenuItemWolvenKitCreatingAModLink,
-                    viewModel => viewModel.WikiLinks.WolvenKitCreatingAModGuide);
+                    viewModel => WikiLinks.WolvenKitCreatingAModGuide);
+
+            this.BindCommand(ViewModel,
+                viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
+                view => view.MenuItemCreateNewClothingItemsLink,
+                viewModel => WikiLinks.AddingNewItems);
+
+            this.BindCommand(ViewModel,
+                viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
+                view => view.MenuItemCreateNewWeaponsLink,
+                viewModel => WikiLinks.AddingNewItems_Weapons);
+
+            this.BindCommand(ViewModel,
+                viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
+                view => view.MenuItemWorldBuildingLink,
+                viewModel => WikiLinks.WorldEditing);
+
+            this.BindCommand(ViewModel,
+                viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
+                view => view.MenuItemAddNpcLink,
+                viewModel => WikiLinks.AMM_NPCs);
+
+            this.BindCommand(ViewModel,
+                viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
+                view => view.MenuItemAddNpvLink,
+                viewModel => WikiLinks.NPVs);
+
+            this.BindCommand(ViewModel,
+                viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
+                view => view.MenuItemCustomTattoosLink,
+                viewModel => WikiLinks.Tattoos);
+
+            this.BindCommand(ViewModel,
+                viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
+                view => view.MenuItemHairLink,
+                viewModel => WikiLinks.Hair);
+
+            this.BindCommand(ViewModel,
+                viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
+                view => view.MenuItemCCXLLink,
+                viewModel => WikiLinks.CCXL);
+
+            this.BindCommand(ViewModel,
+                viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
+                view => view.MenuItemCheatSheetLink,
+                viewModel => WikiLinks.CheatSheets);
+
+            // About Wolvenkit
+            this.BindCommand(ViewModel,
+                viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
+                view => view.MenuItemAboutWolvenKitLink,
+                viewModel => WikiLinks.WolvenkitAbout);
+
+
+            // socials
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
                     view => view.MenuItemDiscordInvitationLink,
-                    viewModel => viewModel.WikiLinks.DiscordInvitation);
-            this.BindCommand(ViewModel,
-                    viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
-                    view => view.MenuItemAboutWolvenKitLink,
-                    viewModel => viewModel.WikiLinks.AboutWolvenKit);
-
+                    viewModel => WikiLinks.DiscordInvite);
             // visibility
             this.Bind(ViewModel,
                     viewModel => viewModel.ProjectExplorerCheckbox,

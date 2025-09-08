@@ -848,16 +848,130 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <!-- Submenu: Creating mods -->
                 <MenuItem
-                    x:Name="MenuItemWolvenKitCreatingAModLink"
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
-                    Header="Creating a Mod">
-                    <MenuItem.Icon>
-                        <local:IconBox
-                            IconPack="Codicons"
-                            Kind="LinkExternal"
-                            Size="{DynamicResource WolvenKitIconTiny}" />
-                    </MenuItem.Icon>
+                    Header="Creating mods">
+
+                    <MenuItem
+                        x:Name="MenuItemWolvenKitCreatingAModLink"
+                        Header="Wolvenkit: Creating a Mod">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="Codicons"
+                                Kind="LinkExternal"
+                                Size="{DynamicResource WolvenKitIconTiny}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <!-- Submenu: Adding new items -->
+                    <MenuItem Header="Adding new items">
+
+                        <MenuItem
+                            x:Name="MenuItemCreateNewClothingItemsLink"
+                            Header="Adding new clothes">
+                            <MenuItem.Icon>
+                                <local:IconBox
+                                    IconPack="Material"
+                                    Kind="Hanger"
+                                    Size="{DynamicResource WolvenKitIconTiny}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem
+                            x:Name="MenuItemCreateNewWeaponsLink"
+                            Header="Adding new weapons">
+                            <MenuItem.Icon>
+                                <local:IconBox
+                                    IconPack="Material"
+                                    Kind="Pistol"
+                                    Size="{DynamicResource WolvenKitIconTiny}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
+
+                    <!-- Submenu: NPCs and V -->
+                    <MenuItem Header="NPCs and V">
+
+                        <MenuItem
+                            x:Name="MenuItemAddNpvLink"
+                            Header="V as NPC">
+                            <MenuItem.Icon>
+                                <local:IconBox
+                                    IconPack="Material"
+                                    Kind="AccountPlus"
+                                    Size="{DynamicResource WolvenKitIconTiny}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+
+                        <MenuItem
+                            x:Name="MenuItemAddNpcLink"
+                            Header="New NPCs for AMM">
+                            <MenuItem.Icon>
+                                <local:IconBox
+                                    IconPack="Material"
+                                    Kind="AccountPlus"
+                                    Size="{DynamicResource WolvenKitIconTiny}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+
+                        <MenuItem
+                            x:Name="MenuItemCustomTattoosLink"
+                            Header="Custom Tattoos">
+                            <MenuItem.Icon>
+                                <local:IconBox
+                                    IconPack="Material"
+                                    Kind="Panorama"
+                                    Size="{DynamicResource WolvenKitIconTiny}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+
+                        <MenuItem
+                            x:Name="MenuItemHairLink"
+                            Header="Hair">
+                            <MenuItem.Icon>
+                                <local:IconBox
+                                    IconPack="Material"
+                                    Kind="HairDryer"
+                                    Size="{DynamicResource WolvenKitIconTiny}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+
+                        <MenuItem
+                            x:Name="MenuItemCCXLLink"
+                            Header="Character Creator Additions">
+                            <MenuItem.Icon>
+                                <local:IconBox
+                                    IconPack="Material"
+                                    Kind="Mirror"
+                                    Size="{DynamicResource WolvenKitIconTiny}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
+
+                    <MenuItem
+                        x:Name="MenuItemWorldBuildingLink"
+                        Header="Changing the world">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="Material"
+                                Kind="EarthPlus"
+                                Size="{DynamicResource WolvenKitIconTiny}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <Separator />
+
+                    <MenuItem
+                        x:Name="MenuItemCheatSheetLink"
+                        Header="Cheat Sheets">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="Material"
+                                Kind="Magnify"
+                                Size="{DynamicResource WolvenKitIconTiny}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
                 </MenuItem>
 
                 <Separator />
