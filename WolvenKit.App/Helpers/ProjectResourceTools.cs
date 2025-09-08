@@ -273,18 +273,18 @@ public class ProjectResourceTools
             return;
         }
 
-        var refPathHash = resourcePath.GetRedHash();
+        var resPathHash = resourcePath.GetRedHash();
         // we can't add it
-        if (refPathHash is 0 || GetRed4Controller() is not RED4Controller controller)
+        if (resPathHash is 0 || GetRed4Controller() is not RED4Controller controller)
         {
             return;
         }
 
-        if (_archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame) is { HasValue: true } basegameFile)
+        if (_archiveManager.Lookup(resPathHash, ArchiveManagerScope.Basegame) is { HasValue: true } basegameFile)
         {
             controller.AddToMod(basegameFile.Value, ArchiveManagerScope.Basegame);
         }
-        else if (_archiveManager.Lookup(refPathHash, ArchiveManagerScope.Mods) is { HasValue: true } modFile)
+        else if (_archiveManager.Lookup(resPathHash, ArchiveManagerScope.Mods) is { HasValue: true } modFile)
         {
             controller.AddToMod(modFile.Value, ArchiveManagerScope.Mods);
         }
@@ -308,10 +308,10 @@ public class ProjectResourceTools
             return;
         }
 
-        var refPathHash = resourcePath.GetRedHash();
+        var resPathHash = resourcePath.GetRedHash();
 
         // we can't add it
-        if (refPathHash is 0 || GetRed4Controller() is not RED4Controller controller)
+        if (resPathHash is 0 || GetRed4Controller() is not RED4Controller controller)
         {
             return;
         }
@@ -328,11 +328,11 @@ public class ProjectResourceTools
             return;
         }
 
-        if (_archiveManager.Lookup(refPathHash, ArchiveManagerScope.Mods) is { HasValue: true } modFile)
+        if (_archiveManager.Lookup(resPathHash, ArchiveManagerScope.Mods) is { HasValue: true } modFile)
         {
             controller.AddToMod(modFile.Value, ArchiveManagerScope.Mods);
         }
-        else if (_archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame) is { HasValue: true } basegameFile)
+        else if (_archiveManager.Lookup(resPathHash, ArchiveManagerScope.Basegame) is { HasValue: true } basegameFile)
         {
             controller.AddToMod(basegameFile.Value, ArchiveManagerScope.Basegame);
         }
