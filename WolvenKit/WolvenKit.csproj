@@ -1076,6 +1076,9 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Content Include="Resources\Media\Images\Placeholders\Error_ImageFormat.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Media\Images\Icons\Files\buffer.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

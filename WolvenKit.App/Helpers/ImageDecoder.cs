@@ -12,6 +12,16 @@ namespace WolvenKit.App.Helpers;
 
 public static class ImageDecoder
 {
+    public static BitmapSource LoadBitmapFromResource(string resourcePath)
+    {
+        var bitmap = new BitmapImage();
+        bitmap.BeginInit();
+        bitmap.UriSource = new Uri($"pack://application:,,,/WolvenKit;component/{resourcePath}");
+        bitmap.EndInit();
+        bitmap.Freeze();
+        return bitmap;
+    }
+
     public static BitmapImage CreateBitmapImage(RedImage img, bool flip)
     {
         var bitmapImage = new BitmapImage();
