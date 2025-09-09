@@ -9,13 +9,34 @@
     xmlns:converters="clr-namespace:WolvenKit.Converters"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <ScrollViewer.Resources>
+            <ResourceDictionary>
+                <converters:LessThanConverter x:Key="LessThanConverter" />
+
+                <Style
+                    x:Key="LayoutResponsiveStyle"
+                    TargetType="{x:Type Grid}">
+                    <Style.Triggers>
+                        <DataTrigger
+                            Binding="{Binding Path=ActualWidth,
+                                              Converter={StaticResource LessThanConverter},
+                                              ConverterParameter=WolvenKitWelcomeBreakWidth,
+                                              RelativeSource={RelativeSource AncestorType=Window}}"
+                            Value="True">
+
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ResourceDictionary>
+        </ScrollViewer.Resources>
+
         <Grid
             x:Name="topGrid"
-            Margin="{DynamicResource WolvenKitMarginHorizontal}">
+            Margin="{DynamicResource WolvenKitMarginHorizontal}"
+            Style="{StaticResource LayoutResponsiveStyle}">
             <Grid.Resources>
                 <ResourceDictionary>
-                    <converters:LessThanConverter x:Key="LessThanConverter" />
-
                     <Style
                         x:Key="WelcomeButton"
                         BasedOn="{StaticResource ButtonDefault}"
@@ -255,6 +276,27 @@
                     </Style>
 
                     <Style
+                        x:Key="ProjectsResponsiveStyle"
+                        TargetType="{x:Type Grid}">
+                        <Setter Property="Grid.Column" Value="0" />
+                        <Setter Property="Grid.Row" Value="1" />
+                        <Setter Property="Margin" Value="6,0,0,24" />
+
+                        <Style.Triggers>
+                            <DataTrigger
+                                Binding="{Binding Path=ActualWidth,
+                                                  Converter={StaticResource LessThanConverter},
+                                                  ConverterParameter=WolvenKitWelcomeActionsColumnBreakWidth,
+                                                  RelativeSource={RelativeSource AncestorType=Window}}"
+                                Value="True">
+                                <Setter Property="Grid.ColumnSpan" Value="2" />
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="Margin" Value="0,0,0,24" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+
+                    <Style
                         x:Key="ActionResponsiveStyle"
                         TargetType="{x:Type Grid}">
                         <!-- Must be set here to allow override with Style.Triggers -->
@@ -277,23 +319,44 @@
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
+
+                    <Style
+                        x:Key="MainActionsResponsiveStyle"
+                        TargetType="{x:Type Grid}">
+                        <Setter Property="Grid.Column" Value="1" />
+                        <Setter Property="Grid.Row" Value="1" />
+                        <Setter Property="Margin" Value="6,0,0,24" />
+
+                        <Style.Triggers>
+                            <DataTrigger
+                                Binding="{Binding Path=ActualWidth,
+                                                  Converter={StaticResource LessThanConverter},
+                                                  ConverterParameter=WolvenKitWelcomeActionsColumnBreakWidth,
+                                                  RelativeSource={RelativeSource AncestorType=Window}}"
+                                Value="True">
+                                <Setter Property="Grid.Column" Value="0" />
+                                <Setter Property="Grid.ColumnSpan" Value="2" />
+                                <Setter Property="Grid.Row" Value="2" />
+                                <Setter Property="Margin" Value="0,0,0,24" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
                 </ResourceDictionary>
             </Grid.Resources>
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition MinWidth="{DynamicResource WolvenKitWelcomeLeftMinWidth}" />
-                <ColumnDefinition Width="{DynamicResource WolvenKitWelcomeRightLength}" />
+                <ColumnDefinition MaxWidth="{DynamicResource WolvenKitWelcomeRightLength}" />
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="1*" />
-                <RowDefinition Height="3*" />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
 
             <!-- WK Text Logo -->
             <Image
-                Grid.Row="0"
-                Grid.Column="0"
                 Grid.ColumnSpan="2"
                 MaxHeight="{DynamicResource WolvenKitWelcomeLogoMaxHeight}"
                 Margin="{DynamicResource WolvenKitMarginVertical}"
@@ -303,12 +366,11 @@
 
             <!-- Left Column \ Projects -->
             <Grid
-                Grid.Row="1"
-                Grid.Column="0"
-                Margin="0,0,6,24">
+                Margin="0,0,6,24"
+                Style="{StaticResource ProjectsResponsiveStyle}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
 
                 <!-- Pinned Projects -->
@@ -514,10 +576,7 @@
             </Grid>
 
             <!-- Right Column \ Main Actions -->
-            <Grid
-                Grid.Row="1"
-                Grid.Column="1"
-                Margin="6,0,0,24">
+            <Grid Style="{StaticResource MainActionsResponsiveStyle}">
                 <Grid>
                     <Border
                         Margin="0"

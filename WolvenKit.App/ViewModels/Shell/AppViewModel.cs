@@ -307,12 +307,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             ShowHomePageSync();
         }
 
-        #if !DEBUG
+#if !DEBUG
         if (SettingsManager.AutoUpdateOnStartup)
         {
             CheckForUpdatesCommand.SafeExecute(true);
         }
-        #endif
+#endif
 
         CheckForScriptUpdatesCommand.SafeExecute();
         CheckForLongPathSupport();
@@ -2473,7 +2473,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         // WelcomePageView
         resources["WolvenKitWelcomeLogoMaxHeight"] = Math.Round(150 * _uiScalePercentage);
         resources["WolvenKitWelcomeLeftMinWidth"] = Math.Round(315 * _uiScalePercentage);
-        resources["WolvenKitWelcomeRightLength"] = new GridLength(380).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitWelcomeRightLength"] = Math.Round(380 * _uiScalePercentage);
         resources["WolvenKitWelcomeOrderWidth"] = Math.Round(140 * _uiScalePercentage);
         resources["WolvenKitWelcomeCardSammyWidth"] = new GridLength(70).Mul(_uiScalePercentage).Round();
         resources["WolvenKitWelcomeCardSammyHeight"] = Math.Round(70 * _uiScalePercentage);
@@ -2489,6 +2489,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         resources["WolvenKitWelcomeSocialButtonHeight"] = Math.Round(50 * _uiScalePercentage);
 
         resources["WolvenKitWelcomeBreakWidth"] = Math.Round(1250 * _uiScalePercentage);
+        resources["WolvenKitWelcomeActionsColumnBreakWidth"] = Math.Round(914 * _uiScalePercentage);
 
         // SettingsPageView
         resources["WolvenKitSettingsGridLabelWidth"] = new GridLength(200).Mul(_uiScalePercentage).Round();
