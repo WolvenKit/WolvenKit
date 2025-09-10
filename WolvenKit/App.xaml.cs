@@ -75,13 +75,13 @@ namespace WolvenKit
             _loggerService.Info($"Version: {_settingsManager.GetVersionNumber()}");
 
             _loggerService.Debug("Initializing red database");
-            Initializations.InitializeThemeHelper();
+            Initializations.InitializeTheme();
 
             Initializations.InitializeSyntaxHighlighting();
 
             // main app viewmodel
             _loggerService.Debug("Initializing Shell");
-            Initializations.InitializeShell(_settingsManager);
+            Initializations.InitializeShell();
 
             RedImage.LoggerService = _loggerService;
             DiscordHelper.LoggerService = _loggerService;
