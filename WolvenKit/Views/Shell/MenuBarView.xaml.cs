@@ -6,6 +6,7 @@ using Splat;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Core;
 
 namespace WolvenKit.Views.Shell;
 
@@ -228,28 +229,11 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                    view => view.MenuItemShowModsView)
                .DisposeWith(disposables);
 
+            // WKit Blender Addon
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
                     view => view.MenuItemCyberpunkBlenderAddonLink,
-                    viewModel => viewModel.WikiLinks.CyberpunkBlenderAddon);
-
-            // Help
-            this.BindCommand(ViewModel,
-                    viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
-                    view => view.MenuItemWolvenKitSetupLink,
-                    viewModel => viewModel.WikiLinks.WolvenKitSetupGuide);
-            this.BindCommand(ViewModel,
-                    viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
-                    view => view.MenuItemWolvenKitCreatingAModLink,
-                    viewModel => viewModel.WikiLinks.WolvenKitCreatingAModGuide);
-            this.BindCommand(ViewModel,
-                    viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
-                    view => view.MenuItemDiscordInvitationLink,
-                    viewModel => viewModel.WikiLinks.DiscordInvitation);
-            this.BindCommand(ViewModel,
-                    viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
-                    view => view.MenuItemAboutWolvenKitLink,
-                    viewModel => viewModel.WikiLinks.AboutWolvenKit);
+                    viewModel => WikiLinks.CyberpunkBlenderAddon);
 
             // visibility
             this.Bind(ViewModel,
