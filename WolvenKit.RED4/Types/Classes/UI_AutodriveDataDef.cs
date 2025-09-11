@@ -37,6 +37,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
+		[RED("DestinationRemainingLength")] 
+		public gamebbScriptID_Float DestinationRemainingLength
+		{
+			get => GetPropertyValue<gamebbScriptID_Float>();
+			set => SetPropertyValue<gamebbScriptID_Float>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("DestinationRemainingTime")] 
+		public gamebbScriptID_Float DestinationRemainingTime
+		{
+			get => GetPropertyValue<gamebbScriptID_Float>();
+			set => SetPropertyValue<gamebbScriptID_Float>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("CinematicCameraActive")] 
 		public gamebbScriptID_Bool CinematicCameraActive
 		{
@@ -50,6 +66,8 @@ namespace WolvenKit.RED4.Types
 			AutoDriveEnabled = new gamebbScriptID_Bool();
 			AutoDriveDelamain = new gamebbScriptID_Bool();
 			FreeRoamEnabled = new gamebbScriptID_Bool();
+			DestinationRemainingLength = new gamebbScriptID_Float();
+			DestinationRemainingTime = new gamebbScriptID_Float();
 			CinematicCameraActive = new gamebbScriptID_Bool();
 
 			PostConstruct();
