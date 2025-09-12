@@ -14,6 +14,8 @@ public partial class MenuBarViewModel : ObservableObject
     public ISettingsManager SettingsManager { get; }
     public AppViewModel MainViewModel { get; }
 
+    public WikiLinksInstance WikiLinks { get; } = new();
+
     public MenuBarViewModel(ISettingsManager settingsManager, AppViewModel appViewModel)
     {
         MainViewModel = appViewModel;

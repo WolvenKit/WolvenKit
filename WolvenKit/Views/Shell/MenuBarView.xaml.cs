@@ -1,12 +1,9 @@
-using System.IO;
 using System.Reactive.Disposables;
 using System.Windows;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.Interaction;
-using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
-using WolvenKit.Core;
 
 namespace WolvenKit.Views.Shell;
 
@@ -228,12 +225,6 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                    viewModel => viewModel.MainViewModel.ShowModsViewCommand,
                    view => view.MenuItemShowModsView)
                .DisposeWith(disposables);
-
-            // WKit Blender Addon
-            this.BindCommand(ViewModel,
-                    viewModel => viewModel.MainViewModel.OpenExternalLinkCommand,
-                    view => view.MenuItemCyberpunkBlenderAddonLink,
-                    viewModel => WikiLinks.CyberpunkBlenderAddon);
 
             // visibility
             this.Bind(ViewModel,
