@@ -8385,7 +8385,8 @@ public static partial class Enums
 		CP77_Patch_2_2 = 2200,
 		CP77_Patch_2_2_Hotfix1 = 2210,
 		CP77_Patch_2_3 = 2300,
-		Current = 2300
+		CP77_Patch_2_3_Hotfix1 = 2310,
+		Current = 2310
 	}
 
 	public enum gameGameplayEventFlag
