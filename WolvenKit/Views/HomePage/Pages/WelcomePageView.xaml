@@ -367,6 +367,7 @@
             <!-- Left Column \ Projects -->
             <Grid
                 Margin="0,0,6,24"
+                VerticalAlignment="Top"
                 Style="{StaticResource ProjectsResponsiveStyle}">
                 <Grid.RowDefinitions>
                     <RowDefinition />
