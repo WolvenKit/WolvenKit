@@ -106,6 +106,8 @@ to select which `IconPack` and `Kind` of icon to draw. You can change the size
 and color with respectively `Size` and `Foreground` properties. It uses a
 default icon size and a white color, which should be good enough in most cases.
 
+**UI scaling:**
+
 **DO** use `WolvenKitFont...`, `WolvenKitIcon...`, `WolvenKitMargin...` and
 other dynamic resources to draw a responsive UI. You can find plenty of them in
 codebase, for example:
@@ -123,9 +125,93 @@ When the user changes UI scaling, the logic in `WolvenKit.App/ViewModels/Shell/A
 is called to update these values.
 
 **DO** update, add or remove dynamic entries properly:
-* Follow the current naming convention, it helps keeping things organized in
-the IDE's autocomplete
-* Update `AppViewModel:UpdateScaleResources()` method for the updated, added or removed entries
+ - update `AppViewModel:UpdateScaleResources()` method for the updated, added 
+   or removed entries
+ - follow the current naming convention, it helps keeping things organized in
+   the IDE's autocomplete
+
+**Responsiveness:**
+
+Currently, this application poorly implements responsive UI. It is expected for
+users to run this application with at least a 1080p screen resolution, with a 
+maximized window.
+
+However, anyone is free to write PRs in order to add responsive UI where 
+needed.
+
+> [!NOTE]
+> Responsiveness is in addition to scaling the UI, like mentioned above. We are
+> mostly focusing on the layout of UI elements when refering to responsive UI.
+
+`WelcomePageView` is the first view implementing a responsive UI (see [#2628]).
+For now, the principal solution is to use XAML only with converters to shape 
+the layout of a view, based on breakpoint widths of the window:
+ - a breakpoint width is a threshold of the current size of the window (in 
+   pixels).
+ - a converter is a condition (like `LessThanConverter`) which change states of
+   a UI element when a breakpoint is triggered or not.
+
+Any `Style` defined for a responsive UI should be suffixed with 
+`ResponsiveStyle`. For example `CardResponsiveStyle`. This help quickly 
+identify what is the purpose of this style.
+
+You can define a `Style` with a `Trigger` and change properties, like
+`Grid.Row` for example. In this case, you will need to define the default value
+of the property in the style, and the new value in the trigger declaration. 
+Moreover, the property `Grid.Row` (for example) must be removed of its element.
+This is required because any property on a UI element always takes precedence.
+See this example:
+
+```xaml
+<!-- Inside a ResourceDictionary -->
+<converters:LessThanConverter x:Key="LessThanConverter" />
+
+<Style
+	x:Key="ExampleResponsiveStyle"
+	TargetType="{x:Type Grid}">
+	<!-- Default value required -->
+	<Setter Property="Grid.Row" Value="0" />
+	
+	<Style.Triggers>
+		<!-- Trigger when ActualWidth < WolvenKitWelcomeBreakWidth -->
+		<DataTrigger
+			Binding="{Binding Path=ActualWidth,
+							  Converter={StaticResource LessThanConverter},
+							  ConverterParameter=WolvenKitWelcomeBreakWidth,
+							  RelativeSource={RelativeSource AncestorType=Window}}"
+			Value="True">
+
+			<Setter Property="Grid.Row" Value="1" />
+		</DataTrigger>
+	</Style.Triggers>
+</Style>
+
+<!-- After ResourceDictionary -->
+
+<Grid>
+	<Grid.RowDefinitions>
+		<RowDefinition />
+		<!-- 2nd row reserved for responsiveness -->
+		<RowDefinition />
+	</Grid.RowDefinitions>
+
+	<TextBlock x:Key="{StaticResource ExampleResponsiveStyle}" />
+</Grid>
+```
+
+A few notes about this snippet of code:
+ - `ConverterParameter` must be a `string` of a dynamic resource. This allows 
+   UI scaling too.
+ - `<!-- 2nd row reserved for responsiveness -->` or similar comment should be
+   used to clearly inform users the UI element is indeed used and must not be
+   removed without a good reason.
+
+> [!NOTE]
+> In some cases, we cannot explicitly define `Grid.Row` nor `Grid.Column` when
+> they must be changed for responsiveness. This is an exception to the rule 
+> defined above (WPF / XAML being the culprit here).
+
+[#2628]: https://github.com/WolvenKit/WolvenKit/pull/2628
 
 ### Code Style
 
