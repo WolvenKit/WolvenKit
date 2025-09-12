@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
 		public saveMetadataContainer()
 		{
-			Metadata = new saveMetadata { SaveVersion = 269, GameVersion = 2300, AdditionalContentIds = new() };
+			Metadata = new saveMetadata { SaveVersion = 269, GameVersion = 2310, AdditionalContentIds = new() };
 
 			PostConstruct();
 		}
