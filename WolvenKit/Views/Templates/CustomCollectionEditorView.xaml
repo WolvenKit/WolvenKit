@@ -25,6 +25,7 @@
             Grid.Column="1"
             Padding="2"
             VerticalAlignment="Stretch"
+            ToolTip="{Binding ToolTip}"
             Click="ButtonBase_OnClick">
             <templates:IconBox
                 IconPack="Codicons"
