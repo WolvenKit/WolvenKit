@@ -48,13 +48,13 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <!-- Left Bottom Button -->
+            <!-- Continue to Editor Button -->
             <Button
                 x:Name="ToEditorButton"
                 Grid.Row="0"
                 Margin="4,4,4,30"
                 Padding="0"
-                HorizontalAlignment="Stretch"
+                HorizontalAlignment="Left"
                 Background="{StaticResource ContentBackgroundAlt}"
                 BorderThickness="0">
                 <Grid>
@@ -82,12 +82,42 @@
                 </Grid>
             </Button>
 
-            <!-- Left Bottom Version Number -->
-            <StackPanel
+            <!-- Version Number -->
+            <Grid
                 Grid.Row="1"
                 Margin="{DynamicResource WolvenKitHomeVersionMargin}"
-                HorizontalAlignment="Left"
-                Orientation="Horizontal">
+                HorizontalAlignment="Left">
+                <Grid.Resources>
+                    <Style
+                        x:Key="NightlyResponsiveStyle"
+                        TargetType="{x:Type StackPanel}">
+                        <Setter Property="Grid.Column" Value="1" />
+                        <Setter Property="Grid.Row" Value="0" />
+
+                        <Style.Triggers>
+                            <DataTrigger
+                                Binding="{Binding IsNightly}"
+                                Value="True">
+                                <Setter Property="Grid.Column" Value="0" />
+                                <Setter Property="Grid.ColumnSpan" Value="2" />
+                                <Setter Property="Grid.Row" Value="1" />
+                                <Setter Property="HorizontalAlignment" Value="Right" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Resources>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <!-- 2nd row reserved for responsiveness -->
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
                 <TextBlock
                     Margin="{DynamicResource WolvenKitHomeVersionMargin}"
                     VerticalAlignment="Center"
@@ -97,19 +127,21 @@
                     FlowDirection="LeftToRight"
                     Text="{Binding VersionNumber}" />
 
-                <templates:IconBox
-                    IconPack="Codicons"
-                    Kind="Versions"
-                    Size="{DynamicResource WolvenKitIcon}"
-                    Foreground="{StaticResource WolvenKitRed}" />
+                <StackPanel
+                    Style="{StaticResource NightlyResponsiveStyle}"
+                    Orientation="Horizontal">
+                    <templates:IconBox
+                        IconPack="Codicons"
+                        Kind="Versions"
+                        Size="{DynamicResource WolvenKitIcon}"
+                        Foreground="{StaticResource WolvenKitRed}" />
 
-                <Button
-                    x:Name="CheckForUpdateButton"
-                    Margin="{DynamicResource WolvenKitHomeVersionMargin}"
-                    Padding="0"
-                    Background="Transparent"
-                    BorderThickness="0">
-                    <Grid>
+                    <Button
+                        x:Name="CheckForUpdateButton"
+                        Margin="{DynamicResource WolvenKitHomeVersionMargin}"
+                        Padding="0"
+                        Background="Transparent"
+                        BorderThickness="0">
                         <templates:IconBox
                             IconPack="Material"
                             Kind="Update"
@@ -118,10 +150,9 @@
                             VerticalAlignment="Center"
                             Size="{DynamicResource WolvenKitIconMilli}"
                             Foreground="{StaticResource WolvenKitRed}" />
-                    </Grid>
-                </Button>
-
-            </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
         </Grid>
 
         <!-- Left Navigation -->
