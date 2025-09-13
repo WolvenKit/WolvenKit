@@ -38,13 +38,13 @@ namespace WolvenKit.Utility
         internal static IHost _host = Host.CreateDefaultBuilder()
                 .ConfigureServices((_, services) =>
                     services
-                        .AddScoped<ILoggerService, SerilogWrapper>()
-                        .AddScoped<IProgressService<double>, ProgressService<double>>()
+                        .AddSingleton<ILoggerService, SerilogWrapper>()
+                        .AddSingleton<IProgressService<double>, ProgressService<double>>()
                         .AddSingleton<IHashService, HashService>()
                         .AddSingleton<ITweakDBService, TweakDBService>()
 
-                        .AddScoped<IHookService, HookService>()
-                        .AddScoped<Red4ParserService>()
+                        .AddSingleton<IHookService, HookService>()
+                        .AddSingleton<Red4ParserService>()
                         .AddScoped<MeshTools>()
                         .AddSingleton<IArchiveManager, ArchiveManager>()
                         .AddSingleton<IModTools, ModTools>()
@@ -129,6 +129,9 @@ namespace WolvenKit.Utility
             s_tweakDbPath = Path.Combine(gameDirectory.FullName, "r6", "cache", "tweakdb_ep1.bin");
             //var tweakService = _host.Services.GetRequiredService<ITweakDBService>();
             //tweakService.LoadDB(s_tweakDbPath);
+
+            var hashService = _host.Services.GetRequiredService<IHashService>();
+            hashService.Load();
 
             s_bm = _host.Services.GetRequiredService<IArchiveManager>();
 
