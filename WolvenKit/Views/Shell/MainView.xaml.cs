@@ -8,6 +8,7 @@ using System.Windows;
 using AdonisUI.Controls;
 using ReactiveUI;
 using Splat;
+using Syncfusion.Windows.Shared;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
@@ -23,8 +24,10 @@ namespace WolvenKit.Views.Shell
 {
     public class MyObservableCollection : ObservableCollection<object> { }
 
-    public partial class MainView : IViewFor<AppViewModel>
+    public partial class MainView : ChromelessWindow, IViewFor<AppViewModel>
     {
+        private bool _keepMaximized;
+
         public AppViewModel ViewModel { get; set; }
 
         object IViewFor.ViewModel
@@ -39,6 +42,13 @@ namespace WolvenKit.Views.Shell
             DataContext = ViewModel;
 
             InitializeComponent();
+
+            var hasMonitors = System.Windows.Forms.Screen.AllScreens.Length > 1;
+            if (hasMonitors)
+            {
+                StateChanged += MainView_StateChanged;
+                Activated += MainView_Activated;
+            }
 
             this.WhenActivated(disposables =>
             {
@@ -201,7 +211,10 @@ namespace WolvenKit.Views.Shell
 
             MessageBoxModel messageBox = new()
             {
-                Text = text, Caption = caption, Icon = GetAdonisImage(image), Buttons = GetAdonisButtons(buttons)
+                Text = text,
+                Caption = caption,
+                Icon = GetAdonisImage(image),
+                Buttons = GetAdonisButtons(buttons)
             };
 
             return (WMessageBoxResult)AdonisUI.Controls.MessageBox.Show(Application.Current.MainWindow, messageBox);
@@ -312,10 +325,25 @@ namespace WolvenKit.Views.Shell
             Application.Current.Shutdown();
         }
 
-        // This is called before this.WhenActivated
-        private void ChromelessWindow_Loaded(object sender, RoutedEventArgs e) { }
+        private void MainView_StateChanged(object sender, EventArgs e)
+        {
+            if (IsActive && WindowState == WindowState.Maximized && !_keepMaximized)
+            {
+                _keepMaximized = true;
+            }
+            else if (WindowState == WindowState.Normal)
+            {
+                _keepMaximized = false;
+            }
+        }
 
-        // This is never called
-        private void ChromelessWindow_Closing(object sender, CancelEventArgs e) { }
+        private void MainView_Activated(object sender, EventArgs e)
+        {
+            if (_keepMaximized)
+            {
+                SetCurrentValue(WindowStateProperty, WindowState.Normal);
+                SetCurrentValue(WindowStateProperty, WindowState.Maximized);
+            }
+        }
     }
 }

@@ -1,10 +1,7 @@
-using System;
-using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
-using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.App.ViewModels.HomePage;
 
@@ -28,14 +25,10 @@ public partial class HomePageViewModel : ObservableObject
     {
         _appViewModel = appViewModel;
         _settingsManager = settingsManager;
-        
-        CurrentWindowState = WindowState.Normal;
     }
 
     [ObservableProperty]
     private int _selectedIndex;
-
-    public WindowState CurrentWindowState { get; set; }
 
     public string VersionNumber => _settingsManager.GetVersionNumber();
 
@@ -50,5 +43,5 @@ public partial class HomePageViewModel : ObservableObject
 
     [RelayCommand]
     private void CheckForUpdates() => _appViewModel.CheckForUpdatesCommand.Execute(false);
-    
+
 }

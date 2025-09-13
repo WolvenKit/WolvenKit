@@ -24,7 +24,7 @@ namespace WolvenKit
         /// <summary>
         /// Initialize everything related to Theming.
         /// </summary>
-        public static void InitializeThemeHelper()
+        public static void InitializeTheme()
         {
             var settingsManager = Locator.Current.GetService<ISettingsManager>();
 
@@ -33,6 +33,7 @@ namespace WolvenKit
             {
                 settingsManager.UiScale = (int)(100.0 * ComputeScaleFromResolution(SystemParameters.PrimaryScreenHeight));
             }
+
             RegisterTheme(settingsManager);
         }
 
@@ -66,7 +67,7 @@ namespace WolvenKit
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(v_30_2_4);
         }
 
-        public static void InitializeShell(ISettingsManager settingsManager)
+        public static void InitializeShell()
         {
             // Set service locator.
             var mainWindow = Locator.Current.GetService<IViewFor<AppViewModel>>();
@@ -76,11 +77,6 @@ namespace WolvenKit
             if (mainWindow is MainView window)
             {
                 window.Show();
-            }
-
-            if (WolvenDBG.EnableTheming)
-            {
-                RegisterTheme(settingsManager);
             }
         }
 
