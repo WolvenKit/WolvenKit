@@ -6,714 +6,858 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:shared="clr-namespace:WolvenKit.App.ViewModels.HomePage.Pages;assembly=WolvenKit.App"
+    xmlns:converters="clr-namespace:WolvenKit.Converters"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf">
-    <Grid
-        x:Name="topGrid"
-        Margin="50,00,50,0">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Name="PercentageThing" Width="4*" />
-            <ColumnDefinition Width="200*" />
-            <ColumnDefinition Width="{DynamicResource WolvenKitWelcomeRightLength}" />
-            <ColumnDefinition x:Name="PercentageThingHalf" Width="1*" />
-            <ColumnDefinition Width="3*" />
-        </Grid.ColumnDefinitions>
-
-        <Grid.RowDefinitions>
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="3*" />
-        </Grid.RowDefinitions>
-
-        <Grid.Resources>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <ScrollViewer.Resources>
             <ResourceDictionary>
-                <Style
-                    x:Key="WelcomeButton"
-                    BasedOn="{StaticResource ButtonDefault}"
-                    TargetType="{x:Type Button}">
-                    <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt}" />
+                <converters:LessThanConverter x:Key="LessThanConverter" />
 
+                <Style
+                    x:Key="LayoutResponsiveStyle"
+                    TargetType="{x:Type Grid}">
                     <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt3}" />
-                        </Trigger>
+                        <DataTrigger
+                            Binding="{Binding Path=ActualWidth,
+                                              Converter={StaticResource LessThanConverter},
+                                              ConverterParameter=WolvenKitWelcomeBreakWidth,
+                                              RelativeSource={RelativeSource AncestorType=Window}}"
+                            Value="True">
+
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </DataTrigger>
                     </Style.Triggers>
                 </Style>
+            </ResourceDictionary>
+        </ScrollViewer.Resources>
 
-                <Style
-                    x:Key="CardViewItemStyle"
-                    TargetType="{x:Type syncfusion:CardViewItem}">
-                    <Setter Property="Margin" Value="0,0,0,10" />
+        <Grid
+            x:Name="topGrid"
+            Margin="{DynamicResource WolvenKitMarginHorizontal}"
+            Style="{StaticResource LayoutResponsiveStyle}">
+            <Grid.Resources>
+                <ResourceDictionary>
+                    <Style
+                        x:Key="WelcomeButton"
+                        BasedOn="{StaticResource ButtonDefault}"
+                        TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt}" />
 
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type syncfusion:CardViewItem}">
-                                <Grid Margin="{Binding ActualWidth, ElementName=PercentageThingHalf}">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="300" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt3}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
 
-                                    <!-- Header Alignment -->
-                                    <Grid>
-                                        <Grid.Resources>
-                                            <Style
-                                                x:Key="CardItemBorder"
-                                                TargetType="Border">
-                                                <Setter Property="Background" Value="Transparent" />
-                                                <Style.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter Property="Background" Value="#2D2D30" />
-                                                    </Trigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Grid.Resources>
+                    <Style
+                        x:Key="CardViewItemStyle"
+                        TargetType="{x:Type syncfusion:CardViewItem}">
+                        <Setter Property="Margin" Value="0,0,0,10" />
 
-                                        <Button
-                                            Height="Auto"
-                                            Padding="0"
-                                            HorizontalContentAlignment="Stretch"
-                                            VerticalContentAlignment="Stretch"
-                                            Background="Transparent"
-                                            BorderThickness="0"
-                                            Command="{Binding ElementName=topGrid,
-                                                              Path=DataContext.OpenProjectCommand}"
-                                            CommandParameter="{Binding ProjectPath}"
-                                            ToolTip="{Binding Path=ProjectPath}">
-                                            <!--Button.OpacityMask>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type syncfusion:CardViewItem}">
+                                    <Grid Margin="{Binding ActualWidth, ElementName=PercentageThingHalf}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="300" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Header Alignment -->
+                                        <Grid>
+                                            <Grid.Resources>
+                                                <Style
+                                                    x:Key="CardItemBorder"
+                                                    TargetType="Border">
+                                                    <Setter Property="Background" Value="Transparent" />
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" Value="#2D2D30" />
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Grid.Resources>
+
+                                            <Button
+                                                Height="Auto"
+                                                Padding="0"
+                                                HorizontalContentAlignment="Stretch"
+                                                VerticalContentAlignment="Stretch"
+                                                Background="Transparent"
+                                                BorderThickness="0"
+                                                Command="{Binding ElementName=topGrid,
+                                                                  Path=DataContext.OpenProjectCommand}"
+                                                CommandParameter="{Binding ProjectPath}"
+                                                ToolTip="{Binding Path=ProjectPath}">
+                                                <!--Button.OpacityMask>
                                                 <VisualBrush Visual="{Binding ElementName=headerBackground}" />
                                             </Button.OpacityMask-->
 
-                                            <Border
-                                                x:Name="headerBackground"
-                                                CornerRadius="10"
-                                                Style="{StaticResource CardItemBorder}">
-                                                <Grid Width="300">
-                                                    <Grid.Resources>
-                                                        <Style
-                                                            x:Key="ProjectIconBackground"
-                                                            TargetType="Border">
-                                                            <Setter Property="Background" Value="{StaticResource WolvenKitYellow}" />
-                                                            <Style.Triggers>
-                                                                <DataTrigger
-                                                                    Binding="{Binding ProjectColor}"
-                                                                    Value="1">
-                                                                    <Setter Property="Background" Value="{StaticResource WolvenKitYellow}" />
-                                                                </DataTrigger>
-                                                                <DataTrigger
-                                                                    Binding="{Binding ProjectColor}"
-                                                                    Value="2">
-                                                                    <Setter Property="Background" Value="{StaticResource WolvenKitCyan}" />
-                                                                </DataTrigger>
-                                                                <DataTrigger
-                                                                    Binding="{Binding ProjectColor}"
-                                                                    Value="3">
-                                                                    <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
-                                                                </DataTrigger>
-                                                                <DataTrigger
-                                                                    Binding="{Binding ProjectColor}"
-                                                                    Value="4">
-                                                                    <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
-                                                                </DataTrigger>
-                                                                <DataTrigger
-                                                                    Binding="{Binding ProjectColor}"
-                                                                    Value="5">
-                                                                    <Setter Property="Background" Value="{StaticResource WolvenKitPurple}" />
-                                                                </DataTrigger>
-                                                                <DataTrigger
-                                                                    Binding="{Binding ProjectColor}"
-                                                                    Value="6">
-                                                                    <Setter Property="Background" Value="{StaticResource WolvenKitTan}" />
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </Grid.Resources>
+                                                <Border
+                                                    x:Name="headerBackground"
+                                                    CornerRadius="10"
+                                                    Style="{StaticResource CardItemBorder}">
+                                                    <Grid Width="300">
+                                                        <Grid.Resources>
+                                                            <Style
+                                                                x:Key="ProjectIconBackground"
+                                                                TargetType="Border">
+                                                                <Setter Property="Background" Value="{StaticResource WolvenKitYellow}" />
+                                                                <Style.Triggers>
+                                                                    <DataTrigger
+                                                                        Binding="{Binding ProjectColor}"
+                                                                        Value="1">
+                                                                        <Setter Property="Background" Value="{StaticResource WolvenKitYellow}" />
+                                                                    </DataTrigger>
+                                                                    <DataTrigger
+                                                                        Binding="{Binding ProjectColor}"
+                                                                        Value="2">
+                                                                        <Setter Property="Background" Value="{StaticResource WolvenKitCyan}" />
+                                                                    </DataTrigger>
+                                                                    <DataTrigger
+                                                                        Binding="{Binding ProjectColor}"
+                                                                        Value="3">
+                                                                        <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
+                                                                    </DataTrigger>
+                                                                    <DataTrigger
+                                                                        Binding="{Binding ProjectColor}"
+                                                                        Value="4">
+                                                                        <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
+                                                                    </DataTrigger>
+                                                                    <DataTrigger
+                                                                        Binding="{Binding ProjectColor}"
+                                                                        Value="5">
+                                                                        <Setter Property="Background" Value="{StaticResource WolvenKitPurple}" />
+                                                                    </DataTrigger>
+                                                                    <DataTrigger
+                                                                        Binding="{Binding ProjectColor}"
+                                                                        Value="6">
+                                                                        <Setter Property="Background" Value="{StaticResource WolvenKitTan}" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Grid.Resources>
 
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="{DynamicResource WolvenKitWelcomeCardSammyWidth}" />
-                                                        <ColumnDefinition Width="*" />
-                                                    </Grid.ColumnDefinitions>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="{DynamicResource WolvenKitWelcomeCardSammyWidth}" />
+                                                            <ColumnDefinition Width="*" />
+                                                        </Grid.ColumnDefinitions>
 
-                                                    <Border
-                                                        Height="{DynamicResource WolvenKitWelcomeCardSammyHeight}"
-                                                        CornerRadius="3"
-                                                        Style="{StaticResource ProjectIconBackground}">
-                                                        <Image
-                                                            Width="{DynamicResource WolvenKitWelcomeCardSammyClipHeight}"
-                                                            HorizontalAlignment="Center"
-                                                            VerticalAlignment="Center"
-                                                            RenderOptions.BitmapScalingMode="HighQuality"
-                                                            Source="pack://application:,,,/Resources/Media/Images/Application/Sammy_Alpha_Mask.png" />
-                                                    </Border>
+                                                        <Border
+                                                            Height="{DynamicResource WolvenKitWelcomeCardSammyHeight}"
+                                                            CornerRadius="3"
+                                                            Style="{StaticResource ProjectIconBackground}">
+                                                            <Image
+                                                                Width="{DynamicResource WolvenKitWelcomeCardSammyClipHeight}"
+                                                                HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center"
+                                                                RenderOptions.BitmapScalingMode="HighQuality"
+                                                                Source="pack://application:,,,/Resources/Media/Images/Application/Sammy_Alpha_Mask.png" />
+                                                        </Border>
 
-                                                    <StackPanel
-                                                        Grid.Column="1"
-                                                        Margin="10,5,0,8"
-                                                        VerticalAlignment="Center">
-                                                        <TextBlock
-                                                            Foreground="White"
-                                                            FontSize="{DynamicResource WolvenKitFontMedium}"
-                                                            FontWeight="Bold"
-                                                            Text="{Binding Path=SafeName}"
-                                                            TextTrimming="CharacterEllipsis" />
+                                                        <StackPanel
+                                                            Grid.Column="1"
+                                                            Margin="10,5,0,8"
+                                                            VerticalAlignment="Center">
+                                                            <TextBlock
+                                                                Foreground="White"
+                                                                FontSize="{DynamicResource WolvenKitFontMedium}"
+                                                                FontWeight="Bold"
+                                                                Text="{Binding Path=SafeName}"
+                                                                TextTrimming="CharacterEllipsis" />
 
-                                                        <TextBlock
-                                                            Margin="0,1,0,2"
-                                                            HorizontalAlignment="Left"
-                                                            Foreground="#999999"
-                                                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                                                            Text="{Binding Path=ProjectPath}"
-                                                            TextTrimming="CharacterEllipsis" />
+                                                            <TextBlock
+                                                                Margin="0,1,0,2"
+                                                                HorizontalAlignment="Left"
+                                                                Foreground="#999999"
+                                                                FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                                                                Text="{Binding Path=ProjectPath}"
+                                                                TextTrimming="CharacterEllipsis" />
 
-                                                        <TextBlock
-                                                            FontSize="{DynamicResource WolvenKitFontAltTitle}"
-                                                            Text="{Binding CreationDate}" />
-                                                    </StackPanel>
-                                                </Grid>
-                                            </Border>
-                                        </Button>
+                                                            <TextBlock
+                                                                FontSize="{DynamicResource WolvenKitFontAltTitle}"
+                                                                Text="{Binding CreationDate}" />
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </Border>
+                                            </Button>
+                                        </Grid>
+
+                                        <StackPanel
+                                            Grid.Column="1"
+                                            Margin="0,0,10,0"
+                                            VerticalAlignment="Center"
+                                            Orientation="Vertical">
+                                            <ToggleButton
+                                                Padding="{DynamicResource WolvenKitWelcomeTogglePadding}"
+                                                Style="{StaticResource ToggleButtonCustom}"
+                                                IsChecked="{Binding IsPinned,
+                                                                    Mode=TwoWay}"
+                                                ToolTip="Pin project">
+                                                <ToggleButton.Resources>
+                                                    <Style TargetType="{x:Type iconPacks:PackIconCodicons}">
+                                                        <Setter Property="Kind" Value="StarEmpty" />
+
+                                                        <Style.Triggers>
+                                                            <DataTrigger
+                                                                Binding="{Binding IsChecked,
+                                                                                  RelativeSource={RelativeSource AncestorType=ToggleButton}}"
+                                                                Value="True">
+                                                                <Setter Property="Kind" Value="StarFull" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </ToggleButton.Resources>
+
+                                                <iconPacks:PackIconCodicons Width="{DynamicResource WolvenKitIconTiny}" />
+                                            </ToggleButton>
+
+                                            <Button
+                                                Padding="{DynamicResource WolvenKitWelcomeTogglePadding}"
+                                                Style="{StaticResource ButtonCustom}"
+                                                Command="{Binding ElementName=topGrid,
+                                                                  Path=DataContext.OpenInExplorerCommand}"
+                                                CommandParameter="{Binding ProjectPath}"
+                                                ToolTip="Find in Explorer">
+                                                <Button.Resources>
+                                                    <Style TargetType="{x:Type iconPacks:PackIconCodicons}">
+                                                        <Setter Property="Foreground" Value="White" />
+
+                                                        <Style.Triggers>
+                                                            <DataTrigger
+                                                                Binding="{Binding IsMouseOver,
+                                                                                  RelativeSource={RelativeSource AncestorType=Button}}"
+                                                                Value="True">
+                                                                <Setter Property="Foreground" Value="#cccccc" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Resources>
+
+                                                <iconPacks:PackIconCodicons
+                                                    Kind="FolderOpened"
+                                                    Width="{DynamicResource WolvenKitIconTiny}" />
+                                            </Button>
+
+                                            <Button
+                                                x:Name="RUIDeleteProjectButton"
+                                                Padding="{DynamicResource WolvenKitWelcomeTogglePadding}"
+                                                Style="{StaticResource ButtonCustom}"
+                                                Command="{Binding ElementName=topGrid,
+                                                                  Path=DataContext.DeleteProjectCommand}"
+                                                CommandParameter="{Binding ProjectPath}"
+                                                ToolTip="Remove from Recents">
+                                                <Button.Resources>
+                                                    <Style TargetType="{x:Type iconPacks:PackIconCodicons}">
+                                                        <Setter Property="Foreground" Value="{StaticResource WolvenKitRed}" />
+
+                                                        <Style.Triggers>
+                                                            <DataTrigger
+                                                                Binding="{Binding IsMouseOver,
+                                                                                  RelativeSource={RelativeSource AncestorType=Button}}"
+                                                                Value="True">
+                                                                <Setter Property="Foreground" Value="{StaticResource WolvenKitRedShadow}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Resources>
+
+                                                <iconPacks:PackIconCodicons
+                                                    Kind="ChromeClose"
+                                                    Width="{DynamicResource WolvenKitIconTiny}" />
+                                            </Button>
+                                        </StackPanel>
                                     </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="Width" Value="Auto" />
+                    </Style>
 
-                                    <StackPanel
-                                        Grid.Column="1"
-                                        Margin="0,0,10,0"
-                                        VerticalAlignment="Center"
-                                        Orientation="Vertical">
-                                        <ToggleButton
-                                            Padding="{DynamicResource WolvenKitWelcomeTogglePadding}"
-                                            Style="{StaticResource ToggleButtonCustom}"
-                                            IsChecked="{Binding IsPinned,
-                                                                Mode=TwoWay}"
-                                            ToolTip="Pin project">
-                                            <ToggleButton.Resources>
-                                                <Style TargetType="{x:Type iconPacks:PackIconCodicons}">
-                                                    <Setter Property="Kind" Value="StarEmpty" />
+                    <Style
+                        x:Key="ProjectsResponsiveStyle"
+                        TargetType="{x:Type Grid}">
+                        <Setter Property="Grid.Column" Value="0" />
+                        <Setter Property="Grid.Row" Value="1" />
+                        <Setter Property="Margin" Value="6,0,0,24" />
 
-                                                    <Style.Triggers>
-                                                        <DataTrigger
-                                                            Binding="{Binding IsChecked,
-                                                                              RelativeSource={RelativeSource AncestorType=ToggleButton}}"
-                                                            Value="True">
-                                                            <Setter Property="Kind" Value="StarFull" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </ToggleButton.Resources>
+                        <Style.Triggers>
+                            <DataTrigger
+                                Binding="{Binding Path=ActualWidth,
+                                                  Converter={StaticResource LessThanConverter},
+                                                  ConverterParameter=WolvenKitWelcomeActionsColumnBreakWidth,
+                                                  RelativeSource={RelativeSource AncestorType=Window}}"
+                                Value="True">
+                                <Setter Property="Grid.ColumnSpan" Value="2" />
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="Margin" Value="0,0,0,24" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
 
-                                            <iconPacks:PackIconCodicons Width="{DynamicResource WolvenKitIconTiny}" />
-                                        </ToggleButton>
+                    <Style
+                        x:Key="ActionResponsiveStyle"
+                        TargetType="{x:Type Grid}">
+                        <!-- Must be set here to allow override with Style.Triggers -->
+                        <Setter Property="Grid.Column" Value="2" />
+                        <Setter Property="Grid.Row" Value="0" />
+                        <Setter Property="HorizontalAlignment" Value="Right" />
 
-                                        <Button
-                                            Padding="{DynamicResource WolvenKitWelcomeTogglePadding}"
-                                            Style="{StaticResource ButtonCustom}"
-                                            Command="{Binding ElementName=topGrid,
-                                                              Path=DataContext.OpenInExplorerCommand}"
-                                            CommandParameter="{Binding ProjectPath}"
-                                            ToolTip="Find in Explorer">
-                                            <Button.Resources>
-                                                <Style TargetType="{x:Type iconPacks:PackIconCodicons}">
-                                                    <Setter Property="Foreground" Value="White" />
+                        <Style.Triggers>
+                            <DataTrigger
+                                Binding="{Binding Path=ActualWidth,
+                                                  Converter={StaticResource LessThanConverter},
+                                                  ConverterParameter=WolvenKitWelcomeBreakWidth,
+                                                  RelativeSource={RelativeSource AncestorType=Window}}"
+                                Value="True">
+                                <Setter Property="Grid.Column" Value="0" />
+                                <Setter Property="Grid.ColumnSpan" Value="3" />
+                                <Setter Property="Grid.Row" Value="1" />
+                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                <Setter Property="Margin" Value="0,8,0,0" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
 
-                                                    <Style.Triggers>
-                                                        <DataTrigger
-                                                            Binding="{Binding IsMouseOver,
-                                                                              RelativeSource={RelativeSource AncestorType=Button}}"
-                                                            Value="True">
-                                                            <Setter Property="Foreground" Value="#cccccc" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Button.Resources>
+                    <Style
+                        x:Key="MainActionsResponsiveStyle"
+                        TargetType="{x:Type Grid}">
+                        <Setter Property="Grid.Column" Value="1" />
+                        <Setter Property="Grid.Row" Value="1" />
+                        <Setter Property="Margin" Value="6,0,0,24" />
 
-                                            <iconPacks:PackIconCodicons
-                                                Kind="FolderOpened"
-                                                Width="{DynamicResource WolvenKitIconTiny}" />
-                                        </Button>
+                        <Style.Triggers>
+                            <DataTrigger
+                                Binding="{Binding Path=ActualWidth,
+                                                  Converter={StaticResource LessThanConverter},
+                                                  ConverterParameter=WolvenKitWelcomeActionsColumnBreakWidth,
+                                                  RelativeSource={RelativeSource AncestorType=Window}}"
+                                Value="True">
+                                <Setter Property="Grid.Column" Value="0" />
+                                <Setter Property="Grid.ColumnSpan" Value="2" />
+                                <Setter Property="Grid.Row" Value="2" />
+                                <Setter Property="Margin" Value="0,0,0,24" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ResourceDictionary>
+            </Grid.Resources>
 
-                                        <Button
-                                            x:Name="RUIDeleteProjectButton"
-                                            Padding="{DynamicResource WolvenKitWelcomeTogglePadding}"
-                                            Style="{StaticResource ButtonCustom}"
-                                            Command="{Binding ElementName=topGrid,
-                                                              Path=DataContext.DeleteProjectCommand}"
-                                            CommandParameter="{Binding ProjectPath}"
-                                            ToolTip="Remove from Recents">
-                                            <Button.Resources>
-                                                <Style TargetType="{x:Type iconPacks:PackIconCodicons}">
-                                                    <Setter Property="Foreground" Value="{StaticResource WolvenKitRed}" />
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="{DynamicResource WolvenKitWelcomeLeftMinWidth}" />
+                <ColumnDefinition MaxWidth="{DynamicResource WolvenKitWelcomeRightLength}" />
+            </Grid.ColumnDefinitions>
 
-                                                    <Style.Triggers>
-                                                        <DataTrigger
-                                                            Binding="{Binding IsMouseOver,
-                                                                              RelativeSource={RelativeSource AncestorType=Button}}"
-                                                            Value="True">
-                                                            <Setter Property="Foreground" Value="{StaticResource WolvenKitRedShadow}" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Button.Resources>
-
-                                            <iconPacks:PackIconCodicons
-                                                Kind="ChromeClose"
-                                                Width="{DynamicResource WolvenKitIconTiny}" />
-                                        </Button>
-                                    </StackPanel>
-                                </Grid>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                    <Setter Property="Width" Value="Auto" />
-                </Style>
-            </ResourceDictionary>
-        </Grid.Resources>
-
-        <!-- WK Text Logo -->
-        <Image
-            Grid.Row="0"
-            Grid.Column="1"
-            Grid.ColumnSpan="2"
-            Margin="66,30,66,20"
-            HorizontalAlignment="Center"
-            RenderOptions.BitmapScalingMode="HighQuality"
-            Source="pack://application:,,,/Resources/Media/Images/Application/wkit_logo_text_singlestack_white.png" />
-
-        <!-- Left Column \ Projects -->
-        <Grid
-            Grid.Row="1"
-            Grid.Column="1"
-            Background="Transparent">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
 
-            <!-- Pinned Projects -->
+            <!-- WK Text Logo -->
+            <Image
+                Grid.ColumnSpan="2"
+                MaxHeight="{DynamicResource WolvenKitWelcomeLogoMaxHeight}"
+                Margin="{DynamicResource WolvenKitMarginVertical}"
+                HorizontalAlignment="Center"
+                RenderOptions.BitmapScalingMode="HighQuality"
+                Source="pack://application:,,,/Resources/Media/Images/Application/wkit_logo_text_singlestack_white.png" />
+
+            <!-- Left Column \ Projects -->
             <Grid
-                Grid.Row="0"
-                Margin="{DynamicResource WolvenKitMarginBottom}"
-                Visibility="{Binding ShowPinned,
-                                     Converter={StaticResource BooleanToVisibilityConverter}}">
+                Margin="0,0,6,24"
+                VerticalAlignment="Top"
+                Style="{StaticResource ProjectsResponsiveStyle}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <!-- Header -->
-                <Grid Grid.Row="0">
-                    <StackPanel
-                        Margin="9,0,0,20"
-                        HorizontalAlignment="Left"
-                        Orientation="Horizontal">
-                        <Border Width="{Binding ActualWidth, ElementName=PercentageThingHalf}" />
+                <!-- Pinned Projects -->
+                <Grid
+                    Grid.Row="0"
+                    Margin="{DynamicResource WolvenKitMarginBottom}"
+                    Visibility="{Binding ShowPinned,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
 
-                        <iconPacks:PackIconCodicons
-                            Kind="StarFull"
-                            Width="{DynamicResource WolvenKitIconSmall}"
-                            Height="{DynamicResource WolvenKitIconSmall}"
-                            VerticalAlignment="Center"
-                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                            Spin="False"
-                            SpinAutoReverse="False" />
+                    <!-- Header -->
+                    <Grid
+                        Grid.Row="0"
+                        Margin="0,0,0,12">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <!-- 2nd row reserved for responsiveness -->
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
 
-                        <TextBlock
-                            x:Name="PinnedProjectTour"
-                            Margin="{DynamicResource WolvenKitMarginSmallLeft}"
-                            FontSize="{DynamicResource WolvenKitFontTitle}"
-                            Text="Pinned Projects" />
-                    </StackPanel>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
-                    <StackPanel
-                        Margin="9,0,0,20"
-                        HorizontalAlignment="Right"
-                        Orientation="Horizontal">
-                        <TextBox
-                            x:Name="PinnedFilter"
-                            Width="{DynamicResource WolvenKitWelcomeOrderWidth}" />
-
-                        <ComboBox
-                            x:Name="PinnedOrder"
-                            Width="{DynamicResource WolvenKitWelcomeOrderWidth}"
-                            DisplayMemberPath="Key"
-                            ItemsSource="{Binding SortMode,
-                                                  Mode=OneWay}"
-                            SelectedValuePath="Value" />
-                    </StackPanel>
-                </Grid>
-
-                <!-- Cards -->
-                <syncfusion:CardView
-                    Name="PinnedCardView"
-                    Grid.Row="1"
-                    MaxHeight="190"
-                    Margin="10,0,0,0"
-                    HorizontalAlignment="Left"
-                    Background="Transparent"
-                    CanSort="False"
-                    ItemContainerStyle="{StaticResource CardViewItemStyle}"
-                    ItemsSource="{Binding FancyPinnedProjects}"
-                    Orientation="Horizontal"
-                    ShowHeader="False">
-                    <syncfusion:CardView.Resources>
-                        <!-- gets rid of margin around items -->
-                        <Style TargetType="{x:Type ItemsPresenter}">
-                            <Setter Property="Margin" Value="-10" />
-                        </Style>
-                    </syncfusion:CardView.Resources>
-                </syncfusion:CardView>
-            </Grid>
-
-            <!-- Recent Projects -->
-            <Grid Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-
-                <!-- Header -->
-                <Grid Grid.Row="0">
-                    <StackPanel
-                        Margin="9,0,0,20"
-                        HorizontalAlignment="Left"
-                        Orientation="Horizontal">
-                        <Border Width="{Binding ActualWidth, ElementName=PercentageThingHalf}" />
-
-                        <iconPacks:PackIconCodicons
-                            Kind="GoToFile"
-                            Width="{DynamicResource WolvenKitIconSmall}"
-                            Height="{DynamicResource WolvenKitIconSmall}"
-                            VerticalAlignment="Center"
-                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                            Spin="False"
-                            SpinAutoReverse="False" />
-
-                        <TextBlock
-                            x:Name="RecentProjectTour"
-                            Margin="{DynamicResource WolvenKitMarginSmallLeft}"
-                            FontSize="{DynamicResource WolvenKitFontTitle}"
-                            Text="Recent Projects" />
-                    </StackPanel>
-
-                    <StackPanel
-                        Margin="9,0,0,20"
-                        HorizontalAlignment="Right"
-                        Orientation="Horizontal">
-                        <TextBox
-                            x:Name="RecentFilter"
-                            Width="{DynamicResource WolvenKitWelcomeOrderWidth}" />
-
-                        <ComboBox
-                            x:Name="RecentOrder"
-                            Width="{DynamicResource WolvenKitWelcomeOrderWidth}"
-                            DisplayMemberPath="Key"
-                            ItemsSource="{Binding SortMode,
-                                                  Mode=OneWay}"
-                            SelectedValuePath="Value" />
-                    </StackPanel>
-                </Grid>
-
-                <!-- Cards -->
-                <syncfusion:CardView
-                    Name="RecentCardView"
-                    Grid.Row="1"
-                    Margin="10,0,0,0"
-                    HorizontalAlignment="Left"
-                    Background="Transparent"
-                    CanSort="False"
-                    ItemContainerStyle="{StaticResource CardViewItemStyle}"
-                    ItemsSource="{Binding FancyProjects}"
-                    Orientation="Horizontal"
-                    ShowHeader="False">
-                    <syncfusion:CardView.Resources>
-                        <!-- gets rid of margin around items -->
-                        <Style TargetType="{x:Type ItemsPresenter}">
-                            <Setter Property="Margin" Value="-10" />
-                        </Style>
-                    </syncfusion:CardView.Resources>
-                </syncfusion:CardView>
-            </Grid>
-        </Grid>
-
-        <!-- Right Column -->
-        <Grid
-            Grid.Row="1"
-            Grid.Column="2">
-            <Grid>
-                <Border
-                    Margin="0"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Top">
-                    <StackPanel>
-                        <Button
-                            x:Name="NewProjectButton"
-                            Height="{DynamicResource WolvenKitWelcomeButtonHeight}"
-                            Margin="{DynamicResource WolvenKitWelcomeButtonMargin}"
-                            Padding="{DynamicResource WolvenKitWelcomeButtonPadding}"
-                            HorizontalAlignment="Stretch"
-                            BorderThickness="0"
-                            Style="{StaticResource WelcomeButton}">
-                            <Grid>
-                                <StackPanel
-                                    Height="{DynamicResource WolvenKitWelcomeStackHeight}"
-                                    Margin="{DynamicResource WolvenKitWelcomeStackMargin}">
-                                    <TextBlock
-                                        Width="{DynamicResource WolvenKitWelcomeButtonWidth}"
-                                        HorizontalAlignment="Center"
-                                        FontSize="{DynamicResource WolvenKitFontHeader}"
-                                        Text="Create a new project" />
-
-                                    <TextBlock
-                                        Width="{DynamicResource WolvenKitWelcomeButtonWidth}"
-                                        HorizontalAlignment="Center"
-                                        Foreground="Gray"
-                                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                                        Text="Get started with WolvenKit by creating a new mod project"
-                                        TextWrapping="Wrap" />
-                                </StackPanel>
-                                <iconPacks:PackIconCodicons
-                                    Kind="Add"
-                                    Width="{DynamicResource WolvenKitIconHuge}"
-                                    Height="{DynamicResource WolvenKitIconHuge}"
-                                    Margin="0"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Center" />
-                            </Grid>
-                        </Button>
-
-                        <Button
-                            x:Name="OpenProjectButton"
-                            Height="{DynamicResource WolvenKitWelcomeButtonHeight}"
-                            Margin="{DynamicResource WolvenKitWelcomeButtonMargin}"
-                            Padding="{DynamicResource WolvenKitWelcomeButtonPadding}"
-                            HorizontalAlignment="Stretch"
-                            BorderThickness="0"
-                            Style="{StaticResource WelcomeButton}">
-                            <Grid>
-                                <StackPanel
-                                    Height="{DynamicResource WolvenKitWelcomeStackHeight}"
-                                    Margin="{DynamicResource WolvenKitWelcomeStackMargin}">
-                                    <TextBlock
-                                        Width="{DynamicResource WolvenKitWelcomeButtonWidth}"
-                                        HorizontalAlignment="Center"
-                                        FontSize="{DynamicResource WolvenKitFontHeader}"
-                                        Text="Open a project" />
-
-                                    <TextBlock
-                                        Width="{DynamicResource WolvenKitWelcomeButtonWidth}"
-                                        HorizontalAlignment="Center"
-                                        Foreground="Gray"
-                                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                                        Text="Open an existing .modproj file"
-                                        TextWrapping="Wrap" />
-                                </StackPanel>
-                                <iconPacks:PackIconCodicons
-                                    Kind="GoToFile"
-                                    Width="{DynamicResource WolvenKitIconHuge}"
-                                    Height="{DynamicResource WolvenKitIconHuge}"
-                                    Margin="0"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Center" />
-                            </Grid>
-                        </Button>
-
-                        <Button
-                            x:Name="ContinueWithoutProjectButton"
-                            Height="{DynamicResource WolvenKitWelcomeButtonHeight}"
-                            Margin="{DynamicResource WolvenKitWelcomeButtonMargin}"
-                            Padding="{DynamicResource WolvenKitWelcomeButtonPadding}"
-                            HorizontalAlignment="Stretch"
-                            BorderThickness="0"
-                            Style="{StaticResource WelcomeButton}">
-                            <Grid>
-                                <StackPanel
-                                    Height="{DynamicResource WolvenKitWelcomeStackHeight}"
-                                    Margin="{DynamicResource WolvenKitWelcomeStackMargin}">
-                                    <TextBlock
-                                        Width="{DynamicResource WolvenKitWelcomeButtonWidth}"
-                                        HorizontalAlignment="Center"
-                                        FontSize="{DynamicResource WolvenKitFontHeader}"
-                                        Text="Continue to editor" />
-
-                                    <TextBlock
-                                        Width="{DynamicResource WolvenKitWelcomeButtonWidth}"
-                                        HorizontalAlignment="Center"
-                                        Foreground="Gray"
-                                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                                        Text="Access the WolvenKit Editor"
-                                        TextWrapping="Wrap" />
-                                </StackPanel>
-                                <iconPacks:PackIconCodicons
-                                    Kind="ArrowRight"
-                                    Width="{DynamicResource WolvenKitIconHuge}"
-                                    Height="{DynamicResource WolvenKitIconHuge}"
-                                    Margin="0"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Center" />
-                            </Grid>
-                        </Button>
-
-                        <!-- Socials Header -->
-
-                        <StackPanel
-                            Margin="3,20,0,20"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Bottom"
-                            Orientation="Horizontal">
-                            <StackPanel Orientation="Horizontal">
-                                <iconPacks:PackIconBoxIcons
-                                    Kind="RegularNetworkChart"
-                                    Width="{DynamicResource WolvenKitIconSmall}"
-                                    Height="{DynamicResource WolvenKitIconSmall}"
-                                    VerticalAlignment="Center"
-                                    Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                    Spin="False"
-                                    SpinAutoReverse="False" />
-
-                                <TextBlock
-                                    Margin="8,0"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"
-                                    FontSize="{DynamicResource WolvenKitFontTitle}"
-                                    Text="Socials" />
-                            </StackPanel>
-                        </StackPanel>
-
-                        <Grid
-                            Margin="0,0,0,0"
-                            HorizontalAlignment="Stretch">
+                        <!-- Pinned Projects -->
+                        <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
-                            <!-- Socials -->
-
-                            <Button
-                                x:Name="DiscordLinkButton"
-                                Height="{DynamicResource WolvenKitWelcomeSocialButtonHeight}"
-                                Margin="0,0,4,0"
-                                HorizontalAlignment="Stretch"
-                                BorderThickness="0"
-                                Style="{StaticResource WelcomeButton}">
-                                <StackPanel Orientation="Horizontal">
-                                    <iconPacks:PackIconBoxIcons
-                                        Kind="LogosDiscord"
-                                        Width="{DynamicResource WolvenKitIconSmall}"
-                                        Height="{DynamicResource WolvenKitIconSmall}"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center" />
-
-                                    <TextBlock
-                                        Margin="7,0,0,0"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        FontSize="{DynamicResource WolvenKitFontMedium}"
-                                        Text="Discord" />
-                                </StackPanel>
-                            </Button>
-
-                            <Button
-                                x:Name="YoutubeLinkButton"
-                                Grid.Column="1"
-                                Height="{DynamicResource WolvenKitWelcomeSocialButtonHeight}"
-                                Margin="4,0,0,0"
-                                HorizontalAlignment="Stretch"
-                                BorderThickness="0"
-                                Style="{StaticResource WelcomeButton}">
-                                <StackPanel Orientation="Horizontal">
-                                    <iconPacks:PackIconBoxIcons
-                                        Kind="LogosYoutube"
-                                        Width="{DynamicResource WolvenKitIconSmall}"
-                                        Height="{DynamicResource WolvenKitIconSmall}"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center" />
-
-                                    <TextBlock
-                                        Margin="7,0,0,0"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        FontSize="{DynamicResource WolvenKitFontMedium}"
-                                        Text="YouTube" />
-                                </StackPanel>
-                            </Button>
-                        </Grid>
-
-                        <!-- Support Header -->
-                        <StackPanel
-                            Margin="3,20,0,20"
-                            FlowDirection="LeftToRight"
-                            Orientation="Horizontal">
-                            <iconPacks:PackIconBoxIcons
-                                Kind="RegularDonateHeart"
+                            <iconPacks:PackIconCodicons
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Kind="StarFull"
                                 Width="{DynamicResource WolvenKitIconSmall}"
                                 Height="{DynamicResource WolvenKitIconSmall}"
                                 VerticalAlignment="Center"
-                                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+                                Foreground="{StaticResource ForegroundColor}"
+                                Spin="False"
+                                SpinAutoReverse="False" />
 
                             <TextBlock
-                                Margin="10,0,0,0"
+                                x:Name="PinnedProjectTour"
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Margin="{DynamicResource WolvenKitMarginSmallLeft}"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 FontSize="{DynamicResource WolvenKitFontTitle}"
-                                Text="Support Us" />
-                        </StackPanel>
+                                Text="Pinned Projects" />
+                        </Grid>
 
-                        <!-- Support -->
-                        <Grid>
+                        <!-- Filter and Dropdown -->
+                        <Grid Style="{StaticResource ActionResponsiveStyle}">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
                             </Grid.ColumnDefinitions>
 
-                            <Button
-                                x:Name="OpenCollectiveLinkButton"
-                                Height="{DynamicResource WolvenKitWelcomeSocialButtonHeight}"
-                                Margin="0,0,4,0"
-                                HorizontalAlignment="Stretch"
-                                BorderThickness="0"
-                                Style="{StaticResource WelcomeButton}">
-                                <StackPanel Orientation="Horizontal">
-                                    <iconPacks:PackIconBoxIcons
-                                        Kind="SolidDonateHeart"
-                                        Width="{DynamicResource WolvenKitIconSmall}"
-                                        Height="{DynamicResource WolvenKitIconSmall}"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center" />
+                            <TextBox
+                                x:Name="PinnedFilter"
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Width="{DynamicResource WolvenKitWelcomeOrderWidth}" />
 
-                                    <TextBlock
-                                        Margin="7,0,0,0"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        FontSize="{DynamicResource WolvenKitFontMedium}"
-                                        Text="Open Collective" />
-                                </StackPanel>
-                            </Button>
-
-                            <Button
-                                x:Name="PatreonLinkButton"
+                            <ComboBox
+                                x:Name="PinnedOrder"
+                                Grid.Row="0"
                                 Grid.Column="1"
-                                Height="{DynamicResource WolvenKitWelcomeSocialButtonHeight}"
-                                Margin="4,0,0,0"
+                                Width="{DynamicResource WolvenKitWelcomeOrderWidth}"
+                                Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                                DisplayMemberPath="Key"
+                                ItemsSource="{Binding SortMode,
+                                                      Mode=OneWay}"
+                                SelectedValuePath="Value" />
+                        </Grid>
+                    </Grid>
+
+                    <!-- Cards -->
+                    <syncfusion:CardView
+                        Name="PinnedCardView"
+                        Grid.Row="1"
+                        MaxHeight="190"
+                        HorizontalAlignment="Left"
+                        Background="Transparent"
+                        CanSort="False"
+                        ItemContainerStyle="{StaticResource CardViewItemStyle}"
+                        ItemsSource="{Binding FancyPinnedProjects}"
+                        Orientation="Horizontal"
+                        ShowHeader="False">
+                        <syncfusion:CardView.Resources>
+                            <!-- gets rid of margin around items -->
+                            <Style TargetType="{x:Type ItemsPresenter}">
+                                <Setter Property="Margin" Value="-10" />
+                            </Style>
+                        </syncfusion:CardView.Resources>
+                    </syncfusion:CardView>
+                </Grid>
+
+                <!-- Recent Projects -->
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Header -->
+                    <Grid
+                        Grid.Row="0"
+                        Margin="0,0,0,12">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <!-- 2nd row reserved for responsiveness -->
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Recent Projects -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <iconPacks:PackIconCodicons
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Kind="GoToFile"
+                                Width="{DynamicResource WolvenKitIconSmall}"
+                                Height="{DynamicResource WolvenKitIconSmall}"
+                                VerticalAlignment="Center"
+                                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                Spin="False"
+                                SpinAutoReverse="False" />
+
+                            <TextBlock
+                                x:Name="RecentProjectTour"
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                FontSize="{DynamicResource WolvenKitFontTitle}"
+                                Text="Recent Projects" />
+                        </Grid>
+
+                        <!-- Filter and Dropdown -->
+                        <Grid Style="{StaticResource ActionResponsiveStyle}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox
+                                x:Name="RecentFilter"
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Width="{DynamicResource WolvenKitWelcomeOrderWidth}" />
+
+                            <ComboBox
+                                x:Name="RecentOrder"
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Width="{DynamicResource WolvenKitWelcomeOrderWidth}"
+                                Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                                DisplayMemberPath="Key"
+                                ItemsSource="{Binding SortMode,
+                                                      Mode=OneWay}"
+                                SelectedValuePath="Value" />
+                        </Grid>
+                    </Grid>
+
+                    <!-- Cards -->
+                    <syncfusion:CardView
+                        Name="RecentCardView"
+                        Grid.Row="1"
+                        HorizontalAlignment="Left"
+                        Background="Transparent"
+                        CanSort="False"
+                        ItemContainerStyle="{StaticResource CardViewItemStyle}"
+                        ItemsSource="{Binding FancyProjects}"
+                        Orientation="Horizontal"
+                        ShowHeader="False">
+                        <syncfusion:CardView.Resources>
+                            <!-- gets rid of margin around items -->
+                            <Style TargetType="{x:Type ItemsPresenter}">
+                                <Setter Property="Margin" Value="-10" />
+                            </Style>
+                        </syncfusion:CardView.Resources>
+                    </syncfusion:CardView>
+                </Grid>
+            </Grid>
+
+            <!-- Right Column \ Main Actions -->
+            <Grid Style="{StaticResource MainActionsResponsiveStyle}">
+                <Grid>
+                    <Border
+                        Margin="0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top">
+                        <StackPanel>
+                            <Button
+                                x:Name="NewProjectButton"
+                                Height="{DynamicResource WolvenKitWelcomeButtonHeight}"
+                                Margin="{DynamicResource WolvenKitWelcomeButtonMargin}"
+                                Padding="{DynamicResource WolvenKitWelcomeButtonPadding}"
                                 HorizontalAlignment="Stretch"
                                 BorderThickness="0"
                                 Style="{StaticResource WelcomeButton}">
+                                <Grid>
+                                    <StackPanel
+                                        Height="{DynamicResource WolvenKitWelcomeStackHeight}"
+                                        Margin="{DynamicResource WolvenKitWelcomeStackMargin}">
+                                        <TextBlock
+                                            Width="{DynamicResource WolvenKitWelcomeButtonWidth}"
+                                            HorizontalAlignment="Center"
+                                            FontSize="{DynamicResource WolvenKitFontHeader}"
+                                            Text="Create a new project" />
+
+                                        <TextBlock
+                                            Width="{DynamicResource WolvenKitWelcomeButtonWidth}"
+                                            HorizontalAlignment="Center"
+                                            Foreground="Gray"
+                                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                                            Text="Get started with WolvenKit by creating a new mod project"
+                                            TextWrapping="Wrap" />
+                                    </StackPanel>
+                                    <iconPacks:PackIconCodicons
+                                        Kind="Add"
+                                        Width="{DynamicResource WolvenKitIconBig}"
+                                        Height="{DynamicResource WolvenKitIconBig}"
+                                        Margin="0"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center" />
+                                </Grid>
+                            </Button>
+
+                            <Button
+                                x:Name="OpenProjectButton"
+                                Height="{DynamicResource WolvenKitWelcomeButtonHeight}"
+                                Margin="{DynamicResource WolvenKitWelcomeButtonMargin}"
+                                Padding="{DynamicResource WolvenKitWelcomeButtonPadding}"
+                                HorizontalAlignment="Stretch"
+                                BorderThickness="0"
+                                Style="{StaticResource WelcomeButton}">
+                                <Grid>
+                                    <StackPanel
+                                        Height="{DynamicResource WolvenKitWelcomeStackHeight}"
+                                        Margin="{DynamicResource WolvenKitWelcomeStackMargin}">
+                                        <TextBlock
+                                            Width="{DynamicResource WolvenKitWelcomeButtonWidth}"
+                                            HorizontalAlignment="Center"
+                                            FontSize="{DynamicResource WolvenKitFontHeader}"
+                                            Text="Open a project" />
+
+                                        <TextBlock
+                                            Width="{DynamicResource WolvenKitWelcomeButtonWidth}"
+                                            HorizontalAlignment="Center"
+                                            Foreground="Gray"
+                                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                                            Text="Open an existing .modproj file"
+                                            TextWrapping="Wrap" />
+                                    </StackPanel>
+                                    <iconPacks:PackIconCodicons
+                                        Kind="GoToFile"
+                                        Width="{DynamicResource WolvenKitIconBig}"
+                                        Height="{DynamicResource WolvenKitIconBig}"
+                                        Margin="0"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center" />
+                                </Grid>
+                            </Button>
+
+                            <Button
+                                x:Name="ContinueWithoutProjectButton"
+                                Height="{DynamicResource WolvenKitWelcomeButtonHeight}"
+                                Margin="{DynamicResource WolvenKitWelcomeButtonMargin}"
+                                Padding="{DynamicResource WolvenKitWelcomeButtonPadding}"
+                                HorizontalAlignment="Stretch"
+                                BorderThickness="0"
+                                Style="{StaticResource WelcomeButton}">
+                                <Grid>
+                                    <StackPanel
+                                        Height="{DynamicResource WolvenKitWelcomeStackHeight}"
+                                        Margin="{DynamicResource WolvenKitWelcomeStackMargin}">
+                                        <TextBlock
+                                            Width="{DynamicResource WolvenKitWelcomeButtonWidth}"
+                                            HorizontalAlignment="Center"
+                                            FontSize="{DynamicResource WolvenKitFontHeader}"
+                                            Text="Continue to editor" />
+
+                                        <TextBlock
+                                            Width="{DynamicResource WolvenKitWelcomeButtonWidth}"
+                                            HorizontalAlignment="Center"
+                                            Foreground="Gray"
+                                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                                            Text="Access the WolvenKit Editor"
+                                            TextWrapping="Wrap" />
+                                    </StackPanel>
+                                    <iconPacks:PackIconCodicons
+                                        Kind="ArrowRight"
+                                        Width="{DynamicResource WolvenKitIconBig}"
+                                        Height="{DynamicResource WolvenKitIconBig}"
+                                        Margin="0"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center" />
+                                </Grid>
+                            </Button>
+
+                            <!-- Socials Header -->
+
+                            <StackPanel
+                                Margin="3,20,0,20"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Bottom"
+                                Orientation="Horizontal">
                                 <StackPanel Orientation="Horizontal">
                                     <iconPacks:PackIconBoxIcons
-                                        Kind="LogosPatreon"
+                                        Kind="RegularNetworkChart"
                                         Width="{DynamicResource WolvenKitIconSmall}"
                                         Height="{DynamicResource WolvenKitIconSmall}"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center" />
+                                        VerticalAlignment="Center"
+                                        Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                        Spin="False"
+                                        SpinAutoReverse="False" />
 
                                     <TextBlock
-                                        Margin="7,0,0,0"
+                                        Margin="8,0"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
-                                        FontSize="{DynamicResource WolvenKitFontMedium}"
-                                        Text="Patreon" />
+                                        FontSize="{DynamicResource WolvenKitFontTitle}"
+                                        Text="Socials" />
                                 </StackPanel>
-                            </Button>
-                        </Grid>
-                    </StackPanel>
-                </Border>
+                            </StackPanel>
+
+                            <Grid
+                                Margin="0,0,0,0"
+                                HorizontalAlignment="Stretch">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Socials -->
+
+                                <Button
+                                    x:Name="DiscordLinkButton"
+                                    Height="{DynamicResource WolvenKitWelcomeSocialButtonHeight}"
+                                    Margin="0,0,4,0"
+                                    HorizontalAlignment="Stretch"
+                                    BorderThickness="0"
+                                    Style="{StaticResource WelcomeButton}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <iconPacks:PackIconBoxIcons
+                                            Kind="LogosDiscord"
+                                            Width="{DynamicResource WolvenKitIconSmall}"
+                                            Height="{DynamicResource WolvenKitIconSmall}"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center" />
+
+                                        <TextBlock
+                                            Margin="7,0,0,0"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            FontSize="{DynamicResource WolvenKitFontMedium}"
+                                            Text="Discord" />
+                                    </StackPanel>
+                                </Button>
+
+                                <Button
+                                    x:Name="YoutubeLinkButton"
+                                    Grid.Column="1"
+                                    Height="{DynamicResource WolvenKitWelcomeSocialButtonHeight}"
+                                    Margin="4,0,0,0"
+                                    HorizontalAlignment="Stretch"
+                                    BorderThickness="0"
+                                    Style="{StaticResource WelcomeButton}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <iconPacks:PackIconBoxIcons
+                                            Kind="LogosYoutube"
+                                            Width="{DynamicResource WolvenKitIconSmall}"
+                                            Height="{DynamicResource WolvenKitIconSmall}"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center" />
+
+                                        <TextBlock
+                                            Margin="7,0,0,0"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            FontSize="{DynamicResource WolvenKitFontMedium}"
+                                            Text="YouTube" />
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
+
+                            <!-- Support Header -->
+                            <StackPanel
+                                Margin="3,20,0,20"
+                                FlowDirection="LeftToRight"
+                                Orientation="Horizontal">
+                                <iconPacks:PackIconBoxIcons
+                                    Kind="RegularDonateHeart"
+                                    Width="{DynamicResource WolvenKitIconSmall}"
+                                    Height="{DynamicResource WolvenKitIconSmall}"
+                                    VerticalAlignment="Center"
+                                    Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}" />
+
+                                <TextBlock
+                                    Margin="10,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    FontSize="{DynamicResource WolvenKitFontTitle}"
+                                    Text="Support Us" />
+                            </StackPanel>
+
+                            <!-- Support -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Button
+                                    x:Name="OpenCollectiveLinkButton"
+                                    Height="{DynamicResource WolvenKitWelcomeSocialButtonHeight}"
+                                    Margin="0,0,4,0"
+                                    HorizontalAlignment="Stretch"
+                                    BorderThickness="0"
+                                    Style="{StaticResource WelcomeButton}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <iconPacks:PackIconBoxIcons
+                                            Kind="SolidDonateHeart"
+                                            Width="{DynamicResource WolvenKitIconSmall}"
+                                            Height="{DynamicResource WolvenKitIconSmall}"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center" />
+
+                                        <TextBlock
+                                            Margin="7,0,0,0"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            FontSize="{DynamicResource WolvenKitFontMedium}"
+                                            Text="Open Collective" />
+                                    </StackPanel>
+                                </Button>
+
+                                <Button
+                                    x:Name="PatreonLinkButton"
+                                    Grid.Column="1"
+                                    Height="{DynamicResource WolvenKitWelcomeSocialButtonHeight}"
+                                    Margin="4,0,0,0"
+                                    HorizontalAlignment="Stretch"
+                                    BorderThickness="0"
+                                    Style="{StaticResource WelcomeButton}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <iconPacks:PackIconBoxIcons
+                                            Kind="LogosPatreon"
+                                            Width="{DynamicResource WolvenKitIconSmall}"
+                                            Height="{DynamicResource WolvenKitIconSmall}"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center" />
+
+                                        <TextBlock
+                                            Margin="7,0,0,0"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            FontSize="{DynamicResource WolvenKitFontMedium}"
+                                            Text="Patreon" />
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </Grid>
             </Grid>
         </Grid>
-    </Grid>
+    </ScrollViewer>
 </reactiveUi:ReactiveUserControl>
