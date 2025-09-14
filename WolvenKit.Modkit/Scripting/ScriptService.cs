@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -29,7 +29,7 @@ public partial class ScriptService : ObservableObject
     
     public ScriptService(ILoggerService loggerService) => _loggerService = loggerService;
 
-    public async Task ExecuteAsync(string code, Dictionary<string, object>? hostObjects = null, List<string>? searchPaths = null)
+    public async Task ExecuteAsync(string code, Dictionary<string, object>? hostObjects = null, List<string>? searchPaths = null, bool enableDebugging = false)
     {
         if (_mainEngine != null)
         {
@@ -41,7 +41,7 @@ public partial class ScriptService : ObservableObject
 
         var sw = Stopwatch.StartNew();
 
-        _mainEngine = GetScriptEngine(hostObjects, searchPaths);
+        _mainEngine = GetScriptEngine(hostObjects, searchPaths, enableDebugging);
 
         try
         {
@@ -91,9 +91,16 @@ public partial class ScriptService : ObservableObject
         IsRunning = false;
     }
 
-    protected virtual V8ScriptEngine GetScriptEngine(Dictionary<string, object>? hostObjects = null, List<string>? searchPaths = null)
+    protected virtual V8ScriptEngine GetScriptEngine(Dictionary<string, object>? hostObjects = null, List<string>? searchPaths = null, bool enableDebugging = false)
     {
-        var engine = new V8ScriptEngine();
+        var flags = V8ScriptEngineFlags.None;
+        if (enableDebugging)
+        {
+            flags |= V8ScriptEngineFlags.EnableDebugging;
+            flags |= V8ScriptEngineFlags.AwaitDebuggerAndPauseOnStart;
+        }
+
+        var engine = new V8ScriptEngine(flags);
 
         engine.AddHostType(typeof(OpenAs));
         engine.AddHostObject("logger", _loggerService);
