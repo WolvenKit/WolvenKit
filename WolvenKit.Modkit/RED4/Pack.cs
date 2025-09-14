@@ -1,11 +1,7 @@
 using System.IO;
 using System.Linq;
-using Serilog;
 using WolvenKit.Helpers;
-using WolvenKit.Interfaces.Extensions;
-using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.IO;
-using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.RED4
 {
