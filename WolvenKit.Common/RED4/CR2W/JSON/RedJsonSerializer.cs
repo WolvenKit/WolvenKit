@@ -133,6 +133,8 @@ public static class RedJsonSerializer
         s_bufferResolver.Begin();
         s_classResolver.Begin();
 
+        Options.WriteIndented = RedOptions.WriteIndented;
+        
         var result = JsonSerializer.Serialize(value, Options);
 
         CleanUp();
@@ -161,6 +163,8 @@ public static class RedJsonSerializer
 
         s_bufferResolver.Begin();
         s_classResolver.Begin();
+
+        Options.WriteIndented = RedOptions.WriteIndented;
 
         await JsonSerializer.SerializeAsync(utf8Json, value, Options);
 
@@ -205,6 +209,8 @@ public static class RedJsonSerializer
         }
         SetHeader(header);
 
+        Options.WriteIndented = RedOptions.WriteIndented;
+
         try
         {
             return JsonSerializer.Deserialize<T>(json, Options);
@@ -232,6 +238,8 @@ public static class RedJsonSerializer
             header.WKitJsonVersion = SemVersion.Parse(RedOptions.JsonVersion, SemVersionStyles.Strict);
         }
         SetHeader(header);
+
+        Options.WriteIndented = RedOptions.WriteIndented;
 
         try
         {
