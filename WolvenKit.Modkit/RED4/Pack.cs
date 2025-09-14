@@ -1,7 +1,11 @@
 using System.IO;
+using System.Linq;
+using Serilog;
 using WolvenKit.Helpers;
+using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -34,7 +38,17 @@ namespace WolvenKit.Modkit.RED4
             var outFile = Path.Combine(outpath.FullName, $"{infolder.Name}.archive");
             if (modname != null)
             {
-                outFile = Path.Combine(outpath.FullName, $"{modname}.archive");
+                var sanitizedModName = new string(modname.Where(c => !Path.GetInvalidFileNameChars().Contains(c)).ToArray()).Trim();
+                if (sanitizedModName.Length == 0)
+                {
+                    _loggerService.Error($"No valid file name characters found in Mod Name! Exporting as \"INVALID MOD NAME.archive\"!");
+                    sanitizedModName = "INVALID MOD NAME";
+                }
+                if (sanitizedModName != modname)
+                {
+                    _loggerService.Warning($"Mod name \"{modname}\" was sanitized to \"{sanitizedModName}\" for safe file names. To fix this, please change your Mod Name in \"Project Configuration\" to remove invalid characters.");
+                }
+                outFile = Path.Combine(outpath.FullName, $"{sanitizedModName}.archive");
             }
             var tmpFile = Path.ChangeExtension(outFile, "tmp");
 
