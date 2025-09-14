@@ -36,12 +36,12 @@ namespace WolvenKit.FunctionalTests
         internal static IHost _host = Host.CreateDefaultBuilder()
                 .ConfigureServices((_, services) =>
                     services
-                        .AddScoped<ILoggerService, SerilogWrapper>()
-                        .AddScoped<IProgressService<double>, ProgressService<double>>()
+                        .AddSingleton<ILoggerService, SerilogWrapper>()
+                        .AddSingleton<IProgressService<double>, ProgressService<double>>()
                         .AddSingleton<IHashService, HashService>()
 
-                        .AddScoped<IHookService, HookService>()
-                        .AddScoped<Red4ParserService>()
+                        .AddSingleton<IHookService, HookService>()
+                        .AddSingleton<Red4ParserService>()
                         .AddScoped<MeshTools>()
                         .AddSingleton<IArchiveManager, ArchiveManager>()
                         .AddSingleton<IModTools, ModTools>()
@@ -120,8 +120,9 @@ namespace WolvenKit.FunctionalTests
             //protobuf
             //RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
 
+            var hashService = _host.Services.GetRequiredService<IHashService>();
+            hashService.Load();
 
-            //var hashService = _host.Services.GetRequiredService<IHashService>();
             s_bm = _host.Services.GetRequiredService<IArchiveManager>();
 
             var exePath = new FileInfo(Path.Combine(gameDirectory.FullName, "bin", "x64", "Cyberpunk2077.exe"));
