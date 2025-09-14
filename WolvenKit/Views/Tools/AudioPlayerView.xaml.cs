@@ -1,14 +1,9 @@
 using System;
-using System.ComponentModel;
-using System.IO;
 using System.Linq;
-using CommunityToolkit.Mvvm.Input;
 using NAudioWpfDemo.AudioPlaybackDemo;
 using ReactiveUI;
 using Splat;
-using WolvenKit.App.Models;
 using WolvenKit.App.ViewModels.Tools;
-using WolvenKit.Core.Wwise;
 
 namespace WolvenKit.Views.Tools;
 /// <summary>
