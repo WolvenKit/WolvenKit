@@ -755,16 +755,13 @@
                             Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
-                
+
                 <!-- Mesh only -->
 
-                <Separator
-                    Visibility="{Binding Path=PlacementTarget.Tag.IsMaterial,
-                                         RelativeSource={RelativeSource AncestorType=ContextMenu},
-                                         Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <Separator Visibility="{Binding Path=PlacementTarget.Tag.IsMaterial, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                 <!-- Mesh: Material only -->
-                
+
                 <!-- Rename Material -->
                 <MenuItem
                     Visibility="{Binding Path=PlacementTarget.Tag.IsMaterial,
@@ -855,7 +852,7 @@
                             Size="{DynamicResource WolvenKitIconMilli}" />
                     </MenuItem.Icon>
                 </MenuItem>
-                
+
                 <!--
                     For arrays of indexables: Renumber Indices of child nodes, starting at 0
                     Useful if you paste a bunch of material definitions from multiple sources
@@ -878,7 +875,7 @@
                 </MenuItem>
 
                 <!-- /Mesh only -->
-                
+
                 <!-- Generate CRUID -->
                 <MenuItem
                     Visibility="{Binding Path=IsEnabled,
@@ -1003,7 +1000,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!-- Copy: Handle (that is an array) -->
+                <!-- Copy: Handle -->
                 <MenuItem
                     Header="Copy Handle"
                     Command="{Binding Path=CopyHandleCommand,
@@ -1012,18 +1009,7 @@
                         <Style
                             BasedOn="{StaticResource TreeViewMenuItemStyle}"
                             TargetType="MenuItem">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                            <Style.Triggers>
-                                <MultiDataTrigger>
-                                    <MultiDataTrigger.Conditions>
-                                        <Condition Binding="{Binding Path=IsHandleSelected, Source={x:Reference redTreeView}}" Value="True" />
-                                        <Condition Binding="{Binding Path=IsArrayItemSelected, Source={x:Reference redTreeView}}" Value="False" />
-                                        <Condition Binding="{Binding Path=IsArraySelected, Source={x:Reference redTreeView}}" Value="False" />
-                                    </MultiDataTrigger.Conditions>
-                                    <Setter Property="Visibility" Value="Visible" />
-                                </MultiDataTrigger>
-
-                            </Style.Triggers>
+                            <Setter Property="Visibility" Value="{Binding Path=IsHandleSelected, Source={x:Reference redTreeView}, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         </Style>
                     </MenuItem.Style>
                     <MenuItem.Icon>
