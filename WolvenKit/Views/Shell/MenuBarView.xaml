@@ -1002,7 +1002,7 @@
                     <MenuItem
                         Header="Cheat Sheets"
                         Command="{Binding MainViewModel.OpenExternalLinkCommand}"
-                        CommandParameter="{x:Static core:WikiLinks.CheatSheets}">
+                        CommandParameter="{Binding WikiLinks.CheatSheets}">
                         <MenuItem.Icon>
                             <local:IconBox
                                 IconPack="Material"
@@ -1018,7 +1018,7 @@
                 <MenuItem
                     Header="Discord Invitation"
                     Command="{Binding MainViewModel.OpenExternalLinkCommand}"
-                    CommandParameter="{x:Static core:WikiLinks.DiscordInvite}">
+                    CommandParameter="{Binding WikiLinks.DiscordInvite}">
                     <MenuItem.Icon>
                         <local:IconBox
                             IconPack="Codicons"
