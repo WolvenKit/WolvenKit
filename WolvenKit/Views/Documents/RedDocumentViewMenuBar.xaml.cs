@@ -178,6 +178,9 @@ namespace WolvenKit.Views.Documents
 
         private ChunkViewModel? RootChunk => ViewModel?.RootChunk;
 
+        /// <summary>
+        /// Scans for broken references in the current file
+        /// </summary>
         private async void OnFindBrokenReferencesClick(object _, RoutedEventArgs e)
         {
             try
@@ -189,13 +192,13 @@ namespace WolvenKit.Views.Documents
 
                 _loggerService.Info(
                     "Scanning file for broken references. This is currently slow as foretold, please hold the line...");
+
                 var allReferences = await _projectManager.ActiveProject.GetAllReferencesAsync(
                     _progressService,
-                    _loggerService,
-                    [s.Replace($"{_projectManager.ActiveProject.ModDirectory}{Path.DirectorySeparatorChar}", "")]
+                    _loggerService
                 );
 
-                var brokenReferences = await _projectManager.ActiveProject.ScanForBrokenReferencePathsAsync(
+                var brokenReferences = await _projectManager.ActiveProject.ScanForBrokenReferencePathsInListAsync(
                     _archiveManager,
                     _loggerService,
                     _progressService,

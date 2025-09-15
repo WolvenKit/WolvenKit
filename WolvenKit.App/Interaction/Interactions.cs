@@ -127,6 +127,7 @@ public static class Interactions
         WMessageBoxResult
     > ShowConfirmation { get; set; } = _ => throw new NotImplementedException();
 
+
     /// <summary>
     /// Asks the user whether they want to save unsaved changes.
     /// </summary>
@@ -146,6 +147,13 @@ public static class Interactions
     /// </summary>
     /// <returns>true if the user pressed OK, false otherwise</returns>
     public static Func<(string text, string caption), bool> ShowQuestionYesNo { get; set; } =
+        _ => throw new NotImplementedException();
+
+    /// <summary>
+    /// This calls <see cref="ShowConfirmation"/> with default image and yes/no/cancel buttons.
+    /// </summary>
+    /// <returns>true for yes, false for no, null for cancel</returns>
+    public static Func<(string text, string caption), bool?> ShowQuestionYesNoCancel { get; set; } =
         _ => throw new NotImplementedException();
 
     /// <summary>

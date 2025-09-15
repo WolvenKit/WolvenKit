@@ -47,6 +47,7 @@ namespace WolvenKit.Views.Shell
                 Interactions.ShowConfirmation = ShowConfirmation;
                 Interactions.ShowSaveUnsavedChangesDialog = ShowSaveUnsavedChangesDialog;
                 Interactions.ShowQuestionYesNo = ShowQuestionYesNo;
+                Interactions.ShowQuestionYesNoCancel = ShowQuestionYesNoCancel;
 
                 Interactions.ShowPopupWithWeblink = ShowConfirmationWithLink;
                 Interactions.ShowDeleteOrDuplicateComponentDialogue = (args) =>
@@ -186,6 +187,23 @@ namespace WolvenKit.Views.Shell
         {
             var messageResult = ShowConfirmation((input.Item1, input.Item2, WMessageBoxImage.Question, WMessageBoxButtons.YesNo));
             return messageResult == WMessageBoxResult.Yes;
+        }
+
+        private static bool? ShowQuestionYesNoCancel((string, string) input)
+        {
+            var messageResult = ShowConfirmation((input.Item1, input.Item2, WMessageBoxImage.Question,
+                WMessageBoxButtons.YesNoCancel));
+
+            switch (messageResult)
+            {
+                case WMessageBoxResult.Yes:
+                    return true;
+                case WMessageBoxResult.Cancel:
+                    return null;
+                case WMessageBoxResult.No:
+                default:
+                    return false;
+            }
         }
 
         // local methods

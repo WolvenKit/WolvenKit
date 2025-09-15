@@ -1038,4 +1038,19 @@ public class ProjectResourceTools
         }
     }
 
+    public void InitializeArchiveManager()
+    {
+        if (_archiveManager.IsInitialized)
+        {
+            return;
+        }
+
+        if (_settingsService.CP77ExecutablePath is null)
+        {
+            throw new WolvenKitException(0x5000, "Cyberpunk executable not configured");
+        }
+
+        _loggerService.Info("Scanning your mods... this can take a moment. Wolvenkit will be unresponsive.");
+        _archiveManager.Initialize(new FileInfo(_settingsService.CP77ExecutablePath));
+    }
 }
