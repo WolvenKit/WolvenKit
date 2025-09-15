@@ -32,7 +32,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     private readonly AppViewModel _appViewModel;
 
     protected IRedType _data;
-    
+
     private List<ResourcePath> _nodePaths = new();
 
     private List<ChunkViewModel> _chunks = new();
@@ -54,7 +54,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         _nodePaths.Add(Chunks[0].RelativePath);
 
         SubscribeToChunkPropertyChanges();
-        
+
         if (SelectedChunk == null && Chunks.Count > 0)
         {
             SelectedChunk = Chunks[0];
@@ -64,9 +64,13 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
     private void SubscribeToChunkPropertyChanges()
     {
-        if (GetRootChunk() is not ChunkViewModel cvm || cvm.ResolvedData is not inkTextureAtlas ||
-            cvm.GetPropertyChild("slots", "0") is not ChunkViewModel firstSlot || firstSlot.ResolvedData is not inkTextureSlot slot ||
-            slot.Texture.DepotPath != ResourcePath.Empty)
+        if (GetRootChunk() is not { ResolvedData: inkTextureAtlas } cvm ||
+            cvm.GetPropertyChild("slots", "0") is not ChunkViewModel { ResolvedData: inkTextureSlot slot } firstSlot)
+        {
+            return;
+        }
+
+        if (slot.Texture.DepotPath != ResourcePath.Empty)
         {
             return;
         }
@@ -104,7 +108,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     public RDTDataViewModel(string header, IRedType data, RedDocumentViewModel file, AppViewModel appViewModel,
         IChunkViewmodelFactory chunkViewmodelFactory,
         ISettingsManager settingsManager,
-        IGameControllerFactory gameController) 
+        IGameControllerFactory gameController)
         : this(data, file, appViewModel, chunkViewmodelFactory, settingsManager, gameController) => Header = header;
 
     #region properties
@@ -159,12 +163,12 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
     public delegate void LayoutNodesDelegate();
 
     public LayoutNodesDelegate? LayoutNodes;
-    
+
 
     #endregion
 
     #region commands
-    
+
     [RelayCommand]
     private async Task OpenImport(ICR2WImport input)
     {
@@ -334,7 +338,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         {
             OnSectorNodeSelected?.Invoke(this, $"{cvm.NodeIdxInParent}");
         }
-        
+
         // if tweak file, deserialize from text
         // read tweakXL file
         // TODO fix TweakXLDocumentViewModel
@@ -380,7 +384,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         }
 
         DirtyChunks.Clear();
-        
+
     }
 
     public void ClearSelection()
@@ -394,11 +398,11 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         SelectedChunk = null;
     }
 
-    
+
     public void AddToSelection(ChunkViewModel? chunk)
     {
         var selectedChunks = SelectedChunks.OfType<ChunkViewModel>().ToList();
-        
+
         ClearSelection();
         if (chunk is null)
         {
@@ -423,7 +427,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
             chunk.IsSelected = false;
             SelectedChunks.Remove(chunk);
         }
-        
+
         SelectedChunk = null;
     }
 
@@ -456,32 +460,32 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
         {
             return;
         }
-        
+
         base.OnPropertyChanged(e);
     }
 
     private bool _suppressPropertyChanges = false;
-    
+
     public void SetSelection(List<ChunkViewModel> chunks)
     {
         try
         {
             _suppressPropertyChanges = true;
-            
+
             ClearSelection();
             if (chunks.Count == 0)
             {
                 return;
             }
-            
+
             // remove duplicates
             var uniqueChunks = new HashSet<ChunkViewModel>(chunks);
-            
+
             foreach (var cvm in uniqueChunks)
             {
                 cvm.IsSelected = true;
                 ExpandParentNodes(cvm);
-                
+
                 if (!SelectedChunks.Contains(cvm))
                 {
                     SelectedChunks.Add(cvm);
@@ -497,11 +501,11 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
             OnPropertyChanged(nameof(SelectedChunks));
         }
     }
-    
+
     public event EventHandler<string>? OnSectorNodeSelected;
 
     /// <summary>
-    /// For .streamingsector files, called when a mesh is selected in the other tab 
+    /// For .streamingsector files, called when a mesh is selected in the other tab
     /// </summary>
     /// <param name="selectedIndex"></param>
     /// <returns></returns>
@@ -532,7 +536,7 @@ public partial class RDTDataViewModel : RedDocumentTabViewModel
 
         return worldNodeArray?.GetChildNode(idx);
     }
-    
+
     #endregion
 
     private static void ExpandParentNodes(ChunkViewModel cvm)
