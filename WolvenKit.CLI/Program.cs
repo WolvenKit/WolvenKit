@@ -78,9 +78,6 @@ internal class Program
 
                 var hashService = servicesProvider.GetRequiredService<IHashService>();
                 hashService.Load();
-
-                var cruidService = servicesProvider.GetRequiredService<CRUIDService>();
-                cruidService.Load();
             })
             .Build();
 
