@@ -690,6 +690,19 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         return relPath;
     }
 
+    public Task<IDictionary<string, List<string>>> GetAllReferencesAsync(
+        IProgressService<double> progressService,
+        ILoggerService loggerService) => GetAllReferencesAsync(progressService, loggerService, []);
+
+    /// <summary>
+    /// Collects all references from all files in the project, or from a given list of files.
+    /// </summary>
+    /// <param name="progressService"></param>
+    /// <param name="loggerService"></param>
+    /// <param name="filePaths">Allows passing a list of files for reference filtering.
+    /// If the list is empty, the entire project will be scanned.
+    /// </param>
+    /// <returns></returns>
     public async Task<IDictionary<string, List<string>>> GetAllReferencesAsync(
         IProgressService<double> progressService,
         ILoggerService loggerService,
@@ -713,14 +726,15 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
             {
                 try
                 {
-                    CR2WFile? cr2WFile;
                     List<string> resourcePaths = [];
 
                     using (var fs = File.Open(GetAbsolutePath(filePath), FileMode.Open))
                     using (var cr = new CR2WReader(fs))
                     {
-                        if (cr.ReadFile(out cr2WFile) != RED4.Archive.IO.EFileReadErrorCodes.NoError || cr2WFile is null)
+                        if (cr.ReadFile(out var cr2WFile) != RED4.Archive.IO.EFileReadErrorCodes.NoError ||
+                            cr2WFile is null)
                         {
+                            loggerService.Warning($"Failed to open {filePath}");
                             return;
                         }
 
@@ -736,16 +750,12 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
                         }
                         else
                         {
-                            foreach (var redRef in cr2WFile.FindType(typeof(IRedRef)).Select(r => r.Value)
-                                         .OfType<IRedRef>())
+                            foreach (var pathString in cr2WFile.FindType(typeof(IRedRef)).Select(r => r.Value)
+                                         .OfType<IRedRef>().Select(r => r.DepotPath.GetResolvedText())
+                                         .Where(s => !string.IsNullOrEmpty(s)))
                             {
-                                if (redRef.DepotPath == ResourcePath.Empty)
-                                {
-                                    continue;
-                                }
-
                                 resourcePaths.AddRange(
-                                    ResolveResourcePaths(redRef.DepotPath.GetResolvedText(), cr2WFile));
+                                    ResolveResourcePaths(pathString, cr2WFile));
                             }
 
                             // Check redStrings that contain resource paths. This happens inside quest files.
@@ -862,15 +872,21 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
     ];
 
     public Task<IDictionary<string, List<string>>> ScanForBrokenReferencePathsAsync(IArchiveManager archiveManager,
-        ILoggerService loggerService, IProgressService<double> progressService) =>
-        ScanForBrokenReferencePathsAsync(archiveManager, loggerService, progressService, new SortedDictionary<string, List<string>>());
+        ILoggerService loggerService, IProgressService<double> progressService, bool includeModFiles = false) =>
+        ScanForBrokenReferencePathsInListAsync(archiveManager, loggerService, progressService,
+            new SortedDictionary<string, List<string>>(), includeModFiles);
 
-    public async Task<IDictionary<string, List<string>>> ScanForBrokenReferencePathsAsync(IArchiveManager archiveManager,
-        ILoggerService loggerService, IProgressService<double> progressService, IDictionary<string, List<string>> references)
+
+    public async Task<IDictionary<string, List<string>>> ScanForBrokenReferencePathsInListAsync(
+        IArchiveManager archiveManager,
+        ILoggerService loggerService,
+        IProgressService<double> progressService,
+        IDictionary<string, List<string>> references,
+        bool includeModFiles = false)
     {
         if (references.Count == 0)
         {
-            references.AddRange(await GetAllReferencesAsync(progressService, loggerService, []));
+            references.AddRange(await GetAllReferencesAsync(progressService, loggerService));
         }
 
         SortedDictionary<string, List<string>> brokenReferences = new();
@@ -893,9 +909,12 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
                     .Where(filePath =>
                         // Warn if file references itself
                         filePath == kvp.Key ||
-                        // Warn if file is not in same mod or basegame
-                        (!ModFiles.Contains(filePath) && archiveManager.GetGameFile(filePath, true,
-                            true) is null))
+                        // File is not in the same mod
+                        (!ModFiles.Contains(filePath)
+                         // Scan for game files and files in other mods (by parameter). We already covered project.
+                         && archiveManager.GetGameFile(filePath, includeModFiles, false) is null
+                        )
+                    )
                     .ToList();
 
                 if (pathsWithError.Count > 0)
