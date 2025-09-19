@@ -87,7 +87,11 @@
 
                 <MenuItem
                     Command="{Binding OpenInMlsbCommand}"
-                    Header="Open in MlSetupBuilder">
+                    Header="Open in MlSetupBuilder"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Empty"
