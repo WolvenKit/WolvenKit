@@ -2674,26 +2674,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             RecalculateProperties(Data);
             Parent.CalculateIsDefault();
 
-            // Notify for graph sync when object is reset to default
             NotifyPropertyUpdateForGraphSync();
             return;
         }
 
-        // Create a proper default value based on the property type
-        try
-        {
-            Data = RedTypeFactory.CreateAndInitRedType(PropertyType);
-        }
-        catch (Exception ex)
-        {
-            _loggerService.Warning(
-                $"Could not create default value for type {PropertyType.Name}, falling back to RedDummy: {ex.Message}");
-            Data = new RedDummy();
-        }
-
+        Data = new RedDummy();
         RecalculateProperties(Data);
 
-        // Notify for graph sync when object is reset
         NotifyPropertyUpdateForGraphSync();
     }
 
