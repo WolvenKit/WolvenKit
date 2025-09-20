@@ -1,13 +1,11 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
 using NAudio.Extras;
 using NAudioWpfDemo.AudioPlaybackDemo;
 using WolvenKit.App.Models;
-using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Wwise;
 
 namespace WolvenKit.App.ViewModels.Tools;
