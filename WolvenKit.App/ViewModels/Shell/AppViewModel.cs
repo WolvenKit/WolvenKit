@@ -935,9 +935,26 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private async Task ScanForBrokenReferencePaths()
     {
+        var userInteraction = Interactions.ShowQuestionYesNoCancel((
+            $"This will scan {ActiveProject!.ModFiles.Count} files and can take a moment.\n\n"
+            + "Should files in other mods be treated as valid references?\n"
+            + "If you don't know what that means, click 'no'."
+            , "Scanning entire project"));
+
+        switch (userInteraction)
+        {
+            case null:
+                return;
+            case true when !_archiveManager.IsInitialized:
+                _projectResourceTools.InitializeArchiveManager();
+                break;
+        }
+
         _loggerService.Info($"Scanning {ActiveProject!.ModFiles.Count} files. Please wait...");
         _progressService.IsIndeterminate = true;
-        var brokenReferences = await ActiveProject!.ScanForBrokenReferencePathsAsync(_archiveManager, _loggerService, _progressService);
+
+        var brokenReferences = await ActiveProject!.ScanForBrokenReferencePathsAsync(_archiveManager, _loggerService,
+            _progressService, (bool)userInteraction);
 
         if (brokenReferences.Keys.Count == 0)
         {
@@ -1067,7 +1084,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private async Task FindUnusedFiles()
     {
-        if (ActiveProject!.ModFiles.Count > 15 && Interactions.ShowQuestionYesNo((
+        if (ActiveProject is null || ActiveProject!.ModFiles.Count > 15 && Interactions.ShowQuestionYesNo((
                 $"This will scan {ActiveProject!.ModFiles.Count} files and can take a while. Proceed?",
                 "Scan for unused references now?")) is false)
         {
@@ -1075,7 +1092,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
         _loggerService.Info($"Scanning {ActiveProject!.ModFiles.Count} files. Please wait...");
 
-        var allReferencePaths = await ActiveProject!.GetAllReferencesAsync(_progressService, _loggerService, []);
+        var allReferencePaths = await ActiveProject!.GetAllReferencesAsync(_progressService, _loggerService);
         _loggerService.Info($"Scanning {ActiveProject!.Files.Count(f => f.StartsWith("archive"))} files. Please wait...");
 
         var referencesHashSet = new HashSet<string>(allReferencePaths.SelectMany((r) => r.Value));
