@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -64,10 +64,10 @@ public partial class AppScriptService : ScriptService
         return _projectExplorerViewModel;
     }
 
-    public async Task ExecuteAsync(string code)
+    public async Task ExecuteAsync(string code, bool enableDebugging = false)
     {
         GetProjectExplorerViewModel()?.SuspendFileWatcher();
-        await ExecuteAsync(code, DefaultHostObject);
+        await ExecuteAsync(code, DefaultHostObject, null, enableDebugging);
         GetProjectExplorerViewModel()?.ResumeFileWatcher();
     }
 
@@ -88,11 +88,11 @@ public partial class AppScriptService : ScriptService
         return result;
     }
 
-    protected override V8ScriptEngine GetScriptEngine(Dictionary<string, object>? hostObjects = null, List<string>? searchPaths = null)
+    protected override V8ScriptEngine GetScriptEngine(Dictionary<string, object>? hostObjects = null, List<string>? searchPaths = null, bool enableDebugging = false)
     {
         searchPaths ??= new List<string> { ISettingsManager.GetWScriptDir(), Path.GetFullPath(@"Resources\Scripts") };
 
-        var engine = base.GetScriptEngine(hostObjects, searchPaths);
+        var engine = base.GetScriptEngine(hostObjects, searchPaths, enableDebugging);
 
         engine.AddHostType(typeof(EUncookExtension));
         engine.AddHostType(typeof(MeshExporterType));

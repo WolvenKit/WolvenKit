@@ -1,4 +1,4 @@
-﻿<reactiveUi:ReactiveUserControl
+<reactiveUi:ReactiveUserControl
     x:Class="WolvenKit.Views.Documents.WScriptDocumentView"
     x:TypeArguments="documents:WScriptDocumentViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -65,6 +65,21 @@
                     <templates:IconBox
                         IconPack="Material"
                         Kind="Play"
+                        Foreground="{StaticResource WolvenKitGreen}" />
+                </MenuItem.Icon>
+            </MenuItem>
+
+            <MenuItem
+                Visibility="{Binding IsNormalScript,
+                                     Converter={StaticResource BooleanToVisibilityConverter}}"
+                Command="{Binding DebugCommand}"
+                CommandParameter="{Binding Document.Text}"
+                Header="Debug"
+                ToolTip="Waits for debugger on port 9222">
+                <MenuItem.Icon>
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="BugPlay"
                         Foreground="{StaticResource WolvenKitGreen}" />
                 </MenuItem.Icon>
             </MenuItem>
