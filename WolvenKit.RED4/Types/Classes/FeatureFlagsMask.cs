@@ -5,7 +5,8 @@ namespace WolvenKit.RED4.Types
 	public partial class FeatureFlagsMask : RedBaseClass
 	{
 		[Ordinal(0)] 
-		[RED("flags")] 
+		[RED("flags")]
+		[DisplayAsEnum<EFeatureFlagMask>]
 		public CUInt64 Flags
 		{
 			get => GetPropertyValue<CUInt64>();

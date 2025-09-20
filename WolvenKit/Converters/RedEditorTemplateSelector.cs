@@ -1,4 +1,6 @@
+using System;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using WolvenKit.App.Helpers;
@@ -31,6 +33,8 @@ namespace WolvenKit.Converters
         public DataTemplate HandleTemplateView { get; set; }
         public DataTemplate BitfieldTemplateView { get; set; }
         public DataTemplate EnumTemplateView { get; set; }
+        public DataTemplate UIntAsBitfieldEditor { get; set; }
+        public DataTemplate UIntAsEnumEditor { get; set; }
         public DataTemplate ColorPickerPalette { get; set; }
         public DataTemplate RedBoolEditor { get; set; }
         public DataTemplate RedVector2Editor { get; set; }
@@ -86,7 +90,17 @@ namespace WolvenKit.Converters
                 
             }
 
-
+            if (vm.DisplayAsEnumType != null)
+            {
+                if (EnumHelper.IsBitfield(vm.DisplayAsEnumType))
+                {
+                    return UIntAsBitfieldEditor;
+                }
+                else
+                {
+                    return UIntAsEnumEditor;
+                }
+            }
 
             if (vm.PropertyType.IsAssignableTo(typeof(TweakDBID)))
             {

@@ -1,5 +1,6 @@
 using System.IO;
 using WolvenKit.RED4.IO;
+using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types;
 
@@ -63,6 +64,7 @@ public class CMaterialParameterInfo : RedBaseClass
     // 5 scalar
     [RED("type")]
     [REDProperty(IsIgnored = true)]
+    [DisplayAsEnum<IMaterialDataProviderDescEParameterType>]
     public CUInt8 Type
     {
         get => GetPropertyValue<CUInt8>();
