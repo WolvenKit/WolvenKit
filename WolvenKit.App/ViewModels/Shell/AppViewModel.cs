@@ -1714,8 +1714,13 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
 
     [RelayCommand]
-    private void OpenExternalLink(string link)
+    private void OpenExternalLink(string? link)
     {
+        if (link is null)
+        {
+            _loggerService.Error("No link provided!");
+            return;
+        }
         var ps = new ProcessStartInfo(link)
         {
             UseShellExecute = true,
