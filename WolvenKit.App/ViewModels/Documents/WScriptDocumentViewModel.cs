@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -36,6 +36,7 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
         if(e.PropertyName == nameof(ScriptService.IsRunning))
         {
             RunCommand.NotifyCanExecuteChanged();
+            DebugCommand.NotifyCanExecuteChanged();
             StopCommand.NotifyCanExecuteChanged();
         }
     }
@@ -68,6 +69,9 @@ public partial class WScriptDocumentViewModel : DocumentViewModel
     private bool CanRun() => !_scriptService.IsRunning;
     [RelayCommand(CanExecute = nameof(CanRun))]
     private async Task Run() => await _scriptService.ExecuteAsync(Text);
+
+    [RelayCommand(CanExecute = nameof(CanRun))]
+    private async Task Debug() => await _scriptService.ExecuteAsync(Text, true);
 
     private bool CanStop() => _scriptService.IsRunning;
     [RelayCommand(CanExecute = nameof(CanStop))]
