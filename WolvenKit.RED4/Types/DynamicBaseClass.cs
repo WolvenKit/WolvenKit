@@ -109,6 +109,11 @@ public class DynamicGraphNodeDefinition : graphGraphNodeDefinition, IDynamicClas
         get => GetPropertyValue<CName>();
         set => SetPropertyValue<CName>(value);
     }
+
+    public DynamicGraphNodeDefinition()
+    {
+        Sockets = new();
+    }
 }
 
 public class DynamicSceneGraphNode : scnSceneGraphNode, IDynamicClass
