@@ -387,11 +387,11 @@ namespace WolvenKit.Views.Tools
 
         /// <summary>Identifies the <see cref="IsHandleSelected"/> dependency property.</summary>
         public static readonly DependencyProperty IsHandleSelectedProperty =
-            DependencyProperty.Register(nameof(IsHandleSelected), typeof(object), typeof(RedTreeView));
+            DependencyProperty.Register(nameof(IsHandleSelected), typeof(bool), typeof(RedTreeView));
 
-        public object IsHandleSelected
+        public bool IsHandleSelected
         {
-            get => GetValue(IsHandleSelectedProperty);
+            get => (bool)GetValue(IsHandleSelectedProperty);
             set => SetValue(IsHandleSelectedProperty, value);
         }
 
