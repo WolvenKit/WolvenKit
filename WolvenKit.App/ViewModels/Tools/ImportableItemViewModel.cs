@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -14,27 +14,20 @@ namespace WolvenKit.App.ViewModels.Tools;
 
 public class ImportableItemViewModel : ImportExportItemViewModel
 {
-    public ImportableItemViewModel(string fileName, IArchiveManager archiveManager, IProjectManager projectManager,
-        Red4ParserService parserService)
-        : base(fileName, DecideImportOptions(fileName, archiveManager, projectManager, parserService)) =>
-        Properties.PropertyChanged += delegate(object? _, PropertyChangedEventArgs args)
+    public ImportableItemViewModel(string fileName, IArchiveManager archiveManager, IProjectManager projectManager, Red4ParserService parserService)
+        : base(fileName, DecideImportOptions(fileName, archiveManager, projectManager, parserService))
+    {
+    }
+
+    protected override void Properties_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(XbmImportArgs.TextureGroup) && Properties is XbmImportArgs importArgs)
         {
-            OnPropertyChanged(nameof(Properties));
+            SetProperties(CommonFunctions.TextureSetupFromTextureGroup(importArgs.TextureGroup));
+        }
 
-            if (args.PropertyName != nameof(XbmImportArgs.TextureGroup) || Properties is not XbmImportArgs importArgs)
-            {
-                return;
-            }
-
-            // when manually changing texture group, recalculate values
-            // IsGamma, RawFormat, Compression, GenerateMipMaps, IsStreamable
-            var propArgs = CommonFunctions.TextureSetupFromTextureGroup(importArgs.TextureGroup);
-            importArgs.IsGamma = propArgs.IsGamma;
-            importArgs.RawFormat = propArgs.RawFormat;
-            importArgs.Compression = propArgs.Compression;
-            importArgs.GenerateMipMaps = propArgs.GenerateMipMaps;
-            importArgs.IsStreamable = propArgs.IsStreamable;
-        };
+        base.Properties_PropertyChanged(sender, e);
+    }
 
     private static ImportArgs DecideImportOptions(string fileName, IArchiveManager archiveManager, IProjectManager projectManager, Red4ParserService parserService)
     {
