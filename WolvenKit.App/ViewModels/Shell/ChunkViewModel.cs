@@ -2954,7 +2954,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             // Lightweight fix: renumber remaining children and notify once
             if (Data is IRedArray)
             {
-                Properties[i].PropertyName = $"[{i}]";
+                Properties[i].PropertyName = $"{i}";
             }
         }
 

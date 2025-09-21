@@ -22,14 +22,7 @@ public abstract partial class ImportExportItemViewModel : ObservableObject, ISel
         Properties.PropertyChanged += Properties_PropertyChanged;
     }
 
-    private void Properties_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(XbmImportArgs.TextureGroup) && Properties is XbmImportArgs xbmImportArgs)
-        {
-            Properties = CommonFunctions.TextureSetupFromTextureGroup(xbmImportArgs.TextureGroup);
-        }
-        PropertiesDisplay = Properties.ToString();
-    }
+    protected virtual void Properties_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) => PropertiesDisplay = Properties.ToString();
 
     public string BaseFile { get; set; }
 
