@@ -59,7 +59,9 @@ namespace WolvenKit.App.ViewModels.Documents
         
         public bool IsOptionCreationVisible => SelectedTab?.Header == "Dialogue";
         
-        public bool IsButtonBarVisible => IsActorCreationVisible || IsPropCreationVisible || IsDialogueCreationVisible || IsOptionCreationVisible;
+        public bool IsWorkspotCreationVisible => SelectedTab?.Header == "Asset Library";
+        
+        public bool IsButtonBarVisible => IsActorCreationVisible || IsPropCreationVisible || IsDialogueCreationVisible || IsOptionCreationVisible || IsWorkspotCreationVisible;
 
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.MainFile;
 
@@ -212,6 +214,7 @@ namespace WolvenKit.App.ViewModels.Documents
             OnPropertyChanged(nameof(IsPropCreationVisible));
             OnPropertyChanged(nameof(IsDialogueCreationVisible));
             OnPropertyChanged(nameof(IsOptionCreationVisible));
+            OnPropertyChanged(nameof(IsWorkspotCreationVisible));
             OnPropertyChanged(nameof(IsButtonBarVisible));
         }
 
@@ -540,6 +543,105 @@ namespace WolvenKit.App.ViewModels.Documents
             catch (Exception ex)
             {
                 _logger?.Error($"Failed to create new choice option: {ex.Message}");
+            }
+        }
+
+        [RelayCommand]
+        private void CreateNewWorkspot()
+        {
+            try
+            {
+                // Show scene input dialog for workspot file path
+                var dialogResult = Interactions.AskForSceneInput((
+                    "Add New Workspot", 
+                    "Workspot File Path:", 
+                    "", 
+                    showSecondary: false, 
+                    "", 
+                    ""
+                ));
+                
+                // Check if user cancelled the dialog
+                if (string.IsNullOrWhiteSpace(dialogResult.primaryInput))
+                {
+                    return;
+                }
+
+                var workspotPath = dialogResult.primaryInput.Trim();
+                
+                // Generate random dataId for the workspot definition
+                var random = new Random();
+                var dataId = (uint)random.Next(1, int.MaxValue);
+                
+                // Ensure unique dataId
+                while (_sceneData.Workspots.Any(w => w.GetValue() is scnWorkspotData data && data.DataId.Id == dataId))
+                {
+                    dataId = (uint)random.Next(1, int.MaxValue);
+                }
+
+                // Create workspot definition with external resource reference
+                var workspotData = new scnWorkspotData_ExternalWorkspotResource
+                {
+                    DataId = new scnSceneWorkspotDataId { Id = dataId },
+                    WorkspotResource = new CResourceReference<workWorkspotResource>(workspotPath)
+                };
+
+                // Add to workspots collection
+                _sceneData.Workspots.Add(workspotData);
+
+                // Generate unique workspot instance ID (smaller numbers, typically 1-based)
+                var instanceId = (uint)1;
+                if (_sceneData.WorkspotInstances.Count > 0)
+                {
+                    instanceId = _sceneData.WorkspotInstances.Max(wi => wi.WorkspotInstanceId.Id) + 1;
+                }
+
+                // Create workspot instance
+                var workspotInstance = new scnWorkspotInstance
+                {
+                    WorkspotInstanceId = new scnSceneWorkspotInstanceId { Id = instanceId },
+                    DataId = new scnSceneWorkspotDataId { Id = dataId }, // Link to the definition
+                    LocalTransform = new Transform 
+                    { 
+                        Position = new Vector4(), 
+                        Orientation = new Quaternion { R = 1.000000F } 
+                    },
+                    PlayAtActorLocation = false,
+                    OriginMarker = new scnMarker 
+                    { 
+                        Type = Enums.scnMarkerType.Global, 
+                        EntityRef = new gameEntityReference { Names = new() }, 
+                        IsMounted = true 
+                    }
+                };
+
+                // Add to workspot instances collection
+                _sceneData.WorkspotInstances.Add(workspotInstance);
+
+                // Mark document as dirty
+                Parent?.SetIsDirty(true);
+
+                // Force recalculation of the root chunk properties
+                var rootChunk = RDTViewModel.GetRootChunk();
+                if (rootChunk != null)
+                {
+                    rootChunk.RecalculateProperties();
+                }
+
+                // Refresh the current tab content
+                if (SelectedTab != null)
+                {
+                    UpdateTabContent(SelectedTab);
+                }
+
+                // Auto-expand to show the newly created workspot instance
+                ExpandToNewEntry("workspotInstances", "", 0);
+
+                _logger?.Info($"Created new workspot: path='{workspotPath}', dataId={dataId}, instanceId={instanceId}");
+            }
+            catch (Exception ex)
+            {
+                _logger?.Error($"Failed to create new workspot: {ex.Message}");
             }
         }
 
