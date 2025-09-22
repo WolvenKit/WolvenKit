@@ -9,14 +9,12 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:shell="clr-namespace:WolvenKit.App.ViewModels.Shell;assembly=WolvenKit.App"
     xmlns:local="clr-namespace:WolvenKit.Views.Templates"
-    mc:Ignorable="d"
-    DataContext="{Binding ViewModel,
-                          RelativeSource={RelativeSource Self}}">
+    mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <Style TargetType="{x:Type local:IconBox}">
-                <Setter Property="Foreground" Value="{StaticResource WolvenKitLabelBrush}" />
                 <Setter Property="Opacity" Value="1.0" />
+
                 <Style.Triggers>
                     <DataTrigger
                         Binding="{Binding Path=IsEnabled,
@@ -26,24 +24,6 @@
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
-
-            <Style TargetType="{x:Type MenuItem}">
-                <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
-
-                <Setter Property="HeaderTemplate">
-                    <Setter.Value>
-                        <DataTemplate>
-                            <TextBlock
-                                Margin="{DynamicResource WolvenKitMarginSmallRight}"
-                                VerticalAlignment="Center"
-                                FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                                Text="{Binding}" />
-                        </DataTemplate>
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginSmallVertical}" />
-            </Style>
-
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -57,11 +37,13 @@
                 x:Name="HomeButton"
                 Margin="1,0"
                 Padding="12,5"
+                FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="HOME" />
 
             <!-- File -->
             <MenuItem
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
+                FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="File">
                 <MenuItem
                     x:Name="MenuItemNewFile"
@@ -232,6 +214,7 @@
             <!-- Project -->
             <MenuItem
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
+                FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="Project">
 
                 <MenuItem
@@ -378,6 +361,7 @@
             <!-- Build -->
             <MenuItem
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
+                FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="Build">
                 <!-- Pack -->
                 <MenuItem
@@ -532,10 +516,8 @@
             <!-- View -->
             <MenuItem
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
-                Header="View"
-                
-                 Margin="{DynamicResource WolvenkitMarginTop}"
-                >
+                FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                Header="View">
                 <MenuItem
                     x:Name="ProjectExplorerCheckbox"
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
@@ -582,7 +564,6 @@
 
                 <MenuItem
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
-                    Padding="{DynamicResource WolvenKitMarginSmallVertical}"
                     Header="Show File Preview"
                     IsCheckable="True"
                     IsChecked="{Binding SettingsManager.ShowFilePreview,
@@ -664,6 +645,7 @@
             <!-- Tools -->
             <MenuItem
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
+                FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="Tools">
                 <MenuItem
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
@@ -765,6 +747,7 @@
             <!-- Game -->
             <MenuItem
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
+                FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="Game">
                 <MenuItem
                     x:Name="ToolbarLaunchButton"
@@ -811,6 +794,7 @@
             <!-- Extensions -->
             <MenuItem
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
+                FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="Extensions">
                 <MenuItem
                     x:Name="MenuItemShowPluginTool"
