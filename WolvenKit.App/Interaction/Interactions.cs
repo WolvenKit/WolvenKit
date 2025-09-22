@@ -201,6 +201,12 @@ public static class Interactions
     public static Func<(string dialogueTitle, string defaultValue), string> AskForTextInput { get; set; } =
         _ => throw new NotImplementedException();
 
+    /// <summary>
+    /// Ask user for scene input (unified dialog for actors, props, dialogue, options)
+    /// </summary>
+    public static Func<(string title, string primaryLabel, string primaryDefault, bool showSecondary, string secondaryLabel, string checkboxText), (string? primaryInput, bool enableSecondary, string? secondaryInput)> AskForSceneInput { get; set; } =
+        _ => throw new NotImplementedException();
+
 
     /// <summary>
     /// Ask user for folder path. Will enforce validity for path-type arguments and check if directory exists.

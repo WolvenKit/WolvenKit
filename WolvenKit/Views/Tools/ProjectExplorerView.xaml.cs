@@ -148,6 +148,14 @@ namespace WolvenKit.Views.Tools
                     return innerVm.Text;
                 };
 
+                Interactions.AskForSceneInput = (parameters) =>
+                {
+                    var (title, primaryLabel, primaryDefault, showSecondary, secondaryLabel, checkboxText) = parameters;
+                    var dialog = new SceneInputDialogView(title, primaryLabel, primaryDefault, showSecondary, secondaryLabel, checkboxText);
+                    var result = dialog.ShowDialog();
+                    return result == true ? (dialog.PrimaryInput, dialog.EnableSecondaryInput, dialog.SecondaryInput) : (null, false, null);
+                };
+
                 Interactions.AskForFolderPathInput = (args) =>
                 {
                     var dialog = new FolderPathInputDialogView(args.Item2, args.Item1);
