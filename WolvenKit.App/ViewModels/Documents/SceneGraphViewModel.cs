@@ -61,7 +61,9 @@ namespace WolvenKit.App.ViewModels.Documents
         
         public bool IsWorkspotCreationVisible => SelectedTab?.Header == "Asset Library";
         
-        public bool IsButtonBarVisible => IsActorCreationVisible || IsPropCreationVisible || IsDialogueCreationVisible || IsOptionCreationVisible || IsWorkspotCreationVisible;
+        public bool IsEffectCreationVisible => SelectedTab?.Header == "Asset Library";
+        
+        public bool IsButtonBarVisible => IsActorCreationVisible || IsPropCreationVisible || IsDialogueCreationVisible || IsOptionCreationVisible || IsWorkspotCreationVisible || IsEffectCreationVisible;
 
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.MainFile;
 
@@ -215,6 +217,7 @@ namespace WolvenKit.App.ViewModels.Documents
             OnPropertyChanged(nameof(IsDialogueCreationVisible));
             OnPropertyChanged(nameof(IsOptionCreationVisible));
             OnPropertyChanged(nameof(IsWorkspotCreationVisible));
+            OnPropertyChanged(nameof(IsEffectCreationVisible));
             OnPropertyChanged(nameof(IsButtonBarVisible));
         }
 
@@ -642,6 +645,160 @@ namespace WolvenKit.App.ViewModels.Documents
             catch (Exception ex)
             {
                 _logger?.Error($"Failed to create new workspot: {ex.Message}");
+            }
+        }
+
+        [RelayCommand]
+        private void CreateNewEffect()
+        {
+            try
+            {
+                // Show scene input dialog for effect file path
+                var dialogResult = Interactions.AskForSceneInput((
+                    "Add New Effect", 
+                    "Effect File Path:", 
+                    "", 
+                    showSecondary: false, 
+                    "", 
+                    ""
+                ));
+                
+                // Check if user cancelled the dialog
+                if (string.IsNullOrWhiteSpace(dialogResult.primaryInput))
+                {
+                    return;
+                }
+
+                var effectPath = dialogResult.primaryInput.Trim();
+                
+                // Generate random effect ID
+                var random = new Random();
+                var effectId = (uint)random.Next(1, int.MaxValue);
+                
+                // Ensure unique effect ID
+                while (_sceneData.EffectDefinitions.Any(e => e.Id.Id == effectId))
+                {
+                    effectId = (uint)random.Next(1, int.MaxValue);
+                }
+
+                // Create effect definition with external resource reference
+                var effectDef = new scnEffectDef
+                {
+                    Id = new scnEffectId { Id = effectId },
+                    Effect = new CResourceAsyncReference<worldEffect>(effectPath)
+                };
+
+                // Add to effect definitions collection
+                _sceneData.EffectDefinitions.Add(effectDef);
+
+                // Generate unique effect instance ID (smaller numbers, typically 1-based)
+                var instanceId = (uint)1;
+                if (_sceneData.EffectInstances.Count > 0)
+                {
+                    instanceId = _sceneData.EffectInstances.Max(ei => ei.EffectInstanceId.Id) + 1;
+                }
+
+                // Load the effect file and populate compiledEffect
+                var compiledEventInfos = new CArray<worldCompiledEffectEventInfo>();
+                
+                try 
+                {
+                    // Load the effect file using Parent's resource loading
+                    var effectFile = Parent?.GetFileFromDepotPathOrCache(effectPath);
+                    if (effectFile?.RootChunk is worldEffect worldEffectResource)
+                    {
+                        // Extract RUIDs from each event in the effect file
+                        foreach (var eventHandle in worldEffectResource.Events)
+                        {
+                            if (eventHandle.GetValue() is effectTrackItem eventItem)
+                            {
+                                var compiledEventInfo = new worldCompiledEffectEventInfo
+                                {
+                                    EventRUID = eventItem.Ruid,
+                                    PlacementIndexMask = 1,
+                                    ComponentIndexMask = 0,
+                                    Flags = 1
+                                };
+                                
+                                compiledEventInfos.Add(compiledEventInfo);
+                            }
+                        }
+                        
+                        _logger?.Info($"Loaded {compiledEventInfos.Count} events from effect file: {effectPath}");
+                    }
+                    else
+                    {
+                        _logger?.Warning($"Could not load effect file or invalid format: {effectPath}");
+                    }
+                }
+                catch (Exception resourceEx)
+                {
+                    _logger?.Error($"Failed to load effect resource '{effectPath}': {resourceEx.Message}");
+                }
+
+                // Create default placement info
+                var placementInfos = new CArray<worldCompiledEffectPlacementInfo>();
+                placementInfos.Add(new worldCompiledEffectPlacementInfo
+                {
+                    Flags = 9,
+                    RelativePositionIndex = 0,
+                    RelativeRotationIndex = 1,
+                    PlacementTagIndex = 255 // Default from constructor
+                });
+
+                // Create default relative positions and rotations
+                var relativePositions = new CArray<Vector3>();
+                relativePositions.Add(new Vector3 { X = 0.0f, Y = 0.0f, Z = 0.0f });
+
+                var relativeRotations = new CArray<Quaternion>();
+                relativeRotations.Add(new Quaternion { I = 0.0f, J = 0.0f, K = 0.0f, R = 1.0f });
+
+                // Create effect instance with populated compiledEffect
+                var effectInstance = new scnEffectInstance
+                {
+                    EffectInstanceId = new scnEffectInstanceId 
+                    { 
+                        EffectId = new scnEffectId { Id = effectId }, // Link to definition
+                        Id = instanceId 
+                    },
+                    CompiledEffect = new worldCompiledEffectInfo 
+                    { 
+                        PlacementTags = new(), 
+                        ComponentNames = new(), 
+                        RelativePositions = relativePositions, // Default empty vec3 (0,0,0)
+                        RelativeRotations = relativeRotations, // Default empty quaternion (0,0,0,1)
+                        PlacementInfos = placementInfos, // Default placement info with flags=9
+                        EventsSortedByRUID = compiledEventInfos // Use populated events
+                    }
+                };
+
+                // Add to effect instances collection
+                _sceneData.EffectInstances.Add(effectInstance);
+
+                // Mark document as dirty
+                Parent?.SetIsDirty(true);
+
+                // Force recalculation of the root chunk properties
+                var rootChunk = RDTViewModel.GetRootChunk();
+                if (rootChunk != null)
+                {
+                    rootChunk.RecalculateProperties();
+                }
+
+                // Refresh the current tab content
+                if (SelectedTab != null)
+                {
+                    UpdateTabContent(SelectedTab);
+                }
+
+                // Auto-expand to show the newly created effect instance
+                ExpandToNewEntry("effectInstances", "", 0);
+
+                _logger?.Info($"Created new effect: path='{effectPath}', effectId={effectId}, instanceId={instanceId}, compiledEvents={compiledEventInfos.Count}");
+            }
+            catch (Exception ex)
+            {
+                _logger?.Error($"Failed to create new effect: {ex.Message}");
             }
         }
 
