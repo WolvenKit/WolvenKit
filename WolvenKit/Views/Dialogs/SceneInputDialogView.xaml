@@ -6,7 +6,9 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     Title="{Binding Title}"
     MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
-    SizeToContent="WidthAndHeight"
+    MaxWidth="800"
+    SizeToContent="Height"
+    Width="500"
     FocusManager.FocusedElement="{Binding ElementName=PrimaryInputTextBox}"
     WindowStartupLocation="CenterScreen">
     <Grid
@@ -33,11 +35,11 @@
                 HelpVisibility="Collapsed"
                 NextVisibility="Collapsed"
                 PageType="Exterior">
-                <StackPanel Margin="10" MinWidth="350">
+                <StackPanel Margin="10" MinWidth="450">
                     <!-- Primary Input Field (always visible) -->
                     <Grid Margin="0,0,0,10">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="120" />
+                            <ColumnDefinition Width="Auto" MinWidth="140" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" 
@@ -52,7 +54,11 @@
                                  Padding="{DynamicResource WolvenKitMarginTiny}"
                                  VerticalContentAlignment="Center"
                                  FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                                 Text="{Binding PrimaryInputValue, UpdateSourceTrigger=PropertyChanged}" />
+                                 Text="{Binding PrimaryInputValue, UpdateSourceTrigger=PropertyChanged}"
+                                 TextWrapping="Wrap"
+                                 AcceptsReturn="False"
+                                 VerticalScrollBarVisibility="Auto"
+                                 MaxHeight="80" />
                     </Grid>
 
                     <!-- Secondary Input Checkbox (conditionally visible) -->
@@ -67,7 +73,7 @@
                     <Grid Margin="0,0,0,0" 
                           Visibility="{Binding EnableSecondaryInput, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="120" />
+                            <ColumnDefinition Width="Auto" MinWidth="140" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" 
