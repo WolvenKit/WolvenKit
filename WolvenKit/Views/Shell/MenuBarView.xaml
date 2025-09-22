@@ -532,40 +532,49 @@
             <!-- View -->
             <MenuItem
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
-                Header="View">
+                Header="View"
+                
+                 Margin="{DynamicResource WolvenkitMarginTop}"
+                >
                 <MenuItem
                     x:Name="ProjectExplorerCheckbox"
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                    Padding="{DynamicResource WolvenKitMarginSmallVertical}"
                     Header="Project Explorer"
                     IsCheckable="True" />
 
                 <MenuItem
                     x:Name="AssetBrowserCheckbox"
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                    Padding="{DynamicResource WolvenKitMarginSmallVertical}"
                     Header="Asset Browser"
                     IsCheckable="True" />
 
                 <MenuItem
                     x:Name="TweakBrowserCheckbox"
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                    Padding="{DynamicResource WolvenKitMarginSmallVertical}"
                     Header="Tweak Browser"
                     IsCheckable="True" />
 
                 <MenuItem
                     x:Name="LocKeyBrowserCheckbox"
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                    Padding="{DynamicResource WolvenKitMarginSmallVertical}"
                     Header="LocKey Browser"
                     IsCheckable="True" />
 
                 <MenuItem
                     x:Name="PropertiesCheckbox"
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                    Padding="{DynamicResource WolvenKitMarginSmallVertical}"
                     Header="Properties"
                     IsCheckable="True" />
 
                 <MenuItem
                     x:Name="LogCheckbox"
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                    Padding="{DynamicResource WolvenKitMarginSmallVertical}"
                     Header="Log"
                     IsCheckable="True" />
 
@@ -573,6 +582,7 @@
 
                 <MenuItem
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                    Padding="{DynamicResource WolvenKitMarginSmallVertical}"
                     Header="Show File Preview"
                     IsCheckable="True"
                     IsChecked="{Binding SettingsManager.ShowFilePreview,
