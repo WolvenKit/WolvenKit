@@ -1,7 +1,7 @@
 ﻿// ReSharper disable InconsistentNaming
 namespace WolvenKit.Core;
 
-public class WikiLinks
+public static class WikiLinks
 {
     public const string DiscordInvite = "https://discord.gg/Epkq79kd96";
 
@@ -47,4 +47,36 @@ public class WikiLinks
 
     public const string CheatSheets =
         "https://wiki.redmodding.org/cyberpunk-2077-modding/for-mod-creators-theory/references-lists-and-overviews";
+}
+
+// ReSharper disable MemberCanBeMadeStatic.Global
+/// <summary>
+/// Views just HATE constants. There must be a better way.
+/// </summary>
+public class WikiLinksInstance
+{
+    public string DiscordInvite { get; } = WikiLinks.DiscordInvite;
+    public string WolvenkitAbout { get; } = WikiLinks.WolvenkitAbout;
+
+    public string WolvenKitSetupGuide { get; } = WikiLinks.WolvenKitSetupGuide;
+    public string WolvenKitCreatingAModGuide { get; } = WikiLinks.WolvenKitCreatingAModGuide;
+
+    public string AddingNewItems { get; } = WikiLinks.AddingNewItems;
+    public string AddingNewItems_Weapons { get; } = WikiLinks.AddingNewItems_Weapons;
+
+    public string NPVs { get; } = WikiLinks.NPVs;
+    public string AMM_NPCs { get; } = WikiLinks.AMM_NPCs;
+
+    public string Tattoos { get; } = WikiLinks.Tattoos;
+
+    public string Hair { get; } = WikiLinks.Hair;
+    public string CCXL { get; } = WikiLinks.CCXL;
+
+    public string WorldEditing { get; } = WikiLinks.WorldEditing;
+
+    public string CheatSheets { get; } = WikiLinks.CheatSheets;
+    public string MeshMaterials { get; } = WikiLinks.MeshMaterials;
+    public string ResourcePatching { get; } = WikiLinks.ResourcePatching;
+
+    public string CyberpunkBlenderAddon { get; } = WikiLinks.CyberpunkBlenderAddon;
 }
