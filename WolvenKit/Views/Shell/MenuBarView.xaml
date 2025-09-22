@@ -9,14 +9,12 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:shell="clr-namespace:WolvenKit.App.ViewModels.Shell;assembly=WolvenKit.App"
     xmlns:local="clr-namespace:WolvenKit.Views.Templates"
-    mc:Ignorable="d"
-    DataContext="{Binding ViewModel,
-                          RelativeSource={RelativeSource Self}}">
+    mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <Style TargetType="{x:Type local:IconBox}">
-                <Setter Property="Foreground" Value="{StaticResource WolvenKitLabelBrush}" />
                 <Setter Property="Opacity" Value="1.0" />
+
                 <Style.Triggers>
                     <DataTrigger
                         Binding="{Binding Path=IsEnabled,
@@ -26,24 +24,6 @@
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
-
-            <Style TargetType="{x:Type MenuItem}">
-                <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
-
-                <Setter Property="HeaderTemplate">
-                    <Setter.Value>
-                        <DataTemplate>
-                            <TextBlock
-                                Margin="{DynamicResource WolvenKitMarginSmallRight}"
-                                VerticalAlignment="Center"
-                                FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                                Text="{Binding}" />
-                        </DataTemplate>
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginSmallVertical}" />
-            </Style>
-
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -57,11 +37,13 @@
                 x:Name="HomeButton"
                 Margin="1,0"
                 Padding="12,5"
+                FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="HOME" />
 
             <!-- File -->
             <MenuItem
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
+                FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="File">
                 <MenuItem
                     x:Name="MenuItemNewFile"
@@ -232,6 +214,7 @@
             <!-- Project -->
             <MenuItem
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
+                FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="Project">
 
                 <MenuItem
@@ -378,6 +361,7 @@
             <!-- Build -->
             <MenuItem
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
+                FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="Build">
                 <!-- Pack -->
                 <MenuItem
@@ -532,10 +516,8 @@
             <!-- View -->
             <MenuItem
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
-                Header="View"
-                
-                 Margin="{DynamicResource WolvenkitMarginTop}"
-                >
+                FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                Header="View">
                 <MenuItem
                     x:Name="ProjectExplorerCheckbox"
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
@@ -582,7 +564,6 @@
 
                 <MenuItem
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
-                    Padding="{DynamicResource WolvenKitMarginSmallVertical}"
                     Header="Show File Preview"
                     IsCheckable="True"
                     IsChecked="{Binding SettingsManager.ShowFilePreview,
@@ -659,11 +640,10 @@
                 </MenuItem>
             </MenuItem>
 
-
-
             <!-- Tools -->
             <MenuItem
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
+                FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="Tools">
                 <MenuItem
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
@@ -765,6 +745,7 @@
             <!-- Game -->
             <MenuItem
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
+                FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="Game">
                 <MenuItem
                     x:Name="ToolbarLaunchButton"
@@ -811,6 +792,7 @@
             <!-- Extensions -->
             <MenuItem
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
+                FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="Extensions">
                 <MenuItem
                     x:Name="MenuItemShowPluginTool"
@@ -877,7 +859,6 @@
                 <MenuItem
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
                     Header="Creating mods">
-
                     <MenuItem.Icon>
                         <local:IconBox
                             IconPack="Empty"
@@ -885,7 +866,8 @@
                     </MenuItem.Icon>
 
                     <MenuItem
-                        Header="Wolvenkit: Creating a Mod"
+                        Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                        Header="WolvenKit: Creating a Mod"
                         Command="{Binding MainViewModel.OpenExternalLinkCommand}"
                         CommandParameter="{Binding WikiLinks.WolvenKitCreatingAModGuide}">
                         <MenuItem.Icon>
@@ -897,8 +879,9 @@
                     </MenuItem>
 
                     <!-- Submenu: Adding new items -->
-                    <MenuItem Header="Adding new items">
-
+                    <MenuItem
+                        Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                        Header="Adding new items">
                         <MenuItem.Icon>
                             <local:IconBox
                                 IconPack="Empty"
@@ -906,6 +889,7 @@
                         </MenuItem.Icon>
 
                         <MenuItem
+                            Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
                             Header="Adding new clothes"
                             Command="{Binding MainViewModel.OpenExternalLinkCommand}"
                             CommandParameter="{Binding WikiLinks.AddingNewItems}">
@@ -916,7 +900,9 @@
                                     Size="{DynamicResource WolvenKitIconTiny}" />
                             </MenuItem.Icon>
                         </MenuItem>
+
                         <MenuItem
+                            Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
                             Header="Adding new weapons"
                             Command="{Binding MainViewModel.OpenExternalLinkCommand}"
                             CommandParameter="{Binding WikiLinks.AddingNewItems_Weapons}">
@@ -930,14 +916,17 @@
                     </MenuItem>
 
                     <!-- Submenu: NPCs and V -->
-                    <MenuItem Header="NPCs and V">
-
+                    <MenuItem
+                        Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                        Header="NPCs and V">
                         <MenuItem.Icon>
                             <local:IconBox
                                 IconPack="Empty"
                                 Size="{DynamicResource WolvenKitIconTiny}" />
                         </MenuItem.Icon>
+
                         <MenuItem
+                            Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
                             Command="{Binding MainViewModel.OpenExternalLinkCommand}"
                             CommandParameter="{Binding WikiLinks.NPVs}"
                             Header="V as NPC">
@@ -950,6 +939,7 @@
                         </MenuItem>
 
                         <MenuItem
+                            Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
                             Header="New NPCs for AMM"
                             Command="{Binding MainViewModel.OpenExternalLinkCommand}"
                             CommandParameter="{Binding WikiLinks.AMM_NPCs}">
@@ -962,6 +952,7 @@
                         </MenuItem>
 
                         <MenuItem
+                            Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
                             Header="Custom Tattoos"
                             Command="{Binding MainViewModel.OpenExternalLinkCommand}"
                             CommandParameter="{Binding WikiLinks.Tattoos}">
@@ -974,6 +965,7 @@
                         </MenuItem>
 
                         <MenuItem
+                            Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
                             Header="Hair"
                             Command="{Binding MainViewModel.OpenExternalLinkCommand}"
                             CommandParameter="{Binding WikiLinks.Hair}">
@@ -986,6 +978,7 @@
                         </MenuItem>
 
                         <MenuItem
+                            Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
                             Header="Character Creator Additions"
                             Command="{Binding MainViewModel.OpenExternalLinkCommand}"
                             CommandParameter="{Binding WikiLinks.CCXL}">
@@ -999,6 +992,7 @@
                     </MenuItem>
 
                     <MenuItem
+                        Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
                         Header="Changing the world"
                         Command="{Binding MainViewModel.OpenExternalLinkCommand}"
                         CommandParameter="{Binding WikiLinks.WorldEditing}">
@@ -1013,6 +1007,7 @@
                     <Separator />
 
                     <MenuItem
+                        Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
                         Header="Cheat Sheets"
                         Command="{Binding MainViewModel.OpenExternalLinkCommand}"
                         CommandParameter="{Binding WikiLinks.CheatSheets}">
@@ -1023,12 +1018,12 @@
                                 Size="{DynamicResource WolvenKitIconTiny}" />
                         </MenuItem.Icon>
                     </MenuItem>
-
                 </MenuItem>
 
                 <Separator />
 
                 <MenuItem
+                    Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
                     Header="Discord Invitation"
                     Command="{Binding MainViewModel.OpenExternalLinkCommand}"
                     CommandParameter="{Binding WikiLinks.DiscordInvite}">
@@ -1041,6 +1036,7 @@
                 </MenuItem>
 
                 <MenuItem
+                    Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
                     Command="{Binding MainViewModel.OpenExternalLinkCommand}"
                     CommandParameter="{Binding WikiLinks.WolvenkitAbout}"
                     Header="About WolvenKit">
