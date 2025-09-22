@@ -1,11 +1,10 @@
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Windows.Data;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Factories;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.GraphEditor;
 using WolvenKit.App.ViewModels.Shell;
@@ -13,8 +12,8 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
 using Splat;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System.Collections.Generic;
-using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 using WolvenKit.Core.Extensions;
 using System.IO;
 
@@ -40,11 +39,27 @@ namespace WolvenKit.App.ViewModels.Documents
         [ObservableProperty]
         private SceneTabDefinition? _selectedTab;
 
-        [ObservableProperty]
         private object? _selectedTabContent;
+        
+        public object? SelectedTabContent
+        {
+            get => _selectedTabContent;
+            set => SetProperty(ref _selectedTabContent, value);
+        }
 
         [ObservableProperty]
         private bool _isGraphLoading = true;
+
+        // Button visibility for tab-specific actions
+        public bool IsActorCreationVisible => SelectedTab?.Header == "Actors & Props";
+        
+        public bool IsPropCreationVisible => SelectedTab?.Header == "Actors & Props";
+        
+        public bool IsDialogueCreationVisible => SelectedTab?.Header == "Dialogue";
+        
+        public bool IsOptionCreationVisible => SelectedTab?.Header == "Dialogue";
+        
+        public bool IsButtonBarVisible => IsActorCreationVisible || IsPropCreationVisible || IsDialogueCreationVisible || IsOptionCreationVisible;
 
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.MainFile;
 
@@ -193,6 +208,398 @@ namespace WolvenKit.App.ViewModels.Documents
         {
             if (value == null) return;
             UpdateTabContent(value);
+            OnPropertyChanged(nameof(IsActorCreationVisible));
+            OnPropertyChanged(nameof(IsPropCreationVisible));
+            OnPropertyChanged(nameof(IsDialogueCreationVisible));
+            OnPropertyChanged(nameof(IsOptionCreationVisible));
+            OnPropertyChanged(nameof(IsButtonBarVisible));
+        }
+
+        [RelayCommand]
+        private void CreateNewActor()
+        {
+            try
+            {
+                // Show scene input dialog for actor name
+                var defaultName = $"NewActor_{_sceneData.Actors.Count + 1}";
+                var dialogResult = Interactions.AskForSceneInput(("Add New Actor", "Actor Name:", defaultName, false, "", "")); 
+                var actorName = dialogResult.primaryInput;
+                
+                // Check if user cancelled the dialog
+                if (string.IsNullOrWhiteSpace(actorName))
+                {
+                    return;
+                }
+
+                // Create a new actor definition with user-provided name
+                var newActor = new scnActorDef
+                {
+                    ActorName = actorName.Trim()
+                };
+
+                // Use the built-in AddActor method which handles initialization
+                _sceneData.AddActor(newActor);
+
+                // Create performer debug symbol for the new actor
+                _sceneData.DebugSymbols ??= new scnDebugSymbols();
+                var performerSymbol = new scnPerformerSymbol
+                {
+                    PerformerId = new scnPerformerId { Id = scnSceneResource.CalculatePerformerId(newActor.ActorId.Id) },
+                    EntityRef = newActor.FindActorInWorldParams?.ActorRef ?? new gameEntityReference { Names = new CArray<CName>() },
+                    EditorPerformerId = new CRUID()
+                };
+                _sceneData.DebugSymbols.PerformersDebugSymbols.Add(performerSymbol);
+
+                // Mark document as dirty
+                Parent?.SetIsDirty(true);
+
+                // Force recalculation of the root chunk properties to pick up new actor
+                var rootChunk = RDTViewModel.GetRootChunk();
+                if (rootChunk != null)
+                {
+                    rootChunk.RecalculateProperties();
+                }
+
+                // Refresh the current tab content
+                if (SelectedTab != null)
+                {
+                    UpdateTabContent(SelectedTab);
+                }
+
+                // Auto-expand to show the newly created actor
+                ExpandToNewEntry("actors", "", 0);
+
+                // Update total actors count in the UI
+                OnPropertyChanged(nameof(TotalActors));
+
+                _logger?.Info($"Created new actor: {newActor.ActorName}");
+            }
+            catch (Exception ex)
+            {
+                _logger?.Error($"Failed to create new actor: {ex.Message}");
+            }
+        }
+
+        [RelayCommand]
+        private void CreateNewProp()
+        {
+            try
+            {
+                // Show scene input dialog for prop name
+                var defaultName = $"NewProp_{_sceneData.Props.Count + 1}";
+                var dialogResult = Interactions.AskForSceneInput(("Add New Prop", "Prop Name:", defaultName, false, "", ""));
+                var propName = dialogResult.primaryInput;
+                
+                // Check if user cancelled the dialog
+                if (string.IsNullOrWhiteSpace(propName))
+                {
+                    return;
+                }
+
+                // Create a new prop definition with user-provided name
+                var newProp = new scnPropDef
+                {
+                    PropName = propName.Trim()
+                };
+
+                // Use the built-in AddProp method which handles initialization
+                _sceneData.AddProp(newProp);
+
+                // Mark document as dirty
+                Parent?.SetIsDirty(true);
+
+                // Force recalculation of the root chunk properties to pick up new prop
+                var rootChunk = RDTViewModel.GetRootChunk();
+                if (rootChunk != null)
+                {
+                    rootChunk.RecalculateProperties();
+                }
+
+                // Refresh the current tab content
+                if (SelectedTab != null)
+                {
+                    UpdateTabContent(SelectedTab);
+                }
+
+                // Auto-expand to show the newly created prop
+                ExpandToNewEntry("props", "", 0);
+
+                // Update total props count in the UI
+                OnPropertyChanged(nameof(TotalProps));
+
+                _logger?.Info($"Created new prop: {newProp.PropName}");
+            }
+            catch (Exception ex)
+            {
+                _logger?.Error($"Failed to create new prop: {ex.Message}");
+            }
+        }
+
+        [RelayCommand]
+        private void CreateNewDialogue()
+        {
+            try
+            {
+                var dialogResult = Interactions.AskForSceneInput((
+                    "Add New Dialogue Line", 
+                    "LocString ID:", 
+                    "", 
+                    showSecondary: true, 
+                    "Embedded Text:", 
+                    "Create embedded text? (Optional)"
+                ));
+                
+                if (dialogResult.primaryInput == null)
+                {
+                    return;
+                }
+
+                var locStringId = dialogResult.primaryInput;
+                var createEmbedText = dialogResult.enableSecondary;
+                var embeddedText = dialogResult.secondaryInput;
+
+                var itemId = (uint)2; // First id is always 2
+                if (_sceneData.ScreenplayStore.Lines.Count > 0)
+                {
+                    itemId = _sceneData.ScreenplayStore.Lines[^1].ItemId.Id + 256;
+                }
+
+                var random = new Random();
+                var cruid = (CRUID)random.NextCRUID();
+                
+                // Parse locStringId as ulong if it's numeric, otherwise generate a CRUID
+                ulong locStringIdValue;
+                if (!ulong.TryParse(locStringId.Trim(), out locStringIdValue))
+                {
+                    locStringIdValue = (ulong)cruid;
+                }
+
+                // Create the dialogue line
+                var newDialogueLine = new scnscreenplayDialogLine
+                {
+                    ItemId = new scnscreenplayItemId { Id = itemId },
+                    LocstringId = new scnlocLocstringId { Ruid = (CRUID)locStringIdValue },
+                    Usage = new scnscreenplayLineUsage { PlayerGenderMask = new scnGenderMask { Mask = 3 } }
+                };
+
+                // Add the dialogue line to the screenplay store
+                _sceneData.ScreenplayStore.Lines.Add(newDialogueLine);
+
+                // If creating embedded text, add entries to locStore
+                if (createEmbedText && embeddedText != null)
+                {
+                    var variantCruid = (CRUID)random.NextCRUID();
+
+                    // Create VpEntry (payload entry) with the embedded text
+                    _sceneData.LocStore.VpEntries.Add(new scnlocLocStoreEmbeddedVariantPayloadEntry
+                    {
+                        Content = embeddedText,
+                        VariantId = new scnlocVariantId { Ruid = variantCruid }
+                    });
+
+                    // Create VdEntry (descriptor entry) linking locStringId to the payload with en_us locale
+                    _sceneData.LocStore.VdEntries.Add(new scnlocLocStoreEmbeddedVariantDescriptorEntry
+                    {
+                        LocstringId = new scnlocLocstringId { Ruid = (CRUID)locStringIdValue },
+                        VariantId = new scnlocVariantId { Ruid = variantCruid },
+                        VpeIndex = (uint)(_sceneData.LocStore.VpEntries.Count - 1),
+                        Signature = new scnlocSignature { Val = 3 }, // en_us locale signature
+                        LocaleId = Enums.scnlocLocaleId.en_us
+                    });
+                }
+
+                // Mark document as dirty
+                Parent?.SetIsDirty(true);
+
+                // Force recalculation of the root chunk properties to pick up new dialogue
+                var rootChunk = RDTViewModel.GetRootChunk();
+                if (rootChunk != null)
+                {
+                    rootChunk.RecalculateProperties();
+                }
+
+                // Refresh the current tab content
+                if (SelectedTab != null)
+                {
+                    UpdateTabContent(SelectedTab);
+                }
+
+                // Auto-expand to show the newly created dialogue line
+                ExpandToNewEntry("screenplayStore", "lines", itemId);
+
+                // Update total dialogues count in the UI
+                OnPropertyChanged(nameof(TotalDialogues));
+
+                _logger?.Info($"Created new dialogue line with itemId: {itemId}, locStringId: {locStringIdValue}" + 
+                             (createEmbedText ? $", embedded text: '{embeddedText}'" : ""));
+            }
+            catch (Exception ex)
+            {
+                _logger?.Error($"Failed to create new dialogue: {ex.Message}");
+            }
+        }
+
+        [RelayCommand]
+        private void CreateNewOption()
+        {
+            try
+            {
+                var dialogResult = Interactions.AskForSceneInput((
+                    "Add New Choice Option", 
+                    "LocString ID:", 
+                    "", 
+                    showSecondary: true, 
+                    "Embedded Text:", 
+                    "Create embedded text? (Optional)"
+                ));
+                
+                if (dialogResult.primaryInput == null)
+                {
+                    return;
+                }
+
+                var locStringId = dialogResult.primaryInput;
+                var createEmbedText = dialogResult.enableSecondary;
+                var embeddedText = dialogResult.secondaryInput;
+
+                var itemId = (uint)2; // First id is always 2
+                if (_sceneData.ScreenplayStore.Options.Count > 0)
+                {
+                    itemId = _sceneData.ScreenplayStore.Options[^1].ItemId.Id + 256;
+                }
+
+                var random = new Random();
+                var cruid = (CRUID)random.NextCRUID();
+                
+                // Parse locStringId as ulong if it's numeric, otherwise generate a CRUID
+                ulong locStringIdValue;
+                if (!ulong.TryParse(locStringId.Trim(), out locStringIdValue))
+                {
+                    locStringIdValue = (ulong)cruid;
+                }
+
+                // Create the choice option
+                var newChoiceOption = new scnscreenplayChoiceOption
+                {
+                    ItemId = new scnscreenplayItemId { Id = itemId },
+                    LocstringId = new scnlocLocstringId { Ruid = (CRUID)locStringIdValue },
+                    Usage = new scnscreenplayOptionUsage { PlayerGenderMask = new scnGenderMask { Mask = 3 } }
+                };
+
+                // Add the choice option to the screenplay store
+                _sceneData.ScreenplayStore.Options.Add(newChoiceOption);
+
+                // If creating embedded text, add entries to locStore
+                if (createEmbedText && embeddedText != null)
+                {
+                    var variantCruid = (CRUID)random.NextCRUID();
+
+                    // Create VpEntry (payload entry) with the embedded text
+                    _sceneData.LocStore.VpEntries.Add(new scnlocLocStoreEmbeddedVariantPayloadEntry
+                    {
+                        Content = embeddedText,
+                        VariantId = new scnlocVariantId { Ruid = variantCruid }
+                    });
+
+                    // Create VdEntry (descriptor entry) linking locStringId to the payload with en_us locale
+                    _sceneData.LocStore.VdEntries.Add(new scnlocLocStoreEmbeddedVariantDescriptorEntry
+                    {
+                        LocstringId = new scnlocLocstringId { Ruid = (CRUID)locStringIdValue },
+                        VariantId = new scnlocVariantId { Ruid = variantCruid },
+                        VpeIndex = (uint)(_sceneData.LocStore.VpEntries.Count - 1),
+                        Signature = new scnlocSignature { Val = 3 }, // en_us locale signature
+                        LocaleId = Enums.scnlocLocaleId.en_us
+                    });
+                }
+
+                // Mark document as dirty
+                Parent?.SetIsDirty(true);
+
+                // Force recalculation of the root chunk properties to pick up new choice option
+                var rootChunk = RDTViewModel.GetRootChunk();
+                if (rootChunk != null)
+                {
+                    rootChunk.RecalculateProperties();
+                }
+
+                // Refresh the current tab content
+                if (SelectedTab != null)
+                {
+                    UpdateTabContent(SelectedTab);
+                }
+
+                // Auto-expand to show the newly created choice option
+                ExpandToNewEntry("screenplayStore", "options", itemId);
+
+                // Update total dialogues count in the UI 
+                OnPropertyChanged(nameof(TotalDialogues));
+
+                _logger?.Info($"Created new choice option with itemId: {itemId}, locStringId: {locStringIdValue}" + 
+                             (createEmbedText ? $", embedded text: '{embeddedText}'" : ""));
+            }
+            catch (Exception ex)
+            {
+                _logger?.Error($"Failed to create new choice option: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Auto-expand tree view to show a newly created entry
+        /// </summary>
+        /// <param name="parentPath">Parent path like "screenplayStore", "actors", or "props"</param>
+        /// <param name="childPath">Child collection like "lines" or "options", or empty for direct arrays</param>
+        /// <param name="itemId">The itemId of the newly created entry</param>
+        private void ExpandToNewEntry(string parentPath, string childPath, uint itemId)
+        {
+            try
+            {
+                var rootChunk = RDTViewModel.GetRootChunk();
+                if (rootChunk == null) return;
+
+                // Find the parent collection in the root chunk's properties
+                var parentCollection = rootChunk.Properties
+                    .FirstOrDefault(p => p.Name.Equals(parentPath, StringComparison.OrdinalIgnoreCase));
+                
+                if (parentCollection != null)
+                {
+                    // Expand the parent collection
+                    parentCollection.IsExpanded = true;
+
+                    // If there's a child path (like screenplayStore -> lines/options)
+                    if (!string.IsNullOrEmpty(childPath))
+                    {
+                        // Find the child collection
+                        var childCollection = parentCollection.Properties
+                            .FirstOrDefault(p => p.Name.Equals(childPath, StringComparison.OrdinalIgnoreCase));
+                        
+                        if (childCollection != null)
+                        {
+                            // Expand the child collection (lines/options array)
+                            childCollection.IsExpanded = true;
+
+                            // Expand the last item (newly created entry)
+                            if (childCollection.Properties.Count > 0)
+                            {
+                                var lastEntry = childCollection.Properties.Last();
+                                lastEntry.IsExpanded = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Direct collection like actors or props - expand the last entry
+                        if (parentCollection.Properties.Count > 0)
+                        {
+                            var lastEntry = parentCollection.Properties.Last();
+                            lastEntry.IsExpanded = true;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger?.Info($"Note: Could not auto-expand new entry - {ex.Message}");
+            }
         }
 
         // Override Unload to ensure disposal when tab is closed

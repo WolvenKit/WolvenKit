@@ -73,6 +73,43 @@
             </nodify:Connection>
         </DataTemplate>
         
+        <!-- Button Style for Add Actor/Prop buttons -->
+        <Style x:Key="SceneEditorButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="{StaticResource WolvenKitRedShadow}" />
+            <Setter Property="Foreground" Value="{StaticResource WolvenKitRedShadow}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="8,4" />
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="{StaticResource WolvenKitRed}" />
+                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource WolvenKitRed}" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="{StaticResource WolvenKitRedShadow}" />
+                                <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource WolvenKitRedShadow}" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -183,21 +220,54 @@
                                     </Style>
                                 </Grid.Style>
                                 
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="3*" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="2*" />
-                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                
+                                <!-- Button Bar -->
+                                <Border Grid.Row="0" Background="{StaticResource ContentBackgroundAlt}" BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,0,0,1" Padding="8,4"
+                                        Visibility="{Binding DataContext.IsButtonBarVisible, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <StackPanel Orientation="Horizontal" Margin="5">
+                                        <Button Content="+ Add Actor" 
+                                                Style="{StaticResource SceneEditorButtonStyle}"
+                                                Command="{Binding DataContext.CreateNewActorCommand, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}}"
+                                                Visibility="{Binding DataContext.IsActorCreationVisible, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                Margin="0,0,5,0"/>
+                                        <Button Content="+ Add Prop" 
+                                                Style="{StaticResource SceneEditorButtonStyle}"
+                                                Command="{Binding DataContext.CreateNewPropCommand, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}}"
+                                                Visibility="{Binding DataContext.IsPropCreationVisible, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                Margin="0,0,5,0"/>
+                                        <Button Content="+ Add Dialogue" 
+                                                Style="{StaticResource SceneEditorButtonStyle}"
+                                                Command="{Binding DataContext.CreateNewDialogueCommand, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}}"
+                                                Visibility="{Binding DataContext.IsDialogueCreationVisible, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                Margin="0,0,5,0"/>
+                                        <Button Content="+ Add Option" 
+                                                Style="{StaticResource SceneEditorButtonStyle}"
+                                                Command="{Binding DataContext.CreateNewOptionCommand, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}}"
+                                                Visibility="{Binding DataContext.IsOptionCreationVisible, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                    </StackPanel>
+                                </Border>
+                                
+                                <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="3*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="2*" />
+                                    </Grid.ColumnDefinitions>
 
-                                <!-- RedTreeView bound directly to the filtered ICollectionView -->
-                                <tools:RedTreeView Grid.Column="0" 
-                                                   ItemsSource="{Binding DataContext.SelectedTabContent, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}}"
-                                                   SelectedItem="{Binding DataContext.RDTViewModel.SelectedChunk, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}, Mode=TwoWay}"
-                                                   SelectedItems="{Binding DataContext.RDTViewModel.SelectedChunks, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}, Mode=TwoWay}"/>
-                                
+                                    <!-- RedTreeView bound directly to the filtered ICollectionView -->
+                                    <tools:RedTreeView Grid.Column="0" 
+                                                       ItemsSource="{Binding DataContext.SelectedTabContent, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}}"
+                                                       SelectedItem="{Binding DataContext.RDTViewModel.SelectedChunk, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}, Mode=TwoWay}"
+                                                       SelectedItems="{Binding DataContext.RDTViewModel.SelectedChunks, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}, Mode=TwoWay}"/>
+                                    
                                 <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch" Background="#FF404040"/>
-                                
+                                    
                                 <editors:RedTypeView Grid.Column="2" DataContext="{Binding DataContext.RDTViewModel.SelectedChunk, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}}"/>
+                            </Grid>
                             </Grid>
                             
                             <!-- Node Properties tab shows our custom selection-driven view -->
