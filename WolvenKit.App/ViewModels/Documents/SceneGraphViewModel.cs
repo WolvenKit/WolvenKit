@@ -63,7 +63,9 @@ namespace WolvenKit.App.ViewModels.Documents
         
         public bool IsEffectCreationVisible => SelectedTab?.Header == "Asset Library";
         
-        public bool IsButtonBarVisible => IsActorCreationVisible || IsPropCreationVisible || IsDialogueCreationVisible || IsOptionCreationVisible || IsWorkspotCreationVisible || IsEffectCreationVisible;
+        public bool IsAnimationCreationVisible => SelectedTab?.Header == "Asset Library";
+        
+        public bool IsButtonBarVisible => IsActorCreationVisible || IsPropCreationVisible || IsDialogueCreationVisible || IsOptionCreationVisible || IsWorkspotCreationVisible || IsEffectCreationVisible || IsAnimationCreationVisible;
 
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.MainFile;
 
@@ -218,6 +220,7 @@ namespace WolvenKit.App.ViewModels.Documents
             OnPropertyChanged(nameof(IsOptionCreationVisible));
             OnPropertyChanged(nameof(IsWorkspotCreationVisible));
             OnPropertyChanged(nameof(IsEffectCreationVisible));
+            OnPropertyChanged(nameof(IsAnimationCreationVisible));
             OnPropertyChanged(nameof(IsButtonBarVisible));
         }
 
@@ -228,7 +231,7 @@ namespace WolvenKit.App.ViewModels.Documents
             {
                 // Show scene input dialog for actor name
                 var defaultName = $"NewActor_{_sceneData.Actors.Count + 1}";
-                var dialogResult = Interactions.AskForSceneInput(("Add New Actor", "Actor Name:", defaultName, false, "", "")); 
+                var dialogResult = Interactions.AskForSceneInput(("Add New Actor", "Actor Name:", defaultName, false, "", "", false, "", null, null)); 
                 var actorName = dialogResult.primaryInput;
                 
                 // Check if user cancelled the dialog
@@ -293,7 +296,7 @@ namespace WolvenKit.App.ViewModels.Documents
             {
                 // Show scene input dialog for prop name
                 var defaultName = $"NewProp_{_sceneData.Props.Count + 1}";
-                var dialogResult = Interactions.AskForSceneInput(("Add New Prop", "Prop Name:", defaultName, false, "", ""));
+                var dialogResult = Interactions.AskForSceneInput(("Add New Prop", "Prop Name:", defaultName, false, "", "", false, "", null, null));
                 var propName = dialogResult.primaryInput;
                 
                 // Check if user cancelled the dialog
@@ -352,7 +355,8 @@ namespace WolvenKit.App.ViewModels.Documents
                     "", 
                     showSecondary: true, 
                     "Embedded Text:", 
-                    "Create embedded text? (Optional)"
+                    "Create embedded text? (Optional)",
+                    false, "", null, null
                 ));
                 
                 if (dialogResult.primaryInput == null)
@@ -456,7 +460,8 @@ namespace WolvenKit.App.ViewModels.Documents
                     "", 
                     showSecondary: true, 
                     "Embedded Text:", 
-                    "Create embedded text? (Optional)"
+                    "Create embedded text? (Optional)",
+                    false, "", null, null
                 ));
                 
                 if (dialogResult.primaryInput == null)
@@ -557,11 +562,12 @@ namespace WolvenKit.App.ViewModels.Documents
                 // Show scene input dialog for workspot file path
                 var dialogResult = Interactions.AskForSceneInput((
                     "Add New Workspot", 
-                    "Workspot File Path:", 
+                    "Workspot File Path (.workspot):", 
                     "", 
                     showSecondary: false, 
                     "", 
-                    ""
+                    "",
+                    false, "", null, null
                 ));
                 
                 // Check if user cancelled the dialog
@@ -571,6 +577,13 @@ namespace WolvenKit.App.ViewModels.Documents
                 }
 
                 var workspotPath = dialogResult.primaryInput.Trim();
+                
+                // Validate file extension
+                if (!workspotPath.EndsWith(".workspot", StringComparison.OrdinalIgnoreCase))
+                {
+                    _logger?.Error($"Invalid workspot file path: '{workspotPath}'. Workspot files must end with '.workspot'");
+                    return;
+                }
                 
                 // Generate random dataId for the workspot definition
                 var random = new Random();
@@ -656,11 +669,12 @@ namespace WolvenKit.App.ViewModels.Documents
                 // Show scene input dialog for effect file path
                 var dialogResult = Interactions.AskForSceneInput((
                     "Add New Effect", 
-                    "Effect File Path:", 
+                    "Effect File Path (.effect):", 
                     "", 
                     showSecondary: false, 
                     "", 
-                    ""
+                    "",
+                    false, "", null, null
                 ));
                 
                 // Check if user cancelled the dialog
@@ -670,6 +684,13 @@ namespace WolvenKit.App.ViewModels.Documents
                 }
 
                 var effectPath = dialogResult.primaryInput.Trim();
+                
+                // Validate file extension
+                if (!effectPath.EndsWith(".effect", StringComparison.OrdinalIgnoreCase))
+                {
+                    _logger?.Error($"Invalid effect file path: '{effectPath}'. Effect files must end with '.effect'");
+                    return;
+                }
                 
                 // Generate random effect ID
                 var random = new Random();
@@ -799,6 +820,172 @@ namespace WolvenKit.App.ViewModels.Documents
             catch (Exception ex)
             {
                 _logger?.Error($"Failed to create new effect: {ex.Message}");
+            }
+        }
+
+        [RelayCommand]
+        private void CreateNewAnimation()
+        {
+            try
+            {
+                // Available animation types
+                var animationTypes = new[] { "Cinematic", "Gameplay" };
+                
+                // Show enhanced scene input dialog with dropdown for animation type
+                var dialogResult = Interactions.AskForSceneInput((
+                    "Add New Animation", 
+                    "Animation File Path (.anims):", 
+                    "", 
+                    showSecondary: false, 
+                    "", 
+                    "",
+                    showDropdown: true,
+                    "Animation Type:",
+                    animationTypes,
+                    "Cinematic"
+                ));
+                
+                // Check if user cancelled the dialog
+                if (string.IsNullOrWhiteSpace(dialogResult.primaryInput))
+                {
+                    return;
+                }
+
+                var animsPath = dialogResult.primaryInput.Trim();
+                var animationType = dialogResult.dropdownValue ?? "Cinematic";
+                
+                // Validate file extension
+                if (!animsPath.EndsWith(".anims", StringComparison.OrdinalIgnoreCase))
+                {
+                    _logger?.Error($"Invalid animation file path: '{animsPath}'. Animation files must end with '.anims'");
+                    return;
+                }
+                
+                // Load the .anims file and extract animation names
+                var animationNames = new List<string>();
+                
+                try 
+                {
+                    // Load the anims file using Parent's resource loading
+                    var animsFile = Parent?.GetFileFromDepotPathOrCache(animsPath);
+                    if (animsFile?.RootChunk is animAnimSet animSet)
+                    {
+                        // Extract animation names from each animation entry
+                        foreach (var animHandle in animSet.Animations)
+                        {
+                            if (animHandle.GetValue() is animAnimSetEntry animEntry)
+                            {
+                                if (animEntry.Animation.GetValue() is animAnimation animation && !string.IsNullOrEmpty(animation.Name))
+                                {
+                                    animationNames.Add(animation.Name!);
+                                }
+                            }
+                        }
+                        
+                        _logger?.Info($"Loaded {animationNames.Count} animations from anims file: {animsPath}");
+                        _logger?.Info($"Animation names: [{string.Join(", ", animationNames)}]");
+                        _logger?.Info($"Animation type: {animationType}");
+                    }
+                    else
+                    {
+                        _logger?.Warning($"Could not load anims file or invalid format: {animsPath}");
+                        return;
+                    }
+                }
+                catch (Exception resourceEx)
+                {
+                    _logger?.Error($"Failed to load anims resource '{animsPath}': {resourceEx.Message}");
+                    return;
+                }
+
+                // Create animation set reference and names collection based on type
+                switch (animationType.ToLower())
+                {
+                    case "cinematic":
+                        var cinematicAnimSet = new scnCinematicAnimSetSRRef
+                        {
+                            AsyncAnimSet = new CResourceAsyncReference<animAnimSet>((ResourcePath)animsPath),
+                            Priority = 128, // Default from constructor
+                            IsOverride = false
+                        };
+
+                        var cinematicAnimNames = new scnAnimSetAnimNames
+                        {
+                            AnimationNames = new CArray<CName>(animationNames.Select(name => (CName)name).ToList())
+                        };
+
+                        _sceneData.ResouresReferences.CinematicAnimSets.Add(cinematicAnimSet);
+                        _sceneData.ResouresReferences.CinematicAnimNames.Add(cinematicAnimNames);
+                        break;
+
+                    case "gameplay":
+                        var gameplayAnimSet = new scnGameplayAnimSetSRRef
+                        {
+                            AsyncAnimSet = new CResourceAsyncReference<animAnimSet>((ResourcePath)animsPath)
+                        };
+
+                        var gameplayAnimNames = new scnAnimSetAnimNames
+                        {
+                            AnimationNames = new CArray<CName>(animationNames.Select(name => (CName)name).ToList())
+                        };
+
+                        _sceneData.ResouresReferences.GameplayAnimSets.Add(gameplayAnimSet);
+                        _sceneData.ResouresReferences.GameplayAnimNames.Add(gameplayAnimNames);
+                        break;
+
+
+                    default:
+                        _logger?.Warning($"Unknown animation type: {animationType}. Defaulting to Cinematic.");
+                        // Create cinematic animation as fallback
+                        var fallbackCinematicAnimSet = new scnCinematicAnimSetSRRef
+                        {
+                            AsyncAnimSet = new CResourceAsyncReference<animAnimSet>((ResourcePath)animsPath),
+                            Priority = 128,
+                            IsOverride = false
+                        };
+
+                        var fallbackCinematicAnimNames = new scnAnimSetAnimNames
+                        {
+                            AnimationNames = new CArray<CName>(animationNames.Select(name => (CName)name).ToList())
+                        };
+
+                        _sceneData.ResouresReferences.CinematicAnimSets.Add(fallbackCinematicAnimSet);
+                        _sceneData.ResouresReferences.CinematicAnimNames.Add(fallbackCinematicAnimNames);
+                        break;
+                }
+
+                // Mark document as dirty
+                Parent?.SetIsDirty(true);
+
+                // Force recalculation of the root chunk properties
+                var rootChunk = RDTViewModel.GetRootChunk();
+                if (rootChunk != null)
+                {
+                    rootChunk.RecalculateProperties();
+                }
+
+                // Refresh the current tab content
+                if (SelectedTab != null)
+                {
+                    UpdateTabContent(SelectedTab);
+                }
+
+                // Auto-expand to show the newly created animation entries
+                switch (animationType.ToLower())
+                {
+                    case "cinematic":
+                        ExpandToNewEntry("resouresReferences", "cinematicAnimNames", 0);
+                        break;
+                    case "gameplay":
+                        ExpandToNewEntry("resouresReferences", "gameplayAnimNames", 0);
+                        break;
+                }
+
+                _logger?.Info($"Created new {animationType.ToLower()} animation: path='{animsPath}', animCount={animationNames.Count}");
+            }
+            catch (Exception ex)
+            {
+                _logger?.Error($"Failed to create new animation: {ex.Message}");
             }
         }
 

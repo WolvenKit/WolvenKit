@@ -226,7 +226,7 @@
                                 </Grid.RowDefinitions>
                                 
                                 <!-- Button Bar -->
-                                <Border Grid.Row="0" Background="{StaticResource ContentBackgroundAlt}" BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,0,0,1" Padding="8,4"
+                                <Border Grid.Row="0" Background="{StaticResource ContentBackgroundAlt}" BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,1" Padding="8,4"
                                         Visibility="{Binding DataContext.IsButtonBarVisible, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <StackPanel Orientation="Horizontal" Margin="5">
                                         <Button Content="+ Add Actor" 
@@ -249,6 +249,12 @@
                                                 Command="{Binding DataContext.CreateNewOptionCommand, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}}"
                                                 Visibility="{Binding DataContext.IsOptionCreationVisible, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                 Margin="0,0,5,0"/>
+                                        <Button Content="+ Add Animation" 
+                                                Style="{StaticResource SceneEditorButtonStyle}"
+                                                Command="{Binding DataContext.CreateNewAnimationCommand, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}}"
+                                                Visibility="{Binding DataContext.IsAnimationCreationVisible, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                Margin="0,0,5,0"
+                                                />
                                         <Button Content="+ Add Workspot" 
                                                 Style="{StaticResource SceneEditorButtonStyle}"
                                                 Command="{Binding DataContext.CreateNewWorkspotCommand, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}}"
@@ -257,7 +263,8 @@
                                         <Button Content="+ Add Effect" 
                                                 Style="{StaticResource SceneEditorButtonStyle}"
                                                 Command="{Binding DataContext.CreateNewEffectCommand, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}}"
-                                                Visibility="{Binding DataContext.IsEffectCreationVisible, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                                Visibility="{Binding DataContext.IsEffectCreationVisible, RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                />
                                     </StackPanel>
                                 </Border>
                                 
