@@ -64,3 +64,11 @@ public enum PhotomodeBodyGender
     [Display(Description = "Cat (Nibbles)")]
     Cat
 }
+
+public enum ProjectFolder
+{
+    All,
+    Archive,
+    Raw,
+    Resources
+}

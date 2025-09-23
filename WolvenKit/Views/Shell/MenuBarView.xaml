@@ -314,6 +314,30 @@
 
                 </MenuItem>
 
+                <!-- Project: utilities -->
+                <MenuItem
+                    Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                    Header="Utilities">
+                    <MenuItem.Icon>
+                        <local:IconBox
+                            IconPack="Empty"
+                            Size="{DynamicResource WolvenKitIconTiny}" />
+                    </MenuItem.Icon>
+
+                    <MenuItem
+                        Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                        Click="GenerateItemCodes_Click"
+                        Header="Generate item codes from .yaml">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="Material"
+                                Kind="FormatList"
+                                Size="{DynamicResource WolvenKitIconTiny}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                </MenuItem>
+
                 <Separator />
 
                 <MenuItem
@@ -645,6 +669,7 @@
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
                 FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="Tools">
+
                 <MenuItem
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
                     Click="GenerateMaterialRepoButton_Click"
