@@ -150,10 +150,12 @@ namespace WolvenKit.Views.Tools
 
                 Interactions.AskForSceneInput = (parameters) =>
                 {
-                    var (title, primaryLabel, primaryDefault, showSecondary, secondaryLabel, checkboxText) = parameters;
-                    var dialog = new SceneInputDialogView(title, primaryLabel, primaryDefault, showSecondary, secondaryLabel, checkboxText);
+                    var (title, primaryLabel, primaryDefault, showSecondary, secondaryLabel, checkboxText, 
+                         showDropdown, dropdownLabel, dropdownOptions, defaultDropdownValue) = parameters;
+                    var dialog = new SceneInputDialogView(title, primaryLabel, primaryDefault, showSecondary, 
+                        secondaryLabel, checkboxText, showDropdown, dropdownLabel, dropdownOptions, defaultDropdownValue);
                     var result = dialog.ShowDialog();
-                    return result == true ? (dialog.PrimaryInput, dialog.EnableSecondaryInput, dialog.SecondaryInput) : (null, false, null);
+                    return result == true ? (dialog.PrimaryInput, dialog.EnableSecondaryInput, dialog.SecondaryInput, dialog.DropdownValue) : (null, false, null, null);
                 };
 
                 Interactions.AskForFolderPathInput = (args) =>

@@ -36,6 +36,28 @@
                 NextVisibility="Collapsed"
                 PageType="Exterior">
                 <StackPanel Margin="10" MinWidth="450">
+                    <!-- Dropdown Field (conditionally visible) -->
+                    <Grid Margin="0,0,0,10"
+                          Visibility="{Binding ShowDropdown, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" MinWidth="140" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" 
+                                   Text="{Binding DropdownLabel}" 
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Right"
+                                   Margin="0,0,10,0"
+                                   Foreground="{DynamicResource PrimaryTextBrush}"
+                                   FontSize="{DynamicResource WolvenKitFontSubTitle}"/>
+                        <ComboBox Grid.Column="1"
+                                  Padding="{DynamicResource WolvenKitMarginTiny}"
+                                  FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                                  ItemsSource="{Binding DropdownOptions}"
+                                  SelectedItem="{Binding SelectedDropdownValue, UpdateSourceTrigger=PropertyChanged}"
+                                  IsReadOnly="True" />
+                    </Grid>
+
                     <!-- Primary Input Field (always visible) -->
                     <Grid Margin="0,0,0,10">
                         <Grid.ColumnDefinitions>

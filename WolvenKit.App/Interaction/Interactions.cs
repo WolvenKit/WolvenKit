@@ -204,7 +204,7 @@ public static class Interactions
     /// <summary>
     /// Ask user for scene input (unified dialog for actors, props, dialogue, options)
     /// </summary>
-    public static Func<(string title, string primaryLabel, string primaryDefault, bool showSecondary, string secondaryLabel, string checkboxText), (string? primaryInput, bool enableSecondary, string? secondaryInput)> AskForSceneInput { get; set; } =
+    public static Func<(string title, string primaryLabel, string primaryDefault, bool showSecondary, string secondaryLabel, string checkboxText, bool showDropdown, string dropdownLabel, IEnumerable<string>? dropdownOptions, string? defaultDropdownValue), (string? primaryInput, bool enableSecondary, string? secondaryInput, string? dropdownValue)> AskForSceneInput { get; set; } =
         _ => throw new NotImplementedException();
 
 

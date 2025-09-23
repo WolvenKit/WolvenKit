@@ -1,4 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 
@@ -13,7 +15,11 @@ public partial class SceneInputDialogViewModel : DialogViewModel
         string primaryDefaultValue = "",
         bool showSecondaryInput = false,
         string secondaryLabel = "Secondary:",
-        string checkboxText = "Enable secondary input")
+        string checkboxText = "Enable secondary input",
+        bool showDropdown = false,
+        string dropdownLabel = "Type:",
+        IEnumerable<string>? dropdownOptions = null,
+        string? defaultDropdownValue = null)
     {
         Title = title;
         PrimaryLabel = primaryLabel;
@@ -21,6 +27,18 @@ public partial class SceneInputDialogViewModel : DialogViewModel
         ShowSecondaryInput = showSecondaryInput;
         SecondaryLabel = secondaryLabel;
         CheckboxText = checkboxText;
+        ShowDropdown = showDropdown;
+        DropdownLabel = dropdownLabel;
+        
+        if (dropdownOptions != null)
+        {
+            DropdownOptions = dropdownOptions.ToList();
+            SelectedDropdownValue = defaultDropdownValue ?? DropdownOptions.FirstOrDefault();
+        }
+        else
+        {
+            DropdownOptions = new List<string>();
+        }
     }
 
     /// <summary>
@@ -44,6 +62,21 @@ public partial class SceneInputDialogViewModel : DialogViewModel
     [ObservableProperty] private string? _secondaryInputValue = "";
 
     /// <summary>
+    /// Whether to show the dropdown section
+    /// </summary>
+    [ObservableProperty] private bool _showDropdown;
+
+    /// <summary>
+    /// The selected dropdown value
+    /// </summary>
+    [ObservableProperty] private string? _selectedDropdownValue;
+
+    /// <summary>
+    /// The available dropdown options
+    /// </summary>
+    public List<string> DropdownOptions { get; set; } = new();
+
+    /// <summary>
     /// The label text for the primary input field
     /// </summary>
     public string PrimaryLabel { get; set; }
@@ -52,6 +85,11 @@ public partial class SceneInputDialogViewModel : DialogViewModel
     /// The label text for the secondary input field
     /// </summary>
     public string SecondaryLabel { get; set; }
+
+    /// <summary>
+    /// The label text for the dropdown field
+    /// </summary>
+    public string DropdownLabel { get; set; }
 
     /// <summary>
     /// The checkbox text

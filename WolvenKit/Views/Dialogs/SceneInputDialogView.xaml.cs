@@ -1,4 +1,5 @@
 #nullable enable
+using System.Collections.Generic;
 using System.Windows;
 using WolvenKit.App.ViewModels.Dialogs;
 
@@ -14,9 +15,14 @@ public partial class SceneInputDialogView : Window
         string primaryDefaultValue = "",
         bool showSecondaryInput = false,
         string secondaryLabel = "Secondary:",
-        string checkboxText = "Enable secondary input")
+        string checkboxText = "Enable secondary input",
+        bool showDropdown = false,
+        string dropdownLabel = "Type:",
+        IEnumerable<string>? dropdownOptions = null,
+        string? defaultDropdownValue = null)
     {
-        ViewModel = new SceneInputDialogViewModel(title, primaryLabel, primaryDefaultValue, showSecondaryInput, secondaryLabel, checkboxText);
+        ViewModel = new SceneInputDialogViewModel(title, primaryLabel, primaryDefaultValue, showSecondaryInput, 
+            secondaryLabel, checkboxText, showDropdown, dropdownLabel, dropdownOptions, defaultDropdownValue);
         DataContext = ViewModel;
         InitializeComponent();
     }
@@ -25,6 +31,7 @@ public partial class SceneInputDialogView : Window
     public string? PrimaryInput => ViewModel.PrimaryInputValue;
     public bool EnableSecondaryInput => ViewModel.EnableSecondaryInput;
     public string? SecondaryInput => ViewModel.SecondaryInputValue;
+    public string? DropdownValue => ViewModel.SelectedDropdownValue;
 
     public bool? ShowDialog(Window owner)
     {
