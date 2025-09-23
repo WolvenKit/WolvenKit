@@ -8,19 +8,6 @@ namespace WolvenKit.Interfaces.Extensions
 {
     public static partial class StringPathExtensions
     {
-        // https://stackoverflow.com/a/3695190
-        public static void EnsureFolderExists(this string path)
-        {
-            var directoryName = Path.GetDirectoryName(path);
-            // If path is a file name only, directory name will be an empty string
-            if (!string.IsNullOrEmpty(directoryName))
-            {
-                // Create all directories on the path that don't already exist
-                Directory.CreateDirectory(directoryName);
-            }
-        }
-
-
         public static (string, bool, EProjectFolders) GetModRelativePath(this string fullpath,
             string activeModFileDirectory)
         {
@@ -102,6 +89,32 @@ namespace WolvenKit.Interfaces.Extensions
         /// Checks if a file path has two extensions, e.g. "file.mlsetup.json"
         /// </summary>
         public static bool HasTwoExtensions(this string filePath) => Path.GetFileName(filePath).Split('.').Length > 2;
+
+        /// <summary>
+        /// Checks if the file path has a given extension. Fuzzy matching (see examples below)
+        /// </summary>
+        /// <param name="filePath">The file path</param>
+        /// <param name="fileExtension">fileExtension (e.g. '.yaml' or '.yml')</param>
+        /// <example>
+        /// <code>
+        /// file.mesh.json  => true for .json, .mesh, and .mesh.json
+        /// file.yaml       => true for .yaml and .yml
+        /// </code>
+        /// </example>
+        public static bool HasFileExtension(this string filePath, string fileExtension)
+        {
+            var targetExtension = fileExtension.StartsWith('.') ? fileExtension : "." + fileExtension;
+            var targetFileName = filePath.EndsWith(".json") && !fileExtension.Contains(".json")
+                ? filePath.Replace(".json", "")
+                : filePath;
+
+            return targetExtension switch
+            {
+                ".yaml" or ".yml" => targetFileName.Contains(".yaml", StringComparison.OrdinalIgnoreCase) ||
+                                     targetFileName.Contains(".yml", StringComparison.OrdinalIgnoreCase),
+                _ => targetFileName.Contains(targetExtension, StringComparison.OrdinalIgnoreCase)
+            };
+        }
 
         /// <summary>
         /// Regular expression for file path separators, forward or backward slashes

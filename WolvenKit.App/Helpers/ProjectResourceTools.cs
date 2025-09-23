@@ -110,7 +110,25 @@ public class ProjectResourceTools
             return "";
         }
 
-        if (appendModderNameFromSettings)
+        if (rootRelativeFolder == "" &&
+            activeProject.Files.FirstOrDefault(f => f.EndsWith(fileName)) is string filePath)
+        {
+            return Path.Join(activeProject.FileDirectory, filePath);
+        }
+
+        // Deal with file paths
+        if (fileName.Contains(Path.DirectorySeparatorChar))
+        {
+            var absoluteFilePath = Path.Join(activeProject.FileDirectory, fileName);
+            if (File.Exists(absoluteFilePath))
+            {
+                return absoluteFilePath;
+            }
+
+            fileName = fileName[(fileName.LastIndexOf(Path.DirectorySeparatorChar) + 1)..];
+        }
+
+        if (appendModderNameFromSettings && rootRelativeFolder == "")
         {
             rootRelativeFolder = AppendPersonalDirectory(rootRelativeFolder);
         }
@@ -1053,4 +1071,27 @@ public class ProjectResourceTools
         _loggerService.Info("Scanning your mods... this can take a moment. Wolvenkit will be unresponsive.");
         _archiveManager.Initialize(new FileInfo(_settingsService.CP77ExecutablePath));
     }
+
+    public List<string> GetProjectFiles(string fileExtension, ProjectFolder folder)
+    {
+        if (_projectManager.ActiveProject is not { } project)
+        {
+            return [];
+        }
+
+        var projectFiles = folder switch
+        {
+            ProjectFolder.All => project.Files,
+            ProjectFolder.Archive => project.ModFiles,
+            ProjectFolder.Raw => project.RawFiles,
+            ProjectFolder.Resources => project.ResourceFiles,
+            _ => [],
+        };
+
+        return projectFiles
+            .Where(f => f.HasFileExtension(fileExtension))
+            .ToList();
+    }
+
+
 }
