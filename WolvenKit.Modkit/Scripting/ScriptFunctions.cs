@@ -10,6 +10,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Modkit.Resources;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
@@ -189,15 +190,9 @@ public partial class ScriptFunctions
     /// <returns>The converted JSON string</returns>
     public virtual string YamlToJson(string yamlText)
     {
-        // remove yaml tags like !include, !append etc.
-        yamlText = YamlTagRegex().Replace(yamlText, "");
-
         try
         {
-            // deserialize it
-            var yamlObject = new Deserializer().Deserialize(yamlText);
-
-            return JsonConvert.SerializeObject(yamlObject);
+            return YamlHelper.YamlToJson(yamlText);
         }
         catch (Exception e)
         {
@@ -221,9 +216,6 @@ public partial class ScriptFunctions
         var serializer = new Serializer();
         return serializer.Serialize(deserializedObject);
     }
-
-    [GeneratedRegex(@"(?<=-)\s?\![a-z-]*(?=\s)")]
-    private static partial Regex YamlTagRegex();
 }
 
 public enum OpenAs
