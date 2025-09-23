@@ -261,4 +261,21 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
 
     private void SaveCurrentLayoutToDefault(object sender, RoutedEventArgs e) => DockingAdapter.G_Dock.SaveLayout(true);
     private void GenerateMaterialRepoButton_Click(object sender, RoutedEventArgs e) => Interactions.ShowMaterialRepositoryView();
+
+    private void GenerateItemCodes_Click(object sender, RoutedEventArgs e)
+    {
+        if (ViewModel is not MenuBarViewModel vm)
+        {
+            return;
+        }
+
+        var itemCodes = vm.GenerateItemCodesFromYaml();
+
+        if (itemCodes.Count == 0)
+        {
+            return;
+        }
+
+        Interactions.ShowDictionaryAsCopyableList(("Item codes:", "These are your item codes", itemCodes, false));
+    }
 }

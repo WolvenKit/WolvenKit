@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Tools;
@@ -64,6 +66,20 @@ public partial class MenuBarViewModel : ObservableObject
 
     [RelayCommand]
     private void OpenGameFolder() => Commonfunctions.ShowFolderInExplorer(SettingsManager.GetRED4GameRootDir());
+
+    public Dictionary<string, List<string>> GenerateItemCodesFromYaml()
+    {
+        var files = MainViewModel.ProjectResourceTools.GetProjectFiles(".yaml", ProjectFolder.Resources);
+
+        Dictionary<string, List<string>> allItems = [];
+
+        foreach (var file in files)
+        {
+            allItems.AddRange(YamlHelper.GetItemsFromYaml(MainViewModel.ProjectResourceTools.GetAbsolutePath(file)));
+        }
+
+        return allItems;
+    }
 
     [ObservableProperty]
     private bool _projectExplorerCheckbox;
