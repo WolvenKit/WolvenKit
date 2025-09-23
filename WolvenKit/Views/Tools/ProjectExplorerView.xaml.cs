@@ -120,10 +120,11 @@ namespace WolvenKit.Views.Tools
                     return (viewModel.Files, viewModel.MoveToPath);
                 };
 
-                Interactions.ShowBrokenReferencesList = (args) =>
+                Interactions.ShowDictionaryAsCopyableList = (args) =>
                 {
                     var comparer = new FilePathComparer();
-                    var dialog = new ShowBrokenReferencesDialogView(args.Item1, args.Item2);
+                    var dialog =
+                        new ShowDictionaryForCopyDialogView(args.title, args.text, args.list, args.isExperimental);
                     return dialog.ShowDialog(Application.Current.MainWindow) == true;
                 };
 

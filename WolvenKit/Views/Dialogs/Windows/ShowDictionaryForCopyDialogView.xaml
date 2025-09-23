@@ -1,16 +1,14 @@
 ﻿<Window
-    x:Class="WolvenKit.Views.Dialogs.Windows.ShowBrokenReferencesDialogView"
+    x:Class="WolvenKit.Views.Dialogs.Windows.ShowDictionaryForCopyDialogView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:converters="clr-namespace:Wolvenkit.App.Converters;assembly=WolvenKit.App"
-    Title="{Binding Title,
-                    RelativeSource={RelativeSource Self}}"
+    xmlns:windows="clr-namespace:WolvenKit.Views.Dialogs.Windows"
+    Title="{Binding Title}"
     MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
     MinHeight="{DynamicResource WolvenKitDialogHeightSmall}"
-    MaxHeight="{Binding MaxHeight,
-                        RelativeSource={RelativeSource Self}}"
     SizeToContent="WidthAndHeight"
     WindowStartupLocation="CenterOwner">
     <Grid
@@ -55,20 +53,23 @@
                             Foreground="{StaticResource WolvenKitYellow}"
                             FontSize="{DynamicResource WolvenKitFontMedium}"
                             FontWeight="Bold"
+                            Visibility="{Binding IsExperimental,
+                                                 Converter={StaticResource BooleanToVisibilityConverter}}"
                             TextWrapping="Wrap">
                             This feature is experimental!
                         </TextBlock>
 
                         <TextBlock
                             Margin="{DynamicResource WolvenKitMarginSmallVertical}"
-                            Text="{Binding ReferencesCount,
-                                           StringFormat='The following {0} files seem to hold broken references:'}" />
+                            Text="{Binding Text}" />
                     </StackPanel>
 
                     <TextBox
                         x:Name="ContentTextBox"
                         Grid.Row="1"
-                        Height="Auto"
+                        Height="{Binding MaxHeight,
+                                         RelativeSource={RelativeSource FindAncestor,
+                                                                        AncestorType={x:Type windows:ShowDictionaryForCopyDialogView}}}"
                         MinHeight="100"
                         VerticalAlignment="Top"
                         VerticalContentAlignment="Top"

@@ -90,7 +90,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             {
                 var yamlTargetDir =
                     Path.Join(_projectManager.ActiveProject.ResourcesDirectory,
-                        _projectResourceTools.AppendPersonalDirectory("r6", "tweaks"), "photomode");
+                        ProjectResourceTools.AppendPersonalDirectory("r6", "tweaks"), "photomode");
 
                 _templateFileTools.CreatePhotomodeYaml(new PhotomodeYamlOptions()
                 {
@@ -193,9 +193,9 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
                 return pathOrFileName;
             }
 
-            if (pathOrFileName.EndsWith(".yaml"))
+            if (pathOrFileName.HasFileExtension(".yaml"))
             {
-                return Path.Join(_projectResourceTools.AppendPersonalDirectory("r6", "tweaks"), pathOrFileName);
+                return Path.Join(ProjectResourceTools.AppendPersonalDirectory("r6", "tweaks"), pathOrFileName);
             }
 
             return Path.Join(relativePhotoModeFolder, pathOrFileName);

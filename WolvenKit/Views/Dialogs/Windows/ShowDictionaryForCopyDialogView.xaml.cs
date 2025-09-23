@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -9,18 +10,23 @@ using WolvenKit.App.ViewModels.Dialogs;
 
 namespace WolvenKit.Views.Dialogs.Windows;
 
-public partial class ShowBrokenReferencesDialogView : IViewFor<ShowBrokenReferencesDialogViewModel>
+public partial class ShowDictionaryForCopyDialogView : IViewFor<ShowDictionaryForCopyDialogViewModel>
 {
     public object ViewModel { get; set; }
 
-    public ShowBrokenReferencesDialogView(string title, IDictionary<string, List<string>> brokenRefs)
+
+    public ShowDictionaryForCopyDialogView(string title, string text, IDictionary<string, List<string>> brokenRefs,
+        bool isExperimental)
     {
-        ViewModel = new ShowBrokenReferencesDialogViewModel(title, brokenRefs);
+        ViewModel = new ShowDictionaryForCopyDialogViewModel(title, text, brokenRefs, isExperimental);
         DataContext = ViewModel;
+
+        MaxHeight = Math.Max(SystemParameters.WorkArea.Height * 0.8, 1200);
+        Height = MaxHeight;
         InitializeComponent();
     }
 
-    ShowBrokenReferencesDialogViewModel IViewFor<ShowBrokenReferencesDialogViewModel>.ViewModel { get; set; }
+    ShowDictionaryForCopyDialogViewModel IViewFor<ShowDictionaryForCopyDialogViewModel>.ViewModel { get; set; }
 
     public bool? ShowDialog(Window owner)
     {

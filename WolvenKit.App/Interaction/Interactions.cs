@@ -192,7 +192,8 @@ public static class Interactions
     /// <summary>
     /// Display dictionary of {relativePath => brokenReferences[]} in a dialogue.
     /// </summary>
-    public static Func<(string, IDictionary<string, List<string>>), bool> ShowBrokenReferencesList { get; set; } =
+    public static Func<(string title, string text, IDictionary<string, List<string>> list, bool isExperimental), bool>
+        ShowDictionaryAsCopyableList { get; set; } =
         _ => throw new NotImplementedException();
 
     /// <summary>
