@@ -212,7 +212,9 @@ namespace WolvenKit.Views.Documents
                 }
 
                 _loggerService.Info("Done!");
-                Interactions.ShowBrokenReferencesList(("Broken references", brokenReferences));
+                Interactions.ShowDictionaryAsCopyableList(("Broken references",
+                    $"The following {brokenReferences.Count} files seem to hold broken references", brokenReferences,
+                    true));
             }
             catch (Exception err)
             {
@@ -1216,8 +1218,9 @@ namespace WolvenKit.Views.Documents
                 }
 
                 _loggerService.Info("Done!");
-                Interactions.ShowBrokenReferencesList(("Unused files in project (extensions: ",
-                    new Dictionary<string, List<string>>() { { relativePath, unusedPaths } }));
+                Interactions.ShowDictionaryAsCopyableList(("Unused files in project (extensions: ",
+                    $"The following files seem to be unused in your project",
+                    new Dictionary<string, List<string>>() { { relativePath, unusedPaths } }, true));
             }
             catch (Exception ex)
             {

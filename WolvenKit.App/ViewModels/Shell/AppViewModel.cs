@@ -79,10 +79,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly DocumentTools _documentTools;
     private readonly Cr2WTools _cr2WTools;
     private readonly TemplateFileTools _templateFileTools;
-    private readonly ProjectResourceTools _projectResourceTools;
     private readonly IUpdateService _updateService;
     // expose to view
     public ISettingsManager SettingsManager { get; init; }
+    public ProjectResourceTools ProjectResourceTools { get; init; }
 
     /// <summary>
     /// Class constructor
@@ -132,7 +132,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _documentTools = documentTools;
         _cr2WTools = cr2WTools;
         _templateFileTools = templateFileTools;
-        _projectResourceTools = projectResourceTools;
+        ProjectResourceTools = projectResourceTools;
         _updateService = updateService;
 
         _fileValidationScript = _scriptService.GetScripts().ToList()
@@ -946,7 +946,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             case null:
                 return;
             case true when !_archiveManager.IsInitialized:
-                _projectResourceTools.InitializeArchiveManager();
+                ProjectResourceTools.InitializeArchiveManager();
                 break;
         }
 
@@ -965,7 +965,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
 
         _loggerService.Info("Done scanning");
-        Interactions.ShowBrokenReferencesList(("Broken references", brokenReferences));
+        Interactions.ShowDictionaryAsCopyableList(("Broken references",
+            $"The following {brokenReferences.Count} files seem to hold broken references", brokenReferences, true));
     }
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
@@ -999,7 +1000,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         Dictionary<string, List<string>> files = [];
         files.Add(ActiveProject.ModName, brokenFiles);
-        Interactions.ShowBrokenReferencesList(("Broken references", files));
+        Interactions.ShowDictionaryAsCopyableList(("Broken references",
+            $"The following {files.Count} files seem to hold broken references", files, true));
         _progressService.IsIndeterminate = false;
         return;
 
