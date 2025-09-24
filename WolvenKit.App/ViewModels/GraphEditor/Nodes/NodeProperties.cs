@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -149,21 +149,8 @@ internal class NodeProperties
         }
         else if (node is questUseWorkspotNodeDefinition useWorkspotNodeCasted)
         {
-            details["Entity Reference"] = ParseGameEntityReference(useWorkspotNodeCasted?.EntityReference);
-
-            if (useWorkspotNodeCasted?.ParamsV1?.Chunk is scnUseSceneWorkspotParamsV1 useSceneWorkspotCasted)
-            {
-                details["Entry Id"] = useSceneWorkspotCasted?.EntryId?.Id.ToString()!;
-                details["Exit Entry Id"] = useSceneWorkspotCasted?.ExitEntryId?.Id.ToString()!;
-                details["Workspot Instance Id"] = useSceneWorkspotCasted?.WorkspotInstanceId?.Id.ToString()!;
-                details["Workspot Name"] = GetWorkspotPath(useSceneWorkspotCasted?.WorkspotInstanceId?.Id, scnSceneResource);
-            }
-            else if (useWorkspotNodeCasted?.ParamsV1?.Chunk is questUseWorkspotParamsV1 useWorkspotCasted)
-            {
-                details["Entry Id"] = useWorkspotCasted?.EntryId?.Id.ToString()!;
-                details["Exit Entry Id"] = useWorkspotCasted?.ExitEntryId?.Id.ToString()!;
-                details["Workspot Node"] = useWorkspotCasted?.WorkspotNode.GetResolvedText()!;
-            }
+            Quest.questUseWorkspotNodeDefinitionWrapper
+                .PopulateWorkspotDetailsWithSceneContext(useWorkspotNodeCasted, details, scnSceneResource);
         }
         else if (node is questSceneManagerNodeDefinition sceneManagerNodeCasted)
         {
@@ -1292,8 +1279,7 @@ internal class NodeProperties
             prioritized["Type"] = properties["Type"];
         }
 
-        // Add high-priority properties
-        var highPriority = new[] { "Name", "Path", "Duration", "Action", "Value", "Count", "Mode", "State" };
+        var highPriority = new[] { "Entity", "Action", "Workspot", "Name", "Path", "Duration", "Value", "Count", "Mode", "State" };
         foreach (var priority in highPriority)
         {
             var key = properties.Keys.FirstOrDefault(k => k.Contains(priority));
@@ -1514,7 +1500,7 @@ internal class NodeProperties
         return "";
     }
 
-    private static string ParseGameEntityReference(gameEntityReference? entRef)
+    public static string ParseGameEntityReference(gameEntityReference? entRef)
     {
         string str = "-";
 
@@ -1616,7 +1602,7 @@ internal class NodeProperties
         return str;
     }
 
-    private static string GetWorkspotPath(CUInt32? workspotID, scnSceneResource? scnSceneResource)
+    public static string GetWorkspotPath(CUInt32? workspotID, scnSceneResource? scnSceneResource)
     {
         string retVal = "";
 

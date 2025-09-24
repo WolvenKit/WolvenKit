@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Media;
 using Splat;
@@ -15,8 +15,11 @@ namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 
 public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
 {
+    private readonly scnSceneResource _sceneResource;
+    
     public scnQuestNodeWrapper(scnQuestNode scnSceneGraphNode, scnSceneResource scnSceneResource) : base(scnSceneGraphNode)
     {
+        _sceneResource = scnSceneResource;
         if (_castedData.QuestNode != null)
         {
             //_castedData.QuestNode.PropertyChanged += QuestNodeOnPropertyChanged;
@@ -155,12 +158,7 @@ public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
             // Create a new Details dictionary to trigger UI updates
             var tempDetails = new Dictionary<string, string>();
             
-            // Get the scene resource from our parent document if possible
-            scnSceneResource? sceneResource = null;
-            if (DocumentViewModel?.SelectedTabItemViewModel is SceneGraphViewModel combinedScene)
-            {
-                sceneResource = combinedScene.RDTViewModel.GetData() as scnSceneResource;
-            }
+            scnSceneResource? sceneResource = _sceneResource;
 
             // Get details from the nested quest node
             if (_castedData.QuestNode?.Chunk != null)
