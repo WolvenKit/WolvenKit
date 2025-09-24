@@ -448,13 +448,12 @@ public partial class ChunkViewModel
 
             case scnscreenplayDialogLine scnscreenplayDialogLine:
             {
-                Descriptor = scnscreenplayDialogLine.FemaleLipsyncAnimationName.GetResolvedText() ?? "";
-                if (StringHelper.StringifyOrNull(scnscreenplayDialogLine.MaleLipsyncAnimationName) is string s1)
-                {
-                    var separator = Value == "" ? "" : " | ";
-                    Descriptor = $"{Descriptor}{separator}${s1}";
-                }
-
+                Descriptor = scnscreenplayDialogLine.ItemId?.Id.ToString() ?? "";
+                break;
+            }
+            case scnscreenplayChoiceOption scnscreenplayChoiceOption:
+            {
+                Descriptor = scnscreenplayChoiceOption.ItemId?.Id.ToString() ?? "";
                 break;
             }
             case CMeshMaterialEntry materialEntry:
