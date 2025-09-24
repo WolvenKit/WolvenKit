@@ -99,4 +99,55 @@ public partial class scnSceneResource
     {
         return 2 + propIndex * 256;
     }
+    
+    /// <summary>
+    /// Gets embedded text content for a given locstring ID from scene's LocStore
+    /// Based on logic from scnSectionNodeWrapper.cs
+    /// </summary>
+    /// <param name="locStringId">The locstring ID to look up</param>
+    /// <returns>The embedded text content, or empty string if not found</returns>
+    public string GetEmbeddedTextForLocString(CRUID locStringId)
+    {
+        if (LocStore?.VdEntries == null || LocStore?.VpEntries == null)
+        {
+            return string.Empty;
+        }
+
+        var preferredLocaleId = WolvenKit.RED4.Types.Enums.scnlocLocaleId.en_us;
+        var vdEntryPreferred = LocStore.VdEntries.FirstOrDefault(vd => 
+            vd.LocstringId?.Ruid == locStringId && vd.LocaleId == preferredLocaleId);
+
+        if (vdEntryPreferred != null && vdEntryPreferred.VariantId != null)
+        {
+            var targetVariantRuid = vdEntryPreferred.VariantId.Ruid;
+            var vpEntry = LocStore.VpEntries.FirstOrDefault(vp => vp.VariantId?.Ruid == targetVariantRuid);
+            if (vpEntry != null)
+            {
+                var content = vpEntry.Content.ToString();
+                if (!string.IsNullOrEmpty(content))
+                {
+                    return content;
+                }
+            }
+        }
+
+        var vdEntryFallback = LocStore.VdEntries.FirstOrDefault(vd => 
+            vd.LocstringId?.Ruid == locStringId && vd.LocaleId != preferredLocaleId);
+        
+        if (vdEntryFallback != null && vdEntryFallback.VariantId != null)
+        {
+            var fallbackVariantRuid = vdEntryFallback.VariantId.Ruid;
+            var vpEntryFallback = LocStore.VpEntries.FirstOrDefault(vp => vp.VariantId?.Ruid == fallbackVariantRuid);
+            if (vpEntryFallback != null)
+            {
+                var content = vpEntryFallback.Content.ToString();
+                if (!string.IsNullOrEmpty(content))
+                {
+                    return content;
+                }
+            }
+        }
+
+        return string.Empty;
+    }
 } 
