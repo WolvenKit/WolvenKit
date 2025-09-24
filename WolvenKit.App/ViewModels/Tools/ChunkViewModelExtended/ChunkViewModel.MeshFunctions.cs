@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using HelixToolkit.SharpDX.Core;
 using WolvenKit.RED4.Types;
 
 // ReSharper disable once CheckNamespace
@@ -19,7 +16,7 @@ public partial class ChunkViewModel
     {
         if ((name is null && index is null)
             || GetRootModel() is not { ResolvedData: CMesh cmesh } rootModel
-            || rootModel.GetPropertyFromPath(MaterialEntryDefinitionPath) is not ChunkViewModel entries)
+            || rootModel.GetPropertyChild(MaterialEntryDefinitionPath) is not ChunkViewModel entries)
         {
             return null;
         }
@@ -38,7 +35,7 @@ public partial class ChunkViewModel
             return null;
         }
 
-        if (rootModel.GetPropertyFromPath(LocalMaterialBufferPath) is not ChunkViewModel entries)
+        if (rootModel.GetPropertyChild(LocalMaterialBufferPath) is not ChunkViewModel entries)
         {
             return null;
         }
@@ -53,7 +50,7 @@ public partial class ChunkViewModel
             return null;
         }
 
-        if (rootModel.GetPropertyFromPath("externalMaterials") is not ChunkViewModel entries)
+        if (rootModel.GetPropertyChild("externalMaterials") is not ChunkViewModel entries)
         {
             return null;
         }
