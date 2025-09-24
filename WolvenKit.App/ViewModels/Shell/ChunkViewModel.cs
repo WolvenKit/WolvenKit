@@ -426,7 +426,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
             foreach (var key in keys)
             {
-                if (GetRootModel().GetPropertyFromPath(key) is not ChunkViewModel list || list.Properties.Count <= idx)
+                if (GetRootModel().GetPropertyChild(key) is not ChunkViewModel list || list.Properties.Count <= idx)
                 {
                     continue;
                 }
@@ -4132,24 +4132,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         while (result.Parent != null)
         {
             result = result.Parent;
-        }
-
-        return result;
-    }
-
-    public ChunkViewModel? GetPropertyFromPath(string path)
-    {
-        var parts = path.Split('.');
-
-        var result = this;
-        foreach (var part in parts)
-        {
-            if (result?.GetTvProperties().Count == 1 && result.TVProperties.FirstOrDefault()?.ResolvedData is RedDummy)
-            {
-                result.RecalculateProperties();
-            }
-
-            result = result?.Properties.FirstOrDefault(x => x.Name == part);
         }
 
         return result;

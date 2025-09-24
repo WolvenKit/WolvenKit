@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
-using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
@@ -464,7 +463,8 @@ public partial class ChunkViewModel
             // For local and external materials
             case CMaterialInstance or CResourceAsyncReference<IMaterial>
                 when NodeIdxInParent > -1
-                     && GetRootModel().GetPropertyFromPath("materialEntries")?.ResolvedData is CArray<CMeshMaterialEntry> materialEntries
+                     && GetRootModel().GetPropertyChild("materialEntries")?.ResolvedData is CArray<CMeshMaterialEntry>
+                         materialEntries
                      && materialEntries.Count > NodeIdxInParent:
             {
                 var isLocalMaterial = ResolvedData is CMaterialInstance;
@@ -657,7 +657,7 @@ public partial class ChunkViewModel
                 // mesh: boneTransforms (in different coordinate spaces)
                 if (NodeIdxInParent > -1 &&
                     Parent?.Name is "boneTransforms" or "aPoseLS" or "aPoseMS" &&
-                    GetRootModel().GetPropertyFromPath("boneNames")?.ResolvedData is CArray<CName> boneNames &&
+                    GetRootModel().GetPropertyChild("boneNames")?.ResolvedData is CArray<CName> boneNames &&
                     boneNames.Count > NodeIdxInParent)
                 {
                     Descriptor = boneNames[NodeIdxInParent];
