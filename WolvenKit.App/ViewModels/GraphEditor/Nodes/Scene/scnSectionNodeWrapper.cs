@@ -492,6 +492,35 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>, IDynami
                         detailSuffix = $" ({actionName}: {effectName})";
                     }
                     break;
+                case scneventsVFXDurationEvent vfxDurationEvent:
+                    {
+                        string startActionName = vfxDurationEvent.StartAction.ToString();
+                        string endActionName = vfxDurationEvent.EndAction.ToString();
+                        string effectName = "[No Effect]";
+                        if (vfxDurationEvent.EffectEntry != null && vfxDurationEvent.EffectEntry.EffectName != CName.Empty)
+                        {
+                            effectName = vfxDurationEvent.EffectEntry.EffectName.GetResolvedText() ?? "[unresolved]";
+                        }
+                        
+                        string performerName = "[No Performer]";
+                        if (vfxDurationEvent.PerformerId != null && _sceneResource != null)
+                        {
+                            performerName = ResolvePerformerName(vfxDurationEvent.PerformerId.Id, _sceneResource);
+                        }
+                        
+                        string nodeRefInfo = "";
+                        if (vfxDurationEvent.NodeRef != NodeRef.Empty)
+                        {
+                            string nodeRefName = vfxDurationEvent.NodeRef.GetResolvedText() ?? "[Unresolved Ref]";
+                            nodeRefInfo = $" - Node: {nodeRefName}";
+                        }
+                        
+                        string muteInfo = vfxDurationEvent.MuteSound ? " - Muted" : "";
+                        string sequenceInfo = vfxDurationEvent.SequenceShift > 0 ? $" - Shift: {vfxDurationEvent.SequenceShift}" : "";
+                        
+                        detailSuffix = $" ({performerName} - {startActionName}→{endActionName}: {effectName}{nodeRefInfo}{muteInfo}{sequenceInfo})";
+                    }
+                    break;
                 case scnChangeIdleAnimEvent idleAnimEvent:
                     {
                             string performerName = ResolvePerformerName(idleAnimEvent.Performer.Id, _sceneResource);
