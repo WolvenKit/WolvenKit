@@ -46,7 +46,7 @@ public partial class RedGraph
     public uint CreateSceneNode(Type type, System.Windows.Point point)
     {
         scnSceneGraphNode instance;
-        
+
         // Check if this is a quest node type - if so, create a scnQuestNode wrapper
         if (typeof(questNodeDefinition).IsAssignableFrom(type))
         {
@@ -56,7 +56,7 @@ public partial class RedGraph
         {
             instance = InternalCreateSceneNode(type);
         }
-        
+
         var wrappedInstance = WrapSceneNode(instance);
         wrappedInstance.Location = point;
 
@@ -67,9 +67,9 @@ public partial class RedGraph
         }
 
         Nodes.Add(wrappedInstance);
-        
+
         DocumentViewModel?.SetIsDirty(true);
-        
+
         return instance.NodeId.Id;
     }
 
@@ -79,7 +79,7 @@ public partial class RedGraph
     public uint CreateCompositeSceneNode(string presetName, Type questNodeType, System.Windows.Point point)
     {
         scnSceneGraphNode instance = CreateCompositeQuestNode(presetName, questNodeType);
-        
+
         var wrappedInstance = WrapSceneNode(instance);
         wrappedInstance.Location = point;
 
@@ -90,9 +90,9 @@ public partial class RedGraph
         }
 
         Nodes.Add(wrappedInstance);
-        
+
         DocumentViewModel?.SetIsDirty(true);
-        
+
         return instance.NodeId.Id;
     }
 
@@ -110,7 +110,7 @@ public partial class RedGraph
         if (sceneNode is scnChoiceNode choiceNode)
         {
             var sceneResource = (scnSceneResource)_data;
-            
+
             // Add notablePoint for choice nodes
             sceneResource.NotablePoints.Add(new scnNotablePoint
             {
@@ -123,7 +123,7 @@ public partial class RedGraph
             // Create proper screenplay entries for the default choice option
             var random = new Random();
             var cruid = (CRUID)random.NextCRUID();
-            
+
             // first id is always 2, don't know why
             var id = (CUInt32)2;
             if (sceneResource.ScreenplayStore.Options.Count > 0)
@@ -288,7 +288,7 @@ public partial class RedGraph
     {
         // Create the basic quest node first
         var questNode = InternalCreateSceneQuestNode(questNodeType);
-        
+
         // Apply the preset configuration
         if (presetName == "DebugWarning" && questNode.QuestNode?.Chunk is questUIManagerNodeDefinition uiManagerNode)
         {
@@ -301,7 +301,7 @@ public partial class RedGraph
             };
             uiManagerNode.Type = new CHandle<questIUIManagerNodeType>(warningNodeType);
         }
-        
+
         return questNode;
     }
 
@@ -318,7 +318,7 @@ public partial class RedGraph
             // Keep 1026 sockets as-is (Cut Control failsafe pattern)
             return originalCoords;
         }
-        
+
         // Map common input patterns to deletion marker 666-based coordinates
         return originalCoords switch
         {
@@ -327,12 +327,12 @@ public partial class RedGraph
             (1, 0) => (666, 1),    // Cancel input -> (666,1) - most common pattern
             (2, 0) => (666, 2),    // Additional inputs
             (3, 0) => (666, 3),
-            
-            // Handle ordinal variations  
+
+            // Handle ordinal variations
             (0, var ord) => (666, ord),
             (1, var ord) => (666, (ushort)(ord + 1)), // Offset by 1 to avoid collision with (0,0)->(666,0)
             (2, var ord) => (666, (ushort)(ord + 2)), // Offset by 2
-            
+
             // Default: map to 666 with preserved ordinal
             _ => (666, originalCoords.ordinal)
         };
@@ -347,26 +347,26 @@ public partial class RedGraph
         if (node.Data is scnQuestNode scnQuestNode && scnQuestNode.QuestNode?.Chunk != null)
         {
             var questNode = scnQuestNode.QuestNode.Chunk;
-            
+
             // Check if the contained quest node is signal-stopping
             if (questNode is questSignalStoppingNodeDefinition)
             {
                 return true;
             }
-            
+
             // Additional quest node types that should use deletion markers for safety
             var criticalQuestTypes = new[]
             {
                 typeof(questSwitchNodeDefinition),
                 typeof(questFlowControlNodeDefinition)
             };
-            
+
             if (criticalQuestTypes.Contains(questNode.GetType()))
             {
                 return true;
             }
         }
-        
+
         // For pure scene nodes, manually list which ones should use deletion markers
         var criticalSceneTypes = new[]
         {
@@ -379,7 +379,7 @@ public partial class RedGraph
             typeof(scnInterruptManagerNode),
             typeof(scnFlowControlNode)
         };
-        
+
         return criticalSceneTypes.Contains(node.Data.GetType());
     }
 
@@ -476,10 +476,10 @@ public partial class RedGraph
 
         // 9. Generate input sockets based on incoming connections and update destination data
         markerWrapper.GenerateSockets();
-        
+
         // Create a mapping from original input socket coordinates to deletion marker socket coordinates
         var socketMapping = new Dictionary<(ushort name, ushort ordinal), (ushort name, ushort ordinal)>();
-        
+
         // Add input sockets for all incoming connections and build mapping
         foreach (var incomingConn in incomingConnections)
         {
@@ -489,12 +489,12 @@ public partial class RedGraph
                 // Map original coordinates to deletion marker coordinates
                 (ushort newName, ushort newOrdinal) = MapToDeleteionMarkerCoordinates(originalCoords);
                 socketMapping[originalCoords] = (newName, newOrdinal);
-                
+
                 // Create the input socket with the mapped coordinates
                 markerWrapper.AddInputWithCoordinates(newName, newOrdinal);
             }
         }
-        
+
         // Update destination data in all output sockets to point to deletion marker's 666-based coordinates
         foreach (var nodeViewModel in Nodes)
         {
@@ -503,7 +503,7 @@ public partial class RedGraph
                 foreach (var output in sceneNodeViewModel.Output.OfType<SceneOutputConnectorViewModel>())
                 {
                     if (output.Data == null) continue;
-                    
+
                     for (int i = 0; i < output.Data.Destinations.Count; i++)
                     {
                         var dest = output.Data.Destinations[i];
@@ -525,13 +525,13 @@ public partial class RedGraph
 
         // 10. Remove the original node from UI
         Nodes.Remove(node);
-        
+
         // 11. Add the deletion marker wrapper to UI
         Nodes.Add(markerWrapper);
-        
+
         // 12. Recreate connections
         Connections.Clear();  // Clear all UI connections
-        
+
         // Rebuild all connections
         foreach (var nodeViewModel in Nodes)
         {
@@ -540,11 +540,11 @@ public partial class RedGraph
                 foreach (var output in sceneNodeViewModel.Output.OfType<SceneOutputConnectorViewModel>())
                 {
                     if (output.Data == null) continue;
-                    
+
                     foreach (var destination in output.Data.Destinations)
                     {
                         if (destination.NodeId == null) continue;
-                        
+
                         var targetNode = Nodes.FirstOrDefault(n => n is BaseSceneViewModel && (n as BaseSceneViewModel)?.UniqueId == destination.NodeId.Id) as BaseSceneViewModel;
                         if (targetNode != null)
                         {
@@ -568,16 +568,16 @@ public partial class RedGraph
                 }
             }
         }
-        
+
         // 13. Update properties in the nodes collection
         if (GetSceneNodesChunkViewModel() is { } nodes)
         {
             nodes.RecalculateProperties();
         }
-        
+
         // Mark document as dirty since we modified the graph
         DocumentViewModel?.SetIsDirty(true);
-        
+
         _loggerService?.Info($"Replaced node {node.UniqueId} with a deletion marker");
     }
 
@@ -654,7 +654,7 @@ public partial class RedGraph
                     }
                 };
                 sceneResource.ExitPoints.Add(endPoint);
-                
+
                 // Refresh the property panel to show the new exitPoint
                 RefreshSpecificProperties("exitPoints");
             }
@@ -705,7 +705,7 @@ public partial class RedGraph
                     }
                 };
                 sceneResource.EntryPoints.Add(entryPoint);
-                
+
                 // Refresh the property panel to show the new entryPoint
                 RefreshSpecificProperties("entryPoints");
             }
@@ -723,9 +723,9 @@ public partial class RedGraph
 
         // Set document reference for property change syncing BEFORE generating sockets
         nodeWrapper.DocumentViewModel = DocumentViewModel;
-        
+
         nodeWrapper.GenerateSockets();
-        
+
         return nodeWrapper;
     }
 
@@ -735,9 +735,9 @@ public partial class RedGraph
 
         // Set document reference for property change syncing BEFORE generating sockets
         nodeWrapper.DocumentViewModel = DocumentViewModel;
-        
+
         nodeWrapper.GenerateSockets();
-        
+
         return nodeWrapper;
     }
 
@@ -759,11 +759,11 @@ public partial class RedGraph
                     sceneSource.Data.Destinations.RemoveAt(j);
                 }
             }
-            
+
             // 1026 Failsafe Cleanup: When Cut Control FALSE socket disconnects from any cut destination socket,
             // also remove the hidden connection to (1026,0) on the same destination node
             var sourceNodeForDisconnect = Nodes.FirstOrDefault(n => n.UniqueId == sceneSource.OwnerId) as BaseSceneViewModel;
-            if (sourceNodeForDisconnect is scnCutControlNodeWrapper && 
+            if (sourceNodeForDisconnect is scnCutControlNodeWrapper &&
                 sceneSource.Data.Stamp.Name == 1 && // FALSE socket of Cut Control
                 IsCutDestinationSocket(sceneTarget)) // Any cut destination socket
             {
@@ -785,14 +785,14 @@ public partial class RedGraph
 
             Connections.RemoveAt(i);
             RefreshCVM(sceneSource.Data);
-            
+
             // Invalidate converter cache for affected nodes to force ChunkViewModel regeneration
             InvalidateConverterCacheForNode(sceneSource.OwnerId);
             InvalidateConverterCacheForNode(sceneTarget.OwnerId);
-            
+
             // Restore general property sync (but don't let it regenerate sockets)
             NotifyNodesUpdated(sceneSource.OwnerId, sceneTarget.OwnerId);
-            
+
             // Mark document as dirty since we modified connections
             DocumentViewModel?.SetIsDirty(true);
 
@@ -814,7 +814,7 @@ public partial class RedGraph
                 sceneSource.Data = socketData;
             }
         }
-        
+
         if (socketData == null)
         {
             _loggerService?.Error("Could not create socket data for connection.");
@@ -836,11 +836,11 @@ public partial class RedGraph
 
         socketData.Destinations.Add(input);
         Connections.Add(new SceneConnectionViewModel(sceneSource, sceneTarget));
-        
+
         // 1026 Failsafe: When Cut Control FALSE socket connects to any cut destination socket,
         // automatically add hidden connection to (1026,0) on the same destination node
         var sourceNode = Nodes.FirstOrDefault(n => n.UniqueId == sceneSource.OwnerId) as BaseSceneViewModel;
-        if (sourceNode is scnCutControlNodeWrapper && 
+        if (sourceNode is scnCutControlNodeWrapper &&
             socketData.Stamp.Name == 1 && // FALSE socket of Cut Control
             IsCutDestinationSocket(sceneTarget)) // Any cut destination socket
         {
@@ -856,20 +856,20 @@ public partial class RedGraph
                     Ordinal = 0
                 }
             };
-            
+
             // Add the hidden connection to data only (not to UI Connections)
             socketData.Destinations.Add(hiddenInput);
         }
-        
+
         RefreshCVM(socketData);
-        
+
         // Invalidate converter cache for affected nodes to force ChunkViewModel regeneration
         InvalidateConverterCacheForNode(sceneSource.OwnerId);
         InvalidateConverterCacheForNode(sceneTarget.OwnerId);
-        
+
         // Restore general property sync (but don't let it regenerate sockets)
         NotifyNodesUpdated(sceneSource.OwnerId, sceneTarget.OwnerId);
-        
+
         // Mark document as dirty since we modified connections
         DocumentViewModel?.SetIsDirty(true);
     }
@@ -885,11 +885,10 @@ public partial class RedGraph
                 {
                     continue;
                 }
-                
+
                 foreach (var destination in output.Data.Destinations)
                 {
-                    if (destination.NodeId != null && 
-                        destination.NodeId.Id == sceneTarget.OwnerId && 
+                    if (destination.NodeId != null &&                        destination.NodeId.Id == sceneTarget.OwnerId &&
                         destination.IsockStamp.Name == sceneTarget.NameId &&
                         destination.IsockStamp.Ordinal == sceneTarget.Ordinal)
                     {
@@ -904,10 +903,10 @@ public partial class RedGraph
     private void RefreshCVM(scnOutputSocket socket)
     {
         // Find the affected node to trigger property panel refresh
-        var affectedNode = Nodes.FirstOrDefault(n => 
+        var affectedNode = Nodes.FirstOrDefault(n =>
             n.Output.OfType<SceneOutputConnectorViewModel>()
                 .Any(output => ReferenceEquals(output.Data, socket)));
-                
+
         if (affectedNode != null)
         {
             // Trigger property panel refresh
@@ -924,11 +923,11 @@ public partial class RedGraph
         var sceneResource = (scnSceneResource)_data;
         var notablePointToRemove = sceneResource.NotablePoints
             .FirstOrDefault(np => np.NodeId.Id == nodeId);
-            
+
         if (notablePointToRemove != null)
         {
             sceneResource.NotablePoints.Remove(notablePointToRemove);
-            
+
             // Refresh the property panel to show the removal
             RefreshSpecificProperties("notablePoints");
         }
@@ -942,19 +941,19 @@ public partial class RedGraph
     public void RefreshSpecificProperties(params string[] propertyNames)
     {
         if (DocumentViewModel == null) return;
-        
+
         var sceneGraphTab = DocumentViewModel.TabItemViewModels
             .OfType<SceneGraphViewModel>()
             .FirstOrDefault();
-            
+
         if (sceneGraphTab?.SelectedTab == null) return;
-        
+
         var rootChunk = sceneGraphTab.RDTViewModel.GetRootChunk();
         if (rootChunk == null) return;
-        
+
         // Only invalidate cache for specific properties we're updating
         var cacheService = new ConverterCacheService();
-        
+
         // Find and refresh only the specific property ChunkViewModels
         bool needsTabRefresh = false;
         foreach (var propertyName in propertyNames)
@@ -967,10 +966,10 @@ public partial class RedGraph
                 {
                     cacheService.InvalidateConverterCache(redData);
                 }
-                
+
                 // Force recalculation of this property only
                 propertyChunk.RecalculateProperties();
-                
+
                 // Check if this property is visible in current tab
                 if (sceneGraphTab.SelectedTab.Filter(propertyChunk))
                 {
@@ -978,20 +977,20 @@ public partial class RedGraph
                 }
             }
         }
-        
+
         // Only refresh the tab content if one of the updated properties is visible in current tab
         if (needsTabRefresh)
         {
             var filteredList = new List<ChunkViewModel>(
                 rootChunk.TVProperties.Where(c => sceneGraphTab.SelectedTab.Filter(c))
             );
-            
+
             // Expand the first level of items by default
             foreach (var item in filteredList)
             {
                 item.IsExpanded = true;
             }
-            
+
             sceneGraphTab.SelectedTabContent = filteredList;
         }
     }
@@ -1005,14 +1004,14 @@ public partial class RedGraph
         // Invalidate converter cache for the root scnSceneResource
         var cacheService = new ConverterCacheService();
         cacheService.InvalidateConverterCache((scnSceneResource)_data);
-        
+
         // Force refresh of the tab content in SceneGraphViewModel
         if (DocumentViewModel != null)
         {
             var sceneGraphTab = DocumentViewModel.TabItemViewModels
                 .OfType<SceneGraphViewModel>()
                 .FirstOrDefault();
-                
+
             if (sceneGraphTab?.SelectedTab != null)
             {
                 // Directly recreate the tab content with fresh filtered data
@@ -1022,18 +1021,18 @@ public partial class RedGraph
                     // Force fresh calculation of properties
                     freshRootChunk.RecalculateProperties();
                     freshRootChunk.ForceLoadPropertiesRecursive();
-                    
+
                     // Apply the filter to get fresh filtered content
                     var freshFilteredList = new List<ChunkViewModel>(
                         freshRootChunk.TVProperties.Where(c => sceneGraphTab.SelectedTab.Filter(c))
                     );
-                    
+
                     // Expand the first level of items by default
                     foreach (var item in freshFilteredList)
                     {
                         item.IsExpanded = true;
                     }
-                    
+
                     // Directly set the new content
                     sceneGraphTab.SelectedTabContent = freshFilteredList;
                 }
@@ -1048,7 +1047,7 @@ public partial class RedGraph
             return null;
         }
 
-        if (dataViewModel.Chunks[0].GetPropertyFromPath("sceneGraph.graph") is not { } nodes)
+        if (dataViewModel.Chunks[0].GetPropertyChild("sceneGraph", "graph") is not { } nodes)
         {
             return null;
         }
@@ -1069,7 +1068,7 @@ public partial class RedGraph
         }
         return false;
     }
-    
+
     private bool IsChildOf(ChunkViewModel child, IRedType potentialParentData)
     {
         var current = child.Parent;
@@ -1081,23 +1080,23 @@ public partial class RedGraph
         }
         return false;
     }
-    
+
     private bool IsPropertyOf(IRedType childData, IRedType parentData)
     {
         if (parentData is not RedBaseClass parentClass)
             return false;
-            
+
         // Check if childData is directly referenced by any property of parentData
         foreach (var propertyInfo in parentClass.GetType().GetProperties())
         {
             try
             {
                 var propertyValue = propertyInfo.GetValue(parentClass);
-                
+
                 // Direct reference check
                 if (ReferenceEquals(propertyValue, childData))
                     return true;
-                
+
                 // Check inside arrays/collections
                 if (propertyValue is System.Collections.IEnumerable enumerable && propertyValue is not string)
                 {
@@ -1114,7 +1113,7 @@ public partial class RedGraph
                 continue;
             }
         }
-        
+
         return false;
     }
 
@@ -1127,11 +1126,11 @@ public partial class RedGraph
         if (sceneDestination != null)
         {
             sceneSource.Data.Destinations.Remove(sceneDestination);
-            
+
             // 1026 Failsafe Cleanup: When Cut Control FALSE socket disconnects from any cut destination socket,
             // also remove the hidden connection to (1026,0) on the same destination node
             var sourceNode = Nodes.FirstOrDefault(n => n.UniqueId == sceneSource.OwnerId) as BaseSceneViewModel;
-            if (sourceNode is scnCutControlNodeWrapper && 
+            if (sourceNode is scnCutControlNodeWrapper &&
                 sceneSource.Data.Stamp.Name == 1 && // FALSE socket of Cut Control
                 IsCutDestinationSocket(sceneTarget)) // Any cut destination socket
             {
@@ -1147,20 +1146,20 @@ public partial class RedGraph
                     }
                 }
             }
-            
+
             sceneSource.IsConnected = sceneSource.Data.Destinations.Count > 0;
             UpdateTargetNode(sceneTarget);
 
             Connections.Remove(sceneConnection);
             RefreshCVM(sceneSource.Data);
-            
+
             // Invalidate converter cache for affected nodes to force ChunkViewModel regeneration
             InvalidateConverterCacheForNode(sceneSource.OwnerId);
             InvalidateConverterCacheForNode(sceneTarget.OwnerId);
-            
+
             // Restore general property sync (but don't let it regenerate sockets)
             NotifyNodesUpdated(sceneSource.OwnerId, sceneTarget.OwnerId);
-            
+
             // Mark document as dirty since we modified connections
             DocumentViewModel?.SetIsDirty(true);
         }
@@ -1180,11 +1179,11 @@ public partial class RedGraph
         }
 
         var duplicatedData = (scnSceneGraphNode)cloneable.DeepCopy();
-        
+
         var newNodeId = GetNextAvailableSceneNodeId();
         duplicatedData.NodeId.Id = newNodeId;
         _currentSceneNodeId = Math.Max(_currentSceneNodeId, newNodeId);
-        
+
         // For scnQuestNode, also update the quest node's ID to match
         if (duplicatedData is scnQuestNode questNode && questNode.QuestNode?.Chunk != null)
         {
@@ -1197,44 +1196,44 @@ public partial class RedGraph
         }
 
         var wrappedDuplicate = WrapSceneNode(duplicatedData);
-        
+
         wrappedDuplicate.Location = new System.Windows.Point(
-            originalNode.Location.X + 50, 
+            originalNode.Location.X + 50,
             originalNode.Location.Y + 50
         );
 
         ((scnSceneResource)_data).SceneGraph.Chunk!.Graph.Add(new CHandle<scnSceneGraphNode>(duplicatedData));
-        
+
         if (GetSceneNodesChunkViewModel() is { } nodes)
         {
             nodes.RecalculateProperties();
         }
 
         Nodes.Add(wrappedDuplicate);
-        
+
         _loggerService?.Info($"Duplicated scene node with new ID: {duplicatedData.NodeId.Id}");
     }
 
     private uint GetNextAvailableSceneNodeId()
     {
         var sceneResource = (scnSceneResource)_data;
-        
+
         uint candidateId = _currentSceneNodeId + 1;
-        
+
         if (!IsSceneNodeIdInUse(candidateId, sceneResource))
         {
             return candidateId;
         }
-        
+
         // Fallback: if there's a collision, keep searching
         do
         {
             candidateId++;
         } while (IsSceneNodeIdInUse(candidateId, sceneResource));
-        
+
         return candidateId;
     }
-    
+
     private bool IsSceneNodeIdInUse(uint nodeId, scnSceneResource sceneResource)
     {
         foreach (var nodeHandle in sceneResource.SceneGraph.Chunk!.Graph)
@@ -1244,7 +1243,7 @@ public partial class RedGraph
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -1306,7 +1305,7 @@ public partial class RedGraph
             var input = new SceneInputConnectorViewModel($"({socketName},{socketOrdinal})", $"({socketName},{socketOrdinal})", targetNode.UniqueId, socketName, socketOrdinal);
             input.Subtitle = label;
             targetNode.Input.Add(input);
-            
+
             _loggerService?.Info($"Created missing input socket ({socketName},{socketOrdinal}) on node {targetNode.UniqueId}");
         }
     }
@@ -1320,7 +1319,7 @@ public partial class RedGraph
     {
         // Check for cut destination patterns based on socket coordinates and target node type
         var targetNode = Nodes.FirstOrDefault(n => n.UniqueId == socket.OwnerId) as BaseSceneViewModel;
-        
+
         if (targetNode == null) return false;
 
         // Pattern 1: Cancel socket (1,0) - traditional scene nodes
@@ -1405,7 +1404,7 @@ public partial class RedGraph
                 {
                     continue;
                 }
-                
+
                 foreach (var destination in sceneOutputConnector.Data!.Destinations)
                 {
                     if (!nodeCache.TryGetValue(destination.NodeId.Id, out var targetNode))
@@ -1440,7 +1439,7 @@ public partial class RedGraph
                 {
                     continue;
                 }
-                
+
                 foreach (var destination in sceneOutputConnector.Data!.Destinations)
                 {
                     if (!nodeCache.TryGetValue(destination.NodeId.Id, out var targetNode))
@@ -1525,7 +1524,7 @@ public partial class RedGraph
                 {
                     continue;
                 }
-                
+
                 foreach (var destination in sceneOutputConnector.Data!.Destinations)
                 {
                     if (!nodeCache.TryGetValue(destination.NodeId.Id, out var targetNode))
@@ -1560,7 +1559,7 @@ public partial class RedGraph
                 {
                     continue;
                 }
-                
+
                 foreach (var destination in sceneOutputConnector.Data!.Destinations)
                 {
                     if (!nodeCache.TryGetValue(destination.NodeId.Id, out var targetNode))
@@ -1610,7 +1609,7 @@ public partial class RedGraph
             // Use the converter cache service to invalidate the cache for this node
             var cacheService = new ConverterCacheService();
             cacheService.InvalidateConverterCache((RedBaseClass)node.Data);
-            
+
             // Trigger Data property change to force UI refresh
             node.TriggerPropertyChanged(nameof(node.Data));
         }

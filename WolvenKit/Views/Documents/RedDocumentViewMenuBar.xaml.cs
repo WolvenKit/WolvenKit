@@ -784,7 +784,7 @@ namespace WolvenKit.Views.Documents
 
             cvm.CalculateProperties();
 
-            foreach (var child in propertyPaths.Select(cvm.GetPropertyFromPath).OfType<ChunkViewModel>())
+            foreach (var child in propertyPaths.Select((p) => cvm.GetPropertyChild(p)).OfType<ChunkViewModel>())
             {
                 child.CalculateProperties();
                 childNodes.AddRange(child.TVProperties);

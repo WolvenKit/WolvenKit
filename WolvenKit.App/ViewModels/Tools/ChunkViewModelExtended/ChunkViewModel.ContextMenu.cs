@@ -1,15 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using WolvenKit.App.Extensions;
-using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
-using WolvenKit.Common;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.Shell;
@@ -20,10 +15,10 @@ public partial class ChunkViewModel
 
     [NotifyCanExecuteChangedFor(nameof(ToggleEnableMaskedCommand))]
     [ObservableProperty] private bool _isShiftKeyPressed;
-    
+
     [ObservableProperty] private bool _isCtrlKeyPressed;
     [ObservableProperty] private bool _isAltKeyPressed;
-    
+
     [ObservableProperty] private bool _isMaterial;
 
     [ObservableProperty] private bool _isMaterialArray;
@@ -82,7 +77,7 @@ public partial class ChunkViewModel
             return;
         }
 
-        var materialEntries = Parent?.Parent?.GetRootModel().GetPropertyFromPath("materialEntries");
+        var materialEntries = Parent?.Parent?.GetRootModel().GetPropertyChild("materialEntries");
 
         if (materialEntries?.ResolvedData is not CArray<CMeshMaterialEntry> array)
         {
@@ -107,12 +102,12 @@ public partial class ChunkViewModel
         entry.Name = (CName)newName;
 
         Tab?.Parent?.SetIsDirty(true);
-        
+
         materialEntries.RecalculateProperties();
         CalculateDescriptor();
 
         // now rename the chunks
-        var appCvm = Parent?.Parent?.GetRootModel().GetPropertyFromPath("appearances");
+        var appCvm = Parent?.Parent?.GetRootModel().GetPropertyChild("appearances");
         if (appCvm?.ResolvedData is not CArray<CHandle<meshMeshAppearance>> appearances)
         {
             return;
@@ -152,7 +147,7 @@ public partial class ChunkViewModel
             return;
         }
 
-        var entryCvm = GetRootModel().GetPropertyFromPath("materialEntries");
+        var entryCvm = GetRootModel().GetPropertyChild("materialEntries");
 
         if (entryCvm?.ResolvedData is not CArray<CMeshMaterialEntry> materialEntries ||
             entryCvm.GetChildNode(NodeIdxInParent) is not ChunkViewModel entryDefinition)
@@ -167,7 +162,7 @@ public partial class ChunkViewModel
         }
 
         newIndex += 1;
-        
+
         entryCvm.MoveChild(newIndex, entryDefinition);
         Parent.MoveChild(newIndex, this);
 
@@ -177,7 +172,7 @@ public partial class ChunkViewModel
 
         entryCvm.RecalculateProperties();
         Parent.RecalculateProperties();
-     
+
     }
 
     /// <summary>
@@ -279,7 +274,7 @@ public partial class ChunkViewModel
             Tab?.Parent.SetIsDirty(true);
         }
     }
-    
+
     private bool CanScrollToMaterial() => ShowScrollToMaterial || GetRootModel().ShowScrollToMaterial;
 
     [RelayCommand(CanExecute = nameof(CanScrollToMaterial))]
@@ -298,7 +293,7 @@ public partial class ChunkViewModel
         // Appearance
         if (ResolvedData is CName data && Parent.Name == "chunkMaterials" &&
             data.GetResolvedText() is string materialName &&
-            GetRootModel().GetPropertyFromPath("materialEntries") is
+            GetRootModel().GetPropertyChild("materialEntries") is
                 { ResolvedData: CArray<CMeshMaterialEntry> ary } materialEntries)
         {
             if (ary.FirstOrDefault(e => e.Name.GetResolvedText() == materialName) is not CMeshMaterialEntry matDef)
@@ -361,7 +356,7 @@ public partial class ChunkViewModel
     {
         var newName = await Interactions.ShowInputBoxAsync("New material name", "");
 
-        var materialEntries = Parent?.GetRootModel().GetPropertyFromPath("materialEntries");
+        var materialEntries = Parent?.GetRootModel().GetPropertyChild("materialEntries");
         if (materialEntries?.ResolvedData is not CArray<CMeshMaterialEntry> array)
         {
             return;
@@ -376,7 +371,7 @@ public partial class ChunkViewModel
         switch (ResolvedData)
         {
             case CArray<CMaterialInstance> matInstances:
-                matInstances.Add(new CMaterialInstance()); 
+                matInstances.Add(new CMaterialInstance());
                 break;
             case CArray<IMaterial> matInstances:
                 matInstances.Add(new CMaterialInstance());
@@ -445,7 +440,7 @@ public partial class ChunkViewModel
 
                 componentsChild.RecalculateProperties();
                 break;
-            // any other node that's not the root node 
+            // any other node that's not the root node
             default:
                 if (Parent is not null && GetRootModel() is { ResolvedData: appearanceAppearanceResource } root)
                 {

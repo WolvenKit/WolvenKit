@@ -7,7 +7,6 @@ using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
-using WolvenKit.App.Services;
 
 namespace WolvenKit.App.ViewModels.GraphEditor;
 
@@ -521,7 +520,7 @@ public partial class RedGraph
 
         // Find affected nodes and trigger property panel refresh for each
         var affectedNodeIds = sockets
-            .Select(socket => Nodes.FirstOrDefault(n => 
+            .Select(socket => Nodes.FirstOrDefault(n =>
                 n.Output.OfType<QuestOutputConnectorViewModel>()
                     .Any(output => ReferenceEquals(output.Data, socket)) ||
                 n.Input.OfType<QuestInputConnectorViewModel>()
@@ -529,7 +528,7 @@ public partial class RedGraph
             .Where(node => node != null)
             .Select(node => node!.UniqueId)
             .ToHashSet();
-        
+
         // Trigger property panel refresh for affected nodes
          foreach (var nodeId in affectedNodeIds)
          {
@@ -548,7 +547,7 @@ public partial class RedGraph
             return null;
         }
 
-        if (dataViewModel.Chunks[0].GetPropertyFromPath("graph.nodes") is not { } nodes)
+        if (dataViewModel.Chunks[0].GetPropertyChild("graph", "nodes") is not { } nodes)
         {
             return null;
         }

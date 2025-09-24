@@ -78,7 +78,7 @@ public partial class ChunkViewModel
             Value = f.ToBitFieldString();
         }
         else if (NodeIdxInParent > -1 && Parent?.Name == "referenceTracks" &&
-                 GetRootModel().GetPropertyFromPath("trackNames")?.ResolvedData is CArray<CName> trackNames)
+                 GetRootModel().GetPropertyChild("trackNames")?.ResolvedData is CArray<CName> trackNames)
         {
             Value = trackNames[NodeIdxInParent].GetResolvedText();
             IsValueExtrapolated = true;
@@ -454,25 +454,26 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = Value != "";
                 break;
             case CMatrix when Parent?.Name == "boneRigMatrices" &&
-                              GetRootModel().GetPropertyFromPath("boneNames")?.ResolvedData is CArray<CName> boneNames &&
+                              GetRootModel().GetPropertyChild("boneNames")?.ResolvedData is CArray<CName> boneNames &&
                               boneNames.Count > NodeIdxInParent:
                 Value = boneNames[NodeIdxInParent].GetResolvedText();
                 IsValueExtrapolated = Value != "";
                 break;
             case Vector4 when Parent?.Name == "bonePositions" &&
-                              GetRootModel().GetPropertyFromPath("boneNames")?.ResolvedData is CArray<CName> boneNames &&
+                              GetRootModel().GetPropertyChild("boneNames")?.ResolvedData is CArray<CName> boneNames &&
                               boneNames.Count > NodeIdxInParent:
                 Value = boneNames[NodeIdxInParent].GetResolvedText();
                 IsValueExtrapolated = Value != "";
                 break;
             case CFloat when Parent?.Name == "boneVertexEpsilons" &&
-                             GetRootModel().GetPropertyFromPath("boneNames")?.ResolvedData is CArray<CName> boneNames &&
+                             GetRootModel().GetPropertyChild("boneNames")?.ResolvedData is CArray<CName> boneNames &&
                              boneNames.Count > NodeIdxInParent:
                 Value = boneNames[NodeIdxInParent].GetResolvedText();
                 IsValueExtrapolated = Value != "";
                 break;
             case CInt16 boneIdx when Parent?.Name == "boneParentIndexes" &&
-                                     GetRootModel().GetPropertyFromPath("boneNames")?.ResolvedData is CArray<CName> boneNames &&
+                                     GetRootModel().GetPropertyChild("boneNames")?.ResolvedData is CArray<CName>
+                                         boneNames &&
                                      boneNames.Count > NodeIdxInParent:
                 Value = boneNames[NodeIdxInParent].GetResolvedText();
                 IsValueExtrapolated = Value != "";
@@ -1024,7 +1025,7 @@ public partial class ChunkViewModel
                 Value = gameEntRef.Reference.GetResolvedText();
                 IsValueExtrapolated = Value != "";
                 break;
-            case gameEntitySpawnerComponent when GetTvPropertyFromPath("slotDataArray") is ChunkViewModel sda:
+            case gameEntitySpawnerComponent when GetPropertyChild("slotDataArray") is ChunkViewModel sda:
                 Value = sda.Descriptor;
                 IsValueExtrapolated = Value != "";
                 break;
@@ -1221,7 +1222,7 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = true;
                 break;
             case physicsRagdollBodyInfo when
-                NodeIdxInParent > -1 && GetRootModel().GetPropertyFromPath("ragdollNames")?.ResolvedData is
+                NodeIdxInParent > -1 && GetRootModel().GetPropertyChild("ragdollNames")?.ResolvedData is
                     CArray<physicsRagdollBodyNames> ragdollNames:
                 var rN = ragdollNames[NodeIdxInParent];
                 Value = $"{rN.ParentAnimName.GetResolvedText() ?? ""} -> {rN.ChildAnimName.GetResolvedText() ?? ""}";
