@@ -230,7 +230,7 @@ namespace WolvenKit.App.ViewModels.Documents
             try
             {
                 // Show scene input dialog for actor name
-                var defaultName = $"NewActor_{_sceneData.Actors.Count + 1}";
+                var defaultName = $"new_actor_{_sceneData.Actors.Count + 1}";
                 var dialogResult = Interactions.AskForSceneInput(("Add New Actor", "Actor Name:", defaultName, false, "", "", false, "", null, null)); 
                 var actorName = dialogResult.primaryInput;
                 
@@ -246,18 +246,8 @@ namespace WolvenKit.App.ViewModels.Documents
                     ActorName = actorName.Trim()
                 };
 
-                // Use the built-in AddActor method which handles initialization
+                // Use the built-in AddActor method which handles initialization and performer symbol creation
                 _sceneData.AddActor(newActor);
-
-                // Create performer debug symbol for the new actor
-                _sceneData.DebugSymbols ??= new scnDebugSymbols();
-                var performerSymbol = new scnPerformerSymbol
-                {
-                    PerformerId = new scnPerformerId { Id = scnSceneResource.CalculatePerformerId(newActor.ActorId.Id) },
-                    EntityRef = newActor.FindActorInWorldParams?.ActorRef ?? new gameEntityReference { Names = new CArray<CName>() },
-                    EditorPerformerId = new CRUID()
-                };
-                _sceneData.DebugSymbols.PerformersDebugSymbols.Add(performerSymbol);
 
                 // Mark document as dirty
                 Parent?.SetIsDirty(true);
@@ -295,7 +285,7 @@ namespace WolvenKit.App.ViewModels.Documents
             try
             {
                 // Show scene input dialog for prop name
-                var defaultName = $"NewProp_{_sceneData.Props.Count + 1}";
+                var defaultName = $"new_prop_{_sceneData.Props.Count + 1}";
                 var dialogResult = Interactions.AskForSceneInput(("Add New Prop", "Prop Name:", defaultName, false, "", "", false, "", null, null));
                 var propName = dialogResult.primaryInput;
                 
@@ -585,14 +575,43 @@ namespace WolvenKit.App.ViewModels.Documents
                     return;
                 }
                 
-                // Generate random dataId for the workspot definition
+                // Generate new dataId
                 var random = new Random();
-                var dataId = (uint)random.Next(1, int.MaxValue);
+                var maxDataId = (uint)0;
                 
-                // Ensure unique dataId
+                if (_sceneData.Workspots.Count > 0)
+                {
+                    var existingDataIds = _sceneData.Workspots
+                        .Where(w => w.GetValue() is scnWorkspotData)
+                        .Select(w => w.GetValue() as scnWorkspotData)
+                        .Where(data => data != null)
+                        .Select(data => data!.DataId.Id);
+                    
+                    if (existingDataIds.Any())
+                    {
+                        maxDataId = existingDataIds.Max();
+                    }
+                }
+                
+                uint dataId;
+                if (maxDataId == 0)
+                {
+                    dataId = (uint)(100_000_000 + random.Next(0, 10_000_000));
+                }
+                else
+                {
+                    var increment = random.Next(1_000, 10_000_000);
+                    var newDataId = (ulong)maxDataId + (ulong)increment;
+                    
+                    dataId = newDataId > uint.MaxValue 
+                        ? (uint)random.Next(100_000_000, int.MaxValue)
+                        : (uint)newDataId;
+                }
+
+                // Ensure uniqueness
                 while (_sceneData.Workspots.Any(w => w.GetValue() is scnWorkspotData data && data.DataId.Id == dataId))
                 {
-                    dataId = (uint)random.Next(1, int.MaxValue);
+                    dataId += (uint)random.Next(1_000, 100_000);
                 }
 
                 // Create workspot definition with external resource reference
@@ -602,8 +621,19 @@ namespace WolvenKit.App.ViewModels.Documents
                     WorkspotResource = new CResourceReference<workWorkspotResource>(workspotPath)
                 };
 
-                // Add to workspots collection
-                _sceneData.Workspots.Add(workspotData);
+                // Add to workspots collection in sorted order (by dataId)
+                var insertIndex = 0;
+                for (int i = 0; i < _sceneData.Workspots.Count; i++)
+                {
+                    if (_sceneData.Workspots[i].GetValue() is scnWorkspotData existingData && 
+                        existingData.DataId.Id > dataId)
+                    {
+                        insertIndex = i;
+                        break;
+                    }
+                    insertIndex = i + 1;
+                }
+                _sceneData.Workspots.Insert(insertIndex, workspotData);
 
                 // Generate unique workspot instance ID (smaller numbers, typically 1-based)
                 var instanceId = (uint)1;
@@ -712,8 +742,8 @@ namespace WolvenKit.App.ViewModels.Documents
                 // Add to effect definitions collection
                 _sceneData.EffectDefinitions.Add(effectDef);
 
-                // Generate unique effect instance ID (smaller numbers, typically 1-based)
-                var instanceId = (uint)1;
+                // Generate unique effect instance ID (starting from 0)
+                var instanceId = (uint)0;
                 if (_sceneData.EffectInstances.Count > 0)
                 {
                     instanceId = _sceneData.EffectInstances.Max(ei => ei.EffectInstanceId.Id) + 1;
