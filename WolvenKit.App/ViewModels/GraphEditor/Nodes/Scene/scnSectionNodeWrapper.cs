@@ -1,4 +1,4 @@
-﻿using WolvenKit.App.Extensions;
+using WolvenKit.App.Extensions;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
@@ -177,75 +177,92 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>, IDynami
                     break;
                 case scnDialogLineEvent dialogLineEvent:
                     {
-                        if (dialogLineEvent.ScreenplayLineId != null &&
-                                _sceneResource?.LocStore != null &&
-                                _sceneResource.LocStore.VdEntries != null &&
-                                _sceneResource.LocStore.VpEntries != null)
+                        string speakerName = "[No Speaker]";
+                        string dialogueInfo = "";
+                        
+                        if (dialogLineEvent.ScreenplayLineId != null && _sceneResource != null)
                         {
                             CUInt32 screenplayId = dialogLineEvent.ScreenplayLineId.Id;
-                                var screenplayLine = _sceneResource.ScreenplayStore?.Lines?.FirstOrDefault(line => line.ItemId?.Id == screenplayId);
+                            var screenplayLine = _sceneResource.ScreenplayStore?.Lines?.FirstOrDefault(line => line.ItemId?.Id == screenplayId);
 
-                            if (screenplayLine != null && screenplayLine.LocstringId != null)
+                            if (screenplayLine != null)
                             {
-                                CRUID locstringRuid = screenplayLine.LocstringId.Ruid;
-                                string? dialogueText = null;
-                                bool foundText = false;
-
-                                var preferredLocaleId = WolvenKit.RED4.Types.Enums.scnlocLocaleId.db_db;
-                                    var vdEntryPreferred = _sceneResource.LocStore.VdEntries.FirstOrDefault(vd => vd.LocstringId?.Ruid == locstringRuid && vd.LocaleId == preferredLocaleId);
-
-                                if (vdEntryPreferred != null && vdEntryPreferred.VariantId != null)
+                                // Get speaker information
+                                if (screenplayLine.Speaker != null && screenplayLine.Speaker.Id != uint.MaxValue)
                                 {
-                                    CRUID targetVariantRuid = vdEntryPreferred.VariantId.Ruid;
-                                        var vpEntry = _sceneResource.LocStore.VpEntries.FirstOrDefault(vp => vp.VariantId?.Ruid == targetVariantRuid);
-                                    if (vpEntry != null)
-                                    {
-                                        dialogueText = vpEntry.Content;
-                                        if (!string.IsNullOrEmpty(dialogueText))
-                                        {
-                                            foundText = true;
-                                        }
-                                    }
+                                    speakerName = _sceneResource.ResolveActorName(screenplayLine.Speaker.Id);
                                 }
 
-                                if (!foundText)
+                                // Get dialogue text if available
+                                if (screenplayLine.LocstringId != null && 
+                                    _sceneResource.LocStore != null &&
+                                    _sceneResource.LocStore.VdEntries != null &&
+                                    _sceneResource.LocStore.VpEntries != null)
                                 {
-                                        var vdEntryFallback = _sceneResource.LocStore.VdEntries.FirstOrDefault(vd => vd.LocstringId?.Ruid == locstringRuid && vd.LocaleId != preferredLocaleId);
-                                    if (vdEntryFallback != null && vdEntryFallback.VariantId != null)
+                                    CRUID locstringRuid = screenplayLine.LocstringId.Ruid;
+                                    string? dialogueText = null;
+                                    bool foundText = false;
+
+                                    var preferredLocaleId = WolvenKit.RED4.Types.Enums.scnlocLocaleId.db_db;
+                                    var vdEntryPreferred = _sceneResource.LocStore.VdEntries.FirstOrDefault(vd => 
+                                        vd.LocstringId?.Ruid == locstringRuid && vd.LocaleId == preferredLocaleId);
+
+                                    if (vdEntryPreferred != null && vdEntryPreferred.VariantId != null)
                                     {
-                                        CRUID fallbackVariantRuid = vdEntryFallback.VariantId.Ruid;
-                                            var vpEntryFallback = _sceneResource.LocStore.VpEntries.FirstOrDefault(vp => vp.VariantId?.Ruid == fallbackVariantRuid);
-                                        if (vpEntryFallback != null)
+                                        CRUID targetVariantRuid = vdEntryPreferred.VariantId.Ruid;
+                                        var vpEntry = _sceneResource.LocStore.VpEntries.FirstOrDefault(vp => vp.VariantId?.Ruid == targetVariantRuid);
+                                        if (vpEntry != null)
                                         {
-                                            dialogueText = vpEntryFallback.Content;
+                                            dialogueText = vpEntry.Content;
                                             if (!string.IsNullOrEmpty(dialogueText))
                                             {
                                                 foundText = true;
                                             }
                                         }
                                     }
-                                }
 
-                                if (foundText && !string.IsNullOrEmpty(dialogueText))
-                                {
-                                    const int maxLen = 40;
-                                    string displayDialogue = dialogueText;
-                                    if (displayDialogue.Length > maxLen)
+                                    if (!foundText)
                                     {
-                                        displayDialogue = displayDialogue.Substring(0, maxLen) + "...";
+                                        var vdEntryFallback = _sceneResource.LocStore.VdEntries.FirstOrDefault(vd => 
+                                            vd.LocstringId?.Ruid == locstringRuid && vd.LocaleId != preferredLocaleId);
+                                        if (vdEntryFallback != null && vdEntryFallback.VariantId != null)
+                                        {
+                                            CRUID fallbackVariantRuid = vdEntryFallback.VariantId.Ruid;
+                                            var vpEntryFallback = _sceneResource.LocStore.VpEntries.FirstOrDefault(vp => vp.VariantId?.Ruid == fallbackVariantRuid);
+                                            if (vpEntryFallback != null)
+                                            {
+                                                dialogueText = vpEntryFallback.Content;
+                                                if (!string.IsNullOrEmpty(dialogueText))
+                                                {
+                                                    foundText = true;
+                                                }
+                                            }
+                                        }
                                     }
-                                    detailSuffix = $" (\"{displayDialogue}\")";
-                                }
-                                else
-                                {
-                                    detailSuffix = $" (RUID {locstringRuid} - empty)";
+
+                                    if (foundText && !string.IsNullOrEmpty(dialogueText))
+                                    {
+                                        const int maxLen = 35;
+                                        string displayDialogue = dialogueText;
+                                        if (displayDialogue.Length > maxLen)
+                                        {
+                                            displayDialogue = displayDialogue.Substring(0, maxLen) + "...";
+                                        }
+                                        dialogueInfo = $"\"{displayDialogue}\"";
+                                    }
+                                    else
+                                    {
+                                        dialogueInfo = $"[RUID {locstringRuid} - empty]";
+                                    }
                                 }
                             }
                             else
                             {
-                                detailSuffix = $" (ID {screenplayId} - missing refs)";
+                                dialogueInfo = $"[ID {screenplayId} - missing refs]";
                             }
                         }
+                        
+                        detailSuffix = $" ({speakerName}: {dialogueInfo})";
                     }
                     break;
                 case scnLookAtEvent lookAtEvent:
@@ -261,13 +278,18 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>, IDynami
                             {
                                 case WolvenKit.RED4.Types.Enums.scnLookAtTargetType.Actor:
                                     // Use TargetPerformerId when TargetType is Actor
-                                    if (basicLookAtData.TargetPerformerId != null)
+                                    if (basicLookAtData.TargetPerformerId != null && basicLookAtData.TargetPerformerId.Id != 4294967040)
                                     {
-                                            targetName = ResolvePerformerName(basicLookAtData.TargetPerformerId.Id, _sceneResource);
+                                        targetName = ResolvePerformerName(basicLookAtData.TargetPerformerId.Id, _sceneResource);
+                                    }
+                                    // If no valid performer, check for static target
+                                    else if (basicLookAtData.StaticTarget.X != 0 || basicLookAtData.StaticTarget.Y != 0 || basicLookAtData.StaticTarget.Z != 0)
+                                    {
+                                        targetName = $"Static Target ({basicLookAtData.StaticTarget.X:F1}, {basicLookAtData.StaticTarget.Y:F1}, {basicLookAtData.StaticTarget.Z:F1})";
                                     }
                                     else
                                     {
-                                        targetName = "Performer: [Null ID]";
+                                        targetName = "None";
                                     }
                                     break;
                                 case WolvenKit.RED4.Types.Enums.scnLookAtTargetType.Prop:
@@ -312,8 +334,151 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>, IDynami
                                     }
                                     break;
                             }
-                            detailSuffix = $" ({performerName} -> {targetName})";
+                            // Handle start vs stop behavior
+                            if (basicLookAtData.IsStart)
+                            {
+                                detailSuffix = $" ({performerName} -> {targetName})";
+                            }
+                            else
+                            {
+                                detailSuffix = $" ({performerName} stop lookat)";
+                            }
                         }
+                    }
+                    break;
+                case scnLookAtAdvancedEvent lookAtAdvancedEvent:
+                    {
+                        if (lookAtAdvancedEvent.AdvancedData?.Basic != null && _sceneResource != null)
+                        {
+                            var basicLookAtData = lookAtAdvancedEvent.AdvancedData.Basic;
+                            string performerName = ResolvePerformerName(basicLookAtData.PerformerId.Id, _sceneResource);
+                            string targetName = "UnknownTarget";
+
+                            var targetTypeEnum = (WolvenKit.RED4.Types.Enums.scnLookAtTargetType)basicLookAtData.TargetType;
+                            switch (targetTypeEnum)
+                            {
+                                case WolvenKit.RED4.Types.Enums.scnLookAtTargetType.Actor:
+                                    // Use TargetPerformerId when TargetType is Actor
+                                    if (basicLookAtData.TargetPerformerId != null && basicLookAtData.TargetPerformerId.Id != 4294967040)
+                                    {
+                                        targetName = ResolvePerformerName(basicLookAtData.TargetPerformerId.Id, _sceneResource);
+                                    }
+                                    // If no valid performer, check for static target
+                                    else if (basicLookAtData.StaticTarget.X != 0 || basicLookAtData.StaticTarget.Y != 0 || basicLookAtData.StaticTarget.Z != 0)
+                                    {
+                                        targetName = $"Static Target ({basicLookAtData.StaticTarget.X:F1}, {basicLookAtData.StaticTarget.Y:F1}, {basicLookAtData.StaticTarget.Z:F1})";
+                                    }
+                                    else
+                                    {
+                                        targetName = "None";
+                                    }
+                                    break;
+                                case WolvenKit.RED4.Types.Enums.scnLookAtTargetType.Prop:
+                                    if (basicLookAtData.TargetPropId != null)
+                                    {
+                                        var propDef = _sceneResource.Props?.FirstOrDefault(p => p.PropId?.Id == basicLookAtData.TargetPropId.Id);
+                                        if (propDef != null)
+                                        {
+                                            targetName = $"Prop: {propDef.PropName} [{basicLookAtData.TargetPropId.Id}]";
+                                        }
+                                        else
+                                        {
+                                            targetName = $"Prop: Unknown [{basicLookAtData.TargetPropId.Id}]";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        targetName = "Prop: [Null ID]";
+                                    }
+                                    break;
+                                default:
+                                    // Check StaticTarget first
+                                    if (basicLookAtData.StaticTarget.X != 0 || basicLookAtData.StaticTarget.Y != 0 || basicLookAtData.StaticTarget.Z != 0)
+                                    {
+                                        targetName = $"Position: ({basicLookAtData.StaticTarget.X:F1}, {basicLookAtData.StaticTarget.Y:F1}, {basicLookAtData.StaticTarget.Z:F1})";
+                                    }
+                                    // Then check TargetPerformerId
+                                    else if (basicLookAtData.TargetPerformerId != null &&
+                                       basicLookAtData.TargetPerformerId.Id != 4294967040)
+                                    {
+                                        targetName = ResolvePerformerName(basicLookAtData.TargetPerformerId.Id, _sceneResource);
+                                        targetName += " (as Performer)";
+                                    }
+                                    // Then check TargetSlot
+                                    else if (basicLookAtData.TargetSlot != CName.Empty)
+                                    {
+                                        targetName = $"Slot: {basicLookAtData.TargetSlot.GetResolvedText() ?? "?"}";
+                                    }
+                                    else
+                                    {
+                                        targetName = $"Unknown ({targetTypeEnum})";
+                                    }
+                                    break;
+                            }
+                            
+                            string bodyParts = "";
+                            if (lookAtAdvancedEvent.AdvancedData.Requests != null && lookAtAdvancedEvent.AdvancedData.Requests.Count > 0)
+                            {
+                                var parts = lookAtAdvancedEvent.AdvancedData.Requests
+                                    .Where(r => !string.IsNullOrEmpty(r.BodyPart))
+                                    .Select(r => r.BodyPart)
+                                    .Take(3);
+                                if (parts.Any())
+                                {
+                                    bodyParts = $" - Parts: {string.Join(", ", parts)}";
+                                }
+                            }
+                            
+                            // Handle start vs stop behavior
+                            if (basicLookAtData.IsStart)
+                            {
+                                detailSuffix = $" ({performerName} -> {targetName}{bodyParts})";
+                            }
+                            else
+                            {
+                                detailSuffix = $" ({performerName} stop lookat)";
+                            }
+                        }
+                    }
+                    break;
+                case scneventsCameraParamsEvent cameraParamsEvent:
+                    {
+                        if (cameraParamsEvent.IsPlayerCamera)
+                        {
+                            string targetPerformer = "None";
+                            if (cameraParamsEvent.TargetActor != null && cameraParamsEvent.TargetActor.Id != 4294967040 && _sceneResource != null)
+                            {
+                                targetPerformer = ResolvePerformerName(cameraParamsEvent.TargetActor.Id, _sceneResource);
+                            }
+
+                            string targetSlotInfo = "";
+                            if (cameraParamsEvent.TargetSlot != CName.Empty)
+                            {
+                                string slotName = cameraParamsEvent.TargetSlot.GetResolvedText() ?? "?";
+                                targetSlotInfo = $" - Slot: {slotName}";
+                            }
+
+                            detailSuffix = $" (Player camera -> {targetPerformer}{targetSlotInfo})";
+                        }
+                        else
+                        {
+                            string cameraRefInfo = "None";
+                            if (cameraParamsEvent.CameraRef != NodeRef.Empty)
+                            {
+                                cameraRefInfo = cameraParamsEvent.CameraRef.GetResolvedText() ?? "[Unresolved Ref]";
+                            }
+                            detailSuffix = $" (Camera Ref: {cameraRefInfo})";
+                        }
+                    }
+                    break;
+                case scnPoseCorrectionEvent poseCorrectionEvent:
+                    {
+                        string performerName = "[No Performer]";
+                        if (poseCorrectionEvent.PerformerId != null && _sceneResource != null)
+                        {
+                            performerName = ResolvePerformerName(poseCorrectionEvent.PerformerId.Id, _sceneResource);
+                        }
+                        detailSuffix = $" ({performerName})";
                     }
                     break;
                 case scneventsVFXEvent vfxEvent:
@@ -454,7 +619,7 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>, IDynami
                             }
                         }
                         string nodeRef = attachNodeEvent.NodeRef != NodeRef.Empty
-                                         ? attachNodeEvent.NodeRef.GetRedHash().ToString("X")
+                                         ? attachNodeEvent.NodeRef.GetResolvedText() ?? "[Unresolved Node]"
                                          : "[No Node]";
                         detailSuffix = $" (Prop: {propName} -> Node: {nodeRef})";
                     }
