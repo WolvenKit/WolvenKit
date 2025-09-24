@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+using System;
 using System.ComponentModel;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -8,9 +7,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.App.ViewModels.Exporters;
-using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Controls;
-using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Exporters;
 
