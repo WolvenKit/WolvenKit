@@ -149,6 +149,16 @@ namespace WolvenKit.Views.Tools
                     return innerVm.Text;
                 };
 
+                Interactions.AskForSceneInput = (parameters) =>
+                {
+                    var (title, primaryLabel, primaryDefault, showSecondary, secondaryLabel, checkboxText, 
+                         showDropdown, dropdownLabel, dropdownOptions, defaultDropdownValue) = parameters;
+                    var dialog = new SceneInputDialogView(title, primaryLabel, primaryDefault, showSecondary, 
+                        secondaryLabel, checkboxText, showDropdown, dropdownLabel, dropdownOptions, defaultDropdownValue);
+                    var result = dialog.ShowDialog();
+                    return result == true ? (dialog.PrimaryInput, dialog.EnableSecondaryInput, dialog.SecondaryInput, dialog.DropdownValue) : (null, false, null, null);
+                };
+
                 Interactions.AskForFolderPathInput = (args) =>
                 {
                     var dialog = new FolderPathInputDialogView(args.Item2, args.Item1);

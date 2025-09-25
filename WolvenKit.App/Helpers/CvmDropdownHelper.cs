@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using WolvenKit.App.ViewModels.Shell;
@@ -518,6 +518,70 @@ public abstract class CvmDropdownHelper
 
                 break;
             }
+
+            // Special case for scnscreenplayItemId.Id - check if we're editing the Id property of a scnscreenplayItemId
+            case scnscreenplayItemId:
+            {
+                var scene = GetSceneContext(cvm);
+                if (scene != null)
+                {
+                    // Check if we're in a definition context vs usage context
+                    var parentPath = GetParentPath(cvm);
+                    if (IsInDefinitionContext(parentPath))
+                    {
+                        return new Dictionary<string, string>();
+                    }
+
+                    // Generate dropdown options for screenplay item IDs with embedded text preview
+                    var screenplayOptions = new Dictionary<string, string>();
+
+                    // Determine if we're looking at lines or options based on parent path
+                    bool isForOptions = parentPath.Contains("options") || parentPath.Contains("choiceOption");
+                    
+                    if (isForOptions && scene.ScreenplayStore?.Options != null)
+                    {
+                        // Handle screenplay options (choice options)
+                        foreach (var option in scene.ScreenplayStore.Options)
+                        {
+                            var itemId = option.ItemId.Id;
+                            var locStringId = option.LocstringId.Ruid;
+                            
+                            // Try to find embedded text
+                            var embeddedText = scene.GetEmbeddedTextForLocString(locStringId);
+                            var previewText = !string.IsNullOrEmpty(embeddedText) ? embeddedText : $"LocString: {locStringId}";
+
+                            var truncatedPreview = previewText.Length > 60 ? previewText.Substring(0, 57) + "..." : previewText;
+                            
+                            var displayText = $"{itemId}: {truncatedPreview}";
+                            
+                            screenplayOptions[displayText] = itemId.ToString();
+                        }
+                    }
+                    else if (scene.ScreenplayStore?.Lines != null)
+                    {
+                        // Handle screenplay lines (dialogue lines)
+                        foreach (var line in scene.ScreenplayStore.Lines)
+                        {
+                            var itemId = line.ItemId.Id;
+                            var locStringId = line.LocstringId.Ruid;
+                            
+                            // Try to find embedded text
+                            var embeddedText = scene.GetEmbeddedTextForLocString(locStringId);
+                            var previewText = !string.IsNullOrEmpty(embeddedText) ? embeddedText : $"LocString: {locStringId}";
+                            
+                            var truncatedPreview = previewText.Length > 60 ? previewText.Substring(0, 57) + "..." : previewText;
+                            
+                            var displayText = $"{itemId}: {truncatedPreview}";
+                            
+                            screenplayOptions[displayText] = itemId.ToString();
+                        }
+                    }
+
+                    return screenplayOptions;
+                }
+
+                break;
+            }
         }
 
         return null;
@@ -908,6 +972,9 @@ public abstract class CvmDropdownHelper
             // scnDynamicAnimSetSRRefId.Id dropdown
             scnDynamicAnimSetSRRefId when cvm.Name == "id" && GetSceneContext(cvm) != null => true,
 
+            // scnscreenplayItemId.Id dropdown for dialogue lines
+            scnscreenplayItemId when cvm.Name == "id" && GetSceneContext(cvm) != null => true,
+
             #endregion
 
             #region questPhase
@@ -1008,7 +1075,9 @@ public abstract class CvmDropdownHelper
             "props", // Prop definitions
             "workspotInstances", // Workspot instance definitions
             "effectInstances", // Effect instance definitions
-            "effectDefinitions" // Effect definitions
+            "effectDefinitions", // Effect definitions
+            "screenplayStore.lines", // Screenplay dialogue line definitions
+            "screenplayStore.options" // Screenplay choice option definitions
         };
 
         return definitionPaths.Any(parentPath.Contains);
