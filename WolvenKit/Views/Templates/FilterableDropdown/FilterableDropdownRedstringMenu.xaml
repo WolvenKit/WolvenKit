@@ -47,6 +47,8 @@
             KeyboardNavigation.TabIndex="1"
             Watermark="Filter"
             WatermarkTemplate="{StaticResource PlaceholderTemplate}"
+            LostFocus="FilterTextBox_OnFocusLost"
+            KeyDown="FilterTextBox_KeyDown"
             Text="{Binding FilterText,
                            RelativeSource={RelativeSource AncestorType={x:Type editors:FilterableDropdownRedstringMenu}},
                            Mode=TwoWay}" />

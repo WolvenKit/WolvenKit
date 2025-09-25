@@ -3,6 +3,7 @@ using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
 using ReactiveUI;
+using Syncfusion.Windows.Controls.Input;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
@@ -193,5 +194,16 @@ namespace WolvenKit.Views.Editors
         }
 
         protected override void ResetDropdownValue() => Dropdown.SetCurrentValue(ComboBox.TextProperty, "");
+
+        private void FilterTextBox_OnFocusLost(object sender, RoutedEventArgs e)
+        {
+            if (sender is not SfTextBoxExt tb || tb.Text == FilterText)
+            {
+                return;
+            }
+
+            SetCurrentValue(FilterTextProperty, tb.Text);
+            RefreshButton_OnClick(sender, e);
+        }
     }
 }
