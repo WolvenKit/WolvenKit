@@ -1085,8 +1085,8 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = !IsDefault;
                 return;
             case scnscreenplayChoiceOption screenplayOption:
-                Value = screenplayOption.LocstringId.Ruid.ToString();
-                IsValueExtrapolated = screenplayOption.LocstringId.Ruid != 0;
+                Value = $"{screenplayOption.ItemId.Id} => {screenplayOption.LocstringId.Ruid}";
+                IsValueExtrapolated = screenplayOption.ItemId.Id != 0 || screenplayOption.LocstringId.Ruid != 0;
                 return;
             case scnSpawnDespawnEntityParams spawnDespawnParams
                 when spawnDespawnParams.SpecRecordId.GetResolvedText() is string specRecordId && specRecordId != "":
@@ -1203,6 +1203,30 @@ public partial class ChunkViewModel
             case workWorkspotAnimsetEntry animsetEntry:
                 Value = $"{animsetEntry.Rig.DepotPath.GetResolvedText() ?? "none"}";
                 IsValueExtrapolated = true;
+                break;
+            case gameJournalContact journalContact:
+                Value = journalContact.Id;
+                if (string.IsNullOrEmpty(Value))
+                {
+                    Value = journalContact.AvatarID.GetResolvedText() ?? "";
+                }
+
+                IsValueExtrapolated = Value != "";
+                break;
+            case gameJournalPhoneMessage phoneMessage:
+                Value = phoneMessage.Text.Value;
+                IsValueExtrapolated = Value != "";
+                break;
+            case gameJournalPhoneChoiceEntry phoneChoiceEntry:
+                Value = phoneChoiceEntry.Text.Value;
+                IsValueExtrapolated = Value != "";
+                break;
+            case gameJournalPhoneChoiceGroup choiceGroup:
+
+                Value = StringHelper.Stringify(choiceGroup.Entries.Select(e => e.Chunk)
+                    .OfType<gameJournalPhoneChoiceEntry>().Select(e => e.Text.Value)
+                    .ToList());
+                IsValueExtrapolated = Value != "";
                 break;
             case gameAudioEmitterComponent audioEmitter:
                 Value = $"{audioEmitter.EmitterName}";
