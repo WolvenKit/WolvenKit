@@ -152,6 +152,10 @@ internal class NodeProperties
             Quest.questUseWorkspotNodeDefinitionWrapper
                 .PopulateWorkspotDetailsWithSceneContext(useWorkspotNodeCasted, details, scnSceneResource);
         }
+        else if (node is questTeleportPuppetNodeDefinition teleportNodeCasted)
+        {
+            Quest.questTeleportPuppetNodeDefinitionWrapper.PopulateTeleportDetailsInto(teleportNodeCasted, details);
+        }
         else if (node is questSceneManagerNodeDefinition sceneManagerNodeCasted)
         {
             details["Manager"] = GetNameFromClass(sceneManagerNodeCasted?.Type?.Chunk);
@@ -400,19 +404,6 @@ internal class NodeProperties
                     details["Visible"] = showOverlayNodeCasted?.Visible == true ? "True" : "False";
                 }
             }
-        }
-        else if (node is questTeleportPuppetNodeDefinition teleportNodeCasted)
-        {
-            details["Entity Reference"] = GetNameFromUniversalRef(teleportNodeCasted?.EntityReference?.Chunk);
-            details["Local Player"] = teleportNodeCasted?.EntityReference?.Chunk?.RefLocalPlayer == true ? "True" : "False";
-            details["Look At Action"] = teleportNodeCasted?.LookAtAction.ToEnumString()!;
-
-            details["Destination Offset"] = teleportNodeCasted?.Params?.Chunk?.DestinationOffset.ToString()!;
-            details["Destination Entity Reference"] = GetNameFromUniversalRef(teleportNodeCasted?.Params?.Chunk?.DestinationRef?.Chunk);
-            details["Heal At Teleport"] = teleportNodeCasted?.Params?.Chunk?.HealAtTeleport == true ? "True" : "False";
-
-            details["Player Look At Offset"] = teleportNodeCasted?.PlayerLookAt?.Chunk?.Offset.ToString()!;
-            details["Player Look At Target"] = ParseGameEntityReference(teleportNodeCasted?.PlayerLookAt?.Chunk?.LookAtTarget);
         }
         else if (node is questWorldDataManagerNodeDefinition worldDataManagerCasted)
         {
@@ -1279,7 +1270,7 @@ internal class NodeProperties
             prioritized["Type"] = properties["Type"];
         }
 
-        var highPriority = new[] { "Entity", "Action", "Workspot", "Name", "Path", "Duration", "Value", "Count", "Mode", "State" };
+        var highPriority = new[] { "Command", "Entity", "Action", "Workspot", "Name", "Path", "Duration", "Value", "Count", "Mode", "State" };
         foreach (var priority in highPriority)
         {
             var key = properties.Keys.FirstOrDefault(k => k.Contains(priority));
