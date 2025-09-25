@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -149,21 +149,12 @@ internal class NodeProperties
         }
         else if (node is questUseWorkspotNodeDefinition useWorkspotNodeCasted)
         {
-            details["Entity Reference"] = ParseGameEntityReference(useWorkspotNodeCasted?.EntityReference);
-
-            if (useWorkspotNodeCasted?.ParamsV1?.Chunk is scnUseSceneWorkspotParamsV1 useSceneWorkspotCasted)
-            {
-                details["Entry Id"] = useSceneWorkspotCasted?.EntryId?.Id.ToString()!;
-                details["Exit Entry Id"] = useSceneWorkspotCasted?.ExitEntryId?.Id.ToString()!;
-                details["Workspot Instance Id"] = useSceneWorkspotCasted?.WorkspotInstanceId?.Id.ToString()!;
-                details["Workspot Name"] = GetWorkspotPath(useSceneWorkspotCasted?.WorkspotInstanceId?.Id, scnSceneResource);
-            }
-            else if (useWorkspotNodeCasted?.ParamsV1?.Chunk is questUseWorkspotParamsV1 useWorkspotCasted)
-            {
-                details["Entry Id"] = useWorkspotCasted?.EntryId?.Id.ToString()!;
-                details["Exit Entry Id"] = useWorkspotCasted?.ExitEntryId?.Id.ToString()!;
-                details["Workspot Node"] = useWorkspotCasted?.WorkspotNode.GetResolvedText()!;
-            }
+            Quest.questUseWorkspotNodeDefinitionWrapper
+                .PopulateWorkspotDetailsWithSceneContext(useWorkspotNodeCasted, details, scnSceneResource);
+        }
+        else if (node is questTeleportPuppetNodeDefinition teleportNodeCasted)
+        {
+            Quest.questTeleportPuppetNodeDefinitionWrapper.PopulateTeleportDetailsInto(teleportNodeCasted, details);
         }
         else if (node is questSceneManagerNodeDefinition sceneManagerNodeCasted)
         {
@@ -413,19 +404,6 @@ internal class NodeProperties
                     details["Visible"] = showOverlayNodeCasted?.Visible == true ? "True" : "False";
                 }
             }
-        }
-        else if (node is questTeleportPuppetNodeDefinition teleportNodeCasted)
-        {
-            details["Entity Reference"] = GetNameFromUniversalRef(teleportNodeCasted?.EntityReference?.Chunk);
-            details["Local Player"] = teleportNodeCasted?.EntityReference?.Chunk?.RefLocalPlayer == true ? "True" : "False";
-            details["Look At Action"] = teleportNodeCasted?.LookAtAction.ToEnumString()!;
-
-            details["Destination Offset"] = teleportNodeCasted?.Params?.Chunk?.DestinationOffset.ToString()!;
-            details["Destination Entity Reference"] = GetNameFromUniversalRef(teleportNodeCasted?.Params?.Chunk?.DestinationRef?.Chunk);
-            details["Heal At Teleport"] = teleportNodeCasted?.Params?.Chunk?.HealAtTeleport == true ? "True" : "False";
-
-            details["Player Look At Offset"] = teleportNodeCasted?.PlayerLookAt?.Chunk?.Offset.ToString()!;
-            details["Player Look At Target"] = ParseGameEntityReference(teleportNodeCasted?.PlayerLookAt?.Chunk?.LookAtTarget);
         }
         else if (node is questWorldDataManagerNodeDefinition worldDataManagerCasted)
         {
@@ -1292,8 +1270,7 @@ internal class NodeProperties
             prioritized["Type"] = properties["Type"];
         }
 
-        // Add high-priority properties
-        var highPriority = new[] { "Name", "Path", "Duration", "Action", "Value", "Count", "Mode", "State" };
+        var highPriority = new[] { "Command", "Entity", "Action", "Workspot", "Name", "Path", "Duration", "Value", "Count", "Mode", "State" };
         foreach (var priority in highPriority)
         {
             var key = properties.Keys.FirstOrDefault(k => k.Contains(priority));
@@ -1514,7 +1491,7 @@ internal class NodeProperties
         return "";
     }
 
-    private static string ParseGameEntityReference(gameEntityReference? entRef)
+    public static string ParseGameEntityReference(gameEntityReference? entRef)
     {
         string str = "-";
 
@@ -1616,7 +1593,7 @@ internal class NodeProperties
         return str;
     }
 
-    private static string GetWorkspotPath(CUInt32? workspotID, scnSceneResource? scnSceneResource)
+    public static string GetWorkspotPath(CUInt32? workspotID, scnSceneResource? scnSceneResource)
     {
         string retVal = "";
 

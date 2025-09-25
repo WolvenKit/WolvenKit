@@ -1085,8 +1085,8 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = !IsDefault;
                 return;
             case scnscreenplayChoiceOption screenplayOption:
-                Value = $"{screenplayOption.ItemId.Id} => {screenplayOption.LocstringId.Ruid}";
-                IsValueExtrapolated = screenplayOption.ItemId.Id != 0 || screenplayOption.LocstringId.Ruid != 0;
+                Value = screenplayOption.LocstringId.Ruid.ToString();
+                IsValueExtrapolated = screenplayOption.LocstringId.Ruid != 0;
                 return;
             case scnSpawnDespawnEntityParams spawnDespawnParams
                 when spawnDespawnParams.SpecRecordId.GetResolvedText() is string specRecordId && specRecordId != "":
