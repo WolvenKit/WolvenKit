@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace WolvenKit.RED4.Types;
 
 public partial class scnSceneResource
@@ -101,6 +103,38 @@ public partial class scnSceneResource
     }
     
     /// <summary>
+    /// Resolves an actor ID to actor name using direct index lookup
+    /// </summary>
+    /// <param name="actorId">The actor ID to resolve</param>
+    /// <returns>The actor name with ID, or a fallback string if not found</returns>
+    public string ResolveActorName(uint actorId)
+    {
+        if (actorId == uint.MaxValue) return "None";
+        
+        // Check player actors first
+        var playerActor = PlayerActors?.FirstOrDefault(p => p.ActorId?.Id == actorId);
+        if (playerActor != null)
+        {
+            string? playerName = playerActor.PlayerName;
+            if (string.IsNullOrEmpty(playerName)) playerName = "Player";
+            return $"{playerName} [{actorId}]";
+        }
+        
+        // Check regular actors by index
+        if (Actors != null && actorId < Actors.Count)
+        {
+            var actorDef = Actors[(int)actorId];
+            if (actorDef != null)
+            {
+                string? actorName = actorDef.ActorName;
+                return $"{actorName ?? "Unnamed"} [{actorId}]";
+            }
+        }
+        
+        return $"Unknown Actor [{actorId}]";
+    }
+
+    /// <summary>
     /// Gets embedded text content for a given locstring ID from scene's LocStore
     /// Based on logic from scnSectionNodeWrapper.cs
     /// </summary>
@@ -150,4 +184,4 @@ public partial class scnSceneResource
 
         return string.Empty;
     }
-} 
+}
