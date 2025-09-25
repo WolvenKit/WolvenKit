@@ -1204,6 +1204,30 @@ public partial class ChunkViewModel
                 Value = $"{animsetEntry.Rig.DepotPath.GetResolvedText() ?? "none"}";
                 IsValueExtrapolated = true;
                 break;
+            case gameJournalContact journalContact:
+                Value = journalContact.Id;
+                if (string.IsNullOrEmpty(Value))
+                {
+                    Value = journalContact.AvatarID.GetResolvedText() ?? "";
+                }
+
+                IsValueExtrapolated = Value != "";
+                break;
+            case gameJournalPhoneMessage phoneMessage:
+                Value = phoneMessage.Text.Value;
+                IsValueExtrapolated = Value != "";
+                break;
+            case gameJournalPhoneChoiceEntry phoneChoiceEntry:
+                Value = phoneChoiceEntry.Text.Value;
+                IsValueExtrapolated = Value != "";
+                break;
+            case gameJournalPhoneChoiceGroup choiceGroup:
+
+                Value = StringHelper.Stringify(choiceGroup.Entries.Select(e => e.Chunk)
+                    .OfType<gameJournalPhoneChoiceEntry>().Select(e => e.Text.Value)
+                    .ToList());
+                IsValueExtrapolated = Value != "";
+                break;
             case gameAudioEmitterComponent audioEmitter:
                 Value = $"{audioEmitter.EmitterName}";
                 IsValueExtrapolated = Value != "";
