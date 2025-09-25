@@ -16,6 +16,8 @@ namespace WolvenKit.Views.Editors
     /// </summary>
     public partial class FilterableDropdownRedstringMenu : FilterableDropdownMenuBase<IRedString>
     {
+        private static string s_LastSearchTerm = string.Empty;
+
         public FilterableDropdownRedstringMenu()
         {
             InitializeComponent();
@@ -40,6 +42,17 @@ namespace WolvenKit.Views.Editors
                     ColumnRefreshButton.SetCurrentValue(ColumnDefinition.WidthProperty, new GridLength(0));
                 }
 
+                if (IsJournalEntryField(vm) && string.IsNullOrEmpty(FilterText) &&
+                    !string.IsNullOrEmpty(s_LastSearchTerm))
+                {
+                    SetCurrentValue(FilterTextProperty, s_LastSearchTerm);
+
+                    SetCurrentValue(OptionsProperty,
+                        CvmDropdownHelper.GetDropdownOptions(vm, _documentTools, true, FilterText));
+
+                    RecalculateFilteredOptions();
+                }
+
                 if (Options.Count != 0 || ShowRefreshButton)
                 {
                     return;
@@ -57,6 +70,7 @@ namespace WolvenKit.Views.Editors
                             Dropdown.SetCurrentValue(VisibilityProperty, Visibility.Visible);
                             Dropdown.SetCurrentValue(IsEnabledProperty, true);
 
+                            s_LastSearchTerm = filter;
                             if (string.IsNullOrWhiteSpace(filter))
                             {
                                 Dropdown.SetCurrentValue(ComboBox.TextProperty, "Type to search journal entries...");
@@ -203,6 +217,8 @@ namespace WolvenKit.Views.Editors
             }
 
             SetCurrentValue(FilterTextProperty, tb.Text);
+
+            s_LastSearchTerm = FilterText;
             RefreshButton_OnClick(sender, e);
         }
     }
