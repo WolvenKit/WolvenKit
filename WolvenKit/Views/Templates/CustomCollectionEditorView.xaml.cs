@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using WolvenKit.App.ViewModels.Exporters;
@@ -22,6 +21,7 @@ namespace WolvenKit.Controls
             _args = args;
 
             SetText();
+            SetToolTip();
         }
 
         public IList List
@@ -38,31 +38,55 @@ namespace WolvenKit.Controls
             set => SetValue(TextProperty, value);
         }
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
-            nameof(Text), typeof(string), typeof(CustomCollectionEditorView), new PropertyMetadata("Null"));
-
+            nameof(Text), typeof(string), typeof(CustomCollectionEditorView), new PropertyMetadata(""));
 
         private async void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             await _callback(_args);
 
             SetText();
+            SetToolTip();
         }
 
         private void SetText()
         {
-            if (List is not null)
+            if (List is null)
             {
-                var text = $"[{List.Count}]";
-                if (List.Count == 1)
-                {
-                    text += $"{List[0]}";
-                }
-                else if (List.Count > 1)
-                {
-                    text += $"{List[0]}, ...";
-                }
+                SetCurrentValue(TextProperty, "");
+                return;
+            }
 
-                SetCurrentValue(TextProperty, text);
+            var size = List.Count;
+            var text = size == 0 ? "" : $"[{size}]";
+
+            if (size == 1)
+            {
+                text += $" {List[0]}";
+            }
+            else if (size > 1)
+            {
+                text += $" {List[0]}, ...";
+            }
+
+            SetCurrentValue(TextProperty, text);
+        }
+
+        private void SetToolTip()
+        {
+            switch (_args.PropertyName)
+            {
+                case "MultiMeshMeshes":
+                    SetCurrentValue(ToolTipProperty, "Select additional mesh(es)");
+                    break;
+                case "MultiMeshRigs":
+                    SetCurrentValue(ToolTipProperty, "Select rig(s)");
+                    break;
+                case "Rig":
+                    SetCurrentValue(ToolTipProperty, "Select a rig");
+                    break;
+                default:
+                    SetCurrentValue(ToolTipProperty, "");
+                    break;
             }
         }
     }
