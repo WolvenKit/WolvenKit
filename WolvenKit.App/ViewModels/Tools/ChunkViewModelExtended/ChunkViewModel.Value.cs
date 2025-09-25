@@ -1221,6 +1221,10 @@ public partial class ChunkViewModel
                 Value = $"[ {string.Join(", ", list.Tags.ToList().Select(t => t.GetResolvedText() ?? "").ToArray())} ]";
                 IsValueExtrapolated = true;
                 break;
+            case entVisualTagsSchema { VisualTags: redTagList list }:
+                Value = $"[ {string.Join(", ", list.Tags.ToList().Select(t => t.GetResolvedText() ?? "").ToArray())} ]";
+                IsValueExtrapolated = true;
+                break;
             case physicsRagdollBodyInfo when
                 NodeIdxInParent > -1 && GetRootModel().GetPropertyChild("ragdollNames")?.ResolvedData is
                     CArray<physicsRagdollBodyNames> ragdollNames:
