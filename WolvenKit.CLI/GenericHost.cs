@@ -14,7 +14,6 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Tools;
-using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 
