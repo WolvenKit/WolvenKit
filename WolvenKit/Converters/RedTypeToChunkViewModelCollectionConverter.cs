@@ -22,12 +22,12 @@ namespace WolvenKit.Converters
     {
         private static ILoggerService? s_loggerService;
         private static ILoggerService? LoggerService => s_loggerService ??= Locator.Current.GetService<ILoggerService>();
-        
+
         /// <summary>
         /// Global cache shared across all converter instances
         /// </summary>
         private static readonly ConditionalWeakTable<RedBaseClass, List<ChunkViewModel>> s_globalCache = new();
-        
+
         /// <summary>
         /// Invalidates the cache for a specific data object, forcing fresh conversion
         /// </summary>
@@ -35,7 +35,7 @@ namespace WolvenKit.Converters
         {
             s_globalCache.Remove(redData);
         }
-        
+
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value is not RedBaseClass redData)
@@ -52,7 +52,7 @@ namespace WolvenKit.Converters
             catch (Exception ex)
             {
                 LoggerService?.Error($"Failed to create ChunkViewModel for {redData.GetType().Name}: {ex.Message}");
-                
+
                 // Return empty collection to prevent UI crashes
                 return new List<ChunkViewModel>();
             }
@@ -64,13 +64,13 @@ namespace WolvenKit.Converters
             {
                 var factory = Locator.Current.GetService<IChunkViewmodelFactory>();
                 var appViewModel = Locator.Current.GetService<AppViewModel>();
-                
+
                 if (factory == null)
                 {
                     LoggerService?.Error("IChunkViewmodelFactory service not available");
                     return new List<ChunkViewModel>();
                 }
-                
+
                 if (appViewModel == null)
                 {
                     LoggerService?.Error("AppViewModel service not available");
@@ -81,9 +81,9 @@ namespace WolvenKit.Converters
                 // This ensures property edits can mark the document as dirty and save properly
                 var currentDocument = appViewModel.ActiveDocument as RedDocumentViewModel;
                 var currentTab = currentDocument?.SelectedTabItemViewModel;
-                
+
                 ChunkViewModel chunkViewModel;
-                
+
                 // If we have a SceneGraphViewModel, use its RDTViewModel as the tab reference
                 if (currentTab is SceneGraphViewModel combinedScene && combinedScene.RDTViewModel != null)
                 {
@@ -105,13 +105,13 @@ namespace WolvenKit.Converters
                     var typeName = redData.GetType().Name;
                     chunkViewModel = factory.ChunkViewModel(redData, typeName, appViewModel, null);
                 }
-                
+
                 if (chunkViewModel == null)
                 {
                     LoggerService?.Error($"Failed to create ChunkViewModel for {redData.GetType().Name}");
                     return new List<ChunkViewModel>();
                 }
-                
+
                 // Force calculation of properties so they show up in the property editor
                 try
                 {
@@ -122,18 +122,34 @@ namespace WolvenKit.Converters
                     LoggerService?.Error($"Failed to calculate properties for {redData.GetType().Name}: {ex.Message}");
                     // Continue anyway, as some properties might still be viewable
                 }
-                
+
                 // Auto-expand based on node type
                 try
                 {
                     AutoExpandProperties(chunkViewModel, redData);
+
+                    if (chunkViewModel.PropertyType == typeof(questPauseConditionNodeDefinition) &&
+                        chunkViewModel.GetPropertyChild("condition", "type", "path") is { } conditionPath)
+                    {
+                        conditionPath.Tab?.SetSelection(conditionPath);
+                    }
+                    else if (chunkViewModel.PropertyType == typeof(questJournalNodeDefinition) &&
+                             chunkViewModel.GetPropertyChild("type", "path") is { } typePath)
+                    {
+                        typePath.Tab?.SetSelection(typePath);
+                    }
+                    else
+                    {
+                        Console.WriteLine("");
+                    }
+
                 }
                 catch (Exception ex)
                 {
                     LoggerService?.Error($"Failed to auto-expand properties for {redData.GetType().Name}: {ex.Message}");
                     // Continue anyway, user can manually expand
                 }
-                
+
                 // Return as a single-item collection for RedTreeView
                 return new List<ChunkViewModel> { chunkViewModel };
             }
@@ -143,27 +159,24 @@ namespace WolvenKit.Converters
                 return new List<ChunkViewModel>();
             }
         }
-        
-        private void AutoExpandProperties(ChunkViewModel rootChunk, RedBaseClass redData)
+
+        private void AutoExpandProperties(ChunkViewModel? rootChunk, RedBaseClass redData)
         {
-            if (rootChunk == null) return;
-            
+            if (rootChunk == null)
+            {
+                return;
+            }
+
             try
             {
                 // Always expand the first level to show immediate properties
                 rootChunk.IsExpanded = true;
-                
+
                 var typeName = redData.GetType().Name;
-                
                 // For quest nodes, we need deeper expansion
-                if (typeName == "scnQuestNode")
+                if (typeName == "scnQuestNode" && rootChunk.GetPropertyChild("questNode") is { } questNodeProperty)
                 {
-                    // Find the questNode property and expand it too
-                    var questNodeProperty = rootChunk.TVProperties
-                        ?.FirstOrDefault(p => p.Name.Equals("questNode", StringComparison.OrdinalIgnoreCase));
-                    
-                    if (questNodeProperty != null)
-                    {
+
                         try
                         {
                             // Force calculation of the questNode's properties
@@ -174,37 +187,26 @@ namespace WolvenKit.Converters
                         {
                             LoggerService?.Error($"Failed to expand questNode property: {ex.Message}");
                         }
-                    }
                 }
                 // For section nodes, expand to the events field
-                else if (typeName == "scnSectionNode" || typeName == "scnRewindableSectionNode")
+                else if (typeName is ("scnSectionNode" or "scnRewindableSectionNode") &&
+                         rootChunk.GetPropertyChild("events") is { } eventsProperty)
                 {
-                    // Find the events property and expand it
-                    var eventsProperty = rootChunk.TVProperties
-                        ?.FirstOrDefault(p => p.Name.Equals("events", StringComparison.OrdinalIgnoreCase));
-                    
-                    if (eventsProperty != null)
+                    try
                     {
-                        try
-                        {
-                            eventsProperty.CalculateProperties();
-                            eventsProperty.IsExpanded = true;
-                        }
-                        catch (Exception ex)
-                        {
-                            LoggerService?.Error($"Failed to expand events property: {ex.Message}");
-                        }
+                        eventsProperty.CalculateProperties();
+                        eventsProperty.IsExpanded = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        LoggerService?.Error($"Failed to expand events property: {ex.Message}");
                     }
                 }
                 // For FactsDB manager nodes, expand all the way to the actual type
-                else if (typeName == "questFactsDBManagerNodeDefinition")
+                else if (typeName == "questFactsDBManagerNodeDefinition" && rootChunk.GetPropertyChild("factsDB") is
+                             { } factsDBProperty)
                 {
                     // These nodes have deep nesting, expand a few levels
-                    var factsDBProperty = rootChunk.TVProperties
-                        ?.FirstOrDefault(p => p.Name.Equals("factsDB", StringComparison.OrdinalIgnoreCase));
-                    
-                    if (factsDBProperty != null)
-                    {
                         try
                         {
                             factsDBProperty.CalculateProperties();
@@ -214,7 +216,7 @@ namespace WolvenKit.Converters
                         {
                             LoggerService?.Error($"Failed to expand factsDB property: {ex.Message}");
                         }
-                    }
+
                 }
                 // For all quest node types in quest graphs, expand everything one level except sockets
                 else if (redData is questNodeDefinition)
@@ -229,7 +231,7 @@ namespace WolvenKit.Converters
                             {
                                 continue;
                             }
-                            
+
                             try
                             {
                                 property.CalculateProperties();
