@@ -10,8 +10,8 @@ using WolvenKit.App.Factories;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
-using System.Diagnostics;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.App.Services;
 
 namespace WolvenKit.Converters
 {
@@ -128,21 +128,8 @@ namespace WolvenKit.Converters
                 {
                     AutoExpandProperties(chunkViewModel, redData);
 
-                    if (chunkViewModel.PropertyType == typeof(questPauseConditionNodeDefinition) &&
-                        chunkViewModel.GetPropertyChild("condition", "type", "path") is { } conditionPath)
-                    {
-                        conditionPath.Tab?.SetSelection(conditionPath);
-                    }
-                    else if (chunkViewModel.PropertyType == typeof(questJournalNodeDefinition) &&
-                             chunkViewModel.GetPropertyChild("type", "path") is { } typePath)
-                    {
-                        typePath.Tab?.SetSelection(typePath);
-                    }
-                    else
-                    {
-                        Console.WriteLine("");
-                    }
-
+                    // Auto-select important properties for specific node types
+                    NodePropertiesSelectionService.Instance.AutoSelectImportantProperty(chunkViewModel);
                 }
                 catch (Exception ex)
                 {
@@ -173,20 +160,45 @@ namespace WolvenKit.Converters
                 rootChunk.IsExpanded = true;
 
                 var typeName = redData.GetType().Name;
-                // For quest nodes, we need deeper expansion
-                if (typeName == "scnQuestNode" && rootChunk.GetPropertyChild("questNode") is { } questNodeProperty)
-                {
 
+                if (typeName == "scnQuestNode")
+                {
+                    var questNodeProperty = rootChunk.TVProperties?.FirstOrDefault(p =>
+                        p.Name.Equals("questNode", StringComparison.OrdinalIgnoreCase));
+
+                    if (questNodeProperty != null)
+                    {
                         try
                         {
-                            // Force calculation of the questNode's properties
                             questNodeProperty.CalculateProperties();
                             questNodeProperty.IsExpanded = true;
+
+                            if (questNodeProperty.ResolvedData is questNodeDefinition)
+                            {
+                                foreach (var nestedProperty in questNodeProperty.TVProperties ?? Enumerable.Empty<ChunkViewModel>())
+                                {
+                                    if (nestedProperty.Name.Equals("sockets", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        continue;
+                                    }
+
+                                    try
+                                    {
+                                        nestedProperty.CalculateProperties();
+                                        nestedProperty.IsExpanded = true;
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        LoggerService?.Error($"Failed to expand nested quest node property '{nestedProperty.Name}': {ex.Message}");
+                                    }
+                                }
+                            }
                         }
                         catch (Exception ex)
                         {
                             LoggerService?.Error($"Failed to expand questNode property: {ex.Message}");
                         }
+                    }
                 }
                 // For section nodes, expand to the events field
                 else if (typeName is ("scnSectionNode" or "scnRewindableSectionNode") &&
@@ -204,18 +216,18 @@ namespace WolvenKit.Converters
                 }
                 // For FactsDB manager nodes, expand all the way to the actual type
                 else if (typeName == "questFactsDBManagerNodeDefinition" && rootChunk.GetPropertyChild("factsDB") is
-                             { } factsDBProperty)
+                { } factsDBProperty)
                 {
                     // These nodes have deep nesting, expand a few levels
-                        try
-                        {
-                            factsDBProperty.CalculateProperties();
-                            factsDBProperty.IsExpanded = true;
-                        }
-                        catch (Exception ex)
-                        {
-                            LoggerService?.Error($"Failed to expand factsDB property: {ex.Message}");
-                        }
+                    try
+                    {
+                        factsDBProperty.CalculateProperties();
+                        factsDBProperty.IsExpanded = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        LoggerService?.Error($"Failed to expand factsDB property: {ex.Message}");
+                    }
 
                 }
                 // For all quest node types in quest graphs, expand everything one level except sockets
