@@ -130,9 +130,6 @@ namespace WolvenKit.Utility
             //var tweakService = _host.Services.GetRequiredService<ITweakDBService>();
             //tweakService.LoadDB(s_tweakDbPath);
 
-            var hashService = _host.Services.GetRequiredService<IHashService>();
-            hashService.Load();
-
             s_bm = _host.Services.GetRequiredService<IArchiveManager>();
 
             var exePath = new FileInfo(Path.Combine(gameDirectory.FullName, "bin", "x64", "Cyberpunk2077.exe"));
