@@ -71,14 +71,6 @@ internal class Program
         var parser = new CommandLineBuilder(rootCommand)
             .UseDefaults()
             .UseHost(GenericHost.CreateHostBuilder)
-            .AddMiddleware(context =>
-            {
-                var host = context.GetHost();
-                var servicesProvider = host.Services;
-
-                var hashService = servicesProvider.GetRequiredService<IHashService>();
-                hashService.Load();
-            })
             .Build();
 
         ImportExportArgs.IsCLI = true;

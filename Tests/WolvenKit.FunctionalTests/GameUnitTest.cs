@@ -120,9 +120,6 @@ namespace WolvenKit.FunctionalTests
             //protobuf
             //RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
 
-            var hashService = _host.Services.GetRequiredService<IHashService>();
-            hashService.Load();
-
             s_bm = _host.Services.GetRequiredService<IArchiveManager>();
 
             var exePath = new FileInfo(Path.Combine(gameDirectory.FullName, "bin", "x64", "Cyberpunk2077.exe"));
