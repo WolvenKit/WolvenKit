@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
@@ -59,9 +61,11 @@ public class ImportableItemViewModel : ImportExportItemViewModel
                 or ERawFileFormat.gltf
                 => new GltfImportArgs()
                 {
-                    ImportFormat = formatFromFilename ?? GltfImportAsFormat.Mesh,
                     // Mesh won't have an internal extension
-                    ImportGarmentSupport = formatFromFilename is null or GltfImportAsFormat.MeshWithRig 
+                    ImportFormat = formatFromFilename ?? GltfImportAsFormat.Mesh,
+                    // Garment support: disable for vehicles, weapons, effects etc
+                    ImportGarmentSupport = ShouldHaveGarmentSupport(fileName),
+                    IgnoreGarmentSupportUVParam = ShouldHaveGarmentSupport(fileName),
                 },
 
             // common import
@@ -76,6 +80,7 @@ public class ImportableItemViewModel : ImportExportItemViewModel
 
             _ => throw new ArgumentOutOfRangeException(nameof(fileName), $"Couldn't import {nameof(rawFileFormat)}"),
         };
+
     }
 
     public static XbmImportArgs LoadXbmDefaultSettings(string fileName)
@@ -98,7 +103,7 @@ public class ImportableItemViewModel : ImportExportItemViewModel
         {
             imageCompression = Enums.ETextureCompression.TCM_Normalmap;
         }
-        
+
         // get the format again, cos CDPR
         // load and, if needed, decompress file
         var image = RedImage.LoadFromFile(fileName);
@@ -172,4 +177,19 @@ public class ImportableItemViewModel : ImportExportItemViewModel
             return false;
         }
     }
+
+    /// <summary>
+    /// If any of the substrings below are in a file path, disable garment support by default
+    /// </summary>
+    private static readonly List<string> s_partialsToDisableGarmentSupport =
+    [
+        "vehicle",
+        "weapon",
+        "world",
+        "effect",
+        "particle",
+    ];
+
+    private static bool ShouldHaveGarmentSupport(string relativePath) =>
+        s_partialsToDisableGarmentSupport.Any(relativePath.Contains);
 }
