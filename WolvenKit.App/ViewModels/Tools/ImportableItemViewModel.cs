@@ -191,5 +191,5 @@ public class ImportableItemViewModel : ImportExportItemViewModel
     ];
 
     private static bool ShouldHaveGarmentSupport(string relativePath) =>
-        s_partialsToDisableGarmentSupport.Any(relativePath.Contains);
+        !s_partialsToDisableGarmentSupport.Any(relativePath.Contains);
 }
