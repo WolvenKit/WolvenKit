@@ -1,9 +1,8 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.Common.Services;
-using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Pools;
 
 namespace WolvenKit.App.Services;
@@ -16,6 +15,13 @@ public class HashServiceExt : HashService
     private readonly ConcurrentDictionary<string, byte> _projectRefCache = new();
     private readonly ConcurrentDictionary<string, byte> _projectTweakCache = new();
 
+    #region Constructors
+
+    public HashServiceExt() : base(false)
+    {
+    }
+
+    #endregion Constructors
 
     public bool AddResourcePath(string resourcePath)
     {

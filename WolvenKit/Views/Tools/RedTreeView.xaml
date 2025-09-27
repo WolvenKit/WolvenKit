@@ -2014,6 +2014,10 @@
                                 Path=SelectedItems,
                                 Mode=TwoWay}"
         SelectionChanged="OnSelectionChanged"
+        SelectionBackgroundColor="{StaticResource BackgroundColor_Control}"
+        SelectionForegroundColor="White"
+        FocusBorderColor="{StaticResource WolvenKitRedShadow}"
+        FocusBorderThickness="1"
         MouseDoubleClick="OnDoubleClick"
         MouseRightButtonDown="OnMouseRightButtonDown"
         SelectionMode="Extended"

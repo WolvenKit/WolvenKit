@@ -37,10 +37,31 @@ namespace WolvenKit.Common.Services
 
         #endregion Fields
 
+        #region Constructors
+
+        public HashService() : this(true)
+        {
+        }
+
+        public HashService(bool autoLoad)
+        {
+            if (autoLoad)
+            {
+                Load();
+            }
+        }
+
+        #endregion Constructors
+
         #region Methods
 
         public void Load()
         {
+            if (_isLoaded)
+            {
+                return;
+            }
+
             var hashesMemory = DecompressEmbeddedFile(s_used);
             ReadHashes(hashesMemory.GetStream());
 

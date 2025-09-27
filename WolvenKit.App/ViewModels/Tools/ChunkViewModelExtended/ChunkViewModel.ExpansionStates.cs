@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Windows;
@@ -30,9 +31,9 @@ public partial class ChunkViewModel
     /// Helper method to expand and select a child node.
     /// </summary>
     /// <param name="cvm">The node to expand</param>
-    /// <param name="selectChild">If parameter is set to false or cvm has no children, will select cvm. Otherwise, will select first child.</param>
+    /// <param name="selectFirstChild">If parameter is set to false or cvm has no children, will select cvm. Otherwise, will select first child.</param>
     /// <param name="expandOnlyChild">If cvm has only one child, it will be expanded as well.</param>
-    private void ExpandAndSelect(ChunkViewModel? cvm, bool selectChild = false, bool expandOnlyChild = false)
+    private void ExpandAndSelect(ChunkViewModel? cvm, bool selectFirstChild = false, bool expandOnlyChild = false)
     {
         if (cvm is null)
         {
@@ -51,7 +52,7 @@ public partial class ChunkViewModel
             return;
         }
 
-        if (!selectChild || cvm.TVProperties.Count == 0)
+        if (!selectFirstChild || cvm.TVProperties.Count == 0)
         {
             Tab.SetSelection(cvm);
             return;
@@ -59,8 +60,37 @@ public partial class ChunkViewModel
 
         Tab.SetSelection(cvm.TVProperties[0]);
     }
+
+
+    /// <summary>
+    /// Map of data types with selection paths
+    /// </summary>
+    private static readonly Dictionary<Type, List<string>> s_typesAndChildren = new()
+    {
+        { typeof(CMaterialInstance), ["values"] }, // mi file
+        { typeof(CMaterialTemplate), ["parameters", "2"] }, // .mt / .remt
+        { typeof(Multilayer_Setup), ["layers"] }, // .mt / .remt
+        { typeof(appearanceAppearanceResource), ["appearances"] }, // .app
+        { typeof(C2dArray), ["compiledData"] }, // .csv
+        { typeof(JsonResource), ["root"] }, // .json
+        { typeof(gameuiSwitcherInfo), ["options"] }, // .inkcharcustomization
+        { typeof(gameuiOptionsGroup), ["options"] }, // .inkcharcustomization
+        { typeof(questQuestPhaseResource), ["graph"] }, // .questphase
+    };
+
+    private void ExpandNodeAndParents()
+    {
+        if (Parent?.IsExpanded == false)
+        {
+            Parent.ExpandNodeAndParents();
+        }
+
+        IsExpanded = true;
+    }
+
     /// <summary>
     /// Called from ChunkViewmodelFactory after initializing the chunk.
+    /// For quest node expansion, see RedTypeToChunkViewModelCollectionConverter.AutoExpandProperties
     /// </summary>
     public ChunkViewModel SetInitialExpansionState()
     {
@@ -69,20 +99,19 @@ public partial class ChunkViewModel
             return this;
         }
 
+        if (s_typesAndChildren.TryGetValue(PropertyType, out var paths))
+        {
+            CalculatePropertiesRecursive();
+            var node = GetPropertyChild([..paths]);
+            if (node is not null)
+            {
+                ExpandAndSelect(node, true);
+                return this;
+            }
+        }
+
         switch (ResolvedData)
         {
-            // .mi file
-            case CMaterialInstance when GetPropertyChild("values") is ChunkViewModel child:
-                ExpandAndSelect(child, true);
-                break;
-            // .mt file
-            case CMaterialTemplate when GetPropertyChild("parameters", "2") is ChunkViewModel child:
-                ExpandAndSelect(child, true);
-                break;
-            // .mlsetup file
-            case Multilayer_Setup when GetPropertyChild("layers") is ChunkViewModel child:
-                ExpandAndSelect(child, true);
-                break;
             // .inkatlas
             case inkTextureAtlas when GetPropertyChild("slots") is ChunkViewModel child:
                 ExpandAndSelect(child, true);
@@ -95,10 +124,6 @@ public partial class ChunkViewModel
                     }
                 }
                 break;
-            // .app file
-            case appearanceAppearanceResource when GetPropertyChild("appearances") is ChunkViewModel child:
-                ExpandAndSelect(child, false, true);
-                break;
             // .ent file
             case entEntityTemplate template:
 
@@ -107,6 +132,8 @@ public partial class ChunkViewModel
                 var nodeToExpand = template.Appearances.Count == 0 ? components : appearances;
                 ExpandAndSelect(nodeToExpand, true, true);
                 break;
+
+            #region mesh
             // .mesh file
             case CMesh:
                 if (GetPropertyChild("appearances") is { TVProperties.Count: > 0 } meshAppearances)
@@ -131,14 +158,9 @@ public partial class ChunkViewModel
                 }
 
                 break;
-            // .csv
-            case C2dArray when GetPropertyChild("compiledData") is ChunkViewModel child:
-                ExpandAndSelect(child, true);
-                break;
-            // .json
-            case JsonResource when GetPropertyChild("root") is ChunkViewModel child:
-                ExpandAndSelect(child, true);
-                break;
+
+            #endregion
+
             // streamingsector
             case worldStreamingSector:
                 // will run into stack overflow due to race conditions if we do this straight away. Let's wait a bit!

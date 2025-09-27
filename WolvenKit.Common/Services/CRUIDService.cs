@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -30,9 +30,18 @@ public class CRUIDService
 
     #region Constructors
 
-    public CRUIDService()
+    public CRUIDService() : this(true)
+    {
+    }
+
+    public CRUIDService(bool autoLoad)
     {
         s_Instance = this;
+
+        if (autoLoad)
+        {
+            Load();
+        }
     }
 
     #endregion Constructors
@@ -70,6 +79,11 @@ public class CRUIDService
 
     public void Load()
     {
+        if (_isLoaded)
+        {
+            return;
+        }
+
         _baseCRUIDS = JsonSerializer.Deserialize<List<ulong>>(DecompressEmbeddedFile(s_used)).NotNull();
 
         var userFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit", "user_cruids.json");
