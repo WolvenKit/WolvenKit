@@ -46,7 +46,7 @@ namespace WolvenKit.Modkit.RED4.Tools
             catch (ArgumentNullException)
             {
             }
-            
+
 
             if (model == null)
             {
@@ -568,11 +568,11 @@ namespace WolvenKit.Modkit.RED4.Tools
                                         info.appearances.Keys.FirstOrDefault("default") :
                                         "submesh_" + Convert.ToString(index).PadLeft(2, '0') + "_LOD_" + info.LODLvl[index];
                 }
-                
+
 
                 meshContainer.materialNames = new string[info.appearances.Count];
 
-                
+
                 //var Mesh_apps = info.appearances.Keys.Select(key => Path.GetFileNameWithoutExtension(meshname)+'_' + key).ToList();
 
                 var apps = info.appearances.Keys.ToList();
@@ -655,6 +655,11 @@ namespace WolvenKit.Modkit.RED4.Tools
 
         public static void UpdateMeshJoints(ref List<RawMeshContainer> meshes, RawArmature? existingJoints, RawArmature? incomingJoints, string fileName = "")
         {
+            if (existingJoints is not { BoneCount: > 0 } && incomingJoints is { BoneCount: > 0 })
+            {
+                throw new WolvenKitException(0x2005, $"\nThe destination mesh has no bones");
+            }
+
             HashSet<string> bonesNotFound = [];
             // updating mesh bone indices
             if (existingJoints is { BoneCount: > 0 } && incomingJoints is { BoneCount: > 0 })
@@ -679,7 +684,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                             }
 
                             var boneName = incomingJoints.Names[mesh.boneindices[e, eye]];
-                            
+
                             var found = false;
                             for (ushort r = 0; r < existingJoints.BoneCount; r++)
                             {
@@ -714,8 +719,7 @@ namespace WolvenKit.Modkit.RED4.Tools
 
             if (bonesNotFound.Any())
             {
-                throw new WolvenKitException(0x2005,
-                    $"\n{string.Join("\n", bonesNotFound)}");
+                throw new WolvenKitException(0x2005, $"\n{string.Join("\n", bonesNotFound)}");
             }
         }
 
@@ -876,7 +880,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 ArgumentNullException.ThrowIfNull(mesh.weights);
                 ArgumentNullException.ThrowIfNull(mesh.indices);
                 ArgumentNullException.ThrowIfNull(mesh.garmentMorph);
-                
+
 
                 Mesh? mes;
                 Node? node;
@@ -899,7 +903,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 ArgumentNullException.ThrowIfNull(mesh.materialNames, nameof(mesh.materialNames));
 
                 var prim = mes.CreatePrimitive();
-                
+
                 if (materials != null && materials.ContainsKey(mesh.materialNames[0]))
                 {
                     prim.Material = materials[mesh.materialNames[0]];
