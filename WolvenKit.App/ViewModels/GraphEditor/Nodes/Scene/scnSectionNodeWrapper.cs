@@ -203,7 +203,7 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>, IDynami
                                     string? dialogueText = null;
                                     bool foundText = false;
 
-                                    var preferredLocaleId = WolvenKit.RED4.Types.Enums.scnlocLocaleId.db_db;
+                                    var preferredLocaleId = WolvenKit.RED4.Types.Enums.scnlocLocaleId.en_us;
                                     var vdEntryPreferred = _sceneResource.LocStore.VdEntries.FirstOrDefault(vd => 
                                         vd.LocstringId?.Ruid == locstringRuid && vd.LocaleId == preferredLocaleId);
 
