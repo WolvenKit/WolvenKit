@@ -4,6 +4,7 @@ using System.Reactive.Disposables;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using ReactiveUI;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.ViewModels.Dialogs;
@@ -114,5 +115,20 @@ namespace WolvenKit.Views.Dialogs.Windows
 
         [GeneratedRegex(@"Items\.\w+")]
         private partial Regex ItemCodesRegex();
+
+        private void OnWizardKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Escape)
+            {
+                return;
+            }
+
+            if (ViewModel is { } vm)
+            {
+                vm.ItemCodes.Clear();
+            }
+
+            CloseDialogue(false);
+        }
     }
 }

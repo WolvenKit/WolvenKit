@@ -168,9 +168,9 @@ public partial class MenuBarViewModel : ObservableObject
         }
     }
 
-    public void AddItemCodesToFiles(AddItemsToStoreDialogViewModel dialogVm)
+    public void AddItemCodesToFiles(AddItemsToStoreDialogViewModel? dialogVm)
     {
-        if (dialogVm.ItemCodes.Count == 0 ||
+        if (dialogVm is null || dialogVm.ItemCodes.Count == 0 ||
             (string.IsNullOrEmpty(dialogVm.RedsPath) && string.IsNullOrEmpty(dialogVm.YamlPath)))
         {
             return;

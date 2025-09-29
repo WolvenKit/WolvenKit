@@ -6,7 +6,7 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
-    Title="Rename"
+    Title="Add items to Atelier Store / VendorsXL tweak"
     Width="{DynamicResource WolvenKitDialogWidthMedium}"
     MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
     MinHeight="{DynamicResource WolvenKitDialogHeightSmall}"
@@ -27,7 +27,9 @@
             HelpVisibility="Collapsed"
             NextVisibility="Collapsed"
             FinishEnabled="{Binding IsFinishEnabled}"
-            PageType="Exterior">
+            PageType="Exterior"
+            KeyDown="OnWizardKeyDown"
+            PreviewKeyDown="OnWizardKeyDown">
 
             <Grid
                 HorizontalAlignment="Stretch"
