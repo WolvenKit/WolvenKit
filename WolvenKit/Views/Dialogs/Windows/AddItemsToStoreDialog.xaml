@@ -1,0 +1,141 @@
+<Window
+    x:Class="WolvenKit.Views.Dialogs.Windows.AddItemsToStoreDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
+    xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
+    Title="Rename"
+    Width="{DynamicResource WolvenKitDialogWidthMedium}"
+    MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
+    MinHeight="{DynamicResource WolvenKitDialogHeightSmall}"
+    Background="{DynamicResource BackgroundColor_Control}"
+    SizeToContent="WidthAndHeight"
+    DataContext="{Binding RelativeSource={RelativeSource Self},
+                          Path=ViewModel}"
+    WindowStartupLocation="CenterOwner">
+
+    <syncfusion:WizardControl
+        CancelButtonCancelsWindow="True"
+        FinishButtonClosesWindow="True"
+        Finish="WizardControl_OnFinish">
+        <syncfusion:WizardPage
+            BackVisibility="Collapsed"
+            CancelVisibility="Visible"
+            FinishVisibility="Visible"
+            HelpVisibility="Collapsed"
+            NextVisibility="Collapsed"
+            FinishEnabled="{Binding IsFinishEnabled}"
+            PageType="Exterior">
+
+            <Grid
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
+                <Grid.Resources>
+                    <ResourceDictionary>
+                        <ResourceDictionary.MergedDictionaries>
+                            <hc:ThemeResources />
+                            <hc:Theme />
+                        </ResourceDictionary.MergedDictionaries>
+                    </ResourceDictionary>
+
+                </Grid.Resources>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{StaticResource WolvenKitDialogLabelColumnWidthMedium}" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="10" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="5" />
+                </Grid.RowDefinitions>
+
+
+                <editors:FilterableDropdownMenu
+                    x:Name="YamlDropdownMenu"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Height="Auto"
+                    Label="CCXL vendor .yaml file:"
+                    Options="{Binding YamlFiles}"
+                    SelectedOption="{Binding YamlPath}" />
+
+                <editors:FilterableDropdownMenu
+                    x:Name="RedsDropdownMenu"
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Height="Auto"
+                    Label="Atelier store .reds file"
+                    Options="{Binding RedsFiles}"
+                    SelectedOption="{Binding RedsPath}" />
+
+
+                <Label
+                    Grid.Row="4"
+                    Grid.Column="0"
+                    HorizontalAlignment="Left"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Foreground="White"
+                    FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                    Content="Remember values" />
+
+
+                <CheckBox
+                    x:Name="RememberValuesCheckbox"
+                    Grid.Row="4"
+                    Grid.Column="1"
+                    IsChecked="{Binding RememberValues}"
+                    KeyboardNavigation.TabIndex="-1" />
+
+                <Label
+                    Grid.Row="6"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    HorizontalAlignment="Left"
+                    HorizontalContentAlignment="Left"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Foreground="White"
+                    FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                    Content="Item Codes (separate with , or new line)" />
+
+
+                <syncfusion:SfTextBoxExt
+                    x:Name="ItemCodesTextBox"
+                    Grid.Row="8"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Height="Auto"
+                    MinHeight="{DynamicResource WolvenKitFieldHeight}"
+                    Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                    HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Top"
+                    Background="{DynamicResource BackgroundColor_Frame_Background}"
+                    BorderBrush="{DynamicResource WolvenKitLabelBrush}"
+                    FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                    helpers:TextBoxBehavior.TripleClickSelectAll="True"
+                    Watermark="Items.MyItem, Items.MyOtherItem"
+                    WatermarkTemplate="{StaticResource PlaceholderTemplate}"
+                    TextChanged="TextBox_TextChanged"
+                    KeyboardNavigation.TabIndex="-1" />
+
+
+            </Grid>
+
+        </syncfusion:WizardPage>
+    </syncfusion:WizardControl>
+</Window>
