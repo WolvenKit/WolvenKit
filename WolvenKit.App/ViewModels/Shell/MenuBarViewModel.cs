@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Core;
 
@@ -167,4 +168,18 @@ public partial class MenuBarViewModel : ObservableObject
         }
     }
 
+    public void AddItemCodesToFiles(AddItemsToStoreDialogViewModel dialogVm)
+    {
+        if (dialogVm.ItemCodes.Count == 0 ||
+            (string.IsNullOrEmpty(dialogVm.RedsPath) && string.IsNullOrEmpty(dialogVm.YamlPath)))
+        {
+            return;
+        }
+
+        MainViewModel.ProjectResourceTools.AddItemCodesToStoreFiles(
+            dialogVm.ItemCodes,
+            dialogVm.YamlPath,
+            dialogVm.RedsPath
+        );
+    }
 }
