@@ -9,6 +9,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Core.Exceptions;
@@ -73,7 +74,7 @@ namespace WolvenKit.Views.Dialogs.Windows
                 Validation.ClearInvalid(bind);
             }
 
-            SetButtonStatesFromControlValidity(); 
+            SetButtonStatesFromControlValidity();
         }
 
         private readonly ItemNameValidationRule _itemRule = new();
@@ -96,7 +97,7 @@ namespace WolvenKit.Views.Dialogs.Windows
                 Validation.ClearInvalid(bindingExpression);
             }
 
-            SetButtonStatesFromControlValidity(); 
+            SetButtonStatesFromControlValidity();
         }
 
         private static bool HasValidationError(Control control) =>

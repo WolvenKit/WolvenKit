@@ -23,6 +23,7 @@
     </ResourceDictionary.MergedDictionaries>
 
     <!-- Colors -->
+    <Color x:Key="WolvenKitRedPaleColor">#E78587</Color>
     <Color x:Key="WolvenKitRedColor">#DF2935</Color>
     <Color x:Key="WolvenKitRedShadowColor">#951C2D</Color>
     <Color x:Key="WolvenKitGreenColor">#28DE55</Color>
@@ -170,6 +171,7 @@
     <SolidColorBrush x:Key="WolvenKitSammyRedShaded" Color="#B71C34" />
     <SolidColorBrush x:Key="WolvenKitSammyBlack" Color="#292929" />
 
+    <SolidColorBrush x:Key="WolvenKitRedPale" Color="{StaticResource WolvenKitRedColor}" />
     <SolidColorBrush x:Key="WolvenKitRed" Color="{StaticResource WolvenKitRedColor}" />
     <SolidColorBrush x:Key="WolvenKitRedShadow" Color="{StaticResource WolvenKitRedShadowColor}" />
     <SolidColorBrush x:Key="WolvenKitGreen" Color="{StaticResource WolvenKitGreenColor}" />

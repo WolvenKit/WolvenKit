@@ -129,7 +129,7 @@
                 NextVisibility="Collapsed"
                 PageType="Exterior"
                 Padding="12, 12">
-                
+
                 <StackPanel Orientation="Vertical">
 
 
@@ -140,10 +140,13 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="5" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="5" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="5" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="120" />
@@ -171,6 +174,7 @@
                             Style="{StaticResource ComboboxStyle}"
                             ItemsSource="{Binding EquipmentItemSlots}"
                             SelectionChanged="ItemType_OnChanged" />
+
                         <TextBlock
                             Visibility="{Binding CreateFactory, Converter={StaticResource InvertBooleanConverter}}"
                             Style="{StaticResource ExplanationStyle}"
@@ -182,35 +186,29 @@
                         <!-- We also need this to create a factory, since we need to generate a subfolder -->
                         <TextBlock Text="Item Name"
                                    Style="{StaticResource LabelStyle}"
-                                   Grid.Row="2"
+                                   Grid.Row="3"
                                    Grid.Column="0" />
                         <hc:TextBox
                             x:Name="ItemNameTextBox"
-                            Grid.Row="2"
+                            Grid.Row="3"
                             Grid.Column="1"
                             Style="{StaticResource WolvenkitTextBoxStyle}"
                             KeyUp="ItemName_OnKeyUp" />
                         <TextBlock
                             Visibility="{Binding CreateFactory, Converter={StaticResource InvertBooleanConverter}}"
                             Style="{StaticResource ExplanationStyle}"
-                            Grid.Row="3"
+                            Grid.Row="4"
                             Grid.Column="1"
                             Text="This will be used to generate your item's spawn code and internal names." />
-                        <TextBlock
-                            Visibility="{Binding CreateFactory, Converter={StaticResource BooleanToVisibilityConverter}}"
-                            Style="{StaticResource ExplanationStyle}"
-                            Grid.Row="3"
-                            Grid.Column="1" />
-
 
                         <!-- Depot path -->
-                        <TextBlock Text="Depot Path"
+                        <TextBlock Text="Item Folder"
                                    Style="{StaticResource LabelStyle}"
-                                   Grid.Row="4"
+                                   Grid.Row="6"
                                    Grid.Column="0" />
 
                         <hc:TextBox x:Name="DepotPathTextBox"
-                                    Grid.Row="4"
+                                    Grid.Row="6"
                                     Grid.Column="1"
                                     Style="{StaticResource TextBoxWithControlValidatorsStyle }"
                                     KeyUp="DepotPath_OnKeyUp">
@@ -226,8 +224,10 @@
                         <controls:ValidationTextBlock
                             BoundControl="{Binding ElementName=DepotPathTextBox}"
                             DefaultText="Your custom subfolder in your project. Directories will be created if they don't exist."
-                            Grid.Row="5"
-                            Grid.Column="1" />
+                            Grid.Row="7"
+                            Grid.Column="1"
+                            Height="{DynamicResource WolvenKitDataGridRowHeight}"
+                            MinHeight="{DynamicResource WolvenKitDataGridRowHeight}" />
 
                     </Grid>
 
@@ -238,20 +238,28 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="5" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="5" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="5" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="5" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="5" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="5" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="5" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="5" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="120" />
@@ -263,7 +271,7 @@
                         <TextBlock Text="Item subtype (optional)"
                                    Style="{StaticResource LabelStyle}"
                                    TextWrapping="Wrap"
-                                   Grid.Row="2"
+                                   Grid.Row="0"
                                    Grid.RowSpan="2"
                                    Grid.Column="0" />
                         <hc:ComboBox
@@ -275,7 +283,7 @@
                             IsTextSearchEnabled="False"
                             GotFocus="Combobox_FocusGained"
                             MouseDown="Combobox_OnClick"
-                            Grid.Row="2"
+                            Grid.Row="0"
                             Grid.Column="1"
                             IsEnabled="{Binding HasSlot}"
                             Style="{StaticResource ComboboxStyle}"
@@ -283,7 +291,7 @@
                             SelectionChanged="SubSlot_OnChanged" />
                         <TextBlock
                             Style="{StaticResource ExplanationStyle}"
-                            Grid.Row="3"
+                            Grid.Row="1"
                             Grid.Column="1"
                             Text="Select a specific item type (e.g. if you need specific footstep sounds)" />
 
@@ -292,21 +300,21 @@
                         <TextBlock Text="EquipmentEx slot (optional)"
                                    Style="{StaticResource LabelStyle}"
                                    TextWrapping="Wrap"
-                                   Grid.Row="4"
+                                   Grid.Row="3"
                                    Grid.RowSpan="2"
                                    Grid.Column="0" />
                         <hc:ComboBox
                             x:Name="EquipmentExControl"
                             IsTextSearchEnabled="True"
                             SelectedValue="{Binding EquipmentExSlot}"
-                            Grid.Row="4"
+                            Grid.Row="3"
                             Grid.Column="1"
                             Style="{StaticResource ComboboxStyle}"
                             ItemsSource="{Binding EquipmentExSlots}"
                             SelectionChanged="EquipmentExSlot_OnChanged" />
                         <TextBlock
                             Style="{StaticResource ExplanationStyle}"
-                            Grid.Row="5"
+                            Grid.Row="4"
                             Grid.Column="1"
                             Text="Select an EquipmentEx slot (supports filtering)" />
 
@@ -334,7 +342,7 @@
                         <TextBlock Text="Garment support tags (optional)"
                                    Style="{StaticResource LabelStyle}"
                                    TextWrapping="Wrap"
-                                   Grid.Row="8"
+                                   Grid.Row="9"
                                    Grid.RowSpan="2"
                                    Grid.Column="0" />
 
@@ -346,14 +354,14 @@
                             IsTextSearchEnabled="False"
                             GotFocus="Combobox_FocusGained"
                             MouseDown="Combobox_OnClick"
-                            Grid.Row="8"
+                            Grid.Row="9"
                             Grid.Column="1"
                             Style="{StaticResource ComboboxStyle}"
                             ItemsSource="{Binding GarmentSupportTagsSource}"
                             SelectionChanged="GarmentSupportTag_OnChanged" />
                         <TextBlock
                             Style="{StaticResource ExplanationStyle}"
-                            Grid.Row="9"
+                            Grid.Row="10"
                             Grid.Column="1"
                             Text="Add tags for fine-tuning garment support?" />
 
@@ -361,16 +369,16 @@
                         <TextBlock Text="Hide in First Person?"
                                    Style="{StaticResource LabelStyle}"
                                    TextWrapping="Wrap"
-                                   Grid.Row="10"
+                                   Grid.Row="12"
                                    Grid.RowSpan="2"
                                    Grid.Column="0" />
-                        <CheckBox Grid.Row="10"
+                        <CheckBox Grid.Row="12"
                                   Grid.Column="1"
                                   Margin="4,10, 10, 5"
                                   IsChecked="{Binding HideInFpp}" />
                         <TextBlock
                             Style="{StaticResource ExplanationStyle}"
-                            Grid.Row="11"
+                            Grid.Row="13"
                             Grid.Column="1"
                             Text="Check to have your item visible in third person only (useful for face masks or helmets)" />
 
@@ -379,10 +387,10 @@
                                    Visibility="{Binding IsHeadItem, Converter={StaticResource BooleanToVisibilityConverter}}"
                                    Style="{StaticResource LabelStyle}"
                                    TextWrapping="Wrap"
-                                   Grid.Row="12"
+                                   Grid.Row="15"
                                    Grid.RowSpan="2"
                                    Grid.Column="0" />
-                        <CheckBox Grid.Row="12"
+                        <CheckBox Grid.Row="15"
                                   Visibility="{Binding IsHeadItem, Converter={StaticResource BooleanToVisibilityConverter}}"
                                   Grid.Column="1"
                                   Margin="4,10, 10, 5"
@@ -390,7 +398,7 @@
                         <TextBlock
                             Style="{StaticResource ExplanationStyle}"
                             Visibility="{Binding IsHeadItem, Converter={StaticResource BooleanToVisibilityConverter}}"
-                            Grid.Row="13"
+                            Grid.Row="16"
                             Grid.Column="1"
                             Text="Check to force-display hair (head items hide player hair by default)" />
                     </Grid>
