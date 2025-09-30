@@ -15,10 +15,10 @@
                     <Setter Property="Margin" Value="5, 4,5,4" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding HasError}" Value="true">
-                            <Setter Property="Foreground" Value="{StaticResource WolvenKitRedPale}" />
+                            <Setter Property="Foreground" Value="{StaticResource WolvenKitRedPaleColor}" />
                         </DataTrigger>
                         <DataTrigger Binding="{Binding HasError}" Value="false">
-                            <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
+                            <Setter Property="Foreground" Value="{StaticResource WolvenKitFrameColor}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

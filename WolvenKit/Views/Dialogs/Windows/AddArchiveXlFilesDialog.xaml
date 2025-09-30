@@ -72,15 +72,12 @@
                     <Setter Property="Margin" Value="5,15,0,4" />
                     <Setter Property="Foreground" Value="{StaticResource WolvenKitTan}" />
                 </Style>
-                <Style x:Key="LabelStyleRow2" TargetType="TextBlock" BasedOn="{StaticResource LabelStyle}">
-                    <Setter Property="Margin" Value="5,0,0,4" />
-                </Style>
                 <Style x:Key="ComboboxStyle" TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
 
                     <Setter Property="Margin" Value="5,15,0,4" />
                     <Setter Property="Padding" Value="5, 7" />
                     <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
-                    <Setter Property="Background" Value="{StaticResource ControlBackgroundColor}" />
+                    <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
                     <Setter Property="BorderThickness" Value="1" />
                 </Style>
                 <Style x:Key="TextBoxWithControlValidatorsStyle" TargetType="TextBox" BasedOn="{StaticResource TextBoxExtendBaseStyle}">
@@ -93,7 +90,7 @@
                         </Trigger>
                         <Trigger Property="Validation.HasError" Value="false">
                             <Setter Property="BorderBrush" Value="{StaticResource ForegroundColor_Grey1}" />
-                            <Setter Property="Background" Value="{StaticResource ControlBackgroundColor}" />
+                            <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
                         </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
@@ -109,7 +106,7 @@
                                 <Condition Property="Validation.HasError" Value="True" />
                             </MultiTrigger.Conditions>
                             <Setter Property="BorderBrush" Value="Red" />
-                            <Setter Property="Background" Value="{StaticResource WolvenKitRedShadow25}" />
+                            <Setter Property="Background" Value="{StaticResource BackgroundColor_Red_Dark}" />
                             <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
                         </MultiTrigger>
                     </Style.Triggers>
@@ -153,11 +150,30 @@
                             <ColumnDefinition Width="600" />
                         </Grid.ColumnDefinitions>
 
+
+                        <!-- Hide in First Person -->
+                        <TextBlock Text="Create control files?"
+                                   Style="{StaticResource LabelStyle}"
+                                   TextWrapping="Wrap"
+                                   Grid.Row="0"
+                                   Grid.RowSpan="2"
+                                   Grid.Column="0" />
+                        <CheckBox Grid.Row="0"
+                                  Grid.Column="1"
+                                  x:Name="ControlFilesCheckbox"
+                                  Margin="4,10, 10, 5"
+                                  IsChecked="{Binding CreateControlFiles}" />
+                        <TextBlock
+                            Style="{StaticResource ExplanationStyle}"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Text="Generate factory.csv, translation.json, and dummy icon files?" />
+
                         <!-- Item Type -->
                         <TextBlock Text="Item Type"
                                    Visibility="{Binding CreateFactory, Converter={StaticResource InvertBooleanConverter}}"
                                    Style="{StaticResource LabelStyle}"
-                                   Grid.Row="0"
+                                   Grid.Row="3"
                                    Grid.Column="0" />
                         <hc:ComboBox
                             Visibility="{Binding CreateFactory, Converter={StaticResource InvertBooleanConverter}}"
@@ -169,7 +185,7 @@
                             IsEnabled="True"
                             GotFocus="Combobox_FocusGained"
                             MouseDown="Combobox_OnClick"
-                            Grid.Row="0"
+                            Grid.Row="3"
                             Grid.Column="1"
                             Style="{StaticResource ComboboxStyle}"
                             ItemsSource="{Binding EquipmentItemSlots}"
@@ -178,7 +194,7 @@
                         <TextBlock
                             Visibility="{Binding CreateFactory, Converter={StaticResource InvertBooleanConverter}}"
                             Style="{StaticResource ExplanationStyle}"
-                            Grid.Row="1"
+                            Grid.Row="4"
                             Grid.Column="1"
                             Text="Where do you want to equip your item?" />
 
@@ -186,48 +202,20 @@
                         <!-- We also need this to create a factory, since we need to generate a subfolder -->
                         <TextBlock Text="Item Name"
                                    Style="{StaticResource LabelStyle}"
-                                   Grid.Row="3"
+                                   Grid.Row="6"
                                    Grid.Column="0" />
                         <hc:TextBox
                             x:Name="ItemNameTextBox"
-                            Grid.Row="3"
+                            Grid.Row="6"
                             Grid.Column="1"
                             Style="{StaticResource WolvenkitTextBoxStyle}"
                             KeyUp="ItemName_OnKeyUp" />
                         <TextBlock
                             Visibility="{Binding CreateFactory, Converter={StaticResource InvertBooleanConverter}}"
                             Style="{StaticResource ExplanationStyle}"
-                            Grid.Row="4"
-                            Grid.Column="1"
-                            Text="This will be used to generate your item's spawn code and internal names." />
-
-                        <!-- Depot path -->
-                        <TextBlock Text="Item Folder"
-                                   Style="{StaticResource LabelStyle}"
-                                   Grid.Row="6"
-                                   Grid.Column="0" />
-
-                        <hc:TextBox x:Name="DepotPathTextBox"
-                                    Grid.Row="6"
-                                    Grid.Column="1"
-                                    Style="{StaticResource TextBoxWithControlValidatorsStyle }"
-                                    KeyUp="DepotPath_OnKeyUp">
-                            <TextBox.Text>
-                                <Binding Path="DepotPath" UpdateSourceTrigger="PropertyChanged">
-                                    <Binding.ValidationRules>
-                                        <validators:DepotPathValidationRule />
-                                    </Binding.ValidationRules>
-                                </Binding>
-                            </TextBox.Text>
-                        </hc:TextBox>
-
-                        <controls:ValidationTextBlock
-                            BoundControl="{Binding ElementName=DepotPathTextBox}"
-                            DefaultText="Your custom subfolder in your project. Directories will be created if they don't exist."
                             Grid.Row="7"
                             Grid.Column="1"
-                            Height="{DynamicResource WolvenKitDataGridRowHeight}"
-                            MinHeight="{DynamicResource WolvenKitDataGridRowHeight}" />
+                            Text="This will be used to generate your item's spawn code and internal names." />
 
                     </Grid>
 

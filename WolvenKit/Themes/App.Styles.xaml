@@ -51,6 +51,7 @@
     <Color x:Key="WolvenKitGraphCurveColor">White</Color>
 
     <Color x:Key="WolvenKitLabelColor">White</Color>
+    <Color x:Key="WolvenKitFrameColor">Silver</Color>
 
     <SolidColorBrush x:Key="WolvenKitLabelBrush" Color="{StaticResource WolvenKitLabelColor}" />
 

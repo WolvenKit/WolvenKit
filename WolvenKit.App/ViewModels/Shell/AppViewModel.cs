@@ -79,7 +79,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly DocumentTools _documentTools;
     private readonly Cr2WTools _cr2WTools;
     private readonly TemplateFileTools _templateFileTools;
-    private readonly ProjectResourceTools _projectResourceTools;
     private readonly IWatcherService _watcherService;
     private readonly ArchiveXlItemService _archiveXlItemService;
     private readonly IUpdateService _updateService;
@@ -1373,7 +1372,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             throw new WolvenKitException(0x4003, "No project loaded");
         }
 
-        var item = Interactions.ShowArchiveXlFilesView(!createItemFiles);
+        var item = Interactions.ShowArchiveXlFilesView((!createItemFiles, ActiveProject));
         if (item is null)
         {
             return;

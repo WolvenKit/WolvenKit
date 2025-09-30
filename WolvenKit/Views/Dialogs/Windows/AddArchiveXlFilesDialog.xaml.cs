@@ -1,29 +1,26 @@
 using System;
 using System.Globalization;
-using System.IO;
 using System.Reactive.Disposables;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using ReactiveUI;
-using Splat;
 using WolvenKit.App;
-using WolvenKit.App.Helpers;
+using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
-using WolvenKit.Core.Exceptions;
 using WolvenKit.ViewModels.Validators;
 
 namespace WolvenKit.Views.Dialogs.Windows
 {
     public partial class AddArchiveXlFilesDialog : IViewFor<AddArchiveXlFilesDialogViewModel>
     {
-        public AddArchiveXlFilesDialog(bool isControlFiles)
+        public AddArchiveXlFilesDialog(Cp77Project activeProject, ISettingsManager settings)
         {
             InitializeComponent();
 
-            ViewModel = new AddArchiveXlFilesDialogViewModel(isControlFiles);
+            ViewModel = new AddArchiveXlFilesDialogViewModel(activeProject, settings);
             DataContext = ViewModel;
 
             Owner = Application.Current.MainWindow;
@@ -31,8 +28,8 @@ namespace WolvenKit.Views.Dialogs.Windows
             this.WhenActivated(disposables =>
             {
                 this.Bind(ViewModel,
-                        x => x.DepotPath,
-                        x => x.DepotPathTextBox.Text)
+                        x => x.CreateControlFiles,
+                        x => x.ControlFilesCheckbox.IsChecked)
                     .DisposeWith(disposables);
 
                 this.Bind(ViewModel,
@@ -52,29 +49,6 @@ namespace WolvenKit.Views.Dialogs.Windows
         {
             Owner = owner;
             return ShowDialog();
-        }
-
-
-        private readonly DepotPathValidationRule _depotPathValidationRule = DepotPathValidationRule.Instance;
-        private void DepotPath_OnKeyUp(object sender, KeyEventArgs e)
-        {
-            if (DepotPathTextBox.GetBindingExpression(TextBox.TextProperty) is not BindingExpression bind)
-            {
-                return;
-            }
-
-            var result = _depotPathValidationRule.Validate(DepotPathTextBox.Text, CultureInfo.CurrentCulture);
-            if (!result.IsValid)
-            {
-                Validation.MarkInvalid(bind,
-                    new ValidationError(_depotPathValidationRule, bind, result.ErrorContent, null));
-            }
-            else
-            {
-                Validation.ClearInvalid(bind);
-            }
-
-            SetButtonStatesFromControlValidity();
         }
 
         private readonly ItemNameValidationRule _itemRule = new();
@@ -110,8 +84,7 @@ namespace WolvenKit.Views.Dialogs.Windows
                 return;
             }
 
-            ViewModel.IsValid = !HasValidationError(ItemNameTextBox) &&
-                                !HasValidationError(DepotPathTextBox);
+            ViewModel.IsValid = !HasValidationError(ItemNameTextBox);
         }
 
         // Enable/Disable subtype and EqEx type based on selected item type

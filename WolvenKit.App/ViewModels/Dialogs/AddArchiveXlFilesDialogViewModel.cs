@@ -2,22 +2,21 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
-using System.Windows;
-using WolvenKit.App.Factories;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
-using WolvenKit.Core.Exceptions;
-using WolvenKit.Core.Interfaces;
+using WolvenKit.Interfaces.Extensions;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 
-public partial class AddArchiveXlFilesDialogViewModel() : DialogViewModel
+public partial class AddArchiveXlFilesDialogViewModel : DialogViewModel
 {
-    [ObservableProperty] private string? _depotPath;
+    private Cp77Project _activeProject;
+    private ISettingsManager _settingsManager;
+
     [ObservableProperty] private string? _itemName;
-    [ObservableProperty] private bool _createFactory;
+    [ObservableProperty] private bool _createControlFiles;
     [ObservableProperty] private EquipmentItemSlot? _slot;
     [ObservableProperty] private EquipmentItemSubSlot? _subSlot;
     [ObservableProperty] private EquipmentExSlot? _eqExSlot;
@@ -43,8 +42,11 @@ public partial class AddArchiveXlFilesDialogViewModel() : DialogViewModel
     [ObservableProperty] private List<GarmentSupportTags>? _garmentSupportTagsSource;
     [ObservableProperty] private List<ArchiveXlHidingTags>? _hidingTagsSource;
 
-    public AddArchiveXlFilesDialogViewModel(bool collectFactoryInfo = false) : this()
+    public AddArchiveXlFilesDialogViewModel(Cp77Project activeProject, ISettingsManager settingsManager)
     {
+        _activeProject = activeProject;
+        _settingsManager = settingsManager;
+
         // initialize dropdowns
         EquipmentItemSlots = [.. Enum.GetValues<EquipmentItemSlot>().Where(x => x != EquipmentItemSlot.None)];
         EquipmentExSlots = [.. Enum.GetValues<EquipmentExSlot>()];
@@ -60,7 +62,7 @@ public partial class AddArchiveXlFilesDialogViewModel() : DialogViewModel
         HidingTags = [];
         GarmentSupportTag = GarmentSupportTags.None;
 
-        CreateFactory = collectFactoryInfo;
+        CreateControlFiles = !activeProject.Files.Any(x => x.HasFileExtension("csv"));
 
         IsHeadItem = false;
         HideInFpp = false;
@@ -72,11 +74,11 @@ public partial class AddArchiveXlFilesDialogViewModel() : DialogViewModel
 
     public ArchiveXlItem CollectItemInfo() => new()
     {
-        DestinationPath = DepotPath ?? string.Empty,
+        CreateControlFiles = CreateControlFiles,
         ItemName = ItemName ?? string.Empty,
         Slot = Slot ?? EquipmentItemSlot.Head,
         SubSlot = SubSlot ?? EquipmentItemSubSlot.None,
-        EqExSlot = EqExSlot ?? EquipmentExSlot.None,
+        EqExSlot = EqExSlot ?? EquipmentExSlot.None
     };
 
     public void SetItemSlot(EquipmentItemSlot slot)
