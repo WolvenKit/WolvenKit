@@ -23,8 +23,8 @@ public class DialogViewModelFactory : IDialogViewModelFactory
         _loggerService = loggerService;
         _notificationService = notificationService;
         _settingsManager = settingsManager;
-
     }
+
     public SoundModdingViewModel SoundModdingViewModel() => new(_notificationService, _loggerService, _projectManager);
-    public NewFileViewModel NewFileViewModel() => new(_projectManager, _settingsManager);
+    public NewFileViewModel NewFileViewModel() => new(_projectManager, _settingsManager, _loggerService);
 }
