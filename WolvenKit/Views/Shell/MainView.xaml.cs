@@ -168,6 +168,17 @@ namespace WolvenKit.Views.Shell
                     return dialog.ViewModel;
                 };
 
+                Interactions.AddItemsToStore = (project) =>
+                {
+                    var dialog = new AddItemsToStoreDialog(project);
+                    if (dialog.ShowDialog() != true)
+                    {
+                        return null;
+                    }
+
+                    return dialog.ViewModel;
+                };
+
                 Interactions.ShowScriptSettingsView = settings =>
                 {
                     var dialog = new ScriptSettingsWindow(settings);

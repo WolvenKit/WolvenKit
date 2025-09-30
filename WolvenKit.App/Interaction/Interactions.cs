@@ -268,4 +268,12 @@ public static class Interactions
     /// </summary>
     public static Func<Cp77Project, AddQuestDialogViewModel> ShowGenerateQuestDialogue { get; set; } =
         project => new AddQuestDialogViewModel(project);
+
+
+    /// <summary>
+    /// Shows dialogue to add item codes to .reds store and vendor yaml
+    /// </summary>
+    public static Func<Cp77Project, AddItemsToStoreDialogViewModel> AddItemsToStore { get; set; } =
+        project => throw new NotImplementedException();
+
 }

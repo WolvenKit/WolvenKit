@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using YamlDotNet.RepresentationModel;
@@ -40,6 +39,14 @@ public class YamlHelper
 
         using var writer = new StreamWriter(absolutePath);
         writer.Write(yaml);
+    }
+
+    public static void WriteYaml(string absolutePath, ExpandoObject rootNode)
+    {
+        var serializer = new Serializer();
+        var yamlString = serializer.Serialize(rootNode);
+        var filePath = Path.Join(absolutePath);
+        File.WriteAllText(filePath, yamlString);
     }
 
     public static ExpandoObject? ReadYamlAsObject(string absolutePath)

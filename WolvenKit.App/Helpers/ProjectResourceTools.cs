@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using HelixToolkit.SharpDX.Core;
 using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Interaction;
@@ -13,7 +15,6 @@ using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
-using WolvenKit.Common.Tools;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Helpers;
@@ -23,7 +24,7 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Helpers;
 
-public class ProjectResourceTools
+public partial class ProjectResourceTools
 {
     private readonly IProjectManager _projectManager;
 
@@ -1094,4 +1095,131 @@ public class ProjectResourceTools
     }
 
 
+    /// <summary>
+    /// Add a list of item codes to an atelier store and/or a VendorsXL vendor
+    /// </summary>
+    /// <param name="dialogVmItemCodes"></param>
+    /// <param name="relativeYamlPath"></param>
+    /// <param name="relativeRedsPath"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    public void AddItemCodesToStoreFiles(List<string> dialogVmItemCodes, string relativeYamlPath,
+        string relativeRedsPath)
+    {
+        if (_projectManager.ActiveProject is not { } project)
+        {
+            return;
+        }
+
+        AddToYaml();
+
+        AddToReds();
+
+        return;
+
+        void AddToYaml()
+        {
+            if (string.IsNullOrEmpty(relativeYamlPath) ||
+                YamlHelper.ReadYamlAsObject(Path.Join(project.ResourcesDirectory, relativeYamlPath)) is not
+                    ExpandoObject yaml)
+            {
+                return;
+            }
+
+            // Get the backing dictionary for mutability
+            IDictionary<string, object> yamlDict = yaml!;
+            if (yamlDict.Count == 0)
+            {
+                return;
+            }
+
+            var modified = false;
+
+            foreach (var key in yamlDict.Keys)
+            {
+                if (!key.StartsWith("Character") || yamlDict.Get(key) is not ExpandoObject characterRecord)
+                {
+                    continue;
+                }
+
+                IDictionary<string, object> characterDict = characterRecord!;
+                if (!characterDict.AsReadOnly().TryGetValue("items", out var value) ||
+                    value is not List<object> items)
+                {
+                    _loggerService.Error($"Failed finding 'items' entry in '{key}' ({relativeRedsPath})");
+                    continue;
+                }
+
+                if (dialogVmItemCodes.All(c => items.Contains(c)))
+                {
+                    _loggerService.Info("All item codes already listed in " + relativeYamlPath);
+                    continue;
+                }
+
+                items.AddRange(dialogVmItemCodes);
+
+                characterDict["items"] = items.Distinct().ToList();
+                modified = true;
+            }
+
+            if (!modified)
+            {
+                return;
+            }
+
+            try
+            {
+                YamlHelper.WriteYaml(Path.Join(project.ResourcesDirectory, relativeYamlPath), yaml);
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error("Failed writing yaml: " + ex.Message);
+            }
+        }
+
+        void AddToReds()
+        {
+            if (string.IsNullOrEmpty(relativeRedsPath))
+            {
+                return;
+            }
+
+            var absoluteRedsPath = Path.Join(project.ResourcesDirectory, relativeRedsPath);
+            if (!File.Exists(absoluteRedsPath))
+            {
+                _loggerService.Error("Failed reading atelier store " + relativeRedsPath);
+                return;
+            }
+
+            var textContent = File.ReadAllText(absoluteRedsPath);
+
+            if (dialogVmItemCodes.All(c => textContent.Contains(c)))
+            {
+                _loggerService.Info("All item codes already listed in atelier store " + relativeRedsPath);
+                return;
+            }
+
+
+            var match = AtelierLastItemCode().Match(textContent);
+            if (!match.Success)
+            {
+                _loggerService.Error("Failed appending to atelier store, couldn't find the last item in the list");
+                return;
+            }
+
+            try
+            {
+                var insertIndex = match.Index + match.Length;
+                var newItems = $",\n    {string.Join(", ", dialogVmItemCodes.Select(i => $"\"{i}\""))} ";
+                textContent = textContent.Insert(insertIndex - 1, newItems);
+                File.WriteAllText(absoluteRedsPath, textContent);
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error("Failed writing atelier .reds: " + ex.Message);
+            }
+        }
+    }
+
+    [GeneratedRegex(@"Items\.\w+""(?!,)(\s)", RegexOptions.Multiline)]
+    private static partial Regex AtelierLastItemCode();
 }

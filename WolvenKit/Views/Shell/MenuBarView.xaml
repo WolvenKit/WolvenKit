@@ -365,6 +365,18 @@
                         </MenuItem.Icon>
                     </MenuItem>
 
+                    <MenuItem
+                        Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                        Click="AddItemsToVendor_Click"
+                        Header="Add items to store/vendor">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="Material"
+                                Kind="FormatList"
+                                Size="{DynamicResource WolvenKitIconTiny}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
                 </MenuItem>
 
                 <Separator />
