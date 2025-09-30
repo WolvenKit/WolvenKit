@@ -5,7 +5,10 @@ using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Interfaces.Extensions;
+using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Services;
 
@@ -35,13 +38,18 @@ public class ArchiveXlItem
 
 public class ArchiveXlItemService
 {
-    private ISettingsManager _settingsManager;
-    private IProjectManager _projectManager;
+    private readonly ISettingsManager _settingsManager;
+    private readonly IProjectManager _projectManager;
+    private readonly ILoggerService _logger;
+    private readonly Cr2WTools _cr2WTools;
 
-    public ArchiveXlItemService(ISettingsManager settingsManager, IProjectManager projectManager)
+    public ArchiveXlItemService(ISettingsManager settingsManager, IProjectManager projectManager, Cr2WTools cr2WTools,
+        ILoggerService logger)
     {
         _settingsManager = settingsManager;
         _projectManager = projectManager;
+        _cr2WTools = cr2WTools;
+        _logger = logger;
     }
 
     public void CreateEquipmentItem(ArchiveXlItem itemData)
@@ -66,9 +74,46 @@ public class ArchiveXlItemService
         {
             return;
         }
+
+        var absoluteFactoryPath = Path.Combine(activeProject.ModDirectory, itemData.ControlFilesRelPath, "factory.csv");
+
+        var cr2Wfile = new CR2WFile();
+        var factory = new C2dArray();
+
+
         // check if factory file exists in project folder, create if not
+        if (File.Exists(absoluteFactoryPath))
+        {
+            if (_cr2WTools.ReadCr2W(absoluteFactoryPath) is not CR2WFile cr2W || cr2W.RootChunk is not C2dArray ary)
+            {
+                _logger.Error("Failed to read existing factory.csv file - please register your item manually:");
+                _logger.Error($"\t [0] = {itemData.ItemName}");
+                _logger.Error($"\t [1] = {Path.Join(itemData.FilesRelPath, "_root_entity.ent")}");
+                _logger.Error($"\t [2] = true");
+                return;
+            }
+
+            cr2Wfile = cr2W;
+            factory = ary;
+        }
+
+        if (factory.CompiledHeaders.Count == 0)
+        {
+            factory.Headers.Add("name");
+            factory.Headers.Add("path");
+            factory.Headers.Add("preload");
+        }
 
         // Then register item name in factory file
+        factory.CompiledData.Add(new CArray<CString>([
+            itemData.ItemName, Path.Join(itemData.FilesRelPath, "_root_entity.ent"), "true"
+        ]));
+
+        // now write factory back
+
+        cr2Wfile.RootChunk = factory;
+        _cr2WTools.WriteCr2W(cr2Wfile, absoluteFactoryPath);
+
     }
 
     private void RegisterInTranslationFile(ArchiveXlItem itemData)
