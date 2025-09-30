@@ -1358,28 +1358,24 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private bool CanAddAxlControlFiles() => ActiveProject is not null && !IsDialogShown;
 
     [RelayCommand(CanExecute = nameof(CanAddAxlControlFiles))]
-    private void AddArchiveXlItemFiles() => AddAxlFiles(true);
+    private void AddAXlItemFiles() => AddAxlFiles();
 
 
-    [RelayCommand(CanExecute = nameof(CanAddAxlControlFiles))]
-    private void AddAxlControlFiles() => AddAxlFiles(false);
-
-
-    private void AddAxlFiles(bool createItemFiles = false)
+    private void AddAxlFiles()
     {
         if (ActiveProject is null)
         {
             throw new WolvenKitException(0x4003, "No project loaded");
         }
 
-        var item = Interactions.ShowArchiveXlFilesView((!createItemFiles, ActiveProject));
+        var item = Interactions.ShowArchiveXlFilesView((ActiveProject, SettingsManager));
         if (item is null)
         {
             return;
         }
 
         _watcherService.Suspend();
-        _archiveXlItemService.CreateEquipmentItem(ActiveProject, item);
+        _archiveXlItemService.CreateEquipmentItem(item);
         _watcherService.Resume();
     }
 
@@ -1872,7 +1868,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(NewFileCommand))]
     //[NotifyCanExecuteChangedFor(nameof(CloseModalCommand))]
     [NotifyCanExecuteChangedFor(nameof(CloseDialogCommand))]
-    [NotifyCanExecuteChangedFor(nameof(AddAxlControlFilesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddAXlItemFilesCommand))]
     private bool _isDialogShown;
 
     [ObservableProperty]
@@ -1901,8 +1897,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(NewPhotoModeFilesCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateMinimalQuestFilesCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateInkatlasCommand))]
-    [NotifyCanExecuteChangedFor(nameof(AddAxlControlFilesCommand))]
-    [NotifyCanExecuteChangedFor(nameof(AddArchiveXlItemFilesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddAXlItemFilesCommand))]
     private Cp77Project? _activeProject;
 
     [ObservableProperty]
