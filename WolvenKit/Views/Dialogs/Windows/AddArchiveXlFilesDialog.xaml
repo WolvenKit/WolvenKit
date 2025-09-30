@@ -33,26 +33,29 @@
                     <hc:Theme />
                 </ResourceDictionary.MergedDictionaries>
                 <Style TargetType="{x:Type ComboBoxItem}">
-                    <Setter Property="SnapsToDevicePixels" Value="true" />
-                    <Setter Property="OverridesDefaultStyle" Value="true" />
                     <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
+                    <Setter Property="OverridesDefaultStyle" Value="true" />
+                    <Setter Property="SnapsToDevicePixels" Value="true" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ComboBoxItem}">
-                                <Border x:Name="Border"
-                                        Padding="2"
-                                        SnapsToDevicePixels="true"
-                                        Background="Transparent"
-                                        CornerRadius="8">
+                                <Border
+                                    x:Name="Border"
+                                    Padding="2"
+                                    Background="Transparent"
+                                    CornerRadius="8"
+                                    SnapsToDevicePixels="true">
                                     <VisualStateManager.VisualStateGroups>
                                         <VisualStateGroup x:Name="SelectionStates">
                                             <VisualState x:Name="Unselected" />
                                             <VisualState x:Name="Selected">
                                                 <Storyboard>
-                                                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
-                                                                                  Storyboard.TargetProperty="(Panel.Background).
-                    (SolidColorBrush.Color)">
-                                                        <EasingColorKeyFrame KeyTime="0" Value="{StaticResource WolvenKitCyanColor}" />
+                                                    <ColorAnimationUsingKeyFrames
+                                                        Storyboard.TargetName="Border"
+                                                        Storyboard.TargetProperty="(Panel.Background).                     (SolidColorBrush.Color)">
+                                                        <EasingColorKeyFrame
+                                                            KeyTime="0"
+                                                            Value="{StaticResource WolvenKitCyanColor}" />
                                                     </ColorAnimationUsingKeyFrames>
                                                 </Storyboard>
                                             </VisualState>
@@ -64,33 +67,43 @@
                         </Setter.Value>
                     </Setter>
                 </Style>
-                <Style x:Key="ExplanationStyle" TargetType="TextBlock">
-                    <Setter Property="Margin" Value="5, 4,5,4" />
+                <Style
+                    x:Key="ExplanationStyle"
+                    TargetType="TextBlock">
                     <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
+                    <Setter Property="Margin" Value="5,4,5,4" />
                 </Style>
-                <Style x:Key="LabelStyle" TargetType="TextBlock">
-                    <Setter Property="Margin" Value="5,15,0,4" />
+                <Style
+                    x:Key="LabelStyle"
+                    TargetType="TextBlock">
                     <Setter Property="Foreground" Value="{StaticResource WolvenKitTan}" />
-                </Style>
-                <Style x:Key="ComboboxStyle" TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
-
                     <Setter Property="Margin" Value="5,15,0,4" />
-                    <Setter Property="Padding" Value="5, 7" />
-                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
+                </Style>
+                <Style
+                    x:Key="ComboboxStyle"
+                    BasedOn="{StaticResource {x:Type ComboBox}}"
+                    TargetType="ComboBox">
                     <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
                     <Setter Property="BorderThickness" Value="1" />
+                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
+
+                    <Setter Property="Margin" Value="5,15,0,4" />
+                    <Setter Property="Padding" Value="5,7" />
                 </Style>
-                <Style x:Key="TextBoxWithControlValidatorsStyle" TargetType="TextBox" BasedOn="{StaticResource TextBoxExtendBaseStyle}">
+                <Style
+                    x:Key="TextBoxWithControlValidatorsStyle"
+                    BasedOn="{StaticResource TextBoxExtendBaseStyle}"
+                    TargetType="TextBox">
                     <Setter Property="Margin" Value="5,15,0,4" />
                     <Style.Triggers>
                         <Trigger Property="Validation.HasError" Value="true">
-                            <Setter Property="BorderBrush" Value="DarkRed" />
                             <Setter Property="Background" Value="{StaticResource WolvenKitRedShadow25}" />
+                            <Setter Property="BorderBrush" Value="DarkRed" />
                             <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
                         </Trigger>
                         <Trigger Property="Validation.HasError" Value="false">
-                            <Setter Property="BorderBrush" Value="{StaticResource ForegroundColor_Grey1}" />
                             <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
+                            <Setter Property="BorderBrush" Value="{StaticResource ForegroundColor_Grey1}" />
                         </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
@@ -105,8 +118,8 @@
                                 <Condition Property="IsMouseOver" Value="True" />
                                 <Condition Property="Validation.HasError" Value="True" />
                             </MultiTrigger.Conditions>
-                            <Setter Property="BorderBrush" Value="Red" />
                             <Setter Property="Background" Value="{StaticResource BackgroundColor_Red_Dark}" />
+                            <Setter Property="BorderBrush" Value="Red" />
                             <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
                         </MultiTrigger>
                     </Style.Triggers>
@@ -116,16 +129,18 @@
         </Grid.Resources>
 
 
-        <syncfusion:WizardControl CancelButtonCancelsWindow="True" FinishButtonClosesWindow="True">
+        <syncfusion:WizardControl
+            CancelButtonCancelsWindow="True"
+            FinishButtonClosesWindow="True">
             <syncfusion:WizardPage
+                Padding="12,12"
                 BackVisibility="Collapsed"
                 CancelVisibility="Visible"
                 FinishVisibility="Visible"
                 FinishEnabled="{Binding IsValid}"
                 HelpVisibility="Visible"
                 NextVisibility="Collapsed"
-                PageType="Exterior"
-                Padding="12, 12">
+                PageType="Exterior">
 
                 <StackPanel Orientation="Vertical">
 
@@ -152,58 +167,66 @@
 
 
                         <!-- Hide in First Person -->
-                        <TextBlock Text="Create control files?"
-                                   Style="{StaticResource LabelStyle}"
-                                   TextWrapping="Wrap"
-                                   Grid.Row="0"
-                                   Grid.RowSpan="2"
-                                   Grid.Column="0" />
-                        <CheckBox Grid.Row="0"
-                                  Grid.Column="1"
-                                  x:Name="ControlFilesCheckbox"
-                                  Margin="4,10, 10, 5"
-                                  IsChecked="{Binding CreateControlFiles}" />
                         <TextBlock
-                            Style="{StaticResource ExplanationStyle}"
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="0"
+                            Style="{StaticResource LabelStyle}"
+                            Text="Create control files?"
+                            TextWrapping="Wrap" />
+                        <CheckBox
+                            x:Name="ControlFilesCheckbox"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Margin="4,10,10,5"
+                            IsChecked="{Binding CreateControlFiles}" />
+                        <TextBlock
                             Grid.Row="1"
                             Grid.Column="1"
+                            Style="{StaticResource ExplanationStyle}"
                             Text="Generate factory.csv, translation.json, and dummy icon files?" />
 
                         <!-- Item Type -->
-                        <TextBlock Text="Item Type"
-                                   Visibility="{Binding CreateFactory, Converter={StaticResource InvertBooleanConverter}}"
-                                   Style="{StaticResource LabelStyle}"
-                                   Grid.Row="3"
-                                   Grid.Column="0" />
+                        <TextBlock
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Style="{StaticResource LabelStyle}"
+                            Visibility="{Binding CreateFactory,
+                                                 Converter={StaticResource InvertBooleanConverter}}"
+                            Text="Item Type" />
                         <hc:ComboBox
-                            Visibility="{Binding CreateFactory, Converter={StaticResource InvertBooleanConverter}}"
-                            SelectedValuePath="Content"
-                            SelectedValue="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Text}"
-                            IsEditable="True"
-                            KeyUp="ComboBox_KeyUp"
-                            IsTextSearchEnabled="False"
-                            IsEnabled="True"
-                            GotFocus="Combobox_FocusGained"
-                            MouseDown="Combobox_OnClick"
                             Grid.Row="3"
                             Grid.Column="1"
                             Style="{StaticResource ComboboxStyle}"
+                            Visibility="{Binding CreateFactory,
+                                                 Converter={StaticResource InvertBooleanConverter}}"
+                            IsEnabled="True"
+                            SelectedValuePath="Content"
+                            SelectedValue="{Binding RelativeSource={RelativeSource Mode=Self},
+                                                    Path=Text}"
+                            IsEditable="True"
+                            KeyUp="ComboBox_KeyUp"
+                            IsTextSearchEnabled="False"
+                            GotFocus="Combobox_FocusGained"
+                            MouseDown="Combobox_OnClick"
                             ItemsSource="{Binding EquipmentItemSlots}"
                             SelectionChanged="ItemType_OnChanged" />
 
                         <TextBlock
-                            Visibility="{Binding CreateFactory, Converter={StaticResource InvertBooleanConverter}}"
-                            Style="{StaticResource ExplanationStyle}"
                             Grid.Row="4"
                             Grid.Column="1"
+                            Style="{StaticResource ExplanationStyle}"
+                            Visibility="{Binding CreateFactory,
+                                                 Converter={StaticResource InvertBooleanConverter}}"
                             Text="Where do you want to equip your item?" />
 
                         <!-- Item name -->
                         <!-- We also need this to create a factory, since we need to generate a subfolder -->
-                        <TextBlock Text="Item Name"
-                                   Style="{StaticResource LabelStyle}"
-                                   Grid.Row="6"
-                                   Grid.Column="0" />
+                        <TextBlock
+                            Grid.Row="6"
+                            Grid.Column="0"
+                            Style="{StaticResource LabelStyle}"
+                            Text="Item Name" />
                         <hc:TextBox
                             x:Name="ItemNameTextBox"
                             Grid.Row="6"
@@ -211,10 +234,11 @@
                             Style="{StaticResource WolvenkitTextBoxStyle}"
                             KeyUp="ItemName_OnKeyUp" />
                         <TextBlock
-                            Visibility="{Binding CreateFactory, Converter={StaticResource InvertBooleanConverter}}"
-                            Style="{StaticResource ExplanationStyle}"
                             Grid.Row="7"
                             Grid.Column="1"
+                            Style="{StaticResource ExplanationStyle}"
+                            Visibility="{Binding CreateFactory,
+                                                 Converter={StaticResource InvertBooleanConverter}}"
                             Text="This will be used to generate your item's spawn code and internal names." />
 
                     </Grid>
@@ -256,63 +280,67 @@
 
 
                         <!-- Item Subtype -->
-                        <TextBlock Text="Item subtype (optional)"
-                                   Style="{StaticResource LabelStyle}"
-                                   TextWrapping="Wrap"
-                                   Grid.Row="0"
-                                   Grid.RowSpan="2"
-                                   Grid.Column="0" />
+                        <TextBlock
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="0"
+                            Style="{StaticResource LabelStyle}"
+                            Text="Item subtype (optional)"
+                            TextWrapping="Wrap" />
                         <hc:ComboBox
                             x:Name="ItemSubtypeControl"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Style="{StaticResource ComboboxStyle}"
+                            IsEnabled="{Binding HasSlot}"
                             SelectedValuePath="Content"
-                            SelectedValue="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Text}"
+                            SelectedValue="{Binding RelativeSource={RelativeSource Mode=Self},
+                                                    Path=Text}"
                             IsEditable="True"
                             KeyUp="ComboBox_KeyUp"
                             IsTextSearchEnabled="False"
                             GotFocus="Combobox_FocusGained"
                             MouseDown="Combobox_OnClick"
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            IsEnabled="{Binding HasSlot}"
-                            Style="{StaticResource ComboboxStyle}"
                             ItemsSource="{Binding EquipmentItemSubSlots}"
                             SelectionChanged="SubSlot_OnChanged" />
                         <TextBlock
-                            Style="{StaticResource ExplanationStyle}"
                             Grid.Row="1"
                             Grid.Column="1"
+                            Style="{StaticResource ExplanationStyle}"
                             Text="Select a specific item type (e.g. if you need specific footstep sounds)" />
 
 
                         <!-- EqEx Type -->
-                        <TextBlock Text="EquipmentEx slot (optional)"
-                                   Style="{StaticResource LabelStyle}"
-                                   TextWrapping="Wrap"
-                                   Grid.Row="3"
-                                   Grid.RowSpan="2"
-                                   Grid.Column="0" />
+                        <TextBlock
+                            Grid.Row="3"
+                            Grid.RowSpan="2"
+                            Grid.Column="0"
+                            Style="{StaticResource LabelStyle}"
+                            Text="EquipmentEx slot (optional)"
+                            TextWrapping="Wrap" />
                         <hc:ComboBox
                             x:Name="EquipmentExControl"
-                            IsTextSearchEnabled="True"
-                            SelectedValue="{Binding EquipmentExSlot}"
                             Grid.Row="3"
                             Grid.Column="1"
                             Style="{StaticResource ComboboxStyle}"
+                            IsTextSearchEnabled="True"
+                            SelectedValue="{Binding EquipmentExSlot}"
                             ItemsSource="{Binding EquipmentExSlots}"
                             SelectionChanged="EquipmentExSlot_OnChanged" />
                         <TextBlock
-                            Style="{StaticResource ExplanationStyle}"
                             Grid.Row="4"
                             Grid.Column="1"
+                            Style="{StaticResource ExplanationStyle}"
                             Text="Select an EquipmentEx slot (supports filtering)" />
 
                         <!-- Hiding tags -->
-                        <TextBlock Text="Visibility tags (optional)"
-                                   Style="{StaticResource LabelStyle}"
-                                   TextWrapping="Wrap"
-                                   Grid.Row="6"
-                                   Grid.RowSpan="2"
-                                   Grid.Column="0" />
+                        <TextBlock
+                            Grid.Row="6"
+                            Grid.RowSpan="2"
+                            Grid.Column="0"
+                            Style="{StaticResource LabelStyle}"
+                            Text="Visibility tags (optional)"
+                            TextWrapping="Wrap" />
 
                         <hc:CheckComboBox
                             Grid.Row="6"
@@ -320,74 +348,83 @@
                             SelectedValue="{Binding HidingTags}"
                             ItemsSource="{Binding HidingTagsSource}" />
                         <TextBlock
-                            Style="{StaticResource ExplanationStyle}"
                             Grid.Row="7"
                             Grid.Column="1"
+                            Style="{StaticResource ExplanationStyle}"
                             Text="Hide player body parts?" />
 
 
                         <!-- GS tags -->
-                        <TextBlock Text="Garment support tags (optional)"
-                                   Style="{StaticResource LabelStyle}"
-                                   TextWrapping="Wrap"
-                                   Grid.Row="9"
-                                   Grid.RowSpan="2"
-                                   Grid.Column="0" />
+                        <TextBlock
+                            Grid.Row="9"
+                            Grid.RowSpan="2"
+                            Grid.Column="0"
+                            Style="{StaticResource LabelStyle}"
+                            Text="Garment support tags (optional)"
+                            TextWrapping="Wrap" />
 
                         <hc:ComboBox
+                            Grid.Row="9"
+                            Grid.Column="1"
+                            Style="{StaticResource ComboboxStyle}"
                             SelectedValuePath="Content"
-                            SelectedValue="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Text}"
+                            SelectedValue="{Binding RelativeSource={RelativeSource Mode=Self},
+                                                    Path=Text}"
                             IsEditable="True"
                             KeyUp="ComboBox_KeyUp"
                             IsTextSearchEnabled="False"
                             GotFocus="Combobox_FocusGained"
                             MouseDown="Combobox_OnClick"
-                            Grid.Row="9"
-                            Grid.Column="1"
-                            Style="{StaticResource ComboboxStyle}"
                             ItemsSource="{Binding GarmentSupportTagsSource}"
                             SelectionChanged="GarmentSupportTag_OnChanged" />
                         <TextBlock
-                            Style="{StaticResource ExplanationStyle}"
                             Grid.Row="10"
                             Grid.Column="1"
+                            Style="{StaticResource ExplanationStyle}"
                             Text="Add tags for fine-tuning garment support?" />
 
                         <!-- Hide in First Person -->
-                        <TextBlock Text="Hide in First Person?"
-                                   Style="{StaticResource LabelStyle}"
-                                   TextWrapping="Wrap"
-                                   Grid.Row="12"
-                                   Grid.RowSpan="2"
-                                   Grid.Column="0" />
-                        <CheckBox Grid.Row="12"
-                                  Grid.Column="1"
-                                  Margin="4,10, 10, 5"
-                                  IsChecked="{Binding HideInFpp}" />
                         <TextBlock
-                            Style="{StaticResource ExplanationStyle}"
+                            Grid.Row="12"
+                            Grid.RowSpan="2"
+                            Grid.Column="0"
+                            Style="{StaticResource LabelStyle}"
+                            Text="Hide in First Person?"
+                            TextWrapping="Wrap" />
+                        <CheckBox
+                            Grid.Row="12"
+                            Grid.Column="1"
+                            Margin="4,10,10,5"
+                            IsChecked="{Binding TagsHideInFpp}" />
+                        <TextBlock
                             Grid.Row="13"
                             Grid.Column="1"
+                            Style="{StaticResource ExplanationStyle}"
                             Text="Check to have your item visible in third person only (useful for face masks or helmets)" />
 
                         <!-- Force Hair -->
-                        <TextBlock Text="Force hair visibility?"
-                                   Visibility="{Binding IsHeadItem, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                   Style="{StaticResource LabelStyle}"
-                                   TextWrapping="Wrap"
-                                   Grid.Row="15"
-                                   Grid.RowSpan="2"
-                                   Grid.Column="0" />
-                        <CheckBox Grid.Row="15"
-                                  Visibility="{Binding IsHeadItem, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                  Grid.Column="1"
-                                  Margin="4,10, 10, 5"
-                                  IsChecked="{Binding ForceHair}" />
                         <TextBlock
-                            Style="{StaticResource ExplanationStyle}"
-                            Visibility="{Binding IsHeadItem, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Grid.Row="15"
+                            Grid.RowSpan="2"
+                            Grid.Column="0"
+                            Style="{StaticResource LabelStyle}"
+                            Visibility="{Binding IsHeadItem,
+                                                 Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Text="Force hair visibility?"
+                            TextWrapping="Wrap" />
+                        <CheckBox
+                            Grid.Row="15"
+                            Grid.Column="1"
+                            Margin="4,10,10,5"
+                            Visibility="{Binding IsHeadItem,
+                                                 Converter={StaticResource BooleanToVisibilityConverter}}"
+                            IsChecked="{Binding TagsForceHair}" />
+                        <TextBlock
                             Grid.Row="16"
                             Grid.Column="1"
+                            Style="{StaticResource ExplanationStyle}"
+                            Visibility="{Binding IsHeadItem,
+                                                 Converter={StaticResource BooleanToVisibilityConverter}}"
                             Text="Check to force-display hair (head items hide player hair by default)" />
                     </Grid>
 

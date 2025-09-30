@@ -76,7 +76,8 @@ public partial class MenuBarViewModel : ObservableObject
 
         foreach (var file in files)
         {
-            allItems.AddRange(YamlHelper.GetItemsFromYaml(MainViewModel.ProjectResourceTools.GetAbsolutePath(file)));
+            allItems.AddRange(
+                YamlHelper.GetItemRecordsFromYaml(MainViewModel.ProjectResourceTools.GetAbsolutePath(file)));
         }
 
         return allItems;

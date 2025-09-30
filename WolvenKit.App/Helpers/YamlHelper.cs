@@ -61,7 +61,58 @@ public class YamlHelper
         return JsonConvert.DeserializeObject<ExpandoObject>(jsonText, new ExpandoObjectConverter());
     }
 
-    public static Dictionary<string, List<string>> GetItemsFromYaml(string absolutePath)
+
+    public static void AddPropertyRecursive(IDictionary<string, object> dict, object property, params string[] names)
+    {
+        if (names.Length == 0)
+        {
+            return;
+        }
+
+        while (names.Length > 1)
+        {
+            var name = names[0];
+            names = names.Skip(1).ToArray();
+            if (!dict.TryGetValue(names[0], out var value))
+            {
+                dict.Add(names[0], new Dictionary<string, object>());
+            }
+
+            if (dict[name] is IDictionary<string, object> child)
+            {
+                dict = child;
+            }
+        }
+
+        dict[names[0]] = property;
+    }
+
+    public static object? GetPropertyRecursive(IDictionary<string, object> dict, params string[] names)
+    {
+        if (names.Length == 0)
+        {
+            return null;
+        }
+
+        while (names.Length > 1)
+        {
+            var name = names[0];
+            names = names.Skip(1).ToArray();
+            if (!dict.TryGetValue(names[0], out var value))
+            {
+                return null;
+            }
+
+            if (dict[name] is IDictionary<string, object> child)
+            {
+                dict = child;
+            }
+        }
+
+        return dict[names[0]];
+    }
+
+    public static Dictionary<string, List<string>> GetItemRecordsFromYaml(string absolutePath)
     {
         Dictionary<string, List<string>> ret = [];
         if (ReadYamlAsObject(absolutePath) is not ExpandoObject yaml || yaml.AsReadOnly() is not { } yamlDict ||

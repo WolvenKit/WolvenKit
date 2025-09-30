@@ -96,6 +96,20 @@ public class Cr2WTools
         return cr2WFile;
     }
 
+    public CR2WFile? ReadCr2WNoException(string absolutePath)
+    {
+        try
+        {
+            return ReadCr2W(absolutePath);
+        }
+        catch
+        {
+            // do nothing
+        }
+
+        return null;
+    }
+
     #endregion
 
     private void SaveHashedValues(CR2WFile file)
