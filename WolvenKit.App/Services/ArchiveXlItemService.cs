@@ -154,9 +154,12 @@ public class ArchiveXlItemService
         }
 
         // Items go into moddername/equipment/itemdataslot/projectname
-        itemData.FilesRelPath = Path
-            .Join(_settingsManager.ModderName, "equipment", itemData.Slot.ToString(), activeProject.ModName)
-            .ToFilePath();
+        itemData.FilesRelPath = Path.Join(
+            _settingsManager.ModderName,
+            "equipment",
+            itemData.Slot.ToString().Replace("outer_", "").Replace("inner_", ""),
+            itemData.ItemName
+        ).ToFilePath();
 
         // Control files go into the folder of any existing csv file in the project, or the default path
         itemData.ControlFilesRelPath =
