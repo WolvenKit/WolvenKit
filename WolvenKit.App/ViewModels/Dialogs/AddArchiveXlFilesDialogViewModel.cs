@@ -16,7 +16,6 @@ public partial class AddArchiveXlFilesDialogViewModel : DialogViewModel
     private ISettingsManager _settingsManager;
 
     [ObservableProperty] private string? _itemName;
-    [ObservableProperty] private bool _createControlFiles;
     [ObservableProperty] private EquipmentItemSlot? _slot;
     [ObservableProperty] private EquipmentItemSubSlot? _subSlot;
     [ObservableProperty] private EquipmentExSlot? _eqExSlot;
@@ -33,6 +32,8 @@ public partial class AddArchiveXlFilesDialogViewModel : DialogViewModel
 
     // for validation: disables/enables the button
     [ObservableProperty] private bool? _isValid;
+
+    [ObservableProperty] private List<string>? _variants;
 
     // Dropdown selection options
     [ObservableProperty] private List<EquipmentItemSubSlot>? _equipmentItemSubSlots;
@@ -59,10 +60,10 @@ public partial class AddArchiveXlFilesDialogViewModel : DialogViewModel
         SubSlot = EquipmentItemSubSlot.None;
         EqExSlot = EquipmentExSlot.None;
 
+        Variants = [];
+
         HidingTags = [];
         GarmentSupportTag = GarmentSupportTags.None;
-
-        CreateControlFiles = !activeProject.Files.Any(x => x.HasFileExtension("csv"));
 
         IsHeadItem = false;
         HideInFpp = false;
@@ -72,14 +73,26 @@ public partial class AddArchiveXlFilesDialogViewModel : DialogViewModel
         HasSlot = false;
     }
 
-    public ArchiveXlItem CollectItemInfo() => new()
+    public ArchiveXlItem CollectItemInfo()
     {
-        CreateControlFiles = CreateControlFiles,
-        ItemName = ItemName ?? string.Empty,
-        Slot = Slot ?? EquipmentItemSlot.Head,
-        SubSlot = SubSlot ?? EquipmentItemSubSlot.None,
-        EqExSlot = EqExSlot ?? EquipmentExSlot.None
-    };
+        var ret = new ArchiveXlItem()
+        {
+            ItemName = ItemName ?? string.Empty,
+            Slot = Slot ?? EquipmentItemSlot.Head,
+            SubSlot = SubSlot ?? EquipmentItemSubSlot.None,
+            EqExSlot = EqExSlot ?? EquipmentExSlot.None,
+            HidingTags = HidingTags ?? [],
+            GarmentSupportTag = GarmentSupportTag,
+            Variants = Variants ?? [],
+        };
+
+        if (ret.Variants.Count == 0)
+        {
+            ret.Variants.Add("default");
+        }
+
+        return ret;
+    }
 
     public void SetItemSlot(EquipmentItemSlot slot)
     {

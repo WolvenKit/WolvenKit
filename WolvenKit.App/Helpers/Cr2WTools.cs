@@ -30,7 +30,6 @@ public class Cr2WTools
         _parserService = parserService;
     }
 
-
     #region cr2w
 
     public bool WriteCr2W(CR2WFile cr2WFile, string? absolutePath)

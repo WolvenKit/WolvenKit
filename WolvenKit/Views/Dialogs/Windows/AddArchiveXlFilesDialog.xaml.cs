@@ -1,11 +1,13 @@
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using ReactiveUI;
+using Syncfusion.Windows.Controls.Input;
 using WolvenKit.App;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
@@ -28,11 +30,6 @@ namespace WolvenKit.Views.Dialogs.Windows
             this.WhenActivated(disposables =>
             {
                 this.Bind(ViewModel,
-                        x => x.CreateControlFiles,
-                        x => x.ControlFilesCheckbox.IsChecked)
-                    .DisposeWith(disposables);
-
-                this.Bind(ViewModel,
                         x => x.ItemName,
                         x => x.ItemNameTextBox.Text)
                     .DisposeWith(disposables);
@@ -49,42 +46,6 @@ namespace WolvenKit.Views.Dialogs.Windows
         {
             Owner = owner;
             return ShowDialog();
-        }
-
-        private readonly ItemNameValidationRule _itemRule = new();
-        private void ItemName_OnKeyUp(object sender, KeyEventArgs e)
-        {
-            var bindingExpression = ItemNameTextBox.GetBindingExpression(TextBox.TextProperty);
-            if (bindingExpression == null)
-            {
-                return;
-            }
-
-            var validationResult = _itemRule.Validate(ItemNameTextBox.Text, CultureInfo.CurrentCulture);
-            if (!validationResult.IsValid)
-            {
-                Validation.MarkInvalid(bindingExpression,
-                    new ValidationError(_itemRule, bindingExpression, validationResult.ErrorContent, null));
-            }
-            else
-            {
-                Validation.ClearInvalid(bindingExpression);
-            }
-
-            SetButtonStatesFromControlValidity();
-        }
-
-        private static bool HasValidationError(Control control) =>
-            control.GetBindingExpression(TextBox.TextProperty) is not null && Validation.GetHasError(control);
-
-        private void SetButtonStatesFromControlValidity()
-        {
-            if (ViewModel is null)
-            {
-                return;
-            }
-
-            ViewModel.IsValid = !HasValidationError(ItemNameTextBox);
         }
 
         // Enable/Disable subtype and EqEx type based on selected item type
@@ -152,6 +113,7 @@ namespace WolvenKit.Views.Dialogs.Windows
             model.GarmentSupportTag = tag;
         }
 
+
         private void EquipmentExSlot_OnChanged(object sender, SelectionChangedEventArgs e)
         {
             if (sender is not ComboBox comboBox || ViewModel is not AddArchiveXlFilesDialogViewModel model)
@@ -182,6 +144,36 @@ namespace WolvenKit.Views.Dialogs.Windows
             }
 
             model.SubSlot = tag;
+        }
+
+        private void ItemVariants_FocusLost(object sender, RoutedEventArgs e)
+        {
+            if (sender is not SfTextBoxExt textBox || ViewModel is not AddArchiveXlFilesDialogViewModel model)
+            {
+                return;
+            }
+
+            model.Variants =
+                [.. textBox.Text.Split(",", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)];
+        }
+
+        private void HidingTags_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ViewModel is not { } vm)
+            {
+                return;
+            }
+
+            var hidingTags = vm.HidingTags ?? [];
+
+            hidingTags.AddRange(e.AddedItems.OfType<ArchiveXlHidingTags>());
+
+            foreach (var removedItem in e.RemovedItems.OfType<ArchiveXlHidingTags>())
+            {
+                hidingTags.Remove(removedItem);
+            }
+
+            vm.HidingTags = hidingTags.Distinct().ToList();
         }
     }
 }

@@ -129,20 +129,9 @@
                         </MenuItem.Icon>
                     </MenuItem>
 
-                    <!-- AppViewModel.AddArchiveXlFilesCommand -->
-                    <MenuItem
-                        x:Name="MenuItemAddAxlControlFiles"
-                        Margin="2,1"
-                        Header="ArchiveXL control files"
-                        ToolTip="Adds a .factory, a .csv, a .yaml and an .archive.xl">
-                        <MenuItem.Icon>
-                            <local:IconBox
-                                IconPack="Material"
-                                Kind="GamepadDown"
-                                Size="{DynamicResource WolvenKitIconTiny}"
-                                Foreground="{StaticResource WolvenKitYellow}" />
-                        </MenuItem.Icon>
-                    </MenuItem>
+                    <Separator />
+
+                    <!-- ArchiveXL item files -->
                     <MenuItem
                         x:Name="MenuItemAddAxlItemFiles"
                         Margin="2,1"
