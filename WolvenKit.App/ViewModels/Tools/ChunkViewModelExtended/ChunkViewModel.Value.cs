@@ -658,12 +658,12 @@ public partial class ChunkViewModel
                 break;
             case graphGraphConnectionDefinition conn:
                 List<string> nameParts = [];
-                if (conn.Source.GetValue() is graphGraphSocketDefinition source)
+                if (conn.Source?.GetValue() is graphGraphSocketDefinition source)
                 {
                     nameParts.Add($"[{source.Connections.Count}] {source.Name.GetResolvedText()}");
                 }
 
-                if (conn.Destination.GetValue() is graphGraphSocketDefinition dest)
+                if (conn.Destination?.GetValue() is graphGraphSocketDefinition dest)
                 {
                     nameParts.Add($"[{dest.Connections.Count}] {dest.Name.GetResolvedText()}");
                 }
