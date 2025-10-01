@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using WolvenKit.App.Models.ProjectManagement.Project;
@@ -35,6 +36,53 @@ public static class InkatlasImageGenerator
         cr2WTools.WriteCr2W(cr2WFile, Path.Combine(absoluteSourcePath, $"{atlasFileName}.inkatlas"));
     }
 
+
+    public static void GenerateDummyIcons(string folderPath, string prefix, string[] variants)
+    {
+        Directory.CreateDirectory(folderPath);
+        try
+        {
+            foreach (var file in Directory.GetFiles(folderPath))
+            {
+                File.Delete(file);
+            }
+        }
+        catch
+        {
+            // don't delete, we'll have extra items
+        }
+
+        foreach (var variant in variants)
+        {
+            var fileName = Path.Combine(folderPath, $"{prefix}{variant}.png");
+
+
+            using var bmp = new Bitmap(160, 160);
+            using var g = Graphics.FromImage(bmp);
+
+            // Use a simpler font constructor and ensure high quality rendering
+            using var font = new Font("Arial", 14, FontStyle.Bold); // Simplified font creation
+            using var brush = new SolidBrush(Color.Black); // Use SolidBrush instead of Brushes.Black
+            using var stringFormat = new StringFormat()
+            {
+                Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center
+            };
+
+            // Clear background white
+            g.Clear(Color.White);
+
+
+            // Set high quality rendering
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
+
+            // Draw the text centered using StringFormat
+            g.DrawString(variant, font, brush, new RectangleF(0, 0, bmp.Width, bmp.Height), stringFormat);
+
+            // Save as PNG
+            bmp.Save(fileName, ImageFormat.Png);
+        }
+    }
 
     private static List<AtlasPart> CreateAtlasImages(string pngFolder, string relativeSourcePath, string atlasFileName,
         Cp77Project activeProject, int tileWidth, int tileHeight)

@@ -372,6 +372,30 @@ public class ArchiveXlItemService
         {
             return;
         }
+
+        var iconName = $"{itemData.ItemName}_$(base_color)";
+
+        var absoluteInkatlasPath = Path.Combine(activeProject.ModDirectory, itemData.InkatlasPath);
+
+        if (File.Exists(absoluteInkatlasPath) && _cr2WTools.ReadCr2W(absoluteInkatlasPath) is CR2WFile f)
+        {
+            _logger.Warning($"Inkatlas {itemData.InkatlasPath} already exists, refusing to overwrite.");
+            _logger.Info($"Delete it or run Files -> Add Files -> Generate Inkatlas");
+        }
+
+        var tempFolder = Path.Combine(Path.GetTempPath(), $"iconImages_{itemData.ItemName}");
+        InkatlasImageGenerator.GenerateDummyIcons(tempFolder, iconName.Replace("$(base_color)", ""),
+            itemData.Variants.ToArray());
+
+        InkatlasImageGenerator.GenerateAtlas(
+            tempFolder,
+            Path.GetDirectoryName(itemData.InkatlasPath)!,
+            Path.GetFileName(itemData.InkatlasPath)!,
+            160,
+            160,
+            _cr2WTools,
+            activeProject
+        );
     }
 
     private void AddMeshEntity(ArchiveXlItem itemData)
