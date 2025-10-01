@@ -73,6 +73,18 @@ namespace WolvenKit.Views.Shell
                     return true;
                 };
 
+                Interactions.ShowArchiveXlFilesView = (args) =>
+                {
+                    AddArchiveXlFilesDialog dialog = new(args.activeProject, args.settingsManager);
+
+                    if (dialog.ShowDialog(this) != true)
+                    {
+                        return null;
+                    }
+
+                    return dialog.ViewModel?.CollectItemInfo();
+                };
+
                 Interactions.ShowSelectSaveView = currentSaveGame =>
                 {
                     SaveGameSelectionDialog dialog = new(currentSaveGame);

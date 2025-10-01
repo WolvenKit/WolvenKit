@@ -30,7 +30,6 @@ public class Cr2WTools
         _parserService = parserService;
     }
 
-
     #region cr2w
 
     public bool WriteCr2W(CR2WFile cr2WFile, string? absolutePath)
@@ -94,6 +93,20 @@ public class Cr2WTools
         }
 
         return cr2WFile;
+    }
+
+    public CR2WFile? ReadCr2WNoException(string absolutePath)
+    {
+        try
+        {
+            return ReadCr2W(absolutePath);
+        }
+        catch
+        {
+            // do nothing
+        }
+
+        return null;
     }
 
     #endregion
