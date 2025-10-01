@@ -86,12 +86,12 @@
                 </MenuItem>
 
                 <MenuItem
-                    Command="{Binding OpenInMlsbCommand}"
-                    Header="Open in MlSetupBuilder"
                     Visibility="{Binding Path=IsEnabled,
                                          RelativeSource={RelativeSource Self},
                                          Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}">
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Command="{Binding OpenInMlsbCommand}"
+                    Header="Open in MlSetupBuilder">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Empty"
@@ -493,6 +493,7 @@
                         Grid.Column="1"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         VerticalAlignment="Center"
+                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
                         Text="{Binding Path=Name}" />
 
                     <TextBlock
@@ -500,6 +501,7 @@
                         Grid.Column="1"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         VerticalAlignment="Center"
+                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
                         Text="{Binding Path=Name}" />
 
                     <!-- Copy relative path - Open in Windows Explorer - Open file - Delete -->
@@ -625,6 +627,7 @@
                         Grid.Column="1"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         VerticalAlignment="Center"
+                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
                         Text="{Binding Path=Name}"
                         TextTrimming="CharacterEllipsis" />
                 </Grid>
@@ -1072,6 +1075,7 @@
                 <Style TargetType="syncfusion:TreeGridCell">
                     <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
                 </Style>
 
                 <Style TargetType="syncfusion:TreeGridExpanderCell">
