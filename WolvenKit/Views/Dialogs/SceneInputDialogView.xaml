@@ -5,10 +5,11 @@
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     Title="{Binding Title}"
+    Width="500"
     MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
     MaxWidth="800"
     SizeToContent="Height"
-    Width="500"
+    ResizeMode="NoResize"
     FocusManager.FocusedElement="{Binding ElementName=PrimaryInputTextBox}"
     WindowStartupLocation="CenterScreen">
     <Grid
@@ -35,88 +36,132 @@
                 HelpVisibility="Collapsed"
                 NextVisibility="Collapsed"
                 PageType="Exterior">
-                <StackPanel Margin="10" MinWidth="450">
+                <Grid Margin="{DynamicResource WolvenKitMarginSmallHeader}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
                     <!-- Dropdown Field (conditionally visible) -->
-                    <Grid Margin="0,0,0,10"
-                          Visibility="{Binding ShowDropdown, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Grid
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Margin="{DynamicResource WolvenKitMarginSmallBottom}"
+                        Visibility="{Binding ShowDropdown,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" MinWidth="140" />
+                            <ColumnDefinition Width="Auto" MinWidth="{DynamicResource WolvenKitLabelWidthMedium}" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" 
-                                   Text="{Binding DropdownLabel}" 
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Right"
-                                   Margin="0,0,10,0"
-                                   Foreground="{DynamicResource PrimaryTextBrush}"
-                                   FontSize="{DynamicResource WolvenKitFontSubTitle}"/>
-                        <ComboBox Grid.Column="1"
-                                  Padding="{DynamicResource WolvenKitMarginTiny}"
-                                  FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                                  ItemsSource="{Binding DropdownOptions}"
-                                  SelectedItem="{Binding SelectedDropdownValue, UpdateSourceTrigger=PropertyChanged}"
-                                  IsReadOnly="True" />
+
+                        <TextBlock
+                            Grid.Column="0"
+                            Margin="{DynamicResource WolvenKitMarginSmallRight}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Foreground="{DynamicResource PrimaryTextBrush}"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                            Text="{Binding DropdownLabel}" />
+
+                        <ComboBox
+                            Grid.Column="1"
+                            Padding="{DynamicResource WolvenKitMarginTiny}"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                            ItemsSource="{Binding DropdownOptions}"
+                            SelectedItem="{Binding SelectedDropdownValue,
+                                                   UpdateSourceTrigger=PropertyChanged}"
+                            IsReadOnly="True" />
                     </Grid>
 
                     <!-- Primary Input Field (always visible) -->
-                    <Grid Margin="0,0,0,10">
+                    <Grid
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Margin="{DynamicResource WolvenKitMarginSmallBottom}">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" MinWidth="140" />
+                            <ColumnDefinition Width="Auto" MinWidth="{DynamicResource WolvenKitLabelWidthMedium}" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" 
-                                   Text="{Binding PrimaryLabel}" 
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Right"
-                                   Margin="0,0,10,0"
-                                   Foreground="{DynamicResource PrimaryTextBrush}"
-                                   FontSize="{DynamicResource WolvenKitFontSubTitle}"/>
-                        <TextBox x:Name="PrimaryInputTextBox"
-                                 Grid.Column="1"
-                                 Padding="{DynamicResource WolvenKitMarginTiny}"
-                                 VerticalContentAlignment="Center"
-                                 FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                                 Text="{Binding PrimaryInputValue, UpdateSourceTrigger=PropertyChanged}"
-                                 TextWrapping="Wrap"
-                                 AcceptsReturn="False"
-                                 VerticalScrollBarVisibility="Auto"
-                                 MaxHeight="80" />
+
+                        <TextBlock
+                            Grid.Column="0"
+                            Margin="{DynamicResource WolvenKitMarginTinyRightSide}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Foreground="{DynamicResource PrimaryTextBrush}"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                            Text="{Binding PrimaryLabel}" />
+
+                        <TextBox
+                            x:Name="PrimaryInputTextBox"
+                            Grid.Column="1"
+                            Padding="{DynamicResource WolvenKitMarginTiny}"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                            Text="{Binding PrimaryInputValue,
+                                           UpdateSourceTrigger=PropertyChanged}"
+                            TextWrapping="Wrap"
+                            AcceptsReturn="False"
+                            VerticalScrollBarVisibility="Auto" />
                     </Grid>
 
                     <!-- Secondary Input Checkbox (conditionally visible) -->
-                    <CheckBox Content="{Binding CheckboxText}"
-                              IsChecked="{Binding EnableSecondaryInput}"
-                              VerticalAlignment="Center"
-                              FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                              Margin="0,5,0,10"
-                              Visibility="{Binding ShowSecondaryInput, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-
-                    <!-- Secondary Input Field (conditionally visible) -->
-                    <Grid Margin="0,0,0,0" 
-                          Visibility="{Binding EnableSecondaryInput, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Grid
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Margin="{DynamicResource WolvenKitMarginSmallBottom}"
+                        VerticalAlignment="Top"
+                        Visibility="{Binding ShowSecondaryInput,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" MinWidth="140" />
+                            <ColumnDefinition Width="Auto" MinWidth="{DynamicResource WolvenKitLabelWidthMedium}" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" 
-                                   Text="{Binding SecondaryLabel}" 
-                                   VerticalAlignment="Top"
-                                   HorizontalAlignment="Right"
-                                   Margin="0,8,10,0"
-                                   Foreground="{DynamicResource PrimaryTextBrush}"
-                                   FontSize="{DynamicResource WolvenKitFontSubTitle}"/>
-                        <TextBox Grid.Column="1"
-                                 Padding="{DynamicResource WolvenKitMarginTiny}"
-                                 VerticalContentAlignment="Top"
-                                 FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                                 Text="{Binding SecondaryInputValue, UpdateSourceTrigger=PropertyChanged}"
-                                 TextWrapping="Wrap"
-                                 AcceptsReturn="True"
-                                 MinHeight="60"
-                                 MaxHeight="120"
-                                 VerticalScrollBarVisibility="Auto" />
+
+                        <CheckBox
+                            Grid.Column="1"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                            Content="{Binding CheckboxText}"
+                            IsChecked="{Binding EnableSecondaryInput}" />
                     </Grid>
-                </StackPanel>
+
+                    <!-- Secondary Input Field (conditionally visible) -->
+                    <Grid
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Margin="{DynamicResource WolvenKitMarginSmallBottom}"
+                        Visibility="{Binding EnableSecondaryInput,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" MinWidth="{DynamicResource WolvenKitLabelWidthMedium}" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock
+                            Grid.Column="0"
+                            Margin="{DynamicResource WolvenKitMarginTinyRightSide}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Foreground="{DynamicResource PrimaryTextBrush}"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                            Text="{Binding SecondaryLabel}" />
+
+                        <TextBox
+                            Grid.Column="1"
+                            Padding="{DynamicResource WolvenKitMarginTiny}"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                            Text="{Binding SecondaryInputValue,
+                                           UpdateSourceTrigger=PropertyChanged}"
+                            TextWrapping="Wrap"
+                            AcceptsReturn="True"
+                            VerticalScrollBarVisibility="Auto" />
+                    </Grid>
+                </Grid>
             </syncfusion:WizardPage>
         </syncfusion:WizardControl>
     </Grid>
