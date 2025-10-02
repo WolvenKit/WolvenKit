@@ -21,6 +21,7 @@ using WolvenKit.Helpers;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
+using IMaterial = WolvenKit.RED4.Types.IMaterial;
 
 namespace WolvenKit.App.Helpers;
 
@@ -35,6 +36,35 @@ public partial class ProjectResourceTools
     private readonly ISettingsManager _settingsService;
 
     private readonly Cr2WTools _crwWTools;
+
+
+    private static readonly List<string> s_ignoredDependencyPartials =
+    [
+        ".mltemplate",
+        ".mt",
+        ".remt",
+        Path.Join("base", "surfaces", "microblends"),
+        Path.Join("base", "materials"),
+        Path.Join("base", "fx"),
+        Path.Join("ep1", "materials"),
+        Path.Join("ep1", "fx"),
+        "engine",
+    ];
+
+    public static bool IsIgnoredDependency(IGameFile gameFile)
+    {
+        return s_ignoredDependencyPartials.Contains(gameFile.Extension) ||
+               s_ignoredDependencyPartials.Any(p => gameFile.FileName.StartsWith(p));
+    }
+
+    private static bool IsIgnoredDependency(ResourcePath resourcePath)
+    {
+        return resourcePath.GetResolvedText() is not string path ||
+               Path.GetExtension(path) is not string extension ||
+               s_ignoredDependencyPartials.Contains(extension) ||
+               s_ignoredDependencyPartials.Any(p => path.StartsWith(p));
+    }
+
 
     /// <summary>
     /// File extensions from source/archive that require updating of resource files
@@ -169,9 +199,13 @@ public partial class ProjectResourceTools
         return Path.GetDirectoryName(currentFilePath) ?? "";
     }
 
-    public async Task<Dictionary<string, string>> AddDependenciesToProjectPathAsync(string destFolderRelativePath, HashSet<ResourcePath> resourcePaths)
+    public async Task<Dictionary<string, string>> AddDependenciesToProjectPathAsync(
+        string destFolderRelativePath,
+        HashSet<ResourcePath> resourcePaths,
+        bool skipExistingFiles = false
+    )
     {
-        if (resourcePaths.Count == 0)
+        if (resourcePaths.Count == 0 || _projectManager.ActiveProject is not Cp77Project currentProject)
         {
             return [];
         }
@@ -188,6 +222,7 @@ public partial class ProjectResourceTools
             {
                 try
                 {
+                    // ReSharper disable once VariableHidesOuterVariable
                     if (resourcePaths.Count == 0 || _projectManager.ActiveProject is not Cp77Project currentProject)
                     {
                         tcs.SetResult();
@@ -225,7 +260,6 @@ public partial class ProjectResourceTools
                         }
                     }
 
-
                     var existingFiles = pathsAndDestinations.Where(kvp =>
                     {
                         var fileName = Path.GetFileName(kvp.Key);
@@ -233,18 +267,22 @@ public partial class ProjectResourceTools
                         return File.Exists(Path.Combine(absolutePath, fileName)) && !Directory.Exists(Path.Combine(absolutePath, fileName));
                     }).Select((kvp) => kvp.Key).ToList();
 
-                    var overwriteFiles = existingFiles.Count == 0 || Interactions.ShowConfirmation((
-                        $"The following files already exist in the project. Do you want to overwrite them?\n{string.Join('\n', existingFiles)}",
-                        "Files Already Exist",
-                        WMessageBoxImage.Question,
-                        WMessageBoxButtons.YesNo)) is WMessageBoxResult.Yes;
+                    var overwriteFiles = !skipExistingFiles
+                                         && (existingFiles.Count == 0 ||
+                                             Interactions.ShowConfirmation((
+                                                 $"The following files already exist in the project. Do you want to overwrite them?\n{string.Join('\n', existingFiles)}",
+                                                 "Files Already Exist",
+                                                 WMessageBoxImage.Question,
+                                                 WMessageBoxButtons.YesNo)) is WMessageBoxResult
+                                                 .Yes);
 
                     List<string> filesToRemove = [];
                     foreach (var kvp in pathsAndDestinations)
                     {
                         try
                         {
-                            AddFileToProjectFolder(archiveRoot, kvp.Key, kvp.Value, pathReplacements, overwriteFiles);
+                            AddFileToProjectFolder(archiveRoot, kvp.Key, kvp.Value, pathReplacements, overwriteFiles,
+                                skipExistingFiles);
                         }
                         catch (FileNotFoundException e)
                         {
@@ -280,6 +318,7 @@ public partial class ProjectResourceTools
         }
         finally
         {
+            currentProject.DeleteEmptyFolders(_loggerService);
             _semaphore.Release();
         }
     }
@@ -317,12 +356,13 @@ public partial class ProjectResourceTools
     /// <param name="targetResourcePath">Path of target resource (the original resource will be moved here)</param>
     /// <param name="pathReplacements">Dictionary with replacements in path (string => string)</param>
     /// <param name="overwriteFiles">boolean: overwrite files?</param>
+    /// <param name="skipExistingFiles">boolean: skip files silently?</param>
     /// <exception cref="FileNotFoundException"></exception>
     private void AddFileToProjectFolder(string projectRoot, ResourcePath resourcePath, ResourcePath targetResourcePath,
-        Dictionary<string, string> pathReplacements, bool overwriteFiles)
+        Dictionary<string, string> pathReplacements, bool overwriteFiles, bool skipExistingFiles)
     {
         if (resourcePath.GetResolvedText() is not string sourceRelativePath
-            || string.IsNullOrEmpty(sourceRelativePath))
+            || string.IsNullOrEmpty(sourceRelativePath) || _projectManager.ActiveProject is not { } activeProject)
         {
             return;
         }
@@ -341,9 +381,16 @@ public partial class ProjectResourceTools
             return;
         }
 
+        var fileName = Path.GetFileName(sourceRelativePath);
+        var targetAbsolutePath = Path.Combine(projectRoot, targetRelativePath);
+
         // We already have this file
-        if (_projectManager.ActiveProject?.Files.Contains(resourcePath!) == true)
+        if (activeProject.Files.Contains(resourcePath.GetResolvedText()!) || File.Exists(targetAbsolutePath))
         {
+            if (skipExistingFiles)
+            {
+                pathReplacements.TryAdd(sourceRelativePath, Path.Combine(targetRelativePath, fileName));
+            }
             return;
         }
 
@@ -360,20 +407,22 @@ public partial class ProjectResourceTools
             throw new FileNotFoundException(targetRelativePath);
         }
 
-        var targetAbsolutePath = Path.Combine(projectRoot, targetRelativePath);
         var sourceAbsolutePath = Path.Combine(projectRoot, sourceRelativePath);
-        var targetAbsoluteFile = Path.Combine(targetAbsolutePath, Path.GetFileName(sourceRelativePath));
+        var targetAbsoluteFile = Path.Combine(targetAbsolutePath, fileName);
 
         if (File.Exists(targetAbsoluteFile))
         {
-            if (!overwriteFiles)
+            if (skipExistingFiles)
             {
+                pathReplacements.TryAdd(sourceRelativePath, Path.Combine(targetRelativePath, fileName));
                 return;
             }
 
-            File.Delete(targetAbsoluteFile);
+            if (overwriteFiles)
+            {
+                File.Delete(targetAbsoluteFile);
+            }
         }
-
 
         if (!Directory.Exists(targetAbsolutePath))
         {
@@ -383,7 +432,7 @@ public partial class ProjectResourceTools
         File.Move(sourceAbsolutePath, targetAbsoluteFile, true);
 
         // pop it into our map
-        pathReplacements.TryAdd(sourceRelativePath, Path.Combine(targetRelativePath, Path.GetFileName(sourceRelativePath)));
+        pathReplacements.TryAdd(sourceRelativePath, Path.Combine(targetRelativePath, fileName));
     }
 
     private const string s_tempDirSuffix = "_wolvenkit_tempdir";
@@ -790,173 +839,171 @@ public partial class ProjectResourceTools
             });
 
             await Task.WhenAll(cr2WTasks);
+        }
+    }
 
-            return;
+    private CR2WFile ReplacePathInFile(CR2WFile cr2W, string oldPathStr, string newPathStr, out bool wasModified)
+    {
+        wasModified = false;
 
-            CR2WFile ReplacePathInFile(CR2WFile cr2W, string oldPathStr, string newPathStr, out bool wasModified)
+        if (oldPathStr == newPathStr || _projectManager.ActiveProject is not { } activeProject)
+        {
+            return cr2W;
+        }
+
+        // Mesh needs to replace in strings for @context materials
+        if ((cr2W.RootChunk is JsonResource or C2dArray or CMesh) &&
+            ReplaceInStrings())
+        {
+            wasModified = true;
+        }
+
+
+        if ((cr2W.RootChunk is not (JsonResource or C2dArray)) &&
+            ReplaceInIRedRefs())
+        {
+            wasModified = true;
+        }
+
+        return cr2W;
+
+
+        bool ReplaceInStrings()
+        {
+            var ret = false;
+            var refs = cr2W.FindType(typeof(IRedString));
+            foreach (var result in refs)
             {
-                wasModified = false;
-
-                if (oldPathStr == newPathStr)
+                var stringValue = result.Value switch
                 {
-                    return cr2W;
+                    CString resourcePath => resourcePath.GetString(),
+                    _ => result.Value.ToString() ?? ""
+                };
+
+                if (string.IsNullOrEmpty(stringValue) || !stringValue.Contains(oldPathStr))
+                {
+                    continue;
                 }
 
-                // Mesh needs to replace in strings for @context materials
-                if ((cr2W.RootChunk is JsonResource or C2dArray or CMesh) &&
-                    ReplaceInStrings())
+                // we need to get the parent node by xpath
+                var resultName = result.Path.Split([':', '.']).LastOrDefault();
+                if (string.IsNullOrEmpty(resultName))
                 {
-                    wasModified = true;
+                    continue;
                 }
 
-
-                if ((cr2W.RootChunk is not (JsonResource or C2dArray)) &&
-                    ReplaceInIRedRefs())
+                var searchResult = cr2W.GetFromXPath(result.Path[..^(resultName.Length + 1)]);
+                if (searchResult.Item2 is not IRedType parent)
                 {
-                    wasModified = true;
+                    continue;
                 }
 
-                return cr2W;
-
-
-                bool ReplaceInStrings()
+                switch (parent)
                 {
-                    var ret = false;
-                    var refs = cr2W.FindType(typeof(IRedString));
-                    foreach (var result in refs)
-                    {
-                        var stringValue = result.Value switch
-                        {
-                            CString resourcePath => resourcePath.GetString(),
-                            _ => result.Value.ToString() ?? ""
-                        };
-
-                        if (string.IsNullOrEmpty(stringValue) || !stringValue.Contains(oldPathStr))
-                        {
-                            continue;
-                        }
-
-                        // we need to get the parent node by xpath
-                        var resultName = result.Path.Split([':', '.']).LastOrDefault();
-                        if (string.IsNullOrEmpty(resultName))
-                        {
-                            continue;
-                        }
-
-                        var searchResult = cr2W.GetFromXPath(result.Path[..^(resultName.Length + 1)]);
-                        if (searchResult.Item2 is not IRedType parent)
-                        {
-                            continue;
-                        }
-
-                        switch (parent)
-                        {
-                            case IList list when int.TryParse(resultName, out var idx):
-                                list[idx] = (CString)stringValue.Replace(oldPathStr, newPathStr);
-                                ret = true;
-                                break;
-                            // CPUNameU64
-                            case CKeyValuePair kvp when resultName == "Value" && kvp.Value is CName str &&
-                                                        str.GetResolvedText() is string s:
-                                kvp.Value = (CName)s.Replace(oldPathStr, newPathStr);
-                                ret = true;
-                                break;
-                        }
-                    }
-
-                    return ret;
-                }
-
-                bool ReplaceInIRedRefs()
-                {
-                    var refs = cr2W.FindType(typeof(IRedRef));
-                    var ret = false;
-                    foreach (var result in refs)
-                    {
-                        if (result.Value is not IRedRef resourceReference ||
-                            resourceReference.DepotPath == ResourcePath.Empty ||
-                            resourceReference.DepotPath.GetResolvedText() is not string depotPath)
-                        {
-                            continue;
-                        }
-
-                        if (depotPath.StartsWith(ArchiveXlHelper.ArchiveXLSubstitutionPrefix) && ArchiveXlHelper
-                                .ResolveDynamicPaths(depotPath, activeProject).Contains(oldPathStr))
-                        {
-                            // handle dynamic substitution
-                            newPathStr = ArchiveXlHelper.ReplaceInDynamicPath(depotPath, newPathStr);
-                        }
-                        else if (depotPath != oldPathStr)
-                        {
-                            continue;
-                        }
-
-                        var parentPath = string.Join('.', result.Path.Split('.')[..^1]);
-
-                        var newValue = (IRedRef)RedTypeManager.CreateRedType(resourceReference.RedType,
-                            (ResourcePath)newPathStr,
-                            resourceReference.Flags);
-
-                        if (result.Name.Contains(':'))
-                        {
-                            var parts = result.Name.Split(':');
-                            if (parts.Length != 2)
-                            {
-                                throw new Exception($"Failed to split {result.Name} in two parts");
-                            }
-
-                            var parentArray = cr2W.GetFromXPath(string.Join('.', parentPath, parts[0]));
-                            if (int.TryParse(parts[1], out var index) &&
-                                parentArray is { Item1: true, Item2: IList arr })
-                            {
-                                arr[index] = newValue;
-                                ret = true;
-                                continue;
-                            }
-                        }
-
-                        var parentClass = cr2W.GetFromXPath(parentPath);
-
-                        if (!parentClass.Item1)
-                        {
-                            throw new Exception($"Failed to find {result.Name} in {parentPath}");
-                        }
-
-                        switch (parentClass.Item2)
-                        {
-                            case null:
-                                throw new InvalidDataException("Item2 should not be null");
-                            case RedBaseClass cls:
-                                cls.SetProperty(result.Name, newValue);
-                                break;
-                            case CKeyValuePair kvp:
-                                kvp.Value = newValue;
-                                break;
-                            case IRedHandle handle
-                                when handle.GetValue() is gameuiAppearanceInfo appInfo:
-                                appInfo.Resource =
-                                    new CResourceAsyncReference<appearanceAppearanceResource>(newValue.DepotPath);
-                                break;
-                            case IRedHandle ira:
-                                throw new WolvenKitException(-1,
-                                    $"Can't replace in IRedHandle property type {ira.RedType}");
-                            default:
-                                throw new WolvenKitException(-1,
-                                    $"Can't replace in property type {parentClass.Item2?.GetType().Name}");
-                        }
-
-
+                    case IList list when int.TryParse(resultName, out var idx):
+                        list[idx] = (CString)stringValue.Replace(oldPathStr, newPathStr);
                         ret = true;
-                    }
-
-                    return ret;
+                        break;
+                    // CPUNameU64
+                    case CKeyValuePair kvp when resultName == "Value" && kvp.Value is CName str &&
+                                                str.GetResolvedText() is string s:
+                        kvp.Value = (CName)s.Replace(oldPathStr, newPathStr);
+                        ret = true;
+                        break;
                 }
             }
 
+            return ret;
+        }
+
+        bool ReplaceInIRedRefs()
+        {
+            var refs = cr2W.FindType(typeof(IRedRef));
+            var ret = false;
+            foreach (var result in refs)
+            {
+                if (result.Value is not IRedRef resourceReference ||
+                    resourceReference.DepotPath == ResourcePath.Empty ||
+                    resourceReference.DepotPath.GetResolvedText() is not string depotPath)
+                {
+                    continue;
+                }
+
+                if (depotPath.StartsWith(ArchiveXlHelper.ArchiveXLSubstitutionPrefix) && ArchiveXlHelper
+                        .ResolveDynamicPaths(depotPath, activeProject).Contains(oldPathStr))
+                {
+                    // handle dynamic substitution
+                    newPathStr = ArchiveXlHelper.ReplaceInDynamicPath(depotPath, newPathStr);
+                }
+                else if (depotPath != oldPathStr)
+                {
+                    continue;
+                }
+
+                var parentPath = string.Join('.', result.Path.Split('.')[..^1]);
+
+                var newValue = (IRedRef)RedTypeManager.CreateRedType(resourceReference.RedType,
+                    (ResourcePath)newPathStr,
+                    resourceReference.Flags);
+
+                if (result.Name.Contains(':'))
+                {
+                    var parts = result.Name.Split(':');
+                    if (parts.Length != 2)
+                    {
+                        throw new Exception($"Failed to split {result.Name} in two parts");
+                    }
+
+                    var parentArray = cr2W.GetFromXPath(string.Join('.', parentPath, parts[0]));
+                    if (int.TryParse(parts[1], out var index) &&
+                        parentArray is { Item1: true, Item2: IList arr })
+                    {
+                        arr[index] = newValue;
+                        ret = true;
+                        continue;
+                    }
+                }
+
+                var parentClass = cr2W.GetFromXPath(parentPath);
+
+                if (!parentClass.Item1)
+                {
+                    throw new Exception($"Failed to find {result.Name} in {parentPath}");
+                }
+
+                switch (parentClass.Item2)
+                {
+                    case null:
+                        throw new InvalidDataException("Item2 should not be null");
+                    case RedBaseClass cls:
+                        cls.SetProperty(result.Name, newValue);
+                        break;
+                    case CKeyValuePair kvp:
+                        kvp.Value = newValue;
+                        break;
+                    case IRedHandle handle when handle.GetValue() is gameuiAppearanceInfo appInfo:
+                        appInfo.Resource =
+                            new CResourceAsyncReference<appearanceAppearanceResource>(newValue.DepotPath);
+                        break;
+                    case IRedHandle handle when handle.GetValue() is CMaterialInstance mInstance:
+                        mInstance.BaseMaterial = new CResourceReference<IMaterial>(newValue.DepotPath);
+                        break;
+                    case IRedHandle ira:
+                        throw new WolvenKitException(-1,
+                            $"Can't replace in IRedHandle property type {ira.RedType}");
+                    default:
+                        throw new WolvenKitException(-1,
+                            $"Can't replace in property type {parentClass.Item2?.GetType().Name}");
+                }
 
 
+                ret = true;
+            }
+
+            return ret;
         }
     }
+
 
     /// <summary>
     /// Deletes empty parent directories of a given file or folder path.
@@ -1222,4 +1269,65 @@ public partial class ProjectResourceTools
 
     [GeneratedRegex(@"Items\.\w+""(?!,)(\s)", RegexOptions.Multiline)]
     private static partial Regex AtelierLastItemCode();
+
+    public async Task AddDependenciesToProject(CR2WFile cr2W, string destFolder)
+    {
+        if (cr2W.RootChunk is not CMesh || _projectManager.ActiveProject is not { } activeProject)
+        {
+            return;
+        }
+
+        var materialDependencies = cr2W.FindType(typeof(IRedRef)).Select(r => r.Value)
+            .OfType<IRedRef>()
+            .Where(refPath => _archiveManager.Lookup(refPath.DepotPath, ArchiveManagerScope.Basegame).HasValue)
+            .Select(r => r.DepotPath)
+            .Where(d => !IsIgnoredDependency(d))
+            .ToHashSet();
+
+        if (materialDependencies.Count == 0)
+        {
+            return;
+        }
+
+        Directory.CreateDirectory(destFolder);
+
+        if (string.IsNullOrEmpty(destFolder))
+        {
+            _loggerService.Info("Adding dependencies aborted by user input");
+            return;
+        }
+
+        // Use search and replace to fix file paths
+        var pathReplacements = await AddDependenciesToProjectPathAsync(
+            destFolder, materialDependencies, true
+        );
+
+        if (pathReplacements.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var kvp in pathReplacements)
+        {
+            ReplacePathInFile(cr2W, kvp.Key, kvp.Value, out var _);
+        }
+
+        // All files were moved. Occasionally, we have leftover ones (duplicates).
+        foreach (var absolutePath in pathReplacements.Keys
+                     .Select(relPath => Path.Combine(activeProject.ModDirectory, relPath))
+                     .Where(File.Exists))
+        {
+            try
+            {
+                File.Delete(absolutePath);
+            }
+            catch
+            {
+                // don't delete
+            }
+        }
+
+        activeProject.DeleteEmptyFolders(_loggerService);
+    }
+
 }

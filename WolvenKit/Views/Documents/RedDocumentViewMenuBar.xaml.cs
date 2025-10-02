@@ -629,20 +629,6 @@ namespace WolvenKit.Views.Documents
         private string GetTextureDirForDependencies(bool useTextureSubfolder) =>
             ViewModel?.GetTextureDirForDependencies(useTextureSubfolder) ?? "";
 
-        // If this is static, we can't use Path.Join
-        private readonly List<string> _ignoredDependencyPartials =
-        [
-            ".mltemplate",
-            ".mt",
-            ".remt",
-            Path.Join("base", "surfaces", "microblends"),
-            Path.Join("base", "materials"),
-            Path.Join("base", "fx"),
-            Path.Join("ep1", "materials"),
-            Path.Join("ep1", "fx"),
-            "engine",
-        ];
-
         private readonly SemaphoreSlim _semaphore = new(1, 1); //  only one thread/task can enter
 
         private async Task AddDependenciesToFileAsync(ChunkViewModel _, bool addBasegameFiles = false)
@@ -687,7 +673,8 @@ namespace WolvenKit.Views.Documents
                                 return true;
                             }
 
-                            return addBasegameFiles && gameFileOpt.HasValue && !IsIgnoredDependency(gameFileOpt.Value);
+                            return addBasegameFiles && gameFileOpt.HasValue &&
+                                   !ProjectResourceTools.IsIgnoredDependency(gameFileOpt.Value);
                         }
                     )
                     .ToHashSet();
@@ -761,12 +748,6 @@ namespace WolvenKit.Views.Documents
                 _semaphore.Release();
             }
 
-            return;
-            bool IsIgnoredDependency(IGameFile gameFile)
-            {
-                return _ignoredDependencyPartials.Contains(gameFile.Extension) ||
-                       _ignoredDependencyPartials.Any(p => gameFile.FileName.StartsWith(p));
-            }
         }
 
         private static async Task SearchAndReplaceInChildNodesAsync(ChunkViewModel cvm,
