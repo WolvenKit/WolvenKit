@@ -73,9 +73,9 @@ namespace WolvenKit.Views.Shell
                     return true;
                 };
 
-                Interactions.ShowArchiveXlFilesView = (args) =>
+                Interactions.ShowArchiveXlFilesView = () =>
                 {
-                    AddArchiveXlFilesDialog dialog = new(args.activeProject, args.settingsManager);
+                    AddArchiveXlFilesDialog dialog = new();
 
                     if (dialog.ShowDialog(this) != true)
                     {

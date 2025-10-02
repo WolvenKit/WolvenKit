@@ -18,11 +18,11 @@ namespace WolvenKit.Views.Dialogs.Windows
 {
     public partial class AddArchiveXlFilesDialog : IViewFor<AddArchiveXlFilesDialogViewModel>
     {
-        public AddArchiveXlFilesDialog(Cp77Project activeProject, ISettingsManager settings)
+        public AddArchiveXlFilesDialog()
         {
             InitializeComponent();
 
-            ViewModel = new AddArchiveXlFilesDialogViewModel(activeProject, settings);
+            ViewModel = new AddArchiveXlFilesDialogViewModel();
             DataContext = ViewModel;
 
             Owner = Application.Current.MainWindow;

@@ -1373,7 +1373,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             throw new WolvenKitException(0x5000, "Please configure your modder name in the settings");
         }
 
-        var item = Interactions.ShowArchiveXlFilesView((ActiveProject, SettingsManager));
+        var item = Interactions.ShowArchiveXlFilesView();
         if (item is null)
         {
             return;
