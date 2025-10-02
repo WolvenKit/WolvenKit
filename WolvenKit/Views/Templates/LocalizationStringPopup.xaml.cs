@@ -65,7 +65,7 @@ namespace WolvenKit.Views.Templates
         {
             InitializeComponent();
             Owner = Application.Current.MainWindow;
-            
+
             _viewModel = new LocalizationStringViewModel();
             DataContext = _viewModel;
         }
@@ -86,18 +86,6 @@ namespace WolvenKit.Views.Templates
         {
             get => _viewModel.SecondaryKey;
             set => _viewModel.SecondaryKey = value;
-        }
-
-        private void OkButton_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = true;
-            Close();
-        }
-
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = false;
-            Close();
         }
     }
 }

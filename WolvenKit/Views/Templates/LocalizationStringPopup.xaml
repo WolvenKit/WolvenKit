@@ -1,56 +1,134 @@
-<Window x:Class="WolvenKit.Views.Templates.LocalizationStringPopup"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WolvenKit.Views.Templates"
-        mc:Ignorable="d"
-        Title="Localization String Editor" 
-        Height="300" 
-        Width="400"
-        WindowStartupLocation="CenterOwner"
-        ResizeMode="NoResize">
-    <Grid Margin="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+<Window
+    x:Class="WolvenKit.Views.Templates.LocalizationStringPopup"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    Title="Localization String Editor"
+    Width="500"
+    MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
+    MaxWidth="800"
+    SizeToContent="Height"
+    ResizeMode="NoResize"
+    FocusManager.FocusedElement="{Binding ElementName=FemaleVariantInput}"
+    WindowStartupLocation="CenterScreen">
+    <Grid
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
+        hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
+        <Grid.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <hc:ThemeResources />
+                    <hc:Theme />
+                </ResourceDictionary.MergedDictionaries>
+                <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            </ResourceDictionary>
+        </Grid.Resources>
 
-        <!-- Female Variant -->
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="Female Variant:" Margin="0,0,5,5"/>
-        <TextBox Grid.Row="0" Grid.Column="1" 
-                 Text="{Binding FemaleVariant, UpdateSourceTrigger=PropertyChanged}" 
-                 Margin="0,0,0,5" Height="60" 
-                 TextWrapping="Wrap" AcceptsReturn="True"/>
+        <syncfusion:WizardControl
+            CancelButtonCancelsWindow="True"
+            FinishButtonClosesWindow="True">
+            <syncfusion:WizardPage
+                BackVisibility="Collapsed"
+                CancelVisibility="Visible"
+                FinishVisibility="Visible"
+                HelpVisibility="Collapsed"
+                NextVisibility="Collapsed"
+                PageType="Exterior">
+                <Grid Margin="{DynamicResource WolvenKitMarginSmallHeader}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
 
-        <!-- Male Variant -->
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="Male Variant:" Margin="0,0,5,5"/>
-        <TextBox Grid.Row="1" Grid.Column="1" 
-                 Text="{Binding MaleVariant, UpdateSourceTrigger=PropertyChanged}" 
-                 Margin="0,0,0,5" Height="60" 
-                 TextWrapping="Wrap" AcceptsReturn="True"/>
+                    <Grid
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Margin="{DynamicResource WolvenKitMarginSmallBottom}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" MinWidth="{DynamicResource WolvenKitLabelWidthMedium}" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <!-- Female Variant -->
+                        <TextBlock
+                            Grid.Column="0"
+                            Margin="{DynamicResource WolvenKitMarginSmallRight}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Foreground="{DynamicResource PrimaryTextBrush}"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                            Text="Female Variant:" />
+                        <TextBox
+                            x:Name="FemaleVariantInput"
+                            Grid.Column="1"
+                            Padding="{DynamicResource WolvenKitMarginTiny}"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                            Text="{Binding FemaleVariant,
+                                           UpdateSourceTrigger=PropertyChanged}"
+                            TextWrapping="Wrap"
+                            AcceptsReturn="False"
+                            VerticalScrollBarVisibility="Auto" />
+                    </Grid>
+                    <Grid
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Margin="{DynamicResource WolvenKitMarginSmallBottom}">
 
-        <!-- Secondary Key -->
-        <TextBlock Grid.Row="2" Grid.Column="0" Text="Secondary Key:" Margin="0,0,5,5"/>
-        <TextBox Grid.Row="2" Grid.Column="1" 
-                 Text="{Binding SecondaryKey, UpdateSourceTrigger=PropertyChanged}" 
-                 Margin="0,0,0,5"/>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" MinWidth="{DynamicResource WolvenKitLabelWidthMedium}" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
-        <!-- Buttons -->
-        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" 
-                    Orientation="Horizontal" 
-                    HorizontalAlignment="Right" 
-                    Margin="0,10,0,0">
-            <Button Content="OK" Width="75" Margin="0,0,10,0" Click="OkButton_Click"/>
-            <Button Content="Cancel" Width="75" Click="CancelButton_Click"/>
-        </StackPanel>
+                        <TextBlock
+                            Grid.Column="0"
+                            Margin="{DynamicResource WolvenKitMarginSmallRight}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Foreground="{DynamicResource PrimaryTextBrush}"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                            Text="Male Variant:" />
+                        <TextBox
+                            Grid.Column="1"
+                            Padding="{DynamicResource WolvenKitMarginTiny}"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                            Text="{Binding MaleVariant,
+                                           UpdateSourceTrigger=PropertyChanged}"
+                            TextWrapping="Wrap"
+                            AcceptsReturn="False"
+                            VerticalScrollBarVisibility="Auto" />
+                    </Grid>
+                    <Grid
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Margin="{DynamicResource WolvenKitMarginSmallBottom}">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" MinWidth="{DynamicResource WolvenKitLabelWidthMedium}" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <!-- Secondary Key -->
+                        <TextBlock
+                            Grid.Column="0"
+                            Margin="{DynamicResource WolvenKitMarginSmallRight}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Foreground="{DynamicResource PrimaryTextBrush}"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                            Text="Secondary Key:" />
+                        <TextBox
+                            Grid.Column="1"
+                            Padding="{DynamicResource WolvenKitMarginTiny}"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                            Text="{Binding SecondaryKey,
+                                           UpdateSourceTrigger=PropertyChanged}"
+                            TextWrapping="Wrap"
+                            AcceptsReturn="False"
+                            VerticalScrollBarVisibility="Auto" />
+                    </Grid>
+                </Grid>
+            </syncfusion:WizardPage>
+        </syncfusion:WizardControl>
     </Grid>
 </Window>
