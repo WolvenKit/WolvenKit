@@ -3,6 +3,7 @@ using System.Windows;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.ViewModels.Shell;
 
 namespace WolvenKit.Views.Shell;
@@ -278,4 +279,19 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
 
         Interactions.ShowDictionaryAsCopyableList(("Item codes:", "These are your item codes", itemCodes, false));
     }
+
+
+    private void AddItemsToVendor_Click(object sender, RoutedEventArgs e)
+    {
+        if (ViewModel is not MenuBarViewModel vm || vm.MainViewModel.ActiveProject is not Cp77Project project)
+        {
+            return;
+        }
+
+        var dialogVm = Interactions.AddItemsToStore(project);
+
+        vm.AddItemCodesToFiles(dialogVm);
+    }
+
+
 }
