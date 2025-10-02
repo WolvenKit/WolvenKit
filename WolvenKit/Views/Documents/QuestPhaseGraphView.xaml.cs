@@ -207,7 +207,6 @@ namespace WolvenKit.Views.Documents
                 KeyDown -= OnKeyDown;
                 
                 _disposed = true;
-                Locator.Current.GetService<ILoggerService>()?.Info("[QuestPhaseGraphView] View disposed successfully - all resources cleaned up");
             }
         }
 
