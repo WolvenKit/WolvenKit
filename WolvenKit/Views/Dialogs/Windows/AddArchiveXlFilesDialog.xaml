@@ -9,6 +9,7 @@
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     Title="Add Archive XL files"
     SizeToContent="WidthAndHeight"
+    FocusManager.FocusedElement="{Binding ElementName=ItemTypeControl}"
     WindowStartupLocation="CenterOwner">
 
     <Window.Resources>
@@ -194,6 +195,7 @@
                                                  Converter={StaticResource InvertBooleanConverter}}"
                             Text="Item Type" />
                         <hc:ComboBox
+                            x:Name="ItemTypeControl"
                             Grid.Row="3"
                             Grid.Column="1"
                             Margin="{DynamicResource WolvenKitMarginLeft}"
@@ -415,7 +417,8 @@
                             Grid.Row="27"
                             Grid.Column="1"
                             Margin="{DynamicResource WolvenKitMarginLeftTop}"
-                            KeyboardNavigation.TabIndex="-1" />
+                            KeyboardNavigation.TabIndex="-1"
+                            IsChecked="{Binding IsAddMeshMaterials}" />
 
                         <!-- Appearances -->
                         <TextBlock

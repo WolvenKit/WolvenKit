@@ -60,6 +60,8 @@ public class ArchiveXlItem
     /// </summary>
     public List<string> Variants { get; init; } = [];
 
+    public bool IsAddMeshMaterials { get; set; }
+
     public static readonly string DefaultAppFilePath =
         @"base\gameplay\items\equipment\underwear\appearances\player_underwear_item_appearances.app";
 
@@ -164,6 +166,7 @@ public class ArchiveXlItemService
     private readonly ISettingsManager _settingsManager;
     private readonly IProjectManager _projectManager;
     private readonly IAppArchiveManager _archiveManager;
+    private readonly ProjectResourceTools _projectResourceTools;
     private readonly ILoggerService _logger;
     private readonly Cr2WTools _cr2WTools;
 
@@ -172,6 +175,7 @@ public class ArchiveXlItemService
         IProjectManager projectManager,
         Cr2WTools cr2WTools,
         IAppArchiveManager archiveManager,
+        ProjectResourceTools projectResourceTools,
         ILoggerService logger
     )
     {
@@ -180,6 +184,7 @@ public class ArchiveXlItemService
         _cr2WTools = cr2WTools;
         _logger = logger;
         _archiveManager = archiveManager;
+        _projectResourceTools = projectResourceTools;
     }
 
     public void CreateEquipmentItem(ArchiveXlItem itemData)
@@ -551,6 +556,7 @@ public class ArchiveXlItemService
          */
         void AddMeshFilesToProject(string filePath, string pathInMod)
         {
+            var textureDirPath = Path.Combine(itemData.FilesRelPath, "textures");
             if (_archiveManager.GetCR2WFile(filePath) is { RootChunk: CMesh mesh } componentMesh)
             {
                 var destPath = Path.Combine(activeProject.ModDirectory, pathInMod);
@@ -561,6 +567,12 @@ public class ArchiveXlItemService
                 }
 
                 AdjustMeshAppearances(mesh);
+
+                if (itemData.IsAddMeshMaterials)
+                {
+                    _projectResourceTools.AddDependenciesToProject(componentMesh, textureDirPath).GetAwaiter()
+                        .GetResult();
+                }
 
                 _cr2WTools.WriteCr2W(componentMesh, destPath);
             }
@@ -578,6 +590,13 @@ public class ArchiveXlItemService
                 }
 
                 AdjustMeshAppearances(mesh2);
+
+                if (itemData.IsAddMeshMaterials)
+                {
+                    _projectResourceTools.AddDependenciesToProject(otherGenderMesh, textureDirPath).GetAwaiter()
+                        .GetResult();
+                }
+
                 _cr2WTools.WriteCr2W(otherGenderMesh, destPath);
             }
         }
@@ -780,11 +799,8 @@ public class ArchiveXlItemService
             {
                 _logger.Warning(
                     $"Yaml file {itemData.YamlFilePath} already contains a definition for {itemName}. Existing properties will not be overwritten.");
+                yaml = yamlFromFile;
                 yamlData = nodeFromFile;
-            }
-            else
-            {
-                yaml.Children.Add(itemName, yamlData);
             }
         }
 
