@@ -84,6 +84,8 @@ public partial class AddArchiveXlFilesDialogViewModel : DialogViewModel
             HidingTags = HidingTags ?? [],
             GarmentSupportTag = GarmentSupportTag,
             Variants = Variants ?? [],
+            TagsHideInFpp = HideInFpp ?? false,
+            TagsForceHair = ForceHair ?? false,
         };
 
         if (ret.Variants.Count == 0)
