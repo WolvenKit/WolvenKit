@@ -198,7 +198,7 @@
                             x:Name="ItemTypeControl"
                             Grid.Row="3"
                             Grid.Column="1"
-                            Margin="{DynamicResource WolvenKitMarginLeft}"
+                            Margin="{DynamicResource WolvenKitMarginLeftTop}"
                             Style="{StaticResource ComboboxStyle}"
                             Visibility="{Binding CreateFactory,
                                                  Converter={StaticResource InvertBooleanConverter}}"
@@ -234,7 +234,7 @@
                             x:Name="ItemNameTextBox"
                             Grid.Row="6"
                             Grid.Column="1"
-                            Margin="{DynamicResource WolvenKitMarginLeft}"
+                            Margin="{DynamicResource WolvenKitMarginLeftTop}"
                             Style="{StaticResource WolvenkitTextBoxStyle}"
                             KeyboardNavigation.TabIndex="-1" />
                         <TextBlock
@@ -257,7 +257,7 @@
                             x:Name="ItemSubtypeControl"
                             Grid.Row="9"
                             Grid.Column="1"
-                            Margin="{DynamicResource WolvenKitMarginLeft}"
+                            Margin="{DynamicResource WolvenKitMarginLeftTop}"
                             Style="{StaticResource ComboboxStyle}"
                             IsEnabled="{Binding HasSlot}"
                             SelectedValuePath="Content"
@@ -290,7 +290,7 @@
                             x:Name="EquipmentExControl"
                             Grid.Row="12"
                             Grid.Column="1"
-                            Margin="{DynamicResource WolvenKitMarginLeft}"
+                            Margin="{DynamicResource WolvenKitMarginLeftTop}"
                             Style="{StaticResource ComboboxStyle}"
                             IsTextSearchEnabled="True"
                             SelectedValue="{Binding EquipmentExSlot}"
@@ -315,7 +315,7 @@
                         <hc:CheckComboBox
                             Grid.Row="15"
                             Grid.Column="1"
-                            Margin="{DynamicResource WolvenKitMarginLeft}"
+                            Margin="{DynamicResource WolvenKitMarginLeftTop}"
                             SelectedValuePath="{Binding HidingTags,
                                                         UpdateSourceTrigger=LostFocus}"
                             ItemsSource="{Binding HidingTagsSource}"
@@ -340,7 +340,7 @@
                         <hc:ComboBox
                             Grid.Row="18"
                             Grid.Column="1"
-                            Margin="{DynamicResource WolvenKitMarginLeft}"
+                            Margin="{DynamicResource WolvenKitMarginLeftTop}"
                             Style="{StaticResource ComboboxStyle}"
                             SelectedValuePath="Content"
                             SelectedValue="{Binding RelativeSource={RelativeSource Mode=Self},
