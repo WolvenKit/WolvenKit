@@ -2459,6 +2459,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         resources["WolvenKitMarginHorizontal"] = new Thickness(15, 0, 15, 0).Mul(_uiScalePercentage).Round();
         resources["WolvenKitMarginVertical"] = new Thickness(0, 15, 0, 15).Mul(_uiScalePercentage).Round();
         resources["WolvenKitMarginLeftBottom"] = new Thickness(15, 0, 0, 15).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginLeftTop"] = new Thickness(15, 15, 0, 0).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginLeftSmallTop"] = new Thickness(15, 8, 0, 0).Mul(_uiScalePercentage).Round();
 
         resources["WolvenKitMarginSmall"] = new Thickness(8).Mul(_uiScalePercentage).Round();
         resources["WolvenKitMarginSmallLeft"] = new Thickness(8, 0, 0, 0).Mul(_uiScalePercentage).Round();
@@ -2471,6 +2473,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         resources["WolvenKitMarginSmallFooter"] = new Thickness(8, 0, 8, 8).Mul(_uiScalePercentage).Round();
         resources["WolvenKitMarginSmallLeftSide"] = new Thickness(8, 8, 0, 8).Mul(_uiScalePercentage).Round();
         resources["WolvenKitMarginSmallRightSide"] = new Thickness(0, 8, 8, 8).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginSmallLeftTop"] = new Thickness(8, 8, 0, 0).Mul(_uiScalePercentage).Round();
 
         resources["WolvenKitMarginTiny"] = new Thickness(4).Mul(_uiScalePercentage).Round();
         resources["WolvenKitMarginTinyRight"] = new Thickness(0, 0, 4, 0).Mul(_uiScalePercentage).Round();

@@ -72,7 +72,7 @@
                     x:Key="ExplanationStyle"
                     TargetType="TextBlock">
                     <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
-                    <Setter Property="Margin" Value="5,4,5,4" />
+                    <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginLeftSmallTop}" />
                 </Style>
                 <Style
                     x:Key="LabelStyle"
@@ -174,6 +174,8 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="5" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="5" />
                         </Grid.RowDefinitions>
@@ -194,6 +196,7 @@
                         <hc:ComboBox
                             Grid.Row="3"
                             Grid.Column="1"
+                            Margin="{DynamicResource WolvenKitMarginLeft}"
                             Style="{StaticResource ComboboxStyle}"
                             Visibility="{Binding CreateFactory,
                                                  Converter={StaticResource InvertBooleanConverter}}"
@@ -229,6 +232,7 @@
                             x:Name="ItemNameTextBox"
                             Grid.Row="6"
                             Grid.Column="1"
+                            Margin="{DynamicResource WolvenKitMarginLeft}"
                             Style="{StaticResource WolvenkitTextBoxStyle}"
                             KeyboardNavigation.TabIndex="-1" />
                         <TextBlock
@@ -251,6 +255,7 @@
                             x:Name="ItemSubtypeControl"
                             Grid.Row="9"
                             Grid.Column="1"
+                            Margin="{DynamicResource WolvenKitMarginLeft}"
                             Style="{StaticResource ComboboxStyle}"
                             IsEnabled="{Binding HasSlot}"
                             SelectedValuePath="Content"
@@ -283,6 +288,7 @@
                             x:Name="EquipmentExControl"
                             Grid.Row="12"
                             Grid.Column="1"
+                            Margin="{DynamicResource WolvenKitMarginLeft}"
                             Style="{StaticResource ComboboxStyle}"
                             IsTextSearchEnabled="True"
                             SelectedValue="{Binding EquipmentExSlot}"
@@ -307,12 +313,11 @@
                         <hc:CheckComboBox
                             Grid.Row="15"
                             Grid.Column="1"
-                            Margin="{DynamicResource WolvenKitMarginMicroLeft}"
+                            Margin="{DynamicResource WolvenKitMarginLeft}"
                             SelectedValuePath="{Binding HidingTags,
                                                         UpdateSourceTrigger=LostFocus}"
                             ItemsSource="{Binding HidingTagsSource}"
                             SelectionChanged="HidingTags_SelectionChanged" />
-
 
                         <TextBlock
                             Grid.Row="16"
@@ -333,6 +338,7 @@
                         <hc:ComboBox
                             Grid.Row="18"
                             Grid.Column="1"
+                            Margin="{DynamicResource WolvenKitMarginLeft}"
                             Style="{StaticResource ComboboxStyle}"
                             SelectedValuePath="Content"
                             SelectedValue="{Binding RelativeSource={RelativeSource Mode=Self},
@@ -362,7 +368,7 @@
                         <CheckBox
                             Grid.Row="21"
                             Grid.Column="1"
-                            Margin="4,10,10,5"
+                            Margin="{DynamicResource WolvenKitMarginLeftTop}"
                             IsChecked="{Binding TagsHideInFpp}"
                             KeyboardNavigation.TabIndex="-1" />
                         <TextBlock
@@ -384,7 +390,7 @@
                         <CheckBox
                             Grid.Row="24"
                             Grid.Column="1"
-                            Margin="4,10,10,5"
+                            Margin="{DynamicResource WolvenKitMarginLeftTop}"
                             Visibility="{Binding IsHeadItem,
                                                  Converter={StaticResource BooleanToVisibilityConverter}}"
                             IsChecked="{Binding TagsForceHair}"
@@ -397,9 +403,23 @@
                                                  Converter={StaticResource BooleanToVisibilityConverter}}"
                             Text="Check to force-display hair (head items hide player hair by default)" />
 
-                        <!-- Appearances -->
+                        <!-- Add materials to project -->
                         <TextBlock
                             Grid.Row="27"
+                            Grid.RowSpan="2"
+                            Grid.Column="0"
+                            Style="{StaticResource LabelStyle}"
+                            Text="Add mesh materials?"
+                            TextWrapping="Wrap" />
+                        <CheckBox
+                            Grid.Row="27"
+                            Grid.Column="1"
+                            Margin="{DynamicResource WolvenKitMarginLeftTop}"
+                            KeyboardNavigation.TabIndex="-1" />
+
+                        <!-- Appearances -->
+                        <TextBlock
+                            Grid.Row="29"
                             Grid.RowSpan="2"
                             Grid.Column="0"
                             Style="{StaticResource LabelStyle}"
@@ -407,10 +427,10 @@
 
                         <syncfusion:SfTextBoxExt
                             x:Name="ItemVariantsTextBox"
-                            Grid.Row="27"
+                            Grid.Row="29"
                             Grid.Column="1"
                             Height="{DynamicResource WolvenKitFieldHeight}"
-                            Margin="{DynamicResource WolvenKitMarginSmall}"
+                            Margin="{DynamicResource WolvenKitMarginLeftTop}"
                             Padding="{DynamicResource WolvenKitMarginTiny}"
                             VerticalContentAlignment="Top"
                             Background="{DynamicResource ContentBackgroundAlt2}"
@@ -425,7 +445,7 @@
                             LostFocus="ItemVariants_FocusLost" />
 
                         <TextBlock
-                            Grid.Row="28"
+                            Grid.Row="30"
                             Grid.Column="1"
                             Style="{StaticResource ExplanationStyle}"
                             Text="Item variants (separate by comma)" />
