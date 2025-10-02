@@ -12,9 +12,6 @@ namespace WolvenKit.App.ViewModels.Dialogs;
 
 public partial class AddArchiveXlFilesDialogViewModel : DialogViewModel
 {
-    private Cp77Project _activeProject;
-    private ISettingsManager _settingsManager;
-
     [ObservableProperty] private string? _itemName;
     [ObservableProperty] private EquipmentItemSlot? _slot;
     [ObservableProperty] private EquipmentItemSubSlot? _subSlot;
@@ -43,11 +40,8 @@ public partial class AddArchiveXlFilesDialogViewModel : DialogViewModel
     [ObservableProperty] private List<GarmentSupportTags>? _garmentSupportTagsSource;
     [ObservableProperty] private List<ArchiveXlHidingTags>? _hidingTagsSource;
 
-    public AddArchiveXlFilesDialogViewModel(Cp77Project activeProject, ISettingsManager settingsManager)
+    public AddArchiveXlFilesDialogViewModel()
     {
-        _activeProject = activeProject;
-        _settingsManager = settingsManager;
-
         // initialize dropdowns
         EquipmentItemSlots = [.. Enum.GetValues<EquipmentItemSlot>().Where(x => x != EquipmentItemSlot.None)];
         EquipmentExSlots = [.. Enum.GetValues<EquipmentExSlot>()];
