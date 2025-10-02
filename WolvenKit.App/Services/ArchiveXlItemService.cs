@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Dynamic;
 using System.IO;
 using System.Linq;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
@@ -11,14 +12,15 @@ using YamlDotNet.RepresentationModel;
 
 namespace WolvenKit.App.Services;
 
+/// <summary>
+/// Created by <see cref="WolvenKit.App.ViewModels.Dialogs.AddArchiveXlFilesDialogViewModel"/>
+/// </summary>
 public class ArchiveXlItem
 {
     public string ItemName { get; init; } = string.Empty;
-
-    public EquipmentItemSlot Slot { get; init; } = EquipmentItemSlot.Head;
+    public EquipmentItemSlot Slot { get; init; } = EquipmentItemSlot.None;
     public EquipmentItemSubSlot SubSlot { get; init; } = EquipmentItemSubSlot.None;
     public EquipmentExSlot EqExSlot { get; init; } = EquipmentExSlot.None;
-
     public bool TagsHideInFpp { get; init; }
     public bool TagsForceHair { get; init; }
 
@@ -26,15 +28,7 @@ public class ArchiveXlItem
     /// Size tag (<see cref="GarmentSupportTag"/>)
     /// </summary>
     public GarmentSupportTags GarmentSupportTag { get; init; }
-
     public List<ArchiveXlHidingTags> HidingTags { get; init; } = [];
-
-    // init these in ItemService during creation
-
-    public string RootEntityPath { get; set; } = string.Empty;
-    public string MeshEntityPath { get; set; } = string.Empty;
-    public string AppFilePath { get; set; } = string.Empty;
-    public string FactoryFilePath { get; set; } = string.Empty;
 
     /// <summary>
     /// modderName/equipment/slot/projectName
@@ -53,6 +47,10 @@ public class ArchiveXlItem
     public string ControlFilesRelPath { get; set; } = string.Empty;
     public string TranslationFileRelPath { get; set; } = string.Empty;
 
+    public string RootEntityPath { get; set; } = string.Empty;
+    public string MeshEntityPath { get; set; } = string.Empty;
+    public string AppFilePath { get; set; } = string.Empty;
+    public string FactoryFilePath { get; set; } = string.Empty;
     public string XlFilePath { get; set; } = string.Empty;
     public string YamlFilePath { get; set; } = string.Empty;
     public string InkatlasPath { get; set; } = string.Empty;
@@ -60,7 +58,7 @@ public class ArchiveXlItem
     /// <summary>
     /// Variants for dynamic appearances, e.g. [black, white, red]
     /// </summary>
-    public List<string> Variants { get; set; } = [];
+    public List<string> Variants { get; init; } = [];
 
     public static readonly string DefaultAppFilePath =
         @"base\gameplay\items\equipment\underwear\appearances\player_underwear_item_appearances.app";
@@ -71,13 +69,58 @@ public class ArchiveXlItem
     public static readonly Dictionary<EquipmentItemSlot, string> FilesByType = new()
     {
         { EquipmentItemSlot.Face, @"base\characters\garment\player_equipment\head\h1_015_pwa_specs__visor_holo.ent" },
-        { EquipmentItemSlot.Head, @"base\characters\garment\player_equipment\head\h1_032_pwa_hat__asian.ent" },
-        { EquipmentItemSlot.Legs, @"base\characters\garment\player_equipment\legs\l1_054_pwa_shorts__latino.ent" },
+        { EquipmentItemSlot.Head, @"base\characters\garment\player_equipment\head\h2_011_pwa_helmet__riot.ent" },
+        { EquipmentItemSlot.Legs, @"base\characters\garment\player_equipment\legs\l1_070_pwa_pants__loose.ent" },
         {
             EquipmentItemSlot.Torso_Inner,
-            @"base\characters\garment\player_equipment\torso\t0_005_pwa_body__t_bug_shirt.ent"
+            @"base\characters\garment\player_equipment\torso\t1_079_pwa_tshirt__casual.ent"
         },
         { EquipmentItemSlot.Torso_Outer, @"base\characters\garment\player_equipment\torso\t2_002_pwa_vest__puffy.ent" },
+        { EquipmentItemSlot.Outfit, @"base\characters\garment\player_equipment\torso\t0_005_pwa_body__t_bug.ent" },
+    };
+
+    public static readonly Dictionary<EquipmentItemSubSlot, string> FilesBySubType = new()
+    {
+        // head
+        { EquipmentItemSubSlot.Cap, @"base\characters\garment\player_equipment\head\h1_002_pwa_hat__headcap.ent" },
+        { EquipmentItemSubSlot.Hat, @"base\characters\garment\player_equipment\head\h1_032_pwa_hat__asian.ent" },
+
+        // torso
+        { EquipmentItemSubSlot.Dress, @"base\characters\garment\player_equipment\torso\t2_014_pwa_dress__chic.ent" },
+        {
+            EquipmentItemSubSlot.Undershirt,
+            @"base\characters\garment\player_equipment\torso\t0_005_pwa_body__t_bug_tight.ent"
+        },
+        { EquipmentItemSubSlot.TankTop, @"base\characters\garment\player_equipment\torso\t1_071_pwa_tank__basic.ent" },
+        {
+            EquipmentItemSubSlot.Jumpsuit,
+            @"base\characters\garment\player_equipment\torso\t1_091_pwa_full__jumpsuit.ent"
+        },
+        {
+            EquipmentItemSubSlot.Coat,
+            @"base\characters\garment\player_equipment\torso\t2_097_pwa_jacket__holmes_coat.ent"
+        },
+        {
+            EquipmentItemSubSlot.TightJumpsuit,
+            @"base\characters\garment\player_equipment\torso\t0_005_pwa_body__t_bug.ent"
+        },
+        // legs
+        { EquipmentItemSubSlot.Skirt, @"base\characters\garment\player_equipment\legs\l1_011_pwa_skirt__tight.ent" },
+        { EquipmentItemSubSlot.Shorts, @"base\characters\garment\player_equipment\legs\l1_054_pwa_shorts__latino.ent" },
+        {
+            EquipmentItemSubSlot.FormalPants,
+            @"base\characters\garment\player_equipment\legs\l1_045_pwa_pants__suit.ent"
+        },
+        // feet
+        { EquipmentItemSubSlot.Boots, @"base\characters\garment\player_equipment\feet\s1_056_pwa_boot__biker.ent" },
+        {
+            EquipmentItemSubSlot.CasualShoes,
+            @"base\characters\garment\player_equipment\feet\s1_068_pwa_shoe__sneakers.ent"
+        },
+        {
+            EquipmentItemSubSlot.FormalShoes,
+            @"base\characters\garment\player_equipment\feet\s1_077_pwa_boot__blackwater.ent"
+        },
     };
 
     public static readonly Dictionary<EquipmentItemSlot, string> EquipmentItemSlotNames = new()
@@ -92,13 +135,13 @@ public class ArchiveXlItem
         { EquipmentItemSlot.Outfit, "Items.Outfit" },
     };
 
-    public static readonly YamlSequenceNode StatModifiers = new YamlSequenceNode(
+    public static readonly YamlSequenceNode StatModifiers = new(
         new YamlScalarNode("!append Quality.IconicItem"),
         new YamlScalarNode("!append Character.ScaleToPlayerLevel")
     );
 
     // Build statModifierGroups sequence
-    public static readonly YamlSequenceNode StatModifierGroups = new YamlSequenceNode(
+    public static readonly YamlSequenceNode StatModifierGroups = new(
         new YamlScalarNode("!append-once Items.IconicQualityRandomization")
     );
 
@@ -129,29 +172,35 @@ public class ArchiveXlItemService
 
     public void CreateEquipmentItem(ArchiveXlItem itemData)
     {
-        SetPathsAndCreateDirectories(itemData);
-
-        AddRootEntity(itemData);
-
-        RegisterInFactory(itemData);
-
-        RegisterInXlFile(itemData);
-
-        AddDummyIcon(itemData);
-
-        AddMeshEntity(itemData);
-        AddAppFile(itemData);
-
-        CreateYamlEntry(itemData);
-        RegisterInTranslationFile(itemData);
-    }
-
-    private void SetPathsAndCreateDirectories(ArchiveXlItem itemData)
-    {
         if (_projectManager.ActiveProject is not { } activeProject)
         {
-            return;
+            throw new WolvenKitException(0x4003, "You need a Wolvenkit project to use this feature");
         }
+
+        SetPathsAndCreateDirectories(itemData, activeProject);
+
+        AddRootEntity(itemData, activeProject);
+
+        RegisterInFactory(itemData, activeProject);
+
+        RegisterInXlFile(itemData, activeProject);
+
+        CreatePlaceholderIcons(itemData, activeProject);
+
+        AddMeshEntity(itemData, activeProject);
+
+        AddAppFile(itemData, activeProject);
+
+        CreateYamlEntry(itemData, activeProject);
+
+        RegisterInTranslationFile(itemData, activeProject);
+    }
+
+    /// <summary>
+    /// Sets default paths in itemData and creates folders if necessary.
+    /// </summary>
+    private void SetPathsAndCreateDirectories(ArchiveXlItem itemData, Cp77Project activeProject)
+    {
 
         // Items go into moddername/equipment/itemdataslot/projectname
         itemData.FilesRelPath = Path.Join(
@@ -222,13 +271,11 @@ public class ArchiveXlItemService
         }
     }
 
-    private void RegisterInXlFile(ArchiveXlItem itemData)
+    /// <summary>
+    /// If necessary, adds .csv and .json file to the generated .xl file.
+    /// </summary>
+    private void RegisterInXlFile(ArchiveXlItem itemData, Cp77Project activeProject)
     {
-        if (_projectManager.ActiveProject is not { } activeProject)
-        {
-            return;
-        }
-
         var xlFileAbsPath = Path.Join(activeProject.ResourcesDirectory, itemData.XlFilePath);
         var xlFileContent = YamlHelper.ReadYamlAsNodes(xlFileAbsPath) ?? new YamlMappingNode();
 
@@ -262,54 +309,57 @@ public class ArchiveXlItemService
                 enUsSeqNode.Children.Add(itemData.TranslationFileRelPath);
             }
         }
-
-
         YamlHelper.WriteYaml(xlFileAbsPath, xlFileContent);
     }
 
-    private void RegisterInFactory(ArchiveXlItem itemData)
+    /// <summary>
+    /// Creates .csv factory file if it doesn't exist, or re-uses existing one (if exactly one file exists).
+    /// Will add factory entry mapping (entityName => rootFilePath) if it doesn't exist yet.
+    /// </summary>
+    private void RegisterInFactory(ArchiveXlItem itemData, Cp77Project activeProject)
     {
-        if (_projectManager.ActiveProject is not { } activeProject)
-        {
-            return;
-        }
-
         var absoluteFactoryPath = Path.Combine(activeProject.ModDirectory, itemData.FactoryFilePath);
 
         // check if factory file exists in project folder, create if not
-        var cr2Wfile = _cr2WTools.ReadCr2WNoException(absoluteFactoryPath) ??
-                       new CR2WFile() { RootChunk = new C2dArray() { Headers = ["name", "path", "preload"] } };
+        var cr2W = _cr2WTools.ReadCr2WNoException(absoluteFactoryPath) ??
+                   new CR2WFile() { RootChunk = new C2dArray() { Headers = ["name", "path", "preload"] } };
 
+        var itemName = $"{itemData.ItemName}_factory_name";
 
-        if (cr2Wfile.RootChunk is not C2dArray factory)
+        if (cr2W.RootChunk is not C2dArray factory)
         {
             _logger.Error(string.Join(",\n\t", [
                 $"Failed when adding to factory {itemData.FactoryFilePath}. Add an entry to CompiledData by hand:",
-                $"[0] = {itemData.ItemName}_factory_name",
+                $"[0] = {itemName}",
                 $"[1] = {itemData.RootEntityPath}",
                 $"[2] = true"
             ]));
             return;
         }
 
+        if (factory.CompiledData.Any(item => item.Count > 0 && item[0].GetString() == itemName))
+        {
+            _logger.Info($"Factory entry for {itemName} already exists.");
+            return;
+        }
+
         factory.CompiledData.Add(new CArray<CString>([
-            $"{itemData.ItemName}_factory_name", // name
+            itemName, // name
             itemData.RootEntityPath, // path
             "true" // preload
         ]));
 
         // write factory back
-        _cr2WTools.WriteCr2W(cr2Wfile, absoluteFactoryPath);
+        _cr2WTools.WriteCr2W(cr2W, absoluteFactoryPath);
 
     }
 
-    private void RegisterInTranslationFile(ArchiveXlItem itemData)
+    /// <summary>
+    /// Creates translation file entries generated from description, display name and variants.
+    /// Will re-use existing i18n file if it exists - entries will be appended, but not overwritten.
+    /// </summary>
+    private void RegisterInTranslationFile(ArchiveXlItem itemData, Cp77Project activeProject)
     {
-        if (_projectManager.ActiveProject is not { } activeProject)
-        {
-            return;
-        }
-
         var absPath = Path.Combine(activeProject.ModDirectory, itemData.TranslationFileRelPath);
 
         var cr2W = new CR2WFile()
@@ -369,18 +419,16 @@ public class ArchiveXlItemService
 
     }
 
-    private void AddDummyIcon(ArchiveXlItem itemData)
+    /// <summary>
+    /// Creates an inkatlas with a dummy icon for each variant. Will do nothing if file exists.
+    /// </summary>
+    private void CreatePlaceholderIcons(ArchiveXlItem itemData, Cp77Project activeProject)
     {
-        if (_projectManager.ActiveProject is not { } activeProject)
-        {
-            return;
-        }
-
         var iconName = $"{itemData.ItemName}_$(base_color)";
 
         var absoluteInkatlasPath = Path.Combine(activeProject.ModDirectory, itemData.InkatlasPath);
 
-        if (File.Exists(absoluteInkatlasPath) && _cr2WTools.ReadCr2W(absoluteInkatlasPath) is CR2WFile f)
+        if (File.Exists(absoluteInkatlasPath) && _cr2WTools.ReadCr2WNoException(absoluteInkatlasPath) is not null)
         {
             _logger.Warning($"Inkatlas {itemData.InkatlasPath} already exists, refusing to overwrite.");
             _logger.Info($"Delete it or run Files -> Add Files -> Generate Inkatlas");
@@ -393,7 +441,7 @@ public class ArchiveXlItemService
         InkatlasImageGenerator.GenerateAtlas(
             tempFolder,
             Path.GetDirectoryName(itemData.InkatlasPath)!,
-            Path.GetFileName(itemData.InkatlasPath)!,
+            Path.GetFileName(itemData.InkatlasPath),
             160,
             160,
             _cr2WTools,
@@ -401,13 +449,12 @@ public class ArchiveXlItemService
         );
     }
 
-    private void AddMeshEntity(ArchiveXlItem itemData)
+    /// <summary>
+    /// Creates mesh entity from base game files, adds tags, reads mesh files from component paths
+    /// and adds them to project, then adjusts/creates mesh file appearances to match variants
+    /// </summary>
+    private void AddMeshEntity(ArchiveXlItem itemData, Cp77Project activeProject)
     {
-        if (_projectManager.ActiveProject is not { } activeProject)
-        {
-            return;
-        }
-
         var meshEntityAbsPath = Path.Combine(activeProject.ModDirectory, itemData.MeshEntityPath);
         CR2WFile? cr2W = null;
 
@@ -415,12 +462,19 @@ public class ArchiveXlItemService
         {
             cr2W = f;
         }
-        else if (ArchiveXlItem.FilesByType.TryGetValue(itemData.Slot, out var defaultFilePath) &&
-                 _archiveManager.GetCR2WFile(defaultFilePath) is
+        else if (ArchiveXlItem.FilesBySubType.TryGetValue(itemData.SubSlot, out var meshEntityPath) &&
+                 _archiveManager.GetCR2WFile(meshEntityPath) is
                      CR2WFile f2)
         {
             ((entEntityTemplate)f2.RootChunk).VisualTagsSchema.Chunk?.VisualTags.Tags.Clear();
             cr2W = f2;
+        }
+        else if (ArchiveXlItem.FilesByType.TryGetValue(itemData.Slot, out var defaultFilePath) &&
+                 _archiveManager.GetCR2WFile(defaultFilePath) is
+                     CR2WFile f3)
+        {
+            ((entEntityTemplate)f3.RootChunk).VisualTagsSchema.Chunk?.VisualTags.Tags.Clear();
+            cr2W = f3;
         }
 
         if (cr2W?.RootChunk is not entEntityTemplate entTemplate)
@@ -434,63 +488,37 @@ public class ArchiveXlItemService
 
         foreach (var entComponent in entTemplate.Components.OfType<IRedMeshComponent>())
         {
-            if (entComponent.Mesh.DepotPath == ResourcePath.Empty ||
-                entComponent.Mesh.DepotPath.GetResolvedText()?.StartsWith('*') == true)
+            var filePath = entComponent.Mesh.DepotPath.GetResolvedText();
+            if (string.IsNullOrEmpty(filePath))
             {
+                _logger.Warning($"Failed to read depot path for {entComponent.Name}, skipping...");
                 continue;
             }
 
-            entComponent.MeshAppearance = "*{variant}";
-
-            var filePath = entComponent.Mesh.DepotPath.GetResolvedText() ?? "";
-            var fileName = Path.GetFileName(filePath);
-
-            var pathInMod = Path.Combine(relativeMeshFolder, fileName);
-
-            if (_archiveManager.GetCR2WFile(filePath) is CR2WFile componentMesh)
+            if (filePath.StartsWith('*'))
             {
-                var destPath = Path.Combine(activeProject.ModDirectory, pathInMod);
-                if (!File.Exists(destPath))
-                {
-                    _cr2WTools.WriteCr2W(componentMesh, destPath);
-                }
-                else
-                {
-                    _logger.Info($"Mesh {pathInMod} exists, not overwriting.");
-                }
+                _logger.Info($"Depot path for {entComponent.Name} is already dynamic. Skipping...");
+                continue;
             }
 
+            var pathInMod = Path.Combine(relativeMeshFolder, Path.GetFileName(filePath));
 
-            if (_archiveManager.GetCR2WFile(filePath.Replace("pwa", "pma").Replace("_wa_", "_ma_")) is CR2WFile
-                otherGenderMesh)
-            {
-                var destPath = Path.Combine(activeProject.ModDirectory,
-                    pathInMod.Replace("pwa", "pma").Replace("_wa_", "_ma_"));
-                if (!File.Exists(destPath))
-                {
-                    _cr2WTools.WriteCr2W(otherGenderMesh, destPath);
-                }
-                else
-                {
-                    _logger.Info(
-                        $"Mesh {pathInMod.Replace("pwa", "pma").Replace("_wa_", "_ma_")} exists, not overwriting.");
-                }
-            }
+            AddMeshFilesToProject(filePath, pathInMod);
 
-            var escapedPath = $"{pathInMod.Replace("pwa", "p{gender}a").Replace("_wa_", "_{gender}a_")}";
-            if (escapedPath.Contains("{gender}"))
+            var dynamicPath = $"{pathInMod.Replace("pwa", "p{gender}a").Replace("_wa_", "_{gender}a_")}";
+            if (dynamicPath.Contains("{gender}"))
             {
                 entComponent.Mesh =
-                    new CResourceAsyncReference<CMesh>($"*{escapedPath}", InternalEnums.EImportFlags.Soft);
+                    new CResourceAsyncReference<CMesh>($"*{dynamicPath}", InternalEnums.EImportFlags.Soft);
+                entComponent.MeshAppearance = "*{variant}";
             }
             else
             {
-                entComponent.Mesh = new CResourceAsyncReference<CMesh>(escapedPath, InternalEnums.EImportFlags.Default);
+                entComponent.Mesh = new CResourceAsyncReference<CMesh>(dynamicPath, InternalEnums.EImportFlags.Default);
             }
         }
 
         // Garment support tags (size)
-
         var tags = entTemplate.VisualTagsSchema.Chunk ?? new entVisualTagsSchema();
         var tagsArray = tags.VisualTags.Tags;
 
@@ -502,15 +530,74 @@ public class ArchiveXlItemService
 
         tags.VisualTags.Tags = tagsArray;
         _cr2WTools.WriteCr2W(cr2W, meshEntityAbsPath);
-    }
 
-    private void AddRootEntity(ArchiveXlItem itemData)
-    {
-        if (_projectManager.ActiveProject is not { } activeProject)
+        return;
+
+        /*
+         * Adds mesh files from .ent components to project. Will try to find pma/_ma mesh (entity is pwa/_wa).
+         * Will not overwrite existing files.
+         */
+        void AddMeshFilesToProject(string filePath, string pathInMod)
         {
-            return;
+            if (_archiveManager.GetCR2WFile(filePath) is { RootChunk: CMesh mesh } componentMesh)
+            {
+                var destPath = Path.Combine(activeProject.ModDirectory, pathInMod);
+                if (File.Exists(destPath))
+                {
+                    _logger.Info($"Mesh {pathInMod} exists, not overwriting.");
+                    return;
+                }
+
+                AdjustMeshAppearances(mesh);
+
+                _cr2WTools.WriteCr2W(componentMesh, destPath);
+            }
+
+            var otherGenderSourcePath = filePath.Replace("pwa", "pma").Replace("_wa_", "_ma_");
+            var otherGenderDestPath = pathInMod.Replace("pwa", "pma").Replace("_wa_", "_ma_");
+
+            if (_archiveManager.GetCR2WFile(otherGenderSourcePath) is { RootChunk: CMesh mesh2 } otherGenderMesh)
+            {
+                var destPath = Path.Combine(activeProject.ModDirectory, otherGenderDestPath);
+                if (File.Exists(destPath))
+                {
+                    _logger.Info($"Mesh {otherGenderDestPath} exists, not overwriting.");
+                    return;
+                }
+
+                AdjustMeshAppearances(mesh2);
+                _cr2WTools.WriteCr2W(otherGenderMesh, destPath);
+            }
         }
 
+        /*
+         * Mesh appearances will be renamed to match variants from generator, and created if they don't exist.
+         */
+        void AdjustMeshAppearances(CMesh mesh)
+        {
+            for (var idx = 0; idx < itemData.Variants.Count; idx++)
+            {
+                CHandle<meshMeshAppearance> appHandle;
+                if (idx < mesh.Appearances.Count)
+                {
+                    appHandle = mesh.Appearances[idx];
+                }
+                else
+                {
+                    appHandle = new CHandle<meshMeshAppearance>();
+                }
+
+                appHandle.Chunk ??= new meshMeshAppearance();
+                appHandle.Chunk.Name = itemData.Variants[idx];
+            }
+        }
+    }
+
+    /// <summary>
+    /// Creates root entity from base game file and adjusts path and tags
+    /// </summary>
+    private void AddRootEntity(ArchiveXlItem itemData, Cp77Project activeProject)
+    {
         var rootEntityAbsPath = Path.Combine(activeProject.ModDirectory, itemData.RootEntityPath);
 
         CR2WFile? cr2W = null;
@@ -579,13 +666,8 @@ public class ArchiveXlItemService
         _cr2WTools.WriteCr2W(cr2W, rootEntityAbsPath);
     }
 
-    private void AddAppFile(ArchiveXlItem itemData)
+    private void AddAppFile(ArchiveXlItem itemData, Cp77Project activeProject)
     {
-        if (_projectManager.ActiveProject is not { } activeProject)
-        {
-            return;
-        }
-
         var appFileAbsPath = Path.Combine(activeProject.ModDirectory, itemData.AppFilePath);
         CR2WFile? cr2W = null;
 
@@ -638,25 +720,26 @@ public class ArchiveXlItemService
         }
 
         _cr2WTools.WriteCr2W(cr2W, appFileAbsPath);
-
     }
 
-    private void CreateYamlEntry(ArchiveXlItem itemData)
+    /// <summary>
+    /// Generates yaml entry and writes it to file
+    /// </summary>
+    private void CreateYamlEntry(ArchiveXlItem itemData, Cp77Project activeProject)
     {
-        if (_projectManager.ActiveProject is not { } activeProject ||
-            !ArchiveXlItem.EquipmentItemSlotNames.TryGetValue(itemData.Slot, out var itemBase) ||
+        if (!ArchiveXlItem.EquipmentItemSlotNames.TryGetValue(itemData.Slot, out var itemBase) ||
             string.IsNullOrEmpty(itemBase))
         {
+            _logger.Error($"Failed to find item base for {itemData.Slot}. Not creating .yaml entry.");
             return;
         }
 
         if (itemData.SubSlot is not EquipmentItemSubSlot.None)
         {
-            itemBase = $"Items.{itemData.SubSlot.ToString()}";
+            itemBase = $"Items.{itemData.SubSlot}";
         }
 
         var yamlAbsPath = Path.Combine(activeProject.ResourcesDirectory, itemData.YamlFilePath);
-        YamlMappingNode yaml = YamlHelper.ReadYamlAsNodes(yamlAbsPath) ?? new YamlMappingNode();
 
         var itemName = $"Items.{_settingsManager.ModderName}_{itemData.ItemName}_$(base_color)";
 
@@ -676,26 +759,39 @@ public class ArchiveXlItemService
             { "atlasPartName", $"{itemData.ItemName}_$(base_color)" }
         };
 
+        var yamlData = new YamlMappingNode();
+        var yaml = new YamlMappingNode() { { itemName, yamlData } };
 
-        var yamlData = new YamlMappingNode()
+        if (YamlHelper.ReadYamlAsNodes(yamlAbsPath) is { } yamlFromFile)
         {
-            { "$base", itemBase },
-            { "$instances", instances },
-            { "appearanceName", $"{itemData.ItemName}_!$(base_color)" },
-            { "entityName", $"{itemData.ItemName}_factory_name" },
-            { "displayName", $"LocKey#{itemData.ItemName}_i18n_$(base_color)" },
-            { "localizedDescription", $"LocKey#{itemData.ItemName}_i18n_desc" },
-            { "icon", icon },
-            { "quality", "Quality.Legendary" },
-            { "statModifiers", ArchiveXlItem.StatModifiers },
-            { "statModifierGroups", ArchiveXlItem.StatModifierGroups }
-        };
+            if (yamlFromFile.Children.TryGetValue(itemName, out var n) && n is YamlMappingNode nodeFromFile)
+            {
+                _logger.Warning(
+                    $"Yaml file {itemData.YamlFilePath} already contains a definition for {itemName}. Existing properties will not be overwritten.");
+                yamlData = nodeFromFile;
+            }
+            else
+            {
+                yaml.Children.Add(itemName, yamlData);
+            }
+        }
+
+        yamlData.Children.TryAdd("$base", itemBase);
+        yamlData.Children.TryAdd("$instances", instances);
+        yamlData.Children.TryAdd("appearanceName", $"{itemData.ItemName}_!$(base_color)");
+        yamlData.Children.TryAdd("entityName", $"{itemData.ItemName}_factory_name");
+        yamlData.Children.TryAdd("icon", icon);
+        yamlData.Children.TryAdd("localizedDescription", $"LocKey#{itemData.ItemName}_i18n_desc");
+        yamlData.Children.TryAdd("displayName", $"LocKey#{itemData.ItemName}_i18n_$(base_color)");
+        yamlData.Children.TryAdd("quality", "Quality.Legendary");
+        yamlData.Children.TryAdd("statModifiers", ArchiveXlItem.StatModifiers);
+        yamlData.Children.TryAdd("statModifierGroups", ArchiveXlItem.StatModifierGroups);
 
         if (itemData.EqExSlot is not EquipmentExSlot.None)
         {
-            yamlData.Children.Add("placementSlots", $"OutfitSlots.{itemData.EqExSlot}");
+            yamlData.Children.TryAdd("placementSlots", $"OutfitSlots.{itemData.EqExSlot}");
         }
 
-        YamlHelper.WriteYaml(yamlAbsPath, new YamlMappingNode() { { itemName, yamlData } });
+        YamlHelper.WriteYaml(yamlAbsPath, yaml);
     }
 }

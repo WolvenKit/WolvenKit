@@ -1368,6 +1368,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             throw new WolvenKitException(0x4003, "No project loaded");
         }
 
+        if (string.IsNullOrEmpty(SettingsManager.ModderName))
+        {
+            throw new WolvenKitException(0x5000, "Please configure your modder name in the settings");
+        }
+
         var item = Interactions.ShowArchiveXlFilesView((ActiveProject, SettingsManager));
         if (item is null)
         {
@@ -1375,8 +1380,14 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
 
         _watcherService.Suspend();
-        _archiveXlItemService.CreateEquipmentItem(item);
-        _watcherService.Resume();
+        try
+        {
+            _archiveXlItemService.CreateEquipmentItem(item);
+        }
+        finally
+        {
+            _watcherService.Resume();
+        }
     }
 
     private async Task OpenFromNewFile(NewFileViewModel? file)
