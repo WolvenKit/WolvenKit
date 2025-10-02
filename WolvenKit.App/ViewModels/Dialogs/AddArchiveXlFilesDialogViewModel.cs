@@ -24,7 +24,7 @@ public partial class AddArchiveXlFilesDialogViewModel : DialogViewModel
     [ObservableProperty] private bool? _forceHair;
     [ObservableProperty] private bool? _isHeadItem;
 
-    [ObservableProperty] private bool _isAddMeshMaterials = true;
+    [ObservableProperty] private bool _isAddMeshMaterials;
 
     // enable/disable the subType and EquipmentEx slot dropdowns
     [ObservableProperty] private bool? _hasSlot;

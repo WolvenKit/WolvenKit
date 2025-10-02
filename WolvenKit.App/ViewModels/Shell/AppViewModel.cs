@@ -41,6 +41,7 @@ using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
+using WolvenKit.Core;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -1360,6 +1361,31 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanAddAxlControlFiles))]
     private void AddAXlItemFiles() => AddAxlFiles();
 
+    private string? GetModderName()
+    {
+        if (!string.IsNullOrEmpty(SettingsManager.ModderName))
+        {
+            return SettingsManager.ModderName;
+        }
+
+        if (string.IsNullOrEmpty(ActiveProject?.Author))
+        {
+            Interactions.ShowPopupWithWeblink((
+                "Please configure modder name",
+                "Please configure your name in the Wolvenkit settings",
+                WikiLinks.SettingsModderName,
+                "Open Wiki",
+                WMessageBoxImage.Warning
+            ));
+            return null;
+        }
+
+        SettingsManager.ModderName = ActiveProject.Author;
+        SettingsManager.Save();
+
+        return SettingsManager.ModderName;
+    }
+
 
     private void AddAxlFiles()
     {
@@ -1368,9 +1394,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             throw new WolvenKitException(0x4003, "No project loaded");
         }
 
-        if (string.IsNullOrEmpty(SettingsManager.ModderName))
+        if (string.IsNullOrEmpty(GetModderName()))
         {
-            throw new WolvenKitException(0x5000, "Please configure your modder name in the settings");
+            return;
         }
 
         var item = Interactions.ShowArchiveXlFilesView();
