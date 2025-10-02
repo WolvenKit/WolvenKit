@@ -1387,6 +1387,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         finally
         {
             _watcherService.Resume();
+            _watcherService.Refresh();
         }
     }
 

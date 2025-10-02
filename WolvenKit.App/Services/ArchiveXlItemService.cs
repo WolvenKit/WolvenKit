@@ -84,6 +84,18 @@ public class ArchiveXlItem
         // head
         { EquipmentItemSubSlot.Cap, @"base\characters\garment\player_equipment\head\h1_002_pwa_hat__headcap.ent" },
         { EquipmentItemSubSlot.Hat, @"base\characters\garment\player_equipment\head\h1_032_pwa_hat__asian.ent" },
+        { EquipmentItemSubSlot.Mask, @"base\characters\garment\player_equipment\head\h1_056_pwa_mask__samurai.ent" },
+        {
+            EquipmentItemSubSlot.Glasses, @"base\characters\garment\player_equipment\head\h1_038_pwa_specs__classic.ent"
+        },
+        {
+            EquipmentItemSubSlot.Tech,
+            @"base\characters\garment\player_equipment\head\h1_052_pwa_specs__tactical_01.ent"
+        },
+        {
+            EquipmentItemSubSlot.Visor,
+            @"base\characters\garment\player_equipment\head\h1_015_pwa_specs__visor_holo.ent"
+        },
 
         // torso
         { EquipmentItemSubSlot.Dress, @"base\characters\garment\player_equipment\torso\t2_014_pwa_dress__chic.ent" },
