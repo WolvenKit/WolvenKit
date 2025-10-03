@@ -86,6 +86,7 @@ public class SettingsDto : ISettingsDto
         ShowVerboseLogOutput = settings.ShowVerboseLogOutput;
         IsDiscordRPCEnabled = settings.IsDiscordRPCEnabled;
         ArchiveNamesExcludeFromScan = settings.ArchiveNamesExcludeFromScan;
+        UseModderNameAsSubfolder = settings.UseModderNameAsSubfolder;
 
         MigrateSettings();
     }
@@ -163,6 +164,7 @@ public class SettingsDto : ISettingsDto
     public bool ReopenFiles { get; set; } = true;
     public bool ShowVerboseLogOutput { get; set; }
     public bool IsDiscordRPCEnabled { get; set; } = true;
+    public bool UseModderNameAsSubfolder { get; set; }
     public string ArchiveNamesExcludeFromScan { get; set; } = "basegame_AMM_Props";
 
     #endregion
@@ -229,6 +231,7 @@ public class SettingsDto : ISettingsDto
         settingsManager.NumFilesToReopen = NumFilesToReopen;
         settingsManager.ShowVerboseLogOutput = ShowVerboseLogOutput;
         settingsManager.IsDiscordRPCEnabled = IsDiscordRPCEnabled;
+        settingsManager.UseModderNameAsSubfolder = UseModderNameAsSubfolder;
         settingsManager.ArchiveNamesExcludeFromScan = ArchiveNamesExcludeFromScan;
 
         return settingsManager;
