@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Splat;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.Views.Templates;
@@ -71,7 +72,7 @@ public partial class RedLocalizationStringEditor : UserControl
         {
             throw new Exception();
         }
-        
+
         e.Handled = !ulong.TryParse(textBox.Text.Insert(textBox.CaretIndex, e.Text), out _);
     }
 
@@ -79,47 +80,53 @@ public partial class RedLocalizationStringEditor : UserControl
     {
         var popup = new LocalizationStringPopup();
         var result = popup.ShowDialog();
-        
+
         if (result == true)
         {
             // Get the values from the popup
             var femaleVariant = popup.FemaleVariant;
             var maleVariant = popup.MaleVariant;
             var secondaryKey = popup.SecondaryKey;
-            
+
             // Update the LocalizationString Value with the secondaryKey
             if (!string.IsNullOrEmpty(secondaryKey))
             {
                 // Save to the onscreens localization file first
                 SaveToLocalizationFile(femaleVariant, maleVariant, secondaryKey);
-                
+
                 // Update the LocalizationString - this notifies the CVM
                 SetCurrentValue(RedLocalizationStringProperty, new LocalizationString
                 {
                     Unk1 = RedLocalizationString.Unk1,
                     Value = secondaryKey
                 });
+
+                if (DataContext is not ChunkViewModel cvm) {
+                    return;
+                }
+                cvm.RecalculateProperties();
+                cvm.Parent?.RecalculateProperties();
             }
         }
     }
-    
+
     private void SaveToLocalizationFile(string femaleVariant, string maleVariant, string secondaryKey)
     {
         try
         {
             var projectManager = Locator.Current.GetService<IProjectManager>();
             var cr2wTools = Locator.Current.GetService<Cr2WTools>();
-            
+
             if (projectManager?.ActiveProject == null || cr2wTools == null)
             {
                 return;
             }
-            
+
             var modDir = projectManager.ActiveProject.ModDirectory;
-            
+
             // Search for existing onscreens files in the entire mod directory
             string onscreensPath = null;
-            
+
             // First, look in the standard location
             var standardLocalizationDir = Path.Combine(modDir, "localization", "en-us", "onscreens");
             if (Directory.Exists(standardLocalizationDir))
@@ -127,7 +134,7 @@ public partial class RedLocalizationStringEditor : UserControl
                 var files = Directory.GetFiles(standardLocalizationDir, "*.json");
                 onscreensPath = files.FirstOrDefault();
             }
-            
+
             // If not found in standard location, search recursively in the mod directory
             if (onscreensPath == null && Directory.Exists(modDir))
             {
@@ -137,7 +144,7 @@ public partial class RedLocalizationStringEditor : UserControl
                     try
                     {
                         var testCr2w = cr2wTools.ReadCr2W(file);
-                        if (testCr2w?.RootChunk is JsonResource json && 
+                        if (testCr2w?.RootChunk is JsonResource json &&
                             json.Root.Chunk is localizationPersistenceOnScreenEntries)
                         {
                             onscreensPath = file;
@@ -150,7 +157,7 @@ public partial class RedLocalizationStringEditor : UserControl
                     }
                 }
             }
-            
+
             // If still not found, create a new file in the standard location
             if (onscreensPath == null)
             {
@@ -158,10 +165,10 @@ public partial class RedLocalizationStringEditor : UserControl
                 var projectName = projectManager.ActiveProject.Name;
                 onscreensPath = Path.Combine(standardLocalizationDir, $"{projectName}_onscreens.json");
             }
-            
+
             localizationPersistenceOnScreenEntries entries;
             CR2WFile cr2w;
-            
+
             // Load existing file or create new one
             if (File.Exists(onscreensPath))
             {
@@ -193,7 +200,7 @@ public partial class RedLocalizationStringEditor : UserControl
                     }
                 };
             }
-            
+
             // Check if entry with this secondaryKey already exists
             var existingEntry = entries.Entries.FirstOrDefault(e => e.SecondaryKey == secondaryKey);
             if (existingEntry != null)
@@ -201,24 +208,22 @@ public partial class RedLocalizationStringEditor : UserControl
                 // Update existing entry
                 existingEntry.FemaleVariant = femaleVariant;
                 existingEntry.MaleVariant = maleVariant;
-                existingEntry.PrimaryKey = RedLocalizationString.Unk1;
             }
             else
             {
                 // Add new entry
                 var newEntry = new localizationPersistenceOnScreenEntry
                 {
-                    PrimaryKey = RedLocalizationString.Unk1,
                     SecondaryKey = secondaryKey,
                     FemaleVariant = femaleVariant,
                     MaleVariant = maleVariant
                 };
                 entries.Entries.Add(newEntry);
             }
-            
+
             // Save the file
             cr2wTools.WriteCr2W(cr2w, onscreensPath);
-            
+
             // Reload the file if it's currently open
             ReloadFileIfOpen(onscreensPath);
         }
@@ -227,7 +232,7 @@ public partial class RedLocalizationStringEditor : UserControl
             MessageBox.Show($"Failed to save localization data: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
-    
+
     private void ReloadFileIfOpen(string filePath)
     {
         try
@@ -237,13 +242,13 @@ public partial class RedLocalizationStringEditor : UserControl
             {
                 return;
             }
-            
+
             // Find the document with this file path
             var openDocument = appViewModel.DockedViews
                 .OfType<App.ViewModels.Documents.IDocumentViewModel>()
-                .FirstOrDefault(doc => doc.FilePath != null && 
+                .FirstOrDefault(doc => doc.FilePath != null &&
                                       Path.GetFullPath(doc.FilePath).Equals(Path.GetFullPath(filePath), StringComparison.OrdinalIgnoreCase));
-            
+
             if (openDocument != null)
             {
                 // Check if the document has unsaved changes
@@ -254,13 +259,13 @@ public partial class RedLocalizationStringEditor : UserControl
                         "Unsaved Changes",
                         MessageBoxButton.YesNoCancel,
                         MessageBoxImage.Question);
-                    
+
                     if (result == MessageBoxResult.Cancel)
                     {
                         // User cancelled, don't reload
                         return;
                     }
-                    
+
                     if (result == MessageBoxResult.Yes)
                     {
                         // Save the document first
@@ -268,7 +273,7 @@ public partial class RedLocalizationStringEditor : UserControl
                     }
                     // If No, continue without saving (changes will be lost on reload)
                 }
-                
+
                 // Reload the document
                 openDocument.Reload(false);
             }
