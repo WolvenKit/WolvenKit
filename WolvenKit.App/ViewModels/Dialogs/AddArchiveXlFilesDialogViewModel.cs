@@ -69,9 +69,9 @@ public partial class AddArchiveXlFilesDialogViewModel : DialogViewModel
         HasSlot = false;
     }
 
-    public ArchiveXlItem CollectItemInfo()
+    public ArchiveXlClothingItem CollectItemInfo()
     {
-        var ret = new ArchiveXlItem()
+        var ret = new ArchiveXlClothingItem()
         {
             ItemName = ItemName ?? string.Empty,
             Slot = Slot ?? EquipmentItemSlot.Head,
