@@ -122,7 +122,7 @@ public partial class RedLocalizationStringEditor : UserControl
                 return;
             }
 
-            var modDir = projectManager.ActiveProject.ModDirectory;
+            var modDir = Path.Combine(projectManager.ActiveProject.ModDirectory, "mod", projectManager.ActiveProject.Name);
 
             // Search for existing onscreens files in the entire mod directory
             string onscreensPath = null;
@@ -163,7 +163,7 @@ public partial class RedLocalizationStringEditor : UserControl
             {
                 Directory.CreateDirectory(standardLocalizationDir);
                 var projectName = projectManager.ActiveProject.Name;
-                onscreensPath = Path.Combine(standardLocalizationDir, $"{projectName}_onscreens.json");
+                onscreensPath = Path.Combine(standardLocalizationDir, $"{projectName}.json");
             }
 
             localizationPersistenceOnScreenEntries entries;
