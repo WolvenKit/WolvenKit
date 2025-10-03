@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using YamlDotNet.RepresentationModel;
@@ -11,12 +10,10 @@ using YamlDotNet.Serialization;
 
 namespace WolvenKit.App.Helpers;
 
-public class YamlHelper
+public static class YamlHelper
 {
-    public static YamlMappingNode CreateLocalizationNode(string jsonRelPath)
-    {
-        return new YamlMappingNode { { "onscreens", new YamlMappingNode { { "en-us", jsonRelPath } } } };
-    }
+    public static YamlMappingNode CreateLocalizationNode(string jsonRelPath) =>
+        new() { { "onscreens", new YamlMappingNode { { "en-us", jsonRelPath } } } };
 
     public static YamlMappingNode CreateScopeNode(string scopeName, List<string> scopeValues)
     {
@@ -32,14 +29,60 @@ public class YamlHelper
         };
     }
 
+    public static YamlMappingNode EnsureNestedMapping(YamlMappingNode rootNode, params string[] names)
+    {
+        if (names.Length == 0)
+        {
+            return rootNode;
+        }
+
+        var currentNode = rootNode;
+        foreach (var name in names)
+        {
+            if (!currentNode.Children.TryGetValue(name, out var child))
+            {
+                var newNode = new YamlMappingNode();
+                currentNode.Add(name, newNode);
+                currentNode = newNode;
+            }
+            else if (child is YamlMappingNode existingNode)
+            {
+                currentNode = existingNode;
+            }
+            else
+            {
+                throw new InvalidOperationException($"Node '{name}' exists but is not a mapping node.");
+            }
+        }
+
+        return currentNode;
+    }
+
 
     public static void WriteYaml(string absolutePath, YamlMappingNode rootNode)
     {
+        if (Path.GetDirectoryName(absolutePath) is string path && !Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
+
         var serializer = new SerializerBuilder().WithIndentedSequences().Build();
         var yaml = serializer.Serialize(rootNode);
 
         using var writer = new StreamWriter(absolutePath);
-        writer.Write(yaml);
+        writer.Write(yaml.Replace("'", ""));
+    }
+
+    public static void WriteYaml(string absolutePath, ExpandoObject rootNode)
+    {
+        if (Path.GetDirectoryName(absolutePath) is string path && !Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
+        var serializer = new Serializer();
+        var yamlString = serializer.Serialize(rootNode);
+        var filePath = Path.Join(absolutePath);
+        File.WriteAllText(filePath, yamlString);
     }
 
     public static ExpandoObject? ReadYamlAsObject(string absolutePath)
@@ -54,7 +97,79 @@ public class YamlHelper
         return JsonConvert.DeserializeObject<ExpandoObject>(jsonText, new ExpandoObjectConverter());
     }
 
-    public static Dictionary<string, List<string>> GetItemsFromYaml(string absolutePath)
+    public static YamlMappingNode? ReadYamlAsNodes(string absolutePath)
+    {
+        if (!File.Exists(absolutePath))
+        {
+            return null;
+        }
+
+        var yamlText = File.ReadAllText(absolutePath);
+        var yamlStream = new YamlStream();
+        using (var reader = new StringReader(yamlText))
+        {
+            yamlStream.Load(reader);
+        }
+
+        if (yamlStream.Documents.Count == 0)
+        {
+            return null;
+        }
+
+        return yamlStream.Documents[0].RootNode as YamlMappingNode;
+    }
+
+    public static void AddPropertyRecursive(IDictionary<string, object> dict, object property, params string[] names)
+    {
+        if (names.Length == 0)
+        {
+            return;
+        }
+
+        while (names.Length > 1)
+        {
+            var name = names[0];
+            names = names.Skip(1).ToArray();
+            if (!dict.TryGetValue(name, out var value))
+            {
+                dict.Add(name, new Dictionary<string, object>());
+            }
+
+            if (dict[name] is IDictionary<string, object> child)
+            {
+                dict = child;
+            }
+        }
+
+        dict[names[0]] = property;
+    }
+
+    public static object? GetPropertyRecursive(IDictionary<string, object> dict, params string[] names)
+    {
+        if (names.Length == 0)
+        {
+            return null;
+        }
+
+        while (names.Length > 1)
+        {
+            var name = names[0];
+            names = names.Skip(1).ToArray();
+            if (!dict.TryGetValue(names[0], out var value))
+            {
+                return null;
+            }
+
+            if (dict[name] is IDictionary<string, object> child)
+            {
+                dict = child;
+            }
+        }
+
+        return dict[names[0]];
+    }
+
+    public static Dictionary<string, List<string>> GetItemRecordsFromYaml(string absolutePath)
     {
         Dictionary<string, List<string>> ret = [];
         if (ReadYamlAsObject(absolutePath) is not ExpandoObject yaml || yaml.AsReadOnly() is not { } yamlDict ||

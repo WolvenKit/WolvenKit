@@ -128,6 +128,24 @@
                                 Foreground="{StaticResource WolvenKitYellow}" />
                         </MenuItem.Icon>
                     </MenuItem>
+
+                    <Separator />
+
+                    <!-- ArchiveXL item files -->
+                    <MenuItem
+                        x:Name="MenuItemAddAxlItemFiles"
+                        Margin="2,1"
+                        Header="ArchiveXL item"
+                        ToolTip="Adds all necessary files for a new ArchiveXL item">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="Material"
+                                Kind="TshirtCrew"
+                                Size="{DynamicResource WolvenKitIconTiny}"
+                                Foreground="{StaticResource WolvenKitYellow}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
                 </MenuItem>
 
                 <MenuItem
@@ -328,6 +346,18 @@
                         Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
                         Click="GenerateItemCodes_Click"
                         Header="Generate item codes from .yaml">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="Material"
+                                Kind="FormatList"
+                                Size="{DynamicResource WolvenKitIconTiny}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <MenuItem
+                        Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                        Click="AddItemsToVendor_Click"
+                        Header="Add items to store/vendor">
                         <MenuItem.Icon>
                             <local:IconBox
                                 IconPack="Material"

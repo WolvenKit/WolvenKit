@@ -25,10 +25,7 @@ public static partial class ArchiveXlHelper
     private static ILoggerService? LoggerService => s_loggerService ??= Locator.Current.GetService<ILoggerService>();
 
     private static IProjectManager? s_projectManager;
-
-    private static IProjectManager? ProjectManager =>
-        s_projectManager ??= Locator.Current.GetService<IProjectManager>();
-
+    private static IProjectManager? ProjectManager => s_projectManager ??= Locator.Current.GetService<IProjectManager>();
 
     private static readonly Dictionary<string, string[]> s_keysAndValues = new()
     {
@@ -90,7 +87,7 @@ public static partial class ArchiveXlHelper
 
         // For {body}: If we get meshes from active project, we'll use these instead of substituting.
         // The list will only hold "base_body" anyway.
-        if (depotPath.Contains("{body}") && depotPath.Split("{body}") is string[] { Length: 2 } parts &&
+        if (depotPath.Contains("{body}") && depotPath.Split("{body}") is { Length: 2 } parts &&
             activeProject is not null)
         {
             if (!s_keysAndValues.TryGetValue("{body}", out var bodyValues))
@@ -159,7 +156,7 @@ public static partial class ArchiveXlHelper
             foreach (var path in activeProject.ModFiles)
             {
                 if (!string.IsNullOrEmpty(pathStart) && path.StartsWith(pathStart) &&
-                    path.Replace(pathStart, "").Split(Path.DirectorySeparatorChar) is string[]
+                    path.Replace(pathStart, "").Split(Path.DirectorySeparatorChar) is
                     {
                         Length: > 1
                     } variantParts)
@@ -181,7 +178,7 @@ public static partial class ArchiveXlHelper
     public static string? GetFirstExistingPath(string? depotPath, Cp77Project? activeProject = null)
     {
         if (depotPath is null || ProjectManager?.ActiveProject?.ModDirectory is not string pathToArchiveFolder
-                              || ProjectManager?.ActiveProject?.FileDirectory is not string pathToGameFiles)
+                              || ProjectManager.ActiveProject?.FileDirectory is not string pathToGameFiles)
         {
             return null;
         }
@@ -414,4 +411,6 @@ public static partial class ArchiveXlHelper
 
     [GeneratedRegex(@"(\{[^}]+\})")]
     private static partial Regex PlaceholderSplitPattern();
+
+
 }
