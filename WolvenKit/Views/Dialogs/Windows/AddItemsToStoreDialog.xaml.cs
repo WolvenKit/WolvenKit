@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -55,6 +56,21 @@ namespace WolvenKit.Views.Dialogs.Windows
                         x => x.RememberValuesCheckbox.IsChecked)
                     .DisposeWith(disposables);
 
+                #region validation
+
+                this.WhenAnyValue(x => x.ItemCodesTextBox.Text)
+                    .Select(_ => ViewModel?.CanSave())
+                    .BindTo(this, x => x.ViewModel.IsFinishEnabled);
+
+                this.WhenAnyValue(x => x.RedsDropdownMenu.SelectedOption)
+                    .Select(_ => ViewModel?.CanSave())
+                    .BindTo(this, x => x.ViewModel.IsFinishEnabled);
+
+                this.WhenAnyValue(x => x.YamlDropdownMenu.SelectedOption)
+                    .Select(_ => ViewModel?.CanSave())
+                    .BindTo(this, x => x.ViewModel.IsFinishEnabled);
+
+                #endregion
 
                 if (s_rememberValues && s_lastItemCodes.Count > 0)
                 {

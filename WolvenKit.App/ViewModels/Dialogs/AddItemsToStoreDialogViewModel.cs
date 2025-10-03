@@ -61,9 +61,6 @@ public partial class AddItemsToStoreDialogViewModel : ObservableObject
         }
     }
 
-    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-    {
-        IsFinishEnabled = ItemCodes.Count > 0 && (!string.IsNullOrEmpty(YamlPath) || !string.IsNullOrEmpty(RedsPath));
-        base.OnPropertyChanged(e);
-    }
+    public bool CanSave() =>
+        ItemCodes.Count > 0 && !(string.IsNullOrEmpty(YamlPath) && string.IsNullOrEmpty(RedsPath));
 }
