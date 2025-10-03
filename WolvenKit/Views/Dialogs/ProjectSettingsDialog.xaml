@@ -8,13 +8,14 @@
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:controls="clr-namespace:WolvenKit.Views.Others"
     mc:Ignorable="d"
     d:DesignWidth="640"
     d:DesignHeight="320"
     MinWidth="{DynamicResource WolvenKitDialogWidth}"
     MinHeight="{DynamicResource WolvenKitDialogHeight}"
     Background="{StaticResource ContentBackgroundAlt3}">
-    <Grid Margin="{DynamicResource WolvenKitMarginSmall}">
+    <Grid Margin="{DynamicResource WolvenKitMargin}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -37,74 +38,94 @@
 
         <Grid
             Grid.Row="0"
-            Grid.Column="2"
-            Margin="{DynamicResource WolvenKitMarginSmallBottom}">
+            Grid.Column="2">
             <Grid.Resources>
                 <Style TargetType="{x:Type Label}">
                     <Setter Property="VerticalAlignment" Value="Center" />
                 </Style>
             </Grid.Resources>
 
+            <!-- Settings panel - will be switched around by ListView -->
             <StackPanel x:Name="GeneralPanel">
                 <Grid Margin="{DynamicResource WolvenKitMarginTinyBottom}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="2*" />
                         <ColumnDefinition Width="8*" />
+                        <ColumnDefinition Width="50" />
                     </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="35" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="5" />
+                    </Grid.RowDefinitions>
 
                     <Label Grid.Column="0">Project Name</Label>
                     <hc:TextBox
                         x:Name="ProjectNameTextBox"
+                        Grid.Row="0"
                         Grid.Column="1"
+                        Background="{StaticResource BackgroundColor_Button_Active}"
                         IsReadOnly="True" />
-                </Grid>
 
-                <Grid Margin="{DynamicResource WolvenKitMarginTinyBottom}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*" />
-                        <ColumnDefinition Width="8*" />
-                    </Grid.ColumnDefinitions>
+                    <controls:ColorPickerButton
+                        x:Name="ProjectColorButton"
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Width="40"
+                        Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
+                        Color="{Binding ProjectColor}" />
 
-                    <Label Grid.Column="0">Mod Name</Label>
+
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="0">
+                        Mod Name
+                    </Label>
                     <hc:TextBox
                         x:Name="ModNameTextBox"
+                        Grid.Row="2"
                         Grid.Column="1" />
-                </Grid>
 
-                <Grid Margin="{DynamicResource WolvenKitMarginTinyBottom}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*" />
-                        <ColumnDefinition Width="8*" />
-                    </Grid.ColumnDefinitions>
 
-                    <Label Grid.Column="0">Author</Label>
-                    <hc:TextBox
-                        x:Name="AuthorTextBox"
-                        Grid.Column="1" />
-                </Grid>
-
-                <Grid Margin="{DynamicResource WolvenKitMarginTinyBottom}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*" />
-                        <ColumnDefinition Width="8*" />
-                    </Grid.ColumnDefinitions>
-
-                    <Label Grid.Column="0">Email</Label>
-                    <hc:TextBox
-                        x:Name="EmailTextBox"
-                        Grid.Column="1" />
-                </Grid>
-
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*" />
-                        <ColumnDefinition Width="8*" />
-                    </Grid.ColumnDefinitions>
-
-                    <Label Grid.Column="0">Version</Label>
+                    <Label
+                        Grid.Row="4"
+                        Grid.Column="0">
+                        Version
+                    </Label>
                     <hc:TextBox
                         x:Name="VersionTextBox"
+                        Grid.Row="4"
                         Grid.Column="1" />
+
+
+                    <Label
+                        Grid.Row="6"
+                        Grid.Column="0">
+                        Author
+                    </Label>
+                    <hc:TextBox
+                        x:Name="AuthorTextBox"
+                        Grid.Row="6"
+                        Grid.Column="1" />
+
+                    <!-- Mod author -->
+                    <Label
+                        Grid.Row="8"
+                        Grid.Column="0">
+                        Email
+                    </Label>
+                    <hc:TextBox
+                        x:Name="EmailTextBox"
+                        Grid.Row="8"
+                        Grid.Column="1" />
+
                 </Grid>
             </StackPanel>
         </Grid>
