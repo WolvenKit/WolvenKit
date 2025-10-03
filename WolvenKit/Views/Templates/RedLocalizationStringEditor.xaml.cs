@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Splat;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Archive.CR2W;
@@ -92,14 +93,26 @@ public partial class RedLocalizationStringEditor : UserControl
             if (!string.IsNullOrEmpty(secondaryKey))
             {
                 // Save to the onscreens localization file first
-                SaveToLocalizationFile(femaleVariant, maleVariant, secondaryKey);
+                var fileExists = SaveToLocalizationFile(femaleVariant, maleVariant, secondaryKey);
 
-                // Update the LocalizationString - this notifies the CVM
-                SetCurrentValue(RedLocalizationStringProperty, new LocalizationString
+                if (fileExists)
                 {
-                    Unk1 = RedLocalizationString.Unk1,
-                    Value = secondaryKey
-                });
+                    // Update the LocalizationString - this notifies the CVM
+                    SetCurrentValue(RedLocalizationStringProperty, new LocalizationString
+                    {
+                        Unk1 = RedLocalizationString.Unk1,
+                        Value = secondaryKey
+                    });
+                }
+                else
+                {
+                    // Update the LocalizationString - this notifies the CVM
+                    SetCurrentValue(RedLocalizationStringProperty, new LocalizationString
+                    {
+                        Unk1 = 0,
+                        Value = ""
+                    });
+                }
 
                 if (DataContext is not ChunkViewModel cvm) {
                     return;
@@ -110,7 +123,7 @@ public partial class RedLocalizationStringEditor : UserControl
         }
     }
 
-    private void SaveToLocalizationFile(string femaleVariant, string maleVariant, string secondaryKey)
+    private bool SaveToLocalizationFile(string femaleVariant, string maleVariant, string secondaryKey)
     {
         try
         {
@@ -119,7 +132,7 @@ public partial class RedLocalizationStringEditor : UserControl
 
             if (projectManager?.ActiveProject == null || cr2wTools == null)
             {
-                return;
+                return false;
             }
 
             var modDir = Path.Combine(projectManager.ActiveProject.ModDirectory, "mod", projectManager.ActiveProject.Name);
@@ -127,16 +140,8 @@ public partial class RedLocalizationStringEditor : UserControl
             // Search for existing onscreens files in the entire mod directory
             string onscreensPath = null;
 
-            // First, look in the standard location
-            var standardLocalizationDir = Path.Combine(modDir, "localization", "en-us", "onscreens");
-            if (Directory.Exists(standardLocalizationDir))
-            {
-                var files = Directory.GetFiles(standardLocalizationDir, "*.json");
-                onscreensPath = files.FirstOrDefault();
-            }
-
-            // If not found in standard location, search recursively in the mod directory
-            if (onscreensPath == null && Directory.Exists(modDir))
+            // search for json recursively in the mod directory
+            if (Directory.Exists(modDir))
             {
                 var allJsonFiles = Directory.GetFiles(modDir, "*.json", SearchOption.AllDirectories);
                 foreach (var file in allJsonFiles)
@@ -150,28 +155,26 @@ public partial class RedLocalizationStringEditor : UserControl
                             onscreensPath = file;
                             break;
                         }
+
+                        MessageBox.Show($"Onscreen json doesn't exist in {Path.GetFileName(modDir)} or is not properly initialised.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return false;
                     }
                     catch
                     {
-                        // Not a valid onscreens file, continue searching
+                        // ignore
                     }
                 }
             }
 
-            // If still not found, create a new file in the standard location
-            if (onscreensPath == null)
-            {
-                Directory.CreateDirectory(standardLocalizationDir);
-                var projectName = projectManager.ActiveProject.Name;
-                onscreensPath = Path.Combine(standardLocalizationDir, $"{projectName}.json");
-            }
+            // Reload the file if it's currently open
+            ReloadFileIfOpen(onscreensPath);
 
-            localizationPersistenceOnScreenEntries entries;
-            CR2WFile cr2w;
+            localizationPersistenceOnScreenEntries entries = null;
+            CR2WFile cr2w = null;
 
-            // Load existing file or create new one
             if (File.Exists(onscreensPath))
             {
+
                 cr2w = cr2wTools.ReadCr2W(onscreensPath);
                 if (cr2w?.RootChunk is JsonResource json && json.Root.Chunk is localizationPersistenceOnScreenEntries existing)
                 {
@@ -189,56 +192,54 @@ public partial class RedLocalizationStringEditor : UserControl
                     };
                 }
             }
-            else
-            {
-                entries = new localizationPersistenceOnScreenEntries();
-                cr2w = new CR2WFile
-                {
-                    RootChunk = new JsonResource
-                    {
-                        Root = new CHandle<ISerializable>(entries)
-                    }
-                };
-            }
 
             // Check if entry with this secondaryKey already exists
-            var existingEntry = entries.Entries.FirstOrDefault(e => e.SecondaryKey == secondaryKey);
-            if (existingEntry != null)
+            if (entries != null)
             {
-                // Update existing entry
-                existingEntry.FemaleVariant = femaleVariant;
-                existingEntry.MaleVariant = maleVariant;
-            }
-            else
-            {
-                // Add new entry
-                var newEntry = new localizationPersistenceOnScreenEntry
+                var existingEntry = entries.Entries.FirstOrDefault(e => e.SecondaryKey == secondaryKey);
+                if (existingEntry != null)
                 {
-                    SecondaryKey = secondaryKey,
-                    FemaleVariant = femaleVariant,
-                    MaleVariant = maleVariant
-                };
-                entries.Entries.Add(newEntry);
+                    if(Interactions.ShowQuestionYesNo((
+                        $"Entry {existingEntry} already exists. Overwrite it?", "Overwrite Entry?")))
+                    {
+                        existingEntry.FemaleVariant = femaleVariant;
+                        existingEntry.MaleVariant = maleVariant;
+                    }
+                }
+                else
+                {
+                    // Add new entry
+                    var newEntry = new localizationPersistenceOnScreenEntry
+                    {
+                        SecondaryKey = secondaryKey,
+                        FemaleVariant = femaleVariant,
+                        MaleVariant = maleVariant
+                    };
+                    entries.Entries.Add(newEntry);
+                }
             }
 
             // Save the file
-            cr2wTools.WriteCr2W(cr2w, onscreensPath);
+            if (cr2w != null)
+            {
+                cr2wTools.WriteCr2W(cr2w, onscreensPath);
+                ReloadFileIfOpen(onscreensPath);
+            }
 
-            // Reload the file if it's currently open
-            ReloadFileIfOpen(onscreensPath);
+            return true;
         }
         catch (Exception ex)
         {
             MessageBox.Show($"Failed to save localization data: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return false;
         }
     }
 
-    private void ReloadFileIfOpen(string filePath)
+    private static void ReloadFileIfOpen(string filePath)
     {
         try
         {
-            var appViewModel = Locator.Current.GetService<App.ViewModels.Shell.AppViewModel>();
-            if (appViewModel == null)
+            if (Locator.Current.GetService<App.ViewModels.Shell.AppViewModel>() is not {} appViewModel)
             {
                 return;
             }
@@ -249,34 +250,17 @@ public partial class RedLocalizationStringEditor : UserControl
                 .FirstOrDefault(doc => doc.FilePath != null &&
                                       Path.GetFullPath(doc.FilePath).Equals(Path.GetFullPath(filePath), StringComparison.OrdinalIgnoreCase));
 
-            if (openDocument != null)
+            if (openDocument == null)
             {
-                // Check if the document has unsaved changes
-                if (openDocument.IsDirty)
-                {
-                    var result = MessageBox.Show(
-                        $"The file {Path.GetFileName(filePath)} has unsaved changes. Do you want to save them before adding the new localization entry?",
-                        "Unsaved Changes",
-                        MessageBoxButton.YesNoCancel,
-                        MessageBoxImage.Question);
-
-                    if (result == MessageBoxResult.Cancel)
-                    {
-                        // User cancelled, don't reload
-                        return;
-                    }
-
-                    if (result == MessageBoxResult.Yes)
-                    {
-                        // Save the document first
-                        appViewModel.SaveFile(filePath);
-                    }
-                    // If No, continue without saving (changes will be lost on reload)
-                }
-
-                // Reload the document
-                openDocument.Reload(false);
+                return;
             }
+
+            if (openDocument.IsDirty)
+            {
+                appViewModel.SaveFile(filePath);
+            }
+
+            openDocument.Reload(true);
         }
         catch
         {
