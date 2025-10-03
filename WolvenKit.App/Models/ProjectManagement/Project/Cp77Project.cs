@@ -278,11 +278,11 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         var dir = Path.Combine(ResourcesDirectory, "r6", "scripts");
         if (useModderName && !string.IsNullOrEmpty(Author))
         {
-            dir = Path.Combine(dir, Author);
+            dir = Path.Combine(dir, Author.ToFileName());
         }
         else
         {
-            dir = Path.Combine(dir, ModName);
+            dir = Path.Combine(dir, ModName.ToFileName());
         }
 
         if (!Directory.Exists(dir))
@@ -300,11 +300,11 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         var dir = Path.Combine(ResourcesDirectory, "bin", "x64", "plugins", "cyber_engine_tweaks", "mods");
         if (useModderName && !string.IsNullOrEmpty(Author))
         {
-            dir = Path.Combine(dir, Author);
+            dir = Path.Combine(dir, Author.ToFileName());
         }
         else
         {
-            dir = Path.Combine(dir, ModName);
+            dir = Path.Combine(dir, ModName.ToFileName());
         }
 
         if (!Directory.Exists(dir))
@@ -323,11 +323,11 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         if (useModderName && !string.IsNullOrEmpty(Author))
 
         {
-            dir = Path.Combine(dir, Author);
+            dir = Path.Combine(dir, Author.ToFileName());
         }
         else
         {
-            dir = Path.Combine(dir, ModName);
+            dir = Path.Combine(dir, ModName.ToFileName());
         }
 
         if (!Directory.Exists(dir))
