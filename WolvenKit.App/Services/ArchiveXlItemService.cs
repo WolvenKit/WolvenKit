@@ -28,6 +28,7 @@ public class ArchiveXlItem
     /// Size tag (<see cref="GarmentSupportTag"/>)
     /// </summary>
     public GarmentSupportTags GarmentSupportTag { get; init; }
+
     public List<ArchiveXlHidingTags> HidingTags { get; init; } = [];
 
     /// <summary>
@@ -45,6 +46,7 @@ public class ArchiveXlItem
     /// tutorial/paper_bag
     /// </code></example>
     public string ControlFilesRelPath { get; set; } = string.Empty;
+
     public string TranslationFileRelPath { get; set; } = string.Empty;
 
     public string RootEntityPath { get; set; } = string.Empty;
@@ -62,92 +64,6 @@ public class ArchiveXlItem
 
     public bool IsAddMeshMaterials { get; set; }
 
-    public static readonly string DefaultAppFilePath =
-        @"base\gameplay\items\equipment\underwear\appearances\player_underwear_item_appearances.app";
-
-    public static readonly string DefaultRootEntityPath =
-        @"base\gameplay\items\equipment\underwear\player_underwear_item.ent";
-
-    public static readonly Dictionary<EquipmentItemSlot, string> FilesByType = new()
-    {
-        { EquipmentItemSlot.Face, @"base\characters\garment\player_equipment\head\h1_015_pwa_specs__visor_holo.ent" },
-        { EquipmentItemSlot.Head, @"base\characters\garment\player_equipment\head\h2_011_pwa_helmet__riot.ent" },
-        { EquipmentItemSlot.Legs, @"base\characters\garment\player_equipment\legs\l1_070_pwa_pants__loose.ent" },
-        {
-            EquipmentItemSlot.Torso_Inner,
-            @"base\characters\garment\player_equipment\torso\t1_079_pwa_tshirt__casual.ent"
-        },
-        { EquipmentItemSlot.Torso_Outer, @"base\characters\garment\player_equipment\torso\t2_002_pwa_vest__puffy.ent" },
-        { EquipmentItemSlot.Outfit, @"base\characters\garment\player_equipment\torso\t0_005_pwa_body__t_bug.ent" },
-    };
-
-    public static readonly Dictionary<EquipmentItemSubSlot, string> FilesBySubType = new()
-    {
-        // head
-        { EquipmentItemSubSlot.Cap, @"base\characters\garment\player_equipment\head\h1_002_pwa_hat__headcap.ent" },
-        { EquipmentItemSubSlot.Hat, @"base\characters\garment\player_equipment\head\h1_032_pwa_hat__asian.ent" },
-        { EquipmentItemSubSlot.Mask, @"base\characters\garment\player_equipment\head\h1_056_pwa_mask__samurai.ent" },
-        {
-            EquipmentItemSubSlot.Glasses, @"base\characters\garment\player_equipment\head\h1_038_pwa_specs__classic.ent"
-        },
-        {
-            EquipmentItemSubSlot.Tech,
-            @"base\characters\garment\player_equipment\head\h1_052_pwa_specs__tactical_01.ent"
-        },
-        {
-            EquipmentItemSubSlot.Visor,
-            @"base\characters\garment\player_equipment\head\h1_015_pwa_specs__visor_holo.ent"
-        },
-
-        // torso
-        { EquipmentItemSubSlot.Dress, @"base\characters\garment\player_equipment\torso\t2_014_pwa_dress__chic.ent" },
-        {
-            EquipmentItemSubSlot.Undershirt,
-            @"base\characters\garment\player_equipment\torso\t0_005_pwa_body__t_bug_tight.ent"
-        },
-        { EquipmentItemSubSlot.TankTop, @"base\characters\garment\player_equipment\torso\t1_071_pwa_tank__basic.ent" },
-        {
-            EquipmentItemSubSlot.Jumpsuit,
-            @"base\characters\garment\player_equipment\torso\t1_091_pwa_full__jumpsuit.ent"
-        },
-        {
-            EquipmentItemSubSlot.Coat,
-            @"base\characters\garment\player_equipment\torso\t2_097_pwa_jacket__holmes_coat.ent"
-        },
-        {
-            EquipmentItemSubSlot.TightJumpsuit,
-            @"base\characters\garment\player_equipment\torso\t0_005_pwa_body__t_bug.ent"
-        },
-        // legs
-        { EquipmentItemSubSlot.Skirt, @"base\characters\garment\player_equipment\legs\l1_011_pwa_skirt__tight.ent" },
-        { EquipmentItemSubSlot.Shorts, @"base\characters\garment\player_equipment\legs\l1_054_pwa_shorts__latino.ent" },
-        {
-            EquipmentItemSubSlot.FormalPants,
-            @"base\characters\garment\player_equipment\legs\l1_045_pwa_pants__suit.ent"
-        },
-        // feet
-        { EquipmentItemSubSlot.Boots, @"base\characters\garment\player_equipment\feet\s1_056_pwa_boot__biker.ent" },
-        {
-            EquipmentItemSubSlot.CasualShoes,
-            @"base\characters\garment\player_equipment\feet\s1_068_pwa_shoe__sneakers.ent"
-        },
-        {
-            EquipmentItemSubSlot.FormalShoes,
-            @"base\characters\garment\player_equipment\feet\s1_077_pwa_boot__blackwater.ent"
-        },
-    };
-
-    public static readonly Dictionary<EquipmentItemSlot, string> EquipmentItemSlotNames = new()
-    {
-        { EquipmentItemSlot.None, "Items.GenericHeadClothing" },
-        { EquipmentItemSlot.Head, "Items.GenericHeadClothing" },
-        { EquipmentItemSlot.Face, "Items.GenericFaceClothing" },
-        { EquipmentItemSlot.Torso_Inner, "Items.GenericInnerChestClothing" },
-        { EquipmentItemSlot.Torso_Outer, "Items.GenericOuterChestClothing" },
-        { EquipmentItemSlot.Legs, "Items.GenericLegClothing" },
-        { EquipmentItemSlot.Feet, "Items.GenericFootClothing" },
-        { EquipmentItemSlot.Outfit, "Items.Outfit" },
-    };
 
     public static readonly YamlSequenceNode StatModifiers = new(
         new YamlScalarNode("!append Quality.IconicItem"),
@@ -158,7 +74,6 @@ public class ArchiveXlItem
     public static readonly YamlSequenceNode StatModifierGroups = new(
         new YamlScalarNode("!append-once Items.IconicQualityRandomization")
     );
-
 }
 
 public class ArchiveXlItemService
@@ -479,14 +394,14 @@ public class ArchiveXlItemService
         {
             cr2W = f;
         }
-        else if (ArchiveXlItem.FilesBySubType.TryGetValue(itemData.SubSlot, out var meshEntityPath) &&
+        else if (EquipmentItemData.FilesBySubType.TryGetValue(itemData.SubSlot, out var meshEntityPath) &&
                  _archiveManager.GetCR2WFile(meshEntityPath) is
                      CR2WFile f2)
         {
             ((entEntityTemplate)f2.RootChunk).VisualTagsSchema.Chunk?.VisualTags.Tags.Clear();
             cr2W = f2;
         }
-        else if (ArchiveXlItem.FilesByType.TryGetValue(itemData.Slot, out var defaultFilePath) &&
+        else if (EquipmentItemData.FilesByType.TryGetValue(itemData.Slot, out var defaultFilePath) &&
                  _archiveManager.GetCR2WFile(defaultFilePath) is
                      CR2WFile f3)
         {
@@ -637,7 +552,7 @@ public class ArchiveXlItemService
         {
             cr2W = f;
         }
-        else if (_archiveManager.GetCR2WFile(ArchiveXlItem.DefaultRootEntityPath) is
+        else if (_archiveManager.GetCR2WFile(EquipmentItemData.DefaultRootEntityPath) is
                  CR2WFile f2)
         {
             ((entEntityTemplate)f2.RootChunk).Appearances.Clear();
@@ -706,7 +621,7 @@ public class ArchiveXlItemService
         {
             cr2W = f;
         }
-        else if (_archiveManager.GetCR2WFile(ArchiveXlItem.DefaultAppFilePath) is
+        else if (_archiveManager.GetCR2WFile(EquipmentItemData.DefaultAppFilePath) is
                  CR2WFile f2)
         {
             ((appearanceAppearanceResource)f2.RootChunk).Appearances.Clear();
@@ -758,7 +673,7 @@ public class ArchiveXlItemService
     /// </summary>
     private void CreateYamlEntry(ArchiveXlItem itemData, Cp77Project activeProject)
     {
-        if (!ArchiveXlItem.EquipmentItemSlotNames.TryGetValue(itemData.Slot, out var itemBase) ||
+        if (!EquipmentItemData.EquipmentItemSlotNames.TryGetValue(itemData.Slot, out var itemBase) ||
             string.IsNullOrEmpty(itemBase))
         {
             _logger.Error($"Failed to find item base for {itemData.Slot}. Not creating .yaml entry.");

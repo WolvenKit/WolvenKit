@@ -411,66 +411,6 @@ public static partial class ArchiveXlHelper
 
     [GeneratedRegex(@"(\{[^}]+\})")]
     private static partial Regex PlaceholderSplitPattern();
-    /// <summary>
-    /// Equipment slots and their potential sub-slots
-    /// </summary>
-    public static Dictionary<EquipmentItemSlot, List<EquipmentItemSubSlot>> EquipmentSlotsAndSubtypes = new()
-    {
-        {
-            EquipmentItemSlot.Head, [
-                EquipmentItemSubSlot.None,
-                EquipmentItemSubSlot.HelmetHair,
-                EquipmentItemSubSlot.Hat,
-                EquipmentItemSubSlot.Cap,
-                EquipmentItemSubSlot.Scarf,
-                EquipmentItemSubSlot.ScarfHair,
-                EquipmentItemSubSlot.Balaclava,
-            ]
-        },
-        {
-            EquipmentItemSlot.Face, [
-                EquipmentItemSubSlot.Glasses,
-                EquipmentItemSubSlot.Mask,
-                EquipmentItemSubSlot.Visor,
-                EquipmentItemSubSlot.Tech,
-            ]
-        },
-        {
-            EquipmentItemSlot.Torso_Inner, [
-                EquipmentItemSubSlot.FormalShirt,
-                EquipmentItemSubSlot.Shirt,
-                EquipmentItemSubSlot.TankTop,
-                EquipmentItemSubSlot.TightJumpsuit,
-                EquipmentItemSubSlot.TShirt,
-                EquipmentItemSubSlot.Undershirt,
-            ]
-        },
-        {
-            EquipmentItemSlot.Torso_Outer, [
-                EquipmentItemSubSlot.Coat,
-                EquipmentItemSubSlot.Dress,
-                EquipmentItemSubSlot.FormalJacket,
-                EquipmentItemSubSlot.Jacket,
-                EquipmentItemSubSlot.Jumpsuit,
-                EquipmentItemSubSlot.LooseShirt,
-                EquipmentItemSubSlot.Vest,
-            ]
-        },
-        {
-            EquipmentItemSlot.Legs, [
-                EquipmentItemSubSlot.FormalPants,
-                EquipmentItemSubSlot.Pants,
-                EquipmentItemSubSlot.Shorts,
-                EquipmentItemSubSlot.Skirt,
-            ]
-        },
-        {
-            EquipmentItemSlot.Feet, [
-                EquipmentItemSubSlot.Boots,
-                EquipmentItemSubSlot.CasualShoes,
-                EquipmentItemSubSlot.FormalShoes
-            ]
-        },
-        { EquipmentItemSlot.Outfit, [] },
-    };
+
+
 }

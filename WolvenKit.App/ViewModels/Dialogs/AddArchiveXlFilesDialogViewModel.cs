@@ -101,7 +101,7 @@ public partial class AddArchiveXlFilesDialogViewModel : DialogViewModel
 
         if (HasSlot == true)
         {
-            EquipmentItemSubSlots = ArchiveXlHelper.EquipmentSlotsAndSubtypes[slot];
+            EquipmentItemSubSlots = EquipmentItemData.EquipmentSlotsAndSubtypes[slot];
             return;
         }
 
