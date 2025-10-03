@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Extensions;
@@ -10,8 +9,6 @@ namespace WolvenKit.App.ViewModels.Dialogs;
 
 public partial class AddItemsToStoreDialogViewModel : ObservableObject
 {
-    private readonly Cp77Project _project;
-
     [ObservableProperty] private List<string> _itemCodes = [];
 
     [ObservableProperty] private string _redsPath = string.Empty;
@@ -27,7 +24,6 @@ public partial class AddItemsToStoreDialogViewModel : ObservableObject
     public AddItemsToStoreDialogViewModel(Cp77Project project, bool rememberValues, string prevYamlPath,
         string prevRedsPath)
     {
-        _project = project;
         RememberValues = rememberValues;
 
         var yamlFiles = new Dictionary<string, string> { { "", "" } };
