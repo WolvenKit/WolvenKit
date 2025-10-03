@@ -1361,6 +1361,10 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [RelayCommand(CanExecute = nameof(CanAddAxlControlFiles))]
     private void AddAXlItemFiles() => AddAxlFiles();
 
+    /// <summary>
+    /// Many users fill out their name when creating a new project, but have no idea the settings even exist.
+    /// This method will take care of that, displaying a notification if it is not set.
+    /// </summary>
     private string? GetModderName()
     {
         if (!string.IsNullOrEmpty(SettingsManager.ModderName))
