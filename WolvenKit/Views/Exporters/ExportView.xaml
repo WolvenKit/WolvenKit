@@ -1,4 +1,4 @@
-﻿<reactiveUi:ReactiveUserControl
+<reactiveUi:ReactiveUserControl
     x:Class="WolvenKit.Views.Exporters.ExportView"
     x:TypeArguments="vm:ExportViewModel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -309,6 +309,8 @@
                 EnableGrouping="True"
                 PropertyExpandMode="NestedMode"
                 ReadOnlyBackground="{DynamicResource ContentBackgroundAlt}"
+                SelectedObjectChanged="OverlayPropertyGrid_OnSelectedObjectChanged"
+                ValueChanged="OverlayPropertyGrid_OnValueChanged"
                 SearchBoxVisibility="Hidden"
                 SortDirection="{x:Null}" />
         </Grid>
