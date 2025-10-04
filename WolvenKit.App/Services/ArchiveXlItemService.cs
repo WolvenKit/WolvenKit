@@ -730,6 +730,7 @@ public class ArchiveXlItemService
         yamlData.Children.TryAdd("displayName", $"LocKey#{clothingItemData.ItemName}_i18n_$(base_color)");
         yamlData.Children.TryAdd("quality", "Quality.Legendary");
         yamlData.Children.TryAdd("statModifiers", ArchiveXlClothingItem.StatModifiers);
+        yamlData.Children.TryAdd("appearanceSuffixes", "[]");
         yamlData.Children.TryAdd("statModifierGroups", ArchiveXlClothingItem.StatModifierGroups);
 
         if (clothingItemData.EqExSlot is not EquipmentExSlot.None)
