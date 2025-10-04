@@ -1,6 +1,10 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Disposables;
+using System.Reflection;
+using System.Windows;
 using ReactiveUI;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.Windows.PropertyGrid;
@@ -16,6 +20,8 @@ namespace WolvenKit.Views.Exporters;
 /// </summary>
 public partial class ExportView : ReactiveUserControl<ExportViewModel>
 {
+    private readonly Dictionary<string, PropertyInfo> _shownProperties = new();
+
     public ExportView()
     {
         InitializeComponent();
@@ -64,6 +70,8 @@ public partial class ExportView : ReactiveUserControl<ExportViewModel>
             .ToList();
     }
 
+    private void OverlayPropertyGrid_OnSelectedObjectChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => _shownProperties.Clear();
+
     private void OverlayPropertyGrid_AutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
     {
         if (e.DisplayName is
@@ -87,6 +95,23 @@ public partial class ExportView : ReactiveUserControl<ExportViewModel>
             return;
         }
 
+        if (Attribute.GetCustomAttribute(propertyItem.PropertyInformation, typeof(UsedWith)) is UsedWith usedWith)
+        {
+            if (!_shownProperties.TryGetValue(usedWith.PropertyName, out var propertyInfo))
+            {
+                e.Cancel = true;
+                return;
+            }
+
+            var value = propertyInfo.GetValue(args);
+
+            if (!usedWith.Values.Contains(value))
+            {
+                e.Cancel = true;
+                return;
+            }
+        }
+
         switch (propertyItem.DisplayName)
         {
             case nameof(MeshExportArgs.Rig):
@@ -99,6 +124,14 @@ public partial class ExportView : ReactiveUserControl<ExportViewModel>
             default:
                 break;
         }
+
+        _shownProperties.Add(propertyItem.Name, propertyItem.PropertyInformation);
+    }
+
+    private void OverlayPropertyGrid_OnValueChanged(object sender, ValueChangedEventArgs args)
+    {
+        _shownProperties.Clear();
+        OverlayPropertyGrid.RefreshPropertygrid();
     }
 
     private void ExportGrid_SelectionChanged(object sender, GridSelectionChangedEventArgs e)
