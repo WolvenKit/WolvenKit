@@ -177,6 +177,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("Import Settings")]
         [Display(Name = "\tIgnore UV param")]
         [Description("Ignores the Garment Support UV param. Fixes a vanilla bug which creates a seam")]
+        [UsedWith(nameof(ImportGarmentSupport), true)]
         public bool IgnoreGarmentSupportUVParam { get; set; } = true;
 
         /// <summary>
@@ -192,14 +193,6 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [property: Browsable(false)]
         public bool ShowVerboseLogOutput { get; set; } = false;
-
-        /// <summary>
-        /// Strip Bind Pose transform from additive animations
-        /// </summary>
-        [Category("Animation Settings")]
-        [Display(Name = "Strip Local Transform from Additives")]
-        [Description("Only uncheck if your additive animations don't include joint's Local Transform (export selection) or you're certain you know what you're doing.")]
-        public bool AdditiveStripLocalTransform { get; set; } = true;
 
         /// <summary>
         /// Should a Material.Json be imported?
@@ -231,6 +224,15 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("Import Settings")]
         [Display(Name = "Target File Format")]
         public GltfImportAsFormat ImportFormat { get => _importFormat; set => SetProperty(ref _importFormat, value); }
+
+        /// <summary>
+        /// Strip Bind Pose transform from additive animations
+        /// </summary>
+        [Category("Animation Settings")]
+        [Display(Name = "Strip Local Transform from Additives")]
+        [Description("Only uncheck if your additive animations don't include joint's Local Transform (export selection) or you're certain you know what you're doing.")]
+        [UsedWith(nameof(ImportFormat), GltfImportAsFormat.Anims)]
+        public bool AdditiveStripLocalTransform { get; set; } = true;
 
         /// <summary>
         /// Fills empty sub meshes with dummy data
