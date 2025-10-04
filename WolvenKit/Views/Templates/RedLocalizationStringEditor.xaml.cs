@@ -114,7 +114,8 @@ public partial class RedLocalizationStringEditor : UserControl
                     });
                 }
 
-                if (DataContext is not ChunkViewModel cvm) {
+                if (DataContext is not ChunkViewModel cvm)
+                {
                     return;
                 }
                 cvm.RecalculateProperties();
@@ -156,7 +157,9 @@ public partial class RedLocalizationStringEditor : UserControl
                             break;
                         }
 
-                        MessageBox.Show($"Onscreen json doesn't exist in {Path.GetFileName(modDir)} or is not properly initialised.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show(
+                            $"Onscreen json doesn't exist in {Path.GetFileName(modDir)} or is not properly initialised.",
+                            "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                         return false;
                     }
                     catch
@@ -164,43 +167,37 @@ public partial class RedLocalizationStringEditor : UserControl
                         // ignore
                     }
                 }
-            }
 
-            // Reload the file if it's currently open
-            ReloadFileIfOpen(onscreensPath);
+                // Reload the file if it's currently open
+                ReloadFileIfOpen(onscreensPath);
 
-            localizationPersistenceOnScreenEntries entries = null;
-            CR2WFile cr2w = null;
+                localizationPersistenceOnScreenEntries entries = null;
 
-            if (File.Exists(onscreensPath))
-            {
+                if (!File.Exists(onscreensPath))
+                {
+                    MessageBox.Show(
+                        $"Onscreen json doesn't exist in {Path.GetFileName(modDir)} or is not properly initialised.",
+                        "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return false;
+                }
 
-                cr2w = cr2wTools.ReadCr2W(onscreensPath);
-                if (cr2w?.RootChunk is JsonResource json && json.Root.Chunk is localizationPersistenceOnScreenEntries existing)
+                var cr2w = cr2wTools.ReadCr2W(onscreensPath);
+
+                if (cr2w?.RootChunk is JsonResource jsonResource && jsonResource.Root.Chunk is localizationPersistenceOnScreenEntries existing)
                 {
                     entries = existing;
                 }
                 else
                 {
                     entries = new localizationPersistenceOnScreenEntries();
-                    cr2w = new CR2WFile
-                    {
-                        RootChunk = new JsonResource
-                        {
-                            Root = new CHandle<ISerializable>(entries)
-                        }
-                    };
+                    cr2w = new CR2WFile { RootChunk = new JsonResource { Root = new CHandle<ISerializable>(entries) } };
                 }
-            }
 
-            // Check if entry with this secondaryKey already exists
-            if (entries != null)
-            {
-                var existingEntry = entries.Entries.FirstOrDefault(e => e.SecondaryKey == secondaryKey);
-                if (existingEntry != null)
+                // Check if entry with this secondaryKey already exists
+                if (entries.Entries.FirstOrDefault(e => e.SecondaryKey == secondaryKey) is { } existingEntry)
                 {
-                    if(Interactions.ShowQuestionYesNo((
-                        $"Entry {existingEntry} already exists. Overwrite it?", "Overwrite Entry?")))
+                    if (Interactions.ShowQuestionYesNo((
+                            $"Entry {existingEntry} already exists. Overwrite it?", "Overwrite Entry?")))
                     {
                         existingEntry.FemaleVariant = femaleVariant;
                         existingEntry.MaleVariant = maleVariant;
@@ -217,11 +214,8 @@ public partial class RedLocalizationStringEditor : UserControl
                     };
                     entries.Entries.Add(newEntry);
                 }
-            }
 
-            // Save the file
-            if (cr2w != null)
-            {
+                // Save the file
                 cr2wTools.WriteCr2W(cr2w, onscreensPath);
                 ReloadFileIfOpen(onscreensPath);
             }
