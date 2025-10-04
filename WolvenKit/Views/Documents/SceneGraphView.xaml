@@ -81,6 +81,25 @@
             </DataTemplate>
 
             <!-- Button Style for Add Actor/Prop buttons -->
+            <!-- Info bar text styles -->
+            <Style
+                x:Key="Label"
+                TargetType="TextBlock">
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Foreground" Value="Gray" />
+                <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontAltTitle}" />
+                <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginTinyRight}" />
+            </Style>
+
+            <Style
+                x:Key="Value"
+                TargetType="TextBlock">
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontAltTitle}" />
+                <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginRight}" />
+            </Style>
+
             <Style
                 x:Key="SceneEditorButtonStyle"
                 TargetType="Button">
@@ -132,39 +151,20 @@
         <!-- Toolbar -->
         <Border
             Grid.Row="0"
-            Padding="{DynamicResource WolvenKitMarginSmall}"
+            Padding="{DynamicResource WolvenKitMarginTiny}"
             Background="{StaticResource ContentBackground}"
             BorderBrush="{StaticResource BorderAlt}"
             BorderThickness="0,0,0,1">
             <StackPanel Orientation="Horizontal">
-                <StackPanel.Resources>
-                    <Style
-                        x:Key="Label"
-                        TargetType="{x:Type TextBlock}">
-                        <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontAltTitle}" />
-                        <Setter Property="Foreground" Value="Gray" />
-                        <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginTinyRight}" />
-                        <Setter Property="VerticalAlignment" Value="Center" />
-                    </Style>
-
-                    <Style
-                        x:Key="Value"
-                        TargetType="{x:Type TextBlock}">
-                        <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
-                        <Setter Property="Foreground" Value="White" />
-                        <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginRight}" />
-                        <Setter Property="VerticalAlignment" Value="Center" />
-                    </Style>
-                </StackPanel.Resources>
-
-                <templates:IconBox
-                    IconPack="Material"
+                <iconPacks:PackIconMaterial
                     Kind="InformationOutline"
-                    Margin="{DynamicResource WolvenKitMarginTinyRight}"
-                    Size="{DynamicResource WolvenKitIconMicro}" />
+                    VerticalAlignment="Center"
+                    Margin="{DynamicResource WolvenKitMarginSmallRight}"
+                    Width="12"
+                    Height="12" />
 
                 <TextBlock
-                    Margin="0,0,16,0"
+                    Margin="{DynamicResource WolvenKitMarginRight}"
                     VerticalAlignment="Center"
                     Foreground="White"
                     FontSize="{DynamicResource WolvenKitFontSubTitle}"
