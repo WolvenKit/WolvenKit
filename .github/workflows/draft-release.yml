@@ -99,6 +99,11 @@ jobs:
       ##########################################
       # create release files
 
+      # Install InnoSetup
+      - name: install InnoSetup
+        shell: cmd
+        run: choco upgrade innosetup -y --no-progress
+
       # Create Installer in OUT_DIR
       - name: create setup
         run: ISCC /O"${{env.OUT_DIR}}" .\Installers\installer.iss
