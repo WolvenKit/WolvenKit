@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.Core;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Interfaces.Extensions;
@@ -109,6 +110,8 @@ public class ArchiveXlItemService
             throw new WolvenKitException(0x4003, "You need a Wolvenkit project to use this feature");
         }
 
+        var projectFiles = activeProject.ModFiles.ToList();
+
         SetPathsAndCreateDirectories(clothingItemData, activeProject);
 
         AddRootEntity(clothingItemData, activeProject);
@@ -126,6 +129,17 @@ public class ArchiveXlItemService
         CreateYamlEntry(clothingItemData, activeProject);
 
         RegisterInTranslationFile(clothingItemData, activeProject);
+
+        var newFiles = activeProject.ModFiles.Where(f => !projectFiles.Contains(f)).ToList();
+        if (newFiles.Count == 0)
+        {
+            return;
+        }
+
+        _logger.Success($"Your ArchiveXL item for {clothingItemData.Slot} has been created.");
+        _logger.Success($"The following files were added:\n\t{string.Join("\n\t", newFiles)}");
+        _logger.Success($"You can learn more about this process here:\n\t{WikiLinks.AddingNewItems}");
+
     }
 
     /// <summary>
