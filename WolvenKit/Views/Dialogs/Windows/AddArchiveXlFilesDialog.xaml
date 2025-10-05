@@ -132,7 +132,8 @@
 
         <syncfusion:WizardControl
             CancelButtonCancelsWindow="True"
-            FinishButtonClosesWindow="True">
+            FinishButtonClosesWindow="True"
+            Help="OnHelpButtonClicked">
             <syncfusion:WizardPage
                 BackVisibility="Collapsed"
                 CancelVisibility="Visible"
