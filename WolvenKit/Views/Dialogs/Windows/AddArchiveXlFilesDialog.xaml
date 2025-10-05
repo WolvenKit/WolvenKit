@@ -8,10 +8,12 @@
     xmlns:controls="clr-namespace:WolvenKit.Views.Controls"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     Title="Add Archive XL files"
+    Width="{StaticResource WolvenKitDialogWidth}"
+    MinWidth="{StaticResource WolvenKitDialogWidth}"
+    MinHeight="{StaticResource WolvenKitDialogHeightMedium}"
     SizeToContent="WidthAndHeight"
     FocusManager.FocusedElement="{Binding ElementName=ItemTypeControl}"
     WindowStartupLocation="CenterOwner">
-
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -23,11 +25,9 @@
     </Window.Resources>
 
     <Grid
-        Margin="5,5,2,5"
-        HorizontalAlignment="Stretch"
-        VerticalAlignment="Stretch"
+        Height="Auto"
+        Margin="{DynamicResource WolvenKitMarginHeader}"
         hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
-
         <Grid.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
@@ -54,7 +54,7 @@
                                                 <Storyboard>
                                                     <ColorAnimationUsingKeyFrames
                                                         Storyboard.TargetName="Border"
-                                                        Storyboard.TargetProperty="(Panel.Background).                     (SolidColorBrush.Color)">
+                                                        Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
                                                         <EasingColorKeyFrame
                                                             KeyTime="0"
                                                             Value="{StaticResource WolvenKitCyanColor}" />
@@ -69,18 +69,20 @@
                         </Setter.Value>
                     </Setter>
                 </Style>
+
                 <Style
                     x:Key="ExplanationStyle"
                     TargetType="TextBlock">
                     <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
-                    <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginLeftSmallTop}" />
+                    <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginBottom}" />
                 </Style>
+
                 <Style
                     x:Key="LabelStyle"
                     TargetType="TextBlock">
-                    <Setter Property="Foreground" Value="{StaticResource WolvenKitTan}" />
-                    <Setter Property="Margin" Value="5,15,0,4" />
+                    <Setter Property="VerticalAlignment" Value="Center" />
                 </Style>
+
                 <Style
                     x:Key="ComboboxStyle"
                     BasedOn="{StaticResource {x:Type ComboBox}}"
@@ -88,10 +90,9 @@
                     <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
                     <Setter Property="BorderThickness" Value="1" />
                     <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
-
-                    <Setter Property="Margin" Value="5,15,0,4" />
-                    <Setter Property="Padding" Value="5,7" />
+                    <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginTinyBottom}" />
                 </Style>
+
                 <Style
                     x:Key="TextBoxWithControlValidatorsStyle"
                     BasedOn="{StaticResource TextBoxExtendBaseStyle}"
@@ -126,341 +127,317 @@
                         </MultiTrigger>
                     </Style.Triggers>
                 </Style>
-
             </ResourceDictionary>
         </Grid.Resources>
-
 
         <syncfusion:WizardControl
             CancelButtonCancelsWindow="True"
             FinishButtonClosesWindow="True">
             <syncfusion:WizardPage
-                Padding="12,12"
                 BackVisibility="Collapsed"
                 CancelVisibility="Visible"
                 FinishVisibility="Visible"
                 HelpVisibility="Visible"
                 NextVisibility="Collapsed"
                 PageType="Exterior">
+                <Grid
+                    Height="Auto"
+                    Visibility="{Binding CreateFactory,
+                                         Converter={StaticResource InvertBooleanConverter}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                    </Grid.RowDefinitions>
 
-                <StackPanel Orientation="Vertical">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidthMedium}" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-                    <Grid Visibility="{Binding CreateFactory, Converter={StaticResource InvertBooleanConverter}}">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="5" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="5" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="5" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="5" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="5" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="5" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="5" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="5" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="5" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="5" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="5" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="120" />
-                            <ColumnDefinition Width="600" />
-                        </Grid.ColumnDefinitions>
+                    <!-- Item Type -->
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Style="{StaticResource LabelStyle}"
+                        Visibility="{Binding CreateFactory,
+                                             Converter={StaticResource InvertBooleanConverter}}"
+                        Text="Item Type" />
+                    <hc:ComboBox
+                        x:Name="ItemTypeControl"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Style="{StaticResource ComboboxStyle}"
+                        Visibility="{Binding CreateFactory,
+                                             Converter={StaticResource InvertBooleanConverter}}"
+                        IsEnabled="True"
+                        SelectedValuePath="Content"
+                        SelectedValue="{Binding RelativeSource={RelativeSource Mode=Self},
+                                                Path=Text}"
+                        IsEditable="True"
+                        KeyUp="ComboBox_KeyUp"
+                        IsTextSearchEnabled="False"
+                        GotFocus="Combobox_FocusGained"
+                        MouseDown="Combobox_OnClick"
+                        ItemsSource="{Binding EquipmentItemSlots}"
+                        SelectionChanged="ItemType_OnChanged"
+                        KeyboardNavigation.TabIndex="-1" />
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Style="{StaticResource ExplanationStyle}"
+                        Visibility="{Binding CreateFactory,
+                                             Converter={StaticResource InvertBooleanConverter}}"
+                        Text="Where do you want to equip your item?" />
 
+                    <!-- Item name -->
+                    <!-- We also need this to create a factory, since we need to generate a subfolder -->
+                    <TextBlock
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Style="{StaticResource LabelStyle}"
+                        Text="Item Name" />
+                    <hc:TextBox
+                        x:Name="ItemNameTextBox"
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Margin="{DynamicResource WolvenKitMarginTinyBottom}"
+                        Style="{StaticResource WolvenkitTextBoxStyle}"
+                        KeyboardNavigation.TabIndex="-1" />
+                    <TextBlock
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        Style="{StaticResource ExplanationStyle}"
+                        Visibility="{Binding CreateFactory,
+                                             Converter={StaticResource InvertBooleanConverter}}"
+                        Text="This will be used to generate your item's spawn code and internal names." />
 
-                        <!-- Item Type -->
-                        <TextBlock
-                            Grid.Row="3"
-                            Grid.Column="0"
-                            Style="{StaticResource LabelStyle}"
-                            Visibility="{Binding CreateFactory,
-                                                 Converter={StaticResource InvertBooleanConverter}}"
-                            Text="Item Type" />
-                        <hc:ComboBox
-                            x:Name="ItemTypeControl"
-                            Grid.Row="3"
-                            Grid.Column="1"
-                            Margin="{DynamicResource WolvenKitMarginLeftTop}"
-                            Style="{StaticResource ComboboxStyle}"
-                            Visibility="{Binding CreateFactory,
-                                                 Converter={StaticResource InvertBooleanConverter}}"
-                            IsEnabled="True"
-                            SelectedValuePath="Content"
-                            SelectedValue="{Binding RelativeSource={RelativeSource Mode=Self},
-                                                    Path=Text}"
-                            IsEditable="True"
-                            KeyUp="ComboBox_KeyUp"
-                            IsTextSearchEnabled="False"
-                            GotFocus="Combobox_FocusGained"
-                            MouseDown="Combobox_OnClick"
-                            ItemsSource="{Binding EquipmentItemSlots}"
-                            SelectionChanged="ItemType_OnChanged"
-                            KeyboardNavigation.TabIndex="-1" />
+                    <!-- Item Subtype -->
+                    <TextBlock
+                        Grid.Row="6"
+                        Grid.Column="0"
+                        Style="{StaticResource LabelStyle}"
+                        Text="Item subtype (optional)"
+                        TextWrapping="Wrap" />
+                    <hc:ComboBox
+                        x:Name="ItemSubtypeControl"
+                        Grid.Row="6"
+                        Grid.Column="1"
+                        Style="{StaticResource ComboboxStyle}"
+                        IsEnabled="{Binding HasSlot}"
+                        SelectedValuePath="Content"
+                        SelectedValue="{Binding RelativeSource={RelativeSource Mode=Self},
+                                                Path=Text}"
+                        IsEditable="True"
+                        KeyUp="ComboBox_KeyUp"
+                        IsTextSearchEnabled="False"
+                        GotFocus="Combobox_FocusGained"
+                        MouseDown="Combobox_OnClick"
+                        ItemsSource="{Binding EquipmentItemSubSlots}"
+                        KeyboardNavigation.TabIndex="-1"
+                        SelectionChanged="SubSlot_OnChanged" />
+                    <TextBlock
+                        Grid.Row="7"
+                        Grid.Column="1"
+                        Style="{StaticResource ExplanationStyle}"
+                        Text="Select a specific item type (e.g. if you need specific footstep sounds)" />
 
-                        <TextBlock
-                            Grid.Row="4"
-                            Grid.Column="1"
-                            Style="{StaticResource ExplanationStyle}"
-                            Visibility="{Binding CreateFactory,
-                                                 Converter={StaticResource InvertBooleanConverter}}"
-                            Text="Where do you want to equip your item?" />
+                    <!-- EqEx Type -->
+                    <TextBlock
+                        Grid.Row="9"
+                        Grid.Column="0"
+                        Style="{StaticResource LabelStyle}"
+                        Text="EquipmentEx slot (optional)"
+                        TextWrapping="Wrap" />
+                    <hc:ComboBox
+                        x:Name="EquipmentExControl"
+                        Grid.Row="9"
+                        Grid.Column="1"
+                        Style="{StaticResource ComboboxStyle}"
+                        IsTextSearchEnabled="True"
+                        SelectedValue="{Binding EquipmentExSlot}"
+                        ItemsSource="{Binding EquipmentExSlots}"
+                        SelectionChanged="EquipmentExSlot_OnChanged"
+                        KeyboardNavigation.TabIndex="-1" />
+                    <TextBlock
+                        Grid.Row="10"
+                        Grid.Column="1"
+                        Style="{StaticResource ExplanationStyle}"
+                        Text="Select an EquipmentEx slot (supports filtering)" />
 
-                        <!-- Item name -->
-                        <!-- We also need this to create a factory, since we need to generate a subfolder -->
-                        <TextBlock
-                            Grid.Row="6"
-                            Grid.Column="0"
-                            Style="{StaticResource LabelStyle}"
-                            Text="Item Name" />
-                        <hc:TextBox
-                            x:Name="ItemNameTextBox"
-                            Grid.Row="6"
-                            Grid.Column="1"
-                            Margin="{DynamicResource WolvenKitMarginLeftTop}"
-                            Style="{StaticResource WolvenkitTextBoxStyle}"
-                            KeyboardNavigation.TabIndex="-1" />
-                        <TextBlock
-                            Grid.Row="7"
-                            Grid.Column="1"
-                            Style="{StaticResource ExplanationStyle}"
-                            Visibility="{Binding CreateFactory,
-                                                 Converter={StaticResource InvertBooleanConverter}}"
-                            Text="This will be used to generate your item's spawn code and internal names." />
+                    <!-- Hiding tags -->
+                    <TextBlock
+                        Grid.Row="12"
+                        Grid.Column="0"
+                        Style="{StaticResource LabelStyle}"
+                        Text="Visibility tags (optional)"
+                        TextWrapping="Wrap" />
 
-                        <!-- Item Subtype -->
-                        <TextBlock
-                            Grid.Row="9"
-                            Grid.RowSpan="2"
-                            Grid.Column="0"
-                            Style="{StaticResource LabelStyle}"
-                            Text="Item subtype (optional)"
-                            TextWrapping="Wrap" />
-                        <hc:ComboBox
-                            x:Name="ItemSubtypeControl"
-                            Grid.Row="9"
-                            Grid.Column="1"
-                            Margin="{DynamicResource WolvenKitMarginLeftTop}"
-                            Style="{StaticResource ComboboxStyle}"
-                            IsEnabled="{Binding HasSlot}"
-                            SelectedValuePath="Content"
-                            SelectedValue="{Binding RelativeSource={RelativeSource Mode=Self},
-                                                    Path=Text}"
-                            IsEditable="True"
-                            KeyUp="ComboBox_KeyUp"
-                            IsTextSearchEnabled="False"
-                            GotFocus="Combobox_FocusGained"
-                            MouseDown="Combobox_OnClick"
-                            ItemsSource="{Binding EquipmentItemSubSlots}"
-                            KeyboardNavigation.TabIndex="-1"
-                            SelectionChanged="SubSlot_OnChanged" />
-                        <TextBlock
-                            Grid.Row="10"
-                            Grid.Column="1"
-                            Style="{StaticResource ExplanationStyle}"
-                            Text="Select a specific item type (e.g. if you need specific footstep sounds)" />
+                    <hc:CheckComboBox
+                        Grid.Row="12"
+                        Grid.Column="1"
+                        Margin="{DynamicResource WolvenKitMarginTinyBottom}"
+                        SelectedValuePath="{Binding HidingTags,
+                                                    UpdateSourceTrigger=LostFocus}"
+                        ItemsSource="{Binding HidingTagsSource}"
+                        SelectionChanged="HidingTags_SelectionChanged" />
 
+                    <TextBlock
+                        Grid.Row="13"
+                        Grid.Column="1"
+                        Style="{StaticResource ExplanationStyle}"
+                        Text="Hide player body parts?" />
 
-                        <!-- EqEx Type -->
-                        <TextBlock
-                            Grid.Row="12"
-                            Grid.RowSpan="2"
-                            Grid.Column="0"
-                            Style="{StaticResource LabelStyle}"
-                            Text="EquipmentEx slot (optional)"
-                            TextWrapping="Wrap" />
-                        <hc:ComboBox
-                            x:Name="EquipmentExControl"
-                            Grid.Row="12"
-                            Grid.Column="1"
-                            Margin="{DynamicResource WolvenKitMarginLeftTop}"
-                            Style="{StaticResource ComboboxStyle}"
-                            IsTextSearchEnabled="True"
-                            SelectedValue="{Binding EquipmentExSlot}"
-                            ItemsSource="{Binding EquipmentExSlots}"
-                            SelectionChanged="EquipmentExSlot_OnChanged"
-                            KeyboardNavigation.TabIndex="-1" />
-                        <TextBlock
-                            Grid.Row="13"
-                            Grid.Column="1"
-                            Style="{StaticResource ExplanationStyle}"
-                            Text="Select an EquipmentEx slot (supports filtering)" />
+                    <!-- GS tags -->
+                    <TextBlock
+                        Grid.Row="15"
+                        Grid.Column="0"
+                        Style="{StaticResource LabelStyle}"
+                        Text="Garment support tags (optional)"
+                        TextWrapping="Wrap" />
+                    <hc:ComboBox
+                        Grid.Row="15"
+                        Grid.Column="1"
+                        Style="{StaticResource ComboboxStyle}"
+                        SelectedValuePath="Content"
+                        SelectedValue="{Binding RelativeSource={RelativeSource Mode=Self},
+                                                Path=Text}"
+                        KeyboardNavigation.TabIndex="-1"
+                        IsEditable="True"
+                        KeyUp="ComboBox_KeyUp"
+                        IsTextSearchEnabled="False"
+                        GotFocus="Combobox_FocusGained"
+                        MouseDown="Combobox_OnClick"
+                        ItemsSource="{Binding GarmentSupportTagsSource}"
+                        SelectionChanged="GarmentSupportTag_OnChanged" />
+                    <TextBlock
+                        Grid.Row="16"
+                        Grid.Column="1"
+                        Style="{StaticResource ExplanationStyle}"
+                        Text="Add tags for fine-tuning garment support?" />
 
-                        <!-- Hiding tags -->
-                        <TextBlock
-                            Grid.Row="15"
-                            Grid.RowSpan="2"
-                            Grid.Column="0"
-                            Style="{StaticResource LabelStyle}"
-                            Text="Visibility tags (optional)"
-                            TextWrapping="Wrap" />
+                    <!-- Hide in First Person -->
+                    <TextBlock
+                        Grid.Row="18"
+                        Grid.Column="0"
+                        Style="{StaticResource LabelStyle}"
+                        Text="Hide in First Person?"
+                        TextWrapping="Wrap" />
+                    <CheckBox
+                        Grid.Row="18"
+                        Grid.Column="1"
+                        Margin="{DynamicResource WolvenKitMarginTinyBottom}"
+                        IsChecked="{Binding TagsHideInFpp}"
+                        KeyboardNavigation.TabIndex="-1" />
+                    <TextBlock
+                        Grid.Row="19"
+                        Grid.Column="1"
+                        Style="{StaticResource ExplanationStyle}"
+                        Text="Check to have your item visible in third person only (useful for face masks or helmets)" />
 
-                        <hc:CheckComboBox
-                            Grid.Row="15"
-                            Grid.Column="1"
-                            Margin="{DynamicResource WolvenKitMarginLeftTop}"
-                            SelectedValuePath="{Binding HidingTags,
-                                                        UpdateSourceTrigger=LostFocus}"
-                            ItemsSource="{Binding HidingTagsSource}"
-                            SelectionChanged="HidingTags_SelectionChanged" />
+                    <!-- Force Hair -->
+                    <TextBlock
+                        Grid.Row="21"
+                        Grid.Column="0"
+                        Style="{StaticResource LabelStyle}"
+                        Visibility="{Binding IsHeadItem,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Text="Force hair visibility?"
+                        TextWrapping="Wrap" />
+                    <CheckBox
+                        Grid.Row="21"
+                        Grid.Column="1"
+                        Margin="{DynamicResource WolvenKitMarginTinyBottom}"
+                        Visibility="{Binding IsHeadItem,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        IsChecked="{Binding TagsForceHair}"
+                        KeyboardNavigation.TabIndex="-1" />
+                    <TextBlock
+                        Grid.Row="22"
+                        Grid.Column="1"
+                        Style="{StaticResource ExplanationStyle}"
+                        Visibility="{Binding IsHeadItem,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Text="Check to force-display hair (head items hide player hair by default)" />
 
-                        <TextBlock
-                            Grid.Row="16"
-                            Grid.Column="1"
-                            Style="{StaticResource ExplanationStyle}"
-                            Text="Hide player body parts?" />
+                    <!-- Add materials to project -->
+                    <TextBlock
+                        Grid.Row="24"
+                        Grid.Column="0"
+                        Style="{StaticResource LabelStyle}"
+                        Text="Add mesh materials?"
+                        TextWrapping="Wrap" />
+                    <CheckBox
+                        Grid.Row="24"
+                        Grid.Column="1"
+                        KeyboardNavigation.TabIndex="-1"
+                        IsChecked="{Binding IsAddMeshMaterials}" />
+                    <!-- Keep for layout -->
+                    <TextBlock
+                        Grid.Row="25"
+                        Grid.Column="1"
+                        Style="{StaticResource ExplanationStyle}"
+                        Text="" />
 
-
-                        <!-- GS tags -->
-                        <TextBlock
-                            Grid.Row="18"
-                            Grid.RowSpan="2"
-                            Grid.Column="0"
-                            Style="{StaticResource LabelStyle}"
-                            Text="Garment support tags (optional)"
-                            TextWrapping="Wrap" />
-
-                        <hc:ComboBox
-                            Grid.Row="18"
-                            Grid.Column="1"
-                            Margin="{DynamicResource WolvenKitMarginLeftTop}"
-                            Style="{StaticResource ComboboxStyle}"
-                            SelectedValuePath="Content"
-                            SelectedValue="{Binding RelativeSource={RelativeSource Mode=Self},
-                                                    Path=Text}"
-                            KeyboardNavigation.TabIndex="-1"
-                            IsEditable="True"
-                            KeyUp="ComboBox_KeyUp"
-                            IsTextSearchEnabled="False"
-                            GotFocus="Combobox_FocusGained"
-                            MouseDown="Combobox_OnClick"
-                            ItemsSource="{Binding GarmentSupportTagsSource}"
-                            SelectionChanged="GarmentSupportTag_OnChanged" />
-                        <TextBlock
-                            Grid.Row="19"
-                            Grid.Column="1"
-                            Style="{StaticResource ExplanationStyle}"
-                            Text="Add tags for fine-tuning garment support?" />
-
-                        <!-- Hide in First Person -->
-                        <TextBlock
-                            Grid.Row="21"
-                            Grid.RowSpan="2"
-                            Grid.Column="0"
-                            Style="{StaticResource LabelStyle}"
-                            Text="Hide in First Person?"
-                            TextWrapping="Wrap" />
-                        <CheckBox
-                            Grid.Row="21"
-                            Grid.Column="1"
-                            Margin="{DynamicResource WolvenKitMarginLeftTop}"
-                            IsChecked="{Binding TagsHideInFpp}"
-                            KeyboardNavigation.TabIndex="-1" />
-                        <TextBlock
-                            Grid.Row="22"
-                            Grid.Column="1"
-                            Style="{StaticResource ExplanationStyle}"
-                            Text="Check to have your item visible in third person only (useful for face masks or helmets)" />
-
-                        <!-- Force Hair -->
-                        <TextBlock
-                            Grid.Row="24"
-                            Grid.RowSpan="2"
-                            Grid.Column="0"
-                            Style="{StaticResource LabelStyle}"
-                            Visibility="{Binding IsHeadItem,
-                                                 Converter={StaticResource BooleanToVisibilityConverter}}"
-                            Text="Force hair visibility?"
-                            TextWrapping="Wrap" />
-                        <CheckBox
-                            Grid.Row="24"
-                            Grid.Column="1"
-                            Margin="{DynamicResource WolvenKitMarginLeftTop}"
-                            Visibility="{Binding IsHeadItem,
-                                                 Converter={StaticResource BooleanToVisibilityConverter}}"
-                            IsChecked="{Binding TagsForceHair}"
-                            KeyboardNavigation.TabIndex="-1" />
-                        <TextBlock
-                            Grid.Row="25"
-                            Grid.Column="1"
-                            Style="{StaticResource ExplanationStyle}"
-                            Visibility="{Binding IsHeadItem,
-                                                 Converter={StaticResource BooleanToVisibilityConverter}}"
-                            Text="Check to force-display hair (head items hide player hair by default)" />
-
-                        <!-- Add materials to project -->
-                        <TextBlock
-                            Grid.Row="27"
-                            Grid.RowSpan="2"
-                            Grid.Column="0"
-                            Style="{StaticResource LabelStyle}"
-                            Text="Add mesh materials?"
-                            TextWrapping="Wrap" />
-                        <CheckBox
-                            Grid.Row="27"
-                            Grid.Column="1"
-                            Margin="{DynamicResource WolvenKitMarginLeftTop}"
-                            KeyboardNavigation.TabIndex="-1"
-                            IsChecked="{Binding IsAddMeshMaterials}" />
-
-                        <!-- Appearances -->
-                        <TextBlock
-                            Grid.Row="29"
-                            Grid.RowSpan="2"
-                            Grid.Column="0"
-                            Style="{StaticResource LabelStyle}"
-                            Text="Item variants" />
-
-                        <syncfusion:SfTextBoxExt
-                            x:Name="ItemVariantsTextBox"
-                            Grid.Row="29"
-                            Grid.Column="1"
-                            Height="{DynamicResource WolvenKitFieldHeight}"
-                            Margin="{DynamicResource WolvenKitMarginLeftTop}"
-                            Padding="{DynamicResource WolvenKitMarginTiny}"
-                            VerticalContentAlignment="Top"
-                            Background="{DynamicResource ContentBackgroundAlt2}"
-                            BorderBrush="{DynamicResource WolvenKitFrameBrush}"
-                            BorderThickness="1"
-                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                            hc:BorderElement.CornerRadius="5"
-                            helpers:TextBoxBehavior.TripleClickSelectAll="True"
-                            KeyboardNavigation.TabIndex="-1"
-                            Watermark="black, white, red"
-                            WatermarkTemplate="{StaticResource PlaceholderTemplate}"
-                            LostFocus="ItemVariants_FocusLost" />
-
-                        <TextBlock
-                            Grid.Row="30"
-                            Grid.Column="1"
-                            Style="{StaticResource ExplanationStyle}"
-                            Text="Item variants (separate by comma)" />
-
-                    </Grid>
-
-                </StackPanel>
-
-
+                    <!-- Appearances -->
+                    <TextBlock
+                        Grid.Row="27"
+                        Grid.Column="0"
+                        VerticalAlignment="Top"
+                        Style="{StaticResource LabelStyle}"
+                        Text="Item variants" />
+                    <syncfusion:SfTextBoxExt
+                        x:Name="ItemVariantsTextBox"
+                        Grid.Row="27"
+                        Grid.Column="1"
+                        Padding="{DynamicResource WolvenKitMarginTinyVertical}"
+                        VerticalContentAlignment="Top"
+                        Background="{StaticResource ContentBackgroundAlt2}"
+                        BorderBrush="{StaticResource ForegroundColor_Grey_Dark}"
+                        BorderThickness="1"
+                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                        helpers:TextBoxBehavior.TripleClickSelectAll="True"
+                        TextWrapping="Wrap"
+                        KeyboardNavigation.TabIndex="-1"
+                        Watermark="black, white, red"
+                        WatermarkTemplate="{StaticResource PlaceholderTemplate}"
+                        LostFocus="ItemVariants_FocusLost" />
+                    <TextBlock
+                        Grid.Row="28"
+                        Grid.Column="1"
+                        Style="{StaticResource ExplanationStyle}"
+                        Text="Item variants (separate by comma)" />
+                </Grid>
             </syncfusion:WizardPage>
         </syncfusion:WizardControl>
-
     </Grid>
-
 </Window>
