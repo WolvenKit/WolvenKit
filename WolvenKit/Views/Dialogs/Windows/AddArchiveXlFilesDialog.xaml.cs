@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reactive.Disposables;
@@ -12,6 +13,7 @@ using WolvenKit.App;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.Core;
 using WolvenKit.ViewModels.Validators;
 
 namespace WolvenKit.Views.Dialogs.Windows
@@ -174,6 +176,12 @@ namespace WolvenKit.Views.Dialogs.Windows
             }
 
             vm.HidingTags = hidingTags.Distinct().ToList();
+        }
+
+        private void OnHelpButtonClicked(object sender, RoutedEventArgs e)
+        {
+            var ps = new ProcessStartInfo(WikiLinks.AddingNewItems) { UseShellExecute = true, Verb = "open" };
+            Process.Start(ps);
         }
     }
 }
