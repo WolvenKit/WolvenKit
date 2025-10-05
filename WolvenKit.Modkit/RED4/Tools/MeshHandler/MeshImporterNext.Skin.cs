@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using WolvenKit.Modkit.RED4.Tools.MeshHandler.Extras;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.RED4.Tools.MeshHandler;
 
@@ -39,14 +42,25 @@ public partial class MeshImporterNext
         }
     }
 
-    private void LoadBones()
+    private void LoadBones(Dictionary<byte, HashSet<int>> lodInfo)
     {
-        foreach (var logicalNode in _modelRoot.LogicalNodes)
+        var boneNodes = _modelRoot.LogicalNodes.Where(x => x.IsSkinJoint).ToList();
+
+        var bonesLod = new int[boneNodes.Count];
+        var lodId = 0;
+        foreach (var lod in lodInfo.Keys.OrderBy(x => x))
         {
-            if (!logicalNode.IsSkinJoint)
+            foreach (var boneIndex in lodInfo[lod])
             {
-                continue;
+                bonesLod[boneIndex] |= 1 << lodId;
             }
+
+            lodId++;
+        }
+
+        for (var i = 0; i < boneNodes.Count; i++)
+        {
+            var logicalNode = boneNodes[i];
 
             var boneRig = ZUp(RotY(logicalNode.WorldMatrix));
             Matrix4x4.Invert(boneRig, out var inverseBoneRig);
@@ -63,13 +77,17 @@ public partial class MeshImporterNext
             });
 
             var extras = GetExtras<BoneExtras>(logicalNode.Extras);
-            if (extras == null)
+            if (extras != null)
             {
-                throw new Exception();
+                _fileWrapper.CMesh.BoneVertexEpsilons.Add(extras.Epsilon);
+            }
+            else
+            {
+                // TODO
+                _fileWrapper.CMesh.BoneVertexEpsilons.Add(0F);
             }
 
-            _fileWrapper.CMesh.BoneVertexEpsilons.Add(extras.Epsilon);
-            _fileWrapper.CMesh.LodBoneMask.Add(extras.Lod);
+            _fileWrapper.CMesh.LodBoneMask.Add((CUInt8)bonesLod[i]);
         }
 
         Matrix4x4 RotY(Matrix4x4 src)

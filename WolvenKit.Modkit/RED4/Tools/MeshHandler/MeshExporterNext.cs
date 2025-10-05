@@ -44,8 +44,11 @@ public partial class MeshExporterNext
         // ...
         if (_args.Format == MeshExperimental2Format.New)
         {
-            ExtensionsFactory.RegisterExtension<ModelRoot, VariantsRootExtension>("KHR_materials_variants", root => new VariantsRootExtension(root));
-            ExtensionsFactory.RegisterExtension<MeshPrimitive, VariantsPrimitiveExtension>("KHR_materials_variants", root => new VariantsPrimitiveExtension(root));
+            if (!ExtensionsFactory.SupportedExtensions.Contains("KHR_materials_variants"))
+            {
+                ExtensionsFactory.RegisterExtension<ModelRoot, VariantsRootExtension>("KHR_materials_variants", root => new VariantsRootExtension(root));
+                ExtensionsFactory.RegisterExtension<MeshPrimitive, VariantsPrimitiveExtension>("KHR_materials_variants", root => new VariantsPrimitiveExtension(root));
+            }
 
             _modelRoot.Extras = JsonSerializer.SerializeToNode(new GltfExtras { ExporterVersion = 2 }, Gltf.SerializationOptions());
         }

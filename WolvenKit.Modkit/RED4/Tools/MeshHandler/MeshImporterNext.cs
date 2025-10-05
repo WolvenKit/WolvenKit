@@ -55,8 +55,11 @@ public partial class MeshImporterNext
 
         if (_exporterVersion >= 2)
         {
-            ExtensionsFactory.RegisterExtension<ModelRoot, VariantsRootExtension>("KHR_materials_variants", root => new VariantsRootExtension(root));
-            ExtensionsFactory.RegisterExtension<MeshPrimitive, VariantsPrimitiveExtension>("KHR_materials_variants", root => new VariantsPrimitiveExtension(root));
+            if (!ExtensionsFactory.SupportedExtensions.Contains("KHR_materials_variants"))
+            {
+                ExtensionsFactory.RegisterExtension<ModelRoot, VariantsRootExtension>("KHR_materials_variants", root => new VariantsRootExtension(root));
+                ExtensionsFactory.RegisterExtension<MeshPrimitive, VariantsPrimitiveExtension>("KHR_materials_variants", root => new VariantsPrimitiveExtension(root));
+            }
         }
     }
 
@@ -134,18 +137,7 @@ public partial class MeshImporterNext
             W = 0F
         };
 
-        var usedLods = new List<byte>();
-
-        if (_exporterVersion < 2)
-        {
-            LoadAppearancesLegacy();
-            LoadBonesLegacy();
-        }
-        else
-        {
-            LoadAppearances();
-            LoadBones();
-        }
+        var lodInfo = new Dictionary<byte, HashSet<int>>();
 
         foreach (var logicalNode in _modelRoot.LogicalNodes)
         {
@@ -175,12 +167,12 @@ public partial class MeshImporterNext
                 var subMesh = int.Parse(name.Substring(8, 2));
                 var lod = byte.Parse(name.Substring(15, 1));
 
-                if (!usedLods.Contains(lod))
+                if (!lodInfo.TryGetValue(lod, out var bonesList))
                 {
-                    _fileWrapper.Header.RenderLODs.Add(3 * usedLods.Count);
-                    _fileWrapper.CMesh.LodLevelInfo.Add(3 * usedLods.Count);
+                    _fileWrapper.Header.RenderLODs.Add(3 * lodInfo.Count);
+                    _fileWrapper.CMesh.LodLevelInfo.Add(3 * lodInfo.Count);
 
-                    usedLods.Add(lod);
+                    lodInfo.Add(lod, new HashSet<int>());
                 }
 
                 if (logicalNode.Mesh.Primitives.Count != 1)
@@ -191,8 +183,25 @@ public partial class MeshImporterNext
                 var rendChunk = AddMesh(logicalNode.Mesh.Primitives[0], vd);
                 rendChunk.LodMask = lod;
 
+                foreach (var boneIndex in _usedBones)
+                {
+                    lodInfo[lod].Add(boneIndex);
+                }
+                _usedBones.Clear();
+
                 _fileWrapper.Header.Topology.Add(new rendTopologyData());
             }
+        }
+
+        if (_exporterVersion < 2)
+        {
+            LoadAppearancesLegacy();
+            LoadBonesLegacy();
+        }
+        else
+        {
+            LoadAppearances();
+            LoadBones(lodInfo);
         }
 
         _fileWrapper.Header.VertexBufferSize = (CUInt32)vd.BaseStream.Position;
@@ -418,6 +427,8 @@ public partial class MeshImporterNext
         return renderChunkInfo;
     }
 
+    private HashSet<int> _usedBones = new();
+
     private List<AttributeInfo> GetLayoutData(IReadOnlyDictionary<string, Accessor> vertexAccessors, Dictionary<string, IReadOnlyDictionary<string, Accessor>> morphTargets)
     {
         var list = new List<AttributeInfo>();
@@ -473,9 +484,19 @@ public partial class MeshImporterNext
                     StreamIndex = streamIndex,
                     StreamType = GpuWrapApiVertexPackingEStreamType.ST_PerVertex
                 },
-                DataArray = vertexAccessors["JOINTS_0"].AsVector4Array().Cast<object>().ToList(),
+                DataArray = new List<object>(),
                 TargetSize = 4
             });
+
+            foreach (var vector in vertexAccessors["JOINTS_0"].AsVector4Array())
+            {
+                _usedBones.Add((int)vector.X);
+                _usedBones.Add((int)vector.Y);
+                _usedBones.Add((int)vector.Z);
+                _usedBones.Add((int)vector.W);
+
+                list[^1].DataArray.Add(vector);
+            }
 
             hasSkin = true;
             groupUsed = true;
@@ -493,9 +514,19 @@ public partial class MeshImporterNext
                     StreamIndex = streamIndex,
                     StreamType = GpuWrapApiVertexPackingEStreamType.ST_PerVertex
                 },
-                DataArray = vertexAccessors["JOINTS_1"].AsVector4Array().Cast<object>().ToList(),
+                DataArray = new List<object>(),
                 TargetSize = 4
             });
+
+            foreach (var vector in vertexAccessors["JOINTS_1"].AsVector4Array())
+            {
+                _usedBones.Add((int)vector.X);
+                _usedBones.Add((int)vector.Y);
+                _usedBones.Add((int)vector.Z);
+                _usedBones.Add((int)vector.W);
+
+                list[^1].DataArray.Add(vector);
+            }
 
             hasSkin = true;
             groupUsed = true;

@@ -18,8 +18,4 @@ public class BoneExtras
     [JsonPropertyName("epsilon")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public float Epsilon { get; set; }
-
-    [JsonPropertyName("lod")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public byte Lod { get; set; }
 }
