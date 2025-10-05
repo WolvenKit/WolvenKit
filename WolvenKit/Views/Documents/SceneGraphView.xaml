@@ -43,7 +43,7 @@
                 BasedOn="{StaticResource SyncfusionTabItemExtStyle}"
                 TargetType="{x:Type syncfusion:TabItemExt}">
                 <Setter Property="Margin" Value="0,0,2,0" />
-                <Setter Property="Padding" Value="12,8,12,8" />
+                <Setter Property="Padding" Value="{DynamicResource WolvenKitMarginTiny}" />
             </Style>
 
             <!-- Scene Connection Template with Variable Thickness -->
@@ -80,26 +80,26 @@
                 </nodify:Connection>
             </DataTemplate>
 
-            <!-- Button Style for Add Actor/Prop buttons -->
             <!-- Info bar text styles -->
             <Style
                 x:Key="Label"
                 TargetType="TextBlock">
-                <Setter Property="VerticalAlignment" Value="Center" />
-                <Setter Property="Foreground" Value="Gray" />
                 <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontAltTitle}" />
+                <Setter Property="Foreground" Value="Gray" />
                 <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginTinyRight}" />
+                <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
 
             <Style
                 x:Key="Value"
                 TargetType="TextBlock">
-                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
                 <Setter Property="Foreground" Value="White" />
-                <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontAltTitle}" />
                 <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginRight}" />
+                <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
 
+            <!-- Button Style for Add Actor/Prop buttons -->
             <Style
                 x:Key="SceneEditorButtonStyle"
                 TargetType="Button">
@@ -109,6 +109,7 @@
                 <Setter Property="Cursor" Value="Hand" />
                 <Setter Property="FontWeight" Value="Medium" />
                 <Setter Property="Foreground" Value="{StaticResource WolvenKitRedShadow}" />
+                <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginTinyRight}" />
                 <Setter Property="Padding" Value="8,4" />
                 <Setter Property="Template">
                     <Setter.Value>
@@ -151,7 +152,7 @@
         <!-- Toolbar -->
         <Border
             Grid.Row="0"
-            Padding="{DynamicResource WolvenKitMarginTiny}"
+            Padding="{DynamicResource WolvenKitMarginTinyHorizontal}"
             Background="{StaticResource ContentBackground}"
             BorderBrush="{StaticResource BorderAlt}"
             BorderThickness="0,0,0,1">
@@ -159,8 +160,8 @@
                 <templates:IconBox
                     IconPack="Material"
                     Kind="InformationOutline"
-                    Size="{DynamicResource WolvenKitIconMicro}"
-                    Margin="{DynamicResource WolvenKitMarginSmallRight}" />
+                    Margin="{DynamicResource WolvenKitMarginTiny}"
+                    Size="{DynamicResource WolvenKitIconMicro}" />
 
                 <TextBlock
                     Margin="{DynamicResource WolvenKitMarginRight}"
@@ -236,8 +237,8 @@
                                 Kind="{Binding Icon}"
                                 Width="{DynamicResource WolvenKitIconTiny}"
                                 Height="{DynamicResource WolvenKitIconTiny}"
-                                VerticalAlignment="Center"
-                                Margin="{DynamicResource WolvenKitMarginSmallRight}" />
+                                Margin="{DynamicResource WolvenKitMarginSmallRight}"
+                                VerticalAlignment="Center" />
                             <TextBlock
                                 VerticalAlignment="Center"
                                 Text="{Binding Header}" />
@@ -282,7 +283,6 @@
                                         Margin="5"
                                         Orientation="Horizontal">
                                         <Button
-                                            Margin="0,0,5,0"
                                             Style="{StaticResource SceneEditorButtonStyle}"
                                             Visibility="{Binding DataContext.IsActorCreationVisible,
                                                                  RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}},
@@ -291,7 +291,6 @@
                                             Command="{Binding DataContext.CreateNewActorCommand,
                                                               RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}}" />
                                         <Button
-                                            Margin="0,0,5,0"
                                             Style="{StaticResource SceneEditorButtonStyle}"
                                             Visibility="{Binding DataContext.IsPropCreationVisible,
                                                                  RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}},
@@ -300,7 +299,6 @@
                                             Command="{Binding DataContext.CreateNewPropCommand,
                                                               RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}}" />
                                         <Button
-                                            Margin="0,0,5,0"
                                             Style="{StaticResource SceneEditorButtonStyle}"
                                             Visibility="{Binding DataContext.IsDialogueCreationVisible,
                                                                  RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}},
@@ -309,7 +307,6 @@
                                             Command="{Binding DataContext.CreateNewDialogueCommand,
                                                               RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}}" />
                                         <Button
-                                            Margin="0,0,5,0"
                                             Style="{StaticResource SceneEditorButtonStyle}"
                                             Visibility="{Binding DataContext.IsOptionCreationVisible,
                                                                  RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}},
@@ -318,7 +315,6 @@
                                             Command="{Binding DataContext.CreateNewOptionCommand,
                                                               RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}}" />
                                         <Button
-                                            Margin="0,0,5,0"
                                             Style="{StaticResource SceneEditorButtonStyle}"
                                             Visibility="{Binding DataContext.IsAnimationCreationVisible,
                                                                  RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}},
@@ -327,7 +323,6 @@
                                             Command="{Binding DataContext.CreateNewAnimationCommand,
                                                               RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}}" />
                                         <Button
-                                            Margin="0,0,5,0"
                                             Style="{StaticResource SceneEditorButtonStyle}"
                                             Visibility="{Binding DataContext.IsWorkspotCreationVisible,
                                                                  RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}},
@@ -336,6 +331,7 @@
                                             Command="{Binding DataContext.CreateNewWorkspotCommand,
                                                               RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}}}" />
                                         <Button
+                                            Margin="0"
                                             Style="{StaticResource SceneEditorButtonStyle}"
                                             Visibility="{Binding DataContext.IsEffectCreationVisible,
                                                                  RelativeSource={RelativeSource AncestorType={x:Type local:SceneGraphView}},
@@ -422,9 +418,9 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="GraphOutline"
-                            Size="{DynamicResource WolvenKitIconHuge}"
-                            Margin="0,0,0,16"
+                            Margin="{DynamicResource WolvenKitMarginBottom}"
                             HorizontalAlignment="Center"
+                            Size="{DynamicResource WolvenKitIconHuge}"
                             Foreground="{StaticResource WolvenKitYellow}">
                             <templates:IconBox.RenderTransform>
                                 <RotateTransform />
@@ -447,15 +443,15 @@
                         <TextBlock
                             HorizontalAlignment="Center"
                             Foreground="White"
-                            FontSize="16"
+                            FontSize="{DynamicResource WolvenKitFontMedium}"
                             FontWeight="Medium"
                             Text="Loading scene graph..." />
 
                         <TextBlock
-                            Margin="0,4,0,0"
+                            Margin="{DynamicResource WolvenKitMarginTinyTop}"
                             HorizontalAlignment="Center"
                             Foreground="Gray"
-                            FontSize="12"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
                             Text="Building nodes and connections" />
                     </StackPanel>
                 </Border>
