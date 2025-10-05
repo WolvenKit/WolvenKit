@@ -33,6 +33,7 @@ using Newtonsoft.Json;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Modkit.Exceptions;
 using WolvenKit.Modkit.RED4.Tools.Common;
+using WolvenKit.Modkit.RED4.Tools.MeshHandler;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -546,14 +547,25 @@ namespace WolvenKit.Modkit.RED4
                 case CMesh:
                     try
                     {
-                        if (settings.Get<MeshExportArgs>().MeshExporter == MeshExporterType.Experimental)
+                        switch (settings.Get<MeshExportArgs>().MeshExporter)
                         {
-                            _loggerService.Info("Using new mesh exporter.");
-                            return HandleMeshesAndRigs(cr2wFile, outfile, settings.Get<MeshExportArgs>());
-                        }
+                            case MeshExporterType.Default:
+                                _loggerService.Info("Using classic mesh exporter.");
+                                return HandleMesh(cr2wFile, outfile, settings.Get<MeshExportArgs>());
 
-                        _loggerService.Info("Using classic mesh exporter.");
-                        return HandleMesh(cr2wFile, outfile, settings.Get<MeshExportArgs>());
+                            case MeshExporterType.Experimental:
+                                _loggerService.Info("Using new mesh exporter.");
+                                return HandleMeshesAndRigs(cr2wFile, outfile, settings.Get<MeshExportArgs>());
+
+                            case MeshExporterType.Experimental2:
+                                return MeshExporterNext.ToGltf(cr2wFile, outfile, settings.Get<MeshExportArgs>());
+
+                            case MeshExporterType.REDmod:
+                                throw new NotSupportedException("REDmod mesh exporter not implemented yet.");
+
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
                     }
                     catch (Exception e)
                     {
@@ -1054,8 +1066,6 @@ namespace WolvenKit.Modkit.RED4
 
             using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
-            var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cMesh);
-
             if (meshExportArgs.withMaterials)
             {
                 if (meshExportArgs.MaterialRepo is null)
@@ -1066,6 +1076,7 @@ namespace WolvenKit.Modkit.RED4
 
                 try
                 {
+                    var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cMesh);
                     ParseMaterials(cr2w, outfile, meshExportArgs.MaterialRepo, meshesinfo, eUncookExtension);
                 }
                 catch

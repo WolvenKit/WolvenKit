@@ -164,6 +164,15 @@ namespace WolvenKit.Common.Model.Arguments
         private GltfImportAsFormat _importFormat = GltfImportAsFormat.Mesh;
 
         /// <summary>
+        /// Choose importer
+        /// </summary>
+        [Category("Experimental")]
+        [Display(Name = "Choose Importer")]
+        [Description("Choose the importer type. Use default if you run into issues.")]
+        [WkitScriptAccess("MeshImporter")]
+        public MeshImporterType MeshImporter { get; set; } = MeshImporterType.Experimental2;
+
+        /// <summary>
         /// Imports garment support data from GLB.
         /// </summary>
         [Category("Import Settings")]
@@ -358,5 +367,11 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         /// <returns>String</returns>
         public override string ToString() => $"{Path.GetFileName(Animset)} - {AnimationToRename}";
+    }
+
+    public enum MeshImporterType
+    {
+        Default,
+        Experimental2
     }
 }
