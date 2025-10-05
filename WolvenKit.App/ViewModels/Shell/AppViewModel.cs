@@ -2488,6 +2488,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         resources["WolvenKitMarginBottom"] = new Thickness(0, 0, 0, 15).Mul(_uiScalePercentage).Round();
         resources["WolvenKitMarginHorizontal"] = new Thickness(15, 0, 15, 0).Mul(_uiScalePercentage).Round();
         resources["WolvenKitMarginVertical"] = new Thickness(0, 15, 0, 15).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginHeader"] = new Thickness(15, 15, 15, 0).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginFooter"] = new Thickness(15, 0, 15, 15).Mul(_uiScalePercentage).Round();
         resources["WolvenKitMarginLeftBottom"] = new Thickness(15, 0, 0, 15).Mul(_uiScalePercentage).Round();
         resources["WolvenKitMarginLeftTop"] = new Thickness(15, 15, 0, 0).Mul(_uiScalePercentage).Round();
         resources["WolvenKitMarginLeftSmallTop"] = new Thickness(15, 8, 0, 0).Mul(_uiScalePercentage).Round();
