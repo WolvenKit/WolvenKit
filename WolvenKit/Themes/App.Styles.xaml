@@ -23,8 +23,8 @@
     </ResourceDictionary.MergedDictionaries>
 
     <!-- Colors -->
+    <Color x:Key="WolvenKitRedPaleColor">#E78587</Color>
     <Color x:Key="WolvenKitRedColor">#DF2935</Color>
-    <Color x:Key="WolvenKitRedShadowColor">#951C2D</Color>
     <Color x:Key="WolvenKitGreenColor">#28DE55</Color>
     <Color x:Key="WolvenKitGreenShadowColor">#1C9435</Color>
     <Color x:Key="WolvenKitCyanColor">#52F1FF</Color>
@@ -39,6 +39,7 @@
 
     <Color x:Key="WolvenKitCyanShadow50Color">#7F4D8C9A</Color>
     <Color x:Key="WolvenKitCyanShadow25Color">#203a40</Color>
+    <Color x:Key="WolvenKitRedShadowColor">#951C2D</Color>
     <Color x:Key="WolvenKitRedShadow50Color">#7F951C2D</Color>
     <Color x:Key="WolvenKitRedShadow25Color">#7F520e17</Color>
     <Color x:Key="WolvenKitYellowShadow50Color">#7FABA108</Color>
@@ -50,8 +51,12 @@
     <Color x:Key="WolvenKitGraphCurveColor">White</Color>
 
     <Color x:Key="WolvenKitLabelColor">White</Color>
+    <Color x:Key="WolvenKitFrameColor">Silver</Color>
+    <Color x:Key="WolvenKitBorderColor">Gray</Color>
 
     <SolidColorBrush x:Key="WolvenKitLabelBrush" Color="{StaticResource WolvenKitLabelColor}" />
+    <SolidColorBrush x:Key="WolvenKitFrameBrush" Color="{StaticResource WolvenKitFrameColor}" />
+    <SolidColorBrush x:Key="WolvenKitBorderBrush" Color="{StaticResource WolvenKitBorderColor}" />
 
     <!-- Quest Node Colors - Header backgrounds -->
     <Color x:Key="QuestStartNodeHeaderColor">#33228B22</Color>
@@ -170,6 +175,7 @@
     <SolidColorBrush x:Key="WolvenKitSammyRedShaded" Color="#B71C34" />
     <SolidColorBrush x:Key="WolvenKitSammyBlack" Color="#292929" />
 
+    <SolidColorBrush x:Key="WolvenKitRedPale" Color="{StaticResource WolvenKitRedColor}" />
     <SolidColorBrush x:Key="WolvenKitRed" Color="{StaticResource WolvenKitRedColor}" />
     <SolidColorBrush x:Key="WolvenKitRedShadow" Color="{StaticResource WolvenKitRedShadowColor}" />
     <SolidColorBrush x:Key="WolvenKitGreen" Color="{StaticResource WolvenKitGreenColor}" />
@@ -184,8 +190,8 @@
     <SolidColorBrush x:Key="WolvenKitOrange" Color="{StaticResource WolvenKitOrangeColor}" />
     <SolidColorBrush x:Key="WolvenKitOrangeShadow" Color="{StaticResource WolvenKitOrangeShadowColor}" />
 
-    <SolidColorBrush x:Key="WolvenKitRed50" Color="#7FDF2935" />
     <SolidColorBrush x:Key="WolvenKitRedShadow50" Color="{StaticResource WolvenKitRedShadow50Color}" />
+    <SolidColorBrush x:Key="WolvenKitRedShadow25" Color="{StaticResource WolvenKitRedShadow25Color}" />
     <SolidColorBrush x:Key="WolvenKitCyan50" Color="#7F52F1FF" />
     <SolidColorBrush x:Key="WolvenKitCyanShadow50" Color="{StaticResource WolvenKitCyanShadow50Color}" />
     <SolidColorBrush x:Key="WolvenKitCyanShadow25" Color="{StaticResource WolvenKitCyanShadow25Color}" />
@@ -220,6 +226,8 @@
 
     <SolidColorBrush x:Key="BackgroundColor_Button_Inactive" Color="#969696" />
     <SolidColorBrush x:Key="BackgroundColor_Button_Active" Color="#313131" />
+
+    <SolidColorBrush x:Key="BackgroundBrush_InputField" Color="{DynamicResource ContentBackgroundAlt2}" />
 
     <!-- Graph and Curve Editors -->
     <SolidColorBrush x:Key="WolvenKitGraphGrid" Color="{StaticResource WolvenKitGraphGridColor}" />
@@ -304,7 +312,7 @@
         BasedOn="{StaticResource {x:Type syncfusion:SfTextBoxExt}}"
         TargetType="{x:Type syncfusion:SfTextBoxExt}">
         <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
-        <Setter Property="BorderBrush" Value="{StaticResource ContentBackgroundAlt3}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
         <Setter Property="Foreground" Value="White" />
     </Style>
 

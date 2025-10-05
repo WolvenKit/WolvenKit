@@ -9,7 +9,7 @@ public static class WikiLinks
     public const string WolvenkitAbout = "https://wiki.redmodding.org/wolvenkit/about";
 
     public const string AddingNewItems =
-        "https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/items-equipment/adding-new-items";
+        "https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/items-equipment/adding-new-items/archivexl-dynamic-variants";
 
     public const string AddingNewItems_Weapons =
         "https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/items-equipment/adding-new-items/weapons";
@@ -47,6 +47,8 @@ public static class WikiLinks
 
     public const string CheatSheets =
         "https://wiki.redmodding.org/cyberpunk-2077-modding/for-mod-creators-theory/references-lists-and-overviews";
+
+    public const string SettingsModderName = "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/settings#your-name";
 }
 
 // ReSharper disable MemberCanBeMadeStatic.Global
