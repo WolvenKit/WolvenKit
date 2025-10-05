@@ -133,6 +133,7 @@ public class ArchiveXlItemService
         var newFiles = activeProject.ModFiles.Where(f => !projectFiles.Contains(f)).ToList();
         if (newFiles.Count == 0)
         {
+            _logger.Success($"Your ArchiveXL item {clothingItemData.ItemName} has been updated.");
             return;
         }
 
