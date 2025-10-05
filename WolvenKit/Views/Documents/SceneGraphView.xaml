@@ -156,12 +156,11 @@
             BorderBrush="{StaticResource BorderAlt}"
             BorderThickness="0,0,0,1">
             <StackPanel Orientation="Horizontal">
-                <iconPacks:PackIconMaterial
+                <templates:IconBox
+                    IconPack="Material"
                     Kind="InformationOutline"
-                    VerticalAlignment="Center"
-                    Margin="{DynamicResource WolvenKitMarginSmallRight}"
-                    Width="12"
-                    Height="12" />
+                    Size="{DynamicResource WolvenKitIconMicro}"
+                    Margin="{DynamicResource WolvenKitMarginSmallRight}" />
 
                 <TextBlock
                     Margin="{DynamicResource WolvenKitMarginRight}"
@@ -235,8 +234,10 @@
                         <StackPanel Orientation="Horizontal">
                             <iconPacks:PackIconMaterial
                                 Kind="{Binding Icon}"
-                                Margin="0,0,8,0"
-                                VerticalAlignment="Center" />
+                                Width="{DynamicResource WolvenKitIconTiny}"
+                                Height="{DynamicResource WolvenKitIconTiny}"
+                                VerticalAlignment="Center"
+                                Margin="{DynamicResource WolvenKitMarginSmallRight}" />
                             <TextBlock
                                 VerticalAlignment="Center"
                                 Text="{Binding Header}" />
@@ -418,17 +419,17 @@
                     <StackPanel
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center">
-                        <iconPacks:PackIconMaterial
+                        <templates:IconBox
+                            IconPack="Material"
                             Kind="GraphOutline"
-                            Width="48"
-                            Height="48"
+                            Size="{DynamicResource WolvenKitIconHuge}"
                             Margin="0,0,0,16"
                             HorizontalAlignment="Center"
                             Foreground="{StaticResource WolvenKitYellow}">
-                            <iconPacks:PackIconMaterial.RenderTransform>
-                                <RotateTransform x:Name="LoadingRotation" />
-                            </iconPacks:PackIconMaterial.RenderTransform>
-                            <iconPacks:PackIconMaterial.Triggers>
+                            <templates:IconBox.RenderTransform>
+                                <RotateTransform />
+                            </templates:IconBox.RenderTransform>
+                            <templates:IconBox.Triggers>
                                 <EventTrigger RoutedEvent="FrameworkElement.Loaded">
                                     <BeginStoryboard>
                                         <Storyboard RepeatBehavior="Forever">
@@ -440,8 +441,8 @@
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </EventTrigger>
-                            </iconPacks:PackIconMaterial.Triggers>
-                        </iconPacks:PackIconMaterial>
+                            </templates:IconBox.Triggers>
+                        </templates:IconBox>
 
                         <TextBlock
                             HorizontalAlignment="Center"

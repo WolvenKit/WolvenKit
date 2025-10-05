@@ -13,6 +13,7 @@
              xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
              xmlns:nodify="https://miroiu.github.io/nodify"
              xmlns:questNodes="clr-namespace:WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;assembly=WolvenKit.App"
+             xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance documents:QuestPhaseGraphViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="800" d:DesignWidth="1200"
@@ -83,7 +84,11 @@
         <!-- Toolbar -->
         <Border Grid.Row="0" Background="{StaticResource ContentBackground}" BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,0,0,1" Padding="{DynamicResource WolvenKitMarginTiny}">
             <StackPanel Orientation="Horizontal">
-                <iconPacks:PackIconMaterial Kind="InformationOutline" VerticalAlignment="Center" Margin="{DynamicResource WolvenKitMarginSmallRight}" Width="12" Height="12"/>
+                <templates:IconBox
+                    IconPack="Material"
+                    Kind="InformationOutline"
+                    Size="{DynamicResource WolvenKitIconMicro}"
+                    Margin="{DynamicResource WolvenKitMarginSmallRight}" />
                 <TextBlock Text="{Binding FileName}" 
                            VerticalAlignment="Center" 
                            Foreground="White" 
@@ -151,7 +156,7 @@
                 <syncfusion:TabControlExt.ItemTemplate>
                     <DataTemplate DataType="{x:Type documents:QuestPhaseTabDefinition}">
                         <StackPanel Orientation="Horizontal">
-                            <iconPacks:PackIconMaterial Kind="{Binding Icon}" VerticalAlignment="Center" Margin="0,0,8,0" />
+                            <iconPacks:PackIconMaterial Kind="{Binding Icon}" Width="{DynamicResource WolvenKitIconTiny}" Height="{DynamicResource WolvenKitIconTiny}" VerticalAlignment="Center" Margin="{DynamicResource WolvenKitMarginSmallRight}" />
                             <TextBlock Text="{Binding Header}" VerticalAlignment="Center" />
                         </StackPanel>
                     </DataTemplate>
@@ -233,16 +238,16 @@
                 <Border Background="#AA000000" 
                         Visibility="{Binding IsGraphLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <iconPacks:PackIconMaterial Kind="GraphOutline" 
-                                                    Foreground="{StaticResource WolvenKitYellow}"
-                                                    Width="48" 
-                                                    Height="48" 
-                                                    HorizontalAlignment="Center"
-                                                    Margin="0,0,0,16">
-                            <iconPacks:PackIconMaterial.RenderTransform>
-                                <RotateTransform x:Name="LoadingRotation" />
-                            </iconPacks:PackIconMaterial.RenderTransform>
-                            <iconPacks:PackIconMaterial.Triggers>
+                        <templates:IconBox Kind="GraphOutline" 
+                                           IconPack="Material"
+                                           Foreground="{StaticResource WolvenKitYellow}"
+                                           Size="{DynamicResource WolvenKitIconHuge}" 
+                                           HorizontalAlignment="Center"
+                                           Margin="0,0,0,16">
+                            <templates:IconBox.RenderTransform>
+                                <RotateTransform />
+                            </templates:IconBox.RenderTransform>
+                            <templates:IconBox.Triggers>
                                 <EventTrigger RoutedEvent="FrameworkElement.Loaded">
                                     <BeginStoryboard>
                                         <Storyboard RepeatBehavior="Forever">
@@ -252,8 +257,8 @@
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </EventTrigger>
-                            </iconPacks:PackIconMaterial.Triggers>
-                        </iconPacks:PackIconMaterial>
+                            </templates:IconBox.Triggers>
+                        </templates:IconBox>
 
                         <TextBlock Text="Loading quest phase graph..." 
                                    Foreground="White" 
