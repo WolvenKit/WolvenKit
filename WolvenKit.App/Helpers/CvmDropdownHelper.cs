@@ -537,7 +537,7 @@ public abstract class CvmDropdownHelper
 
                     // Determine if we're looking at lines or options based on parent path
                     bool isForOptions = parentPath.Contains("options") || parentPath.Contains("choiceOption");
-                    
+
                     if (isForOptions && scene.ScreenplayStore?.Options != null)
                     {
                         // Handle screenplay options (choice options)
@@ -545,15 +545,15 @@ public abstract class CvmDropdownHelper
                         {
                             var itemId = option.ItemId.Id;
                             var locStringId = option.LocstringId.Ruid;
-                            
+
                             // Try to find embedded text
                             var embeddedText = scene.GetEmbeddedTextForLocString(locStringId);
                             var previewText = !string.IsNullOrEmpty(embeddedText) ? embeddedText : $"LocString: {locStringId}";
 
                             var truncatedPreview = previewText.Length > 60 ? previewText.Substring(0, 57) + "..." : previewText;
-                            
+
                             var displayText = $"{itemId}: {truncatedPreview}";
-                            
+
                             screenplayOptions[displayText] = itemId.ToString();
                         }
                     }
@@ -564,15 +564,15 @@ public abstract class CvmDropdownHelper
                         {
                             var itemId = line.ItemId.Id;
                             var locStringId = line.LocstringId.Ruid;
-                            
+
                             // Try to find embedded text
                             var embeddedText = scene.GetEmbeddedTextForLocString(locStringId);
                             var previewText = !string.IsNullOrEmpty(embeddedText) ? embeddedText : $"LocString: {locStringId}";
-                            
+
                             var truncatedPreview = previewText.Length > 60 ? previewText.Substring(0, 57) + "..." : previewText;
-                            
+
                             var displayText = $"{itemId}: {truncatedPreview}";
-                            
+
                             screenplayOptions[displayText] = itemId.ToString();
                         }
                     }
@@ -882,13 +882,10 @@ public abstract class CvmDropdownHelper
         }
 
         // Check if we're in a definition context first - if so, always use regular editor
-        if (cvm.Name == "id")
+        if (cvm.Name == "id" && GetParentPath(cvm) is string parentPath &&
+            !IsInDefinitionContext(parentPath, parent.ResolvedData))
         {
-            var parentPath = GetParentPath(cvm);
-            if (IsInDefinitionContext(parentPath, parent.ResolvedData))
-            {
                 return false; // Use regular integer editor for definition contexts
-            }
         }
 
         // This code checks the PARENT MODEL's ResolvedData type - the node CONTAINING the cvm
@@ -901,8 +898,8 @@ public abstract class CvmDropdownHelper
 
             CArray<CName> when parent is { Name: "chunkMaterials", Parent.Parent.Parent.ResolvedData: CMesh } =>
                 true,
-            CKeyValuePair when parent.Parent?.Parent?.ResolvedData is CMaterialInstance matInstance &&
-                               !string.IsNullOrEmpty(matInstance.BaseMaterial.DepotPath.GetResolvedText()) => true,
+            CKeyValuePair when parent.Parent?.Parent?.ResolvedData is CMaterialInstance matInstance
+                => matInstance.BaseMaterial.DepotPath != ResourcePath.Empty,
 
             CMaterialInstance when cvm.Name is "baseMaterial" => true, // resource path, TODO
 
@@ -1009,8 +1006,11 @@ public abstract class CvmDropdownHelper
             appearanceAppearanceResource when s_appearanceNames.Contains(cvm.Name) => true,
             entTemplateAppearance when cvm.Name == "appearanceName" => true,
             entSkinnedMeshComponent when s_appearanceNames.Contains(cvm.Name) => true,
-            CMesh when cvm.Parent?.Parent?.Parent?.ResolvedData is CMaterialInstance matInstance &&
-                       !string.IsNullOrEmpty(matInstance.BaseMaterial.DepotPath.GetResolvedText()) => true,
+            CMesh or CMaterialInstance when
+                cvm.Parent?.Parent?.Parent?.ResolvedData is CMaterialInstance matInstance &&
+                !string.IsNullOrEmpty(matInstance.BaseMaterial.DepotPath.GetResolvedText())
+                => true,
+
             Multilayer_Setup when cvm.Parent?.ResolvedData is Multilayer_Layer mlLayer =>
                 cvm.Name is "materials" || cvm.Name is "microblend"
                                         || (!string.IsNullOrEmpty(mlLayer.Material.DepotPath.GetResolvedText()) &&
@@ -1067,7 +1067,7 @@ public abstract class CvmDropdownHelper
         }
 
         // Special handling for screenplay store: only scnscreenplayItemId should be editable in definition context
-        if (parentType is scnscreenplayItemId && 
+        if (parentType is scnscreenplayItemId &&
             (parentPath.Contains("screenplayStore.lines") || parentPath.Contains("screenplayStore.options")))
         {
             return true;
