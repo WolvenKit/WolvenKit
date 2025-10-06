@@ -47,6 +47,9 @@ public static class WikiLinks
 
     public const string CheatSheets =
         "https://wiki.redmodding.org/cyberpunk-2077-modding/for-mod-creators-theory/references-lists-and-overviews";
+
+    public const string JsonFiles =
+        "https://wiki.redmodding.org/cyberpunk-2077-modding/for-mod-creators-theory/files-and-what-they-do/file-formats/translation-files-.json";
 }
 
 // ReSharper disable MemberCanBeMadeStatic.Global
