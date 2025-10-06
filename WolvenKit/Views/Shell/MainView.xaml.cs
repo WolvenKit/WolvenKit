@@ -17,6 +17,7 @@ using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common.Services;
 using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
+using WolvenKit.Views.Templates;
 using MessageBoxResult = AdonisUI.Controls.MessageBoxResult;
 
 namespace WolvenKit.Views.Shell
@@ -48,6 +49,22 @@ namespace WolvenKit.Views.Shell
                 Interactions.ShowSaveUnsavedChangesDialog = ShowSaveUnsavedChangesDialog;
                 Interactions.ShowQuestionYesNo = ShowQuestionYesNo;
                 Interactions.ShowQuestionYesNoCancel = ShowQuestionYesNoCancel;
+                Interactions.ShowGenerateTranslationEntry = (_) =>
+                {
+                    var dialog = new LocalizationStringPopup();
+                    if (dialog.ViewModel is not null && dialog.ShowDialog(this) == true)
+                    {
+                        return dialog.ViewModel;
+                    }
+
+                    return null;
+                };
+
+                Interactions.ShowErrorPopup = (args) =>
+                {
+                    ShowConfirmation((args.text, args.caption, WMessageBoxImage.Error, WMessageBoxButtons.Ok));
+                    return true;
+                };
 
                 Interactions.ShowPopupWithWeblink = ShowConfirmationWithLink;
                 Interactions.ShowDeleteOrDuplicateComponentDialogue = (args) =>
@@ -233,20 +250,18 @@ namespace WolvenKit.Views.Shell
         private static AdonisUI.Controls.MessageBoxImage GetAdonisImage(WMessageBoxImage imageParam) =>
             (AdonisUI.Controls.MessageBoxImage)imageParam;
 
-        private static WMessageBoxResult ShowConfirmation((string, string, WMessageBoxImage, WMessageBoxButtons) input)
+        private static WMessageBoxResult ShowConfirmation(
+            (string text, string caption, WMessageBoxImage image, WMessageBoxButtons buttons) input)
         {
-            var text = input.Item1;
-            var caption = input.Item2;
-            var image = input.Item3;
-            var buttons = input.Item4;
-
             MessageBoxModel messageBox = new()
             {
-                Text = text, Caption = caption, Icon = GetAdonisImage(image), Buttons = GetAdonisButtons(buttons)
+                Text = input.text,
+                Caption = input.caption,
+                Icon = GetAdonisImage(input.image),
+                Buttons = GetAdonisButtons(input.buttons)
             };
 
             return (WMessageBoxResult)AdonisUI.Controls.MessageBox.Show(Application.Current.MainWindow, messageBox);
-
 
             static IEnumerable<IMessageBoxButtonModel> GetAdonisButtons(WMessageBoxButtons buttonsParam)
             {
@@ -258,7 +273,7 @@ namespace WolvenKit.Views.Shell
                     WMessageBoxButtons.YesNo => MessageBoxButtons.YesNo(),
                     WMessageBoxButtons.YesNoCancel => MessageBoxButtons.YesNoCancel(),
                     WMessageBoxButtons.No => [MessageBoxButtons.No()],
-                    _ => throw new ArgumentOutOfRangeException(nameof(buttons)),
+                    _ => throw new ArgumentOutOfRangeException(nameof(input.buttons)),
                 };
             }
         }
