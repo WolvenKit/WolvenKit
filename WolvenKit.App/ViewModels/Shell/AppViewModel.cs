@@ -41,6 +41,7 @@ using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
+using WolvenKit.Core;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -79,6 +80,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly DocumentTools _documentTools;
     private readonly Cr2WTools _cr2WTools;
     private readonly TemplateFileTools _templateFileTools;
+    private readonly IWatcherService _watcherService;
+    private readonly ArchiveXlItemService _archiveXlItemService;
     private readonly IUpdateService _updateService;
     // expose to view
     public ISettingsManager SettingsManager { get; init; }
@@ -104,6 +107,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         IHashService hashService,
         ITweakDBService tweakDBService,
         Red4ParserService parserService,
+        IWatcherService watcherService,
+        ArchiveXlItemService archiveXlItemService,
         AppScriptService scriptService,
         IModTools modTools,
         DocumentTools documentTools,
@@ -128,6 +133,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _archiveManager = archiveManager;
         _tweakDBService = tweakDBService;
         _parser = parserService;
+        _watcherService = watcherService;
+        _archiveXlItemService = archiveXlItemService;
         _scriptService = scriptService;
         _documentTools = documentTools;
         _cr2WTools = cr2WTools;
@@ -1349,6 +1356,71 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
     }
 
+    private bool CanAddAxlControlFiles() => ActiveProject is not null && !IsDialogShown;
+
+    [RelayCommand(CanExecute = nameof(CanAddAxlControlFiles))]
+    private void AddAXlItemFiles() => AddAxlFiles();
+
+    /// <summary>
+    /// Many users fill out their name when creating a new project, but have no idea the settings even exist.
+    /// This method will take care of that, displaying a notification if it is not set.
+    /// </summary>
+    private string? GetModderName()
+    {
+        if (!string.IsNullOrEmpty(SettingsManager.ModderName))
+        {
+            return SettingsManager.ModderName;
+        }
+
+        if (string.IsNullOrEmpty(ActiveProject?.Author))
+        {
+            Interactions.ShowPopupWithWeblink((
+                "Please configure modder name",
+                "Please configure your name in the Wolvenkit settings",
+                WikiLinks.SettingsModderName,
+                "Open Wiki",
+                WMessageBoxImage.Warning
+            ));
+            return null;
+        }
+
+        SettingsManager.ModderName = ActiveProject.Author;
+        SettingsManager.Save();
+
+        return SettingsManager.ModderName;
+    }
+
+
+    private void AddAxlFiles()
+    {
+        if (ActiveProject is null)
+        {
+            throw new WolvenKitException(0x4003, "No project loaded");
+        }
+
+        if (string.IsNullOrEmpty(GetModderName()))
+        {
+            return;
+        }
+
+        var item = Interactions.ShowArchiveXlFilesView();
+        if (item is null)
+        {
+            return;
+        }
+
+        _watcherService.Suspend();
+        try
+        {
+            _archiveXlItemService.CreateEquipmentItem(item);
+        }
+        finally
+        {
+            _watcherService.Resume();
+            _watcherService.Refresh();
+        }
+    }
+
     private async Task OpenFromNewFile(NewFileViewModel? file)
     {
         CloseModalCommand.Execute(null);
@@ -1356,6 +1428,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             return;
         }
+
 
         await Task.Run(() => OpenFromNewFileAsync(file)).ContinueWith(async (_) =>
         {
@@ -1426,6 +1499,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 }
                 break;
             case EWolvenKitFile.WScript:
+            case EWolvenKitFile.Other:
                 throw new NotImplementedException();
             default:
                 break;
@@ -1836,6 +1910,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(NewFileCommand))]
     //[NotifyCanExecuteChangedFor(nameof(CloseModalCommand))]
     [NotifyCanExecuteChangedFor(nameof(CloseDialogCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddAXlItemFilesCommand))]
     private bool _isDialogShown;
 
     [ObservableProperty]
@@ -1864,6 +1939,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(NewPhotoModeFilesCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateMinimalQuestFilesCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateInkatlasCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddAXlItemFilesCommand))]
     private Cp77Project? _activeProject;
 
     [ObservableProperty]
@@ -2065,6 +2141,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             case EWolvenKitFile.ArchiveXl:
             case EWolvenKitFile.RedScript:
             case EWolvenKitFile.CETLua:
+            case EWolvenKitFile.Other:
             default:
                 break;
         }
@@ -2411,7 +2488,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         resources["WolvenKitMarginBottom"] = new Thickness(0, 0, 0, 15).Mul(_uiScalePercentage).Round();
         resources["WolvenKitMarginHorizontal"] = new Thickness(15, 0, 15, 0).Mul(_uiScalePercentage).Round();
         resources["WolvenKitMarginVertical"] = new Thickness(0, 15, 0, 15).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginHeader"] = new Thickness(15, 15, 15, 0).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginFooter"] = new Thickness(15, 0, 15, 15).Mul(_uiScalePercentage).Round();
         resources["WolvenKitMarginLeftBottom"] = new Thickness(15, 0, 0, 15).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginLeftTop"] = new Thickness(15, 15, 0, 0).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginLeftSmallTop"] = new Thickness(15, 8, 0, 0).Mul(_uiScalePercentage).Round();
 
         resources["WolvenKitMarginSmall"] = new Thickness(8).Mul(_uiScalePercentage).Round();
         resources["WolvenKitMarginSmallLeft"] = new Thickness(8, 0, 0, 0).Mul(_uiScalePercentage).Round();
@@ -2424,6 +2505,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         resources["WolvenKitMarginSmallFooter"] = new Thickness(8, 0, 8, 8).Mul(_uiScalePercentage).Round();
         resources["WolvenKitMarginSmallLeftSide"] = new Thickness(8, 8, 0, 8).Mul(_uiScalePercentage).Round();
         resources["WolvenKitMarginSmallRightSide"] = new Thickness(0, 8, 8, 8).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginSmallLeftTop"] = new Thickness(8, 8, 0, 0).Mul(_uiScalePercentage).Round();
 
         resources["WolvenKitMarginTiny"] = new Thickness(4).Mul(_uiScalePercentage).Round();
         resources["WolvenKitMarginTinyRight"] = new Thickness(0, 0, 4, 0).Mul(_uiScalePercentage).Round();

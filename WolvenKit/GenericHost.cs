@@ -68,7 +68,9 @@ namespace WolvenKit
                     services.AddSingleton<ILoggerService, SerilogWrapper>();                                    // can this be transient?
                     services.AddSingleton<ITweakDBService, TweakDBService>();
                     services.AddSingleton<IUpdateService, UpdateService>();
-                    
+
+                    services.AddSingleton<ArchiveXlItemService>();
+
                     // scripting
                     services.AddSingleton<IHookService, AppHookService>();
                     services.AddSingleton<AppScriptService>();

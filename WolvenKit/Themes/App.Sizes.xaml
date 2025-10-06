@@ -34,7 +34,11 @@
     <Thickness x:Key="WolvenKitMarginBottom">0,0,0,15</Thickness>
     <Thickness x:Key="WolvenKitMarginHorizontal">15,0</Thickness>
     <Thickness x:Key="WolvenKitMarginVertical">0,15</Thickness>
+    <Thickness x:Key="WolvenKitMarginHeader">15,15,15,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginFooter">15,0,15,15</Thickness>
     <Thickness x:Key="WolvenKitMarginLeftBottom">15,0,0,15</Thickness>
+    <Thickness x:Key="WolvenKitMarginLeftTop">15,15,0,0</Thickness>
+    <Thickness x:Key="WolvenKitMarginLeftSmallTop">15,8,0,0</Thickness>
 
     <Thickness x:Key="WolvenKitMarginSmall">8</Thickness>
     <Thickness x:Key="WolvenKitMarginSmallLeft">8,0,0,0</Thickness>
@@ -47,6 +51,7 @@
     <Thickness x:Key="WolvenKitMarginSmallFooter">8,0,8,8</Thickness>
     <Thickness x:Key="WolvenKitMarginSmallLeftSide">8,8,0,8</Thickness>
     <Thickness x:Key="WolvenKitMarginSmallRightSide">0,8,8,8</Thickness>
+    <Thickness x:Key="WolvenKitMarginSmallLeftTop">8,8,0,0</Thickness>
 
     <Thickness x:Key="WolvenKitMarginTiny">4</Thickness>
     <Thickness x:Key="WolvenKitMarginTinyLeft">4,0,0,0</Thickness>

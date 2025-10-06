@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using WolvenKit.App.Factories;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Scripting;
@@ -228,6 +229,9 @@ public static class Interactions
     //custom views
     public static Func<bool> ShowFirstTimeSetup { get; set; } = () => throw new NotImplementedException();
     public static Func<bool> ShowLaunchProfilesView { get; set; } = () => throw new NotImplementedException();
+
+    public static Func<ArchiveXlClothingItem?> ShowArchiveXlFilesView { get; set; } =
+        () => throw new NotImplementedException();
     public static Func<bool> ShowMaterialRepositoryView { get; set; } = () => throw new NotImplementedException();
 
     public static Func<(IEnumerable<IDisplayable>? availableItems, IEnumerable<IDisplayable>? selectedItems),
@@ -276,4 +280,11 @@ public static class Interactions
     /// </summary>
     public static Func<Cp77Project, LocalizationStringViewModel> ShowGenerateTranslationEntry { get; set; } =
         project => throw new NotImplementedException();
+
+    /// <summary>
+    /// Shows dialogue to add item codes to .reds store and vendor yaml
+    /// </summary>
+    public static Func<Cp77Project, AddItemsToStoreDialogViewModel> AddItemsToStore { get; set; } =
+        project => throw new NotImplementedException();
+
 }

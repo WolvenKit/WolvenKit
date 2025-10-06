@@ -90,6 +90,18 @@ namespace WolvenKit.Views.Shell
                     return true;
                 };
 
+                Interactions.ShowArchiveXlFilesView = () =>
+                {
+                    AddArchiveXlFilesDialog dialog = new();
+
+                    if (dialog.ShowDialog(this) != true)
+                    {
+                        return null;
+                    }
+
+                    return dialog.ViewModel?.CollectItemInfo();
+                };
+
                 Interactions.ShowSelectSaveView = currentSaveGame =>
                 {
                     SaveGameSelectionDialog dialog = new(currentSaveGame);
@@ -165,6 +177,17 @@ namespace WolvenKit.Views.Shell
                         args.text,
                         args.inputFieldLabel,
                         args.inputFieldDefaultValue);
+                    if (dialog.ShowDialog() != true)
+                    {
+                        return null;
+                    }
+
+                    return dialog.ViewModel;
+                };
+
+                Interactions.AddItemsToStore = (project) =>
+                {
+                    var dialog = new AddItemsToStoreDialog(project);
                     if (dialog.ShowDialog() != true)
                     {
                         return null;
