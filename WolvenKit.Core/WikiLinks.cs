@@ -48,6 +48,9 @@ public static class WikiLinks
     public const string CheatSheets =
         "https://wiki.redmodding.org/cyberpunk-2077-modding/for-mod-creators-theory/references-lists-and-overviews";
 
+    public const string JsonFiles =
+        "https://wiki.redmodding.org/cyberpunk-2077-modding/for-mod-creators-theory/files-and-what-they-do/file-formats/translation-files-.json";
+  
     public const string SettingsModderName = "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/settings#your-name";
 }
 

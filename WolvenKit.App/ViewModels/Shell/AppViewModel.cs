@@ -2809,4 +2809,83 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         ActiveDocument = null;
         _lastActiveDocument = null;
     }
+
+    /// <summary>
+    /// Reloads an open document tab.
+    /// </summary>
+    /// <param name="absolutePath">Absolute path of file to reload</param>
+    /// <param name="saveIfDirty">Save if dirty?</param>
+    public void ReloadIfOpen(string absolutePath, bool saveIfDirty = true)
+    {
+        if (string.IsNullOrEmpty(absolutePath) || !File.Exists(absolutePath) ||
+            _projectManager.ActiveProject is not { } project)
+        {
+            return;
+        }
+
+        // Find the document with this file path
+        if (DockedViews.OfType<IDocumentViewModel>().FirstOrDefault(doc =>
+                absolutePath.Equals(doc.FilePath, StringComparison.OrdinalIgnoreCase))
+            is not IDocumentViewModel openDocument)
+        {
+            return;
+        }
+
+        if (openDocument.IsDirty && saveIfDirty)
+        {
+            SaveIfDirty(absolutePath);
+        }
+        else if (!saveIfDirty)
+        {
+            _loggerService.Warning(
+                $"File {project.GetRelativePath(absolutePath)} has unsaved changes and will not be reloaded!");
+            return;
+        }
+
+        try
+        {
+            if (!openDocument.IsDirty)
+            {
+                openDocument.Reload(true);
+            }
+        }
+        catch
+        {
+            _loggerService.Error($"Failed to reload {project.GetRelativePath(absolutePath)}");
+        }
+    }
+
+    /// <summary>
+    /// Saves an open document tab, if it's dirty.
+    /// </summary>
+    /// <param name="absolutePath">Absolute path of file to save</param>
+    /// <returns>Is the file clean (safe to read/overwrite?)</returns>
+    public bool SaveIfDirty(string absolutePath)
+    {
+        if (string.IsNullOrEmpty(absolutePath) || _projectManager.ActiveProject is not { } project)
+        {
+            return true;
+        }
+
+        // Find the document with this file path
+        if (DockedViews.OfType<IDocumentViewModel>()
+                .FirstOrDefault(doc =>
+                    absolutePath.Equals(doc.FilePath, StringComparison.OrdinalIgnoreCase))
+            is not { IsDirty: true })
+        {
+            return true;
+        }
+
+        try
+        {
+            SaveFile(absolutePath);
+        }
+        catch
+        {
+            _loggerService.Error($"Failed to save {project.GetRelativePath(absolutePath)}");
+            return false;
+        }
+
+        return true;
+    }
 }

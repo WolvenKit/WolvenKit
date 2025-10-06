@@ -158,6 +158,13 @@ public static class Interactions
         _ => throw new NotImplementedException();
 
     /// <summary>
+    /// This calls <see cref="ShowConfirmation"/> with error image and OK buttons.
+    /// </summary>
+    /// <returns>true for yes, false for no, null for cancel</returns>
+    public static Func<(string text, string caption), bool> ShowErrorPopup { get; set; } =
+        _ => throw new NotImplementedException();
+
+    /// <summary>
     /// User warning: "The selected item(s) will be moved to the Recycle Bin"
     /// </summary>
     public static Func<IEnumerable<string>, bool> DeleteFiles { get; set; } = _ => throw new NotImplementedException();
@@ -268,6 +275,11 @@ public static class Interactions
     public static Func<Cp77Project, AddQuestDialogViewModel> ShowGenerateQuestDialogue { get; set; } =
         project => new AddQuestDialogViewModel(project);
 
+    /// <summary>
+    /// Shows dialogue to generate translation file entry
+    /// </summary>
+    public static Func<Cp77Project, LocalizationStringViewModel> ShowGenerateTranslationEntry { get; set; } =
+        project => throw new NotImplementedException();
 
     /// <summary>
     /// Shows dialogue to add item codes to .reds store and vendor yaml
