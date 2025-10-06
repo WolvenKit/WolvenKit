@@ -204,7 +204,7 @@ public partial class RedGraph
 
         if (sceneNode is scnQuestNode questNode)
         {
-            questNode.IsockMappings.Add("Cancel");
+            questNode.IsockMappings.Add("CutDestination");
             questNode.IsockMappings.Add("In");
             questNode.OsockMappings.Add("Out");
         }
@@ -260,7 +260,7 @@ public partial class RedGraph
     private void ConfigureQuestNodeSockets(scnQuestNode sceneQuestNode, questNodeDefinition questNode)
     {
         // Default socket mappings
-        sceneQuestNode.IsockMappings.Add("Cancel");
+        sceneQuestNode.IsockMappings.Add("CutDestination");
         sceneQuestNode.IsockMappings.Add("In");
 
         // Configure output sockets based on quest node type

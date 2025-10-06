@@ -358,7 +358,7 @@ namespace WolvenKit.App.ViewModels.Documents
                 var createEmbedText = dialogResult.enableSecondary;
                 var embeddedText = dialogResult.secondaryInput;
 
-                var itemId = (uint)2; // First id is always 2
+                var itemId = (uint)1; // First id is always 1
                 if (_sceneData.ScreenplayStore.Lines.Count > 0)
                 {
                     itemId = _sceneData.ScreenplayStore.Lines[^1].ItemId.Id + 256;

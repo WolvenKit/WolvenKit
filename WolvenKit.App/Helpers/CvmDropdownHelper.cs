@@ -176,7 +176,7 @@ public abstract class CvmDropdownHelper
                     var parentPath = GetParentPath(cvm);
 
                     // Skip dropdown if we're in definition contexts
-                    if (IsInDefinitionContext(parentPath))
+                    if (IsInDefinitionContext(parentPath, parent.ResolvedData))
                     {
                         return new Dictionary<string, string>(); // Return empty to use regular integer editor
                     }
@@ -253,7 +253,7 @@ public abstract class CvmDropdownHelper
                 {
                     // Check if we're in a definition context vs usage context
                     var parentPath = GetParentPath(cvm);
-                    if (IsInDefinitionContext(parentPath))
+                    if (IsInDefinitionContext(parentPath, parent.ResolvedData))
                     {
                         return new Dictionary<string, string>(); // Return empty to use regular integer editor
                     }
@@ -301,7 +301,7 @@ public abstract class CvmDropdownHelper
                 {
                     // Check if we're in a definition context vs usage context
                     var parentPath = GetParentPath(cvm);
-                    if (IsInDefinitionContext(parentPath))
+                    if (IsInDefinitionContext(parentPath, parent.ResolvedData))
                     {
                         return new Dictionary<string, string>(); // Return empty to use regular integer editor
                     }
@@ -359,7 +359,7 @@ public abstract class CvmDropdownHelper
                 {
                     // Check if we're in a definition context vs usage context
                     var parentPath = GetParentPath(cvm);
-                    if (IsInDefinitionContext(parentPath))
+                    if (IsInDefinitionContext(parentPath, parent.ResolvedData))
                     {
                         return new Dictionary<string, string>(); // Return empty to use regular integer editor
                     }
@@ -397,7 +397,7 @@ public abstract class CvmDropdownHelper
                 {
                     // Check if we're in a definition context vs usage context
                     var parentPath = GetParentPath(cvm);
-                    if (IsInDefinitionContext(parentPath))
+                    if (IsInDefinitionContext(parentPath, parent.ResolvedData))
                     {
                         return new Dictionary<string, string>(); // Return empty to use regular integer editor
                     }
@@ -441,7 +441,7 @@ public abstract class CvmDropdownHelper
                 {
                     // Check if we're in a definition context vs usage context
                     var parentPath = GetParentPath(cvm);
-                    if (IsInDefinitionContext(parentPath))
+                    if (IsInDefinitionContext(parentPath, parent.ResolvedData))
                     {
                         return new Dictionary<string, string>(); // Return empty to use regular integer editor
                     }
@@ -484,7 +484,7 @@ public abstract class CvmDropdownHelper
                 {
                     // Check if we're in a definition context vs usage context
                     var parentPath = GetParentPath(cvm);
-                    if (IsInDefinitionContext(parentPath))
+                    if (IsInDefinitionContext(parentPath, parent.ResolvedData))
                     {
                         return new Dictionary<string, string>(); // Return empty to use regular integer editor
                     }
@@ -527,7 +527,7 @@ public abstract class CvmDropdownHelper
                 {
                     // Check if we're in a definition context vs usage context
                     var parentPath = GetParentPath(cvm);
-                    if (IsInDefinitionContext(parentPath))
+                    if (IsInDefinitionContext(parentPath, parent.ResolvedData))
                     {
                         return new Dictionary<string, string>();
                     }
@@ -885,7 +885,7 @@ public abstract class CvmDropdownHelper
         if (cvm.Name == "id")
         {
             var parentPath = GetParentPath(cvm);
-            if (IsInDefinitionContext(parentPath))
+            if (IsInDefinitionContext(parentPath, parent.ResolvedData))
             {
                 return false; // Use regular integer editor for definition contexts
             }
@@ -1057,13 +1057,20 @@ public abstract class CvmDropdownHelper
     /// Determines if we're in a definition context where IDs should be editable
     /// vs usage context where dropdowns are helpful
     /// </summary>
-    private static bool IsInDefinitionContext(string parentPath)
+    private static bool IsInDefinitionContext(string parentPath, IRedType? parentType = null)
     {
         // Usage contexts that can be inside definition paths
         var usagePaths = new[] { "bodyCinematicAnimSets", "lipsyncAnimSet", "dynamicAnimSets" };
         if (usagePaths.Any(parentPath.Contains))
         {
             return false;
+        }
+
+        // Special handling for screenplay store: only scnscreenplayItemId should be editable in definition context
+        if (parentType is scnscreenplayItemId && 
+            (parentPath.Contains("screenplayStore.lines") || parentPath.Contains("screenplayStore.options")))
+        {
+            return true;
         }
 
         // Definition contexts where IDs should be directly editable
@@ -1075,9 +1082,7 @@ public abstract class CvmDropdownHelper
             "props", // Prop definitions
             "workspotInstances", // Workspot instance definitions
             "effectInstances", // Effect instance definitions
-            "effectDefinitions", // Effect definitions
-            "screenplayStore.lines", // Screenplay dialogue line definitions
-            "screenplayStore.options" // Screenplay choice option definitions
+            "effectDefinitions" // Effect definitions
         };
 
         return definitionPaths.Any(parentPath.Contains);
