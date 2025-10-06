@@ -1,91 +1,55 @@
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using System.Diagnostics;
 using System.Windows;
+using System.Windows.Input;
+using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.Core;
 
 namespace WolvenKit.Views.Templates
 {
-    public class LocalizationStringViewModel : INotifyPropertyChanged
-    {
-        private string _femaleVariant = "";
-        private string _maleVariant = "";
-        private string _secondaryKey = "";
-
-        public string FemaleVariant
-        {
-            get => _femaleVariant;
-            set
-            {
-                if (_femaleVariant != value)
-                {
-                    _femaleVariant = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public string MaleVariant
-        {
-            get => _maleVariant;
-            set
-            {
-                if (_maleVariant != value)
-                {
-                    _maleVariant = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public string SecondaryKey
-        {
-            get => _secondaryKey;
-            set
-            {
-                if (_secondaryKey != value)
-                {
-                    _secondaryKey = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
 
     public partial class LocalizationStringPopup : Window
     {
-        private readonly LocalizationStringViewModel _viewModel;
 
         public LocalizationStringPopup()
         {
             InitializeComponent();
-            Owner = Application.Current.MainWindow;
 
-            _viewModel = new LocalizationStringViewModel();
-            DataContext = _viewModel;
+            ViewModel = new LocalizationStringViewModel();
+            DataContext = ViewModel;
         }
 
-        public string FemaleVariant
+        public LocalizationStringViewModel ViewModel { get; set; }
+
+
+        /// <summary>
+        /// Close dialogue on enter or escape
+        /// </summary>
+        private void Wizard_OnKeyDown(object sender, KeyEventArgs e)
         {
-            get => _viewModel.FemaleVariant;
-            set => _viewModel.FemaleVariant = value;
+            switch (e.Key)
+            {
+                case Key.Escape:
+                    DialogResult = false;
+                    e.Handled = true;
+                    Close();
+                    break;
+                case Key.Enter when ViewModel.IsValid:
+                    DialogResult = true;
+                    e.Handled = true;
+                    Close();
+                    break;
+                default:
+                    break;
+            }
         }
 
-        public string MaleVariant
+        public bool? ShowDialog(Window owner)
         {
-            get => _viewModel.MaleVariant;
-            set => _viewModel.MaleVariant = value;
+            Owner = owner;
+            return ShowDialog();
         }
 
-        public string SecondaryKey
-        {
-            get => _viewModel.SecondaryKey;
-            set => _viewModel.SecondaryKey = value;
-        }
+        private void OnHelpClicked(object sender, RoutedEventArgs e) =>
+            Process.Start(new ProcessStartInfo { FileName = WikiLinks.JsonFiles, UseShellExecute = true });
     }
 }

@@ -10,7 +10,7 @@
     MaxWidth="800"
     SizeToContent="Height"
     ResizeMode="NoResize"
-    FocusManager.FocusedElement="{Binding ElementName=FemaleVariantInput}"
+    FocusManager.FocusedElement="{Binding ElementName=SecondaryKeyTextBox}"
     WindowStartupLocation="CenterScreen">
     <Grid
         HorizontalAlignment="Stretch"
@@ -22,111 +22,105 @@
                     <hc:ThemeResources />
                     <hc:Theme />
                 </ResourceDictionary.MergedDictionaries>
-                <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             </ResourceDictionary>
         </Grid.Resources>
 
         <syncfusion:WizardControl
             CancelButtonCancelsWindow="True"
-            FinishButtonClosesWindow="True">
+            FinishButtonClosesWindow="True"
+            KeyDown="Wizard_OnKeyDown"
+            FinishEnabled="{Binding IsValid}"
+            Help="OnHelpClicked"
+            PreviewKeyDown="Wizard_OnKeyDown">
             <syncfusion:WizardPage
                 BackVisibility="Collapsed"
                 CancelVisibility="Visible"
                 FinishVisibility="Visible"
-                HelpVisibility="Collapsed"
+                HelpVisibility="Visible"
                 NextVisibility="Collapsed"
                 PageType="Exterior">
                 <Grid Margin="{DynamicResource WolvenKitMarginSmallHeader}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
                     </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" MinWidth="{DynamicResource WolvenKitLabelWidth}" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-                    <Grid
+                    <!-- Secondary Key -->
+                    <TextBlock
                         Grid.Row="0"
                         Grid.Column="0"
-                        Margin="{DynamicResource WolvenKitMarginSmallBottom}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" MinWidth="{DynamicResource WolvenKitLabelWidthMedium}" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <!-- Female Variant -->
-                        <TextBlock
-                            Grid.Column="0"
-                            Margin="{DynamicResource WolvenKitMarginSmallRight}"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Center"
-                            Foreground="{DynamicResource PrimaryTextBrush}"
-                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                            Text="Female Variant:" />
-                        <TextBox
-                            x:Name="FemaleVariantInput"
-                            Grid.Column="1"
-                            Padding="{DynamicResource WolvenKitMarginTiny}"
-                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                            Text="{Binding FemaleVariant,
-                                           UpdateSourceTrigger=PropertyChanged}"
-                            TextWrapping="Wrap"
-                            AcceptsReturn="False"
-                            VerticalScrollBarVisibility="Auto" />
-                    </Grid>
-                    <Grid
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        Margin="{DynamicResource WolvenKitMarginSmallBottom}">
+                        Margin="{DynamicResource WolvenKitMarginSmallRight}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Foreground="{DynamicResource PrimaryTextBrush}"
+                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                        Text="Secondary Key:" />
+                    <TextBox
+                        x:Name="SecondaryKeyTextBox"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Padding="{DynamicResource WolvenKitMarginTiny}"
+                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                        Text="{Binding SecondaryKey,
+                                       UpdateSourceTrigger=PropertyChanged}"
+                        TextWrapping="Wrap"
+                        KeyboardNavigation.TabIndex="-1"
+                        AcceptsReturn="False"
+                        VerticalScrollBarVisibility="Auto" />
 
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" MinWidth="{DynamicResource WolvenKitLabelWidthMedium}" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock
-                            Grid.Column="0"
-                            Margin="{DynamicResource WolvenKitMarginSmallRight}"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Center"
-                            Foreground="{DynamicResource PrimaryTextBrush}"
-                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                            Text="Male Variant:" />
-                        <TextBox
-                            Grid.Column="1"
-                            Padding="{DynamicResource WolvenKitMarginTiny}"
-                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                            Text="{Binding MaleVariant,
-                                           UpdateSourceTrigger=PropertyChanged}"
-                            TextWrapping="Wrap"
-                            AcceptsReturn="False"
-                            VerticalScrollBarVisibility="Auto" />
-                    </Grid>
-                    <Grid
+                    <!-- Female Variant -->
+                    <TextBlock
                         Grid.Row="2"
                         Grid.Column="0"
-                        Margin="{DynamicResource WolvenKitMarginSmallBottom}">
+                        Margin="{DynamicResource WolvenKitMarginSmallRight}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Foreground="{DynamicResource PrimaryTextBrush}"
+                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                        Text="Female Variant:" />
+                    <TextBox
+                        x:Name="FemaleVariantInput"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Padding="{DynamicResource WolvenKitMarginTiny}"
+                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                        Text="{Binding FemaleVariant,
+                                       UpdateSourceTrigger=PropertyChanged}"
+                        TextWrapping="Wrap"
+                        AcceptsReturn="False"
+                        KeyboardNavigation.TabIndex="-1"
+                        VerticalScrollBarVisibility="Auto" />
 
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" MinWidth="{DynamicResource WolvenKitLabelWidthMedium}" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <!-- Secondary Key -->
-                        <TextBlock
-                            Grid.Column="0"
-                            Margin="{DynamicResource WolvenKitMarginSmallRight}"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Center"
-                            Foreground="{DynamicResource PrimaryTextBrush}"
-                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                            Text="Secondary Key:" />
-                        <TextBox
-                            Grid.Column="1"
-                            Padding="{DynamicResource WolvenKitMarginTiny}"
-                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                            Text="{Binding SecondaryKey,
-                                           UpdateSourceTrigger=PropertyChanged}"
-                            TextWrapping="Wrap"
-                            AcceptsReturn="False"
-                            VerticalScrollBarVisibility="Auto" />
-                    </Grid>
+
+                    <TextBlock
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        Margin="{DynamicResource WolvenKitMarginSmallRight}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Foreground="{DynamicResource PrimaryTextBrush}"
+                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                        Text="Male Variant:" />
+                    <TextBox
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        Padding="{DynamicResource WolvenKitMarginTiny}"
+                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                        Text="{Binding MaleVariant,
+                                       UpdateSourceTrigger=PropertyChanged}"
+                        TextWrapping="Wrap"
+                        AcceptsReturn="False"
+                        KeyboardNavigation.TabIndex="-1"
+                        VerticalScrollBarVisibility="Auto" />
+
                 </Grid>
             </syncfusion:WizardPage>
         </syncfusion:WizardControl>
