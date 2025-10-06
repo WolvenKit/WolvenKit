@@ -204,6 +204,10 @@ public partial class ChunkViewModel
                 ExpandAndSelect(child, true);
                 break;
 
+            case gameJournalResource when GetPropertyChild("entry", "entries") is ChunkViewModel entryChild:
+                ExpandAndSelect(entryChild, true);
+                break;
+
             default:
                 if (TVProperties.Count == 1)
                 {
@@ -396,6 +400,20 @@ public partial class ChunkViewModel
 
                     break;
                 }
+
+                #region gameJournal
+
+                case gameJournalContact when GetPropertyChild("entries") is ChunkViewModel cvm:
+                    cvm.ExpansionStateChangedFromParent = true;
+                    cvm.SetChildExpansionStatesInternal(isExpanded, _recursionLevel);
+                    break;
+
+                case gameJournalPhoneConversation when GetPropertyChild("entries") is ChunkViewModel cvm:
+                    cvm.ExpansionStateChangedFromParent = true;
+                    cvm.IsExpanded = IsExpanded;
+                    break;
+
+                #endregion
                 /*
                  * PartsOverrides
                  */
