@@ -141,7 +141,7 @@ public class scnQuestNodeWrapper : BaseSceneViewModel<scnQuestNode>
 
         _castedData.QuestNode.Chunk.Id = (ushort)_castedData.NodeId.Id;
         _castedData.QuestNode.Chunk.Sockets ??= new CArray<CHandle<graphGraphSocketDefinition>>();
-        _castedData.QuestNode.Chunk.Sockets.Add(new questSocketDefinition { Name = "Cancel", Type = Enums.questSocketType.CutDestination });
+        _castedData.QuestNode.Chunk.Sockets.Add(new questSocketDefinition { Name = "CutDestination", Type = Enums.questSocketType.CutDestination });
         _castedData.QuestNode.Chunk.Sockets.Add(new questSocketDefinition { Name = "In", Type = Enums.questSocketType.Input });
         _castedData.QuestNode.Chunk.Sockets.Add(new questSocketDefinition { Name = "Out", Type = Enums.questSocketType.Output });
     }
