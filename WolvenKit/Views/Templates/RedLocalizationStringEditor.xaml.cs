@@ -189,7 +189,7 @@ public partial class RedLocalizationStringEditor : UserControl
 
             // Save the file
             _cr2wTools.WriteCr2W(cr2W, onscreenAbsolutePath);
-            _appViewModel.ReloadIfOpen(onscreensRelativePath);
+            _appViewModel.ReloadIfOpen(onscreenAbsolutePath);
 
             return true;
         }
