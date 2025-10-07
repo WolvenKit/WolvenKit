@@ -687,6 +687,11 @@ public abstract class CvmDropdownHelper
                 ret = s_appFileRenderPlane;
                 break;
 
+            case inkTextureSlot when cvm.Name is "texture":
+                ret = documentTools.CollectProjectFiles(".xbm");
+                break;
+
+
             #region appFile
 
             case CArray<CName> when parent is // tags in .app file appearance
@@ -977,6 +982,12 @@ public abstract class CvmDropdownHelper
             #region questPhase
 
             graphGraphNodeDefinition when cvm.Name is "phaseResource" or "sceneFile" => true,
+
+            #endregion
+
+            #region inkatlas
+
+            inkTextureSlot => cvm.Name is "texture",
 
             #endregion
 
