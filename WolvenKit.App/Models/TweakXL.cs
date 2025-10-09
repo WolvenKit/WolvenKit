@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
@@ -404,9 +405,8 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
                 }
 
                 // iterate over the properties
-                foreach (var property in txl.GetPropertyNames())
+                foreach (var property in txl.GetPropertyNames().OrderBy(p => p))
                 {
-                    var propertyToWrite = property;
                     // skip ID since it's already written as the map start
                     if (property == "ID")
                     {
@@ -420,12 +420,13 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
                         continue;
                     }
 
-                    if (property == "Value")
+                    var propertyToWrite = property;
+
+                    if (property == "Value" && txl.ID.ResolvedText is string id && !string.IsNullOrWhiteSpace(id))
                     {
-                        propertyToWrite = txl.ID.ResolvedText;
+                        propertyToWrite = id;
                     }
 
-                    ArgumentNullException.ThrowIfNull(propertyToWrite);
                     var propertyValue = txl.GetPropertyValue(property);
                     switch (propertyValue)
                     {
