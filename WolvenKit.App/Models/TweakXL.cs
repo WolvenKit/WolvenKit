@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
@@ -404,9 +405,8 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
                 }
 
                 // iterate over the properties
-                foreach (var property in txl.GetPropertyNames())
+                foreach (var property in txl.GetPropertyNames().OrderBy(p => p))
                 {
-                    var propertyToWrite = property;
                     // skip ID since it's already written as the map start
                     if (property == "ID")
                     {
@@ -420,12 +420,13 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
                         continue;
                     }
 
-                    if (property == "Value")
+                    var propertyToWrite = property;
+
+                    if (property == "Value" && txl.ID.ResolvedText is string id && !string.IsNullOrWhiteSpace(id))
                     {
-                        propertyToWrite = txl.ID.ResolvedText;
+                        propertyToWrite = id;
                     }
 
-                    ArgumentNullException.ThrowIfNull(propertyToWrite);
                     var propertyValue = txl.GetPropertyValue(property);
                     switch (propertyValue)
                     {
@@ -494,6 +495,8 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
     public ITweakXLItem? ReadTweakXL(IParser parser, string? id = null/*, Type? type = null*/)
     {
         var _tdbs = _tweakDBService;
+        var i = 0;
+
         if (parser.TryConsume<SequenceStart>(out var _))
         {
             var tweak = new TweakXLSequence();
@@ -507,17 +510,26 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
             //}
             while (!parser.TryConsume<SequenceEnd>(out var _))
             {
-                var x = ReadTweakXL(parser);
-                if (x is not null)
+                if (ReadTweakXL(parser, id + "_inline" + i) is not {} item)
                 {
-                    tweak.Items.Add(x);
+                    continue;
                 }
+                tweak.Items.Add(item);
+                i++;
             }
             return tweak;
         }
-        else if (parser.TryConsume<MappingStart>(out var _))
+        if (parser.TryConsume<MappingStart>(out var ms))
         {
-            var tweak = new TweakXL();
+            TweakXL tweak;
+            if (ms.Tag == "!append")
+            {
+                tweak = new TweakXLAppend();
+            }
+            else
+            {
+                tweak = new TweakXL();
+            }
             if (id != null)
             {
                 tweak.ID = id;
@@ -582,17 +594,20 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
                                 ((TweakXLSequence)propertyValue).Type = type1.Name;
                             }
                         }
+
                         //if (type != null)
                         //{
                         //    ((TweakXLSequence)propertyValue).Type = type;
                         //}
                         while (!parser.TryConsume<SequenceEnd>(out var _))
                         {
-                            var item = ReadTweakXL(parser);
-                            if (item is not null)
+                            if (ReadTweakXL(parser, id + "_inline" + i) is not { } item)
                             {
-                                ((TweakXLSequence)propertyValue).Items.Add(item);
+                                continue;
                             }
+
+                            ((TweakXLSequence)propertyValue).Items.Add(item);
+                            i++;
                         }
                     }
 
