@@ -1249,7 +1249,8 @@ public partial class ProjectResourceTools
             var match = AtelierLastItemCode().Match(textContent);
             if (!match.Success)
             {
-                _loggerService.Error("Failed appending to atelier store, couldn't find the last item in the list");
+                _loggerService.Error(
+                    "Failed appending to atelier store: Please make sure your store has at least one item.");
                 return;
             }
 
@@ -1267,7 +1268,7 @@ public partial class ProjectResourceTools
         }
     }
 
-    [GeneratedRegex(@"Items\.\w+""(?!,)(\s)", RegexOptions.Multiline)]
+    [GeneratedRegex(@"Items\.\w+""(?!,)()(?=\s|\])", RegexOptions.Multiline)]
     private static partial Regex AtelierLastItemCode();
 
     public async Task AddDependenciesToProject(CR2WFile cr2W, string destFolder)
