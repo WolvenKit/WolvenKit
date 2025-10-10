@@ -119,15 +119,6 @@ namespace WolvenKit.Views.Dialogs.Windows
             s_lastItemCodes.AddRange(vm.ItemCodes);
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (sender is not TextBox textBox || ViewModel is not { } vm)
-            {
-                return;
-            }
-
-            vm.ItemCodes = ItemCodesRegex().Matches(textBox.Text).Select(m => m.Value).Distinct().ToList();
-        }
 
         [GeneratedRegex(@"Items\.\w+")]
         private partial Regex ItemCodesRegex();
@@ -146,5 +137,29 @@ namespace WolvenKit.Views.Dialogs.Windows
 
             CloseDialogue(false);
         }
+
+        private void OnTextboxKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                e.Handled = true;
+            }
+
+            ViewModel?.Validate();
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (sender is not TextBox textBox || ViewModel is not { } vm)
+            {
+                return;
+            }
+
+            vm.ItemCodes = ItemCodesRegex().Matches(textBox.Text).Select(m => m.Value).Distinct().ToList();
+        }
+
+        private void TextBox_MouseLeave(object sender, MouseEventArgs e) => ViewModel?.Validate();
+
+        private void TextBox_FocusLost(object sender, KeyboardFocusChangedEventArgs e) => ViewModel?.Validate();
     }
 }
