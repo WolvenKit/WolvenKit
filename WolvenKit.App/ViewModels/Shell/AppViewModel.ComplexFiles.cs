@@ -321,7 +321,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
                 return;
             }
 
-            var entFolder = Path.Join(wbDataFolder, subfolder, fileName);
+            var entFolder = Path.Join(wbDataFolder, subfolder);
             Directory.CreateDirectory(entFolder);
 
             File.WriteAllText(Path.Join(entFolder, fileName), string.Join(Environment.NewLine, ents));
