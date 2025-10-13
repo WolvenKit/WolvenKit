@@ -710,6 +710,16 @@ namespace WolvenKit.RED4.CR2W.Archive
         public IEnumerable<IGameArchive> GetEp1Archives() => Archives.Items.Where(x => x.Source is EArchiveSource.EP1);
         public IEnumerable<IGameArchive> GetGameArchives() => Archives.Items.Where(x => x.Source is EArchiveSource.EP1 or EArchiveSource.Base);
 
+        public bool IsModInstalled(string archiveName)
+        {
+            archiveName = archiveName.Replace(".archive", "");
+            return GetModArchives()
+                .Any(x => Path.GetFileNameWithoutExtension(x.ArchiveAbsolutePath).EndsWith(archiveName));
+        }
+
+        public bool IsFileInScope(string relativePath, ArchiveManagerScope searchScope) =>
+            Search(relativePath, searchScope).Count != 0;
+
         #endregion methods
     }
 }
