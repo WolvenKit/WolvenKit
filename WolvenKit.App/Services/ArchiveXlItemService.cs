@@ -733,6 +733,7 @@ public class ArchiveXlItemService
                     $"Yaml file {clothingItemData.YamlFilePath} already contains a definition for {itemName}. Existing properties will not be overwritten.");
                 yaml = yamlFromFile;
                 yamlData = nodeFromFile;
+                itemName = nodeFromFile.Children.First().Key.ToString();
             }
         }
 
@@ -753,6 +754,8 @@ public class ArchiveXlItemService
             yamlData.Children.TryAdd("placementSlots", $"OutfitSlots.{clothingItemData.EqExSlot}");
         }
 
-        YamlHelper.WriteYaml(yamlAbsPath, yaml);
+        var comment = clothingItemData.Variants.Select(v => itemName.Replace("$(base_color)", v)).ToArray();
+
+        YamlHelper.WriteYaml(yamlAbsPath, yaml, comment);
     }
 }
