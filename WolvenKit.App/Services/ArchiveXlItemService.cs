@@ -339,6 +339,10 @@ public class ArchiveXlItemService
         }
 
         var displayName = $"{clothingItemData.ItemName}_i18n_$(base_color)";
+        if (clothingItemData.SecondaryVariants.Count > 0)
+        {
+            displayName = $"{displayName}_$(secondary)";
+        }
         var description = $"{clothingItemData.ItemName}_i18n_desc";
 
         var entryList = locEntries.Entries.ToList();
@@ -355,14 +359,34 @@ public class ArchiveXlItemService
         foreach (var variant in clothingItemData.Variants)
         {
             var translationString = displayName.Replace("$(base_color)", variant);
-            if (entryList.All(e => e.SecondaryKey != translationString))
+            if (clothingItemData.SecondaryVariants.Count > 0)
             {
-                entryList.Add(new localizationPersistenceOnScreenEntry()
+                foreach (var secondary in clothingItemData.SecondaryVariants)
                 {
-                    SecondaryKey = translationString,
-                    FemaleVariant = $"{clothingItemData.ItemName} ({variant})".ToHumanFriendlyString(),
-                });
+                    var translationString2 = translationString.Replace("$(secondary)", secondary);
+                    if (entryList.All(e => e.SecondaryKey != translationString2))
+                    {
+                        entryList.Add(new localizationPersistenceOnScreenEntry()
+                        {
+                            SecondaryKey = translationString2,
+                            FemaleVariant = $"{clothingItemData.ItemName} ({variant} {secondary})"
+                                .ToHumanFriendlyString(),
+                        });
+                    }
+                }
             }
+            else
+            {
+                if (entryList.All(e => e.SecondaryKey != translationString))
+                {
+                    entryList.Add(new localizationPersistenceOnScreenEntry()
+                    {
+                        SecondaryKey = translationString,
+                        FemaleVariant = $"{clothingItemData.ItemName} ({variant})".ToHumanFriendlyString(),
+                    });
+                }
+            }
+
         }
 
         locEntries.Entries.Clear();

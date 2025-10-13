@@ -231,13 +231,7 @@
                         Style="{StaticResource LabelStyle}"
                         Text="Item Name" />
 
-                    <!-- Secondary variants -->
-                    <TextBlock
-                        Grid.Row="3"
-                        Grid.Column="0"
-                        VerticalAlignment="Top"
-                        Style="{StaticResource LabelStyle}"
-                        Text="Use two variant fields" />
+                    <!-- Item name -->
                     <hc:TextBox
                         x:Name="ItemNameTextBox"
                         Grid.Row="3"
