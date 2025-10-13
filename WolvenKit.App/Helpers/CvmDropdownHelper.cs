@@ -537,7 +537,7 @@ public abstract class CvmDropdownHelper
 
                     // Determine if we're looking at lines or options based on parent path
                     bool isForOptions = parentPath.Contains("options") || parentPath.Contains("choiceOption");
-                    
+
                     if (isForOptions && scene.ScreenplayStore?.Options != null)
                     {
                         // Handle screenplay options (choice options)
@@ -545,15 +545,15 @@ public abstract class CvmDropdownHelper
                         {
                             var itemId = option.ItemId.Id;
                             var locStringId = option.LocstringId.Ruid;
-                            
+
                             // Try to find embedded text
                             var embeddedText = scene.GetEmbeddedTextForLocString(locStringId);
                             var previewText = !string.IsNullOrEmpty(embeddedText) ? embeddedText : $"LocString: {locStringId}";
 
                             var truncatedPreview = previewText.Length > 60 ? previewText.Substring(0, 57) + "..." : previewText;
-                            
+
                             var displayText = $"{itemId}: {truncatedPreview}";
-                            
+
                             screenplayOptions[displayText] = itemId.ToString();
                         }
                     }
@@ -564,15 +564,15 @@ public abstract class CvmDropdownHelper
                         {
                             var itemId = line.ItemId.Id;
                             var locStringId = line.LocstringId.Ruid;
-                            
+
                             // Try to find embedded text
                             var embeddedText = scene.GetEmbeddedTextForLocString(locStringId);
                             var previewText = !string.IsNullOrEmpty(embeddedText) ? embeddedText : $"LocString: {locStringId}";
-                            
+
                             var truncatedPreview = previewText.Length > 60 ? previewText.Substring(0, 57) + "..." : previewText;
-                            
+
                             var displayText = $"{itemId}: {truncatedPreview}";
-                            
+
                             screenplayOptions[displayText] = itemId.ToString();
                         }
                     }
@@ -686,6 +686,11 @@ public abstract class CvmDropdownHelper
             case entISkinTargetComponent when cvm.Name is "renderingPlaneAnimationParam":
                 ret = s_appFileRenderPlane;
                 break;
+
+            case inkTextureSlot when cvm.Name is "texture":
+                ret = documentTools.CollectProjectFiles(".xbm");
+                break;
+
 
             #region appFile
 
@@ -983,6 +988,12 @@ public abstract class CvmDropdownHelper
 
             #endregion
 
+            #region inkatlas
+
+            inkTextureSlot => cvm.Name is "texture",
+
+            #endregion
+
             _ => false
         };
     }
@@ -1067,7 +1078,7 @@ public abstract class CvmDropdownHelper
         }
 
         // Special handling for screenplay store: only scnscreenplayItemId should be editable in definition context
-        if (parentType is scnscreenplayItemId && 
+        if (parentType is scnscreenplayItemId &&
             (parentPath.Contains("screenplayStore.lines") || parentPath.Contains("screenplayStore.options")))
         {
             return true;
