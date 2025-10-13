@@ -730,7 +730,7 @@ public class ArchiveXlItemService
             new appearanceAppearancePart()
             {
                 Resource = new CResourceAsyncReference<entEntityTemplate>(
-                    (ResourcePath)clothingItemData.AppFilePath)
+                    (ResourcePath)clothingItemData.MeshEntityPath)
             }
         ]);
         appAppearance.VisualTags = new redTagList() { Tags = tags };
@@ -815,7 +815,7 @@ public class ArchiveXlItemService
         yamlData.Children.TryAdd("$base", itemBase);
         yamlData.Children.TryAdd("$instances", instances);
         yamlData.Children.TryAdd("appearanceName",
-            $"{clothingItemData.ItemName}_!$(base_color)+{(useSecondary ? "$(secondary)" : string.Empty)}");
+            $"{clothingItemData.ItemName}_!$(base_color){(useSecondary ? "+$(secondary)" : string.Empty)}");
         yamlData.Children.TryAdd("entityName", $"{clothingItemData.ItemName}_factory_name");
         yamlData.Children.TryAdd("localizedDescription", $"LocKey#{clothingItemData.ItemName}_i18n_desc");
         yamlData.Children.TryAdd("displayName",
