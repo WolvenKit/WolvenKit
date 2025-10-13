@@ -171,11 +171,14 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="5" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
                         <RowDefinition Height="5" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="5" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="10" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="5" />
                     </Grid.RowDefinitions>
@@ -227,6 +230,14 @@
                         Grid.Column="0"
                         Style="{StaticResource LabelStyle}"
                         Text="Item Name" />
+
+                    <!-- Secondary variants -->
+                    <TextBlock
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        VerticalAlignment="Top"
+                        Style="{StaticResource LabelStyle}"
+                        Text="Use two variant fields" />
                     <hc:TextBox
                         x:Name="ItemNameTextBox"
                         Grid.Row="3"
@@ -307,6 +318,7 @@
                         Grid.Row="12"
                         Grid.Column="1"
                         Margin="{DynamicResource WolvenKitMarginTinyBottom}"
+                        MouseDown="Combobox_OnClick"
                         SelectedValuePath="{Binding HidingTags,
                                                     UpdateSourceTrigger=LostFocus}"
                         ItemsSource="{Binding HidingTagsSource}"
@@ -437,6 +449,52 @@
                         Grid.Column="1"
                         Style="{StaticResource ExplanationStyle}"
                         Text="Item variants (separate by comma)" />
+                    <TextBlock
+                        Grid.Row="28"
+                        Grid.Column="1"
+                        Style="{StaticResource ExplanationStyle}"
+                        Text="Item variants (separate by comma)" />
+
+
+                    <TextBlock
+                        Grid.Row="31"
+                        Grid.Column="0"
+                        VerticalAlignment="Top"
+                        Style="{StaticResource LabelStyle}"
+                        Text="Use two variant fields" />
+                    <CheckBox
+                        Grid.Row="31"
+                        Grid.Column="1"
+                        KeyboardNavigation.TabIndex="-1"
+                        IsChecked="{Binding EnableSecondaryVariants}" />
+
+                    <TextBlock
+                        Grid.Row="33"
+                        Grid.Column="0"
+                        VerticalAlignment="Top"
+                        Style="{StaticResource LabelStyle}"
+                        Visibility="{Binding EnableSecondaryVariants,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Text="Secondary variants" />
+                    <syncfusion:SfTextBoxExt
+                        x:Name="SecondaryItemVariantsTextBox"
+                        Grid.Row="33"
+                        Grid.Column="1"
+                        Padding="{DynamicResource WolvenKitMarginTinyVertical}"
+                        VerticalContentAlignment="Top"
+                        Background="{StaticResource ContentBackgroundAlt2}"
+                        BorderBrush="{StaticResource ForegroundColor_Grey_Dark}"
+                        BorderThickness="1"
+                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                        Visibility="{Binding EnableSecondaryVariants,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        helpers:TextBoxBehavior.TripleClickSelectAll="True"
+                        TextWrapping="Wrap"
+                        KeyboardNavigation.TabIndex="-1"
+                        Watermark="samurai, witcher, galaxy"
+                        WatermarkTemplate="{StaticResource PlaceholderTemplate}"
+                        LostFocus="SecondaryItemVariants_FocusLost" />
+
                 </Grid>
             </syncfusion:WizardPage>
         </syncfusion:WizardControl>
