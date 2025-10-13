@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using DynamicData;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using YamlDotNet.RepresentationModel;
@@ -59,7 +60,7 @@ public static class YamlHelper
     }
 
 
-    public static void WriteYaml(string absolutePath, YamlMappingNode rootNode)
+    public static void WriteYaml(string absolutePath, YamlMappingNode rootNode, string[]? prependingFileComment = null)
     {
         if (Path.GetDirectoryName(absolutePath) is string path && !Directory.Exists(path))
         {
@@ -71,9 +72,19 @@ public static class YamlHelper
 
         using var writer = new StreamWriter(absolutePath);
         writer.Write(yaml.Replace("'", ""));
+        writer.Close();
+
+        if (prependingFileComment is null || prependingFileComment.Length == 0)
+        {
+            return;
+        }
+
+        var fileContents = File.ReadAllLines(absolutePath).ToList();
+        fileContents.AddRange(prependingFileComment.Select(s => s.StartsWith("# ") ? s : $"# {s}"), 0);
+        File.WriteAllLines(absolutePath, fileContents);
     }
 
-    public static void WriteYaml(string absolutePath, ExpandoObject rootNode)
+    public static void WriteYaml(string absolutePath, ExpandoObject rootNode, string[]? prependingFileComment = null)
     {
         if (Path.GetDirectoryName(absolutePath) is string path && !Directory.Exists(path))
         {
@@ -83,6 +94,15 @@ public static class YamlHelper
         var yamlString = serializer.Serialize(rootNode);
         var filePath = Path.Join(absolutePath);
         File.WriteAllText(filePath, yamlString);
+
+        if (prependingFileComment is null || prependingFileComment.Length == 0)
+        {
+            return;
+        }
+
+        var fileContents = File.ReadAllLines(absolutePath).ToList();
+        fileContents.AddRange(prependingFileComment.Select(s => s.StartsWith("# ") ? s : $"# {s}"), 0);
+        File.WriteAllLines(absolutePath, fileContents);
     }
 
     public static ExpandoObject? ReadYamlAsObject(string absolutePath)
