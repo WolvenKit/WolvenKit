@@ -630,7 +630,7 @@ namespace WolvenKit.RED4.CR2W.Archive
                 .Items
                 .Where(x => searchScope switch
                 {
-                    ArchiveManagerScope.Basegame => x.Source is EArchiveSource.Base,
+                    ArchiveManagerScope.Basegame => x.Source is EArchiveSource.Base or EArchiveSource.EP1,
                     ArchiveManagerScope.Mods => x.Source is EArchiveSource.Mod,
                     ArchiveManagerScope.Everywhere => true,
                     _ => false,
@@ -714,7 +714,10 @@ namespace WolvenKit.RED4.CR2W.Archive
         {
             archiveName = archiveName.Replace(".archive", "");
             return GetModArchives()
-                .Any(x => Path.GetFileNameWithoutExtension(x.ArchiveAbsolutePath).EndsWith(archiveName));
+                .Select(x => x.ArchiveAbsolutePath)
+                .Select(Path.GetFileNameWithoutExtension)
+                .Any(x => x?.EndsWith(archiveName) == true);
+
         }
 
         public bool IsFileInScope(string relativePath, ArchiveManagerScope searchScope) =>

@@ -2089,7 +2089,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private void AfterProjectPacked()
     {
-        if (ActiveProject is null)
+        if (ActiveProject is null || SettingsManager.GetRED4GameExecutablePath() is not string exePath)
         {
             return;
         }
@@ -2105,6 +2105,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
+        _archiveManager.Initialize(new FileInfo(exePath), false);
         if (_archiveManager.IsModInstalled("###_nim_material_override"))
         {
             return;
