@@ -2087,9 +2087,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         return false;
     }
 
+    private bool warningsDisplayed = false;
+
     private void AfterProjectPacked()
     {
-        if (ActiveProject is null || SettingsManager.GetRED4GameExecutablePath() is not string exePath)
+        if (warningsDisplayed || ActiveProject is null ||
+            SettingsManager.GetRED4GameExecutablePath() is not string exePath)
         {
             return;
         }
@@ -2111,8 +2114,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
+        warningsDisplayed = true;
         Interactions.ShowPopupWithWeblink((
-            "To overwrite base game .mlsetup files, you need to install Material Texture Override.",
+            "Base game .mlsetups should not be overwritten (you should custompath them). For a workaround, click on 'Open Wiki'.",
             "MTO not installed",
             "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/error-codes#mto-requirement",
             "Open Wiki",
