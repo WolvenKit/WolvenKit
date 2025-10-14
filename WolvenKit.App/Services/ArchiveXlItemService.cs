@@ -278,7 +278,13 @@ public class ArchiveXlItemService
 
         // check if factory file exists in project folder, create if not
         var cr2W = _cr2WTools.ReadCr2WNoException(absoluteFactoryPath) ??
-                   new CR2WFile() { RootChunk = new C2dArray() { Headers = ["name", "path", "preload"] } };
+                   new CR2WFile()
+                   {
+                       RootChunk = new C2dArray()
+                       {
+                           Headers = ["name", "path", "preload"], CompiledHeaders = ["name", "path", "preload"]
+                       }
+                   };
 
         var itemName = $"{clothingItemData.ItemName}_factory_name";
 
@@ -730,7 +736,7 @@ public class ArchiveXlItemService
             new appearanceAppearancePart()
             {
                 Resource = new CResourceAsyncReference<entEntityTemplate>(
-                    (ResourcePath)clothingItemData.MeshEntityPath)
+                    (ResourcePath)clothingItemData.MeshEntityPath, InternalEnums.EImportFlags.Soft),
             }
         ]);
         appAppearance.VisualTags = new redTagList() { Tags = tags };
