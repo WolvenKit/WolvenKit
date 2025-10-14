@@ -210,7 +210,6 @@ namespace WolvenKit.Views.Templates
             {
                 return;
             }
-
             // Temporarily disable selection change handling
             multiselectList.SelectionChanged -= ListBox_OnSelectionChanged;
 
@@ -283,12 +282,11 @@ namespace WolvenKit.Views.Templates
         {
             if (SelectedOptions.Count == 0)
             {
-                SelectedOptions.AddRange(FilteredOptions);
+                multiselectList.SelectAll();
             }
             else
             {
-                SelectedOptions.Clear();
-                UpdateListBoxSelections();
+                multiselectList.UnselectAll();
             }
         }
     }

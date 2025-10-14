@@ -952,6 +952,7 @@ public class DocumentTools
             ret.AddRange(FilterByType(cvmResolvedData, cachedList));
         }
         else if (materialPath.EndsWith(".mi") &&
+                 !ret.Contains(materialPath) &&
                  ReadCr2WFromRelativePath(materialPath) is { RootChunk: CMaterialInstance mi } &&
                  mi.BaseMaterial.DepotPath.GetResolvedText() is string baseMaterial)
         {
