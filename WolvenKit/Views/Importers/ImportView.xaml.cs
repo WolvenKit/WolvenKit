@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using ReactiveUI;
@@ -25,6 +27,8 @@ namespace WolvenKit.Views.Importers;
 
 public partial class ImportView : ReactiveUserControl<ImportViewModel>
 {
+    private readonly Dictionary<string, PropertyInfo> _shownProperties = new();
+
     public ImportView()
     {
         InitializeComponent();
@@ -161,6 +165,8 @@ public partial class ImportView : ReactiveUserControl<ImportViewModel>
         }
     }
 
+    private void OverlayPropertyGrid_OnSelectedObjectChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => _shownProperties.Clear();
+
     private void OverlayPropertyGrid_AutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
     {
         switch (e.DisplayName)
@@ -193,6 +199,23 @@ public partial class ImportView : ReactiveUserControl<ImportViewModel>
             return;
         }
 
+        if (Attribute.GetCustomAttribute(propertyItem.PropertyInformation, typeof(UsedWith)) is UsedWith usedWith)
+        {
+            if (!_shownProperties.TryGetValue(usedWith.PropertyName, out var propertyInfo))
+            {
+                e.Cancel = true;
+                return;
+            }
+
+            var value = propertyInfo.GetValue(args);
+
+            if (!usedWith.Values.Contains(value))
+            {
+                e.Cancel = true;
+                return;
+            }
+        }
+
         switch (propertyItem.DisplayName)
         {
             case nameof(GltfImportArgs.Rig):
@@ -203,6 +226,14 @@ public partial class ImportView : ReactiveUserControl<ImportViewModel>
             default:
                 break;
         }
+
+        _shownProperties.Add(propertyItem.Name, propertyItem.PropertyInformation);
+    }
+
+    private void OverlayPropertyGrid_OnValueChanged(object sender, ValueChangedEventArgs args)
+    {
+        _shownProperties.Clear();
+        OverlayPropertyGrid.RefreshPropertygrid();
     }
 
     private void ImportGrid_SelectionChanged(object sender, GridSelectionChangedEventArgs e)
@@ -232,6 +263,4 @@ public partial class ImportView : ReactiveUserControl<ImportViewModel>
         // toggle additional options
         ShowSettings();
     }
-    
-
 }
