@@ -836,12 +836,46 @@ public partial class RedGraph
             .OfType<questNodeDefinition>()
             .ToList();
 
+        var idMap = new Dictionary<ushort, ushort>();
+        foreach (var nodeDef in nodesToMove)
+        {
+            if (nodeDef is questInputNodeDefinition or questOutputNodeDefinition)
+            {
+                continue;
+            }
+
+            if (IsQuestNodeIdInUse(nodeDef.Id, mainGraphDef))
+            {
+                var newNodeId = GetNextAvailableQuestNodeId();
+                idMap[nodeDef.Id] = newNodeId;
+                _currentQuestNodeId = Math.Max(_currentQuestNodeId, newNodeId);
+            }
+        }
+
         foreach (var nodeDef in nodesToMove)
         {
             // Skip I/O nodes, they are placeholders for connections
             if (nodeDef is questInputNodeDefinition or questOutputNodeDefinition)
             {
                 continue;
+            }
+
+            // Update the node's own ID if it was remapped
+            if (idMap.TryGetValue(nodeDef.Id, out var newId))
+            {
+                nodeDef.Id = newId;
+            }
+
+            // Update properties of the node that might reference other node IDs
+            if (nodeDef is questDeletionMarkerNodeDefinition deletionMarker)
+            {
+                for (var i = 0; i < deletionMarker.DeletedNodeIds.Count; i++)
+                {
+                    if (idMap.TryGetValue(deletionMarker.DeletedNodeIds[i], out var newRefId))
+                    {
+                        deletionMarker.DeletedNodeIds[i] = newRefId;
+                    }
+                }
             }
 
             mainGraphDef.Nodes.Add(new CHandle<graphGraphNodeDefinition>(nodeDef));
