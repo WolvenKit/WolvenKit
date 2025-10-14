@@ -887,13 +887,10 @@ public abstract class CvmDropdownHelper
         }
 
         // Check if we're in a definition context first - if so, always use regular editor
-        if (cvm.Name == "id")
+        if (cvm.Name == "id" && GetParentPath(cvm) is string parentPath &&
+            !IsInDefinitionContext(parentPath, parent.ResolvedData))
         {
-            var parentPath = GetParentPath(cvm);
-            if (IsInDefinitionContext(parentPath, parent.ResolvedData))
-            {
                 return false; // Use regular integer editor for definition contexts
-            }
         }
 
         // This code checks the PARENT MODEL's ResolvedData type - the node CONTAINING the cvm
@@ -906,8 +903,8 @@ public abstract class CvmDropdownHelper
 
             CArray<CName> when parent is { Name: "chunkMaterials", Parent.Parent.Parent.ResolvedData: CMesh } =>
                 true,
-            CKeyValuePair when parent.Parent?.Parent?.ResolvedData is CMaterialInstance matInstance &&
-                               !string.IsNullOrEmpty(matInstance.BaseMaterial.DepotPath.GetResolvedText()) => true,
+            CKeyValuePair when parent.Parent?.Parent?.ResolvedData is CMaterialInstance matInstance
+                => matInstance.BaseMaterial.DepotPath != ResourcePath.Empty,
 
             CMaterialInstance when cvm.Name is "baseMaterial" => true, // resource path, TODO
 
@@ -1020,8 +1017,11 @@ public abstract class CvmDropdownHelper
             appearanceAppearanceResource when s_appearanceNames.Contains(cvm.Name) => true,
             entTemplateAppearance when cvm.Name == "appearanceName" => true,
             entSkinnedMeshComponent when s_appearanceNames.Contains(cvm.Name) => true,
-            CMesh when cvm.Parent?.Parent?.Parent?.ResolvedData is CMaterialInstance matInstance &&
-                       !string.IsNullOrEmpty(matInstance.BaseMaterial.DepotPath.GetResolvedText()) => true,
+            CMesh or CMaterialInstance when
+                cvm.Parent?.Parent?.Parent?.ResolvedData is CMaterialInstance matInstance &&
+                !string.IsNullOrEmpty(matInstance.BaseMaterial.DepotPath.GetResolvedText())
+                => true,
+
             Multilayer_Setup when cvm.Parent?.ResolvedData is Multilayer_Layer mlLayer =>
                 cvm.Name is "materials" || cvm.Name is "microblend"
                                         || (!string.IsNullOrEmpty(mlLayer.Material.DepotPath.GetResolvedText()) &&
