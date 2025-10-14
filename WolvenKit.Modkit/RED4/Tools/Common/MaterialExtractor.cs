@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -357,7 +357,10 @@ public partial class MaterialExtractor
 
                 mergedMaterial = new RawMaterial
                 {
-                    BaseMaterial = fileName, MaterialTemplate = fileName, Data = new Dictionary<string, object?>()
+                    Name = materialName,
+                    BaseMaterial = fileName,
+                    MaterialTemplate = fileName,
+                    Data = new Dictionary<string, object?>()
                 };
 
                 template = new RawMaterial
