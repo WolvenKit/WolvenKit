@@ -730,7 +730,7 @@ public class ArchiveXlItemService
             new appearanceAppearancePart()
             {
                 Resource = new CResourceAsyncReference<entEntityTemplate>(
-                    (ResourcePath)clothingItemData.MeshEntityPath)
+                    (ResourcePath)clothingItemData.MeshEntityPath, InternalEnums.EImportFlags.Soft),
             }
         ]);
         appAppearance.VisualTags = new redTagList() { Tags = tags };
