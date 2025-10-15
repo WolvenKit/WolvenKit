@@ -189,7 +189,7 @@ public class ArchiveXlItemService
                 $"{activeProject.ModName}.yaml").ToFilePath();
         }
 
-        if (activeProject.ModFiles.Where(p => p.HasFileExtension("json")).ToList() is { Count: 1 } list)
+        if (activeProject.ModFiles.Where(p => p.HasFileExtension(".json")).ToList() is { Count: 1 } list)
         {
             clothingItemData.TranslationFileRelPath = list.First();
         }
@@ -812,9 +812,7 @@ public class ArchiveXlItemService
             {
                 _logger.Warning(
                     $"Yaml file {clothingItemData.YamlFilePath} already contains a definition for {itemName}. Existing properties will not be overwritten.");
-                yaml = yamlFromFile;
                 yamlData = nodeFromFile;
-                itemName = nodeFromFile.Children.First().Key.ToString();
             }
         }
 
@@ -838,10 +836,10 @@ public class ArchiveXlItemService
         }
 
         var comment = clothingItemData.Variants.SelectMany(color =>
-            clothingItemData.SecondaryVariants.Select(var =>
-                itemName.Replace("$(base_color)", color).Replace("$(secondary)", var))
+            (clothingItemData.SecondaryVariants.Count > 0 ? clothingItemData.SecondaryVariants : [""])
+            .Select(var => itemName.Replace("$(base_color)", color).Replace("$(secondary)", var))
         ).ToArray();
 
-        YamlHelper.WriteYaml(yamlAbsPath, yaml, comment);
+        YamlHelper.RemoveInExistingFileAndAppend(yamlAbsPath, itemName, yaml, comment);
     }
 }

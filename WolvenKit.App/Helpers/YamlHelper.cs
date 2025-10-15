@@ -60,6 +60,75 @@ public static class YamlHelper
     }
 
 
+    /// <summary>
+    /// Appending to parsed yaml will not preserve comments, and also wreak havoc with formatting by trimming all whitespaces.
+    /// For that reason, we're parsing first and appending later.
+    /// </summary>
+    public static void RemoveInExistingFileAndAppend(string absolutePath, string recordName, YamlMappingNode rootNode,
+        string[]? prependingFileComment = null)
+    {
+        if (Path.GetDirectoryName(absolutePath) is string path && !Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
+
+        List<string> existingFileContents = [];
+
+        // If the file exists, remove the record's data
+        if (File.Exists(absolutePath) && File.ReadAllLines(absolutePath) is var fileContent)
+        {
+            if (!fileContent.Any(l => l.Contains($"{recordName}:")))
+            {
+                existingFileContents.AddRange(fileContent);
+            }
+            else
+            {
+                var isInExistingRecord = false;
+                existingFileContents.AddRange(fileContent
+                    .Where(f =>
+                    {
+                        if (f.Contains($"{recordName}:"))
+                        {
+                            isInExistingRecord = true;
+                        }
+
+                        // remove comments that contain the record name, since they'll be regenerated
+                        if (f.StartsWith('#') && f.Contains($"{recordName.Replace("$(base_color)", "")}"))
+                        {
+                            return false;
+                        }
+
+                        if (isInExistingRecord && !f.Contains(recordName) && !f.StartsWith(' '))
+                        {
+                            isInExistingRecord = false;
+                        }
+
+                        return !isInExistingRecord;
+                    })
+                );
+                while (string.IsNullOrEmpty(existingFileContents[0].Trim()))
+                {
+                    existingFileContents.RemoveAt(0);
+                }
+
+                existingFileContents.AddRange([string.Empty, string.Empty], 0);
+            }
+        }
+
+        var serializer = new SerializerBuilder().WithIndentedSequences().Build();
+        var yaml = serializer.Serialize(rootNode).Replace("'", "");
+
+        existingFileContents.AddRange(yaml.Split(Environment.NewLine), 0);
+
+        if (prependingFileComment is not null && prependingFileComment.Length > 0)
+        {
+            existingFileContents.AddRange(prependingFileComment.Select(s => s.StartsWith("# ") ? s : $"# {s}"), 0);
+            existingFileContents.AddRange([""], prependingFileComment.Length);
+        }
+
+        File.WriteAllLines(absolutePath, existingFileContents);
+    }
+
     public static void WriteYaml(string absolutePath, YamlMappingNode rootNode, string[]? prependingFileComment = null)
     {
         if (Path.GetDirectoryName(absolutePath) is string path && !Directory.Exists(path))
