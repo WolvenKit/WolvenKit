@@ -438,6 +438,12 @@ public partial class GraphEditorView : UserControl
             node.ContextMenu.Items.Add(new Separator());
         }
 
+        if (node.DataContext is questPhaseNodeDefinitionWrapper phaseNode)
+        {
+            node.ContextMenu.Items.Add(CreateMenuItem("Unpack phase", "PackageUp", "WolvenKitRed", () => Source.UnpackPhase(phaseNode)));
+            node.ContextMenu.Items.Add(new Separator());
+        }
+
         var toggleSocketsText = nvm.ShowUnusedSockets ? "Hide Unused Sockets" : "Show Unused Sockets";
         node.ContextMenu.Items.Add(CreateMenuItem(toggleSocketsText, "Eye", "WolvenKitYellow",() =>
         {
