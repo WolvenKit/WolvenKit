@@ -106,7 +106,7 @@ public static class YamlHelper
                         return !isInExistingRecord;
                     })
                 );
-                while (string.IsNullOrEmpty(existingFileContents[0].Trim()))
+                while (existingFileContents.Count > 0 && string.IsNullOrEmpty(existingFileContents[0].Trim()))
                 {
                     existingFileContents.RemoveAt(0);
                 }
