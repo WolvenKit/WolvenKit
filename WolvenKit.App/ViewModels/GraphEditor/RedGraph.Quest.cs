@@ -964,7 +964,7 @@ public partial class RedGraph
             var outputNodeDef = outputNodeDefs[i];
             var phaseOutSocket = (QuestOutputConnectorViewModel)wrappedPhaseNode.Output.First(s => s.Name == outputNodeDef.SocketName);
             var tempWrappedOutput = WrapQuestNode(outputNodeDef, true);
-            var internalInSocket = (QuestInputConnectorViewModel)tempWrappedOutput.Input.First();
+            var internalInSocket = (QuestInputConnectorViewModel)tempWrappedOutput.Input.First(s => ((QuestInputConnectorViewModel)s).Data.Type == Enums.questSocketType.Input);
 
             AddConnectionToData((QuestOutputConnectorViewModel)group.Key, internalInSocket);
             foreach (var conn in group)
