@@ -57,6 +57,9 @@ public partial class AddItemsToStoreDialogViewModel : ObservableObject
         }
     }
 
+    // turns out that pasting into a syncfusion textbox doesn't trigger the update event -.-
+    public void Validate() => IsFinishEnabled = CanSave();
+
     public bool CanSave() =>
         ItemCodes.Count > 0 && !(string.IsNullOrEmpty(YamlPath) && string.IsNullOrEmpty(RedsPath));
 }

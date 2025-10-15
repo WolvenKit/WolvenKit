@@ -118,7 +118,7 @@
                     <MenuItem
                         x:Name="MenuItemGenerateWorldBuilderPropFile"
                         Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
-                        Header="Generate WorldBuilder prop file"
+                        Header="Create WorldBuilder asset file"
                         ToolTip="Generates prop file for WorldBuilder">
                         <MenuItem.Icon>
                             <local:IconBox

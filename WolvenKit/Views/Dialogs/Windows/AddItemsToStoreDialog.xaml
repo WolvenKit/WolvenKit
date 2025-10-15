@@ -133,6 +133,11 @@
                     Watermark="Items.MyItem, Items.MyOtherItem"
                     WatermarkTemplate="{StaticResource PlaceholderTemplate}"
                     TextChanged="TextBox_TextChanged"
+                    MouseLeave="TextBox_MouseLeave"
+                    LostKeyboardFocus="TextBox_FocusLost"
+                    AcceptsReturn="True"
+                    KeyDown="OnTextboxKeyDown"
+                    AutoCompleteMode="None"
                     KeyboardNavigation.TabIndex="-1" />
 
 

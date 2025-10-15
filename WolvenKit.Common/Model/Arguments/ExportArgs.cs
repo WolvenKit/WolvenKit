@@ -9,18 +9,6 @@ using WolvenKit.RED4.Archive;
 namespace WolvenKit.Common.Model.Arguments
 {
     /// <summary>
-    /// Tags a property as accessible in a WolvenKit Script
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    public class WkitScriptAccess : Attribute
-    {
-        public string ScriptName { get; }
-
-        // by default the script name is the name of the property or class
-        public WkitScriptAccess([CallerMemberName] string scriptName = "") => ScriptName = scriptName;
-    }
-
-    /// <summary>
     /// Export Arguments
     /// </summary>
     public abstract class ExportArgs : ImportExportArgs
@@ -218,6 +206,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Display(Name = "Mesh Export Type")]
         [Description("Select between mesh export options. By default materials but no rig are included.")]
         [WkitScriptAccess("ExportType")]
+        [UsedWith(nameof(MeshExporter), MeshExporterType.Default, MeshExporterType.Experimental)]
         public MeshExportType meshExportType { get => _meshExportType; set => SetProperty(ref _meshExportType, value); }
 
         /// <summary>
@@ -227,6 +216,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Display(Name = "LOD Filter")]
         [Description("If selected LOD meshes will not be included. May cause complications with clipping decals.")]
         [WkitScriptAccess()]
+        [UsedWith(nameof(MeshExporter), MeshExporterType.Default, MeshExporterType.Experimental)]
         public bool LodFilter { get => _lodFilter; set => SetProperty(ref _lodFilter, value); }
 
         /// <summary>
@@ -236,6 +226,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Display(Name = "Is Binary")]
         [Description("If selected mesh exports will be in binary form as GLB rather than glTF format. (Recommended)")]
         [WkitScriptAccess("Binary")]
+        [UsedWith(nameof(MeshExporter), MeshExporterType.Default, MeshExporterType.Experimental)]
         public bool isGLBinary { get => _isGLBinary; set => SetProperty(ref _isGLBinary, value); }
 
         /// <summary>
@@ -253,6 +244,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("Default Export Settings")]
         [Display(Name = "Export Garment Support (Experimental)")]
         [Description("If selected mesh exports will include garment support data.")]
+        [UsedWith(nameof(MeshExporter), MeshExporterType.Default, MeshExporterType.Experimental)]
         public bool ExportGarmentSupport { get; set; } = true;
 
 
@@ -262,6 +254,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("MultiMesh Settings")]
         [Display(Name = "Select Additional Meshes")]
         [Description("Select additional meshes to be included within a single export.")]
+        [UsedWith(nameof(meshExportType), MeshExportType.Multimesh)]
         public List<FileEntry> MultiMeshMeshes { get; set; } = new();      // meshes?
 
         /// <summary>
@@ -270,6 +263,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("MultiMesh Settings")]
         [Display(Name = "Select Rig(s)")]
         [Description("Select one or multiple rigs to be used within a single export. Recommended for meshes which use more than one rig.")]
+        [UsedWith(nameof(meshExportType), MeshExportType.Multimesh)]
         public List<FileEntry> MultiMeshRigs { get; set; } = new();        // rigs
 
         /// <summary>
@@ -278,6 +272,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("WithRig Settings")]
         [Display(Name = "Select Rig")]
         [Description("Select a rig to export within the mesh.")]
+        [UsedWith(nameof(meshExportType), MeshExportType.WithRig)]
         public List<FileEntry> Rig { get; set; } = new();
 
         /// <summary>
@@ -287,6 +282,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Display(Name = "Select Texture Format")]
         [Description("Select the preferred texture format to be exported within the Depot.")]
         [WkitScriptAccess("ImageType")]
+        [UsedWith(nameof(withMaterials), true)]
         public EUncookExtension MaterialUncookExtension { get; set; } = EUncookExtension.png;
 
         /// <summary>
