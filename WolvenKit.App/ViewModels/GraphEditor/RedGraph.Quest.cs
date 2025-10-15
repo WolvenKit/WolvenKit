@@ -806,8 +806,11 @@ public partial class RedGraph
     public void UnpackPhase(questPhaseNodeDefinitionWrapper phaseNode)
     {
         var mainGraphDef = (graphGraphDefinition)_data;
-        var phaseNodeDef = phaseNode.Data as questPhaseNodeDefinition;
-        if (phaseNodeDef == null) return;
+        if (phaseNode.Data is not questPhaseNodeDefinition phaseNodeDef)
+        {
+            return;
+        }
+
         var phaseGraphDef = phaseNodeDef.PhaseGraph?.Chunk;
 
         if (phaseGraphDef == null)
@@ -831,6 +834,26 @@ public partial class RedGraph
             .ToList();
 
         // 2. Move nodes from the phase's graph to the main graph
+        var idMap = MigrateNodesFromPhase(phaseNode, mainGraphDef, phaseGraphDef);
+
+        // 3. Re-wire connections
+        RewireConnectionsForUnpackedPhase(phaseNode, incomingConnections, outgoingConnections);
+
+        // 4. Remove the phase node itself
+        RemoveQuestNode(phaseNode);
+
+        // 5. Cleanup
+        if (GetQuestNodesChunkViewModel() is { } nodes)
+        {
+            nodes.RecalculateProperties();
+        }
+        RebuildQuestConnections();
+        GraphStateSave();
+        DocumentViewModel?.SetIsDirty(true);
+    }
+
+    private Dictionary<ushort, ushort> MigrateNodesFromPhase(questPhaseNodeDefinitionWrapper phaseNode, graphGraphDefinition mainGraphDef, questGraphDefinition phaseGraphDef)
+    {
         var nodesToMove = phaseGraphDef.Nodes
             .Select(h => h.Chunk)
             .OfType<questNodeDefinition>()
@@ -852,14 +875,8 @@ public partial class RedGraph
             }
         }
 
-        foreach (var nodeDef in nodesToMove)
+        foreach (var nodeDef in nodesToMove.Where(nodeDef => nodeDef is not (questInputNodeDefinition or questOutputNodeDefinition)))
         {
-            // Skip I/O nodes, they are placeholders for connections
-            if (nodeDef is questInputNodeDefinition or questOutputNodeDefinition)
-            {
-                continue;
-            }
-
             // Update the node's own ID if it was remapped
             if (idMap.TryGetValue(nodeDef.Id, out var newId))
             {
@@ -887,33 +904,19 @@ public partial class RedGraph
             Nodes.Add(wrappedNode);
         }
 
-        // 3. Re-wire connections
+        return idMap;
+    }
+
+    private void RewireConnectionsForUnpackedPhase(questPhaseNodeDefinitionWrapper phaseNode,
+        List<QuestConnectionViewModel> incomingConnections, List<QuestConnectionViewModel> outgoingConnections)
+    {
         // Connect nodes that were connected to the phase's inputs
         foreach (var incomingConn in incomingConnections)
         {
             var externalSourceConnector = (QuestOutputConnectorViewModel)incomingConn.Source;
             var phaseInputSocketName = incomingConn.Target.Name;
 
-            // Find the internal node(s) that were connected to this input
-            var internalTargetSockets = new List<QuestInputConnectorViewModel>();
-            var inputNode = phaseNode.Graph.Nodes.FirstOrDefault(n => {
-                if (n is questInputNodeDefinitionWrapper w) {
-                    if (w.Data is questInputNodeDefinition def) {
-                        return def.SocketName.GetResolvedText() == phaseInputSocketName;
-                    }
-                }
-                return false;
-            });
-            if (inputNode != null)
-            {
-                var outputSockets = inputNode.Output.OfType<QuestOutputConnectorViewModel>();
-                foreach (var outputSocket in outputSockets)
-                {
-                    var conns = phaseNode.Graph.Connections.Where(c => c.Source == outputSocket);
-                    internalTargetSockets.AddRange(conns.Select(c => (QuestInputConnectorViewModel)c.Target));
-                }
-            }
-
+            var internalTargetSockets = FindInternalTargetSockets(phaseNode, phaseInputSocketName);
             foreach (var internalTargetSocket in internalTargetSockets)
             {
                 AddQuestConnection(externalSourceConnector, internalTargetSocket);
@@ -926,43 +929,76 @@ public partial class RedGraph
             var phaseOutputSocketName = outgoingConn.Source.Name;
             var externalTargetConnector = (QuestInputConnectorViewModel)outgoingConn.Target;
 
-            // Find the internal node(s) that were connected to this output
-            var internalSourceSockets = new List<QuestOutputConnectorViewModel>();
-            var outputNode = phaseNode.Graph.Nodes.FirstOrDefault(n => {
-                if (n is questOutputNodeDefinitionWrapper w) {
-                    if (w.Data is questOutputNodeDefinition def) {
-                        return def.SocketName.GetResolvedText() == phaseOutputSocketName;
-                    }
-                }
-                return false;
-            });
-            if (outputNode != null)
-            {
-                var inputSockets = outputNode.Input.OfType<QuestInputConnectorViewModel>();
-                foreach (var inputSocket in inputSockets)
-                {
-                    var conns = phaseNode.Graph.Connections.Where(c => c.Target == inputSocket);
-                    internalSourceSockets.AddRange(conns.Select(c => (QuestOutputConnectorViewModel)c.Source));
-                }
-            }
-
+            var internalSourceSockets = FindInternalSourceSockets(phaseNode, phaseOutputSocketName);
             foreach (var internalSourceSocket in internalSourceSockets)
             {
                 AddQuestConnection(internalSourceSocket, externalTargetConnector);
             }
         }
+    }
 
-        // 4. Remove the phase node itself
-        RemoveQuestNode(phaseNode);
-
-        // 5. Cleanup
-        if (GetQuestNodesChunkViewModel() is { } nodes)
+    private List<QuestInputConnectorViewModel> FindInternalTargetSockets(questPhaseNodeDefinitionWrapper phaseNode, string phaseInputSocketName)
+    {
+        var internalTargetSockets = new List<QuestInputConnectorViewModel>();
+        if (phaseNode.Graph == null)
         {
-            nodes.RecalculateProperties();
+            return internalTargetSockets;
         }
-        RebuildQuestConnections();
-        GraphStateSave();
-        DocumentViewModel?.SetIsDirty(true);
+
+        var inputNode = phaseNode.Graph.Nodes.FirstOrDefault(n =>
+        {
+            if (n is questInputNodeDefinitionWrapper { Data: questInputNodeDefinition def })
+            {
+                return def.SocketName.GetResolvedText() == phaseInputSocketName;
+            }
+            return false;
+        });
+
+        if (inputNode == null)
+        {
+            return internalTargetSockets;
+        }
+
+        var outputSockets = inputNode.Output.OfType<QuestOutputConnectorViewModel>();
+        foreach (var outputSocket in outputSockets)
+        {
+            var conns = phaseNode.Graph.Connections.Where(c => c.Source == outputSocket);
+            internalTargetSockets.AddRange(conns.Select(c => (QuestInputConnectorViewModel)c.Target));
+        }
+
+        return internalTargetSockets;
+    }
+
+    private List<QuestOutputConnectorViewModel> FindInternalSourceSockets(questPhaseNodeDefinitionWrapper phaseNode, string phaseOutputSocketName)
+    {
+        var internalSourceSockets = new List<QuestOutputConnectorViewModel>();
+        if (phaseNode.Graph == null)
+        {
+            return internalSourceSockets;
+        }
+
+        var outputNode = phaseNode.Graph.Nodes.FirstOrDefault(n =>
+        {
+            if (n is questOutputNodeDefinitionWrapper w && w.Data is questOutputNodeDefinition def)
+            {
+                return def.SocketName.GetResolvedText() == phaseOutputSocketName;
+            }
+            return false;
+        });
+
+        if (outputNode == null)
+        {
+            return internalSourceSockets;
+        }
+
+        var inputSockets = outputNode.Input.OfType<QuestInputConnectorViewModel>();
+        foreach (var inputSocket in inputSockets)
+        {
+            var conns = phaseNode.Graph.Connections.Where(c => c.Target == inputSocket);
+            internalSourceSockets.AddRange(conns.Select(c => (QuestOutputConnectorViewModel)c.Source));
+        }
+
+        return internalSourceSockets;
     }
 
     public void CreatePhaseFromSelection(IEnumerable<object> selectedNodes)
