@@ -891,7 +891,6 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
 
         SortedDictionary<string, List<string>> brokenReferences = new();
 
-        progressService.IsIndeterminate = true;
         progressService.Report(0);
         var totalFiles = references.Count;
         var processedFiles = 0;
@@ -927,7 +926,6 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
 
                 // Update progress
                 var currentProgress = Interlocked.Increment(ref processedFiles) * progressIncrement;
-                progressService.IsIndeterminate = false;
                 progressService.Report(currentProgress);
             });
         });

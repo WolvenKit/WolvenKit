@@ -221,6 +221,10 @@ namespace WolvenKit.Views.Documents
                 _loggerService.Error("Error while scanning for broken references:");
                 _loggerService.Error(err);
             }
+            finally
+            {
+                _progressService.IsIndeterminate = false;
+            }
         }
 
         private async void OnFileValidationClick(object _, RoutedEventArgs e)
