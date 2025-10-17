@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using HelixToolkit.SharpDX.Core;
 using Splat;
 using WolvenKit.App.Controllers;
+using WolvenKit.App.Extensions;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
@@ -676,7 +677,8 @@ public partial class ProjectResourceTools
         return Task.CompletedTask;
     }
 
-    private async Task ReplacePathInProjectAsync(Cp77Project? activeProject, Dictionary<string, string> pathReplacements)
+    public async Task ReplacePathInProjectAsync(Cp77Project? activeProject, Dictionary<string, string> pathReplacements,
+        params string[] fileExtensions)
     {
         List<string> failedFiles = [];
         if (activeProject is null)
@@ -701,7 +703,8 @@ public partial class ProjectResourceTools
         async Task ReplaceInResourceFilesAsync()
         {
             var resourceFiles = Directory.GetFiles(activeProject.ResourcesDirectory, "*.*", SearchOption.AllDirectories)
-                .Where(f => Path.GetExtension(f) is string s && s_resourceFileExtensions.Contains(s.ToLower()))
+                .Where(f => Path.GetExtension(f) is string s && s_resourceFileExtensions.Contains(s.ToLower()) &&
+                            (fileExtensions.Length == 0 || fileExtensions.Contains(s.ToLower())))
                 .ToList();
 
             // add ext.json files from raw folder
@@ -775,7 +778,8 @@ public partial class ProjectResourceTools
         {
             var files = Directory.GetFiles(activeProject.ModDirectory, "*.*", SearchOption.AllDirectories)
                 .Where(f => Path.GetExtension(f) is string s && !string.IsNullOrEmpty(s) &&
-                            !s_fileExtensionsWithoutPaths.Contains(s)
+                            !s_fileExtensionsWithoutPaths.Contains(s) &&
+                            (fileExtensions.Length == 0 || fileExtensions.Contains(s.ToLower()))
                 )
                 .ToList();
 
@@ -796,11 +800,6 @@ public partial class ProjectResourceTools
 
                     foreach (var (oldAbsPath, newAbsPath) in pathReplacements)
                     {
-                        if (!oldAbsPath.Contains(activeProject.ModDirectory))
-                        {
-                            continue;
-                        }
-
                         var oldPathStr = activeProject.GetRelativePath(oldAbsPath);
                         var newPathStr = activeProject.GetRelativePath(newAbsPath);
 
@@ -1271,6 +1270,25 @@ public partial class ProjectResourceTools
     [GeneratedRegex(@"Items\.\w+""(?!,)()(?=\s|\])", RegexOptions.Multiline)]
     private static partial Regex AtelierLastItemCode();
 
+    public HashSet<ResourcePath> GetDependencyPaths(CR2WFile cr2W, bool includeMods = false)
+    {
+        var materialDependencies = cr2W.FindType(typeof(IRedRef)).Select(r => r.Value)
+            .OfType<IRedRef>()
+            .Where(refPath => _archiveManager.Lookup(refPath.DepotPath,
+                includeMods ? ArchiveManagerScope.BasegameAndMods : ArchiveManagerScope.Basegame).HasValue)
+            .Select(r => r.DepotPath)
+            .Where(d => !IsIgnoredDependency(d))
+            .ToHashSet();
+
+        var miDependencies = materialDependencies.Select(p => p.GetResolvedText()).OfType<string>()
+            .Where(p => p.EndsWith(".mi")).Select(p => _crwWTools.ReadCr2WNoException(p)).OfType<CR2WFile>()
+            .SelectMany(miCr2W => GetDependencyPaths(miCr2W, includeMods));
+
+        materialDependencies.AddRange(miDependencies);
+
+        return materialDependencies;
+    }
+
     public async Task AddDependenciesToProject(CR2WFile cr2W, string destFolder)
     {
         if (cr2W.RootChunk is not CMesh || _projectManager.ActiveProject is not { } activeProject)
@@ -1278,12 +1296,7 @@ public partial class ProjectResourceTools
             return;
         }
 
-        var materialDependencies = cr2W.FindType(typeof(IRedRef)).Select(r => r.Value)
-            .OfType<IRedRef>()
-            .Where(refPath => _archiveManager.Lookup(refPath.DepotPath, ArchiveManagerScope.Basegame).HasValue)
-            .Select(r => r.DepotPath)
-            .Where(d => !IsIgnoredDependency(d))
-            .ToHashSet();
+        var materialDependencies = GetDependencyPaths(cr2W);
 
         if (materialDependencies.Count == 0)
         {
@@ -1308,10 +1321,25 @@ public partial class ProjectResourceTools
             return;
         }
 
+        HashSet<string> miFiles = [];
         foreach (var kvp in pathReplacements)
         {
             ReplacePathInFile(cr2W, kvp.Key, kvp.Value, out var _);
+            if (kvp.Value.EndsWith(".mi"))
+            {
+                miFiles.Add(kvp.Value);
+            }
         }
+
+        // Now take care of any newly-added .mi files
+        foreach (var miCr2W in miFiles.Select(p => _crwWTools.ReadCr2WNoException(p)).OfType<CR2WFile>())
+        {
+            foreach (var kvp in pathReplacements)
+            {
+                ReplacePathInFile(miCr2W, kvp.Key, kvp.Value, out var _);
+            }
+        }
+
 
         // All files were moved. Occasionally, we have leftover ones (duplicates).
         foreach (var absolutePath in pathReplacements.Keys

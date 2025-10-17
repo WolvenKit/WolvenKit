@@ -151,7 +151,8 @@ public partial class ChunkViewModel
         for (var i = 0; i < properties.Count; i++)
         {
             var t = properties[i];
-            if (t.IsHiddenBySearch)
+            var data = t.Data;
+            if (t.IsHiddenBySearch || data is RedDummy || data is CBool || data.GetType().Name.StartsWith("CEnum"))
             {
                 continue;
             }
@@ -399,14 +400,15 @@ public partial class ChunkViewModel
             case IRedBaseHandle handle when handle.GetValue() is IRedType handleValue:
 
             {
-                if (SearchAndReplaceInObjectProperties(search, replace, isWholeWord, isRegex, handleValue,
+                if (!SearchAndReplaceInObjectProperties(search, replace, isWholeWord, isRegex, handleValue,
                         out var newHandleValue))
                 {
-                    handle.SetValue((RedBaseClass)newHandleValue);
-                    return true;
+                    return false;
                 }
 
-                return false;
+                handle.SetValue((RedBaseClass)newHandleValue);
+                return true;
+
             }
             case CMaterialInstance materialInstance:
 
@@ -552,18 +554,6 @@ public partial class ChunkViewModel
                 // Get the value of the property
                 var propertyValue = property.GetValue(ResolvedData);
 
-                if (propertyValue is not (List<CName> or CName) and IRedType redType)
-                {
-                    if (SearchAndReplaceInObjectProperties(search, replace, isWholeWord, isRegex, redType,
-                            out var newPropertyValue))
-                    {
-                        wasChanged = true;
-                        property.SetValue(ResolvedData, newPropertyValue);
-                    }
-
-                    continue;
-                }
-
                 string? newValue;
                 switch (propertyValue)
                 {
@@ -591,6 +581,25 @@ public partial class ChunkViewModel
                         if (s != newValue)
                         {
                             property.SetValue(ResolvedData, newValue);
+                            NumReplacedEntries += 1;
+                            wasChanged = true;
+                        }
+
+                        continue;
+                    case IRedRef redRef:
+                        if (SearchAndReplaceInReference(search, replace, isWholeWord, isRegex, redRef,
+                                out var newRefValue))
+                        {
+                            property.SetValue(ResolvedData, newRefValue);
+                            wasChanged = true;
+                        }
+
+                        continue;
+                    case IRedType redType:
+                        if (SearchAndReplaceInObjectProperties(search, replace, isWholeWord, isRegex, redType,
+                                out var newPropertyValue2))
+                        {
+                            property.SetValue(ResolvedData, newPropertyValue2);
                             NumReplacedEntries += 1;
                             wasChanged = true;
                         }
