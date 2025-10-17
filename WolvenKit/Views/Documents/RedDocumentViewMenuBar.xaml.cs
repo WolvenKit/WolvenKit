@@ -769,7 +769,8 @@ namespace WolvenKit.Views.Documents
 
             cvm.CalculateProperties();
 
-            foreach (var child in propertyPaths.Select((p) => cvm.GetPropertyChild(p)).OfType<ChunkViewModel>())
+            foreach (var child in propertyPaths.Select((p) => cvm.GetPropertyChild(p.Split('.')))
+                         .OfType<ChunkViewModel>())
             {
                 child.CalculateProperties();
                 childNodes.AddRange(child.TVProperties);
@@ -790,7 +791,6 @@ namespace WolvenKit.Views.Documents
                     dirtyNodes.Add(childNode);
                     isDirty = true;
                 }
-
             }));
 
             // Wait for dirty nodes to refresh themselves
