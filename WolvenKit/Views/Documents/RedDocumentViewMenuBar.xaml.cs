@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using HandyControl.Tools.Extension;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App;
@@ -27,6 +28,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.Views.Dialogs.Windows;
 using appearanceAppearanceDefinition = WolvenKit.RED4.Types.appearanceAppearanceDefinition;
@@ -633,125 +635,128 @@ namespace WolvenKit.Views.Documents
         private string GetTextureDirForDependencies(bool useTextureSubfolder) =>
             ViewModel?.GetTextureDirForDependencies(useTextureSubfolder) ?? "";
 
-        private readonly SemaphoreSlim _semaphore = new(1, 1); //  only one thread/task can enter
-
-        private async Task AddDependenciesToFileAsync(ChunkViewModel _, bool addBasegameFiles = false)
+        private async Task AddDependenciesToFileAsync(ChunkViewModel rootChunk, bool addBasegameFiles = false)
         {
-            if (RootChunk is not ChunkViewModel rootChunk ||
-                RootChunk.ResolvedData is not (CMesh or Multilayer_Setup or CMaterialInstance))
+            if (rootChunk.ResolvedData is not (CMesh or Multilayer_Setup or CMaterialInstance))
             {
                 return;
             }
 
-            // Wait asynchronously to acquire the semaphore
-            if (!await _semaphore.WaitAsync(500))
+            if (rootChunk.ResolvedData is CMesh mesh)
             {
-                _loggerService.Info("Already adding dependencies! Please wait for the current run to proceed!");
-                return;
+                UnDynamifyMaterials(rootChunk);
+                ViewModel?.CurrentTab?.Parent.Save(null);
             }
 
-            try
-            {
-                if (rootChunk.ResolvedData is CMesh mesh)
-                {
-                    UnDynamifyMaterials(rootChunk);
-                }
-                RootChunk.ForceLoadPropertiesRecursive();
-                rootChunk.DeleteUnusedMaterialsCommand.Execute(true);
+            rootChunk.ForceLoadPropertiesRecursive();
 
-                await LoadAndAnalyzeModArchivesAsync();
+            rootChunk.DeleteUnusedMaterialsCommand.Execute(true);
+            rootChunk.Tab?.Parent.Save(null);
 
-                var materialDependencies = await rootChunk.GetMaterialRefsFromFile();
+            await LoadAndAnalyzeModArchivesAsync();
 
-                // Filter files: Ignore base game files unless shift key is pressed
-                materialDependencies = materialDependencies
-                    .Where(refPathHash =>
+            var materialDependencies = await rootChunk.GetMaterialRefsFromFile();
+
+            // Throw in anything found in .mi files
+            var miDependencies = materialDependencies.Select(p => p.GetResolvedText()).OfType<string>()
+                .Where(p => p.EndsWith(".mi"))
+                .Select(p => _archiveManager.GetCR2WFile(p, true))
+                .OfType<CR2WFile>()
+                .SelectMany(miCr2W => _projectResourceTools.GetDependencyPaths(miCr2W, true))
+                .ToList();
+
+            materialDependencies.AddRange(miDependencies);
+
+            // Filter files: Ignore base game files unless shift key is pressed
+            materialDependencies = materialDependencies
+                .Where(refPathHash =>
+                    {
+                        var hasModFile = _archiveManager.Lookup(refPathHash, ArchiveManagerScope.Mods) is
+                            { HasValue: true };
+                        var gameFileOpt = _archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame);
+
+                        // Only files from mods. Filter out anything that overwrites basegame files.
+                        if (hasModFile && !gameFileOpt.HasValue)
                         {
-                            var hasModFile = _archiveManager.Lookup(refPathHash, ArchiveManagerScope.Mods) is
-                                { HasValue: true };
-                            var gameFileOpt = _archiveManager.Lookup(refPathHash, ArchiveManagerScope.Basegame);
-
-                            // Only files from mods. Filter out anything that overwrites basegame files.
-                            if (hasModFile && !gameFileOpt.HasValue)
-                            {
-                                return true;
-                            }
-
-                            return addBasegameFiles && gameFileOpt.HasValue &&
-                                   !ProjectResourceTools.IsIgnoredDependency(gameFileOpt.Value);
+                            return true;
                         }
-                    )
-                    .ToHashSet();
 
-                if (materialDependencies.Count == 0)
+                        return addBasegameFiles && gameFileOpt.HasValue &&
+                               !ProjectResourceTools.IsIgnoredDependency(gameFileOpt.Value);
+                    }
+                )
+                .ToHashSet();
+
+            if (materialDependencies.Count == 0)
+            {
+                _loggerService.Info(
+                    "Didn't find any dependencies to add.\n" +
+                    "To include base game files, hold shift while clicking the menu entry."
+                );
+                return;
+            }
+
+            var destFolder = GetTextureDirForDependencies(true);
+
+            if (string.IsNullOrEmpty(destFolder))
+            {
+                _loggerService.Info("Adding dependencies aborted by user input");
+                return;
+            }
+
+            // Use search and replace to fix file paths
+            var pathReplacements = await _projectResourceTools.AddDependenciesToProjectPathAsync(
+                destFolder, materialDependencies
+            );
+
+            // Nothing to replace in file - give user output
+            if (pathReplacements.Count is 0)
+            {
+                if (materialDependencies.Count > 0)
                 {
                     _loggerService.Info(
                         "Didn't find any dependencies to add.\n" +
-                        "To include base game files, hold shift while clicking the menu entry."
+                        "To include base game files, hold shift while clicking the menu entry." +
+                        "If modded files could not be resolved, click the scan button in the mod browser " +
+                        "(to the right of the search bar)."
                     );
-                    return;
                 }
-
-                var destFolder = GetTextureDirForDependencies(true);
-
-                if (string.IsNullOrEmpty(destFolder))
+                else
                 {
-                    _loggerService.Info("Adding dependencies aborted by user input");
-                    return;
+                    _loggerService.Success(
+                        "No dependencies left to replace. To double-check, run file validation now."
+                    );
                 }
 
-                // Use search and replace to fix file paths
-                var pathReplacements = await _projectResourceTools.AddDependenciesToProjectPathAsync(
-                    destFolder, materialDependencies
-                );
-
-                // Nothing to replace in file - give user output
-                if (pathReplacements.Count is 0)
-                {
-                    if (materialDependencies.Count > 0)
-                    {
-                        _loggerService.Info(
-                            "Didn't find any dependencies to add.\n" +
-                            "To include base game files, hold shift while clicking the menu entry." +
-                            "If modded files could not be resolved, click the scan button in the mod browser " +
-                            "(to the right of the search bar)."
-                        );
-                    }
-                    else
-                    {
-                        _loggerService.Success(
-                            "No dependencies left to replace. To double-check, run file validation now."
-                        );
-                    }
-
-                    return;
-                }
-
-                switch (rootChunk.ResolvedData)
-                {
-                    case CMaterialInstance:
-                        await SearchAndReplaceInChildNodesAsync(rootChunk, pathReplacements, "values");
-                        break;
-                    case Multilayer_Setup:
-                        await SearchAndReplaceInChildNodesAsync(rootChunk, pathReplacements, "layers");
-                        break;
-                    case CMesh:
-                        await SearchAndReplaceInChildNodesAsync(rootChunk, pathReplacements,
-                            ChunkViewModel.LocalMaterialBufferPath,
-                            ChunkViewModel.ExternalMaterialPath,
-                            ChunkViewModel.PreloadMaterialPath,
-                            ChunkViewModel.PreloadExternalMaterialPath
-                        );
-                        break;
-                    default:
-                        break;
-                }
+                return;
             }
-            finally
+
+            switch (rootChunk.ResolvedData)
             {
-                _semaphore.Release();
+                case CMaterialInstance:
+                    await SearchAndReplaceInChildNodesAsync(rootChunk, pathReplacements, "values");
+                    break;
+                case Multilayer_Setup:
+                    await SearchAndReplaceInChildNodesAsync(rootChunk, pathReplacements, "layers");
+                    break;
+                case CMesh:
+                    await SearchAndReplaceInChildNodesAsync(rootChunk, pathReplacements,
+                        ChunkViewModel.LocalMaterialBufferPath,
+                        ChunkViewModel.ExternalMaterialPath,
+                        ChunkViewModel.PreloadMaterialPath,
+                        ChunkViewModel.PreloadExternalMaterialPath
+                    );
+                    break;
+                default:
+                    break;
             }
 
+            if (_projectManager.ActiveProject is not { } project)
+            {
+                return;
+            }
+
+            await _projectResourceTools.ReplacePathInProjectAsync(project, pathReplacements, ".mi");
         }
 
         private static async Task SearchAndReplaceInChildNodesAsync(ChunkViewModel cvm,
@@ -840,12 +845,28 @@ namespace WolvenKit.Views.Documents
             });
         }
 
+        private readonly SemaphoreSlim _addDependencySemaphore = new(1, 1);
+
+
         private async void OnAddDependencies(object? _, EventArgs eventArgs)
         {
             try
             {
+                // Wait asynchronously to acquire the semaphore
+                if (!await _addDependencySemaphore.WaitAsync(500))
+                {
+                    return;
+                }
+
                 if (_projectManager.ActiveProject is null || ViewModel?.RootChunk is not ChunkViewModel cvm)
                 {
+                    return;
+                }
+
+                if (ViewModel?.CurrentTab?.Parent.IsDirty == true)
+                {
+                    await Interactions.ShowPopupAsync("Please save your file before adding dependencies.",
+                        "Save your file");
                     return;
                 }
 
@@ -856,13 +877,6 @@ namespace WolvenKit.Views.Documents
                 {
                     await Interactions.ShowPopupAsync("Please run ArchiveXL -> Un-dynamify materials first.",
                         "Dynamic materials found!");
-                    return;
-                }
-
-                if (ViewModel.CurrentTab?.Parent.IsDirty == true)
-                {
-                    await Interactions.ShowPopupAsync("Please save your file before adding dependencies.",
-                        "Save your file");
                     return;
                 }
 
@@ -877,6 +891,15 @@ namespace WolvenKit.Views.Documents
             }
             finally
             {
+                try
+                {
+                    _addDependencySemaphore.Release(1);
+                }
+                catch
+                {
+                    // Don't release?
+                }
+
                 // Project browser will throw an error if we do it immediately - so let's not
                 await Task.Run(async () =>
                 {
