@@ -1108,7 +1108,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
         if (SearchBarText is not null)
         {
-            await PerformSearch(SearchBarText);
+            await PerformSearch(SearchBarText.Trim());
         }
     }
 
