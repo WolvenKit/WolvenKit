@@ -329,7 +329,15 @@ public static class EquipmentItemData
     public static readonly Dictionary<EquipmentItemSubSlot, string> FilesBySubType = new()
     {
         // head
-        { EquipmentItemSubSlot.Cap, @"base\characters\garment\player_equipment\head\h1_002_pwa_hat__headcap.ent" },
+        { EquipmentItemSubSlot.Cap, @"base\characters\garment\player_equipment\head\h1_011_pwa_hat__baseball.ent" },
+        {
+            EquipmentItemSubSlot.ScarfHair,
+            @"base\characters\garment\player_equipment\head\h1_011_pwa_hat__baseball.ent"
+        },
+        {
+            EquipmentItemSubSlot.HelmetHair,
+            @"base\characters\garment\player_equipment\head\h1_011_pwa_hat__baseball.ent"
+        },
         { EquipmentItemSubSlot.Hat, @"base\characters\garment\player_equipment\head\h1_032_pwa_hat__asian.ent" },
         { EquipmentItemSubSlot.Mask, @"base\characters\garment\player_equipment\head\h1_056_pwa_mask__samurai.ent" },
         {
