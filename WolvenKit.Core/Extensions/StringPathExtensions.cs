@@ -104,15 +104,12 @@ namespace WolvenKit.Interfaces.Extensions
         public static bool HasFileExtension(this string filePath, string fileExtension)
         {
             var targetExtension = fileExtension.StartsWith('.') ? fileExtension : "." + fileExtension;
-            var targetFileName = filePath.EndsWith(".json") && !fileExtension.Contains(".json")
-                ? filePath.Replace(".json", "")
-                : filePath;
 
             return targetExtension switch
             {
-                ".yaml" or ".yml" => targetFileName.Contains(".yaml", StringComparison.OrdinalIgnoreCase) ||
-                                     targetFileName.Contains(".yml", StringComparison.OrdinalIgnoreCase),
-                _ => targetFileName.Contains(targetExtension, StringComparison.OrdinalIgnoreCase)
+                ".yaml" or ".yml" => filePath.Contains(".yaml", StringComparison.OrdinalIgnoreCase) ||
+                                     filePath.Contains(".yml", StringComparison.OrdinalIgnoreCase),
+                _ => filePath.Contains(targetExtension, StringComparison.OrdinalIgnoreCase)
             };
         }
 
