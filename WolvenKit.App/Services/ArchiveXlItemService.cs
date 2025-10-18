@@ -169,10 +169,24 @@ public class ArchiveXlItemService
             activeProject.ModFiles.Where(f => f.HasFileExtension("csv")).Select(Path.GetDirectoryName).FirstOrDefault()
             ?? Path.Join(_settingsManager.ModderName, activeProject.ModName, clothingItemData.ItemName).ToFilePath();
 
+
         // Now write paths into the item data
-        clothingItemData.RootEntityPath = Path.Combine(clothingItemData.ControlFilesRelPath, "_root_entity.ent");
-        clothingItemData.AppFilePath = Path.Combine(clothingItemData.ControlFilesRelPath, "_application.app");
-        clothingItemData.MeshEntityPath = Path.Combine(clothingItemData.ControlFilesRelPath, "_mesh_entity.ent");
+        clothingItemData.RootEntityPath = Path.Combine(clothingItemData.ControlFilesRelPath,
+            $"_root_entity.ent".ToFileName());
+        if (activeProject.ModFiles.FirstOrDefault(f => f.EndsWith("_root_entity.ent")) is string existingRoot)
+        {
+            clothingItemData.RootEntityPath = existingRoot;
+        }
+
+        clothingItemData.AppFilePath = Path.Combine(clothingItemData.ControlFilesRelPath,
+            $"_application.app".ToFileName());
+        if (activeProject.ModFiles.FirstOrDefault(f => f.EndsWith("_application.app")) is string existingApp)
+        {
+            clothingItemData.AppFilePath = existingApp;
+        }
+
+        clothingItemData.MeshEntityPath = Path.Combine(clothingItemData.ControlFilesRelPath,
+            $"_{clothingItemData.ItemName}_mesh_entity.ent".ToFileName());
 
         clothingItemData.InkatlasPath = Path.Combine(clothingItemData.ControlFilesRelPath,
             $"{clothingItemData.ItemName}_icons.inkatlas");
@@ -838,7 +852,8 @@ public class ArchiveXlItemService
         var comment = clothingItemData.Variants.SelectMany(color =>
             (clothingItemData.SecondaryVariants.Count > 0 ? clothingItemData.SecondaryVariants : [""])
             .Select(var => itemName.Replace("$(base_color)", color).Replace("$(secondary)", var))
-        ).ToArray();
+            ).Select(s => $"Game.AddToInventory(\"{s}\")")
+            .ToArray();
 
         YamlHelper.RemoveInExistingFileAndAppend(yamlAbsPath, itemName, yaml, comment);
     }
