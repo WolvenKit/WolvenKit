@@ -573,7 +573,10 @@ public class ArchiveXlItemService
                     return;
                 }
 
-                AdjustMeshAppearances(mesh, isSecondaryComponent);
+                if (pathInMod.Contains("_pwa"))
+                {
+                    AdjustMeshAppearances(mesh, isSecondaryComponent);
+                }
 
                 if (clothingItemData.IsAddMeshMaterials)
                 {
@@ -599,7 +602,12 @@ public class ArchiveXlItemService
                 return;
             }
 
-            AdjustMeshAppearances(mesh2);
+
+            if (pathInMod.Contains("_pma"))
+            {
+                AdjustMeshAppearances(mesh2, isSecondaryComponent);
+            }
+
 
             if (clothingItemData.IsAddMeshMaterials)
             {
