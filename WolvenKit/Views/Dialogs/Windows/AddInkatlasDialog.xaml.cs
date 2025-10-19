@@ -1,4 +1,5 @@
-﻿using System.Reactive.Disposables;
+using System;
+using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -30,6 +31,14 @@ public partial class AddInkatlasDialog : IViewFor<AddInkatlasDialogViewModel>
         this.WhenActivated(disposables =>
         {
             // bind to filteredDropdownMenu
+            this.Bind(ViewModel,
+                    x => x.ExistingFiles,
+                    x => x.ExistingFileDropdownMenu.Options)
+                .DisposeWith(disposables);
+            this.Bind(ViewModel,
+                    x => x.ExistingFile,
+                    x => x.ExistingFileDropdownMenu.SelectedOption)
+                .DisposeWith(disposables);
             this.Bind(ViewModel,
                     x => x.ProjectFolders,
                     x => x.FilterableDropdownMenu.Options)
@@ -170,5 +179,16 @@ public partial class AddInkatlasDialog : IViewFor<AddInkatlasDialogViewModel>
         }
 
         vm.PngSourceDir = folderDialog.SelectedPath;
+    }
+
+    private void OnIconSizeSelected(object sender, RoutedEventArgs e)
+    {
+        if (sender is not ComboBox box || ViewModel is null || box.SelectedItem is not Tuple<int, int> size)
+        {
+            return;
+        }
+
+        ViewModel.TileWidth = $"{size.Item1}";
+        ViewModel.TileHeight = $"{size.Item2}";
     }
 }

@@ -1,4 +1,4 @@
-﻿<Window
+<Window
     x:Class="WolvenKit.Views.Dialogs.Windows.AddInkatlasDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -22,8 +22,7 @@
 
     <Grid
         HorizontalAlignment="Stretch"
-        VerticalAlignment="Stretch"
-        hc:ThemeManager.RequestedAccentColor="{StaticResource MahApps.Brushes.Accent3}">
+        VerticalAlignment="Stretch">
         <Grid.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
@@ -31,11 +30,8 @@
                     <hc:Theme />
                 </ResourceDictionary.MergedDictionaries>
                 <Style
-                    BasedOn="{StaticResource WolvenkitDialogLabelStyleMedium}"
-                    TargetType="{x:Type Label}">
-                    <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="HorizontalContentAlignment" Value="Left" />
-                </Style>
+                    BasedOn="{StaticResource WolvenkitLabelStyle}"
+                    TargetType="{x:Type Label}" />
             </ResourceDictionary>
         </Grid.Resources>
 
@@ -59,11 +55,20 @@
                     VerticalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="{StaticResource WolvenKitDialogLabelColumnWidthMedium}" />
+                        <ColumnDefinition Width="60" />
+                        <ColumnDefinition Width="20" />
+                        <ColumnDefinition Width="60" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="{DynamicResource WolvenKitButtonGridWidth}" />
                     </Grid.ColumnDefinitions>
 
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="10" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="5" />
                         <RowDefinition Height="Auto" />
@@ -75,18 +80,38 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="10" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="10" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="10" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="10" />
+                        <RowDefinition Height="0" />
                     </Grid.RowDefinitions>
 
+
+                    <!-- Existing file (overwrite) -->
+                    <editors:FilterableDropdownMenu
+                        x:Name="ExistingFileDropdownMenu"
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="6"
+                        Label="Overwrite existing file:"
+                        Options="{Binding ExistingFiles,
+                                          UpdateSourceTrigger=PropertyChanged}"
+                        SelectedOption="{Binding ExistingFile,
+                                                 Mode=TwoWay}"
+                        IsInline="True" />
+                    <TextBox
+                        x:Name="ExistingFileBox"
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="5"
+                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
+                        Background="{StaticResource BackgroundBrush_InputField_Readonly}"
+                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                        IsReadOnly="True" />
+
+                    <!-- relative path (project folder) -->
                     <editors:FilterableDropdownMenu
                         x:Name="FilterableDropdownMenu"
-                        Grid.Row="0"
+                        Grid.Row="6"
                         Grid.Column="0"
-                        Grid.ColumnSpan="3"
+                        Grid.ColumnSpan="6"
                         Label="Inkatlas folder:"
                         Options="{Binding ProjectFolders,
                                           UpdateSourceTrigger=PropertyChanged}"
@@ -94,31 +119,36 @@
                                                  Mode=TwoWay}"
                         IsInline="True" />
 
-
                     <TextBox
-                        x:Name="RelativePathBox"
-                        Grid.Row="2"
+                        x:Name="FolderPathBox"
+                        Grid.Row="8"
                         Grid.Column="1"
-                        Grid.ColumnSpan="2"
+                        Grid.ColumnSpan="5"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         KeyboardNavigation.TabIndex="-1" />
 
-
-                    <!-- File name -->
                     <Label
-                        Grid.Row="4"
+                        Grid.Row="10"
                         Grid.Column="0"
                         Width="{StaticResource WolvenKitLabelWidthMedium}"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         HorizontalAlignment="Left"
-                        BorderThickness="0"
                         Content="Inkatlas file name" />
                     <TextBox
-                        x:Name="InkatlasFileNameBox"
-                        Grid.Row="4"
+                        x:Name="RelativePathBox"
+                        Grid.Row="10"
                         Grid.Column="1"
-                        Grid.ColumnSpan="2"
+                        Grid.ColumnSpan="5"
+                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
+                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                        KeyboardNavigation.TabIndex="-1" />
+
+                    <TextBox
+                        x:Name="InkatlasFileNameBox"
+                        Grid.Row="10"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="5"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         KeyboardNavigation.TabIndex="-1">
@@ -127,22 +157,19 @@
                         </TextBox.ToolTip>
                     </TextBox>
 
-                    <!-- mesh appearance -->
+                    <!-- Tile size -->
                     <Label
-                        Grid.Row="6"
+                        Grid.Row="12"
                         Grid.Column="0"
                         Width="{StaticResource WolvenKitLabelWidthMedium}"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         HorizontalAlignment="Left"
-                        BorderThickness="0"
-                        Content="Tile width:" />
+                        Content="Tile size:" />
 
                     <TextBox
                         x:Name="TileWidthBox"
-                        Grid.Row="6"
+                        Grid.Row="12"
                         Grid.Column="1"
-                        Grid.ColumnSpan="2"
-                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         KeyboardNavigation.TabIndex="-1">
                         <TextBox.ToolTip>
@@ -152,22 +179,19 @@
                         </TextBox.ToolTip>
                     </TextBox>
 
-
-                    <!-- Chunkmask -->
                     <Label
-                        Grid.Row="8"
-                        Grid.Column="0"
-                        Width="{StaticResource WolvenKitLabelWidthMedium}"
-                        HorizontalAlignment="Left"
-                        BorderThickness="0"
-                        Content="Tile height:" />
+                        Grid.Row="12"
+                        Grid.Column="2"
+                        Width="15"
+                        Margin="{DynamicResource WolvenKitMarginTinyTop}"
+                        HorizontalAlignment="Center"
+                        Foreground="White"
+                        Content="x" />
 
                     <TextBox
                         x:Name="TileHeightBox"
-                        Grid.Row="8"
-                        Grid.Column="1"
-                        Grid.ColumnSpan="2"
-                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
+                        Grid.Row="12"
+                        Grid.Column="3"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         KeyboardNavigation.TabIndex="-1">
                         <TextBox.ToolTip>
@@ -177,23 +201,34 @@
                         </TextBox.ToolTip>
                     </TextBox>
 
+                    <ComboBox
+                        x:Name="IconSizeDropdown"
+                        Grid.Row="12"
+                        Grid.Column="4"
+                        Grid.ColumnSpan="2"
+                        Margin="{DynamicResource WolvenKitMarginLeft}"
+                        ItemsSource="{Binding IconFileSizes,
+                                              UpdateSourceTrigger=PropertyChanged}"
+                        SelectionChanged="OnIconSizeSelected"
+                        KeyboardNavigation.TabIndex="-1" />
+
+
                     <!-- Remember values? -->
                     <Label
-                        Grid.Row="10"
+                        Grid.Row="14"
                         Grid.Column="0"
                         Width="{StaticResource WolvenKitLabelWidthMedium}"
                         HorizontalAlignment="Left"
-                        BorderThickness="0"
                         Content="PNG raw folder" />
-
 
                     <TextBox
                         x:Name="PngFolderBox"
-                        Grid.Row="10"
+                        Grid.Row="14"
                         Grid.Column="1"
+                        Grid.ColumnSpan="4"
                         Margin="{StaticResource WolvenKitMarginTinyRight}"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        KeyboardNavigation.TabIndex="6">
+                        KeyboardNavigation.TabIndex="-1">
                         <TextBox.ToolTip>
                             <ToolTip>
                                 Folder with your icon PNGs
@@ -202,10 +237,11 @@
                     </TextBox>
 
                     <Button
-                        Grid.Row="10"
-                        Grid.Column="2"
+                        Grid.Row="14"
+                        Grid.Column="5"
                         Padding="0"
                         syncfusion:FocusManagerHelper.FocusedElement="True"
+                        KeyboardNavigation.TabIndex="-1"
                         Click="FileButton_Click">
                         <templates:IconBox
                             IconPack="Material"
@@ -216,17 +252,16 @@
 
                     <!-- Remember values? -->
                     <Label
-                        Grid.Row="12"
+                        Grid.Row="16"
                         Grid.Column="0"
                         Width="{StaticResource WolvenKitLabelWidthMedium}"
                         Margin="{DynamicResource WolvenKitMarginTinyVertical}"
                         HorizontalAlignment="Left"
-                        BorderThickness="0"
                         Content="Remember values?" />
 
                     <CheckBox
                         x:Name="RememberValuesCheckBox"
-                        Grid.Row="12"
+                        Grid.Row="16"
                         Grid.Column="1"
                         Margin="{DynamicResource WolvenKitMarginTinyVertical}"
                         KeyboardNavigation.TabIndex="-1" />
