@@ -339,7 +339,7 @@ public partial class ImportViewModel : AbstractImportExportViewModel
             // masklist items
             case "png":
                 var masklistPath = (Path.GetDirectoryName(filePath) ?? "").Replace("_layers", ".masklist");
-                return !File.Exists(masklistPath);
+                return !File.Exists(masklistPath) && !filePath.Contains($".inkatlas{Path.DirectorySeparatorChar}");
             // morphtarget texturesF
             case "dds":
                 var parentDirName = new DirectoryInfo(Path.GetDirectoryName(filePath) ?? string.Empty).Name;
