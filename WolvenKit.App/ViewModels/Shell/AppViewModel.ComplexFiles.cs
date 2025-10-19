@@ -26,11 +26,9 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
-        if (SettingsManager.ModderName is not string modderName || modderName == string.Empty)
+
+        if (GetModderName() is not string modderName || string.IsNullOrEmpty(modderName))
         {
-            Interactions.ShowMessageBox(
-                "Please set a name in the preferences (Home -> Settings -> General -> Your Name) before using this feature",
-                "Configure your settings!");
             return;
         }
 
@@ -88,9 +86,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
              */
             if (dialogModel.IsCreateYamlFile)
             {
-                var yamlTargetDir =
-                    Path.Join(_projectManager.ActiveProject.ResourcesDirectory,
-                        ProjectResourceTools.AppendPersonalDirectory("r6", "tweaks"), "photomode");
+                var yamlTargetDir = Path.Join(_projectManager.ActiveProject.GetResourceTweakDirectory(), "photomode");
 
                 _templateFileTools.CreatePhotomodeYaml(new PhotomodeYamlOptions()
                 {
@@ -195,7 +191,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
             if (pathOrFileName.HasFileExtension(".yaml"))
             {
-                return Path.Join(ProjectResourceTools.AppendPersonalDirectory("r6", "tweaks"), pathOrFileName);
+                return Path.Join(_projectManager.ActiveProject.GetResourceTweakDirectory(), pathOrFileName);
             }
 
             return Path.Join(relativePhotoModeFolder, pathOrFileName);

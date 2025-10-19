@@ -319,9 +319,8 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
     /// <returns><code>/source/resources/r6/tweaks/$MOD_NAME</code> or <code>/source/resources/r6/tweaks/$AUTHOR_NAME</code></returns>
     public string GetResourceTweakDirectory(bool useModderName = false)
     {
-        var dir = Path.Combine(ResourcesDirectory, "r6", "tweaks");
+        var dir = Path.Combine(ResourcesDirectory, s_tweakSubfolder);
         if (useModderName && !string.IsNullOrEmpty(Author))
-
         {
             dir = Path.Combine(dir, Author.ToFileName());
         }
@@ -487,7 +486,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
     {
         get
         {
-            var dir = Path.Combine(PackedRootDirectory, "r6", "tweaks");
+            var dir = Path.Combine(PackedRootDirectory, s_tweakSubfolder);
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);
@@ -599,25 +598,25 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
 
     public string GetAbsolutePath(string fileName, string? rootRelativeFolder)
     {
-        rootRelativeFolder ??= "";
-        switch (Path.GetExtension(fileName))
+        if (!fileName.HasFileExtension(".yaml"))
         {
-            case ".yaml" when string.IsNullOrEmpty(rootRelativeFolder):
-                rootRelativeFolder = s_tweakSubfolder;
-                break;
-            case ".yaml" when !rootRelativeFolder.StartsWith(s_tweakSubfolder):
-                rootRelativeFolder = Path.Join(s_tweakSubfolder, rootRelativeFolder);
-                break;
-            default:
-                break;
+            return Path.GetExtension(fileName) switch
+            {
+                ".xl" => Path.Join(ResourcesDirectory, fileName),
+                _ => Path.Join(ModDirectory, rootRelativeFolder ?? "", fileName)
+            };
         }
 
-        return Path.GetExtension(fileName) switch
+        if (string.IsNullOrEmpty(rootRelativeFolder))
         {
-            ".xl" => Path.Join(ResourcesDirectory, fileName),
-            ".yaml" => Path.Join(ResourcesDirectory, rootRelativeFolder, fileName),
-            _ => Path.Join(ModDirectory, rootRelativeFolder, fileName)
-        };
+            rootRelativeFolder = s_tweakSubfolder;
+        }
+        else if (!rootRelativeFolder.StartsWith(s_tweakSubfolder))
+        {
+            rootRelativeFolder = Path.Join(s_tweakSubfolder, rootRelativeFolder);
+        }
+
+        return Path.Join(ResourcesDirectory, rootRelativeFolder, fileName);
     }
 
     private const string s_relativeModDir = "wkitmoddir";

@@ -178,7 +178,7 @@ public class ArchiveXlItemService
         }
         else
         {
-            clothingItemData.YamlFilePath = Path.Join("r6", "tweaks", _settingsManager.ModderName,
+            clothingItemData.YamlFilePath = Path.Join(activeProject.GetResourceTweakDirectory(),
                 $"{activeProject.ModName}.yaml").ToFilePath();
         }
 
