@@ -120,7 +120,7 @@
                         IsInline="True" />
 
                     <TextBox
-                        x:Name="FolderPathBox"
+                        x:Name="RelativePathBox"
                         Grid.Row="8"
                         Grid.Column="1"
                         Grid.ColumnSpan="5"
@@ -136,26 +136,13 @@
                         HorizontalAlignment="Left"
                         Content="Inkatlas file name" />
                     <TextBox
-                        x:Name="RelativePathBox"
-                        Grid.Row="10"
-                        Grid.Column="1"
-                        Grid.ColumnSpan="5"
-                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
-                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        KeyboardNavigation.TabIndex="-1" />
-
-                    <TextBox
                         x:Name="InkatlasFileNameBox"
                         Grid.Row="10"
                         Grid.Column="1"
                         Grid.ColumnSpan="5"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        KeyboardNavigation.TabIndex="-1">
-                        <TextBox.ToolTip>
-                            <ToolTip />
-                        </TextBox.ToolTip>
-                    </TextBox>
+                        KeyboardNavigation.TabIndex="-1" />
 
                     <!-- Tile size -->
                     <Label
@@ -207,6 +194,8 @@
                         Grid.Column="4"
                         Grid.ColumnSpan="2"
                         Margin="{DynamicResource WolvenKitMarginLeft}"
+                        SelectedValuePath="Value"
+                        DisplayMemberPath="Key"
                         ItemsSource="{Binding IconFileSizes,
                                               UpdateSourceTrigger=PropertyChanged}"
                         SelectionChanged="OnIconSizeSelected"

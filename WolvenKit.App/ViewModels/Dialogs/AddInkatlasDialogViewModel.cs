@@ -31,18 +31,18 @@ public partial class AddInkatlasDialogViewModel : ObservableObject
     {
         switch (e.PropertyName)
         {
-            case nameof(RelativePath):
-                RelativePath = RelativePath.ToFilePath();
-                break;
             case nameof(InkatlasFileName):
                 InkatlasFileName = InkatlasFileName.ToFileName().Replace(".inkatlas", "");
                 break;
+            case nameof(RelativePath):
+                RelativePath = RelativePath.ToFilePath();
+                break;
             case nameof(ExistingFile) when !string.IsNullOrEmpty(ExistingFile):
-
-                InkatlasFileName = Path.GetFileName(ExistingFile).ToFileName().Replace(".inkatlas", "");
+                // No need to escape, the propertyChangedEvents will do that
                 if (Path.GetDirectoryName(ExistingFile) is string path)
                 {
-                    RelativePath = path.ToFileName();
+                    RelativePath = path;
+                    InkatlasFileName = Path.GetFileNameWithoutExtension(ExistingFile);
                 }
 
                 break;
