@@ -341,18 +341,15 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
-        if (SettingsManager.ModderName is not string modderName || modderName == string.Empty)
+        if (GetModderName() is not string modderName || string.IsNullOrEmpty(modderName))
         {
-            Interactions.ShowMessageBox(
-                "Please set a name in the preferences (Home -> Settings -> General -> Your Name) before using this feature",
-                "Configure your settings!");
             return;
         }
         var options = new QuestGenerationOptions
         {
             ModName = dialogModel.ModName,
             TargetRoot = Path.Combine(activeProject.ModDirectory, "mod"),
-            ModderName = SettingsManager.ModderName.ToLower(),
+            ModderName = modderName.ToLower(),
         };
 
         _templateFileTools.GenerateMinimalQuest(options);

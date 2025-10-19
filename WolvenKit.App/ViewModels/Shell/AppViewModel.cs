@@ -1375,8 +1375,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         if (string.IsNullOrEmpty(ActiveProject?.Author))
         {
             Interactions.ShowPopupWithWeblink((
-                "Please configure modder name",
-                "Please configure your name in the Wolvenkit settings",
+                "Please set a name in the preferences (Home -> Settings -> General -> Your Name)!",
+                "No modder name set",
                 WikiLinks.SettingsModderName,
                 "Open Wiki",
                 WMessageBoxImage.Warning
