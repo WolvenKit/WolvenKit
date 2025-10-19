@@ -847,6 +847,10 @@ public partial class RedGraph
         {
             nodes.RecalculateProperties();
         }
+
+        // Clean up orphaned connections
+        CleanUpOrphanedConnections(phaseGraphDef);
+
         RebuildQuestConnections();
         GraphStateSave();
         DocumentViewModel?.SetIsDirty(true);
@@ -1192,6 +1196,54 @@ public partial class RedGraph
         RebuildQuestConnections();
         GraphStateSave();
         DocumentViewModel?.SetIsDirty(true);
+    }
+
+    private void CleanUpOrphanedConnections(questGraphDefinition phaseGraphDef)
+    {
+        var unmigratedSockets = new HashSet<graphGraphSocketDefinition>();
+        foreach (var nodeDef in phaseGraphDef.Nodes.Select(h => h.Chunk).OfType<questNodeDefinition>())
+        {
+            if (nodeDef is questInputNodeDefinition or questOutputNodeDefinition)
+            {
+                foreach (var socketHandle in nodeDef.Sockets)
+                {
+                    if (socketHandle.Chunk is { } socket)
+                    {
+                        unmigratedSockets.Add(socket);
+                    }
+                }
+            }
+        }
+
+        foreach (var nodeViewModel in Nodes.OfType<BaseQuestViewModel>())
+        {
+            foreach (var socket in nodeViewModel.Input.OfType<QuestInputConnectorViewModel>())
+            {
+                for (var i = socket.Data.Connections.Count - 1; i >= 0; i--)
+                {
+                    var connection = socket.Data.Connections[i].Chunk;
+                    if (connection != null &&
+                        ((connection.Source.Chunk != null && unmigratedSockets.Contains(connection.Source.Chunk)) ||
+                         (connection.Destination.Chunk != null && unmigratedSockets.Contains(connection.Destination.Chunk))))
+                    {
+                        socket.Data.Connections.RemoveAt(i);
+                    }
+                }
+            }
+            foreach (var socket in nodeViewModel.Output.OfType<QuestOutputConnectorViewModel>())
+            {
+                for (var i = socket.Data.Connections.Count - 1; i >= 0; i--)
+                {
+                    var connection = socket.Data.Connections[i].Chunk;
+                    if (connection != null &&
+                        ((connection.Source.Chunk != null && unmigratedSockets.Contains(connection.Source.Chunk)) ||
+                         (connection.Destination.Chunk != null && unmigratedSockets.Contains(connection.Destination.Chunk))))
+                    {
+                        socket.Data.Connections.RemoveAt(i);
+                    }
+                }
+            }
+        }
     }
 
     public static RedGraph GenerateQuestGraph(string title, graphGraphDefinition questGraph, INodeWrapperFactory nodeWrapperFactory)
