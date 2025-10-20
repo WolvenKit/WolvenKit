@@ -254,7 +254,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         }
 
         var files = activeProject.Files
-            .Where(f => f.EndsWith(".ent") | f.EndsWith(".mesh"))
+            .Where(f => f.EndsWith(".ent") | f.EndsWith(".mesh") | f.EndsWith(".mi"))
             .OrderBy(Path.GetExtension)
             .ToList();
 
@@ -286,12 +286,11 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             fileName += ".txt";
         }
 
-        var subfolder = string.IsNullOrEmpty(SettingsManager.ModderName)
-            ? activeProject.ModName
-            : SettingsManager.ModderName;
+        var subfolder = GetModderName();
 
         WriteEntData();
         WriteMeshData();
+        WriteMiData();
 
         return;
 
@@ -328,6 +327,23 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
             _loggerService.Success(
                 $"{ents.Count} entries written to {Path.Join([..s_worldBuilderDataPath, subfolder, fileName])}");
+        }
+
+        void WriteMiData()
+        {
+            var miFiles = dialogModel.SelectedOptions.Where(f => f.EndsWith(".mi")).ToList();
+            if (miFiles.Count == 0)
+            {
+                return;
+            }
+
+            var miFolder = Path.Join(wbDataFolder, "spawnables", "mi", "all", subfolder);
+            Directory.CreateDirectory(miFolder);
+
+            File.WriteAllText(Path.Join(miFolder, fileName), string.Join(Environment.NewLine, miFiles));
+
+            _loggerService.Success(
+                $"{miFiles.Count} entries written to {Path.Join([..s_worldBuilderDataPath, miFolder, fileName])}");
         }
 
     }
