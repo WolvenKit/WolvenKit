@@ -169,6 +169,17 @@ namespace WolvenKit.Views.Shell
                     return dialog.ViewModel;
                 };
 
+                Interactions.ShowGeneratePropFileModel = (activeProject) =>
+                {
+                    var dialog = new AddPropFileDialog(activeProject);
+                    if (dialog.ShowDialog() != true)
+                    {
+                        return null;
+                    }
+
+                    return dialog.ViewModel;
+                };
+
                 Interactions.ShowChecklistDialogue = (args) =>
                 {
                     var dialog = new ShowChecklistDialog(
