@@ -1756,6 +1756,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
 
         await _gameControllerFactory.GetController().LaunchProjectAsync(profile);
+        AfterProjectPacked();
     }
 
     [RelayCommand]
@@ -2086,7 +2087,42 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         return false;
     }
 
+    private bool warningsDisplayed = false;
 
+    private void AfterProjectPacked()
+    {
+        if (warningsDisplayed || ActiveProject is null ||
+            SettingsManager.GetRED4GameExecutablePath() is not string exePath)
+        {
+            return;
+        }
+
+        var mlsetupFiles = ActiveProject.ModFiles
+            .Where(f => f.StartsWith("base") || f.StartsWith("ep1"))
+            .Where(f => f.EndsWith(".mlsetup"))
+            .ToList();
+
+        if (mlsetupFiles.Count == 0 ||
+            !mlsetupFiles.Any(f => _archiveManager.IsFileInScope(f, ArchiveManagerScope.Basegame)))
+        {
+            return;
+        }
+
+        _archiveManager.Initialize(new FileInfo(exePath), false);
+        if (_archiveManager.IsModInstalled("###_nim_material_override"))
+        {
+            return;
+        }
+
+        warningsDisplayed = true;
+        Interactions.ShowPopupWithWeblink((
+            "Modding base-game .mlsetups files will not have an effect in-game unless you install the 'Material Texture Override' mod. For a workaround, click on 'Open Wiki'.",
+            "MTO not installed",
+            "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/error-codes#mto-requirement",
+            "Open Wiki",
+            WMessageBoxImage.Warning
+        ));
+    }
 
     private async Task LoadTweakDB()
     {
