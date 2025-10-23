@@ -2116,7 +2116,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         warningsDisplayed = true;
         Interactions.ShowPopupWithWeblink((
-            "Base game .mlsetups should not be overwritten (you should custompath them). For a workaround, click on 'Open Wiki'.",
+            "Modding base-game .mlsetups files will not have an effect in-game unless you install the 'Material Texture Override' mod. For a workaround, click on 'Open Wiki'.",
             "MTO not installed",
             "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/error-codes#mto-requirement",
             "Open Wiki",
