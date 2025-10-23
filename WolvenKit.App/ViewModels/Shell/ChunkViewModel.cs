@@ -462,6 +462,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                  || Parent.ResolvedData is CMeshMaterialEntry
                  || Parent.ResolvedData is localizationPersistenceOnScreenEntry
                  || Parent.ResolvedData is IRedArray
+                 || Parent.ResolvedData is appearancePartComponentOverrides
                 )
         {
             Parent.CalculateDescriptor();
