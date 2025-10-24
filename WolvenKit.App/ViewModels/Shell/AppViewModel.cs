@@ -2111,10 +2111,21 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
 
         _archiveManager.Initialize(new FileInfo(exePath), false);
-        if (_archiveManager.IsModInstalled("###_nim_material_override") ||
-            _archiveManager.IsModInstalled("MaterialAndTextureOverride"))
+        if (_archiveManager.IsModInstalled("MaterialAndTextureOverride"))
         {
             return;
+        }
+
+        if (_archiveManager.IsModInstalled("###_nim_material_override"))
+        {
+            _warningsDisplayed = true;
+            Interactions.ShowPopupWithWeblink((
+                "You have an old version of MTO installed, which can lead to crashes. Click 'Open Wiki' for more information.",
+                "Old version of MTO installed",
+                "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/error-codes#mto-requirement",
+                "Open Wiki",
+                WMessageBoxImage.Warning
+            ));
         }
 
         _warningsDisplayed = true;
