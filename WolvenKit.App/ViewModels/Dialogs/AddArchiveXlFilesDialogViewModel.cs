@@ -33,6 +33,8 @@ public partial class AddArchiveXlFilesDialogViewModel : DialogViewModel
     [ObservableProperty] private bool? _isValid;
 
     [ObservableProperty] private List<string>? _variants;
+    [ObservableProperty] private bool _enableSecondaryVariants = false;
+    [ObservableProperty] private List<string>? _secondaryVariants;
 
     // Dropdown selection options
     [ObservableProperty] private List<EquipmentItemSubSlot>? _equipmentItemSubSlots;
@@ -80,6 +82,7 @@ public partial class AddArchiveXlFilesDialogViewModel : DialogViewModel
             HidingTags = HidingTags ?? [],
             GarmentSupportTag = GarmentSupportTag,
             Variants = Variants ?? [],
+            SecondaryVariants = EnableSecondaryVariants ? SecondaryVariants ?? [] : [],
             TagsHideInFpp = HideInFpp ?? false,
             TagsForceHair = ForceHair ?? false,
             IsAddMeshMaterials = IsAddMeshMaterials,
@@ -88,6 +91,11 @@ public partial class AddArchiveXlFilesDialogViewModel : DialogViewModel
         if (ret.Variants.Count == 0)
         {
             ret.Variants.Add("default");
+        }
+
+        if (EnableSecondaryVariants && ret.SecondaryVariants.Count == 0)
+        {
+            ret.SecondaryVariants.Add("secondary_default");
         }
 
         return ret;
