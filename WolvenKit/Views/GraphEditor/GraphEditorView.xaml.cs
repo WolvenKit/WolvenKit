@@ -352,6 +352,20 @@ public partial class GraphEditorView : UserControl
 
         nodifyEditor.ContextMenu.Items.Add(CreateMenuItem("Hide/unhide sockets", "Eye", ToggleAllSockets));
 
+        // Add paste option if clipboard has compatible data
+        if (GraphClipboardManager.CanPaste(Source.GraphType))
+        {
+            nodifyEditor.ContextMenu.Items.Add(new Separator());
+            nodifyEditor.ContextMenu.Items.Add(CreateMenuItem("Paste Node", "ContentPaste", "WolvenKitGreen", () =>
+            {
+                var copiedData = GraphClipboardManager.GetCopiedData();
+                if (copiedData != null)
+                {
+                    Source.PasteNode(copiedData, mousePosition);
+                }
+            }));
+        }
+
         nodifyEditor.ContextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);
 
         e.Handled = true;
@@ -462,6 +476,7 @@ public partial class GraphEditorView : UserControl
         }
 
         node.ContextMenu.Items.Add(CreateMenuItem("Duplicate Node", "ContentDuplicate", "WolvenKitYellow", () => Source.DuplicateNode(nvm)));
+        node.ContextMenu.Items.Add(CreateMenuItem("Copy Node", "ContentCopy", "WolvenKitYellow", () => GraphClipboardManager.CopyNode(nvm, Source.GraphType)));
 
         if (Source.GraphType == RedGraphType.Scene && node.DataContext is BaseSceneViewModel sceneViewModel)
         {

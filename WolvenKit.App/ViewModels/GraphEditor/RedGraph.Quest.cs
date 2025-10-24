@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using WolvenKit.App.Factories;
@@ -651,6 +651,67 @@ public partial class RedGraph
         Nodes.Add(wrappedDuplicate);
 
         _loggerService?.Info($"Duplicated quest node with new ID: {duplicatedData.Id}");
+    }
+
+    public void PasteQuestNode(IRedType copiedData, System.Windows.Point location)
+    {
+        questNodeDefinition questNodeData;
+
+        // Cross-type paste: Scene -> Quest (unwrap scnQuestNode)
+        if (copiedData is scnQuestNode sceneQuestNode)
+        {
+            if (sceneQuestNode.QuestNode?.Chunk == null)
+            {
+                _loggerService?.Error($"Cannot paste scnQuestNode - embedded quest node is null");
+                return;
+            }
+
+            // Extract the embedded quest node
+            questNodeData = sceneQuestNode.QuestNode.Chunk;
+        }
+        // Same-type paste: Quest -> Quest
+        else if (copiedData is questNodeDefinition questDef)
+        {
+            questNodeData = questDef;
+        }
+        else
+        {
+            _loggerService?.Error($"Cannot paste node data of type {copiedData.GetType().Name} into quest graph. Only nodes inheriting questNodeDefinition or scnQuestNode are allowed.");
+            return;
+        }
+
+        if (questNodeData is not IRedCloneable cloneable)
+        {
+            _loggerService?.Error($"Cannot paste node of type {questNodeData.GetType().Name} - it doesn't implement IRedCloneable");
+            return;
+        }
+
+        var duplicatedData = (questNodeDefinition)cloneable.DeepCopy();
+
+        var newNodeId = GetNextAvailableQuestNodeId();
+        duplicatedData.Id = newNodeId;
+        _currentQuestNodeId = Math.Max(_currentQuestNodeId, newNodeId);
+
+        foreach (var socket in duplicatedData.Sockets)
+        {
+            if (socket.Chunk is questSocketDefinition socketDef)
+            {
+                socketDef.Connections.Clear();
+            }
+        }
+
+        var wrappedDuplicate = WrapQuestNode(duplicatedData, false);
+
+        wrappedDuplicate.Location = location;
+
+        ((graphGraphDefinition)_data).Nodes.Add(new CHandle<graphGraphNodeDefinition>(duplicatedData));
+
+        if (GetQuestNodesChunkViewModel() is { } nodes)
+        {
+            nodes.RecalculateProperties();
+        }
+
+        Nodes.Add(wrappedDuplicate);
     }
 
     private ushort GetNextAvailableQuestNodeId()
