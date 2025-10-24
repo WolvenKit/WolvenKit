@@ -803,6 +803,208 @@ public partial class RedGraph
         }
     }
 
+    public void UnpackPhase(questPhaseNodeDefinitionWrapper phaseNode)
+    {
+        var mainGraphDef = (graphGraphDefinition)_data;
+        if (phaseNode.Data is not questPhaseNodeDefinition phaseNodeDef)
+        {
+            return;
+        }
+
+        var phaseGraphDef = phaseNodeDef.PhaseGraph?.Chunk;
+
+        if (phaseGraphDef == null)
+        {
+            _loggerService?.Warning("Phase node has no internal graph to unpack.");
+            return;
+        }
+
+        if (phaseNode.Graph == null)
+        {
+            _loggerService?.Warning("Phase node has no subgraph.");
+            return;
+        }
+
+        // 1. Cache connections to/from the phase node before removing it
+        var incomingConnections = Connections.OfType<QuestConnectionViewModel>()
+            .Where(c => c.Target.OwnerId == phaseNode.UniqueId)
+            .ToList();
+        var outgoingConnections = Connections.OfType<QuestConnectionViewModel>()
+            .Where(c => c.Source.OwnerId == phaseNode.UniqueId)
+            .ToList();
+
+        // 2. Move nodes from the phase's graph to the main graph
+        var idMap = MigrateNodesFromPhase(phaseNode, mainGraphDef, phaseGraphDef);
+
+        // 3. Re-wire connections
+        RewireConnectionsForUnpackedPhase(phaseNode, incomingConnections, outgoingConnections);
+
+        // 4. Remove the phase node itself
+        RemoveQuestNode(phaseNode);
+
+        // 5. Cleanup
+        if (GetQuestNodesChunkViewModel() is { } nodes)
+        {
+            nodes.RecalculateProperties();
+        }
+
+        // Clean up orphaned connections
+        CleanUpOrphanedConnections(phaseGraphDef);
+
+        RebuildQuestConnections();
+        GraphStateSave();
+        DocumentViewModel?.SetIsDirty(true);
+    }
+
+    private Dictionary<ushort, ushort> MigrateNodesFromPhase(questPhaseNodeDefinitionWrapper phaseNode, graphGraphDefinition mainGraphDef, questGraphDefinition phaseGraphDef)
+    {
+        var nodesToMove = phaseGraphDef.Nodes
+            .Select(h => h.Chunk)
+            .OfType<questNodeDefinition>()
+            .ToList();
+
+        var idMap = new Dictionary<ushort, ushort>();
+        foreach (var nodeDef in nodesToMove)
+        {
+            if (nodeDef is questInputNodeDefinition or questOutputNodeDefinition)
+            {
+                continue;
+            }
+
+            if (IsQuestNodeIdInUse(nodeDef.Id, mainGraphDef))
+            {
+                var newNodeId = GetNextAvailableQuestNodeId();
+                idMap[nodeDef.Id] = newNodeId;
+                _currentQuestNodeId = Math.Max(_currentQuestNodeId, newNodeId);
+            }
+        }
+
+        foreach (var nodeDef in nodesToMove.Where(nodeDef => nodeDef is not (questInputNodeDefinition or questOutputNodeDefinition)))
+        {
+            // Update the node's own ID if it was remapped
+            if (idMap.TryGetValue(nodeDef.Id, out var newId))
+            {
+                nodeDef.Id = newId;
+            }
+
+            // Update properties of the node that might reference other node IDs
+            if (nodeDef is questDeletionMarkerNodeDefinition deletionMarker)
+            {
+                for (var i = 0; i < deletionMarker.DeletedNodeIds.Count; i++)
+                {
+                    if (idMap.TryGetValue(deletionMarker.DeletedNodeIds[i], out var newRefId))
+                    {
+                        deletionMarker.DeletedNodeIds[i] = newRefId;
+                    }
+                }
+            }
+
+            mainGraphDef.Nodes.Add(new CHandle<graphGraphNodeDefinition>(nodeDef));
+            var wrappedNode = WrapQuestNode(nodeDef, false);
+            wrappedNode.Location = new System.Windows.Point(
+                phaseNode.Location.X + new Random().Next(-50, 50),
+                phaseNode.Location.Y + new Random().Next(-50, 50)
+            );
+            Nodes.Add(wrappedNode);
+        }
+
+        return idMap;
+    }
+
+    private void RewireConnectionsForUnpackedPhase(questPhaseNodeDefinitionWrapper phaseNode,
+        List<QuestConnectionViewModel> incomingConnections, List<QuestConnectionViewModel> outgoingConnections)
+    {
+        // Connect nodes that were connected to the phase's inputs
+        foreach (var incomingConn in incomingConnections)
+        {
+            var externalSourceConnector = (QuestOutputConnectorViewModel)incomingConn.Source;
+            var phaseInputSocketName = incomingConn.Target.Name;
+
+            var internalTargetSockets = FindInternalTargetSockets(phaseNode, phaseInputSocketName);
+            foreach (var internalTargetSocket in internalTargetSockets)
+            {
+                AddQuestConnection(externalSourceConnector, internalTargetSocket);
+            }
+        }
+
+        // Connect nodes that were connected from the phase's outputs
+        foreach (var outgoingConn in outgoingConnections)
+        {
+            var phaseOutputSocketName = outgoingConn.Source.Name;
+            var externalTargetConnector = (QuestInputConnectorViewModel)outgoingConn.Target;
+
+            var internalSourceSockets = FindInternalSourceSockets(phaseNode, phaseOutputSocketName);
+            foreach (var internalSourceSocket in internalSourceSockets)
+            {
+                AddQuestConnection(internalSourceSocket, externalTargetConnector);
+            }
+        }
+    }
+
+    private List<QuestInputConnectorViewModel> FindInternalTargetSockets(questPhaseNodeDefinitionWrapper phaseNode, string phaseInputSocketName)
+    {
+        var internalTargetSockets = new List<QuestInputConnectorViewModel>();
+        if (phaseNode.Graph == null)
+        {
+            return internalTargetSockets;
+        }
+
+        var inputNode = phaseNode.Graph.Nodes.FirstOrDefault(n =>
+        {
+            if (n is questInputNodeDefinitionWrapper { Data: questInputNodeDefinition def })
+            {
+                return def.SocketName.GetResolvedText() == phaseInputSocketName;
+            }
+            return false;
+        });
+
+        if (inputNode == null)
+        {
+            return internalTargetSockets;
+        }
+
+        var outputSockets = inputNode.Output.OfType<QuestOutputConnectorViewModel>();
+        foreach (var outputSocket in outputSockets)
+        {
+            var conns = phaseNode.Graph.Connections.Where(c => c.Source == outputSocket);
+            internalTargetSockets.AddRange(conns.Select(c => (QuestInputConnectorViewModel)c.Target));
+        }
+
+        return internalTargetSockets;
+    }
+
+    private List<QuestOutputConnectorViewModel> FindInternalSourceSockets(questPhaseNodeDefinitionWrapper phaseNode, string phaseOutputSocketName)
+    {
+        var internalSourceSockets = new List<QuestOutputConnectorViewModel>();
+        if (phaseNode.Graph == null)
+        {
+            return internalSourceSockets;
+        }
+
+        var outputNode = phaseNode.Graph.Nodes.FirstOrDefault(n =>
+        {
+            if (n is questOutputNodeDefinitionWrapper w && w.Data is questOutputNodeDefinition def)
+            {
+                return def.SocketName.GetResolvedText() == phaseOutputSocketName;
+            }
+            return false;
+        });
+
+        if (outputNode == null)
+        {
+            return internalSourceSockets;
+        }
+
+        var inputSockets = outputNode.Input.OfType<QuestInputConnectorViewModel>();
+        foreach (var inputSocket in inputSockets)
+        {
+            var conns = phaseNode.Graph.Connections.Where(c => c.Target == inputSocket);
+            internalSourceSockets.AddRange(conns.Select(c => (QuestOutputConnectorViewModel)c.Source));
+        }
+
+        return internalSourceSockets;
+    }
+
     public void CreatePhaseFromSelection(IEnumerable<object> selectedNodes)
     {
         var questNodes = selectedNodes.OfType<BaseQuestViewModel>().ToList();
@@ -996,6 +1198,54 @@ public partial class RedGraph
         DocumentViewModel?.SetIsDirty(true);
     }
 
+    private void CleanUpOrphanedConnections(questGraphDefinition phaseGraphDef)
+    {
+        var unmigratedSockets = new HashSet<graphGraphSocketDefinition>();
+        foreach (var nodeDef in phaseGraphDef.Nodes.Select(h => h.Chunk).OfType<questNodeDefinition>())
+        {
+            if (nodeDef is questInputNodeDefinition or questOutputNodeDefinition)
+            {
+                foreach (var socketHandle in nodeDef.Sockets)
+                {
+                    if (socketHandle.Chunk is { } socket)
+                    {
+                        unmigratedSockets.Add(socket);
+                    }
+                }
+            }
+        }
+
+        foreach (var nodeViewModel in Nodes.OfType<BaseQuestViewModel>())
+        {
+            foreach (var socket in nodeViewModel.Input.OfType<QuestInputConnectorViewModel>())
+            {
+                for (var i = socket.Data.Connections.Count - 1; i >= 0; i--)
+                {
+                    var connection = socket.Data.Connections[i].Chunk;
+                    if (connection != null &&
+                        ((connection.Source.Chunk != null && unmigratedSockets.Contains(connection.Source.Chunk)) ||
+                         (connection.Destination.Chunk != null && unmigratedSockets.Contains(connection.Destination.Chunk))))
+                    {
+                        socket.Data.Connections.RemoveAt(i);
+                    }
+                }
+            }
+            foreach (var socket in nodeViewModel.Output.OfType<QuestOutputConnectorViewModel>())
+            {
+                for (var i = socket.Data.Connections.Count - 1; i >= 0; i--)
+                {
+                    var connection = socket.Data.Connections[i].Chunk;
+                    if (connection != null &&
+                        ((connection.Source.Chunk != null && unmigratedSockets.Contains(connection.Source.Chunk)) ||
+                         (connection.Destination.Chunk != null && unmigratedSockets.Contains(connection.Destination.Chunk))))
+                    {
+                        socket.Data.Connections.RemoveAt(i);
+                    }
+                }
+            }
+        }
+    }
+
     public static RedGraph GenerateQuestGraph(string title, graphGraphDefinition questGraph, INodeWrapperFactory nodeWrapperFactory)
     {
         var graph = new RedGraph(title, questGraph);
@@ -1044,9 +1294,11 @@ public partial class RedGraph
 
                 foreach (var connectionHandle in questOutputConnector.Data.Connections)
                 {
-                    var connection = connectionHandle.Chunk!;
-
-                    graph.Connections.Add(new QuestConnectionViewModel(questOutputConnector, socketNodeLookup[connection.Destination.Chunk!], connection));
+                    var connection = connectionHandle.Chunk;
+                    if (connection?.Destination?.Chunk != null && socketNodeLookup.TryGetValue(connection.Destination.Chunk, out var targetInput))
+                    {
+                        graph.Connections.Add(new QuestConnectionViewModel(questOutputConnector, targetInput, connection));
+                    }
                 }
             }
         }
