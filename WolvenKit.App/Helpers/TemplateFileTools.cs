@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text.RegularExpressions;
+using DynamicData;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
@@ -25,15 +28,23 @@ public class TemplateFileTools
     private readonly IModTools _modTools;
     private readonly Cr2WTools _cr2WTools;
     private readonly DocumentTools _documentTools;
+    private readonly ProjectResourceTools _projectResourceTools;
+    private readonly ISettingsManager _settingsManager;
+    private readonly IAppArchiveManager _archiveManager;
 
     public TemplateFileTools(ILoggerService loggerService, IProjectManager projectManager, IModTools modTools,
-        Cr2WTools cr2WTools, DocumentTools documentTools)
+        Cr2WTools cr2WTools, DocumentTools documentTools, ProjectResourceTools projectResourceTools,
+        ISettingsManager settingsManager, IAppArchiveManager archiveManager)
     {
         _loggerService = loggerService;
         _projectManager = projectManager;
         _modTools = modTools;
         _cr2WTools = cr2WTools;
         _documentTools = documentTools;
+        _projectResourceTools = projectResourceTools;
+        _settingsManager = settingsManager;
+        _settingsManager = settingsManager;
+        _archiveManager = archiveManager;
     }
 
     public void CopyInkatlasTemplateSingle(string inkatlasRelativePath, bool forceOverwrite)
@@ -72,7 +83,7 @@ public class TemplateFileTools
     }
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="resourceRelativePath">Path under Resources/TemplateFiles</param>
     /// <param name="targetRelativePath">Relative path of target file</param>
@@ -666,14 +677,14 @@ public class TemplateFileTools
                         Id = 2,
                         PhaseResource = new CResourceAsyncReference<questQuestPhaseResource>(resourcePath)
                     };
-                    
+
                     // Add sockets as specified (CutDestination first)
                     phaseNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "CutDestination", Type = Enums.questSocketType.CutDestination }));
                     phaseNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "In1", Type = Enums.questSocketType.Input }));
                     phaseNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "basegame", Type = Enums.questSocketType.Output }));
                     phaseNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "ifEP1", Type = Enums.questSocketType.Output }));
                     phaseNode.Sockets.Add(new CHandle<graphGraphSocketDefinition>(new questSocketDefinition { Name = "ifReset", Type = Enums.questSocketType.Output }));
-                    
+
                     graph.Nodes.Add(new CHandle<graphGraphNodeDefinition>(phaseNode));
 
                     // Helper to get a socket by node ID and socket name
@@ -1024,6 +1035,21 @@ public class TemplateFileTools
         }
     }
 
+    private string GetFileOrganizationSubdir()
+    {
+        if (!_settingsManager.UseModderNameAsSubfolder)
+        {
+            return _projectManager.ActiveProject?.Name ?? "";
+        }
+
+        if (_projectManager.ActiveProject?.Author is string author && !string.IsNullOrEmpty(author))
+        {
+            return author;
+        }
+
+        return _settingsManager.ModderName ?? "";
+    }
+
     private void CreateOnscreensLocalizationFile(QuestGenerationOptions options, MinimalQuestPaths paths)
     {
         if (!File.Exists(paths.OnscreensPath))
@@ -1077,30 +1103,383 @@ public class TemplateFileTools
         }
     }
 
+    private const string s_questTemplateYaml = """
+
+                                               quest:
+                                                 phases:
+                                                   - path: mod\MOD_NAME\quest\MOD_NAME_root.questphase
+                                                     parent: cyberpunk2077.quest
+                                               journal:
+                                                 - mod\MOD_NAME\journal\MOD_NAME.journal
+                                               localization:
+                                                 onscreens:
+                                                   en-us: mod\MOD_NAME\localization\en-us\onscreens\MOD_NAME.json
+
+                                               """;
+
     private void CreateArchiveXlFile(QuestGenerationOptions options)
     {
-        if (_projectManager.ActiveProject == null || _projectManager.ActiveProject.ResourcesDirectory == null)
+        if (_projectManager.ActiveProject?.ResourcesDirectory is not string resourcesDir)
         {
             _loggerService.Error("Active project or its resources directory is null. Cannot create .archive.xl file.");
             return;
         }
-        var resourcesDir = _projectManager.ActiveProject.ResourcesDirectory;
         var archiveXlPath = Path.Combine(resourcesDir, $"{options.ModName}.archive.xl");
         if (!File.Exists(archiveXlPath))
         {
-            var yaml = $@"quest:
-  phases:
-    - path: mod\{options.ModName}\quest\{options.ModName}_root.questphase
-      parent: cyberpunk2077.quest
-journal:
-  - mod\{options.ModName}\journal\{options.ModName}.journal
-localization:
-  onscreens:
-    en-us: mod\{options.ModName}\localization\en-us\onscreens\{options.ModName}.json
-";
-            File.WriteAllText(archiveXlPath, yaml);
+            File.WriteAllText(archiveXlPath, s_questTemplateYaml.Replace("MOD_NAME", options.ModName));
         }
     }
+
+    public void GeneratePropFiles(AddPropFileDialogViewModel prop)
+    {
+        if (_projectManager.ActiveProject is not { } project)
+        {
+            return;
+        }
+
+        prop.Appearances ??= [];
+        if (prop.Appearances.Count == 0)
+        {
+            prop.Appearances.Add("default");
+        }
+
+        prop.Appearances = prop.Appearances.Select(x => x.ToFileName()).ToList();
+
+        var hasSingleAppearance = prop.Appearances.All(f => f == "default");
+
+
+        var absoluteParentFolder = Path.Combine(project.ModDirectory, prop.ParentFolder);
+        Directory.CreateDirectory(absoluteParentFolder);
+
+        var propFolderName = prop.PropName.ToFileName();
+        if (Directory.GetFileSystemEntries(absoluteParentFolder).Length > 0)
+        {
+            prop.ParentFolder = Path.Combine(prop.ParentFolder, propFolderName);
+            absoluteParentFolder = Path.Combine(project.ModDirectory, prop.ParentFolder);
+            Directory.CreateDirectory(absoluteParentFolder);
+        }
+
+
+        // generate .ent file
+
+        var entFilePath = Path.Combine(prop.ParentFolder, $"{propFolderName}.ent");
+        var appFilePath = Path.Combine(prop.ParentFolder, $"{propFolderName}.app");
+
+        var meshFilesUseAppearances = prop.GetMeshFileData();
+
+        PrepareMeshes();
+
+        GenerateEntFile();
+        GenerateAppFile();
+        WriteLuaFile();
+        WriteWorldbuilderFile();
+
+        project.DeleteEmptyFolders(_loggerService);
+        return;
+
+        void PrepareMeshes()
+        {
+            // if they aren't in the correct directory, move them and adjust list
+            Dictionary<string, bool> meshFileAppearances = [];
+            foreach (var kvp in meshFilesUseAppearances)
+            {
+                if (Path.GetDirectoryName(kvp.Key)?.EndsWith(propFolderName) == true)
+                {
+                    meshFileAppearances[kvp.Key] = kvp.Value;
+                    continue;
+                }
+
+                var relativePath = Path.Combine(prop.ParentFolder, Path.GetFileName(kvp.Key));
+                if (!project.ModFiles.Contains(kvp.Key))
+                {
+                    // try get from game files
+                    _archiveManager.GetGameFile(kvp.Key);
+                }
+
+                if (project.ModFiles.Contains(kvp.Key))
+                {
+                    _projectResourceTools.MoveAndRefactorAsync(
+                            Path.Combine(project.ModDirectory, kvp.Key),
+                            Path.Combine(project.ModDirectory, relativePath),
+                            "",
+                            false).GetAwaiter()
+                        .GetResult();
+                }
+                else
+                {
+                }
+
+                meshFileAppearances[relativePath] = kvp.Value;
+            }
+
+            meshFilesUseAppearances = meshFileAppearances;
+
+            // If they should use appearances, set them now
+            foreach (var kvp in meshFilesUseAppearances.Where(kvp => kvp.Value))
+            {
+                ApplyMeshAppearances(kvp.Key);
+            }
+        }
+
+        void ApplyMeshAppearances(string relativePath)
+        {
+            if (!project.ModFiles.Contains(relativePath))
+            {
+                _loggerService.Info(
+                    $"Mesh file not found in project resources. Can't apply appearances: {relativePath}");
+                return;
+            }
+
+            var absolutePath = Path.Combine(project.ModDirectory, relativePath);
+            if (_cr2WTools.ReadCr2W(absolutePath) is not { RootChunk: CMesh mesh })
+            {
+                _loggerService.Info($"Failed to read mesh file. Can't apply appearances: {relativePath}");
+                return;
+            }
+
+            // Make sure that first appearance is defined, as we're gonna copy that one for all consecutive appearances
+            var firstAppearance = mesh.Appearances.Count > 0
+                ? mesh.Appearances[0]
+                : new CHandle<meshMeshAppearance>()
+                {
+                    Chunk = new meshMeshAppearance()
+                    {
+                        Name = prop.Appearances[0],
+                        ChunkMaterials = new CArray<CName>([
+                            prop.Appearances[0],
+                            prop.Appearances[0],
+                            prop.Appearances[0]
+                        ])
+                    }
+                };
+
+            List<CHandle<meshMeshAppearance>?> newAppearances = [];
+
+            for (var i = 0; i < prop.Appearances.Count; i++)
+            {
+                var meshAppearance = mesh.Appearances.Count > i
+                    ? mesh.Appearances[i]
+                    : new CHandle<meshMeshAppearance>();
+
+                meshAppearance.Chunk ??= new meshMeshAppearance();
+                meshAppearance.Chunk.Name = prop.Appearances[i];
+
+                // make sure it has materials
+                if (meshAppearance.Chunk.ChunkMaterials is null || meshAppearance.Chunk.ChunkMaterials.Count == 0)
+                {
+                    meshAppearance.Chunk.ChunkMaterials =
+                        new CArray<CName>(firstAppearance.Chunk!.ChunkMaterials.ToList());
+                }
+
+                meshAppearance.Chunk.ChunkMaterials = new CArray<CName>(meshAppearance.Chunk.ChunkMaterials
+                    .Select(c => c.ToString() ?? prop.Appearances[i])
+                    .Select(s => (CName)s.Replace(prop.Appearances[0], prop.Appearances[i]))
+                    .ToList());
+
+                // write it back
+                newAppearances.Add(meshAppearance);
+            }
+
+            mesh.Appearances = new CArray<CHandle<meshMeshAppearance>>(newAppearances);
+
+            // now write it back
+            _cr2WTools.WriteCr2W(new CR2WFile() { RootChunk = mesh }, absolutePath);
+        }
+
+        void GenerateAppFile()
+        {
+            if (hasSingleAppearance)
+            {
+                return;
+            }
+
+            var absoluteAppPath = Path.Combine(project.ModDirectory, appFilePath);
+            var appTemplate = new appearanceAppearanceResource();
+            if (File.Exists(absoluteAppPath) && _cr2WTools.ReadCr2WNoException(absoluteAppPath) is
+                    { RootChunk: appearanceAppearanceResource template })
+            {
+                appTemplate = template;
+            }
+
+            appTemplate.Appearances.Clear();
+
+            var components = CreateComponents();
+            var adjustMeshAppearancesFor = meshFilesUseAppearances.Where(kvp => kvp.Value).Select(kvp => kvp.Key);
+
+            foreach (var propAppearance in prop.Appearances)
+            {
+                var appDef = new appearanceAppearanceDefinition() { Name = propAppearance };
+                var appComponents = components.Select(entIComponent? (c) =>
+                {
+                    if (c is IRedMeshComponent mC && mC?.Mesh.DepotPath.GetResolvedText() is string s &&
+                        adjustMeshAppearancesFor.Contains(s))
+                    {
+                        mC.MeshAppearance = propAppearance;
+                    }
+
+                    return c;
+                }).ToList();
+
+                appDef.Components = new CArray<entIComponent>(appComponents);
+                appDef.VisualTags = new redTagList() { Tags = new CArray<CName>(["amm_Prop", "wb_Prop"]) };
+                appTemplate.Appearances.Add(new CHandle<appearanceAppearanceDefinition>() { Chunk = appDef });
+            }
+
+            _cr2WTools.WriteCr2W(new CR2WFile() { RootChunk = appTemplate }, absoluteAppPath);
+        }
+
+        void GenerateEntFile()
+        {
+            var absoluteEntPath = Path.Combine(project.ModDirectory, entFilePath);
+            var entTemplate = new entEntityTemplate();
+
+            if (File.Exists(absoluteEntPath) && _cr2WTools.ReadCr2WNoException(absoluteEntPath) is
+                    { RootChunk: entEntityTemplate template })
+            {
+                entTemplate = template;
+            }
+
+            entTemplate.Appearances.Clear();
+            entTemplate.Components ??= new CArray<entIComponent>();
+            entTemplate.Components.Clear();
+
+
+            if (hasSingleAppearance)
+            {
+                entTemplate.Components = new CArray<entIComponent>(CreateComponents());
+            }
+            else
+            {
+                foreach (var propAppearance in prop.Appearances)
+                {
+                    entTemplate.Appearances.Add(new entTemplateAppearance()
+                    {
+                        Name = propAppearance.ToFileName(),
+                        AppearanceName = propAppearance.ToFileName(),
+                        AppearanceResource = new CResourceAsyncReference<appearanceAppearanceResource>(appFilePath),
+                    });
+                }
+            }
+
+            entTemplate.Components.Add(new gameTargetingComponent() { Name = "targeting", });
+
+            _cr2WTools.WriteCr2W(new CR2WFile() { RootChunk = entTemplate }, absoluteEntPath);
+        }
+
+        List<entIComponent?> CreateComponents()
+        {
+            List<entIComponent?> ret = [];
+
+            var index = 1;
+            foreach (var kvp in meshFilesUseAppearances)
+            {
+                ret.Add(new entPhysicalMeshComponent()
+                {
+                    Name = $"amm_prop_slot_{index}", Mesh = new CResourceAsyncReference<CMesh>(kvp.Key)
+                });
+                index += 1;
+            }
+
+            return ret;
+        }
+
+        void WriteLuaFile()
+        {
+            var luaFolderPath = Path.Combine(project.GetResourceCETDirectory(), "..", "AppearanceMenuMod", "Collabs",
+                "Custom Props", GetFileOrganizationSubdir());
+            var luaPath = Path.Combine(luaFolderPath, $"{project.Name.ToFileName()}.lua");
+
+            var absolutePath = Path.Combine(project.ResourcesDirectory, luaPath);
+            if (!File.Exists(absolutePath))
+            {
+                Directory.CreateDirectory(luaFolderPath);
+                File.WriteAllText(absolutePath,
+                    s_luaPropFileTemplate.Replace("MODDER_NAME", project.Author)
+                        .Replace("PROJECT_NAME", project.Name.ToFileName()));
+            }
+
+            List<string> propFileData =
+            [
+                "    {",
+                $"      name: \"{prop.PropName}\",",
+                $"      path: \"{entFilePath.Replace(@"\", @"\\")}\",",
+                "      category: \"Misc\",",
+                "      distanceFromGround: 1,",
+            ];
+            if (!hasSingleAppearance)
+            {
+                propFileData.Add("      appearances: {\n");
+                propFileData.AddRange(prop.Appearances.Select(propAppearance => $"        \"{propAppearance}\""));
+                propFileData.Add("      },");
+            }
+
+            propFileData.Add("    },");
+
+            var fileContent = File.ReadAllLines(absolutePath).ToList();
+            var propLineIndex =
+                fileContent.IndexOf(fileContent.FirstOrDefault(l => l.Contains("props = ")) ?? "INVALID_STRING");
+            if (propLineIndex <= 0)
+            {
+                return;
+            }
+
+            fileContent.AddRange(propFileData, propLineIndex + 1);
+            File.WriteAllLines(absolutePath, fileContent);
+        }
+
+        void WriteWorldbuilderFile()
+        {
+            var entspawnerSubdir = Path.Combine(project.GetResourceCETDirectory(), "..", "entSpawner", "data");
+
+            if (meshFilesUseAppearances.Count == 1)
+            {
+                var entspawnerMeshDir = Path.Combine(entspawnerSubdir, "spawnables", "mesh", "all",
+                    GetFileOrganizationSubdir());
+                var entspawnerMeshFile = Path.Combine(entspawnerMeshDir, project.Name.ToFileName() + ".txt");
+                var absolutePath = Path.Combine(project.ResourcesDirectory, entspawnerMeshFile);
+
+                Directory.CreateDirectory(Path.Combine(project.ResourcesDirectory, entspawnerMeshDir));
+
+                if (!File.Exists(absolutePath))
+                {
+                    File.WriteAllText(absolutePath, "");
+                }
+
+                File.AppendAllLines(absolutePath, [meshFilesUseAppearances.Keys.First()]);
+
+
+                return;
+            }
+
+            var entspawnerEntFile =
+                Path.Combine(entspawnerSubdir, GetFileOrganizationSubdir(), project.Name.ToFileName() + ".txt");
+            var absoluteEntPath = Path.Combine(project.ResourcesDirectory, entspawnerEntFile);
+            if (!File.Exists(absoluteEntPath))
+            {
+                Directory.CreateDirectory(Path.Combine(project.ResourcesDirectory, entspawnerSubdir,
+                    GetFileOrganizationSubdir()));
+                File.WriteAllText(absoluteEntPath, "");
+            }
+
+            File.AppendAllLines(absoluteEntPath, [entFilePath]);
+        }
+    }
+
+    private const string s_luaPropFileTemplate = """
+                                                 -- This file was autogenerated with WolvenKit. Yay!
+                                                 return {
+
+                                                   modder = "MODDER_NAME",
+
+                                                   unique_identifier = "PROJECT_NAME",
+
+                                                   props = {
+                                                   }
+                                                 }
+
+                                                 """;
+
 }
 
 public class PhotomodeYamlOptions

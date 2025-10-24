@@ -291,22 +291,22 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
                 break;
             case nameof(IsCreateInkatlasFile) when !IsOverwrite && IsCreateInkatlasFile:
                 IsOverwrite =
-                    File.Exists(_projectResourceTools.GetAbsolutePath(InkatlasFileName, PhotomodeRelativeFolder));
+                    File.Exists(_activeProject.GetAbsolutePath(InkatlasFileName, PhotomodeRelativeFolder));
                 break;
             case nameof(IsCreateAppFile) when !IsOverwrite && IsCreateAppFile:
-                IsOverwrite = File.Exists(_projectResourceTools.GetAbsolutePath(AppFileName, PhotomodeRelativeFolder));
+                IsOverwrite = File.Exists(_activeProject.GetAbsolutePath(AppFileName, PhotomodeRelativeFolder));
                 break;
             case nameof(IsCreateEntFile) when !IsOverwrite && IsCreateEntFile:
-                IsOverwrite = File.Exists(_projectResourceTools.GetAbsolutePath(EntFileName, PhotomodeRelativeFolder));
+                IsOverwrite = File.Exists(_activeProject.GetAbsolutePath(EntFileName, PhotomodeRelativeFolder));
                 break;
             case nameof(IsCreateJsonFile) when !IsOverwrite && IsCreateJsonFile:
-                IsOverwrite = File.Exists(_projectResourceTools.GetAbsolutePath(JsonFileName, PhotomodeRelativeFolder));
+                IsOverwrite = File.Exists(_activeProject.GetAbsolutePath(JsonFileName, PhotomodeRelativeFolder));
                 break;
             case nameof(IsCreateYamlFile) when !IsOverwrite && IsCreateYamlFile:
-                IsOverwrite = File.Exists(_projectResourceTools.GetAbsolutePath(YamlFileName, "", true));
+                IsOverwrite = File.Exists(Path.Join(_activeProject.GetResourceTweakDirectory(), YamlFileName));
                 break;
             case nameof(IsCreateXlFile) when !IsOverwrite && IsCreateXlFile:
-                IsOverwrite = File.Exists(_projectResourceTools.GetAbsolutePath(XlFileName));
+                IsOverwrite = File.Exists(_activeProject.GetAbsolutePath(XlFileName));
                 break;
         }
         SetSaveButtonState();

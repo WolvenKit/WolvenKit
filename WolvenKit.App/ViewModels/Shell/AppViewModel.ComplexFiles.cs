@@ -26,11 +26,9 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
-        if (SettingsManager.ModderName is not string modderName || modderName == string.Empty)
+
+        if (GetModderName() is not string modderName || string.IsNullOrEmpty(modderName))
         {
-            Interactions.ShowMessageBox(
-                "Please set a name in the preferences (Home -> Settings -> General -> Your Name) before using this feature",
-                "Configure your settings!");
             return;
         }
 
@@ -88,9 +86,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
              */
             if (dialogModel.IsCreateYamlFile)
             {
-                var yamlTargetDir =
-                    Path.Join(_projectManager.ActiveProject.ResourcesDirectory,
-                        ProjectResourceTools.AppendPersonalDirectory("r6", "tweaks"), "photomode");
+                var yamlTargetDir = Path.Join(_projectManager.ActiveProject.GetResourceTweakDirectory(), "photomode");
 
                 _templateFileTools.CreatePhotomodeYaml(new PhotomodeYamlOptions()
                 {
@@ -195,7 +191,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
             if (pathOrFileName.HasFileExtension(".yaml"))
             {
-                return Path.Join(ProjectResourceTools.AppendPersonalDirectory("r6", "tweaks"), pathOrFileName);
+                return Path.Join(_projectManager.ActiveProject.GetResourceTweakDirectory(), pathOrFileName);
             }
 
             return Path.Join(relativePhotoModeFolder, pathOrFileName);
@@ -246,7 +242,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         ["bin", "x64", "plugins", "cyber_engine_tweaks", "mods", "entSpawner", "data"];
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
-    private void GenerateWorldbuilderProp()
+    private void RegisterWorldbuilderFiles()
     {
         if (_projectManager.ActiveProject is not Cp77Project activeProject)
         {
@@ -361,22 +357,37 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
-        if (SettingsManager.ModderName is not string modderName || modderName == string.Empty)
+        if (GetModderName() is not string modderName || string.IsNullOrEmpty(modderName))
         {
-            Interactions.ShowMessageBox(
-                "Please set a name in the preferences (Home -> Settings -> General -> Your Name) before using this feature",
-                "Configure your settings!");
             return;
         }
         var options = new QuestGenerationOptions
         {
             ModName = dialogModel.ModName,
             TargetRoot = Path.Combine(activeProject.ModDirectory, "mod"),
-            ModderName = SettingsManager.ModderName.ToLower(),
+            ModderName = modderName.ToLower(),
         };
 
         _templateFileTools.GenerateMinimalQuest(options);
 
         _loggerService.Success($"Minimal quest files generated for {options.ModName}!");
+    }
+
+    [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
+    private void GeneratePropItem()
+    {
+        if (_projectManager.ActiveProject is not Cp77Project activeProject)
+        {
+            return;
+        }
+
+        if (Interactions.ShowGeneratePropFileModel(activeProject) is not { } dialogModel)
+        {
+            return;
+        }
+
+
+        _templateFileTools.GeneratePropFiles(dialogModel);
+        _loggerService.Success($"{dialogModel.PropName} was created and registered!");
     }
 }

@@ -1375,8 +1375,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         if (string.IsNullOrEmpty(ActiveProject?.Author))
         {
             Interactions.ShowPopupWithWeblink((
-                "Please configure modder name",
-                "Please configure your name in the Wolvenkit settings",
+                "Please set a name in the preferences (Home -> Settings -> General -> Your Name)!",
+                "No modder name set",
                 WikiLinks.SettingsModderName,
                 "Open Wiki",
                 WMessageBoxImage.Warning
@@ -1939,6 +1939,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(ShowPropertiesCommand))]
     [NotifyCanExecuteChangedFor(nameof(NewPhotoModeFilesCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateMinimalQuestFilesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(GeneratePropItemCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateInkatlasCommand))]
     [NotifyCanExecuteChangedFor(nameof(AddAXlItemFilesCommand))]
     private Cp77Project? _activeProject;
@@ -1954,7 +1955,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(ShowPropertiesCommand))]
     [NotifyCanExecuteChangedFor(nameof(NewPhotoModeFilesCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateMinimalQuestFilesCommand))]
-    [NotifyCanExecuteChangedFor(nameof(GenerateWorldbuilderPropCommand))]
+    [NotifyCanExecuteChangedFor(nameof(GeneratePropItemCommand))]
+    [NotifyCanExecuteChangedFor(nameof(RegisterWorldbuilderFilesCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateInkatlasCommand))]
     private EAppStatus? _status;
 

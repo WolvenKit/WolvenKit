@@ -103,6 +103,17 @@ public class ArchiveXlItemService
         _projectResourceTools = projectResourceTools;
     }
 
+    /// gets modder name from project or settings
+    private string GetModderName()
+    {
+        if (!string.IsNullOrEmpty(_projectManager.ActiveProject?.Author))
+        {
+            return _projectManager.ActiveProject.Author;
+        }
+
+        return _settingsManager.ModderName ?? "wolvenkit_user";
+    }
+
     public void CreateEquipmentItem(ArchiveXlClothingItem clothingItemData)
     {
         if (_projectManager.ActiveProject is not { } activeProject)
@@ -151,7 +162,7 @@ public class ArchiveXlItemService
 
         // Items go into moddername/equipment/itemdataslot/projectname
         clothingItemData.FilesRelPath = Path.Join(
-            _settingsManager.ModderName,
+            GetModderName(),
             "equipment",
             clothingItemData.Slot.ToString().Replace("outer_", "").Replace("inner_", ""),
             clothingItemData.ItemName
@@ -160,7 +171,7 @@ public class ArchiveXlItemService
         // Control files go into the folder of any existing csv file in the project, or the default path
         clothingItemData.ControlFilesRelPath =
             activeProject.ModFiles.Where(f => f.HasFileExtension("csv")).Select(Path.GetDirectoryName).FirstOrDefault()
-            ?? Path.Join(_settingsManager.ModderName, activeProject.ModName, clothingItemData.ItemName).ToFilePath();
+            ?? Path.Join(GetModderName(), activeProject.ModName, clothingItemData.ItemName).ToFilePath();
 
         // Now write paths into the item data
         clothingItemData.RootEntityPath = Path.Combine(clothingItemData.ControlFilesRelPath, "_root_entity.ent");
@@ -178,7 +189,7 @@ public class ArchiveXlItemService
         }
         else
         {
-            clothingItemData.YamlFilePath = Path.Join("r6", "tweaks", _settingsManager.ModderName,
+            clothingItemData.YamlFilePath = Path.Join(activeProject.GetResourceTweakDirectory(),
                 $"{activeProject.ModName}.yaml").ToFilePath();
         }
 
@@ -704,7 +715,7 @@ public class ArchiveXlItemService
 
         var yamlAbsPath = Path.Combine(activeProject.ResourcesDirectory, clothingItemData.YamlFilePath);
 
-        var itemName = $"Items.{_settingsManager.ModderName}_{clothingItemData.ItemName}_$(base_color)";
+        var itemName = $"Items.{GetModderName()}_{clothingItemData.ItemName}_$(base_color)";
 
         var instances = new YamlSequenceNode(
             clothingItemData.Variants.Select(color =>
