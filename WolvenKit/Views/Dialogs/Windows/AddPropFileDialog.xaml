@@ -1,0 +1,369 @@
+<Window
+    x:Class="WolvenKit.Views.Dialogs.Windows.AddPropFileDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:validators="clr-namespace:WolvenKit.ViewModels.Validators"
+    xmlns:controls="clr-namespace:WolvenKit.Views.Controls"
+    xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
+    xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
+    Title="Add Prop files"
+    Width="{StaticResource WolvenKitDialogWidth}"
+    MinWidth="{StaticResource WolvenKitDialogWidth}"
+    MinHeight="{StaticResource WolvenKitDialogHeight}"
+    SizeToContent="WidthAndHeight"
+    FocusManager.FocusedElement="{Binding ElementName=ItemTypeControl}"
+    WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/WolvenKit;component/Themes/ValidationRules.xaml" />
+                <hc:ThemeResources />
+                <hc:Theme />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid
+        Height="Auto"
+        Margin="{DynamicResource WolvenKitMarginHeader}"
+        hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
+        <Grid.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <hc:ThemeResources />
+                    <hc:Theme />
+                </ResourceDictionary.MergedDictionaries>
+                <Style TargetType="{x:Type ComboBoxItem}">
+                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
+                    <Setter Property="OverridesDefaultStyle" Value="true" />
+                    <Setter Property="SnapsToDevicePixels" Value="true" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                                <Border
+                                    x:Name="Border"
+                                    Padding="2"
+                                    Background="Transparent"
+                                    CornerRadius="8"
+                                    SnapsToDevicePixels="true">
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup x:Name="SelectionStates">
+                                            <VisualState x:Name="Unselected" />
+                                            <VisualState x:Name="Selected">
+                                                <Storyboard>
+                                                    <ColorAnimationUsingKeyFrames
+                                                        Storyboard.TargetName="Border"
+                                                        Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                                        <EasingColorKeyFrame
+                                                            KeyTime="0"
+                                                            Value="{StaticResource WolvenKitCyanColor}" />
+                                                    </ColorAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
+                                    <ContentPresenter />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+
+                <Style
+                    x:Key="ExplanationStyle"
+                    TargetType="TextBlock">
+                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
+                    <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginBottom}" />
+                </Style>
+
+                <Style TargetType="TextBlock">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                </Style>
+
+                <Style
+                    x:Key="ComboboxStyle"
+                    BasedOn="{StaticResource {x:Type ComboBox}}"
+                    TargetType="ComboBox">
+                    <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
+                    <Setter Property="BorderThickness" Value="1" />
+                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
+                    <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginTinyBottom}" />
+                </Style>
+
+                <Style
+                    x:Key="LabelStyle"
+                    BasedOn="{StaticResource WolvenkitDialogLabelStyleMedium}"
+                    TargetType="{x:Type Label}">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="HorizontalAlignment" Value="Left" />
+                    <Setter Property="HorizontalContentAlignment" Value="Left" />
+                    <Setter Property="Margin" Value="0" />
+                    <Setter Property="Width" Value="{DynamicResource WolvenKitLabelWidth}" />
+                </Style>
+
+            </ResourceDictionary>
+        </Grid.Resources>
+
+        <syncfusion:WizardControl
+            CancelButtonCancelsWindow="True"
+            FinishButtonClosesWindow="True"
+            Help="OnHelpButtonClicked">
+            <syncfusion:WizardPage
+                BackVisibility="Collapsed"
+                CancelVisibility="Visible"
+                FinishVisibility="Visible"
+                HelpVisibility="Visible"
+                NextVisibility="Collapsed"
+                PageType="Exterior">
+                <Grid
+                    Height="Auto"
+                    Visibility="{Binding CreateFactory,
+                                         Converter={StaticResource InvertBooleanConverter}}">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="{StaticResource WolvenKitDialogLabelColumnWidthMedium}" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="{StaticResource WolvenKitButtonGridWidth}" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <!-- 10 -->
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="10" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Destination folder -->
+                    <editors:FilterableDropdownMenu
+                        x:Name="ParentFolderDropdownMenu"
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        Label="Parent folder:"
+                        Options="{Binding ProjectFolders,
+                                          UpdateSourceTrigger=PropertyChanged}"
+                        SelectedOption="{Binding ParentFolder,
+                                                 Mode=TwoWay}"
+                        IsInline="True" />
+                    <TextBox
+                        x:Name="ParentFolderBox"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
+                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                        Text="{Binding ParentFolder,
+                                       Mode=TwoWay}"
+                        KeyboardNavigation.TabIndex="-1" />
+
+                    <TextBlock
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        Style="{StaticResource ExplanationStyle}"
+                        Text="Project folder for your files" />
+
+                    <!-- prop name -->
+                    <Label
+                        Grid.Row="5"
+                        Grid.Column="0"
+                        Style="{StaticResource LabelStyle}"
+                        Content="Name:" />
+
+                    <TextBox
+                        x:Name="PropNameTextBox"
+                        Grid.Row="5"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
+                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                        KeyboardNavigation.TabIndex="-1" />
+
+                    <!-- Appearances -->
+
+                    <TextBlock
+                        Grid.Row="6"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        Style="{StaticResource ExplanationStyle}"
+                        Text="Human-readable name (for AMM registration)" />
+
+                    <Label
+                        Grid.Row="8"
+                        Grid.Column="0"
+                        Style="{StaticResource LabelStyle}"
+                        Content="Appearances:" />
+
+                    <syncfusion:SfTextBoxExt
+                        x:Name="AppearancesTextBox"
+                        Grid.Row="8"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        Padding="{DynamicResource WolvenKitMarginTinyVertical}"
+                        VerticalContentAlignment="Top"
+                        Background="{StaticResource ContentBackgroundAlt2}"
+                        BorderBrush="{StaticResource ForegroundColor_Grey_Dark}"
+                        BorderThickness="1"
+                        FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                        helpers:TextBoxBehavior.TripleClickSelectAll="True"
+                        TextWrapping="Wrap"
+                        KeyboardNavigation.TabIndex="-1"
+                        Watermark="black, white, red"
+                        WatermarkTemplate="{StaticResource PlaceholderTemplate}"
+                        LostFocus="Appearances_FocusLost" />
+
+                    <TextBlock
+                        Grid.Row="9"
+                        Grid.Column="1"
+                        Style="{StaticResource ExplanationStyle}"
+                        Text="Does your prop have more than one appearance? (Comma-separated list)" />
+
+                    <!-- Meshes for components -->
+                    <Label
+                        Grid.Row="11"
+                        Grid.Column="0"
+                        Style="{StaticResource LabelStyle}"
+                        Content="Mesh files" />
+
+                    <!-- Meshes for components -->
+                    <TextBlock
+                        Grid.Row="11"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        Margin="{DynamicResource WolvenKitMarginSmallTop}"
+                        Text="Check the box on the right to connect the apparance(s) defined above."
+                        TextWrapping="Wrap" />
+
+                    <!-- Mesh file 1 -->
+                    <editors:FilterableDropdownMenu
+                        x:Name="Mesh1DropdownMenu"
+                        Grid.Row="13"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Options="{Binding ProjectMeshes}"
+                        SelectedOption="{Binding MeshFile1,
+                                                 Mode=TwoWay}"
+                        IsInline="True" />
+                    <CheckBox
+                        x:Name="MeshFile1UseAppearancesCheckbox"
+                        Grid.Row="13"
+                        Grid.Column="2"
+                        Margin="{DynamicResource WolvenKitMarginLeft}"
+                        KeyboardNavigation.TabIndex="-1" />
+
+                    <TextBox
+                        x:Name="Mesh1TextBox"
+                        Grid.Row="14"
+                        Grid.Column="1"
+                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
+                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                        KeyboardNavigation.TabIndex="-1" />
+
+                    <!-- Mesh file 2 -->
+                    <editors:FilterableDropdownMenu
+                        x:Name="Mesh2DropdownMenu"
+                        Grid.Row="16"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Options="{Binding ProjectMeshes}"
+                        SelectedOption="{Binding MeshFile2,
+                                                 Mode=TwoWay}"
+                        IsInline="True" />
+                    <CheckBox
+                        x:Name="MeshFile2UseAppearancesCheckbox"
+                        Grid.Row="16"
+                        Grid.Column="2"
+                        Margin="{DynamicResource WolvenKitMarginLeft}"
+                        KeyboardNavigation.TabIndex="-1" />
+
+                    <TextBox
+                        x:Name="Mesh2TextBox"
+                        Grid.Row="17"
+                        Grid.Column="1"
+                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
+                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                        KeyboardNavigation.TabIndex="-1" />
+
+                    <!-- Mesh file 3 -->
+                    <editors:FilterableDropdownMenu
+                        x:Name="Mesh3DropdownMenu"
+                        Grid.Row="19"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Options="{Binding ProjectMeshes}"
+                        SelectedOption="{Binding MeshFile3,
+                                                 Mode=TwoWay}"
+                        IsInline="True" />
+
+                    <CheckBox
+                        x:Name="MeshFile3UseAppearancesCheckbox"
+                        Grid.Row="19"
+                        Grid.Column="2"
+                        Margin="{DynamicResource WolvenKitMarginLeft}"
+                        KeyboardNavigation.TabIndex="-1" />
+
+                    <TextBox
+                        x:Name="Mesh3TextBox"
+                        Grid.Row="20"
+                        Grid.Column="1"
+                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
+                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                        KeyboardNavigation.TabIndex="-1" />
+
+                    <!-- Mesh file 4 -->
+                    <editors:FilterableDropdownMenu
+                        x:Name="Mesh4DropdownMenu"
+                        Grid.Row="22"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Options="{Binding ProjectMeshes}"
+                        SelectedOption="{Binding MeshFile4,
+                                                 Mode=TwoWay}"
+                        IsInline="True" />
+
+                    <CheckBox
+                        x:Name="MeshFile4UseAppearancesCheckbox"
+                        Grid.Row="22"
+                        Grid.Column="2"
+                        Margin="{DynamicResource WolvenKitMarginLeft}"
+                        KeyboardNavigation.TabIndex="-1" />
+
+                    <TextBox
+                        x:Name="Mesh4TextBox"
+                        Grid.Row="23"
+                        Grid.Column="1"
+                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
+                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                        KeyboardNavigation.TabIndex="-1" />
+
+                </Grid>
+            </syncfusion:WizardPage>
+        </syncfusion:WizardControl>
+    </Grid>
+</Window>

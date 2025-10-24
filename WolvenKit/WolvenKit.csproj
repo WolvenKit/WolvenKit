@@ -130,6 +130,11 @@
     <Compile Remove="GridVirtualizingCellsControl.xaml.cs" />
     <Page Remove="GridVirtualizingCellsControl.xaml" />
       <Compile Remove="Converters\BindingProxy.cs" />
+      <Page Update="Views\Dialogs\Windows\AddPropFileDialog.xaml">
+          <Generator>MSBuild:Compile</Generator>
+          <XamlRuntime>Wpf</XamlRuntime>
+          <SubType>Designer</SubType>
+      </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Views\Templates\RedFixedPointEditor.cs" />

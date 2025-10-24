@@ -114,9 +114,26 @@
                         </MenuItem.Icon>
                     </MenuItem>
 
+                    <Separator />
+
+                    <!-- Generate WB/AMM prop -->
+                    <MenuItem
+                        x:Name="MenuItemGeneratePropFile"
+                        Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                        Header="Create a prop"
+                        ToolTip="Generates a prop for WorldBuilder and AMM">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="Material"
+                                Kind="ToyBrickPlus"
+                                Size="{DynamicResource WolvenKitIconTiny}"
+                                Foreground="{StaticResource WolvenKitYellow}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
                     <!-- WorldBuilder prop file -->
                     <MenuItem
-                        x:Name="MenuItemGenerateWorldBuilderPropFile"
+                        x:Name="MenuItemRegisterWorldbuilderFiles"
                         Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
                         Header="Create WorldBuilder asset file"
                         ToolTip="Generates prop file for WorldBuilder">

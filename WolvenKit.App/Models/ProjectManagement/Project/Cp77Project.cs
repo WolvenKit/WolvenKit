@@ -271,38 +271,70 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
     }
 
 
-    /// <summary>
-    /// Path to /source/resources/r6/tweaks
-    /// </summary>
-    public string ResourceTweakDirectory
+    /// <param name="useModderName">Default: false, will use name of mod author as subfolder</param>
+    /// <returns><code>/source/resources/r6/scripts/$MOD_NAME</code> or <code>/source/resources/r6/scripts/$AUTHOR_NAME</code></returns>
+    public string GetResourceScriptsDirectory(bool useModderName = false)
     {
-        get
+        var dir = Path.Combine(ResourcesDirectory, "r6", "scripts");
+        if (useModderName && !string.IsNullOrEmpty(Author))
         {
-            var dir = Path.Combine(ResourcesDirectory, "r6", "tweaks", Name);
-            if (!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
-
-            return dir;
+            dir = Path.Combine(dir, Author.ToFileName());
         }
+        else
+        {
+            dir = Path.Combine(dir, ModName.ToFileName());
+        }
+
+        if (!Directory.Exists(dir))
+        {
+            Directory.CreateDirectory(dir);
+        }
+
+        return dir;
     }
 
-    /// <summary>
-    /// Path to /source/resources/r6/scripts
-    /// </summary>
-    public string ResourceScriptsDirectory
+    /// <param name="useModderName">Default: false, will use name of mod author as subfolder</param>
+    /// <returns><code>/source/resources/bin/x64/plugins/cyber_engine_tweaks/mods/$MOD_NAME</code> or <code>/source/resources/bin/x64/plugins/cyber_engine_tweaks/mods/$AUTHOR_NAME</code></returns>
+    public string GetResourceCETDirectory(bool useModderName = false)
     {
-        get
+        var dir = Path.Combine(ResourcesDirectory, "bin", "x64", "plugins", "cyber_engine_tweaks", "mods");
+        if (useModderName && !string.IsNullOrEmpty(Author))
         {
-            var dir = Path.Combine(ResourcesDirectory, "r6", "scripts", Name);
-            if (!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
-
-            return dir;
+            dir = Path.Combine(dir, Author.ToFileName());
         }
+        else
+        {
+            dir = Path.Combine(dir, ModName.ToFileName());
+        }
+
+        if (!Directory.Exists(dir))
+        {
+            Directory.CreateDirectory(dir);
+        }
+
+        return dir;
+    }
+
+    /// <param name="useModderName">Default: false, will use name of mod author as subfolder</param>
+    /// <returns><code>/source/resources/r6/tweaks/$MOD_NAME</code> or <code>/source/resources/r6/tweaks/$AUTHOR_NAME</code></returns>
+    public string GetResourceTweakDirectory(bool useModderName = false)
+    {
+        var dir = Path.Combine(ResourcesDirectory, s_tweakSubfolder);
+        if (useModderName && !string.IsNullOrEmpty(Author))
+        {
+            dir = Path.Combine(dir, Author.ToFileName());
+        }
+        else
+        {
+            dir = Path.Combine(dir, ModName.ToFileName());
+        }
+
+        if (!Directory.Exists(dir))
+        {
+            Directory.CreateDirectory(dir);
+        }
+
+        return dir;
     }
 
     /// <summary>
@@ -454,7 +486,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
     {
         get
         {
-            var dir = Path.Combine(PackedRootDirectory, "r6", "tweaks");
+            var dir = Path.Combine(PackedRootDirectory, s_tweakSubfolder);
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);
@@ -566,25 +598,25 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
 
     public string GetAbsolutePath(string fileName, string? rootRelativeFolder)
     {
-        rootRelativeFolder ??= "";
-        switch (Path.GetExtension(fileName))
+        if (!fileName.HasFileExtension(".yaml"))
         {
-            case ".yaml" when string.IsNullOrEmpty(rootRelativeFolder):
-                rootRelativeFolder = s_tweakSubfolder;
-                break;
-            case ".yaml" when !rootRelativeFolder.StartsWith(s_tweakSubfolder):
-                rootRelativeFolder = Path.Join(s_tweakSubfolder, rootRelativeFolder);
-                break;
-            default:
-                break;
+            return Path.GetExtension(fileName) switch
+            {
+                ".xl" => Path.Join(ResourcesDirectory, fileName),
+                _ => Path.Join(ModDirectory, rootRelativeFolder ?? "", fileName)
+            };
         }
 
-        return Path.GetExtension(fileName) switch
+        if (string.IsNullOrEmpty(rootRelativeFolder))
         {
-            ".xl" => Path.Join(ResourcesDirectory, fileName),
-            ".yaml" => Path.Join(ResourcesDirectory, rootRelativeFolder, fileName),
-            _ => Path.Join(ModDirectory, rootRelativeFolder, fileName)
-        };
+            rootRelativeFolder = s_tweakSubfolder;
+        }
+        else if (!rootRelativeFolder.StartsWith(s_tweakSubfolder))
+        {
+            rootRelativeFolder = Path.Join(s_tweakSubfolder, rootRelativeFolder);
+        }
+
+        return Path.Join(ResourcesDirectory, rootRelativeFolder, fileName);
     }
 
     private const string s_relativeModDir = "wkitmoddir";

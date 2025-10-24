@@ -17,6 +17,9 @@ public static class WikiLinks
     public const string NPVs =
         "https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/npcs/npv-v-as-custom-npc";
 
+    public const string Props =
+        "https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/everything-else/custom-props";
+
     public const string AMM_NPCs =
         "https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/npcs/amm-custom-npcs";
 
@@ -50,7 +53,7 @@ public static class WikiLinks
 
     public const string JsonFiles =
         "https://wiki.redmodding.org/cyberpunk-2077-modding/for-mod-creators-theory/files-and-what-they-do/file-formats/translation-files-.json";
-  
+
     public const string SettingsModderName = "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/settings#your-name";
 }
 
