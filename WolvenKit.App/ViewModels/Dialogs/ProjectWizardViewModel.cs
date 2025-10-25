@@ -11,7 +11,6 @@ using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
 using WolvenKit.Interfaces.Extensions;
-using YamlDotNet.Core.Tokens;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 
@@ -39,7 +38,7 @@ public partial class ProjectWizardViewModel : DialogViewModel, INotifyDataErrorI
 
         Title = "Project Wizard";
 
-        _projectType = new ObservableCollection<string> { "Cyberpunk 2077" };
+        _projectType = ["Cyberpunk 2077"];
 
         string? lastProjectPath;
         if (_settingsManager.LastUsedProjectPath is not null &&
@@ -83,7 +82,7 @@ public partial class ProjectWizardViewModel : DialogViewModel, INotifyDataErrorI
 
     [ObservableProperty] private string? _version;
 
-    [ObservableProperty] private ObservableCollection<string> _projectType = new();
+    [ObservableProperty] private ObservableCollection<string> _projectType;
 
     [ObservableProperty] private string? _whyNotCreate;
 
@@ -124,10 +123,7 @@ public partial class ProjectWizardViewModel : DialogViewModel, INotifyDataErrorI
     }
 
     [RelayCommand]
-    private void Cancel()
-    {
-        FileHandler?.Invoke(null);
-    }
+    private void Cancel() => FileHandler?.Invoke(null);
 
     partial void OnProjectNameChanged(string? value) => ValidateProjectName();
 
@@ -139,7 +135,7 @@ public partial class ProjectWizardViewModel : DialogViewModel, INotifyDataErrorI
         {
             AddError(nameof(ProjectName), "Please enter a Project name!");
         }
-        else if (!string.IsNullOrEmpty(ProjectPath) && Directory.Exists(System.IO.Path.Combine(ProjectPath, ProjectName)))
+        else if (!string.IsNullOrEmpty(ProjectPath) && Directory.Exists(Path.Combine(ProjectPath, ProjectName)))
         {
             AddError(nameof(ProjectName), "A project with this name already exists!");
         }
@@ -184,6 +180,19 @@ public partial class ProjectWizardViewModel : DialogViewModel, INotifyDataErrorI
         ValidateProjectName();
     }
 
+    public void ReadDefaultValuesFromSettings()
+    {
+        if (string.IsNullOrEmpty(Author))
+        {
+            Author = _settingsManager.ModderName;
+        }
+
+        if (string.IsNullOrEmpty(Email))
+        {
+            Email = _settingsManager.ModderEmail;
+        }
+    }
+
     #region INotifyDataErrorInfo
 
     private void AddError(string propertyName, string error)
@@ -203,6 +212,7 @@ public partial class ProjectWizardViewModel : DialogViewModel, INotifyDataErrorI
 
     private void ClearError(string propertyName)
     {
+        // ReSharper disable once CanSimplifyDictionaryRemovingWithSingleCall
         if (!_errorsByPropertyName.ContainsKey(propertyName))
         {
             return;
@@ -227,4 +237,16 @@ public partial class ProjectWizardViewModel : DialogViewModel, INotifyDataErrorI
     public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
 
     #endregion INotifyDataErrorInfo
+
+    public void SaveAuthorToSettingsIfNeeded()
+    {
+        if (!string.IsNullOrEmpty(_settingsManager.ModderName) ||
+            string.IsNullOrEmpty(Author))
+        {
+            return;
+        }
+
+        _settingsManager.ModderName = Author;
+        _settingsManager.Save();
+    }
 }

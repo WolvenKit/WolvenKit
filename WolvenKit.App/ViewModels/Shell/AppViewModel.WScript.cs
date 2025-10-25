@@ -213,7 +213,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
     }
 
 
-    private readonly string EntspawnerExportRelPath =
+    private readonly string _entspawnerExportRelPath =
         Path.Join("bin", "x64", "plugins", "cyber_engine_tweaks", "mods", "entSpawner", "export");
 
     private string? GetEntspawnerRelativePath()
@@ -223,7 +223,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return null;
         }
 
-        return Path.Join(gameDir, EntspawnerExportRelPath);
+        return Path.Join(gameDir, _entspawnerExportRelPath);
     }
 
     private bool CanImportEntitySpawner() =>

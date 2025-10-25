@@ -70,14 +70,17 @@ public partial class MenuBarViewModel : ObservableObject
 
     public Dictionary<string, List<string>> GenerateItemCodesFromYaml()
     {
+        if (MainViewModel.ActiveProject is not { } project)
+        {
+            return [];
+        }
         var files = MainViewModel.ProjectResourceTools.GetProjectFiles(".yaml", ProjectFolder.Resources);
 
         Dictionary<string, List<string>> allItems = [];
 
         foreach (var file in files)
         {
-            allItems.AddRange(
-                YamlHelper.GetItemRecordsFromYaml(MainViewModel.ProjectResourceTools.GetAbsolutePath(file)));
+            allItems.AddRange(YamlHelper.GetItemRecordsFromYaml(project.GetAbsolutePath(file)));
         }
 
         return allItems;
