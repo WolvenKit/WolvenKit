@@ -125,7 +125,7 @@ public partial class ProjectWizardViewModel : DialogViewModel, INotifyDataErrorI
     [RelayCommand]
     private void Cancel() => FileHandler?.Invoke(null);
 
-    partial void OnProjectNameChanged(string? _value) => ValidateProjectName();
+    partial void OnProjectNameChanged(string? value) => ValidateProjectName();
 
     public void ValidateProjectName()
     {
