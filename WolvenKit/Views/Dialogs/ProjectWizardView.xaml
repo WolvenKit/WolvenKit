@@ -122,7 +122,8 @@
             Grid.ColumnSpan="2"
             Margin="{DynamicResource WolvenKitMarginBottom}"
             hc:InfoElement.Title="Author Name"
-            hc:InfoElement.TitlePlacement="Top" />
+            hc:InfoElement.TitlePlacement="Top"
+            LostFocus="Author_OnFocusLost" />
 
         <hc:TextBox
             x:Name="EmailTextBox"
