@@ -1363,31 +1363,29 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     /// <summary>
     /// Many users fill out their name when creating a new project, but have no idea the settings even exist.
-    /// This method will take care of that, displaying a notification if it is not set.
+    /// While this is written back to settings from the project wizard, we still need to check (string could be empty).
     /// </summary>
     private string? GetModderName()
     {
+        if (!string.IsNullOrEmpty(ActiveProject?.Author))
+        {
+            return ActiveProject.Author;
+        }
+
         if (!string.IsNullOrEmpty(SettingsManager.ModderName))
         {
             return SettingsManager.ModderName;
         }
 
-        if (string.IsNullOrEmpty(ActiveProject?.Author))
-        {
-            Interactions.ShowPopupWithWeblink((
-                "Please set a name in the preferences (Home -> Settings -> General -> Your Name)!",
-                "No modder name set",
-                WikiLinks.SettingsModderName,
-                "Open Wiki",
-                WMessageBoxImage.Warning
-            ));
-            return null;
-        }
+        Interactions.ShowPopupWithWeblink((
+            "Please set a name in the preferences (Home -> Settings -> General -> Your Name)!",
+            "No modder name set",
+            WikiLinks.SettingsModderName,
+            "Open Wiki",
+            WMessageBoxImage.Warning
+        ));
 
-        SettingsManager.ModderName = ActiveProject.Author;
-        SettingsManager.Save();
-
-        return SettingsManager.ModderName;
+        return null;
     }
 
 
