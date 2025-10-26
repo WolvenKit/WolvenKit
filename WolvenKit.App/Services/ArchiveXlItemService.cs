@@ -82,6 +82,22 @@ public class ArchiveXlClothingItem
     public static readonly YamlSequenceNode StatModifierGroups = new(
         new YamlScalarNode("!append-once Items.IconicQualityRandomization")
     );
+
+    public string[] GetAllVariants()
+    {
+        if (SecondaryVariants.Count == 0)
+        {
+            return [.. Variants.Select(variant => ItemName.Replace("$(base_color)", variant))];
+        }
+
+        return
+        [
+            .. Variants.SelectMany(variant =>
+                SecondaryVariants.Select(secondary =>
+                    ItemName.Replace("$(base_color)", variant).Replace("$(secondary)", secondary))
+            )
+        ];
+    }
 }
 
 public class ArchiveXlItemService
@@ -453,7 +469,7 @@ public class ArchiveXlItemService
 
         InkatlasImageGenerator.GenerateDummyIcons(tempFolder,
             iconName.Replace("$(base_color)", "").Replace("_$(secondary)", ""),
-            clothingItemData.Variants.ToArray());
+            clothingItemData.GetAllVariants());
 
         InkatlasImageGenerator.GenerateAtlas(
             tempFolder,
