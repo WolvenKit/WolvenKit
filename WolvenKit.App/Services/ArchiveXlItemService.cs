@@ -87,15 +87,13 @@ public class ArchiveXlClothingItem
     {
         if (SecondaryVariants.Count == 0)
         {
-            return [.. Variants.Select(variant => ItemName.Replace("$(base_color)", variant))];
+            return [.. Variants];
         }
 
         return
         [
             .. Variants.SelectMany(variant =>
-                SecondaryVariants.Select(secondary =>
-                    ItemName.Replace("$(base_color)", variant).Replace("$(secondary)", secondary))
-            )
+                SecondaryVariants.Select(secondary => $"{variant}_{secondary}"))
         ];
     }
 }
