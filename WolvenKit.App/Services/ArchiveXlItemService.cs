@@ -438,12 +438,6 @@ public class ArchiveXlItemService
     /// </summary>
     private void CreatePlaceholderIcons(ArchiveXlClothingItem clothingItemData, Cp77Project activeProject)
     {
-        var iconName = $"{clothingItemData.ItemName}_$(base_color)";
-        if (clothingItemData.SecondaryVariants.Count > 0)
-        {
-            iconName = $"{iconName}_$(secondary)";
-        }
-
         var absoluteInkatlasPath = Path.Combine(activeProject.ModDirectory, clothingItemData.InkatlasPath);
 
         if (File.Exists(absoluteInkatlasPath) && _cr2WTools.ReadCr2WNoException(absoluteInkatlasPath) is not null)
@@ -454,8 +448,7 @@ public class ArchiveXlItemService
 
         var tempFolder = Path.Combine(Path.GetTempPath(), $"iconImages_{clothingItemData.ItemName}");
 
-        InkatlasImageGenerator.GenerateDummyIcons(tempFolder,
-            iconName.Replace("$(base_color)", "").Replace("_$(secondary)", ""),
+        InkatlasImageGenerator.GenerateDummyIcons(tempFolder, $"{clothingItemData.ItemName}_",
             clothingItemData.GetAllVariants());
 
         InkatlasImageGenerator.GenerateAtlas(
