@@ -241,11 +241,6 @@ public static class InkatlasImageGenerator
             imgData.Image.Dispose();
         }
 
-        if (parts.Count == 1)
-        {
-            parts[0].Name = "icon";
-        }
-
         return parts;
     }
 
