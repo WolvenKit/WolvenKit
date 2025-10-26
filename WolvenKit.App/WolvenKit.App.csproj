@@ -23,6 +23,10 @@
     <None Remove="ViewModels\Shared\**" />
     <Page Remove="ViewModels\Others\**" />
     <Page Remove="ViewModels\Shared\**" />
+    <Compile Remove="Services\ArchiveXlItemService_REMOTE_1917.cs" />
+    <Compile Remove="Services\ArchiveXlItemService_LOCAL_1917.cs" />
+    <Compile Remove="Services\ArchiveXlItemService_BASE_1917.cs" />
+    <Compile Remove="Services\ArchiveXlItemService_BACKUP_1917.cs" />
   </ItemGroup>
 
   <!-- Suppress compiler warnings for generated files -->

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using WolvenKit.App.Helpers;
@@ -10,6 +11,7 @@ using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 using YamlDotNet.RepresentationModel;
+using ArchiveXlHelper = WolvenKit.Modkit.Resources.ArchiveXlHelper;
 
 namespace WolvenKit.App.Services;
 
@@ -63,7 +65,12 @@ public class ArchiveXlClothingItem
     /// </summary>
     public List<string> Variants { get; init; } = [];
 
-    public bool IsAddMeshMaterials { get; set; }
+    /// <summary>
+    /// Secondary variants for dynamic appearances, e.g. [samurai, witcher, galaxy]
+    /// </summary>
+    public List<string> SecondaryVariants { get; init; } = [];
+
+    public bool IsAddMeshMaterials { get; init; }
 
 
     public static readonly YamlSequenceNode StatModifiers = new(
@@ -173,10 +180,24 @@ public class ArchiveXlItemService
             activeProject.ModFiles.Where(f => f.HasFileExtension("csv")).Select(Path.GetDirectoryName).FirstOrDefault()
             ?? Path.Join(GetModderName(), activeProject.ModName, clothingItemData.ItemName).ToFilePath();
 
+
         // Now write paths into the item data
-        clothingItemData.RootEntityPath = Path.Combine(clothingItemData.ControlFilesRelPath, "_root_entity.ent");
-        clothingItemData.AppFilePath = Path.Combine(clothingItemData.ControlFilesRelPath, "_application.app");
-        clothingItemData.MeshEntityPath = Path.Combine(clothingItemData.ControlFilesRelPath, "_mesh_entity.ent");
+        clothingItemData.RootEntityPath = Path.Combine(clothingItemData.ControlFilesRelPath,
+            $"_root_entity.ent".ToFileName());
+        if (activeProject.ModFiles.FirstOrDefault(f => f.EndsWith("_root_entity.ent")) is string existingRoot)
+        {
+            clothingItemData.RootEntityPath = existingRoot;
+        }
+
+        clothingItemData.AppFilePath = Path.Combine(clothingItemData.ControlFilesRelPath,
+            $"_application.app".ToFileName());
+        if (activeProject.ModFiles.FirstOrDefault(f => f.EndsWith("_application.app")) is string existingApp)
+        {
+            clothingItemData.AppFilePath = existingApp;
+        }
+
+        clothingItemData.MeshEntityPath = Path.Combine(clothingItemData.ControlFilesRelPath,
+            $"_{clothingItemData.ItemName}_mesh_entity.ent".ToFileName());
 
         clothingItemData.InkatlasPath = Path.Combine(clothingItemData.ControlFilesRelPath,
             $"{clothingItemData.ItemName}_icons.inkatlas");
@@ -193,7 +214,7 @@ public class ArchiveXlItemService
                 $"{activeProject.ModName}.yaml").ToFilePath();
         }
 
-        if (activeProject.ModFiles.Where(p => p.HasFileExtension("json")).ToList() is { Count: 1 } list)
+        if (activeProject.ModFiles.Where(p => p.HasFileExtension(".json")).ToList() is { Count: 1 } list)
         {
             clothingItemData.TranslationFileRelPath = list.First();
         }
@@ -282,7 +303,13 @@ public class ArchiveXlItemService
 
         // check if factory file exists in project folder, create if not
         var cr2W = _cr2WTools.ReadCr2WNoException(absoluteFactoryPath) ??
-                   new CR2WFile() { RootChunk = new C2dArray() { Headers = ["name", "path", "preload"] } };
+                   new CR2WFile()
+                   {
+                       RootChunk = new C2dArray()
+                       {
+                           Headers = ["name", "path", "preload"], CompiledHeaders = ["name", "path", "preload"]
+                       }
+                   };
 
         var itemName = $"{clothingItemData.ItemName}_factory_name";
 
@@ -343,6 +370,10 @@ public class ArchiveXlItemService
         }
 
         var displayName = $"{clothingItemData.ItemName}_i18n_$(base_color)";
+        if (clothingItemData.SecondaryVariants.Count > 0)
+        {
+            displayName = $"{displayName}_$(secondary)";
+        }
         var description = $"{clothingItemData.ItemName}_i18n_desc";
 
         var entryList = locEntries.Entries.ToList();
@@ -359,14 +390,34 @@ public class ArchiveXlItemService
         foreach (var variant in clothingItemData.Variants)
         {
             var translationString = displayName.Replace("$(base_color)", variant);
-            if (entryList.All(e => e.SecondaryKey != translationString))
+            if (clothingItemData.SecondaryVariants.Count > 0)
             {
-                entryList.Add(new localizationPersistenceOnScreenEntry()
+                foreach (var secondary in clothingItemData.SecondaryVariants)
                 {
-                    SecondaryKey = translationString,
-                    FemaleVariant = $"{clothingItemData.ItemName} ({variant})".ToHumanFriendlyString(),
-                });
+                    var translationString2 = translationString.Replace("$(secondary)", secondary);
+                    if (entryList.All(e => e.SecondaryKey != translationString2))
+                    {
+                        entryList.Add(new localizationPersistenceOnScreenEntry()
+                        {
+                            SecondaryKey = translationString2,
+                            FemaleVariant = $"{clothingItemData.ItemName} ({variant} {secondary})"
+                                .ToHumanFriendlyString(),
+                        });
+                    }
+                }
             }
+            else
+            {
+                if (entryList.All(e => e.SecondaryKey != translationString))
+                {
+                    entryList.Add(new localizationPersistenceOnScreenEntry()
+                    {
+                        SecondaryKey = translationString,
+                        FemaleVariant = $"{clothingItemData.ItemName} ({variant})".ToHumanFriendlyString(),
+                    });
+                }
+            }
+
         }
 
         locEntries.Entries.Clear();
@@ -385,6 +436,10 @@ public class ArchiveXlItemService
     private void CreatePlaceholderIcons(ArchiveXlClothingItem clothingItemData, Cp77Project activeProject)
     {
         var iconName = $"{clothingItemData.ItemName}_$(base_color)";
+        if (clothingItemData.SecondaryVariants.Count > 0)
+        {
+            iconName = $"{iconName}_$(secondary)";
+        }
 
         var absoluteInkatlasPath = Path.Combine(activeProject.ModDirectory, clothingItemData.InkatlasPath);
 
@@ -395,7 +450,9 @@ public class ArchiveXlItemService
         }
 
         var tempFolder = Path.Combine(Path.GetTempPath(), $"iconImages_{clothingItemData.ItemName}");
-        InkatlasImageGenerator.GenerateDummyIcons(tempFolder, iconName.Replace("$(base_color)", ""),
+
+        InkatlasImageGenerator.GenerateDummyIcons(tempFolder,
+            iconName.Replace("$(base_color)", "").Replace("_$(secondary)", ""),
             clothingItemData.Variants.ToArray());
 
         InkatlasImageGenerator.GenerateAtlas(
@@ -446,6 +503,8 @@ public class ArchiveXlItemService
         var relativeMeshFolder = Path.Combine(clothingItemData.FilesRelPath, "meshes");
         Directory.CreateDirectory(Path.Combine(activeProject.ModDirectory, relativeMeshFolder));
 
+        var useSecondary = clothingItemData.SecondaryVariants.Count > 0;
+
         foreach (var entComponent in entTemplate.Components.OfType<IRedMeshComponent>())
         {
             var filePath = entComponent.Mesh.DepotPath.GetResolvedText();
@@ -461,20 +520,32 @@ public class ArchiveXlItemService
                 continue;
             }
 
+            var isSecondaryComponent = IsSecondaryComponent(entComponent.Name!);
             var pathInMod = Path.Combine(relativeMeshFolder, Path.GetFileName(filePath));
 
-            AddMeshFilesToProject(filePath, pathInMod);
+            AddMeshFilesToProject(filePath, pathInMod, isSecondaryComponent);
 
-            var dynamicPath = $"{pathInMod.Replace("pwa", "p{gender}a").Replace("_wa_", "_{gender}a_")}";
-            if (dynamicPath.Contains("{gender}"))
+
+            var dynamicPath = WolvenKit.Modkit.Resources.ArchiveXlHelper.MakeDynamic(pathInMod);
+            var hasSubstitution = ArchiveXlHelper.HasSubstitution(dynamicPath);
+
+            entComponent.Mesh =
+                new CResourceAsyncReference<CMesh>(dynamicPath,
+                    hasSubstitution ? InternalEnums.EImportFlags.Soft : InternalEnums.EImportFlags.Default);
+            entComponent.MeshAppearance = "*{variant}";
+
+            if (!useSecondary)
             {
-                entComponent.Mesh =
-                    new CResourceAsyncReference<CMesh>($"*{dynamicPath}", InternalEnums.EImportFlags.Soft);
-                entComponent.MeshAppearance = "*{variant}";
+                continue;
+            }
+
+            if (isSecondaryComponent)
+            {
+                entComponent.MeshAppearance = "*{variant.2}";
             }
             else
             {
-                entComponent.Mesh = new CResourceAsyncReference<CMesh>(dynamicPath, InternalEnums.EImportFlags.Default);
+                entComponent.MeshAppearance = "*{variant.1}";
             }
         }
 
@@ -493,11 +564,15 @@ public class ArchiveXlItemService
 
         return;
 
+        bool IsSecondaryComponent(string componentName) =>
+            componentName.Contains("_dec", StringComparison.OrdinalIgnoreCase) ||
+            componentName.Contains("_cuff", StringComparison.OrdinalIgnoreCase) ||
+            componentName.Contains("_patch", StringComparison.OrdinalIgnoreCase);
         /*
          * Adds mesh files from .ent components to project. Will try to find pma/_ma mesh (entity is pwa/_wa).
          * Will not overwrite existing files.
          */
-        void AddMeshFilesToProject(string filePath, string pathInMod)
+        void AddMeshFilesToProject(string filePath, string pathInMod, bool isSecondaryComponent = false)
         {
             var textureDirPath = Path.Combine(clothingItemData.FilesRelPath, "textures");
             if (_archiveManager.GetCR2WFile(filePath) is { RootChunk: CMesh mesh } componentMesh)
@@ -509,7 +584,10 @@ public class ArchiveXlItemService
                     return;
                 }
 
-                AdjustMeshAppearances(mesh);
+                if (pathInMod.Contains("_pwa"))
+                {
+                    AdjustMeshAppearances(mesh, isSecondaryComponent);
+                }
 
                 if (clothingItemData.IsAddMeshMaterials)
                 {
@@ -523,33 +601,41 @@ public class ArchiveXlItemService
             var otherGenderSourcePath = filePath.Replace("pwa", "pma").Replace("_wa_", "_ma_");
             var otherGenderDestPath = pathInMod.Replace("pwa", "pma").Replace("_wa_", "_ma_");
 
-            if (_archiveManager.GetCR2WFile(otherGenderSourcePath) is { RootChunk: CMesh mesh2 } otherGenderMesh)
+            if (_archiveManager.GetCR2WFile(otherGenderSourcePath) is not { RootChunk: CMesh mesh2 } otherGenderMesh)
             {
-                var destPath = Path.Combine(activeProject.ModDirectory, otherGenderDestPath);
-                if (File.Exists(destPath))
-                {
-                    _logger.Info($"Mesh {otherGenderDestPath} exists, not overwriting.");
-                    return;
-                }
-
-                AdjustMeshAppearances(mesh2);
-
-                if (clothingItemData.IsAddMeshMaterials)
-                {
-                    _projectResourceTools.AddDependenciesToProject(otherGenderMesh, textureDirPath).GetAwaiter()
-                        .GetResult();
-                }
-
-                _cr2WTools.WriteCr2W(otherGenderMesh, destPath);
+                return;
             }
+
+            var destPath2 = Path.Combine(activeProject.ModDirectory, otherGenderDestPath);
+            if (File.Exists(destPath2))
+            {
+                _logger.Info($"Mesh {otherGenderDestPath} exists, not overwriting.");
+                return;
+            }
+
+
+            if (pathInMod.Contains("_pma"))
+            {
+                AdjustMeshAppearances(mesh2, isSecondaryComponent);
+            }
+
+
+            if (clothingItemData.IsAddMeshMaterials)
+            {
+                _projectResourceTools.AddDependenciesToProject(otherGenderMesh, textureDirPath).GetAwaiter()
+                    .GetResult();
+            }
+
+            _cr2WTools.WriteCr2W(otherGenderMesh, destPath2);
         }
 
         /*
          * Mesh appearances will be renamed to match variants from generator, and created if they don't exist.
          */
-        void AdjustMeshAppearances(CMesh mesh)
+        void AdjustMeshAppearances(CMesh mesh, bool isSecondaryComponent = false)
         {
-            for (var idx = 0; idx < clothingItemData.Variants.Count; idx++)
+            var entries = isSecondaryComponent ? clothingItemData.SecondaryVariants : clothingItemData.Variants;
+            for (var idx = 0; idx < entries.Count; idx++)
             {
                 CHandle<meshMeshAppearance> appHandle;
                 if (idx < mesh.Appearances.Count)
@@ -562,7 +648,7 @@ public class ArchiveXlItemService
                 }
 
                 appHandle.Chunk ??= new meshMeshAppearance();
-                appHandle.Chunk.Name = clothingItemData.Variants[idx];
+                appHandle.Chunk.Name = entries[idx];
             }
         }
     }
@@ -683,7 +769,7 @@ public class ArchiveXlItemService
             new appearanceAppearancePart()
             {
                 Resource = new CResourceAsyncReference<entEntityTemplate>(
-                    (ResourcePath)clothingItemData.AppFilePath)
+                    (ResourcePath)clothingItemData.MeshEntityPath, InternalEnums.EImportFlags.Soft),
             }
         ]);
         appAppearance.VisualTags = new redTagList() { Tags = tags };
@@ -716,7 +802,7 @@ public class ArchiveXlItemService
         var yamlAbsPath = Path.Combine(activeProject.ResourcesDirectory, clothingItemData.YamlFilePath);
 
         var itemName = $"Items.{GetModderName()}_{clothingItemData.ItemName}_$(base_color)";
-
+        var atlasPathName = $"{clothingItemData.ItemName}_$(base_color)";
         var instances = new YamlSequenceNode(
             clothingItemData.Variants.Select(color =>
             {
@@ -724,13 +810,30 @@ public class ArchiveXlItemService
                 node.Style = YamlDotNet.Core.Events.MappingStyle.Flow;
 
                 return node;
-            })
-        );
+            }));
+
+        var useSecondary = clothingItemData.SecondaryVariants.Count > 0;
+        // Consider secondary variants
+        if (useSecondary)
+        {
+            itemName = $"{itemName}_$(secondary)";
+            atlasPathName = $"{atlasPathName}_$(secondary)";
+            instances = new YamlSequenceNode(
+                clothingItemData.Variants.SelectMany(color =>
+                {
+                    return clothingItemData.SecondaryVariants.Select(variant =>
+                    {
+                        var node = new YamlMappingNode { { "base_color", color }, { "secondary", variant } };
+                        node.Style = YamlDotNet.Core.Events.MappingStyle.Flow;
+
+                        return node;
+                    });
+                }));
+        }
 
         var icon = new YamlMappingNode
         {
-            { "atlasResourcePath", clothingItemData.InkatlasPath },
-            { "atlasPartName", $"{clothingItemData.ItemName}_$(base_color)" }
+            { "atlasResourcePath", clothingItemData.InkatlasPath }, { "atlasPartName", $"{atlasPathName}" }
         };
 
         var yamlData = new YamlMappingNode();
@@ -742,19 +845,20 @@ public class ArchiveXlItemService
             {
                 _logger.Warning(
                     $"Yaml file {clothingItemData.YamlFilePath} already contains a definition for {itemName}. Existing properties will not be overwritten.");
-                yaml = yamlFromFile;
                 yamlData = nodeFromFile;
             }
         }
 
         yamlData.Children.TryAdd("$base", itemBase);
         yamlData.Children.TryAdd("$instances", instances);
-        yamlData.Children.TryAdd("appearanceName", $"{clothingItemData.ItemName}_!$(base_color)");
+        yamlData.Children.TryAdd("appearanceName",
+            $"{clothingItemData.ItemName}_!$(base_color){(useSecondary ? "+$(secondary)" : string.Empty)}");
         yamlData.Children.TryAdd("entityName", $"{clothingItemData.ItemName}_factory_name");
-        yamlData.Children.TryAdd("icon", icon);
         yamlData.Children.TryAdd("localizedDescription", $"LocKey#{clothingItemData.ItemName}_i18n_desc");
-        yamlData.Children.TryAdd("displayName", $"LocKey#{clothingItemData.ItemName}_i18n_$(base_color)");
+        yamlData.Children.TryAdd("displayName",
+            $"LocKey#{clothingItemData.ItemName}_i18n_$(base_color){(useSecondary ? "_$(secondary)" : string.Empty)}");
         yamlData.Children.TryAdd("quality", "Quality.Legendary");
+        yamlData.Children.TryAdd("icon", icon);
         yamlData.Children.TryAdd("statModifiers", ArchiveXlClothingItem.StatModifiers);
         yamlData.Children.TryAdd("appearanceSuffixes", "[]");
         yamlData.Children.TryAdd("statModifierGroups", ArchiveXlClothingItem.StatModifierGroups);
@@ -764,6 +868,12 @@ public class ArchiveXlItemService
             yamlData.Children.TryAdd("placementSlots", $"OutfitSlots.{clothingItemData.EqExSlot}");
         }
 
-        YamlHelper.WriteYaml(yamlAbsPath, yaml);
+        var comment = clothingItemData.Variants.SelectMany(color =>
+            (clothingItemData.SecondaryVariants.Count > 0 ? clothingItemData.SecondaryVariants : [""])
+            .Select(var => itemName.Replace("$(base_color)", color).Replace("$(secondary)", var))
+            ).Select(s => $"Game.AddToInventory(\"{s}\")")
+            .ToArray();
+
+        YamlHelper.RemoveInExistingFileAndAppend(yamlAbsPath, itemName, yaml, comment);
     }
 }
