@@ -189,8 +189,10 @@ public class ArchiveXlItemService
         }
         else
         {
-            clothingItemData.YamlFilePath = Path.Join(activeProject.GetResourceTweakDirectory(),
-                $"{activeProject.ModName}.yaml").ToFilePath();
+            clothingItemData.YamlFilePath = Path.Join(
+                activeProject.GetRelativeResourceTweakDirectory(),
+                $"{activeProject.ModName}.yaml"
+            ).ToFilePath();
         }
 
         if (activeProject.ModFiles.Where(p => p.HasFileExtension("json")).ToList() is { Count: 1 } list)
