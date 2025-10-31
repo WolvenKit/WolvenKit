@@ -1037,7 +1037,7 @@ public class TemplateFileTools
 
     private string GetFileOrganizationSubdir()
     {
-        if (!_settingsManager.UseModderNameAsSubfolder)
+        if (!_settingsManager.UseAuthorNameAsSubfolder)
         {
             return _projectManager.ActiveProject?.Name ?? "";
         }
