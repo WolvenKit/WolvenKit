@@ -22,8 +22,7 @@ public abstract class CvmDropdownHelper
     private static readonly List<string> s_appTags =
     [
         "AppearanceParts", // enable partsValues for non-player equipment
-        "hide_Head", "hide_Torso", "hide_LowerAbdomen", "hide_UpperAbdomen", "hide_CollarBone",
-        "hide_Arms", "hide_Thighs", "hide_Calves", "hide_Ankles", "hide_Feet", "hide_Legs", "hide_Hair"
+        ..Enum.GetNames(typeof(ArchiveXlHidingTags)).ToList()
     ];
 
 

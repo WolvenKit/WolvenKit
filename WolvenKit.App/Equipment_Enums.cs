@@ -34,6 +34,7 @@ public enum ArchiveXlHidingTags
     hide_CollarBone,
     hide_Arms,
     hide_Thighs,
+    hide_Chest,
     hide_Calves,
     hide_Ankles,
     hide_Feet,
