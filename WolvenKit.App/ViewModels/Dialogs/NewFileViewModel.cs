@@ -138,8 +138,7 @@ public partial class NewFileViewModel : DialogViewModel
     private string GetScriptDir() =>
         _projectManager.ActiveProject!.GetResourceScriptsDirectory(_settingsManager.UseAuthorNameAsSubfolder);
 
-    private string GetCetDir() =>
-        _projectManager.ActiveProject!.GetResourceCETDirectory(false);
+    private string GetCetDir() => _projectManager.ActiveProject!.GetResourceCETDirectory();
 
     private string GetDefaultDir(EWolvenKitFile type)
     {

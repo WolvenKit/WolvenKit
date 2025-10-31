@@ -290,17 +290,10 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         return dir;
     }
 
-    /// <param name="useModderName">Default: false, will use name of mod author as subfolder</param>
-    /// <returns><code>/source/resources/bin/x64/plugins/cyber_engine_tweaks/mods/$MOD_NAME</code> or <code>/source/resources/bin/x64/plugins/cyber_engine_tweaks/mods/$AUTHOR_NAME</code></returns>
-    public string GetResourceCETDirectory(bool useModderName = false)
+    /// <returns><code>$ABSOLUTE_PATH/source/resources/bin/x64/plugins/cyber_engine_tweaks/mods/$MOD_NAME</code> or <code>$ABSOLUTE_PATH/source/resources/bin/x64/plugins/cyber_engine_tweaks/mods/$AUTHOR_NAME</code></returns>
+    public string GetResourceCETDirectory()
     {
-        var subDir = ModName.ToFileName();
-        if (useModderName && !string.IsNullOrEmpty(Author))
-        {
-            subDir = Path.Combine(Author.ToFileName(), ModName.ToFileName());
-        }
-
-        var dir = Path.Combine(ResourcesDirectory, "bin", "x64", "plugins", "cyber_engine_tweaks", "mods", subDir);
+        var dir = Path.Combine(ResourcesDirectory, "bin", "x64", "plugins", "cyber_engine_tweaks", "mods");
 
         if (!Directory.Exists(dir))
         {
