@@ -198,5 +198,5 @@ public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
 
     bool IsDiscordRPCEnabled { get; set; }
 
-    bool UseModderNameAsSubfolder { get; set; }
+    bool UseAuthorNameAsSubfolder { get; set; }
 }

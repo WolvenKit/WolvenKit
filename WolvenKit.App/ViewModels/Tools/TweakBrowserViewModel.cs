@@ -358,7 +358,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
         var txlFile = new TweakXLFile { txl };
 
         var path = Path.Combine(
-            _projectManager.ActiveProject.GetResourceTweakDirectory(),
+            _projectManager.ActiveProject.GetResourceTweakDirectory(_settingsManager.UseAuthorNameAsSubfolder),
             $"{SelectedRecordEntry.DisplayName}.yaml");
         var serializer = new SerializerBuilder()
                  .WithTypeConverter(new TweakXLYamlTypeConverter(_locKeyService, _tweakDB))

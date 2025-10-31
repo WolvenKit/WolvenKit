@@ -188,7 +188,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
     private void MoveLegacyYamlTweaks(Cp77Project project)
     {
         var yamlFiles = Directory.GetFiles(project.ResourcesDirectory, "*.yaml", SearchOption.TopDirectoryOnly);
-        var yamlDir = project.GetResourceTweakDirectory(_settingsManager.UseModderNameAsSubfolder);
+        var yamlDir = project.GetResourceTweakDirectory(_settingsManager.UseAuthorNameAsSubfolder);
         foreach (var file in yamlFiles)
         {
             var fileName = Path.GetFileName(file);
@@ -202,7 +202,6 @@ public partial class ProjectManager : ObservableObject, IProjectManager
             {
                 _loggerService.Error($"Could not move file. Error: {e}");
             }
-
         }
     }
 

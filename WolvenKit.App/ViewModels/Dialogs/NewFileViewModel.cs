@@ -133,13 +133,12 @@ public partial class NewFileViewModel : DialogViewModel
     [ObservableProperty] private string? _whyNotCreate;
 
     private string GetTweakDir() =>
-        _projectManager.ActiveProject!.GetResourceTweakDirectory(_settingsManager.UseModderNameAsSubfolder);
+        _projectManager.ActiveProject!.GetResourceTweakDirectory(_settingsManager.UseAuthorNameAsSubfolder);
 
     private string GetScriptDir() =>
-        _projectManager.ActiveProject!.GetResourceScriptsDirectory(_settingsManager.UseModderNameAsSubfolder);
+        _projectManager.ActiveProject!.GetResourceScriptsDirectory(_settingsManager.UseAuthorNameAsSubfolder);
 
-    private string GetCetDir() =>
-        _projectManager.ActiveProject!.GetResourceCETDirectory(false);
+    private string GetCetDir() => _projectManager.ActiveProject!.GetResourceCETDirectory();
 
     private string GetDefaultDir(EWolvenKitFile type)
     {

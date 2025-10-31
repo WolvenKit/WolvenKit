@@ -270,20 +270,17 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         }
     }
 
-
     /// <param name="useModderName">Default: false, will use name of mod author as subfolder</param>
     /// <returns><code>/source/resources/r6/scripts/$MOD_NAME</code> or <code>/source/resources/r6/scripts/$AUTHOR_NAME</code></returns>
     public string GetResourceScriptsDirectory(bool useModderName = false)
     {
-        var dir = Path.Combine(ResourcesDirectory, "r6", "scripts");
+        var subDir = ModName.ToFileName();
         if (useModderName && !string.IsNullOrEmpty(Author))
         {
-            dir = Path.Combine(dir, Author.ToFileName());
+            subDir = Author.ToFileName();
         }
-        else
-        {
-            dir = Path.Combine(dir, ModName.ToFileName());
-        }
+
+        var dir = Path.Combine(ResourcesDirectory, "r6", "scripts", subDir);
 
         if (!Directory.Exists(dir))
         {
@@ -293,19 +290,10 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         return dir;
     }
 
-    /// <param name="useModderName">Default: false, will use name of mod author as subfolder</param>
-    /// <returns><code>/source/resources/bin/x64/plugins/cyber_engine_tweaks/mods/$MOD_NAME</code> or <code>/source/resources/bin/x64/plugins/cyber_engine_tweaks/mods/$AUTHOR_NAME</code></returns>
-    public string GetResourceCETDirectory(bool useModderName = false)
+    /// <returns><code>$ABSOLUTE_PATH/source/resources/bin/x64/plugins/cyber_engine_tweaks/mods/$MOD_NAME</code> or <code>$ABSOLUTE_PATH/source/resources/bin/x64/plugins/cyber_engine_tweaks/mods/$AUTHOR_NAME</code></returns>
+    public string GetResourceCETDirectory()
     {
         var dir = Path.Combine(ResourcesDirectory, "bin", "x64", "plugins", "cyber_engine_tweaks", "mods");
-        if (useModderName && !string.IsNullOrEmpty(Author))
-        {
-            dir = Path.Combine(dir, Author.ToFileName());
-        }
-        else
-        {
-            dir = Path.Combine(dir, ModName.ToFileName());
-        }
 
         if (!Directory.Exists(dir))
         {
@@ -315,19 +303,18 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         return dir;
     }
 
+    /// Returns ABSOLUTE PATH to tweak directory (use <see cref="GetRelativeResourceTweakDirectory"/> otherwise).
     /// <param name="useModderName">Default: false, will use name of mod author as subfolder</param>
-    /// <returns><code>/source/resources/r6/tweaks/$MOD_NAME</code> or <code>/source/resources/r6/tweaks/$AUTHOR_NAME</code></returns>
+    /// <returns><code>$ABSOLUTE_PATH/source/resources/r6/tweaks/$MOD_NAME</code> or <code>$ABSOLUTE_PATH/source/resources/r6/tweaks/$AUTHOR_NAME</code></returns>
     public string GetResourceTweakDirectory(bool useModderName = false)
     {
-        var dir = Path.Combine(ResourcesDirectory, s_tweakSubfolder);
+        var subDir = ModName.ToFileName();
         if (useModderName && !string.IsNullOrEmpty(Author))
         {
-            dir = Path.Combine(dir, Author.ToFileName());
+            subDir = Author.ToFileName();
         }
-        else
-        {
-            dir = Path.Combine(dir, ModName.ToFileName());
-        }
+
+        var dir = Path.Combine(ResourcesDirectory, s_tweakSubfolder, subDir);
 
         if (!Directory.Exists(dir))
         {
@@ -336,6 +323,12 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
 
         return dir;
     }
+
+    /// Returns RELATIVE PATH to tweak directory (use <see cref="GetResourceTweakDirectory"/> otherwise).
+    /// <param name="useModderName">Default: false, will use name of mod author as subfolder</param>
+    /// <returns><code>source/resources/r6/tweaks/$MOD_NAME</code> or <code>source/resources/r6/tweaks/$AUTHOR_NAME</code></returns>
+    public string GetRelativeResourceTweakDirectory(bool useModderName = false) =>
+        GetRelativePath(GetResourceTweakDirectory(useModderName));
 
     /// <summary>
     /// Path to /packed

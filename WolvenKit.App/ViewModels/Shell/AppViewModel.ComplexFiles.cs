@@ -41,13 +41,13 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
         var relativePhotoModeFolder = dialogModel.PhotomodeRelativeFolder.Trim();
 
-        var relativeEntFilePath = GetRelativePath(dialogModel.EntFileName);
-        var relativeAppFilePath = GetRelativePath(dialogModel.AppFileName);
+        var relativeEntFilePath = GetRelativeDestPath(dialogModel.EntFileName);
+        var relativeAppFilePath = GetRelativeDestPath(dialogModel.AppFileName);
 
         var inkatlasFileName = string.IsNullOrEmpty(dialogModel.InkatlasFileName)
             ? "photomode_preview_icon.inkatlas"
             : dialogModel.InkatlasFileName;
-        var relativeInkatlasFilePath = GetRelativePath(inkatlasFileName);
+        var relativeInkatlasFilePath = GetRelativeDestPath(inkatlasFileName);
 
         ProjectExplorerViewModel.SuspendFileWatcherStatic();
 
@@ -182,7 +182,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
         return;
 
-        string GetRelativePath(string pathOrFileName)
+        string GetRelativeDestPath(string pathOrFileName)
         {
             if (activeProject.ModFiles.Contains(pathOrFileName))
             {
@@ -191,7 +191,9 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
             if (pathOrFileName.HasFileExtension(".yaml"))
             {
-                return Path.Join(_projectManager.ActiveProject.GetResourceTweakDirectory(), pathOrFileName);
+                return Path.Join(
+                    _projectManager.ActiveProject.GetResourceTweakDirectory(SettingsManager.UseAuthorNameAsSubfolder),
+                    pathOrFileName);
             }
 
             return Path.Join(relativePhotoModeFolder, pathOrFileName);
