@@ -253,8 +253,8 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
-        var files = activeProject.Files
-            .Where(f => f.EndsWith(".ent") | f.EndsWith(".mesh") | f.EndsWith(".mi"))
+        var files = activeProject.ModFiles
+            .Where(f => f.EndsWith(".ent") | f.EndsWith(".mesh") | f.EndsWith(".mi"))     
             .OrderBy(Path.GetExtension)
             .ToList();
 
