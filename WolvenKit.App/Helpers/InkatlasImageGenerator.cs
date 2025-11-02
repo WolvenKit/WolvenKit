@@ -33,7 +33,8 @@ public static class InkatlasImageGenerator
         Directory.CreateDirectory(absoluteSourcePath);
 
         var cr2WFile = new CR2WFile() { RootChunk = inkatlas };
-        cr2WTools.WriteCr2W(cr2WFile, Path.Combine(absoluteSourcePath, $"{atlasFileName}.inkatlas"));
+        cr2WTools.WriteCr2W(cr2WFile,
+            Path.Combine(absoluteSourcePath, $"{atlasFileName.Replace(".inkatlas", "")}.inkatlas"));
     }
 
 
