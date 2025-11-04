@@ -135,51 +135,6 @@ public partial class ProjectResourceTools
         return _red4Controller;
     }
 
-    public string GetAbsolutePath(string fileName, string rootRelativeFolder = "", bool appendModderNameFromSettings = false)
-    {
-        if (_projectManager.ActiveProject is not Cp77Project activeProject)
-        {
-            return "";
-        }
-
-        if (rootRelativeFolder == "" &&
-            activeProject.Files.FirstOrDefault(f => f.EndsWith(fileName)) is string filePath)
-        {
-            return Path.Join(activeProject.FileDirectory, filePath);
-        }
-
-        // Deal with file paths
-        if (fileName.Contains(Path.DirectorySeparatorChar))
-        {
-            var absoluteFilePath = Path.Join(activeProject.FileDirectory, fileName);
-            if (File.Exists(absoluteFilePath))
-            {
-                return absoluteFilePath;
-            }
-
-            fileName = fileName[(fileName.LastIndexOf(Path.DirectorySeparatorChar) + 1)..];
-        }
-
-        if (appendModderNameFromSettings && rootRelativeFolder == "")
-        {
-            rootRelativeFolder = AppendPersonalDirectory(rootRelativeFolder);
-        }
-
-        return activeProject.GetAbsolutePath(fileName, rootRelativeFolder);
-
-    }
-
-    public string AppendPersonalDirectory(params string[] filePathParts)
-    {
-        var filePath = Path.Join(filePathParts);
-        if (_settingsService.ModderName is string modderName && modderName != "" && !filePath.Contains(modderName))
-        {
-            filePath = Path.Join(filePath, modderName.ToFileName());
-        }
-
-        return filePath.Trim();
-    }
-
     private static string GetUniqueSubfolderPath(IEnumerable<string> allFilePaths, string currentFilePath)
     {
         var fileName = Path.GetFileName(currentFilePath);
