@@ -1386,7 +1386,7 @@ public class TemplateFileTools
 
         void WriteLuaFile()
         {
-            var luaFolderPath = Path.Combine(project.GetResourceCETDirectory(), "..", "AppearanceMenuMod", "Collabs",
+            var luaFolderPath = Path.Combine(project.GetResourceCETDirectory(), "AppearanceMenuMod", "Collabs",
                 "Custom Props", GetFileOrganizationSubdir());
             var luaPath = Path.Combine(luaFolderPath, $"{project.Name.ToFileName()}.lua");
 
@@ -1430,7 +1430,7 @@ public class TemplateFileTools
 
         void WriteWorldbuilderFile()
         {
-            var entspawnerSubdir = Path.Combine(project.GetResourceCETDirectory(), "..", "entSpawner", "data");
+            var entspawnerSubdir = Path.Combine(project.GetResourceCETDirectory(), "entSpawner", "data");
 
             if (meshFilesUseAppearances.Count == 1)
             {
