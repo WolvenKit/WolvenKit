@@ -1396,7 +1396,7 @@ public class TemplateFileTools
             if (!hasSingleAppearance)
             {
                 propFileData.Add("      appearances = {\n");
-                propFileData.AddRange(prop.Appearances.Select(propAppearance => $"        \"{propAppearance}\""));
+                propFileData.AddRange(prop.Appearances.Select(propAppearance => $"        \"{propAppearance}\","));
                 propFileData.Add("      },");
             }
 
