@@ -96,7 +96,7 @@
                         Grid.Row="2"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
-                        Options="{Binding MeshOptions,
+                        Options="{Binding Options,
                                           UpdateSourceTrigger=PropertyChanged}"
                         IsInline="False"
                         IsShowLabel="False"
@@ -131,7 +131,8 @@
                         Padding="{DynamicResource WolvenKitMarginTiny}"
                         VerticalContentAlignment="Center"
                         FontSize="{DynamicResource WolvenKitFontBody}"
-                        Text="{Binding SelectedOption}"
+                        Text="{Binding SelectedOption,
+                                       Mode=TwoWay}"
                         KeyboardNavigation.TabIndex="-1" />
 
                 </Grid>

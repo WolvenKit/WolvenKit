@@ -1,10 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 using ReactiveUI;
-using WolvenKit.App.Helpers;
-using WolvenKit.App.Models.ProjectManagement.Project;
-using WolvenKit.App.Services;
+using System.Reactive.Disposables;
 using WolvenKit.App.ViewModels.Dialogs;
 using Window = System.Windows.Window;
 
@@ -15,15 +14,27 @@ namespace WolvenKit.Views.Dialogs
         private static string s_lastSelectedOption;
         private static bool s_lastAppend;
 
-        public CopyMeshAppearancesDialog(Cp77Project activeProject, ISettingsManager settingsManager)
+        public CopyMeshAppearancesDialog(List<string> options)
         {
             InitializeComponent();
 
-            ViewModel = new CopyMeshAppearancesDialogViewModel(activeProject, settingsManager)
+            ViewModel = new CopyMeshAppearancesDialogViewModel(options)
             {
                 IsAppend = s_lastAppend, SelectedOption = s_lastSelectedOption
             };
             DataContext = ViewModel;
+
+            this.WhenActivated(disposables =>
+            {
+                this.Bind(ViewModel,
+                        x => x.SelectedOption,
+                        x => x.Dropdown.SelectedOption)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        x => x.OptionsDict,
+                        x => x.Dropdown.Options)
+                    .DisposeWith(disposables);
+            });
         }
 
         public CopyMeshAppearancesDialogViewModel ViewModel { get; set; }

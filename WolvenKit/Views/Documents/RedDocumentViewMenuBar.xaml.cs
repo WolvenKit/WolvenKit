@@ -294,7 +294,7 @@ namespace WolvenKit.Views.Documents
                 .ToList();
 
 
-            if (Interactions.ShowCopyMeshAppearancesDialogue((project, _settingsManager)) is not { } dialog)
+            if (Interactions.ShowCopyMeshAppearancesDialogue(files) is not { } dialog)
             {
                 return;
             }

@@ -22,22 +22,19 @@ public partial class CopyMeshAppearancesDialogViewModel : ObservableObject
     [ObservableProperty] private string _wikiLink = WikiLinks.MeshMaterials;
     [ObservableProperty] private bool _isAppend = false;
     [ObservableProperty] private bool _useArchiveXlPatchMesh = false;
-    [ObservableProperty] private List<string> _meshOptions = [];
+
+    private List<string>? _options;
+    [ObservableProperty] private Dictionary<string, string>? _optionsDict;
 
 
     // enable save button?
     [ObservableProperty] private bool _canSave;
 
 
-    private readonly Cp77Project _activeProject;
-    private readonly ISettingsManager _settingsManager;
-
-    public CopyMeshAppearancesDialogViewModel(Cp77Project activeProject, ISettingsManager settingsManager)
+    public CopyMeshAppearancesDialogViewModel(List<string> options)
     {
-        _activeProject = activeProject;
-        _settingsManager = settingsManager;
-
-        MeshOptions = [.. activeProject.ModFiles.Where(f => f.HasFileExtension(".mesh"))];
+        _options = options;
+        OptionsDict = options.ToDictionary(k => k, v => v);
     }
 
 
