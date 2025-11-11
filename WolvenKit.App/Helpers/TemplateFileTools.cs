@@ -1190,27 +1190,13 @@ public class TemplateFileTools
                     continue;
                 }
 
-                var relativePath = Path.Combine(prop.ParentFolder, Path.GetFileName(kvp.Key));
                 if (!project.ModFiles.Contains(kvp.Key))
                 {
                     // try get from game files
                     _archiveManager.GetGameFile(kvp.Key);
                 }
 
-                if (project.ModFiles.Contains(kvp.Key))
-                {
-                    _projectResourceTools.MoveAndRefactorAsync(
-                            Path.Combine(project.ModDirectory, kvp.Key),
-                            Path.Combine(project.ModDirectory, relativePath),
-                            "",
-                            false).GetAwaiter()
-                        .GetResult();
-                }
-                else
-                {
-                }
-
-                meshFileAppearances[relativePath] = kvp.Value;
+                meshFileAppearances[kvp.Key] = kvp.Value;
             }
 
             meshFilesUseAppearances = meshFileAppearances;
@@ -1402,14 +1388,14 @@ public class TemplateFileTools
             List<string> propFileData =
             [
                 "    {",
-                $"      name: \"{prop.PropName}\",",
-                $"      path: \"{entFilePath.Replace(@"\", @"\\")}\",",
-                "      category: \"Misc\",",
-                "      distanceFromGround: 1,",
+                $"      name = \"{prop.PropName}\",",
+                $"      path = \"{entFilePath.Replace(@"\", @"\\")}\",",
+                "      category = \"Misc\",",
+                "      distanceFromGround = 1,",
             ];
             if (!hasSingleAppearance)
             {
-                propFileData.Add("      appearances: {\n");
+                propFileData.Add("      appearances = {\n");
                 propFileData.AddRange(prop.Appearances.Select(propAppearance => $"        \"{propAppearance}\""));
                 propFileData.Add("      },");
             }
