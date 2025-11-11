@@ -252,7 +252,7 @@ public static class Interactions
     /// <summary>
     /// Shows dialogue to copy mesh materials/appearances.
     /// </summary>
-    public static Func<(Cp77Project activeProject, ISettingsManager settingsManager),
+    public static Func<List<string>,
         CopyMeshAppearancesDialogViewModel?> ShowCopyMeshAppearancesDialogue { get; set; } =
         _ => throw new NotImplementedException();
 
