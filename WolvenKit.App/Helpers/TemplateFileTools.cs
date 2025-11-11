@@ -1329,6 +1329,8 @@ public class TemplateFileTools
             entTemplate.Appearances.Clear();
             entTemplate.Components ??= new CArray<entIComponent>();
             entTemplate.Components.Clear();
+            entTemplate.Entity ??= new CHandle<entEntity>() { Chunk = new gameItemObject() };
+            entTemplate.Entity.Chunk ??= new gameItemObject();
 
 
             if (hasSingleAppearance)
