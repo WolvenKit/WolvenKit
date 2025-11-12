@@ -244,7 +244,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         ["bin", "x64", "plugins", "cyber_engine_tweaks", "mods", "entSpawner", "data"];
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
-    private void GenerateWorldbuilderProp()
+    private void RegisterWorldbuilderFiles()
     {
         if (_projectManager.ActiveProject is not Cp77Project activeProject)
         {
@@ -373,5 +373,23 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         _templateFileTools.GenerateMinimalQuest(options);
 
         _loggerService.Success($"Minimal quest files generated for {options.ModName}!");
+    }
+
+    [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
+    private void GeneratePropItem()
+    {
+        if (_projectManager.ActiveProject is not Cp77Project activeProject)
+        {
+            return;
+        }
+
+        if (Interactions.ShowGeneratePropFileModel(activeProject) is not { } dialogModel)
+        {
+            return;
+        }
+
+
+        _templateFileTools.GeneratePropFiles(dialogModel);
+        _loggerService.Success($"{dialogModel.PropName} was created and registered!");
     }
 }

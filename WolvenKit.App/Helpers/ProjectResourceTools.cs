@@ -393,6 +393,7 @@ public partial class ProjectResourceTools
 
     private const string s_tempDirSuffix = "_wolvenkit_tempdir";
 
+    // TODO: Remove stupid AbsoluteFolderPrefix
     public async Task MoveAndRefactorAsync(string sourcePath, string destPath, string absoluteFolderPrefix,
         bool refactor)
     {
