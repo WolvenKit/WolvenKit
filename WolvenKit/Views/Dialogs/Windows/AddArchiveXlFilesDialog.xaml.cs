@@ -95,7 +95,10 @@ namespace WolvenKit.Views.Dialogs.Windows
 
         private void Combobox_OnClick(object sender, RoutedEventArgs e)
         {
-            var combobox = (ComboBox)sender;
+            if (sender is not ComboBox combobox || combobox.IsDropDownOpen)
+            {
+                return;
+            }
             combobox.SetCurrentValue(ComboBox.IsDropDownOpenProperty, !combobox.IsDropDownOpen);
         }
 
@@ -182,6 +185,17 @@ namespace WolvenKit.Views.Dialogs.Windows
         {
             var ps = new ProcessStartInfo(WikiLinks.AddingNewItems) { UseShellExecute = true, Verb = "open" };
             Process.Start(ps);
+        }
+
+        private void SecondaryItemVariants_FocusLost(object sender, RoutedEventArgs e)
+        {
+            if (sender is not SfTextBoxExt textBox || ViewModel is not AddArchiveXlFilesDialogViewModel model)
+            {
+                return;
+            }
+
+            model.SecondaryVariants =
+                [.. textBox.Text.Split(",", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)];
         }
     }
 }

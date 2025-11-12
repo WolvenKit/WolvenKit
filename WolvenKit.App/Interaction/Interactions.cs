@@ -269,6 +269,12 @@ public static class Interactions
         _ => throw new NotImplementedException();
 
     /// <summary>
+    /// Shows dialogue to generate .inkatlas file. Complex logic inside dialogue model.
+    /// </summary>
+    public static Func<Cp77Project, AddPropFileDialogViewModel> ShowGeneratePropFileModel { get; set; } =
+        _ => throw new NotImplementedException();
+
+    /// <summary>
     /// Shows dialogue to pick from a list of options.
     /// </summary>
     public static Func<(
