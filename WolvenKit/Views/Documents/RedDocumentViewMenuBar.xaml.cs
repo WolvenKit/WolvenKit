@@ -293,9 +293,8 @@ namespace WolvenKit.Views.Documents
             var files = _documentTools.CollectProjectFiles(".mesh").Where(f => f != ViewModel.FilePath)
                 .ToList();
 
-            if (Interactions.AskForDropdownOption((files, "Select .mesh file", "Select .mesh file",
-                    WikiLinks.MeshMaterials, true, "From ArchiveXL patch mesh")) is not string meshFileName ||
-                string.IsNullOrEmpty(meshFileName))
+
+            if (Interactions.ShowCopyMeshAppearancesDialogue(files) is not { } dialog)
             {
                 return;
             }
@@ -303,11 +302,11 @@ namespace WolvenKit.Views.Documents
             try
             {
                 // Only reload if we wrote anything
-                if (_documentTools.CopyMeshMaterials(meshFileName, ViewModel.FilePath))
+                if (_documentTools.CopyMeshMaterials(dialog.SelectedOption, ViewModel.FilePath, dialog.IsAppend))
                 {
                     ViewModel.CurrentTab?.Parent.Reload(true);
                 }
-                else if (meshFileName == SelectDropdownEntryDialogViewModel.ButtonClickResult)
+                else if (dialog.UseArchiveXlPatchMesh)
                 {
                     _loggerService.Error(
                         "Failed to copy mesh materials from patch mesh. Try picking a mesh, or adding the file path directly.");
@@ -351,7 +350,7 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            var failedMeshes = selected.Where(mesh => !_documentTools.CopyMeshMaterials(currentPath, mesh)).ToList();
+            var failedMeshes = selected.Where(mesh => !_documentTools.CopyMeshMaterials(currentPath, mesh, false)).ToList();
 
             var output = StringHelper.Stringify(selected.Where(s => !failedMeshes.Contains(s)).ToList(), true);
 
