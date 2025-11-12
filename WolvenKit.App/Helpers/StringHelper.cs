@@ -400,4 +400,37 @@ public abstract partial class StringHelper
     }
 
 
+    public static string? StringifyChunkMask(CUInt64 chunkMask)
+    {
+        if (chunkMask == 0)
+        {
+            return "(hidden)";
+        }
+
+        if (chunkMask == 18446744073709551615)
+        {
+            return "";
+        }
+
+        var bits = Convert.ToString((uint)chunkMask, 2).PadLeft(64, '0');
+        var reversed = bits.Reverse().ToArray();
+        var result = new string(reversed).TrimEnd('0');
+        return result.Length > 0 ? result : "0";
+    }
+
+    /// <summary>
+    /// Appends a value to a string. If the string is empty, the new string will be returned instead.
+    /// </summary>
+    /// <param name="originalString"></param>
+    /// <param name="secondString"></param>
+    /// <param name="spacer"></param>
+    public static string? AppendToString(string? originalString, string? secondString, char spacer = ' ')
+    {
+        if (string.IsNullOrEmpty(originalString))
+        {
+            return secondString;
+        }
+
+        return originalString + spacer + secondString;
+    }
 }

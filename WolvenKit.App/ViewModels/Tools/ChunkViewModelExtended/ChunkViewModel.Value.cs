@@ -422,7 +422,15 @@ public partial class ChunkViewModel
 
             case appearancePartComponentOverrides compOverride
                 when compOverride.MeshAppearance.GetResolvedText() is string s:
-                Value = s == "default" ? string.Empty : s;
+                Value = string.Empty;
+                if (s is not ("default" or "None"))
+                {
+                    Value = s;
+                }
+
+                Value = StringHelper.AppendToString(Value, StringHelper.StringifyChunkMask(compOverride.ChunkMask),
+                    ' ');
+
                 IsValueExtrapolated = Value != string.Empty;
                 break;
             case meshMeshAppearance { ChunkMaterials: not null } appearance:

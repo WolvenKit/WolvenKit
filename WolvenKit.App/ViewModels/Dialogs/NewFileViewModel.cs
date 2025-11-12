@@ -121,10 +121,10 @@ public partial class NewFileViewModel : DialogViewModel
 #pragma warning disable IDE0072 // Add missing cases
         FileName = SelectedFile?.Type switch
         {
-            EWolvenKitFile.TweakXl => Path.Combine("r6", "tweaks", project.Name, $"untitled.{value.Extension.NotNull().ToLower()}"),
-            EWolvenKitFile.RedScript => Path.Combine("r6", "scripts", project.Name, $"untitled.{value.Extension.NotNull().ToLower()}"),
+            EWolvenKitFile.TweakXl => Path.Combine(GetTweakDir(), $"untitled.{value.Extension.NotNull().ToLower()}"),
+            EWolvenKitFile.RedScript => Path.Combine(GetScriptDir(), $"untitled.{value.Extension.NotNull().ToLower()}"),
             EWolvenKitFile.ArchiveXl => $"{project.Name}.{value.Extension.NotNull().ToLower()}",
-            EWolvenKitFile.CETLua => Path.Combine("bin", "x64", "plugins", "cyber_engine_tweaks", "mods", project.Name, $"init.{value.Extension.NotNull().ToLower()}"),
+            EWolvenKitFile.CETLua => Path.Combine(GetCetDir(), $"init.{value.Extension.NotNull().ToLower()}"),
             _ => $"{value.Name.NotNull().Split(' ').First()}1.{value.Extension.NotNull().ToLower()}",
         };
 #pragma warning restore IDE0072 // Add missing cases
@@ -132,39 +132,13 @@ public partial class NewFileViewModel : DialogViewModel
 
     [ObservableProperty] private string? _whyNotCreate;
 
-    private string GetTweakDir()
-    {
-        var tweakDir = Path.Combine(_projectManager.ActiveProject!.ResourcesDirectory, "r6", "tweaks");
-        if (string.IsNullOrEmpty(_settingsManager.ModderName))
-        {
-            return tweakDir;
-        }
+    private string GetTweakDir() =>
+        _projectManager.ActiveProject!.GetResourceTweakDirectory(_settingsManager.UseAuthorNameAsSubfolder);
 
-        return Path.Combine(tweakDir, _settingsManager.ModderName);
-    }
+    private string GetScriptDir() =>
+        _projectManager.ActiveProject!.GetResourceScriptsDirectory(_settingsManager.UseAuthorNameAsSubfolder);
 
-    private string GetScriptDir()
-    {
-        var scriptDir = Path.Combine(_projectManager.ActiveProject!.ResourcesDirectory, "r6", "scripts");
-        if (string.IsNullOrEmpty(_settingsManager.ModderName))
-        {
-            return scriptDir;
-        }
-
-        return Path.Combine(scriptDir, _settingsManager.ModderName);
-    }
-
-    private string GetCetDir()
-    {
-        var cetPluginDir = Path.Combine(_projectManager.ActiveProject!.ResourcesDirectory, "bin", "x64", "plugins", "cyber_engine_tweaks",
-            "mods");
-        if (string.IsNullOrEmpty(_projectManager.ActiveProject.ModName))
-        {
-            return cetPluginDir;
-        }
-
-        return Path.Combine(cetPluginDir, _projectManager.ActiveProject.ModName);
-    }
+    private string GetCetDir() => _projectManager.ActiveProject!.GetResourceCETDirectory();
 
     private string GetDefaultDir(EWolvenKitFile type)
     {

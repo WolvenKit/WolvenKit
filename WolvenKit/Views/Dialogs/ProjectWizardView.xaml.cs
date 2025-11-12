@@ -1,8 +1,7 @@
 using System.Reactive.Disposables;
+using System.Windows;
 using System.Windows.Controls;
 using ReactiveUI;
-using Splat;
-using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 
 namespace WolvenKit.Views.Dialogs
@@ -32,12 +31,12 @@ namespace WolvenKit.Views.Dialogs
                     vm => vm.OpenProjectPathCommand,
                     v => v.ProjectPathButton).DisposeWith(disposables);
 
-                this.BindCommand(ViewModel, 
-                        x => x.OkCommand, 
+                this.BindCommand(ViewModel,
+                    x => x.OkCommand,
                         x => x.OkButton).DisposeWith(disposables);
 
-                this.BindCommand(ViewModel, 
-                        x => x.CancelCommand, 
+                this.BindCommand(ViewModel,
+                    x => x.CancelCommand,
                         x => x.CancelButton).DisposeWith(disposables);
 
                 if (ViewModel is null)
@@ -52,28 +51,11 @@ namespace WolvenKit.Views.Dialogs
                 ViewModel.ValidateProjectPath();
                 ViewModel.ValidateModName();
 
-                ReadDefaultValuesFromSettings();
+                ViewModel.ReadDefaultValuesFromSettings();
                 VersionTextBox.SetCurrentValue(TextBox.TextProperty, "1.0.0");
+                AuthorTextBox.SetCurrentValue(TextBox.TextProperty, ViewModel.Author);
+                EmailTextBox.SetCurrentValue(TextBox.TextProperty, ViewModel.Email);
             });
-        }
-
-        private void ReadDefaultValuesFromSettings()
-        {
-            var settings = Locator.Current.GetService<ISettingsManager>();
-            if (settings is null)
-            {
-                return;
-            }
-
-            if (settings.ModderName is not null)
-            {
-                AuthorTextBox.SetCurrentValue(TextBox.TextProperty, settings.ModderName);
-            }
-
-            if (settings.ModderEmail is not null)
-            {
-                EmailTextBox.SetCurrentValue(TextBox.TextProperty, settings.ModderEmail);
-            }
         }
 
         private void ProjectNameTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
@@ -95,5 +77,7 @@ namespace WolvenKit.Views.Dialogs
                 _syncModName = false;
             }
         }
+
+        private void Author_OnFocusLost(object sender, RoutedEventArgs e) => ViewModel?.SaveAuthorToSettingsIfNeeded();
     }
 }

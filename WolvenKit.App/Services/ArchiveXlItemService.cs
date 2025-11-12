@@ -124,6 +124,17 @@ public class ArchiveXlItemService
         _projectResourceTools = projectResourceTools;
     }
 
+    /// gets modder name from project or settings
+    private string GetModderName()
+    {
+        if (!string.IsNullOrEmpty(_projectManager.ActiveProject?.Author))
+        {
+            return _projectManager.ActiveProject.Author;
+        }
+
+        return _settingsManager.ModderName ?? "wolvenkit_user";
+    }
+
     public void CreateEquipmentItem(ArchiveXlClothingItem clothingItemData)
     {
         if (_projectManager.ActiveProject is not { } activeProject)
@@ -172,7 +183,7 @@ public class ArchiveXlItemService
 
         // Items go into moddername/equipment/itemdataslot/projectname
         clothingItemData.FilesRelPath = Path.Join(
-            _settingsManager.ModderName,
+            GetModderName(),
             "equipment",
             clothingItemData.Slot.ToString().Replace("outer_", "").Replace("inner_", ""),
             clothingItemData.ItemName
@@ -181,7 +192,7 @@ public class ArchiveXlItemService
         // Control files go into the folder of any existing csv file in the project, or the default path
         clothingItemData.ControlFilesRelPath =
             activeProject.ModFiles.Where(f => f.HasFileExtension("csv")).Select(Path.GetDirectoryName).FirstOrDefault()
-            ?? Path.Join(_settingsManager.ModderName, activeProject.ModName, clothingItemData.ItemName).ToFilePath();
+            ?? Path.Join(GetModderName(), activeProject.ModName, clothingItemData.ItemName).ToFilePath();
 
 
         // Now write paths into the item data
@@ -213,8 +224,10 @@ public class ArchiveXlItemService
         }
         else
         {
-            clothingItemData.YamlFilePath = Path.Join("r6", "tweaks", _settingsManager.ModderName,
-                $"{activeProject.ModName}.yaml").ToFilePath();
+            clothingItemData.YamlFilePath = Path.Join(
+                activeProject.GetRelativeResourceTweakDirectory(),
+                $"{activeProject.ModName}.yaml"
+            ).ToFilePath();
         }
 
         if (activeProject.ModFiles.Where(p => p.HasFileExtension(".json")).ToList() is { Count: 1 } list)

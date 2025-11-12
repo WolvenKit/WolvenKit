@@ -137,7 +137,9 @@ public static class Interactions
         = _ => throw new NotImplementedException();
 
     /// <inheritdoc cref="ShowPopupWithWeblinkAsync"/>
-    public static Func<(string, string, string, string, WMessageBoxImage), WMessageBoxResult> ShowPopupWithWeblink
+    public static
+        Func<(string text, string title, string link, string buttonText, WMessageBoxImage image), WMessageBoxResult>
+        ShowPopupWithWeblink
     {
         get;
         set;

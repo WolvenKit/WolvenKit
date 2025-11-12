@@ -74,16 +74,29 @@ namespace WolvenKit.Common
         /// <param name="searchScope">BaseGame, Mod or Everywhere</param>
         /// <returns>An optional with the matching file</returns>
         public List<IGameFile> Search(string search, ArchiveManagerScope searchScope);
-        
+
         public IGameFile? GetGameFile(ResourcePath path, bool includeMods = true, bool includeProject = true);
         public CR2WFile? GetCR2WFile(ResourcePath path, bool includeMods = true, bool includeProject = true);
 
         public bool IsInitialized { get; }
         public void Initialize(FileInfo executable, bool scanArchives = false);
-        
+
         IEnumerable<IGameArchive> GetModArchives();
         IEnumerable<IGameArchive> GetBaseArchives();
         IEnumerable<IGameArchive> GetEp1Archives();
         IEnumerable<IGameArchive> GetGameArchives();
+
+        /// <summary>
+        /// Checks if a mod with the given file name is installed
+        /// </summary>
+        /// <param name="archiveName">Name of the mod's .archive (without extension, it will be dropped)</param>
+        public bool IsModInstalled(string archiveName);
+
+        /// <summary>
+        /// Checks if a file is inside the given search scope (e.g. "is basegame file")
+        /// </summary>
+        /// <param name="relativePath">Relative path / hash</param>
+        /// <param name="searchScope">Scope</param>
+        public bool IsFileInScope(string relativePath, ArchiveManagerScope searchScope);
     }
 }

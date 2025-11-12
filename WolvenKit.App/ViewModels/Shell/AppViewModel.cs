@@ -1363,31 +1363,29 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     /// <summary>
     /// Many users fill out their name when creating a new project, but have no idea the settings even exist.
-    /// This method will take care of that, displaying a notification if it is not set.
+    /// While this is written back to settings from the project wizard, we still need to check (string could be empty).
     /// </summary>
     private string? GetModderName()
     {
+        if (!string.IsNullOrEmpty(ActiveProject?.Author))
+        {
+            return ActiveProject.Author;
+        }
+
         if (!string.IsNullOrEmpty(SettingsManager.ModderName))
         {
             return SettingsManager.ModderName;
         }
 
-        if (string.IsNullOrEmpty(ActiveProject?.Author))
-        {
-            Interactions.ShowPopupWithWeblink((
-                "Please configure modder name",
-                "Please configure your name in the Wolvenkit settings",
-                WikiLinks.SettingsModderName,
-                "Open Wiki",
-                WMessageBoxImage.Warning
-            ));
-            return null;
-        }
+        Interactions.ShowPopupWithWeblink((
+            "Please set a name in the preferences (Home -> Settings -> General -> Your Name)!",
+            "No modder name set",
+            WikiLinks.SettingsModderName,
+            "Open Wiki",
+            WMessageBoxImage.Warning
+        ));
 
-        SettingsManager.ModderName = ActiveProject.Author;
-        SettingsManager.Save();
-
-        return SettingsManager.ModderName;
+        return null;
     }
 
 
@@ -1756,6 +1754,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
 
         await _gameControllerFactory.GetController().LaunchProjectAsync(profile);
+        AfterProjectPacked();
     }
 
     [RelayCommand]
@@ -2086,7 +2085,54 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         return false;
     }
 
+    private bool _warningsDisplayed = false;
 
+    private void AfterProjectPacked()
+    {
+        if (_warningsDisplayed || ActiveProject is null ||
+            SettingsManager.GetRED4GameExecutablePath() is not string exePath)
+        {
+            return;
+        }
+
+        var mlsetupFiles = ActiveProject.ModFiles
+            .Where(f => f.StartsWith("base") || f.StartsWith("ep1"))
+            .Where(f => f.EndsWith(".mlsetup"))
+            .ToList();
+
+        if (mlsetupFiles.Count == 0 ||
+            !mlsetupFiles.Any(f => _archiveManager.IsFileInScope(f, ArchiveManagerScope.Basegame)))
+        {
+            return;
+        }
+
+        _archiveManager.Initialize(new FileInfo(exePath), false);
+        if (_archiveManager.IsModInstalled("MaterialAndTextureOverride"))
+        {
+            return;
+        }
+
+        if (_archiveManager.IsModInstalled("###_nim_material_override"))
+        {
+            _warningsDisplayed = true;
+            Interactions.ShowPopupWithWeblink((
+                "You have an old version of MTO installed, which can lead to crashes. Click 'Open Wiki' for more information.",
+                "Old version of MTO installed",
+                "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/error-codes#mto-requirement",
+                "Open Wiki",
+                WMessageBoxImage.Warning
+            ));
+        }
+
+        _warningsDisplayed = true;
+        Interactions.ShowPopupWithWeblink((
+            "Modding base-game .mlsetup files will not have an effect in-game unless you install the 'Material Texture Override' mod. For more information, click on 'Open Wiki'.",
+            "MTO not installed",
+            "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/error-codes#mto-requirement",
+            "Open Wiki",
+            WMessageBoxImage.Warning
+        ));
+    }
 
     private async Task LoadTweakDB()
     {

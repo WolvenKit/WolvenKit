@@ -462,6 +462,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                  || Parent.ResolvedData is CMeshMaterialEntry
                  || Parent.ResolvedData is localizationPersistenceOnScreenEntry
                  || Parent.ResolvedData is IRedArray
+                 || Parent.ResolvedData is appearancePartComponentOverrides
                 )
         {
             Parent.CalculateDescriptor();
@@ -1169,13 +1170,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     [RelayCommand]
     private void CreateTXLOverride()
     {
-        if (_projectManager.ActiveProject is null)
+        if (_projectManager.ActiveProject is not { } activeProject)
         {
             return;
         }
 
         var txl = GetTXL();
-        var path = Path.Combine(_projectManager.ActiveProject.ResourceTweakDirectory, $"{txl.ID.ResolvedText}.yaml");
+
+        var tweakFolderPath = activeProject.GetResourceTweakDirectory(_settingsManager.UseAuthorNameAsSubfolder);
+        var path = Path.Combine(tweakFolderPath, $"{txl.ID.ResolvedText}.yaml");
 
         try
         {

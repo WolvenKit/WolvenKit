@@ -26,11 +26,9 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
-        if (SettingsManager.ModderName is not string modderName || modderName == string.Empty)
+
+        if (GetModderName() is not string modderName || string.IsNullOrEmpty(modderName))
         {
-            Interactions.ShowMessageBox(
-                "Please set a name in the preferences (Home -> Settings -> General -> Your Name) before using this feature",
-                "Configure your settings!");
             return;
         }
 
@@ -43,13 +41,13 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
         var relativePhotoModeFolder = dialogModel.PhotomodeRelativeFolder.Trim();
 
-        var relativeEntFilePath = GetRelativePath(dialogModel.EntFileName);
-        var relativeAppFilePath = GetRelativePath(dialogModel.AppFileName);
+        var relativeEntFilePath = GetRelativeDestPath(dialogModel.EntFileName);
+        var relativeAppFilePath = GetRelativeDestPath(dialogModel.AppFileName);
 
         var inkatlasFileName = string.IsNullOrEmpty(dialogModel.InkatlasFileName)
             ? "photomode_preview_icon.inkatlas"
             : dialogModel.InkatlasFileName;
-        var relativeInkatlasFilePath = GetRelativePath(inkatlasFileName);
+        var relativeInkatlasFilePath = GetRelativeDestPath(inkatlasFileName);
 
         ProjectExplorerViewModel.SuspendFileWatcherStatic();
 
@@ -88,9 +86,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
              */
             if (dialogModel.IsCreateYamlFile)
             {
-                var yamlTargetDir =
-                    Path.Join(_projectManager.ActiveProject.ResourcesDirectory,
-                        ProjectResourceTools.AppendPersonalDirectory("r6", "tweaks"), "photomode");
+                var yamlTargetDir = Path.Join(_projectManager.ActiveProject.GetResourceTweakDirectory(), "photomode");
 
                 _templateFileTools.CreatePhotomodeYaml(new PhotomodeYamlOptions()
                 {
@@ -186,7 +182,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
         return;
 
-        string GetRelativePath(string pathOrFileName)
+        string GetRelativeDestPath(string pathOrFileName)
         {
             if (activeProject.ModFiles.Contains(pathOrFileName))
             {
@@ -195,7 +191,9 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
             if (pathOrFileName.HasFileExtension(".yaml"))
             {
-                return Path.Join(ProjectResourceTools.AppendPersonalDirectory("r6", "tweaks"), pathOrFileName);
+                return Path.Join(
+                    _projectManager.ActiveProject.GetResourceTweakDirectory(SettingsManager.UseAuthorNameAsSubfolder),
+                    pathOrFileName);
             }
 
             return Path.Join(relativePhotoModeFolder, pathOrFileName);
@@ -253,8 +251,8 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
-        var files = activeProject.Files
-            .Where(f => f.EndsWith(".ent") | f.EndsWith(".mesh"))
+        var files = activeProject.ModFiles
+            .Where(f => f.EndsWith(".ent") | f.EndsWith(".mesh") | f.EndsWith(".mi"))     
             .OrderBy(Path.GetExtension)
             .ToList();
 
@@ -286,12 +284,11 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             fileName += ".txt";
         }
 
-        var subfolder = string.IsNullOrEmpty(SettingsManager.ModderName)
-            ? activeProject.ModName
-            : SettingsManager.ModderName;
+        var subfolder = GetModderName();
 
         WriteEntData();
         WriteMeshData();
+        WriteMiData();
 
         return;
 
@@ -330,6 +327,23 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
                 $"{ents.Count} entries written to {Path.Join([..s_worldBuilderDataPath, subfolder, fileName])}");
         }
 
+        void WriteMiData()
+        {
+            var miFiles = dialogModel.SelectedOptions.Where(f => f.EndsWith(".mi")).ToList();
+            if (miFiles.Count == 0)
+            {
+                return;
+            }
+
+            var miFolder = Path.Join(wbDataFolder, "spawnables", "mi", "all", subfolder);
+            Directory.CreateDirectory(miFolder);
+
+            File.WriteAllText(Path.Join(miFolder, fileName), string.Join(Environment.NewLine, miFiles));
+
+            _loggerService.Success(
+                $"{miFiles.Count} entries written to {Path.Join([..s_worldBuilderDataPath, miFolder, fileName])}");
+        }
+
     }
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
@@ -345,18 +359,15 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
-        if (SettingsManager.ModderName is not string modderName || modderName == string.Empty)
+        if (GetModderName() is not string modderName || string.IsNullOrEmpty(modderName))
         {
-            Interactions.ShowMessageBox(
-                "Please set a name in the preferences (Home -> Settings -> General -> Your Name) before using this feature",
-                "Configure your settings!");
             return;
         }
         var options = new QuestGenerationOptions
         {
             ModName = dialogModel.ModName,
             TargetRoot = Path.Combine(activeProject.ModDirectory, "mod"),
-            ModderName = SettingsManager.ModderName.ToLower(),
+            ModderName = modderName.ToLower(),
         };
 
         _templateFileTools.GenerateMinimalQuest(options);

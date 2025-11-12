@@ -85,7 +85,7 @@
             Grid.ColumnSpan="2"
             Margin="0,0,1,1"
             VerticalContentAlignment="Center"
-            Background="{DynamicResource BackgroundColor_Control}"
+            Background="{DynamicResource ContentBackgroundAlt2}"
             FontSize="{DynamicResource WolvenKitFontSubTitle}"
             helpers:TextBoxBehavior.TripleClickSelectAll="True"
             KeyboardNavigation.TabIndex="-1"

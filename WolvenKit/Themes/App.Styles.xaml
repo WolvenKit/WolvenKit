@@ -54,6 +54,7 @@
     <Color x:Key="WolvenKitFrameColor">Silver</Color>
     <Color x:Key="WolvenKitBorderColor">Gray</Color>
 
+    <SolidColorBrush x:Key="WolvenKitTransparentBrush" Color="Transparent" />
     <SolidColorBrush x:Key="WolvenKitLabelBrush" Color="{StaticResource WolvenKitLabelColor}" />
     <SolidColorBrush x:Key="WolvenKitFrameBrush" Color="{StaticResource WolvenKitFrameColor}" />
     <SolidColorBrush x:Key="WolvenKitBorderBrush" Color="{StaticResource WolvenKitBorderColor}" />
@@ -166,6 +167,8 @@
     <Color x:Key="SceneXorNodeContentColor">#11AA2255</Color>
     <Color x:Key="SceneDefaultNodeContentColor">#11444444</Color>
 
+    <Color x:Key="BackgroundColor_InputField_Readonly">#313131</Color>
+
     <!-- Brushes -->
     <SolidColorBrush x:Key="CustomSliderForegroundBrush" Color="#FF1E91EA" />
     <SolidColorBrush x:Key="CustomSliderBackgroundBrush" Color="#55ffffff" />
@@ -224,10 +227,12 @@
     <SolidColorBrush x:Key="BackgroundColor_Frame_Active" Color="#313131" />
     <SolidColorBrush x:Key="BackgroundColor_Frame_Background" Color="#1F1F1F" />
 
+
     <SolidColorBrush x:Key="BackgroundColor_Button_Inactive" Color="#969696" />
     <SolidColorBrush x:Key="BackgroundColor_Button_Active" Color="#313131" />
 
     <SolidColorBrush x:Key="BackgroundBrush_InputField" Color="{DynamicResource ContentBackgroundAlt2}" />
+    <SolidColorBrush x:Key="BackgroundBrush_InputField_Readonly" Color="{DynamicResource BackgroundColor_InputField_Readonly}" />
 
     <!-- Graph and Curve Editors -->
     <SolidColorBrush x:Key="WolvenKitGraphGrid" Color="{StaticResource WolvenKitGraphGridColor}" />
@@ -235,19 +240,28 @@
     <SolidColorBrush x:Key="WolvenKitGraphLabel" Color="{StaticResource WolvenKitGraphLabelColor}" />
     <SolidColorBrush x:Key="WolvenKitGraphCurve" Color="{StaticResource WolvenKitGraphCurveColor}" />
 
+    <!-- Generic label style - foreground, border thickness, alignment -->
+    <Style
+        x:Key="WolvenkitLabelStyle"
+        BasedOn="{StaticResource {x:Type Label}}"
+        TargetType="{x:Type Label}">
+        <Setter Property="Background" Value="{StaticResource WolvenKitTransparentBrush}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="{StaticResource WolvenKitLabelBrush}" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+    </Style>
+
     <!-- Dialog Label styles -->
     <Style
         x:Key="WolvenkitDialogLabelStyle"
-        BasedOn="{StaticResource {x:Type Label}}"
+        BasedOn="{StaticResource WolvenkitLabelStyle}"
         TargetType="{x:Type Label}">
-        <Setter Property="Foreground" Value="{StaticResource WolvenKitLabelBrush}" />
-        <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="Width" Value="{StaticResource WolvenKitDialogLabelColumnWidth}" />
     </Style>
 
     <Style
         x:Key="WolvenkitDialogLabelStyleMedium"
-        BasedOn="{StaticResource WolvenkitDialogLabelStyle}"
+        BasedOn="{StaticResource WolvenkitLabelStyle}"
         TargetType="{x:Type Label}">
         <Setter Property="Width" Value="{StaticResource WolvenKitDialogLabelColumnWidthMedium}" />
     </Style>

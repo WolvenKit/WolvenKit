@@ -1,12 +1,14 @@
-﻿using System.Reactive.Disposables;
+using System;
+using System.Collections.Generic;
+using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using ReactiveUI;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.ViewModels.Dialogs;
+using ComboBox = System.Windows.Controls.ComboBox;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-using Window = System.Windows.Window;
 
 namespace WolvenKit.Views.Dialogs.Windows;
 
@@ -31,6 +33,14 @@ public partial class AddInkatlasDialog : IViewFor<AddInkatlasDialogViewModel>
         {
             // bind to filteredDropdownMenu
             this.Bind(ViewModel,
+                    x => x.ExistingFiles,
+                    x => x.ExistingFileDropdownMenu.Options)
+                .DisposeWith(disposables);
+            this.Bind(ViewModel,
+                    x => x.ExistingFile,
+                    x => x.ExistingFileDropdownMenu.SelectedOption)
+                .DisposeWith(disposables);
+            this.Bind(ViewModel,
                     x => x.ProjectFolders,
                     x => x.FilterableDropdownMenu.Options)
                 .DisposeWith(disposables);
@@ -51,6 +61,10 @@ public partial class AddInkatlasDialog : IViewFor<AddInkatlasDialogViewModel>
             this.Bind(ViewModel,
                     x => x.PngSourceDir,
                     x => x.PngFolderBox.Text)
+                .DisposeWith(disposables);
+            this.Bind(ViewModel,
+                    x => x.ExistingFile,
+                    x => x.ExistingFileBox.Text)
                 .DisposeWith(disposables);
             this.Bind(ViewModel,
                     x => x.TileWidth,
@@ -170,5 +184,21 @@ public partial class AddInkatlasDialog : IViewFor<AddInkatlasDialogViewModel>
         }
 
         vm.PngSourceDir = folderDialog.SelectedPath;
+    }
+
+    private void OnIconSizeSelected(object sender, RoutedEventArgs e)
+    {
+        if (ViewModel is null || sender is not ComboBox box)
+        {
+            return;
+        }
+
+        if (box.SelectedItem is not KeyValuePair<string, ValueTuple<int, int>> kvp)
+        {
+            return;
+        }
+
+        ViewModel.TileWidth = $"{kvp.Value.Item1}";
+        ViewModel.TileHeight = $"{kvp.Value.Item2}";
     }
 }
