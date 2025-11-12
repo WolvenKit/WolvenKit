@@ -573,6 +573,36 @@ namespace WolvenKit.Views.Documents
                 }
             }
 
+            // Shortcut: Ctrl+C to copy currently selected node
+            if (e.Key == Key.C && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+            {
+                var selectedNode = NodeSelectionService.Instance.SelectedNode;
+                if (selectedNode != null)
+                {
+                    GraphClipboardManager.CopyNode(selectedNode, viewModel.MainGraph.GraphType);
+                    e.Handled = true;
+                }
+            }
+
+            // Shortcut: Ctrl+V to paste node from clipboard
+            if (e.Key == Key.V && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+            {
+                if (GraphClipboardManager.CanPaste(viewModel.MainGraph.GraphType))
+                {
+                    var copiedData = GraphClipboardManager.GetCopiedData();
+                    if (copiedData != null && SceneGraphEditor?.Editor != null)
+                    {
+                        // Paste at viewport center
+                        var viewportCenter = new System.Windows.Point(
+                            SceneGraphEditor.Editor.ViewportLocation.X + (SceneGraphEditor.Editor.ViewportSize.Width / 2),
+                            SceneGraphEditor.Editor.ViewportLocation.Y + (SceneGraphEditor.Editor.ViewportSize.Height / 2)
+                        );
+                        viewModel.MainGraph.PasteNode(copiedData, viewportCenter);
+                        e.Handled = true;
+                    }
+                }
+            }
+
             // Shortcut: Ctrl+N to open new node dialog
             if (e.Key == Key.N && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
             {

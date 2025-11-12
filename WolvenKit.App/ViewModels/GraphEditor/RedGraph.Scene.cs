@@ -1214,6 +1214,94 @@ public partial class RedGraph
         _loggerService?.Info($"Duplicated scene node with new ID: {duplicatedData.NodeId.Id}");
     }
 
+    public void PasteSceneNode(IRedType copiedData, System.Windows.Point location)
+    {
+        scnSceneGraphNode duplicatedData;
+
+        // Cross-type paste: Quest -> Scene (wrap quest node in scnQuestNode)
+        if (copiedData is questNodeDefinition questNodeData)
+        {
+            if (questNodeData is not IRedCloneable questCloneable)
+            {
+                _loggerService?.Error($"Cannot paste quest node of type {questNodeData.GetType().Name} - it doesn't implement IRedCloneable");
+                return;
+            }
+
+            // Deep copy the quest node
+            var copiedQuestNode = (questNodeDefinition)questCloneable.DeepCopy();
+
+            // Clear quest node connections
+            foreach (var socket in copiedQuestNode.Sockets)
+            {
+                if (socket.Chunk is questSocketDefinition socketDef)
+                {
+                    socketDef.Connections.Clear();
+                }
+            }
+
+            // Create scene node wrapper and get new ID
+            var newNodeId = GetNextAvailableSceneNodeId();
+            _currentSceneNodeId = Math.Max(_currentSceneNodeId, newNodeId);
+
+            var sceneQuestNode = new scnQuestNode
+            {
+                NodeId = new scnNodeId { Id = newNodeId },
+                QuestNode = new CHandle<questNodeDefinition>(copiedQuestNode)
+            };
+
+            // Set quest node ID to match scene node ID
+            copiedQuestNode.Id = (ushort)newNodeId;
+
+            // Configure socket mappings
+            ConfigureQuestNodeSockets(sceneQuestNode, copiedQuestNode);
+
+            duplicatedData = sceneQuestNode;
+        }
+        // Same-type paste: Scene -> Scene
+        else if (copiedData is scnSceneGraphNode sceneNodeData)
+        {
+            if (sceneNodeData is not IRedCloneable cloneable)
+            {
+                _loggerService?.Error($"Cannot paste node of type {sceneNodeData.GetType().Name} - it doesn't implement IRedCloneable");
+                return;
+            }
+
+            duplicatedData = (scnSceneGraphNode)cloneable.DeepCopy();
+
+            var newNodeId = GetNextAvailableSceneNodeId();
+            duplicatedData.NodeId.Id = newNodeId;
+            _currentSceneNodeId = Math.Max(_currentSceneNodeId, newNodeId);
+
+            // For scnQuestNode, also update the quest node's ID to match
+            if (duplicatedData is scnQuestNode questNode && questNode.QuestNode?.Chunk != null)
+            {
+                questNode.QuestNode.Chunk.Id = (ushort)duplicatedData.NodeId.Id;
+            }
+
+            foreach (var outputSocket in duplicatedData.OutputSockets)
+            {
+                outputSocket.Destinations.Clear();
+            }
+        }
+        else
+        {
+            _loggerService?.Error($"Cannot paste node data of type {copiedData.GetType().Name} into scene graph");
+            return;
+        }
+
+        var wrappedDuplicate = WrapSceneNode(duplicatedData);
+        wrappedDuplicate.Location = location;
+
+        ((scnSceneResource)_data).SceneGraph.Chunk!.Graph.Add(new CHandle<scnSceneGraphNode>(duplicatedData));
+
+        if (GetSceneNodesChunkViewModel() is { } nodes)
+        {
+            nodes.RecalculateProperties();
+        }
+
+        Nodes.Add(wrappedDuplicate);
+    }
+
     private uint GetNextAvailableSceneNodeId()
     {
         var sceneResource = (scnSceneResource)_data;
