@@ -31,6 +31,10 @@ namespace WolvenKit.Views.Dialogs
                         x => x.Dropdown.SelectedOption)
                     .DisposeWith(disposables);
                 this.Bind(ViewModel,
+                        x => x.SelectedOption,
+                        x => x.TextBox.Text)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
                         x => x.OptionsDict,
                         x => x.Dropdown.Options)
                     .DisposeWith(disposables);
