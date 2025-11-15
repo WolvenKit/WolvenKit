@@ -845,6 +845,8 @@ public class ArchiveXlItemService
             { "atlasResourcePath", clothingItemData.InkatlasPath }, { "atlasPartName", $"{atlasPathName}" }
         };
 
+        var placementSlots = new YamlSequenceNode() { $"OutfitSlots.{clothingItemData.EqExSlot}" };
+
         var yamlData = new YamlMappingNode();
         var yaml = new YamlMappingNode() { { itemName, yamlData } };
 
@@ -874,7 +876,7 @@ public class ArchiveXlItemService
 
         if (clothingItemData.EqExSlot is not EquipmentExSlot.None)
         {
-            yamlData.Children.TryAdd("placementSlots", $"OutfitSlots.{clothingItemData.EqExSlot}");
+            yamlData.Children.TryAdd("placementSlots", placementSlots);
         }
 
         var comment = clothingItemData.Variants.SelectMany(color =>
