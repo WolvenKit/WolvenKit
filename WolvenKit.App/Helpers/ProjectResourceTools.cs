@@ -1253,6 +1253,15 @@ public partial class ProjectResourceTools
         }
 
         var materialDependencies = GetDependencyPaths(cr2W);
+        var relativeDestPath = activeProject.GetRelativePath(destFolder);
+
+        // Now ignore any files that are already in target folder
+        foreach (var resourcePath in materialDependencies.ToList().Where(p =>
+                     p.GetResolvedText() is string s && s.StartsWith(relativeDestPath)))
+        {
+            materialDependencies.Remove(resourcePath);
+        }
+
 
         if (materialDependencies.Count == 0)
         {
