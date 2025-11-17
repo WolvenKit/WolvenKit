@@ -407,6 +407,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             return;
         }
 
+        var isShiftKeyDown = _modifierViewStateService?.IsShiftKeyPressed == true;
 
         List<entIVisualComponent> components = [];
         List<ChunkViewModel?> chunksToRefresh = [];
@@ -447,6 +448,10 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         foreach (var comp in components.Where(c => c.ForceLODLevel != 0))
         {
             comp.ForceLODLevel = 0;
+            if (isShiftKeyDown && comp is entSkinnedMeshComponent skinnedMesh)
+            {
+                skinnedMesh.LODMode = Enums.entMeshComponentLODMode.Appearance;
+            }
             lodLevelsChanged += 1;
         }
 
