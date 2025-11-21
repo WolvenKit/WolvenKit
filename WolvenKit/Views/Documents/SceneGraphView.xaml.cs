@@ -576,6 +576,10 @@ namespace WolvenKit.Views.Documents
             // Shortcut: Ctrl+C to copy currently selected node
             if (e.Key == Key.C && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
             {
+                // Don't handle copy if user is editing text
+                if (IsTextEditingControlFocused())
+                    return;
+
                 var selectedNode = NodeSelectionService.Instance.SelectedNode;
                 if (selectedNode != null)
                 {
@@ -587,6 +591,10 @@ namespace WolvenKit.Views.Documents
             // Shortcut: Ctrl+V to paste node from clipboard
             if (e.Key == Key.V && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
             {
+                // Don't handle paste if user is editing text
+                if (IsTextEditingControlFocused())
+                    return;
+
                 if (GraphClipboardManager.CanPaste(viewModel.MainGraph.GraphType))
                 {
                     var copiedData = GraphClipboardManager.GetCopiedData();
