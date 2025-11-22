@@ -14,17 +14,18 @@ using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Core;
+using WolvenKit.Interfaces.Extensions;
 using WolvenKit.ViewModels.Validators;
 
 namespace WolvenKit.Views.Dialogs.Windows
 {
     public partial class AddArchiveXlFilesDialog : IViewFor<AddArchiveXlFilesDialogViewModel>
     {
-        public AddArchiveXlFilesDialog()
+        public AddArchiveXlFilesDialog(Cp77Project currentProject)
         {
             InitializeComponent();
 
-            ViewModel = new AddArchiveXlFilesDialogViewModel();
+            ViewModel = new AddArchiveXlFilesDialogViewModel(currentProject);
             DataContext = ViewModel;
 
             Owner = Application.Current.MainWindow;
@@ -196,6 +197,45 @@ namespace WolvenKit.Views.Dialogs.Windows
 
             model.SecondaryVariants =
                 [.. textBox.Text.Split(",", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)];
+        }
+
+        private void ExistingFiles_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ViewModel is not { } vm)
+            {
+                return;
+            }
+
+            var existingFiles = vm.ExistingFiles ?? [];
+
+            existingFiles.AddRange(e.AddedItems.OfType<string>());
+
+            foreach (var removedItem in e.RemovedItems.OfType<string>())
+            {
+                existingFiles.Remove(removedItem);
+            }
+
+            vm.ExistingFiles = existingFiles.Distinct().ToList();
+        }
+
+        private void PrimaryMeshPathDropdown_OnChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ViewModel is null || sender is not ComboBox { SelectedItem: string meshPath })
+            {
+                return;
+            }
+
+            ViewModel.PrimaryAppearanceMesh = meshPath;
+        }
+
+        private void SecondaryMeshPathDropdown_OnChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ViewModel is null || sender is not ComboBox { SelectedItem: string meshPath })
+            {
+                return;
+            }
+
+            ViewModel.SecondaryAppearanceMesh = meshPath;
         }
     }
 }

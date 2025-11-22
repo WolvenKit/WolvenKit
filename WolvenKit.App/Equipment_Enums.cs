@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 // ReSharper disable InconsistentNaming
@@ -455,7 +456,6 @@ public static class EquipmentItemData
         { EquipmentItemSlot.Outfit, [] },
     };
 
-
     public static Dictionary<EquipmentWeaponSlot, List<EquipmentWeaponSubSlot>> EquipmentWeaponSlotToSubSlots = new()
     {
         {
@@ -600,4 +600,21 @@ public static class EquipmentItemData
             ]
         },
     };
+
+    public static string GetComponentPrefix(EquipmentItemSlot slot)
+    {
+        return slot switch
+        {
+            EquipmentItemSlot.Face => "f1_",
+            EquipmentItemSlot.Feet => "s1_",
+            EquipmentItemSlot.Head => "h1_",
+            EquipmentItemSlot.Torso_Outer => "t2_",
+            EquipmentItemSlot.Legs => "l1_",
+            EquipmentItemSlot.Torso_Inner => "t1_",
+            EquipmentItemSlot.Outfit => "t1_",
+            EquipmentItemSlot.None => "t0_",
+            _ => "t0_"
+        };
+    }
+
 }

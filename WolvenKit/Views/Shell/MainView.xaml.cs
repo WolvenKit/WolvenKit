@@ -90,9 +90,9 @@ namespace WolvenKit.Views.Shell
                     return true;
                 };
 
-                Interactions.ShowArchiveXlFilesView = () =>
+                Interactions.ShowArchiveXlFilesView = currentProject =>
                 {
-                    AddArchiveXlFilesDialog dialog = new();
+                    AddArchiveXlFilesDialog dialog = new(currentProject);
 
                     if (dialog.ShowDialog(this) != true)
                     {
@@ -179,7 +179,7 @@ namespace WolvenKit.Views.Shell
 
                     return dialog.ViewModel;
                 };
-                
+
                 Interactions.ShowCopyMeshAppearancesDialogue = (options) =>
                 {
                     var dialog = new CopyMeshAppearancesDialog(options);
