@@ -318,6 +318,7 @@ public static class EquipmentItemData
     {
         { EquipmentItemSlot.Face, @"base\characters\garment\player_equipment\head\h1_015_pwa_specs__visor_holo.ent" },
         { EquipmentItemSlot.Head, @"base\characters\garment\player_equipment\head\h2_011_pwa_helmet__riot.ent" },
+        { EquipmentItemSlot.Feet, @"base\characters\garment\player_equipment\feet\s1_063_pwa_shoe__mexican.ent" },
         { EquipmentItemSlot.Legs, @"base\characters\garment\player_equipment\legs\l1_070_pwa_pants__loose.ent" },
         {
             EquipmentItemSlot.Torso_Inner,
