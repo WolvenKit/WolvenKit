@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.Core;
@@ -98,7 +99,7 @@ public class ArchiveXlClothingItem
     }
 }
 
-public class ArchiveXlItemService
+public partial class ArchiveXlItemService
 {
     private readonly ISettingsManager _settingsManager;
     private readonly IProjectManager _projectManager;
@@ -488,7 +489,8 @@ public class ArchiveXlItemService
         {
             cr2W = f;
         }
-        else if (EquipmentItemData.FilesBySubType.TryGetValue(clothingItemData.SubSlot, out var meshEntityPath) &&
+        else if (clothingItemData.SubSlot is not EquipmentItemSubSlot.None &&
+                 EquipmentItemData.FilesBySubType.TryGetValue(clothingItemData.SubSlot, out var meshEntityPath) &&
                  _archiveManager.GetCR2WFile(meshEntityPath) is
                      CR2WFile f2)
         {
@@ -517,27 +519,28 @@ public class ArchiveXlItemService
         foreach (var entComponent in entTemplate.Components.OfType<IRedMeshComponent>())
         {
             // remove "pwa" from component name, it confuses people
-            entComponent.Name = (entComponent.Name.GetResolvedText() ?? "").Replace("pwa_", "").Replace("_pwa", "");
+            entComponent.Name = (entComponent.Name.GetResolvedText() ?? "").Replace("pwa", "");
 
-            var filePath = entComponent.Mesh.DepotPath.GetResolvedText();
-            if (string.IsNullOrEmpty(filePath))
+            var fileSourcePath = entComponent.Mesh.DepotPath.GetResolvedText();
+            if (string.IsNullOrEmpty(fileSourcePath))
             {
                 _logger.Warning($"Failed to read depot path for {entComponent.Name}, skipping...");
                 continue;
             }
 
-            if (filePath.StartsWith('*'))
+            if (fileSourcePath.StartsWith('*'))
             {
                 _logger.Info($"Depot path for {entComponent.Name} is already dynamic. Skipping...");
                 continue;
             }
 
             var isSecondaryComponent = IsSecondaryComponent(entComponent.Name!);
-            var pathInMod = Path.Combine(relativeMeshFolder, Path.GetFileName(filePath));
 
-            AddMeshFilesToProject(filePath, pathInMod, isSecondaryComponent);
+            var fileDestPath = GetDestFilePath(fileSourcePath, isSecondaryComponent);
 
-            var dynamicPath = WolvenKit.Modkit.Resources.ArchiveXlHelper.MakeDynamic(pathInMod);
+            AddMeshFilesToProject(fileSourcePath, fileDestPath, isSecondaryComponent);
+
+            var dynamicPath = WolvenKit.Modkit.Resources.ArchiveXlHelper.MakeDynamic(fileDestPath);
             var hasSubstitution = ArchiveXlHelper.HasSubstitution(dynamicPath);
 
             entComponent.Mesh =
@@ -579,6 +582,29 @@ public class ArchiveXlItemService
             componentName.Contains("_dec", StringComparison.OrdinalIgnoreCase) ||
             componentName.Contains("_cuff", StringComparison.OrdinalIgnoreCase) ||
             componentName.Contains("_patch", StringComparison.OrdinalIgnoreCase);
+
+        string GetDestFilePath(string filePath, bool isSecondaryComponent = false)
+        {
+            var fileName = Path.GetFileName(filePath);
+            var newPath = Path.Combine(relativeMeshFolder, fileName);
+            if (activeProject.ModFiles.Contains(newPath))
+            {
+                return newPath;
+            }
+
+            if (isSecondaryComponent || fileName.Contains("shadow") || fileName.Contains("proxy"))
+            {
+                fileName = MeshFileName_SecondaryRegex().Replace(fileName, clothingItemData.ItemName);
+            }
+            else
+            {
+                fileName = MeshFileNameRegex().Replace(fileName, clothingItemData.ItemName);
+            }
+
+
+            return Path.Combine(relativeMeshFolder, fileName);
+        }
+
         /*
          * Adds mesh files from .ent components to project. Will try to find pma/_ma mesh (entity is pwa/_wa).
          * Will not overwrite existing files.
@@ -887,4 +913,10 @@ public class ArchiveXlItemService
 
         YamlHelper.RemoveInExistingFileAndAppend(yamlAbsPath, itemName, yaml, comment);
     }
+
+    [GeneratedRegex(@"\d(_[a-z0-9_]+)(?=_\w{1,19}.)")]
+    private static partial Regex MeshFileName_SecondaryRegex();
+
+    [GeneratedRegex("\\d(_[^.]+)")]
+    private static partial Regex MeshFileNameRegex();
 }
