@@ -1324,4 +1324,34 @@ public partial class ProjectResourceTools
         activeProject.DeleteEmptyFolders(_loggerService);
     }
 
+    # region meshFiles
+
+    public List<string> GetAppearanceNames(string relativePath)
+    {
+        List<string> ret = [];
+        if (_projectManager.ActiveProject is not { } activeProject || !activeProject.ModFiles.Contains(relativePath) ||
+            _crwWTools.ReadCr2W(Path.Join(activeProject.ModDirectory, relativePath)) is not { } cr2W)
+        {
+            return ret;
+        }
+
+        switch (cr2W.RootChunk)
+        {
+            case CMesh mesh:
+                ret.AddRange(mesh.Appearances.Select(h => h.Chunk)
+                    .OfType<meshMeshAppearance>()
+                    .Select(a => a.Name.ToString() ?? ""));
+                break;
+            case appearanceAppearanceResource app:
+                ret.AddRange(app.Appearances.Select(a => a.Chunk).OfType<appearanceAppearanceDefinition>()
+                    .Select(a => a.Name.ToString() ?? ""));
+                break;
+            default:
+                break;
+        }
+
+        return ret.Where(s => !string.IsNullOrEmpty(s)).Distinct().ToList();
+    }
+
+    #endregion
 }

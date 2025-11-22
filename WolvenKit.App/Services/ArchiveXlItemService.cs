@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.Core;
@@ -70,7 +71,10 @@ public class ArchiveXlClothingItem
     /// </summary>
     public List<string> SecondaryVariants { get; init; } = [];
 
-    public bool IsAddMeshMaterials { get; init; }
+    public List<string> MeshesFromProject { get; set; } = [];
+
+    public string? PrimaryAppearanceMesh { get; set; } = string.Empty;
+    public string? SecondaryAppearanceMesh { get; set; } = string.Empty;
 
 
     public static readonly YamlSequenceNode StatModifiers = new(
@@ -98,7 +102,7 @@ public class ArchiveXlClothingItem
     }
 }
 
-public class ArchiveXlItemService
+public partial class ArchiveXlItemService
 {
     private readonly ISettingsManager _settingsManager;
     private readonly IProjectManager _projectManager;
@@ -145,6 +149,8 @@ public class ArchiveXlItemService
         var projectFiles = activeProject.ModFiles.ToList();
 
         SetPathsAndCreateDirectories(clothingItemData, activeProject);
+
+        EnsureVariantValidity(clothingItemData, activeProject);
 
         AddRootEntity(clothingItemData, activeProject);
 
@@ -358,6 +364,50 @@ public class ArchiveXlItemService
     }
 
     /// <summary>
+    /// If IsCollectMeshAppearances was checked in the dialog, read appearance name from mesh(es).
+    /// If it was not set, PrimaryAppearanceMesh will be empty.
+    /// </summary>
+    private void EnsureVariantValidity(ArchiveXlClothingItem clothingItemData, Cp77Project activeProject)
+    {
+        if (!string.IsNullOrEmpty(clothingItemData.PrimaryAppearanceMesh) &&
+            activeProject.ModFiles.Contains(clothingItemData.PrimaryAppearanceMesh!))
+        {
+            var appearanceNames = _projectResourceTools.GetAppearanceNames(clothingItemData.PrimaryAppearanceMesh);
+            if (appearanceNames.Count > 0)
+            {
+                clothingItemData.Variants.Clear();
+                clothingItemData.Variants.AddRange(appearanceNames);
+            }
+        }
+
+        // make sure we always have at least one appearance
+        if (clothingItemData.Variants.Count == 0)
+        {
+            clothingItemData.Variants.Add("default");
+        }
+
+        if (string.IsNullOrEmpty(clothingItemData.SecondaryAppearanceMesh) ||
+            !activeProject.ModFiles.Contains(clothingItemData.SecondaryAppearanceMesh!))
+        {
+            return;
+        }
+
+        var secondaryAppearances =
+            _projectResourceTools.GetAppearanceNames(clothingItemData.SecondaryAppearanceMesh);
+
+        if (secondaryAppearances.Count > 0)
+        {
+            clothingItemData.SecondaryVariants.Clear();
+            clothingItemData.SecondaryVariants.AddRange(secondaryAppearances);
+        }
+
+        if (clothingItemData.SecondaryVariants.Count == 0)
+        {
+            clothingItemData.SecondaryVariants.Add("default");
+        }
+    }
+
+    /// <summary>
     /// Creates translation file entries generated from description, display name and variants.
     /// Will re-use existing i18n file if it exists - entries will be appended, but not overwritten.
     /// </summary>
@@ -488,7 +538,8 @@ public class ArchiveXlItemService
         {
             cr2W = f;
         }
-        else if (EquipmentItemData.FilesBySubType.TryGetValue(clothingItemData.SubSlot, out var meshEntityPath) &&
+        else if (clothingItemData.SubSlot is not EquipmentItemSubSlot.None &&
+                 EquipmentItemData.FilesBySubType.TryGetValue(clothingItemData.SubSlot, out var meshEntityPath) &&
                  _archiveManager.GetCR2WFile(meshEntityPath) is
                      CR2WFile f2)
         {
@@ -512,50 +563,15 @@ public class ArchiveXlItemService
         var relativeMeshFolder = Path.Combine(clothingItemData.FilesRelPath, "meshes");
         Directory.CreateDirectory(Path.Combine(activeProject.ModDirectory, relativeMeshFolder));
 
-        var useSecondary = clothingItemData.SecondaryVariants.Count > 0;
-
-        foreach (var entComponent in entTemplate.Components.OfType<IRedMeshComponent>())
+        if (clothingItemData.MeshesFromProject.Count == 0)
         {
-            var filePath = entComponent.Mesh.DepotPath.GetResolvedText();
-            if (string.IsNullOrEmpty(filePath))
-            {
-                _logger.Warning($"Failed to read depot path for {entComponent.Name}, skipping...");
-                continue;
-            }
+            // we are not using meshes from project
+            AdjustExistingComponents();
+        }
+        else
+        {
+            CreateMeshComponents();
 
-            if (filePath.StartsWith('*'))
-            {
-                _logger.Info($"Depot path for {entComponent.Name} is already dynamic. Skipping...");
-                continue;
-            }
-
-            var isSecondaryComponent = IsSecondaryComponent(entComponent.Name!);
-            var pathInMod = Path.Combine(relativeMeshFolder, Path.GetFileName(filePath));
-
-            AddMeshFilesToProject(filePath, pathInMod, isSecondaryComponent);
-
-
-            var dynamicPath = WolvenKit.Modkit.Resources.ArchiveXlHelper.MakeDynamic(pathInMod);
-            var hasSubstitution = ArchiveXlHelper.HasSubstitution(dynamicPath);
-
-            entComponent.Mesh =
-                new CResourceAsyncReference<CMesh>(dynamicPath,
-                    hasSubstitution ? InternalEnums.EImportFlags.Soft : InternalEnums.EImportFlags.Default);
-            entComponent.MeshAppearance = "*{variant}";
-
-            if (!useSecondary)
-            {
-                continue;
-            }
-
-            if (isSecondaryComponent)
-            {
-                entComponent.MeshAppearance = "*{variant.2}";
-            }
-            else
-            {
-                entComponent.MeshAppearance = "*{variant.1}";
-            }
         }
 
         // Garment support tags (size)
@@ -573,10 +589,132 @@ public class ArchiveXlItemService
 
         return;
 
+        // User wants to connect existing meshes
+        void CreateMeshComponents()
+        {
+            var components = entTemplate.Components.Where(c => c is not IRedMeshComponent).ToList();
+            entTemplate.Components.Clear();
+            foreach (var comp in components)
+            {
+                entTemplate.Components.Add(comp);
+            }
+
+            List<string> componentNames = [];
+            var slotPrefix = EquipmentItemData.GetComponentPrefix(clothingItemData.Slot);
+
+            foreach (var relativePath in clothingItemData.MeshesFromProject)
+            {
+                var meshPath = relativePath;
+                var isSecondaryComponent = meshPath == clothingItemData.SecondaryAppearanceMesh;
+
+                // these will be "wa" meshes, so we need to check for "ma" equivalents
+                if (activeProject.Files.Contains(meshPath.Replace("wa", "ma")))
+                {
+                    meshPath = $"*{meshPath.Replace("wa", "{gender}")}";
+                }
+
+                var isSoft = ArchiveXlHelper.HasSubstitution(meshPath);
+                var path = isSoft && !meshPath.StartsWith("*") ? $"*{meshPath}" : meshPath;
+                var flag = isSoft ? InternalEnums.EImportFlags.Soft : InternalEnums.EImportFlags.Default;
+                var appearance = "*{variant}";
+                if (isSecondaryComponent)
+                {
+                    appearance = "*{variant.2}";
+                }
+                else if (clothingItemData.SecondaryVariants.Count > 0)
+                {
+                    appearance = "*{variant.1}";
+                }
+
+                IRedMeshComponent component = new entGarmentSkinnedMeshComponent()
+                {
+                    Name =
+                        $"{slotPrefix}_{Path.GetFileName(meshPath).Replace("{gender}", "").Replace("__", "_").ToFileName()}",
+                    Mesh = new CResourceAsyncReference<CMesh>(path, flag),
+                    MeshAppearance = appearance
+                };
+                entTemplate.Components.Add(component);
+            }
+        }
+
+        void AdjustExistingComponents()
+        {
+            var useSecondary = clothingItemData.SecondaryVariants.Count > 0;
+            foreach (var entComponent in entTemplate.Components.OfType<IRedMeshComponent>())
+            {
+                // remove "pwa" from component name, it confuses people
+                entComponent.Name = (entComponent.Name.GetResolvedText() ?? "").Replace("pwa", "");
+
+                var fileSourcePath = entComponent.Mesh.DepotPath.GetResolvedText();
+                if (string.IsNullOrEmpty(fileSourcePath))
+                {
+                    _logger.Warning($"Failed to read depot path for {entComponent.Name}, skipping...");
+                    continue;
+                }
+
+                if (fileSourcePath.StartsWith('*'))
+                {
+                    _logger.Info($"Depot path for {entComponent.Name} is already dynamic. Skipping...");
+                    continue;
+                }
+
+                var isSecondaryComponent = IsSecondaryComponent(entComponent.Name!);
+
+                var fileDestPath = GetDestFilePath(fileSourcePath, isSecondaryComponent);
+
+                AddMeshFilesToProject(fileSourcePath, fileDestPath, isSecondaryComponent);
+
+                var dynamicPath = WolvenKit.Modkit.Resources.ArchiveXlHelper.MakeDynamic(fileDestPath);
+                var hasSubstitution = ArchiveXlHelper.HasSubstitution(dynamicPath);
+
+                entComponent.Mesh =
+                    new CResourceAsyncReference<CMesh>(dynamicPath,
+                        hasSubstitution ? InternalEnums.EImportFlags.Soft : InternalEnums.EImportFlags.Default);
+                entComponent.MeshAppearance = "*{variant}";
+
+                if (!useSecondary)
+                {
+                    continue;
+                }
+
+                if (isSecondaryComponent)
+                {
+                    entComponent.MeshAppearance = "*{variant.2}";
+                }
+                else
+                {
+                    entComponent.MeshAppearance = "*{variant.1}";
+                }
+            }
+        }
+
         bool IsSecondaryComponent(string componentName) =>
             componentName.Contains("_dec", StringComparison.OrdinalIgnoreCase) ||
             componentName.Contains("_cuff", StringComparison.OrdinalIgnoreCase) ||
             componentName.Contains("_patch", StringComparison.OrdinalIgnoreCase);
+
+        string GetDestFilePath(string filePath, bool isSecondaryComponent = false)
+        {
+            var fileName = Path.GetFileName(filePath);
+            var newPath = Path.Combine(relativeMeshFolder, fileName);
+            if (activeProject.ModFiles.Contains(newPath))
+            {
+                return newPath;
+            }
+
+            if (isSecondaryComponent || fileName.Contains("shadow") || fileName.Contains("proxy"))
+            {
+                fileName = MeshFileName_SecondaryRegex().Replace(fileName, clothingItemData.ItemName);
+            }
+            else
+            {
+                fileName = MeshFileNameRegex().Replace(fileName, clothingItemData.ItemName);
+            }
+
+
+            return Path.Combine(relativeMeshFolder, fileName);
+        }
+
         /*
          * Adds mesh files from .ent components to project. Will try to find pma/_ma mesh (entity is pwa/_wa).
          * Will not overwrite existing files.
@@ -593,16 +731,7 @@ public class ArchiveXlItemService
                     return;
                 }
 
-                if (pathInMod.Contains("_pwa"))
-                {
-                    AdjustMeshAppearances(mesh, isSecondaryComponent);
-                }
-
-                if (clothingItemData.IsAddMeshMaterials)
-                {
-                    _projectResourceTools.AddDependenciesToProject(componentMesh, textureDirPath).GetAwaiter()
-                        .GetResult();
-                }
+                AdjustMeshAppearances(mesh, isSecondaryComponent);
 
                 _cr2WTools.WriteCr2W(componentMesh, destPath);
             }
@@ -622,18 +751,7 @@ public class ArchiveXlItemService
                 return;
             }
 
-
-            if (pathInMod.Contains("_pma"))
-            {
-                AdjustMeshAppearances(mesh2, isSecondaryComponent);
-            }
-
-
-            if (clothingItemData.IsAddMeshMaterials)
-            {
-                _projectResourceTools.AddDependenciesToProject(otherGenderMesh, textureDirPath).GetAwaiter()
-                    .GetResult();
-            }
+            AdjustMeshAppearances(mesh2, isSecondaryComponent);
 
             _cr2WTools.WriteCr2W(otherGenderMesh, destPath2);
         }
@@ -887,4 +1005,10 @@ public class ArchiveXlItemService
 
         YamlHelper.RemoveInExistingFileAndAppend(yamlAbsPath, itemName, yaml, comment);
     }
+
+    [GeneratedRegex(@"\d(_[a-z0-9_]+)(?=_\w{1,19}.)")]
+    private static partial Regex MeshFileName_SecondaryRegex();
+
+    [GeneratedRegex("\\d(_[^.]+)")]
+    private static partial Regex MeshFileNameRegex();
 }

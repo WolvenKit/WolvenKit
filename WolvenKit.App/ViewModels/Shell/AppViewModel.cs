@@ -1401,7 +1401,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
-        var item = Interactions.ShowArchiveXlFilesView();
+        var item = Interactions.ShowArchiveXlFilesView(ActiveProject);
         if (item is null)
         {
             return;
