@@ -363,6 +363,10 @@ public static class EquipmentItemData
         },
         { EquipmentItemSubSlot.TankTop, @"base\characters\garment\player_equipment\torso\t1_071_pwa_tank__basic.ent" },
         {
+            EquipmentItemSubSlot.FormalShirt,
+            @"base\characters\garment\player_equipment\torso\t1_102_pwa_shirt__collar_open.ent"
+        },
+        {
             EquipmentItemSubSlot.Jumpsuit,
             @"base\characters\garment\player_equipment\torso\t1_091_pwa_full__jumpsuit.ent"
         },
