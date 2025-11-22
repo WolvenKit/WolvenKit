@@ -516,6 +516,9 @@ public class ArchiveXlItemService
 
         foreach (var entComponent in entTemplate.Components.OfType<IRedMeshComponent>())
         {
+            // remove "pwa" from component name, it confuses people
+            entComponent.Name = (entComponent.Name.GetResolvedText() ?? "").Replace("pwa_", "").Replace("_pwa", "");
+
             var filePath = entComponent.Mesh.DepotPath.GetResolvedText();
             if (string.IsNullOrEmpty(filePath))
             {
@@ -533,7 +536,6 @@ public class ArchiveXlItemService
             var pathInMod = Path.Combine(relativeMeshFolder, Path.GetFileName(filePath));
 
             AddMeshFilesToProject(filePath, pathInMod, isSecondaryComponent);
-
 
             var dynamicPath = WolvenKit.Modkit.Resources.ArchiveXlHelper.MakeDynamic(pathInMod);
             var hasSubstitution = ArchiveXlHelper.HasSubstitution(dynamicPath);
