@@ -357,9 +357,7 @@ public partial class TweakBrowserViewModel : ToolViewModel
 
         var txlFile = new TweakXLFile { txl };
         var tweakDirectory =
-            _projectManager.ActiveProject.GetResourceTweakDirectory(_settingsManager.UseAuthorNameAsSubfolder);
-
-        Directory.CreateDirectory(tweakDirectory);
+            _projectManager.ActiveProject.GetResourceTweakDirectory(_settingsManager.UseAuthorNameAsSubfolder, true);
 
         var path = Path.Combine(
             tweakDirectory,

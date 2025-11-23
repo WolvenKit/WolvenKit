@@ -192,8 +192,8 @@ public partial class ProjectManager : ObservableObject, IProjectManager
         {
             return;
         }
-        var yamlDir = project.GetResourceTweakDirectory(_settingsManager.UseAuthorNameAsSubfolder);
-        Directory.CreateDirectory(yamlDir);
+
+        var yamlDir = project.GetResourceTweakDirectory(_settingsManager.UseAuthorNameAsSubfolder, true);
 
         foreach (var file in yamlFiles)
         {
