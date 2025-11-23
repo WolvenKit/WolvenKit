@@ -314,14 +314,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
             subDir = Author.ToFileName();
         }
 
-        var dir = Path.Combine(ResourcesDirectory, s_tweakSubfolder, subDir);
-
-        if (!Directory.Exists(dir))
-        {
-            Directory.CreateDirectory(dir);
-        }
-
-        return dir;
+        return Path.Combine(ResourcesDirectory, s_tweakSubfolder, subDir);
     }
 
     /// Returns RELATIVE PATH to tweak directory (use <see cref="GetResourceTweakDirectory"/> otherwise).
