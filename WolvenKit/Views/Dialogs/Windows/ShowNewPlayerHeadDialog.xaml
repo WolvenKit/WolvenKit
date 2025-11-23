@@ -10,19 +10,23 @@
     SizeToContent="WidthAndHeight"
     WindowStartupLocation="CenterOwner">
     <syncfusion:WizardControl
+        Help="OnHelpButtonClicked"
         CancelButtonCancelsWindow="True"
         FinishButtonClosesWindow="True">
         <syncfusion:WizardPage
             BackVisibility="Collapsed"
             CancelVisibility="Visible"
             FinishVisibility="Visible"
-            HelpVisibility="Collapsed"
+            HelpVisibility="Visible"
             NextVisibility="Collapsed"
             KeyDown="ShowNewPlayerHeadDialogView_OnKeyDown"
             PageType="Exterior">
 
             <Grid Height="Auto">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="5" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="5" />
                     <RowDefinition Height="Auto" />
@@ -52,22 +56,39 @@
                 <TextBlock
                     Grid.Row="0"
                     Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="{DynamicResource WolvenKitMarginVertical}"
+                    Style="{StaticResource LabelStyle}"
+                    Text="Add player head files for a body gender of your choice." />
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="{DynamicResource WolvenKitMarginBottom}"
+                    Style="{StaticResource LabelStyle}"
+                    Text="Press the 'Help' button to open the corresponding wiki guide." />
+
+                <TextBlock
+                    Grid.Row="3"
+                    Grid.Column="0"
                     Style="{StaticResource LabelStyle}"
                     Text="Female" />
 
                 <RadioButton
-                    Grid.Row="0"
+                    Name="RadioButtonFemale"
+                    Grid.Row="3"
                     Grid.Column="1"
                     Checked="BodyGenderFemale" />
 
                 <TextBlock
-                    Grid.Row="2"
+                    Grid.Row="5"
                     Grid.Column="0"
                     Style="{StaticResource LabelStyle}"
                     Text="Male" />
 
                 <RadioButton
-                    Grid.Row="2"
+                    Name="RadioButtonMale"
+                    Grid.Row="5"
                     Grid.Column="1"
                     Checked="BodyGenderMale" />
             </Grid>
