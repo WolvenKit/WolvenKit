@@ -465,76 +465,100 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         bool gamefileOnly = false,
         bool cutOffFileName = false)
     {
-        var activeItemPath = SelectedItem.NotNull().FullName;
-        if (!Path.Exists(activeItemPath))
-        {
-            return;
-        }
+        List<FileSystemModel> items = [];
+        List<string> itemPaths = [];
 
-        activeItemPath = activeItemPath.Replace('/', Path.DirectorySeparatorChar);
-        if (!isAbsolute)
+        if (SelectedItems is null || SelectedItems.Count == 0)
         {
-            activeItemPath = ActiveProject!.GetRelativePath(activeItemPath);
-        }
-
-        if (switchToRaw)
-        {
-            if (activeItemPath.Contains(s_rawFolder) || gamefileOnly)
+            if (SelectedItem is null)
             {
-                activeItemPath = activeItemPath.Replace(s_rawFolder, s_archiveFolder);
-                // it's a .morphtarget.glb or .anims.glb or...
-                if (TypedGlbRegex().IsMatch(activeItemPath))
+                return;
+            }
+
+            items.Add(SelectedItem);
+        }
+        else
+        {
+            items.AddRange(SelectedItems.OfType<FileSystemModel>());
+        }
+
+        foreach (var relativePath in items.Select(selectedItem => selectedItem.FullName))
+        {
+            if (!Path.Exists(relativePath))
+            {
+                return;
+            }
+
+            var activeItemPath = relativePath.Replace('/', Path.DirectorySeparatorChar);
+            if (!isAbsolute)
+            {
+                activeItemPath = ActiveProject!.GetRelativePath(activeItemPath);
+            }
+
+            if (switchToRaw)
+            {
+                if (activeItemPath.Contains(s_rawFolder) || gamefileOnly)
                 {
-                    activeItemPath = activeItemPath.Replace(".glb", "");
+                    activeItemPath = activeItemPath.Replace(s_rawFolder, s_archiveFolder);
+                    // it's a .morphtarget.glb or .anims.glb or...
+                    if (TypedGlbRegex().IsMatch(activeItemPath))
+                    {
+                        activeItemPath = activeItemPath.Replace(".glb", "");
+                    }
+                    else if (activeItemPath.EndsWith(".glb"))
+                    {
+                        activeItemPath = activeItemPath.Replace(".glb", ".mesh");
+                    }
+                    else if (activeItemPath.EndsWith(".json"))
+                    {
+                        activeItemPath = activeItemPath.Replace(".json", "");
+                    }
                 }
-                else if (activeItemPath.EndsWith(".glb"))
+                else if (activeItemPath.Contains(s_archiveFolder) && !gamefileOnly)
                 {
-                    activeItemPath = activeItemPath.Replace(".glb", ".mesh");
-                }
-                else if (activeItemPath.EndsWith(".json"))
-                {
-                    activeItemPath = activeItemPath.Replace(".json", "");
+                    activeItemPath = activeItemPath.Replace(s_archiveFolder, s_rawFolder);
+
+                    switch (Path.GetExtension(activeItemPath))
+                    {
+                        case ".mesh":
+                            activeItemPath = activeItemPath.Replace(".mesh", ".glb");
+                            break;
+                        case ".morphtarget":
+                        case ".anims":
+                            activeItemPath = $"{activeItemPath}.glb";
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
-            else if (activeItemPath.Contains(s_archiveFolder) && !gamefileOnly)
+
+            if (gamefileOnly && activeItemPath.Contains(s_archiveFolder))
             {
                 activeItemPath = activeItemPath.Replace(s_archiveFolder, s_rawFolder);
+                activeItemPath = Path.GetDirectoryName(activeItemPath) ?? activeItemPath;
+            }
 
-                switch (Path.GetExtension(activeItemPath))
-                {
-                    case ".mesh":
-                        activeItemPath = activeItemPath.Replace(".mesh", ".glb");
-                        break;
-                    case ".morphtarget":
-                    case ".anims":
-                        activeItemPath = $"{activeItemPath}.glb";
-                        break;
-                    default:
-                        break;
-                }
+            if (cutOffFileName)
+            {
+                activeItemPath = Path.Combine(Path.GetDirectoryName(activeItemPath) ?? "",
+                    Path.GetFileNameWithoutExtension(activeItemPath));
+            }
+
+            if (isAbsolute && !Path.Exists(activeItemPath))
+            {
+                activeItemPath = Path.GetDirectoryName(activeItemPath);
+            }
+
+            if (!string.IsNullOrEmpty(activeItemPath))
+            {
+                itemPaths.Add(activeItemPath);
             }
         }
 
-        if (gamefileOnly && activeItemPath.Contains(s_archiveFolder))
+        if (itemPaths.Count > 0)
         {
-            activeItemPath = activeItemPath.Replace(s_archiveFolder, s_rawFolder);
-            activeItemPath = Path.GetDirectoryName(activeItemPath) ?? activeItemPath;
-        }
-
-        if (cutOffFileName)
-        {
-            activeItemPath = Path.Combine(Path.GetDirectoryName(activeItemPath) ?? "",
-                Path.GetFileNameWithoutExtension(activeItemPath));
-        }
-
-        if (isAbsolute && !Path.Exists(activeItemPath))
-        {
-            activeItemPath = Path.GetDirectoryName(activeItemPath);
-        }
-
-        if (activeItemPath is not null)
-        {
-            Clipboard.SetDataObject(activeItemPath);
+            Clipboard.SetDataObject(string.Join("\n", itemPaths));
         }
     }
 

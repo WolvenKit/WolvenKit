@@ -78,7 +78,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
 
     private bool _manuallyLoading;
-    
+
     #endregion fields
 
     #region ctor
@@ -105,14 +105,14 @@ public partial class AssetBrowserViewModel : ToolViewModel
         _loggerService = loggerService;
         _appViewModel = appViewModel;
         _projectResourceTools = projectResourceTools;
-        
+
         ContentId = ToolContentId;
 
         State = DockState.Dock;
         SideInDockedMode = DockSide.Tabbed;
 
-        IsModBrowserEnabled = false; 
-        
+        IsModBrowserEnabled = false;
+
         archiveManager.ConnectGameRoot()
             .Bind(out _boundRootNodes)
             .Subscribe(OnNext);
@@ -133,8 +133,8 @@ public partial class AssetBrowserViewModel : ToolViewModel
         _settings.ArchiveNamesExcludeFromScan.Split(",", StringSplitOptions.RemoveEmptyEntries)
             .Select(archiveName => archiveName.Replace(".archive", "")).ToArray();
 
-    
-    private void OnNext(IChangeSet<RedFileSystemModel> obj) => 
+
+    private void OnNext(IChangeSet<RedFileSystemModel> obj) =>
         DispatcherHelper.RunOnMainThread(() => LeftItems = new ObservableCollection<RedFileSystemModel>(_boundRootNodes), DispatcherPriority.ContextIdle);
 
     private void CheckView()
@@ -204,7 +204,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     [ObservableProperty]
     private ObservableCollection<RedFileSystemModel> _leftItems = new();
 
-    [ObservableProperty] 
+    [ObservableProperty]
     private object? _leftSelectedItem;
 
     [ObservableProperty]
@@ -221,16 +221,16 @@ public partial class AssetBrowserViewModel : ToolViewModel
     [ObservableProperty]
     private ObservableCollectionEx<IFileSystemViewModel> _rightItems = new();
 
-    [ObservableProperty] 
+    [ObservableProperty]
     private string? _selectedClass;
 
-    [ObservableProperty] 
+    [ObservableProperty]
     private string? _selectedExtension;
 
-    [ObservableProperty] 
+    [ObservableProperty]
     private string? _searchBarText;
 
-    [ObservableProperty] 
+    [ObservableProperty]
     private string? _optionsSearchBarText;
 
     [ObservableProperty] private bool _isModBrowserEnabled;
@@ -287,7 +287,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         }
     }
 
-    
+
     [RelayCommand]
     private async Task FindUsing()
     {
@@ -324,8 +324,8 @@ public partial class AssetBrowserViewModel : ToolViewModel
                         .Subscribe()
                         .Dispose();
 
-                    // This will go into an endless refresh loop if SuppressNotification is not set, which 
-                    // prevents the task from completing. 
+                    // This will go into an endless refresh loop if SuppressNotification is not set, which
+                    // prevents the task from completing.
                     RightItems.SuppressNotification = true;
                     RightItems.Clear();
                     RightItems.AddRange(list);
@@ -412,7 +412,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
             {
                 _loggerService.Error(e);
                 throw new WolvenKitException(0x3002,
-                    "Internal database query failed - try (re)installing the Wolvenkit Resources Plugin.");       
+                    "Internal database query failed - try (re)installing the Wolvenkit Resources Plugin.");
             }
             await Task.CompletedTask;
         });
@@ -480,7 +480,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     /// <summary>
     /// Add File to Project
     /// </summary>
-    /// 
+    ///
     private bool CanAddToProject() => ProjectLoaded;
 
     [RelayCommand(CanExecute = nameof(CanAddToProject))]
@@ -659,8 +659,28 @@ public partial class AssetBrowserViewModel : ToolViewModel
     /// </summary>
     private bool CanCopyRelPath() =>
         RightSelectedItem != null && !IsShiftKeyDown; // _projectManager.ActiveProject != null && RightSelectedItem != null;
+
     [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
-    private void CopyRelPath() => Clipboard.SetDataObject(RightSelectedItem.NotNull().FullName);
+    private void CopyRelPath()
+    {
+        List<IFileSystemViewModel> selectedItems = [];
+        if (RightSelectedItems.Count == 0 && RightSelectedItem is not null)
+        {
+            selectedItems.Add(RightSelectedItem);
+        }
+        else
+        {
+            selectedItems.AddRange(RightSelectedItems.OfType<IFileSystemViewModel>());
+        }
+
+        if (selectedItems.Count == 0)
+        {
+            return;
+        }
+
+        var selectedItemPaths = selectedItems.Select(f => f.FullName).ToList();
+        Clipboard.SetDataObject(string.Join("\n", selectedItemPaths));
+    }
 
     /// <summary>
     /// Copies only file name of node.
@@ -751,7 +771,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         try
         {
             foundFiles.AddRange(await Task.Run(CyberEnhancedSearchAsync, cancellationToken));
-           
+
             // If the search includes an .archive file, let's select it
             if (s_SearchByArchiveNameRegex().Match(query) is { Success: true } m)
             {
@@ -1031,7 +1051,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     // will match anything between archive: and either (.archive, word:searchString, $)
     [GeneratedRegex(@"archive:(.*?)(?=\.archive|\w+?:|$)")]
     private static partial Regex s_SearchByArchiveNameRegex();
-    
+
     private void CyberEnhancedSearch()
     {
         if (string.IsNullOrWhiteSpace(SearchBarText))
@@ -1039,7 +1059,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
             RightItems.Clear();
             return;
         }
-        
+
         var searchAsSequentialRefinements =
             s_refinementSeparator
                 .Split(SearchBarText)
@@ -1072,7 +1092,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
             RightItems.Clear();
             return [];
         }
-        
+
         var searchAsSequentialRefinements =
             s_refinementSeparator
                 .Split(SearchBarText)
