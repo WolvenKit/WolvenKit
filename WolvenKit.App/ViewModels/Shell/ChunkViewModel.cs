@@ -1178,6 +1178,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         var txl = GetTXL();
 
         var tweakFolderPath = activeProject.GetResourceTweakDirectory(_settingsManager.UseAuthorNameAsSubfolder);
+        Directory.CreateDirectory(tweakFolderPath);
         var path = Path.Combine(tweakFolderPath, $"{txl.ID.ResolvedText}.yaml");
 
         try
