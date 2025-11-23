@@ -356,10 +356,13 @@ public partial class TweakBrowserViewModel : ToolViewModel
         baseRecord.GetPropertyNames().ForEach(name => txl.Properties.Add(name, baseRecord.GetProperty(name).NotNull()));
 
         var txlFile = new TweakXLFile { txl };
+        var tweakDirectory =
+            _projectManager.ActiveProject.GetResourceTweakDirectory(_settingsManager.UseAuthorNameAsSubfolder, true);
 
         var path = Path.Combine(
-            _projectManager.ActiveProject.GetResourceTweakDirectory(_settingsManager.UseAuthorNameAsSubfolder),
+            tweakDirectory,
             $"{SelectedRecordEntry.DisplayName}.yaml");
+
         var serializer = new SerializerBuilder()
                  .WithTypeConverter(new TweakXLYamlTypeConverter(_locKeyService, _tweakDB))
                  .WithIndentedSequences()

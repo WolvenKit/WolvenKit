@@ -305,8 +305,9 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
 
     /// Returns ABSOLUTE PATH to tweak directory (use <see cref="GetRelativeResourceTweakDirectory"/> otherwise).
     /// <param name="useModderName">Default: false, will use name of mod author as subfolder</param>
+    /// <param name="createDirectory">Default: false, will create directory if it doesn't exist</param>
     /// <returns><code>$ABSOLUTE_PATH/source/resources/r6/tweaks/$MOD_NAME</code> or <code>$ABSOLUTE_PATH/source/resources/r6/tweaks/$AUTHOR_NAME</code></returns>
-    public string GetResourceTweakDirectory(bool useModderName = false)
+    public string GetResourceTweakDirectory(bool useModderName = false, bool createDirectory = false)
     {
         var subDir = ModName.ToFileName();
         if (useModderName && !string.IsNullOrEmpty(Author))
@@ -314,7 +315,14 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
             subDir = Author.ToFileName();
         }
 
-        return Path.Combine(ResourcesDirectory, s_tweakSubfolder, subDir);
+        var dirPath = Path.Combine(ResourcesDirectory, s_tweakSubfolder, subDir);
+
+        if (createDirectory && !Directory.Exists(dirPath))
+        {
+            Directory.CreateDirectory(dirPath);
+        }
+
+        return dirPath;
     }
 
     /// Returns RELATIVE PATH to tweak directory (use <see cref="GetResourceTweakDirectory"/> otherwise).
