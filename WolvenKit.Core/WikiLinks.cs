@@ -17,6 +17,9 @@ public static class WikiLinks
     public const string NPVs =
         "https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/npcs/npv-v-as-custom-npc";
 
+    public const string PlayerHeadTutorial =
+        "https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/npcs/a-new-head-for-v";
+
     public const string Props =
         "https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/everything-else/custom-props";
 

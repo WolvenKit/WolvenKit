@@ -163,6 +163,23 @@
                         </MenuItem.Icon>
                     </MenuItem>
 
+                    <Separator />
+
+                    <!-- ArchiveXL item files -->
+                    <MenuItem
+                        x:Name="MenuItemAddPlayerHead"
+                        Margin="2,1"
+                        Header="Player Head"
+                        ToolTip="Adds all necessary files for a custom player head sculpt">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="Material"
+                                Kind="Head"
+                                Size="{DynamicResource WolvenKitIconTiny}"
+                                Foreground="{StaticResource WolvenKitYellow}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
                 </MenuItem>
 
                 <MenuItem

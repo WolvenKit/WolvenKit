@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Helpers;
@@ -10,9 +10,9 @@ using WolvenKit.App.Interaction;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Tools;
+using WolvenKit.Core;
 using WolvenKit.Interfaces.Extensions;
 using YamlDotNet.RepresentationModel;
-using YamlDotNet.Serialization;
 
 namespace WolvenKit.App.ViewModels.Shell;
 
@@ -252,7 +252,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         }
 
         var files = activeProject.ModFiles
-            .Where(f => f.EndsWith(".ent") | f.EndsWith(".mesh") | f.EndsWith(".mi"))     
+            .Where(f => f.EndsWith(".ent") | f.EndsWith(".mesh") | f.EndsWith(".mi"))
             .OrderBy(Path.GetExtension)
             .ToList();
 
@@ -391,5 +391,83 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
         _templateFileTools.GeneratePropFiles(dialogModel);
         _loggerService.Success($"{dialogModel.PropName} was created and registered!");
+    }
+
+    [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
+    private void AddPlayerHead()
+    {
+        if (_projectManager.ActiveProject is not Cp77Project activeProject)
+        {
+            return;
+        }
+
+        if (Interactions.ShowNewPlayerHeadView() is not { } dialogModel || dialogModel.SelectedFiles.Count == 0)
+        {
+            return;
+        }
+
+        var filesToAdd = dialogModel.SelectedFiles.ToList();
+        var existingFiles = activeProject.ModFiles.Where(f => dialogModel.SelectedFiles.Contains(f)).ToList();
+
+        if (existingFiles.Count > 0 && !Interactions.ShowQuestionYesNo((
+                $"Do you want to overwrite the existing files \n\t{string.Join("\n\t", existingFiles)}?",
+                "One or more files already exists!")))
+        {
+            filesToAdd = filesToAdd.Where(f => !existingFiles.Contains(f)).ToList();
+        }
+
+        if (filesToAdd.Count == 0)
+        {
+            return;
+        }
+
+        _notificationService.Info("Adding player head files. Wolvenkit may be unresponsive...");
+
+        var failedFiles = 0;
+        var tasks = filesToAdd.Select(relativePath => Task.Run(() =>
+        {
+            var absolutePath = Path.Combine(activeProject.ModDirectory, relativePath);
+            var parentFolder = Path.GetDirectoryName(absolutePath);
+            if (parentFolder is not null)
+            {
+                Directory.CreateDirectory(parentFolder);
+            }
+
+            try
+            {
+                if (_archiveManager.GetCR2WFile(relativePath) is { } cr2W)
+                {
+                    _cr2WTools.WriteCr2W(cr2W, absolutePath);
+                }
+            }
+            catch (Exception e)
+            {
+                System.Threading.Interlocked.Increment(ref failedFiles);
+                _loggerService.Error($"Failed to add file {relativePath}: {e.Message}");
+            }
+        })).ToArray();
+
+        Task.WhenAll(tasks).GetAwaiter().GetResult();
+
+        if (filesToAdd.Count == failedFiles)
+        {
+            _loggerService.Error("Failed to add player head files. Please see the log view for details.");
+            _notificationService.Error("Failed to add player head files. Please see the log view for details.");
+        }
+        else if (failedFiles > 0)
+        {
+            _loggerService.Success(
+                $"Added {filesToAdd.Count - failedFiles} files. {failedFiles} files failed. See log for details.");
+            _loggerService.Warning($"{failedFiles} files failed. See log for details.");
+            _notificationService.Success(
+                $"Added {filesToAdd.Count - failedFiles} files. {failedFiles} files failed. See log for details.");
+            _notificationService.Warning($"{failedFiles} files failed. See log for details.");
+        }
+        else
+        {
+            _loggerService.Success(
+                $"Added player head files. For sculpting tutorial, see {WikiLinks.PlayerHeadTutorial}.");
+            _notificationService.Error($"Successfully added {filesToAdd.Count} files to your project.");
+        }
     }
 }
