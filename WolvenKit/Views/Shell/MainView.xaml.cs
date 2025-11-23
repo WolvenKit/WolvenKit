@@ -102,6 +102,19 @@ namespace WolvenKit.Views.Shell
                     return dialog.ViewModel?.CollectItemInfo();
                 };
 
+
+                Interactions.ShowNewPlayerHeadView = () =>
+                {
+                    ShowNewPlayerHeadDialog dialog = new();
+
+                    if (dialog.ShowDialog(this) != true)
+                    {
+                        return null;
+                    }
+
+                    return dialog.ViewModel;
+                };
+
                 Interactions.ShowSelectSaveView = currentSaveGame =>
                 {
                     SaveGameSelectionDialog dialog = new(currentSaveGame);

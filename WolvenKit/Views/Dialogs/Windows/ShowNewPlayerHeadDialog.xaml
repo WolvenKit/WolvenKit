@@ -1,0 +1,98 @@
+<Window
+    x:Class="WolvenKit.Views.Dialogs.Windows.ShowNewPlayerHeadDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    Title="Select body gender"
+    MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
+    MinHeight="{DynamicResource WolvenKitDialogHeightSmall}"
+    SizeToContent="WidthAndHeight"
+    WindowStartupLocation="CenterOwner">
+    <syncfusion:WizardControl
+        Help="OnHelpButtonClicked"
+        CancelButtonCancelsWindow="True"
+        FinishButtonClosesWindow="True">
+        <syncfusion:WizardPage
+            BackVisibility="Collapsed"
+            CancelVisibility="Visible"
+            FinishVisibility="Visible"
+            HelpVisibility="Visible"
+            NextVisibility="Collapsed"
+            KeyDown="ShowNewPlayerHeadDialogView_OnKeyDown"
+            PageType="Exterior">
+
+            <Grid Height="Auto">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="5" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidthMedium}" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.Resources>
+                    <ResourceDictionary>
+                        <ResourceDictionary.MergedDictionaries>
+                            <hc:ThemeResources />
+                            <hc:Theme />
+                        </ResourceDictionary.MergedDictionaries>
+                        <Style
+                            x:Key="LabelStyle"
+                            TargetType="TextBlock">
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </ResourceDictionary>
+
+                </Grid.Resources>
+
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="{DynamicResource WolvenKitMarginVertical}"
+                    Style="{StaticResource LabelStyle}"
+                    Text="Add player head files for a body gender of your choice." />
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="{DynamicResource WolvenKitMarginBottom}"
+                    Style="{StaticResource LabelStyle}"
+                    Text="Press the 'Help' button to open the corresponding wiki guide." />
+
+                <TextBlock
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    Style="{StaticResource LabelStyle}"
+                    Text="Female" />
+
+                <RadioButton
+                    Name="RadioButtonFemale"
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Checked="BodyGenderFemale" />
+
+                <TextBlock
+                    Grid.Row="5"
+                    Grid.Column="0"
+                    Style="{StaticResource LabelStyle}"
+                    Text="Male" />
+
+                <RadioButton
+                    Name="RadioButtonMale"
+                    Grid.Row="5"
+                    Grid.Column="1"
+                    Checked="BodyGenderMale" />
+            </Grid>
+
+        </syncfusion:WizardPage>
+    </syncfusion:WizardControl>
+</Window>

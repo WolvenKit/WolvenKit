@@ -659,8 +659,28 @@ public partial class AssetBrowserViewModel : ToolViewModel
     /// </summary>
     private bool CanCopyRelPath() =>
         RightSelectedItem != null && !IsShiftKeyDown; // _projectManager.ActiveProject != null && RightSelectedItem != null;
+
     [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
-    private void CopyRelPath() => Clipboard.SetDataObject(RightSelectedItem.NotNull().FullName);
+    private void CopyRelPath()
+    {
+        List<IFileSystemViewModel> selectedItems = [];
+        if (RightSelectedItems.Count == 0 && RightSelectedItem is not null)
+        {
+            selectedItems.Add(RightSelectedItem);
+        }
+        else
+        {
+            selectedItems.AddRange(RightSelectedItems.OfType<IFileSystemViewModel>());
+        }
+
+        if (selectedItems.Count == 0)
+        {
+            return;
+        }
+
+        var selectedItemPaths = selectedItems.Select(f => f.FullName).ToList();
+        Clipboard.SetDataObject(string.Join("\n", selectedItemPaths));
+    }
 
     /// <summary>
     /// Copies only file name of node.
