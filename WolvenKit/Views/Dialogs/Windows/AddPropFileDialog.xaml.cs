@@ -104,6 +104,10 @@ namespace WolvenKit.Views.Dialogs.Windows
                         x => x.MeshFile4UseAppearances,
                         x => x.MeshFile4UseAppearancesCheckbox.IsChecked)
                     .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        x => x.MoveMeshesToFolder,
+                        x => x.MoveMeshesToFolderCheckbox.IsChecked)
+                    .DisposeWith(disposables);
 
                 Mesh1DropdownMenu.dropdown.SelectionChanged += Mesh1SelectionChanged;
                 disposables.Add(Disposable.Create(() =>
@@ -124,6 +128,12 @@ namespace WolvenKit.Views.Dialogs.Windows
                 ParentFolderDropdownMenu.dropdown.SelectionChanged += ParentFolderSelectionChanged;
                 disposables.Add(Disposable.Create(() =>
                     ParentFolderDropdownMenu.dropdown.SelectionChanged -= ParentFolderSelectionChanged));
+
+                MeshFile1UseAppearancesCheckbox.SetCurrentValue(IsEnabledProperty, false);
+                MeshFile2UseAppearancesCheckbox.SetCurrentValue(IsEnabledProperty, false);
+                MeshFile3UseAppearancesCheckbox.SetCurrentValue(IsEnabledProperty, false);
+                MeshFile4UseAppearancesCheckbox.SetCurrentValue(IsEnabledProperty, false);
+                MoveMeshesToFolderCheckbox.SetCurrentValue(IsEnabledProperty, false);
             });
         }
 
@@ -140,47 +150,59 @@ namespace WolvenKit.Views.Dialogs.Windows
 
         private void Mesh1SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.AddedItems.Count == 0 || e.AddedItems[0] is not KeyValuePair<string, string> kvp ||
-                string.IsNullOrEmpty(kvp.Value))
+            var newValue = string.Empty;
+            if (e.AddedItems.Count > 0 && e.AddedItems[0] is KeyValuePair<string, string> kvp)
             {
-                return;
+                newValue = kvp.Value;
             }
 
-            Mesh1TextBox.SetCurrentValue(TextBox.TextProperty, kvp.Value);
+            SetCheckboxStatus(Mesh1TextBox, MeshFile1UseAppearancesCheckbox, newValue);
         }
 
         private void Mesh2SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.AddedItems.Count == 0 || e.AddedItems[0] is not KeyValuePair<string, string> kvp ||
-                string.IsNullOrEmpty(kvp.Value))
+            var newValue = string.Empty;
+            if (e.AddedItems.Count > 0 && e.AddedItems[0] is KeyValuePair<string, string> kvp)
             {
-                return;
+                newValue = kvp.Value;
             }
 
-
-            Mesh1TextBox.SetCurrentValue(TextBox.TextProperty, kvp.Value);
+            SetCheckboxStatus(Mesh2TextBox, MeshFile2UseAppearancesCheckbox, newValue);
         }
 
         private void Mesh3SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.AddedItems.Count == 0 || e.AddedItems[0] is not KeyValuePair<string, string> kvp ||
-                string.IsNullOrEmpty(kvp.Value))
+            var newValue = string.Empty;
+            if (e.AddedItems.Count > 0 && e.AddedItems[0] is KeyValuePair<string, string> kvp)
             {
-                return;
+                newValue = kvp.Value;
             }
 
-            Mesh3TextBox.SetCurrentValue(TextBox.TextProperty, kvp.Value);
+            SetCheckboxStatus(Mesh3TextBox, MeshFile3UseAppearancesCheckbox, newValue);
         }
 
         private void Mesh4SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.AddedItems.Count == 0 || e.AddedItems[0] is not KeyValuePair<string, string> kvp ||
-                string.IsNullOrEmpty(kvp.Value))
+            var newValue = string.Empty;
+            if (e.AddedItems.Count > 0 && e.AddedItems[0] is KeyValuePair<string, string> kvp)
             {
-                return;
+                newValue = kvp.Value;
             }
 
-            Mesh4TextBox.SetCurrentValue(TextBox.TextProperty, kvp.Value);
+            SetCheckboxStatus(Mesh4TextBox, MeshFile4UseAppearancesCheckbox, newValue);
+        }
+
+        private void SetCheckboxStatus(TextBox textBox, CheckBox useAppearancesCheckbox, string newValue)
+        {
+            textBox.SetCurrentValue(TextBox.TextProperty, newValue);
+            var isEnabled = !string.IsNullOrEmpty(newValue);
+            useAppearancesCheckbox.SetCurrentValue(IsEnabledProperty, isEnabled);
+
+            // don't disable it though, other mesh file paths might be non-empty
+            if (isEnabled)
+            {
+                MoveMeshesToFolderCheckbox.SetCurrentValue(IsEnabledProperty, true);
+            }
         }
 
         public AddPropFileDialogViewModel ViewModel { get; set; }
@@ -236,6 +258,11 @@ namespace WolvenKit.Views.Dialogs.Windows
 
             model.Appearances =
                 [.. textBox.Text.Split(",", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)];
+
+            if (model.Appearances.Count > 0 && !_hasMeshBeenTouched)
+            {
+                model.MeshFile1UseAppearances = true;
+            }
         }
 
 
@@ -243,6 +270,13 @@ namespace WolvenKit.Views.Dialogs.Windows
         {
             var ps = new ProcessStartInfo(WikiLinks.Props) { UseShellExecute = true, Verb = "open" };
             Process.Start(ps);
+        }
+
+        private bool _hasMeshBeenTouched = false;
+
+        private void OnMeshCheckboxChecked(object sender, RoutedEventArgs e)
+        {
+            _hasMeshBeenTouched = true;
         }
     }
 }
