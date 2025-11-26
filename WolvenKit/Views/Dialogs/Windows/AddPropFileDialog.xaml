@@ -157,6 +157,9 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
                     </Grid.RowDefinitions>
 
                     <!-- Destination folder -->
@@ -187,7 +190,7 @@
                         Grid.Column="1"
                         Grid.ColumnSpan="2"
                         Style="{StaticResource ExplanationStyle}"
-                        Text="Project folder for your files" />
+                        Text="Project folder for your files (will be created)" />
 
                     <!-- prop name -->
                     <Label
@@ -275,7 +278,8 @@
                         Grid.Row="13"
                         Grid.Column="2"
                         Margin="{DynamicResource WolvenKitMarginLeft}"
-                        KeyboardNavigation.TabIndex="-1" />
+                        KeyboardNavigation.TabIndex="-1"
+                        Click="OnMeshCheckboxChecked" />
 
                     <TextBox
                         x:Name="Mesh1TextBox"
@@ -361,6 +365,24 @@
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         KeyboardNavigation.TabIndex="-1" />
+
+                    <Label
+                        Grid.Row="25"
+                        Grid.Column="0"
+                        Style="{StaticResource LabelStyle}"
+                        Content="Move mesh files" />
+
+                    <CheckBox
+                        x:Name="MoveMeshesToFolderCheckbox"
+                        Grid.Row="25"
+                        Grid.Column="1"
+                        KeyboardNavigation.TabIndex="-1" />
+
+                    <TextBlock
+                        Grid.Row="26"
+                        Grid.Column="1"
+                        Style="{StaticResource ExplanationStyle}"
+                        Text="Move .mesh files to parent folder" />
 
                 </Grid>
             </syncfusion:WizardPage>
