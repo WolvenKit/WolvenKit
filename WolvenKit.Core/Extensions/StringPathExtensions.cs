@@ -63,7 +63,8 @@ namespace WolvenKit.Interfaces.Extensions
         /// Generates redengine friendly file name
         /// </summary>
         public static string ToFileName(this string target) =>
-            new string(target.Where(c => !Path.GetInvalidFileNameChars().Contains(c)).ToArray()).Trim()
+            new string(target.Replace('/', Path.DirectorySeparatorChar)
+                    .Where(c => !Path.GetInvalidFileNameChars().Contains(c)).ToArray()).Trim()
                 .Replace(" ", "_").ToLower();
 
         /// <summary>
