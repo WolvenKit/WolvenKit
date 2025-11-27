@@ -830,6 +830,7 @@ namespace WolvenKit.Views.Documents
             }
 
             _loggerService.Info("Scanning your mods... this can take a moment. Wolvenkit will be unresponsive.");
+            _notificationService.Info("Scanning your mods... this can take a moment. Wolvenkit will be unresponsive.");
 
             if (!_archiveManager.IsInitialized)
             {
@@ -849,7 +850,8 @@ namespace WolvenKit.Views.Documents
                     _archiveManager.LoadAdditionalModArchives(extraModDir, true, ignoredArchives);
                 }
 
-                _loggerService.Info("Scan complete.");
+                _loggerService.Success("Scan complete.");
+                _notificationService.Success("Scan complete.");
             });
         }
 
@@ -891,11 +893,12 @@ namespace WolvenKit.Views.Documents
                 _projectWatcher.Suspend();
 
                 await AddDependenciesToFileAsync(cvm, eventArgs is AddDependenciesFullEventArgs);
-
+                _notificationService.Success("Successfully added dependencies");
                 _loggerService.Success("Successfully added dependencies");
             }
             catch (Exception err)
             {
+                _notificationService.Error("Failed to add dependencies. For details, please check the log.");
                 _loggerService.Error("Failed to add dependencies:");
                 _loggerService.Error(err);
             }
