@@ -891,11 +891,12 @@ namespace WolvenKit.Views.Documents
                 _projectWatcher.Suspend();
 
                 await AddDependenciesToFileAsync(cvm, eventArgs is AddDependenciesFullEventArgs);
-
+                _notificationService.Success("Successfully added dependencies");
                 _loggerService.Success("Successfully added dependencies");
             }
             catch (Exception err)
             {
+                _notificationService.Error("Failed to add dependencies. For details, please check the log.");
                 _loggerService.Error("Failed to add dependencies:");
                 _loggerService.Error(err);
             }
