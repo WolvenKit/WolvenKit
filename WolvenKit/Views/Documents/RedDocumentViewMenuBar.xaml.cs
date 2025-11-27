@@ -44,6 +44,7 @@ namespace WolvenKit.Views.Documents
         private readonly ISettingsManager _settingsManager;
         private readonly IProjectManager _projectManager;
         private readonly ILoggerService _loggerService;
+        private readonly INotificationService _notificationService;
         private readonly WatcherService _projectWatcher;
         private readonly IAppArchiveManager _archiveManager;
         private readonly IModifierViewStateService _modifierStateService;
@@ -69,6 +70,7 @@ namespace WolvenKit.Views.Documents
             _projectExplorer = Locator.Current.GetService<ProjectExplorerViewModel>()!;
             _projectResourceTools = Locator.Current.GetService<ProjectResourceTools>()!;
             _cr2WTools = Locator.Current.GetService<Cr2WTools>()!;
+            _notificationService = Locator.Current.GetService<INotificationService>()!;
             _cvmMaterialTools = Locator.Current.GetService<CvmMaterialTools>()!;
 
             _appViewModel = Locator.Current.GetService<AppViewModel>()!;
@@ -606,6 +608,8 @@ namespace WolvenKit.Views.Documents
                     "Didn't find any dependencies to add.\n" +
                     "To include base game files, hold shift while clicking the menu entry."
                 );
+                _notificationService.Info("Didn't find any dependencies to add.\n" +
+                                          "To include base game files, hold shift while clicking the menu entry.");
                 return;
             }
 
@@ -614,6 +618,7 @@ namespace WolvenKit.Views.Documents
             if (string.IsNullOrEmpty(destFolder))
             {
                 _loggerService.Info("Adding dependencies aborted by user input");
+                _notificationService.Info("Adding dependencies aborted by user input");
                 return;
             }
 
@@ -633,12 +638,16 @@ namespace WolvenKit.Views.Documents
                         "If modded files could not be resolved, click the scan button in the mod browser " +
                         "(to the right of the search bar)."
                     );
+                    _loggerService.Info("Didn't find any dependencies to add");
                 }
                 else
                 {
                     _loggerService.Success(
                         "No dependencies left to replace. To double-check, run file validation now."
                     );
+
+                    _loggerService.Success(
+                        "No dependencies left to replace. To double-check, run file validation now.");
                 }
 
                 return;
@@ -796,6 +805,8 @@ namespace WolvenKit.Views.Documents
                 _projectWatcher.Suspend();
 
                 await AddDependenciesToFileAsync(cvm, eventArgs is AddDependenciesFullEventArgs);
+
+                _loggerService.Success("Successfully added dependencies");
             }
             catch (Exception err)
             {
