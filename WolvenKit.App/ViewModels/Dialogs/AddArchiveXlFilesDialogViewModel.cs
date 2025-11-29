@@ -13,21 +13,6 @@ using WolvenKit.Interfaces.Extensions;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 
-public class FilePathItemDataTemplateSelector : DataTemplateSelector
-{
-    public override DataTemplate?
-        SelectTemplate(object item, DependencyObject container)
-    {
-        if (container is not FrameworkElement frameworkElement || item == null)
-        {
-            return null;
-        }
-
-
-        return null;
-    }
-}
-
 public partial class AddArchiveXlFilesDialogViewModel : DialogViewModel
 {
     // form validation
