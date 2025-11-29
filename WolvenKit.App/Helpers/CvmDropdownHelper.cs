@@ -887,7 +887,7 @@ public abstract class CvmDropdownHelper
 
         // Check if we're in a definition context first - if so, always use regular editor
         if (cvm.Name == "id" && GetParentPath(cvm) is string parentPath &&
-            !IsInDefinitionContext(parentPath, parent.ResolvedData))
+            IsInDefinitionContext(parentPath, parent.ResolvedData))
         {
                 return false; // Use regular integer editor for definition contexts
         }

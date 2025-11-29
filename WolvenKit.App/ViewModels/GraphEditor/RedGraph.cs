@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -243,6 +243,24 @@ public partial class RedGraph : IDisposable
         if (GraphType == RedGraphType.Quest && node is BaseQuestViewModel questNode)
         {
             DuplicateQuestNode(questNode);
+        }
+        
+        // Mark document as dirty since we modified the data
+        DocumentViewModel?.SetIsDirty(true);
+    }
+
+    /// <summary>
+    /// Pastes a node from clipboard data at the specified location
+    /// </summary>
+    public void PasteNode(IRedType copiedData, System.Windows.Point location)
+    {
+        if (GraphType == RedGraphType.Scene)
+        {
+            PasteSceneNode(copiedData, location);
+        }
+        else if (GraphType == RedGraphType.Quest)
+        {
+            PasteQuestNode(copiedData, location);
         }
         
         // Mark document as dirty since we modified the data
