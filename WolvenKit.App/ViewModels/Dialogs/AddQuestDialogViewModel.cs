@@ -7,8 +7,8 @@ public partial class AddQuestDialogViewModel : ObservableObject
 {
     public AddQuestDialogViewModel(Cp77Project project)
     {
-        ModName = project.Name;
+        ModName = project.ModName;
     }
 
     [ObservableProperty] private string _modName;
-} 
+}

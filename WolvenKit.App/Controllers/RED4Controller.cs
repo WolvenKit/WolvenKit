@@ -252,7 +252,7 @@ public class RED4Controller : ObservableObject, IGameController
 
         _progressService.IsIndeterminate = false;
 
-        var successMessage = $"{cp77Proj.Name} packed directory all cleaned.";
+        var successMessage = $"{cp77Proj.ModName} packed, directories cleaned.";
         _loggerService.Success(successMessage);
         _notificationService.Success(successMessage);
 
@@ -365,7 +365,7 @@ public class RED4Controller : ObservableObject, IGameController
         // CleanAll will return true when the options disable it, so check here
         if (options.CleanAll)
         {
-            _loggerService.Info($"{cp77Proj.Name} files cleaned up.");
+            _loggerService.Info($"{cp77Proj.ModName} files cleaned up.");
         }
 
         // Pack it up
@@ -449,7 +449,7 @@ public class RED4Controller : ObservableObject, IGameController
     {
         if (!options.Install)
         {
-            _notificationService.Success($"{cp77Proj.Name} packed!");
+            _notificationService.Success($"{cp77Proj.ModName} packed!");
             return true;
         }
 
@@ -463,10 +463,11 @@ public class RED4Controller : ObservableObject, IGameController
             return false;
         }
 
-        _notificationService.Success($"{cp77Proj.Name} installed!");
+        _notificationService.Success($"{cp77Proj.ModName} installed!");
 
         var successString = options.DeployWithRedmod ? "deployed as REDmod" : "installed";
-        _loggerService.Success($"{cp77Proj.Name} {successString} to {_settingsManager.GetRED4GameRootDir()}/{installPath}");
+        _loggerService.Success(
+            $"{cp77Proj.ModName} {successString} to {_settingsManager.GetRED4GameRootDir()}/{installPath}");
 
         if (!options.DeployWithRedmod || await DeployRedmod())
         {
@@ -518,7 +519,8 @@ public class RED4Controller : ObservableObject, IGameController
                 return false;
             }
 
-            _loggerService.Info($"{cp77Proj.Name} archives packed into {cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)}");
+            _loggerService.Info(
+                $"{cp77Proj.Name}: archives packed into {cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)}");
         }
 
         // pack archiveXL files
@@ -533,7 +535,8 @@ public class RED4Controller : ObservableObject, IGameController
                 return false;
             }
 
-            _loggerService.Info($"{cp77Proj.Name} archiveXL files packed into {cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)}");
+            _loggerService.Info(
+                $"{cp77Proj.ModName}: archiveXL files packed into {cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)}");
         }
 
         // pack generic resources excluding script and tweak files
@@ -548,7 +551,7 @@ public class RED4Controller : ObservableObject, IGameController
                 return false;
             }
 
-            _loggerService.Info($"{cp77Proj.Name} resource files packed into {cp77Proj.PackedRootDirectory}");
+            _loggerService.Info($"{cp77Proj.ModName}: resource files packed into {cp77Proj.PackedRootDirectory}");
         }
 
         // pack redmod files
@@ -565,7 +568,7 @@ public class RED4Controller : ObservableObject, IGameController
             return false;
         }
 
-        _loggerService.Info($"{cp77Proj.Name} redmod files packed into {cp77Proj.PackedRedModDirectory}");
+        _loggerService.Info($"{cp77Proj.ModName}: redmod files packed into {cp77Proj.PackedRedModDirectory}");
         return true;
     }
 
@@ -694,7 +697,7 @@ public class RED4Controller : ObservableObject, IGameController
         // sounds
         if (PackSoundFiles())
         {
-            _loggerService.Info($"{cp77Proj.Name} redmod sound files packed into {cp77Proj.PackedRedModDirectory}");
+            _loggerService.Info($"{cp77Proj.ModName}: redmod sound files packed into {cp77Proj.PackedRedModDirectory}");
         }
 
         // tweaks
@@ -715,7 +718,8 @@ public class RED4Controller : ObservableObject, IGameController
                 // copy files, with overwriting
                 File.Copy(file, fileOutputPath, true);
             }
-            _loggerService.Info($"{cp77Proj.Name} redmod tweak files packed into {cp77Proj.PackedRedModDirectory}");
+
+            _loggerService.Info($"{cp77Proj.ModName}: redmod tweak files packed into {cp77Proj.PackedRedModDirectory}");
         }
 
         // scripts
@@ -738,7 +742,7 @@ public class RED4Controller : ObservableObject, IGameController
             }
         }
 
-        _loggerService.Info($"{cp77Proj.Name} redmod script files packed into {cp77Proj.PackedRedModDirectory}");
+        _loggerService.Info($"{cp77Proj.ModName}: redmod script files packed into {cp77Proj.PackedRedModDirectory}");
 
         return true;
     }
@@ -809,7 +813,7 @@ public class RED4Controller : ObservableObject, IGameController
         }
 
         var suffix = isBackup ? "_previousBuild" : "";
-        var zipPath = Path.Combine(zipPathRoot, $"{cp77Proj.Name}{suffix}.zip");
+        var zipPath = Path.Combine(zipPathRoot, $"{cp77Proj.ModName}{suffix}.zip");
         try
         {
             if (File.Exists(zipPath))
@@ -823,7 +827,8 @@ public class RED4Controller : ObservableObject, IGameController
             _loggerService.Error(e);
             return false;
         }
-        _loggerService.Info($"{cp77Proj.Name} zip available at {zipPath}");
+
+        _loggerService.Info($"{cp77Proj.ModName}: packed to {zipPath}, ready for sharing");
         return true;
     }
 
@@ -885,7 +890,7 @@ public class RED4Controller : ObservableObject, IGameController
 
             XDocument installlog = new(
                 new XElement("InstalLog",
-                    new XAttribute("Project", activeMod.Name),
+                    new XAttribute("Project", activeMod.ModName),
                     new XAttribute("Build_date", DateTime.Now.ToString())
                     ));
             XElement fileroot = new("Files");
