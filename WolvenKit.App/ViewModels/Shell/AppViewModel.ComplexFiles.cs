@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Octokit;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models.ProjectManagement.Project;
@@ -426,19 +427,9 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         var failedFiles = 0;
         var tasks = filesToAdd.Select(relativePath => Task.Run(() =>
         {
-            var absolutePath = Path.Combine(activeProject.ModDirectory, relativePath);
-            var parentFolder = Path.GetDirectoryName(absolutePath);
-            if (parentFolder is not null)
-            {
-                Directory.CreateDirectory(parentFolder);
-            }
-
             try
             {
-                if (_archiveManager.GetCR2WFile(relativePath) is { } cr2W)
-                {
-                    _cr2WTools.WriteCr2W(cr2W, absolutePath);
-                }
+                ProjectResourceTools.AddToProject(relativePath);
             }
             catch (Exception e)
             {
@@ -467,7 +458,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         {
             _loggerService.Success(
                 $"Added player head files. For sculpting tutorial, see {WikiLinks.PlayerHeadTutorial}.");
-            _notificationService.Error($"Successfully added {filesToAdd.Count} files to your project.");
+            _notificationService.Success($"Successfully added {filesToAdd.Count} files to your project.");
         }
     }
 }
