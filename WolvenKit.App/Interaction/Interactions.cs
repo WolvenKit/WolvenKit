@@ -232,8 +232,8 @@ public static class Interactions
     public static Func<bool> ShowFirstTimeSetup { get; set; } = () => throw new NotImplementedException();
     public static Func<bool> ShowLaunchProfilesView { get; set; } = () => throw new NotImplementedException();
 
-    public static Func<ArchiveXlClothingItem?> ShowArchiveXlFilesView { get; set; } =
-        () => throw new NotImplementedException();
+    public static Func<Cp77Project, ArchiveXlClothingItem?> ShowArchiveXlFilesView { get; set; } =
+        (Cp77Project currentProject) => throw new NotImplementedException();
     public static Func<bool> ShowMaterialRepositoryView { get; set; } = () => throw new NotImplementedException();
 
     public static Func<(IEnumerable<IDisplayable>? availableItems, IEnumerable<IDisplayable>? selectedItems),

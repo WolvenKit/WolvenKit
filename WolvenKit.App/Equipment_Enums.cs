@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 // ReSharper disable InconsistentNaming
@@ -318,6 +319,7 @@ public static class EquipmentItemData
     {
         { EquipmentItemSlot.Face, @"base\characters\garment\player_equipment\head\h1_015_pwa_specs__visor_holo.ent" },
         { EquipmentItemSlot.Head, @"base\characters\garment\player_equipment\head\h2_011_pwa_helmet__riot.ent" },
+        { EquipmentItemSlot.Feet, @"base\characters\garment\player_equipment\feet\s1_063_pwa_shoe__mexican.ent" },
         { EquipmentItemSlot.Legs, @"base\characters\garment\player_equipment\legs\l1_070_pwa_pants__loose.ent" },
         {
             EquipmentItemSlot.Torso_Inner,
@@ -360,6 +362,10 @@ public static class EquipmentItemData
             @"base\characters\garment\player_equipment\torso\t0_005_pwa_body__t_bug_tight.ent"
         },
         { EquipmentItemSubSlot.TankTop, @"base\characters\garment\player_equipment\torso\t1_071_pwa_tank__basic.ent" },
+        {
+            EquipmentItemSubSlot.FormalShirt,
+            @"base\characters\garment\player_equipment\torso\t1_102_pwa_shirt__collar_open.ent"
+        },
         {
             EquipmentItemSubSlot.Jumpsuit,
             @"base\characters\garment\player_equipment\torso\t1_091_pwa_full__jumpsuit.ent"
@@ -453,7 +459,6 @@ public static class EquipmentItemData
         },
         { EquipmentItemSlot.Outfit, [] },
     };
-
 
     public static Dictionary<EquipmentWeaponSlot, List<EquipmentWeaponSubSlot>> EquipmentWeaponSlotToSubSlots = new()
     {
@@ -599,4 +604,21 @@ public static class EquipmentItemData
             ]
         },
     };
+
+    public static string GetComponentPrefix(EquipmentItemSlot slot)
+    {
+        return slot switch
+        {
+            EquipmentItemSlot.Face => "f1_",
+            EquipmentItemSlot.Feet => "s1_",
+            EquipmentItemSlot.Head => "h1_",
+            EquipmentItemSlot.Torso_Outer => "t2_",
+            EquipmentItemSlot.Legs => "l1_",
+            EquipmentItemSlot.Torso_Inner => "t1_",
+            EquipmentItemSlot.Outfit => "t1_",
+            EquipmentItemSlot.None => "t0_",
+            _ => "t0_"
+        };
+    }
+
 }
