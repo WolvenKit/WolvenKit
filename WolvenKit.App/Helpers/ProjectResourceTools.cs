@@ -282,8 +282,17 @@ public partial class ProjectResourceTools
     public void AddToProject(ResourcePath resourcePath)
     {
         if (resourcePath.GetResolvedText() is not string sourceRelativePath
-            || string.IsNullOrEmpty(sourceRelativePath))
+            || string.IsNullOrEmpty(sourceRelativePath)
+            || _projectManager.ActiveProject is not { } project
+            )
         {
+            return;
+        }
+
+        if (project.ModFiles.Contains(sourceRelativePath))
+        {
+            // not aborting here will lead to the file becoming corrupted
+            _loggerService.Info("This file is already in your project!");
             return;
         }
 
