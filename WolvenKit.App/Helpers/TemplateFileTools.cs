@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Threading;
 using DynamicData;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models.ProjectManagement.Project;
@@ -1148,12 +1149,13 @@ public class TemplateFileTools
 
         var hasSingleAppearance = prop.Appearances.All(f => f == "default");
 
-
-        var absoluteParentFolder = Path.Combine(project.ModDirectory, prop.ParentFolder);
+        var absoluteParentFolder = Path.Combine(project.ModDirectory, prop.ParentFolder).ToFilePath();
         Directory.CreateDirectory(absoluteParentFolder);
 
+
         var propFolderName = prop.PropName.ToFileName();
-        if (Directory.GetFileSystemEntries(absoluteParentFolder).Length > 0)
+        if (!absoluteParentFolder.Contains(propFolderName) &&
+            Directory.GetFileSystemEntries(absoluteParentFolder).Length > 0)
         {
             prop.ParentFolder = Path.Combine(prop.ParentFolder, propFolderName);
             absoluteParentFolder = Path.Combine(project.ModDirectory, prop.ParentFolder);
@@ -1162,12 +1164,11 @@ public class TemplateFileTools
 
 
         // generate .ent file
-
         var entFilePath = Path.Combine(prop.ParentFolder, $"{propFolderName}.ent");
         var appFilePath = Path.Combine(prop.ParentFolder, $"{propFolderName}.app");
 
+        MoveMeshes();
         var meshFilesUseAppearances = prop.GetMeshFileData();
-
         PrepareMeshes();
 
         GenerateEntFile();
@@ -1175,7 +1176,7 @@ public class TemplateFileTools
         WriteLuaFile();
         WriteWorldbuilderFile();
 
-        project.DeleteEmptyFolders(_loggerService);
+        DispatcherHelper.RunOnMainThread(() => project.DeleteEmptyFolders(_loggerService));
         return;
 
         void PrepareMeshes()
@@ -1205,6 +1206,58 @@ public class TemplateFileTools
             foreach (var kvp in meshFilesUseAppearances.Where(kvp => kvp.Value))
             {
                 ApplyMeshAppearances(kvp.Key);
+            }
+        }
+
+        void MoveMeshes()
+        {
+            if (!prop.MoveMeshesToFolder)
+            {
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(prop.MeshFile1) && !prop.MeshFile1.Contains(prop.ParentFolder))
+            {
+                var meshFileName = Path.GetFileName(prop.MeshFile1);
+                var meshFilePath = Path.Combine(prop.ParentFolder, meshFileName);
+                _projectResourceTools
+                    .MoveAndRefactorAsync(project.GetAbsolutePath(prop.MeshFile1),
+                        project.GetAbsolutePath(meshFilePath), "", false).GetAwaiter()
+                    .GetResult();
+                prop.MeshFile1 = meshFilePath;
+            }
+
+            if (!string.IsNullOrEmpty(prop.MeshFile2) && !prop.MeshFile2.Contains(prop.ParentFolder))
+            {
+                var meshFileName = Path.GetFileName(prop.MeshFile2);
+                var meshFilePath = Path.Combine(prop.ParentFolder, meshFileName);
+                _projectResourceTools
+                    .MoveAndRefactorAsync(project.GetAbsolutePath(prop.MeshFile2),
+                        project.GetAbsolutePath(meshFilePath), "", false).GetAwaiter()
+                    .GetResult();
+                prop.MeshFile2 = meshFilePath;
+            }
+
+            if (!string.IsNullOrEmpty(prop.MeshFile3) && !prop.MeshFile3.Contains(prop.ParentFolder))
+            {
+                var meshFileName = Path.GetFileName(prop.MeshFile3);
+                var meshFilePath = Path.Combine(prop.ParentFolder, meshFileName);
+                _projectResourceTools
+                    .MoveAndRefactorAsync(project.GetAbsolutePath(prop.MeshFile3),
+                        project.GetAbsolutePath(meshFilePath), "", false).GetAwaiter()
+                    .GetResult();
+                prop.MeshFile3 = meshFilePath;
+            }
+
+            if (!string.IsNullOrEmpty(prop.MeshFile4) && !prop.MeshFile4.Contains(prop.ParentFolder))
+            {
+                var meshFileName = Path.GetFileName(prop.MeshFile4);
+                var meshFilePath = Path.Combine(prop.ParentFolder, meshFileName);
+                _projectResourceTools
+                    .MoveAndRefactorAsync(project.GetAbsolutePath(prop.MeshFile4),
+                        project.GetAbsolutePath(meshFilePath), "", false).GetAwaiter()
+                    .GetResult();
+                prop.MeshFile4 = meshFilePath;
             }
         }
 
@@ -1387,11 +1440,21 @@ public class TemplateFileTools
                         .Replace("PROJECT_NAME", project.Name.ToFileName()));
             }
 
+            var fileContent = File.ReadAllLines(absolutePath).ToList();
+            var escapedEntFilePath = entFilePath.Replace(@"\", @"\\");
+
+            if (fileContent.Any(l => l.Contains(escapedEntFilePath)))
+            {
+                _loggerService.Error(
+                    $"Your .lua file already contains an entry for {entFilePath}! Please update the file by hand if you want to make changes.");
+                return;
+            }
+
             List<string> propFileData =
             [
                 "    {",
                 $"      name = \"{prop.PropName}\",",
-                $"      path = \"{entFilePath.Replace(@"\", @"\\")}\",",
+                $"      path = \"{escapedEntFilePath}\",",
                 "      category = \"Misc\",",
                 "      distanceFromGround = 1,",
             ];
@@ -1403,8 +1466,6 @@ public class TemplateFileTools
             }
 
             propFileData.Add("    },");
-
-            var fileContent = File.ReadAllLines(absolutePath).ToList();
             var propLineIndex =
                 fileContent.IndexOf(fileContent.FirstOrDefault(l => l.Contains("props = ")) ?? "INVALID_STRING");
             if (propLineIndex <= 0)
@@ -1420,6 +1481,7 @@ public class TemplateFileTools
         {
             var entspawnerSubdir = Path.Combine(project.GetResourceCETDirectory(), "entSpawner", "data");
 
+            List<string> fileContent = [];
             if (meshFilesUseAppearances.Count == 1)
             {
                 var entspawnerMeshDir = Path.Combine(entspawnerSubdir, "spawnables", "mesh", "all",
@@ -1429,28 +1491,36 @@ public class TemplateFileTools
 
                 Directory.CreateDirectory(Path.Combine(project.ResourcesDirectory, entspawnerMeshDir));
 
-                if (!File.Exists(absolutePath))
+                if (File.Exists(absolutePath))
                 {
-                    File.WriteAllText(absolutePath, "");
+                    fileContent.AddRange(File.ReadAllLines(absolutePath));
+                }
+                else if (Path.GetDirectoryName(absolutePath) is string fileDir && !Directory.Exists(fileDir))
+                {
+                    Directory.CreateDirectory(fileDir);
                 }
 
-                File.AppendAllLines(absolutePath, [meshFilesUseAppearances.Keys.First()]);
-
+                fileContent.Add(meshFilesUseAppearances.Keys.First());
+                File.WriteAllLines(absolutePath, fileContent.Distinct().ToArray());
 
                 return;
             }
 
             var entspawnerEntFile =
                 Path.Combine(entspawnerSubdir, GetFileOrganizationSubdir(), project.Name.ToFileName() + ".txt");
-            var absoluteEntPath = Path.Combine(project.ResourcesDirectory, entspawnerEntFile);
-            if (!File.Exists(absoluteEntPath))
+            var absoluteEntRegistryPath = Path.Combine(project.ResourcesDirectory, entspawnerEntFile);
+            if (!File.Exists(absoluteEntRegistryPath))
             {
                 Directory.CreateDirectory(Path.Combine(project.ResourcesDirectory, entspawnerSubdir,
                     GetFileOrganizationSubdir()));
-                File.WriteAllText(absoluteEntPath, "");
+            }
+            else
+            {
+                fileContent.AddRange(File.ReadAllLines(absoluteEntRegistryPath));
             }
 
-            File.AppendAllLines(absoluteEntPath, [entFilePath]);
+            fileContent.Add(entFilePath);
+            File.WriteAllLines(absoluteEntRegistryPath, fileContent.Distinct().ToArray());
         }
     }
 

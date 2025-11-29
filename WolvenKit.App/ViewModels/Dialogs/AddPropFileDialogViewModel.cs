@@ -9,6 +9,45 @@ namespace WolvenKit.App.ViewModels.Dialogs;
 
 public partial class AddPropFileDialogViewModel : ObservableObject
 {
+
+    [ObservableProperty] private Dictionary<string, string> _projectFolders;
+
+    [ObservableProperty] private Dictionary<string, string> _projectMeshes;
+
+    /// <summary>
+    /// Remember the last selection
+    /// </summary>
+    [ObservableProperty] private bool _rememberValues = true;
+
+    /// <summary>
+    /// Move mesh files to parent folder? (if they aren't already)
+    /// </summary>
+    [ObservableProperty] private bool _moveMeshesToFolder = true;
+
+    /// <summary>
+    /// Relative path to PropFile folder
+    /// </summary>
+    [ObservableProperty] private string _parentFolder = "";
+
+    /// <summary>
+    /// name for PropFile file
+    /// </summary>
+    [ObservableProperty] private string _propName = "";
+
+    [ObservableProperty] private List<string>? _appearances;
+
+    [ObservableProperty] private string _meshFile1 = "";
+    [ObservableProperty] private bool _meshFile1UseAppearances = false;
+
+    [ObservableProperty] private string _meshFile2 = "";
+    [ObservableProperty] private bool _meshFile2UseAppearances = false;
+
+    [ObservableProperty] private string _meshFile3 = "";
+    [ObservableProperty] private bool _meshFile3UseAppearances = false;
+
+    [ObservableProperty] private string _meshFile4 = "";
+    [ObservableProperty] private bool _meshFile4UseAppearances = false;
+
     public AddPropFileDialogViewModel(Cp77Project project)
     {
         ProjectFolders = project.GetAllFolders(project.ModDirectory).ToDictionary<string, string>(x => x);
@@ -28,40 +67,6 @@ public partial class AddPropFileDialogViewModel : ObservableObject
 
         base.OnPropertyChanged(e);
     }
-
-    [ObservableProperty] private Dictionary<string, string> _projectFolders;
-
-    [ObservableProperty] private Dictionary<string, string> _projectMeshes;
-
-    /// <summary>
-    /// Remember the last selection
-    /// </summary>
-    [ObservableProperty] private bool _rememberValues = true;
-
-    /// <summary>
-    /// Relative path to PropFile folder
-    /// </summary>
-    [ObservableProperty] private string _parentFolder = "";
-
-    /// <summary>
-    /// name for PropFile file
-    /// </summary>
-    [ObservableProperty] private string _propName = "";
-
-    [ObservableProperty] private List<string>? _appearances;
-
-    [ObservableProperty] private string _meshFile1 = "";
-    [ObservableProperty] private bool _meshFile1UseAppearances = true;
-
-    [ObservableProperty] private string _meshFile2 = "";
-    [ObservableProperty] private bool _meshFile2UseAppearances = false;
-
-    [ObservableProperty] private string _meshFile3 = "";
-    [ObservableProperty] private bool _meshFile3UseAppearances = false;
-
-    [ObservableProperty] private string _meshFile4 = "";
-    [ObservableProperty] private bool _meshFile4UseAppearances = false;
-
     public Dictionary<string, bool> GetMeshFileData()
     {
         Dictionary<string, bool> ret = [];
