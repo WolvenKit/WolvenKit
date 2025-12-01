@@ -123,7 +123,7 @@ public partial class NewFileViewModel : DialogViewModel
         {
             EWolvenKitFile.TweakXl => Path.Combine(GetTweakDir(), $"untitled.{value.Extension.NotNull().ToLower()}"),
             EWolvenKitFile.RedScript => Path.Combine(GetScriptDir(), $"untitled.{value.Extension.NotNull().ToLower()}"),
-            EWolvenKitFile.ArchiveXl => $"{project.Name}.{value.Extension.NotNull().ToLower()}",
+            EWolvenKitFile.ArchiveXl => $"{project.ModName}.{value.Extension.NotNull().ToLower()}",
             EWolvenKitFile.CETLua => Path.Combine(GetCetDir(), $"init.{value.Extension.NotNull().ToLower()}"),
             _ => $"{value.Name.NotNull().Split(' ').First()}1.{value.Extension.NotNull().ToLower()}",
         };
