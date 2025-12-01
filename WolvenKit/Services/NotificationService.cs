@@ -2,6 +2,7 @@ using System;
 using System.Windows;
 using System.Windows.Threading;
 using HandyControl.Controls;
+using HandyControl.Data;
 using WolvenKit.App.Helpers;
 using WolvenKit.Common.Services;
 
@@ -28,75 +29,75 @@ namespace WolvenKit.Services
 
         #region methods
 
-        public void Info(string message)
+        public void Info(string message, bool staysOpen = false)
         {
             switch (NotificationCategory)
             {
                 case ENotificationCategory.App:
-                    ShowNotificationInApp(message, ENotificationType.Info);
+                    ShowNotificationInApp(message, ENotificationType.Info, staysOpen);
                     break;
                 case ENotificationCategory.Desktop:
-                    ShowNotificationInDesktop(message, ENotificationType.Info);
+                    ShowNotificationInDesktop(message, ENotificationType.Info, staysOpen);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(NotificationCategory), NotificationCategory, null);
             }
         }
 
-        public void Success(string message)
+        public void Success(string message, bool staysOpen = false)
         {
             switch (NotificationCategory)
             {
                 case ENotificationCategory.App:
-                    ShowNotificationInApp(message, ENotificationType.Success);
+                    ShowNotificationInApp(message, ENotificationType.Success, staysOpen);
                     break;
                 case ENotificationCategory.Desktop:
-                    ShowNotificationInDesktop(message, ENotificationType.Success);
+                    ShowNotificationInDesktop(message, ENotificationType.Success, staysOpen);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(NotificationCategory), NotificationCategory, null);
             }
         }
 
-        public void Warning(string message)
+        public void Warning(string message, bool staysOpen = false)
         {
             switch (NotificationCategory)
             {
                 case ENotificationCategory.App:
-                    ShowNotificationInApp(message, ENotificationType.Warning);
+                    ShowNotificationInApp(message, ENotificationType.Warning, staysOpen);
                     break;
                 case ENotificationCategory.Desktop:
-                    ShowNotificationInDesktop(message, ENotificationType.Warning);
+                    ShowNotificationInDesktop(message, ENotificationType.Warning, staysOpen);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(NotificationCategory), NotificationCategory, null);
             }
         }
 
-        public void Error(string message)
+        public void Error(string message, bool staysOpen = false)
         {
             switch (NotificationCategory)
             {
                 case ENotificationCategory.App:
-                    ShowNotificationInApp(message, ENotificationType.Error);
+                    ShowNotificationInApp(message, ENotificationType.Error, staysOpen);
                     break;
                 case ENotificationCategory.Desktop:
-                    ShowNotificationInDesktop(message, ENotificationType.Error);
+                    ShowNotificationInDesktop(message, ENotificationType.Error, staysOpen);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(NotificationCategory), NotificationCategory, null);
             }
         }
 
-        public void Fatal(string message)
+        public void Fatal(string message, bool staysOpen = false)
         {
             switch (NotificationCategory)
             {
                 case ENotificationCategory.App:
-                    ShowNotificationInApp(message, ENotificationType.Fatal);
+                    ShowNotificationInApp(message, ENotificationType.Fatal, staysOpen);
                     break;
                 case ENotificationCategory.Desktop:
-                    ShowNotificationInDesktop(message, ENotificationType.Fatal);
+                    ShowNotificationInDesktop(message, ENotificationType.Fatal, staysOpen);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(NotificationCategory), NotificationCategory, null);
@@ -138,33 +139,64 @@ namespace WolvenKit.Services
 
         public void AskInDesktop(string message, Func<bool, bool> func) => Growl.AskGlobal(message, func);
 
-        public void ShowAppNotification(string message, ENotificationType type) => ShowNotificationInApp(message, type);
+        public void ShowAppNotification(string message, ENotificationType type, bool staysOpen = false) => ShowNotificationInApp(message, type, staysOpen);
 
-        public void ShowDesktopNotification(string message, ENotificationType type) => ShowNotificationInDesktop(message, type);
+        public void ShowDesktopNotification(string message, ENotificationType type, bool staysOpen = false) => ShowNotificationInDesktop(message, type, staysOpen);
 
-        private static void ShowNotificationInDesktop(string message, ENotificationType type)
+        private static void ShowNotificationInDesktop(string message, ENotificationType type, bool staysOpen = false)
         {
             Action action = type switch
             {
-                ENotificationType.Success => () => Growl.SuccessGlobal(message),
-                ENotificationType.Info => () => Growl.InfoGlobal(message),
-                ENotificationType.Warning => () => Growl.WarningGlobal(message),
-                ENotificationType.Error => () => Growl.ErrorGlobal(message),
-                ENotificationType.Fatal => () => Growl.FatalGlobal(message),
+                ENotificationType.Success => () =>
+                    Growl.SuccessGlobal(new GrowlInfo
+                    {
+                        Message = message, Token = "", StaysOpen = staysOpen, WaitTime = 5
+                    }),
+                ENotificationType.Info => () =>
+                    Growl.InfoGlobal(new GrowlInfo
+                    {
+                        Message = message, Token = "", StaysOpen = staysOpen, WaitTime = 5
+                    }),
+                ENotificationType.Warning => () =>
+                    Growl.WarningGlobal(new GrowlInfo
+                    {
+                        Message = message, Token = "", StaysOpen = staysOpen, WaitTime = 5
+                    }),
+                ENotificationType.Error => () =>
+                    Growl.ErrorGlobal(new GrowlInfo
+                    {
+                        Message = message, Token = "", StaysOpen = staysOpen, WaitTime = 5
+                    }),
+                ENotificationType.Fatal => () =>
+                    Growl.FatalGlobal(new GrowlInfo
+                    {
+                        Message = message, Token = "", StaysOpen = staysOpen, WaitTime = 5
+                    }),
                 _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
             };
             DispatcherHelper.RunOnMainThread(action, DispatcherPriority.Background);
         }
 
-        private static void ShowNotificationInApp(string message, ENotificationType type)
+        private static void ShowNotificationInApp(string message, ENotificationType type, bool staysOpen = false)
         {
             Action action = type switch
             {
-                ENotificationType.Success => () => Growl.Success(message),
-                ENotificationType.Info => () => Growl.Info(message),
-                ENotificationType.Warning => () => Growl.Warning(message),
-                ENotificationType.Error => () => Growl.Error(message),
-                ENotificationType.Fatal => () => Growl.Fatal(message),
+                ENotificationType.Success => () =>
+                    Growl.Success(new GrowlInfo
+                    {
+                        Message = message, Token = "", StaysOpen = staysOpen, WaitTime = 5
+                    }),
+                ENotificationType.Info => () =>
+                    Growl.Info(new GrowlInfo { Message = message, Token = "", StaysOpen = staysOpen, WaitTime = 5 }),
+                ENotificationType.Warning => () =>
+                    Growl.Warning(new GrowlInfo
+                    {
+                        Message = message, Token = "", StaysOpen = staysOpen, WaitTime = 5
+                    }),
+                ENotificationType.Error => () =>
+                    Growl.Error(new GrowlInfo { Message = message, Token = "", StaysOpen = staysOpen, WaitTime = 5 }),
+                ENotificationType.Fatal => () =>
+                    Growl.Fatal(new GrowlInfo { Message = message, Token = "", StaysOpen = staysOpen, WaitTime = 5 }),
                 _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
             };
             DispatcherHelper.RunOnMainThread(action, DispatcherPriority.Background);
