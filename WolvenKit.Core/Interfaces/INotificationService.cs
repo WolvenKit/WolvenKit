@@ -22,16 +22,16 @@ namespace WolvenKit.Common.Services
         bool IsShowNotificationsEnabled { get; set; }
         ENotificationCategory NotificationCategory { get; set; }
 
-        void Error(string message);
-        void Fatal(string message);
-        void Info(string message);
-        void Success(string message);
-        void Warning(string message);
+        void Error(string message, bool staysOpen = false);
+        void Fatal(string message, bool staysOpen = false);
+        void Info(string message, bool staysOpen = false);
+        void Success(string message, bool staysOpen = false);
+        void Warning(string message, bool staysOpen = false);
 
         void Ask(string message, Func<bool, bool> isConfirmedFunc);
 
-        void ShowAppNotification(string message, ENotificationType type);
-        void ShowDesktopNotification(string message, ENotificationType type);
+        void ShowAppNotification(string message, ENotificationType type, bool staysOpen = false);
+        void ShowDesktopNotification(string message, ENotificationType type, bool staysOpen = false);
         void ShowNotification(string message, ENotificationType type, ENotificationCategory category);
         void AskInApp(string message, Func<bool, bool> func);
         void AskInDesktop(string message, Func<bool, bool> func);
