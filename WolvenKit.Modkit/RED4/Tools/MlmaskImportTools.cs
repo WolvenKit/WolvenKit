@@ -87,13 +87,10 @@ namespace WolvenKit.Modkit.RED4.MLMask
                     image.Convert(DXGI_FORMAT.DXGI_FORMAT_R8_UNORM);
                 }
 
-                // Bitset arithmetic to check that both width and height is a power of 2
-                if (!(((image.Metadata.Width - 1) & image.Metadata.Width) == 0 &&
-                      ((image.Metadata.Height - 1) & image.Metadata.Height) == 0)
-                   )
+                if (image.Metadata.Width % 2 != 0 || image.Metadata.Height % 2 != 0)
                 {
                     throw new WolvenKitException(0x2002,
-                        $"Texture {f}: width={image.Metadata.Width},height={image.Metadata.Height} must have dimensions in powers of 2");
+                        $"Texture {f}: width={image.Metadata.Width},height={image.Metadata.Height} must have dimensions divisible by 2");
                 }
 
                 using var ms = new MemoryStream(image.SaveToDDSMemory());
