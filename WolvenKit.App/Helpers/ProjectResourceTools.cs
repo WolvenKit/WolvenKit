@@ -93,7 +93,8 @@ public partial class ProjectResourceTools
         ".yaml",
         ".yml",
         ".reds",
-        ".tweak"
+        ".tweak",
+        ".txt"
     ];
 
     /// <summary>
@@ -689,6 +690,9 @@ public partial class ProjectResourceTools
                         fileContent = fileContent.Select(str => str.Replace(@"\\", @"\")).ToArray();
                     }
 
+                    // Take care of forward slashes (e.g. lua)
+                    var hasForwardSlashes = fileContent.Any(s => s.Contains('/'));
+
                     var newFileContent = fileContent.ToArray();
                     foreach (var (oldAbsPath, newAbsPath) in pathReplacements)
                     {
@@ -700,7 +704,7 @@ public partial class ProjectResourceTools
                         }
 
                         var oldPathStr = activeProject.GetResourcePathFromRoot(oldAbsPath).GetResolvedText()
-                            ?.SanitizeFilePath(true);
+                            ?.SanitizeFilePath();
                         var newPathStr = activeProject.GetResourcePathFromRoot(newAbsPath).GetResolvedText()?
                             .SanitizeFilePath();
 
@@ -721,9 +725,13 @@ public partial class ProjectResourceTools
 
                     if (!newFileContent.SequenceEqual(fileContent))
                     {
-                        if (hasDuplicateBackslashes || absoluteFilePath.EndsWith(".lua"))
+                        if (hasDuplicateBackslashes)
                         {
                             newFileContent = newFileContent.Select(line => line.Replace(@"\", @"\\")).ToArray();
+                        }
+                        else if (hasForwardSlashes)
+                        {
+                            newFileContent = newFileContent.Select(line => line.Replace(@"\", @"/")).ToArray();
                         }
 
                         await File.WriteAllLinesAsync(absoluteFilePath, newFileContent);

@@ -126,8 +126,9 @@ namespace WolvenKit.Views.Dialogs.Windows
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (sender is not TextBox textBox ||
-                textBox.Text.Equals(textBox.Text, StringComparison.CurrentCultureIgnoreCase))
+            if (sender is not TextBox textBox || string.IsNullOrEmpty(textBox.Text) ||
+                (textBox.Text.Equals(textBox.Text, StringComparison.CurrentCultureIgnoreCase) &&
+                 !textBox.Text.Contains('/')))
             {
                 return;
             }
