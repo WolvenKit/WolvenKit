@@ -70,10 +70,16 @@ public partial class ExportView : ReactiveUserControl<ExportViewModel>
             .ToList();
     }
 
-    private void OverlayPropertyGrid_OnSelectedObjectChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => _shownProperties.Clear();
+    private object _previousSelectedObject;
 
     private void OverlayPropertyGrid_AutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
     {
+        if (!ReferenceEquals(_previousSelectedObject, OverlayPropertyGrid.SelectedObject))
+        {
+            _shownProperties.Clear();
+            _previousSelectedObject = OverlayPropertyGrid.SelectedObject;
+        }
+
         if (e.DisplayName is
             nameof(ReactiveObject.Changed) or
             nameof(ReactiveObject.Changing) or
