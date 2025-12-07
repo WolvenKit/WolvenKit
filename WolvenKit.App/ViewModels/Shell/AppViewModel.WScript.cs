@@ -86,7 +86,10 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         if (ActiveDocument is null)
         {
             ScriptService.SuppressLogOutput = false;
-            _loggerService.Info("Resource file validation needs an active document! Please open any CR2W file!");
+            _loggerService.Error(
+                "Resource file validation needs an open editor tab. Open any file to bring it up (e.g. .app, .ent, .mesh)!");
+            _notificationService.Error(
+                "Resource file validation needs an open editor tab. Open any file to bring it up (e.g. .app, .ent, .mesh)!");
             return;
         }
 
