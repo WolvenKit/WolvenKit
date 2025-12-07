@@ -894,7 +894,9 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         // CDPR originals - they have them in all of their NPCS, surely it'll be fine to just ignore them
         @"base\fx\characters\npc\kerenzikov",
         @"base\animations\anim_motion_database\cover_action.csv",
+        @"ep1\fx\gameplay\perks_ep1\spy_mantis_blades\spy_perks_charge_hit.effect",
         @"ep1\animations\npc\gameplay\woman_average\gang\unarmed\wa_gang_unarmed_reaction_death.anims",
+        @"ep1\animations\npc\gameplay\man_average\gang\unarmed\ma_gang_unarmed_reaction_death.anims",
     ];
 
     public Task<IDictionary<string, List<string>>> ScanForBrokenReferencePathsAsync(IArchiveManager archiveManager,
@@ -929,7 +931,10 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
                 // path is either not in the project/game, or it is the file itself
                 var pathsWithError = kvp.Value
                     .Distinct()
-                    // Some dead references are allowed - e.g. xbae's facial animation pack
+                    .Where(filePath => !string.IsNullOrEmpty(filePath) &&
+                                       !filePath.Equals("none", StringComparison.CurrentCultureIgnoreCase) &&
+                                       filePath != "0")
+                    // Some dead references are allowed - e.g. xbae's facial animation pack or CDPR's known issues
                     .Where(filePath => s_allowedDeadReferencePartials.All(part => !filePath.StartsWith(part)))
                     .Where(filePath =>
                         // Warn if file references itself

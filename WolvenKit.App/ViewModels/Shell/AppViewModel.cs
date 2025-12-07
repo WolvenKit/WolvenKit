@@ -983,7 +983,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _progressService.IsIndeterminate = true;
 
         List<string> brokenFiles = [];
-        foreach (var relativePath in ActiveProject.ModFiles)
+        foreach (var relativePath in ActiveProject.ModFiles.Where(f => !f.HasFileExtension(".txt")))
         {
             try
             {
