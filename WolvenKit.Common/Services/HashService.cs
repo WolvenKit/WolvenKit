@@ -32,8 +32,9 @@ namespace WolvenKit.Common.Services
         private Dictionary<ulong, string> _missing = new();
 
         private volatile bool _isLoaded;
+        private readonly TaskCompletionSource _loader = new();
 
-        public bool IsLoaded => _isLoaded;
+        public Task Loaded => _loader.Task;
 
         #endregion Fields
 
@@ -62,24 +63,33 @@ namespace WolvenKit.Common.Services
                 return;
             }
 
-            var hashesMemory = DecompressEmbeddedFile(s_used);
-            ReadHashes(hashesMemory.GetStream());
+            try
+            {
+                var hashesMemory = DecompressEmbeddedFile(s_used);
+                ReadHashes(hashesMemory.GetStream());
 
-            hashesMemory.Dispose();
+                hashesMemory.Dispose();
 
-            var nodeRefsMemory = DecompressEmbeddedFile(s_nodeRefs);
-            ReadNodeRefs(nodeRefsMemory.GetStream());
+                var nodeRefsMemory = DecompressEmbeddedFile(s_nodeRefs);
+                ReadNodeRefs(nodeRefsMemory.GetStream());
 
-            nodeRefsMemory.Dispose();
+                nodeRefsMemory.Dispose();
 
-            var tweakNamesMemory = DecompressEmbeddedFile(s_tweakDbStr);
-            ReadTweakNames(tweakNamesMemory.GetStream());
+                var tweakNamesMemory = DecompressEmbeddedFile(s_tweakDbStr);
+                ReadTweakNames(tweakNamesMemory.GetStream());
 
-            tweakNamesMemory.Dispose();
+                tweakNamesMemory.Dispose();
 
-            LoadMissingHashes();
+                LoadMissingHashes();
 
-            _isLoaded = true;
+                _isLoaded = true;
+                _loader.SetResult();
+            }
+            catch (Exception e)
+            {
+                _loader.SetException(e);
+                throw;
+            }
         }
 
         public IEnumerable<ulong> GetAllHashes() => _hashes.Keys;

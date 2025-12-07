@@ -5,7 +5,7 @@ namespace WolvenKit.Common.Services
 {
     public interface IHashService
     {
-        bool IsLoaded { get; }
+        Task Loaded { get; }
 
         void Load();
 

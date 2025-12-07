@@ -14,11 +14,16 @@ namespace WolvenKit.Common.Services
     {
         private static TweakDB s_tweakDb = new();
 
+        private IHashService _hashService;
         private bool _isLoading;
 
         public bool IsLoaded { get; set; }
         public event EventHandler? Loaded;
 
+        public TweakDBService(IHashService hashService)
+        {
+            _hashService = hashService;
+        }
 
         private void OnLoadDB() => Loaded?.Invoke(this, EventArgs.Empty);
 
@@ -30,6 +35,8 @@ namespace WolvenKit.Common.Services
             }
 
             _isLoading = true;
+
+            await _hashService.Loaded;
 
             await Task.Run(() =>
             {
