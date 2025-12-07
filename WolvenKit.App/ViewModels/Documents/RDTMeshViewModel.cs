@@ -3654,8 +3654,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                 foreach (var model in a.Models)
                 {
-                    if (a.Models.FirstOrDefault(x => x.Name == model.BindName) is var parentModel &&
-                        parentModel is not null)
+                    if (a.Models.FirstOrDefault(x => x.Name == model.BindName) is { } parentModel)
                     {
                         parentModel.AddModel(model);
                     }
@@ -3766,7 +3765,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
     #endregion
 
-    private object? findMeshChild(object o)
+    private object? FindMeshChild(object o)
     {
         switch (o)
         {
@@ -3774,7 +3773,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             {
                 foreach (var groupChild in group.Children)
                 {
-                    if (findMeshChild(groupChild) is { } result)
+                    if (FindMeshChild(groupChild) is { } result)
                     {
                         return result;
                     }
@@ -3820,7 +3819,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 continue;
             }
 
-            selectedMesh = findMeshChild(loadableModel);
+            selectedMesh = FindMeshChild(loadableModel);
         }
 
         foreach (var appearance in Appearances)
@@ -3832,7 +3831,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     return;
                 }
 
-                selectedMesh = findMeshChild(model);
+                selectedMesh = FindMeshChild(model);
             });
         }
 
