@@ -124,7 +124,8 @@ namespace WolvenKit.Utility
             //RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
 
 
-            Locator.CurrentMutable.RegisterConstant(new TweakDBService(), typeof(ITweakDBService));
+            Locator.CurrentMutable.RegisterConstant(
+                new TweakDBService(_host.Services.GetRequiredService<IHashService>()), typeof(ITweakDBService));
 
             s_tweakDbPath = Path.Combine(gameDirectory.FullName, "r6", "cache", "tweakdb_ep1.bin");
             //var tweakService = _host.Services.GetRequiredService<ITweakDBService>();
