@@ -931,7 +931,9 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
                 // path is either not in the project/game, or it is the file itself
                 var pathsWithError = kvp.Value
                     .Distinct()
-                    .Where(fp => fp.ToLower() != "none" && fp != "0" && !string.IsNullOrEmpty(fp))
+                    .Where(filePath => !string.IsNullOrEmpty(filePath) &&
+                                       !filePath.Equals("none", StringComparison.CurrentCultureIgnoreCase) &&
+                                       filePath != "0")
                     // Some dead references are allowed - e.g. xbae's facial animation pack or CDPR's known issues
                     .Where(filePath => s_allowedDeadReferencePartials.All(part => !filePath.StartsWith(part)))
                     .Where(filePath =>
