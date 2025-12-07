@@ -3612,79 +3612,94 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 }
 
                 var appearanceDefs = aar.Appearances
-                    .Where(handle => handle?.GetValue() is appearanceAppearanceDefinition)
-                    .Select(handle => (appearanceAppearanceDefinition)handle.GetValue()!)
-                    .GroupBy(value => (value.Name.GetResolvedText() ?? string.Empty).Split("&")[0])
+                    .Select(handle => handle.GetValue())
+                    .OfType<appearanceAppearanceDefinition>()
+                    .GroupBy(value => (StringHelper.StringifyOrNull(value.Name) ?? string.Empty).Split("&")[0])
                     .ToDictionary(group => group.Key, group => group.First());
 
-                var resolvedName = (app.AppearanceName.GetResolvedText() ?? "invalid name").Split("&")[0];
-                if (!appearanceDefs.TryGetValue(resolvedName, out var appDef) ||
-                    appDef.CompiledData?.Data is not RedPackage appPkg)
+                var resolvedName = (StringHelper.StringifyOrNull(app.AppearanceName)
+                                    ?? StringHelper.StringifyOrNull(app.Name)
+                                    ?? "invalid name")
+                    .Split("&")[0];
+                if (!appearanceDefs.TryGetValue(resolvedName, out var appDef))
                 {
                     _loggerService.Error(
-                        $"No valid appearance with the name {app.AppearanceName} found in {app.AppearanceResource.DepotPath}");
+                        $"No appearance with the name {app.AppearanceName} found in {app.AppearanceResource.DepotPath}");
                     continue;
                 }
 
+                List<LoadableModel> loadableModels = new();
+                if (appDef.CompiledData?.Data is RedPackage appPkg)
                 {
-                    var loadableModels = LoadMeshes(appPkg.Chunks);
-                    loadableModels.AddRange(LoadPartsValues(appDef));
-                    LoadPartsOverrides(appDef, loadableModels);
+                    loadableModels.AddRange(LoadMeshes(appPkg.Chunks));
+                }
 
-                    var a = new Appearance(app.Name.ToString().NotNull())
+                loadableModels.AddRange(LoadPartsValues(appDef));
+
+                if (loadableModels.Count == 0)
+                {
+                    _loggerService.Error(
+                        $"No no components loaded for {app.AppearanceName} from {app.AppearanceResource.DepotPath}");
+                    continue;
+                }
+
+                LoadPartsOverrides(appDef, loadableModels);
+
+                var a = new Appearance(app.Name.ToString().NotNull())
+                {
+                    AppearanceName = app.AppearanceName,
+                    Resource = app.AppearanceResource.DepotPath,
+                    Models = loadableModels,
+                };
+
+                foreach (var model in a.Models)
+                {
+                    if (a.Models.FirstOrDefault(x => x.Name == model.BindName) is var parentModel &&
+                        parentModel is not null)
                     {
-                        AppearanceName = app.AppearanceName,
-                        Resource = app.AppearanceResource.DepotPath,
-                        Models = loadableModels,
-                    };
-
-                    foreach (var model in a.Models)
-                    {
-                        if (a.Models.FirstOrDefault(x => x.Name == model.BindName) is var parentModel && parentModel is not null)
-                        {
-                            parentModel.AddModel(model);
-                        }
-                        else
-                        {
-                            a.BindableModels.Add(model);
-                        }
-                        foreach (var material in model.Materials)
-                        {
-                            a.RawMaterials[material.Name] = material;
-                        }
-                        if (model.MeshFile?.RootChunk is CMesh mesh)
-                        {
-                            model.Meshes = MakeMesh(mesh, model.ChunkMask, model.AppearanceIndex);
-                        }
-
-                        foreach (var m in model.Meshes)
-                        {
-                            if (!a.LODLUT.TryGetValue(m.LOD, out var value))
-                            {
-                                value = new List<SubmeshComponent>();
-                                a.LODLUT[m.LOD] = value;
-                            }
-
-                            value.Add(m);
-                        }
-                    }
-
-                    if (appearance == null)
-                    {
-                        a.ModelGroup.AddRange(AddMeshesToRiggedGroups(a));
-                        Appearances.Add(a);
+                        parentModel.AddModel(model);
                     }
                     else
                     {
-                        //appearance.ModelGroup.AddRange(a.ModelGroup);
-                        var group = AddMeshesToRiggedGroups(a);
-                        foreach (var model in group)
+                        a.BindableModels.Add(model);
+                    }
+
+                    foreach (var material in model.Materials)
+                    {
+                        a.RawMaterials[material.Name] = material;
+                    }
+
+                    if (model.MeshFile?.RootChunk is CMesh mesh)
+                    {
+                        model.Meshes = MakeMesh(mesh, model.ChunkMask, model.AppearanceIndex);
+                    }
+
+                    foreach (var m in model.Meshes)
+                    {
+                        if (!a.LODLUT.TryGetValue(m.LOD, out var value))
                         {
-                            element.Children.Add(model);
+                            value = new List<SubmeshComponent>();
+                            a.LODLUT[m.LOD] = value;
                         }
+
+                        value.Add(m);
                     }
                 }
 
+                if (appearance == null)
+                {
+                    a.ModelGroup.AddRange(AddMeshesToRiggedGroups(a));
+                    Appearances.Add(a);
+                }
+                else
+                {
+                    //appearance.ModelGroup.AddRange(a.ModelGroup);
+                    var group = AddMeshesToRiggedGroups(a);
+                    foreach (var model in group)
+                    {
+                        element.Children.Add(model);
+                    }
+                }
             }
 
 
