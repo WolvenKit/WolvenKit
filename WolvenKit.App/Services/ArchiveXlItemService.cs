@@ -829,6 +829,7 @@ public partial class ArchiveXlItemService
 
         // Take care of the tags
         rootEntity.VisualTagsSchema ??= new CHandle<entVisualTagsSchema>() { Chunk = new entVisualTagsSchema() };
+        rootEntity.DefaultAppearance = itemName;
 
         var tags = rootEntity.VisualTagsSchema.Chunk ?? new entVisualTagsSchema();
         tags.VisualTags ??= new redTagList();
