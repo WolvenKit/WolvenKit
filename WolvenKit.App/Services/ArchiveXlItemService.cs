@@ -963,7 +963,7 @@ public partial class ArchiveXlItemService
             { "atlasResourcePath", clothingItemData.InkatlasPath }, { "atlasPartName", $"{atlasPathName}" }
         };
 
-        var placementSlots = new YamlSequenceNode() { $"OutfitSlots.{clothingItemData.EqExSlot}" };
+        var placementSlots = new YamlSequenceNode() { $"!append-once OutfitSlots.{clothingItemData.EqExSlot}" };
 
         var yamlData = new YamlMappingNode();
         var yaml = new YamlMappingNode() { { itemName, yamlData } };
