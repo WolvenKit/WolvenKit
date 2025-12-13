@@ -7,6 +7,7 @@ using HelixToolkit.SharpDX.Core;
 using Splat;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
 using YamlDotNet.Serialization;
@@ -413,4 +414,61 @@ public static partial class ArchiveXlHelper
     private static partial Regex PlaceholderSplitPattern();
 
 
+    /// <summary>
+    /// Replaces {material} in a resource reference's depot path with a new material name.
+    /// I'm sure there is a way to make this nicer with generics, but this will do for now.
+    /// </summary>
+    public static IRedRef UnDynamifyResourceReference(IRedType cvpValue, string newMatName)
+    {
+        var newPath = "";
+        var redType = cvpValue.RedType.Split(":").Last();
+        if (cvpValue is IRedResourceReference original)
+        {
+            newPath = ReplaceMaterialPath(original.DepotPath, newMatName);
+            return redType switch
+            {
+                "Multilayer_Setup" => new CResourceReference<Multilayer_Setup>(newPath,
+                    InternalEnums.EImportFlags.Default),
+                "Multilayer_Mask" => new CResourceReference<Multilayer_Mask>(newPath,
+                    InternalEnums.EImportFlags.Default),
+                "ITexture" => new CResourceReference<ITexture>(newPath, InternalEnums.EImportFlags.Default),
+                "CGradient" => new CResourceReference<CGradient>(newPath, InternalEnums.EImportFlags.Default),
+                "CFoliageProfile" => new CResourceReference<CFoliageProfile>(newPath,
+                    InternalEnums.EImportFlags.Default),
+                "CHairProfile" => new CResourceReference<CHairProfile>(newPath, InternalEnums.EImportFlags.Default),
+                "CSkinProfile" => new CResourceReference<CSkinProfile>(newPath, InternalEnums.EImportFlags.Default),
+                "CTerrainSetup" => new CResourceReference<CTerrainSetup>(newPath, InternalEnums.EImportFlags.Default),
+                _ => original
+            };
+        }
+
+        if (cvpValue is not IRedResourceReference asyncRef)
+        {
+            throw new WolvenKitException(0,
+                $"This shouldn't happen: UnDynamifyResourceReference called with unsupported type {redType}");
+        }
+
+        newPath = ReplaceMaterialPath(asyncRef.DepotPath, newMatName);
+        return redType switch
+        {
+            "Multilayer_Setup" => new CResourceAsyncReference<Multilayer_Setup>(newPath,
+                InternalEnums.EImportFlags.Default),
+            "Multilayer_Mask" => new CResourceAsyncReference<Multilayer_Mask>(newPath,
+                InternalEnums.EImportFlags.Default),
+            "ITexture" => new CResourceAsyncReference<ITexture>(newPath, InternalEnums.EImportFlags.Default),
+            "CGradient" => new CResourceAsyncReference<CGradient>(newPath, InternalEnums.EImportFlags.Default),
+            "CFoliageProfile" => new CResourceAsyncReference<CFoliageProfile>(newPath,
+                InternalEnums.EImportFlags.Default),
+            "CHairProfile" => new CResourceAsyncReference<CHairProfile>(newPath,
+                InternalEnums.EImportFlags.Default),
+            "CSkinProfile" => new CResourceAsyncReference<CSkinProfile>(newPath,
+                InternalEnums.EImportFlags.Default),
+            "CTerrainSetup" => new CResourceAsyncReference<CTerrainSetup>(newPath,
+                InternalEnums.EImportFlags.Default),
+            _ => asyncRef
+        };
+
+        static string ReplaceMaterialPath(ResourcePath? depotPath, string input) =>
+            (depotPath?.GetResolvedText() ?? "").Replace("{material}", input).Replace("*", "");
+    }
 }
