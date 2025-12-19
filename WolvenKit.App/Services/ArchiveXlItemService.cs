@@ -829,6 +829,7 @@ public partial class ArchiveXlItemService
 
         // Take care of the tags
         rootEntity.VisualTagsSchema ??= new CHandle<entVisualTagsSchema>() { Chunk = new entVisualTagsSchema() };
+        rootEntity.DefaultAppearance = itemName;
 
         var tags = rootEntity.VisualTagsSchema.Chunk ?? new entVisualTagsSchema();
         tags.VisualTags ??= new redTagList();
@@ -963,7 +964,7 @@ public partial class ArchiveXlItemService
             { "atlasResourcePath", clothingItemData.InkatlasPath }, { "atlasPartName", $"{atlasPathName}" }
         };
 
-        var placementSlots = new YamlSequenceNode() { $"OutfitSlots.{clothingItemData.EqExSlot}" };
+        var placementSlots = new YamlSequenceNode() { $"!append-once OutfitSlots.{clothingItemData.EqExSlot}" };
 
         var yamlData = new YamlMappingNode();
         var yaml = new YamlMappingNode() { { itemName, yamlData } };
