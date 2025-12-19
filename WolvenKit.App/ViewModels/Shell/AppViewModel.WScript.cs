@@ -361,7 +361,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             var jsonFilesInProject =
                 ProjectResourceTools.GetFilesFromDirectory(ActiveProject?.RawDirectory, true, ".json", false);
 
-            if (jsonFilesInProject.Count != 0 && Path.GetDirectoryName(jsonFilesInProject.First()) is string dir)
+            if (jsonFilesInProject.Count != 0 && Path.GetDirectoryName(jsonFilesInProject.FirstOrDefault()) is string dir)
             {
                 _notificationService.Info(infoMessage);
                 _loggerService.Info(infoMessage);
