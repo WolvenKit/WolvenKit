@@ -308,4 +308,11 @@ public static class Interactions
     /// </summary>
     public static Func<PlayerHeadDialogViewModel> ShowNewPlayerHeadView { get; set; } =
         () => throw new NotImplementedException();
+
+    public static Func<string, (string search, string replace, bool isRegex, bool wholeWorld)> ShowSearchReplaceDialog
+    {
+        get;
+        set;
+    } =
+        (title) => throw new NotImplementedException();
 }
