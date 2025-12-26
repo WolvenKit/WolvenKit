@@ -1,4 +1,7 @@
+using System.Collections.Generic;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
+using DynamicData;
 
 
 namespace WolvenKit.App.ViewModels.Dialogs;
@@ -8,9 +11,9 @@ namespace WolvenKit.App.ViewModels.Dialogs;
 /// </summary>
 public partial class SearchAndReplaceDialogViewModel() : ObservableObject
 {
-       
+
     /// <summary>
-    /// Search text 
+    /// Search text
     /// </summary>
     [ObservableProperty] private string? _searchText = "";
 
@@ -33,8 +36,50 @@ public partial class SearchAndReplaceDialogViewModel() : ObservableObject
     /// Regular expression?
     /// </summary>
     [ObservableProperty] private bool _isRegex;
-    
-    
+
+    /// <summary>
+    /// Dialogue title/message
+    /// </summary>
+    [ObservableProperty] private string _message = "";
+
+    /// <summary>
+    /// Dialogue message
+    /// </summary>
+    [ObservableProperty] private bool _showMessage;
+
+    /// <summary>
+    /// multiple entries?
+    /// </summary>
+    [ObservableProperty] private bool _hasMultipleEntries;
+
+    /// <summary>
+    /// multiple entries?
+    /// </summary>
+    [ObservableProperty] private bool _showSearchDropdown;
+
+    /// <summary>
+    /// multiple entries?
+    /// </summary>
+    [ObservableProperty] private Dictionary<string, string> _dropdownOptions = [];
+
+    public SearchAndReplaceDialogViewModel(string message, bool replaceMultiples, List<string> existingOptions) : this()
+    {
+        Message = message;
+        ShowMessage = !string.IsNullOrEmpty(Message);
+
+        existingOptions = existingOptions.Distinct().Where(s => !string.IsNullOrEmpty(s)).ToList();
+        HasMultipleEntries = replaceMultiples;
+
+        if (existingOptions.Count > 1)
+        {
+            ShowSearchDropdown = true;
+            DropdownOptions = existingOptions.ToDictionary(x => x, x => x);
+        }
+        else if (existingOptions.Count == 1)
+        {
+            SearchText = existingOptions.First();
+        }
+    }
 
     public void SwapFields() => (SearchText, ReplaceText) = (ReplaceText, SearchText);
 }

@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using ReactiveUI;
 using Splat;
@@ -16,16 +18,16 @@ namespace WolvenKit.Views.Dialogs.Windows
         private static bool s_lastRegex;
 
         public static bool IsInstanceOpen { get; private set; }
-        
-        public SearchAndReplaceDialog()
+
+        public SearchAndReplaceDialog(string message = "", bool showMultiple = false, List<string> options = null)
         {
             InitializeComponent();
 
-            ViewModel = Locator.Current.GetService<SearchAndReplaceDialogViewModel>();
+            ViewModel = new SearchAndReplaceDialogViewModel(message, showMultiple, options ?? []);
             DataContext = ViewModel;
 
             LoadLastSelection();
-            
+
             this.WhenActivated(disposables =>
             {
                 this.Bind(ViewModel,
@@ -49,6 +51,29 @@ namespace WolvenKit.Views.Dialogs.Windows
                         x => x.IsWholeWord,
                         x => x.IsWholeWordCheckbox.IsChecked)
                     .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        x => x.DropdownOptions,
+                        x => x.ExistingFileDropdownMenu.Options)
+                    .DisposeWith(disposables);
+
+                if (!ViewModel.ShowMessage)
+                {
+                    MessageRow.SetCurrentValue(System.Windows.Controls.RowDefinition.HeightProperty, new GridLength(0));
+                    MessageRowSpacer.SetCurrentValue(System.Windows.Controls.RowDefinition.HeightProperty,
+                        new GridLength(0));
+                }
+
+                if (ViewModel.HasMultipleEntries)
+                {
+                    ReplaceTextBox.SetCurrentValue(HeightProperty, 150.0);
+                    ReplaceTextBox.SetCurrentValue(System.Windows.Controls.TextBox.TextWrappingProperty,
+                        TextWrapping.WrapWithOverflow);
+                    ReplaceTextBox.SetCurrentValue(
+                        System.Windows.Controls.Primitives.TextBoxBase.VerticalScrollBarVisibilityProperty,
+                        ScrollBarVisibility.Auto);
+                    ReplaceTextBox.SetCurrentValue(System.Windows.Controls.Primitives.TextBoxBase.AcceptsReturnProperty,
+                        true);
+                }
 
                 if (ViewModel.ReplaceText != "")
                 {
@@ -76,7 +101,7 @@ namespace WolvenKit.Views.Dialogs.Windows
 
             ViewModel.IsRegex = s_lastRegex;
             ViewModel.IsWholeWord = s_lastWholeWord;
-            
+
             if (s_lastSearch != "")
             {
                 ViewModel.SearchText = s_lastSearch;
@@ -114,7 +139,7 @@ namespace WolvenKit.Views.Dialogs.Windows
             s_lastReplace = ViewModel.ReplaceText;
         }
 
-        
+
         private void WizardPage_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key != Key.Enter)

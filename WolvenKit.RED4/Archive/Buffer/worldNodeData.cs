@@ -53,11 +53,12 @@ public class worldNodeData : IRedType, IRedCloneable
         {
             Id = Id,
             NodeIndex = NodeIndex,
-            Position = (Vector4)Position.DeepCopy(),
-            Orientation = (Quaternion)Orientation.DeepCopy(),
-            Scale = (Vector3)Scale.DeepCopy(),
-            Pivot = (Vector3)Pivot.DeepCopy(),
-            Bounds = (Box)Bounds.DeepCopy(),
+            Position = new Vector4() { W = Position.W, X = Position.X, Y = Position.Y, Z = Position.Z },
+            Orientation =
+                new Quaternion() { I = Orientation.I, J = Orientation.J, K = Orientation.K, R = Orientation.R },
+            Scale = new Vector3() { X = Scale.X, Y = Scale.Y, Z = Scale.Z },
+            Pivot = new Vector3() { X = Pivot.X, Y = Pivot.Y, Z = Pivot.Z },
+            Bounds = new Box() { Max = Bounds.Max, Min = Bounds.Min },
             QuestPrefabRefHash = QuestPrefabRefHash,
             UkHash1 = UkHash1,
             CookedPrefabData = CookedPrefabData,

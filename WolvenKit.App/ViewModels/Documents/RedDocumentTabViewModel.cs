@@ -31,7 +31,7 @@ public enum RedDocumentItemType
     Mi,
     Csv,
     Json,
-    Sector,
+    Streamingsector,
     Physmatlib,
     Other,
     None,
@@ -179,7 +179,7 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
         IsLastCopyOperationSingle = false;
         OnCopiedChunkChanged?.Invoke(null, EventArgs.Empty);
     }
-    
+
     public static void ClearCopiedChunks()
     {
         CopiedChunks.Clear();

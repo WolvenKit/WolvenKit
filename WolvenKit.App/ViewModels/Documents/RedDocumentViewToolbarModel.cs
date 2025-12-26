@@ -35,6 +35,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private readonly CRUIDService _cruidService;
     private readonly DocumentTools _documentTools;
     private readonly ILoggerService _loggerService;
+    private readonly StreamingSectorTools _sectorTools;
 
     public RedDocumentViewToolbarModel(
         ISettingsManager settingsManager,
@@ -42,7 +43,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         IProjectManager projectManager,
         DocumentTools documentTools,
         CRUIDService cruidService,
-        ILoggerService loggerService
+        ILoggerService loggerService,
+        StreamingSectorTools sectorTools
     )
     {
         _modifierViewStateService = modifierSvc;
@@ -51,6 +53,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         _cruidService = cruidService;
         _documentTools = documentTools;
         _loggerService = loggerService;
+        _sectorTools = sectorTools;
 
         modifierSvc.ModifierStateChanged += OnModifierChanged;
         modifierSvc.PropertyChanged += (_, args) => OnPropertyChanged(args.PropertyName);
@@ -106,11 +109,11 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
                 or RedDocumentItemType.Questphase
                 or RedDocumentItemType.Scene
                 or RedDocumentItemType.Physmatlib
+                or RedDocumentItemType.Streamingsector
+                or RedDocumentItemType.Mlsetup
                 or RedDocumentItemType.Ent => true,
             RedDocumentItemType.Xbm
                 or RedDocumentItemType.Mlmask
-                or RedDocumentItemType.Mlsetup
-                or RedDocumentItemType.Sector
                 or RedDocumentItemType.None
                 or RedDocumentItemType.Other => false,
             _ => false,
@@ -188,6 +191,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(RegenerateIdsCommand))]
     [NotifyCanExecuteChangedFor(nameof(CopyMaterialFromMeshCommand))]
     [NotifyCanExecuteChangedFor(nameof(CopyMaterialToMeshesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddSectorVariantCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddSectorVariantsMultipleCommand))]
     [ObservableProperty]
     private RedDocumentItemType _contentType;
 
@@ -737,12 +742,59 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     #region phymatlibFile
 
     /*
-     * Delete duplicate entries
+     * Regenerate IDs
      */
     private bool CanRegenerateIds() => ContentType is RedDocumentItemType.Physmatlib;
 
     [RelayCommand(CanExecute = nameof(CanRegenerateIds))]
     private void RegenerateIds() => RootChunk?.RegenerateIdsCommand.Execute(null);
+
+    #endregion
+
+    #region sector
+
+    /*
+     * Regenerate IDs
+     */
+    private bool CanCreateVariants() => ContentType is RedDocumentItemType.Streamingsector;
+
+    [RelayCommand(CanExecute = nameof(CanCreateVariants))]
+    private void AddSectorVariant()
+    {
+        if (RootChunk?.ResolvedData is not worldStreamingSector sector)
+        {
+            return;
+        }
+
+        if (string.IsNullOrEmpty(_sectorTools.AddSectorVariant(sector)))
+        {
+            return;
+        }
+
+        RootChunk.Tab?.Parent.SetIsDirty(true);
+        RootChunk.GetPropertyChild("nodes")?.RecalculateProperties();
+        RootChunk.GetPropertyChild("nodeData")?.RecalculateProperties();
+        RootChunk.GetPropertyChild("variantIndices")?.RecalculateProperties();
+    }
+
+    [RelayCommand(CanExecute = nameof(CanCreateVariants))]
+    private void AddSectorVariantsMultiple()
+    {
+        if (RootChunk?.ResolvedData is not worldStreamingSector sector)
+        {
+            return;
+        }
+
+        if (!_sectorTools.AddSectorVariants(sector))
+        {
+            return;
+        }
+
+        RootChunk.Tab?.Parent.SetIsDirty(true);
+        RootChunk.GetPropertyChild("nodes")?.RecalculateProperties();
+        RootChunk.GetPropertyChild("nodeData")?.RecalculateProperties();
+        RootChunk.GetPropertyChild("variantIndices")?.RecalculateProperties();
+    }
 
     #endregion
 

@@ -6,6 +6,8 @@ public interface IRedMeshNode
 
     public CName MeshAppearance { get; set; }
 
+
+
 }
 
 public partial class worldBendedMeshNode : IRedMeshNode

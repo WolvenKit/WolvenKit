@@ -115,16 +115,21 @@ namespace WolvenKit.Views.Shell
                     return dialog.ViewModel;
                 };
 
-                Interactions.ShowSearchReplaceDialog = (message) =>
+                Interactions.ShowSearchReplaceDialog = args =>
                 {
-                    var dialog = new SearchAndReplaceDialog(message);
+                    var dialog =
+                        new SearchAndReplaceDialog(args.message, args.allowMultiple, args.existingOptions ?? null);
                     if (dialog.ShowDialog() != true)
                     {
                         return ("", "", false, false);
                     }
 
-                    return (dialog.ViewModel?.SearchText ?? "", dialog.ViewModel?.ReplaceText ?? "",
-                        dialog.ViewModel?.IsRegex ?? false, dialog.ViewModel?.IsWholeWord ?? false);
+                    return (
+                        dialog.ViewModel?.SearchText ?? "",
+                        dialog.ViewModel?.ReplaceText ?? "",
+                        dialog.ViewModel?.IsRegex ?? false,
+                        dialog.ViewModel?.IsWholeWord ?? false
+                    );
                 };
 
                 Interactions.ShowSelectSaveView = currentSaveGame =>

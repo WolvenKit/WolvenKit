@@ -2442,7 +2442,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             {
                 var meshFile = Parent.GetFileFromDepotPathOrCache(irmn.Mesh.DepotPath);
 
-                if (meshFile == null || meshFile.RootChunk is not CMesh mesh)
+                if (meshFile is not { RootChunk: CMesh mesh })
                 {
                     continue;
                 }

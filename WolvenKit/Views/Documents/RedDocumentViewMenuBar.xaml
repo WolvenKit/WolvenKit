@@ -241,9 +241,25 @@
 
                 <Style.Triggers>
                     <DataTrigger
+                        Binding="{Binding Path=ContentType}"
+                        Value="{x:Static documents:RedDocumentItemType.Streamingsector}">
+                        <Setter Property="Visibility" Value="Visible" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- Streaming sector: .streamingsector -->
+            <Style
+                x:Key="ShowSectorMenuItemStyle"
+                BasedOn="{StaticResource HasNestedMenuItemStyle}"
+                TargetType="{x:Type MenuItem}">
+                <Setter Property="Visibility" Value="Collapsed" />
+
+                <Style.Triggers>
+                    <DataTrigger
                         Binding="{Binding Path=ContentType,
                                           UpdateSourceTrigger=PropertyChanged}"
-                        Value="{x:Static documents:RedDocumentItemType.App}">
+                        Value="{x:Static documents:RedDocumentItemType.Streamingsector}">
                         <Setter Property="Visibility" Value="Visible" />
                     </DataTrigger>
                 </Style.Triggers>
@@ -1026,6 +1042,44 @@
                         Foreground="White" />
                 </MenuItem.Icon>
             </MenuItem>
+
+
+            <!-- .streamingsector -->
+            <MenuItem
+                Style="{StaticResource ShowSectorMenuItemStyle}"
+                Header="Sector Variants">
+                <MenuItem.Icon>
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="Earth"
+                        Foreground="White" />
+                </MenuItem.Icon>
+
+                <MenuItem
+                    Style="{DynamicResource NestedMenuItemStyle}"
+                    Header="Create from existing"
+                    Command="{Binding Path=AddSectorVariantCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentDuplicate"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem
+                    Style="{DynamicResource NestedMenuItemStyle}"
+                    Header="Create multiple from existing"
+                    Command="{Binding Path=AddSectorVariantsMultipleCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentDuplicate"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+
 
             <!-- File validation submenu. Run WScript directly with shift-click. -->
             <MenuItem

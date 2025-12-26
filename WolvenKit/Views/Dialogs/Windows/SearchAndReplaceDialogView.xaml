@@ -6,6 +6,7 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
     Title="Replace in Selection"
     MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
     MinHeight="{DynamicResource WolvenKitDialogHeightSmall}"
@@ -48,6 +49,8 @@
                     </Grid.ColumnDefinitions>
 
                     <Grid.RowDefinitions>
+                        <RowDefinition Name="MessageRow" Height="Auto" />
+                        <RowDefinition Name="MessageRowSpacer" Height="{DynamicResource WolvenKitColumnTiny}" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="{DynamicResource WolvenKitColumnTiny}" />
                         <RowDefinition Height="Auto" />
@@ -63,17 +66,60 @@
                     <TextBlock
                         Grid.Row="0"
                         Grid.Column="0"
+                        Grid.ColumnSpan="2"
                         VerticalAlignment="Center"
+                        Visibility="{Binding ShowMessage,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Text="{Binding Message}" />
+
+
+                    <editors:FilterableDropdownMenu
+                        x:Name="ExistingFileDropdownMenu"
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Visibility="{Binding Path=ShowSearchDropdown,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Label="Replace appearance:"
+                        Options="{Binding DropdownOptions,
+                                          UpdateSourceTrigger=PropertyChanged}"
+                        SelectedOption="{Binding SearchText,
+                                                 Mode=TwoWay}"
+                        IsInline="True" />
+
+                    <!-- Search -->
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        VerticalAlignment="Center"
+                        Visibility="{Binding Path=ShowSearchDropdown,
+                                             Converter={StaticResource InvertBooleanVisibilityConverter}}"
                         Text="Search:" />
                     <TextBox
                         x:Name="SearchTextBox"
-                        Grid.Row="0"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Visibility="{Binding Path=ShowSearchDropdown,
+                                             Converter={StaticResource InvertBooleanVisibilityConverter}}"
+                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                        KeyboardNavigation.TabIndex="-1" />
+
+                    <!-- Replace -->
+                    <TextBlock
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        VerticalAlignment="Center"
+                        Text="Replace:" />
+
+                    <TextBox
+                        x:Name="ReplaceTextBox"
+                        Grid.Row="4"
                         Grid.Column="1"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        KeyboardNavigation.TabIndex="1" />
+                        KeyboardNavigation.TabIndex="-1" />
 
                     <Button
-                        Grid.Row="0"
+                        Grid.Row="4"
                         Grid.RowSpan="3"
                         Grid.Column="2"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
@@ -87,54 +133,41 @@
                             Size="{DynamicResource WolvenKitIconTiny}" />
                     </Button>
 
-                    <!-- Replace -->
-                    <TextBlock
-                        Grid.Row="2"
-                        Grid.Column="0"
-                        VerticalAlignment="Center"
-                        Text="Replace:" />
-                    <TextBox
-                        x:Name="ReplaceTextBox"
-                        Grid.Row="2"
-                        Grid.Column="1"
-                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        KeyboardNavigation.TabIndex="2" />
-
                     <!-- Whole word -->
                     <TextBlock
-                        Grid.Row="4"
+                        Grid.Row="6"
                         Grid.Column="0"
                         VerticalAlignment="Center"
                         Text="Whole word:" />
                     <CheckBox
                         x:Name="IsWholeWordCheckbox"
-                        Grid.Row="4"
+                        Grid.Row="6"
                         Grid.Column="1"
-                        KeyboardNavigation.TabIndex="3" />
+                        KeyboardNavigation.TabIndex="-1" />
 
                     <!-- As regex -->
                     <TextBlock
-                        Grid.Row="6"
+                        Grid.Row="8"
                         Grid.Column="0"
                         VerticalAlignment="Center"
                         Text="As regex:" />
                     <CheckBox
                         x:Name="IsRegexCheckbox"
-                        Grid.Row="6"
+                        Grid.Row="8"
                         Grid.Column="1"
-                        KeyboardNavigation.TabIndex="4" />
+                        KeyboardNavigation.TabIndex="-1" />
 
                     <!-- Remember selection -->
                     <TextBlock
-                        Grid.Row="8"
+                        Grid.Row="10"
                         Grid.Column="0"
                         VerticalAlignment="Center"
                         Text="Remember:" />
                     <CheckBox
                         x:Name="RememberValuesCheckBox"
-                        Grid.Row="8"
+                        Grid.Row="10"
                         Grid.Column="1"
-                        KeyboardNavigation.TabIndex="5" />
+                        KeyboardNavigation.TabIndex="-1" />
                 </Grid>
             </syncfusion:WizardPage>
         </syncfusion:WizardControl>
