@@ -6,6 +6,7 @@ using System.Windows.Input;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.ViewModels.Dialogs;
+using DragEventArgs = System.Windows.DragEventArgs;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 namespace WolvenKit.Views.Dialogs.Windows
@@ -28,8 +29,10 @@ namespace WolvenKit.Views.Dialogs.Windows
 
             LoadLastSelection();
 
+
             this.WhenActivated(disposables =>
             {
+
                 this.Bind(ViewModel,
                         x => x.IconFilePath,
                         x => x.IconTextBox.Text)
@@ -47,6 +50,17 @@ namespace WolvenKit.Views.Dialogs.Windows
                         x => x.SongFolderPath,
                         x => x.SongFolderTextBox.Text)
                     .DisposeWith(disposables);
+
+                // Grid with songs
+                this.Bind(ViewModel,
+                        x => x.SongItems,
+                        x => x.SongsGrid.ItemsSource)
+                    .DisposeWith(disposables);
+
+
+                SongsGrid.SetCurrentValue(Syncfusion.UI.Xaml.Grid.SfDataGrid.AllowDraggingRowsProperty, true);
+                SongsGrid.SetCurrentValue(AllowDropProperty, true);
+                SongsGrid.Drop += SongsGrid_OnDrop;
             });
         }
 
@@ -93,11 +107,6 @@ namespace WolvenKit.Views.Dialogs.Windows
             if (ViewModel.Frequency != 0.0)
             {
                 s_lastFrequency = ViewModel.Frequency;
-            }
-
-            if (!string.IsNullOrEmpty(ViewModel.SongFolderPath))
-            {
-                s_lastSongFolder = ViewModel.SongFolderPath;
             }
         }
 
@@ -165,7 +174,22 @@ namespace WolvenKit.Views.Dialogs.Windows
 
         private void RowDeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            if (ViewModel is null)
+            {
+                return;
+            }
+            // TODO: Call ViewModel.RemoveSong
         }
+
+
+        private void SongsGrid_OnDrop(object sender, DragEventArgs e)
+        {
+            if (ViewModel is null)
+            {
+                return;
+            }
+            // TODO: Call ViewModel.MoveSongOrder
+        }
+
     }
 }
