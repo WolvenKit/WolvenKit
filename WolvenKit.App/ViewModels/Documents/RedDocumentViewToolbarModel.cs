@@ -35,6 +35,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private readonly CRUIDService _cruidService;
     private readonly DocumentTools _documentTools;
     private readonly ILoggerService _loggerService;
+    private readonly INotificationService _notificationService;
     private readonly StreamingSectorTools _sectorTools;
 
     public RedDocumentViewToolbarModel(
@@ -44,6 +45,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         DocumentTools documentTools,
         CRUIDService cruidService,
         ILoggerService loggerService,
+        INotificationService notificationService,
         StreamingSectorTools sectorTools
     )
     {
@@ -54,6 +56,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         _documentTools = documentTools;
         _loggerService = loggerService;
         _sectorTools = sectorTools;
+        _notificationService = notificationService;
 
         modifierSvc.ModifierStateChanged += OnModifierChanged;
         modifierSvc.PropertyChanged += (_, args) => OnPropertyChanged(args.PropertyName);
@@ -110,6 +113,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
                 or RedDocumentItemType.Scene
                 or RedDocumentItemType.Physmatlib
                 or RedDocumentItemType.Streamingsector
+                or RedDocumentItemType.Streamingblock
                 or RedDocumentItemType.Mlsetup
                 or RedDocumentItemType.Ent => true,
             RedDocumentItemType.Xbm
@@ -192,7 +196,6 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(CopyMaterialFromMeshCommand))]
     [NotifyCanExecuteChangedFor(nameof(CopyMaterialToMeshesCommand))]
     [NotifyCanExecuteChangedFor(nameof(AddSectorVariantCommand))]
-    [NotifyCanExecuteChangedFor(nameof(AddSectorVariantsMultipleCommand))]
     [ObservableProperty]
     private RedDocumentItemType _contentType;
 
@@ -761,32 +764,20 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CanCreateVariants))]
     private void AddSectorVariant()
     {
-        if (RootChunk?.ResolvedData is not worldStreamingSector sector)
+        if (RootChunk?.ResolvedData is not worldStreamingBlock block ||
+            _projectManager.ActiveProject is not { } project)
         {
             return;
         }
 
-        if (string.IsNullOrEmpty(_sectorTools.AddSectorVariant(sector)))
+        try
         {
-            return;
+            _sectorTools.AddSectorVariants(block, project);
         }
-
-        RootChunk.Tab?.Parent.SetIsDirty(true);
-        RootChunk.GetPropertyChild("nodes")?.RecalculateProperties();
-        RootChunk.GetPropertyChild("nodeData")?.RecalculateProperties();
-        RootChunk.GetPropertyChild("variantIndices")?.RecalculateProperties();
-    }
-
-    [RelayCommand(CanExecute = nameof(CanCreateVariants))]
-    private void AddSectorVariantsMultiple()
-    {
-        if (RootChunk?.ResolvedData is not worldStreamingSector sector)
+        catch (Exception e)
         {
-            return;
-        }
-
-        if (!_sectorTools.AddSectorVariants(sector))
-        {
+            _notificationService.Error(e.Message);
+            _loggerService.Error(e.Message);
             return;
         }
 

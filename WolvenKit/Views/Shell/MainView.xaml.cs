@@ -115,21 +115,16 @@ namespace WolvenKit.Views.Shell
                     return dialog.ViewModel;
                 };
 
-                Interactions.ShowSearchReplaceDialog = args =>
+                Interactions.ShowNewSectorVariantView = args =>
                 {
                     var dialog =
-                        new SearchAndReplaceDialog(args.message, args.allowMultiple, args.existingOptions ?? null);
+                        new AddSectorVariantDialogView(args.block, args.project);
                     if (dialog.ShowDialog() != true)
                     {
-                        return ("", "", false, false);
+                        return null;
                     }
 
-                    return (
-                        dialog.ViewModel?.SearchText ?? "",
-                        dialog.ViewModel?.ReplaceText ?? "",
-                        dialog.ViewModel?.IsRegex ?? false,
-                        dialog.ViewModel?.IsWholeWord ?? false
-                    );
+                    return dialog.ViewModel;
                 };
 
                 Interactions.ShowSelectSaveView = currentSaveGame =>

@@ -12,7 +12,7 @@
     MinWidth="{StaticResource WolvenKitDialogWidthSmall}"
     MinHeight="{StaticResource WolvenKitDialogHeightSmall}"
     SizeToContent="WidthAndHeight"
-    FocusManager.FocusedElement="{Binding ElementName=FilterableDropdownMenu}"
+    FocusManager.FocusedElement="{Binding ElementName=SectorVariantDropdownMenu}"
     DataContext="{Binding RelativeSource={RelativeSource Self},
                           Path=ViewModel}"
     WindowStartupLocation="CenterScreen">

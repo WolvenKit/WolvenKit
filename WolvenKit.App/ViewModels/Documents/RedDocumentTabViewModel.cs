@@ -32,6 +32,7 @@ public enum RedDocumentItemType
     Csv,
     Json,
     Streamingsector,
+    Streamingblock,
     Physmatlib,
     Other,
     None,

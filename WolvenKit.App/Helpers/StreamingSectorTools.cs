@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using DynamicData;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Helpers;
@@ -41,7 +44,7 @@ public class StreamingSectorTools
         _notificationService = notificationService;
     }
 
-    private void ValidateSector(worldStreamingSector sector)
+    private static void ValidateSector(worldStreamingSector sector)
     {
         if (sector.VariantIndices.Count == 0)
         {
@@ -50,7 +53,13 @@ public class StreamingSectorTools
 
         if (sector.NodeData.Buffer.Data is not worldNodeDataBuffer nodeData)
         {
-            throw new WolvenKitException(0, "Invalid node data buffer, please open a ticket");
+            throw new WolvenKitException(0, "Invalid node data buffer");
+        }
+
+        var variantIndices = sector.VariantIndices.Select(i => (int)i).OrderBy(i => i).ToList();
+        if (nodeData.Count > variantIndices.Last())
+        {
+            throw new WolvenKitException(0, "Invalid variant index");
         }
     }
 
@@ -70,6 +79,47 @@ public class StreamingSectorTools
             QuestPrefabRefHash = node.QuestPrefabRefHash,
             CookedPrefabData = node.CookedPrefabData
         };
+    }
+
+    public List<string> GetNodeAppearances(uint rangeIndex, string absolutePath) =>
+        GetDataNodes(rangeIndex, absolutePath).Values.OfType<IRedMeshNode>()
+            .Select(n => n.MeshAppearance.ToString() ?? "")
+            .Where(s => !string.IsNullOrEmpty(s)).Distinct().ToList();
+
+
+    public Dictionary<worldNodeData, worldNode?> GetDataNodes(uint rangeIndex, string absolutePath)
+    {
+        if (_cr2WTools.ReadCr2W(absolutePath) is not { RootChunk: worldStreamingSector sector } ||
+            sector.VariantIndices.Count < rangeIndex)
+        {
+            return [];
+        }
+
+        ValidateSector(sector);
+
+        var sectorStartIndex = sector.VariantIndices[(int)(rangeIndex - 1)];
+        var sectorEndIndex = sector.VariantIndices.Count - 1;
+        if (sector.VariantIndices.Count >= rangeIndex + 1)
+        {
+            sectorEndIndex = sector.VariantIndices[(int)rangeIndex];
+        }
+
+        // will have thrown an exception in ValidateSector if this wasn't valid
+        var nodeData = (worldNodeDataBuffer)sector.NodeData.Buffer.Data!;
+
+        var nodeIndices = nodeData.Where((node, index) => index >= sectorStartIndex && index < sectorEndIndex)
+            .Select(node => node.NodeIndex).Distinct().ToList();
+
+        return nodeData.Where((node, index) => index >= sectorStartIndex && index < sectorEndIndex).ToDictionary(n => n,
+            n =>
+            {
+                if (n.NodeIndex < sector.Nodes.Count)
+                {
+                    return null;
+                }
+
+                return sector.Nodes[n.NodeIndex].Chunk;
+            });
     }
 
     private worldNode? CopyNodeRef(worldNodeData dataNode, worldStreamingSector sector)
@@ -138,47 +188,48 @@ public class StreamingSectorTools
         bool? isRegexP = false,
         bool? isWholeWordP = false)
     {
-        if (newNodes.Count == 0)
-        {
-            return "";
-        }
-
-        var search = searchP;
-        var replace = replaceP;
-        var isRegex = isRegexP;
-        var isWholeWord = isWholeWordP;
-
-        if (search is null || replace is null)
-        {
-            var dropdownOptions = newNodes.OfType<IRedMeshNode>()
-                .Select(n => n.MeshAppearance.ToString() ?? "")
-                .Where(s => !string.IsNullOrEmpty(s))
-                .ToList();
-
-            (string search, string replace, bool isRegex, bool wholeWord) result =
-                Interactions.ShowSearchReplaceDialog(("Search and replace in mesh appearances", false,
-                    dropdownOptions));
-
-            search = result.search;
-            replace = result.replace;
-            isRegex = result.isRegex;
-            isWholeWord = result.wholeWord;
-        }
-
-        if (string.IsNullOrEmpty(search) || string.IsNullOrEmpty(replace))
-        {
-            return "";
-        }
-
-        foreach (var worldNode in newNodes.Where(n => n is IRedMeshNode).OfType<IRedMeshNode>()
-                     .Where(n => !string.IsNullOrEmpty(n.MeshAppearance)))
-        {
-            worldNode.MeshAppearance = StringHelper.ReplaceInString(worldNode.MeshAppearance!, search, replace,
-                isWholeWord ?? false,
-                isRegex ?? false);
-        }
-
-        return replace;
+        return "";
+        // if (newNodes.Count == 0)
+        // {
+        //     return "";
+        // }
+        //
+        // var search = searchP;
+        // var replace = replaceP;
+        // var isRegex = isRegexP;
+        // var isWholeWord = isWholeWordP;
+        //
+        // if (search is null || replace is null)
+        // {
+        //     var dropdownOptions = newNodes.OfType<IRedMeshNode>()
+        //         .Select(n => n.MeshAppearance.ToString() ?? "")
+        //         .Where(s => !string.IsNullOrEmpty(s))
+        //         .ToList();
+        //
+        //     (string search, string replace, bool isRegex, bool wholeWord) result =
+        //         Interactions.ShowSearchReplaceDialog(("Search and replace in mesh appearances", false,
+        //             dropdownOptions));
+        //
+        //     search = result.search;
+        //     replace = result.replace;
+        //     isRegex = result.isRegex;
+        //     isWholeWord = result.wholeWord;
+        // }
+        //
+        // if (string.IsNullOrEmpty(search) || string.IsNullOrEmpty(replace))
+        // {
+        //     return "";
+        // }
+        //
+        // foreach (var worldNode in newNodes.Where(n => n is IRedMeshNode).OfType<IRedMeshNode>()
+        //              .Where(n => !string.IsNullOrEmpty(n.MeshAppearance)))
+        // {
+        //     worldNode.MeshAppearance = StringHelper.ReplaceInString(worldNode.MeshAppearance!, search, replace,
+        //         isWholeWord ?? false,
+        //         isRegex ?? false);
+        // }
+        //
+        // return replace;
     }
 
     public string AddSectorVariant(worldStreamingSector sector)
@@ -269,47 +320,101 @@ public class StreamingSectorTools
         var nodeAppearanceNames = nodeData.Where((node, index) => index >= startIndex)
             .Select(node => GetNodeAppearance(sector, node.NodeIndex)).Distinct().ToList();
 
-        (string search, string replace, bool isRegex, bool wholeWord) result = Interactions.ShowSearchReplaceDialog(
-            ("Search and replace in mesh appearances (separate multiple entries by comma or linebreak)", true,
-                nodeAppearanceNames));
-
-        if (string.IsNullOrEmpty(result.search) || string.IsNullOrEmpty(result.replace))
-        {
-            return [];
-        }
-
         List<string> newSectorNodes = [];
-        foreach (var replace in result.replace.Split(",").SelectMany(s => s.Split("\n")).Select(s => s.Trim()).ToList())
-        {
-            List<worldNode?> newNodes = [];
-            // try
-            // {
-
-            foreach (var newDataNode in nodeData.Where((node, index) => index >= startIndex)
-                         .Select((node) => CopyDataNode(node, sector)).ToList())
-            {
-                newNodes.Add(CopyNodeRef(newDataNode, sector));
-                newDataNode.NodeIndex = (CUInt16)(newNodes.Count - 1);
-
-                nodeData.Add(newDataNode);
-            }
-
-            if (nodeData.Count - 1 == startIndex)
-            {
-                throw new WolvenKitException(0, "Failed to add sector variant");
-            }
-
-            sector.VariantIndices.Add(nodeData.Count - 1);
-            // }
-            // catch (Exception e)
-            // {
-            //     _loggerService.Error(e.Message);
-            //     _notificationService.Error(e.Message);
-            // }
-
-            newSectorNodes.Add(ReplaceInNodes(newNodes, result.search, replace, result.isRegex, result.wholeWord));
-        }
+        //
+        // (string search, string replace, bool isRegex, bool wholeWord) result = Interactions.ShowSearchReplaceDialog(
+        //     ("Search and replace in mesh appearances (separate multiple entries by comma or linebreak)", true,
+        //         nodeAppearanceNames));
+        //
+        // if (string.IsNullOrEmpty(result.search) || string.IsNullOrEmpty(result.replace))
+        // {
+        //     return [];
+        // }
+        // foreach (var replace in result.replace.Split(",").SelectMany(s => s.Split("\n")).Select(s => s.Trim()).ToList())
+        // {
+        //     List<worldNode?> newNodes = [];
+        //     // try
+        //     // {
+        //
+        //     foreach (var newDataNode in nodeData.Where((node, index) => index >= startIndex)
+        //                  .Select((node) => CopyDataNode(node, sector)).ToList())
+        //     {
+        //         newNodes.Add(CopyNodeRef(newDataNode, sector));
+        //         newDataNode.NodeIndex = (CUInt16)(newNodes.Count - 1);
+        //
+        //         nodeData.Add(newDataNode);
+        //     }
+        //
+        //     if (nodeData.Count - 1 == startIndex)
+        //     {
+        //         throw new WolvenKitException(0, "Failed to add sector variant");
+        //     }
+        //
+        //     sector.VariantIndices.Add(nodeData.Count - 1);
+        //     // }
+        //     // catch (Exception e)
+        //     // {
+        //     //     _loggerService.Error(e.Message);
+        //     //     _notificationService.Error(e.Message);
+        //     // }
+        //
+        //     newSectorNodes.Add(ReplaceInNodes(newNodes, result.search, replace, result.isRegex, result.wholeWord));
+        // }
 
         return newSectorNodes;
+    }
+
+    public void CheckForStreamingSectorFiles(Cp77Project project)
+    {
+        var sectorFiles = project.ModFiles.Where(s => s.HasFileExtension(".streamingsector")).ToList();
+        if (sectorFiles.Count == 0)
+        {
+            throw new WolvenKitException(0, "You need to have at least one .streamingsector in your project");
+        }
+    }
+
+    public void AddSectorVariants(worldStreamingBlock sector, Cp77Project project)
+    {
+        var result = Interactions.ShowNewSectorVariantView((sector, project));
+        result?.GenerateResults();
+        if (result is null || result.NewAppearances.Count == 0 || result.NewVariantNameOrPrefix is null)
+        {
+            return;
+        }
+
+        if (string.IsNullOrEmpty(result.SectorRelativePath))
+        {
+            CheckForStreamingSectorFiles(project);
+            var sectorFiles = project.ModFiles.Where(s => s.HasFileExtension(".streamingsector")).ToList();
+            result.SectorRelativePath = Interactions.AskForDropdownOption((sectorFiles, "Select a sector",
+                "Failed to read sector from streamingblock. Please select one of the following sector files:", "", true,
+                null));
+        }
+
+        if (string.IsNullOrEmpty(result.SectorRelativePath) || !project.ModFiles.Contains(result.SectorRelativePath) ||
+            project.GetAbsolutePath(result.SectorRelativePath) is not string sectorPath ||
+            _cr2WTools.ReadCr2WNoException(sectorPath) is not CR2WFile
+            {
+                RootChunk: worldStreamingSector streamingSector
+            })
+        {
+            _notificationService.Info($"Failed to find sector '{result.SectorRelativePath}', aborting");
+            _loggerService.Info($"Failed to find sector '{result.SectorRelativePath}', aborting");
+            return;
+        }
+
+        ValidateSector(streamingSector);
+
+        var sectorPrefix = "";
+        if (result.NewAppearances.Count > 1)
+        {
+            sectorPrefix = result.NewVariantNameOrPrefix + (result.NewVariantNameOrPrefix.EndsWith('_') ? "" : "_");
+        }
+
+        // Now iterate and create variants
+        foreach (var replaceString in result.NewAppearances)
+        {
+            // in sector: add nodes
+        }
     }
 }
