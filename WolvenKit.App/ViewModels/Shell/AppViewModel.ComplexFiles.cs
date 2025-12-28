@@ -377,6 +377,24 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
     }
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
+    private void AddOrEditRadio()
+    {
+        if (_projectManager.ActiveProject is not Cp77Project activeProject ||
+            GetModderName() is not string modderName || string.IsNullOrEmpty(modderName))
+        {
+            return;
+        }
+
+
+        if (Interactions.CreateOrEditRadioDialog(activeProject) is not { } dialogModel)
+        {
+            return;
+        }
+
+        _templateFileTools.CreateRadio(dialogModel);
+    }
+
+    [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private void GeneratePropItem()
     {
         if (_projectManager.ActiveProject is not Cp77Project activeProject)

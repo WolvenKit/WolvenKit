@@ -138,7 +138,7 @@ namespace WolvenKit.Views.Shell
                     return true;
                 };
 
-                Interactions.CreateOrEditRadio = project =>
+                Interactions.CreateOrEditRadioDialog = project =>
                 {
                     AddRadioExtFilesDialog dialog = new(project);
 

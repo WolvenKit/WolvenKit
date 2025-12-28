@@ -1910,6 +1910,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     //[NotifyCanExecuteChangedFor(nameof(CloseModalCommand))]
     [NotifyCanExecuteChangedFor(nameof(CloseDialogCommand))]
     [NotifyCanExecuteChangedFor(nameof(AddAXlItemFilesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddOrEditRadioCommand))]
     private bool _isDialogShown;
 
     [ObservableProperty]
@@ -1940,6 +1941,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(GeneratePropItemCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateInkatlasCommand))]
     [NotifyCanExecuteChangedFor(nameof(AddAXlItemFilesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddOrEditRadioCommand))]
     private Cp77Project? _activeProject;
 
     [ObservableProperty]
@@ -1957,6 +1959,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(AddPlayerHeadCommand))]
     [NotifyCanExecuteChangedFor(nameof(RegisterWorldbuilderFilesCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateInkatlasCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddAXlItemFilesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddOrEditRadioCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddOrEditRadioCommand))]
     private EAppStatus? _status;
 
     [ObservableProperty]

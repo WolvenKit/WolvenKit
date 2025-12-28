@@ -312,6 +312,6 @@ public static class Interactions
     /// <summary>
     /// Shows dialogue to add item codes to .reds store and vendor yaml
     /// </summary>
-    public static Func<Cp77Project, AddRadioExtFilesDialogViewModel?> CreateOrEditRadio { get; set; } =
+    public static Func<Cp77Project, AddRadioExtFilesDialogViewModel?> CreateOrEditRadioDialog { get; set; } =
         project => throw new NotImplementedException();
 }
