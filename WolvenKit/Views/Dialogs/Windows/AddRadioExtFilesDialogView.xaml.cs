@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.ViewModels.Dialogs;
 using DragEventArgs = System.Windows.DragEventArgs;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
@@ -13,42 +14,38 @@ namespace WolvenKit.Views.Dialogs.Windows
 {
     public partial class AddRadioExtFilesDialog : IViewFor<AddRadioExtFilesDialogViewModel>
     {
-        private static string s_lastIcon = "";
-        private static string s_lastName = "";
-        private static string s_lastSongFolder = "";
-        private static double s_lastFrequency = 0.0;
-
         public static bool IsInstanceOpen { get; private set; }
 
-        public AddRadioExtFilesDialog()
+        public AddRadioExtFilesDialog(Cp77Project project)
         {
             InitializeComponent();
 
-            ViewModel = Locator.Current.GetService<AddRadioExtFilesDialogViewModel>();
+            ViewModel = new AddRadioExtFilesDialogViewModel(project);
             DataContext = ViewModel;
-
-            LoadLastSelection();
-
 
             this.WhenActivated(disposables =>
             {
-
-                this.Bind(ViewModel,
-                        x => x.IconFilePath,
-                        x => x.IconTextBox.Text)
-                    .DisposeWith(disposables);
-
                 this.Bind(ViewModel,
                         x => x.StationName,
                         x => x.StationNameTextBox.Text)
                     .DisposeWith(disposables);
                 this.Bind(ViewModel,
-                        x => x.SongFolderPath,
-                        x => x.SongFolderTextBox.Text)
+                        x => x.IconFilePath,
+                        x => x.IconPathTextBox.Text)
                     .DisposeWith(disposables);
                 this.Bind(ViewModel,
-                        x => x.SongFolderPath,
-                        x => x.SongFolderTextBox.Text)
+                        x => x.Frequency,
+                        x => x.StationFrequencyTextBox.Text)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        x => x.UseStream,
+                        x => x.UseStreamCheckBox.IsChecked)
+                    .DisposeWith(disposables);
+
+                // stream URL
+                this.Bind(ViewModel,
+                        x => x.StreamPath,
+                        x => x.StreamPathTextBox.Text)
                     .DisposeWith(disposables);
 
                 // Grid with songs
@@ -56,7 +53,6 @@ namespace WolvenKit.Views.Dialogs.Windows
                         x => x.SongItems,
                         x => x.SongsGrid.ItemsSource)
                     .DisposeWith(disposables);
-
 
                 SongsGrid.SetCurrentValue(Syncfusion.UI.Xaml.Grid.SfDataGrid.AllowDraggingRowsProperty, true);
                 SongsGrid.SetCurrentValue(AllowDropProperty, true);
@@ -74,41 +70,6 @@ namespace WolvenKit.Views.Dialogs.Windows
             return ShowDialog();
         }
 
-        private void LoadLastSelection()
-        {
-            if (ViewModel is null)
-            {
-                return;
-            }
-
-            ViewModel.IconFilePath = s_lastIcon;
-            ViewModel.StationName = s_lastName;
-            ViewModel.Frequency = s_lastFrequency;
-            ViewModel.SongFolderPath = s_lastSongFolder;
-        }
-
-        private void SaveLastSelection()
-        {
-            if (ViewModel is null)
-            {
-                return;
-            }
-
-            if (!string.IsNullOrEmpty(ViewModel.IconFilePath))
-            {
-                s_lastIcon = ViewModel.IconFilePath;
-            }
-
-            if (!string.IsNullOrEmpty(ViewModel.StationName))
-            {
-                s_lastName = ViewModel.StationName;
-            }
-
-            if (ViewModel.Frequency != 0.0)
-            {
-                s_lastFrequency = ViewModel.Frequency;
-            }
-        }
 
 
         private void WizardPage_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -118,7 +79,6 @@ namespace WolvenKit.Views.Dialogs.Windows
                 return;
             }
 
-            SaveLastSelection();
             e.Handled = true;
             DialogResult = true;
             Close();
@@ -129,8 +89,6 @@ namespace WolvenKit.Views.Dialogs.Windows
             IsInstanceOpen = false;
             base.OnClosed(e);
         }
-
-        private void WizardControl_OnFinish(object sender, RoutedEventArgs e) => SaveLastSelection();
 
         private void SearchIconButton_OnClick(object sender, RoutedEventArgs e)
         {
@@ -152,7 +110,7 @@ namespace WolvenKit.Views.Dialogs.Windows
             ViewModel.IconFilePath = dlg.FileName;
         }
 
-        private void SearchSongFolderButton_OnClick(object sender, RoutedEventArgs e)
+        private void AddSongFilesButton_OnClick(object sender, RoutedEventArgs e)
         {
             if (ViewModel is null)
             {
@@ -169,7 +127,8 @@ namespace WolvenKit.Views.Dialogs.Windows
                 return;
             }
 
-            // TODO: Add to viewmodel list
+            ViewModel.AddSong("", "");
+
         }
 
         private void RowDeleteButton_Click(object sender, RoutedEventArgs e)
@@ -178,7 +137,8 @@ namespace WolvenKit.Views.Dialogs.Windows
             {
                 return;
             }
-            // TODO: Call ViewModel.RemoveSong
+
+            ViewModel.RemoveSong("", "");
         }
 
 
@@ -188,7 +148,8 @@ namespace WolvenKit.Views.Dialogs.Windows
             {
                 return;
             }
-            // TODO: Call ViewModel.MoveSongOrder
+
+            ViewModel.MoveSongOrder("", 0);
         }
 
     }

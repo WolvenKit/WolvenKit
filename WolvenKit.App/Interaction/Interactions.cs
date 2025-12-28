@@ -308,4 +308,10 @@ public static class Interactions
     /// </summary>
     public static Func<PlayerHeadDialogViewModel> ShowNewPlayerHeadView { get; set; } =
         () => throw new NotImplementedException();
+
+    /// <summary>
+    /// Shows dialogue to add item codes to .reds store and vendor yaml
+    /// </summary>
+    public static Func<Cp77Project, AddRadioExtFilesDialogViewModel?> CreateOrEditRadio { get; set; } =
+        project => throw new NotImplementedException();
 }

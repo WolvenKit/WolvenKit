@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
+using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.Interfaces.Extensions;
 
 
 namespace WolvenKit.App.ViewModels.Dialogs;
@@ -17,43 +20,57 @@ class SongItem
 /// </summary>
 public partial class AddRadioExtFilesDialogViewModel() : ObservableObject
 {
-    /// <summary>
-    /// Search text
-    /// </summary>
+
     [ObservableProperty] private string? _stationName = "";
 
-    /// <summary>
-    /// Replace text
-    /// </summary>
     [ObservableProperty] private string? _iconFilePath = "";
 
-    /// <summary>
-    /// Replace text
-    /// </summary>
+    [ObservableProperty] private string? _streamPath = "";
+
+    [ObservableProperty] private bool? _useStream;
+
     [ObservableProperty] private List<string> _musicFiles = [];
 
-    /// <summary>
-    /// Replace text
-    /// </summary>
     [ObservableProperty] private List<SongItem> _songItems = [];
 
-    /// <summary>
-    /// Replace text
-    /// </summary>
     [ObservableProperty]
     private double _frequency = double.Parse($"{new Random().Next(87, 108)}.{new Random().Next(0, 9)}");
 
-    private void AddSong(string songTitle, string filePath)
+    private readonly Cp77Project? _project;
+
+    public AddRadioExtFilesDialogViewModel(Cp77Project project) : this()
+    {
+        _project = project;
+        Initialize();
+    }
+
+    private void Initialize()
+    {
+        if (_project is null)
+        {
+            return;
+        }
+
+        // read json file if we have one
+        var jsonFiles = _project.ResourceFiles.Where(f => f.HasFileExtension(".json")).ToList();
+
+        if (jsonFiles.FirstOrDefault() is not string relativePath)
+        {
+            return;
+        }
+    }
+
+    public void AddSong(string songTitle, string filePath)
     {
         // TODO
     }
 
-    private void RemoveSong(string songTitle, string filePath)
+    public void RemoveSong(string songTitle, string filePath)
     {
         // TODO
     }
 
-    private void MoveSongOrder(string filePath, int newIndex)
+    public void MoveSongOrder(string filePath, int newIndex)
     {
         // TODO
     }

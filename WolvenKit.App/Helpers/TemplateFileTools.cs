@@ -22,7 +22,7 @@ using PhotoModePlayerEntityComponent = WolvenKit.RED4.Types.PhotoModePlayerEntit
 
 namespace WolvenKit.App.Helpers;
 
-public class TemplateFileTools
+public partial class TemplateFileTools
 {
     private readonly ILoggerService _loggerService;
     private readonly IProjectManager _projectManager;

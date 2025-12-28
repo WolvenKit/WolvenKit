@@ -5,11 +5,13 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
-    Title="Replace in Selection"
+    Title="RadioExt Station"
     MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
     MinHeight="{DynamicResource WolvenKitDialogHeightSmall}"
     SizeToContent="WidthAndHeight"
-    FocusManager.FocusedElement="{Binding ElementName=IconTextBox}"
+    DataContext="{Binding RelativeSource={RelativeSource Self},
+                          Path=ViewModel}"
+    FocusManager.FocusedElement="{Binding ElementName=IconPathTextBox}"
     WindowStartupLocation="CenterScreen">
     <Grid
         HorizontalAlignment="Stretch"
@@ -17,8 +19,7 @@
 
         <syncfusion:WizardControl
             CancelButtonCancelsWindow="True"
-            FinishButtonClosesWindow="True"
-            Finish="WizardControl_OnFinish">
+            FinishButtonClosesWindow="True">
             <syncfusion:WizardPage
                 BackVisibility="Collapsed"
                 CancelVisibility="Visible"
@@ -45,7 +46,9 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="5" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="5" />
+                        <RowDefinition Height="10" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="10" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="5" />
                         <RowDefinition Height="Auto" />
@@ -77,7 +80,7 @@
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         KeyboardNavigation.TabIndex="2" />
 
-                    <!-- Search -->
+                    <!-- Icon file absolute path -->
                     <TextBlock
                         Grid.Row="4"
                         Grid.Column="0"
@@ -85,7 +88,7 @@
                         Text="Icon file:" />
 
                     <TextBox
-                        x:Name="IconTextBox"
+                        x:Name="IconPathTextBox"
                         Grid.Row="4"
                         Grid.Column="1"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
@@ -94,6 +97,7 @@
                     <Button
                         Grid.Row="4"
                         Grid.Column="2"
+                        Height="{DynamicResource WolvenKitIconSmall}"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Background="Transparent"
                         Style="{StaticResource ButtonCustom}"
@@ -102,28 +106,65 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="ImageSearch"
-                            Size="{DynamicResource WolvenKitIconTiny}" />
+                            Margin="0"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </Button>
 
-                    <!-- Search -->
                     <TextBlock
                         Grid.Row="6"
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Text="Select a png file (200x200) to generate an .inkatlas file" />
+
+                    <!-- Use Stream -->
+                    <TextBlock
+                        Grid.Row="8"
+                        Grid.Column="0"
+                        VerticalAlignment="Top"
+                        Text="Use stream:" />
+                    <CheckBox
+                        x:Name="UseStreamCheckBox"
+                        Grid.Row="8"
+                        Grid.Column="1"
+                        KeyboardNavigation.TabIndex="-1" />
+
+                    <!-- ======================================================== -->
+                    <!-- Song Folder / Stream -->
+                    <TextBlock
+                        Grid.Row="10"
                         Grid.Column="0"
                         Grid.ColumnSpan="3"
                         VerticalAlignment="Top"
-                        Text="Songs:" />
+                        Text="Songs:">
+                        <TextBlock.Style>
+                            <Style>
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding UseStream}"
+                                        Value="True">
+                                        <Setter Property="Text" Value="Stream URL:" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
 
                     <TextBox
-                        x:Name="SongFolderTextBox"
-                        Grid.Row="6"
+                        x:Name="StreamPathTextBox"
+                        Grid.Row="10"
                         Grid.Column="1"
+                        Visibility="{Binding Path=UseStream,
+                                             Mode=OneWay,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
-                        KeyboardNavigation.TabIndex="1" />
-
+                        KeyboardNavigation.TabIndex="-1" />
 
                     <Grid
-                        Grid.Row="6"
-                        Grid.Column="1">
+                        Grid.Row="10"
+                        Grid.Column="1"
+                        Visibility="{Binding Path=UseStream,
+                                             Mode=OneWay,
+                                             Converter={StaticResource InvertBooleanVisibilityConverter}}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
@@ -135,7 +176,8 @@
                         <syncfusion:SfDataGrid
                             x:Name="SongsGrid"
                             Grid.Row="1"
-                            Margin="10"
+                            Width="Auto"
+                            Margin="0"
                             RowHeight="40"
                             AutoGenerateColumns="False"
                             AllowDraggingRows="True"
@@ -170,15 +212,7 @@
                                     Width="*"
                                     MappingName="FileName"
                                     HeaderText="Song Name"
-                                    TextAlignment="Left">
-                                    <syncfusion:GridTextColumn.HeaderStyle>
-                                        <Style TargetType="syncfusion:GridRowHeaderCell">
-                                            <Setter Property="Background" Value="#F8F9FA" />
-                                            <Setter Property="FontWeight" Value="Bold" />
-                                            <Setter Property="Foreground" Value="#2E3A59" />
-                                        </Style>
-                                    </syncfusion:GridTextColumn.HeaderStyle>
-                                </syncfusion:GridTextColumn>
+                                    TextAlignment="Left" />
 
                                 <!-- Delete Button -->
                                 <syncfusion:GridTemplateColumn
@@ -224,13 +258,16 @@
                     </Grid>
 
                     <Button
-                        Grid.Row="6"
+                        Grid.Row="10"
                         Grid.Column="2"
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Background="Transparent"
                         Style="{StaticResource ButtonCustom}"
-                        Click="SearchSongFolderButton_OnClick"
-                        ToolTip="Search icon file">
+                        Visibility="{Binding Path=UseStream,
+                                             Mode=OneWay,
+                                             Converter={StaticResource InvertBooleanVisibilityConverter}}"
+                        Click="AddSongFilesButton_OnClick"
+                        ToolTip="Add songs from folder">
                         <templates:IconBox
                             IconPack="Material"
                             Kind="FolderMusic"
