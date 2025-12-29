@@ -64,7 +64,12 @@ namespace WolvenKit.Interfaces.Extensions
         /// </summary>
         public static string ToFileName(this string target) =>
             new string(target.Where(c => !Path.GetInvalidFileNameChars().Contains(c)).ToArray()).Trim()
-                .Replace(" ", "_").ToLower();
+                .Replace(" ", "_")
+                .Replace("'", "-")
+                .Replace(",", "-")
+                .Replace(".", "-")
+                .Replace("\"", "-")
+                .ToLower();
 
         /// <summary>
         /// Is this a file path without invalid characters?
