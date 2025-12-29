@@ -25,6 +25,7 @@ namespace WolvenKit.App.Helpers;
 public partial class TemplateFileTools
 {
     private readonly ILoggerService _loggerService;
+    private readonly INotificationService _notificationService;
     private readonly IProjectManager _projectManager;
     private readonly IModTools _modTools;
     private readonly Cr2WTools _cr2WTools;
@@ -35,7 +36,7 @@ public partial class TemplateFileTools
 
     public TemplateFileTools(ILoggerService loggerService, IProjectManager projectManager, IModTools modTools,
         Cr2WTools cr2WTools, DocumentTools documentTools, ProjectResourceTools projectResourceTools,
-        ISettingsManager settingsManager, IAppArchiveManager archiveManager)
+        ISettingsManager settingsManager, IAppArchiveManager archiveManager, INotificationService notificationService)
     {
         _loggerService = loggerService;
         _projectManager = projectManager;
@@ -46,6 +47,7 @@ public partial class TemplateFileTools
         _settingsManager = settingsManager;
         _settingsManager = settingsManager;
         _archiveManager = archiveManager;
+        _notificationService = notificationService;
     }
 
     public void CopyInkatlasTemplateSingle(string inkatlasRelativePath, bool forceOverwrite)
