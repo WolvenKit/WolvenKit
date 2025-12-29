@@ -79,7 +79,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly AppScriptService _scriptService;
     private readonly DocumentTools _documentTools;
     private readonly Cr2WTools _cr2WTools;
-    private readonly TemplateFileTools _templateFileTools;
+    public readonly TemplateFileTools TemplateFileTools;
     private readonly IWatcherService _watcherService;
     private readonly ArchiveXlItemService _archiveXlItemService;
     private readonly IUpdateService _updateService;
@@ -138,7 +138,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _scriptService = scriptService;
         _documentTools = documentTools;
         _cr2WTools = cr2WTools;
-        _templateFileTools = templateFileTools;
+        TemplateFileTools = templateFileTools;
         ProjectResourceTools = projectResourceTools;
         _updateService = updateService;
 

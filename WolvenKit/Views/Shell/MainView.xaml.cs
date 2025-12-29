@@ -140,7 +140,7 @@ namespace WolvenKit.Views.Shell
 
                 Interactions.CreateOrEditRadioDialog = project =>
                 {
-                    AddRadioExtFilesDialog dialog = new(project);
+                    AddRadioExtFilesDialog dialog = new(project, ViewModel.TemplateFileTools);
 
                     if (dialog.ShowDialog(this) != true)
                     {
