@@ -391,7 +391,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
-        TemplateFileTools.CreateRadio(dialogModel, modderName);
+        TemplateFileTools.CreateRadio(dialogModel, modderName, activeProject);
     }
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]

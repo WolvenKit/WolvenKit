@@ -6,9 +6,10 @@
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     Title="RadioExt Station"
-    MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
+    Width="{DynamicResource WolvenKitDialogWidthSmall}"
     MinHeight="{DynamicResource WolvenKitDialogHeightSmall}"
-    SizeToContent="WidthAndHeight"
+    MaxHeight="{DynamicResource WolvenKitDialogHeightLarge}"
+    SizeToContent="Height"
     DataContext="{Binding RelativeSource={RelativeSource Self},
                           Path=ViewModel}"
     FocusManager.FocusedElement="{Binding ElementName=IconPathTextBox}"
@@ -106,7 +107,7 @@
                         <templates:IconBox
                             IconPack="Material"
                             Kind="ImageSearch"
-                            Margin="0"
+                            Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                             Size="{DynamicResource WolvenKitIconMilli}" />
                     </Button>
 
@@ -135,19 +136,7 @@
                         Grid.Column="0"
                         Grid.ColumnSpan="3"
                         VerticalAlignment="Top"
-                        Text="Songs:">
-                        <TextBlock.Style>
-                            <Style>
-                                <Style.Triggers>
-                                    <DataTrigger
-                                        Binding="{Binding UseStream}"
-                                        Value="True">
-                                        <Setter Property="Text" Value="Stream URL:" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Style>
-                    </TextBlock>
+                        Text="{Binding LastRowLabel}" />
 
                     <TextBox
                         x:Name="StreamPathTextBox"
@@ -159,103 +148,99 @@
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         KeyboardNavigation.TabIndex="-1" />
 
-                    <Grid
+
+                    <!-- Songs Grid -->
+                    <syncfusion:SfDataGrid
+                        x:Name="SongsGrid"
                         Grid.Row="10"
                         Grid.Column="1"
+                        MaxWidth="{DynamicResource WolvenKitDialogHeightMedium}"
+                        Margin="0"
+                        HorizontalAlignment="Stretch"
+                        BorderThickness="0"
                         Visibility="{Binding Path=UseStream,
                                              Mode=OneWay,
-                                             Converter={StaticResource InvertBooleanVisibilityConverter}}">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
+                                             Converter={StaticResource InvertBooleanVisibilityConverter}}"
+                        RowHeight="{DynamicResource WolvenKitTreeRowHeight}"
+                        AutoGenerateColumns="False"
+                        AllowDraggingRows="True"
+                        AllowSorting="False"
+                        AllowFiltering="False"
+                        SelectionMode="Single"
+                        SelectionUnit="Row"
+                        ShowRowHeader="False">
 
+                        <!-- Columns -->
+                        <syncfusion:SfDataGrid.Columns>
 
-                        <!-- Songs Grid -->
-                        <syncfusion:SfDataGrid
-                            x:Name="SongsGrid"
-                            Grid.Row="1"
-                            Width="Auto"
-                            Margin="0"
-                            RowHeight="40"
-                            AutoGenerateColumns="False"
-                            AllowDraggingRows="True"
-                            SelectionMode="Single"
-                            SelectionUnit="Row"
-                            ShowRowHeader="False">
+                            <!-- Drag Handle Column -->
+                            <syncfusion:GridTemplateColumn
+                                Width="30"
+                                HeaderText=""
+                                AllowEditing="False">
+                                <syncfusion:GridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            Margin="10,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Foreground="#888"
+                                            FontSize="16"
+                                            Text="☰"
+                                            ToolTip="Drag to reorder" />
+                                    </DataTemplate>
+                                </syncfusion:GridTemplateColumn.CellTemplate>
+                            </syncfusion:GridTemplateColumn>
 
-                            <!-- Columns -->
-                            <syncfusion:SfDataGrid.Columns>
+                            <!-- Song Name -->
+                            <syncfusion:GridTextColumn
+                                Width="1"
+                                MinimumWidth="220"
+                                MappingName="DisplayName"
+                                HeaderText="Song Name"
+                                TextAlignment="Left"
+                                TextWrapping="NoWrap" />
 
-                                <!-- Drag Handle Column -->
-                                <syncfusion:GridTemplateColumn
-                                    Width="40"
-                                    HeaderText=""
-                                    AllowEditing="False">
-                                    <syncfusion:GridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock
-                                                Margin="10,0"
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Center"
-                                                Foreground="#888"
-                                                FontSize="16"
-                                                Text="☰"
-                                                ToolTip="Drag to reorder" />
-                                        </DataTemplate>
-                                    </syncfusion:GridTemplateColumn.CellTemplate>
-                                </syncfusion:GridTemplateColumn>
+                            <!-- Delete Button -->
+                            <syncfusion:GridTemplateColumn
+                                Width="40"
+                                HeaderText=""
+                                AllowEditing="False">
+                                <syncfusion:GridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button
+                                            x:Name="DeleteButton"
+                                            Width="26"
+                                            Height="26"
+                                            Background="Transparent"
+                                            BorderBrush="Transparent"
+                                            Foreground="#FF4444"
+                                            FontSize="12"
+                                            FontWeight="Bold"
+                                            Content="❌"
+                                            Cursor="Hand"
+                                            ToolTip="Delete this song"
+                                            Click="RowDeleteButton_Click"
+                                            Tag="{Binding}">
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" Value="#FFE0E0" />
+                                                            <Setter Property="BorderBrush" Value="#FFAAAA" />
+                                                            <Setter Property="BorderThickness" Value="1" />
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+                                    </DataTemplate>
+                                </syncfusion:GridTemplateColumn.CellTemplate>
+                            </syncfusion:GridTemplateColumn>
 
-                                <!-- Song Name -->
-                                <syncfusion:GridTextColumn
-                                    Width="*"
-                                    MappingName="FileName"
-                                    HeaderText="Song Name"
-                                    TextAlignment="Left" />
+                        </syncfusion:SfDataGrid.Columns>
 
-                                <!-- Delete Button -->
-                                <syncfusion:GridTemplateColumn
-                                    Width="60"
-                                    HeaderText=""
-                                    AllowEditing="False">
-                                    <syncfusion:GridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Button
-                                                x:Name="DeleteButton"
-                                                Width="26"
-                                                Height="26"
-                                                Background="Transparent"
-                                                BorderBrush="Transparent"
-                                                Foreground="#FF4444"
-                                                FontSize="12"
-                                                FontWeight="Bold"
-                                                Content="❌"
-                                                Cursor="Hand"
-                                                ToolTip="Delete this song"
-                                                Click="RowDeleteButton_Click"
-                                                Tag="{Binding}">
-                                                <Button.Style>
-                                                    <Style TargetType="Button">
-                                                        <Style.Triggers>
-                                                            <Trigger Property="IsMouseOver" Value="True">
-                                                                <Setter Property="Background" Value="#FFE0E0" />
-                                                                <Setter Property="BorderBrush" Value="#FFAAAA" />
-                                                                <Setter Property="BorderThickness" Value="1" />
-                                                            </Trigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Button.Style>
-                                            </Button>
-                                        </DataTemplate>
-                                    </syncfusion:GridTemplateColumn.CellTemplate>
-                                </syncfusion:GridTemplateColumn>
-
-                            </syncfusion:SfDataGrid.Columns>
-
-                        </syncfusion:SfDataGrid>
-
-                    </Grid>
+                    </syncfusion:SfDataGrid>
 
                     <Button
                         Grid.Row="10"
@@ -270,8 +255,9 @@
                         ToolTip="Add songs from folder">
                         <templates:IconBox
                             IconPack="Material"
-                            Kind="FolderMusic"
-                            Size="{DynamicResource WolvenKitIconTiny}" />
+                            Kind="FolderMusicOutline"
+                            Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
                     </Button>
 
                 </Grid>
