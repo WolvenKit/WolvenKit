@@ -6,9 +6,7 @@ using System.Text.Json;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.ViewModels.Dialogs;
-using WolvenKit.Common.Services;
 using WolvenKit.Core.Exceptions;
-using WolvenKit.Core.Interfaces;
 using WolvenKit.Interfaces.Extensions;
 
 namespace WolvenKit.App.Helpers;
@@ -137,6 +135,10 @@ public partial class TemplateFileTools
         File.WriteAllText(absolutePath, json);
     }
 
+
+    private static readonly List<string> s_audioFileExtensions =
+        [".mp3", ".wav", ".ogg", ".flac", ".mp2", ".wax", ".wma"];
+
     public AddRadioExtFilesDialogViewModel LoadRadioProperties(string absolutePath)
     {
         try
@@ -173,9 +175,8 @@ public partial class TemplateFileTools
 
             // Add files from mod folder
 
-            List<string> fileExtensions = [".mp3", ".wav", ".ogg", ".flac", ".mp2", ".wax", ".wma"];
             var filesInMod = Directory.GetFiles(stationFileFolder)
-                .Where(f => fileExtensions.Contains(Path.GetExtension(f))).ToList();
+                .Where(f => s_audioFileExtensions.Contains(Path.GetExtension(f))).ToList();
             foreach (var file in filesInMod)
             {
                 var fileName = Path.GetFileName(file);
@@ -232,7 +233,25 @@ public partial class TemplateFileTools
                 viewModel.StationName!.ToFileName());
         }
 
-        var absoluteFolderPath = viewModel.JsonFileFolder;
+        var songPaths = viewModel.SongItems.Select(f => f.FilePath).ToList();
+
+        var songsToDelete = Directory.GetFiles(project.ResourcesDirectory)
+            .Where(f => s_audioFileExtensions.Contains(Path.GetExtension(f)) && !songPaths.Contains(f)).ToList();
+
+
+        if (songsToDelete.Count > 0)
+        {
+            var question = "Delete the following song files from the project? You can't undo this!" +
+                           string.Join("\n", songsToDelete);
+            if (Interactions.ShowQuestionYesNo((question, "Delete Unused Songs")))
+            {
+                foreach (var songFilePath in songsToDelete)
+                {
+                    File.Delete(songFilePath);
+                }
+            }
+        }
+
 
         var songsOutsideOfProject =
             viewModel.SongItems.Where(s => !s.FilePath.StartsWith(project.FileDirectory)).ToList();
@@ -242,8 +261,9 @@ public partial class TemplateFileTools
             return;
         }
 
+
         var sourceDestPath = songsOutsideOfProject.ToDictionary(x => x,
-            s => Path.Combine(absoluteFolderPath, Path.GetFileName(s.FilePath)));
+            s => Path.Combine(viewModel.JsonFileFolder, Path.GetFileName(s.FilePath)));
 
         // Check for duplicates and ask if we want to overwrite them
         var existingFiles = sourceDestPath.Values.Where(File.Exists).ToList();
