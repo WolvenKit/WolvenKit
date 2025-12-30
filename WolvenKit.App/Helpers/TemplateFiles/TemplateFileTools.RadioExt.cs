@@ -235,14 +235,16 @@ public partial class TemplateFileTools
 
         var songPaths = viewModel.SongItems.Select(f => f.FilePath).ToList();
 
-        var songsToDelete = Directory.GetFiles(project.ResourcesDirectory)
+        var songsToDelete = Directory.EnumerateFiles(project.ResourcesDirectory, "*.*", SearchOption.AllDirectories)
             .Where(f => s_audioFileExtensions.Contains(Path.GetExtension(f)) && !songPaths.Contains(f)).ToList();
 
 
         if (songsToDelete.Count > 0)
         {
-            var question = "Delete the following song files from the project? You can't undo this!" +
-                           string.Join("\n", songsToDelete);
+            var question = $"Delete the following song files from the project? You can't undo this!\n{
+                (string.Join("\n", songsToDelete.Select(f => f.Replace(project.ResourcesDirectory, ""))))
+            }";
+
             if (Interactions.ShowQuestionYesNo((question, "Delete Unused Songs")))
             {
                 foreach (var songFilePath in songsToDelete)

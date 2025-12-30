@@ -17,7 +17,6 @@
     <Grid
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch">
-
         <syncfusion:WizardControl
             CancelButtonCancelsWindow="True"
             FinishButtonClosesWindow="True">
@@ -29,10 +28,12 @@
                 NextVisibility="Collapsed"
                 PreviewKeyDown="WizardPage_PreviewKeyDown"
                 PageType="Exterior">
-                <Grid
-                    Margin="{StaticResource WolvenKitMarginTiny}"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch">
+                <Grid Margin="{StaticResource WolvenKitMarginTiny}">
+
+                    <Grid.Resources>
+                        <!-- Disable drag'n'drop popup of SfDataGrid -->
+                        <DataTemplate x:Key="DragDropPopup" />
+                    </Grid.Resources>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="{StaticResource WolvenKitPropertyColumnWidth}" />
                         <ColumnDefinition Width="*" />
@@ -50,9 +51,8 @@
                         <RowDefinition Height="10" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="10" />
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
                         <RowDefinition Height="5" />
-                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <!-- Radio Name -->
@@ -87,14 +87,12 @@
                         Grid.Column="0"
                         VerticalAlignment="Center"
                         Text="Icon file:" />
-
                     <TextBox
                         x:Name="IconPathTextBox"
                         Grid.Row="4"
                         Grid.Column="1"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         KeyboardNavigation.TabIndex="1" />
-
                     <Button
                         Grid.Row="4"
                         Grid.Column="2"
@@ -108,9 +106,8 @@
                             IconPack="Material"
                             Kind="ImageSearch"
                             Margin="{DynamicResource WolvenKitMarginTinyLeft}"
-                            Size="{DynamicResource WolvenKitIconMilli}" />
+                            Size="{DynamicResource WolvenKitIconTiny}" />
                     </Button>
-
                     <TextBlock
                         Grid.Row="6"
                         Grid.Column="1"
@@ -137,56 +134,50 @@
                         Grid.ColumnSpan="3"
                         VerticalAlignment="Top"
                         Text="{Binding LastRowLabel}" />
-
                     <TextBox
                         x:Name="StreamPathTextBox"
                         Grid.Row="10"
                         Grid.Column="1"
+                        VerticalAlignment="Top"
                         Visibility="{Binding Path=UseStream,
                                              Mode=OneWay,
                                              Converter={StaticResource BooleanToVisibilityConverter}}"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         KeyboardNavigation.TabIndex="-1" />
 
-
                     <!-- Songs Grid -->
                     <syncfusion:SfDataGrid
                         x:Name="SongsGrid"
                         Grid.Row="10"
                         Grid.Column="1"
-                        MaxWidth="{DynamicResource WolvenKitDialogHeightMedium}"
-                        Margin="0"
-                        HorizontalAlignment="Stretch"
-                        BorderThickness="0"
                         Visibility="{Binding Path=UseStream,
                                              Mode=OneWay,
                                              Converter={StaticResource InvertBooleanVisibilityConverter}}"
-                        RowHeight="{DynamicResource WolvenKitTreeRowHeight}"
+                        RowHeight="{DynamicResource WolvenKitIconHuge}"
+                        ColumnSizer="Star"
+                        RowDragDropTemplate="{DynamicResource DragDropPopup}"
+                        RowDropIndicatorMode="Line"
                         AutoGenerateColumns="False"
                         AllowDraggingRows="True"
+                        AllowDrop="True"
                         AllowSorting="False"
                         AllowFiltering="False"
                         SelectionMode="Single"
                         SelectionUnit="Row"
                         ShowRowHeader="False">
 
-                        <!-- Columns -->
                         <syncfusion:SfDataGrid.Columns>
-
-                            <!-- Drag Handle Column -->
+                            <!-- Drag Handle -->
                             <syncfusion:GridTemplateColumn
-                                Width="30"
+                                Width="{DynamicResource WolvenKitIconHuge}"
                                 HeaderText=""
                                 AllowEditing="False">
                                 <syncfusion:GridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock
-                                            Margin="10,0"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            Foreground="#888"
-                                            FontSize="16"
-                                            Text="☰"
+                                        <templates:IconBox
+                                            IconPack="Material"
+                                            Kind="DragVertical"
+                                            Size="{DynamicResource WolvenKitIconTiny}"
                                             ToolTip="Drag to reorder" />
                                     </DataTemplate>
                                 </syncfusion:GridTemplateColumn.CellTemplate>
@@ -194,52 +185,34 @@
 
                             <!-- Song Name -->
                             <syncfusion:GridTextColumn
-                                Width="1"
-                                MinimumWidth="220"
+                                Padding="{DynamicResource WolvenKitMarginSmallLeft}"
                                 MappingName="DisplayName"
                                 HeaderText="Song Name"
-                                TextAlignment="Left"
-                                TextWrapping="NoWrap" />
+                                HorizontalHeaderContentAlignment="Left" />
 
                             <!-- Delete Button -->
                             <syncfusion:GridTemplateColumn
-                                Width="40"
+                                Width="{DynamicResource WolvenKitIconHuge}"
                                 HeaderText=""
                                 AllowEditing="False">
                                 <syncfusion:GridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button
                                             x:Name="DeleteButton"
-                                            Width="26"
-                                            Height="26"
-                                            Background="Transparent"
-                                            BorderBrush="Transparent"
-                                            Foreground="#FF4444"
-                                            FontSize="12"
-                                            FontWeight="Bold"
-                                            Content="❌"
-                                            Cursor="Hand"
+                                            Style="{StaticResource WPFFlatButtonStyle}"
                                             ToolTip="Delete this song"
                                             Click="RowDeleteButton_Click"
                                             Tag="{Binding}">
-                                            <Button.Style>
-                                                <Style TargetType="Button">
-                                                    <Style.Triggers>
-                                                        <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter Property="Background" Value="#FFE0E0" />
-                                                            <Setter Property="BorderBrush" Value="#FFAAAA" />
-                                                            <Setter Property="BorderThickness" Value="1" />
-                                                        </Trigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Button.Style>
+                                            <templates:IconBox
+                                                IconPack="Material"
+                                                Kind="Delete"
+                                                Size="{DynamicResource WolvenKitIconTiny}"
+                                                Foreground="{StaticResource WolvenKitRed}" />
                                         </Button>
                                     </DataTemplate>
                                 </syncfusion:GridTemplateColumn.CellTemplate>
                             </syncfusion:GridTemplateColumn>
-
                         </syncfusion:SfDataGrid.Columns>
-
                     </syncfusion:SfDataGrid>
 
                     <Button
@@ -257,9 +230,8 @@
                             IconPack="Material"
                             Kind="FolderMusicOutline"
                             Margin="{DynamicResource WolvenKitMarginTinyLeft}"
-                            Size="{DynamicResource WolvenKitIconMilli}" />
+                            Size="{DynamicResource WolvenKitIconTiny}" />
                     </Button>
-
                 </Grid>
             </syncfusion:WizardPage>
         </syncfusion:WizardControl>

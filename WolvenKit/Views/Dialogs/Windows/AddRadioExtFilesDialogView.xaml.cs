@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Forms;
@@ -59,8 +60,7 @@ namespace WolvenKit.Views.Dialogs.Windows
 
                 SongsGrid.SetCurrentValue(Syncfusion.UI.Xaml.Grid.SfDataGrid.AllowDraggingRowsProperty, true);
                 SongsGrid.SetCurrentValue(AllowDropProperty, true);
-                SongsGrid.Drop += SongsGrid_OnDrop;
-                SongsGrid.PreviewMouseLeftButtonDown += SongsGrid_PreviewMouseLeftButtonDown;
+                SongsGrid.RowDragDropController.Drop += SongsGrid_OnDrop;
             });
         }
 
@@ -155,97 +155,19 @@ namespace WolvenKit.Views.Dialogs.Windows
 
         }
 
-        private RadioSongItem _draggedItem;
-
-        // Handler to capture the source item when the user begins a drag
-        private void SongsGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (sender is not SfDataGrid grid)
-            {
-                _draggedItem = null;
-                return;
-            }
-
-            var point = e.GetPosition(grid);
-            var hit = VisualTreeHelper.HitTest(grid, point);
-
-            if (hit == null)
-            {
-                return;
-            }
-
-            _draggedItem = null;
-            var current = hit.VisualHit;
-            while (current != null)
-            {
-                if (current is FrameworkElement { DataContext: RadioSongItem rsi })
-                {
-                    _draggedItem = rsi;
-                    break;
-                }
-
-                current = VisualTreeHelper.GetParent(current);
-            }
-        }
-
         // Update SongsGrid_OnDrop to use the captured item and fall back to drag data
-        private void SongsGrid_OnDrop(object sender, DragEventArgs e)
+        private void SongsGrid_OnDrop(object sender, GridRowDropEventArgs gridRowDropEventArgs)
         {
-            if (ViewModel is null || sender is not SfDataGrid grid)
+            if (ViewModel is null || gridRowDropEventArgs.TargetRecord is not int idx)
             {
                 return;
             }
 
-            var point = e.GetPosition(grid);
-            var hit = VisualTreeHelper.HitTest(grid, point);
-            RadioSongItem targetRecord = null;
-
-            if (hit != null)
+            var offset = gridRowDropEventArgs.DropPosition == DropPosition.DropBelow ? +1 : 0;
+            foreach (var record in gridRowDropEventArgs.DraggingRecords.OfType<RadioSongItem>())
             {
-                var current = hit.VisualHit;
-                while (current != null)
-                {
-                    if (current is FrameworkElement { DataContext: RadioSongItem rsi })
-                    {
-                        targetRecord = rsi;
-                        break;
-                    }
-
-                    current = VisualTreeHelper.GetParent(current);
-                }
+                ViewModel.MoveSongOrder(record, idx + offset);
             }
-
-            int targetIndex;
-            if (targetRecord != null)
-            {
-                targetIndex = ViewModel.SongItems.IndexOf(targetRecord);
-            }
-            else
-            {
-                targetIndex = ViewModel.SongItems.Count;
-            }
-
-            if (targetIndex < 0)
-            {
-                return;
-            }
-
-            // Try to obtain source from captured field, then from drag data
-            var source = _draggedItem;
-            if (source == null && e.Data != null && e.Data.GetDataPresent(typeof(RadioSongItem)))
-            {
-                source = e.Data.GetData(typeof(RadioSongItem)) as RadioSongItem;
-            }
-
-            if (source != null)
-            {
-                ViewModel.MoveSongOrder(source, targetIndex);
-            }
-
-            // clear the captured reference
-            _draggedItem = null;
-
-            e.Handled = true;
         }
 
     }
