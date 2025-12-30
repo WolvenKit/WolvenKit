@@ -241,8 +241,9 @@ public partial class TemplateFileTools
 
         if (songsToDelete.Count > 0)
         {
-            var question =
-                $"Delete the following song files from the project? You can't undo this!\n{(string.Join("\n", songsToDelete.Select(f => f.Replace(project.ResourcesDirectory, ""))))}";
+            var question = $"Delete the following song files from the project? You can't undo this!\n{
+                (string.Join("\n", songsToDelete.Select(f => f.Replace(project.ResourcesDirectory, ""))))
+            }";
 
             if (Interactions.ShowQuestionYesNo((question, "Delete Unused Songs")))
             {
