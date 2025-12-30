@@ -29,11 +29,11 @@
                 PreviewKeyDown="WizardPage_PreviewKeyDown"
                 PageType="Exterior">
                 <Grid Margin="{StaticResource WolvenKitMarginTiny}">
-
                     <Grid.Resources>
                         <!-- Disable drag'n'drop popup of SfDataGrid -->
                         <DataTemplate x:Key="DragDropPopup" />
                     </Grid.Resources>
+
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="{StaticResource WolvenKitPropertyColumnWidth}" />
                         <ColumnDefinition Width="*" />
@@ -155,7 +155,7 @@
                                              Converter={StaticResource InvertBooleanVisibilityConverter}}"
                         RowHeight="{DynamicResource WolvenKitIconHuge}"
                         ColumnSizer="Star"
-                        RowDragDropTemplate="{DynamicResource DragDropPopup}"
+                        RowDragDropTemplate="{StaticResource DragDropPopup}"
                         RowDropIndicatorMode="Line"
                         AutoGenerateColumns="False"
                         AllowDraggingRows="True"
