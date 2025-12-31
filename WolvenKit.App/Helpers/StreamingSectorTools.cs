@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.Common.Services;
@@ -155,6 +158,37 @@ public class StreamingSectorTools
         }
     }
 
+    public static string InsertVariant(string content, string existingVariant, string newVariantName)
+    {
+        var newDisplayName = newVariantName.ToHumanFriendlyString();
+
+
+        var pattern = $@"(\s*){{\s*variant\s*=\s*""{existingVariant}""";
+
+        var newEntry = $@"{{
+        variant = ""{newVariantName}"",
+        displayName = ""{newDisplayName}""
+      }},
+$1$0";
+
+        return Regex.Replace(content, pattern, newEntry, RegexOptions.Singleline);
+    }
+
+    private static void AddVariantToLuaFile(string oldVariantName, List<string> newVariantNames, string luaAbsPath)
+    {
+        if (!File.Exists(luaAbsPath) || newVariantNames.Count == 0)
+        {
+            return;
+        }
+
+        var content = File.ReadAllText(luaAbsPath);
+        content = newVariantNames.Aggregate(content,
+            (current, newSectorName) => InsertVariant(current, oldVariantName, newSectorName));
+        // File.WriteAllText(absoltueLuaFilePath, content);
+        Console.Write("");
+    }
+
+
     public void AddSectorVariants(worldStreamingBlock block, Cp77Project project)
     {
         var result = Interactions.ShowNewSectorVariantView((block, project, this));
@@ -194,19 +228,36 @@ public class StreamingSectorTools
 
         EnsureSectorDataNodes();
 
+        var pattern = $@"(\s*){{\s*variant\s*=\s*""{result.TemplateVariant}""";
+
+        var luaFilePath = "";
+        if (project.ResourceFiles.Where(f => f.EndsWith("init.lua"))
+                .Select(f => Path.Combine(project.ResourcesDirectory, f))
+                .Where(File.Exists)
+                .FirstOrDefault(f =>
+                {
+                    var content = File.ReadAllText(f);
+                    return Regex.Replace(content, pattern, "") != Regex.Replace(content, "INVALID", "");
+                })
+            is string s)
+        {
+            luaFilePath = s;
+        }
+
+        List<string> newVariants = [];
         // Now iterate and create variants
         foreach (var replaceString in result.NewAppearances)
         {
-            var sectorName = $"{sectorPrefix}{(sectorPrefix.EndsWith('_') ? "" : replaceString)}";
+            var variantName = $"{sectorPrefix}{(sectorPrefix.EndsWith('_') ? "" : replaceString)}";
 
             var matchingDescriptor = block.Descriptors.FirstOrDefault(desc =>
                 desc.Data.DepotPath.GetResolvedText() == result.SectorRelativePath);
 
             if (matchingDescriptor?.Variants.Select(v => v.Name.GetResolvedText()).Where(s => !string.IsNullOrEmpty(s))
-                    .Contains(sectorName) == true)
+                    .Contains(variantName) == true)
             {
                 _loggerService.Warning(
-                    $"Sector variant {sectorName} already defined in {result.SectorRelativePath}, skipping");
+                    $"Sector variant {variantName} already defined in {result.SectorRelativePath}, skipping");
                 continue;
             }
 
@@ -228,10 +279,13 @@ public class StreamingSectorTools
 
 
             var rangeIndex = AddVariantInSector(replaceString);
-            AddVariantInStreamingBlock(rangeIndex, sectorName, matchingDescriptor, matchingVariant);
+            AddVariantInStreamingBlock(rangeIndex, variantName, matchingDescriptor, matchingVariant);
+            newVariants.Add(variantName);
         }
 
-        _cr2WTools.WriteCr2W(sectorCr2W, sectorPath);
+        // _cr2WTools.WriteCr2W(sectorCr2W, sectorPath);
+
+        AddVariantToLuaFile(result.TemplateVariant, newVariants, luaFilePath);
 
         return;
 
@@ -300,5 +354,6 @@ public class StreamingSectorTools
             };
             matchingDescriptor.Variants.Add(newVariant);
         }
+
     }
 }

@@ -789,7 +789,6 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
     #endregion
 
-
     private bool CanDeleteChunkMaterialByIndex() => RootChunk?.ResolvedData is CMesh mesh && mesh.Appearances.Count > 0;
 
     [RelayCommand(CanExecute = nameof(CanDeleteChunkMaterialByIndex))]
