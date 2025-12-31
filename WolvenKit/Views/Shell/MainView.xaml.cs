@@ -117,8 +117,7 @@ namespace WolvenKit.Views.Shell
 
                 Interactions.ShowNewSectorVariantView = args =>
                 {
-                    var dialog =
-                        new AddSectorVariantDialogView(args.block, args.project);
+                    var dialog = new AddSectorVariantDialogView(args.block, args.project, args.sectorTools);
                     if (dialog.ShowDialog() != true)
                     {
                         return null;

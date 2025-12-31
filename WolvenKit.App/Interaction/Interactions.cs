@@ -315,6 +315,7 @@ public static class Interactions
     /// <summary>
     /// Shows dialogue to add item codes to .reds store and vendor yaml
     /// </summary>
-    public static Func<(worldStreamingBlock block, Cp77Project project), AddSectorVariantDialogViewModel?>
+    public static Func<(worldStreamingBlock block, Cp77Project project, StreamingSectorTools sectorTools),
+            AddSectorVariantDialogViewModel?>
         ShowNewSectorVariantView { get; set; } = (args) => throw new NotImplementedException();
 }

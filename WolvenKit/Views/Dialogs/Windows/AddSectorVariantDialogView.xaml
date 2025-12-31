@@ -111,13 +111,12 @@
                         Background="Transparent"
                         Style="{StaticResource ButtonCustom}"
                         Click="LoadSectorButton_OnClick"
-                        ToolTip="Swap search and replace fields">
+                        ToolTip="Load appearances from template sector">
                         <templates:IconBox
                             IconPack="Material"
-                            Kind="FolderArrowUpOutline"
+                            Kind="DownloadNetworkOutline"
                             Size="{DynamicResource WolvenKitIconTiny}" />
                     </Button>
-
 
                     <TextBlock
                         Grid.Row="8"
