@@ -37,17 +37,39 @@ namespace WolvenKit.Views.Dialogs.Windows
                         x => x.SectorNameTextBox.Text)
                     .DisposeWith(disposables);
 
+                this.Bind(ViewModel,
+                        x => x.ReplaceInAppearances,
+                        x => x.ReplaceInMeshAppearanceTextBox.Text)
+                    .DisposeWith(disposables);
 
-                // dropdowns
+                // select sector node appearance (search&replace)
+                this.Bind(ViewModel,
+                        x => x.SearchInAppearances,
+                        x => x.SearchInMeshAppearanceTextBox.Text)
+                    .DisposeWith(disposables);
                 this.Bind(ViewModel,
                         x => x.SectorNodeAppearances,
                         x => x.NodeAppearanceDropdown.Options)
                     .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        x => x.SearchInAppearances,
+                        x => x.NodeAppearanceDropdown.SelectedOption)
+                    .DisposeWith(disposables);
 
+                // select template variant
+                this.Bind(ViewModel,
+                        x => x.TemplateVariant,
+                        x => x.TemplateSectorTextBox.Text)
+                    .DisposeWith(disposables);
                 this.Bind(ViewModel,
                         x => x.VariantNames,
-                        x => x.SectorVariantDropdownMenu.Options)
+                        x => x.TemplateVariantDropdownMenu.Options)
                     .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        x => x.TemplateVariant,
+                        x => x.TemplateVariantDropdownMenu.SelectedOption)
+                    .DisposeWith(disposables);
+
             });
         }
 

@@ -39,7 +39,7 @@ public class StreamingSectorTools
         }
 
         var variantIndices = sector.VariantIndices.Select(i => (int)i).OrderBy(i => i).ToList();
-        if (nodeData.Count > variantIndices.Last())
+        if (nodeData.Count < variantIndices.Last())
         {
             throw new WolvenKitException(0, "Invalid variant index");
         }
@@ -95,7 +95,7 @@ public class StreamingSectorTools
         return nodeData.Where((_, index) => index >= sectorStartIndex && index < sectorEndIndex).ToDictionary(n => n,
             n =>
             {
-                if (n.NodeIndex < sector.Nodes.Count)
+                if (n.NodeIndex >= sector.Nodes.Count)
                 {
                     return null;
                 }
@@ -188,18 +188,16 @@ public class StreamingSectorTools
 
         ValidateSector(sector);
 
-        var sectorPrefix = "";
-        if (result.NewAppearances.Count > 1)
-        {
-            sectorPrefix = result.NewVariantNameOrPrefix + (result.NewVariantNameOrPrefix.EndsWith('_') ? "" : "_");
-        }
+        // if there are multiple new variants (or if name ends in _), use as prefix
+        var sectorPrefix = result.NewVariantNameOrPrefix +
+                           (result.NewAppearances.Count == 1 || result.NewVariantNameOrPrefix.EndsWith('_') ? "" : "_");
 
         EnsureSectorDataNodes();
 
         // Now iterate and create variants
         foreach (var replaceString in result.NewAppearances)
         {
-            var sectorName = $"{sectorPrefix}{replaceString}";
+            var sectorName = $"{sectorPrefix}{(sectorPrefix.EndsWith('_') ? "" : replaceString)}";
 
             var matchingDescriptor = block.Descriptors.FirstOrDefault(desc =>
                 desc.Data.DepotPath.GetResolvedText() == result.SectorRelativePath);

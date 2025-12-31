@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Helpers;
@@ -48,7 +49,7 @@ public partial class AddSectorVariantDialogViewModel() : ObservableObject
         foreach (var descriptor in block.Descriptors.ToList())
         {
             var descriptorPath = descriptor.Data.DepotPath.ToString() ?? "";
-            foreach (var variant in descriptor.Variants.ToList())
+            foreach (var variant in descriptor.Variants.OrderBy(x => x.RangeIndex).ToList())
             {
                 if (variant.Name.ToString() is not string s || string.IsNullOrEmpty(s))
                 {
@@ -112,5 +113,37 @@ public partial class AddSectorVariantDialogViewModel() : ObservableObject
         }
 
         ReadStreamingSector();
+    }
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        switch (e.PropertyName)
+        {
+            case nameof(TemplateVariant):
+                ReadStreamingSector();
+                break;
+            case nameof(ReplaceInAppearances):
+                ReadNewAppearanceNames();
+                break;
+            default:
+                break;
+        }
+
+        base.OnPropertyChanged(e);
+    }
+
+    private void ReadNewAppearanceNames()
+    {
+        NewAppearances ??= [];
+        NewAppearances.Clear();
+        if (string.IsNullOrEmpty(ReplaceInAppearances))
+        {
+            return;
+        }
+
+        foreach (var s1 in ReplaceInAppearances.Split("\n").Select(s => s.Trim()))
+        {
+            NewAppearances.Add(s1);
+        }
     }
 }

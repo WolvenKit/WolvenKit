@@ -83,13 +83,10 @@
                         Text="Will be used as prefix for multiple sectors" />
 
                     <editors:FilterableDropdownMenu
-                        x:Name="SectorVariantDropdownMenu"
+                        x:Name="TemplateVariantDropdownMenu"
                         Grid.Row="4"
                         Grid.Column="0"
                         Grid.ColumnSpan="3"
-                        Visibility="{Binding Path=ShowNodeAppearanceDropdown,
-                                             Mode=OneWay,
-                                             Converter={StaticResource BooleanToVisibilityConverter}}"
                         Label="Template variant:"
                         Options="{Binding VariantNames,
                                           UpdateSourceTrigger=PropertyChanged}"
@@ -133,7 +130,6 @@
                         Grid.Column="0"
                         Grid.ColumnSpan="3"
                         Visibility="{Binding Path=ShowNodeAppearanceDropdown,
-                                             Mode=OneWay,
                                              Converter={StaticResource BooleanToVisibilityConverter}}"
                         Label=""
                         Options="{Binding SectorNodeAppearances,
