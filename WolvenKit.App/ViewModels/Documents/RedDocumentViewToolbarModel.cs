@@ -770,6 +770,12 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             return;
         }
 
+        if (RootChunk.Tab?.Parent.IsDirty == true)
+        {
+            Interactions.ShowErrorPopup(("Save your file first!",
+                "Your file has un-saved changes. Please save before running this workflow."));
+        }
+
         try
         {
             _sectorTools.AddSectorVariants(block, project);

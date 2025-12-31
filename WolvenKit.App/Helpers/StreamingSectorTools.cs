@@ -184,8 +184,7 @@ $1$0";
         var content = File.ReadAllText(luaAbsPath);
         content = newVariantNames.Aggregate(content,
             (current, newSectorName) => InsertVariant(current, oldVariantName, newSectorName));
-        // File.WriteAllText(absoltueLuaFilePath, content);
-        Console.Write("");
+        File.WriteAllText(luaAbsPath, content);
     }
 
 
@@ -283,7 +282,7 @@ $1$0";
             newVariants.Add(variantName);
         }
 
-        // _cr2WTools.WriteCr2W(sectorCr2W, sectorPath);
+        _cr2WTools.WriteCr2W(sectorCr2W, sectorPath);
 
         AddVariantToLuaFile(result.TemplateVariant, newVariants, luaFilePath);
 
