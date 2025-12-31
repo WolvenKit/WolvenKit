@@ -242,7 +242,7 @@
                 <Style.Triggers>
                     <DataTrigger
                         Binding="{Binding Path=ContentType}"
-                        Value="{x:Static documents:RedDocumentItemType.Streamingsector}">
+                        Value="{x:Static documents:RedDocumentItemType.App}">
                         <Setter Property="Visibility" Value="Visible" />
                     </DataTrigger>
                 </Style.Triggers>
@@ -250,7 +250,7 @@
 
             <!-- Streaming sector: .streamingsector -->
             <Style
-                x:Key="ShowSectorMenuItemStyle"
+                x:Key="ShowStreamingBlockMenuItemStyle"
                 BasedOn="{StaticResource HasNestedMenuItemStyle}"
                 TargetType="{x:Type MenuItem}">
                 <Setter Property="Visibility" Value="Collapsed" />
@@ -259,7 +259,7 @@
                     <DataTrigger
                         Binding="{Binding Path=ContentType,
                                           UpdateSourceTrigger=PropertyChanged}"
-                        Value="{x:Static documents:RedDocumentItemType.Streamingsector}">
+                        Value="{x:Static documents:RedDocumentItemType.Streamingblock}">
                         <Setter Property="Visibility" Value="Visible" />
                     </DataTrigger>
                 </Style.Triggers>
@@ -1046,7 +1046,7 @@
 
             <!-- .streamingsector -->
             <MenuItem
-                Style="{StaticResource ShowSectorMenuItemStyle}"
+                Style="{StaticResource ShowStreamingBlockMenuItemStyle}"
                 Header="Sector Variants">
                 <MenuItem.Icon>
                     <templates:IconBox
@@ -1054,23 +1054,10 @@
                         Kind="Earth"
                         Foreground="White" />
                 </MenuItem.Icon>
-
                 <MenuItem
                     Style="{DynamicResource NestedMenuItemStyle}"
-                    Header="Create from existing"
+                    Header="Create variant(s) from existing"
                     Command="{Binding Path=AddSectorVariantCommand}">
-                    <MenuItem.Icon>
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="ContentDuplicate"
-                            Foreground="White" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <MenuItem
-                    Style="{DynamicResource NestedMenuItemStyle}"
-                    Header="Create multiple from existing"
-                    Command="{Binding Path=AddSectorVariantsMultipleCommand}">
                     <MenuItem.Icon>
                         <templates:IconBox
                             IconPack="Material"

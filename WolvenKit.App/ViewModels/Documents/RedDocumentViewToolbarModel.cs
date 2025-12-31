@@ -757,9 +757,9 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     #region sector
 
     /*
-     * Regenerate IDs
+     * Create sector variant(s) in streamingblock
      */
-    private bool CanCreateVariants() => ContentType is RedDocumentItemType.Streamingsector;
+    private bool CanCreateVariants() => ContentType is RedDocumentItemType.Streamingblock;
 
     [RelayCommand(CanExecute = nameof(CanCreateVariants))]
     private void AddSectorVariant()
