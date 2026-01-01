@@ -58,8 +58,6 @@ namespace WolvenKit.Views.Dialogs.Windows
                         x => x.SongsGrid.ItemsSource)
                     .DisposeWith(disposables);
 
-                SongsGrid.SetCurrentValue(Syncfusion.UI.Xaml.Grid.SfDataGrid.AllowDraggingRowsProperty, true);
-                SongsGrid.SetCurrentValue(AllowDropProperty, true);
                 SongsGrid.RowDragDropController.Drop += SongsGrid_OnDrop;
             });
         }

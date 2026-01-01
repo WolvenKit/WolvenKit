@@ -149,7 +149,7 @@ public partial class AddRadioExtFilesDialogViewModel() : ObservableObject
 
     public void MoveSongOrder(RadioSongItem? songItem, int newIndex)
     {
-        if (songItem is null || (!SongItems.Select(s => s.FilePath).ToList().Contains(songItem.FilePath)))
+        if (songItem is null || !SongItems.Contains(songItem))
         {
             return;
         }
