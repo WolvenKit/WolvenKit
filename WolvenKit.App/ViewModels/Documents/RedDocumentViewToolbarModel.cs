@@ -774,11 +774,16 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         {
             Interactions.ShowErrorPopup(("Save your file first!",
                 "Your file has un-saved changes. Please save before running this workflow."));
+            return;
         }
 
         try
         {
-            _sectorTools.AddSectorVariants(block, project);
+            if (_sectorTools.AddSectorVariants(block, project))
+            {
+                RootChunk.Tab?.Parent.SetIsDirty(true);
+                RootChunk.GetPropertyChild("descriptors")?.RecalculateProperties();
+            }
         }
         catch (Exception e)
         {
@@ -786,9 +791,6 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             _loggerService.Error(e.Message);
             return;
         }
-
-        RootChunk.Tab?.Parent.SetIsDirty(true);
-        RootChunk.GetPropertyChild("descriptors")?.RecalculateProperties();
     }
 
     #endregion

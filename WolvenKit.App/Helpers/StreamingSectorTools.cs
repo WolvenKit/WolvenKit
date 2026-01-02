@@ -83,8 +83,8 @@ public class StreamingSectorTools
         ValidateSector(sector);
 
         var sectorStartIndex = sector.VariantIndices[(int)(rangeIndex - 1)];
-        var sectorEndIndex = sector.VariantIndices.Count - 1;
-        if (sector.VariantIndices.Count >= rangeIndex + 1)
+        var sectorEndIndex = sector.VariantIndices[^1];
+        if (sector.VariantIndices.Count >= rangeIndex)
         {
             sectorEndIndex = sector.VariantIndices[(int)rangeIndex];
         }
@@ -188,7 +188,7 @@ $1$0";
     }
 
 
-    public void AddSectorVariants(worldStreamingBlock block, Cp77Project project)
+    public bool AddSectorVariants(worldStreamingBlock block, Cp77Project project)
     {
         var result = Interactions.ShowNewSectorVariantView((block, project, this));
         result?.GenerateResults();
@@ -197,7 +197,7 @@ $1$0";
         {
             _notificationService.Info("Invalid input, aborting");
             _loggerService.Info("Invalid input, aborting");
-            return;
+            return false;
         }
 
 
@@ -218,7 +218,7 @@ $1$0";
         {
             _notificationService.Info($"Failed to find sector '{result.SectorRelativePath}', aborting");
             _loggerService.Info($"Failed to find sector '{result.SectorRelativePath}', aborting");
-            return;
+            return false;
         }
 
         ValidateSector(sector);
@@ -292,14 +292,14 @@ $1$0";
         {
             _loggerService.Info("Failed to generate new sector variants: no valid replacements found");
             _notificationService.Info("Failed to generate new sector variants: no valid replacements found");
-            return;
+            return false;
         }
 
         if (!Interactions.ShowQuestionYesNo((
                 $"The following variants will be created. Write them to files now?\n{string.Join(", ", newVariants)}",
                 "Generate variants now?")))
         {
-            return;
+            return false;
         }
 
 
@@ -311,7 +311,7 @@ $1$0";
         _loggerService.Success($"Added {newVariants.Count} variants. Don't forget to save your file!");
         _notificationService.Success($"Added {newVariants.Count} variants. Don't forget to save your file!");
 
-        return;
+        return true;
 
         void EnsureSectorDataNodes()
         {
@@ -324,10 +324,6 @@ $1$0";
 
         int AddVariantInSector(string replaceString)
         {
-
-            // would have thrown an exception in ValidateSector if this wasn't valid
-            var startIndex = (int)sector.VariantIndices.Last();
-            var endIndex = sector.VariantIndices.Count();
 
             List<worldNode> newNodes = [];
             List<worldNodeData> newDataNodes = [];
@@ -376,7 +372,7 @@ $1$0";
                 nodeData.Add(dataNode);
             }
 
-            sector.VariantIndices.Add(endIndex);
+            sector.VariantIndices.Add(sector.VariantIndices.Count - 1);
             return sector.VariantIndices.Count;
         }
 
