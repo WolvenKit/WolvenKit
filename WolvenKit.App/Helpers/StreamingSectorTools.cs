@@ -307,6 +307,10 @@ $1$0";
 
         AddVariantToLuaFile(result.TemplateVariant, newVariants, luaFilePath);
 
+
+        _loggerService.Success($"Added {newVariants.Count} variants. Don't forget to save your file!");
+        _notificationService.Success($"Added {newVariants.Count} variants. Don't forget to save your file!");
+
         return;
 
         void EnsureSectorDataNodes()
