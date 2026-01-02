@@ -1419,7 +1419,7 @@ public partial class TemplateFileTools
             {
                 ret.Add(new entPhysicalMeshComponent()
                 {
-                    Name = $"amm_prop_slot_{index}", Mesh = new CResourceAsyncReference<CMesh>(kvp.Key)
+                    Name = $"amm_prop_slot{index}", Mesh = new CResourceAsyncReference<CMesh>(kvp.Key)
                 });
                 index += 1;
             }
