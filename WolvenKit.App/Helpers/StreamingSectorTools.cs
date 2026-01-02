@@ -249,6 +249,11 @@ $1$0";
         // Now iterate and create variants
         foreach (var replaceString in result.NewAppearances)
         {
+            if (replaceString == result.SearchInAppearances)
+            {
+                _loggerService.Info($"Skipping {replaceString} (won't replace it with itself)");
+                continue;
+            }
             var variantName = $"{sectorPrefix}{(sectorPrefix.EndsWith('_') ? "" : replaceString)}";
 
             var matchingDescriptor = block.Descriptors.FirstOrDefault(desc =>
@@ -324,19 +329,15 @@ $1$0";
 
         int AddVariantInSector(string replaceString)
         {
-
             List<worldNode> newNodes = [];
             List<worldNodeData> newDataNodes = [];
 
             // would have thrown an exception in ValidateSector if this wasn't valid
             var nodeData = (worldNodeDataBuffer)sector.NodeData.Buffer.Data!;
+            var endIndex = nodeData.Count;
 
             foreach (var (data, node) in result.DataNodes)
             {
-                if (node is IRedMeshNode mNode && (mNode.MeshAppearance.ToString() ?? "").Contains(replaceString))
-                {
-                    continue;
-                }
                 var newNode = CopyNode(node);
                 var newData = CopyDataNode(data);
 
@@ -349,7 +350,6 @@ $1$0";
                             false,
                             false);
                     }
-
                     newNodes.Add(newNode);
                     newData.NodeIndex = (CUInt16)(sector.Nodes.Count + newNodes.Count - 1);
                 }
@@ -357,14 +357,14 @@ $1$0";
                 newDataNodes.Add(newData);
             }
 
-            if (newNodes.Count == 0 || newDataNodes.Count == 0)
+            if (newDataNodes.Count == 0)
             {
                 return -1;
             }
 
             foreach (var worldNode in newNodes)
             {
-                sector.Nodes.Add(worldNode!);
+                sector.Nodes.Add(worldNode);
             }
 
             foreach (var dataNode in newDataNodes)
@@ -372,8 +372,8 @@ $1$0";
                 nodeData.Add(dataNode);
             }
 
-            sector.VariantIndices.Add(sector.VariantIndices.Count - 1);
-            return sector.VariantIndices.Count;
+            sector.VariantIndices.Add(endIndex);
+            return sector.VariantIndices.Count - 1;
         }
 
         void AddVariantInStreamingBlock(int rangeIndex, string sectorName,
