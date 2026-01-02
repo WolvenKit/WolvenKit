@@ -117,6 +117,6 @@ namespace WolvenKit.Views.Editors
         protected override void ResetDropdownValue() => Dropdown.SetCurrentValue(ComboBox.TextProperty, "");
 
         public static bool IsExcludedFromAutoPopulation(ChunkViewModel cvm) =>
-            cvm.GetRootModel().ResolvedData is questQuestPhaseResource or scnSceneResource;
+            cvm.GetRootModel().ResolvedData is questQuestPhaseResource or scnSceneResource or CMesh;
     }
 }
