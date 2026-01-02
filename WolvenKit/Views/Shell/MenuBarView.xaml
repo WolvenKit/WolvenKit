@@ -128,7 +128,7 @@
                                 IconPack="Material"
                                 Kind="Radio"
                                 Size="{DynamicResource WolvenKitIconTiny}"
-                                Foreground="{StaticResource ForegroundColor}" />
+                                Foreground="{StaticResource WolvenKitYellow}" />
                         </MenuItem.Icon>
                     </MenuItem>
 

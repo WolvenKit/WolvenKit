@@ -58,8 +58,6 @@ namespace WolvenKit.Views.Dialogs.Windows
                         x => x.SongsGrid.ItemsSource)
                     .DisposeWith(disposables);
 
-                SongsGrid.SetCurrentValue(Syncfusion.UI.Xaml.Grid.SfDataGrid.AllowDraggingRowsProperty, true);
-                SongsGrid.SetCurrentValue(AllowDropProperty, true);
                 SongsGrid.RowDragDropController.Drop += SongsGrid_OnDrop;
             });
         }
@@ -148,23 +146,19 @@ namespace WolvenKit.Views.Dialogs.Windows
             {
                 ViewModel.RemoveSong(item);
             }
-            else
-            {
-                Console.Write("");
-            }
 
         }
 
         // Update SongsGrid_OnDrop to use the captured item and fall back to drag data
-        private void SongsGrid_OnDrop(object sender, GridRowDropEventArgs gridRowDropEventArgs)
+        private void SongsGrid_OnDrop(object sender, GridRowDropEventArgs e)
         {
-            if (ViewModel is null || gridRowDropEventArgs.TargetRecord is not int idx)
+            if (ViewModel is null || e.TargetRecord is not int idx)
             {
                 return;
             }
 
-            var offset = gridRowDropEventArgs.DropPosition == DropPosition.DropBelow ? +1 : 0;
-            foreach (var record in gridRowDropEventArgs.DraggingRecords.OfType<RadioSongItem>())
+            var offset = e.DropPosition == DropPosition.DropBelow ? +1 : 0;
+            foreach (var record in e.DraggingRecords.OfType<RadioSongItem>())
             {
                 ViewModel.MoveSongOrder(record, idx + offset);
             }
