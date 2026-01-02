@@ -329,12 +329,12 @@ $1$0";
 
         int AddVariantInSector(string replaceString)
         {
-
             List<worldNode> newNodes = [];
             List<worldNodeData> newDataNodes = [];
 
             // would have thrown an exception in ValidateSector if this wasn't valid
             var nodeData = (worldNodeDataBuffer)sector.NodeData.Buffer.Data!;
+            var endIndex = nodeData.Count;
 
             foreach (var (data, node) in result.DataNodes)
             {
@@ -343,16 +343,13 @@ $1$0";
 
                 if (newNode is not null)
                 {
-                    if (newNode is IRedMeshNode meshNode &&
-                        !(meshNode.MeshAppearance.ToString() ?? "").Contains(replaceString))
+                    if (newNode is IRedMeshNode meshNode)
                     {
-
                         meshNode.MeshAppearance = StringHelper.ReplaceInString(meshNode.MeshAppearance!,
                             result.SearchInAppearances, replaceString,
                             false,
                             false);
                     }
-
                     newNodes.Add(newNode);
                     newData.NodeIndex = (CUInt16)(sector.Nodes.Count + newNodes.Count - 1);
                 }
@@ -360,14 +357,14 @@ $1$0";
                 newDataNodes.Add(newData);
             }
 
-            if (newNodes.Count == 0 || newDataNodes.Count == 0)
+            if (newDataNodes.Count == 0)
             {
                 return -1;
             }
 
             foreach (var worldNode in newNodes)
             {
-                sector.Nodes.Add(worldNode!);
+                sector.Nodes.Add(worldNode);
             }
 
             foreach (var dataNode in newDataNodes)
@@ -375,8 +372,8 @@ $1$0";
                 nodeData.Add(dataNode);
             }
 
-            sector.VariantIndices.Add(sector.VariantIndices.Count - 1);
-            return sector.VariantIndices.Count;
+            sector.VariantIndices.Add(endIndex);
+            return sector.VariantIndices.Count - 1;
         }
 
         void AddVariantInStreamingBlock(int rangeIndex, string sectorName,
