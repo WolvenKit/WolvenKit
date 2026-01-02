@@ -254,7 +254,8 @@ $1$0";
                 _loggerService.Info($"Skipping {replaceString} (won't replace it with itself)");
                 continue;
             }
-            var variantName = $"{sectorPrefix}{(sectorPrefix.EndsWith('_') ? "" : replaceString)}";
+
+            var variantName = $"{sectorPrefix}{(sectorPrefix.EndsWith('_') ? replaceString : "")}";
 
             var matchingDescriptor = block.Descriptors.FirstOrDefault(desc =>
                 desc.Data.DepotPath.GetResolvedText() == result.SectorRelativePath);
