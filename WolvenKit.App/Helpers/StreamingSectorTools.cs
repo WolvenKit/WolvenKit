@@ -249,6 +249,11 @@ $1$0";
         // Now iterate and create variants
         foreach (var replaceString in result.NewAppearances)
         {
+            if (replaceString == result.SearchInAppearances)
+            {
+                _loggerService.Info($"Skipping {replaceString} (won't replace it with itself)");
+                continue;
+            }
             var variantName = $"{sectorPrefix}{(sectorPrefix.EndsWith('_') ? "" : replaceString)}";
 
             var matchingDescriptor = block.Descriptors.FirstOrDefault(desc =>
