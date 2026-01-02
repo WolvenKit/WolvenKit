@@ -82,15 +82,15 @@ public class StreamingSectorTools
 
         ValidateSector(sector);
 
-        var sectorStartIndex = sector.VariantIndices[(int)(rangeIndex - 1)];
-        var sectorEndIndex = sector.VariantIndices[^1];
-        if (sector.VariantIndices.Count >= rangeIndex)
-        {
-            sectorEndIndex = sector.VariantIndices[(int)rangeIndex];
-        }
-
         // will have thrown an exception in ValidateSector if this wasn't valid
         var nodeData = (worldNodeDataBuffer)sector.NodeData.Buffer.Data!;
+
+        var sectorStartIndex = sector.VariantIndices[(int)(rangeIndex)];
+        var sectorEndIndex = nodeData.Count;
+        if (rangeIndex < sector.VariantIndices.Count + 1)
+        {
+            sectorEndIndex = sector.VariantIndices[(int)(rangeIndex + 1)];
+        }
 
         // var nodeIndices = nodeData.Where((node, index) => index >= sectorStartIndex && index < sectorEndIndex)
         //     .Select(node => node.NodeIndex).Distinct().ToList();
