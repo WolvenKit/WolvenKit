@@ -53,6 +53,10 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     view => view.MenuItemGenerateMinimalQuest)
                 .DisposeWith(disposables);
             this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.AddOrEditRadioCommand,
+                    view => view.MenuItemAddOrEditRadio)
+                .DisposeWith(disposables);
+            this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.RegisterWorldbuilderFilesCommand,
                     view => view.MenuItemRegisterWorldbuilderFiles)
                 .DisposeWith(disposables);

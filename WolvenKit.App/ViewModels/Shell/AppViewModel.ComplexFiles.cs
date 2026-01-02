@@ -57,7 +57,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
          */
         try
         {
-            _templateFileTools.CreatePhotoModeAppAndEnt(new PhotomodeEntAppOptions()
+            TemplateFileTools.CreatePhotoModeAppAndEnt(new PhotomodeEntAppOptions()
                 {
                     AppSourceRelPath = dialogModel.SelectedApp,
                     AppDestRelPath = relativeAppFilePath,
@@ -79,7 +79,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
              */
             if (dialogModel.IsCreateInkatlasFile)
             {
-                _templateFileTools.CopyInkatlasTemplateSingle(relativeInkatlasFilePath, dialogModel.IsOverwrite);
+                TemplateFileTools.CopyInkatlasTemplateSingle(relativeInkatlasFilePath, dialogModel.IsOverwrite);
             }
 
             /*
@@ -89,7 +89,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             {
                 var yamlTargetDir = Path.Join(_projectManager.ActiveProject.GetResourceTweakDirectory(), "photomode");
 
-                _templateFileTools.CreatePhotomodeYaml(new PhotomodeYamlOptions()
+                TemplateFileTools.CreatePhotomodeYaml(new PhotomodeYamlOptions()
                 {
                     NpcName = dialogModel.NpcName,
                     InkatlasPath = relativeInkatlasFilePath,
@@ -123,7 +123,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
                     File.Delete(jsonFileAbsolutePath);
                 }
 
-                _templateFileTools.CreateOrAppendToJsonFile(
+                TemplateFileTools.CreateOrAppendToJsonFile(
                     jsonFileAbsolutePath,
                     new Dictionary<string, string> { { locKey, dialogModel.NpcName } },
                     dialogModel.IsOverwrite,
@@ -371,9 +371,27 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             ModderName = modderName.ToLower(),
         };
 
-        _templateFileTools.GenerateMinimalQuest(options);
+        TemplateFileTools.GenerateMinimalQuest(options);
 
         _loggerService.Success($"Minimal quest files generated for {options.ModName}!");
+    }
+
+    [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
+    private void AddOrEditRadio()
+    {
+        if (_projectManager.ActiveProject is not Cp77Project activeProject ||
+            GetModderName() is not string modderName || string.IsNullOrEmpty(modderName))
+        {
+            return;
+        }
+
+
+        if (Interactions.CreateOrEditRadioDialog(activeProject) is not { } dialogModel)
+        {
+            return;
+        }
+
+        TemplateFileTools.CreateRadio(dialogModel, modderName, activeProject);
     }
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
@@ -390,7 +408,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         }
 
 
-        _templateFileTools.GeneratePropFiles(dialogModel);
+        TemplateFileTools.GeneratePropFiles(dialogModel);
         _loggerService.Success($"{dialogModel.PropName} was created and registered!");
     }
 

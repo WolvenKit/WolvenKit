@@ -99,6 +99,9 @@
                         </MenuItem.Icon>
                     </MenuItem>
 
+
+                    <Separator />
+
                     <!-- Minimal Quest Files -->
                     <MenuItem
                         x:Name="MenuItemGenerateMinimalQuest"
@@ -109,6 +112,21 @@
                             <local:IconBox
                                 IconPack="Codicons"
                                 Kind="SymbolEvent"
+                                Size="{DynamicResource WolvenKitIconTiny}"
+                                Foreground="{StaticResource WolvenKitYellow}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <!-- Radio -->
+                    <MenuItem
+                        x:Name="MenuItemAddOrEditRadio"
+                        Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                        Header="RadioEXT station"
+                        ToolTip="Add or edit radio station">
+                        <MenuItem.Icon>
+                            <local:IconBox
+                                IconPack="Material"
+                                Kind="Radio"
                                 Size="{DynamicResource WolvenKitIconTiny}"
                                 Foreground="{StaticResource WolvenKitYellow}" />
                         </MenuItem.Icon>

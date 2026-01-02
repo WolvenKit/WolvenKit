@@ -138,6 +138,18 @@ namespace WolvenKit.Views.Shell
                     return true;
                 };
 
+                Interactions.CreateOrEditRadioDialog = project =>
+                {
+                    AddRadioExtFilesDialog dialog = new(project, ViewModel.TemplateFileTools);
+
+                    if (dialog.ShowDialog(this) != true)
+                    {
+                        return null;
+                    }
+
+                    return dialog.ViewModel;
+                };
+
                 Interactions.ShowCollectionView = input =>
                 {
                     ChooseCollectionView dialog = new();
