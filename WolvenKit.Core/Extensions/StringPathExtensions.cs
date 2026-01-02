@@ -67,7 +67,6 @@ namespace WolvenKit.Interfaces.Extensions
                 .Replace(" ", "_")
                 .Replace("'", "-")
                 .Replace(",", "-")
-                .Replace(".", "-")
                 .Replace("\"", "-")
                 .ToLower();
 
