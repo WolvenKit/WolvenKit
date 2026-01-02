@@ -162,7 +162,7 @@
                         AllowDrop="True"
                         AllowSorting="False"
                         AllowFiltering="False"
-                        SelectionMode="Single"
+                        SelectionMode="None"
                         SelectionUnit="Row"
                         ShowRowHeader="False">
 
