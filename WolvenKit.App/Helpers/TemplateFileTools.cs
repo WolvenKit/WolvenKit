@@ -1040,7 +1040,7 @@ public class TemplateFileTools
     {
         if (!_settingsManager.UseAuthorNameAsSubfolder)
         {
-            return _projectManager.ActiveProject?.Name ?? "";
+            return _projectManager.ActiveProject?.ModName ?? "";
         }
 
         if (_projectManager.ActiveProject?.Author is string author && !string.IsNullOrEmpty(author))
@@ -1429,7 +1429,7 @@ public class TemplateFileTools
         {
             var luaFolderPath = Path.Combine(project.GetResourceCETDirectory(), "AppearanceMenuMod", "Collabs",
                 "Custom Props", GetFileOrganizationSubdir());
-            var luaPath = Path.Combine(luaFolderPath, $"{project.Name.ToFileName()}.lua");
+            var luaPath = Path.Combine(luaFolderPath, $"{project.ModName.ToFileName()}.lua");
 
             var absolutePath = Path.Combine(project.ResourcesDirectory, luaPath);
             if (!File.Exists(absolutePath))
@@ -1437,7 +1437,7 @@ public class TemplateFileTools
                 Directory.CreateDirectory(luaFolderPath);
                 File.WriteAllText(absolutePath,
                     s_luaPropFileTemplate.Replace("MODDER_NAME", project.Author)
-                        .Replace("PROJECT_NAME", project.Name.ToFileName()));
+                        .Replace("PROJECT_NAME", project.ModName.ToFileName()));
             }
 
             var fileContent = File.ReadAllLines(absolutePath).ToList();
@@ -1486,7 +1486,7 @@ public class TemplateFileTools
             {
                 var entspawnerMeshDir = Path.Combine(entspawnerSubdir, "spawnables", "mesh", "all",
                     GetFileOrganizationSubdir());
-                var entspawnerMeshFile = Path.Combine(entspawnerMeshDir, project.Name.ToFileName() + ".txt");
+                var entspawnerMeshFile = Path.Combine(entspawnerMeshDir, project.ModName.ToFileName() + ".txt");
                 var absolutePath = Path.Combine(project.ResourcesDirectory, entspawnerMeshFile);
 
                 Directory.CreateDirectory(Path.Combine(project.ResourcesDirectory, entspawnerMeshDir));
@@ -1507,7 +1507,7 @@ public class TemplateFileTools
             }
 
             var entspawnerEntFile =
-                Path.Combine(entspawnerSubdir, GetFileOrganizationSubdir(), project.Name.ToFileName() + ".txt");
+                Path.Combine(entspawnerSubdir, GetFileOrganizationSubdir(), project.ModName.ToFileName() + ".txt");
             var absoluteEntRegistryPath = Path.Combine(project.ResourcesDirectory, entspawnerEntFile);
             if (!File.Exists(absoluteEntRegistryPath))
             {
