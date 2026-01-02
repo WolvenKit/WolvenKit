@@ -788,9 +788,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         }
 
         RootChunk.Tab?.Parent.SetIsDirty(true);
-        RootChunk.GetPropertyChild("nodes")?.RecalculateProperties();
-        RootChunk.GetPropertyChild("nodeData")?.RecalculateProperties();
-        RootChunk.GetPropertyChild("variantIndices")?.RecalculateProperties();
+        RootChunk.GetPropertyChild("descriptors")?.RecalculateProperties();
     }
 
     #endregion
