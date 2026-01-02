@@ -329,13 +329,18 @@ $1$0";
             var startIndex = (int)sector.VariantIndices.Last();
             var endIndex = sector.VariantIndices.Count();
 
-            List<worldNode?> newNodes = [];
+            List<worldNode> newNodes = [];
+            List<worldNodeData> newDataNodes = [];
 
             // would have thrown an exception in ValidateSector if this wasn't valid
             var nodeData = (worldNodeDataBuffer)sector.NodeData.Buffer.Data!;
 
             foreach (var (data, node) in result.DataNodes)
             {
+                if (node is IRedMeshNode mNode && (mNode.MeshAppearance.ToString() ?? "").Contains(replaceString))
+                {
+                    continue;
+                }
                 var newNode = CopyNode(node);
                 var newData = CopyDataNode(data);
 
@@ -343,27 +348,32 @@ $1$0";
                 {
                     if (newNode is IRedMeshNode meshNode)
                     {
-                        if ((meshNode.MeshAppearance.ToString() ?? "").Contains(replaceString))
-                        {
-                            // skip this one
-                            return -1;
-                        }
                         meshNode.MeshAppearance = StringHelper.ReplaceInString(meshNode.MeshAppearance!,
                             result.SearchInAppearances, replaceString,
                             false,
                             false);
                     }
 
-                    sector.Nodes.Add(newNode);
-                    newData.NodeIndex = (CUInt16)(sector.Nodes.Count - 1);
+                    newNodes.Add(newNode);
+                    newData.NodeIndex = (CUInt16)(sector.Nodes.Count + newNodes.Count - 1);
                 }
 
-                nodeData.Add(newData);
+                newDataNodes.Add(newData);
             }
 
-            if (nodeData.Count - 1 == startIndex)
+            if (newNodes.Count == 0 || newDataNodes.Count == 0)
             {
-                throw new WolvenKitException(0, "Failed to add sector variant");
+                return -1;
+            }
+
+            foreach (var worldNode in newNodes)
+            {
+                sector.Nodes.Add(worldNode!);
+            }
+
+            foreach (var dataNode in newDataNodes)
+            {
+                nodeData.Add(dataNode);
             }
 
             sector.VariantIndices.Add(endIndex);
