@@ -193,10 +193,13 @@ $1$0";
         var result = Interactions.ShowNewSectorVariantView((block, project, this));
         result?.GenerateResults();
         if (result is null || result.NewAppearances.Count == 0 || result.NewVariantNameOrPrefix is null ||
-            string.IsNullOrEmpty(result.TemplateVariant))
+            string.IsNullOrEmpty(result.TemplateVariant) || string.IsNullOrEmpty(result.SearchInAppearances))
         {
+            _notificationService.Info("Invalid input, aborting");
+            _loggerService.Info("Invalid input, aborting");
             return;
         }
+
 
         if (string.IsNullOrEmpty(result.SectorRelativePath))
         {
@@ -206,7 +209,6 @@ $1$0";
                 "Failed to read sector from streamingblock. Please select one of the following sector files:", "", true,
                 null));
         }
-
         if (string.IsNullOrEmpty(result.SectorRelativePath) || !project.ModFiles.Contains(result.SectorRelativePath) ||
             project.GetAbsolutePath(result.SectorRelativePath) is not string sectorPath ||
             _cr2WTools.ReadCr2WNoException(sectorPath) is not CR2WFile
@@ -278,9 +280,28 @@ $1$0";
 
 
             var rangeIndex = AddVariantInSector(replaceString);
+            if (rangeIndex < 0)
+            {
+                continue;
+            }
             AddVariantInStreamingBlock(rangeIndex, variantName, matchingDescriptor, matchingVariant);
             newVariants.Add(variantName);
         }
+
+        if (newVariants.Count == 0)
+        {
+            _loggerService.Info("Failed to generate new sector variants: no valid replacements found");
+            _notificationService.Info("Failed to generate new sector variants: no valid replacements found");
+            return;
+        }
+
+        if (!Interactions.ShowQuestionYesNo((
+                $"The following variants will be created. Write them to files now?\n{string.Join(", ", newVariants)}",
+                "Generate variants now?")))
+        {
+            return;
+        }
+
 
         _cr2WTools.WriteCr2W(sectorCr2W, sectorPath);
 
@@ -299,6 +320,7 @@ $1$0";
 
         int AddVariantInSector(string replaceString)
         {
+
             // would have thrown an exception in ValidateSector if this wasn't valid
             var startIndex = (int)sector.VariantIndices.Last();
             var endIndex = sector.VariantIndices.Count();
@@ -315,8 +337,13 @@ $1$0";
 
                 if (newNode is not null)
                 {
-                    if (newNode is IRedMeshNode meshNode && !string.IsNullOrEmpty(result.SearchInAppearances))
+                    if (newNode is IRedMeshNode meshNode)
                     {
+                        if ((meshNode.MeshAppearance.ToString() ?? "").Contains(replaceString))
+                        {
+                            // skip this one
+                            return -1;
+                        }
                         meshNode.MeshAppearance = StringHelper.ReplaceInString(meshNode.MeshAppearance!,
                             result.SearchInAppearances, replaceString,
                             false,
