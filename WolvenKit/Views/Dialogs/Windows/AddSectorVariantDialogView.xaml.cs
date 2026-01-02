@@ -133,7 +133,7 @@ namespace WolvenKit.Views.Dialogs.Windows
 
         private void WizardPage_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key != Key.Enter && (e.SystemKey == Key.LeftCtrl || e.SystemKey == Key.RightCtrl))
+            if (ReplaceInMeshAppearanceTextBox.IsFocused || e.Key != Key.Enter)
             {
                 return;
             }

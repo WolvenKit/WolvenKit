@@ -200,7 +200,6 @@ $1$0";
             return false;
         }
 
-
         if (string.IsNullOrEmpty(result.SectorRelativePath))
         {
             CheckForStreamingSectorFiles(project);
