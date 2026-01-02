@@ -92,6 +92,7 @@ public partial class AddSectorVariantDialogViewModel() : ObservableObject
             case 0:
                 return;
             case 1:
+                ShowNodeAppearanceDropdown = true;
                 SearchInAppearances = nodeAppearances.First();
                 return;
             default:
