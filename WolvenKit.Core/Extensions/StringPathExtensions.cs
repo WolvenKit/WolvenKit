@@ -56,14 +56,14 @@ namespace WolvenKit.Interfaces.Extensions
         /// <summary>
         /// Generates redengine friendly file path.
         /// </summary>
-        public static string ToFilePath(this string target) => string.Join(Path.DirectorySeparatorChar,
-            target.Split(Path.DirectorySeparatorChar).Select(s => s.ToFileName()));
+        public static string ToFilePath(this string target) => target.SanitizeFilePath(false);
 
         /// <summary>
         /// Generates redengine friendly file name
         /// </summary>
         public static string ToFileName(this string target) =>
-            new string(target.Where(c => !Path.GetInvalidFileNameChars().Contains(c)).ToArray()).Trim()
+            new string(target.Replace('/', Path.DirectorySeparatorChar)
+                    .Where(c => !Path.GetInvalidFileNameChars().Contains(c)).ToArray()).Trim()
                 .Replace(" ", "_").ToLower();
 
         /// <summary>
