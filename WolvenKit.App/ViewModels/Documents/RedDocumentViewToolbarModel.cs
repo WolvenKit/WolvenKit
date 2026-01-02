@@ -37,6 +37,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private readonly ILoggerService _loggerService;
     private readonly INotificationService _notificationService;
     private readonly StreamingSectorTools _sectorTools;
+    private readonly AppViewModel _appViewModel;
 
     public RedDocumentViewToolbarModel(
         ISettingsManager settingsManager,
@@ -46,7 +47,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         CRUIDService cruidService,
         ILoggerService loggerService,
         INotificationService notificationService,
-        StreamingSectorTools sectorTools
+        StreamingSectorTools sectorTools,
+        AppViewModel appViewModel
     )
     {
         _modifierViewStateService = modifierSvc;
@@ -57,6 +59,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         _loggerService = loggerService;
         _sectorTools = sectorTools;
         _notificationService = notificationService;
+        _appViewModel = appViewModel;
 
         modifierSvc.ModifierStateChanged += OnModifierChanged;
         modifierSvc.PropertyChanged += (_, args) => OnPropertyChanged(args.PropertyName);
@@ -783,6 +786,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             {
                 RootChunk.Tab?.Parent.SetIsDirty(true);
                 RootChunk.GetPropertyChild("descriptors")?.RecalculateProperties();
+                _appViewModel.ReloadChangedFiles();
             }
         }
         catch (Exception e)
