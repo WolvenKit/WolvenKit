@@ -333,17 +333,15 @@ $1$0";
 
             foreach (var (data, node) in result.DataNodes)
             {
-                if (node is IRedMeshNode mNode && (mNode.MeshAppearance.ToString() ?? "").Contains(replaceString))
-                {
-                    continue;
-                }
                 var newNode = CopyNode(node);
                 var newData = CopyDataNode(data);
 
                 if (newNode is not null)
                 {
-                    if (newNode is IRedMeshNode meshNode)
+                    if (newNode is IRedMeshNode meshNode &&
+                        !(meshNode.MeshAppearance.ToString() ?? "").Contains(replaceString))
                     {
+
                         meshNode.MeshAppearance = StringHelper.ReplaceInString(meshNode.MeshAppearance!,
                             result.SearchInAppearances, replaceString,
                             false,
