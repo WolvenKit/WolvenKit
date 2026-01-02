@@ -48,7 +48,7 @@ namespace WolvenKit.Converters
         public DataTemplate NullTemplate { get; set; }
 
         // Some vectors are actually colours
-        private static readonly string[] s_vectorsAsColors = ["BaseColorScale", "HSV_Mod"];
+        private static readonly string[] s_vectorsAsColors = ["BaseColorScale", "HSV_Mod", "TintColor"];
 
         // Some uints are actually chunkMasks
         private static readonly string[] s_chunkMaskProperties = ["chunkMask", "componentIndexMask"];
@@ -56,7 +56,7 @@ namespace WolvenKit.Converters
 
         public string[] DropdownOptions = [];
         public string SelectedOption = "";
-        
+
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
             if (item is not ChunkViewModel vm)
@@ -87,7 +87,7 @@ namespace WolvenKit.Converters
                 }
 
                 return FilterableDropdownCNameEditor;
-                
+
             }
 
             if (vm.DisplayAsEnumType != null)
@@ -165,7 +165,7 @@ namespace WolvenKit.Converters
                 {
                     return FilterableDropdownIntegerEditor;
                 }
-                
+
                 return RedIntegerEditor;
             }
 
