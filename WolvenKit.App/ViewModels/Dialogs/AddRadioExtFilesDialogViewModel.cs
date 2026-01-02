@@ -128,23 +128,19 @@ public partial class AddRadioExtFilesDialogViewModel() : ObservableObject
 
     public void RemoveSong(RadioSongItem songItem)
     {
-        if (!SongItems.Select(s => s.FilePath).ToList().Contains(songItem.FilePath))
+        var index = SongItems.FindIndex(s => s.FilePath == songItem.FilePath);
+        if (index == -1)
         {
             return;
         }
 
-        var songItems = SongItems.ToList();
-        songItems.Remove(songItem);
-
-        if (songItems.FirstOrDefault(f => f.Index > 0) is not null)
+        SongItems.RemoveAt(index);
+        for (var i = index; i < SongItems.Count; i++)
         {
-            for (var i = 0; i < songItems.Count; i++)
-            {
-                songItems[i].Index = i;
-            }
+            SongItems[i].Index = i;
         }
 
-        SongItems = songItems;
+        SongItems = SongItems.ToList();
     }
 
     public void MoveSongOrder(RadioSongItem? songItem, int newIndex)

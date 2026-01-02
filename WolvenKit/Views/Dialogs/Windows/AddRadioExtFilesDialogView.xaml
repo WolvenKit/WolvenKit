@@ -178,6 +178,7 @@
                                             IconPack="Material"
                                             Kind="DragVertical"
                                             Size="{DynamicResource WolvenKitIconTiny}"
+                                            Tag="DragHandle"
                                             ToolTip="Drag to reorder" />
                                     </DataTemplate>
                                 </syncfusion:GridTemplateColumn.CellTemplate>
