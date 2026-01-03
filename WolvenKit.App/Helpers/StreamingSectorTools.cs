@@ -307,10 +307,10 @@ $1$0";
             return false;
         }
 
-
         _cr2WTools.WriteCr2W(sectorCr2W, sectorPath);
 
-        AddVariantToLuaFile(result.TemplateVariant, newVariants, luaFilePath);
+        // TODO fix this
+        // AddVariantToLuaFile(result.TemplateVariant, newVariants, luaFilePath);
 
 
         _loggerService.Success($"Added {newVariants.Count} variants. Don't forget to save your file!");
