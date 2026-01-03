@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace WolvenKit.App.Helpers;
 
@@ -67,60 +66,65 @@ public class LuaFileHelper
 
     private static string? ExtractSmallestTable(string[] lines, int targetLine)
     {
-        // Find the nearest opening brace BEFORE target line
-        var startLine = -1;
-        var braceDepthAtStart = 0;
-
-        // We need to track brace balance to find the correct {
+        // Stack to track opening brace positions and their depths
+        var braceStack = new Stack<(int lineIndex, int depth)>();
         var currentDepth = 0;
 
+        // First pass: scan up to targetLine to find all opening braces
         for (var i = 0; i <= targetLine; i++)
         {
             var (opens, closes) = CountBracesInLine(lines[i]);
-            currentDepth += opens - closes;
 
-            if (opens <= 0)
+            // Process closes first (LIFO - matching recent opens)
+            for (var j = 0; j < closes; j++)
             {
-                continue;
+                if (braceStack.Count > 0)
+                {
+                    braceStack.Pop();
+                }
+
+                currentDepth--;
+                if (currentDepth < 0) currentDepth = 0;
             }
 
-            // The depth RIGHT BEFORE this line's braces
-            var depthBeforeLine = currentDepth - opens;
-            startLine = i;
-            braceDepthAtStart = depthBeforeLine;
+            // Then process opens
+            for (var j = 0; j < opens; j++)
+            {
+                braceStack.Push((i, currentDepth));
+                currentDepth++;
+            }
         }
 
-        if (startLine == -1)
+        // If no opening braces found before our target, return null
+        if (braceStack.Count == 0)
         {
             return null;
         }
 
-        // Now find the matching closing brace
+        // The top of stack is the innermost opening brace before targetLine
+        var (startLine, startDepth) = braceStack.Peek();
+
+        // Second pass: find the matching closing brace
         var endLine = -1;
-        currentDepth = braceDepthAtStart;
+        currentDepth = startDepth; // Reset to depth at start of this block
 
         for (var i = startLine; i < lines.Length; i++)
         {
             var (opens, closes) = CountBracesInLine(lines[i]);
 
-            // Update depth as we process this line
-            // Important: we need to check when we reach depth 0
-            for (var j = 0; j < opens; j++)
-            {
-                currentDepth++;
-            }
+            // Update depth
+            currentDepth += opens;
 
+            // Check each closing brace
             for (var j = 0; j < closes; j++)
             {
                 currentDepth--;
-                if (currentDepth != braceDepthAtStart)
+                // When depth returns to original level, we found the match
+                if (currentDepth == startDepth)
                 {
-                    continue;
+                    endLine = i;
+                    break;
                 }
-
-                // When we return to the starting depth, we've found the match
-                endLine = i;
-                break;
             }
 
             if (endLine != -1)
