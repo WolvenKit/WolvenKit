@@ -62,7 +62,14 @@ public class StreamingSectorTools
             Position = node.Position,
             MaxStreamingDistance = node.MaxStreamingDistance,
             QuestPrefabRefHash = node.QuestPrefabRefHash,
-            CookedPrefabData = node.CookedPrefabData
+            CookedPrefabData = node.CookedPrefabData,
+            Uk10 = node.Uk10,
+            Uk11 = node.Uk11,
+            Uk12 = node.Uk12,
+            Uk13 = node.Uk13,
+            Uk14 = node.Uk14,
+            UkFloat1 = node.UkFloat1,
+            UkHash1 = node.UkHash1,
         };
     }
 
@@ -180,6 +187,12 @@ $1$0";
         {
             return;
         }
+
+        // var luaChunk = LuaFileHelper.FindChunkContainingString(luaAbsPath, oldVariantName);
+        // if (string.IsNullOrEmpty(luaChunk))
+        // {
+        //     return;
+        // }
 
         var content = File.ReadAllText(luaAbsPath);
         content = newVariantNames.Aggregate(content,
@@ -310,7 +323,7 @@ $1$0";
         _cr2WTools.WriteCr2W(sectorCr2W, sectorPath);
 
         // TODO fix this
-        // AddVariantToLuaFile(result.TemplateVariant, newVariants, luaFilePath);
+        AddVariantToLuaFile(result.TemplateVariant, newVariants, luaFilePath);
 
 
         _loggerService.Success($"Added {newVariants.Count} variants. Don't forget to save your file!");
