@@ -165,20 +165,13 @@ public class StreamingSectorTools
         }
     }
 
-    public static string InsertVariant(string content, string existingVariant, string newVariantName)
+    public static string CreateVariant(string existingVariant, string oldVariantName, string newVariantName)
     {
         var newDisplayName = newVariantName.ToHumanFriendlyString();
 
-
-        var pattern = $@"(\s*){{\s*variant\s*=\s*""{existingVariant}""";
-
-        var newEntry = $@"{{
-        variant = ""{newVariantName}"",
-        displayName = ""{newDisplayName}""
-      }},
-$1$0";
-
-        return Regex.Replace(content, pattern, newEntry, RegexOptions.Singleline);
+        var ret = existingVariant.Replace(oldVariantName, newVariantName);
+        var pattern = $@"displayName\s?=\s?""([^""]+)";
+        return Regex.Replace(ret, pattern, newDisplayName, RegexOptions.Singleline);
     }
 
     private static void AddVariantToLuaFile(string oldVariantName, List<string> newVariantNames, string luaAbsPath)
@@ -188,15 +181,20 @@ $1$0";
             return;
         }
 
-        // var luaChunk = LuaFileHelper.FindChunkContainingString(luaAbsPath, oldVariantName);
-        // if (string.IsNullOrEmpty(luaChunk))
-        // {
-        //     return;
-        // }
+        var originalLuaEntry = LuaFileHelper.FindChunkContainingString(luaAbsPath, oldVariantName);
+        if (string.IsNullOrEmpty(originalLuaEntry))
+        {
+            return;
+        }
+
+        var variantLuaEntries =
+            newVariantNames.Select(v => CreateVariant(originalLuaEntry, oldVariantName, v)).ToList();
+        variantLuaEntries.Reverse();
 
         var content = File.ReadAllText(luaAbsPath);
-        content = newVariantNames.Aggregate(content,
-            (current, newSectorName) => InsertVariant(current, oldVariantName, newSectorName));
+        content = variantLuaEntries.Aggregate(content,
+            (current, newLuaEntry) => current.Replace(originalLuaEntry, $"{originalLuaEntry},\n{newLuaEntry}"));
+
         File.WriteAllText(luaAbsPath, content);
     }
 
@@ -240,22 +238,6 @@ $1$0";
                            (result.NewAppearances.Count == 1 || result.NewVariantNameOrPrefix.EndsWith('_') ? "" : "_");
 
         EnsureSectorDataNodes();
-
-        var pattern = $@"(\s*){{\s*variant\s*=\s*""{result.TemplateVariant}""";
-
-        var luaFilePath = "";
-        if (project.ResourceFiles.Where(f => f.EndsWith("init.lua"))
-                .Select(f => Path.Combine(project.ResourcesDirectory, f))
-                .Where(File.Exists)
-                .FirstOrDefault(f =>
-                {
-                    var content = File.ReadAllText(f);
-                    return Regex.Replace(content, pattern, "") != Regex.Replace(content, "INVALID", "");
-                })
-            is string s)
-        {
-            luaFilePath = s;
-        }
 
         List<string> newVariants = [];
         // Now iterate and create variants
@@ -321,6 +303,21 @@ $1$0";
         }
 
         _cr2WTools.WriteCr2W(sectorCr2W, sectorPath);
+
+
+        var luaFilePath = "";
+        if (project.ResourceFiles.Where(f => f.EndsWith("init.lua"))
+                .Select(f => Path.Combine(project.ResourcesDirectory, f))
+                .Where(File.Exists)
+                .FirstOrDefault(f =>
+                {
+                    var content = File.ReadAllText(f);
+                    return content.Contains("function switcher:new()");
+                })
+            is string s)
+        {
+            luaFilePath = s;
+        }
 
         // TODO fix this
         AddVariantToLuaFile(result.TemplateVariant, newVariants, luaFilePath);
