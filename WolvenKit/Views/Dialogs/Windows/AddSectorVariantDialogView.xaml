@@ -20,8 +20,7 @@
 
         <syncfusion:WizardControl
             CancelButtonCancelsWindow="True"
-            FinishButtonClosesWindow="True"
-            Finish="WizardControl_OnFinish">
+            FinishButtonClosesWindow="True">
             <syncfusion:WizardPage
                 BackVisibility="Collapsed"
                 CancelVisibility="Visible"

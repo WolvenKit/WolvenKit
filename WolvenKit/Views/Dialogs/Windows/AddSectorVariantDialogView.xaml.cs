@@ -5,6 +5,7 @@ using System.Windows.Input;
 using ReactiveUI;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.RED4.Types;
 using Window = System.Windows.Window;
@@ -27,8 +28,6 @@ namespace WolvenKit.Views.Dialogs.Windows
 
             ViewModel = new AddSectorVariantDialogViewModel(block, project, sectorTools);
             DataContext = ViewModel;
-
-            LoadLastSelection();
 
             this.WhenActivated(disposables =>
             {
@@ -83,62 +82,16 @@ namespace WolvenKit.Views.Dialogs.Windows
             return ShowDialog();
         }
 
-        private void LoadLastSelection()
-        {
-            // if (ViewModel is null)
-            // {
-            //     return;
-            // }
-            //
-            // ViewModel.IsRegex = s_lastRegex;
-            // ViewModel.IsWholeWord = s_lastWholeWord;
-            //
-            // if (s_lastSearch != "")
-            // {
-            //     ViewModel.SearchText = s_lastSearch;
-            //     ViewModel.RememberValues = true;
-            // }
-            //
-            // if (s_lastReplace == "")
-            // {
-            //     return;
-            // }
-            //
-            // ViewModel.ReplaceText = s_lastReplace;
-            // ViewModel.RememberValues = true;
-        }
-
-        private void SaveLastSelection()
-        {
-            if (ViewModel is null)
-            {
-                return;
-            }
-
-            // if (!ViewModel.RememberValues)
-            // {
-            //     s_lastRegex = false;
-            //     s_lastWholeWord = false;
-            //     s_lastSearch = "";
-            //     s_lastReplace = "";
-            //     return;
-            // }
-            //
-            // s_lastRegex = ViewModel.IsRegex;
-            // s_lastWholeWord = ViewModel.IsWholeWord;
-            // s_lastSearch = ViewModel.SearchText;
-            // s_lastReplace = ViewModel.ReplaceText;
-        }
-
-
         private void WizardPage_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (ReplaceInMeshAppearanceTextBox.IsFocused || e.Key != Key.Enter)
+            // Only send dialog result enter is pressed - if textbox is focused, require ctrl+shift+enter
+            if (e.Key != Key.Enter || (ReplaceInMeshAppearanceTextBox.IsFocused &&
+                                       !(ModifierViewStateService.IsCtrlBeingHeld &&
+                                         ModifierViewStateService.IsShiftBeingHeld)))
             {
                 return;
             }
 
-            SaveLastSelection();
             e.Handled = true;
             DialogResult = true;
             Close();
@@ -149,9 +102,5 @@ namespace WolvenKit.Views.Dialogs.Windows
             IsInstanceOpen = false;
             base.OnClosed(e);
         }
-
-        private void WizardControl_OnFinish(object sender, RoutedEventArgs e) => SaveLastSelection();
-
-        private void LoadSectorButton_OnClick(object sender, RoutedEventArgs e) => ViewModel?.ReadStreamingSector();
     }
 }
