@@ -298,9 +298,12 @@ public class StreamingSectorTools
             {
                 continue;
             }
+
             AddVariantInStreamingBlock(rangeIndex, variantName, matchingDescriptor, matchingVariant);
             newVariants.Add(variantName);
+            matchingDescriptor.NumNodeRanges += 1;
         }
+
 
         if (newVariants.Count == 0)
         {
@@ -321,7 +324,6 @@ public class StreamingSectorTools
 
         // TODO fix this
         AddVariantToLuaFile(result.TemplateVariant, newVariants, project);
-
 
         _loggerService.Success($"Added {newVariants.Count} variants. Don't forget to save your file!");
         _notificationService.Success($"Added {newVariants.Count} variants. Don't forget to save your file!");
