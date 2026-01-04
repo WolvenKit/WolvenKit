@@ -86,7 +86,11 @@ namespace WolvenKit.Views.Documents
                 _projectManager,
                 _documentTools,
                 Locator.Current.GetService<CRUIDService>()!,
-                _loggerService) { CurrentTab = _currentTab };
+                _loggerService,
+                Locator.Current.GetService<INotificationService>()!,
+                Locator.Current.GetService<StreamingSectorTools>()!,
+                _appViewModel
+            ) { CurrentTab = _currentTab };
             ViewModel = DataContext as RedDocumentViewToolbarModel;
 
             _modifierStateService.ModifierStateChanged += OnModifierStateChanged;
@@ -425,7 +429,31 @@ namespace WolvenKit.Views.Documents
 
                     foreach (var cvp in matInstance.Values)
                     {
-                        var value = ArchiveXlHelper.UnDynamifyResourceReference(cvp.Value, newMatName);
+                        var value = cvp.Value switch
+                        {
+                            CResourceReference<Multilayer_Setup> mlsetup => new CResourceReference<Multilayer_Setup>(
+                                ReplaceMaterialPath(mlsetup.DepotPath, newMatName), InternalEnums.EImportFlags.Default),
+                            CResourceReference<Multilayer_Mask> mlmask => new CResourceReference<Multilayer_Mask>(
+                                ReplaceMaterialPath(mlmask.DepotPath, newMatName), InternalEnums.EImportFlags.Default),
+                            CResourceReference<ITexture> tex => new CResourceReference<ITexture>(
+                                ReplaceMaterialPath(tex.DepotPath, newMatName), InternalEnums.EImportFlags.Default),
+                            CResourceAsyncReference<Multilayer_Setup> mlsetup => new
+                                CResourceAsyncReference<Multilayer_Setup>(
+                                    ReplaceMaterialPath(mlsetup.DepotPath, newMatName),
+                                    InternalEnums.EImportFlags.Default),
+                            CResourceAsyncReference<Multilayer_Mask> mlmask => new
+                                CResourceAsyncReference<Multilayer_Mask>(
+                                    ReplaceMaterialPath(mlmask.DepotPath, newMatName),
+                                    InternalEnums.EImportFlags.Default),
+                            CResourceAsyncReference<ITexture> tex => new CResourceAsyncReference<ITexture>(
+                                ReplaceMaterialPath(tex.DepotPath, newMatName), InternalEnums.EImportFlags.Default),
+                            IRedResourceReference val => new CResourceReference<CResource>(
+                                ReplaceMaterialPath(val.DepotPath, newMatName), InternalEnums.EImportFlags.Default),
+                            IRedResourceAsyncReference asyncVal => new CResourceAsyncReference<CResource>(
+                                ReplaceMaterialPath(asyncVal.DepotPath, newMatName),
+                                InternalEnums.EImportFlags.Default),
+                            _ => cvp.Value
+                        };
 
                         newMaterialInstance.Values.Add(new CKeyValuePair(cvp.Key, value));
                     }
@@ -441,6 +469,10 @@ namespace WolvenKit.Views.Documents
             cvm.Tab?.Parent.SetIsDirty(true);
 
             ViewModel?.DeleteUnusedMaterialsCommand?.NotifyCanExecuteChanged();
+            return;
+
+            static string ReplaceMaterialPath(ResourcePath? depotPath, string newMatName) =>
+                (depotPath?.GetResolvedText() ?? "").Replace("{material}", newMatName).Replace("*", "");
         }
 
         private void OnUnDynamifyMaterialsClick(object _, RoutedEventArgs e) => UnDynamifyMaterials(RootChunk);
