@@ -906,8 +906,9 @@ public partial class AssetBrowserViewModel : ToolViewModel
     // Negative regexps are extremely fraught even when not synthesized,
     // so instead we simply fail on a negative match (with the corresponding
     // positive match so that we know the refinement is otherwise satisfied).
+    // Prevent nesting: If term contains !!, ignore
     private static readonly Func<Term, Term> s_allowExcludingTerm = term =>
-        !s_negation.IsMatch(term.Pattern)
+        term.Pattern.Contains("!!") || !s_negation.IsMatch(term.Pattern)
             ? term with { Type = TermType.Include }
             : term with
             {
@@ -1127,7 +1128,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
         if (SearchBarText is not null)
         {
-            await PerformSearch(SearchBarText);
+            await PerformSearch(SearchBarText.Trim());
         }
     }
 
