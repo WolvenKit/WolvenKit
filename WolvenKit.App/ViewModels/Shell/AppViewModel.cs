@@ -79,7 +79,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly AppScriptService _scriptService;
     private readonly DocumentTools _documentTools;
     private readonly Cr2WTools _cr2WTools;
-    private readonly TemplateFileTools _templateFileTools;
+    public readonly TemplateFileTools TemplateFileTools;
     private readonly IWatcherService _watcherService;
     private readonly ArchiveXlItemService _archiveXlItemService;
     private readonly IUpdateService _updateService;
@@ -138,7 +138,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _scriptService = scriptService;
         _documentTools = documentTools;
         _cr2WTools = cr2WTools;
-        _templateFileTools = templateFileTools;
+        TemplateFileTools = templateFileTools;
         ProjectResourceTools = projectResourceTools;
         _updateService = updateService;
 
@@ -1910,6 +1910,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     //[NotifyCanExecuteChangedFor(nameof(CloseModalCommand))]
     [NotifyCanExecuteChangedFor(nameof(CloseDialogCommand))]
     [NotifyCanExecuteChangedFor(nameof(AddAXlItemFilesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddOrEditRadioCommand))]
     private bool _isDialogShown;
 
     [ObservableProperty]
@@ -1940,6 +1941,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(GeneratePropItemCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateInkatlasCommand))]
     [NotifyCanExecuteChangedFor(nameof(AddAXlItemFilesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddOrEditRadioCommand))]
     private Cp77Project? _activeProject;
 
     [ObservableProperty]
@@ -1957,6 +1959,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(AddPlayerHeadCommand))]
     [NotifyCanExecuteChangedFor(nameof(RegisterWorldbuilderFilesCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateInkatlasCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddAXlItemFilesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddOrEditRadioCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddOrEditRadioCommand))]
     private EAppStatus? _status;
 
     [ObservableProperty]
