@@ -104,6 +104,10 @@ public partial class AddSectorVariantDialogViewModel() : ObservableObject
 
     public void GenerateResults()
     {
+        if (string.IsNullOrEmpty(NewVariantNameOrPrefix) && !string.IsNullOrEmpty(TemplateVariant))
+        {
+            NewVariantNameOrPrefix = TemplateVariant + "_";
+        }
         NewAppearances = (ReplaceInAppearances ?? "").Split("\n").Select(s => s.Trim())
             .Where(s => !string.IsNullOrEmpty(s)).ToList();
 
@@ -121,6 +125,10 @@ public partial class AddSectorVariantDialogViewModel() : ObservableObject
         switch (e.PropertyName)
         {
             case nameof(TemplateVariant):
+                if (string.IsNullOrEmpty(NewVariantNameOrPrefix))
+                {
+                    NewVariantNameOrPrefix = TemplateVariant + "_";
+                }
                 ReadStreamingSector();
                 break;
             case nameof(ReplaceInAppearances):
