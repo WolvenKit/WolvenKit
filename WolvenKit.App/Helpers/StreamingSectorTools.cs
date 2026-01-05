@@ -94,7 +94,7 @@ public class StreamingSectorTools
 
         var sectorStartIndex = sector.VariantIndices[(int)(rangeIndex)];
         var sectorEndIndex = nodeData.Count;
-        if (rangeIndex < sector.VariantIndices.Count + 1)
+        if (rangeIndex + 1 < sector.VariantIndices.Count)
         {
             sectorEndIndex = sector.VariantIndices[(int)(rangeIndex + 1)];
         }
@@ -202,11 +202,19 @@ public class StreamingSectorTools
             return;
         }
 
-        var variantLuaEntries =
-            newVariantNames.Select(v => CreateVariant(originalLuaEntry, oldVariantName, v)).ToList();
-        variantLuaEntries.Reverse();
-
         var content = File.ReadAllText(luaAbsPath);
+
+        var variantLuaEntries =
+            newVariantNames
+                .Where(v => !content.Contains(v))
+                .Select(v => (CreateVariant(originalLuaEntry, oldVariantName, v) ?? "").Trim())
+                .Where(name => !string.IsNullOrEmpty(name)).ToList();
+
+        if (variantLuaEntries.Count == 0)
+        {
+            return;
+        }
+        variantLuaEntries.Reverse();
         content = variantLuaEntries.Aggregate(content,
             (current, newLuaEntry) => current.Replace(originalLuaEntry, $"{originalLuaEntry},\n{newLuaEntry}"));
 
@@ -298,9 +306,12 @@ public class StreamingSectorTools
             {
                 continue;
             }
+
             AddVariantInStreamingBlock(rangeIndex, variantName, matchingDescriptor, matchingVariant);
             newVariants.Add(variantName);
+            matchingDescriptor.NumNodeRanges += 1;
         }
+
 
         if (newVariants.Count == 0)
         {
@@ -321,7 +332,6 @@ public class StreamingSectorTools
 
         // TODO fix this
         AddVariantToLuaFile(result.TemplateVariant, newVariants, project);
-
 
         _loggerService.Success($"Added {newVariants.Count} variants. Don't forget to save your file!");
         _notificationService.Success($"Added {newVariants.Count} variants. Don't forget to save your file!");
