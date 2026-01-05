@@ -206,7 +206,7 @@ public class StreamingSectorTools
 
         var variantLuaEntries =
             newVariantNames
-                .Where(v => !content.Contains(v))
+                .Where(v => !content.Contains($"\"{v}\""))
                 .Select(v => (CreateVariant(originalLuaEntry, oldVariantName, v) ?? "").Trim())
                 .Where(name => !string.IsNullOrEmpty(name)).ToList();
 
@@ -216,7 +216,8 @@ public class StreamingSectorTools
         }
         variantLuaEntries.Reverse();
         content = variantLuaEntries.Aggregate(content,
-            (current, newLuaEntry) => current.Replace(originalLuaEntry, $"{originalLuaEntry},\n{newLuaEntry}"));
+            (current, newLuaEntry) =>
+                current.Replace(originalLuaEntry, $"{originalLuaEntry},\n            {newLuaEntry}"));
 
         File.WriteAllText(luaAbsPath, content);
     }
