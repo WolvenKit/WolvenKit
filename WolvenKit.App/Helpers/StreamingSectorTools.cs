@@ -203,7 +203,13 @@ public class StreamingSectorTools
         }
 
         var variantLuaEntries =
-            newVariantNames.Select(v => CreateVariant(originalLuaEntry, oldVariantName, v)).ToList();
+            newVariantNames.Select(v => (CreateVariant(originalLuaEntry, oldVariantName, v) ?? "").Trim())
+                .Where(s => !string.IsNullOrEmpty(s)).ToList();
+
+        if (variantLuaEntries.Count == 0)
+        {
+            return;
+        }
         variantLuaEntries.Reverse();
 
         var content = File.ReadAllText(luaAbsPath);
