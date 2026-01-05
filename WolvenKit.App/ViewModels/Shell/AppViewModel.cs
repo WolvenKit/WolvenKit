@@ -1575,13 +1575,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 continue;
             }
 
-            var result = Interactions.ShowConfirmation((
-                $"The file {documentViewModel.FilePath} has been modified externally. Do you want to reload it?",
-                "File Modified",
-                WMessageBoxImage.Question,
-                WMessageBoxButtons.YesNo));
-
-            if (result == WMessageBoxResult.Yes)
+            if (!documentViewModel.IsDirty || Interactions.ShowConfirmation((
+                    $"The file {documentViewModel.FilePath} has been modified externally. Do you want to reload it?",
+                    "File Modified",
+                    WMessageBoxImage.Question,
+                    WMessageBoxButtons.YesNo)) == WMessageBoxResult.Yes)
             {
                 documentViewModel.Reload(true);
             }
