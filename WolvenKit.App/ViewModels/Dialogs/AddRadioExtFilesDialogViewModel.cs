@@ -26,15 +26,13 @@ public class RadioSongItem
 
     public override string ToString() => $"{Index:D2} - {FilePath}";
 
-    public override bool Equals(object? obj) => base.Equals(obj);
-
-    protected bool Equals(RadioSongItem other) => FilePath == other.FilePath;
+    public override bool Equals(object? obj) => obj is RadioSongItem other && FilePath == other.FilePath;
 
     public override int GetHashCode() => FilePath.GetHashCode();
 }
 
 /// <summary>
-/// A simple "search and replace" dialog. Needs to register in GenericHost via AddTransient.
+/// Dialog model to add/edit RadioExt station.
 /// </summary>
 public partial class AddRadioExtFilesDialogViewModel() : ObservableObject
 {
