@@ -34,7 +34,7 @@ public class RadioSongItem
 }
 
 /// <summary>
-/// A simple "search and replace" dialog. Needs to register in GenericHost via AddTransient.
+/// Dialog model to add/edit RadioExt station.
 /// </summary>
 public partial class AddRadioExtFilesDialogViewModel() : ObservableObject
 {
