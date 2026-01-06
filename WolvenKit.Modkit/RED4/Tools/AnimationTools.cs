@@ -83,6 +83,16 @@ namespace WolvenKit.Modkit.RED4
                 }
                 var skin = gltfModel.CreateSkin("Armature");
                 skin.BindJoints(RIG.ExportNodes(ref gltfModel, rig).Values.ToArray());
+                var rigExtras = new
+                {
+                    rigPath = anims.Rig.DepotPath.GetResolvedText(),
+                    boneNames = rig.Names,
+                    boneParentIndexes = rig.Parent,
+                    trackNames = rig.TrackNames 
+                };
+
+                skin.Extras = JsonSerializer.SerializeToNode(rigExtras, Gltf.SerializationOptions());
+
             }
 
             var gltfSkin = gltfModel.LogicalSkins.FirstOrDefault(_ => _.Name is "Armature");
