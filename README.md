@@ -79,7 +79,6 @@ For any questions:
 Developer | Role | Email
 ------------ | ------------- | -------------
 [Seberoth](https://github.com/seberoth) | Project Lead / Core Development | 
-[Rfuzzo](https://github.com/rfuzzo) | Project Lead / Core Development | [Email](mailto:r.fuzzo@gmail.com) 
 [Traderain](https://github.com/Traderain) | Project Lead | [Email](mailto:hambalko.bence@gmail.com) 
 
 ## Screenshots
