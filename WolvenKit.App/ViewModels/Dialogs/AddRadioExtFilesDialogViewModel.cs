@@ -26,9 +26,7 @@ public class RadioSongItem
 
     public override string ToString() => $"{Index:D2} - {FilePath}";
 
-    public override bool Equals(object? obj) => base.Equals(obj);
-
-    protected bool Equals(RadioSongItem other) => FilePath == other.FilePath;
+    public override bool Equals(object? obj) => obj is RadioSongItem other && FilePath == other.FilePath;
 
     public override int GetHashCode() => FilePath.GetHashCode();
 }
