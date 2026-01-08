@@ -11,6 +11,10 @@ namespace WolvenKit.App.Helpers;
 
 /// <summary>
 /// This class takes a <see cref="ChunkViewModel"/> and returns a list of compatible strings for the view.
+/// To register a dropdown menu for a view, you have to do the following things: 
+/// 1. adjust HasDropdownOptions (the switch case matches on cvm's PARENT)
+/// 2. adjust GetDropdownOptions (switch case matches on cvm's PARENT)
+/// 3. optional: adjust ShouldShowRefreshButton (switch casse matches on cvm's ROOT)
 /// </summary>
 public abstract class CvmDropdownHelper
 {
@@ -995,7 +999,9 @@ public abstract class CvmDropdownHelper
     }
 
     /// <summary>
-    /// Show the refresh button (e.g. to load data from a different file)?
+    /// Show the refresh button?
+    /// If other files need to be parsed to display the options, they aren't loaded on every change,
+    /// but instead only refresh on a click of the button
     /// </summary>
     public static bool ShouldShowRefreshButton(ChunkViewModel cvm)
     {
