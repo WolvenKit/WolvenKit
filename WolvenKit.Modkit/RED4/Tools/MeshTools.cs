@@ -14,6 +14,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.Exceptions;
+using WolvenKit.Modkit.Extensions;
 using WolvenKit.Modkit.RED4.Animation;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
@@ -28,93 +29,6 @@ using Vec4 = System.Numerics.Vector4;
 
 namespace WolvenKit.Modkit.RED4.Tools
 {
-    public static class BoneIndicesHelper
-    {
-        public static string[] SetWithResize(this string[] array, string value)
-        {
-            var index = array?.Length ?? 0;
-            if (array == null)
-            {
-                // Create array large enough to hold this position
-                string[] newArray = new string[index + 1];
-                newArray[index] = value;
-                return newArray;
-            }
-
-            if (index < 0)
-                throw new IndexOutOfRangeException($"Index {index} cannot be negative");
-
-            if (index < array.Length)
-            {
-                // Index exists, just set the value
-                array[index] = value;
-                return array;
-            }
-            else
-            {
-                // Need to resize
-                string[] newArray = new string[index + 1];
-
-                // Copy existing elements
-                Array.Copy(array, newArray, array.Length);
-
-                // Initialize new positions with null
-                for (int i = array.Length; i < index; i++)
-                {
-                    newArray[i] = "";
-                }
-
-                // Set the requested value
-                newArray[index] = value;
-
-                return newArray;
-            }
-        }
-
-        public static T[,] SetValueWithResize<T>(this T[,] array, int row, int col, T value)
-        {
-            if (array == null)
-            {
-                // Create array large enough to hold this position
-                var newArray = new T[row + 1, col + 1];
-                newArray[row, col] = value;
-                return newArray;
-            }
-
-            int currentRows = array.GetLength(0);
-            int currentCols = array.GetLength(1);
-
-            // Check if we need to resize
-            bool needsResize = row >= currentRows || col >= currentCols;
-
-            if (!needsResize)
-            {
-                array[row, col] = value;
-                return array;
-            }
-
-            // Calculate new dimensions
-            int newRows = Math.Max(row + 1, currentRows);
-            int newCols = Math.Max(col + 1, currentCols);
-
-            var result = new T[newRows, newCols];
-
-            // Copy existing values
-            for (int i = 0; i < currentRows; i++)
-            {
-                for (int j = 0; j < currentCols; j++)
-                {
-                    result[i, j] = array[i, j];
-                }
-            }
-
-            // Set the new value
-            result[row, col] = value;
-
-            return result;
-        }
-    }
-
     public class MeshTools
     {
         private readonly Red4ParserService _red4ParserService;
@@ -748,7 +662,6 @@ namespace WolvenKit.Modkit.RED4.Tools
                 throw new WolvenKitException(0x2005, $"\nThe destination mesh has no bones");
             }
 
-            HashSet<string> bonesNotFound = [];
             // No bones
             if (!(existingArmature is { BoneCount: > 0 } && importedArmature is { BoneCount: > 0 }))
             {
@@ -805,19 +718,15 @@ namespace WolvenKit.Modkit.RED4.Tools
                         var newIndex = existingArmature.Names.Length;
                         // Append bone name at the end of the array
 
-                        existingArmature.Names = existingArmature.Names.SetWithResize(boneName);
-                        mesh.boneindices = mesh.boneindices.SetValueWithResize(e, newIndex, (ushort)0);
-
-                        mesh.boneindices[e, (ushort)newIndex] = 0;
                         existingArmature.BoneCount += 1;
-
+                        existingArmature.Names = existingArmature.Names.SetWithResize(boneName);
+                        mesh.boneindices = mesh.boneindices.SetWithResize(
+                            e,
+                            newIndex,
+                            (ushort)existingArmature.BoneCount
+                        );
                     }
                 }
-            }
-
-            if (bonesNotFound.Any())
-            {
-                throw new WolvenKitException(0x2005, $"\n{string.Join("\n", bonesNotFound)}");
             }
         }
 
