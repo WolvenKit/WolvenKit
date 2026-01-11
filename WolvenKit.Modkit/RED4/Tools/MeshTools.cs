@@ -654,6 +654,8 @@ namespace WolvenKit.Modkit.RED4.Tools
             return (numLodLevels, numSubmeshesPerLod);
         }
 
+        public static readonly HashSet<string> CreatedBones = [];
+
         public static void UpdateMeshJoints(ref List<RawMeshContainer> meshes, RawArmature? existingArmature,
             RawArmature? importedArmature, string fileName = "")
         {
@@ -725,6 +727,8 @@ namespace WolvenKit.Modkit.RED4.Tools
                             newIndex,
                             (ushort)existingArmature.BoneCount
                         );
+
+                        CreatedBones.Add(boneName);
                     }
                 }
             }
