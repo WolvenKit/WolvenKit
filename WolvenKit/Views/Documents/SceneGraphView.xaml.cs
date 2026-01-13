@@ -751,18 +751,35 @@ namespace WolvenKit.Views.Documents
         }
 
         /// <summary>
-        /// Checks if the currently focused element is a text editing control
+        /// Checks if the currently focused element is a text editing control or timeline
         /// </summary>
         private bool IsTextEditingControlFocused()
         {
             var focusedElement = Keyboard.FocusedElement;
             
             // Check for text editing controls
-            return focusedElement is TextBox or 
+            if (focusedElement is TextBox or 
                    RichTextBox or 
                    PasswordBox or
                    System.Windows.Controls.ComboBox { IsEditable: true } or
-                   System.Windows.Documents.TextElement;
+                   System.Windows.Documents.TextElement)
+            {
+                return true;
+            }
+            
+            // Check if timeline control has focus
+            if (focusedElement is DependencyObject depObj)
+            {
+                var current = depObj;
+                while (current != null)
+                {
+                    if (current is WolvenKit.Views.Timeline.SectionTimelineView)
+                        return true;
+                    current = VisualTreeHelper.GetParent(current);
+                }
+            }
+            
+            return false;
         }
 
         /// <summary>

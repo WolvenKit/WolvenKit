@@ -7,6 +7,7 @@
     xmlns:documents="clr-namespace:WolvenKit.App.ViewModels.Documents;assembly=WolvenKit.App"
     xmlns:local="clr-namespace:WolvenKit.Views.Documents"
     xmlns:graphEditor="clr-namespace:WolvenKit.Views.GraphEditor"
+    xmlns:timeline="clr-namespace:WolvenKit.Views.Timeline"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:shell="clr-namespace:WolvenKit.App.ViewModels.Shell;assembly=WolvenKit.App"
     xmlns:tools="clr-namespace:WolvenKit.Views.Tools"
@@ -215,11 +216,19 @@
 
         <!-- Main Content -->
         <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="3*" />
-            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" MinHeight="0"/>
+            </Grid.RowDefinitions>
+            
+            <!-- Top section: Left Panel + Graph Editor side by side -->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="3*" />
+                </Grid.ColumnDefinitions>
 
             <!-- Left Panel: Curated Tab Control -->
             <syncfusion:TabControlExt
@@ -401,7 +410,7 @@
                 HorizontalAlignment="Stretch"
                 Background="#FF404040" />
 
-            <!-- Right Panel: Graph Editor -->
+            <!-- Right Panel: Graph Editor Only -->
             <Grid Grid.Column="2">
                 <graphEditor:GraphEditorView
                     x:Name="SceneGraphEditor"
@@ -456,6 +465,22 @@
                     </StackPanel>
                 </Border>
             </Grid>
+            </Grid>
+            
+            <!-- Horizontal Splitter between main content and Timeline (only visible when timeline is shown) -->
+            <GridSplitter
+                Grid.Row="1"
+                Height="4"
+                HorizontalAlignment="Stretch"
+                Background="#FF404040"
+                Visibility="{Binding ElementName=TimelinePanel, Path=DataContext.HasSectionNode, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            
+            <!-- Timeline Panel - spans full width, visible only when section node is selected -->
+            <timeline:SectionTimelineView
+                Grid.Row="2"
+                x:Name="TimelinePanel"
+                MinHeight="120"
+                Visibility="{Binding ElementName=TimelinePanel, Path=DataContext.HasSectionNode, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Grid>
     </Grid>
 </UserControl>
