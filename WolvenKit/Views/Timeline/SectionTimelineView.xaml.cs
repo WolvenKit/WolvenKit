@@ -7,6 +7,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using WolvenKit.App.Helpers;
+using WolvenKit.App.Models.Timeline;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Timeline;
 
@@ -18,27 +20,26 @@ namespace WolvenKit.Views.Timeline;
 public partial class SectionTimelineView : UserControl
 {
     private SectionTimelineViewModel? _viewModel;
-    private readonly Dictionary<TimelineEventViewModel, Border> _eventElements = new();
+    private readonly Dictionary<TimelineEvent, Border> _eventElements = new();
     
-    private TimelineEventViewModel? _draggedEvent;
+    private TimelineEvent? _draggedEvent;
     private bool _isResizing;
-    private bool _isDragActive; // True only after drag threshold exceeded
+    private bool _isDragActive;
     private Point _dragStartPoint;
     private uint _dragStartTime;
     private uint _dragStartDuration;
     private int _dragStartRow;
-    private double _dragTrackYOffset; // Y offset of the track containing the dragged event
+    private double _dragTrackYOffset;
     
-    // Selection highlighting
-    private TimelineEventViewModel? _selectedEvent;
+    private TimelineEvent? _selectedEvent;
     private Border? _selectedBorder;
-    private const double DragThreshold = 5.0; // Pixels to move before drag starts
+    private Border? _activeResizeGrip;
+    private const double DragThreshold = 5.0;
 
     public SectionTimelineView()
     {
         InitializeComponent();
         
-        // Create and set the ViewModel
         _viewModel = new SectionTimelineViewModel();
         DataContext = _viewModel;
         _viewModel.PropertyChanged += ViewModel_PropertyChanged;
@@ -47,6 +48,24 @@ public partial class SectionTimelineView : UserControl
         SizeChanged += OnSizeChanged;
         
         PreviewKeyDown += OnPreviewKeyDown;
+        PreviewMouseLeftButtonUp += OnGlobalMouseLeftButtonUp;
+    }
+    
+    private void OnGlobalMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+        if (_isResizing)
+        {
+            _draggedEvent = null;
+            _isResizing = false;
+            _activeResizeGrip?.ReleaseMouseCapture();
+            _activeResizeGrip = null;
+            
+            if (_viewModel != null)
+            {
+                _viewModel.IsDragging = false;
+                _viewModel.RefreshAfterDrag();
+            }
+        }
     }
     
     private void OnPreviewKeyDown(object sender, KeyEventArgs e)
@@ -82,6 +101,11 @@ public partial class SectionTimelineView : UserControl
 
     private void ViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
+        if (_draggedEvent != null || _isResizing)
+        {
+            return;
+        }
+
         if (e.PropertyName is nameof(SectionTimelineViewModel.HasSectionNode) 
             or nameof(SectionTimelineViewModel.PixelsPerMs)
             or nameof(SectionTimelineViewModel.SectionDuration)
@@ -108,7 +132,9 @@ public partial class SectionTimelineView : UserControl
     private void RenderTimeRuler()
     {
         if (TimeRulerCanvas == null || _viewModel == null)
+        {
             return;
+        }
 
         TimeRulerCanvas.Children.Clear();
 
@@ -116,7 +142,9 @@ public partial class SectionTimelineView : UserControl
         var pixelsPerMs = _viewModel.PixelsPerMs;
         
         if (duration == 0 || pixelsPerMs == 0)
+        {
             return;
+        }
 
         // Determine tick interval based on zoom level
         uint tickInterval = GetTickInterval(pixelsPerMs);
@@ -164,7 +192,9 @@ public partial class SectionTimelineView : UserControl
     private static string FormatTime(uint ms)
     {
         if (ms < 1000)
+        {
             return $"{ms}ms";
+        }
         
         var seconds = ms / 1000.0;
         return $"{seconds:F1}s";
@@ -173,7 +203,9 @@ public partial class SectionTimelineView : UserControl
     private void RenderEvents()
     {
         if (TimelineCanvas == null || _viewModel == null)
+        {
             return;
+        }
 
         TimelineCanvas.Children.Clear();
         _eventElements.Clear();
@@ -181,15 +213,13 @@ public partial class SectionTimelineView : UserControl
         var pixelsPerMs = _viewModel.PixelsPerMs;
         double yOffset = 0;
 
-        // Render grid lines first
         RenderGridLines();
 
         foreach (var track in _viewModel.Tracks)
         {
-            var trackHeight = track.TrackHeight;
-            var rowHeight = track.RowHeight;
+            var trackHeight = _viewModel.GetTrackHeight(track);
+            var rowHeight = _viewModel.GetRowHeight();
 
-            // Track background/separator
             var trackBg = new Rectangle
             {
                 Width = _viewModel.TimelineWidth,
@@ -202,7 +232,6 @@ public partial class SectionTimelineView : UserControl
             Canvas.SetTop(trackBg, yOffset);
             TimelineCanvas.Children.Add(trackBg);
 
-            // Render events in this track, positioned by their Row
             foreach (var evt in track.Events)
             {
                 var eventYOffset = yOffset + (evt.Row * rowHeight) + 2;
@@ -214,7 +243,6 @@ public partial class SectionTimelineView : UserControl
             yOffset += trackHeight;
         }
 
-        // Set canvas height
         TimelineCanvas.SetCurrentValue(HeightProperty, yOffset);
     }
 
@@ -225,7 +253,7 @@ public partial class SectionTimelineView : UserControl
 
         var pixelsPerMs = _viewModel.PixelsPerMs;
         var duration = _viewModel.SectionDuration;
-        var totalHeight = _viewModel.Tracks.Sum(t => t.TrackHeight);
+        var totalHeight = _viewModel.TotalTrackHeight;
         
         uint gridInterval = GetTickInterval(pixelsPerMs);
         
@@ -245,17 +273,17 @@ public partial class SectionTimelineView : UserControl
         }
     }
 
-    private Border CreateEventElement(TimelineEventViewModel evt, double yOffset, double trackHeight)
+    private Border CreateEventElement(TimelineEvent evt, double yOffset, double trackHeight)
     {
         const double eventHeight = 50;
         var pixelsPerMs = _viewModel!.PixelsPerMs;
         var x = evt.StartTime * pixelsPerMs;
-
         var width = Math.Max(80, evt.Duration * pixelsPerMs);
+        var eventColor = TimelineColorHelper.GetColorForEventType(evt.EventType);
 
         var border = new Border
         {
-            Background = new SolidColorBrush(evt.Color),
+            Background = new SolidColorBrush(eventColor),
             CornerRadius = new CornerRadius(4),
             Height = eventHeight,
             MinWidth = 80,
@@ -264,14 +292,12 @@ public partial class SectionTimelineView : UserControl
             ToolTip = $"{evt.DisplayLabel}\nStart: {evt.StartTime}ms\nDuration: {evt.Duration}ms"
         };
 
-        // Two-line layout: Title on top, Details below
         var stackPanel = new StackPanel
         {
             Margin = new Thickness(8, 6, 12, 6),
             VerticalAlignment = VerticalAlignment.Center
         };
 
-        // Title line (bigger font)
         var titleLabel = new TextBlock
         {
             Text = evt.TitleLine,
@@ -281,7 +307,6 @@ public partial class SectionTimelineView : UserControl
         };
         titleLabel.SetResourceReference(TextBlock.FontSizeProperty, "WolvenKitFontSubTitle");
 
-        // Details line (smaller font)
         var detailsLabel = new TextBlock
         {
             Text = evt.DetailsLine,
@@ -296,7 +321,6 @@ public partial class SectionTimelineView : UserControl
             stackPanel.Children.Add(detailsLabel);
         }
 
-        // Resize grip
         var resizeGrip = new Border
         {
             Background = Brushes.Transparent,
@@ -315,14 +339,17 @@ public partial class SectionTimelineView : UserControl
         Canvas.SetTop(border, yOffset + (trackHeight - eventHeight) / 2);
         border.Width = width;
 
-        // Mouse events for the resize grip
         resizeGrip.MouseLeftButtonDown += (s, e) =>
         {
             _isResizing = true;
             _draggedEvent = evt;
+            _activeResizeGrip = resizeGrip;
             _dragStartPoint = e.GetPosition(TimelineCanvas);
             _dragStartDuration = evt.Duration;
-            if (_viewModel != null) _viewModel.IsDragging = true;
+            if (_viewModel != null)
+            {
+                _viewModel.IsDragging = true;
+            }
             resizeGrip.CaptureMouse();
             e.Handled = true;
         };
@@ -333,9 +360,9 @@ public partial class SectionTimelineView : UserControl
             {
                 _isResizing = false;
                 _draggedEvent = null;
+                _activeResizeGrip = null;
                 resizeGrip.ReleaseMouseCapture();
                 
-                // End resize and refresh rows
                 if (_viewModel != null)
                 {
                     _viewModel.IsDragging = false;
@@ -366,7 +393,7 @@ public partial class SectionTimelineView : UserControl
         return border;
     }
 
-    private void UpdateEventElement(TimelineEventViewModel evt)
+    private void UpdateEventElement(TimelineEvent evt)
     {
         if (!_eventElements.TryGetValue(evt, out var border) || _viewModel == null)
             return;
@@ -380,9 +407,10 @@ public partial class SectionTimelineView : UserControl
     private void TimelineCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         if (_viewModel == null || _isResizing)
+        {
             return;
+        }
 
-        // Capture keyboard focus to block shortcuts from propagating
         Focus();
         
         var point = e.GetPosition(TimelineCanvas);
@@ -391,34 +419,54 @@ public partial class SectionTimelineView : UserControl
         var hitElement = TimelineCanvas.InputHitTest(point) as DependencyObject;
         while (hitElement != null && hitElement != TimelineCanvas)
         {
-            if (hitElement is Border border && border.Tag is TimelineEventViewModel evt)
+            if (hitElement is Border border && border.Tag is TimelineEvent evt)
             {
-                // Check if clicking on resize grip
                 var innerHit = border.InputHitTest(e.GetPosition(border)) as FrameworkElement;
                 if (innerHit?.Tag as string == "resize")
-                    return; // Let resize grip handle it
+                {
+                    return;
+                }
+                
+                var clickX = e.GetPosition(border).X;
+                var resizeZone = Math.Max(20, border.ActualWidth * 0.3);
+                if (clickX > border.ActualWidth - resizeZone && evt.Duration < 500)
+                {
+                    var eventRightEdge = (evt.StartTime + evt.Duration) * _viewModel.PixelsPerMs;
+                    _isResizing = true;
+                    _isDragActive = false;
+                    _draggedEvent = evt;
+                    _dragStartPoint = new Point(eventRightEdge, point.Y);
+                    _dragStartDuration = evt.Duration;
+                    _dragStartTime = evt.StartTime;
+                    if (_viewModel != null)
+                    {
+                        _viewModel.IsDragging = true;
+                    }
+                    TimelineCanvas.CaptureMouse();
+                    e.Handled = true;
+                    return;
+                }
 
-                // Apply selection highlight
                 SelectEvent(evt, border);
 
                 _draggedEvent = evt;
                 _dragStartPoint = point;
                 _dragStartTime = evt.StartTime;
                 _dragStartRow = evt.Row;
-                _isDragActive = false; // Don't start dragging until threshold exceeded
+                _isDragActive = false;
                 
-                // Calculate the Y offset of the track containing this event
                 _dragTrackYOffset = 0;
                 foreach (var track in _viewModel.Tracks)
                 {
                     if (track.Events.Contains(evt))
+                    {
                         break;
-                    _dragTrackYOffset += track.TrackHeight;
+                    }
+                    _dragTrackYOffset += _viewModel.GetTrackHeight(track);
                 }
                 
                 TimelineCanvas.CaptureMouse();
                 
-                // Select this event in the property panel
                 SelectEventInPropertyPanel(evt);
                 
                 e.Handled = true;
@@ -427,7 +475,6 @@ public partial class SectionTimelineView : UserControl
             hitElement = VisualTreeHelper.GetParent(hitElement);
         }
         
-        // Clicked on empty space - deselect current event but keep focus
         if (_selectedBorder != null && _selectedEvent != null)
         {
             _selectedBorder.SetCurrentValue(Border.BorderBrushProperty, null);
@@ -439,16 +486,14 @@ public partial class SectionTimelineView : UserControl
         e.Handled = true;
     }
     
-    private void SelectEvent(TimelineEventViewModel evt, Border border)
+    private void SelectEvent(TimelineEvent evt, Border border)
     {
-        // Remove highlight from previously selected event
         if (_selectedBorder != null && _selectedEvent != null)
         {
             _selectedBorder.SetCurrentValue(Border.BorderBrushProperty, null);
             _selectedBorder.SetCurrentValue(Border.BorderThicknessProperty, new Thickness(0));
         }
         
-        // Apply highlight to newly selected event
         _selectedEvent = evt;
         _selectedBorder = border;
         border.SetCurrentValue(Border.BorderBrushProperty, Brushes.White);
@@ -462,7 +507,6 @@ public partial class SectionTimelineView : UserControl
             _draggedEvent = null;
             TimelineCanvas.ReleaseMouseCapture();
             
-            // End drag and refresh rows only if drag was active
             if (_viewModel != null && _isDragActive)
             {
                 _viewModel.IsDragging = false;
@@ -474,35 +518,56 @@ public partial class SectionTimelineView : UserControl
 
     private void TimelineCanvas_MouseMove(object sender, MouseEventArgs e)
     {
-        if (_draggedEvent == null || _isResizing || _viewModel == null)
+        if (_draggedEvent == null || _viewModel == null)
+        {
             return;
+        }
+        
+        if (_isResizing)
+        {
+            var resizePoint = e.GetPosition(TimelineCanvas);
+            var resizeDeltaX = resizePoint.X - _dragStartPoint.X;
+            var resizeDeltaMs = (int)(resizeDeltaX / _viewModel.PixelsPerMs);
+            
+            var newDuration = (uint)Math.Max(0, (int)_dragStartDuration + resizeDeltaMs);
+            newDuration = _viewModel.SnapValue(newDuration);
+            
+            if (newDuration > 0)
+            {
+                _draggedEvent.Duration = newDuration;
+                UpdateEventElement(_draggedEvent);
+            }
+            return;
+        }
 
         var currentPoint = e.GetPosition(TimelineCanvas);
         var deltaX = currentPoint.X - _dragStartPoint.X;
         var deltaY = currentPoint.Y - _dragStartPoint.Y;
         
-        // Check if drag threshold exceeded (reduces accidental drags on click)
         if (!_isDragActive)
         {
             var distance = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
             if (distance < DragThreshold)
-                return; // Not dragging yet, just a click
+            {
+                return;
+            }
                 
-            // Threshold exceeded - start actual drag
             _isDragActive = true;
             _viewModel.IsDragging = true;
         }
         
-        // Horizontal movement (time)
+        if (_isResizing)
+        {
+            return;
+        }
+        
         var deltaMs = (int)(deltaX / _viewModel.PixelsPerMs);
         
         var newStartTime = (uint)Math.Max(0, (int)_dragStartTime + deltaMs);
         newStartTime = _viewModel.SnapValue(newStartTime);
         _draggedEvent.StartTime = newStartTime;
         
-        // Vertical movement (row within track)
-        // Find the track containing this event and get its row height
-        TimelineTrackViewModel? eventTrack = null;
+        TimelineTrack? eventTrack = null;
         foreach (var track in _viewModel.Tracks)
         {
             if (track.Events.Contains(_draggedEvent))
@@ -514,14 +579,11 @@ public partial class SectionTimelineView : UserControl
         
         if (eventTrack != null)
         {
-            var rowHeight = eventTrack.RowHeight;
+            var rowHeight = _viewModel.GetRowHeight();
             var relativeY = currentPoint.Y - _dragTrackYOffset;
             var targetRow = Math.Max(0, (int)(relativeY / rowHeight));
             
-            // Set preferred row so the assignment algorithm respects it
             _draggedEvent.PreferredRow = targetRow;
-            
-            // Update visual position during drag
             UpdateEventElementWithRow(_draggedEvent, _dragTrackYOffset, rowHeight, targetRow);
         }
         else
@@ -530,10 +592,12 @@ public partial class SectionTimelineView : UserControl
         }
     }
     
-    private void UpdateEventElementWithRow(TimelineEventViewModel evt, double trackYOffset, double rowHeight, int row)
+    private void UpdateEventElementWithRow(TimelineEvent evt, double trackYOffset, double rowHeight, int row)
     {
         if (!_eventElements.TryGetValue(evt, out var border) || _viewModel == null)
+        {
             return;
+        }
 
         var pixelsPerMs = _viewModel.PixelsPerMs;
         Canvas.SetLeft(border, evt.StartTime * pixelsPerMs);
@@ -544,7 +608,6 @@ public partial class SectionTimelineView : UserControl
 
     private void TimelineCanvas_MouseLeave(object sender, MouseEventArgs e)
     {
-        // Don't cancel drag on mouse leave - user might be dragging past the edge
     }
     
     private void TrackScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
@@ -555,17 +618,18 @@ public partial class SectionTimelineView : UserControl
         }
     }
     
-    /// <summary>
-    /// Select the corresponding event in the property panel when a timeline item is clicked
-    /// </summary>
-    private void SelectEventInPropertyPanel(TimelineEventViewModel evt)
+    private void SelectEventInPropertyPanel(TimelineEvent evt)
     {
         if (_viewModel == null)
+        {
             return;
+        }
 
         var eventIndex = evt.EventIndex;
         if (eventIndex < 0)
+        {
             return;
+        }
             
         NodePropertyUpdateService.RequestEventSelection(eventIndex);
     }

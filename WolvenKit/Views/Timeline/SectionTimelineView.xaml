@@ -5,6 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:timeline="clr-namespace:WolvenKit.App.ViewModels.Timeline;assembly=WolvenKit.App"
+    xmlns:models="clr-namespace:WolvenKit.App.Models.Timeline;assembly=WolvenKit.App"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:converters="clr-namespace:WolvenKit.Converters"
     mc:Ignorable="d"
@@ -18,6 +19,7 @@
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <converters:MsToSecondsConverter x:Key="MsToSecondsConverter" />
         <converters:InverseBooleanToVisibilityConverter x:Key="InverseBoolToVis" />
+        <converters:HeightMultiplierToPixelsConverter x:Key="HeightToPixels" />
 
         <Style
             x:Key="TimelineEventStyle"
@@ -176,9 +178,10 @@
                     Background="#FF252526"
                     ItemsSource="{Binding Tracks}">
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type timeline:TimelineTrackViewModel}">
+                        <DataTemplate DataType="{x:Type models:TimelineTrack}">
                             <Border
-                                Height="{Binding TrackHeight}"
+                                Height="{Binding HeightMultiplier,
+                                                 Converter={StaticResource HeightToPixels}}"
                                 BorderBrush="{StaticResource BorderAlt}"
                                 BorderThickness="0,0,0,1">
                                 <StackPanel

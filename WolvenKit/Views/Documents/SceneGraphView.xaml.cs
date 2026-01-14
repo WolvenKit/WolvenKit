@@ -529,7 +529,7 @@ namespace WolvenKit.Views.Documents
             if (e.Key == Key.Delete)
             {
                 // Don't handle delete key if user is editing text
-                if (IsTextEditingControlFocused())
+                if (IsEditingContextActive())
                     return;
 
                 // Use SelectedNodes from underlying GraphEditor
@@ -577,7 +577,7 @@ namespace WolvenKit.Views.Documents
             if (e.Key == Key.C && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
             {
                 // Don't handle copy if user is editing text
-                if (IsTextEditingControlFocused())
+                if (IsEditingContextActive())
                     return;
 
                 var selectedNode = NodeSelectionService.Instance.SelectedNode;
@@ -592,7 +592,7 @@ namespace WolvenKit.Views.Documents
             if (e.Key == Key.V && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
             {
                 // Don't handle paste if user is editing text
-                if (IsTextEditingControlFocused())
+                if (IsEditingContextActive())
                     return;
 
                 if (GraphClipboardManager.CanPaste(viewModel.MainGraph.GraphType))
@@ -630,7 +630,7 @@ namespace WolvenKit.Views.Documents
             if (e.Key is Key.Left or Key.Right or Key.Up or Key.Down)
             {
                 // Don't handle arrow keys if user is editing text
-                if (IsTextEditingControlFocused())
+                if (IsEditingContextActive())
                     return;
                 
                 var currentNode = NodeSelectionService.Instance.SelectedNode;
@@ -753,7 +753,7 @@ namespace WolvenKit.Views.Documents
         /// <summary>
         /// Checks if the currently focused element is a text editing control or timeline
         /// </summary>
-        private bool IsTextEditingControlFocused()
+        private bool IsEditingContextActive()
         {
             var focusedElement = Keyboard.FocusedElement;
             
@@ -771,11 +771,15 @@ namespace WolvenKit.Views.Documents
             if (focusedElement is DependencyObject depObj)
             {
                 var current = depObj;
-                while (current != null)
+                const int maxDepth = 20;
+                var depth = 0;
+                
+                while (current != null && depth < maxDepth)
                 {
                     if (current is WolvenKit.Views.Timeline.SectionTimelineView)
                         return true;
                     current = VisualTreeHelper.GetParent(current);
+                    depth++;
                 }
             }
             
