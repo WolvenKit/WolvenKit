@@ -1002,5 +1002,13 @@ namespace WolvenKit.Views.Documents
         }
 
         #endregion
+        
+        private void TimelinePanel_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue is false)
+            {
+                TimelineRow.SetCurrentValue(RowDefinition.HeightProperty, GridLength.Auto);
+            }
+        }
     }
 }

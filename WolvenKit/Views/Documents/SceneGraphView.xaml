@@ -215,11 +215,11 @@
         </Border>
 
         <!-- Main Content -->
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" x:Name="MainContentGrid">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto" MinHeight="0"/>
+                <RowDefinition x:Name="TimelineRow" Height="Auto" MinHeight="0"/>
             </Grid.RowDefinitions>
             
             <!-- Top section: Left Panel + Graph Editor side by side -->
@@ -480,7 +480,8 @@
                 Grid.Row="2"
                 x:Name="TimelinePanel"
                 MinHeight="120"
-                Visibility="{Binding ElementName=TimelinePanel, Path=DataContext.HasSectionNode, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                Visibility="{Binding ElementName=TimelinePanel, Path=DataContext.HasSectionNode, Converter={StaticResource BooleanToVisibilityConverter}}"
+                IsVisibleChanged="TimelinePanel_IsVisibleChanged" />
         </Grid>
     </Grid>
 </UserControl>
