@@ -42,8 +42,23 @@ public partial class TimelineTrack : ObservableObject
         
         bool CanFitInRow(int row, uint start, uint end)
         {
-            if (row >= rowOccupancy.Count) return true;
-            return !rowOccupancy[row].Any(o => start < o.End && o.Start < end);
+            if (row >= rowOccupancy.Count)
+            {
+                return true;
+            }
+            
+            foreach (var o in rowOccupancy[row])
+            {
+                if (start == end && o.Start == o.End && start == o.Start)
+                {
+                    return false;
+                }
+                if (start < o.End && o.Start < end)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
         
         void AddToRow(int row, uint start, uint end)
