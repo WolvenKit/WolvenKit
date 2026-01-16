@@ -102,7 +102,7 @@ public class scnSectionNodeWrapper : BaseSceneViewModel<scnSectionNode>, IDynami
             detailsDict["Ff Strategy"] = strategy;
             detailsDict["Events"] = eventCount.ToString();
 
-            int counter = 1;
+            int counter = 0;
             foreach (var eventClass in _castedData.Events)
         {
             string evName = eventClass?.Chunk?.GetType().Name ?? "Undefined Event";

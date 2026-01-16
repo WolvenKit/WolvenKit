@@ -13,6 +13,11 @@ public abstract class BaseSceneViewModel : NodeViewModel, IRefreshableDetails
 {
     private readonly scnSceneResource? _sceneResource;
     
+    /// <summary>
+    /// The scene resource this node belongs to
+    /// </summary>
+    public scnSceneResource? SceneResource => _sceneResource;
+
     public override uint UniqueId => ((scnSceneGraphNode)Data).NodeId.Id;
 
     public Dictionary<ushort, string> InputSocketNames = new();
