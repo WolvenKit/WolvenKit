@@ -261,31 +261,38 @@ public partial class TimelineEvent : ObservableObject
     
     private string GetDialogText(scnDialogLineEvent dialogLine)
     {
-        if (dialogLine.ScreenplayLineId != null && _sceneResource != null)
+        if (dialogLine.ScreenplayLineId == null || _sceneResource == null)
         {
-            CUInt32 screenplayId = dialogLine.ScreenplayLineId.Id;
-            var screenplayLine = _sceneResource.ScreenplayStore?.Lines?.FirstOrDefault(line => line.ItemId?.Id == screenplayId);
-            
-            if (screenplayLine?.LocstringId != null && 
-                _sceneResource.LocStore?.VdEntries != null &&
-                _sceneResource.LocStore?.VpEntries != null)
-            {
-                CRUID locstringRuid = screenplayLine.LocstringId.Ruid;
-                var preferredLocaleId = WolvenKit.RED4.Types.Enums.scnlocLocaleId.en_us;
-                var vdEntry = _sceneResource.LocStore.VdEntries.FirstOrDefault(vd => 
-                    vd.LocstringId?.Ruid == locstringRuid && vd.LocaleId == preferredLocaleId);
-                
-                if (vdEntry?.VariantId != null)
-                {
-                    var vpEntry = _sceneResource.LocStore.VpEntries.FirstOrDefault(vp => vp.VariantId?.Ruid == vdEntry.VariantId.Ruid);
-                    if (vpEntry?.Content != null)
-                    {
-                        return StringHelper.Truncate(vpEntry.Content.ToString() ?? "", 40);
-                    }
-                }
-            }
+            return "";
         }
-        return "";
+
+        CUInt32 screenplayId = dialogLine.ScreenplayLineId.Id;
+        var screenplayLine = _sceneResource.ScreenplayStore?.Lines?.FirstOrDefault(line => line.ItemId?.Id == screenplayId);
+
+        if (screenplayLine?.LocstringId == null ||
+            _sceneResource.LocStore?.VdEntries == null ||
+            _sceneResource.LocStore?.VpEntries == null)
+        {
+            return "";
+        }
+
+        CRUID locstringRuid = screenplayLine.LocstringId.Ruid;
+        var preferredLocaleId = WolvenKit.RED4.Types.Enums.scnlocLocaleId.en_us;
+        var vdEntry = _sceneResource.LocStore.VdEntries.FirstOrDefault(vd => 
+            vd.LocstringId?.Ruid == locstringRuid && vd.LocaleId == preferredLocaleId);
+
+        if (vdEntry?.VariantId == null)
+        {
+            return "";
+        }
+
+        var vpEntry = _sceneResource.LocStore.VpEntries.FirstOrDefault(vp => vp.VariantId?.Ruid == vdEntry.VariantId.Ruid);
+        if (vpEntry?.Content == null)
+        {
+            return "";
+        }
+
+        return StringHelper.Truncate(vpEntry.Content.ToString() ?? "", 40);
     }
     
     private string GetAnimName(scnPlaySkAnimEvent skAnim)
