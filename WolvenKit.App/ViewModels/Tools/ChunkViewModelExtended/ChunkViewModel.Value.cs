@@ -23,8 +23,8 @@ public partial class ChunkViewModel
     {
         Value = "";
 
-        // nothing to calculate
-        if (ResolvedData is RedDummy)
+        // nothing to calculate - resolved data is dummy, or isDefault calculated from parent
+        if (IsDefault)
         {
             return;
         }
@@ -389,6 +389,7 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = true;
                 return;
 
+            #region app
             case appearanceAppearancePartOverrides partsOverrides:
                 if (GetPropertyChild("componentsOverrides") is ChunkViewModel cvm)
                 {
@@ -433,6 +434,42 @@ public partial class ChunkViewModel
 
                 IsValueExtrapolated = Value != string.Empty;
                 break;
+            case entEntityParametersBuffer buf
+                when buf.ParameterBuffers.Count > 0 && buf.ParameterBuffers[0] is
+                    { Data: CR2WList { Data: IRedArray ary } list }:
+                var sumComponentsData = 0;
+                foreach (var o in ary)
+                {
+                    if (o is not entGarmentParameter gp)
+                    {
+                        continue;
+                    }
+
+                    sumComponentsData += gp.ComponentsData.Count;
+                }
+
+                Value = $"{sumComponentsData}";
+
+
+                IsValueExtrapolated = true;
+                break;
+
+            case entGarmentParameter garmentParam:
+                Value = $"{garmentParam.ComponentsData.Count}";
+                IsValueExtrapolated = true;
+                break;
+
+            case entGarmentParameterComponentData garmentData when
+                Parent?.Parent?.Parent?.Parent?.Parent?.Parent?.Parent?.ResolvedData is
+                    appearanceAppearanceDefinition app &&
+                app.Components.FirstOrDefault(c => c.Id == garmentData.ComponentID) is entIComponent component:
+                Value = component.Name;
+                IsValueExtrapolated = true;
+                break;
+
+            #endregion
+
+            #region mesh
             case meshMeshAppearance { ChunkMaterials: not null } appearance:
                 Value = string.Join(", ", appearance.ChunkMaterials);
                 Value = $"[{appearance.ChunkMaterials.Count}] {Value}";
@@ -447,6 +484,8 @@ public partial class ChunkViewModel
                 Value = $"[ {string.Join(", ", materialDefinitions.Select((m) => m.Name))} ]";
                 IsValueExtrapolated = true;
                 break;
+
+            #endregion
             // Material instance (mesh): "[2] - engine\materials\multilayered.mt" (show #keyValuePairs)
             case CMaterialInstance { BaseMaterial: { } cResourceReference } material:
             {
@@ -811,6 +850,8 @@ public partial class ChunkViewModel
                 Value = StringHelper.Stringify(animNodeBase);
                 IsValueExtrapolated = Value != "";
                 break;
+
+            # region components
             case entVisualControllerComponent entVisualControllerComponent:
                 Value = $"{entVisualControllerComponent.ForcedLodDistance}";
                 if (entVisualControllerComponent.MeshProxy.DepotPath.GetResolvedText() is string meshProxyPath &&
@@ -868,6 +909,8 @@ public partial class ChunkViewModel
                 Value = StringHelper.Stringify(tBinding2);
                 IsValueExtrapolated = Value != "";
                 break;
+
+            #endregion
             case scnlocLocstringId stringId when
                 stringId.Ruid != 0:
                 Value = stringId.Ruid.ToString();
@@ -1212,6 +1255,8 @@ public partial class ChunkViewModel
                 Value = $"{animsetEntry.Rig.DepotPath.GetResolvedText() ?? "none"}";
                 IsValueExtrapolated = true;
                 break;
+
+            #region journal
             case gameJournalContact journalContact:
                 Value = journalContact.Id;
                 if (string.IsNullOrEmpty(Value))
@@ -1236,6 +1281,8 @@ public partial class ChunkViewModel
                     .ToList());
                 IsValueExtrapolated = Value != "";
                 break;
+
+            #endregion
             case gameAudioEmitterComponent audioEmitter:
                 Value = $"{audioEmitter.EmitterName}";
                 IsValueExtrapolated = Value != "";
