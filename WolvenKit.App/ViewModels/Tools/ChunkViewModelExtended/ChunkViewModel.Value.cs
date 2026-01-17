@@ -24,7 +24,7 @@ public partial class ChunkViewModel
         Value = "";
 
         // nothing to calculate - resolved data is dummy, or isDefault calculated from parent
-        if (IsDefault)
+        if (ResolvedData is RedDummy)
         {
             return;
         }
@@ -460,6 +460,7 @@ public partial class ChunkViewModel
                 break;
 
             case entGarmentParameterComponentData garmentData when
+                !IsDefault &&
                 Parent?.Parent?.Parent?.Parent?.Parent?.Parent?.Parent?.ResolvedData is
                     appearanceAppearanceDefinition app &&
                 app.Components.FirstOrDefault(c => c.Id == garmentData.ComponentID) is entIComponent component:
