@@ -149,9 +149,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             });
         }
 
+        CalculateIsDefault();
         CalculateValue();
         CalculateDescriptor();
-        CalculateIsDefault();
         CalculateUserInteractionStates();
 
         CalculateDisplayName();
@@ -316,9 +316,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     partial void OnDataChanged(IRedType value)
     {
+        CalculateIsDefault();
         CalculateValue();
         CalculateDescriptor();
-        CalculateIsDefault();
 
         // Certain properties should not be editable by or visible to the user, based on current editor mode
         CalculateUserInteractionStates();
@@ -465,9 +465,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                  || Parent.ResolvedData is appearancePartComponentOverrides
                 )
         {
+            Parent.CalculateIsDefault();
             Parent.CalculateDescriptor();
             Parent.CalculateValue();
-            Parent.CalculateIsDefault();
         }
         else if (Parent.IsValueExtrapolated)
         {
