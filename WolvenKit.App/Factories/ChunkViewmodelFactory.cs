@@ -7,6 +7,7 @@ using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Tools;
 
 namespace WolvenKit.App.Factories;
 
@@ -27,6 +28,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
     private readonly ITweakDBService _tweakDbService;
     private readonly ILocKeyService _locKeyService;
     private readonly Red4ParserService _parserService;
+    private readonly CvmMaterialTools _cvmMaterialTools;
     private readonly CRUIDService _cruidService;
 
     public ChunkViewmodelFactory(
@@ -40,6 +42,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
         Red4ParserService parserService,
+        CvmMaterialTools cvmMaterialTools,
         CRUIDService cruidService)
     {
         _tabViewmodelFactory = tabViewmodelFactory;
@@ -52,9 +55,10 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
         _tweakDbService = tweakDbService;
         _locKeyService = locKeyService;
         _parserService = parserService;
+        _cvmMaterialTools = cvmMaterialTools;
         _cruidService = cruidService;
     }
-    
+
     public ChunkViewModel ChunkViewModel(IRedType rootChunk, string name, AppViewModel appViewModel,
         ChunkViewModel? parent = null, bool isReadOnly = false) =>
         new ChunkViewModel(rootChunk, name, appViewModel,
@@ -70,6 +74,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
             _locKeyService,
             _parserService,
             _cruidService,
+            _cvmMaterialTools,
             parent,
             isReadOnly).SetInitialExpansionState();
 
@@ -87,6 +92,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
             _tweakDbService,
             _locKeyService,
             _parserService,
+            _cvmMaterialTools,
             _cruidService,
             isReadOnly).SetInitialExpansionState();
 
@@ -104,6 +110,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
             _tweakDbService,
             _locKeyService,
             _parserService,
+            _cvmMaterialTools,
             _cruidService,
             isReadOnly).SetInitialExpansionState();
 }
