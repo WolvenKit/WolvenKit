@@ -290,12 +290,8 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
-
-        public static readonly List<string> CreatedBones = [];
-
         public bool ImportMesh(FileInfo inGltfFile, Stream inMeshStream, GltfImportArgs args)
         {
-            CreatedBones.Clear();
             var cr2w = _parserService.ReadRed4File(inMeshStream);
 
             if (cr2w is not { RootChunk: CMesh meshBlob } || meshBlob.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendBlob)
