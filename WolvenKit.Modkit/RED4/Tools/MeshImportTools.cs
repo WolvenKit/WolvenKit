@@ -461,6 +461,7 @@ namespace WolvenKit.Modkit.RED4
 
             UpdateGarmentSupportParameters(meshes, meshBlob, args.ImportGarmentSupport, args.IgnoreGarmentSupportUVParam);
 
+            // TODO: We need to make sure to update mesh.boneNames mesh.boneRigMatrices and mesh.boneVertexEpsilons based on the armature somehow
             var expMeshes = meshes.Select(_ => RawMeshToRE4Mesh(_, quantScale, quantTrans)).ToList();
 
             var meshBuffer = new MemoryStream();
