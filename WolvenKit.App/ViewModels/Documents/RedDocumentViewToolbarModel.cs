@@ -841,7 +841,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         appearanceChild.RecalculateProperties();
     }
 
-    private bool CanClearChunkMaterials() => SelectedChunks.All(c => c.ResolvedData is meshMeshAppearance);
+    private bool CanClearChunkMaterials() =>
+        SelectedChunks.Count > 0 && SelectedChunks.All(c => c.ResolvedData is meshMeshAppearance);
 
 
     [RelayCommand(CanExecute = nameof(CanClearChunkMaterials))]
