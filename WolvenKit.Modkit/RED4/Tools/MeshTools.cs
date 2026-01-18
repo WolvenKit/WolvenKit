@@ -31,8 +31,9 @@ namespace WolvenKit.Modkit.RED4.Tools
 {
     public class MeshTools
     {
-        private readonly Red4ParserService _red4ParserService;
+        public static readonly HashSet<string> CreatedBones = [];
 
+        private readonly Red4ParserService _red4ParserService;
         public MeshTools(Red4ParserService red4ParserService) => _red4ParserService = red4ParserService;
 
         public static bool ExportMesh(CR2WFile cr2W, FileInfo outfile, MeshExportArgs meshExportArgs,
@@ -654,18 +655,16 @@ namespace WolvenKit.Modkit.RED4.Tools
             return (numLodLevels, numSubmeshesPerLod);
         }
 
-        public static readonly HashSet<string> CreatedBones = [];
-
         public static void UpdateMeshJoints(ref List<RawMeshContainer> meshes, RawArmature? existingArmature,
             RawArmature? importedArmature, string fileName = "")
         {
-            if (existingArmature is not { BoneCount: > 0 } && importedArmature is { BoneCount: > 0 })
-            {
-                throw new WolvenKitException(0x2005, $"\nThe destination mesh has no bones");
-            }
+            // if (existingArmature is not { BoneCount: > 0 } && importedArmature is { BoneCount: > 0 })
+            // {
+            //     throw new WolvenKitException(0x2005, $"\nThe destination mesh has no bones");
+            // }
 
             // No bones
-            if (!(existingArmature is { BoneCount: > 0 } && importedArmature is { BoneCount: > 0 }))
+            if (existingArmature?.BoneCount == 0 && importedArmature?.BoneCount == 0)
             {
                 foreach (var mesh in meshes)
                 {
@@ -678,14 +677,13 @@ namespace WolvenKit.Modkit.RED4.Tools
                 return;
             }
 
-            ArgumentNullException.ThrowIfNull(existingArmature.Names);
-            ArgumentNullException.ThrowIfNull(importedArmature.Names);
+            ArgumentNullException.ThrowIfNull(existingArmature?.Names);
+            ArgumentNullException.ThrowIfNull(importedArmature?.Names);
 
             foreach (var mesh in meshes)
             {
                 ArgumentNullException.ThrowIfNull(mesh.positions);
                 ArgumentNullException.ThrowIfNull(mesh.boneindices);
-
 
                 for (var e = 0; e < mesh.positions.Length; e++)
                 {
