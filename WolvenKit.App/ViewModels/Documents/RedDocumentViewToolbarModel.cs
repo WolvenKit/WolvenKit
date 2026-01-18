@@ -11,6 +11,7 @@ using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Services;
@@ -35,6 +36,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private readonly CRUIDService _cruidService;
     private readonly DocumentTools _documentTools;
     private readonly ILoggerService _loggerService;
+    private readonly CvmMaterialTools _cvmMaterialTools;
 
     public RedDocumentViewToolbarModel(
         ISettingsManager settingsManager,
@@ -42,6 +44,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         IProjectManager projectManager,
         DocumentTools documentTools,
         CRUIDService cruidService,
+        CvmMaterialTools cvmMaterialTools,
         ILoggerService loggerService
     )
     {
@@ -50,6 +53,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         _settingsManager = settingsManager;
         _cruidService = cruidService;
         _documentTools = documentTools;
+        _cvmMaterialTools = cvmMaterialTools;
         _loggerService = loggerService;
 
         modifierSvc.ModifierStateChanged += OnModifierChanged;
@@ -206,7 +210,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(ScrollToMaterialCommand))]
     [NotifyCanExecuteChangedFor(nameof(ToggleLocalInstanceCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteDuplicateEntriesCommand))]
-    [NotifyCanExecuteChangedFor(nameof(ConvertPreloadMaterialsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ConvertToPreloadMaterialsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ConvertFromPreloadMaterialsCommand))]
     [ObservableProperty]
     private ChunkViewModel? _selectedChunk;
 
@@ -225,7 +230,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         ClearChunkMaterialsCommand.NotifyCanExecuteChanged();
         RegenerateAllCRUIDsCommand.NotifyCanExecuteChanged();
         DeleteChunkByIndexCommand.NotifyCanExecuteChanged();
-        ConvertPreloadMaterialsCommand.NotifyCanExecuteChanged();
+        ConvertToPreloadMaterialsCommand.NotifyCanExecuteChanged();
+        ConvertFromPreloadMaterialsCommand.NotifyCanExecuteChanged();
     }
 
     public void SetCurrentTab(RedDocumentTabViewModel? value)
@@ -628,13 +634,21 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private void ScrollToMaterial() => SelectedChunk?.ScrollToMaterialCommand.Execute(null);
 
     /*
-     * mesh: convert preloadXXX to regular local materials
+     * mesh: convert to and from preload materials
      */
-    private bool CanConvertPreloadMaterials() => RootChunk?.ResolvedData is CMesh mesh &&
-                                                 (mesh.PreloadExternalMaterials.Count > 0 || mesh.PreloadLocalMaterialInstances.Count > 0);
+    private bool CanConvertToPreloadMaterials() => RootChunk?.ResolvedData is CMesh mesh &&
+                                                   (mesh.LocalMaterialBuffer.Materials.Count > 0 ||
+                                                    mesh.ExternalMaterials.Count > 0);
 
-    [RelayCommand(CanExecute = nameof(CanConvertPreloadMaterials))]
-    private void ConvertPreloadMaterials() => RootChunk?.ConvertPreloadMaterialsCommand.Execute(null);
+    [RelayCommand(CanExecute = nameof(CanConvertToPreloadMaterials))]
+    private void ConvertToPreloadMaterials() => _cvmMaterialTools.ConvertPreloadMaterials(RootChunk);
+
+    private bool CanConvertFromPreloadMaterials() => RootChunk?.ResolvedData is CMesh mesh &&
+                                                     (mesh.PreloadExternalMaterials.Count > 0 ||
+                                                      mesh.PreloadLocalMaterialInstances.Count > 0);
+
+    [RelayCommand(CanExecute = nameof(CanConvertFromPreloadMaterials))]
+    private void ConvertFromPreloadMaterials() => _cvmMaterialTools.ConvertPreloadMaterials(RootChunk, true);
 
     /*
      * mesh: clear appearances

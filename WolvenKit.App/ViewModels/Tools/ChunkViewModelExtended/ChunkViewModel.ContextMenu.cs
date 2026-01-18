@@ -210,17 +210,23 @@ public partial class ChunkViewModel
 
                 break;
             case CMesh mesh:
-                if (mesh.PreloadExternalMaterials.Count > 0 || mesh.PreloadLocalMaterialInstances.Count > 0)
-                {
-                    GetRootModel().ConvertPreloadMaterials();
-                }
-
+                // Why is this async?
                 foreach (var externalMaterial in mesh.ExternalMaterials)
                 {
                     await Task.Run(() => ret.Add(externalMaterial.DepotPath));
                 }
 
-                foreach (var localMaterial in (mesh.LocalMaterialBuffer?.Materials ?? []).OfType<CMaterialInstance>())
+                foreach (var externalMaterial in mesh.PreloadExternalMaterials)
+                {
+                    await Task.Run(() => ret.Add(externalMaterial.DepotPath));
+                }
+
+                List<CMaterialInstance> localMaterials = [];
+                localMaterials.AddRange((mesh.LocalMaterialBuffer?.Materials ?? []).OfType<CMaterialInstance>());
+                localMaterials.AddRange((mesh.PreloadLocalMaterialInstances ?? []).Select(h => h.Chunk)
+                    .OfType<CMaterialInstance>());
+
+                foreach (var localMaterial in localMaterials)
                 {
                     ret.Add(localMaterial.BaseMaterial.DepotPath);
                     foreach (var value in localMaterial.Values)
@@ -283,11 +289,6 @@ public partial class ChunkViewModel
         if (GetRootModel() is not { ResolvedData: CMesh mesh } rootModel || Tab is null || Parent is null)
         {
             return;
-        }
-
-        if (mesh.PreloadExternalMaterials.Count > 0 || mesh.PreloadLocalMaterialInstances.Count > 0)
-        {
-            rootModel.ConvertPreloadMaterials();
         }
 
         // Appearance
