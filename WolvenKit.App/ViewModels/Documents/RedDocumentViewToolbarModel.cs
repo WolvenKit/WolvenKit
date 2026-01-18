@@ -47,10 +47,9 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         IProjectManager projectManager,
         DocumentTools documentTools,
         CRUIDService cruidService,
-        ILoggerService loggerService,
         INotificationService notificationService,
         StreamingSectorTools sectorTools,
-        AppViewModel appViewModel
+        AppViewModel appViewModel,
         CvmMaterialTools cvmMaterialTools,
         ILoggerService loggerService
     )

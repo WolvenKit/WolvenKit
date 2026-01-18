@@ -83,17 +83,17 @@ namespace WolvenKit.Views.Documents
             InitializeInstanceObjects();
 
             DataContext = new RedDocumentViewToolbarModel(
-                _settingsManager,
-                _modifierStateService,
-                _projectManager,
-                _documentTools,
-                Locator.Current.GetService<CRUIDService>()!,
-                _cvmMaterialTools,
-                _loggerService,
-                Locator.Current.GetService<INotificationService>()!,
-                Locator.Current.GetService<StreamingSectorTools>()!,
-                _appViewModel
-                ) { CurrentTab = _currentTab };
+                settingsManager: _settingsManager,
+                modifierSvc: _modifierStateService,
+                projectManager: _projectManager,
+                documentTools: _documentTools,
+                cruidService: Locator.Current.GetService<CRUIDService>()!,
+                notificationService: Locator.Current.GetService<INotificationService>()!,
+                appViewModel: _appViewModel,
+                loggerService: _loggerService,
+                sectorTools: Locator.Current.GetService<StreamingSectorTools>()!,
+                cvmMaterialTools: _cvmMaterialTools
+            ) { CurrentTab = _currentTab };
             ViewModel = DataContext as RedDocumentViewToolbarModel;
 
             _modifierStateService.ModifierStateChanged += OnModifierStateChanged;
