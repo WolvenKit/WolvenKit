@@ -10,9 +10,9 @@ public static class ArrayExtensions
     /// <param name="array"></param>
     /// <param name="value"></param>
     /// <returns></returns>
-    public static string[] SetWithResize(this string[] array, string value)
+    public static T[] SetWithResize<T>(this T[] array, T value)
     {
-        var newArray = new string[array.Length + 1];
+        var newArray = new T[array.Length + 1];
         Array.Copy(array, newArray, array.Length);
         newArray[^1] = value;
 
