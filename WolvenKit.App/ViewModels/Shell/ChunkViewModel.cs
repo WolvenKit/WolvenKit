@@ -156,7 +156,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         CalculateValue();
         CalculateDescriptor();
         CalculateIsDefault();
-        CalculateUserInteractionStates();
+        CalculateEditorDifficultyVisibility();
 
         CalculateDisplayName();
     }
@@ -327,7 +327,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         CalculateIsDefault();
 
         // Certain properties should not be editable by or visible to the user, based on current editor mode
-        CalculateUserInteractionStates();
+        CalculateEditorDifficultyVisibility();
 
         if (Parent is null)
         {
@@ -1707,11 +1707,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     [RelayCommand(CanExecute = nameof(CanAdjustSubmeshCount))]
     private void AdjustSubmeshCount() => _cvmMaterialTools.AdjustSubmeshCount(this);
-
-
-    [RelayCommand]
-    private void DeleteUnusedMaterials(bool suppressLogOutput = false) =>
-        _cvmMaterialTools.DeleteUnusedMaterials(this, _appViewModel, suppressLogOutput);
 
     public ChunkViewModel? GetPropertyChild(params string[] propertyNames)
     {

@@ -551,12 +551,13 @@ namespace WolvenKit.Views.Documents
 
             rootChunk.ForceLoadPropertiesRecursive();
 
-            rootChunk.DeleteUnusedMaterialsCommand.Execute(true);
+            _cvmMaterialTools.DeleteUnusedMaterials(rootChunk, null, true);
             rootChunk.Tab?.Parent.Save(null);
 
             await LoadAndAnalyzeModArchivesAsync();
 
-            var materialDependencies = await rootChunk.GetMaterialRefsFromFile();
+            var materialDependencies = await CvmMaterialTools.GetMaterialRefsFromFile(rootChunk);
+            await rootChunk.GetMaterialRefsFromFile();
 
             // Throw in anything found in .mi files
             var miDependencies = materialDependencies.Select(p => p.GetResolvedText()).OfType<string>()

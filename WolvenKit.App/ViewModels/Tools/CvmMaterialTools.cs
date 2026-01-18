@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
@@ -50,6 +52,7 @@ public class CvmMaterialTools
         }
 
         RecalculateMaterialProperties(cvm, true);
+        cvm.CalculateEditorDifficultyVisibility();
         cvm.Tab?.Parent.SetIsDirty(needsChanges);
 
         return;
@@ -123,7 +126,8 @@ public class CvmMaterialTools
 
     # endregion
 
-    public void DeleteUnusedMaterials(ChunkViewModel cvm, AppViewModel appViewModel, bool suppressLogOutput = false)
+    public void DeleteUnusedMaterials(ChunkViewModel cvm, AppViewModel? appViewModel = null,
+        bool suppressLogOutput = false)
     {
         if (cvm.GetRootModel() is not { ResolvedData: CMesh mesh } rootChunk)
         {
@@ -186,7 +190,7 @@ public class CvmMaterialTools
             (!me.IsLocalInstance && externalMatIdxList.Contains(me.Index))
         ).ToArray();
 
-        if (keepLocal.Length + keepExternal.Length != usedMaterialDefinitions.Length &&
+        if (appViewModel is not null && keepLocal.Length + keepExternal.Length != usedMaterialDefinitions.Length &&
             !appViewModel.ShowConfirmationDialog(
                 "Not all remaining materials match up. Continue? (You need to validate by hand)",
                 "Really delete materials?"))
@@ -642,7 +646,7 @@ public class CvmMaterialTools
         cvm.GetPropertyChild("materialEntries")?.RecalculateProperties();
         cvm.GetPropertyChild("localMaterialBuffer", "materials")?.RecalculateProperties();
 
-        cvm.DeleteUnusedMaterialsCommand.Execute(true);
+        DeleteUnusedMaterials(cvm, null, true);
         cvm.Tab?.Parent.SetIsDirty(true);
 
         return;
@@ -658,5 +662,128 @@ public class CvmMaterialTools
                 _ => null
             };
         }
+    }
+
+    public void AddMaterialAndDefinition(ChunkViewModel cvm, string newName)
+    {
+        if (cvm.Parent is null)
+        {
+            return;
+        }
+
+        var materialEntries = cvm.Parent.GetRootModel().GetPropertyChild("materialEntries");
+        if (materialEntries?.ResolvedData is not CArray<CMeshMaterialEntry> array)
+        {
+            return;
+        }
+
+        var isLocalInstance = cvm.Parent.ResolvedData is meshMeshMaterialBuffer ||
+                              cvm.Name == ChunkViewModel.PreloadMaterialPath;
+
+        // Add the material definition
+        var lastIndex = array.LastOrDefault((e) => e.IsLocalInstance == isLocalInstance)?.Index ?? -1;
+        array.Add(new CMeshMaterialEntry
+        {
+            Name = newName, IsLocalInstance = isLocalInstance, Index = (CUInt16)lastIndex + 1
+        });
+
+        switch (materialEntries?.ResolvedData)
+        {
+            case CArray<CMaterialInstance> matInstances:
+                matInstances.Add(new CMaterialInstance());
+                break;
+            case CArray<IMaterial> matInstances:
+                matInstances.Add(new CMaterialInstance());
+                break;
+            case CArray<CResourceAsyncReference<IMaterial>> externalMaterials:
+                externalMaterials.Add(new CResourceAsyncReference<IMaterial>());
+                break;
+            default:
+                break;
+        }
+
+        materialEntries?.RecalculateProperties();
+        cvm.RecalculateProperties();
+    }
+
+    public static async Task<HashSet<ResourcePath>> GetMaterialRefsFromFile(ChunkViewModel cvm,
+        IProjectManager? projectManager = null)
+    {
+        HashSet<ResourcePath> ret = [];
+
+        switch (cvm.GetRootModel().ResolvedData)
+        {
+            case CMaterialInstance mi:
+                foreach (var value in (mi.Values ?? []).OfType<CKeyValuePair>())
+                {
+                    switch (value.Value)
+                    {
+                        case IRedResourceReference rRef:
+                            ret.Add(rRef.DepotPath);
+                            break;
+                        case IRedResourceAsyncReference raRef:
+                            ret.Add(raRef.DepotPath);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                break;
+            case Multilayer_Setup mlsetup:
+                foreach (var layer in mlsetup.Layers)
+                {
+                    ret.Add(layer.Material.DepotPath);
+                    ret.Add(layer.Microblend.DepotPath);
+                }
+
+                break;
+            case CMesh mesh:
+                // Why is this async?
+                foreach (var externalMaterial in mesh.ExternalMaterials)
+                {
+                    await Task.Run(() => ret.Add(externalMaterial.DepotPath));
+                }
+
+                foreach (var externalMaterial in mesh.PreloadExternalMaterials)
+                {
+                    await Task.Run(() => ret.Add(externalMaterial.DepotPath));
+                }
+
+                List<CMaterialInstance> localMaterials = [];
+                localMaterials.AddRange((mesh.LocalMaterialBuffer?.Materials ?? []).OfType<CMaterialInstance>());
+                localMaterials.AddRange((mesh.PreloadLocalMaterialInstances ?? []).Select(h => h.Chunk)
+                    .OfType<CMaterialInstance>());
+
+                foreach (var localMaterial in localMaterials)
+                {
+                    ret.Add(localMaterial.BaseMaterial.DepotPath);
+                    foreach (var value in localMaterial.Values)
+                    {
+                        switch (value.Value)
+                        {
+                            case IRedResourceReference rRef:
+                                ret.Add(rRef.DepotPath);
+                                break;
+                            case IRedResourceAsyncReference raRef:
+                                ret.Add(raRef.DepotPath);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+
+                break;
+            default:
+                break;
+        }
+
+        if (projectManager?.ActiveProject?.Files is not null)
+        {
+            ret = ret.Where(p => !projectManager.ActiveProject.Files.Contains(p!)).ToHashSet();
+        }
+
+        return ret;
     }
 }

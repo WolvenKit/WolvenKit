@@ -666,7 +666,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         }
 
         mesh.Appearances.Clear();
-        RootChunk.DeleteUnusedMaterialsCommand.Execute(false);
+        _cvmMaterialTools.DeleteUnusedMaterials(RootChunk, null, true);
     }
 
     #region meshfile_materials
@@ -743,7 +743,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             RootChunk.GetPropertyChild("appearances")?.CalculateProperties();
         }
 
-        RootChunk?.DeleteUnusedMaterialsCommand.Execute(false);
+        _cvmMaterialTools.DeleteUnusedMaterials(RootChunk);
     }
 
     #endregion
