@@ -13,11 +13,11 @@ public partial class ConvertHairToCCXLMaterialsDialogViewModel : ObservableObjec
 
     [ObservableProperty] private string _selectedMiType = "";
 
-    [ObservableProperty] private bool _IsCap = false;
+    [ObservableProperty] private bool _isCap = false;
 
     [ObservableProperty] private string _selectedCapMiFile = "";
 
-    public ConvertHairToCCXLMaterialsDialogViewModel(Cp77Project activeProject) 
+    public ConvertHairToCCXLMaterialsDialogViewModel(Cp77Project activeProject)
     {
 
         MiFileOption.AddRange<string>(
@@ -28,17 +28,12 @@ public partial class ConvertHairToCCXLMaterialsDialogViewModel : ObservableObjec
         SelectedMiFile = MiFileOption.LastOrDefault() ?? "";
 
         MainMiMaterialTypeList = new List<string> { "Braid", "Cap", "Cap01", "Curls", "Dread", "Long", "Short", "Brows", "Lashes" };
-        SelectedMiType = "Long" ?? MainMiMaterialTypeList.LastOrDefault();
+        SelectedMiType = "Long";
 
-        SelectedCapMiFile = MiFileOption.FirstOrDefault() ?? ""; 
+        SelectedCapMiFile = MiFileOption.FirstOrDefault() ?? "";
 
     }
     [ObservableProperty] private List<string> _miFileOption = [];
     [ObservableProperty] private List<string> _mainMiMaterialTypeList = [];
-    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-    {
-        base.OnPropertyChanged(e);
-
-    }
 
 }
