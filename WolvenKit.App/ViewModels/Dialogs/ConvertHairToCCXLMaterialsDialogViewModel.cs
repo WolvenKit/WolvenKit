@@ -9,13 +9,17 @@ using static System.Net.Mime.MediaTypeNames;
 namespace WolvenKit.App.ViewModels.Dialogs;
 public partial class ConvertHairToCCXLMaterialsDialogViewModel : ObservableObject
 {
-    [ObservableProperty] private string _selectedMiFile = "";
+    [ObservableProperty]
+    private string _selectedMiFile = "";
 
-    [ObservableProperty] private string _selectedMiType = "";
+    [ObservableProperty]
+    private string _selectedMiType = "";
 
-    [ObservableProperty] private bool _isCap = false;
+    [ObservableProperty]
+    private bool _isCap = false;
 
-    [ObservableProperty] private string _selectedCapMiFile = "";
+    [ObservableProperty]
+    private string _selectedCapMiFile = "";
 
     public ConvertHairToCCXLMaterialsDialogViewModel(Cp77Project activeProject)
     {
@@ -31,9 +35,11 @@ public partial class ConvertHairToCCXLMaterialsDialogViewModel : ObservableObjec
         SelectedMiType = "Long";
 
         SelectedCapMiFile = MiFileOption.FirstOrDefault() ?? "";
-
     }
-    [ObservableProperty] private List<string> _miFileOption = [];
-    [ObservableProperty] private List<string> _mainMiMaterialTypeList = [];
 
+    [ObservableProperty]
+    private List<string> _miFileOption = [];
+
+    [ObservableProperty]
+    private List<string> _mainMiMaterialTypeList = [];
 }

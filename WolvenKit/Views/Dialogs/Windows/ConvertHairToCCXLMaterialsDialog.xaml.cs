@@ -32,7 +32,5 @@ public partial class ConvertHairToCCXLMaterialsDialog : IViewFor<ConvertHairToCC
         Close();
     }
 
-    private void WizardControl_OnFinish(object sender, RoutedEventArgs e)
-    {
-    }
+    private void WizardControl_OnFinish(object sender, RoutedEventArgs e) { }
 }
