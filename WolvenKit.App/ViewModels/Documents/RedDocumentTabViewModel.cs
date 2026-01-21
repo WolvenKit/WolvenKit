@@ -179,7 +179,7 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
         IsLastCopyOperationSingle = false;
         OnCopiedChunkChanged?.Invoke(null, EventArgs.Empty);
     }
-    
+
     public static void ClearCopiedChunks()
     {
         CopiedChunks.Clear();
@@ -241,25 +241,51 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
             return;
         }
 
-        var fileName = Path.GetFileName(embeddedFile.FileName.GetResolvedText()!);
-
-        var dlg = new SaveFileDialog { FileName = fileName, Filter = "All files (*.*)|*.*" };
-
-        if (Path.GetDirectoryName(Parent.FilePath) is { } parentPath && Directory.Exists(parentPath))
+        string saveFilePath;
+        if (Parent.GetActiveProject() is { } project)
         {
-            dlg.InitialDirectory = parentPath;
+            saveFilePath = Path.Join(project.ModDirectory, embeddedFile.FileName);
         }
-        else if (Parent.GetActiveProject() is { } project)
+        else
         {
-            dlg.InitialDirectory = project.ModDirectory;
+            var fileName = Path.GetFileName(embeddedFile.FileName.GetResolvedText()!);
+
+            var dlg = new SaveFileDialog { FileName = fileName, Filter = "All files (*.*)|*.*" };
+
+            if (Path.GetDirectoryName(Parent.FilePath) is { } parentPath && Directory.Exists(parentPath))
+            {
+                dlg.InitialDirectory = parentPath;
+            }
+
+            if (!dlg.ShowDialog().GetValueOrDefault())
+            {
+                return;
+            }
+
+            saveFilePath = dlg.FileName;
         }
 
-        if (!dlg.ShowDialog().GetValueOrDefault())
+        if (File.Exists(saveFilePath))
         {
-            return;
+            var relativePath = Parent.GetActiveProject() is { } proj ? saveFilePath.Replace($"{proj.ModDirectory}{Path.DirectorySeparatorChar}", "") : saveFilePath;
+            var result = Interactions.ShowConfirmation((
+                $"The following file already exists in the project. Do you want to overwrite it?\n{relativePath}",
+                "File Already Exists",
+                WMessageBoxImage.Question,
+                WMessageBoxButtons.YesNo));
+            if (result != WMessageBoxResult.Yes)
+            {
+                return;
+            }
         }
 
-        using var fs = File.Open(dlg.FileName, FileMode.OpenOrCreate);
+        var parentDir = Directory.GetParent(saveFilePath)?.FullName;
+        if (!string.IsNullOrWhiteSpace(parentDir))
+        {
+            Directory.CreateDirectory(parentDir);
+        }
+
+        using var fs = File.Open(saveFilePath, FileMode.OpenOrCreate);
         using var cw = new CR2WWriter(fs);
 
         cw.WriteFile(new CR2WFile { RootChunk = embeddedFile.Content });
