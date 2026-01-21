@@ -1,0 +1,36 @@
+<reactiveUi:ReactiveUserControl
+    x:Class="WolvenKit.Views.Dialogs.ExtractEmbeddedFileDialog"
+    x:TypeArguments="dialogs:ExtractEmbeddedFileDialogViewModel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dialogs="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:reactiveUi="http://reactiveui.net"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=dialogs:ExtractEmbeddedFileDialogViewModel}"
+    d:DesignWidth="450"
+    d:DesignHeight="100"
+    MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
+    MaxWidth="{DynamicResource WolvenKitDialogWidth}"
+    Padding="{DynamicResource WolvenKitMargin}"
+    Background="{StaticResource ContentBackgroundAlt3}">
+    <StackPanel>
+        <TextBlock Text="Extract Embedded File" />
+        <TextBox Text="{Binding NewFilePath}" />
+        <TextBlock
+            Foreground="{DynamicResource WolvenKitYellow50}"
+            Text="Extract the embedded file to a custom filepath to avoid collisions with vanilla or modded files."
+            TextWrapping="Wrap" />
+        <StackPanel
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+            <Button
+                Content="Cancel"
+                Click="CancelButton_OnClick" />
+            <Button
+                Content="Extract"
+                Click="ExtractButton_OnClick" />
+        </StackPanel>
+    </StackPanel>
+</reactiveUi:ReactiveUserControl>

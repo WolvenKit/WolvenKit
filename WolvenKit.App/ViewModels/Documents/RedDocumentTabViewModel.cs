@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Win32;
+using Splat;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -226,7 +229,7 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
 
     private bool CanExtractEmbeddedFile() => this is RDTDataViewModel data && data.IsEmbeddedFile;
     [RelayCommand(CanExecute = nameof(CanRenameEmbeddedFile))]
-    private void ExtractEmbeddedFile()
+    private async Task ExtractEmbeddedFile()
     {
         if (this is not RDTDataViewModel datavm)
         {
@@ -236,48 +239,32 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
         var embeddedFile = Parent.Cr2wFile.EmbeddedFiles
             .Where(file => ReferenceEquals(file.Content, datavm.GetData())).Cast<CR2WEmbedded>().FirstOrDefault();
 
-        if (embeddedFile == null)
+        if (embeddedFile == null || (string?)embeddedFile.FileName is not { } embeddedFileName)
         {
             return;
         }
 
-        string saveFilePath;
-        if (Parent.GetActiveProject() is { } project)
+        if (Parent.GetActiveProject() is not { } project)
         {
-            saveFilePath = Path.Join(project.ModDirectory, embeddedFile.FileName);
-        }
-        else
-        {
-            var fileName = Path.GetFileName(embeddedFile.FileName.GetResolvedText()!);
-
-            var dlg = new SaveFileDialog { FileName = fileName, Filter = "All files (*.*)|*.*" };
-
-            if (Path.GetDirectoryName(Parent.FilePath) is { } parentPath && Directory.Exists(parentPath))
-            {
-                dlg.InitialDirectory = parentPath;
-            }
-
-            if (!dlg.ShowDialog().GetValueOrDefault())
-            {
-                return;
-            }
-
-            saveFilePath = dlg.FileName;
+            return;
         }
 
-        if (File.Exists(saveFilePath))
+        var appVM = Locator.Current.GetService<AppViewModel>();
+        if (appVM == null)
         {
-            var relativePath = Parent.GetActiveProject() is { } proj ? saveFilePath.Replace($"{proj.ModDirectory}{Path.DirectorySeparatorChar}", "") : saveFilePath;
-            var result = Interactions.ShowConfirmation((
-                $"The following file already exists in the project. Do you want to overwrite it?\n{relativePath}",
-                "File Already Exists",
-                WMessageBoxImage.Question,
-                WMessageBoxButtons.YesNo));
-            if (result != WMessageBoxResult.Yes)
-            {
-                return;
-            }
+            return;
         }
+
+        var dialog = new ExtractEmbeddedFileDialogViewModel(appVM, embeddedFileName, project.ModDirectory);
+        await appVM.SetActiveDialog(dialog);
+        await dialog.WaitAsync();
+
+        if (dialog.UserCanceled)
+        {
+            return;
+        }
+
+        var saveFilePath = Path.Join(project.ModDirectory, dialog.NewFilePath);
 
         var parentDir = Directory.GetParent(saveFilePath)?.FullName;
         if (!string.IsNullOrWhiteSpace(parentDir))
