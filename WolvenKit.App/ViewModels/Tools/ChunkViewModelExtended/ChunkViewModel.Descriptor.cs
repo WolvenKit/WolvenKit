@@ -93,8 +93,8 @@ public partial class ChunkViewModel
     {
         Descriptor = "";
 
-        // nothing to calculate - resolved data is dummy, or isDefault calculated from parent
-        if (IsDefault)
+        // nothing to calculate - resolved data is dummy
+        if (ResolvedData is RedDummy)
         {
             return;
         }
