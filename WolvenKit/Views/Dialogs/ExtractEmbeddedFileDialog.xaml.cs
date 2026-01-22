@@ -24,19 +24,6 @@ public partial class ExtractEmbeddedFileDialog : ReactiveUserControl<ExtractEmbe
     {
         ViewModel.NewFilePath.SanitizeFilePath();
 
-        if (ViewModel.NewFilePath == ViewModel.EmbeddedFilePath)
-        {
-            var result = Interactions.ShowConfirmation((
-                "The file path is the same as the embedded file path, this may overwrite a vanilla file or conflict with a mod.\nContinue Anyway?",
-                "Filepath Unchanged",
-                WMessageBoxImage.Question,
-                WMessageBoxButtons.YesNo));
-            if (result != WMessageBoxResult.Yes)
-            {
-                return;
-            }
-        }
-
         if (File.Exists(Path.Join(ViewModel.ProjectPath, ViewModel.NewFilePath)))
         {
             var result = Interactions.ShowConfirmation((
@@ -48,6 +35,11 @@ public partial class ExtractEmbeddedFileDialog : ReactiveUserControl<ExtractEmbe
             {
                 return;
             }
+        }
+
+        if (ViewModel.NewFilePath == ViewModel.EmbeddedFilePath)
+        {
+            ViewModel.NotificationService?.Warning("The archive file path is the same as the embedded file path, this may conflict with a vanilla or mod file.");
         }
 
         ViewModel.Close();

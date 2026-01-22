@@ -7,9 +7,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Splat;
 using WolvenKit.App.Interaction;
-using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Common.Services;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
@@ -255,7 +255,9 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
             return;
         }
 
-        var dialog = new ExtractEmbeddedFileDialogViewModel(appVM, embeddedFileName, project.ModDirectory);
+        var notificationService = Locator.Current.GetService<INotificationService>();
+
+        var dialog = new ExtractEmbeddedFileDialogViewModel(appVM, notificationService, embeddedFileName, project.ModDirectory);
         await appVM.SetActiveDialog(dialog);
         await dialog.WaitAsync();
 
