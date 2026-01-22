@@ -65,9 +65,11 @@ namespace WolvenKit.Interfaces.Extensions
         public static string ToFileName(this string target) =>
             new string(target.Where(c => !Path.GetInvalidFileNameChars().Contains(c)).ToArray()).Trim()
                 .Replace(" ", "_")
-                .Replace("'", "-")
                 .Replace(",", "-")
                 .Replace("\"", "-")
+                .Replace("'", "-")
+                .Replace(")", "-")
+                .Replace("(", "-")
                 .ToLower();
 
         /// <summary>
