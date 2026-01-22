@@ -503,10 +503,10 @@ public class RED4Controller : ObservableObject, IGameController
                 .Where(f => f.Any(char.IsUpper) || f.Any(char.IsWhiteSpace)).ToList();
             if (invalidFiles.Count != 0)
             {
-                _loggerService.Error("Capital letters and/or whitespaces found (this may cause issues):");
+                _loggerService.Warning("Capital letters and/or whitespaces found (this may cause issues):");
                 foreach (var filePath in invalidFiles)
                 {
-                    _loggerService.Error($"\t {filePath}");
+                    _loggerService.Warning($"\t {filePath}");
                 }
             }
 
