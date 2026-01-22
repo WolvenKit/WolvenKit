@@ -27,7 +27,7 @@ public partial class ExtractEmbeddedFileDialog : ReactiveUserControl<ExtractEmbe
         if (ViewModel.NewFilePath == ViewModel.EmbeddedFilePath)
         {
             var result = Interactions.ShowConfirmation((
-                "The file path is the same as the embedded file path, this may overwrite an archive file or conflict with a mod. Continue Anyway?",
+                "The file path is the same as the embedded file path, this may overwrite a vanilla file or conflict with a mod.\nContinue Anyway?",
                 "Filepath Unchanged",
                 WMessageBoxImage.Question,
                 WMessageBoxButtons.YesNo));
