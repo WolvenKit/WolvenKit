@@ -12,7 +12,7 @@ public partial class ExtractEmbeddedFileDialogViewModel : DialogViewModel
     private string _embeddedFilePath;
     [ObservableProperty]
     private string _newFilePath;
-    public string ProjectPath { get; set; }
+    public string ProjectPath { get; }
     private readonly AppViewModel _appViewModel;
     public INotificationService? NotificationService { get; }
 
