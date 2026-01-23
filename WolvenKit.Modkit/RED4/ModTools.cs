@@ -10,6 +10,7 @@ namespace WolvenKit.Modkit.RED4
     public partial class ModTools : IModTools
     {
         private readonly ILoggerService _loggerService;
+        private readonly INotificationService _notificationService;
         private readonly IProgressService<double> _progressService;
         private readonly IHashService _hashService;
         private readonly Red4ParserService _parserService;
@@ -18,6 +19,7 @@ namespace WolvenKit.Modkit.RED4
 
         public ModTools(
             ILoggerService loggerService,
+            INotificationService notificationService,
             IProgressService<double> progressService,
             IHashService hashService,
             Red4ParserService parserService,
@@ -26,6 +28,7 @@ namespace WolvenKit.Modkit.RED4
         )
         {
             _loggerService = loggerService;
+            _notificationService = notificationService;
             _progressService = progressService;
             _hashService = hashService;
             _parserService = parserService;

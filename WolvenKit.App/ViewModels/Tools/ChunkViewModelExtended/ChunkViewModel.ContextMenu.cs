@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.Shell;
@@ -178,78 +179,8 @@ public partial class ChunkViewModel
     /// <summary>
     /// Called from RedDocumentViewToolbar: returns all material dependencies in an array for adding them to the current project
     /// </summary>
-    public async Task<HashSet<ResourcePath>> GetMaterialRefsFromFile()
-    {
-        HashSet<ResourcePath> ret = [];
-
-        switch (GetRootModel().ResolvedData)
-        {
-            case CMaterialInstance mi:
-                foreach (var value in (mi.Values ?? []).OfType<CKeyValuePair>())
-                {
-                    switch (value.Value)
-                    {
-                        case IRedResourceReference rRef:
-                            ret.Add(rRef.DepotPath);
-                            break;
-                        case IRedResourceAsyncReference raRef:
-                            ret.Add(raRef.DepotPath);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
-                break;
-            case Multilayer_Setup mlsetup:
-                foreach (var layer in mlsetup.Layers)
-                {
-                    ret.Add(layer.Material.DepotPath);
-                    ret.Add(layer.Microblend.DepotPath);
-                }
-
-                break;
-            case CMesh mesh:
-                if (mesh.PreloadExternalMaterials.Count > 0 || mesh.PreloadLocalMaterialInstances.Count > 0)
-                {
-                    GetRootModel().ConvertPreloadMaterials();
-                }
-
-                foreach (var externalMaterial in mesh.ExternalMaterials)
-                {
-                    await Task.Run(() => ret.Add(externalMaterial.DepotPath));
-                }
-
-                foreach (var localMaterial in (mesh.LocalMaterialBuffer?.Materials ?? []).OfType<CMaterialInstance>())
-                {
-                    ret.Add(localMaterial.BaseMaterial.DepotPath);
-                    foreach (var value in localMaterial.Values)
-                    {
-                        switch (value.Value)
-                        {
-                            case IRedResourceReference rRef:
-                                ret.Add(rRef.DepotPath);
-                                break;
-                            case IRedResourceAsyncReference raRef:
-                                ret.Add(raRef.DepotPath);
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                }
-
-                break;
-            default:
-                break;
-        }
-
-        if (_projectManager.ActiveProject?.Files is not null)
-        {
-            ret = ret.Where(p => !_projectManager.ActiveProject.Files.Contains(p!)).ToHashSet();
-        }
-        return ret;
-    }
+    public Task<HashSet<ResourcePath>> GetMaterialRefsFromFile() =>
+        CvmMaterialTools.GetMaterialRefsFromFile(this, _projectManager);
 
     private bool CanGenerateCruids() => IsArray && Name == "components";
 
@@ -283,11 +214,6 @@ public partial class ChunkViewModel
         if (GetRootModel() is not { ResolvedData: CMesh mesh } rootModel || Tab is null || Parent is null)
         {
             return;
-        }
-
-        if (mesh.PreloadExternalMaterials.Count > 0 || mesh.PreloadLocalMaterialInstances.Count > 0)
-        {
-            rootModel.ConvertPreloadMaterials();
         }
 
         // Appearance
@@ -354,37 +280,12 @@ public partial class ChunkViewModel
     [RelayCommand]
     private async Task AddMaterialAndDefinition()
     {
-        var newName = await Interactions.ShowInputBoxAsync("New material name", "");
-
-        var materialEntries = Parent?.GetRootModel().GetPropertyChild("materialEntries");
-        if (materialEntries?.ResolvedData is not CArray<CMeshMaterialEntry> array)
+        if (Parent is null)
         {
             return;
         }
-
-        var isLocalInstance = Parent?.ResolvedData is meshMeshMaterialBuffer || Name == PreloadMaterialPath;
-
-        // Add the material definition
-        var lastIndex = array.LastOrDefault((e) => e.IsLocalInstance == isLocalInstance)?.Index ?? -1;
-        array.Add(new CMeshMaterialEntry { Name = newName, IsLocalInstance = isLocalInstance, Index = (CUInt16)lastIndex + 1 });
-
-        switch (ResolvedData)
-        {
-            case CArray<CMaterialInstance> matInstances:
-                matInstances.Add(new CMaterialInstance());
-                break;
-            case CArray<IMaterial> matInstances:
-                matInstances.Add(new CMaterialInstance());
-                break;
-            case CArray<CResourceAsyncReference<IMaterial>> externalMaterials:
-                externalMaterials.Add(new CResourceAsyncReference<IMaterial>());
-                break;
-            default:
-                break;
-        }
-
-        materialEntries.RecalculateProperties();
-        RecalculateProperties();
+        var newName = await Interactions.ShowInputBoxAsync("New material name", "");
+        _cvmMaterialTools.AddMaterialAndDefinition(this, newName);
     }
 
     public void ReplaceEntIComponentProperties(
@@ -432,9 +333,9 @@ public partial class ChunkViewModel
                     Tab?.Parent?.SetIsDirty(true);
 
                     kvp.Key.RecalculateProperties();
+                    kvp.Key.CalculateIsDefault();
                     kvp.Key.CalculateDescriptor();
                     kvp.Key.CalculateValue();
-                    kvp.Key.CalculateIsDefault();
                     kvp.Key.IsSelected = true;
                 }
 

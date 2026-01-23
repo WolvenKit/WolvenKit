@@ -7,6 +7,7 @@ using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Scripting;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.Interaction;
 
@@ -64,6 +65,8 @@ public static class Interactions
         DispatcherHelper.RunOnMainThread(() => result = ShowSaveUnsavedChangesDialog(fileName));
         return result;
     }
+
+    public static string ShowInputBox(string title, string originalValue) => AskForTextInput((title, originalValue));
 
     // wrappers
     public static async Task<string> ShowInputBoxAsync(string title, string originalValue)
@@ -308,4 +311,17 @@ public static class Interactions
     /// </summary>
     public static Func<PlayerHeadDialogViewModel> ShowNewPlayerHeadView { get; set; } =
         () => throw new NotImplementedException();
+
+    /// <summary>
+    /// Shows dialogue to add item codes to .reds store and vendor yaml
+    /// </summary>
+    public static Func<Cp77Project, AddRadioExtFilesDialogViewModel?> CreateOrEditRadioDialog { get; set; } =
+        project => throw new NotImplementedException();
+
+    /// <summary>
+    /// Shows dialogue to add item codes to .reds store and vendor yaml
+    /// </summary>
+    public static Func<(worldStreamingBlock block, Cp77Project project, StreamingSectorTools sectorTools),
+            AddSectorVariantDialogViewModel?>
+        ShowNewSectorVariantView { get; set; } = (args) => throw new NotImplementedException();
 }

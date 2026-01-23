@@ -12,6 +12,7 @@ using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Helpers;
 using WolvenKit.Modkit.Extensions;
 using WolvenKit.Modkit.RED4.MLMask;
+using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -63,7 +64,7 @@ namespace WolvenKit.Modkit.RED4
             gltfImportArgs.ShowVerboseLogOutput = showVerboseLogOutput;
 
             var commonImportArgs = args.Get<CommonImportArgs>();
-            
+
             // import files
             return extAsEnum switch
             {
@@ -483,6 +484,13 @@ namespace WolvenKit.Modkit.RED4
                 {
                     case GltfImportAsFormat.Mesh:
                         result = ImportMesh(rawRelative.ToFileInfo(), redFs, args);
+                        if (MeshTools.CreatedBones.Count > 0)
+                        {
+                            _loggerService.Warning(
+                                $"Wolvenkit created the following bones in your .mesh: \n{string.Join(',', MeshTools.CreatedBones)}");
+                            _notificationService.Warning(
+                                $"Wolvenkit created bones during import. Check the log for details.");
+                        }
                         break;
                     case GltfImportAsFormat.Morphtarget:
                         result = ImportMorphTargets(rawRelative.ToFileInfo(), redFs, args);
@@ -531,7 +539,7 @@ namespace WolvenKit.Modkit.RED4
             {
                 GltfImportAsFormat.MeshWithRig => ($".mesh", args.ImportFormat),
                 GltfImportAsFormat.Anims => ($".anims", GltfImportAsFormat.Anims),
-                _ => (maybeType.HasValue ? maybeType.Value : ".mesh", args.ImportFormat), 
+                _ => (maybeType.HasValue ? maybeType.Value : ".mesh", args.ImportFormat),
             };
 
 

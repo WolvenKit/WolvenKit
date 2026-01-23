@@ -139,7 +139,7 @@ public class SettingsDto : ISettingsDto
     #region General
 
     public bool AutoUpdateOnStartup { get; set; } = true;
-    public bool AlwaysAskBeforeUpdating { get; set; }
+    public bool AlwaysAskBeforeUpdating { get; set; } = true;
     public EUpdateChannel UpdateChannel { get; set; }
     public bool ShowGuidedTour { get; set; }
     public string? ThemeAccentString { get; set; }

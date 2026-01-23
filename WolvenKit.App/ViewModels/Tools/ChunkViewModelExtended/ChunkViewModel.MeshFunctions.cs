@@ -1,4 +1,5 @@
 using System.Linq;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.RED4.Types;
 
 // ReSharper disable once CheckNamespace
@@ -15,7 +16,7 @@ public partial class ChunkViewModel
     private ChunkViewModel? FindMaterialDefinition(bool isLocal, CName? name, int? index)
     {
         if ((name is null && index is null)
-            || GetRootModel() is not { ResolvedData: CMesh cmesh } rootModel
+            || GetRootModel() is not { ResolvedData: CMesh } rootModel
             || rootModel.GetPropertyChild(MaterialEntryDefinitionPath) is not ChunkViewModel entries)
         {
             return null;
@@ -35,7 +36,11 @@ public partial class ChunkViewModel
             return null;
         }
 
-        if (rootModel.GetPropertyChild(LocalMaterialBufferPath) is not ChunkViewModel entries)
+        var usePreload = CvmMaterialTools.HasPreloadMaterials(this);
+
+        // get the right view child
+        if (rootModel.GetPropertyChild(usePreload ? PreloadMaterialPath : LocalMaterialBufferPath) is not ChunkViewModel
+            entries)
         {
             return null;
         }

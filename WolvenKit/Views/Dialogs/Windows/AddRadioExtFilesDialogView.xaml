@@ -1,0 +1,240 @@
+<Window
+    x:Class="WolvenKit.Views.Dialogs.Windows.AddRadioExtFilesDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    Title="RadioExt Station"
+    Width="{DynamicResource WolvenKitDialogWidthSmall}"
+    MinHeight="{DynamicResource WolvenKitDialogHeightSmall}"
+    MaxHeight="{DynamicResource WolvenKitDialogHeightLarge}"
+    SizeToContent="Height"
+    DataContext="{Binding RelativeSource={RelativeSource Self},
+                          Path=ViewModel}"
+    FocusManager.FocusedElement="{Binding ElementName=IconPathTextBox}"
+    WindowStartupLocation="CenterScreen">
+    <Grid
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch">
+        <syncfusion:WizardControl
+            CancelButtonCancelsWindow="True"
+            FinishButtonClosesWindow="True">
+            <syncfusion:WizardPage
+                BackVisibility="Collapsed"
+                CancelVisibility="Visible"
+                FinishVisibility="Visible"
+                HelpVisibility="Collapsed"
+                NextVisibility="Collapsed"
+                PreviewKeyDown="WizardPage_PreviewKeyDown"
+                PageType="Exterior">
+                <Grid Margin="{StaticResource WolvenKitMarginTiny}">
+
+                    <Grid.Resources>
+                        <!-- Disable drag'n'drop popup of SfDataGrid -->
+                        <DataTemplate x:Key="DragDropPopup" />
+                    </Grid.Resources>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="{StaticResource WolvenKitPropertyColumnWidth}" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="10" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="10" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="5" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Radio Name -->
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        VerticalAlignment="Center"
+                        Text="Station name:" />
+                    <TextBox
+                        x:Name="StationNameTextBox"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                        KeyboardNavigation.TabIndex="2" />
+
+                    <!-- Radio Name -->
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        VerticalAlignment="Center"
+                        Text="FM:" />
+                    <TextBox
+                        x:Name="StationFrequencyTextBox"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                        KeyboardNavigation.TabIndex="2" />
+
+                    <!-- Icon file absolute path -->
+                    <TextBlock
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        VerticalAlignment="Center"
+                        Text="Icon file:" />
+                    <TextBox
+                        x:Name="IconPathTextBox"
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                        KeyboardNavigation.TabIndex="1" />
+                    <Button
+                        Grid.Row="4"
+                        Grid.Column="2"
+                        Height="{DynamicResource WolvenKitIconSmall}"
+                        Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                        Background="Transparent"
+                        Style="{StaticResource ButtonCustom}"
+                        Click="SearchIconButton_OnClick"
+                        ToolTip="Search icon file">
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ImageSearch"
+                            Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                            Size="{DynamicResource WolvenKitIconTiny}" />
+                    </Button>
+                    <TextBlock
+                        Grid.Row="6"
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Text="Select a png file (200x200) to generate an .inkatlas file" />
+
+                    <!-- Use Stream -->
+                    <TextBlock
+                        Grid.Row="8"
+                        Grid.Column="0"
+                        VerticalAlignment="Top"
+                        Text="Use stream:" />
+                    <CheckBox
+                        x:Name="UseStreamCheckBox"
+                        Grid.Row="8"
+                        Grid.Column="1"
+                        KeyboardNavigation.TabIndex="-1" />
+
+                    <!-- ======================================================== -->
+                    <!-- Song Folder / Stream -->
+                    <TextBlock
+                        Grid.Row="10"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        VerticalAlignment="Top"
+                        Text="{Binding LastRowLabel}" />
+                    <TextBox
+                        x:Name="StreamPathTextBox"
+                        Grid.Row="10"
+                        Grid.Column="1"
+                        VerticalAlignment="Top"
+                        Visibility="{Binding Path=UseStream,
+                                             Mode=OneWay,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        helpers:TextBoxBehavior.FocusGainedSelectAll="True"
+                        KeyboardNavigation.TabIndex="-1" />
+
+                    <!-- Songs Grid -->
+                    <syncfusion:SfDataGrid
+                        x:Name="SongsGrid"
+                        Grid.Row="10"
+                        Grid.Column="1"
+                        Visibility="{Binding Path=UseStream,
+                                             Mode=OneWay,
+                                             Converter={StaticResource InvertBooleanVisibilityConverter}}"
+                        RowHeight="{DynamicResource WolvenKitIconHuge}"
+                        ColumnSizer="Star"
+                        RowDragDropTemplate="{DynamicResource DragDropPopup}"
+                        RowDropIndicatorMode="Line"
+                        AutoGenerateColumns="False"
+                        AllowDraggingRows="True"
+                        AllowDrop="True"
+                        AllowSorting="False"
+                        AllowFiltering="False"
+                        SelectionMode="None"
+                        SelectionUnit="Row"
+                        ShowRowHeader="False">
+
+                        <syncfusion:SfDataGrid.Columns>
+                            <!-- Drag Handle -->
+                            <syncfusion:GridTemplateColumn
+                                Width="{DynamicResource WolvenKitIconHuge}"
+                                HeaderText=""
+                                AllowEditing="False">
+                                <syncfusion:GridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <templates:IconBox
+                                            IconPack="Material"
+                                            Kind="DragVertical"
+                                            Size="{DynamicResource WolvenKitIconTiny}"
+                                            Tag="DragHandle"
+                                            ToolTip="Drag to reorder" />
+                                    </DataTemplate>
+                                </syncfusion:GridTemplateColumn.CellTemplate>
+                            </syncfusion:GridTemplateColumn>
+
+                            <!-- Song Name -->
+                            <syncfusion:GridTextColumn
+                                Padding="{DynamicResource WolvenKitMarginSmallLeft}"
+                                MappingName="DisplayName"
+                                HeaderText="Song Name"
+                                HorizontalHeaderContentAlignment="Left" />
+
+                            <!-- Delete Button -->
+                            <syncfusion:GridTemplateColumn
+                                Width="{DynamicResource WolvenKitIconHuge}"
+                                HeaderText=""
+                                AllowEditing="False">
+                                <syncfusion:GridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button
+                                            x:Name="DeleteButton"
+                                            Style="{StaticResource WPFFlatButtonStyle}"
+                                            ToolTip="Delete this song"
+                                            Click="RowDeleteButton_Click"
+                                            Tag="{Binding}">
+                                            <templates:IconBox
+                                                IconPack="Material"
+                                                Kind="Delete"
+                                                Size="{DynamicResource WolvenKitIconTiny}"
+                                                Foreground="{StaticResource WolvenKitRed}" />
+                                        </Button>
+                                    </DataTemplate>
+                                </syncfusion:GridTemplateColumn.CellTemplate>
+                            </syncfusion:GridTemplateColumn>
+                        </syncfusion:SfDataGrid.Columns>
+                    </syncfusion:SfDataGrid>
+
+                    <Button
+                        Grid.Row="10"
+                        Grid.Column="2"
+                        Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                        Background="Transparent"
+                        Style="{StaticResource ButtonCustom}"
+                        Visibility="{Binding Path=UseStream,
+                                             Mode=OneWay,
+                                             Converter={StaticResource InvertBooleanVisibilityConverter}}"
+                        Click="AddSongFilesButton_OnClick"
+                        ToolTip="Add songs from folder">
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="FolderMusicOutline"
+                            Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                            Size="{DynamicResource WolvenKitIconTiny}" />
+                    </Button>
+                </Grid>
+            </syncfusion:WizardPage>
+        </syncfusion:WizardControl>
+    </Grid>
+</Window>

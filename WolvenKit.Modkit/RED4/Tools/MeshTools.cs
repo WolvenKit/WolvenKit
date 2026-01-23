@@ -14,6 +14,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.Exceptions;
+using WolvenKit.Modkit.Extensions;
 using WolvenKit.Modkit.RED4.Animation;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
@@ -653,60 +654,18 @@ namespace WolvenKit.Modkit.RED4.Tools
             return (numLodLevels, numSubmeshesPerLod);
         }
 
-        public static void UpdateMeshJoints(ref List<RawMeshContainer> meshes, RawArmature? existingJoints, RawArmature? incomingJoints, string fileName = "")
+        public static readonly HashSet<string> CreatedBones = [];
+
+        public static void UpdateMeshJoints(ref List<RawMeshContainer> meshes, RawArmature? existingArmature,
+            RawArmature? importedArmature, string fileName = "")
         {
-            if (existingJoints is not { BoneCount: > 0 } && incomingJoints is { BoneCount: > 0 })
+            if (existingArmature is not { BoneCount: > 0 } && importedArmature is { BoneCount: > 0 })
             {
                 throw new WolvenKitException(0x2005, $"\nThe destination mesh has no bones");
             }
 
-            HashSet<string> bonesNotFound = [];
-            // updating mesh bone indices
-            if (existingJoints is { BoneCount: > 0 } && incomingJoints is { BoneCount: > 0 })
-            {
-                ArgumentNullException.ThrowIfNull(existingJoints.Names);
-                ArgumentNullException.ThrowIfNull(incomingJoints.Names);
-
-                foreach (var mesh in meshes)
-                {
-                    ArgumentNullException.ThrowIfNull(mesh.positions);
-                    ArgumentNullException.ThrowIfNull(mesh.boneindices);
-
-
-                    for (var e = 0; e < mesh.positions.Length; e++)
-                    {
-                        for (var eye = 0; eye < mesh.weightCount; eye++)
-                        {
-
-                            if (mesh.boneindices[e, eye] >= incomingJoints.BoneCount)// && meshes[i].weights[e, eye] == 0)
-                            {
-                                mesh.boneindices[e, eye] = 0;
-                            }
-
-                            var boneName = incomingJoints.Names[mesh.boneindices[e, eye]];
-
-                            var found = false;
-                            for (ushort r = 0; r < existingJoints.BoneCount; r++)
-                            {
-                                if (existingJoints.Names[r] != boneName)
-                                {
-                                    continue;
-                                }
-
-                                mesh.boneindices[e, eye] = r;
-                                found = true;
-                                break;
-                            }
-
-                            if (!found && !bonesNotFound.Contains(boneName))
-                            {
-                                bonesNotFound.Add(boneName);
-                            }
-                        }
-                    }
-                }
-            }
-            else
+            // No bones
+            if (!(existingArmature is { BoneCount: > 0 } && importedArmature is { BoneCount: > 0 }))
             {
                 foreach (var mesh in meshes)
                 {
@@ -715,11 +674,63 @@ namespace WolvenKit.Modkit.RED4.Tools
                         mesh.weightCount = 0;
                     }
                 }
+
+                return;
             }
 
-            if (bonesNotFound.Any())
+            ArgumentNullException.ThrowIfNull(existingArmature.Names);
+            ArgumentNullException.ThrowIfNull(importedArmature.Names);
+
+            foreach (var mesh in meshes)
             {
-                throw new WolvenKitException(0x2005, $"\n{string.Join("\n", bonesNotFound)}");
+                ArgumentNullException.ThrowIfNull(mesh.positions);
+                ArgumentNullException.ThrowIfNull(mesh.boneindices);
+
+
+                for (var e = 0; e < mesh.positions.Length; e++)
+                {
+                    for (var eye = 0; eye < mesh.weightCount; eye++)
+                    {
+                        if (mesh.boneindices[e, eye] >= importedArmature.BoneCount)
+                            // && meshes[i].weights[e, eye] == 0)
+                        {
+                            mesh.boneindices[e, eye] = 0;
+                        }
+
+                        var boneName = importedArmature.Names[mesh.boneindices[e, eye]];
+
+                        var found = false;
+                        for (ushort r = 0; r < existingArmature.BoneCount; r++)
+                        {
+                            if (existingArmature.Names[r] != boneName)
+                            {
+                                continue;
+                            }
+
+                            mesh.boneindices[e, eye] = r;
+                            found = true;
+                            break;
+                        }
+
+                        if (found)
+                        {
+                            continue;
+                        }
+
+                        var newIndex = existingArmature.Names.Length;
+                        // Append bone name at the end of the array
+
+                        existingArmature.BoneCount += 1;
+                        existingArmature.Names = existingArmature.Names.SetWithResize(boneName);
+                        mesh.boneindices = mesh.boneindices.SetWithResize(
+                            e,
+                            newIndex,
+                            (ushort)existingArmature.BoneCount
+                        );
+
+                        CreatedBones.Add(boneName);
+                    }
+                }
             }
         }
 

@@ -1113,6 +1113,33 @@ public partial class ProjectResourceTools
             .ToList();
     }
 
+    /// <param name="absolutePath">absolute path of folder</param>
+    /// <param name="checkRecursive">get only files in top level directory?</param>
+    /// <param name="fileExtension">optional: a file extension to filter by</param>
+    /// <param name="allowDuplicateFileExtension">Checks for duplicate file extension, e.g. .json matches .morphtarget.json</param>
+    /// <returns></returns>
+    public static List<string> GetFilesFromDirectory(string? absolutePath, bool checkRecursive = false,
+        string fileExtension = "", bool allowDuplicateFileExtension = false)
+    {
+        if (absolutePath is null || !Directory.Exists(absolutePath))
+        {
+            return [];
+        }
+
+        return Directory.GetFiles(absolutePath, "*",
+                checkRecursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly)
+            .Where(f =>
+            {
+                if (string.IsNullOrEmpty(fileExtension))
+                {
+                    return true;
+                }
+
+                return f.HasFileExtension(fileExtension) && (allowDuplicateFileExtension || !f.HasTwoExtensions());
+            })
+            .Order()
+            .ToList();
+    }
 
     /// <summary>
     /// Add a list of item codes to an atelier store and/or a VendorsXL vendor

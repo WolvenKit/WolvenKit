@@ -11,6 +11,7 @@ using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Services;
@@ -35,6 +36,10 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private readonly CRUIDService _cruidService;
     private readonly DocumentTools _documentTools;
     private readonly ILoggerService _loggerService;
+    private readonly INotificationService _notificationService;
+    private readonly StreamingSectorTools _sectorTools;
+    private readonly AppViewModel _appViewModel;
+    private readonly CvmMaterialTools _cvmMaterialTools;
 
     public RedDocumentViewToolbarModel(
         ISettingsManager settingsManager,
@@ -42,6 +47,10 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         IProjectManager projectManager,
         DocumentTools documentTools,
         CRUIDService cruidService,
+        INotificationService notificationService,
+        StreamingSectorTools sectorTools,
+        AppViewModel appViewModel,
+        CvmMaterialTools cvmMaterialTools,
         ILoggerService loggerService
     )
     {
@@ -50,7 +59,11 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         _settingsManager = settingsManager;
         _cruidService = cruidService;
         _documentTools = documentTools;
+        _cvmMaterialTools = cvmMaterialTools;
         _loggerService = loggerService;
+        _sectorTools = sectorTools;
+        _notificationService = notificationService;
+        _appViewModel = appViewModel;
 
         modifierSvc.ModifierStateChanged += OnModifierChanged;
         modifierSvc.PropertyChanged += (_, args) => OnPropertyChanged(args.PropertyName);
@@ -106,11 +119,12 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
                 or RedDocumentItemType.Questphase
                 or RedDocumentItemType.Scene
                 or RedDocumentItemType.Physmatlib
+                or RedDocumentItemType.Streamingsector
+                or RedDocumentItemType.Streamingblock
+                or RedDocumentItemType.Mlsetup
                 or RedDocumentItemType.Ent => true,
             RedDocumentItemType.Xbm
                 or RedDocumentItemType.Mlmask
-                or RedDocumentItemType.Mlsetup
-                or RedDocumentItemType.Sector
                 or RedDocumentItemType.None
                 or RedDocumentItemType.Other => false,
             _ => false,
@@ -188,6 +202,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(RegenerateIdsCommand))]
     [NotifyCanExecuteChangedFor(nameof(CopyMaterialFromMeshCommand))]
     [NotifyCanExecuteChangedFor(nameof(CopyMaterialToMeshesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddSectorVariantCommand))]
     [ObservableProperty]
     private RedDocumentItemType _contentType;
 
@@ -206,7 +221,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(ScrollToMaterialCommand))]
     [NotifyCanExecuteChangedFor(nameof(ToggleLocalInstanceCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteDuplicateEntriesCommand))]
-    [NotifyCanExecuteChangedFor(nameof(ConvertPreloadMaterialsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ConvertToPreloadMaterialsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ConvertFromPreloadMaterialsCommand))]
     [ObservableProperty]
     private ChunkViewModel? _selectedChunk;
 
@@ -225,7 +241,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         ClearChunkMaterialsCommand.NotifyCanExecuteChanged();
         RegenerateAllCRUIDsCommand.NotifyCanExecuteChanged();
         DeleteChunkByIndexCommand.NotifyCanExecuteChanged();
-        ConvertPreloadMaterialsCommand.NotifyCanExecuteChanged();
+        ConvertToPreloadMaterialsCommand.NotifyCanExecuteChanged();
+        ConvertFromPreloadMaterialsCommand.NotifyCanExecuteChanged();
     }
 
     public void SetCurrentTab(RedDocumentTabViewModel? value)
@@ -628,13 +645,21 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private void ScrollToMaterial() => SelectedChunk?.ScrollToMaterialCommand.Execute(null);
 
     /*
-     * mesh: convert preloadXXX to regular local materials
+     * mesh: convert to and from preload materials
      */
-    private bool CanConvertPreloadMaterials() => RootChunk?.ResolvedData is CMesh mesh &&
-                                                 (mesh.PreloadExternalMaterials.Count > 0 || mesh.PreloadLocalMaterialInstances.Count > 0);
+    private bool CanConvertToPreloadMaterials() => RootChunk?.ResolvedData is CMesh mesh &&
+                                                   (mesh.LocalMaterialBuffer.Materials.Count > 0 ||
+                                                    mesh.ExternalMaterials.Count > 0);
 
-    [RelayCommand(CanExecute = nameof(CanConvertPreloadMaterials))]
-    private void ConvertPreloadMaterials() => RootChunk?.ConvertPreloadMaterialsCommand.Execute(null);
+    [RelayCommand(CanExecute = nameof(CanConvertToPreloadMaterials))]
+    private void ConvertToPreloadMaterials() => _cvmMaterialTools.ConvertPreloadMaterials(RootChunk);
+
+    private bool CanConvertFromPreloadMaterials() => RootChunk?.ResolvedData is CMesh mesh &&
+                                                     (mesh.PreloadExternalMaterials.Count > 0 ||
+                                                      mesh.PreloadLocalMaterialInstances.Count > 0);
+
+    [RelayCommand(CanExecute = nameof(CanConvertFromPreloadMaterials))]
+    private void ConvertFromPreloadMaterials() => _cvmMaterialTools.ConvertPreloadMaterials(RootChunk, true);
 
     /*
      * mesh: clear appearances
@@ -652,7 +677,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         }
 
         mesh.Appearances.Clear();
-        RootChunk.DeleteUnusedMaterialsCommand.Execute(false);
+        _cvmMaterialTools.DeleteUnusedMaterials(RootChunk, null, true);
     }
 
     #region meshfile_materials
@@ -729,7 +754,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             RootChunk.GetPropertyChild("appearances")?.CalculateProperties();
         }
 
-        RootChunk?.DeleteUnusedMaterialsCommand.Execute(false);
+        _cvmMaterialTools.DeleteUnusedMaterials(RootChunk);
     }
 
     #endregion
@@ -737,7 +762,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     #region phymatlibFile
 
     /*
-     * Delete duplicate entries
+     * Regenerate IDs
      */
     private bool CanRegenerateIds() => ContentType is RedDocumentItemType.Physmatlib;
 
@@ -746,6 +771,47 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
     #endregion
 
+    #region sector
+
+    /*
+     * Create sector variant(s) in streamingblock
+     */
+    private bool CanCreateVariants() => ContentType is RedDocumentItemType.Streamingblock;
+
+    [RelayCommand(CanExecute = nameof(CanCreateVariants))]
+    private void AddSectorVariant()
+    {
+        if (RootChunk?.ResolvedData is not worldStreamingBlock block ||
+            _projectManager.ActiveProject is not { } project)
+        {
+            return;
+        }
+
+        if (RootChunk.Tab?.Parent.IsDirty == true)
+        {
+            Interactions.ShowErrorPopup(("Save your file first!",
+                "Your file has un-saved changes. Please save before running this workflow."));
+            return;
+        }
+
+        try
+        {
+            if (_sectorTools.AddSectorVariants(block, project))
+            {
+                RootChunk.Tab?.Parent.SetIsDirty(true);
+                RootChunk.GetPropertyChild("descriptors")?.RecalculateProperties();
+                _appViewModel.ReloadChangedFiles();
+            }
+        }
+        catch (Exception e)
+        {
+            _notificationService.Error(e.Message);
+            _loggerService.Error(e.Message);
+            return;
+        }
+    }
+
+    #endregion
 
     private bool CanDeleteChunkMaterialByIndex() => RootChunk?.ResolvedData is CMesh mesh && mesh.Appearances.Count > 0;
 
@@ -827,7 +893,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         appearanceChild.RecalculateProperties();
     }
 
-    private bool CanClearChunkMaterials() => SelectedChunks.All(c => c.ResolvedData is meshMeshAppearance);
+    private bool CanClearChunkMaterials() =>
+        SelectedChunks.Count > 0 && SelectedChunks.All(c => c.ResolvedData is meshMeshAppearance);
 
 
     [RelayCommand(CanExecute = nameof(CanClearChunkMaterials))]

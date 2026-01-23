@@ -78,8 +78,7 @@ It's a good idea to create an issue when implementing a feature so people don't 
 For any questions:
 Developer | Role | Email
 ------------ | ------------- | -------------
-[Seberoth](https://github.com/seberoth) | Project Lead / Core Development | 
-[Rfuzzo](https://github.com/rfuzzo) | Project Lead / Core Development | [Email](mailto:r.fuzzo@gmail.com) 
+[spirit (sprt_)](https://github.com/notaspirit) | Project Lead / Core Development | 
 [Traderain](https://github.com/Traderain) | Project Lead | [Email](mailto:hambalko.bence@gmail.com) 
 
 ## Screenshots

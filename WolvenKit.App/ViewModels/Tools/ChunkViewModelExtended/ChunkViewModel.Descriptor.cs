@@ -93,6 +93,11 @@ public partial class ChunkViewModel
     {
         Descriptor = "";
 
+        // nothing to calculate - resolved data is dummy
+        if (ResolvedData is RedDummy)
+        {
+            return;
+        }
 
         switch (ResolvedData)
         {
@@ -334,6 +339,9 @@ public partial class ChunkViewModel
 
                 break;
             }
+            case CDateTime dateTime:
+                Descriptor = dateTime.ToString();
+                break;
             case animAnimSetEntry entry when entry.Animation?.GetValue() is animAnimation animation:
             {
                 Descriptor = animation.GetProperty(nameof(Name))?.ToString() ?? "";
@@ -651,6 +659,14 @@ public partial class ChunkViewModel
             case animAnimNode_Container nodeContainer:
                 Descriptor = $"[{nodeContainer.Nodes.Count}]";
                 return;
+
+            # region app
+
+            case entGarmentParameterComponentData garmentData:
+                Descriptor = $"{garmentData.ComponentID}";
+                return;
+
+            #endregion
             default:
             {
                 // mesh: boneTransforms (in different coordinate spaces)

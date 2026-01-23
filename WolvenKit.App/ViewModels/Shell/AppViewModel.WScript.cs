@@ -219,7 +219,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
     private readonly string _entspawnerExportRelPath =
         Path.Join("bin", "x64", "plugins", "cyber_engine_tweaks", "mods", "entSpawner", "export");
 
-    private string? GetEntspawnerRelativePath()
+    private string? GetEntspawnerGameDir()
     {
         if (SettingsManager.GetRED4GameRootDir() is not string gameDir)
         {
@@ -229,8 +229,21 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         return Path.Join(gameDir, _entspawnerExportRelPath);
     }
 
+    private string? GetEntspawnerRawDir()
+    {
+        if (ActiveProject?.RawDirectory is not string resourceDir)
+        {
+            return null;
+        }
+
+        return Path.Join(resourceDir, _entspawnerExportRelPath);
+    }
+
     private bool CanImportEntitySpawner() =>
-        CanShowProjectActions() && GetEntspawnerRelativePath() is string path && Directory.Exists(path);
+        CanShowProjectActions() && (
+            (GetEntspawnerGameDir() is string path && Directory.Exists(path))
+            || (GetEntspawnerRawDir() is string resourcePath && Directory.Exists(resourcePath))
+        );
 
     [RelayCommand(CanExecute = nameof(CanImportEntitySpawner))]
     private async Task ImportFromEntitySpawner()
@@ -242,9 +255,23 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
-        if (_archiveManager.ProjectArchive is not FileSystemArchive projArchive)
+        if (_archiveManager.ProjectArchive is not FileSystemArchive projArchive || ActiveProject is null)
         {
             _loggerService.Error("You need an active project to use this.");
+            return;
+        }
+
+        var entspawnerProjectDir = GetEntspawnerRawDir();
+        var entspawnerGameDir = GetEntspawnerGameDir();
+
+        var initialDir = GetImportDirectoryPath();
+        if (initialDir is null)
+        {
+            _loggerService.Error("No .json files were found in the following directories:"
+                                 + "\n\t - " + entspawnerGameDir
+                                 + "\n\t - " + entspawnerProjectDir
+            );
+            _notificationService.Error("No .json files were found. Check the log view for more detail.");
             return;
         }
 
@@ -253,7 +280,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         {
             Filter = "Json files (*.json)|*.json|All files (*.*)|*.*",
             Title = "Open object spawner export file",
-            InitialDirectory = GetEntspawnerRelativePath(),
+            InitialDirectory = initialDir,
         };
 
         openFileDialog.ShowDialog();
@@ -269,42 +296,84 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
+        // if project is not in rawDirectory, copy it there (from game directory)
+        var destPath = Path.Combine(ActiveProject.RawDirectory, Path.GetFileName(filePath));
+
         // Move it to the project - wscript can only deal with relative paths
-        var destPath = Path.Combine(ActiveProject!.RawDirectory, Path.GetFileName(filePath));
-
-        if (File.Exists(destPath))
+        if (destPath != filePath)
         {
-            var response = await Interactions.ShowMessageBoxAsync(
-                "A file with the same name already exists in the project. Do you want to overwrite it?",
-                "Overwrite file",
-                WMessageBoxButtons.YesNo);
-
-            if (response == WMessageBoxResult.No)
+            if (File.Exists(destPath))
             {
-                return;
+                var response = await Interactions.ShowMessageBoxAsync(
+                    "A file with the same name already exists in the project. Do you want to overwrite it?",
+                    "Overwrite file",
+                    WMessageBoxButtons.YesNo);
+
+                if (response == WMessageBoxResult.No)
+                {
+                    return;
+                }
+
+                File.Delete(destPath);
             }
 
-            File.Delete(destPath);
+            File.Copy(filePath, destPath);
         }
 
-        File.Copy(filePath, destPath);
+        try
+        {
+            ActiveDocument = await Open(destPath, EWolvenKitFile.WScript);
+            var code = await File.ReadAllTextAsync(_entSpawnerImportScript.Path);
 
-        ActiveDocument = await Open(destPath, EWolvenKitFile.WScript);
-        var code = await File.ReadAllTextAsync(_entSpawnerImportScript.Path);
+            await _scriptService.ExecuteAsync(code);
+        }
+        catch
+        {
+            _loggerService.Error($"Failed to read! Is the file corrupt? Please check {filePath}.");
+            _notificationService.Error($"Failed to read! Is the file corrupt? Please check {filePath}.");
+            return;
+        }
+        finally
+        {
+            ActiveDocument = null;
+        }
 
-        await _scriptService.ExecuteAsync(code);
-
-        ActiveDocument = null;
         try
         {
             File.Delete(destPath);
+            ProjectResourceTools.DeleteEmptyParents(destPath, ActiveProject);
         }
         catch
         {
             _loggerService.Error($"Failed to delete {filePath}. This file is no longer needed.");
+            _notificationService.Error($"Failed to delete {filePath}. This file is no longer needed.");
         }
 
         // Check for and reload any modified streaming sector or related files that are currently open
         ReloadChangedFiles();
+
+        return;
+
+        string? GetImportDirectoryPath()
+        {
+            const string infoMessage =
+                "You don't need to copy .json files to your project, we'll import from the game directory";
+            var jsonFilesInProject =
+                ProjectResourceTools.GetFilesFromDirectory(ActiveProject?.RawDirectory, true, ".json", false);
+
+            if (jsonFilesInProject.Count != 0 && Path.GetDirectoryName(jsonFilesInProject.FirstOrDefault()) is string dir)
+            {
+                _notificationService.Info(infoMessage);
+                _loggerService.Info(infoMessage);
+                return dir;
+            }
+
+            if (ProjectResourceTools.GetFilesFromDirectory(entspawnerGameDir, false, ".json").Count == 0)
+            {
+                return null;
+            }
+
+            return entspawnerGameDir;
+        }
     }
 }

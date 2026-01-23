@@ -1,0 +1,337 @@
+<UserControl
+    x:Class="WolvenKit.Views.Timeline.SectionTimelineView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:timeline="clr-namespace:WolvenKit.App.ViewModels.Timeline;assembly=WolvenKit.App"
+    xmlns:models="clr-namespace:WolvenKit.App.Models.Timeline;assembly=WolvenKit.App"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:converters="clr-namespace:WolvenKit.Converters"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance timeline:SectionTimelineViewModel,
+                                     IsDesignTimeCreatable=False}"
+    d:DesignHeight="200"
+    d:DesignWidth="800"
+    Focusable="True">
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <converters:MsToSecondsConverter x:Key="MsToSecondsConverter" />
+        <converters:InverseBooleanToVisibilityConverter x:Key="InverseBoolToVis" />
+        <converters:HeightMultiplierToPixelsConverter x:Key="HeightToPixels" />
+
+        <Style
+            x:Key="TimelineEventStyle"
+            TargetType="Border">
+            <Setter Property="CornerRadius" Value="3" />
+            <Setter Property="Cursor" Value="SizeAll" />
+            <Setter Property="Height" Value="22" />
+            <Setter Property="MinWidth" Value="4" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <Style
+            x:Key="ResizeGripStyle"
+            TargetType="Border">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Cursor" Value="SizeWE" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="Width" Value="6" />
+        </Style>
+
+        <Style
+            x:Key="TrackLabelStyle"
+            TargetType="TextBlock">
+            <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontSubTitle}" />
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginSmallLeft}" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="{StaticResource ContentBackgroundAlt}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border
+            Grid.Row="0"
+            Padding="8,6"
+            Background="{StaticResource ContentBackground}"
+            BorderBrush="{StaticResource BorderAlt}"
+            BorderThickness="0,0,0,1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel
+                    Grid.Column="0"
+                    Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial
+                        Kind="TimelineClockOutline"
+                        Margin="{DynamicResource WolvenKitMarginSmallRight}"
+                        VerticalAlignment="Center"
+                        Foreground="{StaticResource WolvenKitYellow}" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Foreground="White"
+                        FontSize="{DynamicResource WolvenKitFontBody}"
+                        FontWeight="Bold"
+                        Text="Section Timeline" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Foreground="Gray"
+                        FontSize="{DynamicResource WolvenKitFontBody}"
+                        Visibility="{Binding HasSectionNode,
+                                             Converter={StaticResource BoolToVis}}"
+                        Text=" - " />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Foreground="Gray"
+                        FontSize="{DynamicResource WolvenKitFontBody}"
+                        Visibility="{Binding HasSectionNode,
+                                             Converter={StaticResource BoolToVis}}"
+                        Text="{Binding SectionName}" />
+                </StackPanel>
+
+                <StackPanel
+                    Grid.Column="2"
+                    Visibility="{Binding HasSectionNode,
+                                         Converter={StaticResource BoolToVis}}"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                        VerticalAlignment="Center"
+                        Foreground="Gray"
+                        FontSize="{DynamicResource WolvenKitFontBody}"
+                        Text="Duration:" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Foreground="White"
+                        FontSize="{DynamicResource WolvenKitFontBody}">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0:N0}ms ({1:N2}s)">
+                                <Binding Path="SectionDuration" />
+                                <Binding
+                                    Path="SectionDuration"
+                                    Converter="{StaticResource MsToSecondsConverter}" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Time Ruler -->
+        <Border
+            Grid.Row="1"
+            Height="24"
+            Background="#FF2D2D30"
+            BorderBrush="{StaticResource BorderAlt}"
+            BorderThickness="0,0,0,1"
+            Visibility="{Binding HasSectionNode,
+                                 Converter={StaticResource BoolToVis}}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border
+                    Grid.Column="0"
+                    Background="#FF252526" />
+
+                <Canvas
+                    x:Name="TimeRulerCanvas"
+                    Grid.Column="1"
+                    ClipToBounds="True" />
+            </Grid>
+        </Border>
+
+        <!-- Track Area -->
+        <ScrollViewer
+            x:Name="TrackScrollViewer"
+            Grid.Row="2"
+            Visibility="{Binding HasSectionNode,
+                                 Converter={StaticResource BoolToVis}}"
+            HorizontalScrollBarVisibility="Auto"
+            VerticalScrollBarVisibility="Auto"
+            ScrollChanged="TrackScrollViewer_ScrollChanged">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Track Labels -->
+                <ItemsControl
+                    Grid.Column="0"
+                    Background="#FF252526"
+                    ItemsSource="{Binding Tracks}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type models:TimelineTrack}">
+                            <Border
+                                Height="{Binding HeightMultiplier,
+                                                 Converter={StaticResource HeightToPixels}}"
+                                BorderBrush="{StaticResource BorderAlt}"
+                                BorderThickness="0,0,0,1">
+                                <StackPanel
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal">
+                                    <Border
+                                        Width="4"
+                                        Height="20"
+                                        Margin="8,0,0,0"
+                                        Background="{Binding ColorBrush}"
+                                        CornerRadius="2" />
+                                    <TextBlock
+                                        Style="{StaticResource TrackLabelStyle}"
+                                        Text="{Binding Category}" />
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        Foreground="Gray"
+                                        FontSize="{DynamicResource WolvenKitFontAltTitle}"
+                                        Text="{Binding Events.Count,
+                                                       StringFormat='({0})'}" />
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Timeline Content -->
+                <Canvas
+                    x:Name="TimelineCanvas"
+                    Grid.Column="1"
+                    Width="{Binding TimelineWidth,
+                                    FallbackValue=800}"
+                    Height="{Binding TotalTrackHeight,
+                                     FallbackValue=200}"
+                    Background="#FF1E1E1E"
+                    ClipToBounds="True"
+                    MouseLeftButtonDown="TimelineCanvas_MouseLeftButtonDown"
+                    MouseLeftButtonUp="TimelineCanvas_MouseLeftButtonUp"
+                    MouseMove="TimelineCanvas_MouseMove"
+                    MouseLeave="TimelineCanvas_MouseLeave" />
+            </Grid>
+        </ScrollViewer>
+
+        <!-- No Selection Message -->
+        <StackPanel
+            Grid.Row="2"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Visibility="{Binding HasSectionNode,
+                                 Converter={StaticResource InverseBoolToVis}}">
+            <iconPacks:PackIconMaterial
+                Kind="TimelineClockOutline"
+                Width="32"
+                Height="32"
+                Margin="0,0,0,8"
+                HorizontalAlignment="Center"
+                Opacity="0.4" />
+            <TextBlock
+                HorizontalAlignment="Center"
+                Foreground="Gray"
+                FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                Text="Select a Section Node to edit its timeline" />
+        </StackPanel>
+
+        <!-- Toolbar -->
+        <Border
+            Grid.Row="3"
+            Padding="8,4"
+            Background="{StaticResource ContentBackground}"
+            BorderBrush="{StaticResource BorderAlt}"
+            BorderThickness="0,1,0,0"
+            Visibility="{Binding HasSectionNode,
+                                 Converter={StaticResource BoolToVis}}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Snap Controls -->
+                <StackPanel
+                    Grid.Column="0"
+                    Orientation="Horizontal">
+                    <CheckBox
+                        Margin="{DynamicResource WolvenKitMarginSmallRight}"
+                        VerticalAlignment="Center"
+                        Foreground="White"
+                        Content="Snap"
+                        IsChecked="{Binding IsSnapEnabled}" />
+                    <TextBox
+                        Width="50"
+                        VerticalAlignment="Center"
+                        IsEnabled="{Binding IsSnapEnabled}"
+                        Text="{Binding SnapInterval,
+                                       UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock
+                        Margin="{DynamicResource WolvenKitMarginTinyLeft}"
+                        VerticalAlignment="Center"
+                        Foreground="Gray"
+                        Text="ms" />
+                </StackPanel>
+
+                <!-- Zoom Controls -->
+                <StackPanel
+                    Grid.Column="2"
+                    Orientation="Horizontal">
+                    <Button
+                        Padding="4"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Command="{Binding ZoomOutCommand}"
+                        ToolTip="Zoom Out">
+                        <iconPacks:PackIconMaterial
+                            Kind="MagnifyMinusOutline"
+                            Width="14"
+                            Height="14" />
+                    </Button>
+                    <Slider
+                        Width="100"
+                        Margin="4,0"
+                        VerticalAlignment="Center"
+                        Minimum="{Binding MinPixelsPerMs}"
+                        Maximum="{Binding MaxPixelsPerMs}"
+                        Value="{Binding PixelsPerMs}" />
+                    <Button
+                        Padding="4"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Command="{Binding ZoomInCommand}"
+                        ToolTip="Zoom In">
+                        <iconPacks:PackIconMaterial
+                            Kind="MagnifyPlusOutline"
+                            Width="14"
+                            Height="14" />
+                    </Button>
+                    <Button
+                        Margin="8,0,0,0"
+                        Padding="4"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Command="{Binding ZoomToFitCommand}"
+                        ToolTip="Zoom to Fit">
+                        <iconPacks:PackIconMaterial
+                            Kind="FitToScreenOutline"
+                            Width="14"
+                            Height="14" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

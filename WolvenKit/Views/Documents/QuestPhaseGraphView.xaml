@@ -95,7 +95,7 @@
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
-                    </nodify:Connection.Style>
+                    </nodify:Connection.Style>  
                 </nodify:Connection>
             </DataTemplate>
 

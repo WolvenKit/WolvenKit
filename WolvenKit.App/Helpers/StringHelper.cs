@@ -433,4 +433,51 @@ public abstract partial class StringHelper
 
         return originalString + spacer + secondString;
     }
+
+    public static string ReplaceInString(string input, string searchOrPattern, string replace, bool isWholeWord,
+        bool isRegex, List<string>? previouslyReplacedStrings = null)
+    {
+        if (previouslyReplacedStrings?.Contains(input) == true)
+        {
+            return input;
+        }
+
+        if (isWholeWord)
+        {
+            if (input != searchOrPattern)
+            {
+                return input;
+            }
+
+            previouslyReplacedStrings?.Add(replace);
+            return replace;
+        }
+
+        string ret;
+        if (isRegex)
+        {
+            ret = Regex.Replace(input, searchOrPattern, replace);
+        }
+        else
+        {
+            ret = input.Replace(searchOrPattern, replace);
+        }
+
+        if (ret != input)
+        {
+            previouslyReplacedStrings?.Add(ret);
+        }
+
+        return ret;
+    }
+
+    public static string Truncate(string text, int maxLength)
+    {
+        if (string.IsNullOrEmpty(text) || text.Length <= maxLength)
+        {
+            return text;
+        }
+
+        return text.Substring(0, maxLength) + "...";
+    }
 }

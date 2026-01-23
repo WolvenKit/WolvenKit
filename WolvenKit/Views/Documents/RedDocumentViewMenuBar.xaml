@@ -241,9 +241,25 @@
 
                 <Style.Triggers>
                     <DataTrigger
+                        Binding="{Binding Path=ContentType}"
+                        Value="{x:Static documents:RedDocumentItemType.App}">
+                        <Setter Property="Visibility" Value="Visible" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <!-- Streaming sector: .streamingsector -->
+            <Style
+                x:Key="ShowStreamingBlockMenuItemStyle"
+                BasedOn="{StaticResource HasNestedMenuItemStyle}"
+                TargetType="{x:Type MenuItem}">
+                <Setter Property="Visibility" Value="Collapsed" />
+
+                <Style.Triggers>
+                    <DataTrigger
                         Binding="{Binding Path=ContentType,
                                           UpdateSourceTrigger=PropertyChanged}"
-                        Value="{x:Static documents:RedDocumentItemType.App}">
+                        Value="{x:Static documents:RedDocumentItemType.Streamingblock}">
                         <Setter Property="Visibility" Value="Visible" />
                     </DataTrigger>
                 </Style.Triggers>
@@ -549,37 +565,6 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <MenuItem
-                    Style="{StaticResource ShowMeshMenuItemStyle}"
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Header="Convert preload materials to local"
-                    Command="{Binding Path=ConvertPreloadMaterialsCommand}">
-                    <MenuItem.Icon>
-                        <templates:IconBox IconPack="Empty" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-
-                <MenuItem
-                    Style="{StaticResource ShowMeshMenuItemStyle}"
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Header="Delete chunk by submesh index"
-                    ToolTip="If you deleted submeshes"
-                    Command="{Binding Path=DeleteChunkByIndexCommand}">
-                    <MenuItem.Icon>
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="FilterVariantRemove"
-                            Foreground="{StaticResource WolvenKitRed}" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
                 <!-- .mesh file: Delete unused materials (Only display without SHIFT) -->
                 <MenuItem
                     Header="Delete unused materials"
@@ -655,20 +640,50 @@
 
                 <Separator Style="{StaticResource ShowInMeshFileSeparatorStyle}" />
 
-                <!-- mesh file: convert preload materials -->
+                <!-- mesh file: convert to/from preload materials -->
+
                 <MenuItem
                     Style="{StaticResource ShowMeshMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
                                          RelativeSource={RelativeSource Self},
                                          Mode=OneWay,
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Header="Convert preload materials to local"
-                    Command="{Binding Path=ConvertPreloadMaterialsCommand}">
+                    Header="Convert material preloading state">
                     <MenuItem.Icon>
                         <templates:IconBox IconPack="Empty" />
                     </MenuItem.Icon>
-                </MenuItem>
 
+                    <MenuItem
+                        Style="{StaticResource ShowMeshMenuItemStyle}"
+                        Visibility="{Binding Path=IsEnabled,
+                                             RelativeSource={RelativeSource Self},
+                                             Mode=OneWay,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Header="Convert preload materials to local"
+                        Command="{Binding Path=ConvertFromPreloadMaterialsCommand}">
+                        <MenuItem.Icon>
+                            <templates:IconBox IconPack="Empty" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <MenuItem
+                        Style="{StaticResource ShowMeshMenuItemStyle}"
+                        Visibility="{Binding Path=IsEnabled,
+                                             RelativeSource={RelativeSource Self},
+                                             Mode=OneWay,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Header="Convert local materials to preload"
+                        ToolTip="Do not do this unless you know why you need it!"
+                        Command="{Binding Path=ConvertToPreloadMaterialsCommand}">
+                        <MenuItem.Icon>
+                            <templates:IconBox
+                                IconPack="Material"
+                                Kind="Alert"
+                                Foreground="{StaticResource WolvenKitYellow}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                </MenuItem>
 
                 <!-- .mesh file: Clear chunk materials (if you have multiple appearances selected) -->
                 <MenuItem
@@ -1027,6 +1042,31 @@
                 </MenuItem.Icon>
             </MenuItem>
 
+
+            <!-- .streamingsector -->
+            <MenuItem
+                Style="{StaticResource ShowStreamingBlockMenuItemStyle}"
+                Header="Sector Variants">
+                <MenuItem.Icon>
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="Earth"
+                        Foreground="White" />
+                </MenuItem.Icon>
+                <MenuItem
+                    Style="{DynamicResource NestedMenuItemStyle}"
+                    Header="Create variant(s) from existing"
+                    Command="{Binding Path=AddSectorVariantCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="ContentDuplicate"
+                            Foreground="White" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+
+
             <!-- File validation submenu. Run WScript directly with shift-click. -->
             <MenuItem
                 Style="{StaticResource NestedMenuItemStyle}"
@@ -1043,7 +1083,7 @@
                 <!-- Run WScript -->
                 <MenuItem
                     Style="{StaticResource MenuItemStyle}"
-                    Header="Run WScript"
+                    Header="Full scan to log view"
                     Click="OnFileValidationClick">
                     <MenuItem.Icon>
                         <templates:IconBox

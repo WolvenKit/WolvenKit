@@ -52,6 +52,7 @@ namespace WolvenKit.Views.Documents
         private readonly IProgressService<double> _progressService;
         private readonly ProjectResourceTools _projectResourceTools;
         private readonly DocumentTools _documentTools;
+        private readonly CvmMaterialTools _cvmMaterialTools;
         private readonly Cr2WTools _cr2WTools;
 
 
@@ -69,6 +70,7 @@ namespace WolvenKit.Views.Documents
             _projectResourceTools = Locator.Current.GetService<ProjectResourceTools>()!;
             _cr2WTools = Locator.Current.GetService<Cr2WTools>()!;
             _notificationService = Locator.Current.GetService<INotificationService>()!;
+            _cvmMaterialTools = Locator.Current.GetService<CvmMaterialTools>()!;
 
             _appViewModel = Locator.Current.GetService<AppViewModel>()!;
 
@@ -81,12 +83,17 @@ namespace WolvenKit.Views.Documents
             InitializeInstanceObjects();
 
             DataContext = new RedDocumentViewToolbarModel(
-                _settingsManager,
-                _modifierStateService,
-                _projectManager,
-                _documentTools,
-                Locator.Current.GetService<CRUIDService>()!,
-                _loggerService) { CurrentTab = _currentTab };
+                settingsManager: _settingsManager,
+                modifierSvc: _modifierStateService,
+                projectManager: _projectManager,
+                documentTools: _documentTools,
+                cruidService: Locator.Current.GetService<CRUIDService>()!,
+                notificationService: Locator.Current.GetService<INotificationService>()!,
+                appViewModel: _appViewModel,
+                loggerService: _loggerService,
+                sectorTools: Locator.Current.GetService<StreamingSectorTools>()!,
+                cvmMaterialTools: _cvmMaterialTools
+            ) { CurrentTab = _currentTab };
             ViewModel = DataContext as RedDocumentViewToolbarModel;
 
             _modifierStateService.ModifierStateChanged += OnModifierStateChanged;
@@ -273,7 +280,7 @@ namespace WolvenKit.Views.Documents
             var isLocal = dialog.ViewModel?.IsLocalMaterial ?? true;
             var resolveSubstitutions = dialog.ViewModel?.ResolveSubstitutions ?? false;
 
-            cvm.GenerateMissingMaterials(baseMaterial, isLocal, resolveSubstitutions);
+            _cvmMaterialTools.GenerateMissingMaterials(cvm, baseMaterial, isLocal, resolveSubstitutions);
 
             cvm.Tab?.Parent.SetIsDirty(true);
         }
@@ -366,109 +373,8 @@ namespace WolvenKit.Views.Documents
 
         private void UnDynamifyMaterials(ChunkViewModel? cvm)
         {
-            if (cvm?.ResolvedData is not CMesh mesh ||
-                cvm.GetPropertyChild("appearances") is not ChunkViewModel appearances)
-            {
-                return;
-            }
-
-            cvm.ConvertPreloadMaterialsCommand.Execute(null);
-
-            appearances.CalculatePropertiesRecursive();
-
-            var templatesAndValues = ArchiveXlHelper.GetMaterialSubstitutionMap(mesh.Appearances);
-
-            // nothing to do here
-            if (templatesAndValues.Count == 0)
-            {
-                return;
-            }
-
-            var expandedData = ArchiveXlHelper.ExpandAppearanceTemplate(mesh.Appearances);
-            appearances.Data = ArchiveXlHelper.UnDynamifyChunkNames(expandedData);
-
-            appearances.RecalculateProperties();
-
-            cvm.GetPropertyChild("materials")?.CalculateProperties();
-            cvm.GetPropertyChild("localMaterialBuffer", "materials")?.CalculateProperties();
-
-            // iterate over dictionary and create new materials
-            foreach (var (matName, resolvedMatNames) in templatesAndValues)
-            {
-                var material = mesh.MaterialEntries.FirstOrDefault(m => m.Name == $"@{matName}");
-                if (material is null || mesh.LocalMaterialBuffer.Materials.Count < material.Index)
-                {
-                    _loggerService.Warning($"Can't un-dynamify material: Failed to resolve {matName}");
-                    continue;
-                }
-
-                var matInstance = (CMaterialInstance)mesh.LocalMaterialBuffer.Materials[material.Index];
-                var baseMaterialPath = matInstance.BaseMaterial.DepotPath.GetResolvedText() ?? "";
-
-                var maxIndex = mesh.MaterialEntries.Where(m => m.IsLocalInstance.Equals(material.IsLocalInstance))
-                    .Select(m => m.Index).Max();
-
-                foreach (var newMatName in resolvedMatNames.Distinct())
-                {
-                    maxIndex += 1;
-                    mesh.MaterialEntries.Add(new CMeshMaterialEntry()
-                    {
-                        Name = $"{matName}_{newMatName}", Index = maxIndex, IsLocalInstance = material.IsLocalInstance
-                    });
-
-                    var newMaterialInstance = new CMaterialInstance()
-                    {
-                        BaseMaterial = new CResourceReference<IMaterial>(
-                            baseMaterialPath.Replace("{material}", newMatName).Replace("*", ""),
-                            InternalEnums.EImportFlags.Default),
-                    };
-
-                    foreach (var cvp in matInstance.Values)
-                    {
-                        var value = cvp.Value switch
-                        {
-                            CResourceReference<Multilayer_Setup> mlsetup => new CResourceReference<Multilayer_Setup>(
-                                ReplaceMaterialPath(mlsetup.DepotPath, newMatName), InternalEnums.EImportFlags.Default),
-                            CResourceReference<Multilayer_Mask> mlmask => new CResourceReference<Multilayer_Mask>(
-                                ReplaceMaterialPath(mlmask.DepotPath, newMatName), InternalEnums.EImportFlags.Default),
-                            CResourceReference<ITexture> tex => new CResourceReference<ITexture>(
-                                ReplaceMaterialPath(tex.DepotPath, newMatName), InternalEnums.EImportFlags.Default),
-                            CResourceAsyncReference<Multilayer_Setup> mlsetup => new
-                                CResourceAsyncReference<Multilayer_Setup>(
-                                    ReplaceMaterialPath(mlsetup.DepotPath, newMatName),
-                                    InternalEnums.EImportFlags.Default),
-                            CResourceAsyncReference<Multilayer_Mask> mlmask => new
-                                CResourceAsyncReference<Multilayer_Mask>(
-                                    ReplaceMaterialPath(mlmask.DepotPath, newMatName),
-                                    InternalEnums.EImportFlags.Default),
-                            CResourceAsyncReference<ITexture> tex => new CResourceAsyncReference<ITexture>(
-                                ReplaceMaterialPath(tex.DepotPath, newMatName), InternalEnums.EImportFlags.Default),
-                            IRedResourceReference val => new CResourceReference<CResource>(
-                                ReplaceMaterialPath(val.DepotPath, newMatName), InternalEnums.EImportFlags.Default),
-                            IRedResourceAsyncReference asyncVal => new CResourceAsyncReference<CResource>(
-                                ReplaceMaterialPath(asyncVal.DepotPath, newMatName),
-                                InternalEnums.EImportFlags.Default),
-                            _ => cvp.Value
-                        };
-
-                        newMaterialInstance.Values.Add(new CKeyValuePair(cvp.Key, value));
-                    }
-
-                    mesh.LocalMaterialBuffer.Materials.Add(newMaterialInstance);
-                }
-            }
-
-            cvm.GetPropertyChild("materialEntries")?.RecalculateProperties();
-            cvm.GetPropertyChild("localMaterialBuffer", "materials")?.RecalculateProperties();
-
-            cvm.DeleteUnusedMaterialsCommand.Execute(true);
-            cvm.Tab?.Parent.SetIsDirty(true);
-
+            _cvmMaterialTools.UnDynamifyMaterials(cvm);
             ViewModel?.DeleteUnusedMaterialsCommand?.NotifyCanExecuteChanged();
-            return;
-
-            static string ReplaceMaterialPath(ResourcePath? depotPath, string newMatName) =>
-                (depotPath?.GetResolvedText() ?? "").Replace("{material}", newMatName).Replace("*", "");
         }
 
         private void OnUnDynamifyMaterialsClick(object _, RoutedEventArgs e) => UnDynamifyMaterials(RootChunk);
@@ -651,12 +557,13 @@ namespace WolvenKit.Views.Documents
 
             rootChunk.ForceLoadPropertiesRecursive();
 
-            rootChunk.DeleteUnusedMaterialsCommand.Execute(true);
+            _cvmMaterialTools.DeleteUnusedMaterials(rootChunk, null, true);
             rootChunk.Tab?.Parent.Save(null);
 
             await LoadAndAnalyzeModArchivesAsync();
 
-            var materialDependencies = await rootChunk.GetMaterialRefsFromFile();
+            var materialDependencies = await CvmMaterialTools.GetMaterialRefsFromFile(rootChunk);
+            await rootChunk.GetMaterialRefsFromFile();
 
             // Throw in anything found in .mi files
             var miDependencies = materialDependencies.Select(p => p.GetResolvedText()).OfType<string>()

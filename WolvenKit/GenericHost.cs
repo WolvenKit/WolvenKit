@@ -70,6 +70,7 @@ namespace WolvenKit
                     services.AddSingleton<IUpdateService, UpdateService>();
 
                     services.AddSingleton<ArchiveXlItemService>();
+                    services.AddSingleton<CvmMaterialTools>();
 
                     // scripting
                     services.AddSingleton<IHookService, AppHookService>();
@@ -205,6 +206,7 @@ namespace WolvenKit
                     services.AddSingleton<TemplateFileTools>();
                     services.AddSingleton<Cr2WTools>();
                     services.AddSingleton<ProjectResourceTools>();
+                    services.AddSingleton<StreamingSectorTools>();
                     #endregion
 
                     #region homepage

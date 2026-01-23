@@ -115,6 +115,17 @@ namespace WolvenKit.Views.Shell
                     return dialog.ViewModel;
                 };
 
+                Interactions.ShowNewSectorVariantView = args =>
+                {
+                    var dialog = new AddSectorVariantDialogView(args.block, args.project, args.sectorTools);
+                    if (dialog.ShowDialog() != true)
+                    {
+                        return null;
+                    }
+
+                    return dialog.ViewModel;
+                };
+
                 Interactions.ShowSelectSaveView = currentSaveGame =>
                 {
                     SaveGameSelectionDialog dialog = new(currentSaveGame);
@@ -136,6 +147,18 @@ namespace WolvenKit.Views.Shell
                     }
 
                     return true;
+                };
+
+                Interactions.CreateOrEditRadioDialog = project =>
+                {
+                    AddRadioExtFilesDialog dialog = new(project, ViewModel.TemplateFileTools);
+
+                    if (dialog.ShowDialog(this) != true)
+                    {
+                        return null;
+                    }
+
+                    return dialog.ViewModel;
                 };
 
                 Interactions.ShowCollectionView = input =>

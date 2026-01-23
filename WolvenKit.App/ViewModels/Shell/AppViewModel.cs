@@ -10,6 +10,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -79,7 +80,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly AppScriptService _scriptService;
     private readonly DocumentTools _documentTools;
     private readonly Cr2WTools _cr2WTools;
-    private readonly TemplateFileTools _templateFileTools;
+    public readonly TemplateFileTools TemplateFileTools;
     private readonly IWatcherService _watcherService;
     private readonly ArchiveXlItemService _archiveXlItemService;
     private readonly IUpdateService _updateService;
@@ -138,7 +139,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _scriptService = scriptService;
         _documentTools = documentTools;
         _cr2WTools = cr2WTools;
-        _templateFileTools = templateFileTools;
+        TemplateFileTools = templateFileTools;
         ProjectResourceTools = projectResourceTools;
         _updateService = updateService;
 
@@ -1575,13 +1576,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 continue;
             }
 
-            var result = Interactions.ShowConfirmation((
-                $"The file {documentViewModel.FilePath} has been modified externally. Do you want to reload it?",
-                "File Modified",
-                WMessageBoxImage.Question,
-                WMessageBoxButtons.YesNo));
-
-            if (result == WMessageBoxResult.Yes)
+            if (!documentViewModel.IsDirty || Interactions.ShowConfirmation((
+                    $"The file {documentViewModel.FilePath} has been modified externally. Do you want to reload it?",
+                    "File Modified",
+                    WMessageBoxImage.Question,
+                    WMessageBoxButtons.YesNo)) == WMessageBoxResult.Yes)
             {
                 documentViewModel.Reload(true);
             }
@@ -1910,6 +1909,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     //[NotifyCanExecuteChangedFor(nameof(CloseModalCommand))]
     [NotifyCanExecuteChangedFor(nameof(CloseDialogCommand))]
     [NotifyCanExecuteChangedFor(nameof(AddAXlItemFilesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddOrEditRadioCommand))]
     private bool _isDialogShown;
 
     [ObservableProperty]
@@ -1940,6 +1940,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(GeneratePropItemCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateInkatlasCommand))]
     [NotifyCanExecuteChangedFor(nameof(AddAXlItemFilesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddOrEditRadioCommand))]
     private Cp77Project? _activeProject;
 
     [ObservableProperty]
@@ -1957,6 +1958,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     [NotifyCanExecuteChangedFor(nameof(AddPlayerHeadCommand))]
     [NotifyCanExecuteChangedFor(nameof(RegisterWorldbuilderFilesCommand))]
     [NotifyCanExecuteChangedFor(nameof(GenerateInkatlasCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddAXlItemFilesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddOrEditRadioCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddOrEditRadioCommand))]
     private EAppStatus? _status;
 
     [ObservableProperty]
@@ -2351,13 +2355,24 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     {
         try
         {
-            ProcessStartInfo proc = new(fullpath.ToEscapedPath()) { UseShellExecute = true };
-            Process.Start(proc);
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                ProcessStartInfo proc = new(fullpath.ToEscapedPath()) { UseShellExecute = true };
+                Process.Start(proc);
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                Process.Start("xdg-open", fullpath);
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                Process.Start("open", fullpath);
+            }
         }
-        catch (Win32Exception)
+        catch (Exception e)
         {
             // eat this: no default app set for filetype
-            _loggerService.Error($"No default program set in Windows to open file extension {Path.GetExtension(fullpath)}");
+            _loggerService.Error($"Failed to open extension {Path.GetExtension(fullpath)}: {e.Message}");
         }
     }
 
@@ -2376,110 +2391,116 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
     }
 
+    // everything in ignoredExtensions is delegated to the System viewer
+    private const string s_ignoredExceptionsDelimiter = "|";
 
-    /// <param name="fullpath">Absolute path of the file</param>
+    private bool IsExtensionIgnored(string ext) =>
+        (SettingsManager.TreeViewIgnoredExtensions ?? "")
+        .Split(s_ignoredExceptionsDelimiter)
+        .Any(entry => entry.ToLower().Trim().Equals(ext));
+
+    /// <param name="absolutePath">Absolute path of the file</param>
     /// <param name="ignoreIgnoredExtension">Sometimes, we need to open files for internal script use. Set this flag to true for this case.</param>
     /// <exception cref="InvalidFileTypeException"></exception>
-    public void RequestFileOpen(string fullpath, bool ignoreIgnoredExtension = false)
+    public void RequestFileOpen(string absolutePath, bool ignoreIgnoredExtension = false)
     {
-        var ext = Path.GetExtension(fullpath).ToLower();
-
-        // everything in ignoredExtensions is delegated to the System viewer
-        var delimiter = "|";
-        //string[] ignoredExtensions = _settingsManager.TreeViewIgnoredExtensions.ToLower().Split(delimiter);
-        //bool isAnIgnoredExtension = Array.Exists(ignoredExtensions, extension => extension.Equals(ext));
-        var isAnIgnoredExtension = (SettingsManager.TreeViewIgnoredExtensions ?? "").Split(delimiter)
-            .Any(entry => entry.ToLower().Trim().Equals(ext));
-        if (isAnIgnoredExtension && !ignoreIgnoredExtension)
+        if (!File.Exists(absolutePath))
         {
-            ShellExecute(fullpath);
+            return;
         }
-        // double click
-        else
+
+        var ext = Path.GetExtension(absolutePath).ToLower();
+
+        if (!ignoreIgnoredExtension && IsExtensionIgnored(ext))
         {
-            switch (ext)
-            {
-                // custom raw file extensions
-                case $".{nameof(ERawFileFormat.masklist)}":
+            ShellExecute(absolutePath);
+            return;
+        }
 
-                // images
-                case ".png":
-                case ".jpg":
-                case ".tga":
-                case ".bmp":
-                case ".jpeg":
-                case ".dds":
+        switch (ext)
+        {
+            // custom raw file extensions
+            case $".{nameof(ERawFileFormat.masklist)}":
 
-                //text
-                case ".xml":
-                case ".txt":
-                case ".ws":
-                case ".lua":
+            // images
+            case ".png":
+            case ".jpg":
+            case ".tga":
+            case ".bmp":
+            case ".jpeg":
+            case ".dds":
 
-                // other
-                case ".mp3":
-                case ".wav":
-                case ".glb":
-                case ".gltf":
-                case ".fbx":
-                case ".xcf":
-                case ".psd":
-                case ".apb":
-                case ".apx":
-                case ".ctw":
-                case ".blend":
-                case ".zip":
-                case ".rar":
-                case ".bat":
-                case ".yml":
-                case ".log":
-                case ".ini":
-                case ".xl":
-                case ".reds":
-                case ".yaml":
-                case ".tweak":
-                    ShellExecute(fullpath);
-                    break;
-                // double file formats
-                case ".csv":
-                case ".json":
-                    if (IsInRawFolder(fullpath) || IsInResourceFolder(fullpath))
-                    {
-                        ShellExecute(fullpath);
-                    }
-                    else
-                    {
-                        OpenRedengineFile(fullpath, ext);
-                    }
-                    break;
-                // VIDEO
-                case ".bk2":
-                    break;
+            //text
+            case ".xml":
+            case ".txt":
+            case ".ws":
+            case ".lua":
 
-                // AUDIO
-
-                case ".wem":
-                    OpenAudioFile();
-                    break;
-                case ".subs":
-                    PolymorphExecute(fullpath, ".txt");
-                    break;
-                case ".usm":
+            // other
+            case ".mp3":
+            case ".wav":
+            case ".glb":
+            case ".gltf":
+            case ".fbx":
+            case ".xcf":
+            case ".psd":
+            case ".apb":
+            case ".apx":
+            case ".ctw":
+            case ".blend":
+            case ".zip":
+            case ".rar":
+            case ".bat":
+            case ".yml":
+            case ".log":
+            case ".ini":
+            case ".xl":
+            case ".reds":
+            case ".yaml":
+            case ".tweak":
+                ShellExecute(absolutePath);
+                break;
+            // double file formats
+            case ".csv":
+            case ".json":
+                if (IsInRawFolder(absolutePath) || IsInResourceFolder(absolutePath))
                 {
-                    // TODO: port winforms
-                    //if (!File.Exists(fullpath) || Path.GetExtension(fullpath) != ".usm")
-                    //    return;
-                    //var usmPlayer = new frmUsmPlayer(fullpath);
-                    //usmPlayer.Show(dockPanel, DockState.Document);
-                    break;
+                    ShellExecute(absolutePath);
                 }
-                //case ".BNK":
-                // TODO SPLIT WEMs TO PLAYLIST FROM BNK
-                default:
-                    OpenRedengineFile(fullpath, ext);
-                    break;
+                else
+                {
+                    OpenRedengineFile(absolutePath, ext);
+                }
+
+                break;
+            // VIDEO
+            case ".bk2":
+                break;
+
+            // AUDIO
+
+            case ".wem":
+                OpenAudioFile();
+                break;
+            case ".subs":
+                PolymorphExecute(absolutePath, ".txt");
+                break;
+            case ".usm":
+            {
+                // TODO: port winforms
+                //if (!File.Exists(fullpath) || Path.GetExtension(fullpath) != ".usm")
+                //    return;
+                //var usmPlayer = new frmUsmPlayer(fullpath);
+                //usmPlayer.Show(dockPanel, DockState.Document);
+                break;
             }
+            //case ".BNK":
+            // TODO SPLIT WEMs TO PLAYLIST FROM BNK
+            default:
+                OpenRedengineFile(absolutePath, ext);
+                break;
         }
+        
     }
 
     public void CloseFile(IDocumentViewModel documentViewModel) => DockedViews.Remove(documentViewModel);
