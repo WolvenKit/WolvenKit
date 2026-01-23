@@ -29,6 +29,11 @@ namespace WolvenKit.Modkit.RED4
     public partial class ModTools
     {
         /// <summary>
+        /// Does the GUI need to show an info popup about having created bones?
+        /// </summary>
+        public static bool ShowBoneCreationWarning { get; set; } = false;
+
+        /// <summary>
         /// Imports a raw File to a RedEngine file (e.g. .dds to .xbm, .fbx to .mesh)
         /// </summary>
         /// <param name="rawRelative"></param>
@@ -488,8 +493,7 @@ namespace WolvenKit.Modkit.RED4
                         {
                             _loggerService.Warning(
                                 $"Wolvenkit created the following bones in your .mesh: \n{string.Join(',', MeshTools.CreatedBones)}");
-                            _notificationService.Warning(
-                                $"Wolvenkit created bones during import. Check the log for details.");
+                            ShowBoneCreationWarning = true;
                         }
                         break;
                     case GltfImportAsFormat.Morphtarget:

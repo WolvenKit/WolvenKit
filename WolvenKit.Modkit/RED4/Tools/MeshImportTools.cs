@@ -290,12 +290,8 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
-
-        public static readonly List<string> CreatedBones = [];
-
         public bool ImportMesh(FileInfo inGltfFile, Stream inMeshStream, GltfImportArgs args)
         {
-            CreatedBones.Clear();
             var cr2w = _parserService.ReadRed4File(inMeshStream);
 
             if (cr2w is not { RootChunk: CMesh meshBlob } || meshBlob.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendBlob)
@@ -461,6 +457,7 @@ namespace WolvenKit.Modkit.RED4
 
             UpdateGarmentSupportParameters(meshes, meshBlob, args.ImportGarmentSupport, args.IgnoreGarmentSupportUVParam);
 
+            // TODO: We need to make sure to update mesh.boneNames mesh.boneRigMatrices and mesh.boneVertexEpsilons based on the armature somehow
             var expMeshes = meshes.Select(_ => RawMeshToRE4Mesh(_, quantScale, quantTrans)).ToList();
 
             var meshBuffer = new MemoryStream();
