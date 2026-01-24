@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WolvenKit.App.Extensions;
-using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
 
-namespace WolvenKit.App.ViewModels.Tools;
+namespace WolvenKit.App.Helpers;
 
 public class CvmMaterialTools
 {
