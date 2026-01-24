@@ -11,15 +11,20 @@ namespace WolvenKit.Views.Templates
 {
     public class PasteEventArgs : EventArgs
     {
-        public PasteEventArgs(string originalText)
+        public PasteEventArgs(string text)
         {
-            OriginalText = originalText;
-            ProcessedText = originalText;
+            Text = text;
             Handled = false;
         }
 
-        public string OriginalText { get; }
-        public string? ProcessedText { get; set; }
+        /// <summary>
+        /// Text content from the clipboard being pasted into the textbox
+        /// </summary>
+        public string Text { get; }
+
+        /// <summary>
+        /// Set to true to cancel the paste operation (e.g. if you're setting the textbox value yourself)
+        /// </summary>
         public bool Handled { get; set; }
     }
 
@@ -78,8 +83,10 @@ namespace WolvenKit.Views.Templates
             }
 
             var text = Clipboard.GetText();
-            var processed = ProcessText(text);
-            if (processed == null) return;
+            if (ProcessText(text) is not string processed)
+            {
+                return;
+            }
 
             PasteCustomText(processed);
         }
@@ -121,7 +128,7 @@ namespace WolvenKit.Views.Templates
                 return null;
             }
 
-            return args.ProcessedText ?? input;
+            return args.Text;
         }
     }
 }
