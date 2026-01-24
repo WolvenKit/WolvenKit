@@ -393,7 +393,7 @@
                         Grid.Row="28"
                         Grid.Column="0"
                         Style="{StaticResource LabelStyle}"
-                        Content="Move mesh files" />
+                        Content="Clean up WorldBuilder files" />
 
                     <CheckBox
                         x:Name="CleanupInvalidEntriesCheckbox"
