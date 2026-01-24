@@ -259,7 +259,7 @@ namespace WolvenKit.Views.Dialogs.Windows
             model.Appearances =
                 [.. textBox.Text.Split(",", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)];
 
-            if (model.Appearances.Count > 0 && !_hasMeshBeenTouched)
+            if (model.Appearances.Count > 0 && !model.HasMoveMeshBeenTouched)
             {
                 model.MeshFile1UseAppearances = true;
             }
@@ -272,11 +272,15 @@ namespace WolvenKit.Views.Dialogs.Windows
             Process.Start(ps);
         }
 
-        private bool _hasMeshBeenTouched = false;
 
         private void OnMeshCheckboxChecked(object sender, RoutedEventArgs e)
         {
-            _hasMeshBeenTouched = true;
+            if (ViewModel is null)
+            {
+                return;
+            }
+
+            ViewModel.HasMoveMeshBeenTouched = true;
         }
     }
 }
