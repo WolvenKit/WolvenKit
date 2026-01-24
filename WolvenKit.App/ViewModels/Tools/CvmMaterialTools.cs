@@ -359,7 +359,7 @@ public class CvmMaterialTools
         GenerateMissingMaterialInstances(cvm, baseMaterial, isLocal, resolveSubstitutions);
     }
 
-    private static void GenerateMissingMaterialDefinitions(ChunkViewModel cvm, bool isLocal)
+    private void GenerateMissingMaterialDefinitions(ChunkViewModel cvm, bool isLocal)
     {
         if (cvm.ResolvedData is not CMesh mesh)
         {
@@ -379,6 +379,8 @@ public class CvmMaterialTools
 
         if (undefinedMaterialNames.Count == 0)
         {
+            _notificationService.Success("No undefined materials - nothing was generated!");
+            _loggerService.Success("No undefined materials - nothing was generated!");
             return;
         }
 
@@ -399,7 +401,7 @@ public class CvmMaterialTools
     }
 
 
-    private static void GenerateMissingMaterialInstances(ChunkViewModel cvm, string baseMaterial, bool isLocal,
+    private void GenerateMissingMaterialInstances(ChunkViewModel cvm, string baseMaterial, bool isLocal,
         bool resolveSubstitutions)
     {
         if (cvm.ResolvedData is not CMesh mesh || mesh.MaterialEntries.Count == 0)
@@ -426,7 +428,7 @@ public class CvmMaterialTools
 
                 if (usePreload)
                 {
-                    mesh.PreloadLocalMaterialInstances.Add(materialInstance);
+                    mesh.PreloadLocalMaterialInstances.Add(new CHandle<IMaterial> { Chunk = materialInstance });
                 }
                 else
                 {
@@ -437,7 +439,7 @@ public class CvmMaterialTools
             {
                 if (usePreload)
                 {
-                    mesh.PreloadExternalMaterials.Add(new CResourceAsyncReference<IMaterial>(baseMaterialPath));
+                    mesh.PreloadExternalMaterials.Add(new CResourceReference<IMaterial>(baseMaterialPath));
                 }
                 else
                 {
@@ -445,7 +447,6 @@ public class CvmMaterialTools
                 }
             }
         }
-
 
         RecalculateMaterialProperties(cvm);
     }
