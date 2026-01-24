@@ -271,10 +271,21 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         // expand / collapse nested elements. Why click twice.
-        if (!IsArray && (TVProperties.Count == 1 || TVProperties.Count(p => !p.IsHiddenByEditorDifficultyLevel) == 1))
+        if (!IsArray)
         {
-            TVProperties[0].IsExpanded = IsExpanded;
-            return;
+            var visibleProperties = TVProperties.Where(p => !p.IsHiddenByEditorDifficultyLevel).ToList();
+            if (visibleProperties.Count == 1)
+            {
+                var prop = visibleProperties.First();
+                // ... unless we don't want to expand them (e.g. because they're primitives or so)
+                if (!IsExpanded || (prop.Value != prop.Descriptor &&
+                                    prop.ResolvedData is not (CKeyValuePair or Vector4 or Vector3)))
+                {
+                    prop.IsExpanded = IsExpanded;
+                }
+
+                return;
+            }
         }
 
         // Some special cases should be auto-expanded, e.g. if the parent only has one "interesting" property
