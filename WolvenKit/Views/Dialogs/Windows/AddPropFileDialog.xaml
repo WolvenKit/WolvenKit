@@ -8,6 +8,7 @@
     xmlns:controls="clr-namespace:WolvenKit.Views.Controls"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     Title="Add Prop files"
     Width="{StaticResource WolvenKitDialogWidth}"
     MinWidth="{StaticResource WolvenKitDialogWidth}"
@@ -160,6 +161,9 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
                     </Grid.RowDefinitions>
 
                     <!-- Destination folder -->
@@ -223,7 +227,7 @@
                         Style="{StaticResource LabelStyle}"
                         Content="Appearances:" />
 
-                    <syncfusion:SfTextBoxExt
+                    <templates:TextboxExtWithPasteHandler
                         x:Name="AppearancesTextBox"
                         Grid.Row="8"
                         Grid.Column="1"
@@ -238,6 +242,7 @@
                         TextWrapping="Wrap"
                         KeyboardNavigation.TabIndex="-1"
                         Watermark="black, white, red"
+                        ConvertNewlineToComma="True"
                         WatermarkTemplate="{StaticResource PlaceholderTemplate}"
                         LostFocus="Appearances_FocusLost" />
 
@@ -383,6 +388,24 @@
                         Grid.Column="1"
                         Style="{StaticResource ExplanationStyle}"
                         Text="Move .mesh files to parent folder" />
+
+                    <Label
+                        Grid.Row="28"
+                        Grid.Column="0"
+                        Style="{StaticResource LabelStyle}"
+                        Content="Move mesh files" />
+
+                    <CheckBox
+                        x:Name="CleanupInvalidEntriesCheckbox"
+                        Grid.Row="28"
+                        Grid.Column="1"
+                        KeyboardNavigation.TabIndex="-1" />
+
+                    <TextBlock
+                        Grid.Row="29"
+                        Grid.Column="1"
+                        Style="{StaticResource ExplanationStyle}"
+                        Text="Clean up non-existing entries from worldbuilder .txt files" />
 
                 </Grid>
             </syncfusion:WizardPage>

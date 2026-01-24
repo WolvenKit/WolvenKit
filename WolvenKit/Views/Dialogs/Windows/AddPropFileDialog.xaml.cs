@@ -16,6 +16,7 @@ using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Core;
 using WolvenKit.ViewModels.Validators;
+using WolvenKit.Views.Templates;
 
 namespace WolvenKit.Views.Dialogs.Windows
 {
@@ -107,6 +108,10 @@ namespace WolvenKit.Views.Dialogs.Windows
                 this.Bind(ViewModel,
                         x => x.MoveMeshesToFolder,
                         x => x.MoveMeshesToFolderCheckbox.IsChecked)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        x => x.CleanupInvalidEntries,
+                        x => x.CleanupInvalidEntriesCheckbox.IsChecked)
                     .DisposeWith(disposables);
 
                 Mesh1DropdownMenu.dropdown.SelectionChanged += Mesh1SelectionChanged;
@@ -259,12 +264,11 @@ namespace WolvenKit.Views.Dialogs.Windows
             model.Appearances =
                 [.. textBox.Text.Split(",", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)];
 
-            if (model.Appearances.Count > 0 && !_hasMeshBeenTouched)
+            if (model.Appearances.Count > 0 && !model.HasMoveMeshBeenTouched)
             {
                 model.MeshFile1UseAppearances = true;
             }
         }
-
 
         private void OnHelpButtonClicked(object sender, RoutedEventArgs e)
         {
@@ -272,11 +276,29 @@ namespace WolvenKit.Views.Dialogs.Windows
             Process.Start(ps);
         }
 
-        private bool _hasMeshBeenTouched = false;
 
         private void OnMeshCheckboxChecked(object sender, RoutedEventArgs e)
         {
-            _hasMeshBeenTouched = true;
+            if (ViewModel is null)
+            {
+                return;
+            }
+
+            ViewModel.HasMoveMeshBeenTouched = true;
+        }
+
+        // Custom event handler for keyDown because why not
+        private void OnAppearancesCheckboxKeyDown(object sender, KeyEventArgs e)
+        {
+            if (sender is not TextBox textbox || e.Key != Key.V ||
+                !Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+            {
+                return;
+            }
+
+            e.Handled = true;
+            var clipboardText = Clipboard.GetText().Replace("\n", ", ").Replace("\r", ", ");
+            textbox.Text = clipboardText;
         }
     }
 }
