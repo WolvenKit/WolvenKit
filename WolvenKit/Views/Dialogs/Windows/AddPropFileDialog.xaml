@@ -161,6 +161,9 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
                     </Grid.RowDefinitions>
 
                     <!-- Destination folder -->
@@ -385,6 +388,24 @@
                         Grid.Column="1"
                         Style="{StaticResource ExplanationStyle}"
                         Text="Move .mesh files to parent folder" />
+
+                    <Label
+                        Grid.Row="28"
+                        Grid.Column="0"
+                        Style="{StaticResource LabelStyle}"
+                        Content="Move mesh files" />
+
+                    <CheckBox
+                        x:Name="CleanupInvalidEntriesCheckbox"
+                        Grid.Row="28"
+                        Grid.Column="1"
+                        KeyboardNavigation.TabIndex="-1" />
+
+                    <TextBlock
+                        Grid.Row="29"
+                        Grid.Column="1"
+                        Style="{StaticResource ExplanationStyle}"
+                        Text="Clean up non-existing entries from worldbuilder .txt files" />
 
                 </Grid>
             </syncfusion:WizardPage>

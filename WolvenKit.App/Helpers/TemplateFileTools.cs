@@ -1523,6 +1523,12 @@ public partial class TemplateFileTools
             }
 
             fileContent.Add(entFilePath);
+
+            if (prop.CleanupInvalidEntries)
+            {
+                fileContent = fileContent.Where(project.ModFiles.Contains).ToHashSet();
+            }
+
             File.WriteAllLines(absoluteEntRegistryPath, fileContent.ToArray());
         }
     }
