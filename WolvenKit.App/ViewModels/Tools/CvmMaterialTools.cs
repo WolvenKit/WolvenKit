@@ -95,7 +95,7 @@ public class CvmMaterialTools
         cvm.GetRootModel() is { ResolvedData: CMesh mesh } && HasPreloadMaterials(mesh);
 
     private static bool HasPreloadMaterials(CMesh mesh) =>
-        mesh.PreloadExternalMaterials.Count > 1 || mesh.PreloadLocalMaterialInstances.Count > 0;
+        mesh.PreloadExternalMaterials.Count > 0 || mesh.PreloadLocalMaterialInstances.Count > 0;
 
     # endregion
 
