@@ -2498,16 +2498,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return null;
         }
 
-        var newIdx = Parent.Properties.Count;
-
-        // Material definitions: Don't append at the end - local and external materials have their own indices
-        if (Data is CMeshMaterialEntry def &&
-            _cvmMaterialTools.FindHighestMaterialIndex(Parent, def.IsLocalInstance) is var i and >= 0)
-        {
-            newIdx = i;
-        }
-
-        return DuplicateChunk(newIdx, true);
+        return DuplicateChunk(Parent.Properties.Count, true);
     }
 
     private void ReindexChildren()
@@ -3627,12 +3618,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             case CArray<CMeshMaterialEntry> materialDefinitionArray when
                 ResolvedData is CMeshMaterialEntry materialDefinition:
             {
-                var materialIndex = materialDefinitionArray
-                    .Where(mat => mat.IsLocalInstance.Equals(materialDefinition.IsLocalInstance))
-                    .OrderBy(mat => Int32.Parse(mat.Index.ToString()))
-                    .Select(mat => mat.Index)
-                    .Last();
-
+                var materialIndex =
+                    _cvmMaterialTools.FindHighestMaterialIndex(Parent, materialDefinition.IsLocalInstance);
                 SetDataIndexProperty(materialIndex + 1);
                 break;
             }
