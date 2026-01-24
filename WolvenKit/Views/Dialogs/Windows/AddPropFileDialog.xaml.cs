@@ -109,6 +109,10 @@ namespace WolvenKit.Views.Dialogs.Windows
                         x => x.MoveMeshesToFolder,
                         x => x.MoveMeshesToFolderCheckbox.IsChecked)
                     .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        x => x.CleanupInvalidEntries,
+                        x => x.CleanupInvalidEntriesCheckbox.IsChecked)
+                    .DisposeWith(disposables);
 
                 Mesh1DropdownMenu.dropdown.SelectionChanged += Mesh1SelectionChanged;
                 disposables.Add(Disposable.Create(() =>

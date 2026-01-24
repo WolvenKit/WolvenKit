@@ -15,10 +15,7 @@ public partial class AddPropFileDialogViewModel : ObservableObject
 
     [ObservableProperty] private Dictionary<string, string> _projectMeshes;
 
-    /// <summary>
-    /// Remember the last selection
-    /// </summary>
-    [ObservableProperty] private bool _rememberValues = true;
+    [ObservableProperty] private bool _cleanupInvalidEntries = true;
 
     /// <summary>
     /// Move mesh files to parent folder? (if they aren't already)
