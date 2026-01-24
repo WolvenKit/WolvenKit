@@ -641,14 +641,14 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
                                                     mesh.ExternalMaterials.Count > 0);
 
     [RelayCommand(CanExecute = nameof(CanConvertToPreloadMaterials))]
-    private void ConvertToPreloadMaterials() => _cvmMaterialTools.ConvertPreloadMaterials(RootChunk);
+    private void ConvertToPreloadMaterials() => _cvmMaterialTools.ConvertMaterialsToPreload(RootChunk);
 
     private bool CanConvertFromPreloadMaterials() => RootChunk?.ResolvedData is CMesh mesh &&
                                                      (mesh.PreloadExternalMaterials.Count > 0 ||
                                                       mesh.PreloadLocalMaterialInstances.Count > 0);
 
     [RelayCommand(CanExecute = nameof(CanConvertFromPreloadMaterials))]
-    private void ConvertFromPreloadMaterials() => _cvmMaterialTools.ConvertPreloadMaterials(RootChunk, true);
+    private void ConvertFromPreloadMaterials() => _cvmMaterialTools.ConvertMaterialsFromPreload(RootChunk);
 
     /*
      * mesh: clear appearances
