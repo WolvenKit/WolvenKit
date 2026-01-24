@@ -8,6 +8,7 @@
     xmlns:controls="clr-namespace:WolvenKit.Views.Controls"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     Title="Add Prop files"
     Width="{StaticResource WolvenKitDialogWidth}"
     MinWidth="{StaticResource WolvenKitDialogWidth}"
@@ -223,7 +224,7 @@
                         Style="{StaticResource LabelStyle}"
                         Content="Appearances:" />
 
-                    <syncfusion:SfTextBoxExt
+                    <templates:TextboxExtWithPasteHandler
                         x:Name="AppearancesTextBox"
                         Grid.Row="8"
                         Grid.Column="1"
@@ -238,6 +239,7 @@
                         TextWrapping="Wrap"
                         KeyboardNavigation.TabIndex="-1"
                         Watermark="black, white, red"
+                        ConvertNewlineToComma="True"
                         WatermarkTemplate="{StaticResource PlaceholderTemplate}"
                         LostFocus="Appearances_FocusLost" />
 

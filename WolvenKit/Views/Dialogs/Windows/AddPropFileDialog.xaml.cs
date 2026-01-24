@@ -16,6 +16,7 @@ using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Core;
 using WolvenKit.ViewModels.Validators;
+using WolvenKit.Views.Templates;
 
 namespace WolvenKit.Views.Dialogs.Windows
 {
@@ -265,7 +266,6 @@ namespace WolvenKit.Views.Dialogs.Windows
             }
         }
 
-
         private void OnHelpButtonClicked(object sender, RoutedEventArgs e)
         {
             var ps = new ProcessStartInfo(WikiLinks.Props) { UseShellExecute = true, Verb = "open" };
@@ -281,6 +281,20 @@ namespace WolvenKit.Views.Dialogs.Windows
             }
 
             ViewModel.HasMoveMeshBeenTouched = true;
+        }
+
+        // Custom event handler for keyDown because why not
+        private void OnAppearancesCheckboxKeyDown(object sender, KeyEventArgs e)
+        {
+            if (sender is not TextBox textbox || e.Key != Key.V ||
+                !Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+            {
+                return;
+            }
+
+            e.Handled = true;
+            var clipboardText = Clipboard.GetText().Replace("\n", ", ").Replace("\r", ", ");
+            textbox.Text = clipboardText;
         }
     }
 }
