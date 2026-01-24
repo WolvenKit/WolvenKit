@@ -664,7 +664,7 @@ namespace WolvenKit.Modkit.RED4.Tools
             // }
 
             // No bones
-            if (existingArmature?.BoneCount == 0 && importedArmature?.BoneCount == 0)
+            if ((existingArmature?.BoneCount ?? 0) == 0 && (importedArmature?.BoneCount ?? 0) == 0)
             {
                 foreach (var mesh in meshes)
                 {
