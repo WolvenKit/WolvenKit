@@ -2487,7 +2487,16 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return null;
         }
 
-        return DuplicateChunk(Parent.Properties.Count, true);
+        var newIdx = Parent.Properties.Count;
+
+        // Material definitions: Don't append at the end - local and external materials have their own indices
+        if (Data is CMeshMaterialEntry def &&
+            _cvmMaterialTools.FindHighestMaterialIndex(Parent, def.IsLocalInstance) is var i and >= 0)
+        {
+            newIdx = i;
+        }
+
+        return DuplicateChunk(newIdx, true);
     }
 
     private void ReindexChildren()

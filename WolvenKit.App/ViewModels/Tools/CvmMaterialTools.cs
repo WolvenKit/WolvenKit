@@ -781,4 +781,16 @@ public class CvmMaterialTools
 
         return ret;
     }
+
+    public int FindHighestMaterialIndex(ChunkViewModel materialDefinitionArray, bool isLocalInstance)
+    {
+        if (materialDefinitionArray.ResolvedData is not CArray<CMeshMaterialEntry> array)
+        {
+            return -1;
+        }
+
+        return array.ToList()
+            .Where(m => m.IsLocalInstance == isLocalInstance)
+            .Max(m => m.Index);
+    }
 }
