@@ -227,35 +227,44 @@ public static partial class ArchiveXlHelper
     public static CArray<CHandle<meshMeshAppearance>> ExpandAppearanceTemplate(CArray<CHandle<meshMeshAppearance>> apps)
     {
         var meshAppearances = apps.Select(m => m.Chunk).OfType<meshMeshAppearance>().ToList();
-        var appearancesWithMaterials = meshAppearances.Where(mA => mA.ChunkMaterials.Count > 0).ToList();
+        var appearancesWithMaterials =
+            meshAppearances.Where(mA => mA.ChunkMaterials.Count > 0).ToDictionary(k => k.Name, v => v);
 
-        if (meshAppearances.Count <= 1 || meshAppearances.Count == appearancesWithMaterials.Count ||
-            meshAppearances.First() is not meshMeshAppearance template ||
-            template.Name.GetString() is not string templateName)
+        if (meshAppearances.Count <= 1 || // can't expand anything if there's just one appearance
+            meshAppearances.Count == appearancesWithMaterials.Count || // they all have materials
+            appearancesWithMaterials.Count == 0 // none have materials
+           )
         {
             // nothing to do here
             return apps;
         }
 
-        if (template.ChunkMaterials.Count == 0)
-        {
-            s_loggerService?.Error($"Can't expand from appearance {templateName}, it doesn't have chunk materials!");
-            return apps;
-        }
 
         if (appearancesWithMaterials.Count != 1)
         {
             s_loggerService?.Warning("More than one appearance has chunk materials. Using first entry as template.");
         }
 
-        var templateChunkMaterials = template.ChunkMaterials.Select(s => s.ToString() ?? "").ToList();
         foreach (var mA in meshAppearances.Where(ma => ma.ChunkMaterials.Count == 0))
         {
-            // turn template@neon to currentMaterial@neon
-            foreach (var chunkMaterial in templateChunkMaterials.Select(chunk =>
-                         chunk.Replace(templateName, mA.Name)))
+            var templateAppearance = appearancesWithMaterials.Values.First();
+
+            // If a template appearance is defined via tag, use that one
+            if (mA.Tags.Count > 0 && appearancesWithMaterials.TryGetValue(mA.Tags[0], out var appearance))
             {
-                mA.ChunkMaterials.Add(chunkMaterial);
+                templateAppearance = appearance;
+            }
+
+            if (templateAppearance.Name.ToString() is not string templateAppearanceName)
+            {
+                continue;
+            }
+
+            // turn template@neon to currentMaterial@neon
+            foreach (var chunkMaterial in templateAppearance.ChunkMaterials.ToList().Select(chunk =>
+                         chunk.ToString()!.Replace(templateAppearanceName, mA.Name)))
+            {
+                mA.ChunkMaterials.Add((CName)chunkMaterial);
             }
         }
 
@@ -306,7 +315,8 @@ public static partial class ArchiveXlHelper
     /// Returns a dictionary of dynamic appearance names with all possible parameters.
     /// </summary>
     /// <example><code>
-    /// { "@neon", [ "red", "blue", "green" ] }
+    /// { "@neon",   [ "red", "blue", "green" ] }
+    /// { "lambert", [ "lambert" ] }
     /// </code></example>
     public static Dictionary<string, List<string>> GetMaterialSubstitutionMap(CArray<CHandle<meshMeshAppearance>> apps)
     {
@@ -325,6 +335,7 @@ public static partial class ArchiveXlHelper
             var nameParts = mat.Split('@');
             if (nameParts.Length != 2)
             {
+                ret.TryAdd(mat, [mat]);
                 continue;
             }
 
@@ -338,22 +349,20 @@ public static partial class ArchiveXlHelper
     /// <summary>
     /// Takes a depot path and a list of mesh appearances, and returns a list of all possible material substitutions.
     /// </summary>
-    /// <example>
-    ///<code>
+    /// <example><code>
     /// in:
     /// red@neon, green@neon, blue@neon
+    /// lambert
     /// out:
-    /// @neon => [red, green, blue]
-    /// </code>
-    /// </example>
-    ///     ///
-    ///
+    /// @neon   => [red, green, blue]
+    /// lambert => [lambert]
+    /// </code> </example>
     public static IEnumerable<string> ResolveMaterialSubstitutions(string depotPath,
         CArray<CHandle<meshMeshAppearance>> meshAppearances)
     {
-        if (!depotPath.Contains("{material}"))
+        if (!depotPath.StartsWith('*') && !depotPath.Contains("{material}"))
         {
-            return ResolveDynamicPaths(depotPath);
+            return [depotPath];
         }
 
         var materialSubstitutions = GetMaterialSubstitutionMap(meshAppearances);
@@ -374,7 +383,6 @@ public static partial class ArchiveXlHelper
     {
         // Find all {placeholders} in the original string
         var placeholderPattern = PlaceholderPattern();
-        var matches = placeholderPattern.Matches(dynamicPathStr);
 
         // Split the original string into literal and placeholder parts
         var splitPattern = PlaceholderSplitPattern();
@@ -425,21 +433,20 @@ public static partial class ArchiveXlHelper
         if (cvpValue is IRedResourceReference original)
         {
             newPath = ReplaceMaterialPath(original.DepotPath, newMatName);
+            // @formatter:off
             return redType switch
             {
-                "Multilayer_Setup" => new CResourceReference<Multilayer_Setup>(newPath,
-                    InternalEnums.EImportFlags.Default),
-                "Multilayer_Mask" => new CResourceReference<Multilayer_Mask>(newPath,
-                    InternalEnums.EImportFlags.Default),
+                "Multilayer_Setup" => new CResourceReference<Multilayer_Setup>(newPath, InternalEnums.EImportFlags.Default),
+                "Multilayer_Mask" => new CResourceReference<Multilayer_Mask>(newPath, InternalEnums.EImportFlags.Default),
                 "ITexture" => new CResourceReference<ITexture>(newPath, InternalEnums.EImportFlags.Default),
                 "CGradient" => new CResourceReference<CGradient>(newPath, InternalEnums.EImportFlags.Default),
-                "CFoliageProfile" => new CResourceReference<CFoliageProfile>(newPath,
-                    InternalEnums.EImportFlags.Default),
+                "CFoliageProfile" => new CResourceReference<CFoliageProfile>(newPath, InternalEnums.EImportFlags.Default),
                 "CHairProfile" => new CResourceReference<CHairProfile>(newPath, InternalEnums.EImportFlags.Default),
                 "CSkinProfile" => new CResourceReference<CSkinProfile>(newPath, InternalEnums.EImportFlags.Default),
                 "CTerrainSetup" => new CResourceReference<CTerrainSetup>(newPath, InternalEnums.EImportFlags.Default),
                 _ => original
             };
+            // @formatter:on
         }
 
         if (cvpValue is not IRedResourceReference asyncRef)
@@ -449,24 +456,20 @@ public static partial class ArchiveXlHelper
         }
 
         newPath = ReplaceMaterialPath(asyncRef.DepotPath, newMatName);
+        // @formatter:off
         return redType switch
         {
-            "Multilayer_Setup" => new CResourceAsyncReference<Multilayer_Setup>(newPath,
-                InternalEnums.EImportFlags.Default),
-            "Multilayer_Mask" => new CResourceAsyncReference<Multilayer_Mask>(newPath,
-                InternalEnums.EImportFlags.Default),
+            "Multilayer_Setup" => new CResourceAsyncReference<Multilayer_Setup>(newPath, InternalEnums.EImportFlags.Default),
+            "Multilayer_Mask" => new CResourceAsyncReference<Multilayer_Mask>(newPath, InternalEnums.EImportFlags.Default),
             "ITexture" => new CResourceAsyncReference<ITexture>(newPath, InternalEnums.EImportFlags.Default),
             "CGradient" => new CResourceAsyncReference<CGradient>(newPath, InternalEnums.EImportFlags.Default),
-            "CFoliageProfile" => new CResourceAsyncReference<CFoliageProfile>(newPath,
-                InternalEnums.EImportFlags.Default),
-            "CHairProfile" => new CResourceAsyncReference<CHairProfile>(newPath,
-                InternalEnums.EImportFlags.Default),
-            "CSkinProfile" => new CResourceAsyncReference<CSkinProfile>(newPath,
-                InternalEnums.EImportFlags.Default),
-            "CTerrainSetup" => new CResourceAsyncReference<CTerrainSetup>(newPath,
-                InternalEnums.EImportFlags.Default),
+            "CFoliageProfile" => new CResourceAsyncReference<CFoliageProfile>(newPath, InternalEnums.EImportFlags.Default),
+            "CHairProfile" => new CResourceAsyncReference<CHairProfile>(newPath, InternalEnums.EImportFlags.Default),
+            "CSkinProfile" => new CResourceAsyncReference<CSkinProfile>(newPath, InternalEnums.EImportFlags.Default),
+            "CTerrainSetup" => new CResourceAsyncReference<CTerrainSetup>(newPath, InternalEnums.EImportFlags.Default),
             _ => asyncRef
         };
+        // @formatter:on
 
         static string ReplaceMaterialPath(ResourcePath? depotPath, string input) =>
             (depotPath?.GetResolvedText() ?? "").Replace("{material}", input).Replace("*", "");
