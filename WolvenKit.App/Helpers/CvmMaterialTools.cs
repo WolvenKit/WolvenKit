@@ -409,43 +409,40 @@ public class CvmMaterialTools
         }
 
         var numDefinedMaterials = isLocal ? mesh.LocalMaterialBuffer.Materials.Count : mesh.ExternalMaterials.Count;
+
+        var matDefsWithoutEntry = mesh.MaterialEntries
+            .Where(entry => entry.IsLocalInstance == isLocal && entry.Index >= numDefinedMaterials).ToList();
+
+        if (matDefsWithoutEntry.Count == 0)
+        {
+            return;
+        }
+
         var usePreload = HasPreloadMaterials(cvm);
 
-        foreach (var mat in mesh.MaterialEntries
-                     .Where(entry => entry.IsLocalInstance == isLocal && entry.Index >= numDefinedMaterials))
-        {
-            var baseMaterialPath = resolveSubstitutions
-                ? baseMaterial.Replace(@"{material}", mat.Name).Replace("*", "")
-                : baseMaterial;
+        List<IRedRef> externalMaterials = [..GetExternalMaterials(mesh)];
+        List<IMaterial> localMaterials = [..GetLocalMaterials(mesh)];
 
+        foreach (var baseMaterialPath in matDefsWithoutEntry
+                     .Select(mat => resolveSubstitutions
+                         ? baseMaterial.Replace(@"{material}", mat.Name).Replace("*", "")
+                         : baseMaterial))
+        {
             if (isLocal)
             {
-                var materialInstance = new CMaterialInstance()
+                localMaterials.Add(new CMaterialInstance()
                 {
                     BaseMaterial = new CResourceReference<IMaterial>(baseMaterialPath)
-                };
-
-                if (usePreload)
-                {
-                    mesh.PreloadLocalMaterialInstances.Add(new CHandle<IMaterial> { Chunk = materialInstance });
-                }
-                else
-                {
-                    mesh.LocalMaterialBuffer?.Materials.Add(materialInstance);
-                }
+                });
             }
             else
             {
-                if (usePreload)
-                {
-                    mesh.PreloadExternalMaterials.Add(new CResourceReference<IMaterial>(baseMaterialPath));
-                }
-                else
-                {
-                    mesh.ExternalMaterials.Add(new CResourceAsyncReference<IMaterial>(baseMaterialPath));
-                }
+                externalMaterials.Add(new CResourceReference<IMaterial>(baseMaterialPath));
             }
         }
+
+        SetExternalMaterials(mesh, externalMaterials, usePreload);
+        SetLocalMaterials(mesh, localMaterials, usePreload);
 
         RecalculateMaterialProperties(cvm);
     }
