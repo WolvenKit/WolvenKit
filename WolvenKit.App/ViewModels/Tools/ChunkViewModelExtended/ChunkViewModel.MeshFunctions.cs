@@ -1,4 +1,5 @@
 using System.Linq;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.RED4.Types;
 

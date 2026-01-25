@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WolvenKit.App.Extensions;
-using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
 
-namespace WolvenKit.App.ViewModels.Tools;
+namespace WolvenKit.App.Helpers;
 
 public class CvmMaterialTools
 {
@@ -28,71 +27,44 @@ public class CvmMaterialTools
 
     #region convert between preload and regular
 
-    public void ConvertPreloadMaterials(ChunkViewModel? cvm, bool fromPreload = false)
+    public void ConvertMaterialsFromPreload(ChunkViewModel? cvm)
     {
         var resolvedData = cvm?.ResolvedData is CMesh ? cvm.ResolvedData : cvm?.GetRootModel().ResolvedData;
-        if (cvm is null || resolvedData is not CMesh mesh)
+        if (cvm is null || resolvedData is not CMesh mesh ||
+            (mesh.LocalMaterialBuffer.Materials.Count > 0 && mesh.ExternalMaterials.Count > 0))
         {
             return;
         }
 
-        var needsChanges = false;
-        if (fromPreload)
-        {
-            FromPreload();
-        }
-        else
-        {
-            ToPreload();
-        }
+        SetLocalMaterials(mesh, GetLocalMaterials(mesh), false);
+        mesh.PreloadLocalMaterialInstances.Clear();
 
-        if (!needsChanges)
-        {
-            return;
-        }
+        SetExternalMaterials(mesh, GetExternalMaterials(mesh), false);
+        mesh.PreloadExternalMaterials.Clear();
 
         RecalculateMaterialProperties(cvm, true);
         cvm.CalculateEditorDifficultyVisibility();
-        cvm.Tab?.Parent.SetIsDirty(needsChanges);
+        cvm.Tab?.Parent.SetIsDirty(true);
+    }
 
-        return;
-
-        void ToPreload()
+    public void ConvertMaterialsToPreload(ChunkViewModel? cvm)
+    {
+        var resolvedData = cvm?.ResolvedData is CMesh ? cvm.ResolvedData : cvm?.GetRootModel().ResolvedData;
+        if (cvm is null || resolvedData is not CMesh mesh ||
+            (mesh.LocalMaterialBuffer.Materials.Count == 0 && mesh.ExternalMaterials.Count == 0))
         {
-            needsChanges = mesh.LocalMaterialBuffer.Materials.Count > 0 || mesh.ExternalMaterials.Count > 0;
-            if (!needsChanges)
-            {
-                return;
-            }
-
-            mesh.PreloadLocalMaterialInstances.AddRange(
-                mesh.LocalMaterialBuffer.Materials.Select(h => new CHandle<IMaterial>() { Chunk = h }));
-
-            mesh.LocalMaterialBuffer.Materials.Clear();
-
-            mesh.PreloadExternalMaterials.AddRange(mesh.ExternalMaterials.Select(mat =>
-                new CResourceReference<IMaterial>(mat.DepotPath, mat.Flags)));
-
-            mesh.ExternalMaterials.Clear();
+            return;
         }
 
-        void FromPreload()
-        {
-            needsChanges = mesh.PreloadLocalMaterialInstances.Count > 0 || mesh.PreloadExternalMaterials.Count > 0;
-            if (!needsChanges)
-            {
-                return;
-            }
+        SetLocalMaterials(mesh, GetLocalMaterials(mesh), true);
+        mesh.LocalMaterialBuffer.Materials.Clear();
 
-            // Make sure these are initialized
-            mesh.LocalMaterialBuffer ??= new meshMeshMaterialBuffer { Materials = [], };
-            mesh.LocalMaterialBuffer.Materials ??= [];
+        SetExternalMaterials(mesh, GetExternalMaterials(mesh), true);
+        mesh.ExternalMaterials.Clear();
 
-            mesh.LocalMaterialBuffer.Materials.AddRange(
-                mesh.PreloadLocalMaterialInstances.Select(h => h.Chunk).OfType<IMaterial>());
-
-            mesh.PreloadLocalMaterialInstances.Clear();
-        }
+        RecalculateMaterialProperties(cvm, true);
+        cvm.CalculateEditorDifficultyVisibility();
+        cvm.Tab?.Parent.SetIsDirty(true);
     }
 
     #endregion
@@ -122,9 +94,82 @@ public class CvmMaterialTools
         cvm.GetRootModel() is { ResolvedData: CMesh mesh } && HasPreloadMaterials(mesh);
 
     private static bool HasPreloadMaterials(CMesh mesh) =>
-        mesh.PreloadExternalMaterials.Count > 1 || mesh.PreloadLocalMaterialInstances.Count > 0;
+        mesh.PreloadExternalMaterials.Count > 0 || mesh.PreloadLocalMaterialInstances.Count > 0;
 
     # endregion
+
+    private static List<IMaterial> GetLocalMaterials(CMesh mesh)
+    {
+        if (HasPreloadMaterials(mesh))
+        {
+            return mesh.PreloadLocalMaterialInstances.Select(r => r.Chunk).OfType<IMaterial>().ToList();
+        }
+
+        return mesh.LocalMaterialBuffer.Materials.ToList();
+    }
+
+    private static void SetLocalMaterials(CMesh mesh, List<IMaterial> materials, bool isPreload)
+    {
+        if (isPreload)
+        {
+            mesh.PreloadLocalMaterialInstances.Clear();
+            mesh.PreloadLocalMaterialInstances.AddRange(materials.Select(m => new CHandle<IMaterial>() { Chunk = m }));
+            return;
+        }
+
+        mesh.LocalMaterialBuffer.Materials.Clear();
+        mesh.LocalMaterialBuffer.Materials.AddRange(materials.Cast<CMaterialInstance>());
+    }
+
+    private static List<IRedRef> GetExternalMaterials(CMesh mesh)
+    {
+        if (HasPreloadMaterials(mesh))
+        {
+            return mesh.PreloadExternalMaterials.Cast<IRedRef>().ToList();
+        }
+
+        return mesh.ExternalMaterials.Cast<IRedRef>().ToList();
+    }
+
+    /// <summary>
+    /// Sets a mesh file's external materials to the provided list of materials.
+    /// </summary>
+    /// <param name="mesh">The mesh file</param>
+    /// <param name="materials">Can be CResourceReference or CResourceAsyncReference, method will convert.</param>
+    /// <param name="isPreload">Picks destination lists and sets target type for conversion of materials.</param>
+    private static void SetExternalMaterials(CMesh mesh, List<IRedRef> materials, bool isPreload)
+    {
+        if (isPreload)
+        {
+            mesh.PreloadExternalMaterials.Clear();
+            mesh.PreloadExternalMaterials.AddRange(
+                // make sure all materials are CResourceReference
+                materials.Select(m =>
+                {
+                    if (m is CResourceReference<IMaterial> reference)
+                    {
+                        return reference;
+                    }
+
+                    return new CResourceReference<IMaterial>(m.DepotPath, m.Flags);
+                }));
+
+            return;
+        }
+
+        mesh.ExternalMaterials.Clear();
+        mesh.ExternalMaterials.AddRange(
+            // make sure all materials are CResourceAsyncReference
+            materials.Select(m =>
+            {
+                if (m is CResourceAsyncReference<IMaterial> reference)
+                {
+                    return reference;
+                }
+
+                return new CResourceAsyncReference<IMaterial>(m.DepotPath, m.Flags);
+            }));
+    }
 
     public void DeleteUnusedMaterials(ChunkViewModel cvm, AppViewModel? appViewModel = null,
         bool suppressLogOutput = false)
@@ -138,7 +183,7 @@ public class CvmMaterialTools
         var appearances = CreateAutoGeneratedChunkMaterials(mesh.Appearances);
 
         // Collect material names from appearance chunk materials
-        var appearanceNames = appearances
+        var appearanceChunkMaterialNames = appearances
             .SelectMany(mA => mA!.ChunkMaterials.Select(chunkMaterial => chunkMaterial.GetResolvedText()).ToArray())
             .Where(n => n is not null)
             .Select(n => n!.Contains('@') ? $"@{n.Split('@').Last()}" : n) // dynamic
@@ -146,17 +191,35 @@ public class CvmMaterialTools
 
         var localMatIdxList = mesh.MaterialEntries.Where((mE) =>
             mE.IsLocalInstance && mE.Name.GetResolvedText() is string s &&
-            appearanceNames.Contains(s, StringComparer.OrdinalIgnoreCase)
+            appearanceChunkMaterialNames.Contains(s, StringComparer.OrdinalIgnoreCase)
         ).Select(me => (int)me.Index).ToList();
 
         var externalMatIdxList = mesh.MaterialEntries.Where((mE) =>
             !mE.IsLocalInstance && mE.Name.GetResolvedText() is string s &&
-            appearanceNames.Contains(s, StringComparer.OrdinalIgnoreCase)
+            appearanceChunkMaterialNames.Contains(s, StringComparer.OrdinalIgnoreCase)
         ).Select(me => (int)me.Index).ToList();
 
         var numUnusedMaterials = mesh.MaterialEntries.Count - (localMatIdxList.Count + externalMatIdxList.Count);
         var numTemplateProperties = 0;
 
+        var keepLocal = GetLocalMaterials(mesh)
+            .Where((_, i) => localMatIdxList.Contains(i))
+            .Select(DeleteTemplatePaths)
+            .ToList();
+
+        var isPreload = HasPreloadMaterials(mesh);
+
+        if (numTemplateProperties > 0)
+        {
+            SetLocalMaterials(mesh, keepLocal, isPreload);
+            RecalculateMaterialProperties(rootChunk);
+            rootChunk.Tab?.Parent.SetIsDirty(true);
+
+            _loggerService.Success($"Deleted {numTemplateProperties} properties from outdated templates.");
+            _notificationService.Success($"Deleted {numTemplateProperties} properties from outdated templates.");
+        }
+
+        // If we don't have unused materials, check if we need to clean up template properties
         if (numUnusedMaterials == 0)
         {
             if (suppressLogOutput)
@@ -170,29 +233,16 @@ public class CvmMaterialTools
             return;
         }
 
-        IMaterial[] keepLocal = [];
-        CResourceAsyncReference<IMaterial>[] keepExternal = [];
-
-        if (mesh.LocalMaterialBuffer?.Materials is not null && mesh.LocalMaterialBuffer.Materials.Count > 0)
-        {
-            keepLocal = mesh.LocalMaterialBuffer.Materials
-                .Where((material, i) => localMatIdxList.Contains(i)).ToArray();
-        }
-
-        if (mesh.ExternalMaterials is not null && mesh.ExternalMaterials.Count > 0)
-        {
-            keepExternal = mesh.ExternalMaterials
-                .Where((material, i) => externalMatIdxList.Contains(i)).ToArray();
-        }
+        var keepExternal = GetExternalMaterials(mesh).Where((_, i) => localMatIdxList.Contains(i)).ToList();
 
         var usedMaterialDefinitions = mesh.MaterialEntries.Where(me =>
             (me.IsLocalInstance && localMatIdxList.Contains(me.Index)) ||
             (!me.IsLocalInstance && externalMatIdxList.Contains(me.Index))
         ).ToArray();
 
-        if (appViewModel is not null && keepLocal.Length + keepExternal.Length != usedMaterialDefinitions.Length &&
+        if (appViewModel is not null && keepLocal.Count + keepExternal.Count != usedMaterialDefinitions.Length &&
             !appViewModel.ShowConfirmationDialog(
-                "Not all remaining materials match up. Continue? (You need to validate by hand)",
+                "Not all remaining materials match up. This might break your materials or even your file! (Run file validation to find out what's wrong)",
                 "Really delete materials?"))
         {
             return;
@@ -220,77 +270,21 @@ public class CvmMaterialTools
             mesh.MaterialEntries.Add(t);
         }
 
-        if (HasPreloadMaterials(cvm))
-        {
-            DeletePreloadUnusedMaterialDefinitions();
-        }
-        else
-        {
-            DeleteUnusedMaterialDefinitions();
-        }
-
         if (numUnusedMaterials > 0)
         {
             _loggerService.Info($"Deleted {numUnusedMaterials} unused materials.");
             _notificationService.Info($"Deleted {numUnusedMaterials} unused materials.");
         }
 
-        if (numTemplateProperties > 0)
-        {
-            _loggerService.Success($"Deleted {numTemplateProperties} properties from outdated templates.");
-            _notificationService.Success($"Deleted {numTemplateProperties} properties from outdated templates.");
-        }
+        SetLocalMaterials(mesh, keepLocal, isPreload);
+        SetExternalMaterials(mesh, keepExternal, isPreload);
+
+        RecalculateMaterialProperties(rootChunk);
+        rootChunk.Tab?.Parent.SetIsDirty(true);
 
         return;
 
-        void DeleteUnusedMaterialDefinitions()
-        {
-            if (mesh.LocalMaterialBuffer?.Materials is not null)
-            {
-                mesh.LocalMaterialBuffer.Materials.Clear();
-                foreach (var t in keepLocal)
-                {
-                    mesh.LocalMaterialBuffer.Materials.Add(DeleteTemplatePaths(t));
-                }
-            }
-
-            if (mesh.ExternalMaterials is not null)
-            {
-                mesh.ExternalMaterials.Clear();
-                foreach (var t in keepExternal)
-                {
-                    mesh.ExternalMaterials.Add(t);
-                }
-            }
-
-            RecalculateMaterialProperties(rootChunk);
-            rootChunk.Tab?.Parent.SetIsDirty(true);
-        }
-
-        void DeletePreloadUnusedMaterialDefinitions()
-        {
-            if (mesh.PreloadLocalMaterialInstances is not null)
-            {
-                mesh.PreloadLocalMaterialInstances.Clear();
-                foreach (var t in keepLocal)
-                {
-                    mesh.PreloadLocalMaterialInstances.Add(DeleteTemplatePaths(t));
-                }
-            }
-
-            if (mesh.PreloadExternalMaterials is not null)
-            {
-                mesh.PreloadExternalMaterials.Clear();
-                foreach (var t in keepExternal)
-                {
-                    mesh.PreloadExternalMaterials.Add(t);
-                }
-            }
-
-            RecalculateMaterialProperties(rootChunk);
-            rootChunk.Tab?.Parent.SetIsDirty(true);
-        }
-
+        // Clean up paths from ancient templates >.<
         IMaterial DeleteTemplatePaths(IMaterial material)
         {
             if (material is not CMaterialInstance matInstance)
@@ -364,7 +358,7 @@ public class CvmMaterialTools
         GenerateMissingMaterialInstances(cvm, baseMaterial, isLocal, resolveSubstitutions);
     }
 
-    private static void GenerateMissingMaterialDefinitions(ChunkViewModel cvm, bool isLocal)
+    private void GenerateMissingMaterialDefinitions(ChunkViewModel cvm, bool isLocal)
     {
         if (cvm.ResolvedData is not CMesh mesh)
         {
@@ -384,6 +378,8 @@ public class CvmMaterialTools
 
         if (undefinedMaterialNames.Count == 0)
         {
+            _notificationService.Success("No undefined materials - nothing was generated!");
+            _loggerService.Success("No undefined materials - nothing was generated!");
             return;
         }
 
@@ -404,7 +400,7 @@ public class CvmMaterialTools
     }
 
 
-    private static void GenerateMissingMaterialInstances(ChunkViewModel cvm, string baseMaterial, bool isLocal,
+    private void GenerateMissingMaterialInstances(ChunkViewModel cvm, string baseMaterial, bool isLocal,
         bool resolveSubstitutions)
     {
         if (cvm.ResolvedData is not CMesh mesh || mesh.MaterialEntries.Count == 0)
@@ -413,44 +409,40 @@ public class CvmMaterialTools
         }
 
         var numDefinedMaterials = isLocal ? mesh.LocalMaterialBuffer.Materials.Count : mesh.ExternalMaterials.Count;
+
+        var matDefsWithoutEntry = mesh.MaterialEntries
+            .Where(entry => entry.IsLocalInstance == isLocal && entry.Index >= numDefinedMaterials).ToList();
+
+        if (matDefsWithoutEntry.Count == 0)
+        {
+            return;
+        }
+
         var usePreload = HasPreloadMaterials(cvm);
 
-        foreach (var mat in mesh.MaterialEntries
-                     .Where(entry => entry.IsLocalInstance == isLocal && entry.Index >= numDefinedMaterials))
-        {
-            var baseMaterialPath = resolveSubstitutions
-                ? baseMaterial.Replace(@"{material}", mat.Name)
-                : baseMaterial;
+        List<IRedRef> externalMaterials = [..GetExternalMaterials(mesh)];
+        List<IMaterial> localMaterials = [..GetLocalMaterials(mesh)];
 
+        foreach (var baseMaterialPath in matDefsWithoutEntry
+                     .Select(mat => resolveSubstitutions
+                         ? baseMaterial.Replace(@"{material}", mat.Name).Replace("*", "")
+                         : baseMaterial))
+        {
             if (isLocal)
             {
-                var materialInstance = new CMaterialInstance()
+                localMaterials.Add(new CMaterialInstance()
                 {
                     BaseMaterial = new CResourceReference<IMaterial>(baseMaterialPath)
-                };
-
-                if (usePreload)
-                {
-                    mesh.PreloadLocalMaterialInstances.Add(materialInstance);
-                }
-                else
-                {
-                    mesh.LocalMaterialBuffer?.Materials.Add(materialInstance);
-                }
+                });
             }
             else
             {
-                if (usePreload)
-                {
-                    mesh.PreloadExternalMaterials.Add(new CResourceAsyncReference<IMaterial>(baseMaterialPath));
-                }
-                else
-                {
-                    mesh.ExternalMaterials.Add(new CResourceAsyncReference<IMaterial>(baseMaterialPath));
-                }
+                externalMaterials.Add(new CResourceReference<IMaterial>(baseMaterialPath));
             }
         }
 
+        SetExternalMaterials(mesh, externalMaterials, usePreload);
+        SetLocalMaterials(mesh, localMaterials, usePreload);
 
         RecalculateMaterialProperties(cvm);
     }
@@ -664,20 +656,18 @@ public class CvmMaterialTools
         }
     }
 
+    /// <summary>
+    /// Called from <see cref="ChunkViewModel.AddMaterialAndDefinition"/>
+    /// </summary>
     public void AddMaterialAndDefinition(ChunkViewModel cvm, string newName)
     {
-        if (cvm.Parent is null)
-        {
-            return;
-        }
-
-        var materialEntries = cvm.Parent.GetRootModel().GetPropertyChild("materialEntries");
+        var materialEntries = cvm.Parent?.GetRootModel().GetPropertyChild("materialEntries");
         if (materialEntries?.ResolvedData is not CArray<CMeshMaterialEntry> array)
         {
             return;
         }
 
-        var isLocalInstance = cvm.Parent.ResolvedData is meshMeshMaterialBuffer ||
+        var isLocalInstance = cvm.Parent!.ResolvedData is meshMeshMaterialBuffer ||
                               cvm.Name == ChunkViewModel.PreloadMaterialPath;
 
         // Add the material definition
@@ -687,7 +677,7 @@ public class CvmMaterialTools
             Name = newName, IsLocalInstance = isLocalInstance, Index = (CUInt16)lastIndex + 1
         });
 
-        switch (materialEntries?.ResolvedData)
+        switch (materialEntries.ResolvedData)
         {
             case CArray<CMaterialInstance> matInstances:
                 matInstances.Add(new CMaterialInstance());
@@ -702,7 +692,7 @@ public class CvmMaterialTools
                 break;
         }
 
-        materialEntries?.RecalculateProperties();
+        materialEntries.RecalculateProperties();
         cvm.RecalculateProperties();
     }
 
@@ -714,6 +704,7 @@ public class CvmMaterialTools
         switch (cvm.GetRootModel().ResolvedData)
         {
             case CMaterialInstance mi:
+                // ReSharper disable once NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract api contract is more of a suggestion here
                 foreach (var value in (mi.Values ?? []).OfType<CKeyValuePair>())
                 {
                     switch (value.Value)
@@ -785,5 +776,61 @@ public class CvmMaterialTools
         }
 
         return ret;
+    }
+
+    public int FindHighestMaterialIndex(ChunkViewModel materialDefinitionArray, bool isLocalInstance)
+    {
+        if (materialDefinitionArray.ResolvedData is not CArray<CMeshMaterialEntry> array)
+        {
+            return -1;
+        }
+
+        return array.ToList()
+            .Where(m => m.IsLocalInstance == isLocalInstance)
+            .Max(m => m.Index);
+    }
+
+    public void AddTagsToMeshAppearances(List<ChunkViewModel> chunks, List<string> tagList)
+    {
+        if (tagList.Count == 0 || chunks.Count == 0)
+        {
+            return;
+        }
+        List<meshMeshAppearance> appearances = [];
+        List<ChunkViewModel> appearanceChunks = [];
+        foreach (var cvm in chunks)
+        {
+            switch (cvm.ResolvedData)
+            {
+                case CArray<CHandle<meshMeshAppearance>> appearanceHandles:
+                    appearances.AddRange(appearanceHandles.Select(h => h.GetValue()).OfType<meshMeshAppearance>());
+                    appearanceChunks.AddRange(cvm.GetPropertyChild("appearances")?.GetAllProperties() ?? []);
+                    break;
+                case meshMeshAppearance singleAppearance:
+                    appearances.Add(singleAppearance);
+                    appearanceChunks.Add(cvm);
+                    break;
+            }
+        }
+
+        if (appearances.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var appearance in appearances)
+        {
+            foreach (var tag in tagList.Where(tag => !appearance.Tags.Contains(tag)))
+            {
+                appearance.Tags.Add(tag);
+            }
+        }
+
+        foreach (var cvm in appearanceChunks)
+        {
+            cvm.RecalculateProperties();
+        }
+
+        appearanceChunks.First().Tab?.Parent.SetIsDirty(true);
     }
 }

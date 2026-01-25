@@ -472,8 +472,15 @@ public partial class ChunkViewModel
 
             #region mesh
             case meshMeshAppearance { ChunkMaterials: not null } appearance:
-                Value = string.Join(", ", appearance.ChunkMaterials);
-                Value = $"[{appearance.ChunkMaterials.Count}] {Value}";
+                if (appearance.ChunkMaterials.Count == 0 && appearance.Tags.Count == 1)
+                {
+                    Value = $"[0] (template: {appearance.Tags[0]})";
+                }
+                else
+                {
+                    Value = string.Join(", ", appearance.ChunkMaterials);
+                    Value = $"[{appearance.ChunkMaterials.Count}] {Value}";
+                }
                 IsValueExtrapolated = true;
                 break;
             case CArray<CHandle<meshMeshAppearance>> appearanceArray:

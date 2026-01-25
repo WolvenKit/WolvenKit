@@ -276,16 +276,21 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         // expand / collapse nested elements. Why click twice.
-        if (TVProperties.Count == 1)
+        if (!IsArray)
         {
-            TVProperties[0].IsExpanded = IsExpanded;
-            return;
-        }
+            var visibleProperties = TVProperties.Where(p => !p.IsHiddenByEditorDifficultyLevel).ToList();
+            if (visibleProperties.Count == 1)
+            {
+                var prop = visibleProperties.First();
+                // ... unless we don't want to expand them (e.g. because they're primitives or so)
+                if (!IsExpanded || (prop.Value != prop.Descriptor &&
+                                    prop.ResolvedData is not (CKeyValuePair or Vector4 or Vector3)))
+                {
+                    prop.IsExpanded = IsExpanded;
+                }
 
-        if (TVProperties.Where(p => !p.IsHiddenByEditorDifficultyLevel).ToList() is { Count: 1 } visibleProps)
-        {
-            visibleProps[0].IsExpanded = IsExpanded;
-            return;
+                return;
+            }
         }
 
         // Some special cases should be auto-expanded, e.g. if the parent only has one "interesting" property
@@ -3202,6 +3207,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             entMeshComponent meshComponent => string.IsNullOrEmpty(meshComponent.Mesh.DepotPath.GetResolvedText()) ||
                                               meshComponent.ChunkMask == 0,
             Multilayer_Layer layer => ((float)layer.Opacity) == 0.0,
+            meshMeshAppearance app => app.ChunkMaterials.Count == 0,
             _ => IsDefault
         };
     }
@@ -3624,12 +3630,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             case CArray<CMeshMaterialEntry> materialDefinitionArray when
                 ResolvedData is CMeshMaterialEntry materialDefinition:
             {
-                var materialIndex = materialDefinitionArray
-                    .Where(mat => mat.IsLocalInstance.Equals(materialDefinition.IsLocalInstance))
-                    .OrderBy(mat => Int32.Parse(mat.Index.ToString()))
-                    .Select(mat => mat.Index)
-                    .Last();
-
+                var materialIndex =
+                    _cvmMaterialTools.FindHighestMaterialIndex(Parent, materialDefinition.IsLocalInstance);
                 SetDataIndexProperty(materialIndex + 1);
                 break;
             }
