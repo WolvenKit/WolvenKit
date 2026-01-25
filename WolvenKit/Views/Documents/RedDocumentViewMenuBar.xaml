@@ -747,6 +747,8 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <Separator />
+
                 <!-- .mesh file: Clear chunk materials (if you have multiple appearances selected) -->
                 <MenuItem
                     Style="{StaticResource ShowMeshMenuItemStyle}"
@@ -762,6 +764,23 @@
                             IconPack="Material"
                             Kind="Graph"
                             Foreground="{StaticResource WolvenKitRed}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <!-- Add tag -->
+                <MenuItem
+                    Style="{StaticResource MenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Header="Select template appearance"
+                    Command="{Binding Path=SelectTemplateAppearanceCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="TagPlus"
+                            Foreground="White" />
                     </MenuItem.Icon>
                 </MenuItem>
 

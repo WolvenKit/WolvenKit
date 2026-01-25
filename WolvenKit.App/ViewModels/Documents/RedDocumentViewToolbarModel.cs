@@ -15,6 +15,7 @@ using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Services;
+using WolvenKit.Core;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Interfaces.Extensions;
@@ -212,6 +213,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(DeleteDuplicateEntriesCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertToPreloadMaterialsCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertFromPreloadMaterialsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SelectTemplateAppearanceCommand))]
     [ObservableProperty]
     private ChunkViewModel? _selectedChunk;
 
@@ -667,6 +669,53 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
         mesh.Appearances.Clear();
         _cvmMaterialTools.DeleteUnusedMaterials(RootChunk, null, true);
+    }
+
+    private bool CanSelectTemplateAppearance() => SelectedChunk?.ResolvedData is CArray<CHandle<meshMeshAppearance>> ||
+                                                  SelectedChunks.All(cvm => cvm.ResolvedData is meshMeshAppearance);
+
+    [RelayCommand(CanExecute = nameof(CanSelectTemplateAppearance))]
+    private void SelectTemplateAppearance()
+    {
+        if (SelectedChunk?.GetRootModel()?.ResolvedData is not CMesh mesh)
+        {
+            return;
+        }
+
+        var appearanceNames = mesh.Appearances
+            .Select(a => a.Chunk).OfType<meshMeshAppearance>()
+            .Where(mA => mA.ChunkMaterials.Count > 0)
+            .Select(mA => mA.Name.GetResolvedText())
+            .Where(s => !string.IsNullOrEmpty(s)).OfType<string>()
+            .Distinct().ToList();
+
+        if (appearanceNames.Count == 0)
+        {
+            _loggerService.Info(
+                "No valid appearance found to use as a template - you need to have at least one appearance with non-empty chunk materials.");
+            return;
+        }
+
+        var appearanceTemplate = Interactions.AskForDropdownOption((appearanceNames, "Select template appearance",
+            "Select appearance name to use as template for dynamic expansion", WikiLinks.AXLMaterialExpansion, false,
+            "Wiki"));
+
+        if (string.IsNullOrEmpty(appearanceTemplate))
+        {
+            return;
+        }
+
+        List<ChunkViewModel> appearanceChunks = [];
+        if (SelectedChunk?.ResolvedData is CArray<CHandle<meshMeshAppearance>>)
+        {
+            appearanceChunks.Add(SelectedChunk);
+        }
+        else
+        {
+            appearanceChunks.AddRange(SelectedChunks.Where(cvm => cvm.ResolvedData is meshMeshAppearance));
+        }
+
+        _cvmMaterialTools.AddTagsToMeshAppearances(appearanceChunks, [appearanceTemplate]);
     }
 
     #region meshfile_materials

@@ -415,7 +415,7 @@ public class CvmMaterialTools
                      .Where(entry => entry.IsLocalInstance == isLocal && entry.Index >= numDefinedMaterials))
         {
             var baseMaterialPath = resolveSubstitutions
-                ? baseMaterial.Replace(@"{material}", mat.Name)
+                ? baseMaterial.Replace(@"{material}", mat.Name).Replace("*", "")
                 : baseMaterial;
 
             if (isLocal)
@@ -791,5 +791,49 @@ public class CvmMaterialTools
         return array.ToList()
             .Where(m => m.IsLocalInstance == isLocalInstance)
             .Max(m => m.Index);
+    }
+
+    public void AddTagsToMeshAppearances(List<ChunkViewModel> chunks, List<string> tagList)
+    {
+        if (tagList.Count == 0 || chunks.Count == 0)
+        {
+            return;
+        }
+        List<meshMeshAppearance> appearances = [];
+        List<ChunkViewModel> appearanceChunks = [];
+        foreach (var cvm in chunks)
+        {
+            switch (cvm.ResolvedData)
+            {
+                case CArray<CHandle<meshMeshAppearance>> appearanceHandles:
+                    appearances.AddRange(appearanceHandles.Select(h => h.GetValue()).OfType<meshMeshAppearance>());
+                    appearanceChunks.AddRange(cvm.GetPropertyChild("appearances")?.GetAllProperties() ?? []);
+                    break;
+                case meshMeshAppearance singleAppearance:
+                    appearances.Add(singleAppearance);
+                    appearanceChunks.Add(cvm);
+                    break;
+            }
+        }
+
+        if (appearances.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var appearance in appearances)
+        {
+            foreach (var tag in tagList.Where(tag => !appearance.Tags.Contains(tag)))
+            {
+                appearance.Tags.Add(tag);
+            }
+        }
+
+        foreach (var cvm in appearanceChunks)
+        {
+            cvm.RecalculateProperties();
+        }
+
+        appearanceChunks.First().Tab?.Parent.SetIsDirty(true);
     }
 }
