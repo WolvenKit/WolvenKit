@@ -7,6 +7,7 @@ using HelixToolkit.SharpDX.Core;
 using Splat;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
+using WolvenKit.Common.Services;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
@@ -23,7 +24,11 @@ public static partial class ArchiveXlHelper
     public const string ArchiveXLSubstitutionPrefix = "*";
 
     private static ILoggerService? s_loggerService;
+    private static INotificationService? s_notificationService;
     private static ILoggerService? LoggerService => s_loggerService ??= Locator.Current.GetService<ILoggerService>();
+
+    private static INotificationService? NotificationService =>
+        s_notificationService ??= Locator.Current.GetService<INotificationService>();
 
     private static IProjectManager? s_projectManager;
     private static IProjectManager? ProjectManager => s_projectManager ??= Locator.Current.GetService<IProjectManager>();
@@ -239,15 +244,24 @@ public static partial class ArchiveXlHelper
             return apps;
         }
 
+        var appearancesWithoutMaterials =
+            meshAppearances.Where(ma => ma.ChunkMaterials.Count == 0).ToList();
 
-        if (appearancesWithMaterials.Count != 1)
+        if (appearancesWithMaterials.Count > 1 && appearancesWithoutMaterials.Count(a => a.Tags.Count == 0) <
+            appearancesWithoutMaterials.Count)
         {
-            s_loggerService?.Warning("More than one appearance has chunk materials. Using first entry as template.");
+            LoggerService?.Warning(
+                "More than one appearance has chunk materials. " +
+                "To avoid ambiguities, add the template appearance name as a tag to your empty appearances." +
+                "Expansion will proceed, but results may not be what you expect."
+            );
+            NotificationService?.Warning("Material template ambiguity detected in mesh appearances. " +
+                                         "Check the log view for details.");
         }
 
-        foreach (var mA in meshAppearances.Where(ma => ma.ChunkMaterials.Count == 0))
+        var templateAppearance = appearancesWithMaterials.Values.First();
+        foreach (var mA in appearancesWithoutMaterials)
         {
-            var templateAppearance = appearancesWithMaterials.Values.First();
 
             // If a template appearance is defined via tag, use that one
             if (mA.Tags.Count > 0 && appearancesWithMaterials.TryGetValue(mA.Tags[0], out var appearance))
