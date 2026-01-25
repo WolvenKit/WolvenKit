@@ -3196,6 +3196,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             entMeshComponent meshComponent => string.IsNullOrEmpty(meshComponent.Mesh.DepotPath.GetResolvedText()) ||
                                               meshComponent.ChunkMask == 0,
             Multilayer_Layer layer => ((float)layer.Opacity) == 0.0,
+            meshMeshAppearance app => app.ChunkMaterials.Count == 0,
             _ => IsDefault
         };
     }
