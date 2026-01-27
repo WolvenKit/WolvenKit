@@ -527,15 +527,13 @@ namespace WolvenKit.Modkit.RED4
             }
             catch (Exception e)
             {
-                _loggerService.Error(e);
+                _loggerService.Error(e.Message);
                 return false;
             }
             finally
             {
                 redFs.Close();
             }
-
-
         }
 
         private static (string, GltfImportAsFormat) GetImportExtensionAndFormat(GltfImportArgs args, Optional<string> maybeType) =>
