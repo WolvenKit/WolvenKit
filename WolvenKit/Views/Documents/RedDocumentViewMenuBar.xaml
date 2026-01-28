@@ -549,37 +549,6 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <MenuItem
-                    Style="{StaticResource ShowMeshMenuItemStyle}"
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Header="Convert preload materials to local"
-                    Command="{Binding Path=ConvertPreloadMaterialsCommand}">
-                    <MenuItem.Icon>
-                        <templates:IconBox IconPack="Empty" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-
-                <MenuItem
-                    Style="{StaticResource ShowMeshMenuItemStyle}"
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Header="Delete chunk by submesh index"
-                    ToolTip="If you deleted submeshes"
-                    Command="{Binding Path=DeleteChunkByIndexCommand}">
-                    <MenuItem.Icon>
-                        <templates:IconBox
-                            IconPack="Material"
-                            Kind="FilterVariantRemove"
-                            Foreground="{StaticResource WolvenKitRed}" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
                 <!-- .mesh file: Delete unused materials (Only display without SHIFT) -->
                 <MenuItem
                     Header="Delete unused materials"
@@ -655,20 +624,50 @@
 
                 <Separator Style="{StaticResource ShowInMeshFileSeparatorStyle}" />
 
-                <!-- mesh file: convert preload materials -->
+                <!-- mesh file: convert to/from preload materials -->
+
                 <MenuItem
                     Style="{StaticResource ShowMeshMenuItemStyle}"
                     Visibility="{Binding Path=IsEnabled,
                                          RelativeSource={RelativeSource Self},
                                          Mode=OneWay,
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Header="Convert preload materials to local"
-                    Command="{Binding Path=ConvertPreloadMaterialsCommand}">
+                    Header="Convert material preloading state">
                     <MenuItem.Icon>
                         <templates:IconBox IconPack="Empty" />
                     </MenuItem.Icon>
-                </MenuItem>
 
+                    <MenuItem
+                        Style="{StaticResource ShowMeshMenuItemStyle}"
+                        Visibility="{Binding Path=IsEnabled,
+                                             RelativeSource={RelativeSource Self},
+                                             Mode=OneWay,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Header="Convert preload materials to local"
+                        Command="{Binding Path=ConvertFromPreloadMaterialsCommand}">
+                        <MenuItem.Icon>
+                            <templates:IconBox IconPack="Empty" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <MenuItem
+                        Style="{StaticResource ShowMeshMenuItemStyle}"
+                        Visibility="{Binding Path=IsEnabled,
+                                             RelativeSource={RelativeSource Self},
+                                             Mode=OneWay,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Header="Convert local materials to preload"
+                        ToolTip="Do not do this unless you know why you need it!"
+                        Command="{Binding Path=ConvertToPreloadMaterialsCommand}">
+                        <MenuItem.Icon>
+                            <templates:IconBox
+                                IconPack="Material"
+                                Kind="Alert"
+                                Foreground="{StaticResource WolvenKitYellow}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                </MenuItem>
 
                 <!-- .mesh file: Clear chunk materials (if you have multiple appearances selected) -->
                 <MenuItem
@@ -748,6 +747,8 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <Separator />
+
                 <!-- .mesh file: Clear chunk materials (if you have multiple appearances selected) -->
                 <MenuItem
                     Style="{StaticResource ShowMeshMenuItemStyle}"
@@ -763,6 +764,23 @@
                             IconPack="Material"
                             Kind="Graph"
                             Foreground="{StaticResource WolvenKitRed}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <!-- Add tag -->
+                <MenuItem
+                    Style="{StaticResource MenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Header="Select template appearance"
+                    Command="{Binding Path=SelectTemplateAppearanceCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="TagPlus"
+                            Foreground="White" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -1043,7 +1061,7 @@
                 <!-- Run WScript -->
                 <MenuItem
                     Style="{StaticResource MenuItemStyle}"
-                    Header="Run WScript"
+                    Header="Full scan to log view"
                     Click="OnFileValidationClick">
                     <MenuItem.Icon>
                         <templates:IconBox
