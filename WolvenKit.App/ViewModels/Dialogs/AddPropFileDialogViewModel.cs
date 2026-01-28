@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Models.ProjectManagement.Project;
@@ -14,15 +15,12 @@ public partial class AddPropFileDialogViewModel : ObservableObject
 
     [ObservableProperty] private Dictionary<string, string> _projectMeshes;
 
-    /// <summary>
-    /// Remember the last selection
-    /// </summary>
-    [ObservableProperty] private bool _rememberValues = true;
+    [ObservableProperty] private bool _cleanupInvalidEntries = true;
 
     /// <summary>
     /// Move mesh files to parent folder? (if they aren't already)
     /// </summary>
-    [ObservableProperty] private bool _moveMeshesToFolder = true;
+    [ObservableProperty] private bool _moveMeshesToFolder = false;
 
     /// <summary>
     /// Relative path to PropFile folder
@@ -48,6 +46,8 @@ public partial class AddPropFileDialogViewModel : ObservableObject
     [ObservableProperty] private string _meshFile4 = "";
     [ObservableProperty] private bool _meshFile4UseAppearances = false;
 
+    public bool HasMoveMeshBeenTouched { get; set; } = false;
+
     public AddPropFileDialogViewModel(Cp77Project project)
     {
         ProjectFolders = project.GetAllFolders(project.ModDirectory).ToDictionary<string, string>(x => x);
@@ -56,13 +56,51 @@ public partial class AddPropFileDialogViewModel : ObservableObject
         Appearances = [];
     }
 
+    private bool NeedsMoveToPOarentFolder(string filePath)
+    {
+        if (string.IsNullOrEmpty(filePath) || string.IsNullOrEmpty(ParentFolder))
+        {
+            return false;
+        }
+
+        return !filePath.StartsWith(ParentFolder);
+    }
+
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
         switch (e.PropertyName)
         {
             case nameof(ParentFolder):
                 ParentFolder = ParentFolder.ToFilePath();
+
+                if (string.IsNullOrEmpty(PropName))
+                {
+                    PropName = (ParentFolder.Split(Path.DirectorySeparatorChar).LastOrDefault() ?? "")
+                        .ToHumanFriendlyString();
+                }
+
+                // Update "Move meshes" checkbox based on parent folder path
+                if (HasMoveMeshBeenTouched)
+                {
+                    break;
+                }
+
+                MoveMeshesToFolder = NeedsMoveToPOarentFolder(MeshFile1) || NeedsMoveToPOarentFolder(MeshFile2) ||
+                                     NeedsMoveToPOarentFolder(MeshFile3) || NeedsMoveToPOarentFolder(MeshFile4);
                 break;
+            case nameof(MeshFile1) when !HasMoveMeshBeenTouched:
+                MoveMeshesToFolder = MoveMeshesToFolder || NeedsMoveToPOarentFolder(MeshFile1);
+                break;
+            case nameof(MeshFile2) when !HasMoveMeshBeenTouched:
+                MoveMeshesToFolder = MoveMeshesToFolder || NeedsMoveToPOarentFolder(MeshFile2);
+                break;
+            case nameof(MeshFile3) when !HasMoveMeshBeenTouched:
+                MoveMeshesToFolder = MoveMeshesToFolder || NeedsMoveToPOarentFolder(MeshFile3);
+                break;
+            case nameof(MeshFile4) when !HasMoveMeshBeenTouched:
+                MoveMeshesToFolder = MoveMeshesToFolder || NeedsMoveToPOarentFolder(MeshFile4);
+                break;
+
         }
 
         base.OnPropertyChanged(e);
