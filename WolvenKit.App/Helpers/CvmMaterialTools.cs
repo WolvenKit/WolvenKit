@@ -730,7 +730,7 @@ public class CvmMaterialTools
 
                 break;
             case CMesh mesh:
-                // Why is this async?
+                // Async as a workaround for editor freezes if the lists get very long
                 foreach (var externalMaterial in mesh.ExternalMaterials)
                 {
                     await Task.Run(() => ret.Add(externalMaterial.DepotPath));
