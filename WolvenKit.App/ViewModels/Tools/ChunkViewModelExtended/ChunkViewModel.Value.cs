@@ -436,11 +436,11 @@ public partial class ChunkViewModel
                 break;
             case entEntityParametersBuffer buf
                 when buf.ParameterBuffers.Count > 0 && buf.ParameterBuffers[0] is
-                    { Data: CR2WList { Data: IRedArray ary } list }:
+                    { Data: CR2WList { Data: IRedArray garmentParams } list }:
                 var sumComponentsData = 0;
-                foreach (var o in ary)
+                foreach (var param in garmentParams)
                 {
-                    if (o is not entGarmentParameter gp)
+                    if (param is not entGarmentParameter gp)
                     {
                         continue;
                     }
