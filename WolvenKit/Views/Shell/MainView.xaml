@@ -141,6 +141,9 @@
                     <DataTemplate DataType="{x:Type dialogVMs:UpdateDialogViewModel}">
                         <dialogs:UpdateDialog ViewModel="{Binding}" />
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type dialogVMs:ExtractEmbeddedFileDialogViewModel}">
+                        <dialogs:ExtractEmbeddedFileDialog ViewModel="{Binding}" />
+                    </DataTemplate>
                     <Storyboard x:Key="OverlayFadeIn">
                         <DoubleAnimation
                             FillBehavior="HoldEnd"
