@@ -27,6 +27,7 @@ using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Exceptions;
@@ -69,6 +70,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     private readonly ILocKeyService _locKeyService;
     private readonly Red4ParserService _parserService;
     private readonly CRUIDService _cruidService;
+    private readonly CvmMaterialTools _cvmMaterialTools;
 
     private static readonly List<string> s_hiddenProperties = new()
     {
@@ -107,6 +109,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         ILocKeyService locKeyService,
         Red4ParserService parserService,
         CRUIDService cruidService,
+        CvmMaterialTools cvmMaterialTools,
         ChunkViewModel? parent = null,
         bool isReadOnly = false
     )
@@ -123,6 +126,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         _locKeyService = locKeyService;
         _parserService = parserService;
         _cruidService = cruidService;
+        _cvmMaterialTools = cvmMaterialTools;
 
         _appViewModel = appViewModel;
         _data = data;
@@ -152,7 +156,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         CalculateIsDefault();
         CalculateValue();
         CalculateDescriptor();
-        CalculateUserInteractionStates();
+        CalculateEditorDifficultyVisibility();
 
         CalculateDisplayName();
     }
@@ -169,13 +173,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
         Red4ParserService parserService,
+        CvmMaterialTools cvmMaterialTools,
         CRUIDService cruidService,
         bool isReadOnly = false
     )
         : this(data, nameof(RDTDataViewModel), appViewModel,
             chunkViewmodelFactory, tabViewmodelFactory, hashService, loggerService, projectManager,
             gameController, settingsManager, archiveManager, tweakDbService, locKeyService, parserService,
-            cruidService, null, isReadOnly)
+            cruidService, cvmMaterialTools, null, isReadOnly)
     {
         _tab = tab;
         RelativePath = _tab.Parent.RelativePath;
@@ -194,13 +199,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
         Red4ParserService parserService,
+        CvmMaterialTools cvmMaterialTools,
         CRUIDService cruidService,
         bool isReadOnly = false
     )
         : this(export, nameof(ReferenceSocket), appViewModel,
             chunkViewmodelFactory, tabViewmodelFactory, hashService, loggerService, projectManager,
             gameController, settingsManager, archiveManager, tweakDbService, locKeyService, parserService,
-            cruidService, null, isReadOnly
+            cruidService, cvmMaterialTools, null, isReadOnly
         )
     {
         Socket = socket;
@@ -269,10 +275,21 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         // expand / collapse nested elements. Why click twice.
-        if (TVProperties.Count == 1)
+        if (!IsArray)
         {
-            TVProperties[0].IsExpanded = IsExpanded;
-            return;
+            var visibleProperties = TVProperties.Where(p => !p.IsHiddenByEditorDifficultyLevel).ToList();
+            if (visibleProperties.Count == 1)
+            {
+                var prop = visibleProperties.First();
+                // ... unless we don't want to expand them (e.g. because they're primitives or so)
+                if (!IsExpanded || (prop.Value != prop.Descriptor &&
+                                    prop.ResolvedData is not (CKeyValuePair or Vector4 or Vector3)))
+                {
+                    prop.IsExpanded = IsExpanded;
+                }
+
+                return;
+            }
         }
 
         if (TVProperties.Where(p => !p.IsHiddenByEditorDifficultyLevel).ToList() is { Count: 1 } visibleProps)
@@ -337,7 +354,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         CalculateDescriptor();
 
         // Certain properties should not be editable by or visible to the user, based on current editor mode
-        CalculateUserInteractionStates();
+        CalculateEditorDifficultyVisibility();
 
         if (Parent is null)
         {
@@ -1716,357 +1733,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     private bool CanAdjustSubmeshCount() => ResolvedData is CMesh;
 
     [RelayCommand(CanExecute = nameof(CanAdjustSubmeshCount))]
-    private void AdjustSubmeshCount()
-    {
-        if (ResolvedData is not CMesh mesh || mesh.Appearances.Count == 0 ||
-            mesh.RenderResourceBlob.GetValue() is not rendRenderMeshBlob blob)
-        {
-            return;
-        }
-
-        List<rendChunk> filteredRenderChunkInfos = new();
-        List<CUInt8> filteredRenderChunks = new();
-
-        for (var i = 0; i < blob.Header.RenderChunkInfos.Count; i++)
-        {
-            var renderChunkInfo = blob.Header.RenderChunkInfos[i];
-            // <4 vertices: an "invisible" mesh that we want to get rid of
-            if (renderChunkInfo.NumVertices <= 3)
-            {
-                continue;
-            }
-
-            filteredRenderChunkInfos.Add(renderChunkInfo);
-            if (blob.Header.RenderChunks.Count > i)
-            {
-                filteredRenderChunks.Add(blob.Header.RenderChunks[i]);
-            }
-        }
-
-        blob.Header.RenderChunkInfos = [];
-        blob.Header.RenderChunks = [];
-
-        foreach (var renderChunkInfo in filteredRenderChunkInfos)
-        {
-            blob.Header.RenderChunkInfos.Add(renderChunkInfo);
-        }
-
-        foreach (var renderChunkInfo in filteredRenderChunks)
-        {
-            blob.Header.RenderChunks.Add(renderChunkInfo);
-        }
-
-        // Find out how many chunk meshes we have
-        var numSubmeshes = blob.Header.RenderChunkInfos.Count;
-        var wasDeleted = false;
-        var wasAdded = false;
-        foreach (var appearance in mesh.Appearances.Select(a => a.GetValue()).OfType<meshMeshAppearance>())
-        {
-            if (appearance.ChunkMaterials.Count == numSubmeshes || appearance.ChunkMaterials.Count == 0)
-            {
-                continue;
-            }
-
-            var newMaterials = appearance.ChunkMaterials.Where((_, i) => i < numSubmeshes).ToList();
-            if (newMaterials.Count < numSubmeshes)
-            {
-                var sequenceIndex =
-                    GetIndexOfFirstNonRepeatingMaterial(newMaterials.Select(m => m.GetResolvedText() ?? "").ToList());
-
-                while (newMaterials.Count < numSubmeshes && sequenceIndex < newMaterials.Count + 1)
-                {
-                    newMaterials.Add(newMaterials[sequenceIndex]);
-                    wasAdded = true;
-                    sequenceIndex = (sequenceIndex + 1) % newMaterials.Count;
-                }
-            }
-
-            appearance.ChunkMaterials = new CArray<CName>();
-            foreach (var t in newMaterials)
-            {
-                appearance.ChunkMaterials.Add(t);
-            }
-
-            wasDeleted = true;
-        }
-
-
-
-        if (wasAdded || wasDeleted)
-        {
-            GetPropertyChild("appearances")?.RecalculateProperties();
-            _loggerService.Info("Chunk material counts were adjusted. You can now delete unused materials.");
-            Tab?.Parent.SetIsDirty(true);
-        }
-        else if (!wasDeleted)
-        {
-            _loggerService.Info("No changes were made");
-        }
-
-        return;
-
-        int GetIndexOfFirstNonRepeatingMaterial(List<string> materials)
-        {
-            var numMaterials = materials.Count;
-
-            var materialCounts = new Dictionary<string, int>();
-            foreach (var material in materials.Where(material => !materialCounts.TryAdd(material, 1)))
-            {
-                materialCounts[material]++;
-            }
-
-            var startIndex = 0;
-            for (var i = 0; i < numMaterials; i++)
-            {
-                if (materialCounts[materials[i]] != 1)
-                {
-                    continue;
-                }
-
-                startIndex = i;
-                break;
-            }
-
-            return startIndex;
-        }
-    }
-
-
-    private static IEnumerable<meshMeshAppearance?> CreateAutoGeneratedChunkMaterials(
-        CArray<CHandle<meshMeshAppearance>> appearanceHandles)
-    {
-        var appearances = appearanceHandles.Select((handle) => handle.GetValue() as meshMeshAppearance)
-            .Where((i) => i != null).ToList();
-        if (appearances.Count == 0)
-        {
-            return appearances;
-        }
-
-        var firstChunkMaterials = appearances[0]!.ChunkMaterials;
-        var firstAppearanceName = appearances[0]!.Name.GetResolvedText() ?? "INVALID";
-        for (var i = 1; i < appearances.Count; i++)
-        {
-            var appearance = appearances[i];
-            if (appearance is null || appearance.ChunkMaterials.Count > 0)
-            {
-                continue;
-            }
-
-            var appearanceName = appearance.Name.GetResolvedText() ?? "INVALID";
-            appearance.ChunkMaterials ??= [];
-            for (var j = 0; j < firstChunkMaterials.Count; j++)
-            {
-                var newChunkMaterial =
-                    (firstChunkMaterials[j].GetResolvedText() ?? "").Replace(firstAppearanceName, appearanceName);
-                appearance.ChunkMaterials.Insert(j, newChunkMaterial);
-            }
-        }
-
-        return appearances;
-    }
-
-    [RelayCommand]
-    private void DeleteUnusedMaterials(bool suppressLogOutput = false)
-    {
-        if (GetRootModel() is not { ResolvedData: CMesh mesh } rootChunk)
-        {
-            return;
-        }
-
-        rootChunk.ConvertPreloadMaterials();
-
-        // Support auto-generated chunk material names (psiberx magic)
-        var appearances = CreateAutoGeneratedChunkMaterials(mesh.Appearances);
-
-        // Collect material names from appearance chunk materials
-        var appearanceNames = appearances
-            .SelectMany(mA => mA!.ChunkMaterials.Select(chunkMaterial => chunkMaterial.GetResolvedText()).ToArray())
-            .Where(n => n is not null)
-            .Select(n => n!.Contains('@') ? $"@{n.Split('@').Last()}" : n) // dynamic
-            .ToList();
-
-
-        var localMatIdxList = mesh.MaterialEntries.Where((mE) =>
-            mE.IsLocalInstance && mE.Name.GetResolvedText() is string s &&
-            appearanceNames.Contains(s, StringComparer.OrdinalIgnoreCase)
-        ).Select(me => (int)me.Index).ToList();
-
-        var externalMatIdxList = mesh.MaterialEntries.Where((mE) =>
-            !mE.IsLocalInstance && mE.Name.GetResolvedText() is string s &&
-            appearanceNames.Contains(s, StringComparer.OrdinalIgnoreCase)
-        ).Select(me => (int)me.Index).ToList();
-
-        var numUnusedMaterials = mesh.MaterialEntries.Count - (localMatIdxList.Count + externalMatIdxList.Count);
-        var numTemplateProperties = 0;
-
-        if (!suppressLogOutput && numUnusedMaterials == 0)
-        {
-            _loggerService.Info("No unused materials in current mesh.");
-            return;
-        }
-
-        IMaterial[] keepLocal = [];
-        CResourceAsyncReference<IMaterial>[] keepExternal = [];
-
-        if (mesh.LocalMaterialBuffer?.Materials is not null && mesh.LocalMaterialBuffer.Materials.Count > 0)
-        {
-            keepLocal = mesh.LocalMaterialBuffer.Materials
-                .Where((material, i) => localMatIdxList.Contains(i)).ToArray();
-        }
-
-        if (mesh.ExternalMaterials is not null && mesh.ExternalMaterials.Count > 0)
-        {
-            keepExternal = mesh.ExternalMaterials
-                .Where((material, i) => externalMatIdxList.Contains(i)).ToArray();
-        }
-
-        var usedMaterialDefinitions = mesh.MaterialEntries.Where(me =>
-            (me.IsLocalInstance && localMatIdxList.Contains(me.Index)) ||
-            (!me.IsLocalInstance && externalMatIdxList.Contains(me.Index))
-        ).ToArray();
-
-        if (keepLocal.Length + keepExternal.Length != usedMaterialDefinitions.Length &&
-            !_appViewModel.ShowConfirmationDialog(
-                "Not all remaining materials match up. Continue? (You need to validate by hand)",
-                "Really delete materials?"))
-        {
-            return;
-        }
-
-        // recreate material definition
-        mesh.MaterialEntries.Clear();
-        var localMaterialIdx = 0;
-        var externalMaterialIdx = 0;
-        for (var i = 0; i < usedMaterialDefinitions.Length; i++)
-        {
-            var t = usedMaterialDefinitions[i];
-            if (t.IsLocalInstance)
-            {
-                t.Index = (CUInt16)localMaterialIdx;
-                localMaterialIdx += 1;
-            }
-            else
-            {
-                t.Index = (CUInt16)externalMaterialIdx;
-                externalMaterialIdx += 1;
-            }
-
-            t.Index = (CUInt16)i;
-            mesh.MaterialEntries.Add(t);
-        }
-
-
-        if (mesh.LocalMaterialBuffer?.Materials is not null)
-        {
-            mesh.LocalMaterialBuffer.Materials.Clear();
-            foreach (var t in keepLocal)
-            {
-                mesh.LocalMaterialBuffer.Materials.Add(DeleteTemplatePaths(t));
-            }
-        }
-
-        if (mesh.ExternalMaterials is not null)
-        {
-            mesh.ExternalMaterials.Clear();
-            foreach (var t in keepExternal)
-            {
-                mesh.ExternalMaterials.Add(t);
-            }
-        }
-
-        rootChunk.GetPropertyChild("materialEntries")?.RecalculateProperties();
-
-        rootChunk.GetPropertyChild("localMaterialBuffer")?.GetPropertyChild("materials")?.RecalculateProperties();
-        rootChunk.GetPropertyChild("localMaterialBuffer")?.RecalculateProperties();
-
-        rootChunk.GetPropertyChild("externalMaterials")?.RecalculateProperties();
-
-        rootChunk.RecalculateProperties();
-        Tab?.Parent.SetIsDirty(true);
-
-        if (numUnusedMaterials > 0)
-        {
-            _loggerService.Info($"Deleted {numUnusedMaterials} unused materials.");
-        }
-
-        if (numTemplateProperties > 0)
-        {
-            _loggerService.Info($"Deleted {numTemplateProperties} properties from outdated templates.");
-        }
-
-        return;
-
-        IMaterial DeleteTemplatePaths(IMaterial material)
-        {
-            if (material is not CMaterialInstance matInstance)
-            {
-                return material;
-            }
-
-            CArray<CKeyValuePair> values = [];
-            foreach (var cKeyValuePair in matInstance.Values)
-            {
-                if (cKeyValuePair.Value is not IRedRef reference || reference.DepotPath.GetResolvedText()?.Contains(
-                        "this_is_an_extra_long_path_so_you_can_better_use_010_editor_to_custom_path") is not true)
-                {
-                    values.Add(cKeyValuePair);
-                }
-                else
-                {
-                    numTemplateProperties += 1;
-                }
-            }
-
-            matInstance.Values = values;
-
-            return matInstance;
-        }
-    }
-
-    public void GenerateMissingMaterials(string baseMaterial, bool isLocal, bool resolveSubstitutions)
-    {
-        GenerateMissingMaterialDefinitions(isLocal);
-        GenerateMissingMaterialInstances(baseMaterial, isLocal, resolveSubstitutions);
-    }
-
-    private void GenerateMissingMaterialDefinitions(bool isLocal)
-    {
-        if (ResolvedData is not CMesh mesh)
-        {
-            return;
-        }
-
-        var definedMaterialNames = mesh.MaterialEntries.Select(mat => mat.Name).ToList();
-
-        // Collect material names from appearance chunk materials
-        var undefinedMaterialNames = CreateAutoGeneratedChunkMaterials(mesh.Appearances)
-            .SelectMany(mA =>
-                mA!.ChunkMaterials.Select(chunkMaterial => chunkMaterial.GetResolvedText() ?? "").ToArray())
-            .Select((materialName) =>
-                materialName.Contains('@') ? $"@{materialName.Split('@').Last()}" : materialName) // dynamic
-            .Where((chunkMaterialName) => !definedMaterialNames.Contains(chunkMaterialName))
-            .ToHashSet().ToList();
-
-        if (undefinedMaterialNames.Count == 0)
-        {
-            return;
-        }
-
-        var matIdx = mesh.MaterialEntries.LastOrDefault(mat => mat.IsLocalInstance == isLocal)?.Index ?? -1;
-
-        // Create material definitions
-        foreach (var materialName in undefinedMaterialNames)
-        {
-            matIdx += 1;
-            var material = new CMeshMaterialEntry()
-            {
-                Name = materialName, Index = (CUInt16)matIdx, IsLocalInstance = isLocal
-            };
-            mesh.MaterialEntries.Add(material);
-        }
-
-        GetPropertyChild("materialEntries")?.RecalculateProperties();
-    }
+    private void AdjustSubmeshCount() => _cvmMaterialTools.AdjustSubmeshCount(this);
 
     public ChunkViewModel? GetPropertyChild(params string[] propertyNames)
     {
@@ -2085,115 +1752,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         return cvm.GetPropertyChild(propertyNames.Skip(1).ToArray());
     }
-
-    // Converts PreloadMaterials to regular local materials. We like them better, and this way,
-    // we don't have to check all those arrays.
-
-
-    private bool CanConvertPreloadMaterial() => ResolvedData is CMesh mesh &&
-                                                ((mesh.PreloadLocalMaterialInstances?.Count ?? 0) > 0 ||
-                                                 (mesh.PreloadExternalMaterials?.Count ?? 0) > 0);
-
-
-    /// <summary>
-    /// Convert to local materials - if preloadLocalMaterialInstances or preloadExternalMaterials have entries, allow converting them
-    /// to the corresponding non-preload list
-    /// </summary>
-    [RelayCommand(CanExecute = nameof(CanConvertPreloadMaterial))]
-    private void ConvertPreloadMaterials()
-    {
-        var resolvedData = ResolvedData is CMesh ? ResolvedData : GetRootModel().ResolvedData;
-        if (resolvedData is not CMesh mesh)
-        {
-            return;
-        }
-
-        // Make sure these are initialized
-        mesh.LocalMaterialBuffer ??= new meshMeshMaterialBuffer { Materials = [], };
-        mesh.LocalMaterialBuffer.Materials ??= [];
-
-        CArray<IMaterial> localMaterials = [];
-        foreach (var iMaterial in mesh.LocalMaterialBuffer.Materials)
-        {
-            localMaterials.Add(iMaterial);
-        }
-
-        if (mesh.PreloadLocalMaterialInstances.Count > 0)
-        {
-            localMaterials.AddRange(mesh.PreloadLocalMaterialInstances.Select(h => h.Chunk).OfType<IMaterial>());
-
-            mesh.LocalMaterialBuffer.Materials = localMaterials;
-
-            mesh.PreloadLocalMaterialInstances.Clear();
-
-            GetPropertyChild("preloadLocalMaterialInstances")?.RecalculateProperties();
-            GetPropertyChild("localMaterialBuffer")?.GetPropertyChild("materials")?.RecalculateProperties();
-            GetPropertyChild("localMaterialBuffer")?.RecalculateProperties();
-            Tab?.Parent.SetIsDirty(true);
-        }
-
-        if (mesh.PreloadExternalMaterials.Count == 0)
-        {
-            return;
-        }
-
-        CArray<CResourceAsyncReference<IMaterial>> externalMaterials = [];
-        foreach (var mat in mesh.PreloadExternalMaterials)
-        {
-            externalMaterials.Add(new CResourceAsyncReference<IMaterial>(mat.DepotPath));
-        }
-
-        mesh.ExternalMaterials = externalMaterials;
-        mesh.PreloadExternalMaterials.Clear();
-
-        GetPropertyChild("preloadExternalMaterials")?.RecalculateProperties();
-        GetPropertyChild("externalMaterials")?.RecalculateProperties();
-
-        Tab?.Parent.SetIsDirty(true);
-    }
-
-    private void GenerateMissingMaterialInstances(string baseMaterial, bool isLocal, bool resolveSubstitutions)
-    {
-        if (ResolvedData is not CMesh mesh || mesh.MaterialEntries.Count == 0)
-        {
-            return;
-        }
-
-        ConvertPreloadMaterials();
-
-        var numDefinedMaterials = isLocal ? mesh.LocalMaterialBuffer.Materials.Count : mesh.ExternalMaterials.Count;
-
-        foreach (var mat in mesh.MaterialEntries
-                     .Where(entry => entry.IsLocalInstance == isLocal && entry.Index >= numDefinedMaterials))
-        {
-            var baseMaterialPath = resolveSubstitutions
-                ? baseMaterial.Replace(@"{material}", mat.Name)
-                : baseMaterial;
-
-            if (isLocal)
-            {
-                mesh.LocalMaterialBuffer?.Materials.Add(new CMaterialInstance()
-                {
-                    BaseMaterial = new CResourceReference<IMaterial>(baseMaterialPath)
-                });
-            }
-            else
-            {
-                mesh.ExternalMaterials.Add(new CResourceAsyncReference<IMaterial>(baseMaterialPath));
-            }
-        }
-
-        if (isLocal)
-        {
-            GetPropertyChild("localMaterialBuffer")?.GetPropertyChild("materials")?.RecalculateProperties();
-            GetPropertyChild("localMaterialBuffer")?.RecalculateProperties();
-        }
-        else
-        {
-            GetPropertyChild("externalMaterials")?.RecalculateProperties();
-        }
-    }
-
 
     // Dynamic Properties
 
@@ -3654,6 +3212,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             entMeshComponent meshComponent => string.IsNullOrEmpty(meshComponent.Mesh.DepotPath.GetResolvedText()) ||
                                               meshComponent.ChunkMask == 0,
             Multilayer_Layer layer => ((float)layer.Opacity) == 0.0,
+            meshMeshAppearance app => app.ChunkMaterials.Count == 0,
             _ => IsDefault
         };
     }
@@ -4076,12 +3635,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             case CArray<CMeshMaterialEntry> materialDefinitionArray when
                 ResolvedData is CMeshMaterialEntry materialDefinition:
             {
-                var materialIndex = materialDefinitionArray
-                    .Where(mat => mat.IsLocalInstance.Equals(materialDefinition.IsLocalInstance))
-                    .OrderBy(mat => Int32.Parse(mat.Index.ToString()))
-                    .Select(mat => mat.Index)
-                    .Last();
-
+                var materialIndex =
+                    _cvmMaterialTools.FindHighestMaterialIndex(Parent, materialDefinition.IsLocalInstance);
                 SetDataIndexProperty(materialIndex + 1);
                 break;
             }

@@ -11,9 +11,11 @@ using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Services;
+using WolvenKit.Core;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Interfaces.Extensions;
@@ -35,6 +37,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private readonly CRUIDService _cruidService;
     private readonly DocumentTools _documentTools;
     private readonly ILoggerService _loggerService;
+    private readonly CvmMaterialTools _cvmMaterialTools;
 
     public RedDocumentViewToolbarModel(
         ISettingsManager settingsManager,
@@ -42,6 +45,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         IProjectManager projectManager,
         DocumentTools documentTools,
         CRUIDService cruidService,
+        CvmMaterialTools cvmMaterialTools,
         ILoggerService loggerService
     )
     {
@@ -50,6 +54,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         _settingsManager = settingsManager;
         _cruidService = cruidService;
         _documentTools = documentTools;
+        _cvmMaterialTools = cvmMaterialTools;
         _loggerService = loggerService;
 
         modifierSvc.ModifierStateChanged += OnModifierChanged;
@@ -206,7 +211,9 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(ScrollToMaterialCommand))]
     [NotifyCanExecuteChangedFor(nameof(ToggleLocalInstanceCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteDuplicateEntriesCommand))]
-    [NotifyCanExecuteChangedFor(nameof(ConvertPreloadMaterialsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ConvertToPreloadMaterialsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ConvertFromPreloadMaterialsCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SelectTemplateAppearanceCommand))]
     [ObservableProperty]
     private ChunkViewModel? _selectedChunk;
 
@@ -225,7 +232,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         ClearChunkMaterialsCommand.NotifyCanExecuteChanged();
         RegenerateAllCRUIDsCommand.NotifyCanExecuteChanged();
         DeleteChunkByIndexCommand.NotifyCanExecuteChanged();
-        ConvertPreloadMaterialsCommand.NotifyCanExecuteChanged();
+        ConvertToPreloadMaterialsCommand.NotifyCanExecuteChanged();
+        ConvertFromPreloadMaterialsCommand.NotifyCanExecuteChanged();
     }
 
     public void SetCurrentTab(RedDocumentTabViewModel? value)
@@ -628,13 +636,21 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private void ScrollToMaterial() => SelectedChunk?.ScrollToMaterialCommand.Execute(null);
 
     /*
-     * mesh: convert preloadXXX to regular local materials
+     * mesh: convert to and from preload materials
      */
-    private bool CanConvertPreloadMaterials() => RootChunk?.ResolvedData is CMesh mesh &&
-                                                 (mesh.PreloadExternalMaterials.Count > 0 || mesh.PreloadLocalMaterialInstances.Count > 0);
+    private bool CanConvertToPreloadMaterials() => RootChunk?.ResolvedData is CMesh mesh &&
+                                                   (mesh.LocalMaterialBuffer.Materials.Count > 0 ||
+                                                    mesh.ExternalMaterials.Count > 0);
 
-    [RelayCommand(CanExecute = nameof(CanConvertPreloadMaterials))]
-    private void ConvertPreloadMaterials() => RootChunk?.ConvertPreloadMaterialsCommand.Execute(null);
+    [RelayCommand(CanExecute = nameof(CanConvertToPreloadMaterials))]
+    private void ConvertToPreloadMaterials() => _cvmMaterialTools.ConvertMaterialsToPreload(RootChunk);
+
+    private bool CanConvertFromPreloadMaterials() => RootChunk?.ResolvedData is CMesh mesh &&
+                                                     (mesh.PreloadExternalMaterials.Count > 0 ||
+                                                      mesh.PreloadLocalMaterialInstances.Count > 0);
+
+    [RelayCommand(CanExecute = nameof(CanConvertFromPreloadMaterials))]
+    private void ConvertFromPreloadMaterials() => _cvmMaterialTools.ConvertMaterialsFromPreload(RootChunk);
 
     /*
      * mesh: clear appearances
@@ -652,7 +668,54 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         }
 
         mesh.Appearances.Clear();
-        RootChunk.DeleteUnusedMaterialsCommand.Execute(false);
+        _cvmMaterialTools.DeleteUnusedMaterials(RootChunk, null, true);
+    }
+
+    private bool CanSelectTemplateAppearance() => SelectedChunk?.ResolvedData is CArray<CHandle<meshMeshAppearance>> ||
+                                                  SelectedChunks.All(cvm => cvm.ResolvedData is meshMeshAppearance);
+
+    [RelayCommand(CanExecute = nameof(CanSelectTemplateAppearance))]
+    private void SelectTemplateAppearance()
+    {
+        if (SelectedChunk?.GetRootModel()?.ResolvedData is not CMesh mesh)
+        {
+            return;
+        }
+
+        var appearanceNames = mesh.Appearances
+            .Select(a => a.Chunk).OfType<meshMeshAppearance>()
+            .Where(mA => mA.ChunkMaterials.Count > 0)
+            .Select(mA => mA.Name.GetResolvedText())
+            .Where(s => !string.IsNullOrEmpty(s)).OfType<string>()
+            .Distinct().ToList();
+
+        if (appearanceNames.Count == 0)
+        {
+            _loggerService.Info(
+                "No valid appearance found to use as a template - you need to have at least one appearance with non-empty chunk materials.");
+            return;
+        }
+
+        var appearanceTemplate = Interactions.AskForDropdownOption((appearanceNames, "Select template appearance",
+            "Select appearance name to use as template for dynamic expansion", WikiLinks.AXLMaterialExpansion, false,
+            "Wiki"));
+
+        if (string.IsNullOrEmpty(appearanceTemplate))
+        {
+            return;
+        }
+
+        List<ChunkViewModel> appearanceChunks = [];
+        if (SelectedChunk?.ResolvedData is CArray<CHandle<meshMeshAppearance>>)
+        {
+            appearanceChunks.Add(SelectedChunk);
+        }
+        else
+        {
+            appearanceChunks.AddRange(SelectedChunks.Where(cvm => cvm.ResolvedData is meshMeshAppearance));
+        }
+
+        _cvmMaterialTools.AddTagsToMeshAppearances(appearanceChunks, [appearanceTemplate]);
     }
 
     #region meshfile_materials
@@ -729,7 +792,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             RootChunk.GetPropertyChild("appearances")?.CalculateProperties();
         }
 
-        RootChunk?.DeleteUnusedMaterialsCommand.Execute(false);
+        _cvmMaterialTools.DeleteUnusedMaterials(RootChunk);
     }
 
     #endregion
@@ -827,7 +890,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         appearanceChild.RecalculateProperties();
     }
 
-    private bool CanClearChunkMaterials() => SelectedChunks.All(c => c.ResolvedData is meshMeshAppearance);
+    private bool CanClearChunkMaterials() =>
+        SelectedChunks.Count > 0 && SelectedChunks.All(c => c.ResolvedData is meshMeshAppearance);
 
 
     [RelayCommand(CanExecute = nameof(CanClearChunkMaterials))]

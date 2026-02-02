@@ -289,11 +289,11 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
 
     [Display(Name = "Auto Update On Startup", GroupName = "General")]
     [ObservableProperty]
-    private bool _autoUpdateOnStartup;
+    private bool _autoUpdateOnStartup = true;
 
     [Display(Name = "Always Ask Before Updating", GroupName = "General")]
     [ObservableProperty]
-    private bool _alwaysAskBeforeUpdating;
+    private bool _alwaysAskBeforeUpdating = true;
 
     [Display(Name = "Update Channel", GroupName = "General")]
     [ObservableProperty]
