@@ -156,7 +156,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         CalculateIsDefault();
         CalculateValue();
         CalculateDescriptor();
-        CalculateIsDefault();
         CalculateEditorDifficultyVisibility();
 
         CalculateDisplayName();
@@ -291,6 +290,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
                 return;
             }
+        }
+
+        if (TVProperties.Where(p => !p.IsHiddenByEditorDifficultyLevel).ToList() is { Count: 1 } visibleProps)
+        {
+            visibleProps[0].IsExpanded = IsExpanded;
+            return;
         }
 
         // Some special cases should be auto-expanded, e.g. if the parent only has one "interesting" property
