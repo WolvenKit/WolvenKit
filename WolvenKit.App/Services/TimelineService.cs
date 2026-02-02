@@ -280,10 +280,7 @@ public partial class TimelineService : ObservableObject, IDisposable
         var newDuration = Math.Max(maxEndTime, currentDuration);
 
         SectionDuration = newDuration;
-        if (newDuration > currentDuration)
-        {
-            _sectionNode.SectionDuration = new scnSceneTime { Stu = newDuration };
-        }
+        _sectionNode.SectionDuration = new scnSceneTime { Stu = newDuration };
     }
 
     private void MarkDocumentDirty()
