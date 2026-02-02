@@ -334,9 +334,9 @@ public partial class ChunkViewModel
                     Tab?.Parent?.SetIsDirty(true);
 
                     kvp.Key.RecalculateProperties();
+                    kvp.Key.CalculateIsDefault();
                     kvp.Key.CalculateDescriptor();
                     kvp.Key.CalculateValue();
-                    kvp.Key.CalculateIsDefault();
                     kvp.Key.IsSelected = true;
                 }
 

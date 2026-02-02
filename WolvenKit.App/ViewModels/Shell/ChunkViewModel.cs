@@ -153,9 +153,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             });
         }
 
+        CalculateIsDefault();
         CalculateValue();
         CalculateDescriptor();
-        CalculateIsDefault();
         CalculateEditorDifficultyVisibility();
 
         CalculateDisplayName();
@@ -257,6 +257,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
+    /// <summary>
+    /// On expanding a node: conditionally expand child nodes for convenience (e.g. if there's only one child)
+    /// </summary>
+    /// <param name="value"></param>
     partial void OnIsExpandedChanged(bool value)
     {
         if (IsExpanded && !_propertiesLoaded)
@@ -286,6 +290,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
                 return;
             }
+        }
+
+        if (TVProperties.Where(p => !p.IsHiddenByEditorDifficultyLevel).ToList() is { Count: 1 } visibleProps)
+        {
+            visibleProps[0].IsExpanded = IsExpanded;
+            return;
         }
 
         // Some special cases should be auto-expanded, e.g. if the parent only has one "interesting" property
@@ -326,6 +336,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 valueChild.IsExpanded = IsExpanded;
                 break;
             }
+            case entGarmentParameter when GetPropertyChild("componentsData") is ChunkViewModel valueChild:
+            {
+                InitializeChild(valueChild);
+                valueChild.IsExpanded = IsExpanded;
+                break;
+            }
             default:
                 break;
         }
@@ -333,9 +349,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     partial void OnDataChanged(IRedType value)
     {
+        CalculateIsDefault();
         CalculateValue();
         CalculateDescriptor();
-        CalculateIsDefault();
 
         // Certain properties should not be editable by or visible to the user, based on current editor mode
         CalculateEditorDifficultyVisibility();
@@ -482,9 +498,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                  || Parent.ResolvedData is appearancePartComponentOverrides
                 )
         {
+            Parent.CalculateIsDefault();
             Parent.CalculateDescriptor();
             Parent.CalculateValue();
-            Parent.CalculateIsDefault();
         }
         else if (Parent.IsValueExtrapolated)
         {
