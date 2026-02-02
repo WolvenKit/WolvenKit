@@ -56,7 +56,7 @@ public partial class AddPropFileDialogViewModel : ObservableObject
         Appearances = [];
     }
 
-    private bool NeedsMoveToPOarentFolder(string filePath)
+    private bool NeedsMoveToParentFolder(string filePath)
     {
         if (string.IsNullOrEmpty(filePath) || string.IsNullOrEmpty(ParentFolder))
         {
@@ -85,20 +85,20 @@ public partial class AddPropFileDialogViewModel : ObservableObject
                     break;
                 }
 
-                MoveMeshesToFolder = NeedsMoveToPOarentFolder(MeshFile1) || NeedsMoveToPOarentFolder(MeshFile2) ||
-                                     NeedsMoveToPOarentFolder(MeshFile3) || NeedsMoveToPOarentFolder(MeshFile4);
+                MoveMeshesToFolder = NeedsMoveToParentFolder(MeshFile1) || NeedsMoveToParentFolder(MeshFile2) ||
+                                     NeedsMoveToParentFolder(MeshFile3) || NeedsMoveToParentFolder(MeshFile4);
                 break;
             case nameof(MeshFile1) when !HasMoveMeshBeenTouched:
-                MoveMeshesToFolder = MoveMeshesToFolder || NeedsMoveToPOarentFolder(MeshFile1);
+                MoveMeshesToFolder = MoveMeshesToFolder || NeedsMoveToParentFolder(MeshFile1);
                 break;
             case nameof(MeshFile2) when !HasMoveMeshBeenTouched:
-                MoveMeshesToFolder = MoveMeshesToFolder || NeedsMoveToPOarentFolder(MeshFile2);
+                MoveMeshesToFolder = MoveMeshesToFolder || NeedsMoveToParentFolder(MeshFile2);
                 break;
             case nameof(MeshFile3) when !HasMoveMeshBeenTouched:
-                MoveMeshesToFolder = MoveMeshesToFolder || NeedsMoveToPOarentFolder(MeshFile3);
+                MoveMeshesToFolder = MoveMeshesToFolder || NeedsMoveToParentFolder(MeshFile3);
                 break;
             case nameof(MeshFile4) when !HasMoveMeshBeenTouched:
-                MoveMeshesToFolder = MoveMeshesToFolder || NeedsMoveToPOarentFolder(MeshFile4);
+                MoveMeshesToFolder = MoveMeshesToFolder || NeedsMoveToParentFolder(MeshFile4);
                 break;
 
         }
