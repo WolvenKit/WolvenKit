@@ -276,8 +276,11 @@ public partial class TimelineService : ObservableObject, IDisposable
             }
         }
 
-        SectionDuration = maxEndTime;
-        _sectionNode.SectionDuration = new scnSceneTime { Stu = maxEndTime };
+        var currentDuration = _sectionNode.SectionDuration?.Stu ?? 0;
+        var newDuration = Math.Max(maxEndTime, currentDuration);
+
+        SectionDuration = newDuration;
+        _sectionNode.SectionDuration = new scnSceneTime { Stu = newDuration };
     }
 
     private void MarkDocumentDirty()
