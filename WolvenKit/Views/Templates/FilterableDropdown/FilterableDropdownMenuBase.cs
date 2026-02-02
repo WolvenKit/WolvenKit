@@ -249,7 +249,7 @@ public abstract class FilterableDropdownMenuBase<T> : ReactiveUserControl<ChunkV
 
     protected void SetDropdownValueFromDataContext()
     {
-        if (DataContext is not ChunkViewModel { Data: T value })
+        if (DataContext is not ChunkViewModel { Data: T value } cvm)
         {
             return;
         }
@@ -261,7 +261,8 @@ public abstract class FilterableDropdownMenuBase<T> : ReactiveUserControl<ChunkV
         }
 
         // If the dropdown has only one value and CVM is empty, we can default to the only option.
-        if (_useDefaultOption && Options.Count == 1 && string.IsNullOrEmpty(SelectedOption))
+        if (_useDefaultOption && Options.Count == 1 && string.IsNullOrEmpty(SelectedOption) &&
+            (cvm.Data is not CName cname || string.IsNullOrEmpty(cname)))
         {
             SetCurrentValue(SelectedOptionProperty, Options.First().Key);
             return;
