@@ -76,7 +76,8 @@ public partial class worldStreamingSector : IRedAppendix
         NodeData = new DataBuffer();
         Nodes = new CArray<CHandle<worldNode>>();
         NodeRefs = new CArray<NodeRef>();
-        VariantIndices = new CArray<CInt32>();
+        VariantIndices = new CArray<CInt32>() { 0 };
+        Version = 62;
     }
 
     public void Read(Red4Reader reader, uint size)
