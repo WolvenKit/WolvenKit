@@ -221,7 +221,6 @@
                         x:Name="AppearancesTextBox"
                         Grid.Row="8"
                         Grid.Column="1"
-                        Grid.ColumnSpan="2"
                         Padding="{DynamicResource WolvenKitMarginTinyVertical}"
                         VerticalContentAlignment="Top"
                         Background="{StaticResource ContentBackgroundAlt2}"
@@ -236,11 +235,20 @@
                         WatermarkTemplate="{StaticResource PlaceholderTemplate}"
                         LostFocus="Appearances_FocusLost" />
 
+                    <CheckBox
+                        x:Name="ReadAppearancesFromMeshCheckbox"
+                        Grid.Row="8"
+                        Grid.Column="2"
+                        Margin="{DynamicResource WolvenKitMarginLeft}"
+                        ToolTip="Read appearances from first mesh file (text box will be IGNORED)"
+                        KeyboardNavigation.TabIndex="-1"
+                        Click="OnReadAppearancesCheckboxChecked" />
+
                     <TextBlock
                         Grid.Row="9"
                         Grid.Column="1"
                         Style="{StaticResource ExplanationStyle}"
-                        Text="Does your prop have more than one appearance? (Comma-separated list)" />
+                        Text="Comma-separated list, or check the box to read appearances from first mesh" />
 
                     <!-- Meshes for components -->
                     <Label

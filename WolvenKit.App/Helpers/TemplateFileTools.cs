@@ -1143,6 +1143,15 @@ public partial class TemplateFileTools
         }
 
         prop.Appearances ??= [];
+        if (prop.ReadAppearancesFromMesh && !string.IsNullOrEmpty(prop.MeshFile1) &&
+            _cr2WTools.ReadCr2WNoException(Path.Join(project.ModDirectory, prop.MeshFile1)) is CR2WFile file &&
+            file.RootChunk is CMesh mesh)
+        {
+            prop.Appearances.Clear();
+            prop.Appearances.AddRange(mesh.Appearances.Select(handle => handle.Chunk?.Name.GetResolvedText() ?? "")
+                .Where(s => !string.IsNullOrEmpty(s)).ToList());
+        }
+
         if (prop.Appearances.Count == 0)
         {
             prop.Appearances.Add("default");

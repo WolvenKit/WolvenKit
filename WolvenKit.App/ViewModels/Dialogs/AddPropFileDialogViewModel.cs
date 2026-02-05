@@ -23,6 +23,11 @@ public partial class AddPropFileDialogViewModel : ObservableObject
     [ObservableProperty] private bool _moveMeshesToFolder = false;
 
     /// <summary>
+    /// Move mesh files to parent folder? (if they aren't already)
+    /// </summary>
+    [ObservableProperty] private bool _readAppearancesFromMesh = false;
+
+    /// <summary>
     /// Relative path to PropFile folder
     /// </summary>
     [ObservableProperty] private string _parentFolder = "";
