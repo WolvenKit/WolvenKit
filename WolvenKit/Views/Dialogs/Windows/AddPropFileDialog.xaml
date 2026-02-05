@@ -99,6 +99,7 @@
         <syncfusion:WizardControl
             CancelButtonCancelsWindow="True"
             FinishButtonClosesWindow="True"
+            Finish="OnDialogueFinish"
             Help="OnHelpButtonClicked">
             <syncfusion:WizardPage
                 BackVisibility="Collapsed"
@@ -149,6 +150,8 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="5" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="5" />
                     </Grid.RowDefinitions>
@@ -393,6 +396,17 @@
                         Grid.Column="1"
                         Style="{StaticResource ExplanationStyle}"
                         Text="Clean up non-existing entries from worldbuilder .txt files" />
+
+                    <TextBlock
+                        Grid.Row="31"
+                        Grid.Column="0"
+                        Text="Remember selection" />
+
+                    <CheckBox
+                        x:Name="RememberValuesCheckbox"
+                        Grid.Row="31"
+                        Grid.Column="1"
+                        KeyboardNavigation.TabIndex="-1" />
 
                 </Grid>
             </syncfusion:WizardPage>
