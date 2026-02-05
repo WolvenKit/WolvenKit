@@ -374,13 +374,13 @@
                         Grid.Row="26"
                         Grid.Column="1"
                         Style="{StaticResource ExplanationStyle}"
-                        Text="Move .mesh files to parent folder" />
+                        Text="Move .mesh files to folder" />
 
                     <Label
                         Grid.Row="28"
                         Grid.Column="0"
                         Style="{StaticResource LabelStyle}"
-                        Content="Clean up WorldBuilder files" />
+                        Content="Clean up WB files" />
 
                     <CheckBox
                         x:Name="CleanupInvalidEntriesCheckbox"
