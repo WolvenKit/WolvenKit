@@ -32,6 +32,7 @@ namespace WolvenKit.Views.Dialogs.Windows
         private static string s_lastMeshAppearances = string.Empty;
         private static string s_lastPropName = string.Empty;
         private static bool s_lastMoveMeshFiles = false;
+        private static bool s_lastReadAppearancesFromMeshFile = false;
 
         public AddPropFileDialog(Cp77Project project)
         {
@@ -119,6 +120,10 @@ namespace WolvenKit.Views.Dialogs.Windows
                 this.Bind(ViewModel,
                         x => x.MoveMeshesToFolder,
                         x => x.MoveMeshesToFolderCheckbox.IsChecked)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        x => x.ReadAppearancesFromMesh,
+                        x => x.ReadAppearancesFromMeshCheckbox.IsChecked)
                     .DisposeWith(disposables);
                 this.Bind(ViewModel,
                         x => x.CleanupInvalidEntries,
@@ -335,6 +340,7 @@ namespace WolvenKit.Views.Dialogs.Windows
                 s_lastMeshAppearances = string.Empty;
                 s_lastPropName = string.Empty;
                 s_lastMoveMeshFiles = false;
+                s_lastReadAppearancesFromMeshFile = false;
                 return;
             }
 
@@ -352,6 +358,7 @@ namespace WolvenKit.Views.Dialogs.Windows
             s_lastMeshFile3 = ViewModel.MeshFile3;
             s_lastMeshFile4 = ViewModel.MeshFile4;
             s_lastMoveMeshFiles = ViewModel.MoveMeshesToFolder;
+            s_lastReadAppearancesFromMeshFile = ViewModel.ReadAppearancesFromMesh;
             s_lastPropName = ViewModel.PropName;
 
             if (!ViewModel.ProjectFolders.ContainsKey(ViewModel.ParentFolder) &&
@@ -422,8 +429,21 @@ namespace WolvenKit.Views.Dialogs.Windows
             }
 
             MoveMeshesToFolderCheckbox.SetCurrentValue(ToggleButton.IsCheckedProperty, s_lastMoveMeshFiles);
+            ReadAppearancesFromMeshCheckbox.SetCurrentValue(ToggleButton.IsCheckedProperty,
+                s_lastReadAppearancesFromMeshFile);
 
             RememberValuesCheckbox.SetCurrentValue(ToggleButton.IsCheckedProperty, true);
+        }
+
+        private void OnReadAppearancesCheckboxChecked(object sender, RoutedEventArgs e)
+        {
+            if (sender is not CheckBox box)
+            {
+                return;
+            }
+
+            // enable appearance textbox status based on checkbox
+            AppearancesTextBox.SetCurrentValue(IsEnabledProperty, box.IsChecked != true);
         }
     }
 }
