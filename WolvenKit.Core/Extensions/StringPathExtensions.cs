@@ -62,14 +62,19 @@ namespace WolvenKit.Interfaces.Extensions
         /// <summary>
         /// Generates redengine friendly file name
         /// </summary>
-        public static string ToFileName(this string target) =>
-            new string(target.Replace('/', Path.DirectorySeparatorChar).Where(c => !Path.GetInvalidFileNameChars().Contains(c)).ToArray()).Trim()
+        /// <param name="target">Extension method, call on string</param>
+        /// <param name="replaceSpecialCharacters">Replace special characters with dashes instead of removing them?</param>
+        public static string ToFileName(this string target, bool replaceSpecialCharacters = false) =>
+            new string(target
+                    .Replace('/', Path.DirectorySeparatorChar)
+                    .Where(c => !Path.GetInvalidFileNameChars().Contains(c)).ToArray()
+                ).Trim()
                 .Replace(" ", "_")
                 .Replace(",", "-")
-                .Replace("\"", "-")
-                .Replace("'", "-")
-                .Replace(")", "-")
-                .Replace("(", "-")
+                .Replace("\"", replaceSpecialCharacters ? "-" : string.Empty)
+                .Replace("'", replaceSpecialCharacters ? "-" : string.Empty)
+                .Replace(")", replaceSpecialCharacters ? "-" : string.Empty)
+                .Replace("(", replaceSpecialCharacters ? "-" : string.Empty)
                 .ToLower();
 
         /// <summary>

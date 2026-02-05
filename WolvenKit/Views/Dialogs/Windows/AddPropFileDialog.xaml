@@ -4,11 +4,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:validators="clr-namespace:WolvenKit.ViewModels.Validators"
     xmlns:controls="clr-namespace:WolvenKit.Views.Controls"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
-    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     Title="Add Prop files"
     Width="{StaticResource WolvenKitDialogWidth}"
     MinWidth="{StaticResource WolvenKitDialogWidth}"
@@ -85,21 +83,10 @@
                 </Style>
 
                 <Style
-                    x:Key="ComboboxStyle"
-                    BasedOn="{StaticResource {x:Type ComboBox}}"
-                    TargetType="ComboBox">
-                    <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
-                    <Setter Property="BorderThickness" Value="1" />
-                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
-                    <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginTinyBottom}" />
-                </Style>
-
-                <Style
                     x:Key="LabelStyle"
                     BasedOn="{StaticResource WolvenkitDialogLabelStyleMedium}"
                     TargetType="{x:Type Label}">
                     <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="BorderThickness" Value="0" />
                     <Setter Property="HorizontalAlignment" Value="Left" />
                     <Setter Property="HorizontalContentAlignment" Value="Left" />
                     <Setter Property="Margin" Value="0" />
@@ -227,7 +214,7 @@
                         Style="{StaticResource LabelStyle}"
                         Content="Appearances:" />
 
-                    <templates:TextboxExtWithPasteHandler
+                    <controls:TextboxExtWithPasteHandler
                         x:Name="AppearancesTextBox"
                         Grid.Row="8"
                         Grid.Column="1"
@@ -265,7 +252,7 @@
                         Grid.Column="1"
                         Grid.ColumnSpan="2"
                         Margin="{DynamicResource WolvenKitMarginSmallTop}"
-                        Text="Check the box on the right to connect the apparance(s) defined above."
+                        Text="Check the box on the right to connect the appearance(s) defined above."
                         TextWrapping="Wrap" />
 
                     <!-- Mesh file 1 -->
@@ -387,13 +374,13 @@
                         Grid.Row="26"
                         Grid.Column="1"
                         Style="{StaticResource ExplanationStyle}"
-                        Text="Move .mesh files to parent folder" />
+                        Text="Move .mesh files to folder" />
 
                     <Label
                         Grid.Row="28"
                         Grid.Column="0"
                         Style="{StaticResource LabelStyle}"
-                        Content="Clean up WorldBuilder files" />
+                        Content="Clean up WB files" />
 
                     <CheckBox
                         x:Name="CleanupInvalidEntriesCheckbox"

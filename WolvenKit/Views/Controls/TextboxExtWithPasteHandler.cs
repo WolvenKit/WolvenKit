@@ -1,13 +1,11 @@
-﻿// File: WolvenKit/Views/Templates/TextboxExtWithPaste.cs
+﻿#nullable enable
 
 using System;
 using System.Windows;
 using System.Windows.Input;
 using Syncfusion.Windows.Controls.Input;
 
-#nullable enable
-
-namespace WolvenKit.Views.Templates
+namespace WolvenKit.Views.Controls
 {
     public class PasteEventArgs : EventArgs
     {
