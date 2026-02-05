@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:validators="clr-namespace:WolvenKit.ViewModels.Validators"
     xmlns:controls="clr-namespace:WolvenKit.Views.Controls"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
@@ -84,21 +83,10 @@
                 </Style>
 
                 <Style
-                    x:Key="ComboboxStyle"
-                    BasedOn="{StaticResource {x:Type ComboBox}}"
-                    TargetType="ComboBox">
-                    <Setter Property="Background" Value="{StaticResource BackgroundColor_Control}" />
-                    <Setter Property="BorderThickness" Value="1" />
-                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor}" />
-                    <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginTinyBottom}" />
-                </Style>
-
-                <Style
                     x:Key="LabelStyle"
                     BasedOn="{StaticResource WolvenkitDialogLabelStyleMedium}"
                     TargetType="{x:Type Label}">
                     <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="BorderThickness" Value="0" />
                     <Setter Property="HorizontalAlignment" Value="Left" />
                     <Setter Property="HorizontalContentAlignment" Value="Left" />
                     <Setter Property="Margin" Value="0" />
@@ -111,6 +99,7 @@
         <syncfusion:WizardControl
             CancelButtonCancelsWindow="True"
             FinishButtonClosesWindow="True"
+            Finish="OnDialogueFinish"
             Help="OnHelpButtonClicked">
             <syncfusion:WizardPage
                 BackVisibility="Collapsed"
@@ -158,6 +147,11 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="5" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="5" />
                     </Grid.RowDefinitions>
@@ -223,11 +217,10 @@
                         Style="{StaticResource LabelStyle}"
                         Content="Appearances:" />
 
-                    <syncfusion:SfTextBoxExt
+                    <controls:TextboxExtWithPasteHandler
                         x:Name="AppearancesTextBox"
                         Grid.Row="8"
                         Grid.Column="1"
-                        Grid.ColumnSpan="2"
                         Padding="{DynamicResource WolvenKitMarginTinyVertical}"
                         VerticalContentAlignment="Top"
                         Background="{StaticResource ContentBackgroundAlt2}"
@@ -238,14 +231,24 @@
                         TextWrapping="Wrap"
                         KeyboardNavigation.TabIndex="-1"
                         Watermark="black, white, red"
+                        ConvertNewlineToComma="True"
                         WatermarkTemplate="{StaticResource PlaceholderTemplate}"
                         LostFocus="Appearances_FocusLost" />
+
+                    <CheckBox
+                        x:Name="ReadAppearancesFromMeshCheckbox"
+                        Grid.Row="8"
+                        Grid.Column="2"
+                        Margin="{DynamicResource WolvenKitMarginLeft}"
+                        ToolTip="Read appearances from first mesh file (text box will be IGNORED)"
+                        KeyboardNavigation.TabIndex="-1"
+                        Click="OnReadAppearancesCheckboxChecked" />
 
                     <TextBlock
                         Grid.Row="9"
                         Grid.Column="1"
                         Style="{StaticResource ExplanationStyle}"
-                        Text="Does your prop have more than one appearance? (Comma-separated list)" />
+                        Text="Comma-separated list, or check the box to read appearances from first mesh" />
 
                     <!-- Meshes for components -->
                     <Label
@@ -260,7 +263,7 @@
                         Grid.Column="1"
                         Grid.ColumnSpan="2"
                         Margin="{DynamicResource WolvenKitMarginSmallTop}"
-                        Text="Check the box on the right to connect the apparance(s) defined above."
+                        Text="Check the box on the right to connect the appearance(s) defined above."
                         TextWrapping="Wrap" />
 
                     <!-- Mesh file 1 -->
@@ -382,7 +385,36 @@
                         Grid.Row="26"
                         Grid.Column="1"
                         Style="{StaticResource ExplanationStyle}"
-                        Text="Move .mesh files to parent folder" />
+                        Text="Move .mesh files to folder" />
+
+                    <Label
+                        Grid.Row="28"
+                        Grid.Column="0"
+                        Style="{StaticResource LabelStyle}"
+                        Content="Clean up WB files" />
+
+                    <CheckBox
+                        x:Name="CleanupInvalidEntriesCheckbox"
+                        Grid.Row="28"
+                        Grid.Column="1"
+                        KeyboardNavigation.TabIndex="-1" />
+
+                    <TextBlock
+                        Grid.Row="29"
+                        Grid.Column="1"
+                        Style="{StaticResource ExplanationStyle}"
+                        Text="Clean up non-existing entries from worldbuilder .txt files" />
+
+                    <TextBlock
+                        Grid.Row="31"
+                        Grid.Column="0"
+                        Text="Remember selection" />
+
+                    <CheckBox
+                        x:Name="RememberValuesCheckbox"
+                        Grid.Row="31"
+                        Grid.Column="1"
+                        KeyboardNavigation.TabIndex="-1" />
 
                 </Grid>
             </syncfusion:WizardPage>
