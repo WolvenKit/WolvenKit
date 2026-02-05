@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using ReactiveUI;
@@ -22,6 +24,15 @@ namespace WolvenKit.Views.Dialogs.Windows
 {
     public partial class AddPropFileDialog : IViewFor<AddPropFileDialogViewModel>
     {
+        private static string s_lastParentFolder = string.Empty;
+        private static string s_lastMeshFile1 = string.Empty;
+        private static string s_lastMeshFile2 = string.Empty;
+        private static string s_lastMeshFile3 = string.Empty;
+        private static string s_lastMeshFile4 = string.Empty;
+        private static string s_lastMeshAppearances = string.Empty;
+        private static string s_lastPropName = string.Empty;
+        private static bool s_lastMoveMeshFiles = false;
+
         public AddPropFileDialog(Cp77Project project)
         {
             InitializeComponent();
@@ -113,6 +124,10 @@ namespace WolvenKit.Views.Dialogs.Windows
                         x => x.CleanupInvalidEntries,
                         x => x.CleanupInvalidEntriesCheckbox.IsChecked)
                     .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        x => x.RememberSelection,
+                        x => x.RememberValuesCheckbox.IsChecked)
+                    .DisposeWith(disposables);
 
                 Mesh1DropdownMenu.dropdown.SelectionChanged += Mesh1SelectionChanged;
                 disposables.Add(Disposable.Create(() =>
@@ -139,6 +154,8 @@ namespace WolvenKit.Views.Dialogs.Windows
                 MeshFile3UseAppearancesCheckbox.SetCurrentValue(IsEnabledProperty, false);
                 MeshFile4UseAppearancesCheckbox.SetCurrentValue(IsEnabledProperty, false);
                 MoveMeshesToFolderCheckbox.SetCurrentValue(IsEnabledProperty, false);
+
+                LoadDefaultValues();
             });
         }
 
@@ -151,6 +168,11 @@ namespace WolvenKit.Views.Dialogs.Windows
             }
 
             ParentFolderBox.SetCurrentValue(TextBox.TextProperty, comboBox.Text);
+
+            if (string.IsNullOrEmpty(Mesh1TextBox.Text))
+            {
+                Mesh1DropdownMenu.SetCurrentValue(Editors.FilterableDropdownMenu.FilterTextProperty, comboBox.Text);
+            }
         }
 
         private void Mesh1SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -299,6 +321,109 @@ namespace WolvenKit.Views.Dialogs.Windows
             e.Handled = true;
             var clipboardText = Clipboard.GetText().Replace("\n", ", ").Replace("\r", ", ");
             textbox.Text = clipboardText;
+        }
+
+        private void OnDialogueFinish(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel is null || !ViewModel.RememberSelection)
+            {
+                s_lastMeshFile1 = string.Empty;
+                s_lastMeshFile2 = string.Empty;
+                s_lastMeshFile3 = string.Empty;
+                s_lastMeshFile4 = string.Empty;
+                s_lastParentFolder = string.Empty;
+                s_lastMeshAppearances = string.Empty;
+                s_lastPropName = string.Empty;
+                s_lastMoveMeshFiles = false;
+                return;
+            }
+
+            if (ViewModel.MoveMeshesToFolder && !string.IsNullOrEmpty(ViewModel.MeshFile1) &&
+                Path.GetDirectoryName(ViewModel.MeshFile1) is string parentDir)
+            {
+                s_lastMeshFile1 = parentDir;
+            }
+            else
+            {
+                s_lastMeshFile1 = ViewModel.MeshFile1;
+            }
+
+            s_lastMeshFile2 = ViewModel.MeshFile2;
+            s_lastMeshFile3 = ViewModel.MeshFile3;
+            s_lastMeshFile4 = ViewModel.MeshFile4;
+            s_lastMoveMeshFiles = ViewModel.MoveMeshesToFolder;
+            s_lastPropName = ViewModel.PropName;
+
+            if (!ViewModel.ProjectFolders.ContainsKey(ViewModel.ParentFolder) &&
+                Path.GetDirectoryName(ViewModel.ParentFolder) is string s)
+            {
+                s_lastParentFolder = s;
+            }
+            else
+            {
+                s_lastParentFolder = ViewModel.ParentFolder;
+            }
+
+            s_lastMeshAppearances = string.Join(",", ViewModel.Appearances ?? []);
+        }
+
+        private void LoadDefaultValues()
+        {
+            if (ViewModel is null)
+            {
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(s_lastParentFolder))
+            {
+                ParentFolderDropdownMenu.SetCurrentValue(Editors.FilterableDropdownMenu.FilterTextProperty,
+                    s_lastParentFolder);
+            }
+
+            if (!string.IsNullOrEmpty(s_lastMeshFile1))
+            {
+                Mesh1DropdownMenu.SetCurrentValue(Editors.FilterableDropdownMenu.FilterTextProperty, s_lastMeshFile1);
+            }
+
+            if (!string.IsNullOrEmpty(s_lastMeshFile2))
+            {
+                Mesh2DropdownMenu.SetCurrentValue(Editors.FilterableDropdownMenu.FilterTextProperty, s_lastMeshFile2);
+            }
+
+            if (!string.IsNullOrEmpty(s_lastMeshFile3))
+            {
+                Mesh3DropdownMenu.SetCurrentValue(Editors.FilterableDropdownMenu.FilterTextProperty, s_lastMeshFile3);
+            }
+
+            if (!string.IsNullOrEmpty(s_lastMeshFile4))
+            {
+                Mesh4DropdownMenu.SetCurrentValue(Editors.FilterableDropdownMenu.FilterTextProperty, s_lastMeshFile4);
+            }
+
+            if (!string.IsNullOrEmpty(s_lastMeshAppearances))
+            {
+                AppearancesTextBox.SetCurrentValue(TextBox.TextProperty, s_lastMeshAppearances);
+
+                // due to textbox's binding to a list, this doesn't populate properly
+                ViewModel.Appearances ??= [];
+                ViewModel.Appearances.Clear();
+                ViewModel.Appearances.AddRange(s_lastMeshAppearances.Split(",",
+                    StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
+            }
+
+            if (!string.IsNullOrEmpty(s_lastPropName))
+            {
+                PropNameTextBox.SetCurrentValue(TextBox.TextProperty, s_lastPropName);
+            }
+
+            if (!string.IsNullOrEmpty(s_lastPropName))
+            {
+                PropNameTextBox.SetCurrentValue(TextBox.TextProperty, s_lastPropName);
+            }
+
+            MoveMeshesToFolderCheckbox.SetCurrentValue(ToggleButton.IsCheckedProperty, s_lastMoveMeshFiles);
+
+            RememberValuesCheckbox.SetCurrentValue(ToggleButton.IsCheckedProperty, true);
         }
     }
 }

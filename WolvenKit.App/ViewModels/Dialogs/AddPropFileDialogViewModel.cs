@@ -46,6 +46,9 @@ public partial class AddPropFileDialogViewModel : ObservableObject
     [ObservableProperty] private string _meshFile4 = "";
     [ObservableProperty] private bool _meshFile4UseAppearances = false;
 
+
+    [ObservableProperty] private bool _rememberSelection = false;
+
     public bool HasMoveMeshBeenTouched { get; set; } = false;
 
     public AddPropFileDialogViewModel(Cp77Project project)
