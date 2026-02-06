@@ -10,6 +10,7 @@ using DynamicData;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
@@ -887,12 +888,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
                 return ret;
             }).Distinct().Order().ToDictionary(x => x, x => false);
 
-        if (Interactions.ShowChecklistDialogue((
-                existingChunks,
-                "Select chunk to delete",
-                string.Empty,
-                string.Empty,
-                string.Empty)) is not { } dialogModel || dialogModel.SelectedOptions.Count == 0)
+        if (Interactions.ShowChecklistDialogue(new ChecklistDialogOptions(existingChunks, "Select chunk to delete")) is
+                not { } dialogModel || dialogModel.SelectedOptions.Count == 0)
         {
             return;
         }

@@ -9,20 +9,9 @@ public partial class SceneInputDialogView : Window
 {
     public SceneInputDialogViewModel ViewModel { get; set; }
 
-    public SceneInputDialogView(
-        string title, 
-        string primaryLabel, 
-        string primaryDefaultValue = "",
-        bool showSecondaryInput = false,
-        string secondaryLabel = "Secondary:",
-        string checkboxText = "Enable secondary input",
-        bool showDropdown = false,
-        string dropdownLabel = "Type:",
-        IEnumerable<string>? dropdownOptions = null,
-        string? defaultDropdownValue = null)
+    public SceneInputDialogView(SceneInputDialogOptions dialogOptions)
     {
-        ViewModel = new SceneInputDialogViewModel(title, primaryLabel, primaryDefaultValue, showSecondaryInput, 
-            secondaryLabel, checkboxText, showDropdown, dropdownLabel, dropdownOptions, defaultDropdownValue);
+        ViewModel = new SceneInputDialogViewModel(dialogOptions);
         DataContext = ViewModel;
         InitializeComponent();
     }
