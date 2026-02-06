@@ -16,6 +16,7 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.Generic;
 using WolvenKit.Core.Extensions;
 using System.IO;
+using WolvenKit.App.ViewModels.Dialogs;
 
 namespace WolvenKit.App.ViewModels.Documents
 {
@@ -40,7 +41,7 @@ namespace WolvenKit.App.ViewModels.Documents
         private SceneTabDefinition? _selectedTab;
 
         private object? _selectedTabContent;
-        
+
         public object? SelectedTabContent
         {
             get => _selectedTabContent;
@@ -52,26 +53,26 @@ namespace WolvenKit.App.ViewModels.Documents
 
         // Button visibility for tab-specific actions
         public bool IsActorCreationVisible => SelectedTab?.Header == "Actors & Props";
-        
+
         public bool IsPropCreationVisible => SelectedTab?.Header == "Actors & Props";
-        
+
         public bool IsDialogueCreationVisible => SelectedTab?.Header == "Dialogue";
-        
+
         public bool IsOptionCreationVisible => SelectedTab?.Header == "Dialogue";
-        
+
         public bool IsWorkspotCreationVisible => SelectedTab?.Header == "Asset Library";
-        
+
         public bool IsEffectCreationVisible => SelectedTab?.Header == "Asset Library";
-        
+
         public bool IsAnimationCreationVisible => SelectedTab?.Header == "Asset Library";
-        
+
         public bool IsButtonBarVisible => IsActorCreationVisible || IsPropCreationVisible || IsDialogueCreationVisible || IsOptionCreationVisible || IsWorkspotCreationVisible || IsEffectCreationVisible || IsAnimationCreationVisible;
 
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.MainFile;
 
         // Scene statistics properties
         public string FileName => Path.GetFileNameWithoutExtension(Parent?.Header ?? "Unknown");
-        
+
         public string SceneCategory
         {
             get
@@ -91,27 +92,27 @@ namespace WolvenKit.App.ViewModels.Documents
         }
 
         public int TotalNodes => _sceneData.SceneGraph?.Chunk?.Graph?.Count ?? 0;
-        
+
         public int TotalActors => (_sceneData.Actors?.Count ?? 0) + (_sceneData.PlayerActors?.Count ?? 0);
-        
+
         public int TotalProps => _sceneData.Props?.Count ?? 0;
-        
+
         public int TotalChoices => _sceneData.ScreenplayStore?.Options?.Count ?? 0;
-        
+
         public int TotalDialogues => _sceneData.ScreenplayStore?.Lines?.Count ?? 0;
 
         public SceneGraphViewModel(scnSceneResource data, RedDocumentViewModel parent, IChunkViewmodelFactory chunkViewmodelFactory, INodeWrapperFactory nodeWrapperFactory)
             : base(parent, "Scene Editor")
         {
             _sceneData = data;
-            
+
             var appViewModel = Locator.Current.GetService<AppViewModel>() ?? throw new ArgumentNullException(nameof(AppViewModel));
             var settingsManager = Locator.Current.GetService<ISettingsManager>() ?? throw new ArgumentNullException(nameof(ISettingsManager));
             var gameController = Locator.Current.GetService<IGameControllerFactory>() ?? throw new ArgumentNullException(nameof(IGameControllerFactory));
 
             RDTViewModel = new RDTDataViewModel(data, parent, appViewModel, chunkViewmodelFactory, settingsManager, gameController);
             MainGraph = RedGraph.GenerateSceneGraph(parent.Header, data, parent);
-            
+
             // Set document reference for property change syncing
             MainGraph.DocumentViewModel = parent;
 
@@ -122,7 +123,7 @@ namespace WolvenKit.App.ViewModels.Documents
             }
 
             CreateTabs();
-            
+
             // Set the first tab as selected
             SelectedTab = Tabs.FirstOrDefault();
 
@@ -231,9 +232,10 @@ namespace WolvenKit.App.ViewModels.Documents
             {
                 // Show scene input dialog for actor name
                 var defaultName = $"new_actor_{_sceneData.Actors.Count + 1}";
-                var dialogResult = Interactions.AskForSceneInput(("Add New Actor", "Actor Name:", defaultName, false, "", "", false, "", null, null)); 
+                var dialogResult = Interactions.AskForSceneInput(
+                    new SceneInputDialogOptions("Add New Actor", "Actor Name:", defaultName));
                 var actorName = dialogResult.primaryInput;
-                
+
                 // Check if user cancelled the dialog
                 if (string.IsNullOrWhiteSpace(actorName))
                 {
@@ -286,9 +288,11 @@ namespace WolvenKit.App.ViewModels.Documents
             {
                 // Show scene input dialog for prop name
                 var defaultName = $"new_prop_{_sceneData.Props.Count + 1}";
-                var dialogResult = Interactions.AskForSceneInput(("Add New Prop", "Prop Name:", defaultName, false, "", "", false, "", null, null));
+                var dialogResult =
+                    Interactions.AskForSceneInput(
+                        new SceneInputDialogOptions("Add New Prop", "Prop Name:", defaultName));
                 var propName = dialogResult.primaryInput;
-                
+
                 // Check if user cancelled the dialog
                 if (string.IsNullOrWhiteSpace(propName))
                 {
@@ -339,16 +343,16 @@ namespace WolvenKit.App.ViewModels.Documents
         {
             try
             {
-                var dialogResult = Interactions.AskForSceneInput((
-                    "Add New Dialogue Line", 
-                    "LocString ID:", 
-                    "", 
-                    showSecondary: true, 
-                    "Embedded Text:", 
-                    "Create embedded text? (Optional)",
-                    false, "", null, null
+                var dialogResult = Interactions.AskForSceneInput(
+                    new SceneInputDialogOptions(
+                        "Add New Dialogue Line",
+                        "LocString ID:",
+                        "",
+                        showSecondary: true,
+                        "Embedded Text:",
+                        "Create embedded text? (Optional)"
                 ));
-                
+
                 if (dialogResult.primaryInput == null)
                 {
                     return;
@@ -366,7 +370,7 @@ namespace WolvenKit.App.ViewModels.Documents
 
                 var random = new Random();
                 var cruid = (CRUID)random.NextCRUID();
-                
+
                 // Parse locStringId as ulong if it's numeric, otherwise generate a CRUID
                 ulong locStringIdValue;
                 if (!ulong.TryParse(locStringId.Trim(), out locStringIdValue))
@@ -430,8 +434,10 @@ namespace WolvenKit.App.ViewModels.Documents
                 // Update total dialogues count in the UI
                 OnPropertyChanged(nameof(TotalDialogues));
 
-                _logger?.Info($"Created new dialogue line with itemId: {itemId}, locStringId: {locStringIdValue}" + 
-                             (createEmbedText ? $", embedded text: '{embeddedText}'" : ""));
+                _logger?.Info(
+                    $"Created new dialogue line with itemId: {itemId}, locStringId: {locStringIdValue}" +
+                    (
+                        createEmbedText ? $", embedded text: '{embeddedText}'" : ""));
             }
             catch (Exception ex)
             {
@@ -444,16 +450,15 @@ namespace WolvenKit.App.ViewModels.Documents
         {
             try
             {
-                var dialogResult = Interactions.AskForSceneInput((
-                    "Add New Choice Option", 
-                    "LocString ID:", 
-                    "", 
-                    showSecondary: true, 
-                    "Embedded Text:", 
-                    "Create embedded text? (Optional)",
-                    false, "", null, null
+                var dialogResult = Interactions.AskForSceneInput(new SceneInputDialogOptions(
+                    "Add New Choice Option",
+                    "LocString ID:",
+                    "",
+                    showSecondary: true,
+                    "Embedded Text:",
+                    "Create embedded text? (Optional)"
                 ));
-                
+
                 if (dialogResult.primaryInput == null)
                 {
                     return;
@@ -471,7 +476,7 @@ namespace WolvenKit.App.ViewModels.Documents
 
                 var random = new Random();
                 var cruid = (CRUID)random.NextCRUID();
-                
+
                 // Parse locStringId as ulong if it's numeric, otherwise generate a CRUID
                 ulong locStringIdValue;
                 if (!ulong.TryParse(locStringId.Trim(), out locStringIdValue))
@@ -532,11 +537,13 @@ namespace WolvenKit.App.ViewModels.Documents
                 // Auto-expand to show the newly created choice option
                 ExpandToNewEntry("screenplayStore", "options", itemId);
 
-                // Update total dialogues count in the UI 
+                // Update total dialogues count in the UI
                 OnPropertyChanged(nameof(TotalDialogues));
 
-                _logger?.Info($"Created new choice option with itemId: {itemId}, locStringId: {locStringIdValue}" + 
-                             (createEmbedText ? $", embedded text: '{embeddedText}'" : ""));
+                _logger?.Info(
+                    $"Created new choice option with itemId: {itemId}, locStringId: {locStringIdValue}" +
+                    (
+                        createEmbedText ? $", embedded text: '{embeddedText}'" : ""));
             }
             catch (Exception ex)
             {
@@ -550,16 +557,11 @@ namespace WolvenKit.App.ViewModels.Documents
             try
             {
                 // Show scene input dialog for workspot file path
-                var dialogResult = Interactions.AskForSceneInput((
-                    "Add New Workspot", 
-                    "Workspot File Path (.workspot):", 
-                    "", 
-                    showSecondary: false, 
-                    "", 
-                    "",
-                    false, "", null, null
+                var dialogResult = Interactions.AskForSceneInput(new SceneInputDialogOptions(
+                    "Add New Workspot",
+                    "Workspot File Path (.workspot):"
                 ));
-                
+
                 // Check if user cancelled the dialog
                 if (string.IsNullOrWhiteSpace(dialogResult.primaryInput))
                 {
@@ -567,18 +569,18 @@ namespace WolvenKit.App.ViewModels.Documents
                 }
 
                 var workspotPath = dialogResult.primaryInput.Trim();
-                
+
                 // Validate file extension
                 if (!workspotPath.EndsWith(".workspot", StringComparison.OrdinalIgnoreCase))
                 {
                     _logger?.Error($"Invalid workspot file path: '{workspotPath}'. Workspot files must end with '.workspot'");
                     return;
                 }
-                
+
                 // Generate new dataId
                 var random = new Random();
                 var maxDataId = (uint)0;
-                
+
                 if (_sceneData.Workspots.Count > 0)
                 {
                     var existingDataIds = _sceneData.Workspots
@@ -586,13 +588,13 @@ namespace WolvenKit.App.ViewModels.Documents
                         .Select(w => w.GetValue() as scnWorkspotData)
                         .Where(data => data != null)
                         .Select(data => data!.DataId.Id);
-                    
+
                     if (existingDataIds.Any())
                     {
                         maxDataId = existingDataIds.Max();
                     }
                 }
-                
+
                 uint dataId;
                 if (maxDataId == 0)
                 {
@@ -602,8 +604,8 @@ namespace WolvenKit.App.ViewModels.Documents
                 {
                     var increment = random.Next(1_000, 10_000_000);
                     var newDataId = (ulong)maxDataId + (ulong)increment;
-                    
-                    dataId = newDataId > uint.MaxValue 
+
+                    dataId = newDataId > uint.MaxValue
                         ? (uint)random.Next(100_000_000, int.MaxValue)
                         : (uint)newDataId;
                 }
@@ -625,7 +627,7 @@ namespace WolvenKit.App.ViewModels.Documents
                 var insertIndex = 0;
                 for (int i = 0; i < _sceneData.Workspots.Count; i++)
                 {
-                    if (_sceneData.Workspots[i].GetValue() is scnWorkspotData existingData && 
+                    if (_sceneData.Workspots[i].GetValue() is scnWorkspotData existingData &&
                         existingData.DataId.Id > dataId)
                     {
                         insertIndex = i;
@@ -647,17 +649,16 @@ namespace WolvenKit.App.ViewModels.Documents
                 {
                     WorkspotInstanceId = new scnSceneWorkspotInstanceId { Id = instanceId },
                     DataId = new scnSceneWorkspotDataId { Id = dataId }, // Link to the definition
-                    LocalTransform = new Transform 
-                    { 
-                        Position = new Vector4(), 
-                        Orientation = new Quaternion { R = 1.000000F } 
+                    LocalTransform = new Transform
+                    {
+                        Position = new Vector4(), Orientation = new Quaternion { R = 1.000000F }
                     },
                     PlayAtActorLocation = false,
-                    OriginMarker = new scnMarker 
-                    { 
-                        Type = Enums.scnMarkerType.Global, 
-                        EntityRef = new gameEntityReference { Names = new() }, 
-                        IsMounted = true 
+                    OriginMarker = new scnMarker
+                    {
+                        Type = Enums.scnMarkerType.Global,
+                        EntityRef = new gameEntityReference { Names = new() },
+                        IsMounted = true
                     }
                 };
 
@@ -697,16 +698,11 @@ namespace WolvenKit.App.ViewModels.Documents
             try
             {
                 // Show scene input dialog for effect file path
-                var dialogResult = Interactions.AskForSceneInput((
-                    "Add New Effect", 
-                    "Effect File Path (.effect):", 
-                    "", 
-                    showSecondary: false, 
-                    "", 
-                    "",
-                    false, "", null, null
+                var dialogResult = Interactions.AskForSceneInput(new SceneInputDialogOptions(
+                    "Add New Effect",
+                    "Effect File Path (.effect):"
                 ));
-                
+
                 // Check if user cancelled the dialog
                 if (string.IsNullOrWhiteSpace(dialogResult.primaryInput))
                 {
@@ -714,18 +710,18 @@ namespace WolvenKit.App.ViewModels.Documents
                 }
 
                 var effectPath = dialogResult.primaryInput.Trim();
-                
+
                 // Validate file extension
                 if (!effectPath.EndsWith(".effect", StringComparison.OrdinalIgnoreCase))
                 {
                     _logger?.Error($"Invalid effect file path: '{effectPath}'. Effect files must end with '.effect'");
                     return;
                 }
-                
+
                 // Generate random effect ID
                 var random = new Random();
                 var effectId = (uint)random.Next(1, int.MaxValue);
-                
+
                 // Ensure unique effect ID
                 while (_sceneData.EffectDefinitions.Any(e => e.Id.Id == effectId))
                 {
@@ -751,8 +747,8 @@ namespace WolvenKit.App.ViewModels.Documents
 
                 // Load the effect file and populate compiledEffect
                 var compiledEventInfos = new CArray<worldCompiledEffectEventInfo>();
-                
-                try 
+
+                try
                 {
                     // Load the effect file using Parent's resource loading
                     var effectFile = Parent?.GetFileFromDepotPathOrCache(effectPath);
@@ -770,11 +766,11 @@ namespace WolvenKit.App.ViewModels.Documents
                                     ComponentIndexMask = 0,
                                     Flags = 1
                                 };
-                                
+
                                 compiledEventInfos.Add(compiledEventInfo);
                             }
                         }
-                        
+
                         _logger?.Info($"Loaded {compiledEventInfos.Count} events from effect file: {effectPath}");
                     }
                     else
@@ -807,15 +803,15 @@ namespace WolvenKit.App.ViewModels.Documents
                 // Create effect instance with populated compiledEffect
                 var effectInstance = new scnEffectInstance
                 {
-                    EffectInstanceId = new scnEffectInstanceId 
-                    { 
+                    EffectInstanceId = new scnEffectInstanceId
+                    {
                         EffectId = new scnEffectId { Id = effectId }, // Link to definition
-                        Id = instanceId 
+                        Id = instanceId
                     },
-                    CompiledEffect = new worldCompiledEffectInfo 
-                    { 
-                        PlacementTags = new(), 
-                        ComponentNames = new(), 
+                    CompiledEffect = new worldCompiledEffectInfo
+                    {
+                        PlacementTags = new(),
+                        ComponentNames = new(),
                         RelativePositions = relativePositions, // Default empty vec3 (0,0,0)
                         RelativeRotations = relativeRotations, // Default empty quaternion (0,0,0,1)
                         PlacementInfos = placementInfos, // Default placement info with flags=9
@@ -860,21 +856,21 @@ namespace WolvenKit.App.ViewModels.Documents
             {
                 // Available animation types
                 var animationTypes = new[] { "Cinematic", "Gameplay" };
-                
+
                 // Show enhanced scene input dialog with dropdown for animation type
-                var dialogResult = Interactions.AskForSceneInput((
-                    "Add New Animation", 
-                    "Animation File Path (.anims):", 
-                    "", 
-                    showSecondary: false, 
-                    "", 
+                var dialogResult = Interactions.AskForSceneInput(new SceneInputDialogOptions(
+                    "Add New Animation",
+                    "Animation File Path (.anims):",
+                    "",
+                    showSecondary: false,
+                    "",
                     "",
                     showDropdown: true,
                     "Animation Type:",
                     animationTypes,
                     "Cinematic"
                 ));
-                
+
                 // Check if user cancelled the dialog
                 if (string.IsNullOrWhiteSpace(dialogResult.primaryInput))
                 {
@@ -883,18 +879,18 @@ namespace WolvenKit.App.ViewModels.Documents
 
                 var animsPath = dialogResult.primaryInput.Trim();
                 var animationType = dialogResult.dropdownValue ?? "Cinematic";
-                
+
                 // Validate file extension
                 if (!animsPath.EndsWith(".anims", StringComparison.OrdinalIgnoreCase))
                 {
                     _logger?.Error($"Invalid animation file path: '{animsPath}'. Animation files must end with '.anims'");
                     return;
                 }
-                
+
                 // Load the .anims file and extract animation names
                 var animationNames = new List<string>();
-                
-                try 
+
+                try
                 {
                     // Load the anims file using Parent's resource loading
                     var animsFile = Parent?.GetFileFromDepotPathOrCache(animsPath);
@@ -911,7 +907,7 @@ namespace WolvenKit.App.ViewModels.Documents
                                 }
                             }
                         }
-                        
+
                         _logger?.Info($"Loaded {animationNames.Count} animations from anims file: {animsPath}");
                         _logger?.Info($"Animation names: [{string.Join(", ", animationNames)}]");
                         _logger?.Info($"Animation type: {animationType}");
@@ -1035,7 +1031,7 @@ namespace WolvenKit.App.ViewModels.Documents
                 // Find the parent collection in the root chunk's properties
                 var parentCollection = rootChunk.Properties
                     .FirstOrDefault(p => p.Name.Equals(parentPath, StringComparison.OrdinalIgnoreCase));
-                
+
                 if (parentCollection != null)
                 {
                     // Expand the parent collection
@@ -1047,7 +1043,7 @@ namespace WolvenKit.App.ViewModels.Documents
                         // Find the child collection
                         var childCollection = parentCollection.Properties
                             .FirstOrDefault(p => p.Name.Equals(childPath, StringComparison.OrdinalIgnoreCase));
-                        
+
                         if (childCollection != null)
                         {
                             // Expand the child collection (lines/options array)
@@ -1104,4 +1100,4 @@ namespace WolvenKit.App.ViewModels.Documents
             Dispose(false);
         }
     }
-} 
+}

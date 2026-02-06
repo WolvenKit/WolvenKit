@@ -217,7 +217,7 @@ namespace WolvenKit.Views.Documents
                 }
 
                 _loggerService.Info("Done!");
-                Interactions.ShowDictionaryAsCopyableList(("Broken references",
+                Interactions.ShowDictionaryAsCopyableList(new ShowDictAsCopyableListDialogOptions("Broken references",
                     $"The following {brokenReferences.Count} files seem to hold broken references", brokenReferences,
                     true));
             }
@@ -345,8 +345,18 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            var selected = Interactions.ShowChecklistDialogue((otherMeshFiles, "Select target .mesh files",
-                "Copy materials to the following mesh files", string.Empty, string.Empty))?.SelectedOptions;
+            var filterDefaultValue = string.Empty;
+            if (Path.GetDirectoryName(project.GetRelativePath(currentPath)) is string parentFolder &&
+                otherMeshFiles.Select(kvp => kvp.Key).Any(f => f.Contains(parentFolder)))
+            {
+                filterDefaultValue = parentFolder;
+            }
+
+            var selected = Interactions.ShowChecklistDialogue(new ChecklistDialogOptions(
+                otherMeshFiles,
+                "Select target .mesh files",
+                "Copy materials to to the following mesh files"
+            ) { FilterDefaultValue = filterDefaultValue })?.SelectedOptions;
 
             if (selected is null || selected.Count == 0)
             {
@@ -1128,7 +1138,7 @@ namespace WolvenKit.Views.Documents
                 }
 
                 _loggerService.Info("Done!");
-                Interactions.ShowDictionaryAsCopyableList(("Unused files in project (extensions: ",
+                Interactions.ShowDictionaryAsCopyableList(new("Unused files in project",
                     $"The following files seem to be unused in your project",
                     new Dictionary<string, List<string>>() { { relativePath, unusedPaths } }, true));
             }

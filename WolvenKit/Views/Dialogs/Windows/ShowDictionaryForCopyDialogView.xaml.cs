@@ -15,10 +15,9 @@ public partial class ShowDictionaryForCopyDialogView : IViewFor<ShowDictionaryFo
     public object ViewModel { get; set; }
 
 
-    public ShowDictionaryForCopyDialogView(string title, string text, IDictionary<string, List<string>> brokenRefs,
-        bool isExperimental)
+    public ShowDictionaryForCopyDialogView(ShowDictAsCopyableListDialogOptions options)
     {
-        ViewModel = new ShowDictionaryForCopyDialogViewModel(title, text, brokenRefs, isExperimental);
+        ViewModel = new ShowDictionaryForCopyDialogViewModel(options);
         DataContext = ViewModel;
 
         MaxHeight = Math.Max(SystemParameters.WorkArea.Height * 0.8, 1200);
