@@ -1135,7 +1135,8 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = Value != "";
                 return;
             case scnChoiceNodeOption scnChoiceNodeOption:
-                Value = $"{scnChoiceNodeOption.Caption.GetResolvedText()}";
+                Value =
+                    $"{scnChoiceNodeOption.ScreenplayOptionId}"; // TODO: Check how this is resolved in scnChoiceNodeWrapper or ask Chedda
                 IsValueExtrapolated = Value != "";
                 return;
             case scnscreenplayOptionUsage screenplayOptionUsage:
