@@ -1541,12 +1541,6 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         Tab?.Parent.SetIsDirty(true);
     }
 
-    private bool CanRegenerateVisualController() =>
-        Name == "components" && Data is CArray<entIComponent>; // TODO RelayCommand check notify
-
-    [RelayCommand(CanExecute = nameof(CanRegenerateVisualController))]
-    private void RegenerateVisualController() => _cvmTools.RegenerateVisualControllers(this);
-
     //
     [GeneratedRegex(@"^[-=_]+$")]
     private static partial Regex PlaceholderRegex();
