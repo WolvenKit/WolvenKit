@@ -26,7 +26,7 @@ public interface ICvmTools
 
     #region CvmDependencyTools
 
-    public void RegenerateVisualControllers(ChunkViewModel cvm);
+    public void RegenerateVisualControllers(ChunkViewModel? cvm);
 
     #endregion
 }
