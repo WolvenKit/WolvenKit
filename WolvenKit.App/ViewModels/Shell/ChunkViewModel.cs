@@ -1548,6 +1548,9 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         switch (ResolvedData)
         {
+            case RedDummy:
+                // fix for #2806
+                return;
             case appearanceAppearanceDefinition:
                 GetPropertyChild("components")?.RegenerateVisualController();
                 return;
