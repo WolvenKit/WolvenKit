@@ -68,7 +68,7 @@ namespace WolvenKit.Views.Documents
             _projectExplorer = Locator.Current.GetService<ProjectExplorerViewModel>()!;
             _projectResourceTools = Locator.Current.GetService<ProjectResourceTools>()!;
             _cr2WTools = Locator.Current.GetService<Cr2WTools>()!;
-            _cvmTools = Locator.Current.GetService<CvmTools>()!;
+            _cvmTools = Locator.Current.GetService<ICvmTools>()!;
 
             _appViewModel = Locator.Current.GetService<AppViewModel>()!;
 
@@ -270,9 +270,14 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            var baseMaterial = dialog.ViewModel?.BaseMaterial ?? "";
-            var isLocal = dialog.ViewModel?.IsLocalMaterial ?? true;
-            var resolveSubstitutions = dialog.ViewModel?.ResolveSubstitutions ?? false;
+            if (dialog.ViewModel is null)
+            {
+                return;
+            }
+
+            var baseMaterial = dialog.ViewModel.BaseMaterial ?? "";
+            var isLocal = dialog.ViewModel.IsLocalMaterial;
+            var resolveSubstitutions = dialog.ViewModel.ResolveSubstitutions;
 
             _cvmTools.GenerateMissingMaterials(cvm, baseMaterial, isLocal, resolveSubstitutions);
 
