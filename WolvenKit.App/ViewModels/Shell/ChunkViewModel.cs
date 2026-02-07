@@ -200,7 +200,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
         Red4ParserService parserService,
-        CvmTools cvmTools,
+        ICvmTools cvmTools,
         CRUIDService cruidService,
         bool isReadOnly = false
     )
