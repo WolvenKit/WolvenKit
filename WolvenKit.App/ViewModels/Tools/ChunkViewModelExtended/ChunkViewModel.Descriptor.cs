@@ -478,7 +478,7 @@ public partial class ChunkViewModel
                 var entry = materialEntries[NodeIdxInParent];
 
                 // If we immediately found the right material: use material name
-                if (entry.IsLocalInstance == isLocalMaterial && entry.Index == NodeIdxInParent)
+                if (entry?.IsLocalInstance == isLocalMaterial && entry?.Index == NodeIdxInParent)
                 {
                     Descriptor = entry.Name.GetResolvedText();
                     if (Descriptor != null)
