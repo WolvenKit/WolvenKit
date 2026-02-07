@@ -29,7 +29,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
     private readonly ITweakDBService _tweakDbService;
     private readonly ILocKeyService _locKeyService;
     private readonly Red4ParserService _parserService;
-    private readonly CvmTools _cvmTools;
+    private readonly ICvmTools _cvmTools;
     private readonly CRUIDService _cruidService;
 
     public ChunkViewmodelFactory(
@@ -43,7 +43,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
         Red4ParserService parserService,
-        CvmTools cvmTools,
+        ICvmTools cvmTools,
         CRUIDService cruidService)
     {
         _tabViewmodelFactory = tabViewmodelFactory;
