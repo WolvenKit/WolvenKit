@@ -196,7 +196,8 @@ namespace WolvenKit.Views.Documents
         {
             try
             {
-                if (_projectManager.ActiveProject is null || CurrentTab?.FilePath is not string s || !File.Exists(s))
+                if (_projectManager.ActiveProject is not { } project || CurrentTab?.FilePath is not string s ||
+                    !File.Exists(s))
                 {
                     return;
                 }
@@ -204,12 +205,14 @@ namespace WolvenKit.Views.Documents
                 _loggerService.Info(
                     "Scanning file for broken references. This is currently slow as foretold, please hold the line...");
 
-                var allReferences = await _projectManager.ActiveProject.GetAllReferencesAsync(
+                var allReferences = await project.GetAllReferencesAsync(
                     _progressService,
-                    _loggerService
+                    _loggerService,
+                    [project.GetRelativePath(CurrentTab.FilePath)]
+
                 );
 
-                var brokenReferences = await _projectManager.ActiveProject.ScanForBrokenReferencePathsInListAsync(
+                var brokenReferences = await project.ScanForBrokenReferencePathsInListAsync(
                     _archiveManager,
                     _loggerService,
                     _progressService,
