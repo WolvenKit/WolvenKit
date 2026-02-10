@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Numerics;
 using System.Reflection;
 
@@ -62,6 +62,6 @@ public class EnumHelper
                 values.Add(Enum.GetName(enumType, e) ?? "");
             }
         }
-        return values.Count > 0 ? string.Join(", ", values) : none;
+        return values.Count > 0 ? string.Join(", ", values) : $"{none} ({value:X})";
     }
 }
