@@ -187,6 +187,14 @@ public partial class ChunkViewModel
                 Descriptor = s;
                 return;
             }
+
+            case scnDynamicAnimSetSRRef animSet
+                when animSet.AsyncAnimSet.DepotPath.GetResolvedText() is string s && s != string.Empty:
+                Descriptor = s;
+                return;
+            case scnPerformerSymbol performerSymbol when performerSymbol.PerformerId.Id != 0:
+                Descriptor = $"{performerSymbol.PerformerId.Id.ToString()}";
+                return;
             case scnSectionInternalsActorBehavior actorBehavior:
                 Descriptor = $"{actorBehavior.ActorId.Id}";
                 return;

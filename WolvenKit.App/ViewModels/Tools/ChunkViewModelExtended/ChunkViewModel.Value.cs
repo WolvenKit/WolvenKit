@@ -991,9 +991,13 @@ public partial class ChunkViewModel
                 Value = scnGenderMask.Mask.ToString();
                 IsValueExtrapolated = scnGenderMask.Mask != 0;
                 break;
-            case scnPerformerSymbol performerSymbol:
-                Value = performerSymbol.PerformerId.Id.ToString();
-                IsValueExtrapolated = performerSymbol.PerformerId.Id != 0;
+            case scnAnimName animName when animName.Unk1.FirstOrDefault() is { } firstAnim:
+                Value = firstAnim.GetResolvedText() ?? "";
+                IsValueExtrapolated = Value != "";
+                break;
+            case scnPerformerSymbol debugSymbol:
+                Value = $"{debugSymbol.EntityRef.Reference}";
+                IsValueExtrapolated = Value != "";
                 break;
             case scnSceneEventSymbol sceneEventSymbol:
                 Value = sceneEventSymbol.OriginNodeId.Id.ToString();
