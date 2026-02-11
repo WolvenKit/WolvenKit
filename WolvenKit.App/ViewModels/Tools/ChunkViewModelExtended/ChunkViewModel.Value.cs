@@ -1011,6 +1011,15 @@ public partial class ChunkViewModel
                 Value = scnWorkspotSymbol.WsEditorEventId.ToString();
                 IsValueExtrapolated = scnWorkspotSymbol.WsEditorEventId != 0;
                 break;
+            case scnAnimTargetBasicData animData when animData.PerformerId.Id > 0:
+                Value = $"performerId: {animData.PerformerId.Id}";
+                IsValueExtrapolated = Value != string.Empty;
+                break;
+            case scnIKEventData ikEvent
+                when ikEvent.Basic is scnAnimTargetBasicData animData && animData.PerformerId.Id > 0:
+                Value = $"performerId: {animData.PerformerId.Id}";
+                IsValueExtrapolated = Value != string.Empty;
+                break;
             case scnCinematicAnimSetSRRefId cinematicAnimSetRefId when GetRootModel().ResolvedData is scnSceneResource sceneForAnimSetRef:
                 var animSetId = cinematicAnimSetRefId.Id;
                 Value = ((uint)animSetId).ToString();
