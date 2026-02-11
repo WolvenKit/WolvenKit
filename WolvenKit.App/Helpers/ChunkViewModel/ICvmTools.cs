@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 
 namespace WolvenKit.App.Helpers;
@@ -22,6 +24,7 @@ public interface ICvmTools
     int FindHighestMaterialIndex(ChunkViewModel materialDefinitionArray, bool isLocalInstance);
     void AddTagsToMeshAppearances(List<ChunkViewModel> chunks, List<string> tagList);
 
+    void FlattenMiChain(ChunkViewModel? cvm, IAppArchiveManager archiveManager, Cp77Project? project);
     #endregion
 
     #region CvmDependencyTools
