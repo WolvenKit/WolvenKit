@@ -182,6 +182,11 @@ public partial class ChunkViewModel
                 Descriptor = $"{startTime}{eventType}";
                 return;
             }
+            case scnScenesVersionsSceneChanges scn when scn.Scene.DepotPath.GetResolvedText() is string s && s != "":
+            {
+                Descriptor = s;
+                return;
+            }
 
             case worldStreamingSectorDescriptor:
                 // handled by default name resolution below
