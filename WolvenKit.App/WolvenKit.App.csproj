@@ -23,6 +23,7 @@
     <None Remove="ViewModels\Shared\**" />
     <Page Remove="ViewModels\Others\**" />
     <Page Remove="ViewModels\Shared\**" />
+    <None Remove="WolvenKit.App.csproj.DotSettings" />
   </ItemGroup>
 
   <!-- Suppress compiler warnings for generated files -->

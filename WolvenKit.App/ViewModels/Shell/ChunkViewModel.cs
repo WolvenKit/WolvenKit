@@ -70,7 +70,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     private readonly ILocKeyService _locKeyService;
     private readonly Red4ParserService _parserService;
     private readonly CRUIDService _cruidService;
-    private readonly CvmMaterialTools _cvmMaterialTools;
+    private readonly ICvmTools _cvmTools;
+
 
     private static readonly List<string> s_hiddenProperties = new()
     {
@@ -109,7 +110,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         ILocKeyService locKeyService,
         Red4ParserService parserService,
         CRUIDService cruidService,
-        CvmMaterialTools cvmMaterialTools,
+        ICvmTools cvmTools,
         ChunkViewModel? parent = null,
         bool isReadOnly = false
     )
@@ -126,7 +127,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         _locKeyService = locKeyService;
         _parserService = parserService;
         _cruidService = cruidService;
-        _cvmMaterialTools = cvmMaterialTools;
+        _cvmTools = cvmTools;
 
         _appViewModel = appViewModel;
         _data = data;
@@ -173,14 +174,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
         Red4ParserService parserService,
-        CvmMaterialTools cvmMaterialTools,
+        ICvmTools cvmTools,
         CRUIDService cruidService,
         bool isReadOnly = false
     )
         : this(data, nameof(RDTDataViewModel), appViewModel,
             chunkViewmodelFactory, tabViewmodelFactory, hashService, loggerService, projectManager,
             gameController, settingsManager, archiveManager, tweakDbService, locKeyService, parserService,
-            cruidService, cvmMaterialTools, null, isReadOnly)
+            cruidService, cvmTools, null, isReadOnly)
     {
         _tab = tab;
         RelativePath = _tab.Parent.RelativePath;
@@ -199,14 +200,14 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
         Red4ParserService parserService,
-        CvmMaterialTools cvmMaterialTools,
+        CvmTools cvmTools,
         CRUIDService cruidService,
         bool isReadOnly = false
     )
         : this(export, nameof(ReferenceSocket), appViewModel,
             chunkViewmodelFactory, tabViewmodelFactory, hashService, loggerService, projectManager,
             gameController, settingsManager, archiveManager, tweakDbService, locKeyService, parserService,
-            cruidService, cvmMaterialTools, null, isReadOnly
+            cruidService, cvmTools, null, isReadOnly
         )
     {
         Socket = socket;
@@ -1544,108 +1545,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         Name == "components" && Data is CArray<entIComponent>; // TODO RelayCommand check notify
 
     [RelayCommand(CanExecute = nameof(CanRegenerateVisualController))]
-    private void RegenerateVisualController()
-    {
-        switch (ResolvedData)
-        {
-            case appearanceAppearanceDefinition:
-                GetPropertyChild("components")?.RegenerateVisualController();
-                return;
-            case appearanceAppearanceResource:
-            {
-                GetPropertyChild("appearances")?.RegenerateVisualController();
-                return;
-            }
-            case CArray<CHandle<appearanceAppearanceDefinition>>:
-                foreach (var chunkViewModel in TVProperties)
-                {
-                    chunkViewModel.RegenerateVisualController();
-                }
-
-                return;
-        }
-
-        if (Data is not CArray<entIComponent> arr)
-        {
-            if (GetRootModel() is ChunkViewModel { ResolvedData: appearanceAppearanceResource } root)
-            {
-                root.RegenerateVisualController();
-                return;
-            }
-
-            _loggerService.Error(
-                "Wrong type to regenerate visual controllers. Please select a component array inside an .app file and re-run!");
-            return;
-        }
-
-        entVisualControllerComponent? vc = null;
-        var list = new CArray<entVisualControllerDependency>();
-
-        var hasChange = false;
-        foreach (var component in arr)
-        {
-            if (component is entMeshComponent mesh &&
-                mesh.LODMode == Enums.entMeshComponentLODMode.Appearance &&
-                mesh.Mesh.DepotPath != ResourcePath.Empty)
-            {
-                list.Add(new entVisualControllerDependency()
-                {
-                    AppearanceName = mesh.MeshAppearance, ComponentName = mesh.Name, Mesh = mesh.Mesh
-                });
-
-                hasChange = true;
-            }
-
-            if (component is entSkinnedMeshComponent skinnedMesh &&
-                skinnedMesh.LODMode == Enums.entMeshComponentLODMode.Appearance &&
-                skinnedMesh.Mesh.DepotPath != ResourcePath.Empty)
-            {
-                list.Add(new entVisualControllerDependency()
-                {
-                    AppearanceName = skinnedMesh.MeshAppearance,
-                    ComponentName = skinnedMesh.Name,
-                    Mesh = skinnedMesh.Mesh
-                });
-                hasChange = true;
-            }
-
-            if (component is entSkinnedClothComponent skinnedCloth &&
-                skinnedCloth.LODMode == Enums.entMeshComponentLODMode.Appearance)
-            {
-                list.Add(new entVisualControllerDependency()
-                {
-                    AppearanceName = skinnedCloth.MeshAppearance,
-                    ComponentName = skinnedCloth.Name,
-                    Mesh = skinnedCloth.GraphicsMesh
-                });
-
-                list.Add(new entVisualControllerDependency()
-                {
-                    AppearanceName = "default", ComponentName = skinnedCloth.Name, Mesh = skinnedCloth.PhysicalMesh
-                });
-                hasChange = true;
-            }
-
-            if (component is entVisualControllerComponent c3)
-            {
-                vc = c3;
-                hasChange = true;
-            }
-        }
-
-        if (!hasChange)
-        {
-            return;
-        }
-
-        if (vc != null)
-        {
-            vc.AppearanceDependency = list;
-            RecalculateProperties();
-        }
-
-        Tab?.Parent.SetIsDirty(true);
-    }
+    private void RegenerateVisualController() => _cvmTools.RegenerateVisualControllers(this);
 
     //
     [GeneratedRegex(@"^[-=_]+$")]
@@ -1733,7 +1633,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     private bool CanAdjustSubmeshCount() => ResolvedData is CMesh;
 
     [RelayCommand(CanExecute = nameof(CanAdjustSubmeshCount))]
-    private void AdjustSubmeshCount() => _cvmMaterialTools.AdjustSubmeshCount(this);
+    private void AdjustSubmeshCount() => _cvmTools.AdjustSubmeshCount(this);
 
     public ChunkViewModel? GetPropertyChild(params string[] propertyNames)
     {
@@ -3636,7 +3536,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 ResolvedData is CMeshMaterialEntry materialDefinition:
             {
                 var materialIndex =
-                    _cvmMaterialTools.FindHighestMaterialIndex(Parent, materialDefinition.IsLocalInstance);
+                    _cvmTools.FindHighestMaterialIndex(Parent, materialDefinition.IsLocalInstance);
                 SetDataIndexProperty(materialIndex + 1);
                 break;
             }
