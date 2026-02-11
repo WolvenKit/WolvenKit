@@ -991,9 +991,17 @@ public partial class ChunkViewModel
                 Value = scnGenderMask.Mask.ToString();
                 IsValueExtrapolated = scnGenderMask.Mask != 0;
                 break;
-            case scnPerformerSymbol performerSymbol:
-                Value = performerSymbol.PerformerId.Id.ToString();
-                IsValueExtrapolated = performerSymbol.PerformerId.Id != 0;
+            case scnAnimName animName when animName.Unk1.FirstOrDefault() is { } firstAnim:
+                Value = firstAnim.GetResolvedText() ?? "";
+                IsValueExtrapolated = Value != "";
+                break;
+            case scnReferencePointDef refDef:
+                Value = $"{StringHelper.Stringify(refDef.Offset)}";
+                IsValueExtrapolated = Value != "";
+                break;
+            case scnPerformerSymbol debugSymbol:
+                Value = $"{debugSymbol.EntityRef.Reference}";
+                IsValueExtrapolated = Value != "";
                 break;
             case scnSceneEventSymbol sceneEventSymbol:
                 Value = sceneEventSymbol.OriginNodeId.Id.ToString();
@@ -1002,6 +1010,15 @@ public partial class ChunkViewModel
             case scnWorkspotSymbol scnWorkspotSymbol:
                 Value = scnWorkspotSymbol.WsEditorEventId.ToString();
                 IsValueExtrapolated = scnWorkspotSymbol.WsEditorEventId != 0;
+                break;
+            case scnAnimTargetBasicData animData when animData.PerformerId.Id > 0:
+                Value = $"performerId: {animData.PerformerId.Id}";
+                IsValueExtrapolated = Value != string.Empty;
+                break;
+            case scnIKEventData ikEvent
+                when ikEvent.Basic is scnAnimTargetBasicData animData && animData.PerformerId.Id > 0:
+                Value = $"performerId: {animData.PerformerId.Id}";
+                IsValueExtrapolated = Value != string.Empty;
                 break;
             case scnCinematicAnimSetSRRefId cinematicAnimSetRefId when GetRootModel().ResolvedData is scnSceneResource sceneForAnimSetRef:
                 var animSetId = cinematicAnimSetRefId.Id;
