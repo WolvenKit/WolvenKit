@@ -995,6 +995,10 @@ public partial class ChunkViewModel
                 Value = firstAnim.GetResolvedText() ?? "";
                 IsValueExtrapolated = Value != "";
                 break;
+            case scnReferencePointDef refDef:
+                Value = $"{StringHelper.Stringify(refDef.Offset)}";
+                IsValueExtrapolated = Value != "";
+                break;
             case scnPerformerSymbol debugSymbol:
                 Value = $"{debugSymbol.EntityRef.Reference}";
                 IsValueExtrapolated = Value != "";

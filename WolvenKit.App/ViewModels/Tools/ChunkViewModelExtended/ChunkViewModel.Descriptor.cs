@@ -195,6 +195,10 @@ public partial class ChunkViewModel
             case scnPerformerSymbol performerSymbol when performerSymbol.PerformerId.Id != 0:
                 Descriptor = $"{performerSymbol.PerformerId.Id.ToString()}";
                 return;
+
+            case scnReferencePointDef refDef:
+                Descriptor = $"{refDef.Id}";
+                return;
             case scnSectionInternalsActorBehavior actorBehavior:
                 Descriptor = $"{actorBehavior.ActorId.Id}";
                 return;
