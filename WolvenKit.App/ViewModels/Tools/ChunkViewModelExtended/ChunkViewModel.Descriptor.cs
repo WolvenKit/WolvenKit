@@ -187,7 +187,9 @@ public partial class ChunkViewModel
                 Descriptor = s;
                 return;
             }
-
+            case scnSectionInternalsActorBehavior actorBehavior:
+                Descriptor = $"{actorBehavior.ActorId.Id}";
+                return;
             case worldStreamingSectorDescriptor:
                 // handled by default name resolution below
                 break;

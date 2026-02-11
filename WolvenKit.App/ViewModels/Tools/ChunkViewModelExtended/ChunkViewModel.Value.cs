@@ -1176,6 +1176,10 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = true;
                 return;
             }
+            case scnSectionInternalsActorBehavior actorBehavior:
+                Value = $"{actorBehavior.BehaviorMode}";
+                IsValueExtrapolated = Value != "";
+                break;
             case scnGameplayAnimSetSRRef animSetRRef:
                 Value = $"{animSetRRef.AsyncAnimSet.DepotPath.GetResolvedText()}";
                 IsValueExtrapolated = Value != "";
