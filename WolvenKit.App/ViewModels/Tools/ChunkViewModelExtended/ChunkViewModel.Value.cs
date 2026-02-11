@@ -1168,6 +1168,14 @@ public partial class ChunkViewModel
                 Value = $"{scnSolutionHashHash.SceneSolutionHashDate}";
                 IsValueExtrapolated = scnSolutionHashHash.SceneSolutionHashDate != 0;
                 return;
+            case scnScenesVersionsSceneChanges scn when scn.SceneChanges.FirstOrDefault() is { } change &&
+                                                        StringHelper.Stringify(change.SceneBeforeChange.DepotPath,
+                                                            true) is string s && s != string.Empty:
+            {
+                Value = s;
+                IsValueExtrapolated = true;
+                return;
+            }
             case scnGameplayAnimSetSRRef animSetRRef:
                 Value = $"{animSetRRef.AsyncAnimSet.DepotPath.GetResolvedText()}";
                 IsValueExtrapolated = Value != "";
