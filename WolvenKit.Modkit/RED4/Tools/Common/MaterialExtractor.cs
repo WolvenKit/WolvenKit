@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Common.FNV1A;
@@ -34,7 +35,6 @@ public partial class MaterialExtractor
     [GeneratedRegex(@"^[A-Za-z]:\\", RegexOptions.Compiled)]
     private static partial Regex WindowsAbsolutePathRegex();
 
-    private readonly Dictionary<string, string> _materialBaseDictionary = [];
 
     public MaterialExtractor(ModTools modTools, IArchiveManager archiveManager, string materialRepositoryPath,
         GlobalExportArgs globalExportArgs, ILoggerService loggerService)
@@ -273,34 +273,6 @@ public partial class MaterialExtractor
         return materialData;
     }
 
-    private string GetShaderName(string? relPath)
-    {
-        if (string.IsNullOrEmpty(relPath))
-        {
-            return string.Empty;
-        }
-
-        if (_materialBaseDictionary.TryGetValue(relPath, out var shaderPath))
-        {
-            return shaderPath;
-        }
-
-        // we were passed an .mt/.remt file
-        if (!relPath.EndsWith(".mi"))
-        {
-            _materialBaseDictionary[relPath] = relPath;
-            return _materialBaseDictionary[relPath];
-        }
-
-        TryFindFile2(new CR2WFile(), new CResourceReference<CMaterialInstance>(relPath), out var result);
-        if (result?.File?.RootChunk is CMaterialInstance mi)
-        {
-            _materialBaseDictionary[relPath] = GetShaderName(mi.BaseMaterial.DepotPath.GetResolvedText());
-        }
-
-        _materialBaseDictionary[relPath] ??= string.Empty;
-        return _materialBaseDictionary[relPath];
-    }
 
 
     private (RawMaterial mergedMaterial, RawMaterial template) MergeMaterialChain(CR2WFile parentFile, IMaterial material,
@@ -308,7 +280,6 @@ public partial class MaterialExtractor
     {
         RawMaterial mergedMaterial, template;
         var materialName = dynamicMaterialName.Split('@').FirstOrDefault() ?? dynamicMaterialName;
-        var parentFilePath = parentFile.MetaData.FileName ?? "";
 
         switch (material)
         {
@@ -339,14 +310,10 @@ public partial class MaterialExtractor
                         materialName);
                 }
 
-                var baseMaterial = cMaterialInstance.BaseMaterial.DepotPath.GetResolvedText() ?? "";
-                _materialBaseDictionary[parentFilePath] = baseMaterial;
-
-                mergedMaterial.BaseMaterial = baseMaterial;
+                mergedMaterial.BaseMaterial = cMaterialInstance.BaseMaterial.DepotPath.GetResolvedText()!;
                 mergedMaterial.EnableMask = (bool)template.EnableMask! && cMaterialInstance.EnableMask;
                 mergedMaterial.Name = materialName;
                 mergedMaterial.Data ??= [];
-                mergedMaterial.MaterialTemplate = template.BaseMaterial;
 
                 foreach (var pair in cMaterialInstance.Values)
                 {
@@ -383,7 +350,22 @@ public partial class MaterialExtractor
             }
             case CMaterialTemplate cMaterialTemplate:
             {
-                var fileName = (parentFile.MetaData.FileName ?? string.Empty).ToLower().Replace("none", "");
+                var fileName = DefaultMaterials.DefaultMiPath;
+                if (ReferenceEquals(parentFile.RootChunk, material))
+                {
+                    fileName = (parentFile.MetaData.FileName ?? string.Empty).ToLower().Replace("none", "");
+                }
+                else
+                {
+                    foreach (var embeddedFile in parentFile.EmbeddedFiles)
+                    {
+                        if (ReferenceEquals(embeddedFile.Content, material))
+                        {
+                            fileName = (embeddedFile.FileName.GetResolvedText() ?? string.Empty).ToLower()
+                                .Replace("none", "");
+                        }
+                    }
+                }
                 if (fileName == string.Empty)
                 {
                     fileName = DefaultMaterials.DefaultMiPath;
@@ -393,16 +375,15 @@ public partial class MaterialExtractor
                 {
                     Name = materialName,
                     BaseMaterial = fileName,
-                    MaterialTemplate = GetShaderName(fileName),
+                    MaterialTemplate = fileName,
                     Data = new Dictionary<string, object?>()
                 };
 
                 template = new RawMaterial
                 {
-                    Name = mergedMaterial.MaterialTemplate,
+                    Name = fileName,
                     Data = new Dictionary<string, object?>(),
-                    EnableMask = cMaterialTemplate.CanBeMasked,
-                    BaseMaterial = mergedMaterial.MaterialTemplate,
+                    EnableMask = cMaterialTemplate.CanBeMasked
                 };
 
                 var usedParameterNames = cMaterialTemplate.UsedParameters[2]
