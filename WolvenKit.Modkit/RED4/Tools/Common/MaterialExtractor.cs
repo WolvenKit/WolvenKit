@@ -287,7 +287,7 @@ public partial class MaterialExtractor
             {
                 // This method handles both ArchiveXL dynamic substitution and replaces empty material with default.mi
                 cMaterialInstance.BaseMaterial =
-                    ArchiveXlHelper.ResolveBaseMaterial(cMaterialInstance.BaseMaterial, dynamicMaterialName);
+                    ArchiveXlHelper.ResolveBaseMaterial(cMaterialInstance.BaseMaterial, materialName);
 
                 var status = TryFindFile2(parentFile, cMaterialInstance.BaseMaterial, out var result);
                 if (status is FindFileResult.NoCR2W or FindFileResult.FileNotFound || result.File!.RootChunk is not IMaterial childMaterial)
