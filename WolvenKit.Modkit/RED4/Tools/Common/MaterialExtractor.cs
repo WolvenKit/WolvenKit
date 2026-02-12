@@ -33,13 +33,14 @@ public partial class MaterialExtractor
 
     [GeneratedRegex(@"^[A-Za-z]:\\", RegexOptions.Compiled)]
     private static partial Regex WindowsAbsolutePathRegex();
-    
-    
+
+    private readonly Dictionary<string, string> _materialBaseDictionary = [];
+
     public MaterialExtractor(ModTools modTools, IArchiveManager archiveManager, string materialRepositoryPath,
         GlobalExportArgs globalExportArgs, ILoggerService loggerService)
     {
         _modTools = modTools;
-        
+
         _archiveManager = archiveManager;
         _materialRepositoryPath = materialRepositoryPath;
         _globalExportArgs = globalExportArgs;
@@ -99,7 +100,7 @@ public partial class MaterialExtractor
                 {
                     _loggerService.Warning($"Duplicated materialEntry \"{indexName}\" found (First name \"{oldValue}\"| Current name \"{materialName}\"). Skipping!");
                 }
-                
+
                 continue;
             }
 
@@ -142,7 +143,7 @@ public partial class MaterialExtractor
             {
                 materialIndex = pExtIdx;
             }
-            
+
             if (materialEntry.IsLocalInstance)
             {
                 if (preloadLocalMaterials.Count > materialIndex)
@@ -272,6 +273,34 @@ public partial class MaterialExtractor
         return materialData;
     }
 
+    private string GetShaderName(string? relPath)
+    {
+        if (string.IsNullOrEmpty(relPath))
+        {
+            return string.Empty;
+        }
+
+        if (_materialBaseDictionary.TryGetValue(relPath, out var shaderPath))
+        {
+            return shaderPath;
+        }
+
+        // we were passed an .mt/.remt file
+        if (!relPath.EndsWith(".mi"))
+        {
+            _materialBaseDictionary[relPath] = relPath;
+            return _materialBaseDictionary[relPath];
+        }
+
+        TryFindFile2(new CR2WFile(), new CResourceReference<CMaterialInstance>(relPath), out var result);
+        if (result?.File?.RootChunk is CMaterialInstance mi)
+        {
+            _materialBaseDictionary[relPath] = GetShaderName(mi.BaseMaterial.DepotPath.GetResolvedText());
+        }
+
+        _materialBaseDictionary[relPath] ??= string.Empty;
+        return _materialBaseDictionary[relPath];
+    }
 
 
     private (RawMaterial mergedMaterial, RawMaterial template) MergeMaterialChain(CR2WFile parentFile, IMaterial material,
@@ -287,7 +316,7 @@ public partial class MaterialExtractor
                 // This method handles both ArchiveXL dynamic substitution and replaces empty material with default.mi
                 cMaterialInstance.BaseMaterial =
                     ArchiveXlHelper.ResolveBaseMaterial(cMaterialInstance.BaseMaterial, dynamicMaterialName);
-                
+
                 var status = TryFindFile2(parentFile, cMaterialInstance.BaseMaterial, out var result);
                 if (status is FindFileResult.NoCR2W or FindFileResult.FileNotFound || result.File!.RootChunk is not IMaterial childMaterial)
                 {
@@ -298,7 +327,7 @@ public partial class MaterialExtractor
                         throw new Exception("Default material is missing!");
                     }
 
-                    // If there's anything wrong with the file, we're falling back to the default material 
+                    // If there's anything wrong with the file, we're falling back to the default material
                     (mergedMaterial, template) =
                         MergeMaterialChain(DefaultMaterials.DefaultMaterialTemplateFile, DefaultMaterials.DefaultMaterialInstance,
                             materialName);
@@ -313,6 +342,7 @@ public partial class MaterialExtractor
                 mergedMaterial.EnableMask = (bool)template.EnableMask! && cMaterialInstance.EnableMask;
                 mergedMaterial.Name = materialName;
                 mergedMaterial.Data ??= [];
+                mergedMaterial.MaterialTemplate = template.BaseMaterial;
 
                 foreach (var pair in cMaterialInstance.Values)
                 {
@@ -342,7 +372,7 @@ public partial class MaterialExtractor
                             mergedMaterial.Data![key] = "";
                         }
                     }
-                    
+
                 }
 
                 return (mergedMaterial, template);
@@ -367,7 +397,8 @@ public partial class MaterialExtractor
                 {
                     Name = fileName,
                     Data = new Dictionary<string, object?>(),
-                    EnableMask = cMaterialTemplate.CanBeMasked
+                    EnableMask = cMaterialTemplate.CanBeMasked,
+                    BaseMaterial = GetShaderName(fileName),
                 };
 
                 var usedParameterNames = cMaterialTemplate.UsedParameters[2]
@@ -421,7 +452,7 @@ public partial class MaterialExtractor
             }
 
             resourceReference = ArchiveXlHelper.ResolvePotentiallyDynamicDepotPath(resourceReference, escapedMaterialName);
-            
+
 
             var status = TryFindFile2(parentFile, resourceReference, out var result);
             if (status == FindFileResult.NoCR2W)
