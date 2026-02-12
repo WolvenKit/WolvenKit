@@ -308,6 +308,7 @@ public partial class MaterialExtractor
     {
         RawMaterial mergedMaterial, template;
         var materialName = dynamicMaterialName.Split('@').FirstOrDefault() ?? dynamicMaterialName;
+        var parentFilePath = parentFile.MetaData.FileName ?? "";
 
         switch (material)
         {
@@ -338,7 +339,10 @@ public partial class MaterialExtractor
                         materialName);
                 }
 
-                mergedMaterial.BaseMaterial = cMaterialInstance.BaseMaterial.DepotPath.GetResolvedText()!;
+                var baseMaterial = cMaterialInstance.BaseMaterial.DepotPath.GetResolvedText() ?? "";
+                _materialBaseDictionary[parentFilePath] = baseMaterial;
+
+                mergedMaterial.BaseMaterial = baseMaterial;
                 mergedMaterial.EnableMask = (bool)template.EnableMask! && cMaterialInstance.EnableMask;
                 mergedMaterial.Name = materialName;
                 mergedMaterial.Data ??= [];
@@ -389,16 +393,16 @@ public partial class MaterialExtractor
                 {
                     Name = materialName,
                     BaseMaterial = fileName,
-                    MaterialTemplate = fileName,
+                    MaterialTemplate = GetShaderName(fileName),
                     Data = new Dictionary<string, object?>()
                 };
 
                 template = new RawMaterial
                 {
-                    Name = fileName,
+                    Name = mergedMaterial.MaterialTemplate,
                     Data = new Dictionary<string, object?>(),
                     EnableMask = cMaterialTemplate.CanBeMasked,
-                    BaseMaterial = GetShaderName(fileName),
+                    BaseMaterial = mergedMaterial.MaterialTemplate,
                 };
 
                 var usedParameterNames = cMaterialTemplate.UsedParameters[2]
