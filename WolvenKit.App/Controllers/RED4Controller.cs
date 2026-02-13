@@ -78,17 +78,20 @@ public class RED4Controller : ObservableObject, IGameController
 
     public async Task HandleStartup()
     {
-        if (!_initialized)
+        if (_initialized)
         {
-            _initialized = true;
-            _progressService.IsIndeterminate = true;
-
-            // load archives
-            await LoadArchiveManager();
-
-            _progressService.IsIndeterminate = false;
-            _progressService.Completed();
+            return;
         }
+
+        _initialized = true;
+        _progressService.IsIndeterminate = true;
+
+        // load archives
+        await LoadArchiveManager();
+
+        _progressService.IsIndeterminate = false;
+        _progressService.Completed();
+
     }
 
     // TODO: Move this somewhere else
@@ -161,7 +164,7 @@ public class RED4Controller : ObservableObject, IGameController
             _loggerService.Info("Loading Archive Manager ... ");
             try
             {
-                _archiveManager.LoadGameArchives(new FileInfo(_settingsManager.CP77ExecutablePath));
+                _archiveManager.Initialize(new FileInfo(_settingsManager.CP77ExecutablePath));
             }
             catch (Exception e)
             {
