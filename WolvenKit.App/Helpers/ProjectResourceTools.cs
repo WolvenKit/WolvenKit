@@ -1080,7 +1080,7 @@ public partial class ProjectResourceTools
             throw new WolvenKitException(0x5000, "Cyberpunk executable not configured");
         }
 
-        _loggerService.Info("Scanning your mods... this can take a moment. Wolvenkit might be unresponsive.");
+        _loggerService.Info("Scanning your mods... this can take a moment. WolvenKit might be unresponsive.");
         _archiveManager.Initialize(new FileInfo(_settingsService.CP77ExecutablePath));
     }
 

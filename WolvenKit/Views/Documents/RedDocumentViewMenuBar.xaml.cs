@@ -725,7 +725,7 @@ namespace WolvenKit.Views.Documents
 
             if (!_archiveManager.IsInitialized)
             {
-                _loggerService.Info("Scanning your mods... this can take a moment. Wolvenkit will be unresponsive.");
+                _loggerService.Info("Scanning your mods... this can take a moment. WolvenKit might be unresponsive.");
                 _archiveManager.Initialize(new FileInfo(_settingsManager.CP77ExecutablePath));
             }
 
