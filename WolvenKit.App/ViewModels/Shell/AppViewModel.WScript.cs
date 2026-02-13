@@ -62,9 +62,9 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
     private readonly ScriptFileViewModel? _fileValidationScript;
     private readonly ScriptFileViewModel? _entSpawnerImportScript;
 
-    private static readonly string[] s_ignoredExtensions = [".xbm", ".mlmask"];
+    private static readonly string[] s_ignoredExtensions = [".xbm", ".mlmask", ".bin"];
 
-    private static readonly string[] s_packIgnoredExtensions = ["bin"];
+    private static readonly string[] s_packIgnoredExtensions = [".bin"];
 
     private static readonly string[] s_resourceFileExtensions = ["xl", "yaml", "yml"];
 
@@ -161,7 +161,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
         foreach (var file in filesToValidate)
         {
-            var fileExtension = file.Extension.TrimStart('.').ToLower();
+            var fileExtension = file.Extension.ToLower();
             if (!redExtensions.Contains(fileExtension) && !s_packIgnoredExtensions.Contains(fileExtension))
             {
                 _loggerService.Warning($"{file.FileName} has an unsupported extension and will not be packed!");
