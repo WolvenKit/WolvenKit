@@ -167,6 +167,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         SettingsManager.WhenPropertyChanged(settings => settings.IsDiscordRPCEnabled)
             .Subscribe(_ => OnDiscordRPCChanged());
+        SettingsManager.WhenPropertyChanged(settings => settings.CP77ExecutablePath)
+            .Subscribe(_ => InitializeArchiveManager());
 
         UpdateTitle();
         OnDiscordRPCChanged();
@@ -175,7 +177,20 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         ClearMaterialCache();
 
+        InitializeArchiveManager();
+
         DockedViews.CollectionChanged += DockedViews_OnCollectionChanged;
+    }
+
+
+    private void InitializeArchiveManager()
+    {
+        if (SettingsManager.CP77ExecutablePath is not string s || !File.Exists(s) || _archiveManager.IsInitialized)
+        {
+            return;
+        }
+
+        Task.Run(() => _archiveManager.Initialize(new FileInfo(s)));
     }
 
 

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
 using DynamicData.Kernel;
@@ -94,23 +95,46 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         #region loading
 
+        private readonly SemaphoreSlim _semaphore = new(1, 1);
         public bool IsInitialized { get; private set; }
 
         public virtual void Initialize(FileInfo executable, bool scanArchives = false)
         {
+
             if (IsInitialized)
             {
                 return;
             }
 
-            if (!GetGameArchives().Any())
+            try
             {
-                LoadGameArchives(executable);
-            }
+                if (!_semaphore.Wait(50))
+                {
+                    return;
+                }
 
-            if (!GetModArchives().Any())
+                if (!GetGameArchives().Any())
+                {
+                    _logger.Info("Scanning game archives...");
+                    LoadGameArchives(executable);
+                }
+
+                if (!GetModArchives().Any())
+                {
+                    _logger.Info("Scanning mod archives...");
+                    LoadModArchives(executable, scanArchives);
+                }
+            }
+            finally
             {
-                LoadModArchives(executable, scanArchives);
+                try
+                {
+                    _semaphore.Release(1);
+                }
+                catch
+                {
+                    // don't release then
+                }
             }
 
             IsInitialized = true;

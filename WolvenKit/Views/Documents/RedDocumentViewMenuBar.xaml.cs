@@ -755,11 +755,11 @@ namespace WolvenKit.Views.Documents
                     "Can't add dependencies without a game executable path in the settings");
             }
 
-            _loggerService.Info("Scanning your mods... this can take a moment. Wolvenkit will be unresponsive.");
-            _notificationService.Info("Scanning your mods... this can take a moment. Wolvenkit will be unresponsive.");
 
             if (!_archiveManager.IsInitialized)
             {
+                _loggerService.Info("Scanning your mods... this can take a moment. Wolvenkit will be unresponsive.");
+                _notificationService.Info("Scanning your mods... this can take a moment. Wolvenkit will be unresponsive.");
                 _archiveManager.Initialize(new FileInfo(_settingsManager.CP77ExecutablePath));
             }
 
