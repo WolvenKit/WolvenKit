@@ -82,12 +82,12 @@ namespace WolvenKit.Views.Tools
 
             SetCurrentValue(RedHDRColorProperty, new HDRColor
             {
-                Alpha = (CFloat)Color.A,
+                Alpha = (CFloat)Color.A / 255F,
                 Red = (CFloat)Color.RGB_R / 255F,
                 Green = (CFloat)Color.RGB_G / 255F,
                 Blue = (CFloat)Color.RGB_B / 255F
             });
-            
+
 
             UpdateBrush();
 
@@ -97,7 +97,7 @@ namespace WolvenKit.Views.Tools
                 cvm.NotifyChain(nameof(ChunkViewModel.Data));
                 cvm.RecalculateProperties();
             }
-            
+
             _updateFromColor = false;
         }
 
@@ -124,7 +124,7 @@ namespace WolvenKit.Views.Tools
             {
                 picker._updateFromColor = true;
 
-                picker.Color.A = color.Alpha;
+                picker.Color.A = color.Alpha * 255F;
                 picker.Color.RGB_R = color.Red * 255F;
                 picker.Color.RGB_G = color.Green * 255F;
                 picker.Color.RGB_B = color.Blue * 255F;
