@@ -772,9 +772,9 @@ namespace WolvenKit.Modkit.RED4
                 var x = qScale.X != 0 ? (mesh.positions[i].X - qTrans.X) / qScale.X : 0;
                 var y = qScale.Y != 0 ? (mesh.positions[i].Y - qTrans.Y) / qScale.Y : 0;
                 var z = qScale.Z != 0 ? (mesh.positions[i].Z - qTrans.Z) / qScale.Z : 0;
-                re4Mesh.ExpVerts[i, 0] = Convert.ToInt16(x * 32767);
-                re4Mesh.ExpVerts[i, 1] = Convert.ToInt16(y * 32767);
-                re4Mesh.ExpVerts[i, 2] = Convert.ToInt16(z * 32767);
+                re4Mesh.ExpVerts[i, 0] = Convert.ToInt16(Math.Min(x, 1) * short.MaxValue);
+                re4Mesh.ExpVerts[i, 1] = Convert.ToInt16(Math.Min(y, 1) * short.MaxValue);
+                re4Mesh.ExpVerts[i, 2] = Convert.ToInt16(Math.Min(z, 1) * short.MaxValue);
             }
 
             // converting normals struct
