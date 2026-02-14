@@ -6,8 +6,8 @@ namespace WolvenKit.App.ViewModels.Dialogs;
 
 public partial class SelectDropdownEntryDialogViewModel : DialogViewModel
 {
-    public const string ButtonClickResult = "FROM_BUTTON_CLICK"; 
-    
+    public const string ButtonClickResult = "FROM_BUTTON_CLICK";
+
     [ObservableProperty] private string? _title;
     [ObservableProperty] private string? _text;
     [ObservableProperty] private bool _showText;
@@ -15,6 +15,7 @@ public partial class SelectDropdownEntryDialogViewModel : DialogViewModel
     [ObservableProperty] private List<string>? _options;
     [ObservableProperty] private Dictionary<string, string>? _optionsDict;
     [ObservableProperty] private string _selectedOption;
+    [ObservableProperty] private string _filterText = string.Empty;
 
     /// <summary>
     /// Set <see cref="HelpLink"/> to not null or empty to show the help button
@@ -55,15 +56,8 @@ public partial class SelectDropdownEntryDialogViewModel : DialogViewModel
     {
         Options = list;
         ShowInputBar = showInputBar;
-        if (showInputBar)
-        {
-            SelectedOption = string.Empty;
-        }
-        else
-        {
-            SelectedOption = list.FirstOrDefault() ?? string.Empty;
-        }
-        
+        SelectedOption = string.Empty;
+
         Title = title;
         Text = text;
         ShowText = !string.IsNullOrEmpty(text);

@@ -4,6 +4,7 @@ using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Input;
 using ReactiveUI;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Core;
 using Window = System.Windows.Window;
@@ -12,6 +13,7 @@ namespace WolvenKit.Views.Dialogs.Windows
 {
     public partial class SelectDropdownEntryWindow : IViewFor<SelectDropdownEntryDialogViewModel>
     {
+        private string s_lastFilterText = string.Empty;
         public SelectDropdownEntryWindow(List<string> options, string title, string text, bool showInputBar = false) :
             this(options, title, text, "", "", showInputBar)
         {
@@ -29,7 +31,7 @@ namespace WolvenKit.Views.Dialogs.Windows
             {
                 HelpLink = helpLink, ButtonText = buttonText,
             };
-            
+
             DataContext = ViewModel;
 
             Owner = Application.Current.MainWindow;
@@ -41,9 +43,21 @@ namespace WolvenKit.Views.Dialogs.Windows
                         x => x.Dropdown.SelectedOption)
                     .DisposeWith(disposables);
                 this.Bind(ViewModel,
+                        x => x.FilterText,
+                        x => x.Dropdown.FilterText)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
                         x => x.OptionsDict,
                         x => x.Dropdown.Options)
                     .DisposeWith(disposables);
+
+                ViewModel.SelectedOption = string.Empty;
+
+                // re-use last filter text on control
+                if (ModifierViewStateService.IsCtrlBeingHeld && !string.IsNullOrEmpty(s_lastFilterText))
+                {
+                    ViewModel.FilterText = s_lastFilterText;
+                }
             });
         }
 
@@ -66,6 +80,7 @@ namespace WolvenKit.Views.Dialogs.Windows
 
             e.Handled = true;
             DialogResult = true;
+            s_lastFilterText = ViewModel.FilterText;
             Close();
         }
 
@@ -89,7 +104,9 @@ namespace WolvenKit.Views.Dialogs.Windows
             viewModel.SelectedOption = SelectDropdownEntryDialogViewModel.ButtonClickResult;
             e.Handled = true;
             DialogResult = true;
+            s_lastFilterText = ViewModel.FilterText;
             Close();
         }
+
     }
 }
