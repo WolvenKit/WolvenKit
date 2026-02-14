@@ -18,6 +18,7 @@ using WolvenKit.Core.Services;
 using WolvenKit.Modkit.Resources;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Pools;
 
 namespace WolvenKit.RED4.CR2W.Archive
 {
@@ -261,12 +262,22 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// </summary>
         /// <param name="absoluteFilepath"> absolute path of file to process </param>
         /// <param name="analyzeFiles"></param>
-        /// <param name="forceRescan"></param>
-        public void LoadModArchive(string absoluteFilepath, bool analyzeFiles = true, bool forceRescan = false)
+        public void LoadModArchive(string absoluteFilepath, bool analyzeFiles = true)
         {
-            if (!forceRescan && Archives.Lookup(absoluteFilepath).HasValue)
+            // check if archive has unresolved entries. If not, analyzeFiles can be skipped.
+            if (analyzeFiles && Archives.Lookup(absoluteFilepath) is { HasValue: true } a)
             {
-                return;
+                var hasUnresolved = false;
+                foreach (var (hash, _) in a.Value.Files)
+                {
+                    if (ResourcePathPool.ResolveHash(hash) == null)
+                    {
+                        hasUnresolved = true;
+                        break;
+                    }
+                }
+
+                analyzeFiles = hasUnresolved;
             }
 
             var archiveName = Path.GetFileName(absoluteFilepath).Replace(".archive", "");
@@ -285,6 +296,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             {
                 return;
             }
+
 
             var importError = false;
             foreach (var (_, gameFile) in archive.Files)
