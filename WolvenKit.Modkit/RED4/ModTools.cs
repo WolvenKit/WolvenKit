@@ -3,6 +3,7 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.Modkit.Scripting;
 using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.Modkit.RED4
