@@ -18,6 +18,7 @@ using WolvenKit.Core.Services;
 using WolvenKit.Modkit.Resources;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Pools;
 
 namespace WolvenKit.RED4.CR2W.Archive
 {
@@ -282,6 +283,21 @@ namespace WolvenKit.RED4.CR2W.Archive
             Archives.AddOrUpdate(archive);
 
             if (!analyzeFiles)
+            {
+                return;
+            }
+
+            var hasUnresolved = false;
+            foreach (var (hash, _) in archive.Files)
+            {
+                if (ResourcePathPool.ResolveHash(hash) == null)
+                {
+                    hasUnresolved = true;
+                    break;
+                }
+            }
+
+            if (!hasUnresolved)
             {
                 return;
             }
