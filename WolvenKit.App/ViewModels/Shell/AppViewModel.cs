@@ -2055,7 +2055,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         if (_projectManager.ActiveProject is not null)
         {
-            title += _projectManager.ActiveProject.Name + " - ";
+            title += _projectManager.ActiveProject.ModName + " - ";
         }
 
         title += "WolvenKit";
