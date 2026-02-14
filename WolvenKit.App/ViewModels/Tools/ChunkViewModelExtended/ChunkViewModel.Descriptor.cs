@@ -182,14 +182,33 @@ public partial class ChunkViewModel
                 Descriptor = $"{startTime}{eventType}";
                 return;
             }
+            case scnScenesVersionsSceneChanges scn when scn.Scene.DepotPath.GetResolvedText() is string s && s != string.Empty:
+            {
+                Descriptor = s;
+                return;
+            }
 
+            case scnDynamicAnimSetSRRef animSet
+                when animSet.AsyncAnimSet.DepotPath.GetResolvedText() is string s && s != string.Empty:
+                Descriptor = s;
+                return;
+            case scnPerformerSymbol performerSymbol when performerSymbol.PerformerId.Id != 0:
+                Descriptor = $"{performerSymbol.PerformerId.Id.ToString()}";
+                return;
+
+            case scnReferencePointDef refDef:
+                Descriptor = $"{refDef.Id}";
+                return;
+            case scnSectionInternalsActorBehavior actorBehavior:
+                Descriptor = $"{actorBehavior.ActorId.Id}";
+                return;
             case worldStreamingSectorDescriptor:
                 // handled by default name resolution below
                 break;
             case worldNodeData sst when Parent?.Parent?.ResolvedData is worldStreamingSector wss && sst.NodeIndex < wss.Nodes.Count:
                 Descriptor = $"[{sst.NodeIndex}] {StringHelper.Stringify(wss.Nodes[sst.NodeIndex].Chunk)}";
                 return;
-            case worldNode worldNode when StringHelper.Stringify(worldNode) is string s && s != "":
+            case worldNode worldNode when StringHelper.Stringify(worldNode) is string s && s != string.Empty:
                 Descriptor = s;
                 return;
             case worldNode:
@@ -200,7 +219,7 @@ public partial class ChunkViewModel
 
                 Descriptor = StringHelper.Stringify(animAry
                     .Select((animPoseLink) => GetNodeName(animPoseLink.Node) ?? "").ToArray());
-                if (Descriptor != "")
+                if (Descriptor != string.Empty)
                 {
                     return;
                 }
@@ -286,7 +305,7 @@ public partial class ChunkViewModel
                 }
 
                 Descriptor = $"{csvAry[nameIndex]}";
-                if (Descriptor != "")
+                if (Descriptor != string.Empty)
                 {
                     return;
                 }
@@ -302,7 +321,7 @@ public partial class ChunkViewModel
             case appearanceAppearancePart part:
             {
                 Descriptor = part.Resource.DepotPath.GetResolvedText() ?? "";
-                if (Descriptor != "")
+                if (Descriptor != string.Empty)
                 {
                     return;
                 }
@@ -312,7 +331,7 @@ public partial class ChunkViewModel
             case locVoLineEntry voLineEntry:
             {
                 Descriptor = voLineEntry.StringId.ToString();
-                if (Descriptor != "")
+                if (Descriptor != string.Empty)
                 {
                     return;
                 }
@@ -322,7 +341,7 @@ public partial class ChunkViewModel
             case animAnimEvent animEvent:
             {
                 Descriptor = animEvent.EventName.GetResolvedText();
-                if (Descriptor != "")
+                if (Descriptor != string.Empty)
                 {
                     return;
                 }
@@ -332,7 +351,7 @@ public partial class ChunkViewModel
             case locVoLengthEntry voLengthEntry:
             {
                 Descriptor = voLengthEntry.StringId.ToString();
-                if (Descriptor != "")
+                if (Descriptor != string.Empty)
                 {
                     return;
                 }
@@ -351,7 +370,7 @@ public partial class ChunkViewModel
                     Descriptor = ResourcePathPool.ResolveHash(result);
                 }
 
-                if (Descriptor != "")
+                if (Descriptor != string.Empty)
                 {
                     return;
                 }
@@ -407,7 +426,7 @@ public partial class ChunkViewModel
             case scnPropDef propDef:
             {
                 Descriptor = $"{propDef.PropName}";
-                if (propDef.SpecPropRecordId.GetResolvedText() is string s && s != "")
+                if (propDef.SpecPropRecordId.GetResolvedText() is string s && s != string.Empty)
                 {
                     Descriptor = $"{Descriptor} ID: {s}";
                 }
@@ -417,7 +436,7 @@ public partial class ChunkViewModel
             case scnSpawnDespawnEntityParams spawnDespawnParams:
             {
                 Descriptor = $"{spawnDespawnParams.DynamicEntityUniqueName.GetResolvedText()}";
-                if (spawnDespawnParams.SpawnMarkerNodeRef.GetResolvedText() is string s && s != "")
+                if (spawnDespawnParams.SpawnMarkerNodeRef.GetResolvedText() is string s && s != string.Empty)
                 {
                     Descriptor = $"{Descriptor} ID: {s}";
                 }
@@ -442,7 +461,7 @@ public partial class ChunkViewModel
             case scnLipsyncAnimSetSRRef lipsyncAnim:
                 Descriptor = StringHelper.StringifyOrNull(lipsyncAnim.LipsyncAnimSet.DepotPath)
                              ?? StringHelper.StringifyOrNull(lipsyncAnim.AsyncRefLipsyncAnimSet.DepotPath) ?? "";
-                if (Descriptor != "")
+                if (Descriptor != string.Empty)
                 {
                     return;
                 }
@@ -619,7 +638,7 @@ public partial class ChunkViewModel
                 break;
             }
             case IRedMeshComponent meshComponent
-                when meshComponent.Name.GetResolvedText() is string name && name != "":
+                when meshComponent.Name.GetResolvedText() is string name && name != string.Empty:
             {
                 IsDefault = name == "Component";
                 Descriptor = name;
