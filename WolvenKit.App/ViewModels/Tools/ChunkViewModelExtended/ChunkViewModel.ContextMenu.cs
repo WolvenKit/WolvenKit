@@ -286,7 +286,7 @@ public partial class ChunkViewModel
             return;
         }
         var newName = await Interactions.ShowInputBoxAsync("New material name", "");
-        _cvmMaterialTools.AddMaterialAndDefinition(this, newName);
+        _cvmTools.AddMaterialAndDefinition(this, newName);
     }
 
     public void ReplaceEntIComponentProperties(
