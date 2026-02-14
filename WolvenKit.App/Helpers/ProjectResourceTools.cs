@@ -1052,7 +1052,7 @@ public partial class ProjectResourceTools
         {
             foreach (var absoluteFilepath in archivesToScan)
             {
-                _archiveManager.LoadModArchive(absoluteFilepath, scanArchives, !scanArchives);
+                _archiveManager.LoadModArchive(absoluteFilepath, scanArchives);
             }
 
             return;
