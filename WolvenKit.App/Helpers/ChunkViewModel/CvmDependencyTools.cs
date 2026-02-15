@@ -128,16 +128,19 @@ public class CvmDependencyTools
                 }
             }
 
-            if (!hasChange)
+            if (!hasChange && vc != null)
             {
                 return;
             }
 
-            if (vc != null)
+            if (vc == null)
             {
-                vc.AppearanceDependency = list;
-                cvm.RecalculateProperties();
+                vc = new entVisualControllerComponent();
+                arr.Add(vc);
             }
+
+            vc.AppearanceDependency = list;
+            cvm.RecalculateProperties();
 
             cvm.Tab?.Parent.SetIsDirty(true);
         }
