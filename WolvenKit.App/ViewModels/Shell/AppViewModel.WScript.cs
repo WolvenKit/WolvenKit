@@ -62,7 +62,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
     private readonly ScriptFileViewModel? _fileValidationScript;
     private readonly ScriptFileViewModel? _entSpawnerImportScript;
 
-    private static readonly string[] s_ignoredExtensions = [".xbm", ".mlmask"];
+    private static readonly string[] s_ignoredExtensions = [".xbm", ".mlmask", ".bin"];
 
     private static readonly string[] s_packIgnoredExtensions = ["bin"];
 

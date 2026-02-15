@@ -26,7 +26,7 @@ namespace WolvenKit.Views.Tools
 
 
         private readonly IModifierViewStateService _modifierViewSvc;
-        
+
 
         // ReSharper disable once MemberCanBePrivate.Global - used in view model
         public bool IsModBrowserEnabled { get; set; } = false;
@@ -39,7 +39,7 @@ namespace WolvenKit.Views.Tools
             _modifierViewSvc = Locator.Current.GetService<IModifierViewStateService>();
             _modifierViewSvc.ModifierStateChanged += OnModifierStateChanged;
 
-            
+
             this.WhenActivated(disposables =>
             {
                 if (DataContext is AssetBrowserViewModel vm)
@@ -99,6 +99,10 @@ namespace WolvenKit.Views.Tools
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.CopyRelPathFileNameCommand,
                         view => view.RightContextMenuCopyNameMenuItem)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.CopyRelPathFileNameNoExtensionCommand,
+                        view => view.RightContextMenuCopyFileNameNoExtensionMenuItem)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
                       viewModel => viewModel.OpenFileOnlyCommand,
