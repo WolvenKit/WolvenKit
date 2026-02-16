@@ -292,6 +292,7 @@ namespace WolvenKit.Modkit.RED4
                     OptimizationHints = new AnimationOptimizationHints {
                         PreferSIMD = bufferData.IsSimd,
                         MaxRotationCompression = bufferData.CompressionUsed,
+                        SimdQuantizationBits = bufferData.SimdQuantizationBits,
                     },
                 };
 
@@ -550,6 +551,7 @@ namespace WolvenKit.Modkit.RED4
                     TracksCountActual = tracksCountActual,
                     IsSimd = extras.OptimizationHints.PreferSIMD && !importArgs.ForceCompressedEncoding,
                     CompressionUsed = extras.OptimizationHints.MaxRotationCompression,
+                    SimdQuantizationBits = extras.OptimizationHints.SimdQuantizationBits,
                 };
 
                 // Backfill from original where we must, for now

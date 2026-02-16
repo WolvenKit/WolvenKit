@@ -367,6 +367,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                     isQuantizedRotations
                     ? AnimationCompression.QuaternionAsFixed3x16bit
                     : AnimationCompression.Uncompressed,
+                SimdQuantizationBits = animBufSimd.QuantizationBits,
             };
         }
     }

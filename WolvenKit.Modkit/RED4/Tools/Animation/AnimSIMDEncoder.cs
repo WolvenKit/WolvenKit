@@ -70,9 +70,13 @@ namespace WolvenKit.Modkit.RED4.Animation
             // SIMD alignment
             var numJointsSimdAligned = (uint)((jointsCountActual + SimdBlockWidth - 1) & (~(SimdBlockWidth - 1)));
 
-            // Determine quantization
+            // Determine quantization — use the original bit depth if available,
+            // otherwise derive from the compression enum (0 = uncompressed, else 16-bit default)
             var isQuantized = data.CompressionUsed == AnimationCompression.QuaternionAsFixed3x16bit;
-            ushort quantizationBits = isQuantized ? (ushort)16 : (ushort)0;
+            ushort quantizationBits = data.SimdQuantizationBits > 0
+                ? data.SimdQuantizationBits
+                : (isQuantized ? (ushort)16 : (ushort)0);
+            isQuantized = quantizationBits > 0;
 
             // --- Classify translations: which joints animate, which are static ---
             ClassifyTranslations(
