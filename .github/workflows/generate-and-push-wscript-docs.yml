@@ -1,0 +1,61 @@
+name: Generate and Push WScript API Documentation
+
+on:
+  workflow_dispatch:
+
+jobs:
+  generate-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Doxygen
+        run: sudo apt-get update && sudo apt-get install -y doxygen
+
+      - name: Run Doxygen
+        run: doxygen Doxyfile_scripting
+
+      - name: Generate  markdown
+        run: |
+          mkdir -p out
+          python tools/doxygen_xml_to_md.py docs/xml out/wolvenkit.md
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.WKIT_WIKI_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Clone WolvenKit Wiki Repo
+        run: |
+          git clone git@github.com:CDPR-Modding-Documentation/WolvenKit-8-Wiki.git
+
+      - name: Validate API Docs File
+        run: |
+          cd WolvenKit-8-Wiki/wolvenkit-app/usage
+          grep -Fq "<!-- AUTOGEN_MARKER_START -->" wscript-api-docs.md
+
+      - name: Update WScript API Docs
+        run: |
+          cd WolvenKit-8-Wiki/wolvenkit-app/usage
+          awk '
+          /<!-- AUTOGEN_MARKER_START -->/ {
+            print
+            system("cat ../../../out/wolvenkit.md")
+            exit
+          }
+          { print }
+          ' wscript-api-docs.md > wscript-api-docs.new.md
+          mv wscript-api-docs.new.md wscript-api-docs.md
+
+      - name: Commit and push
+        run: |
+          cd WolvenKit-8-Wiki
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Automated WScript API Update"
+          git push
