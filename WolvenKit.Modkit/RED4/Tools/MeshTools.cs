@@ -64,6 +64,21 @@ namespace WolvenKit.Modkit.RED4.Tools
             return true;
         }
 
+        public static ModelRoot? ExportMesh2(CR2WFile cr2W, MeshExportArgs meshExportArgs)
+        {
+            ModelRoot? model = null;
+            try
+            {
+                model = GetModel(cr2W, meshExportArgs.LodFilter, mergeMeshes: meshExportArgs.ExperimentalMergedExport,
+                    exportGarmentSupport: meshExportArgs.ExportGarmentSupport);
+            }
+            catch (ArgumentNullException)
+            {
+            }
+
+            return model;
+        }
+
         public static ModelRoot? GetModel(CR2WFile cr2W, bool lodFilter = true, bool includeRig = true, ulong chunkMask = ulong.MaxValue,
             bool mergeMeshes = false, bool exportGarmentSupport = false)
         {
