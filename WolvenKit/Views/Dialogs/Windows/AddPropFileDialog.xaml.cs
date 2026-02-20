@@ -314,20 +314,6 @@ namespace WolvenKit.Views.Dialogs.Windows
             ViewModel.HasMoveMeshBeenTouched = true;
         }
 
-        // Custom event handler for keyDown because why not
-        private void OnAppearancesCheckboxKeyDown(object sender, KeyEventArgs e)
-        {
-            if (sender is not TextBox textbox || e.Key != Key.V ||
-                !Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
-            {
-                return;
-            }
-
-            e.Handled = true;
-            var clipboardText = Clipboard.GetText().Replace("\n", ", ").Replace("\r", ", ");
-            textbox.Text = clipboardText;
-        }
-
         private void OnDialogueFinish(object sender, RoutedEventArgs e)
         {
             if (ViewModel is null || !ViewModel.RememberSelection)
