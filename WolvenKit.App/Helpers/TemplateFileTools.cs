@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
 using DynamicData;
+using WolvenKit.App.Extensions;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
@@ -1142,6 +1143,15 @@ public partial class TemplateFileTools
         }
 
         prop.Appearances ??= [];
+        if (prop.ReadAppearancesFromMesh && !string.IsNullOrEmpty(prop.MeshFile1) &&
+            _cr2WTools.ReadCr2WNoException(Path.Join(project.ModDirectory, prop.MeshFile1)) is CR2WFile file &&
+            file.RootChunk is CMesh mesh)
+        {
+            prop.Appearances.Clear();
+            prop.Appearances.AddRange(mesh.Appearances.Select(handle => handle.Chunk?.Name.GetResolvedText() ?? "")
+                .Where(s => !string.IsNullOrEmpty(s)).ToList());
+        }
+
         if (prop.Appearances.Count == 0)
         {
             prop.Appearances.Add("default");
@@ -1483,7 +1493,7 @@ public partial class TemplateFileTools
         {
             var entspawnerSubdir = Path.Combine(project.GetResourceCETDirectory(), "entSpawner", "data");
 
-            List<string> fileContent = [];
+            HashSet<string> fileContent = [];
             if (meshFilesUseAppearances.Count == 1)
             {
                 var entspawnerMeshDir = Path.Combine(entspawnerSubdir, "spawnables", "mesh", "all",
@@ -1503,7 +1513,7 @@ public partial class TemplateFileTools
                 }
 
                 fileContent.Add(meshFilesUseAppearances.Keys.First());
-                File.WriteAllLines(absolutePath, fileContent.Distinct().ToArray());
+                File.WriteAllLines(absolutePath, fileContent.ToArray());
 
                 return;
             }
@@ -1522,7 +1532,13 @@ public partial class TemplateFileTools
             }
 
             fileContent.Add(entFilePath);
-            File.WriteAllLines(absoluteEntRegistryPath, fileContent.Distinct().ToArray());
+
+            if (prop.CleanupInvalidEntries)
+            {
+                fileContent = fileContent.Where(project.ModFiles.Contains).ToHashSet();
+            }
+
+            File.WriteAllLines(absoluteEntRegistryPath, fileContent.ToArray());
         }
     }
 

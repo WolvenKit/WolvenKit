@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using ReactiveUI;
@@ -16,11 +18,22 @@ using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Core;
 using WolvenKit.ViewModels.Validators;
+using WolvenKit.Views.Templates;
 
 namespace WolvenKit.Views.Dialogs.Windows
 {
     public partial class AddPropFileDialog : IViewFor<AddPropFileDialogViewModel>
     {
+        private static string s_lastParentFolder = string.Empty;
+        private static string s_lastMeshFile1 = string.Empty;
+        private static string s_lastMeshFile2 = string.Empty;
+        private static string s_lastMeshFile3 = string.Empty;
+        private static string s_lastMeshFile4 = string.Empty;
+        private static string s_lastMeshAppearances = string.Empty;
+        private static string s_lastPropName = string.Empty;
+        private static bool s_lastMoveMeshFiles = false;
+        private static bool s_lastReadAppearancesFromMeshFile = false;
+
         public AddPropFileDialog(Cp77Project project)
         {
             InitializeComponent();
@@ -108,6 +121,18 @@ namespace WolvenKit.Views.Dialogs.Windows
                         x => x.MoveMeshesToFolder,
                         x => x.MoveMeshesToFolderCheckbox.IsChecked)
                     .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        x => x.ReadAppearancesFromMesh,
+                        x => x.ReadAppearancesFromMeshCheckbox.IsChecked)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        x => x.CleanupInvalidEntries,
+                        x => x.CleanupInvalidEntriesCheckbox.IsChecked)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        x => x.RememberSelection,
+                        x => x.RememberValuesCheckbox.IsChecked)
+                    .DisposeWith(disposables);
 
                 Mesh1DropdownMenu.dropdown.SelectionChanged += Mesh1SelectionChanged;
                 disposables.Add(Disposable.Create(() =>
@@ -134,6 +159,8 @@ namespace WolvenKit.Views.Dialogs.Windows
                 MeshFile3UseAppearancesCheckbox.SetCurrentValue(IsEnabledProperty, false);
                 MeshFile4UseAppearancesCheckbox.SetCurrentValue(IsEnabledProperty, false);
                 MoveMeshesToFolderCheckbox.SetCurrentValue(IsEnabledProperty, false);
+
+                LoadDefaultValues();
             });
         }
 
@@ -146,6 +173,11 @@ namespace WolvenKit.Views.Dialogs.Windows
             }
 
             ParentFolderBox.SetCurrentValue(TextBox.TextProperty, comboBox.Text);
+
+            if (string.IsNullOrEmpty(Mesh1TextBox.Text))
+            {
+                Mesh1DropdownMenu.SetCurrentValue(Editors.FilterableDropdownMenu.FilterTextProperty, comboBox.Text);
+            }
         }
 
         private void Mesh1SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -259,12 +291,11 @@ namespace WolvenKit.Views.Dialogs.Windows
             model.Appearances =
                 [.. textBox.Text.Split(",", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)];
 
-            if (model.Appearances.Count > 0 && !_hasMeshBeenTouched)
+            if (model.Appearances.Count > 0 && !model.HasMoveMeshBeenTouched)
             {
                 model.MeshFile1UseAppearances = true;
             }
         }
-
 
         private void OnHelpButtonClicked(object sender, RoutedEventArgs e)
         {
@@ -272,11 +303,133 @@ namespace WolvenKit.Views.Dialogs.Windows
             Process.Start(ps);
         }
 
-        private bool _hasMeshBeenTouched = false;
 
         private void OnMeshCheckboxChecked(object sender, RoutedEventArgs e)
         {
-            _hasMeshBeenTouched = true;
+            if (ViewModel is null)
+            {
+                return;
+            }
+
+            ViewModel.HasMoveMeshBeenTouched = true;
+        }
+
+        private void OnDialogueFinish(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel is null || !ViewModel.RememberSelection)
+            {
+                s_lastMeshFile1 = string.Empty;
+                s_lastMeshFile2 = string.Empty;
+                s_lastMeshFile3 = string.Empty;
+                s_lastMeshFile4 = string.Empty;
+                s_lastParentFolder = string.Empty;
+                s_lastMeshAppearances = string.Empty;
+                s_lastPropName = string.Empty;
+                s_lastMoveMeshFiles = false;
+                s_lastReadAppearancesFromMeshFile = false;
+                return;
+            }
+
+            if (ViewModel.MoveMeshesToFolder && !string.IsNullOrEmpty(ViewModel.MeshFile1) &&
+                Path.GetDirectoryName(ViewModel.MeshFile1) is string parentDir)
+            {
+                s_lastMeshFile1 = parentDir;
+            }
+            else
+            {
+                s_lastMeshFile1 = ViewModel.MeshFile1;
+            }
+
+            s_lastMeshFile2 = ViewModel.MeshFile2;
+            s_lastMeshFile3 = ViewModel.MeshFile3;
+            s_lastMeshFile4 = ViewModel.MeshFile4;
+            s_lastMoveMeshFiles = ViewModel.MoveMeshesToFolder;
+            s_lastReadAppearancesFromMeshFile = ViewModel.ReadAppearancesFromMesh;
+            s_lastPropName = ViewModel.PropName;
+
+            if (!ViewModel.ProjectFolders.ContainsKey(ViewModel.ParentFolder) &&
+                Path.GetDirectoryName(ViewModel.ParentFolder) is string s)
+            {
+                s_lastParentFolder = s;
+            }
+            else
+            {
+                s_lastParentFolder = ViewModel.ParentFolder;
+            }
+
+            s_lastMeshAppearances = string.Join(",", ViewModel.Appearances ?? []);
+        }
+
+        private void LoadDefaultValues()
+        {
+            if (ViewModel is null)
+            {
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(s_lastParentFolder))
+            {
+                ParentFolderDropdownMenu.SetCurrentValue(Editors.FilterableDropdownMenu.FilterTextProperty,
+                    s_lastParentFolder);
+            }
+
+            if (!string.IsNullOrEmpty(s_lastMeshFile1))
+            {
+                Mesh1DropdownMenu.SetCurrentValue(Editors.FilterableDropdownMenu.FilterTextProperty, s_lastMeshFile1);
+            }
+
+            if (!string.IsNullOrEmpty(s_lastMeshFile2))
+            {
+                Mesh2DropdownMenu.SetCurrentValue(Editors.FilterableDropdownMenu.FilterTextProperty, s_lastMeshFile2);
+            }
+
+            if (!string.IsNullOrEmpty(s_lastMeshFile3))
+            {
+                Mesh3DropdownMenu.SetCurrentValue(Editors.FilterableDropdownMenu.FilterTextProperty, s_lastMeshFile3);
+            }
+
+            if (!string.IsNullOrEmpty(s_lastMeshFile4))
+            {
+                Mesh4DropdownMenu.SetCurrentValue(Editors.FilterableDropdownMenu.FilterTextProperty, s_lastMeshFile4);
+            }
+
+            if (!string.IsNullOrEmpty(s_lastMeshAppearances))
+            {
+                AppearancesTextBox.SetCurrentValue(TextBox.TextProperty, s_lastMeshAppearances);
+
+                // due to textbox's binding to a list, this doesn't populate properly
+                ViewModel.Appearances ??= [];
+                ViewModel.Appearances.Clear();
+                ViewModel.Appearances.AddRange(s_lastMeshAppearances.Split(",",
+                    StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries));
+            }
+
+            if (!string.IsNullOrEmpty(s_lastPropName))
+            {
+                PropNameTextBox.SetCurrentValue(TextBox.TextProperty, s_lastPropName);
+            }
+
+            if (!string.IsNullOrEmpty(s_lastPropName))
+            {
+                PropNameTextBox.SetCurrentValue(TextBox.TextProperty, s_lastPropName);
+            }
+
+            MoveMeshesToFolderCheckbox.SetCurrentValue(ToggleButton.IsCheckedProperty, s_lastMoveMeshFiles);
+            ReadAppearancesFromMeshCheckbox.SetCurrentValue(ToggleButton.IsCheckedProperty,
+                s_lastReadAppearancesFromMeshFile);
+
+            RememberValuesCheckbox.SetCurrentValue(ToggleButton.IsCheckedProperty, true);
+        }
+
+        private void OnReadAppearancesCheckboxChecked(object sender, RoutedEventArgs e)
+        {
+            if (sender is not CheckBox box)
+            {
+                return;
+            }
+
+            // enable appearance textbox status based on checkbox
+            AppearancesTextBox.SetCurrentValue(IsEnabledProperty, box.IsChecked != true);
         }
     }
 }
