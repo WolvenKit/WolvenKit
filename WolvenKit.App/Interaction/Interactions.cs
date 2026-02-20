@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using WolvenKit.App.Factories;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Interaction.Options;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Scripting;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 
 namespace WolvenKit.App.Interaction;
+
 
 public static class Interactions
 {
@@ -202,8 +204,7 @@ public static class Interactions
     /// <summary>
     /// Display dictionary of {relativePath => brokenReferences[]} in a dialogue.
     /// </summary>
-    public static Func<(string title, string text, IDictionary<string, List<string>> list, bool isExperimental), bool>
-        ShowDictionaryAsCopyableList { get; set; } =
+    public static Func<ShowDictAsCopyableListDialogOptions, bool> ShowDictionaryAsCopyableList { get; set; } =
         _ => throw new NotImplementedException();
 
     /// <summary>
@@ -215,7 +216,13 @@ public static class Interactions
     /// <summary>
     /// Ask user for scene input (unified dialog for actors, props, dialogue, options)
     /// </summary>
-    public static Func<(string title, string primaryLabel, string primaryDefault, bool showSecondary, string secondaryLabel, string checkboxText, bool showDropdown, string dropdownLabel, IEnumerable<string>? dropdownOptions, string? defaultDropdownValue), (string? primaryInput, bool enableSecondary, string? secondaryInput, string? dropdownValue)> AskForSceneInput { get; set; } =
+    public static Func<SceneInputDialogOptions,
+            (string? primaryInput, bool enableSecondary, string? secondaryInput, string? dropdownValue)>
+        AskForSceneInput
+    {
+        get;
+        set;
+    } =
         _ => throw new NotImplementedException();
 
 
@@ -277,13 +284,9 @@ public static class Interactions
     /// <summary>
     /// Shows dialogue to pick from a list of options.
     /// </summary>
-    public static Func<(
-        Dictionary<string, bool> checklistOptions,
-        string title,
-        string text,
-        string inputFieldLabel,
-        string inputFieldDefaultValue
-        ), ShowChecklistDialogViewModel?> ShowChecklistDialogue { get; set; } = _ => throw new NotImplementedException();
+    public static Func<ChecklistDialogOptions, ShowChecklistDialogViewModel?> ShowChecklistDialogue { get; set; } =
+        _ => throw new NotImplementedException();
+
 
     /// <summary>
     /// Shows dialogue to generate default quest files. Complex logic inside dialogue model.

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using DynamicData;
+using WolvenKit.App.Interaction.Options;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.Interfaces.Extensions;
 
@@ -11,16 +12,16 @@ namespace WolvenKit.App.ViewModels.Dialogs;
 
 public partial class ShowChecklistDialogViewModel : ObservableObject
 {
-    public ShowChecklistDialogViewModel(Dictionary<string, bool> checklistOptions, string title,
-        string text, string inputFieldHeader, string inputFieldValue)
+    public ShowChecklistDialogViewModel(ChecklistDialogOptions options)
     {
-        Title = title;
-        InputFieldText = inputFieldValue;
-        InputFieldHeader = inputFieldHeader;
-        Text = text;
-        ChecklistOptions = checklistOptions;
-        SelectedOptions = checklistOptions.Where(x => x.Value).Select(x => x.Key).ToList();
-        ShowInputField = !string.IsNullOrEmpty(inputFieldHeader);
+        Title = options.Title;
+        InputFieldText = options.InputFieldDefaultValue;
+        InputFieldHeader = options.InputFieldLabel;
+        Text = options.Text;
+        ChecklistOptions = options.ChecklistOptions;
+        SelectedOptions = options.ChecklistOptions.Where(x => x.Value).Select(x => x.Key).ToList();
+        ShowInputField = options.ShowInputField;
+        FilterText = options.FilterDefaultValue;
     }
 
     [ObservableProperty] private Dictionary<string, bool> _checklistOptions = [];
@@ -33,8 +34,8 @@ public partial class ShowChecklistDialogViewModel : ObservableObject
     [ObservableProperty] private string _title = "";
 
     [ObservableProperty] private string _text = "";
+    [ObservableProperty] private string _filterText = "";
 
     [ObservableProperty] private bool _rememberValues = true;
-
     [ObservableProperty] private bool _showInputField = false;
 }

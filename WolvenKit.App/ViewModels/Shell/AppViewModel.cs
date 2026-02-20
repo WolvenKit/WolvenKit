@@ -25,6 +25,7 @@ using WolvenKit.App.Extensions;
 using WolvenKit.App.Factories;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.Interaction.Options;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.Docking;
 using WolvenKit.App.Models.ProjectManagement;
@@ -973,7 +974,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
 
         _loggerService.Info("Done scanning");
-        Interactions.ShowDictionaryAsCopyableList(("Broken references",
+        Interactions.ShowDictionaryAsCopyableList(new ShowDictAsCopyableListDialogOptions("Broken references",
             $"The following {brokenReferences.Count} files seem to hold broken references", brokenReferences, true));
     }
 
@@ -1008,7 +1009,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
         Dictionary<string, List<string>> files = [];
         files.Add(ActiveProject.ModName, brokenFiles);
-        Interactions.ShowDictionaryAsCopyableList(("Broken references",
+        Interactions.ShowDictionaryAsCopyableList(new ShowDictAsCopyableListDialogOptions("Broken references",
             $"The following {files.Count} files seem to hold broken references", files, true));
         _progressService.IsIndeterminate = false;
         return;
@@ -2502,7 +2503,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 OpenRedengineFile(absolutePath, ext);
                 break;
         }
-        
+
     }
 
     public void CloseFile(IDocumentViewModel documentViewModel) => DockedViews.Remove(documentViewModel);

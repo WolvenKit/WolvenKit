@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.Input;
 using Octokit;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.Interaction.Options;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Tools;
@@ -265,13 +266,14 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
         var dict = files.ToDictionary(f => f, f => f.Contains("prop") || f.Contains("amm"));
 
-        if (Interactions.ShowChecklistDialogue((
-                    dict,
-                    "Select files to include",
+        if (Interactions.ShowChecklistDialogue(
+                new ChecklistDialogOptions(dict,
+                    "Select chunk to include",
                     "Select the files you want to make available to World Builder.",
                     "WorldBuilder file name",
-                    activeProject.ModName)) is not
-                { } dialogModel || dialogModel.SelectedOptions.Count == 0)
+                    activeProject.ModName
+                )
+            ) is not { } dialogModel || dialogModel.SelectedOptions.Count == 0)
         {
             return;
         }
