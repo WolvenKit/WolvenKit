@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
+using WolvenKit.App.Interaction.Options;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 

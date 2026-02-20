@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using WolvenKit.App.Factories;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Interaction.Options;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Scripting;
 using WolvenKit.App.Services;

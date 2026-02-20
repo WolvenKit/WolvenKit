@@ -4,6 +4,7 @@ using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Input;
 using ReactiveUI;
+using WolvenKit.App.Interaction.Options;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Converters;

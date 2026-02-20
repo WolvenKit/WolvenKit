@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.Interaction.Options;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Interaction.Options;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 

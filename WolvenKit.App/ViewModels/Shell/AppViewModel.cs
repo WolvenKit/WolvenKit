@@ -25,6 +25,7 @@ using WolvenKit.App.Extensions;
 using WolvenKit.App.Factories;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.Interaction.Options;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.Docking;
 using WolvenKit.App.Models.ProjectManagement;

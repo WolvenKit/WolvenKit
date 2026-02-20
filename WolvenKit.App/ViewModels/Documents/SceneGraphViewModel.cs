@@ -16,6 +16,7 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.Generic;
 using WolvenKit.Core.Extensions;
 using System.IO;
+using WolvenKit.App.Interaction.Options;
 using WolvenKit.App.ViewModels.Dialogs;
 
 namespace WolvenKit.App.ViewModels.Documents

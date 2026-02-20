@@ -1,6 +1,7 @@
 #nullable enable
 using System.Collections.Generic;
 using System.Windows;
+using WolvenKit.App.Interaction.Options;
 using WolvenKit.App.ViewModels.Dialogs;
 
 namespace WolvenKit.Views.Dialogs;

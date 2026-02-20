@@ -3,6 +3,7 @@ using System.Windows;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.Interaction.Options;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
