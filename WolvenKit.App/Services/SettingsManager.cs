@@ -223,7 +223,9 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
     [ObservableProperty]
     private string? _materialRepositoryPath;
 
-    [Display(Name = "Analyze mods", Description = "Scan installed mods for file paths when opening mod browser", GroupName = "Cyberpunk")]
+    [Display(Name = "Analyze mods",
+        Description = "When opening mod browser, do a full scan of installed mods? (This impacts performance)",
+        GroupName = "Cyberpunk")]
     [ObservableProperty]
     private bool _analyzeModArchives;
 
