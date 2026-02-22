@@ -41,15 +41,19 @@ public partial class AddPropFileDialogViewModel : ObservableObject
 
     [ObservableProperty] private string _meshFile1 = "";
     [ObservableProperty] private bool _meshFile1UseAppearances = false;
+    [ObservableProperty] private bool _meshFile1ReadFromMesh = false;
 
     [ObservableProperty] private string _meshFile2 = "";
     [ObservableProperty] private bool _meshFile2UseAppearances = false;
+    [ObservableProperty] private bool _meshFile2ReadFromMesh = false;
 
     [ObservableProperty] private string _meshFile3 = "";
     [ObservableProperty] private bool _meshFile3UseAppearances = false;
+    [ObservableProperty] private bool _meshFile3ReadFromMesh = false;
 
     [ObservableProperty] private string _meshFile4 = "";
     [ObservableProperty] private bool _meshFile4UseAppearances = false;
+    [ObservableProperty] private bool _meshFile4ReadFromMesh = false;
 
 
     [ObservableProperty] private bool _rememberSelection = false;
@@ -72,6 +76,12 @@ public partial class AddPropFileDialogViewModel : ObservableObject
         }
 
         return !filePath.StartsWith(ParentFolder);
+    }
+
+    public bool HasMeshSelection()
+    {
+        return !string.IsNullOrEmpty(MeshFile1) || !string.IsNullOrEmpty(MeshFile2) ||
+               !string.IsNullOrEmpty(MeshFile3) || !string.IsNullOrEmpty(MeshFile4);
     }
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
@@ -113,6 +123,8 @@ public partial class AddPropFileDialogViewModel : ObservableObject
 
         base.OnPropertyChanged(e);
     }
+
+    /// <returns>For easier mapping in TemplateFileTools, return a dictionary of filePath to boolean</returns>
     public Dictionary<string, bool> GetMeshFileData()
     {
         Dictionary<string, bool> ret = [];

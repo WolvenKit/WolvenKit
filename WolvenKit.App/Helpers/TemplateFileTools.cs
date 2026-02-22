@@ -1143,14 +1143,7 @@ public partial class TemplateFileTools
         }
 
         prop.Appearances ??= [];
-        if (prop.ReadAppearancesFromMesh && !string.IsNullOrEmpty(prop.MeshFile1) &&
-            _cr2WTools.ReadCr2WNoException(Path.Join(project.ModDirectory, prop.MeshFile1)) is CR2WFile file &&
-            file.RootChunk is CMesh mesh)
-        {
-            prop.Appearances.Clear();
-            prop.Appearances.AddRange(mesh.Appearances.Select(handle => handle.Chunk?.Name.GetResolvedText() ?? "")
-                .Where(s => !string.IsNullOrEmpty(s)).ToList());
-        }
+        ReadMeshAppearances();
 
         if (prop.Appearances.Count == 0)
         {
@@ -1164,7 +1157,6 @@ public partial class TemplateFileTools
         var absoluteParentFolder = Path.Combine(project.ModDirectory, prop.ParentFolder).ToFilePath();
         Directory.CreateDirectory(absoluteParentFolder);
 
-
         var propFolderName = prop.PropName.ToFileName();
         if (!absoluteParentFolder.Contains(propFolderName) &&
             Directory.GetFileSystemEntries(absoluteParentFolder).Length > 0)
@@ -1174,23 +1166,78 @@ public partial class TemplateFileTools
             Directory.CreateDirectory(absoluteParentFolder);
         }
 
-
-        // generate .ent file
-        var entFilePath = Path.Combine(prop.ParentFolder, $"{propFolderName}.ent");
-        var appFilePath = Path.Combine(prop.ParentFolder, $"{propFolderName}.app");
-
+        // move meshes to parent folder if user checked the box
         MoveMeshes();
+
+        // get map of mesh path to boolean for easier mapping
         var meshFilesUseAppearances = prop.GetMeshFileData();
+
         PrepareMeshes();
 
+        // generate control files
+        var entFilePath = Path.Combine(prop.ParentFolder, $"{propFolderName}.ent");
+        var appFilePath = Path.Combine(prop.ParentFolder, $"{propFolderName}.app");
         GenerateEntFile();
         GenerateAppFile();
+
         WriteLuaFile();
         WriteWorldbuilderFile();
 
         DispatcherHelper.RunOnMainThread(() => project.DeleteEmptyFolders(_loggerService));
         return;
 
+        void ReadMeshAppearances()
+        {
+            // User does not want to read appearances from any of the files
+            if (!(prop.MeshFile1ReadFromMesh || prop.MeshFile2ReadFromMesh || prop.MeshFile3ReadFromMesh ||
+                  prop.MeshFile4ReadFromMesh))
+            {
+                return;
+            }
+
+            prop.Appearances.Clear();
+
+            if (prop.MeshFile1ReadFromMesh && !string.IsNullOrEmpty(prop.MeshFile1) &&
+                _cr2WTools.ReadCr2WNoException(Path.Join(project.ModDirectory, prop.MeshFile1)) is CR2WFile
+                {
+                    RootChunk: CMesh mesh
+                })
+            {
+                prop.Appearances.Clear();
+                prop.Appearances.AddRange(mesh.Appearances.Select(handle => handle.Chunk?.Name.GetResolvedText() ?? "")
+                    .Where(s => !string.IsNullOrEmpty(s)).ToList());
+            }
+
+            if (prop.MeshFile2ReadFromMesh && !string.IsNullOrEmpty(prop.MeshFile2) &&
+                _cr2WTools.ReadCr2WNoException(Path.Join(project.ModDirectory, prop.MeshFile2)) is CR2WFile
+                {
+                    RootChunk: CMesh mesh2
+                })
+            {
+                prop.Appearances.AddRange(mesh2.Appearances.Select(handle => handle.Chunk?.Name.GetResolvedText() ?? "")
+                    .Where(s => !string.IsNullOrEmpty(s)).ToList());
+            }
+
+            if (prop.MeshFile3ReadFromMesh && !string.IsNullOrEmpty(prop.MeshFile3) &&
+                _cr2WTools.ReadCr2WNoException(Path.Join(project.ModDirectory, prop.MeshFile3)) is CR2WFile
+                {
+                    RootChunk: CMesh mesh3
+                })
+            {
+                prop.Appearances.AddRange(mesh3.Appearances.Select(handle => handle.Chunk?.Name.GetResolvedText() ?? "")
+                    .Where(s => !string.IsNullOrEmpty(s)).ToList());
+            }
+
+            if (prop.MeshFile4ReadFromMesh && !string.IsNullOrEmpty(prop.MeshFile4) &&
+                _cr2WTools.ReadCr2WNoException(Path.Join(project.ModDirectory, prop.MeshFile4)) is CR2WFile
+                {
+                    RootChunk: CMesh mesh4
+                })
+            {
+                prop.Appearances.AddRange(mesh4.Appearances.Select(handle => handle.Chunk?.Name.GetResolvedText() ?? "")
+                    .Where(s => !string.IsNullOrEmpty(s)).ToList());
+            }
+        }
         void PrepareMeshes()
         {
             // if they aren't in the correct directory, move them and adjust list

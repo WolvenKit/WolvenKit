@@ -76,6 +76,15 @@
                     <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
                     <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginBottom}" />
                 </Style>
+                <Style
+                    x:Key="LabelHeaderStyle"
+                    TargetType="Label">
+                    <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitBorderBrush}" />
+                    <Setter Property="BorderThickness" Value="0,0,0,1" />
+
+                    <Setter Property="FontSize" Value="{DynamicResource WolvenKitFontMedium}" />
+                    <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginBottom}" />
+                </Style>
 
                 <Style TargetType="TextBlock">
                     <Setter Property="Background" Value="Transparent" />
@@ -91,6 +100,14 @@
                     <Setter Property="HorizontalContentAlignment" Value="Left" />
                     <Setter Property="Margin" Value="0" />
                     <Setter Property="Width" Value="{DynamicResource WolvenKitLabelWidth}" />
+                </Style>
+                <Style
+                    x:Key="InlineLabelStyle"
+                    BasedOn="{StaticResource LabelStyle}"
+                    TargetType="{x:Type Label}">
+                    <Setter Property="Margin" Value="0" />
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="Width" Value="10" />
                 </Style>
 
             </ResourceDictionary>
@@ -108,6 +125,7 @@
                 HelpVisibility="Visible"
                 NextVisibility="Collapsed"
                 PageType="Exterior">
+
                 <Grid
                     Height="Auto"
                     Visibility="{Binding CreateFactory,
@@ -123,21 +141,14 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="5" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="5" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="5" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
-                        <!-- 10 -->
                         <RowDefinition Height="5" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="10" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="5" />
-                        <RowDefinition Height="Auto" />
+
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="5" />
                         <RowDefinition Height="Auto" />
@@ -149,17 +160,49 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="5" />
+
+                        <RowDefinition Height="Auto" />
+
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="5" />
                     </Grid.RowDefinitions>
 
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        Margin="{DynamicResource WolvenKitMarginSmall}"
+                        FontSize="{DynamicResource WolvenKitFontMedium}"
+                        TextWrapping="Wrap"
+                        Text="You should have at least one .mesh file to register with AMM and WorldBuilder." />
+
                     <!-- Destination folder -->
                     <editors:FilterableDropdownMenu
                         x:Name="ParentFolderDropdownMenu"
-                        Grid.Row="0"
+                        Grid.Row="2"
                         Grid.Column="0"
                         Grid.ColumnSpan="3"
                         Label="Parent folder:"
@@ -170,7 +213,7 @@
                         IsInline="True" />
                     <TextBox
                         x:Name="ParentFolderBox"
-                        Grid.Row="2"
+                        Grid.Row="4"
                         Grid.Column="1"
                         Grid.ColumnSpan="2"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
@@ -180,7 +223,7 @@
                         KeyboardNavigation.TabIndex="-1" />
 
                     <TextBlock
-                        Grid.Row="3"
+                        Grid.Row="5"
                         Grid.Column="1"
                         Grid.ColumnSpan="2"
                         Style="{StaticResource ExplanationStyle}"
@@ -188,14 +231,14 @@
 
                     <!-- prop name -->
                     <Label
-                        Grid.Row="5"
+                        Grid.Row="7"
                         Grid.Column="0"
                         Style="{StaticResource LabelStyle}"
                         Content="Name:" />
 
                     <TextBox
                         x:Name="PropNameTextBox"
-                        Grid.Row="5"
+                        Grid.Row="7"
                         Grid.Column="1"
                         Grid.ColumnSpan="2"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
@@ -205,21 +248,98 @@
                     <!-- Appearances -->
 
                     <TextBlock
-                        Grid.Row="6"
+                        Grid.Row="8"
                         Grid.Column="1"
                         Grid.ColumnSpan="2"
                         Style="{StaticResource ExplanationStyle}"
                         Text="Human-readable name (for AMM registration)" />
 
                     <Label
-                        Grid.Row="8"
+                        Grid.Row="10"
                         Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        Style="{StaticResource LabelHeaderStyle}"
+                        Content="Appearances" />
+
+                    <Label
+                        Grid.Row="12"
+                        Grid.Column="0"
+                        Width="{DynamicResource WolvenKitLabelWidthLarge}"
+                        VerticalAlignment="Top"
                         Style="{StaticResource LabelStyle}"
-                        Content="Appearances:" />
+                        Content="Read from mes(es)" />
+
+
+                    <!-- Read from meshes - checkboxes 1-4 -->
+                    <StackPanel
+                        Grid.Row="12"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        Margin="0"
+                        Orientation="Horizontal">
+
+                        <Label
+                            Style="{StaticResource InlineLabelStyle}"
+                            Content="1" />
+                        <CheckBox
+                            x:Name="MeshFile1ReadAppearancesCheckbox"
+                            Margin="{DynamicResource WolvenKitMarginRight}"
+                            ToolTip="Read appearances from first mesh file (text box will be IGNORED)"
+                            KeyboardNavigation.TabIndex="-1"
+                            Click="OnReadAppearancesCheckboxChecked" />
+
+                        <Label
+                            Style="{StaticResource InlineLabelStyle}"
+                            Content="2" />
+                        <CheckBox
+                            x:Name="MeshFile2ReadAppearancesCheckbox"
+                            Margin="{DynamicResource WolvenKitMarginRight}"
+                            ToolTip="Read appearances from first mesh file (text box will be IGNORED)"
+                            KeyboardNavigation.TabIndex="-1"
+                            Click="OnReadAppearancesCheckboxChecked" />
+
+                        <Label
+                            Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                            Style="{StaticResource InlineLabelStyle}"
+                            Content="3" />
+                        <CheckBox
+                            x:Name="MeshFile3ReadAppearancesCheckbox"
+                            Margin="{DynamicResource WolvenKitMarginRight}"
+                            ToolTip="Read appearances from first mesh file (text box will be IGNORED)"
+                            KeyboardNavigation.TabIndex="-1"
+                            Click="OnReadAppearancesCheckboxChecked" />
+
+                        <Label
+                            Style="{StaticResource InlineLabelStyle}"
+                            Content="4" />
+                        <CheckBox
+                            x:Name="MeshFile4ReadAppearancesCheckbox"
+                            Margin="{DynamicResource WolvenKitMarginRight}"
+                            ToolTip="Read appearances from first mesh file (text box will be IGNORED)"
+                            KeyboardNavigation.TabIndex="-1"
+                            Click="OnReadAppearancesCheckboxChecked" />
+
+                    </StackPanel>
+
+                    <TextBlock
+                        Grid.Row="13"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        Style="{StaticResource ExplanationStyle}"
+                        Text="Check boxes to read appearances from mesh file(s) instead of entering them by hand" />
+
+
+                    <Label
+                        Grid.Row="15"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        Width="{DynamicResource WolvenKitLabelWidthLarge}"
+                        Style="{StaticResource LabelStyle}"
+                        Content="Define appearances" />
 
                     <controls:TextboxExtWithPasteHandler
                         x:Name="AppearancesTextBox"
-                        Grid.Row="8"
+                        Grid.Row="15"
                         Grid.Column="1"
                         Padding="{DynamicResource WolvenKitMarginTinyVertical}"
                         VerticalContentAlignment="Top"
@@ -235,92 +355,149 @@
                         WatermarkTemplate="{StaticResource PlaceholderTemplate}"
                         LostFocus="Appearances_FocusLost" />
 
-                    <CheckBox
-                        x:Name="ReadAppearancesFromMeshCheckbox"
-                        Grid.Row="8"
-                        Grid.Column="2"
-                        Margin="{DynamicResource WolvenKitMarginLeft}"
-                        ToolTip="Read appearances from first mesh file (text box will be IGNORED)"
-                        KeyboardNavigation.TabIndex="-1"
-                        Click="OnReadAppearancesCheckboxChecked" />
-
                     <TextBlock
-                        Grid.Row="9"
+                        Grid.Row="16"
                         Grid.Column="1"
                         Style="{StaticResource ExplanationStyle}"
-                        Text="Comma-separated list, or check the box to read appearances from first mesh" />
+                        Text="Comma-separated list (only available without reading from mesh files)" />
+
+
+                    <Label
+                        Grid.Row="18"
+                        Grid.Column="0"
+                        Width="{DynamicResource WolvenKitLabelWidthLarge}"
+                        VerticalAlignment="Top"
+                        Style="{StaticResource LabelStyle}"
+                        Content="Write to mes(es)" />
+
+                    <!-- Read from meshes - checkboxes 1-4 -->
+                    <StackPanel
+                        Grid.Row="18"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        Margin="0"
+                        Orientation="Horizontal">
+
+                        <Label
+                            Style="{StaticResource InlineLabelStyle}"
+                            Content="1" />
+                        <CheckBox
+                            x:Name="MeshFile1UseAppearancesCheckbox"
+                            Grid.Row="20"
+                            Grid.Column="2"
+                            Margin="{DynamicResource WolvenKitMarginRight}"
+                            KeyboardNavigation.TabIndex="-1"
+                            Click="OnMeshCheckboxChecked" />
+
+                        <Label
+                            Style="{StaticResource InlineLabelStyle}"
+                            Content="2" />
+                        <CheckBox
+                            x:Name="MeshFile2UseAppearancesCheckbox"
+                            Grid.Row="23"
+                            Grid.Column="2"
+                            Margin="{DynamicResource WolvenKitMarginRight}"
+                            KeyboardNavigation.TabIndex="-1" />
+
+                        <Label
+                            Style="{StaticResource InlineLabelStyle}"
+                            Content="3" />
+                        <CheckBox
+                            x:Name="MeshFile3UseAppearancesCheckbox"
+                            Grid.Row="26"
+                            Grid.Column="2"
+                            Margin="{DynamicResource WolvenKitMarginRight}"
+                            KeyboardNavigation.TabIndex="-1" />
+
+                        <Label
+                            Style="{StaticResource InlineLabelStyle}"
+                            Content="4" />
+                        <CheckBox
+                            x:Name="MeshFile4UseAppearancesCheckbox"
+                            Grid.Row="29"
+                            Grid.Column="2"
+                            Margin="{DynamicResource WolvenKitMarginRight}"
+                            KeyboardNavigation.TabIndex="-1" />
+
+                    </StackPanel>
+
+                    <TextBlock
+                        Grid.Row="19"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        Style="{StaticResource ExplanationStyle}"
+                        Text="Check box(es) to generate appearance names in mesh file(s)" />
 
                     <!-- Meshes for components -->
                     <Label
-                        Grid.Row="11"
+                        Grid.Row="21"
                         Grid.Column="0"
-                        Style="{StaticResource LabelStyle}"
+                        Grid.ColumnSpan="3"
+                        Style="{StaticResource LabelHeaderStyle}"
                         Content="Mesh files" />
 
-                    <!-- Meshes for components -->
-                    <TextBlock
-                        Grid.Row="11"
-                        Grid.Column="1"
-                        Grid.ColumnSpan="2"
-                        Margin="{DynamicResource WolvenKitMarginSmallTop}"
-                        Text="Check the box on the right to connect the appearance(s) defined above."
-                        TextWrapping="Wrap" />
-
                     <!-- Mesh file 1 -->
+                    <Label
+                        Grid.Row="22"
+                        Grid.Column="0"
+                        VerticalAlignment="Top"
+                        Style="{StaticResource LabelStyle}"
+                        Content="Mesh 1" />
+
                     <editors:FilterableDropdownMenu
                         x:Name="Mesh1DropdownMenu"
-                        Grid.Row="13"
+                        Grid.Row="22"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
                         Options="{Binding ProjectMeshes}"
                         SelectedOption="{Binding MeshFile1,
                                                  Mode=TwoWay}"
                         IsInline="True" />
-                    <CheckBox
-                        x:Name="MeshFile1UseAppearancesCheckbox"
-                        Grid.Row="13"
-                        Grid.Column="2"
-                        Margin="{DynamicResource WolvenKitMarginLeft}"
-                        KeyboardNavigation.TabIndex="-1"
-                        Click="OnMeshCheckboxChecked" />
 
                     <TextBox
                         x:Name="Mesh1TextBox"
-                        Grid.Row="14"
+                        Grid.Row="23"
                         Grid.Column="1"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         KeyboardNavigation.TabIndex="-1" />
 
                     <!-- Mesh file 2 -->
+                    <Label
+                        Grid.Row="25"
+                        Grid.Column="0"
+                        VerticalAlignment="Top"
+                        Style="{StaticResource LabelStyle}"
+                        Content="Mesh 2" />
+
                     <editors:FilterableDropdownMenu
                         x:Name="Mesh2DropdownMenu"
-                        Grid.Row="16"
+                        Grid.Row="25"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
                         Options="{Binding ProjectMeshes}"
                         SelectedOption="{Binding MeshFile2,
                                                  Mode=TwoWay}"
                         IsInline="True" />
-                    <CheckBox
-                        x:Name="MeshFile2UseAppearancesCheckbox"
-                        Grid.Row="16"
-                        Grid.Column="2"
-                        Margin="{DynamicResource WolvenKitMarginLeft}"
-                        KeyboardNavigation.TabIndex="-1" />
 
                     <TextBox
                         x:Name="Mesh2TextBox"
-                        Grid.Row="17"
+                        Grid.Row="26"
                         Grid.Column="1"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         KeyboardNavigation.TabIndex="-1" />
 
                     <!-- Mesh file 3 -->
+                    <Label
+                        Grid.Row="28"
+                        Grid.Column="0"
+                        VerticalAlignment="Top"
+                        Style="{StaticResource LabelStyle}"
+                        Content="Mesh 3" />
                     <editors:FilterableDropdownMenu
                         x:Name="Mesh3DropdownMenu"
-                        Grid.Row="19"
+                        Grid.Row="28"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
                         Options="{Binding ProjectMeshes}"
@@ -328,25 +505,27 @@
                                                  Mode=TwoWay}"
                         IsInline="True" />
 
-                    <CheckBox
-                        x:Name="MeshFile3UseAppearancesCheckbox"
-                        Grid.Row="19"
-                        Grid.Column="2"
-                        Margin="{DynamicResource WolvenKitMarginLeft}"
-                        KeyboardNavigation.TabIndex="-1" />
 
                     <TextBox
                         x:Name="Mesh3TextBox"
-                        Grid.Row="20"
+                        Grid.Row="29"
                         Grid.Column="1"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         KeyboardNavigation.TabIndex="-1" />
 
                     <!-- Mesh file 4 -->
+
+                    <Label
+                        Grid.Row="31"
+                        Grid.Column="0"
+                        VerticalAlignment="Top"
+                        Style="{StaticResource LabelStyle}"
+                        Content="Mesh 4" />
+
                     <editors:FilterableDropdownMenu
                         x:Name="Mesh4DropdownMenu"
-                        Grid.Row="22"
+                        Grid.Row="31"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
                         Options="{Binding ProjectMeshes}"
@@ -354,65 +533,58 @@
                                                  Mode=TwoWay}"
                         IsInline="True" />
 
-                    <CheckBox
-                        x:Name="MeshFile4UseAppearancesCheckbox"
-                        Grid.Row="22"
-                        Grid.Column="2"
-                        Margin="{DynamicResource WolvenKitMarginLeft}"
-                        KeyboardNavigation.TabIndex="-1" />
-
                     <TextBox
                         x:Name="Mesh4TextBox"
-                        Grid.Row="23"
+                        Grid.Row="32"
                         Grid.Column="1"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         KeyboardNavigation.TabIndex="-1" />
 
                     <Label
-                        Grid.Row="25"
+                        Grid.Row="35"
                         Grid.Column="0"
                         Style="{StaticResource LabelStyle}"
                         Content="Move mesh files" />
 
                     <CheckBox
                         x:Name="MoveMeshesToFolderCheckbox"
-                        Grid.Row="25"
+                        Grid.Row="35"
                         Grid.Column="1"
                         KeyboardNavigation.TabIndex="-1" />
 
                     <TextBlock
-                        Grid.Row="26"
+                        Grid.Row="36"
                         Grid.Column="1"
                         Style="{StaticResource ExplanationStyle}"
                         Text="Move .mesh files to folder" />
 
                     <Label
-                        Grid.Row="28"
+                        Grid.Row="38"
                         Grid.Column="0"
                         Style="{StaticResource LabelStyle}"
                         Content="Clean up WB files" />
 
                     <CheckBox
                         x:Name="CleanupInvalidEntriesCheckbox"
-                        Grid.Row="28"
+                        Grid.Row="38"
                         Grid.Column="1"
                         KeyboardNavigation.TabIndex="-1" />
 
                     <TextBlock
-                        Grid.Row="29"
+                        Grid.Row="39"
                         Grid.Column="1"
                         Style="{StaticResource ExplanationStyle}"
                         Text="Clean up non-existing entries from worldbuilder .txt files" />
 
                     <TextBlock
-                        Grid.Row="31"
+                        Grid.Row="40"
                         Grid.Column="0"
                         Text="Remember selection" />
 
                     <CheckBox
                         x:Name="RememberValuesCheckbox"
-                        Grid.Row="31"
+                        Grid.Row="40"
                         Grid.Column="1"
                         KeyboardNavigation.TabIndex="-1" />
 
