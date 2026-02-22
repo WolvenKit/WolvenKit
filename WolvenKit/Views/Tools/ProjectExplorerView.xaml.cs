@@ -123,8 +123,7 @@ namespace WolvenKit.Views.Tools
                 Interactions.ShowDictionaryAsCopyableList = (args) =>
                 {
                     var comparer = new FilePathComparer();
-                    var dialog =
-                        new ShowDictionaryForCopyDialogView(args.title, args.text, args.list, args.isExperimental);
+                    var dialog = new ShowDictionaryForCopyDialogView(args);
                     return dialog.ShowDialog(Application.Current.MainWindow) == true;
                 };
 
@@ -151,10 +150,7 @@ namespace WolvenKit.Views.Tools
 
                 Interactions.AskForSceneInput = (parameters) =>
                 {
-                    var (title, primaryLabel, primaryDefault, showSecondary, secondaryLabel, checkboxText, 
-                         showDropdown, dropdownLabel, dropdownOptions, defaultDropdownValue) = parameters;
-                    var dialog = new SceneInputDialogView(title, primaryLabel, primaryDefault, showSecondary, 
-                        secondaryLabel, checkboxText, showDropdown, dropdownLabel, dropdownOptions, defaultDropdownValue);
+                    var dialog = new SceneInputDialogView(parameters);
                     var result = dialog.ShowDialog();
                     return result == true ? (dialog.PrimaryInput, dialog.EnableSecondaryInput, dialog.SecondaryInput, dialog.DropdownValue) : (null, false, null, null);
                 };
