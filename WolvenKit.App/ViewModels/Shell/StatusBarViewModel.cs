@@ -51,7 +51,9 @@ public partial class StatusBarViewModel : ObservableObject
     {
         if (e.PropertyName == nameof(ProjectManager.ActiveProject))
         {
-            CurrentProject = _projectManager.ActiveProject != null ? _projectManager.ActiveProject.ModName : s_noProjectLoaded;
+            CurrentProject = _projectManager.ActiveProject != null
+                ? _projectManager.ActiveProject.Name
+                : s_noProjectLoaded;
         }
     }
 
