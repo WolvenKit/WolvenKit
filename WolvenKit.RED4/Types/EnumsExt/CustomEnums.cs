@@ -181,4 +181,22 @@ public static partial class Enums
         Extended         = 8,
         Custom0          = 16
     }
+
+    // Cleaned up version of EMeshChunkRenderMask
+    [Flags]
+    public enum EMeshChunkRenderMaskFlags : UInt16
+    {
+        None                = 0,
+        Scene               = 1 << 0,
+        Cascade1            = 1 << 1,
+        Cascade2            = 1 << 2,
+        Cascade3            = 1 << 3,
+        Cascade4            = 1 << 4,
+        LocalShadows        = 1 << 5,
+        IsTwoSided          = 1 << 6,
+        DistantShadows      = 1 << 7,
+        IsRayTracedEmissive = 1 << 8,
+        PrefabProxy         = 1 << 11,
+        Cascades            = 1 << 12
+    }
 }

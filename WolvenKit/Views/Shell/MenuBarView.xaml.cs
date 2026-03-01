@@ -3,7 +3,9 @@ using System.Windows;
 using ReactiveUI;
 using Splat;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.Interaction.Options;
 using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
 
 namespace WolvenKit.Views.Shell;
@@ -51,6 +53,10 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.GenerateMinimalQuestFilesCommand,
                     view => view.MenuItemGenerateMinimalQuest)
+                .DisposeWith(disposables);
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.AddOrEditRadioCommand,
+                    view => view.MenuItemAddOrEditRadio)
                 .DisposeWith(disposables);
             this.BindCommand(ViewModel,
                     viewModel => viewModel.MainViewModel.RegisterWorldbuilderFilesCommand,
@@ -289,7 +295,8 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
             return;
         }
 
-        Interactions.ShowDictionaryAsCopyableList(("Item codes:", "These are your item codes", itemCodes, false));
+        Interactions.ShowDictionaryAsCopyableList(
+            new ShowDictAsCopyableListDialogOptions("Item codes:", "These are your item codes", itemCodes));
     }
 
 

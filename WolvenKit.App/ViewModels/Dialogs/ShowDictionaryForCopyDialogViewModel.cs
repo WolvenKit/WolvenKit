@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Interaction.Options;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 
@@ -16,12 +17,11 @@ public partial class ShowDictionaryForCopyDialogViewModel : DialogViewModel
     public int ReferencesCount => References.Count;
 
 
-    public ShowDictionaryForCopyDialogViewModel(string title, string text, IDictionary<string, List<string>> references,
-        bool isExperimental)
+    public ShowDictionaryForCopyDialogViewModel(ShowDictAsCopyableListDialogOptions options)
     {
-        References = references;
-        Title = title;
-        Text = text;
-        IsExperimental = isExperimental;
+        References = options.ValueDictionary;
+        Title = options.Title;
+        Text = options.Text;
+        IsExperimental = options.IsExperimental;
     }
 }

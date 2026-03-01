@@ -9,7 +9,7 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
     public class RawArmature
     {
         public string[]? Names;
-
+        public string[]? TrackNames;
         public short[]? Parent;
         public int BoneCount;
         public Vector3[]? LocalPosn;

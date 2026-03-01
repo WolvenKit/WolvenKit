@@ -70,6 +70,7 @@ namespace WolvenKit
                     services.AddSingleton<IUpdateService, UpdateService>();
 
                     services.AddSingleton<ArchiveXlItemService>();
+                    services.AddSingleton<CvmMaterialTools>();
 
                     // scripting
                     services.AddSingleton<IHookService, AppHookService>();

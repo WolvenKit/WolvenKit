@@ -149,6 +149,18 @@ namespace WolvenKit.Views.Shell
                     return true;
                 };
 
+                Interactions.CreateOrEditRadioDialog = project =>
+                {
+                    AddRadioExtFilesDialog dialog = new(project, ViewModel.TemplateFileTools);
+
+                    if (dialog.ShowDialog(this) != true)
+                    {
+                        return null;
+                    }
+
+                    return dialog.ViewModel;
+                };
+
                 Interactions.ShowCollectionView = input =>
                 {
                     ChooseCollectionView dialog = new();
@@ -217,12 +229,7 @@ namespace WolvenKit.Views.Shell
 
                 Interactions.ShowChecklistDialogue = (args) =>
                 {
-                    var dialog = new ShowChecklistDialog(
-                        args.checklistOptions,
-                        args.title,
-                        args.text,
-                        args.inputFieldLabel,
-                        args.inputFieldDefaultValue);
+                    var dialog = new ShowChecklistDialog(args);
                     if (dialog.ShowDialog() != true)
                     {
                         return null;

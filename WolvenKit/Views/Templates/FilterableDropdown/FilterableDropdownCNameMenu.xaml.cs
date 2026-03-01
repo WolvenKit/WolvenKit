@@ -54,16 +54,14 @@ namespace WolvenKit.Views.Editors
 
         protected override void SetChunkViewModelValueFromDropdown()
         {
-            if (string.IsNullOrWhiteSpace(SelectedOption))
+            if (string.IsNullOrWhiteSpace(SelectedOption)
+                || DataContext is not ChunkViewModel { Data: CName } cvm)
             {
                 return;
             }
 
-            if (DataContext is ChunkViewModel { Data: CName var } cvm &&
-                ((var.GetResolvedText() ?? "") != SelectedOption))
-            {
-                cvm.Data = (CName)SelectedOption;
-            }
+            cvm.Data = (CName)SelectedOption;
+
         }
 
         private void RedCNameEditor_ValueChanged(object sender, RoutedEventArgs e)

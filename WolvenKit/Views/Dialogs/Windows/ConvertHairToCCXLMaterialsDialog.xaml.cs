@@ -10,28 +10,16 @@ namespace WolvenKit.Views.Dialogs.Windows;
 /// </summary>
 public partial class ConvertHairToCCXLMaterialsDialog : IViewFor<ConvertHairToCCXLMaterialsDialogViewModel>
 {
-    private static bool s_IsCap = false;
-
     public ConvertHairToCCXLMaterialsDialog(Cp77Project activeProject)
     {
         InitializeComponent();
-        ViewModel = new ConvertHairToCCXLMaterialsDialogViewModel(activeProject)
-        {
-            IsCap = s_IsCap
-
-        };
+        ViewModel = new ConvertHairToCCXLMaterialsDialogViewModel(activeProject);
         DataContext = ViewModel;
-
-        
     }
 
     public ConvertHairToCCXLMaterialsDialogViewModel ViewModel { get; set; }
     object IViewFor.ViewModel { get => ViewModel; set => ViewModel = (ConvertHairToCCXLMaterialsDialogViewModel)value; }
-    public bool? ShowDialog(Window owner)
-    {
-        Owner = owner;
-        return ShowDialog();
-    }
+
     private void WizardPage_PreviewKeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key != Key.Enter)
@@ -44,7 +32,5 @@ public partial class ConvertHairToCCXLMaterialsDialog : IViewFor<ConvertHairToCC
         Close();
     }
 
-    private void WizardControl_OnFinish(object sender, RoutedEventArgs e) 
-    { 
-    }
+    private void WizardControl_OnFinish(object sender, RoutedEventArgs e) { }
 }

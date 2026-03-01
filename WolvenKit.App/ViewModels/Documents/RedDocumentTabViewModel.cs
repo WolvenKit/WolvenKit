@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Win32;
+using Splat;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Common.Services;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
@@ -227,7 +230,7 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
 
     private bool CanExtractEmbeddedFile() => this is RDTDataViewModel data && data.IsEmbeddedFile;
     [RelayCommand(CanExecute = nameof(CanRenameEmbeddedFile))]
-    private void ExtractEmbeddedFile()
+    private async Task ExtractEmbeddedFile()
     {
         if (this is not RDTDataViewModel datavm)
         {
@@ -237,30 +240,42 @@ public abstract partial class RedDocumentTabViewModel : ObservableObject
         var embeddedFile = Parent.Cr2wFile.EmbeddedFiles
             .Where(file => ReferenceEquals(file.Content, datavm.GetData())).Cast<CR2WEmbedded>().FirstOrDefault();
 
-        if (embeddedFile == null)
+        if (embeddedFile == null || (string?)embeddedFile.FileName is not { } embeddedFileName)
         {
             return;
         }
 
-        var fileName = Path.GetFileName(embeddedFile.FileName.GetResolvedText()!);
-
-        var dlg = new SaveFileDialog { FileName = fileName, Filter = "All files (*.*)|*.*" };
-
-        if (Path.GetDirectoryName(Parent.FilePath) is { } parentPath && Directory.Exists(parentPath))
-        {
-            dlg.InitialDirectory = parentPath;
-        }
-        else if (Parent.GetActiveProject() is { } project)
-        {
-            dlg.InitialDirectory = project.ModDirectory;
-        }
-
-        if (!dlg.ShowDialog().GetValueOrDefault())
+        if (Parent.GetActiveProject() is not { } project)
         {
             return;
         }
 
-        using var fs = File.Open(dlg.FileName, FileMode.OpenOrCreate);
+        var appVM = Locator.Current.GetService<AppViewModel>();
+        if (appVM == null)
+        {
+            return;
+        }
+
+        var notificationService = Locator.Current.GetService<INotificationService>();
+
+        var dialog = new ExtractEmbeddedFileDialogViewModel(appVM, notificationService, embeddedFileName, project.ModDirectory);
+        await appVM.SetActiveDialog(dialog);
+        await dialog.WaitAsync();
+
+        if (dialog.UserCanceled)
+        {
+            return;
+        }
+
+        var saveFilePath = Path.Join(project.ModDirectory, dialog.NewFilePath);
+
+        var parentDir = Directory.GetParent(saveFilePath)?.FullName;
+        if (!string.IsNullOrWhiteSpace(parentDir))
+        {
+            Directory.CreateDirectory(parentDir);
+        }
+
+        using var fs = File.Open(saveFilePath, FileMode.OpenOrCreate);
         using var cw = new CR2WWriter(fs);
 
         cw.WriteFile(new CR2WFile { RootChunk = embeddedFile.Content });

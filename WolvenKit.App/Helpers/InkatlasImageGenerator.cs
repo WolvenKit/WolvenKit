@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
@@ -148,13 +149,13 @@ public static class InkatlasImageGenerator
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error loading image {file}: {ex.Message}");
+                throw new WolvenKitException(0, $"Error loading image {file}: {ex.Message}");
             }
         }
 
         if (images.Count == 0)
         {
-            throw new InvalidOperationException("No valid PNG files could be loaded.");
+            throw new WolvenKitException(0, $"Failed to load PNG data from a file in {pngFolder}");
         }
 
         // Calculate atlas dimensions

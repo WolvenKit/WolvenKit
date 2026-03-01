@@ -533,6 +533,21 @@
                                                 Size="{DynamicResource WolvenKitIconMilli}" />
                                         </MenuItem.Icon>
                                     </MenuItem>
+                                    <MenuItem
+                                        x:Name="RightContextMenuCopyFileNameNoExtensionMenuItem"
+                                        Visibility="{Binding Path=IsEnabled,
+                                                             RelativeSource={RelativeSource Self},
+                                                             Mode=OneWay,
+                                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        Header="Copy File Name (no extension)">
+                                        <MenuItem.Icon>
+                                            <templates:IconBox
+                                                IconPack="Vaadin"
+                                                Kind="CopyOutline"
+                                                Margin="{DynamicResource WolvenKitMarginTiny}"
+                                                Size="{DynamicResource WolvenKitIconMilli}" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
                                 </ContextMenu>
                             </syncfusion:SfDataGrid.RecordContextMenu>
 

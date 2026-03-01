@@ -19,6 +19,7 @@ using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.Types;
@@ -38,6 +39,7 @@ namespace WolvenKit.Views.Tools
         private readonly AppViewModel _appViewModel;
         private readonly ProjectResourceTools _projectResourceTools;
         private readonly ISettingsManager _settingsManager;
+        private readonly CvmMaterialTools _cvmMaterialTools;
 
 
         public RedTreeView()
@@ -48,6 +50,7 @@ namespace WolvenKit.Views.Tools
             _appViewModel = Locator.Current.GetService<AppViewModel>();
             _projectResourceTools = Locator.Current.GetService<ProjectResourceTools>();
             _settingsManager = Locator.Current.GetService<ISettingsManager>();
+            _cvmMaterialTools = Locator.Current.GetService<CvmMaterialTools>();
 
             InitializeComponent();
 
@@ -1337,7 +1340,7 @@ namespace WolvenKit.Views.Tools
             var isLocal = dialog.ViewModel?.IsLocalMaterial ?? true;
             var resolveSubstitutions = dialog.ViewModel?.ResolveSubstitutions ?? false;
 
-            cvm.GenerateMissingMaterials(baseMaterial, isLocal, resolveSubstitutions);
+            _cvmMaterialTools.GenerateMissingMaterials(cvm, baseMaterial, isLocal, resolveSubstitutions);
 
             cvm.Tab?.Parent.SetIsDirty(true);
         }

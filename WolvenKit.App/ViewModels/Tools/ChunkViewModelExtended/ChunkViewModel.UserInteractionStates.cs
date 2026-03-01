@@ -30,7 +30,7 @@ public partial class ChunkViewModel
     /// </summary>
     [ObservableProperty] private bool _isHiddenBySearch;
 
-    private void CalculateUserInteractionStates()
+    public void CalculateEditorDifficultyVisibility()
     {
         // Either a root field, or a field that isn't initialized yet
         if (ResolvedData is RedDummy || Parent?.ResolvedData.GetType() is not Type type)

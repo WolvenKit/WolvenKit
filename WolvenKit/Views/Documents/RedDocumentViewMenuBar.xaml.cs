@@ -15,6 +15,7 @@ using Splat;
 using WolvenKit.App;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.Interaction.Options;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
@@ -51,6 +52,7 @@ namespace WolvenKit.Views.Documents
         private readonly IProgressService<double> _progressService;
         private readonly ProjectResourceTools _projectResourceTools;
         private readonly DocumentTools _documentTools;
+        private readonly CvmMaterialTools _cvmMaterialTools;
         private readonly Cr2WTools _cr2WTools;
 
 
@@ -67,6 +69,7 @@ namespace WolvenKit.Views.Documents
             _projectExplorer = Locator.Current.GetService<ProjectExplorerViewModel>()!;
             _projectResourceTools = Locator.Current.GetService<ProjectResourceTools>()!;
             _cr2WTools = Locator.Current.GetService<Cr2WTools>()!;
+            _cvmMaterialTools = Locator.Current.GetService<CvmMaterialTools>()!;
 
             _appViewModel = Locator.Current.GetService<AppViewModel>()!;
 
@@ -84,6 +87,7 @@ namespace WolvenKit.Views.Documents
                 _projectManager,
                 _documentTools,
                 Locator.Current.GetService<CRUIDService>()!,
+                _cvmMaterialTools,
                 _loggerService,
                 Locator.Current.GetService<INotificationService>()!,
                 Locator.Current.GetService<StreamingSectorTools>()!,
@@ -218,7 +222,7 @@ namespace WolvenKit.Views.Documents
                 }
 
                 _loggerService.Info("Done!");
-                Interactions.ShowDictionaryAsCopyableList(("Broken references",
+                Interactions.ShowDictionaryAsCopyableList(new ShowDictAsCopyableListDialogOptions("Broken references",
                     $"The following {brokenReferences.Count} files seem to hold broken references", brokenReferences,
                     true));
             }
@@ -275,7 +279,7 @@ namespace WolvenKit.Views.Documents
             var isLocal = dialog.ViewModel?.IsLocalMaterial ?? true;
             var resolveSubstitutions = dialog.ViewModel?.ResolveSubstitutions ?? false;
 
-            cvm.GenerateMissingMaterials(baseMaterial, isLocal, resolveSubstitutions);
+            _cvmMaterialTools.GenerateMissingMaterials(cvm, baseMaterial, isLocal, resolveSubstitutions);
 
             cvm.Tab?.Parent.SetIsDirty(true);
         }
@@ -346,8 +350,18 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            var selected = Interactions.ShowChecklistDialogue((otherMeshFiles, "Select target .mesh files",
-                "Copy materials to the following mesh files", string.Empty, string.Empty))?.SelectedOptions;
+            var filterDefaultValue = string.Empty;
+            if (Path.GetDirectoryName(project.GetRelativePath(currentPath)) is string parentFolder &&
+                otherMeshFiles.Select(kvp => kvp.Key).Any(f => f.Contains(parentFolder)))
+            {
+                filterDefaultValue = parentFolder;
+            }
+
+            var selected = Interactions.ShowChecklistDialogue(new ChecklistDialogOptions(
+                otherMeshFiles,
+                "Select target .mesh files",
+                "Copy materials to to the following mesh files"
+            ) { FilterDefaultValue = filterDefaultValue })?.SelectedOptions;
 
             if (selected is null || selected.Count == 0)
             {
@@ -368,109 +382,8 @@ namespace WolvenKit.Views.Documents
 
         private void UnDynamifyMaterials(ChunkViewModel? cvm)
         {
-            if (cvm?.ResolvedData is not CMesh mesh ||
-                cvm.GetPropertyChild("appearances") is not ChunkViewModel appearances)
-            {
-                return;
-            }
-
-            cvm.ConvertPreloadMaterialsCommand.Execute(null);
-
-            appearances.CalculatePropertiesRecursive();
-
-            var templatesAndValues = ArchiveXlHelper.GetMaterialSubstitutionMap(mesh.Appearances);
-
-            // nothing to do here
-            if (templatesAndValues.Count == 0)
-            {
-                return;
-            }
-
-            var expandedData = ArchiveXlHelper.ExpandAppearanceTemplate(mesh.Appearances);
-            appearances.Data = ArchiveXlHelper.UnDynamifyChunkNames(expandedData);
-
-            appearances.RecalculateProperties();
-
-            cvm.GetPropertyChild("materials")?.CalculateProperties();
-            cvm.GetPropertyChild("localMaterialBuffer", "materials")?.CalculateProperties();
-
-            // iterate over dictionary and create new materials
-            foreach (var (matName, resolvedMatNames) in templatesAndValues)
-            {
-                var material = mesh.MaterialEntries.FirstOrDefault(m => m.Name == $"@{matName}");
-                if (material is null || mesh.LocalMaterialBuffer.Materials.Count < material.Index)
-                {
-                    _loggerService.Warning($"Can't un-dynamify material: Failed to resolve {matName}");
-                    continue;
-                }
-
-                var matInstance = (CMaterialInstance)mesh.LocalMaterialBuffer.Materials[material.Index];
-                var baseMaterialPath = matInstance.BaseMaterial.DepotPath.GetResolvedText() ?? "";
-
-                var maxIndex = mesh.MaterialEntries.Where(m => m.IsLocalInstance.Equals(material.IsLocalInstance))
-                    .Select(m => m.Index).Max();
-
-                foreach (var newMatName in resolvedMatNames.Distinct())
-                {
-                    maxIndex += 1;
-                    mesh.MaterialEntries.Add(new CMeshMaterialEntry()
-                    {
-                        Name = $"{matName}_{newMatName}", Index = maxIndex, IsLocalInstance = material.IsLocalInstance
-                    });
-
-                    var newMaterialInstance = new CMaterialInstance()
-                    {
-                        BaseMaterial = new CResourceReference<IMaterial>(
-                            baseMaterialPath.Replace("{material}", newMatName).Replace("*", ""),
-                            InternalEnums.EImportFlags.Default),
-                    };
-
-                    foreach (var cvp in matInstance.Values)
-                    {
-                        var value = cvp.Value switch
-                        {
-                            CResourceReference<Multilayer_Setup> mlsetup => new CResourceReference<Multilayer_Setup>(
-                                ReplaceMaterialPath(mlsetup.DepotPath, newMatName), InternalEnums.EImportFlags.Default),
-                            CResourceReference<Multilayer_Mask> mlmask => new CResourceReference<Multilayer_Mask>(
-                                ReplaceMaterialPath(mlmask.DepotPath, newMatName), InternalEnums.EImportFlags.Default),
-                            CResourceReference<ITexture> tex => new CResourceReference<ITexture>(
-                                ReplaceMaterialPath(tex.DepotPath, newMatName), InternalEnums.EImportFlags.Default),
-                            CResourceAsyncReference<Multilayer_Setup> mlsetup => new
-                                CResourceAsyncReference<Multilayer_Setup>(
-                                    ReplaceMaterialPath(mlsetup.DepotPath, newMatName),
-                                    InternalEnums.EImportFlags.Default),
-                            CResourceAsyncReference<Multilayer_Mask> mlmask => new
-                                CResourceAsyncReference<Multilayer_Mask>(
-                                    ReplaceMaterialPath(mlmask.DepotPath, newMatName),
-                                    InternalEnums.EImportFlags.Default),
-                            CResourceAsyncReference<ITexture> tex => new CResourceAsyncReference<ITexture>(
-                                ReplaceMaterialPath(tex.DepotPath, newMatName), InternalEnums.EImportFlags.Default),
-                            IRedResourceReference val => new CResourceReference<CResource>(
-                                ReplaceMaterialPath(val.DepotPath, newMatName), InternalEnums.EImportFlags.Default),
-                            IRedResourceAsyncReference asyncVal => new CResourceAsyncReference<CResource>(
-                                ReplaceMaterialPath(asyncVal.DepotPath, newMatName),
-                                InternalEnums.EImportFlags.Default),
-                            _ => cvp.Value
-                        };
-
-                        newMaterialInstance.Values.Add(new CKeyValuePair(cvp.Key, value));
-                    }
-
-                    mesh.LocalMaterialBuffer.Materials.Add(newMaterialInstance);
-                }
-            }
-
-            cvm.GetPropertyChild("materialEntries")?.RecalculateProperties();
-            cvm.GetPropertyChild("localMaterialBuffer", "materials")?.RecalculateProperties();
-
-            cvm.DeleteUnusedMaterialsCommand.Execute(true);
-            cvm.Tab?.Parent.SetIsDirty(true);
-
+            _cvmMaterialTools.UnDynamifyMaterials(cvm);
             ViewModel?.DeleteUnusedMaterialsCommand?.NotifyCanExecuteChanged();
-            return;
-
-            static string ReplaceMaterialPath(ResourcePath? depotPath, string newMatName) =>
-                (depotPath?.GetResolvedText() ?? "").Replace("{material}", newMatName).Replace("*", "");
         }
 
         private void OnUnDynamifyMaterialsClick(object _, RoutedEventArgs e) => UnDynamifyMaterials(RootChunk);
@@ -653,12 +566,13 @@ namespace WolvenKit.Views.Documents
 
             rootChunk.ForceLoadPropertiesRecursive();
 
-            rootChunk.DeleteUnusedMaterialsCommand.Execute(true);
+            _cvmMaterialTools.DeleteUnusedMaterials(rootChunk, null, true);
             rootChunk.Tab?.Parent.Save(null);
 
             await LoadAndAnalyzeModArchivesAsync();
 
-            var materialDependencies = await rootChunk.GetMaterialRefsFromFile();
+            var materialDependencies = await CvmMaterialTools.GetMaterialRefsFromFile(rootChunk);
+            await rootChunk.GetMaterialRefsFromFile();
 
             // Throw in anything found in .mi files
             var miDependencies = materialDependencies.Select(p => p.GetResolvedText()).OfType<string>()
@@ -1229,7 +1143,7 @@ namespace WolvenKit.Views.Documents
                 }
 
                 _loggerService.Info("Done!");
-                Interactions.ShowDictionaryAsCopyableList(("Unused files in project (extensions: ",
+                Interactions.ShowDictionaryAsCopyableList(new("Unused files in project",
                     $"The following files seem to be unused in your project",
                     new Dictionary<string, List<string>>() { { relativePath, unusedPaths } }, true));
             }

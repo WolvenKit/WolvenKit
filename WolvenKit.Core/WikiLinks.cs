@@ -58,6 +58,13 @@ public static class WikiLinks
         "https://wiki.redmodding.org/cyberpunk-2077-modding/for-mod-creators-theory/files-and-what-they-do/file-formats/translation-files-.json";
 
     public const string SettingsModderName = "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/settings#your-name";
+
+    # region archive_xl
+
+    public const string AXLMaterialExpansion =
+        "https://wiki.redmodding.org/cyberpunk-2077-modding/for-mod-creators-theory/core-mods-explained/archivexl/archivexl-dynamic-materials#step-3-appearance-expansion";
+
+    #endregion
 }
 
 // ReSharper disable MemberCanBeMadeStatic.Global
@@ -90,4 +97,5 @@ public class WikiLinksInstance
     public string ResourcePatching { get; } = WikiLinks.ResourcePatching;
 
     public string CyberpunkBlenderAddon { get; } = WikiLinks.CyberpunkBlenderAddon;
+    public string AXLMaterialExpansion { get; } = WikiLinks.AXLMaterialExpansion;
 }

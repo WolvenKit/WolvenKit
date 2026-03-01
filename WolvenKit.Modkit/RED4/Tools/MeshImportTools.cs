@@ -1440,6 +1440,7 @@ namespace WolvenKit.Modkit.RED4
                 _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
             };
 
+        private const string s_gltfError = "One or more geometry entries in GLTF";
         private static void VerifyGLTF(ModelRoot model, GltfImportArgs args)
         {
             if (model.LogicalMeshes.Count < 1)
@@ -1470,19 +1471,21 @@ namespace WolvenKit.Modkit.RED4
 
                 if (!accessors.Contains("POSITION"))
                 {
-                    throw new Exception("One or more Geometry in provided GLTF doesn't contain Vertices");
+                    throw new InvalidDataException($"{s_gltfError} do not contain vertices.");
                 }
                 if (!accessors.Contains("NORMAL"))
                 {
-                    throw new Exception("One or more Geometry in provided GLTF doesn't contain Normals data. Normals must be included within glTF files.");
+                    throw new InvalidDataException($"{s_gltfError} do not contain Normals data.");
                 }
                 if (!accessors.Contains("TANGENT"))
                 {
-                    throw new Exception("One or more Geometry in provided GLTF doesn't contain Tangents data. Tangents must be included within glTF files.");
+                    throw new InvalidDataException(
+                        $"{s_gltfError} do not contain Tangents data. Make sure to triangulate your mesh!");
                 }
                 if (m.Primitives[0].GetIndices().ToList().Count < 3)
                 {
-                    throw new Exception("One or more Geometry in provided GLTF doesn't contain any Triangle primitives");
+                    throw new InvalidDataException(
+                        $"{s_gltfError} contain less than 3 vertices. Please import at least a triangle!");
                 }
                 var name = m.Name;
                 uint lod = 0;

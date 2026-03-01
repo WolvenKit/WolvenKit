@@ -63,7 +63,7 @@ namespace WolvenKit.Modkit.RED4
             gltfImportArgs.ShowVerboseLogOutput = showVerboseLogOutput;
 
             var commonImportArgs = args.Get<CommonImportArgs>();
-            
+
             // import files
             return extAsEnum switch
             {
@@ -515,15 +515,13 @@ namespace WolvenKit.Modkit.RED4
             }
             catch (Exception e)
             {
-                _loggerService.Error(e);
+                _loggerService.Error(e.Message);
                 return false;
             }
             finally
             {
                 redFs.Close();
             }
-
-
         }
 
         private static (string, GltfImportAsFormat) GetImportExtensionAndFormat(GltfImportArgs args, Optional<string> maybeType) =>
@@ -531,7 +529,7 @@ namespace WolvenKit.Modkit.RED4
             {
                 GltfImportAsFormat.MeshWithRig => ($".mesh", args.ImportFormat),
                 GltfImportAsFormat.Anims => ($".anims", GltfImportAsFormat.Anims),
-                _ => (maybeType.HasValue ? maybeType.Value : ".mesh", args.ImportFormat), 
+                _ => (maybeType.HasValue ? maybeType.Value : ".mesh", args.ImportFormat),
             };
 
 

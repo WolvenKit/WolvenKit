@@ -12,7 +12,7 @@ namespace WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
 
 /// <summary>
 /// Helper class to hold the logic for conditional editor field hiding and read-only states.
-/// We'll have one instance of this class per difficulty level. 
+/// We'll have one instance of this class per difficulty level.
 /// </summary>
 public abstract class EditorDifficultyLevelInformation
 {
@@ -57,6 +57,7 @@ public abstract class EditorDifficultyLevelInformation
                 "baseRenderMask", "lodMask", "materialId", "mergedRenderMask", "numIndices", "vertexFactory"
             ]
         },
+        { typeof(scnAudioEvent), ["duration"] }
     };
 
     // Fields (by parent class) that should be marked as read-only
