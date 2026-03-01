@@ -16,7 +16,7 @@ public class SettingsDto : ISettingsDto
     /// <summary>
     /// Current version of SettingsDTO.
     /// </summary>
-    private const int s_currentSettingsVersion = 4;
+    private const int s_currentSettingsVersion = 5;
 
     public bool IsDirty;
 
@@ -110,7 +110,7 @@ public class SettingsDto : ISettingsDto
     public string? CP77LaunchCommand { get; set; }
     public string? CP77LaunchOptions { get; set; }
     public string? MaterialRepositoryPath { get; set; }
-    public bool AnalyzeModArchives { get; set; }
+    public bool AnalyzeModArchives { get; set; } = false;
     public string? ExtraModDirPath { get; set; }
 
     #endregion
@@ -275,6 +275,12 @@ public class SettingsDto : ISettingsDto
             }
 
             SettingsVersion = 4;
+        }
+
+        if (SettingsVersion < 5)
+        {
+            AnalyzeModArchives = false;
+            SettingsVersion = 5;
         }
 
         SettingsVersion = s_currentSettingsVersion;
