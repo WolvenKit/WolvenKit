@@ -299,7 +299,6 @@
                             Click="OnReadAppearancesCheckboxChecked" />
 
                         <Label
-                            Margin="{DynamicResource WolvenKitMarginSmallLeft}"
                             Style="{StaticResource InlineLabelStyle}"
                             Content="3" />
                         <CheckBox
