@@ -405,6 +405,13 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
+        if (!activeProject.ModFiles.Any(f => f.Contains(".mesh")))
+        {
+            Interactions.ShowPopup("You need at least one .mesh file in your project to use this",
+                "Please add a mesh!");
+            return;
+        }
+
         if (Interactions.ShowGeneratePropFileModel(activeProject) is not { } dialogModel)
         {
             return;
