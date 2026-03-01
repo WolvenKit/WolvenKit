@@ -241,8 +241,15 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     [NotifyCanExecuteChangedFor(nameof(CopyRelPathCommand))]
     [NotifyCanExecuteChangedFor(nameof(CopyRelPathFileNameCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyRelPathFileNameNoExtensionCommand))]
     [ObservableProperty]
     private bool _isShiftKeyDown;
+
+    [NotifyCanExecuteChangedFor(nameof(CopyRelPathCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyRelPathFileNameCommand))]
+    [NotifyCanExecuteChangedFor(nameof(CopyRelPathFileNameNoExtensionCommand))]
+    [ObservableProperty]
+    private bool _isCtrlKeyDown;
 
     #endregion properties
 
@@ -654,14 +661,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
             ? new GridLength(0, GridUnitType.Pixel)
             : new GridLength(1, GridUnitType.Star);
 
-    /// <summary>
-    /// Copies relative path of node.
-    /// </summary>
-    private bool CanCopyRelPath() =>
-        RightSelectedItem != null && !IsShiftKeyDown; // _projectManager.ActiveProject != null && RightSelectedItem != null;
-
-    [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
-    private void CopyRelPath()
+    private void CopySelectionNames(bool fileNameOnly = false, bool removeExtension = false)
     {
         List<IFileSystemViewModel> selectedItems = [];
         if (RightSelectedItems.Count == 0 && RightSelectedItem is not null)
@@ -678,9 +678,31 @@ public partial class AssetBrowserViewModel : ToolViewModel
             return;
         }
 
-        var selectedItemPaths = selectedItems.Select(f => f.FullName).ToList();
+        var selectedItemPaths = selectedItems.Select(f =>
+        {
+            if (!fileNameOnly)
+            {
+                return f.FullName;
+            }
+
+            if (!removeExtension)
+            {
+                return f.Name;
+            }
+
+            return f.Name.Replace(Path.GetExtension(f.Name), "");
+        }).ToList();
+
         Clipboard.SetDataObject(string.Join("\n", selectedItemPaths));
     }
+
+    /// <summary>
+    /// Copies relative path of node.
+    /// </summary>
+    private bool CanCopyRelPath() => RightSelectedItem != null && !IsShiftKeyDown;
+
+    [RelayCommand(CanExecute = nameof(CanCopyRelPath))]
+    private void CopyRelPath() => CopySelectionNames();
 
     /// <summary>
     /// Copies only file name of node.
@@ -688,16 +710,17 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private bool CanCopyRelPathFileName() => RightSelectedItem != null && IsShiftKeyDown;
 
     [RelayCommand(CanExecute = nameof(CanCopyRelPathFileName))]
-    private void CopyRelPathFileName()
-    {
-        var fileName = Path.GetFileName(RightSelectedItem.NotNull().FullName);
-        if (ModifierViewStateService.IsCtrlBeingHeld)
-        {
-            fileName = fileName.Replace(Path.GetExtension(fileName), "");
-        }
+    private void CopyRelPathFileName() => CopySelectionNames(true);
 
-        Clipboard.SetDataObject(fileName);
-    }
+
+    /// <summary>
+    /// Copies only file name of node.
+    /// </summary>
+    private bool CanCopyRelPathFileNameNoExtension() => RightSelectedItem != null && IsShiftKeyDown && IsCtrlKeyDown;
+
+    [RelayCommand(CanExecute = nameof(CanCopyRelPathFileNameNoExtension))]
+    private void CopyRelPathFileNameNoExtension() => CopySelectionNames(true, true);
+
 
     private bool CanAddFromArchive() => RightSelectedItem is RedFileViewModel;
     [RelayCommand(CanExecute = nameof(CanAddFromArchive))]
@@ -1136,6 +1159,8 @@ public partial class AssetBrowserViewModel : ToolViewModel
     {
         IsShiftKeyDown = false;
         IsShiftKeyDown = ModifierViewStateService.IsShiftBeingHeld;
+        IsCtrlKeyDown = false;
+        IsShiftKeyDown = ModifierViewStateService.IsCtrlBeingHeld;
     }
 
     #endregion methods

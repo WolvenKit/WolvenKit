@@ -79,6 +79,7 @@ public partial class ProjectResourceTools
         ".json",
         ".anims",
         ".workspot",
+        ".morphtarget",
         ".inkcharcustomization"
     ];
 
