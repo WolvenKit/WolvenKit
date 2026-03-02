@@ -87,7 +87,7 @@ namespace WolvenKit.Interfaces.Extensions
             var stringPartials = PathSeparatorRegex().Split(target);
             var directorySeparator = useForwardSlashes ? "/" : Path.DirectorySeparatorChar.ToString();
 
-            return string.Join(directorySeparator, stringPartials);
+            return string.Join(directorySeparator, stringPartials).ToLower();
         }
 
         /// <summary>
