@@ -18,6 +18,8 @@ namespace WolvenKit.Views.Templates
         public ObservableCollection<string> SelectedItems { get; set; } = new();
         public ObservableCollection<string> BindingCollection { get; set; } = new();
 
+        public string NoneString { get; set; } = "None";
+
         public Type EnumType
         {
             get => (Type)GetValue(EnumTypeProperty);
@@ -64,6 +66,7 @@ namespace WolvenKit.Views.Templates
             {
                 view.BindingCollection.Clear();
                 view.SelectedItems.Clear();
+                view.NoneString = System.Activator.CreateInstance(enumType)?.ToString() ?? "None";
                 var val = EnumHelper.RedIntToULong(ri);
                 foreach (var ev in Enum.GetValues(enumType))
                 {

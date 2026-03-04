@@ -4,6 +4,7 @@ using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Input;
 using ReactiveUI;
+using WolvenKit.App.Interaction.Options;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Converters;
@@ -12,28 +13,28 @@ using Window = System.Windows.Window;
 
 namespace WolvenKit.Views.Dialogs.Windows;
 
+
 public partial class ShowChecklistDialog : IViewFor<ShowChecklistDialogViewModel>
 {
     private static List<string> s_lastSelection = [];
     private static string s_lastInputFieldText = "";
 
-    public ShowChecklistDialog(Dictionary<string, bool> checklistOptions, string title,
-        string text, string inputFieldLabel, string inputFieldDefaultValue)
+
+    public ShowChecklistDialog(ChecklistDialogOptions options)
     {
         InitializeComponent();
 
-        if (s_lastInputFieldText != "" && inputFieldLabel != "")
+        if (s_lastInputFieldText != "" && options.InputFieldLabel != "")
         {
-            inputFieldDefaultValue = s_lastInputFieldText;
+            options.InputFieldDefaultValue = s_lastInputFieldText;
         }
 
-        foreach (var se in s_lastSelection.Where(checklistOptions.ContainsKey))
+        foreach (var se in s_lastSelection.Where(options.ChecklistOptions.ContainsKey))
         {
-            checklistOptions[se] = true;
+            options.ChecklistOptions[se] = true;
         }
 
-        ViewModel = new ShowChecklistDialogViewModel(checklistOptions, title, text, inputFieldLabel,
-            inputFieldDefaultValue);
+        ViewModel = new ShowChecklistDialogViewModel(options);
         DataContext = ViewModel;
 
         this.WhenActivated(disposables =>
@@ -53,8 +54,13 @@ public partial class ShowChecklistDialog : IViewFor<ShowChecklistDialogViewModel
                 )
                 .DisposeWith(disposables);
 
+            // set filter text (if given)
+            FilterableChecklistMenu.SetCurrentValue(Templates.FilterableChecklistMenu.FilterTextProperty,
+                options.FilterDefaultValue);
+
             // Load last selection if available
-            ViewModel.SelectedOptions = checklistOptions.Where(x => x.Value).Select(x => x.Key).ToList();
+            ViewModel.SelectedOptions = options.ChecklistOptions.Where(x => x.Value)
+                .Select(x => x.Key).ToList();
 
             // bind rest of properties
             this.Bind(ViewModel,

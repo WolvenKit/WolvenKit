@@ -824,9 +824,8 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
 
             });
 
-            // Get file paths from resource files. Yes, with a regex - parsing them would be way more effort
             Parallel.ForEach(
-                Files.Where(f => f.EndsWith(".xl") || f.EndsWith(".yaml") || f.EndsWith(".lua") || f.EndsWith(".reds")),
+                Files.Where(IsResourceFile).Where(filePaths.Contains),
                 filePath =>
             {
                 var absolutePath = Path.Combine(FileDirectory, filePath);

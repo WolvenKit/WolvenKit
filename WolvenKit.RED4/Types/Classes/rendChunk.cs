@@ -54,7 +54,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
-		[RED("baseRenderMask")] 
+		[RED("baseRenderMask")]
+		[DisplayAsEnum<EMeshChunkRenderMaskFlags>]
 		public CUInt16 BaseRenderMask
 		{
 			get => GetPropertyValue<CUInt16>();
@@ -62,7 +63,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(7)] 
-		[RED("mergedRenderMask")] 
+		[RED("mergedRenderMask")]
+		[DisplayAsEnum<EMeshChunkRenderMaskFlags>]
 		public CUInt16 MergedRenderMask
 		{
 			get => GetPropertyValue<CUInt16>();

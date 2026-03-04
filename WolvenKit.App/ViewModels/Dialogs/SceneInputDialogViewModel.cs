@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
+using WolvenKit.App.Interaction.Options;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 
@@ -9,31 +10,21 @@ namespace WolvenKit.App.ViewModels.Dialogs;
 /// </summary>
 public partial class SceneInputDialogViewModel : DialogViewModel
 {
-    public SceneInputDialogViewModel(
-        string title = "Scene Input", 
-        string primaryLabel = "Value:", 
-        string primaryDefaultValue = "",
-        bool showSecondaryInput = false,
-        string secondaryLabel = "Secondary:",
-        string checkboxText = "Enable secondary input",
-        bool showDropdown = false,
-        string dropdownLabel = "Type:",
-        IEnumerable<string>? dropdownOptions = null,
-        string? defaultDropdownValue = null)
+    public SceneInputDialogViewModel(SceneInputDialogOptions dialogOptions)
     {
-        Title = title;
-        PrimaryLabel = primaryLabel;
-        PrimaryInputValue = primaryDefaultValue;
-        ShowSecondaryInput = showSecondaryInput;
-        SecondaryLabel = secondaryLabel;
-        CheckboxText = checkboxText;
-        ShowDropdown = showDropdown;
-        DropdownLabel = dropdownLabel;
-        
-        if (dropdownOptions != null)
+        Title = dialogOptions.Title;
+        PrimaryLabel = dialogOptions.PrimaryLabel;
+        PrimaryInputValue = dialogOptions.PrimaryDefault;
+        ShowSecondaryInput = dialogOptions.ShowSecondary;
+        SecondaryLabel = dialogOptions.SecondaryLabel;
+        CheckboxText = dialogOptions.CheckboxText;
+        ShowDropdown = dialogOptions.ShowDropdown;
+        DropdownLabel = dialogOptions.DropdownLabel;
+
+        if (dialogOptions.DropdownOptions != null)
         {
-            DropdownOptions = dropdownOptions.ToList();
-            SelectedDropdownValue = defaultDropdownValue ?? DropdownOptions.FirstOrDefault();
+            DropdownOptions = dialogOptions.DropdownOptions.ToList();
+            SelectedDropdownValue = dialogOptions.DefaultDropdownValue ?? DropdownOptions.FirstOrDefault();
         }
         else
         {
