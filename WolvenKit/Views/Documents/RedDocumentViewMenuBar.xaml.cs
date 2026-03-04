@@ -91,10 +91,11 @@ namespace WolvenKit.Views.Documents
                 Locator.Current.GetService<CRUIDService>()!,
                 _cvmTools,
                 _loggerService,
+                _archiveManager,
                 Locator.Current.GetService<INotificationService>()!,
                 Locator.Current.GetService<StreamingSectorTools>()!,
-                _appViewModel,
-                _archiveManager) { CurrentTab = _currentTab };
+                _appViewModel) { CurrentTab = _currentTab };
+
             ViewModel = DataContext as RedDocumentViewToolbarModel;
 
             _modifierStateService.ModifierStateChanged += OnModifierStateChanged;
