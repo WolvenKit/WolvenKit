@@ -16,6 +16,15 @@ export default defineConfig({
 
     sidebar: [
       {
+        text: 'Summary',
+        collapsed: false,
+        items: [
+          { text: 'Contributing', link: '/CONTRIBUTING' },
+          { text: 'Code of Conduct', link: '/CODE_OF_CONDUCT' },
+          { text: 'Developer Guide', link: '/DEVELOPER%20GUIDE' },
+        ]
+      },
+      {
         text: 'Meta Documentation',
         collapsed: false,
         items: [
