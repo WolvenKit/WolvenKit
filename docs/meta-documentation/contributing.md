@@ -2,6 +2,10 @@
 
 This documentation uses [vitepress](https://vitepress.dev/) as such it supports markdown with custom extensions as outlined [here](https://vitepress.dev/guide/markdown).
 
+::: warning
+`/docs/CODE_OF_CONDUCT.md`, `/docs/CONTRIBUTING.md` and `/docs/DEVELOPER GUIDE.md` are also served via the GitHub UI and as such should only contain GitHub compatible markdown. Documentation on GitHubs markdown flavor can be found [here](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
+:::
+
 ### Writing Changes
 
 To write changes modify the markdown files in `/docs` and follow the regular pull request process to merge the changes into the main branch.
