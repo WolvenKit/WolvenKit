@@ -7,7 +7,7 @@ export default defineConfig({
   base: '/WolvenKit/',
   ignoreDeadLinks: true,
   head: [
-    ['link', { rel: 'icon', href: '/favicon.ico' }]
+    ['link', { rel: 'icon', href: '/WolvenKit/favicon.ico' }]
   ],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
