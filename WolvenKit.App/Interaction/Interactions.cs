@@ -84,7 +84,7 @@ public static class Interactions
 
 
     /// <summary>
-    /// Shows a message box with an extra button to open a weblink
+    /// Shows a message box
     /// </summary>
     /// <param name="title">Dialogue title</param>
     /// <param name="message">Dialogue message (auto-wrapping)</param>
@@ -97,6 +97,19 @@ public static class Interactions
         DispatcherHelper.RunOnMainThread(() =>
             result = ShowMessageBoxAsync(title, message, WMessageBoxButtons.Ok, WMessageBoxImage.Information).Result);
         return await Task.FromResult(result);
+    }
+
+
+    /// <summary>
+    /// Shows a message box
+    /// </summary>
+    /// <param name="title">Dialogue title</param>
+    /// <param name="message">Dialogue message (auto-wrapping)</param>
+    /// <returns>result of the task</returns>
+    public static WMessageBoxResult ShowPopup(string title, string message)
+    {
+        return ShowMessageBoxAsync(title, message, WMessageBoxButtons.Ok, WMessageBoxImage.Information).GetAwaiter()
+            .GetResult();
     }
 
     /// <summary>
