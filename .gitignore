@@ -280,6 +280,11 @@ launchSettings.json
 docs/doxygen_doc_html/*
 docs/doxygen.warnings
 
+#Ignore vitepress setup
+docs/node_modules/*
+docs/.vitepress/dist/*
+docs/.vitepress/cache/*
+
 #Local git wiki repository - preferred to not delve into git submodules/subtree horrors
 Wolven-kit.wiki
 WolvenKit.IrrlichtLime/Debug-x64
