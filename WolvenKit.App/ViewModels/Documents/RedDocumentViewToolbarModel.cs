@@ -15,6 +15,7 @@ using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
+using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Services;
 using WolvenKit.Core;
@@ -40,6 +41,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private readonly DocumentTools _documentTools;
     private readonly ILoggerService _loggerService;
     private readonly ICvmTools _cvmTools;
+    private readonly IAppArchiveManager _archiveManager;
 
     public RedDocumentViewToolbarModel(
         ISettingsManager settingsManager,
@@ -48,7 +50,8 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         DocumentTools documentTools,
         CRUIDService cruidService,
         ICvmTools cvmTools,
-        ILoggerService loggerService
+        ILoggerService loggerService,
+        IAppArchiveManager archiveManager
     )
     {
         _modifierViewStateService = modifierSvc;
@@ -58,6 +61,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         _documentTools = documentTools;
         _cvmTools = cvmTools;
         _loggerService = loggerService;
+        _archiveManager = archiveManager;
 
         modifierSvc.ModifierStateChanged += OnModifierChanged;
         modifierSvc.PropertyChanged += (_, args) => OnPropertyChanged(args.PropertyName);
@@ -216,6 +220,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(ConvertToPreloadMaterialsCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertFromPreloadMaterialsCommand))]
     [NotifyCanExecuteChangedFor(nameof(SelectTemplateAppearanceCommand))]
+    [NotifyCanExecuteChangedFor(nameof(FlattenMiChainCommand))]
     [ObservableProperty]
     private ChunkViewModel? _selectedChunk;
 
@@ -236,6 +241,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         DeleteChunkByIndexCommand.NotifyCanExecuteChanged();
         ConvertToPreloadMaterialsCommand.NotifyCanExecuteChanged();
         ConvertFromPreloadMaterialsCommand.NotifyCanExecuteChanged();
+        FlattenMiChainCommand.NotifyCanExecuteChanged();
     }
 
     public void SetCurrentTab(RedDocumentTabViewModel? value)
@@ -653,6 +659,25 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
     [RelayCommand(CanExecute = nameof(CanConvertFromPreloadMaterials))]
     private void ConvertFromPreloadMaterials() => _cvmTools.ConvertMaterialsFromPreload(RootChunk);
+
+    private bool CanFlattenMiChain() => RootChunk?.ResolvedData is (CMesh or CMaterialInstance);
+
+    [RelayCommand(CanExecute = nameof(CanFlattenMiChain))]
+    private void FlattenMiChain()
+    {
+        var chunk = SelectedChunk ?? RootChunk;
+
+        if (chunk?.Tab?.Parent.IsDirty != false)
+        {
+            _loggerService.Error("Your open file has un-saved changes. Please save, or re-open the file.");
+            return;
+        }
+
+        _cvmTools.FlattenMiChain(chunk, _archiveManager, _projectManager.ActiveProject);
+    }
+
+
+
 
     /*
      * mesh: clear appearances
