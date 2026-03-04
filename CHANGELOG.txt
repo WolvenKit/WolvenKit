@@ -1,4 +1,5 @@
-
+better UX for generate prop dialogue in #2802 by @manavortex
+activated mesh path and -appearance dropdown in entPhysicalMeshComponent in #2822 by @manavortex
 
 
 WolvenKit 8.12.0 - 2024/01/02
@@ -261,7 +262,7 @@ Bug Fixes
     Better? handling of archive file handles (068119b)
     Catch exceptions while guessing file formats (892e02b)
     Changed archive file size calculation to better reflect disk size in AB (c8655b5)
-    collection editor (364b0fa)    
+    collection editor (364b0fa)
     fixed a bug where the importall button was always disabled (64c7da5), closes #1055
     Prevent creation of empty soundbanks folder on import (0f4650b)
     Saving for new entEntityTemplates (37addf5)
@@ -355,7 +356,7 @@ WolvenKit 8.5.1
 WolvenKit 8.5
 -----------------
 
-Implemented: 
+Implemented:
 - add mlsb support
 
 Fixed:
@@ -373,7 +374,7 @@ Fixed:
 WolvenKit 8.5-rc1
 -----------------
 
-Implemented: 
+Implemented:
 - open files & browse assets without loading a project
 - cr2w editor UI overhaul
 - project explorer UI overhaul
@@ -412,10 +413,10 @@ Fixed:
 - Fix tga/dds import while using an exsiting file
 - Ribbon view updated
 - Allow drag and drop for both buffer types
-- Changed default materials export to png 
+- Changed default materials export to png
 - add open in AB & replace with original context menu options
 - Set new JsonSerializer for Import/Export
-- replace auto-installer 
+- replace auto-installer
 - Fixed csv import
 - Fixed masklist writing for PNG exports
 - Changed default export format for mlmask from DDS to PNG
@@ -431,7 +432,7 @@ Implemented:
 Fixed:
 - tweak editor: array editing
 - curve editor: fixes, zoom and editing
-- red resource editor: fixes, array editing, 
+- red resource editor: fixes, array editing,
 - fixed a bug where w2rc buffers would not update on selection changed
 - fix asset browser alphabetical folder ordering
 - tweakDB fix arrays and adds remaining types
