@@ -1,5 +1,5 @@
 better UX for generate prop dialogue in #2802 by @manavortex
-activated mesh path and -appearance dropdown in entPhysicalMeshComponent in #2822 by @manavortex
+activated mesh path and -appearance dropdown in entPhysicalMeshComponent and entMeshComponent in #2822 by @manavortex
 
 
 WolvenKit 8.12.0 - 2024/01/02

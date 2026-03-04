@@ -796,6 +796,20 @@ public abstract class CvmDropdownHelper
                 }
 
                 break;
+            case entMeshComponent meshComp:
+                switch (cvm.Name)
+                {
+                    case "meshAppearance":
+                        ret = documentTools.GetAppearanceNamesFromMesh(meshComp.Mesh.DepotPath, forceCacheRefresh);
+                        break;
+                    case "mesh":
+                        ret = documentTools.CollectProjectFiles(".mesh");
+                        break;
+                    default:
+                        break;
+                }
+
+                break;
             case entMorphTargetSkinnedMeshComponent morphtargetMeshComp:
                 ret = documentTools.GetAppearanceNamesFromMesh(morphtargetMeshComp.MorphResource.DepotPath,
                     forceCacheRefresh);
@@ -817,6 +831,14 @@ public abstract class CvmDropdownHelper
                 {
                     Name: "meshAppearance",
                     Parent.ResolvedData: entPhysicalMeshComponent { Mesh.DepotPath: { } meshDepotPath }
+                } && !string.IsNullOrEmpty(meshDepotPath.ToString()):
+                ret = documentTools.GetAppearanceNamesFromMesh(meshDepotPath, forceCacheRefresh);
+                break;
+            case CName
+                when cvm is
+                {
+                    Name: "meshAppearance",
+                    Parent.ResolvedData: entMeshComponent { Mesh.DepotPath: { } meshDepotPath }
                 } && !string.IsNullOrEmpty(meshDepotPath.ToString()):
                 ret = documentTools.GetAppearanceNamesFromMesh(meshDepotPath, forceCacheRefresh);
                 break;
@@ -950,6 +972,7 @@ public abstract class CvmDropdownHelper
             IRedRef when cvm is { Name: "resource", Parent.ResolvedData: appearanceAppearancePart } => true,
             entGarmentSkinnedMeshComponent
                 or entPhysicalMeshComponent
+                or entMeshComponent
                 or entSkinnedMeshComponent
                 => cvm.Name is ("mesh" or "meshAppearance"),
             CName => cvm.Name is "meshAppearance",
