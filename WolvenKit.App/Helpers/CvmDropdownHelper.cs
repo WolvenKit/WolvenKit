@@ -11,7 +11,7 @@ namespace WolvenKit.App.Helpers;
 
 /// <summary>
 /// This class takes a <see cref="ChunkViewModel"/> and returns a list of compatible strings for the view.
-/// To register a dropdown menu for a view, you have to do the following things: 
+/// To register a dropdown menu for a view, you have to do the following things:
 /// 1. adjust HasDropdownOptions (the switch case matches on cvm's PARENT)
 /// 2. adjust GetDropdownOptions (switch case matches on cvm's PARENT)
 /// 3. optional: adjust ShouldShowRefreshButton (switch casse matches on cvm's ROOT)
@@ -782,6 +782,20 @@ public abstract class CvmDropdownHelper
                 }
 
                 break;
+            case entPhysicalMeshComponent meshComp:
+                switch (cvm.Name)
+                {
+                    case "meshAppearance":
+                        ret = documentTools.GetAppearanceNamesFromMesh(meshComp.Mesh.DepotPath, forceCacheRefresh);
+                        break;
+                    case "mesh":
+                        ret = documentTools.CollectProjectFiles(".mesh");
+                        break;
+                    default:
+                        break;
+                }
+
+                break;
             case entMorphTargetSkinnedMeshComponent morphtargetMeshComp:
                 ret = documentTools.GetAppearanceNamesFromMesh(morphtargetMeshComp.MorphResource.DepotPath,
                     forceCacheRefresh);
@@ -795,6 +809,14 @@ public abstract class CvmDropdownHelper
                 {
                     Name: "meshAppearance",
                     Parent.ResolvedData: entSkinnedMeshComponent { Mesh.DepotPath: { } meshDepotPath }
+                } && !string.IsNullOrEmpty(meshDepotPath.ToString()):
+                ret = documentTools.GetAppearanceNamesFromMesh(meshDepotPath, forceCacheRefresh);
+                break;
+            case CName
+                when cvm is
+                {
+                    Name: "meshAppearance",
+                    Parent.ResolvedData: entPhysicalMeshComponent { Mesh.DepotPath: { } meshDepotPath }
                 } && !string.IsNullOrEmpty(meshDepotPath.ToString()):
                 ret = documentTools.GetAppearanceNamesFromMesh(meshDepotPath, forceCacheRefresh);
                 break;
@@ -913,23 +935,25 @@ public abstract class CvmDropdownHelper
 
             #endregion
 
-            #region ent
+            #region ent_and_app_and_components
 
             appearanceAppearancePart when cvm.Name is "appearanceResource" or "resource" => true,
+            entTemplateAppearance => cvm.Name is "appearanceName" or "appearanceResource",
+            appearanceAppearanceResource when s_appearanceNames.Contains(cvm.Name) => true,
+
             entSkinnedMeshComponent when s_appearanceNames.Contains(cvm.Name) => true,
             entSkinnedMeshComponent when parent.Name == "mesh" => true,
+
             entEntityTemplate when s_appearanceNames.Contains(cvm.Name) => true,
             entEntityTemplate => cvm.Name is "defaultAppearance",
-            entTemplateAppearance => cvm.Name is "appearanceName" or "appearanceResource",
 
-            #endregion
-
-            #region app
-
-            appearanceAppearanceResource when s_appearanceNames.Contains(cvm.Name) => true,
             IRedRef when cvm is { Name: "resource", Parent.ResolvedData: appearanceAppearancePart } => true,
-            entSkinnedMeshComponent when cvm is { Name: "mesh" } => true,
-            entGarmentSkinnedMeshComponent when cvm is { Name: "mesh" } => true,
+            entGarmentSkinnedMeshComponent
+                or entPhysicalMeshComponent
+                or entSkinnedMeshComponent
+                => cvm.Name is ("mesh" or "meshAppearance"),
+            CName => cvm.Name is "meshAppearance",
+
 
             #endregion
 
@@ -939,6 +963,7 @@ public abstract class CvmDropdownHelper
                                         !string.IsNullOrEmpty(mlLayer.Material.DepotPath.GetResolvedText()),
 
             #endregion
+
 
             // tags: ent and app
             IRedArray<CName> when parent is { Name: "tags", Parent.ResolvedData: redTagList } => true,

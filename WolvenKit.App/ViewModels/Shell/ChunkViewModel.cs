@@ -258,6 +258,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
+    private static readonly List<Type> s_skipExpansionTypes =
+    [
+        typeof(CKeyValuePair), typeof(Vector4), typeof(Vector3)
+    ];
+
     /// <summary>
     /// On expanding a node: conditionally expand child nodes for convenience (e.g. if there's only one child)
     /// </summary>
@@ -284,7 +289,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 var prop = visibleProperties.First();
                 // ... unless we don't want to expand them (e.g. because they're primitives or so)
                 if (!IsExpanded || (prop.Value != prop.Descriptor &&
-                                    prop.ResolvedData is not (CKeyValuePair or Vector4 or Vector3)))
+                                    (s_skipExpansionTypes.Contains(prop.ResolvedData.GetType()) ||
+                                     prop.ResolvedData is IRedMeshComponent)))
                 {
                     prop.IsExpanded = IsExpanded;
                 }
