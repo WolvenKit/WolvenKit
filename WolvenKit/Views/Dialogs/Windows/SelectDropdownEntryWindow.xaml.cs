@@ -29,7 +29,7 @@ namespace WolvenKit.Views.Dialogs.Windows
             {
                 HelpLink = helpLink, ButtonText = buttonText,
             };
-            
+
             DataContext = ViewModel;
 
             Owner = Application.Current.MainWindow;
@@ -44,6 +44,8 @@ namespace WolvenKit.Views.Dialogs.Windows
                         x => x.OptionsDict,
                         x => x.Dropdown.Options)
                     .DisposeWith(disposables);
+
+                ViewModel.SelectedOption = string.Empty;
             });
         }
 

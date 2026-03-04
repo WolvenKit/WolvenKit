@@ -619,6 +619,7 @@ public partial class RedGraph
         {
             _loggerService?.Error($"RedGraph internal data is not scnSceneResource, cannot create node wrappers correctly.");
             sceneResource = new scnSceneResource();
+            sceneResource.SceneGraph ??= new CHandle<scnSceneGraph>() { Chunk = new scnSceneGraph() };
         }
 
         BaseSceneViewModel nodeWrapper;
