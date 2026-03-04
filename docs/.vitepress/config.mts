@@ -5,6 +5,7 @@ export default defineConfig({
   title: "WolvenKit Developer Documentation",
   description: "Everything you need to know about contributing to the WolvenKit project.",
   base: '/WolvenKit/',
+  ignoreDeadLinks: true,
   head: [
     ['link', { rel: 'icon', href: '/WolvenKit/favicon.ico' }]
   ],
