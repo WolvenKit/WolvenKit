@@ -864,6 +864,14 @@ public abstract class CvmDropdownHelper
 
             #endregion
 
+            #region morphtarget
+
+            case MorphTargetMesh when (parent.Name is "baseMesh" && cvm.Name == "DepotPath") || cvm.Name is "baseMesh":
+                ret = documentTools.CollectProjectFiles(".mesh");
+                break;
+
+            #endregion
+
             #region mlsetup
 
             case Multilayer_Layer mlLayer:
@@ -987,6 +995,12 @@ public abstract class CvmDropdownHelper
 
             #endregion
 
+            #region morphtarget
+
+            MorphTargetMesh when (parent.Name is "baseMesh" && cvm.Name == "DepotPath") || cvm.Name is "baseMesh" =>
+                true,
+
+            #endregion
 
             // tags: ent and app
             IRedArray<CName> when parent is { Name: "tags", Parent.ResolvedData: redTagList } => true,
