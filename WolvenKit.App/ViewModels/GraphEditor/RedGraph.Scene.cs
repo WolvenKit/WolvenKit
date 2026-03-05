@@ -1449,6 +1449,7 @@ public partial class RedGraph
 
     public static RedGraph GenerateSceneGraph(string title, scnSceneResource sceneResource, RedDocumentViewModel doc)
     {
+        sceneResource.SceneGraph ??= new CHandle<scnSceneGraph>() { Chunk = new scnSceneGraph() };
         var graph = new RedGraph(title, sceneResource, doc);
 
         var nodeCache = new Dictionary<uint, BaseSceneViewModel>();
