@@ -260,7 +260,8 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
         if (files.Count == 0)
         {
-            _loggerService.Warning("You have no .ent or .mesh files in your project, so there's nothing to add.");
+            _loggerService.Info("You have no .ent, .mesh, or .mi files in your project, there's nothing to add.");
+            _notificationService.Info("You have no .ent, .mesh, or .mi files in your project, there's nothing to add.");
             return;
         }
 
@@ -401,6 +402,13 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
     {
         if (_projectManager.ActiveProject is not Cp77Project activeProject)
         {
+            return;
+        }
+
+        if (!activeProject.ModFiles.Any(f => f.Contains(".mesh")))
+        {
+            Interactions.ShowPopup("You need at least one .mesh file in your project to use this",
+                "Please add a mesh!");
             return;
         }
 
