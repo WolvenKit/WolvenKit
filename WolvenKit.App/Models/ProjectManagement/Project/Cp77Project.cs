@@ -35,6 +35,9 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         // use other constructor
     }
 
+    /// <summary>
+    /// Project name in UI (human-friendly). Will not be used for any files.
+    /// </summary>
     public string Name { get; set; }
 
     /// <summary>
@@ -47,6 +50,9 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
     /// </summary>
     public string Location { get; set; }
 
+    /// <summary>
+    /// Project name in files (does not allow special characters etc).
+    /// </summary>
     public string ModName { get; set; }
 
     public int ActiveTab { get; set; } = 0;
@@ -331,6 +337,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
     public string GetRelativeResourceTweakDirectory(bool useModderName = false) =>
         GetRelativePath(GetResourceTweakDirectory(useModderName));
 
+    #region packed
     /// <summary>
     /// Path to /packed
     /// </summary>
@@ -490,6 +497,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         }
     }
 
+    #endregion
 
     // Methods
 
