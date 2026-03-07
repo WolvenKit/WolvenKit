@@ -292,7 +292,9 @@ namespace WolvenKit.Modkit.RED4
                     OptimizationHints = new AnimationOptimizationHints {
                         PreferSIMD = bufferData.IsSimd,
                         MaxRotationCompression = bufferData.CompressionUsed,
+                        SimdQuantizationBits = bufferData.SimdQuantizationBits,
                     },
+                    AnimEvents = SerializeAnimEvents(anim.Chunk),
                 };
 
                 // -.-
@@ -309,10 +311,6 @@ namespace WolvenKit.Modkit.RED4
             if (stats.RootMotionConflicts > 0)
             {
                 _loggerService.Warning($"{animsFileName}: {stats.RootMotionConflicts} animations had regular root joint transforms in addition to Root Motion. Only exporting Root Motion. Re-importing with Root Motion will delete the non-RM. This is probably correct, but you can additionally export without Root Motion to get the regular transforms.");
-            }
-            if (stats.SimdAnims > 0)
-            {
-                _loggerService.Info($"{animsFileName}: Exported {stats.SimdAnims} SIMD animations. They can only be imported back as regular animations, so you may want to simplify them when editing, or omit them from the re-import to keep the old ones."); 
             }
             if (stats.AdditiveAnims > 0)
             {
@@ -552,8 +550,9 @@ namespace WolvenKit.Modkit.RED4
                     NumTracks = numTracks,
                     NumExtraTracks = numExtraTracks,
                     TracksCountActual = tracksCountActual,
-                    IsSimd = false,
+                    IsSimd = extras.OptimizationHints.PreferSIMD && !importArgs.ForceCompressedEncoding,
                     CompressionUsed = extras.OptimizationHints.MaxRotationCompression,
+                    SimdQuantizationBits = extras.OptimizationHints.SimdQuantizationBits,
                 };
 
                 // Backfill from original where we must, for now
@@ -578,12 +577,24 @@ namespace WolvenKit.Modkit.RED4
                     ZeInBytes = 0,
                 };
 
-                CompressedBuffer.EncodeAnimationData(out var newAnimDataChunk, out var newCompressedBuffer, ref incomingAnimData, chunkDataAddress, _loggerService);
+                animAnimDataChunk newAnimDataChunk;
+                animIAnimationBuffer newAnimBuffer;
+
+                if (incomingAnimData.IsSimd)
+                {
+                    SIMDEncoder.EncodeSimdAnimationData(out newAnimDataChunk, out var newSimdBuffer, in incomingAnimData, chunkDataAddress, _loggerService);
+                    newAnimBuffer = newSimdBuffer;
+                }
+                else
+                {
+                    CompressedBuffer.EncodeAnimationData(out newAnimDataChunk, out var newCompressedBuffer, in incomingAnimData, chunkDataAddress, _loggerService);
+                    newAnimBuffer = newCompressedBuffer;
+                }
 
                 var newAnimDesc = new animAnimation()
                 {
                     Name = incomingAnim.Name,
-                    AnimBuffer = new(newCompressedBuffer),
+                    AnimBuffer = new(newAnimBuffer),
                     Duration = incomingAnimData.Duration,
                     AnimationType = incomingAnimationType,
                     FrameClamping = extras.FrameClamping,
@@ -603,7 +614,7 @@ namespace WolvenKit.Modkit.RED4
                 var newAnim = new animAnimSetEntry()
                 {
                     Animation = new(newAnimDesc),
-                    Events = new((animEventsContainer?)(oldAnim?.Events?.Chunk?.DeepCopy())),
+                    Events = new(BuildEventsContainer(extras.AnimEvents, oldAnim?.Events?.Chunk)),
                 };
 
                 newAnimChunks.Add(newAnimDataChunk);
@@ -639,7 +650,14 @@ namespace WolvenKit.Modkit.RED4
 
             if (stats.SIMDs > 0)
             {
-                _loggerService.Warning($"{gltfFileName}: Encoding: SIMD anims are not fully supported, converted {stats.SIMDs} to normal anims. These mostly work ok, but if you have trouble, you can omit them from the animset to keep the existing SIMD versions.");
+                if (importArgs.ForceCompressedEncoding)
+                {
+                    _loggerService.Warning($"{gltfFileName}: Encoding: Force Compressed enabled, converted {stats.SIMDs} SIMD anims to Compressed format.");
+                }
+                else
+                {
+                    _loggerService.Success($"{gltfFileName}: Encoding: {stats.SIMDs} animations encoded as SIMD buffers.");
+                }
             }
             if (stats.AdditivesStripped > 0)
             {
@@ -691,6 +709,621 @@ namespace WolvenKit.Modkit.RED4
             newAnimChunks.Add(newChunk);
             newAnimSetEntries.Add(copiedAnim);
         }
+
+        #region animEventHelpers
+
+        /// <summary>
+        /// Serialize animation events from an animAnimSetEntry into glTF-friendly records.
+        /// </summary>
+        private static List<AnimEventSerializable>? SerializeAnimEvents(animAnimSetEntry animSetEntry)
+        {
+            var eventsContainer = animSetEntry.Events?.Chunk;
+            if (eventsContainer == null || eventsContainer.Events.Count == 0)
+            {
+                return null;
+            }
+
+            var animEvents = new List<AnimEventSerializable>();
+            foreach (var handle in eventsContainer.Events)
+            {
+                var evt = handle.Chunk;
+                if (evt == null) continue;
+                animEvents.Add(ConvertEventToSerializable(evt));
+            }
+            return animEvents.Count > 0 ? animEvents : null;
+        }
+
+        /// <summary>
+        /// Convert a single animAnimEvent to its serializable representation.
+        /// </summary>
+        private static AnimEventSerializable ConvertEventToSerializable(animAnimEvent evt)
+        {
+            var type = evt switch
+            {
+                animAnimEvent_Sound => "Sound",
+                animAnimEvent_SoundFromEmitter => "SoundFromEmitter",
+                animAnimEvent_Effect => "Effect",
+                animAnimEvent_EffectDuration => "EffectDuration",
+                animAnimEvent_ItemEffect => "ItemEffect",
+                animAnimEvent_ItemEffectDuration => "ItemEffectDuration",
+                animAnimEvent_Simple => "Simple",
+                _ => evt.GetType().Name.Replace("animAnimEvent_", "")
+            };
+
+            Dictionary<string, string>? switches = null;
+            Dictionary<string, float>? parameters = null;
+            List<AnimEventParamCurve>? paramCurves = null;
+            List<string>? dynamicParams = null;
+            string? metadataContext = null, onlyPlayOn = null, dontPlayOn = null;
+            string? playerGenderAlt = null, emitterName = null, effectName = null;
+            uint? sequenceShift = null;
+            bool? breakAllLoopsOnStop = null;
+            // Phase 6 fields
+            float? eventValue = null;
+            string? actionName = null, boneName = null, facialAnimName = null;
+            string? leg = null, footPhase = null, voContext = null;
+            bool? isQuest = null;
+            string? side = null, customEvent = null;
+            List<WorkspotActionSerializable>? workspotActions = null;
+
+            if (evt is animAnimEvent_Sound sound)
+            {
+                switches = sound.Switches?.Count > 0
+                    ? sound.Switches.ToDictionary(
+                        s => s.Name.GetResolvedText() ?? "",
+                        s => s.Value.GetResolvedText() ?? "")
+                    : null;
+                parameters = sound.Params?.Count > 0
+                    ? sound.Params.ToDictionary(
+                        p => p.Name.GetResolvedText() ?? "",
+                        p => (float)p.Value)
+                    : null;
+                paramCurves = sound.Params?.Count > 0
+                    ? sound.Params.Select(p => new AnimEventParamCurve(
+                        p.Name.GetResolvedText() ?? "",
+                        (float)p.Value,
+                        p.EnterCurveType.ToString(),
+                        (float)p.EnterCurveTime,
+                        p.ExitCurveType.ToString(),
+                        (float)p.ExitCurveTime
+                    )).ToList()
+                    : null;
+                dynamicParams = sound.DynamicParams?.Count > 0
+                    ? sound.DynamicParams.Select(d => d.GetResolvedText() ?? "").ToList()
+                    : null;
+                metadataContext = sound.MetadataContext.GetResolvedText();
+                onlyPlayOn = sound.OnlyPlayOn.GetResolvedText();
+                dontPlayOn = sound.DontPlayOn.GetResolvedText();
+                playerGenderAlt = sound.PlayerGenderAlt.ToString();
+            }
+            else if (evt is animAnimEvent_SoundFromEmitter emitter)
+            {
+                emitterName = emitter.EmitterName.GetResolvedText();
+            }
+            else if (evt is animAnimEvent_EffectDuration effectDuration)
+            {
+                effectName = effectDuration.EffectName.GetResolvedText();
+                sequenceShift = effectDuration.SequenceShift;
+                breakAllLoopsOnStop = effectDuration.BreakAllLoopsOnStop;
+            }
+            else if (evt is animAnimEvent_ItemEffectDuration itemEffectDuration)
+            {
+                effectName = itemEffectDuration.EffectName.GetResolvedText();
+                sequenceShift = itemEffectDuration.SequenceShift;
+                breakAllLoopsOnStop = itemEffectDuration.BreakAllLoopsOnStop;
+            }
+            else if (evt is animAnimEvent_ItemEffect itemEffect)
+            {
+                effectName = itemEffect.EffectName.GetResolvedText();
+            }
+            else if (evt is animAnimEvent_Effect effect)
+            {
+                effectName = effect.EffectName.GetResolvedText();
+            }
+            else if (evt is animAnimEvent_Valued valued)
+            {
+                eventValue = (float)valued.Value;
+            }
+            else if (evt is animAnimEvent_FoleyAction foley)
+            {
+                actionName = foley.ActionName.GetResolvedText();
+            }
+            else if (evt is animAnimEvent_SceneItem sceneItem)
+            {
+                boneName = sceneItem.BoneName.GetResolvedText();
+            }
+            else if (evt is animAnimEvent_WorkspotPlayFacialAnim facial)
+            {
+                facialAnimName = facial.FacialAnimName.GetResolvedText();
+            }
+            else if (evt is animAnimEvent_FootIK footIk)
+            {
+                leg = footIk.Leg.ToString();
+            }
+            else if (evt is animAnimEvent_FootPhase footPhaseEvt)
+            {
+                footPhase = footPhaseEvt.Phase.ToString();
+            }
+            else if (evt is animAnimEvent_GameplayVo gameplayVo)
+            {
+                voContext = gameplayVo.VoContext.GetResolvedText();
+                isQuest = gameplayVo.IsQuest;
+            }
+            else if (evt is animAnimEvent_FootPlant footPlant)
+            {
+                side = footPlant.Side.ToString();
+                customEvent = footPlant.CustomEvent.GetResolvedText();
+            }
+            else if (evt is animAnimEvent_WorkspotItem workspotItem)
+            {
+                workspotActions = SerializeWorkspotActions(workspotItem.Actions);
+            }
+
+            return new AnimEventSerializable(
+                type,
+                evt.EventName.GetResolvedText() ?? "",
+                evt.StartFrame,
+                evt.DurationInFrames,
+                switches,
+                parameters,
+                paramCurves,
+                dynamicParams,
+                metadataContext,
+                onlyPlayOn,
+                dontPlayOn,
+                playerGenderAlt,
+                emitterName,
+                effectName,
+                sequenceShift,
+                breakAllLoopsOnStop,
+                eventValue,
+                actionName,
+                boneName,
+                facialAnimName,
+                leg,
+                footPhase,
+                voContext,
+                isQuest,
+                side,
+                customEvent,
+                workspotActions
+            );
+        }
+
+        /// <summary>
+        /// Build an animEventsContainer from serialized events, merging with originals
+        /// to preserve subclass-specific fields for event types we don't fully serialize.
+        /// Falls back to deep-copy from original when no events in glTF.
+        /// </summary>
+        private static animEventsContainer? BuildEventsContainer(
+            List<AnimEventSerializable>? serializedEvents,
+            animEventsContainer? fallback)
+        {
+            // No events in glTF — fall back to deep-copy from original (backwards compat)
+            if (serializedEvents == null || serializedEvents.Count == 0)
+            {
+                return (animEventsContainer?)fallback?.DeepCopy();
+            }
+
+            // Build a consumable list of original events for matching uncovered types
+            var originals = new List<animAnimEvent>();
+            if (fallback != null)
+            {
+                foreach (var handle in fallback.Events)
+                {
+                    if (handle.Chunk != null)
+                        originals.Add(handle.Chunk);
+                }
+            }
+
+            var container = new animEventsContainer();
+            foreach (var se in serializedEvents)
+            {
+                animAnimEvent evt;
+
+                if (IsFullySerializedType(se.Type))
+                {
+                    // Types we can reconstruct perfectly from glTF data
+                    evt = ConvertSerializableToEvent(se);
+                }
+                else
+                {
+                    // Uncovered type — try to find matching original to preserve subclass fields
+                    var matchIdx = originals.FindIndex(o =>
+                        (o.EventName.GetResolvedText() ?? "") == se.EventName &&
+                        GetEventTypeName(o) == se.Type);
+
+                    if (matchIdx >= 0)
+                    {
+                        // Deep-copy original (preserves all subclass fields), update base fields
+                        evt = (animAnimEvent)originals[matchIdx].DeepCopy();
+                        evt.EventName = se.EventName;
+                        evt.StartFrame = se.StartFrame;
+                        evt.DurationInFrames = se.DurationInFrames;
+                        originals.RemoveAt(matchIdx); // consume to handle duplicates
+                    }
+                    else
+                    {
+                        // New event of unknown type with no original match — best effort
+                        evt = ConvertSerializableToEvent(se);
+                    }
+                }
+
+                container.Events.Add(evt);
+            }
+
+            return container;
+        }
+
+        /// <summary>
+        /// Returns true for event types where we serialize ALL fields to glTF,
+        /// meaning we can reconstruct them perfectly without the original.
+        /// </summary>
+        private static bool IsFullySerializedType(string type) => type is
+            "Sound" or "SoundFromEmitter" or "Effect" or "EffectDuration" or
+            "ItemEffect" or "ItemEffectDuration" or
+            // Base-only types (no subclass fields to lose):
+            "Simple" or "SimpleDuration" or "Phase" or "KeyPose" or
+            "ForceRagdoll" or "Slide" or "SafeCut" or
+            "WorkspotFastExitCutoff" or "TrajectoryAdjustment" or
+            // Phase 6 — fully serialized with subclass fields:
+            "Valued" or "FoleyAction" or "SceneItem" or "WorkspotPlayFacialAnim" or
+            "FootIK" or "FootPhase" or "GameplayVo" or "FootPlant" or "WorkspotItem";
+
+        /// <summary>
+        /// Get the serializable type name for an animAnimEvent instance.
+        /// </summary>
+        private static string GetEventTypeName(animAnimEvent evt) => evt switch
+        {
+            animAnimEvent_Sound => "Sound",
+            animAnimEvent_SoundFromEmitter => "SoundFromEmitter",
+            animAnimEvent_Effect => "Effect",
+            animAnimEvent_EffectDuration => "EffectDuration",
+            animAnimEvent_ItemEffect => "ItemEffect",
+            animAnimEvent_ItemEffectDuration => "ItemEffectDuration",
+            animAnimEvent_Simple => "Simple",
+            _ => evt.GetType().Name.Replace("animAnimEvent_", "")
+        };
+
+        /// <summary>
+        /// Convert a serialized event record back to a RED4 animAnimEvent instance.
+        /// </summary>
+        private static animAnimEvent ConvertSerializableToEvent(AnimEventSerializable se)
+        {
+            animAnimEvent evt = se.Type switch
+            {
+                "Sound" => BuildSoundEvent(se),
+                "SoundFromEmitter" => BuildSoundFromEmitterEvent(se),
+                "Effect" => BuildEffectEvent(se),
+                "EffectDuration" => BuildEffectDurationEvent(se),
+                "ItemEffect" => BuildItemEffectEvent(se),
+                "ItemEffectDuration" => BuildItemEffectDurationEvent(se),
+                // Phase 6 — types with subclass fields we now fully serialize:
+                "Valued" => BuildValuedEvent(se),
+                "FoleyAction" => BuildFoleyActionEvent(se),
+                "SceneItem" => BuildSceneItemEvent(se),
+                "WorkspotPlayFacialAnim" => BuildWorkspotPlayFacialAnimEvent(se),
+                "FootIK" => BuildFootIKEvent(se),
+                "FootPhase" => BuildFootPhaseEvent(se),
+                "GameplayVo" => BuildGameplayVoEvent(se),
+                "FootPlant" => BuildFootPlantEvent(se),
+                "WorkspotItem" => BuildWorkspotItemEvent(se),
+                // Base-only types (no subclass fields, just need correct C# type)
+                "Phase" => new animAnimEvent_Phase(),
+                "KeyPose" => new animAnimEvent_KeyPose(),
+                "ForceRagdoll" => new animAnimEvent_ForceRagdoll(),
+                "Slide" => new animAnimEvent_Slide(),
+                "SafeCut" => new animAnimEvent_SafeCut(),
+                "SimpleDuration" => new animAnimEvent_SimpleDuration(),
+                "WorkspotFastExitCutoff" => new animAnimEvent_WorkspotFastExitCutoff(),
+                "TrajectoryAdjustment" => new animAnimEvent_TrajectoryAdjustment(),
+                // Fallback for anything truly unknown
+                _ => new animAnimEvent_Simple()
+            };
+
+            evt.EventName = se.EventName;
+            evt.StartFrame = se.StartFrame;
+            evt.DurationInFrames = se.DurationInFrames;
+            return evt;
+        }
+
+        private static animAnimEvent_Sound BuildSoundEvent(AnimEventSerializable se)
+        {
+            var sound = new animAnimEvent_Sound();
+
+            if (se.ParamCurves != null)
+            {
+                foreach (var pc in se.ParamCurves)
+                {
+                    var param = new audioAudParameter
+                    {
+                        Name = pc.Name,
+                        Value = pc.Value,
+                        EnterCurveTime = pc.EnterCurveTime,
+                        ExitCurveTime = pc.ExitCurveTime,
+                    };
+                    if (Enum.TryParse<audioESoundCurveType>(pc.EnterCurveType, out var enterCurve))
+                        param.EnterCurveType = enterCurve;
+                    if (Enum.TryParse<audioESoundCurveType>(pc.ExitCurveType, out var exitCurve))
+                        param.ExitCurveType = exitCurve;
+                    sound.Params.Add(param);
+                }
+            }
+            else if (se.Params != null)
+            {
+                // Legacy path: params without curve data
+                foreach (var kvp in se.Params)
+                {
+                    sound.Params.Add(new audioAudParameter { Name = kvp.Key, Value = kvp.Value });
+                }
+            }
+
+            if (se.Switches != null)
+            {
+                foreach (var kvp in se.Switches)
+                {
+                    sound.Switches.Add(new audioAudSwitch { Name = kvp.Key, Value = kvp.Value });
+                }
+            }
+
+            if (se.DynamicParams != null)
+            {
+                foreach (var dp in se.DynamicParams)
+                {
+                    sound.DynamicParams.Add(dp);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(se.MetadataContext)) sound.MetadataContext = se.MetadataContext;
+            if (!string.IsNullOrEmpty(se.OnlyPlayOn)) sound.OnlyPlayOn = se.OnlyPlayOn;
+            if (!string.IsNullOrEmpty(se.DontPlayOn)) sound.DontPlayOn = se.DontPlayOn;
+            if (se.PlayerGenderAlt != null && Enum.TryParse<animAnimEventGenderAlt>(se.PlayerGenderAlt, out var genderAlt))
+            {
+                sound.PlayerGenderAlt = genderAlt;
+            }
+
+            return sound;
+        }
+
+        private static animAnimEvent_SoundFromEmitter BuildSoundFromEmitterEvent(AnimEventSerializable se)
+        {
+            var emitter = new animAnimEvent_SoundFromEmitter();
+            if (!string.IsNullOrEmpty(se.EmitterName)) emitter.EmitterName = se.EmitterName;
+            return emitter;
+        }
+
+        private static animAnimEvent_Effect BuildEffectEvent(AnimEventSerializable se)
+        {
+            var effect = new animAnimEvent_Effect();
+            if (!string.IsNullOrEmpty(se.EffectName)) effect.EffectName = se.EffectName;
+            return effect;
+        }
+
+        private static animAnimEvent_EffectDuration BuildEffectDurationEvent(AnimEventSerializable se)
+        {
+            var effect = new animAnimEvent_EffectDuration();
+            if (!string.IsNullOrEmpty(se.EffectName)) effect.EffectName = se.EffectName;
+            if (se.SequenceShift.HasValue) effect.SequenceShift = se.SequenceShift.Value;
+            if (se.BreakAllLoopsOnStop.HasValue) effect.BreakAllLoopsOnStop = se.BreakAllLoopsOnStop.Value;
+            return effect;
+        }
+
+        private static animAnimEvent_ItemEffect BuildItemEffectEvent(AnimEventSerializable se)
+        {
+            var effect = new animAnimEvent_ItemEffect();
+            if (!string.IsNullOrEmpty(se.EffectName)) effect.EffectName = se.EffectName;
+            return effect;
+        }
+
+        private static animAnimEvent_ItemEffectDuration BuildItemEffectDurationEvent(AnimEventSerializable se)
+        {
+            var effect = new animAnimEvent_ItemEffectDuration();
+            if (!string.IsNullOrEmpty(se.EffectName)) effect.EffectName = se.EffectName;
+            if (se.SequenceShift.HasValue) effect.SequenceShift = se.SequenceShift.Value;
+            if (se.BreakAllLoopsOnStop.HasValue) effect.BreakAllLoopsOnStop = se.BreakAllLoopsOnStop.Value;
+            return effect;
+        }
+
+        // ── Phase 6 builders ──
+
+        private static animAnimEvent_Valued BuildValuedEvent(AnimEventSerializable se)
+        {
+            var valued = new animAnimEvent_Valued();
+            if (se.EventValue.HasValue) valued.Value = se.EventValue.Value;
+            return valued;
+        }
+
+        private static animAnimEvent_FoleyAction BuildFoleyActionEvent(AnimEventSerializable se)
+        {
+            var foley = new animAnimEvent_FoleyAction();
+            if (!string.IsNullOrEmpty(se.ActionName)) foley.ActionName = se.ActionName;
+            return foley;
+        }
+
+        private static animAnimEvent_SceneItem BuildSceneItemEvent(AnimEventSerializable se)
+        {
+            var sceneItem = new animAnimEvent_SceneItem();
+            if (!string.IsNullOrEmpty(se.BoneName)) sceneItem.BoneName = se.BoneName;
+            return sceneItem;
+        }
+
+        private static animAnimEvent_WorkspotPlayFacialAnim BuildWorkspotPlayFacialAnimEvent(AnimEventSerializable se)
+        {
+            var facial = new animAnimEvent_WorkspotPlayFacialAnim();
+            if (!string.IsNullOrEmpty(se.FacialAnimName)) facial.FacialAnimName = se.FacialAnimName;
+            return facial;
+        }
+
+        private static animAnimEvent_FootIK BuildFootIKEvent(AnimEventSerializable se)
+        {
+            var footIk = new animAnimEvent_FootIK();
+            if (se.Leg != null && Enum.TryParse<Enums.animLeg>(se.Leg, out var leg))
+                footIk.Leg = leg;
+            return footIk;
+        }
+
+        private static animAnimEvent_FootPhase BuildFootPhaseEvent(AnimEventSerializable se)
+        {
+            var fp = new animAnimEvent_FootPhase();
+            if (se.FootPhase != null && Enum.TryParse<Enums.animEFootPhase>(se.FootPhase, out var phase))
+                fp.Phase = phase;
+            return fp;
+        }
+
+        private static animAnimEvent_GameplayVo BuildGameplayVoEvent(AnimEventSerializable se)
+        {
+            var vo = new animAnimEvent_GameplayVo();
+            if (!string.IsNullOrEmpty(se.VoContext)) vo.VoContext = se.VoContext;
+            if (se.IsQuest.HasValue) vo.IsQuest = se.IsQuest.Value;
+            return vo;
+        }
+
+        private static animAnimEvent_FootPlant BuildFootPlantEvent(AnimEventSerializable se)
+        {
+            var plant = new animAnimEvent_FootPlant();
+            if (se.Side != null && Enum.TryParse<Enums.animEventSide>(se.Side, out var side))
+                plant.Side = side;
+            if (!string.IsNullOrEmpty(se.CustomEvent)) plant.CustomEvent = se.CustomEvent;
+            return plant;
+        }
+
+        // ── WorkspotItem serialization ──
+
+        private static List<WorkspotActionSerializable>? SerializeWorkspotActions(CArray<CHandle<workIWorkspotItemAction>> actions)
+        {
+            if (actions == null || actions.Count == 0)
+                return null;
+
+            var result = new List<WorkspotActionSerializable>();
+            foreach (var handle in actions)
+            {
+                var action = handle.Chunk;
+                if (action == null) continue;
+
+                result.Add(action switch
+                {
+                    workEquipItemToSlotAction equip => new WorkspotActionSerializable(
+                        "EquipItemToSlot",
+                        ((ulong)equip.Item).ToString(), ((ulong)equip.ItemSlot).ToString(),
+                        null, null, null, null, null, null, null, null, null, null, null, null, null),
+
+                    workEquipPropToSlotAction prop => new WorkspotActionSerializable(
+                        "EquipPropToSlot",
+                        null, ((ulong)prop.ItemSlot).ToString(),
+                        prop.ItemId.GetResolvedText(), prop.AttachMethod.ToString(),
+                        prop.CustomOffsetPos.X, prop.CustomOffsetPos.Y, prop.CustomOffsetPos.Z,
+                        prop.CustomOffsetRot.I, prop.CustomOffsetRot.J, prop.CustomOffsetRot.K, prop.CustomOffsetRot.R,
+                        null, null, null, null),
+
+                    workEquipInventoryWeaponAction weapon => new WorkspotActionSerializable(
+                        "EquipInventoryWeapon",
+                        null, null, null, null, null, null, null, null, null, null, null,
+                        weapon.WeaponType.ToString(), weapon.KeepEquippedAfterExit,
+                        ((ulong)weapon.FallbackItem).ToString(), ((ulong)weapon.FallbackSlot).ToString()),
+
+                    workUnequipFromSlotAction unequipSlot => new WorkspotActionSerializable(
+                        "UnequipFromSlot",
+                        null, ((ulong)unequipSlot.ItemSlot).ToString(),
+                        null, null, null, null, null, null, null, null, null, null, null, null, null),
+
+                    workUnequipPropAction unequipProp => new WorkspotActionSerializable(
+                        "UnequipProp",
+                        null, null, unequipProp.ItemId.GetResolvedText(),
+                        null, null, null, null, null, null, null, null, null, null, null, null),
+
+                    workUnequipItemAction unequipItem => new WorkspotActionSerializable(
+                        "UnequipItem",
+                        ((ulong)unequipItem.Item).ToString(), null,
+                        null, null, null, null, null, null, null, null, null, null, null, null, null),
+
+                    _ => new WorkspotActionSerializable(
+                        action.GetType().Name, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null)
+                });
+            }
+            return result.Count > 0 ? result : null;
+        }
+
+        private static animAnimEvent_WorkspotItem BuildWorkspotItemEvent(AnimEventSerializable se)
+        {
+            var wsItem = new animAnimEvent_WorkspotItem();
+            if (se.WorkspotActions == null) return wsItem;
+
+            foreach (var wa in se.WorkspotActions)
+            {
+                workIWorkspotItemAction? action = wa.ActionType switch
+                {
+                    "EquipItemToSlot" => BuildEquipItemToSlotAction(wa),
+                    "EquipPropToSlot" => BuildEquipPropToSlotAction(wa),
+                    "EquipInventoryWeapon" => BuildEquipInventoryWeaponAction(wa),
+                    "UnequipFromSlot" => BuildUnequipFromSlotAction(wa),
+                    "UnequipProp" => BuildUnequipPropAction(wa),
+                    "UnequipItem" => BuildUnequipItemAction(wa),
+                    _ => null
+                };
+                if (action != null)
+                    wsItem.Actions.Add(action);
+            }
+            return wsItem;
+        }
+
+        private static workEquipItemToSlotAction BuildEquipItemToSlotAction(WorkspotActionSerializable wa)
+        {
+            var a = new workEquipItemToSlotAction();
+            if (wa.Item != null && ulong.TryParse(wa.Item, out var item)) a.Item = item;
+            if (wa.ItemSlot != null && ulong.TryParse(wa.ItemSlot, out var slot)) a.ItemSlot = slot;
+            return a;
+        }
+
+        private static workEquipPropToSlotAction BuildEquipPropToSlotAction(WorkspotActionSerializable wa)
+        {
+            var a = new workEquipPropToSlotAction();
+            if (!string.IsNullOrEmpty(wa.ItemId)) a.ItemId = wa.ItemId;
+            if (wa.ItemSlot != null && ulong.TryParse(wa.ItemSlot, out var slot)) a.ItemSlot = slot;
+            if (wa.AttachMethod != null && Enum.TryParse<Enums.workPropAttachMethod>(wa.AttachMethod, out var method))
+                a.AttachMethod = method;
+            if (wa.OffsetPosX.HasValue) a.CustomOffsetPos.X = wa.OffsetPosX.Value;
+            if (wa.OffsetPosY.HasValue) a.CustomOffsetPos.Y = wa.OffsetPosY.Value;
+            if (wa.OffsetPosZ.HasValue) a.CustomOffsetPos.Z = wa.OffsetPosZ.Value;
+            if (wa.OffsetRotI.HasValue) a.CustomOffsetRot.I = wa.OffsetRotI.Value;
+            if (wa.OffsetRotJ.HasValue) a.CustomOffsetRot.J = wa.OffsetRotJ.Value;
+            if (wa.OffsetRotK.HasValue) a.CustomOffsetRot.K = wa.OffsetRotK.Value;
+            if (wa.OffsetRotR.HasValue) a.CustomOffsetRot.R = wa.OffsetRotR.Value;
+            return a;
+        }
+
+        private static workEquipInventoryWeaponAction BuildEquipInventoryWeaponAction(WorkspotActionSerializable wa)
+        {
+            var a = new workEquipInventoryWeaponAction();
+            if (wa.WeaponType != null && Enum.TryParse<Enums.workWeaponType>(wa.WeaponType, out var wt))
+                a.WeaponType = wt;
+            if (wa.KeepEquippedAfterExit.HasValue) a.KeepEquippedAfterExit = wa.KeepEquippedAfterExit.Value;
+            if (wa.FallbackItem != null && ulong.TryParse(wa.FallbackItem, out var fi)) a.FallbackItem = fi;
+            if (wa.FallbackSlot != null && ulong.TryParse(wa.FallbackSlot, out var fs)) a.FallbackSlot = fs;
+            return a;
+        }
+
+        private static workUnequipFromSlotAction BuildUnequipFromSlotAction(WorkspotActionSerializable wa)
+        {
+            var a = new workUnequipFromSlotAction();
+            if (wa.ItemSlot != null && ulong.TryParse(wa.ItemSlot, out var slot)) a.ItemSlot = slot;
+            return a;
+        }
+
+        private static workUnequipPropAction BuildUnequipPropAction(WorkspotActionSerializable wa)
+        {
+            var a = new workUnequipPropAction();
+            if (!string.IsNullOrEmpty(wa.ItemId)) a.ItemId = wa.ItemId;
+            return a;
+        }
+
+        private static workUnequipItemAction BuildUnequipItemAction(WorkspotActionSerializable wa)
+        {
+            var a = new workUnequipItemAction();
+            if (wa.Item != null && ulong.TryParse(wa.Item, out var item)) a.Item = item;
+            return a;
+        }
+
+        #endregion animEventHelpers
 
         #endregion importanims
     }
