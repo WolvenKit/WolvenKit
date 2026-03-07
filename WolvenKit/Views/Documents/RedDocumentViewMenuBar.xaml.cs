@@ -53,7 +53,7 @@ namespace WolvenKit.Views.Documents
         private readonly IProgressService<double> _progressService;
         private readonly ProjectResourceTools _projectResourceTools;
         private readonly DocumentTools _documentTools;
-        private readonly CvmMaterialTools _cvmMaterialTools;
+        private readonly ICvmTools _cvmTools;
         private readonly Cr2WTools _cr2WTools;
 
 
@@ -71,7 +71,7 @@ namespace WolvenKit.Views.Documents
             _projectResourceTools = Locator.Current.GetService<ProjectResourceTools>()!;
             _cr2WTools = Locator.Current.GetService<Cr2WTools>()!;
             _notificationService = Locator.Current.GetService<INotificationService>()!;
-            _cvmMaterialTools = Locator.Current.GetService<CvmMaterialTools>()!;
+            _cvmTools = Locator.Current.GetService<ICvmTools>()!;
 
             _appViewModel = Locator.Current.GetService<AppViewModel>()!;
 
@@ -89,8 +89,9 @@ namespace WolvenKit.Views.Documents
                 _projectManager,
                 _documentTools,
                 Locator.Current.GetService<CRUIDService>()!,
-                _cvmMaterialTools,
-                _loggerService) { CurrentTab = _currentTab };
+                _cvmTools,
+                _loggerService,
+                _archiveManager) { CurrentTab = _currentTab };
             ViewModel = DataContext as RedDocumentViewToolbarModel;
 
             _modifierStateService.ModifierStateChanged += OnModifierStateChanged;
@@ -276,11 +277,16 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            var baseMaterial = dialog.ViewModel?.BaseMaterial ?? "";
-            var isLocal = dialog.ViewModel?.IsLocalMaterial ?? true;
-            var resolveSubstitutions = dialog.ViewModel?.ResolveSubstitutions ?? false;
+            if (dialog.ViewModel is null)
+            {
+                return;
+            }
 
-            _cvmMaterialTools.GenerateMissingMaterials(cvm, baseMaterial, isLocal, resolveSubstitutions);
+            var baseMaterial = dialog.ViewModel.BaseMaterial ?? "";
+            var isLocal = dialog.ViewModel.IsLocalMaterial;
+            var resolveSubstitutions = dialog.ViewModel.ResolveSubstitutions;
+
+            _cvmTools.GenerateMissingMaterials(cvm, baseMaterial, isLocal, resolveSubstitutions);
 
             cvm.Tab?.Parent.SetIsDirty(true);
         }
@@ -383,7 +389,7 @@ namespace WolvenKit.Views.Documents
 
         private void UnDynamifyMaterials(ChunkViewModel? cvm)
         {
-            _cvmMaterialTools.UnDynamifyMaterials(cvm);
+            _cvmTools.UnDynamifyMaterials(cvm);
             ViewModel?.DeleteUnusedMaterialsCommand?.NotifyCanExecuteChanged();
         }
 
@@ -567,7 +573,7 @@ namespace WolvenKit.Views.Documents
 
             rootChunk.ForceLoadPropertiesRecursive();
 
-            _cvmMaterialTools.DeleteUnusedMaterials(rootChunk, null, true);
+            _cvmTools.DeleteUnusedMaterials(rootChunk, null, true);
             rootChunk.Tab?.Parent.Save(null);
 
             await LoadAndAnalyzeModArchivesAsync();
