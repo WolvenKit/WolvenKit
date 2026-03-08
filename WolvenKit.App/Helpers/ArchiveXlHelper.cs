@@ -440,8 +440,12 @@ public static partial class ArchiveXlHelper
     /// Replaces {material} in a resource reference's depot path with a new material name.
     /// I'm sure there is a way to make this nicer with generics, but this will do for now.
     /// </summary>
-    public static IRedRef UnDynamifyResourceReference(IRedType cvpValue, string newMatName)
+    public static IRedType UnDynamifyResourceReference(IRedType cvpValue, string newMatName)
     {
+        if (cvpValue is not IRedResourceReference and not IRedResourceAsyncReference)
+        {
+            return cvpValue;
+        }
         var newPath = "";
         var redType = cvpValue.RedType.Split(":").Last();
         if (cvpValue is IRedResourceReference original)
