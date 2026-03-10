@@ -89,7 +89,7 @@ namespace WolvenKit.Interfaces.Extensions
         /// <param name="useForwardSlashes">Use forward slashes instead of <see cref="Path.DirectorySeparatorChar"/>?</param>
         public static string SanitizeFilePath(this string target, bool useForwardSlashes = false)
         {
-            var stringPartials = PathSeparatorRegex().Split(target);
+            var stringPartials = PathSeparatorRegex().Split(target).Select(p => p.ToFileName()).ToList();
             var directorySeparator = useForwardSlashes ? "/" : Path.DirectorySeparatorChar.ToString();
 
             return string.Join(directorySeparator, stringPartials).ToLower();
