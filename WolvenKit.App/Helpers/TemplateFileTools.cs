@@ -545,7 +545,8 @@ public partial class TemplateFileTools
             _loggerService.Error("ModName or TargetRoot is empty.");
             return null;
         }
-        var modDir = Path.Combine(options.TargetRoot, options.ModName);
+
+        var modDir = Path.Combine(options.TargetRoot, options.ModName).ToFilePath();
         var journalDir = Path.Combine(modDir, "journal");
         var localizationDir = Path.Combine(modDir, "localization", "en-us", "onscreens");
         var questDir = Path.Combine(modDir, "quest");
@@ -573,61 +574,63 @@ public partial class TemplateFileTools
 
     private void CreateJournalFile(QuestGenerationOptions options, MinimalQuestPaths paths)
     {
-        if (!File.Exists(paths.JournalPath))
+        if (File.Exists(paths.JournalPath))
         {
-            var journalResource = new gameJournalResource();
-            var rootEntry = new gameJournalRootFolderEntry {  };
-
-            // onscreens folder
-            var onscreensFolder = new gameJournalFolderEntry { Id = "onscreens" };
-            var onscreenGroup = new gameJournalOnscreenGroup { Id = $"{options.ModName}_tutorials" };
-            var onscreenEntry = new gameJournalOnscreen
-            {
-                Id = $"{options.ModName}_popup" ,
-                Tag = "None",
-                Title = new LocalizationString { Value = $"{options.ModName}_popup_title" },
-                Description = new LocalizationString { Value = $"{options.ModName}_popup_description" },
-            };
-            onscreenGroup.Entries.Add(new CHandle<gameJournalEntry>(onscreenEntry));
-            onscreensFolder.Entries.Add(new CHandle<gameJournalEntry>(onscreenGroup));
-
-            // contacts folder
-            var contactsFolder = new gameJournalFolderEntry { Id = "contacts" };
-            var contactEntry = new gameJournalContact
-            {
-                Id = $"{options.ModderName}",
-                Name = new LocalizationString { Value = $"{options.ModName}_{options.ModderName}" },
-                Type = Enums.gameContactType.Texter,
-                UseFlatMessageLayout = true,
-                IsCallableDefault = true
-            };
-            // Phone conversation
-            var phoneConversation = new gameJournalPhoneConversation
-            {
-                Id = $"{options.ModName}_thread_title",
-                Title = new LocalizationString { Value = $"{options.ModName}_thread_title"}
-            };
-            // Phone message
-            var phoneMessage = new gameJournalPhoneMessage
-            {
-                Id = "info1",
-                Delay = 3,
-                IsQuestImportant = false,
-                Sender = Enums.gameMessageSender.NPC,
-                Text = new LocalizationString { Value = $"{options.ModName}_message" },
-            };
-            phoneConversation.Entries.Add(new CHandle<gameJournalEntry>(phoneMessage));
-            contactEntry.Entries.Add(new CHandle<gameJournalEntry>(phoneConversation));
-            contactsFolder.Entries.Add(new CHandle<gameJournalEntry>(contactEntry));
-
-            // Add folders to root
-            rootEntry.Entries.Add(new CHandle<gameJournalEntry>(onscreensFolder));
-            rootEntry.Entries.Add(new CHandle<gameJournalEntry>(contactsFolder));
-            journalResource.Entry = new CHandle<gameJournalEntry>(rootEntry);
-
-            var cr2w = new CR2WFile { RootChunk = journalResource };
-            _cr2WTools.WriteCr2W(cr2w, paths.JournalPath);
+            return;
         }
+
+        var modName = options.ModName.ToFileName();
+        var journalResource = new gameJournalResource();
+        var rootEntry = new gameJournalRootFolderEntry { };
+
+        // onscreens folder
+        var onscreensFolder = new gameJournalFolderEntry { Id = "onscreens" };
+        var onscreenGroup = new gameJournalOnscreenGroup { Id = $"{modName}_tutorials" };
+        var onscreenEntry = new gameJournalOnscreen
+        {
+            Id = $"{modName}_popup",
+            Tag = "None",
+            Title = new LocalizationString { Value = $"{modName}_popup_title" },
+            Description = new LocalizationString { Value = $"{modName}_popup_description" },
+        };
+        onscreenGroup.Entries.Add(new CHandle<gameJournalEntry>(onscreenEntry));
+        onscreensFolder.Entries.Add(new CHandle<gameJournalEntry>(onscreenGroup));
+
+        // contacts folder
+        var contactsFolder = new gameJournalFolderEntry { Id = "contacts" };
+        var contactEntry = new gameJournalContact
+        {
+            Id = $"{options.ModderName}",
+            Name = new LocalizationString { Value = $"{modName}_{options.ModderName}" },
+            Type = Enums.gameContactType.Texter,
+            UseFlatMessageLayout = true,
+            IsCallableDefault = true
+        };
+        // Phone conversation
+        var phoneConversation = new gameJournalPhoneConversation
+        {
+            Id = $"{modName}_thread_title", Title = new LocalizationString { Value = $"{modName}_thread_title" }
+        };
+        // Phone message
+        var phoneMessage = new gameJournalPhoneMessage
+        {
+            Id = "info1",
+            Delay = 3,
+            IsQuestImportant = false,
+            Sender = Enums.gameMessageSender.NPC,
+            Text = new LocalizationString { Value = $"{modName}_message" },
+        };
+        phoneConversation.Entries.Add(new CHandle<gameJournalEntry>(phoneMessage));
+        contactEntry.Entries.Add(new CHandle<gameJournalEntry>(phoneConversation));
+        contactsFolder.Entries.Add(new CHandle<gameJournalEntry>(contactEntry));
+
+        // Add folders to root
+        rootEntry.Entries.Add(new CHandle<gameJournalEntry>(onscreensFolder));
+        rootEntry.Entries.Add(new CHandle<gameJournalEntry>(contactsFolder));
+        journalResource.Entry = new CHandle<gameJournalEntry>(rootEntry);
+
+        var cr2w = new CR2WFile { RootChunk = journalResource };
+        _cr2WTools.WriteCr2W(cr2w, paths.JournalPath);
     }
 
     // ... Move the quest phase file creation logic into this helper ...
@@ -675,7 +678,8 @@ public partial class TemplateFileTools
                 }
                 if (!hasPhase)
                 {
-                    var resourcePath = $"mod/{options.ModName}/quest/phases/{options.ModName}_root_setup.questphase";
+                    var resourcePath = $"mod/{options.ModName}/quest/phases/{options.ModName}_root_setup.questphase"
+                        .SanitizeFilePath(true);
                     var phaseNode = new questPhaseNodeDefinition
                     {
                         Id = 2,
@@ -802,7 +806,7 @@ public partial class TemplateFileTools
                     {
                         var varComparison = new questVarComparison_ConditionType
                         {
-                            FactName = $"{options.ModName}_active",
+                            FactName = $"{options.ModName.ToFileName()}_active",
                             ComparisonType = Enums.EComparisonType.Equal,
                             Value = 0
                         };
@@ -889,7 +893,8 @@ public partial class TemplateFileTools
                         Path = new CHandle<gameJournalPath>(new gameJournalPath
                         {
                             ClassName = "gameJournalOnscreen",
-                            RealPath = $"onscreens/{options.ModName}_tutorials/{options.ModName}_popup",
+                            RealPath =
+                                $"onscreens/{options.ModName}_tutorials/{options.ModName}_popup".SanitizeFilePath(true),
                             FileEntryIndex = 1
                         }),
                         CloseAtInput = true,
@@ -922,7 +927,8 @@ public partial class TemplateFileTools
                         Path = new CHandle<gameJournalPath>(new gameJournalPath
                         {
                             ClassName = "gameJournalPhoneMessage",
-                            RealPath =  $"contacts/{options.ModderName}/{options.ModName}_thread_title/info1",
+                            RealPath = $"contacts/{options.ModderName}/{options.ModName}_thread_title/info1"
+                                .SanitizeFilePath(true),
                             FileEntryIndex = 1
                         }),
                         SendNotification = true
@@ -960,7 +966,7 @@ public partial class TemplateFileTools
                 {
                     var setVarType = new questSetVar_NodeType
                     {
-                        FactName = $"{options.ModName}_active",
+                        FactName = $"{options.ModName.ToFileName()}_active",
                         SetExactValue = true,
                         Value = 1
                     };
@@ -1056,55 +1062,51 @@ public partial class TemplateFileTools
 
     private void CreateOnscreensLocalizationFile(QuestGenerationOptions options, MinimalQuestPaths paths)
     {
-        if (!File.Exists(paths.OnscreensPath))
+        if (File.Exists(paths.OnscreensPath))
         {
-            var modnameUpper = options.ModName.ToUpperInvariant();
-            var onscreenEntries = new localizationPersistenceOnScreenEntries();
-            onscreenEntries.Entries.Add(new localizationPersistenceOnScreenEntry
-            {
-                FemaleVariant = $"{modnameUpper} TITLE",
-                MaleVariant = "",
-                PrimaryKey = 0,
-                SecondaryKey = $"{options.ModName}_popup_title"
-            });
-            onscreenEntries.Entries.Add(new localizationPersistenceOnScreenEntry
-            {
-                FemaleVariant = $"{modnameUpper} DESCRIPTION",
-                MaleVariant = "",
-                PrimaryKey = 0,
-                SecondaryKey = $"{options.ModName}_popup_description"
-            });
-            onscreenEntries.Entries.Add(new localizationPersistenceOnScreenEntry
-            {
-                FemaleVariant = $"{modnameUpper} AUTHOR",
-                MaleVariant = "",
-                PrimaryKey = 0,
-                SecondaryKey = $"{options.ModName}_{options.ModderName}"
-            });
-            onscreenEntries.Entries.Add(new localizationPersistenceOnScreenEntry
-            {
-                FemaleVariant = $"{modnameUpper} THREAD TITLE",
-                MaleVariant = "",
-                PrimaryKey = 0,
-                SecondaryKey = $"{options.ModName}_thread_title"
-            });
-            onscreenEntries.Entries.Add(new localizationPersistenceOnScreenEntry
-            {
-                FemaleVariant = $"{modnameUpper} CONFIRMATION MESSAGE",
-                MaleVariant = "",
-                PrimaryKey = 0,
-                SecondaryKey = $"{options.ModName}_message"
-            });
-
-            var cr2w = new CR2WFile
-            {
-                RootChunk = new JsonResource
-                {
-                    Root = new CHandle<ISerializable>(onscreenEntries)
-                }
-            };
-            _cr2WTools.WriteCr2W(cr2w, paths.OnscreensPath);
+            return;
         }
+
+        var modnameUpper = options.ModName.ToUpperInvariant();
+        var onscreenEntries = new localizationPersistenceOnScreenEntries();
+        onscreenEntries.Entries.Add(new localizationPersistenceOnScreenEntry
+        {
+            FemaleVariant = $"{modnameUpper} TITLE",
+            MaleVariant = "",
+            PrimaryKey = 0,
+            SecondaryKey = $"{options.ModName}_popup_title"
+        });
+        onscreenEntries.Entries.Add(new localizationPersistenceOnScreenEntry
+        {
+            FemaleVariant = $"{modnameUpper} DESCRIPTION",
+            MaleVariant = "",
+            PrimaryKey = 0,
+            SecondaryKey = $"{options.ModName}_popup_description"
+        });
+        onscreenEntries.Entries.Add(new localizationPersistenceOnScreenEntry
+        {
+            FemaleVariant = $"{modnameUpper} AUTHOR",
+            MaleVariant = "",
+            PrimaryKey = 0,
+            SecondaryKey = $"{options.ModName}_{options.ModderName}"
+        });
+        onscreenEntries.Entries.Add(new localizationPersistenceOnScreenEntry
+        {
+            FemaleVariant = $"{modnameUpper} THREAD TITLE",
+            MaleVariant = "",
+            PrimaryKey = 0,
+            SecondaryKey = $"{options.ModName}_thread_title"
+        });
+        onscreenEntries.Entries.Add(new localizationPersistenceOnScreenEntry
+        {
+            FemaleVariant = $"{modnameUpper} CONFIRMATION MESSAGE",
+            MaleVariant = "",
+            PrimaryKey = 0,
+            SecondaryKey = $"{options.ModName}_message"
+        });
+
+        var cr2w = new CR2WFile { RootChunk = new JsonResource { Root = new CHandle<ISerializable>(onscreenEntries) } };
+        _cr2WTools.WriteCr2W(cr2w, paths.OnscreensPath);
     }
 
     private const string s_questTemplateYaml = """
@@ -1128,10 +1130,12 @@ public partial class TemplateFileTools
             _loggerService.Error("Active project or its resources directory is null. Cannot create .archive.xl file.");
             return;
         }
-        var archiveXlPath = Path.Combine(resourcesDir, $"{options.ModName}.archive.xl");
+
+        var archiveXlPath = Path.Combine(resourcesDir, $"{options.ModName}.archive.xl").ToFilePath();
+        ;
         if (!File.Exists(archiveXlPath))
         {
-            File.WriteAllText(archiveXlPath, s_questTemplateYaml.Replace("MOD_NAME", options.ModName));
+            File.WriteAllText(archiveXlPath, s_questTemplateYaml.Replace("MOD_NAME", options.ModName.ToFileName()));
         }
     }
 
@@ -1161,7 +1165,7 @@ public partial class TemplateFileTools
         if (!absoluteParentFolder.Contains(propFolderName) &&
             Directory.GetFileSystemEntries(absoluteParentFolder).Length > 0)
         {
-            prop.ParentFolder = Path.Combine(prop.ParentFolder, propFolderName);
+            prop.ParentFolder = Path.Combine(prop.ParentFolder, propFolderName).ToFilePath();
             absoluteParentFolder = Path.Combine(project.ModDirectory, prop.ParentFolder);
             Directory.CreateDirectory(absoluteParentFolder);
         }
@@ -1175,8 +1179,8 @@ public partial class TemplateFileTools
         PrepareMeshes();
 
         // generate control files
-        var entFilePath = Path.Combine(prop.ParentFolder, $"{propFolderName}.ent");
-        var appFilePath = Path.Combine(prop.ParentFolder, $"{propFolderName}.app");
+        var entFilePath = Path.Combine(prop.ParentFolder, $"{propFolderName}.ent").ToFilePath();
+        var appFilePath = Path.Combine(prop.ParentFolder, $"{propFolderName}.app").ToFilePath();
         GenerateEntFile();
         GenerateAppFile();
 
@@ -1278,7 +1282,7 @@ public partial class TemplateFileTools
             if (!string.IsNullOrEmpty(prop.MeshFile1) && !prop.MeshFile1.Contains(prop.ParentFolder))
             {
                 var meshFileName = Path.GetFileName(prop.MeshFile1);
-                var meshFilePath = Path.Combine(prop.ParentFolder, meshFileName);
+                var meshFilePath = Path.Combine(prop.ParentFolder, meshFileName).ToFilePath();
                 _projectResourceTools
                     .MoveAndRefactorAsync(project.GetAbsolutePath(prop.MeshFile1),
                         project.GetAbsolutePath(meshFilePath), "", false).GetAwaiter()
@@ -1289,7 +1293,7 @@ public partial class TemplateFileTools
             if (!string.IsNullOrEmpty(prop.MeshFile2) && !prop.MeshFile2.Contains(prop.ParentFolder))
             {
                 var meshFileName = Path.GetFileName(prop.MeshFile2);
-                var meshFilePath = Path.Combine(prop.ParentFolder, meshFileName);
+                var meshFilePath = Path.Combine(prop.ParentFolder, meshFileName).ToFilePath();
                 _projectResourceTools
                     .MoveAndRefactorAsync(project.GetAbsolutePath(prop.MeshFile2),
                         project.GetAbsolutePath(meshFilePath), "", false).GetAwaiter()
@@ -1300,7 +1304,7 @@ public partial class TemplateFileTools
             if (!string.IsNullOrEmpty(prop.MeshFile3) && !prop.MeshFile3.Contains(prop.ParentFolder))
             {
                 var meshFileName = Path.GetFileName(prop.MeshFile3);
-                var meshFilePath = Path.Combine(prop.ParentFolder, meshFileName);
+                var meshFilePath = Path.Combine(prop.ParentFolder, meshFileName).ToFilePath();
                 _projectResourceTools
                     .MoveAndRefactorAsync(project.GetAbsolutePath(prop.MeshFile3),
                         project.GetAbsolutePath(meshFilePath), "", false).GetAwaiter()
@@ -1311,7 +1315,7 @@ public partial class TemplateFileTools
             if (!string.IsNullOrEmpty(prop.MeshFile4) && !prop.MeshFile4.Contains(prop.ParentFolder))
             {
                 var meshFileName = Path.GetFileName(prop.MeshFile4);
-                var meshFilePath = Path.Combine(prop.ParentFolder, meshFileName);
+                var meshFilePath = Path.Combine(prop.ParentFolder, meshFileName).ToFilePath();
                 _projectResourceTools
                     .MoveAndRefactorAsync(project.GetAbsolutePath(prop.MeshFile4),
                         project.GetAbsolutePath(meshFilePath), "", false).GetAwaiter()
