@@ -440,14 +440,19 @@ public static partial class ArchiveXlHelper
     /// Replaces {material} in a resource reference's depot path with a new material name.
     /// I'm sure there is a way to make this nicer with generics, but this will do for now.
     /// </summary>
-    public static IRedRef UnDynamifyResourceReference(IRedType cvpValue, string newMatName)
+    public static IRedType UnDynamifyResourceReference(IRedType cvpValue, string newMatName)
     {
-        var newPath = "";
-        var redType = cvpValue.RedType.Split(":").Last();
-        if (cvpValue is IRedResourceReference original)
+        if (cvpValue is not IRedRef original)
         {
-            newPath = ReplaceMaterialPath(original.DepotPath, newMatName);
-            // @formatter:off
+            return cvpValue;
+        }
+
+        var newPath = (original.DepotPath.GetResolvedText() ?? "").Replace("{material}", newMatName).Replace("*", "");
+        var redType = cvpValue.RedType.Split(":").Last();
+
+        // @formatter:off
+        if (cvpValue is IRedResourceReference)
+        {
             return redType switch
             {
                 "Multilayer_Setup" => new CResourceReference<Multilayer_Setup>(newPath, InternalEnums.EImportFlags.Default),
@@ -460,17 +465,7 @@ public static partial class ArchiveXlHelper
                 "CTerrainSetup" => new CResourceReference<CTerrainSetup>(newPath, InternalEnums.EImportFlags.Default),
                 _ => original
             };
-            // @formatter:on
         }
-
-        if (cvpValue is not IRedResourceReference asyncRef)
-        {
-            throw new WolvenKitException(0,
-                $"This shouldn't happen: UnDynamifyResourceReference called with unsupported type {redType}");
-        }
-
-        newPath = ReplaceMaterialPath(asyncRef.DepotPath, newMatName);
-        // @formatter:off
         return redType switch
         {
             "Multilayer_Setup" => new CResourceAsyncReference<Multilayer_Setup>(newPath, InternalEnums.EImportFlags.Default),
@@ -481,11 +476,8 @@ public static partial class ArchiveXlHelper
             "CHairProfile" => new CResourceAsyncReference<CHairProfile>(newPath, InternalEnums.EImportFlags.Default),
             "CSkinProfile" => new CResourceAsyncReference<CSkinProfile>(newPath, InternalEnums.EImportFlags.Default),
             "CTerrainSetup" => new CResourceAsyncReference<CTerrainSetup>(newPath, InternalEnums.EImportFlags.Default),
-            _ => asyncRef
+            _ => (IRedResourceAsyncReference) original
         };
         // @formatter:on
-
-        static string ReplaceMaterialPath(ResourcePath? depotPath, string input) =>
-            (depotPath?.GetResolvedText() ?? "").Replace("{material}", input).Replace("*", "");
     }
 }
