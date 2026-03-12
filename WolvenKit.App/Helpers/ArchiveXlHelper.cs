@@ -442,16 +442,17 @@ public static partial class ArchiveXlHelper
     /// </summary>
     public static IRedType UnDynamifyResourceReference(IRedType cvpValue, string newMatName)
     {
-        if (cvpValue is not IRedResourceReference and not IRedResourceAsyncReference)
+        if (cvpValue is not IRedRef original)
         {
             return cvpValue;
         }
-        var newPath = "";
+
+        var newPath = (original.DepotPath.GetResolvedText() ?? "").Replace("{material}", newMatName).Replace("*", "");
         var redType = cvpValue.RedType.Split(":").Last();
-        if (cvpValue is IRedResourceReference original)
+
+        // @formatter:off
+        if (cvpValue is IRedResourceReference)
         {
-            newPath = ReplaceMaterialPath(original.DepotPath, newMatName);
-            // @formatter:off
             return redType switch
             {
                 "Multilayer_Setup" => new CResourceReference<Multilayer_Setup>(newPath, InternalEnums.EImportFlags.Default),
@@ -464,17 +465,7 @@ public static partial class ArchiveXlHelper
                 "CTerrainSetup" => new CResourceReference<CTerrainSetup>(newPath, InternalEnums.EImportFlags.Default),
                 _ => original
             };
-            // @formatter:on
         }
-
-        if (cvpValue is not IRedResourceReference asyncRef)
-        {
-            throw new WolvenKitException(0,
-                $"This shouldn't happen: UnDynamifyResourceReference called with unsupported type {redType}");
-        }
-
-        newPath = ReplaceMaterialPath(asyncRef.DepotPath, newMatName);
-        // @formatter:off
         return redType switch
         {
             "Multilayer_Setup" => new CResourceAsyncReference<Multilayer_Setup>(newPath, InternalEnums.EImportFlags.Default),
@@ -485,11 +476,8 @@ public static partial class ArchiveXlHelper
             "CHairProfile" => new CResourceAsyncReference<CHairProfile>(newPath, InternalEnums.EImportFlags.Default),
             "CSkinProfile" => new CResourceAsyncReference<CSkinProfile>(newPath, InternalEnums.EImportFlags.Default),
             "CTerrainSetup" => new CResourceAsyncReference<CTerrainSetup>(newPath, InternalEnums.EImportFlags.Default),
-            _ => asyncRef
+            _ => (IRedResourceAsyncReference) original
         };
         // @formatter:on
-
-        static string ReplaceMaterialPath(ResourcePath? depotPath, string input) =>
-            (depotPath?.GetResolvedText() ?? "").Replace("{material}", input).Replace("*", "");
     }
 }
