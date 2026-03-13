@@ -226,7 +226,8 @@ namespace WolvenKit.Modkit.RED4.Animation
 
     internal readonly record struct AnimationOptimizationHints(
         bool PreferSIMD,
-        AnimationCompression MaxRotationCompression
+        AnimationCompression MaxRotationCompression,
+        ushort SimdQuantizationBits = 0  // 0 = derive from MaxRotationCompression (0→uncompressed, 1→16bit); non-zero = exact bit depth for SIMD rotation quantization
     );
 
     internal record struct AnimationBufferData(
@@ -248,7 +249,8 @@ namespace WolvenKit.Modkit.RED4.Animation
         byte NumExtraTracks,
         ushort TracksCountActual,
         bool IsSimd,
-        AnimationCompression CompressionUsed
+        AnimationCompression CompressionUsed,
+        ushort SimdQuantizationBits = 0  // Original quantization bit depth from SIMD buffer (0 = uncompressed float32)
     );
 
     internal readonly record struct AnimationExtrasForGltf(
