@@ -39,6 +39,9 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private readonly CRUIDService _cruidService;
     private readonly DocumentTools _documentTools;
     private readonly ILoggerService _loggerService;
+    private readonly INotificationService _notificationService;
+    private readonly StreamingSectorTools _sectorTools;
+    private readonly AppViewModel _appViewModel;
     private readonly CvmMaterialTools _cvmMaterialTools;
 
     public RedDocumentViewToolbarModel(
@@ -48,7 +51,10 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         DocumentTools documentTools,
         CRUIDService cruidService,
         CvmMaterialTools cvmMaterialTools,
-        ILoggerService loggerService
+        ILoggerService loggerService,
+        INotificationService notificationService,
+        StreamingSectorTools sectorTools,
+        AppViewModel appViewModel
     )
     {
         _modifierViewStateService = modifierSvc;
@@ -58,6 +64,9 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         _documentTools = documentTools;
         _cvmMaterialTools = cvmMaterialTools;
         _loggerService = loggerService;
+        _sectorTools = sectorTools;
+        _notificationService = notificationService;
+        _appViewModel = appViewModel;
 
         modifierSvc.ModifierStateChanged += OnModifierChanged;
         modifierSvc.PropertyChanged += (_, args) => OnPropertyChanged(args.PropertyName);
@@ -113,11 +122,12 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
                 or RedDocumentItemType.Questphase
                 or RedDocumentItemType.Scene
                 or RedDocumentItemType.Physmatlib
+                or RedDocumentItemType.Streamingsector
+                or RedDocumentItemType.Streamingblock
+                or RedDocumentItemType.Mlsetup
                 or RedDocumentItemType.Ent => true,
             RedDocumentItemType.Xbm
                 or RedDocumentItemType.Mlmask
-                or RedDocumentItemType.Mlsetup
-                or RedDocumentItemType.Sector
                 or RedDocumentItemType.None
                 or RedDocumentItemType.Other => false,
             _ => false,
@@ -195,6 +205,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(RegenerateIdsCommand))]
     [NotifyCanExecuteChangedFor(nameof(CopyMaterialFromMeshCommand))]
     [NotifyCanExecuteChangedFor(nameof(CopyMaterialToMeshesCommand))]
+    [NotifyCanExecuteChangedFor(nameof(AddSectorVariantCommand))]
     [ObservableProperty]
     private RedDocumentItemType _contentType;
 
@@ -802,7 +813,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     #region phymatlibFile
 
     /*
-     * Delete duplicate entries
+     * Regenerate IDs
      */
     private bool CanRegenerateIds() => ContentType is RedDocumentItemType.Physmatlib;
 
@@ -811,6 +822,47 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
     #endregion
 
+    #region sector
+
+    /*
+     * Create sector variant(s) in streamingblock
+     */
+    private bool CanCreateVariants() => ContentType is RedDocumentItemType.Streamingblock;
+
+    [RelayCommand(CanExecute = nameof(CanCreateVariants))]
+    private void AddSectorVariant()
+    {
+        if (RootChunk?.ResolvedData is not worldStreamingBlock block ||
+            _projectManager.ActiveProject is not { } project)
+        {
+            return;
+        }
+
+        if (RootChunk.Tab?.Parent.IsDirty == true)
+        {
+            Interactions.ShowErrorPopup(("Save your file first!",
+                "Your file has un-saved changes. Please save before running this workflow."));
+            return;
+        }
+
+        try
+        {
+            if (_sectorTools.AddSectorVariants(block, project))
+            {
+                RootChunk.Tab?.Parent.SetIsDirty(true);
+                RootChunk.GetPropertyChild("descriptors")?.RecalculateProperties();
+                _appViewModel.ReloadChangedFiles();
+            }
+        }
+        catch (Exception e)
+        {
+            _notificationService.Error(e.Message);
+            _loggerService.Error(e.Message);
+            return;
+        }
+    }
+
+    #endregion
 
     private bool CanDeleteChunkMaterialByIndex() => RootChunk?.ResolvedData is CMesh mesh && mesh.Appearances.Count > 0;
 
