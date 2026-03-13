@@ -32,23 +32,31 @@ public partial class ProjectSettingsDialog : ReactiveUserControl<ProjectSettings
             this.Bind(ViewModel, x => x.Project.Version, x => x.VersionTextBox.Text)
                 .DisposeWith(disposables);
 
+            this.Bind(ViewModel, x => x.Project.ProjectColor, x => x.ProjectColorButton.Color)
+                .DisposeWith(disposables);
+
             this.BindCommand(ViewModel, x => x.OkCommand, x => x.OkButton)
                 .DisposeWith(disposables);
 
             this.BindCommand(ViewModel, x => x.CancelCommand, x => x.CancelButton)
                 .DisposeWith(disposables);
+
+            if (ViewModel is not null)
+            {
+                ProjectColorButton.SetCurrentValue(Others.ColorPickerButton.ColorProperty,
+                    ViewModel.Project.ProjectColor);
+            }
+
         });
 
         this.WhenAnyValue(x => x.MenuListBox.SelectedItem)
             .Subscribe(selectedItem =>
             {
-                if (selectedItem is ListBoxItem { Content: string name })
+                if (selectedItem is ListBoxItem { Content: "General" })
                 {
-                    if (name == "General")
-                    {
-                        GeneralPanel.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-                    }
+                    GeneralPanel.SetCurrentValue(VisibilityProperty, Visibility.Visible);
                 }
             });
     }
+
 }
