@@ -5,27 +5,27 @@ using System.Linq;
 namespace WolvenKit.Core.Services;
 
 /// <summary>
-/// Provides helper methods for validating and sanitizing archive file paths, as such paths provided should be relative from the archives root.
+/// Provides helper methods for validating and sanitizing OS file paths. Does not enforce archive file path rules. For Validating archive file paths, use <ref cref="ArchiveFilepathTools"/>.
 /// </summary>
-public static class ArchiveFilepathTools
+public class OsFilepathTools
 {
     /// <summary>
-    /// A set of valid characters that can be used in archive file paths.
-    /// This includes lowercase letters, numbers, underscores, dots, forward slashes,
-    /// and backslashes.
+    /// A set of characters that are considered invalid in operating system file paths.
+    /// This collection is initialized with the invalid path characters as defined
+    /// by the .NET framework's <see cref="Path.GetInvalidPathChars"/>.
     /// </summary>
-    public static readonly HashSet<char>　ValidCharacters = new("abcdefghijklmnopqrstuvwxyz0123456789_./\\");
+    public static readonly HashSet<char> InvalidCharacters = new(Path.GetInvalidPathChars());
 
     /// <summary>
     /// Determines whether the specified file path is valid by ensuring that it does not contain invalid characters
     /// and does not have empty directory paths.
     /// </summary>
-    /// <param name="filepath">The file path to be validated.</param>
+    /// <param name="filepath">The file path to validate.</param>
     /// <returns>True if the file path is valid; otherwise, false.</returns>
     public static bool IsFilePathValid(string filepath)
     {
         var normalizedFilepath = NormalizeFilePath(filepath);
-        return normalizedFilepath.Split(Path.DirectorySeparatorChar).All(part => !string.IsNullOrEmpty(part) && part.All(c => ValidCharacters.Contains(c)));
+        return normalizedFilepath.Split(Path.DirectorySeparatorChar).All(part => !string.IsNullOrEmpty(part) && part.All(c => !InvalidCharacters.Contains(c)));
     }
 
     /// <summary>
@@ -38,11 +38,11 @@ public static class ArchiveFilepathTools
     {
         var normalizedFilepath = NormalizeFilePath(filename);
         var parts = normalizedFilepath.Split(Path.DirectorySeparatorChar);
-        return parts.Length == 1 && !string.IsNullOrEmpty(parts[0]) && parts[0].All(c => ValidCharacters.Contains(c));
+        return parts.Length == 1 && !string.IsNullOrEmpty(parts[0]) && parts[0].All(c => !InvalidCharacters.Contains(c));
     }
 
     /// <summary>
-    /// Sanitizes the provided file path by ensuring all parts of the path contain only valid characters.
+    /// Sanitizes the provided file path by the Operating System's rules for file paths.
     /// Invalid characters are replaced with the specified replacement string. Empty path segments are removed.
     /// </summary>
     /// <param name="filepath">The file path to be sanitized.</param>
@@ -59,8 +59,7 @@ public static class ArchiveFilepathTools
         List<string> parts = normalizedFilepath.Split(Path.DirectorySeparatorChar)
             .Select(part => string.Concat(part.ToLowerInvariant()
                 .Trim()
-                .Select(c => c == ' ' ? '_' : c)
-                .SelectMany(c => ValidCharacters.Contains(c) ? c.ToString() : replacement)))
+                .SelectMany(c => InvalidCharacters.Contains(c) ? replacement : c.ToString())))
             .Where(partSanitized => !string.IsNullOrEmpty(partSanitized))
             .ToList();
 
