@@ -5,7 +5,7 @@ using System.Linq;
 namespace WolvenKit.Core.Services;
 
 /// <summary>
-/// Provides helper methods for validating and sanitizing archive file paths, as such paths provided should be relative.
+/// Provides helper methods for validating and sanitizing archive file paths, as such paths provided should be relative from the archives root.
 /// </summary>
 public static class ArchiveFilepathTools
 {
@@ -24,9 +24,7 @@ public static class ArchiveFilepathTools
     /// <returns>True if the file path is valid; otherwise, false.</returns>
     public static bool IsFilePathValid(string filepath)
     {
-        var normalizedFilepath = filepath.Replace("/", Path.DirectorySeparatorChar.ToString())
-            .Replace(@"\", Path.DirectorySeparatorChar.ToString());
-
+        var normalizedFilepath = NormalizeFilePath(filepath);
         return normalizedFilepath.Split(Path.DirectorySeparatorChar).All(part => !string.IsNullOrEmpty(part) && part.All(c => ValidCharacters.Contains(c)));
     }
 
@@ -39,16 +37,23 @@ public static class ArchiveFilepathTools
     /// <returns>A sanitized file path with invalid characters replaced and empty segments removed.</returns>
     public static string SanitizeFilePath(string filepath, string replacement = "")
     {
-        var normalizedFilepath = filepath.Replace("/", Path.DirectorySeparatorChar.ToString())
-            .Replace(@"\", Path.DirectorySeparatorChar.ToString());
+        var normalizedFilepath = NormalizeFilePath(filepath);
 
         List<string> parts = normalizedFilepath.Split(Path.DirectorySeparatorChar)
-            .Select(part => part.ToLowerInvariant()
+            .Select(part => string.Concat(part.ToLowerInvariant()
                 .Trim()
-                .SelectMany(c => ValidCharacters.Contains(c) ? c.ToString() : replacement) as string)
+                .Select(c => c == ' ' ? '_' : c)
+                .SelectMany(c => ValidCharacters.Contains(c) ? c.ToString() : replacement)))
             .Where(partSanitized => !string.IsNullOrEmpty(partSanitized))
-            .ToList()!;
+            .ToList();
 
         return string.Join(Path.DirectorySeparatorChar.ToString(), parts);
     }
+
+    private static string NormalizeFilePath(string filepath)
+    {
+        return filepath.Replace("/", Path.DirectorySeparatorChar.ToString())
+            .Replace(@"\", Path.DirectorySeparatorChar.ToString());
+    }
+
 }
