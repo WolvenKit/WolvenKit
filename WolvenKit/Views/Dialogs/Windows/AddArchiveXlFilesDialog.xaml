@@ -24,7 +24,6 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-
     <Grid
         Height="Auto"
         Margin="{DynamicResource WolvenKitMarginHeader}"
@@ -439,6 +438,9 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="5" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="5" />
                         </Grid.RowDefinitions>
 
                         <!-- Variants -->
@@ -463,7 +465,6 @@
                             KeyboardNavigation.TabIndex="-1"
                             IsChecked="{Binding EnableSecondaryVariants,
                                                 Mode=TwoWay}" />
-
                         <TextBlock
                             Grid.Row="3"
                             Grid.Column="1"
@@ -475,16 +476,33 @@
                             Grid.Column="0"
                             VerticalAlignment="Top"
                             Style="{StaticResource LabelStyle}"
-                            Text="Read from files" />
+                            Text="Generate toggles" />
                         <CheckBox
                             Grid.Row="5"
                             Grid.Column="1"
                             KeyboardNavigation.TabIndex="-1"
-                            IsChecked="{Binding IsCollectMeshAppearances,
+                            IsChecked="{Binding EnableToggles,
                                                 Mode=TwoWay}" />
-
                         <TextBlock
                             Grid.Row="6"
+                            Grid.Column="1"
+                            Style="{StaticResource ExplanationStyle}"
+                            Text="Toggle parts, e.g. 'stickers'. Generated values will be 'on' and 'off'." />
+
+                        <TextBlock
+                            Grid.Row="8"
+                            Grid.Column="0"
+                            VerticalAlignment="Top"
+                            Style="{StaticResource LabelStyle}"
+                            Text="Read from files" />
+                        <CheckBox
+                            Grid.Row="8"
+                            Grid.Column="1"
+                            KeyboardNavigation.TabIndex="-1"
+                            IsChecked="{Binding IsCollectMeshAppearances,
+                                                Mode=TwoWay}" />
+                        <TextBlock
+                            Grid.Row="9"
                             Grid.Column="1"
                             Style="{StaticResource ExplanationStyle}"
                             Text="Read appearances from existing files?" />
@@ -498,12 +516,14 @@
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="5" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="5" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="5" />
                         </Grid.RowDefinitions>
+
 
                         <!-- Variants 1 -->
                         <TextBlock
@@ -526,11 +546,14 @@
                             </TextBlock.Style>
                         </TextBlock>
 
-
-                        <!-- Variants 1 - show dropdown (read from mesh) -->
-                        <hc:ComboBox
-                            x:Name="PrimaryMeshPathDropdown"
+                        <StackPanel
                             Grid.Row="0"
+                            Grid.Column="1">
+
+                            <!-- Variants 1 - show dropdown (read from mesh) -->
+                            <hc:ComboBox
+                                x:Name="PrimaryMeshPathDropdown"
+                                Grid.Row="1"
                             Grid.Column="1"
                             MaxWidth="{DynamicResource WolvenKitDialogWidthSmall}"
                             Style="{StaticResource ComboboxStyle}"
@@ -549,48 +572,49 @@
                             SelectionChanged="PrimaryMeshPathDropdown_OnChanged"
                             KeyboardNavigation.TabIndex="-1" />
 
-                        <!-- Variants 1 - user input (do not read from mesh) -->
-                        <syncfusion:SfTextBoxExt
-                            x:Name="ItemVariantsTextBox"
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            Padding="{DynamicResource WolvenKitMarginTinyVertical}"
-                            VerticalContentAlignment="Top"
-                            Background="{StaticResource ContentBackgroundAlt2}"
-                            BorderBrush="{StaticResource ForegroundColor_Grey_Dark}"
-                            BorderThickness="1"
-                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
-                            Visibility="{Binding IsCollectMeshAppearances,
-                                                 Converter={StaticResource InvertBooleanVisibilityConverter}}"
-                            helpers:TextBoxBehavior.TripleClickSelectAll="True"
-                            TextWrapping="Wrap"
-                            KeyboardNavigation.TabIndex="-1"
-                            Watermark="black, white, red"
-                            WatermarkTemplate="{StaticResource PlaceholderTemplate}"
-                            LostFocus="ItemVariants_FocusLost" />
+                            <!-- Variants 1 - user input (do not read from mesh) -->
+                            <syncfusion:SfTextBoxExt
+                                x:Name="ItemVariantsTextBox"
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Padding="{DynamicResource WolvenKitMarginTinyVertical}"
+                                VerticalContentAlignment="Top"
+                                Background="{StaticResource ContentBackgroundAlt2}"
+                                BorderBrush="{StaticResource ForegroundColor_Grey_Dark}"
+                                BorderThickness="1"
+                                FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                                Visibility="{Binding IsCollectMeshAppearances,
+                                                     Converter={StaticResource InvertBooleanVisibilityConverter}}"
+                                helpers:TextBoxBehavior.TripleClickSelectAll="True"
+                                TextWrapping="Wrap"
+                                KeyboardNavigation.TabIndex="-1"
+                                Watermark="black, white, red"
+                                WatermarkTemplate="{StaticResource PlaceholderTemplate}"
+                                LostFocus="ItemVariants_FocusLost" />
 
-                        <!-- Variants 1: explanation -->
-                        <TextBlock
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            Text="Item variants (separate with comma)">
-                            <TextBlock.Style>
-                                <Style
-                                    BasedOn="{StaticResource ExplanationStyle}"
-                                    TargetType="TextBlock">
-                                    <Style.Triggers>
-                                        <DataTrigger
-                                            Binding="{Binding IsCollectMeshAppearances}"
-                                            Value="True">
-                                            <Setter Property="Text" Value="Use this file's appearances as primary variant (path must contain 'wa')" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
+                            <!-- Variants 1: explanation -->
+                            <TextBlock
+                                Text="Item variants (separate with comma)">
+                                <TextBlock.Style>
+                                    <Style
+                                        BasedOn="{StaticResource ExplanationStyle}"
+                                        TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger
+                                                Binding="{Binding IsCollectMeshAppearances}"
+                                                Value="True">
+                                                <Setter Property="Text"
+                                                        Value="Use this file's appearances as primary variant (path must contain 'wa')" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+
+                        </StackPanel>
 
                         <TextBlock
-                            Grid.Row="3"
+                            Grid.Row="2"
                             Grid.Column="0"
                             VerticalAlignment="Top"
                             Visibility="{Binding EnableSecondaryVariants,
@@ -598,7 +622,7 @@
                             Text="Secondary" />
 
                         <StackPanel
-                            Grid.Row="3"
+                            Grid.Row="2"
                             Grid.Column="1"
                             Visibility="{Binding EnableSecondaryVariants,
                                                  Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -642,14 +666,55 @@
 
                             <TextBlock
                                 Visibility="{Binding IsCollectMeshAppearances,
-                                                     Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                     Converter={StaticResource InvertBooleanVisibilityConverter}}"
+                                Style="{StaticResource ExplanationStyle}"
                                 Text="Secondary item variants (separate by comma)" />
                             <TextBlock
                                 Visibility="{Binding IsCollectMeshAppearances,
-                                                     Converter={StaticResource InvertBooleanVisibilityConverter}}"
+                                                     Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Style="{StaticResource ExplanationStyle}"
                                 Text="Source mesh for secondary item variants" />
 
                         </StackPanel>
+
+                        <!-- Toggles -->
+                        <TextBlock
+                            Grid.Row="4"
+                            Grid.Column="0"
+                            VerticalAlignment="Top"
+                            Text="Part toggles"
+                            Visibility="{Binding EnableToggles,
+                                                 Converter={StaticResource BooleanToVisibilityConverter}}">
+                        </TextBlock>
+
+                        <!-- Toggles -->
+                        <syncfusion:SfTextBoxExt
+                            x:Name="PartTogglesTextBox"
+                            Grid.Row="4"
+                            Grid.Column="1"
+                            Padding="{DynamicResource WolvenKitMarginTinyVertical}"
+                            VerticalContentAlignment="Top"
+                            Background="{StaticResource ContentBackgroundAlt2}"
+                            BorderBrush="{StaticResource ForegroundColor_Grey_Dark}"
+                            BorderThickness="1"
+                            FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                            Visibility="{Binding EnableToggles,
+                                                 Converter={StaticResource BooleanToVisibilityConverter}}"
+                            helpers:TextBoxBehavior.TripleClickSelectAll="True"
+                            TextWrapping="Wrap"
+                            KeyboardNavigation.TabIndex="-1"
+                            Watermark="stickers, buttons, leds"
+                            WatermarkTemplate="{StaticResource PlaceholderTemplate}"
+                            LostFocus="PartToggles_FocusLost" />
+
+                        <!-- Toggles: explanation -->
+                        <TextBlock
+                            Visibility="{Binding EnableToggles,
+                                                 Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Grid.Row="5"
+                            Grid.Column="1"
+                            Text="Item part toggles (generate extra appearances in root_entity and .app)">
+                        </TextBlock>
 
 
                     </Grid>
