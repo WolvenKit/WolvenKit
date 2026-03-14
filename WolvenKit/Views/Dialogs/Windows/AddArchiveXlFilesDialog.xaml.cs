@@ -163,6 +163,17 @@ namespace WolvenKit.Views.Dialogs.Windows
                 [.. textBox.Text.Split(",", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)];
         }
 
+        private void PartToggles_FocusLost(object sender, RoutedEventArgs e)
+        {
+            if (sender is not SfTextBoxExt textBox || ViewModel is not AddArchiveXlFilesDialogViewModel model)
+            {
+                return;
+            }
+
+            model.Toggles =
+                [.. textBox.Text.Split(",", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)];
+        }
+
         private void HidingTags_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ViewModel is not { } vm)
