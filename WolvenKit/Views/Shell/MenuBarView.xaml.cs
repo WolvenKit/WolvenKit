@@ -2,11 +2,13 @@ using System.Reactive.Disposables;
 using System.Windows;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Interaction.Options;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.Views.Dialogs.Windows;
 
 namespace WolvenKit.Views.Shell;
 
@@ -310,6 +312,29 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
         var dialogVm = Interactions.AddItemsToStore(project);
 
         vm.AddItemCodesToFiles(dialogVm);
+    }
+
+    private void SearchInProject_Click(object sender, RoutedEventArgs e)
+    {
+        if (ViewModel is not MenuBarViewModel vm || vm.MainViewModel.ActiveProject is not Cp77Project project)
+        {
+            return;
+        }
+
+        var dialog = new SearchAndReplaceDialog(true);
+        if (dialog.ShowDialog() != true)
+        {
+            return;
+        }
+
+        if (dialog.ViewModel is null || string.IsNullOrEmpty(dialog.ViewModel.SearchText))
+        {
+            return;
+        }
+
+
+        _mainViewModel.SearchInProject(dialog.ViewModel.SearchText, dialog.ViewModel.IsRegex,
+            dialog.ViewModel.IsWholeWord);
     }
 
 

@@ -2023,6 +2023,33 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
     */
 
+
+    public void SearchInProject(string searchText, bool isRegex, bool isWholeWord)
+    {
+        if (_projectManager.ActiveProject is not { } project)
+        {
+            return;
+        }
+
+        var filesWithMatch =
+            ProjectResourceTools.GetFilesContainingString(searchText, isRegex, isWholeWord, _progressService);
+        if (filesWithMatch.Count == 0)
+        {
+            _notificationService.Success("Finished search, but found no results");
+            return;
+        }
+
+        _notificationService.Success($"Finished search, found {filesWithMatch.Count} results");
+        _loggerService.Success($"Finished search for {searchText}: \n\t{string.Join("\n\t", filesWithMatch)}");
+
+        var dict = new Dictionary<string, List<string>>() { { searchText, filesWithMatch } };
+
+        Interactions.ShowDictionaryAsCopyableList(
+            new ShowDictAsCopyableListDialogOptions("Search results", "Files containing your search term", dict,
+                false));
+    }
+
+
     private void ShowHomePageSync(EHomePage page = EHomePage.Welcome)
     {
         var homePage = _pageViewModelFactory.HomePageViewModel(this);

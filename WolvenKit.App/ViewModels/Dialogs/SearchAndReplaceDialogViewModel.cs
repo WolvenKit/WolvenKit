@@ -8,14 +8,24 @@ namespace WolvenKit.App.ViewModels.Dialogs;
 /// </summary>
 public partial class SearchAndReplaceDialogViewModel : ObservableObject
 {
-    public SearchAndReplaceDialogViewModel(bool isSearchOnly)
+    public SearchAndReplaceDialogViewModel(bool isSearchOnly = false)
     {
+        IsSearchOnly = isSearchOnly;
+        if (isSearchOnly)
+        {
+            Title = "Search";
+        }
     }
 
     /// <summary>
     /// Search text
     /// </summary>
     [ObservableProperty] private string? _searchText = "";
+
+    /// <summary>
+    /// Dialogue title
+    /// </summary>
+    [ObservableProperty] private string? _title = "Replace in Selection";
 
     /// <summary>
     /// Replace text
