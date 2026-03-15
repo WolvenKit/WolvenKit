@@ -385,7 +385,7 @@
                                 <Button
                                     x:Name="LaunchProfileButton"
                                     Style="{StaticResource ButtonChromelessStyle}"
-                                    ToolTip="Start from launch profile (configure in 'Launch Options')">
+                                    ToolTip="Start from launch profile (configure in 'Launch Profiles')">
                                     <StackPanel Orientation="Horizontal">
                                         <templates:IconBox
                                             IconPack="Material"
@@ -414,10 +414,10 @@
 
                         <Separator Margin="{DynamicResource WolvenKitMarginTiny}" />
 
-                        <!-- Launch Options -->
+                        <!-- Launch Profiles -->
                         <MenuItem
                             x:Name="LaunchOptionsMenuItem"
-                            Header="{x:Static local:RibbonView.LaunchOptionsString}">
+                            Header="{x:Static local:RibbonView.LaunchProfilesString}">
                             <MenuItem.Icon>
                                 <templates:IconBox
                                     IconPack="Codicons"
