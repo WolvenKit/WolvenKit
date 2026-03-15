@@ -423,6 +423,19 @@
                 <Separator />
 
                 <MenuItem
+                    Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                    Click="SearchInProject_Click"
+                    Header="Search in project files">
+                    <MenuItem.Icon>
+                        <local:IconBox
+                            IconPack="Material"
+                            Kind="FileSearch"
+                            Size="{DynamicResource WolvenKitIconTiny}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+
+                <MenuItem
                     x:Name="ToolbarProjectScanFilePathsButton"
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
                     Header="Scan for broken file references">

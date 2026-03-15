@@ -18,6 +18,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Core.Services;
 using WolvenKit.Helpers;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
@@ -1399,4 +1400,61 @@ public partial class ProjectResourceTools
     }
 
     #endregion
+
+    public List<string> GetFilesContainingString(string searchText, bool isRegex, bool isWholeWord,
+        IProgressService<double> progressService)
+    {
+        if (_projectManager.ActiveProject is not { } project)
+        {
+            return [];
+        }
+
+        var totalFiles = project.ModFiles.Count + project.ResourceFiles.Count;
+
+        if (totalFiles == 0)
+        {
+            return [];
+        }
+
+        progressService.Report(0);
+        var processedFiles = 0;
+        var progressIncrement = totalFiles > 0 ? 100.0 / totalFiles : 100;
+
+        List<string> filesWithMatch = [];
+        foreach (var filePath in project.ModFiles)
+        {
+            var json = _crwWTools.ReadJsonNoException(Path.Join(project.ModDirectory, filePath));
+            if (StringHelper.StringContains(json, searchText, isRegex, isWholeWord))
+            {
+                filesWithMatch.Add(filePath);
+            }
+
+            var currentProgress = Interlocked.Increment(ref processedFiles) * progressIncrement;
+            progressService.Report(currentProgress);
+        }
+
+        foreach (var filePath in project.ResourceFiles)
+        {
+            try
+            {
+                var absolutePath = Path.Join(project.ResourcesDirectory, filePath);
+                var fileContent = File.ReadAllText(absolutePath);
+                if (StringHelper.StringContains(fileContent, searchText, isRegex, isWholeWord))
+                {
+                    filesWithMatch.Add($"resources{Path.DirectorySeparatorChar}{filePath}");
+                }
+
+                var currentProgress = Interlocked.Increment(ref processedFiles) * progressIncrement;
+                progressService.Report(currentProgress);
+            }
+            catch
+            {
+                _loggerService.Error($"Failed to open resources{Path.DirectorySeparatorChar}{filePath} for searching");
+            }
+        }
+
+        progressService.IsIndeterminate = false;
+
+        return filesWithMatch.Distinct().ToList();
+    }
 }
