@@ -6,11 +6,14 @@ namespace WolvenKit.App.ViewModels.Dialogs;
 /// <summary>
 /// A simple "search and replace" dialog. Needs to register in GenericHost via AddTransient.
 /// </summary>
-public partial class SearchAndReplaceDialogViewModel() : ObservableObject
+public partial class SearchAndReplaceDialogViewModel : ObservableObject
 {
-       
+    public SearchAndReplaceDialogViewModel(bool isSearchOnly)
+    {
+    }
+
     /// <summary>
-    /// Search text 
+    /// Search text
     /// </summary>
     [ObservableProperty] private string? _searchText = "";
 
@@ -33,8 +36,13 @@ public partial class SearchAndReplaceDialogViewModel() : ObservableObject
     /// Regular expression?
     /// </summary>
     [ObservableProperty] private bool _isRegex;
-    
-    
+
+    /// <summary>
+    /// Search dialogue only? (Hide "replace" box)
+    /// </summary>
+    [ObservableProperty] private bool _isSearchOnly;
+
+
 
     public void SwapFields() => (SearchText, ReplaceText) = (ReplaceText, SearchText);
 }

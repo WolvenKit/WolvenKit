@@ -79,6 +79,10 @@
                         Margin="{DynamicResource WolvenKitMarginTinyLeft}"
                         Background="Transparent"
                         Style="{StaticResource ButtonCustom}"
+                        Visibility="{Binding Path=IsSearchOnly,
+                                             RelativeSource={RelativeSource Self},
+                                             Mode=OneWay,
+                                             Converter={StaticResource InvertBooleanVisibilityConverter}}"
                         Click="SwapFieldsButton_OnClick"
                         ToolTip="Swap search and replace fields">
                         <templates:IconBox
@@ -92,11 +96,19 @@
                         Grid.Row="2"
                         Grid.Column="0"
                         VerticalAlignment="Center"
+                        Visibility="{Binding Path=IsSearchOnly,
+                                             RelativeSource={RelativeSource Self},
+                                             Mode=OneWay,
+                                             Converter={StaticResource InvertBooleanVisibilityConverter}}"
                         Text="Replace:" />
                     <TextBox
                         x:Name="ReplaceTextBox"
                         Grid.Row="2"
                         Grid.Column="1"
+                        Visibility="{Binding Path=IsSearchOnly,
+                                             RelativeSource={RelativeSource Self},
+                                             Mode=OneWay,
+                                             Converter={StaticResource InvertBooleanVisibilityConverter}}"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         KeyboardNavigation.TabIndex="2" />
 
@@ -129,11 +141,19 @@
                         Grid.Row="8"
                         Grid.Column="0"
                         VerticalAlignment="Center"
+                        Visibility="{Binding Path=IsSearchOnly,
+                                             RelativeSource={RelativeSource Self},
+                                             Mode=OneWay,
+                                             Converter={StaticResource InvertBooleanVisibilityConverter}}"
                         Text="Remember:" />
                     <CheckBox
                         x:Name="RememberValuesCheckBox"
                         Grid.Row="8"
                         Grid.Column="1"
+                        Visibility="{Binding Path=IsSearchOnly,
+                                             RelativeSource={RelativeSource Self},
+                                             Mode=OneWay,
+                                             Converter={StaticResource InvertBooleanVisibilityConverter}}"
                         KeyboardNavigation.TabIndex="5" />
                 </Grid>
             </syncfusion:WizardPage>
