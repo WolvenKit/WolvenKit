@@ -64,9 +64,9 @@ public class CvmDependencyTools
 
                 return;
             default:
-                _notificationService.Warning(
+                _notificationService.Error(
                     "Can't regenerate visual controllers. Please check the log for more detail.");
-                _loggerService.Warning(
+                _loggerService.Error(
                     $"Failed to regenerate visual controllers on {cvm.ResolvedData.GetType().Name}. " +
                     "Select one or more appearances, the appearances array, or the root node.");
 
