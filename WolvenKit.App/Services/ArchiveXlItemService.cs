@@ -705,8 +705,10 @@ public partial class ArchiveXlItemService
                 var path = isSoft && !meshPath.StartsWith("*") ? $"*{meshPath}" : meshPath;
                 var flag = isSoft ? InternalEnums.EImportFlags.Soft : InternalEnums.EImportFlags.Default;
                 var appearance = "*{variant}";
+                var componentName = $"{slotPrefix}_{clothingItemData.ItemFileName}{componentIndex++:D2}";
                 if (isSecondaryComponent)
                 {
+                    componentName = $"{componentName}_secondary";
                     appearance = "*{variant.2}";
                 }
                 else if (clothingItemData.SecondaryVariants.Count > 0)
@@ -716,7 +718,7 @@ public partial class ArchiveXlItemService
 
                 IRedMeshComponent component = new entGarmentSkinnedMeshComponent()
                 {
-                    Name = $"{slotPrefix}_{clothingItemData.ItemFileName}{componentIndex++:D2}",
+                    Name = componentName,
                     Mesh = new CResourceAsyncReference<CMesh>(path, flag),
                     MeshAppearance = appearance
                 };
@@ -730,8 +732,6 @@ public partial class ArchiveXlItemService
             var componentIndex = 0;
             foreach (var entComponent in entTemplate.Components.OfType<IRedMeshComponent>())
             {
-                // components will be named like h0_my_new_hat1
-                entComponent.Name = $"{slotPrefix}_{clothingItemData.ItemFileName}{componentIndex++:D2}";
 
                 var fileSourcePath = entComponent.Mesh.DepotPath.GetResolvedText();
                 if (string.IsNullOrEmpty(fileSourcePath))
@@ -740,19 +740,22 @@ public partial class ArchiveXlItemService
                     continue;
                 }
 
-                if (fileSourcePath.StartsWith('*'))
+                var isSecondaryComponent = IsSecondaryComponent(entComponent.Name!);
+                var componentName = $"{slotPrefix}_{clothingItemData.ItemFileName}{componentIndex++:D2}";
+                if (isSecondaryComponent)
                 {
-                    _logger.Info($"Depot path for {entComponent.Name} is already dynamic. Skipping...");
-                    continue;
+                    componentName = $"{componentName}_secondary";
                 }
 
-                var isSecondaryComponent = IsSecondaryComponent(entComponent.Name!);
+                // components will be named like h0_my_new_hat1
+                entComponent.Name = componentName;
+
 
                 var fileDestPath = GetDestFilePath(fileSourcePath, isSecondaryComponent);
 
                 AddMeshFilesToProject(fileSourcePath, fileDestPath, isSecondaryComponent);
 
-                var dynamicPath = WolvenKit.Modkit.Resources.ArchiveXlHelper.MakeDynamic(fileDestPath);
+                var dynamicPath = ArchiveXlHelper.MakeDynamic(fileDestPath);
                 var hasSubstitution = ArchiveXlHelper.HasSubstitution(dynamicPath);
 
                 entComponent.Mesh =
@@ -779,6 +782,7 @@ public partial class ArchiveXlItemService
         bool IsSecondaryComponent(string componentName) =>
             componentName.Contains("_dec", StringComparison.OrdinalIgnoreCase) ||
             componentName.Contains("_cuff", StringComparison.OrdinalIgnoreCase) ||
+            componentName.Contains("_secondary", StringComparison.OrdinalIgnoreCase) ||
             componentName.Contains("_patch", StringComparison.OrdinalIgnoreCase);
 
         string GetDestFilePath(string filePath, bool isSecondaryComponent = false)
