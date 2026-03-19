@@ -647,6 +647,9 @@ public partial class ArchiveXlItemService
         var relativeMeshFolder = Path.Combine(clothingItemData.FilesRelPath, "meshes");
         Directory.CreateDirectory(Path.Combine(activeProject.ModDirectory, relativeMeshFolder));
 
+
+        var slotPrefix = EquipmentItemData.GetComponentPrefix(clothingItemData.Slot);
+
         if (clothingItemData.MeshesFromProject.Count == 0)
         {
             // we are not using meshes from project
@@ -686,6 +689,7 @@ public partial class ArchiveXlItemService
             List<string> componentNames = [];
             var slotPrefix = EquipmentItemData.GetComponentPrefix(clothingItemData.Slot);
 
+            var componentIndex = 0;
             foreach (var relativePath in clothingItemData.MeshesFromProject)
             {
                 var meshPath = relativePath;
@@ -712,8 +716,7 @@ public partial class ArchiveXlItemService
 
                 IRedMeshComponent component = new entGarmentSkinnedMeshComponent()
                 {
-                    Name =
-                        $"{slotPrefix}_{Path.GetFileName(meshPath).Replace("{gender}", "").Replace("__", "_").ToFileName()}",
+                    Name = $"{slotPrefix}_{clothingItemData.ItemFileName}{componentIndex++:D2}",
                     Mesh = new CResourceAsyncReference<CMesh>(path, flag),
                     MeshAppearance = appearance
                 };
@@ -724,10 +727,11 @@ public partial class ArchiveXlItemService
         void AdjustExistingComponents()
         {
             var useSecondary = clothingItemData.SecondaryVariants.Count > 0;
+            var componentIndex = 0;
             foreach (var entComponent in entTemplate.Components.OfType<IRedMeshComponent>())
             {
-                // remove "pwa" from component name, it confuses people
-                entComponent.Name = (entComponent.Name.GetResolvedText() ?? "").Replace("pwa", "");
+                // components will be named like h0_my_new_hat1
+                entComponent.Name = $"{slotPrefix}_{clothingItemData.ItemFileName}{componentIndex++:D2}";
 
                 var fileSourcePath = entComponent.Mesh.DepotPath.GetResolvedText();
                 if (string.IsNullOrEmpty(fileSourcePath))
@@ -915,7 +919,7 @@ public partial class ArchiveXlItemService
         }
         // Take care of the tags
         rootEntity.VisualTagsSchema ??= new CHandle<entVisualTagsSchema>() { Chunk = new entVisualTagsSchema() };
-        rootEntity.DefaultAppearance = appearanceNames.First();
+        rootEntity.DefaultAppearance = "default"; // checked with psiberx
 
         var tags = rootEntity.VisualTagsSchema.Chunk ?? new entVisualTagsSchema();
         tags.VisualTags ??= new redTagList();
