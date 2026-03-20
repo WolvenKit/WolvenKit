@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using DynamicData;
 
@@ -9,7 +10,7 @@ public interface IRecentlyUsedItemsService
 
     public List<RecentlyUsedItemModel> PinnedItems { get; }
 
-    void AddItem(RecentlyUsedItemModel recentlyUsedItemModel);
+    void AddOrUpdateItem(RecentlyUsedItemModel recentlyUsedItemModel);
     void RemoveItem(RecentlyUsedItemModel itemModel);
     void PinItem(string key);
     void UnpinItem(string key);

@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Models.ProjectManagement.Project;
@@ -18,8 +19,9 @@ public partial class ProjectSettingsDialogViewModel : DialogViewModel
     private readonly IPluginService _pluginService;
     private readonly AppViewModel _appViewModel;
 
-    [ObservableProperty]
-    private Cp77Project _project;
+    [ObservableProperty] private Cp77Project _project;
+
+    [ObservableProperty] private Color? _projectColor;
 
 
     public bool IsRedModInstalled => _pluginService.IsInstalled(EPlugin.redmod);
@@ -31,13 +33,18 @@ public partial class ProjectSettingsDialogViewModel : DialogViewModel
         _appViewModel = appViewModel;
 
         _project = _projectManager.ActiveProject.NotNull();
+        _projectColor = _project.ProjectColor;
     }
 
     [RelayCommand]
     private async Task Ok()
     {
-        await _projectManager.SaveAsync();
+        if (ProjectColor is Color c)
+        {
+            Project.ProjectColor = c;
+        }
 
+        await _projectManager.SaveAsync();
         _appViewModel.CloseModalCommand.Execute(null);
     }
 
