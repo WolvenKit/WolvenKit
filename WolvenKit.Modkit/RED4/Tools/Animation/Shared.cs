@@ -114,7 +114,7 @@ namespace WolvenKit.Modkit.RED4.Animation
     {
         // JSON stuffs..
         public const string SchemaType = "wkit.cp2077.gltf.anims";
-        public const uint SchemaVersion = 4;
+        public const uint SchemaVersion = 5;
 
         public static Func<Schema> CurrentSchema = () => new(SchemaType, SchemaVersion);
         public static Func<AnimationExtrasForGltf, bool> IsCurrentSchema = (extras) =>
@@ -127,7 +127,27 @@ namespace WolvenKit.Modkit.RED4.Animation
                 WriteIndented = true
             };
 
-        private static Func<AnimationExtrasForGltfV3, AnimationExtrasForGltf> MigrateFromV3toV4 = (v3Extras) => {
+        private static Func<Deprecated.AnimationExtrasForGltfV4, AnimationExtrasForGltf> MigrateFromV4toV5 = (v4Extras) => {
+            return new(
+                new(SchemaType, 5),
+                v4Extras.AnimationType,
+                v4Extras.RootMotionType,
+                v4Extras.FrameClamping,
+                v4Extras.FrameClampingStartFrame,
+                v4Extras.FrameClampingEndFrame,
+                v4Extras.NumExtraJoints,
+                v4Extras.NumExtraTracks,
+                v4Extras.ConstTrackKeys,
+                v4Extras.TrackKeys,
+                v4Extras.FallbackFrameIndices,
+                v4Extras.OptimizationHints,
+                null  // AnimEvents — not present in V4
+            );
+        };
+        private static Func<System.Text.Json.Nodes.JsonNode, AnimationExtrasForGltf> MigrateJsonFromV4toV5 = (maybeExtras) =>
+            MigrateFromV4toV5(JsonSerializer.Deserialize<Deprecated.AnimationExtrasForGltfV4>(maybeExtras, SerializationOptions()));
+
+        private static Func<Deprecated.AnimationExtrasForGltfV3, Deprecated.AnimationExtrasForGltfV4> MigrateFromV3toV4 = (v3Extras) => {
             return new(
                 new(SchemaType, 4),
                 v3Extras.AnimationType,
@@ -143,7 +163,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                 v3Extras.OptimizationHints
             );
         };
-        private static Func<System.Text.Json.Nodes.JsonNode, AnimationExtrasForGltf> MigrateJsonFromV3toV4 = (maybeExtras) =>
+        private static Func<System.Text.Json.Nodes.JsonNode, Deprecated.AnimationExtrasForGltfV4> MigrateJsonFromV3toV4 = (maybeExtras) =>
             MigrateFromV3toV4(JsonSerializer.Deserialize<Deprecated.AnimationExtrasForGltfV3>(maybeExtras, SerializationOptions()));
 
         private static Func<System.Text.Json.Nodes.JsonNode, Deprecated.AnimationExtrasForGltfV3> MigrateJsonFromV2toV3 = (maybeExtras) =>
@@ -186,8 +206,9 @@ namespace WolvenKit.Modkit.RED4.Animation
 
             return extras.Schema.Version switch
             {
-                3 => new Valid(MigrateJsonFromV3toV4(maybeExtras)),
-                2 => new Valid(MigrateFromV3toV4(MigrateJsonFromV2toV3(maybeExtras))),
+                4 => new Valid(MigrateJsonFromV4toV5(maybeExtras)),
+                3 => new Valid(MigrateFromV4toV5(MigrateJsonFromV3toV4(maybeExtras))),
+                2 => new Valid(MigrateFromV4toV5(MigrateFromV3toV4(MigrateJsonFromV2toV3(maybeExtras)))),
                 _ => new Invalid($"No migration path for schema version {extras.Schema.Version} found.")
             };
         };
@@ -226,7 +247,8 @@ namespace WolvenKit.Modkit.RED4.Animation
 
     internal readonly record struct AnimationOptimizationHints(
         bool PreferSIMD,
-        AnimationCompression MaxRotationCompression
+        AnimationCompression MaxRotationCompression,
+        ushort SimdQuantizationBits = 0  // 0 = derive from MaxRotationCompression (0→uncompressed, 1→16bit); non-zero = exact bit depth for SIMD rotation quantization
     );
 
     internal record struct AnimationBufferData(
@@ -248,7 +270,68 @@ namespace WolvenKit.Modkit.RED4.Animation
         byte NumExtraTracks,
         ushort TracksCountActual,
         bool IsSimd,
-        AnimationCompression CompressionUsed
+        AnimationCompression CompressionUsed,
+        ushort SimdQuantizationBits = 0  // Original quantization bit depth from SIMD buffer (0 = uncompressed float32)
+    );
+
+    internal readonly record struct AnimEventSerializable(
+        string Type,           // e.g. "Sound", "SoundFromEmitter", "Effect", "Simple", etc.
+        string EventName,      // CName → string
+        uint StartFrame,
+        uint DurationInFrames,
+        // Subclass-specific fields (nullable, only populated for the relevant type):
+        Dictionary<string, string>? Switches,       // Sound: Wwise switch name→value
+        Dictionary<string, float>? Params,          // Sound: Wwise param name→value (with curve metadata in ParamCurves)
+        List<AnimEventParamCurve>? ParamCurves,     // Sound: per-param curve data
+        List<string>? DynamicParams,                // Sound: dynamic param CNames
+        string? MetadataContext,                    // Sound
+        string? OnlyPlayOn,                         // Sound
+        string? DontPlayOn,                         // Sound
+        string? PlayerGenderAlt,                    // Sound (enum as string)
+        string? EmitterName,                        // SoundFromEmitter
+        string? EffectName,                         // Effect / EffectDuration / ItemEffect / ItemEffectDuration
+        uint? SequenceShift,                        // EffectDuration / ItemEffectDuration
+        bool? BreakAllLoopsOnStop,                  // EffectDuration / ItemEffectDuration
+        // Phase 6 — remaining event type fields:
+        float? EventValue,                          // Valued
+        string? ActionName,                         // FoleyAction
+        string? BoneName,                           // SceneItem
+        string? FacialAnimName,                     // WorkspotPlayFacialAnim
+        string? Leg,                                // FootIK (enum as string: "Left"/"Right")
+        string? FootPhase,                          // FootPhase (enum as string: "RightUp"/"RightForward"/"LeftUp"/"LeftForward"/"NotConsidered")
+        string? VoContext,                          // GameplayVo
+        bool? IsQuest,                              // GameplayVo
+        string? Side,                               // FootPlant (enum as string: "Left"/"Right")
+        string? CustomEvent,                         // FootPlant
+        List<WorkspotActionSerializable>? WorkspotActions  // WorkspotItem: array of polymorphic actions
+    );
+
+    internal readonly record struct WorkspotActionSerializable(
+        string ActionType,               // "EquipItemToSlot", "EquipPropToSlot", "EquipInventoryWeapon", "UnequipFromSlot", "UnequipProp", "UnequipItem"
+        string? Item,                    // TweakDBID as decimal string (EquipItemToSlot, UnequipItem)
+        string? ItemSlot,                // TweakDBID as decimal string (EquipItemToSlot, EquipPropToSlot, UnequipFromSlot)
+        string? ItemId,                  // CName (EquipPropToSlot, UnequipProp)
+        string? AttachMethod,            // enum as string (EquipPropToSlot: "BonePosition"/"RelativePosition"/"Custom")
+        float? OffsetPosX,               // EquipPropToSlot: CustomOffsetPos.X
+        float? OffsetPosY,               // EquipPropToSlot: CustomOffsetPos.Y
+        float? OffsetPosZ,               // EquipPropToSlot: CustomOffsetPos.Z
+        float? OffsetRotI,               // EquipPropToSlot: CustomOffsetRot.I
+        float? OffsetRotJ,               // EquipPropToSlot: CustomOffsetRot.J
+        float? OffsetRotK,               // EquipPropToSlot: CustomOffsetRot.K
+        float? OffsetRotR,               // EquipPropToSlot: CustomOffsetRot.R
+        string? WeaponType,              // enum as string (EquipInventoryWeapon)
+        bool? KeepEquippedAfterExit,     // EquipInventoryWeapon
+        string? FallbackItem,            // TweakDBID as decimal string (EquipInventoryWeapon)
+        string? FallbackSlot             // TweakDBID as decimal string (EquipInventoryWeapon)
+    );
+
+    internal readonly record struct AnimEventParamCurve(
+        string Name,
+        float Value,
+        string EnterCurveType,
+        float EnterCurveTime,
+        string ExitCurveType,
+        float ExitCurveTime
     );
 
     internal readonly record struct AnimationExtrasForGltf(
@@ -263,11 +346,26 @@ namespace WolvenKit.Modkit.RED4.Animation
         List<AnimConstTrackKeySerializable> ConstTrackKeys,
         List<AnimTrackKeySerializable> TrackKeys,
         List<ushort> FallbackFrameIndices,
-        AnimationOptimizationHints OptimizationHints
+        AnimationOptimizationHints OptimizationHints,
+        List<AnimEventSerializable>? AnimEvents  // NEW — nullable for backwards compat
     );
 
     namespace Deprecated
     {
+        internal readonly record struct AnimationExtrasForGltfV4(
+            Schema Schema,
+            string AnimationType,
+            string RootMotionType,
+            bool FrameClamping,
+            short FrameClampingStartFrame,
+            short FrameClampingEndFrame,
+            byte NumExtraJoints,
+            byte NumExtraTracks,
+            List<AnimConstTrackKeySerializable> ConstTrackKeys,
+            List<AnimTrackKeySerializable> TrackKeys,
+            List<ushort> FallbackFrameIndices,
+            AnimationOptimizationHints OptimizationHints
+        );
         // TODO: maybe explicit constructor for explicit defaults?
         internal readonly record struct AnimationExtrasForGltfV3(
             Schema Schema,
