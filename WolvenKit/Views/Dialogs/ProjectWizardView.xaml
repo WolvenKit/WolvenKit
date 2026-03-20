@@ -104,7 +104,7 @@
             Grid.ColumnSpan="2"
             Margin="{DynamicResource WolvenKitMarginBottom}"
             hc:InfoElement.Necessary="True"
-            hc:InfoElement.Title="Mod Name (Used as RedMod Name / Archive Name)"
+            hc:InfoElement.Title="Mod File Name (Used as RedMod Name / Archive Name)"
             hc:InfoElement.TitlePlacement="Top"
             hc:InfoElement.TitleWidth="120"
             Text="{Binding ModName,
