@@ -24,6 +24,7 @@ using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
@@ -166,6 +167,13 @@ public partial class ImportViewModel : AbstractImportExportViewModel
                 Interlocked.Increment(ref progress);
                 _progressService.Report(progress / (float)total);
             });
+        }
+
+        if (ModTools.ShowBoneCreationWarning)
+        {
+            _notificationService.Info(
+                "Wolvenkit created bones during import. Please check the log for more information.");
+            ModTools.ShowBoneCreationWarning = false;
         }
 
         await ImportWavs(Items.Where(x => x.IsChecked ||
