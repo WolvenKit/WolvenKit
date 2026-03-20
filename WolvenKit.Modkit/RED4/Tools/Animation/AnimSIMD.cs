@@ -154,7 +154,9 @@ namespace WolvenKit.Modkit.RED4.Animation
                 evalAlignedPositions[i] = br.ReadSingle();
             }
 
-            var scalesForFrame = new Vec3[animBufSimd.NumFrames, numJointsSimdAligned];
+            // Must be large enough for both SIMD-aligned data and all joint indices
+            var scalesDim = Math.Max(numJointsSimdAligned, (uint)animBufSimd.NumJoints);
+            var scalesForFrame = new Vec3[animBufSimd.NumFrames, scalesDim];
             if (animBufSimd.IsScaleConstant)
             {
                 // I guess these are aligned too?
@@ -186,7 +188,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                 }
                 for (uint i = 0; i < animBufSimd.NumFrames; i++)
                 {
-                    for (uint e = 0; e < animBufSimd.NumJoints; e += 4)
+                    for (uint e = 0; e < numJointsSimdAligned; e += 4)
                     {
                         for (uint eye = 0; eye < 4; eye++)
                         {
@@ -196,7 +198,10 @@ namespace WolvenKit.Modkit.RED4.Animation
                                 Y = scalesRaw[(i * numJointsSimdAligned * 3) + (e * 3) + 4 + eye], // just magnitude for scale, no flip
                                 Z = scalesRaw[(i * numJointsSimdAligned * 3) + (e * 3) + 8 + eye],
                             };
-                            scalesForFrame[i, e + eye] = SVectorGltf(v)._;
+                            if (e + eye < animBufSimd.NumJoints)
+                            {
+                                scalesForFrame[i, e + eye] = SVectorGltf(v)._;  
+                            }
                         }
                     }
                 }
@@ -282,10 +287,10 @@ namespace WolvenKit.Modkit.RED4.Animation
                             Z = evalAlignedPositions[(i * animBufSimd.NumTranslationsToEvalAlignedToSimd * 3) + (e * 3) + 8 + eye]
                         };
 
-                        // Skip padding, store real indices
-                        if (evalIndices[e + eye] > -1)
+                        // Skip padding, store real indices (bounds check for extra joints)
+                        if (evalIndices[e + eye] > -1 && evalIndices[e + eye] < animBufSimd.NumJoints)
                         {
-                            positionsForFrame[i, evalIndices[e + eye]] = TVectorGltf(v)._;
+                            positionsForFrame[i, evalIndices[e + eye]] = TVectorGltf(v)._;  
                         }
                     }
                 }
@@ -298,7 +303,10 @@ namespace WolvenKit.Modkit.RED4.Animation
                         Z = positionToCopy[e].Z
                     };
 
-                    positionsForFrame[i, copyIndices[e]] = TVectorGltf(v)._;
+                    if (copyIndices[e] >= 0 && copyIndices[e] < animBufSimd.NumJoints)
+                    {
+                        positionsForFrame[i, copyIndices[e]] = TVectorGltf(v)._;
+                    }
                 }
             }
 
@@ -359,6 +367,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                     isQuantizedRotations
                     ? AnimationCompression.QuaternionAsFixed3x16bit
                     : AnimationCompression.Uncompressed,
+                SimdQuantizationBits = animBufSimd.QuantizationBits,
             };
         }
     }
