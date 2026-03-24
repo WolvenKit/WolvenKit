@@ -23,13 +23,11 @@ public static class FilepathValidationTools
     private static readonly Regex InvalidPathTraversal = new Regex(@"^(?=(?:[^.]*\.){3,})[. ]+$");
 
     /// <summary>
-    /// Validates whether the given file path conforms to operating system standards by checking
-    /// for invalid characters, invalid path traversal, and ensuring no sections are empty or
-    /// improperly formatted (e.g., containing dots and spaces only).
+    /// Validates whether the given file path conforms to operating system standards.
     /// </summary>
     /// <param name="filepath">The file path to validate.</param>
     /// <returns>Returns true if the file path is valid, according to operating system standards; otherwise, false.</returns>
-    /// <remarks>Considers a filepath where the last segment consists of a path traversal as invalid even if it is valid from the operating systems perspective</remarks>
+    /// <remarks>Considers a filepath where the last segment consists of a path traversal as invalid even if it is valid from the operating systems' perspective.</remarks>
     public static bool IsOsFilePathValid(string filepath)
     {
         var normalizedFilepathParts = NormalizeFilePath(filepath).Split(Path.DirectorySeparatorChar);
@@ -41,9 +39,7 @@ public static class FilepathValidationTools
     }
 
     /// <summary>
-    /// Validates whether the given file name conforms to operating system standards by ensuring that
-    /// it does not contain invalid characters, does not represent a path traversal, and has only one segment
-    /// without directory separators.
+    /// Validates whether the given file name conforms to operating system standards and does not contain directories.
     /// </summary>
     /// <param name="filename">The file name to validate.</param>
     /// <returns>Returns true if the file name is valid, according to operating system standards; otherwise, false.</returns>
@@ -52,13 +48,12 @@ public static class FilepathValidationTools
                                                                  .Split(Path.DirectorySeparatorChar).Length == 1;
 
     /// <summary>
-    /// Sanitizes a file path by replacing invalid characters, trimming whitespace, and
-    /// eliminating empty segments. Ensures the resulting path conforms to operating system standards.
+    /// Sanitizes a file path ensuring the resulting path conforms to operating system standards.
     /// </summary>
     /// <param name="filepath">The file path to sanitize.</param>
     /// <param name="replacement">The string to replace invalid characters with. Defaults to an empty string.</param>
     /// <returns>Returns a sanitized file path, with invalid characters replaced and empty segments removed.</returns>
-    /// <remarks>Despite path traversal being technically a valid filepath as the last element, this method sanitizes it  away as it is not a valid filename</remarks>
+    /// <remarks>Despite path traversal being accepted by Windows as the last element of a filepath, this method sanitizes it away as it is not a valid filename.</remarks>
     public static string SanitizeOsFilePath(string filepath, string replacement = "")
     {
         var normalizedFilepath = NormalizeFilePath(filepath);
@@ -83,12 +78,12 @@ public static class FilepathValidationTools
     }
 
     /// <summary>
-    /// Sanitizes a file name by removing or replacing characters that are invalid for operating system file names.
+    /// Sanitizes a file name ensuring the resulting name conforms to operating system standards.
     /// If the input contains path separators, only the last segment is retained and all preceding segments are discarded.
     /// </summary>
     /// <param name="filename">The file name to sanitize.</param>
     /// <param name="replacement">The string to replace invalid characters in the file name. Defaults to an empty string.</param>
-    /// <returns>Returns the sanitized file name with invalid characters removed or replaced.</returns>
+    /// <returns>Returns the sanitized file name with invalid characters replaced.</returns>
     public static string SanitizeOsFileName(string filename, string replacement = "")
         => SanitizeOsFilePath(filename, replacement).Split(Path.DirectorySeparatorChar).Last();
 
@@ -103,12 +98,11 @@ public static class FilepathValidationTools
     public static readonly HashSet<char>　ValidArchiveCharacters = new("abcdefghijklmnopqrstuvwxyz0123456789_./\\-");
 
     /// <summary>
-    /// Validates whether the given file path is suitable for use within an archive by ensuring it adheres to both
-    /// operating system standards and archive-specific character constraints.
-    /// Path traversal is explicitly disallowed.
+    /// Validates whether the given file path conforms to operating system and archive standards.
     /// </summary>
-    /// <param name="filepath">The file path to validate against archive-specific criteria.</param>
-    /// <returns>Returns true if the file path is valid for use in an archive; otherwise, false.</returns>
+    /// <param name="filepath">The file path to validate.</param>
+    /// <returns>Returns true if the file path is valid, according to operating system and archive standards; otherwise, false.</returns>
+    /// <remarks>Path traversal is explicitly disallowed.</remarks>
     public static bool IsArchiveFilePathValid(string filepath) => IsOsFilePathValid(filepath) &&
                                                                   filepath.All(c => ValidArchiveCharacters.Contains(c)) &&
                                                                   NormalizeFilePath(filepath)
@@ -116,22 +110,21 @@ public static class FilepathValidationTools
                                                                       .All(p => !IsOnlyDotsAndSpaces.IsMatch(p));
 
     /// <summary>
-    /// Validates whether the given file name conforms to archive standards by ensuring that
-    /// it does not contain invalid characters, does not represent a path traversal, and only
-    /// includes characters permitted for archived file names.
+    /// Validates whether the given file name conforms to operating system and archive standards and does not contain directories.
     /// </summary>
     /// <param name="filename">The file name to validate.</param>
-    /// <returns>Returns true if the file name is valid for use in archives; otherwise, false.</returns>
+    /// <returns>Returns true if the file name is valid, according to operating system and archive standards; otherwise, false.</returns>
+    /// <remarks>Path traversal is explicitly disallowed.</remarks>
     public static bool IsArchiveFileNameValid(string filename) => IsOsFileNameValid(filename) &&
                                                                   filename.All(c => ValidArchiveCharacters.Contains(c));
 
     /// <summary>
-    /// Sanitizes the given file path for use in the archive by normalizing the path, replacing invalid characters,
-    /// and ensuring compatibility with predefined archive file path standards.
+    /// Sanitizes a file path ensuring the resulting path conforms to operating system and archive standards.
     /// </summary>
     /// <param name="filepath">The file path to sanitize.</param>
-    /// <param name="replacement">The string to replace invalid characters in the file path. Defaults to an empty string.</param>
-    /// <returns>Returns the sanitized file path as a string, which complies with archive file path standards.</returns>
+    /// <param name="replacement">The string to replace invalid characters with. Defaults to an empty string.</param>
+    /// <returns>Returns a sanitized file path, with invalid characters replaced and empty segments removed.</returns>
+    /// <remarks>Path traversal is explicitly disallowed.</remarks>
     public static string SanitizeArchiveFilePath(string filepath, string replacement = "")
     {
         var osSanitizedFilepath = SanitizeOsFilePath(filepath, replacement);
@@ -148,14 +141,12 @@ public static class FilepathValidationTools
     }
 
     /// <summary>
-    /// Sanitizes the given file name for use in the archive by replacing invalid characters
-    /// and ensuring compatibility with predefined archive file path standards.
+    /// Sanitizes a file name ensuring the resulting name conforms to operating system and archive standards.
     /// If the input contains path separators, only the last segment is retained and all preceding segments are discarded.
     /// </summary>
     /// <param name="filename">The file name to sanitize.</param>
-    /// <param name="replacement">The string replacement for any invalid characters found in the file name.
-    /// Defaults to an empty string if not specified.</param>
-    /// <returns>Returns the sanitized file name as a string, ensuring it is compliant with archive-specific rules.</returns>
+    /// <param name="replacement">The string to replace invalid characters in the file name. Defaults to an empty string.</param>
+    /// <returns>Returns the sanitized file name with invalid characters replaced.</returns>
     public static string SanitizeArchiveFileName(string filename, string replacement = "")
         => SanitizeArchiveFilePath(filename, replacement).Split(Path.DirectorySeparatorChar).Last();
 
