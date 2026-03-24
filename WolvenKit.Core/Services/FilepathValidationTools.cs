@@ -58,16 +58,26 @@ public static class FilepathValidationTools
     /// <param name="filepath">The file path to sanitize.</param>
     /// <param name="replacement">The string to replace invalid characters with. Defaults to an empty string.</param>
     /// <returns>Returns a sanitized file path, with invalid characters replaced and empty segments removed.</returns>
+    /// <remarks>Despite path traversal being technically a valid filepath as the last element, this method sanitizes it  away as it is not a valid filename</remarks>
     public static string SanitizeOsFilePath(string filepath, string replacement = "")
     {
         var normalizedFilepath = NormalizeFilePath(filepath);
 
-        // TODO: needs to remove incorrect path traversal and handle dots and space only filenames to stay consistent with the validation methods
         List<string> parts = normalizedFilepath.Split(Path.DirectorySeparatorChar)
             .Select(part => string.Concat(part.Trim()
                 .SelectMany(c => InvalidOsCharacters.Contains(c) ? replacement : c.ToString())))
+            .Select(part => InvalidPathTraversal.IsMatch(part) ? part.Replace(".", replacement) : part)
             .Where(partSanitized => !string.IsNullOrEmpty(partSanitized))
             .ToList();
+
+        if (parts.Count != 0)
+        {
+            parts[parts.Count] = OnlyDotsAndSpaces.IsMatch(parts.Last()) ? parts.Last().Replace(".", replacement) : parts.Last();
+            if (string.IsNullOrEmpty(parts.Last()))
+            {
+                parts.RemoveAt(parts.Count);
+            }
+        }
 
         return string.Join(Path.DirectorySeparatorChar.ToString(), parts);
     }
