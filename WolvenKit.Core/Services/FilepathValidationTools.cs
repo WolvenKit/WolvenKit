@@ -156,7 +156,7 @@ public static class FilepathValidationTools
     /// <param name="replacement">The string replacement for any invalid characters found in the file name.
     /// Defaults to an empty string if not specified.</param>
     /// <returns>Returns the sanitized file name as a string, ensuring it is compliant with archive-specific rules.</returns>
-    public static string SanitizeFileName(string filename, string replacement = "")
+    public static string SanitizeArchiveFileName(string filename, string replacement = "")
         => SanitizeArchiveFilePath(filename, replacement).Split(Path.DirectorySeparatorChar).Last();
 
     #endregion

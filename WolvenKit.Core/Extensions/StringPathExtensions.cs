@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using WolvenKit.Common;
+using WolvenKit.Core.Services;
 
 namespace WolvenKit.Interfaces.Extensions
 {
@@ -56,31 +57,18 @@ namespace WolvenKit.Interfaces.Extensions
         /// <summary>
         /// Generates redengine friendly file path.
         /// </summary>
-        public static string ToFilePath(this string target) => target.SanitizeFilePath(false);
+        public static string ToFilePath(this string target) => FilepathValidationTools.SanitizeArchiveFilePath(target, "-");
 
         /// <summary>
         /// Generates redengine friendly file name
         /// </summary>
         /// <param name="target">Extension method, call on string</param>
-        /// <param name="replaceSpecialCharacters">Replace special characters with dashes instead of removing them?</param>
-        public static string ToFileName(this string target, bool replaceSpecialCharacters = false) =>
-            new string(target
-                    .Replace('/', Path.DirectorySeparatorChar)
-                    .Where(c => !Path.GetInvalidFileNameChars().Contains(c)).ToArray()
-                ).Trim()
-                .Replace(" ", "_")
-                .Replace(",", "-")
-                .Replace("\"", replaceSpecialCharacters ? "-" : string.Empty)
-                .Replace("'", replaceSpecialCharacters ? "-" : string.Empty)
-                .Replace(")", replaceSpecialCharacters ? "-" : string.Empty)
-                .Replace("(", replaceSpecialCharacters ? "-" : string.Empty)
-                .ToLower();
+        public static string ToFileName(this string target) => FilepathValidationTools.SanitizeArchiveFileName(target, "-");
 
         /// <summary>
         /// Is this a file path without invalid characters?
         /// </summary>
-        public static bool IsSaneFilePath(this string target) =>
-            target.All(c => !Path.GetInvalidPathChars().Contains(c));
+        public static bool IsFilePathValid(this string target) => FilepathValidationTools.IsArchiveFilePathValid(target);
 
         /// <summary>
         /// Sanitizes a file path by splitting it into segments and joining them on either a forward or backward slash
@@ -89,10 +77,8 @@ namespace WolvenKit.Interfaces.Extensions
         /// <param name="useForwardSlashes">Use forward slashes instead of <see cref="Path.DirectorySeparatorChar"/>?</param>
         public static string SanitizeFilePath(this string target, bool useForwardSlashes = false)
         {
-            var stringPartials = PathSeparatorRegex().Split(target);
-            var directorySeparator = useForwardSlashes ? "/" : Path.DirectorySeparatorChar.ToString();
-
-            return string.Join(directorySeparator, stringPartials).ToLower();
+            var fp = FilepathValidationTools.SanitizeArchiveFilePath(target);
+            return useForwardSlashes ? fp.Replace(Path.DirectorySeparatorChar, '/') : fp;
         }
 
         /// <summary>
