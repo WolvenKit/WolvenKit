@@ -37,7 +37,7 @@ public static class FilepathValidationTools
                                                    part.All(c => !InvalidOsCharacters.Contains(c)) &&
                                                    !InvalidPathTraversal.IsMatch(part) &&
                                                    part == part.Trim()) &&
-               !OnlyDotsAndSpaces.IsMatch(normalizedFilepathParts.Last());
+               !IsOnlyDotsAndSpaces.IsMatch(normalizedFilepathParts.Last());
     }
 
     /// <summary>
@@ -72,7 +72,7 @@ public static class FilepathValidationTools
 
         if (parts.Count != 0)
         {
-            parts[parts.Count] = OnlyDotsAndSpaces.IsMatch(parts.Last()) ? parts.Last().Replace(".", replacement) : parts.Last();
+            parts[parts.Count] = IsOnlyDotsAndSpaces.IsMatch(parts.Last()) ? parts.Last().Replace(".", replacement) : parts.Last();
             if (string.IsNullOrEmpty(parts.Last()))
             {
                 parts.RemoveAt(parts.Count);
@@ -113,7 +113,7 @@ public static class FilepathValidationTools
                                                                   filepath.All(c => ValidArchiveCharacters.Contains(c)) &&
                                                                   NormalizeFilePath(filepath)
                                                                       .Split(Path.DirectorySeparatorChar)
-                                                                      .All(p => !OnlyDotsAndSpaces.IsMatch(p));
+                                                                      .All(p => !IsOnlyDotsAndSpaces.IsMatch(p));
 
     /// <summary>
     /// Validates whether the given file name conforms to archive standards by ensuring that
@@ -141,7 +141,7 @@ public static class FilepathValidationTools
                 .Select(c => c == ' ' ? '_' : c)
                 .SelectMany(c => ValidArchiveCharacters.Contains(c) ? c.ToString() : replacement)))
             .Where(partSanitized => !string.IsNullOrEmpty(partSanitized))
-            .Where(partSanitized => !OnlyDotsAndSpaces.IsMatch(partSanitized))
+            .Where(partSanitized => !IsOnlyDotsAndSpaces.IsMatch(partSanitized))
             .ToList();
 
         return string.Join(Path.DirectorySeparatorChar.ToString(), parts);
@@ -166,7 +166,7 @@ public static class FilepathValidationTools
     /// <summary>
     /// A regular expression pattern that matches strings consisting only of dots and spaces.
     /// </summary>
-    private static readonly Regex OnlyDotsAndSpaces = new Regex(@"^[. ]+$");
+    private static readonly Regex IsOnlyDotsAndSpaces = new Regex(@"^[. ]+$");
 
     private static string NormalizeFilePath(string filepath)
     {
