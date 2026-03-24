@@ -62,7 +62,7 @@ namespace WolvenKit.Interfaces.Extensions
         /// <param name="target">The file path to sanitize.</param>
         /// <returns>Returns a sanitized file path, with invalid characters replaced and empty segments removed.</returns>
         /// <remarks>Path traversal is explicitly disallowed.</remarks>
-        public static string ToFilePath(this string target) => FilepathValidationTools.SanitizeArchiveFilePath(target, "-");
+        public static string ToFilePath(this string target) => FilepathValidationTools.SanitizeArchiveFilePath(target);
 
         /// <summary>
         /// Sanitizes a file name ensuring the resulting name conforms to operating system and archive standards.
@@ -72,7 +72,7 @@ namespace WolvenKit.Interfaces.Extensions
         /// </summary>
         /// <param name="target">The file name to sanitize.</param>
         /// <returns>Returns the sanitized file name with invalid characters replaced.</returns>
-        public static string ToFileName(this string target) => FilepathValidationTools.SanitizeArchiveFileName(target, "-");
+        public static string ToFileName(this string target) => FilepathValidationTools.SanitizeArchiveFileName(target);
 
         /// <summary>
         /// Validates whether the given file path conforms to operating system and archive standards.
