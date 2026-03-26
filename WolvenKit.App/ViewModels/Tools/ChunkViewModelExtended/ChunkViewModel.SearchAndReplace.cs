@@ -192,35 +192,10 @@ public partial class ChunkViewModel
             return input;
         }
 
-        if (isWholeWord)
-        {
-            if (input != searchOrPattern)
-            {
-                return input;
-            }
+        var ret = StringHelper.ReplaceInString(input, searchOrPattern, replace, isWholeWord, isRegex);
 
-            s_replacedStrings.Add(replace);
-            return replace;
-
-        }
-
-        string ret;
-        if (isRegex)
-        {
-            ret = Regex.Replace(input, searchOrPattern, replace);
-        }
-        else
-        {
-            ret = input.Replace(searchOrPattern, replace);
-        }
-
-        if (ret != input)
-        {
-            s_replacedStrings.Add(ret);
-        }
-
+        s_replacedStrings.Add(ret);
         return ret;
-
     }
 
     private bool SearchAndReplaceInReference(string search, string replace, bool isWholeWord, bool isRegex,

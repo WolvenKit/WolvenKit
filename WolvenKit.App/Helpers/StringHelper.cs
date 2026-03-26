@@ -443,4 +443,70 @@ public abstract partial class StringHelper
 
         return text.Substring(0, maxLength) + "...";
     }
+
+
+    /// <summary>
+    /// Search and replace, duplication-safe
+    /// </summary>
+    /// <param name="input">String to be replaced in</param>
+    /// <param name="searchOrPattern">Search string or regex pattern</param>
+    /// <param name="replace">String to replace it with</param>
+    /// <param name="isWholeWord">Search refinement: whole word only</param>
+    /// <param name="isRegex">Search refinement: regular expression</param>
+    /// <returns></returns>
+    public static string ReplaceInString(string input, string searchOrPattern, string replace, bool isWholeWord,
+        bool isRegex)
+    {
+        if (isWholeWord)
+        {
+            if (input != searchOrPattern)
+            {
+                return input;
+            }
+
+            return replace;
+        }
+
+        string ret;
+        if (isRegex)
+        {
+            ret = Regex.Replace(input, searchOrPattern, replace);
+        }
+        else
+        {
+            ret = input.Replace(searchOrPattern, replace);
+        }
+
+        return ret;
+    }
+
+    /// <summary>
+    /// Check a string for a substring, considering search options regex and whole word
+    /// </summary>
+    /// <param name="input">String to be replaced in</param>
+    /// <param name="searchOrPattern">Search string or regex pattern</param>
+    /// <param name="isWholeWord">Search refinement: whole word only</param>
+    /// <param name="isRegex">Search refinement: regular expression</param>
+    /// <returns></returns>
+    public static bool StringContains(string? input, string searchOrPattern, bool isWholeWord, bool isRegex)
+    {
+        if (input is null)
+        {
+            return false;
+        }
+
+        if (isWholeWord)
+        {
+            var pattern = isRegex ? $@"\b{searchOrPattern}\b" : @"\b" + Regex.Escape(searchOrPattern) + @"\b";
+            return Regex.IsMatch(input, pattern, RegexOptions.IgnoreCase);
+        }
+
+        if (!isRegex)
+        {
+            return input.Contains(searchOrPattern);
+        }
+
+        return Regex.IsMatch(input, searchOrPattern);
+    }
+
 }

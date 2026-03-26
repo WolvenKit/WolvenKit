@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using WolvenKit.App.Services;
 using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Services;
@@ -10,6 +11,7 @@ using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace WolvenKit.App.Helpers;
 
@@ -107,6 +109,25 @@ public class Cr2WTools
         }
 
         return null;
+    }
+
+    public string ReadJson(string absolutePath)
+    {
+        var cr2W = ReadCr2W(absolutePath);
+        var json = JsonSerializer.Serialize(cr2W);
+        return Regex.Unescape(json).Replace(@"""", "'");
+    }
+
+    public string ReadJsonNoException(string absolutePath)
+    {
+        try
+        {
+            return ReadJson(absolutePath);
+        }
+        catch
+        {
+            return string.Empty;
+        }
     }
 
     #endregion
