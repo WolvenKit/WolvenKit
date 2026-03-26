@@ -235,6 +235,17 @@ namespace WolvenKit.Common.Model.Arguments
         public bool AdditiveStripLocalTransform { get; set; } = true;
 
         /// <summary>
+        /// Force all animations to use Compressed encoding even if the source was SIMD.
+        /// When unchecked, animations exported from SIMD sources (or flagged as preferSIMD)
+        /// will be re-encoded as SIMD buffers, preserving the original format.
+        /// </summary>
+        [Category("Animation Settings")]
+        [Display(Name = "Force Compressed Encoding")]
+        [Description("When checked, all animations will use Compressed encoding regardless of their original format. Uncheck to preserve SIMD encoding for animations that were originally SIMD.")]
+        [UsedWith(nameof(ImportFormat), GltfImportAsFormat.Anims)]
+        public bool ForceCompressedEncoding { get; set; } = false;
+
+        /// <summary>
         /// Fills empty sub meshes with dummy data
         /// </summary>
         [Category("Import Settings")]
