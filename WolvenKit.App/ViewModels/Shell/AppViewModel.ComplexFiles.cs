@@ -299,8 +299,9 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         WriteData(f => f.EndsWith(".mesh"), ["spawnables", "mesh", "all"]);
         WriteData(f => f.EndsWith(".anims"), ["spawnables", "ai", "aispot"]);
         WriteData(f => f.EndsWith(".ent"), ["spawnables", "entity", "templates"]);
-        WriteData(f => f.EndsWith(".mi") || f.EndsWith(".particle"),
-            ["spawnables", "visual", "decals"]);
+        WriteData(f => f.EndsWith(".mi"), ["spawnables", "visual", "decals"]);
+        WriteData(f =>f.EndsWith(".particle"), ["spawnables", "visual", "particles"]);
+        WriteData(f =>f.EndsWith(".effect"), ["spawnables", "visual", "effects"]);
         return;
 
         // Write data to file. First param: filter function (predicate for entries)
@@ -313,14 +314,14 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
                 return;
             }
 
-            var meshFilePath = Path.Join([..folderPath, subfolder]);
-            Directory.CreateDirectory(Path.Join(wbDataFolder, meshFilePath));
+            var subdir = Path.Join([..folderPath, subfolder]);
+            Directory.CreateDirectory(Path.Join(wbDataFolder, subdir));
 
-            File.WriteAllText(Path.Join(wbDataFolder, meshFilePath, fileName),
+            File.WriteAllText(Path.Join(wbDataFolder, subdir, fileName),
                 string.Join(Environment.NewLine, entries));
 
             _loggerService.Success(
-                $"{entries.Count} entries written to {Path.Join([..s_worldBuilderDataPath, meshFilePath, fileName])}");
+                $"{entries.Count} entries written to {Path.Join([..s_worldBuilderDataPath, subdir, fileName])}");
         }
     }
 
