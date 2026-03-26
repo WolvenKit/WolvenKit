@@ -242,7 +242,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         _loggerService.Success("Done! Now import the .png files via Import Tool.");
     }
 
-    private static string[] s_extensions = [".ent", ".mesh", ".mi", ".anims", ".particle"];
+    private static string[] s_extensions = [".ent", ".mesh", ".mi", ".anims", ".particle", ".effect"];
     private static readonly List<string> s_worldBuilderDataPath =
         ["bin", "x64", "plugins", "cyber_engine_tweaks", "mods", "entSpawner", "data"];
 
