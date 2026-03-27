@@ -58,20 +58,26 @@ public static class FilepathValidationTools
     {
         var normalizedFilepath = NormalizeFilePath(filepath);
 
-        List<string> parts = normalizedFilepath.Split(Path.DirectorySeparatorChar)
+        var parts = normalizedFilepath.Split(Path.DirectorySeparatorChar)
             .Select(part => string.Concat(part.Trim()
                 .SelectMany(c => InvalidOsCharacters.Contains(c) ? replacement : c.ToString())))
             .Select(part => InvalidPathTraversal.IsMatch(part) ? part.Replace(".", replacement) : part)
             .Where(partSanitized => !string.IsNullOrEmpty(partSanitized))
             .ToList();
 
-        if (parts.Count != 0)
+        if (parts.Count == 0)
         {
-            parts[parts.Count] = IsOnlyDotsAndSpaces.IsMatch(parts.Last()) ? parts.Last().Replace(".", replacement) : parts.Last();
-            if (string.IsNullOrEmpty(parts.Last()))
-            {
-                parts.RemoveAt(parts.Count);
-            }
+            return string.Join(Path.DirectorySeparatorChar.ToString(), parts);
+        }
+
+        if (IsOnlyDotsAndSpaces.IsMatch(parts.Last()))
+        {
+            parts[^1] = parts.Last().Replace(".", replacement);
+        }
+
+        if (string.IsNullOrEmpty(parts.Last()))
+        {
+            parts.RemoveAt(parts.Count);
         }
 
         return string.Join(Path.DirectorySeparatorChar.ToString(), parts);
