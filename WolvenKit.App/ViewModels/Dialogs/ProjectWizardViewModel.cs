@@ -171,7 +171,7 @@ public partial class ProjectWizardViewModel : DialogViewModel, INotifyDataErrorI
         {
             AddError(nameof(ProjectPath), "Selected path does not exist");
         }
-        else if (!ProjectPath.IsSaneFilePath())
+        else if (!ProjectPath.IsFilePathValid())
         {
             // We're grudgingly okay with spaces. We are not okay with special characters.
             AddError(nameof(ProjectPath), "Please do not use special characters in your project path!");

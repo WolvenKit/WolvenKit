@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using WolvenKit.Common;
+using WolvenKit.Core.Services;
 
 namespace WolvenKit.Interfaces.Extensions
 {
@@ -54,45 +55,49 @@ namespace WolvenKit.Interfaces.Extensions
         }
 
         /// <summary>
-        /// Generates redengine friendly file path.
+        /// Sanitizes a file path ensuring the resulting path conforms to operating system and archive standards.
+        /// Wrapper method for <see cref="FilepathValidationTools.SanitizeArchiveFilePath(string, string)"/> exposing
+        /// functionality as an extension method.
         /// </summary>
-        public static string ToFilePath(this string target) => target.SanitizeFilePath(false);
+        /// <param name="target">The file path to sanitize.</param>
+        /// <returns>Returns a sanitized file path, with invalid characters replaced and empty segments removed.</returns>
+        /// <remarks>Path traversal is explicitly disallowed.</remarks>
+        public static string ToFilePath(this string target) => FilepathValidationTools.SanitizeArchiveFilePath(target);
 
         /// <summary>
-        /// Generates redengine friendly file name
+        /// Sanitizes a file name ensuring the resulting name conforms to operating system and archive standards.
+        /// If the input contains path separators, only the last segment is retained and all preceding segments are discarded.
+        /// Wrapper method for <see cref="FilepathValidationTools.SanitizeArchiveFileName(string, string)"/> exposing
+        /// functionality as an extension method.
         /// </summary>
-        /// <param name="target">Extension method, call on string</param>
-        /// <param name="replaceSpecialCharacters">Replace special characters with dashes instead of removing them?</param>
-        public static string ToFileName(this string target, bool replaceSpecialCharacters = false) =>
-            new string(target
-                    .Replace('/', Path.DirectorySeparatorChar)
-                    .Where(c => !Path.GetInvalidFileNameChars().Contains(c)).ToArray()
-                ).Trim()
-                .Replace(" ", "_")
-                .Replace(",", "-")
-                .Replace("\"", replaceSpecialCharacters ? "-" : string.Empty)
-                .Replace("'", replaceSpecialCharacters ? "-" : string.Empty)
-                .Replace(")", replaceSpecialCharacters ? "-" : string.Empty)
-                .Replace("(", replaceSpecialCharacters ? "-" : string.Empty)
-                .ToLower();
+        /// <param name="target">The file name to sanitize.</param>
+        /// <returns>Returns the sanitized file name with invalid characters replaced.</returns>
+        public static string ToFileName(this string target) => FilepathValidationTools.SanitizeArchiveFileName(target);
 
         /// <summary>
-        /// Is this a file path without invalid characters?
+        /// Validates whether the given file path conforms to operating system and archive standards.
+        /// Wrapper method for <see cref="FilepathValidationTools.IsArchiveFilePathValid(string)"/> exposing
+        /// functionality as an extension method.
         /// </summary>
-        public static bool IsSaneFilePath(this string target) =>
-            target.All(c => !Path.GetInvalidPathChars().Contains(c));
+        /// <param name="target">The file path to validate.</param>
+        /// <returns>Returns true if the file path is valid, according to operating system and archive standards; otherwise, false.</returns>
+        /// <remarks>Path traversal is explicitly disallowed.</remarks>
+        public static bool IsFilePathValid(this string target) => FilepathValidationTools.IsArchiveFilePathValid(target);
 
         /// <summary>
-        /// Sanitizes a file path by splitting it into segments and joining them on either a forward or backward slash
+        /// Sanitizes a file path ensuring the resulting path conforms to operating system and archive standards.
+        /// Extension method for <see cref="FilepathValidationTools.SanitizeArchiveFilePath(string, string)"/>
+        /// exoposing functionality as an extension method as well as optionally replacing the path separator with a
+        /// forward slash.
         /// </summary>
-        /// <param name="target">String to run this on (this., it's an extension method)</param>
+        /// <param name="target">The file path to sanitize.</param>
         /// <param name="useForwardSlashes">Use forward slashes instead of <see cref="Path.DirectorySeparatorChar"/>?</param>
+        /// <returns>Returns a sanitized file path, with invalid characters replaced and empty segments removed.</returns>
+        /// <remarks>Path traversal is explicitly disallowed.</remarks>
         public static string SanitizeFilePath(this string target, bool useForwardSlashes = false)
         {
-            var stringPartials = PathSeparatorRegex().Split(target).Select(p => p.ToFileName()).ToList();
-            var directorySeparator = useForwardSlashes ? "/" : Path.DirectorySeparatorChar.ToString();
-
-            return string.Join(directorySeparator, stringPartials).ToLower();
+            var fp = FilepathValidationTools.SanitizeArchiveFilePath(target);
+            return useForwardSlashes ? fp.Replace(Path.DirectorySeparatorChar, '/') : fp;
         }
 
         /// <summary>

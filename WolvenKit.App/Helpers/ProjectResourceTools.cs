@@ -427,10 +427,10 @@ public partial class ProjectResourceTools
 
         try
         {
-            destRelPath = FileHelper.SanitizePath(destRelPath);
+            destRelPath = FilepathValidationTools.SanitizeOsFilePath(destRelPath);
             destAbsPath = ToAbsolutePath(destRelPath);
 
-            sourceRelPath = FileHelper.SanitizePath(sourceRelPath);
+            sourceRelPath = FilepathValidationTools.SanitizeOsFilePath(sourceRelPath);
             sourceFileOrDirAbsPath = ToAbsolutePath(sourceRelPath);
         }
         catch (Exception e)
