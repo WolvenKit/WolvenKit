@@ -415,9 +415,11 @@ public static class Oodle
     /// <returns></returns>
     public static int GetCompressedBufferSizeNeeded(int count)
     {
-        var n = (((count + 0x3ffff + ((uint)((count + 0x3ffff) >> 0x1f) & 0x3ffff)) >> 0x12) * 0x112) + count;
-        //var n  = OodleNative.GetCompressedBufferSizeNeeded((long)count);
-        return (int)n;
+        if (CompressionSettings.Get().UseOodle)
+        {
+            return (int)OodleLib.OodleLZ_GetCompressedBufferSizeNeeded(count);
+        }
+        return (int)((((count + 0x3ffff + ((uint)((count + 0x3ffff) >> 0x1f) & 0x3ffff)) >> 0x12) * 0x112) + count);
     }
 
     private static bool TryCopyOodleLib(string? filePath)

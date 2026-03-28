@@ -192,5 +192,11 @@ namespace WolvenKit.Core.Compression
                 outputBuffer,
                 level);
         }
+
+        public static long OodleLZ_GetCompressedBufferSizeNeeded(long size)
+        {
+            ArgumentNullException.ThrowIfNull(s_getCompressedBufferSizeNeeded);
+            return s_getCompressedBufferSizeNeeded(size);
+        }
     }
 }
