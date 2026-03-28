@@ -18,6 +18,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Core.Services;
 using WolvenKit.Helpers;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
@@ -426,10 +427,10 @@ public partial class ProjectResourceTools
 
         try
         {
-            destRelPath = FileHelper.SanitizePath(destRelPath);
+            destRelPath = FilepathValidationTools.SanitizeOsFilePath(destRelPath);
             destAbsPath = ToAbsolutePath(destRelPath);
 
-            sourceRelPath = FileHelper.SanitizePath(sourceRelPath);
+            sourceRelPath = FilepathValidationTools.SanitizeOsFilePath(sourceRelPath);
             sourceFileOrDirAbsPath = ToAbsolutePath(sourceRelPath);
         }
         catch (Exception e)
