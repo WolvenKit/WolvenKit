@@ -11,7 +11,7 @@ public class LxrsFooter
 
     public const uint s_magic = 0x4C585253; //1397905484;
     private const uint s_version = 1;
-    
+
     public List<string> FileInfos { init; get; }
     private readonly Encoding _iso8859 = Encoding.GetEncoding("ISO-8859-1");
 
@@ -31,15 +31,12 @@ public class LxrsFooter
 
         var inBuffer = ms.ToByteArray();
 
-        IEnumerable<byte> outBuffer = new List<byte>();
-        var r = Oodle.Compress(inBuffer, ref outBuffer, false);
+        Oodle.Compress(inBuffer, out var outBuffer, false);
 
         bw.Write(inBuffer.Length);  // size
-        // avoid possible multiple enumerations
-        var outArray = outBuffer as byte[] ?? outBuffer.ToArray();
-        bw.Write(outArray.Length);  // zsize
+        bw.Write(outBuffer.Length);  // zsize
         bw.Write(FileInfos.Count);  // count
-        bw.Write(outArray);
+        bw.Write(outBuffer);
     }
 
     public void Read(BinaryReader br)
@@ -76,7 +73,7 @@ public class LxrsFooter
             // no compression
             buffer = inBuffer;
         }
-        
+
         using var ms = new MemoryStream(buffer);
         using var tempBr = new BinaryReader(ms);
         for (var i = 0; i < count; i++)
