@@ -14,6 +14,7 @@ using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Core.Services;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
@@ -1158,7 +1159,7 @@ public partial class TemplateFileTools
 
         var hasSingleAppearance = prop.Appearances.All(f => f == "default");
 
-        var absoluteParentFolder = Path.Combine(project.ModDirectory, prop.ParentFolder).ToFilePath();
+        var absoluteParentFolder = Path.Combine(project.ModDirectory, FilepathValidationTools.SanitizeArchiveFilePath(prop.ParentFolder));
         Directory.CreateDirectory(absoluteParentFolder);
 
         var propFolderName = prop.PropName.ToFileName();
