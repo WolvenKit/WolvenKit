@@ -751,7 +751,7 @@ public partial class ArchiveXlItemService
                 entComponent.Name = componentName;
 
 
-                var fileDestPath = GetDestFilePath(fileSourcePath, isSecondaryComponent);
+                var fileDestPath = GetDestFilePath(fileSourcePath, slotPrefix, isSecondaryComponent);
 
                 AddMeshFilesToProject(fileSourcePath, fileDestPath, isSecondaryComponent);
 
@@ -785,9 +785,13 @@ public partial class ArchiveXlItemService
             componentName.Contains("_secondary", StringComparison.OrdinalIgnoreCase) ||
             componentName.Contains("_patch", StringComparison.OrdinalIgnoreCase);
 
-        string GetDestFilePath(string filePath, bool isSecondaryComponent = false)
+        string GetDestFilePath(string filePath, string componentPrefix, bool isSecondaryComponent = false)
         {
             var fileName = Path.GetFileName(filePath);
+            if (!fileName.StartsWith($"{componentPrefix}_"))
+            {
+                fileName = $"{componentPrefix}_{fileName}";
+            }
             var newPath = Path.Combine(relativeMeshFolder, fileName);
             if (activeProject.ModFiles.Contains(newPath))
             {
