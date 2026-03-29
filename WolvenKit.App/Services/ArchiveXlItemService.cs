@@ -750,8 +750,7 @@ public partial class ArchiveXlItemService
                 // components will be named like h0_my_new_hat1
                 entComponent.Name = componentName;
 
-
-                var fileDestPath = GetDestFilePath(fileSourcePath, slotPrefix, isSecondaryComponent);
+                var fileDestPath = GetDestMeshPath(slotPrefix, componentIndex, isSecondaryComponent);
 
                 AddMeshFilesToProject(fileSourcePath, fileDestPath, isSecondaryComponent);
 
@@ -785,71 +784,56 @@ public partial class ArchiveXlItemService
             componentName.Contains("_secondary", StringComparison.OrdinalIgnoreCase) ||
             componentName.Contains("_patch", StringComparison.OrdinalIgnoreCase);
 
-        string GetDestFilePath(string filePath, string componentPrefix, bool isSecondaryComponent = false)
+        string GetDestMeshPath(string componentPrefix, int idx, bool isSecondaryComponent = false)
         {
-            var fileName = Path.GetFileName(filePath);
-            if (!fileName.StartsWith($"{componentPrefix}_"))
+            var fileName = $"{componentPrefix}_{clothingItemData.ItemFileName}_{idx}.mesh";
+
+            // if it's a secondary mesh, change file name (append that)
+            if (isSecondaryComponent)
             {
-                fileName = $"{componentPrefix}_{fileName}";
+                fileName = $"{componentPrefix}_{clothingItemData.ItemFileName}_secondary_{idx}.mesh";
             }
+
             var newPath = Path.Combine(relativeMeshFolder, fileName);
-            if (activeProject.ModFiles.Contains(newPath))
-            {
-                return newPath;
-            }
-
-            if (isSecondaryComponent || fileName.Contains("shadow") || fileName.Contains("proxy"))
-            {
-                fileName = MeshFileName_SecondaryRegex().Replace(fileName, clothingItemData.ItemFileName);
-            }
-            else
-            {
-                fileName = MeshFileNameRegex().Replace(fileName, clothingItemData.ItemFileName);
-            }
-
-
-            return Path.Combine(relativeMeshFolder, fileName);
+            return newPath;
         }
 
         /*
          * Adds mesh files from .ent components to project. Will try to find pma/_ma mesh (entity is pwa/_wa).
          * Will not overwrite existing files.
          */
-        void AddMeshFilesToProject(string filePath, string pathInMod, bool isSecondaryComponent = false)
+        void AddMeshFilesToProject(string originalRelPath, string pathInMod, bool isSecondaryComponent = false)
         {
-            var textureDirPath = Path.Combine(clothingItemData.FilesRelPath, "textures");
-            if (_archiveManager.GetCR2WFile(filePath) is { RootChunk: CMesh mesh } componentMesh)
-            {
-                var destPath = Path.Combine(activeProject.ModDirectory, pathInMod);
-                if (File.Exists(destPath))
-                {
-                    _logger.Info($"Mesh {pathInMod} exists, not overwriting.");
-                    return;
-                }
+            var destPath = Path.Combine(activeProject.ModDirectory, pathInMod);
 
+            if (File.Exists(destPath))
+            {
+                _logger.Info($"Mesh {pathInMod} exists, not overwriting.");
+            }
+            else if (_archiveManager.GetCR2WFile(originalRelPath) is { RootChunk: CMesh mesh } componentMesh)
+
+            {
                 AdjustMeshAppearances(mesh, isSecondaryComponent);
 
                 _cr2WTools.WriteCr2W(componentMesh, destPath);
             }
 
-            var otherGenderSourcePath = filePath.Replace("pwa", "pma").Replace("_wa_", "_ma_");
-            var otherGenderDestPath = pathInMod.Replace("pwa", "pma").Replace("_wa_", "_ma_");
-
-            if (_archiveManager.GetCR2WFile(otherGenderSourcePath) is not { RootChunk: CMesh mesh2 } otherGenderMesh)
-            {
-                return;
-            }
-
-            var destPath2 = Path.Combine(activeProject.ModDirectory, otherGenderDestPath);
-            if (File.Exists(destPath2))
+            var otherGenderDestPath = destPath.Replace("pwa", "pma").Replace("_wa_", "_ma_");
+            if (File.Exists(otherGenderDestPath))
             {
                 _logger.Info($"Mesh {otherGenderDestPath} exists, not overwriting.");
                 return;
             }
 
+            var otherGenderSourcePath = originalRelPath.Replace("pwa", "pma").Replace("_wa_", "_ma_");
+            if (_archiveManager.GetCR2WFile(otherGenderSourcePath) is not { RootChunk: CMesh mesh2 } otherGenderMesh)
+            {
+                _logger.Warning($"Failed to add {otherGenderSourcePath} for masc variant. Please create it by hand!");
+                return;
+            }
             AdjustMeshAppearances(mesh2, isSecondaryComponent);
 
-            _cr2WTools.WriteCr2W(otherGenderMesh, destPath2);
+            _cr2WTools.WriteCr2W(otherGenderMesh, otherGenderDestPath);
         }
 
         /*
@@ -1175,9 +1159,10 @@ public partial class ArchiveXlItemService
         return $"{itemNameBase}!{itemNameAppearance}";
     }
 
-    [GeneratedRegex(@"\d(_[a-z0-9_]+)(?=_\w{1,19}.)")]
-    private static partial Regex MeshFileName_SecondaryRegex();
 
-    [GeneratedRegex("\\d(_[^.]+)")]
-    private static partial Regex MeshFileNameRegex();
+    /// <summary>
+    /// Regex for matching stuff like "an0_123" or "hh_" to strip prefixes from file names
+    /// </summary>
+    [GeneratedRegex(@"^([a-z]{1,2}[0-9]*_?[0-9]*_?)")]
+    private static partial Regex PrefixAndNumberRegex();
 }
