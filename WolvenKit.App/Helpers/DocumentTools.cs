@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes;
+using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.Modkit.Scripting;
 using CollectionExtensions = HelixToolkit.SharpDX.Core.CollectionExtensions;
@@ -41,6 +42,7 @@ internal class MultilayerProperties
 public class DocumentTools
 {
     private readonly ILoggerService _loggerService;
+    private readonly INotificationService _notificationService;
     private readonly Cr2WTools _cr2WTools;
     private readonly MeshTools _meshTools;
     private readonly IArchiveManager _archiveManager;
@@ -65,7 +67,7 @@ public class DocumentTools
 
     public DocumentTools(ILoggerService loggerService, Cr2WTools cr2WTools, IArchiveManager archiveManager,
         IProjectManager projectManager, MeshTools meshTools, ProjectResourceTools projectResourceTools,
-        ISettingsManager settingsManager)
+        ISettingsManager settingsManager, INotificationService notificationService)
     {
         _loggerService = loggerService;
         _cr2WTools = cr2WTools;
@@ -74,6 +76,7 @@ public class DocumentTools
         _meshTools = meshTools;
         _projectResourceTools = projectResourceTools;
         _settingsManager = settingsManager;
+        _notificationService = notificationService;
     }
 
 
@@ -1139,10 +1142,10 @@ public class DocumentTools
         mesh.PreloadLocalMaterialInstances.Clear();
     }
 
-    public bool AppendMeshMaterials(CR2WFile? sourceCr2W, CR2WFile? destCr2W, string sourcePath = "",
+    public int AppendMeshMaterials(CR2WFile? sourceCr2W, CR2WFile? destCr2W, string sourcePath = "",
         string destPath = "")
     {
-        var wasChanged = false;
+        var wasChanged = 0;
 
         if (sourceCr2W is null)
         {
@@ -1167,7 +1170,7 @@ public class DocumentTools
         if (!hasMaterials)
         {
             _loggerService.Error($"source file {sourcePath} does not have materials!");
-            return false;
+            return 0;
         }
 
         // ReSharper disable ForCanBeConvertedToForeach
@@ -1182,7 +1185,7 @@ public class DocumentTools
             appearances.Add(sourceMesh.Appearances[i]);
         }
 
-        wasChanged = wasChanged || destMesh.Appearances.Count != appearances.Count;
+        wasChanged += appearances.Count - destMesh.Appearances.Count;
         destMesh.Appearances = appearances;
 
         CArray<CMeshMaterialEntry> materialEntries = [];
@@ -1214,21 +1217,31 @@ public class DocumentTools
             }
         }
 
-        wasChanged = wasChanged || destMesh.MaterialEntries.Count != materialEntries.Count;
+        wasChanged += materialEntries.Count - destMesh.MaterialEntries.Count;
         destMesh.MaterialEntries = materialEntries;
 
         CArray<IMaterial> localMaterials = [];
-        for (var i = 0; i < destMesh.LocalMaterialBuffer.Materials.Count; i++)
+        foreach (var material in destMesh.LocalMaterialBuffer.Materials)
         {
-            localMaterials.Add(destMesh.LocalMaterialBuffer.Materials[i]);
+            localMaterials.Add(material);
         }
 
-        for (var i = 0; i < sourceMesh.LocalMaterialBuffer.Materials.Count; i++)
+        foreach (var material in sourceMesh.LocalMaterialBuffer.Materials)
         {
-            localMaterials.Add(sourceMesh.LocalMaterialBuffer.Materials[i]);
+            localMaterials.Add(material);
         }
 
-        wasChanged = wasChanged || destMesh.LocalMaterialBuffer.Materials.Count != localMaterials.Count;
+        foreach (var material in destMesh.PreloadLocalMaterialInstances.Select(m => m.Chunk).OfType<IMaterial>())
+        {
+            localMaterials.Add(material);
+        }
+
+        foreach (var material in sourceMesh.PreloadLocalMaterialInstances.Select(m => m.Chunk).OfType<IMaterial>())
+        {
+            localMaterials.Add(material);
+        }
+
+        wasChanged += localMaterials.Count - destMesh.LocalMaterialBuffer.Materials.Count;
         destMesh.LocalMaterialBuffer.Materials = localMaterials;
 
         CArray<CResourceAsyncReference<IMaterial>> externalMaterials = [];
@@ -1242,7 +1255,7 @@ public class DocumentTools
             externalMaterials.Add(sourceMesh.ExternalMaterials[i]);
         }
 
-        wasChanged = wasChanged || destMesh.ExternalMaterials.Count != externalMaterials.Count;
+        wasChanged += destMesh.ExternalMaterials.Count - externalMaterials.Count;
         destMesh.ExternalMaterials = externalMaterials;
 
         CArray<CResourceReference<IMaterial>> preloadExternalMaterials = [];
@@ -1250,15 +1263,13 @@ public class DocumentTools
         {
             preloadExternalMaterials.Add(destMesh.PreloadExternalMaterials[i]);
         }
-
         for (var i = 0; i < sourceMesh.PreloadExternalMaterials.Count; i++)
         {
             preloadExternalMaterials.Add(sourceMesh.PreloadExternalMaterials[i]);
         }
 
-        wasChanged = wasChanged || destMesh.PreloadExternalMaterials.Count != preloadExternalMaterials.Count;
+        wasChanged += destMesh.PreloadExternalMaterials.Count - preloadExternalMaterials.Count;
         destMesh.PreloadExternalMaterials = preloadExternalMaterials;
-
 
         CArray<CHandle<IMaterial>> preloadLocalMaterialInstances = [];
         for (var i = 0; i < destMesh.PreloadLocalMaterialInstances.Count; i++)
@@ -1271,7 +1282,7 @@ public class DocumentTools
             preloadLocalMaterialInstances.Add(sourceMesh.PreloadLocalMaterialInstances[i]);
         }
 
-        wasChanged = wasChanged || destMesh.PreloadLocalMaterialInstances.Count != preloadLocalMaterialInstances.Count;
+        wasChanged += destMesh.PreloadLocalMaterialInstances.Count - preloadLocalMaterialInstances.Count;
         destMesh.PreloadLocalMaterialInstances = preloadLocalMaterialInstances;
 
         // ReSharper restore ForCanBeConvertedToForeach
@@ -1317,25 +1328,33 @@ public class DocumentTools
             ClearMeshMaterials(destCr2W);
         }
 
-        if (!meshPaths.Select(sourceMeshPath =>
-                AppendMeshMaterials(GetCr2W(sourceMeshPath), destCr2W, sourcePath, destPath)).Contains(true))
+        var numChanges = meshPaths.Select(sourceMeshPath =>
+            AppendMeshMaterials(GetCr2W(sourceMeshPath), destCr2W, sourcePath, destPath)).Sum();
+
+        if (numChanges == 0)
         {
+            _loggerService.Info("No materials were copied");
+            _notificationService.Info("No materials were copied");
             return false;
         }
 
         if (!_cr2WTools.WriteCr2W(destCr2W, activeProject.GetAbsolutePath(destPath)))
         {
             _loggerService.Error($"Failed writing changes to {destPath}");
+            _notificationService.Error($"Failed writing changes to {destPath}");
             return false;
         }
 
         if (meshPaths.Count == 1)
         {
-            _loggerService.Success($"Copied materials from {meshPaths[0]}");
+            _loggerService.Success($"Copied {numChanges} entries from {meshPaths[0]}");
+            _notificationService.Success($"Copied {numChanges} entries from {meshPaths[0]}");
         }
         else
         {
-            _loggerService.Success($"Copied materials from the following files: \n\t {string.Join("\n\t", meshPaths)}");
+            _loggerService.Success(
+                $"Copied {numChanges} entries from the following files: \n\t {string.Join("\n\t", meshPaths)}");
+            _notificationService.Success($"Copied {numChanges} entries from files (check log for detail)");
         }
 
         return true;
