@@ -737,6 +737,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         if (filePaths.Count == 0)
         {
             filePaths.AddRange(ModFiles);
+            filePaths.AddRange(ResourceFiles);
         }
 
         SortedDictionary<string, List<string>> references = new();
