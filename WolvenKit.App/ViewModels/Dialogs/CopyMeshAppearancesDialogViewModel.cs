@@ -18,41 +18,48 @@ namespace WolvenKit.App.ViewModels.Dialogs;
 /// </summary>
 public partial class CopyMeshAppearancesDialogViewModel : ObservableObject
 {
-    [ObservableProperty] private string? _selectedOption = "";
     [ObservableProperty] private string _wikiLink = WikiLinks.MeshMaterials;
     [ObservableProperty] private bool _isAppend = false;
     [ObservableProperty] private bool _useArchiveXlPatchMesh = false;
 
     private List<string>? _options;
-    [ObservableProperty] private Dictionary<string, string>? _optionsDict;
+    [ObservableProperty] private Dictionary<string, bool>? _optionsDict;
 
+    public List<string> SelectedOptions { get; set; } = [];
+
+    public string? SelectedOption { get; set; }
 
     // enable save button?
     [ObservableProperty] private bool _canSave;
 
 
-    public CopyMeshAppearancesDialogViewModel(List<string> options)
+    public CopyMeshAppearancesDialogViewModel(List<string> options, List<string> previousSelection)
     {
         _options = options;
-        OptionsDict = options.ToDictionary(k => k, v => v);
+        OptionsDict = options.ToDictionary(k => k, previousSelection.Contains);
+        SelectedOption = previousSelection.FirstOrDefault() ?? "";
     }
+
 
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
         base.OnPropertyChanged(e);
-        SetSaveButtonState();
+        if (e.PropertyName != nameof(CanSave))
+        {
+            SetSaveButtonState();
+        }
     }
 
-    private void SetSaveButtonState()
+    public void SetSaveButtonState()
     {
-        if (string.IsNullOrEmpty(SelectedOption))
+        if (SelectedOptions.Count == 0)
         {
             CanSave = false;
             return;
         }
 
         // If the mesh value is okay, we can save here
-        CanSave = !string.IsNullOrEmpty(SelectedOption) && SelectedOption.EndsWith(".mesh");
+        CanSave = SelectedOptions.Any((sel) => !string.IsNullOrEmpty(sel) && sel.EndsWith(".mesh"));
     }
 }

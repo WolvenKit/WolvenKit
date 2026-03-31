@@ -6,6 +6,7 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:converters="clr-namespace:WolvenKit.Converters"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     Title="Select .mesh file(s)"
     SizeToContent="WidthAndHeight"
     DataContext="{Binding RelativeSource={RelativeSource Self},
@@ -91,17 +92,16 @@
                         VerticalAlignment="Top"
                         Text="Select .mesh file(s)" />
 
-                    <editors:FilterableDropdownMenu
-                        x:Name="Dropdown"
+                    <!-- Checklist -->
+                    <templates:FilterableChecklistMenu
+                        x:Name="FilterableChecklistMenu"
                         Grid.Row="2"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
-                        Options="{Binding Options,
-                                          UpdateSourceTrigger=PropertyChanged}"
-                        IsInline="False"
-                        IsShowLabel="False"
-                        SelectedOption="{Binding SelectedOption}"
-                        KeyboardNavigation.TabIndex="-1" />
+                        MaxHeight="{StaticResource WolvenkitControlMinWidth}"
+                        CheckboxOptionsAndStates="{Binding OptionsDict}"
+                        SelectionChanged="ChecklistMenu_OnSelectionChanged"
+                        KeyboardNavigation.TabIndex="1" />
 
                     <TextBlock
                         Grid.Row="4"
@@ -133,6 +133,7 @@
                         FontSize="{DynamicResource WolvenKitFontBody}"
                         Text="{Binding SelectedOption,
                                        Mode=TwoWay}"
+                        LostFocus="TextBox_OnFocusLost"
                         KeyboardNavigation.TabIndex="-1" />
 
                 </Grid>

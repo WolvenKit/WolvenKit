@@ -568,6 +568,7 @@ public class CvmMaterialTools
         }
     }
 
+
     public void UnDynamifyMaterials(ChunkViewModel? cvm)
     {
         if (cvm?.ResolvedData is not CMesh mesh ||
@@ -781,35 +782,23 @@ public class CvmMaterialTools
         return ret;
     }
 
-    public int FindHighestMaterialIndex(ChunkViewModel? materialDefinitionArray, bool isLocalInstance)
-    {
-        if (materialDefinitionArray?.ResolvedData is not CArray<CMeshMaterialEntry> array || array.Count == 0)
+    public static int FindHighestMaterialIndex(CArray<CMeshMaterialEntry> materialEntries, bool isLocalMaterial)
+        {
+        if (materialEntries.Count == 0)
         {
             return -1;
         }
 
-        return FindHighestMaterialIndex(array, isLocalInstance);
-    }
+        var existingIndices = materialEntries
+            .Select(m => m.IsLocalInstance == isLocalMaterial ? m.Index : -1)
+            .ToList();
 
-    private int FindHighestMaterialIndex(CArray<CMeshMaterialEntry> array, bool isLocalInstance)
-    {
-        if (array.Count == 0)
+        if (existingIndices.Count == 0)
         {
-            return -1;
+            existingIndices.Add(-1);
         }
 
-        List<int> indices = [];
-        // ReSharper disable once ForCanBeConvertedToForeach - can't LINQ here
-        // ReSharper disable once LoopCanBeConvertedToQuery - will throw NoElementsException
-        for (var i = 0; i < array.Count; i++)
-        {
-            if (array[i].IsLocalInstance == isLocalInstance)
-            {
-                indices.Add(array[i].Index);
-            }
-        }
-
-        return indices.Count == 0 ? -1 : indices.Max();
+        return existingIndices.Max();
     }
 
     public void AddTagsToMeshAppearances(List<ChunkViewModel> chunks, List<string> tagList)
@@ -854,6 +843,74 @@ public class CvmMaterialTools
         }
 
         appearanceChunks.First().Tab?.Parent.SetIsDirty(true);
+    }
+
+    public static IMaterial EmbeddedToDefault(IMaterial mat)
+    {
+        if (mat is not CMaterialInstance material)
+        {
+            return mat;
+        }
+
+        if (material.BaseMaterial.Flags == InternalEnums.EImportFlags.Embedded)
+        {
+            material.BaseMaterial =
+                new CResourceReference<IMaterial>(material.BaseMaterial.DepotPath, InternalEnums.EImportFlags.Default);
+        }
+
+        for (var i = 0; i < material.Values.Count; i++)
+        {
+            var kvp = material.Values[i];
+
+            if (kvp.Value is not IRedRef { Flags: InternalEnums.EImportFlags.Soft } redRef)
+            {
+                continue;
+            }
+
+            material.Values[i] = new CKeyValuePair(kvp.Key, UnEmbedResourceReference(kvp.Value));
+        }
+
+        return material;
+    }
+
+    public static IRedType UnEmbedResourceReference(IRedType cvpValue)
+    {
+        if (cvpValue is not IRedRef original)
+        {
+            return cvpValue;
+        }
+
+        var redType = cvpValue.RedType.Split(":").Last();
+
+        // @formatter:off
+        if (cvpValue is IRedResourceReference)
+        {
+            return redType switch
+            {
+                "Multilayer_Setup" => new CResourceReference<Multilayer_Setup>(original.DepotPath, InternalEnums.EImportFlags.Default),
+                "Multilayer_Mask" => new CResourceReference<Multilayer_Mask>(original.DepotPath, InternalEnums.EImportFlags.Default),
+                "ITexture" => new CResourceReference<ITexture>(original.DepotPath, InternalEnums.EImportFlags.Default),
+                "CGradient" => new CResourceReference<CGradient>(original.DepotPath, InternalEnums.EImportFlags.Default),
+                "CFoliageProfile" => new CResourceReference<CFoliageProfile>(original.DepotPath, InternalEnums.EImportFlags.Default),
+                "CHairProfile" => new CResourceReference<CHairProfile>(original.DepotPath, InternalEnums.EImportFlags.Default),
+                "CSkinProfile" => new CResourceReference<CSkinProfile>(original.DepotPath, InternalEnums.EImportFlags.Default),
+                "CTerrainSetup" => new CResourceReference<CTerrainSetup>(original.DepotPath, InternalEnums.EImportFlags.Default),
+                _ => original
+            };
+        }
+        return redType switch
+        {
+            "Multilayer_Setup" => new CResourceAsyncReference<Multilayer_Setup>(original.DepotPath, InternalEnums.EImportFlags.Default),
+            "Multilayer_Mask" => new CResourceAsyncReference<Multilayer_Mask>(original.DepotPath, InternalEnums.EImportFlags.Default),
+            "ITexture" => new CResourceAsyncReference<ITexture>(original.DepotPath, InternalEnums.EImportFlags.Default),
+            "CGradient" => new CResourceAsyncReference<CGradient>(original.DepotPath, InternalEnums.EImportFlags.Default),
+            "CFoliageProfile" => new CResourceAsyncReference<CFoliageProfile>(original.DepotPath, InternalEnums.EImportFlags.Default),
+            "CHairProfile" => new CResourceAsyncReference<CHairProfile>(original.DepotPath, InternalEnums.EImportFlags.Default),
+            "CSkinProfile" => new CResourceAsyncReference<CSkinProfile>(original.DepotPath, InternalEnums.EImportFlags.Default),
+            "CTerrainSetup" => new CResourceAsyncReference<CTerrainSetup>(original.DepotPath, InternalEnums.EImportFlags.Default),
+            _ => (IRedResourceAsyncReference) original
+        };
+        // @formatter:on
     }
 
     private static readonly Dictionary<string, List<CKeyValuePair>> s_materialValuesByPath = [];
