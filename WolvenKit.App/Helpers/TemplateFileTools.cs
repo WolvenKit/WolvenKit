@@ -547,7 +547,7 @@ public partial class TemplateFileTools
             return null;
         }
 
-        var modDir = Path.Combine(options.TargetRoot, options.ModName).ToFilePath();
+        var modDir = Path.Combine(options.TargetRoot, options.ModName.ToArchiveFileName()).ToOsFilePath();
         var journalDir = Path.Combine(modDir, "journal");
         var localizationDir = Path.Combine(modDir, "localization", "en-us", "onscreens");
         var questDir = Path.Combine(modDir, "quest");
@@ -580,7 +580,7 @@ public partial class TemplateFileTools
             return;
         }
 
-        var modName = options.ModName.ToFileName();
+        var modName = options.ModName.ToArchiveFileName();
         var journalResource = new gameJournalResource();
         var rootEntry = new gameJournalRootFolderEntry { };
 
@@ -680,7 +680,7 @@ public partial class TemplateFileTools
                 if (!hasPhase)
                 {
                     var resourcePath = $"mod/{options.ModName}/quest/phases/{options.ModName}_root_setup.questphase"
-                        .SanitizeFilePath(true);
+                        .ToArchiveFilePath(useForwardSlashes: true);
                     var phaseNode = new questPhaseNodeDefinition
                     {
                         Id = 2,
@@ -807,7 +807,7 @@ public partial class TemplateFileTools
                     {
                         var varComparison = new questVarComparison_ConditionType
                         {
-                            FactName = $"{options.ModName.ToFileName()}_active",
+                            FactName = $"{options.ModName.ToArchiveFileName()}_active",
                             ComparisonType = Enums.EComparisonType.Equal,
                             Value = 0
                         };
@@ -895,7 +895,7 @@ public partial class TemplateFileTools
                         {
                             ClassName = "gameJournalOnscreen",
                             RealPath =
-                                $"onscreens/{options.ModName}_tutorials/{options.ModName}_popup".SanitizeFilePath(true),
+                                $"onscreens/{options.ModName}_tutorials/{options.ModName}_popup".ToArchiveFilePath(useForwardSlashes: true),
                             FileEntryIndex = 1
                         }),
                         CloseAtInput = true,
@@ -929,7 +929,7 @@ public partial class TemplateFileTools
                         {
                             ClassName = "gameJournalPhoneMessage",
                             RealPath = $"contacts/{options.ModderName}/{options.ModName}_thread_title/info1"
-                                .SanitizeFilePath(true),
+                                .ToArchiveFilePath(useForwardSlashes: true),
                             FileEntryIndex = 1
                         }),
                         SendNotification = true
@@ -967,7 +967,7 @@ public partial class TemplateFileTools
                 {
                     var setVarType = new questSetVar_NodeType
                     {
-                        FactName = $"{options.ModName.ToFileName()}_active",
+                        FactName = $"{options.ModName.ToArchiveFileName()}_active",
                         SetExactValue = true,
                         Value = 1
                     };
@@ -1132,11 +1132,11 @@ public partial class TemplateFileTools
             return;
         }
 
-        var archiveXlPath = Path.Combine(resourcesDir, $"{options.ModName}.archive.xl").ToFilePath();
+        var archiveXlPath = Path.Combine(resourcesDir, $"{options.ModName.ToArchiveFileName()}.archive.xl");
         ;
         if (!File.Exists(archiveXlPath))
         {
-            File.WriteAllText(archiveXlPath, s_questTemplateYaml.Replace("MOD_NAME", options.ModName.ToFileName()));
+            File.WriteAllText(archiveXlPath, s_questTemplateYaml.Replace("MOD_NAME", options.ModName.ToArchiveFileName()));
         }
     }
 
@@ -1166,7 +1166,7 @@ public partial class TemplateFileTools
         if (!absoluteParentFolder.Contains(propFolderName) &&
             Directory.GetFileSystemEntries(absoluteParentFolder).Length > 0)
         {
-            prop.ParentFolder = Path.Combine(prop.ParentFolder, propFolderName).ToFilePath();
+            prop.ParentFolder = Path.Combine(prop.ParentFolder, propFolderName).ToArchiveFilePath();
             absoluteParentFolder = Path.Combine(project.ModDirectory, prop.ParentFolder);
             Directory.CreateDirectory(absoluteParentFolder);
         }
@@ -1180,8 +1180,8 @@ public partial class TemplateFileTools
         PrepareMeshes();
 
         // generate control files
-        var entFilePath = Path.Combine(prop.ParentFolder, $"{propFolderName}.ent").ToFilePath();
-        var appFilePath = Path.Combine(prop.ParentFolder, $"{propFolderName}.app").ToFilePath();
+        var entFilePath = Path.Combine(prop.ParentFolder, $"{propFolderName}.ent").ToArchiveFilePath();
+        var appFilePath = Path.Combine(prop.ParentFolder, $"{propFolderName}.app").ToArchiveFilePath();
         GenerateEntFile();
         GenerateAppFile();
 
@@ -1283,7 +1283,7 @@ public partial class TemplateFileTools
             if (!string.IsNullOrEmpty(prop.MeshFile1) && !prop.MeshFile1.Contains(prop.ParentFolder))
             {
                 var meshFileName = Path.GetFileName(prop.MeshFile1);
-                var meshFilePath = Path.Combine(prop.ParentFolder, meshFileName).ToFilePath();
+                var meshFilePath = Path.Combine(prop.ParentFolder, meshFileName).ToArchiveFilePath();
                 _projectResourceTools
                     .MoveAndRefactorAsync(project.GetAbsolutePath(prop.MeshFile1),
                         project.GetAbsolutePath(meshFilePath), "", false).GetAwaiter()
@@ -1294,7 +1294,7 @@ public partial class TemplateFileTools
             if (!string.IsNullOrEmpty(prop.MeshFile2) && !prop.MeshFile2.Contains(prop.ParentFolder))
             {
                 var meshFileName = Path.GetFileName(prop.MeshFile2);
-                var meshFilePath = Path.Combine(prop.ParentFolder, meshFileName).ToFilePath();
+                var meshFilePath = Path.Combine(prop.ParentFolder, meshFileName).ToArchiveFilePath();
                 _projectResourceTools
                     .MoveAndRefactorAsync(project.GetAbsolutePath(prop.MeshFile2),
                         project.GetAbsolutePath(meshFilePath), "", false).GetAwaiter()
@@ -1305,7 +1305,7 @@ public partial class TemplateFileTools
             if (!string.IsNullOrEmpty(prop.MeshFile3) && !prop.MeshFile3.Contains(prop.ParentFolder))
             {
                 var meshFileName = Path.GetFileName(prop.MeshFile3);
-                var meshFilePath = Path.Combine(prop.ParentFolder, meshFileName).ToFilePath();
+                var meshFilePath = Path.Combine(prop.ParentFolder, meshFileName).ToArchiveFilePath();
                 _projectResourceTools
                     .MoveAndRefactorAsync(project.GetAbsolutePath(prop.MeshFile3),
                         project.GetAbsolutePath(meshFilePath), "", false).GetAwaiter()
@@ -1316,7 +1316,7 @@ public partial class TemplateFileTools
             if (!string.IsNullOrEmpty(prop.MeshFile4) && !prop.MeshFile4.Contains(prop.ParentFolder))
             {
                 var meshFileName = Path.GetFileName(prop.MeshFile4);
-                var meshFilePath = Path.Combine(prop.ParentFolder, meshFileName).ToFilePath();
+                var meshFilePath = Path.Combine(prop.ParentFolder, meshFileName).ToArchiveFilePath();
                 _projectResourceTools
                     .MoveAndRefactorAsync(project.GetAbsolutePath(prop.MeshFile4),
                         project.GetAbsolutePath(meshFilePath), "", false).GetAwaiter()

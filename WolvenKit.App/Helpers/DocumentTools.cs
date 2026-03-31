@@ -1150,7 +1150,7 @@ public class DocumentTools
 
         // append separators to appearances, materialNames, materials
         var separatorString =
-            $"----- merged_from_{Path.GetFileNameWithoutExtension(sourcePath).ToFileName()}";
+            $"----- merged_from_{Path.GetFileNameWithoutExtension(sourcePath).ToArchiveFileName()}";
 
         if (sourceCr2W is null)
         {

@@ -35,7 +35,7 @@ public class ArchiveXlClothingItem
 
     public List<ArchiveXlHidingTags> HidingTags { get; init; } = [];
 
-    public string ItemFileName => $"{ItemName.ToFileName().ToLower().Replace(" ", "_")}";
+    public string ItemFileName => $"{ItemName.ToArchiveFileName().ToLower().Replace(" ", "_")}";
 
     /// <summary>
     /// modderName/equipment/slot/projectName
