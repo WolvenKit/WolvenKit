@@ -1112,14 +1112,18 @@ public partial class ArchiveXlItemService
             }
         }
 
-        var appearanceName = clothingItemData.GetAppearanceName().Split("!").First();
+        var nameSuffix = "$(base_color)";
+        if (clothingItemData.SecondaryVariants.Count > 0)
+        {
+            nameSuffix = $"{nameSuffix}_$(secondary)";
+        }
 
         yamlData.Children.TryAdd("$base", itemBase);
         yamlData.Children.TryAdd("$instances", instances);
         yamlData.Children.TryAdd("appearanceName", clothingItemData.GetAppearanceName());
         yamlData.Children.TryAdd("entityName", $"{clothingItemData.ItemFileName}_factory_name");
         yamlData.Children.TryAdd("localizedDescription", $"LocKey#{clothingItemData.ItemFileName}_i18n_desc");
-        yamlData.Children.TryAdd("displayName", $"LocKey#{appearanceName.Replace("!", "")}");
+        yamlData.Children.TryAdd("displayName", $"LocKey#{clothingItemData.ItemFileName}_i18n_{nameSuffix}");
         yamlData.Children.TryAdd("quality", "Quality.Legendary");
         yamlData.Children.TryAdd("icon", icon);
         yamlData.Children.TryAdd("statModifiers", ArchiveXlClothingItem.StatModifiers);
