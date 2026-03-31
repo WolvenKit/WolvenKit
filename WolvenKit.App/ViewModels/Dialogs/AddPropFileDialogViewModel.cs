@@ -89,7 +89,7 @@ public partial class AddPropFileDialogViewModel : ObservableObject
         switch (e.PropertyName)
         {
             case nameof(ParentFolder):
-                ParentFolder = ParentFolder.ToFilePath();
+                ParentFolder = ParentFolder.ToArchiveFilePath();
 
                 if (string.IsNullOrEmpty(PropName))
                 {

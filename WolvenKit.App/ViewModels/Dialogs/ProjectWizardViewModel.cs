@@ -140,7 +140,7 @@ public partial class ProjectWizardViewModel : DialogViewModel, INotifyDataErrorI
         {
             AddError(nameof(ProjectName), "A project with this name already exists!");
         }
-        else if (!ProjectName.ToFileName().Equals(ProjectName, StringComparison.OrdinalIgnoreCase))
+        else if (!ProjectName.IsArchiveFileNameValid())
         {
             AddError(nameof(ProjectName), "Project name must not contain special characters or spaces!");
         }

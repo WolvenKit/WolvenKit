@@ -706,9 +706,9 @@ public partial class ProjectResourceTools
                         }
 
                         var oldPathStr = activeProject.GetResourcePathFromRoot(oldAbsPath).GetResolvedText()
-                            ?.SanitizeFilePath();
+                            ?.ToArchiveFilePath();
                         var newPathStr = activeProject.GetResourcePathFromRoot(newAbsPath).GetResolvedText()?
-                            .SanitizeFilePath();
+                            .ToArchiveFilePath();
 
                         if (string.IsNullOrEmpty(oldPathStr) || string.IsNullOrEmpty(newPathStr) ||
                             oldPathStr == newPathStr)
@@ -716,8 +716,8 @@ public partial class ProjectResourceTools
                             continue;
                         }
 
-                        var oldPathWithForwardSlashes = oldPathStr.SanitizeFilePath(true);
-                        var newPathWithForwardSlashes = newPathStr.SanitizeFilePath(true);
+                        var oldPathWithForwardSlashes = oldPathStr.ToArchiveFilePath(useForwardSlashes: true);
+                        var newPathWithForwardSlashes = newPathStr.ToArchiveFilePath(useForwardSlashes: true);
 
                         newFileContent = newFileContent.Select(line => line
                             .Replace(oldPathStr, newPathStr)
