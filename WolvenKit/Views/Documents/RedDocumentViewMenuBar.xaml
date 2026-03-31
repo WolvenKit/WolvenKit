@@ -387,7 +387,7 @@
                                          RelativeSource={RelativeSource Self},
                                          Mode=OneWay,
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Header="Copy materials from other mesh"
+                    Header="Copy materials from other mesh(es)"
                     Click="OnCopyMaterialsFromMeshClick"
                     Command="{Binding CopyMaterialFromMeshCommand}">
                     <MenuItem.Icon>
@@ -405,7 +405,7 @@
                                          RelativeSource={RelativeSource Self},
                                          Mode=OneWay,
                                          Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Header="Copy materials to other meshes"
+                    Header="Copy materials to other mesh(es)"
                     Click="OnCopyMaterialsToMeshesClick"
                     Command="{Binding CopyMaterialToMeshesCommand}">
                     <MenuItem.Icon>
