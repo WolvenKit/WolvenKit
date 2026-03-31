@@ -55,14 +55,23 @@ namespace WolvenKit.Interfaces.Extensions
         }
 
         /// <summary>
-        /// Sanitizes a file path ensuring the resulting path conforms to operating system and archive standards.
+        /// Sanitizes a file path ensuring the resulting path conforms to archive standards.
         /// Wrapper method for <see cref="FilepathValidationTools.SanitizeArchiveFilePath(string, string)"/> exposing
         /// functionality as an extension method.
         /// </summary>
         /// <param name="target">The file path to sanitize.</param>
         /// <returns>Returns a sanitized file path, with invalid characters replaced and empty segments removed.</returns>
         /// <remarks>Path traversal is explicitly disallowed.</remarks>
-        public static string ToFilePath(this string target) => FilepathValidationTools.SanitizeArchiveFilePath(target);
+        public static string ToFilePath(this string target)
+        {
+            // check for OS file paths
+            if (Path.IsPathRooted(target) || StartsWithDriveLetter().IsMatch(target))
+            {
+                FilepathValidationTools.SanitizeOsFilePath(target);
+            }
+
+            return FilepathValidationTools.SanitizeArchiveFilePath(target);
+        }
 
         /// <summary>
         /// Sanitizes a file name ensuring the resulting name conforms to operating system and archive standards.
@@ -133,5 +142,8 @@ namespace WolvenKit.Interfaces.Extensions
         /// </summary>
         [GeneratedRegex(@"[\\/]+")]
         private static partial Regex PathSeparatorRegex();
+
+        [GeneratedRegex("^[a-zA-Z]:\\W")]
+        private static partial Regex StartsWithDriveLetter();
     }
 }
