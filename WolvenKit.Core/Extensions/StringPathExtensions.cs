@@ -64,8 +64,8 @@ namespace WolvenKit.Interfaces.Extensions
         /// <remarks>Path traversal is explicitly disallowed.</remarks>
         public static string ToFilePath(this string target)
         {
-            // check for OS file paths
-            if (Path.IsPathRooted(target) || StartsWithDriveLetter().IsMatch(target))
+            // check for OS file paths (Windows only)
+            if (StartsWithDriveLetter().IsMatch(target))
             {
                 FilepathValidationTools.SanitizeOsFilePath(target);
             }
