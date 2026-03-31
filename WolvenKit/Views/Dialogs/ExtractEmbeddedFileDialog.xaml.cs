@@ -22,7 +22,7 @@ public partial class ExtractEmbeddedFileDialog : ReactiveUserControl<ExtractEmbe
 
     private void ExtractButton_OnClick(object sender, RoutedEventArgs e)
     {
-        ViewModel.NewFilePath.SanitizeFilePath();
+        ViewModel.NewFilePath.ToArchiveFilePath();
 
         if (File.Exists(Path.Join(ViewModel.ProjectPath, ViewModel.NewFilePath)))
         {

@@ -211,10 +211,10 @@ public partial class ArchiveXlItemService
     {
         if (!string.IsNullOrEmpty(_projectManager.ActiveProject?.Author))
         {
-            return _projectManager.ActiveProject.Author.ToFileName().Replace(" ", "_");
+            return _projectManager.ActiveProject.Author.ToArchiveFileName();
         }
 
-        return (_settingsManager.ModderName ?? "wolvenkit_user").ToFileName().Replace(" ", "_");
+        return _settingsManager.ModderName ?? "wolvenkit_user".ToArchiveFileName();
     }
 
     public void CreateEquipmentItem(ArchiveXlClothingItem clothingItemData)
@@ -249,7 +249,7 @@ public partial class ArchiveXlItemService
         var newFiles = activeProject.ModFiles.Where(f => !projectFiles.Contains(f)).ToList();
         if (newFiles.Count == 0)
         {
-            _logger.Success($"Your ArchiveXL item {clothingItemData.ItemFileName} has been updated.");
+            _logger.Success($"Your ArchiveXL item {clothingItemData.ItemName.ToArchiveFileName()} has been updated.");
             return;
         }
 
@@ -270,8 +270,8 @@ public partial class ArchiveXlItemService
             GetModderName(),
             "equipment",
             clothingItemData.Slot.ToString().Replace("outer_", "").Replace("inner_", ""),
-            clothingItemData.ItemFileName
-        ).ToFilePath();
+            clothingItemData.ItemName
+        ).ToArchiveFilePath();
 
         // Control files go into the folder of any existing csv file in the project, or the default path
         clothingItemData.ControlFilesRelPath =
@@ -280,29 +280,29 @@ public partial class ArchiveXlItemService
                 GetModderName(),
                 activeProject.ModName,
                 clothingItemData.ItemFileName
-            ).ToFilePath();
+            ).ToArchiveFilePath();
 
 
         // Now write paths into the item data
         clothingItemData.RootEntityPath = Path.Combine(clothingItemData.ControlFilesRelPath,
-            $"_root_entity.ent").ToFilePath();
+            "_root_entity.ent");
         if (activeProject.ModFiles.FirstOrDefault(f => f.EndsWith("_root_entity.ent")) is string existingRoot)
         {
             clothingItemData.RootEntityPath = existingRoot;
         }
 
         clothingItemData.AppFilePath = Path.Combine(clothingItemData.ControlFilesRelPath,
-            $"_application.app").ToFilePath();
+            "_application.app");
         if (activeProject.ModFiles.FirstOrDefault(f => f.EndsWith("_application.app")) is string existingApp)
         {
             clothingItemData.AppFilePath = existingApp;
         }
 
         clothingItemData.MeshEntityPath = Path.Combine(clothingItemData.ControlFilesRelPath,
-            $"_{clothingItemData.ItemFileName}_mesh_entity.ent").ToFilePath();
+            $"_{clothingItemData.ItemName.ToArchiveFileName()}_mesh_entity.ent");
 
         clothingItemData.InkatlasPath = Path.Combine(clothingItemData.ControlFilesRelPath,
-            $"{clothingItemData.ItemFileName}_icons.inkatlas").ToFilePath();
+            $"{clothingItemData.ItemName.ToArchiveFileName()}_icons.inkatlas");
 
         // If we have more than one .yaml file under resources, create a new one, otherwise append
         var yamlFiles = activeProject.ResourceFiles.Where(f => f.HasFileExtension("yaml")).ToList();
@@ -316,7 +316,7 @@ public partial class ArchiveXlItemService
                 activeProject.GetRelativeResourceTweakDirectory(),
                 GetModderName(),
                 $"{activeProject.ModName}.yaml"
-            ).ToFilePath();
+            ).ToArchiveFilePath();
         }
 
         if (activeProject.ModFiles.Where(p => p.HasFileExtension(".json")).ToList() is { Count: 1 } list)
@@ -330,14 +330,7 @@ public partial class ArchiveXlItemService
         }
 
         var xlFiles = activeProject.ResourceFiles.Where(f => f.HasFileExtension("xl")).ToList();
-        if (xlFiles.Count == 1)
-        {
-            clothingItemData.XlFilePath = xlFiles.First();
-        }
-        else
-        {
-            clothingItemData.XlFilePath = Path.Join($"{activeProject.ModName}.archive.xl").ToFilePath();
-        }
+        clothingItemData.XlFilePath = xlFiles.Count == 1 ? xlFiles.First() : $"{activeProject.ModName.ToArchiveFileName()}.archive.xl";
 
         var relativeFactoryPath = Path.Combine(clothingItemData.ControlFilesRelPath, "factory.csv");
         if (activeProject.ModFiles.Where(f => f.HasFileExtension("csv")).ToList() is { Count: 1 } l)
@@ -416,7 +409,7 @@ public partial class ArchiveXlItemService
                        }
                    };
 
-        var itemName = $"{clothingItemData.ItemFileName}_factory_name";
+        var itemName = $"{clothingItemData.ItemName.ToArchiveFileName()}_factory_name";
 
         if (cr2W.RootChunk is not C2dArray factory)
         {
@@ -518,13 +511,12 @@ public partial class ArchiveXlItemService
             return;
         }
 
-        var displayName = $"{clothingItemData.ItemFileName}_i18n_$(base_color)";
+        var displayName = $"{clothingItemData.ItemName.ToArchiveFileName()}_i18n_$(base_color)";
         if (clothingItemData.SecondaryVariants.Count > 0)
         {
             displayName = $"{displayName}_$(secondary)";
         }
-
-        var description = $"{clothingItemData.ItemFileName}_i18n_desc";
+        var description = $"{clothingItemData.ItemName.ToArchiveFileName()}_i18n_desc";
 
         var entryList = locEntries.Entries.ToList();
 
@@ -593,9 +585,9 @@ public partial class ArchiveXlItemService
             _logger.Info($"Delete it or run Files -> Add Files -> Generate Inkatlas");
         }
 
-        var tempFolder = Path.Combine(Path.GetTempPath(), $"iconImages_{clothingItemData.ItemFileName}");
+        var tempFolder = Path.Combine(Path.GetTempPath(), $"iconImages_{clothingItemData.ItemName.ToArchiveFileName()}");
 
-        InkatlasImageGenerator.GenerateDummyIcons(tempFolder, $"{clothingItemData.ItemFileName}_",
+        InkatlasImageGenerator.GenerateDummyIcons(tempFolder, $"{clothingItemData.ItemName.ToArchiveFileName()}_",
             clothingItemData.GetAllVariants());
 
         InkatlasImageGenerator.GenerateAtlas(
@@ -719,7 +711,8 @@ public partial class ArchiveXlItemService
 
                 IRedMeshComponent component = new entGarmentSkinnedMeshComponent()
                 {
-                    Name = componentName,
+                    Name =
+                        $"{slotPrefix}_{Path.GetFileName(meshPath).Replace("{gender}", "").Replace("__", "_").ToArchiveFileName()}",
                     Mesh = new CResourceAsyncReference<CMesh>(path, flag),
                     MeshAppearance = appearance
                 };
@@ -1053,8 +1046,8 @@ public partial class ArchiveXlItemService
 
         var yamlAbsPath = Path.Combine(activeProject.ResourcesDirectory, clothingItemData.YamlFilePath);
 
-        var itemName = $"Items.{GetModderName()}_{clothingItemData.ItemFileName}_$(base_color)";
-        var atlasPathName = $"{clothingItemData.ItemFileName}_$(base_color)";
+        var itemName = $"Items.{GetModderName()}_{clothingItemData.ItemFileName.ToArchiveFileName()}_$(base_color)";
+        var atlasPathName = $"{clothingItemData.ItemFileName.ToArchiveFileName()}_$(base_color)";
 
         // Consider secondary variants
         var useSecondary = clothingItemData.SecondaryVariants.Count > 0;
@@ -1123,9 +1116,9 @@ public partial class ArchiveXlItemService
         yamlData.Children.TryAdd("$base", itemBase);
         yamlData.Children.TryAdd("$instances", instances);
         yamlData.Children.TryAdd("appearanceName", clothingItemData.GetAppearanceName());
-        yamlData.Children.TryAdd("entityName", $"{clothingItemData.ItemFileName}_factory_name");
-        yamlData.Children.TryAdd("localizedDescription", $"LocKey#{clothingItemData.ItemFileName}_i18n_desc");
-        yamlData.Children.TryAdd("displayName", $"LocKey#{clothingItemData.ItemFileName}_i18n_{nameSuffix}");
+        yamlData.Children.TryAdd("entityName", $"{clothingItemData.ItemFileName.ToArchiveFileName()}_factory_name");
+        yamlData.Children.TryAdd("localizedDescription", $"LocKey#{clothingItemData.ItemFileName.ToArchiveFileName()}_i18n_desc");
+        yamlData.Children.TryAdd("displayName", $"LocKey#{clothingItemData.ItemFileName.ToArchiveFileName()}_i18n_{nameSuffix}");
         yamlData.Children.TryAdd("quality", "Quality.Legendary");
         yamlData.Children.TryAdd("icon", icon);
         yamlData.Children.TryAdd("statModifiers", ArchiveXlClothingItem.StatModifiers);
