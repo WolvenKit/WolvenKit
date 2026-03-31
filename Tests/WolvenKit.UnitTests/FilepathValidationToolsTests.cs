@@ -45,6 +45,7 @@ namespace WolvenKit.UnitTests
         [DataRow("path/   /file.txt", "path\\file.txt")] // empty segment removed
         [DataRow("path/..../file.txt", "path\\file.txt")] // traversal replaced by replacement (empty) -> empty segment removed
         [DataRow("folder/...", "folder")] // last segment traversal/dots removed
+        [DataRow("folder/.", "folder")]
         public void SanitizeOsFilePath_Tests(string path, string expected, string replacement = "")
         {
             // Note: the implementation of SanitizeOsFilePath uses Path.DirectorySeparatorChar
