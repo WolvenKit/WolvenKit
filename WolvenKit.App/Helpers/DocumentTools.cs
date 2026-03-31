@@ -1425,7 +1425,16 @@ public class DocumentTools
         // ReSharper restore ForCanBeConvertedToForeach
     }
 
-    public bool CopyMeshMaterials(string? sourcePath, string destPath, bool? append)
+    /// <summary>
+    /// Copies materials from a source mesh to a dest mesh. Can replace or append.
+    /// </summary>
+    /// <param name="sourcePath">source path (file to copy FROM)</param>
+    /// <param name="destPath">dest path (file to copy TO)</param>
+    /// <param name="append">append materials from source mesh instead of replacing them?</param>
+    /// <param name="addSeparator">Add separators? (Will only be set when copying _from_, not when copying _to_)</param>
+    /// <returns>bool as success</returns>
+    /// <exception cref="InvalidDataException"></exception>
+    public bool CopyMeshMaterials(string? sourcePath, string destPath, bool append = false, bool addSeparator = false)
     {
         if (_projectManager.ActiveProject is not { } activeProject)
         {
@@ -1457,13 +1466,19 @@ public class DocumentTools
             throw new InvalidDataException($"target file {destPath} is not a valid mesh.");
         }
 
-        if (append != true)
+        if (!append)
         {
             ClearMeshMaterials(destCr2W);
         }
 
         var numChanges = meshPaths.Select((t, i) =>
-            AppendMeshMaterials(GetCr2W(t), destCr2W, sourcePath, destPath, i < meshPaths.Count + 1)
+            AppendMeshMaterials(
+                GetCr2W(t),
+                destCr2W,
+                sourcePath,
+                destPath,
+                addSeparator && i < meshPaths.Count + 1
+            )
         ).Sum();
 
         if (numChanges == 0)
