@@ -39,7 +39,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private readonly CRUIDService _cruidService;
     private readonly DocumentTools _documentTools;
     private readonly ILoggerService _loggerService;
-    private readonly CvmMaterialTools _cvmMaterialTools;
+    private readonly ICvmTools _cvmTools;
 
     public RedDocumentViewToolbarModel(
         ISettingsManager settingsManager,
@@ -47,7 +47,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         IProjectManager projectManager,
         DocumentTools documentTools,
         CRUIDService cruidService,
-        CvmMaterialTools cvmMaterialTools,
+        ICvmTools cvmTools,
         ILoggerService loggerService
     )
     {
@@ -56,7 +56,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         _settingsManager = settingsManager;
         _cruidService = cruidService;
         _documentTools = documentTools;
-        _cvmMaterialTools = cvmMaterialTools;
+        _cvmTools = cvmTools;
         _loggerService = loggerService;
 
         modifierSvc.ModifierStateChanged += OnModifierChanged;
@@ -385,7 +385,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     {
         if (SelectedChunk is { Name: "components", Data: CArray<entIComponent> })
         {
-            SelectedChunk?.RegenerateVisualControllerCommand.Execute(null);
+            _cvmTools.RegenerateVisualControllers(SelectedChunk);
             return;
         }
 
@@ -396,14 +396,14 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             appearances.CalculateProperties();
             foreach (var app in appearances.TVProperties.Where(x => x.ResolvedData is appearanceAppearanceDefinition))
             {
-                app.RegenerateVisualControllerCommand.Execute(null);
+                _cvmTools.RegenerateVisualControllers(app);
             }
 
             return;
         }
 
         // .ent file
-        RootChunk?.GetPropertyChild("components")?.RegenerateVisualControllerCommand.Execute(null);
+        _cvmTools.RegenerateVisualControllers(RootChunk?.GetPropertyChild("components"));
     }
 
     /// <summary>
@@ -645,14 +645,14 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
                                                     mesh.ExternalMaterials.Count > 0);
 
     [RelayCommand(CanExecute = nameof(CanConvertToPreloadMaterials))]
-    private void ConvertToPreloadMaterials() => _cvmMaterialTools.ConvertMaterialsToPreload(RootChunk);
+    private void ConvertToPreloadMaterials() => _cvmTools.ConvertMaterialsToPreload(RootChunk);
 
     private bool CanConvertFromPreloadMaterials() => RootChunk?.ResolvedData is CMesh mesh &&
                                                      (mesh.PreloadExternalMaterials.Count > 0 ||
                                                       mesh.PreloadLocalMaterialInstances.Count > 0);
 
     [RelayCommand(CanExecute = nameof(CanConvertFromPreloadMaterials))]
-    private void ConvertFromPreloadMaterials() => _cvmMaterialTools.ConvertMaterialsFromPreload(RootChunk);
+    private void ConvertFromPreloadMaterials() => _cvmTools.ConvertMaterialsFromPreload(RootChunk);
 
     /*
      * mesh: clear appearances
@@ -670,7 +670,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         }
 
         mesh.Appearances.Clear();
-        _cvmMaterialTools.DeleteUnusedMaterials(RootChunk, null, true);
+        _cvmTools.DeleteUnusedMaterials(RootChunk, null, true);
     }
 
     private bool CanSelectTemplateAppearance() => SelectedChunk?.ResolvedData is CArray<CHandle<meshMeshAppearance>> ||
@@ -717,7 +717,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             appearanceChunks.AddRange(SelectedChunks.Where(cvm => cvm.ResolvedData is meshMeshAppearance));
         }
 
-        _cvmMaterialTools.AddTagsToMeshAppearances(appearanceChunks, [appearanceTemplate]);
+        _cvmTools.AddTagsToMeshAppearances(appearanceChunks, [appearanceTemplate]);
     }
 
     #region meshfile_materials
@@ -794,7 +794,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             RootChunk.GetPropertyChild("appearances")?.CalculateProperties();
         }
 
-        _cvmMaterialTools.DeleteUnusedMaterials(RootChunk);
+        _cvmTools.DeleteUnusedMaterials(RootChunk);
     }
 
     #endregion
