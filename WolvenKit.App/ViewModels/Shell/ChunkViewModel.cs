@@ -3574,6 +3574,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         CalculateProperties();
         CalculateDescriptor();
         CalculateValue();
+        CalculateIsDefault();
 
         if (IsArray)
         {
