@@ -34,7 +34,8 @@ public static class FilepathValidationTools
         return normalizedFilepathParts.All(part => !string.IsNullOrEmpty(part) &&
                                                    part.All(c => !InvalidOsCharacters.Contains(c)) &&
                                                    !InvalidPathTraversal.IsMatch(part) &&
-                                                   part == part.Trim()) &&
+                                                   part == part.Trim() &&
+                                                   (part == part.TrimEnd('.') || part == "..")) &&
                !IsOnlyDotsAndSpaces.IsMatch(normalizedFilepathParts.Last());
     }
 
@@ -62,6 +63,7 @@ public static class FilepathValidationTools
             .Select(part => string.Concat(part.Trim()
                 .SelectMany(c => InvalidOsCharacters.Contains(c) ? replacement : c.ToString())))
             .Select(part => InvalidPathTraversal.IsMatch(part) ? part.Replace(".", replacement) : part)
+            .Select(part => part == ".." ? part : part.TrimEnd('.'))
             .Where(partSanitized => !string.IsNullOrEmpty(partSanitized))
             .ToList();
 
@@ -77,7 +79,7 @@ public static class FilepathValidationTools
 
         if (string.IsNullOrEmpty(parts.Last()))
         {
-            parts.RemoveAt(parts.Count);
+            parts.RemoveAt(parts.Count - 1);
         }
 
         return string.Join(Path.DirectorySeparatorChar.ToString(), parts);
