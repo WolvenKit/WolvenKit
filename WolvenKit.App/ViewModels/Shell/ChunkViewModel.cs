@@ -3536,7 +3536,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 ResolvedData is CMeshMaterialEntry materialDefinition:
             {
                 var materialIndex =
-                    _cvmTools.FindHighestMaterialIndex(Parent, materialDefinition.IsLocalInstance);
+                    CvmMaterialTools.FindHighestMaterialIndex(materialDefinitionArray,
+                        materialDefinition.IsLocalInstance);
                 SetDataIndexProperty(materialIndex + 1);
                 break;
             }

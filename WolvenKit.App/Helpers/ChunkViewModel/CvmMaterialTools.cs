@@ -565,6 +565,7 @@ public class CvmMaterialTools
         }
     }
 
+
     public void UnDynamifyMaterials(ChunkViewModel? cvm)
     {
         if (cvm?.ResolvedData is not CMesh mesh ||
@@ -778,16 +779,23 @@ public class CvmMaterialTools
         return ret;
     }
 
-    public int FindHighestMaterialIndex(ChunkViewModel materialDefinitionArray, bool isLocalInstance)
+    public static int FindHighestMaterialIndex(CArray<CMeshMaterialEntry> materialEntries, bool isLocalMaterial)
     {
-        if (materialDefinitionArray.ResolvedData is not CArray<CMeshMaterialEntry> array)
+        if (materialEntries.Count == 0)
         {
             return -1;
         }
 
-        return array.ToList()
-            .Where(m => m.IsLocalInstance == isLocalInstance)
-            .Max(m => m.Index);
+        var existingIndices = materialEntries
+            .Select(m => m.IsLocalInstance == isLocalMaterial ? m.Index : -1)
+            .ToList();
+
+        if (existingIndices.Count == 0)
+        {
+            existingIndices.Add(-1);
+        }
+
+        return existingIndices.Max();
     }
 
     public void AddTagsToMeshAppearances(List<ChunkViewModel> chunks, List<string> tagList)
