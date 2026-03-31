@@ -658,7 +658,6 @@ public partial class ArchiveXlItemService
         else
         {
             CreateMeshComponents();
-
         }
 
         // Garment support tags (size)
@@ -685,9 +684,6 @@ public partial class ArchiveXlItemService
             {
                 entTemplate.Components.Add(comp);
             }
-
-            List<string> componentNames = [];
-            var slotPrefix = EquipmentItemData.GetComponentPrefix(clothingItemData.Slot);
 
             var componentIndex = 0;
             foreach (var relativePath in clothingItemData.MeshesFromProject)
@@ -750,7 +746,8 @@ public partial class ArchiveXlItemService
                 // components will be named like h0_my_new_hat1
                 entComponent.Name = componentName;
 
-                var fileDestPath = GetDestMeshPath(slotPrefix, componentIndex, isSecondaryComponent);
+                var fileDestPath = GetDestMeshPath(entComponent.Mesh.DepotPath.GetResolvedText() ?? "", slotPrefix,
+                    componentIndex, isSecondaryComponent);
 
                 AddMeshFilesToProject(fileSourcePath, fileDestPath, isSecondaryComponent);
 
@@ -784,14 +781,16 @@ public partial class ArchiveXlItemService
             componentName.Contains("_secondary", StringComparison.OrdinalIgnoreCase) ||
             componentName.Contains("_patch", StringComparison.OrdinalIgnoreCase);
 
-        string GetDestMeshPath(string componentPrefix, int idx, bool isSecondaryComponent = false)
+        string GetDestMeshPath(string originalPath, string componentPrefix, int idx, bool isSecondaryComponent = false)
         {
-            var fileName = $"{componentPrefix}_{clothingItemData.ItemFileName}_{idx}.mesh";
+            var bodyGender = originalPath.Contains("_wa_") || originalPath.Contains("_pwa_") ? "pwa" : "pma";
+            var fileName = $"{componentPrefix}_{clothingItemData.ItemFileName}_{bodyGender}_base_body_{idx}.mesh";
 
             // if it's a secondary mesh, change file name (append that)
             if (isSecondaryComponent)
             {
-                fileName = $"{componentPrefix}_{clothingItemData.ItemFileName}_secondary_{idx}.mesh";
+                fileName =
+                    $"{componentPrefix}_{clothingItemData.ItemFileName}_{bodyGender}_base_body_secondary_{idx}.mesh";
             }
 
             var newPath = Path.Combine(relativeMeshFolder, fileName);
