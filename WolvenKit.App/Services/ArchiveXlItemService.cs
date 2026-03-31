@@ -126,7 +126,7 @@ public class ArchiveXlClothingItem
             itemNameAppearance = "$(base_color)+$(secondary)";
         }
 
-        _appearanceName = $"{itemNameBase}!{itemNameAppearance}";
+        _appearanceName = $"{itemNameBase}_!{itemNameAppearance}";
         return _appearanceName;
     }
 
@@ -173,7 +173,7 @@ public class ArchiveXlClothingItem
             return _appearanceNames;
         }
 
-        _appearanceNames = GenerateAppearanceNames(GetAppearanceName().Split("!").First(), Toggles)
+        _appearanceNames = GenerateAppearanceNames(GetAppearanceName().Split("_!").First(), Toggles)
             .Select(s => (CName)s).ToList();
 
         return _appearanceNames;
@@ -691,10 +691,15 @@ public partial class ArchiveXlItemService
                 var meshPath = relativePath;
                 var isSecondaryComponent = meshPath == clothingItemData.SecondaryAppearanceMesh;
 
-                // these will be "wa" meshes, so we need to check for "ma" equivalents
-                if (activeProject.Files.Contains(meshPath.Replace("wa", "ma")))
+                // these will be "pwa" meshes, so we need to check for "pma" equivalents
+                if (activeProject.Files.Contains(meshPath.Replace("_pwa", "_pma")))
                 {
-                    meshPath = $"*{meshPath.Replace("wa", "{gender}")}";
+                    meshPath = $"*{meshPath.Replace("_pwa", "{gender}")}";
+                }
+
+                if (activeProject.Files.Contains(meshPath.Replace("_wa_", "_ma_")))
+                {
+                    meshPath = $"*{meshPath.Replace("_wa_", "_{gender}_")}";
                 }
 
                 var isSoft = ArchiveXlHelper.HasSubstitution(meshPath);
@@ -958,10 +963,7 @@ public partial class ArchiveXlItemService
             return;
         }
 
-        var appearanceName = GetAppearanceName(clothingItemData).Split("!").FirstOrDefault() ??
-                             $"{clothingItemData.ItemFileName}_";
         var appearanceNames = clothingItemData.GetAppearanceNames();
-
 
         foreach (var name in appearanceNames)
         {
@@ -1145,23 +1147,6 @@ public partial class ArchiveXlItemService
         var yaml = new YamlMappingNode() { { itemName, yamlData } };
         YamlHelper.RemoveInExistingFileAndAppend(yamlAbsPath, itemName, yaml, comment);
     }
-
-    private static string GetAppearanceName(ArchiveXlClothingItem clothingItemData)
-    {
-        var itemNameBase = $"{clothingItemData.ItemFileName}";
-
-        itemNameBase = clothingItemData.Toggles.Aggregate(itemNameBase,
-            (current, toggle) => $"{current}_${toggle}_$(${toggle})");
-
-        var itemNameAppearance = "$(base_color)";
-        if (clothingItemData.SecondaryVariants.Count > 0)
-        {
-            itemNameAppearance = "$(base_color)+$(secondary)";
-        }
-
-        return $"{itemNameBase}!{itemNameAppearance}";
-    }
-
 
     /// <summary>
     /// Regex for matching stuff like "an0_123" or "hh_" to strip prefixes from file names

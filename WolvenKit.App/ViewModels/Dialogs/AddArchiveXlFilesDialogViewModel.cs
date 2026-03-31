@@ -83,9 +83,6 @@ public partial class AddArchiveXlFilesDialogViewModel : DialogViewModel
         GarmentSupportTag = GarmentSupportTags.None;
 
         ExistingFilesSource = currentProject.ModFiles.Where(f => f.HasFileExtension("mesh"))
-            .Select(f => f.Replace("wa", "{gender}").Replace("ma", "{gender}"))
-            .Distinct()
-            .Select(f => f.Replace("{gender}", "wa"))
             .ToList();
 
         IsHeadItem = false;
