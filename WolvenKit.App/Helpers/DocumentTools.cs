@@ -1144,9 +1144,13 @@ public class DocumentTools
     }
 
     private int AppendMeshMaterials(CR2WFile? sourceCr2W, CR2WFile? destCr2W, string sourcePath = "",
-        string destPath = "")
+        string destPath = "", bool appendSeparator = false)
     {
         var wasChanged = 0;
+
+        // append separators to appearances, materialNames, materials
+        var separatorString =
+            $"----- merged_from_{Path.GetFileNameWithoutExtension(sourcePath).ToFileName()}";
 
         if (sourceCr2W is null)
         {
@@ -1176,10 +1180,7 @@ public class DocumentTools
 
         // ReSharper disable ForCanBeConvertedToForeach
 
-        CArray<CMeshMaterialEntry> materialEntries = [];
-        var materialNameCollisions = CopyMaterialDefinitions();
-
-        CopyMeshAppearances();
+        var materialEntries = CollectMaterialDefinitions(out var materialNameCollisions);
 
         // now reindex properties
         var localMaterialIndex = 0;
@@ -1200,35 +1201,18 @@ public class DocumentTools
         }
 
         wasChanged += materialEntries.Count - destMesh.MaterialEntries.Count;
-        destMesh.MaterialEntries = materialEntries;
 
-        #region localMaterialCopy
+        destMesh.MaterialEntries.Clear();
+        materialEntries.ForEach(e => destMesh.MaterialEntries.Add(e));
 
-        var usePreloadLocalMaterials = destMesh.PreloadLocalMaterialInstances.Count > 0;
-        var usePreloadExternalMaterials = destMesh.PreloadLocalMaterialInstances.Count > 0;
+        var appearances = CopyMeshAppearances();
 
-        CArray<IMaterial> localMaterials = [];
-        foreach (var material in destMesh.LocalMaterialBuffer.Materials)
-        {
-            localMaterials.Add(CvmMaterialTools.EmbeddedToDefault(material));
-        }
+        wasChanged += appearances.Count - destMesh.Appearances.Count;
+        destMesh.Appearances = appearances;
 
-        foreach (var material in sourceMesh.LocalMaterialBuffer.Materials)
-        {
-            localMaterials.Add(material);
-        }
+        var localMaterials = CollectLocalMaterials();
 
-        foreach (var material in destMesh.PreloadLocalMaterialInstances.Select(m => m.Chunk).OfType<IMaterial>())
-        {
-            localMaterials.Add(material);
-        }
-
-        foreach (var material in sourceMesh.PreloadLocalMaterialInstances.Select(m => m.Chunk).OfType<IMaterial>())
-        {
-            localMaterials.Add(material);
-        }
-
-        if (usePreloadLocalMaterials)
+        if (destMesh.PreloadLocalMaterialInstances.Count > 0)
         {
             wasChanged += localMaterials.Count - destMesh.PreloadLocalMaterialInstances.Count;
             destMesh.PreloadLocalMaterialInstances.Clear();
@@ -1243,37 +1227,16 @@ public class DocumentTools
             destMesh.LocalMaterialBuffer.Materials = localMaterials;
         }
 
-        #endregion
+        var externalMaterials = CollectExternalMaterials();
 
-        #region externalMaterialCopy
-        CArray<CResourceAsyncReference<IMaterial>> externalMaterials = [];
-        for (var i = 0; i < destMesh.ExternalMaterials.Count; i++)
-        {
-            externalMaterials.Add(destMesh.ExternalMaterials[i]);
-        }
-
-        for (var i = 0; i < sourceMesh.ExternalMaterials.Count; i++)
-        {
-            externalMaterials.Add(sourceMesh.ExternalMaterials[i]);
-        }
-
-        for (var i = 0; i < destMesh.PreloadExternalMaterials.Count; i++)
-        {
-            externalMaterials.Add(destMesh.PreloadExternalMaterials[i]);
-        }
-
-        for (var i = 0; i < sourceMesh.PreloadExternalMaterials.Count; i++)
-        {
-            externalMaterials.Add(sourceMesh.PreloadExternalMaterials[i]);
-        }
-
-        if (usePreloadExternalMaterials)
+        if (destMesh.PreloadExternalMaterials.Count > 0)
         {
             wasChanged += externalMaterials.Count - destMesh.PreloadExternalMaterials.Count;
             destMesh.PreloadExternalMaterials.Clear();
             foreach (var m in externalMaterials)
             {
-                destMesh.PreloadExternalMaterials.Add(new CResourceReference<IMaterial>(m.DepotPath, m.Flags));
+                destMesh.PreloadExternalMaterials.Add(
+                    new CResourceReference<IMaterial>(m.DepotPath, m.Flags));
             }
         }
         else
@@ -1282,16 +1245,100 @@ public class DocumentTools
             destMesh.ExternalMaterials = externalMaterials;
         }
 
-        #endregion
-
         return wasChanged;
 
-        void CopyMeshAppearances()
+        CArray<IMaterial> CollectLocalMaterials()
         {
-            CArray<CHandle<meshMeshAppearance>> appearances = [];
+            CArray<IMaterial> ret = [];
+            foreach (var material in destMesh.LocalMaterialBuffer.Materials)
+            {
+                ret.Add(CvmMaterialTools.EmbeddedToDefault(material));
+            }
+
+            foreach (var material in destMesh.PreloadLocalMaterialInstances.Select(m => m.Chunk)
+                         .OfType<IMaterial>())
+            {
+                ret.Add(material);
+            }
+
+            if (sourceMesh.LocalMaterialBuffer.Materials.Count == 0 &&
+                sourceMesh.PreloadLocalMaterialInstances.Count == 0)
+            {
+                return ret;
+            }
+
+            if (appendSeparator)
+            {
+                ret.Add(new CMaterialInstance()
+                {
+                    BaseMaterial = new CResourceReference<IMaterial>(@"base\fx\_shaders\invisible.mt"),
+                });
+            }
+
+            foreach (var material in sourceMesh.LocalMaterialBuffer.Materials)
+            {
+                ret.Add(material);
+            }
+
+            foreach (var material in sourceMesh.PreloadLocalMaterialInstances.Select(m => m.Chunk)
+                         .OfType<IMaterial>())
+            {
+                ret.Add(material);
+            }
+
+            return ret;
+        }
+
+        CArray<CResourceAsyncReference<IMaterial>> CollectExternalMaterials()
+        {
+            CArray<CResourceAsyncReference<IMaterial>> ret = [];
+            for (var i = 0; i < destMesh.ExternalMaterials.Count; i++)
+            {
+                ret.Add(destMesh.ExternalMaterials[i]);
+            }
+
+            for (var i = 0; i < destMesh.PreloadExternalMaterials.Count; i++)
+            {
+                ret.Add(destMesh.PreloadExternalMaterials[i]);
+            }
+
+            if (sourceMesh.ExternalMaterials.Count == 0 && sourceMesh.PreloadExternalMaterials.Count == 0)
+            {
+                return ret;
+            }
+
+            if (appendSeparator)
+            {
+                ret.Add(new CResourceAsyncReference<IMaterial>(ResourcePath.Empty));
+            }
+
+            for (var i = 0; i < sourceMesh.ExternalMaterials.Count; i++)
+            {
+                ret.Add(sourceMesh.ExternalMaterials[i]);
+            }
+
+            for (var i = 0; i < sourceMesh.PreloadExternalMaterials.Count; i++)
+            {
+                ret.Add(sourceMesh.PreloadExternalMaterials[i]);
+            }
+
+            return ret;
+        }
+
+        CArray<CHandle<meshMeshAppearance>> CopyMeshAppearances()
+        {
+            CArray<CHandle<meshMeshAppearance>> ret = [];
             for (var i = 0; i < destMesh.Appearances.Count; i++)
             {
-                appearances.Add(destMesh.Appearances[i]);
+                ret.Add(destMesh.Appearances[i]);
+            }
+
+            if (appendSeparator && sourceMesh.Appearances.Count > 0)
+            {
+                ret.Add(new CHandle<meshMeshAppearance>()
+                {
+                    Chunk = new meshMeshAppearance() { Name = separatorString, ChunkMaterials = [] }
+                });
             }
 
             for (var i = 0; i < sourceMesh.Appearances.Count; i++)
@@ -1299,7 +1346,7 @@ public class DocumentTools
                 var appearance = sourceMesh.Appearances[i];
                 if (materialNameCollisions.Count == 0 || appearance.Chunk is null)
                 {
-                    appearances.Add(appearance);
+                    ret.Add(appearance);
                     continue;
                 }
 
@@ -1315,29 +1362,46 @@ public class DocumentTools
                     appearance.Chunk.ChunkMaterials.Add(cn);
                 }
 
-                appearances.Add(appearance);
+                ret.Add(appearance);
             }
 
-            wasChanged += appearances.Count - destMesh.Appearances.Count;
-            destMesh.Appearances = appearances;
+            return ret;
         }
 
-        Dictionary<string, string> CopyMaterialDefinitions()
+        List<CMeshMaterialEntry> CollectMaterialDefinitions(out Dictionary<string, string> nameCollisions)
         {
+            List<CMeshMaterialEntry> ret = [];
             HashSet<string> materialNames = [];
-            Dictionary<string, string> nameCollisions = [];
+            nameCollisions = [];
 
+            // not checking for material name collisions in the original mesh
             for (var i = 0; i < destMesh.MaterialEntries.Count; i++)
             {
                 var materialEntry = destMesh.MaterialEntries[i];
                 var materialName = materialEntry.Name.GetResolvedText() ?? "sourceMaterial" + i;
-                materialEntries.Add(materialEntry);
+                ret.Add(materialEntry);
                 materialNames.Add(materialName);
+            }
+
+            if (sourceMesh.MaterialEntries.Count == 0)
+            {
+                return ret;
+            }
+
+            if (appendSeparator)
+            {
+                ret.Add(new CMeshMaterialEntry()
+                {
+                    Name = separatorString,
+                    IsLocalInstance = false,
+                    Index =
+                        (CUInt16)(CvmMaterialTools.FindHighestMaterialIndex(destMesh.MaterialEntries, false) + 1),
+                });
             }
 
             for (var i = 0; i < sourceMesh.MaterialEntries.Count; i++)
             {
-                var materialEntry = destMesh.MaterialEntries[i];
+                var materialEntry = sourceMesh.MaterialEntries[i];
                 var materialName = materialEntry.Name.GetResolvedText() ?? "destMaterial" + i;
                 var originalMaterialName = materialName;
                 var materialNameIndex = 0;
@@ -1348,14 +1412,14 @@ public class DocumentTools
                 }
 
                 materialNames.Add(materialName);
-                materialEntries.Add(materialEntry);
+                ret.Add(materialEntry);
                 if (materialName != originalMaterialName)
                 {
                     nameCollisions.Add(originalMaterialName, materialName);
                 }
             }
 
-            return nameCollisions;
+            return ret;
         }
 
         // ReSharper restore ForCanBeConvertedToForeach
@@ -1398,71 +1462,9 @@ public class DocumentTools
             ClearMeshMaterials(destCr2W);
         }
 
-        var numChanges = 0;
-        for (var i = 0; i < meshPaths.Count; i++)
-        {
-            numChanges += AppendMeshMaterials(GetCr2W(meshPaths[i]), destCr2W, sourcePath, destPath);
-
-            if (i >= meshPaths.Count + 1)
-            {
-                continue;
-            }
-
-            // append separators to appearances, materialNames, materials
-            var separatorString =
-                $"----- merged_from_{Path.GetFileNameWithoutExtension(meshPaths[i]).ToFileName()}";
-            destMesh.Appearances.Add(new CHandle<meshMeshAppearance>()
-            {
-                Chunk = new meshMeshAppearance() { Name = separatorString }
-            });
-
-            if (destMesh.LocalMaterialBuffer.Materials.Count > 0 || destMesh.PreloadLocalMaterialInstances.Count > 0)
-            {
-                destMesh.MaterialEntries.Add(new CMeshMaterialEntry()
-                {
-                    Name = separatorString,
-                    IsLocalInstance = true,
-                    Index = destMesh.MaterialEntries.Where(e => e.IsLocalInstance).Select(e => e.Index)
-                        .Max(),
-                });
-
-                var matInstance = new CMaterialInstance();
-
-                if (destMesh.PreloadLocalMaterialInstances.Count > 0)
-                {
-                    destMesh.PreloadLocalMaterialInstances.Add(new CHandle<IMaterial>() { Chunk = matInstance });
-                }
-                else
-                {
-                    destMesh.LocalMaterialBuffer.Materials.Add(matInstance);
-                }
-            }
-
-            if (destMesh.ExternalMaterials.Count <= 0 && destMesh.PreloadExternalMaterials.Count <= 0)
-            {
-                continue;
-            }
-
-            {
-                destMesh.MaterialEntries.Add(new CMeshMaterialEntry()
-                {
-                    Name = separatorString,
-                    IsLocalInstance = false,
-                    Index = destMesh.MaterialEntries.Where(e => !e.IsLocalInstance).Select(e => e.Index)
-                        .Max(),
-                });
-
-                if (destMesh.ExternalMaterials.Count > 0)
-                {
-                    destMesh.ExternalMaterials.Add(new CResourceAsyncReference<IMaterial>(ResourcePath.Empty));
-                }
-                else
-                {
-                    destMesh.PreloadExternalMaterials.Add(new CResourceReference<IMaterial>(ResourcePath.Empty));
-                }
-            }
-        }
-
+        var numChanges = meshPaths.Select((t, i) =>
+            AppendMeshMaterials(GetCr2W(t), destCr2W, sourcePath, destPath, i < meshPaths.Count + 1)
+        ).Sum();
 
         if (numChanges == 0)
         {
