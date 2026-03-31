@@ -278,7 +278,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
                     "Select asset files",
                     "Select the files you want to make available to World Builder.",
                     "WorldBuilder file name",
-                    activeProject.ModName.ToFileName()
+                    activeProject.ModName.ToArchiveFileName()
                 )
             ) is not { } dialogModel || dialogModel.SelectedOptions.Count == 0)
         {
