@@ -518,12 +518,13 @@ public partial class ArchiveXlItemService
             return;
         }
 
-        var displayName = $"{clothingItemData.ItemFileName}_i18n_$(base_color)";
+        var nameSuffix = "$(base_color)";
         if (clothingItemData.SecondaryVariants.Count > 0)
         {
-            displayName = $"{displayName}_$(secondary)";
+            nameSuffix = $"{nameSuffix}_$(secondary)";
         }
 
+        var displayName = $"{clothingItemData.ItemFileName}_i18n_{nameSuffix}";
         var description = $"{clothingItemData.ItemFileName}_i18n_desc";
 
         var entryList = locEntries.Entries.ToList();
