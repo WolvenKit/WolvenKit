@@ -11,5 +11,5 @@ public static class HashHelper
     /// <param name="filePath"></param>
     /// <returns></returns>
     public static ulong CalculateDepotPathHash(string? filePath) =>
-        filePath is null ? 0 : FNV1A64HashAlgorithm.HashString(filePath.SanitizeFilePath());
+        filePath is null ? 0 : FNV1A64HashAlgorithm.HashString(filePath.ToArchiveFilePath());
 }

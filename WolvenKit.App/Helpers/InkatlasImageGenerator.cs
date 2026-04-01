@@ -142,7 +142,7 @@ public static class InkatlasImageGenerator
                 (
                     file,
                     paddedImage,
-                    Path.GetFileNameWithoutExtension(file).ToFileName(),
+                    Path.GetFileNameWithoutExtension(file).ToArchiveFileName(),
                     originalWidth,
                     originalHeight
                 ));

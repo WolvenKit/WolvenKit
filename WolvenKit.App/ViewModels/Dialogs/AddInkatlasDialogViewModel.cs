@@ -32,10 +32,10 @@ public partial class AddInkatlasDialogViewModel : ObservableObject
         switch (e.PropertyName)
         {
             case nameof(InkatlasFileName):
-                InkatlasFileName = InkatlasFileName.ToFileName().Replace(".inkatlas", "");
+                InkatlasFileName = InkatlasFileName.ToArchiveFileName().Replace(".inkatlas", "");
                 break;
             case nameof(RelativePath):
-                RelativePath = RelativePath.ToFilePath();
+                RelativePath = RelativePath.ToArchiveFilePath();
                 break;
             case nameof(ExistingFile) when !string.IsNullOrEmpty(ExistingFile):
                 // No need to escape, the propertyChangedEvents will do that

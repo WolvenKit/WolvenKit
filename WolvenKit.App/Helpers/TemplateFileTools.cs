@@ -14,6 +14,7 @@ using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Core.Services;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
@@ -179,7 +180,7 @@ public partial class TemplateFileTools
             throw new Exception("NPC name is empty, this won't work");
         }
 
-        var fileName = options.NpcName.ToFileName();
+        var fileName = options.NpcName.ToArchiveFileName();
 
         if (File.Exists(options.YamlFileAbsolutePath) && !options.Overwrite)
         {
@@ -206,7 +207,7 @@ public partial class TemplateFileTools
         var yamlTemplate = File.ReadAllText(options.YamlFileAbsolutePath);
 
         yamlTemplate = yamlTemplate.Replace("DISPLAY_NAME",
-            $"LocKey#{options.ModderName.ToFileName()}_{fileName}_photomode_i18n");
+            $"LocKey#{options.ModderName.ToArchiveFileName()}_{fileName}_photomode_i18n");
 
         // upper case first letter makes them show up at the top of the list
         yamlTemplate = yamlTemplate.Replace("NPC_NAME", fileName.FirstCharToUpper());
@@ -1150,14 +1151,14 @@ public partial class TemplateFileTools
             prop.Appearances.Add("default");
         }
 
-        prop.Appearances = prop.Appearances.Select(x => x.ToFileName()).ToList();
+        prop.Appearances = prop.Appearances.Select(x => x.ToArchiveFileName()).ToList();
 
         var hasSingleAppearance = prop.Appearances.All(f => f == "default");
 
-        var absoluteParentFolder = Path.Combine(project.ModDirectory, prop.ParentFolder).ToFilePath();
+        var absoluteParentFolder = Path.Combine(project.ModDirectory, FilepathValidationTools.SanitizeArchiveFilePath(prop.ParentFolder));
         Directory.CreateDirectory(absoluteParentFolder);
 
-        var propFolderName = prop.PropName.ToFileName();
+        var propFolderName = prop.PropName.ToArchiveFileName();
         if (!absoluteParentFolder.Contains(propFolderName) &&
             Directory.GetFileSystemEntries(absoluteParentFolder).Length > 0)
         {
@@ -1455,8 +1456,8 @@ public partial class TemplateFileTools
                 {
                     entTemplate.Appearances.Add(new entTemplateAppearance()
                     {
-                        Name = propAppearance.ToFileName(),
-                        AppearanceName = propAppearance.ToFileName(),
+                        Name = propAppearance.ToArchiveFileName(),
+                        AppearanceName = propAppearance.ToArchiveFileName(),
                         AppearanceResource = new CResourceAsyncReference<appearanceAppearanceResource>(appFilePath),
                     });
                 }
@@ -1488,7 +1489,7 @@ public partial class TemplateFileTools
         {
             var luaFolderPath = Path.Combine(project.GetResourceCETDirectory(), "AppearanceMenuMod", "Collabs",
                 "Custom Props", GetFileOrganizationSubdir());
-            var luaPath = Path.Combine(luaFolderPath, $"{project.Name.ToFileName()}.lua");
+            var luaPath = Path.Combine(luaFolderPath, $"{project.Name.ToArchiveFileName()}.lua");
 
             var absolutePath = Path.Combine(project.ResourcesDirectory, luaPath);
             if (!File.Exists(absolutePath))
@@ -1496,7 +1497,7 @@ public partial class TemplateFileTools
                 Directory.CreateDirectory(luaFolderPath);
                 File.WriteAllText(absolutePath,
                     s_luaPropFileTemplate.Replace("MODDER_NAME", project.Author)
-                        .Replace("PROJECT_NAME", project.Name.ToFileName()));
+                        .Replace("PROJECT_NAME", project.Name.ToArchiveFileName()));
             }
 
             var fileContent = File.ReadAllLines(absolutePath).ToList();
@@ -1545,7 +1546,7 @@ public partial class TemplateFileTools
             {
                 var entspawnerMeshDir = Path.Combine(entspawnerSubdir, "spawnables", "mesh", "all",
                     GetFileOrganizationSubdir());
-                var entspawnerMeshFile = Path.Combine(entspawnerMeshDir, project.Name.ToFileName() + ".txt");
+                var entspawnerMeshFile = Path.Combine(entspawnerMeshDir, project.Name.ToArchiveFileName() + ".txt");
                 var absolutePath = Path.Combine(project.ResourcesDirectory, entspawnerMeshFile);
 
                 Directory.CreateDirectory(Path.Combine(project.ResourcesDirectory, entspawnerMeshDir));
@@ -1566,7 +1567,7 @@ public partial class TemplateFileTools
             }
 
             var entspawnerEntFile =
-                Path.Combine(entspawnerSubdir, GetFileOrganizationSubdir(), project.Name.ToFileName() + ".txt");
+                Path.Combine(entspawnerSubdir, GetFileOrganizationSubdir(), project.Name.ToArchiveFileName() + ".txt");
             var absoluteEntRegistryPath = Path.Combine(project.ResourcesDirectory, entspawnerEntFile);
             if (!File.Exists(absoluteEntRegistryPath))
             {

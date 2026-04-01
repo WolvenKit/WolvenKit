@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Services;
+using WolvenKit.Core.Services;
 using WolvenKit.Interfaces.Extensions;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
@@ -139,7 +140,7 @@ public partial class ProjectWizardViewModel : DialogViewModel, INotifyDataErrorI
         {
             AddError(nameof(ProjectName), "A project with this name already exists!");
         }
-        else if (!ProjectName.ToFileName().Equals(ProjectName, StringComparison.OrdinalIgnoreCase))
+        else if (!ProjectName.IsArchiveFileNameValid())
         {
             AddError(nameof(ProjectName), "Project name must not contain special characters or spaces!");
         }
@@ -171,7 +172,7 @@ public partial class ProjectWizardViewModel : DialogViewModel, INotifyDataErrorI
         {
             AddError(nameof(ProjectPath), "Selected path does not exist");
         }
-        else if (!ProjectPath.IsSaneFilePath())
+        else if (!FilepathValidationTools.IsOsFilePathValid(ProjectPath))
         {
             // We're grudgingly okay with spaces. We are not okay with special characters.
             AddError(nameof(ProjectPath), "Please do not use special characters in your project path!");
