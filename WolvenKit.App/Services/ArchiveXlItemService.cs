@@ -986,6 +986,21 @@ public partial class ArchiveXlItemService
                         (ResourcePath)clothingItemData.MeshEntityPath, InternalEnums.EImportFlags.Soft),
                 }
             ]);
+
+            appAppearance.PartsOverrides ??= [];
+
+            if (clothingItemData.Toggles.Count > 0 && appAppearance.PartsOverrides.Count == 0)
+            {
+                CArray<appearancePartComponentOverrides> componentOverrides = [];
+                foreach (var toggle in clothingItemData.Toggles)
+                {
+                    componentOverrides.Add(new appearancePartComponentOverrides());
+                }
+
+                appAppearance.PartsOverrides.Add(
+                    new appearanceAppearancePartOverrides() { ComponentsOverrides = componentOverrides }
+                );
+            }
             appAppearance.VisualTags = new redTagList() { Tags = tags };
 
             if (isAdding)
