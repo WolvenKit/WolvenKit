@@ -35,6 +35,8 @@ public class ArchiveXlClothingItem
 
     public List<ArchiveXlHidingTags> HidingTags { get; init; } = [];
 
+    public string ItemFileName => $"{ItemName.ToFileName().ToLower().Replace(" ", "_")}";
+
     /// <summary>
     /// modderName/equipment/slot/projectName
     /// </summary>
@@ -66,11 +68,16 @@ public class ArchiveXlClothingItem
     /// </summary>
     public List<string> Variants { get; init; } = [];
 
+
     /// <summary>
     /// Secondary variants for dynamic appearances, e.g. [samurai, witcher, galaxy]
     /// </summary>
     public List<string> SecondaryVariants { get; init; } = [];
 
+    /// <summary>
+    /// Toggles for dynamic appearances (to generate entries in .app and .ent)
+    /// </summary>
+    public List<string> Toggles { get; init; } = [];
     public List<string> MeshesFromProject { get; set; } = [];
 
     public string? PrimaryAppearanceMesh { get; set; } = string.Empty;
@@ -99,6 +106,77 @@ public class ArchiveXlClothingItem
             .. Variants.SelectMany(variant =>
                 SecondaryVariants.Select(secondary => $"{variant}_{secondary}"))
         ];
+    }
+
+    private string _appearanceName = "";
+
+    public string GetAppearanceName()
+    {
+        if (!string.IsNullOrEmpty(_appearanceName))
+        {
+            return _appearanceName;
+        }
+
+        var itemNameBase = Toggles.Aggregate($"{ItemFileName}",
+            (current, toggle) => $"{current}_{toggle}_$({toggle})") ?? "FAILED_GENERATING_ITEM_NAME";
+
+        var itemNameAppearance = "$(base_color)";
+        if (SecondaryVariants.Count > 0)
+        {
+            itemNameAppearance = "$(base_color)+$(secondary)";
+        }
+
+        _appearanceName = $"{itemNameBase}_!{itemNameAppearance}";
+        return _appearanceName;
+    }
+
+    private static IEnumerable<string> GenerateAppearanceNames(
+        string template,
+        IEnumerable<string> toggleNames)
+    {
+        var toggleList = toggleNames?.Where(name => !string.IsNullOrEmpty(name)).ToList() ?? new List<string>();
+
+        // If no toggles, just return the template as-is.
+        if (!toggleList.Any())
+        {
+            yield return template;
+            yield break;
+        }
+
+        // Start with one empty combination (a dictionary of chosen values)
+        IEnumerable<Dictionary<string, string>> combinations = new[] { new Dictionary<string, string>() };
+
+        // For each toggle, cross‑join with the two possible values ("on", "off")
+        combinations = toggleList.Aggregate(combinations, (current, toggle) => current.SelectMany(existing =>
+            new[] { "on", "off" }.Select(value =>
+            {
+                var newCombo = new Dictionary<string, string>(existing) { [toggle] = value };
+                return newCombo;
+            })));
+
+        // For each combination, replace placeholders in the template
+        foreach (var combo in combinations)
+        {
+            var result = combo.Aggregate(template, (current, kvp) => current.Replace($"$({kvp.Key})", kvp.Value));
+
+            yield return result;
+        }
+    }
+
+
+    private List<CName> _appearanceNames = [];
+
+    public List<CName> GetAppearanceNames()
+    {
+        if (_appearanceNames.Count > 0)
+        {
+            return _appearanceNames;
+        }
+
+        _appearanceNames = GenerateAppearanceNames(GetAppearanceName().Split("_!").First(), Toggles)
+            .Select(s => (CName)s).ToList();
+
+        return _appearanceNames;
     }
 }
 
@@ -133,10 +211,10 @@ public partial class ArchiveXlItemService
     {
         if (!string.IsNullOrEmpty(_projectManager.ActiveProject?.Author))
         {
-            return _projectManager.ActiveProject.Author;
+            return _projectManager.ActiveProject.Author.ToFileName().Replace(" ", "_");
         }
 
-        return _settingsManager.ModderName ?? "wolvenkit_user";
+        return (_settingsManager.ModderName ?? "wolvenkit_user").ToFileName().Replace(" ", "_");
     }
 
     public void CreateEquipmentItem(ArchiveXlClothingItem clothingItemData)
@@ -171,7 +249,7 @@ public partial class ArchiveXlItemService
         var newFiles = activeProject.ModFiles.Where(f => !projectFiles.Contains(f)).ToList();
         if (newFiles.Count == 0)
         {
-            _logger.Success($"Your ArchiveXL item {clothingItemData.ItemName.ToFileName()} has been updated.");
+            _logger.Success($"Your ArchiveXL item {clothingItemData.ItemFileName} has been updated.");
             return;
         }
 
@@ -192,35 +270,39 @@ public partial class ArchiveXlItemService
             GetModderName(),
             "equipment",
             clothingItemData.Slot.ToString().Replace("outer_", "").Replace("inner_", ""),
-            clothingItemData.ItemName.ToFileName()
+            clothingItemData.ItemFileName
         ).ToFilePath();
 
         // Control files go into the folder of any existing csv file in the project, or the default path
         clothingItemData.ControlFilesRelPath =
             activeProject.ModFiles.Where(f => f.HasFileExtension("csv")).Select(Path.GetDirectoryName).FirstOrDefault()
-            ?? Path.Join(GetModderName(), activeProject.ModName, clothingItemData.ItemName).ToFilePath();
+            ?? Path.Join(
+                GetModderName(),
+                activeProject.ModName,
+                clothingItemData.ItemFileName
+            ).ToFilePath();
 
 
         // Now write paths into the item data
         clothingItemData.RootEntityPath = Path.Combine(clothingItemData.ControlFilesRelPath,
-            $"_root_entity.ent".ToFileName());
+            $"_root_entity.ent").ToFilePath();
         if (activeProject.ModFiles.FirstOrDefault(f => f.EndsWith("_root_entity.ent")) is string existingRoot)
         {
             clothingItemData.RootEntityPath = existingRoot;
         }
 
         clothingItemData.AppFilePath = Path.Combine(clothingItemData.ControlFilesRelPath,
-            $"_application.app".ToFileName());
+            $"_application.app").ToFilePath();
         if (activeProject.ModFiles.FirstOrDefault(f => f.EndsWith("_application.app")) is string existingApp)
         {
             clothingItemData.AppFilePath = existingApp;
         }
 
         clothingItemData.MeshEntityPath = Path.Combine(clothingItemData.ControlFilesRelPath,
-            $"_{clothingItemData.ItemName.ToFileName()}_mesh_entity.ent".ToFileName());
+            $"_{clothingItemData.ItemFileName}_mesh_entity.ent").ToFilePath();
 
         clothingItemData.InkatlasPath = Path.Combine(clothingItemData.ControlFilesRelPath,
-            $"{clothingItemData.ItemName.ToFileName()}_icons.inkatlas");
+            $"{clothingItemData.ItemFileName}_icons.inkatlas").ToFilePath();
 
         // If we have more than one .yaml file under resources, create a new one, otherwise append
         var yamlFiles = activeProject.ResourceFiles.Where(f => f.HasFileExtension("yaml")).ToList();
@@ -232,6 +314,7 @@ public partial class ArchiveXlItemService
         {
             clothingItemData.YamlFilePath = Path.Join(
                 activeProject.GetRelativeResourceTweakDirectory(),
+                GetModderName(),
                 $"{activeProject.ModName}.yaml"
             ).ToFilePath();
         }
@@ -333,7 +416,7 @@ public partial class ArchiveXlItemService
                        }
                    };
 
-        var itemName = $"{clothingItemData.ItemName.ToFileName()}_factory_name";
+        var itemName = $"{clothingItemData.ItemFileName}_factory_name";
 
         if (cr2W.RootChunk is not C2dArray factory)
         {
@@ -435,12 +518,14 @@ public partial class ArchiveXlItemService
             return;
         }
 
-        var displayName = $"{clothingItemData.ItemName.ToFileName()}_i18n_$(base_color)";
+        var nameSuffix = "$(base_color)";
         if (clothingItemData.SecondaryVariants.Count > 0)
         {
-            displayName = $"{displayName}_$(secondary)";
+            nameSuffix = $"{nameSuffix}_$(secondary)";
         }
-        var description = $"{clothingItemData.ItemName.ToFileName()}_i18n_desc";
+
+        var displayName = $"{clothingItemData.ItemFileName}_i18n_{nameSuffix}";
+        var description = $"{clothingItemData.ItemFileName}_i18n_desc";
 
         var entryList = locEntries.Entries.ToList();
 
@@ -509,9 +594,9 @@ public partial class ArchiveXlItemService
             _logger.Info($"Delete it or run Files -> Add Files -> Generate Inkatlas");
         }
 
-        var tempFolder = Path.Combine(Path.GetTempPath(), $"iconImages_{clothingItemData.ItemName.ToFileName()}");
+        var tempFolder = Path.Combine(Path.GetTempPath(), $"iconImages_{clothingItemData.ItemFileName}");
 
-        InkatlasImageGenerator.GenerateDummyIcons(tempFolder, $"{clothingItemData.ItemName.ToFileName()}_",
+        InkatlasImageGenerator.GenerateDummyIcons(tempFolder, $"{clothingItemData.ItemFileName}_",
             clothingItemData.GetAllVariants());
 
         InkatlasImageGenerator.GenerateAtlas(
@@ -563,6 +648,9 @@ public partial class ArchiveXlItemService
         var relativeMeshFolder = Path.Combine(clothingItemData.FilesRelPath, "meshes");
         Directory.CreateDirectory(Path.Combine(activeProject.ModDirectory, relativeMeshFolder));
 
+
+        var slotPrefix = EquipmentItemData.GetComponentPrefix(clothingItemData.Slot);
+
         if (clothingItemData.MeshesFromProject.Count == 0)
         {
             // we are not using meshes from project
@@ -571,7 +659,6 @@ public partial class ArchiveXlItemService
         else
         {
             CreateMeshComponents();
-
         }
 
         // Garment support tags (size)
@@ -599,26 +686,31 @@ public partial class ArchiveXlItemService
                 entTemplate.Components.Add(comp);
             }
 
-            List<string> componentNames = [];
-            var slotPrefix = EquipmentItemData.GetComponentPrefix(clothingItemData.Slot);
-
+            var componentIndex = 0;
             foreach (var relativePath in clothingItemData.MeshesFromProject)
             {
                 var meshPath = relativePath;
                 var isSecondaryComponent = meshPath == clothingItemData.SecondaryAppearanceMesh;
 
-                // these will be "wa" meshes, so we need to check for "ma" equivalents
-                if (activeProject.Files.Contains(meshPath.Replace("wa", "ma")))
+                // these will be "pwa" meshes, so we need to check for "pma" equivalents
+                if (activeProject.Files.Contains(meshPath.Replace("_pwa", "_pma")))
                 {
-                    meshPath = $"*{meshPath.Replace("wa", "{gender}")}";
+                    meshPath = $"*{meshPath.Replace("_pwa", "{gender}")}";
+                }
+
+                if (activeProject.Files.Contains(meshPath.Replace("_wa_", "_ma_")))
+                {
+                    meshPath = $"*{meshPath.Replace("_wa_", "_{gender}_")}";
                 }
 
                 var isSoft = ArchiveXlHelper.HasSubstitution(meshPath);
                 var path = isSoft && !meshPath.StartsWith("*") ? $"*{meshPath}" : meshPath;
                 var flag = isSoft ? InternalEnums.EImportFlags.Soft : InternalEnums.EImportFlags.Default;
                 var appearance = "*{variant}";
+                var componentName = $"{slotPrefix}_{clothingItemData.ItemFileName}{componentIndex++:D2}";
                 if (isSecondaryComponent)
                 {
+                    componentName = $"{componentName}_secondary";
                     appearance = "*{variant.2}";
                 }
                 else if (clothingItemData.SecondaryVariants.Count > 0)
@@ -628,8 +720,7 @@ public partial class ArchiveXlItemService
 
                 IRedMeshComponent component = new entGarmentSkinnedMeshComponent()
                 {
-                    Name =
-                        $"{slotPrefix}_{Path.GetFileName(meshPath).Replace("{gender}", "").Replace("__", "_").ToFileName()}",
+                    Name = componentName,
                     Mesh = new CResourceAsyncReference<CMesh>(path, flag),
                     MeshAppearance = appearance
                 };
@@ -640,10 +731,9 @@ public partial class ArchiveXlItemService
         void AdjustExistingComponents()
         {
             var useSecondary = clothingItemData.SecondaryVariants.Count > 0;
+            var componentIndex = 0;
             foreach (var entComponent in entTemplate.Components.OfType<IRedMeshComponent>())
             {
-                // remove "pwa" from component name, it confuses people
-                entComponent.Name = (entComponent.Name.GetResolvedText() ?? "").Replace("pwa", "");
 
                 var fileSourcePath = entComponent.Mesh.DepotPath.GetResolvedText();
                 if (string.IsNullOrEmpty(fileSourcePath))
@@ -652,19 +742,22 @@ public partial class ArchiveXlItemService
                     continue;
                 }
 
-                if (fileSourcePath.StartsWith('*'))
+                var isSecondaryComponent = IsSecondaryComponent(entComponent.Name!);
+                var componentName = $"{slotPrefix}_{clothingItemData.ItemFileName}{componentIndex++:D2}";
+                if (isSecondaryComponent)
                 {
-                    _logger.Info($"Depot path for {entComponent.Name} is already dynamic. Skipping...");
-                    continue;
+                    componentName = $"{componentName}_secondary";
                 }
 
-                var isSecondaryComponent = IsSecondaryComponent(entComponent.Name!);
+                // components will be named like h0_my_new_hat1
+                entComponent.Name = componentName;
 
-                var fileDestPath = GetDestFilePath(fileSourcePath, isSecondaryComponent);
+                var fileDestPath = GetDestMeshPath(entComponent.Mesh.DepotPath.GetResolvedText() ?? "", slotPrefix,
+                    componentIndex, isSecondaryComponent);
 
                 AddMeshFilesToProject(fileSourcePath, fileDestPath, isSecondaryComponent);
 
-                var dynamicPath = WolvenKit.Modkit.Resources.ArchiveXlHelper.MakeDynamic(fileDestPath);
+                var dynamicPath = ArchiveXlHelper.MakeDynamic(fileDestPath);
                 var hasSubstitution = ArchiveXlHelper.HasSubstitution(dynamicPath);
 
                 entComponent.Mesh =
@@ -691,69 +784,61 @@ public partial class ArchiveXlItemService
         bool IsSecondaryComponent(string componentName) =>
             componentName.Contains("_dec", StringComparison.OrdinalIgnoreCase) ||
             componentName.Contains("_cuff", StringComparison.OrdinalIgnoreCase) ||
+            componentName.Contains("_secondary", StringComparison.OrdinalIgnoreCase) ||
             componentName.Contains("_patch", StringComparison.OrdinalIgnoreCase);
 
-        string GetDestFilePath(string filePath, bool isSecondaryComponent = false)
+        string GetDestMeshPath(string originalPath, string componentPrefix, int idx, bool isSecondaryComponent = false)
         {
-            var fileName = Path.GetFileName(filePath);
+            var bodyGender = originalPath.Contains("_wa_") || originalPath.Contains("_pwa_") ? "pwa" : "pma";
+            var fileName = $"{componentPrefix}_{clothingItemData.ItemFileName}_{bodyGender}_base_body_{idx}.mesh";
+
+            // if it's a secondary mesh, change file name (append that)
+            if (isSecondaryComponent)
+            {
+                fileName =
+                    $"{componentPrefix}_{clothingItemData.ItemFileName}_{bodyGender}_base_body_secondary_{idx}.mesh";
+            }
+
             var newPath = Path.Combine(relativeMeshFolder, fileName);
-            if (activeProject.ModFiles.Contains(newPath))
-            {
-                return newPath;
-            }
-
-            if (isSecondaryComponent || fileName.Contains("shadow") || fileName.Contains("proxy"))
-            {
-                fileName = MeshFileName_SecondaryRegex().Replace(fileName, clothingItemData.ItemName.ToFileName());
-            }
-            else
-            {
-                fileName = MeshFileNameRegex().Replace(fileName, clothingItemData.ItemName.ToFileName());
-            }
-
-
-            return Path.Combine(relativeMeshFolder, fileName);
+            return newPath;
         }
 
         /*
          * Adds mesh files from .ent components to project. Will try to find pma/_ma mesh (entity is pwa/_wa).
          * Will not overwrite existing files.
          */
-        void AddMeshFilesToProject(string filePath, string pathInMod, bool isSecondaryComponent = false)
+        void AddMeshFilesToProject(string originalRelPath, string pathInMod, bool isSecondaryComponent = false)
         {
-            var textureDirPath = Path.Combine(clothingItemData.FilesRelPath, "textures");
-            if (_archiveManager.GetCR2WFile(filePath) is { RootChunk: CMesh mesh } componentMesh)
-            {
-                var destPath = Path.Combine(activeProject.ModDirectory, pathInMod);
-                if (File.Exists(destPath))
-                {
-                    _logger.Info($"Mesh {pathInMod} exists, not overwriting.");
-                    return;
-                }
+            var destPath = Path.Combine(activeProject.ModDirectory, pathInMod);
 
+            if (File.Exists(destPath))
+            {
+                _logger.Info($"Mesh {pathInMod} exists, not overwriting.");
+            }
+            else if (_archiveManager.GetCR2WFile(originalRelPath) is { RootChunk: CMesh mesh } componentMesh)
+
+            {
                 AdjustMeshAppearances(mesh, isSecondaryComponent);
 
                 _cr2WTools.WriteCr2W(componentMesh, destPath);
             }
 
-            var otherGenderSourcePath = filePath.Replace("pwa", "pma").Replace("_wa_", "_ma_");
-            var otherGenderDestPath = pathInMod.Replace("pwa", "pma").Replace("_wa_", "_ma_");
-
-            if (_archiveManager.GetCR2WFile(otherGenderSourcePath) is not { RootChunk: CMesh mesh2 } otherGenderMesh)
-            {
-                return;
-            }
-
-            var destPath2 = Path.Combine(activeProject.ModDirectory, otherGenderDestPath);
-            if (File.Exists(destPath2))
+            var otherGenderDestPath = destPath.Replace("pwa", "pma").Replace("_wa_", "_ma_");
+            if (File.Exists(otherGenderDestPath))
             {
                 _logger.Info($"Mesh {otherGenderDestPath} exists, not overwriting.");
                 return;
             }
 
+            var otherGenderSourcePath = originalRelPath.Replace("pwa", "pma").Replace("_wa_", "_ma_");
+            if (_archiveManager.GetCR2WFile(otherGenderSourcePath) is not { RootChunk: CMesh mesh2 } otherGenderMesh)
+            {
+                _logger.Warning($"Failed to add {otherGenderSourcePath} for masc variant. Please create it by hand!");
+                return;
+            }
             AdjustMeshAppearances(mesh2, isSecondaryComponent);
 
-            _cr2WTools.WriteCr2W(otherGenderMesh, destPath2);
+            _cr2WTools.WriteCr2W(otherGenderMesh, otherGenderDestPath);
         }
 
         /*
@@ -806,30 +891,32 @@ public partial class ArchiveXlItemService
             return;
         }
 
-        var itemName = $"{clothingItemData.ItemName.ToFileName()}_";
 
-        var entTemplateAppearance = new entTemplateAppearance();
-        var isAdding = true;
-
-        if (rootEntity.Appearances.FirstOrDefault(e => e.Name == itemName) is { } existingAppearance)
+        var appearanceNames = clothingItemData.GetAppearanceNames();
+        foreach (var itemName in appearanceNames)
         {
-            entTemplateAppearance = existingAppearance;
-            isAdding = false;
+            var entTemplateAppearance = new entTemplateAppearance();
+            var isAdding = true;
+
+            if (rootEntity.Appearances.FirstOrDefault(e => e.Name == itemName) is { } existingAppearance)
+            {
+                entTemplateAppearance = existingAppearance;
+                isAdding = false;
+            }
+
+            entTemplateAppearance.Name = itemName;
+            entTemplateAppearance.AppearanceName = itemName;
+            entTemplateAppearance.AppearanceResource =
+                new CResourceAsyncReference<appearanceAppearanceResource>(clothingItemData.AppFilePath);
+
+            if (isAdding)
+            {
+                rootEntity.Appearances.Add(entTemplateAppearance);
+            }
         }
-
-        entTemplateAppearance.Name = itemName;
-        entTemplateAppearance.AppearanceName = itemName;
-        entTemplateAppearance.AppearanceResource =
-            new CResourceAsyncReference<appearanceAppearanceResource>(clothingItemData.AppFilePath);
-
-        if (isAdding)
-        {
-            rootEntity.Appearances.Add(entTemplateAppearance);
-        }
-
         // Take care of the tags
         rootEntity.VisualTagsSchema ??= new CHandle<entVisualTagsSchema>() { Chunk = new entVisualTagsSchema() };
-        rootEntity.DefaultAppearance = itemName;
+        rootEntity.DefaultAppearance = "default"; // checked with psiberx
 
         var tags = rootEntity.VisualTagsSchema.Chunk ?? new entVisualTagsSchema();
         tags.VisualTags ??= new redTagList();
@@ -854,6 +941,7 @@ public partial class ArchiveXlItemService
         _cr2WTools.WriteCr2W(cr2W, rootEntityAbsPath);
     }
 
+
     private void AddAppFile(ArchiveXlClothingItem clothingItemData, Cp77Project activeProject)
     {
         var appFileAbsPath = Path.Combine(activeProject.ModDirectory, clothingItemData.AppFilePath);
@@ -876,38 +964,90 @@ public partial class ArchiveXlItemService
             return;
         }
 
-        var appearanceName = $"{clothingItemData.ItemName.ToFileName()}_";
-        var appAppearance = new appearanceAppearanceDefinition();
-        var appHandle = new CHandle<appearanceAppearanceDefinition>(appAppearance);
-        var isAdding = true;
+        var appearanceNames = clothingItemData.GetAppearanceNames();
 
-        if (app.Appearances.FirstOrDefault(a =>
-                a.Chunk?.Name == appearanceName) is CHandle<appearanceAppearanceDefinition> existingHandle)
+        foreach (var name in appearanceNames)
         {
-            existingHandle.Chunk ??= appAppearance;
-            appHandle = existingHandle;
-            appAppearance = existingHandle.Chunk ?? appAppearance;
-            isAdding = false;
-        }
+            var appAppearance = new appearanceAppearanceDefinition();
+            var appHandle = new CHandle<appearanceAppearanceDefinition>(appAppearance);
+            var isAdding = true;
 
-        CArray<CName> tags = [.. clothingItemData.HidingTags.Select(t => (CName)t.ToString()).ToArray()];
-
-        appAppearance.Name = $"{clothingItemData.ItemName.ToFileName()}_";
-        appAppearance.PartsValues = new CArray<appearanceAppearancePart>([
-            new appearanceAppearancePart()
+            if (app.Appearances.FirstOrDefault(a =>
+                    a.Chunk?.Name.GetResolvedText() is string s && appearanceNames.Contains(s)) is
+                CHandle<appearanceAppearanceDefinition> existingHandle)
             {
-                Resource = new CResourceAsyncReference<entEntityTemplate>(
-                    (ResourcePath)clothingItemData.MeshEntityPath, InternalEnums.EImportFlags.Soft),
+                existingHandle.Chunk ??= appAppearance;
+                appHandle = existingHandle;
+                appAppearance = existingHandle.Chunk ?? appAppearance;
+                isAdding = false;
             }
-        ]);
-        appAppearance.VisualTags = new redTagList() { Tags = tags };
 
-        if (isAdding)
-        {
-            app.Appearances.Add(appHandle);
+            CArray<CName> tags = [.. clothingItemData.HidingTags.Select(t => (CName)t.ToString()).ToArray()];
+
+            appAppearance.Name = name;
+            appAppearance.PartsValues = new CArray<appearanceAppearancePart>([
+                new appearanceAppearancePart()
+                {
+                    Resource = new CResourceAsyncReference<entEntityTemplate>(
+                        (ResourcePath)clothingItemData.MeshEntityPath, InternalEnums.EImportFlags.Soft),
+                }
+            ]);
+
+            appAppearance.PartsOverrides ??= [];
+
+            if (clothingItemData.Toggles.Count > 0 && appAppearance.PartsOverrides.Count == 0)
+            {
+                CArray<appearancePartComponentOverrides> componentOverrides = [];
+                foreach (var toggle in clothingItemData.Toggles)
+                {
+                    componentOverrides.Add(new appearancePartComponentOverrides());
+                }
+
+                appAppearance.PartsOverrides.Add(
+                    new appearanceAppearancePartOverrides() { ComponentsOverrides = componentOverrides }
+                );
+            }
+            appAppearance.VisualTags = new redTagList() { Tags = tags };
+
+            if (isAdding)
+            {
+                app.Appearances.Add(appHandle);
+            }
         }
 
         _cr2WTools.WriteCr2W(cr2W, appFileAbsPath);
+    }
+
+
+    private static IEnumerable<Dictionary<string, string>> GetCombinations(
+        Dictionary<string, List<string>> attributeValues)
+    {
+        // Start with a single empty combination
+        IEnumerable<Dictionary<string, string>> combinations =
+            new[] { new Dictionary<string, string>() };
+
+        // For each attribute, cross‑join with its possible values
+        foreach (var kvp in attributeValues)
+        {
+            var key = kvp.Key;
+            var values = kvp.Value;
+
+            if (values.Count == 0)
+            {
+                continue;
+            }
+
+            combinations = combinations.SelectMany(
+                existingCombination => values.Select(value =>
+                {
+                    // Create a new dictionary based on the existing one
+                    var newCombination = new Dictionary<string, string>(existingCombination);
+                    newCombination[key] = value;
+                    return newCombination;
+                }));
+        }
+
+        return combinations;
     }
 
     /// <summary>
@@ -929,35 +1069,46 @@ public partial class ArchiveXlItemService
 
         var yamlAbsPath = Path.Combine(activeProject.ResourcesDirectory, clothingItemData.YamlFilePath);
 
-        var itemName = $"Items.{_settingsManager.ModderName}_{clothingItemData.ItemName.ToFileName()}_$(base_color)";
-        var atlasPathName = $"{clothingItemData.ItemName.ToFileName()}_$(base_color)";
-        var instances = new YamlSequenceNode(
-            clothingItemData.Variants.Select(color =>
-            {
-                var node = new YamlMappingNode { { "base_color", color } };
-                node.Style = YamlDotNet.Core.Events.MappingStyle.Flow;
+        var itemName = $"Items.{GetModderName()}_{clothingItemData.ItemFileName}_$(base_color)";
+        var atlasPathName = $"{clothingItemData.ItemFileName}_$(base_color)";
 
-                return node;
-            }));
-
-        var useSecondary = clothingItemData.SecondaryVariants.Count > 0;
         // Consider secondary variants
+        var useSecondary = clothingItemData.SecondaryVariants.Count > 0;
+
         if (useSecondary)
         {
             itemName = $"{itemName}_$(secondary)";
             atlasPathName = $"{atlasPathName}_$(secondary)";
-            instances = new YamlSequenceNode(
-                clothingItemData.Variants.SelectMany(color =>
-                {
-                    return clothingItemData.SecondaryVariants.Select(variant =>
-                    {
-                        var node = new YamlMappingNode { { "base_color", color }, { "secondary", variant } };
-                        node.Style = YamlDotNet.Core.Events.MappingStyle.Flow;
-
-                        return node;
-                    });
-                }));
         }
+
+        var instanceParts = new Dictionary<string, List<string>>();
+        instanceParts.Add("base_color", clothingItemData.Variants);
+        if (useSecondary)
+        {
+            instanceParts.Add("secondary", clothingItemData.SecondaryVariants);
+        }
+
+        foreach (var toggle in clothingItemData.Toggles)
+        {
+            instanceParts.Add(toggle, ["on", "off"]);
+        }
+
+        // Generate all combinations
+        var combinations = GetCombinations(instanceParts);
+
+        // Create YAML sequence nodes from the combinations
+        var instances = new YamlSequenceNode(
+            combinations.Select(combo =>
+            {
+                var node = new YamlMappingNode();
+                foreach (var kvp in combo)
+                {
+                    node.Add(kvp.Key, kvp.Value);
+                }
+
+                node.Style = YamlDotNet.Core.Events.MappingStyle.Flow;
+                return node;
+            }));
 
         var icon = new YamlMappingNode
         {
@@ -967,7 +1118,7 @@ public partial class ArchiveXlItemService
         var placementSlots = new YamlSequenceNode() { $"!append-once OutfitSlots.{clothingItemData.EqExSlot}" };
 
         var yamlData = new YamlMappingNode();
-        var yaml = new YamlMappingNode() { { itemName, yamlData } };
+
 
         if (YamlHelper.ReadYamlAsNodes(yamlAbsPath) is { } yamlFromFile)
         {
@@ -979,14 +1130,18 @@ public partial class ArchiveXlItemService
             }
         }
 
+        var nameSuffix = "$(base_color)";
+        if (clothingItemData.SecondaryVariants.Count > 0)
+        {
+            nameSuffix = $"{nameSuffix}_$(secondary)";
+        }
+
         yamlData.Children.TryAdd("$base", itemBase);
         yamlData.Children.TryAdd("$instances", instances);
-        yamlData.Children.TryAdd("appearanceName",
-            $"{clothingItemData.ItemName.ToFileName()}_!$(base_color){(useSecondary ? "+$(secondary)" : string.Empty)}");
-        yamlData.Children.TryAdd("entityName", $"{clothingItemData.ItemName.ToFileName()}_factory_name");
-        yamlData.Children.TryAdd("localizedDescription", $"LocKey#{clothingItemData.ItemName.ToFileName()}_i18n_desc");
-        yamlData.Children.TryAdd("displayName",
-            $"LocKey#{clothingItemData.ItemName.ToFileName()}_i18n_$(base_color){(useSecondary ? "_$(secondary)" : string.Empty)}");
+        yamlData.Children.TryAdd("appearanceName", clothingItemData.GetAppearanceName());
+        yamlData.Children.TryAdd("entityName", $"{clothingItemData.ItemFileName}_factory_name");
+        yamlData.Children.TryAdd("localizedDescription", $"LocKey#{clothingItemData.ItemFileName}_i18n_desc");
+        yamlData.Children.TryAdd("displayName", $"LocKey#{clothingItemData.ItemFileName}_i18n_{nameSuffix}");
         yamlData.Children.TryAdd("quality", "Quality.Legendary");
         yamlData.Children.TryAdd("icon", icon);
         yamlData.Children.TryAdd("statModifiers", ArchiveXlClothingItem.StatModifiers);
@@ -998,18 +1153,20 @@ public partial class ArchiveXlItemService
             yamlData.Children.TryAdd("placementSlots", placementSlots);
         }
 
-        var comment = clothingItemData.Variants.SelectMany(color =>
+        var comment =
+            clothingItemData.Variants.SelectMany(color =>
             (clothingItemData.SecondaryVariants.Count > 0 ? clothingItemData.SecondaryVariants : [""])
             .Select(var => itemName.Replace("$(base_color)", color).Replace("$(secondary)", var))
             ).Select(s => $"Game.AddToInventory(\"{s}\")")
             .ToArray();
 
+        var yaml = new YamlMappingNode() { { itemName, yamlData } };
         YamlHelper.RemoveInExistingFileAndAppend(yamlAbsPath, itemName, yaml, comment);
     }
 
-    [GeneratedRegex(@"\d(_[a-z0-9_]+)(?=_\w{1,19}.)")]
-    private static partial Regex MeshFileName_SecondaryRegex();
-
-    [GeneratedRegex("\\d(_[^.]+)")]
-    private static partial Regex MeshFileNameRegex();
+    /// <summary>
+    /// Regex for matching stuff like "an0_123" or "hh_" to strip prefixes from file names
+    /// </summary>
+    [GeneratedRegex(@"^([a-z]{1,2}[0-9]*_?[0-9]*_?)")]
+    private static partial Regex PrefixAndNumberRegex();
 }

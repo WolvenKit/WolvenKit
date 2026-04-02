@@ -40,6 +40,8 @@ public partial class AddArchiveXlFilesDialogViewModel : DialogViewModel
     [ObservableProperty] private List<string>? _variants;
     [ObservableProperty] private bool _enableSecondaryVariants = false;
     [ObservableProperty] private List<string>? _secondaryVariants;
+    [ObservableProperty] private bool _enableToggles = false;
+    [ObservableProperty] private List<string>? _toggles;
 
     // select mesh files from project
     [ObservableProperty] private bool _isUseExistingMeshes = false;
@@ -75,14 +77,12 @@ public partial class AddArchiveXlFilesDialogViewModel : DialogViewModel
         EqExSlot = EquipmentExSlot.None;
 
         Variants = [];
+        Toggles = [];
 
         HidingTags = [];
         GarmentSupportTag = GarmentSupportTags.None;
 
         ExistingFilesSource = currentProject.ModFiles.Where(f => f.HasFileExtension("mesh"))
-            .Select(f => f.Replace("wa", "{gender}").Replace("ma", "{gender}"))
-            .Distinct()
-            .Select(f => f.Replace("{gender}", "wa"))
             .ToList();
 
         IsHeadItem = false;
@@ -110,6 +110,7 @@ public partial class AddArchiveXlFilesDialogViewModel : DialogViewModel
             HidingTags = HidingTags ?? [],
             GarmentSupportTag = GarmentSupportTag,
             Variants = Variants ?? [],
+            Toggles = Toggles ?? [],
             SecondaryVariants = EnableSecondaryVariants ? SecondaryVariants ?? [] : [],
             TagsHideInFpp = IsHideInFpp ?? false,
             TagsForceHair = IsForceHair ?? false,
