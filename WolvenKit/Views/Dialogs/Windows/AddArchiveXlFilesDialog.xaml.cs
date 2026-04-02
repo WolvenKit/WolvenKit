@@ -256,7 +256,8 @@ namespace WolvenKit.Views.Dialogs.Windows
 
         private void PrimaryMeshPathDropdown_OnChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ViewModel is null || sender is not ComboBox { SelectedItem: string meshPath })
+            if (ViewModel is null || sender is not ComboBox { SelectedItem: string meshPath } ||
+                string.IsNullOrEmpty(meshPath))
             {
                 return;
             }
@@ -268,7 +269,8 @@ namespace WolvenKit.Views.Dialogs.Windows
 
         private void SecondaryMeshPathDropdown_OnChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ViewModel is null || sender is not ComboBox { SelectedItem: string meshPath })
+            if (ViewModel is null || sender is not ComboBox { SelectedItem: string meshPath } ||
+                string.IsNullOrEmpty(meshPath))
             {
                 return;
             }
