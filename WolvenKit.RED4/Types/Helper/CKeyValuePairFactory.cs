@@ -5,43 +5,25 @@ public static class CKeyValuePairFactory
     public static CKeyValuePair Create(CMaterialParameter param)
     {
         var parameterName = param.ParameterName.GetResolvedText() ?? "invalid";
-        ;
-        switch (param)
+        return param switch
         {
-            case CMaterialParameterColor col:
-                return new CKeyValuePair(parameterName, col.Color);
-            case CMaterialParameterCpuNameU64 paramCpuName:
-                return new CKeyValuePair(parameterName, paramCpuName.Name);
-            case CMaterialParameterCube cube:
-                return new CKeyValuePair(parameterName, cube.Texture);
-            case CMaterialParameterDynamicTexture tex:
-                return new CKeyValuePair(parameterName, tex.Texture);
-            case CMaterialParameterFoliageParameters fol:
-                return new CKeyValuePair(parameterName, fol.FoliageProfile);
-            case CMaterialParameterGradient grad:
-                return new CKeyValuePair(parameterName, grad.Gradient);
-            case CMaterialParameterHairParameters hp:
-                return new CKeyValuePair(parameterName, hp.HairProfile);
-            case CMaterialParameterMultilayerMask mlmask:
-                return new CKeyValuePair(parameterName, mlmask.Mask);
-            case CMaterialParameterMultilayerSetup mlsetup:
-                return new CKeyValuePair(parameterName, mlsetup.Setup);
-            case CMaterialParameterScalar scalar:
-                return new CKeyValuePair(parameterName, scalar.Scalar);
-            case CMaterialParameterSkinParameters sp:
-                return new CKeyValuePair(parameterName, sp.SkinProfile);
-            case CMaterialParameterTerrainSetup terrainSetup:
-                return new CKeyValuePair(parameterName, terrainSetup.Setup);
-            case CMaterialParameterStructBuffer buffer:
-                return new CKeyValuePair(parameterName, buffer.Register);
-            case CMaterialParameterTexture tex:
-                return new CKeyValuePair(parameterName, tex.Texture);
-            case CMaterialParameterTextureArray texArray:
-                return new CKeyValuePair(parameterName, texArray.Texture);
-            case CMaterialParameterVector vec:
-                return new CKeyValuePair(parameterName, vec.Vector);
-        }
-
-        return new CKeyValuePair("invalid", new RedDummy());
+            CMaterialParameterColor col => new CKeyValuePair(parameterName, col.Color),
+            CMaterialParameterCpuNameU64 paramCpuName => new CKeyValuePair(parameterName, paramCpuName.Name),
+            CMaterialParameterCube cube => new CKeyValuePair(parameterName, cube.Texture),
+            CMaterialParameterDynamicTexture tex => new CKeyValuePair(parameterName, tex.Texture),
+            CMaterialParameterFoliageParameters fol => new CKeyValuePair(parameterName, fol.FoliageProfile),
+            CMaterialParameterGradient grad => new CKeyValuePair(parameterName, grad.Gradient),
+            CMaterialParameterHairParameters hp => new CKeyValuePair(parameterName, hp.HairProfile),
+            CMaterialParameterMultilayerMask mlmask => new CKeyValuePair(parameterName, mlmask.Mask),
+            CMaterialParameterMultilayerSetup mlsetup => new CKeyValuePair(parameterName, mlsetup.Setup),
+            CMaterialParameterScalar scalar => new CKeyValuePair(parameterName, scalar.Scalar),
+            CMaterialParameterSkinParameters sp => new CKeyValuePair(parameterName, sp.SkinProfile),
+            CMaterialParameterTerrainSetup terrainSetup => new CKeyValuePair(parameterName, terrainSetup.Setup),
+            CMaterialParameterStructBuffer buffer => new CKeyValuePair(parameterName, buffer.Register),
+            CMaterialParameterTexture tex => new CKeyValuePair(parameterName, tex.Texture),
+            CMaterialParameterTextureArray texArray => new CKeyValuePair(parameterName, texArray.Texture),
+            CMaterialParameterVector vec => new CKeyValuePair(parameterName, vec.Vector),
+            _ => new CKeyValuePair("invalid", new RedDummy())
+        };
     }
 }

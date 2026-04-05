@@ -791,9 +791,9 @@ public class CvmMaterialTools
         return FindHighestMaterialIndex(array, isLocalInstance);
     }
 
-    private int FindHighestMaterialIndex(CArray<CMeshMaterialEntry> array, bool isLocalInstance)
+    private static int FindHighestMaterialIndex(CArray<CMeshMaterialEntry> matDefArray, bool isLocalInstance)
     {
-        if (array.Count == 0)
+        if (matDefArray.Count == 0)
         {
             return -1;
         }
@@ -801,11 +801,11 @@ public class CvmMaterialTools
         List<int> indices = [];
         // ReSharper disable once ForCanBeConvertedToForeach - can't LINQ here
         // ReSharper disable once LoopCanBeConvertedToQuery - will throw NoElementsException
-        for (var i = 0; i < array.Count; i++)
+        for (var i = 0; i < matDefArray.Count; i++)
         {
-            if (array[i].IsLocalInstance == isLocalInstance)
+            if (matDefArray[i].IsLocalInstance == isLocalInstance)
             {
-                indices.Add(array[i].Index);
+                indices.Add(matDefArray[i].Index);
             }
         }
 
@@ -859,15 +859,18 @@ public class CvmMaterialTools
     private static readonly Dictionary<string, List<CKeyValuePair>> s_materialValuesByPath = [];
 
     /// <summary>
-    /// Reads a material's properties into a map for quick lookup. This includes shader properties and parameters.
+    /// Reads a material's properties into <see cref="s_materialValuesByPath"/> for quick lookup.
+    /// This includes shader properties and parameters.
     /// </summary>
-    /// <param name="relativeBasePath"></param>
+    /// <param name="originalRelPath"></param>
     /// <param name="archiveManager"></param>
     /// <param name="previousPaths">Array of previous paths - will append current base material and return</param>
     /// <returns></returns>
-    private List<string> ReadMaterialValuesRecursive(ResourcePath relativeBasePath, IAppArchiveManager archiveManager,
+    private static List<string> ReadMaterialValuesRecursive(ResourcePath originalRelPath,
+        IAppArchiveManager archiveManager,
         List<string> previousPaths)
     {
+        var relativeBasePath = originalRelPath;
         while (relativeBasePath.GetResolvedText() is string relPath && !previousPaths.Contains(relPath))
         {
             previousPaths.Add(relPath);
