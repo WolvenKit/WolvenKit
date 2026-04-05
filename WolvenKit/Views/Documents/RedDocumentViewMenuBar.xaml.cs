@@ -323,12 +323,12 @@ namespace WolvenKit.Views.Documents
                 var meshIdx = 0;
                 foreach (var sourcePath in dialog.SelectedOptions)
                 {
+                    var isAppend = meshIdx > 0 || dialog.IsAppend;
                     // First copy operation needs to consider IsAppend
                     if (!_documentTools.CopyMeshMaterials(
                             sourcePath,
                             currentPath,
-                            meshIdx > 0 || dialog.IsAppend,
-                            true))
+                            isAppend))
                     {
                         failedMeshes.Add(sourcePath);
                     }
@@ -404,7 +404,7 @@ namespace WolvenKit.Views.Documents
             }
 
             var failedMeshes = selected.Where(mesh =>
-                !_documentTools.CopyMeshMaterials(currentPath, mesh, false, false)
+                !_documentTools.CopyMeshMaterials(currentPath, mesh, false)
             ).ToList();
 
             var output = StringHelper.Stringify(selected.Where(s => !failedMeshes.Contains(s)).ToList(), true);

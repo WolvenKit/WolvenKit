@@ -1438,7 +1438,7 @@ public class DocumentTools
     /// <param name="addSeparator">Add separators? (Will only be set when copying _from_, not when copying _to_)</param>
     /// <returns>bool as success</returns>
     /// <exception cref="InvalidDataException"></exception>
-    public bool CopyMeshMaterials(string? sourcePath, string destPath, bool append = false, bool addSeparator = false)
+    public bool CopyMeshMaterials(string? sourcePath, string destPath, bool append = false)
     {
         if (_projectManager.ActiveProject is not { } activeProject)
         {
@@ -1481,7 +1481,7 @@ public class DocumentTools
                 destCr2W,
                 sourcePath,
                 destPath,
-                addSeparator && i < meshPaths.Count + 1
+                append && i < meshPaths.Count + 1
             )
         ).Sum();
 
