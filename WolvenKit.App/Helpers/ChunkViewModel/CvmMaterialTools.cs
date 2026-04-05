@@ -1036,13 +1036,12 @@ public class CvmMaterialTools
             s_materialValuesByPath[relativePath] = inst.Values.ToList();
 
             // first, read the entire material chain into the cache
-            var baseMaterialChain =
-                ReadMaterialValuesRecursive(inst.BaseMaterial.DepotPath, archiveManager, [relativePath]);
+            var baseMaterialChain = ReadMaterialValuesRecursive(inst.BaseMaterial.DepotPath, archiveManager, []);
 
             if (baseMaterialChain.Count == 1)
             {
                 // only contains self, nothing to do
-                return;
+                // return;
             }
 
             List<CKeyValuePair> values = [];
