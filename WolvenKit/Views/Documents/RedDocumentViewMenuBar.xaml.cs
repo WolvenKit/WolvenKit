@@ -204,8 +204,8 @@ namespace WolvenKit.Views.Documents
                     return;
                 }
 
-                _loggerService.Info(
-                    "Scanning file for broken references. This is currently slow as foretold, please hold the line...");
+                _loggerService.Info("Scanning file for broken references. Wolvenkit may be unresponsive.");
+                _notificationService.Info("Scanning file for broken references. Wolvenkit may be unresponsive.");
 
                 var allReferences = await project.GetAllReferencesAsync(
                     _progressService,
@@ -214,7 +214,7 @@ namespace WolvenKit.Views.Documents
 
                 );
 
-                var brokenReferences = await project.ScanForBrokenReferencePathsInListAsync(
+                var brokenReferences = await project.ScanForBrokenReferencePathsAsync(
                     _archiveManager,
                     _loggerService,
                     _progressService,
@@ -224,16 +224,23 @@ namespace WolvenKit.Views.Documents
                 if (brokenReferences.Keys.Count == 0)
                 {
                     _loggerService.Success("No broken references... that we can find!");
+                    _notificationService.Success("No broken references... that we can find!");
                     return;
                 }
 
-                _loggerService.Info("Done!");
+                var numMatches = brokenReferences.Values.SelectMany(v => v).Count();
+
+                _loggerService.Success($"Found {numMatches} broken references in project.");
+                _notificationService.Success($"Found {numMatches} broken references in project.");
+
                 Interactions.ShowDictionaryAsCopyableList(new ShowDictAsCopyableListDialogOptions("Broken references",
-                    $"The following {brokenReferences.Count} files seem to hold broken references", brokenReferences,
+                    $"The following {brokenReferences.Count} files seem to hold broken references (ignore this if everything works)",
+                    brokenReferences,
                     true));
             }
             catch (Exception err)
             {
+                _notificationService.Error("Error while scanning for broken references (check the log for detes)");
                 _loggerService.Error("Error while scanning for broken references:");
                 _loggerService.Error(err);
             }

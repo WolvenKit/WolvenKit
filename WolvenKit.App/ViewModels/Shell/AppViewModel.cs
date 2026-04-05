@@ -977,8 +977,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     {
         var userInteraction = Interactions.ShowQuestionYesNoCancel((
             $"This will scan {ActiveProject!.ModFiles.Count} files and can take a moment.\n\n"
-            + "Should files in other mods be treated as valid references?\n"
-            + "If you don't know what that means, click 'no'."
+            + "Flag files in other mods?\n"
+            + "If you don't know what that means, click 'yes'."
             , "Scanning entire project"));
 
         switch (userInteraction)
@@ -994,7 +994,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _progressService.IsIndeterminate = true;
 
         var brokenReferences = await ActiveProject!.ScanForBrokenReferencePathsAsync(_archiveManager, _loggerService,
-            _progressService, (bool)userInteraction);
+            _progressService, null, (bool)userInteraction);
 
         if (brokenReferences.Keys.Count == 0)
         {
