@@ -1154,18 +1154,21 @@ public class DocumentTools
 
         if (sourceCr2W is null)
         {
+            _notificationService.Error($"source file {sourcePath} not found. Can't copy...");
             _loggerService.Error($"source file {sourcePath} not found. Can't copy...");
             return wasChanged;
         }
 
         if (destCr2W is null)
         {
+            _notificationService.Error($"target file {destCr2W} not found. Can't copy...");
             _loggerService.Error($"target file {destCr2W} not found. Can't copy...");
             return wasChanged;
         }
 
         if (sourceCr2W.RootChunk is not CMesh sourceMesh || destCr2W.RootChunk is not CMesh destMesh)
         {
+            _notificationService.Error($"source file {sourcePath} or target file {destPath} is not a valid mesh.");
             _loggerService.Error($"source file {sourcePath} or target file {destPath} is not a valid mesh.");
             return wasChanged;
         }
@@ -1174,6 +1177,7 @@ public class DocumentTools
 
         if (!hasMaterials)
         {
+            _notificationService.Error($"source file {sourcePath} does not have materials!");
             _loggerService.Error($"source file {sourcePath} does not have materials!");
             return 0;
         }
@@ -1434,7 +1438,7 @@ public class DocumentTools
     /// <param name="addSeparator">Add separators? (Will only be set when copying _from_, not when copying _to_)</param>
     /// <returns>bool as success</returns>
     /// <exception cref="InvalidDataException"></exception>
-    public bool CopyMeshMaterials(string? sourcePath, string destPath, bool append = false, bool addSeparator = false)
+    public bool CopyMeshMaterials(string? sourcePath, string destPath, bool append = false)
     {
         if (_projectManager.ActiveProject is not { } activeProject)
         {
@@ -1477,7 +1481,7 @@ public class DocumentTools
                 destCr2W,
                 sourcePath,
                 destPath,
-                addSeparator && i < meshPaths.Count + 1
+                append && i < meshPaths.Count + 1
             )
         ).Sum();
 
