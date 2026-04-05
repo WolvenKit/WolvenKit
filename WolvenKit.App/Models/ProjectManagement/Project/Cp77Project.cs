@@ -749,7 +749,9 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
 
         await Task.Run(() =>
         {
-            Parallel.ForEach(filePaths, filePath =>
+            Parallel.ForEach(
+                Files.Where(f => !IsResourceFile(f)).Where(filePaths.Contains),
+                filePath =>
             {
                 try
                 {
