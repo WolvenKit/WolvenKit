@@ -552,7 +552,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         return "";
     }
 
-    private static bool IsResourceFile(string fileNameOrPath) =>
+    private bool IsResourceFile(string fileNameOrPath) =>
         Path.GetExtension(fileNameOrPath) switch
         {
             ".xl" => true,
@@ -560,7 +560,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
             ".yml" => true,
             ".lua" => true,
             ".reds" => true,
-            _ => false,
+            _ => ResourceFiles.Contains(fileNameOrPath) || ResourceFiles.Any(f => f.EndsWith(fileNameOrPath)),
         };
 
 
@@ -736,33 +736,37 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
             filePaths.AddRange(ResourceFiles);
         }
 
-        SortedDictionary<string, List<string>> references = [];
-
         progressService?.Report(0);
         var totalFiles = filePaths.Count;
         var processedFiles = 0;
         var progressIncrement = totalFiles > 0 ? 100.0 / totalFiles : 100;
 
-        Parallel.ForEach(filePaths, filePath =>
+        var references = await Task.Run(() =>
         {
-            var resourcePaths = (IsResourceFile(filePath) ? ReadResourceFile(filePath) : ReadCr2wFile(filePath))
-                .Distinct().ToList();
-            if (resourcePaths.Count == 0)
-            {
-                return;
-            }
+            SortedDictionary<string, List<string>> refsByFile = [];
 
-            lock (references)
+            Parallel.ForEach(filePaths, filePath =>
             {
-                if (!references.TryAdd(filePath, resourcePaths))
+                var resourcePaths = IsResourceFile(filePath) ? ReadResourceFile(filePath) : ReadCr2WFile(filePath);
+                if (resourcePaths.Count == 0)
                 {
-                    references[filePath].AddRange(resourcePaths);
+                    return;
                 }
-            }
 
-            // Update progress
-            var currentProgress = Interlocked.Increment(ref processedFiles) * progressIncrement;
-            progressService?.Report(currentProgress);
+                lock (refsByFile)
+                {
+                    if (!refsByFile.TryAdd(filePath, resourcePaths))
+                    {
+                        refsByFile[filePath].AddRange(resourcePaths);
+                    }
+                }
+
+                // Update progress
+                var currentProgress = Interlocked.Increment(ref processedFiles) * progressIncrement;
+                progressService?.Report(currentProgress);
+            });
+
+            return refsByFile;
         });
 
         // Order entries by file name
@@ -770,31 +774,9 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
             .OrderBy(obj => obj.Key)
             .ToDictionary(obj => obj.Key, obj => obj.Value);
 
-        // Deal with ArchiveXL substitution and empty/falsy strings
-        static IEnumerable<string> ResolveResourcePaths(string? resourcePath, CR2WFile cr2WFile)
-        {
-            if (string.IsNullOrEmpty(resourcePath))
-            {
-                return [];
-            }
-
-            if (!resourcePath.StartsWith(ArchiveXlHelper.ArchiveXLSubstitutionPrefix))
-            {
-                return [resourcePath];
-            }
-
-            if (cr2WFile.RootChunk is not CMesh mesh)
-            {
-                return ArchiveXlHelper.ResolveDynamicPaths(resourcePath);
-            }
-
-            // TODO: We need to pass the correct material name for the substitution here
-            return ArchiveXlHelper.ResolveMaterialSubstitutions(resourcePath, mesh.Appearances);
-        }
-
         List<string> ReadResourceFile(string filePath)
         {
-            var absolutePath = Path.Combine(FileDirectory, filePath);
+            var absolutePath = Path.Combine(ResourcesDirectory, filePath);
             if (!File.Exists(absolutePath))
             {
                 return [];
@@ -805,10 +787,11 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
             // Get anything with double or single slashes, then replace double slashes
             return ResourceFilePathsRegex().Matches(fileContent).Where(m => m.Success)
                 .Select(m => m.Value.Replace(@"\\", @"\").Replace(@"/", @"\"))
+                .Distinct()
                 .ToList();
         }
 
-        List<string> ReadCr2wFile(string filePath)
+        List<string> ReadCr2WFile(string filePath)
         {
             List<string> resourcePaths = [];
             try
@@ -863,7 +846,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
                     }
                 }
 
-                if (resourcePaths.Count <= 0)
+                if (resourcePaths.Count == 0)
                 {
                     return resourcePaths;
                 }
@@ -873,7 +856,29 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
                 loggerService.Error($"Results will be incomplete: Failed to read {filePath} ({e.Message})");
             }
 
-            return resourcePaths;
+            return resourcePaths.Distinct().ToList();
+        }
+
+        // Deal with ArchiveXL substitution and empty/falsy strings
+        static IEnumerable<string> ResolveResourcePaths(string? resourcePath, CR2WFile cr2WFile)
+        {
+            if (string.IsNullOrEmpty(resourcePath))
+            {
+                return [];
+            }
+
+            if (!resourcePath.StartsWith(ArchiveXlHelper.ArchiveXLSubstitutionPrefix))
+            {
+                return [resourcePath];
+            }
+
+            if (cr2WFile.RootChunk is not CMesh mesh)
+            {
+                return ArchiveXlHelper.ResolveDynamicPaths(resourcePath);
+            }
+
+            // TODO: We need to pass the correct material name for the substitution here
+            return ArchiveXlHelper.ResolveMaterialSubstitutions(resourcePath, mesh.Appearances);
         }
     }
 
