@@ -716,24 +716,20 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         return relPath;
     }
 
-    public Task<IDictionary<string, List<string>>> GetAllReferencesAsync(
-        IProgressService<double> progressService,
-        ILoggerService loggerService) => GetAllReferencesAsync(progressService, loggerService, []);
-
     /// <summary>
     /// Collects all references from all files in the project, or from a given list of files.
     /// </summary>
     /// <param name="progressService"></param>
     /// <param name="loggerService"></param>
-    /// <param name="filePaths">Allows passing a list of files for reference filtering.
-    /// If the list is empty, the entire project will be scanned.
+    /// <param name="filePaths">Optional: A list of files that should be scanned (otherwise, entire project will be scanned)
     /// </param>
-    /// <returns></returns>
-    public async Task<IDictionary<string, List<string>>> GetAllReferencesAsync(
+    /// <returns>A dictionary with lists of referenced files, grouped by containing file's relative path.</returns>
+    public async Task<Dictionary<string, List<string>>> GetAllReferencesAsync(
         IProgressService<double> progressService,
         ILoggerService loggerService,
-        List<string> filePaths)
+        List<string>? filePaths = null)
     {
+        filePaths ??= [];
         if (filePaths.Count == 0)
         {
             filePaths.AddRange(ModFiles);
@@ -901,25 +897,21 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         @"ep1\animations\npc\gameplay\man_average\gang\unarmed\ma_gang_unarmed_reaction_death.anims",
     ];
 
-    public Task<IDictionary<string, List<string>>> ScanForBrokenReferencePathsAsync(IArchiveManager archiveManager,
-        ILoggerService loggerService, IProgressService<double> progressService, bool includeModFiles = false) =>
-        ScanForBrokenReferencePathsInListAsync(archiveManager, loggerService, progressService,
-            new SortedDictionary<string, List<string>>(), includeModFiles);
 
-
-    public async Task<IDictionary<string, List<string>>> ScanForBrokenReferencePathsInListAsync(
+    public async Task<IDictionary<string, List<string>>> ScanForBrokenReferencePathsAsync(
         IArchiveManager archiveManager,
         ILoggerService loggerService,
         IProgressService<double> progressService,
-        IDictionary<string, List<string>> references,
+        Dictionary<string, List<string>>? references = null,
         bool includeModFiles = false)
     {
+        references ??= [];
         if (references.Count == 0)
         {
             references.AddRange(await GetAllReferencesAsync(progressService, loggerService));
         }
 
-        SortedDictionary<string, List<string>> brokenReferences = new();
+        SortedDictionary<string, List<string>> brokenReferences = [];
 
         progressService.Report(0);
         var totalFiles = references.Count;
