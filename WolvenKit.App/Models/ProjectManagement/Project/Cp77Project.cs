@@ -721,7 +721,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
     /// </summary>
     /// <param name="progressService"></param>
     /// <param name="loggerService"></param>
-    /// <param name="filePaths">Optional: A list of files that should be scanned (otherwise, entire project will be scanned)
+    /// <param name="filePaths">Optional: A list of files to scan (will use entire project otherwise)
     /// </param>
     /// <returns>A dictionary with lists of referenced files, grouped by containing file's relative path.</returns>
     public async Task<Dictionary<string, List<string>>> GetAllReferencesAsync(
@@ -736,127 +736,39 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
             filePaths.AddRange(ResourceFiles);
         }
 
-        SortedDictionary<string, List<string>> references = new();
+        SortedDictionary<string, List<string>> references = [];
 
         progressService?.Report(0);
         var totalFiles = filePaths.Count;
         var processedFiles = 0;
         var progressIncrement = totalFiles > 0 ? 100.0 / totalFiles : 100;
 
-        await Task.Run(() =>
+        Parallel.ForEach(filePaths, filePath =>
         {
-            Parallel.ForEach(
-                Files.Where(f => !IsResourceFile(f)).Where(filePaths.Contains),
-                filePath =>
+            var resourcePaths = (IsResourceFile(filePath) ? ReadResourceFile(filePath) : ReadCr2wFile(filePath))
+                .Distinct().ToList();
+            if (resourcePaths.Count == 0)
             {
-                try
-                {
-                    List<string> resourcePaths = [];
+                return;
+            }
 
-                    using (var fs = File.Open(GetAbsolutePath(filePath), FileMode.Open))
-                    using (var cr = new CR2WReader(fs))
-                    {
-                        if (cr.ReadFile(out var cr2WFile) != RED4.Archive.IO.EFileReadErrorCodes.NoError ||
-                            cr2WFile is null)
-                        {
-                            loggerService.Warning($"Failed to open {filePath}");
-                            return;
-                        }
-
-                        // check if it's a factory
-                        if (cr2WFile.RootChunk is C2dArray { CompiledData: CArray<CArray<CString>> data })
-                        {
-                            // Grab the second string from CompiledData, if it's a depotPath
-                            var paths = data
-                                .Where(c => c.Count == 3).Select(cStrings => cStrings[1])
-                                .Where(potentialDepotPath => potentialDepotPath.GetString().Contains(Path.DirectorySeparatorChar))
-                                .Select(potentialDepotPath => (string)potentialDepotPath).ToList();
-                            resourcePaths.AddRange(paths);
-                        }
-                        else
-                        {
-                            foreach (var pathString in cr2WFile.FindType(typeof(IRedRef)).Select(r => r.Value)
-                                         .OfType<IRedRef>().Select(r => r.DepotPath.GetResolvedText())
-                                         .Where(s => !string.IsNullOrEmpty(s)))
-                            {
-                                resourcePaths.AddRange(
-                                    ResolveResourcePaths(pathString, cr2WFile));
-                            }
-
-                            // Check redStrings that contain resource paths. This happens inside quest files.
-                            foreach (var result in cr2WFile.FindType(typeof(IRedString))
-                                         .Select(r => r.Value)
-                                         .OfType<IRedString>()
-                                         .Select(r => r.GetString())
-                                         .Where(s => s?.IsFilePath() == true)
-                                    )
-                            {
-                                resourcePaths.AddRange(ResolveResourcePaths(result, cr2WFile));
-                            }
-
-                            foreach (var cr2WImport in cr2WFile.Info.Imports)
-                            {
-                                resourcePaths.AddRange(ResolveResourcePaths(cr2WImport.DepotPath.GetResolvedText(),
-                                    cr2WFile));
-                            }
-                        }
-                    }
-
-                    if (resourcePaths.Count <= 0)
-                    {
-                        return;
-                    }
-
-                    lock (references)
-                    {
-                        references.Add(filePath, resourcePaths.Distinct().ToList());
-                    }
-                }
-                catch (Exception e)
-                {
-                    loggerService.Error($"Results will be incomplete: Failed to read {filePath} ({e.Message})");
-                }
-
-                // Update progress
-                var currentProgress = Interlocked.Increment(ref processedFiles) * progressIncrement;
-                progressService?.Report(currentProgress);
-
-            });
-
-            Parallel.ForEach(
-                Files.Where(IsResourceFile).Where(filePaths.Contains),
-                filePath =>
+            lock (references)
             {
-                var absolutePath = Path.Combine(FileDirectory, filePath);
-                if (!File.Exists(absolutePath))
+                if (!references.TryAdd(filePath, resourcePaths))
                 {
-                    return;
+                    references[filePath].AddRange(resourcePaths);
                 }
+            }
 
-                var fileContent = File.ReadAllText(absolutePath);
-
-                // Get anything with double or single slashes, then replace double slashes
-                var refs = ResourceFilePathsRegex().Matches(fileContent).Where(m => m.Success)
-                    .Select(m => m.Value.Replace(@"\\", @"\").Replace(@"/", @"\"))
-                    .ToList();
-
-                if (refs.Count <= 0)
-                {
-                    return;
-                }
-
-                lock (references)
-                {
-                    if (!references.TryAdd(filePath, refs))
-                    {
-                        references[filePath].AddRange(refs);
-                    }
-                }
-            });
+            // Update progress
+            var currentProgress = Interlocked.Increment(ref processedFiles) * progressIncrement;
+            progressService?.Report(currentProgress);
         });
 
         // Order entries by file name
-        return references.OrderBy(obj => obj.Key).ToDictionary(obj => obj.Key, obj => obj.Value);
+        return references
+            .OrderBy(obj => obj.Key)
+            .ToDictionary(obj => obj.Key, obj => obj.Value);
 
         // Deal with ArchiveXL substitution and empty/falsy strings
         static IEnumerable<string> ResolveResourcePaths(string? resourcePath, CR2WFile cr2WFile)
@@ -878,6 +790,90 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
 
             // TODO: We need to pass the correct material name for the substitution here
             return ArchiveXlHelper.ResolveMaterialSubstitutions(resourcePath, mesh.Appearances);
+        }
+
+        List<string> ReadResourceFile(string filePath)
+        {
+            var absolutePath = Path.Combine(FileDirectory, filePath);
+            if (!File.Exists(absolutePath))
+            {
+                return [];
+            }
+
+            var fileContent = File.ReadAllText(absolutePath);
+
+            // Get anything with double or single slashes, then replace double slashes
+            return ResourceFilePathsRegex().Matches(fileContent).Where(m => m.Success)
+                .Select(m => m.Value.Replace(@"\\", @"\").Replace(@"/", @"\"))
+                .ToList();
+        }
+
+        List<string> ReadCr2wFile(string filePath)
+        {
+            List<string> resourcePaths = [];
+            try
+            {
+                using (var fs = File.Open(GetAbsolutePath(filePath), FileMode.Open))
+                using (var cr = new CR2WReader(fs))
+                {
+                    if (cr.ReadFile(out var cr2WFile) != RED4.Archive.IO.EFileReadErrorCodes.NoError ||
+                        cr2WFile is null)
+                    {
+                        loggerService.Warning($"Failed to open {filePath}");
+                        return resourcePaths;
+                    }
+
+                    // check if it's a factory
+                    if (cr2WFile.RootChunk is C2dArray { CompiledData: CArray<CArray<CString>> data })
+                    {
+                        // Grab the second string from CompiledData, if it's a depotPath
+                        var paths = data
+                            .Where(c => c.Count == 3).Select(cStrings => cStrings[1])
+                            .Where(potentialDepotPath =>
+                                potentialDepotPath.GetString().Contains(Path.DirectorySeparatorChar))
+                            .Select(potentialDepotPath => (string)potentialDepotPath).ToList();
+                        resourcePaths.AddRange(paths);
+                    }
+                    else
+                    {
+                        foreach (var pathString in cr2WFile.FindType(typeof(IRedRef)).Select(r => r.Value)
+                                     .OfType<IRedRef>().Select(r => r.DepotPath.GetResolvedText())
+                                     .Where(s => !string.IsNullOrEmpty(s)))
+                        {
+                            resourcePaths.AddRange(
+                                ResolveResourcePaths(pathString, cr2WFile));
+                        }
+
+                        // Check redStrings that contain resource paths. This happens inside quest files.
+                        foreach (var result in cr2WFile.FindType(typeof(IRedString))
+                                     .Select(r => r.Value)
+                                     .OfType<IRedString>()
+                                     .Select(r => r.GetString())
+                                     .Where(s => s?.IsFilePath() == true)
+                                )
+                        {
+                            resourcePaths.AddRange(ResolveResourcePaths(result, cr2WFile));
+                        }
+
+                        foreach (var cr2WImport in cr2WFile.Info.Imports)
+                        {
+                            resourcePaths.AddRange(ResolveResourcePaths(cr2WImport.DepotPath.GetResolvedText(),
+                                cr2WFile));
+                        }
+                    }
+                }
+
+                if (resourcePaths.Count <= 0)
+                {
+                    return resourcePaths;
+                }
+            }
+            catch (Exception e)
+            {
+                loggerService.Error($"Results will be incomplete: Failed to read {filePath} ({e.Message})");
+            }
+
+            return resourcePaths;
         }
     }
 
