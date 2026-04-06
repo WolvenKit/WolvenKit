@@ -24,6 +24,7 @@ public interface ICvmTools
     int FindHighestMaterialIndex(ChunkViewModel materialDefinitionArray, bool isLocalInstance);
     void AddTagsToMeshAppearances(List<ChunkViewModel> chunks, List<string> tagList);
 
+    void FlattenMiChain(ChunkViewModel[] cvmSelection, IAppArchiveManager archiveManager, Cp77Project? project);
     void FlattenMiChain(ChunkViewModel? cvm, IAppArchiveManager archiveManager, Cp77Project? project);
     #endregion
 

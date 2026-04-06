@@ -669,11 +669,23 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
 
         if (chunk?.Tab?.Parent.IsDirty != false)
         {
-            _loggerService.Error("Your open file has un-saved changes. Please save, or re-open the file.");
+            _loggerService.Error(
+                "Your open file has un-saved changes. Please save first, or reload the file (Ctrl+R).");
             return;
         }
 
-        _cvmTools.FlattenMiChain(chunk, _archiveManager, _projectManager.ActiveProject);
+        if (SelectedChunks.Count == 0)
+        {
+            _cvmTools.FlattenMiChain(chunk, _archiveManager, _projectManager.ActiveProject);
+        }
+        else
+        {
+            foreach (var selected in SelectedChunks)
+            {
+                _cvmTools.FlattenMiChain(selected, _archiveManager, _projectManager.ActiveProject);
+            }
+        }
+
     }
 
 

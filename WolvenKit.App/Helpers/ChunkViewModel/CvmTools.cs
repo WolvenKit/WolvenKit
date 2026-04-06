@@ -46,7 +46,11 @@ public class CvmTools : ICvmTools
         _cvmMaterialTools.AddTagsToMeshAppearances(chunks, tagList);
 
     public void FlattenMiChain(ChunkViewModel? cvm, IAppArchiveManager archiveManager, Cp77Project? project) =>
-        _cvmMaterialTools.FlattenMiChain(cvm, archiveManager, project);
+        _cvmMaterialTools.FlattenMiChain(cvm, archiveManager, project, true);
+
+    public void FlattenMiChain(ChunkViewModel[] cvmSelection, IAppArchiveManager archiveManager,
+        Cp77Project? project) => _cvmMaterialTools.FlattenMiChain(cvmSelection, archiveManager, project);
+
     #endregion
 
     #region CvmDependencyTools
