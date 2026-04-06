@@ -197,4 +197,6 @@ public class ImportExportHelper
         return await _modTools.Import(rawRelative, args, outDir, _settingsManager.ShowVerboseLogOutput);
         //_hookService.OnPostImport(ref cr2wFile, ref args);
     }
+
+    public static bool CanExportFilepath(string filePath) => Enum.TryParse<ECookedFileFormat>(Path.GetExtension(filePath).TrimStart('.'), out var _);
 }

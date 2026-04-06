@@ -207,8 +207,6 @@ public partial class ExportViewModel : AbstractImportExportViewModel
         HasItems = Items.Any();
     }
 
-    private static bool CanExport(string x) => Enum.TryParse<ECookedFileFormat>(Path.GetExtension(x).TrimStart('.'), out var _);
-
     public Task InitCollectionEditor(CallbackArguments args)
     {
         if (args.Arg is not ExportArgs exportArgs)

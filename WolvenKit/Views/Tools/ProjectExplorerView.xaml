@@ -162,6 +162,66 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <MenuItem
+                    x:Name="ExportMenuItem"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource {x:Type MenuItem}}"
+                            TargetType="{x:Type MenuItem}">
+                            <Setter Property="Command" Value="{Binding ExportArchiveFileCommand}" />
+                            <Setter Property="Header" Value="Export" />
+                            <Style.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding IsShiftKeyPressed}"
+                                    Value="True">
+                                    <Setter Property="Header" Value="Export with default settings" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Export"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem
+                    x:Name="ImportMenuItem"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource {x:Type MenuItem}}"
+                            TargetType="{x:Type MenuItem}">
+                            <Setter Property="Command" Value="{Binding ConvertArchiveFileCommand}" />
+                            <Setter Property="Header" Value="Import" />
+                            <Style.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding IsShiftKeyPressed}"
+                                    Value="True">
+                                    <Setter Property="Header" Value="Import with default settings" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Import"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
                 <Separator />
 
                 <MenuItem

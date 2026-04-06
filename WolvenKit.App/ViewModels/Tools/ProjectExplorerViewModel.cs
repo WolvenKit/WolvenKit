@@ -28,6 +28,8 @@ using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Interfaces;
+using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
@@ -55,6 +57,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private const string s_toolTitle = "Project Explorer";
 
     private readonly ILoggerService _loggerService;
+    private readonly INotificationService _notificationService;
     private readonly IProjectManager _projectManager;
     private readonly IModTools _modTools;
     private readonly IProgressService<double> _progressService;
@@ -71,6 +74,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly IArchiveManager _archiveManager;
     private readonly ProjectResourceTools _projectResourceTools;
 
+    private readonly ImportExportHelper _importExportHelper;
+
     #endregion fields
 
     private static ProjectExplorerViewModel? s_instance;
@@ -78,6 +83,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         AppViewModel appViewModel,
         IProjectManager projectManager,
         ILoggerService loggerService,
+        INotificationService notificationService,
         IProgressService<double> progressService,
         IModTools modTools,
         IGameControllerFactory gameController,
@@ -85,11 +91,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         ISettingsManager settingsManager,
         IModifierViewStateService modifierSvc,
         IArchiveManager archiveManager,
-        ProjectResourceTools projectResourceTools
+        ProjectResourceTools projectResourceTools,
+        ImportExportHelper importExportHelper
     ) : base(s_toolTitle)
     {
         _projectManager = projectManager;
         _loggerService = loggerService;
+        _notificationService = notificationService;
         _modTools = modTools;
         _progressService = progressService;
         _gameController = gameController;
@@ -97,6 +105,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _settingsManager = settingsManager;
         _archiveManager = archiveManager;
         _projectResourceTools = projectResourceTools;
+        _importExportHelper = importExportHelper;
         ModifierStateService = modifierSvc;
 
         _appViewModel = appViewModel;
@@ -297,12 +306,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertArchiveFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertRawFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ExportArchiveFileCommand))]
     private FileSystemModel? _selectedItem;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(DeleteFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertArchiveFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertRawFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ExportArchiveFileCommand))]
     private ObservableCollection<object>? _selectedItems = new();
 
     [ObservableProperty] private bool _isFlatModeEnabled;
@@ -1036,6 +1047,68 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _progressService.Completed();
     }
 
+    // TODO: Evaluate performance impact
+    private bool CanExportSelection() => ActiveProject is not null && SelectedItems is not null &&
+                                         SelectedItems.All(x =>
+                                             x is FileSystemModel { } m &&
+                                             IsInArchiveFolder(m)) &&
+                                         SelectedItems.Select(x => x as FileSystemModel)
+                                             .SelectMany(x =>
+                                                 x!.IsDirectory
+                                                     ? new DirectoryInfo(x.FullName).EnumerateFiles("*", SearchOption.AllDirectories)
+                                                         .Select(f => f.FullName)
+                                                     : [x.FullName])
+                                             .Any(ImportExportHelper.CanExportFilepath);
+
+    [RelayCommand (CanExecute = nameof(CanExportSelection))]
+    private async Task ExportArchiveFile(bool? shiftOverride = null)
+    {
+        var filePaths = SelectedItems!.Select(x => x as FileSystemModel)
+            .SelectMany(x =>
+                x!.IsDirectory ? new DirectoryInfo(x.FullName).EnumerateFiles("*", SearchOption.AllDirectories).Select(f => f.FullName) : [x.FullName])
+            .Distinct().ToArray();
+
+
+        var ineligibleFilePaths = filePaths.Where(fp => !ImportExportHelper.CanExportFilepath(fp))
+            .Select(fp => fp.Replace($"{ActiveProject!.ModDirectory}{Path.DirectorySeparatorChar}", "")).ToArray();
+
+        if (ineligibleFilePaths.Length > 0)
+        {
+            var msg = $"The following files are not exportable and will be skipped:\n {string.Join(",\n", ineligibleFilePaths)}";
+            _loggerService.Warning(msg);
+            _notificationService.Warning(msg);
+        }
+
+
+        var shiftPressed = shiftOverride ?? IsShiftKeyPressed;
+
+        var exportArgs = new GlobalExportArgs();
+
+        if (!_importExportHelper.Finalize(exportArgs))
+        {
+            const string msg = "Failed to initiate export arguments, aborting.";
+            _loggerService.Error(msg);
+            _notificationService.Error(msg);
+        }
+
+        if (!shiftPressed)
+        {
+            // TODO: popup letting the user adjust the export arguments like in the export window
+        }
+
+        var exportTasks = filePaths
+            .Where(ImportExportHelper.CanExportFilepath)
+            .Select(fp => _importExportHelper.Export(new FileInfo(fp),
+                exportArgs,
+                new DirectoryInfo(ActiveProject!.ModDirectory),
+                new DirectoryInfo(ActiveProject!.RawDirectory)
+                ));
+
+        await Task.WhenAll(exportTasks);
+        _appViewModel.ReloadChangedFiles();
+
+        // TODO: communicate status (all succeeded, all failed, some succeeded)
+    }
 
     // If shift key is pressed, we want to convert any matching files in archive _to_ json
     private bool CanConvertRawFile() => ActiveProject is not null && SelectedItems is not null &&
