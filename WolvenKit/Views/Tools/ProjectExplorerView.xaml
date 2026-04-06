@@ -202,7 +202,7 @@
                         <Style
                             BasedOn="{StaticResource {x:Type MenuItem}}"
                             TargetType="{x:Type MenuItem}">
-                            <Setter Property="Command" Value="{Binding ConvertArchiveFileCommand}" />
+                            <Setter Property="Command" Value="{Binding ImportRawFileCommand}" />
                             <Setter Property="Header" Value="Import" />
                             <Style.Triggers>
                                 <DataTrigger

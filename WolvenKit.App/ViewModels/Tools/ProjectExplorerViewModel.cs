@@ -28,6 +28,7 @@ using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Interfaces;
+using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
@@ -307,6 +308,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [NotifyCanExecuteChangedFor(nameof(ConvertArchiveFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertRawFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(ExportArchiveFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ImportRawFileCommand))]
     private FileSystemModel? _selectedItem;
 
     [ObservableProperty]
@@ -314,6 +316,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [NotifyCanExecuteChangedFor(nameof(ConvertArchiveFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertRawFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(ExportArchiveFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ImportRawFileCommand))]
     private ObservableCollection<object>? _selectedItems = new();
 
     [ObservableProperty] private bool _isFlatModeEnabled;
@@ -1047,7 +1050,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _progressService.Completed();
     }
 
-    // TODO: Evaluate performance impact
     private bool CanExportSelection() => ActiveProject is not null && SelectedItems is not null &&
                                          SelectedItems.All(x =>
                                              x is FileSystemModel { } m &&
@@ -1130,6 +1132,83 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         {
             var s = failedPaths.Count > 1 ? "s" : "";
             var msg = $"Failed to export the following {failedPaths.Count} file{s}:\n {string.Join(",\n", failedPaths)}";
+            _loggerService.Error(msg);
+            _notificationService.Error(msg);
+        }
+    }
+
+    private bool CanImportRawFile() =>  ActiveProject is not null && SelectedItems is not null &&
+                                            SelectedItems.All(x =>
+                                                x is FileSystemModel m && IsInRawFolder(m)) &&
+                                            SelectedItems.Select(x => x as FileSystemModel)
+                                                .SelectMany(x =>
+                                                    x!.IsDirectory
+                                                        ? new DirectoryInfo(x.FullName).EnumerateFiles("*", SearchOption.AllDirectories)
+                                                            .Select(f => f.FullName)
+                                                        : [x.FullName])
+                                                .Any(ImportExportHelper.CanImportFilepath);
+
+    [RelayCommand (CanExecute = nameof(CanImportRawFile))]
+    private async Task ImportRawFile(bool? shiftOverride = null)
+    {
+        var filePaths = SelectedItems!.Select(x => x as FileSystemModel)
+            .SelectMany(x =>
+                x!.IsDirectory ? new DirectoryInfo(x.FullName).EnumerateFiles("*", SearchOption.AllDirectories).Select(f => f.FullName) : [x.FullName])
+            .Select(fp => fp.Replace($"{ActiveProject!.RawDirectory}{Path.DirectorySeparatorChar}", ""))
+            .Distinct().ToArray();
+
+
+        var ineligibleFilePaths = filePaths.Where(fp => !ImportExportHelper.CanImportFilepath(fp) && !fp.ToLowerInvariant().EndsWith(".material.json")).ToArray();
+
+        if (ineligibleFilePaths.Length > 0)
+        {
+            var msg = $"The following files are not importable and will be skipped:\n {string.Join(",\n", ineligibleFilePaths)}";
+            _loggerService.Warning(msg);
+            _notificationService.Warning(msg);
+        }
+
+
+        var shiftPressed = shiftOverride ?? IsShiftKeyPressed;
+
+        var importArgs = new GlobalImportArgs();
+
+        if (!shiftPressed)
+        {
+            // TODO: popup letting the user adjust the export arguments like in the export window
+        }
+
+        var importTasks = filePaths
+            .Where(ImportExportHelper.CanImportFilepath)
+            .Select(fp => _importExportHelper.Import(new RedRelativePath(new DirectoryInfo(ActiveProject!.RawDirectory), fp),
+                importArgs,
+                new DirectoryInfo(ActiveProject!.ModDirectory)
+                )).ToArray();
+
+        await Task.WhenAll(importTasks);
+        _appViewModel.ReloadChangedFiles();
+
+        List<string> failedPaths = [];
+        var relProcessedPaths = filePaths.Where(ImportExportHelper.CanImportFilepath).ToArray();
+
+        for (var i = 0; i < importTasks.Length; i++)
+        {
+            if (!importTasks[i].Result)
+            {
+                failedPaths.Add(relProcessedPaths[i]);
+            }
+        }
+
+        if (failedPaths.Count == 0)
+        {
+            var s = importTasks.Length > 1 ? "s" : "";
+            var msg = $"Successfully imported {importTasks.Length} file{s}";
+            _loggerService.Success(msg);
+            _notificationService.Success(msg);
+        }
+        else
+        {
+            var s = failedPaths.Count > 1 ? "s" : "";
+            var msg = $"Failed to import the following {failedPaths.Count} file{s}:\n {string.Join(",\n", failedPaths)}";
             _loggerService.Error(msg);
             _notificationService.Error(msg);
         }
