@@ -91,11 +91,7 @@ namespace WolvenKit.Views.Documents
                 Locator.Current.GetService<CRUIDService>()!,
                 _cvmTools,
                 _loggerService,
-                _archiveManager,
-                Locator.Current.GetService<INotificationService>()!,
-                Locator.Current.GetService<StreamingSectorTools>()!,
-                _appViewModel) { CurrentTab = _currentTab };
-
+                _archiveManager) { CurrentTab = _currentTab };
             ViewModel = DataContext as RedDocumentViewToolbarModel;
 
             _modifierStateService.ModifierStateChanged += OnModifierStateChanged;
@@ -204,8 +200,8 @@ namespace WolvenKit.Views.Documents
                     return;
                 }
 
-                _loggerService.Info("Scanning file for broken references. Wolvenkit may be unresponsive.");
-                _notificationService.Info("Scanning file for broken references. Wolvenkit may be unresponsive.");
+                _loggerService.Info(
+                    "Scanning file for broken references. This is currently slow as foretold, please hold the line...");
 
                 var allReferences = await project.GetAllReferencesAsync(
                     _progressService,
@@ -224,23 +220,16 @@ namespace WolvenKit.Views.Documents
                 if (brokenReferences.Keys.Count == 0)
                 {
                     _loggerService.Success("No broken references... that we can find!");
-                    _notificationService.Success("No broken references... that we can find!");
                     return;
                 }
 
-                var numMatches = brokenReferences.Values.SelectMany(v => v).Count();
-
-                _loggerService.Success($"Found {numMatches} broken references in project.");
-                _notificationService.Success($"Found {numMatches} broken references in project.");
-
+                _loggerService.Info("Done!");
                 Interactions.ShowDictionaryAsCopyableList(new ShowDictAsCopyableListDialogOptions("Broken references",
-                    $"The following {brokenReferences.Count} files seem to hold broken references (ignore this if everything works)",
-                    brokenReferences,
+                    $"The following {brokenReferences.Count} files seem to hold broken references", brokenReferences,
                     true));
             }
             catch (Exception err)
             {
-                _notificationService.Error("Error while scanning for broken references (check the log for detes)");
                 _loggerService.Error("Error while scanning for broken references:");
                 _loggerService.Error(err);
             }
@@ -310,61 +299,32 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            if (ViewModel?.FilePath is not string currentPath ||
-                ViewModel?.RootChunk is not ChunkViewModel { ResolvedData: CMesh mesh } || ViewModel.FilePath is null ||
+            if (ViewModel?.RootChunk is not ChunkViewModel { ResolvedData: CMesh mesh } || ViewModel.FilePath is null ||
                 _projectManager.ActiveProject is not { } project)
             {
                 return;
             }
 
-            var otherMeshFiles =
-                _documentTools.CollectProjectFiles(".mesh")
-                    .Where(f => !currentPath.EndsWith(f))
-                    .Distinct()
-                    .ToList();
+            var files = _documentTools.CollectProjectFiles(".mesh").Where(f => f != ViewModel.FilePath)
+                .ToList();
 
-            if (Interactions.ShowCopyMeshAppearancesDialogue(otherMeshFiles) is not { } dialog ||
-                dialog.SelectedOptions.Count == 0)
+
+            if (Interactions.ShowCopyMeshAppearancesDialogue(files) is not { } dialog)
             {
                 return;
             }
 
             try
             {
-                List<string> failedMeshes = [];
-                var meshIdx = 0;
-                foreach (var sourcePath in dialog.SelectedOptions)
-                {
-                    var isAppend = meshIdx > 0 || dialog.IsAppend;
-                    // First copy operation needs to consider IsAppend
-                    if (!_documentTools.CopyMeshMaterials(
-                            sourcePath,
-                            currentPath,
-                            isAppend))
-                    {
-                        failedMeshes.Add(sourcePath);
-                    }
-
-                    meshIdx += 1;
-                }
-
                 // Only reload if we wrote anything
-                if (failedMeshes.Count != dialog.SelectedOptions.Count)
+                if (_documentTools.CopyMeshMaterials(dialog.SelectedOption, ViewModel.FilePath, dialog.IsAppend))
                 {
                     ViewModel.CurrentTab?.Parent.Reload(true);
                 }
-
-                if (failedMeshes.Count == 0)
+                else if (dialog.UseArchiveXlPatchMesh)
                 {
-                    return;
-                }
-
-                if (dialog.UseArchiveXlPatchMesh)
-                {
-                    _notificationService.Error(
-                        "Failed to copy mesh materials from ArchiveXL patch mesh (see log for detes)");
                     _loggerService.Error(
-                        "Failed to copy mesh materials from patch mesh (source mesh not found, or you have moved the file in your mod). Please pick the file path in the dialogue.");
+                        "Failed to copy mesh materials from patch mesh. Try picking a mesh, or adding the file path directly.");
                 }
                 else
                 {
@@ -415,27 +375,17 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            var failedMeshes = selected.Where(mesh =>
-                !_documentTools.CopyMeshMaterials(currentPath, mesh, false)
-            ).ToList();
+            var failedMeshes = selected.Where(mesh => !_documentTools.CopyMeshMaterials(currentPath, mesh, false))
+                .ToList();
 
             var output = StringHelper.Stringify(selected.Where(s => !failedMeshes.Contains(s)).ToList(), true);
 
-            if (failedMeshes.Count == 0)
+            if (failedMeshes.Count > 0)
             {
-                _loggerService.Success($"Copied materials from {currentPath} to {output}");
-                _notificationService.Success(
-                    $"Copied materials from {currentPath} to {selected.Count} file(s). Check the log for details.");
-                return;
+                output = output + "\nMaterial copy failed for:" + StringHelper.Stringify(failedMeshes, true);
             }
 
-            output = output + ", but there were problems:\nMaterial copy failed for:" +
-                     StringHelper.Stringify(failedMeshes, true);
-
-            _notificationService.Warning(
-                $"Copied materials from {currentPath} to {selected.Count} files, but there were problems. Check the log for details.");
-            _loggerService.Warning($"Copied materials from {currentPath} to {output}");
-
+            _loggerService.Success($"Copied materials from {currentPath} to {output}");
         }
 
         private void UnDynamifyMaterials(ChunkViewModel? cvm)
@@ -808,7 +758,6 @@ namespace WolvenKit.Views.Documents
 
             if (!_archiveManager.IsInitialized)
             {
-                _loggerService.Info("Scanning your mods... this can take a moment. WolvenKit might be unresponsive.");
                 _archiveManager.Initialize(new FileInfo(_settingsManager.CP77ExecutablePath));
             }
 
