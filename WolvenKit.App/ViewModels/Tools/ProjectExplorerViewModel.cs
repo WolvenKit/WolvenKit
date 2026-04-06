@@ -23,6 +23,7 @@ using WolvenKit.App.Models;
 using WolvenKit.App.Models.Docking;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
@@ -1097,7 +1098,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         if (!useDefaultArgsBool)
         {
-            // TODO: popup letting the user adjust the export arguments like in the export window
+            var dialog = new ExportArgsDialogViewModel(exportArgs, _appViewModel);
+            await _appViewModel.SetActiveDialog(dialog);
+            await dialog.WaitAsync();
+            if (dialog.UserCanceled)
+            {
+                return;
+            }
         }
 
         var exportTasks = filePaths
@@ -1178,7 +1185,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         if (!useDefaultArgsBool)
         {
-            // TODO: popup letting the user adjust the export arguments like in the export window
+            var dialog = new ImportArgsDialogViewModel(importArgs, _appViewModel);
+            await _appViewModel.SetActiveDialog(dialog);
+            await dialog.WaitAsync();
+            if (dialog.UserCanceled)
+            {
+                return;
+            }
         }
 
         var importTasks = filePaths
