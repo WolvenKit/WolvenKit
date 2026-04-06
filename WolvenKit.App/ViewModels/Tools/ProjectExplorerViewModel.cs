@@ -1063,8 +1063,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                                              .Any(ImportExportHelper.CanExportFilepath);
 
     [RelayCommand (CanExecute = nameof(CanExportSelection))]
-    private async Task ExportArchiveFile(bool? shiftOverride = null)
+    private async Task ExportArchiveFile(string useDefaultArgs)
     {
+        if (!bool.TryParse(useDefaultArgs, out var useDefaultArgsBool))
+        {
+            throw new ArgumentException("useDefaultArgs must be a stringified boolean value");
+        }
+
         var filePaths = SelectedItems!.Select(x => x as FileSystemModel)
             .SelectMany(x =>
                 x!.IsDirectory ? new DirectoryInfo(x.FullName).EnumerateFiles("*", SearchOption.AllDirectories).Select(f => f.FullName) : [x.FullName])
@@ -1081,9 +1086,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             _notificationService.Warning(msg);
         }
 
-
-        var shiftPressed = shiftOverride ?? IsShiftKeyPressed;
-
         var exportArgs = new GlobalExportArgs();
 
         if (!_importExportHelper.Finalize(exportArgs))
@@ -1093,7 +1095,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             _notificationService.Error(msg);
         }
 
-        if (!shiftPressed)
+        if (!useDefaultArgsBool)
         {
             // TODO: popup letting the user adjust the export arguments like in the export window
         }
@@ -1149,8 +1151,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                                                 .Any(ImportExportHelper.CanImportFilepath);
 
     [RelayCommand (CanExecute = nameof(CanImportRawFile))]
-    private async Task ImportRawFile(bool? shiftOverride = null)
+    private async Task ImportRawFile(string useDefaultArgs)
     {
+        if (!bool.TryParse(useDefaultArgs, out var useDefaultArgsBool))
+        {
+            throw new ArgumentException("useDefaultArgs must be a stringified boolean value");
+        }
+
         var filePaths = SelectedItems!.Select(x => x as FileSystemModel)
             .SelectMany(x =>
                 x!.IsDirectory ? new DirectoryInfo(x.FullName).EnumerateFiles("*", SearchOption.AllDirectories).Select(f => f.FullName) : [x.FullName])
@@ -1167,12 +1174,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             _notificationService.Warning(msg);
         }
 
-
-        var shiftPressed = shiftOverride ?? IsShiftKeyPressed;
-
         var importArgs = new GlobalImportArgs();
 
-        if (!shiftPressed)
+        if (!useDefaultArgsBool)
         {
             // TODO: popup letting the user adjust the export arguments like in the export window
         }
