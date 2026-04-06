@@ -1102,12 +1102,37 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 exportArgs,
                 new DirectoryInfo(ActiveProject!.ModDirectory),
                 new DirectoryInfo(ActiveProject!.RawDirectory)
-                ));
+                )).ToArray();
 
         await Task.WhenAll(exportTasks);
         _appViewModel.ReloadChangedFiles();
 
-        // TODO: communicate status (all succeeded, all failed, some succeeded)
+        List<string> failedPaths = [];
+        var relProcessedPaths = filePaths.Where(ImportExportHelper.CanExportFilepath)
+            .Select(fp => fp.Replace($"{ActiveProject!.ModDirectory}{Path.DirectorySeparatorChar}", "")).ToArray();
+
+        for (var i = 0; i < exportTasks.Length; i++)
+        {
+            if (!exportTasks[i].Result)
+            {
+                failedPaths.Add(relProcessedPaths[i]);
+            }
+        }
+
+        if (failedPaths.Count == 0)
+        {
+            var s = exportTasks.Length > 1 ? "s" : "";
+            var msg = $"Successfully exported {exportTasks.Length} file{s}";
+            _loggerService.Success(msg);
+            _notificationService.Success(msg);
+        }
+        else
+        {
+            var s = failedPaths.Count > 1 ? "s" : "";
+            var msg = $"Failed to export the following {failedPaths.Count} file{s}:\n {string.Join(",\n", failedPaths)}";
+            _loggerService.Error(msg);
+            _notificationService.Error(msg);
+        }
     }
 
     // If shift key is pressed, we want to convert any matching files in archive _to_ json
