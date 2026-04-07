@@ -1196,10 +1196,34 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         var importTasks = filePaths
             .Where(ImportExportHelper.CanImportFilepath)
-            .Select(fp => _importExportHelper.Import(new RedRelativePath(new DirectoryInfo(ActiveProject!.RawDirectory), fp),
-                importArgs,
-                new DirectoryInfo(ActiveProject!.ModDirectory)
-                )).ToArray();
+            .Select(fp =>
+            {
+                var instanceImportArgs = importArgs;
+                if (importArgs.Get<GltfImportArgs>().ImportFormat != GltfImportAsFormat.MeshWithRig || fp.ToLowerInvariant().EndsWith(".glb"))
+                {
+                    var doubleExt = $".{string.Join(".", fp.Split(".").TakeLast(2))}".ToLowerInvariant();
+                    var extensionBasedFormat = doubleExt switch
+                    {
+                        ".morphtarget.glb" => GltfImportAsFormat.Morphtarget,
+                        ".anims.glb" => GltfImportAsFormat.Anims,
+                        ".rig.glb" => GltfImportAsFormat.Rig,
+                        ".physicalscene.glb" => GltfImportAsFormat.PhysicalScene,
+                        _ => GltfImportAsFormat.Mesh,
+                    };
+
+                    if (importArgs.Get<GltfImportArgs>().ImportFormat != extensionBasedFormat)
+                    {
+                        instanceImportArgs = DeepCopyGlbArgs(importArgs);
+                        instanceImportArgs.Get<GltfImportArgs>().ImportFormat = extensionBasedFormat;
+                    }
+                }
+
+                return _importExportHelper.Import(
+                    new RedRelativePath(new DirectoryInfo(ActiveProject!.RawDirectory), fp),
+                    instanceImportArgs,
+                    new DirectoryInfo(ActiveProject!.ModDirectory)
+                );
+            }).ToArray();
 
         await Task.WhenAll(importTasks);
         _appViewModel.ReloadChangedFiles();
@@ -1228,6 +1252,23 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             var msg = $"Failed to import the following {failedPaths.Count} file{s}:\n {string.Join(",\n", failedPaths)}";
             _loggerService.Error(msg);
             _notificationService.Error(msg);
+        }
+
+        GlobalImportArgs DeepCopyGlbArgs(GlobalImportArgs args)
+        {
+            var newArgs = new GlobalImportArgs();
+
+            newArgs.Register([
+                args.Get<CommonImportArgs>(),
+                args.Get<XbmImportArgs>(),
+                JsonSerializer.Deserialize<GltfImportArgs>(JsonSerializer.Serialize(args.Get<GltfImportArgs>()))!,
+                args.Get<OpusImportArgs>(),
+                args.Get<MlmaskImportArgs>(),
+                args.Get<ReImportArgs>(),
+                args.Get<FntImportArgs>()
+            ]);
+
+            return newArgs;
         }
     }
 
