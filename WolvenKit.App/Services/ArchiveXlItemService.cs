@@ -452,7 +452,7 @@ public partial class ArchiveXlItemService
             if (appearanceNames.Count > 0)
             {
                 clothingItemData.Variants.Clear();
-                clothingItemData.Variants.AddRange(appearanceNames);
+                clothingItemData.Variants.AddRange(appearanceNames.Select(s => s.ToFileName()));
             }
         }
 
@@ -474,7 +474,7 @@ public partial class ArchiveXlItemService
         if (secondaryAppearances.Count > 0)
         {
             clothingItemData.SecondaryVariants.Clear();
-            clothingItemData.SecondaryVariants.AddRange(secondaryAppearances);
+            clothingItemData.SecondaryVariants.AddRange(secondaryAppearances.Select(s => s.ToFileName()));
         }
 
         if (clothingItemData.SecondaryVariants.Count == 0)
