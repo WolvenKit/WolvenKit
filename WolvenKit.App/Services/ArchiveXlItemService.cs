@@ -173,7 +173,7 @@ public class ArchiveXlClothingItem
             return _appearanceNames;
         }
 
-        _appearanceNames = GenerateAppearanceNames(GetAppearanceName().Split("_!").First(), Toggles)
+        _appearanceNames = GenerateAppearanceNames(GetAppearanceName().Split("!").First(), Toggles)
             .Select(s => (CName)s).ToList();
 
         return _appearanceNames;
