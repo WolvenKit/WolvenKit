@@ -35,6 +35,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive;
 using Clipboard = System.Windows.Clipboard;
 using FileMode = System.IO.FileMode;
@@ -1199,25 +1200,17 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             .Select(fp =>
             {
                 var instanceImportArgs = importArgs;
-                if (importArgs.Get<GltfImportArgs>().ImportFormat != GltfImportAsFormat.MeshWithRig || fp.ToLowerInvariant().EndsWith(".glb"))
+                // ReSharper disable InvertIf
+                if (fp.ToLowerInvariant().EndsWith(".glb"))
                 {
-                    var doubleExt = $".{string.Join(".", fp.Split(".").TakeLast(2))}".ToLowerInvariant();
-                    var extensionBasedFormat = doubleExt switch
-                    {
-                        ".morphtarget.glb" => GltfImportAsFormat.Morphtarget,
-                        ".anims.glb" => GltfImportAsFormat.Anims,
-                        ".rig.glb" => GltfImportAsFormat.Rig,
-                        ".physicalscene.glb" => GltfImportAsFormat.PhysicalScene,
-                        _ => GltfImportAsFormat.Mesh,
-                    };
-
-                    if (importArgs.Get<GltfImportArgs>().ImportFormat != extensionBasedFormat)
+                    var guessedImportFormat = ModTools.GltfImportAsFormatFromFileExt(fp);
+                    if (guessedImportFormat is { } extBasedFormat && importArgs.Get<GltfImportArgs>().ImportFormat != extBasedFormat)
                     {
                         instanceImportArgs = DeepCopyGlbArgs(importArgs);
-                        instanceImportArgs.Get<GltfImportArgs>().ImportFormat = extensionBasedFormat;
+                        instanceImportArgs.Get<GltfImportArgs>().ImportFormat = extBasedFormat;
                     }
                 }
-
+                // ReSharper restore InvertIf
                 return _importExportHelper.Import(
                     new RedRelativePath(new DirectoryInfo(ActiveProject!.RawDirectory), fp),
                     instanceImportArgs,
