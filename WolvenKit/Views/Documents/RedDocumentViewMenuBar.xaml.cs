@@ -317,34 +317,34 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
+            var selectedOptions = dialog.SelectedOptions;
+            if (dialog.UseArchiveXlPatchMesh)
+            {
+                selectedOptions.Clear();
+                selectedOptions.Add("");
+            }
+            else if (selectedOptions.Count == 0 && dialog.SelectedOption?.EndsWith(".mesh") == true)
+            {
+                selectedOptions.Add(dialog.SelectedOption);
+            }
+
+            if (selectedOptions.Count == 0)
+            {
+                _loggerService.Info("No meshes selected, aborting");
+                _notificationService.Info("No meshes selected, aborting");
+                return;
+            }
+
             try
             {
-                List<string> failedMeshes = [];
-                var meshIdx = 0;
-                foreach (var sourcePath in dialog.SelectedOptions)
-                {
-                    var isAppend = meshIdx > 0 || dialog.IsAppend;
-                    // First copy operation needs to consider IsAppend
-                    if (!_documentTools.CopyMeshMaterials(
-                            sourcePath,
-                            currentPath,
-                            isAppend))
-                    {
-                        failedMeshes.Add(sourcePath);
-                    }
-
-                    meshIdx += 1;
-                }
+                var isDirty = selectedOptions.Aggregate(false,
+                    (current, sourcePath) =>
+                        _documentTools.CopyMeshMaterials(sourcePath, ViewModel.FilePath, dialog.IsAppend) || current);
 
                 // Only reload if we wrote anything
-                if (failedMeshes.Count != dialog.SelectedOptions.Count)
+                if (isDirty)
                 {
                     ViewModel.CurrentTab?.Parent.Reload(true);
-                }
-
-                if (failedMeshes.Count == 0)
-                {
-                    return;
                 }
 
                 if (dialog.UseArchiveXlPatchMesh)

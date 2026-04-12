@@ -33,11 +33,12 @@ public partial class CopyMeshAppearancesDialogViewModel : ObservableObject
     [ObservableProperty] private bool _canSave;
 
 
-    public CopyMeshAppearancesDialogViewModel(List<string> options, List<string> previousSelection)
+    public CopyMeshAppearancesDialogViewModel(List<string> options, List<string> previousSelection,
+        string lastSelectedOption)
     {
         _options = options;
         OptionsDict = options.ToDictionary(k => k, previousSelection.Contains);
-        SelectedOption = previousSelection.FirstOrDefault() ?? "";
+        SelectedOption = lastSelectedOption;
     }
 
 
