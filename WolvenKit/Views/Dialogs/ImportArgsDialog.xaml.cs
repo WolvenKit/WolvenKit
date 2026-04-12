@@ -1,13 +1,9 @@
-using System;
 using System.Collections.Generic;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using ReactiveUI;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.App.ViewModels.Dialogs;
-using WolvenKit.Helpers;
 
 namespace WolvenKit.Views.Dialogs;
 
@@ -16,24 +12,13 @@ public partial class ImportArgsDialog : ReactiveUserControl<ImportArgsDialogView
     private readonly HashSet<string> _hiddenProps = [
         "Target File Format"
     ];
+    private readonly PropertyGrid _propertyGrid;
 
     public ImportArgsDialog()
     {
         InitializeComponent();
 
-        this.WhenActivated(disposables =>
-        {
-            this.WhenAnyValue(x => x.ViewModel)
-                .Where(vm => vm is not null)
-                .Subscribe(vm =>
-                {
-                    if (FindName("OverlayPropertyGrid") is PropertyGrid opg)
-                    {
-                        opg.SelectedObject = ImportArgsWrapper.From(vm!.Args);
-                    }
-                })
-                .DisposeWith(disposables);
-        });
+        _propertyGrid = FindName("OverlayPropertyGrid") as PropertyGrid;
     }
 
     private void OkButton_Click(object sender, RoutedEventArgs e)
@@ -61,6 +46,25 @@ public partial class ImportArgsDialog : ReactiveUserControl<ImportArgsDialogView
     private void OverlayPropertyGrid_OnAutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
     {
         if (_hiddenProps.Contains(e.DisplayName))
+        {
+            e.Cancel = true;
+            return;
+        }
+
+        var selectedObject = _propertyGrid.SelectedObject;
+        if (selectedObject == null)
+        {
+            return;
+        }
+
+        var propertyInfo = selectedObject.GetType().GetProperty(e.DisplayName);
+        if (propertyInfo == null)
+        {
+            return;
+        }
+        var value = propertyInfo.GetValue(selectedObject);
+
+        if (value == null)
         {
             e.Cancel = true;
         }

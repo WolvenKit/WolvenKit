@@ -1,24 +1,24 @@
 using WolvenKit.Common.Model.Arguments;
 
-namespace WolvenKit.Helpers;
+namespace WolvenKit.App.Helpers;
 
 /// <summary>
 /// Wrapper for use with Syncfusions property grid
 /// </summary>
 public class ExportArgsWrapper
 {
-    public GeneralExportArgs General { get; set; }
-    public CommonExportArgs Common { get; set; }
-    public MorphTargetExportArgs MorphTarget { get; set; }
-    public MlmaskExportArgs Mlmask { get; set; }
-    public XbmExportArgs Xbm { get; set; }
-    public MeshExportArgs Mesh { get; set; }
-    public AnimationExportArgs Animation { get; set; }
-    public WemExportArgs Wem { get; set; }
-    public OpusExportArgs Opus { get; set; }
-    public EntityExportArgs Entity { get; set; }
-    public InkAtlasExportArgs InkAtlas { get; set; }
-    public FntExportArgs Fnt { get; set; }
+    public GeneralExportArgs? General { get; set; }
+    public CommonExportArgs? Common { get; set; }
+    public MorphTargetExportArgs? MorphTarget { get; set; }
+    public MlmaskExportArgs? Mlmask { get; set; }
+    public XbmExportArgs? Xbm { get; set; }
+    public MeshExportArgs? Mesh { get; set; }
+    public AnimationExportArgs? Animation { get; set; }
+    public WemExportArgs? Wem { get; set; }
+    public OpusExportArgs? Opus { get; set; }
+    public EntityExportArgs? Entity { get; set; }
+    public InkAtlasExportArgs? InkAtlas { get; set; }
+    public FntExportArgs? Fnt { get; set; }
 
     public static ExportArgsWrapper From(GlobalExportArgs args) => new()
     {

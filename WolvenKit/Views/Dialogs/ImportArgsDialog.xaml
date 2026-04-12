@@ -9,6 +9,8 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:dialogs="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
     mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=dialogs:ImportArgsDialogViewModel,
+                                     IsDesignTimeCreatable=True}"
     d:DesignHeight="300"
     d:DesignWidth="600">
     <StackPanel Width="600">
@@ -29,6 +31,7 @@
             EnableGrouping="True"
             PropertyExpandMode="NestedMode"
             ReadOnlyBackground="{DynamicResource ContentBackgroundAlt}"
+            SelectedObject="{Binding Args}"
             SearchBoxVisibility="Hidden"
             SortDirection="{x:Null}" />
 

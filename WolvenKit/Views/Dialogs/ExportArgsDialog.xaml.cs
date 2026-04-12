@@ -1,34 +1,19 @@
-using System;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using ReactiveUI;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.App.ViewModels.Dialogs;
-using WolvenKit.Helpers;
 
 namespace WolvenKit.Views.Dialogs;
 
 public partial class ExportArgsDialog : ReactiveUserControl<ExportArgsDialogViewModel>
 {
+    private readonly PropertyGrid _propertyGrid;
+
     public ExportArgsDialog()
     {
         InitializeComponent();
-
-        this.WhenActivated(disposables =>
-        {
-            this.WhenAnyValue(x => x.ViewModel)
-                .Where(vm => vm is not null)
-                .Subscribe(vm =>
-                {
-                    if (FindName("OverlayPropertyGrid") is PropertyGrid opg)
-                    {
-                        opg.SelectedObject = ExportArgsWrapper.From(vm!.Args);
-                    }
-                })
-                .DisposeWith(disposables);
-        });
+        _propertyGrid = FindName("OverlayPropertyGrid") as PropertyGrid;
     }
 
     private void OkButton_Click(object sender, RoutedEventArgs e)
@@ -51,6 +36,27 @@ public partial class ExportArgsDialog : ReactiveUserControl<ExportArgsDialogView
 
         vm.UserCanceled = true;
         vm.Close();
+    }
+
+    private void OverlayPropertyGrid_OnAutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
+    {
+        var selectedObject = _propertyGrid.SelectedObject;
+        if (selectedObject == null)
+        {
+            return;
+        }
+
+        var propertyInfo = selectedObject.GetType().GetProperty(e.DisplayName);
+        if (propertyInfo == null)
+        {
+            return;
+        }
+        var value = propertyInfo.GetValue(selectedObject);
+
+        if (value == null)
+        {
+            e.Cancel = true;
+        }
     }
 }
 

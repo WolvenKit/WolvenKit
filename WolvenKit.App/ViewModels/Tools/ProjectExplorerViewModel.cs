@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -1072,14 +1073,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             throw new ArgumentException("useDefaultArgs must be a stringified boolean value");
         }
 
-        var filePaths = SelectedItems!.Select(x => x as FileSystemModel)
+        var selectedFilePaths = SelectedItems!.Select(x => x as FileSystemModel)
             .SelectMany(x =>
                 x!.IsDirectory ? new DirectoryInfo(x.FullName).EnumerateFiles("*", SearchOption.AllDirectories).Select(f => f.FullName) : [x.FullName])
-            .Distinct().ToArray();
+            .Distinct().Select(fp => fp.Replace($"{ActiveProject!.ModDirectory}{Path.DirectorySeparatorChar}", "")).ToArray();
 
-
-        var ineligibleFilePaths = filePaths.Where(fp => !ImportExportHelper.CanExportFilepath(fp))
-            .Select(fp => fp.Replace($"{ActiveProject!.ModDirectory}{Path.DirectorySeparatorChar}", "")).ToArray();
+        var ineligibleFilePaths = selectedFilePaths.Where(fp => !ImportExportHelper.CanExportFilepath(fp)).ToArray();
+        var eligibleFilePaths = selectedFilePaths.Where(ImportExportHelper.CanExportFilepath).ToArray();
 
         if (ineligibleFilePaths.Length > 0)
         {
@@ -1099,7 +1099,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         if (!useDefaultArgsBool)
         {
-            var dialog = new ExportArgsDialogViewModel(exportArgs, _appViewModel);
+            var displayExportArgs = new ExportArgsWrapper { Common = exportArgs.Get<CommonExportArgs>() };
+
+            foreach (var filePath in eligibleFilePaths)
+            {
+                SetExportArgs(displayExportArgs, exportArgs, filePath);
+            }
+
+            var dialog = new ExportArgsDialogViewModel(_appViewModel, displayExportArgs);
             await _appViewModel.SetActiveDialog(dialog);
             await dialog.WaitAsync();
             if (dialog.UserCanceled)
@@ -1108,9 +1115,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             }
         }
 
-        var exportTasks = filePaths
-            .Where(ImportExportHelper.CanExportFilepath)
-            .Select(fp => _importExportHelper.Export(new FileInfo(fp),
+        var exportTasks = eligibleFilePaths
+            .Select(fp => _importExportHelper.Export(new FileInfo(Path.Join(ActiveProject!.ModDirectory, fp)),
                 exportArgs,
                 new DirectoryInfo(ActiveProject!.ModDirectory),
                 new DirectoryInfo(ActiveProject!.RawDirectory)
@@ -1120,14 +1126,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _appViewModel.ReloadChangedFiles();
 
         List<string> failedPaths = [];
-        var relProcessedPaths = filePaths.Where(ImportExportHelper.CanExportFilepath)
-            .Select(fp => fp.Replace($"{ActiveProject!.ModDirectory}{Path.DirectorySeparatorChar}", "")).ToArray();
 
         for (var i = 0; i < exportTasks.Length; i++)
         {
             if (!exportTasks[i].Result)
             {
-                failedPaths.Add(relProcessedPaths[i]);
+                failedPaths.Add(eligibleFilePaths[i]);
             }
         }
 
@@ -1144,6 +1148,100 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             var msg = $"Failed to export the following {failedPaths.Count} file{s}:\n {string.Join(",\n", failedPaths)}";
             _loggerService.Error(msg);
             _notificationService.Error(msg);
+        }
+
+        void SetExportArgs(ExportArgsWrapper displayArgs, GlobalExportArgs args, string fileName)
+        {
+            var extension = Path.GetExtension(fileName).TrimStart('.');
+            if (!Enum.TryParse(extension, out ECookedFileFormat fileFormat))
+            {
+                return;
+            }
+
+            switch (fileFormat)
+            {
+                case ECookedFileFormat.opusinfo:
+                    if (displayArgs.Opus != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Opus = args.Get<OpusExportArgs>();
+                    break;
+                case ECookedFileFormat.mesh:
+                case ECookedFileFormat.w2mesh:
+                    if (displayArgs.Mesh != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Mesh = args.Get<MeshExportArgs>();
+                    break;
+                case ECookedFileFormat.xbm:
+                    if (displayArgs.Xbm != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Xbm = args.Get<XbmExportArgs>();
+                    break;
+                case ECookedFileFormat.wem:
+                    if (displayArgs.Wem != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Wem = args.Get<WemExportArgs>();
+                    break;
+                case ECookedFileFormat.mlmask:
+                    if (displayArgs.Mlmask != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Mlmask = args.Get<MlmaskExportArgs>();
+                    break;
+                case ECookedFileFormat.fnt:
+                    if (displayArgs.Fnt != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Fnt = args.Get<FntExportArgs>();
+                    break;
+                case ECookedFileFormat.morphtarget:
+                    if (displayArgs.MorphTarget != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.MorphTarget = args.Get<MorphTargetExportArgs>();
+                    break;
+                case ECookedFileFormat.anims:
+                    if (displayArgs.Animation != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Animation = args.Get<AnimationExportArgs>();
+                    break;
+                case ECookedFileFormat.inkatlas:
+                    if (displayArgs.InkAtlas != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.InkAtlas = args.Get<InkAtlasExportArgs>();
+                    break;
+                case ECookedFileFormat.physicalscene:
+                    if (displayArgs.Mesh != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Mesh = args.Get<MeshExportArgs>();
+                    break;
+            }
         }
     }
 
@@ -1166,14 +1264,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             throw new ArgumentException("useDefaultArgs must be a stringified boolean value");
         }
 
-        var filePaths = SelectedItems!.Select(x => x as FileSystemModel)
+        var selectedFilePaths = SelectedItems!.Select(x => x as FileSystemModel)
             .SelectMany(x =>
                 x!.IsDirectory ? new DirectoryInfo(x.FullName).EnumerateFiles("*", SearchOption.AllDirectories).Select(f => f.FullName) : [x.FullName])
             .Select(fp => fp.Replace($"{ActiveProject!.RawDirectory}{Path.DirectorySeparatorChar}", ""))
             .Distinct().ToArray();
 
-
-        var ineligibleFilePaths = filePaths.Where(fp => !ImportExportHelper.CanImportFilepath(fp) && !fp.ToLowerInvariant().EndsWith(".material.json")).ToArray();
+        var ineligibleFilePaths = selectedFilePaths.Where(fp => !ImportExportHelper.CanImportFilepath(fp) && !fp.ToLowerInvariant().EndsWith(".material.json")).ToArray();
+        var eligibleFilePaths = selectedFilePaths.Where(ImportExportHelper.CanImportFilepath).ToArray();
 
         if (ineligibleFilePaths.Length > 0)
         {
@@ -1186,7 +1284,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         if (!useDefaultArgsBool)
         {
-            var dialog = new ImportArgsDialogViewModel(importArgs, _appViewModel);
+            var displayImportArgs = new ImportArgsWrapper { Common = importArgs.Get<CommonImportArgs>() };
+
+            foreach (var filePath in eligibleFilePaths)
+            {
+                SetImportArgs(displayImportArgs, importArgs, filePath);
+            }
+
+            var dialog = new ImportArgsDialogViewModel(_appViewModel, displayImportArgs);
             await _appViewModel.SetActiveDialog(dialog);
             await dialog.WaitAsync();
             if (dialog.UserCanceled)
@@ -1195,8 +1300,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             }
         }
 
-        var importTasks = filePaths
-            .Where(ImportExportHelper.CanImportFilepath)
+        var importTasks = eligibleFilePaths
             .Select(fp =>
             {
                 var instanceImportArgs = importArgs;
@@ -1222,13 +1326,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _appViewModel.ReloadChangedFiles();
 
         List<string> failedPaths = [];
-        var relProcessedPaths = filePaths.Where(ImportExportHelper.CanImportFilepath).ToArray();
 
         for (var i = 0; i < importTasks.Length; i++)
         {
             if (!importTasks[i].Result)
             {
-                failedPaths.Add(relProcessedPaths[i]);
+                failedPaths.Add(eligibleFilePaths[i]);
             }
         }
 
@@ -1262,6 +1365,74 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             ]);
 
             return newArgs;
+        }
+
+        void SetImportArgs(ImportArgsWrapper displayArgs, GlobalImportArgs args, string filePath)
+        {
+            var extension = Path.GetExtension(filePath).TrimStart('.');
+            if (!Enum.TryParse(extension, out ERawFileFormat rawFileFormat))
+            {
+                return;
+            }
+
+            switch (rawFileFormat)
+            {
+                case ERawFileFormat.tga:
+                case ERawFileFormat.bmp:
+                case ERawFileFormat.jpg:
+                case ERawFileFormat.png:
+                case ERawFileFormat.tiff:
+                case ERawFileFormat.dds:
+                case ERawFileFormat.cube:
+                    if (displayArgs.Xbm != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Xbm = args.Get<XbmImportArgs>();
+                    break;
+                case ERawFileFormat.glb:
+                case ERawFileFormat.gltf:
+                    if (displayArgs.Gltf != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Gltf = args.Get<GltfImportArgs>();
+                    break;
+                case ERawFileFormat.ttf:
+                    if (displayArgs.Fnt != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Fnt = args.Get<FntImportArgs>();
+                    break;
+                case ERawFileFormat.wav:
+                    if (displayArgs.Opus != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Opus = args.Get<OpusImportArgs>();
+                    break;
+                case ERawFileFormat.masklist:
+                    if (displayArgs.Mlmask != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Mlmask = args.Get<MlmaskImportArgs>();
+                    break;
+                case ERawFileFormat.re:
+                    if (displayArgs.Re != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Re = args.Get<ReImportArgs>();
+                    break;
+            }
         }
     }
 

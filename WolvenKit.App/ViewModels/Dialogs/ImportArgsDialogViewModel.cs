@@ -1,13 +1,6 @@
-using System;
-using System.Drawing.Imaging;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using WolvenKit.App.ViewModels.Exporters;
 using WolvenKit.App.ViewModels.Shell;
-using WolvenKit.Common.Model.Arguments;
-
-using System.Linq;
-using System.Windows.Controls;
+using WolvenKit.App.Helpers;
 
 
 namespace WolvenKit.App.ViewModels.Dialogs;
@@ -16,10 +9,10 @@ public class ImportArgsDialogViewModel : DialogViewModel
 {
     private TaskCompletionSource<bool> _tcs = new();
     private readonly AppViewModel _appViewModel;
-    public GlobalImportArgs Args { get; set; }
+    public ImportArgsWrapper Args { get; set; }
     public bool UserCanceled { get; set; } = false;
 
-    public ImportArgsDialogViewModel(GlobalImportArgs args, AppViewModel appViewModel)
+    public ImportArgsDialogViewModel(AppViewModel appViewModel, ImportArgsWrapper args)
     {
         Args = args;
         _appViewModel = appViewModel;
