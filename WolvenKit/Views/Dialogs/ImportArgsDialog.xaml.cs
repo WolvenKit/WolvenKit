@@ -1,5 +1,5 @@
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
@@ -7,10 +7,7 @@ using System.Windows.Controls;
 using ReactiveUI;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.App.ViewModels.Dialogs;
-using WolvenKit.App.ViewModels.Exporters;
-using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Helpers;
-using WolvenKit.Views.Exporters;
 
 namespace WolvenKit.Views.Dialogs;
 
@@ -55,6 +52,19 @@ public partial class ImportArgsDialog : ReactiveUserControl<ImportArgsDialogView
 
         vm.UserCanceled = true;
         vm.Close();
+    }
+
+
+    private readonly HashSet<string> _hiddenProps = [
+        "Target File Format"
+    ];
+
+    private void OverlayPropertyGrid_OnAutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
+    {
+        if (_hiddenProps.Contains(e.DisplayName))
+        {
+            e.Cancel = true;
+        }
     }
 }
 

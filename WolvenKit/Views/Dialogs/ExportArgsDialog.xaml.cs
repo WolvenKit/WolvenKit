@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
@@ -7,10 +6,7 @@ using System.Windows.Controls;
 using ReactiveUI;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.App.ViewModels.Dialogs;
-using WolvenKit.App.ViewModels.Exporters;
-using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Helpers;
-using WolvenKit.Views.Exporters;
 
 namespace WolvenKit.Views.Dialogs;
 

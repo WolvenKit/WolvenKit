@@ -25,6 +25,7 @@
             ButtonPanelVisibility="Hidden"
             CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
             DescriptionPanelVisibility="Visible"
+            AutoGeneratingPropertyGridItem="OverlayPropertyGrid_OnAutoGeneratingPropertyGridItem"
             EnableGrouping="True"
             PropertyExpandMode="NestedMode"
             ReadOnlyBackground="{DynamicResource ContentBackgroundAlt}"
