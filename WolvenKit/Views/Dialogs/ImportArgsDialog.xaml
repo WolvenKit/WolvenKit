@@ -10,15 +10,17 @@
     xmlns:dialogs="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
     mc:Ignorable="d"
     d:DesignHeight="300"
-    d:DesignWidth="300">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    d:DesignWidth="600">
+    <StackPanel Width="600">
+        <TextBlock
+            Margin="{DynamicResource WolvenKitMarginSmall}"
+            Background="{DynamicResource BackgroundColor_Frame_Background}"
+            FontSize="{DynamicResource WolvenKitFontHeader}"
+            FontWeight="Bold"
+            Text="Import Configuration" />
+
         <syncfusion:PropertyGrid
             x:Name="OverlayPropertyGrid"
-            Grid.Row="0"
             BorderThickness="0,1,0,0"
             ButtonPanelVisibility="Hidden"
             CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
@@ -28,16 +30,20 @@
             ReadOnlyBackground="{DynamicResource ContentBackgroundAlt}"
             SearchBoxVisibility="Hidden"
             SortDirection="{x:Null}" />
+
         <StackPanel
-            Grid.Row="1"
+            Margin="10"
+            HorizontalAlignment="Right"
             Orientation="Horizontal">
-            <Button Click="OkButton_Click">
-                OK
-            </Button>
-            <Button Click="CancelButton_Click">
-                Cancel
-            </Button>
+            <Button
+                Style="{StaticResource DialogButtonStyle}"
+                Click="CancelButton_Click"
+                Content="Cancel" />
+            <Button
+                Style="{StaticResource DialogPrimaryButtonStyle}"
+                Click="OkButton_Click"
+                Content="OK" />
         </StackPanel>
-    </Grid>
+    </StackPanel>
 </reactiveUi:ReactiveUserControl>
 
