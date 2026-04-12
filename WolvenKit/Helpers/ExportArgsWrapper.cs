@@ -2,6 +2,9 @@ using WolvenKit.Common.Model.Arguments;
 
 namespace WolvenKit.Helpers;
 
+/// <summary>
+/// Wrapper for use with Syncfusions property grid
+/// </summary>
 public class ExportArgsWrapper
 {
     public GeneralExportArgs General { get; set; }

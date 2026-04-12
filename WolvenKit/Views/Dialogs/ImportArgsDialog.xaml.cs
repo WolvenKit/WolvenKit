@@ -13,6 +13,10 @@ namespace WolvenKit.Views.Dialogs;
 
 public partial class ImportArgsDialog : ReactiveUserControl<ImportArgsDialogViewModel>
 {
+    private readonly HashSet<string> _hiddenProps = [
+        "Target File Format"
+    ];
+
     public ImportArgsDialog()
     {
         InitializeComponent();
@@ -53,11 +57,6 @@ public partial class ImportArgsDialog : ReactiveUserControl<ImportArgsDialogView
         vm.UserCanceled = true;
         vm.Close();
     }
-
-
-    private readonly HashSet<string> _hiddenProps = [
-        "Target File Format"
-    ];
 
     private void OverlayPropertyGrid_OnAutoGeneratingPropertyGridItem(object sender, AutoGeneratingPropertyGridItemEventArgs e)
     {
