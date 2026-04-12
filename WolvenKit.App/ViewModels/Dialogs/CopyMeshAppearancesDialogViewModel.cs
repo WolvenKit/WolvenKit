@@ -53,6 +53,12 @@ public partial class CopyMeshAppearancesDialogViewModel : ObservableObject
 
     public void SetSaveButtonState()
     {
+        if (SelectedOption?.EndsWith(".mesh") == true)
+        {
+            CanSave = true;
+            return;
+        }
+
         if (SelectedOptions.Count == 0)
         {
             CanSave = false;
