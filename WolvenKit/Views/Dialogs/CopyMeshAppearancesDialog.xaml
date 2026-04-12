@@ -133,7 +133,8 @@
                         FontSize="{DynamicResource WolvenKitFontBody}"
                         Text="{Binding SelectedOption,
                                        Mode=TwoWay}"
-                        LostFocus="TextBox_OnFocusLost"
+                        KeyUp="TextBox_OnChange"
+                        LostFocus="TextBox_OnChange"
                         KeyboardNavigation.TabIndex="-1" />
 
                 </Grid>

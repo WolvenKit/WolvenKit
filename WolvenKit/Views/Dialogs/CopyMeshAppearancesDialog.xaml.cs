@@ -4,8 +4,9 @@ using System.Windows;
 using System.Windows.Input;
 using ReactiveUI;
 using System.Reactive.Disposables;
-using Syncfusion.Windows.Controls.Input;
+using System.Windows.Controls;
 using WolvenKit.App.ViewModels.Dialogs;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using Window = System.Windows.Window;
 
 namespace WolvenKit.Views.Dialogs
@@ -112,15 +113,20 @@ namespace WolvenKit.Views.Dialogs
             ViewModel.SetSaveButtonState();
         }
 
-        private void TextBox_OnFocusLost(object sender, RoutedEventArgs e)
+        private void TextBox_OnChange(object sender, RoutedEventArgs e)
         {
-            if (sender is not SfTextBoxExt tb || ViewModel is null)
+            if (sender is not TextBox tb || ViewModel is null)
             {
                 return;
             }
 
-            ViewModel.SelectedOptions.Clear();
-            ViewModel.SelectedOptions.Add(tb.Text);
+            if (tb.Text.EndsWith(".mesh", StringComparison.OrdinalIgnoreCase))
+            {
+                ViewModel.SelectedOptions.Clear();
+                ViewModel.SelectedOptions.Add(tb.Text);
+                ViewModel.SelectedOption = tb.Text;
+            }
+
             ViewModel.SetSaveButtonState();
         }
     }
