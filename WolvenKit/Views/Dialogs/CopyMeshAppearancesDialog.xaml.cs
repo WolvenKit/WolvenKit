@@ -14,13 +14,14 @@ namespace WolvenKit.Views.Dialogs
     public partial class CopyMeshAppearancesDialog : IViewFor<CopyMeshAppearancesDialogViewModel>
     {
         private static List<string> s_lastSelectedOptions = [];
+        private static string s_lastSelectedOption = "";
         private static bool s_lastAppend;
 
         public CopyMeshAppearancesDialog(List<string> options)
         {
             InitializeComponent();
 
-            ViewModel = new CopyMeshAppearancesDialogViewModel(options, s_lastSelectedOptions)
+            ViewModel = new CopyMeshAppearancesDialogViewModel(options, s_lastSelectedOptions, s_lastSelectedOption)
             {
                 IsAppend = s_lastAppend
             };
@@ -55,9 +56,15 @@ namespace WolvenKit.Views.Dialogs
                 return;
             }
 
-            if (!string.IsNullOrEmpty(ViewModel.SelectedOption))
+            if (string.IsNullOrEmpty(ViewModel.SelectedOption))
             {
                 s_lastSelectedOptions = ViewModel.SelectedOptions;
+                s_lastSelectedOption = "";
+            }
+            else
+            {
+                s_lastSelectedOptions = [];
+                s_lastSelectedOption = ViewModel.SelectedOption;
             }
 
             // save bool flags

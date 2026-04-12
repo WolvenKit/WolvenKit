@@ -314,15 +314,40 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
+            var selectedOptions = dialog.SelectedOptions;
+            if (dialog.UseArchiveXlPatchMesh)
+            {
+                selectedOptions.Clear();
+                selectedOptions.Add("");
+            }
+            else if (selectedOptions.Count == 0 && dialog.SelectedOption?.EndsWith(".mesh") == true)
+            {
+                selectedOptions.Add(dialog.SelectedOption);
+            }
+
+            if (selectedOptions.Count == 0)
+            {
+                _loggerService.Info("No meshes selected, aborting");
+                _notificationService.Info("No meshes selected, aborting");
+                return;
+            }
+
             try
             {
+                var isDirty = selectedOptions.Aggregate(false,
+                    (current, sourcePath) =>
+                        _documentTools.CopyMeshMaterials(sourcePath, ViewModel.FilePath, dialog.IsAppend) || current);
+
                 // Only reload if we wrote anything
-                if (_documentTools.CopyMeshMaterials(dialog.SelectedOption, ViewModel.FilePath, dialog.IsAppend))
+                if (isDirty)
                 {
                     ViewModel.CurrentTab?.Parent.Reload(true);
                 }
-                else if (dialog.UseArchiveXlPatchMesh)
+
+                if (dialog.UseArchiveXlPatchMesh)
                 {
+                    _notificationService.Error(
+                        "Failed to copy mesh materials from ArchiveXL patch mesh (see log for detes)");
                     _loggerService.Error(
                         "Failed to copy mesh materials from patch mesh. Try picking a mesh, or adding the file path directly.");
                 }
