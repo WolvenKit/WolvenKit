@@ -345,6 +345,7 @@ namespace WolvenKit.Views.Documents
                 if (isDirty)
                 {
                     ViewModel.CurrentTab?.Parent.Reload(true);
+                    return;
                 }
 
                 if (dialog.UseArchiveXlPatchMesh)
