@@ -36,9 +36,7 @@
 
         <syncfusion:WizardControl
             CancelButtonCancelsWindow="True"
-            FinishButtonClosesWindow="True"
-            FinishEnabled="{Binding CanSave,
-                                    UpdateSourceTrigger=PropertyChanged}">
+            FinishButtonClosesWindow="True">
 
             <syncfusion:WizardPage
                 BackVisibility="Collapsed"
@@ -47,7 +45,9 @@
                 HelpVisibility="Collapsed"
                 NextVisibility="Collapsed"
                 PreviewKeyDown="WizardPage_PreviewKeyDown"
-                PageType="Exterior">
+                PageType="Exterior"
+                FinishEnabled="{Binding CanSave,
+                                        UpdateSourceTrigger=PropertyChanged}">
                 <Grid
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
