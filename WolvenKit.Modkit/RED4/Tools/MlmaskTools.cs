@@ -240,35 +240,6 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
-        //private static byte BilinearInterpolation(byte q00, byte q10, byte q01, byte q11, int x, int x1, int y, int y1)
-        // {
-        //    const int sc = 256;
-
-        //    if (x1 == 0 || y1 == 0)
-        //    {
-        //        return q00;
-        //    }
-
-        //    var q00s = q00 * sc;
-        //    var q10s = q10 * sc;
-        //    var q01s = q01 * sc;
-        //    var q11s = q11 * sc;
-
-        //    var a0 = q00s;
-        //    var a1 = (q10s - q00s) * x / x1;
-        //    var a2 = (q01s - q00s) * y / y1;
-        //    var a3 = (q00s - q01s - q10s + q11s) * x * y / x1 / y1;
-
-        //    var a = a0 + a1 + a2 + a3;
-        //    var r = a / sc;
-        //    if (r > 255)
-        //    {
-        //        r = 255;
-        //    }
-
-        //    return (byte)r;
-        //}
-
         private static uint CountBits(uint v)
         {
             var t = v;
