@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Numerics;
+using System.Threading.Tasks;
 using CP77.Common.Image;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
+
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -51,31 +53,111 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            var maskData = new byte[maskWidth * maskHeight];
+            var fullResBuffer = new byte[maskWidth * maskHeight];
 
             for (var i = 0; i < maskCount; i++)
             {
-                //Clear instead of allocate new is faster?
-                //Mandatory cause decode does not always write to every pixel
-                Array.Clear(maskData, 0, maskData.Length);
+                Array.Clear(fullResBuffer, 0, fullResBuffer.Length);
 
-                Decode(ref maskData, maskWidth, maskHeight, maskWidthLow, maskHeightLow, atlasRaw, atlasWidth,
-                    atlasHeight, tiles, maskTileSize, i);
+                Decode(ref fullResBuffer, maskWidth, maskHeight, maskWidthLow, maskHeightLow, atlasRaw, atlasWidth, atlasHeight, tiles, maskTileSize, i);
+
+                var hasHighRes = HasLayerHighResolutionData(tiles, maskWidth, maskHeight, maskTileSize, i);
+
+                byte[] layerBuffer;
+                uint outWidth;
+                uint outHeight;
+
+                if (hasHighRes || maskWidthLow == 0 || maskHeightLow == 0 || maskWidthLow == maskWidth)
+                {
+                    // Use full resolution buffer
+                    layerBuffer = (byte[])fullResBuffer.Clone();
+                    outWidth = maskWidth;
+                    outHeight = maskHeight;
+                }
+                else
+                {
+                    // Downscale to low resolution
+                    outWidth = maskWidthLow;
+                    outHeight = maskHeightLow;
+                    layerBuffer = DownscaleNearest(fullResBuffer, maskWidth, maskHeight, outWidth, outHeight);
+                }
 
                 var info = new DDSUtils.DDSInfo
                 {
                     Compression = Enums.ETextureCompression.TCM_None,
                     RawFormat = Enums.ETextureRawFormat.TRF_Grayscale,
                     IsGamma = false,
-                    Width = maskWidth,
-                    Height = maskHeight,
+                    Width = outWidth,
+                    Height = outHeight,
                     Depth = 1,
                     MipCount = 1,
                     SliceCount = 1,
                     TextureType = Enums.GpuWrapApieTextureType.TEXTYPE_2D
                 };
 
-                yield return RedImage.Create(info, maskData);
+                yield return RedImage.Create(info, layerBuffer);
+            }
+        }
+
+        // <summary>
+        // Check if a layer has high-resolution data available in the atlas
+        // </summary>
+        private static bool HasLayerHighResolutionData(uint[] tiles, uint maskWidth, uint maskHeight, uint maskTileSize, int layerIndex)
+        {
+            var widthInTiles = DivCeil(maskWidth, maskTileSize);
+            var heightInTiles = DivCeil(maskHeight, maskTileSize);
+            var highResTileCount = widthInTiles * heightInTiles;
+
+            // Check high-res tiles (offset 0) for this layer
+            for (uint tileIdx = 0; tileIdx < highResTileCount; tileIdx++)
+            {
+                if ((tileIdx * 2) + 1 >= tiles.Length)
+                {
+                    continue;
+                }
+
+                var paramBits = tiles[(tileIdx * 2) + 1];
+
+                // Check if this layer has data in this high-res tile
+                if ((paramBits & (1 << layerIndex)) != 0)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        // <summary>
+        // Decode function that prevents corruption by only decoding available data
+        // </summary>
+        private static void DecodeWithCorruptionPrevention(ref byte[] maskData, uint maskWidth, uint maskHeight,
+            uint mWidthLow, uint mHeightLow, byte[] atlasData, uint atlasWidth, uint atlasHeight,
+            uint[] tileData, uint maskTileSize, int maskIndex)
+        {
+            var widthInTiles0 = DivCeil(maskWidth, maskTileSize);
+            var heightInTiles0 = DivCeil(maskHeight, maskTileSize);
+            var smallOffset = widthInTiles0 * heightInTiles0;
+
+            var smallScale = mWidthLow == 0 || maskWidth < mWidthLow ? 1 : maskWidth / mWidthLow;
+
+            var hasHighResData = HasLayerHighResolutionData(tileData, maskWidth, maskHeight, maskTileSize, maskIndex);
+
+            for (uint x = 0; x < maskWidth; x++)
+            {
+                for (uint y = 0; y < maskHeight; y++)
+                {
+                    // Always decode low-res data first
+                    DecodeSingle(ref maskData, maskWidth, maskHeight, atlasData, atlasWidth, atlasHeight,
+                        x, y, tileData, maskTileSize, maskIndex, smallOffset, smallScale);
+
+                    // Only decode high-res data if it actually exists to prevent corruption
+                    if (hasHighResData)
+                    {
+                        DecodeSingle(ref maskData, maskWidth, maskHeight, atlasData, atlasWidth, atlasHeight,
+                            x, y, tileData, maskTileSize, maskIndex, 0, 1);
+                    }
+                }
             }
         }
 
@@ -158,34 +240,34 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
-        private static byte BilinearInterpolation(byte q00, byte q10, byte q01, byte q11, int x, int x1, int y, int y1)
-        {
-            const int sc = 256;
+        //private static byte BilinearInterpolation(byte q00, byte q10, byte q01, byte q11, int x, int x1, int y, int y1)
+        // {
+        //    const int sc = 256;
 
-            if (x1 == 0 || y1 == 0)
-            {
-                return q00;
-            }
+        //    if (x1 == 0 || y1 == 0)
+        //    {
+        //        return q00;
+        //    }
 
-            var q00s = q00 * sc;
-            var q10s = q10 * sc;
-            var q01s = q01 * sc;
-            var q11s = q11 * sc;
+        //    var q00s = q00 * sc;
+        //    var q10s = q10 * sc;
+        //    var q01s = q01 * sc;
+        //    var q11s = q11 * sc;
 
-            var a0 = q00s;
-            var a1 = (q10s - q00s) * x / x1;
-            var a2 = (q01s - q00s) * y / y1;
-            var a3 = (q00s - q01s - q10s + q11s) * x * y / x1 / y1;
+        //    var a0 = q00s;
+        //    var a1 = (q10s - q00s) * x / x1;
+        //    var a2 = (q01s - q00s) * y / y1;
+        //    var a3 = (q00s - q01s - q10s + q11s) * x * y / x1 / y1;
 
-            var a = a0 + a1 + a2 + a3;
-            var r = a / sc;
-            if (r > 255)
-            {
-                r = 255;
-            }
+        //    var a = a0 + a1 + a2 + a3;
+        //    var r = a / sc;
+        //    if (r > 255)
+        //    {
+        //        r = 255;
+        //    }
 
-            return (byte)r;
-        }
+        //    return (byte)r;
+        //}
 
         private static uint CountBits(uint v)
         {
@@ -276,12 +358,30 @@ namespace WolvenKit.Modkit.RED4
             var q01 = atlasData[ux + 0 + ((uy + 1) * atlasWidth)];
             var q11 = atlasData[ux + 1 + ((uy + 1) * atlasWidth)];
 
-            var p = BilinearInterpolation(q00, q10, q01, q11, xi, x1, yi, y1);
+            var p = atlasData[ux + (uy * atlasWidth)]; // Nearest pixel
 
             maskData[x + (y * maskWidth)] = p;
         }
 
         private static uint DivCeil(uint l, uint r) => (l + r - 1) / r;
+
+        // Simple nearest-neighbour downscale (power-of-two scale)
+        private static byte[] DownscaleNearest(byte[] src, uint srcW, uint srcH, uint dstW, uint dstH)
+        {
+            var dst = new byte[dstW * dstH];
+            var factorX = (double)srcW / dstW;
+            var factorY = (double)srcH / dstH;
+            for (uint y = 0; y < dstH; y++)
+            {
+                for (uint x = 0; x < dstW; x++)
+                {
+                    var srcX = (uint)(x * factorX);
+                    var srcY = (uint)(y * factorY);
+                    dst[x + y * dstW] = src[srcX + srcY * srcW];
+                }
+            }
+            return dst;
+        }
 
         #endregion Methods
     }
