@@ -130,22 +130,22 @@ public partial class AddPropFileDialogViewModel : ObservableObject
         Dictionary<string, bool> ret = [];
         if (!string.IsNullOrEmpty(MeshFile1))
         {
-            ret[MeshFile1] = MeshFile1UseAppearances;
+            ret[MeshFile1] = MeshFile1UseAppearances || MeshFile1ReadFromMesh;
         }
 
         if (!string.IsNullOrEmpty(MeshFile2))
         {
-            ret[MeshFile2] = MeshFile2UseAppearances;
+            ret[MeshFile2] = MeshFile2UseAppearances || MeshFile2ReadFromMesh;
         }
 
         if (!string.IsNullOrEmpty(MeshFile3))
         {
-            ret[MeshFile3] = MeshFile3UseAppearances;
+            ret[MeshFile3] = MeshFile3UseAppearances || MeshFile3ReadFromMesh;
         }
 
         if (!string.IsNullOrEmpty(MeshFile4))
         {
-            ret[MeshFile4] = MeshFile4UseAppearances;
+            ret[MeshFile4] = MeshFile4UseAppearances || MeshFile4ReadFromMesh;
         }
 
         return ret;
