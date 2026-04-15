@@ -1053,17 +1053,34 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _progressService.Completed();
     }
 
+    /// <summary>
+    /// Gathers all file paths from selected items, including files contained in all selected folders and subfolders.
+    /// The resulting collection does not contain folders.
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerable<string> EnumerateSelectedFilePaths()
+    {
+        if (SelectedItems is null)
+        {
+            return [];
+        }
+
+        return SelectedItems
+            .Cast<FileSystemModel>()
+            .SelectMany(x =>
+                x.IsDirectory
+                    ? new DirectoryInfo(x.FullName)
+                        .EnumerateFiles("*", SearchOption.AllDirectories)
+                        .Select(f => f.FullName)
+                    : [x.FullName])
+            .Distinct();
+    }
+
     private bool CanExportSelection() => ActiveProject is not null && SelectedItems is not null &&
                                          SelectedItems.All(x =>
                                              x is FileSystemModel { } m &&
                                              IsInArchiveFolder(m)) &&
-                                         SelectedItems.Select(x => x as FileSystemModel)
-                                             .SelectMany(x =>
-                                                 x!.IsDirectory
-                                                     ? new DirectoryInfo(x.FullName).EnumerateFiles("*", SearchOption.AllDirectories)
-                                                         .Select(f => f.FullName)
-                                                     : [x.FullName])
-                                             .Any(ImportExportHelper.CanExportFilepath);
+                                         EnumerateSelectedFilePaths().Any(ImportExportHelper.CanExportFilepath);
 
     [RelayCommand (CanExecute = nameof(CanExportSelection))]
     private async Task ExportArchiveFile(string useDefaultArgs)
@@ -1073,10 +1090,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             throw new ArgumentException("useDefaultArgs must be a stringified boolean value");
         }
 
-        var selectedFilePaths = SelectedItems!.Select(x => x as FileSystemModel)
-            .SelectMany(x =>
-                x!.IsDirectory ? new DirectoryInfo(x.FullName).EnumerateFiles("*", SearchOption.AllDirectories).Select(f => f.FullName) : [x.FullName])
-            .Distinct().Select(fp => fp.Replace($"{ActiveProject!.ModDirectory}{Path.DirectorySeparatorChar}", "")).ToArray();
+        var selectedFilePaths = EnumerateSelectedFilePaths()
+            .Select(fp => fp.Replace($"{ActiveProject!.ModDirectory}{Path.DirectorySeparatorChar}", "")).ToArray();
 
         var ineligibleFilePaths = selectedFilePaths.Where(fp => !ImportExportHelper.CanExportFilepath(fp)).ToArray();
         var eligibleFilePaths = selectedFilePaths.Where(ImportExportHelper.CanExportFilepath).ToArray();
@@ -1248,13 +1263,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private bool CanImportRawFile() =>  ActiveProject is not null && SelectedItems is not null &&
                                             SelectedItems.All(x =>
                                                 x is FileSystemModel m && IsInRawFolder(m)) &&
-                                            SelectedItems.Select(x => x as FileSystemModel)
-                                                .SelectMany(x =>
-                                                    x!.IsDirectory
-                                                        ? new DirectoryInfo(x.FullName).EnumerateFiles("*", SearchOption.AllDirectories)
-                                                            .Select(f => f.FullName)
-                                                        : [x.FullName])
-                                                .Any(ImportExportHelper.CanImportFilepath);
+                                            EnumerateSelectedFilePaths().Any(ImportExportHelper.CanImportFilepath);
 
     [RelayCommand (CanExecute = nameof(CanImportRawFile))]
     private async Task ImportRawFile(string useDefaultArgs)
@@ -1264,9 +1273,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             throw new ArgumentException("useDefaultArgs must be a stringified boolean value");
         }
 
-        var selectedFilePaths = SelectedItems!.Select(x => x as FileSystemModel)
-            .SelectMany(x =>
-                x!.IsDirectory ? new DirectoryInfo(x.FullName).EnumerateFiles("*", SearchOption.AllDirectories).Select(f => f.FullName) : [x.FullName])
+        var selectedFilePaths = EnumerateSelectedFilePaths()
             .Select(fp => fp.Replace($"{ActiveProject!.RawDirectory}{Path.DirectorySeparatorChar}", ""))
             .Distinct().ToArray();
 
