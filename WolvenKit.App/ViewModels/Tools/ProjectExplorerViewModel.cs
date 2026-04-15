@@ -1106,7 +1106,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 SetExportArgs(displayExportArgs, exportArgs, filePath);
             }
 
-            var dialog = new ExportArgsDialogViewModel(_appViewModel, displayExportArgs);
+            var dialog = new ExportArgsDialogViewModel(_appViewModel, _archiveManager, _notificationService, displayExportArgs);
             await _appViewModel.SetActiveDialog(dialog);
             await dialog.WaitAsync();
             if (dialog.UserCanceled)

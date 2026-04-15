@@ -32,7 +32,7 @@
             ReadOnlyBackground="{DynamicResource ContentBackgroundAlt}"
             AutoGeneratingPropertyGridItem="OverlayPropertyGrid_OnAutoGeneratingPropertyGridItem"
             SearchBoxVisibility="Hidden"
-            SelectedObject="{Binding Args}"
+            SelectedObject="{Binding ArgsWrapper}"
             SortDirection="{x:Null}" />
 
         <StackPanel
