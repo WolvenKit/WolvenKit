@@ -16,7 +16,7 @@ public partial class AddInkatlasDialogViewModel : ObservableObject
         ProjectFolders = project.GetAllFolders(project.ModDirectory).ToDictionary<string, string>(x => x);
         ExistingFiles = project.ModFiles.Where(f => f.HasFileExtension(".inkatlas"))
             .ToDictionary<string, string>(x => x);
-        InkatlasFileName = $"{project.Name}_icons";
+        InkatlasFileName = $"{project.ModName}_icons".ToFileName();
 
         IconFileSizes = new Dictionary<string, (int, int)>()
         {

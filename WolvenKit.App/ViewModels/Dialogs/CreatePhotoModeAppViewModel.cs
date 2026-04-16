@@ -186,7 +186,7 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
         }
         else
         {
-            NpcName = _activeProject.ModName.ToHumanFriendlyString();
+            NpcName = _activeProject.Name.ToHumanFriendlyString();
         }
 
         NpcName = NpcName.Replace("NPV", "").Replace("NPC", "").Trim();
