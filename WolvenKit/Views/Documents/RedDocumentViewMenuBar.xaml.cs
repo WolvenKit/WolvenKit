@@ -397,12 +397,14 @@ namespace WolvenKit.Views.Documents
         {
             _cvmTools.UnDynamifyMaterials(cvm);
             ViewModel?.DeleteUnusedMaterialsCommand?.NotifyCanExecuteChanged();
+            _notificationService.Success("Dynamic materials resolved");
         }
 
         private void ExpandMeshAppearances(ChunkViewModel? cvm)
         {
             _cvmTools.ExpandMeshAppearances(cvm, out var _, true);
             ViewModel?.DeleteUnusedMaterialsCommand?.NotifyCanExecuteChanged();
+            _notificationService.Success("Mesh appearances expanded");
         }
 
         private void OnUnDynamifyMaterialsClick(object _, RoutedEventArgs e) => UnDynamifyMaterials(RootChunk);
