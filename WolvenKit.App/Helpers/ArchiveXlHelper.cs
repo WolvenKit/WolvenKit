@@ -233,7 +233,8 @@ public static partial class ArchiveXlHelper
     {
         var meshAppearances = apps.Select(m => m.Chunk).OfType<meshMeshAppearance>().ToList();
         var appearancesWithMaterials =
-            meshAppearances.Where(mA => mA.ChunkMaterials.Count > 0).ToDictionary(k => k.Name, v => v);
+            meshAppearances.Where(mA => mA.ChunkMaterials.Count > 0).DistinctBy(k => k.Name)
+                .ToDictionary(k => k.Name, v => v);
 
         if (meshAppearances.Count <= 1 || // can't expand anything if there's just one appearance
             meshAppearances.Count == appearancesWithMaterials.Count || // they all have materials
