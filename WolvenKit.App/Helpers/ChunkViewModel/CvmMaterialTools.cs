@@ -643,11 +643,17 @@ public class CvmMaterialTools
                 foreach (var cvp in matInstance.Values)
                 {
                     var value = ArchiveXlHelper.UnDynamifyResourceReference(cvp.Value, newMatName);
-
                     newMaterialInstance.Values.Add(new CKeyValuePair(cvp.Key, value));
                 }
 
-                mesh.LocalMaterialBuffer.Materials.Add(newMaterialInstance);
+                if (hasPreload)
+                {
+                    mesh.PreloadLocalMaterialInstances.Add(new CHandle<IMaterial>() { Chunk = newMaterialInstance });
+                }
+                else
+                {
+                    mesh.LocalMaterialBuffer.Materials.Add(newMaterialInstance);
+                }
             }
         }
 
@@ -671,6 +677,7 @@ public class CvmMaterialTools
             };
         }
     }
+
 
     /// <summary>
     /// Called from <see cref="ChunkViewModel.AddMaterialAndDefinition"/>
