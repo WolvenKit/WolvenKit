@@ -565,22 +565,25 @@ public class CvmMaterialTools
         }
     }
 
-    public void UnDynamifyMaterials(ChunkViewModel? cvm)
+    public Dictionary<string, List<string>> ExpandMeshAppearances(ChunkViewModel? cvm,
+        out Dictionary<string, List<string>> templatesAndValues)
     {
+        templatesAndValues = [];
+
         if (cvm?.ResolvedData is not CMesh mesh ||
             cvm.GetPropertyChild("appearances") is not ChunkViewModel appearances)
         {
-            return;
+            return templatesAndValues;
         }
 
         appearances.CalculatePropertiesRecursive();
 
-        var templatesAndValues = ArchiveXlHelper.GetMaterialSubstitutionMap(mesh.Appearances);
+        templatesAndValues.AddRange(ArchiveXlHelper.GetMaterialSubstitutionMap(mesh.Appearances));
 
         // nothing to do here
         if (templatesAndValues.Count == 0)
         {
-            return;
+            return templatesAndValues;
         }
 
         var expandedData = ArchiveXlHelper.ExpandAppearanceTemplate(mesh.Appearances);
@@ -588,11 +591,24 @@ public class CvmMaterialTools
 
         appearances.RecalculateProperties();
 
+        return templatesAndValues;
+    }
+
+    public void UnDynamifyMaterials(ChunkViewModel? cvm)
+    {
+        if (cvm?.ResolvedData is not CMesh mesh ||
+            cvm.GetPropertyChild("appearances") is not ChunkViewModel)
+        {
+            return;
+        }
+
+        ExpandMeshAppearances(cvm, out var templatesAndValues);
+
         cvm.GetPropertyChild("materials")?.CalculateProperties();
         cvm.GetPropertyChild("localMaterialBuffer", "materials")?.CalculateProperties();
         cvm.GetPropertyChild("preloadLocalMaterialInstances")?.CalculateProperties();
 
-        var hasPreload = CvmMaterialTools.HasPreloadMaterials(cvm);
+        var hasPreload = HasPreloadMaterials(cvm);
 
         // iterate over dictionary and create new materials
         foreach (var (matName, resolvedMatNames) in templatesAndValues)

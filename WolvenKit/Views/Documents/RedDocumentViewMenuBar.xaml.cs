@@ -399,7 +399,14 @@ namespace WolvenKit.Views.Documents
             ViewModel?.DeleteUnusedMaterialsCommand?.NotifyCanExecuteChanged();
         }
 
+        private void ExpandMeshAppearances(ChunkViewModel? cvm)
+        {
+            _cvmTools.ExpandMeshAppearances(cvm, out var _);
+            ViewModel?.DeleteUnusedMaterialsCommand?.NotifyCanExecuteChanged();
+        }
+
         private void OnUnDynamifyMaterialsClick(object _, RoutedEventArgs e) => UnDynamifyMaterials(RootChunk);
+        private void OnExpandMeshAppearancesClick(object _, RoutedEventArgs e) => ExpandMeshAppearances(RootChunk);
 
         private void OnConvertHairToCCXLMaterials(object _, RoutedEventArgs e)
         {
