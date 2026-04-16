@@ -401,7 +401,7 @@ namespace WolvenKit.Views.Documents
 
         private void ExpandMeshAppearances(ChunkViewModel? cvm)
         {
-            _cvmTools.ExpandMeshAppearances(cvm, out var _);
+            _cvmTools.ExpandMeshAppearances(cvm, out var _, true);
             ViewModel?.DeleteUnusedMaterialsCommand?.NotifyCanExecuteChanged();
         }
 

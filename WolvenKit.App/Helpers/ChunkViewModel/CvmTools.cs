@@ -34,8 +34,9 @@ public class CvmTools : ICvmTools
 
     public void UnDynamifyMaterials(ChunkViewModel? cvm) => _cvmMaterialTools.UnDynamifyMaterials(cvm);
 
-    public void ExpandMeshAppearances(ChunkViewModel? cvm, out Dictionary<string, List<string>> templatesAndValues) =>
-        _cvmMaterialTools.ExpandMeshAppearances(cvm, out templatesAndValues);
+    public void ExpandMeshAppearances(ChunkViewModel? cvm, out Dictionary<string, List<string>> templatesAndValues,
+        bool preserveDynamicChunks = false) =>
+        _cvmMaterialTools.ExpandMeshAppearances(cvm, out templatesAndValues, preserveDynamicChunks);
 
     public void AddMaterialAndDefinition(ChunkViewModel cvm, string newName) =>
         _cvmMaterialTools.AddMaterialAndDefinition(cvm, newName);

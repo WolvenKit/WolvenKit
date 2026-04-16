@@ -566,7 +566,7 @@ public class CvmMaterialTools
     }
 
     public Dictionary<string, List<string>> ExpandMeshAppearances(ChunkViewModel? cvm,
-        out Dictionary<string, List<string>> templatesAndValues)
+        out Dictionary<string, List<string>> templatesAndValues, bool preserveDynamicChunks = false)
     {
         templatesAndValues = [];
 
@@ -587,7 +587,11 @@ public class CvmMaterialTools
         }
 
         var expandedData = ArchiveXlHelper.ExpandAppearanceTemplate(mesh.Appearances);
-        appearances.Data = ArchiveXlHelper.UnDynamifyChunkNames(expandedData);
+
+        if (!preserveDynamicChunks)
+        {
+            appearances.Data = ArchiveXlHelper.UnDynamifyChunkNames(expandedData);
+        }
 
         appearances.RecalculateProperties();
 
