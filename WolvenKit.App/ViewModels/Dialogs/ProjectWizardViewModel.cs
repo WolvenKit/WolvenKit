@@ -140,9 +140,9 @@ public partial class ProjectWizardViewModel : DialogViewModel, INotifyDataErrorI
         {
             AddError(nameof(ProjectName), "A project with this name already exists!");
         }
-        else if (!ProjectName.IsArchiveFileNameValid())
+        else if (!ProjectName.IsOsFileNameValid())
         {
-            AddError(nameof(ProjectName), "Project name must not contain special characters or spaces!");
+            AddError(nameof(ProjectName), "Project name must be a valid operating system file name.");
         }
     }
 
