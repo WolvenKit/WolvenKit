@@ -877,14 +877,13 @@ public class CvmMaterialTools
                 ReadMaterialValuesRecursive(parentPath, archiveManager);
                 return;
 
-            case CMaterialTemplate shader:
+            case CMaterialTemplate shader
+                when shader.Parameters.Count > 1 && shader.Parameters[^1] is { } shaderParamList:
             {
-                var shaderParamList = shader.Parameters[^1];
                 s_materialValuesByRelPath[relPath] = shaderParamList.Select(p => p.Chunk)
                     .OfType<CMaterialParameter>()
                     .Select(CKeyValuePairFactory.Create)
                     .ToList();
-
                 return;
             }
         }
