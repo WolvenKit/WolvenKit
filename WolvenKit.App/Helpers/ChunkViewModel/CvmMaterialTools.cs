@@ -940,59 +940,6 @@ public class CvmMaterialTools
         return values;
     }
 
-    private void ConvertExternalMaterials(CMesh mesh)
-    {
-        if (mesh.MaterialEntries.Count == 0)
-        {
-            _loggerService.Error("No materials defined in current mesh");
-            return;
-        }
-
-        var idx = FindHighestMaterialIndex(mesh.MaterialEntries, true);
-        // have to append those
-        var highestLocalIdx = Math.Max(idx, 0);
-
-        var isPreload = HasPreloadMaterials(mesh);
-        var localMaterials = GetLocalMaterials(mesh);
-        var externalMaterials = GetExternalMaterials(mesh);
-
-        var materialEntries = mesh.MaterialEntries.ToList();
-        for (var i = 0; i < materialEntries.Count; i++)
-        {
-            var matDef = materialEntries[i];
-            if (matDef.IsLocalInstance)
-            {
-                continue;
-            }
-
-            highestLocalIdx += 1;
-            matDef.Index = (CUInt16)highestLocalIdx;
-            matDef.IsLocalInstance = true;
-            if (i >= externalMaterials.Count)
-            {
-                continue;
-            }
-
-            var mat = externalMaterials[i];
-            localMaterials.Add(new CMaterialInstance()
-            {
-                BaseMaterial = new CResourceReference<IMaterial>(mat.DepotPath)
-            });
-        }
-
-        // now sort them by index
-        materialEntries.Sort((a, b) => b.Index - a.Index);
-
-        mesh.MaterialEntries.Clear();
-        foreach (var entry in materialEntries)
-        {
-            mesh.MaterialEntries.Add(entry);
-        }
-
-        SetLocalMaterials(mesh, localMaterials, isPreload);
-        SetExternalMaterials(mesh, [], isPreload);
-    }
-
     public void FlattenMiChain(ChunkViewModel[] cvmSelection, IAppArchiveManager archiveManager, Cp77Project? project)
     {
         s_materialValuesByRelPath.Clear();
