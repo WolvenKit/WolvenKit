@@ -793,23 +793,18 @@ public class CvmMaterialTools
 
     private static int FindHighestMaterialIndex(CArray<CMeshMaterialEntry> matDefArray, bool isLocalInstance)
     {
-        if (matDefArray.Count == 0)
-        {
-            return -1;
-        }
-
-        List<int> indices = [];
+        var maxIndex = -1;
         // ReSharper disable once ForCanBeConvertedToForeach - can't LINQ here
         // ReSharper disable once LoopCanBeConvertedToQuery - will throw NoElementsException
         for (var i = 0; i < matDefArray.Count; i++)
         {
-            if (matDefArray[i].IsLocalInstance == isLocalInstance)
+            if (matDefArray[i].IsLocalInstance == isLocalInstance && matDefArray[i].Index > maxIndex)
             {
-                indices.Add(matDefArray[i].Index);
+                maxIndex = matDefArray[i].Index;
             }
         }
 
-        return indices.Count == 0 ? -1 : indices.Max();
+        return maxIndex;
     }
 
     public void AddTagsToMeshAppearances(List<ChunkViewModel> chunks, List<string> tagList)
