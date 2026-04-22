@@ -1097,7 +1097,7 @@ public class CvmMaterialTools
             inst.BaseMaterial = new CResourceReference<IMaterial>(shaderPath);
             inst.Values.Clear();
 
-            // can't LINQ here because CArray doesn't like it
+            // can't LINQ here because CArray doesn't support it
             foreach (var cKeyValuePair in consolidatedValues)
             {
                 inst.Values.Add(cKeyValuePair);
