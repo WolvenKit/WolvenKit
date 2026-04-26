@@ -212,7 +212,7 @@ public class CvmMaterialTools
         if (numTemplateProperties > 0)
         {
             SetLocalMaterials(mesh, keepLocal, isPreload);
-            RecalculateMaterialProperties(rootChunk);
+            RecalculateMaterialProperties(rootChunk, true);
             rootChunk.Tab?.Parent.SetIsDirty(true);
 
             _loggerService.Success($"Deleted {numTemplateProperties} properties from outdated templates.");
@@ -278,7 +278,7 @@ public class CvmMaterialTools
         SetLocalMaterials(mesh, keepLocal, isPreload);
         SetExternalMaterials(mesh, keepExternal, isPreload);
 
-        RecalculateMaterialProperties(rootChunk);
+        RecalculateMaterialProperties(rootChunk, true);
         rootChunk.Tab?.Parent.SetIsDirty(true);
 
         return;
