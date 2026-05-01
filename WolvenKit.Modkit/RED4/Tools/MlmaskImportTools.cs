@@ -21,6 +21,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
         private const uint s_headerLength = 148;
         private MlMaskContainer _mlmask;
         private readonly ILoggerService _logger;
+        private string _layerResolutionsStr = "";
 
         public MLMASK(MlMaskContainer mlMask, ILoggerService logger)
         {
@@ -33,13 +34,12 @@ namespace WolvenKit.Modkit.RED4.MLMask
             var lines = File.ReadAllLines(txtImageList.FullName);
             var baseDir = txtImageList.Directory.NotNull();
 
-            // === Parse header ===
             uint targetMaskWidth = 0;
             uint targetMaskHeight = 0;
             uint targetAtlasWidth = 0;
             uint targetAtlasHeight = 0;
             uint targetTileSize = 16;
-            bool preserveNative = true;
+            _layerResolutionsStr = "";
 
             var filePaths = new List<string>();
 
@@ -55,33 +55,47 @@ namespace WolvenKit.Modkit.RED4.MLMask
                     else if (trimmed.Contains("MaskWidth=")) targetMaskWidth = ParseHeaderValue(trimmed);
                     else if (trimmed.Contains("MaskHeight=")) targetMaskHeight = ParseHeaderValue(trimmed);
                     else if (trimmed.Contains("MaskTileSize=")) targetTileSize = ParseHeaderValue(trimmed);
-                    else if (trimmed.Contains("PreserveNativeResolutions="))
-                        preserveNative = bool.Parse(trimmed.Split('=')[1].Trim());
+                    else if (trimmed.Contains("LayerResolutions="))
+                        _layerResolutionsStr = trimmed.Split('=')[1].Trim();
                     continue;
                 }
+                
+                if (trimmed.Contains("=")) continue;
+                
                 filePaths.Add(trimmed);
             }
 
             var files = filePaths.Select(x => Path.Combine(baseDir.FullName, x)).ToList();
 
-            #region Init and Verify
-
             _mlmask = new MlMaskContainer();
             var textures = new List<RawTexContainer>();
 
-            var firstLayerName = Path.GetFileNameWithoutExtension(files[0]);
-            if (!firstLayerName.EndsWith("_0"))
+            string[]? layerResolutionsArray = null;
+            if (!string.IsNullOrEmpty(_layerResolutionsStr))
             {
-                var white = new RawTexContainer { Pixels = new byte[16], Width = 4, Height = 4 };
-                Array.Fill(white.Pixels, (byte)255);
-                textures.Add(white);
+                layerResolutionsArray = _layerResolutionsStr.Split(',');
+                _logger.Info($"Using per-layer resolutions from .masklist: {_layerResolutionsStr}");
             }
 
-            uint finalWidth = targetMaskWidth;
-            uint finalHeight = targetMaskHeight;
+            var firstLayerName = Path.GetFileNameWithoutExtension(files[0]);
+            bool needsLayer0 = !firstLayerName.EndsWith("_0") && !firstLayerName.Equals("0");
 
-            foreach (var f in files)
+            if (needsLayer0)
             {
+                uint layer0W = layerResolutionsArray != null && layerResolutionsArray.Length > 0 
+                    ? uint.Parse(layerResolutionsArray[0].Split('x')[0]) : 1024;
+                uint layer0H = layerResolutionsArray != null && layerResolutionsArray.Length > 0 
+                    ? uint.Parse(layerResolutionsArray[0].Split('x')[1]) : 1024;
+                
+                var whitePixels = new byte[layer0W * layer0H];
+                Array.Fill(whitePixels, (byte)255);
+                textures.Add(new RawTexContainer { Width = layer0W, Height = layer0H, Pixels = whitePixels });
+                _logger.Info($"Added white layer 0 at {layer0W}x{layer0H}");
+            }
+
+            for (int fileIdx = 0; fileIdx < files.Count; fileIdx++)
+            {
+                var f = files[fileIdx];
                 if (!File.Exists(f))
                     throw new FileNotFoundException($"File not found: {f}");
 
@@ -100,38 +114,71 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 uint imgW = (uint)image.Metadata.Width;
                 uint imgH = (uint)image.Metadata.Height;
 
-                // Auto-upscale smaller layers
-                if (finalWidth > 0 && finalHeight > 0 && (imgW != finalWidth || imgH != finalHeight))
+                uint layerTargetW = targetMaskWidth;
+                uint layerTargetH = targetMaskHeight;
+
+                if (layerResolutionsArray != null && fileIdx < layerResolutionsArray.Length)
                 {
-                    if (imgW > finalWidth || imgH > finalHeight)
-                        throw new WolvenKitException(0x2003, $"Layer {f} is larger than target size");
-
-                    var upscaled = UpscaleNearest(image.SaveToDDSMemory(), imgW, imgH, finalWidth, finalHeight);
-                    image = RedImage.Create(new DDSUtils.DDSInfo
+                    var parts = layerResolutionsArray[fileIdx].Split('x');
+                    if (parts.Length == 2)
                     {
-                        Width = finalWidth, Height = finalHeight,
-                        RawFormat = Enums.ETextureRawFormat.TRF_Grayscale
-                    }, upscaled);
-
-                    _logger.Info($"Upscaled {Path.GetFileName(f)}: {imgW}x{imgH} → {finalWidth}x{finalHeight}");
+                        layerTargetW = uint.Parse(parts[0]);
+                        layerTargetH = uint.Parse(parts[1]);
+                    }
                 }
-
-                if (finalWidth == 0) { finalWidth = imgW; finalHeight = imgH; }
 
                 using var ms = new MemoryStream(image.SaveToDDSMemory());
                 using var br = new BinaryReader(ms);
                 ms.Seek(s_headerLength, SeekOrigin.Begin);
-                var bytes = br.ReadBytes((int)(finalWidth * finalHeight));
+                var pixels = br.ReadBytes((int)(imgW * imgH));
 
-                textures.Add(new RawTexContainer { Width = finalWidth, Height = finalHeight, Pixels = bytes });
+                bool isBlank = IsBlankLayer(pixels);
+                byte blankValue = pixels.Length > 0 ? pixels[0] : (byte)0;
+
+                if (isBlank)
+                {
+                    var blankPixels = new byte[layerTargetW * layerTargetH];
+                    Array.Fill(blankPixels, blankValue);
+                    textures.Add(new RawTexContainer { Width = layerTargetW, Height = layerTargetH, Pixels = blankPixels });
+                    _logger.Info($"Created blank layer {Path.GetFileName(f)} at {layerTargetW}x{layerTargetH} (value: {blankValue})");
+                    continue;
+                }
+
+                if (layerTargetW > 0 && layerTargetH > 0 && (imgW != layerTargetW || imgH != layerTargetH))
+                {
+                    if (imgW > layerTargetW || imgH > layerTargetH)
+                    {
+                        throw new WolvenKitException(0x2003, 
+                            $"Layer {f} ({imgW}x{imgH}) is larger than target size {layerTargetW}x{layerTargetH}");
+                    }
+
+                    var upscaled = UpscaleNearest(pixels, imgW, imgH, layerTargetW, layerTargetH);
+                    textures.Add(new RawTexContainer { Width = layerTargetW, Height = layerTargetH, Pixels = upscaled });
+                    _logger.Info($"Upscaled {Path.GetFileName(f)}: {imgW}x{imgH} → {layerTargetW}x{layerTargetH}");
+                }
+                else
+                {
+                    textures.Add(new RawTexContainer { Width = layerTargetW, Height = layerTargetH, Pixels = pixels });
+                }
             }
 
             _mlmask.Layers = textures.ToArray();
 
-            #endregion
-
             Create();
             Write(outFile);
+
+            _logger.Info("Import complete. Keep your original .masklist file for round-trip export.");
+        }
+
+        private static bool IsBlankLayer(byte[] pixels)
+        {
+            if (pixels.Length == 0) return true;
+            var first = pixels[0];
+            for (int i = 1; i < pixels.Length; i++)
+            {
+                if (pixels[i] != first) return false;
+            }
+            return true;
         }
 
         private static uint ParseHeaderValue(string line)
@@ -156,7 +203,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
             return dst;
         }
 
-        #region Existing Methods (Do Not Change)
+        #region Existing Methods
 
         private void Write(FileInfo f)
         {
@@ -171,7 +218,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
                     Version = 3,
                     AtlasWidth = _mlmask.AtlasWidth,
                     AtlasHeight = _mlmask.AtlasHeight,
-                    NumLayers = (uint)_mlmask.Layers.Length,
+                    NumLayers = (uint)_mlmask.Layers!.Length,
                     MaskWidth = _mlmask.WidthHigh,
                     MaskHeight = _mlmask.HeightHigh,
                     MaskWidthLow = _mlmask.WidthLow,
@@ -179,13 +226,13 @@ namespace WolvenKit.Modkit.RED4.MLMask
                     MaskTileSize = _mlmask.TileSize,
                     Flags = 2
                 },
-                AtlasData = new SerializationDeferredDataBuffer(_mlmask.AtlasBuffer),
-                TilesData = new SerializationDeferredDataBuffer(_mlmask.TilesBuffer)
+                AtlasData = new SerializationDeferredDataBuffer(_mlmask.AtlasBuffer!),
+                TilesData = new SerializationDeferredDataBuffer(_mlmask.TilesBuffer!)
             };
 
             mask.RenderResourceBlob.RenderResourceBlobPC = blob;
 
-            var dir = f.Directory.NotNull();
+            var dir = f.Directory ?? throw new InvalidOperationException("File directory is null");
             if (!Directory.Exists(dir.FullName)) Directory.CreateDirectory(dir.FullName);
 
             using var fs = new FileStream(f.FullName, FileMode.Create, FileAccess.Write);
@@ -216,7 +263,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
                         var position = tileZ[tileIdx].Layers[i].AtlasInPosition;
                         var atlasX = position & widthInTilesGrayUp;
                         var atlasY = (uint)((int)position >> (int)widthInTilesShift0);
-                        var widthShift = _mlmask.Layers[layerIdx].WidthShift;
+                        var widthShift = _mlmask.Layers![layerIdx].WidthShift;
                         var heightShift = _mlmask.Layers[layerIdx].HeightShift;
 
                         uint puts = 0;
@@ -286,7 +333,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
             var xx = (int)(tx * _mlmask.TileSize) + x;
             var yy = (int)(ty * _mlmask.TileSize) + y;
-            xx = Math.Clamp(xx, 0, (int)_mlmask.Layers[layerIdx].Width - 1);
+            xx = Math.Clamp(xx, 0, (int)_mlmask.Layers![layerIdx].Width - 1);
             yy = Math.Clamp(yy, 0, (int)_mlmask.Layers[layerIdx].Height - 1);
             return _mlmask.Layers[layerIdx].Pixels[xx + (yy * (int)_mlmask.Layers[layerIdx].Width)];
         }
@@ -297,15 +344,44 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
             _mlmask.WidthHigh = 0;
             _mlmask.HeightHigh = 0;
-            _mlmask.WidthLow = uint.MaxValue;
-            _mlmask.HeightLow = uint.MaxValue;
 
             foreach (var lay in _mlmask.Layers)
             {
-                _mlmask.WidthLow = Math.Min(_mlmask.WidthLow, lay.Width);
-                _mlmask.HeightLow = Math.Min(_mlmask.HeightLow, lay.Height);
                 _mlmask.WidthHigh = Math.Max(_mlmask.WidthHigh, lay.Width);
                 _mlmask.HeightHigh = Math.Max(_mlmask.HeightHigh, lay.Height);
+            }
+
+            if (!string.IsNullOrEmpty(_layerResolutionsStr))
+            {
+                var resolutions = _layerResolutionsStr.Split(',');
+                uint minW = uint.MaxValue;
+                uint minH = uint.MaxValue;
+
+                foreach (var res in resolutions)
+                {
+                    var parts = res.Split('x');
+                    if (parts.Length == 2)
+                    {
+                        uint w = uint.Parse(parts[0]);
+                        uint h = uint.Parse(parts[1]);
+                        if (w < minW) minW = w;
+                        if (h < minH) minH = h;
+                    }
+                }
+
+                _mlmask.WidthLow = minW != uint.MaxValue ? minW : _mlmask.WidthHigh;
+                _mlmask.HeightLow = minH != uint.MaxValue ? minH : _mlmask.HeightHigh;
+                _logger.Info($"Preserved WidthLow={_mlmask.WidthLow}, HeightLow={_mlmask.HeightLow} from LayerResolutions");
+            }
+            else
+            {
+                _mlmask.WidthLow = uint.MaxValue;
+                _mlmask.HeightLow = uint.MaxValue;
+                foreach (var lay in _mlmask.Layers)
+                {
+                    _mlmask.WidthLow = Math.Min(_mlmask.WidthLow, lay.Width);
+                    _mlmask.HeightLow = Math.Min(_mlmask.HeightLow, lay.Height);
+                }
             }
 
             for (var i = 0; i < _mlmask.Layers.Length; i++)
@@ -559,7 +635,6 @@ namespace WolvenKit.Modkit.RED4.MLMask
                         }
                     }
 
-                    // Neighbor padding for better BC4 quality
                     if (tx > 0 && xBlock == 0) PushBlockReferenceData(ref referenceData, layer, tx - 1, ty, tileSizeInBlocks0 - 1, yBlock);
                     else if (tx < layer.WidthInTiles0 - 1 && xBlock == tileSizeInBlocks0 - 1) PushBlockReferenceData(ref referenceData, layer, tx + 1, ty, 0, yBlock);
 
@@ -596,7 +671,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
         #endregion
 
-        #region Structs & Helpers
+        #region Structs
 
         public struct RawTexContainer
         {
@@ -656,7 +731,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
         #endregion
 
-        #region FNV1A & D3DX (Keep as is)
+        #region FNV1A
 
         internal class FNV1A
         {
@@ -670,7 +745,226 @@ namespace WolvenKit.Modkit.RED4.MLMask
             }
         }
 
-        internal class D3DX { /* Keep your full D3DX class exactly as it was in the original file */ }
+        #endregion
+
+        #region D3DX
+
+        internal class D3DX
+        {
+            [StructLayout(LayoutKind.Explicit, Size = 8)]
+            public struct BC4_UNORM
+            {
+                public float R(int offset)
+                {
+                    var index = GetIndex(offset);
+                    return DecodeFromIndex(index);
+                }
+
+                public float DecodeFromIndex(uint index)
+                {
+                    if (index == 0) return Red_0 / 255.0f;
+                    if (index == 1) return Red_1 / 255.0f;
+
+                    var fred0 = Red_0 / 255.0f;
+                    var fred1 = Red_1 / 255.0f;
+
+                    if (Red_0 > Red_1)
+                    {
+                        index--;
+                        return ((fred0 * ((float)7 - index)) + (fred1 * index)) / 7.0f;
+                    }
+
+                    if (index == 6) return 0.0f;
+                    if (index == 7) return 1.0f;
+
+                    index--;
+                    return ((fred0 * ((float)5 - index)) + (fred1 * index)) / 5.0f;
+                }
+
+                public uint GetIndex(int offset) => (uint)(Data >> ((3 * offset) + 16)) & 0x07;
+
+                public void SetIndex(int uOffset, int uIndex)
+                {
+                    Data &= ~((ulong)0x07 << ((3 * uOffset) + 16));
+                    Data |= (ulong)uIndex << ((3 * uOffset) + 16);
+                }
+
+                [FieldOffset(0)] public ulong Data;
+                [FieldOffset(0)] public byte Red_0;
+                [FieldOffset(1)] public byte Red_1;
+                [FieldOffset(2)] public byte Index0;
+                [FieldOffset(3)] public byte Index1;
+                [FieldOffset(4)] public byte Index2;
+                [FieldOffset(5)] public byte Index3;
+                [FieldOffset(6)] public byte Index4;
+                [FieldOffset(7)] public byte Index5;
+            }
+
+            public static void D3DXEncodeBC4U(ref ulong resultantBlock, float[] refData, List<float> theTexelsU)
+            {
+                var pBC4 = new BC4_UNORM();
+                FindEndPointsBC4U(theTexelsU, theTexelsU.Count, ref pBC4.Red_0, ref pBC4.Red_1);
+                FindClosestUNORM(ref pBC4, refData);
+                resultantBlock = pBC4.Data;
+            }
+
+            private static void FindEndPointsBC4U(List<float> theTexelsU, int numTexels, ref byte endpointU_0, ref byte endpointU_1)
+            {
+                const float MIN_NORM = 0f;
+                const float MAX_NORM = 1f;
+
+                var fBlockMax = theTexelsU[0];
+                var fBlockMin = theTexelsU[0];
+                for (var i = 0; i < numTexels; ++i)
+                {
+                    if (theTexelsU[i] < fBlockMin) fBlockMin = theTexelsU[i];
+                    else if (theTexelsU[i] > fBlockMax) fBlockMax = theTexelsU[i];
+                }
+
+                var bUsing4BlockCodec = MIN_NORM == fBlockMin || MAX_NORM == fBlockMax;
+                float fStart = 0, fEnd = 0;
+
+                if (!bUsing4BlockCodec)
+                {
+                    OptimizeAlpha(ref fStart, ref fEnd, theTexelsU, numTexels, 8);
+                    var iStart = Convert.ToByte(fStart * 255.0f);
+                    var iEnd = Convert.ToByte(fEnd * 255.0f);
+                    endpointU_0 = iEnd;
+                    endpointU_1 = iStart;
+                }
+                else
+                {
+                    OptimizeAlpha(ref fStart, ref fEnd, theTexelsU, numTexels, 6);
+                    var iStart = Convert.ToByte(fStart * 255.0f);
+                    var iEnd = Convert.ToByte(fEnd * 255.0f);
+                    endpointU_1 = iEnd;
+                    endpointU_0 = iStart;
+                }
+            }
+
+            private static void OptimizeAlpha(ref float pX, ref float pY, List<float> pPoints, int numTexels, uint cSteps)
+            {
+                float[] pC6 = { 5.0f / 5.0f, 4.0f / 5.0f, 3.0f / 5.0f, 2.0f / 5.0f, 1.0f / 5.0f, 0.0f / 5.0f };
+                float[] pD6 = { 0.0f / 5.0f, 1.0f / 5.0f, 2.0f / 5.0f, 3.0f / 5.0f, 4.0f / 5.0f, 5.0f / 5.0f };
+                float[] pC8 = { 7.0f / 7.0f, 6.0f / 7.0f, 5.0f / 7.0f, 4.0f / 7.0f, 3.0f / 7.0f, 2.0f / 7.0f, 1.0f / 7.0f, 0.0f / 7.0f };
+                float[] pD8 = { 0.0f / 7.0f, 1.0f / 7.0f, 2.0f / 7.0f, 3.0f / 7.0f, 4.0f / 7.0f, 5.0f / 7.0f, 6.0f / 7.0f, 7.0f / 7.0f };
+
+                var pC = 6 == cSteps ? pC6 : pC8;
+                var pD = 6 == cSteps ? pD6 : pD8;
+
+                const float maxValue = 1.0f;
+                const float minValue = 0.0f;
+
+                var fX = maxValue;
+                var fY = minValue;
+
+                if (8 == cSteps)
+                {
+                    for (var iPoint = 0; iPoint < numTexels; iPoint++)
+                    {
+                        if (pPoints[iPoint] < fX) fX = pPoints[iPoint];
+                        if (pPoints[iPoint] > fY) fY = pPoints[iPoint];
+                    }
+                }
+                else
+                {
+                    for (var iPoint = 0; iPoint < numTexels; iPoint++)
+                    {
+                        if (pPoints[iPoint] < fX && pPoints[iPoint] > minValue) fX = pPoints[iPoint];
+                        if (pPoints[iPoint] > fY && pPoints[iPoint] < maxValue) fY = pPoints[iPoint];
+                    }
+                    if (fX == fY) fY = maxValue;
+                }
+
+                var fSteps = Convert.ToSingle(cSteps - 1);
+
+                for (var iIteration = 0; iIteration < 8; iIteration++)
+                {
+                    if (fY - fX < 1.0f / 256.0f) break;
+
+                    var fScale = fSteps / (fY - fX);
+                    var pSteps = new float[8];
+
+                    for (var iStep = 0; iStep < cSteps; iStep++)
+                        pSteps[iStep] = (pC[iStep] * fX) + (pD[iStep] * fY);
+
+                    if (6 == cSteps)
+                    {
+                        pSteps[6] = minValue;
+                        pSteps[7] = maxValue;
+                    }
+
+                    var dX = 0.0f;
+                    var dY = 0.0f;
+                    var d2X = 0.0f;
+                    var d2Y = 0.0f;
+
+                    for (uint iPoint = 0; iPoint < numTexels; iPoint++)
+                    {
+                        var fDot = (pPoints[(int)iPoint] - fX) * fScale;
+                        uint iStep;
+
+                        if (fDot <= 0.0f)
+                            iStep = 6 == cSteps && pPoints[(int)iPoint] <= fX * 0.5f ? (uint)6 : 0;
+                        else if (fDot >= fSteps)
+                            iStep = 6 == cSteps && pPoints[(int)iPoint] >= (fY + 1.0f) * 0.5f ? 7 : cSteps - 1;
+                        else
+                            iStep = (uint)(fDot + 0.5f);
+
+                        if (iStep < cSteps)
+                        {
+                            var fDiff = pSteps[iStep] - pPoints[(int)iPoint];
+                            dX += pC[iStep] * fDiff;
+                            d2X += pC[iStep] * pC[iStep];
+                            dY += pD[iStep] * fDiff;
+                            d2Y += pD[iStep] * pD[iStep];
+                        }
+                    }
+
+                    if (d2X > 0.0f) fX -= dX / d2X;
+                    if (d2Y > 0.0f) fY -= dY / d2Y;
+
+                    if (fX > fY) (fY, fX) = (fX, fY);
+
+                    if (dX * dX < 1.0f / 64.0f && dY * dY < 1.0f / 64.0f) break;
+                }
+
+                pX = fX < minValue ? minValue : fX > maxValue ? maxValue : fX;
+                pY = fY < minValue ? minValue : fY > maxValue ? maxValue : fY;
+            }
+
+            private static void FindClosestUNORM(ref BC4_UNORM pBC, float[] theTexelsU)
+            {
+                const uint numPixelsPerBlock = 16;
+                var rGradient = new float[8];
+                for (uint i = 0; i < 8; ++i)
+                    rGradient[i] = pBC.DecodeFromIndex(i);
+
+                for (uint i = 0; i < numPixelsPerBlock; ++i)
+                {
+                    uint uBestIndex = 0;
+                    float fBestDelta = 100000;
+                    for (uint uIndex = 0; uIndex < 8; uIndex++)
+                    {
+                        var fCurrentDelta = Math.Abs(rGradient[uIndex] - theTexelsU[i]);
+                        if (fCurrentDelta < fBestDelta)
+                        {
+                            uBestIndex = uIndex;
+                            fBestDelta = fCurrentDelta;
+                        }
+                    }
+                    pBC.SetIndex((int)i, (int)uBestIndex);
+                }
+            }
+
+            public static void D3DXDecodeBC4U(ref float[] pColor, ulong pBC)
+            {
+                const uint numPixelsPerBlock = 16;
+                var pBC4 = new BC4_UNORM { Data = pBC };
+                for (var i = 0; i < numPixelsPerBlock; ++i)
+                    pColor[i] = pBC4.R(i);
+            }
+        }
 
         #endregion
     }
