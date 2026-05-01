@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using CP77.Common.Image;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
@@ -15,23 +16,22 @@ namespace WolvenKit.Modkit.RED4
     {
         #region Methods
 
-        private static IEnumerable<RedImage> GetRedImages(rendRenderMultilayerMaskBlobPC blob, bool preserveNativeResolutions = true)
+        private static IEnumerable<RedImage> GetRedImages(rendRenderMultilayerMaskBlobPC blob)
         {
             uint atlasWidth = blob.Header.AtlasWidth;
             uint atlasHeight = blob.Header.AtlasHeight;
-
             uint maskWidth = blob.Header.MaskWidth;
             uint maskHeight = blob.Header.MaskHeight;
-
             uint maskWidthLow = blob.Header.MaskWidthLow;
             uint maskHeightLow = blob.Header.MaskHeightLow;
-
             uint maskTileSize = blob.Header.MaskTileSize;
             uint maskCount = blob.Header.NumLayers;
 
             var atlasRaw = new byte[atlasWidth * atlasHeight];
             if (!BlockCompression.DecodeBC(blob.AtlasData.Buffer.GetBytes(), ref atlasRaw, atlasWidth, atlasHeight, BlockCompression.BlockCompressionType.BC4))
-                throw new Exception("Failed to decode BC4 atlas data");
+            {
+                throw new Exception();
+            }
 
             var tileBuffer = blob.TilesData.Buffer;
             var tiles = new uint[tileBuffer.MemSize / 4];
@@ -40,55 +40,34 @@ namespace WolvenKit.Modkit.RED4
             {
                 ms.Seek(0, SeekOrigin.Begin);
                 for (var i = 0; i < tiles.Length; i++)
+                {
                     tiles[i] = br.ReadUInt32();
+                }
             }
 
-            for (var layerIndex = 0; layerIndex < maskCount; layerIndex++)
+            var fullResBuffer = new byte[maskWidth * maskHeight];
+            for (var i = 0; i < maskCount; i++)
             {
-                byte[] layerPixels;
-                uint finalWidth;
-                uint finalHeight;
+                Array.Clear(fullResBuffer, 0, fullResBuffer.Length);
+                Decode(ref fullResBuffer, maskWidth, maskHeight, maskWidthLow, maskHeightLow, atlasRaw, atlasWidth, atlasHeight, tiles, maskTileSize, i);
 
-                if (preserveNativeResolutions)
+                var hasHighRes = HasLayerHighResolutionData(tiles, maskWidth, maskHeight, maskTileSize, i);
+
+                byte[] layerBuffer;
+                uint outWidth;
+                uint outHeight;
+
+                if (hasHighRes || maskWidthLow == 0 || maskHeightLow == 0 || maskWidthLow == maskWidth)
                 {
-                    bool hasHighRes = HasLayerHighResolutionData(tiles, maskWidth, maskHeight, maskTileSize, layerIndex);
-
-                    if (hasHighRes)
-                    {
-                        layerPixels = new byte[maskWidth * maskHeight];
-                        DecodeWithCorruptionPrevention(ref layerPixels, maskWidth, maskHeight,
-                            maskWidthLow, maskHeightLow, atlasRaw, atlasWidth, atlasHeight,
-                            tiles, maskTileSize, layerIndex);
-                        finalWidth = maskWidth;
-                        finalHeight = maskHeight;
-                    }
-                    else if (maskWidthLow > 0 && maskHeightLow > 0 && maskWidthLow != maskWidth)
-                    {
-                        layerPixels = new byte[maskWidthLow * maskHeightLow];
-                        DecodeWithCorruptionPrevention(ref layerPixels, maskWidthLow, maskHeightLow,
-                            maskWidthLow, maskHeightLow, atlasRaw, atlasWidth, atlasHeight,
-                            tiles, maskTileSize, layerIndex);
-                        finalWidth = maskWidthLow;
-                        finalHeight = maskHeightLow;
-                    }
-                    else
-                    {
-                        layerPixels = new byte[maskWidth * maskHeight];
-                        DecodeWithCorruptionPrevention(ref layerPixels, maskWidth, maskHeight,
-                            maskWidthLow, maskHeightLow, atlasRaw, atlasWidth, atlasHeight,
-                            tiles, maskTileSize, layerIndex);
-                        finalWidth = maskWidth;
-                        finalHeight = maskHeight;
-                    }
+                    layerBuffer = (byte[])fullResBuffer.Clone();
+                    outWidth = maskWidth;
+                    outHeight = maskHeight;
                 }
                 else
                 {
-                    layerPixels = new byte[maskWidth * maskHeight];
-                    DecodeWithCorruptionPrevention(ref layerPixels, maskWidth, maskHeight,
-                        maskWidthLow, maskHeightLow, atlasRaw, atlasWidth, atlasHeight,
-                        tiles, maskTileSize, layerIndex);
-                    finalWidth = maskWidth;
-                    finalHeight = maskHeight;
+                    outWidth = maskWidthLow;
+                    outHeight = maskHeightLow;
+                    layerBuffer = DownscaleNearest(fullResBuffer, maskWidth, maskHeight, outWidth, outHeight);
                 }
 
                 var info = new DDSUtils.DDSInfo
@@ -96,15 +75,15 @@ namespace WolvenKit.Modkit.RED4
                     Compression = Enums.ETextureCompression.TCM_None,
                     RawFormat = Enums.ETextureRawFormat.TRF_Grayscale,
                     IsGamma = false,
-                    Width = finalWidth,
-                    Height = finalHeight,
+                    Width = outWidth,
+                    Height = outHeight,
                     Depth = 1,
                     MipCount = 1,
                     SliceCount = 1,
                     TextureType = Enums.GpuWrapApieTextureType.TEXTYPE_2D
                 };
 
-                yield return RedImage.Create(info, layerPixels);
+                yield return RedImage.Create(info, layerBuffer);
             }
         }
 
@@ -116,43 +95,32 @@ namespace WolvenKit.Modkit.RED4
 
             for (uint tileIdx = 0; tileIdx < highResTileCount; tileIdx++)
             {
-                int bitIndex = (int)((tileIdx * 2) + 1);
-                if (bitIndex >= tiles.Length) continue;
-                if ((tiles[bitIndex] & (1u << layerIndex)) != 0) return true;
+                if ((tileIdx * 2) + 1 >= tiles.Length) continue;
+                var paramBits = tiles[(tileIdx * 2) + 1];
+                if ((paramBits & (1 << layerIndex)) != 0) return true;
             }
             return false;
         }
 
-        private static void DecodeWithCorruptionPrevention(ref byte[] maskData, uint maskWidth, uint maskHeight,
-            uint mWidthLow, uint mHeightLow, byte[] atlasData, uint atlasWidth, uint atlasHeight,
-            uint[] tileData, uint maskTileSize, int maskIndex)
+        private static void Decode(ref byte[] maskData, uint maskWidth, uint maskHeight, uint mWidthLow, uint mHeightLow, byte[] atlasData, uint atlasWidth, uint atlasHeight, uint[] tileData, uint maskTileSize, int maskIndex)
         {
             var widthInTiles0 = DivCeil(maskWidth, maskTileSize);
             var heightInTiles0 = DivCeil(maskHeight, maskTileSize);
             var smallOffset = widthInTiles0 * heightInTiles0;
 
             var smallScale = (mWidthLow == 0 || maskWidth < mWidthLow) ? 1u : maskWidth / mWidthLow;
-            bool hasHighResData = HasLayerHighResolutionData(tileData, maskWidth, maskHeight, maskTileSize, maskIndex);
 
             for (uint x = 0; x < maskWidth; x++)
             {
                 for (uint y = 0; y < maskHeight; y++)
                 {
-                    DecodeSingle(ref maskData, maskWidth, maskHeight, atlasData, atlasWidth, atlasHeight,
-                        x, y, tileData, maskTileSize, maskIndex, smallOffset, smallScale);
-
-                    if (hasHighResData)
-                    {
-                        DecodeSingle(ref maskData, maskWidth, maskHeight, atlasData, atlasWidth, atlasHeight,
-                            x, y, tileData, maskTileSize, maskIndex, 0, 1);
-                    }
+                    DecodeSingle(ref maskData, maskWidth, maskHeight, atlasData, atlasWidth, atlasHeight, x, y, tileData, maskTileSize, maskIndex, smallOffset, smallScale);
+                    DecodeSingle(ref maskData, maskWidth, maskHeight, atlasData, atlasWidth, atlasHeight, x, y, tileData, maskTileSize, maskIndex, 0, 1);
                 }
             }
         }
 
-        private static void DecodeSingle(ref byte[] maskData, uint maskWidth, uint maskHeight, byte[] atlasData,
-            uint atlasWidth, uint atlasHeight, uint x, uint y, uint[] tilesData, uint maskTileSize,
-            int maskIndex, uint tilesOffset, uint smallScale)
+        private static void DecodeSingle(ref byte[] maskData, uint maskWidth, uint maskHeight, byte[] atlasData, uint atlasWidth, uint atlasHeight, uint x, uint y, uint[] tilesData, uint maskTileSize, int maskIndex, uint tilesOffset, uint smallScale)
         {
             var widthInTiles = DivCeil(maskWidth / smallScale, maskTileSize);
             var xTile = x / maskTileSize / smallScale;
@@ -164,9 +132,9 @@ namespace WolvenKit.Modkit.RED4
             var paramOffset = tilesData[tileIndex * 2];
             var paramBits = tilesData[(tileIndex * 2) + 1];
 
-            if ((paramBits & (1u << maskIndex)) == 0) return;
+            if ((uint)(paramBits & (1 << maskIndex)) == 0U) return;
 
-            var extraAdd = CountBits((uint)(paramBits & ((1u << maskIndex) - 1)));
+            var extraAdd = CountBits((uint)(paramBits & ((1 << maskIndex) - 1)));
 
             uint tileDecl = 0;
             if (paramOffset + extraAdd < tilesData.Length)
@@ -182,7 +150,7 @@ namespace WolvenKit.Modkit.RED4
             var ux = ((x >> (int)sx) % maskTileSize) + 1 + (dx * atlasTileSize);
             var uy = ((y >> (int)sy) % maskTileSize) + 1 + (dy * atlasTileSize);
 
-            byte p = atlasData[ux + (uy * atlasWidth)]; // Nearest neighbor
+            var p = atlasData[ux + (uy * atlasWidth)];
             maskData[x + (y * maskWidth)] = p;
         }
 
@@ -190,13 +158,36 @@ namespace WolvenKit.Modkit.RED4
 
         private static uint CountBits(uint v)
         {
+            var t = v;
             uint count = 0;
             for (uint i = 0; i < 32; i++)
             {
-                if ((v & 1) == 1) count++;
-                v >>= 1;
+                if ((t & 1) == 1) count++;
+                t >>= 1;
             }
             return count;
+        }
+
+        private static byte[] DownscaleNearest(byte[] src, uint srcW, uint srcH, uint dstW, uint dstH)
+        {
+            var dst = new byte[dstW * dstH];
+            var factorX = (double)srcW / dstW;
+            var factorY = (double)srcH / dstH;
+
+            for (uint y = 0; y < dstH; y++)
+            {
+                for (uint x = 0; x < dstW; x++)
+                {
+                    uint srcX = (uint)(x * factorX);
+                    uint srcY = (uint)(y * factorY);
+
+                    if (srcX >= srcW) srcX = srcW - 1;
+                    if (srcY >= srcH) srcY = srcH - 1;
+
+                    dst[x + y * dstW] = src[srcX + srcY * srcW];
+                }
+            }
+            return dst;
         }
 
         public bool UncookMlmask(Multilayer_Mask mlmask, FileInfo outfile, MlmaskExportArgs args)
@@ -208,8 +199,7 @@ namespace WolvenKit.Modkit.RED4
             if (args.AsList)
             {
                 subDir = new DirectoryInfo(Path.ChangeExtension(outfile.FullName, null) + "_layers");
-                if (!subDir.Exists)
-                    Directory.CreateDirectory(subDir.FullName);
+                if (!subDir.Exists) Directory.CreateDirectory(subDir.FullName);
             }
 
             if ((args.AsList && subDir is null) || (!args.AsList && outfile.Directory is null))
@@ -220,28 +210,32 @@ namespace WolvenKit.Modkit.RED4
 
             var cnt = 0;
             var masks = new List<string>();
+            var layerResolutions = new List<string>();
 
-            foreach (var img in GetRedImages(blob, args.PreserveNativeResolutions))
+            foreach (var img in GetRedImages(blob))
             {
                 var mFilename = Path.GetFileNameWithoutExtension(outfile.FullName) + $"_{cnt++}";
-                var newPath = Path.Combine(args.AsList ? subDir!.FullName : outfile.Directory!.FullName,
-                                           $"{mFilename}.{args.UncookExtension}");
+                var newPath = Path.Combine(args.AsList ? subDir!.FullName : outfile.Directory!.FullName, $"{mFilename}.{args.UncookExtension}");
 
                 var buffer = args.UncookExtension switch
                 {
-                    EUncookExtension.dds => img.SaveToDDSMemory(),
-                    EUncookExtension.tga => img.SaveToTGAMemory(),
-                    EUncookExtension.bmp => img.SaveToBMPMemory(),
-                    EUncookExtension.jpg => img.SaveToJPEGMemory(),
-                    EUncookExtension.png => img.SaveToPNGMemory(),
-                    EUncookExtension.tiff => img.SaveToTIFFMemory(),
-                    _ => throw new ArgumentOutOfRangeException()
+                    EUncookExtension.dds   => img.SaveToDDSMemory(),
+                    EUncookExtension.tga   => img.SaveToTGAMemory(),
+                    EUncookExtension.bmp   => img.SaveToBMPMemory(),
+                    EUncookExtension.jpg   => img.SaveToJPEGMemory(),
+                    EUncookExtension.png   => img.SaveToPNGMemory(),
+                    EUncookExtension.tiff  => img.SaveToTIFFMemory(),
+                    _ => throw new ArgumentOutOfRangeException(nameof(args.UncookExtension), 
+                        $"Unsupported uncook extension: {args.UncookExtension}")
                 };
-                img.Dispose();
 
                 File.WriteAllBytes(newPath, buffer);
+
                 if (args.AsList)
                     masks.Add($"{subDir!.Name}/{mFilename}.{args.UncookExtension}");
+
+                layerResolutions.Add($"{img.Metadata.Width}x{img.Metadata.Height}");
+                img.Dispose();
             }
 
             if (args.AsList)
@@ -251,16 +245,17 @@ namespace WolvenKit.Modkit.RED4
                 var headerLines = new List<string>
                 {
                     "# MLMask Export v2",
-                    "# Original file header values - do not modify unless you know what you are doing",
-                    $"AtlasWidth={blob.Header.AtlasWidth}",
-                    $"AtlasHeight={blob.Header.AtlasHeight}",
-                    $"MaskWidth={blob.Header.MaskWidth}",
-                    $"MaskHeight={blob.Header.MaskHeight}",
-                    $"MaskWidthLow={blob.Header.MaskWidthLow}",
-                    $"MaskHeightLow={blob.Header.MaskHeightLow}",
-                    $"MaskTileSize={blob.Header.MaskTileSize}",
-                    $"NumLayers={blob.Header.NumLayers}",
-                    $"PreserveNativeResolutions={args.PreserveNativeResolutions}",
+                    "# Original file header values",
+                    $"# AtlasWidth={blob.Header.AtlasWidth}",
+                    $"# AtlasHeight={blob.Header.AtlasHeight}",
+                    $"# MaskWidth={blob.Header.MaskWidth}",
+                    $"# MaskHeight={blob.Header.MaskHeight}",
+                    $"# MaskWidthLow={blob.Header.MaskWidthLow}",
+                    $"# MaskHeightLow={blob.Header.MaskHeightLow}",
+                    $"# MaskTileSize={blob.Header.MaskTileSize}",
+                    $"# NumLayers={blob.Header.NumLayers}",
+                    "",
+                    $"# LayerResolutions={string.Join(",", layerResolutions)}",
                     "",
                     "# Layer image files (must be in correct order)"
                 };
@@ -278,7 +273,7 @@ namespace WolvenKit.Modkit.RED4
             if (mask.RenderResourceBlob.RenderResourceBlobPC.GetValue() is not rendRenderMultilayerMaskBlobPC blob)
                 return false;
 
-            foreach (var img in GetRedImages(blob, preserveNativeResolutions: true))
+            foreach (var img in GetRedImages(blob))
             {
                 streams.Add(new MemoryStream(img.SaveToDDSMemory()));
                 img.Dispose();
