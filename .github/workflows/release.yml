@@ -1,9 +1,6 @@
-name: wkit-draft-release
+name: release
 on:
   workflow_dispatch:
-  push:
-    tags-ignore:
-      - "*-nightly*"
 
 env:
   PROJ: ./WolvenKit/WolvenKit.csproj
@@ -14,7 +11,6 @@ env:
 jobs:
   console-linux:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,9 +31,10 @@ jobs:
     runs-on: windows-latest
     needs: [console-linux]
     env:
-      VERSION_APP: ${{github.ref_name}} # this is the tag on tag push or the branch name on dispatch
       OUT_DIR: ./release
       NAME: WolvenKit
+    permissions:
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -49,24 +46,109 @@ jobs:
       ##########################################
       # VERSIONS
 
-      # the CLI is versioned by its assemblyversion
-      - name: Get console version
-        uses: naminodarie/get-net-sdk-project-versions-action@v2
-        id: get_version_cli
-        with:
-          proj-path: ${{env.PROJC}}
-
-      # get the version for the portable from the tag
-      # only run on dispatch, otherwise the version is taken from the tag
+      # get the version from the app project
       - name: Get app version
-        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
         uses: naminodarie/get-net-sdk-project-versions-action@v2
         id: get_version
         with:
           proj-path: ${{env.PROJ}}
       - name: change version
-        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+        shell: bash
         run: echo "VERSION_APP=${{steps.get_version.outputs.assembly-version}}" >> $GITHUB_ENV
+
+      ##########################################
+      # CHANGELOG
+
+      - name: Ensure changelog is staged
+        shell: pwsh
+        run: |
+          $branchExists = git ls-remote --exit-code --heads origin changelog-staging
+          if ($LASTEXITCODE -eq 0) {
+            Write-Host "Changelog branch exists"
+          } else {
+            Write-Host "Changelog branch does not exist, please run stage changelog first"
+            exit 1
+          }
+
+      - name: Checkout changelog branch
+        run: |
+          git fetch origin changelog-staging
+          git checkout changelog-staging
+
+      - name: Read MD Version Changelog
+        id: md_changelog
+        shell: bash
+        run: |
+          {
+            echo 'content<<EOF'
+            cat compiled-changelog/CHANGELOG.md
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Read BB Version Changelog
+        id: bb_changelog
+        shell: bash
+        run: |
+          {
+            echo 'content<<EOF'
+            cat compiled-changelog/CHANGELOG.txt
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Read History Changelog
+        id: history_changelog
+        shell: bash
+        run: |
+          {
+            echo 'content<<EOF'
+            cat CHANGELOG.md
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Clean up Branches
+        run: |
+          git checkout main
+          git branch -D changelog-staging
+
+      - name: Write Changelog
+        shell: pwsh
+        env:
+          CHANGELOG: ${{ steps.history_changelog.outputs.content }}
+        run: Set-Content -Path "CHANGELOG.md" -Value $env:CHANGELOG
+
+      - name: Name Unreleased
+        shell: pwsh
+        run: |
+          cd changelog
+          Rename-Item -Path "!unreleased.yaml" -NewName "${{env.VERSION_APP}}.yaml"
+
+      - name: Add Templated Unreleased
+        shell: pwsh
+        run: |
+          cd changelog
+          Copy-Item -Path "!template.yaml" -Destination "!unreleased.yaml"
+
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md
+          git add changelog\*.yaml
+          git commit -m "Update changelog for version ${{env.VERSION_APP}}" || echo "No changes to commit"
+
+      - name: Create Release Tag
+        run: git tag -a ${{env.VERSION_APP}} -m "Release ${{env.VERSION_APP}}"
+
+      - name: Push changes
+        run: |
+          git push origin --delete changelog-staging
+          git push origin main --tags
+
+      - name: Populate Release Template
+        shell: pwsh
+        env:
+          CHANGELOG: ${{ steps.md_changelog.outputs.content }}
+        run: (Get-Content RELEASE.md -Raw) -replace '{CHANGELOG}', $env:CHANGELOG | Set-Content RELEASE.md
 
       ##########################################
       # APP
@@ -84,7 +166,7 @@ jobs:
 
       ##########################################
       # UNPACKER
-      
+
       # Publish unpacker to .\publish_unpacker
       - name: publish unpacker
         run: dotnet publish ${{env.PROJU}} -o .\publish_unpacker -c Release -p:DebugType=None -p:DebugSymbols=false
@@ -110,33 +192,19 @@ jobs:
 
       # compress portables to OUT_DIR
       - run: Compress-Archive -Path .\publish\* -DestinationPath ${{ env.OUT_DIR }}/${{env.NAME}}-${{env.VERSION_APP}}.zip
-      - run: Compress-Archive -Path .\publish_cli\* -DestinationPath ${{ env.OUT_DIR }}/${{env.NAME}}.Console-${{steps.get_version_cli.outputs.assembly-version}}.zip
-      - run: Compress-Archive -Path ".\download\${{env.ARTIFACT_CLI_LIN}}\*" -DestinationPath ${{ env.OUT_DIR }}/${{env.NAME}}.ConsoleLinux-${{steps.get_version_cli.outputs.assembly-version}}.zip
+      - run: Compress-Archive -Path .\publish_cli\* -DestinationPath ${{ env.OUT_DIR }}/${{env.NAME}}.Console-${{env.VERSION_APP}}.zip
+      - run: Compress-Archive -Path ".\download\${{env.ARTIFACT_CLI_LIN}}\*" -DestinationPath ${{ env.OUT_DIR }}/${{env.NAME}}.ConsoleLinux-${{env.VERSION_APP}}.zip
       - run: Compress-Archive -Path .\publish_unpacker\* -DestinationPath ${{ env.OUT_DIR }}/${{env.NAME}}.Unpacker-${{env.VERSION_APP}}.zip
 
       ##########################################
       # RELEASE
-      - name: Release tag
-        if: ${{ startsWith(github.ref, 'refs/tags/') }}
-        uses: softprops/action-gh-release@v2
-        with:
-          draft: true
-          generate_release_notes: true
-          body_path: "RELEASE.md"
-          files: |
-            ${{ env.OUT_DIR }}/*.zip
-            ${{ env.OUT_DIR }}/*.exe
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # dispatch release uses the version and not the ref
       - name: Release dispatch
-        if: ${{ !startsWith(github.ref, 'refs/tags/') }}
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.VERSION_APP }}
-          draft: true
-          generate_release_notes: true
+          draft: false
+          generate_release_notes: false
           body_path: "RELEASE.md"
           files: |
             ${{ env.OUT_DIR }}/*.zip
@@ -144,9 +212,28 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Upload Portable to Nexus Mods
+        uses: Nexus-Mods/upload-action@v1.0.0-beta.5
+        with:
+          api_key: ${{ secrets.NEXUSMODS_API_KEY }}
+          file_group_id: 2464501
+          filename: ${{ env.OUT_DIR }}/${{env.NAME}}-${{env.VERSION_APP}}.zip
+          version: ${{env.VERSION_APP}}
+          file_category: main
+          description: ${{ steps.bb_changelog.outputs.content }}
+
+      - name: Upload Installer to Nexus Mods
+        uses: Nexus-Mods/upload-action@v1.0.0-beta.5
+        with:
+          api_key: ${{ secrets.NEXUSMODS_API_KEY }}
+          file_group_id: 2464504
+          filename: ${{ env.OUT_DIR }}/${{env.NAME}}Setup-${{env.VERSION_APP}}.exe
+          version: ${{env.VERSION_APP}}
+          file_category: optional
+          description: ${{ steps.bb_changelog.outputs.content }}
+
   publish-nugets:
     runs-on: windows-latest
-    if: ${{ startsWith(github.ref, 'refs/tags/') && !contains(github.ref_name, '-') }} # only run on tags that are non-prerelease tags
 
     steps:
       - name: checkout
@@ -161,22 +248,22 @@ jobs:
       - name: Core
         continue-on-error: true
         run: dotnet nuget push .\WolvenKit.Core\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
-      
+
       - run: dotnet pack .\WolvenKit.RED4\WolvenKit.RED4.csproj
       - name: RED4
         continue-on-error: true
         run: dotnet nuget push .\WolvenKit.RED4\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
-  
+
       - run: dotnet pack .\WolvenKit.Modkit\WolvenKit.Modkit.csproj
       - name: Modkit
         continue-on-error: true
         run: dotnet nuget push .\WolvenKit.Modkit\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
-  
+
       - run: dotnet pack .\WolvenKit.CLI\WolvenKit.CLI.csproj
       - name: CLI
         continue-on-error: true
         run: dotnet nuget push .\WolvenKit.CLI\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
-  
+
       - run: dotnet pack .\WolvenKit.Common\WolvenKit.Common.csproj
       - name: Common
         continue-on-error: true
