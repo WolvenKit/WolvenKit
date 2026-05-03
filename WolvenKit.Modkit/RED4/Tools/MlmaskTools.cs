@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using CP77.Common.Image;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
@@ -16,6 +17,7 @@ namespace WolvenKit.Modkit.RED4
     {
         #region Methods
 
+        // Decode each grayscale layer to RedImage (always outputs linear R8G8B8A8_UNORM)
         private static IEnumerable<RedImage> GetRedImages(rendRenderMultilayerMaskBlobPC blob)
         {
             uint atlasWidth = blob.Header.AtlasWidth;
@@ -30,7 +32,76 @@ namespace WolvenKit.Modkit.RED4
             var atlasRaw = new byte[atlasWidth * atlasHeight];
             if (!BlockCompression.DecodeBC(blob.AtlasData.Buffer.GetBytes(), ref atlasRaw, atlasWidth, atlasHeight, BlockCompression.BlockCompressionType.BC4))
             {
-                throw new Exception();
+                throw new WolvenKitException(0x3001, "BC4 decode failed for multilayer mask atlas.");
+            }
+
+            var tileBuffer = blob.TilesData.Buffer;
+            var tiles = new uint[tileBuffer.MemSize / 4];
+            using (var ms = new MemoryStream(tileBuffer.GetBytes()))
+            using (var br = new BinaryReader(ms))
+            {
+                ms.Seek(0, SeekOrigin.Begin);
+                for (var i = 0; i < tiles.Length; i++)
+                {
+                    tiles[i] = br.ReadUInt32();
+                }
+            }
+
+            foreach (var layer in DecodeLayerBuffers(blob))
+            {
+                var (layerBuffer, outWidth, outHeight) = layer;
+
+                var info = new DDSUtils.DDSInfo
+                {
+                    Compression = Enums.ETextureCompression.TCM_None,
+                    RawFormat = Enums.ETextureRawFormat.TRF_Grayscale,
+                    IsGamma = false,
+                    Width = outWidth,
+                    Height = outHeight,
+                    Depth = 1,
+                    MipCount = 1,
+                    SliceCount = 1,
+                    TextureType = Enums.GpuWrapApieTextureType.TEXTYPE_2D
+                };
+
+                // Create RedImage from grayscale buffer
+                var img = RedImage.Create(info, layerBuffer);
+
+                // Convert single-channel grayscale to RGBA (R8G8B8A8_UNORM) to avoid ambiguity when saving via WIC
+                try
+                {
+                    var targetLinear = Common.DDS.DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
+
+                    if (img.Metadata.Format != (DXGI_FORMAT)targetLinear)
+                    {
+                        img.Convert(targetLinear);
+                    }
+                }
+                catch
+                {
+                    // Conversion failed — yield original image to avoid losing data
+                }
+
+                yield return img;
+            }
+        }
+
+        // Decode and return raw grayscale buffers for each layer: (buffer, width, height)
+        private static IEnumerable<(byte[] buffer, uint width, uint height)> DecodeLayerBuffers(rendRenderMultilayerMaskBlobPC blob)
+        {
+            uint atlasWidth = blob.Header.AtlasWidth;
+            uint atlasHeight = blob.Header.AtlasHeight;
+            uint maskWidth = blob.Header.MaskWidth;
+            uint maskHeight = blob.Header.MaskHeight;
+            uint maskWidthLow = blob.Header.MaskWidthLow;
+            uint maskHeightLow = blob.Header.MaskHeightLow;
+            uint maskTileSize = blob.Header.MaskTileSize;
+            uint maskCount = blob.Header.NumLayers;
+
+            var atlasRaw = new byte[atlasWidth * atlasHeight];
+            if (!BlockCompression.DecodeBC(blob.AtlasData.Buffer.GetBytes(), ref atlasRaw, atlasWidth, atlasHeight, BlockCompression.BlockCompressionType.BC4))
+            {
+                throw new WolvenKitException(0x3001, "BC4 decode failed for multilayer mask atlas.");
             }
 
             var tileBuffer = blob.TilesData.Buffer;
@@ -70,20 +141,7 @@ namespace WolvenKit.Modkit.RED4
                     layerBuffer = DownscaleNearest(fullResBuffer, maskWidth, maskHeight, outWidth, outHeight);
                 }
 
-                var info = new DDSUtils.DDSInfo
-                {
-                    Compression = Enums.ETextureCompression.TCM_None,
-                    RawFormat = Enums.ETextureRawFormat.TRF_Grayscale,
-                    IsGamma = false,
-                    Width = outWidth,
-                    Height = outHeight,
-                    Depth = 1,
-                    MipCount = 1,
-                    SliceCount = 1,
-                    TextureType = Enums.GpuWrapApieTextureType.TEXTYPE_2D
-                };
-
-                yield return RedImage.Create(info, layerBuffer);
+                yield return (layerBuffer, outWidth, outHeight);
             }
         }
 
@@ -190,10 +248,70 @@ namespace WolvenKit.Modkit.RED4
             return dst;
         }
 
+        // Create a PNG where RGB is white and alpha = maskValue for each pixel (WK-style opacity mask over white)
+        private static byte[] CreateWkPreviewPng(byte[] gray, int width, int height)
+        {
+            // Build RGBA buffer: R=G=B=255 (white), A=mask
+            var imgData = new byte[width * height * 4];
+            for (int i = 0; i < width * height; i++)
+            {
+                var v = gray[i];
+                var baseIdx = i * 4;
+                imgData[baseIdx + 0] = 255; // R
+                imgData[baseIdx + 1] = 255; // G
+                imgData[baseIdx + 2] = 255; // B
+                imgData[baseIdx + 3] = v;   // A
+            }
+
+            var info = new DDSUtils.DDSInfo
+            {
+                Compression = Enums.ETextureCompression.TCM_None,
+                RawFormat = Enums.ETextureRawFormat.TRF_TrueColor,
+                IsGamma = false,
+                Width = (uint)width,
+                Height = (uint)height,
+                Depth = 1,
+                MipCount = 1,
+                SliceCount = 1,
+                TextureType = Enums.GpuWrapApieTextureType.TEXTYPE_2D
+            };
+
+            var img = RedImage.Create(info, imgData);
+            var png = img.SaveToPNGMemory();
+            img.Dispose();
+            return png;
+        }
+
         public bool UncookMlmask(Multilayer_Mask mlmask, FileInfo outfile, MlmaskExportArgs args)
         {
             if (mlmask.RenderResourceBlob.RenderResourceBlobPC.Chunk is not rendRenderMultilayerMaskBlobPC blob)
                 return false;
+
+            // Validate header values for atlas/tile layout
+            try
+            {
+                uint atlasWidth = blob.Header.AtlasWidth;
+                uint atlasHeight = blob.Header.AtlasHeight;
+                uint maskTileSize = blob.Header.MaskTileSize;
+
+                if (maskTileSize == 0)
+                {
+                    _loggerService.Error("Invalid MaskTileSize: 0");
+                    return false;
+                }
+
+                var atlasTileSize = maskTileSize + 2;
+                if (atlasWidth % atlasTileSize != 0 || atlasHeight % atlasTileSize != 0)
+                {
+                    _loggerService.Error($"Atlas dimensions {atlasWidth}x{atlasHeight} are not divisible by (MaskTileSize+2) = {atlasTileSize}.");
+                    return false;
+                }
+            }
+            catch
+            {
+                _loggerService.Error("Failed to validate multilayer mask header.");
+                return false;
+            }
 
             DirectoryInfo? subDir = null;
             if (args.AsList)
@@ -212,22 +330,65 @@ namespace WolvenKit.Modkit.RED4
             var masks = new List<string>();
             var layerResolutions = new List<string>();
 
-            foreach (var img in GetRedImages(blob))
+            // Iterate raw decoded layers so we can produce WK-style preview PNGs
+            foreach (var layer in DecodeLayerBuffers(blob))
             {
+                var (layerBuffer, outWidth, outHeight) = layer;
+
                 var mFilename = Path.GetFileNameWithoutExtension(outfile.FullName) + $"_{cnt++}";
                 var newPath = Path.Combine(args.AsList ? subDir!.FullName : outfile.Directory!.FullName, $"{mFilename}.{args.UncookExtension}");
 
-                var buffer = args.UncookExtension switch
+                if (args.UncookExtension == EUncookExtension.png)
                 {
-                    EUncookExtension.dds   => img.SaveToDDSMemory(),
-                    EUncookExtension.tga   => img.SaveToTGAMemory(),
-                    EUncookExtension.bmp   => img.SaveToBMPMemory(),
-                    EUncookExtension.jpg   => img.SaveToJPEGMemory(),
-                    EUncookExtension.png   => img.SaveToPNGMemory(),
-                    EUncookExtension.tiff  => img.SaveToTIFFMemory(),
-                    _ => throw new ArgumentOutOfRangeException(nameof(args.UncookExtension), 
-                        $"Unsupported uncook extension: {args.UncookExtension}")
+                    // Create WK-style preview PNG: rectangle filled with white, alpha = mask value
+                    var preview = CreateWkPreviewPng(layerBuffer, (int)outWidth, (int)outHeight);
+                    File.WriteAllBytes(newPath, preview);
+
+                    if (args.AsList)
+                        masks.Add($"{subDir!.Name}/{mFilename}.{args.UncookExtension}");
+
+                    layerResolutions.Add($"{outWidth}x{outHeight}");
+                    continue;
+                }
+
+                // For non-PNG formats, create RedImage and save using existing logic
+                var info = new DDSUtils.DDSInfo
+                {
+                    Compression = Enums.ETextureCompression.TCM_None,
+                    RawFormat = Enums.ETextureRawFormat.TRF_Grayscale,
+                    IsGamma = false,
+                    Width = outWidth,
+                    Height = outHeight,
+                    Depth = 1,
+                    MipCount = 1,
+                    SliceCount = 1,
+                    TextureType = Enums.GpuWrapApieTextureType.TEXTYPE_2D
                 };
+
+                var img = RedImage.Create(info, layerBuffer);
+
+                byte[] buffer;
+                switch (args.UncookExtension)
+                {
+                    case EUncookExtension.dds:
+                        buffer = img.SaveToDDSMemory();
+                        break;
+                    case EUncookExtension.tga:
+                        buffer = img.SaveToTGAMemory();
+                        break;
+                    case EUncookExtension.bmp:
+                        buffer = img.SaveToBMPMemory();
+                        break;
+                    case EUncookExtension.jpg:
+                        buffer = img.SaveToJPEGMemory();
+                        break;
+                    case EUncookExtension.tiff:
+                        buffer = img.SaveToTIFFMemory();
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(args.UncookExtension),
+                            $"Unsupported uncook extension: {args.UncookExtension}");
+                }
 
                 File.WriteAllBytes(newPath, buffer);
 
@@ -263,6 +424,8 @@ namespace WolvenKit.Modkit.RED4
                 headerLines.AddRange(masks);
                 File.WriteAllLines(maskListPath, headerLines);
             }
+
+            // MlmaskInspector analysis removed from standard export flow.
 
             return true;
         }
