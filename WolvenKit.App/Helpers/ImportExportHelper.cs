@@ -64,7 +64,7 @@ public class ImportExportHelper
         return true;
     }
 
-    public bool Finalize(ImportArgs mainArgs, GlobalImportArgs args) => 
+    public bool Finalize(ImportArgs mainArgs, GlobalImportArgs args) =>
         mainArgs is not ReImportArgs || Finalize(args.Get<ReImportArgs>());
 
     public bool Finalize(ReImportArgs args)
@@ -129,7 +129,7 @@ public class ImportExportHelper
             }
             _modTools.ExportMaterials(cr2w!, outputPath.ToFileInfo(), meshExportArgs);
         }
-        
+
         return result;
     }
 
