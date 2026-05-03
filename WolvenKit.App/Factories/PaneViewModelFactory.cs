@@ -79,8 +79,8 @@ public class PaneViewModelFactory : IPaneViewModelFactory
 
     public LogViewModel LogViewModel() => new(_loggerService, _appScriptService, _settingsManager);
     public ProjectExplorerViewModel ProjectExplorerViewModel(AppViewModel appViewModel)
-        => new(appViewModel, _projectManager, _loggerService, _progressService, _modTools,
-            _gameController, _pluginService, _settingsManager, _modifierSvc, _archiveManager, _projectResourceTools);
+        => new(appViewModel, _projectManager, _loggerService, _notificationService, _progressService, _modTools,
+            _gameController, _pluginService, _settingsManager, _modifierSvc, _archiveManager, _projectResourceTools, _importExportHelper);
     public PropertiesViewModel PropertiesViewModel()
         => _propertiesViewModel;
     public AssetBrowserViewModel AssetBrowserViewModel(AppViewModel appViewModel)
