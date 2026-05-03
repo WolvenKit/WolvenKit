@@ -98,67 +98,66 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 var f = files[fileIdx];
                 if (!File.Exists(f))
                     throw new FileNotFoundException($"File not found: {f}");
+                try
+                {
+                    using var image = RedImage.LoadFromFile(f) ?? throw new WolvenKitException(0x2001, $"Could not load image: {f}");
 
-                RedImage? image = null;
-                try { image = RedImage.LoadFromFile(f); }
+                    if (image.Metadata.Format != DXGI_FORMAT.DXGI_FORMAT_R8_UNORM)
+                        image.Convert(DXGI_FORMAT.DXGI_FORMAT_R8_UNORM);
+
+                    uint imgW = (uint)image.Metadata.Width;
+                    uint imgH = (uint)image.Metadata.Height;
+
+                    uint layerTargetW = targetMaskWidth;
+                    uint layerTargetH = targetMaskHeight;
+
+                    if (layerResolutionsArray != null && fileIdx < layerResolutionsArray.Length)
+                    {
+                        var parts = layerResolutionsArray[fileIdx].Split('x');
+                        if (parts.Length == 2)
+                        {
+                            layerTargetW = uint.Parse(parts[0]);
+                            layerTargetH = uint.Parse(parts[1]);
+                        }
+                    }
+
+                    using var ms = new MemoryStream(image.SaveToDDSMemory());
+                    using var br = new BinaryReader(ms);
+                    ms.Seek(s_headerLength, SeekOrigin.Begin);
+                    var pixels = br.ReadBytes((int)(imgW * imgH));
+
+                    bool isBlank = IsBlankLayer(pixels);
+                    byte blankValue = pixels.Length > 0 ? pixels[0] : (byte)0;
+
+                    if (isBlank)
+                    {
+                        var blankPixels = new byte[layerTargetW * layerTargetH];
+                        Array.Fill(blankPixels, blankValue);
+                        textures.Add(new RawTexContainer { Width = layerTargetW, Height = layerTargetH, Pixels = blankPixels });
+                        _logger.Info($"Created blank layer {Path.GetFileName(f)} at {layerTargetW}x{layerTargetH} (value: {blankValue})");
+                        continue;
+                    }
+
+                    if (layerTargetW > 0 && layerTargetH > 0 && (imgW != layerTargetW || imgH != layerTargetH))
+                    {
+                        if (imgW > layerTargetW || imgH > layerTargetH)
+                        {
+                            throw new WolvenKitException(0x2003,
+                                $"Layer {f} ({imgW}x{imgH}) is larger than target size {layerTargetW}x{layerTargetH}");
+                        }
+
+                        var upscaled = UpscaleNearest(pixels, imgW, imgH, layerTargetW, layerTargetH);
+                        textures.Add(new RawTexContainer { Width = layerTargetW, Height = layerTargetH, Pixels = upscaled });
+                        _logger.Info($"Upscaled {Path.GetFileName(f)}: {imgW}x{imgH} → {layerTargetW}x{layerTargetH}");
+                    }
+                    else
+                    {
+                        textures.Add(new RawTexContainer { Width = layerTargetW, Height = layerTargetH, Pixels = pixels });
+                    }
+                }
                 catch (WolvenKitException e)
                 {
                     throw new WolvenKitException(0x2001, $"{e.Message} (must be grayscale)");
-                }
-
-                if (image == null) { _logger.Error($"Could not load: {f}"); continue; }
-
-                if (image.Metadata.Format != DXGI_FORMAT.DXGI_FORMAT_R8_UNORM)
-                    image.Convert(DXGI_FORMAT.DXGI_FORMAT_R8_UNORM);
-
-                uint imgW = (uint)image.Metadata.Width;
-                uint imgH = (uint)image.Metadata.Height;
-
-                uint layerTargetW = targetMaskWidth;
-                uint layerTargetH = targetMaskHeight;
-
-                if (layerResolutionsArray != null && fileIdx < layerResolutionsArray.Length)
-                {
-                    var parts = layerResolutionsArray[fileIdx].Split('x');
-                    if (parts.Length == 2)
-                    {
-                        layerTargetW = uint.Parse(parts[0]);
-                        layerTargetH = uint.Parse(parts[1]);
-                    }
-                }
-
-                using var ms = new MemoryStream(image.SaveToDDSMemory());
-                using var br = new BinaryReader(ms);
-                ms.Seek(s_headerLength, SeekOrigin.Begin);
-                var pixels = br.ReadBytes((int)(imgW * imgH));
-
-                bool isBlank = IsBlankLayer(pixels);
-                byte blankValue = pixels.Length > 0 ? pixels[0] : (byte)0;
-
-                if (isBlank)
-                {
-                    var blankPixels = new byte[layerTargetW * layerTargetH];
-                    Array.Fill(blankPixels, blankValue);
-                    textures.Add(new RawTexContainer { Width = layerTargetW, Height = layerTargetH, Pixels = blankPixels });
-                    _logger.Info($"Created blank layer {Path.GetFileName(f)} at {layerTargetW}x{layerTargetH} (value: {blankValue})");
-                    continue;
-                }
-
-                if (layerTargetW > 0 && layerTargetH > 0 && (imgW != layerTargetW || imgH != layerTargetH))
-                {
-                    if (imgW > layerTargetW || imgH > layerTargetH)
-                    {
-                        throw new WolvenKitException(0x2003, 
-                            $"Layer {f} ({imgW}x{imgH}) is larger than target size {layerTargetW}x{layerTargetH}");
-                    }
-
-                    var upscaled = UpscaleNearest(pixels, imgW, imgH, layerTargetW, layerTargetH);
-                    textures.Add(new RawTexContainer { Width = layerTargetW, Height = layerTargetH, Pixels = upscaled });
-                    _logger.Info($"Upscaled {Path.GetFileName(f)}: {imgW}x{imgH} → {layerTargetW}x{layerTargetH}");
-                }
-                else
-                {
-                    textures.Add(new RawTexContainer { Width = layerTargetW, Height = layerTargetH, Pixels = pixels });
                 }
             }
 
