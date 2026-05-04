@@ -32,6 +32,9 @@ public enum RedGraphType
 
 public partial class RedGraph : IDisposable
 {
+    private const double FallbackLayoutNodeWidth = 220;
+    private const double FallbackLayoutNodeHeight = 70;
+
     private IRedType _data;
 
     private uint _currentSceneNodeId;
@@ -321,8 +324,9 @@ public partial class RedGraph : IDisposable
 
         foreach (var node in Nodes)
         {
-            var layoutHeight = node.Size.Height + nodeIdExtraHeight;
-            var msaglNode = new Node(CurveFactory.CreateRectangle(node.Size.Width, layoutHeight, new Microsoft.Msagl.Core.Geometry.Point()))
+            var layoutWidth = GetLayoutNodeWidth(node);
+            var layoutHeight = GetLayoutNodeHeight(node) + nodeIdExtraHeight;
+            var msaglNode = new Node(CurveFactory.CreateRectangle(layoutWidth, layoutHeight, new Microsoft.Msagl.Core.Geometry.Point()))
             {
                 UserData = node
             };
@@ -353,20 +357,31 @@ public partial class RedGraph : IDisposable
         foreach (var node in graph.Nodes)
         {
             var nvm = (NodeViewModel)node.UserData;
+            var layoutWidth = GetLayoutNodeWidth(nvm);
+            var layoutHeight = GetLayoutNodeHeight(nvm);
+
             // Offset the Y position to account for the extra height added for node ID spacing
             nvm.Location = new System.Windows.Point(
-                node.Center.X - graph.BoundingBox.Center.X - (nvm.Size.Width / 2) + xOffset,
-                node.Center.Y - graph.BoundingBox.Center.Y - (nvm.Size.Height / 2) + yOffset + (nodeIdExtraHeight / 2));
+                node.Center.X - graph.BoundingBox.Center.X - (layoutWidth / 2) + xOffset,
+                node.Center.Y - graph.BoundingBox.Center.Y - (layoutHeight / 2) + yOffset + (nodeIdExtraHeight / 2));
 
             // Calculate bounds including the node ID space
-            maxX = Math.Max(maxX, nvm.Location.X + nvm.Size.Width);
+            maxX = Math.Max(maxX, nvm.Location.X + layoutWidth);
             minX = Math.Min(minX, nvm.Location.X);
-            maxY = Math.Max(maxY, nvm.Location.Y + nvm.Size.Height + nodeIdExtraHeight);
+            maxY = Math.Max(maxY, nvm.Location.Y + layoutHeight + nodeIdExtraHeight);
             minY = Math.Min(minY, nvm.Location.Y - nodeIdExtraHeight);
         }
 
         return new System.Windows.Rect(minX, minY, maxX - minX, maxY - minY);
     }
+
+    private static double GetLayoutNodeWidth(NodeViewModel node) =>
+        IsValidLayoutDimension(node.Size.Width) ? node.Size.Width : FallbackLayoutNodeWidth;
+
+    private static double GetLayoutNodeHeight(NodeViewModel node) =>
+        IsValidLayoutDimension(node.Size.Height) ? node.Size.Height : FallbackLayoutNodeHeight;
+
+    private static bool IsValidLayoutDimension(double value) => value > 0 && double.IsFinite(value);
 
     public void GraphStateLoad()
     {
