@@ -15,6 +15,16 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
+        private const uint ATLAS_TILE_PADDING = 2;
+
+        // Bit layout of tileDecl (from multilayer mask tiles data)
+        private const uint TILE_PARAM_MASK = 0x3FF;   // 10 bits (0-9)
+        private const int  TILE_DX_SHIFT   = 0;       // bits 0-9  → X offset in atlas
+        private const int  TILE_DY_SHIFT   = 10;      // bits 10-19 → Y offset in atlas
+        private const int  TILE_SX_SHIFT   = 20;      // bits 20-23 → X scale/shift
+        private const int  TILE_SY_SHIFT   = 24;      // bits 24-27 → Y scale/shift
+        private const uint TILE_S_MASK     = 0xF;     // 4 bits
+
         #region Methods
 
         // Decode each grayscale layer to RedImage (always outputs linear R8G8B8A8_UNORM)
@@ -27,7 +37,6 @@ namespace WolvenKit.Modkit.RED4
             uint maskWidthLow = blob.Header.MaskWidthLow;
             uint maskHeightLow = blob.Header.MaskHeightLow;
             uint maskTileSize = blob.Header.MaskTileSize;
-            uint maskCount = blob.Header.NumLayers;
 
             var atlasRaw = new byte[atlasWidth * atlasHeight];
             if (!BlockCompression.DecodeBC(blob.AtlasData.Buffer.GetBytes(), ref atlasRaw, atlasWidth, atlasHeight, BlockCompression.BlockCompressionType.BC4))
@@ -160,27 +169,31 @@ namespace WolvenKit.Modkit.RED4
             return false;
         }
 
-        private static void Decode(ref byte[] maskData, uint maskWidth, uint maskHeight, uint mWidthLow, uint mHeightLow, byte[] atlasData, uint atlasWidth, uint atlasHeight, uint[] tileData, uint maskTileSize, int maskIndex)
+        private static void Decode(ref byte[] maskData, uint maskWidth, uint maskHeight, uint maskWidthLow, uint maskHeightLow, byte[] atlasData, uint atlasWidth, uint atlasHeight, uint[] tileData, uint maskTileSize, int maskIndex)
         {
             var widthInTiles0 = DivCeil(maskWidth, maskTileSize);
             var heightInTiles0 = DivCeil(maskHeight, maskTileSize);
             var smallOffset = widthInTiles0 * heightInTiles0;
+            var smallScale = (maskWidthLow == 0 || maskWidth < maskWidthLow) ? 1u : maskWidth / maskWidthLow;
 
-            var smallScale = (mWidthLow == 0 || maskWidth < mWidthLow) ? 1u : maskWidth / mWidthLow;
+            // Precompute widthInTiles for both scaled and full resolutions
+            var widthInTilesScaled = DivCeil(maskWidth / smallScale, maskTileSize);
+            var widthInTilesFull = DivCeil(maskWidth, maskTileSize);
 
-            for (uint x = 0; x < maskWidth; x++)
+            // Iterate rows first for better cache locality (row-major layout)
+            for (uint y = 0; y < maskHeight; y++)
             {
-                for (uint y = 0; y < maskHeight; y++)
+                for (uint x = 0; x < maskWidth; x++)
                 {
-                    DecodeSingle(ref maskData, maskWidth, maskHeight, atlasData, atlasWidth, atlasHeight, x, y, tileData, maskTileSize, maskIndex, smallOffset, smallScale);
-                    DecodeSingle(ref maskData, maskWidth, maskHeight, atlasData, atlasWidth, atlasHeight, x, y, tileData, maskTileSize, maskIndex, 0, 1);
+                    DecodeSingle(ref maskData, maskWidth, maskHeight, atlasData, atlasWidth, atlasHeight, x, y, tileData, maskTileSize, maskIndex, smallOffset, smallScale, widthInTilesScaled);
+                    DecodeSingle(ref maskData, maskWidth, maskHeight, atlasData, atlasWidth, atlasHeight, x, y, tileData, maskTileSize, maskIndex, 0, 1, widthInTilesFull);
                 }
             }
         }
 
-        private static void DecodeSingle(ref byte[] maskData, uint maskWidth, uint maskHeight, byte[] atlasData, uint atlasWidth, uint atlasHeight, uint x, uint y, uint[] tilesData, uint maskTileSize, int maskIndex, uint tilesOffset, uint smallScale)
+        private static void DecodeSingle(ref byte[] maskData, uint maskWidth, uint maskHeight, byte[] atlasData, uint atlasWidth, uint atlasHeight, uint x, uint y, uint[] tilesData, uint maskTileSize, int maskIndex, uint tilesOffset, uint smallScale, uint widthInTiles)
         {
-            var widthInTiles = DivCeil(maskWidth / smallScale, maskTileSize);
+            // Use precomputed widthInTiles (optimization - avoids expensive per-pixel DivCeil)
             var xTile = x / maskTileSize / smallScale;
             var yTile = y / maskTileSize / smallScale;
 
@@ -198,12 +211,13 @@ namespace WolvenKit.Modkit.RED4
             if (paramOffset + extraAdd < tilesData.Length)
                 tileDecl = tilesData[paramOffset + extraAdd];
 
-            var dx = tileDecl & 0x3ff;
-            var dy = (tileDecl >> 10) & 0x3ff;
-            var sx = (tileDecl >> 20) & 0xf;
-            var sy = (tileDecl >> 24) & 0xf;
+            // Extract fields from tileDecl using named constants
+            var dx = (tileDecl >> TILE_DX_SHIFT) & TILE_PARAM_MASK;
+            var dy = (tileDecl >> TILE_DY_SHIFT) & TILE_PARAM_MASK;
+            var sx = (tileDecl >> TILE_SX_SHIFT) & TILE_S_MASK;
+            var sy = (tileDecl >> TILE_SY_SHIFT) & TILE_S_MASK;
 
-            var atlasTileSize = maskTileSize + 2;
+            var atlasTileSize = maskTileSize + ATLAS_TILE_PADDING;
 
             var ux = ((x >> (int)sx) % maskTileSize) + 1 + (dx * atlasTileSize);
             var uy = ((y >> (int)sy) % maskTileSize) + 1 + (dy * atlasTileSize);
@@ -212,18 +226,14 @@ namespace WolvenKit.Modkit.RED4
             maskData[x + (y * maskWidth)] = p;
         }
 
-        private static uint DivCeil(uint l, uint r) => (l + r - 1) / r;
+        private static uint DivCeil(uint l, uint r)
+        {
+            return (l + r - 1) / r;
+        }
 
         private static uint CountBits(uint v)
         {
-            var t = v;
-            uint count = 0;
-            for (uint i = 0; i < 32; i++)
-            {
-                if ((t & 1) == 1) count++;
-                t >>= 1;
-            }
-            return count;
+            return (uint)System.Numerics.BitOperations.PopCount(v);
         }
 
         private static byte[] DownscaleNearest(byte[] src, uint srcW, uint srcH, uint dstW, uint dstH)
@@ -234,15 +244,16 @@ namespace WolvenKit.Modkit.RED4
 
             for (uint y = 0; y < dstH; y++)
             {
+                var rowOffset = y * dstW;
                 for (uint x = 0; x < dstW; x++)
                 {
-                    uint srcX = (uint)(x * factorX);
-                    uint srcY = (uint)(y * factorY);
+                    var srcX = (uint)(x * factorX);
+                    var srcY = (uint)(y * factorY);
 
                     if (srcX >= srcW) srcX = srcW - 1;
                     if (srcY >= srcH) srcY = srcH - 1;
 
-                    dst[x + y * dstW] = src[srcX + srcY * srcW];
+                    dst[rowOffset + x] = src[srcX + srcY * srcW];
                 }
             }
             return dst;
@@ -251,16 +262,16 @@ namespace WolvenKit.Modkit.RED4
         // Create a PNG where RGB is white and alpha = maskValue for each pixel (WK-style opacity mask over white)
         private static byte[] CreateWkPreviewPng(byte[] gray, int width, int height)
         {
-            // Build RGBA buffer: R=G=B=255 (white), A=mask
+            // Build RGBA buffer: R=G=B=mask value (grayscale), A=255 (opaque)
             var imgData = new byte[width * height * 4];
             for (int i = 0; i < width * height; i++)
             {
                 var v = gray[i];
                 var baseIdx = i * 4;
-                imgData[baseIdx + 0] = 255; // R
-                imgData[baseIdx + 1] = 255; // G
-                imgData[baseIdx + 2] = 255; // B
-                imgData[baseIdx + 3] = v;   // A
+                imgData[baseIdx + 0] = v; // R
+                imgData[baseIdx + 1] = v; // G
+                imgData[baseIdx + 2] = v; // B
+                imgData[baseIdx + 3] = 255; // A
             }
 
             var info = new DDSUtils.DDSInfo
@@ -300,7 +311,7 @@ namespace WolvenKit.Modkit.RED4
                     return false;
                 }
 
-                var atlasTileSize = maskTileSize + 2;
+                var atlasTileSize = maskTileSize + ATLAS_TILE_PADDING;
                 if (atlasWidth % atlasTileSize != 0 || atlasHeight % atlasTileSize != 0)
                 {
                     _loggerService.Error($"Atlas dimensions {atlasWidth}x{atlasHeight} are not divisible by (MaskTileSize+2) = {atlasTileSize}.");
@@ -335,8 +346,8 @@ namespace WolvenKit.Modkit.RED4
             {
                 var (layerBuffer, outWidth, outHeight) = layer;
 
-                var mFilename = Path.GetFileNameWithoutExtension(outfile.FullName) + $"_{cnt++}";
-                var newPath = Path.Combine(args.AsList ? subDir!.FullName : outfile.Directory!.FullName, $"{mFilename}.{args.UncookExtension}");
+                var layerFileName = Path.GetFileNameWithoutExtension(outfile.FullName) + $"_{cnt++}";
+                var newPath = Path.Combine(args.AsList ? subDir!.FullName : outfile.Directory!.FullName, $"{layerFileName}.{args.UncookExtension}");
 
                 if (args.UncookExtension == EUncookExtension.png)
                 {
@@ -345,7 +356,7 @@ namespace WolvenKit.Modkit.RED4
                     File.WriteAllBytes(newPath, preview);
 
                     if (args.AsList)
-                        masks.Add($"{subDir!.Name}/{mFilename}.{args.UncookExtension}");
+                        masks.Add($"{subDir!.Name}/{layerFileName}.{args.UncookExtension}");
 
                     layerResolutions.Add($"{outWidth}x{outHeight}");
                     continue;
@@ -393,7 +404,7 @@ namespace WolvenKit.Modkit.RED4
                 File.WriteAllBytes(newPath, buffer);
 
                 if (args.AsList)
-                    masks.Add($"{subDir!.Name}/{mFilename}.{args.UncookExtension}");
+                    masks.Add($"{subDir!.Name}/{layerFileName}.{args.UncookExtension}");
 
                 layerResolutions.Add($"{img.Metadata.Width}x{img.Metadata.Height}");
                 img.Dispose();
