@@ -379,6 +379,176 @@
                     </local:NodeTemplateSelector.SceneEndNode>
                 </local:NodeTemplateSelector>
 
+                <DataTemplate x:Key="LowDetailNodeContentTemplate" />
+
+                <DataTemplate x:Key="InputConnectorHeaderTemplate" DataType="{x:Type nodes:InputConnectorViewModel}">
+                    <StackPanel Orientation="Horizontal">
+                        <!-- Scene nodes: Show Title FIRST and BIG (socket name) -->
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Foreground="{DynamicResource TextFillColorPrimary}"
+                            FontSize="14"
+                            FontWeight="Normal"
+                            Text="{Binding Title}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <!-- Hide if no subtitle (quest nodes) -->
+                                        <DataTrigger
+                                            Binding="{Binding Subtitle}"
+                                            Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                        <DataTrigger
+                                            Binding="{Binding Subtitle}"
+                                            Value="">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+                        <!-- Scene nodes only: Show Subtitle SECOND and SMALL (coordinates) -->
+                        <TextBlock
+                            Margin="4,0,0,0"
+                            VerticalAlignment="Center"
+                            Foreground="#777777"
+                            FontSize="10"
+                            FontFamily="Consolas"
+                            Text="{Binding Subtitle}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <!-- Hide if no subtitle (quest nodes) -->
+                                        <DataTrigger
+                                            Binding="{Binding Subtitle}"
+                                            Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                        <DataTrigger
+                                            Binding="{Binding Subtitle}"
+                                            Value="">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+                        <!-- Quest nodes: Show Title only (socket name) -->
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Foreground="{DynamicResource TextFillColorPrimary}"
+                            FontSize="14"
+                            FontWeight="Normal"
+                            Text="{Binding Title}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <!-- Hide if subtitle exists (scene nodes) -->
+                                        <DataTrigger
+                                            Binding="{Binding Subtitle}"
+                                            Value="">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                        <DataTrigger
+                                            Binding="{Binding Subtitle}"
+                                            Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+
+                <DataTemplate x:Key="OutputConnectorHeaderTemplate" DataType="{x:Type nodes:OutputConnectorViewModel}">
+                    <StackPanel Orientation="Horizontal">
+                        <!-- Scene nodes only: Show Title as coordinate FIRST -->
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Foreground="#777777"
+                            FontSize="10"
+                            FontFamily="Consolas"
+                            Text="{Binding Title}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <!-- Hide if no subtitle (quest nodes) -->
+                                        <DataTrigger
+                                            Binding="{Binding Subtitle}"
+                                            Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                        <DataTrigger
+                                            Binding="{Binding Subtitle}"
+                                            Value="">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+                        <!-- Scene nodes: Show Subtitle SECOND (socket name) -->
+                        <TextBlock
+                            Margin="4,0,0,0"
+                            VerticalAlignment="Center"
+                            Foreground="{DynamicResource TextFillColorPrimary}"
+                            FontSize="14"
+                            FontWeight="Normal"
+                            Text="{Binding Subtitle}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <!-- Hide if no subtitle (quest nodes) -->
+                                        <DataTrigger
+                                            Binding="{Binding Subtitle}"
+                                            Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                        <DataTrigger
+                                            Binding="{Binding Subtitle}"
+                                            Value="">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+                        <!-- Quest nodes: Show Title only (socket name) -->
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Foreground="{DynamicResource TextFillColorPrimary}"
+                            FontSize="14"
+                            FontWeight="Normal"
+                            Text="{Binding Title}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <!-- Hide if subtitle exists (scene nodes) -->
+                                        <DataTrigger
+                                            Binding="{Binding Subtitle}"
+                                            Value="">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                        <DataTrigger
+                                            Binding="{Binding Subtitle}"
+                                            Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+
                 <DataTemplate DataType="{x:Type nodes:NodeViewModel}">
                     <nodify:Node
                         Content="{Binding}"
@@ -386,9 +556,9 @@
                         ContextMenuOpening="Node_ContextMenuOpening"
                         Header="{Binding}"
                         HeaderTemplate="{StaticResource DetailedHeaderTemplate}"
-                        Input="{Binding Input}"
+                        Input="{Binding DisplayInput}"
                         MouseDoubleClick="Node_OnMouseDoubleClick"
-                        Output="{Binding Output}">
+                        Output="{Binding DisplayOutput}">
                         <nodify:Node.ContextMenu>
                             <ContextMenu />
                         </nodify:Node.ContextMenu>
@@ -412,6 +582,13 @@
                                         <Setter Property="BorderBrush" Value="{StaticResource WolvenKitYellow}" />
                                         <Setter Property="BorderThickness" Value="2" />
                                     </DataTrigger>
+                                    <DataTrigger
+                                        Binding="{Binding IsLowDetail}"
+                                        Value="True">
+                                        <Setter Property="HeaderTemplate" Value="{StaticResource HeaderTemplate}" />
+                                        <Setter Property="ContentTemplateSelector" Value="{x:Null}" />
+                                        <Setter Property="ContentTemplate" Value="{StaticResource LowDetailNodeContentTemplate}" />
+                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </nodify:Node.Style>
@@ -421,94 +598,13 @@
                                 <nodify:NodeInput
                                     Margin="0,2,0,2"
                                     Background="Transparent"
+                                    Header="{Binding}"
+                                    HeaderTemplate="{StaticResource InputConnectorHeaderTemplate}"
                                     Visibility="{Binding IsVisible,
                                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                                     Anchor="{Binding Anchor,
                                                      Mode=OneWayToSource}"
                                     IsConnected="{Binding IsConnected}">
-                                    <nodify:NodeInput.Header>
-                                        <StackPanel Orientation="Horizontal">
-                                            <!-- Scene nodes: Show Title FIRST and BIG (socket name) -->
-                                            <TextBlock
-                                                VerticalAlignment="Center"
-                                                Foreground="{DynamicResource TextFillColorPrimary}"
-                                                FontSize="14"
-                                                FontWeight="Normal"
-                                                Text="{Binding Title}">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Style.Triggers>
-                                                            <!-- Hide if no subtitle (quest nodes) -->
-                                                            <DataTrigger
-                                                                Binding="{Binding Subtitle}"
-                                                                Value="{x:Null}">
-                                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                            </DataTrigger>
-                                                            <DataTrigger
-                                                                Binding="{Binding Subtitle}"
-                                                                Value="">
-                                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </TextBlock.Style>
-                                            </TextBlock>
-
-                                            <!-- Scene nodes only: Show Subtitle SECOND and SMALL (coordinates) -->
-                                            <TextBlock
-                                                Margin="4,0,0,0"
-                                                VerticalAlignment="Center"
-                                                Foreground="#777777"
-                                                FontSize="10"
-                                                FontFamily="Consolas"
-                                                Text="{Binding Subtitle}">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Style.Triggers>
-                                                            <!-- Hide if no subtitle (quest nodes) -->
-                                                            <DataTrigger
-                                                                Binding="{Binding Subtitle}"
-                                                                Value="{x:Null}">
-                                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                            </DataTrigger>
-                                                            <DataTrigger
-                                                                Binding="{Binding Subtitle}"
-                                                                Value="">
-                                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </TextBlock.Style>
-                                            </TextBlock>
-
-                                            <!-- Quest nodes: Show Title only (socket name) -->
-                                            <TextBlock
-                                                VerticalAlignment="Center"
-                                                Foreground="{DynamicResource TextFillColorPrimary}"
-                                                FontSize="14"
-                                                FontWeight="Normal"
-                                                Text="{Binding Title}">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Style.Triggers>
-                                                            <!-- Hide if subtitle exists (scene nodes) -->
-                                                            <DataTrigger
-                                                                Binding="{Binding Subtitle}"
-                                                                Value="">
-                                                                <Setter Property="Visibility" Value="Visible" />
-                                                            </DataTrigger>
-                                                            <DataTrigger
-                                                                Binding="{Binding Subtitle}"
-                                                                Value="{x:Null}">
-                                                                <Setter Property="Visibility" Value="Visible" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                        <Setter Property="Visibility" Value="Collapsed" />
-                                                    </Style>
-                                                </TextBlock.Style>
-                                            </TextBlock>
-                                        </StackPanel>
-                                    </nodify:NodeInput.Header>
                                 </nodify:NodeInput>
                             </DataTemplate>
                         </nodify:Node.InputConnectorTemplate>
@@ -516,94 +612,13 @@
                         <nodify:Node.OutputConnectorTemplate>
                             <DataTemplate DataType="{x:Type nodes:OutputConnectorViewModel}">
                                 <nodify:NodeOutput
+                                    Header="{Binding}"
+                                    HeaderTemplate="{StaticResource OutputConnectorHeaderTemplate}"
                                     Visibility="{Binding IsVisible,
                                                          Converter={StaticResource BooleanToVisibilityConverter}}"
                                     Anchor="{Binding Anchor,
                                                      Mode=OneWayToSource}"
                                     IsConnected="{Binding IsConnected}">
-                                    <nodify:NodeOutput.Header>
-                                        <StackPanel Orientation="Horizontal">
-                                            <!-- Scene nodes only: Show Title as coordinate FIRST -->
-                                            <TextBlock
-                                                VerticalAlignment="Center"
-                                                Foreground="#777777"
-                                                FontSize="10"
-                                                FontFamily="Consolas"
-                                                Text="{Binding Title}">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Style.Triggers>
-                                                            <!-- Hide if no subtitle (quest nodes) -->
-                                                            <DataTrigger
-                                                                Binding="{Binding Subtitle}"
-                                                                Value="{x:Null}">
-                                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                            </DataTrigger>
-                                                            <DataTrigger
-                                                                Binding="{Binding Subtitle}"
-                                                                Value="">
-                                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </TextBlock.Style>
-                                            </TextBlock>
-
-                                            <!-- Scene nodes: Show Subtitle SECOND (socket name) -->
-                                            <TextBlock
-                                                Margin="4,0,0,0"
-                                                VerticalAlignment="Center"
-                                                Foreground="{DynamicResource TextFillColorPrimary}"
-                                                FontSize="14"
-                                                FontWeight="Normal"
-                                                Text="{Binding Subtitle}">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Style.Triggers>
-                                                            <!-- Hide if no subtitle (quest nodes) -->
-                                                            <DataTrigger
-                                                                Binding="{Binding Subtitle}"
-                                                                Value="{x:Null}">
-                                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                            </DataTrigger>
-                                                            <DataTrigger
-                                                                Binding="{Binding Subtitle}"
-                                                                Value="">
-                                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </TextBlock.Style>
-                                            </TextBlock>
-
-                                            <!-- Quest nodes: Show Title only (socket name) -->
-                                            <TextBlock
-                                                VerticalAlignment="Center"
-                                                Foreground="{DynamicResource TextFillColorPrimary}"
-                                                FontSize="14"
-                                                FontWeight="Normal"
-                                                Text="{Binding Title}">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Style.Triggers>
-                                                            <!-- Hide if subtitle exists (scene nodes) -->
-                                                            <DataTrigger
-                                                                Binding="{Binding Subtitle}"
-                                                                Value="">
-                                                                <Setter Property="Visibility" Value="Visible" />
-                                                            </DataTrigger>
-                                                            <DataTrigger
-                                                                Binding="{Binding Subtitle}"
-                                                                Value="{x:Null}">
-                                                                <Setter Property="Visibility" Value="Visible" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                        <Setter Property="Visibility" Value="Collapsed" />
-                                                    </Style>
-                                                </TextBlock.Style>
-                                            </TextBlock>
-                                        </StackPanel>
-                                    </nodify:NodeOutput.Header>
                                 </nodify:NodeOutput>
                             </DataTemplate>
                         </nodify:Node.OutputConnectorTemplate>
