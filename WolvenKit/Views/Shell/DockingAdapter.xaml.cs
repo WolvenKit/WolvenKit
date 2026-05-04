@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Xml;
 using ReactiveUI;
 using Splat;
@@ -24,6 +25,7 @@ using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Layout;
+using WolvenKit.Views.GraphEditor;
 using DockState = WolvenKit.App.Models.Docking.DockState;
 
 namespace WolvenKit.Views.Shell
@@ -690,6 +692,13 @@ namespace WolvenKit.Views.Shell
                     var control = (from ContentControl element in PART_DockingManager.Children
                                    where element.Content == item
                                    select element).FirstOrDefault();
+
+                    if (control is not null)
+                    {
+                        // Drop heavy graph bindings before the docking manager tears down the document visual tree
+                        DetachGraphEditorsForClose(control);
+                    }
+
                     PART_DockingManager.Children.Remove(control);
 
                     // set active document to null
@@ -745,6 +754,41 @@ namespace WolvenKit.Views.Shell
                 DockingManager.SetCanSerialize(control, element.CanSerialize);
 
                 PART_DockingManager.Children.Add(control);
+            }
+        }
+
+        private static void DetachGraphEditorsForClose(DependencyObject root)
+        {
+            foreach (var graphEditor in FindVisualChildren<GraphEditorView>(root))
+            {
+                graphEditor.PrepareForClose();
+            }
+        }
+
+        private static IEnumerable<T> FindVisualChildren<T>(DependencyObject root) where T : DependencyObject
+        {
+            var childCount = 0;
+            try
+            {
+                childCount = VisualTreeHelper.GetChildrenCount(root);
+            }
+            catch (InvalidOperationException)
+            {
+                yield break;
+            }
+
+            for (var i = 0; i < childCount; i++)
+            {
+                var child = VisualTreeHelper.GetChild(root, i);
+                if (child is T typedChild)
+                {
+                    yield return typedChild;
+                }
+
+                foreach (var descendant in FindVisualChildren<T>(child))
+                {
+                    yield return descendant;
+                }
             }
         }
 

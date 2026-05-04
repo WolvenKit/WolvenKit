@@ -440,6 +440,26 @@ public partial class GraphEditorView : UserControl, INotifyPropertyChanged
         Source.GraphStateSave();
     }
 
+    internal void PrepareForClose()
+    {
+        var graph = Source;
+
+        _hydrationRequestVersion++;
+        _hydrationPassScheduled = false;
+        _allowViewportHydration = false;
+        _suppressHydrationUpdates = true;
+
+        SelectedNode = null;
+        SelectedNodes.Clear();
+
+        if (graph?.Editor == Editor)
+        {
+            graph.Editor = null;
+        }
+
+        SetCurrentValue(SourceProperty, null);
+    }
+
     private void ArrangeNodes()
     {
         if (Source == null)
