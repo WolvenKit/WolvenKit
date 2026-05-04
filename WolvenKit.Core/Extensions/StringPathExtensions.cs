@@ -151,6 +151,60 @@ namespace WolvenKit.Interfaces.Extensions
 
         #endregion
 
+        #region deprecated
+
+        /// <remarks><see cref="ToFilePath"/> is deprecated, use <see cref="ToOsFilePath"/> or <see cref="ToArchiveFilePath"/> instead.</remarks>
+        [Obsolete("ToFilePath() is deprecated, use ToOsFilePath() or ToArchiveFilePath() instead.")]
+        public static string ToFilePath(this string target) => target.SanitizeFilePath(false);
+
+        /// <summary>
+        /// Generates redengine friendly file name
+        /// </summary>
+        /// <param name="target">Extension method, call on string</param>
+        /// <param name="replaceSpecialCharacters">Replace special characters with dashes instead of removing them?</param>
+        /// <remarks><see cref="ToFileName"/> is deprecated, use <see cref="ToOsFileName"/> or <see cref="ToArchiveFileName"/> instead.</remarks>
+        [Obsolete("ToFileName() is deprecated, use ToOsFileName() or ToArchiveFileName() instead.")]
+        public static string ToFileName(this string target, bool replaceSpecialCharacters = false) =>
+            new string(target
+                    .Replace('/', Path.DirectorySeparatorChar)
+                    .Where(c => !Path.GetInvalidFileNameChars().Contains(c)).ToArray()
+                ).Trim()
+                .Replace(" ", "_")
+                .Replace(",", "-")
+                .Replace("\"", replaceSpecialCharacters ? "-" : string.Empty)
+                .Replace("'", replaceSpecialCharacters ? "-" : string.Empty)
+                .Replace(")", replaceSpecialCharacters ? "-" : string.Empty)
+                .Replace("(", replaceSpecialCharacters ? "-" : string.Empty)
+                .ToLower();
+
+        /// <remarks><see cref="IsSaneFilePath"/> is deprecated, use <see cref="IsOsFilePathValid"/> or <see cref="IsArchiveFilePathValid"/> instead.</remarks>
+        [Obsolete("IsSaneFilePath() is deprecated, use IsOsFilePathValid() or IsArchiveFilePathValid() instead.")]
+        public static bool IsSaneFilePath(this string target) =>
+            target.All(c => !Path.GetInvalidPathChars().Contains(c));
+
+        /// <summary>
+        /// Sanitizes a file path by splitting it into segments and joining them on either a forward or backward slash
+        /// </summary>
+        /// <param name="target">String to run this on (this., it's an extension method)</param>
+        /// <param name="useForwardSlashes">Use forward slashes instead of <see cref="Path.DirectorySeparatorChar"/>?</param>
+        /// <remarks><see cref="SanitizeFilePath"/> is deprecated, use <see cref="ToOsFilePath"/> or <see cref="ToArchiveFilePath"/> instead.</remarks>
+        [Obsolete("SanitizeFilePath() is deprecated, use ToOsFilePath() or ToArchiveFilePath() instead.")]
+        public static string SanitizeFilePath(this string target, bool useForwardSlashes = false)
+        {
+            var stringPartials = PathSeparatorRegex().Split(target);
+            var directorySeparator = useForwardSlashes ? "/" : Path.DirectorySeparatorChar.ToString();
+
+            return string.Join(directorySeparator, stringPartials).ToLower();
+        }
+
+        /// <summary>
+        /// Regular expression for file path separators, forward or backward slashes
+        /// </summary>
+        [GeneratedRegex(@"[\\/]+")]
+        private static partial Regex PathSeparatorRegex();
+
+        #endregion
+
         /// <summary>
         /// Checks if a file path has two extensions, e.g. "file.mlsetup.json"
         /// </summary>
