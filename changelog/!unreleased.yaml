@@ -7,3 +7,32 @@ Template changelog entry:
       description: ""
 
 changes:
+    -   type: "fixed"
+        packages: [ "App" ]
+        pr-number: 2893
+        author: "manavortex"
+        description: "AMM prop generation now correctly reads mesh appearances"
+
+    -   type: "fixed"
+        packages: [ "App" ]
+        pr-number: 2894
+        author: "manavortex"
+        description: "Delete unused materials now uses correct index"
+
+    -   type: "added"
+        packages: [ "App" ]
+        pr-number: 2895
+        author: "notaspirit"
+        description: "Import and export flow is now also available in the right click menu"
+
+    -   type: "added"
+        packages: [ "App", "CLI", "Nuget Packages" ]
+        pr-number: 2898
+        author: "manavortex"
+        description: "Sleeves and hair substitution for ArchiveXL"
+
+    -   type: "fixed"
+        packages: [ "App" ]
+        pr-number: 2904
+        author: "misterchedda"
+        description: "Nested quest phase nodes no longer loose internal socket connections after paste/duplicate operations"
