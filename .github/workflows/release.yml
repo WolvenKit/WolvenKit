@@ -69,14 +69,6 @@ jobs:
             Write-Host "Changelog branch does not exist, please run stage changelog first"
             exit 1
           }
-
-      - name: Setup SSH
-        shell: bash
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SELF_SSH_PKEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
       
       - name: Checkout changelog branch
         run: |
