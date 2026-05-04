@@ -5,7 +5,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
-using WolvenKit.Common.Exceptions;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -46,64 +45,115 @@ namespace WolvenKit.Modkit.RED4.MLMask
             foreach (var line in lines)
             {
                 var trimmed = line.Trim();
-                if (string.IsNullOrWhiteSpace(trimmed)) continue;
+                if (string.IsNullOrWhiteSpace(trimmed))
+                {
+                    continue;
+                }
 
                 if (trimmed.StartsWith("#"))
                 {
-                    if (trimmed.Contains("AtlasWidth=")) targetAtlasWidth = ParseHeaderValue(trimmed);
-                    else if (trimmed.Contains("AtlasHeight=")) targetAtlasHeight = ParseHeaderValue(trimmed);
-                    else if (trimmed.Contains("MaskWidth=")) targetMaskWidth = ParseHeaderValue(trimmed);
-                    else if (trimmed.Contains("MaskHeight=")) targetMaskHeight = ParseHeaderValue(trimmed);
-                    else if (trimmed.Contains("MaskTileSize=")) targetTileSize = ParseHeaderValue(trimmed);
+                    if (trimmed.Contains("AtlasWidth="))
+                    {
+                        targetAtlasWidth = ParseHeaderValue(trimmed);
+                    }
+                    else if (trimmed.Contains("AtlasHeight="))
+                    {
+                        targetAtlasHeight = ParseHeaderValue(trimmed);
+                    }
+                    else if (trimmed.Contains("MaskWidth="))
+                    {
+                        targetMaskWidth = ParseHeaderValue(trimmed);
+                    }
+                    else if (trimmed.Contains("MaskHeight="))
+                    {
+                        targetMaskHeight = ParseHeaderValue(trimmed);
+                    }
+                    else if (trimmed.Contains("MaskTileSize="))
+                    {
+                        targetTileSize = ParseHeaderValue(trimmed);
+                    }
                     else if (trimmed.Contains("LayerResolutions="))
+                    {
                         _layerResolutionsStr = trimmed.Split('=')[1].Trim();
+                    }
+
                     continue;
                 }
-                
-                if (trimmed.Contains("=")) continue;
-                
+
+                if (trimmed.Contains("="))
+                {
+                    continue;
+                }
+
                 filePaths.Add(trimmed);
             }
 
             var files = filePaths.Select(x => Path.Combine(baseDir.FullName, x)).ToList();
 
+            if (files.Count == 0)
+            {
+                throw new WolvenKitException(0x2002, "No layer files specified in masklist.");
+            }
+
             _mlmask = new MlMaskContainer();
             var textures = new List<RawTexContainer>();
 
             string[]? layerResolutionsArray = null;
+            uint[]? layerResW = null;
+            uint[]? layerResH = null;
             if (!string.IsNullOrEmpty(_layerResolutionsStr))
             {
                 layerResolutionsArray = _layerResolutionsStr.Split(',');
                 _logger.Info($"Using per-layer resolutions from .masklist: {_layerResolutionsStr}");
+
+                layerResW = new uint[layerResolutionsArray.Length];
+                layerResH = new uint[layerResolutionsArray.Length];
+                for (var i = 0; i < layerResolutionsArray.Length; i++)
+                {
+                    var parts = layerResolutionsArray[i].Split('x');
+                    if (parts.Length == 2 && uint.TryParse(parts[0], out var w) && uint.TryParse(parts[1], out var h))
+                    {
+                        layerResW[i] = w;
+                        layerResH[i] = h;
+                    }
+                    else
+                    {
+                        layerResW[i] = 0;
+                        layerResH[i] = 0;
+                    }
+                }
             }
 
             var firstLayerName = Path.GetFileNameWithoutExtension(files[0]);
-            bool needsLayer0 = !firstLayerName.EndsWith("_0") && !firstLayerName.Equals("0");
+            var needsLayer0 = !firstLayerName.EndsWith("_0") && !firstLayerName.Equals("0");
 
             if (needsLayer0)
             {
-                uint layer0W = layerResolutionsArray != null && layerResolutionsArray.Length > 0 
-                    ? uint.Parse(layerResolutionsArray[0].Split('x')[0]) : 1024;
-                uint layer0H = layerResolutionsArray != null && layerResolutionsArray.Length > 0 
-                    ? uint.Parse(layerResolutionsArray[0].Split('x')[1]) : 1024;
-                
+                uint layer0W = (layerResW != null && layerResW.Length > 0 && layerResW[0] != 0) ? layerResW[0] : 1024u;
+                uint layer0H = (layerResH != null && layerResH.Length > 0 && layerResH[0] != 0) ? layerResH[0] : 1024u;
+
                 var whitePixels = new byte[layer0W * layer0H];
                 Array.Fill(whitePixels, (byte)255);
                 textures.Add(new RawTexContainer { Width = layer0W, Height = layer0H, Pixels = whitePixels });
                 _logger.Info($"Added white layer 0 at {layer0W}x{layer0H}");
             }
 
-            for (int fileIdx = 0; fileIdx < files.Count; fileIdx++)
+            for (var fileIdx = 0; fileIdx < files.Count; fileIdx++)
             {
                 var f = files[fileIdx];
                 if (!File.Exists(f))
+                {
                     throw new FileNotFoundException($"File not found: {f}");
+                }
+
                 try
                 {
                     using var image = RedImage.LoadFromFile(f) ?? throw new WolvenKitException(0x2001, $"Could not load image: {f}");
 
                     if (image.Metadata.Format != DXGI_FORMAT.DXGI_FORMAT_R8_UNORM)
+                    {
                         image.Convert(DXGI_FORMAT.DXGI_FORMAT_R8_UNORM);
+                    }
 
                     uint imgW = (uint)image.Metadata.Width;
                     uint imgH = (uint)image.Metadata.Height;
@@ -111,14 +161,10 @@ namespace WolvenKit.Modkit.RED4.MLMask
                     uint layerTargetW = targetMaskWidth;
                     uint layerTargetH = targetMaskHeight;
 
-                    if (layerResolutionsArray != null && fileIdx < layerResolutionsArray.Length)
+                    if (layerResW != null && fileIdx < layerResW.Length && layerResW[fileIdx] != 0 && layerResH != null && layerResH[fileIdx] != 0)
                     {
-                        var parts = layerResolutionsArray[fileIdx].Split('x');
-                        if (parts.Length == 2)
-                        {
-                            layerTargetW = uint.Parse(parts[0]);
-                            layerTargetH = uint.Parse(parts[1]);
-                        }
+                        layerTargetW = layerResW[fileIdx];
+                        layerTargetH = layerResH[fileIdx];
                     }
 
                     using var ms = new MemoryStream(image.SaveToDDSMemory());
@@ -126,8 +172,8 @@ namespace WolvenKit.Modkit.RED4.MLMask
                     ms.Seek(s_headerLength, SeekOrigin.Begin);
                     var pixels = br.ReadBytes((int)(imgW * imgH));
 
-                    bool isBlank = IsBlankLayer(pixels);
-                    byte blankValue = pixels.Length > 0 ? pixels[0] : (byte)0;
+                    var isBlank = IsBlankLayer(pixels);
+                    var blankValue = pixels.Length > 0 ? pixels[0] : (byte)0;
 
                     if (isBlank)
                     {
@@ -169,7 +215,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
             _logger.Info("Import complete. Keep your original .masklist file for round-trip export.");
         }
 
-        private static bool IsBlankLayer(byte[] pixels)
+        internal static bool IsBlankLayer(byte[] pixels)
         {
             if (pixels.Length == 0) return true;
             var first = pixels[0];
@@ -180,13 +226,13 @@ namespace WolvenKit.Modkit.RED4.MLMask
             return true;
         }
 
-        private static uint ParseHeaderValue(string line)
+        internal static uint ParseHeaderValue(string line)
         {
             var parts = line.Split('=');
             return parts.Length > 1 ? uint.Parse(parts[1].Trim()) : 0;
         }
 
-        private static byte[] UpscaleNearest(byte[] src, uint srcW, uint srcH, uint dstW, uint dstH)
+        internal static byte[] UpscaleNearest(byte[] src, uint srcW, uint srcH, uint dstW, uint dstH)
         {
             var dst = new byte[dstW * dstH];
             var scaleX = (double)srcW / dstW;
