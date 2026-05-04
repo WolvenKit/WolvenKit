@@ -33,6 +33,12 @@ changes:
 
     -   type: "fixed"
         packages: [ "App" ]
+        pr-number: 2866
+        author: "manavortex"
+        description: "ArchiveXL item generator will now successfully handle component name uniqueness - various robustness fixes"
+        
+    -   type: "fixed"
+        packages: [ "App" ]
         pr-number: 2904
         author: "misterchedda"
         description: "Nested quest phase nodes no longer loose internal socket connections after paste/duplicate operations"
