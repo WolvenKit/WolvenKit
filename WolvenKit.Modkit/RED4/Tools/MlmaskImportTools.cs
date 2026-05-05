@@ -53,37 +53,22 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 if (trimmed.StartsWith("#"))
                 {
                     if (trimmed.Contains("AtlasWidth="))
-                    {
                         targetAtlasWidth = ParseHeaderValue(trimmed);
-                    }
                     else if (trimmed.Contains("AtlasHeight="))
-                    {
                         targetAtlasHeight = ParseHeaderValue(trimmed);
-                    }
                     else if (trimmed.Contains("MaskWidth="))
-                    {
                         targetMaskWidth = ParseHeaderValue(trimmed);
-                    }
                     else if (trimmed.Contains("MaskHeight="))
-                    {
                         targetMaskHeight = ParseHeaderValue(trimmed);
-                    }
                     else if (trimmed.Contains("MaskTileSize="))
-                    {
                         targetTileSize = ParseHeaderValue(trimmed);
-                    }
                     else if (trimmed.Contains("LayerResolutions="))
-                    {
                         _layerResolutionsStr = trimmed.Split('=')[1].Trim();
-                    }
 
                     continue;
                 }
 
-                if (trimmed.Contains("="))
-                {
-                    continue;
-                }
+                if (trimmed.Contains("=")) continue;
 
                 filePaths.Add(trimmed);
             }
@@ -91,16 +76,19 @@ namespace WolvenKit.Modkit.RED4.MLMask
             var files = filePaths.Select(x => Path.Combine(baseDir.FullName, x)).ToList();
 
             if (files.Count == 0)
-            {
                 throw new WolvenKitException(0x2002, "No layer files specified in masklist.");
-            }
 
             _mlmask = new MlMaskContainer();
+            _mlmask.PreferredTileSize = targetTileSize;
+            _mlmask.PreferredAtlasWidth = targetAtlasWidth;
+            _mlmask.PreferredAtlasHeight = targetAtlasHeight;
+
             var textures = new List<RawTexContainer>();
 
             string[]? layerResolutionsArray = null;
             uint[]? layerResW = null;
             uint[]? layerResH = null;
+
             if (!string.IsNullOrEmpty(_layerResolutionsStr))
             {
                 layerResolutionsArray = _layerResolutionsStr.Split(',');
@@ -115,11 +103,6 @@ namespace WolvenKit.Modkit.RED4.MLMask
                     {
                         layerResW[i] = w;
                         layerResH[i] = h;
-                    }
-                    else
-                    {
-                        layerResW[i] = 0;
-                        layerResH[i] = 0;
                     }
                 }
             }
@@ -141,19 +124,14 @@ namespace WolvenKit.Modkit.RED4.MLMask
             for (var fileIdx = 0; fileIdx < files.Count; fileIdx++)
             {
                 var f = files[fileIdx];
-                if (!File.Exists(f))
-                {
-                    throw new FileNotFoundException($"File not found: {f}");
-                }
+                if (!File.Exists(f)) throw new FileNotFoundException($"File not found: {f}");
 
                 try
                 {
                     using var image = RedImage.LoadFromFile(f) ?? throw new WolvenKitException(0x2001, $"Could not load image: {f}");
 
                     if (image.Metadata.Format != DXGI_FORMAT.DXGI_FORMAT_R8_UNORM)
-                    {
                         image.Convert(DXGI_FORMAT.DXGI_FORMAT_R8_UNORM);
-                    }
 
                     uint imgW = (uint)image.Metadata.Width;
                     uint imgH = (uint)image.Metadata.Height;
@@ -180,21 +158,16 @@ namespace WolvenKit.Modkit.RED4.MLMask
                         var blankPixels = new byte[layerTargetW * layerTargetH];
                         Array.Fill(blankPixels, blankValue);
                         textures.Add(new RawTexContainer { Width = layerTargetW, Height = layerTargetH, Pixels = blankPixels });
-                        _logger.Info($"Created blank layer {Path.GetFileName(f)} at {layerTargetW}x{layerTargetH} (value: {blankValue})");
                         continue;
                     }
 
                     if (layerTargetW > 0 && layerTargetH > 0 && (imgW != layerTargetW || imgH != layerTargetH))
                     {
                         if (imgW > layerTargetW || imgH > layerTargetH)
-                        {
-                            throw new WolvenKitException(0x2003,
-                                $"Layer {f} ({imgW}x{imgH}) is larger than target size {layerTargetW}x{layerTargetH}");
-                        }
+                            throw new WolvenKitException(0x2003, $"Layer {f} is larger than target size");
 
                         var upscaled = UpscaleNearest(pixels, imgW, imgH, layerTargetW, layerTargetH);
                         textures.Add(new RawTexContainer { Width = layerTargetW, Height = layerTargetH, Pixels = upscaled });
-                        _logger.Info($"Upscaled {Path.GetFileName(f)}: {imgW}x{imgH} → {layerTargetW}x{layerTargetH}");
                     }
                     else
                     {
@@ -220,9 +193,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
             if (pixels.Length == 0) return true;
             var first = pixels[0];
             for (int i = 1; i < pixels.Length; i++)
-            {
                 if (pixels[i] != first) return false;
-            }
             return true;
         }
 
@@ -389,7 +360,6 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
             _mlmask.WidthHigh = 0;
             _mlmask.HeightHigh = 0;
-
             foreach (var lay in _mlmask.Layers)
             {
                 _mlmask.WidthHigh = Math.Max(_mlmask.WidthHigh, lay.Width);
@@ -435,7 +405,11 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 _mlmask.Layers[i].HeightShift = (uint)Math.Ceiling(Math.Log2(_mlmask.HeightHigh / (double)_mlmask.Layers[i].Height));
             }
 
-            uint tempAtlasTileSize = 16;
+            uint startAtlasTileSize = (_mlmask.PreferredTileSize > 0)
+                ? _mlmask.PreferredTileSize + 2
+                : 16u;
+
+            uint tempAtlasTileSize = startAtlasTileSize;
             while (true)
             {
                 _mlmask.AtlasTileSize = tempAtlasTileSize;
@@ -588,6 +562,26 @@ namespace WolvenKit.Modkit.RED4.MLMask
             _mlmask.AtlasWidth = 0;
             _mlmask.AtlasHeight = 0;
 
+            // Prefer original atlas size from .masklist when possible
+            if (_mlmask.PreferredAtlasWidth > 0 && _mlmask.PreferredAtlasHeight > 0)
+            {
+                var widthInTiles = _mlmask.PreferredAtlasWidth / _mlmask.AtlasTileSize;
+                if (widthInTiles > 0)
+                {
+                    var neededRows = (_mlmask.AtlasTilesCount + widthInTiles - 1) / widthInTiles;
+                    var requiredHeight = neededRows * _mlmask.AtlasTileSize;
+
+                    if (requiredHeight <= _mlmask.PreferredAtlasHeight)
+                    {
+                        _mlmask.AtlasWidth = _mlmask.PreferredAtlasWidth;
+                        _mlmask.AtlasHeight = _mlmask.PreferredAtlasHeight;
+                        _logger.Info($"Reusing original atlas size {_mlmask.PreferredAtlasWidth}x{_mlmask.PreferredAtlasHeight}");
+                        return;
+                    }
+                }
+            }
+
+            // Fallback: minimum waste packing
             uint widthTry = 16384;
             var emptyArea = uint.MaxValue;
 
@@ -772,6 +766,11 @@ namespace WolvenKit.Modkit.RED4.MLMask
             public uint TileSize;
             public uint WidthHigh;
             public uint AtlasTilesCount;
+
+            // Values from original .masklist for best round-trip fidelity
+            public uint PreferredTileSize;
+            public uint PreferredAtlasWidth;
+            public uint PreferredAtlasHeight;
         }
 
         #endregion
