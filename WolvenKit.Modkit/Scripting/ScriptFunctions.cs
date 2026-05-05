@@ -197,7 +197,9 @@ public partial class ScriptFunctions
         catch (Exception e)
         {
             _loggerService.Error("Failed to read YAML: " + e.Message);
-            _loggerService.Error(e);
+            _loggerService.Error("");
+            _loggerService.Error("Please run the file through https://yamllint.com and fix all errors!");
+            _loggerService.Error("");
         }
 
         return "";
