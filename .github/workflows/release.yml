@@ -69,7 +69,7 @@ jobs:
             Write-Host "Changelog branch does not exist, please run stage changelog first"
             exit 1
           }
-
+      
       - name: Checkout changelog branch
         run: |
           git fetch origin changelog-staging
