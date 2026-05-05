@@ -809,23 +809,18 @@ public class CvmMaterialTools
 
     public static int FindHighestMaterialIndex(CArray<CMeshMaterialEntry> matDefArray, bool isLocalInstance)
     {
-        if (matDefArray.Count == 0)
-        {
-            return -1;
-        }
-
-        List<int> indices = [];
+        var maxIndex = -1;
         // ReSharper disable once ForCanBeConvertedToForeach - can't LINQ here
         // ReSharper disable once LoopCanBeConvertedToQuery - will throw NoElementsException
         for (var i = 0; i < matDefArray.Count; i++)
         {
-            if (matDefArray[i].IsLocalInstance == isLocalInstance)
+            if (matDefArray[i].IsLocalInstance == isLocalInstance && matDefArray[i].Index > maxIndex)
             {
-                indices.Add(matDefArray[i].Index);
+                maxIndex = matDefArray[i].Index;
             }
         }
 
-        return indices.Count == 0 ? -1 : indices.Max();
+        return maxIndex;
     }
 
     public void AddTagsToMeshAppearances(List<ChunkViewModel> chunks, List<string> tagList)
@@ -966,14 +961,13 @@ public class CvmMaterialTools
                 ReadMaterialValuesRecursive(parentPath, archiveManager);
                 return;
 
-            case CMaterialTemplate shader:
+            case CMaterialTemplate shader
+                when shader.Parameters.Count > 1 && shader.Parameters[^1] is { } shaderParamList:
             {
-                var shaderParamList = shader.Parameters[^1];
                 s_materialValuesByRelPath[relPath] = shaderParamList.Select(p => p.Chunk)
                     .OfType<CMaterialParameter>()
                     .Select(CKeyValuePairFactory.Create)
                     .ToList();
-
                 return;
             }
         }
@@ -1022,59 +1016,6 @@ public class CvmMaterialTools
         }
 
         return values;
-    }
-
-    private void ConvertExternalMaterials(CMesh mesh)
-    {
-        if (mesh.MaterialEntries.Count == 0)
-        {
-            _loggerService.Error("No materials defined in current mesh");
-            return;
-        }
-
-        var idx = FindHighestMaterialIndex(mesh.MaterialEntries, true);
-        // have to append those
-        var highestLocalIdx = Math.Max(idx, 0);
-
-        var isPreload = HasPreloadMaterials(mesh);
-        var localMaterials = GetLocalMaterials(mesh);
-        var externalMaterials = GetExternalMaterials(mesh);
-
-        var materialEntries = mesh.MaterialEntries.ToList();
-        for (var i = 0; i < materialEntries.Count; i++)
-        {
-            var matDef = materialEntries[i];
-            if (matDef.IsLocalInstance)
-            {
-                continue;
-            }
-
-            highestLocalIdx += 1;
-            matDef.Index = (CUInt16)highestLocalIdx;
-            matDef.IsLocalInstance = true;
-            if (i >= externalMaterials.Count)
-            {
-                continue;
-            }
-
-            var mat = externalMaterials[i];
-            localMaterials.Add(new CMaterialInstance()
-            {
-                BaseMaterial = new CResourceReference<IMaterial>(mat.DepotPath)
-            });
-        }
-
-        // now sort them by index
-        materialEntries.Sort((a, b) => b.Index - a.Index);
-
-        mesh.MaterialEntries.Clear();
-        foreach (var entry in materialEntries)
-        {
-            mesh.MaterialEntries.Add(entry);
-        }
-
-        SetLocalMaterials(mesh, localMaterials, isPreload);
-        SetExternalMaterials(mesh, [], isPreload);
     }
 
     public void FlattenMiChain(ChunkViewModel[] cvmSelection, IAppArchiveManager archiveManager, Cp77Project? project)
@@ -1181,7 +1122,7 @@ public class CvmMaterialTools
             inst.BaseMaterial = new CResourceReference<IMaterial>(shaderPath);
             inst.Values.Clear();
 
-            // can't LINQ here because CArray doesn't like it
+            // can't LINQ here because CArray doesn't support it
             foreach (var cKeyValuePair in consolidatedValues)
             {
                 inst.Values.Add(cKeyValuePair);
