@@ -35,7 +35,7 @@ public class ArchiveXlClothingItem
 
     public List<ArchiveXlHidingTags> HidingTags { get; init; } = [];
 
-    public string ItemFileName => $"{ItemName.ToFileName().ToLower().Replace(" ", "_")}";
+    public string ItemFileName => $"{ItemName.ToArchiveFileName()}";
 
     /// <summary>
     /// modderName/equipment/slot/projectName
@@ -209,12 +209,20 @@ public partial class ArchiveXlItemService
     /// gets modder name from project or settings
     private string GetModderName()
     {
-        if (!string.IsNullOrEmpty(_projectManager.ActiveProject?.Author))
+        if (!string.IsNullOrEmpty(_projectManager.ActiveProject?.Author?.ToArchiveFileName()))
         {
             return _projectManager.ActiveProject.Author.ToArchiveFileName();
         }
 
-        return (_settingsManager.ModderName ?? "wolvenkit_user").ToFileName().Replace(" ", "_");
+        var modderName = _settingsManager.ModderName?.ToArchiveFileName();
+
+
+        if (string.IsNullOrEmpty(modderName))
+        {
+            return "wolvenkit_user";
+        }
+
+        return modderName;
     }
 
     public void CreateEquipmentItem(ArchiveXlClothingItem clothingItemData)
