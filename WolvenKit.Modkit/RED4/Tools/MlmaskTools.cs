@@ -92,7 +92,11 @@ public partial class ModTools
         }
     }
 
-    // Decode and return raw grayscale buffers for each layer
+    /// <summary>
+    /// Decodes each layer from the multilayer mask.
+    /// Layers are exported either at full high resolution or at the reduced low resolution,
+    /// depending on whether the layer has dedicated high-resolution tile data.
+    /// </summary>
     private static IEnumerable<(byte[] buffer, uint width, uint height)> DecodeLayerBuffers(rendRenderMultilayerMaskBlobPC blob)
     {
         uint atlasWidth = blob.Header.AtlasWidth;
@@ -152,6 +156,10 @@ public partial class ModTools
         }
     }
 
+    /// <summary>
+    /// Checks whether a specific layer has any high-resolution tile data.
+    /// This determines if the layer should be exported at full resolution or downscaled.
+    /// </summary>
     private static bool HasLayerHighResolutionData(uint[] tiles, uint maskWidth, uint maskHeight, uint maskTileSize, int layerIndex)
     {
         var widthInTiles = DivCeil(maskWidth, maskTileSize);
@@ -224,6 +232,8 @@ public partial class ModTools
             tileDecl = tilesData[paramOffset + extraAdd];
         }
 
+        // Extract atlas position and scaling factors from the packed tile declaration.
+        // dx/dy = tile position in the atlas, sx/sy = bit-shift scaling for this layer.
         var dx = (tileDecl >> TILE_DX_SHIFT) & TILE_PARAM_MASK;
         var dy = (tileDecl >> TILE_DY_SHIFT) & TILE_PARAM_MASK;
         var sx = (tileDecl >> TILE_SX_SHIFT) & TILE_S_MASK;
@@ -266,6 +276,7 @@ public partial class ModTools
                 {
                     srcX = srcW - 1;
                 }
+
                 if (srcY >= srcH)
                 {
                     srcY = srcH - 1;
@@ -477,5 +488,5 @@ public partial class ModTools
         return true;
     }
 
-    #endregion
+    #endregion Methods
 }
