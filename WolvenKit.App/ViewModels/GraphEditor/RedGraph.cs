@@ -34,6 +34,19 @@ public partial class RedGraph : IDisposable
 {
     private const double FallbackLayoutNodeWidth = 220;
     private const double FallbackLayoutNodeHeight = 70;
+    private const double DefaultLayoutNodeSeparation = 10;
+    private const double DefaultLayoutLayerSeparation = 30;
+    private const double EstimatedLayoutNodeSeparation = 40;
+    private const double EstimatedLayoutLayerSeparation = 70;
+    private const double EstimatedLayoutNodeMinWidth = 420;
+    private const double EstimatedLayoutNodeMaxWidth = 680;
+    private const double EstimatedLayoutNodeMinHeight = 120;
+    private const double EstimatedLayoutNodeMaxHeight = 720;
+    private const double EstimatedLayoutNodeBaseHeight = 82;
+    private const double EstimatedLayoutNodeHorizontalPadding = 96;
+    private const double EstimatedLayoutTextCharacterWidth = 7.2;
+    private const double EstimatedLayoutDetailRowHeight = 22;
+    private const double EstimatedLayoutSocketRowHeight = 18;
 
     private IRedType _data;
 
@@ -293,9 +306,9 @@ public partial class RedGraph : IDisposable
     {
         if (nodes.Count > 0 && Editor != null)
         {
-            if (nodes[0] is not NodeViewModel nvm)
+            if (nodes.OfType<NodeViewModel>().FirstOrDefault() is not { } nvm)
             {
-                throw new Exception();
+                return;
             }
 
             Editor.ViewportZoom = 1;
@@ -321,6 +334,7 @@ public partial class RedGraph : IDisposable
 
         // Extra height for external node ID (font + margin + padding)
         const double nodeIdExtraHeight = 35;
+        var hasEstimatedLayoutNodes = Nodes.Any(ShouldUseEstimatedLayoutSize);
 
         foreach (var node in Nodes)
         {
@@ -343,6 +357,8 @@ public partial class RedGraph : IDisposable
         var settings = new SugiyamaLayoutSettings
         {
             Transformation = PlaneTransformation.Rotation(Math.PI / 2),
+            NodeSeparation = hasEstimatedLayoutNodes ? EstimatedLayoutNodeSeparation : DefaultLayoutNodeSeparation,
+            LayerSeparation = hasEstimatedLayoutNodes ? EstimatedLayoutLayerSeparation : DefaultLayoutLayerSeparation,
             EdgeRoutingSettings = { EdgeRoutingMode = EdgeRoutingMode.Spline }
         };
 
@@ -375,11 +391,69 @@ public partial class RedGraph : IDisposable
         return new System.Windows.Rect(minX, minY, maxX - minX, maxY - minY);
     }
 
-    private static double GetLayoutNodeWidth(NodeViewModel node) =>
-        IsValidLayoutDimension(node.Size.Width) ? node.Size.Width : FallbackLayoutNodeWidth;
+    private static double GetLayoutNodeWidth(NodeViewModel node)
+    {
+        if (!ShouldUseEstimatedLayoutSize(node))
+        {
+            return node.Size.Width;
+        }
 
-    private static double GetLayoutNodeHeight(NodeViewModel node) =>
-        IsValidLayoutDimension(node.Size.Height) ? node.Size.Height : FallbackLayoutNodeHeight;
+        return EstimateLayoutNodeWidth(node);
+    }
+
+    private static double GetLayoutNodeHeight(NodeViewModel node)
+    {
+        if (!ShouldUseEstimatedLayoutSize(node))
+        {
+            return node.Size.Height;
+        }
+
+        return EstimateLayoutNodeHeight(node);
+    }
+
+    private static bool ShouldUseEstimatedLayoutSize(NodeViewModel node) =>
+        node.IsLowDetail
+        || !IsValidLayoutDimension(node.Size.Width)
+        || !IsValidLayoutDimension(node.Size.Height);
+
+    private static double EstimateLayoutNodeWidth(NodeViewModel node)
+    {
+        var longestTextLength = node.Title?.Length ?? 0;
+
+        foreach (var (key, value) in node.Details)
+        {
+            longestTextLength = Math.Max(longestTextLength, (key?.Length ?? 0) + (value?.Length ?? 0) + 2);
+        }
+
+        foreach (var connector in node.Input.Concat<BaseConnectorViewModel>(node.Output))
+        {
+            longestTextLength = Math.Max(longestTextLength, connector.Title?.Length ?? connector.Name?.Length ?? 0);
+        }
+
+        var estimatedWidth = EstimatedLayoutNodeHorizontalPadding + longestTextLength * EstimatedLayoutTextCharacterWidth;
+        return Math.Clamp(
+            Math.Max(estimatedWidth, FallbackLayoutNodeWidth),
+            EstimatedLayoutNodeMinWidth,
+            EstimatedLayoutNodeMaxWidth);
+    }
+
+    private static double EstimateLayoutNodeHeight(NodeViewModel node)
+    {
+        var visibleInputCount = node.Input.Count(connector => connector.IsVisible);
+        var visibleOutputCount = node.Output.Count(connector => connector.IsVisible);
+        var socketRows = Math.Max(visibleInputCount, visibleOutputCount);
+        var detailRows = node.Details.Count;
+
+        var estimatedHeight = EstimatedLayoutNodeBaseHeight
+                              + Math.Max(
+                                  detailRows * EstimatedLayoutDetailRowHeight,
+                                  socketRows * EstimatedLayoutSocketRowHeight);
+
+        return Math.Clamp(
+            Math.Max(estimatedHeight, FallbackLayoutNodeHeight),
+            EstimatedLayoutNodeMinHeight,
+            EstimatedLayoutNodeMaxHeight);
+    }
 
     private static bool IsValidLayoutDimension(double value) => value > 0 && double.IsFinite(value);
 
