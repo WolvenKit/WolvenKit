@@ -1322,9 +1322,9 @@ namespace WolvenKit.Views.Documents
                 subGraph.DocumentViewModel ??= QuestPhaseGraphEditor?.Source.DocumentViewModel;
 
                 // Handle quest phase node state tracking
-                if (selectedNode.Data is questPhaseNodeDefinition { PhaseResource.IsSet: false } ph)
+                if (selectedNode.Data is questPhaseNodeDefinition ph)
                 {
-                    subGraph.StateParents = QuestPhaseGraphEditor?.Source.StateParents + "." + ph.Id;
+                    subGraph.StateParents = (QuestPhaseGraphEditor?.Source.StateParents ?? "") + GetPhaseNodeStateSuffix(ph);
                     subGraph.DocumentViewModel = QuestPhaseGraphEditor?.Source.DocumentViewModel;
                 }
 
@@ -1371,6 +1371,21 @@ namespace WolvenKit.Views.Documents
                     }), DispatcherPriority.Loaded);
                 }
             }
+        }
+
+        private static string GetPhaseNodeStateSuffix(questPhaseNodeDefinition phaseNode)
+        {
+            if (!phaseNode.PhaseResource.IsSet)
+            {
+                return "." + phaseNode.Id;
+            }
+
+            var depotPath = phaseNode.PhaseResource.DepotPath;
+            var stateValue = depotPath.IsResolvable
+                ? depotPath.GetResolvedText()!
+                : ((ulong)depotPath).ToString();
+
+            return RedGraph.CreateStateSuffix("phaseResource", stateValue);
         }
 
         /// <summary>

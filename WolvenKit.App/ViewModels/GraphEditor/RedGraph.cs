@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Msagl.Core.Geometry.Curves;
@@ -99,6 +101,34 @@ public partial class RedGraph : IDisposable
         ItemsDragCompletedCommand = new RelayCommand(ItemsDragCompleted);
 
         _loggerService = Locator.Current.GetService<ILoggerService>();
+    }
+
+    public static string CreateStateSuffix(string prefix, string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return "";
+        }
+
+        var normalizedValue = value.Replace('\\', '/');
+        var name = Path.GetFileNameWithoutExtension(normalizedValue);
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            name = "graph";
+        }
+
+        var hash = Convert.ToHexString(SHA1.HashData(Encoding.UTF8.GetBytes(normalizedValue.ToLowerInvariant())))[..12].ToLowerInvariant();
+        return $".{CreateSafeStateSegment(prefix)}.{CreateSafeStateSegment(name)}.{hash}";
+    }
+
+    private static string CreateSafeStateSegment(string value)
+    {
+        var safeChars = value
+            .Select(ch => char.IsLetterOrDigit(ch) || ch is '_' or '-' ? ch : '_')
+            .ToArray();
+
+        var safeValue = new string(safeChars).Trim('_');
+        return string.IsNullOrWhiteSpace(safeValue) ? "graph" : safeValue;
     }
 
     public void Connect()

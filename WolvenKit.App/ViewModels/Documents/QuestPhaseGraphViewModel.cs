@@ -55,9 +55,14 @@ namespace WolvenKit.App.ViewModels.Documents
         
         public int TotalInplacePhases => _questPhaseData.InplacePhases?.Count ?? 0;
 
-        public QuestPhaseGraphViewModel(questQuestPhaseResource data, RedDocumentViewModel parent, IChunkViewmodelFactory chunkViewmodelFactory, INodeWrapperFactory nodeWrapperFactory)
+        public QuestPhaseGraphViewModel(questQuestPhaseResource data, RedDocumentViewModel parent, IChunkViewmodelFactory chunkViewmodelFactory, INodeWrapperFactory nodeWrapperFactory, string? graphFilePath = null)
             : base(parent, "Quest Phase Editor")
         {
+            if (!string.IsNullOrWhiteSpace(graphFilePath))
+            {
+                FilePath = graphFilePath;
+            }
+
             _questPhaseData = data;
             
             var appViewModel = Locator.Current.GetService<AppViewModel>() ?? throw new ArgumentNullException(nameof(AppViewModel));
@@ -65,6 +70,7 @@ namespace WolvenKit.App.ViewModels.Documents
             var gameController = Locator.Current.GetService<IGameControllerFactory>() ?? throw new ArgumentNullException(nameof(IGameControllerFactory));
 
             RDTViewModel = new RDTDataViewModel(data, parent, appViewModel, chunkViewmodelFactory, settingsManager, gameController);
+            RDTViewModel.FilePath = FilePath;
             
             // Create MainGraph - handle cases where graph might be null
             try
@@ -75,6 +81,7 @@ namespace WolvenKit.App.ViewModels.Documents
                     
                     // Set document reference for property change syncing
                     MainGraph.DocumentViewModel = parent;
+                    ApplyGraphStateIdentity(MainGraph, graphFilePath);
 
                     // Ensure all nodes have DocumentViewModel reference for dirty tracking
                     foreach (var node in MainGraph.Nodes)
@@ -88,6 +95,7 @@ namespace WolvenKit.App.ViewModels.Documents
                     // Create an empty graph as fallback
                     MainGraph = new RedGraph(parent.Header, data);
                     MainGraph.DocumentViewModel = parent;
+                    ApplyGraphStateIdentity(MainGraph, graphFilePath);
                 }
             }
             catch (Exception ex)
@@ -96,6 +104,7 @@ namespace WolvenKit.App.ViewModels.Documents
                 // Create an empty graph as fallback
                 MainGraph = new RedGraph(parent.Header, data);
                 MainGraph.DocumentViewModel = parent;
+                ApplyGraphStateIdentity(MainGraph, graphFilePath);
             }
 
             // Initialize navigation history with the main graph
@@ -110,6 +119,16 @@ namespace WolvenKit.App.ViewModels.Documents
             {
                 UpdateTabContent(SelectedTab);
             }
+        }
+
+        private void ApplyGraphStateIdentity(RedGraph graph, string? graphFilePath)
+        {
+            if (string.IsNullOrWhiteSpace(graphFilePath))
+            {
+                return;
+            }
+
+            graph.StateParents = RedGraph.CreateStateSuffix("embedded", graphFilePath);
         }
 
         public void SetGraphLoaded()
@@ -264,4 +283,4 @@ namespace WolvenKit.App.ViewModels.Documents
             Dispose(false);
         }
     }
-} 
+}
