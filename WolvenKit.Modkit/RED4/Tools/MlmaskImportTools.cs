@@ -27,52 +27,43 @@ namespace WolvenKit.Modkit.RED4.MLMask
             _logger = logger;
         }
 
+        /// <summary>
+        /// Импорт .masklist → .mlmask
+        /// Поддерживает как разные разрешения слоёв, так и одинаковые.
+        /// .masklist теперь содержит только пути к файлам (без заголовка).
+        /// </summary>
         public void Import(FileInfo txtImageList, FileInfo outFile)
         {
             var lines = File.ReadAllLines(txtImageList.FullName);
             var baseDir = txtImageList.Directory.NotNull();
-
-            uint targetAtlasWidth = 0;
-            uint targetAtlasHeight = 0;
-            uint targetTileSize = 16;
 
             var filePaths = new List<string>();
 
             foreach (var line in lines)
             {
                 var trimmed = line.Trim();
-                if (string.IsNullOrWhiteSpace(trimmed))
+                if (string.IsNullOrWhiteSpace(trimmed) || trimmed.StartsWith("#"))
                     continue;
-
-                if (trimmed.StartsWith("#"))
-                {
-                    if (trimmed.Contains("AtlasWidth="))
-                        targetAtlasWidth = ParseHeaderValue(trimmed);
-                    else if (trimmed.Contains("AtlasHeight="))
-                        targetAtlasHeight = ParseHeaderValue(trimmed);
-                    else if (trimmed.Contains("MaskTileSize="))
-                        targetTileSize = ParseHeaderValue(trimmed);
-
-                    continue;
-                }
-
-                if (trimmed.Contains("=")) continue;
+                if (trimmed.Contains("=")) continue; // совместимость со старыми файлами
 
                 filePaths.Add(trimmed);
             }
 
-            var files = filePaths.Select(x => Path.Combine(baseDir.FullName, x)).ToList();
-
-            if (files.Count == 0)
+            if (filePaths.Count == 0)
                 throw new WolvenKitException(0x2002, "No layer files specified in masklist.");
 
-            _mlmask = new MlMaskContainer();
-            _mlmask.PreferredTileSize = targetTileSize;
-            _mlmask.PreferredAtlasWidth = targetAtlasWidth;
-            _mlmask.PreferredAtlasHeight = targetAtlasHeight;
+            var files = filePaths.Select(x => Path.Combine(baseDir.FullName, x)).ToList();
+
+            _mlmask = new MlMaskContainer
+            {
+                PreferredTileSize = 16,
+                PreferredAtlasWidth = 0,
+                PreferredAtlasHeight = 0
+            };
 
             var textures = new List<RawTexContainer>();
 
+            // Добавляем белый слой 0 (если первый слой не заканчивается на _0)
             var firstLayerName = Path.GetFileNameWithoutExtension(files[0]);
             var needsLayer0 = !firstLayerName.EndsWith("_0") && !firstLayerName.Equals("0");
 
@@ -81,34 +72,31 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 uint whiteW = 1024u;
                 uint whiteH = 1024u;
 
-                if (files.Count > 0)
+                if (files.Count > 0 && File.Exists(files[0]))
                 {
-                    var firstReal = files[0];
-                    if (File.Exists(firstReal))
+                    try
                     {
-                        try
+                        using var probe = RedImage.LoadFromFile(files[0]);
+                        if (probe != null)
                         {
-                            using var probe = RedImage.LoadFromFile(firstReal);
-                            if (probe != null)
-                            {
-                                whiteW = (uint)probe.Metadata.Width;
-                                whiteH = (uint)probe.Metadata.Height;
-                            }
+                            whiteW = (uint)probe.Metadata.Width;
+                            whiteH = (uint)probe.Metadata.Height;
                         }
-                        catch { }
                     }
+                    catch { }
                 }
 
                 var whitePixels = new byte[whiteW * whiteH];
                 Array.Fill(whitePixels, (byte)255);
                 textures.Add(new RawTexContainer { Width = whiteW, Height = whiteH, Pixels = whitePixels });
-                _logger.Info($"Added white layer 0 at {whiteW}x{whiteH} (inferred from first provided layer metadata)");
+                _logger.Info($"Added white layer 0 at {whiteW}x{whiteH}");
             }
 
-            for (var fileIdx = 0; fileIdx < files.Count; fileIdx++)
+            // Загружаем все слои из файлов
+            foreach (var f in files)
             {
-                var f = files[fileIdx];
-                if (!File.Exists(f)) throw new FileNotFoundException($"File not found: {f}");
+                if (!File.Exists(f))
+                    throw new FileNotFoundException($"File not found: {f}");
 
                 try
                 {
@@ -125,19 +113,11 @@ namespace WolvenKit.Modkit.RED4.MLMask
                     ms.Seek(s_headerLength, SeekOrigin.Begin);
                     var pixels = br.ReadBytes((int)(imgW * imgH));
 
-                    var isBlank = IsBlankLayer(pixels);
-
-                    if (isBlank)
-                    {
-                        textures.Add(new RawTexContainer { Width = imgW, Height = imgH, Pixels = pixels });
-                        continue;
-                    }
-
                     textures.Add(new RawTexContainer { Width = imgW, Height = imgH, Pixels = pixels });
                 }
                 catch (WolvenKitException e)
                 {
-                    throw new WolvenKitException(0x2001, $"{e.Message} (must be grayscale)");
+                    throw new WolvenKitException(0x2001, $"{e.Message} (must be grayscale R8)");
                 }
             }
 
@@ -146,7 +126,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
             Create();
             Write(outFile);
 
-            _logger.Info("Import complete. Keep your original .masklist file for round-trip export.");
+            _logger.Info("MLMask import completed successfully.");
         }
 
         internal static bool IsBlankLayer(byte[] pixels)
@@ -156,28 +136,6 @@ namespace WolvenKit.Modkit.RED4.MLMask
             for (int i = 1; i < pixels.Length; i++)
                 if (pixels[i] != first) return false;
             return true;
-        }
-
-        internal static uint ParseHeaderValue(string line)
-        {
-            var parts = line.Split('=');
-            return parts.Length > 1 ? uint.Parse(parts[1].Trim()) : 0;
-        }
-
-        internal static byte[] UpscaleNearest(byte[] src, uint srcW, uint srcH, uint dstW, uint dstH)
-        {
-            var dst = new byte[dstW * dstH];
-            var scaleX = (double)srcW / dstW;
-            var scaleY = (double)srcH / dstH;
-
-            for (uint y = 0; y < dstH; y++)
-                for (uint x = 0; x < dstW; x++)
-                {
-                    var srcX = (uint)(x * scaleX);
-                    var srcY = (uint)(y * scaleY);
-                    dst[x + y * dstW] = src[srcX + srcY * srcW];
-                }
-            return dst;
         }
 
         #region Core Methods
@@ -217,51 +175,250 @@ namespace WolvenKit.Modkit.RED4.MLMask
             writer.WriteFile(cr2w);
         }
 
-        /// <summary>
-        /// Writes the tile index data (TilesData buffer) for one resolution level (high or low).
-        /// For each tile, it records:
-        /// - The starting index in the data list where this tile's layer entries begin.
-        /// - For each layer present in the tile: packed atlas position (dx, dy) + scaling shifts (sx, sy).
-        /// - A bitmask indicating which layers are active in this tile.
-        /// </summary>
-        private void PutTiles(ref List<uint> tilesDataList, MaskTile[] tileZ, uint basisTileIdx, uint widthInTiles0, uint heightInTiles0)
+        private void Create()
         {
-            var atlasTileSize = _mlmask.AtlasWidth / _mlmask.AtlasTileSize;
-            var widthInTilesShift0 = (uint)Math.Log2(atlasTileSize);
-            var widthInTilesGrayUp = (1u << (int)widthInTilesShift0) - 1;
+            if (_mlmask.Layers == null || _mlmask.Layers.Length == 0) return;
 
-            for (uint ty = 0; ty < heightInTiles0; ty++)
+            // High resolution
+            _mlmask.WidthHigh = 0;
+            _mlmask.HeightHigh = 0;
+            foreach (var lay in _mlmask.Layers)
             {
-                for (uint tx = 0; tx < widthInTiles0; tx++)
+                _mlmask.WidthHigh = Math.Max(_mlmask.WidthHigh, lay.Width);
+                _mlmask.HeightHigh = Math.Max(_mlmask.HeightHigh, lay.Height);
+            }
+
+            // Low resolution
+            _mlmask.WidthLow = _mlmask.WidthHigh;
+            _mlmask.HeightLow = _mlmask.HeightHigh;
+
+            bool hasDifferentResolutions = false;
+            foreach (var lay in _mlmask.Layers)
+            {
+                if (lay.Width < _mlmask.WidthHigh || lay.Height < _mlmask.HeightHigh)
                 {
-                    var tileIdx = tx + (ty * widthInTiles0);
-                    var layersBeg = (uint)tilesDataList.Count;
-                    var numLayers = (uint)tileZ[tileIdx].Layers.Count;
-
-                    tilesDataList[(int)((basisTileIdx + tileIdx) * 2 + 0)] = layersBeg;
-
-                    uint layersMask = 0;
-                    for (var i = 0; i < numLayers; i++)
-                    {
-                        var layerIdx = tileZ[tileIdx].Layers[i].LayerIndex;
-                        var position = tileZ[tileIdx].Layers[i].AtlasInPosition;
-                        var atlasX = position & widthInTilesGrayUp;
-                        var atlasY = (uint)((int)position >> (int)widthInTilesShift0);
-                        var widthShift = _mlmask.Layers![layerIdx].WidthShift;
-                        var heightShift = _mlmask.Layers[layerIdx].HeightShift;
-
-                        uint puts = 0;
-                        puts |= atlasX;
-                        puts |= atlasY << 10;
-                        puts |= widthShift << 20;
-                        puts |= heightShift << 24;
-
-                        tilesDataList.Add(puts);
-                        layersMask |= 1u << (int)layerIdx;
-                    }
-                    tilesDataList[(int)((basisTileIdx + tileIdx) * 2 + 1)] = layersMask;
+                    hasDifferentResolutions = true;
+                    _mlmask.WidthLow = Math.Min(_mlmask.WidthLow, lay.Width);
+                    _mlmask.HeightLow = Math.Min(_mlmask.HeightLow, lay.Height);
                 }
             }
+
+            if (!hasDifferentResolutions)
+            {
+                _mlmask.WidthLow = _mlmask.WidthHigh;
+                _mlmask.HeightLow = _mlmask.HeightHigh;
+            }
+
+            // Shifts
+            for (var i = 0; i < _mlmask.Layers.Length; i++)
+            {
+                _mlmask.Layers[i].WidthShift = (uint)Math.Ceiling(Math.Log2(_mlmask.WidthHigh / (double)_mlmask.Layers[i].Width));
+                _mlmask.Layers[i].HeightShift = (uint)Math.Ceiling(Math.Log2(_mlmask.HeightHigh / (double)_mlmask.Layers[i].Height));
+            }
+
+            // AtlasTileSize must be divisible by 4 (we split it into 4x4 BC4 blocks for compression).
+            // Start at 16 (standard when maskTileSize=14) and increase by 4 to maintain divisibility.
+            uint tempAtlasTileSize = 16u;
+            while (true)
+            {
+                _mlmask.AtlasTileSize = tempAtlasTileSize;
+                _mlmask.TileSize = _mlmask.AtlasTileSize - 2;
+
+                _mlmask.MaskTilesHigh = null;
+                _mlmask.MaskTilesLow = null;
+                _mlmask.AtlasTiles.Clear();
+                _mlmask.AtlasWidth = 0;
+                _mlmask.AtlasHeight = 0;
+                _mlmask.AtlasTilesCount = 0;
+
+                InitializeMaskLayers();
+
+                _mlmask.WidthInTilesHigh = (_mlmask.WidthHigh + (_mlmask.TileSize - 1)) / _mlmask.TileSize;
+                _mlmask.HeightInTilesHigh = (_mlmask.HeightHigh + (_mlmask.TileSize - 1)) / _mlmask.TileSize;
+                _mlmask.WidthInTilesLow = (_mlmask.WidthLow + (_mlmask.TileSize - 1)) / _mlmask.TileSize;
+                _mlmask.HeightInTilesLow = (_mlmask.HeightLow + (_mlmask.TileSize - 1)) / _mlmask.TileSize;
+
+                _mlmask.MaskTilesHigh = new MaskTile[_mlmask.WidthInTilesHigh * _mlmask.HeightInTilesHigh];
+                for (uint i = 0; i < _mlmask.MaskTilesHigh.Length; i++)
+                    _mlmask.MaskTilesHigh[i].Layers = new List<TileView>();
+
+                _mlmask.MaskTilesLow = new MaskTile[_mlmask.WidthInTilesLow * _mlmask.HeightInTilesLow];
+                for (uint i = 0; i < _mlmask.MaskTilesLow.Length; i++)
+                    _mlmask.MaskTilesLow[i].Layers = new List<TileView>();
+
+                CleanTileLayers();
+
+                if (_mlmask.AtlasTiles.Count <= 0x20000) break;
+
+                tempAtlasTileSize += 4;   // keep the value divisible by 4
+            }
+
+            CalculateAtlasProportionForPacking();
+            CreateAtlasBuffer();
+
+            var numTilesHigh = _mlmask.WidthInTilesHigh * _mlmask.HeightInTilesHigh;
+            var numTilesLow = _mlmask.WidthInTilesLow * _mlmask.HeightInTilesLow;
+            var tilesDataList = new List<uint>();
+
+            for (uint i = 0; i < (numTilesHigh + numTilesLow) * 2; i++)
+                tilesDataList.Add(0U);
+
+            PutTiles(ref tilesDataList, _mlmask.MaskTilesHigh, 0, _mlmask.WidthInTilesHigh, _mlmask.HeightInTilesHigh);
+            PutTiles(ref tilesDataList, _mlmask.MaskTilesLow, numTilesHigh, _mlmask.WidthInTilesLow, _mlmask.HeightInTilesLow);
+
+            using var ms = new MemoryStream();
+            using var bw = new BinaryWriter(ms);
+            foreach (var l in tilesDataList) bw.Write(l);
+            _mlmask.TilesBuffer = ms.ToArray();
+        }
+
+        private void CalculateAtlasProportionForPacking()
+        {
+            if (_mlmask.AtlasTilesCount == 0)
+                throw new Exception("No tiles to pack into atlas.");
+
+            uint tileSize = _mlmask.AtlasTileSize;
+            uint tileCount = _mlmask.AtlasTilesCount;
+
+            // The atlas size is independent of maskWidth/maskHeight.
+            // It only needs to hold all *unique* compressed tiles (after hash deduplication).
+            // Real game files often have atlas much smaller than mask resolution when content has repetition/empty areas.
+
+            uint bestWidth = 0;
+            uint bestHeight = 0;
+            ulong bestWaste = ulong.MaxValue;
+
+            // Start near square root for good aspect ratio
+            uint startWidthInTiles = Math.Max(1u, (uint)Math.Ceiling(Math.Sqrt(tileCount)));
+
+            // Try widths around the square root (good for most cases)
+            for (uint wTiles = startWidthInTiles; wTiles <= startWidthInTiles + 48 && wTiles <= 512; wTiles++)
+            {
+                if (wTiles == 0) continue;
+
+                uint hTiles = (tileCount + wTiles - 1) / wTiles; // ceil division
+                uint w = wTiles * tileSize;
+                uint h = hTiles * tileSize;
+
+                if (w > 16384 || h > 16384) continue;
+
+                ulong area = (ulong)w * h;
+                ulong usedArea = (ulong)tileCount * tileSize * tileSize;
+                ulong waste = area - usedArea;
+
+                if (waste < bestWaste || bestWidth == 0)
+                {
+                    bestWaste = waste;
+                    bestWidth = w;
+                    bestHeight = h;
+                }
+            }
+
+            // Also try a few power-of-two widths for potentially better cache/GPU behavior
+            uint[] pow2Candidates = { 256, 512, 1024, 2048, 4096 };
+            foreach (uint pw in pow2Candidates)
+            {
+                if (pw < tileSize) continue;
+                uint pwTiles = pw / tileSize;
+                uint phTiles = (tileCount + pwTiles - 1) / pwTiles;
+                uint ph = phTiles * tileSize;
+
+                if (ph > 16384) continue;
+
+                ulong pWaste = (ulong)pw * ph - (ulong)tileCount * tileSize * tileSize;
+                if (pWaste < bestWaste)
+                {
+                    bestWaste = pWaste;
+                    bestWidth = pw;
+                    bestHeight = ph;
+                }
+            }
+
+            // Final fallback: simple horizontal strip (rarely needed)
+            if (bestWidth == 0)
+            {
+                uint wTiles = Math.Min(128u, tileCount);
+                if (wTiles == 0) wTiles = 1;
+                uint hTiles = (tileCount + wTiles - 1) / wTiles;
+                bestWidth = wTiles * tileSize;
+                bestHeight = hTiles * tileSize;
+            }
+
+            _mlmask.AtlasWidth = bestWidth;
+            _mlmask.AtlasHeight = bestHeight;
+
+            if (_mlmask.AtlasWidth > 16384 || _mlmask.AtlasHeight > 16384)
+                throw new Exception("Atlas too large (over 16k)");
+
+            // Ensure the number of tiles horizontally is a power of 2 (required by PutTiles bit-packing).
+            uint tilesX = _mlmask.AtlasWidth / tileSize;
+            if (tilesX > 0 && (tilesX & (tilesX - 1)) != 0)
+            {
+                uint nextPow2 = 1u;
+                while (nextPow2 < tilesX) nextPow2 <<= 1;
+
+                uint newWidth = nextPow2 * tileSize;
+                uint newHeight = ((tileCount + nextPow2 - 1) / nextPow2) * tileSize;
+
+                // Try to prefer layouts where height >= width (more vertical/square, like most CDPR atlases)
+                // when it doesn't increase waste too much.
+                bool preferTaller = newHeight < newWidth;
+
+                if (preferTaller && nextPow2 > 1)
+                {
+                    uint prevPow2 = nextPow2 / 2;
+                    uint prevWidth = prevPow2 * tileSize;
+                    uint prevHeight = ((tileCount + prevPow2 - 1) / prevPow2) * tileSize;
+
+                    if (prevWidth <= 16384)
+                    {
+                        // Accept previous power of 2 if it gives height >= width or the waste increase is reasonable
+                        ulong prevWaste = (ulong)prevWidth * prevHeight - (ulong)tileCount * tileSize * tileSize;
+                        ulong currWaste = (ulong)newWidth * newHeight - (ulong)tileCount * tileSize * tileSize;
+
+                        if (prevHeight >= prevWidth || prevWaste <= currWaste * 1.6)
+                        {
+                            newWidth = prevWidth;
+                            newHeight = prevHeight;
+                        }
+                    }
+                }
+
+                if (newWidth <= 16384)
+                {
+                    _mlmask.AtlasWidth = newWidth;
+                    _mlmask.AtlasHeight = newHeight;
+                }
+            }
+
+            // Final pass: if we still have a very wide result (width > height), try one more time
+            // to use a smaller power-of-2 width if it gives a better aspect ratio with acceptable waste.
+            uint finalTilesX = _mlmask.AtlasWidth / tileSize;
+            uint finalTilesY = _mlmask.AtlasHeight / tileSize;
+
+            if (finalTilesX > finalTilesY && finalTilesX > 1)
+            {
+                uint smallerPow2 = finalTilesX / 2;
+                while (smallerPow2 > 1 && (smallerPow2 & (smallerPow2 - 1)) != 0) smallerPow2 /= 2;
+
+                if (smallerPow2 >= 1)
+                {
+                    uint tryWidth = smallerPow2 * tileSize;
+                    uint tryHeight = ((tileCount + smallerPow2 - 1) / smallerPow2) * tileSize;
+
+                    ulong tryWaste = (ulong)tryWidth * tryHeight - (ulong)tileCount * tileSize * tileSize;
+                    ulong currWaste = (ulong)_mlmask.AtlasWidth * _mlmask.AtlasHeight - (ulong)tileCount * tileSize * tileSize;
+
+                    // Accept if it makes height >= width or waste increase is small
+                    if ((tryHeight >= tryWidth || tryWaste <= currWaste * 1.5) && tryWidth <= 16384)
+                    {
+                        _mlmask.AtlasWidth = tryWidth;
+                        _mlmask.AtlasHeight = tryHeight;
+                    }
+                }
+            }
+
+            _logger.Info($"Atlas packed to {_mlmask.AtlasWidth}x{_mlmask.AtlasHeight} ({tileCount} unique tiles, tileSize={tileSize})");
         }
 
         private void InitializeMaskLayers()
@@ -322,100 +479,6 @@ namespace WolvenKit.Modkit.RED4.MLMask
             return _mlmask.Layers[layerIdx].Pixels[xx + (yy * (int)_mlmask.Layers[layerIdx].Width)];
         }
 
-        /// <summary>
-        /// Builds all internal data structures required to write a valid .mlmask file.
-        /// Calculates global resolution bounds, classifies layers into high/low tile sets,
-        /// packs tiles into the atlas, and generates the final compressed buffers.
-        /// </summary>
-        private void Create()
-        {
-            if (_mlmask.Layers == null) return;
-
-            _mlmask.WidthHigh = 0;
-            _mlmask.HeightHigh = 0;
-            foreach (var lay in _mlmask.Layers)
-            {
-                _mlmask.WidthHigh = Math.Max(_mlmask.WidthHigh, lay.Width);
-                _mlmask.HeightHigh = Math.Max(_mlmask.HeightHigh, lay.Height);
-            }
-
-            // Metadata-driven: WidthLow/HeightLow are derived from actual layer image sizes
-            _mlmask.WidthLow = uint.MaxValue;
-            _mlmask.HeightLow = uint.MaxValue;
-            foreach (var lay in _mlmask.Layers)
-            {
-                _mlmask.WidthLow = Math.Min(_mlmask.WidthLow, lay.Width);
-                _mlmask.HeightLow = Math.Min(_mlmask.HeightLow, lay.Height);
-            }
-
-            for (var i = 0; i < _mlmask.Layers.Length; i++)
-            {
-                _mlmask.Layers[i].WidthShift = (uint)Math.Ceiling(Math.Log2(_mlmask.WidthHigh / (double)_mlmask.Layers[i].Width));
-                _mlmask.Layers[i].HeightShift = (uint)Math.Ceiling(Math.Log2(_mlmask.HeightHigh / (double)_mlmask.Layers[i].Height));
-            }
-
-            uint startAtlasTileSize = (_mlmask.PreferredTileSize > 0)
-                ? _mlmask.PreferredTileSize + 2
-                : 16u;
-
-            uint tempAtlasTileSize = startAtlasTileSize;
-            while (true)
-            {
-                _mlmask.AtlasTileSize = tempAtlasTileSize;
-                _mlmask.TileSize = _mlmask.AtlasTileSize - 2;
-                tempAtlasTileSize += 16;
-
-                _mlmask.MaskTilesHigh = null;
-                _mlmask.MaskTilesLow = null;
-                _mlmask.AtlasTiles.Clear();
-                _mlmask.AtlasWidth = 0;
-                _mlmask.AtlasHeight = 0;
-                _mlmask.AtlasTilesCount = 0;
-
-                InitializeMaskLayers();
-
-                _mlmask.WidthInTilesHigh = (_mlmask.WidthHigh + (_mlmask.TileSize - 1)) / _mlmask.TileSize;
-                _mlmask.HeightInTilesHigh = (_mlmask.HeightHigh + (_mlmask.TileSize - 1)) / _mlmask.TileSize;
-                _mlmask.WidthInTilesLow = (_mlmask.WidthLow + (_mlmask.TileSize - 1)) / _mlmask.TileSize;
-                _mlmask.HeightInTilesLow = (_mlmask.HeightLow + (_mlmask.TileSize - 1)) / _mlmask.TileSize;
-
-                _mlmask.MaskTilesHigh = new MaskTile[_mlmask.WidthInTilesHigh * _mlmask.HeightInTilesHigh];
-                for (uint i = 0; i < _mlmask.MaskTilesHigh.Length; i++)
-                    _mlmask.MaskTilesHigh[i].Layers = new List<TileView>();
-
-                _mlmask.MaskTilesLow = new MaskTile[_mlmask.WidthInTilesLow * _mlmask.HeightInTilesLow];
-                for (uint i = 0; i < _mlmask.MaskTilesLow.Length; i++)
-                    _mlmask.MaskTilesLow[i].Layers = new List<TileView>();
-
-                CleanTileLayers();
-
-                if (_mlmask.AtlasTiles.Count <= 0x20000) break;
-            }
-
-            CalculateAtlasProportionForPacking();
-            CreateAtlasBuffer();
-
-            var numTilesHigh = _mlmask.WidthInTilesHigh * _mlmask.HeightInTilesHigh;
-            var numTilesLow = _mlmask.WidthInTilesLow * _mlmask.HeightInTilesLow;
-            var tilesDataList = new List<uint>();
-
-            for (uint i = 0; i < (numTilesHigh + numTilesLow) * 2; i++)
-                tilesDataList.Add(0U);
-
-            PutTiles(ref tilesDataList, _mlmask.MaskTilesHigh, 0, _mlmask.WidthInTilesHigh, _mlmask.HeightInTilesHigh);
-            PutTiles(ref tilesDataList, _mlmask.MaskTilesLow, numTilesHigh, _mlmask.WidthInTilesLow, _mlmask.HeightInTilesLow);
-
-            using var ms = new MemoryStream();
-            using var bw = new BinaryWriter(ms);
-            foreach (var l in tilesDataList) bw.Write(l);
-            _mlmask.TilesBuffer = ms.ToArray();
-        }
-
-        /// <summary>
-        /// Distributes layers into high-resolution or low-resolution tile sets.
-        /// A layer is considered "low" if its resolution is smaller than WidthHigh.
-        /// This affects which tile grid (MaskTilesHigh or MaskTilesLow) the layer's tiles are added to.
-        /// </summary>
         private void CleanTileLayers()
         {
             if (_mlmask.Layers == null || _mlmask.MaskTilesHigh == null || _mlmask.MaskTilesLow == null) return;
@@ -424,19 +487,30 @@ namespace WolvenKit.Modkit.RED4.MLMask
             {
                 if (_mlmask.Layers[I].Width < _mlmask.WidthHigh)
                 {
+                    // Low-res layer
                     for (uint y = 0; y < _mlmask.HeightInTilesLow; y++)
                     {
                         for (uint x = 0; x < _mlmask.WidthInTilesLow; x++)
                         {
-                            var tx = x * _mlmask.Layers[I].Width / _mlmask.WidthLow;
-                            var ty = y * _mlmask.Layers[I].Height / _mlmask.HeightLow;
+                            uint wTiles0 = _mlmask.Layers[I].WidthInTiles0;
+                            uint hTiles0 = _mlmask.Layers[I].HeightInTiles0;
 
-                            if (_mlmask.Layers[I].Tiles[(int)(tx + (ty * _mlmask.Layers[I].WidthInTiles0))].RangeMax > 0)
+                            if (wTiles0 == 0 || hTiles0 == 0) continue;
+
+                            var txRaw = x * _mlmask.Layers[I].Width / _mlmask.WidthLow;
+                            var tyRaw = y * _mlmask.Layers[I].Height / _mlmask.HeightLow;
+
+                            var tx = Math.Min(txRaw, wTiles0 - 1);
+                            var ty = Math.Min(tyRaw, hTiles0 - 1);
+
+                            var tileIdxCheck = tx + (ty * wTiles0);
+                            if (tileIdxCheck < (uint)_mlmask.Layers[I].Tiles.Count &&
+                                _mlmask.Layers[I].Tiles[(int)tileIdxCheck].RangeMax > 0)
                             {
                                 var layer = new TileView
                                 {
                                     LayerIndex = I,
-                                    LayerTileIndex = tx + (ty * _mlmask.Layers[I].WidthInTiles0),
+                                    LayerTileIndex = tx + (ty * wTiles0),
                                     AtlasInPosition = PackTileInAtlas(I, tx, ty)
                                 };
                                 _mlmask.MaskTilesLow[x + (y * _mlmask.WidthInTilesLow)].Layers.Add(layer);
@@ -446,19 +520,30 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 }
                 else
                 {
+                    // High-res layer
                     for (uint y = 0; y < _mlmask.HeightInTilesHigh; y++)
                     {
                         for (uint x = 0; x < _mlmask.WidthInTilesHigh; x++)
                         {
-                            var tx = x * _mlmask.Layers[I].Width / _mlmask.WidthHigh;
-                            var ty = y * _mlmask.Layers[I].Height / _mlmask.HeightHigh;
+                            uint wTiles0 = _mlmask.Layers[I].WidthInTiles0;
+                            uint hTiles0 = _mlmask.Layers[I].HeightInTiles0;
 
-                            if (_mlmask.Layers[I].Tiles[(int)(tx + (ty * _mlmask.Layers[I].WidthInTiles0))].RangeMax > 0)
+                            if (wTiles0 == 0 || hTiles0 == 0) continue;
+
+                            var txRaw = x * _mlmask.Layers[I].Width / _mlmask.WidthHigh;
+                            var tyRaw = y * _mlmask.Layers[I].Height / _mlmask.HeightHigh;
+
+                            var tx = Math.Min(txRaw, wTiles0 - 1);
+                            var ty = Math.Min(tyRaw, hTiles0 - 1);
+
+                            var tileIdxCheck = tx + (ty * wTiles0);
+                            if (tileIdxCheck < (uint)_mlmask.Layers[I].Tiles.Count &&
+                                _mlmask.Layers[I].Tiles[(int)tileIdxCheck].RangeMax > 0)
                             {
                                 var layer = new TileView
                                 {
                                     LayerIndex = I,
-                                    LayerTileIndex = tx + (ty * _mlmask.Layers[I].WidthInTiles0),
+                                    LayerTileIndex = tx + (ty * wTiles0),
                                     AtlasInPosition = PackTileInAtlas(I, tx, ty)
                                 };
                                 _mlmask.MaskTilesHigh[x + (y * _mlmask.WidthInTilesHigh)].Layers.Add(layer);
@@ -471,11 +556,23 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
         private uint PackTileInAtlas(uint layerIdx, uint tx, uint ty)
         {
-            if (_mlmask.Layers == null) return 0;
+            if (_mlmask.Layers == null || layerIdx >= _mlmask.Layers.Length) return 0;
 
-            var tileIndex = tx + (ty * _mlmask.Layers[layerIdx].WidthInTiles0);
+            var layer = _mlmask.Layers[layerIdx];
+            if (layer.Tiles == null || layer.WidthInTiles0 == 0 || layer.HeightInTiles0 == 0) return 0;
 
-            if (_mlmask.Layers[layerIdx].Tiles[(int)tileIndex].AtlasInPosition == uint.MaxValue)
+            // Extra safety clamp in case caller passed slightly out-of-range values
+            if (tx >= layer.WidthInTiles0) tx = layer.WidthInTiles0 - 1;
+            if (ty >= layer.HeightInTiles0) ty = layer.HeightInTiles0 - 1;
+
+            var tileIndex = tx + (ty * layer.WidthInTiles0);
+            if (tileIndex >= (uint)layer.Tiles.Count)
+            {
+                _logger?.Error($"PackTileInAtlas: calculated tileIndex {tileIndex} is out of range for layer {layerIdx} (Tiles.Count = {layer.Tiles.Count}, tx={tx}, ty={ty})");
+                return 0;
+            }
+
+            if (layer.Tiles[(int)tileIndex].AtlasInPosition == uint.MaxValue)
             {
                 BlockCompressLocalTile(ref _mlmask.Layers[layerIdx], tileIndex);
 
@@ -509,75 +606,6 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 _mlmask.Layers[layerIdx].Tiles[(int)tileIndex] = z;
             }
             return _mlmask.Layers[layerIdx].Tiles[(int)tileIndex].AtlasInPosition;
-        }
-
-        /// <summary>
-        /// Calculates the optimal atlas dimensions.
-        /// First tries to reuse the original atlas size from the .masklist (for round-trip fidelity).
-        /// If that doesn't fit, falls back to a minimum-waste power-of-2-friendly packing algorithm.
-        /// </summary>
-        private void CalculateAtlasProportionForPacking()
-        {
-            _mlmask.AtlasWidth = 0;
-            _mlmask.AtlasHeight = 0;
-
-            if (_mlmask.PreferredAtlasWidth > 0 && _mlmask.PreferredAtlasHeight > 0)
-            {
-                var widthInTiles = _mlmask.PreferredAtlasWidth / _mlmask.AtlasTileSize;
-                if (widthInTiles > 0)
-                {
-                    var neededRows = (_mlmask.AtlasTilesCount + widthInTiles - 1) / widthInTiles;
-                    var requiredHeight = neededRows * _mlmask.AtlasTileSize;
-
-                    if (requiredHeight <= _mlmask.PreferredAtlasHeight)
-                    {
-                        _mlmask.AtlasWidth = _mlmask.PreferredAtlasWidth;
-                        _mlmask.AtlasHeight = _mlmask.PreferredAtlasHeight;
-                        _logger.Info($"Reusing original atlas size {_mlmask.PreferredAtlasWidth}x{_mlmask.PreferredAtlasHeight}");
-                        return;
-                    }
-                    else
-                    {
-                        _logger.Info($"Original atlas size {_mlmask.PreferredAtlasWidth}x{_mlmask.PreferredAtlasHeight} is insufficient for the current layer content ({_mlmask.AtlasTilesCount} unique tiles). Calculating a larger atlas...");
-                    }
-                }
-            }
-
-            uint widthTry = 16384;
-            var emptyArea = uint.MaxValue;
-
-            while (widthTry >= _mlmask.AtlasTileSize)
-            {
-                var widthInTiles0 = widthTry / _mlmask.AtlasTileSize;
-                var heightTry = (_mlmask.AtlasTilesCount + widthInTiles0 - 1) / widthInTiles0 * _mlmask.AtlasTileSize;
-
-                var widthUp = RoundUpPowerOf2(widthTry);
-                var heightUp = RoundUpPowerOf2(heightTry);
-
-                var currEmptyArea = (widthUp * heightUp) - (_mlmask.AtlasTilesCount * _mlmask.AtlasTileSize * _mlmask.AtlasTileSize);
-                if (currEmptyArea <= emptyArea)
-                {
-                    _mlmask.AtlasWidth = widthTry;
-                    _mlmask.AtlasHeight = heightTry;
-                    emptyArea = currEmptyArea;
-                }
-
-                if (widthTry <= heightTry) break;
-                widthTry /= 2;
-            }
-
-            if (_mlmask.AtlasWidth > 16384 || _mlmask.AtlasHeight > 16384)
-                throw new Exception("Atlas too large (over 16k)");
-
-            if (_mlmask.PreferredAtlasWidth > 0 && _mlmask.PreferredAtlasHeight > 0 &&
-                (_mlmask.AtlasWidth != _mlmask.PreferredAtlasWidth || _mlmask.AtlasHeight != _mlmask.PreferredAtlasHeight))
-            {
-                _logger.Info($"Atlas size automatically increased from {_mlmask.PreferredAtlasWidth}x{_mlmask.PreferredAtlasHeight} to {_mlmask.AtlasWidth}x{_mlmask.AtlasHeight} to accommodate new layer content.");
-            }
-            else if (_mlmask.PreferredAtlasWidth == 0 || _mlmask.PreferredAtlasHeight == 0)
-            {
-                _logger.Info($"Atlas size set to {_mlmask.AtlasWidth}x{_mlmask.AtlasHeight}.");
-            }
         }
 
         private void CreateAtlasBuffer()
@@ -661,22 +689,66 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
         private void PushBlockReferenceData(ref List<float> referenceData, RawTexContainer layer, uint tx, uint ty, uint xBlock, uint yBlock)
         {
+            // Extra defensive bounds check for neighbor tiles
+            uint w = layer.WidthInTiles0;
+            uint h = layer.HeightInTiles0;
+            if (w == 0 || h == 0) return;
+
+            if (tx >= w || ty >= h) return; // neighbor is out of layer bounds — skip
+
+            uint neighborTileIndex = tx + (ty * w);
+            if (neighborTileIndex >= (uint)layer.Tiles.Count) return;
+
             for (uint j = 0; j < 4; j++)
             {
                 for (uint i = 0; i < 4; i++)
                 {
                     var px = (xBlock * 4) + i;
                     var py = (yBlock * 4) + j;
-                    var v = layer.Tiles[(int)(tx + (ty * layer.WidthInTiles0))].AtlasUnCompressed[px + (py * _mlmask.AtlasTileSize)] / 255.0f;
+                    var v = layer.Tiles[(int)neighborTileIndex].AtlasUnCompressed[px + (py * _mlmask.AtlasTileSize)] / 255.0f;
                     referenceData.Add(v);
                 }
             }
         }
 
-        private static uint RoundUpPowerOf2(uint v)
+        private void PutTiles(ref List<uint> tilesDataList, MaskTile[] tileZ, uint basisTileIdx, uint widthInTiles0, uint heightInTiles0)
         {
-            v--; v |= v >> 1; v |= v >> 2; v |= v >> 4; v |= v >> 8; v |= v >> 16;
-            return ++v;
+            var atlasTileSize = _mlmask.AtlasWidth / _mlmask.AtlasTileSize;
+            var widthInTilesShift0 = (uint)Math.Log2(atlasTileSize);
+            var widthInTilesGrayUp = (1u << (int)widthInTilesShift0) - 1;
+
+            for (uint ty = 0; ty < heightInTiles0; ty++)
+            {
+                for (uint tx = 0; tx < widthInTiles0; tx++)
+                {
+                    var tileIdx = tx + (ty * widthInTiles0);
+                    var layersBeg = (uint)tilesDataList.Count;
+                    var numLayers = (uint)tileZ[tileIdx].Layers.Count;
+
+                    tilesDataList[(int)((basisTileIdx + tileIdx) * 2 + 0)] = layersBeg;
+
+                    uint layersMask = 0;
+                    for (var i = 0; i < numLayers; i++)
+                    {
+                        var layerIdx = tileZ[tileIdx].Layers[i].LayerIndex;
+                        var position = tileZ[tileIdx].Layers[i].AtlasInPosition;
+                        var atlasX = position & widthInTilesGrayUp;
+                        var atlasY = (uint)((int)position >> (int)widthInTilesShift0);
+                        var widthShift = _mlmask.Layers![layerIdx].WidthShift;
+                        var heightShift = _mlmask.Layers[layerIdx].HeightShift;
+
+                        uint puts = 0;
+                        puts |= atlasX;
+                        puts |= atlasY << 10;
+                        puts |= widthShift << 20;
+                        puts |= heightShift << 24;
+
+                        tilesDataList.Add(puts);
+                        layersMask |= 1u << (int)layerIdx;
+                    }
+                    tilesDataList[(int)((basisTileIdx + tileIdx) * 2 + 1)] = layersMask;
+                }
+            }
         }
 
         #endregion Core Methods
@@ -751,6 +823,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
         {
             public const ulong FnvHashInitial = 0xCBF29CE484222325;
             public const ulong FnvHashPrime = 0x00000100000001B3;
+
             public static ulong HashReadOnlySpan(ReadOnlySpan<byte> source, ulong hash = FnvHashInitial)
             {
                 foreach (var b in source)
@@ -768,6 +841,24 @@ namespace WolvenKit.Modkit.RED4.MLMask
             [StructLayout(LayoutKind.Explicit, Size = 8)]
             public struct BC4_UNORM
             {
+                [FieldOffset(0)] public ulong Data;
+                [FieldOffset(0)] public byte Red_0;
+                [FieldOffset(1)] public byte Red_1;
+                [FieldOffset(2)] public byte Index0;
+                [FieldOffset(3)] public byte Index1;
+                [FieldOffset(4)] public byte Index2;
+                [FieldOffset(5)] public byte Index3;
+                [FieldOffset(6)] public byte Index4;
+                [FieldOffset(7)] public byte Index5;
+
+                public uint GetIndex(int offset) => (uint)(Data >> ((3 * offset) + 16)) & 0x07;
+
+                public void SetIndex(int uOffset, int uIndex)
+                {
+                    Data &= ~((ulong)0x07 << ((3 * uOffset) + 16));
+                    Data |= (ulong)uIndex << ((3 * uOffset) + 16);
+                }
+
                 public float R(int offset)
                 {
                     var index = GetIndex(offset);
@@ -794,24 +885,6 @@ namespace WolvenKit.Modkit.RED4.MLMask
                     index--;
                     return ((fred0 * ((float)5 - index)) + (fred1 * index)) / 5.0f;
                 }
-
-                public uint GetIndex(int offset) => (uint)(Data >> ((3 * offset) + 16)) & 0x07;
-
-                public void SetIndex(int uOffset, int uIndex)
-                {
-                    Data &= ~((ulong)0x07 << ((3 * uOffset) + 16));
-                    Data |= (ulong)uIndex << ((3 * uOffset) + 16);
-                }
-
-                [FieldOffset(0)] public ulong Data;
-                [FieldOffset(0)] public byte Red_0;
-                [FieldOffset(1)] public byte Red_1;
-                [FieldOffset(2)] public byte Index0;
-                [FieldOffset(3)] public byte Index1;
-                [FieldOffset(4)] public byte Index2;
-                [FieldOffset(5)] public byte Index3;
-                [FieldOffset(6)] public byte Index4;
-                [FieldOffset(7)] public byte Index5;
             }
 
             public static void D3DXEncodeBC4U(ref ulong resultantBlock, float[] refData, List<float> theTexelsU)
@@ -824,9 +897,6 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
             private static void FindEndPointsBC4U(List<float> theTexelsU, int numTexels, ref byte endpointU_0, ref byte endpointU_1)
             {
-                const float MIN_NORM = 0f;
-                const float MAX_NORM = 1f;
-
                 var fBlockMax = theTexelsU[0];
                 var fBlockMin = theTexelsU[0];
                 for (var i = 0; i < numTexels; ++i)
@@ -835,24 +905,20 @@ namespace WolvenKit.Modkit.RED4.MLMask
                     else if (theTexelsU[i] > fBlockMax) fBlockMax = theTexelsU[i];
                 }
 
-                var bUsing4BlockCodec = MIN_NORM == fBlockMin || MAX_NORM == fBlockMax;
+                var bUsing4BlockCodec = fBlockMin == 0f || fBlockMax == 1f;
                 float fStart = 0, fEnd = 0;
 
                 if (!bUsing4BlockCodec)
                 {
                     OptimizeAlpha(ref fStart, ref fEnd, theTexelsU, numTexels, 8);
-                    var iStart = Convert.ToByte(fStart * 255.0f);
-                    var iEnd = Convert.ToByte(fEnd * 255.0f);
-                    endpointU_0 = iEnd;
-                    endpointU_1 = iStart;
+                    endpointU_0 = (byte)(fEnd * 255.0f);
+                    endpointU_1 = (byte)(fStart * 255.0f);
                 }
                 else
                 {
                     OptimizeAlpha(ref fStart, ref fEnd, theTexelsU, numTexels, 6);
-                    var iStart = Convert.ToByte(fStart * 255.0f);
-                    var iEnd = Convert.ToByte(fEnd * 255.0f);
-                    endpointU_1 = iEnd;
-                    endpointU_0 = iStart;
+                    endpointU_1 = (byte)(fEnd * 255.0f);
+                    endpointU_0 = (byte)(fStart * 255.0f);
                 }
             }
 
@@ -863,16 +929,13 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 float[] pC8 = { 7.0f / 7.0f, 6.0f / 7.0f, 5.0f / 7.0f, 4.0f / 7.0f, 3.0f / 7.0f, 2.0f / 7.0f, 1.0f / 7.0f, 0.0f / 7.0f };
                 float[] pD8 = { 0.0f / 7.0f, 1.0f / 7.0f, 2.0f / 7.0f, 3.0f / 7.0f, 4.0f / 7.0f, 5.0f / 7.0f, 6.0f / 7.0f, 7.0f / 7.0f };
 
-                var pC = 6 == cSteps ? pC6 : pC8;
-                var pD = 6 == cSteps ? pD6 : pD8;
+                var pC = (cSteps == 6) ? pC6 : pC8;
+                var pD = (cSteps == 6) ? pD6 : pD8;
 
-                const float maxValue = 1.0f;
-                const float minValue = 0.0f;
+                float fX = 1.0f;
+                float fY = 0.0f;
 
-                var fX = maxValue;
-                var fY = minValue;
-
-                if (8 == cSteps)
+                if (cSteps == 8)
                 {
                     for (var iPoint = 0; iPoint < numTexels; iPoint++)
                     {
@@ -884,10 +947,10 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 {
                     for (var iPoint = 0; iPoint < numTexels; iPoint++)
                     {
-                        if (pPoints[iPoint] < fX && pPoints[iPoint] > minValue) fX = pPoints[iPoint];
-                        if (pPoints[iPoint] > fY && pPoints[iPoint] < maxValue) fY = pPoints[iPoint];
+                        if (pPoints[iPoint] < fX && pPoints[iPoint] > 0.0f) fX = pPoints[iPoint];
+                        if (pPoints[iPoint] > fY && pPoints[iPoint] < 1.0f) fY = pPoints[iPoint];
                     }
-                    if (fX == fY) fY = maxValue;
+                    if (fX == fY) fY = 1.0f;
                 }
 
                 var fSteps = Convert.ToSingle(cSteps - 1);
@@ -902,10 +965,10 @@ namespace WolvenKit.Modkit.RED4.MLMask
                     for (var iStep = 0; iStep < cSteps; iStep++)
                         pSteps[iStep] = (pC[iStep] * fX) + (pD[iStep] * fY);
 
-                    if (6 == cSteps)
+                    if (cSteps == 6)
                     {
-                        pSteps[6] = minValue;
-                        pSteps[7] = maxValue;
+                        pSteps[6] = 0.0f;
+                        pSteps[7] = 1.0f;
                     }
 
                     var dX = 0.0f;
@@ -919,9 +982,9 @@ namespace WolvenKit.Modkit.RED4.MLMask
                         uint iStep;
 
                         if (fDot <= 0.0f)
-                            iStep = 6 == cSteps && pPoints[(int)iPoint] <= fX * 0.5f ? (uint)6 : 0;
+                            iStep = (cSteps == 6 && pPoints[(int)iPoint] <= fX * 0.5f) ? 6u : 0u;
                         else if (fDot >= fSteps)
-                            iStep = 6 == cSteps && pPoints[(int)iPoint] >= (fY + 1.0f) * 0.5f ? 7 : cSteps - 1;
+                            iStep = (cSteps == 6 && pPoints[(int)iPoint] >= (fY + 1.0f) * 0.5f) ? 7u : cSteps - 1;
                         else
                             iStep = (uint)(fDot + 0.5f);
 
@@ -943,8 +1006,8 @@ namespace WolvenKit.Modkit.RED4.MLMask
                     if (dX * dX < 1.0f / 64.0f && dY * dY < 1.0f / 64.0f) break;
                 }
 
-                pX = fX < minValue ? minValue : fX > maxValue ? maxValue : fX;
-                pY = fY < minValue ? minValue : fY > maxValue ? maxValue : fY;
+                pX = Math.Clamp(fX, 0.0f, 1.0f);
+                pY = Math.Clamp(fY, 0.0f, 1.0f);
             }
 
             private static void FindClosestUNORM(ref BC4_UNORM pBC, float[] theTexelsU)
