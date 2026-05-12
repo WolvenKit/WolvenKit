@@ -1,4 +1,4 @@
-using System;
+// using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -233,7 +233,6 @@ public partial class ModTools
         }
 
         // Extract atlas position and scaling factors from the packed tile declaration.
-        // dx/dy = tile position in the atlas, sx/sy = bit-shift scaling for this layer.
         var dx = (tileDecl >> TILE_DX_SHIFT) & TILE_PARAM_MASK;
         var dy = (tileDecl >> TILE_DY_SHIFT) & TILE_PARAM_MASK;
         var sx = (tileDecl >> TILE_SX_SHIFT) & TILE_S_MASK;
@@ -445,22 +444,12 @@ public partial class ModTools
         {
             var maskListPath = Path.ChangeExtension(outfile.FullName, "masklist");
 
+            // Simplified header - only basic info, no original atlas/mask dimensions
             var headerLines = new List<string>
             {
-                "# MLMask Export v2",
-                "# Original file header values",
-                $"# AtlasWidth={blob.Header.AtlasWidth}",
-                $"# AtlasHeight={blob.Header.AtlasHeight}",
-                $"# MaskWidth={blob.Header.MaskWidth}",
-                $"# MaskHeight={blob.Header.MaskHeight}",
-                $"# MaskWidthLow={blob.Header.MaskWidthLow}",
-                $"# MaskHeightLow={blob.Header.MaskHeightLow}",
-                $"# MaskTileSize={blob.Header.MaskTileSize}",
-                $"# NumLayers={blob.Header.NumLayers}",
-                "",
-                $"# LayerResolutions={string.Join(",", layerResolutions)}",
-                "",
-                "# Layer image files (must be in correct order)"
+                "# MLMask Export",
+                "# Layer image files (must be in correct order)",
+                ""
             };
 
             headerLines.AddRange(masks);
