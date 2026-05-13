@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
@@ -14,12 +15,11 @@ using WolvenKit.Helpers;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.IO;
-using YamlDotNet.Serialization;
 using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
 
 namespace WolvenKit.App.Helpers;
 
-public class ImportExportHelper
+public partial class ImportExportHelper
 {
     private readonly ILoggerService _loggerService;
     private readonly IProjectManager _projectManager;
@@ -64,7 +64,7 @@ public class ImportExportHelper
         return true;
     }
 
-    public bool Finalize(ImportArgs mainArgs, GlobalImportArgs args) => 
+    public bool Finalize(ImportArgs mainArgs, GlobalImportArgs args) =>
         mainArgs is not ReImportArgs || Finalize(args.Get<ReImportArgs>());
 
     public bool Finalize(ReImportArgs args)
@@ -129,7 +129,7 @@ public class ImportExportHelper
             }
             _modTools.ExportMaterials(cr2w!, outputPath.ToFileInfo(), meshExportArgs);
         }
-        
+
         return result;
     }
 
@@ -197,4 +197,34 @@ public class ImportExportHelper
         return await _modTools.Import(rawRelative, args, outDir, _settingsManager.ShowVerboseLogOutput);
         //_hookService.OnPostImport(ref cr2wFile, ref args);
     }
+
+    public static bool CanExportFilepath(string filePath) => Enum.TryParse<ECookedFileFormat>(Path.GetExtension(filePath).TrimStart('.'), out var _);
+
+    public static bool CanImportFilepath(string filePath)
+    {
+        var fileExtension = Path.GetExtension(filePath).TrimStart('.');
+        if (!Enum.TryParse<ERawFileFormat>(fileExtension.ToLower(), out var _))
+        {
+            return false;
+        }
+
+        switch (fileExtension)
+        {
+            // masklist items
+            case "png":
+                var masklistPath  = (Path.GetDirectoryName(filePath)?? "").Replace("_layers", ".masklist");
+                return !File.Exists(masklistPath) && !filePath.Contains($".inkatlas{Path.DirectorySeparatorChar}");
+            // morphtarget texturesF
+            case "dds":
+                var parentDirName = new DirectoryInfo(Path.GetDirectoryName(filePath) ?? string.Empty).Name;
+                var morphtargetFolderName = NumberedDdsFileRegex().Replace(Path.GetFileName(filePath), "textures");
+                return parentDirName != morphtargetFolderName;
+            default:
+                return true;
+        }
+    }
+
+    // for checking if a dds file is part of a morphtarget
+    [GeneratedRegex("\\d+\\.dds$")]
+    private static partial Regex NumberedDdsFileRegex();
 }

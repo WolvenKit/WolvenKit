@@ -115,7 +115,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             if (dialogModel.IsCreateJsonFile)
             {
                 var locKey =
-                    $"{modderName.ToFileName()}_{dialogModel.NpcName.ToFileName()}_photomode_i18n";
+                    $"{modderName.ToArchiveFileName()}_{dialogModel.NpcName.ToArchiveFileName()}_photomode_i18n";
 
                 var jsonFileAbsolutePath = Path.Join(activeProject.ModDirectory, jsonFileRelativePath);
 
@@ -278,7 +278,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
                     "Select asset files",
                     "Select the files you want to make available to World Builder.",
                     "WorldBuilder file name",
-                    activeProject.ModName.ToFileName()
+                    activeProject.ModName.ToArchiveFileName()
                 )
             ) is not { } dialogModel || dialogModel.SelectedOptions.Count == 0)
         {

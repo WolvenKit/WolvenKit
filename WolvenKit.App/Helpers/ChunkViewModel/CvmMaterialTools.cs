@@ -266,7 +266,6 @@ public class CvmMaterialTools
                 externalMaterialIdx += 1;
             }
 
-            t.Index = (CUInt16)i;
             mesh.MaterialEntries.Add(t);
         }
 

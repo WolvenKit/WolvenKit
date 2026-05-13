@@ -1,0 +1,50 @@
+name: stage changelog
+on:
+  workflow_dispatch:
+
+env:
+  PROJ: ./WolvenKit/WolvenKit.csproj
+
+jobs:
+  stage-changelog:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Cleanup branch
+        run: |
+          git push origin --delete changelog-staging || true
+          git checkout -b changelog-staging
+
+      - name: Get app version
+        uses: naminodarie/get-net-sdk-project-versions-action@v2
+        id: get_version
+        with:
+          proj-path: ${{env.PROJ}}
+
+      - name: Set Version Variable
+        shell: bash
+        run: echo "VERSION_APP=${{steps.get_version.outputs.assembly-version}}" >> $GITHUB_ENV
+
+      - name: Generate changelog
+        run: |
+          mkdir compiled-changelog
+          pip install pyyaml
+          echo ${{env.VERSION_APP}}
+          python "tools/compile_changelog.py" --release ${{env.VERSION_APP}} --input "changelog/!unreleased.yaml" --out-md "compiled-changelog/CHANGELOG.md" --out-bb "compiled-changelog/CHANGELOG.txt" --changelog "CHANGELOG.md"
+
+      - name: Commit and Push
+        run: |
+          git add CHANGELOG.md
+          git add compiled-changelog/CHANGELOG.md
+          git add compiled-changelog/CHANGELOG.txt
+          git commit -m "Stage changelog for version ${{env.VERSION_APP}}" || echo "No changes to commit"
+          git push origin changelog-staging
