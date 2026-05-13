@@ -28,9 +28,9 @@ namespace WolvenKit.Modkit.RED4.MLMask
         }
 
         /// <summary>
-        /// Импорт .masklist → .mlmask
-        /// Поддерживает как разные разрешения слоёв, так и одинаковые.
-        /// .masklist теперь содержит только пути к файлам (без заголовка).
+        /// Imports a .masklist file into a .mlmask file.
+        /// Supports both single-resolution and multi-resolution layer sets.
+        /// The .masklist now contains only layer file paths (no header).
         /// </summary>
         public void Import(FileInfo txtImageList, FileInfo outFile)
         {
@@ -43,8 +43,9 @@ namespace WolvenKit.Modkit.RED4.MLMask
             {
                 var trimmed = line.Trim();
                 if (string.IsNullOrWhiteSpace(trimmed) || trimmed.StartsWith("#"))
+                {
                     continue;
-                if (trimmed.Contains("=")) continue; // совместимость со старыми файлами
+                }
 
                 filePaths.Add(trimmed);
             }
@@ -54,16 +55,11 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
             var files = filePaths.Select(x => Path.Combine(baseDir.FullName, x)).ToList();
 
-            _mlmask = new MlMaskContainer
-            {
-                PreferredTileSize = 16,
-                PreferredAtlasWidth = 0,
-                PreferredAtlasHeight = 0
-            };
+            _mlmask = new MlMaskContainer();
 
             var textures = new List<RawTexContainer>();
 
-            // Добавляем белый слой 0 (если первый слой не заканчивается на _0)
+            // Add white base layer 0 (if the first layer does not end with _0)
             var firstLayerName = Path.GetFileNameWithoutExtension(files[0]);
             var needsLayer0 = !firstLayerName.EndsWith("_0") && !firstLayerName.Equals("0");
 
@@ -92,7 +88,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 _logger.Info($"Added white layer 0 at {whiteW}x{whiteH}");
             }
 
-            // Загружаем все слои из файлов
+            // Load all layers from files
             foreach (var f in files)
             {
                 if (!File.Exists(f))
@@ -209,6 +205,13 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 _mlmask.HeightLow = _mlmask.HeightHigh;
             }
 
+            _logger.Info($"MLMask layers: High-res {_mlmask.WidthHigh}x{_mlmask.HeightHigh}, Low-res {_mlmask.WidthLow}x{_mlmask.HeightLow}, Layers: {_mlmask.Layers.Length}");
+
+            for (int i = 0; i < _mlmask.Layers.Length; i++)
+            {
+                _logger.Info($"  Layer {i}: {_mlmask.Layers[i].Width}x{_mlmask.Layers[i].Height}");
+            }
+
             // Shifts
             for (var i = 0; i < _mlmask.Layers.Length; i++)
             {
@@ -216,8 +219,9 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 _mlmask.Layers[i].HeightShift = (uint)Math.Ceiling(Math.Log2(_mlmask.HeightHigh / (double)_mlmask.Layers[i].Height));
             }
 
+            // Fixed tile size for this project: maskTileSize = 14 → AtlasTileSize = 16.
             // AtlasTileSize must be divisible by 4 (we split it into 4x4 BC4 blocks for compression).
-            // Start at 16 (standard when maskTileSize=14) and increase by 4 to maintain divisibility.
+            // We start at 16 and increase by 4 if needed to keep divisibility.
             uint tempAtlasTileSize = 16u;
             while (true)
             {
@@ -287,17 +291,14 @@ namespace WolvenKit.Modkit.RED4.MLMask
             uint bestWidth = 0;
             uint bestHeight = 0;
             ulong bestWaste = ulong.MaxValue;
+            double bestWasteRatio = double.MaxValue; // waste / usedArea
 
-            // Start near square root for good aspect ratio
-            uint startWidthInTiles = Math.Max(1u, (uint)Math.Ceiling(Math.Sqrt(tileCount)));
-
-            // Try widths around the square root (good for most cases)
-            for (uint wTiles = startWidthInTiles; wTiles <= startWidthInTiles + 48 && wTiles <= 512; wTiles++)
+            // Search over all reasonable power-of-2 widths (this is the constraint from PutTiles).
+            // Start from 4 tiles wide to avoid extremely narrow (1-tile) atlases.
+            for (uint wTilesPow2 = 4; wTilesPow2 <= 1024; wTilesPow2 <<= 1)
             {
-                if (wTiles == 0) continue;
-
-                uint hTiles = (tileCount + wTiles - 1) / wTiles; // ceil division
-                uint w = wTiles * tileSize;
+                uint hTiles = (tileCount + wTilesPow2 - 1) / wTilesPow2;
+                uint w = wTilesPow2 * tileSize;
                 uint h = hTiles * tileSize;
 
                 if (w > 16384 || h > 16384) continue;
@@ -305,40 +306,47 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 ulong area = (ulong)w * h;
                 ulong usedArea = (ulong)tileCount * tileSize * tileSize;
                 ulong waste = area - usedArea;
+                double wasteRatio = usedArea > 0 ? (double)waste / usedArea : 0;
 
-                if (waste < bestWaste || bestWidth == 0)
+                // Calculate aspect ratio
+                double aspect = (double)h / w;
+
+                // Hard filter: reject extremely bad aspect ratios
+                if (aspect > 4.0 || aspect < 0.25) continue;
+
+                // Prefer lower waste ratio. If ratios are close, prefer reasonable aspect ratio.
+                bool better = false;
+                if (wasteRatio < bestWasteRatio - 0.01) better = true;
+                else if (Math.Abs(wasteRatio - bestWasteRatio) <= 0.01)
+                {
+                    // Prefer aspect ratios in good range [0.5 .. 2.5]
+                    bool currGood = aspect >= 0.5 && aspect <= 2.5;
+                    bool bestGood = (bestHeight >= 0.5 * bestWidth) && (bestHeight <= 2.5 * bestWidth);
+
+                    if (currGood && !bestGood) better = true;
+                    else if (currGood == bestGood)
+                    {
+                        // Among good aspects, prefer closer to square
+                        double currDist = Math.Abs(aspect - 1.0);
+                        double bestDist = Math.Abs((double)bestHeight / bestWidth - 1.0);
+                        if (currDist < bestDist - 0.08) better = true;
+                        else if (Math.Abs(currDist - bestDist) <= 0.08 && waste < bestWaste) better = true;
+                    }
+                }
+
+                if (better || bestWidth == 0)
                 {
                     bestWaste = waste;
+                    bestWasteRatio = wasteRatio;
                     bestWidth = w;
                     bestHeight = h;
                 }
             }
 
-            // Also try a few power-of-two widths for potentially better cache/GPU behavior
-            uint[] pow2Candidates = { 256, 512, 1024, 2048, 4096 };
-            foreach (uint pw in pow2Candidates)
-            {
-                if (pw < tileSize) continue;
-                uint pwTiles = pw / tileSize;
-                uint phTiles = (tileCount + pwTiles - 1) / pwTiles;
-                uint ph = phTiles * tileSize;
-
-                if (ph > 16384) continue;
-
-                ulong pWaste = (ulong)pw * ph - (ulong)tileCount * tileSize * tileSize;
-                if (pWaste < bestWaste)
-                {
-                    bestWaste = pWaste;
-                    bestWidth = pw;
-                    bestHeight = ph;
-                }
-            }
-
-            // Final fallback: simple horizontal strip (rarely needed)
+            // Fallback (should rarely happen)
             if (bestWidth == 0)
             {
-                uint wTiles = Math.Min(128u, tileCount);
-                if (wTiles == 0) wTiles = 1;
+                uint wTiles = 64;
                 uint hTiles = (tileCount + wTiles - 1) / wTiles;
                 bestWidth = wTiles * tileSize;
                 bestHeight = hTiles * tileSize;
@@ -418,7 +426,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 }
             }
 
-            _logger.Info($"Atlas packed to {_mlmask.AtlasWidth}x{_mlmask.AtlasHeight} ({tileCount} unique tiles, tileSize={tileSize})");
+            _logger.Info($"Atlas packed to {_mlmask.AtlasWidth}x{_mlmask.AtlasHeight} ({tileCount} unique tiles)");
         }
 
         private void InitializeMaskLayers()
@@ -809,10 +817,6 @@ namespace WolvenKit.Modkit.RED4.MLMask
             public uint TileSize;
             public uint WidthHigh;
             public uint AtlasTilesCount;
-
-            public uint PreferredTileSize;
-            public uint PreferredAtlasWidth;
-            public uint PreferredAtlasHeight;
         }
 
         #endregion Structs
