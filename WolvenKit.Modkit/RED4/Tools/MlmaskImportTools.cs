@@ -202,6 +202,23 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 _mlmask.HeightLow = _mlmask.HeightHigh;
             }
 
+            // Protection against 3+ different resolutions (only 2 levels supported: High + Low)
+            bool hasThirdResolution = false;
+            foreach (var lay in _mlmask.Layers)
+            {
+                if (lay.Width != _mlmask.WidthHigh && lay.Width != _mlmask.WidthLow)
+                {
+                    hasThirdResolution = true;
+                    break;
+                }
+            }
+
+            if (hasThirdResolution)
+            {
+                _logger.Error("MLMask import does not support 3 or more different resolutions. Only High + Low are supported.");
+                throw new WolvenKitException(0x2003, "More than 2 different resolutions detected in masklist. Only 2 resolution levels are supported.");
+            }
+
             _logger.Info($"MLMask layers: High-res {_mlmask.WidthHigh}x{_mlmask.HeightHigh}, Low-res {_mlmask.WidthLow}x{_mlmask.HeightLow}, Layers: {_mlmask.Layers.Length}");
 
             for (int i = 0; i < _mlmask.Layers.Length; i++)
