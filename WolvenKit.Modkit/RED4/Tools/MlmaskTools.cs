@@ -77,7 +77,7 @@ public partial class ModTools
 
             try
             {
-                var targetLinear = Common.DDS.DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
+                var targetLinear = Common.DDS.DXGI_FORMAT.DXGI_FORMAT_R8_UNORM;
                 if (img.Metadata.Format != (DXGI_FORMAT)targetLinear)
                 {
                     img.Convert(targetLinear);
