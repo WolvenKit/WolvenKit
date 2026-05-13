@@ -215,7 +215,6 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
             if (hasThirdResolution)
             {
-                _logger.Error("MLMask import does not support 3 or more different resolutions. Only High + Low are supported.");
                 throw new WolvenKitException(0x2003, "More than 2 different resolutions detected in masklist. Only 2 resolution levels are supported.");
             }
 
