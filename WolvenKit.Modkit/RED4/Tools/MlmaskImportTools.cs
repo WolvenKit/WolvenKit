@@ -85,7 +85,6 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 var whitePixels = new byte[whiteW * whiteH];
                 Array.Fill(whitePixels, (byte)255);
                 textures.Add(new RawTexContainer { Width = whiteW, Height = whiteH, Pixels = whitePixels });
-                _logger.Info($"Added white layer 0 at {whiteW}x{whiteH}");
             }
 
             // Load all layers from files
@@ -121,8 +120,6 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
             Create();
             Write(outFile);
-
-            _logger.Info("MLMask import completed successfully.");
         }
 
         internal static bool IsBlankLayer(byte[] pixels)
@@ -209,7 +206,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
             for (int i = 0; i < _mlmask.Layers.Length; i++)
             {
-                _logger.Info($"  Layer {i}: {_mlmask.Layers[i].Width}x{_mlmask.Layers[i].Height}");
+                _logger.Debug($"  Layer {i}: {_mlmask.Layers[i].Width}x{_mlmask.Layers[i].Height}");
             }
 
             // Shifts
@@ -426,7 +423,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 }
             }
 
-            _logger.Info($"Atlas packed to {_mlmask.AtlasWidth}x{_mlmask.AtlasHeight} ({tileCount} unique tiles)");
+            _logger.Debug($"Atlas packed to {_mlmask.AtlasWidth}x{_mlmask.AtlasHeight} ({tileCount} unique tiles)");
         }
 
         private void InitializeMaskLayers()
