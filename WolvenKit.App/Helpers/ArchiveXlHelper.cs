@@ -480,6 +480,4 @@ public static partial class ArchiveXlHelper
         };
         // @formatter:on
     }
-
-
 }
