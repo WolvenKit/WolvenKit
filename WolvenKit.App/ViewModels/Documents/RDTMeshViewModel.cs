@@ -1705,52 +1705,38 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         }
     }
 
-    [RelayCommand]
+   [RelayCommand]
     public void LoadMaterials()
     {
         if (SelectedAppearance == null)
         {
-            Parent.GetLoggerService().NotNull().Warning($"No material selected!");
+            Parent.GetLoggerService().NotNull().Warning("No material selected!");
             return;
         }
+
         IsLoadingMaterials = true;
+
         if (CtrlKeyPressed)
         {
             DeleteMaterialCache();
-
-            Parent.GetLoggerService().NotNull().Info($"Clearing material cache...");
+            Parent.GetLoggerService().NotNull().Info("Clearing material cache...");
             foreach (var (_, material) in SelectedAppearance.RawMaterials)
-            {
                 ClearMaterial(material);
-            }
-
-            if (ShiftKeyPressed)
-            {
-                Parent.GetLoggerService().NotNull().Info($"All materials cleared!");
-                return;
-            }
         }
 
+        var loadTask = Parallel.ForEachAsync(
+            from entry in SelectedAppearance.RawMaterials orderby entry.Key ascending select entry,
+            (material, ct) => LoadMaterial(material.Value));
 
-        Parallel.ForEachAsync(from entry in SelectedAppearance.RawMaterials orderby entry.Key ascending select entry, (material, cancellationToken) => LoadMaterial(material.Value)).ContinueWith((result) =>
+        loadTask.ContinueWith(t =>
         {
-            Parent.GetLoggerService().NotNull().Info($"All materials loaded!");
+            if (t.IsFaulted)
+                Parent.GetLoggerService().NotNull().Error($"Material loading had errors: {t.Exception?.GetBaseException().Message}");
+            else
+                Parent.GetLoggerService().NotNull().Info("All materials loaded!");
+
             IsLoadingMaterials = false;
-        });
-
-
-        //IsLoadingMaterials = true;
-        //var tasks = new List<Task>();
-
-        //foreach (var (name, material) in RawMaterials)
-        //{
-        //    tasks.Add(LoadMaterial(material));
-        //}
-
-        //Task.WhenAll(tasks).ContinueWith((result) =>
-        //{
-        //    IsLoadingMaterials = false;
-        //});
+        }, TaskScheduler.Default);
     }
 
     private void ClearMaterial(Material? material)
@@ -1763,7 +1749,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         GetMaterialFilePathsFromCache(material.Name, true);
     }
 
-    public async ValueTask LoadMaterial(WolvenKit.App.Models.Material? material)
+        public async ValueTask LoadMaterial(WolvenKit.App.Models.Material? material)
     {
         if (material == null)
         {
@@ -1772,543 +1758,448 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
         Parent.GetLoggerService().Info($"Loading material: {material.Name}");
 
-        var dictionary = material.Values;
-
-        var mat = material.Instance;
-        while (mat != null && mat.BaseMaterial.DepotPath != ResourcePath.Empty)
+        try
         {
-            CR2WFile? baseMaterialFile = null;
+            var dictionary = material.Values;
 
-            try
+            var mat = material.Instance;
+            while (mat != null && mat.BaseMaterial.DepotPath != ResourcePath.Empty)
             {
-                baseMaterialFile = Parent.GetFileFromDepotPathOrCache(mat.BaseMaterial.DepotPath);
-            }
-            catch
-            {
-                Parent.GetLoggerService().Warning($"Trying to find base material, but was not found: \n{mat.BaseMaterial.DepotPath}");
-                continue;
-            }
+                CR2WFile? baseMaterialFile = null;
 
-            if (baseMaterialFile == null)
-            {
-                mat = null;
-                continue;
-            }
-
-
-            switch (baseMaterialFile.RootChunk)
-            {
-                case CMaterialInstance cmi:
+                try
                 {
-                    foreach (var pair in cmi.Values)
-                    {
-                        var k = pair.Key.ToString().NotNull();
-
-                        if (!dictionary.ContainsKey(k))
-                        {
-                            dictionary.Add(k, pair.Value);
-                        }
-                    }
-
-                    mat = cmi;
-                    break;
+                    baseMaterialFile = Parent.GetFileFromDepotPathOrCache(mat.BaseMaterial.DepotPath);
                 }
-                case CMaterialTemplate cmt:
-                    material.TemplateName = cmt.Name;
+                catch
+                {
+                    Parent.GetLoggerService().Warning($"Trying to find base material, but was not found: \n{mat.BaseMaterial.DepotPath}");
+                    continue;
+                }
+
+                if (baseMaterialFile == null)
+                {
                     mat = null;
-                    break;
-                default:
-                    break;
+                    continue;
+                }
+
+                switch (baseMaterialFile.RootChunk)
+                {
+                    case CMaterialInstance cmi:
+                    {
+                        foreach (var pair in cmi.Values)
+                        {
+                            var k = pair.Key.ToString().NotNull();
+
+                            if (!dictionary.ContainsKey(k))
+                            {
+                                dictionary.Add(k, pair.Value);
+                            }
+                        }
+
+                        mat = cmi;
+                        break;
+                    }
+                    case CMaterialTemplate cmt:
+                        material.TemplateName = cmt.Name;
+                        mat = null;
+                        break;
+                    default:
+                        break;
+                }
             }
 
-        }
+            // set numeric roughness, metalness etc. values from textures
+            adjustRoughness(dictionary, material);
 
-        // set numeric roughness, metalness etc. values from textures
-        adjustRoughness(dictionary, material);
+            var (filename_b, filename_bn, filename_rm, filename_d, filename_n) = GetMaterialFilePathsFromCache(material.Name);
 
-        var (filename_b, filename_bn, filename_rm, filename_d, filename_n) = GetMaterialFilePathsFromCache(material.Name);
-
-        if (dictionary.TryGetValue("MultilayerSetup", out var mlsetup) && dictionary.TryGetValue("MultilayerMask", out var mlmask))
-        {
-            var albedoExists = File.Exists(filename_b);
-            var roughMetallicExists = File.Exists(filename_rm);
-            var normalExists = File.Exists(filename_bn);
-
-            if (albedoExists && normalExists && roughMetallicExists)
+            if (dictionary.TryGetValue("MultilayerSetup", out var mlsetup) && dictionary.TryGetValue("MultilayerMask", out var mlmask))
             {
-                goto DiffuseMaps;
-            }
+                var albedoExists = File.Exists(filename_b);
+                var roughMetallicExists = File.Exists(filename_rm);
+                var normalExists = File.Exists(filename_bn);
 
-            if (mlsetup is not CResourceReference<Multilayer_Setup> mlsRef)
-            {
-                goto DiffuseMaps;
-            }
+                if (albedoExists && normalExists && roughMetallicExists)
+                {
+                    goto DiffuseMaps;
+                }
 
-            if (mlmask is not CResourceReference<Multilayer_Mask> mlmRef)
-            {
-                goto DiffuseMaps;
-            }
+                if (mlsetup is not CResourceReference<Multilayer_Setup> mlsRef)
+                {
+                    goto DiffuseMaps;
+                }
 
-            var setupFile = Parent.GetFileFromDepotPathOrCache(mlsRef.DepotPath);
+                if (mlmask is not CResourceReference<Multilayer_Mask> mlmRef)
+                {
+                    goto DiffuseMaps;
+                }
 
-            if (setupFile is not { RootChunk: Multilayer_Setup mls })
-            {
-                goto DiffuseMaps;
-            }
+                var setupFile = Parent.GetFileFromDepotPathOrCache(mlsRef.DepotPath);
 
-            var maskFile = Parent.GetFileFromDepotPathOrCache(mlmRef.DepotPath);
+                if (setupFile is not { RootChunk: Multilayer_Setup mls })
+                {
+                    goto DiffuseMaps;
+                }
 
-            if (maskFile is not { RootChunk: Multilayer_Mask mlm })
-            {
-                goto DiffuseMaps;
-            }
+                var maskFile = Parent.GetFileFromDepotPathOrCache(mlmRef.DepotPath);
+
+                if (maskFile is not { RootChunk: Multilayer_Mask mlm })
+                {
+                    goto DiffuseMaps;
+                }
 
             ModTools.ConvertMultilayerMaskToDdsStreams(mlm, out var streams);
 
+            if (streams == null || streams.Count == 0)
+                goto DiffuseMaps;
 
-            var firstStream = await ImageDecoder.RenderToBitmapImageDds(streams[0], Enums.ETextureRawFormat.TRF_Grayscale);
-            if (firstStream == null)
+            // === Render all layers first and find the maximum resolution ===
+            var layerBitmaps = new List<System.Drawing.Bitmap>();
+            int maxW = 0, maxH = 0;
+
+            foreach (var stream in streams)
             {
-                _loggerService.Error("Could not load MultilayerMask");
-                return;
+                var img = await ImageDecoder.RenderToBitmapImageDds(stream, Enums.ETextureRawFormat.TRF_Grayscale);
+                if (img == null) continue;
+
+                // Create target bitmaps at maximum resolution
+                using (var ms = new MemoryStream())
+                {
+                    var encoder = new PngBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create(img));
+                    encoder.Save(ms);
+                    ms.Position = 0;
+                    var bmp = new System.Drawing.Bitmap(ms);
+
+                    layerBitmaps.Add(bmp);
+                    maxW = Math.Max(maxW, bmp.Width);
+                    maxH = Math.Max(maxH, bmp.Height);
+                }
             }
 
-            var destBitmap = new Bitmap((int)firstStream.PixelWidth, (int)firstStream.PixelHeight);
-            var rmBitmap = new Bitmap((int)firstStream.PixelWidth, (int)firstStream.PixelHeight);
-            var normalBitmap = new Bitmap((int)firstStream.PixelWidth, (int)firstStream.PixelHeight);
-            using (var gfx_n = Graphics.FromImage(normalBitmap))
+            if (layerBitmaps.Count == 0)
+                goto DiffuseMaps;
+
+            // Create target bitmaps at maximum resolution
+            var destBitmap   = new Bitmap(maxW, maxH);
+            var rmBitmap     = new Bitmap(maxW, maxH);
+            var normalBitmap = new Bitmap(maxW, maxH);
+
+            using (var g = Graphics.FromImage(normalBitmap))
             using (var brush = new SolidBrush(System.Drawing.Color.FromArgb(128, 128, 255)))
-            {
-                gfx_n.FillRectangle(brush, 0, 0, (int)firstStream.PixelWidth, (int)firstStream.PixelHeight);
-            }
+                g.FillRectangle(brush, 0, 0, maxW, maxH);
 
             var gfx = Graphics.FromImage(destBitmap);
             var gfx_rm = Graphics.FromImage(rmBitmap);
-            //Graphics gfx_n = Graphics.FromImage(destBitmap);
 
             var i = 0;
             foreach (var layer in mls.Layers)
             {
-                if (i >= streams.Count)
-                {
-                    break;
-                }
+                if (i >= layerBitmaps.Count) break;
 
                 if (layer.Material.DepotPath == ResourcePath.Empty)
-                {
                     goto SkipLayer;
-                }
 
                 var templateFile = Parent.GetFileFromDepotPathOrCache(layer.Material.DepotPath);
-
                 if (templateFile?.RootChunk is not Multilayer_LayerTemplate mllt)
-                {
                     goto SkipLayer;
-                }
 
-                var tmp = i == 0 ? firstStream : await ImageDecoder.RenderToBitmapImageDds(streams[i], Enums.ETextureRawFormat.TRF_Grayscale);
-                if (tmp == null)
-                {
-                    _loggerService.Error("Could not load Multilayer_Layer");
-                    continue;
-                }
-
-                var mask = new TransformedBitmap(tmp, new ScaleTransform(1, 1));
-
+                // Get the layer and resize it to max resolution if needed
+                var sourceBmp = layerBitmaps[i];
                 Bitmap maskBitmap;
-                using (var outStream = new MemoryStream())
+
+                if (sourceBmp.Width == maxW && sourceBmp.Height == maxH)
                 {
-                    BitmapEncoder enc = new PngBitmapEncoder();
-                    enc.Frames.Add(BitmapFrame.Create(mask));
-                    enc.Save(outStream);
-                    maskBitmap = new Bitmap(outStream);
+                    maskBitmap = (Bitmap)sourceBmp.Clone();
+                }
+                else
+                {
+                    // Resize using System.Drawing (thread-safe)
+                    maskBitmap = new Bitmap(maxW, maxH);
+                    using (var g = Graphics.FromImage(maskBitmap))
+                    {
+                        g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
+                        g.DrawImage(sourceBmp, 0, 0, maxW, maxH);
+                    }
                 }
 
-                if (layer.ColorScale == "null_null" || layer.Opacity == 0 || layer.Material.DepotPath == ResourcePath.Empty)
-                {
-                    goto SkipColor;
-                }
-
-                {
-                    var color = mllt.Overrides.ColorScale.Where(x => x is not null && x.N == layer.ColorScale).FirstOrDefault()?.V ?? null;
-
-                    if (color == null)
+                    if (layer.ColorScale == "null_null" || layer.Opacity == 0 || layer.Material.DepotPath == ResourcePath.Empty)
                     {
                         goto SkipColor;
                     }
 
-                    var colorMatrix = new ColorMatrix(new float[][]
                     {
-                        new float[] { 0, 0, 0, 0, 0},
-                        new float[] { 0, 0, 0, 0, 0},
-                        new float[] { 0, 0, 0, 0, 0},
-                        new float[] { 0, 0, 0, 0, 0},
-                        new float[] { 0, 0, 0, 0, 0},
-                    })
+                        var color = mllt.Overrides.ColorScale.Where(x => x is not null && x.N == layer.ColorScale).FirstOrDefault()?.V ?? null;
+
+                        if (color == null)
+                        {
+                            goto SkipColor;
+                        }
+
+                        var colorMatrix = new ColorMatrix(new float[][]
+                        {
+                            new float[] { 0, 0, 0, 0, 0},
+                            new float[] { 0, 0, 0, 0, 0},
+                            new float[] { 0, 0, 0, 0, 0},
+                            new float[] { 0, 0, 0, 0, 0},
+                            new float[] { 0, 0, 0, 0, 0},
+                        })
+                        {
+                            Matrix03 = layer.Opacity,
+                            Matrix40 = color[0],
+                            Matrix41 = color[1],
+                            Matrix42 = color[2]
+                        };
+
+                        var attributes = new ImageAttributes();
+
+                        attributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+
+                        gfx.DrawImage(maskBitmap, new Rectangle(0, 0, maskBitmap.Width, maskBitmap.Height), 0, 0, maskBitmap.Width, maskBitmap.Height, GraphicsUnit.Pixel, attributes);
+                    }
+
+                #region skipColor
+                SkipColor:
+
                     {
-                        Matrix03 = layer.Opacity,
-                        Matrix40 = color[0],
-                        Matrix41 = color[1],
-                        Matrix42 = color[2]
-                    };
+                        var roughOut = mllt.Overrides.RoughLevelsOut.Where(x => x is not null && x.N == layer.RoughLevelsOut).FirstOrDefault()?.V ?? null;
 
-                    var attributes = new ImageAttributes();
+                        var metalOut = mllt.Overrides.MetalLevelsOut.Where(x => x is not null && x.N == layer.MetalLevelsOut).FirstOrDefault()?.V ?? null;
 
-                    attributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+                        var colorMatrix = new ColorMatrix(new float[][]
+                        {
+                            new float[] { 0, 0, 0, 0, 0},
+                            new float[] { 0, 0, 0, 0, 0},
+                            new float[] { 0, 0, 0, 0, 0},
+                            new float[] { 0, 0, 0, 0, 0},
+                            new float[] { 0, 0, 0, 0, 0},
+                        })
+                        {
+                            Matrix03 = 1f,
+                            Matrix40 = 0,
+                            Matrix41 = roughOut != null ? (float)((roughOut[0] + roughOut[1]) / 2f) : 0.5f,
+                            Matrix42 = metalOut != null ? (float)((metalOut[0] + metalOut[1]) / 2f) : 0.0f
+                        };
 
-                    gfx.DrawImage(maskBitmap, new Rectangle(0, 0, maskBitmap.Width, maskBitmap.Height), 0, 0, maskBitmap.Width, maskBitmap.Height, GraphicsUnit.Pixel, attributes);
+                        var attributes = new ImageAttributes();
+
+                        attributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+
+                        gfx_rm.DrawImage(maskBitmap, new Rectangle(0, 0, maskBitmap.Width, maskBitmap.Height), 0, 0, maskBitmap.Width, maskBitmap.Height, GraphicsUnit.Pixel, attributes);
+                    }
+
+                    var normalFile = Parent.GetFileFromDepotPathOrCache(mllt.NormalTexture.DepotPath);
+
+                    if (normalFile != null && normalFile.RootChunk is ITexture it)
+                    {
+                        var stream = new MemoryStream();
+                        ModTools.ConvertRedClassToDdsStream(it, stream, out _, out var decompressedFormat, true);
+
+                        var normal = await ImageDecoder.RenderToBitmapImageDds(stream, decompressedFormat);
+                        if (normal == null)
+                        {
+                            _loggerService.Error($"Could not load NormalTexture \"{mllt.NormalTexture.DepotPath}\"");
+                            goto SkipNormals;
+                        }
+
+                        Bitmap normalLayer;
+                        using (var outStream = new MemoryStream())
+                        {
+                            BitmapEncoder enc = new PngBitmapEncoder();
+                            enc.Frames.Add(BitmapFrame.Create(normal));
+                            enc.Save(outStream);
+                            normalLayer = new Bitmap(outStream);
+                        }
+
+                        var layerWidth = (int)(normalLayer.Width * layer.MatTile);
+                        var layerHeight = (int)(normalLayer.Height * layer.MatTile);
+
+                        var tempNormalBitmap = new Bitmap(maskBitmap.Width, maskBitmap.Height);
+
+                        if (layerWidth != 0 && layerHeight != 0)
+                        {
+                            try
+                            {
+                                tempNormalBitmap = new Bitmap(layerWidth < maskBitmap.Width ? layerWidth : maskBitmap.Width, layerHeight < maskBitmap.Height ? layerHeight : maskBitmap.Height);
+                            }
+                            catch (Exception ex)
+                            {
+                                _loggerService.Warning($"Failed to create temp normal bitmap: {ex.Message}");
+                            }
+                        }
+
+                        var gfx_n = Graphics.FromImage(tempNormalBitmap);
+                        gfx_n.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
+                        gfx_n.DrawImage(normalLayer, new Rectangle(0, 0, layerWidth, layerHeight), 0, 0, normalLayer.Width, normalLayer.Height, GraphicsUnit.Pixel, null);
+                        gfx_n.Dispose();
+
+                        // === FIX: Grow normalBitmap if current mask is larger ===
+                        if (maskBitmap.Width > normalBitmap.Width || maskBitmap.Height > normalBitmap.Height)
+                        {
+                            int newW = Math.Max(normalBitmap.Width, maskBitmap.Width);
+                            int newH = Math.Max(normalBitmap.Height, maskBitmap.Height);
+                            var grown = new Bitmap(newW, newH);
+                            using (var g = Graphics.FromImage(grown))
+                            {
+                                g.DrawImage(normalBitmap, 0, 0);
+                            }
+                            normalBitmap.Dispose();
+                            normalBitmap = grown;
+                        }
+
+                        foreach (var strength in mllt.Overrides.NormalStrength)
+                        {
+                            if (strength.N == layer.NormalStrength)
+                            {
+                                for (var y = 0; y < maskBitmap.Height; y++)
+                                {
+                                    for (var x = 0; x < maskBitmap.Width; x++)
+                                    {
+                                        var oc = normalBitmap.GetPixel(x, y);
+                                        var n = tempNormalBitmap.GetPixel(x % tempNormalBitmap.Width, y % tempNormalBitmap.Height);
+                                        var alpha = maskBitmap.GetPixel(x, y).R / 255F * (float)strength.V;
+                                        var r = (int)((oc.R - 127) * (1F - alpha) + (n.R - 127) * alpha) + 127;
+                                        var g = (int)((oc.G - 127) * (1F - alpha) + (n.G - 127) * alpha) + 127;
+                                        var b = (int)((oc.B - 127) * (1F - alpha)) + 127;
+                                        if (n.B == 0)
+                                        {
+                                            b += (int)((ToBlue((byte)r, (byte)g) - 127) * alpha);
+                                        }
+                                        else
+                                        {
+                                            b += (int)((n.B - 127) * alpha);
+                                        }
+                                        var color = System.Drawing.Color.FromArgb(Math.Clamp(r, 0, 255), Math.Clamp(g, 0, 255), Math.Clamp(b, 0, 255));
+                                        normalBitmap.SetPixel(x, y, color);
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        stream.Dispose();
+                    }
+
+                    SkipLayer:
+                    i++;
                 }
 
+                gfx.Dispose();
 
-            #region skipColor
-            SkipColor:
+                try { destBitmap.Save(filename_b, ImageFormat.Png); } catch (Exception e) { Parent.GetLoggerService().Error(e.Message); } finally { destBitmap.Dispose(); }
+                try { rmBitmap.Save(filename_rm, ImageFormat.Png); } catch (Exception e) { Parent.GetLoggerService().Error(e.Message); } finally { rmBitmap.Dispose(); }
+                try { normalBitmap.Save(filename_bn, ImageFormat.Png); } catch (Exception e) { Parent.GetLoggerService().Error(e.Message); } finally { normalBitmap.Dispose(); }
+            }
 
+            #endregion
+            #region diffuseMaps
+        DiffuseMaps:
+            if (File.Exists(filename_d)) goto NormalMaps;
+
+            if (dictionary.TryGetValue("DiffuseTexture", out var diffuse) && diffuse is CResourceReference<ITexture> crrd)
+            {
+                var xbm = Parent.GetFileFromDepotPathOrCache(crrd.DepotPath);
+                if (xbm?.RootChunk is ITexture it)
                 {
-                    var roughOut = mllt.Overrides.RoughLevelsOut.Where(x => x is not null && x.N == layer.RoughLevelsOut).FirstOrDefault()?.V ?? null;
-
-                    var metalOut = mllt.Overrides.MetalLevelsOut.Where(x => x is not null && x.N == layer.MetalLevelsOut).FirstOrDefault()?.V ?? null;
-
-                    var colorMatrix = new ColorMatrix(new float[][]
-                    {
-                        new float[] { 0, 0, 0, 0, 0},
-                        new float[] { 0, 0, 0, 0, 0},
-                        new float[] { 0, 0, 0, 0, 0},
-                        new float[] { 0, 0, 0, 0, 0},
-                        new float[] { 0, 0, 0, 0, 0},
-                    })
-                    {
-                        Matrix03 = 1f,
-                        Matrix40 = 0,
-                        Matrix41 = roughOut != null ? (float)((roughOut[0] + roughOut[1]) / 2f) : 0.5f,
-                        Matrix42 = metalOut != null ? (float)((metalOut[0] + metalOut[1]) / 2f) : 0.0f
-                    };
-
-                    var attributes = new ImageAttributes();
-
-                    attributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
-
-                    gfx_rm.DrawImage(maskBitmap, new Rectangle(0, 0, maskBitmap.Width, maskBitmap.Height), 0, 0, maskBitmap.Width, maskBitmap.Height, GraphicsUnit.Pixel, attributes);
+                    var stream = new FileStream(filename_d, FileMode.Create);
+                    ModTools.ConvertRedClassToDdsStream(it, stream, out _, out _, true);
+                    stream.Dispose();
                 }
+            }
 
-                //SkipRoughMetal:
+            if (dictionary.TryGetValue("ParalaxTexture", out var paralax) && paralax is CResourceReference<ITexture> crrp)
+            {
+                var xbm = Parent.GetFileFromDepotPathOrCache(crrp.DepotPath);
+                if (xbm?.RootChunk is ITexture it)
+                {
+                    var stream = new FileStream(filename_d, FileMode.Create);
+                    ModTools.ConvertRedClassToDdsStream(it, stream, out _, out _, true);
+                    stream.Dispose();
+                }
+            }
 
-                var normalFile = Parent.GetFileFromDepotPathOrCache(mllt.NormalTexture.DepotPath);
+            if (dictionary.TryGetValue("BaseColor", out var baseColorTex) && baseColorTex is CResourceReference<ITexture> crrbc)
+            {
+                var xbm = Parent.GetFileFromDepotPathOrCache(crrbc.DepotPath);
+                if (xbm?.RootChunk is ITexture it)
+                {
+                    var stream = new FileStream(filename_d, FileMode.Create);
+                    ModTools.ConvertRedClassToDdsStream(it, stream, out _, out _, true);
+                    stream.Dispose();
+                }
+            }
+            #endregion
 
-                if (normalFile != null && normalFile.RootChunk is ITexture it)
+            #region normalMaps
+        NormalMaps:
+            if (File.Exists(filename_bn)) goto SkipNormals;
+
+            if (dictionary.TryGetValue("NormalTexture", out var normalTex) && normalTex is CResourceReference<ITexture> crrn)
+            {
+                var xbm = Parent.GetFileFromDepotPathOrCache(crrn.DepotPath);
+                if (xbm?.RootChunk is ITexture it)
                 {
                     var stream = new MemoryStream();
                     ModTools.ConvertRedClassToDdsStream(it, stream, out _, out var decompressedFormat, true);
-
                     var normal = await ImageDecoder.RenderToBitmapImageDds(stream, decompressedFormat);
-                    if (normal == null)
+                    if (normal != null)
                     {
-                        _loggerService.Error($"Could not load NormalTexture \"{mllt.NormalTexture.DepotPath}\"");
-                        goto SkipNormals;
-                    }
-
-                    Bitmap normalLayer;
-                    using (var outStream = new MemoryStream())
-                    {
-                        BitmapEncoder enc = new PngBitmapEncoder();
-                        enc.Frames.Add(BitmapFrame.Create(normal));
-                        enc.Save(outStream);
-                        normalLayer = new Bitmap(outStream);
-                    }
-
-                    var layerWidth = (int)(normalLayer.Width * layer.MatTile);
-                    var layerHeight = (int)(normalLayer.Height * layer.MatTile);
-
-                    var tempNormalBitmap = new Bitmap(maskBitmap.Width, maskBitmap.Height);
-
-                    if (layerWidth != 0 && layerHeight != 0)
-                    {
-                        try
+                        Bitmap normalLayer;
+                        using (var outStream = new MemoryStream())
                         {
-                            tempNormalBitmap = new Bitmap(layerWidth < maskBitmap.Width ? layerWidth : maskBitmap.Width, layerHeight < maskBitmap.Height ? layerHeight : maskBitmap.Height);
+                            new PngBitmapEncoder { Frames = { BitmapFrame.Create(normal) } }.Save(outStream);
+                            normalLayer = new Bitmap(outStream);
                         }
-                        catch (Exception)
-                        {
-                            ;
-                        }
-                    }
 
-                    var gfx_n = Graphics.FromImage(tempNormalBitmap);
-                    gfx_n.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
-                    gfx_n.DrawImage(normalLayer, new Rectangle(0, 0, layerWidth, layerHeight), 0, 0, normalLayer.Width, normalLayer.Height, GraphicsUnit.Pixel, null);
-                    gfx_n.Dispose();
-
-                    foreach (var strength in mllt.Overrides.NormalStrength)
-                    {
-                        if (strength.N == layer.NormalStrength)
-                        {
-                            for (var y = 0; y < maskBitmap.Height; y++)
+                        for (var y = 0; y < normalLayer.Height; y++)
+                            for (var x = 0; x < normalLayer.Width; x++)
                             {
-                                for (var x = 0; x < maskBitmap.Width; x++)
-                                {
-                                    var oc = normalBitmap.GetPixel(x, y);
-                                    var n = tempNormalBitmap.GetPixel(x % tempNormalBitmap.Width, y % tempNormalBitmap.Height);
-                                    var alpha = maskBitmap.GetPixel(x, y).R / 255F * (float)strength.V;
-                                    var r = (int)((oc.R - 127) * (1F - alpha) + (n.R - 127) * alpha) + 127;
-                                    //var g = 255 - ((int)((oc.G - 127) * (1F - alpha) + (n.G - 127) * alpha) + 127);
-                                    var g = (int)((oc.G - 127) * (1F - alpha) + (n.G - 127) * alpha) + 127;
-                                    var b = (int)((oc.B - 127) * (1F - alpha)) + 127;
-                                    if (n.B == 0)
-                                    {
-                                        b += (int)((ToBlue((byte)r, (byte)g) - 127) * alpha);
-                                    }
-                                    else
-                                    {
-                                        b += (int)((n.B - 127) * alpha);
-                                    }
-                                    var color = System.Drawing.Color.FromArgb(Math.Clamp(r, 0, 255), Math.Clamp(g, 0, 255), Math.Clamp(b, 0, 255));
-                                    normalBitmap.SetPixel(x, y, color);
-                                }
+                                var oc = normalLayer.GetPixel(x, y);
+                                normalLayer.SetPixel(x, y, System.Drawing.Color.FromArgb(oc.R, oc.G, ToBlue(oc.R, oc.G)));
                             }
-                            break;
-                        }
+
+                        try { normalLayer.Save(filename_bn, ImageFormat.Png); } catch (Exception e) { Parent.GetLoggerService().Error(e.Message); } finally { normalLayer.Dispose(); }
                     }
-                    stream.Dispose();
                 }
-
-                SkipLayer:
-                i++;
             }
-
-            gfx.Dispose();
-            //gfx_n.Dispose();
-
-            try
+            else if (dictionary.TryGetValue("Normal", out var normalTex2) && normalTex2 is CResourceReference<ITexture> crrn2)
             {
-                destBitmap.Save(filename_b, ImageFormat.Png);
-            }
-            catch (Exception e)
-            {
-                Parent.GetLoggerService().Error(e.Message);
-            }
-            finally
-            {
-                destBitmap.Dispose();
-            }
-
-            try
-            {
-                rmBitmap.Save(filename_rm, ImageFormat.Png);
-            }
-            catch (Exception e)
-            {
-                Parent.GetLoggerService().Error(e.Message);
-            }
-            finally
-            {
-                rmBitmap.Dispose();
-            }
-
-            try
-            {
-                normalBitmap.Save(filename_bn, ImageFormat.Png);
-            }
-            catch (Exception e)
-            {
-                Parent.GetLoggerService().Error(e.Message);
-            }
-            finally
-            {
-                normalBitmap.Dispose();
-            }
-        }
-
-        #endregion
-        #region diffuseMaps
-    DiffuseMaps:
-        if (File.Exists(filename_d))
-        {
-            goto NormalMaps;
-        }
-
-        if (dictionary.TryGetValue("DiffuseTexture", out var diffuse) && diffuse is CResourceReference<ITexture> crrd)
-        {
-            var xbm = Parent.GetFileFromDepotPathOrCache(crrd.DepotPath);
-
-            if (xbm?.RootChunk is not ITexture it)
-            {
-                goto NormalMaps;
-            }
-
-            var stream = new FileStream(filename_d, FileMode.Create);
-            ModTools.ConvertRedClassToDdsStream(it, stream, out var format, out _, true);
-            stream.Dispose();
-        }
-
-        if (dictionary.TryGetValue("ParalaxTexture", out var paralax) && paralax is CResourceReference<ITexture> crrp)
-        {
-            var xbm = Parent.GetFileFromDepotPathOrCache(crrp.DepotPath);
-
-            if (xbm?.RootChunk is not ITexture it)
-            {
-                goto NormalMaps;
-            }
-
-            var stream = new FileStream(filename_d, FileMode.Create);
-            ModTools.ConvertRedClassToDdsStream(it, stream, out var format, out _, true);
-            stream.Dispose();
-        }
-
-        if (dictionary.TryGetValue("BaseColor", out var baseColorTex) && baseColorTex is CResourceReference<ITexture> crrbc)
-        {
-            var xbm = Parent.GetFileFromDepotPathOrCache(crrbc.DepotPath);
-
-            if (xbm == null || xbm.RootChunk is not ITexture it)
-            {
-                goto NormalMaps;
-            }
-
-            var stream = new FileStream(filename_d, FileMode.Create);
-            ModTools.ConvertRedClassToDdsStream(it, stream, out var format, out _, true);
-            stream.Dispose();
-        }
-
-        #endregion
-
-        #region normalMaps
-    NormalMaps:
-
-        // normals
-
-        if (File.Exists(filename_bn))
-        {
-            goto SkipNormals;
-        }
-
-        if (dictionary.TryGetValue("NormalTexture", out var normalTex) && normalTex is CResourceReference<ITexture> crrn)
-        {
-            var xbm = Parent.GetFileFromDepotPathOrCache(crrn.DepotPath);
-
-            if (xbm?.RootChunk is not ITexture it)
-            {
-                goto SkipNormals;
-            }
-
-            //var stream = new FileStream(filename_n, FileMode.Create);
-            //ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
-            //stream.Dispose();
-
-            var stream = new MemoryStream();
-            ModTools.ConvertRedClassToDdsStream(it, stream, out _, out var decompressedFormat, true);
-
-            var normal = await ImageDecoder.RenderToBitmapImageDds(stream, decompressedFormat);
-            if (normal == null)
-            {
-                _loggerService.Error($"Could not load NormalTexture \"{crrn.DepotPath}\"");
-                goto SkipNormals;
-            }
-
-            stream.Dispose();
-
-            Bitmap normalLayer;
-            using (var outStream = new MemoryStream())
-            {
-                BitmapEncoder enc = new PngBitmapEncoder();
-                enc.Frames.Add(BitmapFrame.Create(normal));
-                enc.Save(outStream);
-                normalLayer = new Bitmap(outStream);
-            }
-
-            for (var y = 0; y < normalLayer.Height; y++)
-            {
-                for (var x = 0; x < normalLayer.Width; x++)
+                // same logic as above for the second normal case (kept identical for safety)
+                var xbm = Parent.GetFileFromDepotPathOrCache(crrn2.DepotPath);
+                if (xbm?.RootChunk is ITexture it)
                 {
-                    var oc = normalLayer.GetPixel(x, y);
-                    var r = oc.R;
-                    //var g = (byte)(255 - oc.G);
-                    var g = oc.G;
-                    var b = ToBlue(r, g);
-                    normalLayer.SetPixel(x, y, System.Drawing.Color.FromArgb(r, g, b));
+                    var stream = new MemoryStream();
+                    ModTools.ConvertRedClassToDdsStream(it, stream, out _, out var decompressedFormat, true);
+                    var normal = await ImageDecoder.RenderToBitmapImageDds(stream, decompressedFormat);
+                    if (normal != null)
+                    {
+                        Bitmap normalLayer;
+                        using (var outStream = new MemoryStream())
+                        {
+                            new PngBitmapEncoder { Frames = { BitmapFrame.Create(normal) } }.Save(outStream);
+                            normalLayer = new Bitmap(outStream);
+                        }
+
+                        for (var y = 0; y < normalLayer.Height; y++)
+                            for (var x = 0; x < normalLayer.Width; x++)
+                            {
+                                var oc = normalLayer.GetPixel(x, y);
+                                normalLayer.SetPixel(x, y, System.Drawing.Color.FromArgb(oc.R, oc.G, ToBlue(oc.R, oc.G)));
+                            }
+
+                        try { normalLayer.Save(filename_bn, ImageFormat.Png); } catch (Exception e) { Parent.GetLoggerService().Error(e.Message); } finally { normalLayer.Dispose(); }
+                    }
                 }
             }
+            #endregion
 
-            try
-            {
-                normalLayer.Save(filename_bn, ImageFormat.Png);
-            }
-            catch (Exception e)
-            {
-                Parent.GetLoggerService().Error(e.Message);
-            }
-            finally
-            {
-                normalLayer.Dispose();
-            }
-
+        SkipNormals:
+            DispatcherHelper.RunOnMainThread(() => SetupPBRMaterial(material.Name, true));
         }
-        else if (dictionary.TryGetValue("Normal", out var normalTex2) && normalTex2 is CResourceReference<ITexture> crrn2)
+        catch (Exception ex)
         {
-            var xbm = Parent.GetFileFromDepotPathOrCache(crrn2.DepotPath);
-
-            if (xbm?.RootChunk is not ITexture it)
-            {
-                goto SkipNormals;
-            }
-
-            //var stream = new FileStream(filename_n, FileMode.Create);
-            //ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
-            //stream.Dispose();
-
-            var stream = new MemoryStream();
-            ModTools.ConvertRedClassToDdsStream(it, stream, out _, out var decompressedFormat, true);
-
-            var normal = await ImageDecoder.RenderToBitmapImageDds(stream, decompressedFormat);
-            if (normal == null)
-            {
-                _loggerService.Error($"Could not load NormalTexture \"{crrn2.DepotPath}\"");
-                goto SkipNormals;
-            }
-
-            stream.Dispose();
-
-            Bitmap normalLayer;
-            using (var outStream = new MemoryStream())
-            {
-                BitmapEncoder enc = new PngBitmapEncoder();
-                enc.Frames.Add(BitmapFrame.Create(normal));
-                enc.Save(outStream);
-                normalLayer = new Bitmap(outStream);
-            }
-
-            for (var y = 0; y < normalLayer.Height; y++)
-            {
-                for (var x = 0; x < normalLayer.Width; x++)
-                {
-                    var oc = normalLayer.GetPixel(x, y);
-                    var r = oc.R;
-                    //var g = (byte)(255 - oc.G);
-                    var g = oc.G;
-                    var b = ToBlue(r, g);
-                    normalLayer.SetPixel(x, y, System.Drawing.Color.FromArgb(r, g, b));
-                }
-            }
-
-            try
-            {
-                normalLayer.Save(filename_bn, ImageFormat.Png);
-            }
-            catch (Exception e)
-            {
-                Parent.GetLoggerService().Error(e.Message);
-            }
-            finally
-            {
-                normalLayer.Dispose();
-            }
+            Parent.GetLoggerService().Error($"Failed to load material '{material?.Name}': {ex.Message}");
         }
-
-        #endregion
-
-        #region skipNormals
-    SkipNormals:
-        DispatcherHelper.RunOnMainThread(() => SetupPBRMaterial(material.Name, true));
-
-        #endregion
-        return;
     }
 
     /** Set default roughness values for material */
