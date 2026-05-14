@@ -434,6 +434,43 @@ public abstract partial class StringHelper
         return originalString + spacer + secondString;
     }
 
+    public static string ReplaceInString(string input, string searchOrPattern, string replace, bool isWholeWord,
+        bool isRegex, List<string>? previouslyReplacedStrings = null)
+    {
+        if (previouslyReplacedStrings?.Contains(input) == true)
+        {
+            return input;
+        }
+
+        if (isWholeWord)
+        {
+            if (input != searchOrPattern)
+            {
+                return input;
+            }
+
+            previouslyReplacedStrings?.Add(replace);
+            return replace;
+        }
+
+        string ret;
+        if (isRegex)
+        {
+            ret = Regex.Replace(input, searchOrPattern, replace);
+        }
+        else
+        {
+            ret = input.Replace(searchOrPattern, replace);
+        }
+
+        if (ret != input)
+        {
+            previouslyReplacedStrings?.Add(ret);
+        }
+
+        return ret;
+    }
+
     public static string Truncate(string text, int maxLength)
     {
         if (string.IsNullOrEmpty(text) || text.Length <= maxLength)
@@ -443,4 +480,70 @@ public abstract partial class StringHelper
 
         return text.Substring(0, maxLength) + "...";
     }
+
+
+    /// <summary>
+    /// Search and replace, duplication-safe
+    /// </summary>
+    /// <param name="input">String to be replaced in</param>
+    /// <param name="searchOrPattern">Search string or regex pattern</param>
+    /// <param name="replace">String to replace it with</param>
+    /// <param name="isWholeWord">Search refinement: whole word only</param>
+    /// <param name="isRegex">Search refinement: regular expression</param>
+    /// <returns></returns>
+    public static string ReplaceInString(string input, string searchOrPattern, string replace, bool isWholeWord,
+        bool isRegex)
+    {
+        if (isWholeWord)
+        {
+            if (input != searchOrPattern)
+            {
+                return input;
+            }
+
+            return replace;
+        }
+
+        string ret;
+        if (isRegex)
+        {
+            ret = Regex.Replace(input, searchOrPattern, replace);
+        }
+        else
+        {
+            ret = input.Replace(searchOrPattern, replace);
+        }
+
+        return ret;
+    }
+
+    /// <summary>
+    /// Check a string for a substring, considering search options regex and whole word
+    /// </summary>
+    /// <param name="input">String to be replaced in</param>
+    /// <param name="searchOrPattern">Search string or regex pattern</param>
+    /// <param name="isWholeWord">Search refinement: whole word only</param>
+    /// <param name="isRegex">Search refinement: regular expression</param>
+    /// <returns></returns>
+    public static bool StringContains(string? input, string searchOrPattern, bool isWholeWord, bool isRegex)
+    {
+        if (input is null)
+        {
+            return false;
+        }
+
+        if (isWholeWord)
+        {
+            var pattern = isRegex ? $@"\b{searchOrPattern}\b" : @"\b" + Regex.Escape(searchOrPattern) + @"\b";
+            return Regex.IsMatch(input, pattern, RegexOptions.IgnoreCase);
+        }
+
+        if (!isRegex)
+        {
+            return input.Contains(searchOrPattern);
+        }
+
+        return Regex.IsMatch(input, searchOrPattern);
+    }
+
 }

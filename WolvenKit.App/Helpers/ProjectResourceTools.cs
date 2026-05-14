@@ -1062,7 +1062,7 @@ public partial class ProjectResourceTools
         {
             foreach (var absoluteFilepath in archivesToScan)
             {
-                _archiveManager.LoadModArchive(absoluteFilepath, scanArchives, !scanArchives);
+                _archiveManager.LoadModArchive(absoluteFilepath, scanArchives);
             }
 
             return;
@@ -1090,7 +1090,7 @@ public partial class ProjectResourceTools
             throw new WolvenKitException(0x5000, "Cyberpunk executable not configured");
         }
 
-        _loggerService.Info("Scanning your mods... this can take a moment. Wolvenkit will be unresponsive.");
+        _loggerService.Info("Scanning your mods... this can take a moment. WolvenKit might be unresponsive.");
         _archiveManager.Initialize(new FileInfo(_settingsService.CP77ExecutablePath));
     }
 
@@ -1400,4 +1400,61 @@ public partial class ProjectResourceTools
     }
 
     #endregion
+
+    public List<string> GetFilesContainingString(string searchText, bool isRegex, bool isWholeWord,
+        IProgressService<double> progressService)
+    {
+        if (_projectManager.ActiveProject is not { } project)
+        {
+            return [];
+        }
+
+        var totalFiles = project.ModFiles.Count + project.ResourceFiles.Count;
+
+        if (totalFiles == 0)
+        {
+            return [];
+        }
+
+        progressService.Report(0);
+        var processedFiles = 0;
+        var progressIncrement = totalFiles > 0 ? 100.0 / totalFiles : 100;
+
+        List<string> filesWithMatch = [];
+        foreach (var filePath in project.ModFiles)
+        {
+            var json = _crwWTools.ReadJsonNoException(Path.Join(project.ModDirectory, filePath));
+            if (StringHelper.StringContains(json, searchText, isRegex, isWholeWord))
+            {
+                filesWithMatch.Add(filePath);
+            }
+
+            var currentProgress = Interlocked.Increment(ref processedFiles) * progressIncrement;
+            progressService.Report(currentProgress);
+        }
+
+        foreach (var filePath in project.ResourceFiles)
+        {
+            try
+            {
+                var absolutePath = Path.Join(project.ResourcesDirectory, filePath);
+                var fileContent = File.ReadAllText(absolutePath);
+                if (StringHelper.StringContains(fileContent, searchText, isRegex, isWholeWord))
+                {
+                    filesWithMatch.Add($"resources{Path.DirectorySeparatorChar}{filePath}");
+                }
+
+                var currentProgress = Interlocked.Increment(ref processedFiles) * progressIncrement;
+                progressService.Report(currentProgress);
+            }
+            catch
+            {
+                _loggerService.Error($"Failed to open resources{Path.DirectorySeparatorChar}{filePath} for searching");
+            }
+        }
+
+        progressService.IsIndeterminate = false;
+
+        return filesWithMatch.Distinct().ToList();
+    }
 }

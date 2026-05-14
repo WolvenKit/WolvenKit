@@ -1152,8 +1152,9 @@ public partial class ChunkViewModel
                 IsValueExtrapolated = Value != string.Empty;
                 return;
             case scnChoiceNodeOption scnChoiceNodeOption:
-                Value = $"{scnChoiceNodeOption.Caption.GetResolvedText()}";
-                IsValueExtrapolated = Value != string.Empty;
+                Value =
+                    $"{scnChoiceNodeOption.ScreenplayOptionId}"; // TODO: Check how this is resolved in scnChoiceNodeWrapper or ask Chedda
+                IsValueExtrapolated = Value != "";
                 return;
             case scnscreenplayOptionUsage screenplayOptionUsage:
                 Value = $"{screenplayOptionUsage.PlayerGenderMask.Mask}";
@@ -1236,17 +1237,20 @@ public partial class ChunkViewModel
             case IRedMeshComponent meshComponent:
             {
                 Value = StringHelper.Stringify(meshComponent.Mesh.DepotPath, true);
-                if (meshComponent.MeshAppearance.GetResolvedText() is string app and (not "default" or "") && Value != string.Empty)
+                if (meshComponent.MeshAppearance.GetResolvedText() is string app and (not "default" or "") &&
+                    Value != string.Empty)
                 {
                     Value = $"{Value} ({app})";
                 }
+
                 IsValueExtrapolated = Value != string.Empty;
                 break;
             }
             case entMorphTargetSkinnedMeshComponent morphtargetComponent:
             {
                 Value = StringHelper.Stringify(morphtargetComponent.MorphResource.DepotPath, true);
-                if (morphtargetComponent.MeshAppearance.GetResolvedText() is string app and (not "default" or "") && Value != string.Empty)
+                if (morphtargetComponent.MeshAppearance.GetResolvedText() is string app and (not "default" or "") &&
+                    Value != string.Empty)
                 {
                     Value = $"{Value} ({app})";
                 }

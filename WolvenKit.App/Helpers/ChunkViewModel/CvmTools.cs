@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
@@ -34,14 +36,21 @@ public class CvmTools : ICvmTools
 
     public void UnDynamifyMaterials(ChunkViewModel? cvm) => _cvmMaterialTools.UnDynamifyMaterials(cvm);
 
+    public void ExpandMeshAppearances(ChunkViewModel? cvm, out Dictionary<string, List<string>> templatesAndValues,
+        bool preserveDynamicChunks = false) =>
+        _cvmMaterialTools.ExpandMeshAppearances(cvm, out templatesAndValues, preserveDynamicChunks);
+
     public void AddMaterialAndDefinition(ChunkViewModel cvm, string newName) =>
         _cvmMaterialTools.AddMaterialAndDefinition(cvm, newName);
 
-    public int FindHighestMaterialIndex(ChunkViewModel materialDefinitionArray, bool isLocalInstance) =>
-        _cvmMaterialTools.FindHighestMaterialIndex(materialDefinitionArray, isLocalInstance);
-
     public void AddTagsToMeshAppearances(List<ChunkViewModel> chunks, List<string> tagList) =>
         _cvmMaterialTools.AddTagsToMeshAppearances(chunks, tagList);
+
+    public void FlattenMiChain(ChunkViewModel? cvm, IAppArchiveManager archiveManager, Cp77Project? project) =>
+        _cvmMaterialTools.FlattenMiChain(cvm, archiveManager, project, true);
+
+    public void FlattenMiChain(ChunkViewModel[] cvmSelection, IAppArchiveManager archiveManager,
+        Cp77Project? project) => _cvmMaterialTools.FlattenMiChain(cvmSelection, archiveManager, project);
 
     #endregion
 

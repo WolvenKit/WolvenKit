@@ -206,6 +206,7 @@ namespace WolvenKit
                     services.AddSingleton<TemplateFileTools>();
                     services.AddSingleton<Cr2WTools>();
                     services.AddSingleton<ProjectResourceTools>();
+                    services.AddSingleton<StreamingSectorTools>();
                     #endregion
 
                     #region homepage
