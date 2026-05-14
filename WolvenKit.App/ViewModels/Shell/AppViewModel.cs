@@ -776,7 +776,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             UpdateTitle();
             _notificationService.Success($"Project {Path.GetFileNameWithoutExtension(location)} loaded!");
             // https://github.com/WolvenKit/WolvenKit/issues/1962
-            if (!location.IsSaneFilePath())
+            if (!FilepathValidationTools.IsOsFilePathValid(location))
             {
                 _notificationService.Warning($"Project path {location} contains invalid characters!");
             }
@@ -946,15 +946,15 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     {
         var userInteraction = Interactions.ShowQuestionYesNoCancel((
             $"This will scan {ActiveProject!.ModFiles.Count} files and can take a moment.\n\n"
-            + "Should files in other mods be treated as valid references?\n"
-            + "If you don't know what that means, click 'no'."
+            + "List files in other mods as 'missing'?\n"
+            + "If you don't know what that means, click 'yes'."
             , "Scanning entire project"));
 
         switch (userInteraction)
         {
             case null:
                 return;
-            case true when !_archiveManager.IsInitialized:
+            case false when !_archiveManager.IsInitialized:
                 ProjectResourceTools.InitializeArchiveManager();
                 break;
         }
@@ -963,7 +963,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _progressService.IsIndeterminate = true;
 
         var brokenReferences = await ActiveProject!.ScanForBrokenReferencePathsAsync(_archiveManager, _loggerService,
-            _progressService, (bool)userInteraction);
+            _progressService, null, !(bool)userInteraction);
 
         if (brokenReferences.Keys.Count == 0)
         {

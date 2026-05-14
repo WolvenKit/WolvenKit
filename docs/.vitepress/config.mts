@@ -38,6 +38,16 @@ export default defineConfig({
         collapsed: false,
         items: [
           { text: 'Homepage', link: '/contributing/home' },
+          { text: 'Pull Requests', link: '/contributing/pull-requests' },
+          { text: 'Keep a Changelog', link: '/contributing/keep-changelog' },
+        ]
+      },
+      {
+        text: 'Maintaining',
+        collapsed: false,
+        items: [
+          { text: 'Homepage', link: '/maintaining/home' },
+          { text: 'Release Process', link: '/maintaining/release-process' },
         ]
       },
       {

@@ -18,6 +18,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Core.Services;
 using WolvenKit.Helpers;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
@@ -426,10 +427,10 @@ public partial class ProjectResourceTools
 
         try
         {
-            destRelPath = FileHelper.SanitizePath(destRelPath);
+            destRelPath = FilepathValidationTools.SanitizeOsFilePath(destRelPath);
             destAbsPath = ToAbsolutePath(destRelPath);
 
-            sourceRelPath = FileHelper.SanitizePath(sourceRelPath);
+            sourceRelPath = FilepathValidationTools.SanitizeOsFilePath(sourceRelPath);
             sourceFileOrDirAbsPath = ToAbsolutePath(sourceRelPath);
         }
         catch (Exception e)
@@ -705,9 +706,9 @@ public partial class ProjectResourceTools
                         }
 
                         var oldPathStr = activeProject.GetResourcePathFromRoot(oldAbsPath).GetResolvedText()
-                            ?.SanitizeFilePath();
+                            ?.ToArchiveFilePath();
                         var newPathStr = activeProject.GetResourcePathFromRoot(newAbsPath).GetResolvedText()?
-                            .SanitizeFilePath();
+                            .ToArchiveFilePath();
 
                         if (string.IsNullOrEmpty(oldPathStr) || string.IsNullOrEmpty(newPathStr) ||
                             oldPathStr == newPathStr)
@@ -715,8 +716,8 @@ public partial class ProjectResourceTools
                             continue;
                         }
 
-                        var oldPathWithForwardSlashes = oldPathStr.SanitizeFilePath(true);
-                        var newPathWithForwardSlashes = newPathStr.SanitizeFilePath(true);
+                        var oldPathWithForwardSlashes = oldPathStr.ToArchiveFilePath(useForwardSlashes: true);
+                        var newPathWithForwardSlashes = newPathStr.ToArchiveFilePath(useForwardSlashes: true);
 
                         newFileContent = newFileContent.Select(line => line
                             .Replace(oldPathStr, newPathStr)

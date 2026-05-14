@@ -1,0 +1,9 @@
+# Indepth docs at https://wolvenkit.github.io/WolvenKit/contributing/keep-changelog.html
+Template changelog entry:
+    - type: "security | deprecated | removed | added | fixed | changed"
+      packages: ["App", "CLI", "Nuget Packages"]
+      pr-number: 0
+      author: ""
+      description: ""
+
+changes:
