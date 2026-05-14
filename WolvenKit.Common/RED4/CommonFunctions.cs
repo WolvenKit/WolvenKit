@@ -10,6 +10,8 @@ namespace WolvenKit.RED4.CR2W;
 
 public static class CommonFunctions
 {
+    public static Type? GetTypeFromExtension(ERedExtension extension) => FileTypeHelper.FileTypes.FirstOrDefault(x => x.Extension == extension)?.RootType;
+
     public static string? GetResourceClassesFromExtension(ERedExtension extension)
     {
         foreach (var fileType in FileTypeHelper.FileTypes)

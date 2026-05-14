@@ -13,6 +13,7 @@
     mc:Ignorable="d"
     d:DesignWidth="800"
     d:DesignHeight="600"
+    d:DataContext="{d:DesignInstance Type=dialogs:NewFileViewModel}"
     Width="800"
     Height="600"
     Background="{StaticResource ContentBackgroundAlt3}">
@@ -126,6 +127,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="0.25*" />
                 </Grid.ColumnDefinitions>
 
                 <TextBlock
@@ -138,6 +140,50 @@
                     x:Name="FileName"
                     Grid.Column="1"
                     FlowDirection="LeftToRight" />
+
+                <ComboBox
+                    x:Name="RedTemplateComboBox"
+                    Grid.Column="2"
+                    Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                    IsEditable="False"
+                    IsReadOnly="True"
+                    ItemsSource="{Binding CurrentRedTypeTemplates.View}"
+                    SelectedItem="{Binding SelectedRedTypeTemplate}"
+                    ToolTip="Select script">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="{Binding Name}" />
+                            </StackPanel>
+
+                            <DataTemplate.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                     AncestorType=ComboBoxItem}}"
+                                    Value="{x:Null}" />
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+
+                    <ComboBox.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate>
+                                    <Border
+                                        Padding="15,0,0,7"
+                                        BorderBrush="White"
+                                        BorderThickness="0,0,0,1">
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBlock
+                                                FontSize="{DynamicResource WolvenKitFontBody}"
+                                                Text="{Binding Name}" />
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+                        </GroupStyle>
+                    </ComboBox.GroupStyle>
+                </ComboBox>
             </Grid>
         </Border>
 

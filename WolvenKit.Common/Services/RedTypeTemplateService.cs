@@ -29,6 +29,9 @@ public class RedTypeTemplateService
         _systemTemplateDir = systemTemplateDir;
         _userTemplateDir = userTemplateDir;
 
+        Directory.CreateDirectory(_systemTemplateDir);
+        Directory.CreateDirectory(_userTemplateDir);
+
         LoadTemplates();
     }
 
@@ -74,10 +77,11 @@ public class RedTypeTemplateService
             }
 
             templates.Add(new TemplateEntry(sections[0], type, f.FullName));
+            _logger.Debug($"Loaded file {f.FullName} with type {type.Name} and name {sections[0]}");
         }
     }
 
-    private static Type? ParseType(string typeName) => AppDomain.CurrentDomain
+    public static Type? ParseType(string typeName) => AppDomain.CurrentDomain
                                                             .GetAssemblies()
                                                             .SelectMany(a => a.GetTypes())
                                                             .FirstOrDefault(t => t.Name == typeName);

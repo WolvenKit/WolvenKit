@@ -85,6 +85,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly IWatcherService _watcherService;
     private readonly ArchiveXlItemService _archiveXlItemService;
     private readonly IUpdateService _updateService;
+    private readonly RedTypeTemplateService _redTypeTemplateService;
     // expose to view
     public ISettingsManager SettingsManager { get; init; }
     public ProjectResourceTools ProjectResourceTools { get; init; }
@@ -117,7 +118,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         Cr2WTools cr2WTools,
         TemplateFileTools templateFileTools,
         ProjectResourceTools projectResourceTools,
-        IUpdateService updateService
+        IUpdateService updateService,
+        RedTypeTemplateService redTypeTemplateService
     )
     {
         _documentViewmodelFactory = documentViewmodelFactory;
@@ -143,6 +145,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         TemplateFileTools = templateFileTools;
         ProjectResourceTools = projectResourceTools;
         _updateService = updateService;
+        _redTypeTemplateService = redTypeTemplateService;
 
         _fileValidationScript = _scriptService.GetScripts().ToList()
             .Where(s => s.Name == "run_FileValidation_on_active_tab")
@@ -1439,7 +1442,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         });
     }
 
-    private static async Task OpenFromNewFileAsync(NewFileViewModel file)
+    private async Task OpenFromNewFileAsync(NewFileViewModel file)
     {
         if (file.SelectedFile is null || file.FullPath is null)
         {
@@ -1486,12 +1489,15 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 break;
             }
             case EWolvenKitFile.Cr2w:
-                var redType = file.SelectedFile.Name;
-                if (!string.IsNullOrEmpty(redType))
+                var redType = RedTypeTemplateService.ParseType(file.SelectedFile?.Name ?? "");
+                if (redType is not null)
                 {
+                    var rc = (RedBaseClass?)_redTypeTemplateService.CreateTypeInstance(redType,
+                        file.SelectedRedTypeTemplate?.Name ?? "default") ?? throw new Exception($"Failed to create instance of {redType.Name}");
+
                     CR2WFile cr2W = new()
                     {
-                        RootChunk = RedTypeManager.Create(redType)
+                        RootChunk = rc
                     };
                     stream = new FileStream(file.FullPath, FileMode.Create, FileAccess.Write);
                     using CR2WWriter writer = new(stream);

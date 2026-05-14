@@ -1,15 +1,19 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
+using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
@@ -25,16 +29,19 @@ public partial class NewFileViewModel : DialogViewModel
     private readonly IProjectManager _projectManager;
     private readonly ISettingsManager _settingsManager;
     private readonly ILoggerService _loggerService;
+    private readonly RedTypeTemplateService _redTypeTemplateService;
 
     public NewFileViewModel(
         IProjectManager projectManager,
         ISettingsManager settingsManager,
-        ILoggerService loggerService
+        ILoggerService loggerService,
+        RedTypeTemplateService redTypeTemplateService
     )
     {
         _projectManager = projectManager;
         _loggerService = loggerService;
         _settingsManager = settingsManager;
+        _redTypeTemplateService = redTypeTemplateService;
 
         Title = "Create new file";
 
@@ -50,13 +57,24 @@ public partial class NewFileViewModel : DialogViewModel
 
             var resourceFiles = newdef.Categories.First(x => x.Name == "CR2W Files").Files.NotNull();
 
+            _redTypeTemplateService.LoadTemplates();
+
+            CurrentRedTypeTemplates = new();
+            CurrentRedTypeTemplates.GroupDescriptions.Add(new PropertyGroupDescription(nameof(RedTypeTemplate.Type)));
+            CurrentRedTypeTemplates.SortDescriptions.Add(new SortDescription(nameof(RedTypeTemplate.Name), ListSortDirection.Ascending));
+
             foreach (ERedExtension ext in Enum.GetValues(typeof(ERedExtension)))
             {
                 var c = CommonFunctions.GetResourceClassesFromExtension(ext);
-                if (c is not null)
+                var t = CommonFunctions.GetTypeFromExtension(ext);
+                if (c is null || t is null)
                 {
-                    resourceFiles.Add(new AddFileModel(c, $"A .{ext} File", ext.ToString(), EWolvenKitFile.Cr2w, ""));
+                    continue;
                 }
+                List<RedTypeTemplate> rtt = [ new("No Template", RedTypeTemplateType.Raw) ];
+                rtt.AddRange(_redTypeTemplateService.SystemTemplates.Where(te => te.Type == t).Select(t => new RedTypeTemplate(t.Name, RedTypeTemplateType.System)));
+                rtt.AddRange(_redTypeTemplateService.UserTemplates.Where(te => te.Type == t).Select(t => new RedTypeTemplate(t.Name, RedTypeTemplateType.User)));
+                resourceFiles.Add(new AddFileModel(c, $"A .{ext} File", ext.ToString(), EWolvenKitFile.Cr2w, "", rtt));
             }
 
             var ordered = newdef.Categories.First(x => x.Name == "CR2W Files").Files.NotNull().OrderBy(x => x.Name).ToList();
@@ -75,6 +93,12 @@ public partial class NewFileViewModel : DialogViewModel
     public string Title { get; set; }
 
     [ObservableProperty] private string? _text;
+
+    [ObservableProperty]
+    private CollectionViewSource? _currentRedTypeTemplates;
+
+    [ObservableProperty]
+    private RedTypeTemplate? _selectedRedTypeTemplate;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OkCommand))]
@@ -110,6 +134,13 @@ public partial class NewFileViewModel : DialogViewModel
         if (value is null)
         {
             return;
+        }
+
+        if (CurrentRedTypeTemplates is not null)
+        {
+            CurrentRedTypeTemplates.Source = SelectedFile?.RedTypeTemplates;
+            SelectedRedTypeTemplate = GetInitialTemplateForSelectedFile();
+            CurrentRedTypeTemplates.View.Refresh();
         }
 
         var project = _projectManager.ActiveProject;
@@ -172,4 +203,29 @@ public partial class NewFileViewModel : DialogViewModel
         FileHandler?.Invoke(null);
     }
 
+    private RedTypeTemplate? GetInitialTemplateForSelectedFile()
+    {
+        if (SelectedFile is null)
+        {
+            return null;
+        }
+
+        var userDefault =
+            SelectedFile.RedTypeTemplates?.FirstOrDefault(rtt =>
+                rtt.Name == "default" && rtt.Type == RedTypeTemplateType.User);
+        if (userDefault is not null)
+        {
+            return userDefault;
+        }
+
+        var systemDefault =
+            SelectedFile.RedTypeTemplates?.FirstOrDefault(rtt =>
+                rtt.Name == "default" && rtt.Type == RedTypeTemplateType.System);
+        if (systemDefault is not null)
+        {
+            return systemDefault;
+        }
+
+        return SelectedFile.RedTypeTemplates?.FirstOrDefault(rtt => rtt.Type == RedTypeTemplateType.Raw);
+    }
 }
