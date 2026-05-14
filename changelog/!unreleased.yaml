@@ -7,3 +7,8 @@ Template changelog entry:
       description: ""
 
 changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 2917
+      author: "manavortex"
+      description: "'copy materials' logic"
