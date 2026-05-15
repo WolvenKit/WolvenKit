@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -10,6 +9,7 @@ using System.Windows.Data;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using WolvenKit.App.Comparers;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
@@ -57,10 +57,13 @@ public partial class NewFileViewModel : DialogViewModel
 
             var resourceFiles = newdef.Categories.First(x => x.Name == "CR2W Files").Files.NotNull();
 
-            CurrentRedTypeTemplates = new();
+            CurrentRedTypeTemplates = new CollectionViewSource
+            {
+                Source = new List<RedTypeTemplate>([new RedTypeTemplate("No Template", RedTypeTemplateType.Raw)])
+            };
+            ApplyTemplateCustomSort(CurrentRedTypeTemplates);
             CurrentRedTypeTemplates.GroupDescriptions.Add(new PropertyGroupDescription(nameof(RedTypeTemplate.Type)));
-            CurrentRedTypeTemplates.SortDescriptions.Add(new SortDescription(nameof(RedTypeTemplate.Name), ListSortDirection.Ascending));
-            CurrentRedTypeTemplates.SortDescriptions.Add(new SortDescription(nameof(RedTypeTemplate.Type), ListSortDirection.Ascending));
+            SelectedRedTypeTemplate = ((List<RedTypeTemplate>)CurrentRedTypeTemplates.Source).First();
 
             foreach (ERedExtension ext in Enum.GetValues(typeof(ERedExtension)))
             {
@@ -138,6 +141,7 @@ public partial class NewFileViewModel : DialogViewModel
             CurrentRedTypeTemplates.Source = SelectedFile?.RedTypeTemplates;
             SelectedRedTypeTemplate = GetInitialTemplateForSelectedFile();
             CurrentRedTypeTemplates.View.Refresh();
+            ApplyTemplateCustomSort(CurrentRedTypeTemplates);
         }
 
         var project = _projectManager.ActiveProject;
@@ -207,6 +211,7 @@ public partial class NewFileViewModel : DialogViewModel
         IndexRedTypeTemplates();
         SelectedRedTypeTemplate = GetInitialTemplateForSelectedFile();
         CurrentRedTypeTemplates?.View.Refresh();
+        ApplyTemplateCustomSort(CurrentRedTypeTemplates);
     }
 
     private void IndexRedTypeTemplates()
@@ -252,5 +257,13 @@ public partial class NewFileViewModel : DialogViewModel
         }
 
         return SelectedFile.RedTypeTemplates?.FirstOrDefault(rtt => rtt.Type == RedTypeTemplateType.Raw);
+    }
+
+    private static void ApplyTemplateCustomSort(CollectionViewSource? source)
+    {
+        if (source?.View is ListCollectionView listView)
+        {
+            listView.CustomSort = new RedTypeTemplateComparer("default");
+        }
     }
 }
