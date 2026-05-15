@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text.Json;
 using WolvenKit.Common.Model;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.JSON;
+using Activator = System.Activator;
 
 namespace WolvenKit.Common.Services;
 
@@ -58,21 +58,38 @@ public class RedTypeTemplateService
         {
             if (!f.Name.EndsWith(".json"))
             {
-                _logger.Debug($"Skipping non-json file {f.FullName}");
+                _logger.Warning($"Skipping non-json file {f.FullName}");
                 continue;
             }
 
             var sections = f.Name.Split('.');
             if (sections.Length != 3)
             {
-                _logger.Debug($"Skipping filename with malformed filename {f.FullName}");
+                _logger.Warning($"Skipping filename with malformed filename {f.FullName}");
                 continue;
             }
 
             var type = ParseType(sections[1]);
             if (type == null)
             {
-                _logger.Debug($"Skipping file with unknown type {f.FullName}");
+                _logger.Warning($"Skipping file with unknown type {f.FullName}");
+                continue;
+            }
+
+            try
+            {
+                var templateObj = RedJsonSerializer.Deserialize(type,
+                    JsonDocument.Parse(File.ReadAllText(f.FullName)).RootElement);
+
+                if (templateObj is null)
+                {
+                    _logger.Warning($"Failed to deserialize template {f.FullName}");
+                    continue;
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Warning($"Failed to deserialize template {f.FullName} with exception {e.Message}");
                 continue;
             }
 
@@ -97,6 +114,7 @@ public class RedTypeTemplateService
     /// <param name="type">Type of the template</param>
     /// <param name="src">Source of the template, defaults to "Auto"</param>
     /// <returns></returns>
+    /// <exception cref="Exception">Template File contains invalid or mismatched data</exception>
     /// <remarks>When using <see cref="TemplateSource.Auto"/>, user templates are preferred over system templates.</remarks>
     public object? CreateTypeInstance(Type type, string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
         ReadTemplate(type, templateName, src) ?? Activator.CreateInstance(type);
@@ -107,6 +125,7 @@ public class RedTypeTemplateService
     /// <param name="templateName">Name of the template, defaults to "default"</param>
     /// <param name="src">Source of the template, defaults to "Auto"</param>
     /// <returns></returns>
+    /// <exception cref="Exception">Template File contains invalid or mismatched data</exception>
     /// <remarks>When using <see cref="TemplateSource.Auto"/>, user templates are preferred over system templates.</remarks>
     public object? CreateTypeInstance<T>(string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
         ReadTemplate(typeof(T), templateName, src) ?? Activator.CreateInstance(typeof(T));
@@ -118,6 +137,7 @@ public class RedTypeTemplateService
     /// <param name="src">Source of the template, defaults to "Auto"</param>
     /// <returns></returns>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <exception cref="Exception">Template File contains invalid or mismatched data</exception>
     /// <remarks>When using <see cref="TemplateSource.Auto"/>, user templates are preferred over system templates.</remarks>
     public object? ReadTemplate<T>(string templateName = "default", TemplateSource src = TemplateSource.Auto) => ReadTemplate(typeof(T), templateName, src);
 
@@ -129,6 +149,7 @@ public class RedTypeTemplateService
     /// <param name="src">Source of the template, defaults to "Auto"</param>
     /// <returns></returns>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <exception cref="Exception">Template File contains invalid or mismatched data</exception>
     /// <remarks>When using <see cref="TemplateSource.Auto"/>, user templates are preferred over system templates.</remarks>
     public object? ReadTemplate(Type type, string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
         src switch
