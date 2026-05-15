@@ -1705,7 +1705,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         }
     }
 
-   [RelayCommand]
+    [RelayCommand]
     public void LoadMaterials()
     {
         if (SelectedAppearance == null)
@@ -1749,7 +1749,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         GetMaterialFilePathsFromCache(material.Name, true);
     }
 
-        public async ValueTask LoadMaterial(WolvenKit.App.Models.Material? material)
+    public async ValueTask LoadMaterial(WolvenKit.App.Models.Material? material)
     {
         if (material == null)
         {
