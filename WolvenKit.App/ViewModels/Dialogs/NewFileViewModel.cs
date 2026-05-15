@@ -57,29 +57,26 @@ public partial class NewFileViewModel : DialogViewModel
 
             var resourceFiles = newdef.Categories.First(x => x.Name == "CR2W Files").Files.NotNull();
 
-            _redTypeTemplateService.LoadTemplates();
-
             CurrentRedTypeTemplates = new();
             CurrentRedTypeTemplates.GroupDescriptions.Add(new PropertyGroupDescription(nameof(RedTypeTemplate.Type)));
             CurrentRedTypeTemplates.SortDescriptions.Add(new SortDescription(nameof(RedTypeTemplate.Name), ListSortDirection.Ascending));
+            CurrentRedTypeTemplates.SortDescriptions.Add(new SortDescription(nameof(RedTypeTemplate.Type), ListSortDirection.Ascending));
 
             foreach (ERedExtension ext in Enum.GetValues(typeof(ERedExtension)))
             {
                 var c = CommonFunctions.GetResourceClassesFromExtension(ext);
-                var t = CommonFunctions.GetTypeFromExtension(ext);
-                if (c is null || t is null)
+                if (c is null)
                 {
                     continue;
                 }
-                List<RedTypeTemplate> rtt = [ new("No Template", RedTypeTemplateType.Raw) ];
-                rtt.AddRange(_redTypeTemplateService.SystemTemplates.Where(te => te.Type == t).Select(t => new RedTypeTemplate(t.Name, RedTypeTemplateType.System)));
-                rtt.AddRange(_redTypeTemplateService.UserTemplates.Where(te => te.Type == t).Select(t => new RedTypeTemplate(t.Name, RedTypeTemplateType.User)));
-                resourceFiles.Add(new AddFileModel(c, $"A .{ext} File", ext.ToString(), EWolvenKitFile.Cr2w, "", rtt));
+
+                resourceFiles.Add(new AddFileModel(c, $"A .{ext} File", ext.ToString(), EWolvenKitFile.Cr2w, "", new List<RedTypeTemplate>()));
             }
 
             var ordered = newdef.Categories.First(x => x.Name == "CR2W Files").Files.NotNull().OrderBy(x => x.Name).ToList();
             newdef.Categories.First(x => x.Name == "CR2W Files").Files = ordered;
             Categories = new ObservableCollection<FileCategoryModel>(newdef.Categories);
+            IndexRedTypeTemplates();
 
             SelectedCategory = Categories.FirstOrDefault();
         }
@@ -201,6 +198,34 @@ public partial class NewFileViewModel : DialogViewModel
     private void Cancel()
     {
         FileHandler?.Invoke(null);
+    }
+
+    [RelayCommand]
+    private async Task Refresh()
+    {
+        await Task.Run(_redTypeTemplateService.LoadTemplates);
+        IndexRedTypeTemplates();
+        SelectedRedTypeTemplate = GetInitialTemplateForSelectedFile();
+        CurrentRedTypeTemplates?.View.Refresh();
+    }
+
+    private void IndexRedTypeTemplates()
+    {
+        foreach (var fileModel in Categories.First(x => x.Name == "CR2W Files").Files.NotNull())
+        {
+            var rootChunkType = RedTypeTemplateService.ParseType(fileModel.Name ?? "");
+            if (rootChunkType is null)
+            {
+                continue;
+            }
+
+            fileModel.RedTypeTemplates ??= new List<RedTypeTemplate>();
+
+            fileModel.RedTypeTemplates.Clear();
+            fileModel.RedTypeTemplates.Add(new RedTypeTemplate("No Template", RedTypeTemplateType.Raw));
+            fileModel.RedTypeTemplates.AddRange(_redTypeTemplateService.SystemTemplates.Where(te => te.Type == rootChunkType).Select(t => new RedTypeTemplate(t.Name, RedTypeTemplateType.System)));
+            fileModel.RedTypeTemplates.AddRange(_redTypeTemplateService.UserTemplates.Where(te => te.Type == rootChunkType).Select(t => new RedTypeTemplate(t.Name, RedTypeTemplateType.User)));
+        }
     }
 
     private RedTypeTemplate? GetInitialTemplateForSelectedFile()

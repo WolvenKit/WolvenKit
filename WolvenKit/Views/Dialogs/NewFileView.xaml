@@ -10,6 +10,7 @@
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     mc:Ignorable="d"
     d:DesignWidth="800"
     d:DesignHeight="600"
@@ -128,6 +129,7 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="0.25*" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
                 <TextBlock
@@ -139,12 +141,13 @@
                 <hc:TextBox
                     x:Name="FileName"
                     Grid.Column="1"
+                    Margin="{DynamicResource WolvenKitMarginSmallRight}"
                     FlowDirection="LeftToRight" />
 
                 <ComboBox
                     x:Name="RedTemplateComboBox"
                     Grid.Column="2"
-                    Margin="{DynamicResource WolvenKitMarginTinyRight}"
+                    Margin="{DynamicResource WolvenKitMarginSmallRight}"
                     IsEditable="False"
                     IsReadOnly="True"
                     ItemsSource="{Binding CurrentRedTypeTemplates.View}"
@@ -184,6 +187,20 @@
                         </GroupStyle>
                     </ComboBox.GroupStyle>
                 </ComboBox>
+
+                <Button
+                    x:Name="RefreshButton"
+                    Grid.Column="3"
+                    Height="Auto"
+                    Padding="0"
+                    HorizontalAlignment="Right"
+                    ToolTip="Refresh Red Type Templates">
+                    <templates:IconBox
+                        IconPack="Material"
+                        Kind="Refresh"
+                        Size="{DynamicResource WolvenKitIconTiny}"
+                        Foreground="{StaticResource WolvenKitPurple}" />
+                </Button>
             </Grid>
         </Border>
 
