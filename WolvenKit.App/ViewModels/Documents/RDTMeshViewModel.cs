@@ -14,7 +14,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DynamicData;
 using DynamicData.Kernel;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
@@ -24,7 +23,6 @@ using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.App.Services;
-using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.PhysX;
 using WolvenKit.Common.Services;
@@ -36,10 +34,8 @@ using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
-using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 using IMaterial = WolvenKit.RED4.Types.IMaterial;
-using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 using Material = WolvenKit.App.Models.Material;
 
 namespace WolvenKit.App.ViewModels.Documents;
@@ -1205,7 +1201,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
             if (ShiftKeyPressed)
             {
-                if (Camera != null )
+                if (Camera != null)
                 {
                     // Zoom to the selected submesh
                     var v = submesh.BoundsWithTransform;
@@ -1232,7 +1228,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     Camera?.AnimateTo(
                     new System.Windows.Media.Media3D.Point3D(newPosition.X, newPosition.Y, newPosition.Z),
                     new Vector3D(newDirection.X, newDirection.Y, newDirection.Z),
-                    new Vector3D(0,1,0),
+                    new Vector3D(0, 1, 0),
                     s_cameraAnimationTime);
                 }
             }
@@ -1500,7 +1496,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         {
             material = new PBRMaterial()
             {
-                EnableAutoTangent = true, RenderShadowMap = true, RenderEnvironmentMap = true,
+                EnableAutoTangent = true,
+                RenderShadowMap = true,
+                RenderEnvironmentMap = true,
                 //EnableTessellation = true,
                 //MaxDistanceTessellationFactor = 2,
                 //MinDistanceTessellationFactor = 4
@@ -1849,94 +1847,94 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     goto DiffuseMaps;
                 }
 
-            ModTools.ConvertMultilayerMaskToDdsStreams(mlm, out var streams);
+                ModTools.ConvertMultilayerMaskToDdsStreams(mlm, out var streams);
 
-            if (streams == null || streams.Count == 0)
-                goto DiffuseMaps;
+                if (streams == null || streams.Count == 0)
+                    goto DiffuseMaps;
 
-            // === Render all layers first and find the maximum resolution ===
-            var layerBitmaps = new List<System.Drawing.Bitmap>();
-            int maxW = 0, maxH = 0;
+                // === Render all layers first and find the maximum resolution ===
+                var layerBitmaps = new List<System.Drawing.Bitmap>();
+                int maxW = 0, maxH = 0;
 
-            foreach (var stream in streams)
-            {
-                var img = await ImageDecoder.RenderToBitmapImageDds(stream, Enums.ETextureRawFormat.TRF_Grayscale);
-                if (img == null)
+                foreach (var stream in streams)
                 {
-                    continue;
-                }
-
-                // Create target bitmaps at maximum resolution
-                using (var ms = new MemoryStream())
-                {
-                    var encoder = new PngBitmapEncoder();
-                    encoder.Frames.Add(BitmapFrame.Create(img));
-                    encoder.Save(ms);
-                    ms.Position = 0;
-                    var bmp = new System.Drawing.Bitmap(ms);
-
-                    layerBitmaps.Add(bmp);
-                    maxW = Math.Max(maxW, bmp.Width);
-                    maxH = Math.Max(maxH, bmp.Height);
-                }
-            }
-
-            if (layerBitmaps.Count == 0)
-                goto DiffuseMaps;
-
-            // Create target bitmaps at maximum resolution
-            var destBitmap   = new Bitmap(maxW, maxH);
-            var rmBitmap     = new Bitmap(maxW, maxH);
-            var normalBitmap = new Bitmap(maxW, maxH);
-
-            using (var g = Graphics.FromImage(normalBitmap))
-            {
-                using (var brush = new SolidBrush(System.Drawing.Color.FromArgb(128, 128, 255)))
-                {
-                    g.FillRectangle(brush, 0, 0, maxW, maxH);
-                }
-            }
-
-            var gfx = Graphics.FromImage(destBitmap);
-            var gfx_rm = Graphics.FromImage(rmBitmap);
-
-            var i = 0;
-            foreach (var layer in mls.Layers)
-            {
-                if (i >= layerBitmaps.Count)
-                {
-                    break;
-                }
-
-                if (layer.Material.DepotPath == ResourcePath.Empty)
-                {
-                    goto SkipLayer;
-                }
-
-                var templateFile = Parent.GetFileFromDepotPathOrCache(layer.Material.DepotPath);
-                if (templateFile?.RootChunk is not Multilayer_LayerTemplate mllt)
-                {
-                    goto SkipLayer;
-                }
-
-                // Get the layer and resize it to max resolution if needed
-                var sourceBmp = layerBitmaps[i];
-                Bitmap maskBitmap;
-
-                if (sourceBmp.Width == maxW && sourceBmp.Height == maxH)
-                {
-                    maskBitmap = (Bitmap)sourceBmp.Clone();
-                }
-                else
-                {
-                    // Resize using System.Drawing (thread-safe)
-                    maskBitmap = new Bitmap(maxW, maxH);
-                    using (var g = Graphics.FromImage(maskBitmap))
+                    var img = await ImageDecoder.RenderToBitmapImageDds(stream, Enums.ETextureRawFormat.TRF_Grayscale);
+                    if (img == null)
                     {
-                        g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
-                        g.DrawImage(sourceBmp, 0, 0, maxW, maxH);
+                        continue;
+                    }
+
+                    // Create target bitmaps at maximum resolution
+                    using (var ms = new MemoryStream())
+                    {
+                        var encoder = new PngBitmapEncoder();
+                        encoder.Frames.Add(BitmapFrame.Create(img));
+                        encoder.Save(ms);
+                        ms.Position = 0;
+                        var bmp = new System.Drawing.Bitmap(ms);
+
+                        layerBitmaps.Add(bmp);
+                        maxW = Math.Max(maxW, bmp.Width);
+                        maxH = Math.Max(maxH, bmp.Height);
                     }
                 }
+
+                if (layerBitmaps.Count == 0)
+                    goto DiffuseMaps;
+
+                // Create target bitmaps at maximum resolution
+                var destBitmap = new Bitmap(maxW, maxH);
+                var rmBitmap = new Bitmap(maxW, maxH);
+                var normalBitmap = new Bitmap(maxW, maxH);
+
+                using (var g = Graphics.FromImage(normalBitmap))
+                {
+                    using (var brush = new SolidBrush(System.Drawing.Color.FromArgb(128, 128, 255)))
+                    {
+                        g.FillRectangle(brush, 0, 0, maxW, maxH);
+                    }
+                }
+
+                var gfx = Graphics.FromImage(destBitmap);
+                var gfx_rm = Graphics.FromImage(rmBitmap);
+
+                var i = 0;
+                foreach (var layer in mls.Layers)
+                {
+                    if (i >= layerBitmaps.Count)
+                    {
+                        break;
+                    }
+
+                    if (layer.Material.DepotPath == ResourcePath.Empty)
+                    {
+                        goto SkipLayer;
+                    }
+
+                    var templateFile = Parent.GetFileFromDepotPathOrCache(layer.Material.DepotPath);
+                    if (templateFile?.RootChunk is not Multilayer_LayerTemplate mllt)
+                    {
+                        goto SkipLayer;
+                    }
+
+                    // Get the layer and resize it to max resolution if needed
+                    var sourceBmp = layerBitmaps[i];
+                    Bitmap maskBitmap;
+
+                    if (sourceBmp.Width == maxW && sourceBmp.Height == maxH)
+                    {
+                        maskBitmap = (Bitmap)sourceBmp.Clone();
+                    }
+                    else
+                    {
+                        // Resize using System.Drawing (thread-safe)
+                        maskBitmap = new Bitmap(maxW, maxH);
+                        using (var g = Graphics.FromImage(maskBitmap))
+                        {
+                            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
+                            g.DrawImage(sourceBmp, 0, 0, maxW, maxH);
+                        }
+                    }
 
                     if (layer.ColorScale == "null_null" || layer.Opacity == 0 || layer.Material.DepotPath == ResourcePath.Empty)
                     {
@@ -1973,7 +1971,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                         gfx.DrawImage(maskBitmap, new Rectangle(0, 0, maskBitmap.Width, maskBitmap.Height), 0, 0, maskBitmap.Width, maskBitmap.Height, GraphicsUnit.Pixel, attributes);
                     }
 
-                #region skipColor
+                #region SkipColor
+
                 SkipColor:
 
                     {
@@ -2094,22 +2093,34 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                         stream.Dispose();
                     }
 
-                    SkipLayer:
+                SkipLayer:
                     i++;
                 }
 
                 gfx.Dispose();
 
-                try { destBitmap.Save(filename_b, ImageFormat.Png); } catch (Exception e) { Parent.GetLoggerService().Error(e.Message); } finally { destBitmap.Dispose(); }
-                try { rmBitmap.Save(filename_rm, ImageFormat.Png); } catch (Exception e) { Parent.GetLoggerService().Error(e.Message); } finally { rmBitmap.Dispose(); }
-                try { normalBitmap.Save(filename_bn, ImageFormat.Png); } catch (Exception e) { Parent.GetLoggerService().Error(e.Message); } finally { normalBitmap.Dispose(); }
+                try
+                { destBitmap.Save(filename_b, ImageFormat.Png); }
+                catch (Exception e) { Parent.GetLoggerService().Error(e.Message); }
+                finally { destBitmap.Dispose(); }
+                try
+                { rmBitmap.Save(filename_rm, ImageFormat.Png); }
+                catch (Exception e) { Parent.GetLoggerService().Error(e.Message); }
+                finally { rmBitmap.Dispose(); }
+                try
+                { normalBitmap.Save(filename_bn, ImageFormat.Png); }
+                catch (Exception e) { Parent.GetLoggerService().Error(e.Message); }
+                finally { normalBitmap.Dispose(); }
             }
 
-            #endregion
-            #region diffuseMaps
+        #endregion
+
+        #region DiffuseMaps
+
         DiffuseMaps:
-            if (File.Exists(filename_d)) goto NormalMaps;
-   
+            if (File.Exists(filename_d))
+                goto NormalMaps;
+
 
             if (dictionary.TryGetValue("DiffuseTexture", out var diffuse) && diffuse is CResourceReference<ITexture> crrd)
             {
@@ -2143,11 +2154,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                     stream.Dispose();
                 }
             }
-            #endregion
+        #endregion
 
-            #region normalMaps
+        #region NormalMaps
+
         NormalMaps:
-            if (File.Exists(filename_bn)) goto SkipNormals;
+
+            if (File.Exists(filename_bn))
+                goto SkipNormals;
 
             if (dictionary.TryGetValue("NormalTexture", out var normalTex) && normalTex is CResourceReference<ITexture> crrn)
             {
@@ -2174,7 +2188,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                                 normalLayer.SetPixel(x, y, System.Drawing.Color.FromArgb(oc.R, oc.G, ToBlue(oc.R, oc.G)));
                             }
 
-                        try { normalLayer.Save(filename_bn, ImageFormat.Png); } catch (Exception e) { Parent.GetLoggerService().Error(e.Message); } finally { normalLayer.Dispose(); }
+                        try
+                        { normalLayer.Save(filename_bn, ImageFormat.Png); }
+                        catch (Exception e) { Parent.GetLoggerService().Error(e.Message); }
+                        finally { normalLayer.Dispose(); }
                     }
                 }
             }
@@ -2204,11 +2221,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                                 normalLayer.SetPixel(x, y, System.Drawing.Color.FromArgb(oc.R, oc.G, ToBlue(oc.R, oc.G)));
                             }
 
-                        try { normalLayer.Save(filename_bn, ImageFormat.Png); } catch (Exception e) { Parent.GetLoggerService().Error(e.Message); } finally { normalLayer.Dispose(); }
+                        try
+                        { normalLayer.Save(filename_bn, ImageFormat.Png); }
+                        catch (Exception e) { Parent.GetLoggerService().Error(e.Message); }
+                        finally { normalLayer.Dispose(); }
                     }
                 }
             }
-            #endregion
+        #endregion
 
         SkipNormals:
             DispatcherHelper.RunOnMainThread(() => SetupPBRMaterial(material.Name, true));
@@ -2329,7 +2349,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
     public SectorGroup RenderSector(worldStreamingSector data, Appearance app)
     {
-        if ( data.NodeData.Data is not worldNodeDataBuffer buffer)
+        if (data.NodeData.Data is not worldNodeDataBuffer buffer)
         {
             throw new ArgumentNullException();
         }
@@ -2821,7 +2841,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                     var group = new MeshComponent()
                     {
-                        Name = name, Text = name, WorldNodeIndex = string.Empty, WorldNodeDataIndices = string.Empty
+                        Name = name,
+                        Text = name,
+                        WorldNodeIndex = string.Empty,
+                        WorldNodeDataIndices = string.Empty
                     };
 
                     group.Children.Add(mesh);
@@ -3219,7 +3242,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 new TextInfo(Path.GetFileNameWithoutExtension(desc.Data.DepotPath.GetResolvedText()),
                     new SharpDX.Vector3((desc.StreamingBox.Max.X + desc.StreamingBox.Min.X) / 2, (desc.StreamingBox.Max.Z + desc.StreamingBox.Min.Z) / 2, -(desc.StreamingBox.Max.Y + desc.StreamingBox.Min.Y) / 2))
                 {
-                    Foreground = SharpDX.Color.Red, Scale = 0.5f
+                    Foreground = SharpDX.Color.Red,
+                    Scale = 0.5f
                 }
             );
 
@@ -3310,7 +3334,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
             sectors.Add(new Sector(Path.GetFileNameWithoutExtension(desc.Data.DepotPath.GetResolvedText().NotNull()), bbText)
             {
-                DepotPath = desc.Data.DepotPath, NumberOfHandles = desc.NumNodeRanges
+                DepotPath = desc.Data.DepotPath,
+                NumberOfHandles = desc.NumNodeRanges
             });
         }
         Sectors = new List<Sector>(sectors.OrderBy(x => x.Name).ToList());
@@ -3422,7 +3447,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                             _slotSets.Add(slotSetName,
                                 new SlotSet(slotSetName, bindName)
                                 {
-                                    Matrix = ToSeparateMatrix(slotset.LocalTransform), Slots = slots, SlotName = slotName
+                                    Matrix = ToSeparateMatrix(slotset.LocalTransform),
+                                    Slots = slots,
+                                    SlotName = slotName
                                 });
                         }
 
@@ -3459,7 +3486,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
 
                             Rigs[enc.Name.ToString().NotNull()] = new Rig(enc.Name.ToString().NotNull())
                             {
-                                Bones = rigBones, BindName = bindName, SlotName = slotName
+                                Bones = rigBones,
+                                BindName = bindName,
+                                SlotName = slotName
                             };
                         }
 
