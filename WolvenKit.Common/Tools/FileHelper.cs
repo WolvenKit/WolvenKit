@@ -121,4 +121,40 @@ public class FileHelper
 
         return new DirectoryInfo(directoryPath).GetFiles(searchPattern).MaxBy(f => f.LastWriteTime);
     }
+
+    #region deprecated
+
+    /// <remarks><see cref="SanitizePath"/> is deprecated, use <see cref="WolvenKit.Core.Services.FilepathValidationTools.SanitizeOsFilePath"/> or <see cref="WolvenKit.Core.Services.FilepathValidationTools.SanitizeArchiveFilePath"/> instead.</remarks>
+    [Obsolete("SanitizePath() is deprecated, use FilePathValidationTools.SanitizeOsFilePath() or FilePathValidationTools.SanitizeArchiveFilePath() instead.")]
+    public static string SanitizePath(string path)
+    {
+        char[] additionalInvalidChars = { '?', '*', '"', '<', '>', '|', '\\', '/' };
+        var invalidCharacters = Path.GetInvalidPathChars().Concat(additionalInvalidChars).Distinct().ToArray();
+        var inputPath = path;
+        var inputPathArray = new List<string>();
+        foreach (var part in inputPath.Split(Path.DirectorySeparatorChar))
+        {
+            var outputPart = part.Trim();
+            if (string.IsNullOrEmpty(outputPart))
+            {
+                continue;
+            }
+            outputPart = new string(outputPart.Select(c => invalidCharacters.Contains(c) ? '_' : c).ToArray());
+
+            if (new Regex(@"^\.{3,}$").IsMatch(outputPart))
+            {
+                throw new Exception($"Pattern \"{outputPart}{Path.DirectorySeparatorChar}\" is not a valid relative path traversal method, consider using {'"' + @" \..\ " + '"'}.");
+            }
+            inputPathArray.Add(outputPart);
+        }
+
+        if (inputPathArray.Count == 0)
+        {
+            throw new Exception($"Path \"{path}\" is empty after sanitation");
+        }
+        inputPath = string.Join(Path.DirectorySeparatorChar, inputPathArray);
+        return inputPath;
+    }
+
+    #endregion
 }
