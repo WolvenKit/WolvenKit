@@ -2100,16 +2100,37 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 gfx.Dispose();
 
                 try
-                { destBitmap.Save(filename_b, ImageFormat.Png); }
-                catch (Exception e) { Parent.GetLoggerService().Error(e.Message); }
-                finally { destBitmap.Dispose(); }
+                {
+                    destBitmap.Save(filename_b, ImageFormat.Png);
+                }
+                catch (Exception e)
+                {
+                    Parent.GetLoggerService().Error(e.Message);
+                }
+                finally { destBitmap.Dispose();
+                }
+
                 try
-                { rmBitmap.Save(filename_rm, ImageFormat.Png); }
-                catch (Exception e) { Parent.GetLoggerService().Error(e.Message); }
-                finally { rmBitmap.Dispose(); }
+                {
+                    rmBitmap.Save(filename_rm, ImageFormat.Png);
+                }
+                catch (Exception e)
+                {
+                    Parent.GetLoggerService().Error(e.Message);
+                }
+                finally
+                {
+                    rmBitmap.Dispose();
+                }
+
                 try
-                { normalBitmap.Save(filename_bn, ImageFormat.Png); }
-                catch (Exception e) { Parent.GetLoggerService().Error(e.Message); }
+                {
+                    normalBitmap.Save(filename_bn, ImageFormat.Png);
+                }
+                catch (Exception e)
+                {
+                    Parent.GetLoggerService().Error(e.Message);
+                }
                 finally { normalBitmap.Dispose(); }
             }
 
@@ -2189,9 +2210,15 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                             }
 
                         try
-                        { normalLayer.Save(filename_bn, ImageFormat.Png); }
-                        catch (Exception e) { Parent.GetLoggerService().Error(e.Message); }
-                        finally { normalLayer.Dispose(); }
+                        {
+                            normalLayer.Save(filename_bn, ImageFormat.Png);
+                        }
+                        catch (Exception e)
+                        {
+                            Parent.GetLoggerService().Error(e.Message);
+                        }
+                        finally { normalLayer.Dispose();
+                        }
                     }
                 }
             }
@@ -2222,9 +2249,16 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                             }
 
                         try
-                        { normalLayer.Save(filename_bn, ImageFormat.Png); }
-                        catch (Exception e) { Parent.GetLoggerService().Error(e.Message); }
-                        finally { normalLayer.Dispose(); }
+                        {
+                            normalLayer.Save(filename_bn, ImageFormat.Png);
+                        }
+                        catch (Exception e) {
+                            Parent.GetLoggerService().Error(e.Message);
+                        }
+                        finally
+                        {
+                            normalLayer.Dispose();
+                        }
                     }
                 }
             }
