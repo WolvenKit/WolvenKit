@@ -1719,7 +1719,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         if (CtrlKeyPressed)
         {
             DeleteMaterialCache();
-            Parent.GetLoggerService().NotNull().Info("Clearing material cache...");
+            Parent.GetLoggerService()?.Info("Clearing material cache...");
             foreach (var (_, material) in SelectedAppearance.RawMaterials)
                 ClearMaterial(material);
         }
@@ -1731,9 +1731,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         loadTask.ContinueWith(t =>
         {
             if (t.IsFaulted)
-                Parent.GetLoggerService().NotNull().Error($"Material loading had errors: {t.Exception?.GetBaseException().Message}");
+                Parent.GetLoggerService()?.Error($"Material loading had errors: {t.Exception?.GetBaseException().Message}");
             else
-                Parent.GetLoggerService().NotNull().Info("All materials loaded!");
+                Parent.GetLoggerService()?.Info("All materials loaded!");
 
             IsLoadingMaterials = false;
         }, TaskScheduler.Default);
