@@ -1718,22 +1718,32 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         {
             DeleteMaterialCache();
             Parent.GetLoggerService()?.Info("Clearing material cache...");
+
             foreach (var (_, material) in SelectedAppearance.RawMaterials)
+            {
                 ClearMaterial(material);
+            }
         }
 
         var loadTask = Parallel.ForEachAsync(
-            from entry in SelectedAppearance.RawMaterials orderby entry.Key ascending select entry,
+            from entry in SelectedAppearance.RawMaterials
+            orderby entry.Key ascending
+            select entry,
             (material, ct) => LoadMaterial(material.Value));
 
         loadTask.ContinueWith(t =>
         {
             if (t.IsFaulted)
+            {
                 Parent.GetLoggerService()?.Error($"Material loading had errors: {t.Exception?.GetBaseException().Message}");
+            }
             else
+            {
                 Parent.GetLoggerService()?.Info("All materials loaded!");
+            }
 
             IsLoadingMaterials = false;
+
         }, TaskScheduler.Default);
     }
 
@@ -1759,8 +1769,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         try
         {
             var dictionary = material.Values;
-
             var mat = material.Instance;
+
             while (mat != null && mat.BaseMaterial.DepotPath != ResourcePath.Empty)
             {
                 CR2WFile? baseMaterialFile = null;
@@ -1850,7 +1860,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 ModTools.ConvertMultilayerMaskToDdsStreams(mlm, out var streams);
 
                 if (streams == null || streams.Count == 0)
+                {
                     goto DiffuseMaps;
+                }
 
                 // === Render all layers first and find the maximum resolution ===
                 var layerBitmaps = new List<System.Drawing.Bitmap>();
@@ -1901,6 +1913,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 var gfx_rm = Graphics.FromImage(rmBitmap);
 
                 var i = 0;
+
                 foreach (var layer in mls.Layers)
                 {
                     if (i >= layerBitmaps.Count)
@@ -2213,12 +2226,14 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                         }
 
                         for (var y = 0; y < normalLayer.Height; y++)
+                        {
 
                             for (var x = 0; x < normalLayer.Width; x++)
                             {
                                 var oc = normalLayer.GetPixel(x, y);
                                 normalLayer.SetPixel(x, y, System.Drawing.Color.FromArgb(oc.R, oc.G, ToBlue(oc.R, oc.G)));
                             }
+                        }
 
                         try
                         {
@@ -2254,12 +2269,13 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                         }
 
                         for (var y = 0; y < normalLayer.Height; y++)
-
+                        { 
                             for (var x = 0; x < normalLayer.Width; x++)
                             {
                                 var oc = normalLayer.GetPixel(x, y);
                                 normalLayer.SetPixel(x, y, System.Drawing.Color.FromArgb(oc.R, oc.G, ToBlue(oc.R, oc.G)));
                             }
+                        }
 
                         try
                         {
