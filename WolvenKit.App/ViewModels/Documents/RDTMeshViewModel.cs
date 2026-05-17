@@ -1883,6 +1883,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 {
                     goto DiffuseMaps;
                 }
+
                 // Create target bitmaps at maximum resolution
                 var destBitmap = new Bitmap(maxW, maxH);
                 var rmBitmap = new Bitmap(maxW, maxH);
@@ -2108,7 +2109,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 {
                     Parent.GetLoggerService().Error(e.Message);
                 }
-                finally { destBitmap.Dispose();
+                finally
+                {
+                    destBitmap.Dispose();
                 }
 
                 try
@@ -2132,7 +2135,10 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 {
                     Parent.GetLoggerService().Error(e.Message);
                 }
-                finally { normalBitmap.Dispose(); }
+                finally
+                {
+                    normalBitmap.Dispose();
+                }
             }
 
         #endregion
@@ -2140,9 +2146,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         #region DiffuseMaps
 
         DiffuseMaps:
-            if (File.Exists(filename_d))
-                goto NormalMaps;
 
+            if (File.Exists(filename_d))
+            {
+                goto NormalMaps;
+            }
 
             if (dictionary.TryGetValue("DiffuseTexture", out var diffuse) && diffuse is CResourceReference<ITexture> crrd)
             {
@@ -2183,7 +2191,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
         NormalMaps:
 
             if (File.Exists(filename_bn))
+            {
                 goto SkipNormals;
+            }
 
             if (dictionary.TryGetValue("NormalTexture", out var normalTex) && normalTex is CResourceReference<ITexture> crrn)
             {
@@ -2218,7 +2228,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                         {
                             Parent.GetLoggerService().Error(e.Message);
                         }
-                        finally { normalLayer.Dispose();
+                        finally
+                        {
+                            normalLayer.Dispose();
                         }
                     }
                 }
@@ -2253,7 +2265,8 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                         {
                             normalLayer.Save(filename_bn, ImageFormat.Png);
                         }
-                        catch (Exception e) {
+                        catch (Exception e)
+                        {
                             Parent.GetLoggerService().Error(e.Message);
                         }
                         finally
@@ -2315,7 +2328,6 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     }
 
     public byte ToBlue(byte r, byte g) => (byte)Math.Clamp(Math.Round((Math.Sqrt(1.02 - 2 * (r / 255F * 2 - 1) * (g / 255F * 2 - 1)) + 1) / 2 * 255), 0, 255);
-
 
     #endregion
 
