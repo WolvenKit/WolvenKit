@@ -1710,7 +1710,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     {
         if (SelectedAppearance == null)
         {
-            Parent.GetLoggerService().NotNull().Warning("No material selected!");
+            Parent.GetLoggerService()?.Warning($"No material selected!");
             return;
         }
 
