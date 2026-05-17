@@ -1880,8 +1880,9 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 }
 
                 if (layerBitmaps.Count == 0)
+                {
                     goto DiffuseMaps;
-
+                }
                 // Create target bitmaps at maximum resolution
                 var destBitmap = new Bitmap(maxW, maxH);
                 var rmBitmap = new Bitmap(maxW, maxH);
