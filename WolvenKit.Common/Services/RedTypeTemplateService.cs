@@ -171,7 +171,7 @@ public class RedTypeTemplateService
     /// <summary>
     /// Writes a template to the system or user template directory.
     /// </summary>
-    /// <param name="template">Instance of the object to act as a template</param>
+    /// <param name="templateData">Instance of the object to act as a template</param>
     /// <param name="templateName">Name of the template</param>
     /// <param name="dst">Template category destination</param>
     /// <remarks>If a template with that name already exists, it will be overwritten.</remarks>
