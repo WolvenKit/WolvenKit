@@ -59,11 +59,11 @@ public partial class NewFileViewModel : DialogViewModel
 
             CurrentRedTypeTemplates = new CollectionViewSource
             {
-                Source = new List<RedTypeTemplate>([new RedTypeTemplate("No Template", RedTypeTemplateType.Raw)])
+                Source = new List<RedTypeTemplateFileModelDescriptor>([new RedTypeTemplateFileModelDescriptor("No Template", RedTypeTemplateFileModelDescriptorType.Raw)])
             };
             ApplyTemplateCustomSort(CurrentRedTypeTemplates);
-            CurrentRedTypeTemplates.GroupDescriptions.Add(new PropertyGroupDescription(nameof(RedTypeTemplate.Type)));
-            SelectedRedTypeTemplate = ((List<RedTypeTemplate>)CurrentRedTypeTemplates.Source).First();
+            CurrentRedTypeTemplates.GroupDescriptions.Add(new PropertyGroupDescription(nameof(RedTypeTemplateFileModelDescriptor.Type)));
+            SelectedRedTypeTemplate = ((List<RedTypeTemplateFileModelDescriptor>)CurrentRedTypeTemplates.Source).First();
 
             foreach (ERedExtension ext in Enum.GetValues(typeof(ERedExtension)))
             {
@@ -73,7 +73,7 @@ public partial class NewFileViewModel : DialogViewModel
                     continue;
                 }
 
-                resourceFiles.Add(new AddFileModel(c, $"A .{ext} File", ext.ToString(), EWolvenKitFile.Cr2w, "", new List<RedTypeTemplate>()));
+                resourceFiles.Add(new AddFileModel(c, $"A .{ext} File", ext.ToString(), EWolvenKitFile.Cr2w, "", new List<RedTypeTemplateFileModelDescriptor>()));
             }
 
             var ordered = newdef.Categories.First(x => x.Name == "CR2W Files").Files.NotNull().OrderBy(x => x.Name).ToList();
@@ -98,7 +98,7 @@ public partial class NewFileViewModel : DialogViewModel
     private CollectionViewSource? _currentRedTypeTemplates;
 
     [ObservableProperty]
-    private RedTypeTemplate? _selectedRedTypeTemplate;
+    private RedTypeTemplateFileModelDescriptor? _selectedRedTypeTemplate;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OkCommand))]
@@ -224,16 +224,16 @@ public partial class NewFileViewModel : DialogViewModel
                 continue;
             }
 
-            fileModel.RedTypeTemplates ??= new List<RedTypeTemplate>();
+            fileModel.RedTypeTemplates ??= new List<RedTypeTemplateFileModelDescriptor>();
 
             fileModel.RedTypeTemplates.Clear();
-            fileModel.RedTypeTemplates.Add(new RedTypeTemplate("No Template", RedTypeTemplateType.Raw));
-            fileModel.RedTypeTemplates.AddRange(_redTypeTemplateService.SystemTemplates.Where(te => te.Type == rootChunkType).Select(t => new RedTypeTemplate(t.Name, RedTypeTemplateType.System)));
-            fileModel.RedTypeTemplates.AddRange(_redTypeTemplateService.UserTemplates.Where(te => te.Type == rootChunkType).Select(t => new RedTypeTemplate(t.Name, RedTypeTemplateType.User)));
+            fileModel.RedTypeTemplates.Add(new RedTypeTemplateFileModelDescriptor("No Template", RedTypeTemplateFileModelDescriptorType.Raw));
+            fileModel.RedTypeTemplates.AddRange(_redTypeTemplateService.SystemTemplates.Where(te => te.Type == rootChunkType).Select(t => new RedTypeTemplateFileModelDescriptor(t.Name, RedTypeTemplateFileModelDescriptorType.System)));
+            fileModel.RedTypeTemplates.AddRange(_redTypeTemplateService.UserTemplates.Where(te => te.Type == rootChunkType).Select(t => new RedTypeTemplateFileModelDescriptor(t.Name, RedTypeTemplateFileModelDescriptorType.User)));
         }
     }
 
-    private RedTypeTemplate? GetInitialTemplateForSelectedFile()
+    private RedTypeTemplateFileModelDescriptor? GetInitialTemplateForSelectedFile()
     {
         if (SelectedFile is null)
         {
@@ -242,7 +242,7 @@ public partial class NewFileViewModel : DialogViewModel
 
         var userDefault =
             SelectedFile.RedTypeTemplates?.FirstOrDefault(rtt =>
-                rtt.Name == "default" && rtt.Type == RedTypeTemplateType.User);
+                rtt.Name == "default" && rtt.Type == RedTypeTemplateFileModelDescriptorType.User);
         if (userDefault is not null)
         {
             return userDefault;
@@ -250,20 +250,20 @@ public partial class NewFileViewModel : DialogViewModel
 
         var systemDefault =
             SelectedFile.RedTypeTemplates?.FirstOrDefault(rtt =>
-                rtt.Name == "default" && rtt.Type == RedTypeTemplateType.System);
+                rtt.Name == "default" && rtt.Type == RedTypeTemplateFileModelDescriptorType.System);
         if (systemDefault is not null)
         {
             return systemDefault;
         }
 
-        return SelectedFile.RedTypeTemplates?.FirstOrDefault(rtt => rtt.Type == RedTypeTemplateType.Raw);
+        return SelectedFile.RedTypeTemplates?.FirstOrDefault(rtt => rtt.Type == RedTypeTemplateFileModelDescriptorType.Raw);
     }
 
     private static void ApplyTemplateCustomSort(CollectionViewSource? source)
     {
         if (source?.View is ListCollectionView listView)
         {
-            listView.CustomSort = new RedTypeTemplateComparer("default");
+            listView.CustomSort = new RedTypeTemplateFileModelDescriptorComparer("default");
         }
     }
 }

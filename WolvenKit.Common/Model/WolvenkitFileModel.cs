@@ -16,22 +16,21 @@ namespace WolvenKit.Common.Model
         public List<AddFileModel>? Files { get; set; }
     }
 
-    public enum RedTypeTemplateType
+    public enum RedTypeTemplateFileModelDescriptorType
     {
         User,
         System,
         Raw // Raw as in the default as defined by the RTTI
     }
 
-    // TODO: Better name this is very confusing, potentially have a "cannon" equivalent that is specifically defined instead of being usage specific
-    public class RedTypeTemplate
+    public class RedTypeTemplateFileModelDescriptor
     {
         public string Name { get; set; } = "";
-        public RedTypeTemplateType Type { get; set; } = RedTypeTemplateType.Raw;
+        public RedTypeTemplateFileModelDescriptorType Type { get; set; } = RedTypeTemplateFileModelDescriptorType.Raw;
 
-        public RedTypeTemplate() { }
+        public RedTypeTemplateFileModelDescriptor() { }
 
-        public RedTypeTemplate(string name, RedTypeTemplateType type)
+        public RedTypeTemplateFileModelDescriptor(string name, RedTypeTemplateFileModelDescriptorType type)
         {
             Name = name;
             Type = type;
@@ -45,7 +44,7 @@ namespace WolvenKit.Common.Model
 
         }
 
-        public AddFileModel(string? name, string? description, string? extension, EWolvenKitFile type, string? template, List<RedTypeTemplate>? redTypeTemplates)
+        public AddFileModel(string? name, string? description, string? extension, EWolvenKitFile type, string? template, List<RedTypeTemplateFileModelDescriptor>? redTypeTemplates)
         {
             Name = name;
             Description = description;
@@ -65,6 +64,6 @@ namespace WolvenKit.Common.Model
         // Just for filtering
         public string? FullText { get; init; }
 
-        public List<RedTypeTemplate>? RedTypeTemplates { get; set; }
+        public List<RedTypeTemplateFileModelDescriptor>? RedTypeTemplates { get; set; }
     }
 }

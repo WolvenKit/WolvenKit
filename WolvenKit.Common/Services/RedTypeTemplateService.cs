@@ -17,8 +17,8 @@ public class RedTypeTemplateService
     private readonly string _systemTemplateDir;
     private readonly string _userTemplateDir;
 
-    public readonly List<TemplateEntry> SystemTemplates = [];
-    public readonly List<TemplateEntry> UserTemplates = [];
+    public readonly List<RedTypeTemplateDescriptor> SystemTemplates = [];
+    public readonly List<RedTypeTemplateDescriptor> UserTemplates = [];
 
     private object _lock = new();
 
@@ -52,7 +52,7 @@ public class RedTypeTemplateService
         }
     }
 
-    private void LoadTemplatesFromDirectory(string dir, List<TemplateEntry> templates)
+    private void LoadTemplatesFromDirectory(string dir, List<RedTypeTemplateDescriptor> templates)
     {
         foreach (var f in new DirectoryInfo(dir).EnumerateFiles("*", SearchOption.TopDirectoryOnly))
         {
@@ -93,7 +93,7 @@ public class RedTypeTemplateService
                 continue;
             }
 
-            templates.Add(new TemplateEntry(sections[0], type, f.FullName));
+            templates.Add(new RedTypeTemplateDescriptor(sections[0], type, f.FullName));
             _logger.Debug($"Loaded file {f.FullName} with type {type.Name} and name {sections[0]}");
         }
     }
@@ -161,7 +161,7 @@ public class RedTypeTemplateService
             _ => throw new ArgumentOutOfRangeException(nameof(src), src, null)
         };
 
-    private object? ReadTemplate(Type templateType, string templateName, List<TemplateEntry> templates)
+    private object? ReadTemplate(Type templateType, string templateName, List<RedTypeTemplateDescriptor> templates)
     {
         lock (_lock)
         {
@@ -194,7 +194,7 @@ public class RedTypeTemplateService
         var templateList = dst == TemplateDestination.User ? UserTemplates : SystemTemplates;
         if (!templateList.Any(t => t.Name == templateName && t.Type == template.GetType()))
         {
-            templateList.Add(new TemplateEntry(templateName, template.GetType(), fn));
+            templateList.Add(new RedTypeTemplateDescriptor(templateName, template.GetType(), fn));
         }
     }
 

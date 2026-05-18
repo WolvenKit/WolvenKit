@@ -4,11 +4,11 @@ using WolvenKit.Common.Model;
 
 namespace WolvenKit.App.Comparers;
 
-public class RedTypeTemplateComparer : IComparer
+public class RedTypeTemplateFileModelDescriptorComparer : IComparer
 {
     private readonly string PinnedName;
 
-    public RedTypeTemplateComparer(string pinnedName)
+    public RedTypeTemplateFileModelDescriptorComparer(string pinnedName)
     {
         PinnedName = pinnedName;
     }
@@ -20,12 +20,12 @@ public class RedTypeTemplateComparer : IComparer
             return 0;
         }
 
-        if (x is not RedTypeTemplate left)
+        if (x is not RedTypeTemplateFileModelDescriptor left)
         {
             return 1;
         }
 
-        if (y is not RedTypeTemplate right)
+        if (y is not RedTypeTemplateFileModelDescriptor right)
         {
             return -1;
         }
