@@ -1295,6 +1295,14 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         await SetActiveDialog(new ScriptManagerViewModel(this, _scriptService, SettingsManager, _loggerService));
     }
 
+    private bool CanShowRedTypeTemplateManager() => !IsDialogShown;
+    [RelayCommand(CanExecute = nameof(CanShowRedTypeTemplateManager))]
+    private async Task ShowRedTypeTemplateManager()
+    {
+        CloseModalCommand.Execute(null);
+        await SetActiveDialog(new RedTypeTemplateManagerViewModel(this, _scriptService, SettingsManager, _loggerService));
+    }
+
     private bool CanShowPlugin() => !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanShowPlugin))]
     private async Task ShowPlugin() => await ShowHomePageAsync(EHomePage.Plugins);
