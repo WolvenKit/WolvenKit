@@ -78,10 +78,9 @@ public class RedTypeTemplateService
 
             try
             {
-                var templateObj = RedJsonSerializer.Deserialize(type,
-                    JsonDocument.Parse(File.ReadAllText(f.FullName)).RootElement);
+                var template = ReadTemplate(type, File.ReadAllText(f.FullName));
 
-                if (templateObj is null)
+                if (template.Data is null)
                 {
                     _logger.Warning($"Failed to deserialize template {f.FullName}");
                     continue;
@@ -97,11 +96,6 @@ public class RedTypeTemplateService
             _logger.Debug($"Loaded file {f.FullName} with type {type.Name} and name {sections[0]}");
         }
     }
-
-    public static Type? ParseType(string typeName) => AppDomain.CurrentDomain
-                                                            .GetAssemblies()
-                                                            .SelectMany(a => a.GetTypes())
-                                                            .FirstOrDefault(t => t.Name == typeName);
 
     #endregion
 
@@ -166,7 +160,7 @@ public class RedTypeTemplateService
         lock (_lock)
         {
             var template = templates.FirstOrDefault(t => t.Name == templateName && t.Type == templateType);
-            return template == null ? null : RedJsonSerializer.Deserialize(templateType, JsonDocument.Parse(File.ReadAllText(template.FilePath)).RootElement);
+            return template == null ? null : ReadTemplate(templateType, File.ReadAllText(template.FilePath)).Data;
         }
     }
 
@@ -181,9 +175,14 @@ public class RedTypeTemplateService
     /// <param name="templateName">Name of the template</param>
     /// <param name="dst">Template category destination</param>
     /// <remarks>If a template with that name already exists, it will be overwritten.</remarks>
-    public void WriteTemplate(object template, string templateName, TemplateDestination dst = TemplateDestination.User)
+    public void WriteTemplate(object templateData, string templateName, TemplateDestination dst = TemplateDestination.User)
     {
-        var fn = Path.Join(dst == TemplateDestination.User ? _userTemplateDir : _systemTemplateDir, $"{templateName}.{template.GetType().Name}.json");
+        var fn = Path.Join(dst == TemplateDestination.User ? _userTemplateDir : _systemTemplateDir, $"{templateName}.{templateData.GetType().Name}.json");
+        var template = new RedTypeTemplate()
+        {
+            Version = 1,
+            Data = templateData
+        };
         var js = RedJsonSerializer.Serialize(template);
 
         lock (_lock)
@@ -196,6 +195,39 @@ public class RedTypeTemplateService
         {
             templateList.Add(new RedTypeTemplateDescriptor(templateName, template.GetType(), fn));
         }
+    }
+
+    #endregion
+
+    #region Helper Methods
+
+    public static Type? ParseType(string typeName) => AppDomain.CurrentDomain
+        .GetAssemblies()
+        .SelectMany(a => a.GetTypes())
+        .FirstOrDefault(t => t.Name == typeName);
+
+    private static RedTypeTemplate ReadTemplate(Type type, string json)
+    {
+        var doc = JsonDocument.Parse(json);
+
+        var versionPresent = doc.RootElement.TryGetProperty("Version", out var version);
+        var dataPresent = doc.RootElement.TryGetProperty("Data", out var data);
+
+        if (!versionPresent)
+        {
+            throw new Exception("Template file is missing version property");
+        }
+
+        if (!dataPresent)
+        {
+            throw new Exception("Template file is missing data property");
+        }
+
+        return new RedTypeTemplate
+        {
+            Version = version.GetInt32(),
+            Data = RedJsonSerializer.Deserialize(type, data)
+        };
     }
 
     #endregion
