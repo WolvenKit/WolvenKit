@@ -54,7 +54,7 @@ public class RedTypeTemplateService
 
     private void LoadTemplatesFromDirectory(string dir, List<TemplateEntry> templates)
     {
-        foreach (var f in new DirectoryInfo(dir).EnumerateFiles("*", SearchOption.AllDirectories))
+        foreach (var f in new DirectoryInfo(dir).EnumerateFiles("*", SearchOption.TopDirectoryOnly))
         {
             if (!f.Name.EndsWith(".json"))
             {
