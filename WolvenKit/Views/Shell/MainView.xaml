@@ -139,7 +139,7 @@
                         <dialogs:ScriptManagerView ViewModel="{Binding}" />
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type dialogVMs:RedTypeTemplateManagerViewModel}">
-                        <dialogs:ScriptManagerView ViewModel="{Binding}" />
+                        <dialogs:RedTypeTemplateManagerView ViewModel="{Binding}" />
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type dialogVMs:UpdateDialogViewModel}">
                         <dialogs:UpdateDialog ViewModel="{Binding}" />
