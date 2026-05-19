@@ -9,6 +9,13 @@ Template changelog entry:
 changes:
     - type: "fixed"
       packages: ["App"]
+      pr-number: 2917
+      author: "manavortex"
+      description: "Fixed 'create item codes from yaml'"
+
+changes:
+    - type: "fixed"
+      packages: ["App"]
       pr-number: 2923
       author: "Ametis81"
       description: "Fixed material loading in preview window with 'Generate Materials' button action"
