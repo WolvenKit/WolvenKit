@@ -13,7 +13,6 @@ changes:
       author: "manavortex"
       description: "Fixed 'create item codes from yaml'"
 
-changes:
     - type: "fixed"
       packages: ["App"]
       pr-number: 2923
