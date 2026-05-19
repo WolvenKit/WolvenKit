@@ -81,7 +81,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
                 return;
             }
 
-
+            // Triggers OnPropertyChanged in ProjectExplorerViewModel, which in turn triggers a RefreshProjectData call.
             ActiveProject = x.Result;
             _archiveManager.ProjectArchive = x.Result.AsArchive();
             IsProjectLoaded = true;

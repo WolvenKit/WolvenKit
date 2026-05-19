@@ -21,7 +21,7 @@ public class FileSystemModel : INotifyPropertyChanged
     private string _extension = "default";
 
     [Browsable(false)] public FileSystemModel? Parent { get; }
-    
+
     public string Name
     {
         get => _name;
@@ -65,6 +65,9 @@ public class FileSystemModel : INotifyPropertyChanged
     [Browsable(false)] public DispatchedObservableCollection<FileSystemModel> Children { get; } = new();
     [Browsable(false)] public bool IsDirectory { get; }
 
+    // Parent: the parent model if one exists
+    // Name: just the filename/directory name, e.g. myFile.ent
+    // RawRelativePath: GameRelativePath/Name, e.g. archive/worlds/myFile.ent
     public FileSystemModel(FileSystemModel? parent, string name, string relativePath, bool isDirectory)
     {
         Parent = parent;

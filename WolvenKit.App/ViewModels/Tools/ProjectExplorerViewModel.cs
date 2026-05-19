@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -155,13 +156,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
     {
-        RefreshProjectData();
+        // happening twice on initial load
+        // RefreshProjectData();
 
         CheckForOneDriveInPath();
 
         // On first project load, we're already initialized, so this won't fire
-        Refresh();
-        OnProjectChanged?.Invoke();
+        // Refresh();
+        // OnProjectChanged?.Invoke();
     }
 
     /// <summary>
@@ -223,7 +225,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             if (ActiveProject is not null)
             {
                 RestoreProjectState(ActiveProject);
-                _projectWatcher.WatchProject(ActiveProject);
+                _projectWatcher.WatchProject(ActiveProject!);
             }
 
             OnProjectChanged?.Invoke();
@@ -1009,11 +1011,18 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private async Task ConvertToJsonInternal(IEnumerable<FileSystemModel> selection)
     {
-        List<string> files = new();
+        List<string> files = new(10);
+        List<List<string>> batches = new();
 
         // get all files
         foreach (var item in selection)
         {
+            if (files.Count == 10)
+            {
+                batches.Add(files);
+                files = new List<string>(10);
+            }
+
             if (item.IsDirectory)
             {
                 files.AddRange(Directory.GetFiles(item.FullName, "*", SearchOption.AllDirectories));
@@ -1024,32 +1033,52 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             }
         }
 
-        var progress = 0;
-        _progressService.Report(0);
-
-        // convert files
-        foreach (var file in files)
+        if (files.Count > 0)
         {
-            if (!File.Exists(file) || !Enum.GetNames<ERedExtension>()
-                    .Contains(Path.GetExtension(file).TrimStart('.').ToLower()))
-            {
-                progress++;
-                continue;
-            }
-
-            var rawOutPath = Path.Combine(ActiveProject.NotNull().RawDirectory, ActiveProject!.GetRelativePath(file));
-            var outDirectoryPath = Path.GetDirectoryName(rawOutPath);
-            if (outDirectoryPath != null)
-            {
-                Directory.CreateDirectory(outDirectoryPath);
-
-                await _modTools.ConvertToJsonAndWriteAsync(file, new DirectoryInfo(outDirectoryPath));
-            }
-
-            progress++;
-            _progressService.Report(progress / (float)files.Count);
+            batches.Add(files);
         }
 
+        var progress = 0;
+        _progressService.Report(0);
+        var totalFiles = batches.Sum(x => x.Count);
+        var validExtensions = Enum.GetNames<ERedExtension>()
+            .Select(x => x.ToLowerInvariant())
+            .ToHashSet();
+
+        // convert files
+        var tasks = batches.Select(async batch =>
+        {
+            foreach (var file in batch)
+            {
+                if (!File.Exists(file) ||
+                   !validExtensions.Contains(
+                       Path.GetExtension(file).TrimStart('.').ToLowerInvariant()))
+                {
+                    Interlocked.Increment(ref progress);
+                    continue;
+                }
+
+                var rawOutPath = Path.Combine(
+                    ActiveProject.NotNull().RawDirectory,
+                    ActiveProject!.GetRelativePath(file));
+
+                var outDirectoryPath = Path.GetDirectoryName(rawOutPath);
+
+                if (outDirectoryPath != null)
+                {
+                    Directory.CreateDirectory(outDirectoryPath);
+
+                    await _modTools.ConvertToJsonAndWriteAsync(
+                        file,
+                        new DirectoryInfo(outDirectoryPath));
+                }
+
+                var current = Interlocked.Increment(ref progress);
+                _progressService.Report(current / (float)totalFiles);
+            }
+        });
+
+        await Task.WhenAll(tasks);
         _progressService.Completed();
     }
 

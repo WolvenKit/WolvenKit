@@ -781,6 +781,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 _notificationService.Warning($"Project path {location} contains invalid characters!");
             }
 
+            // calls a second time on load/>???
             OnInitialProjectLoaded?.Invoke(this, EventArgs.Empty);
         }, TaskContinuationOptions.OnlyOnRanToCompletion);
     }
