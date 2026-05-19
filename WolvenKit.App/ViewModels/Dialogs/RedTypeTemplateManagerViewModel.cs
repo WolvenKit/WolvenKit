@@ -50,8 +50,21 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
     public TypeDesc SelectedType { get; set; }
     public ObservableCollection<TypeDesc> ValidNewTypes { get; }
 
-    public void AddTemplate(Type type, string name)
+    public async Task AddTemplate(Type type, string name)
     {
+        if (_templateService.TemplateExists(type, name))
+        {
+            var response = await Interactions.ShowMessageBoxAsync(
+                "A template with this name and type already exists, do you want to overwrite it?",
+                "Template already exists",
+                WMessageBoxButtons.YesNo);
+
+            if (response == WMessageBoxResult.No)
+            {
+                return;
+            }
+        }
+
         var typeInstance = _templateService.CreateTypeInstance(type) ?? throw new Exception("Failed to create type instance");
 
         _templateService.WriteTemplate(typeInstance, name);

@@ -256,6 +256,45 @@ public class RedTypeTemplateService
 
     #endregion
 
+    #region Misc
+
+    /// <summary>
+    /// Checks if a template with the given type and name exists in the system or user template directory.
+    /// </summary>
+    /// <param name="templateDesc"></param>
+    /// <param name="src"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    public bool TemplateExists(RedTypeTemplateDescriptor templateDesc, TemplateSource src = TemplateSource.Auto) => TemplateExists(templateDesc.Type, templateDesc.Name, src);
+
+    /// <summary>
+    /// Checks if a template with the given type and name exists in the system or user template directory.
+    /// </summary>
+    /// <param name="templateName"></param>
+    /// <param name="src"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    public bool TemplateExists<T>(string templateName, TemplateSource src = TemplateSource.Auto) => TemplateExists(typeof(T), templateName, src);
+
+    /// <summary>
+    /// Checks if a template with the given type and name exists in the system or user template directory.
+    /// </summary>
+    /// <param name="templateType"></param>
+    /// <param name="templateName"></param>
+    /// <param name="src"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    public bool TemplateExists(Type templateType, string templateName, TemplateSource src = TemplateSource.Auto) => src switch
+    {
+        TemplateSource.Auto => SystemTemplates.Any(t => t.Name.Equals(templateName, StringComparison.CurrentCultureIgnoreCase) && t.Type == templateType) ||
+                               UserTemplates.Any(t => t.Name.Equals(templateName, StringComparison.CurrentCultureIgnoreCase) && t.Type == templateType),
+        TemplateSource.System => SystemTemplates.Any(t => t.Name.Equals(templateName, StringComparison.CurrentCultureIgnoreCase) && t.Type == templateType),
+        TemplateSource.User => UserTemplates.Any(t => t.Name.Equals(templateName, StringComparison.CurrentCultureIgnoreCase) && t.Type == templateType),
+        _ => throw new ArgumentOutOfRangeException(nameof(src), src, null)
+    };
+
+    #endregion
+
     #region Helper Methods
 
     private string GetTemplateFilePath(Type type, string name, TemplateDestination src) => Path.Join(

@@ -73,7 +73,7 @@ public partial class RedTypeTemplateManagerView : ReactiveUserControl<RedTypeTem
             return;
         }
 
-        ViewModel.AddTemplate(ViewModel.SelectedType.Type, FileNameTextBox.Text);
+        _ = ViewModel.AddTemplate(ViewModel.SelectedType.Type, FileNameTextBox.Text);
     }
 
     private void TypeSelectorComboBox_OnKeyUp(object sender, KeyEventArgs e)
