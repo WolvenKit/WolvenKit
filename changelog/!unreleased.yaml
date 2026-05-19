@@ -7,3 +7,8 @@ Template changelog entry:
       description: ""
 
 changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 2923
+      author: "Ametis81"
+      description: "Fixed material loading in preview window with 'Generate Materials' button action"
