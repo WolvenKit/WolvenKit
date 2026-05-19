@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models.ProjectManagement.Project;
+using WolvenKit.Common.Services;
 using WolvenKit.Core;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
@@ -187,6 +188,7 @@ public partial class ArchiveXlItemService
     private readonly IAppArchiveManager _archiveManager;
     private readonly ProjectResourceTools _projectResourceTools;
     private readonly ILoggerService _logger;
+    private readonly INotificationService _notificationService;
     private readonly Cr2WTools _cr2WTools;
 
     public ArchiveXlItemService(
@@ -195,7 +197,8 @@ public partial class ArchiveXlItemService
         Cr2WTools cr2WTools,
         IAppArchiveManager archiveManager,
         ProjectResourceTools projectResourceTools,
-        ILoggerService logger
+        ILoggerService logger,
+        INotificationService notificationService
     )
     {
         _settingsManager = settingsManager;
@@ -204,6 +207,7 @@ public partial class ArchiveXlItemService
         _logger = logger;
         _archiveManager = archiveManager;
         _projectResourceTools = projectResourceTools;
+        _notificationService = notificationService;
     }
 
     /// gets modder name from project or settings
@@ -229,7 +233,8 @@ public partial class ArchiveXlItemService
     {
         if (_projectManager.ActiveProject is not { } activeProject)
         {
-            throw new WolvenKitException(0x4003, "You need a Wolvenkit project to use this feature");
+            throw new WolvenKitException(0x4003,
+                "You need a Wolvenkit project to use this feature");
         }
 
         var projectFiles = activeProject.ModFiles.ToList();
@@ -257,10 +262,14 @@ public partial class ArchiveXlItemService
         var newFiles = activeProject.ModFiles.Where(f => !projectFiles.Contains(f)).ToList();
         if (newFiles.Count == 0)
         {
-            _logger.Success($"Your ArchiveXL item {clothingItemData.ItemName.ToArchiveFileName()} has been updated.");
+            _notificationService.Success(
+                $"Your ArchiveXL item {clothingItemData.ItemFileName} has been updated.");
+            _logger.Success($"Your ArchiveXL item {clothingItemData.ItemFileName} has been updated.");
             return;
         }
 
+        _notificationService.Success(
+            $"Your ArchiveXL item for {clothingItemData.Slot} has been created. See the log for detail.");
         _logger.Success($"Your ArchiveXL item for {clothingItemData.Slot} has been created.");
         _logger.Success($"The following files were added:\n\t{string.Join("\n\t", newFiles)}");
         _logger.Success($"You can learn more about this process here:\n\t{WikiLinks.AddingNewItems}");
@@ -421,6 +430,7 @@ public partial class ArchiveXlItemService
 
         if (cr2W.RootChunk is not C2dArray factory)
         {
+            _notificationService.Error("Couldn't add factory entries. See the log for detail.");
             _logger.Error(string.Join(",\n\t", [
                 $"Failed when adding to factory {clothingItemData.FactoryFilePath}. Add an entry to CompiledData by hand:",
                 $"[0] = {itemName}",
@@ -516,6 +526,8 @@ public partial class ArchiveXlItemService
             json.Root.Chunk is not localizationPersistenceOnScreenEntries locEntries)
         {
             _logger.Error($"Failed to open or create translation file {clothingItemData.TranslationFileRelPath}");
+            _notificationService.Error(
+                $"Failed to open or create translation file {clothingItemData.TranslationFileRelPath}");
             return;
         }
 
@@ -591,6 +603,8 @@ public partial class ArchiveXlItemService
 
         if (File.Exists(absoluteInkatlasPath) && _cr2WTools.ReadCr2WNoException(absoluteInkatlasPath) is not null)
         {
+            _notificationService.Warning(
+                $"Inkatlas {clothingItemData.InkatlasPath} already exists, refusing to overwrite. See the log for detail.");
             _logger.Warning($"Inkatlas {clothingItemData.InkatlasPath} already exists, refusing to overwrite.");
             _logger.Info($"Delete it or run Files -> Add Files -> Generate Inkatlas");
         }
@@ -600,7 +614,7 @@ public partial class ArchiveXlItemService
         InkatlasImageGenerator.GenerateDummyIcons(tempFolder, $"{clothingItemData.ItemName.ToArchiveFileName()}_",
             clothingItemData.GetAllVariants());
 
-        InkatlasImageGenerator.GenerateAtlas(
+        var fileSuccessfullyWritten = InkatlasImageGenerator.GenerateAtlas(
             tempFolder,
             Path.GetDirectoryName(clothingItemData.InkatlasPath)!,
             Path.GetFileName(clothingItemData.InkatlasPath),
@@ -609,6 +623,20 @@ public partial class ArchiveXlItemService
             _cr2WTools,
             activeProject
         );
+
+
+        if (fileSuccessfullyWritten)
+        {
+            _logger.Success(
+                "Successfully created dummy inkatlas. To make it work, import the .png files via Import Tool.");
+            _notificationService.Success("Successfully created dummy inkatlas, you can import the .png files now.");
+        }
+        else
+        {
+            _logger.Warning(
+                "Failed to overwrite dummy inkatlas (written to _new.inkatlas instead). Remember to import the .png files via Import Tool.");
+            _notificationService.Warning("Failed to overwrite dummy inkatlas - see log for detail.");
+        }
     }
 
     /// <summary>
@@ -643,6 +671,7 @@ public partial class ArchiveXlItemService
         if (cr2W?.RootChunk is not entEntityTemplate entTemplate)
         {
             _logger.Error($"Failed to open or create mesh entity {clothingItemData.MeshEntityPath}");
+            _notificationService.Error($"Failed to open or create mesh entity {clothingItemData.MeshEntityPath}");
             return;
         }
 
@@ -890,6 +919,7 @@ public partial class ArchiveXlItemService
         if (cr2W?.RootChunk is not entEntityTemplate rootEntity)
         {
             _logger.Error($"Failed to open or create root entity {clothingItemData.RootEntityPath}");
+            _notificationService.Error($"Failed to open or create root entity {clothingItemData.RootEntityPath}");
             return;
         }
 
@@ -963,6 +993,7 @@ public partial class ArchiveXlItemService
         if (cr2W?.RootChunk is not appearanceAppearanceResource app)
         {
             _logger.Error($"Failed to open or create .app file {clothingItemData.AppFilePath}");
+            _notificationService.Error($"Failed to open or create .app file {clothingItemData.AppFilePath}");
             return;
         }
 
@@ -1061,6 +1092,8 @@ public partial class ArchiveXlItemService
             string.IsNullOrEmpty(itemBase))
         {
             _logger.Error($"Failed to find item base for {clothingItemData.Slot}. Not creating .yaml entry.");
+            _notificationService.Error(
+                $"Failed to find item base for {clothingItemData.Slot}. Not creating .yaml entry.");
             return;
         }
 

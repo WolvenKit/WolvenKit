@@ -229,7 +229,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             return;
         }
 
-        InkatlasImageGenerator.GenerateAtlas(
+        var fileSuccessfullyWritten = InkatlasImageGenerator.GenerateAtlas(
                 pngFolder: vm.PngSourceDir,
                 relativeSourcePath: vm.RelativePath,
                 atlasFileName: vm.InkatlasFileName,
@@ -239,7 +239,15 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
                 activeProject
             );
 
-        _loggerService.Success("Done! Now import the .png files via Import Tool.");
+        if (fileSuccessfullyWritten)
+        {
+            _loggerService.Success("Done! Now import the .png files via Import Tool.");
+        }
+        else
+        {
+            _loggerService.Warning(
+                "Couldn't overwrite inkatlas file! Please rename _new.inkatlas and import the .png files via Import Tool.");
+        }
     }
 
     private static string[] s_extensions = [".ent", ".mesh", ".mi", ".anims", ".particle", ".effect"];
