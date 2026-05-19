@@ -12,3 +12,10 @@ public enum TemplateDestination
     System,
     User
 }
+
+public enum RedTypeTemplateDescriptorExtSource
+{
+    User,
+    System,
+    Raw // Raw as in the default as defined by the RTTI
+}

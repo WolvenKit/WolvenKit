@@ -194,7 +194,7 @@
                     Height="Auto"
                     Padding="0"
                     HorizontalAlignment="Right"
-                    ToolTip="Refresh Red Type Templates">
+                    ToolTip="Refresh Templates">
                     <templates:IconBox
                         IconPack="Material"
                         Kind="Refresh"

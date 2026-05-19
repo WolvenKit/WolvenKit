@@ -4,11 +4,11 @@ using WolvenKit.Common.Model;
 
 namespace WolvenKit.App.Comparers;
 
-public class RedTypeTemplateFileModelDescriptorComparer : IComparer
+public class RedTypeTemplateDescriptorExtComparer : IComparer
 {
     private readonly string PinnedName;
 
-    public RedTypeTemplateFileModelDescriptorComparer(string pinnedName)
+    public RedTypeTemplateDescriptorExtComparer(string pinnedName)
     {
         PinnedName = pinnedName;
     }
@@ -20,12 +20,12 @@ public class RedTypeTemplateFileModelDescriptorComparer : IComparer
             return 0;
         }
 
-        if (x is not RedTypeTemplateFileModelDescriptor left)
+        if (x is not RedTypeTemplateDescriptorExt left)
         {
             return 1;
         }
 
-        if (y is not RedTypeTemplateFileModelDescriptor right)
+        if (y is not RedTypeTemplateDescriptorExt right)
         {
             return -1;
         }
@@ -49,6 +49,6 @@ public class RedTypeTemplateFileModelDescriptorComparer : IComparer
             return nameCompare;
         }
 
-        return left.Type.CompareTo(right.Type);
+        return left.Source.CompareTo(right.Source);
     }
 }
