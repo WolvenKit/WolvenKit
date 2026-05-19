@@ -62,6 +62,12 @@
             ShowGroupDropArea="False"
             AutoExpandGroups="True">
 
+            <syncfusion:SfDataGrid.SortColumnDescriptions>
+                <syncfusion:SortColumnDescription
+                    ColumnName="TypeName"
+                    SortDirection="Ascending" />
+            </syncfusion:SfDataGrid.SortColumnDescriptions>
+
             <syncfusion:SfDataGrid.GroupColumnDescriptions>
                 <syncfusion:GroupColumnDescription ColumnName="Source" />
             </syncfusion:SfDataGrid.GroupColumnDescriptions>
@@ -71,6 +77,10 @@
                     HeaderText="Name"
                     MappingName="Name"
                     ColumnSizer="Star" />
+
+                <syncfusion:GridTextColumn
+                    HeaderText="Type"
+                    MappingName="TypeName"/>
 
                 <syncfusion:GridTemplateColumn
                     HeaderText="Action"

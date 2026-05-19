@@ -9,6 +9,8 @@ public class RedTypeTemplateDescriptorManagerExt : RedTypeTemplateDescriptorExt
         get => Source == RedTypeTemplateDescriptorExtSource.User;
     }
 
+    public string TypeName => Type.Name;
+
     public RedTypeTemplateDescriptorManagerExt(RedTypeTemplateDescriptor template,
         RedTypeTemplateDescriptorExtSource src)
     {

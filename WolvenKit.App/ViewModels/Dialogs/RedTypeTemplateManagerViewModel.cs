@@ -21,8 +21,6 @@ public record TypeDesc(Type Type, string TypeName);
 
 public partial class RedTypeTemplateManagerViewModel : DialogViewModel
 {
-    private const string s_scriptExtension = ".wscript";
-
     private readonly AppViewModel _appViewModel;
     private readonly RedTypeTemplateService _templateService;
     private readonly ISettingsManager _settingsManager;
@@ -42,6 +40,7 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
             .SelectMany(s => s.GetTypes())
             .Where(p => typeof(IRedType).IsAssignableFrom(p) && p is { IsClass: true, IsAbstract: false })
             .Select(x => new TypeDesc(x, x.Name))
+            .OrderBy(x => x.TypeName)
         );
         SelectedType = ValidNewTypes.FirstOrDefault()!;
     }
