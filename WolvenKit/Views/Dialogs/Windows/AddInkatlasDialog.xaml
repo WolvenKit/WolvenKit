@@ -6,7 +6,6 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     Title="Generate new inkatlas"
     Width="{StaticResource WolvenKitDialogWidth}"
@@ -54,7 +53,7 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="{StaticResource WolvenKitDialogLabelColumnWidthMedium}" />
+                        <ColumnDefinition Width="{DynamicResource WolvenKitDialogLabelColumnWidthMedium}" />
                         <ColumnDefinition Width="60" />
                         <ColumnDefinition Width="20" />
                         <ColumnDefinition Width="60" />
@@ -96,15 +95,30 @@
                         SelectedOption="{Binding ExistingFile,
                                                  Mode=TwoWay}"
                         IsInline="True" />
+
                     <TextBox
                         x:Name="ExistingFileBox"
                         Grid.Row="4"
                         Grid.Column="1"
-                        Grid.ColumnSpan="5"
+                        Grid.ColumnSpan="4"
                         Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         Background="{StaticResource BackgroundBrush_InputField_Readonly}"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         IsReadOnly="True" />
+
+                    <Button
+                        x:Name="ClearExistingFileButton"
+                        Grid.Row="4"
+                        Grid.Column="5"
+                        Padding="0"
+                        KeyboardNavigation.TabIndex="-1">
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Delete"
+                            Size="{DynamicResource WolvenKitIconMicro}"
+                            Foreground="{StaticResource WolvenKitRed}" />
+                    </Button>
+
 
                     <!-- relative path (project folder) -->
                     <editors:FilterableDropdownMenu
