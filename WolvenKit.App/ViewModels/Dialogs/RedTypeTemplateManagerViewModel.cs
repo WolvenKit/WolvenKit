@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -12,8 +13,11 @@ using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
+
+public record TypeDesc(Type Type, string TypeName);
 
 public partial class RedTypeTemplateManagerViewModel : DialogViewModel
 {
@@ -33,30 +37,28 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
         _loggerService = loggerService;
 
         LoadTemplates();
+
+        ValidNewTypes = new ObservableCollection<TypeDesc>(AppDomain.CurrentDomain.GetAssemblies()
+            .SelectMany(s => s.GetTypes())
+            .Where(p => typeof(IRedType).IsAssignableFrom(p) && p is { IsClass: true, IsAbstract: false })
+            .Select(x => new TypeDesc(x, x.Name))
+        );
+        SelectedType = ValidNewTypes.FirstOrDefault()!;
     }
 
     public ObservableCollection<RedTypeTemplateDescriptorManagerExt> Templates { get; } = new();
 
-    public void AddScript(string fileName)
+    public TypeDesc SelectedType { get; set; }
+    public ObservableCollection<TypeDesc> ValidNewTypes { get; }
+
+    public void AddTemplate(Type type, string name)
     {
-        if (string.IsNullOrEmpty(fileName))
-        {
-            return;
-        }
+        var typeInstance = _templateService.CreateTypeInstance(type) ?? throw new Exception("Failed to create type instance");
 
-        if (!fileName.EndsWith(s_scriptExtension))
-        {
-            fileName += s_scriptExtension;
-        }
-
-        var scriptPath = Path.Combine(ISettingsManager.GetWScriptDir(), fileName);
-        if (File.Exists(scriptPath))
-        {
-            return;
-        }
-
-        File.Create(scriptPath).Close();
-        LoadTemplates();
+        _templateService.WriteTemplate(typeInstance, name);
+        Templates.Add(new RedTypeTemplateDescriptorManagerExt(
+            _templateService.UserTemplates.First(t => t.Name == name && t.Type == type),
+            RedTypeTemplateDescriptorExtSource.User));
     }
 
     [RelayCommand]

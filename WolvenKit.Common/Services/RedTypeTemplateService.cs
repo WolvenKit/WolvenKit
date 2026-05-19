@@ -213,9 +213,9 @@ public class RedTypeTemplateService
         }
 
         var templateList = dst == TemplateDestination.User ? UserTemplates : SystemTemplates;
-        if (!templateList.Any(t => t.Name == templateName && t.Type == template.GetType()))
+        if (!templateList.Any(t => t.Name == templateName && t.Type == templateData.GetType()))
         {
-            templateList.Add(new RedTypeTemplateDescriptor(templateName, template.GetType(), fn));
+            templateList.Add(new RedTypeTemplateDescriptor(templateName, templateData.GetType(), fn));
         }
     }
 

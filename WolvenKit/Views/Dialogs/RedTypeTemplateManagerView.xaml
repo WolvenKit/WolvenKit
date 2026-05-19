@@ -124,7 +124,16 @@
                 Width="{DynamicResource WolvenKitScriptManagerFileNameWidth}"
                 hc:InfoElement.Title="Name: "
                 hc:InfoElement.TitlePlacement="Left"
-                FlowDirection="LeftToRight" />
+                FlowDirection="LeftToRight"/>
+
+            <syncfusion:ComboBoxAdv
+                Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                Width="{DynamicResource WolvenKitScriptManagerFileNameWidth}"
+                IsEditable="True"
+                ItemsSource="{Binding ValidNewTypes}"
+                DisplayMemberPath="TypeName"
+                SelectedItem="{Binding SelectedType, Mode=TwoWay}"
+                KeyUp="TypeSelectorComboBox_OnKeyUp"/>
 
             <Button
                 Margin="{DynamicResource WolvenKitMarginSmallLeft}"
