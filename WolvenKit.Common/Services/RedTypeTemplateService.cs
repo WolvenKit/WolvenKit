@@ -210,12 +210,12 @@ public class RedTypeTemplateService
         lock (_lock)
         {
             File.WriteAllText(fn, js);
-        }
 
-        var templateList = dst == TemplateDestination.User ? UserTemplates : SystemTemplates;
-        if (!templateList.Any(t => t.Name == templateName && t.Type == templateData.GetType()))
-        {
-            templateList.Add(new RedTypeTemplateDescriptor(templateName, templateData.GetType(), fn));
+            var templateList = dst == TemplateDestination.User ? UserTemplates : SystemTemplates;
+            if (!templateList.Any(t => t.Name.Equals(templateName, StringComparison.CurrentCultureIgnoreCase) && t.Type == templateData.GetType()))
+            {
+                templateList.Add(new RedTypeTemplateDescriptor(templateName, templateData.GetType(), fn));
+            }
         }
     }
 

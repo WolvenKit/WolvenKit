@@ -68,9 +68,13 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
         var typeInstance = _templateService.CreateTypeInstance(type) ?? throw new Exception("Failed to create type instance");
 
         _templateService.WriteTemplate(typeInstance, name);
-        Templates.Add(new RedTypeTemplateDescriptorManagerExt(
-            _templateService.UserTemplates.First(t => t.Name == name && t.Type == type),
-            RedTypeTemplateDescriptorExtSource.User));
+
+        if (!Templates.Any(t => t.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase) && t.Type == type && t.Source == RedTypeTemplateDescriptorExtSource.User))
+        {
+            Templates.Add(new RedTypeTemplateDescriptorManagerExt(
+                _templateService.UserTemplates.First(t => t.Name == name && t.Type == type),
+                RedTypeTemplateDescriptorExtSource.User));
+        }
     }
 
     [RelayCommand]
