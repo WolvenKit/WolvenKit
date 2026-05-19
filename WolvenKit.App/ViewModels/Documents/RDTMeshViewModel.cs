@@ -36,6 +36,7 @@ using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
+using Color = System.Drawing.Color;
 using IMaterial = WolvenKit.RED4.Types.IMaterial;
 using Material = WolvenKit.App.Models.Material;
 
@@ -1757,201 +1758,181 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
     }
 
     public async ValueTask LoadMaterial(WolvenKit.App.Models.Material? material)
+{
+    if (material == null)
     {
-        if (material == null)
+        return;
+    }
+
+    Parent.GetLoggerService().Info($"Loading material: {material.Name}");
+
+    try
+    {
+        var dictionary = material.Values;
+        var mat = material.Instance;
+
+        // Resolve base material chain (inheritance)
+        while (mat != null && mat.BaseMaterial.DepotPath != ResourcePath.Empty)
         {
-            return;
+            CR2WFile? baseMaterialFile = null;
+
+            try
+            {
+                baseMaterialFile = Parent.GetFileFromDepotPathOrCache(mat.BaseMaterial.DepotPath);
+            }
+            catch
+            {
+                Parent.GetLoggerService().Warning(
+                    $"Trying to find base material, but was not found: \n{mat.BaseMaterial.DepotPath}");
+                continue;
+            }
+
+            if (baseMaterialFile == null)
+            {
+                mat = null;
+                continue;
+            }
+
+            switch (baseMaterialFile.RootChunk)
+            {
+                case CMaterialInstance cmi:
+                    foreach (var pair in cmi.Values)
+                    {
+                        var k = pair.Key.ToString().NotNull();
+                        if (!dictionary.ContainsKey(k))
+                        {
+                            dictionary.Add(k, pair.Value);
+                        }
+                    }
+                    mat = cmi;
+                    break;
+
+                case CMaterialTemplate cmt:
+                    material.TemplateName = cmt.Name;
+                    mat = null;
+                    break;
+            }
         }
 
-        Parent.GetLoggerService().Info($"Loading material: {material.Name}");
+        // Set numeric roughness / metalness values from material parameters
+        adjustRoughness(dictionary, material);
 
-        try
+        var (filename_b, filename_bn, filename_rm, filename_d, filename_n) =
+            GetMaterialFilePathsFromCache(material.Name);
+
+        // === MULTILAYER PROCESSING ===
+        if (dictionary.TryGetValue("MultilayerSetup", out var mlsetup) &&
+            dictionary.TryGetValue("MultilayerMask", out var mlmask))
         {
-            var dictionary = material.Values;
-            var mat = material.Instance;
-            while (mat != null && mat.BaseMaterial.DepotPath != ResourcePath.Empty)
+            var albedoExists = File.Exists(filename_b);
+            var roughMetallicExists = File.Exists(filename_rm);
+            var normalExists = File.Exists(filename_bn);
+
+            // Skip if cached textures already exist
+            if (albedoExists && normalExists && roughMetallicExists)
             {
-                CR2WFile? baseMaterialFile = null;
+                goto DiffuseMaps;
+            }
+
+            if (mlsetup is not CResourceReference<Multilayer_Setup> mlsRef ||
+                mlmask is not CResourceReference<Multilayer_Mask> mlmRef)
+            {
+                goto DiffuseMaps;
+            }
+
+            var setupFile = Parent.GetFileFromDepotPathOrCache(mlsRef.DepotPath);
+            if (setupFile is not { RootChunk: Multilayer_Setup mls })
+                goto DiffuseMaps;
+
+            var maskFile = Parent.GetFileFromDepotPathOrCache(mlmRef.DepotPath);
+            if (maskFile is not { RootChunk: Multilayer_Mask mlm })
+                goto DiffuseMaps;
+
+            ModTools.ConvertMultilayerMaskToDdsStreams(mlm, out var streams);
+            if (streams == null || streams.Count == 0)
+                goto DiffuseMaps;
+
+            // === Render all mask layers and normalize them to maximum resolution ===
+            var layerBitmaps = new List<Bitmap>();
+            int maxWidth = 0;
+            int maxHeight = 0;
+
+            foreach (var stream in streams)
+            {
+                var img = await ImageDecoder.RenderToBitmapImageDds(
+                    stream, Enums.ETextureRawFormat.TRF_Grayscale);
+
+                if (img == null) continue;
+
+                using var ms = new MemoryStream();
+                var encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(img));
+                encoder.Save(ms);
+                ms.Position = 0;
+
+                var bmp = new Bitmap(ms);
+                layerBitmaps.Add(bmp);
+
+                maxWidth = Math.Max(maxWidth, bmp.Width);
+                maxHeight = Math.Max(maxHeight, bmp.Height);
+            }
+
+            if (layerBitmaps.Count == 0)
+                goto DiffuseMaps;
+
+            // Create target bitmaps at maximum resolution
+            var destBitmap = new Bitmap(maxWidth, maxHeight);
+            var rmBitmap = new Bitmap(maxWidth, maxHeight);
+            var normalBitmap = new Bitmap(maxWidth, maxHeight);
+
+            using (var g = Graphics.FromImage(normalBitmap))
+            using (var brush = new SolidBrush(Color.FromArgb(128, 128, 255)))
+            {
+                g.FillRectangle(brush, 0, 0, maxWidth, maxHeight);
+            }
+
+            var gfx = Graphics.FromImage(destBitmap);
+            var gfxRm = Graphics.FromImage(rmBitmap);
+
+            var layerIndex = 0;
+
+            foreach (var layer in mls.Layers)
+            {
+                if (layerIndex >= layerBitmaps.Count) break;
+
+                if (layer.Material.DepotPath == ResourcePath.Empty)
+                {
+                    layerIndex++;
+                    continue;
+                }
+
+                var templateFile = Parent.GetFileFromDepotPathOrCache(layer.Material.DepotPath);
+                if (templateFile?.RootChunk is not Multilayer_LayerTemplate mllt)
+                {
+                    layerIndex++;
+                    continue;
+                }
+
+                Bitmap? maskBitmap = null;
 
                 try
                 {
-                    baseMaterialFile = Parent.GetFileFromDepotPathOrCache(mat.BaseMaterial.DepotPath);
-                }
-                catch
-                {
-                    Parent.GetLoggerService()
-                        .Warning($"Trying to find base material, but was not found: \n{mat.BaseMaterial.DepotPath}");
-                    continue;
-                }
+                    var sourceBmp = layerBitmaps[layerIndex];
 
-                if (baseMaterialFile == null)
-                {
-                    mat = null;
-                    continue;
-                }
-
-
-                switch (baseMaterialFile.RootChunk)
-                {
-                    case CMaterialInstance cmi:
+                    // Resize mask to max resolution for correct preview
+                    if (sourceBmp.Width == maxWidth && sourceBmp.Height == maxHeight)
                     {
-                        foreach (var pair in cmi.Values)
+                        maskBitmap = (Bitmap)sourceBmp.Clone();
+                    }
+                    else
+                    {
+                        maskBitmap = new Bitmap(maxWidth, maxHeight);
+                        using (var g = Graphics.FromImage(maskBitmap))
                         {
-                            var k = pair.Key.ToString().NotNull();
-
-                            if (!dictionary.ContainsKey(k))
-                            {
-                                dictionary.Add(k, pair.Value);
-                            }
+                            g.InterpolationMode = InterpolationMode.HighQualityBilinear;
+                            g.DrawImage(sourceBmp, 0, 0, maxWidth, maxHeight);
                         }
-
-                        mat = cmi;
-                        break;
                     }
-                    case CMaterialTemplate cmt:
-                        material.TemplateName = cmt.Name;
-                        mat = null;
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            // set numeric roughness, metalness etc. values from textures
-            adjustRoughness(dictionary, material);
-
-            var (filename_b, filename_bn, filename_rm, filename_d, filename_n) =
-                GetMaterialFilePathsFromCache(material.Name);
-
-            if (dictionary.TryGetValue("MultilayerSetup", out var mlsetup) &&
-                dictionary.TryGetValue("MultilayerMask", out var mlmask))
-            {
-                var albedoExists = File.Exists(filename_b);
-                var roughMetallicExists = File.Exists(filename_rm);
-                var normalExists = File.Exists(filename_bn);
-
-                if (albedoExists && normalExists && roughMetallicExists)
-                {
-                    goto DiffuseMaps;
-                }
-
-                if (mlsetup is not CResourceReference<Multilayer_Setup> mlsRef ||
-                    mlmask is not CResourceReference<Multilayer_Mask> mlmRef)
-                {
-                    goto DiffuseMaps;
-                }
-
-                var setupFile = Parent.GetFileFromDepotPathOrCache(mlsRef.DepotPath);
-
-                if (setupFile is not { RootChunk: Multilayer_Setup mls })
-                {
-                    goto DiffuseMaps;
-                }
-
-                var maskFile = Parent.GetFileFromDepotPathOrCache(mlmRef.DepotPath);
-
-                if (maskFile is not { RootChunk: Multilayer_Mask mlm })
-                {
-                    goto DiffuseMaps;
-                }
-
-                ModTools.ConvertMultilayerMaskToDdsStreams(mlm, out var streams);
-
-                if (streams == null || streams.Count == 0)
-                {
-                    goto DiffuseMaps;
-                }
-
-                // === Render all layers and normalize to maximum resolution ===
-                var layerBitmaps = new List<Bitmap>();
-                int maxWidth = 0;
-                int maxHeight = 0;
-
-                foreach (var stream in streams)
-                {
-                    var img = await ImageDecoder.RenderToBitmapImageDds(
-                        stream, Enums.ETextureRawFormat.TRF_Grayscale);
-
-                    if (img == null)
-                    {
-                        continue;
-                    }
-
-                    using (var ms = new MemoryStream())
-                    {
-                        var encoder = new PngBitmapEncoder();
-                        encoder.Frames.Add(BitmapFrame.Create(img));
-                        encoder.Save(ms);
-                        ms.Position = 0;
-
-                        var bmp = new Bitmap(ms);
-                        layerBitmaps.Add(bmp);
-
-                        maxWidth = Math.Max(maxWidth, bmp.Width);
-                        maxHeight = Math.Max(maxHeight, bmp.Height);
-                    }
-                }
-
-                if (layerBitmaps.Count == 0)
-                {
-                    goto DiffuseMaps;
-                }
-
-                var destBitmap = new Bitmap(maxWidth, maxHeight);
-                var rmBitmap = new Bitmap(maxWidth, maxHeight);
-                var normalBitmap = new Bitmap(maxWidth, maxHeight);
-
-                using (var g = Graphics.FromImage(normalBitmap))
-                using (var brush = new SolidBrush(System.Drawing.Color.FromArgb(128, 128, 255)))
-                {
-                    g.FillRectangle(brush, 0, 0, maxWidth, maxHeight);
-                }
-
-                var gfx = Graphics.FromImage(destBitmap);
-                var gfxRm = Graphics.FromImage(rmBitmap);
-                //Graphics gfx_n = Graphics.FromImage(destBitmap);
-                var layerIndex = 0;
-
-                foreach (var layer in mls.Layers)
-                {
-                    if (layerIndex >= layerBitmaps.Count)
-                    {
-                        break;
-                    }
-
-                    if (layer.Material.DepotPath == ResourcePath.Empty)
-                    {
-                        layerIndex++;
-                        continue;
-                    }
-
-                    var templateFile = Parent.GetFileFromDepotPathOrCache(layer.Material.DepotPath);
-                    if (templateFile?.RootChunk is not Multilayer_LayerTemplate mllt)
-                    {
-                        layerIndex++;
-                        continue;
-                    }
-
-                    Bitmap? maskBitmap = null;
-
-                    try
-                    {
-                        var sourceBmp = layerBitmaps[layerIndex];
-
-                        if (sourceBmp.Width == maxWidth && sourceBmp.Height == maxHeight)
-                        {
-                            maskBitmap = (Bitmap)sourceBmp.Clone();
-                        }
-                        else
-                        {
-                            maskBitmap = new Bitmap(maxWidth, maxHeight);
-                            using (var g = Graphics.FromImage(maskBitmap))
-                            {
-                                g.InterpolationMode = InterpolationMode.HighQualityBilinear;
-                                g.DrawImage(sourceBmp, 0, 0, maxWidth, maxHeight);
-                            }
-                        }
-
                         // ==================== LAYER PROCESSING ====================
 
                         if (layer.ColorScale == "null_null" || layer.Opacity == 0 ||
