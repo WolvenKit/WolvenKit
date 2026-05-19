@@ -1,15 +1,10 @@
-using System;
-using System.Collections.Specialized;
 using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
 using ReactiveUI;
-using Syncfusion.UI.Xaml.Grid;
-using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Scripting;
-using WolvenKit.Modkit.Scripting;
-using SelectionChangedEventArgs = System.Windows.Controls.SelectionChangedEventArgs;
+using WolvenKit.Common.Model;
 
 namespace WolvenKit.Views.Dialogs;
 /// <summary>
@@ -50,12 +45,12 @@ public partial class RedTypeTemplateManagerView : ReactiveUserControl<RedTypeTem
             return;
         }
 
-        if (sender is not Button { DataContext: ScriptFileViewModel scriptFile })
+        if (sender is not Button { DataContext: RedTypeTemplateDescriptorManagerExt templateDesc })
         {
             return;
         }
 
-        await ViewModel.DeleteFile(scriptFile);
+        await ViewModel.DeleteFile(templateDesc);
     }
 
     private void Add_OnClick(object sender, RoutedEventArgs e)

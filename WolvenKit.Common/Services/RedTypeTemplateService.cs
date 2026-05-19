@@ -104,14 +104,13 @@ public class RedTypeTemplateService
     /// <summary>
     /// Creates an instance of the given type by first attempting to read the template, if no template is found, a blank instance is created instead.
     /// </summary>
-    /// <param name="templateName">Name of the template, defaults to "default"</param>
-    /// <param name="type">Type of the template</param>
+    /// <param name="templateDescriptor">Descriptor of the Template</param>
     /// <param name="src">Source of the template, defaults to "Auto"</param>
     /// <returns></returns>
     /// <exception cref="Exception">Template File contains invalid or mismatched data</exception>
     /// <remarks>When using <see cref="TemplateSource.Auto"/>, user templates are preferred over system templates.</remarks>
-    public object? CreateTypeInstance(Type type, string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
-        ReadTemplate(type, templateName, src) ?? Activator.CreateInstance(type);
+    public object? CreateTypeInstance(RedTypeTemplateDescriptor templateDescriptor, TemplateSource src = TemplateSource.Auto) =>
+        CreateTypeInstance(templateDescriptor.Type, templateDescriptor.Name, src);
 
     /// <summary>
     /// Creates an instance of the given type by first attempting to read the template, if no template is found, a blank instance is created instead.
@@ -122,7 +121,30 @@ public class RedTypeTemplateService
     /// <exception cref="Exception">Template File contains invalid or mismatched data</exception>
     /// <remarks>When using <see cref="TemplateSource.Auto"/>, user templates are preferred over system templates.</remarks>
     public object? CreateTypeInstance<T>(string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
-        ReadTemplate(typeof(T), templateName, src) ?? Activator.CreateInstance(typeof(T));
+        CreateTypeInstance(typeof(T), templateName, src);
+
+    /// <summary>
+    /// Creates an instance of the given type by first attempting to read the template, if no template is found, a blank instance is created instead.
+    /// </summary>
+    /// <param name="templateName">Name of the template, defaults to "default"</param>
+    /// <param name="type">Type of the template</param>
+    /// <param name="src">Source of the template, defaults to "Auto"</param>
+    /// <returns></returns>
+    /// <exception cref="Exception">Template File contains invalid or mismatched data</exception>
+    /// <remarks>When using <see cref="TemplateSource.Auto"/>, user templates are preferred over system templates.</remarks>
+    public object? CreateTypeInstance(Type type, string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
+        ReadTemplate(type, templateName, src) ?? Activator.CreateInstance(type);
+
+    /// <summary>
+    /// Reads a template from the system or user template directory and returns an instance of the templated object.
+    /// </summary>
+    /// <param name="templateDescriptor">Descriptor of the Template</param>
+    /// <param name="src">Source of the template, defaults to "Auto"</param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <exception cref="Exception">Template File contains invalid or mismatched data</exception>
+    /// <remarks>When using <see cref="TemplateSource.Auto"/>, user templates are preferred over system templates.</remarks>
+    public object? ReadTemplate(RedTypeTemplateDescriptor templateDescriptor, TemplateSource src = TemplateSource.Auto) => ReadTemplate(templateDescriptor.Type, templateDescriptor.Name, src);
 
     /// <summary>
     /// Reads a template from the system or user template directory and returns an instance of the templated object.
@@ -199,7 +221,45 @@ public class RedTypeTemplateService
 
     #endregion
 
+    #region Delete Templates
+
+    /// <summary>
+    /// Deletes a template from the system or user template directory.
+    /// </summary>
+    /// <param name="templateDescriptor"></param>
+    /// <param name="dst"></param>
+    public void DeleteTemplate(RedTypeTemplateDescriptor templateDescriptor, TemplateDestination dst = TemplateDestination.User) => DeleteTemplate(templateDescriptor.Type, templateDescriptor.Name, dst);
+
+    /// <summary>
+    /// Deletes a template from the system or user template directory.
+    /// </summary>
+    /// <param name="templateName"></param>
+    /// <param name="dst"></param>
+    public void DeleteTemplate<T>(string templateName, TemplateDestination dst = TemplateDestination.User) => DeleteTemplate(typeof(T), templateName, dst);
+
+    /// <summary>
+    /// Deletes a template from the system or user template directory.
+    /// </summary>
+    /// <param name="templateType"></param>
+    /// <param name="templateName"></param>
+    /// <param name="dst"></param>
+    public void DeleteTemplate(Type templateType, string templateName, TemplateDestination dst = TemplateDestination.User)
+    {
+        var fn = GetTemplateFilePath(templateType, templateName, dst);
+        var templateList = dst == TemplateDestination.User ? UserTemplates : SystemTemplates;
+        lock (_lock)
+        {
+            File.Delete(fn);
+            templateList.RemoveAll(t => t.Name == templateName && t.Type == templateType);
+        }
+    }
+
+    #endregion
+
     #region Helper Methods
+
+    private string GetTemplateFilePath(Type type, string name, TemplateDestination src) => Path.Join(
+        src == TemplateDestination.User ? _userTemplateDir : _systemTemplateDir, $"{name}.{type.Name}.json");
 
     public static Type? ParseType(string typeName) => AppDomain.CurrentDomain
         .GetAssemblies()

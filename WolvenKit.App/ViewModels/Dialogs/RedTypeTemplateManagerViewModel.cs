@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -14,7 +12,6 @@ using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Modkit.Scripting;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 
@@ -137,19 +134,17 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
         // await _templateService.ExecuteAsync(code);
     }
 
-    public async Task DeleteFile(ScriptFileViewModel scriptFile)
+    public async Task DeleteFile(RedTypeTemplateDescriptorManagerExt templateDescriptor)
     {
         var response = await Interactions.ShowMessageBoxAsync(
-            $"Are you sure you want to delete \"{scriptFile.Name}\"?",
+            $"Are you sure you want to delete \"{templateDescriptor.Name}\"?",
             "Delete file",
             WMessageBoxButtons.YesNo);
 
         if (response == WMessageBoxResult.Yes)
         {
-            // _templateService.RemoveFromCache(scriptFile.Path);
-
-            File.Delete(scriptFile.Path);
-            LoadTemplates();
+            Templates.Remove(templateDescriptor);
+            _templateService.DeleteTemplate(templateDescriptor);
         }
     }
 }
