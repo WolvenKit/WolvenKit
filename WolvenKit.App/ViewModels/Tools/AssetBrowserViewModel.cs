@@ -585,7 +585,8 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
         _progressService.IsIndeterminate = false;
         _progressService.Report(0.1);
-        //update to handle batch adding
+
+        // TODO: Implement batching here to improve performance further.
         await Parallel.ForEachAsync(files, async (file, token) =>
         {
             await Task.Run(() => { _gameController.GetController().AddToMod(file); }, token);
