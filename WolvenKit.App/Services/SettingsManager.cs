@@ -286,7 +286,7 @@ public partial class SettingsManager : ObservableObject, ISettingsManager
 
     [Display(Name = "Auto-Open All Mod Folders When Opening a Project (May CausesSlower Opening for Very Large Projects)", GroupName = "File Editor")]
     [ObservableProperty]
-    private bool? _autoExpandAllFoldersOnLaunch = true;
+    private bool _autoExpandAllFoldersOnLaunch = true;
 
     #endregion
 

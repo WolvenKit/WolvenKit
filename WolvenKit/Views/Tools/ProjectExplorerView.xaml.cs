@@ -13,6 +13,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using HandyControl.Data;
 using ReactiveUI;
+using Splat;
 using Syncfusion.Data;
 using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.App.Extensions;
@@ -59,12 +60,15 @@ namespace WolvenKit.Views.Tools
         private string _currentFolderQuery = "";
         private bool _isDragging;
         private bool _isFirstLoad = true;
+        private ISettingsManager _settingsManager;
 
         #region Constructors
 
         public ProjectExplorerView()
         {
             InitializeComponent();
+            _settingsManager = Locator.Current.GetService<ISettingsManager>();
+
             TreeGrid.ItemsSourceChanged += TreeGrid_ItemsSourceChanged;
             TreeGridFlat.ItemsSourceChanged += TreeGridFlat_ItemsSourceChanged;
             TreeGrid.RowDragDropController.DragStart += RowDragDropController_DragStart;
@@ -505,7 +509,8 @@ namespace WolvenKit.Views.Tools
 
             if (e.Action is NotifyCollectionChangedAction.Reset)
             {
-                if (_isFirstLoad && TreeGrid.View.Nodes.Count != 0)
+                var shouldAutoExpand = _settingsManager.AutoExpandAllFoldersOnLaunch;
+                if (_isFirstLoad && TreeGrid.View.Nodes.Count != 0 && shouldAutoExpand)
                 {
                     TreeGrid.ExpandAllNodes();
                     _isFirstLoad = false;
