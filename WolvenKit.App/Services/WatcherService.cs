@@ -37,7 +37,6 @@ public partial class WatcherService : ObservableObject, IWatcherService
     private Task? _batchUpdateTask;
     private CancellationTokenSource _batchUpdateThreadCancellationTokenSource = new();
 
-
     private readonly ConcurrentQueue<FileSystemEventArgsWrapper> _fileChanges = new();
     private readonly ConcurrentQueue<FileSystemEventArgsWrapper> _batchFileChanges = new();
 

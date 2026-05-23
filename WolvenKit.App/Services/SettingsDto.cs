@@ -133,6 +133,7 @@ public class SettingsDto : ISettingsDto
     public uint TreeViewGroupSize { get; set; }
     public EditorDifficultyLevel DefaultEditorDifficultyLevel { get; set; } = EditorDifficultyLevel.Easy;
     public string? TreeViewIgnoredExtensions { get; set; } = "";
+    public bool? AutoExpandAllFoldersOnLaunch { get; set; } = true;
 
     #endregion
 

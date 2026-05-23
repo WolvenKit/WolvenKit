@@ -17,8 +17,12 @@ public class DispatchedObservableCollection<T> : ObservableCollection<T>
 
     public void AddRange(IEnumerable<T> items)
     {
-        var itemsList = items.ToList();
-        if (itemsList.Count == 0) return;
+        var itemsList = items as IList<T> ?? items.ToList();
+
+        if (itemsList.Count == 0)
+        {
+            return;
+        }
 
         DispatcherHelper.RunOnMainThread(() =>
         {
@@ -26,19 +30,17 @@ public class DispatchedObservableCollection<T> : ObservableCollection<T>
             {
                 Items.Add(item);
             }
+
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }, DispatcherPriority.Background);
     }
 
-    public void ReplaceAll(IEnumerable<T> newItems)
+    public void ReplaceAll(IEnumerable<T> items)
     {
         DispatcherHelper.RunOnMainThread(() =>
         {
             Items.Clear();
-            foreach (var item in newItems)
-                Items.Add(item);
-
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            AddRange(items);
         }, DispatcherPriority.Background);
     }
 }

@@ -51,6 +51,7 @@ public interface ISettingsDto
     public uint TreeViewGroupSize { get; set; }
     public EditorDifficultyLevel DefaultEditorDifficultyLevel { get; set; }
     public string? TreeViewIgnoredExtensions { get; set; }
+    public bool? AutoExpandAllFoldersOnLaunch { get; set; }
 
     #endregion
 

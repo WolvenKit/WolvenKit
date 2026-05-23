@@ -58,6 +58,7 @@ namespace WolvenKit.Views.Tools
 
         private string _currentFolderQuery = "";
         private bool _isDragging;
+        private bool _isFirstLoad = true;
 
         #region Constructors
 
@@ -82,7 +83,6 @@ namespace WolvenKit.Views.Tools
             TreeGrid.NodeExpanded += TreeGrid_OnNodeExpanded;
             TreeGrid.NodeCollapsing += TreeGrid_OnNodeCollapsing;
             TreeGrid.NodeCollapsed += TreeGrid_OnNodeCollapsed;
-
 
             this.WhenActivated(disposables =>
             {
@@ -263,6 +263,8 @@ namespace WolvenKit.Views.Tools
         // Run inside Dispatcher to avoid exception on startup
         private void ResetUiElements() => Dispatcher.Invoke(() =>
         {
+            _isFirstLoad = true;
+
             // Hide loading text
             LoadingText.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
 
@@ -501,7 +503,16 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems is not null)
+            if (e.Action is NotifyCollectionChangedAction.Reset)
+            {
+                if (_isFirstLoad && TreeGrid.View.Nodes.Count != 0)
+                {
+                    TreeGrid.ExpandAllNodes();
+                    _isFirstLoad = false;
+                }
+            }
+
+            if (e.Action is NotifyCollectionChangedAction.Add && e.NewItems is not null)
             {
                 foreach (var item in e.NewItems)
                 {
