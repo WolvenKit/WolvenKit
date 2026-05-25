@@ -35,6 +35,7 @@ public class PaneViewModelFactory : IPaneViewModelFactory
     private readonly PropertiesViewModel _propertiesViewModel;
     private readonly IModifierViewStateService _modifierSvc;
     private readonly ProjectResourceTools _projectResourceTools;
+    private readonly IWatcherService _watcherService;
 
     public PaneViewModelFactory(
         IProjectManager projectManager,
@@ -54,7 +55,8 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         ImportExportHelper importExportHelper,
         AppScriptService appScriptService,
         ProjectResourceTools projectResourceTools,
-        IModifierViewStateService modifierSvc
+        IModifierViewStateService modifierSvc,
+        IWatcherService watcherService
         )
     {
         _projectManager = projectManager;
@@ -75,6 +77,7 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         _appScriptService = appScriptService;
         _modifierSvc = modifierSvc;
         _projectResourceTools = projectResourceTools;
+        _watcherService = watcherService;
     }
 
     public LogViewModel LogViewModel() => new(_loggerService, _appScriptService, _settingsManager);
@@ -85,7 +88,7 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         => _propertiesViewModel;
     public AssetBrowserViewModel AssetBrowserViewModel(AppViewModel appViewModel)
         => new(appViewModel, _projectManager, _notificationService, _gameController, _archiveManager, _settingsManager, _progressService,
-            _loggerService, _pluginService, _projectResourceTools);
+            _loggerService, _pluginService, _projectResourceTools, _watcherService);
     public TweakBrowserViewModel TweakBrowserViewModel(AppViewModel appViewModel)
         => new(appViewModel, _chunkViewmodelFactory, _settingsManager, _notificationService, _projectManager, _loggerService, _tweakDbService, _locKeyService);
     public LocKeyBrowserViewModel LocKeyBrowserViewModel() => new(_projectManager, _loggerService, _progressService, _modTools, _gameController, _archiveManager, _locKeyService);

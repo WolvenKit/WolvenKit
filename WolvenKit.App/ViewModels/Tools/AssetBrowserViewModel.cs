@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -27,7 +26,6 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Database;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Exceptions;
-using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.Archive;
@@ -74,7 +72,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private readonly IPluginService _pluginService;
     private readonly AppViewModel _appViewModel;
     private readonly ProjectResourceTools _projectResourceTools;
-
+    private readonly IWatcherService _watcherService;
     private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
 
     private bool _manuallyLoading;
@@ -93,7 +91,8 @@ public partial class AssetBrowserViewModel : ToolViewModel
         IProgressService<double> progressService,
         ILoggerService loggerService,
         IPluginService pluginService,
-        ProjectResourceTools projectResourceTools) : base(ToolTitle)
+        ProjectResourceTools projectResourceTools,
+        IWatcherService watcherService) : base(ToolTitle)
     {
         _projectManager = projectManager;
         _notificationService = notificationService;
@@ -105,6 +104,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         _loggerService = loggerService;
         _appViewModel = appViewModel;
         _projectResourceTools = projectResourceTools;
+        _watcherService = watcherService;
 
         ContentId = ToolContentId;
 
@@ -564,7 +564,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
             finalFilesToAdd = filesToAdd.Values.ToList();
         }
 
-        InternalAddFiles(finalFilesToAdd);
+        await InternalAddFiles(finalFilesToAdd);
     }
 
     private void GetFilesRecursive(RedFileSystemModel directory, Dictionary<ulong, IGameFile> files)
@@ -579,24 +579,10 @@ public partial class AssetBrowserViewModel : ToolViewModel
         }
     }
 
-    private async void InternalAddFiles(IList<IGameFile> files)
+    private async Task InternalAddFiles(IList<IGameFile> files)
     {
-        var progress = 0;
-
-        _progressService.IsIndeterminate = false;
-        _progressService.Report(0.1);
-
-        // TODO: Implement batching here to improve performance further.
-        await Parallel.ForEachAsync(files, async (file, token) =>
-        {
-            await Task.Run(() => { _gameController.GetController().AddToMod(file); }, token);
-
-            Interlocked.Increment(ref progress);
-            _progressService.Report(progress / (float)files.Count);
-        });
-
-        _progressService.Completed();
-
+        _watcherService.ForceStop();
+        await _gameController.GetController().AddToModAsync(files);
         _loggerService.Success($"Added {files.Count} files to the project.");
     }
 

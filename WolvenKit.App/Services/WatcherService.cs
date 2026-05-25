@@ -1,16 +1,20 @@
 using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement.Project;
+using ReactiveUI;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types.Exceptions;
 
@@ -44,6 +48,9 @@ public partial class WatcherService : ObservableObject, IWatcherService
     private readonly ConcurrentDictionary<string, FileSystemEventArgsWrapper> _fileProcessing = new();
     private readonly ConcurrentDictionary<string, long> _removedFiles = new();
 
+    private readonly IProjectEvents _projectEvents;
+    private CompositeDisposable _disposables = new();
+
     [ObservableProperty]
     private DispatchedObservableCollection<FileSystemModel> _fileList = new();
 
@@ -72,7 +79,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
     #endregion
 
-    public WatcherService(ILoggerService? loggerService)
+    public WatcherService(ILoggerService? loggerService, IProjectEvents projectEvents)
     {
         _loggerService = loggerService;
 
@@ -86,26 +93,21 @@ public partial class WatcherService : ObservableObject, IWatcherService
         _modsWatcher.Changed += OnChanged;
         _modsWatcher.Deleted += OnChanged;
         _modsWatcher.Renamed += OnRenamed;
+
+        _projectEvents = projectEvents;
+        _projectEvents.FilesImported
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(OnFilesImported)
+            .DisposeWith(_disposables);
     }
 
     public void WatchProject(Cp77Project project)
     {
-        Task.Run(action: async () =>
-        {
-            try
-            {
-                _projectDirectory = project.FileDirectory;
-                _projectFileSystemModel = new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
-                await InternalRefreshAsync();
-                _loggerService?.Debug($"Now watching project: {project.FileDirectory} ({FileList.Count} files");
-                WatchLocation();
-                MonitorFileUpdates();
-            }
-            catch (Exception ex)
-            {
-                _loggerService?.Error($"WatchProject failed. {ex.Message}");
-            }
-        });
+        _projectDirectory = project.FileDirectory;
+        _projectFileSystemModel = new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
+        InternalRefreshAsync();
+        WatchLocation();
+        _loggerService?.Debug($"Now watching project: {project.FileDirectory} ({FileList.Count} files");
     }
 
     public void Resume() => _modsWatcher.EnableRaisingEvents = true;
@@ -120,6 +122,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
     {
         _modsWatcher.Path = _projectDirectory;
         _modsWatcher.EnableRaisingEvents = true;
+        MonitorFileUpdates();
     }
 
     private void UnwatchLocation()
@@ -280,7 +283,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
                 {
                     ClearChildren(subModel);
 
-                    _fileLookup.Remove(subModel.RawRelativePath, out _);
+                    _fileLookup.TryRemove(subModel.RawRelativePath, out _);
                     FileList.Remove(subModel);
                 }
             }
@@ -289,18 +292,10 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
     public void Refresh()
     {
-        Task.Run(action: async () =>
+        lock (_refreshLock)
         {
-            var ct = new CancellationToken();
-            try
-            {
-                await InternalRefreshAsync(ct);
-            }
-            catch (Exception ex)
-            {
-                _loggerService?.Error($"Refresh failed. {ex.Message}");
-            }
-        });
+            InternalRefreshAsync();
+        }
     }
 
     private void Clear()
@@ -314,35 +309,31 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
     // Clears the entire Project file tree and rebuild it from scratch.
     // Pauses the watching of file system changes while this operation occurs.
-    private async Task InternalRefreshAsync(CancellationToken outerCt = default)
-    {
-        try
-        {
-            Clear();
+    private void InternalRefreshAsync() {
+        Clear();
 
-            var (flatList, treeRoot) = await Task.Run(() =>
-                BuildFullFileStructure(outerCt), outerCt);
-
-            await Application.Current.Dispatcher.InvokeAsync(() =>
-            {
-                lock (_refreshLock)
-                {
-                    FileList.ReplaceAll(flatList);
-                    FileTree.ReplaceAll(treeRoot != null ? treeRoot.Children : Array.Empty<FileSystemModel>());
-                }
-            }, DispatcherPriority.Background, outerCt);
-        }
-        catch (OperationCanceledException)
+        if (_projectFileSystemModel == null)
         {
-            // expected
-        }
-        catch (Exception ex)
-        {
-            _loggerService?.Error($"InternalRefresh failed: {ex.Message}");
+            throw new Exception("Project file system model is missing.");
         }
 
-        (List<FileSystemModel> FlatList, FileSystemModel? TreeRoot) BuildFullFileStructure(CancellationToken ct)
+        var (flatListReturn, treeRoot) = BuildFullFileStructure();
+
+        if (flatListReturn.Count != 0)
         {
+            FileList.ReplaceAll(flatListReturn);
+        }
+
+        FileTree.ReplaceAll((treeRoot != null)
+            ? treeRoot.Children
+            : Array.Empty<FileSystemModel>());
+
+
+        (List<FileSystemModel> FlatList, FileSystemModel? TreeRoot) BuildFullFileStructure()
+        {
+            // TODO: Investigate why some batches of files when they are added, we get the errors like:
+            /* [5/24/2026 12:12:55 PM] [Warning  ] Failed to create FileSystemModel for D:\WolvenKitProjects\asdf\source\archive\base\gameplay\devices\window_blinds\window_blinds_2m.mesh: Could not find file 'C:\lib\WolvenKit\WolvenKit\bin\x64\Debug\net8.0-windows10.0.17763\win-x64\archive\base\gameplay\devices\window_blinds\window_blinds_2m.mesh\archive\base\gameplay\devices\window_blinds\window_blinds_2m.mesh'.
+             */
             var flatList = new List<FileSystemModel>(10000);
             var rootModel = _projectFileSystemModel ?? new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
             var stack = new Stack<(DirectoryInfo Dir, FileSystemModel Parent)>();
@@ -350,7 +341,6 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
             while (stack.Count > 0)
             {
-                ct.ThrowIfCancellationRequested();
                 var (dir, parent) = stack.Pop();
 
                 try
@@ -371,7 +361,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
                             if (dirModel.FullName != rootModel.FullName)
                                 flatList.Add(dirModel);
                             parent.Children.Add(dirModel);
-                            _fileLookup[dirModel.FullName] = dirModel;
+                            _fileLookup.TryAdd(dirModel.FullName, dirModel);
                             stack.Push((subDir, dirModel));
                         }
                     }
@@ -504,7 +494,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
                     break;
                 }
 
-                _fileProcessing[e.FullPath] = e;
+                _fileProcessing.TryAdd(e.FullPath, e);
                 var extension = Path.GetExtension(e.Name);
 
                 if (!string.IsNullOrEmpty(extension) && HasIgnoredExtension(e.Name))
@@ -556,13 +546,18 @@ public partial class WatcherService : ObservableObject, IWatcherService
                     {
                         case WatcherChangeTypes.Created:
                             var parent = FindParentModel(e.FullPath);
+                            // if (parent == null)
+                            // {
+                            //     _batchFileChanges.Enqueue(e);
+                            //     continue;
+                            // }
                             var newItem = CreateFromScratch(parent, e);
                             if (newItem != null)
                             {
                                 parent?.Children.Add(newItem);
                                 created.Add(newItem);
-                                _fileLookup[e.FullPath] = newItem;
-                                _fileProcessing.Remove(e.FullPath, out _);
+                                _fileLookup.TryAdd(e.FullPath, newItem);
+                                _fileProcessing.TryRemove(e.FullPath, out _);
                             }
                             break;
                         // add deleted/changed/renamed as needed?
@@ -591,18 +586,25 @@ public partial class WatcherService : ObservableObject, IWatcherService
                 }
             }
 
-            Application.Current.Dispatcher.Invoke(() =>
+            DispatcherHelper.RunOnMainThread(() =>
             {
-                lock (_refreshLock)
+                FileList.AddRange(created);
+                if (FileTree.Count < 3)
                 {
-                    FileList.AddRange(created);
+                    FileTree.AddRange(created);
                 }
+
             }, DispatcherPriority.Background);
         }
     }
 
     private FileSystemModel? CreateFromScratch(FileSystemModel? parent, FileSystemEventArgsWrapper e)
     {
+        if (parent == null && e.Name != _projectDirectory && e.Name != "archive" && e.Name != "raw" && e.Name != "resources")
+        {
+            return null;
+        }
+
         if (string.IsNullOrEmpty(e.FullPath))
             return null;
 
@@ -614,8 +616,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
         try
         {
             var isDirectory = Directory.Exists(fullPath);
-            var index = fullPath.IndexOf(_projectDirectory, StringComparison.InvariantCultureIgnoreCase);
-            var relativePath = fullPath.Remove(index, _projectDirectory.Length + 1);
+            var relativePath = fullPath[(_projectDirectory.Length + 1)..];
             var name = Path.GetFileName(e.FullPath);
             var model = new FileSystemModel(parent, name, relativePath, isDirectory);
             return model;
@@ -635,5 +636,82 @@ public partial class WatcherService : ObservableObject, IWatcherService
         return HasIgnoredExtension(fileName)
                || s_backupFilePartials.Any(p => fileName.Contains(p, StringComparison.OrdinalIgnoreCase))
                || fileName.StartsWith(".");
+    }
+
+    private void OnFilesImported(FilesImportedMessage msg)
+    {
+        ForceStop();
+
+        var files = msg.Files;
+        var batch = new List<FileSystemModel>();
+
+        foreach (var file in files)
+        {
+            var gameRelativePath = file.FileName;
+            var fullPath = Path.Combine(_projectDirectory, "archive", gameRelativePath);
+            var fileInfo = new FileInfo(fullPath);
+            var fileName = fileInfo.Name;
+            var parentDirInfo = Directory.GetParent(fullPath);
+            var parentPath = parentDirInfo!.FullName;
+
+            if (_fileLookup.TryGetValue(parentPath, out var parent))
+            {
+                var fileSystemModel = new FileSystemModel(parent, fileName, fullPath, false);
+                parent.Children.Add(fileSystemModel);
+                _fileLookup.TryAdd(fullPath, fileSystemModel);
+                batch.Add(fileSystemModel);
+                continue;
+            }
+
+            var parentDirs = new Stack<DirectoryInfo>();
+            var currentLevel = Directory.GetParent(fullPath)!;
+
+            while (currentLevel.Name != "archive")
+            {
+                parentDirs.Push(currentLevel);
+                currentLevel = currentLevel.Parent!;
+            }
+
+            var parentModel = _fileLookup[Path.Combine(_projectDirectory, "archive")]!;
+
+            while (parentDirs.Count > 0)
+            {
+                var current = parentDirs.Pop();
+
+                if (_fileLookup.TryGetValue(current.FullName, out var currentModel))
+                {
+                    parentModel = currentModel;
+                    continue;
+                }
+
+                // Make the directory if needed. (Does nothing if already exists.)
+                current.Create();
+                var newCurrentModel = new FileSystemModel(parentModel, current.Name, current.FullName, true);
+                parentModel.Children.Add(newCurrentModel);
+                _fileLookup.TryAdd(current.FullName, newCurrentModel);
+                batch.Add(newCurrentModel);
+                parentModel = newCurrentModel;
+            }
+
+            var newFileModel = new FileSystemModel(parentModel, fileName, fullPath, false);
+            parentModel.Children.Add(newFileModel);
+            _fileLookup.TryAdd(fullPath, newFileModel);
+            batch.Add(newFileModel);
+        }
+
+        DispatcherHelper.RunOnMainThread(() =>
+        {
+            FileList.AddRange(batch);
+        }, DispatcherPriority.Background);
+
+        Resume();
+
+        var fileList = "";
+        foreach (var file in files)
+        {
+            fileList += $"Added file to project: {file.FileName}\r\n";
+        };
+
+        _loggerService?.Info(fileList);
     }
 }

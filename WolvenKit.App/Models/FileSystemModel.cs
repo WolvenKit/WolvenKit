@@ -131,6 +131,10 @@ public class FileSystemModel : INotifyPropertyChanged
 
         GameRelativePath = string.Join(ResourcePath.DirectorySeparatorChar, hashParts);
         FullName = Path.Combine(root.RawRelativePath, RawRelativePath);
+        if (!FullName.StartsWith("D"))
+        {
+            Console.WriteLine("WTF");
+        }
 
         if (Parent?.Extension == Constants.ModDirectoryTop)
         {

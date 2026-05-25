@@ -6,6 +6,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -45,6 +46,7 @@ public class RED4Controller : ObservableObject, IGameController
     private readonly IPluginService _pluginService;
     private readonly Red4ParserService _parserService;
     private readonly IModifierViewStateService _modifierService;
+    private readonly IProjectEvents _projectEvents;
 
     private bool _initialized = false;
 
@@ -61,7 +63,8 @@ public class RED4Controller : ObservableObject, IGameController
         IProgressService<double> progressService,
         IPluginService pluginService,
         IModifierViewStateService modifierService,
-        Red4ParserService parserService)
+        Red4ParserService parserService,
+        IProjectEvents projectEvents)
     {
         _notificationService = notificationService;
         _loggerService = loggerService;
@@ -74,6 +77,7 @@ public class RED4Controller : ObservableObject, IGameController
         _pluginService = pluginService;
         _modifierService = modifierService;
         _parserService = parserService;
+        _projectEvents = projectEvents;
     }
 
     public async Task HandleStartup()
@@ -1012,6 +1016,27 @@ public class RED4Controller : ObservableObject, IGameController
         return true;
     }
 
+    public async Task AddToModAsync(IList<IGameFile> files)
+    {
+        var progress = 0;
+
+        _progressService.IsIndeterminate = false;
+        _progressService.Report(0.1);
+
+        // TODO: Implement batching here to improve performance further.
+        await Parallel.ForEachAsync(files, async (file, token) =>
+        {
+            await Task.Run(() => { AddToMod(file); }, token);
+
+            Interlocked.Increment(ref progress);
+            _progressService.Report(progress / (float)files.Count);
+        });
+
+        _progressService.Completed();
+        _projectEvents.PublishFilesImported(new FilesImportedMessage([.. files]));
+    }
+
+
     /// <Inheritdoc />
     public bool AddToMod(ulong hash)
     {
@@ -1071,7 +1096,7 @@ public class RED4Controller : ObservableObject, IGameController
             {
                 using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
                 file.Extract(fs);
-                _loggerService.Info($"Added game file to project: {file.Name}");
+                //_loggerService.Info($"Added game file to project: {file.Name}");
             }
             catch (Exception ex)
             {
