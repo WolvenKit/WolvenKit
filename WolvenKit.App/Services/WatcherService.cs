@@ -105,7 +105,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
     {
         _projectDirectory = project.FileDirectory;
         _projectFileSystemModel = new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
-        InternalRefreshAsync();
+        Refresh();
         WatchLocation();
         _loggerService?.Debug($"Now watching project: {project.FileDirectory} ({FileList.Count} files");
     }
@@ -294,7 +294,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
     {
         lock (_refreshLock)
         {
-            InternalRefreshAsync();
+            InternalRefresh();
         }
     }
 
@@ -307,9 +307,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
         FileList.Clear();
     }
 
-    // Clears the entire Project file tree and rebuild it from scratch.
-    // Pauses the watching of file system changes while this operation occurs.
-    private void InternalRefreshAsync() {
+    private void InternalRefresh() {
         Clear();
 
         if (_projectFileSystemModel == null)
@@ -328,12 +326,8 @@ public partial class WatcherService : ObservableObject, IWatcherService
             ? treeRoot.Children
             : Array.Empty<FileSystemModel>());
 
-
         (List<FileSystemModel> FlatList, FileSystemModel? TreeRoot) BuildFullFileStructure()
         {
-            // TODO: Investigate why some batches of files when they are added, we get the errors like:
-            /* [5/24/2026 12:12:55 PM] [Warning  ] Failed to create FileSystemModel for D:\WolvenKitProjects\asdf\source\archive\base\gameplay\devices\window_blinds\window_blinds_2m.mesh: Could not find file 'C:\lib\WolvenKit\WolvenKit\bin\x64\Debug\net8.0-windows10.0.17763\win-x64\archive\base\gameplay\devices\window_blinds\window_blinds_2m.mesh\archive\base\gameplay\devices\window_blinds\window_blinds_2m.mesh'.
-             */
             var flatList = new List<FileSystemModel>(10000);
             var rootModel = _projectFileSystemModel ?? new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
             var stack = new Stack<(DirectoryInfo Dir, FileSystemModel Parent)>();
@@ -394,6 +388,9 @@ public partial class WatcherService : ObservableObject, IWatcherService
         }
     }
 
+    /// <summary>
+    /// Kick off monitoring of file system events.
+    /// </summary>
     private void MonitorFileUpdates()
     {
         _updateThreadCancellationTokenSource = new CancellationTokenSource();
@@ -546,11 +543,6 @@ public partial class WatcherService : ObservableObject, IWatcherService
                     {
                         case WatcherChangeTypes.Created:
                             var parent = FindParentModel(e.FullPath);
-                            // if (parent == null)
-                            // {
-                            //     _batchFileChanges.Enqueue(e);
-                            //     continue;
-                            // }
                             var newItem = CreateFromScratch(parent, e);
                             if (newItem != null)
                             {
@@ -560,7 +552,6 @@ public partial class WatcherService : ObservableObject, IWatcherService
                                 _fileProcessing.TryRemove(e.FullPath, out _);
                             }
                             break;
-                        // add deleted/changed/renamed as needed?
                     }
                 }
                 catch (Exception ex)
@@ -598,6 +589,12 @@ public partial class WatcherService : ObservableObject, IWatcherService
         }
     }
 
+    /// <summary>
+    /// Creates a FileSystemMoodel from a FileSystemEventArgsWrapper and parent.
+    /// </summary>
+    /// <param name="parent"></param>
+    /// <param name="e"></param>
+    /// <returns></returns>
     private FileSystemModel? CreateFromScratch(FileSystemModel? parent, FileSystemEventArgsWrapper e)
     {
         if (parent == null && e.Name != _projectDirectory && e.Name != "archive" && e.Name != "raw" && e.Name != "resources")
@@ -638,6 +635,11 @@ public partial class WatcherService : ObservableObject, IWatcherService
                || fileName.StartsWith(".");
     }
 
+    /// <summary>
+    /// Subscriber to published lists of files being added by other objects.
+    /// Bypasses the need for monitoring file system events for performance.
+    /// </summary>
+    /// <param name="msg"></param>
     private void OnFilesImported(FilesImportedMessage msg)
     {
         ForceStop();

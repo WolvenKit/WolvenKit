@@ -1023,7 +1023,6 @@ public class RED4Controller : ObservableObject, IGameController
         _progressService.IsIndeterminate = false;
         _progressService.Report(0.1);
 
-        // TODO: Implement batching here to improve performance further.
         await Parallel.ForEachAsync(files, async (file, token) =>
         {
             await Task.Run(() => { AddToMod(file); }, token);

@@ -65,9 +65,13 @@ public class FileSystemModel : INotifyPropertyChanged
     [Browsable(false)] public DispatchedObservableCollection<FileSystemModel> Children { get; } = new();
     [Browsable(false)] public bool IsDirectory { get; }
 
-    // Parent: the parent model if one exists
-    // Name: just the filename/directory name, e.g. myFile.ent
-    // RawRelativePath: GameRelativePath/Name, e.g. archive/worlds/myFile.ent
+    /// <summary>
+    /// FileSystemModel represents a file or directory on-disk.
+    /// </summary>
+    /// <param name="parent"></param><remark>FileSystemModel of the parent.</remark>
+    /// <param name="name"></param><remark>Name of the file with extension but no paths.</remark>
+    /// <param name="relativePath"></param><remark>Path above 'source' to the file. E.g. archive/worlds/myfile.ent</remark>
+    /// <param name="isDirectory"></param>
     public FileSystemModel(FileSystemModel? parent, string name, string relativePath, bool isDirectory)
     {
         Parent = parent;

@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Windows.Threading;
-using Octokit;
 using WolvenKit.App.Helpers;
 
 namespace WolvenKit.App.Models;
