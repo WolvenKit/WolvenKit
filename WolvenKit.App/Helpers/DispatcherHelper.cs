@@ -1,6 +1,8 @@
 using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using Serilog.Debugging;
 
 namespace WolvenKit.App.Helpers;
 
@@ -32,5 +34,16 @@ public static class DispatcherHelper
                 throw;
             }
         }
+    }
+
+    /// <summary>
+    /// Runs `action` on the main thread after specified delay, without blocking.
+    /// </summary>
+    /// <param name="action"></param>
+    /// <param name="millisecondsDelay"></param>
+    public static void DelayOnMainThread(Action action, int millisecondsDelay)
+    {
+        Task.Delay(millisecondsDelay)
+            .ContinueWith(_ => RunOnMainThread(action), TaskScheduler.Default);
     }
 }

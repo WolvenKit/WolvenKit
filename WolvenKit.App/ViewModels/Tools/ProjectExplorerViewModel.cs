@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -16,6 +17,7 @@ using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.VisualBasic.FileIO;
+using ReactiveUI;
 using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
@@ -142,6 +144,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         svc.ThreadIdleTenSeconds += Svc_ThreadIdleTenSeconds;
 
         s_instance = this;
+
+        _projectManager.WhenAnyValue(x => x.ActiveProject)
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(project => ActiveProject = project);
     }
 
     /// <summary>
@@ -158,8 +164,18 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
     {
         _loggerService.Debug("ProjectExplorer: loaded new project..");
-        RefreshProjectData();
         CheckForOneDriveInPath();
+        Refresh();
+    }
+
+    private void InternalRefresh()
+    {
+        _progressService.IsIndeterminate = true;
+        _progressService.Status = EStatus.Running;
+        OnSetLoading?.Invoke(this, true);
+
+        // Give time for progress bar to update.
+        DispatcherHelper.DelayOnMainThread(() => RefreshProjectData(), 50);
     }
 
     /// <summary>
@@ -175,26 +191,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private void AppViewModelOnPropertyChanged(object? sender, PropertyChangedEventArgs e) =>
         CanScrollToOpenFile = HasSelectedItem && _appViewModel.ActiveDocument is not null;
 
-    private bool _loading;
-
-    public bool Loading
-    {
-        get => _loading;
-        set
-        {
-            _loading = value;
-            OnPropertyChanged(new PropertyChangedEventArgs(nameof(_loading)));
-        }
-    }
-    public event Action? OnProjectChanged;
-    public event Action<bool>? OnProjectFinishedRefreshing;
-
     private void RefreshProjectData()
     {
         _loggerService.Debug("Refreshing Project Data in ProjectExplorerViewModel.");
-
-        // Refresh the TreeGrids to ensure they render properly.
-        OnProjectChanged?.Invoke();
 
         // Save changes in active project
         if (ActiveProject != null)
@@ -217,8 +216,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
                 if (ActiveProject is not null)
                 {
+                    _loggerService.Debug("ProjectExplorer: Beginning to watch project.");
                     _projectWatcher.WatchProject(ActiveProject!);
-                    OnProjectFinishedRefreshing?.Invoke(IsFlatModeEnabled);
+                    _loggerService.Debug("ProjectExplorer: Restoring project settings.");
                     RestoreProjectState(ActiveProject);
                 }
             }
@@ -228,7 +228,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             }
             finally
             {
+                _loggerService.Debug("ProjectExplorer: Finishing project load.");
                 _progressService.IsIndeterminate = false;
+                OnSetLoading?.Invoke(this, false);
             }
         }, DispatcherPriority.ContextIdle);
     }
@@ -359,9 +361,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanRefresh))]
     private void Refresh()
     {
-        _progressService.IsIndeterminate = true;
-        _progressService.Status = EStatus.Running;
-        RefreshProjectData();
+        InternalRefresh();
     }
 
     private string GetActiveFolderPath() => SelectedTabIndex switch
@@ -1691,6 +1691,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     #endregion
 
     public event EventHandler? OnToggleFlatMode;
+    public event EventHandler<bool>? OnSetLoading;
 
     [RelayCommand(CanExecute = nameof(CanOpenInFileExplorer))]
     private void ToggleFlatMode() => OnToggleFlatMode?.Invoke(this, EventArgs.Empty);

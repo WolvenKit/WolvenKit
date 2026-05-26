@@ -11,7 +11,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using DynamicData.Binding;
 using HandyControl.Data;
+using MahApps.Metro.Controls;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Data;
@@ -93,8 +95,6 @@ namespace WolvenKit.Views.Tools
                 if (DataContext is ProjectExplorerViewModel vm)
                 {
                     SetCurrentValue(ViewModelProperty, vm);
-                    vm.OnProjectChanged += IndicateProjectLoading;
-                    vm.OnProjectFinishedRefreshing += ResetUiElements;
                 }
 
                 AddKeyUpEvent();
@@ -223,11 +223,26 @@ namespace WolvenKit.Views.Tools
                     .DisposeWith(disposables);
 
                 ViewModel.OnToggleFlatMode += OnToggleFlatMode;
+                ViewModel.OnSetLoading += SetLoading;
 
                 ViewModel.WhenAnyValue(x => x.FileList)
                     .Subscribe(_ => RefreshFlatViewIfNeeded())
                     .DisposeWith(disposables);
             });
+
+            this.ExecuteWhenLoaded(() => IndicateProjectLoading());
+        }
+
+        private void SetLoading(object sender, bool isLoading)
+        {
+            if (isLoading)
+            {
+                IndicateProjectLoading();
+            }
+            else
+            {
+                ResetUiElements(ViewModel?.IsFlatModeEnabled ?? false);
+            }
         }
 
         private void RefreshFlatViewIfNeeded()
