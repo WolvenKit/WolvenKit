@@ -159,14 +159,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
     {
-        // happening twice on initial load
-        // RefreshProjectData();
-
+        RefreshProjectData();
         CheckForOneDriveInPath();
+        _projectWatcher.ForceStop();
 
         // On first project load, we're already initialized, so this won't fire
-        // Refresh();
-        // OnProjectChanged?.Invoke();
+        Refresh();
+        OnProjectChanged?.Invoke();
     }
 
     /// <summary>

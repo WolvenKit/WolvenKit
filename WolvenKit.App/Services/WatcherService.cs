@@ -106,8 +106,8 @@ public partial class WatcherService : ObservableObject, IWatcherService
     {
         _projectDirectory = project.FileDirectory;
         _projectFileSystemModel = new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
-        Refresh();
         WatchLocation();
+        Refresh();
         _loggerService?.Debug($"Now watching project: {project.FileDirectory} ({FileList.Count} files");
     }
 
@@ -123,7 +123,6 @@ public partial class WatcherService : ObservableObject, IWatcherService
     {
         _modsWatcher.Path = _projectDirectory;
         _modsWatcher.EnableRaisingEvents = true;
-        MonitorFileUpdates();
     }
 
     private void UnwatchLocation()
@@ -309,6 +308,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
     }
 
     private void InternalRefresh() {
+        ForceStop();
         Clear();
 
         if (_projectFileSystemModel == null)
@@ -387,6 +387,8 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
             return (flatList, rootModel);
         }
+
+        MonitorFileUpdates();
     }
 
     /// <summary>
