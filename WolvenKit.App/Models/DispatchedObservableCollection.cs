@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Windows.Threading;
+using DynamicData;
 using WolvenKit.App.Helpers;
 
 namespace WolvenKit.App.Models;
@@ -24,21 +25,20 @@ public class DispatchedObservableCollection<T> : ObservableCollection<T>
 
         DispatcherHelper.RunOnMainThread(() =>
         {
-            foreach (var item in itemsList)
-            {
-                Items.Add(item);
-            }
-
+            Items.AddRange(itemsList);
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-        }, DispatcherPriority.Background);
+        });
     }
 
     public void ReplaceAll(IEnumerable<T> items)
     {
+        var itemsList = items as IList<T> ?? items.ToList();
+
         DispatcherHelper.RunOnMainThread(() =>
         {
             Items.Clear();
-            AddRange(items);
-        }, DispatcherPriority.Background);
+            Items.AddRange(itemsList);
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        });
     }
 }
