@@ -161,10 +161,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     {
         RefreshProjectData();
         CheckForOneDriveInPath();
-        _projectWatcher.ForceStop();
-
-        // On first project load, we're already initialized, so this won't fire
-        Refresh();
+        _projectWatcher.Suspend();
         OnProjectChanged?.Invoke();
     }
 
