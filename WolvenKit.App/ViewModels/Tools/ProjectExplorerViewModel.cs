@@ -159,6 +159,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
     {
+        _loggerService.Debug("ProjectExplorer: loaded new project..");
         RefreshProjectData();
         CheckForOneDriveInPath();
         _projectWatcher.Suspend();
@@ -204,9 +205,15 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     // When opening projects from launch args, change detection for dependent objects isn't working yet.
     private void RefreshProjectData()
     {
+        _loggerService.Debug("Refreshing Project Data in ProjectExplorerViewModel.");
+
+        // Refresh the TreeGrids to ensure they render properly.
+        OnProjectChanged?.Invoke();
+
         // Save changes in active project
         if (ActiveProject != null)
         {
+            _loggerService.Debug("Saving changes in active project and suspending the file watcher.");
             _hasUnsavedFileTreeChanges = true;
             SaveProjectExplorerExpansionStateIfDirty();
             _projectWatcher.UnwatchProject(ActiveProject);

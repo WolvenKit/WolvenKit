@@ -105,6 +105,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
     public void WatchProject(Cp77Project project)
     {
         _projectDirectory = project.FileDirectory;
+        _loggerService?.Debug($"Starting the WatcherService file system monitors for dir: {_projectDirectory}.");
         _projectFileSystemModel = new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
         Refresh();
         WatchLocation();
@@ -115,6 +116,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
     public void UnwatchProject(Cp77Project? project)
     {
+        _loggerService?.Debug("Stopping WatcherService file system monitors.");
         _isWatcherStopped = true;
         UnwatchLocation();
     }
@@ -292,6 +294,8 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
     public void Refresh()
     {
+        _loggerService?.Debug($"Refreshing the project from disk for {_projectDirectory}.");
+
         lock (_refreshLock)
         {
             InternalRefresh();
@@ -300,6 +304,8 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
     private void Clear()
     {
+        _loggerService?.Debug("Clearing all file changes and project data sources.");
+
         _fileChanges.Clear();
         _batchFileChanges.Clear();
         _fileLookup.Clear();
@@ -414,6 +420,8 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
     public void ForceStop()
     {
+        _loggerService?.Debug("ForceStopping WatcherService and cancelling update tasks.");
+
         _modsWatcher.EnableRaisingEvents = false;
 
         if (_updateTask != null)
@@ -435,7 +443,11 @@ public partial class WatcherService : ObservableObject, IWatcherService
         }
     }
 
-    public void Suspend() => _modsWatcher.EnableRaisingEvents = false;
+    public void Suspend()
+    {
+        _loggerService?.Debug("Suspending system FileWatcher.");
+        _modsWatcher.EnableRaisingEvents = false;
+    }
 
     private void OnRenamed(object sender, RenamedEventArgs e) => _fileChanges.Enqueue(new FileSystemEventArgsWrapper(e));
 
