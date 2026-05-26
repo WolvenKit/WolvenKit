@@ -36,6 +36,7 @@ public class PaneViewModelFactory : IPaneViewModelFactory
     private readonly IModifierViewStateService _modifierSvc;
     private readonly ProjectResourceTools _projectResourceTools;
     private readonly IWatcherService _watcherService;
+    private readonly IProjectEvents _projectEvents;
 
     public PaneViewModelFactory(
         IProjectManager projectManager,
@@ -56,7 +57,8 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         AppScriptService appScriptService,
         ProjectResourceTools projectResourceTools,
         IModifierViewStateService modifierSvc,
-        IWatcherService watcherService
+        IWatcherService watcherService,
+        IProjectEvents projectEvents
         )
     {
         _projectManager = projectManager;
@@ -78,12 +80,13 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         _modifierSvc = modifierSvc;
         _projectResourceTools = projectResourceTools;
         _watcherService = watcherService;
+        _projectEvents = projectEvents;
     }
 
     public LogViewModel LogViewModel() => new(_loggerService, _appScriptService, _settingsManager);
     public ProjectExplorerViewModel ProjectExplorerViewModel(AppViewModel appViewModel)
         => new(appViewModel, _projectManager, _loggerService, _notificationService, _progressService, _modTools,
-            _gameController, _pluginService, _settingsManager, _modifierSvc, _archiveManager, _projectResourceTools, _importExportHelper);
+            _gameController, _pluginService, _settingsManager, _modifierSvc, _archiveManager, _projectResourceTools, _importExportHelper, _projectEvents);
     public PropertiesViewModel PropertiesViewModel()
         => _propertiesViewModel;
     public AssetBrowserViewModel AssetBrowserViewModel(AppViewModel appViewModel)

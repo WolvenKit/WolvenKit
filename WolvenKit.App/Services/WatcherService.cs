@@ -16,6 +16,7 @@ using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using ReactiveUI;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.App.Services;
@@ -642,63 +643,22 @@ public partial class WatcherService : ObservableObject, IWatcherService
     /// <param name="msg"></param>
     private void OnFilesImported(FilesImportedMessage msg)
     {
-        ForceStop();
+        var gameFiles = msg.GameFiles;
+        var rawFiles = msg.RawFiles;
 
-        var files = msg.Files;
         var batch = new List<FileSystemModel>();
 
-        foreach (var file in files)
+        foreach (var file in gameFiles)
         {
             var gameRelativePath = file.FileName;
             var fullPath = Path.Combine(_projectDirectory, "archive", gameRelativePath);
             var fileInfo = new FileInfo(fullPath);
-            var fileName = fileInfo.Name;
-            var parentDirInfo = Directory.GetParent(fullPath);
-            var parentPath = parentDirInfo!.FullName;
+            CreateFileAndAllNeededDirectories(FileDestination.Archive, fileInfo, batch);
+        }
 
-            if (_fileLookup.TryGetValue(parentPath, out var parent))
-            {
-                var fileSystemModel = new FileSystemModel(parent, fileName, fullPath, false);
-                parent.Children.Add(fileSystemModel);
-                _fileLookup.TryAdd(fullPath, fileSystemModel);
-                batch.Add(fileSystemModel);
-                continue;
-            }
-
-            var parentDirs = new Stack<DirectoryInfo>();
-            var currentLevel = Directory.GetParent(fullPath)!;
-
-            while (currentLevel.Name != "archive")
-            {
-                parentDirs.Push(currentLevel);
-                currentLevel = currentLevel.Parent!;
-            }
-
-            var parentModel = _fileLookup[Path.Combine(_projectDirectory, "archive")]!;
-
-            while (parentDirs.Count > 0)
-            {
-                var current = parentDirs.Pop();
-
-                if (_fileLookup.TryGetValue(current.FullName, out var currentModel))
-                {
-                    parentModel = currentModel;
-                    continue;
-                }
-
-                // Make the directory if needed. (Does nothing if already exists.)
-                current.Create();
-                var newCurrentModel = new FileSystemModel(parentModel, current.Name, current.FullName, true);
-                parentModel.Children.Add(newCurrentModel);
-                _fileLookup.TryAdd(current.FullName, newCurrentModel);
-                batch.Add(newCurrentModel);
-                parentModel = newCurrentModel;
-            }
-
-            var newFileModel = new FileSystemModel(parentModel, fileName, fullPath, false);
-            parentModel.Children.Add(newFileModel);
-            _fileLookup.TryAdd(fullPath, newFileModel);
-            batch.Add(newFileModel);
+        foreach (var file in rawFiles)
+        {
+            CreateFileAndAllNeededDirectories(FileDestination.Raw, file, batch);
         }
 
         DispatcherHelper.RunOnMainThread(() =>
@@ -709,11 +669,84 @@ public partial class WatcherService : ObservableObject, IWatcherService
         Resume();
 
         var fileList = "";
-        foreach (var file in files)
+        foreach (var file in batch)
         {
-            fileList += $"Added file to project: {file.FileName}\r\n";
+            fileList += $"Added file to project: {file.FullName}\r\n";
         };
 
         _loggerService?.Info(fileList);
+    }
+
+    private enum FileDestination
+    {
+        Archive,
+        Raw,
+        Resources
+    }
+
+    private void CreateFileAndAllNeededDirectories(FileDestination fileDestination, FileInfo file, List<FileSystemModel> batch)
+    {
+        var destination = "";
+
+        switch (fileDestination)
+        {
+            case FileDestination.Archive:
+                destination = "archive";
+                break;
+            case FileDestination.Raw:
+                destination = "raw";
+                break;
+            default:
+                destination = "";
+                break;
+        }
+
+        var fullPath = file.FullName;
+        var fileName = file.Name;
+        var parentDirInfo = Directory.GetParent(fullPath);
+        var parentPath = parentDirInfo!.FullName;
+
+        if (_fileLookup.TryGetValue(parentPath, out var parent))
+        {
+            var fileSystemModel = new FileSystemModel(parent, fileName, fullPath, false);
+            parent.Children.Add(fileSystemModel);
+            _fileLookup.TryAdd(fullPath, fileSystemModel);
+            batch.Add(fileSystemModel);
+            return;
+        }
+
+        var parentDirs = new Stack<DirectoryInfo>();
+        var currentLevel = Directory.GetParent(fullPath)!;
+
+        while (currentLevel.Name != destination)
+        {
+            parentDirs.Push(currentLevel);
+            currentLevel = currentLevel.Parent!;
+        }
+
+        var parentModel = _fileLookup[Path.Combine(_projectDirectory, destination)]!;
+
+        while (parentDirs.Count > 0)
+        {
+            var current = parentDirs.Pop();
+
+            if (_fileLookup.TryGetValue(current.FullName, out var currentModel))
+            {
+                parentModel = currentModel;
+                continue;
+            }
+
+            // Make the directory if needed. (Does nothing if already exists.)
+            current.Create();
+            var newCurrentModel = new FileSystemModel(parentModel, current.Name, current.FullName, true);
+            parentModel.Children.Add(newCurrentModel);
+            _fileLookup.TryAdd(current.FullName, newCurrentModel);
+            batch.Add(newCurrentModel);
+            parentModel = newCurrentModel;
+        }
+
+        var newFileModel = new FileSystemModel(parentModel, fileName, fullPath, false);
+        parentModel.Children.Add(newFileModel);
+        _fileLookup.TryAdd(fullPath, newFileModel);
     }
 }

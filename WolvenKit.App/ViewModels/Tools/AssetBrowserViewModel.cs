@@ -581,9 +581,10 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     private async Task InternalAddFiles(IList<IGameFile> files)
     {
-        _watcherService.ForceStop();
+        _watcherService.Suspend();
         await _gameController.GetController().AddToModAsync(files);
         _loggerService.Success($"Added {files.Count} files to the project.");
+        _watcherService.Resume();
     }
 
     /// <summary>

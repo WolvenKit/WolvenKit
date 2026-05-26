@@ -1032,7 +1032,7 @@ public class RED4Controller : ObservableObject, IGameController
         });
 
         _progressService.Completed();
-        _projectEvents.PublishFilesImported(new FilesImportedMessage([.. files]));
+        _projectEvents.PublishFilesImported(new FilesImportedMessage([.. files],[]));
     }
 
 

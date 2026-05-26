@@ -1,12 +1,11 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -71,6 +70,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly AppViewModel _appViewModel;
     public readonly IModifierViewStateService ModifierStateService;
     private readonly IWatcherService _projectWatcher;
+    private readonly IProjectEvents _projectEvents;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
@@ -98,7 +98,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         IModifierViewStateService modifierSvc,
         IArchiveManager archiveManager,
         ProjectResourceTools projectResourceTools,
-        ImportExportHelper importExportHelper
+        ImportExportHelper importExportHelper,
+        IProjectEvents projectEvents
     ) : base(s_toolTitle)
     {
         _projectManager = projectManager;
@@ -113,6 +114,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _projectResourceTools = projectResourceTools;
         _importExportHelper = importExportHelper;
         ModifierStateService = modifierSvc;
+        _projectEvents = projectEvents;
 
         _appViewModel = appViewModel;
 
@@ -985,6 +987,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanConvertGameFile))]
     private async Task ConvertArchiveFile()
     {
+        _projectWatcher.Suspend();
         if (SelectedItems is null)
         {
             return;
@@ -1007,80 +1010,103 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             .Where(x => selectedItemPaths.Contains(x.FullName) && File.Exists(x.FullName)).ToList();
 
         await ConvertFromJsonInternal(convertSelection);
+        _projectWatcher.Resume();
     }
-
 
     private async Task ConvertToJsonInternal(IEnumerable<FileSystemModel> selection)
     {
-        List<string> files = new(10);
-        List<List<string>> batches = new();
-
-        // get all files
-        foreach (var item in selection)
+        await Task.Run(async () =>
         {
-            if (files.Count == 10)
-            {
-                batches.Add(files);
-                files = new List<string>(10);
-            }
-
-            if (item.IsDirectory)
-            {
-                files.AddRange(Directory.GetFiles(item.FullName, "*", SearchOption.AllDirectories));
-            }
-            else
-            {
-                files.Add(item.FullName);
-            }
-        }
-
-        if (files.Count > 0)
-        {
-            batches.Add(files);
-        }
-
-        var progress = 0;
-        _progressService.Report(0);
-        var totalFiles = batches.Sum(x => x.Count);
-        var validExtensions = Enum.GetNames<ERedExtension>()
-            .Select(x => x.ToLowerInvariant())
-            .ToHashSet();
-
-        // convert files
-        var tasks = batches.Select(async batch =>
-        {
-            foreach (var file in batch)
-            {
-                if (!File.Exists(file) ||
-                   !validExtensions.Contains(
-                       Path.GetExtension(file).TrimStart('.').ToLowerInvariant()))
+            // === Phase 1: Collect all files ===
+            var allFiles = selection
+                .SelectMany(item =>
                 {
-                    Interlocked.Increment(ref progress);
-                    continue;
-                }
+                    if (item.IsDirectory)
+                    {
+                        return Directory.EnumerateFiles(item.FullName, "*", SearchOption.AllDirectories);
+                    }
+                    return new[] { item.FullName };
+                })
+                .ToList();
 
-                var rawOutPath = Path.Combine(
-                    ActiveProject.NotNull().RawDirectory,
-                    ActiveProject!.GetRelativePath(file));
-
-                var outDirectoryPath = Path.GetDirectoryName(rawOutPath);
-
-                if (outDirectoryPath != null)
-                {
-                    Directory.CreateDirectory(outDirectoryPath);
-
-                    await _modTools.ConvertToJsonAndWriteAsync(
-                        file,
-                        new DirectoryInfo(outDirectoryPath));
-                }
-
-                var current = Interlocked.Increment(ref progress);
-                _progressService.Report(current / (float)totalFiles);
+            if (allFiles.Count == 0)
+            {
+                _progressService.Completed();
+                return;
             }
+
+            // === Phase 2: Setup ===
+            var validExtensions = Enum.GetNames<ERedExtension>()
+                .Select(x => x.ToLowerInvariant())
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            var createdJsonFiles = new ConcurrentBag<FileInfo>();
+
+            int progress = 0;
+            _progressService.Report(0);
+
+            // === Phase 3: Parallel processing ===
+            await Parallel.ForEachAsync(allFiles,
+                new ParallelOptions
+                {
+                    MaxDegreeOfParallelism = Environment.ProcessorCount * 2,
+                },
+                async (file, ct) =>
+                {
+                    if (!File.Exists(file))
+                    {
+                        Interlocked.Increment(ref progress);
+                        return;
+                    }
+
+                    var ext = Path.GetExtension(file).TrimStart('.').ToLowerInvariant();
+                    if (!validExtensions.Contains(ext))
+                    {
+                        Interlocked.Increment(ref progress);
+                        return;
+                    }
+
+                    try
+                    {
+                        var rawOutPath = Path.Combine(
+                            ActiveProject.NotNull().RawDirectory,
+                            ActiveProject!.GetRelativePath(file));
+
+                        var outDirectoryPath = Path.GetDirectoryName(rawOutPath);
+
+                        if (outDirectoryPath != null)
+                        {
+                            Directory.CreateDirectory(outDirectoryPath);
+
+                            await _modTools.ConvertToJsonAndWriteAsync(
+                                file,
+                                new DirectoryInfo(outDirectoryPath));
+
+                            // Add the created JSON file to the result list
+                            var jsonFilePath = rawOutPath + ".json";
+
+                            if (File.Exists(jsonFilePath))
+                            {
+                                var jsonFileInfo = new FileInfo(jsonFilePath);
+                                createdJsonFiles.Add(jsonFileInfo);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"Failed to convert {file}: {ex.Message}");
+                    }
+                    finally
+                    {
+                        var currentProgress = Interlocked.Increment(ref progress);
+                        _progressService.Report(currentProgress / (float)allFiles.Count);
+                    }
+                });
+
+            _progressService.Completed();
+            // Return list of created JSON files
+            _projectEvents.PublishFilesImported(new FilesImportedMessage([],[.. createdJsonFiles.ToList()]));
         });
-
-        await Task.WhenAll(tasks);
-        _progressService.Completed();
     }
 
     /// <summary>

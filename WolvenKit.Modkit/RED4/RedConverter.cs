@@ -92,9 +92,6 @@ namespace WolvenKit.Modkit.RED4
                 var outpath = Path.Combine(outputDirInfo.FullName, $"{Path.GetFileName(infile)}.json");
                 using var fileStream = File.Open(outpath, FileMode.Create, FileAccess.Write);
                 await ConvertToJsonAsync(fileStream, infile);
-
-                _loggerService.Success($"Converted {infile} to {outpath}");
-
                 return true;
             }
             catch (InvalidParsingException ie)
@@ -143,7 +140,7 @@ namespace WolvenKit.Modkit.RED4
         public Task<bool> ConvertFromJsonAndWriteAsync(string absoluteFilePath, string absoluteDestFolder,
             string? destFileName = null) =>
             ConvertFromJsonAndWriteAsync(new FileInfo(absoluteFilePath), new DirectoryInfo(absoluteDestFolder));
-        
+
         /// <summary>
         /// Creates a redengine file from a given textual representation and saves it to a given output directory
         /// </summary>

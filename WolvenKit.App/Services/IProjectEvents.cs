@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.App.Services;
@@ -30,5 +31,6 @@ public interface IProjectEvents
 /// </summary>
 /// <param name="Files"></param>
 public sealed record FilesImportedMessage(
-    IReadOnlyList<IGameFile> Files
+    IReadOnlyList<IGameFile> GameFiles,
+    IReadOnlyList<FileInfo> RawFiles
 );
