@@ -1095,7 +1095,6 @@ public class RED4Controller : ObservableObject, IGameController
             {
                 using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
                 file.Extract(fs);
-                //_loggerService.Info($"Added game file to project: {file.Name}");
             }
             catch (Exception ex)
             {
