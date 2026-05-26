@@ -106,8 +106,8 @@ public partial class WatcherService : ObservableObject, IWatcherService
     {
         _projectDirectory = project.FileDirectory;
         _projectFileSystemModel = new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
-        WatchLocation();
         Refresh();
+        WatchLocation();
         _loggerService?.Debug($"Now watching project: {project.FileDirectory} ({FileList.Count} files");
     }
 
@@ -313,7 +313,8 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
         if (_projectFileSystemModel == null)
         {
-            throw new Exception("Project file system model is missing.");
+            // On first app launch, there's no project yet.
+            return;
         }
 
         var (flatListReturn, treeRoot) = BuildFullFileStructure();
