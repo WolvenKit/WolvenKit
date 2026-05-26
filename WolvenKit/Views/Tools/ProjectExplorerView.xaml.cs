@@ -223,7 +223,16 @@ namespace WolvenKit.Views.Tools
 
                 ViewModel.OnToggleFlatMode += OnToggleFlatMode;
 
+                ViewModel.WhenAnyValue(x => x.FileList)
+                    .Subscribe(_ => RefreshFlatViewIfNeeded())
+                    .DisposeWith(disposables);
             });
+        }
+
+        private void RefreshFlatViewIfNeeded()
+        {
+            TreeGridFlat.View.RefreshFilter();
+            TreeGridFlat.View.Refresh();
         }
 
         private static (string Text, bool EnableRefactoring) ShowRenameDialog(string input, bool showCheckbox = false)
@@ -256,11 +265,13 @@ namespace WolvenKit.Views.Tools
             {
                 TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
                 TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+                RefreshFlatViewIfNeeded();
             }
             else
             {
                 TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Visible);
                 TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+                RefreshFlatViewIfNeeded();
             }
         }
 
@@ -600,13 +611,11 @@ namespace WolvenKit.Views.Tools
 
             if (ViewModel?.IsFlatModeEnabled == true)
             {
-                TreeGridFlat.View.Filter = IsFileInFlat;
-                TreeGridFlat.View.RefreshFilter();
+                RefreshFlatViewIfNeeded();
             }
             else
             {
-                TreeGrid.View.Filter = IsFileIn;
-                TreeGrid.View.RefreshFilter();
+                RefreshFlatViewIfNeeded();
             }
         }
 
