@@ -130,8 +130,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _appViewModel.PropertyChanged += AppViewModelOnPropertyChanged;
         _appViewModel.OpenDocumentChanged += OnOpenDocumentChanged;
 
-        _projectManager.PropertyChanged += ProjectManager_OnPropertyChanged;
-
         SelectedTabIndex = ActiveProject?.ActiveTab ?? 0;
 
         _appViewModel.OnInitialProjectLoaded += AppViewModel_OnInitialProjectLoaded;
@@ -162,8 +160,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _loggerService.Debug("ProjectExplorer: loaded new project..");
         RefreshProjectData();
         CheckForOneDriveInPath();
-        _projectWatcher.Suspend();
-        OnProjectChanged?.Invoke();
     }
 
     /// <summary>
@@ -191,18 +187,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
     }
     public event Action? OnProjectChanged;
+    public event Action<bool>? OnProjectFinishedRefreshing;
 
-    private void ProjectManager_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName != nameof(ProjectManager.ActiveProject))
-        {
-            return;
-        }
-
-        RefreshProjectData();
-    }
-
-    // When opening projects from launch args, change detection for dependent objects isn't working yet.
     private void RefreshProjectData()
     {
         _loggerService.Debug("Refreshing Project Data in ProjectExplorerViewModel.");
@@ -216,25 +202,34 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             _loggerService.Debug("Saving changes in active project and suspending the file watcher.");
             _hasUnsavedFileTreeChanges = true;
             SaveProjectExplorerExpansionStateIfDirty();
-            _projectWatcher.UnwatchProject(ActiveProject);
+            _projectWatcher.Suspend();
         }
-
-        OnProjectChanged?.Invoke();
 
         DispatcherHelper.RunOnMainThread(() =>
         {
-            if (ActiveProject?.Equals(_projectManager.ActiveProject) == true)
+            try
             {
-                return;
-            }
-            ActiveProject = _projectManager.ActiveProject;
-            if (ActiveProject is not null)
-            {
-                RestoreProjectState(ActiveProject);
-                _projectWatcher.WatchProject(ActiveProject!);
-            }
+                // Don't change the ActiveProject if user pressed "Refresh" button.
+                if (ActiveProject?.Equals(_projectManager.ActiveProject) == false)
+                {
+                    ActiveProject = _projectManager.ActiveProject;
+                }
 
-            OnProjectChanged?.Invoke();
+                if (ActiveProject is not null)
+                {
+                    _projectWatcher.WatchProject(ActiveProject!);
+                    OnProjectFinishedRefreshing?.Invoke(IsFlatModeEnabled);
+                    RestoreProjectState(ActiveProject);
+                }
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error($"Error refreshing project: {e.Message}");
+            }
+            finally
+            {
+                _progressService.IsIndeterminate = false;
+            }
         }, DispatcherPriority.ContextIdle);
     }
 
@@ -360,17 +355,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// Refreshes all files in the Grid
     /// </summary>
     private bool CanRefresh() => ActiveProject != null;
+
     [RelayCommand(CanExecute = nameof(CanRefresh))]
     private void Refresh()
     {
-        if (_projectWatcher.IsWatcherStopped)
-        {
-            ResumeFileWatcher();
-        }
-        else
-        {
-            _projectWatcher.Refresh();
-        }
+        _progressService.IsIndeterminate = true;
+        _progressService.Status = EStatus.Running;
+        RefreshProjectData();
     }
 
     private string GetActiveFolderPath() => SelectedTabIndex switch

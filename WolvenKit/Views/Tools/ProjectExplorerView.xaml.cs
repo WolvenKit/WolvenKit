@@ -93,7 +93,8 @@ namespace WolvenKit.Views.Tools
                 if (DataContext is ProjectExplorerViewModel vm)
                 {
                     SetCurrentValue(ViewModelProperty, vm);
-                    vm.OnProjectChanged += ResetUiElements;
+                    vm.OnProjectChanged += IndicateProjectLoading;
+                    vm.OnProjectFinishedRefreshing += ResetUiElements;
                 }
 
                 AddKeyUpEvent();
@@ -231,6 +232,7 @@ namespace WolvenKit.Views.Tools
 
         private void RefreshFlatViewIfNeeded()
         {
+            TreeGridFlat.View.Filter = IsFileInFlat;
             TreeGridFlat.View.RefreshFilter();
             TreeGridFlat.View.Refresh();
         }
@@ -275,11 +277,17 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        // Run inside Dispatcher to avoid exception on startup
-        private void ResetUiElements() => Dispatcher.Invoke(() =>
+        private void IndicateProjectLoading() => Dispatcher.Invoke(() =>
         {
             _isFirstLoad = true;
+            TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+            TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+            LoadingText.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+        });
 
+        // Run inside Dispatcher to avoid exception on startup
+        private void ResetUiElements(bool isFlatModeEnabled) => Dispatcher.Invoke(() =>
+        {
             // Hide loading text
             LoadingText.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
 
@@ -292,12 +300,25 @@ namespace WolvenKit.Views.Tools
             {
                 TreeGridFlat.ClearFilters();
                 TreeGridFlat.ClearSelections(false);
+                TreeGridFlat.View.Refresh();
             }
 
             if (TreeGrid.View is not null)
             {
                 TreeGrid.ClearFilters();
                 TreeGrid.ClearSelections(false);
+                TreeGrid.View.Refresh();
+            }
+
+            if (isFlatModeEnabled)
+            {
+                TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+                TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+            }
+            else
+            {
+                TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+                TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Visible);
             }
         });
 
@@ -567,8 +588,7 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            TreeGridFlat.View.Filter = IsFileInFlat;
-            TreeGridFlat.View.RefreshFilter();
+            RefreshFlatViewIfNeeded();
         }
 
         private bool IsFileIn(object o)
