@@ -385,7 +385,7 @@ namespace WolvenKit.Views.Shell
             if (ViewModel?.GetToolViewModel<ProjectExplorerViewModel>() is { } pe)
             {
                 pe.SaveProjectExplorerTabIfDirty();
-                pe.StopWatcher();
+                pe.StopWatcher(); // TODO: Migrate to UnwatchProject?
             }
 
             if (ViewModel?.GetToolViewModel<PropertiesViewModel>() is { } p)

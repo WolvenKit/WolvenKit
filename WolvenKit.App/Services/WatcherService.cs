@@ -42,6 +42,8 @@ public partial class WatcherService : ObservableObject, IWatcherService
     private Task? _batchUpdateTask;
     private CancellationTokenSource _batchUpdateThreadCancellationTokenSource = new();
 
+    private CancellationTokenSource? _fileLoggingCts;
+
     private readonly ConcurrentQueue<FileSystemEventArgsWrapper> _fileChanges = new();
     private readonly ConcurrentQueue<FileSystemEventArgsWrapper> _batchFileChanges = new();
 
@@ -108,29 +110,23 @@ public partial class WatcherService : ObservableObject, IWatcherService
         _loggerService?.Debug($"Starting the WatcherService file system monitors for dir: {_projectDirectory}.");
         _projectFileSystemModel = new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
         Refresh();
-        WatchLocation();
+        _modsWatcher.Path = _projectDirectory;
+        Resume();
         _loggerService?.Debug($"Now watching project: {project.FileDirectory} ({FileList.Count} files");
     }
 
-    public void Resume() => _modsWatcher.EnableRaisingEvents = true;
+    public void Resume()
+    {
+        _loggerService?.Debug("Resuming system FileWatcher.");
+        _modsWatcher.EnableRaisingEvents = true;
+    }
 
     public void UnwatchProject(Cp77Project? project)
     {
         _loggerService?.Debug("Stopping WatcherService file system monitors.");
         _isWatcherStopped = true;
-        UnwatchLocation();
-    }
-
-    private void WatchLocation()
-    {
-        _modsWatcher.Path = _projectDirectory;
-        _modsWatcher.EnableRaisingEvents = true;
-    }
-
-    private void UnwatchLocation()
-    {
-        _modsWatcher.EnableRaisingEvents = false;
-
+        Suspend();
+        _projectDirectory = "";
         ForceStop();
         Clear();
     }
@@ -416,13 +412,23 @@ public partial class WatcherService : ObservableObject, IWatcherService
             _batchUpdateThreadCancellationTokenSource.Token,
             TaskCreationOptions.LongRunning,
             TaskScheduler.Default);
+
+        ResetFileLoggingToken();
     }
 
+    private void ResetFileLoggingToken()
+    {
+        _fileLoggingCts?.Cancel();
+        _fileLoggingCts?.Dispose();
+        _fileLoggingCts = new CancellationTokenSource();
+    }
+
+    // TODO: Make this private. Consumers should not be calling this method, use UnwatchProject only.
     public void ForceStop()
     {
         _loggerService?.Debug("ForceStopping WatcherService and cancelling update tasks.");
 
-        _modsWatcher.EnableRaisingEvents = false;
+        Suspend();
 
         if (_updateTask != null)
         {
@@ -441,6 +447,15 @@ public partial class WatcherService : ObservableObject, IWatcherService
                 throw new Exception();
             }
         }
+
+        CancelFileLoggingToken();
+    }
+
+    private void CancelFileLoggingToken()
+    {
+        _fileLoggingCts?.Cancel();
+        _fileLoggingCts?.Dispose();
+        _fileLoggingCts = null;
     }
 
     public void Suspend()
@@ -676,20 +691,71 @@ public partial class WatcherService : ObservableObject, IWatcherService
             CreateFileAndAllNeededDirectories(FileDestination.Raw, file, batch);
         }
 
-        DispatcherHelper.RunOnMainThread(() =>
-        {
-            FileList.AddRange(batch);
-        }, DispatcherPriority.Background);
+        FileList.AddRange(batch);
 
         Resume();
 
-        var fileList = "";
-        foreach (var file in batch)
-        {
-            fileList += $"Added file to project: {file.FullName}\r\n";
-        };
+        // Log added files in the background to avoid hanging the UI on very large imports.
+        LogBatchAddedFiles(batch);
+    }
 
-        _loggerService?.Info(fileList);
+    /// <summary>
+    /// Logs a large number of added files in the background.
+    /// Chunks the list, logs alphabetically, uses a low-priority background task with light debouncing,
+    /// and ends with a summary count.
+    /// </summary>
+    private void LogBatchAddedFiles(List<FileSystemModel> addedFiles)
+    {
+        if (_loggerService == null || addedFiles.Count == 0)
+            return;
+
+        // Capture the token at the start to avoid races if the CTS is replaced mid-operation
+        var token = _fileLoggingCts?.Token ?? CancellationToken.None;
+
+        Task.Factory.StartNew(async () =>
+        {
+            try
+            {
+                token.ThrowIfCancellationRequested();
+
+                // Sort alphabetically for consistent logging order
+                var sortedNames = addedFiles
+                    .Select(f => f.FullName)
+                    .OrderBy(name => name, StringComparer.OrdinalIgnoreCase)
+                    .ToList();
+
+                const int chunkSize = 100;
+                int total = sortedNames.Count;
+
+                for (int i = 0; i < sortedNames.Count; i += chunkSize)
+                {
+                    token.ThrowIfCancellationRequested();
+
+                    var chunk = sortedNames.Skip(i).Take(chunkSize);
+                    var message = string.Join(Environment.NewLine,
+                        chunk.Select(name => $"Added file to project: {name}"));
+
+                    _loggerService.Info(message);
+
+                    // Light debouncing / pacing so we don't flood the logger during very large imports
+                    await Task.Delay(60, token);
+                }
+
+                token.ThrowIfCancellationRequested();
+                _loggerService.Info($"Added {total} files to the project via batch import.");
+            }
+            catch (OperationCanceledException)
+            {
+                // Expected when project is unwatched during a large batch import
+            }
+            catch (Exception ex)
+            {
+                _loggerService?.Warning($"Error while logging batch import details: {ex.Message}");
+            }
+        },
+        token,
+        TaskCreationOptions.LongRunning,
+        TaskScheduler.Default);
     }
 
     private enum FileDestination

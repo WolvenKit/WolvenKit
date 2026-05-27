@@ -981,7 +981,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanConvertGameFile))]
     private async Task ConvertArchiveFile()
     {
-        _projectWatcher.Suspend();
         if (SelectedItems is null)
         {
             return;
@@ -1004,11 +1003,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             .Where(x => selectedItemPaths.Contains(x.FullName) && File.Exists(x.FullName)).ToList();
 
         await ConvertFromJsonInternal(convertSelection);
-        _projectWatcher.Resume();
     }
 
     private async Task ConvertToJsonInternal(IEnumerable<FileSystemModel> selection)
     {
+        _projectWatcher.Suspend();
+
         await Task.Run(async () =>
         {
             // === Phase 1: Collect all files ===
@@ -1518,8 +1518,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         await ConvertToJsonInternal(convertSelection);
     }
 
+    // TODO: Refactor this method to use PublishFilesImported rather than relying on WatcherService.
     private async Task ConvertFromJsonInternal(IEnumerable<FileSystemModel> selection)
     {
+        _projectWatcher.Resume();
+
         var progress = 0;
         _progressService.Report(0);
 
@@ -1809,6 +1812,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _hasUnsavedFileTreeChanges = false;
     }
 
+    // TODO: Migrate to UnwatchProject? Figure out when this is getting called.
     public void StopWatcher() => _projectWatcher.ForceStop();
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
