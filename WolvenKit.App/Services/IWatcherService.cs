@@ -16,15 +16,6 @@ public interface IWatcherService
     public DispatchedObservableCollection<FileSystemModel> FileList { get; }
 
     /// <summary>
-    /// Instructs the WatcherService to stop all file monitoring, clear the existing data models,
-    /// then rebuild those data models from disk, then begin monitoring for file system changes again.
-    /// </summary>
-    public void Refresh();
-
-    // TODO: Get rid of this method and just use UnwatchProject or Suspend.
-    public void ForceStop();
-
-    /// <summary>
     /// Tells the OS-level API to stop sending file system events to the WatcherService temporarily.
     /// This should be called before performing operations that may add files to the project and data model
     /// via another pathway.
@@ -43,8 +34,7 @@ public interface IWatcherService
     /// that represent mod directories, no active file system event watcher, and no background tasks polling for
     /// file system events from the OS. Any such active processes are killed by this method.
     /// </summary>
-    /// <param name="project"></param>
-    public void UnwatchProject(Cp77Project? project);
+    public void UnwatchProject();
 
     /// <summary>
     /// Populates the data models FileTree and FileList for the mod directory from disk and begins tracking any
@@ -54,7 +44,18 @@ public interface IWatcherService
     /// <param name="project"></param>
     public void WatchProject(Cp77Project project);
 
-    // TODO: Migrate this to "WatcherState" with "NoProject" "Suspended" and "Active" states.
-    public bool IsWatcherStopped { get; }
-
+    /// <summary>
+    /// NoProject: there is no active mod loaded up.
+    /// Suspended: there is a mod loaded up, but Windows file system events are being ignored.
+    /// Active: there is a mod loaded up, and the Watcher is monitoring for file system events.
+    /// </summary>
+    public WatcherState WatcherState { get; }
 }
+
+public enum WatcherState
+{
+    NoProject,
+    Suspended,
+    Active
+}
+

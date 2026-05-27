@@ -1416,8 +1416,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
         finally
         {
-            _watcherService.Resume();
-            _watcherService.Refresh();
+            _watcherService.WatchProject(ActiveProject);
         }
     }
 

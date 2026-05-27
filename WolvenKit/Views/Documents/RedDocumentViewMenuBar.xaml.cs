@@ -846,8 +846,10 @@ namespace WolvenKit.Views.Documents
                 await Task.Run(async () =>
                 {
                     await Task.Delay(100);
-                    _projectWatcher.Refresh();
-                    _projectWatcher.Resume();
+                    if (_appViewModel.ActiveProject != null)
+                    {
+                        _projectWatcher.WatchProject(_appViewModel.ActiveProject);
+                    }
                 });
             }
 

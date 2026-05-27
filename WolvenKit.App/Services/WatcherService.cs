@@ -35,7 +35,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
     private readonly FileSystemWatcher _modsWatcher;
 
-    private readonly object _refreshLock = new();
+    private readonly object _modLoadingLock = new();
 
     private Task? _updateTask;
     private CancellationTokenSource _updateThreadCancellationTokenSource = new();
@@ -49,10 +49,11 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
     private readonly ConcurrentDictionary<string, FileSystemModel> _fileLookup = new();
     private readonly ConcurrentDictionary<string, FileSystemEventArgsWrapper> _fileProcessing = new();
+
+    // TODO: This is never read from, can it be cleaned out?
     private readonly ConcurrentDictionary<string, long> _removedFiles = new();
 
-    private readonly IProjectEvents _projectEvents;
-    private CompositeDisposable _disposables = new();
+    private readonly CompositeDisposable _disposables = new();
 
     [ObservableProperty]
     private DispatchedObservableCollection<FileSystemModel> _fileList = new();
@@ -76,9 +77,9 @@ public partial class WatcherService : ObservableObject, IWatcherService
             fileExtension.Contains(partial, StringComparison.OrdinalIgnoreCase));
     }
 
-    private bool _isWatcherStopped;
+    private WatcherState _watcherState;
 
-    public bool IsWatcherStopped => _isWatcherStopped;
+    public WatcherState WatcherState => _watcherState;
 
     #endregion
 
@@ -97,8 +98,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
         _modsWatcher.Deleted += OnChanged;
         _modsWatcher.Renamed += OnRenamed;
 
-        _projectEvents = projectEvents;
-        _projectEvents.FilesImported
+        projectEvents.FilesImported
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(OnFilesImported)
             .DisposeWith(_disposables);
@@ -106,28 +106,40 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
     public void WatchProject(Cp77Project project)
     {
+        if (_projectDirectory.Length > 0 && project.FileDirectory != _projectDirectory)
+        {
+            _loggerService?.Warning($"Internal warning: project {_projectDirectory} not unloaded before loading a new project. This is a minor bug, please report to the dev team.");
+            UnwatchProject();
+        }
+
         _projectDirectory = project.FileDirectory;
-        _loggerService?.Debug($"Starting the WatcherService file system monitors for dir: {_projectDirectory}.");
         _projectFileSystemModel = new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
-        Refresh();
-        _modsWatcher.Path = _projectDirectory;
+        Locked_LoadModProjectFileStructure();
+        StartBackgroundPolling();
         Resume();
         _loggerService?.Debug($"Now watching project: {project.FileDirectory} ({FileList.Count} files");
     }
 
     public void Resume()
     {
-        _loggerService?.Debug("Resuming system FileWatcher.");
+        if (_projectDirectory == "")
+        {
+            throw new Exception("No project directory to resume watching!.");
+        }
+        _loggerService?.Debug($"Now monitoring file system events in project: {_projectDirectory} with ({FileList.Count} files");
+        _modsWatcher.Path = _projectDirectory;
         _modsWatcher.EnableRaisingEvents = true;
+        _watcherState = WatcherState.Active;
     }
 
-    public void UnwatchProject(Cp77Project? project)
+    public void UnwatchProject()
     {
-        _loggerService?.Debug("Stopping WatcherService file system monitors.");
-        _isWatcherStopped = true;
         Suspend();
+        _watcherState = WatcherState.NoProject;
+        _modsWatcher.Path = "";
         _projectDirectory = "";
-        ForceStop();
+        _loggerService?.Debug($"Closing the current mod and clearing file lists and background tasks.");
+        StopBackgroundPolling();
         Clear();
     }
 
@@ -200,7 +212,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
             if (!_fileLookup.TryGetValue(e.Name, out var item))
             {
-                if (!_isWatcherStopped && _fileProcessing.ContainsKey(e.FullPath))
+                if (_watcherState == WatcherState.NoProject && _fileProcessing.ContainsKey(e.FullPath))
                 {
                     _loggerService?.Warning($"Failed to refresh {e.Name}. This is just a UI glitch!");
                 }
@@ -288,13 +300,11 @@ public partial class WatcherService : ObservableObject, IWatcherService
         }
     }
 
-    public void Refresh()
+    private void Locked_LoadModProjectFileStructure()
     {
-        _loggerService?.Debug($"Refreshing the project from disk for {_projectDirectory}.");
-
-        lock (_refreshLock)
+        lock (_modLoadingLock)
         {
-            InternalRefresh();
+            LoadModProjectFileStructure();
         }
     }
 
@@ -309,10 +319,8 @@ public partial class WatcherService : ObservableObject, IWatcherService
         FileList.Clear();
     }
 
-    private void InternalRefresh() {
-        ForceStop();
-        Clear();
-
+    private void LoadModProjectFileStructure()
+    {
         if (_projectFileSystemModel == null)
         {
             // On first app launch, there's no project yet.
@@ -394,11 +402,14 @@ public partial class WatcherService : ObservableObject, IWatcherService
         MonitorFileUpdates();
     }
 
-    /// <summary>
-    /// Kick off monitoring of file system events.
-    /// </summary>
-    private void MonitorFileUpdates()
+    private void StartBackgroundPolling()
     {
+        // Cancel any existing background tasks.
+        _updateThreadCancellationTokenSource.Cancel();
+        _batchUpdateThreadCancellationTokenSource.Cancel();
+        _updateTask = null;
+        _batchUpdateTask = null;
+
         _updateThreadCancellationTokenSource = new CancellationTokenSource();
         _updateTask = Task.Factory.StartNew(
             () => Update(_updateThreadCancellationTokenSource.Token),
@@ -423,8 +434,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
         _fileLoggingCts = new CancellationTokenSource();
     }
 
-    // TODO: Make this private. Consumers should not be calling this method, use UnwatchProject only.
-    public void ForceStop()
+    private void StopBackgroundPolling()
     {
         _loggerService?.Debug("ForceStopping WatcherService and cancelling update tasks.");
 
@@ -460,8 +470,9 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
     public void Suspend()
     {
-        _loggerService?.Debug("Suspending system FileWatcher.");
+        _loggerService?.Debug("Ceasing monitoring of file system events in mod folder.");
         _modsWatcher.EnableRaisingEvents = false;
+        _watcherState = WatcherState.Suspended;
     }
 
     private void OnRenamed(object sender, RenamedEventArgs e) => _fileChanges.Enqueue(new FileSystemEventArgsWrapper(e));

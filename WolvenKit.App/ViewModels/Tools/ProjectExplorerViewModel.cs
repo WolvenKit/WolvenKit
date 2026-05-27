@@ -943,6 +943,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         ResumeFileWatcher();
     }
 
+    public void CloseProject() => _projectWatcher.UnwatchProject();
+
 
     #endregion general commands
 
@@ -1876,8 +1878,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         try
         {
-            _projectWatcher.UnwatchProject(project);
-            _projectWatcher.ForceStop();
+            _projectWatcher.UnwatchProject();
         }
         catch
         {

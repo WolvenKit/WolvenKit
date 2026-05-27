@@ -152,7 +152,7 @@ public class WatcherServiceTests : IDisposable
         // After suspend, EnableRaisingEvents should be false (internal state)
         // We can't easily assert the private _modsWatcher here without InternalsVisibleTo or reflection.
         // The important behavioral contract: subsequent manual file drops should not immediately flood queues.
-        Assert.False(_watcher.IsWatcherStopped); // only ForceStop / Unwatch sets this
+        Assert.True(_watcher.WatcherState == WatcherState.Suspended);
     }
 
     [Fact]
@@ -345,7 +345,7 @@ public class WatcherServiceTests : IDisposable
         await Task.Delay(120);
 
         // This should cancel the in-progress logging task
-        _watcher.UnwatchProject(project);
+        _watcher.UnwatchProject();
 
         // Give cancellation time to propagate
         await Task.Delay(600);
@@ -386,7 +386,7 @@ public class WatcherServiceTests : IDisposable
         _projectEvents.PublishFilesImported(new FilesImportedMessage(openWorldFiles, Array.Empty<FileInfo>()));
 
         // Immediately switch projects (the critical race condition)
-        _watcher.UnwatchProject(project1);
+        _watcher.UnwatchProject();
 
         var project2 = new Cp77Project(_tempProjectDir, "RapidSwitch2", "RapidSwitch2");
         _watcher.WatchProject(project2);
@@ -704,14 +704,14 @@ public class WatcherServiceTests : IDisposable
         Assert.Null(ex);
 
         // Cleanup this local watcher
-        watcherWithNullLogger.ForceStop();
+        watcherWithNullLogger.UnwatchProject();
     }
 
     public void Dispose()
     {
         try
         {
-            _watcher.ForceStop();
+            _watcher.UnwatchProject();
         }
         catch (Exception e)
         {
