@@ -68,7 +68,7 @@ public partial class AppScriptService : ScriptService
     {
         GetProjectExplorerViewModel()?.SuspendFileWatcher();
         await ExecuteAsync(code, DefaultHostObject, null, enableDebugging);
-        GetProjectExplorerViewModel()?.ResumeFileWatcher();
+        GetProjectExplorerViewModel()?.ResumeFileWatcher_AndReloadProject();
     }
 
     public void SetAppViewModel(AppViewModel appViewModel) => _wkit.AppViewModel = appViewModel;

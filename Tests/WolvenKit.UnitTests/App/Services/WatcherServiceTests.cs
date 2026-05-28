@@ -100,7 +100,7 @@ public class WatcherServiceTests : IDisposable
     {
         _currentProject = new Cp77Project(_tempProjectDir, "TestMod", "TestMod");
 
-        _watcher.WatchProject(_currentProject);
+        _watcher.StartWatcher_AndLoadProject(_currentProject);
 
         Assert.NotNull(_watcher.FileList);
         Assert.NotNull(_watcher.FileTree);
@@ -112,7 +112,7 @@ public class WatcherServiceTests : IDisposable
     public void PublishFilesImported_BypassPath_AddsModelsWithoutRelyingOnFsEvents()
     {
         _currentProject = new Cp77Project(_tempProjectDir, "TestMod", "TestMod");
-        _watcher.WatchProject(_currentProject);
+        _watcher.StartWatcher_AndLoadProject(_currentProject);
 
         var initialCount = _watcher.FileList.Count;
 
@@ -145,7 +145,7 @@ public class WatcherServiceTests : IDisposable
     public void Suspend_StopsNewFsEvents_ButDoesNotCancelProcessingTasks()
     {
         _currentProject = new Cp77Project(_tempProjectDir, "TestMod", "TestMod");
-        _watcher.WatchProject(_currentProject);
+        _watcher.StartWatcher_AndLoadProject(_currentProject);
 
         _watcher.Suspend();
 
@@ -159,7 +159,7 @@ public class WatcherServiceTests : IDisposable
     public void OnFilesImported_AfterSuspend_StillProcessesViaBypass()
     {
         _currentProject = new Cp77Project(_tempProjectDir, "TestMod", "TestMod");
-        _watcher.WatchProject(_currentProject);
+        _watcher.StartWatcher_AndLoadProject(_currentProject);
         _watcher.Suspend();
 
         const string relativePath = @"base\test\after_suspend.mesh";
@@ -201,7 +201,7 @@ public class WatcherServiceTests : IDisposable
 
         // 1. Create a real project
         _currentProject = new Cp77Project(_tempProjectDir, "LightingTestMod", "LightingTestMod");
-        _watcher.WatchProject(_currentProject);
+        _watcher.StartWatcher_AndLoadProject(_currentProject);
 
         // 2. AssetBrowser-style add for 'base\gameplay\devices\lighting'
         // In a real scenario we would get these IGameFile objects from the ArchiveManager.
@@ -278,7 +278,7 @@ public class WatcherServiceTests : IDisposable
     {
         // Arrange
         var project = new Cp77Project(_tempProjectDir, "LogTestMod", "LogTestMod");
-        _watcher.WatchProject(project);
+        _watcher.StartWatcher_AndLoadProject(project);
 
         // Create a reasonably large batch (250 files → multiple chunks + summary)
         const int fileCount = 250;
@@ -319,7 +319,7 @@ public class WatcherServiceTests : IDisposable
     {
         // Arrange
         var project = new Cp77Project(_tempProjectDir, "CancelLogTest", "CancelLogTest");
-        _watcher.WatchProject(project);
+        _watcher.StartWatcher_AndLoadProject(project);
 
         // Large enough batch that full logging would take noticeable time
         const int fileCount = 600;
@@ -370,7 +370,7 @@ public class WatcherServiceTests : IDisposable
 
         // First project
         var project1 = new Cp77Project(_tempProjectDir, "RapidSwitch1", "RapidSwitch1");
-        _watcher.WatchProject(project1);
+        _watcher.StartWatcher_AndLoadProject(project1);
 
         // Create physical files for the bypass path
         var archiveRoot1 = Path.Combine(project1.FileDirectory, "archive");
@@ -389,7 +389,7 @@ public class WatcherServiceTests : IDisposable
         _watcher.UnwatchProject();
 
         var project2 = new Cp77Project(_tempProjectDir, "RapidSwitch2", "RapidSwitch2");
-        _watcher.WatchProject(project2);
+        _watcher.StartWatcher_AndLoadProject(project2);
 
         // Small import on new project
         var smallBatch = openWorldFiles.Take(30).ToList();
@@ -420,7 +420,7 @@ public class WatcherServiceTests : IDisposable
     public async Task OnFilesImported_SmallRealBatches_LogCorrectSummary()
     {
         var project = new Cp77Project(_tempProjectDir, "SmallBatchTest", "SmallBatchTest");
-        _watcher.WatchProject(project);
+        _watcher.StartWatcher_AndLoadProject(project);
 
         var dynamicEvents = GetGameFilesWithPrefix(@"ep1\openworld\dynamic_events"); // ~49 files
         var worldEncounters = GetGameFilesWithPrefix(@"ep1\openworld\world_encounters"); // ~21 files
@@ -456,7 +456,7 @@ public class WatcherServiceTests : IDisposable
     public async Task OnFilesImported_VerySmallAndEmptyBatches()
     {
         var project = new Cp77Project(_tempProjectDir, "TinyBatchTest", "TinyBatchTest");
-        _watcher.WatchProject(project);
+        _watcher.StartWatcher_AndLoadProject(project);
 
         var archiveRoot = Path.Combine(project.FileDirectory, "archive");
 
@@ -490,7 +490,7 @@ public class WatcherServiceTests : IDisposable
         var openWorldFiles = GetGameFilesWithPrefix(@"ep1\openworld");
 
         var project = new Cp77Project(_tempProjectDir, "AlphaTest", "AlphaTest");
-        _watcher.WatchProject(project);
+        _watcher.StartWatcher_AndLoadProject(project);
 
         var archiveRoot = Path.Combine(project.FileDirectory, "archive");
         foreach (var f in openWorldFiles.Take(300)) // limit for speed
@@ -534,7 +534,7 @@ public class WatcherServiceTests : IDisposable
         var gameFiles = GetGameFilesWithPrefix(@"ep1\openworld\dynamic_events").Take(40).ToList();
 
         var project = new Cp77Project(_tempProjectDir, "MixedTest", "MixedTest");
-        _watcher.WatchProject(project);
+        _watcher.StartWatcher_AndLoadProject(project);
 
         var archiveRoot = Path.Combine(project.FileDirectory, "archive");
         foreach (var f in gameFiles)
@@ -576,7 +576,7 @@ public class WatcherServiceTests : IDisposable
         var files = GetGameFilesWithPrefix(@"ep1\openworld\dynamic_events").Take(30).ToList();
 
         var project = new Cp77Project(_tempProjectDir, "HierarchyTest", "HierarchyTest");
-        _watcher.WatchProject(project);
+        _watcher.StartWatcher_AndLoadProject(project);
 
         var archiveRoot = Path.Combine(project.FileDirectory, "archive");
         foreach (var f in files)
@@ -609,7 +609,7 @@ public class WatcherServiceTests : IDisposable
         var files = GetGameFilesWithPrefix(@"ep1\openworld\world_encounters"); // ~21 files
 
         var project = new Cp77Project(_tempProjectDir, "SmallSummaryTest", "SmallSummaryTest");
-        _watcher.WatchProject(project);
+        _watcher.StartWatcher_AndLoadProject(project);
 
         var archiveRoot = Path.Combine(project.FileDirectory, "archive");
         foreach (var f in files)
@@ -635,7 +635,7 @@ public class WatcherServiceTests : IDisposable
     public async Task OnFilesImported_ChunkBoundary_ProducesCorrectNumberOfLogs()
     {
         var project = new Cp77Project(_tempProjectDir, "ChunkBoundaryTest", "ChunkBoundaryTest");
-        _watcher.WatchProject(project);
+        _watcher.StartWatcher_AndLoadProject(project);
 
         var archiveRoot = Path.Combine(project.FileDirectory, "archive");
 
@@ -681,7 +681,7 @@ public class WatcherServiceTests : IDisposable
         var watcherWithNullLogger = new WatcherService(null, events);
 
         var project = new Cp77Project(_tempProjectDir, "NullLoggerTest", "NullLoggerTest");
-        watcherWithNullLogger.WatchProject(project);
+        watcherWithNullLogger.StartWatcher_AndLoadProject(project);
 
         // Create a few files on disk
         var archiveRoot = Path.Combine(project.FileDirectory, "archive");

@@ -42,7 +42,15 @@ public interface IWatcherService
     /// such file system events and remains ready to receive published events to add files to the active project.
     /// </summary>
     /// <param name="project"></param>
-    public void WatchProject(Cp77Project project);
+    public void StartWatcher_AndLoadProject(Cp77Project project);
+
+    /// <summary>
+    /// Populates the data models FileTree and FileList for the mod directory from disk and begins tracking any
+    /// file system events to automatically add files to the project. Establishes background processes to poll for
+    /// such file system events and remains ready to receive published events to add files to the active project.
+    /// </summary>
+    /// <param name="project"></param>
+    public void ResumeWatcher_AndReloadProject();
 
     /// <summary>
     /// NoProject: there is no active mod loaded up.

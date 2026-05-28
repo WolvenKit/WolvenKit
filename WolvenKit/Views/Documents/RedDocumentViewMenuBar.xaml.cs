@@ -848,7 +848,7 @@ namespace WolvenKit.Views.Documents
                     await Task.Delay(100);
                     if (_appViewModel.ActiveProject != null)
                     {
-                        _projectWatcher.WatchProject(_appViewModel.ActiveProject);
+                        _projectWatcher.StartWatcher_AndLoadProject(_appViewModel.ActiveProject);
                     }
                 });
             }

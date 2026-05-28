@@ -22,7 +22,20 @@ using WolvenKit.RED4.Types.Exceptions;
 namespace WolvenKit.App.Services;
 
 /// <summary>
-/// This service watches certain locations in the game files and notifies changes
+/// There's three fundamental things WatcherService does:
+///    1. Owns & manages changes to data models FileList and FileTree that are state of ProjectExplorerViewModel.
+///       This includes building and populating these models when WatchProject is called.
+///    2. While not "suspended", monitor OS file system events from _modsWatcher & add change events update queues.
+///    3. Subscribe to IProjectEvents change sets coming from other parts of the app to bypass the need
+///       to rely on file system events for large batches of changes.
+///    4. Run background jobs Update & BatchUpdate that dequeue file change events and update the FileList/Tree.
+///        * Update checks _fileChanges and processes individual Changed, Renamed, and Deleted events one at a time.
+///        * BatchUpdate checks _batchFileChanges and processes batches of Add events in groups for performance.
+///        TODO: migrate all FS events to use BatchUpdate.
+///
+/// Due to flakiness with file system events, various parts of the app currently suspend/stop the monitoring of
+/// file system events in order to make broad changes in the mod directory, then they call "Refresh" to reload the
+/// whole project from disk.
 /// </summary>
 public partial class WatcherService : ObservableObject, IWatcherService
 {
@@ -104,7 +117,15 @@ public partial class WatcherService : ObservableObject, IWatcherService
             .DisposeWith(_disposables);
     }
 
-    public void WatchProject(Cp77Project project)
+    public void ResumeWatcher_AndReloadProject()
+    {
+        Locked_LoadModProjectFileStructure();
+        StartBackgroundPolling();
+        Resume();
+        _loggerService?.Debug($"Now watching project: {_projectDirectory} ({FileList.Count} files");
+    }
+
+    public void StartWatcher_AndLoadProject(Cp77Project project)
     {
         if (_projectDirectory.Length > 0 && project.FileDirectory != _projectDirectory)
         {
@@ -114,10 +135,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
         _projectDirectory = project.FileDirectory;
         _projectFileSystemModel = new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
-        Locked_LoadModProjectFileStructure();
-        StartBackgroundPolling();
-        Resume();
-        _loggerService?.Debug($"Now watching project: {project.FileDirectory} ({FileList.Count} files");
+        ResumeWatcher_AndReloadProject();
     }
 
     public void Resume()
@@ -136,7 +154,6 @@ public partial class WatcherService : ObservableObject, IWatcherService
     {
         Suspend();
         _watcherState = WatcherState.NoProject;
-        _modsWatcher.Path = "";
         _projectDirectory = "";
         _loggerService?.Debug($"Closing the current mod and clearing file lists and background tasks.");
         StopBackgroundPolling();
@@ -399,7 +416,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
             return (flatList, rootModel);
         }
 
-        MonitorFileUpdates();
+        StartBackgroundPolling();
     }
 
     private void StartBackgroundPolling()

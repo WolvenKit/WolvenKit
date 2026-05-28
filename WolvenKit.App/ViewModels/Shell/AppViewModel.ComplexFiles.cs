@@ -179,7 +179,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         }
         finally
         {
-            ProjectExplorerViewModel.ResumeFileWatcherStatic();
+            ProjectExplorerViewModel.ResumeFileWatcher_AndReloadProject_Static();
         }
 
         return;

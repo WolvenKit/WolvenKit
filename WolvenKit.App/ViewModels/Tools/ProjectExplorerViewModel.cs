@@ -217,7 +217,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 if (ActiveProject is not null)
                 {
                     _loggerService.Debug("ProjectExplorer: Beginning to watch project.");
-                    _projectWatcher.WatchProject(ActiveProject!);
+                    _projectWatcher.StartWatcher_AndLoadProject(ActiveProject!);
                     _loggerService.Debug("ProjectExplorer: Restoring project settings.");
                     RestoreProjectState(ActiveProject);
                 }
@@ -935,12 +935,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        StopWatcher();
+        SuspendFileWatcher();
 
         await _projectResourceTools.MoveAndRefactorAsync(relativePath, newRelativePath, prefixPath, refactor);
         _appViewModel.ReloadChangedFiles();
 
-        ResumeFileWatcher();
+        ResumeFileWatcher_AndReloadProject();
     }
 
     public void CloseProject() => _projectWatcher.UnwatchProject();
@@ -1814,9 +1814,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _hasUnsavedFileTreeChanges = false;
     }
 
-    // TODO: Migrate to UnwatchProject? Figure out when this is getting called.
-    public void StopWatcher() => _projectWatcher.ForceStop();
-
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
         switch (e.PropertyName)
@@ -1878,7 +1875,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         try
         {
-            _projectWatcher.UnwatchProject();
+            _projectWatcher.Suspend();
         }
         catch
         {
@@ -1887,18 +1884,18 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     }
 
     public static void SuspendFileWatcherStatic() => s_instance?.SuspendFileWatcher();
-    public static void ResumeFileWatcherStatic() => s_instance?.ResumeFileWatcher();
+    public static void ResumeFileWatcher_AndReloadProject_Static() => s_instance?.ResumeFileWatcher_AndReloadProject();
 
-    public void ResumeFileWatcher()
+    /// <summary>
+    /// Reload the active project from disk to ensure consistency.
+    /// </summary>
+    public void ResumeFileWatcher_AndReloadProject()
     {
-        if (ActiveProject is not Cp77Project project)
-        {
-            return;
-        }
-
         try
         {
-            _projectWatcher.WatchProject(project);
+            OnSetLoading?.Invoke(this, true);
+            _progressService.IsIndeterminate = true;
+            _projectWatcher.ResumeWatcher_AndReloadProject();
         }
         catch
         {
@@ -1906,7 +1903,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 "Failed to resume file watcher. Please hit the refresh button in the project browser.");
             _loggerService.Error("If that doesn't solve the problem, restart WolvenKit.");
         }
-
+        finally
+        {
+            OnSetLoading?.Invoke(this, false);
+            _progressService.IsIndeterminate = false;
+        }
     }
 
     public void OnKeyStateChanged(KeyEventArgs e)
