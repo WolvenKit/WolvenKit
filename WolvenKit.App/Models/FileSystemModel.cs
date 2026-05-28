@@ -65,6 +65,18 @@ public class FileSystemModel : INotifyPropertyChanged
     [Browsable(false)] public DispatchedObservableCollection<FileSystemModel> Children { get; } = new();
     [Browsable(false)] public bool IsDirectory { get; }
 
+    private bool _isExpanded;
+
+    /// <summary>
+    /// Indicates whether this directory node is expanded in the Project Explorer.
+    /// This is the source of truth for expansion state and survives tree rebuilds.
+    /// </summary>
+    public bool IsExpanded
+    {
+        get => _isExpanded;
+        set => SetField(ref _isExpanded, value);
+    }
+
     /// <summary>
     /// FileSystemModel represents a file or directory on-disk.
     /// </summary>
@@ -72,12 +84,13 @@ public class FileSystemModel : INotifyPropertyChanged
     /// <param name="name"></param><remark>Name of the file with extension but no paths.</remark>
     /// <param name="relativePath"></param><remark>Path above 'source' to the file. E.g. archive/worlds/myfile.ent</remark>
     /// <param name="isDirectory"></param>
-    public FileSystemModel(FileSystemModel? parent, string name, string relativePath, bool isDirectory)
+    public FileSystemModel(FileSystemModel? parent, string name, string relativePath, bool isDirectory, bool isExpanded = false)
     {
         Parent = parent;
         _name = name;
         RawRelativePath = relativePath;
         IsDirectory = isDirectory;
+        _isExpanded = isDirectory && isExpanded; // only directories can be expanded
 
         GetMetadata();
     }

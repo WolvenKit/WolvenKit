@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -120,7 +121,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         _appViewModel = appViewModel;
 
-        _projectWatcher = new WatcherService(loggerService, projectEvents);
+        _projectWatcher = new WatcherService(this, loggerService, projectEvents);
+
+        // Subscribe to collection changes so we can automatically track IsExpanded changes on models
+        FileList.CollectionChanged += OnFileCollectionChanged;
+        FileTree.CollectionChanged += OnFileCollectionChanged;
 
         SideInDockedMode = DockSide.Left;
 
@@ -134,8 +139,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         SelectedTabIndex = ActiveProject?.ActiveTab ?? 0;
 
-        _appViewModel.OnInitialProjectLoaded += AppViewModel_OnInitialProjectLoaded;
-
         if (Locator.Current.GetService<AppIdleStateService>() is not AppIdleStateService svc)
         {
             return;
@@ -147,7 +150,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         _projectManager.WhenAnyValue(x => x.ActiveProject)
             .ObserveOn(RxApp.MainThreadScheduler)
-            .Subscribe(project => ActiveProject = project);
+            .Subscribe(project =>
+            {
+                if (project != null)
+                {
+                    StartWatcher_AndLoadProject(project);
+                }
+            });
     }
 
     /// <summary>
@@ -159,23 +168,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     {
         SaveProjectExplorerExpansionStateIfDirty();
         SaveProjectExplorerTabIfDirty();
-    }
-
-    private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
-    {
-        _loggerService.Debug("ProjectExplorer: loaded new project..");
-        CheckForOneDriveInPath();
-        Refresh();
-    }
-
-    private void InternalRefresh()
-    {
-        _progressService.IsIndeterminate = true;
-        _progressService.Status = EStatus.Running;
-        OnSetLoading?.Invoke(this, true);
-
-        // Give time for progress bar to update.
-        DispatcherHelper.DelayOnMainThread(() => RefreshProjectData(), 50);
     }
 
     /// <summary>
@@ -191,36 +183,35 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private void AppViewModelOnPropertyChanged(object? sender, PropertyChangedEventArgs e) =>
         CanScrollToOpenFile = HasSelectedItem && _appViewModel.ActiveDocument is not null;
 
-    private void RefreshProjectData()
+    /// <summary>
+    /// Loads a new project and starts watching it.
+    /// </summary>
+    /// <param name="activeProject"></param>
+    public void StartWatcher_AndLoadProject(Cp77Project activeProject)
     {
-        _loggerService.Debug("Refreshing Project Data in ProjectExplorerViewModel.");
+        var freshLoad = ActiveProject != activeProject;
+        var projectName = Path.GetFileNameWithoutExtension(activeProject.Location);
+        _loggerService.Info($"[Expansion] StartWatcher_AndLoadProject for '{projectName}' (freshLoad={freshLoad}, previous ActiveProject={(ActiveProject != null ? Path.GetFileNameWithoutExtension(ActiveProject.Location) : "null")})");
 
-        // Save changes in active project
+        // IMPORTANT: Save the *current* (old) project's live expansion state from FileList
+        // BEFORE we load the persisted dict for the incoming project. Otherwise SaveProjectState()
+        // will call RebuildExpansionStateFromFileList() and clobber the dict we just loaded.
         if (ActiveProject != null)
         {
-            _loggerService.Debug("Saving changes in active project and suspending the file watcher.");
-            _hasUnsavedFileTreeChanges = true;
-            SaveProjectExplorerExpansionStateIfDirty();
-            _projectWatcher.Suspend();
+            SaveProjectState();
         }
 
-        DispatcherHelper.RunOnMainThread(() =>
+        LoadExpansionStateDictionary(activeProject);
+        EnableLoadingMode();
+        ActiveProject = null;
+        UnwatchProject();
+
+        DispatcherHelper.DelayOnMainThread(() =>
         {
             try
             {
-                // Don't change the ActiveProject if user pressed "Refresh" button.
-                if (ActiveProject?.Equals(_projectManager.ActiveProject) == false)
-                {
-                    ActiveProject = _projectManager.ActiveProject;
-                }
-
-                if (ActiveProject is not null)
-                {
-                    _loggerService.Debug("ProjectExplorer: Beginning to watch project.");
-                    _projectWatcher.StartWatcher_AndLoadProject(ActiveProject!);
-                    _loggerService.Debug("ProjectExplorer: Restoring project settings.");
-                    RestoreProjectState(ActiveProject);
-                }
+                ActiveProject = activeProject;
+                _projectWatcher.StartWatcher_AndLoadProject(activeProject);
             }
             catch (Exception e)
             {
@@ -228,11 +219,82 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             }
             finally
             {
-                _loggerService.Debug("ProjectExplorer: Finishing project load.");
-                _progressService.IsIndeterminate = false;
-                OnSetLoading?.Invoke(this, false);
+                RestoreProjectState(ActiveProject!);
+                DisableLoadingMode();
+
+                if (freshLoad)
+                {
+                    CheckForOneDriveInPath();
+                }
             }
-        }, DispatcherPriority.ContextIdle);
+        }, 50);
+    }
+
+    /// <summary>
+    /// Reload the active project from disk to ensure consistency.
+    /// </summary>
+    public void ResumeWatcher_AndReloadProject()
+    {
+        StartWatcher_AndLoadProject(ActiveProject!);
+        // DispatcherHelper.RunOnMainThread(() =>
+        // {
+        //     SaveProjectState();
+        //     EnableLoadingMode();
+        //     UnwatchProject();
+        //     LoadExpansionStateDictionary(ActiveProject!);
+        //
+        //     try
+        //     {
+        //         // Give time for loading mode to render.
+        //         DispatcherHelper.DelayOnMainThread(() =>
+        //         {
+        //             try
+        //             {
+        //                 _projectWatcher.ResumeWatcher_AndReloadProject();
+        //                 RestoreProjectState(ActiveProject!);
+        //             }
+        //             catch (Exception e)
+        //             {
+        //                 _loggerService.Error($"Error refreshing project: {e.Message}");
+        //             }
+        //             finally
+        //             {
+        //                 DisableLoadingMode();
+        //             }
+        //         }, 50);
+        //     }
+        //     catch
+        //     {
+        //         _loggerService.Error(
+        //             "Failed to resume file watcher. Please hit the refresh button in the project browser.");
+        //         _loggerService.Error("If that doesn't solve the problem, restart WolvenKit.");
+        //     }
+        // });
+    }
+
+    private void EnableLoadingMode()
+    {
+        _progressService.IsIndeterminate = true;
+        _progressService.Status = EStatus.Running;
+        OnSetLoading?.Invoke(this, true);
+    }
+
+    private void DisableLoadingMode()
+    {
+        _progressService.IsIndeterminate = false;
+        OnSetLoading?.Invoke(this, false);
+    }
+
+    private void SaveProjectState()
+    {
+        if (ActiveProject != null)
+        {
+            _hasUnsavedFileTreeChanges = true;
+            SaveOpenFilePaths();
+            SaveProjectExplorerExpansionStateIfDirty();
+            SaveProjectExplorerTabIfDirty();
+            _hasUnsavedFileTreeChanges = false;
+        }
     }
 
     private void CheckForOneDriveInPath()
@@ -262,6 +324,67 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     public DispatchedObservableCollection<FileSystemModel> FileTree => _projectWatcher.FileTree;
     public DispatchedObservableCollection<FileSystemModel> FileList => _projectWatcher.FileList;
     public WatcherState FileWatcherState => _projectWatcher.WatcherState;
+
+    private readonly HashSet<FileSystemModel> _subscribedModels = new();
+
+    private void SubscribeToModelChanges(FileSystemModel model)
+    {
+        // Only subscribe to directories. At 100k+ files, subscribing to every model
+        // just to watch a few thousand directories change IsExpanded is wasteful.
+        if (model.IsDirectory && _subscribedModels.Add(model))
+        {
+            model.PropertyChanged += OnFileSystemModelPropertyChanged;
+        }
+    }
+
+    private void UnsubscribeFromModelChanges(FileSystemModel model)
+    {
+        if (_subscribedModels.Remove(model))
+        {
+            model.PropertyChanged -= OnFileSystemModelPropertyChanged;
+        }
+    }
+
+    private void OnFileSystemModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        // Backstop for any direct mutation of IsExpanded outside the normal View path.
+        // Primary dirty tracking for user-initiated expand/collapse goes through
+        // NotifyDirectoryExpanded / NotifyDirectoryCollapsed.
+        if (sender is not FileSystemModel model || e.PropertyName != nameof(FileSystemModel.IsExpanded))
+            return;
+
+        // We no longer call SaveNodeExpansionState here to avoid duplicate work
+        // when the View goes through the Notify* methods.
+        // This handler is mainly for future programmatic changes to IsExpanded.
+    }
+
+    private void OnFileCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.NewItems != null)
+        {
+            foreach (FileSystemModel model in e.NewItems)
+            {
+                SubscribeToModelChanges(model);
+            }
+        }
+
+        if (e.OldItems != null)
+        {
+            foreach (FileSystemModel model in e.OldItems)
+            {
+                UnsubscribeFromModelChanges(model);
+            }
+        }
+
+        if (e.Action == NotifyCollectionChangedAction.Reset)
+        {
+            // On full reset (ReplaceAll), re-subscribe to everything currently in the collection
+            foreach (FileSystemModel model in FileList)
+            {
+                SubscribeToModelChanges(model);
+            }
+        }
+    }
 
     /// <summary>
     /// Enable ConvertTo and ConvertFrom
@@ -360,10 +483,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private bool CanRefresh() => ActiveProject != null;
 
     [RelayCommand(CanExecute = nameof(CanRefresh))]
-    private void Refresh()
-    {
-        InternalRefresh();
-    }
+    private void Refresh() => ResumeWatcher_AndReloadProject();
 
     private string GetActiveFolderPath() => SelectedTabIndex switch
     {
@@ -1725,22 +1845,26 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     // IconSource = bi;
 
 
-    private void RestoreProjectState(Cp77Project project)
+    private void LoadExpansionStateDictionary(Cp77Project project)
     {
-
-        // read tree state from file
+        var projectName = Path.GetFileNameWithoutExtension(project.Location);
         if (File.Exists(project.InterfaceProjectTreeStatePath))
         {
             _hasUnsavedFileTreeChanges = false;
             ExpansionStateDictionary =
                 JsonSerializer.Deserialize<Dictionary<string, bool>>(
                     File.ReadAllText(project.InterfaceProjectTreeStatePath)) ?? [];
+            _loggerService.Info($"[Expansion] Loaded persisted expansion state for '{projectName}': {ExpansionStateDictionary.Count} directories");
         }
         else
         {
             ExpansionStateDictionary = [];
+            _loggerService.Info($"[Expansion] No persisted expansion state file for '{projectName}' - starting fresh");
         }
+    }
 
+    private void RestoreProjectState(Cp77Project project)
+    {
         // Abort if user doesn't want to reopen any files
         if (!_settingsManager.ReopenFiles || _settingsManager.NumFilesToReopen == 0 ||
             project.OpenProjectFiles.Count == 0)
@@ -1814,6 +1938,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
+        // Rebuild from live models in FileList — this is cheap and survives ReplaceAll rebuilds
+        RebuildExpansionStateFromFileList();
+
         File.WriteAllText(project.InterfaceProjectTreeStatePath, JsonSerializer.Serialize(ExpansionStateDictionary));
         _hasUnsavedFileTreeChanges = false;
     }
@@ -1870,6 +1997,50 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _hasUnsavedFileTreeChanges = true;
     }
 
+    /// <summary>
+    /// Used by the internal WatcherService when rebuilding the tree to restore previous expansion state onto new model instances.
+    /// </summary>
+    internal bool GetDesiredExpansionState(string rawRelativePath)
+        => ExpansionStateDictionary.TryGetValue(rawRelativePath, out var state) ? state : false;
+
+    /// <summary>
+    /// Rebuilds the expansion state dictionary directly from the current models in FileList.
+    /// This is robust after tree rebuilds because FileList holds references to the live FileSystemModel instances.
+    /// </summary>
+    internal void RebuildExpansionStateFromFileList()
+    {
+        ExpansionStateDictionary = FileList
+            .Where(m => m.IsDirectory)
+            .ToDictionary(m => m.RawRelativePath, m => m.IsExpanded, StringComparer.OrdinalIgnoreCase);
+        _hasUnsavedFileTreeChanges = true;
+    }
+
+    /// <summary>
+    /// Called by the View when the user expands a directory node.
+    /// This is the primary path for dirty tracking expansion state.
+    /// </summary>
+    public void NotifyDirectoryExpanded(FileSystemModel model)
+    {
+        if (model is { IsDirectory: true })
+        {
+            model.IsExpanded = true;
+            SaveNodeExpansionState(model.RawRelativePath, true);
+        }
+    }
+
+    /// <summary>
+    /// Called by the View when the user collapses a directory node.
+    /// This is the primary path for dirty tracking expansion state.
+    /// </summary>
+    public void NotifyDirectoryCollapsed(FileSystemModel model)
+    {
+        if (model is { IsDirectory: true })
+        {
+            model.IsExpanded = false;
+            SaveNodeExpansionState(model.RawRelativePath, false);
+        }
+    }
+
     public void SuspendFileWatcher()
     {
         if (ActiveProject is not Cp77Project project)
@@ -1884,23 +2055,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         catch
         {
             _loggerService.Error("Failed to suspend file watcher. Please ignore any errors.");
-        }
-    }
-
-    /// <summary>
-    /// Reload the active project from disk to ensure consistency.
-    /// </summary>
-    public void ResumeWatcher_AndReloadProject()
-    {
-        try
-        {
-            InternalRefresh();
-        }
-        catch
-        {
-            _loggerService.Error(
-                "Failed to resume file watcher. Please hit the refresh button in the project browser.");
-            _loggerService.Error("If that doesn't solve the problem, restart WolvenKit.");
         }
     }
 

@@ -1119,6 +1119,7 @@
             AllowResizingColumns="False"
             AutoGenerateColumns="False"
             ChildPropertyName="Children"
+            ExpandStateMappingName="IsExpanded"
             ContextMenu="{StaticResource TreeGridContextMenu}"
             CurrentCellBorderBrush="White"
             CurrentCellBorderThickness="0"

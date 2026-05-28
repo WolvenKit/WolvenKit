@@ -51,7 +51,6 @@ public partial class ExportViewModel : AbstractImportExportViewModel
         _importExportHelper = importExportHelper;
 
         PropertyChanged += ImportExportViewModel_PropertyChanged;
-        _appViewModel.OnInitialProjectLoaded += AppViewModel_OnInitialProjectLoaded;
     }
 
     #region Commands

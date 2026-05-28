@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 using DynamicData.Binding;
 using HandyControl.Data;
 using MahApps.Metro.Controls;
@@ -69,7 +70,7 @@ namespace WolvenKit.Views.Tools
         public ProjectExplorerView()
         {
             InitializeComponent();
-            _settingsManager = Locator.Current.GetService<ISettingsManager>();
+            _settingsManager = Locator.Current.GetService<ISettingsManager>()!;
 
             TreeGrid.ItemsSourceChanged += TreeGrid_ItemsSourceChanged;
             TreeGridFlat.ItemsSourceChanged += TreeGridFlat_ItemsSourceChanged;
@@ -252,6 +253,45 @@ namespace WolvenKit.Views.Tools
             TreeGridFlat.View.Refresh();
         }
 
+        /// <summary>
+        /// Recursively applies expansion state from FileSystemModel.IsExpanded to the TreeNodes.
+        /// Only iterates directory nodes using Where for efficiency.
+        /// </summary>
+        private void ApplyExpansionState(IEnumerable<TreeNode> nodes)
+        {
+            var directoryNodes = nodes
+                .Where(n => n.Item is FileSystemModel model && model.IsDirectory)
+                .ToList();
+
+            int expanded = 0, collapsed = 0;
+            int shouldBeExpanded = 0;
+
+            foreach (var node in directoryNodes)
+            {
+                if (node.Item is FileSystemModel model)
+                {
+                    if (model.IsExpanded)
+                    {
+                        shouldBeExpanded++;
+                        TreeGrid.ExpandNode(node);
+                        expanded++;
+                    }
+                    else
+                    {
+                        TreeGrid.CollapseNode(node);
+                        collapsed++;
+                    }
+                }
+
+                if (node.HasChildNodes)
+                {
+                    ApplyExpansionState(node.ChildNodes);
+                }
+            }
+
+            Console.WriteLine($"[Expansion] ApplyExpansionState walked {directoryNodes.Count} dir nodes (of which {shouldBeExpanded} had IsExpanded=true in model) → did {expanded} ExpandNode, {collapsed} CollapseNode");
+        }
+
         private static (string Text, bool EnableRefactoring) ShowRenameDialog(string input, bool showCheckbox = false)
         {
             var dialog = new RenameDialog(showCheckbox);
@@ -295,6 +335,7 @@ namespace WolvenKit.Views.Tools
         private void IndicateProjectLoading() => Dispatcher.Invoke(() =>
         {
             _isFirstLoad = true;
+            Console.WriteLine("[Expansion] IndicateProjectLoading - _isFirstLoad reset to true, grids hidden (preparing for new tree)");
             TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
             TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
             LoadingText.SetCurrentValue(VisibilityProperty, Visibility.Visible);
@@ -325,15 +366,64 @@ namespace WolvenKit.Views.Tools
                 TreeGrid.View.Refresh();
             }
 
+            // Keep the hierarchical TreeGrid hidden until after we have decided on expansion.
+            // Making a 10k+ directory tree visible while SfTreeGrid is still doing its initial
+            // massive layout pass (especially after ReplaceAll) is what triggers the repeated
+            // "Height must be non-negative" crashes in TreeGridPanel.MeasureOverride on very large projects.
+            TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+
+            // Re-apply expansion state from the models after a project load/refresh.
+            // We deliberately run this on Background priority and guard it for scale.
+            var dispatcher = Dispatcher;
+            dispatcher.BeginInvoke(DispatcherPriority.Background, () =>
+            {
+                try
+                {
+                    var nodeCount = TreeGrid.View?.Nodes?.Count ?? 0;
+                    Console.WriteLine($"[Expansion] Deferred expansion apply starting (View.Nodes.Count={nodeCount})");
+
+                    bool isLargeTree = nodeCount > 2000;   // ~2k+ directories is where SfTreeGrid + Recycling starts getting fragile on full data replace
+
+                    if (isLargeTree)
+                    {
+                        // For very large projects (10k+ directories, 100k+ files) we skip the recursive
+                        // manual ApplyExpansionState entirely. It causes a storm of ExpandNode/CollapseNode
+                        // calls that destabilize the measure/layout pipeline, leading to the "Height must be non-negative" crash.
+                        // We rely purely on ExpandStateMappingName="IsExpanded" (the models already have the correct values
+                        // from the watcher build) + whatever the per-Add handler in NodeCollectionChanged managed to do.
+                        Console.WriteLine("[Expansion] Large tree detected — skipping manual ApplyExpansionState to avoid layout crash. Relying on ExpandStateMappingName.");
+                    }
+                    else if (nodeCount > 0)
+                    {
+                        ApplyExpansionState(TreeGrid.View!.Nodes);
+                        Console.WriteLine("[Expansion] ApplyExpansionState completed");
+                    }
+
+                    // Now it's safe to show the tree (expansion decisions have been made or deliberately skipped).
+                    if (!isFlatModeEnabled)
+                    {
+                        TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[Expansion] Error during deferred expansion apply: {ex.Message}");
+                    // Still show the tree so the user isn't stuck with a blank view
+                    if (!isFlatModeEnabled)
+                    {
+                        TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+                    }
+                }
+            });
+
             if (isFlatModeEnabled)
             {
                 TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-                TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
             }
             else
             {
+                // TreeGrid visibility is now controlled inside the deferred block above
                 TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-                TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Visible);
             }
         });
 
@@ -403,7 +493,7 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            ViewModel.SaveNodeExpansionState(fileSystemModel.RawRelativePath, true);
+            ViewModel.NotifyDirectoryExpanded(fileSystemModel);
         }
 
         private bool _automatic;
@@ -470,7 +560,7 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            ViewModel.SaveNodeExpansionState(fileSystemModel.RawRelativePath, false);
+            ViewModel.NotifyDirectoryCollapsed(fileSystemModel);
         }
 
         private void AddKeyUpEvent()
@@ -557,15 +647,29 @@ namespace WolvenKit.Views.Tools
             if (e.Action is NotifyCollectionChangedAction.Reset)
             {
                 var shouldAutoExpand = _settingsManager.AutoExpandAllFoldersOnLaunch;
-                if (_isFirstLoad && TreeGrid.View.Nodes.Count != 0 && shouldAutoExpand)
+                var nodeCount = TreeGrid.View?.Nodes?.Count ?? 0;
+                Console.WriteLine($"[Expansion] NodeCollectionChanged RESET - Nodes.Count={nodeCount}, _isFirstLoad={_isFirstLoad}, AutoExpandAll={shouldAutoExpand}");
+
+                if (_isFirstLoad && nodeCount != 0 && shouldAutoExpand)
                 {
-                    TreeGrid.ExpandAllNodes();
+                    // Only do the nuclear ExpandAll on small trees + first load + setting.
+                    // On 10k+ dir projects this would also cause massive layout work.
+                    if (nodeCount < 2000)
+                    {
+                        TreeGrid.ExpandAllNodes();
+                        Console.WriteLine("[Expansion] Performed ExpandAllNodes due to _isFirstLoad + AutoExpandAll setting");
+                    }
+                    else
+                    {
+                        Console.WriteLine("[Expansion] Large tree on RESET — skipping ExpandAllNodes to protect layout.");
+                    }
                     _isFirstLoad = false;
                 }
             }
 
             if (e.Action is NotifyCollectionChangedAction.Add && e.NewItems is not null)
             {
+                int expandedFromAdd = 0;
                 foreach (var item in e.NewItems)
                 {
                     if (item is not TreeNode { Item: FileSystemModel { IsDirectory: true } fileSystemModel } treeNode)
@@ -573,10 +677,15 @@ namespace WolvenKit.Views.Tools
                         continue;
                     }
 
-                    if (ViewModel.GetExpansionStateOrNull(fileSystemModel.RawRelativePath) is true or null)
+                    if (fileSystemModel.IsExpanded || ViewModel.GetExpansionStateOrNull(fileSystemModel.RawRelativePath) is true)
                     {
                         TreeGrid.ExpandNode(treeNode);
+                        expandedFromAdd++;
                     }
+                }
+                if (expandedFromAdd > 0)
+                {
+                    Console.WriteLine($"[Expansion] NodeCollectionChanged ADD - expanded {expandedFromAdd} directory nodes from model.IsExpanded / dict");
                 }
             }
 

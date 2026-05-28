@@ -1407,14 +1407,14 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
-        Locator.Current.GetService<ProjectExplorerViewModel>()?.SuspendFileWatcher();
+        GetToolViewModel<ProjectExplorerViewModel>()?.SuspendFileWatcher();
         try
         {
             _archiveXlItemService.CreateEquipmentItem(item);
         }
         finally
         {
-            Locator.Current.GetService<ProjectExplorerViewModel>()?
+            GetToolViewModel<ProjectExplorerViewModel>()?
                 .ResumeWatcher_AndReloadProject();
         }
     }

@@ -98,8 +98,11 @@ public partial class ProjectExplorerViewModel
 
         #endregion
 
-        public WatcherService(ILoggerService? loggerService, IProjectEvents projectEvents)
+          private readonly ProjectExplorerViewModel _owner;
+
+        public WatcherService(ProjectExplorerViewModel owner, ILoggerService? loggerService, IProjectEvents projectEvents)
         {
+            _owner = owner;
             _loggerService = loggerService;
 
             _modsWatcher = new FileSystemWatcher
@@ -122,7 +125,8 @@ public partial class ProjectExplorerViewModel
         public void ResumeWatcher_AndReloadProject()
         {
             Locked_LoadModProjectFileStructure();
-            StartBackgroundPolling();
+            // StartBackgroundPolling() is intentionally called from inside LoadModProjectFileStructure
+            // after the tree has been rebuilt. Do NOT call it again here.
             Resume();
             _loggerService?.Debug($"Now watching project: {_projectDirectory} ({FileList.Count} files");
         }
@@ -357,6 +361,10 @@ public partial class ProjectExplorerViewModel
                 ? treeRoot.Children
                 : Array.Empty<FileSystemModel>());
 
+            // Diagnostic logging for expansion state persistence across loads
+            var expandedCount = FileList.Count(m => m.IsDirectory && m.IsExpanded);
+            _loggerService?.Info($"[Expansion] Tree build complete for '{_projectDirectory}': {FileList.Count(m => m.IsDirectory)} directories total, {expandedCount} restored as expanded from persisted state");
+
             (List<FileSystemModel> FlatList, FileSystemModel? TreeRoot) BuildFullFileStructure()
             {
                 var flatList = new List<FileSystemModel>(10000);
@@ -423,11 +431,9 @@ public partial class ProjectExplorerViewModel
 
         private void StartBackgroundPolling()
         {
-            // Cancel any existing background tasks.
-            _updateThreadCancellationTokenSource.Cancel();
-            _batchUpdateThreadCancellationTokenSource.Cancel();
-            _updateTask = null;
-            _batchUpdateTask = null;
+            // Always ensure any previous polling tasks are fully stopped first.
+            // This is the single choke point that prevents duplicate long-running tasks.
+            StopBackgroundPollingInternal();
 
             _updateThreadCancellationTokenSource = new CancellationTokenSource();
             _updateTask = Task.Factory.StartNew(
@@ -456,28 +462,52 @@ public partial class ProjectExplorerViewModel
         private void StopBackgroundPolling()
         {
             _loggerService?.Debug("ForceStopping WatcherService and cancelling update tasks.");
+            StopBackgroundPollingInternal();
+            CancelFileLoggingToken();
+        }
 
+        /// <summary>
+        /// Internal implementation that actually cancels and waits for the background tasks.
+        /// Called from both public Stop and defensively from Start.
+        /// </summary>
+        private void StopBackgroundPollingInternal()
+        {
             Suspend();
 
+            // Cancel update task
             if (_updateTask != null)
             {
-                _updateThreadCancellationTokenSource.Cancel();
-                if (!_updateTask.IsCanceled && !_updateTask.Wait(1000))
+                try
                 {
-                    throw new Exception();
+                    _updateThreadCancellationTokenSource.Cancel();
+                    // Best-effort wait so the loop can exit its Sleep and observe the token.
+                    _updateTask.Wait(TimeSpan.FromMilliseconds(250));
+                }
+                catch (AggregateException) { /* task cancelled, expected */ }
+                finally
+                {
+                    _updateTask = null;
+                    _updateThreadCancellationTokenSource.Dispose();
+                    _updateThreadCancellationTokenSource = new CancellationTokenSource();
                 }
             }
 
+            // Cancel batch update task
             if (_batchUpdateTask != null)
             {
-                _batchUpdateThreadCancellationTokenSource.Cancel();
-                if (!_batchUpdateTask.IsCanceled && !_batchUpdateTask.Wait(1000))
+                try
                 {
-                    throw new Exception();
+                    _batchUpdateThreadCancellationTokenSource.Cancel();
+                    _batchUpdateTask.Wait(TimeSpan.FromMilliseconds(250));
+                }
+                catch (AggregateException) { /* task cancelled, expected */ }
+                finally
+                {
+                    _batchUpdateTask = null;
+                    _batchUpdateThreadCancellationTokenSource.Dispose();
+                    _batchUpdateThreadCancellationTokenSource = new CancellationTokenSource();
                 }
             }
-
-            CancelFileLoggingToken();
         }
 
         private void CancelFileLoggingToken()
@@ -676,7 +706,9 @@ public partial class ProjectExplorerViewModel
                 var isDirectory = Directory.Exists(fullPath);
                 var relativePath = fullPath[(_projectDirectory.Length + 1)..];
                 var name = Path.GetFileName(e.FullPath);
-                var model = new FileSystemModel(parent, name, relativePath, isDirectory);
+
+                bool desiredExpansion = isDirectory && _owner.GetDesiredExpansionState(relativePath);
+                var model = new FileSystemModel(parent, name, relativePath, isDirectory, desiredExpansion);
                 return model;
             }
             catch (Exception ex)

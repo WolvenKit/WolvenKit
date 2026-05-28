@@ -52,7 +52,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             : dialogModel.InkatlasFileName;
         var relativeInkatlasFilePath = GetRelativeDestPath(inkatlasFileName);
 
-        Locator.Current.GetService<ProjectExplorerViewModel>()?.SuspendFileWatcher();
+        GetToolViewModel<ProjectExplorerViewModel>()?.SuspendFileWatcher();
 
         /*
          * Copy and connect .app and .ent file
@@ -180,7 +180,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         }
         finally
         {
-            Locator.Current.GetService<ProjectExplorerViewModel>()?.ResumeWatcher_AndReloadProject();
+            GetToolViewModel<ProjectExplorerViewModel>()?.ResumeWatcher_AndReloadProject();
         }
 
         return;
