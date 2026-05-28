@@ -861,25 +861,6 @@ public partial class ProjectExplorerViewModel
             _fileLookup.TryAdd(fullPath, newFileModel);
         }
     }
-    /// <summary>
-    /// Tells the OS-level API to stop sending file system events to the WatcherService temporarily.
-    /// This should be called before performing operations that may add files to the project and data model
-    /// via another pathway.
-    /// </summary>
-
-    /// <summary>
-    /// Tells the OS-level API to stop sending file system events to the WatcherService temporarily.
-    /// This should be called after performing operations that may add files to the project and data model
-    /// via another pathway. Such methods should already call this automatically.
-    /// </summary>
-
-    /// <summary>
-    /// Populates the data models FileTree and FileList for the mod directory from disk and begins tracking any
-    /// file system events to automatically add files to the project. Establishes background processes to poll for
-    /// such file system events and remains ready to receive published events to add files to the active project.
-    /// </summary>
-    /// <param name="project"></param>
-
 
     /// <summary>
     /// NoProject: there is no active mod loaded up.
