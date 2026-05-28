@@ -344,9 +344,6 @@ namespace WolvenKit.Views.Tools
         // Run inside Dispatcher to avoid exception on startup
         private void ResetUiElements(bool isFlatModeEnabled) => Dispatcher.Invoke(() =>
         {
-            // Hide loading text
-            LoadingText.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-
             _currentFolderQuery = "";
             // Set search bar to empty if it wasn't
             PESearchBar?.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, "");
@@ -366,10 +363,9 @@ namespace WolvenKit.Views.Tools
                 TreeGrid.View.Refresh();
             }
 
-            // Keep the hierarchical TreeGrid hidden until after we have decided on expansion.
-            // Making a 10k+ directory tree visible while SfTreeGrid is still doing its initial
-            // massive layout pass (especially after ReplaceAll) is what triggers the repeated
-            // "Height must be non-negative" crashes in TreeGridPanel.MeasureOverride on very large projects.
+            // Keep both the loading text visible AND the TreeGrid hidden until the deferred work completes.
+            // This restores the loading UX while still protecting huge trees from the layout crash.
+            LoadingText.SetCurrentValue(VisibilityProperty, Visibility.Visible);
             TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
 
             // Re-apply expansion state from the models after a project load/refresh.
@@ -382,15 +378,10 @@ namespace WolvenKit.Views.Tools
                     var nodeCount = TreeGrid.View?.Nodes?.Count ?? 0;
                     Console.WriteLine($"[Expansion] Deferred expansion apply starting (View.Nodes.Count={nodeCount})");
 
-                    bool isLargeTree = nodeCount > 2000;   // ~2k+ directories is where SfTreeGrid + Recycling starts getting fragile on full data replace
+                    bool isLargeTree = nodeCount > 2000;
 
                     if (isLargeTree)
                     {
-                        // For very large projects (10k+ directories, 100k+ files) we skip the recursive
-                        // manual ApplyExpansionState entirely. It causes a storm of ExpandNode/CollapseNode
-                        // calls that destabilize the measure/layout pipeline, leading to the "Height must be non-negative" crash.
-                        // We rely purely on ExpandStateMappingName="IsExpanded" (the models already have the correct values
-                        // from the watcher build) + whatever the per-Add handler in NodeCollectionChanged managed to do.
                         Console.WriteLine("[Expansion] Large tree detected — skipping manual ApplyExpansionState to avoid layout crash. Relying on ExpandStateMappingName.");
                     }
                     else if (nodeCount > 0)
@@ -399,8 +390,14 @@ namespace WolvenKit.Views.Tools
                         Console.WriteLine("[Expansion] ApplyExpansionState completed");
                     }
 
-                    // Now it's safe to show the tree (expansion decisions have been made or deliberately skipped).
-                    if (!isFlatModeEnabled)
+                    // Now safe to hide loading text and show the tree.
+                    LoadingText.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+
+                    if (isFlatModeEnabled)
+                    {
+                        TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+                    }
+                    else
                     {
                         TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Visible);
                     }
@@ -408,23 +405,20 @@ namespace WolvenKit.Views.Tools
                 catch (Exception ex)
                 {
                     Console.WriteLine($"[Expansion] Error during deferred expansion apply: {ex.Message}");
-                    // Still show the tree so the user isn't stuck with a blank view
-                    if (!isFlatModeEnabled)
+                    LoadingText.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+                    if (isFlatModeEnabled)
+                    {
+                        TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+                    }
+                    else
                     {
                         TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Visible);
                     }
                 }
             });
 
-            if (isFlatModeEnabled)
-            {
-                TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-            }
-            else
-            {
-                // TreeGrid visibility is now controlled inside the deferred block above
-                TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-            }
+            // Flat grid visibility is also deferred for consistency on large loads.
+            TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
         });
 
         private void TreeGrid_OnNodeExpanding(object sender, NodeExpandingEventArgs e)
