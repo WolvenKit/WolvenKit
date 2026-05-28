@@ -1893,20 +1893,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     {
         try
         {
-            OnSetLoading?.Invoke(this, true);
-            _progressService.IsIndeterminate = true;
-            _projectWatcher.ResumeWatcher_AndReloadProject();
+            InternalRefresh();
         }
         catch
         {
             _loggerService.Error(
                 "Failed to resume file watcher. Please hit the refresh button in the project browser.");
             _loggerService.Error("If that doesn't solve the problem, restart WolvenKit.");
-        }
-        finally
-        {
-            OnSetLoading?.Invoke(this, false);
-            _progressService.IsIndeterminate = false;
         }
     }
 
