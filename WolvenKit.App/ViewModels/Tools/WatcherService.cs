@@ -350,83 +350,91 @@ public partial class ProjectExplorerViewModel
                 return;
             }
 
-            var (flatListReturn, treeRoot) = BuildFullFileStructure();
 
-            if (flatListReturn.Count != 0)
+            _loggerService?.Info($"[Expansion] Starting background build for '{_projectDirectory}' ({_projectFileSystemModel?.FullName})");
+            Task.Run(() =>
             {
-                FileList.ReplaceAll(flatListReturn);
-            }
+                var (flatListReturn, treeRoot) = BuildFullFileStructure();
 
-            FileTree.ReplaceAll((treeRoot != null)
-                ? treeRoot.Children
-                : Array.Empty<FileSystemModel>());
-
-            // Diagnostic logging for expansion state persistence across loads
-            var expandedCount = FileList.Count(m => m.IsDirectory && m.IsExpanded);
-            _loggerService?.Info($"[Expansion] Tree build complete for '{_projectDirectory}': {FileList.Count(m => m.IsDirectory)} directories total, {expandedCount} restored as expanded from persisted state");
-
-            (List<FileSystemModel> FlatList, FileSystemModel? TreeRoot) BuildFullFileStructure()
-            {
-                var flatList = new List<FileSystemModel>(10000);
-                var rootModel = _projectFileSystemModel ?? new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
-                var stack = new Stack<(DirectoryInfo Dir, FileSystemModel Parent)>();
-                stack.Push((new DirectoryInfo(rootModel.FullName), rootModel));
-
-                while (stack.Count > 0)
+                DispatcherHelper.RunOnMainThread(() =>
                 {
-                    var (dir, parent) = stack.Pop();
-
-                    try
+                    if (flatListReturn.Count != 0)
                     {
-                        // dir
-                        foreach (var subDir in dir.EnumerateDirectories("*", SearchOption.TopDirectoryOnly))
+                        FileList.ReplaceAll(flatListReturn);
+                    }
+
+                    FileTree.ReplaceAll((treeRoot != null)
+                        ? treeRoot.Children
+                        : Array.Empty<FileSystemModel>());
+
+                    // Diagnostic logging for expansion state persistence across loads
+                    var expandedCount = FileList.Count(m => m.IsDirectory && m.IsExpanded);
+                    _loggerService?.Info($"[Expansion] Tree build complete for '{_projectDirectory}': {FileList.Count(m => m.IsDirectory)} directories total, {expandedCount} restored as expanded from persisted state");
+
+                    StartBackgroundPolling();
+                });
+            });
+        }
+
+        private (List<FileSystemModel> FlatList, FileSystemModel? TreeRoot) BuildFullFileStructure()
+        {
+            var flatList = new List<FileSystemModel>(10000);
+            var rootModel = _projectFileSystemModel ?? new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
+            var stack = new Stack<(DirectoryInfo Dir, FileSystemModel Parent)>();
+            stack.Push((new DirectoryInfo(rootModel.FullName), rootModel));
+
+            while (stack.Count > 0)
+            {
+                var (dir, parent) = stack.Pop();
+
+                try
+                {
+                    // dir
+                    foreach (var subDir in dir.EnumerateDirectories("*", SearchOption.TopDirectoryOnly))
+                    {
+                        if (IsIgnoredPath(subDir.FullName))
+                            continue;
+
+                        var wrapper = new FileSystemEventArgsWrapper(new FileSystemEventArgs(WatcherChangeTypes.Created,
+                            subDir.Parent?.FullName ?? "", subDir.Name));
+
+                        var dirModel = CreateFromScratch(parent, wrapper);
+
+                        if (dirModel != null)
                         {
-                            if (IsIgnoredPath(subDir.FullName))
-                                continue;
-
-                            var wrapper = new FileSystemEventArgsWrapper(new FileSystemEventArgs(WatcherChangeTypes.Created,
-                                subDir.Parent?.FullName ?? "", subDir.Name));
-
-                            var dirModel = CreateFromScratch(parent, wrapper);
-
-                            if (dirModel != null)
-                            {
-                                if (dirModel.FullName != rootModel.FullName)
-                                    flatList.Add(dirModel);
-                                parent.Children.Add(dirModel);
-                                _fileLookup.TryAdd(dirModel.FullName, dirModel);
-                                stack.Push((subDir, dirModel));
-                            }
-                        }
-
-                        // file
-                        foreach (var file in dir.EnumerateFiles("*", SearchOption.TopDirectoryOnly))
-                        {
-                            if (IsIgnoredPath(file.FullName))
-                                continue;
-
-                            var fileModel = CreateFromScratch(parent, new FileSystemEventArgsWrapper(new FileSystemEventArgs(
-                                WatcherChangeTypes.Created,
-                                file.DirectoryName ?? "", file.Name)));
-
-                            if (fileModel != null)
-                            {
-                                flatList.Add(fileModel);
-                                parent.Children.Add(fileModel);
-                                _fileLookup[fileModel.FullName] = fileModel;
-                            }
+                            if (dirModel.FullName != rootModel.FullName)
+                                flatList.Add(dirModel);
+                            parent.Children.Add(dirModel);
+                            _fileLookup.TryAdd(dirModel.FullName, dirModel);
+                            stack.Push((subDir, dirModel));
                         }
                     }
-                    catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+
+                    // file
+                    foreach (var file in dir.EnumerateFiles("*", SearchOption.TopDirectoryOnly))
                     {
-                        _loggerService?.Warning($"Access denied on {dir.FullName}");
+                        if (IsIgnoredPath(file.FullName))
+                            continue;
+
+                        var fileModel = CreateFromScratch(parent, new FileSystemEventArgsWrapper(new FileSystemEventArgs(
+                            WatcherChangeTypes.Created,
+                            file.DirectoryName ?? "", file.Name)));
+
+                        if (fileModel != null)
+                        {
+                            flatList.Add(fileModel);
+                            parent.Children.Add(fileModel);
+                            _fileLookup[fileModel.FullName] = fileModel;
+                        }
                     }
                 }
-
-                return (flatList, rootModel);
+                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+                {
+                    _loggerService?.Warning($"Access denied on {dir.FullName}");
+                }
             }
 
-            StartBackgroundPolling();
+            return (flatList, rootModel);
         }
 
         private void StartBackgroundPolling()

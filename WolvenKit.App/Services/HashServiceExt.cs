@@ -1,6 +1,8 @@
 using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.Common.Services;
 using WolvenKit.RED4.Types.Pools;
@@ -60,7 +62,7 @@ public class HashServiceExt : HashService
                 ResourcePathPool.AddOrGetHash(p);
                 _globalRefCache.TryAdd(p, 0);
             }
-            
+
             File.Delete(customRefsFile);
         }
     }
@@ -132,41 +134,52 @@ public class HashServiceExt : HashService
 
     public void LoadProjectCache(Cp77Project project)
     {
-        _projectRefCache.Clear();
-        _projectTweakCache.Clear();
-
-        MigrateLegacyProjectCache(project);
-
-        foreach (var p in project.ModFiles.Where(AddResourcePath))
+        Task.Run(() =>
         {
-            ResourcePathPool.AddOrGetHash(p);
-        }
-
-        var customRefsFile = Path.Combine(project.ProjectDirectory, "custom_refs.txt");
-        if (File.Exists(customRefsFile))
-        {
-            var paths = File.ReadAllLines(customRefsFile);
-            foreach (var p in paths)
+            var thread = new Thread(() =>
             {
-                if (AddResourcePath(p))
+                 Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
+                Thread.CurrentThread.IsBackground = true;
+                _projectRefCache.Clear();
+                _projectTweakCache.Clear();
+
+                MigrateLegacyProjectCache(project);
+
+                foreach (var p in project.ModFiles.Where(AddResourcePath))
                 {
                     ResourcePathPool.AddOrGetHash(p);
                 }
-            }
-        }
 
-        var customTweaksFile = Path.Combine(project.ProjectDirectory, "custom_tweaks.txt");
-        if (File.Exists(customTweaksFile))
-        {
-            var paths = File.ReadAllLines(customTweaksFile);
-            foreach (var p in paths)
-            {
-                if (AddTweakName(p))
+                var customRefsFile = Path.Combine(project.ProjectDirectory, "custom_refs.txt");
+                if (File.Exists(customRefsFile))
                 {
-                    TweakDBIDPool.AddOrGetHash(p);
+                    var paths = File.ReadAllLines(customRefsFile);
+                    foreach (var p in paths)
+                    {
+                        if (AddResourcePath(p))
+                        {
+                            ResourcePathPool.AddOrGetHash(p);
+                        }
+                    }
                 }
-            }
-        }
+
+                var customTweaksFile = Path.Combine(project.ProjectDirectory, "custom_tweaks.txt");
+                if (File.Exists(customTweaksFile))
+                {
+                    var paths = File.ReadAllLines(customTweaksFile);
+                    foreach (var p in paths)
+                    {
+                        if (AddTweakName(p))
+                        {
+                            TweakDBIDPool.AddOrGetHash(p);
+                        }
+                    }
+                }
+            });
+
+            thread.Start();
+            return thread; // Optional: you can wait on the thread if needed
+        });
     }
 
     public void SaveProjectCache(Cp77Project project)
@@ -175,7 +188,7 @@ public class HashServiceExt : HashService
         {
             var list = _projectRefCache.Keys.ToList();
             list.Sort();
-            
+
             File.WriteAllLines(Path.Combine(project.ProjectDirectory, "custom_refs.txt"), list);
         }
 

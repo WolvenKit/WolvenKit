@@ -153,31 +153,38 @@ public class RED4Controller : ObservableObject, IGameController
     {
         return Task.Run(() =>
         {
-            if (_archiveManager.IsManagerLoaded)
+            var thread = new Thread(() =>
             {
-                return;
-            }
-            if (_settingsManager.CP77ExecutablePath is null)
-            {
-                return;
-            }
+                Thread.CurrentThread.Priority = ThreadPriority.Highest;
+                Thread.CurrentThread.IsBackground = true;
 
-            _loggerService.Info("Loading Archive Manager ... ");
-            try
-            {
-                _archiveManager.LoadGameArchives(new FileInfo(_settingsManager.CP77ExecutablePath));
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error(e);
-                throw;
-            }
-            finally
-            {
-                _loggerService.Success("Finished loading Archive Manager.");
-            }
+                if (_archiveManager.IsManagerLoaded)
+                    return;
 
-            LoadCustomHashes();
+                if (_settingsManager.CP77ExecutablePath is null)
+                    return;
+
+                _loggerService.Info("Loading Archive Manager ... ");
+
+                try
+                {
+                    _archiveManager.LoadGameArchives(new FileInfo(_settingsManager.CP77ExecutablePath));
+                }
+                catch (Exception e)
+                {
+                    _loggerService.Error(e);
+                    throw;
+                }
+                finally
+                {
+                    _loggerService.Success("Finished loading Archive Manager.");
+                }
+
+                LoadCustomHashes();
+            });
+
+            thread.Start();
+            return thread;
         });
     }
 
