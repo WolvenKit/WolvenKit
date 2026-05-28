@@ -76,6 +76,8 @@ public partial class ProjectExplorerViewModel
         [ObservableProperty]
         private DispatchedObservableCollection<FileSystemModel> _fileTree = new();
 
+        public Guid CompletionTimer = Guid.NewGuid();
+
         private static readonly List<string> s_ignoredExtensions =
         [
             "tmp",
@@ -131,7 +133,7 @@ public partial class ProjectExplorerViewModel
             _loggerService?.Debug($"Now watching project: {_projectDirectory} ({FileList.Count} files");
         }
 
-        public void StartWatcher_AndLoadProject(Cp77Project project)
+        public void StartWatcher_AndLoadProject(Cp77Project project, Action? completion = null)
         {
             if (_projectDirectory.Length > 0 && project.FileDirectory != _projectDirectory)
             {
@@ -366,6 +368,8 @@ public partial class ProjectExplorerViewModel
                     FileTree.ReplaceAll((treeRoot != null)
                         ? treeRoot.Children
                         : Array.Empty<FileSystemModel>());
+
+                    DispatcherHelper.StopRepeatingAction(CompletionTimer);
 
                     // Diagnostic logging for expansion state persistence across loads
                     var expandedCount = FileList.Count(m => m.IsDirectory && m.IsExpanded);

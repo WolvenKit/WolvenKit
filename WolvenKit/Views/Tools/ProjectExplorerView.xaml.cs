@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,6 +21,7 @@ using Splat;
 using Syncfusion.Data;
 using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.App.Extensions;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement.Project;
@@ -64,6 +66,7 @@ namespace WolvenKit.Views.Tools
         private bool _isDragging;
         private bool _isFirstLoad = true;
         private ISettingsManager _settingsManager;
+        private CancellationTokenSource _deferRefreshTokenSource = new();
 
         #region Constructors
 
@@ -90,6 +93,8 @@ namespace WolvenKit.Views.Tools
             TreeGrid.NodeExpanded += TreeGrid_OnNodeExpanded;
             TreeGrid.NodeCollapsing += TreeGrid_OnNodeCollapsing;
             TreeGrid.NodeCollapsed += TreeGrid_OnNodeCollapsed;
+
+            TreeGrid.NotificationSubscriptionMode = NotificationSubscriptionMode.CollectionChange;
 
             this.WhenActivated(disposables =>
             {
@@ -234,15 +239,42 @@ namespace WolvenKit.Views.Tools
             this.ExecuteWhenLoaded(() => IndicateProjectLoading());
         }
 
+        private async void StartLoading()
+        {
+            _deferRefreshTokenSource?.Cancel();
+            _deferRefreshTokenSource = new CancellationTokenSource();
+
+            await InitiateLoadingUntilCancellation(_deferRefreshTokenSource.Token);
+        }
+
+        private Task InitiateLoadingUntilCancellation(CancellationToken deferRefreshToken)
+        {
+            using (TreeGrid.View.DeferRefresh(TreeViewRefreshMode.DeferRefresh))
+            {
+                IndicateProjectLoading();
+
+                var tcs = new TaskCompletionSource<bool>();
+
+                DispatcherHelper.WaitUntilCancelled(deferRefreshToken, () =>
+                {
+                    ResetUiElements(ViewModel?.IsFlatModeEnabled ?? false);
+                    tcs.TrySetResult(true);
+                });
+
+                return tcs.Task;
+            }
+        }
+
         private void SetLoading(object sender, bool isLoading)
         {
             if (isLoading)
             {
-                IndicateProjectLoading();
+                StartLoading();
             }
             else
             {
-                ResetUiElements(ViewModel?.IsFlatModeEnabled ?? false);
+               _deferRefreshTokenSource?.Cancel();
+               _isFirstLoad = false;
             }
         }
 
@@ -344,6 +376,8 @@ namespace WolvenKit.Views.Tools
         // Run inside Dispatcher to avoid exception on startup
         private void ResetUiElements(bool isFlatModeEnabled) => Dispatcher.Invoke(() =>
         {
+            Console.WriteLine("[Expansion] Resetting UI");
+
             _currentFolderQuery = "";
             // Set search bar to empty if it wasn't
             PESearchBar?.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, "");
@@ -657,7 +691,6 @@ namespace WolvenKit.Views.Tools
                     {
                         Console.WriteLine("[Expansion] Large tree on RESET — skipping ExpandAllNodes to protect layout.");
                     }
-                    _isFirstLoad = false;
                 }
             }
 

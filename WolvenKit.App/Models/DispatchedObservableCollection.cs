@@ -36,8 +36,8 @@ public class DispatchedObservableCollection<T> : ObservableCollection<T>
 
         DispatcherHelper.RunOnMainThread(() =>
         {
-            Items.Clear();
-            Items.AddRange(itemsList);
+                this.RemoveMany(Items);
+                AddRange(itemsList);
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         });
     }

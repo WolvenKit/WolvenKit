@@ -220,7 +220,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             finally
             {
                 RestoreProjectState(ActiveProject!);
-                DisableLoadingMode();
+                //DisableLoadingMode();
 
                 if (freshLoad)
                 {
@@ -233,49 +233,23 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <summary>
     /// Reload the active project from disk to ensure consistency.
     /// </summary>
-    public void ResumeWatcher_AndReloadProject()
-    {
-        StartWatcher_AndLoadProject(ActiveProject!);
-        // DispatcherHelper.RunOnMainThread(() =>
-        // {
-        //     SaveProjectState();
-        //     EnableLoadingMode();
-        //     UnwatchProject();
-        //     LoadExpansionStateDictionary(ActiveProject!);
-        //
-        //     try
-        //     {
-        //         // Give time for loading mode to render.
-        //         DispatcherHelper.DelayOnMainThread(() =>
-        //         {
-        //             try
-        //             {
-        //                 _projectWatcher.ResumeWatcher_AndReloadProject();
-        //                 RestoreProjectState(ActiveProject!);
-        //             }
-        //             catch (Exception e)
-        //             {
-        //                 _loggerService.Error($"Error refreshing project: {e.Message}");
-        //             }
-        //             finally
-        //             {
-        //                 DisableLoadingMode();
-        //             }
-        //         }, 50);
-        //     }
-        //     catch
-        //     {
-        //         _loggerService.Error(
-        //             "Failed to resume file watcher. Please hit the refresh button in the project browser.");
-        //         _loggerService.Error("If that doesn't solve the problem, restart WolvenKit.");
-        //     }
-        // });
-    }
+    public void ResumeWatcher_AndReloadProject() => StartWatcher_AndLoadProject(ActiveProject!);
+
+    private Guid _loadingCompletion = Guid.NewGuid();
 
     private void EnableLoadingMode()
     {
-        _progressService.IsIndeterminate = true;
-        _progressService.Status = EStatus.Running;
+        _loadingCompletion = DispatcherHelper.StartRepeatingAction(
+            () =>
+            {
+                _progressService.IsIndeterminate = true;
+                _progressService.Status = EStatus.Running;
+            },
+            TimeSpan.FromMilliseconds(100),
+            DisableLoadingMode
+        );
+
+        _projectWatcher.CompletionTimer = _loadingCompletion;
         OnSetLoading?.Invoke(this, true);
     }
 
@@ -284,6 +258,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _progressService.IsIndeterminate = false;
         OnSetLoading?.Invoke(this, false);
     }
+
 
     private void SaveProjectState()
     {
@@ -458,6 +433,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [ObservableProperty] private bool _canScrollToOpenFile;
 
     [ObservableProperty] private bool _hasSelectedItem;
+
+    #region INotifyCollectionChanged
+
+    public NotifyCollectionChangedEventHandler? NotifyCollectionChangedEventHandler { get; set; }
+
+    #endregion INotifyCollectionChanged
 
     #endregion properties
 
