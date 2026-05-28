@@ -35,7 +35,6 @@ public class PaneViewModelFactory : IPaneViewModelFactory
     private readonly PropertiesViewModel _propertiesViewModel;
     private readonly IModifierViewStateService _modifierSvc;
     private readonly ProjectResourceTools _projectResourceTools;
-    private readonly IWatcherService _watcherService;
     private readonly IProjectEvents _projectEvents;
 
     public PaneViewModelFactory(
@@ -57,7 +56,6 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         AppScriptService appScriptService,
         ProjectResourceTools projectResourceTools,
         IModifierViewStateService modifierSvc,
-        IWatcherService watcherService,
         IProjectEvents projectEvents
         )
     {
@@ -79,7 +77,6 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         _appScriptService = appScriptService;
         _modifierSvc = modifierSvc;
         _projectResourceTools = projectResourceTools;
-        _watcherService = watcherService;
         _projectEvents = projectEvents;
     }
 
@@ -91,7 +88,7 @@ public class PaneViewModelFactory : IPaneViewModelFactory
         => _propertiesViewModel;
     public AssetBrowserViewModel AssetBrowserViewModel(AppViewModel appViewModel)
         => new(appViewModel, _projectManager, _notificationService, _gameController, _archiveManager, _settingsManager, _progressService,
-            _loggerService, _pluginService, _projectResourceTools, _watcherService);
+            _loggerService, _pluginService, _projectResourceTools);
     public TweakBrowserViewModel TweakBrowserViewModel(AppViewModel appViewModel)
         => new(appViewModel, _chunkViewmodelFactory, _settingsManager, _notificationService, _projectManager, _loggerService, _tweakDbService, _locKeyService);
     public LocKeyBrowserViewModel LocKeyBrowserViewModel() => new(_projectManager, _loggerService, _progressService, _modTools, _gameController, _archiveManager, _locKeyService);

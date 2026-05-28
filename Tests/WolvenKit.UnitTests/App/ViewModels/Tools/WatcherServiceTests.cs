@@ -11,6 +11,7 @@ using Moq;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
@@ -21,7 +22,7 @@ using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
 using Xunit;
 
-namespace Wolvenkit.Test.App.Services;
+namespace Wolvenkit.Test.App.ViewModels.Tools;
 
 /// <summary>
 /// Focused tests for WatcherService behavior introduced/changed in the large-project performance PR (#2927).
@@ -38,7 +39,7 @@ public class WatcherServiceTests : IDisposable
 {
     private readonly Mock<ILoggerService> _loggerMock;
     private readonly ProjectEvents _projectEvents;
-    private readonly WatcherService _watcher;
+    private readonly ProjectExplorerViewModel.WatcherService _watcher;
     private readonly string _tempProjectDir;
     private Cp77Project? _currentProject;
 
@@ -89,7 +90,7 @@ public class WatcherServiceTests : IDisposable
         _loggerMock = new Mock<ILoggerService>();
         _projectEvents = new ProjectEvents();
 
-        _watcher = new WatcherService(_loggerMock.Object, _projectEvents);
+        _watcher = new ProjectExplorerViewModel.WatcherService(_loggerMock.Object, _projectEvents);
 
         _tempProjectDir = Path.Combine(Path.GetTempPath(), "WatcherServiceTests_" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(_tempProjectDir);
@@ -152,7 +153,7 @@ public class WatcherServiceTests : IDisposable
         // After suspend, EnableRaisingEvents should be false (internal state)
         // We can't easily assert the private _modsWatcher here without InternalsVisibleTo or reflection.
         // The important behavioral contract: subsequent manual file drops should not immediately flood queues.
-        Assert.True(_watcher.WatcherState == WatcherState.Suspended);
+        Assert.True(_watcher.WatcherState == ProjectExplorerViewModel.WatcherState.Suspended);
     }
 
     [Fact]
@@ -678,7 +679,7 @@ public class WatcherServiceTests : IDisposable
     public void OnFilesImported_WithNullLogger_DoesNotThrow()
     {
         var events = new ProjectEvents();
-        var watcherWithNullLogger = new WatcherService(null, events);
+        var watcherWithNullLogger = new ProjectExplorerViewModel.WatcherService(null, events);
 
         var project = new Cp77Project(_tempProjectDir, "NullLoggerTest", "NullLoggerTest");
         watcherWithNullLogger.StartWatcher_AndLoadProject(project);

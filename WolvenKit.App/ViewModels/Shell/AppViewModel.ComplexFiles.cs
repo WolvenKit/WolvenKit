@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Octokit;
+using Splat;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Interaction.Options;
@@ -51,7 +52,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             : dialogModel.InkatlasFileName;
         var relativeInkatlasFilePath = GetRelativeDestPath(inkatlasFileName);
 
-        ProjectExplorerViewModel.SuspendFileWatcherStatic();
+        Locator.Current.GetService<ProjectExplorerViewModel>()?.SuspendFileWatcher();
 
         /*
          * Copy and connect .app and .ent file
@@ -179,7 +180,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         }
         finally
         {
-            ProjectExplorerViewModel.ResumeFileWatcher_AndReloadProject_Static();
+            Locator.Current.GetService<ProjectExplorerViewModel>()?.ResumeWatcher_AndReloadProject();
         }
 
         return;

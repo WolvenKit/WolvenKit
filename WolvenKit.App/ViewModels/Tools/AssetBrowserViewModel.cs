@@ -11,6 +11,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using Microsoft.EntityFrameworkCore;
+using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
@@ -72,7 +73,6 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private readonly IPluginService _pluginService;
     private readonly AppViewModel _appViewModel;
     private readonly ProjectResourceTools _projectResourceTools;
-    private readonly IWatcherService _watcherService;
     private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
 
     private bool _manuallyLoading;
@@ -91,8 +91,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         IProgressService<double> progressService,
         ILoggerService loggerService,
         IPluginService pluginService,
-        ProjectResourceTools projectResourceTools,
-        IWatcherService watcherService) : base(ToolTitle)
+        ProjectResourceTools projectResourceTools) : base(ToolTitle)
     {
         _projectManager = projectManager;
         _notificationService = notificationService;
@@ -104,7 +103,6 @@ public partial class AssetBrowserViewModel : ToolViewModel
         _loggerService = loggerService;
         _appViewModel = appViewModel;
         _projectResourceTools = projectResourceTools;
-        _watcherService = watcherService;
 
         ContentId = ToolContentId;
 
@@ -581,10 +579,10 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     private async Task InternalAddFiles(IList<IGameFile> files)
     {
-        _watcherService.Suspend();
+        Locator.Current.GetService<ProjectExplorerViewModel>()?.SuspendFileWatcher();
         await _gameController.GetController().AddToModAsync(files);
         _loggerService.Success($"Added {files.Count} files to the project.");
-        _watcherService.Resume();
+        Locator.Current.GetService<ProjectExplorerViewModel>()?.ResumeFileWatcher();
     }
 
     /// <summary>

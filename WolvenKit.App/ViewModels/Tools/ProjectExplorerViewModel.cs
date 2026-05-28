@@ -71,7 +71,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly IGameControllerFactory _gameController;
     private readonly AppViewModel _appViewModel;
     public readonly IModifierViewStateService ModifierStateService;
-    private readonly IWatcherService _projectWatcher;
+    private readonly WatcherService _projectWatcher;
     private readonly IProjectEvents _projectEvents;
 
     [ObservableProperty]
@@ -120,7 +120,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         _appViewModel = appViewModel;
 
-        _projectWatcher = Locator.Current.GetService<IWatcherService>()!;
+        _projectWatcher = new WatcherService(loggerService, projectEvents);
 
         SideInDockedMode = DockSide.Left;
 
@@ -261,6 +261,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     public DispatchedObservableCollection<FileSystemModel> FileTree => _projectWatcher.FileTree;
     public DispatchedObservableCollection<FileSystemModel> FileList => _projectWatcher.FileList;
+    public WatcherState FileWatcherState => _projectWatcher.WatcherState;
 
     /// <summary>
     /// Enable ConvertTo and ConvertFrom
@@ -940,11 +941,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         await _projectResourceTools.MoveAndRefactorAsync(relativePath, newRelativePath, prefixPath, refactor);
         _appViewModel.ReloadChangedFiles();
 
-        ResumeFileWatcher_AndReloadProject();
+        ResumeWatcher_AndReloadProject();
     }
 
-    public void CloseProject() => _projectWatcher.UnwatchProject();
+    public void ResumeFileWatcher() => _projectWatcher.Resume();
 
+    public void UnwatchProject() => _projectWatcher.UnwatchProject();
+
+    public void CloseProject() => _projectWatcher.UnwatchProject();
 
     #endregion general commands
 
@@ -1883,13 +1887,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
     }
 
-    public static void SuspendFileWatcherStatic() => s_instance?.SuspendFileWatcher();
-    public static void ResumeFileWatcher_AndReloadProject_Static() => s_instance?.ResumeFileWatcher_AndReloadProject();
-
     /// <summary>
     /// Reload the active project from disk to ensure consistency.
     /// </summary>
-    public void ResumeFileWatcher_AndReloadProject()
+    public void ResumeWatcher_AndReloadProject()
     {
         try
         {
