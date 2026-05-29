@@ -125,8 +125,6 @@ public partial class ProjectExplorerViewModel
         public void ResumeWatcher_AndLoadProject()
         {
             Locked_LoadModProjectFileStructure();
-            // StartBackgroundPolling() is intentionally called from inside LoadModProjectFileStructure
-            // after the tree has been rebuilt. Do NOT call it again here.
             Resume();
         }
 
