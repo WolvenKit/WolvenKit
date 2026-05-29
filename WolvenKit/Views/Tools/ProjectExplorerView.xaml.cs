@@ -318,45 +318,6 @@ namespace WolvenKit.Views.Tools
             TreeGridFlat.View.Refresh();
         }
 
-        /// <summary>
-        /// Recursively applies expansion state from FileSystemModel.IsExpanded to the TreeNodes.
-        /// Only iterates directory nodes using Where for efficiency.
-        /// </summary>
-        private void ApplyExpansionState(IEnumerable<TreeNode> nodes)
-        {
-            // var directoryNodes = nodes
-            //     .Where(n => n.Item is FileSystemModel model && model.IsDirectory)
-            //     .ToList();
-            //
-            // int expanded = 0, collapsed = 0;
-            // int shouldBeExpanded = 0;
-            //
-            // foreach (var node in directoryNodes)
-            // {
-            //     if (node.Item is FileSystemModel model)
-            //     {
-            //         if (model.IsExpanded)
-            //         {
-            //             shouldBeExpanded++;
-            //             TreeGrid.ExpandNode(node);
-            //             expanded++;
-            //         }
-            //         else
-            //         {
-            //             TreeGrid.CollapseNode(node);
-            //             collapsed++;
-            //         }
-            //     }
-            //
-            //     if (node.HasChildNodes)
-            //     {
-            //         ApplyExpansionState(node.ChildNodes);
-            //     }
-            // }
-            //
-            // Console.WriteLine($"[Expansion] ApplyExpansionState walked {directoryNodes.Count} dir nodes (of which {shouldBeExpanded} had IsExpanded=true in model) → did {expanded} ExpandNode, {collapsed} CollapseNode");
-        }
-
         private static (string Text, bool EnableRefactoring) ShowRenameDialog(string input, bool showCheckbox = false)
         {
             var dialog = new RenameDialog(showCheckbox);
@@ -399,7 +360,6 @@ namespace WolvenKit.Views.Tools
 
         private void IndicateProjectLoading() => Dispatcher.Invoke(() =>
         {
-            Console.WriteLine("[Expansion] IndicateProjectLoading - _isFirstLoad reset to true, grids hidden (preparing for new tree)");
             TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
             TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
             LoadingText.SetCurrentValue(VisibilityProperty, Visibility.Visible);
@@ -408,13 +368,9 @@ namespace WolvenKit.Views.Tools
         // Run inside Dispatcher to avoid exception on startup
         private void ResetUiElements(bool isFlatModeEnabled) => Dispatcher.Invoke(() =>
         {
-            Console.WriteLine("[Expansion] Resetting UI");
-
             _currentFolderQuery = "";
-            // Set search bar to empty if it wasn't
             PESearchBar?.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, "");
 
-            // now handle the grids
             if (TreeGridFlat.View is not null)
             {
                 TreeGridFlat.ClearFilters();
@@ -437,54 +393,20 @@ namespace WolvenKit.Views.Tools
             // Re-apply expansion state from the models after a project load/refresh.
             // We deliberately run this on Background priority and guard it for scale.
             var dispatcher = Dispatcher;
+
             dispatcher.BeginInvoke(DispatcherPriority.Background, () =>
             {
-                try
+                LoadingText.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+
+                if (isFlatModeEnabled)
                 {
-                    var nodeCount = TreeGrid.View?.Nodes?.Count ?? 0;
-                    Console.WriteLine($"[Expansion] Deferred expansion apply starting (View.Nodes.Count={nodeCount})");
-
-                    bool isLargeTree = nodeCount > 2000;
-
-                    if (isLargeTree)
-                    {
-                        Console.WriteLine("[Expansion] Large tree detected — skipping manual ApplyExpansionState to avoid layout crash. Relying on ExpandStateMappingName.");
-                    }
-                    else if (nodeCount > 0)
-                    {
-                        ApplyExpansionState(TreeGrid.View!.Nodes);
-                        Console.WriteLine("[Expansion] ApplyExpansionState completed");
-                    }
-
-                    // Now safe to hide loading text and show the tree.
-                    LoadingText.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-
-                    if (isFlatModeEnabled)
-                    {
-                        TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-                    }
-                    else
-                    {
-                        TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-                    }
+                    TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Visible);
                 }
-                catch (Exception ex)
+                else
                 {
-                    Console.WriteLine($"[Expansion] Error during deferred expansion apply: {ex.Message}");
-                    LoadingText.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-                    if (isFlatModeEnabled)
-                    {
-                        TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-                    }
-                    else
-                    {
-                        TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-                    }
+                    TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Visible);
                 }
             });
-
-            // Flat grid visibility is also deferred for consistency on large loads.
-            TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
         });
 
         private void TreeGrid_OnNodeExpanding(object sender, NodeExpandingEventArgs e)
@@ -708,30 +630,18 @@ namespace WolvenKit.Views.Tools
             {
                 var shouldAutoExpand = _settingsManager.AutoExpandAllFoldersOnLaunch;
                 var nodeCount = TreeGrid.View?.Nodes?.Count ?? 0;
-                Console.WriteLine($"[Expansion] NodeCollectionChanged RESET - Nodes.Count={nodeCount}, AutoExpandAll={shouldAutoExpand}");
 
                 // TODO: Check if this can ever be true here. Otherwise find a way to pass "isFirstLoad" to here.
                 var isFreshProject = ViewModel.ExpansionStateDictionary.AreKeysNull();
 
                 if (isFreshProject && nodeCount != 0 && shouldAutoExpand)
                 {
-                    // Only do the nuclear ExpandAll on small trees + first load + setting.
-                    // On 10k+ dir projects this would also cause massive layout work.
-                    if (nodeCount < 2000)
-                    {
-                        TreeGrid.ExpandAllNodes();
-                        Console.WriteLine("[Expansion] Performed ExpandAllNodes due to isFreshLoad + AutoExpandAll setting");
-                    }
-                    else
-                    {
-                        Console.WriteLine("[Expansion] Large tree on RESET — skipping ExpandAllNodes to protect layout.");
-                    }
+                    TreeGrid.ExpandAllNodes();
                 }
             }
 
             if (e.Action is NotifyCollectionChangedAction.Add && e.NewItems is not null)
             {
-                int expandedFromAdd = 0;
                 foreach (var item in e.NewItems)
                 {
                     if (item is not TreeNode { Item: FileSystemModel { IsDirectory: true } fileSystemModel } treeNode)
@@ -742,12 +652,7 @@ namespace WolvenKit.Views.Tools
                     if (fileSystemModel.IsExpanded || ViewModel.GetExpansionStateOrNull(fileSystemModel.RawRelativePath) is true)
                     {
                         TreeGrid.ExpandNode(treeNode);
-                        expandedFromAdd++;
                     }
-                }
-                if (expandedFromAdd > 0)
-                {
-                    Console.WriteLine($"[Expansion] NodeCollectionChanged ADD - expanded {expandedFromAdd} directory nodes from model.IsExpanded / dict");
                 }
             }
 
@@ -884,10 +789,7 @@ namespace WolvenKit.Views.Tools
             }
             else
             {
-                // expand all
                 TreeGrid.ExpandAllNodes();
-
-                // filter programmatically
                 TreeGrid.View.RefreshFilter();
             }
         }
@@ -919,15 +821,13 @@ namespace WolvenKit.Views.Tools
 
         private async void RowDragDropController_Drop(object sender, TreeGridRowDropEventArgs e)
         {
-            // this should all be somewhere else, right?
             try
             {
-                e.Handled = _isDragging; // which should be true at this point
+                e.Handled = _isDragging;
                 if (e.TargetNode.Item is not FileSystemModel targetFile || ViewModel is not ProjectExplorerViewModel vm)
                 {
                     return;
                 }
-
 
                 var selectedFilePaths =
                     vm.SelectedItems?.OfType<FileSystemModel>().Select(fsm => fsm.FullName).ToList() ?? [];
