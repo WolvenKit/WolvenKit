@@ -154,7 +154,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             {
                 if (project != null)
                 {
-                    StartWatcher_AndLoadProject(project);
+                    var isReload = project.FileDirectory == _activeProject?.FileDirectory;
+                    StartWatcher_AndLoadProject(project, isReload);
                 }
             });
     }
@@ -184,14 +185,15 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         CanScrollToOpenFile = HasSelectedItem && _appViewModel.ActiveDocument is not null;
 
     /// <summary>
-    /// Loads a new project and starts watching it.
+    /// Loads a project and starts watching it.
+    /// If isReload is true then we won't show `Loading` in the files pane.
     /// </summary>
     /// <param name="activeProject"></param>
-    public void StartWatcher_AndLoadProject(Cp77Project activeProject)
+    /// <param name="isReload"></param>
+    public void StartWatcher_AndLoadProject(Cp77Project activeProject, bool isReload)
     {
-        var freshLoad = ActiveProject != activeProject;
         var projectName = Path.GetFileNameWithoutExtension(activeProject.Location);
-        _loggerService.Info($"[Expansion] StartWatcher_AndLoadProject for '{projectName}' (freshLoad={freshLoad}, previous ActiveProject={(ActiveProject != null ? Path.GetFileNameWithoutExtension(ActiveProject.Location) : "null")})");
+        _loggerService.Info($"[Expansion] StartWatcher_AndLoadProject for '{projectName}' (isReload={isReload}, previous ActiveProject={(ActiveProject != null ? Path.GetFileNameWithoutExtension(ActiveProject.Location) : "null")})");
 
         // IMPORTANT: Save the *current* (old) project's live expansion state from FileList
         // BEFORE we load the persisted dict for the incoming project. Otherwise SaveProjectState()
@@ -202,7 +204,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
 
         LoadExpansionStateDictionary(activeProject);
-        EnableLoadingMode();
+        EnableLoadingMode(isReload);
         ActiveProject = null;
         UnwatchProject();
 
@@ -220,9 +222,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             finally
             {
                 RestoreProjectState(ActiveProject!);
-                //DisableLoadingMode();
 
-                if (freshLoad)
+                if (!isReload)
                 {
                     CheckForOneDriveInPath();
                 }
@@ -233,11 +234,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <summary>
     /// Reload the active project from disk to ensure consistency.
     /// </summary>
-    public void ResumeWatcher_AndReloadProject() => StartWatcher_AndLoadProject(ActiveProject!);
+    public void ResumeWatcher_AndReloadProject() => StartWatcher_AndLoadProject(ActiveProject!, true);
 
     private Guid _loadingCompletion = Guid.NewGuid();
 
-    private void EnableLoadingMode()
+    private void EnableLoadingMode(bool isReload)
     {
         _loadingCompletion = DispatcherHelper.StartRepeatingAction(
             () =>
@@ -250,13 +251,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         );
 
         _projectWatcher.CompletionTimer = _loadingCompletion;
-        OnSetLoading?.Invoke(this, true);
+        OnSetLoading?.Invoke(this, (true, isReload));
     }
 
     private void DisableLoadingMode()
     {
         _progressService.IsIndeterminate = false;
-        OnSetLoading?.Invoke(this, false);
+        OnSetLoading?.Invoke(this, (false, false));
     }
 
 
@@ -1801,7 +1802,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     #endregion
 
     public event EventHandler? OnToggleFlatMode;
-    public event EventHandler<bool>? OnSetLoading;
+
+    /// <summary>
+    /// Event for `isLoading` and `isReload`.
+    /// The latter will be true if the user clicked the "reload" button.
+    /// It will be false if the user has loaded a fresh project or changed projects.
+    /// </summary>
+    public event EventHandler<(bool, bool)>? OnSetLoading;
 
     [RelayCommand(CanExecute = nameof(CanOpenInFileExplorer))]
     private void ToggleFlatMode() => OnToggleFlatMode?.Invoke(this, EventArgs.Empty);

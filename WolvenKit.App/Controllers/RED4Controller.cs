@@ -149,8 +149,31 @@ public class RED4Controller : ObservableObject, IGameController
         }
     }
 
+    private Guid _loadingCompletion = Guid.NewGuid();
+
+    private void EnableLoadingMode()
+    {
+        _loadingCompletion = DispatcherHelper.StartRepeatingAction(
+            () =>
+            {
+                _progressService.IsIndeterminate = true;
+                _progressService.Status = EStatus.Running;
+            },
+            TimeSpan.FromMilliseconds(100),
+            DisableLoadingMode
+        );
+    }
+
+    private void DisableLoadingMode()
+    {
+        _progressService.IsIndeterminate = false;
+        DispatcherHelper.StopRepeatingAction(_loadingCompletion);
+    }
+
     private Task LoadArchiveManager()
     {
+        EnableLoadingMode();
+
         return Task.Run(() =>
         {
             var thread = new Thread(() =>
@@ -178,6 +201,7 @@ public class RED4Controller : ObservableObject, IGameController
                 finally
                 {
                     _loggerService.Success("Finished loading Archive Manager.");
+                    DisableLoadingMode();
                 }
 
                 LoadCustomHashes();

@@ -17,6 +17,8 @@ using ReactiveUI;
 using Serilog.Events;
 using Splat;
 using WolvenKit.App;
+using WolvenKit.App.Helpers;
+using WolvenKit.App.Models;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
@@ -35,8 +37,8 @@ namespace WolvenKit.Views.Tools
         private ScrollViewer _scrollViewer;
         private bool _autoscroll = true;
 
-        public ObservableCollection<LogEntry> LogEntries { get; set; } = new();
-        public ObservableCollection<LogEntry> FilteredLogEntries { get; set; } = new();
+        public DispatchedObservableCollection<LogEntry> LogEntries { get; set; } = new();
+        public DispatchedObservableCollection<LogEntry> FilteredLogEntries { get; set; } = new();
 
         public LogView()
         {
@@ -74,7 +76,6 @@ namespace WolvenKit.Views.Tools
 
         private void LogEntries_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-           
             var filtered = LogEntries.Where(log =>
             {
                 return ViewModel is null || log.Level switch
@@ -88,8 +89,11 @@ namespace WolvenKit.Views.Tools
                 };
             });
 
-            FilteredLogEntries.Clear();
-            FilteredLogEntries.AddRange(filtered);
+            DispatcherHelper.RunOnMainThread(() =>
+            {
+                FilteredLogEntries.Clear();
+                FilteredLogEntries.AddRange(filtered);
+            });
         }
 
         private void ScrollViewer_Loaded(object sender, RoutedEventArgs e) => _scrollViewer = (ScrollViewer)sender;
@@ -136,11 +140,13 @@ namespace WolvenKit.Views.Tools
             var message = item.RenderMessage();
             if (item.Properties.TryGetValue(Core.Constants.InfoCode, out var infoCodeObj) && infoCodeObj is ScalarValue { Value: int infoCode })
             {
-                LogEntries.Add(new LogEntry(level, $"[{item.Timestamp.LocalDateTime}] [{level,-9}] {message}", LogCodeHelper.GetUrl(infoCode), brush));
+                DispatcherHelper.RunOnMainThread(() =>
+                LogEntries.Add(new LogEntry(level, $"[{item.Timestamp.LocalDateTime}] [{level,-9}] {message}", LogCodeHelper.GetUrl(infoCode), brush)));
             }
             else
             {
-                LogEntries.Add(new LogEntry(level, $"[{item.Timestamp.LocalDateTime}] [{level,-9}] {message}", null, brush));
+                DispatcherHelper.RunOnMainThread(() =>
+                LogEntries.Add(new LogEntry(level, $"[{item.Timestamp.LocalDateTime}] [{level,-9}] {message}", null, brush)));
             }
 
             if (_autoscroll)
@@ -176,7 +182,7 @@ namespace WolvenKit.Views.Tools
 
         private void OpenLogFolder_Click(object sender, RoutedEventArgs e)
         {
-            // regular click: open log folder 
+            // regular click: open log folder
             if (!ModifierViewStateService.IsShiftBeingHeld)
             {
                 Process.Start(new ProcessStartInfo(ISettingsManager.GetLogsDir()) { UseShellExecute = true });

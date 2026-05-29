@@ -15,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using DynamicData.Binding;
 using HandyControl.Data;
+using HandyControl.Tools.Extension;
 using MahApps.Metro.Controls;
 using ReactiveUI;
 using Splat;
@@ -64,7 +65,6 @@ namespace WolvenKit.Views.Tools
 
         private string _currentFolderQuery = "";
         private bool _isDragging;
-        private bool _isFirstLoad = true;
         private ISettingsManager _settingsManager;
         private CancellationTokenSource _deferRefreshTokenSource = new();
 
@@ -239,42 +239,75 @@ namespace WolvenKit.Views.Tools
             this.ExecuteWhenLoaded(() => IndicateProjectLoading());
         }
 
-        private async void StartLoading()
+        /// <summary>
+        /// Helper method for starting `InitiateLoadingUntilCancellation` method.
+        /// </summary>
+        private async Task StartLoading(bool isFirstLoad)
         {
             _deferRefreshTokenSource?.Cancel();
             _deferRefreshTokenSource = new CancellationTokenSource();
 
-            await InitiateLoadingUntilCancellation(_deferRefreshTokenSource.Token);
+            await InitiateLoadingUntilCancellation(_deferRefreshTokenSource.Token, isFirstLoad);
         }
 
-        private Task InitiateLoadingUntilCancellation(CancellationToken deferRefreshToken)
+        /// <summary>
+        /// Does the following steps in a specific timing order to ensure UI consistency:
+        ///     1. Starts a `DeferRefresh` cycle to prevent the `TreeGrid` from overreacting
+        ///        to batches of changes to its datasource, causing performance issues and
+        ///        other problems. Within this cycle it performs the remaining steps.
+        ///     2. Displays "Loading" in the tree/list pane and hides the tree views.
+        ///        (via `IndicateProjectLoading`) if _isFirstLoad is true.
+        ///     3. Waits until the `deferRefreshToken` is cancelled to proceed.
+        ///        (This will be cancelled when `SetLoading(false)` is called by the
+        ///        ViewModel upon the completion of WatcherService rebuilding the file tree
+        ///        and populates the datasource of the `TreeGrid` with the new nodes
+        ///        when a new project has been loaded or existing one refreshed.
+        ///     4. Finally, `ResetUiElements` is called, which refreshes the tree views
+        ///        and restores the state of the UI to normal use.
+        ///
+        /// </summary>
+        /// <param name="deferRefreshToken"></param>
+        /// <returns></returns>
+        private Task InitiateLoadingUntilCancellation(CancellationToken deferRefreshToken, bool isFirstLoad)
         {
             using (TreeGrid.View.DeferRefresh(TreeViewRefreshMode.DeferRefresh))
             {
-                IndicateProjectLoading();
+                // Only show "Loading" if switching projects or loading the first one after
+                // a fresh launch of the app.
+                if (isFirstLoad)
+                {
+                    IndicateProjectLoading();
+                }
 
                 var tcs = new TaskCompletionSource<bool>();
 
                 DispatcherHelper.WaitUntilCancelled(deferRefreshToken, () =>
                 {
                     ResetUiElements(ViewModel?.IsFlatModeEnabled ?? false);
-                    tcs.TrySetResult(true);
                 });
 
                 return tcs.Task;
             }
         }
 
-        private void SetLoading(object sender, bool isLoading)
+        private bool _isLoading = false;
+
+        /// <summary>
+        /// Called by the ViewModel when the View should show "Loading" on the file pane.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SetLoading(object sender, (bool isLoading, bool isReload) e)
         {
-            if (isLoading)
+            if (e.isLoading && !_isLoading)
             {
-                StartLoading();
+                _isLoading = true;
+                _ = StartLoading(!e.isReload);
             }
-            else
+            else if (!e.isLoading)
             {
+                _isLoading = false;
                _deferRefreshTokenSource?.Cancel();
-               _isFirstLoad = false;
             }
         }
 
@@ -291,37 +324,37 @@ namespace WolvenKit.Views.Tools
         /// </summary>
         private void ApplyExpansionState(IEnumerable<TreeNode> nodes)
         {
-            var directoryNodes = nodes
-                .Where(n => n.Item is FileSystemModel model && model.IsDirectory)
-                .ToList();
-
-            int expanded = 0, collapsed = 0;
-            int shouldBeExpanded = 0;
-
-            foreach (var node in directoryNodes)
-            {
-                if (node.Item is FileSystemModel model)
-                {
-                    if (model.IsExpanded)
-                    {
-                        shouldBeExpanded++;
-                        TreeGrid.ExpandNode(node);
-                        expanded++;
-                    }
-                    else
-                    {
-                        TreeGrid.CollapseNode(node);
-                        collapsed++;
-                    }
-                }
-
-                if (node.HasChildNodes)
-                {
-                    ApplyExpansionState(node.ChildNodes);
-                }
-            }
-
-            Console.WriteLine($"[Expansion] ApplyExpansionState walked {directoryNodes.Count} dir nodes (of which {shouldBeExpanded} had IsExpanded=true in model) → did {expanded} ExpandNode, {collapsed} CollapseNode");
+            // var directoryNodes = nodes
+            //     .Where(n => n.Item is FileSystemModel model && model.IsDirectory)
+            //     .ToList();
+            //
+            // int expanded = 0, collapsed = 0;
+            // int shouldBeExpanded = 0;
+            //
+            // foreach (var node in directoryNodes)
+            // {
+            //     if (node.Item is FileSystemModel model)
+            //     {
+            //         if (model.IsExpanded)
+            //         {
+            //             shouldBeExpanded++;
+            //             TreeGrid.ExpandNode(node);
+            //             expanded++;
+            //         }
+            //         else
+            //         {
+            //             TreeGrid.CollapseNode(node);
+            //             collapsed++;
+            //         }
+            //     }
+            //
+            //     if (node.HasChildNodes)
+            //     {
+            //         ApplyExpansionState(node.ChildNodes);
+            //     }
+            // }
+            //
+            // Console.WriteLine($"[Expansion] ApplyExpansionState walked {directoryNodes.Count} dir nodes (of which {shouldBeExpanded} had IsExpanded=true in model) → did {expanded} ExpandNode, {collapsed} CollapseNode");
         }
 
         private static (string Text, bool EnableRefactoring) ShowRenameDialog(string input, bool showCheckbox = false)
@@ -366,7 +399,6 @@ namespace WolvenKit.Views.Tools
 
         private void IndicateProjectLoading() => Dispatcher.Invoke(() =>
         {
-            _isFirstLoad = true;
             Console.WriteLine("[Expansion] IndicateProjectLoading - _isFirstLoad reset to true, grids hidden (preparing for new tree)");
             TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
             TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
@@ -676,16 +708,19 @@ namespace WolvenKit.Views.Tools
             {
                 var shouldAutoExpand = _settingsManager.AutoExpandAllFoldersOnLaunch;
                 var nodeCount = TreeGrid.View?.Nodes?.Count ?? 0;
-                Console.WriteLine($"[Expansion] NodeCollectionChanged RESET - Nodes.Count={nodeCount}, _isFirstLoad={_isFirstLoad}, AutoExpandAll={shouldAutoExpand}");
+                Console.WriteLine($"[Expansion] NodeCollectionChanged RESET - Nodes.Count={nodeCount}, AutoExpandAll={shouldAutoExpand}");
 
-                if (_isFirstLoad && nodeCount != 0 && shouldAutoExpand)
+                // TODO: Check if this can ever be true here. Otherwise find a way to pass "isFirstLoad" to here.
+                var isFreshProject = ViewModel.ExpansionStateDictionary.AreKeysNull();
+
+                if (isFreshProject && nodeCount != 0 && shouldAutoExpand)
                 {
                     // Only do the nuclear ExpandAll on small trees + first load + setting.
                     // On 10k+ dir projects this would also cause massive layout work.
                     if (nodeCount < 2000)
                     {
                         TreeGrid.ExpandAllNodes();
-                        Console.WriteLine("[Expansion] Performed ExpandAllNodes due to _isFirstLoad + AutoExpandAll setting");
+                        Console.WriteLine("[Expansion] Performed ExpandAllNodes due to isFreshLoad + AutoExpandAll setting");
                     }
                     else
                     {

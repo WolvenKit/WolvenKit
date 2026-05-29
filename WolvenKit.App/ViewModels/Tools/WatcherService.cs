@@ -124,7 +124,7 @@ public partial class ProjectExplorerViewModel
                 .DisposeWith(_disposables);
         }
 
-        public void ResumeWatcher_AndReloadProject()
+        public void ResumeWatcher_AndLoadProject()
         {
             Locked_LoadModProjectFileStructure();
             // StartBackgroundPolling() is intentionally called from inside LoadModProjectFileStructure
@@ -135,15 +135,9 @@ public partial class ProjectExplorerViewModel
 
         public void StartWatcher_AndLoadProject(Cp77Project project, Action? completion = null)
         {
-            if (_projectDirectory.Length > 0 && project.FileDirectory != _projectDirectory)
-            {
-                _loggerService?.Warning($"Internal warning: project {_projectDirectory} not unloaded before loading a new project. This is a minor bug, please report to the dev team.");
-                UnwatchProject();
-            }
-
             _projectDirectory = project.FileDirectory;
             _projectFileSystemModel = new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
-            ResumeWatcher_AndReloadProject();
+            ResumeWatcher_AndLoadProject();
         }
 
         public void Resume()
