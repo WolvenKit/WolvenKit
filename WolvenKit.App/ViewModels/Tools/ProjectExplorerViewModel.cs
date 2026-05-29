@@ -152,19 +152,21 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(project =>
             {
-                if (project != null)
+                if (project == null)
                 {
-                    var isReload = project.FileDirectory == _activeProject?.FileDirectory;
-
-                    // If a modal or overlay is currently visible (e.g. HomePage, settings, etc.),
-                    // defer the (potentially very expensive) watcher + tree build until after the
-                    // overlay has finished fading out. This prevents the 0.3s OverlayFadeOut animation
-                    // from becoming extremely choppy on large projects.
-                    _appViewModel.RunAfterModalClosed(() =>
-                    {
-                        StartWatcher_AndLoadProject(project, isReload);
-                    });
+                    return;
                 }
+
+                var isReload = project.FileDirectory == _activeProject?.FileDirectory;
+
+                // If a modal or overlay is currently visible (e.g. HomePage, settings, etc.),
+                // defer the (potentially very expensive) watcher + tree build until after the
+                // overlay has finished fading out. This prevents the 0.3s OverlayFadeOut animation
+                // from becoming extremely choppy on large projects.
+                _appViewModel.RunAfterModalClosed(() =>
+                {
+                    StartWatcher_AndLoadProject(project, isReload);
+                });
             });
     }
 
@@ -207,8 +209,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             _appViewModel.RunAfterModalClosed(() => StartWatcher_AndLoadProject(activeProject, isReload));
             return;
         }
-
-        var projectName = Path.GetFileNameWithoutExtension(activeProject.Location);
 
         // IMPORTANT: Save the *current* (old) project's live expansion state from FileList
         // BEFORE we load the persisted dict for the incoming project. Otherwise SaveProjectState()
@@ -1117,7 +1117,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         if (!IsShiftKeyPressed)
         {
-            await ConvertToJsonInternal(selection);
+            _deferredRefreshCts = new CancellationTokenSource();
+            if (BeginDeferredRefreshContext == null)
+            {
+                throw new Exception("Rendering context does not exist.");
+            }
+
+            await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertToJsonInternal(selection));
+
             return;
         }
 
@@ -1129,16 +1136,25 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         var convertSelection = FileList
             .Where(x => selectedItemPaths.Contains(x.FullName) && File.Exists(x.FullName)).ToList();
 
-        await ConvertFromJsonInternal(convertSelection);
+        _deferredRefreshCts = new CancellationTokenSource();
+        if (BeginDeferredRefreshContext == null)
+        {
+            throw new Exception("Rendering context does not exist.");
+        }
+
+        await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertToJsonInternal(convertSelection));
     }
+
+    private CancellationTokenSource _deferredRefreshCts = new();
+
+    public Func<CancellationToken, Task, Task>? BeginDeferredRefreshContext { get; set; }
 
     private async Task ConvertToJsonInternal(IEnumerable<FileSystemModel> selection)
     {
-        _projectWatcher.Suspend();
+        SuspendFileWatcher();
 
         await Task.Run(async () =>
         {
-            // === Phase 1: Collect all files ===
             var allFiles = selection
                 .SelectMany(item =>
                 {
@@ -1156,7 +1172,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 return;
             }
 
-            // === Phase 2: Setup ===
             var validExtensions = Enum.GetNames<ERedExtension>()
                 .Select(x => x.ToLowerInvariant())
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
@@ -1166,7 +1181,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             int progress = 0;
             _progressService.Report(0);
 
-            // === Phase 3: Parallel processing ===
             await Parallel.ForEachAsync(allFiles,
                 new ParallelOptions
                 {
@@ -1191,7 +1205,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                     {
                         var rawOutPath = Path.Combine(
                             ActiveProject.NotNull().RawDirectory,
-                            ActiveProject!.GetRelativePath(file));
+                            ActiveProject.NotNull().GetRelativePath(file));
 
                         var outDirectoryPath = Path.GetDirectoryName(rawOutPath);
 
@@ -1203,12 +1217,18 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                                 file,
                                 new DirectoryInfo(outDirectoryPath));
 
-                            // Add the created JSON file to the result list
                             var jsonFilePath = rawOutPath + ".json";
 
                             if (File.Exists(jsonFilePath))
                             {
                                 var jsonFileInfo = new FileInfo(jsonFilePath);
+
+                                if (_projectWatcher.FileLookup.ContainsKey(jsonFilePath))
+                                {
+                                    // don't add a duplicate file to the trees
+                                    return;
+                                }
+
                                 createdJsonFiles.Add(jsonFileInfo);
                             }
                         }
@@ -1228,6 +1248,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             // Return list of created JSON files
             _projectEvents.PublishFilesImported(new FilesImportedMessage([],[.. createdJsonFiles.ToList()]));
         });
+
+        await _deferredRefreshCts.CancelAsync();
+        _deferredRefreshCts.Dispose();
     }
 
     /// <summary>
@@ -1631,7 +1654,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     {
         if (!IsShiftKeyPressed)
         {
-            await ConvertFromJsonInternal(SelectedItems!.OfType<FileSystemModel>().Where(IsInRawFolder));
+            _deferredRefreshCts = new CancellationTokenSource();
+            if (BeginDeferredRefreshContext == null)
+            {
+                throw new Exception("Rendering context does not exist.");
+            }
+
+            await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertFromJsonInternal(SelectedItems!.OfType<FileSystemModel>().Where(IsInRawFolder)));
+
             return;
         }
 
@@ -1642,7 +1672,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             .Where(IsInArchiveFolder)
             .Where(x => selectedItemPaths.Contains(x.GameRelativePath)).ToList();
 
-        await ConvertToJsonInternal(convertSelection);
+        _deferredRefreshCts = new CancellationTokenSource();
+        if (BeginDeferredRefreshContext == null)
+        {
+            throw new Exception("Rendering context does not exist.");
+        }
+
+        await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertFromJsonInternal(convertSelection));
     }
 
     // TODO: Refactor this method to use PublishFilesImported rather than relying on WatcherService.

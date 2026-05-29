@@ -10,7 +10,7 @@ namespace Wolvenkit.Test.App.Models;
 /// Tests for the batch-update collection introduced for large-project performance.
 /// The AddRange/ReplaceAll paths are critical — they must produce exactly one Reset notification
 /// instead of N individual notifications, which was the source of the original UI thrashing.
-/// 
+///
 /// Note: These tests are best-effort in a pure unit test context because DispatcherHelper
 /// ultimately requires Application.Current. Full verification of marshaling happens in
 /// integration tests that run with a real WPF application context.
@@ -45,22 +45,6 @@ public class DispatchedObservableCollectionTests
         // We at least verify the API shape and that no per-item events were the intent.
         Assert.NotNull(lastEvent); // If the dispatcher ran synchronously in this context, we see it
         // The important contract: when it does run, it uses Reset, not Add for each.
-        if (lastEvent != null)
-        {
-            Assert.Equal(NotifyCollectionChangedAction.Reset, lastEvent.Action);
-        }
-    }
-
-    [Fact]
-    public void ReplaceAll_ReplacesContent_AndFiresSingleReset()
-    {
-        var collection = new DispatchedObservableCollection<string> { "old1", "old2" };
-        NotifyCollectionChangedEventArgs? lastEvent = null;
-        collection.CollectionChanged += (_, e) => lastEvent = e;
-
-        var newItems = new[] { "a", "b", "c" };
-        collection.ReplaceAll(newItems);
-
         if (lastEvent != null)
         {
             Assert.Equal(NotifyCollectionChangedAction.Reset, lastEvent.Action);

@@ -94,7 +94,7 @@ namespace WolvenKit.Views.Tools
             TreeGrid.NodeCollapsing += TreeGrid_OnNodeCollapsing;
             TreeGrid.NodeCollapsed += TreeGrid_OnNodeCollapsed;
 
-            TreeGrid.NotificationSubscriptionMode = NotificationSubscriptionMode.None;
+            TreeGrid.NotificationSubscriptionMode = NotificationSubscriptionMode.CollectionChange;
 
             this.WhenActivated(disposables =>
             {
@@ -230,6 +230,7 @@ namespace WolvenKit.Views.Tools
 
                 ViewModel.OnToggleFlatMode += OnToggleFlatMode;
                 ViewModel.OnSetLoading += SetLoading;
+                ViewModel.BeginDeferredRefreshContext += BeginDeferredRefreshContext;
 
                 ViewModel.WhenAnyValue(x => x.FileList)
                     .Subscribe(_ => RefreshFlatViewIfNeeded())
@@ -287,6 +288,26 @@ namespace WolvenKit.Views.Tools
                 });
 
                 return tcs.Task;
+            }
+        }
+
+        private async Task BeginDeferredRefreshContext(CancellationToken deferRefreshToken, Task doBeforeRefresh)
+        {
+            CompositeDisposable disposables = [
+                TreeGridFlat.View.DeferRefresh(TreeViewRefreshMode.DeferRefresh),
+                TreeGrid.View.DeferRefresh(TreeViewRefreshMode.DeferRefresh)
+            ];
+
+            using (disposables)
+            {
+                await doBeforeRefresh;
+
+                DispatcherHelper.WaitUntilCancelled(deferRefreshToken, () =>
+                {
+                    TreeGrid.View.Refresh();
+                    TreeGridFlat.View.Filter = IsFileInFlat;
+                    TreeGridFlat.View.Refresh();
+                });
             }
         }
 

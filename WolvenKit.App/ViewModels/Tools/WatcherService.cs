@@ -63,6 +63,9 @@ public partial class ProjectExplorerViewModel
         private readonly ConcurrentQueue<FileSystemEventArgsWrapper> _batchFileChanges = new();
 
         private readonly ConcurrentDictionary<string, FileSystemModel> _fileLookup = new();
+
+        public ConcurrentDictionary<string, FileSystemModel> FileLookup => _fileLookup;
+
         private readonly ConcurrentDictionary<string, FileSystemEventArgsWrapper> _fileProcessing = new();
 
         // TODO: This is never read from, can it be cleaned out?
@@ -148,14 +151,25 @@ public partial class ProjectExplorerViewModel
             _watcherState = WatcherState.Active;
         }
 
+        /// <summary>
+        ///  Does the following:
+        ///     1. Suspend the OS file watcher.
+        ///     2. Sets _watcherState to `noProject`
+        ///     3. Clears the _projectDirectory & _projectFileSystemModel vars.
+        ///     4. Stops background polling for things added to the update batches.
+        ///     5. Clears lookup caches, batches, and data models.
+        ///
+        /// This must be called before performing anything that sends a Reset for
+        /// FileList or FileTree collections.
+        /// </summary>
         public void UnwatchProject()
         {
             Suspend();
             _watcherState = WatcherState.NoProject;
             _projectDirectory = "";
+            _projectFileSystemModel = null;
             _loggerService?.Debug($"Closing the current mod and clearing file lists and background tasks.");
             StopBackgroundPolling();
-            Clear();
         }
 
         private static readonly List<string> s_backupFilePartials =
@@ -163,6 +177,14 @@ public partial class ProjectExplorerViewModel
             "_tmp", ".bak", ".bkp"
         ];
 
+        /// <summary>
+        /// Processes file system events saved to the _fileChanges queue.
+        /// The only ones Update cares about in that queue are change/rename/remove.
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <exception cref="Exception"></exception>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        /// <exception cref="TodoException"></exception>
         private void Update(CancellationToken cancellationToken)
         {
             while (true)
@@ -192,8 +214,6 @@ public partial class ProjectExplorerViewModel
                     {
                         case WatcherChangeTypes.Created:
                             throw new Exception($"Tried to create file ${e.FullPath} outside of batch update.");
-                            // Create(e);
-                            // break;
                         case WatcherChangeTypes.Deleted:
                             Delete(e);
                             break;
@@ -323,17 +343,6 @@ public partial class ProjectExplorerViewModel
             }
         }
 
-        private void Clear()
-        {
-            _loggerService?.Debug("Clearing all file changes and project data sources.");
-
-            _fileChanges.Clear();
-            _batchFileChanges.Clear();
-            _fileLookup.Clear();
-            FileTree.Clear();
-            FileList.Clear();
-        }
-
         private void LoadModProjectFileStructure()
         {
             if (_projectFileSystemModel == null)
@@ -341,6 +350,19 @@ public partial class ProjectExplorerViewModel
                 // On first app launch, there's no project yet.
                 return;
             }
+
+            void Clear()
+            {
+                _loggerService?.Debug("Clearing all file changes and project data sources.");
+
+                _fileChanges.Clear();
+                _batchFileChanges.Clear();
+                _fileLookup.Clear();
+                FileTree.Clear();
+                FileList.Clear();
+            }
+
+            Clear();
 
             Task.Run(() =>
             {
@@ -350,10 +372,10 @@ public partial class ProjectExplorerViewModel
                 {
                     if (flatListReturn.Count != 0)
                     {
-                        FileList.ReplaceAll(flatListReturn);
+                        FileList.AddRange(flatListReturn);
                     }
 
-                    FileTree.ReplaceAll((treeRoot != null)
+                    FileTree.AddRange((treeRoot != null)
                         ? treeRoot.Children
                         : Array.Empty<FileSystemModel>());
 
