@@ -121,7 +121,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         _appViewModel = appViewModel;
 
-        _projectWatcher = new WatcherService(this, loggerService, projectEvents);
+        _projectWatcher = new WatcherService(GetDesiredExpansionState, loggerService, projectEvents);
 
         // Subscribe to collection changes so we can automatically track IsExpanded changes on models
         FileList.CollectionChanged += OnFileCollectionChanged;
@@ -193,7 +193,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     public void StartWatcher_AndLoadProject(Cp77Project activeProject, bool isReload)
     {
         var projectName = Path.GetFileNameWithoutExtension(activeProject.Location);
-        _loggerService.Info($"[Expansion] StartWatcher_AndLoadProject for '{projectName}' (isReload={isReload}, previous ActiveProject={(ActiveProject != null ? Path.GetFileNameWithoutExtension(ActiveProject.Location) : "null")})");
 
         // IMPORTANT: Save the *current* (old) project's live expansion state from FileList
         // BEFORE we load the persisted dict for the incoming project. Otherwise SaveProjectState()
@@ -258,8 +257,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     {
         _progressService.IsIndeterminate = false;
         OnSetLoading?.Invoke(this, (false, false));
+        _loggerService?.Success($"Loaded project: {ActiveProject!.ProjectDirectory} ({FileList.Count} files). File watcher active.");
     }
-
 
     private void SaveProjectState()
     {
@@ -1842,12 +1841,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             ExpansionStateDictionary =
                 JsonSerializer.Deserialize<Dictionary<string, bool>>(
                     File.ReadAllText(project.InterfaceProjectTreeStatePath)) ?? [];
-            _loggerService.Info($"[Expansion] Loaded persisted expansion state for '{projectName}': {ExpansionStateDictionary.Count} directories");
         }
         else
         {
             ExpansionStateDictionary = [];
-            _loggerService.Info($"[Expansion] No persisted expansion state file for '{projectName}' - starting fresh");
         }
     }
 

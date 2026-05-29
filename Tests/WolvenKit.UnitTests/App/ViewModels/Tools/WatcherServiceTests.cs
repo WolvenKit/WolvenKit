@@ -42,6 +42,7 @@ public class WatcherServiceTests : IDisposable
     private readonly ProjectExplorerViewModel.WatcherService _watcher;
     private readonly string _tempProjectDir;
     private Cp77Project? _currentProject;
+    bool NoOp(string rawRelativePath) => false;
 
     // === Real game archive loading for realistic large-project tests ===
     private static readonly Lazy<IArchiveManager> _archiveManager = new(() =>
@@ -90,7 +91,8 @@ public class WatcherServiceTests : IDisposable
         _loggerMock = new Mock<ILoggerService>();
         _projectEvents = new ProjectEvents();
 
-        _watcher = new ProjectExplorerViewModel.WatcherService(_loggerMock.Object, _projectEvents);
+
+        _watcher = new ProjectExplorerViewModel.WatcherService(NoOp, _loggerMock.Object, _projectEvents);
 
         _tempProjectDir = Path.Combine(Path.GetTempPath(), "WatcherServiceTests_" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(_tempProjectDir);
@@ -147,7 +149,6 @@ public class WatcherServiceTests : IDisposable
     {
         _currentProject = new Cp77Project(_tempProjectDir, "TestMod", "TestMod");
         _watcher.StartWatcher_AndLoadProject(_currentProject);
-
         _watcher.Suspend();
 
         // After suspend, EnableRaisingEvents should be false (internal state)
@@ -679,7 +680,7 @@ public class WatcherServiceTests : IDisposable
     public void OnFilesImported_WithNullLogger_DoesNotThrow()
     {
         var events = new ProjectEvents();
-        var watcherWithNullLogger = new ProjectExplorerViewModel.WatcherService(null, events);
+        var watcherWithNullLogger = new ProjectExplorerViewModel.WatcherService(NoOp, null, events);
 
         var project = new Cp77Project(_tempProjectDir, "NullLoggerTest", "NullLoggerTest");
         watcherWithNullLogger.StartWatcher_AndLoadProject(project);

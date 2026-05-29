@@ -44,7 +44,7 @@ public partial class ProjectExplorerViewModel
         #region fields
 
         private readonly ILoggerService? _loggerService;
-
+        private readonly Func<string, bool> _getDesiredExpansionState;
         private string _projectDirectory = string.Empty;
         private FileSystemModel? _projectFileSystemModel;
 
@@ -100,12 +100,10 @@ public partial class ProjectExplorerViewModel
 
         #endregion
 
-          private readonly ProjectExplorerViewModel _owner;
-
-        public WatcherService(ProjectExplorerViewModel owner, ILoggerService? loggerService, IProjectEvents projectEvents)
+        public WatcherService(Func<string, bool> getDesiredExpansionState, ILoggerService? loggerService, IProjectEvents projectEvents)
         {
-            _owner = owner;
             _loggerService = loggerService;
+            _getDesiredExpansionState = getDesiredExpansionState;
 
             _modsWatcher = new FileSystemWatcher
             {
@@ -130,7 +128,6 @@ public partial class ProjectExplorerViewModel
             // StartBackgroundPolling() is intentionally called from inside LoadModProjectFileStructure
             // after the tree has been rebuilt. Do NOT call it again here.
             Resume();
-            _loggerService?.Debug($"Now watching project: {_projectDirectory} ({FileList.Count} files");
         }
 
         public void StartWatcher_AndLoadProject(Cp77Project project, Action? completion = null)
@@ -146,8 +143,9 @@ public partial class ProjectExplorerViewModel
             {
                 throw new Exception("No project directory to resume watching!.");
             }
-            _loggerService?.Debug($"Now monitoring file system events in project: {_projectDirectory} with ({FileList.Count} files");
+            _loggerService?.Debug($"Resuming monitoring of file system events in project: {_projectDirectory}.");
             _modsWatcher.Path = _projectDirectory;
+            _modsWatcher.IncludeSubdirectories = true;
             _modsWatcher.EnableRaisingEvents = true;
             _watcherState = WatcherState.Active;
         }
@@ -229,7 +227,7 @@ public partial class ProjectExplorerViewModel
                     throw new TodoException();
                 }
 
-                if (!_fileLookup.TryGetValue(e.Name, out var item))
+                if (!_fileLookup.TryGetValue(e.FullPath, out var item))
                 {
                     if (_watcherState == WatcherState.NoProject && _fileProcessing.ContainsKey(e.FullPath))
                     {
@@ -289,12 +287,12 @@ public partial class ProjectExplorerViewModel
 
             void Delete(FileSystemEventArgsWrapper e)
             {
-                if (string.IsNullOrEmpty(e.Name))
+                if (string.IsNullOrEmpty(e.FullPath))
                 {
                     throw new TodoException();
                 }
 
-                if (_fileLookup.TryRemove(e.Name, out var item))
+                if (_fileLookup.TryRemove(e.FullPath, out var item))
                 {
                     FileTree.Remove(item);
                     FileList.Remove(item);
@@ -346,8 +344,6 @@ public partial class ProjectExplorerViewModel
                 return;
             }
 
-
-            _loggerService?.Info($"[Expansion] Starting background build for '{_projectDirectory}' ({_projectFileSystemModel?.FullName})");
             Task.Run(() =>
             {
                 var (flatListReturn, treeRoot) = BuildFullFileStructure();
@@ -364,11 +360,6 @@ public partial class ProjectExplorerViewModel
                         : Array.Empty<FileSystemModel>());
 
                     DispatcherHelper.StopRepeatingAction(CompletionTimer);
-
-                    // Diagnostic logging for expansion state persistence across loads
-                    var expandedCount = FileList.Count(m => m.IsDirectory && m.IsExpanded);
-                    _loggerService?.Info($"[Expansion] Tree build complete for '{_projectDirectory}': {FileList.Count(m => m.IsDirectory)} directories total, {expandedCount} restored as expanded from persisted state");
-
                     StartBackgroundPolling();
                 });
             });
@@ -478,8 +469,6 @@ public partial class ProjectExplorerViewModel
         /// </summary>
         private void StopBackgroundPollingInternal()
         {
-            Suspend();
-
             // Cancel update task
             if (_updateTask != null)
             {
@@ -525,7 +514,7 @@ public partial class ProjectExplorerViewModel
 
         public void Suspend()
         {
-            _loggerService?.Debug("Ceasing monitoring of file system events in mod folder.");
+            _loggerService?.Debug("Stopping file system watcher in mod folder.");
             _modsWatcher.EnableRaisingEvents = false;
             _watcherState = WatcherState.Suspended;
         }
@@ -713,7 +702,7 @@ public partial class ProjectExplorerViewModel
                 var relativePath = fullPath[(_projectDirectory.Length + 1)..];
                 var name = Path.GetFileName(e.FullPath);
 
-                bool desiredExpansion = isDirectory && _owner.GetDesiredExpansionState(relativePath);
+                bool desiredExpansion = isDirectory && _getDesiredExpansionState(relativePath);
                 var model = new FileSystemModel(parent, name, relativePath, isDirectory, desiredExpansion);
                 return model;
             }
@@ -760,7 +749,6 @@ public partial class ProjectExplorerViewModel
             }
 
             FileList.AddRange(batch);
-
             Resume();
 
             // Log added files in the background to avoid hanging the UI on very large imports.
