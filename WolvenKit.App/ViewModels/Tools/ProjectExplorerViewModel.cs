@@ -259,6 +259,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private void EnableLoadingMode(bool isReload)
     {
+        _loadingCompletion = DispatcherHelper.StartRepeatingAction(
+            () =>
+            {
         // _loadingCompletion = DispatcherHelper.StartRepeatingAction(
         //     () =>
         //     {
