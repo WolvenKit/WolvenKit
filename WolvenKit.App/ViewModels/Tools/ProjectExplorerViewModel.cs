@@ -264,6 +264,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             {
                 _progressService.IsIndeterminate = true;
                 _progressService.Status = EStatus.Running;
+            },
+            TimeSpan.FromMilliseconds(100),
+            DisableLoadingMode
+        );
 
         _projectWatcher.CompletionTimer = _loadingCompletion;
         OnSetLoading?.Invoke(this, (true, isReload));

@@ -85,13 +85,13 @@ public class RED4Controller : ObservableObject, IGameController
         if (!_initialized)
         {
             _initialized = true;
-            _progressService.IsIndeterminate = true;
 
-            // load archives
-            await LoadArchiveManager();
-
-            _progressService.IsIndeterminate = false;
-            _progressService.Completed();
+            // ArchiveManager loading runs on a background thread and manages its own
+            // progress indicator + 100ms heartbeat (via EnableLoadingMode) to keep the
+            // global ProgressService in "Running" state for the duration of the load.
+            // We do NOT force Completed() here because there is only one global
+            // IsIndeterminate/Status and other long-running work may still be active.
+            await LoadArchiveManagerAsync();
         }
     }
 
@@ -153,55 +153,76 @@ public class RED4Controller : ObservableObject, IGameController
 
     private void EnableLoadingMode()
     {
+        _loadingCompletion = DispatcherHelper.StartRepeatingAction(
+            () =>
+            {
                 _progressService.IsIndeterminate = true;
                 _progressService.Status = EStatus.Running;
+            },
+            TimeSpan.FromMilliseconds(100),
+            DisableLoadingMode
+        );
     }
 
     private void DisableLoadingMode()
     {
         _progressService.IsIndeterminate = false;
+        DispatcherHelper.StopRepeatingAction(_loadingCompletion);
     }
 
-    private Task LoadArchiveManager()
+    /// <summary>
+    /// Loads the basegame + EP1 archives on a background thread.
+    /// While loading, a 100ms repeating timer forces the global ProgressService
+    /// into Running/Indeterminate state. This mitigates the problem that there is
+    /// only a single global "Ready/Running" state — other code can (and does)
+    /// call Completed() or set IsIndeterminate=false while this long job is still
+    /// in progress.
+    /// </summary>
+    private async Task LoadArchiveManagerAsync()
     {
+        // Fast path checks — do NOT start the loading indicator if there's nothing to do.
+        if (_archiveManager.IsManagerLoaded)
+        {
+            return;
+        }
+
+        if (_settingsManager.CP77ExecutablePath is null)
+        {
+            _loggerService.Warning("Cyberpunk 2077 executable path is not set. Skipping Archive Manager load.");
+            return;
+        }
+
         EnableLoadingMode();
 
-        return Task.Run(() =>
+        try
         {
-            var thread = new Thread(() =>
+            await Task.Run(() =>
             {
+                // Keep priority low so the UI stays responsive during the (potentially long)
+                // first-time scan of dozens of large .archive files.
                 Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
                 Thread.CurrentThread.IsBackground = true;
 
-                if (_archiveManager.IsManagerLoaded)
-                    return;
-
-                if (_settingsManager.CP77ExecutablePath is null)
-                    return;
-
                 _loggerService.Info("Loading Archive Manager ... ");
 
-                try
-                {
-                    _archiveManager.LoadGameArchives(new FileInfo(_settingsManager.CP77ExecutablePath));
-                }
-                catch (Exception e)
-                {
-                    _loggerService.Error(e);
-                    throw;
-                }
-                finally
-                {
-                    _loggerService.Success("Finished loading Archive Manager.");
-                    DisableLoadingMode();
-                }
+                _archiveManager.LoadGameArchives(new FileInfo(_settingsManager.CP77ExecutablePath));
 
+                // Custom hash population needs the archives to be loaded, so do it here on the same thread.
                 LoadCustomHashes();
             });
 
-            thread.Start();
-            return thread;
-        });
+            _loggerService.Success("Finished loading Archive Manager.");
+        }
+        catch (Exception e)
+        {
+            _loggerService.Error(e);
+            throw;
+        }
+        finally
+        {
+            // Always stop the heartbeat timer and release the progress indicator.
+            DisableLoadingMode();
+        }
     }
 
     #region Packing
