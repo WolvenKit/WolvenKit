@@ -262,18 +262,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _loadingCompletion = DispatcherHelper.StartRepeatingAction(
             () =>
             {
-        // _loadingCompletion = DispatcherHelper.StartRepeatingAction(
-        //     () =>
-        //     {
                 _progressService.IsIndeterminate = true;
                 _progressService.Status = EStatus.Running;
-            // },
-            // TimeSpan.FromMilliseconds(100),
-            // DisableLoadingMode
-        // );
+            },
+            TimeSpan.FromMilliseconds(100),
+            DisableLoadingMode
+        );
 
         _projectWatcher.CompletionTimer = _loadingCompletion;
-        // _projectWatcher.CompletionTimer = _loadingCompletion;
         OnSetLoading?.Invoke(this, (true, isReload));
     }
 
