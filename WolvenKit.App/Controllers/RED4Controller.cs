@@ -153,21 +153,13 @@ public class RED4Controller : ObservableObject, IGameController
 
     private void EnableLoadingMode()
     {
-        _loadingCompletion = DispatcherHelper.StartRepeatingAction(
-            () =>
-            {
                 _progressService.IsIndeterminate = true;
                 _progressService.Status = EStatus.Running;
-            },
-            TimeSpan.FromMilliseconds(100),
-            DisableLoadingMode
-        );
     }
 
     private void DisableLoadingMode()
     {
         _progressService.IsIndeterminate = false;
-        DispatcherHelper.StopRepeatingAction(_loadingCompletion);
     }
 
     private Task LoadArchiveManager()
