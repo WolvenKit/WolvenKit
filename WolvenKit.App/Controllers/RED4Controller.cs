@@ -178,7 +178,7 @@ public class RED4Controller : ObservableObject, IGameController
         {
             var thread = new Thread(() =>
             {
-                Thread.CurrentThread.Priority = ThreadPriority.Highest;
+                Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
                 Thread.CurrentThread.IsBackground = true;
 
                 if (_archiveManager.IsManagerLoaded)
