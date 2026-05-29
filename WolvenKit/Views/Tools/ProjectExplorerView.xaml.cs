@@ -94,6 +94,8 @@ namespace WolvenKit.Views.Tools
             TreeGrid.NodeCollapsing += TreeGrid_OnNodeCollapsing;
             TreeGrid.NodeCollapsed += TreeGrid_OnNodeCollapsed;
 
+            TreeGrid.NotificationSubscriptionMode = NotificationSubscriptionMode.CollectionChange;
+
             this.WhenActivated(disposables =>
             {
                 if (DataContext is ProjectExplorerViewModel vm)
