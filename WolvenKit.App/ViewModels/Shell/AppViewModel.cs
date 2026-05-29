@@ -705,11 +705,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         if (File.Exists(location))
         {
             CloseModal();
-
-            // Defer the actual (very expensive) project load until after the overlay fade-out
-            // animation has completed. This dramatically improves the perceived smoothness
-            // of OverlayFadeOut on large projects.
-            RunAfterModalClosed(async () => await LoadProjectFromPathAsync(location));
+            await LoadProjectFromPathAsync(location);
             return;
         }
 
@@ -833,8 +829,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             await _projectManager.SaveAsync();
             np.CreateDefaultDirectories();
 
-            // Defer loading so the wizard close animation can complete smoothly
-            RunAfterModalClosed(async () => await LoadProjectFromPathAsync(projectLocation));
+            await LoadProjectFromPathAsync(projectLocation);
         }
         catch (Exception ex)
         {
@@ -1872,74 +1867,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         if (!ShouldOverlayShow)
         {
             IsOverlayShown = false;
-        }
-
-        // Run any work that was deferred because an overlay or dialog was open.
-        // This gives animations (like OverlayFadeOut) a clean shot at the UI thread.
-        while (_pendingAfterModalCloseActions.Count > 0 && !IsDialogShown && !IsOverlayShown)
-        {
-            var action = _pendingAfterModalCloseActions.Dequeue();
-            try
-            {
-                action();
-            }
-            catch (Exception ex)
-            {
-                _loggerService.Error($"Error running deferred post-modal action: {ex.Message}");
-            }
-        }
-
-        while (_pendingAfterModalCloseAsyncActions.Count > 0 && !IsDialogShown && !IsOverlayShown)
-        {
-            var asyncAction = _pendingAfterModalCloseAsyncActions.Dequeue();
-            _ = ExecuteDeferredAsync(asyncAction);
-        }
-    }
-
-    private async Task ExecuteDeferredAsync(Func<Task> asyncAction)
-    {
-        try
-        {
-            await asyncAction();
-        }
-        catch (Exception ex)
-        {
-            _loggerService.Error($"Error running deferred async post-modal action: {ex.Message}");
-        }
-    }
-
-    private readonly Queue<Action> _pendingAfterModalCloseActions = new();
-    private readonly Queue<Func<Task>> _pendingAfterModalCloseAsyncActions = new();
-
-    /// <summary>
-    /// Schedules an action to run on the UI thread after all modals and overlays have fully closed.
-    /// This is useful for kicking off heavy UI work (large tree builds, etc.) so that
-    /// fade-out animations are not starved for dispatcher time.
-    /// </summary>
-    public void RunAfterModalClosed(Action action)
-    {
-        if (!IsDialogShown && !IsOverlayShown)
-        {
-            action();
-        }
-        else
-        {
-            _pendingAfterModalCloseActions.Enqueue(action);
-        }
-    }
-
-    /// <summary>
-    /// Async version of RunAfterModalClosed. The action will be awaited when the overlays close.
-    /// </summary>
-    public void RunAfterModalClosed(Func<Task> asyncAction)
-    {
-        if (!IsDialogShown && !IsOverlayShown)
-        {
-            _ = asyncAction();
-        }
-        else
-        {
-            _pendingAfterModalCloseAsyncActions.Enqueue(asyncAction);
         }
     }
 

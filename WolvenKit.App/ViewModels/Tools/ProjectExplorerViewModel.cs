@@ -155,15 +155,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 if (project != null)
                 {
                     var isReload = project.FileDirectory == _activeProject?.FileDirectory;
-
-                    // If a modal or overlay is currently visible (e.g. HomePage, settings, etc.),
-                    // defer the (potentially very expensive) watcher + tree build until after the
-                    // overlay has finished fading out. This prevents the 0.3s OverlayFadeOut animation
-                    // from becoming extremely choppy on large projects.
-                    _appViewModel.RunAfterModalClosed(() =>
-                    {
-                        StartWatcher_AndLoadProject(project, isReload);
-                    });
+                    StartWatcher_AndLoadProject(project, isReload);
                 }
             });
     }
@@ -200,14 +192,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <param name="isReload"></param>
     public void StartWatcher_AndLoadProject(Cp77Project activeProject, bool isReload)
     {
-        // Protect against being called while an overlay/dialog is open.
-        // This is important so that fade-out animations (OverlayFadeOut) don't get starved.
-        if (_appViewModel.IsDialogShown || _appViewModel.IsOverlayShown)
-        {
-            _appViewModel.RunAfterModalClosed(() => StartWatcher_AndLoadProject(activeProject, isReload));
-            return;
-        }
-
         var projectName = Path.GetFileNameWithoutExtension(activeProject.Location);
 
         // IMPORTANT: Save the *current* (old) project's live expansion state from FileList
@@ -249,11 +233,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <summary>
     /// Reload the active project from disk to ensure consistency.
     /// </summary>
-    public void ResumeWatcher_AndReloadProject()
-    {
-        if (ActiveProject is null) return;
-        StartWatcher_AndLoadProject(ActiveProject, true);
-    }
+    public void ResumeWatcher_AndReloadProject() => StartWatcher_AndLoadProject(ActiveProject!, true);
 
     private Guid _loadingCompletion = Guid.NewGuid();
 
