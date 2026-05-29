@@ -82,17 +82,17 @@ public class RED4Controller : ObservableObject, IGameController
 
     public async Task HandleStartup()
     {
-        if (!_initialized)
+        if (_initialized)
         {
-            _initialized = true;
-
-            // ArchiveManager loading runs on a background thread and manages its own
-            // progress indicator + 100ms heartbeat (via EnableLoadingMode) to keep the
-            // global ProgressService in "Running" state for the duration of the load.
-            // We do NOT force Completed() here because there is only one global
-            // IsIndeterminate/Status and other long-running work may still be active.
-            await LoadArchiveManagerAsync();
+            return;
         }
+
+        // ArchiveManager loading runs on a background thread and manages its own
+        // progress indicator + 100ms heartbeat (via EnableLoadingMode) to keep the
+        // global ProgressService in "Running" state for the duration of the load.
+        // We do NOT force Completed() here because there is only one global
+        // IsIndeterminate/Status and other long-running work may still be active.
+        await LoadArchiveManagerAsync();
     }
 
     // TODO: Move this somewhere else
