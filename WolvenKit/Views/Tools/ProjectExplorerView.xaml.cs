@@ -319,6 +319,7 @@ namespace WolvenKit.Views.Tools
                     {
                         RefreshTreeViewIfNeeded();
                         RefreshFlatViewIfNeeded();
+                        PESearchBar_OnSearchStarted(this, new FunctionEventArgs<string>(_currentFolderQuery));
                     }
                 });
 
@@ -373,14 +374,12 @@ namespace WolvenKit.Views.Tools
         {
             TreeGridFlat.View.Filter = IsFileInFlat;
             TreeGridFlat.View.Refresh();
-            PESearchBar_OnSearchStarted(this, new FunctionEventArgs<string>(_currentFolderQuery));
         }
 
         private void RefreshTreeViewIfNeeded()
         {
             TreeGrid.View.Filter = IsFileIn;
             TreeGrid.View.Refresh();
-            PESearchBar_OnSearchStarted(this, new FunctionEventArgs<string>(_currentFolderQuery));
         }
 
         // Run inside Dispatcher to avoid exception on startup
@@ -419,8 +418,17 @@ namespace WolvenKit.Views.Tools
 
                 DispatcherHelper.WaitUntilCancelled(deferRefreshToken, () =>
                 {
-                    RefreshTreeViewIfNeeded();
-                    RefreshFlatViewIfNeeded();
+
+                    TreeGridFlat.View.Filter = IsFileInFlat;
+                    TreeGridFlat.View.Refresh();
+
+                    Task.Run(() =>
+                    {
+                        DispatcherHelper.DelayOnMainThread(() =>
+                        {
+                            PESearchBar_OnSearchStarted(this, new FunctionEventArgs<string>(_currentFolderQuery));
+                        }, 10);
+                    });
                 });
             }
         }
@@ -442,8 +450,9 @@ namespace WolvenKit.Views.Tools
             {
                 TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Visible);
                 TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-                RefreshFlatViewIfNeeded();
             }
+
+            PESearchBar_OnSearchStarted(this, new FunctionEventArgs<string>(_currentFolderQuery));
         }
 
         private void TreeGrid_OnNodeExpanding(object sender, NodeExpandingEventArgs e)
@@ -819,16 +828,9 @@ namespace WolvenKit.Views.Tools
         private void PESearchBar_OnSearchStarted(object sender, FunctionEventArgs<string> e)
         {
             _currentFolderQuery = e.Info;
-
-            if (ViewModel?.IsFlatModeEnabled == true)
-            {
-                TreeGridFlat.View.RefreshFilter();
-            }
-            else
-            {
-                TreeGrid.ExpandAllNodes();
-                TreeGrid.View.RefreshFilter();
-            }
+            TreeGridFlat.View.RefreshFilter();
+            TreeGrid.ExpandAllNodes();
+            TreeGrid.View.RefreshFilter();
         }
 
         private void RowDragDropController_DragStart(object sender, TreeGridRowDragStartEventArgs e) =>
