@@ -22,3 +22,8 @@ changes:
       pr-number: 2923
       author: "Ametis81"
       description: "Fixed material loading in preview window with 'Generate Materials' button action"
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 2931
+      author: "manavortex"
+      description: "Better error message if project fails to load because .cpmodproj is broken"
