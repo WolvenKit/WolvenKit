@@ -48,8 +48,6 @@ public class RED4Controller : ObservableObject, IGameController
     private readonly IModifierViewStateService _modifierService;
     private readonly IProjectEvents _projectEvents;
 
-    private bool _initialized = false;
-
     #endregion
 
     public RED4Controller(
@@ -82,16 +80,6 @@ public class RED4Controller : ObservableObject, IGameController
 
     public async Task HandleStartup()
     {
-        if (_initialized)
-        {
-            return;
-        }
-
-        // ArchiveManager loading runs on a background thread and manages its own
-        // progress indicator + 100ms heartbeat (via EnableLoadingMode) to keep the
-        // global ProgressService in "Running" state for the duration of the load.
-        // We do NOT force Completed() here because there is only one global
-        // IsIndeterminate/Status and other long-running work may still be active.
         await LoadArchiveManagerAsync();
     }
 
