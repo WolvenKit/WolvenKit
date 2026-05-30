@@ -221,7 +221,7 @@ namespace WolvenKit.Common.Services
                 collection.Add(nextLine);
             }
 
-            var lookupTable = new LookupTable(collection, _maxDoP, ResourcePath.CalculateHash);
+            var lookupTable = new LookupTable(collection, _maxDoP, (s) => ResourcePath.CalculateHash(s, false));
 
             ResourcePathPool.SetNative(lookupTable);
         }
