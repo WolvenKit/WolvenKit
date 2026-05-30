@@ -131,7 +131,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
         return null;
     }
 
-    private async Task<Cp77Project?> Load(string path)
+    private async Task<Cp77Project?> Load(string path, bool isRetry = false)
     {
         try
         {
@@ -177,11 +177,35 @@ public partial class ProjectManager : ObservableObject, IProjectManager
 
             return project;
         }
+        catch (InvalidOperationException ex) when (ex.Message.Contains("error in XML document"))
+        {
+            _loggerService.Error($"Failed to load project. Your .cpmodproj file may have been corrupted.");
+            return null;
+
+        }
         catch (Exception e)
         {
             _loggerService.Error($"Failed to load project.");
             _loggerService.Error(e);
             return null;
+        }
+
+        static bool DeleteLayoutFile(string layoutFilePath)
+        {
+            if (!File.Exists(layoutFilePath))
+            {
+                return false;
+            }
+
+            try
+            {
+                File.Delete(layoutFilePath);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 
