@@ -189,24 +189,6 @@ public partial class ProjectManager : ObservableObject, IProjectManager
             _loggerService.Error(e);
             return null;
         }
-
-        static bool DeleteLayoutFile(string layoutFilePath)
-        {
-            if (!File.Exists(layoutFilePath))
-            {
-                return false;
-            }
-
-            try
-            {
-                File.Delete(layoutFilePath);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
     }
 
     private void MoveLegacyYamlTweaks(Cp77Project project)
