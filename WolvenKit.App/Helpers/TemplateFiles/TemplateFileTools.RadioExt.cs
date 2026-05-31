@@ -246,10 +246,9 @@ public partial class TemplateFileTools
                 viewModel.StationName!.ToArchiveFileName());
         }
 
-        if (!Directory.Exists(viewModel.JsonFileFolder))
-        {
-            Directory.CreateDirectory(viewModel.JsonFileFolder);
-        }
+
+        Directory.CreateDirectory(viewModel.JsonFileFolder);
+
 
         var songPaths = viewModel.SongItems.Select(f => f.FilePath).ToList();
 
