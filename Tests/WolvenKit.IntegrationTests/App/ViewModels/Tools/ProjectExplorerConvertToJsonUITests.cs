@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using HandyControl.Tools.Extension;
@@ -24,6 +23,7 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.IntegrationTests.Helpers;
 using WolvenKit.RED4.Types;
+using System.Windows.Threading;
 using WolvenKit.Views.Tools;
 using Xunit;
 using Xunit.Sdk;
@@ -90,10 +90,10 @@ public class ProjectExplorerConvertToJsonUITests : IDisposable
         // Assert.Equal(3, _projectExplorerVm.FileTree.Count);
 
         await assetBrowserVm.LoadAssetBrowser();
-        // var rootDir = assetBrowserVm._boundRootNodes.First();
-        // Dictionary<ulong, IGameFile> files = new();
-        // assetBrowserVm.GetFilesRecursive(rootDir, files);
-        // Assert.NotEmpty(files.Values);
+
+        // Flush any pending dispatcher work (e.g. ContextIdle-priority callbacks from DynamicData bindings)
+        // before reading _boundRootNodes, otherwise we may see a stale tree.
+        await Dispatcher.Yield(DispatcherPriority.ContextIdle);
 
         var folderToAdd = assetBrowserVm
             ._boundRootNodes.First()
@@ -101,15 +101,11 @@ public class ProjectExplorerConvertToJsonUITests : IDisposable
             .Directories["base\\animations"]
             .Directories["base\\animations\\anim_motion_database"];
 
-        // Replicate what AssetBrowserView.LeftNavigation_OnSelectionChanged does:
-        // it populates RightItems with both subdirectory entries and direct files.
-        // Checked RedDirectoryViewModel entries are expanded recursively by AddSelectedAsync.
-        assetBrowserVm.RightItems.AddRange(folderToAdd.Directories
-            .Select(h => new RedDirectoryViewModel(h.Value))
-            .OrderBy(el => Regex.Replace(el.Name, @"\d+", n => n.Value.PadLeft(16, '0'))));
-        assetBrowserVm.RightItems.AddRange(folderToAdd.Files
-            .Select(h => new RedFileViewModel(h))
-            .OrderBy(el => Regex.Replace(el.Name, @"\d+", n => n.Value.PadLeft(16, '0'))));
+
+
+        var iGameFiles = folderToAdd.Files;
+        Assert.NotEmpty(iGameFiles);
+        iGameFiles.ToList().ForEach(f => assetBrowserVm.RightItems.Add(new RedFileViewModel(f)));
         assetBrowserVm.RightItems.ForEach(item => item.IsChecked = true);
         await assetBrowserVm.AddSelectedAsync();
         Assert.True(_projectExplorerVm!.FileList.Count > 5);
