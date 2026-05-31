@@ -131,7 +131,7 @@ public partial class ProjectManager : ObservableObject, IProjectManager
         return null;
     }
 
-    private async Task<Cp77Project?> Load(string path, bool isRetry = false)
+    private async Task<Cp77Project?> Load(string path)
     {
         try
         {
