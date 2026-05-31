@@ -73,7 +73,8 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private readonly IPluginService _pluginService;
     private readonly AppViewModel _appViewModel;
     private readonly ProjectResourceTools _projectResourceTools;
-    private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
+
+    internal readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
 
     private bool _manuallyLoading;
 
@@ -254,7 +255,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     #region commands
 
     [RelayCommand]
-    private async Task LoadAssetBrowser()
+    internal async Task LoadAssetBrowser()
     {
         _manuallyLoading = true;
         ShouldShowLoadButton = !_manuallyLoading && !ProjectLoaded && !ArchiveDirNotFound;
@@ -489,7 +490,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private bool CanAddToProject() => ProjectLoaded;
 
     [RelayCommand(CanExecute = nameof(CanAddToProject))]
-    private async Task AddSelectedAsync()
+    internal async Task AddSelectedAsync()
     {
         // get all selected files
         Dictionary<ulong, IGameFile> filesToAdd = new();
@@ -565,7 +566,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         await InternalAddFiles(finalFilesToAdd);
     }
 
-    private void GetFilesRecursive(RedFileSystemModel directory, Dictionary<ulong, IGameFile> files)
+    internal void GetFilesRecursive(RedFileSystemModel directory, Dictionary<ulong, IGameFile> files)
     {
         foreach (var (_, model) in directory.Directories)
         {
@@ -726,9 +727,9 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     #region methods
 
-    private void MoveToFolder(RedFileSystemModel dir) => LeftSelectedItem = dir;
+    internal void MoveToFolder(RedFileSystemModel dir) => LeftSelectedItem = dir;
 
-    private void MoveToFolder(RedDirectoryViewModel dir) => LeftSelectedItem = dir.GetModel();
+    internal void MoveToFolder(RedDirectoryViewModel dir) => LeftSelectedItem = dir.GetModel();
 
     /// <summary>
     /// Navigates the Asset Browser to the existing file.

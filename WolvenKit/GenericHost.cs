@@ -40,7 +40,7 @@ using WolvenKit.Views.Tools;
 
 namespace WolvenKit
 {
-    internal static class GenericHost
+    public static class GenericHost
     {
         public static IHostBuilder CreateHostBuilder() => Host
                 .CreateDefaultBuilder()
