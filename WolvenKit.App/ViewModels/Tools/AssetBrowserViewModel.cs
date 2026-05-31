@@ -201,7 +201,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private bool _shouldShowExecutablePathWarning = true;
 
     [ObservableProperty]
-    private ObservableCollection<RedFileSystemModel> _leftItems = new();
+    internal ObservableCollection<RedFileSystemModel> _leftItems = new();
 
     [ObservableProperty]
     private object? _leftSelectedItem;
@@ -1124,7 +1124,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     }
 
 
-    private void SetLeftSelectedItem(string itemName) =>
+    internal void SetLeftSelectedItem(string itemName) =>
         LeftSelectedItem = LeftItems.ToList().FirstOrDefault(item => item.Name.Contains(itemName));
 
     public async void Refresh()
