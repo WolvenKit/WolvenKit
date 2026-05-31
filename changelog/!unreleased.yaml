@@ -12,15 +12,18 @@ changes:
       pr-number: 2917
       author: "manavortex"
       description: "Fixed 'create item codes from yaml'"
-
     - type: "removed"
       packages: ["App"]
       pr-number: 2924
       author: "manavortex"
       description: "WKit will no longer try to update dynamic paths (breaking them in the process), and instead warn about them."
-
     - type: "fixed"
       packages: ["App"]
       pr-number: 2923
       author: "Ametis81"
       description: "Fixed material loading in preview window with 'Generate Materials' button action"
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 2934
+      author: "manavortex"
+      description: "When generating a radio, the folder in resources will now be created"
