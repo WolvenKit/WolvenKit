@@ -143,12 +143,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         SelectedTabIndex = ActiveProject?.ActiveTab ?? 0;
 
-        if (Locator.Current.GetService<AppIdleStateService>() is not AppIdleStateService svc)
-        {
-            return;
-        }
-
-        svc.ThreadIdleTenSeconds += Svc_ThreadIdleTenSeconds;
+        DispatcherHelper.StartRepeatingAction(
+            () => Svc_ThreadIdleTenSeconds(null, EventArgs.Empty),
+            TimeSpan.FromSeconds(10));
 
         s_instance = this;
 
@@ -257,24 +254,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         );
 
         _projectWatcher.CompletionTimer = _loadingCompletion;
-
-        if (OnSetLoading == null)
-        {
-            throw new InvalidOperationException("OnSetLoading has not been set. Invalid view state.");
-        }
-
         OnSetLoading?.Invoke(this, (true, isReload));
     }
 
     private void DisableLoadingMode()
     {
         _progressService.IsIndeterminate = false;
-
-        if (OnSetLoading == null)
-        {
-            throw new InvalidOperationException("OnSetLoading has not been set. Invalid view state.");
-        }
-
         OnSetLoading?.Invoke(this, (false, false));
         _loggerService?.Success($"Loaded project: {ActiveProject!.ProjectDirectory} ({FileList.Count} files). File watcher active.");
     }
