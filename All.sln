@@ -52,6 +52,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Unpacker", "Wolve
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.IntegrationTests", "Tests\WolvenKit.IntegrationTests\WolvenKit.IntegrationTests.csproj", "{D52A8EF6-188F-478E-9B80-B18A4563220D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.UITests", "Tests\WolvenKit.UITests\WolvenKit.UITests.csproj", "{B1C2D3E4-F5A6-7890-ABCD-EF1234567890}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -139,6 +141,12 @@ Global
 		{D52A8EF6-188F-478E-9B80-B18A4563220D}.Profile|x64.Build.0 = Debug|x64
 		{D52A8EF6-188F-478E-9B80-B18A4563220D}.Release|x64.ActiveCfg = Release|x64
 		{D52A8EF6-188F-478E-9B80-B18A4563220D}.Release|x64.Build.0 = Release|x64
+		{B1C2D3E4-F5A6-7890-ABCD-EF1234567890}.Debug|x64.ActiveCfg = Debug|x64
+		{B1C2D3E4-F5A6-7890-ABCD-EF1234567890}.Debug|x64.Build.0 = Debug|x64
+		{B1C2D3E4-F5A6-7890-ABCD-EF1234567890}.Profile|x64.ActiveCfg = Debug|x64
+		{B1C2D3E4-F5A6-7890-ABCD-EF1234567890}.Profile|x64.Build.0 = Debug|x64
+		{B1C2D3E4-F5A6-7890-ABCD-EF1234567890}.Release|x64.ActiveCfg = Release|x64
+		{B1C2D3E4-F5A6-7890-ABCD-EF1234567890}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -157,6 +165,7 @@ Global
 		{849A9683-78D3-4A05-8C76-A804DC79704A} = {BE958494-0BB3-4401-93DB-65458FED482B}
 		{9BECAA2C-1F77-4FF1-843A-BF6FB937ADB1} = {6BC8815E-BFF9-46A5-9535-0E89A765D75A}
 		{D52A8EF6-188F-478E-9B80-B18A4563220D} = {B904A345-E6CF-4D6A-9F10-C04F02340B63}
+		{B1C2D3E4-F5A6-7890-ABCD-EF1234567890} = {B904A345-E6CF-4D6A-9F10-C04F02340B63}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8DAAF993-E8B7-47A4-AB0E-C159CB499F45}

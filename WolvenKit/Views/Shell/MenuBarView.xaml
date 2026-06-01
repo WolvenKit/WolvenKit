@@ -42,6 +42,8 @@
 
             <!-- File -->
             <MenuItem
+                x:Name="MenuItemFile"
+                AutomationProperties.AutomationId="MenuItemFile"
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
                 FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="File">
