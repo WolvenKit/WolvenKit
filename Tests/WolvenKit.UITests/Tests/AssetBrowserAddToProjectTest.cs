@@ -352,50 +352,21 @@ public class AssetBrowserAddToProjectTest
     }
 
     /// <summary>
-    /// Counts leaf (file) nodes in the Project Explorer hierarchical tree.
-    /// Folder nodes are skipped by checking whether the element has children that
-    /// are also TreeItem/DataItem (which folders do, but files don't).
+    /// Returns the leaf (file) node count from the Project Explorer tree via the
+    /// Grid pattern exposed by <c>InspectableTreeGrid</c>'s custom automation peer.
+    /// The peer walks the bound item hierarchy using <c>ChildPropertyName</c> and
+    /// counts only nodes that have no children, so the result directly equals the
+    /// number of files — no UIA tree traversal or expand-all required.
     /// </summary>
     private int CountProjectExplorerFiles()
     {
-        var cf = _fixture.Automation.ConditionFactory;
+        var treeGrid = _projectExplorerTreeGrid;
 
-        var expandAllButton = _mainWindow
-            .FindFirstDescendant(cf
-                .ByControlType(ControlType.Button)
-                .And(cf
-                    .ByAutomationId("ExpandAllButton")));
+        Assert.IsTrue(treeGrid.Patterns.Grid.IsSupported,
+            "ProjectExplorerTreeGrid does not support the Grid pattern. " +
+            "Ensure ProjectExplorerView.xaml uses others:InspectableTreeGrid and the app has been rebuilt.");
 
-        if (expandAllButton == null)
-        {
-            throw new InvalidOperationException("Could not find the ExpandAll button.");
-        }
-
-        expandAllButton.Click();
-        Task.Delay(100).Wait();
-
-        var projectExplorer = _mainWindow.FindFirstDescendant(
-            cf.ByClassName("ProjectExplorerView"));
-        var projectExplorerTreeGrid = _mainWindow.FindFirstDescendant(cf.ByAutomationId("ProjectExplorerTreeGrid"));
-
-        if (projectExplorer == null)
-        {
-            throw new  InvalidOperationException("Could not find the ProjectExplorerView.");
-        }
-
-        //
-        // var allNodes = treeGrid.FindAllDescendants(
-        //     cf.ByControlType(ControlType.TreeItem)
-        //     .Or(cf.ByControlType(ControlType.DataItem)));
-
-        // A leaf node is one that has no TreeItem/DataItem children of its own.
-        return projectExplorer.AsGrid().Rows.Count(node =>
-        {
-            var children = node.FindAllChildren(
-                cf.ByControlType(ControlType.TreeItem)
-                .Or(cf.ByControlType(ControlType.DataItem)));
-            return children.Length == 0;
-        });
+        return treeGrid.Patterns.Grid.Pattern.RowCount;
     }
 
     // ── Generic wait helper ───────────────────────────────────────────────────

@@ -1103,7 +1103,7 @@
         </Border>
 
         <!-- Hierarchical Tree View -->
-        <syncfusion:SfTreeGrid
+        <others:InspectableTreeGrid
             Name="TreeGrid"
             AutomationProperties.AutomationId="ProjectExplorerTreeGrid"
             Grid.Row="2"
@@ -1173,7 +1173,7 @@
                     ImmediateUpdateColumnFilter="True"
                     MappingName="Name" />
             </syncfusion:SfTreeGrid.Columns>
-        </syncfusion:SfTreeGrid>
+        </others:InspectableTreeGrid>
 
         <!-- Flat Tree View -->
         <syncfusion:SfTreeGrid
