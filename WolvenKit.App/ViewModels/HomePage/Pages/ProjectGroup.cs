@@ -6,7 +6,7 @@ namespace WolvenKit.App.ViewModels.HomePage.Pages;
 
 public partial class WelcomePageViewModel
 {
-    // NOUVEAU : représente un groupe de projets (en-tête + liste de cartes) sur la page d'accueil.
+    // Represents a project group (header + list of cards) on the welcome page.
     public partial class ProjectGroup : ObservableObject
     {
         public ProjectGroup(string name, IEnumerable<FancyProjectObject> projects)
@@ -18,7 +18,7 @@ public partial class WelcomePageViewModel
         public string Name { get; }
         public ObservableCollection<FancyProjectObject> Projects { get; }
 
-        // NOUVEAU : true = groupe déplié (cartes visibles), false = replié.
+        // true = group expanded (cards visible), false = collapsed.
         [ObservableProperty]
         private bool _isExpanded = true;
     }

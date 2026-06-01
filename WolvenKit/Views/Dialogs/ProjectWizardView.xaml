@@ -144,7 +144,7 @@
             hc:InfoElement.Title="Version"
             hc:InfoElement.TitlePlacement="Top" />
 
-        <!-- NOUVEAU : choix du groupe (liste éditable des groupes existants, vide = Sans groupe) -->
+        <!-- Group selection (editable list of existing groups; empty = Ungrouped) -->
         <hc:ComboBox
             x:Name="GroupComboBox"
             Grid.Row="7"

@@ -833,7 +833,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
             await LoadProjectFromPathAsync(projectLocation);
 
-            // NOUVEAU : applique le groupe choisi dans l'assistant au projet récent.
+            // Apply the group chosen in the wizard to the newly created recent project.
             if (!string.IsNullOrWhiteSpace(project.SelectedGroup))
             {
                 var recent = _recentlyUsedItemsService.Items.Items

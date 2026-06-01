@@ -93,13 +93,13 @@
                                                 CommandParameter="{Binding ProjectPath}"
                                                 ToolTip="{Binding Path=ProjectPath}">
 
-                                                <!-- NOUVEAU : menu clic droit pour gérer le groupe.
-                                                     Le ContextMenu vit dans un popup hors du visual tree :
-                                                     on passe par PlacementTarget.Tag (= le ViewModel racine). -->
+                                                <!-- Right-click menu to manage the group.
+                                                     The ContextMenu lives in a popup outside the visual tree,
+                                                     so we go through PlacementTarget.Tag (= the root ViewModel). -->
                                                 <Button.ContextMenu>
                                                     <ContextMenu Opened="ProjectContextMenu_Opened">
-                                                        <!-- Sous-menu rempli dynamiquement en code-behind
-                                                             avec les groupes existants (Tag sert de repère). -->
+                                                        <!-- Submenu filled dynamically in code-behind
+                                                             with the existing groups (Tag is used as a marker). -->
                                                         <MenuItem
                                                             Header="Move to existing group"
                                                             Tag="MoveToGroupParent" />
@@ -581,8 +581,8 @@
                         </Grid>
                     </Grid>
 
-                    <!-- Cards groupées (NOUVEAU) : une section par groupe.
-                         Chaque groupe = en-tête + son propre CardView. -->
+                    <!-- Grouped cards: one section per group.
+                         Each group = header + its own CardView. -->
                     <ItemsControl
                         Grid.Row="1"
                         HorizontalAlignment="Left"
@@ -590,7 +590,7 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Margin="0,0,0,16">
-                                    <!-- En-tête du groupe : flèche (replier/déplier) + nom -->
+                                    <!-- Group header: chevron (collapse/expand) + name -->
                                     <StackPanel
                                         Margin="0,0,0,6"
                                         Orientation="Horizontal">
@@ -626,8 +626,8 @@
                                             FontWeight="Bold"
                                             Foreground="#CCCCCC"
                                             Text="{Binding Name}" />
-                                        <!-- NOUVEAU : supprimer le groupe (les projets repassent
-                                             dans "Sans groupe"). Caché pour le pseudo-groupe "Sans groupe". -->
+                                        <!-- Delete the group (its projects move back to "Ungrouped").
+                                             Hidden for the "Ungrouped" pseudo-group. -->
                                         <Button
                                             Margin="8,0,0,0"
                                             VerticalAlignment="Center"
@@ -652,7 +652,7 @@
 
                                     </StackPanel>
 
-                                    <!-- Projets du groupe (réutilise le même style de carte) -->
+                                    <!-- Group projects (reuses the same card style) -->
                                     <syncfusion:CardView
                                         MaxHeight="190"
                                         HorizontalAlignment="Left"

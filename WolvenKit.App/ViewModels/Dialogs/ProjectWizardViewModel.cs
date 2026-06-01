@@ -25,7 +25,7 @@ public partial class ProjectWizardViewModel : DialogViewModel, INotifyDataErrorI
 
     private readonly ISettingsManager _settingsManager;
 
-    // NOUVEAU : service des projets récents (pour lister les groupes existants).
+    // Recent-projects service (used to list the existing groups).
     private readonly IRecentlyUsedItemsService? _recentlyUsedItemsService;
 
     public delegate Task ReturnHandler(ProjectWizardViewModel? project);
@@ -48,7 +48,7 @@ public partial class ProjectWizardViewModel : DialogViewModel, INotifyDataErrorI
 
         _projectType = ["Cyberpunk 2077"];
 
-        // NOUVEAU : charge les groupes déjà utilisés pour les proposer dans la liste.
+        // Load the groups already in use so they can be offered in the dropdown.
         if (_recentlyUsedItemsService is not null)
         {
             var existingGroups = _recentlyUsedItemsService.Items.Items
@@ -111,10 +111,10 @@ public partial class ProjectWizardViewModel : DialogViewModel, INotifyDataErrorI
 
     [ObservableProperty] private string? _whyNotCreate;
 
-    // NOUVEAU : groupe choisi à la création (null/vide = "Sans groupe").
+    // Group chosen at creation time (null/empty = "Ungrouped").
     [ObservableProperty] private string? _selectedGroup;
 
-    // NOUVEAU : groupes existants proposés dans la liste déroulante.
+    // Existing groups offered in the dropdown.
     [ObservableProperty] private ObservableCollection<string> _availableGroups = new();
 
     #endregion Properties

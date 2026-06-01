@@ -45,7 +45,7 @@ public partial class WelcomePageViewModel
             set => Item.IsPinned = value;
         }
 
-        // NOUVEAU : passthrough vers le modèle. Écrire ici déclenche l'auto-save + le refresh.
+        // Passthrough to the model. Writing here triggers the auto-save + refresh.
         public string? Group
         {
             get => Item.Group;

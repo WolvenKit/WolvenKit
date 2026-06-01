@@ -74,9 +74,9 @@ namespace WolvenKit.Views.HomePage.Pages
 
         }
 
-        // NOUVEAU : remplit dynamiquement le sous-menu "Move to existing group" avec les
-        // groupes existants à l'ouverture du menu contextuel. On le fait en code-behind car
-        // les bindings de commande dans les sous-menus WPF traversent mal les popups.
+        // Dynamically fills the "Move to existing group" submenu with the existing
+        // groups when the context menu opens. Done in code-behind because command
+        // bindings inside WPF submenus do not travel well across popups.
         private void ProjectContextMenu_Opened(object sender, RoutedEventArgs e)
         {
             if (sender is not ContextMenu contextMenu)
@@ -101,12 +101,12 @@ namespace WolvenKit.Views.HomePage.Pages
 
             parent.Items.Clear();
 
-            // Désactivé (grisé) s'il n'existe encore aucun groupe.
+            // Disabled (greyed out) when no group exists yet.
             parent.IsEnabled = ViewModel.AvailableGroups.Count > 0;
 
             foreach (var groupName in ViewModel.AvailableGroups)
             {
-                var name = groupName; // capture locale pour la closure
+                var name = groupName; // local capture for the closure
                 var item = new MenuItem { Header = name };
                 item.Click += (_, _) => ViewModel.MoveProjectToGroup(project, name);
                 parent.Items.Add(item);

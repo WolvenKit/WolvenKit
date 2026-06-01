@@ -31,10 +31,10 @@ public partial class WelcomePageViewModel : PageViewModel
 
     private readonly ReadOnlyObservableCollection<RecentlyUsedItemModel> _recentlyUsedItems;
 
-    // NOUVEAU : nom du groupe par défaut pour les projets sans groupe.
+    // Default group name for projects that have no group.
     public const string UngroupedName = "Ungrouped";
 
-    // NOUVEAU : noms des groupes repliés (mémorisé le temps de la session).
+    // Names of collapsed groups (kept in memory for the current session).
     private readonly HashSet<string> _collapsedGroups = new();
 
     private Dictionary<string, int> _sortMode = new()
@@ -95,11 +95,11 @@ public partial class WelcomePageViewModel : PageViewModel
     [ObservableProperty]
     private ObservableCollection<FancyProjectObject> _fancyProjects = new();
 
-    // NOUVEAU : projets récents regroupés par "Group", pour l'affichage en sections.
+    // Recent projects grouped by "Group", for display as sections.
     [ObservableProperty]
     private ObservableCollection<ProjectGroup> _groupedProjects = new();
 
-    // NOUVEAU : noms des groupes existants (pour le sous-menu "Move to existing group").
+    // Names of existing groups (for the "Move to existing group" submenu).
     [ObservableProperty]
     private ObservableCollection<string> _availableGroups = new();
 
@@ -189,7 +189,7 @@ public partial class WelcomePageViewModel : PageViewModel
         //_recentlyUsedItemsService.UnpinItem(parameter);
     }
 
-    // NOUVEAU : assigne (ou modifie) le groupe d'un projet via une boîte de saisie.
+    // Assign (or change) a project's group via an input box.
     [RelayCommand]
     private async Task SetProjectGroup(FancyProjectObject? project)
     {
@@ -200,16 +200,16 @@ public partial class WelcomePageViewModel : PageViewModel
 
         var name = await Interactions.ShowInputBoxAsync("Move project to group", project.Group ?? "");
 
-        // L'utilisateur a saisi un nom -> on l'assigne. Vide -> on retire du groupe.
-        // (Note : cette API ne distingue pas clairement "Annuler" d'un champ vidé ;
-        //  si tu veux préserver le groupe sur Annulation, remplace la ligne suivante par :
+        // The user typed a name -> assign it. Empty -> remove from the group.
+        // (Note: this API does not clearly distinguish "Cancel" from an emptied field;
+        //  to keep the group on cancel, replace the next line with:
         //  if (string.IsNullOrWhiteSpace(name)) return;)
         project.Group = string.IsNullOrWhiteSpace(name) ? null : name.Trim();
 
         RefreshRecentProjects();
     }
 
-    // NOUVEAU : retire un projet de son groupe (revient sous "Sans groupe").
+    // Remove a project from its group (it goes back under "Ungrouped").
     [RelayCommand]
     private void RemoveProjectGroup(FancyProjectObject? project)
     {
@@ -222,7 +222,7 @@ public partial class WelcomePageViewModel : PageViewModel
         RefreshRecentProjects();
     }
 
-    // NOUVEAU : assigne un projet à un groupe existant (appelé depuis le sous-menu code-behind).
+    // Assign a project to an existing group (called from the code-behind submenu).
     public void MoveProjectToGroup(FancyProjectObject? project, string group)
     {
         if (project is null)
@@ -233,8 +233,8 @@ public partial class WelcomePageViewModel : PageViewModel
         project.Group = string.IsNullOrWhiteSpace(group) ? null : group.Trim();
         RefreshRecentProjects();
     }
-    // NOUVEAU : supprime un groupe (après confirmation). Les projets ne sont PAS supprimés :
-    // ils repassent simplement dans "Sans groupe".
+    // Delete a group (after confirmation). Projects are NOT deleted: they simply
+    // go back under "Ungrouped".
     [RelayCommand]
     private async Task DeleteGroup(ProjectGroup? group)
     {
@@ -360,21 +360,21 @@ public partial class WelcomePageViewModel : PageViewModel
             FancyProjects.Clear();
             FancyProjects.AddRange(items);
 
-            // NOUVEAU : regroupe par "Group". Les projets sans groupe vont dans
-            // "Sans groupe", placé en dernier ; les autres groupes sont triés par nom.
+            // Group by "Group". Projects without a group go into "Ungrouped",
+            // placed last; the other groups are sorted by name.
             var groups = items
                 .GroupBy(p => string.IsNullOrWhiteSpace(p.Group) ? UngroupedName : p.Group!)
                 .OrderBy(g => g.Key == UngroupedName ? 1 : 0)
                 .ThenBy(g => g.Key, StringComparer.InvariantCultureIgnoreCase)
                 .Select(g =>
                 {
-                    // Restaure l'état replié/déplié mémorisé pour cette session.
+                    // Restore the collapsed/expanded state remembered for this session.
                     var group = new ProjectGroup(g.Key, g)
                     {
                         IsExpanded = !_collapsedGroups.Contains(g.Key)
                     };
 
-                    // Mémorise les changements de pliage (sans toucher au disque).
+                    // Remember collapse/expand changes (without persisting to disk).
                     group.PropertyChanged += (_, e) =>
                     {
                         if (e.PropertyName != nameof(ProjectGroup.IsExpanded))
@@ -402,7 +402,7 @@ public partial class WelcomePageViewModel : PageViewModel
                 GroupedProjects.Add(g);
             }
 
-            // NOUVEAU : liste des groupes existants (hors "Sans groupe"), pour le sous-menu.
+            // Build the list of existing groups (excluding "Ungrouped"), for the submenu.
             var names = items
                 .Select(p => p.Group)
                 .Where(n => !string.IsNullOrWhiteSpace(n))

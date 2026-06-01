@@ -17,8 +17,8 @@ public partial class RecentlyUsedItemModel : ObservableObject
     [ObservableProperty]
     private bool _isPinned;
 
-    // NOUVEAU : groupe du projet. null ou vide = "Sans groupe".
-    // Sérialisé automatiquement dans recentItems.json (rétrocompatible : absent = null).
+    // Project group. null or empty = "Ungrouped".
+    // Serialized automatically in recentItems.json (backward compatible: absent = null).
     [ObservableProperty]
     private string? _group;
 
