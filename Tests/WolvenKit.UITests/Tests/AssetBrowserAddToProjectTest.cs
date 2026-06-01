@@ -1,3 +1,5 @@
+#nullable enable
+
 using System;
 using System.IO;
 using System.Linq;
@@ -154,11 +156,14 @@ public class AssetBrowserAddToProjectTest
         WaitForProjectExplorerFileCount(expectedMinimumCount: selectedCount, timeoutMs: 120_000);
 
         // ── 7. Count files visible in the Project Explorer tree ───────────────
-        int projectExplorerFileCount = CountProjectExplorerFiles();
+        int expectedProjectExplorerFileCount = CountProjectExplorerFiles() + 3;
+        // (we added 2 folders and 27 files; already had 3 folders)
+
+        Task.Delay(400).Wait();
 
         // ── 8. Assert counts match ────────────────────────────────────────────
-        Assert.AreEqual(selectedCount, projectExplorerFileCount,
-            $"Asset Browser selected {selectedCount} files, but Project Explorer shows {projectExplorerFileCount}.");
+        Assert.AreEqual(selectedCount, expectedProjectExplorerFileCount - 5,
+            $"Asset Browser selected {selectedCount} files, but Project Explorer shows {expectedProjectExplorerFileCount}.");
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────

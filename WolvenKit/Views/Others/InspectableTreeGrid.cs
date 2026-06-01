@@ -1,5 +1,3 @@
-#nullable enable
-
 using System;
 using System.Collections;
 using System.Windows.Automation;
@@ -46,7 +44,7 @@ internal sealed class InspectableTreeGridAutomationPeer
     protected override AutomationControlType GetAutomationControlTypeCore() =>
         AutomationControlType.Tree;
 
-    public override object? GetPattern(PatternInterface patternInterface) =>
+    public override object GetPattern(PatternInterface patternInterface) =>
         patternInterface == PatternInterface.Grid
             ? this
             : base.GetPattern(patternInterface);
@@ -70,7 +68,7 @@ internal sealed class InspectableTreeGridAutomationPeer
     public int ColumnCount => _grid.Columns.Count;
 
     /// <summary>Not needed for count-only tests.</summary>
-    public IRawElementProviderSimple? GetItem(int row, int column) => null;
+    public IRawElementProviderSimple GetItem(int row, int column) => null;
 
     // ── Helpers ───────────────────────────────────────────────────────────────
 

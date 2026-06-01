@@ -1,4 +1,3 @@
-#nullable enable
 using System.Windows.Automation;
 using System.Windows.Automation.Peers;
 using System.Windows.Automation.Provider;
@@ -38,7 +37,7 @@ internal sealed class InspectableDataGridAutomationPeer
     protected override AutomationControlType GetAutomationControlTypeCore() =>
         AutomationControlType.DataGrid;
 
-    public override object? GetPattern(PatternInterface patternInterface) =>
+    public override object GetPattern(PatternInterface patternInterface) =>
         patternInterface == PatternInterface.Grid
             ? this
             : base.GetPattern(patternInterface);
@@ -73,5 +72,5 @@ internal sealed class InspectableDataGridAutomationPeer
     /// Returns null — individual cell providers are not needed for our tests.
     /// Implement if you need FlaUI to traverse individual cells.
     /// </summary>
-    public IRawElementProviderSimple? GetItem(int row, int column) => null;
+    public IRawElementProviderSimple GetItem(int row, int column) => null;
 }

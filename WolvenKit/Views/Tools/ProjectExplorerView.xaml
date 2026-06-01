@@ -1104,7 +1104,7 @@
 
         <!-- Hierarchical Tree View -->
         <others:InspectableTreeGrid
-            Name="TreeGrid"
+            x:Name="TreeGrid"
             AutomationProperties.AutomationId="ProjectExplorerTreeGrid"
             Grid.Row="2"
             Margin="0"
