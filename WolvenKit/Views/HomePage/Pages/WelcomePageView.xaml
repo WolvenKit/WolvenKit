@@ -586,6 +586,7 @@
                         <StackPanel>
                             <Button
                                 x:Name="NewProjectButton"
+                                AutomationProperties.AutomationId="NewProjectButton"
                                 Height="{DynamicResource WolvenKitWelcomeButtonHeight}"
                                 Margin="{DynamicResource WolvenKitWelcomeButtonMargin}"
                                 Padding="{DynamicResource WolvenKitWelcomeButtonPadding}"

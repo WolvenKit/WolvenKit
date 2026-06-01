@@ -144,7 +144,7 @@ public sealed class WolvenKitTestFixture : IDisposable
     }
 
     /// <summary>Waits up to <paramref name="timeoutMs"/> ms, polling every 200 ms, until <paramref name="condition"/> returns true.</summary>
-    public static bool WaitUntil(Func<bool> condition, int timeoutMs = 15_000, int pollIntervalMs = 200)
+    public static bool WaitUntil(Func<bool> condition, int timeoutMs = 15_000, int pollIntervalMs = 50)
     {
         var deadline = Stopwatch.StartNew();
         while (deadline.ElapsedMilliseconds < timeoutMs)
