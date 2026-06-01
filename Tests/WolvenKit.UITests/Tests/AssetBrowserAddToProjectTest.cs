@@ -9,6 +9,9 @@ using FlaUI.Core.Input;
 using FlaUI.Core.Tools;
 using FlaUI.Core.WindowsAPI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Syncfusion.UI.Xaml.Grid;
+using Syncfusion.UI.Xaml.TreeGrid;
+using Syncfusion.UI.Xaml;
 using WolvenKit.UITests.Helpers;
 
 namespace WolvenKit.UITests.Tests;
@@ -46,6 +49,58 @@ public class AssetBrowserAddToProjectTest
     private FlaUI.Core.AutomationElements.Window _mainWindow = null!;
     private string _projectDir = null!;
 
+    private ConditionFactory _cf
+    {
+        get
+        {
+            return _fixture.Automation.ConditionFactory;
+        }
+    }
+
+    private AutomationElement _assetBrowserRightFileView
+    {
+        get
+        {
+            return WaitForElement(() => _mainWindow
+                .FindFirstDescendant(_cf
+                    .ByAutomationId("RightFileView")),
+            label: "Asset Browser right file list");
+        }
+    }
+
+    private AutomationElement _assetBrowserLeftNavigation
+    {
+        get
+        {
+            return WaitForElement(() => _mainWindow
+                    .FindFirstDescendant(_cf
+                        .ByAutomationId("LeftNavigation")),
+                label: "Asset Browser left navigation");
+        }
+    }
+
+    private AutomationElement _projectExplorerTreeGrid
+    {
+        get
+        {
+            return WaitForElement(() => _mainWindow
+                    .FindFirstDescendant(_cf
+                        .ByAutomationId("ProjectExplorerTreeGrid")),
+                label: "Project Explorer Tree Grid");
+        }
+    }
+
+    private AutomationElement _projectExplorerView
+    {
+        get
+        {
+            return WaitForElement(() => _mainWindow
+                    .FindFirstDescendant(_cf
+                        .ByAutomationId("Project Explorer View")),
+                label: "Project Explorer View");
+        }
+    }
+
     [TestInitialize]
     public void Setup()
     {
@@ -67,7 +122,7 @@ public class AssetBrowserAddToProjectTest
 
     [TestMethod]
     [Timeout(300_000)] // 5 minutes — archive loading is the bottleneck
-    public void AddAnimMotionDatabaseFiles_CountMatchesProjectExplorer()
+    public void  AddAnimMotionDatabaseFiles_CountMatchesProjectExplorer()
     {
         // ── 1. Create a new project ──────────────────────────────────────────
         CreateNewProject(projectName: "UITestProject", projectPath: _projectDir, modName: "UITestMod");
@@ -76,18 +131,19 @@ public class AssetBrowserAddToProjectTest
         WaitForAssetBrowserReady();
 
         // ── 3. Navigate the left tree to the target folder ───────────────────
-        var leftNavigation = FindAssetBrowserLeftNavigation();
+        var leftNavigation = _assetBrowserLeftNavigation;
         NavigateLeftTree(leftNavigation, s_leftTreePath);
 
         // ── 4. Select all files via the header checkbox ───────────────────────
-        var rightFileView = FindAssetBrowserRightFileView();
-        var selectedCount = SelectAllAndGetCount(rightFileView);
+        ClickSelectAllHeader();
 
-        Assert.IsTrue(selectedCount > 0,
-            "Expected at least one file in anim_motion_database, but the grid appeared empty.");
+        var selectedCount = _assetBrowserRightFileView.FindFirstDescendant(_cf.ByClassName("DataGrid")).AsGrid().RowCount;
+
+        // See if we can get this to work
+        Assert.Equals(27, selectedCount);
 
         // ── 5. Right-click and add selected files to the project ──────────────
-        Mouse.MoveTo(rightFileView.BoundingRectangle.Center());
+        Mouse.MoveTo(_assetBrowserRightFileView.BoundingRectangle.Center());
         Mouse.RightClick();
         Task.Delay(250).Wait();
         ClickContextMenuItem("Add selected items to project");
@@ -157,36 +213,6 @@ public class AssetBrowserAddToProjectTest
         Assert.IsTrue(ready, "Asset Browser did not finish loading within 120 seconds.");
     }
 
-    private AutomationElement FindAssetBrowserLeftNavigation()
-    {
-        var cf = _fixture.Automation.ConditionFactory;
-        return WaitForElement(() =>
-            {
-                var element = _mainWindow
-                    .FindFirstDescendant(cf
-                        .ByClassName("TextBlock")
-                        .And(cf.ByName("Archive Name")))
-                    .Parent;
-                return element;
-            },
-            label: "Asset Browser left navigation tree");
-    }
-
-    private AutomationElement FindAssetBrowserRightFileView()
-    {
-        var cf = _fixture.Automation.ConditionFactory;
-        return WaitForElement(() =>
-            {
-                var element = _mainWindow
-                    .FindFirstDescendant(cf
-                        .ByClassName("TextBlock")
-                    .And(cf.ByName("File Name")))
-                    .Parent;
-                return element;
-            },
-            label: "Asset Browser right file list");
-    }
-
     /// <summary>
     /// Expands tree nodes one level at a time to reach the target folder.
     /// Each element in <paramref name="pathSegments"/> is matched against the
@@ -235,101 +261,53 @@ public class AssetBrowserAddToProjectTest
         }
     }
 
-    private AutomationElement FindExpansionButtonForFolderName(string folderName, AutomationElement parent) =>
-        WaitForElement(() => ExpansionButtonForFolderName(folderName, parent));
-
-    private AutomationElement ExpansionButtonForFolderName(string folderName, AutomationElement parent)
-    {
-        var cf = _fixture.Automation.ConditionFactory;
-        var folderIcon = parent
-            .FindFirstDescendant(cf.ByAutomationId(folderName)
-                .And(cf.ByClassName("FileIcon")));
-
-        if (folderIcon == null)
-        {
-            throw new InvalidOperationException($"Could not find the folder icon for folder {folderName}");
-        }
-
-        var rowContainer = folderIcon.Parent;
-        // or .Ancestor(cf => cf.ByControlType(ControlType.ListItem) || cf.ByClassName("TreeGridRow"))
-
-        if (rowContainer == null)
-        {
-            throw new InvalidOperationException($"Could not find the parent row of folder {folderName}");
-        }
-
-        var expander = rowContainer
-            .FindFirstDescendant(cf.ByControlType(ControlType.Button)
-                .Or(cf.ByClassName("TreeGridExpanderCell")))
-            .AsButton();
-
-        if (expander == null)
-        {
-            throw new InvalidOperationException($"Could not find the expander button for folder {folderName}");
-        }
-
-        return expander;
-    }
-
-    /// <summary>
-    /// Clicks the "Select All" checkbox in the SfDataGrid header column, then
-    /// returns the total row count exposed by the grid's Table UIA pattern.
-    /// Falls back to Ctrl+A if the header checkbox cannot be located.
-    /// </summary>
-    private int SelectAllAndGetCount(AutomationElement grid)
-    {
-        var cf = _fixture.Automation.ConditionFactory;
-        var assetBrowserView = grid.Parent;
-        // The GridCheckBoxSelectorColumn header is a CheckBox in the header row.
-        // Syncfusion exposes header cells as ControlType.Custom or Header type.
-        ClickSelectAllHeader(assetBrowserView);
-
-        // Read the total row count from the UIA Table pattern (works even with
-        // data virtualization because Syncfusion reports the full logical count).
-        if (grid.Patterns.Table.IsSupported)
-        {
-            int rowCount = grid.Patterns.Grid.Pattern.RowCount;
-            if (rowCount > 0)
-            {
-                return rowCount;
-            }
-        }
-        else
-        {
-            var selectedCount = grid
-                .As<DataGridViewRow>()
-                .FindAllDescendants(cf => cf
-                    .ByControlType(ControlType.CheckBox))
-                .Select(e => e
-                    .AsCheckBox().IsChecked)
-                .Count();
-            return selectedCount;
-        }
-
-        // Fallback: count visible DataItem children (may undercount with virtualization).
-        var visibleRows = grid.FindAllDescendants(cf.ByControlType(ControlType.DataItem));
-        return visibleRows.Length;
-    }
+    // private AutomationElement FindExpansionButtonForFolderName(string folderName, AutomationElement parent) =>
+    //     WaitForElement(() => ExpansionButtonForFolderName(folderName, parent));
+    //
+    // private AutomationElement ExpansionButtonForFolderName(string folderName, AutomationElement parent)
+    // {
+    //     var cf = _fixture.Automation.ConditionFactory;
+    //     var folderIcon = parent
+    //         .FindFirstDescendant(cf.ByAutomationId(folderName)
+    //             .And(cf.ByClassName("FileIcon")));
+    //
+    //     if (folderIcon == null)
+    //     {
+    //         throw new InvalidOperationException($"Could not find the folder icon for folder {folderName}");
+    //     }
+    //
+    //     var rowContainer = folderIcon.Parent;
+    //     // or .Ancestor(cf => cf.ByControlType(ControlType.ListItem) || cf.ByClassName("TreeGridRow"))
+    //
+    //     if (rowContainer == null)
+    //     {
+    //         throw new InvalidOperationException($"Could not find the parent row of folder {folderName}");
+    //     }
+    //
+    //     var expander = rowContainer
+    //         .FindFirstDescendant(cf.ByControlType(ControlType.Button)
+    //             .Or(cf.ByClassName("TreeGridExpanderCell")))
+    //         .AsButton();
+    //
+    //     if (expander == null)
+    //     {
+    //         throw new InvalidOperationException($"Could not find the expander button for folder {folderName}");
+    //     }
+    //
+    //     return expander;
+    // }
 
     /// <summary>
     /// Attempts to find and click the select-all checkbox in the SfDataGrid column header.
     /// Returns true if the click succeeded.
     /// </summary>
-    private void ClickSelectAllHeader(AutomationElement assetBrowserView)
+    private void ClickSelectAllHeader()
     {
-        try
-        {
-            var cf = _fixture.Automation.ConditionFactory;
-            assetBrowserView
-                .FindFirstDescendant(cf
-                    .ByControlType(ControlType.CheckBox))
-                .Click();
-            Task.Delay(100).Wait();
-        }
-        catch
-        {
-            throw new InvalidOperationException($"Could not find the checkbox to select all in AssetBrowser right pane.");
-        }
+        var checkBox = _assetBrowserRightFileView
+            .FindFirstDescendant(_cf.ByClassName("HeaderRowControl"))
+            .FindFirstDescendant(_cf.ByControlType(ControlType.CheckBox));
+        Mouse.Click(checkBox.BoundingRectangle.Center());
+        Task.Delay(100).Wait();
     }
 
     private void ClickContextMenuItem(string headerText)
@@ -396,6 +374,7 @@ public class AssetBrowserAddToProjectTest
 
         var projectExplorer = _mainWindow.FindFirstDescendant(
             cf.ByClassName("ProjectExplorerView"));
+        var projectExplorerTreeGrid = _mainWindow.FindFirstDescendant(cf.ByAutomationId("ProjectExplorerTreeGrid"));
 
         if (projectExplorer == null)
         {
