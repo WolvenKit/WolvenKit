@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using FlaUI.Core.AutomationElements;
 using FlaUI.Core.Conditions;
 using FlaUI.Core.Definitions;
@@ -50,7 +51,11 @@ public class AssetBrowserAddToProjectTest
     {
         _fixture = new WolvenKitTestFixture();
         _mainWindow = _fixture.Start(startupTimeoutSeconds: 90);
+
+        // Create the temp dir for project files.
         _projectDir = Path.Combine(_fixture.TempRoot, "TestProject");
+        // e.g. C:\lib\WolvenKit\Tests\WolvenKit.UITests\bin\x64\obj\
+        //         UITestTemp\d2ee145c598747f5835796331dad35f5\TestProject
         Directory.CreateDirectory(_projectDir);
     }
 
@@ -117,8 +122,11 @@ public class AssetBrowserAddToProjectTest
                 .FindFirstDescendant(cf.ByClassName("ProjectWizardView")));
 
         SetTextBox(wizard, "ProjectNameTextBox", projectName);
+        Task.Delay(500).Wait();
         SetTextBox(wizard, "ProjectPathTextBox", projectPath);
+        Task.Delay(2000).Wait();
         SetTextBox(wizard, "ModNameTextBox", modName);
+        Task.Delay(500).Wait();
 
         var okButton = wizard.FindFirstDescendant(cf.ByAutomationId("OkButton"))
             ?? throw new InvalidOperationException("Could not find the wizard OK button.");
@@ -390,6 +398,8 @@ public class AssetBrowserAddToProjectTest
             ?? throw new InvalidOperationException($"TextBox '{automationId}' not found in dialog.");
 
         textBox.AsTextBox().Text = string.Empty;
+        Task.Delay(500).Wait();
         textBox.AsTextBox().Enter(text);
+        Task.Delay(500).Wait();
     }
 }

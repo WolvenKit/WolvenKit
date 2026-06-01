@@ -39,7 +39,7 @@ public sealed class WolvenKitTestFixture : IDisposable
     {
         // Place temp projects under the test project's obj/ directory.
         var assemblyDir = AppContext.BaseDirectory;
-        var testProjectRoot = Path.GetFullPath(Path.Combine(assemblyDir, "..", "..", ".."));
+        var testProjectRoot = Path.GetFullPath(Path.Combine(assemblyDir, "..", ".."));
         TempRoot = Path.Combine(testProjectRoot, "obj", "UITestTemp", Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(TempRoot);
     }
