@@ -155,6 +155,7 @@ public class RED4Controller : ObservableObject, IGameController
     private void DisableLoadingMode()
     {
         _progressService.IsIndeterminate = false;
+        _progressService.Status = EStatus.Ready;
         DispatcherHelper.StopRepeatingAction(_loadingCompletion);
     }
 
