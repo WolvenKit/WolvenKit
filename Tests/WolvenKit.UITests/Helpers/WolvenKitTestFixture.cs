@@ -56,15 +56,63 @@ public sealed class WolvenKitTestFixture : IDisposable
         _automation = new UIA3Automation();
         _application = Application.Launch(exePath);
 
-        var window = _application.GetMainWindow(_automation, TimeSpan.FromSeconds(startupTimeoutSeconds));
-        if (window == null)
+        // Do NOT use Application.GetMainWindow() — it polls Process.MainWindowHandle,
+        // which Windows only sets to whichever window first becomes foreground. WolvenKit
+        // shows transient loading UI before its docking shell is ready, so that handle
+        // either goes stale or never stabilises, causing a spurious timeout.
+        //
+        // Instead we scan all top-level windows owned by the process and look for the
+        // one that carries the "File" menu (a reliable sign the shell is ready), with
+        // a broad timeout to accommodate archive loading.
+        var automation = _automation;
+        Window? found = null;
+
+        bool ready = WaitUntil(
+            () =>
+            {
+                var windows = _application.GetAllTopLevelWindows(automation);
+                found = windows.FirstOrDefault(IsMainShellWindow);
+                return found != null;
+            },
+            timeoutMs: startupTimeoutSeconds * 1000,
+            pollIntervalMs: 500);
+
+        if (!ready || found == null)
         {
+            var titles = string.Join(", ",
+                _application.GetAllTopLevelWindows(automation).Select(w => $"'{w.Title}'"));
             throw new TimeoutException(
-                $"WolvenKit main window did not appear within {startupTimeoutSeconds} seconds. " +
-                $"Executable: {exePath}");
+                $"WolvenKit main shell window did not appear within {startupTimeoutSeconds} s. " +
+                $"Open windows: [{titles}]. Executable: {exePath}");
         }
 
-        return window;
+        return found;
+    }
+
+    /// <summary>
+    /// Returns true when <paramref name="window"/> looks like the WolvenKit main docking shell
+    /// rather than a transient dialog or splash screen.
+    /// We use size as the heuristic: the shell is always large; dialogs are small.
+    /// </summary>
+    private static bool IsMainShellWindow(Window window)
+    {
+        try
+        {
+            if (!window.IsAvailable || window.IsOffscreen)
+            {
+                return false;
+            }
+
+            var bounds = window.BoundingRectangle;
+
+            // Any real application shell will be at least 600×400.
+            // Splash screens and dialogs are smaller or zero-sized while loading.
+            return bounds.Width >= 600 && bounds.Height >= 400;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     private static string ResolveExePath()
