@@ -4,15 +4,26 @@ on:
 
 env:
   PROJ: ./WolvenKit/WolvenKit.csproj
+  GH_TOKEN: ${{ github.token }}
 
 jobs:
   stage-changelog:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Ensure Changes exist
+        shell: bash
+        run: |
+          git checkout main
+          if cmp -s 'changelog/!template.yaml' 'changelog/!unreleased.yaml'; then
+            echo "No changes in changelog, aborting."
+            exit 1
+          fi
 
       - name: Configure git
         run: |
@@ -39,12 +50,29 @@ jobs:
           mkdir compiled-changelog
           pip install pyyaml
           echo ${{env.VERSION_APP}}
-          python "tools/compile_changelog.py" --release ${{env.VERSION_APP}} --input "changelog/!unreleased.yaml" --out-md "compiled-changelog/CHANGELOG.md" --out-bb "compiled-changelog/CHANGELOG.txt" --changelog "CHANGELOG.md"
+          python "tools/compile_changelog.py" --release ${{env.VERSION_APP}} --input "changelog/!unreleased.yaml" --out-md "changelog/generated/CHANGELOG.md" --out-bb "changelog/generated/CHANGELOG.txt" --changelog "CHANGELOG.md"
+
+      - name: Name Unreleased
+        shell: bash
+        run: |
+          mv 'changelog/!unreleased.yaml' "changelog/${VERSION_APP}.yaml"
+
+      - name: Add Templated Unreleased
+        shell: bash
+        run: |
+          cp 'changelog/!template.yaml' 'changelog/!unreleased.yaml'
 
       - name: Commit and Push
         run: |
           git add CHANGELOG.md
-          git add compiled-changelog/CHANGELOG.md
-          git add compiled-changelog/CHANGELOG.txt
-          git commit -m "Stage changelog for version ${{env.VERSION_APP}}" || echo "No changes to commit"
+          git add changelog/
+          git commit -m "Generate changelog for version ${{env.VERSION_APP}} and update source yaml files" || echo "No changes to commit"
           git push origin changelog-staging
+
+      - name: Create Pull Request
+        run: |
+          gh pr create \
+            --base main \
+            --head "changelog-staging" \
+            --title "Generate changelog for ${{env.VERSION_APP}}" \
+            --body "Generates user facing changelog entries and updates source yaml files. beep boop."
