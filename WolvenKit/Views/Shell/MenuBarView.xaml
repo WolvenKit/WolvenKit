@@ -285,6 +285,7 @@
 
             <!-- Project -->
             <MenuItem
+                AutomationProperties.AutomationId="MenuItemProject"
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
                 FontSize="{DynamicResource WolvenKitFontSubTitle}"
                 Header="Project">

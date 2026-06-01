@@ -103,9 +103,9 @@ public class AssetBrowserAddToProjectTest
         var cf = _fixture.Automation.ConditionFactory;
 
         // File → New Project
-        var fileMenu = _mainWindow.FindFirstDescendant(cf.ByAutomationId("MenuItemFile"))
-            ?? throw new InvalidOperationException("Could not find the File menu.");
-        fileMenu.Click();
+        var projectMenu = _mainWindow.FindFirstDescendant(cf.ByAutomationId("MenuItemProject"))
+            ?? throw new InvalidOperationException("Could not find the Project menu.");
+        projectMenu.Click();
 
         var newProjectItem = WaitForElement(() =>
             _mainWindow.FindFirstDescendant(cf.ByAutomationId("MenuItemNewProject")));
@@ -114,7 +114,7 @@ public class AssetBrowserAddToProjectTest
         // Fill in the Project Wizard dialog (it may open as a child of the main window or as a separate dialog).
         var wizard = WaitForElement(() =>
             _fixture.Automation.GetDesktop()
-                .FindFirstDescendant(cf.ByName("Project Wizard")));
+                .FindFirstDescendant(cf.ByClassName("ProjectWizardView")));
 
         SetTextBox(wizard, "ProjectNameTextBox", projectName);
         SetTextBox(wizard, "ProjectPathTextBox", projectPath);
