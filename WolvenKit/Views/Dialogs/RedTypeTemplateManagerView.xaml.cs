@@ -36,19 +36,41 @@ public partial class RedTypeTemplateManagerView : ReactiveUserControl<RedTypeTem
         };
     }
 
-    private async void Run_OnClick(object sender, RoutedEventArgs e)
+    private async void Edit_OnClick(object sender, RoutedEventArgs e)
     {
         if (ViewModel == null)
         {
             return;
         }
 
-        if (sender is not Button { DataContext: ScriptFileViewModel scriptFile })
+        if (sender is not Button { DataContext: RedTypeTemplateDescriptorManagerExt scriptFile })
         {
             return;
         }
 
         await ViewModel.EditFile(scriptFile);
+    }
+
+    private async void TemplateDataGrid_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (ViewModel == null)
+        {
+            return;
+        }
+
+        if (sender is not Syncfusion.UI.Xaml.Grid.SfDataGrid dataGrid)
+        {
+            return;
+        }
+
+        var record = dataGrid.SelectedItem;
+
+        if (record is null)
+        {
+            return;
+        }
+
+        await ViewModel.EditFile((RedTypeTemplateDescriptorManagerExt)record);
     }
 
     private async void Delete_OnClick(object sender, RoutedEventArgs e)

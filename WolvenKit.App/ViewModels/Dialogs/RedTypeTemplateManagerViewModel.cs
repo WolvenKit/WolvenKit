@@ -141,15 +141,9 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
         _appViewModel.CloseModalCommand.Execute(null);
     }
 
-    public async Task EditFile(ScriptFileViewModel scriptFile)
+    public async Task EditFile(RedTypeTemplateDescriptorManagerExt templateDesc)
     {
-        if (!File.Exists(scriptFile.Path))
-        {
-            return;
-        }
-        var code = File.ReadAllText(scriptFile.Path);
-
-        // await _templateService.ExecuteAsync(code);
+        _loggerService.Debug("Edit File method reached");
     }
 
     public async Task DeleteFile(RedTypeTemplateDescriptorManagerExt templateDescriptor)

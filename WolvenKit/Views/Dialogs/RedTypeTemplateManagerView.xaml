@@ -60,7 +60,8 @@
             NavigationMode="Row"
             AllowGrouping="True"
             ShowGroupDropArea="False"
-            AutoExpandGroups="True">
+            AutoExpandGroups="True"
+            MouseDoubleClick="TemplateDataGrid_OnMouseDoubleClick">
 
             <syncfusion:SfDataGrid.SortColumnDescriptions>
                 <syncfusion:SortColumnDescription
@@ -93,7 +94,7 @@
                                     Margin="{DynamicResource WolvenKitMarginSmallLeft}"
                                     Visibility="{Binding CanEdit,
                                                          Converter={StaticResource BooleanToVisibilityConverter}}"
-                                    Click="Run_OnClick"
+                                    Click="Edit_OnClick"
                                     ToolTip="Edit">
                                     <iconPacks:PackIconMaterial
                                         Kind="FileEdit"
