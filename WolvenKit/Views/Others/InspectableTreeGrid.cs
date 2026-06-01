@@ -1,8 +1,12 @@
+#nullable enable
+
+using System;
 using System.Collections;
 using System.Windows.Automation;
 using System.Windows.Automation.Peers;
 using System.Windows.Automation.Provider;
 using Syncfusion.UI.Xaml.TreeGrid;
+using Syncfusion.Windows.ComponentModel;
 
 namespace WolvenKit.Views.Others;
 
@@ -42,7 +46,7 @@ internal sealed class InspectableTreeGridAutomationPeer
     protected override AutomationControlType GetAutomationControlTypeCore() =>
         AutomationControlType.Tree;
 
-    public override object GetPattern(PatternInterface patternInterface) =>
+    public override object? GetPattern(PatternInterface patternInterface) =>
         patternInterface == PatternInterface.Grid
             ? this
             : base.GetPattern(patternInterface);
@@ -66,15 +70,16 @@ internal sealed class InspectableTreeGridAutomationPeer
     public int ColumnCount => _grid.Columns.Count;
 
     /// <summary>Not needed for count-only tests.</summary>
-    public IRawElementProviderSimple GetItem(int row, int column) => null;
+    public IRawElementProviderSimple? GetItem(int row, int column) => null;
 
     // ── Helpers ───────────────────────────────────────────────────────────────
 
     private static int CountLeaves(IEnumerable items, string childPropertyName)
     {
-        int count = 0;
+        var count = 0;
 
         var enumerator = items.GetEnumerator();
+
         while (enumerator.MoveNext())
         {
             var item = enumerator.Current;
@@ -97,6 +102,11 @@ internal sealed class InspectableTreeGridAutomationPeer
                 // Empty collection means a folder with no files yet — treat as leaf.
                 count += childCount == 0 ? 1 : childCount;
             }
+        }
+
+        if (enumerator is IDisposable disposable)
+        {
+            disposable.Dispose();
         }
 
         return count;
