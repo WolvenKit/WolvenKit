@@ -44,17 +44,15 @@
             </Button>
         </DockPanel>
 
-        <!-- Separator -->
-        <Separator
-            Grid.Row="1"
-            Margin="{DynamicResource WolvenKitMarginSmallVertical}" />
-
         <syncfusion:SfDataGrid
             x:Name="TemplateDataGrid"
             Grid.Row="2"
             FontSize="{DynamicResource WolvenKitFontSubTitle}"
             HeaderRowHeight="{DynamicResource WolvenKitTreeRowHeaderHeight}"
             RowHeight="{DynamicResource WolvenKitTreeRowHeight}"
+            Background="{StaticResource ContentBackground}"
+            BorderBrush="#373737"
+            GridLinesVisibility="Both"
             AutoGenerateColumns="False"
             ItemsSource="{Binding Templates}"
             NavigationMode="Row"
@@ -62,6 +60,40 @@
             ShowGroupDropArea="False"
             AutoExpandGroups="True"
             MouseDoubleClick="TemplateDataGrid_OnMouseDoubleClick">
+
+            <syncfusion:SfDataGrid.Resources>
+                <!-- Normal data cell grid lines -->
+                <Style TargetType="syncfusion:GridCell">
+                    <Setter Property="BorderBrush" Value="#373737" />
+                </Style>
+
+                <!-- Main column headers: Name / Type / Action -->
+                <Style TargetType="syncfusion:GridHeaderCellControl">
+                    <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
+                    <Setter Property="BorderBrush" Value="#373737" />
+                </Style>
+
+                <!-- Group/source sub headers -->
+                <Style TargetType="syncfusion:GridCaptionSummaryCell">
+                    <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
+                    <Setter Property="BorderBrush" Value="#373737" />
+                </Style>
+
+                <!-- Grid outer border when style-based resolution is needed -->
+                <Style TargetType="syncfusion:SfDataGrid">
+                    <Setter Property="BorderBrush" Value="#373737" />
+                </Style>
+
+                <!-- Group drop area border, if enabled later -->
+                <Style TargetType="syncfusion:GroupDropArea">
+                    <Setter Property="BorderBrush" Value="#373737" />
+                </Style>
+
+                <!-- Indent cells used by grouping/expander area -->
+                <Style TargetType="syncfusion:GridIndentCell">
+                    <Setter Property="BorderBrush" Value="#373737" />
+                </Style>
+            </syncfusion:SfDataGrid.Resources>
 
             <syncfusion:SfDataGrid.SortColumnDescriptions>
                 <syncfusion:SortColumnDescription
@@ -123,11 +155,6 @@
                 </syncfusion:GridTemplateColumn>
             </syncfusion:SfDataGrid.Columns>
         </syncfusion:SfDataGrid>
-
-        <!-- Separator -->
-        <Separator
-            Grid.Row="3"
-            Margin="{DynamicResource WolvenKitMarginSmallVertical}" />
 
         <DockPanel Grid.Row="4">
             <hc:TextBox
