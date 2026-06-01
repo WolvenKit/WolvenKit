@@ -48,10 +48,9 @@ public sealed class WolvenKitTestFixture : IDisposable
     /// Call once per test class from [TestInitialize] or class fixture init.
     /// </summary>
     /// <param name="startupTimeoutSeconds">
-    /// How long to wait for the main window. WolvenKit loads archives on startup,
-    /// so this can legitimately take 20–60 s depending on hardware.
+    /// How long to wait for the main window.
     /// </param>
-    public Window Start(int startupTimeoutSeconds = 60)
+    public Window Start(int startupTimeoutSeconds = 400)
     {
         var exePath = ResolveExePath();
         _automation = new UIA3Automation();
@@ -83,14 +82,18 @@ public sealed class WolvenKitTestFixture : IDisposable
         {
             var candidate = Path.GetFullPath(
                 Path.Combine(assemblyDir,
-                    "..", "..", "..", "..", "..",    // Tests/WolvenKit.UITests/bin/<config>/net…  →  repo root
-                    "WolvenKit", "bin", config,
+                    "..", "..", "..", "..", "..", "..",    // Tests/WolvenKit.UITests/bin/<config>/net…  →  repo root
+                    "WolvenKit", "bin", "x64", config,
                     "net8.0-windows10.0.17763", "win-x64",
                     "WolvenKit.exe"));
 
             if (File.Exists(candidate))
             {
                 return candidate;
+            }
+            else
+            {
+                Console.WriteLine($"Failed to find WolvenKit.exe in dir: {candidate}.");
             }
         }
 

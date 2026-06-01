@@ -6,11 +6,16 @@
     <IsPackable>false</IsPackable>
     <Platforms>x64</Platforms>
     <TargetFramework>net8.0-windows10.0.17763</TargetFramework>
-    <UseWpf>true</UseWpf>
     <!-- UI tests launch WolvenKit.exe as an external process via FlaUI and require
          the app to be built and published separately (or pointed to via WOLVENKIT_EXE). -->
     <RootNamespace>WolvenKit.UITests</RootNamespace>
   </PropertyGroup>
+
+    <ItemGroup Condition="'$(OS)' == 'Windows_NT'">
+        <ProjectReference Include="..\..\WolvenKit\WolvenKit.csproj"
+                          ReferenceOutputAssembly="false"
+                          SkipGetTargetFrameworkProperties="true" />
+    </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FlaUI.Core" />

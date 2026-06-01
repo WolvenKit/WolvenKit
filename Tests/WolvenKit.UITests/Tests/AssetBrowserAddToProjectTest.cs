@@ -25,8 +25,6 @@ namespace WolvenKit.UITests.Tests;
 /// Prerequisites:
 ///   • WolvenKit must have been configured (CP77 executable path set in Settings)
 ///     so that the Asset Browser can load game archives.
-///   • Either set the WOLVENKIT_EXE environment variable, or build the WolvenKit
-///     project first so the executable exists at the default output location.
 ///
 /// The test is intentionally slow: archive loading + file extraction take time.
 /// </summary>
@@ -239,7 +237,7 @@ public class AssetBrowserAddToProjectTest
         // data virtualization because Syncfusion reports the full logical count).
         if (grid.Patterns.Table.IsSupported)
         {
-            int rowCount = grid.Patterns.Table.Pattern.RowCount;
+            int rowCount = grid.Patterns.Grid.Pattern.RowCount;
             if (rowCount > 0)
             {
                 return rowCount;
@@ -262,8 +260,9 @@ public class AssetBrowserAddToProjectTest
             // The header row is typically the first row-level element of the grid.
             // The GridCheckBoxSelectorColumn header checkbox is a CheckBox child.
             var header = grid.FindFirstDescendant(el =>
-                el.ControlType == ControlType.Header
-                || el.ControlType == ControlType.HeaderItem);
+                el.ByControlType(ControlType.Header)
+                    .Or(el.ByControlType(ControlType.HeaderItem))
+               );
 
             if (header == null)
             {
@@ -271,7 +270,7 @@ public class AssetBrowserAddToProjectTest
             }
 
             var checkBox = header.FindFirstChild(el =>
-                el.ControlType == ControlType.CheckBox);
+                el.ByControlType(ControlType.CheckBox));
 
             if (checkBox == null)
             {
