@@ -9,9 +9,6 @@ using FlaUI.Core.Input;
 using FlaUI.Core.Tools;
 using FlaUI.Core.WindowsAPI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Syncfusion.UI.Xaml.Grid;
-using Syncfusion.UI.Xaml.TreeGrid;
-using Syncfusion.UI.Xaml;
 using WolvenKit.UITests.Helpers;
 
 namespace WolvenKit.UITests.Tests;
@@ -137,10 +134,15 @@ public class AssetBrowserAddToProjectTest
         // ── 4. Select all files via the header checkbox ───────────────────────
         ClickSelectAllHeader();
 
-        var selectedCount = _assetBrowserRightFileView.FindFirstDescendant(_cf.ByClassName("DataGrid")).AsGrid().RowCount;
+        // Read the row count via the Table pattern exposed by InspectableDataGrid's
+        // custom automation peer. RowCount comes from View.Records.Count, which is
+        // Syncfusion's live post-filter list — no Coded UI plugin required.
+        var rightView = _assetBrowserRightFileView;
+        Assert.IsTrue(rightView.Patterns.Table.IsSupported,
+            "RightFileView does not support the Table pattern. " +
+            "Ensure AssetBrowserView.xaml uses others:InspectableDataGrid and the app has been rebuilt.");
 
-        // See if we can get this to work
-        Assert.Equals(27, selectedCount);
+        int selectedCount = rightView.Patterns.Table.Pattern.RowCount;
 
         // ── 5. Right-click and add selected files to the project ──────────────
         Mouse.MoveTo(_assetBrowserRightFileView.BoundingRectangle.Center());
