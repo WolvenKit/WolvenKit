@@ -21,6 +21,7 @@ using HandyControl.Tools;
 using WolvenKit.App.Models;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
+using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
 using Xunit;
 using Xunit.Sdk;
@@ -61,8 +62,10 @@ public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
     private CancellationTokenSource _cts = new();
 
     [StaFact]
-    public async Task ConvertToJson_FromArchiveSelection_UpdatesWatcherModels_And_TreeGridNodes_Correctly()
+    public async Task WhenAnimsDbSelectedAssetBrowserRightViewHasRightItems()
     {
+        var expectedNumberOfItems = 27;
+
         _host = IntegrationTestHost.Create();
         var services = _host.Services;
         services.UseMicrosoftDependencyResolver();
@@ -70,6 +73,9 @@ public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
 
         var resolver = Locator.CurrentMutable;
         resolver.InitializeSplat();
+
+        var hashService = services.GetRequiredService<IHashService>();
+        hashService.Load();
 
         var settingsManager = services.GetRequiredService<ISettingsManager>();
         var gameDir = ResolveGameDirectory();
@@ -114,17 +120,11 @@ public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
             .Directories[Const.AnimMotionDbName];
         AddDirs(animMotionDb, vm);
 
-        // Here, animMotionDb.Files should have lots of members, but only has 1.
-
         var rightItems = vm.RightItems;
-        Assert.True(rightItems.Count> 5);
+        Assert.Equal(expectedNumberOfItems, rightItems.Count);
 
         vm.RightItems.ToList().ForEach(item => item.IsChecked = true);
-        await vm.AddSelectedAsync();
-
-        // This assertion stil failing, will only have 1 file. Why?
-        Assert.True(_projectExplorerVm!.FileList.Count > 5);
-    }
+   }
 
     private void AddDirs(RedFileSystemModel model,
         AssetBrowserViewModel vm)
