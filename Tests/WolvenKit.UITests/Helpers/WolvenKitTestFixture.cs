@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using FlaUI.Core;
 using FlaUI.Core.AutomationElements;
@@ -56,14 +57,6 @@ public sealed class WolvenKitTestFixture : IDisposable
         _automation = new UIA3Automation();
         _application = Application.Launch(exePath);
 
-        // Do NOT use Application.GetMainWindow() — it polls Process.MainWindowHandle,
-        // which Windows only sets to whichever window first becomes foreground. WolvenKit
-        // shows transient loading UI before its docking shell is ready, so that handle
-        // either goes stale or never stabilises, causing a spurious timeout.
-        //
-        // Instead we scan all top-level windows owned by the process and look for the
-        // one that carries the "File" menu (a reliable sign the shell is ready), with
-        // a broad timeout to accommodate archive loading.
         var automation = _automation;
         Window? found = null;
 
