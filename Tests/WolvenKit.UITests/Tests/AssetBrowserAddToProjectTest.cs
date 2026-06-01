@@ -6,6 +6,7 @@ using FlaUI.Core.AutomationElements;
 using FlaUI.Core.Conditions;
 using FlaUI.Core.Definitions;
 using FlaUI.Core.Input;
+using FlaUI.Core.Tools;
 using FlaUI.Core.WindowsAPI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.UITests.Helpers;
@@ -80,19 +81,15 @@ public class AssetBrowserAddToProjectTest
 
         // ── 4. Select all files via the header checkbox ───────────────────────
         var rightFileView = FindAssetBrowserRightFileView();
-        var selectedCount = rightFileView
-            .As<DataGridViewRow>()
-            .FindAllDescendants(cf => cf
-                .ByControlType(ControlType.CheckBox))
-            .Select(e => e
-                .AsCheckBox().IsChecked)
-            .Count();
+        var selectedCount = SelectAllAndGetCount(rightFileView);
 
         Assert.IsTrue(selectedCount > 0,
             "Expected at least one file in anim_motion_database, but the grid appeared empty.");
 
         // ── 5. Right-click and add selected files to the project ──────────────
-        rightFileView.RightClick();
+        Mouse.MoveTo(rightFileView.BoundingRectangle.Center());
+        Mouse.RightClick();
+        Task.Delay(250).Wait();
         ClickContextMenuItem("Add selected items to project");
 
         // ── 6. Wait for the Project Explorer to reflect the added files ───────
@@ -282,10 +279,10 @@ public class AssetBrowserAddToProjectTest
     private int SelectAllAndGetCount(AutomationElement grid)
     {
         var cf = _fixture.Automation.ConditionFactory;
-
+        var assetBrowserView = grid.Parent;
         // The GridCheckBoxSelectorColumn header is a CheckBox in the header row.
         // Syncfusion exposes header cells as ControlType.Custom or Header type.
-        ClickSelectAllHeader(grid);
+        ClickSelectAllHeader(assetBrowserView);
 
         // Read the total row count from the UIA Table pattern (works even with
         // data virtualization because Syncfusion reports the full logical count).
@@ -297,6 +294,17 @@ public class AssetBrowserAddToProjectTest
                 return rowCount;
             }
         }
+        else
+        {
+            var selectedCount = grid
+                .As<DataGridViewRow>()
+                .FindAllDescendants(cf => cf
+                    .ByControlType(ControlType.CheckBox))
+                .Select(e => e
+                    .AsCheckBox().IsChecked)
+                .Count();
+            return selectedCount;
+        }
 
         // Fallback: count visible DataItem children (may undercount with virtualization).
         var visibleRows = grid.FindAllDescendants(cf.ByControlType(ControlType.DataItem));
@@ -307,14 +315,16 @@ public class AssetBrowserAddToProjectTest
     /// Attempts to find and click the select-all checkbox in the SfDataGrid column header.
     /// Returns true if the click succeeded.
     /// </summary>
-    private void ClickSelectAllHeader(AutomationElement grid)
+    private void ClickSelectAllHeader(AutomationElement assetBrowserView)
     {
         try
         {
             var cf = _fixture.Automation.ConditionFactory;
-            var scrollBar =  grid.FindFirstDescendant(cf.ByControlType(ControlType.ScrollBar));
-            var scrollBarParent =  scrollBar.Parent;
-            scrollBarParent.As<DataGridView>().Parent.FindFirstDescendant(cf.ByControlType(ControlType.CheckBox)).Click();
+            assetBrowserView
+                .FindFirstDescendant(cf
+                    .ByControlType(ControlType.CheckBox))
+                .Click();
+            Task.Delay(100).Wait();
         }
         catch
         {
@@ -370,20 +380,35 @@ public class AssetBrowserAddToProjectTest
     {
         var cf = _fixture.Automation.ConditionFactory;
 
-        var treeGrid = _mainWindow.FindFirstDescendant(
-            cf.ByAutomationId("ProjectExplorerTreeGrid"));
+        var expandAllButton = _mainWindow
+            .FindFirstDescendant(cf
+                .ByControlType(ControlType.Button)
+                .And(cf
+                    .ByAutomationId("ExpandAllButton")));
 
-        if (treeGrid == null)
+        if (expandAllButton == null)
         {
-            return 0;
+            throw new InvalidOperationException("Could not find the ExpandAll button.");
         }
 
-        var allNodes = treeGrid.FindAllDescendants(
-            cf.ByControlType(ControlType.TreeItem)
-            .Or(cf.ByControlType(ControlType.DataItem)));
+        expandAllButton.Click();
+        Task.Delay(100).Wait();
+
+        var projectExplorer = _mainWindow.FindFirstDescendant(
+            cf.ByClassName("ProjectExplorerView"));
+
+        if (projectExplorer == null)
+        {
+            throw new  InvalidOperationException("Could not find the ProjectExplorerView.");
+        }
+
+        //
+        // var allNodes = treeGrid.FindAllDescendants(
+        //     cf.ByControlType(ControlType.TreeItem)
+        //     .Or(cf.ByControlType(ControlType.DataItem)));
 
         // A leaf node is one that has no TreeItem/DataItem children of its own.
-        return allNodes.Count(node =>
+        return projectExplorer.AsGrid().Rows.Count(node =>
         {
             var children = node.FindAllChildren(
                 cf.ByControlType(ControlType.TreeItem)

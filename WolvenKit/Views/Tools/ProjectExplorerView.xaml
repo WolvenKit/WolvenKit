@@ -982,6 +982,7 @@
                     Margin="{DynamicResource WolvenKitMarginTinyFooter}"
                     Orientation="Horizontal">
                     <Button
+                        AutomationProperties.AutomationId="ExpandAllButton"
                         Height="Auto"
                         Padding="0"
                         Click="ExpandAll_OnClick"
