@@ -1,4 +1,3 @@
-using System;
 using System.Windows.Automation;
 using System.Windows.Automation.Peers;
 using System.Windows.Automation.Provider;
@@ -8,14 +7,12 @@ namespace WolvenKit.Views.Others;
 
 /// <summary>
 /// A thin <see cref="SfDataGrid"/> subclass that exposes its logical row count
-/// through the standard UIA <b>Value</b> and <b>Table</b> patterns.
+/// through the standard UIA <b>Grid</b> pattern so FlaUI can read it via
+/// <c>element.Patterns.Grid.Pattern.RowCount</c>.
 ///
 /// Syncfusion's Coded UI plugin is unmaintained and cannot be built against
-/// modern SDKs. By overriding <see cref="OnCreateAutomationPeer"/> we bypass
-/// that entirely: FlaUI (or any UIA client) can read the count via:
-/// <code>
-///   int count = int.Parse(element.Patterns.Value.Pattern.Value.ValueOrDefault);
-/// </code>
+/// modern SDKs. Overriding <see cref="OnCreateAutomationPeer"/> bypasses it
+/// entirely — no extra plugin required on either the app or test side.
 ///
 /// Replace <c>syncfusion:SfDataGrid</c> with <c>others:InspectableDataGrid</c>
 /// in XAML wherever a test needs to inspect the row count.
@@ -27,7 +24,7 @@ public class InspectableDataGrid : SfDataGrid
 }
 
 internal sealed class InspectableDataGridAutomationPeer
-    : FrameworkElementAutomationPeer, IValueProvider, ITableProvider
+    : FrameworkElementAutomationPeer, IGridProvider
 {
     private readonly InspectableDataGrid _grid;
 
@@ -41,48 +38,16 @@ internal sealed class InspectableDataGridAutomationPeer
         AutomationControlType.DataGrid;
 
     public override object GetPattern(PatternInterface patternInterface) =>
-        patternInterface is PatternInterface.Value or PatternInterface.Table
+        patternInterface == PatternInterface.Grid
             ? this
             : base.GetPattern(patternInterface);
 
-    // ── IValueProvider ────────────────────────────────────────────────────────
-    // The Value is a plain integer string — easy to parse in FlaUI without any
-    // Syncfusion dependencies on the test side.
-
-    public bool IsReadOnly => true;
+    // ── IGridProvider ─────────────────────────────────────────────────────────
 
     /// <summary>
-    /// Returns the number of logical (filtered/sorted) rows as a string.
-    /// Reads from <c>SfDataGrid.View.Records</c> so it reflects the current
-    /// filter state, not the raw ItemsSource count.
+    /// Number of logical (post-filter/sort) rows. Reads from
+    /// <c>SfDataGrid.View.Records</c> so it stays correct when filters are active.
     /// </summary>
-    public string Value
-    {
-        get
-        {
-            // View.Records is the live, post-filter/sort record list.
-            if (_grid.View?.Records is { } records)
-            {
-                return records.Count.ToString();
-            }
-
-            // Fallback: raw ItemsSource count (no filtering applied).
-            if (_grid.ItemsSource is System.Collections.ICollection col)
-            {
-                return col.Count.ToString();
-            }
-
-            return "0";
-        }
-    }
-
-    public void SetValue(string value) =>
-        throw new InvalidOperationException("InspectableDataGrid row count is read-only.");
-
-    // ── ITableProvider ────────────────────────────────────────────────────────
-    // Implementing Table lets UIA clients discover the count via the Table
-    // pattern as well (e.g. element.Patterns.Table.Pattern.RowCount).
-
     public int RowCount
     {
         get
@@ -103,11 +68,9 @@ internal sealed class InspectableDataGridAutomationPeer
 
     public int ColumnCount => _grid.Columns.Count;
 
-    public RowOrColumnMajor RowOrColumnMajor => RowOrColumnMajor.RowMajor;
-
-    public IRawElementProviderSimple[] GetRowHeaders() =>
-        Array.Empty<IRawElementProviderSimple>();
-
-    public IRawElementProviderSimple[] GetColumnHeaders() =>
-        Array.Empty<IRawElementProviderSimple>();
+    /// <summary>
+    /// Returns null — individual cell providers are not needed for our tests.
+    /// Implement if you need FlaUI to traverse individual cells.
+    /// </summary>
+    public IRawElementProviderSimple? GetItem(int row, int column) => null;
 }

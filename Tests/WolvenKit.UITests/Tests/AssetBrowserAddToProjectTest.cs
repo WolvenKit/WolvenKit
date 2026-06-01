@@ -134,15 +134,15 @@ public class AssetBrowserAddToProjectTest
         // ── 4. Select all files via the header checkbox ───────────────────────
         ClickSelectAllHeader();
 
-        // Read the row count via the Table pattern exposed by InspectableDataGrid's
+        // Read the row count via the Grid pattern exposed by InspectableDataGrid's
         // custom automation peer. RowCount comes from View.Records.Count, which is
         // Syncfusion's live post-filter list — no Coded UI plugin required.
         var rightView = _assetBrowserRightFileView;
-        Assert.IsTrue(rightView.Patterns.Table.IsSupported,
-            "RightFileView does not support the Table pattern. " +
+        Assert.IsTrue(rightView.Patterns.Grid.IsSupported,
+            "RightFileView does not support the Grid pattern. " +
             "Ensure AssetBrowserView.xaml uses others:InspectableDataGrid and the app has been rebuilt.");
 
-        int selectedCount = rightView.Patterns.Table.Pattern.RowCount;
+        int selectedCount = rightView.Patterns.Grid.Pattern.RowCount;
 
         // ── 5. Right-click and add selected files to the project ──────────────
         Mouse.MoveTo(_assetBrowserRightFileView.BoundingRectangle.Center());
