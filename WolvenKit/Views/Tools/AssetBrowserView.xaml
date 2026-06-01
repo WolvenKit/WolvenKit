@@ -227,6 +227,7 @@
                         <!-- Folder Tree -->
                         <syncfusion:SfTreeGrid
                             x:Name="LeftNavigation"
+                            AutomationProperties.AutomationId="LeftNavigation"
                             Margin="0"
                             BorderThickness="0"
                             HeaderRowHeight="{DynamicResource WolvenKitTreeGridRowHeaderHeight}"
@@ -364,6 +365,7 @@
 
                         <syncfusion:SfDataGrid
                             x:Name="RightFileView"
+                            AutomationProperties.AutomationId="RightFileView"
                             Background="{StaticResource ContentBackground}"
                             BorderThickness="0"
                             HeaderRowHeight="{DynamicResource WolvenKitTreeGridRowHeaderHeight}"

@@ -1104,6 +1104,7 @@
         <!-- Hierarchical Tree View -->
         <syncfusion:SfTreeGrid
             Name="TreeGrid"
+            AutomationProperties.AutomationId="ProjectExplorerTreeGrid"
             Grid.Row="2"
             Margin="0"
             BorderThickness="0"
