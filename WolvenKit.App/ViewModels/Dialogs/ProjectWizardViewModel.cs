@@ -5,10 +5,12 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Models.ProjectManagement;
 using WolvenKit.App.Services;
 using WolvenKit.Core.Services;
 using WolvenKit.Interfaces.Extensions;
@@ -23,6 +25,9 @@ public partial class ProjectWizardViewModel : DialogViewModel, INotifyDataErrorI
 
     private readonly ISettingsManager _settingsManager;
 
+    // NOUVEAU : service des projets récents (pour lister les groupes existants).
+    private readonly IRecentlyUsedItemsService? _recentlyUsedItemsService;
+
     public delegate Task ReturnHandler(ProjectWizardViewModel? project);
     public ReturnHandler? FileHandler;
 
@@ -33,13 +38,32 @@ public partial class ProjectWizardViewModel : DialogViewModel, INotifyDataErrorI
 
     #region Constructors
 
-    public ProjectWizardViewModel(ISettingsManager settingsManager)
+    public ProjectWizardViewModel(ISettingsManager settingsManager,
+        IRecentlyUsedItemsService? recentlyUsedItemsService = null)
     {
         _settingsManager = settingsManager;
+        _recentlyUsedItemsService = recentlyUsedItemsService;
 
         Title = "Project Wizard";
 
         _projectType = ["Cyberpunk 2077"];
+
+        // NOUVEAU : charge les groupes déjà utilisés pour les proposer dans la liste.
+        if (_recentlyUsedItemsService is not null)
+        {
+            var existingGroups = _recentlyUsedItemsService.Items.Items
+                .Select(item => item.Group)
+                .Where(g => !string.IsNullOrWhiteSpace(g))
+                .Select(g => g!.Trim())
+                .Distinct(StringComparer.InvariantCultureIgnoreCase)
+                .OrderBy(g => g, StringComparer.InvariantCultureIgnoreCase)
+                .ToList();
+
+            foreach (var g in existingGroups)
+            {
+                _availableGroups.Add(g);
+            }
+        }
 
         string? lastProjectPath;
         if (_settingsManager.LastUsedProjectPath is not null &&
@@ -86,6 +110,12 @@ public partial class ProjectWizardViewModel : DialogViewModel, INotifyDataErrorI
     [ObservableProperty] private ObservableCollection<string> _projectType;
 
     [ObservableProperty] private string? _whyNotCreate;
+
+    // NOUVEAU : groupe choisi à la création (null/vide = "Sans groupe").
+    [ObservableProperty] private string? _selectedGroup;
+
+    // NOUVEAU : groupes existants proposés dans la liste déroulante.
+    [ObservableProperty] private ObservableCollection<string> _availableGroups = new();
 
     #endregion Properties
 

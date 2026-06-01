@@ -86,10 +86,36 @@
                                                 VerticalContentAlignment="Stretch"
                                                 Background="Transparent"
                                                 BorderThickness="0"
+                                                Tag="{Binding ElementName=topGrid,
+                                                              Path=DataContext}"
                                                 Command="{Binding ElementName=topGrid,
                                                                   Path=DataContext.OpenProjectCommand}"
                                                 CommandParameter="{Binding ProjectPath}"
                                                 ToolTip="{Binding Path=ProjectPath}">
+
+                                                <!-- NOUVEAU : menu clic droit pour gérer le groupe.
+                                                     Le ContextMenu vit dans un popup hors du visual tree :
+                                                     on passe par PlacementTarget.Tag (= le ViewModel racine). -->
+                                                <Button.ContextMenu>
+                                                    <ContextMenu Opened="ProjectContextMenu_Opened">
+                                                        <!-- Sous-menu rempli dynamiquement en code-behind
+                                                             avec les groupes existants (Tag sert de repère). -->
+                                                        <MenuItem
+                                                            Header="Move to existing group"
+                                                            Tag="MoveToGroupParent" />
+                                                        <MenuItem
+                                                            Header="New group…"
+                                                            Command="{Binding PlacementTarget.Tag.SetProjectGroupCommand,
+                                                                              RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                                            CommandParameter="{Binding}" />
+                                                        <Separator />
+                                                        <MenuItem
+                                                            Header="Remove from group"
+                                                            Command="{Binding PlacementTarget.Tag.RemoveProjectGroupCommand,
+                                                                              RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                                            CommandParameter="{Binding}" />
+                                                    </ContextMenu>
+                                                </Button.ContextMenu>
                                                 <!--Button.OpacityMask>
                                                 <VisualBrush Visual="{Binding ElementName=headerBackground}" />
                                             </Button.OpacityMask-->
@@ -555,24 +581,100 @@
                         </Grid>
                     </Grid>
 
-                    <!-- Cards -->
-                    <syncfusion:CardView
-                        Name="RecentCardView"
+                    <!-- Cards groupées (NOUVEAU) : une section par groupe.
+                         Chaque groupe = en-tête + son propre CardView. -->
+                    <ItemsControl
                         Grid.Row="1"
                         HorizontalAlignment="Left"
-                        Background="Transparent"
-                        CanSort="False"
-                        ItemContainerStyle="{StaticResource CardViewItemStyle}"
-                        ItemsSource="{Binding FancyProjects}"
-                        Orientation="Horizontal"
-                        ShowHeader="False">
-                        <syncfusion:CardView.Resources>
-                            <!-- gets rid of margin around items -->
-                            <Style TargetType="{x:Type ItemsPresenter}">
-                                <Setter Property="Margin" Value="-10" />
-                            </Style>
-                        </syncfusion:CardView.Resources>
-                    </syncfusion:CardView>
+                        ItemsSource="{Binding GroupedProjects}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="0,0,0,16">
+                                    <!-- En-tête du groupe : flèche (replier/déplier) + nom -->
+                                    <StackPanel
+                                        Margin="0,0,0,6"
+                                        Orientation="Horizontal">
+                                        <ToggleButton
+                                            Style="{StaticResource ToggleButtonCustom}"
+                                            VerticalAlignment="Center"
+                                            Cursor="Hand"
+                                            IsChecked="{Binding IsExpanded,
+                                                                Mode=TwoWay}"
+                                            ToolTip="Collapse / expand group">
+                                            <ToggleButton.Resources>
+                                                <Style TargetType="{x:Type iconPacks:PackIconCodicons}">
+                                                    <Setter Property="Kind" Value="ChevronDown" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger
+                                                            Binding="{Binding IsChecked,
+                                                                              RelativeSource={RelativeSource AncestorType=ToggleButton}}"
+                                                            Value="False">
+                                                            <Setter Property="Kind" Value="ChevronRight" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ToggleButton.Resources>
+                                            <iconPacks:PackIconCodicons
+                                                Width="{DynamicResource WolvenKitIconTiny}"
+                                                Foreground="#CCCCCC" />
+                                        </ToggleButton>
+
+                                        <TextBlock
+                                            Margin="6,0,0,0"
+                                            VerticalAlignment="Center"
+                                            FontSize="{DynamicResource WolvenKitFontMedium}"
+                                            FontWeight="Bold"
+                                            Foreground="#CCCCCC"
+                                            Text="{Binding Name}" />
+                                        <!-- NOUVEAU : supprimer le groupe (les projets repassent
+                                             dans "Sans groupe"). Caché pour le pseudo-groupe "Sans groupe". -->
+                                        <Button
+                                            Margin="8,0,0,0"
+                                            VerticalAlignment="Center"
+                                            Command="{Binding DataContext.DeleteGroupCommand,
+                                                              RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}"
+                                            ToolTip="Delete group (projects move back to Ungrouped)">
+                                            <Button.Style>
+                                                <Style BasedOn="{StaticResource ButtonCustom}" TargetType="Button">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Name}" Value="Ungrouped">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                            <iconPacks:PackIconCodicons
+                                                Kind="Trash"
+                                                Width="{DynamicResource WolvenKitIconTiny}"
+                                                Foreground="{StaticResource WolvenKitRed}" />
+                                        </Button>
+
+                                    </StackPanel>
+
+                                    <!-- Projets du groupe (réutilise le même style de carte) -->
+                                    <syncfusion:CardView
+                                        MaxHeight="190"
+                                        HorizontalAlignment="Left"
+                                        Visibility="{Binding IsExpanded,
+                                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        Background="Transparent"
+                                        CanSort="False"
+                                        ItemContainerStyle="{StaticResource CardViewItemStyle}"
+                                        ItemsSource="{Binding Projects}"
+                                        Orientation="Horizontal"
+                                        ShowHeader="False">
+                                        <syncfusion:CardView.Resources>
+                                            <!-- gets rid of margin around items -->
+                                            <Style TargetType="{x:Type ItemsPresenter}">
+                                                <Setter Property="Margin" Value="-10" />
+                                            </Style>
+                                        </syncfusion:CardView.Resources>
+                                    </syncfusion:CardView>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </Grid>
             </Grid>
 

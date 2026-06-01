@@ -31,6 +31,12 @@ public partial class WelcomePageViewModel : PageViewModel
 
     private readonly ReadOnlyObservableCollection<RecentlyUsedItemModel> _recentlyUsedItems;
 
+    // NOUVEAU : nom du groupe par défaut pour les projets sans groupe.
+    public const string UngroupedName = "Ungrouped";
+
+    // NOUVEAU : noms des groupes repliés (mémorisé le temps de la session).
+    private readonly HashSet<string> _collapsedGroups = new();
+
     private Dictionary<string, int> _sortMode = new()
     {
         {"Last opened", 0},
@@ -88,6 +94,14 @@ public partial class WelcomePageViewModel : PageViewModel
 
     [ObservableProperty]
     private ObservableCollection<FancyProjectObject> _fancyProjects = new();
+
+    // NOUVEAU : projets récents regroupés par "Group", pour l'affichage en sections.
+    [ObservableProperty]
+    private ObservableCollection<ProjectGroup> _groupedProjects = new();
+
+    // NOUVEAU : noms des groupes existants (pour le sous-menu "Move to existing group").
+    [ObservableProperty]
+    private ObservableCollection<string> _availableGroups = new();
 
     [ObservableProperty]
     private List<RecentlyUsedItemModel> _pinnedItems = new();
@@ -173,6 +187,78 @@ public partial class WelcomePageViewModel : PageViewModel
     {
         //Argument.IsNotNullOrWhitespace(() => parameter);
         //_recentlyUsedItemsService.UnpinItem(parameter);
+    }
+
+    // NOUVEAU : assigne (ou modifie) le groupe d'un projet via une boîte de saisie.
+    [RelayCommand]
+    private async Task SetProjectGroup(FancyProjectObject? project)
+    {
+        if (project is null)
+        {
+            return;
+        }
+
+        var name = await Interactions.ShowInputBoxAsync("Move project to group", project.Group ?? "");
+
+        // L'utilisateur a saisi un nom -> on l'assigne. Vide -> on retire du groupe.
+        // (Note : cette API ne distingue pas clairement "Annuler" d'un champ vidé ;
+        //  si tu veux préserver le groupe sur Annulation, remplace la ligne suivante par :
+        //  if (string.IsNullOrWhiteSpace(name)) return;)
+        project.Group = string.IsNullOrWhiteSpace(name) ? null : name.Trim();
+
+        RefreshRecentProjects();
+    }
+
+    // NOUVEAU : retire un projet de son groupe (revient sous "Sans groupe").
+    [RelayCommand]
+    private void RemoveProjectGroup(FancyProjectObject? project)
+    {
+        if (project is null)
+        {
+            return;
+        }
+
+        project.Group = null;
+        RefreshRecentProjects();
+    }
+
+    // NOUVEAU : assigne un projet à un groupe existant (appelé depuis le sous-menu code-behind).
+    public void MoveProjectToGroup(FancyProjectObject? project, string group)
+    {
+        if (project is null)
+        {
+            return;
+        }
+
+        project.Group = string.IsNullOrWhiteSpace(group) ? null : group.Trim();
+        RefreshRecentProjects();
+    }
+    // NOUVEAU : supprime un groupe (après confirmation). Les projets ne sont PAS supprimés :
+    // ils repassent simplement dans "Sans groupe".
+    [RelayCommand]
+    private async Task DeleteGroup(ProjectGroup? group)
+    {
+        if (group is null || group.Name == UngroupedName)
+        {
+            return;
+        }
+
+        var result = await Interactions.ShowMessageBoxAsync(
+            $"Delete the group \"{group.Name}\"? Its {group.Projects.Count} project(s) will move back to \"{UngroupedName}\". No project is deleted from disk.",
+            "Delete group",
+            WMessageBoxButtons.YesNo);
+
+        if (result != WMessageBoxResult.Yes)
+        {
+            return;
+        }
+
+        foreach (var project in group.Projects.ToList())
+        {
+            project.Group = null;
+        }
+
+        RefreshRecentProjects();
     }
 
     #endregion
@@ -269,8 +355,67 @@ public partial class WelcomePageViewModel : PageViewModel
         {
             _settingsManager.RecentOrder = SelectedRecentOrder;
 
+            var items = GetSortedItems(false, SelectedRecentOrder, RecentFilter);
+
             FancyProjects.Clear();
-            FancyProjects.AddRange(GetSortedItems(false, SelectedRecentOrder, RecentFilter));
+            FancyProjects.AddRange(items);
+
+            // NOUVEAU : regroupe par "Group". Les projets sans groupe vont dans
+            // "Sans groupe", placé en dernier ; les autres groupes sont triés par nom.
+            var groups = items
+                .GroupBy(p => string.IsNullOrWhiteSpace(p.Group) ? UngroupedName : p.Group!)
+                .OrderBy(g => g.Key == UngroupedName ? 1 : 0)
+                .ThenBy(g => g.Key, StringComparer.InvariantCultureIgnoreCase)
+                .Select(g =>
+                {
+                    // Restaure l'état replié/déplié mémorisé pour cette session.
+                    var group = new ProjectGroup(g.Key, g)
+                    {
+                        IsExpanded = !_collapsedGroups.Contains(g.Key)
+                    };
+
+                    // Mémorise les changements de pliage (sans toucher au disque).
+                    group.PropertyChanged += (_, e) =>
+                    {
+                        if (e.PropertyName != nameof(ProjectGroup.IsExpanded))
+                        {
+                            return;
+                        }
+
+                        if (group.IsExpanded)
+                        {
+                            _collapsedGroups.Remove(group.Name);
+                        }
+                        else
+                        {
+                            _collapsedGroups.Add(group.Name);
+                        }
+                    };
+
+                    return group;
+                })
+                .ToList();
+
+            GroupedProjects.Clear();
+            foreach (var g in groups)
+            {
+                GroupedProjects.Add(g);
+            }
+
+            // NOUVEAU : liste des groupes existants (hors "Sans groupe"), pour le sous-menu.
+            var names = items
+                .Select(p => p.Group)
+                .Where(n => !string.IsNullOrWhiteSpace(n))
+                .Select(n => n!.Trim())
+                .Distinct(StringComparer.InvariantCultureIgnoreCase)
+                .OrderBy(n => n, StringComparer.InvariantCultureIgnoreCase)
+                .ToList();
+
+            AvailableGroups.Clear();
+            foreach (var n in names)
+            {
+                AvailableGroups.Add(n);
+            }
         });
 
     private List<FancyProjectObject> GetSortedItems(bool isPinned, int order, string filter)

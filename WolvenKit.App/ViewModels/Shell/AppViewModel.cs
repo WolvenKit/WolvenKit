@@ -789,7 +789,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private async Task NewProject()
     {
         //IsOverlayShown = false;
-        await SetActiveDialog(new ProjectWizardViewModel(SettingsManager)
+        await SetActiveDialog(new ProjectWizardViewModel(SettingsManager, _recentlyUsedItemsService)
         {
             FileHandler = NewProject
         });
@@ -832,6 +832,17 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             np.CreateDefaultDirectories();
 
             await LoadProjectFromPathAsync(projectLocation);
+
+            // NOUVEAU : applique le groupe choisi dans l'assistant au projet récent.
+            if (!string.IsNullOrWhiteSpace(project.SelectedGroup))
+            {
+                var recent = _recentlyUsedItemsService.Items.Items
+                    .FirstOrDefault(i => i.Name == projectLocation);
+                if (recent is not null)
+                {
+                    recent.Group = project.SelectedGroup.Trim();
+                }
+            }
         }
         catch (Exception ex)
         {
@@ -2034,16 +2045,16 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     private void OnAfterOverlayRendered() => DispatcherHelper.RunOnMainThread(() =>
-        {
-            IsOverlayShown = true;
-            ShouldOverlayShow = true;
-        }, DispatcherPriority.Render);
+    {
+        IsOverlayShown = true;
+        ShouldOverlayShow = true;
+    }, DispatcherPriority.Render);
 
     private void OnAfterDialogRendered() => DispatcherHelper.RunOnMainThread(() =>
-        {
-            IsDialogShown = true;
-            ShouldDialogShow = true;
-        }, DispatcherPriority.Render);
+    {
+        IsDialogShown = true;
+        ShouldDialogShow = true;
+    }, DispatcherPriority.Render);
 
     [MemberNotNull(nameof(Title))]
     public void UpdateTitle()

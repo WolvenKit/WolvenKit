@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using ReactiveUI;
 using Splat;
@@ -70,6 +72,45 @@ namespace WolvenKit.Views.HomePage.Pages
 
             });
 
+        }
+
+        // NOUVEAU : remplit dynamiquement le sous-menu "Move to existing group" avec les
+        // groupes existants à l'ouverture du menu contextuel. On le fait en code-behind car
+        // les bindings de commande dans les sous-menus WPF traversent mal les popups.
+        private void ProjectContextMenu_Opened(object sender, RoutedEventArgs e)
+        {
+            if (sender is not ContextMenu contextMenu)
+            {
+                return;
+            }
+
+            if (contextMenu.PlacementTarget is not FrameworkElement element ||
+                element.DataContext is not WelcomePageViewModel.FancyProjectObject project ||
+                ViewModel is null)
+            {
+                return;
+            }
+
+            var parent = contextMenu.Items
+                .OfType<MenuItem>()
+                .FirstOrDefault(m => (m.Tag as string) == "MoveToGroupParent");
+            if (parent is null)
+            {
+                return;
+            }
+
+            parent.Items.Clear();
+
+            // Désactivé (grisé) s'il n'existe encore aucun groupe.
+            parent.IsEnabled = ViewModel.AvailableGroups.Count > 0;
+
+            foreach (var groupName in ViewModel.AvailableGroups)
+            {
+                var name = groupName; // capture locale pour la closure
+                var item = new MenuItem { Header = name };
+                item.Click += (_, _) => ViewModel.MoveProjectToGroup(project, name);
+                parent.Items.Add(item);
+            }
         }
     }
 }
