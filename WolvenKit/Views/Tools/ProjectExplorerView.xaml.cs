@@ -283,6 +283,31 @@ namespace WolvenKit.Views.Tools
                 TreeGrid.ClearSelections(false);
             }
         });
+        private async Task BeginDeferredRefreshContext(CancellationToken deferRefreshToken, Task doBeforeRefresh)
+        {
+            CompositeDisposable disposables =
+            [
+                TreeGridFlat.View.DeferRefresh(TreeViewRefreshMode.DeferRefresh),
+                TreeGrid.View.DeferRefresh(TreeViewRefreshMode.DeferRefresh)
+            ];
+
+            using (disposables)
+            {
+                await doBeforeRefresh;
+                await DispatcherHelper.WaitUntilCancelled(deferRefreshToken);
+
+                TreeGridFlat.View.Filter = IsFileInFlat;
+                TreeGridFlat.View.Refresh();
+
+                Task.Run(() =>
+                {
+                    DispatcherHelper.DelayOnMainThread(() =>
+                    {
+                        PESearchBar_OnSearchStarted(this, new FunctionEventArgs<string>(_currentFolderQuery));
+                    }, 10);
+                });
+            }
+        }
 
         private void TreeGrid_OnNodeExpanding(object sender, NodeExpandingEventArgs e)
         {
