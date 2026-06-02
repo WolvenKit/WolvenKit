@@ -58,6 +58,7 @@ namespace WolvenKit.Views.Tools
 
         private string _currentFolderQuery = "";
         private bool _isDragging;
+        private CancellationTokenSource _deferRefreshTokenSource = new();
 
         #region Constructors
 
@@ -218,6 +219,7 @@ namespace WolvenKit.Views.Tools
                     .DisposeWith(disposables);
 
                 ViewModel.OnToggleFlatMode += OnToggleFlatMode;
+                ViewModel.BeginDeferredRefreshContext += BeginDeferredRefreshContext;
 
             });
         }

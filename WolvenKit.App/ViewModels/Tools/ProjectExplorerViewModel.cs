@@ -78,8 +78,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly IArchiveManager _archiveManager;
     private readonly ProjectResourceTools _projectResourceTools;
 
+    private CancellationTokenSource _deferredRefreshCts = new();
     private readonly ImportExportHelper _importExportHelper;
 
+    public Func<CancellationToken, Task, Task>? BeginDeferredRefreshContext { get; set; }
     #endregion fields
 
     private static ProjectExplorerViewModel? s_instance;
@@ -991,7 +993,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         if (!IsShiftKeyPressed)
         {
-            await ConvertToJsonInternal(selection);
+            _deferredRefreshCts = new CancellationTokenSource();
+            if (BeginDeferredRefreshContext == null)
+            {
+                throw new Exception("Rendering context does not exist.");
+            }
+
+            await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertToJsonInternal(selection));
+
             return;
         }
 
@@ -1003,54 +1012,113 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         var convertSelection = FileList
             .Where(x => selectedItemPaths.Contains(x.FullName) && File.Exists(x.FullName)).ToList();
 
-        await ConvertFromJsonInternal(convertSelection);
-    }
+        _deferredRefreshCts = new CancellationTokenSource();
+        if (BeginDeferredRefreshContext == null)
+        {
+            throw new Exception("Rendering context does not exist.");
+        }
 
+        await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertToJsonInternal(convertSelection));
+    }
 
     private async Task ConvertToJsonInternal(IEnumerable<FileSystemModel> selection)
     {
-        List<string> files = new();
-
-        // get all files
-        foreach (var item in selection)
+        await Task.Run(async () =>
         {
-            if (item.IsDirectory)
-            {
-                files.AddRange(Directory.GetFiles(item.FullName, "*", SearchOption.AllDirectories));
-            }
-            else
-            {
-                files.Add(item.FullName);
-            }
-        }
+            var allFiles = selection
+                .SelectMany(item =>
+                {
+                    if (item.IsDirectory)
+                    {
+                        return Directory.EnumerateFiles(item.FullName, "*", SearchOption.AllDirectories);
+                    }
+                    return new[] { item.FullName };
+                })
+                .ToList();
 
-        var progress = 0;
-        _progressService.Report(0);
-
-        // convert files
-        foreach (var file in files)
-        {
-            if (!File.Exists(file) || !Enum.GetNames<ERedExtension>()
-                    .Contains(Path.GetExtension(file).TrimStart('.').ToLower()))
+            if (allFiles.Count == 0)
             {
-                progress++;
-                continue;
+                _progressService.Completed();
+                return;
             }
 
-            var rawOutPath = Path.Combine(ActiveProject.NotNull().RawDirectory, ActiveProject!.GetRelativePath(file));
-            var outDirectoryPath = Path.GetDirectoryName(rawOutPath);
-            if (outDirectoryPath != null)
-            {
-                Directory.CreateDirectory(outDirectoryPath);
+            var validExtensions = Enum.GetNames<ERedExtension>()
+                .Select(x => x.ToLowerInvariant())
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-                await _modTools.ConvertToJsonAndWriteAsync(file, new DirectoryInfo(outDirectoryPath));
-            }
+            var createdJsonFiles = new ConcurrentBag<FileInfo>();
 
-            progress++;
-            _progressService.Report(progress / (float)files.Count);
-        }
+            int progress = 0;
+            _progressService.Report(0);
 
-        _progressService.Completed();
+            await Parallel.ForEachAsync(allFiles,
+                new ParallelOptions
+                {
+                    MaxDegreeOfParallelism = Environment.ProcessorCount * 2,
+                },
+                async (file, ct) =>
+                {
+                    if (!File.Exists(file))
+                    {
+                        Interlocked.Increment(ref progress);
+                        return;
+                    }
+
+                    var ext = Path.GetExtension(file).TrimStart('.').ToLowerInvariant();
+                    if (!validExtensions.Contains(ext))
+                    {
+                        Interlocked.Increment(ref progress);
+                        return;
+                    }
+
+                    try
+                    {
+                        var rawOutPath = Path.Combine(
+                            ActiveProject.NotNull().RawDirectory,
+                            ActiveProject.NotNull().GetRelativePath(file));
+
+                        var outDirectoryPath = Path.GetDirectoryName(rawOutPath);
+
+                        if (outDirectoryPath != null)
+                        {
+                            Directory.CreateDirectory(outDirectoryPath);
+
+                            await _modTools.ConvertToJsonAndWriteAsync(
+                                file,
+                                new DirectoryInfo(outDirectoryPath));
+
+                            var jsonFilePath = rawOutPath + ".json";
+
+                            if (File.Exists(jsonFilePath))
+                            {
+                                var jsonFileInfo = new FileInfo(jsonFilePath);
+
+                                if (_projectWatcher.FileLookup.ContainsKey(jsonFilePath))
+                                {
+                                    // don't add a duplicate file to the trees
+                                    return;
+                                }
+
+                                createdJsonFiles.Add(jsonFileInfo);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"Failed to convert {file}: {ex.Message}");
+                    }
+                    finally
+                    {
+                        var currentProgress = Interlocked.Increment(ref progress);
+                        _progressService.Report(currentProgress / (float)allFiles.Count);
+                    }
+                });
+
+            _progressService.Completed();
+        });
+
+        await _deferredRefreshCts.CancelAsync();
+        _deferredRefreshCts.Dispose();
     }
 
     /// <summary>
@@ -1454,7 +1522,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     {
         if (!IsShiftKeyPressed)
         {
-            await ConvertFromJsonInternal(SelectedItems!.OfType<FileSystemModel>().Where(IsInRawFolder));
+            _deferredRefreshCts = new CancellationTokenSource();
+            if (BeginDeferredRefreshContext == null)
+            {
+                throw new Exception("Rendering context does not exist.");
+            }
+
+            await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertFromJsonInternal(SelectedItems!.OfType<FileSystemModel>().Where(IsInRawFolder)));
+
             return;
         }
 
@@ -1465,7 +1540,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             .Where(IsInArchiveFolder)
             .Where(x => selectedItemPaths.Contains(x.GameRelativePath)).ToList();
 
-        await ConvertToJsonInternal(convertSelection);
+        _deferredRefreshCts = new CancellationTokenSource();
+        if (BeginDeferredRefreshContext == null)
+        {
+            throw new Exception("Rendering context does not exist.");
+        }
+
+        await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertFromJsonInternal(convertSelection));
     }
 
     private async Task ConvertFromJsonInternal(IEnumerable<FileSystemModel> selection)
