@@ -41,113 +41,45 @@ namespace WolvenKit.Core
 
         public static SemVersion GetAssemblyVersion(string assemblyName)
         {
-            try
+            var runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
+            var paths = new List<string>(runtimeAssemblies);
+            if (paths == null)
             {
-                var runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
-                var paths = new List<string>(runtimeAssemblies);
-                string fullAssemblyPath = assemblyName;
+                return SemVersion.Parse("1.0.0", SemVersionStyles.Strict);
+            }
+            var resolver = new PathAssemblyResolver(paths);
+            var mlc = new MetadataLoadContext(resolver);
 
-                if (!Path.IsPathRooted(assemblyName))
+            using (mlc)
+            {
+                var assembly = mlc.LoadFromAssemblyPath(assemblyName);
+                var productVersion = "1.0.0";
+
+                var attributes = assembly.CustomAttributes.ToList();
+                for (var i = 0; i < attributes.Count; i++)
                 {
-                    var searchDirs = new[]
-                    {
-                        AppContext.BaseDirectory,
-                        Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "",
-                        RuntimeEnvironment.GetRuntimeDirectory()
-                    };
+                    var a = attributes[i];
 
-                    foreach (var dir in searchDirs.Distinct())
+                    try
                     {
-                        if (string.IsNullOrEmpty(dir)) continue;
+                        var t = a.AttributeType.Name;
 
-                        var candidate = Path.Combine(dir, assemblyName);
-                        if (File.Exists(candidate))
+
+                        if (t == nameof(AssemblyInformationalVersionAttribute))
                         {
-                            fullAssemblyPath = candidate;
+                            productVersion = a.ConstructorArguments.First().Value as string;
                             break;
                         }
                     }
-                }
-
-                try
-                {
-                    var targetDir = Path.GetDirectoryName(fullAssemblyPath);
-                    if (!string.IsNullOrEmpty(targetDir) && Directory.Exists(targetDir))
+                    catch (FileNotFoundException ex)
                     {
-                        foreach (var dll in Directory.GetFiles(targetDir, "*.dll", SearchOption.TopDirectoryOnly))
-                        {
-                            if (!paths.Contains(dll))
-                                paths.Add(dll);
-                        }
-                    }
-                }
-                catch { /* best effort */ }
-
-                if (paths.Count == 0)
-                {
-                    return SemVersion.Parse("1.0.0", SemVersionStyles.Strict);
-                }
-
-                return _GetAssemblyVersion(paths.First(s => s == fullAssemblyPath));
-            }
-            catch (Exception ex)
-            {
-                // Completely defensive fallback for integration tests and environments
-                // where MetadataLoadContext can't resolve all WPF assemblies.
-                Console.WriteLine($"[GetAssemblyVersion] Failed to read version metadata for '{assemblyName}': {ex.Message}");
-                return SemVersion.Parse("1.0.0", SemVersionStyles.Strict);
-            }
-        }
-
-        private static SemVersion _GetAssemblyVersion(string assemblyPath)
-        {
-            try
-            {
-                if (!Path.IsPathRooted(assemblyPath))
-                {
-                    var searchDirs = new[]
-                    {
-                        AppContext.BaseDirectory,
-                        Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? ""
-                    };
-
-                    foreach (var dir in searchDirs.Distinct())
-                    {
-                        if (string.IsNullOrEmpty(dir))
-                            continue;
-
-                        var candidate = Path.Combine(dir, assemblyPath);
-
-                        if (File.Exists(candidate))
-                        {
-                            assemblyPath = candidate;
-                            break;
-                        }
+                        // We are missing the required dependency assembly.
+                        Console.WriteLine($"Error while getting attribute type: {ex.Message}");
                     }
                 }
 
-                if (!File.Exists(assemblyPath))
-                {
-                    return SemVersion.Parse("1.0.0", SemVersionStyles.Strict);
-                }
-
-                var assemblyName = AssemblyName.GetAssemblyName(assemblyPath);
-
-                if (assemblyName.Version is { } version)
-                {
-                    return SemVersion.Parse(
-                        $"{version.Major}.{version.Minor}.{version.Build}",
-                        SemVersionStyles.Strict);
-                }
-
-                return SemVersion.Parse("1.0.0", SemVersionStyles.Strict);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(
-                    $"[GetAssemblyVersion] Failed to read version metadata for '{assemblyPath}': {ex.Message}");
-
-                return SemVersion.Parse("1.0.0", SemVersionStyles.Strict);
+                var version = SemVersion.Parse(productVersion.NotNull(), SemVersionStyles.Strict);
+                return version;
             }
         }
 
