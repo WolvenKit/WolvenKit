@@ -30,5 +30,5 @@ changes:
     - type: "fixed"
       packages: ["App"]
       pr-number: 2939
-      author: "vitamin arrr"
+      author: "gistya"
       description: "Increased performance of JSON imports."
