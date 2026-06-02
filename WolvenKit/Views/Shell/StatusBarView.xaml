@@ -24,6 +24,7 @@
                 HorizontalAlignment="Left"
                 Background="Transparent">
                 <TextBlock
+                    AutomationProperties.AutomationId="ProgressStatus"
                     FontSize="{DynamicResource WolvenKitFontBody}"
                     Text="{Binding Status}" />
             </StatusBarItem>
