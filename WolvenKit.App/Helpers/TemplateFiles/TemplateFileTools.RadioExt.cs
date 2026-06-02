@@ -233,6 +233,10 @@ public partial class TemplateFileTools
                 viewModel.StationName!.ToArchiveFileName());
         }
 
+
+        Directory.CreateDirectory(viewModel.JsonFileFolder);
+
+
         var songPaths = viewModel.SongItems.Select(f => f.FilePath).ToList();
 
         var songsToDelete = Directory.EnumerateFiles(project.ResourcesDirectory, "*.*", SearchOption.AllDirectories)
@@ -262,7 +266,6 @@ public partial class TemplateFileTools
         {
             return;
         }
-
 
         var sourceDestPath = songsOutsideOfProject.ToDictionary(x => x,
             s => Path.Combine(viewModel.JsonFileFolder, Path.GetFileName(s.FilePath)));

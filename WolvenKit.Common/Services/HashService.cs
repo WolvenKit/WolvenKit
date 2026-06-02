@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Exceptions;
@@ -220,7 +221,7 @@ namespace WolvenKit.Common.Services
                 collection.Add(nextLine);
             }
 
-            var lookupTable = new LookupTable(collection, _maxDoP, ResourcePath.CalculateHash);
+            var lookupTable = new LookupTable(collection, _maxDoP, (s) => ResourcePath.CalculateHash(s, false));
 
             ResourcePathPool.SetNative(lookupTable);
         }
@@ -240,7 +241,7 @@ namespace WolvenKit.Common.Services
                 collection.Add(nextLine);
             }
 
-            var lookupTable = new LookupTable(collection, _maxDoP, ResourcePath.CalculateHash);
+            var lookupTable = new LookupTable(collection, _maxDoP, NodeRef.CalculateHash);
 
             NodeRefPool.SetNative(lookupTable);
         }
