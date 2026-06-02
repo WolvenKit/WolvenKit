@@ -92,9 +92,6 @@ namespace WolvenKit.Modkit.RED4
                 var outpath = Path.Combine(outputDirInfo.FullName, $"{Path.GetFileName(infile)}.json");
                 using var fileStream = File.Open(outpath, FileMode.Create, FileAccess.Write);
                 await ConvertToJsonAsync(fileStream, infile);
-
-                _loggerService.Success($"Converted {infile} to {outpath}");
-
                 return true;
             }
             catch (InvalidParsingException ie)
