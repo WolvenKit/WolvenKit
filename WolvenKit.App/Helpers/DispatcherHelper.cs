@@ -12,18 +12,22 @@ public static class DispatcherHelper
 {
     private static ConcurrentDictionary<Guid, DispatcherTimer> _dispatcherTimers = new();
 
-    public static void RunOnMainThread(Action action, DispatcherPriority priority = DispatcherPriority.Normal) => Application.Current.RunOnUIThread(action, priority);
+    public static void RunOnMainThread(Action action, DispatcherPriority priority = DispatcherPriority.Normal) =>
+        Application.Current.RunOnUIThread(action, priority);
 
-    private static void RunOnUIThread(this DispatcherObject? d, Action action, DispatcherPriority priority = DispatcherPriority.Normal)
+    private static void RunOnUIThread(this DispatcherObject? d, Action action,
+        DispatcherPriority priority = DispatcherPriority.Normal)
     {
-        if (d is not { Dispatcher: { } dispatcher})
+        if (d is not { Dispatcher: { } dispatcher })
         {
             return;
         }
+
         if (dispatcher.CheckAccess())
         {
             action();
-        }        else
+        }
+        else
         {
             try
             {
@@ -36,7 +40,6 @@ public static class DispatcherHelper
             }
         }
     }
-}
 
     /// <summary>
     /// Runs `action` on the main thread after specified delay, without blocking.
@@ -49,7 +52,7 @@ public static class DispatcherHelper
             .ContinueWith(_ => RunOnMainThread(action), TaskScheduler.Default);
     }
 
-    public static Task WaitUntilCancelled(CancellationToken token, Action onCancelled)
+    public static void WaitUntilCancelled(CancellationToken token, Action onCancelled)
     {
         if (token.IsCancellationRequested)
         {
@@ -58,7 +61,7 @@ public static class DispatcherHelper
         }
 
         // Use a low-priority dispatcher operation that re-queues itself
-        var dispatcher = Dispatcher.CurrentDispatcher;   // or Application.Current.Dispatcher
+        var dispatcher = Dispatcher.CurrentDispatcher; // or Application.Current.Dispatcher
 
         void CheckCancellation()
         {
@@ -76,3 +79,4 @@ public static class DispatcherHelper
         // Start the polling loop
         dispatcher.BeginInvoke(CheckCancellation, DispatcherPriority.Background);
     }
+}

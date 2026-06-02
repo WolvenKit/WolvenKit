@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,6 +17,7 @@ using ReactiveUI;
 using Syncfusion.Data;
 using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.App.Extensions;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement.Project;
@@ -296,17 +298,18 @@ namespace WolvenKit.Views.Tools
             using (disposables)
             {
                 await doBeforeRefresh;
-                await DispatcherHelper.WaitUntilCancelled(deferRefreshToken);
-
-                TreeGridFlat.View.Filter = IsFileInFlat;
-                TreeGridFlat.View.Refresh();
-
-                Task.Run(() =>
+                DispatcherHelper.WaitUntilCancelled(deferRefreshToken, () =>
                 {
-                    DispatcherHelper.DelayOnMainThread(() =>
+                    TreeGridFlat.View.Filter = IsFileInFlat;
+                    TreeGridFlat.View.Refresh();
+
+                    Task.Run(() =>
                     {
-                        PESearchBar_OnSearchStarted(this, new FunctionEventArgs<string>(_currentFolderQuery));
-                    }, 10);
+                        DispatcherHelper.DelayOnMainThread(() =>
+                        {
+                            PESearchBar_OnSearchStarted(this, new FunctionEventArgs<string>(_currentFolderQuery));
+                        }, 10);
+                    });
                 });
             }
         }

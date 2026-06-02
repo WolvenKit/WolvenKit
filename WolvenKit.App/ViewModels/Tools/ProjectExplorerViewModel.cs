@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -6,8 +7,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -1023,6 +1026,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private async Task ConvertToJsonInternal(IEnumerable<FileSystemModel> selection)
     {
+        var createdJsonFiles = new ConcurrentBag<FileInfo>();
+
         await Task.Run(async () =>
         {
             var allFiles = selection
@@ -1046,7 +1051,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 .Select(x => x.ToLowerInvariant())
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-            var createdJsonFiles = new ConcurrentBag<FileInfo>();
 
             int progress = 0;
             _progressService.Report(0);
@@ -1115,6 +1119,18 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 });
 
             _progressService.Completed();
+        });
+
+        _ = Task.Run(() =>
+        {
+            var logMsg = "";
+
+            createdJsonFiles.ToList().ForEach(file =>
+            {
+                logMsg += $"JSON file converted: ${file.FullName}.\r\n";
+            });
+
+            _loggerService.Info(logMsg);
         });
 
         await _deferredRefreshCts.CancelAsync();
