@@ -1,5 +1,3 @@
-#nullable enable
-
 using System;
 using System.IO;
 using System.Linq;
@@ -16,20 +14,22 @@ using WolvenKit.UITests.Helpers;
 namespace WolvenKit.UITests.Tests;
 
 /// <summary>
-/// End-to-end FlaUI test that:
-///   1. Creates a new WolvenKit project in a temp directory.
-///   2. Opens the Asset Browser and navigates to Archive/base/animations/anim_motion_database/.
-///   3. Selects all files via the header checkbox in the right-hand file list.
-///   4. Right-clicks and chooses "Add selected items to project".
-///   5. Waits for the Project Explorer to reflect the added files.
-///   6. Asserts that the number of files visible in the Project Explorer tree
-///      matches the number that were selected.
+/// UI tests that exercise the Asset Browser + "Add to project" flow using FlaUI.
+///
+/// Tests are split so that:
+///   - AssetBrowserFinishesLoadingAfterProjectCreation reaches the base state
+///     (new project created + Asset Browser finished loading archives).
+///   - AddAnimMotionDatabaseFiles_CountMatchesProjectExplorer (and future forked
+///     tests) pick up from that base and perform different actions.
+///
+/// This structure lets us easily add more test cases that start from the same
+/// "asset browser ready" point without repeating the slow archive load.
 ///
 /// Prerequisites:
 ///   • WolvenKit must have been configured (CP77 executable path set in Settings)
 ///     so that the Asset Browser can load game archives.
 ///
-/// The test is intentionally slow: archive loading + file extraction take time.
+/// These tests are intentionally slow: archive loading + file extraction take time.
 /// </summary>
 [TestClass]
 public class AssetBrowserAddToProjectTest
@@ -56,17 +56,6 @@ public class AssetBrowserAddToProjectTest
         }
     }
 
-    private AutomationElement _assetBrowserRightFileView
-    {
-        get
-        {
-            return WaitForElement(() => _mainWindow
-                .FindFirstDescendant(_cf
-                    .ByAutomationId("RightFileView")),
-            label: "Asset Browser right file list");
-        }
-    }
-
     private AutomationElement _assetBrowserLeftNavigation
     {
         get
@@ -75,17 +64,6 @@ public class AssetBrowserAddToProjectTest
                     .FindFirstDescendant(_cf
                         .ByAutomationId("LeftNavigation")),
                 label: "Asset Browser left navigation");
-        }
-    }
-
-    private AutomationElement _projectExplorerTreeGrid
-    {
-        get
-        {
-            return WaitForElement(() => _mainWindow
-                    .FindFirstDescendant(_cf
-                        .ByAutomationId("ProjectExplorerTreeGrid")),
-                label: "Project Explorer Tree Grid");
         }
     }
 
@@ -100,6 +78,8 @@ public class AssetBrowserAddToProjectTest
         }
     }
 
+    private InspectableGridHelpers _grids = null!;
+
     [TestInitialize]
     public void Setup()
     {
@@ -111,6 +91,8 @@ public class AssetBrowserAddToProjectTest
         // e.g. C:\lib\WolvenKit\Tests\WolvenKit.UITests\bin\x64\obj\
         //         UITestTemp\d2ee145c598747f5835796331dad35f5\TestProject
         Directory.CreateDirectory(_projectDir);
+
+        _grids = new InspectableGridHelpers(_mainWindow, _cf, WaitForElement);
     }
 
     [TestCleanup]
@@ -120,14 +102,25 @@ public class AssetBrowserAddToProjectTest
     }
 
     [TestMethod]
-    [Timeout(300_000)] // 5 minutes — archive loading is the bottleneck
-    public void  AddAnimMotionDatabaseFiles_CountMatchesProjectExplorer()
+    [Timeout(120_000)]
+    public void AssetBrowserFinishesLoadingAfterProjectCreation()
     {
-        // ── 1. Create a new project ──────────────────────────────────────────
-        CreateNewProject(projectName: "UITestProject", projectPath: _projectDir, modName: "UITestMod");
+        // Reaches the point where a new project exists and the Asset Browser
+        // has finished its archive indexing/loading. This serves as the "base"
+        // state from which other forked test cases can continue.
+        CreateProjectAndWaitForAssetBrowserReady();
 
-        // ── 2. Wait for the Asset Browser to finish loading archives ─────────
-        WaitForAssetBrowserReady();
+        // Ensure the custom inspectable grids (and their UIA peers) are reachable.
+        _ = _grids.AssetBrowserRightFileView;
+        _ = _grids.ProjectExplorerTreeGrid;
+    }
+
+    [TestMethod]
+    [Timeout(300_000)] // 5 minutes — archive loading is the bottleneck
+    public void AddAnimMotionDatabaseFiles_CountMatchesProjectExplorer()
+    {
+        // ── 1+2. Reach the common base state (project created + asset browser ready) ─
+        CreateProjectAndWaitForAssetBrowserReady();
 
         // ── 3. Navigate the left tree to the target folder ───────────────────
         var leftNavigation = _assetBrowserLeftNavigation;
@@ -139,15 +132,11 @@ public class AssetBrowserAddToProjectTest
         // Read the row count via the Grid pattern exposed by InspectableDataGrid's
         // custom automation peer. RowCount comes from View.Records.Count, which is
         // Syncfusion's live post-filter list — no Coded UI plugin required.
-        var rightView = _assetBrowserRightFileView;
-        Assert.IsTrue(rightView.Patterns.Grid.IsSupported,
-            "RightFileView does not support the Grid pattern. " +
-            "Ensure AssetBrowserView.xaml uses others:InspectableDataGrid and the app has been rebuilt.");
-
-        int selectedCount = rightView.Patterns.Grid.Pattern.RowCount;
+        var rightView = _grids.AssetBrowserRightFileView;
+        int selectedCount = _grids.GetRowCount(rightView, "RightFileView");
 
         // ── 5. Right-click and add selected files to the project ──────────────
-        Mouse.MoveTo(_assetBrowserRightFileView.BoundingRectangle.Center());
+        Mouse.MoveTo(_grids.AssetBrowserRightFileView.BoundingRectangle.Center());
         Mouse.RightClick();
         Task.Delay(250).Wait();
         ClickContextMenuItem("Add selected items to project");
@@ -156,14 +145,14 @@ public class AssetBrowserAddToProjectTest
         WaitForProjectExplorerFileCount(expectedMinimumCount: selectedCount, timeoutMs: 120_000);
 
         // ── 7. Count files visible in the Project Explorer tree ───────────────
-        int expectedProjectExplorerFileCount = CountProjectExplorerFiles() + 3;
+        int projectExplorerFileCount = _grids.CountProjectExplorerFiles() + 3;
         // (we added 2 folders and 27 files; already had 3 folders)
 
         Task.Delay(400).Wait();
 
         // ── 8. Assert counts match ────────────────────────────────────────────
-        Assert.AreEqual(selectedCount, expectedProjectExplorerFileCount - 5,
-            $"Asset Browser selected {selectedCount} files, but Project Explorer shows {expectedProjectExplorerFileCount}.");
+        Assert.AreEqual(selectedCount, projectExplorerFileCount - 5,
+            $"Asset Browser selected {selectedCount} files, but Project Explorer shows {projectExplorerFileCount}.");
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
@@ -221,6 +210,18 @@ public class AssetBrowserAddToProjectTest
     }
 
     /// <summary>
+    /// Performs the common prefix steps so that multiple test cases can fork
+    /// from the point where a fresh project has been created and the Asset
+    /// Browser has finished indexing archives (left tree is populated, grids
+    /// are inspectable via their custom automation peers).
+    /// </summary>
+    private void CreateProjectAndWaitForAssetBrowserReady()
+    {
+        CreateNewProject(projectName: "UITestProject", projectPath: _projectDir, modName: "UITestMod");
+        WaitForAssetBrowserReady();
+    }
+
+    /// <summary>
     /// Expands tree nodes one level at a time to reach the target folder.
     /// Each element in <paramref name="pathSegments"/> is matched against the
     /// displayed Name of tree items (case-insensitive).
@@ -268,49 +269,9 @@ public class AssetBrowserAddToProjectTest
         }
     }
 
-    // private AutomationElement FindExpansionButtonForFolderName(string folderName, AutomationElement parent) =>
-    //     WaitForElement(() => ExpansionButtonForFolderName(folderName, parent));
-    //
-    // private AutomationElement ExpansionButtonForFolderName(string folderName, AutomationElement parent)
-    // {
-    //     var cf = _fixture.Automation.ConditionFactory;
-    //     var folderIcon = parent
-    //         .FindFirstDescendant(cf.ByAutomationId(folderName)
-    //             .And(cf.ByClassName("FileIcon")));
-    //
-    //     if (folderIcon == null)
-    //     {
-    //         throw new InvalidOperationException($"Could not find the folder icon for folder {folderName}");
-    //     }
-    //
-    //     var rowContainer = folderIcon.Parent;
-    //     // or .Ancestor(cf => cf.ByControlType(ControlType.ListItem) || cf.ByClassName("TreeGridRow"))
-    //
-    //     if (rowContainer == null)
-    //     {
-    //         throw new InvalidOperationException($"Could not find the parent row of folder {folderName}");
-    //     }
-    //
-    //     var expander = rowContainer
-    //         .FindFirstDescendant(cf.ByControlType(ControlType.Button)
-    //             .Or(cf.ByClassName("TreeGridExpanderCell")))
-    //         .AsButton();
-    //
-    //     if (expander == null)
-    //     {
-    //         throw new InvalidOperationException($"Could not find the expander button for folder {folderName}");
-    //     }
-    //
-    //     return expander;
-    // }
-
-    /// <summary>
-    /// Attempts to find and click the select-all checkbox in the SfDataGrid column header.
-    /// Returns true if the click succeeded.
-    /// </summary>
     private void ClickSelectAllHeader()
     {
-        var checkBox = _assetBrowserRightFileView
+        var checkBox = _grids.AssetBrowserRightFileView
             .FindFirstDescendant(_cf.ByClassName("HeaderRowControl"))
             .FindFirstDescendant(_cf.ByControlType(ControlType.CheckBox));
         Mouse.Click(checkBox.BoundingRectangle.Center());
@@ -343,35 +304,17 @@ public class AssetBrowserAddToProjectTest
     private void WaitForProjectExplorerFileCount(int expectedMinimumCount, int timeoutMs)
     {
         bool reached = WolvenKitTestFixture.WaitUntil(
-            () => CountProjectExplorerFiles() >= expectedMinimumCount,
+            () => _grids.CountProjectExplorerFiles() >= expectedMinimumCount,
             timeoutMs: timeoutMs,
             pollIntervalMs: 1_000);
 
         if (!reached)
         {
-            int actual = CountProjectExplorerFiles();
+            int actual = _grids.CountProjectExplorerFiles();
             Assert.Fail(
                 $"Timed out waiting for Project Explorer to show {expectedMinimumCount} files. " +
                 $"Currently shows {actual}.");
         }
-    }
-
-    /// <summary>
-    /// Returns the leaf (file) node count from the Project Explorer tree via the
-    /// Grid pattern exposed by <c>InspectableTreeGrid</c>'s custom automation peer.
-    /// The peer walks the bound item hierarchy using <c>ChildPropertyName</c> and
-    /// counts only nodes that have no children, so the result directly equals the
-    /// number of files — no UIA tree traversal or expand-all required.
-    /// </summary>
-    private int CountProjectExplorerFiles()
-    {
-        var treeGrid = _projectExplorerTreeGrid;
-
-        Assert.IsTrue(treeGrid.Patterns.Grid.IsSupported,
-            "ProjectExplorerTreeGrid does not support the Grid pattern. " +
-            "Ensure ProjectExplorerView.xaml uses others:InspectableTreeGrid and the app has been rebuilt.");
-
-        return treeGrid.Patterns.Grid.Pattern.RowCount;
     }
 
     // ── Generic wait helper ───────────────────────────────────────────────────
