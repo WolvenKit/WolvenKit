@@ -50,6 +50,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.RED4", "WolvenKit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Unpacker", "WolvenKit.Unpacker\WolvenKit.Unpacker.csproj", "{A0FD2057-AA63-47F2-BE69-BF55455F02CF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.IntegrationTests", "Tests\WolvenKit.IntegrationTests\WolvenKit.IntegrationTests.csproj", "{D52A8EF6-188F-478E-9B80-B18A4563220D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
