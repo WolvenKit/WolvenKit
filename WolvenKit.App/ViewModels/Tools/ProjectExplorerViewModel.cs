@@ -18,7 +18,7 @@ using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.VisualBasic.FileIO;
-using Splat;
+
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
@@ -102,7 +102,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         IModifierViewStateService modifierSvc,
         IArchiveManager archiveManager,
         ProjectResourceTools projectResourceTools,
-        ImportExportHelper importExportHelper
+        ImportExportHelper importExportHelper,
+        IWatcherService projectWatcher
     ) : base(s_toolTitle)
     {
         _projectManager = projectManager;
@@ -120,7 +121,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         _appViewModel = appViewModel;
 
-        _projectWatcher = Locator.Current.GetService<IWatcherService>()!;
+        _projectWatcher = projectWatcher;
 
         SideInDockedMode = DockSide.Left;
 
@@ -138,12 +139,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         _appViewModel.OnInitialProjectLoaded += AppViewModel_OnInitialProjectLoaded;
 
-        if (Locator.Current.GetService<AppIdleStateService>() is not AppIdleStateService svc)
-        {
-            return;
-        }
-
-        svc.ThreadIdleTenSeconds += Svc_ThreadIdleTenSeconds;
+        DispatcherHelper.StartRepeatingAction(
+            () => Svc_ThreadIdleTenSeconds(null, EventArgs.Empty),
+            TimeSpan.FromSeconds(10));
 
         s_instance = this;
     }

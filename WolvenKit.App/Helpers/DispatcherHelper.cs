@@ -79,4 +79,56 @@ public static class DispatcherHelper
         // Start the polling loop
         dispatcher.BeginInvoke(CheckCancellation, DispatcherPriority.Background);
     }
+
+    /// <summary>
+    /// Repeats action every interval TimeSpan until the timer is
+    /// stopped by passing the returned guid to StopRepeatingAction.
+    ///
+    /// Returns a Guid to call StopRepeatingSetter(guid) with, to stop it.
+    ///
+    /// </summary>
+    /// <param name="action"></param>
+    /// <param name="interval"></param>
+    /// <param name="onCancelled"></param>
+    /// <returns>Guid</returns>
+    public static Guid StartRepeatingAction(
+        Action action,
+        TimeSpan interval,
+        Action? onCancelled = null)
+    {
+        var guid = Guid.NewGuid();
+        DispatcherTimer timer = new()
+        {
+            Interval = interval,
+            Tag = onCancelled
+        };
+
+        _dispatcherTimers.TryAdd(guid, timer);
+
+        timer.Tick += (sender, e) =>
+        {
+            if (sender is DispatcherTimer timer)
+            {
+                action();
+            }
+        };
+
+        timer.Start();
+
+        return guid;
+    }
+
+    /// <summary>
+    /// Call with a guid to cancel a repeating setter timer.
+    /// </summary>
+    /// <param name="guid"></param>
+    public static void StopRepeatingAction(Guid guid)
+    {
+        if (_dispatcherTimers.TryRemove(guid, out DispatcherTimer? timer))
+        {
+            var onCancelled = timer.Tag as Action;
+            timer.Stop();
+            onCancelled?.Invoke();
+        }
+    }
 }

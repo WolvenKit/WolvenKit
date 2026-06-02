@@ -36,7 +36,6 @@ static class Const
     public static string AnimMotionDbName = "base\\animations\\anim_motion_database";
 }
 
-[STATestClass]
 public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
 {
     private readonly string _tempProjectRoot;
@@ -90,9 +89,9 @@ public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
         var projectManager = services.GetRequiredService<IProjectManager>();
         await projectManager.LoadAsync(_project.Location);
 
-        var vm = appViewModel.GetToolViewModel<AssetBrowserViewModel>();
-        _projectExplorerVm.StartWatcher_AndLoadProject(_project, false);
+        Assert.NotNull(_projectExplorerVm.ActiveProject);
 
+        var vm = appViewModel.GetToolViewModel<AssetBrowserViewModel>();
         var progress = services.GetRequiredService<IProgressService<double>>();
         var state = progress.Status;
         await vm.LoadAssetBrowser();

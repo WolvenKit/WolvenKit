@@ -2528,6 +2528,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private void UpdateScalesResource()
     {
+        // During integration testing, return here to avoid crash.
+        if (Application.Current == null)
+        {
+            return;
+        }
+        
         // NOTE: keep in sync with App.Sizes.xaml
         var resources = Application.Current.Resources;
 
