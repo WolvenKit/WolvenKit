@@ -7,7 +7,8 @@ using System.Windows.Threading;
 
 namespace WolvenKit.App.Helpers;
 
-//Assembly: HandyControl, Version=3.2.0.0, Culture=neutral, PublicKeyToken=45be8712787a1e5bpublic static class DispatcherHelper
+//Assembly: HandyControl, Version=3.2.0.0, Culture=neutral, PublicKeyToken=45be8712787a1e5b
+public static class DispatcherHelper
 {
     private static ConcurrentDictionary<Guid, DispatcherTimer> _dispatcherTimers = new();
 
@@ -22,8 +23,7 @@ namespace WolvenKit.App.Helpers;
         if (dispatcher.CheckAccess())
         {
             action();
-        }
-        else
+        }        else
         {
             try
             {
