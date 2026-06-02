@@ -36,6 +36,7 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
@@ -999,7 +1000,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             _deferredRefreshCts = new CancellationTokenSource();
             if (BeginDeferredRefreshContext == null)
             {
-                throw new Exception("Rendering context does not exist.");
+                await ConvertToJsonInternal(selection);
+                return;
             }
 
             await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertToJsonInternal(selection));
@@ -1018,7 +1020,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _deferredRefreshCts = new CancellationTokenSource();
         if (BeginDeferredRefreshContext == null)
         {
-            throw new Exception("Rendering context does not exist.");
+            await ConvertToJsonInternal(selection);
+            return;
         }
 
         await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertToJsonInternal(convertSelection));
@@ -1539,12 +1542,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         if (!IsShiftKeyPressed)
         {
             _deferredRefreshCts = new CancellationTokenSource();
-            if (BeginDeferredRefreshContext == null)
-            {
-                throw new Exception("Rendering context does not exist.");
-            }
-
-            await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertFromJsonInternal(SelectedItems!.OfType<FileSystemModel>().Where(IsInRawFolder)));
+            await BeginDeferredRefreshContext!(_deferredRefreshCts.Token, ConvertFromJsonInternal(SelectedItems!.OfType<FileSystemModel>().Where(IsInRawFolder)));
 
             return;
         }
