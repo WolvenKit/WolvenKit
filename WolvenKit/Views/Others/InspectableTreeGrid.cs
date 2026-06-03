@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections;
+using System.Windows;
 using System.Windows.Automation;
 using System.Windows.Automation.Peers;
 using System.Windows.Automation.Provider;
@@ -28,6 +29,16 @@ namespace WolvenKit.Views.Others;
 /// </summary>
 public class InspectableTreeGrid : SfTreeGrid
 {
+    static InspectableTreeGrid()
+    {
+        // Help Syncfusion defaults reach the subclass.
+#pragma warning disable WPF0018 // Intentional: we want the *base* type's theme style
+        DefaultStyleKeyProperty.OverrideMetadata(
+            typeof(InspectableTreeGrid),
+            new FrameworkPropertyMetadata(typeof(SfTreeGrid)));
+#pragma warning restore WPF0018
+    }
+
     protected override AutomationPeer OnCreateAutomationPeer() =>
         new InspectableTreeGridAutomationPeer(this);
 }

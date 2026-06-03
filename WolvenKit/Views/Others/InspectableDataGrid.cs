@@ -1,4 +1,5 @@
 #nullable enable
+using System.Windows;
 using System.Windows.Automation;
 using System.Windows.Automation.Peers;
 using System.Windows.Automation.Provider;
@@ -20,6 +21,16 @@ namespace WolvenKit.Views.Others;
 /// </summary>
 public class InspectableDataGrid : SfDataGrid
 {
+    static InspectableDataGrid()
+    {
+        // Help Syncfusion defaults reach the subclass.
+#pragma warning disable WPF0018
+        DefaultStyleKeyProperty.OverrideMetadata(
+            typeof(InspectableDataGrid),
+            new FrameworkPropertyMetadata(typeof(SfDataGrid)));
+#pragma warning restore WPF0018
+    }
+
     protected override AutomationPeer OnCreateAutomationPeer() =>
         new InspectableDataGridAutomationPeer(this);
 }
