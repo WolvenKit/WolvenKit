@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 using DynamicData;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -19,6 +20,7 @@ using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.IntegrationTests.Helpers;
 using HandyControl.Tools;
 using WolvenKit.App.Models;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
@@ -36,7 +38,6 @@ static class Const
     public static string AnimMotionDbName = "base\\animations\\anim_motion_database";
 }
 
-[STATestClass]
 public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
 {
     private readonly string _tempProjectRoot;
@@ -48,15 +49,6 @@ public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
     {
         _tempProjectRoot = Path.Combine(Path.GetTempPath(), "WolvenKit_ConvertUITest_" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(_tempProjectRoot);
-
-        _project = new Cp77Project(
-            Path.Combine(_tempProjectRoot, "testmod"),
-            "ConvertToJsonUITest",
-            "ConvertToJsonUITest");
-
-        Directory.CreateDirectory(_project.ModDirectory);
-        Directory.CreateDirectory(_project.RawDirectory);
-        Directory.CreateDirectory(_project.FileDirectory);
     }
 
     private CancellationTokenSource _cts = new();
@@ -88,11 +80,22 @@ public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
         _projectExplorerVm = appViewModel.GetToolViewModel<ProjectExplorerViewModel>();
 
         var projectManager = services.GetRequiredService<IProjectManager>();
-        await projectManager.LoadAsync(_project.Location);
+
+        var projectWizard = services.GetRequiredService<ProjectWizardViewModel>();
+        projectWizard.Author = "FF:06:B5";
+        projectWizard.ModName = "Cyberpunk2077";
+        projectWizard.ProjectName = "Make Misty Hot";
+        projectWizard.ProjectPath = _tempProjectRoot;
+        await appViewModel.NewProjectTask(projectWizard);
+
+        Assert.NotNull(projectManager.ActiveProject);
+        //_projectExplorerVm.StartWatcher_AndLoadProject(_project, false);
+
+        Task.Delay(500).Wait();
+
+        Assert.NotNull(_projectExplorerVm.ActiveProject);
 
         var vm = appViewModel.GetToolViewModel<AssetBrowserViewModel>();
-        _projectExplorerVm.StartWatcher_AndLoadProject(_project, false);
-
         var progress = services.GetRequiredService<IProgressService<double>>();
         var state = progress.Status;
         await vm.LoadAssetBrowser();
