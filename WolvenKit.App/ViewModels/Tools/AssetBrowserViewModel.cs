@@ -564,7 +564,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
             finalFilesToAdd = filesToAdd.Values.ToList();
         }
 
-        InternalAddFiles(finalFilesToAdd);
+        await InternalAddFiles(finalFilesToAdd);
     }
 
     private void GetFilesRecursive(RedFileSystemModel directory, Dictionary<ulong, IGameFile> files)
