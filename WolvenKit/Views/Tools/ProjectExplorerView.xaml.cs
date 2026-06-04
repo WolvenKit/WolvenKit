@@ -768,11 +768,13 @@ namespace WolvenKit.Views.Tools
 
             if (ViewModel?.IsFlatModeEnabled == true)
             {
-                RefreshFlatViewIfNeeded();
+                TreeGridFlat.View.Filter = IsFileInFlat;
+                TreeGridFlat.View.RefreshFilter();
             }
             else
             {
-                RefreshFlatViewIfNeeded();
+                TreeGrid.View.Filter = IsFileIn;
+                TreeGrid.View.RefreshFilter();
             }
         }
 
