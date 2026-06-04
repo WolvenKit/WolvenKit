@@ -93,13 +93,17 @@
                                                 CommandParameter="{Binding ProjectPath}"
                                                 ToolTip="{Binding Path=ProjectPath}">
 
-                                                <!-- Right-click menu to manage the group.
-                                                     The ContextMenu lives in a popup outside the visual tree,
-                                                     so we go through PlacementTarget.Tag (= the root ViewModel). -->
+                                                <!--
+                                                    Right-click menu to manage the group.
+                                                    The ContextMenu lives in a popup outside the visual tree,
+                                                    so we go through PlacementTarget.Tag (= the root ViewModel).
+                                                -->
                                                 <Button.ContextMenu>
                                                     <ContextMenu Opened="ProjectContextMenu_Opened">
-                                                        <!-- Submenu filled dynamically in code-behind
-                                                             with the existing groups (Tag is used as a marker). -->
+                                                        <!--
+                                                            Submenu filled dynamically in code-behind
+                                                            with the existing groups (Tag is used as a marker).
+                                                        -->
                                                         <MenuItem
                                                             Header="Move to existing group"
                                                             Tag="MoveToGroupParent" />
@@ -581,8 +585,10 @@
                         </Grid>
                     </Grid>
 
-                    <!-- Grouped cards: one section per group.
-                         Each group = header + its own CardView. -->
+                    <!--
+                        Grouped cards: one section per group.
+                        Each group = header + its own CardView.
+                    -->
                     <ItemsControl
                         Grid.Row="1"
                         HorizontalAlignment="Left"
@@ -595,8 +601,8 @@
                                         Margin="0,0,0,6"
                                         Orientation="Horizontal">
                                         <ToggleButton
-                                            Style="{StaticResource ToggleButtonCustom}"
                                             VerticalAlignment="Center"
+                                            Style="{StaticResource ToggleButtonCustom}"
                                             Cursor="Hand"
                                             IsChecked="{Binding IsExpanded,
                                                                 Mode=TwoWay}"
@@ -622,12 +628,14 @@
                                         <TextBlock
                                             Margin="6,0,0,0"
                                             VerticalAlignment="Center"
+                                            Foreground="#CCCCCC"
                                             FontSize="{DynamicResource WolvenKitFontMedium}"
                                             FontWeight="Bold"
-                                            Foreground="#CCCCCC"
                                             Text="{Binding Name}" />
-                                        <!-- Delete the group (its projects move back to "Ungrouped").
-                                             Hidden for the "Ungrouped" pseudo-group. -->
+                                        <!--
+                                            Delete the group (its projects move back to "Ungrouped").
+                                            Hidden for the "Ungrouped" pseudo-group.
+                                        -->
                                         <Button
                                             Margin="8,0,0,0"
                                             VerticalAlignment="Center"
@@ -636,9 +644,13 @@
                                             CommandParameter="{Binding}"
                                             ToolTip="Delete group (projects move back to Ungrouped)">
                                             <Button.Style>
-                                                <Style BasedOn="{StaticResource ButtonCustom}" TargetType="Button">
+                                                <Style
+                                                    BasedOn="{StaticResource ButtonCustom}"
+                                                    TargetType="Button">
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Name}" Value="Ungrouped">
+                                                        <DataTrigger
+                                                            Binding="{Binding Name}"
+                                                            Value="Ungrouped">
                                                             <Setter Property="Visibility" Value="Collapsed" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
@@ -656,9 +668,9 @@
                                     <syncfusion:CardView
                                         MaxHeight="190"
                                         HorizontalAlignment="Left"
+                                        Background="Transparent"
                                         Visibility="{Binding IsExpanded,
                                                              Converter={StaticResource BooleanToVisibilityConverter}}"
-                                        Background="Transparent"
                                         CanSort="False"
                                         ItemContainerStyle="{StaticResource CardViewItemStyle}"
                                         ItemsSource="{Binding Projects}"

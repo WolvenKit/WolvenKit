@@ -151,10 +151,10 @@
             Grid.Column="0"
             Grid.ColumnSpan="2"
             Margin="{DynamicResource WolvenKitMarginBottom}"
-            IsEditable="True"
             hc:InfoElement.Title="Group (optional — empty = Ungrouped)"
             hc:InfoElement.TitlePlacement="Top"
             hc:InfoElement.Placeholder="Type a new group name or pick an existing one"
+            IsEditable="True"
             ItemsSource="{Binding AvailableGroups}"
             Text="{Binding SelectedGroup,
                            Mode=TwoWay,
