@@ -1056,13 +1056,33 @@ public class RED4Controller : ObservableObject, IGameController
         _progressService.IsIndeterminate = false;
         _progressService.Report(0.1);
 
-        await Parallel.ForEachAsync(files, async (file, token) =>
-        {
-            await Task.Run(() => { AddToMod(file); }, token);
+        var total = files.Count;
 
-            Interlocked.Increment(ref progress);
-            _progressService.Report(progress / (float)files.Count);
-        });
+        if (total > 0)
+        {
+            // Limit concurrency for disk I/O (extraction + writes). Unbounded parallelism
+            // often saturates the disk and ends up slower + spams the UI thread.
+            var dop = Math.Min(8, Math.Max(1, Environment.ProcessorCount / 2));
+
+            await Parallel.ForEachAsync(
+                files,
+                new ParallelOptions { MaxDegreeOfParallelism = dop },
+                (file, token) =>
+                {
+                    token.ThrowIfCancellationRequested();
+                    AddToMod(file);
+                    var current = Interlocked.Increment(ref progress);
+                    var reportInterval = Math.Max(1, total / 50);
+
+                    if (current % reportInterval == 0 || current == total)
+                    {
+                        _progressService.Report(current / (float)total);
+                    }
+
+                    return ValueTask.CompletedTask;
+                });
+
+        }
 
         _progressService.Completed();
         _projectEvents.PublishFilesImported(new FilesImportedMessage([.. files],[]));
