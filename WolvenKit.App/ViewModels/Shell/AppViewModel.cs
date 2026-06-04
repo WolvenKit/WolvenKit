@@ -709,7 +709,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             // Defer the actual (very expensive) project load until after the overlay fade-out
             // animation has completed. This dramatically improves the perceived smoothness
             // of OverlayFadeOut on large projects.
-            RunAfterModalClosed(async () => await LoadProjectFromPathAsync(location));
+            await RunAfterModalClosed(async () => await LoadProjectFromPathAsync(location));
             return;
         }
 
@@ -833,8 +833,14 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             await _projectManager.SaveAsync();
             np.CreateDefaultDirectories();
 
-            // Defer loading so the wizard close animation can complete smoothly
-            RunAfterModalClosed(async () => await LoadProjectFromPathAsync(projectLocation));
+            // Defer loading so the wizard close animation can complete smoothly.
+            // Await the returned task so that callers (e.g. NewProject) do not proceed until
+            // LoadProjectFromPathAsync has actually completed (after any modal close animation).
+            await RunAfterModalClosed(async () =>
+            {
+                await LoadProjectFromPathAsync(projectLocation);
+                Console.WriteLine("This should happen first.");
+            });
         }
         catch (Exception ex)
         {
@@ -1929,18 +1935,46 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     /// <summary>
-    /// Async version of RunAfterModalClosed. The action will be awaited when the overlays close.
+    /// Schedules an async action to run on the UI thread after all modals and overlays have fully closed.
+    /// Returns a Task that completes when the action has executed (immediately if no modals are open,
+    /// or after the close animation + execution if deferred).
+    /// This is useful for kicking off heavy UI work (large tree builds, etc.) so that
+    /// fade-out animations are not starved for dispatcher time, while still allowing callers to await completion.
     /// </summary>
-    public void RunAfterModalClosed(Func<Task> asyncAction)
+    public Task RunAfterModalClosed(Func<Task> asyncAction)
     {
+        _progressService.Status = EStatus.Running;
+        _progressService.IsIndeterminate = true;
+
         if (!IsDialogShown && !IsOverlayShown)
         {
-            _ = asyncAction();
+            var task = asyncAction();
+            // Ensure errors are logged even if caller does not await the returned task.
+            task.ContinueWith(t =>
+            {
+                if (t.IsFaulted)
+                {
+                    _loggerService.Error($"Error running immediate post-modal async action: {t.Exception?.GetBaseException().Message}");
+                }
+            }, TaskContinuationOptions.OnlyOnFaulted | TaskContinuationOptions.ExecuteSynchronously);
+            return task;
         }
-        else
+
+        var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        _pendingAfterModalCloseAsyncActions.Enqueue(async () =>
         {
-            _pendingAfterModalCloseAsyncActions.Enqueue(asyncAction);
-        }
+            try
+            {
+                await asyncAction();
+                tcs.TrySetResult();
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error($"Error running deferred async post-modal action: {ex.Message}");
+                tcs.TrySetException(ex);
+            }
+        });
+        return tcs.Task;
     }
 
     private bool CanCloseOverlay() => IsOverlayShown;

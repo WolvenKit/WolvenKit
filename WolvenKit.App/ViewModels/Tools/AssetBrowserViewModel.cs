@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
@@ -10,7 +12,9 @@ using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
+using DynamicData.Binding;
 using Microsoft.EntityFrameworkCore;
+using ReactiveUI;
 using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
@@ -76,8 +80,6 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     internal readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
 
-    private bool _manuallyLoading;
-
     #endregion fields
 
     #region ctor
@@ -125,7 +127,40 @@ public partial class AssetBrowserViewModel : ToolViewModel
         ProjectLoaded = _projectManager.IsProjectLoaded;
         _projectManager.PropertyChanged += ProjectManager_PropertyChanged;
 
+        // Subscribe to _rightItems so dependent commands (e.g. AddSelected) can be re-evaluated
+        // when the list is repopulated (folder nav, search results) or items added/removed.
+        // Uses reactive Switch() so that when RightItems is replaced (e.g. ToggleModBrowser),
+        // we automatically unsubscribe from the old collection's events and subscribe the new one.
+        this.WhenAnyValue(x => x.LeftItems)
+            .Subscribe(_ =>
+            {
+                UpdateLoadArchiveButtonVisibility();
+                UpdateLoadingIndicatorVisibility();
+            });
+
         CheckView();
+    }
+
+    private void UpdateLoadArchiveButtonVisibility()
+    {
+        if (LeftItems.Count == 0 && !ShouldShowLoadButton && _archiveManager.ProjectArchive == null && _projectManager.ActiveProject != null)
+        {
+            ShouldShowLoadButton = true;
+        } else if (LeftItems.Count > 0 && ShouldShowLoadButton)
+        {
+            ShouldShowLoadButton = false;
+        }
+    }
+
+    private void UpdateLoadingIndicatorVisibility()
+    {
+        if (LeftItems.Count > 0 && LoadVisibility == Visibility.Visible)
+        {
+            LoadVisibility = Visibility.Collapsed;
+        } else if (LoadVisibility == Visibility.Collapsed)
+        {
+            LoadVisibility = Visibility.Visible;
+        }
     }
 
     private string[] IgnoredArchives =>
@@ -139,10 +174,9 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private void CheckView()
     {
         ArchiveDirNotFound = _settings.CP77ExecutablePath == null;
-        LoadVisibility = _archiveManager.IsManagerLoaded ? Visibility.Collapsed : Visibility.Visible;
-
+        UpdateLoadArchiveButtonVisibility();
+        UpdateLoadingIndicatorVisibility();
         ShouldShowExecutablePathWarning = ArchiveDirNotFound;
-        ShouldShowLoadButton = !_manuallyLoading && _archiveManager is { IsManagerLoaded: false, IsManagerLoading: false };
     }
 
     // if the game exe path changes
@@ -255,12 +289,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     #region commands
 
     [RelayCommand]
-    internal async Task LoadAssetBrowser()
-    {
-        _manuallyLoading = true;
-        ShouldShowLoadButton = !_manuallyLoading && !ProjectLoaded && !ArchiveDirNotFound;
-        await _gameController.GetRed4Controller().HandleStartup();
-    }
+    internal async Task LoadAssetBrowser() => await _gameController.GetRed4Controller().HandleStartup();
 
     [RelayCommand]
     private async Task OpenWolvenKitSettings() => await _appViewModel.ShowHomePageAsync(EHomePage.Settings);
@@ -487,7 +516,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     /// Add File to Project
     /// </summary>
     ///
-    private bool CanAddToProject() => ProjectLoaded;
+    private bool CanAddToProject() => ProjectLoaded && RightItems.Any(x => x.IsChecked);
 
     [RelayCommand(CanExecute = nameof(CanAddToProject))]
     internal async Task AddSelectedAsync()
