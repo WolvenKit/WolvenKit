@@ -579,24 +579,12 @@ public partial class AssetBrowserViewModel : ToolViewModel
         }
     }
 
-    private async void InternalAddFiles(IList<IGameFile> files)
+    private async Task InternalAddFiles(IList<IGameFile> files)
     {
-        var progress = 0;
-
-        _progressService.IsIndeterminate = false;
-        _progressService.Report(0.1);
-
-        await Parallel.ForEachAsync(files, async (file, token) =>
-        {
-            await Task.Run(() => { _gameController.GetController().AddToMod(file); }, token);
-
-            Interlocked.Increment(ref progress);
-            _progressService.Report(progress / (float)files.Count);
-        });
-
-        _progressService.Completed();
-
+        _appViewModel.GetToolViewModel<ProjectExplorerViewModel>()?.SuspendFileWatcher();
+        await _gameController.GetController().AddToModAsync(files);
         _loggerService.Success($"Added {files.Count} files to the project.");
+        _appViewModel.GetToolViewModel<ProjectExplorerViewModel>()?.ResumeFileWatcher();
     }
 
     /// <summary>

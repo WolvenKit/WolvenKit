@@ -1012,6 +1012,25 @@ public class RED4Controller : ObservableObject, IGameController
         return true;
     }
 
+    public async Task AddToModAsync(IList<IGameFile> files)
+    {
+        var progress = 0;
+
+        _progressService.IsIndeterminate = false;
+        _progressService.Report(0.1);
+
+        await Parallel.ForEachAsync(files, async (file, token) =>
+        {
+            AddToMod(file);
+            Interlocked.Increment(ref progress);
+            _progressService.Report(progress / (float)files.Count);
+        });
+
+        _progressService.Completed();
+        _projectEvents.PublishFilesImported(new FilesImportedMessage([.. files],[]));
+    }
+
+
     /// <Inheritdoc />
     public bool AddToMod(ulong hash)
     {
