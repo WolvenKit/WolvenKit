@@ -32,3 +32,8 @@ changes:
       pr-number: 2934
       author: "manavortex"
       description: "When generating a radio, the folder in resources will now be created"
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 2934
+      author: "manavortex"
+      description: "When generating a radio, the folder in resources will now be created"
