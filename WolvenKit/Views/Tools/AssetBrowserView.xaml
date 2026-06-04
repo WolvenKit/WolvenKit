@@ -366,7 +366,6 @@
                         <others:InspectableDataGrid
                             x:Name="RightFileView"
                             AutomationProperties.AutomationId="RightFileView"
-                            Background="{StaticResource ContentBackground}"
                             BorderThickness="0"
                             HeaderRowHeight="{DynamicResource WolvenKitTreeGridRowHeaderHeight}"
                             RowHeight="{DynamicResource WolvenKitTreeGridRowHeight}"
