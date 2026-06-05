@@ -125,8 +125,6 @@
                             <StackPanel Orientation="Horizontal">
                                 <Button
                                     Margin="{DynamicResource WolvenKitMarginSmallLeft}"
-                                    Visibility="{Binding CanEdit,
-                                                         Converter={StaticResource BooleanToVisibilityConverter}}"
                                     Click="Edit_OnClick"
                                     ToolTip="Edit">
                                     <iconPacks:PackIconMaterial

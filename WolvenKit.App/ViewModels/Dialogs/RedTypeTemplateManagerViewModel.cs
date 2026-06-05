@@ -141,11 +141,52 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
 
     public async Task EditFile(RedTypeTemplateDescriptorManagerExt templateDesc)
     {
-        var tempFile = Path.Combine(Path.GetTempPath(), $"{templateDesc.Name}.{templateDesc.TypeName}.tempcr2w");
+        #region Source Validation
+
+        var desc = templateDesc;
+
+        if (desc.Source == RedTypeTemplateDescriptorExtSource.System)
+        {
+            var response = await Interactions.ShowMessageBoxAsync(
+                "Trying to edit a system template. Should a local copy be created?",
+                "Edit system file",
+                WMessageBoxButtons.YesNo);
+
+            if (response == WMessageBoxResult.No)
+            {
+                return;
+            }
+
+            var localPath = Path.Join(ISettingsManager.GetUserTemplateDir(),$"{desc.Name}.{desc.Type.Name}.json");
+            if (File.Exists(localPath))
+            {
+                response = await Interactions.ShowMessageBoxAsync(
+                    "A local copy of this template already exists. Overwrite it?",
+                    "Overwrite template",
+                    WMessageBoxButtons.YesNo);
+
+                if (response == WMessageBoxResult.No)
+                {
+                    return;
+                }
+            }
+
+            File.Copy(desc.FilePath, localPath, true);
+            await Task.Run(LoadTemplates);
+            desc = Templates.First(t => t.Name == desc.Name &&
+                                        t.Type == desc.Type &&
+                                        t.Source == RedTypeTemplateDescriptorExtSource.User);
+        }
+
+        #endregion
+
+        #region Temp CR2W File Creation
+
+        var tempFile = Path.Combine(Path.GetTempPath(), $"{desc.Name}.{desc.Type.Name}.tempcr2w");
 
         var tempFileCreated = await Task.Run(() =>
         {
-            var data = _templateService.ReadTemplate(templateDesc);
+            var data = _templateService.ReadTemplate(desc);
             if (data is not RedBaseClass redBase)
             {
                 _loggerService.Error("Template data is not a RedBaseClass.");
@@ -169,6 +210,10 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
         {
             return;
         }
+
+        #endregion
+
+        #region Editing Event Handlers
 
         _appViewModel.DockedViews.CollectionChanged += OnDockedViewsChanged;
         _appViewModel.RequestFileOpen(tempFile);
@@ -224,10 +269,12 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
                     return;
                 }
 
-                _templateService.WriteTemplate(doc.Cr2wFile.RootChunk, templateDesc.Name);
-                _loggerService.Success($"Template '{templateDesc.Name}' updated.");
+                _templateService.WriteTemplate(doc.Cr2wFile.RootChunk, desc.Name);
+                _loggerService.Success($"Template '{desc.Name}' of type `{desc.TypeName}` updated.");
             }
         }
+
+        #endregion
     }
 
     public async Task DeleteFile(RedTypeTemplateDescriptorManagerExt templateDescriptor)
