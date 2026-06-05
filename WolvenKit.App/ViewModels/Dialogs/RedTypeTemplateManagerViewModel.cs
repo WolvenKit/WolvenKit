@@ -10,7 +10,6 @@ using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Documents;
-using WolvenKit.App.ViewModels.Scripting;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
@@ -27,16 +26,14 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
 {
     private readonly AppViewModel _appViewModel;
     private readonly RedTypeTemplateService _templateService;
-    private readonly ISettingsManager _settingsManager;
     private readonly ILoggerService _loggerService;
     private readonly Cr2WTools _cr2wTools;
 
 
-    public RedTypeTemplateManagerViewModel(AppViewModel appViewModel, RedTypeTemplateService templateService, ISettingsManager settingsManager, ILoggerService loggerService, Cr2WTools cr2wTools)
+    public RedTypeTemplateManagerViewModel(AppViewModel appViewModel, RedTypeTemplateService templateService, ILoggerService loggerService, Cr2WTools cr2wTools)
     {
         _appViewModel = appViewModel;
         _templateService = templateService;
-        _settingsManager = settingsManager;
         _loggerService = loggerService;
         _cr2wTools = cr2wTools;
 
@@ -96,47 +93,6 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
         Templates.Clear();
         Templates.AddRange(_templateService.UserTemplates.Select(t => new RedTypeTemplateDescriptorManagerExt(t, RedTypeTemplateDescriptorExtSource.User)));
         Templates.AddRange(_templateService.SystemTemplates.Select(t => new RedTypeTemplateDescriptorManagerExt(t, RedTypeTemplateDescriptorExtSource.System)));
-    }
-
-    public async Task OpenFile(ScriptFileViewModel scriptFile)
-    {
-        if (!File.Exists(scriptFile.Path))
-        {
-            return;
-        }
-
-        var localFilePath = scriptFile.Path;
-        if (scriptFile.Source == ScriptSource.System)
-        {
-            var response = await Interactions.ShowMessageBoxAsync(
-                "Trying to open a system file. Should a local copy be created?",
-                "Open system file",
-                WMessageBoxButtons.YesNo);
-
-            if (response == WMessageBoxResult.No)
-            {
-                return;
-            }
-
-            localFilePath = Path.Combine(ISettingsManager.GetWScriptDir(), Path.GetFileName(scriptFile.Path));
-            if (File.Exists(localFilePath))
-            {
-                response = await Interactions.ShowMessageBoxAsync(
-                    "A copy of this file already exists. Overwrite it?",
-                    "Overwrite file",
-                    WMessageBoxButtons.YesNo);
-
-                if (response == WMessageBoxResult.No)
-                {
-                    return;
-                }
-            }
-
-            File.Copy(scriptFile.Path, localFilePath, true);
-        }
-
-        _appViewModel.RequestFileOpen(localFilePath);
-        _appViewModel.CloseModalCommand.Execute(null);
     }
 
     public async Task EditFile(RedTypeTemplateDescriptorManagerExt templateDesc)

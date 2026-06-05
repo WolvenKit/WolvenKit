@@ -1300,7 +1300,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private async Task ShowRedTypeTemplateManager()
     {
         CloseModalCommand.Execute(null);
-        await SetActiveDialog(new RedTypeTemplateManagerViewModel(this, _redTypeTemplateService, SettingsManager, _loggerService, _cr2WTools));
+        await SetActiveDialog(new RedTypeTemplateManagerViewModel(this, _redTypeTemplateService, _loggerService, _cr2WTools));
     }
 
     private bool CanShowPlugin() => !IsDialogShown;
