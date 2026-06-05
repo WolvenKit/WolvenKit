@@ -2045,16 +2045,16 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     private void OnAfterOverlayRendered() => DispatcherHelper.RunOnMainThread(() =>
-    {
-        IsOverlayShown = true;
-        ShouldOverlayShow = true;
-    }, DispatcherPriority.Render);
+        {
+            IsOverlayShown = true;
+            ShouldOverlayShow = true;
+        }, DispatcherPriority.Render);
 
     private void OnAfterDialogRendered() => DispatcherHelper.RunOnMainThread(() =>
-    {
-        IsDialogShown = true;
-        ShouldDialogShow = true;
-    }, DispatcherPriority.Render);
+        {
+            IsDialogShown = true;
+            ShouldDialogShow = true;
+        }, DispatcherPriority.Render);
 
     [MemberNotNull(nameof(Title))]
     public void UpdateTitle()

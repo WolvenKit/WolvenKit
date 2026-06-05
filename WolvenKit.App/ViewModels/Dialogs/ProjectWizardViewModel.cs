@@ -5,7 +5,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -48,18 +47,10 @@ public partial class ProjectWizardViewModel : DialogViewModel, INotifyDataErrorI
 
         _projectType = ["Cyberpunk 2077"];
 
-        // Load the groups already in use so they can be offered in the dropdown.
+        // Load the existing groups (single source of truth) so they can be offered in the dropdown.
         if (_recentlyUsedItemsService is not null)
         {
-            var existingGroups = _recentlyUsedItemsService.Items.Items
-                .Select(item => item.Group)
-                .Where(g => !string.IsNullOrWhiteSpace(g))
-                .Select(g => g!.Trim())
-                .Distinct(StringComparer.InvariantCultureIgnoreCase)
-                .OrderBy(g => g, StringComparer.InvariantCultureIgnoreCase)
-                .ToList();
-
-            foreach (var g in existingGroups)
+            foreach (var g in _recentlyUsedItemsService.GetGroups())
             {
                 _availableGroups.Add(g);
             }

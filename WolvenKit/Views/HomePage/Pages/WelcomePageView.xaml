@@ -666,7 +666,6 @@
 
                                     <!-- Group projects (reuses the same card style) -->
                                     <syncfusion:CardView
-                                        MaxHeight="190"
                                         HorizontalAlignment="Left"
                                         Background="Transparent"
                                         Visibility="{Binding IsExpanded,

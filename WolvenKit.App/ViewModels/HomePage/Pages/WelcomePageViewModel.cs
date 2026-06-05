@@ -198,13 +198,13 @@ public partial class WelcomePageViewModel : PageViewModel
             return;
         }
 
-        var name = await Interactions.ShowInputBoxAsync("Move project to group", project.Group ?? "");
+        var name = await Interactions.ShowInputBoxAsync("Move project to group", project.Group);
 
         // The user typed a name -> assign it. Empty -> remove from the group.
         // (Note: this API does not clearly distinguish "Cancel" from an emptied field;
         //  to keep the group on cancel, replace the next line with:
         //  if (string.IsNullOrWhiteSpace(name)) return;)
-        project.Group = string.IsNullOrWhiteSpace(name) ? null : name.Trim();
+        project.Group = string.IsNullOrWhiteSpace(name) ? "" : name.Trim();
 
         RefreshRecentProjects();
     }
@@ -218,7 +218,7 @@ public partial class WelcomePageViewModel : PageViewModel
             return;
         }
 
-        project.Group = null;
+        project.Group = "";
         RefreshRecentProjects();
     }
 
@@ -230,7 +230,7 @@ public partial class WelcomePageViewModel : PageViewModel
             return;
         }
 
-        project.Group = string.IsNullOrWhiteSpace(group) ? null : group.Trim();
+        project.Group = string.IsNullOrWhiteSpace(group) ? "" : group.Trim();
         RefreshRecentProjects();
     }
     // Delete a group (after confirmation). Projects are NOT deleted: they simply
@@ -255,7 +255,7 @@ public partial class WelcomePageViewModel : PageViewModel
 
         foreach (var project in group.Projects.ToList())
         {
-            project.Group = null;
+            project.Group = "";
         }
 
         RefreshRecentProjects();
@@ -363,7 +363,8 @@ public partial class WelcomePageViewModel : PageViewModel
             // Group by "Group". Projects without a group go into "Ungrouped",
             // placed last; the other groups are sorted by name.
             var groups = items
-                .GroupBy(p => string.IsNullOrWhiteSpace(p.Group) ? UngroupedName : p.Group!)
+                .GroupBy(p => string.IsNullOrWhiteSpace(p.Group) ? UngroupedName : p.Group.Trim(),
+                         StringComparer.InvariantCultureIgnoreCase)
                 .OrderBy(g => g.Key == UngroupedName ? 1 : 0)
                 .ThenBy(g => g.Key, StringComparer.InvariantCultureIgnoreCase)
                 .Select(g =>
@@ -402,17 +403,9 @@ public partial class WelcomePageViewModel : PageViewModel
                 GroupedProjects.Add(g);
             }
 
-            // Build the list of existing groups (excluding "Ungrouped"), for the submenu.
-            var names = items
-                .Select(p => p.Group)
-                .Where(n => !string.IsNullOrWhiteSpace(n))
-                .Select(n => n!.Trim())
-                .Distinct(StringComparer.InvariantCultureIgnoreCase)
-                .OrderBy(n => n, StringComparer.InvariantCultureIgnoreCase)
-                .ToList();
-
+            // Existing groups for the submenu — single source of truth (RecentlyUsedItemsService).
             AvailableGroups.Clear();
-            foreach (var n in names)
+            foreach (var n in _recentlyUsedItemsService.GetGroups())
             {
                 AvailableGroups.Add(n);
             }

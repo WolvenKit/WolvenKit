@@ -20,7 +20,7 @@ public partial class RecentlyUsedItemModel : ObservableObject
     // Project group. null or empty = "Ungrouped".
     // Serialized automatically in recentItems.json (backward compatible: absent = null).
     [ObservableProperty]
-    private string? _group;
+    private string _group = "";
 
     public RecentlyUsedItemModel(string name, DateTime dateTime, DateTime lastOpened)
     {

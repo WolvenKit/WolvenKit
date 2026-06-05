@@ -46,7 +46,7 @@ public partial class WelcomePageViewModel
         }
 
         // Passthrough to the model. Writing here triggers the auto-save + refresh.
-        public string? Group
+        public string Group
         {
             get => Item.Group;
             set => Item.Group = value;
