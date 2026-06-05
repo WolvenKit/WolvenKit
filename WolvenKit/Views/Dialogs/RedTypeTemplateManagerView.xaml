@@ -60,6 +60,7 @@
             AllowGrouping="True"
             ShowGroupDropArea="False"
             AutoExpandGroups="True"
+            LiveDataUpdateMode="AllowDataShaping"
             MouseDoubleClick="TemplateDataGrid_OnMouseDoubleClick">
 
             <syncfusion:SfDataGrid.Resources>
