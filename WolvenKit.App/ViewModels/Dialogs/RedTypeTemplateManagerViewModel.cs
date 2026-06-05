@@ -84,14 +84,6 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
     private void Cancel() => _appViewModel.CloseModalCommand.Execute(null);
 
     [RelayCommand]
-    private async Task UpdateScripts()
-    {
-        await _appViewModel.CheckForScriptUpdatesCommand.ExecuteAsync(null);
-        LoadTemplates();
-
-        _loggerService.Info("Scripts update complete");
-    }
-
     public void LoadTemplates()
     {
         _templateService.LoadTemplates();

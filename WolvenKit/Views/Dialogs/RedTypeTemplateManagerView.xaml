@@ -196,7 +196,7 @@
             <Button
                 Margin="{DynamicResource WolvenKitMarginSmallLeft}"
                 HorizontalAlignment="Right"
-                Command="{Binding UpdateTemplateCommand}">
+                Command="{Binding LoadTemplatesCommand}">
                 <StackPanel
                     Margin="{DynamicResource WolvenKitMarginSmallHorizontal}"
                     Orientation="Horizontal">
