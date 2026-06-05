@@ -1,5 +1,6 @@
 using System;
 using System.Reactive.Disposables;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -43,12 +44,12 @@ public partial class RedTypeTemplateManagerView : ReactiveUserControl<RedTypeTem
             return;
         }
 
-        if (sender is not Button { DataContext: RedTypeTemplateDescriptorManagerExt scriptFile })
+        if (sender is not Button { DataContext: RedTypeTemplateDescriptorManagerExt templateFile})
         {
             return;
         }
 
-        await ViewModel.EditFile(scriptFile);
+        await ViewModel.EditFile(templateFile);
     }
 
     private async void TemplateDataGrid_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)

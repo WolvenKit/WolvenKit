@@ -1,18 +1,22 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Scripting;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
@@ -25,14 +29,16 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
     private readonly RedTypeTemplateService _templateService;
     private readonly ISettingsManager _settingsManager;
     private readonly ILoggerService _loggerService;
+    private readonly Cr2WTools _cr2wTools;
 
 
-    public RedTypeTemplateManagerViewModel(AppViewModel appViewModel, RedTypeTemplateService templateService, ISettingsManager settingsManager, ILoggerService loggerService)
+    public RedTypeTemplateManagerViewModel(AppViewModel appViewModel, RedTypeTemplateService templateService, ISettingsManager settingsManager, ILoggerService loggerService, Cr2WTools cr2wTools)
     {
         _appViewModel = appViewModel;
         _templateService = templateService;
         _settingsManager = settingsManager;
         _loggerService = loggerService;
+        _cr2wTools = cr2wTools;
 
         LoadTemplates();
 
@@ -135,7 +141,93 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
 
     public async Task EditFile(RedTypeTemplateDescriptorManagerExt templateDesc)
     {
-        _loggerService.Debug("Edit File method reached");
+        var tempFile = Path.Combine(Path.GetTempPath(), $"{templateDesc.Name}.{templateDesc.TypeName}.tempcr2w");
+
+        var tempFileCreated = await Task.Run(() =>
+        {
+            var data = _templateService.ReadTemplate(templateDesc);
+            if (data is not RedBaseClass redBase)
+            {
+                _loggerService.Error("Template data is not a RedBaseClass.");
+                return false;
+            }
+            var cr2w = new CR2WFile
+            {
+                RootChunk = redBase
+            };
+
+            if (!_cr2wTools.WriteCr2W(cr2w, tempFile))
+            {
+                _loggerService.Error($"Failed to create temporary file: {tempFile}");
+                return false;
+            }
+
+            return true;
+        });
+
+        if (!tempFileCreated)
+        {
+            return;
+        }
+
+        _appViewModel.DockedViews.CollectionChanged += OnDockedViewsChanged;
+        _appViewModel.RequestFileOpen(tempFile);
+
+        _appViewModel.CloseModalCommand.Execute(null);
+        return;
+
+        void OnDockedViewsChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems == null)
+            {
+                return;
+            }
+
+            foreach (var item in e.NewItems.OfType<RedDocumentViewModel>())
+            {
+                if (item.FilePath == tempFile)
+                {
+                    item.OnSaveCompleted += OnDocumentSaved;
+                    _appViewModel.DockedViews.CollectionChanged -= OnDockedViewsChanged;
+                    _appViewModel.DockedViews.CollectionChanged += OnRemoved;
+                    break;
+                }
+                continue;
+
+                void OnRemoved(object? s, NotifyCollectionChangedEventArgs ea)
+                {
+                    if (ea.OldItems?.Contains(item) != true)
+                    {
+                        return;
+                    }
+
+                    item.OnSaveCompleted -= OnDocumentSaved;
+                    _appViewModel.DockedViews.CollectionChanged -= OnRemoved;
+
+                    try
+                    {
+                        File.Delete(tempFile);
+                    }
+                    catch
+                    {
+                        /* ignore */
+                    }
+                }
+            }
+
+            return;
+
+            void OnDocumentSaved(object? docSavedSender, EventArgs docSavedArgs)
+            {
+                if (docSavedSender is not RedDocumentViewModel doc)
+                {
+                    return;
+                }
+
+                _templateService.WriteTemplate(doc.Cr2wFile.RootChunk, templateDesc.Name);
+                _loggerService.Success($"Template '{templateDesc.Name}' updated.");
+            }
+        }
     }
 
     public async Task DeleteFile(RedTypeTemplateDescriptorManagerExt templateDescriptor)
