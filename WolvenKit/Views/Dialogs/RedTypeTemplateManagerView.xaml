@@ -28,7 +28,7 @@
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <DockPanel Grid.Row="0">
+        <DockPanel Grid.Row="0" Margin="{StaticResource WolvenKitMarginBottom}">
             <TextBlock
                 FontSize="{DynamicResource WolvenKitFontHuge}"
                 Text="Template Manager" />
@@ -45,6 +45,7 @@
         </DockPanel>
 
         <syncfusion:SfDataGrid
+            Margin="{StaticResource WolvenKitMarginBottom}"
             x:Name="TemplateDataGrid"
             Grid.Row="2"
             FontSize="{DynamicResource WolvenKitFontSubTitle}"
