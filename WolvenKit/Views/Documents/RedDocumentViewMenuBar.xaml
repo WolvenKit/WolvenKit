@@ -357,7 +357,7 @@
                 <!-- Editor Mode end -->
             </MenuItem>
 
-            <!-- Materials: mesh files -->
+            <!-- Materials: .mesh/.mi files -->
             <MenuItem
                 Style="{StaticResource ShowMaterialsMenuItemStyle}"
                 Header="Materials"
@@ -505,6 +505,65 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <!-- mesh file: flatten mi chain -->
+                <MenuItem
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Header="Resolve .mi files"
+                    Command="{Binding Path=FlattenMiChainCommand}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Iron" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <!-- mesh file: convert to/from preload materials -->
+                <MenuItem
+                    Style="{StaticResource ShowMeshMenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Header="Convert material preloading state">
+                    <MenuItem.Icon>
+                        <templates:IconBox IconPack="Empty" />
+                    </MenuItem.Icon>
+
+                    <MenuItem
+                        Style="{StaticResource ShowMeshMenuItemStyle}"
+                        Visibility="{Binding Path=IsEnabled,
+                                             RelativeSource={RelativeSource Self},
+                                             Mode=OneWay,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Header="Convert preload materials to local"
+                        Command="{Binding Path=ConvertFromPreloadMaterialsCommand}">
+                        <MenuItem.Icon>
+                            <templates:IconBox IconPack="Empty" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <MenuItem
+                        Style="{StaticResource ShowMeshMenuItemStyle}"
+                        Visibility="{Binding Path=IsEnabled,
+                                             RelativeSource={RelativeSource Self},
+                                             Mode=OneWay,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Header="Convert local materials to preload"
+                        ToolTip="Do not do this unless you know why you need it!"
+                        Command="{Binding Path=ConvertToPreloadMaterialsCommand}">
+                        <MenuItem.Icon>
+                            <templates:IconBox
+                                IconPack="Material"
+                                Kind="Alert"
+                                Foreground="{StaticResource WolvenKitYellow}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                </MenuItem>
+
                 <!-- end Materials: mesh files -->
             </MenuItem>
 
@@ -623,51 +682,6 @@
                 </MenuItem>
 
                 <Separator Style="{StaticResource ShowInMeshFileSeparatorStyle}" />
-
-                <!-- mesh file: convert to/from preload materials -->
-
-                <MenuItem
-                    Style="{StaticResource ShowMeshMenuItemStyle}"
-                    Visibility="{Binding Path=IsEnabled,
-                                         RelativeSource={RelativeSource Self},
-                                         Mode=OneWay,
-                                         Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Header="Convert material preloading state">
-                    <MenuItem.Icon>
-                        <templates:IconBox IconPack="Empty" />
-                    </MenuItem.Icon>
-
-                    <MenuItem
-                        Style="{StaticResource ShowMeshMenuItemStyle}"
-                        Visibility="{Binding Path=IsEnabled,
-                                             RelativeSource={RelativeSource Self},
-                                             Mode=OneWay,
-                                             Converter={StaticResource BooleanToVisibilityConverter}}"
-                        Header="Convert preload materials to local"
-                        Command="{Binding Path=ConvertFromPreloadMaterialsCommand}">
-                        <MenuItem.Icon>
-                            <templates:IconBox IconPack="Empty" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-
-                    <MenuItem
-                        Style="{StaticResource ShowMeshMenuItemStyle}"
-                        Visibility="{Binding Path=IsEnabled,
-                                             RelativeSource={RelativeSource Self},
-                                             Mode=OneWay,
-                                             Converter={StaticResource BooleanToVisibilityConverter}}"
-                        Header="Convert local materials to preload"
-                        ToolTip="Do not do this unless you know why you need it!"
-                        Command="{Binding Path=ConvertToPreloadMaterialsCommand}">
-                        <MenuItem.Icon>
-                            <templates:IconBox
-                                IconPack="Material"
-                                Kind="Alert"
-                                Foreground="{StaticResource WolvenKitYellow}" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-
-                </MenuItem>
 
                 <!-- .mesh file: Clear chunk materials (if you have multiple appearances selected) -->
                 <MenuItem
