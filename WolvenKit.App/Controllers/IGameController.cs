@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using WolvenKit.App.Models;
 using WolvenKit.Common;
@@ -7,6 +8,12 @@ namespace WolvenKit.App.Controllers;
 
 public interface IGameController
 {
+    /// <summary>
+    /// Adds files to the mod's directory, creating necessary folders, using current scope.
+    /// </summary>
+    /// <param name="files"></param>
+    public Task AddToModAsync(IList<IGameFile> files);
+
     /// <summary>
     /// Finds a file in the currently active scope and adds it to the mod
     /// </summary>
@@ -23,7 +30,7 @@ public interface IGameController
     public bool AddToMod(ulong hash, ArchiveManagerScope searchScope);
 
     /// <summary>
-    /// Adds file to the mod's directory, creating the necessary folders. 
+    /// Adds file to the mod's directory, creating the necessary folders.
     /// </summary>
     /// <param name="file">the file in question</param>
     /// <param name="searchScope">Search scope. Defaults to ArchiveManagerScope.Basegame</param>
