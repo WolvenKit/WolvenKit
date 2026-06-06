@@ -75,7 +75,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     private readonly AppViewModel _appViewModel;
     private readonly ProjectResourceTools _projectResourceTools;
 
-    private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
+    internal readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
 
     private bool _manuallyLoading;
 
@@ -256,7 +256,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     #region commands
 
     [RelayCommand]
-    private async Task LoadAssetBrowser()
+    internal async Task LoadAssetBrowser()
     {
         _manuallyLoading = true;
         ShouldShowLoadButton = !_manuallyLoading && !ProjectLoaded && !ArchiveDirNotFound;
@@ -1125,7 +1125,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
     }
 
 
-    private void SetLeftSelectedItem(string itemName) =>
+    internal void SetLeftSelectedItem(string itemName) =>
         LeftSelectedItem = LeftItems.ToList().FirstOrDefault(item => item.Name.Contains(itemName));
 
     public async void Refresh()

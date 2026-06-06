@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,6 +17,7 @@ using ReactiveUI;
 using Syncfusion.Data;
 using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.App.Extensions;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement.Project;
@@ -58,6 +60,7 @@ namespace WolvenKit.Views.Tools
 
         private string _currentFolderQuery = "";
         private bool _isDragging;
+        private CancellationTokenSource _deferRefreshTokenSource = new();
 
         #region Constructors
 
@@ -218,6 +221,7 @@ namespace WolvenKit.Views.Tools
                     .DisposeWith(disposables);
 
                 ViewModel.OnToggleFlatMode += OnToggleFlatMode;
+                ViewModel.BeginDeferredRefreshContext += BeginDeferredRefreshContext;
 
             });
         }
@@ -283,6 +287,32 @@ namespace WolvenKit.Views.Tools
                 TreeGrid.ClearSelections(false);
             }
         });
+        private async Task BeginDeferredRefreshContext(CancellationToken deferRefreshToken, Task doBeforeRefresh)
+        {
+            CompositeDisposable disposables =
+            [
+                TreeGridFlat.View.DeferRefresh(TreeViewRefreshMode.DeferRefresh),
+                TreeGrid.View.DeferRefresh(TreeViewRefreshMode.DeferRefresh)
+            ];
+
+            using (disposables)
+            {
+                await doBeforeRefresh;
+                DispatcherHelper.WaitUntilCancelled(deferRefreshToken, () =>
+                {
+                    TreeGridFlat.View.Filter = IsFileInFlat;
+                    TreeGridFlat.View.Refresh();
+
+                    Task.Run(() =>
+                    {
+                        DispatcherHelper.DelayOnMainThread(() =>
+                        {
+                            PESearchBar_OnSearchStarted(this, new FunctionEventArgs<string>(_currentFolderQuery));
+                        }, 10);
+                    });
+                });
+            }
+        }
 
         private void TreeGrid_OnNodeExpanding(object sender, NodeExpandingEventArgs e)
         {
