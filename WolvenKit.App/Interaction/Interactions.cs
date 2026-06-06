@@ -144,7 +144,10 @@ public static class Interactions
     public static Func<
         (string text, string caption, WMessageBoxImage image, WMessageBoxButtons buttons),
         WMessageBoxResult
-    > ShowConfirmation { get; set; } = _ => throw new NotImplementedException();
+    > ShowConfirmation { get; set; } = _ =>
+        TestHelper.InActiveTest
+            ? WMessageBoxResult.OK
+            : throw new NotImplementedException();
 
 
     /// <summary>
