@@ -45,7 +45,6 @@ namespace WolvenKit.Views.Documents
         private readonly IProjectManager _projectManager;
         private readonly ILoggerService _loggerService;
         private readonly INotificationService _notificationService;
-        private readonly WatcherService _projectWatcher;
         private readonly IAppArchiveManager _archiveManager;
         private readonly IModifierViewStateService _modifierStateService;
         private readonly ProjectExplorerViewModel _projectExplorer;
@@ -63,7 +62,6 @@ namespace WolvenKit.Views.Documents
             _settingsManager = Locator.Current.GetService<ISettingsManager>()!;
             _projectManager = Locator.Current.GetService<IProjectManager>()!;
             _loggerService = Locator.Current.GetService<ILoggerService>()!;
-            _projectWatcher = (WatcherService)Locator.Current.GetService<IWatcherService>()!;
             _archiveManager = Locator.Current.GetService<IAppArchiveManager>()!;
             _modifierStateService = Locator.Current.GetService<IModifierViewStateService>()!;
             _progressService = Locator.Current.GetService<IProgressService<double>>()!;
@@ -819,7 +817,7 @@ namespace WolvenKit.Views.Documents
                     return;
                 }
 
-                _projectWatcher.Suspend();
+                Locator.Current.GetService<ProjectExplorerViewModel>()?.SuspendFileWatcher();
 
                 await AddDependenciesToFileAsync(cvm, eventArgs is AddDependenciesFullEventArgs);
                 _notificationService.Success("Successfully added dependencies");
@@ -846,8 +844,10 @@ namespace WolvenKit.Views.Documents
                 await Task.Run(async () =>
                 {
                     await Task.Delay(100);
-                    _projectWatcher.Refresh();
-                    _projectWatcher.Resume();
+                    if (_appViewModel.ActiveProject != null)
+                    {
+                        Locator.Current.GetService<ProjectExplorerViewModel>()?.ResumeWatcher_AndReloadProject();
+                    }
                 });
             }
 
