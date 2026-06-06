@@ -90,7 +90,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     public DispatchedObservableCollection<FileSystemModel> FileList => _projectWatcher.FileList;
     public WatcherState FileWatcherState => _projectWatcher.WatcherState;
     public Func<CancellationToken, Task, Task>? BeginDeferredRefreshContext { get; set; }
-
+    public Dictionary<string, bool> ExpansionStateDictionary = [];
     public bool IsKeyUpEventAssigned { get; set; }
 
     #endregion fields
@@ -170,19 +170,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 });
             });
     }
-    
+
+
     private void Svc_ThreadIdleTenSeconds(object? sender, EventArgs e)
     {
         SaveProjectExplorerExpansionStateIfDirty();
         SaveProjectExplorerTabIfDirty();
     }
-
-    /// <summary>
-    /// Save project browser expansion state (will be written to <see cref="Cp77Project.InterfaceProjectTreeStatePath"/>)
-    /// </summary>
-    public Dictionary<string, bool> ExpansionStateDictionary = [];
-
-    public bool? GetExpansionStateOrNull(string relPath) => ExpansionStateDictionary.TryGetValue(relPath, out var state) ? state : null;
 
     /// <summary>
     /// Set status of "scroll to open file" button (disable if we don't have one open)
@@ -310,6 +304,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             WMessageBoxButtons.Ok
         )));
     }
+
+    public bool? GetExpansionStateOrNull(string relPath) => ExpansionStateDictionary.TryGetValue(relPath, out var state) ? state : null;
 
     #endregion Project_Loading
 
