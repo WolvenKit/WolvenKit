@@ -1143,10 +1143,18 @@ public class DocumentTools
         mesh.PreloadLocalMaterialInstances.Clear();
     }
 
+    /// <summary>
+    /// Appends materials from source to dest
+    /// </summary>
+    /// <param name="sourceCr2W"></param>
+    /// <param name="destCr2W"></param>
+    /// <param name="sourcePath"></param>
+    /// <param name="destPath"></param>
+    /// <param name="appendSeparator">Optionally: append separator appearances / materials for every new mesh</param>
+    /// <returns>number of changed parameters across the files</returns>
     private int AppendMeshMaterials(CR2WFile? sourceCr2W, CR2WFile? destCr2W, string sourcePath = "",
         string destPath = "", bool appendSeparator = false)
     {
-        var wasChanged = 0;
 
         // append separators to appearances, materialNames, materials
         var separatorString =
@@ -1154,23 +1162,23 @@ public class DocumentTools
 
         if (sourceCr2W is null)
         {
-            _notificationService.Error($"source file {sourcePath} not found. Can't copy...");
-            _loggerService.Error($"source file {sourcePath} not found. Can't copy...");
-            return wasChanged;
+            _notificationService.Error($"Source file {sourcePath} not found. Can't copy.");
+            _loggerService.Error($"Source file {sourcePath} not found. Can't copy.");
+            return 0;
         }
 
         if (destCr2W is null)
         {
             _notificationService.Error($"target file {destCr2W} not found. Can't copy...");
             _loggerService.Error($"target file {destCr2W} not found. Can't copy...");
-            return wasChanged;
+            return 0;
         }
 
         if (sourceCr2W.RootChunk is not CMesh sourceMesh || destCr2W.RootChunk is not CMesh destMesh)
         {
             _notificationService.Error($"source file {sourcePath} or target file {destPath} is not a valid mesh.");
             _loggerService.Error($"source file {sourcePath} or target file {destPath} is not a valid mesh.");
-            return wasChanged;
+            return 0;
         }
 
         var hasMaterials = sourceMesh.MaterialEntries.Count > 0;
@@ -1182,6 +1190,7 @@ public class DocumentTools
             return 0;
         }
 
+        var numChangedEntries = 0;
         // ReSharper disable ForCanBeConvertedToForeach
 
         var materialEntries = CollectMaterialDefinitions(out var materialNameCollisions);
@@ -1204,21 +1213,21 @@ public class DocumentTools
             }
         }
 
-        wasChanged += materialEntries.Count - destMesh.MaterialEntries.Count;
+        numChangedEntries += materialEntries.Count - destMesh.MaterialEntries.Count;
 
         destMesh.MaterialEntries.Clear();
         materialEntries.ForEach(e => destMesh.MaterialEntries.Add(e));
 
         var appearances = CopyMeshAppearances();
 
-        wasChanged += appearances.Count - destMesh.Appearances.Count;
+        numChangedEntries += appearances.Count - destMesh.Appearances.Count;
         destMesh.Appearances = appearances;
 
         var localMaterials = CollectLocalMaterials();
 
         if (destMesh.PreloadLocalMaterialInstances.Count > 0)
         {
-            wasChanged += localMaterials.Count - destMesh.PreloadLocalMaterialInstances.Count;
+            numChangedEntries += localMaterials.Count - destMesh.PreloadLocalMaterialInstances.Count;
             destMesh.PreloadLocalMaterialInstances.Clear();
             foreach (var m in localMaterials)
             {
@@ -1227,7 +1236,7 @@ public class DocumentTools
         }
         else
         {
-            wasChanged += localMaterials.Count - destMesh.LocalMaterialBuffer.Materials.Count;
+            numChangedEntries += localMaterials.Count - destMesh.LocalMaterialBuffer.Materials.Count;
             destMesh.LocalMaterialBuffer.Materials = localMaterials;
         }
 
@@ -1235,7 +1244,7 @@ public class DocumentTools
 
         if (destMesh.PreloadExternalMaterials.Count > 0)
         {
-            wasChanged += externalMaterials.Count - destMesh.PreloadExternalMaterials.Count;
+            numChangedEntries += externalMaterials.Count - destMesh.PreloadExternalMaterials.Count;
             destMesh.PreloadExternalMaterials.Clear();
             foreach (var m in externalMaterials)
             {
@@ -1245,11 +1254,11 @@ public class DocumentTools
         }
         else
         {
-            wasChanged += externalMaterials.Count - destMesh.ExternalMaterials.Count;
+            numChangedEntries += externalMaterials.Count - destMesh.ExternalMaterials.Count;
             destMesh.ExternalMaterials = externalMaterials;
         }
 
-        return wasChanged;
+        return numChangedEntries;
 
         CArray<IMaterial> CollectLocalMaterials()
         {
@@ -1406,7 +1415,7 @@ public class DocumentTools
             for (var i = 0; i < sourceMesh.MaterialEntries.Count; i++)
             {
                 var materialEntry = sourceMesh.MaterialEntries[i];
-                var materialName = materialEntry.Name.GetResolvedText() ?? "destMaterial" + i;
+                var materialName = materialEntry.Name.GetResolvedText() ?? $"destMaterial{i}";
                 var originalMaterialName = materialName;
                 var materialNameIndex = 0;
                 while (materialNames.Contains(materialName))
@@ -1435,7 +1444,6 @@ public class DocumentTools
     /// <param name="sourcePath">source path (file to copy FROM)</param>
     /// <param name="destPath">dest path (file to copy TO)</param>
     /// <param name="append">append materials from source mesh instead of replacing them?</param>
-    /// <param name="addSeparator">Add separators? (Will only be set when copying _from_, not when copying _to_)</param>
     /// <returns>bool as success</returns>
     /// <exception cref="InvalidDataException"></exception>
     public bool CopyMeshMaterials(string? sourcePath, string destPath, bool append = false)

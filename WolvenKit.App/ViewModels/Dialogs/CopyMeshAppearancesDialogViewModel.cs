@@ -69,4 +69,26 @@ public partial class CopyMeshAppearancesDialogViewModel : ObservableObject
         // If the mesh value is okay, we can save here
         CanSave = SelectedOptions.Any((sel) => !string.IsNullOrEmpty(sel) && sel.EndsWith(".mesh"));
     }
+
+    /// <summary>
+    /// Get all selected options. If the AXL patch button was clicked, selection list will be [""]
+    /// </summary>
+    public List<string> GetAllSelectedOptions()
+    {
+        if (UseArchiveXlPatchMesh)
+        {
+            return [""];
+        }
+
+        SelectedOptions ??= [];
+
+        if (string.IsNullOrEmpty(SelectedOption) || !SelectedOption.Contains(".mesh"))
+        {
+            return SelectedOptions;
+        }
+
+        SelectedOption.Split(';').Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s)).ToList()
+            .ForEach(SelectedOptions.Add);
+        return SelectedOptions.Distinct().ToList();
+    }
 }

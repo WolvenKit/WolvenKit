@@ -314,16 +314,7 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            var selectedOptions = dialog.SelectedOptions;
-            if (dialog.UseArchiveXlPatchMesh)
-            {
-                selectedOptions.Clear();
-                selectedOptions.Add("");
-            }
-            else if (selectedOptions.Count == 0 && dialog.SelectedOption?.EndsWith(".mesh") == true)
-            {
-                selectedOptions.Add(dialog.SelectedOption);
-            }
+            var selectedOptions = dialog.GetAllSelectedOptions();
 
             if (selectedOptions.Count == 0)
             {
@@ -334,9 +325,11 @@ namespace WolvenKit.Views.Documents
 
             try
             {
-                var isDirty = selectedOptions.Aggregate(false,
-                    (current, sourcePath) =>
-                        _documentTools.CopyMeshMaterials(sourcePath, ViewModel.FilePath, dialog.IsAppend) || current);
+                var isDirty = selectedOptions
+                    .Select((sourcePath, index) => (sourcePath, index))
+                    .Aggregate(false, (current, item) =>
+                        _documentTools.CopyMeshMaterials(item.sourcePath, ViewModel.FilePath,
+                            dialog.IsAppend || item.index > 0) || current);
 
                 // Only reload if we wrote anything
                 if (isDirty)

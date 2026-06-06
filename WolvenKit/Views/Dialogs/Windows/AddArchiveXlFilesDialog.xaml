@@ -71,13 +71,6 @@
                 </Style>
 
                 <Style
-                    x:Key="ExplanationStyle"
-                    TargetType="TextBlock">
-                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
-                    <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginBottom}" />
-                </Style>
-
-                <Style
                     x:Key="LabelStyle"
                     TargetType="TextBlock">
                     <Setter Property="VerticalAlignment" Value="Center" />
@@ -168,7 +161,7 @@
                         <TextBlock
                             Grid.Row="1"
                             Grid.Column="1"
-                            Style="{StaticResource ExplanationStyle}"
+                            Style="{StaticResource WolvenkitExplanationStyle}"
                             Text="Where do you want to equip your item?" />
 
                         <!-- Item name -->
@@ -190,7 +183,7 @@
                         <TextBlock
                             Grid.Row="4"
                             Grid.Column="1"
-                            Style="{StaticResource ExplanationStyle}"
+                            Style="{StaticResource WolvenkitExplanationStyle}"
                             Text="This will be used to generate your item's spawn code and internal names." />
 
                         <!-- Item Subtype -->
@@ -220,7 +213,7 @@
                         <TextBlock
                             Grid.Row="7"
                             Grid.Column="1"
-                            Style="{StaticResource ExplanationStyle}"
+                            Style="{StaticResource WolvenkitExplanationStyle}"
                             Text="Select a specific item type (e.g. if you need specific footstep sounds)" />
 
                         <!-- EqEx Type -->
@@ -242,7 +235,7 @@
                         <TextBlock
                             Grid.Row="10"
                             Grid.Column="1"
-                            Style="{StaticResource ExplanationStyle}"
+                            Style="{StaticResource WolvenkitExplanationStyle}"
                             Text="Select an EquipmentEx slot (supports filtering)" />
 
                         <!-- Hiding tags -->
@@ -266,7 +259,7 @@
                         <TextBlock
                             Grid.Row="13"
                             Grid.Column="1"
-                            Style="{StaticResource ExplanationStyle}"
+                            Style="{StaticResource WolvenkitExplanationStyle}"
                             Text="Hide player body parts?" />
 
                         <!-- GS tags -->
@@ -294,7 +287,7 @@
                         <TextBlock
                             Grid.Row="16"
                             Grid.Column="1"
-                            Style="{StaticResource ExplanationStyle}"
+                            Style="{StaticResource WolvenkitExplanationStyle}"
                             Text="Add tags for fine-tuning garment support?" />
 
                         <!-- Hide in First Person -->
@@ -313,7 +306,7 @@
                         <TextBlock
                             Grid.Row="19"
                             Grid.Column="1"
-                            Style="{StaticResource ExplanationStyle}"
+                            Style="{StaticResource WolvenkitExplanationStyle}"
                             Text="Check to have your item visible in third person only (useful for face masks or helmets)" />
 
                         <!-- Force Hair -->
@@ -336,7 +329,7 @@
                         <TextBlock
                             Grid.Row="22"
                             Grid.Column="1"
-                            Style="{StaticResource ExplanationStyle}"
+                            Style="{StaticResource WolvenkitExplanationStyle}"
                             Visibility="{Binding IsHeadItem,
                                                  Converter={StaticResource BooleanToVisibilityConverter}}"
                             Text="Check to force-display hair (head items hide player hair by default)" />
@@ -465,7 +458,7 @@
                         <TextBlock
                             Grid.Row="3"
                             Grid.Column="1"
-                            Style="{StaticResource ExplanationStyle}"
+                            Style="{StaticResource WolvenkitExplanationStyle}"
                             Text="Use two variant fields" />
 
 
@@ -484,7 +477,7 @@
                         <TextBlock
                             Grid.Row="6"
                             Grid.Column="1"
-                            Style="{StaticResource ExplanationStyle}"
+                            Style="{StaticResource WolvenkitExplanationStyle}"
                             Text="Read appearances from existing files?" />
                     </Grid>
 
@@ -577,7 +570,7 @@
                             <TextBlock Text="Item variants (separate with comma)">
                                 <TextBlock.Style>
                                     <Style
-                                        BasedOn="{StaticResource ExplanationStyle}"
+                                        BasedOn="{StaticResource WolvenkitExplanationStyle}"
                                         TargetType="TextBlock">
                                         <Style.Triggers>
                                             <DataTrigger
@@ -647,7 +640,7 @@
                                 Text="Secondary item variants (separate by comma)">
                                 <TextBlock.Style>
                                     <Style
-                                        BasedOn="{StaticResource ExplanationStyle}"
+                                        BasedOn="{StaticResource WolvenkitExplanationStyle}"
                                         TargetType="TextBlock">
                                         <Style.Triggers>
                                             <DataTrigger
@@ -677,7 +670,7 @@
                         <TextBlock
                             Grid.Row="5"
                             Grid.Column="1"
-                            Style="{StaticResource ExplanationStyle}"
+                            Style="{StaticResource WolvenkitExplanationStyle}"
                             Text="Toggle parts, e.g. 'stickers'. Generated values will be 'on' and 'off'." />
 
                         <!-- Toggles -->
