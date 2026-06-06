@@ -122,18 +122,13 @@ namespace WolvenKit.Views.Dialogs
 
         private void TextBox_OnChange(object sender, RoutedEventArgs e)
         {
-            if (sender is not TextBox tb || ViewModel is null)
+            if (sender is not TextBox tb || ViewModel is null ||
+                !tb.Text.Contains(".mesh", StringComparison.OrdinalIgnoreCase))
             {
                 return;
             }
 
-            if (tb.Text.EndsWith(".mesh", StringComparison.OrdinalIgnoreCase))
-            {
-                ViewModel.SelectedOptions.Clear();
-                ViewModel.SelectedOptions.Add(tb.Text);
-                ViewModel.SelectedOption = tb.Text;
-            }
-
+            ViewModel.SelectedOption = tb.Text;
             ViewModel.SetSaveButtonState();
         }
     }
