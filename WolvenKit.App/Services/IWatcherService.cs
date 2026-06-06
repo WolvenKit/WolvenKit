@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement.Project;
 
@@ -7,7 +8,8 @@ public interface IWatcherService
 {
     public DispatchedObservableCollection<FileSystemModel> FileTree { get; }
     public DispatchedObservableCollection<FileSystemModel> FileList { get; }
-    
+    public ConcurrentDictionary<string, FileSystemModel> FileLookup { get; }
+
     public void Refresh();
 
     public void ForceStop();
