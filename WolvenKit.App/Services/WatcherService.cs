@@ -11,7 +11,7 @@ using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types.Exceptions;
 
-namespace WolvenKit.App.Services;
+namespace WolvenKit.App.ViewModels.Tools;
 
 /// <summary>
 /// This service watches certain locations in the game files and notifies changes
@@ -47,7 +47,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
     private readonly FileSystemWatcher _modsWatcher;
 
-    private readonly object _refreshLock = new();
+    private readonly object _modLoadingLock = new();
 
     private Task? _updateTask;
     private CancellationTokenSource _updateThreadCancellationTokenSource = new();
@@ -80,9 +80,9 @@ public partial class WatcherService : ObservableObject, IWatcherService
             fileExtension.Contains(partial, StringComparison.OrdinalIgnoreCase));
     }
 
-    private bool _isWatcherStopped;
+    private WatcherState _watcherState;
 
-    public bool IsWatcherStopped => _isWatcherStopped;
+    public WatcherState WatcherState => _watcherState;
 
     #endregion
 
@@ -102,7 +102,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
         _modsWatcher.Renamed += OnRenamed;
     }
 
-    public void WatchProject(Cp77Project project)
+    public void ResumeWatcher_AndLoadProject()
     {
         _projectDirectory = project.FileDirectory;
         _projectFileSystemModel = new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
@@ -114,13 +114,13 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
     public void Resume() => _modsWatcher.EnableRaisingEvents = true;
 
-    public void UnwatchProject(Cp77Project? project)
+    public void StartWatcher_AndLoadProject(Cp77Project project, Action? completion = null)
     {
         _isWatcherStopped = true;
         UnwatchLocation();
     }
 
-    private void WatchLocation()
+    public void Resume()
     {
         _modsWatcher.Path = _projectDirectory;
         _modsWatcher.EnableRaisingEvents = true;
@@ -365,7 +365,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
             if (Path.GetExtension(renamedEventArgs.OldName).Equals(".tmp", StringComparison.InvariantCultureIgnoreCase))
             {
-                _fileChanges.Enqueue(new FileSystemEventArgsWrapper(new FileSystemEventArgs(WatcherChangeTypes.Created, _projectDirectory, renamedEventArgs.Name)));
+                _batchFileChanges.Enqueue(new FileSystemEventArgsWrapper(new FileSystemEventArgs(WatcherChangeTypes.Created, _projectDirectory, renamedEventArgs.Name)));
                 return;
             }
 
@@ -424,11 +424,11 @@ public partial class WatcherService : ObservableObject, IWatcherService
         }
     }
 
-    public void Refresh()
+    private void Locked_LoadModProjectFileStructure()
     {
-        lock (_refreshLock)
+        lock (_modLoadingLock)
         {
-            InternalRefresh();
+            LoadModProjectFileStructure();
         }
     }
 
@@ -440,7 +440,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
         FileList.Clear();
     }
 
-    private void InternalRefresh()
+    private void LoadModProjectFileStructure()
     {
         if (string.IsNullOrEmpty(_projectDirectory))
         {
@@ -464,7 +464,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
         _modsWatcher.EnableRaisingEvents = true;
     }
 
-    public void ForceStop()
+    private void StopBackgroundPolling()
     {
         _modsWatcher.EnableRaisingEvents = false;
 
