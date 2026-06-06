@@ -34,11 +34,6 @@ changes:
       description: "When generating a radio, the folder in resources will now be created"
     - type: "fixed"
       packages: ["App"]
-      pr-number: 2934
-      author: "manavortex"
-      description: "When generating a radio, the folder in resources will now be created"
-    - type: "fixed"
-      packages: ["App"]
       pr-number: 2939
       author: "gistya"
       description: "Increased performance of JSON imports."
