@@ -6,6 +6,7 @@ using System.Text.Json;
 using WolvenKit.Common.Model;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.CR2W.JSON;
+using WolvenKit.RED4.Types;
 using Activator = System.Activator;
 
 namespace WolvenKit.Common.Services;
@@ -109,7 +110,7 @@ public class RedTypeTemplateService
     /// <returns></returns>
     /// <exception cref="Exception">Template File contains invalid or mismatched data</exception>
     /// <remarks>When using <see cref="TemplateSource.Auto"/>, user templates are preferred over system templates.</remarks>
-    public object? CreateTypeInstance(RedTypeTemplateDescriptor templateDescriptor, TemplateSource src = TemplateSource.Auto) =>
+    public RedBaseClass? CreateTypeInstance(RedTypeTemplateDescriptor templateDescriptor, TemplateSource src = TemplateSource.Auto) =>
         CreateTypeInstance(templateDescriptor.Type, templateDescriptor.Name, src);
 
     /// <summary>
@@ -120,7 +121,7 @@ public class RedTypeTemplateService
     /// <returns></returns>
     /// <exception cref="Exception">Template File contains invalid or mismatched data</exception>
     /// <remarks>When using <see cref="TemplateSource.Auto"/>, user templates are preferred over system templates.</remarks>
-    public object? CreateTypeInstance<T>(string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
+    public RedBaseClass? CreateTypeInstance<T>(string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
         CreateTypeInstance(typeof(T), templateName, src);
 
     /// <summary>
@@ -132,8 +133,8 @@ public class RedTypeTemplateService
     /// <returns></returns>
     /// <exception cref="Exception">Template File contains invalid or mismatched data</exception>
     /// <remarks>When using <see cref="TemplateSource.Auto"/>, user templates are preferred over system templates.</remarks>
-    public object? CreateTypeInstance(Type type, string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
-        ReadTemplate(type, templateName, src) ?? Activator.CreateInstance(type);
+    public RedBaseClass? CreateTypeInstance(Type type, string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
+        ReadTemplate(type, templateName, src) ?? (RedBaseClass?)Activator.CreateInstance(type);
 
     /// <summary>
     /// Reads a template from the system or user template directory and returns an instance of the templated object.
@@ -144,7 +145,7 @@ public class RedTypeTemplateService
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     /// <exception cref="Exception">Template File contains invalid or mismatched data</exception>
     /// <remarks>When using <see cref="TemplateSource.Auto"/>, user templates are preferred over system templates.</remarks>
-    public object? ReadTemplate(RedTypeTemplateDescriptor templateDescriptor, TemplateSource src = TemplateSource.Auto) => ReadTemplate(templateDescriptor.Type, templateDescriptor.Name, src);
+    public RedBaseClass? ReadTemplate(RedTypeTemplateDescriptor templateDescriptor, TemplateSource src = TemplateSource.Auto) => ReadTemplate(templateDescriptor.Type, templateDescriptor.Name, src);
 
     /// <summary>
     /// Reads a template from the system or user template directory and returns an instance of the templated object.
@@ -155,7 +156,7 @@ public class RedTypeTemplateService
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     /// <exception cref="Exception">Template File contains invalid or mismatched data</exception>
     /// <remarks>When using <see cref="TemplateSource.Auto"/>, user templates are preferred over system templates.</remarks>
-    public object? ReadTemplate<T>(string templateName = "default", TemplateSource src = TemplateSource.Auto) => ReadTemplate(typeof(T), templateName, src);
+    public RedBaseClass? ReadTemplate<T>(string templateName = "default", TemplateSource src = TemplateSource.Auto) => ReadTemplate(typeof(T), templateName, src);
 
     /// <summary>
     /// Reads a template from the system or user template directory and returns an instance of the templated object.
@@ -167,7 +168,7 @@ public class RedTypeTemplateService
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     /// <exception cref="Exception">Template File contains invalid or mismatched data</exception>
     /// <remarks>When using <see cref="TemplateSource.Auto"/>, user templates are preferred over system templates.</remarks>
-    public object? ReadTemplate(Type type, string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
+    public RedBaseClass? ReadTemplate(Type type, string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
         src switch
         {
             TemplateSource.Auto => ReadTemplate(type, templateName, UserTemplates) ??
@@ -177,7 +178,7 @@ public class RedTypeTemplateService
             _ => throw new ArgumentOutOfRangeException(nameof(src), src, null)
         };
 
-    private object? ReadTemplate(Type templateType, string templateName, List<RedTypeTemplateDescriptor> templates)
+    private RedBaseClass? ReadTemplate(Type templateType, string templateName, List<RedTypeTemplateDescriptor> templates)
     {
         lock (_lock)
         {
@@ -197,7 +198,7 @@ public class RedTypeTemplateService
     /// <param name="templateName">Name of the template</param>
     /// <param name="dst">Template category destination</param>
     /// <remarks>If a template with that name already exists, it will be overwritten.</remarks>
-    public void WriteTemplate(object templateData, string templateName, TemplateDestination dst = TemplateDestination.User)
+    public void WriteTemplate(RedBaseClass templateData, string templateName, TemplateDestination dst = TemplateDestination.User)
     {
         var fn = Path.Join(dst == TemplateDestination.User ? _userTemplateDir : _systemTemplateDir, $"{templateName}.{templateData.GetType().Name}.json");
         var template = new RedTypeTemplate()
@@ -325,7 +326,7 @@ public class RedTypeTemplateService
         return new RedTypeTemplate
         {
             Version = version.GetInt32(),
-            Data = RedJsonSerializer.Deserialize(type, data)
+            Data = (RedBaseClass?)RedJsonSerializer.Deserialize(type, data)
         };
     }
 

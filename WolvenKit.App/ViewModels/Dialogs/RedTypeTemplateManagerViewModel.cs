@@ -143,17 +143,18 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
         var tempFileCreated = await Task.Run(() =>
         {
             var data = _templateService.ReadTemplate(desc);
-            if (data is not RedBaseClass redBase)
+            if (data is null)
             {
-                _loggerService.Error("Template data is not a RedBaseClass.");
+                _loggerService.Error($"Failed to read template: {desc.FilePath}");
                 return false;
             }
-            var cr2w = new CR2WFile
+
+            var cr2W = new CR2WFile
             {
-                RootChunk = redBase
+                RootChunk = data
             };
 
-            if (!_cr2wTools.WriteCr2W(cr2w, tempFile))
+            if (!_cr2wTools.WriteCr2W(cr2W, tempFile))
             {
                 _loggerService.Error($"Failed to create temporary file: {tempFile}");
                 return false;
