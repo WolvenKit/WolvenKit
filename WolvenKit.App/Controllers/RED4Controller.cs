@@ -46,6 +46,7 @@ public class RED4Controller : ObservableObject, IGameController
     private readonly IPluginService _pluginService;
     private readonly Red4ParserService _parserService;
     private readonly IModifierViewStateService _modifierService;
+    private readonly IProjectEvents _projectEvents;
 
     #endregion
 
@@ -60,7 +61,8 @@ public class RED4Controller : ObservableObject, IGameController
         IProgressService<double> progressService,
         IPluginService pluginService,
         IModifierViewStateService modifierService,
-        Red4ParserService parserService)
+        Red4ParserService parserService,
+        IProjectEvents projectEvents)
     {
         _notificationService = notificationService;
         _loggerService = loggerService;
@@ -73,6 +75,7 @@ public class RED4Controller : ObservableObject, IGameController
         _pluginService = pluginService;
         _modifierService = modifierService;
         _parserService = parserService;
+        _projectEvents = projectEvents;
     }
 
     public async Task HandleStartup()
@@ -208,7 +211,6 @@ public class RED4Controller : ObservableObject, IGameController
         {
             // Always stop the heartbeat timer and release the progress indicator.
             DisableLoadingMode();
-            LoadCustomHashes();
         }
     }
 
@@ -1080,17 +1082,10 @@ public class RED4Controller : ObservableObject, IGameController
                     return ValueTask.CompletedTask;
                 });
 
-            var report = "";
-
-            foreach (var file in files)
-            {
-                report += $"Added game file to project: {file.Name}\r\n";
-            }
-
-            _loggerService.Info(report);
         }
 
         _progressService.Completed();
+        _projectEvents.PublishFilesImported(new FilesImportedMessage([.. files],[]));
     }
 
 
