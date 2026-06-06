@@ -72,7 +72,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly IGameControllerFactory _gameController;
     private readonly AppViewModel _appViewModel;
     public readonly IModifierViewStateService ModifierStateService;
-    private readonly IWatcherService _projectWatcher;
+    private readonly WatcherService _projectWatcher;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
@@ -85,6 +85,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private CancellationTokenSource _deferredRefreshCts = new();
     private readonly ImportExportHelper _importExportHelper;
 
+    public WatcherState FileWatcherState => _projectWatcher.WatcherState;
     public Func<CancellationToken, Task, Task>? BeginDeferredRefreshContext { get; set; }
     #endregion fields
 
@@ -103,7 +104,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         IArchiveManager archiveManager,
         ProjectResourceTools projectResourceTools,
         ImportExportHelper importExportHelper,
-        IWatcherService projectWatcher
     ) : base(s_toolTitle)
     {
         _projectManager = projectManager;
@@ -121,7 +121,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         _appViewModel = appViewModel;
 
-        _projectWatcher = projectWatcher;
+        _projectWatcher = new WatcherService(GetDesiredExpansionState, loggerService, projectEvents);
 
         SideInDockedMode = DockSide.Left;
 
@@ -195,24 +195,22 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     public event Action? OnProjectChanged;
 
     private void ProjectManager_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    /// <summary>
+    /// Loads a project and starts watching it.
+    /// If isReload is true then we won't show `Loading` in the files pane.
+    /// </summary>
+    /// <param name="activeProject"></param>
+    /// <param name="isReload"></param>
+    public void StartWatcher_AndLoadProject(Cp77Project activeProject, bool isReload)
     {
         if (e.PropertyName != nameof(ProjectManager.ActiveProject))
         {
             return;
         }
 
-        RefreshProjectData();
-    }
-
-    // When opening projects from launch args, change detection for dependent objects isn't working yet.
-    private void RefreshProjectData()
-    {
-        // Save changes in active project
         if (ActiveProject != null)
         {
-            _hasUnsavedFileTreeChanges = true;
-            SaveProjectExplorerExpansionStateIfDirty();
-            _projectWatcher.UnwatchProject(ActiveProject);
+            SaveProjectState();
         }
 
         OnProjectChanged?.Invoke();
@@ -222,6 +220,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             if (ActiveProject?.Equals(_projectManager.ActiveProject) == true)
             {
                 return;
+                _projectWatcher.StartWatcher_AndLoadProject(activeProject);
             }
             ActiveProject = _projectManager.ActiveProject;
             if (ActiveProject is not null)
@@ -230,8 +229,27 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 _projectWatcher.WatchProject(ActiveProject);
             }
 
+    /// <summary>
+    /// Reload the active project from disk to ensure consistency.
+    /// </summary>
+    public void ResumeWatcher_AndReloadProject()
+    {
+        if (ActiveProject is null) return;
+        StartWatcher_AndLoadProject(ActiveProject, true);
+    }
+
             OnProjectChanged?.Invoke();
         }, DispatcherPriority.ContextIdle);
+    private void SaveProjectState()
+    {
+        if (ActiveProject != null)
+        {
+            _hasUnsavedFileTreeChanges = true;
+            SaveOpenFilePaths();
+            SaveProjectExplorerExpansionStateIfDirty();
+            SaveProjectExplorerTabIfDirty();
+            _hasUnsavedFileTreeChanges = false;
+        }
     }
 
     private void CheckForOneDriveInPath()
@@ -357,17 +375,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     private bool CanRefresh() => ActiveProject != null;
     [RelayCommand(CanExecute = nameof(CanRefresh))]
-    private void Refresh()
-    {
-        if (_projectWatcher.IsWatcherStopped)
-        {
-            ResumeFileWatcher();
-        }
-        else
-        {
-            _projectWatcher.Refresh();
-        }
-    }
+    private void Refresh() => ResumeWatcher_AndReloadProject();
 
     private string GetActiveFolderPath() => SelectedTabIndex switch
     {
@@ -940,14 +948,19 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        StopWatcher();
+        SuspendFileWatcher();
 
         await _projectResourceTools.MoveAndRefactorAsync(relativePath, newRelativePath, prefixPath, refactor);
         _appViewModel.ReloadChangedFiles();
 
-        ResumeFileWatcher();
+        ResumeWatcher_AndReloadProject();
     }
 
+    public void ResumeFileWatcher() => _projectWatcher.Resume();
+
+    public void UnwatchProject() => _projectWatcher.UnwatchProject();
+
+    public void CloseProject() => _projectWatcher.UnwatchProject();
 
     #endregion general commands
 
@@ -1851,8 +1864,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _hasUnsavedFileTreeChanges = false;
     }
 
-    public void StopWatcher() => _projectWatcher.ForceStop();
-
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
         switch (e.PropertyName)
@@ -1905,7 +1916,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _hasUnsavedFileTreeChanges = true;
     }
 
-    public void SuspendFileWatcher()
     {
         if (ActiveProject is not Cp77Project project)
         {
@@ -1915,7 +1925,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         try
         {
             _projectWatcher.UnwatchProject(project);
-            _projectWatcher.ForceStop();
         }
         catch
         {
@@ -1923,10 +1932,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
     }
 
-    public static void SuspendFileWatcherStatic() => s_instance?.SuspendFileWatcher();
-    public static void ResumeFileWatcherStatic() => s_instance?.ResumeFileWatcher();
-
-    public void ResumeFileWatcher()
+    public void SuspendFileWatcher()
     {
         if (ActiveProject is not Cp77Project project)
         {
@@ -1935,15 +1941,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         try
         {
-            _projectWatcher.WatchProject(project);
+            _projectWatcher.Suspend();
         }
         catch
         {
-            _loggerService.Error(
-                "Failed to resume file watcher. Please hit the refresh button in the project browser.");
-            _loggerService.Error("If that doesn't solve the problem, restart WolvenKit.");
+            _loggerService.Error("Failed to suspend file watcher. Please ignore any errors.");
         }
-
     }
 
     public void OnKeyStateChanged(KeyEventArgs e)
