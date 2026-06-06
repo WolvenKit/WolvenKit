@@ -19,6 +19,26 @@ namespace WolvenKit.App.Services;
 public partial class WatcherService : ObservableObject, IWatcherService
 {
     #region fields
+    /// <summary>
+    /// WatcherService is an internal class of ProjectExplorerViewModel.
+    ///
+    /// There's three fundamental things WatcherService does:
+    ///    1. Owns & manages changes to data models FileList and FileTree that are state of ProjectExplorerViewModel.
+    ///       This includes building and populating these models when WatchProject is called.
+    ///    2. While not "suspended", monitor OS file system events from _modsWatcher & add change events update queues.
+    ///    3. Subscribe to IProjectEvents change sets coming from other parts of the app to bypass the need
+    ///       to rely on file system events for large batches of changes.
+    ///    4. Run background jobs Update & BatchUpdate that dequeue file change events and update the FileList/Tree.
+    ///        * Update checks _fileChanges and processes individual Changed, Renamed, and Deleted events one at a time.
+    ///        * BatchUpdate checks _batchFileChanges and processes batches of Add events in groups for performance.
+    ///
+    /// Due to flakiness with file system events, various parts of the app currently suspend/stop the monitoring of
+    /// file system events in order to make broad changes in the mod directory, then they call "Refresh" to reload the
+    /// whole project from disk.
+    /// </summary>
+    internal partial class WatcherService : ObservableObject
+    {
+        #region fields
 
     private readonly ILoggerService? _loggerService;
 
@@ -106,7 +126,18 @@ public partial class WatcherService : ObservableObject, IWatcherService
         _modsWatcher.EnableRaisingEvents = true;
     }
 
-    private void UnwatchLocation()
+    /// <summary>
+    ///  Does the following:
+    ///     1. Suspend the OS file watcher.
+    ///     2. Sets _watcherState to `noProject`
+    ///     3. Clears the _projectDirectory & _projectFileSystemModel vars.
+    ///     4. Stops background polling for things added to the update batches.
+    ///     5. Clears lookup caches, batches, and data models.
+    ///
+    /// This must be called before performing anything that sends a Reset for
+    /// FileList or FileTree collections.
+    /// </summary>
+    public void UnwatchProject()
     {
         _modsWatcher.EnableRaisingEvents = false;
 
@@ -119,6 +150,14 @@ public partial class WatcherService : ObservableObject, IWatcherService
         "_tmp", ".bak", ".bkp"
     ];
 
+    /// <summary>
+    /// Processes file system events saved to the _fileChanges queue.
+    /// The only ones Update cares about in that queue are change/rename/remove.
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <exception cref="Exception"></exception>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <exception cref="TodoException"></exception>
     private void Update(CancellationToken cancellationToken)
     {
         while (true)
@@ -405,6 +444,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
     {
         if (string.IsNullOrEmpty(_projectDirectory))
         {
+            // On first app launch, there's no project yet.
             return;
         }
 
