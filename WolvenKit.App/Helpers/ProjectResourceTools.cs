@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
@@ -1401,7 +1402,7 @@ public partial class ProjectResourceTools
 
     #endregion
 
-    public List<string> GetFilesContainingString(string searchText, bool isRegex, bool isWholeWord,
+    public async Task<List<string>> GetFilesContainingString(string searchText, bool isRegex, bool isWholeWord,
         IProgressService<double> progressService)
     {
         if (_projectManager.ActiveProject is not { } project)
@@ -1420,26 +1421,28 @@ public partial class ProjectResourceTools
         var processedFiles = 0;
         var progressIncrement = totalFiles > 0 ? 100.0 / totalFiles : 100;
 
-        List<string> filesWithMatch = [];
-        foreach (var filePath in project.ModFiles)
+        var filesWithMatch = new ConcurrentBag<string>();
+        await Parallel.ForEachAsync(project.ModFiles, (filePath, _) =>
         {
             var json = _crwWTools.ReadJsonNoException(Path.Join(project.ModDirectory, filePath));
-            if (StringHelper.StringContains(json, searchText, isRegex, isWholeWord))
+            if (StringHelper.StringContains(json, searchText, isWholeWord, isRegex))
             {
                 filesWithMatch.Add(filePath);
             }
 
             var currentProgress = Interlocked.Increment(ref processedFiles) * progressIncrement;
             progressService.Report(currentProgress);
-        }
 
-        foreach (var filePath in project.ResourceFiles)
+            return ValueTask.CompletedTask;
+        });
+
+        await Parallel.ForEachAsync(project.ResourceFiles, (filePath, _) =>
         {
             try
             {
                 var absolutePath = Path.Join(project.ResourcesDirectory, filePath);
                 var fileContent = File.ReadAllText(absolutePath);
-                if (StringHelper.StringContains(fileContent, searchText, isRegex, isWholeWord))
+                if (StringHelper.StringContains(fileContent, searchText, isWholeWord, isRegex))
                 {
                     filesWithMatch.Add($"resources{Path.DirectorySeparatorChar}{filePath}");
                 }
@@ -1451,10 +1454,11 @@ public partial class ProjectResourceTools
             {
                 _loggerService.Error($"Failed to open resources{Path.DirectorySeparatorChar}{filePath} for searching");
             }
-        }
+            return ValueTask.CompletedTask;
+        });
 
         progressService.IsIndeterminate = false;
 
-        return filesWithMatch.Distinct().ToList();
+        return filesWithMatch.ToList().Distinct().ToList();
     }
 }
