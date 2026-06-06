@@ -2,12 +2,12 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
+using System.Reactive.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -18,7 +18,8 @@ using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.VisualBasic.FileIO;
-
+using ReactiveUI;
+using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
@@ -36,7 +37,6 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
-using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
@@ -73,6 +73,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly AppViewModel _appViewModel;
     public readonly IModifierViewStateService ModifierStateService;
     private readonly WatcherService _projectWatcher;
+    private readonly IProjectEvents _projectEvents;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
@@ -81,12 +82,17 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly ISettingsManager _settingsManager;
     private readonly IArchiveManager _archiveManager;
     private readonly ProjectResourceTools _projectResourceTools;
-
+    private Guid _loadingCompletion = Guid.NewGuid();
     private CancellationTokenSource _deferredRefreshCts = new();
     private readonly ImportExportHelper _importExportHelper;
 
+    public DispatchedObservableCollection<FileSystemModel> FileTree => _projectWatcher.FileTree;
+    public DispatchedObservableCollection<FileSystemModel> FileList => _projectWatcher.FileList;
     public WatcherState FileWatcherState => _projectWatcher.WatcherState;
     public Func<CancellationToken, Task, Task>? BeginDeferredRefreshContext { get; set; }
+
+    public bool IsKeyUpEventAssigned { get; set; }
+
     #endregion fields
 
     private static ProjectExplorerViewModel? s_instance;
@@ -104,6 +110,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         IArchiveManager archiveManager,
         ProjectResourceTools projectResourceTools,
         ImportExportHelper importExportHelper,
+        IProjectEvents projectEvents
     ) : base(s_toolTitle)
     {
         _projectManager = projectManager;
@@ -118,6 +125,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _projectResourceTools = projectResourceTools;
         _importExportHelper = importExportHelper;
         ModifierStateService = modifierSvc;
+        _projectEvents = projectEvents;
 
         _appViewModel = appViewModel;
 
@@ -133,39 +141,46 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _appViewModel.PropertyChanged += AppViewModelOnPropertyChanged;
         _appViewModel.OpenDocumentChanged += OnOpenDocumentChanged;
 
-        _projectManager.PropertyChanged += ProjectManager_OnPropertyChanged;
-
         SelectedTabIndex = ActiveProject?.ActiveTab ?? 0;
-
-        _appViewModel.OnInitialProjectLoaded += AppViewModel_OnInitialProjectLoaded;
 
         DispatcherHelper.StartRepeatingAction(
             () => Svc_ThreadIdleTenSeconds(null, EventArgs.Empty),
             TimeSpan.FromSeconds(10));
 
         s_instance = this;
-    }
 
-    /// <summary>
-    /// Whenever the document changes, save open file paths to <see cref="Cp77Project.ProjectFileExtension"/> file
-    /// </summary>
-    private void OnOpenDocumentChanged(object? sender, EventArgs e) => SaveOpenFilePaths();
+        private void Svc_ThreadIdleTenSeconds(object? sender, EventArgs e)
+        {
+            SaveProjectExplorerExpansionStateIfDirty();
+            SaveProjectExplorerTabIfDirty();
+        }
 
-    private void Svc_ThreadIdleTenSeconds(object? sender, EventArgs e)
-    {
-        SaveProjectExplorerExpansionStateIfDirty();
-        SaveProjectExplorerTabIfDirty();
-    }
 
-    private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
-    {
-        RefreshProjectData();
 
-        CheckForOneDriveInPath();
 
-        // On first project load, we're already initialized, so this won't fire
-        Refresh();
-        OnProjectChanged?.Invoke();
+
+
+
+        _projectManager.WhenAnyValue(x => x.ActiveProject)
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Subscribe(project =>
+            {
+                if (project == null)
+                {
+                    return;
+                }
+
+                var isReload = project.FileDirectory == _activeProject?.FileDirectory;
+
+                // If a modal or overlay is currently visible (e.g. HomePage, settings, etc.),
+                // defer the (potentially very expensive) watcher + tree build until after the
+                // overlay has finished fading out. This prevents the 0.3s OverlayFadeOut animation
+                // from becoming extremely choppy on large projects.
+                _appViewModel.RunAfterModalClosed(() =>
+                {
+                    StartWatcher_AndLoadProject(project, isReload);
+                });
+            });
     }
 
     /// <summary>
@@ -181,20 +196,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private void AppViewModelOnPropertyChanged(object? sender, PropertyChangedEventArgs e) =>
         CanScrollToOpenFile = HasSelectedItem && _appViewModel.ActiveDocument is not null;
 
-    private bool _loading;
+    #region Project_Loading
 
-    public bool Loading
-    {
-        get => _loading;
-        set
-        {
-            _loading = value;
-            OnPropertyChanged(new PropertyChangedEventArgs(nameof(_loading)));
-        }
-    }
-    public event Action? OnProjectChanged;
-
-    private void ProjectManager_OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     /// <summary>
     /// Loads a project and starts watching it.
     /// If isReload is true then we won't show `Loading` in the files pane.
@@ -203,8 +206,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <param name="isReload"></param>
     public void StartWatcher_AndLoadProject(Cp77Project activeProject, bool isReload)
     {
-        if (e.PropertyName != nameof(ProjectManager.ActiveProject))
+        if (_appViewModel.IsDialogShown || _appViewModel.IsOverlayShown)
         {
+            _appViewModel.RunAfterModalClosed(() => StartWatcher_AndLoadProject(activeProject, isReload));
             return;
         }
 
@@ -213,21 +217,32 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             SaveProjectState();
         }
 
-        OnProjectChanged?.Invoke();
+        LoadExpansionStateDictionary(activeProject);
+        EnableLoadingMode(isReload);
+        ActiveProject = null;
+        UnwatchProject();
 
-        DispatcherHelper.RunOnMainThread(() =>
+        DispatcherHelper.DelayOnMainThread(() =>
         {
-            if (ActiveProject?.Equals(_projectManager.ActiveProject) == true)
+            try
             {
-                return;
+                ActiveProject = activeProject;
                 _projectWatcher.StartWatcher_AndLoadProject(activeProject);
             }
-            ActiveProject = _projectManager.ActiveProject;
-            if (ActiveProject is not null)
+            catch (Exception e)
             {
-                RestoreProjectState(ActiveProject);
-                _projectWatcher.WatchProject(ActiveProject);
+                _loggerService.Error($"Error refreshing project: {e.Message}");
             }
+            finally
+            {
+                if (!isReload)
+                {
+                    RestoreProjectState(ActiveProject!);
+                    CheckForOneDriveInPath();
+                }
+            }
+        }, 50);
+    }
 
     /// <summary>
     /// Reload the active project from disk to ensure consistency.
@@ -238,8 +253,34 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         StartWatcher_AndLoadProject(ActiveProject, true);
     }
 
-            OnProjectChanged?.Invoke();
-        }, DispatcherPriority.ContextIdle);
+    private void EnableLoadingMode(bool isReload)
+    {
+        _loadingCompletion = DispatcherHelper.StartRepeatingAction(
+            () =>
+            {
+                _progressService.IsIndeterminate = true;
+                _progressService.Status = EStatus.Running;
+            },
+            TimeSpan.FromMilliseconds(100),
+            DisableLoadingMode
+        );
+
+        _projectWatcher.CompletionTimer = _loadingCompletion;
+        OnSetLoading?.Invoke(this, (true, isReload));
+    }
+
+    private void DisableLoadingMode()
+    {
+        _progressService.IsIndeterminate = false;
+        OnSetLoading?.Invoke(this, (false, false));
+        _loggerService?.Success($"Loaded project: {ActiveProject!.ProjectDirectory} ({FileList.Count} files). File watcher active.");
+    }
+
+    /// <summary>
+    /// Whenever the document changes, save open file paths to <see cref="Cp77Project.ProjectFileExtension"/> file
+    /// </summary>
+    private void OnOpenDocumentChanged(object? sender, EventArgs e) => SaveOpenFilePaths();
+
     private void SaveProjectState()
     {
         if (ActiveProject != null)
@@ -276,8 +317,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         )));
     }
 
-    public DispatchedObservableCollection<FileSystemModel> FileTree => _projectWatcher.FileTree;
-    public DispatchedObservableCollection<FileSystemModel> FileList => _projectWatcher.FileList;
+    #endregion Project_Loading
 
     /// <summary>
     /// Enable ConvertTo and ConvertFrom
@@ -297,8 +337,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     }
 
     #region properties
-
-    public bool IsKeyUpEventAssigned { get; set; }
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(RefreshCommand))]
@@ -352,28 +390,23 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     [ObservableProperty] private bool _hasSelectedItem;
 
+    #region INotifyCollectionChanged
+
+    public NotifyCollectionChangedEventHandler? NotifyCollectionChangedEventHandler { get; set; }
+
+    #endregion INotifyCollectionChanged
+
     #endregion properties
 
     #region commands
 
     #region general commands
 
-    //[RelayCommand]
-    //private void ExpandAll() {  }
-
-    //[RelayCommand]
-    //private void CollapseAll() { }
-
-    //[RelayCommand]
-    //private void CollapseChildren() { }
-
-    //[RelayCommand]
-    //private void ExpandChildren() { }
-
     /// <summary>
     /// Refreshes all files in the Grid
     /// </summary>
     private bool CanRefresh() => ActiveProject != null;
+
     [RelayCommand(CanExecute = nameof(CanRefresh))]
     private void Refresh() => ResumeWatcher_AndReloadProject();
 
@@ -479,7 +512,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     [GeneratedRegex(@".*\.\S+\.glb$")]
     private static partial Regex TypedGlbRegex();
-
 
     /// <summary>
     /// Copies the path to an item in clipboard
@@ -1011,8 +1043,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             _deferredRefreshCts = new CancellationTokenSource();
             if (BeginDeferredRefreshContext == null)
             {
-                await ConvertToJsonInternal(selection);
-                return;
+                throw new Exception("Rendering context does not exist.");
             }
 
             await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertToJsonInternal(selection));
@@ -1031,8 +1062,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _deferredRefreshCts = new CancellationTokenSource();
         if (BeginDeferredRefreshContext == null)
         {
-            await ConvertToJsonInternal(selection);
-            return;
+            throw new Exception("Rendering context does not exist.");
         }
 
         await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertToJsonInternal(convertSelection));
@@ -1040,7 +1070,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private async Task ConvertToJsonInternal(IEnumerable<FileSystemModel> selection)
     {
-        var createdJsonFiles = new ConcurrentBag<FileInfo>();
+        SuspendFileWatcher();
 
         await Task.Run(async () =>
         {
@@ -1065,6 +1095,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 .Select(x => x.ToLowerInvariant())
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
+            var createdJsonFiles = new ConcurrentBag<FileInfo>();
 
             int progress = 0;
             _progressService.Report(0);
@@ -1133,18 +1164,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 });
 
             _progressService.Completed();
-        });
-
-        _ = Task.Run(() =>
-        {
-            var logMsg = "";
-
-            createdJsonFiles.ToList().ForEach(file =>
-            {
-                logMsg += $"JSON file converted: ${file.FullName}.\r\n";
-            });
-
-            _loggerService.Info(logMsg);
+            // Return list of created JSON files
+            _projectEvents.PublishFilesImported(new FilesImportedMessage([],[.. createdJsonFiles.ToList()]));
         });
 
         await _deferredRefreshCts.CancelAsync();
@@ -1553,7 +1574,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         if (!IsShiftKeyPressed)
         {
             _deferredRefreshCts = new CancellationTokenSource();
-            await BeginDeferredRefreshContext!(_deferredRefreshCts.Token, ConvertFromJsonInternal(SelectedItems!.OfType<FileSystemModel>().Where(IsInRawFolder)));
+            if (BeginDeferredRefreshContext == null)
+            {
+                throw new Exception("Rendering context does not exist.");
+            }
+
+            await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertFromJsonInternal(SelectedItems!.OfType<FileSystemModel>().Where(IsInRawFolder)));
 
             return;
         }
@@ -1574,8 +1600,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertFromJsonInternal(convertSelection));
     }
 
+    // TODO: Refactor this method to use PublishFilesImported rather than relying on WatcherService.
     private async Task ConvertFromJsonInternal(IEnumerable<FileSystemModel> selection)
     {
+        _projectWatcher.Resume();
+
         var progress = 0;
         _progressService.Report(0);
 
@@ -1748,6 +1777,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     public event EventHandler? OnToggleFlatMode;
 
+    /// <summary>
+    /// Event for `isLoading` and `isReload`.
+    /// The latter will be true if the user clicked the "reload" button.
+    /// It will be false if the user has loaded a fresh project or changed projects.
+    /// </summary>
+    public event EventHandler<(bool, bool)>? OnSetLoading;
+
     [RelayCommand(CanExecute = nameof(CanOpenInFileExplorer))]
     private void ToggleFlatMode() => OnToggleFlatMode?.Invoke(this, EventArgs.Empty);
 
@@ -1771,10 +1807,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     // IconSource = bi;
 
 
-    private void RestoreProjectState(Cp77Project project)
+    private void LoadExpansionStateDictionary(Cp77Project project)
     {
-
-        // read tree state from file
+        var projectName = Path.GetFileNameWithoutExtension(project.Location);
         if (File.Exists(project.InterfaceProjectTreeStatePath))
         {
             _hasUnsavedFileTreeChanges = false;
@@ -1786,7 +1821,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         {
             ExpansionStateDictionary = [];
         }
+    }
 
+    private void RestoreProjectState(Cp77Project project)
+    {
         // Abort if user doesn't want to reopen any files
         if (!_settingsManager.ReopenFiles || _settingsManager.NumFilesToReopen == 0 ||
             project.OpenProjectFiles.Count == 0)
@@ -1860,6 +1898,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
+        // Rebuild from live models in FileList — this is cheap and survives ReplaceAll rebuilds
+        RebuildExpansionStateFromFileList();
+
         File.WriteAllText(project.InterfaceProjectTreeStatePath, JsonSerializer.Serialize(ExpansionStateDictionary));
         _hasUnsavedFileTreeChanges = false;
     }
@@ -1916,19 +1957,47 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _hasUnsavedFileTreeChanges = true;
     }
 
-    {
-        if (ActiveProject is not Cp77Project project)
-        {
-            return;
-        }
+    /// <summary>
+    /// Used by the internal WatcherService when rebuilding the tree to restore previous expansion state onto new model instances.
+    /// </summary>
+    internal bool GetDesiredExpansionState(string rawRelativePath)
+        => ExpansionStateDictionary.TryGetValue(rawRelativePath, out var state) ? state : false;
 
-        try
+    /// <summary>
+    /// Rebuilds the expansion state dictionary directly from the current models in FileList.
+    /// This is robust after tree rebuilds because FileList holds references to the live FileSystemModel instances.
+    /// </summary>
+    internal void RebuildExpansionStateFromFileList()
+    {
+        ExpansionStateDictionary = FileList
+            .Where(m => m.IsDirectory)
+            .ToDictionary(m => m.RawRelativePath, m => m.IsExpanded, StringComparer.OrdinalIgnoreCase);
+        _hasUnsavedFileTreeChanges = true;
+    }
+
+    /// <summary>
+    /// Called by the View when the user expands a directory node.
+    /// This is the primary path for dirty tracking expansion state.
+    /// </summary>
+    public void NotifyDirectoryExpanded(FileSystemModel model)
+    {
+        if (model is { IsDirectory: true })
         {
-            _projectWatcher.UnwatchProject(project);
+            model.IsExpanded = true;
+            SaveNodeExpansionState(model.RawRelativePath, true);
         }
-        catch
+    }
+
+    /// <summary>
+    /// Called by the View when the user collapses a directory node.
+    /// This is the primary path for dirty tracking expansion state.
+    /// </summary>
+    public void NotifyDirectoryCollapsed(FileSystemModel model)
+    {
+        if (model is { IsDirectory: true })
         {
-            _loggerService.Error("Failed to suspend file watcher. Please ignore any errors.");
+            model.IsExpanded = false;
+            SaveNodeExpansionState(model.RawRelativePath, false);
         }
     }
 
