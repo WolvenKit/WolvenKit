@@ -104,26 +104,28 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
     public void ResumeWatcher_AndLoadProject()
     {
-        _projectDirectory = project.FileDirectory;
-        _projectFileSystemModel = new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
-
-        WatchLocation();
-        Refresh();
+        Locked_LoadModProjectFileStructure();
+        Resume();
     }
-
-
-    public void Resume() => _modsWatcher.EnableRaisingEvents = true;
 
     public void StartWatcher_AndLoadProject(Cp77Project project, Action? completion = null)
     {
-        _isWatcherStopped = true;
-        UnwatchLocation();
+        _projectDirectory = project.FileDirectory;
+        _projectFileSystemModel = new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
+        ResumeWatcher_AndLoadProject();
     }
 
     public void Resume()
     {
+        if (_projectDirectory == "")
+        {
+            throw new Exception("No project directory to resume watching!.");
+        }
+        _loggerService?.Debug($"Resuming monitoring of file system events in project: {_projectDirectory}.");
         _modsWatcher.Path = _projectDirectory;
+        _modsWatcher.IncludeSubdirectories = true;
         _modsWatcher.EnableRaisingEvents = true;
+        _watcherState = WatcherState.Active;
     }
 
     /// <summary>
@@ -139,10 +141,12 @@ public partial class WatcherService : ObservableObject, IWatcherService
     /// </summary>
     public void UnwatchProject()
     {
-        _modsWatcher.EnableRaisingEvents = false;
-
-        ForceStop();
-        Clear();
+        Suspend();
+        _watcherState = WatcherState.NoProject;
+        _projectDirectory = "";
+        _projectFileSystemModel = null;
+        _loggerService?.Debug($"Closing the current mod and clearing file lists and background tasks.");
+        StopBackgroundPolling();
     }
 
     private static readonly List<string> s_backupFilePartials =
@@ -431,10 +435,12 @@ public partial class WatcherService : ObservableObject, IWatcherService
             LoadModProjectFileStructure();
         }
     }
-
-    private void Clear()
+    void Clear()
     {
+        _loggerService?.Debug("Clearing all file changes and project data sources.");
+
         _fileChanges.Clear();
+        _batchFileChanges.Clear();
         _fileLookup.Clear();
         FileTree.Clear();
         FileList.Clear();
@@ -448,7 +454,6 @@ public partial class WatcherService : ObservableObject, IWatcherService
             return;
         }
 
-        ForceStop();
         Clear();
 
         var allFiles = new DirectoryInfo(_projectDirectory).GetFileSystemInfos("*", SearchOption.AllDirectories);
@@ -458,10 +463,20 @@ public partial class WatcherService : ObservableObject, IWatcherService
             _fileChanges.Enqueue(new FileSystemEventArgsWrapper(new FileSystemEventArgs(WatcherChangeTypes.Created, _projectDirectory, name)));
         }
 
-        _updateThreadCancellationTokenSource = new CancellationTokenSource();
-        _updateTask = Task.Factory.StartNew(() => Update(_updateThreadCancellationTokenSource.Token), _updateThreadCancellationTokenSource.Token);
+    private void StartBackgroundPolling()
+    {
+        // Always ensure any previous polling tasks are fully stopped first.
+        // This is the single choke point that prevents duplicate long-running tasks.
+        StopBackgroundPollingInternal();
 
-        _modsWatcher.EnableRaisingEvents = true;
+        _updateThreadCancellationTokenSource = new CancellationTokenSource();
+        _updateTask = Task.Factory.StartNew(
+            () => Update(_updateThreadCancellationTokenSource.Token),
+            _updateThreadCancellationTokenSource.Token,
+            TaskCreationOptions.LongRunning,
+            TaskScheduler.Default);
+
+        ResetFileLoggingToken();
     }
 
     private void StopBackgroundPolling()
@@ -477,8 +492,14 @@ public partial class WatcherService : ObservableObject, IWatcherService
             }
         }
     }
+    
+    public void Suspend()
+    {
+        _loggerService?.Debug("Stopping file system watcher in mod folder.");
+        _modsWatcher.EnableRaisingEvents = false;
+        _watcherState = WatcherState.Suspended;
+    }
 
-    public void Suspend() => _modsWatcher.EnableRaisingEvents = false;
 
     private void OnRenamed(object sender, RenamedEventArgs e) => _fileChanges.Enqueue(new FileSystemEventArgsWrapper(e));
 
@@ -502,4 +523,15 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
         public long EventAddedAt { get; } = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
     }
+/// <summary>
+/// NoProject: there is no active mod loaded up.
+/// Suspended: there is a mod loaded up, but Windows file system events are being ignored.
+/// Active: there is a mod loaded up, and the Watcher is monitoring for file system events.
+/// </summary>
+public enum WatcherState
+{
+    NoProject,
+    Suspended,
+    Active
+}
 }
