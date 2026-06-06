@@ -12,8 +12,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
+using DynamicData.Binding;
 using HandyControl.Data;
+using HandyControl.Tools.Extension;
+using MahApps.Metro.Controls;
 using ReactiveUI;
+using Splat;
 using Syncfusion.Data;
 using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.App.Extensions;
@@ -60,6 +65,7 @@ namespace WolvenKit.Views.Tools
 
         private string _currentFolderQuery = "";
         private bool _isDragging;
+        private ISettingsManager _settingsManager;
         private CancellationTokenSource _deferRefreshTokenSource = new();
 
         #region Constructors
@@ -67,6 +73,8 @@ namespace WolvenKit.Views.Tools
         public ProjectExplorerView()
         {
             InitializeComponent();
+            _settingsManager = Locator.Current.GetService<ISettingsManager>()!;
+
             TreeGrid.ItemsSourceChanged += TreeGrid_ItemsSourceChanged;
             TreeGridFlat.ItemsSourceChanged += TreeGridFlat_ItemsSourceChanged;
             TreeGrid.RowDragDropController.DragStart += RowDragDropController_DragStart;
@@ -86,13 +94,13 @@ namespace WolvenKit.Views.Tools
             TreeGrid.NodeCollapsing += TreeGrid_OnNodeCollapsing;
             TreeGrid.NodeCollapsed += TreeGrid_OnNodeCollapsed;
 
+            TreeGrid.NotificationSubscriptionMode = NotificationSubscriptionMode.CollectionChange;
 
             this.WhenActivated(disposables =>
             {
                 if (DataContext is ProjectExplorerViewModel vm)
                 {
                     SetCurrentValue(ViewModelProperty, vm);
-                    vm.OnProjectChanged += ResetUiElements;
                 }
 
                 AddKeyUpEvent();
@@ -221,9 +229,102 @@ namespace WolvenKit.Views.Tools
                     .DisposeWith(disposables);
 
                 ViewModel.OnToggleFlatMode += OnToggleFlatMode;
+                ViewModel.OnSetLoading += SetLoading;
                 ViewModel.BeginDeferredRefreshContext += BeginDeferredRefreshContext;
 
+                ViewModel.WhenAnyValue(x => x.FileList)
+                    .Subscribe(_ => RefreshFlatViewIfNeeded())
+                    .DisposeWith(disposables);
             });
+
+            this.ExecuteWhenLoaded(() => IndicateProjectLoading());
+        }
+
+        private bool _isLoading = false;
+
+        #region Project_Loading
+
+        /// <summary>
+        /// Called by the ViewModel when the View should show "Loading" on the file pane.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SetLoading(object sender, (bool isLoading, bool isReload) e)
+        {
+            if (e.isLoading && !_isLoading)
+            {
+                _isLoading = true;
+                _ = StartLoading(!e.isReload);
+            }
+            else if (!e.isLoading)
+            {
+                _isLoading = false;
+                _deferRefreshTokenSource?.Cancel();
+            }
+        }
+
+
+        /// <summary>
+        /// Helper method for starting `InitiateLoadingUntilCancellation` method.
+        /// </summary>
+        private async Task StartLoading(bool isFirstLoad)
+        {
+            _deferRefreshTokenSource?.Cancel();
+            _deferRefreshTokenSource = new CancellationTokenSource();
+
+            await InitiateLoadingUntilCancellation(_deferRefreshTokenSource.Token, isFirstLoad);
+        }
+
+        /// <summary>
+        /// Does the following steps in a specific timing order to ensure UI consistency:
+        ///     1. Starts a `DeferRefresh` cycle to prevent the `TreeGrid` from overreacting
+        ///        to batches of changes to its datasource, causing performance issues and
+        ///        other problems. Within this cycle it performs the remaining steps.
+        ///     2. Displays "Loading" in the tree/list pane and hides the tree views.
+        ///        (via `IndicateProjectLoading`) if _isFirstLoad is true.
+        ///     3. Waits until the `deferRefreshToken` is cancelled to proceed.
+        ///        (This will be cancelled when `SetLoading(false)` is called by the
+        ///        ViewModel upon the completion of WatcherService rebuilding the file tree
+        ///        and populates the datasource of the `TreeGrid` with the new nodes
+        ///        when a new project has been loaded or existing one refreshed.
+        ///     4. Finally, `ResetUiElements` is called, which refreshes the tree views
+        ///        and restores the state of the UI to normal use.
+        ///
+        /// </summary>
+        /// <param name="deferRefreshToken"></param>
+        /// <param name="isFirstLoad"></param>
+        /// <returns></returns>
+        private Task InitiateLoadingUntilCancellation(CancellationToken deferRefreshToken, bool isFirstLoad)
+        {
+            using (TreeGrid.View.DeferRefresh(TreeViewRefreshMode.DeferRefresh))
+            {
+                // Only show "Loading" if switching projects or loading the first one after
+                // a fresh launch of the app.
+                if (isFirstLoad)
+                {
+                    IndicateProjectLoading();
+                }
+
+                var tcs = new TaskCompletionSource<bool>();
+
+                DispatcherHelper.WaitUntilCancelled(deferRefreshToken, () =>
+                {
+                    var isFlatModeEnabled = ViewModel?.IsFlatModeEnabled ?? false;
+                    if (isFirstLoad)
+                    {
+                        IndicateProjectNotLoading(isFlatModeEnabled);
+                        ClearFiltersAndRefreshTrees();
+                    }
+                    else
+                    {
+                        RefreshTreeViewIfNeeded();
+                        RefreshFlatViewIfNeeded();
+                        PESearchBar_OnSearchStarted(this, new FunctionEventArgs<string>(_currentFolderQuery));
+                    }
+                });
+
+                return tcs.Task;
+            }
         }
 
         private static (string Text, bool EnableRefactoring) ShowRenameDialog(string input, bool showCheckbox = false)
@@ -244,49 +345,65 @@ namespace WolvenKit.Views.Tools
             return (innerVm.Text, innerVm.EnableRefactoring == true);
         }
 
-        // Not sure why the property binding broke, but it did. This fixes it.
-        private void OnToggleFlatMode(object sender, EventArgs e)
-        {
-            if (sender is not ProjectExplorerViewModel model)
-            {
-                return;
-            }
 
-            if (model.IsFlatModeEnabled)
+        private void IndicateProjectLoading() => Dispatcher.Invoke(() =>
+        {
+            Console.WriteLine("IndicateProjectLoading");
+
+            TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+            TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+            LoadingText.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+        });
+
+        private void IndicateProjectNotLoading(bool isFlatModeEnabled)
+        {
+            Console.WriteLine("IndicateProjectNotLoading");
+            LoadingText.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+
+            if (isFlatModeEnabled)
             {
-                TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
                 TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Visible);
             }
             else
             {
                 TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Visible);
-                TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
             }
         }
 
-        // Run inside Dispatcher to avoid exception on startup
-        private void ResetUiElements() => Dispatcher.Invoke(() =>
+        private void RefreshFlatViewIfNeeded()
         {
-            // Hide loading text
-            LoadingText.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+            TreeGridFlat.View.Filter = IsFileInFlat;
+            TreeGridFlat.View.Refresh();
+        }
 
+        private void RefreshTreeViewIfNeeded()
+        {
+            TreeGrid.View.Filter = IsFileIn;
+            TreeGrid.View.Refresh();
+        }
+
+        // Run inside Dispatcher to avoid exception on startup
+        private void ClearFiltersAndRefreshTrees() {
             _currentFolderQuery = "";
-            // Set search bar to empty if it wasn't
             PESearchBar?.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, "");
 
-            // now handle the grids
             if (TreeGridFlat.View is not null)
             {
                 TreeGridFlat.ClearFilters();
                 TreeGridFlat.ClearSelections(false);
+                TreeGridFlat.View.Refresh();
             }
 
             if (TreeGrid.View is not null)
             {
                 TreeGrid.ClearFilters();
                 TreeGrid.ClearSelections(false);
+                TreeGrid.View.Refresh();
             }
-        });
+        }
+
+        #endregion Project_Loading
+
         private async Task BeginDeferredRefreshContext(CancellationToken deferRefreshToken, Task doBeforeRefresh)
         {
             CompositeDisposable disposables =
@@ -298,8 +415,10 @@ namespace WolvenKit.Views.Tools
             using (disposables)
             {
                 await doBeforeRefresh;
+
                 DispatcherHelper.WaitUntilCancelled(deferRefreshToken, () =>
                 {
+
                     TreeGridFlat.View.Filter = IsFileInFlat;
                     TreeGridFlat.View.Refresh();
 
@@ -312,6 +431,28 @@ namespace WolvenKit.Views.Tools
                     });
                 });
             }
+        }
+
+        private void OnToggleFlatMode(object sender, EventArgs e)
+        {
+            if (sender is not ProjectExplorerViewModel model)
+            {
+                return;
+            }
+
+            if (model.IsFlatModeEnabled)
+            {
+                TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+                TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+                RefreshFlatViewIfNeeded();
+            }
+            else
+            {
+                TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+                TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+            }
+
+            PESearchBar_OnSearchStarted(this, new FunctionEventArgs<string>(_currentFolderQuery));
         }
 
         private void TreeGrid_OnNodeExpanding(object sender, NodeExpandingEventArgs e)
@@ -380,7 +521,7 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            ViewModel.SaveNodeExpansionState(fileSystemModel.RawRelativePath, true);
+            ViewModel.NotifyDirectoryExpanded(fileSystemModel);
         }
 
         private bool _automatic;
@@ -447,7 +588,7 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            ViewModel.SaveNodeExpansionState(fileSystemModel.RawRelativePath, false);
+            ViewModel.NotifyDirectoryCollapsed(fileSystemModel);
         }
 
         private void AddKeyUpEvent()
@@ -531,7 +672,21 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems is not null)
+            if (e.Action is NotifyCollectionChangedAction.Reset)
+            {
+                var shouldAutoExpand = _settingsManager.AutoExpandAllFoldersOnLaunch;
+                var nodeCount = TreeGrid.View?.Nodes?.Count ?? 0;
+
+                // TODO: Check if this can ever be true here. Otherwise find a way to pass "isFirstLoad" to here.
+                var isFreshProject = ViewModel.ExpansionStateDictionary.AreKeysNull();
+
+                if (isFreshProject && nodeCount != 0 && shouldAutoExpand)
+                {
+                    TreeGrid.ExpandAllNodes();
+                }
+            }
+
+            if (e.Action is NotifyCollectionChangedAction.Add && e.NewItems is not null)
             {
                 foreach (var item in e.NewItems)
                 {
@@ -540,7 +695,7 @@ namespace WolvenKit.Views.Tools
                         continue;
                     }
 
-                    if (ViewModel.GetExpansionStateOrNull(fileSystemModel.RawRelativePath) is true or null)
+                    if (fileSystemModel.IsExpanded || ViewModel.GetExpansionStateOrNull(fileSystemModel.RawRelativePath) is true)
                     {
                         TreeGrid.ExpandNode(treeNode);
                     }
@@ -570,8 +725,7 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            TreeGridFlat.View.Filter = IsFileInFlat;
-            TreeGridFlat.View.RefreshFilter();
+            RefreshFlatViewIfNeeded();
         }
 
         private bool IsFileIn(object o)
@@ -676,19 +830,9 @@ namespace WolvenKit.Views.Tools
         private void PESearchBar_OnSearchStarted(object sender, FunctionEventArgs<string> e)
         {
             _currentFolderQuery = e.Info;
-
-            if (ViewModel?.IsFlatModeEnabled == true)
-            {
-                TreeGridFlat.View.RefreshFilter();
-            }
-            else
-            {
-                // expand all
-                TreeGrid.ExpandAllNodes();
-
-                // filter programmatically
-                TreeGrid.View.RefreshFilter();
-            }
+            TreeGridFlat.View.RefreshFilter();
+            TreeGrid.ExpandAllNodes();
+            TreeGrid.View.RefreshFilter();
         }
 
         private void RowDragDropController_DragStart(object sender, TreeGridRowDragStartEventArgs e) =>
@@ -718,15 +862,13 @@ namespace WolvenKit.Views.Tools
 
         private async void RowDragDropController_Drop(object sender, TreeGridRowDropEventArgs e)
         {
-            // this should all be somewhere else, right?
             try
             {
-                e.Handled = _isDragging; // which should be true at this point
+                e.Handled = _isDragging;
                 if (e.TargetNode.Item is not FileSystemModel targetFile || ViewModel is not ProjectExplorerViewModel vm)
                 {
                     return;
                 }
-
 
                 var selectedFilePaths =
                     vm.SelectedItems?.OfType<FileSystemModel>().Select(fsm => fsm.FullName).ToList() ?? [];

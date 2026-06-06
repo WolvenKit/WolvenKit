@@ -100,6 +100,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
     <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="Moq" />
@@ -116,7 +117,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\WolvenKit.App\WolvenKit.App.csproj" />
     <ProjectReference Include="..\..\WolvenKit.Core\WolvenKit.Core.csproj" />
-      <ProjectReference Include="..\..\WolvenKit.Common\WolvenKit.Common.csproj" />
+    <ProjectReference Include="..\..\WolvenKit.Common\WolvenKit.Common.csproj" />
+    <ProjectReference Include="..\..\WolvenKit.Modkit\WolvenKit.Modkit.csproj" />
   </ItemGroup>
 
 </Project>

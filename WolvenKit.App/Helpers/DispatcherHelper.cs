@@ -4,29 +4,26 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using Serilog.Debugging;
 
 namespace WolvenKit.App.Helpers;
 
 //Assembly: HandyControl, Version=3.2.0.0, Culture=neutral, PublicKeyToken=45be8712787a1e5b
 public static class DispatcherHelper
 {
-    private static ConcurrentDictionary<Guid, DispatcherTimer> _dispatcherTimers = new();
+    public static void RunOnMainThread(Action action, DispatcherPriority priority = DispatcherPriority.Normal) => Application.Current.RunOnUIThread(action, priority);
 
-    public static void RunOnMainThread(Action action, DispatcherPriority priority = DispatcherPriority.Normal)
+    private static void RunOnUIThread(this DispatcherObject? d, Action action, DispatcherPriority priority = DispatcherPriority.Normal)
     {
-        // If in a unit test there is no current application, so use the current dispatcher.
-        if (TestHelper.InActiveTest)
+        // In a unit test / headless context there is no WPF Application and no Dispatcher.
+        // Run the action synchronously so code paths that rely on DispatcherHelper
+        // (DispatchedObservableCollection, etc.) continue to work.
+        if (d == null && Application.Current == null)
         {
-            Task.Run(action);
+            action();
             return;
         }
 
-        Application.Current.RunOnUIThread(action, priority);
-    }
-
-    private static void RunOnUIThread(this DispatcherObject? d, Action action,
-        DispatcherPriority priority = DispatcherPriority.Normal)
-    {
         if (d is not { Dispatcher: { } dispatcher })
         {
             return;
@@ -70,7 +67,7 @@ public static class DispatcherHelper
         }
 
         // Use a low-priority dispatcher operation that re-queues itself
-        var dispatcher = Dispatcher.CurrentDispatcher; // or Application.Current.Dispatcher
+        var dispatcher = Dispatcher.CurrentDispatcher;   // or Application.Current.Dispatcher
 
         void CheckCancellation()
         {
@@ -88,6 +85,8 @@ public static class DispatcherHelper
         // Start the polling loop
         dispatcher.BeginInvoke(CheckCancellation, DispatcherPriority.Background);
     }
+
+    private static ConcurrentDictionary<Guid, DispatcherTimer> _dispatcherTimers = new();
 
     /// <summary>
     /// Repeats action every interval TimeSpan until the timer is

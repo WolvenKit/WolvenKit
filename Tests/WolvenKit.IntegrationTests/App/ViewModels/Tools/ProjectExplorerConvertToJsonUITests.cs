@@ -26,6 +26,7 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
 using Xunit;
+using Xunit.Abstractions;
 using Xunit.Sdk;
 using Assert = Xunit.Assert;
 
@@ -40,6 +41,7 @@ static class Const
 
 public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
 {
+    private readonly ITestOutputHelper _output;
     private readonly string _tempProjectRoot;
     private readonly Cp77Project _project;
     private IHost? _host;
@@ -56,31 +58,45 @@ public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
     [StaFact]
     public async Task WhenAnimsDbSelectedAssetBrowserRightViewHasRightItems()
     {
-        var dispatcher = Dispatcher.CurrentDispatcher;
-
         var expectedNumberOfItems = 27;
+        var numberOfFolders = 5;
 
+        // Setup Host
         _host = IntegrationTestHost.Create();
+
+        // Setup Services
         var services = _host.Services;
         services.UseMicrosoftDependencyResolver();
-        var appViewModel = services.GetRequiredService<AppViewModel>();
 
+        // Setup DI Resolver
         var resolver = Locator.CurrentMutable;
         resolver.InitializeSplat();
 
+        // Setup Hash Services (needed for archives to load properly)
         var hashService = services.GetRequiredService<IHashService>();
         hashService.Load();
 
-        var settingsManager = services.GetRequiredService<ISettingsManager>();
+        // Setup the Settings Manager & Game Directory
         var gameDir = ResolveGameDirectory();
+        var settingsManager = services.GetRequiredService<ISettingsManager>();
         var exePath = Path.Combine(gameDir, "bin", "x64", "Cyberpunk2077.exe");
         settingsManager.CP77ExecutablePath = exePath;
+
+        // Grab the App View Model
+        var appViewModel = services.GetRequiredService<AppViewModel>();
+
+        // Grab the GameController
         var gameControllerFactory = services.GetRequiredService<IGameControllerFactory>();
         var controller = gameControllerFactory.GetRed4Controller();
         Assert.NotNull(controller);
+
+        // Grab the Project Manager
         var projectManager = services.GetRequiredService<IProjectManager>();
+
+        // Grab the Project Explorer
         _projectExplorerVm = appViewModel.GetToolViewModel<ProjectExplorerViewModel>();
 
+        // Create a new Project & Add it to AppViewModel
         var projectWizard = services.GetRequiredService<ProjectWizardViewModel>();
         projectWizard.Author = "FF:06:B5";
         projectWizard.ModName = "Cyberpunk2077";
@@ -88,27 +104,45 @@ public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
         projectWizard.ProjectPath = _tempProjectRoot;
         await appViewModel.NewProjectTask(projectWizard);
 
-        Assert.NotNull(dispatcher);
+        // Verify the project propagated to the right places
         Assert.NotNull(projectManager.ActiveProject);
-
-        Task.Delay(500).Wait();
-
         Assert.NotNull(_projectExplorerVm.ActiveProject);
 
+        // Grab the AssetBrowserViewModel
         var vm = appViewModel.GetToolViewModel<AssetBrowserViewModel>();
+
+        // Grab the ProgressService
         var progress = services.GetRequiredService<IProgressService<double>>();
         var state = progress.Status;
-        await vm.LoadAssetBrowser();
 
+        // Wait until the Archives have loaded
         while (state != EStatus.Ready)
         {
             state = progress.Status;
             await Task.Delay(100);
         }
 
+        // Grab the Archives and add them to the AssetBrowser
         var archives = vm._boundRootNodes.First();
         AddDirs(archives, vm);
 
+        // Navigate to the anim_motion_db folder
+        NavigateToAnimMotionDbFolder(vm);
+
+        // Verify the correct number of items are in the RightItems
+        Assert.Equal(expectedNumberOfItems, vm.RightItems.Count);
+
+        // Set all the RightItems to Checked so they can be added to ProjectManager
+        vm.RightItems.ToList().ForEach(item => item.IsChecked = true);
+
+        // Add the files to the mod project
+        await vm.AddSelectedAsync();
+
+        Assert.Equal(expectedNumberOfItems, _projectExplorerVm.FileList.Count - numberOfFolders);
+    }
+
+    private void NavigateToAnimMotionDbFolder(AssetBrowserViewModel vm)
+    {
         var baseDir = vm.LeftItems.First().Directories[Const.BaseDirName];
         AddDirs(baseDir, vm);
 
@@ -122,17 +156,11 @@ public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
             .Directories[Const.AnimationsName]
             .Directories[Const.AnimMotionDbName];
         AddDirs(animMotionDb, vm);
-
-        var rightItems = vm.RightItems;
-        Assert.Equal(expectedNumberOfItems, rightItems.Count);
-
-        vm.RightItems.ToList().ForEach(item => item.IsChecked = true);
-   }
+    }
 
     private void AddDirs(RedFileSystemModel model,
         AssetBrowserViewModel vm)
     {
-        vm.SetLeftSelectedItem(model.Name);
         vm.RightItems.Clear();
 
         vm.RightItems.AddRange(model.Directories
