@@ -149,18 +149,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         s_instance = this;
 
-        private void Svc_ThreadIdleTenSeconds(object? sender, EventArgs e)
-        {
-            SaveProjectExplorerExpansionStateIfDirty();
-            SaveProjectExplorerTabIfDirty();
-        }
-
-
-
-
-
-
-
         _projectManager.WhenAnyValue(x => x.ActiveProject)
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(project =>
@@ -181,6 +169,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                     StartWatcher_AndLoadProject(project, isReload);
                 });
             });
+    }
+    
+    private void Svc_ThreadIdleTenSeconds(object? sender, EventArgs e)
+    {
+        SaveProjectExplorerExpansionStateIfDirty();
+        SaveProjectExplorerTabIfDirty();
     }
 
     /// <summary>

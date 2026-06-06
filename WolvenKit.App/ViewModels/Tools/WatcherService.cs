@@ -61,7 +61,7 @@ partial class ProjectExplorerViewModel
 
     private readonly ConcurrentQueue<FileSystemEventArgsWrapper> _fileChanges = new();
 
-    ConcurrentDictionary<string, FileSystemModel> FileLookup => _fileLookup;
+    public ConcurrentDictionary<string, FileSystemModel> FileLookup => _fileLookup;
     private readonly ConcurrentQueue<FileSystemEventArgsWrapper> _batchFileChanges = new();
     private readonly ConcurrentDictionary<string, FileSystemModel> _fileLookup = new();
 
@@ -87,7 +87,7 @@ partial class ProjectExplorerViewModel
         "blend1", // Blender temp files
     ];
 
-    Guid CompletionTimer = Guid.NewGuid();
+    public Guid CompletionTimer = Guid.NewGuid();
 
     private static bool HasIgnoredExtension(string? fileName)
     {
@@ -96,13 +96,13 @@ partial class ProjectExplorerViewModel
             fileExtension.Contains(partial, StringComparison.OrdinalIgnoreCase));
     }
 
-    private WatcherState _watcherState;
+    public WatcherState _watcherState;
 
     WatcherState WatcherState => _watcherState;
 
     #endregion
 
-    WatcherService(Func<string, bool> getDesiredExpansionState, ILoggerService? loggerService, IProjectEvents projectEvents)
+    public WatcherService(Func<string, bool> getDesiredExpansionState, ILoggerService? loggerService, IProjectEvents projectEvents)
     {
         _loggerService = loggerService;
 
@@ -129,14 +129,14 @@ partial class ProjectExplorerViewModel
         Resume();
     }
 
-    void StartWatcher_AndLoadProject(Cp77Project project, Action? completion = null)
+    public void StartWatcher_AndLoadProject(Cp77Project project, Action? completion = null)
     {
         _projectDirectory = project.FileDirectory;
         _projectFileSystemModel = new FileSystemModel(null, FileSystemModel.ProjectDirName, _projectDirectory, true);
         ResumeWatcher_AndLoadProject();
     }
 
-    void Resume()
+    public void Resume()
     {
         if (_projectDirectory == "")
         {
@@ -160,7 +160,7 @@ partial class ProjectExplorerViewModel
     /// This must be called before performing anything that sends a Reset for
     /// FileList or FileTree collections.
     /// </summary>
-    void UnwatchProject()
+    public void UnwatchProject()
     {
         Suspend();
         _watcherState = WatcherState.NoProject;
@@ -523,7 +523,7 @@ partial class ProjectExplorerViewModel
         }
     }
 
-    void Suspend()
+    public void Suspend()
     {
         _loggerService?.Debug("Stopping file system watcher in mod folder.");
         _modsWatcher.EnableRaisingEvents = false;
