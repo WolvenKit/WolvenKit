@@ -113,8 +113,7 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
                 return;
             }
 
-            var localPath = Path.Join(ISettingsManager.GetUserTemplateDir(),$"{desc.Name}.{desc.Type.Name}.json");
-            if (File.Exists(localPath))
+            if (_templateService.TemplateExists(desc, TemplateSource.User))
             {
                 response = await Interactions.ShowMessageBoxAsync(
                     "A local copy of this template already exists. Overwrite it?",
@@ -127,11 +126,17 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
                 }
             }
 
-            File.Copy(desc.FilePath, localPath, true);
-            await Task.Run(LoadTemplates);
-            desc = Templates.First(t => t.Name == desc.Name &&
-                                        t.Type == desc.Type &&
-                                        t.Source == RedTypeTemplateDescriptorExtSource.User);
+            var systemTemplateData = _templateService.ReadTemplate(desc) ?? throw new Exception($"Failed to read system template `{desc.Name}` of type `{desc.Type.Name}`");
+            _templateService.WriteTemplate(systemTemplateData, desc.Name);
+
+            desc = new RedTypeTemplateDescriptorManagerExt(
+                _templateService.UserTemplates.First(t => t.Name.Equals(desc.Name, StringComparison.OrdinalIgnoreCase) && t.Type == desc.Type),
+                RedTypeTemplateDescriptorExtSource.User);
+
+            if (!Templates.Any(t => t.Name.Equals(desc.Name, StringComparison.OrdinalIgnoreCase) && t.Type == desc.Type && t.Source == RedTypeTemplateDescriptorExtSource.User))
+            {
+                Templates.Add(desc);
+            }
         }
 
         #endregion
