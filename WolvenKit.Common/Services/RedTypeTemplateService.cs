@@ -134,7 +134,7 @@ public class RedTypeTemplateService
     /// <exception cref="Exception">Template File contains invalid or mismatched data</exception>
     /// <remarks>When using <see cref="TemplateSource.Auto"/>, user templates are preferred over system templates.</remarks>
     public RedBaseClass? CreateTypeInstance(Type type, string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
-        ReadTemplate(type, templateName, src) ?? (RedBaseClass?)Activator.CreateInstance(type);
+        ReadTemplate(type, templateName, src) ?? ReadTemplate(type, "default", src) ?? (RedBaseClass?)Activator.CreateInstance(type);
 
     /// <summary>
     /// Reads a template from the system or user template directory and returns an instance of the templated object.
