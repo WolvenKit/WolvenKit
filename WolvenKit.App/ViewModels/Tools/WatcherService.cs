@@ -64,6 +64,8 @@ partial class ProjectExplorerViewModel
     ConcurrentDictionary<string, FileSystemModel> FileLookup => _fileLookup;
     private readonly ConcurrentQueue<FileSystemEventArgsWrapper> _batchFileChanges = new();
     private readonly ConcurrentDictionary<string, FileSystemModel> _fileLookup = new();
+
+    // TODO: This is never read from, can it be cleaned out?
     private readonly ConcurrentDictionary<string, long> _removedFiles = new();
 
     [ObservableProperty]
@@ -241,7 +243,7 @@ partial class ProjectExplorerViewModel
                 throw new TodoException();
             }
 
-            if (!_fileLookup.TryGetValue(e.Name, out var item))
+            if (!_fileLookup.TryGetValue(e.FullPath, out var item))
             {
                 if (_watcherState == WatcherState.NoProject && _fileProcessing.ContainsKey(e.FullPath))
                 {
@@ -301,12 +303,12 @@ partial class ProjectExplorerViewModel
 
         void Delete(FileSystemEventArgsWrapper e)
         {
-            if (string.IsNullOrEmpty(e.Name))
+            if (string.IsNullOrEmpty(e.FullPath))
             {
                 throw new TodoException();
             }
 
-            if (_fileLookup.TryRemove(e.Name, out var item))
+            if (_fileLookup.TryRemove(e.FullPath, out var item))
             {
                 FileTree.Remove(item);
                 FileList.Remove(item);
@@ -338,6 +340,15 @@ partial class ProjectExplorerViewModel
             LoadModProjectFileStructure();
         }
     }
+
+    private void LoadModProjectFileStructure()
+    {
+        if (_projectFileSystemModel == null)
+        {
+            // On first app launch, there's no project yet.
+            return;
+        }
+
     void Clear()
     {
         _loggerService?.Debug("Clearing all file changes and project data sources.");
@@ -348,14 +359,6 @@ partial class ProjectExplorerViewModel
         FileTree.Clear();
         FileList.Clear();
     }
-
-    private void LoadModProjectFileStructure()
-    {
-        if (string.IsNullOrEmpty(_projectDirectory))
-        {
-            // On first app launch, there's no project yet.
-            return;
-        }
 
         Clear();
 
