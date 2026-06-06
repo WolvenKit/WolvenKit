@@ -165,23 +165,23 @@ public class RED4Controller : ObservableObject, IGameController
     /// in progress.
     /// </summary>
     private async Task LoadArchiveManagerAsync()
-        {
+    {
         // Fast path checks — do NOT start the loading indicator if there's nothing to do.
-            if (_archiveManager.IsManagerLoaded)
-            {
-                return;
-            }
+        if (_archiveManager.IsManagerLoaded)
+        {
+            return;
+        }
 
-            if (_settingsManager.CP77ExecutablePath is null)
-            {
+        if (_settingsManager.CP77ExecutablePath is null)
+        {
             _loggerService.Warning("Cyberpunk 2077 executable path is not set. Skipping Archive Manager load.");
-                return;
-            }
+            return;
+        }
 
         EnableLoadingMode();
 
-            try
-            {
+        try
+        {
             await Task.Run(() =>
             {
                 // Keep priority low so the UI stays responsive during the (potentially long)
@@ -198,20 +198,18 @@ public class RED4Controller : ObservableObject, IGameController
             });
 
             _loggerService.Success("Finished loading Archive Manager.");
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error(e);
-                throw;
-            }
-            finally
-            {
+        }
+        catch (Exception e)
+        {
+            _loggerService.Error(e);
+            throw;
+        }
+        finally
+        {
             // Always stop the heartbeat timer and release the progress indicator.
             DisableLoadingMode();
-            }
-
             LoadCustomHashes();
-        });
+        }
     }
 
     #region Packing
