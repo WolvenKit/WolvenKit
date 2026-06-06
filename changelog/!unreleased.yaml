@@ -34,11 +34,11 @@ changes:
       description: "When generating a radio, the folder in resources will now be created"
     - type: "fixed"
       packages: ["App"]
-      pr-number: 2941
-      author: "gistya"
-      description: "Improved performance when adding thousands of game files to a mod"
-    - type: "fixed"
-      packages: ["App"]
       pr-number: 2939
       author: "gistya"
       description: "Increased performance of JSON imports."
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 2941
+      author: "gistya"
+      description: "Improved performance when adding thousands of game files to a mod"
