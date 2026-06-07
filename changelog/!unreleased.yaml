@@ -32,3 +32,8 @@ changes:
       pr-number: 2934
       author: "manavortex"
       description: "When generating a radio, the folder in resources will now be created"
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 2883
+      author: "manavortex"
+      description: "'Copy materials from other mesh' now reliably works for multiselect"

@@ -1169,22 +1169,22 @@ public class DocumentTools
 
         if (destCr2W is null)
         {
-            _notificationService.Error($"target file {destCr2W} not found. Can't copy...");
-            _loggerService.Error($"target file {destCr2W} not found. Can't copy...");
+            _notificationService.Error($"Target file {destCr2W} not found. Can't copy...");
+            _loggerService.Error($"Target file {destCr2W} not found. Can't copy...");
             return 0;
         }
 
         if (sourceCr2W.RootChunk is not CMesh sourceMesh || destCr2W.RootChunk is not CMesh destMesh)
         {
-            _notificationService.Error($"source file {sourcePath} or target file {destPath} is not a valid mesh.");
-            _loggerService.Error($"source file {sourcePath} or target file {destPath} is not a valid mesh.");
+            _notificationService.Error($"Source file {sourcePath} or target file {destPath} is not a valid mesh.");
+            _loggerService.Error($"Source file {sourcePath} or target file {destPath} is not a valid mesh.");
             return 0;
         }
 
         if (sourceMesh.MaterialEntries.Count == 0)
         {
-            _notificationService.Error($"source file {sourcePath} does not have materials!");
-            _loggerService.Error($"source file {sourcePath} does not have materials!");
+            _notificationService.Error($"Source file {sourcePath} does not have materials!");
+            _loggerService.Error($"Source file {sourcePath} does not have materials!");
             return 0;
         }
 
