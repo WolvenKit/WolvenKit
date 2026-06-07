@@ -71,12 +71,6 @@
                 </Style>
 
                 <Style
-                    x:Key="ExplanationStyle"
-                    TargetType="TextBlock">
-                    <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
-                    <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginBottom}" />
-                </Style>
-                <Style
                     x:Key="LabelHeaderStyle"
                     TargetType="Label">
                     <Setter Property="BorderBrush" Value="{DynamicResource WolvenKitBorderBrush}" />
@@ -226,7 +220,7 @@
                         Grid.Row="5"
                         Grid.Column="1"
                         Grid.ColumnSpan="2"
-                        Style="{StaticResource ExplanationStyle}"
+                        Style="{StaticResource WolvenkitExplanationStyle}"
                         Text="Project folder for your files (will be created)" />
 
                     <!-- prop name -->
@@ -251,7 +245,7 @@
                         Grid.Row="8"
                         Grid.Column="1"
                         Grid.ColumnSpan="2"
-                        Style="{StaticResource ExplanationStyle}"
+                        Style="{StaticResource WolvenkitExplanationStyle}"
                         Text="Human-readable name (for AMM registration)" />
 
                     <CheckBox
@@ -333,7 +327,7 @@
                         Grid.Row="13"
                         Grid.Column="1"
                         Grid.ColumnSpan="2"
-                        Style="{StaticResource ExplanationStyle}"
+                        Style="{StaticResource WolvenkitExplanationStyle}"
                         Text="Check boxes to read appearances from mesh file(s) instead of entering them by hand" />
 
 
@@ -366,7 +360,7 @@
                     <TextBlock
                         Grid.Row="16"
                         Grid.Column="1"
-                        Style="{StaticResource ExplanationStyle}"
+                        Style="{StaticResource WolvenkitExplanationStyle}"
                         Text="Comma-separated list (only available without reading from mesh files)" />
 
 
@@ -433,7 +427,7 @@
                         Grid.Row="19"
                         Grid.Column="1"
                         Grid.ColumnSpan="2"
-                        Style="{StaticResource ExplanationStyle}"
+                        Style="{StaticResource WolvenkitExplanationStyle}"
                         Text="Check box(es) to generate appearance names in mesh file(s)" />
 
                     <!-- Meshes for components -->
@@ -564,7 +558,7 @@
                     <TextBlock
                         Grid.Row="36"
                         Grid.Column="1"
-                        Style="{StaticResource ExplanationStyle}"
+                        Style="{StaticResource WolvenkitExplanationStyle}"
                         Text="Move .mesh files to folder" />
 
                     <Label
@@ -582,7 +576,7 @@
                     <TextBlock
                         Grid.Row="39"
                         Grid.Column="1"
-                        Style="{StaticResource ExplanationStyle}"
+                        Style="{StaticResource WolvenkitExplanationStyle}"
                         Text="Clean up non-existing entries from worldbuilder .txt files" />
 
                     <TextBlock

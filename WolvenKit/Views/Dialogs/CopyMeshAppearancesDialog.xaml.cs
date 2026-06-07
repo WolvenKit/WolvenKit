@@ -4,23 +4,26 @@ using System.Windows;
 using System.Windows.Input;
 using ReactiveUI;
 using System.Reactive.Disposables;
+using System.Windows.Controls;
 using WolvenKit.App.ViewModels.Dialogs;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using Window = System.Windows.Window;
 
 namespace WolvenKit.Views.Dialogs
 {
     public partial class CopyMeshAppearancesDialog : IViewFor<CopyMeshAppearancesDialogViewModel>
     {
-        private static string s_lastSelectedOption;
+        private static List<string> s_lastSelectedOptions = [];
+        private static string s_lastSelectedOption = "";
         private static bool s_lastAppend;
 
         public CopyMeshAppearancesDialog(List<string> options)
         {
             InitializeComponent();
 
-            ViewModel = new CopyMeshAppearancesDialogViewModel(options)
+            ViewModel = new CopyMeshAppearancesDialogViewModel(options, s_lastSelectedOptions, s_lastSelectedOption)
             {
-                IsAppend = s_lastAppend, SelectedOption = s_lastSelectedOption
+                IsAppend = s_lastAppend
             };
             DataContext = ViewModel;
 
@@ -28,15 +31,11 @@ namespace WolvenKit.Views.Dialogs
             {
                 this.Bind(ViewModel,
                         x => x.SelectedOption,
-                        x => x.Dropdown.SelectedOption)
-                    .DisposeWith(disposables);
-                this.Bind(ViewModel,
-                        x => x.SelectedOption,
                         x => x.TextBox.Text)
                     .DisposeWith(disposables);
                 this.Bind(ViewModel,
                         x => x.OptionsDict,
-                        x => x.Dropdown.Options)
+                        x => x.FilterableChecklistMenu.CheckboxOptionsAndStates)
                     .DisposeWith(disposables);
             });
         }
@@ -57,8 +56,14 @@ namespace WolvenKit.Views.Dialogs
                 return;
             }
 
-            if (!string.IsNullOrEmpty(ViewModel.SelectedOption))
+            if (string.IsNullOrEmpty(ViewModel.SelectedOption))
             {
+                s_lastSelectedOptions = ViewModel.SelectedOptions;
+                s_lastSelectedOption = "";
+            }
+            else
+            {
+                s_lastSelectedOptions = [];
                 s_lastSelectedOption = ViewModel.SelectedOption;
             }
 
@@ -99,6 +104,32 @@ namespace WolvenKit.Views.Dialogs
             ViewModel.UseArchiveXlPatchMesh = true;
             DialogResult = true;
             Close();
+        }
+
+        private void ChecklistMenu_OnSelectionChanged(object _, List<string> selection)
+        {
+            if (ViewModel is null)
+            {
+                return;
+            }
+
+            ViewModel.SelectedOptions ??= [];
+
+            ViewModel.SelectedOptions.Clear();
+            ViewModel.SelectedOptions.AddRange(selection);
+            ViewModel.SetSaveButtonState();
+        }
+
+        private void TextBox_OnChange(object sender, RoutedEventArgs e)
+        {
+            if (sender is not TextBox tb || ViewModel is null ||
+                !tb.Text.Contains(".mesh", StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            ViewModel.SelectedOption = tb.Text;
+            ViewModel.SetSaveButtonState();
         }
     }
 }
