@@ -308,7 +308,6 @@ namespace WolvenKit.Views.Documents
             var files = _documentTools.CollectProjectFiles(".mesh").Where(f => f != ViewModel.FilePath)
                 .ToList();
 
-
             if (Interactions.ShowCopyMeshAppearancesDialogue(files) is not { } dialog)
             {
                 return;

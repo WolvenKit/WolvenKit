@@ -39,6 +39,8 @@ public partial class CopyMeshAppearancesDialogViewModel : ObservableObject
         _options = options;
         OptionsDict = options.ToDictionary(k => k, previousSelection.Contains);
         SelectedOption = lastSelectedOption;
+
+        SetSaveButtonState();
     }
 
 
