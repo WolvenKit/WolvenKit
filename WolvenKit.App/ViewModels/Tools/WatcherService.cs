@@ -797,6 +797,7 @@ public partial class ProjectExplorerViewModel
 
                     // Sort alphabetically for consistent logging order
                     var sortedNames = addedFiles
+                        .Where(file => !file.IsDirectory)
                         .Select(f => f.FullName)
                         .OrderBy(name => name, StringComparer.OrdinalIgnoreCase)
                         .ToList();
@@ -904,6 +905,7 @@ public partial class ProjectExplorerViewModel
             }
 
             var newFileModel = new FileSystemModel(parentModel, fileName, fullPath, false);
+            batch.Add(newFileModel);
             parentModel.Children.Add(newFileModel);
             _fileLookup.TryAdd(fullPath, newFileModel);
         }

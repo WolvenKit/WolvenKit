@@ -1019,7 +1019,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                                              (!IsShiftKeyPressed || HasCorrespondingConvertFile(m)));
 
     [RelayCommand(CanExecute = nameof(CanConvertGameFile))]
-    private async Task ConvertArchiveFile()
+    internal async Task ConvertArchiveFile()
     {
         if (SelectedItems is null)
         {
@@ -1033,6 +1033,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             _deferredRefreshCts = new CancellationTokenSource();
             if (BeginDeferredRefreshContext == null)
             {
+                if (TestHelper.InActiveTest)
+                {
+                    await ConvertToJsonInternal(selection);
+                    return;
+                }
+
                 throw new Exception("Rendering context does not exist.");
             }
 
