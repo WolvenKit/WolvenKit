@@ -318,8 +318,7 @@ namespace WolvenKit.Views.Documents
                     .Distinct()
                     .ToList();
 
-            if (Interactions.ShowCopyMeshAppearancesDialogue(otherMeshFiles) is not { } dialog ||
-                dialog.SelectedOptions.Count == 0)
+            if (Interactions.ShowCopyMeshAppearancesDialogue(otherMeshFiles) is not { } dialog)
             {
                 return;
             }

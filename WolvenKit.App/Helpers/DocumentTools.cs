@@ -1181,9 +1181,7 @@ public class DocumentTools
             return 0;
         }
 
-        var hasMaterials = sourceMesh.MaterialEntries.Count > 0;
-
-        if (!hasMaterials)
+        if (sourceMesh.MaterialEntries.Count == 0)
         {
             _notificationService.Error($"source file {sourcePath} does not have materials!");
             _loggerService.Error($"source file {sourcePath} does not have materials!");
