@@ -157,7 +157,7 @@ public partial class AssetBrowserViewModel : ToolViewModel
         if (LeftItems.Count > 0 && LoadVisibility == Visibility.Visible)
         {
             LoadVisibility = Visibility.Collapsed;
-        } else if (LoadVisibility == Visibility.Collapsed)
+        } else if (LoadVisibility == Visibility.Collapsed && !IsModBrowserEnabled && !_archiveManager.IsManagerLoaded)
         {
             LoadVisibility = Visibility.Visible;
         }
