@@ -1467,6 +1467,6 @@ public partial class ProjectResourceTools
 
         progressService.IsIndeterminate = false;
 
-        return filesWithMatch.Distinct().ToList();
+        return filesWithMatch.ToList();
     }
 }
