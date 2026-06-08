@@ -111,18 +111,18 @@ public class Cr2WTools
         return null;
     }
 
-    public string ReadJson(string absolutePath)
+    public string ReadAsJson(string absolutePath)
     {
         var cr2W = ReadCr2W(absolutePath);
         var json = JsonSerializer.Serialize(cr2W);
         return Regex.Unescape(json).Replace(@"""", "'");
     }
 
-    public string ReadJsonNoException(string absolutePath)
+    public string ReadAsJsonNoException(string absolutePath)
     {
         try
         {
-            return ReadJson(absolutePath);
+            return ReadAsJson(absolutePath);
         }
         catch
         {

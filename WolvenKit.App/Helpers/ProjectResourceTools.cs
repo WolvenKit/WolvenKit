@@ -1436,14 +1436,21 @@ public partial class ProjectResourceTools
         var filesWithMatch = new ConcurrentBag<string>();
         await Parallel.ForEachAsync(project.ModFiles, (filePath, _) =>
         {
-            var json = _crwWTools.ReadJsonNoException(Path.Join(project.ModDirectory, filePath));
-            if (StringHelper.StringContains(json, searchText, isWholeWord, isRegex))
+            try
             {
-                filesWithMatch.Add(filePath);
-            }
+                var json = _crwWTools.ReadAsJson(Path.Join(project.ModDirectory, filePath));
+                if (StringHelper.StringContains(json, searchText, isWholeWord, isRegex))
+                {
+                    filesWithMatch.Add(filePath);
+                }
 
-            var currentProgress = Interlocked.Increment(ref processedFiles) * progressIncrement;
-            progressService.Report(currentProgress);
+                var currentProgress = Interlocked.Increment(ref processedFiles) * progressIncrement;
+                progressService.Report(currentProgress);
+            }
+            catch
+            {
+                _loggerService.Error($"Failed to open {Path.DirectorySeparatorChar}{filePath} for searching");
+            }
 
             return ValueTask.CompletedTask;
         });
@@ -1452,8 +1459,7 @@ public partial class ProjectResourceTools
         {
             try
             {
-                var absolutePath = Path.Join(project.ResourcesDirectory, filePath);
-                var fileContent = File.ReadAllText(absolutePath);
+                var fileContent = File.ReadAllText(Path.Join(project.ResourcesDirectory, filePath));
                 if (StringHelper.StringContains(fileContent, searchText, isWholeWord, isRegex))
                 {
                     filesWithMatch.Add($"resources{Path.DirectorySeparatorChar}{filePath}");
@@ -1471,6 +1477,6 @@ public partial class ProjectResourceTools
 
         progressService.IsIndeterminate = false;
 
-        return filesWithMatch.ToList().Distinct().ToList();
+        return filesWithMatch.Distinct().ToList();
     }
 }
