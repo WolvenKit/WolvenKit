@@ -17,7 +17,7 @@ namespace WolvenKit.Views.Shell
         private readonly ISettingsManager _settingsManager;
         private readonly ILoggerService _loggerService;
 
-        public const string LaunchOptionsString = "Launch Options";
+        public const string LaunchProfilesString = "Launch Profiles";
 
         public RibbonView()
         {
@@ -116,7 +116,7 @@ namespace WolvenKit.Views.Shell
             // unsubscribe
             foreach (var obj in LaunchMenuMainItem.Items)
             {
-                if (obj is not MenuItem { Header: string menuitemHeader } menuitem || menuitemHeader == LaunchOptionsString)
+                if (obj is not MenuItem { Header: string menuitemHeader } menuitem || menuitemHeader == LaunchProfilesString)
                 {
                     continue;
                 }

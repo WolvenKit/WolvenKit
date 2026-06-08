@@ -634,6 +634,11 @@ public partial class RedGraph
             }
         }
 
+        if (duplicatedData is questPhaseNodeDefinition phaseNode)
+        {
+            RepairCopiedPhaseGraphConnections(phaseNode);
+        }
+
         var wrappedDuplicate = WrapQuestNode(duplicatedData, false);
 
         wrappedDuplicate.Location = new System.Windows.Point(
@@ -700,6 +705,11 @@ public partial class RedGraph
             }
         }
 
+        if (duplicatedData is questPhaseNodeDefinition phaseNode)
+        {
+            RepairCopiedPhaseGraphConnections(phaseNode);
+        }
+
         var wrappedDuplicate = WrapQuestNode(duplicatedData, false);
 
         wrappedDuplicate.Location = location;
@@ -713,6 +723,135 @@ public partial class RedGraph
 
         Nodes.Add(wrappedDuplicate);
     }
+
+    private static void RepairCopiedPhaseGraphConnections(questPhaseNodeDefinition phaseNode)
+    {
+        RepairCopiedPhaseGraphConnections(phaseNode, new List<questGraphDefinition>());
+    }
+
+    private static void RepairCopiedPhaseGraphConnections(questPhaseNodeDefinition phaseNode, List<questGraphDefinition> visitedGraphs)
+    {
+        if (phaseNode.PhaseResource.IsSet)
+        {
+            return;
+        }
+
+        if (phaseNode.PhaseGraph?.Chunk is not { } phaseGraph)
+        {
+            return;
+        }
+
+        if (visitedGraphs.Any(x => ReferenceEquals(x, phaseGraph)))
+        {
+            return;
+        }
+
+        visitedGraphs.Add(phaseGraph);
+
+        var nodeDefinitions = phaseGraph.Nodes
+            .Select(x => x.Chunk)
+            .OfType<questNodeDefinition>()
+            .ToList();
+
+        var socketDefinitions = new List<questSocketDefinition>();
+        var sourceSocketLookup = new List<(graphGraphSocketDefinition Reference, questSocketDefinition Socket)>();
+        var destinationSocketLookup = new List<(graphGraphSocketDefinition Reference, questSocketDefinition Socket)>();
+        var pendingConnections = new List<(graphGraphSocketDefinition Source, graphGraphSocketDefinition Destination)>();
+
+        foreach (var nodeDefinition in nodeDefinitions)
+        {
+            foreach (var socketHandle in nodeDefinition.Sockets)
+            {
+                if (socketHandle.Chunk is not questSocketDefinition socketDefinition)
+                {
+                    continue;
+                }
+
+                socketDefinitions.Add(socketDefinition);
+
+                foreach (var connectionHandle in socketDefinition.Connections)
+                {
+                    var connection = connectionHandle.Chunk;
+                    var source = connection?.Source?.Chunk;
+                    var destination = connection?.Destination?.Chunk;
+
+                    if (source == null || destination == null)
+                    {
+                        continue;
+                    }
+
+                    if (!pendingConnections.Any(x => ReferenceEquals(x.Source, source) && ReferenceEquals(x.Destination, destination)))
+                    {
+                        pendingConnections.Add((source, destination));
+                    }
+
+                    if (IsQuestOutputSocket(socketDefinition) &&
+                        !sourceSocketLookup.Any(x => ReferenceEquals(x.Reference, source)))
+                    {
+                        sourceSocketLookup.Add((source, socketDefinition));
+                    }
+
+                    if (IsQuestInputSocket(socketDefinition) &&
+                        !destinationSocketLookup.Any(x => ReferenceEquals(x.Reference, destination)))
+                    {
+                        destinationSocketLookup.Add((destination, socketDefinition));
+                    }
+                }
+            }
+        }
+
+        var repairedConnections = new List<(questSocketDefinition Source, questSocketDefinition Destination)>();
+        foreach (var pendingConnection in pendingConnections)
+        {
+            var sourceSocket = sourceSocketLookup
+                .FirstOrDefault(x => ReferenceEquals(x.Reference, pendingConnection.Source))
+                .Socket;
+            var destinationSocket = destinationSocketLookup
+                .FirstOrDefault(x => ReferenceEquals(x.Reference, pendingConnection.Destination))
+                .Socket;
+
+            if (sourceSocket == null || destinationSocket == null)
+            {
+                continue;
+            }
+
+            repairedConnections.Add((sourceSocket, destinationSocket));
+        }
+
+        if (repairedConnections.Count > 0)
+        {
+            foreach (var socketDefinition in socketDefinitions)
+            {
+                socketDefinition.Connections.Clear();
+            }
+
+            foreach (var (sourceSocket, destinationSocket) in repairedConnections)
+            {
+                var connection = new graphGraphConnectionDefinition
+                {
+                    Source = new CWeakHandle<graphGraphSocketDefinition>(sourceSocket),
+                    Destination = new CWeakHandle<graphGraphSocketDefinition>(destinationSocket)
+                };
+
+                var handle = new CHandle<graphGraphConnectionDefinition>(connection);
+                sourceSocket.Connections.Add(handle);
+                destinationSocket.Connections.Add(handle);
+            }
+        }
+
+        foreach (var nestedPhaseNode in nodeDefinitions.OfType<questPhaseNodeDefinition>())
+        {
+            RepairCopiedPhaseGraphConnections(nestedPhaseNode, visitedGraphs);
+        }
+    }
+
+    private static bool IsQuestOutputSocket(questSocketDefinition socketDefinition) =>
+        socketDefinition.Type == Enums.questSocketType.Output ||
+        socketDefinition.Type == Enums.questSocketType.CutSource;
+
+    private static bool IsQuestInputSocket(questSocketDefinition socketDefinition) =>
+        socketDefinition.Type == Enums.questSocketType.Input ||
+        socketDefinition.Type == Enums.questSocketType.CutDestination;
 
     private ushort GetNextAvailableQuestNodeId()
     {

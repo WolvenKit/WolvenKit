@@ -134,7 +134,7 @@ namespace WolvenKit.Views.Dialogs.Windows
             }
 
             var caretIndex = textBox.CaretIndex;
-            textBox.Text = textBox.Text.ToFilePath();
+            textBox.Text = textBox.Text.ToArchiveFilePath();
             textBox.CaretIndex = caretIndex;
         }
 

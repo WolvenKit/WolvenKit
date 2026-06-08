@@ -160,10 +160,10 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
 
         // Dialogue can't even be shown if modder name is not set
         var firstFolderName = _activeProject.Author ?? _settingsManager.ModderName ?? "modded";
-        var photomodeDirectory = Path.Join(firstFolderName.ToFileName(), s_photomodeSubDir);
-        if (!string.IsNullOrEmpty(NpcName) && !photomodeDirectory.Contains(NpcName.ToFileName()))
+        var photomodeDirectory = Path.Join(firstFolderName.ToArchiveFileName(), s_photomodeSubDir);
+        if (!string.IsNullOrEmpty(NpcName) && !photomodeDirectory.Contains(NpcName.ToArchiveFileName()))
         {
-            photomodeDirectory = Path.Join(photomodeDirectory, NpcName.ToFileName());
+            photomodeDirectory = Path.Join(photomodeDirectory, NpcName.ToArchiveFileName());
         }
 
         PhotomodeRelativeFolder = photomodeDirectory;
@@ -208,7 +208,7 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
         }
         else if (string.IsNullOrEmpty(XlFileName))
         {
-            XlFileName = $"{_activeProject.ModName.ToFileName()}.archive.xl";
+            XlFileName = $"{_activeProject.ModName.ToArchiveFileName()}.archive.xl";
             IsCreateXlFile = !File.Exists(Path.Join(_activeProject.ResourcesDirectory, XlFileName));
         }
     }
@@ -224,7 +224,7 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
         }
         else if (!string.IsNullOrEmpty(NpcName) && string.IsNullOrEmpty(YamlFileName))
         {
-            YamlFileName = $"{NpcName.ToFileName()}_npc.yaml";
+            YamlFileName = $"{NpcName.ToArchiveFileName()}_npc.yaml";
             IsCreateYamlFile =
                 !File.Exists(Path.Join(_activeProject.ResourcesDirectory, PhotomodeRelativeFolder, YamlFileName));
         }
@@ -242,7 +242,7 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
         }
         else if (!string.IsNullOrEmpty(NpcName) && string.IsNullOrEmpty(InkatlasFileName))
         {
-            InkatlasFileName = $"{NpcName.ToFileName()}_icon.inkatlas";
+            InkatlasFileName = $"{NpcName.ToArchiveFileName()}_icon.inkatlas";
             IsCreateInkatlasFile =
                 !File.Exists(Path.Join(_activeProject.ModDirectory, PhotomodeRelativeFolder, InkatlasFileName));
         }
@@ -264,7 +264,7 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
         }
         else if (!string.IsNullOrEmpty(NpcName) && string.IsNullOrEmpty(JsonFileName))
         {
-            JsonFileName = $"{NpcName.ToFileName()}_i18n.json";
+            JsonFileName = $"{NpcName.ToArchiveFileName()}_i18n.json";
             IsCreateJsonFile =
                 !File.Exists(Path.Join(_activeProject.ModDirectory, PhotomodeRelativeFolder, JsonFileName));
         }
@@ -367,7 +367,7 @@ public partial class CreatePhotoModeAppViewModel : ObservableObject
     /// <param name="boxText"></param>
     public void PreselectAppAndEntFromNpcName(string boxText)
     {
-        var npcNameFileName = boxText.ToFileName();
+        var npcNameFileName = boxText.ToArchiveFileName();
         var entPath = PhotomodeEntOptions.FirstOrDefault(x => x.Contains(npcNameFileName)) ?? null;
         var appPath = PhotomodeAppOptions.FirstOrDefault(x => x.Contains(npcNameFileName)) ?? null;
         if (!IsEntNameTouched && !string.IsNullOrEmpty(entPath))

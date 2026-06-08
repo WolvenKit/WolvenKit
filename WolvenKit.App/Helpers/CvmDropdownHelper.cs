@@ -893,6 +893,14 @@ public abstract class CvmDropdownHelper
                     ret = documentTools.GetMultilayerProperties(materialPath, cvm.Name, forceCacheRefresh);
                 }
 
+                // Color scale dropdown menu has percentages in its display key,
+                // which must not be in the value
+                if (cvm.Name == "colorScale")
+                {
+                    return ret.Distinct().Where(x => !string.IsNullOrEmpty(x))
+                        .ToDictionary(x => x!, y => y?.Split(" ").FirstOrDefault() ?? "");
+                }
+
                 break;
             }
 
@@ -925,7 +933,8 @@ public abstract class CvmDropdownHelper
 
         #endregion
 
-        return (ret ?? []).Distinct().Where(x => !string.IsNullOrEmpty(x)).ToDictionary(x => x!, y => y!);
+        return (ret ?? []).Distinct().Where(x => !string.IsNullOrEmpty(x))
+            .ToDictionary(x => x!, y => y!);
 
 
     }

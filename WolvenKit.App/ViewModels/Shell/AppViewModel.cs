@@ -753,7 +753,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     public event EventHandler? OnInitialProjectLoaded;
 
-    private async Task LoadProjectFromPathAsync(string location)
+    internal async Task LoadProjectFromPathAsync(string location)
     {
         var p = await _projectManager.LoadAsync(location);
         if (p is null)
@@ -776,7 +776,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             UpdateTitle();
             _notificationService.Success($"Project {Path.GetFileNameWithoutExtension(location)} loaded!");
             // https://github.com/WolvenKit/WolvenKit/issues/1962
-            if (!location.IsSaneFilePath())
+            if (!FilepathValidationTools.IsOsFilePathValid(location))
             {
                 _notificationService.Warning($"Project path {location} contains invalid characters!");
             }
@@ -808,7 +808,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         UpdateTitle();
     }
 
-    private async Task NewProjectTask(ProjectWizardViewModel project)
+    internal async Task NewProjectTask(ProjectWizardViewModel project)
     {
         try
         {
@@ -962,15 +962,15 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     {
         var userInteraction = Interactions.ShowQuestionYesNoCancel((
             $"This will scan {ActiveProject!.ModFiles.Count} files and can take a moment.\n\n"
-            + "Should files in other mods be treated as valid references?\n"
-            + "If you don't know what that means, click 'no'."
+            + "List files in other mods as 'missing'?\n"
+            + "If you don't know what that means, click 'yes'."
             , "Scanning entire project"));
 
         switch (userInteraction)
         {
             case null:
                 return;
-            case true when !_archiveManager.IsInitialized:
+            case false when !_archiveManager.IsInitialized:
                 ProjectResourceTools.InitializeArchiveManager();
                 break;
         }
@@ -979,7 +979,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _progressService.IsIndeterminate = true;
 
         var brokenReferences = await ActiveProject!.ScanForBrokenReferencePathsAsync(_archiveManager, _loggerService,
-            _progressService, (bool)userInteraction);
+            _progressService, null, !(bool)userInteraction);
 
         if (brokenReferences.Keys.Count == 0)
         {
@@ -2346,6 +2346,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private void UpdateScalesResource()
     {
+        // During integration testing, return here to avoid crash.
+        if (Application.Current == null)
+        {
+            return;
+        }
+
         // NOTE: keep in sync with App.Sizes.xaml
         var resources = Application.Current.Resources;
 

@@ -428,10 +428,10 @@ public partial class ProjectResourceTools
 
         try
         {
-            destRelPath = FileHelper.SanitizePath(destRelPath);
+            destRelPath = FilepathValidationTools.SanitizeOsFilePath(destRelPath);
             destAbsPath = ToAbsolutePath(destRelPath);
 
-            sourceRelPath = FileHelper.SanitizePath(sourceRelPath);
+            sourceRelPath = FilepathValidationTools.SanitizeOsFilePath(sourceRelPath);
             sourceFileOrDirAbsPath = ToAbsolutePath(sourceRelPath);
         }
         catch (Exception e)
@@ -707,9 +707,9 @@ public partial class ProjectResourceTools
                         }
 
                         var oldPathStr = activeProject.GetResourcePathFromRoot(oldAbsPath).GetResolvedText()
-                            ?.SanitizeFilePath();
+                            ?.ToArchiveFilePath();
                         var newPathStr = activeProject.GetResourcePathFromRoot(newAbsPath).GetResolvedText()?
-                            .SanitizeFilePath();
+                            .ToArchiveFilePath();
 
                         if (string.IsNullOrEmpty(oldPathStr) || string.IsNullOrEmpty(newPathStr) ||
                             oldPathStr == newPathStr)
@@ -717,8 +717,8 @@ public partial class ProjectResourceTools
                             continue;
                         }
 
-                        var oldPathWithForwardSlashes = oldPathStr.SanitizeFilePath(true);
-                        var newPathWithForwardSlashes = newPathStr.SanitizeFilePath(true);
+                        var oldPathWithForwardSlashes = oldPathStr.ToArchiveFilePath(useForwardSlashes: true);
+                        var newPathWithForwardSlashes = newPathStr.ToArchiveFilePath(useForwardSlashes: true);
 
                         newFileContent = newFileContent.Select(line => line
                             .Replace(oldPathStr, newPathStr)
@@ -773,6 +773,7 @@ public partial class ProjectResourceTools
 
                     var wasModified = false;
                     Dictionary<string, string> foundReplacements = new();
+                    List<string> dynamicPaths = new();
 
                     foreach (var (oldAbsPath, newAbsPath) in pathReplacements)
                     {
@@ -784,14 +785,17 @@ public partial class ProjectResourceTools
                             continue;
                         }
 
-                        cr2W = ReplacePathInFile(cr2W, oldPathStr, newPathStr, out var b);
+                        cr2W = ReplacePathInFile(cr2W, oldPathStr, newPathStr, out var b, out var hasDynamicPath);
                         if (!b)
                         {
                             continue;
                         }
-
                         wasModified = true;
                         foundReplacements.Add(oldPathStr, newPathStr);
+                        if (hasDynamicPath)
+                        {
+                            dynamicPaths.Add(oldPathStr);
+                        }
                     }
 
                     if (!wasModified)
@@ -799,8 +803,15 @@ public partial class ProjectResourceTools
                         return Task.CompletedTask;
                     }
 
+                    var relativePath = activeProject.GetRelativePath(absoluteFilePath);
                     _loggerService.Debug(
-                        $"Replaced the following paths in \"{activeProject.GetRelativePath(absoluteFilePath)}\"\n\t: {string.Join(",\n\t", foundReplacements.Select(kvp => $"{kvp.Key} -> {kvp.Value}"))}");
+                        $"Replaced the following paths in \"{relativePath}\"\n\t: {string.Join(",\n\t", foundReplacements.Select(kvp => $"{kvp.Key} -> {kvp.Value}"))}");
+
+                    if (dynamicPaths.Count > 0)
+                    {
+                        _loggerService.Warning(
+                            $"You have to update dynamic paths in \"{relativePath}\" by hand:\n\t {string.Join(",\n\t", dynamicPaths)}");
+                    }
 
                     _crwWTools.WriteCr2W(cr2W, absoluteFilePath);
                 }
@@ -817,9 +828,11 @@ public partial class ProjectResourceTools
         }
     }
 
-    private CR2WFile ReplacePathInFile(CR2WFile cr2W, string oldPathStr, string newPathStr, out bool wasModified)
+    private CR2WFile ReplacePathInFile(CR2WFile cr2W, string oldPathStr, string newPathStr, out bool wasModified,
+        out bool dynamicPathsNeedRenaming)
     {
         wasModified = false;
+        dynamicPathsNeedRenaming = false;
 
         if (oldPathStr == newPathStr || _projectManager.ActiveProject is not { } activeProject)
         {
@@ -835,7 +848,7 @@ public partial class ProjectResourceTools
 
 
         if ((cr2W.RootChunk is not (JsonResource or C2dArray)) &&
-            ReplaceInIRedRefs())
+            ReplaceInIRedRefs(ref dynamicPathsNeedRenaming))
         {
             wasModified = true;
         }
@@ -891,7 +904,7 @@ public partial class ProjectResourceTools
             return ret;
         }
 
-        bool ReplaceInIRedRefs()
+        bool ReplaceInIRedRefs(ref bool dynamicPathsNeedRenaming)
         {
             var refs = cr2W.FindType(typeof(IRedRef));
             var ret = false;
@@ -907,8 +920,7 @@ public partial class ProjectResourceTools
                 if (depotPath.StartsWith(ArchiveXlHelper.ArchiveXLSubstitutionPrefix) && ArchiveXlHelper
                         .ResolveDynamicPaths(depotPath, activeProject).Contains(oldPathStr))
                 {
-                    // handle dynamic substitution
-                    newPathStr = ArchiveXlHelper.ReplaceInDynamicPath(depotPath, newPathStr);
+                    dynamicPathsNeedRenaming = true;
                 }
                 else if (depotPath != oldPathStr)
                 {
@@ -1336,7 +1348,7 @@ public partial class ProjectResourceTools
         HashSet<string> miFiles = [];
         foreach (var kvp in pathReplacements)
         {
-            ReplacePathInFile(cr2W, kvp.Key, kvp.Value, out var _);
+            ReplacePathInFile(cr2W, kvp.Key, kvp.Value, out var _, out var _);
             if (kvp.Value.EndsWith(".mi"))
             {
                 miFiles.Add(kvp.Value);
@@ -1348,7 +1360,7 @@ public partial class ProjectResourceTools
         {
             foreach (var kvp in pathReplacements)
             {
-                ReplacePathInFile(miCr2W, kvp.Key, kvp.Value, out var _);
+                ReplacePathInFile(miCr2W, kvp.Key, kvp.Value, out var _, out var _);
             }
         }
 

@@ -162,6 +162,144 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <MenuItem
+                    x:Name="ExportMenuItem"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource {x:Type MenuItem}}"
+                            TargetType="{x:Type MenuItem}">
+                            <Setter Property="Command" Value="{Binding ExportArchiveFileCommand}" />
+                            <Setter Property="Header" Value="Export" />
+                        </Style>
+                    </MenuItem.Style>
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Export"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
+                    </MenuItem.Icon>
+                    <MenuItem
+                        x:Name="ExportMenuItemNeverDefault"
+                        Visibility="{Binding Path=IsEnabled,
+                                             RelativeSource={RelativeSource Self},
+                                             Mode=OneWay,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <MenuItem.Style>
+                            <Style
+                                BasedOn="{StaticResource {x:Type MenuItem}}"
+                                TargetType="{x:Type MenuItem}">
+                                <Setter Property="Command" Value="{Binding ExportArchiveFileCommand}" />
+                                <Setter Property="CommandParameter" Value="False" />
+                                <Setter Property="Header" Value="Export" />
+                            </Style>
+                        </MenuItem.Style>
+                        <MenuItem.Icon>
+                            <templates:IconBox
+                                IconPack="Material"
+                                Kind="Export"
+                                Margin="{DynamicResource WolvenKitMarginTiny}"
+                                Size="{DynamicResource WolvenKitIconMilli}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem
+                        x:Name="ExportMenuItemAlwaysDefault"
+                        Visibility="{Binding Path=IsEnabled,
+                                             RelativeSource={RelativeSource Self},
+                                             Mode=OneWay,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <MenuItem.Style>
+                            <Style
+                                BasedOn="{StaticResource {x:Type MenuItem}}"
+                                TargetType="{x:Type MenuItem}">
+                                <Setter Property="Command" Value="{Binding ExportArchiveFileCommand}" />
+                                <Setter Property="CommandParameter" Value="True" />
+                                <Setter Property="Header" Value="Export with default settings" />
+                            </Style>
+                        </MenuItem.Style>
+                        <MenuItem.Icon>
+                            <templates:IconBox
+                                IconPack="Material"
+                                Kind="Export"
+                                Margin="{DynamicResource WolvenKitMarginTiny}"
+                                Size="{DynamicResource WolvenKitIconMilli}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+
+                <MenuItem
+                    x:Name="ImportMenuItem"
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <MenuItem.Style>
+                        <Style
+                            BasedOn="{StaticResource {x:Type MenuItem}}"
+                            TargetType="{x:Type MenuItem}">
+                            <Setter Property="Command" Value="{Binding ImportRawFileCommand}" />
+                            <Setter Property="Header" Value="Import" />
+                        </Style>
+                    </MenuItem.Style>
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Material"
+                            Kind="Import"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}" />
+                    </MenuItem.Icon>
+                    <MenuItem
+                        x:Name="ImportMenuItemNeverDefault"
+                        Visibility="{Binding Path=IsEnabled,
+                                             RelativeSource={RelativeSource Self},
+                                             Mode=OneWay,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <MenuItem.Style>
+                            <Style
+                                BasedOn="{StaticResource {x:Type MenuItem}}"
+                                TargetType="{x:Type MenuItem}">
+                                <Setter Property="Command" Value="{Binding ImportRawFileCommand}" />
+                                <Setter Property="CommandParameter" Value="False" />
+                                <Setter Property="Header" Value="Import" />
+                            </Style>
+                        </MenuItem.Style>
+                        <MenuItem.Icon>
+                            <templates:IconBox
+                                IconPack="Material"
+                                Kind="Import"
+                                Margin="{DynamicResource WolvenKitMarginTiny}"
+                                Size="{DynamicResource WolvenKitIconMilli}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem
+                        x:Name="ImportMenuItemAlwaysDefault"
+                        Visibility="{Binding Path=IsEnabled,
+                                             RelativeSource={RelativeSource Self},
+                                             Mode=OneWay,
+                                             Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <MenuItem.Style>
+                            <Style
+                                BasedOn="{StaticResource {x:Type MenuItem}}"
+                                TargetType="{x:Type MenuItem}">
+                                <Setter Property="Command" Value="{Binding ImportRawFileCommand}" />
+                                <Setter Property="CommandParameter" Value="True" />
+                                <Setter Property="Header" Value="Import with default settings" />
+                            </Style>
+                        </MenuItem.Style>
+                        <MenuItem.Icon>
+                            <templates:IconBox
+                                IconPack="Material"
+                                Kind="Import"
+                                Margin="{DynamicResource WolvenKitMarginTiny}"
+                                Size="{DynamicResource WolvenKitIconMilli}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+
                 <Separator />
 
                 <MenuItem
@@ -844,6 +982,7 @@
                     Margin="{DynamicResource WolvenKitMarginTinyFooter}"
                     Orientation="Horizontal">
                     <Button
+                        AutomationProperties.AutomationId="ExpandAllButton"
                         Height="Auto"
                         Padding="0"
                         Click="ExpandAll_OnClick"
@@ -964,8 +1103,9 @@
         </Border>
 
         <!-- Hierarchical Tree View -->
-        <syncfusion:SfTreeGrid
-            Name="TreeGrid"
+        <others:InspectableTreeGrid
+            x:Name="TreeGrid"
+            AutomationProperties.AutomationId="ProjectExplorerTreeGrid"
             Grid.Row="2"
             Margin="0"
             BorderThickness="0"
@@ -1032,7 +1172,7 @@
                     ImmediateUpdateColumnFilter="True"
                     MappingName="Name" />
             </syncfusion:SfTreeGrid.Columns>
-        </syncfusion:SfTreeGrid>
+        </others:InspectableTreeGrid>
 
         <!-- Flat Tree View -->
         <syncfusion:SfTreeGrid

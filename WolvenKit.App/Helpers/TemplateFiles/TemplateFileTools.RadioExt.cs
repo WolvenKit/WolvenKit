@@ -74,8 +74,8 @@ public partial class TemplateFileTools
         var destDir = Directory.CreateTempSubdirectory();
         File.Copy(model.IconFilePath, Path.Combine(destDir.FullName, "icon.png"));
 
-        var relativePath = Path.Combine(modderName, "radio_stations", model.StationName!.ToFileName());
-        var fileName = $"{model.StationName!.ToFileName()}_atlas";
+        var relativePath = Path.Combine(modderName, "radio_stations", model.StationName!.ToArchiveFileName());
+        var fileName = $"{model.StationName!.ToArchiveFileName()}_atlas";
 
         if (!string.IsNullOrEmpty(model.InkatlasPath) && Path.GetDirectoryName(model.InkatlasPath) is string p &&
             Path.GetFileName(model.InkatlasPath) is string f && !string.IsNullOrEmpty(p) && !string.IsNullOrEmpty(f))
@@ -230,8 +230,12 @@ public partial class TemplateFileTools
         if (string.IsNullOrEmpty(viewModel.JsonFileFolder))
         {
             viewModel.JsonFileFolder = Path.Combine(project.ResourcesDirectory, s_subfolderPath,
-                viewModel.StationName!.ToFileName());
+                viewModel.StationName!.ToArchiveFileName());
         }
+
+
+        Directory.CreateDirectory(viewModel.JsonFileFolder);
+
 
         var songPaths = viewModel.SongItems.Select(f => f.FilePath).ToList();
 
@@ -262,7 +266,6 @@ public partial class TemplateFileTools
         {
             return;
         }
-
 
         var sourceDestPath = songsOutsideOfProject.ToDictionary(x => x,
             s => Path.Combine(viewModel.JsonFileFolder, Path.GetFileName(s.FilePath)));
