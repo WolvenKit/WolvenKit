@@ -303,32 +303,54 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            if (ViewModel?.RootChunk is not ChunkViewModel { ResolvedData: CMesh mesh } || ViewModel.FilePath is null ||
+            if (ViewModel?.FilePath is not string currentPath ||
+                ViewModel?.RootChunk is not ChunkViewModel { ResolvedData: CMesh mesh } || ViewModel.FilePath is null ||
                 _projectManager.ActiveProject is not { } project)
             {
                 return;
             }
 
-            var files = _documentTools.CollectProjectFiles(".mesh").Where(f => f != ViewModel.FilePath)
-                .ToList();
+            var otherMeshFiles =
+                _documentTools.CollectProjectFiles(".mesh")
+                    .Where(f => !currentPath.EndsWith(f))
+                    .Distinct()
+                    .ToList();
 
-
-            if (Interactions.ShowCopyMeshAppearancesDialogue(files) is not { } dialog)
+            if (Interactions.ShowCopyMeshAppearancesDialogue(otherMeshFiles) is not { } dialog)
             {
+                return;
+            }
+
+            var selectedOptions = dialog.GetAllSelectedOptions();
+
+            if (selectedOptions.Count == 0)
+            {
+                _loggerService.Info("No meshes selected, aborting");
+                _notificationService.Info("No meshes selected, aborting");
                 return;
             }
 
             try
             {
+                var isDirty = selectedOptions
+                    .Select((sourcePath, index) => (sourcePath, index))
+                    .Aggregate(false, (current, item) =>
+                        _documentTools.CopyMeshMaterials(item.sourcePath, ViewModel.FilePath,
+                            dialog.IsAppend || item.index > 0) || current);
+
                 // Only reload if we wrote anything
-                if (_documentTools.CopyMeshMaterials(dialog.SelectedOption, ViewModel.FilePath, dialog.IsAppend))
+                if (isDirty)
                 {
                     ViewModel.CurrentTab?.Parent.Reload(true);
+                    return;
                 }
-                else if (dialog.UseArchiveXlPatchMesh)
+
+                if (dialog.UseArchiveXlPatchMesh)
                 {
+                    _notificationService.Error(
+                        "Failed to copy mesh materials from ArchiveXL patch mesh (see log for detes)");
                     _loggerService.Error(
-                        "Failed to copy mesh materials from patch mesh. Try picking a mesh, or adding the file path directly.");
+                        "Failed to copy mesh materials from patch mesh (source mesh not found, or you have moved the file in your mod). Please pick the file path in the dialogue.");
                 }
                 else
                 {
@@ -379,16 +401,27 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            var failedMeshes = selected.Where(mesh => !_documentTools.CopyMeshMaterials(currentPath, mesh, false)).ToList();
+            var failedMeshes = selected.Where(mesh =>
+                !_documentTools.CopyMeshMaterials(currentPath, mesh, false)
+            ).ToList();
 
             var output = StringHelper.Stringify(selected.Where(s => !failedMeshes.Contains(s)).ToList(), true);
 
-            if (failedMeshes.Count > 0)
+            if (failedMeshes.Count == 0)
             {
-                output = output + "\nMaterial copy failed for:" + StringHelper.Stringify(failedMeshes, true);
+                _loggerService.Success($"Copied materials from {currentPath} to {output}");
+                _notificationService.Success(
+                    $"Copied materials from {currentPath} to {selected.Count} file(s). Check the log for details.");
+                return;
             }
 
-            _loggerService.Success($"Copied materials from {currentPath} to {output}");
+            output = output + ", but there were problems:\nMaterial copy failed for:" +
+                     StringHelper.Stringify(failedMeshes, true);
+
+            _notificationService.Warning(
+                $"Copied materials from {currentPath} to {selected.Count} files, but there were problems. Check the log for details.");
+            _loggerService.Warning($"Copied materials from {currentPath} to {output}");
+
         }
 
         private void UnDynamifyMaterials(ChunkViewModel? cvm)

@@ -37,9 +37,6 @@ public class CvmTools : ICvmTools
     public void AddMaterialAndDefinition(ChunkViewModel cvm, string newName) =>
         _cvmMaterialTools.AddMaterialAndDefinition(cvm, newName);
 
-    public int FindHighestMaterialIndex(ChunkViewModel materialDefinitionArray, bool isLocalInstance) =>
-        _cvmMaterialTools.FindHighestMaterialIndex(materialDefinitionArray, isLocalInstance);
-
     public void AddTagsToMeshAppearances(List<ChunkViewModel> chunks, List<string> tagList) =>
         _cvmMaterialTools.AddTagsToMeshAppearances(chunks, tagList);
 
