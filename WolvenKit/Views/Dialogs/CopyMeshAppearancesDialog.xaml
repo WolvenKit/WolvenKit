@@ -60,7 +60,7 @@
                         <RowDefinition Height="10" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="10" />
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
                         <RowDefinition Height="10" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -99,7 +99,6 @@
                         Grid.Row="4"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
-                        MaxHeight="{StaticResource WolvenKitDialogHeightSmall}"
                         CheckboxOptionsAndStates="{Binding OptionsDict}"
                         SelectionChanged="ChecklistMenu_OnSelectionChanged"
                         KeyboardNavigation.TabIndex="1" />
