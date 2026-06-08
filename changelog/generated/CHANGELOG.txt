@@ -1,0 +1,12 @@
+[b]8.18.1 — 2026-06-08[/b]
+
+[b]App[/b]
+
+[*] [i]Removed[/i]: WKit will no longer try to update dynamic paths (breaking them in the process), and instead warn about them. by @manavortex
+[*] [i]Fixed[/i]: Fixed 'create item codes from yaml' by @manavortex
+[*] [i]Fixed[/i]: Fixed material loading in preview window with 'Generate Materials' button action by @Ametis81
+[*] [i]Fixed[/i]: Better error message if project fails to load because .cpmodproj is broken by @manavortex
+[*] [i]Fixed[/i]: When generating a radio, the folder in resources will now be created by @manavortex
+[*] [i]Fixed[/i]: 'Copy materials from other mesh' now reliably works for multiselect by @manavortex
+[*] [i]Fixed[/i]: Improved performance when adding thousands of game files to a mod by @gistya
+[*] [i]Fixed[/i]: Increased performance of JSON imports. by @gistya
