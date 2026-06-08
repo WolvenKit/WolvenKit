@@ -1,5 +1,8 @@
 ## 8.18.1 — 2026-06-08
 
+**New Contributor**
+* @gistya made their first contribution in https://github.com/WolvenKit/WolvenKit/pull/2937
+
 **App**
 
 * *Removed*: WKit will no longer try to update dynamic paths (breaking them in the process), and instead warn about them. by @manavortex
