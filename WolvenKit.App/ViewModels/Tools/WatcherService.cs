@@ -867,7 +867,8 @@ public partial class ProjectExplorerViewModel
 
             if (_fileLookup.TryGetValue(parentPath, out var parent))
             {
-                var fileSystemModel = new FileSystemModel(parent, fileName, fullPath, false);
+                var rawRelativePath = fullPath.Substring(_projectDirectory.Length + 1);
+                var fileSystemModel = new FileSystemModel(parent, fileName, rawRelativePath, false);
                 parent.Children.Add(fileSystemModel);
                 _fileLookup.TryAdd(fullPath, fileSystemModel);
                 batch.Add(fileSystemModel);
@@ -883,6 +884,17 @@ public partial class ProjectExplorerViewModel
                 currentLevel = currentLevel.Parent!;
             }
 
+            /*
+             * This is reached from OnFilesImported (for both game files under "archive" and raw JSONs)
+             * before or without the "archive"/"raw" root directories having been inserted into _fileLookup
+             * by a prior full LoadModProjectFileStructure / BuildFullFileStructure. Will throw
+             * KeyNotFoundException. (Tests paper over it with WaitForFileListCountAsync waits for roots,
+             * but production paths and edge cases like publish immediately after project switch or during
+             * load do not guarantee it.)
+                       Suggestion: Use TryGetValue + fall back to creating the root
+                        (or ensure roots are always pre-created in StartWatcher_AndLoadProject before any
+                         publish can fire). Make the root creation robust and remove the !
+             */
             var parentModel = _fileLookup[Path.Combine(_projectDirectory, destination)]!;
 
             while (parentDirs.Count > 0)
