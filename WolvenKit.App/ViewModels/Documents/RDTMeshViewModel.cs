@@ -1329,7 +1329,7 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 // Mesh material preview in WolvenKit fix for vehicles/entity preview (e.g. Villefort Columbus)
                 // Prevents crash on cMesh.Parameters[0] when the mesh has no Parameters (most non-terrain meshes)
                 if (cMesh.Parameters.Count > 0 &&
-                    cMesh.Parameters[0]?.NotNull()?.Chunk is meshMeshParamTerrain mmpt)
+                    cMesh.Parameters[0]?.Chunk is meshMeshParamTerrain mmpt)
                 {
                     float xMax = 0, xMin = 0, yMin = 0, yMax = 0;
                     foreach (var chunk in mmpt.ChunkBoundingBoxes)
