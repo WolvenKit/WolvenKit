@@ -10,11 +10,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using DynamicData;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using ReactiveUI;
 using WolvenKit.App.Services;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types.Exceptions;
 
@@ -98,7 +100,7 @@ public partial class ProjectExplorerViewModel
                 fileExtension.Contains(partial, StringComparison.OrdinalIgnoreCase));
         }
 
-        public WatcherState _watcherState;
+        public WatcherState _watcherState = WatcherState.NoProject;
 
         public WatcherState WatcherState => _watcherState;
 
@@ -128,6 +130,7 @@ public partial class ProjectExplorerViewModel
 
         public void ResumeWatcher_AndLoadProject()
         {
+            Suspend();
             Locked_LoadModProjectFileStructure();
             Resume();
         }
@@ -246,7 +249,9 @@ public partial class ProjectExplorerViewModel
                     throw new TodoException();
                 }
 
-                if (!_fileLookup.TryGetValue(e.FullPath, out var item))
+                var lookup = e.FullPath.Substring(_projectDirectory.Length + 1)
+
+                if (!_fileLookup.TryGetValue(lookup, out var item))
                 {
                     if (_watcherState == WatcherState.NoProject && _fileProcessing.ContainsKey(e.FullPath))
                     {
@@ -352,6 +357,8 @@ public partial class ProjectExplorerViewModel
                 return;
             }
 
+            _watcherState = WatcherState.Loading;
+
             void Clear()
             {
                 _loggerService?.Debug("Clearing all file changes and project data sources.");
@@ -382,6 +389,7 @@ public partial class ProjectExplorerViewModel
 
                     DispatcherHelper.StopRepeatingAction(CompletionTimer);
                     StartBackgroundPolling();
+                    _watcherState = WatcherState.Active;
                 });
             });
         }
@@ -634,6 +642,8 @@ public partial class ProjectExplorerViewModel
                 }
             }
 
+            Lock _batchLock;
+
             void ApplyBatch(List<FileSystemEventArgsWrapper> batch, CancellationToken ct)
             {
                 var created = new List<FileSystemModel>();
@@ -649,15 +659,22 @@ public partial class ProjectExplorerViewModel
                         switch (e.ChangeType)
                         {
                             case WatcherChangeTypes.Created:
-                                var parent = FindParentModel(e.FullPath);
-                                var newItem = CreateFromScratch(parent, e);
-                                if (newItem != null)
+                                DispatcherHelper.RunOnMainThread(() =>
                                 {
-                                    parent?.Children.Add(newItem);
-                                    created.Add(newItem);
-                                    _fileLookup.TryAdd(e.FullPath, newItem);
-                                    _fileProcessing.TryRemove(e.FullPath, out _);
-                                }
+                                    lock (_batchLock)
+                                    {
+                                        var parent = FindParentModel(e.FullPath);
+                                        var newItem = CreateFromScratch(parent, e);
+                                        if (newItem != null)
+                                        {
+
+                                            parent?.Children.Add(newItem);
+                                            created.Add(newItem);
+                                            _fileLookup.TryAdd(e.FullPath, newItem);
+                                            _fileProcessing.TryRemove(e.FullPath, out _);
+                                        }
+                                    }
+                                });
                                 break;
                         }
                     }
@@ -864,10 +881,10 @@ public partial class ProjectExplorerViewModel
             var fileName = file.Name;
             var parentDirInfo = Directory.GetParent(fullPath);
             var parentPath = parentDirInfo!.FullName;
+            var rawRelativePath = fullPath.Substring(_projectDirectory.Length + 1);
 
             if (_fileLookup.TryGetValue(parentPath, out var parent))
             {
-                var rawRelativePath = fullPath.Substring(_projectDirectory.Length + 1);
                 var fileSystemModel = new FileSystemModel(parent, fileName, rawRelativePath, false);
                 parent.Children.Add(fileSystemModel);
                 _fileLookup.TryAdd(fullPath, fileSystemModel);
@@ -884,24 +901,22 @@ public partial class ProjectExplorerViewModel
                 currentLevel = currentLevel.Parent!;
             }
 
-            /*
-             * This is reached from OnFilesImported (for both game files under "archive" and raw JSONs)
-             * before or without the "archive"/"raw" root directories having been inserted into _fileLookup
-             * by a prior full LoadModProjectFileStructure / BuildFullFileStructure. Will throw
-             * KeyNotFoundException. (Tests paper over it with WaitForFileListCountAsync waits for roots,
-             * but production paths and edge cases like publish immediately after project switch or during
-             * load do not guarantee it.)
-                       Suggestion: Use TryGetValue + fall back to creating the root
-                        (or ensure roots are always pre-created in StartWatcher_AndLoadProject before any
-                         publish can fire). Make the root creation robust and remove the !
-             */
-            var parentModel = _fileLookup[Path.Combine(_projectDirectory, destination)]!;
+            var lookupKey = Path.Combine(_projectDirectory, destination);
+
+            if (!_fileLookup.TryGetValue(lookupKey, out var parentModel))
+            {
+                throw new WolvenKitException(987, $"Filed to find needed directory ${lookupKey}. " +
+                                                  "This means the file system is in an inconsistent state. " +
+                                                  "Please close and reload WolvenKit. ");
+
+            }
 
             while (parentDirs.Count > 0)
             {
                 var current = parentDirs.Pop();
+                var lookup = current.FullName.Substring(_projectDirectory.Length + 1)
 
-                if (_fileLookup.TryGetValue(current.FullName, out var currentModel))
+                if (_fileLookup.TryGetValue(lookup, out var currentModel))
                 {
                     parentModel = currentModel;
                     continue;
@@ -909,14 +924,15 @@ public partial class ProjectExplorerViewModel
 
                 // Make the directory if needed. (Does nothing if already exists.)
                 current.Create();
-                var newCurrentModel = new FileSystemModel(parentModel, current.Name, current.FullName, true);
+                var currentRawRelativePath = current.FullName.Substring(_projectDirectory.Length + 1);
+                var newCurrentModel = new FileSystemModel(parentModel, current.Name, currentRawRelativePath, true);
                 parentModel.Children.Add(newCurrentModel);
                 _fileLookup.TryAdd(current.FullName, newCurrentModel);
                 batch.Add(newCurrentModel);
                 parentModel = newCurrentModel;
             }
 
-            var newFileModel = new FileSystemModel(parentModel, fileName, fullPath, false);
+            var newFileModel = new FileSystemModel(parentModel, fileName, rawRelativePath, false);
             batch.Add(newFileModel);
             parentModel.Children.Add(newFileModel);
             _fileLookup.TryAdd(fullPath, newFileModel);
@@ -932,6 +948,8 @@ public partial class ProjectExplorerViewModel
     {
         NoProject,
         Suspended,
-        Active
+        Active,
+        Loading,
+        Error
     }
 }

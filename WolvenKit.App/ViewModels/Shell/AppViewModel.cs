@@ -839,7 +839,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             await RunAfterModalClosed(async () =>
             {
                 await LoadProjectFromPathAsync(projectLocation);
-                Console.WriteLine("This should happen first.");
             });
         }
         catch (Exception ex)
