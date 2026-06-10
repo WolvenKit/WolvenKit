@@ -319,26 +319,54 @@ public partial class ProjectExplorerViewModel
 
                 if (_fileLookup.TryRemove(e.FullPath, out var item))
                 {
-                    FileTree.Remove(item);
-                    FileList.Remove(item);
-
-                    ClearChildren(item);
-
-                    item.Parent?.Children.Remove(item);
+                    RemoveModel(item, e.EventAddedAt);
                 }
-
-                _removedFiles.TryAdd(e.FullPath, e.EventAddedAt);
-
-                void ClearChildren(FileSystemModel model)
+                else
                 {
-                    foreach (var subModel in model.Children)
-                    {
-                        ClearChildren(subModel);
-
-                        _fileLookup.Remove(subModel.RawRelativePath, out _);
-                        FileList.Remove(subModel);
-                    }
+                    _removedFiles.TryAdd(e.FullPath, e.EventAddedAt);
                 }
+            }
+        }
+
+        private void RemoveModel(FileSystemModel model, long removedAt = 0)
+        {
+            if (model == null) return;
+
+            _fileLookup.TryRemove(model.FullName, out _);
+
+            if (FileTree.Contains(model))
+                FileTree.Remove(model);
+            if (FileList.Contains(model))
+                FileList.Remove(model);
+
+            RemoveChildModels(model);
+
+            if (model.Parent != null && model.Parent.Children.Contains(model))
+                model.Parent.Children.Remove(model);
+
+            if (removedAt != 0)
+                _removedFiles.TryAdd(model.FullName, removedAt);
+        }
+
+        private void RemoveChildModels(FileSystemModel model)
+        {
+            var children = model.Children.ToList();
+            foreach (var subModel in children)
+            {
+                RemoveChildModels(subModel);
+
+                _fileLookup.Remove(subModel.FullName, out _);
+                if (FileList.Contains(subModel))
+                    FileList.Remove(subModel);
+            }
+        }
+
+        internal void RemoveItems(IEnumerable<FileSystemModel> items)
+        {
+            foreach (var item in items)
+            {
+                if (item == null) continue;
+                RemoveModel(item, DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond);
             }
         }
 
@@ -666,10 +694,12 @@ public partial class ProjectExplorerViewModel
                                         var newItem = CreateFromScratch(parent, e);
                                         if (newItem != null)
                                         {
-
-                                            parent?.Children.Add(newItem);
-                                            created.Add(newItem);
-                                            _fileLookup.TryAdd(e.FullPath, newItem);
+                                            if (parent != null && !parent.Children.Contains(newItem) && !_fileLookup.ContainsKey(e.FullPath))
+                                            {
+                                                parent.Children.Add(newItem);
+                                                created.Add(newItem);
+                                                _fileLookup.TryAdd(e.FullPath, newItem);
+                                            }
                                             _fileProcessing.TryRemove(e.FullPath, out _);
                                         }
                                     }
@@ -884,10 +914,13 @@ public partial class ProjectExplorerViewModel
 
             if (_fileLookup.TryGetValue(parentPath, out var parent))
             {
-                var fileSystemModel = new FileSystemModel(parent, fileName, rawRelativePath, false);
-                parent.Children.Add(fileSystemModel);
-                _fileLookup.TryAdd(fullPath, fileSystemModel);
-                batch.Add(fileSystemModel);
+                if (!parent.Children.Any(m => m.FullName == fullPath) && !_fileLookup.ContainsKey(fullPath))
+                {
+                    var fileSystemModel = new FileSystemModel(parent, fileName, rawRelativePath, false);
+                    parent.Children.Add(fileSystemModel);
+                    _fileLookup.TryAdd(fullPath, fileSystemModel);
+                    batch.Add(fileSystemModel);
+                }
                 return;
             }
 
@@ -924,17 +957,27 @@ public partial class ProjectExplorerViewModel
                 // Make the directory if needed. (Does nothing if already exists.)
                 current.Create();
                 var currentRawRelativePath = current.FullName.Substring(_projectDirectory.Length + 1);
-                var newCurrentModel = new FileSystemModel(parentModel, current.Name, currentRawRelativePath, true);
-                parentModel.Children.Add(newCurrentModel);
-                _fileLookup.TryAdd(current.FullName, newCurrentModel);
-                batch.Add(newCurrentModel);
-                parentModel = newCurrentModel;
+                if (!_fileLookup.ContainsKey(current.FullName))
+                {
+                    var newCurrentModel = new FileSystemModel(parentModel, current.Name, currentRawRelativePath, true);
+                    parentModel.Children.Add(newCurrentModel);
+                    _fileLookup.TryAdd(current.FullName, newCurrentModel);
+                    batch.Add(newCurrentModel);
+                    parentModel = newCurrentModel;
+                }
+                else
+                {
+                    parentModel = _fileLookup[current.FullName];
+                }
             }
 
-            var newFileModel = new FileSystemModel(parentModel, fileName, rawRelativePath, false);
-            batch.Add(newFileModel);
-            parentModel.Children.Add(newFileModel);
-            _fileLookup.TryAdd(fullPath, newFileModel);
+            if (!_fileLookup.ContainsKey(fullPath))
+            {
+                var newFileModel = new FileSystemModel(parentModel, fileName, rawRelativePath, false);
+                batch.Add(newFileModel);
+                parentModel.Children.Add(newFileModel);
+                _fileLookup.TryAdd(fullPath, newFileModel);
+            }
         }
     }
 
