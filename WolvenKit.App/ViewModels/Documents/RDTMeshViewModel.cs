@@ -1325,7 +1325,11 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
             else
             {
                 textureCoordinates = new Vector2Collection(mesh.positions.Length);
-                if (cMesh.Parameters[0].NotNull().Chunk is meshMeshParamTerrain mmpt)
+
+                // Mesh material preview in WolvenKit fix for vehicles/entity preview (e.g. Villefort Columbus)
+                // Prevents crash on cMesh.Parameters[0] when the mesh has no Parameters (most non-terrain meshes)
+                if (cMesh.Parameters.Count > 0 &&
+                    cMesh.Parameters[0]?.NotNull()?.Chunk is meshMeshParamTerrain mmpt)
                 {
                     float xMax = 0, xMin = 0, yMin = 0, yMax = 0;
                     foreach (var chunk in mmpt.ChunkBoundingBoxes)
@@ -1414,24 +1418,26 @@ public partial class RDTMeshViewModel : RedDocumentTabViewModel
                 //IsTransparent = true
             };
 
-            if (mesh.materialNames.Length > appearanceIndex)
+            // Mesh material preview in WolvenKit - safe material selection
+            string chosenMatName = "default";
+            var matNames = mesh.materialNames;
+            if (matNames != null && matNames.Length > 0)
             {
-                sm.MaterialName = GetUniqueMaterialName(mesh.materialNames[appearanceIndex], cMesh);
-                sm.Material = SetupPBRMaterial(sm.MaterialName);
-                if (sm.MaterialName.Contains("glass"))
-                {
-                    sm.DepthBias -= 10;
-                    sm.IsTransparent = true;
-                }
-                if (sm.MaterialName.Contains("sticker") || sm.MaterialName.Contains("decal"))
-                {
-                    sm.DepthBias -= 15;
-                    sm.IsTransparent = true;
-                }
+                var safeIndex = (appearanceIndex >= 0 && appearanceIndex < matNames.Length) ? appearanceIndex : 0;
+                chosenMatName = matNames[safeIndex];
             }
-            else
+
+            sm.MaterialName = GetUniqueMaterialName(chosenMatName, cMesh);
+            sm.Material = SetupPBRMaterial(sm.MaterialName);
+            if (sm.MaterialName.Contains("glass"))
             {
-                sm.Material = SetupPBRMaterial("DefaultMaterial");
+                sm.DepthBias -= 10;
+                sm.IsTransparent = true;
+            }
+            if (sm.MaterialName.Contains("sticker") || sm.MaterialName.Contains("decal"))
+            {
+                sm.DepthBias -= 15;
+                sm.IsTransparent = true;
             }
             list.Add(sm);
             index++;
