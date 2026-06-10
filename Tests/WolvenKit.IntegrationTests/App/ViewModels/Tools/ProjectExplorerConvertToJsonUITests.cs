@@ -63,7 +63,7 @@ public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
         await LoadANewProject();
 
         var expectedNumberOfItems = 27;
-        var numberOfFolders = 5;
+        var numberOfFolders = 6;
 
         Assert.NotNull(_host);
 

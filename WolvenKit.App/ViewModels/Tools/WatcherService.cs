@@ -53,6 +53,7 @@ public partial class ProjectExplorerViewModel
         private readonly FileSystemWatcher _modsWatcher;
 
         private readonly object _modLoadingLock = new();
+        private readonly object _batchLock = new();
 
         private Task? _updateTask;
         private CancellationTokenSource _updateThreadCancellationTokenSource = new();
@@ -249,7 +250,7 @@ public partial class ProjectExplorerViewModel
                     throw new TodoException();
                 }
 
-                var lookup = e.FullPath.Substring(_projectDirectory.Length + 1)
+                var lookup = e.FullPath.Substring(_projectDirectory.Length + 1);
 
                 if (!_fileLookup.TryGetValue(lookup, out var item))
                 {
@@ -642,8 +643,6 @@ public partial class ProjectExplorerViewModel
                 }
             }
 
-            Lock _batchLock;
-
             void ApplyBatch(List<FileSystemEventArgsWrapper> batch, CancellationToken ct)
             {
                 var created = new List<FileSystemModel>();
@@ -914,7 +913,7 @@ public partial class ProjectExplorerViewModel
             while (parentDirs.Count > 0)
             {
                 var current = parentDirs.Pop();
-                var lookup = current.FullName.Substring(_projectDirectory.Length + 1)
+                var lookup = current.FullName.Substring(_projectDirectory.Length + 1);
 
                 if (_fileLookup.TryGetValue(lookup, out var currentModel))
                 {

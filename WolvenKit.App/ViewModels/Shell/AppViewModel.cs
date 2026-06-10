@@ -777,10 +777,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             UpdateTitle();
             _notificationService.Success($"Project {Path.GetFileNameWithoutExtension(location)} loaded!");
+
             // https://github.com/WolvenKit/WolvenKit/issues/1962
             if (!FilepathValidationTools.IsOsFilePathValid(location))
             {
                 _notificationService.Warning($"Project path {location} contains invalid characters!");
+
             }
 
             OnInitialProjectLoaded?.Invoke(this, EventArgs.Empty);
