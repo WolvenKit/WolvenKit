@@ -6,7 +6,7 @@ This project keeps the unreleased changes in yaml format under `changelog/unrele
 ::: warning
 
 All other files in the `changelog` directory should not be manually modified as they are generated.
-While `changelog/unreleased.yaml` will consider changes added to it directly, it should be avoided due to the high risk of merge conflicts.
+While `changelog/!unreleased.yaml` will consider changes added to it directly, it should be avoided due to the high risk of merge conflicts.
 
 :::
 
