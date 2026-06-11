@@ -9,42 +9,6 @@ Template changelog entry:
 changes:
     - type: "fixed"
       packages: ["App"]
-      pr-number: 2917
-      author: "manavortex"
-      description: "Fixed 'create item codes from yaml'"
-    - type: "removed"
-      packages: ["App"]
-      pr-number: 2924
-      author: "manavortex"
-      description: "WKit will no longer try to update dynamic paths (breaking them in the process), and instead warn about them."
-    - type: "fixed"
-      packages: ["App"]
-      pr-number: 2923
+      pr-number: 2953
       author: "Ametis81"
-      description: "Fixed material loading in preview window with 'Generate Materials' button action"
-    - type: "fixed"
-      packages: ["App"]
-      pr-number: 2931
-      author: "manavortex"
-      description: "Better error message if project fails to load because .cpmodproj is broken"
-    - type: "fixed"
-      packages: ["App"]
-      pr-number: 2934
-      author: "manavortex"
-      description: "When generating a radio, the folder in resources will now be created"
-    - type: "fixed"
-      packages: ["App"]
-      pr-number: 2883
-      author: "manavortex"
-      description: "'Copy materials from other mesh' now reliably works for multiselect"
-    - type: "fixed"
-      packages: ["App"]
-      pr-number: 2939
-      author: "gistya"
-      description: "Increased performance of JSON imports."
-    - type: "fixed"
-      packages: ["App"]
-      pr-number: 2941
-      author: "gistya"
-      description: "Improved performance when adding thousands of game files to a mod"
-    - type: "fixed"
+      description: ".ent preview fix (index out of bounds)"
