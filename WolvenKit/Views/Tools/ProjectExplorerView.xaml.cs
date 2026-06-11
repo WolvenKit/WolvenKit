@@ -831,7 +831,17 @@ namespace WolvenKit.Views.Tools
         {
             _currentFolderQuery = e.Info;
             TreeGridFlat.View.RefreshFilter();
-            TreeGrid.ExpandAllNodes();
+
+            // Only force-expand everything when there is an active search query.
+            // This makes deep search results visible. When re-applying an empty query
+            // (e.g. after deferred structural changes like delete/convert, or when the
+            // user clears the search), we must NOT call ExpandAllNodes(), otherwise
+            // it overrides the user's saved/per-model IsExpanded states for all folders.
+            if (!string.IsNullOrEmpty(e.Info))
+            {
+                TreeGrid.ExpandAllNodes();
+            }
+
             TreeGrid.View.RefreshFilter();
         }
 
