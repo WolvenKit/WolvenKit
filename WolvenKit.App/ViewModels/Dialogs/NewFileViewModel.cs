@@ -11,6 +11,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Comparers;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Controls;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
@@ -57,14 +58,6 @@ public partial class NewFileViewModel : DialogViewModel
 
             var resourceFiles = newdef.Categories.First(x => x.Name == "CR2W Files").Files.NotNull();
 
-            CurrentRedTypeTemplates = new CollectionViewSource
-            {
-                Source = new List<RedTypeTemplateDescriptorExt>([new RedTypeTemplateDescriptorExt("No Template", typeof(object), "", RedTypeTemplateDescriptorExtSource.Raw)])
-            };
-            ApplyTemplateCustomSort(CurrentRedTypeTemplates);
-            CurrentRedTypeTemplates.GroupDescriptions.Add(new PropertyGroupDescription(nameof(RedTypeTemplateDescriptorExt.Source)));
-            SelectedRedTypeTemplate = ((List<RedTypeTemplateDescriptorExt>)CurrentRedTypeTemplates.Source).First();
-
             foreach (ERedExtension ext in Enum.GetValues(typeof(ERedExtension)))
             {
                 var c = CommonFunctions.GetResourceClassesFromExtension(ext);
@@ -79,9 +72,10 @@ public partial class NewFileViewModel : DialogViewModel
             var ordered = newdef.Categories.First(x => x.Name == "CR2W Files").Files.NotNull().OrderBy(x => x.Name).ToList();
             newdef.Categories.First(x => x.Name == "CR2W Files").Files = ordered;
             Categories = new ObservableCollection<FileCategoryModel>(newdef.Categories);
-            IndexRedTypeTemplates();
 
             SelectedCategory = Categories.FirstOrDefault();
+
+            _redTypeTemplateDropdownViewModel = new RedTypeTemplateDropdownViewModel(_redTypeTemplateService);
         }
         catch (Exception e)
         {
@@ -90,15 +84,12 @@ public partial class NewFileViewModel : DialogViewModel
         }
     }
 
+    [ObservableProperty]
+    private RedTypeTemplateDropdownViewModel _redTypeTemplateDropdownViewModel;
+
     public string Title { get; set; }
 
     [ObservableProperty] private string? _text;
-
-    [ObservableProperty]
-    private CollectionViewSource? _currentRedTypeTemplates;
-
-    [ObservableProperty]
-    private RedTypeTemplateDescriptorExt? _selectedRedTypeTemplate;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OkCommand))]
@@ -136,14 +127,6 @@ public partial class NewFileViewModel : DialogViewModel
             return;
         }
 
-        if (CurrentRedTypeTemplates is not null)
-        {
-            CurrentRedTypeTemplates.Source = SelectedFile?.RedTypeTemplates;
-            SelectedRedTypeTemplate = GetInitialTemplateForSelectedFile();
-            CurrentRedTypeTemplates.View.Refresh();
-            ApplyTemplateCustomSort(CurrentRedTypeTemplates);
-        }
-
         var project = _projectManager.ActiveProject;
         if (project is null)
         {
@@ -160,6 +143,12 @@ public partial class NewFileViewModel : DialogViewModel
             _ => $"{value.Name.NotNull().Split(' ').First()}1.{value.Extension.NotNull().ToLower()}",
         };
 #pragma warning restore IDE0072 // Add missing cases
+
+        var type = RedTypeTemplateService.ParseType(value.Name ?? "");
+        if (type != null)
+        {
+            RedTypeTemplateDropdownViewModel.RequestedType = type;
+        }
     }
 
     [ObservableProperty] private string? _whyNotCreate;
@@ -202,68 +191,5 @@ public partial class NewFileViewModel : DialogViewModel
     private void Cancel()
     {
         FileHandler?.Invoke(null);
-    }
-
-    [RelayCommand]
-    private async Task Refresh()
-    {
-        await Task.Run(_redTypeTemplateService.LoadTemplates);
-        IndexRedTypeTemplates();
-        SelectedRedTypeTemplate = GetInitialTemplateForSelectedFile();
-        CurrentRedTypeTemplates?.View.Refresh();
-        ApplyTemplateCustomSort(CurrentRedTypeTemplates);
-    }
-
-    private void IndexRedTypeTemplates()
-    {
-        foreach (var fileModel in Categories.First(x => x.Name == "CR2W Files").Files.NotNull())
-        {
-            var rootChunkType = RedTypeTemplateService.ParseType(fileModel.Name ?? "");
-            if (rootChunkType is null)
-            {
-                continue;
-            }
-
-            fileModel.RedTypeTemplates ??= new List<RedTypeTemplateDescriptorExt>();
-
-            fileModel.RedTypeTemplates.Clear();
-            fileModel.RedTypeTemplates.Add(new RedTypeTemplateDescriptorExt("No Template", typeof(object), "", RedTypeTemplateDescriptorExtSource.Raw));
-            fileModel.RedTypeTemplates.AddRange(_redTypeTemplateService.SystemTemplates.Where(te => te.Type == rootChunkType).Select(t => new RedTypeTemplateDescriptorExt(t, RedTypeTemplateDescriptorExtSource.System)));
-            fileModel.RedTypeTemplates.AddRange(_redTypeTemplateService.UserTemplates.Where(te => te.Type == rootChunkType).Select(t => new RedTypeTemplateDescriptorExt(t, RedTypeTemplateDescriptorExtSource.User)));
-        }
-    }
-
-    private RedTypeTemplateDescriptorExt? GetInitialTemplateForSelectedFile()
-    {
-        if (SelectedFile is null)
-        {
-            return null;
-        }
-
-        var userDefault =
-            SelectedFile.RedTypeTemplates?.FirstOrDefault(rtt =>
-                rtt.Name == "default" && rtt.Source == RedTypeTemplateDescriptorExtSource.User);
-        if (userDefault is not null)
-        {
-            return userDefault;
-        }
-
-        var systemDefault =
-            SelectedFile.RedTypeTemplates?.FirstOrDefault(rtt =>
-                rtt.Name == "default" && rtt.Source == RedTypeTemplateDescriptorExtSource.System);
-        if (systemDefault is not null)
-        {
-            return systemDefault;
-        }
-
-        return SelectedFile.RedTypeTemplates?.FirstOrDefault(rtt => rtt.Source == RedTypeTemplateDescriptorExtSource.Raw);
-    }
-
-    private static void ApplyTemplateCustomSort(CollectionViewSource? source)
-    {
-        if (source?.View is ListCollectionView listView)
-        {
-            listView.CustomSort = new RedTypeTemplateDescriptorExtComparer("default");
-        }
     }
 }

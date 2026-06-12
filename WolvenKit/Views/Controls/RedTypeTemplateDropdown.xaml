@@ -1,0 +1,71 @@
+<reactiveUi:ReactiveUserControl x:TypeArguments="controls:RedTypeTemplateDropdownViewModel" x:Class="WolvenKit.Views.Controls.RedTypeTemplateDropdown"
+                                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                                xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                                xmlns:local="clr-namespace:WolvenKit.Views.Controls"
+                                d:DataContext="{d:DesignInstance Type=controls:RedTypeTemplateDropdownViewModel}"
+                                xmlns:controls="clr-namespace:WolvenKit.App.ViewModels.Controls;assembly=WolvenKit.App"
+                                xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+                                xmlns:reactiveUi="http://reactiveui.net"
+                                mc:Ignorable="d"
+                                d:DesignHeight="30" d:DesignWidth="300">
+    <StackPanel Orientation="Horizontal">
+        <ComboBox
+            x:Name="RedTemplateComboBox"
+            Margin="{DynamicResource WolvenKitMarginSmallRight}"
+            IsEditable="False"
+            IsReadOnly="True"
+            MinWidth="150"
+            ToolTip="Select script">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="{Binding Name}" />
+                    </StackPanel>
+
+                    <DataTemplate.Triggers>
+                        <DataTrigger
+                            Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                             AncestorType=ComboBoxItem}}"
+                            Value="{x:Null}" />
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+
+            <ComboBox.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <Border
+                                Padding="15,0,0,7"
+                                BorderBrush="White"
+                                BorderThickness="0,0,0,1">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock
+                                        FontSize="{DynamicResource WolvenKitFontBody}"
+                                        Text="{Binding Name}" />
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </ComboBox.GroupStyle>
+        </ComboBox>
+
+        <Button
+            x:Name="RefreshButton"
+            Height="Auto"
+            Padding="0"
+            HorizontalAlignment="Right"
+            Command="Refresh"
+            ToolTip="Refresh Templates">
+            <templates:IconBox
+                IconPack="Material"
+                Kind="Refresh"
+                Size="{DynamicResource WolvenKitIconTiny}"
+                Foreground="{StaticResource WolvenKitPurple}" />
+        </Button>
+    </StackPanel>
+</reactiveUi:ReactiveUserControl>
+

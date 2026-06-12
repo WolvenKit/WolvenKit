@@ -1500,8 +1500,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 var redType = RedTypeTemplateService.ParseType(file.SelectedFile?.Name ?? "");
                 if (redType is not null)
                 {
-                    var rc = (RedBaseClass?)_redTypeTemplateService.CreateTypeInstance(redType,
-                        file.SelectedRedTypeTemplate?.Name ?? "default") ?? throw new Exception($"Failed to create instance of {redType.Name}");
+                    var rc = _redTypeTemplateService.CreateTypeInstance(redType,
+                        file.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate?.Name ?? "default") ?? throw new Exception($"Failed to create instance of {redType.Name}");
 
                     CR2WFile cr2W = new()
                     {

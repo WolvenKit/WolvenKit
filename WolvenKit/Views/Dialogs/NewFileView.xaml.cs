@@ -44,9 +44,6 @@ namespace WolvenKit.Views.Dialogs
 
                 this.BindCommand(ViewModel, x => x.CancelCommand, x => x.CancelButton)
                     .DisposeWith(disposables);
-
-                this.BindCommand(ViewModel, x => x.RefreshCommand, x => x.RefreshButton)
-                    .DisposeWith(disposables);
             });
 
         }

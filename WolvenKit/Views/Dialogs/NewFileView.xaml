@@ -11,6 +11,7 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    xmlns:controls="clr-namespace:WolvenKit.Views.Controls"
     mc:Ignorable="d"
     d:DesignWidth="800"
     d:DesignHeight="600"
@@ -128,7 +129,6 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="0.25*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
@@ -144,63 +144,7 @@
                     Margin="{DynamicResource WolvenKitMarginSmallRight}"
                     FlowDirection="LeftToRight" />
 
-                <ComboBox
-                    x:Name="RedTemplateComboBox"
-                    Grid.Column="2"
-                    Margin="{DynamicResource WolvenKitMarginSmallRight}"
-                    IsEditable="False"
-                    IsReadOnly="True"
-                    ItemsSource="{Binding CurrentRedTypeTemplates.View}"
-                    SelectedItem="{Binding SelectedRedTypeTemplate}"
-                    ToolTip="Select script">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock Text="{Binding Name}" />
-                            </StackPanel>
-
-                            <DataTemplate.Triggers>
-                                <DataTrigger
-                                    Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
-                                                                                     AncestorType=ComboBoxItem}}"
-                                    Value="{x:Null}" />
-                            </DataTemplate.Triggers>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-
-                    <ComboBox.GroupStyle>
-                        <GroupStyle>
-                            <GroupStyle.HeaderTemplate>
-                                <DataTemplate>
-                                    <Border
-                                        Padding="15,0,0,7"
-                                        BorderBrush="White"
-                                        BorderThickness="0,0,0,1">
-                                        <StackPanel Orientation="Vertical">
-                                            <TextBlock
-                                                FontSize="{DynamicResource WolvenKitFontBody}"
-                                                Text="{Binding Name}" />
-                                        </StackPanel>
-                                    </Border>
-                                </DataTemplate>
-                            </GroupStyle.HeaderTemplate>
-                        </GroupStyle>
-                    </ComboBox.GroupStyle>
-                </ComboBox>
-
-                <Button
-                    x:Name="RefreshButton"
-                    Grid.Column="3"
-                    Height="Auto"
-                    Padding="0"
-                    HorizontalAlignment="Right"
-                    ToolTip="Refresh Templates">
-                    <templates:IconBox
-                        IconPack="Material"
-                        Kind="Refresh"
-                        Size="{DynamicResource WolvenKitIconTiny}"
-                        Foreground="{StaticResource WolvenKitPurple}" />
-                </Button>
+                <controls:RedTypeTemplateDropdown Grid.Column="2" ViewModel="{Binding RedTypeTemplateDropdownViewModel}"/>
             </Grid>
         </Border>
 
