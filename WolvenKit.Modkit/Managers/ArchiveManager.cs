@@ -389,7 +389,7 @@ namespace WolvenKit.RED4.CR2W.Archive
 
                 foreach (var archiveName in legacyOrder)
                 {
-                    var archiveFile = Path.Combine(legacyModPath, $"{archiveName}.archive");
+                    var archiveFile = Path.Combine(legacyModPath, archiveName);
                     if (!File.Exists(archiveFile))
                     {
                         enabledButDontExist.Add(archiveFile);
