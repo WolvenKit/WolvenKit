@@ -43,9 +43,7 @@ static class Const
 
 public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
 {
-    private readonly ITestOutputHelper _output;
     private readonly string _tempProjectRoot;
-    private readonly Cp77Project _project;
     private IHost? _host;
     private ProjectExplorerViewModel? _projectExplorerVm;
 
@@ -54,8 +52,6 @@ public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
         _tempProjectRoot = Path.Combine(Path.GetTempPath(), "WolvenKit_ConvertUITest_" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(_tempProjectRoot);
     }
-
-    private CancellationTokenSource _cts = new();
 
     [StaFact]
     public async Task WhenAnimsDbSelectedAssetBrowserRightViewHasRightItems()
@@ -96,6 +92,7 @@ public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
         NavigateToDevicesFolder(assetBrowser);
         await AddRightItemsToProject(assetBrowser);
 
+        Assert.NotNull(_projectExplorerVm);
         Assert.True(_projectExplorerVm.FileList.Count > 3600);
 
         _projectExplorerVm.IsFlatModeEnabled = true;
