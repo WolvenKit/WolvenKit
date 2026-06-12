@@ -4,6 +4,7 @@
                                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                                 xmlns:local="clr-namespace:WolvenKit.Views.Controls"
+                                xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
                                 d:DataContext="{d:DesignInstance Type=controls:RedTypeTemplateDropdownViewModel}"
                                 xmlns:controls="clr-namespace:WolvenKit.App.ViewModels.Controls;assembly=WolvenKit.App"
                                 xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
@@ -11,14 +12,15 @@
                                 mc:Ignorable="d"
                                 d:DesignHeight="30" d:DesignWidth="300">
     <StackPanel Orientation="Horizontal">
-        <ComboBox
+        <syncfusion:ComboBoxAdv
             x:Name="RedTemplateComboBox"
             Margin="{DynamicResource WolvenKitMarginSmallRight}"
             IsEditable="False"
             IsReadOnly="True"
             MinWidth="150"
-            ToolTip="Select script">
-            <ComboBox.ItemTemplate>
+            Background="{StaticResource ContentBackground}"
+            ToolTip="Select Template">
+            <syncfusion:ComboBoxAdv.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Vertical">
                         <TextBlock Text="{Binding Name}" />
@@ -27,13 +29,13 @@
                     <DataTemplate.Triggers>
                         <DataTrigger
                             Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
-                                                                             AncestorType=ComboBoxItem}}"
+                                                                             AncestorType=syncfusion:ComboBoxItemAdv}}"
                             Value="{x:Null}" />
                     </DataTemplate.Triggers>
                 </DataTemplate>
-            </ComboBox.ItemTemplate>
+            </syncfusion:ComboBoxAdv.ItemTemplate>
 
-            <ComboBox.GroupStyle>
+            <syncfusion:ComboBoxAdv.GroupStyle>
                 <GroupStyle>
                     <GroupStyle.HeaderTemplate>
                         <DataTemplate>
@@ -50,8 +52,8 @@
                         </DataTemplate>
                     </GroupStyle.HeaderTemplate>
                 </GroupStyle>
-            </ComboBox.GroupStyle>
-        </ComboBox>
+            </syncfusion:ComboBoxAdv.GroupStyle>
+        </syncfusion:ComboBoxAdv>
 
         <Button
             x:Name="RefreshButton"
@@ -68,4 +70,3 @@
         </Button>
     </StackPanel>
 </reactiveUi:ReactiveUserControl>
-
