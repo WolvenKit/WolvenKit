@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WolvenKit.App.Models.ProjectManagement;
 
@@ -14,13 +15,13 @@ public partial class WelcomePageViewModel
         public FancyProjectObject(RecentlyUsedItemModel recentlyUsedItemModel, string name, DateTime createdate, string type, string path, string image)
         {
             Item = recentlyUsedItemModel;
-
             Name = name;
             CreationDate = createdate;
             Type = type;
             ProjectPath = path;
             Image = image;
             SafeName = Path.GetFileNameWithoutExtension(name);
+            ProjectColor = new SolidColorBrush(recentlyUsedItemModel.Color);
         }
 
         #endregion Constructors
@@ -33,7 +34,7 @@ public partial class WelcomePageViewModel
         public DateTime LastEditDate { get; set; }
         public string Name { get; set; }
 
-        public string ProjectColor => ((uint)string.GetHashCode(ProjectPath) % 7).ToString();
+        public SolidColorBrush ProjectColor { get; set; }
 
         public string SafeName { get; set; }
         public string ProjectPath { get; set; }
