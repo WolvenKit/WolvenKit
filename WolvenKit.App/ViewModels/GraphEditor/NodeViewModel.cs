@@ -51,6 +51,30 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
     public ObservableCollection<InputConnectorViewModel> Input { get; } = new();
     public ObservableCollection<OutputConnectorViewModel> Output { get; } = new();
 
+    private static readonly ObservableCollection<InputConnectorViewModel> EmptyInput = new();
+    private static readonly ObservableCollection<OutputConnectorViewModel> EmptyOutput = new();
+
+    private bool _isLowDetail;
+    public bool IsLowDetail
+    {
+        get => _isLowDetail;
+        set
+        {
+            if (_isLowDetail == value)
+            {
+                return;
+            }
+
+            _isLowDetail = value;
+            OnPropertyChanged(nameof(IsLowDetail));
+            OnPropertyChanged(nameof(DisplayInput));
+            OnPropertyChanged(nameof(DisplayOutput));
+        }
+    }
+
+    public ObservableCollection<InputConnectorViewModel> DisplayInput => IsLowDetail ? EmptyInput : Input;
+    public ObservableCollection<OutputConnectorViewModel> DisplayOutput => IsLowDetail ? EmptyOutput : Output;
+
     [ObservableProperty]
     private bool _showUnusedSockets = true;
 
@@ -205,6 +229,9 @@ public abstract partial class NodeViewModel : ObservableObject, IDisposable
         // Ensure the Node Properties panel reflects the latest socket list
         if (propertyName is nameof(Input) or nameof(Output))
         {
+            OnPropertyChanged(nameof(DisplayInput));
+            OnPropertyChanged(nameof(DisplayOutput));
+
             // Notify that underlying data may have changed to refresh property panel bindings
             OnPropertyChanged(nameof(Data));
 
