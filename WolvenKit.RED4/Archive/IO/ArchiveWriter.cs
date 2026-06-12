@@ -166,7 +166,7 @@ public class ArchiveWriter
         #region write files
 
         HashSet<ulong> importsHashSet = new();
-        
+
 
         var progress = 0;
         foreach (var (hash, fileEntries) in fileDict)
@@ -424,13 +424,10 @@ public class ArchiveWriter
         }
         else
         {
-            IEnumerable<byte> outBuffer = new List<byte>();
-            var r = Oodle.Compress(inbuffer, ref outBuffer, true);
+            var r = Oodle.Compress(inbuffer, out var outBuffer, true);
 
-            var b = outBuffer.ToArray();
-
-            var crc = Crc32Algorithm.Compute(b);
-            bw.Write(b);
+            var crc = Crc32Algorithm.Compute(outBuffer);
+            bw.Write(outBuffer);
 
             return ((uint)r, crc);
         }
