@@ -11,6 +11,7 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    xmlns:controls="clr-namespace:WolvenKit.Views.Controls"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=dialogs:RedTypeTemplateManagerViewModel}"
     d:DesignWidth="800"
@@ -173,6 +174,10 @@
                 SelectedItem="{Binding SelectedType, Mode=TwoWay}"
                 KeyUp="TypeSelectorComboBox_OnKeyUp"/>
 
+            <controls:RedTypeTemplateDropdown
+                Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                ViewModel="{Binding RedTypeTemplateDropdownViewModel}" />
+
             <Button
                 Margin="{DynamicResource WolvenKitMarginSmallLeft}"
                 Click="Add_OnClick">
@@ -190,27 +195,6 @@
                         Margin="{DynamicResource WolvenKitMarginSmallLeft}"
                         VerticalAlignment="Center"
                         Text="Add" />
-                </StackPanel>
-            </Button>
-
-            <Button
-                Margin="{DynamicResource WolvenKitMarginSmallLeft}"
-                HorizontalAlignment="Right"
-                Command="{Binding LoadTemplatesCommand}">
-                <StackPanel
-                    Margin="{DynamicResource WolvenKitMarginSmallHorizontal}"
-                    Orientation="Horizontal">
-                    <templates:IconBox
-                        IconPack="Material"
-                        Kind="Refresh"
-                        Margin="{DynamicResource WolvenKitMarginTinyVertical}"
-                        Size="{DynamicResource WolvenKitIconTiny}"
-                        Foreground="{StaticResource WolvenKitPurple}" />
-
-                    <TextBlock
-                        Margin="{DynamicResource WolvenKitMarginSmallLeft}"
-                        VerticalAlignment="Center"
-                        Text="Update Templates" />
                 </StackPanel>
             </Button>
         </DockPanel>

@@ -4,11 +4,13 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Controls;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
@@ -17,6 +19,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
+using Activator = System.Activator;
 
 namespace WolvenKit.App.ViewModels.Dialogs;
 
@@ -37,7 +40,8 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
         _loggerService = loggerService;
         _cr2wTools = cr2wTools;
 
-        LoadTemplates();
+        RedTypeTemplateDropdownViewModel = new RedTypeTemplateDropdownViewModel(templateService);
+        RedTypeTemplateDropdownViewModel.PostRefresh += (_, _) => LoadTemplates();
 
         ValidNewTypes = new ObservableCollection<TypeDesc>(AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(s => s.GetTypes())
@@ -48,10 +52,23 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
         SelectedType = ValidNewTypes.FirstOrDefault()!;
     }
 
+    public RedTypeTemplateDropdownViewModel RedTypeTemplateDropdownViewModel { get; }
     public ObservableCollection<RedTypeTemplateDescriptorManagerExt> Templates { get; } = new();
 
-    public TypeDesc SelectedType { get; set; }
+    [ObservableProperty]
+    private TypeDesc _selectedType;
     public ObservableCollection<TypeDesc> ValidNewTypes { get; }
+
+    partial void OnSelectedTypeChanged(TypeDesc value)
+    {
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+        if (value is null)
+        {
+            return;
+        }
+
+        RedTypeTemplateDropdownViewModel.RequestedType = value.Type;
+    }
 
     public async Task AddTemplate(Type type, string name)
     {
@@ -68,7 +85,17 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
             }
         }
 
-        var typeInstance = _templateService.CreateTypeInstance(type) ?? throw new Exception("Failed to create type instance");
+        RedBaseClass typeInstance;
+
+        if (RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate is not null &&
+            RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate.Source != RedTypeTemplateDescriptorExtSource.Raw)
+        {
+            typeInstance = _templateService.CreateTypeInstance(RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate) ?? throw new Exception("Failed to create type instance");
+        }
+        else
+        {
+            typeInstance = (RedBaseClass?)Activator.CreateInstance(type) ?? throw new Exception("Failed to create type instance");
+        }
 
         _templateService.WriteTemplate(typeInstance, name);
 
@@ -86,10 +113,8 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
     [RelayCommand]
     private void Cancel() => _appViewModel.CloseModalCommand.Execute(null);
 
-    [RelayCommand]
-    public void LoadTemplates()
+    private void LoadTemplates()
     {
-        _templateService.LoadTemplates();
         Templates.Clear();
         Templates.AddRange(_templateService.UserTemplates.Select(t => new RedTypeTemplateDescriptorManagerExt(t, RedTypeTemplateDescriptorExtSource.User)));
         Templates.AddRange(_templateService.SystemTemplates.Select(t => new RedTypeTemplateDescriptorManagerExt(t, RedTypeTemplateDescriptorExtSource.System)));

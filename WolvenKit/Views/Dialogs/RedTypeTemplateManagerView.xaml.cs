@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
+using Microsoft.Extensions.Logging;
 using ReactiveUI;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.App.ViewModels.Dialogs;

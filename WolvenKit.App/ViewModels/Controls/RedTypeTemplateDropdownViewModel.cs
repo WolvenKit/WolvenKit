@@ -36,6 +36,8 @@ public partial class RedTypeTemplateDropdownViewModel : ObservableObject
         _ = Refresh();
     }
 
+    public event EventHandler? PostRefresh;
+
     private List<RedTypeTemplateDescriptorExt> defaultList;
 
     [ObservableProperty]
@@ -68,6 +70,8 @@ public partial class RedTypeTemplateDropdownViewModel : ObservableObject
         SelectedRedTypeTemplate = GetInitialTemplateForSelectedFile();
         CurrentRedTypeTemplates?.View.Refresh();
         ApplyTemplateCustomSort(CurrentRedTypeTemplates);
+
+        PostRefresh?.Invoke(this, EventArgs.Empty);
     }
 
     private void IndexRedTypeTemplates()
