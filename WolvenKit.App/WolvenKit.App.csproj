@@ -76,6 +76,7 @@
     <PackageReference Include="Nodify" />
     <PackageReference Include="Splat" />
     <PackageReference Include="ReactiveUI" />
+    <PackageReference Include="SwiftXState" />
   </ItemGroup>
 
   <ItemGroup>

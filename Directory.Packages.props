@@ -65,6 +65,7 @@
     <PackageVersion Include="Splat" Version="15.3.1" />
     <PackageVersion Include="Splat.Microsoft.Extensions.DependencyInjection" Version="15.3.1" />
     <PackageVersion Include="Splat.Microsoft.Extensions.Logging" Version="15.3.1" />
+    <PackageVersion Include="SwiftXState" Version="0.9.6" />
     <PackageVersion Include="Syncfusion.Edit.WPF" Version="30.2.4" />
     <PackageVersion Include="Syncfusion.PropertyGrid.WPF" Version="30.2.4" />
     <PackageVersion Include="Syncfusion.SfAccordion.WPF" Version="30.2.4" />
