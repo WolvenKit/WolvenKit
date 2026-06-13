@@ -76,11 +76,17 @@ public partial class ProjectExplorerViewModel
 
         private readonly CompositeDisposable _disposables = new();
 
-        [ObservableProperty]
-        private DispatchedObservableCollection<FileSystemModel> _fileList = new();
+        // The grids bind to the GridGuard's clone projection, not to these. These are the DOMAIN
+        // models the watcher builds and the rest of the app mutates freely. After each domain
+        // mutation the watcher calls _guard.Project*(...) so the shim updates the clones the grids
+        // actually show — that indirection is what keeps the wild mutations off the Syncfusion grids.
+        private readonly GridGuard _guard;
 
-        [ObservableProperty]
-        private DispatchedObservableCollection<FileSystemModel> _fileTree = new();
+        private readonly DispatchedObservableCollection<FileSystemModel> _fileList = new();
+        private readonly DispatchedObservableCollection<FileSystemModel> _fileTree = new();
+
+        public DispatchedObservableCollection<FileSystemModel> FileList => _fileList;
+        public DispatchedObservableCollection<FileSystemModel> FileTree => _fileTree;
 
 
         private static readonly List<string> s_ignoredExtensions =
@@ -107,10 +113,11 @@ public partial class ProjectExplorerViewModel
 
         #endregion
 
-        public WatcherService(Func<string, bool> getDesiredExpansionState, ILoggerService? loggerService, IProjectEvents projectEvents)
+        public WatcherService(Func<string, bool> getDesiredExpansionState, ILoggerService? loggerService, IProjectEvents projectEvents, GridGuard guard)
         {
             _loggerService = loggerService;
             _getDesiredExpansionState = getDesiredExpansionState;
+            _guard = guard;
 
             _modsWatcher = new FileSystemWatcher
             {
@@ -267,6 +274,7 @@ public partial class ProjectExplorerViewModel
                 }
 
                 item.UpdateFileInfo();
+                _guard.ProjectUpdateFileInfo(item);
             }
 
             void Renamed(FileSystemEventArgsWrapper e)
@@ -306,7 +314,10 @@ public partial class ProjectExplorerViewModel
                     }
 
                     var newName = renamedEventArgs.Name.Split(Path.DirectorySeparatorChar)[^1];
+                    // Capture the clone key before the rename changes FullName, then project it.
+                    var oldFullName = item.FullName;
                     item.Rename(newName);
+                    _guard.ProjectRename(item, oldFullName);
                 }
             }
 
@@ -346,6 +357,9 @@ public partial class ProjectExplorerViewModel
 
             if (removedAt != 0)
                 _removedFiles.TryAdd(model.FullName, removedAt);
+
+            // Mirror the removal onto the grid-bound clone subtree.
+            _guard.ProjectRemove(model);
         }
 
         private void RemoveChildModels(FileSystemModel model)
@@ -366,7 +380,11 @@ public partial class ProjectExplorerViewModel
             foreach (var item in items)
             {
                 if (item == null) continue;
-                RemoveModel(item, DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond);
+                // `item` is usually a grid clone (it came from the grid's SelectedItems). Resolve it
+                // to the domain model of the same path so RemoveModel operates on real domain state;
+                // RemoveModel then projects the removal back onto the clones.
+                var domain = _fileLookup.TryGetValue(item.FullName, out var d) ? d : item;
+                RemoveModel(domain, DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond);
             }
         }
 
@@ -415,6 +433,9 @@ public partial class ProjectExplorerViewModel
                     FileTree.AddRange((treeRoot != null)
                         ? treeRoot.Children
                         : Array.Empty<FileSystemModel>());
+
+                    // Project the freshly built domain tree onto the grid-bound clones.
+                    _guard.ProjectReset(flatListReturn, treeRoot?.Children.ToList() ?? new List<FileSystemModel>());
 
                     DispatcherHelper.StopRepeatingAction(CompletionTimer);
                     StartBackgroundPolling();
@@ -738,6 +759,8 @@ public partial class ProjectExplorerViewModel
                         FileTree.AddRange(created);
                     }
 
+                    _guard.ProjectAdd(created);
+
                 }, DispatcherPriority.Background);
             }
         }
@@ -816,6 +839,7 @@ public partial class ProjectExplorerViewModel
             }
 
             FileList.AddRange(batch);
+            _guard.ProjectAdd(batch);
             Resume();
 
             // Log added files in the background to avoid hanging the UI on very large imports.

@@ -86,8 +86,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private CancellationTokenSource _deferredRefreshCts = new();
     private readonly ImportExportHelper _importExportHelper;
 
-    public DispatchedObservableCollection<FileSystemModel> FileTree => _projectWatcher.FileTree;
-    public DispatchedObservableCollection<FileSystemModel> FileList => _projectWatcher.FileList;
+    // Bound to TreeGrid.ItemsSource / TreeGridFlat.ItemsSource by the View. The collections are
+    // owned by the GridGuard (the watcher mutates those same instances), so the grids' single
+    // source of truth is the guard.
+    public DispatchedObservableCollection<FileSystemModel> FileTree => _gridGuard.FileTree;
+    public DispatchedObservableCollection<FileSystemModel> FileList => _gridGuard.FileList;
     public WatcherState FileWatcherState => _projectWatcher.WatcherState;
     public Func<CancellationToken, Task, Task>? BeginDeferredRefreshContext { get; set; }
     public Dictionary<string, bool> ExpansionStateDictionary = [];
@@ -129,7 +132,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         _appViewModel = appViewModel;
 
-        _projectWatcher = new WatcherService(GetDesiredExpansionState, loggerService, projectEvents);
+        _projectWatcher = new WatcherService(GetDesiredExpansionState, loggerService, projectEvents, _gridGuard);
 
         SideInDockedMode = DockSide.Left;
 
@@ -243,6 +246,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private void EnableLoadingMode(bool isReload)
     {
+        // Loading/reloading a project is the archetypal "making changes to files then redrawing the
+        // grids" flow, so it drives the guard's machine: Ready -> MakingChangesToFiles here, and
+        // DisableLoadingMode walks it through AwaitingRedrawsOfGrids back to Ready when the rebuild
+        // finishes. While not-Ready, GridsLocked is true and outside writers stay off the grids.
+        _gridGuard.NotifyChangeRequested();
+        _gridGuard.BeginChanges();
+
         _loadingCompletion = DispatcherHelper.StartRepeatingAction(
             () =>
             {
@@ -261,6 +271,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     {
         _progressService.IsIndeterminate = false;
         OnSetLoading?.Invoke(this, (false, false));
+
+        // The rebuild is done and the grids have their new nodes — walk the machine back to Ready
+        // (MakingChangesToFiles -> AwaitingRedrawsOfGrids -> Ready). ForceReady is safe to call from
+        // any mode, so this can't strand the guard if the load took an unusual path.
+        _gridGuard.ForceReady();
+
         _loggerService?.Success($"Loaded project: {ActiveProject!.ProjectDirectory} ({FileList.Count} files). File watcher active.");
     }
 
@@ -1039,7 +1055,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         ResumeWatcher_AndReloadProject();
     }
 
-    public void ResumeFileWatcher() => _projectWatcher.Resume();
+    public void ResumeFileWatcher()
+    {
+        _projectWatcher.Resume();
+        // The watcher is live again, so the grids are back to a safe, mutable state. ForceReady is a
+        // no-op if we were already Ready, so calling it here can never strand the guard.
+        _gridGuard.ForceReady();
+    }
 
     public void UnwatchProject() => _projectWatcher.UnwatchProject();
 
@@ -2068,6 +2090,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         try
         {
             _projectWatcher.Suspend();
+            // Suspending the watcher means a high-level operation is about to mutate files behind the
+            // grids. Move the guard into MakingChangesToFiles so GridsLocked is true for the duration;
+            // ResumeFileWatcher (or the next load) walks it back to Ready.
+            _gridGuard.NotifyChangeRequested();
+            _gridGuard.BeginChanges();
         }
         catch
         {
