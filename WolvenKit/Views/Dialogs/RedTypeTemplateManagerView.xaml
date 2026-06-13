@@ -22,9 +22,7 @@
     <Grid Margin="{DynamicResource WolvenKitMarginSmall}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
@@ -45,119 +43,157 @@
             </Button>
         </DockPanel>
 
-        <syncfusion:SfDataGrid
-            Margin="{StaticResource WolvenKitMarginBottom}"
-            x:Name="TemplateDataGrid"
-            Grid.Row="2"
-            FontSize="{DynamicResource WolvenKitFontSubTitle}"
-            HeaderRowHeight="{DynamicResource WolvenKitTreeRowHeaderHeight}"
-            RowHeight="{DynamicResource WolvenKitTreeRowHeight}"
-            Background="{StaticResource ContentBackground}"
-            BorderBrush="#373737"
-            GridLinesVisibility="Both"
-            AutoGenerateColumns="False"
-            ItemsSource="{Binding Templates}"
-            NavigationMode="Row"
-            AllowGrouping="True"
-            ShowGroupDropArea="False"
-            AutoExpandGroups="True"
-            LiveDataUpdateMode="AllowDataShaping"
-            MouseDoubleClick="TemplateDataGrid_OnMouseDoubleClick">
+        <Grid
+            Grid.Row="1"
+            Margin="{StaticResource WolvenKitMarginBottom}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-            <syncfusion:SfDataGrid.Resources>
-                <!-- Normal data cell grid lines -->
-                <Style TargetType="syncfusion:GridCell">
-                    <Setter Property="BorderBrush" Value="#373737" />
-                </Style>
+            <syncfusion:SfDataGrid
+                x:Name="TemplateDataGrid"
+                Grid.Column="0"
+                FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                HeaderRowHeight="{DynamicResource WolvenKitTreeRowHeaderHeight}"
+                RowHeight="{DynamicResource WolvenKitTreeRowHeight}"
+                SelectedItem="{Binding SelectedTemplate}"
+                Background="{StaticResource ContentBackground}"
+                BorderBrush="#373737"
+                GridLinesVisibility="Both"
+                AutoGenerateColumns="False"
+                ItemsSource="{Binding Templates}"
+                NavigationMode="Row"
+                AllowGrouping="True"
+                ShowGroupDropArea="False"
+                AutoExpandGroups="True"
+                LiveDataUpdateMode="AllowDataShaping"
+                MouseDoubleClick="TemplateDataGrid_OnMouseDoubleClick">
 
-                <!-- Main column headers: Name / Type / Action -->
-                <Style TargetType="syncfusion:GridHeaderCellControl">
-                    <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
-                    <Setter Property="BorderBrush" Value="#373737" />
-                </Style>
+                <syncfusion:SfDataGrid.Resources>
+                    <!-- Normal data cell grid lines -->
+                    <Style TargetType="syncfusion:GridCell">
+                        <Setter Property="BorderBrush" Value="#373737" />
+                    </Style>
 
-                <!-- Group/source sub headers -->
-                <Style TargetType="syncfusion:GridCaptionSummaryCell">
-                    <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
-                    <Setter Property="BorderBrush" Value="#373737" />
-                </Style>
+                    <!-- Main column headers: Name / Type / Action -->
+                    <Style TargetType="syncfusion:GridHeaderCellControl">
+                        <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
+                        <Setter Property="BorderBrush" Value="#373737" />
+                    </Style>
 
-                <!-- Grid outer border when style-based resolution is needed -->
-                <Style TargetType="syncfusion:SfDataGrid">
-                    <Setter Property="BorderBrush" Value="#373737" />
-                </Style>
+                    <!-- Group/source sub headers -->
+                    <Style TargetType="syncfusion:GridCaptionSummaryCell">
+                        <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
+                        <Setter Property="BorderBrush" Value="#373737" />
+                    </Style>
 
-                <!-- Group drop area border, if enabled later -->
-                <Style TargetType="syncfusion:GroupDropArea">
-                    <Setter Property="BorderBrush" Value="#373737" />
-                </Style>
+                    <!-- Grid outer border when style-based resolution is needed -->
+                    <Style TargetType="syncfusion:SfDataGrid">
+                        <Setter Property="BorderBrush" Value="#373737" />
+                    </Style>
 
-                <!-- Indent cells used by grouping/expander area -->
-                <Style TargetType="syncfusion:GridIndentCell">
-                    <Setter Property="BorderBrush" Value="#373737" />
-                </Style>
-            </syncfusion:SfDataGrid.Resources>
+                    <!-- Group drop area border, if enabled later -->
+                    <Style TargetType="syncfusion:GroupDropArea">
+                        <Setter Property="BorderBrush" Value="#373737" />
+                    </Style>
 
-            <syncfusion:SfDataGrid.SortColumnDescriptions>
-                <syncfusion:SortColumnDescription
-                    ColumnName="TypeName"
-                    SortDirection="Ascending" />
-            </syncfusion:SfDataGrid.SortColumnDescriptions>
+                    <!-- Indent cells used by grouping/expander area -->
+                    <Style TargetType="syncfusion:GridIndentCell">
+                        <Setter Property="BorderBrush" Value="#373737" />
+                    </Style>
+                </syncfusion:SfDataGrid.Resources>
 
-            <syncfusion:SfDataGrid.GroupColumnDescriptions>
-                <syncfusion:GroupColumnDescription ColumnName="Source" />
-            </syncfusion:SfDataGrid.GroupColumnDescriptions>
+                <syncfusion:SfDataGrid.SortColumnDescriptions>
+                    <syncfusion:SortColumnDescription
+                        ColumnName="TypeName"
+                        SortDirection="Ascending" />
+                </syncfusion:SfDataGrid.SortColumnDescriptions>
 
-            <syncfusion:SfDataGrid.Columns>
-                <syncfusion:GridTextColumn
-                    HeaderText="Name"
-                    MappingName="Name"
-                    ColumnSizer="Star" />
+                <syncfusion:SfDataGrid.GroupColumnDescriptions>
+                    <syncfusion:GroupColumnDescription ColumnName="Source" />
+                </syncfusion:SfDataGrid.GroupColumnDescriptions>
 
-                <syncfusion:GridTextColumn
-                    HeaderText="Type"
-                    MappingName="TypeName"/>
+                <syncfusion:SfDataGrid.Columns>
+                    <syncfusion:GridTextColumn
+                        HeaderText="Name"
+                        MappingName="Name"
+                        ColumnSizer="Star" />
 
-                <syncfusion:GridTemplateColumn
-                    HeaderText="Action"
-                    AllowSorting="False"
-                    MappingName="Name">
-                    <syncfusion:GridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Button
-                                    Margin="{DynamicResource WolvenKitMarginSmallLeft}"
-                                    Click="Edit_OnClick"
-                                    ToolTip="Edit">
-                                    <iconPacks:PackIconMaterial
-                                        Kind="FileEdit"
-                                        Width="{DynamicResource WolvenKitIconMicro}"
-                                        Height="{DynamicResource WolvenKitIconMicro}"
-                                        Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
-                                        Foreground="{StaticResource WolvenKitGreen}" />
-                                </Button>
+                    <syncfusion:GridTextColumn
+                        HeaderText="Type"
+                        MappingName="TypeName"/>
 
-                                <Button
-                                    Margin="{DynamicResource WolvenKitMarginSmallLeft}"
-                                    Visibility="{Binding CanEdit,
-                                                         Converter={StaticResource BooleanToVisibilityConverter}}"
-                                    Click="Delete_OnClick"
-                                    ToolTip="Delete">
-                                    <iconPacks:PackIconMaterial
-                                        Kind="Delete"
-                                        Width="{DynamicResource WolvenKitIconMicro}"
-                                        Height="{DynamicResource WolvenKitIconMicro}"
-                                        Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
-                                        Foreground="{StaticResource WolvenKitRed}" />
-                                </Button>
-                            </StackPanel>
-                        </DataTemplate>
-                    </syncfusion:GridTemplateColumn.CellTemplate>
-                </syncfusion:GridTemplateColumn>
-            </syncfusion:SfDataGrid.Columns>
-        </syncfusion:SfDataGrid>
+                    <syncfusion:GridTemplateColumn
+                        HeaderText="Action"
+                        AllowSorting="False"
+                        MappingName="Name">
+                        <syncfusion:GridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button
+                                        Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                                        Click="Edit_OnClick"
+                                        ToolTip="Edit">
+                                        <iconPacks:PackIconMaterial
+                                            Kind="FileEdit"
+                                            Width="{DynamicResource WolvenKitIconMicro}"
+                                            Height="{DynamicResource WolvenKitIconMicro}"
+                                            Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
+                                            Foreground="{StaticResource WolvenKitGreen}" />
+                                    </Button>
 
-        <DockPanel Grid.Row="4">
+                                    <Button
+                                        Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                                        Visibility="{Binding CanEdit,
+                                                             Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        Click="Delete_OnClick"
+                                        ToolTip="Delete">
+                                        <iconPacks:PackIconMaterial
+                                            Kind="Delete"
+                                            Width="{DynamicResource WolvenKitIconMicro}"
+                                            Height="{DynamicResource WolvenKitIconMicro}"
+                                            Margin="{DynamicResource WolvenKitMarginTinyHorizontal}"
+                                            Foreground="{StaticResource WolvenKitRed}" />
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </syncfusion:GridTemplateColumn.CellTemplate>
+                    </syncfusion:GridTemplateColumn>
+                </syncfusion:SfDataGrid.Columns>
+            </syncfusion:SfDataGrid>
+
+            <Border
+                Grid.Column="1"
+                BorderBrush="#373737"
+                BorderThickness="1"
+                Padding="{StaticResource WolvenKitMarginSmall}"
+                Background="{StaticResource ContentBackground}">
+                <Grid
+                    Background="{StaticResource ContentBackground}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Version" Margin="{StaticResource WolvenKitMarginSmallRight}"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SelectedTemplate.Version, TargetNullValue=''}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Author" Margin="{StaticResource WolvenKitMarginSmallRight}"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SelectedTemplate.Author, TargetNullValue=''}"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Description" Margin="{StaticResource WolvenKitMarginSmallRight}"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding SelectedTemplate.Description, TargetNullValue=''}" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <DockPanel Grid.Row="2">
             <hc:TextBox
                 x:Name="FileNameTextBox"
                 Width="{DynamicResource WolvenKitScriptManagerFileNameWidth}"

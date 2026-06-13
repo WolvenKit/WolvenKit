@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.CR2W.JSON;
@@ -79,7 +80,7 @@ public class RedTypeTemplateService
 
             try
             {
-                var template = ReadTemplate(type, File.ReadAllText(f.FullName));
+                var template = DeserializeTemplate(type, File.ReadAllText(f.FullName));
 
                 if (template.Data is null)
                 {
@@ -134,7 +135,7 @@ public class RedTypeTemplateService
     /// <exception cref="Exception">Template File contains invalid or mismatched data</exception>
     /// <remarks>When using <see cref="TemplateSource.Auto"/>, user templates are preferred over system templates.</remarks>
     public RedBaseClass? CreateTypeInstance(Type type, string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
-        ReadTemplate(type, templateName, src) ?? ReadTemplate(type, "default", src) ?? (RedBaseClass?)Activator.CreateInstance(type);
+        ReadTemplate(type, templateName, src)?.Data ?? ReadTemplate(type, "default", src)?.Data ?? (RedBaseClass?)Activator.CreateInstance(type);
 
     /// <summary>
     /// Reads a template from the system or user template directory and returns an instance of the templated object.
@@ -145,7 +146,7 @@ public class RedTypeTemplateService
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     /// <exception cref="Exception">Template File contains invalid or mismatched data</exception>
     /// <remarks>When using <see cref="TemplateSource.Auto"/>, user templates are preferred over system templates.</remarks>
-    public RedBaseClass? ReadTemplate(RedTypeTemplateDescriptor templateDescriptor, TemplateSource src = TemplateSource.Auto) => ReadTemplate(templateDescriptor.Type, templateDescriptor.Name, src);
+    public RedTypeTemplate? ReadTemplate(RedTypeTemplateDescriptor templateDescriptor, TemplateSource src = TemplateSource.Auto) => ReadTemplate(templateDescriptor.Type, templateDescriptor.Name, src);
 
     /// <summary>
     /// Reads a template from the system or user template directory and returns an instance of the templated object.
@@ -156,7 +157,7 @@ public class RedTypeTemplateService
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     /// <exception cref="Exception">Template File contains invalid or mismatched data</exception>
     /// <remarks>When using <see cref="TemplateSource.Auto"/>, user templates are preferred over system templates.</remarks>
-    public RedBaseClass? ReadTemplate<T>(string templateName = "default", TemplateSource src = TemplateSource.Auto) => ReadTemplate(typeof(T), templateName, src);
+    public RedTypeTemplate? ReadTemplate<T>(string templateName = "default", TemplateSource src = TemplateSource.Auto) => ReadTemplate(typeof(T), templateName, src);
 
     /// <summary>
     /// Reads a template from the system or user template directory and returns an instance of the templated object.
@@ -168,7 +169,7 @@ public class RedTypeTemplateService
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     /// <exception cref="Exception">Template File contains invalid or mismatched data</exception>
     /// <remarks>When using <see cref="TemplateSource.Auto"/>, user templates are preferred over system templates.</remarks>
-    public RedBaseClass? ReadTemplate(Type type, string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
+    public RedTypeTemplate? ReadTemplate(Type type, string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
         src switch
         {
             TemplateSource.Auto => ReadTemplate(type, templateName, UserTemplates) ??
@@ -178,12 +179,12 @@ public class RedTypeTemplateService
             _ => throw new ArgumentOutOfRangeException(nameof(src), src, null)
         };
 
-    private RedBaseClass? ReadTemplate(Type templateType, string templateName, List<RedTypeTemplateDescriptor> templates)
+    private RedTypeTemplate? ReadTemplate(Type templateType, string templateName, List<RedTypeTemplateDescriptor> templates)
     {
         lock (_lock)
         {
             var template = templates.FirstOrDefault(t => t.Name == templateName && t.Type == templateType);
-            return template == null ? null : ReadTemplate(templateType, File.ReadAllText(template.FilePath)).Data;
+            return template == null ? null : DeserializeTemplate(templateType, File.ReadAllText(template.FilePath));
         }
     }
 
@@ -194,18 +195,16 @@ public class RedTypeTemplateService
     /// <summary>
     /// Writes a template to the system or user template directory.
     /// </summary>
-    /// <param name="templateData">Instance of the object to act as a template</param>
+    /// <param name="template">Instance of the template</param>
     /// <param name="templateName">Name of the template</param>
     /// <param name="dst">Template category destination</param>
     /// <remarks>If a template with that name already exists, it will be overwritten.</remarks>
-    public void WriteTemplate(RedBaseClass templateData, string templateName, TemplateDestination dst = TemplateDestination.User)
+    /// <exception cref="ArgumentNullException">Template Data property is null</exception>
+    public void WriteTemplate(RedTypeTemplate template, string templateName, TemplateDestination dst = TemplateDestination.User)
     {
-        var fn = Path.Join(dst == TemplateDestination.User ? _userTemplateDir : _systemTemplateDir, $"{templateName}.{templateData.GetType().Name}.json");
-        var template = new RedTypeTemplate()
-        {
-            Version = 1,
-            Data = templateData
-        };
+        ArgumentNullException.ThrowIfNull(template.Data, nameof(template.Data));
+
+        var fn = Path.Join(dst == TemplateDestination.User ? _userTemplateDir : _systemTemplateDir, $"{templateName}.{template.Data.GetType().Name}.json");
         var js = RedJsonSerializer.Serialize(template);
 
         lock (_lock)
@@ -213,9 +212,9 @@ public class RedTypeTemplateService
             File.WriteAllText(fn, js);
 
             var templateList = dst == TemplateDestination.User ? UserTemplates : SystemTemplates;
-            if (!templateList.Any(t => t.Name.Equals(templateName, StringComparison.CurrentCultureIgnoreCase) && t.Type == templateData.GetType()))
+            if (!templateList.Any(t => t.Name.Equals(templateName, StringComparison.CurrentCultureIgnoreCase) && t.Type == template.Data.GetType()))
             {
-                templateList.Add(new RedTypeTemplateDescriptor(templateName, templateData.GetType(), fn));
+                templateList.Add(new RedTypeTemplateDescriptor(templateName, template.Data.GetType(), fn));
             }
         }
     }
@@ -306,26 +305,33 @@ public class RedTypeTemplateService
         .SelectMany(a => a.GetTypes())
         .FirstOrDefault(t => t.Name == typeName);
 
-    private static RedTypeTemplate ReadTemplate(Type type, string json)
+    private static RedTypeTemplate DeserializeTemplate(Type type, string json)
     {
         var doc = JsonDocument.Parse(json);
 
-        var versionPresent = doc.RootElement.TryGetProperty("Version", out var version);
+        var formatVersionPresent = doc.RootElement.TryGetProperty("FormatVersion", out var formatVersion);
         var dataPresent = doc.RootElement.TryGetProperty("Data", out var data);
 
-        if (!versionPresent)
+        if (!formatVersionPresent)
         {
-            throw new Exception("Template file is missing version property");
+            throw new Exception("Template file is missing FormatVersion property");
         }
 
         if (!dataPresent)
         {
-            throw new Exception("Template file is missing data property");
+            throw new Exception("Template file is missing Data property");
         }
+
+        doc.RootElement.TryGetProperty("Author", out var author);
+        doc.RootElement.TryGetProperty("Description", out var description);
+        doc.RootElement.TryGetProperty("Version", out var version);
 
         return new RedTypeTemplate
         {
-            Version = version.GetInt32(),
+            FormatVersion = formatVersion.GetInt32(),
+            Author = author.GetStringOrDefault(),
+            Description = description.GetStringOrDefault(),
+            Version = version.GetStringOrDefault(),
             Data = (RedBaseClass?)RedJsonSerializer.Deserialize(type, data)
         };
     }

@@ -4,6 +4,40 @@ namespace WolvenKit.Common.Model;
 
 public class RedTypeTemplateManagerOption : RedTypeTemplateSelectionOption
 {
+    public RedTypeTemplate Template;
+
+    public string Author
+    {
+        get => Template.Author;
+        set
+        {
+            Template.Author = value;
+            IsDirty = true;
+        }
+    }
+
+    public string Description
+    {
+        get => Template.Description;
+        set
+        {
+            Template.Description = value;
+            IsDirty = true;
+        }
+    }
+
+    public string Version
+    {
+        get => Template.Version;
+        set
+        {
+            Template.Version = value;
+            IsDirty = true;
+        }
+    }
+
+    public bool IsDirty = false;
+
     public bool CanEdit
     {
         get => Source == RedTypeTemplateSelectionOptionSource.User;
@@ -11,18 +45,14 @@ public class RedTypeTemplateManagerOption : RedTypeTemplateSelectionOption
 
     public string TypeName => Type.Name;
 
-    public RedTypeTemplateManagerOption(RedTypeTemplateDescriptor template,
-        RedTypeTemplateSelectionOptionSource src)
+    public RedTypeTemplateManagerOption(RedTypeTemplateDescriptor templateDesc,
+        RedTypeTemplateSelectionOptionSource src, RedTypeTemplate template)
     {
-        Name = template.Name;
-        Type = template.Type;
-        FilePath = template.FilePath;
+        Name = templateDesc.Name;
+        Type = templateDesc.Type;
+        FilePath = templateDesc.FilePath;
         Source = src;
+
+        Template = template;
     }
-
-    public RedTypeTemplateManagerOption(string name, Type type, string filepath,
-        RedTypeTemplateSelectionOptionSource src)
-        : base(name, type, filepath, src) { }
-
-    public RedTypeTemplateManagerOption() : base() { }
 }

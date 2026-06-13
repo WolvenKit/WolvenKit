@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -56,6 +57,9 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
     public ObservableCollection<RedTypeTemplateManagerOption> Templates { get; } = new();
 
     [ObservableProperty]
+    private RedTypeTemplateManagerOption? _selectedTemplate;
+
+    [ObservableProperty]
     private TypeDesc _selectedType;
     public ObservableCollection<TypeDesc> ValidNewTypes { get; }
 
@@ -102,13 +106,14 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
             throw new Exception($"Failed to create instance of type {type.Name}");
         }
 
-        _templateService.WriteTemplate(typeInstance, name);
+        _templateService.WriteTemplate(new RedTypeTemplate { Data = typeInstance }, name);
+        var userTemplate = _templateService.ReadTemplate(type, name, TemplateSource.User) ?? throw new Exception($"Failed to read user template `{name}` of type `{type.Name}`");
 
         if (!Templates.Any(t => t.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase) && t.Type == type && t.Source == RedTypeTemplateSelectionOptionSource.User))
         {
             Templates.Add(new RedTypeTemplateManagerOption(
                 _templateService.UserTemplates.First(t => t.Name == name && t.Type == type),
-                RedTypeTemplateSelectionOptionSource.User));
+                RedTypeTemplateSelectionOptionSource.User, userTemplate));
         }
     }
 
@@ -121,8 +126,12 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
     private void LoadTemplates()
     {
         Templates.Clear();
-        Templates.AddRange(_templateService.UserTemplates.Select(t => new RedTypeTemplateManagerOption(t, RedTypeTemplateSelectionOptionSource.User)));
-        Templates.AddRange(_templateService.SystemTemplates.Select(t => new RedTypeTemplateManagerOption(t, RedTypeTemplateSelectionOptionSource.System)));
+        Templates.AddRange(_templateService
+            .UserTemplates.Select(t => new RedTypeTemplateManagerOption(t, RedTypeTemplateSelectionOptionSource.User,
+                _templateService.ReadTemplate(t, TemplateSource.User)!)));
+        Templates.AddRange(_templateService
+            .SystemTemplates.Select(t => new RedTypeTemplateManagerOption(t, RedTypeTemplateSelectionOptionSource.System,
+                _templateService.ReadTemplate(t, TemplateSource.System)!)));
     }
 
     public async Task EditFile(RedTypeTemplateManagerOption templateDesc)
@@ -156,12 +165,13 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
                 }
             }
 
-            var systemTemplateData = _templateService.ReadTemplate(desc) ?? throw new Exception($"Failed to read system template `{desc.Name}` of type `{desc.Type.Name}`");
-            _templateService.WriteTemplate(systemTemplateData, desc.Name);
+            var systemTemplate = _templateService.ReadTemplate(desc) ?? throw new Exception($"Failed to read system template `{desc.Name}` of type `{desc.Type.Name}`");
+            _templateService.WriteTemplate(systemTemplate, desc.Name);
+            var userTemplate = _templateService.ReadTemplate(desc, TemplateSource.User) ?? throw new Exception($"Failed to read user template `{desc.Name}` of type `{desc.Type.Name}`");
 
             desc = new RedTypeTemplateManagerOption(
                 _templateService.UserTemplates.First(t => t.Name.Equals(desc.Name, StringComparison.OrdinalIgnoreCase) && t.Type == desc.Type),
-                RedTypeTemplateSelectionOptionSource.User);
+                RedTypeTemplateSelectionOptionSource.User, userTemplate);
 
             if (!Templates.Any(t => t.Name.Equals(desc.Name, StringComparison.OrdinalIgnoreCase) && t.Type == desc.Type && t.Source == RedTypeTemplateSelectionOptionSource.User))
             {
@@ -174,11 +184,12 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
         #region Temp CR2W File Creation
 
         var tempFile = Path.Combine(Path.GetTempPath(), $"{desc.Name}.{desc.Type.Name}.tempcr2w");
+        RedTypeTemplate? template = null;
 
         var tempFileCreated = await Task.Run(() =>
         {
-            var data = _templateService.ReadTemplate(desc);
-            if (data is null)
+            template = _templateService.ReadTemplate(desc);
+            if (template?.Data is null)
             {
                 _loggerService.Error($"Failed to read template: {desc.FilePath}");
                 return false;
@@ -186,7 +197,7 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
 
             var cr2W = new CR2WFile
             {
-                RootChunk = data
+                RootChunk = template.Data
             };
 
             if (!_cr2wTools.WriteCr2W(cr2W, tempFile))
@@ -198,7 +209,7 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
             return true;
         });
 
-        if (!tempFileCreated)
+        if (!tempFileCreated || template is null)
         {
             return;
         }
@@ -260,8 +271,8 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
                 {
                     return;
                 }
-
-                _templateService.WriteTemplate(doc.Cr2wFile.RootChunk, desc.Name);
+                template.Data = doc.Cr2wFile.RootChunk;
+                _templateService.WriteTemplate(template, desc.Name);
                 _loggerService.Success($"Template '{desc.Name}' of type `{desc.TypeName}` updated.");
             }
         }
