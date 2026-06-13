@@ -45,7 +45,7 @@ public partial class RedTypeTemplateManagerView : ReactiveUserControl<RedTypeTem
             return;
         }
 
-        if (sender is not Button { DataContext: RedTypeTemplateDescriptorManagerExt templateFile})
+        if (sender is not Button { DataContext: RedTypeTemplateManagerOption templateFile})
         {
             return;
         }
@@ -72,7 +72,7 @@ public partial class RedTypeTemplateManagerView : ReactiveUserControl<RedTypeTem
             return;
         }
 
-        await ViewModel.EditFile((RedTypeTemplateDescriptorManagerExt)record);
+        await ViewModel.EditFile((RedTypeTemplateManagerOption)record);
     }
 
     private async void Delete_OnClick(object sender, RoutedEventArgs e)
@@ -82,7 +82,7 @@ public partial class RedTypeTemplateManagerView : ReactiveUserControl<RedTypeTem
             return;
         }
 
-        if (sender is not Button { DataContext: RedTypeTemplateDescriptorManagerExt templateDesc })
+        if (sender is not Button { DataContext: RedTypeTemplateManagerOption templateDesc })
         {
             return;
         }

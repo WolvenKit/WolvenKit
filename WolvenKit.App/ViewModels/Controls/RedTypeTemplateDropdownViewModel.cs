@@ -20,17 +20,17 @@ public partial class RedTypeTemplateDropdownViewModel : ObservableObject
     {
         _redTypeTemplateService = redTypeTemplateService;
 
-        defaultList = new List<RedTypeTemplateDescriptorExt>([
-            new RedTypeTemplateDescriptorExt("No Template", typeof(object), "", RedTypeTemplateDescriptorExtSource.Raw)
+        _defaultList = new List<RedTypeTemplateSelectionOption>([
+            new RedTypeTemplateSelectionOption("No Template", typeof(object), "", RedTypeTemplateSelectionOptionSource.Raw)
         ]);
 
         CurrentRedTypeTemplates = new CollectionViewSource
         {
-            Source = defaultList
+            Source = _defaultList
         };
         ApplyTemplateCustomSort(CurrentRedTypeTemplates);
-        CurrentRedTypeTemplates.GroupDescriptions.Add(new PropertyGroupDescription(nameof(RedTypeTemplateDescriptorExt.Source)));
-        SelectedRedTypeTemplate = ((List<RedTypeTemplateDescriptorExt>)CurrentRedTypeTemplates.Source).First();
+        CurrentRedTypeTemplates.GroupDescriptions.Add(new PropertyGroupDescription(nameof(RedTypeTemplateSelectionOption.Source)));
+        SelectedRedTypeTemplate = ((List<RedTypeTemplateSelectionOption>)CurrentRedTypeTemplates.Source).First();
 
         RequestedType = typeof(object);
         _ = Refresh();
@@ -38,23 +38,23 @@ public partial class RedTypeTemplateDropdownViewModel : ObservableObject
 
     public event EventHandler? PostRefresh;
 
-    private List<RedTypeTemplateDescriptorExt> defaultList;
+    private readonly List<RedTypeTemplateSelectionOption> _defaultList;
 
     [ObservableProperty]
     private CollectionViewSource _currentRedTypeTemplates;
 
     [ObservableProperty]
-    private RedTypeTemplateDescriptorExt? _selectedRedTypeTemplate;
+    private RedTypeTemplateSelectionOption _selectedRedTypeTemplate;
 
     [ObservableProperty]
     private Type _requestedType;
 
     [ObservableProperty]
-    private Dictionary<Type, List<RedTypeTemplateDescriptorExt>> _templatesByType = new();
+    private Dictionary<Type, List<RedTypeTemplateSelectionOption>> _templatesByType = new();
 
     partial void OnRequestedTypeChanged(Type value)
     {
-        CurrentRedTypeTemplates.Source = TemplatesByType.TryGetValue(value, out var list) ? list : defaultList;
+        CurrentRedTypeTemplates.Source = TemplatesByType.TryGetValue(value, out var list) ? list : _defaultList;
 
         SelectedRedTypeTemplate = GetInitialTemplateForSelectedFile();
         CurrentRedTypeTemplates.View.Refresh();
@@ -66,7 +66,7 @@ public partial class RedTypeTemplateDropdownViewModel : ObservableObject
     {
         await Task.Run(_redTypeTemplateService.LoadTemplates);
         IndexRedTypeTemplates();
-        CurrentRedTypeTemplates.Source = TemplatesByType.TryGetValue(RequestedType, out var list) ? list : defaultList;
+        CurrentRedTypeTemplates.Source = TemplatesByType.TryGetValue(RequestedType, out var list) ? list : _defaultList;
         SelectedRedTypeTemplate = GetInitialTemplateForSelectedFile();
         CurrentRedTypeTemplates?.View.Refresh();
         ApplyTemplateCustomSort(CurrentRedTypeTemplates);
@@ -78,42 +78,37 @@ public partial class RedTypeTemplateDropdownViewModel : ObservableObject
     {
         TemplatesByType.Clear();
 
-        IndexTemplates(_redTypeTemplateService.UserTemplates, RedTypeTemplateDescriptorExtSource.User);
-        IndexTemplates(_redTypeTemplateService.SystemTemplates, RedTypeTemplateDescriptorExtSource.System);
+        IndexTemplates(_redTypeTemplateService.UserTemplates, RedTypeTemplateSelectionOptionSource.User);
+        IndexTemplates(_redTypeTemplateService.SystemTemplates, RedTypeTemplateSelectionOptionSource.System);
 
         foreach (var kvp in TemplatesByType)
         {
-            kvp.Value.Add(new RedTypeTemplateDescriptorExt("No Template", kvp.Key, "", RedTypeTemplateDescriptorExtSource.Raw));
+            kvp.Value.Add(new RedTypeTemplateSelectionOption("No Template", kvp.Key, "", RedTypeTemplateSelectionOptionSource.Raw));
         }
 
-        void IndexTemplates(IEnumerable<RedTypeTemplateDescriptor> templates, RedTypeTemplateDescriptorExtSource source)
+        void IndexTemplates(IEnumerable<RedTypeTemplateDescriptor> templates, RedTypeTemplateSelectionOptionSource source)
         {
             foreach (var template in templates)
             {
                 if (TemplatesByType.TryGetValue(template.Type, out var list))
                 {
-                    list.Add(new RedTypeTemplateDescriptorExt(template, source));
+                    list.Add(new RedTypeTemplateSelectionOption(template, source));
                 }
                 else
                 {
-                    TemplatesByType.Add(template.Type, [new RedTypeTemplateDescriptorExt(template, source)]);
+                    TemplatesByType.Add(template.Type, [new RedTypeTemplateSelectionOption(template, source)]);
                 }
             }
         }
 
     }
 
-    private RedTypeTemplateDescriptorExt? GetInitialTemplateForSelectedFile()
+    private RedTypeTemplateSelectionOption GetInitialTemplateForSelectedFile()
     {
-        var templates = CurrentRedTypeTemplates.Source as List<RedTypeTemplateDescriptorExt> ?? defaultList;
-
-        if (RequestedType is null)
-        {
-            return null;
-        }
+        var templates = CurrentRedTypeTemplates.Source as List<RedTypeTemplateSelectionOption> ?? _defaultList;
 
         var userDefault =
-            templates.FirstOrDefault(rtt => rtt is { Name: "default", Source: RedTypeTemplateDescriptorExtSource.User });
+            templates.FirstOrDefault(rtt => rtt is { Name: "default", Source: RedTypeTemplateSelectionOptionSource.User });
         if (userDefault is not null)
         {
             return userDefault;
@@ -121,20 +116,20 @@ public partial class RedTypeTemplateDropdownViewModel : ObservableObject
 
         var systemDefault =
             templates.FirstOrDefault(rtt =>
-                rtt is { Name: "default", Source: RedTypeTemplateDescriptorExtSource.System });
+                rtt is { Name: "default", Source: RedTypeTemplateSelectionOptionSource.System });
         if (systemDefault is not null)
         {
             return systemDefault;
         }
 
-        return templates.FirstOrDefault(rtt => rtt.Source == RedTypeTemplateDescriptorExtSource.Raw);
+        return templates.First(rtt => rtt.Source == RedTypeTemplateSelectionOptionSource.Raw);
     }
 
     private static void ApplyTemplateCustomSort(CollectionViewSource? source)
     {
         if (source?.View is ListCollectionView listView)
         {
-            listView.CustomSort = new RedTypeTemplateDescriptorExtComparer("default");
+            listView.CustomSort = new RedTypeTemplateSelectionOptionComparer("default");
         }
     }
 }

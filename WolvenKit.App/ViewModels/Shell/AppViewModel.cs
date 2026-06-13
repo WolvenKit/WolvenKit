@@ -54,6 +54,7 @@ using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
+using Activator = System.Activator;
 using FileSystem = Microsoft.VisualBasic.FileIO.FileSystem;
 using NativeMethods = WolvenKit.App.Helpers.NativeMethods;
 using Rect = System.Windows.Rect;
@@ -1500,12 +1501,29 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 var redType = RedTypeTemplateService.ParseType(file.SelectedFile?.Name ?? "");
                 if (redType is not null)
                 {
-                    var rc = _redTypeTemplateService.CreateTypeInstance(redType,
-                        file.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate?.Name ?? "default") ?? throw new Exception($"Failed to create instance of {redType.Name}");
+                    RedBaseClass? rootChunkData;
+
+                    if (file.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate.Source !=
+                        RedTypeTemplateSelectionOptionSource.Raw)
+                    {
+                        rootChunkData = _redTypeTemplateService.CreateTypeInstance(redType,
+                            file.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate.Name);
+                    }
+                    else
+                    {
+                        rootChunkData =
+                            (RedBaseClass?)Activator.CreateInstance(file.RedTypeTemplateDropdownViewModel
+                                .SelectedRedTypeTemplate.Type);
+                    }
+
+                    if (rootChunkData is null)
+                    {
+                        throw new Exception($"Failed to create {file.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate.Type.Name} when creating a new CR2W file.");
+                    }
 
                     CR2WFile cr2W = new()
                     {
-                        RootChunk = rc
+                        RootChunk = rootChunkData
                     };
                     stream = new FileStream(file.FullPath, FileMode.Create, FileAccess.Write);
                     using CR2WWriter writer = new(stream);

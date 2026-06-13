@@ -13,7 +13,7 @@ public enum TemplateDestination
     User
 }
 
-public enum RedTypeTemplateDescriptorExtSource
+public enum RedTypeTemplateSelectionOptionSource
 {
     User,
     System,

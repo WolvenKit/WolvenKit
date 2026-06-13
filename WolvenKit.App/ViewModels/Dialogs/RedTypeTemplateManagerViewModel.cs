@@ -53,7 +53,7 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
     }
 
     public RedTypeTemplateDropdownViewModel RedTypeTemplateDropdownViewModel { get; }
-    public ObservableCollection<RedTypeTemplateDescriptorManagerExt> Templates { get; } = new();
+    public ObservableCollection<RedTypeTemplateManagerOption> Templates { get; } = new();
 
     [ObservableProperty]
     private TypeDesc _selectedType;
@@ -85,25 +85,30 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
             }
         }
 
-        RedBaseClass typeInstance;
+        RedBaseClass? typeInstance;
 
-        if (RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate is not null &&
-            RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate.Source != RedTypeTemplateDescriptorExtSource.Raw)
+        if (RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate.Source != RedTypeTemplateSelectionOptionSource.Raw)
         {
-            typeInstance = _templateService.CreateTypeInstance(RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate) ?? throw new Exception("Failed to create type instance");
+            typeInstance =
+                _templateService.CreateTypeInstance(RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate);
         }
         else
         {
-            typeInstance = (RedBaseClass?)Activator.CreateInstance(type) ?? throw new Exception("Failed to create type instance");
+            typeInstance = (RedBaseClass?)Activator.CreateInstance(type);
+        }
+
+        if (typeInstance is null)
+        {
+            throw new Exception($"Failed to create instance of type {type.Name}");
         }
 
         _templateService.WriteTemplate(typeInstance, name);
 
-        if (!Templates.Any(t => t.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase) && t.Type == type && t.Source == RedTypeTemplateDescriptorExtSource.User))
+        if (!Templates.Any(t => t.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase) && t.Type == type && t.Source == RedTypeTemplateSelectionOptionSource.User))
         {
-            Templates.Add(new RedTypeTemplateDescriptorManagerExt(
+            Templates.Add(new RedTypeTemplateManagerOption(
                 _templateService.UserTemplates.First(t => t.Name == name && t.Type == type),
-                RedTypeTemplateDescriptorExtSource.User));
+                RedTypeTemplateSelectionOptionSource.User));
         }
     }
 
@@ -116,17 +121,17 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
     private void LoadTemplates()
     {
         Templates.Clear();
-        Templates.AddRange(_templateService.UserTemplates.Select(t => new RedTypeTemplateDescriptorManagerExt(t, RedTypeTemplateDescriptorExtSource.User)));
-        Templates.AddRange(_templateService.SystemTemplates.Select(t => new RedTypeTemplateDescriptorManagerExt(t, RedTypeTemplateDescriptorExtSource.System)));
+        Templates.AddRange(_templateService.UserTemplates.Select(t => new RedTypeTemplateManagerOption(t, RedTypeTemplateSelectionOptionSource.User)));
+        Templates.AddRange(_templateService.SystemTemplates.Select(t => new RedTypeTemplateManagerOption(t, RedTypeTemplateSelectionOptionSource.System)));
     }
 
-    public async Task EditFile(RedTypeTemplateDescriptorManagerExt templateDesc)
+    public async Task EditFile(RedTypeTemplateManagerOption templateDesc)
     {
         #region Source Validation
 
         var desc = templateDesc;
 
-        if (desc.Source == RedTypeTemplateDescriptorExtSource.System)
+        if (desc.Source == RedTypeTemplateSelectionOptionSource.System)
         {
             var response = await Interactions.ShowMessageBoxAsync(
                 "Trying to edit a system template. Should a local copy be created?",
@@ -154,11 +159,11 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
             var systemTemplateData = _templateService.ReadTemplate(desc) ?? throw new Exception($"Failed to read system template `{desc.Name}` of type `{desc.Type.Name}`");
             _templateService.WriteTemplate(systemTemplateData, desc.Name);
 
-            desc = new RedTypeTemplateDescriptorManagerExt(
+            desc = new RedTypeTemplateManagerOption(
                 _templateService.UserTemplates.First(t => t.Name.Equals(desc.Name, StringComparison.OrdinalIgnoreCase) && t.Type == desc.Type),
-                RedTypeTemplateDescriptorExtSource.User);
+                RedTypeTemplateSelectionOptionSource.User);
 
-            if (!Templates.Any(t => t.Name.Equals(desc.Name, StringComparison.OrdinalIgnoreCase) && t.Type == desc.Type && t.Source == RedTypeTemplateDescriptorExtSource.User))
+            if (!Templates.Any(t => t.Name.Equals(desc.Name, StringComparison.OrdinalIgnoreCase) && t.Type == desc.Type && t.Source == RedTypeTemplateSelectionOptionSource.User))
             {
                 Templates.Add(desc);
             }
@@ -264,17 +269,17 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
         #endregion
     }
 
-    public async Task DeleteFile(RedTypeTemplateDescriptorManagerExt templateDescriptor)
+    public async Task DeleteFile(RedTypeTemplateManagerOption template)
     {
         var response = await Interactions.ShowMessageBoxAsync(
-            $"Are you sure you want to delete \"{templateDescriptor.Name}\"?",
+            $"Are you sure you want to delete \"{template.Name}\"?",
             "Delete file",
             WMessageBoxButtons.YesNo);
 
         if (response == WMessageBoxResult.Yes)
         {
-            Templates.Remove(templateDescriptor);
-            _templateService.DeleteTemplate(templateDescriptor);
+            Templates.Remove(template);
+            _templateService.DeleteTemplate(template);
         }
     }
 }
