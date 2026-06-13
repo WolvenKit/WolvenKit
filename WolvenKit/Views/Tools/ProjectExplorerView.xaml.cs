@@ -13,6 +13,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
+using DynamicData;
 using DynamicData.Binding;
 using HandyControl.Data;
 using HandyControl.Tools.Extension;
@@ -845,8 +846,21 @@ namespace WolvenKit.Views.Tools
             TreeGrid.View.RefreshFilter();
         }
 
-        private void RowDragDropController_DragStart(object sender, TreeGridRowDragStartEventArgs e) =>
+        private void RowDragDropController_DragStart(object sender, TreeGridRowDragStartEventArgs e)
+        {
+            if (ViewModel is not ProjectExplorerViewModel vm)
+            {
+                return;
+            }
+
+            // Don't drag stuff you're not freakin' draggin' choom... gosh.
+            var draggedItems = e.DraggingNodes.ToList();
+            var selectedItems = vm.SelectedItems?.ToList() ?? [];
+            var nonDraggedSelections = selectedItems.Where(x => !draggedItems.Contains(x)).ToList();
+            vm.SelectedItems?.RemoveMany(nonDraggedSelections);
+
             _isDragging = true;
+        }
 
         private void RowDragDropController_DragOver(object sender, TreeGridRowDragOverEventArgs e)
         {
