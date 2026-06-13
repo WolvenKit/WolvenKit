@@ -66,7 +66,7 @@ public partial class NewFileViewModel : DialogViewModel
                     continue;
                 }
 
-                resourceFiles.Add(new AddFileModel(c, $"A .{ext} File", ext.ToString(), EWolvenKitFile.Cr2w, "", new List<RedTypeTemplateDescriptorExt>()));
+                resourceFiles.Add(new AddFileModel(c, $"A .{ext} File", ext.ToString(), EWolvenKitFile.Cr2w, ""));
             }
 
             var ordered = newdef.Categories.First(x => x.Name == "CR2W Files").Files.NotNull().OrderBy(x => x.Name).ToList();

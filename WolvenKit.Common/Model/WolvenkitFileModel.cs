@@ -23,7 +23,7 @@ namespace WolvenKit.Common.Model
 
         }
 
-        public AddFileModel(string? name, string? description, string? extension, EWolvenKitFile type, string? template, List<RedTypeTemplateDescriptorExt>? redTypeTemplates)
+        public AddFileModel(string? name, string? description, string? extension, EWolvenKitFile type, string? template)
         {
             Name = name;
             Description = description;
@@ -31,7 +31,6 @@ namespace WolvenKit.Common.Model
             Extension = extension;
             Type = type;
             Template = template;
-            RedTypeTemplates = redTypeTemplates;
         }
 
         public string? Name { get; set; }
@@ -42,7 +41,5 @@ namespace WolvenKit.Common.Model
 
         // Just for filtering
         public string? FullText { get; init; }
-
-        public List<RedTypeTemplateDescriptorExt>? RedTypeTemplates { get; set; }
     }
 }
