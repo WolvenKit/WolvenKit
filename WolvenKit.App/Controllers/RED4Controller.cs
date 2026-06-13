@@ -46,8 +46,7 @@ public class RED4Controller : ObservableObject, IGameController
     private readonly IPluginService _pluginService;
     private readonly Red4ParserService _parserService;
     private readonly IModifierViewStateService _modifierService;
-
-    private bool _initialized = false;
+    private readonly IProjectEvents _projectEvents;
 
     #endregion
 
@@ -62,7 +61,8 @@ public class RED4Controller : ObservableObject, IGameController
         IProgressService<double> progressService,
         IPluginService pluginService,
         IModifierViewStateService modifierService,
-        Red4ParserService parserService)
+        Red4ParserService parserService,
+        IProjectEvents projectEvents)
     {
         _notificationService = notificationService;
         _loggerService = loggerService;
@@ -75,21 +75,12 @@ public class RED4Controller : ObservableObject, IGameController
         _pluginService = pluginService;
         _modifierService = modifierService;
         _parserService = parserService;
+        _projectEvents = projectEvents;
     }
 
     public async Task HandleStartup()
     {
-        if (!_initialized)
-        {
-            _initialized = true;
-            _progressService.IsIndeterminate = true;
-
-            // load archives
-            await LoadArchiveManager();
-
-            _progressService.IsIndeterminate = false;
-            _progressService.Completed();
-        }
+        await LoadArchiveManagerAsync();
     }
 
     // TODO: Move this somewhere else
@@ -146,36 +137,81 @@ public class RED4Controller : ObservableObject, IGameController
         }
     }
 
-    private Task LoadArchiveManager()
+    private Guid _loadingCompletion = Guid.NewGuid();
+
+    private void EnableLoadingMode()
     {
-        return Task.Run(() =>
+        _loadingCompletion = DispatcherHelper.StartRepeatingAction(
+            () =>
+            {
+                _progressService.IsIndeterminate = true;
+                _progressService.Status = EStatus.Running;
+            },
+            TimeSpan.FromMilliseconds(100),
+            DisableLoadingMode
+        );
+    }
+
+    private void DisableLoadingMode()
+    {
+        _progressService.IsIndeterminate = false;
+        _progressService.Status = EStatus.Ready;
+        DispatcherHelper.StopRepeatingAction(_loadingCompletion);
+    }
+
+    /// <summary>
+    /// Loads the basegame + EP1 archives on a background thread.
+    /// While loading, a 100ms repeating timer forces the global ProgressService
+    /// into Running/Indeterminate state. This mitigates the problem that there is
+    /// only a single global "Ready/Running" state — other code can (and does)
+    /// call Completed() or set IsIndeterminate=false while this long job is still
+    /// in progress.
+    /// </summary>
+    private async Task LoadArchiveManagerAsync()
+    {
+        // Fast path checks — do NOT start the loading indicator if there's nothing to do.
+        if (_archiveManager.IsManagerLoaded)
         {
-            if (_archiveManager.IsManagerLoaded)
-            {
-                return;
-            }
-            if (_settingsManager.CP77ExecutablePath is null)
-            {
-                return;
-            }
+            return;
+        }
 
-            _loggerService.Info("Loading Archive Manager ... ");
-            try
+        if (_settingsManager.CP77ExecutablePath is null)
+        {
+            _loggerService.Warning("Cyberpunk 2077 executable path is not set. Skipping Archive Manager load.");
+            return;
+        }
+
+        EnableLoadingMode();
+
+        try
+        {
+            await Task.Run(() =>
             {
+                // Keep priority low so the UI stays responsive during the (potentially long)
+                // first-time scan of dozens of large .archive files.
+                Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
+                Thread.CurrentThread.IsBackground = true;
+
+                _loggerService.Info("Loading Archive Manager ... ");
+
                 _archiveManager.LoadGameArchives(new FileInfo(_settingsManager.CP77ExecutablePath));
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error(e);
-                throw;
-            }
-            finally
-            {
-                _loggerService.Success("Finished loading Archive Manager.");
-            }
 
-            LoadCustomHashes();
-        });
+                // Custom hash population needs the archives to be loaded, so do it here on the same thread.
+                LoadCustomHashes();
+            });
+
+            _loggerService.Success("Finished loading Archive Manager.");
+        }
+        catch (Exception e)
+        {
+            _loggerService.Error(e);
+            throw;
+        }
+        finally
+        {
+            // Always stop the heartbeat timer and release the progress indicator.
+            DisableLoadingMode();
+        }
     }
 
     #region Packing
@@ -1046,17 +1082,22 @@ public class RED4Controller : ObservableObject, IGameController
                     return ValueTask.CompletedTask;
                 });
 
-            var report = "";
-
-            foreach (var file in files)
-            {
-                report += $"Added game file to project: {file.Name}\r\n";
-            }
-
-            _loggerService.Info(report);
         }
 
         _progressService.Completed();
+        _projectEvents.PublishFilesImported(new FilesImportedMessage([.. files],[]));
+
+        // Ensure projection of the imported files onto the GridGuard clones (FileList/FileTree)
+        // has completed before returning to awaiters (e.g. tests asserting counts, or UI code).
+        // The publish is observed via ObserveOn main and the adds are dispatched; Invoke to
+        // ContextIdle drains the queue so callers see the updated collections synchronously.
+        try
+        {
+            System.Windows.Application.Current?.Dispatcher?.Invoke(
+                () => { },
+                System.Windows.Threading.DispatcherPriority.ContextIdle);
+        }
+        catch { /* test/headless/no dispatcher or cross-thread invoke not available; best effort */ }
     }
 
 

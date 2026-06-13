@@ -159,6 +159,7 @@ namespace WolvenKit.RED4.CR2W.Archive
                 ep1Files.Sort(CompareArchives);
 
                 totalCnt += ep1Files.Count;
+                var archivePaths = "";
 
                 foreach (var file in ep1Files)
                 {
@@ -167,8 +168,11 @@ namespace WolvenKit.RED4.CR2W.Archive
                     LoadArchive(file, EArchiveSource.EP1);
                     cnt++;
 
-                    _logger.Debug($"Loaded archive {Path.GetFileName(file)} {cnt}/{totalCnt} in {sw.ElapsedMilliseconds}ms");
+                    archivePaths +=
+                        $"Loaded archive {Path.GetFileName(file)} {cnt}/{totalCnt} in {sw.ElapsedMilliseconds}ms\r\n";
                 }
+
+                _logger.Debug(archivePaths);
             }
 
             foreach (var file in baseFiles)
