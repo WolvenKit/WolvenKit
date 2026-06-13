@@ -198,6 +198,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <param name="isReload"></param>
     public void StartWatcher_AndLoadProject(Cp77Project activeProject, bool isReload)
     {
+        _gridGuard.NotifyChangeRequested();
+        _gridGuard.BeginChanges();
+
         if (_appViewModel.IsDialogShown || _appViewModel.IsOverlayShown)
         {
             _appViewModel.RunAfterModalClosed(() => StartWatcher_AndLoadProject(activeProject, isReload));
@@ -247,13 +250,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private void EnableLoadingMode(bool isReload)
     {
-        // Loading/reloading a project is the archetypal "making changes to files then redrawing the
-        // grids" flow, so it drives the guard's machine: Ready -> MakingChangesToFiles here, and
-        // DisableLoadingMode walks it through AwaitingRedrawsOfGrids back to Ready when the rebuild
-        // finishes. While not-Ready, GridsLocked is true and outside writers stay off the grids.
-        _gridGuard.NotifyChangeRequested();
-        _gridGuard.BeginChanges();
-
         _loadingCompletion = DispatcherHelper.StartRepeatingAction(
             () =>
             {
