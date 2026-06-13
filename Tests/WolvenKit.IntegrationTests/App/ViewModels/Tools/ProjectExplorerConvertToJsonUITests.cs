@@ -77,6 +77,10 @@ public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
 
         await AddRightItemsToProject(vm);
 
+        // Pump dispatcher to ensure any posted projections (ProjectAdd via import publish) have landed
+        // in the GridGuard's FileList before we assert counts (shim isolation + ObserveOn + dispatch can queue).
+        PumpDispatcher();
+
         Assert.Equal(expectedNumberOfItems, _projectExplorerVm.FileList.Count - numberOfFolders);
     }
 
@@ -105,6 +109,7 @@ public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
 
         _projectExplorerVm.SelectedItems.Add(list.First());
         await _projectExplorerVm.ConvertArchiveFile();
+        PumpDispatcher();
         list = _projectExplorerVm.FileList.Where(model => !model.IsDirectory).ToList();
 
         var count = list.Count;
@@ -196,6 +201,16 @@ public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
                 Directory.Delete(_tempProjectRoot, true);
         }
         catch { /* best effort */ }
+    }
+
+    private static void PumpDispatcher()
+    {
+        try
+        {
+            var disp = System.Windows.Application.Current?.Dispatcher;
+            disp?.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.ContextIdle);
+        }
+        catch { /* best effort in test env */ }
     }
 
     private async Task LoadANewProject()

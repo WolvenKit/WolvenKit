@@ -66,23 +66,6 @@
     <PackageVersion Include="Splat.Microsoft.Extensions.DependencyInjection" Version="15.3.1" />
     <PackageVersion Include="Splat.Microsoft.Extensions.Logging" Version="15.3.1" />
     <PackageVersion Include="SwiftXState" Version="0.9.6" />
-    <PackageVersion Include="Syncfusion.Edit.WPF" Version="30.2.4" />
-    <PackageVersion Include="Syncfusion.PropertyGrid.WPF" Version="30.2.4" />
-    <PackageVersion Include="Syncfusion.SfAccordion.WPF" Version="30.2.4" />
-    <PackageVersion Include="Syncfusion.SfBusyIndicator.WPF" Version="30.2.4" />
-    <PackageVersion Include="Syncfusion.SfGrid.WPF" Version="30.2.4" />
-    <PackageVersion Include="Syncfusion.SfHubTile.WPF" Version="30.2.4" />
-    <PackageVersion Include="Syncfusion.SfImageEditor.WPF" Version="30.2.4" />
-    <PackageVersion Include="Syncfusion.SfInput.WPF" Version="30.2.4" />
-    <PackageVersion Include="Syncfusion.SfNavigationDrawer.WPF" Version="30.2.4" />
-    <PackageVersion Include="Syncfusion.SfProgressBar.WPF" Version="30.2.4" />
-    <PackageVersion Include="Syncfusion.SfRadialMenu.WPF" Version="30.2.4" />
-    <PackageVersion Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="30.2.4" />
-    <PackageVersion Include="Syncfusion.SfSkinManager.WPF" Version="30.2.4" />
-    <PackageVersion Include="Syncfusion.SfTextInputLayout.WPF" Version="30.2.4" />
-    <PackageVersion Include="Syncfusion.SfTreeNavigator.WPF" Version="30.2.4" />
-    <PackageVersion Include="Syncfusion.SfTreeView.WPF" Version="30.2.4" />
-    <PackageVersion Include="Syncfusion.Themes.MaterialDark.WPF" Version="30.2.4" />
     <PackageVersion Include="Syncfusion.Edit.WPF" Version="33.2.8" />
     <PackageVersion Include="Syncfusion.PropertyGrid.WPF" Version="33.2.8" />
     <PackageVersion Include="Syncfusion.SfAccordion.WPF" Version="33.2.8" />

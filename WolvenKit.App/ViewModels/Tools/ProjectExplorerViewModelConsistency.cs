@@ -130,6 +130,14 @@ public sealed class GridGuard : IDisposable
     private readonly SwiftXStateWinBridge.SnapshotCallback _onState; // field, so the GC keeps it alive
     private readonly object _gate = new();
 
+    /// <summary>
+    /// Invisible root clone used only for hierarchy/FullName computation in the projection.
+    /// Mirrors the domain's &lt;ProjectDir&gt; so that top-level folders ("archive", "raw", ...)
+    /// and their descendants compute the exact same FullName as their domain counterparts.
+    /// This makes _cloneByKey lookups by domain.FullName reliable and prevents duplicate clones.
+    /// </summary>
+    private FileSystemModel? _invisibleCloneRoot;
+
     /// <summary>Raised (from the bridge's callback) whenever the machine's mode changes.</summary>
     public event Action<GridFlow.State>? ModeChanged;
 
@@ -273,10 +281,28 @@ public sealed class GridGuard : IDisposable
                     _cloneByKey.Clear();
                     FileTree.Clear();
                     FileList.Clear();
+                    _invisibleCloneRoot = null;
+
+                    if (domainTreeRoots.Count > 0)
+                    {
+                        var first = domainTreeRoots[0];
+                        if (first.Parent?.Name == FileSystemModel.ProjectDirName)
+                        {
+                            var inv = first.Parent;
+                            _invisibleCloneRoot = new FileSystemModel(null, FileSystemModel.ProjectDirName, inv.RawRelativePath, true);
+                            _cloneByKey[_invisibleCloneRoot.FullName] = _invisibleCloneRoot;
+                        }
+                    }
 
                     foreach (var root in domainTreeRoots)
                     {
-                        FileTree.Add(CloneSubtree(root, null));
+                        var rootClone = CloneSubtree(root, _invisibleCloneRoot);
+                        FileTree.Add(rootClone);
+
+                        if (_invisibleCloneRoot != null && !_invisibleCloneRoot.Children.Contains(rootClone))
+                        {
+                            _invisibleCloneRoot.Children.Add(rootClone);
+                        }
                     }
 
                     var flatClones = new List<FileSystemModel>(domainFlat.Count);
@@ -408,6 +434,16 @@ public sealed class GridGuard : IDisposable
         return clone;
     }
 
+    private FileSystemModel GetOrCreateInvisibleClone(FileSystemModel domainInvisible)
+    {
+        if (_invisibleCloneRoot == null)
+        {
+            _invisibleCloneRoot = new FileSystemModel(null, FileSystemModel.ProjectDirName, domainInvisible.RawRelativePath, true);
+            _cloneByKey[_invisibleCloneRoot.FullName] = _invisibleCloneRoot;
+        }
+        return _invisibleCloneRoot;
+    }
+
     private FileSystemModel EnsureClone(FileSystemModel domain)
     {
         if (_cloneByKey.TryGetValue(domain.FullName, out var existing))
@@ -415,11 +451,19 @@ public sealed class GridGuard : IDisposable
             return existing;
         }
 
-        // A node is a tree root (no clone parent) when its domain parent is the invisible project
-        // root or there is no parent. Otherwise make sure the ancestor clones exist first.
+        // A node is a visible tree root when its domain parent is the invisible project root.
+        // We still create a (hidden) invisible clone parent so that GetMetadata() on the clone
+        // walks a correct base and produces *exactly* the same FullName as the domain model.
+        // This makes _cloneByKey[domain.FullName] lookups succeed and prevents creating
+        // duplicate clone instances for the same folder (the root cause of "multiple copies of
+        // the same folder" in FileTree/FileList after adds, converts, and ProjectAdd).
         FileSystemModel? cloneParent = null;
         var dp = domain.Parent;
-        if (dp is not null && dp.Name != FileSystemModel.ProjectDirName)
+        if (dp is not null && dp.Name == FileSystemModel.ProjectDirName)
+        {
+            cloneParent = GetOrCreateInvisibleClone(dp);
+        }
+        else if (dp is not null)
         {
             cloneParent = EnsureClone(dp);
         }
@@ -427,16 +471,18 @@ public sealed class GridGuard : IDisposable
         var clone = new FileSystemModel(cloneParent, domain.Name, domain.RawRelativePath, domain.IsDirectory, domain.IsExpanded);
         _cloneByKey[clone.FullName] = clone;
 
-        if (cloneParent is not null)
+        if (cloneParent is not null && !cloneParent.Children.Contains(clone))
         {
-            if (!cloneParent.Children.Contains(clone))
-            {
-                cloneParent.Children.Add(clone);
-            }
+            cloneParent.Children.Add(clone);
         }
-        else if (!FileTree.Contains(clone))
+
+        bool isVisibleRoot = (dp is not null && dp.Name == FileSystemModel.ProjectDirName) || dp == null;
+        if (isVisibleRoot)
         {
-            FileTree.Add(clone);
+            if (!FileTree.Contains(clone))
+            {
+                FileTree.Add(clone);
+            }
         }
 
         if (!FileList.Contains(clone))

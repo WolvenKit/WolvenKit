@@ -37,6 +37,7 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
@@ -1022,9 +1023,15 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// Renames selected node. Works for files and directories.
     /// </summary>
     private bool CanRenameFile() => ActiveProject != null && SelectedItem != null;
+
     [RelayCommand(CanExecute = nameof(CanRenameFile))]
     private async Task RenameFile()
     {
+        if (SelectedItem == null)
+        {
+            return;
+        }
+
         if (_projectManager.ActiveProject is null || SelectedItem?.FullName is not string absolutePath)
         {
             return;
@@ -1047,12 +1054,32 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        SuspendFileWatcher();
+        _deferredRefreshCts = new CancellationTokenSource();
+        var token = _deferredRefreshCts.Token;
+        await BeginDeferredRefreshContext!(token, InternalRenameFile(SelectedItem, relativePath, newRelativePath, prefixPath, refactor));
+        _gridGuard.ConfirmRedrawComplete();
 
+        if (_gridGuard.GridsLocked)
+        {
+            throw new WolvenKitException(352345, "Internal inconsistency found. Please quit and restart the app.");
+        }
+    }
+
+    private async Task InternalRenameFile(FileSystemModel selectedItem, string relativePath, string newRelativePath, string prefixPath, bool refactor)
+    {
+        FileSystemModel renamed = new(
+            parent: selectedItem.Parent,
+            name: Path.GetFileName(newRelativePath),
+            relativePath: newRelativePath,
+            isDirectory: selectedItem.IsDirectory,
+            isExpanded: selectedItem.IsExpanded
+        );
+
+        _gridGuard.ProjectRename(renamed, selectedItem.FullName);
+        SuspendFileWatcher();
         await _projectResourceTools.MoveAndRefactorAsync(relativePath, newRelativePath, prefixPath, refactor);
         _appViewModel.ReloadChangedFiles();
-
-        ResumeWatcher_AndReloadProject();
+        ResumeFileWatcher();
     }
 
     public void ResumeFileWatcher()
@@ -1245,10 +1272,24 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             _progressService.Completed();
             // Return list of created JSON files
             _projectEvents.PublishFilesImported(new FilesImportedMessage([],[.. createdJsonFiles.ToList()]));
+
+            // Ensure any ObserveOn-scheduled handler + ProjectAdd dispatches have run to completion
+            // (so FileList/FileTree clones are updated) before unblocking awaiters/tests.
+            try
+            {
+                System.Windows.Application.Current?.Dispatcher?.Invoke(
+                    () => { },
+                    System.Windows.Threading.DispatcherPriority.ContextIdle);
+            }
+            catch { /* best effort for tests/headless */ }
         });
 
         await _deferredRefreshCts.CancelAsync();
         _deferredRefreshCts.Dispose();
+
+        // Pair the SuspendFileWatcher (which locked the guard) with resume + force back to Ready.
+        // This prevents the guard from being stranded in MakingChangesToFiles after a convert.
+        ResumeFileWatcher();
     }
 
     /// <summary>
@@ -1712,6 +1753,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
 
         _progressService.Completed();
+
+        // Ensure guard is back to Ready (in case this path was entered while locked).
+        _gridGuard.ForceReady();
     }
 
     private async Task ConvertFromJsonAsync(string file)

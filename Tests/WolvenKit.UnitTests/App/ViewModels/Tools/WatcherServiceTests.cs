@@ -40,6 +40,7 @@ public class WatcherServiceTests : IDisposable
     private readonly Mock<ILoggerService> _loggerMock;
     private readonly ProjectEvents _projectEvents;
     private readonly ProjectExplorerViewModel.WatcherService _watcher;
+    private readonly GridGuard _guard;
     private readonly string _tempProjectDir;
     private Cp77Project? _currentProject;
     bool NoOp(string rawRelativePath) => false;
@@ -91,8 +92,8 @@ public class WatcherServiceTests : IDisposable
         _loggerMock = new Mock<ILoggerService>();
         _projectEvents = new ProjectEvents();
 
-
-        _watcher = new ProjectExplorerViewModel.WatcherService(NoOp, _loggerMock.Object, _projectEvents);
+        _guard = new GridGuard();
+        _watcher = new ProjectExplorerViewModel.WatcherService(NoOp, _loggerMock.Object, _projectEvents, _guard);
 
         _tempProjectDir = Path.Combine(Path.GetTempPath(), "WatcherServiceTests_" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(_tempProjectDir);
@@ -680,7 +681,8 @@ public class WatcherServiceTests : IDisposable
     public void OnFilesImported_WithNullLogger_DoesNotThrow()
     {
         var events = new ProjectEvents();
-        var watcherWithNullLogger = new ProjectExplorerViewModel.WatcherService(NoOp, null, events);
+        using var guard = new GridGuard();
+        var watcherWithNullLogger = new ProjectExplorerViewModel.WatcherService(NoOp, null, events, guard);
 
         var project = new Cp77Project(_tempProjectDir, "NullLoggerTest", "NullLoggerTest");
         watcherWithNullLogger.StartWatcher_AndLoadProject(project);
@@ -714,6 +716,7 @@ public class WatcherServiceTests : IDisposable
         try
         {
             _watcher.UnwatchProject();
+            _guard?.Dispose();
         }
         catch (Exception e)
         {
