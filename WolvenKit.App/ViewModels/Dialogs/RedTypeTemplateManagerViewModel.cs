@@ -17,6 +17,7 @@ using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
@@ -118,10 +119,10 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
     }
 
     [RelayCommand]
-    private void Ok() => _appViewModel.CloseModalCommand.Execute(null);
+    private void Ok() => Close();
 
     [RelayCommand]
-    private void Cancel() => _appViewModel.CloseModalCommand.Execute(null);
+    private void Cancel() => Close();
 
     private void LoadTemplates()
     {
@@ -221,7 +222,7 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
         _appViewModel.DockedViews.CollectionChanged += OnDockedViewsChanged;
         _appViewModel.RequestFileOpen(tempFile);
 
-        _appViewModel.CloseModalCommand.Execute(null);
+        Close();
         return;
 
         void OnDockedViewsChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -292,5 +293,16 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
             Templates.Remove(template);
             _templateService.DeleteTemplate(template);
         }
+    }
+
+    private void Close()
+    {
+        foreach (var template in Templates.Where(t => t is
+                     { Source: RedTypeTemplateSelectionOptionSource.User, IsDirty: true }))
+        {
+            _templateService.WriteTemplate(template.Template, template.Name);
+        }
+
+        _appViewModel.CloseModalCommand.Execute(null);
     }
 }

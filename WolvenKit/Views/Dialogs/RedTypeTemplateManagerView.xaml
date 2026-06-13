@@ -182,13 +182,13 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Row="0" Grid.Column="0" Text="Version" Margin="{StaticResource WolvenKitMarginSmallRight}"/>
-                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SelectedTemplate.Version, TargetNullValue=''}"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SelectedTemplate.Version, TargetNullValue=''}" IsReadOnly="{Binding SelectedTemplate.CanEdit, Converter={StaticResource InvertBooleanConverter}}"/>
 
                     <TextBlock Grid.Row="1" Grid.Column="0" Text="Author" Margin="{StaticResource WolvenKitMarginSmallRight}"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SelectedTemplate.Author, TargetNullValue=''}"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SelectedTemplate.Author, TargetNullValue=''}" IsReadOnly="{Binding SelectedTemplate.CanEdit, Converter={StaticResource InvertBooleanConverter}}"/>
 
                     <TextBlock Grid.Row="2" Grid.Column="0" Text="Description" Margin="{StaticResource WolvenKitMarginSmallRight}"/>
-                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding SelectedTemplate.Description, TargetNullValue=''}" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding SelectedTemplate.Description, TargetNullValue=''}" IsReadOnly="{Binding SelectedTemplate.CanEdit, Converter={StaticResource InvertBooleanConverter}}" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
                 </Grid>
             </Border>
         </Grid>
