@@ -1,8 +1,6 @@
-﻿using SwiftXStateWinBridgeInterop;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
@@ -41,10 +39,12 @@ public static class GridFlow
         GridUpdateConfirmedCompleted,
     }
 
-    // THE machine, fully typed. This is the only place transitions live; the JSON is generated from it,
-    // so the bridge can never see a state/event that isn't in these enums. Self-targets are "legal here
-    // but no mode change" (the machine still validates them).
-    private static readonly Dictionary<State, Dictionary<Event, State>> Table = new()
+    /// <summary>
+    /// THE machine, fully typed and declared in pure C# right here. This is the single source of truth
+    /// for all transitions. Self-targets are "legal in this state but produce no mode change".
+    /// The GridGuard below is a tiny interpreter over this table (no external libraries or native bridges).
+    /// </summary>
+    internal static readonly Dictionary<State, Dictionary<Event, State>> Table = new()
     {
         [State.Ready] = new()
         {
@@ -64,10 +64,21 @@ public static class GridFlow
     };
 
     public const State Initial = State.Ready;
-    private const string MachineId = "gridGuard";
 
-    // Wire string = the enum name with a lowercase first letter (e.g. MakingChangesToFiles ->
-    // "makingChangesToFiles"). One conversion, used both ways.
+    /// <summary>
+    /// Returns true if (current, evt) has a defined transition in the table; writes the target state.
+    /// The caller (GridGuard) applies it and decides whether an actual mode change occurred.
+    /// </summary>
+    public static bool TryTransition(State current, Event evt, out State next)
+    {
+        if (Table.TryGetValue(current, out var map) && map.TryGetValue(evt, out next))
+            return true;
+        next = default;
+        return false;
+    }
+
+    // Wire string and TryParseState are retained for any string-based callers or debugging.
+    // They are no longer used by the runtime (we use the enums + Table directly).
     public static string Wire<T>(T value) where T : Enum
     {
         var name = value.ToString();
@@ -75,24 +86,7 @@ public static class GridFlow
     }
 
     public static bool TryParseState(string wire, out State state) =>
-        Enum.TryParse(wire, ignoreCase: true, out state);   // "ready" -> State.Ready, etc.
-
-    // Built once; the XState JSON the bridge expects, generated from Table.
-    public static readonly string DefinitionJson = BuildJson();
-
-    private static string BuildJson()
-    {
-        var states = new Dictionary<string, object>();
-        foreach (var (state, transitions) in Table)
-        {
-            var on = new Dictionary<string, string>();
-            foreach (var (evt, target) in transitions)
-                on[Wire(evt)] = Wire(target);
-            states[Wire(state)] = new { on };
-        }
-        var definition = new { id = MachineId, initial = Wire(Initial), states };
-        return JsonSerializer.Serialize(definition);
-    }
+        Enum.TryParse(wire, ignoreCase: true, out state);
 }
 
 /// <summary>
@@ -106,9 +100,9 @@ public static class GridFlow
 ///      Children, or removes one, the grids don't see it and don't corrupt. The watcher reports each
 ///      approved domain change here via the Project* intents, and the shim re-applies it to the
 ///      clones on the UI thread. One owner, one truth.
-///   2. It runs the GridFlow state machine (in Swift, over the C bridge) tracking what the UI is
-///      doing right now: Ready, MakingChangesToFiles, or AwaitingRedrawsOfGrids. Writers gate on
-///      that mode instead of poking the grids whenever they feel like it.
+///   2. It runs the GridFlow state machine (a tiny pure-C# interpreter over <see cref="GridFlow.Table"/>)
+///      tracking what the UI is doing right now: Ready, MakingChangesToFiles, or AwaitingRedrawsOfGrids.
+///      Writers gate on that mode instead of poking the grids whenever they feel like it.
 ///
 /// The mode maps onto how the project explorer already behaves:
 ///   Ready                  - the watcher is live, the grids are safe to read and redraw.
@@ -126,8 +120,8 @@ public sealed class GridGuard : IDisposable
     /// <summary>Single source of truth for the hierarchical TreeGrid (TreeGrid.ItemsSource). Holds clones.</summary>
     public DispatchedObservableCollection<FileSystemModel> FileTree { get; } = new();
 
-    private readonly long _h;
-    private readonly SwiftXStateWinBridge.SnapshotCallback _onState; // field, so the GC keeps it alive
+    // --- Pure C# GridFlow state machine (no native bridge, no external DLLs) --------------------
+    private GridFlow.State _current = GridFlow.Initial;
     private readonly object _gate = new();
 
     /// <summary>
@@ -138,37 +132,49 @@ public sealed class GridGuard : IDisposable
     /// </summary>
     private FileSystemModel? _invisibleCloneRoot;
 
-    /// <summary>Raised (from the bridge's callback) whenever the machine's mode changes.</summary>
+    /// <summary>Raised whenever the machine's mode actually changes to a different state.</summary>
     public event Action<GridFlow.State>? ModeChanged;
 
     public GridGuard()
     {
-        _h = SwiftXStateWinBridge.MachineCreate(GridFlow.DefinitionJson);
-        if (_h == 0) throw new InvalidOperationException("Bad grid-flow definition.");
-
-        _onState = wire =>
-        {
-            if (GridFlow.TryParseState(wire, out var s)) ModeChanged?.Invoke(s);
-        };
-        SwiftXStateWinBridge.MachineSetStateCallback(_h, _onState);
+        // Pure declaration: initial state is GridFlow.Initial (Ready). No bridge, no JSON, no handles.
     }
 
-    public GridFlow.State Mode =>
-        GridFlow.TryParseState(SwiftXStateWinBridge.MachineState(_h), out var s) ? s : GridFlow.Initial;
+    public GridFlow.State Mode
+    {
+        get { lock (_gate) { return _current; } }
+    }
 
-    public bool Is(GridFlow.State s) =>
-        SwiftXStateWinBridge.MachineMatches(_h, GridFlow.Wire(s)) == 1;
+    public bool Is(GridFlow.State s)
+    {
+        lock (_gate) { return _current == s; }
+    }
 
     /// <summary>True whenever we are NOT in Ready, i.e. external writers must not touch the grids.</summary>
     public bool GridsLocked => !Is(GridFlow.State.Ready);
 
-    /// <summary>Send a raw event. True if it was legal in the current mode (and applied).</summary>
+    /// <summary>
+    /// Send a raw event. True if the event is legal in the current state per GridFlow.Table (applied).
+    /// If the transition targets a different state, ModeChanged is raised (outside the lock).
+    /// </summary>
     public bool Send(GridFlow.Event e)
     {
+        GridFlow.State? changedTo = null;
+        bool accepted;
         lock (_gate)
         {
-            return SwiftXStateWinBridge.MachineSend(_h, GridFlow.Wire(e)) == 1;
+            accepted = GridFlow.TryTransition(_current, e, out var next);
+            if (accepted && next != _current)
+            {
+                _current = next;
+                changedTo = next;
+            }
         }
+
+        if (changedTo.HasValue)
+            ModeChanged?.Invoke(changedTo.Value);
+
+        return accepted;
     }
 
     // --- Named transitions (these read better at call sites than the raw events) -----------------
@@ -549,7 +555,7 @@ public sealed class GridGuard : IDisposable
 
     public void Dispose()
     {
-        SwiftXStateWinBridge.MachineSetStateCallback(_h, null);
-        SwiftXStateWinBridge.MachineRelease(_h);
+        // No native resources; the pure-C# machine needs nothing to release.
+        // Retained for API compatibility (tests use `using var guard = new GridGuard()`).
     }
 }
