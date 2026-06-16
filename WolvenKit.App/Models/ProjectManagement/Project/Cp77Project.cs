@@ -173,7 +173,8 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
     }
 
     /// <summary>
-    /// Absolute path to /source/archive
+    /// Absolute path to /source/archive.
+    /// (Returns 'Mod' instead for legacy project compatibility.)
     /// </summary>
     public string ModDirectory
     {
@@ -515,6 +516,13 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         _ = ResourcesDirectory;
     }
 
+    /// <summary>
+    /// Splits the supplied `fullPath` into two paths divided after archive/raw/resource.
+    /// E.g. for "C:\path\to\my\mod\source\archive\my\kleppiin\choom.ent":
+    /// returns ("C:\path\to\my\mod\source\archive", "my\kleppiin\choom.ent")
+    /// </summary>
+    /// <param name="fullPath"></param>
+    /// <returns>(AbsolutePathToGameRelativeRoot, GameRelativePath)</returns>
     public (string, string) SplitFilePath(string fullPath) =>
         (GetAbsoluteSubDirPath(fullPath), GetRelativePath(fullPath));
 
@@ -563,7 +571,11 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
             _ => ResourceFiles.Contains(fileNameOrPath) || ResourceFiles.Any(f => f.EndsWith(fileNameOrPath)),
         };
 
-
+    /// <summary>
+    /// Gives you the game relative path for a particular filepath.
+    /// </summary>
+    /// <param name="relativeOrAbsolutePath"></param>
+    /// <returns>GameRelativePath</returns>
     public string GetAbsolutePath(string relativeOrAbsolutePath)
     {
         if (Path.IsPathRooted(relativeOrAbsolutePath))
@@ -617,6 +629,11 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
     private const string s_relativeRawDir = "wkitrawdir";
     private const string s_relativePackedDir = "wkitpackeddir";
 
+    /// <summary>
+    /// Get the game relative path from an absolute path.
+    /// </summary>
+    /// <param name="absolutePath"></param>
+    /// <returns>GameRelativePath</returns>
     public string GetRelativePath(string absolutePath)
     {
         if (absolutePath.Equals(FileDirectory, StringComparison.Ordinal))

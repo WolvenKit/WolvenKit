@@ -1023,36 +1023,26 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanRenameFile))]
     private async Task RenameFile()
     {
-        if (SelectedItem == null)
+        if (SelectedItem == null || ActiveProject == null || SelectedItem?.FullName is not string absolutePath)
         {
             return;
         }
 
-        if (_projectManager.ActiveProject is null || SelectedItem?.FullName is not string absolutePath)
-        {
-            return;
-        }
+        var currentRawRelativePath = SelectedItem.RawRelativePath;
 
-        var (prefixPath, relativePath) = _projectManager.ActiveProject.SplitFilePath(absolutePath);
-
-        if (absolutePath.StartsWith(_projectManager.ActiveProject.ModDirectory))
-        {
-            relativePath = absolutePath[(_projectManager.ActiveProject.ModDirectory.Length + 1)..];
-        }
-
-        var (newRelativePath, refactor) = Interactions.RenameAndRefactor((
-            relativePath,
-            absolutePath.StartsWith(_projectManager.ActiveProject.ModDirectory)
+        var (newRawRelativePath, refactor) = Interactions.RenameAndRefactor((
+            currentRawRelativePath,
+            absolutePath.StartsWith(ActiveProject.ModDirectory)
         ));
 
-        if (string.IsNullOrEmpty(newRelativePath) || newRelativePath == relativePath)
+        if (string.IsNullOrEmpty(newRawRelativePath) || newRawRelativePath == currentRawRelativePath)
         {
             return;
         }
 
         _deferredRefreshCts = new CancellationTokenSource();
         var token = _deferredRefreshCts.Token;
-        await BeginDeferredRefreshContext!(token, InternalRenameFile(SelectedItem, relativePath, newRelativePath, prefixPath, refactor));
+        await BeginDeferredRefreshContext!(token, InternalRenameFile(SelectedItem, currentRawRelativePath, newRawRelativePath, ActiveProject.FileDirectory, refactor));
         _gridGuard.ConfirmRedrawComplete();
 
         if (_gridGuard.GridsLocked)
@@ -1061,6 +1051,16 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
     }
 
+    /// <summary>
+    /// Renames the supplied FileSystemModel.
+    /// You must pass in the old RawRelativePath and new RawRelativePath as well as the path to /source.
+    /// 'Refactor' checkbox makes the name change effected in references to that file in the mod.
+    /// </summary>
+    /// <param name="selectedItem"></param>
+    /// <param name="relativePath"></param>
+    /// <param name="newRelativePath"></param>
+    /// <param name="prefixPath"></param>
+    /// <param name="refactor"></param>
     private async Task InternalRenameFile(FileSystemModel selectedItem, string relativePath, string newRelativePath, string prefixPath, bool refactor)
     {
         FileSystemModel renamed = new(
@@ -1070,6 +1070,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             isDirectory: selectedItem.IsDirectory,
             isExpanded: selectedItem.IsExpanded
         );
+
+        if (_projectWatcher.FileLookup.TryGetValue(selectedItem.FullName, out var existingFile))
+        {
+            _gridGuard.ProjectRemove(existingFile);
+        }
 
         _gridGuard.ProjectRename(renamed, selectedItem.FullName);
         SuspendFileWatcher();
