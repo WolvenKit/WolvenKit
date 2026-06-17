@@ -33,7 +33,6 @@ namespace WolvenKit
             {
                 settingsManager.UiScale = (int)(100.0 * ComputeScaleFromResolution(SystemParameters.PrimaryScreenHeight));
             }
-            RegisterTheme(settingsManager);
         }
 
         public static void InitializeSyntaxHighlighting()
@@ -61,9 +60,9 @@ namespace WolvenKit
 
         public static void InitializeLicenses()
         {
-            const string v_30_2_4 =
-                "NDAwMzEzOEAzMzMwMmUzMDJlMzAzYjMzMzAzYkQ1SXl0dFh1V1FjZ3dzSlo1bDVsT2hMNWZTYnF4SU1ZdjR1bEYvcXhIZGM9";
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(v_30_2_4);
+           const string _33_2_8 =
+                "Ngo9BigBOggjHTQxAR8/V1JHaF1cXmhPYVF+WmFZfVhgd19HZlZQTGYuP1ZhSXxVdkBhUH9dcXNWQmdVV0Z9XEE=";
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(_33_2_8);
         }
 
         public static void InitializeShell(ISettingsManager settingsManager)
@@ -77,62 +76,6 @@ namespace WolvenKit
             {
                 window.Show();
             }
-
-            if (WolvenDBG.EnableTheming)
-            {
-                RegisterTheme(settingsManager);
-            }
-        }
-
-        private static void RegisterTheme(ISettingsManager settingsManager)
-        {
-            var themeSettings = BuildTheme(settingsManager);
-
-            SfSkinManager.RegisterThemeSettings("MaterialDark", themeSettings);
-            SfSkinManager.ApplyStylesOnApplication = true;
-        }
-
-        // NOTE: used for debug environment
-        public static void UpdateTheme(ISettingsManager settingsManager)
-        {
-            var window = Application.Current.MainWindow;
-            // NOTE: trick SfSkinManager to unregister current ThemeSettings.
-            var theme = SfSkinManager.GetTheme(window);
-
-            theme.ThemeName = "";
-            var themeSettings = BuildTheme(settingsManager);
-
-            SfSkinManager.RegisterThemeSettings("MaterialDark", themeSettings);
-            SfSkinManager.ApplyStylesOnApplication = true;
-            SfSkinManager.SetTheme(window, new Theme("MaterialDark"));
-            window.InvalidateVisual();
-            window.UpdateLayout();
-            window.Visibility = Visibility.Collapsed;
-
-            Task.Delay(1000).ContinueWith(_ =>
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    window.InvalidateVisual();
-                    window.UpdateLayout();
-                    window.Visibility = Visibility.Visible;
-                });
-            });
-        }
-
-        private static IThemeSetting BuildTheme(ISettingsManager settingsManager)
-        {
-            return new MaterialDarkThemeSettings
-            {
-                PrimaryBackground = new SolidColorBrush(settingsManager.GetThemeAccent()),
-                BodyFontSize = 11 * settingsManager.UiScalePercentage,
-                HeaderFontSize = 14 * settingsManager.UiScalePercentage,
-                SubHeaderFontSize = 13 * settingsManager.UiScalePercentage,
-                TitleFontSize = 13 * settingsManager.UiScalePercentage,
-                SubTitleFontSize = 12 * settingsManager.UiScalePercentage,
-                BodyAltFontSize = 11 * settingsManager.UiScalePercentage,
-                FontFamily = new FontFamily("Segoe UI")
-            };
         }
 
         private static double ComputeScaleFromResolution(double height)

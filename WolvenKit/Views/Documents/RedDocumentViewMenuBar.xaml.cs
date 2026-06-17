@@ -747,7 +747,9 @@ namespace WolvenKit.Views.Documents
                 childNode.ForceLoadPropertiesRecursive();
                 foreach (var (oldPath, newPath) in pathReplacements)
                 {
-                    if (await childNode.SearchAndReplaceAsync(oldPath, newPath, true, false) == 0)
+                    // result of await can't be in if statement check, or logic is flaky
+                    var replaced = await childNode.SearchAndReplaceAsync(oldPath, newPath, true, false);
+                    if (replaced <= 0)
                     {
                         continue;
                     }

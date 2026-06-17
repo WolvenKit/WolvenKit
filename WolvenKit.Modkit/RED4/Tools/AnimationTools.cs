@@ -292,6 +292,7 @@ namespace WolvenKit.Modkit.RED4
                     OptimizationHints = new AnimationOptimizationHints {
                         PreferSIMD = bufferData.IsSimd,
                         MaxRotationCompression = bufferData.CompressionUsed,
+                        SimdQuantizationBits = bufferData.SimdQuantizationBits,
                     },
                 };
 
@@ -309,10 +310,6 @@ namespace WolvenKit.Modkit.RED4
             if (stats.RootMotionConflicts > 0)
             {
                 _loggerService.Warning($"{animsFileName}: {stats.RootMotionConflicts} animations had regular root joint transforms in addition to Root Motion. Only exporting Root Motion. Re-importing with Root Motion will delete the non-RM. This is probably correct, but you can additionally export without Root Motion to get the regular transforms.");
-            }
-            if (stats.SimdAnims > 0)
-            {
-                _loggerService.Info($"{animsFileName}: Exported {stats.SimdAnims} SIMD animations. They can only be imported back as regular animations, so you may want to simplify them when editing, or omit them from the re-import to keep the old ones."); 
             }
             if (stats.AdditiveAnims > 0)
             {
@@ -552,8 +549,9 @@ namespace WolvenKit.Modkit.RED4
                     NumTracks = numTracks,
                     NumExtraTracks = numExtraTracks,
                     TracksCountActual = tracksCountActual,
-                    IsSimd = false,
+                    IsSimd = extras.OptimizationHints.PreferSIMD && !importArgs.ForceCompressedEncoding,
                     CompressionUsed = extras.OptimizationHints.MaxRotationCompression,
+                    SimdQuantizationBits = extras.OptimizationHints.SimdQuantizationBits,
                 };
 
                 // Backfill from original where we must, for now
@@ -578,12 +576,24 @@ namespace WolvenKit.Modkit.RED4
                     ZeInBytes = 0,
                 };
 
-                CompressedBuffer.EncodeAnimationData(out var newAnimDataChunk, out var newCompressedBuffer, ref incomingAnimData, chunkDataAddress, _loggerService);
+                animAnimDataChunk newAnimDataChunk;
+                animIAnimationBuffer newAnimBuffer;
+
+                if (incomingAnimData.IsSimd)
+                {
+                    SIMDEncoder.EncodeSimdAnimationData(out newAnimDataChunk, out var newSimdBuffer, in incomingAnimData, chunkDataAddress, _loggerService);
+                    newAnimBuffer = newSimdBuffer;
+                }
+                else
+                {
+                    CompressedBuffer.EncodeAnimationData(out newAnimDataChunk, out var newCompressedBuffer, in incomingAnimData, chunkDataAddress, _loggerService);
+                    newAnimBuffer = newCompressedBuffer;
+                }
 
                 var newAnimDesc = new animAnimation()
                 {
                     Name = incomingAnim.Name,
-                    AnimBuffer = new(newCompressedBuffer),
+                    AnimBuffer = new(newAnimBuffer),
                     Duration = incomingAnimData.Duration,
                     AnimationType = incomingAnimationType,
                     FrameClamping = extras.FrameClamping,
@@ -639,7 +649,14 @@ namespace WolvenKit.Modkit.RED4
 
             if (stats.SIMDs > 0)
             {
-                _loggerService.Warning($"{gltfFileName}: Encoding: SIMD anims are not fully supported, converted {stats.SIMDs} to normal anims. These mostly work ok, but if you have trouble, you can omit them from the animset to keep the existing SIMD versions.");
+                if (importArgs.ForceCompressedEncoding)
+                {
+                    _loggerService.Warning($"{gltfFileName}: Encoding: Force Compressed enabled, converted {stats.SIMDs} SIMD anims to Compressed format.");
+                }
+                else
+                {
+                    _loggerService.Success($"{gltfFileName}: Encoding: {stats.SIMDs} animations encoded as SIMD buffers.");
+                }
             }
             if (stats.AdditivesStripped > 0)
             {
