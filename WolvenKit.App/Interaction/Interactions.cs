@@ -275,7 +275,7 @@ public static class Interactions
     /// <summary>
     /// Shows dialogue to copy mesh materials/appearances.
     /// </summary>
-    public static Func<List<string>,
+    public static Func<(List<string> options, string filterDefaultValue),
         CopyMeshAppearancesDialogViewModel?> ShowCopyMeshAppearancesDialogue { get; set; } =
         _ => throw new NotImplementedException();
 
