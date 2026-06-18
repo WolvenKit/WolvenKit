@@ -1,7 +1,8 @@
 # Indepth docs at https://wolvenkit.github.io/WolvenKit/contributing/keep-changelog.html
-
-- type: "changed"
-  packages: ["App"]
-  pr-number: 2960
-  author: "manavortex"
-  description: "Project-wide scans will now ignore .tmp file extension"
+changes:
+  - type: "changed"
+    packages: ["App"]
+    pr-number: 2960
+    author: "manavortex"
+    description: "Project-wide scans will now ignore .tmp file extension"
+  
