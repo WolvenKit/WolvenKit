@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -735,6 +736,10 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
             filePaths.AddRange(ModFiles);
             filePaths.AddRange(ResourceFiles);
         }
+
+        filePaths = filePaths
+            .Where(f => !AppViewModel.FileScanIgnoredExtensions.Contains(Path.GetExtension(f).ToLower()))
+            .ToList();
 
         progressService?.Report(0);
         var totalFiles = filePaths.Count;
