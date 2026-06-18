@@ -1,4 +1,4 @@
-- type: "security | deprecated | removed | added | fixed | changed"
+- type: "changed"
   packages: ["App"]
   pr-number: 2959
   author: "manavortex"
