@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using ReactiveUI;
@@ -17,7 +18,7 @@ namespace WolvenKit.Views.Dialogs
         private static string s_lastSelectedOption = "";
         private static bool s_lastAppend;
 
-        public CopyMeshAppearancesDialog(List<string> options)
+        public CopyMeshAppearancesDialog(List<string> options, string argsFilterDefaultValue)
         {
             InitializeComponent();
 
@@ -37,6 +38,21 @@ namespace WolvenKit.Views.Dialogs
                         x => x.OptionsDict,
                         x => x.FilterableChecklistMenu.CheckboxOptionsAndStates)
                     .DisposeWith(disposables);
+
+                if (!string.IsNullOrEmpty(argsFilterDefaultValue))
+                {
+                    FilterableChecklistMenu.SetCurrentValue(Templates.FilterableChecklistMenu.FilterTextProperty,
+                        argsFilterDefaultValue);
+                }
+
+                // if SelectedOption is not null, select content of textbox for easier overwriting
+                if (string.IsNullOrEmpty(ViewModel?.SelectedOption))
+                {
+                    return;
+                }
+
+                TextBox.SelectAll();
+                TextBox.Focus();
             });
         }
 
