@@ -299,16 +299,28 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            if (ViewModel?.RootChunk is not ChunkViewModel { ResolvedData: CMesh mesh } || ViewModel.FilePath is null ||
+            if (ViewModel?.FilePath is not string currentPath ||
+                ViewModel?.RootChunk is not ChunkViewModel { ResolvedData: CMesh mesh } || ViewModel.FilePath is null ||
                 _projectManager.ActiveProject is not { } project)
             {
                 return;
             }
 
-            var files = _documentTools.CollectProjectFiles(".mesh").Where(f => f != ViewModel.FilePath)
-                .ToList();
 
-            if (Interactions.ShowCopyMeshAppearancesDialogue(files) is not { } dialog)
+            var otherMeshFiles =
+                _documentTools.CollectProjectFiles(".mesh")
+                    .Where(f => !currentPath.EndsWith(f, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+
+            var filterDefaultValue = string.Empty;
+            if (Path.GetDirectoryName(project.GetRelativePath(currentPath)) is string parentFolder &&
+                otherMeshFiles.Any(f => f.Contains(parentFolder)))
+            {
+                filterDefaultValue = parentFolder;
+            }
+
+
+            if (Interactions.ShowCopyMeshAppearancesDialogue((otherMeshFiles, filterDefaultValue)) is not { } dialog)
             {
                 return;
             }
@@ -365,8 +377,7 @@ namespace WolvenKit.Views.Documents
 
             var otherMeshFiles =
                 _documentTools.CollectProjectFiles(".mesh")
-                    .Where(f => !currentPath.EndsWith(f))
-                    .Distinct()
+                    .Where(f => currentPath.EndsWith(f, StringComparison.OrdinalIgnoreCase))
                     .ToDictionary(x => x, x => false);
 
             if (otherMeshFiles.Count == 0)
