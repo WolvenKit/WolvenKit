@@ -312,13 +312,21 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
+
             var otherMeshFiles =
                 _documentTools.CollectProjectFiles(".mesh")
-                    .Where(f => !currentPath.EndsWith(f))
-                    .Distinct()
+                    .Where(f => !currentPath.EndsWith(f, StringComparison.OrdinalIgnoreCase))
                     .ToList();
 
-            if (Interactions.ShowCopyMeshAppearancesDialogue(otherMeshFiles) is not { } dialog)
+            var filterDefaultValue = string.Empty;
+            if (Path.GetDirectoryName(project.GetRelativePath(currentPath)) is string parentFolder &&
+                otherMeshFiles.Any(f => f.Contains(parentFolder)))
+            {
+                filterDefaultValue = parentFolder;
+            }
+
+
+            if (Interactions.ShowCopyMeshAppearancesDialogue((otherMeshFiles, filterDefaultValue)) is not { } dialog)
             {
                 return;
             }
@@ -375,8 +383,7 @@ namespace WolvenKit.Views.Documents
 
             var otherMeshFiles =
                 _documentTools.CollectProjectFiles(".mesh")
-                    .Where(f => !currentPath.EndsWith(f))
-                    .Distinct()
+                    .Where(f => currentPath.EndsWith(f, StringComparison.OrdinalIgnoreCase))
                     .ToDictionary(x => x, x => false);
 
             if (otherMeshFiles.Count == 0)
