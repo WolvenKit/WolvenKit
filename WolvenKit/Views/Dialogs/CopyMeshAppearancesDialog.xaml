@@ -6,11 +6,12 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:converters="clr-namespace:WolvenKit.Converters"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
     Title="Select .mesh file(s)"
     SizeToContent="WidthAndHeight"
     DataContext="{Binding RelativeSource={RelativeSource Self},
                           Path=ViewModel}"
-    FocusManager.FocusedElement="{Binding ElementName=NpcNameTextbox}"
+    FocusManager.FocusedElement="{Binding ElementName=TextBox}"
     WindowStartupLocation="CenterScreen"
     Topmost="True">
 
@@ -35,9 +36,7 @@
 
         <syncfusion:WizardControl
             CancelButtonCancelsWindow="True"
-            FinishButtonClosesWindow="True"
-            FinishEnabled="{Binding CanSave,
-                                    UpdateSourceTrigger=PropertyChanged}">
+            FinishButtonClosesWindow="True">
 
             <syncfusion:WizardPage
                 BackVisibility="Collapsed"
@@ -46,7 +45,9 @@
                 HelpVisibility="Collapsed"
                 NextVisibility="Collapsed"
                 PreviewKeyDown="WizardPage_PreviewKeyDown"
-                PageType="Exterior">
+                PageType="Exterior"
+                FinishEnabled="{Binding CanSave,
+                                        UpdateSourceTrigger=PropertyChanged}">
                 <Grid
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
@@ -59,8 +60,9 @@
                         <RowDefinition Height="10" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="10" />
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
                         <RowDefinition Height="10" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="10" />
                     </Grid.RowDefinitions>
@@ -84,34 +86,32 @@
                     <!-- ======================================================== -->
 
                     <TextBlock
-                        Grid.Row="2"
+                        Grid.Row="4"
                         Grid.Column="0"
                         Margin="{DynamicResource WolvenKitMarginTop}"
                         Padding="{DynamicResource WolvenKitMarginTinyLeft}"
                         VerticalAlignment="Top"
                         Text="Select .mesh file(s)" />
 
-                    <editors:FilterableDropdownMenu
-                        x:Name="Dropdown"
-                        Grid.Row="2"
+                    <!-- Checklist -->
+                    <templates:FilterableChecklistMenu
+                        x:Name="FilterableChecklistMenu"
+                        Grid.Row="4"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
-                        Options="{Binding Options,
-                                          UpdateSourceTrigger=PropertyChanged}"
-                        IsInline="False"
-                        IsShowLabel="False"
-                        SelectedOption="{Binding SelectedOption}"
-                        KeyboardNavigation.TabIndex="-1" />
+                        CheckboxOptionsAndStates="{Binding OptionsDict}"
+                        SelectionChanged="ChecklistMenu_OnSelectionChanged"
+                        KeyboardNavigation.TabIndex="1" />
 
                     <TextBlock
-                        Grid.Row="4"
+                        Grid.Row="2"
                         Grid.Column="0"
                         Margin="{DynamicResource WolvenKitMarginTiny}"
                         VerticalAlignment="Bottom"
                         Text="Append (don't overwrite)" />
 
                     <CheckBox
-                        Grid.Row="4"
+                        Grid.Row="2"
                         Grid.Column="1"
                         Margin="{DynamicResource WolvenKitMarginTinyTop}"
                         IsChecked="{Binding IsAppend}"
@@ -133,7 +133,17 @@
                         FontSize="{DynamicResource WolvenKitFontBody}"
                         Text="{Binding SelectedOption,
                                        Mode=TwoWay}"
+                        KeyUp="TextBox_OnChange"
+                        LostFocus="TextBox_OnChange"
                         KeyboardNavigation.TabIndex="-1" />
+
+                    <TextBlock
+                        Grid.Row="7"
+                        Grid.Column="1"
+                        Style="{DynamicResource WolvenkitExplanationStyle}"
+                        Margin="{DynamicResource WolvenKitMarginTiny}"
+                        VerticalAlignment="Bottom"
+                        Text="You can separate multiple entries with ;" />
 
                 </Grid>
             </syncfusion:WizardPage>

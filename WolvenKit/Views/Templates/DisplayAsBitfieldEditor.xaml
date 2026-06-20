@@ -24,6 +24,7 @@
                                   Mode=TwoWay,
                                   UpdateSourceTrigger=PropertyChanged}"
             SelectedItems="{Binding SelectedItems}"
-            SelectedValueDelimiter=", " />
+            SelectedValueDelimiter=", "
+            DefaultText="{Binding NoneString}" />
     </Grid>
 </UserControl>

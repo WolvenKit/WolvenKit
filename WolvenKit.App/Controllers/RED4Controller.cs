@@ -6,6 +6,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -1012,6 +1013,53 @@ public class RED4Controller : ObservableObject, IGameController
         return true;
     }
 
+    public async Task AddToModAsync(IList<IGameFile> files)
+    {
+        var progress = 0;
+
+        _progressService.IsIndeterminate = false;
+        _progressService.Report(0);
+
+        var total = files.Count;
+
+        if (total > 0)
+        {
+            // Limit concurrency for disk I/O (extraction + writes). Unbounded parallelism
+            // often saturates the disk and ends up slower + spams the UI thread.
+            var dop = Math.Min(8, Math.Max(1, Environment.ProcessorCount / 2));
+
+            await Parallel.ForEachAsync(
+                files,
+                new ParallelOptions { MaxDegreeOfParallelism = dop },
+                (file, token) =>
+                {
+                    token.ThrowIfCancellationRequested();
+                    AddToMod(file);
+                    var current = Interlocked.Increment(ref progress);
+                    var reportInterval = Math.Max(1, total / 50);
+
+                    if (current % reportInterval == 0 || current == total)
+                    {
+                        _progressService.Report(current / (float)total);
+                    }
+
+                    return ValueTask.CompletedTask;
+                });
+
+            var report = "";
+
+            foreach (var file in files)
+            {
+                report += $"Added game file to project: {file.Name}\r\n";
+            }
+
+            _loggerService.Info(report);
+        }
+
+        _progressService.Completed();
+    }
+
+
     /// <Inheritdoc />
     public bool AddToMod(ulong hash)
     {
@@ -1071,7 +1119,6 @@ public class RED4Controller : ObservableObject, IGameController
             {
                 using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
                 file.Extract(fs);
-                _loggerService.Info($"Added game file to project: {file.Name}");
             }
             catch (Exception ex)
             {

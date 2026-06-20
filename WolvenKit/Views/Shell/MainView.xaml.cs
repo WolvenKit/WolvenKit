@@ -8,6 +8,7 @@ using System.Windows;
 using AdonisUI.Controls;
 using ReactiveUI;
 using Splat;
+using Syncfusion.UI.Xaml.Grid;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
@@ -36,10 +37,11 @@ namespace WolvenKit.Views.Shell
 
         public MainView(ProjectResourceTools projectResourceTools, AppViewModel viewModel = null)
         {
+            InitializeComponent();
+            Syncfusion.UI.Xaml.Grid.AutomationPeerHelper.EnableCodedUI = true;
+
             ViewModel = viewModel ?? Locator.Current.GetService<AppViewModel>();
             DataContext = ViewModel;
-
-            InitializeComponent();
 
             this.WhenActivated(disposables =>
             {
@@ -218,12 +220,7 @@ namespace WolvenKit.Views.Shell
 
                 Interactions.ShowChecklistDialogue = (args) =>
                 {
-                    var dialog = new ShowChecklistDialog(
-                        args.checklistOptions,
-                        args.title,
-                        args.text,
-                        args.inputFieldLabel,
-                        args.inputFieldDefaultValue);
+                    var dialog = new ShowChecklistDialog(args);
                     if (dialog.ShowDialog() != true)
                     {
                         return null;

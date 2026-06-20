@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.Input;
 using Octokit;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
+using WolvenKit.App.Interaction.Options;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Tools;
@@ -114,7 +115,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             if (dialogModel.IsCreateJsonFile)
             {
                 var locKey =
-                    $"{modderName.ToFileName()}_{dialogModel.NpcName.ToFileName()}_photomode_i18n";
+                    $"{modderName.ToArchiveFileName()}_{dialogModel.NpcName.ToArchiveFileName()}_photomode_i18n";
 
                 var jsonFileAbsolutePath = Path.Join(activeProject.ModDirectory, jsonFileRelativePath);
 
@@ -241,6 +242,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         _loggerService.Success("Done! Now import the .png files via Import Tool.");
     }
 
+    private static string[] s_extensions = [".ent", ".mesh", ".mi", ".anims", ".particle", ".effect"];
     private static readonly List<string> s_worldBuilderDataPath =
         ["bin", "x64", "plugins", "cyber_engine_tweaks", "mods", "entSpawner", "data"];
 
@@ -253,25 +255,32 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         }
 
         var files = activeProject.ModFiles
-            .Where(f => f.EndsWith(".ent") | f.EndsWith(".mesh") | f.EndsWith(".mi"))
+            .Where(f => s_extensions.Contains(Path.GetExtension(f)))
             .OrderBy(Path.GetExtension)
             .ToList();
 
         if (files.Count == 0)
         {
-            _loggerService.Warning("You have no .ent or .mesh files in your project, so there's nothing to add.");
+            _loggerService.Info(
+                "You have no matching files in your project, there's nothing to add (only supports " +
+                string.Join(", ", s_extensions) + ").");
+            _notificationService.Info(
+                "You have no matching files in your project, there's nothing to add. See log for detail");
             return;
         }
 
-        var dict = files.ToDictionary(f => f, f => f.Contains("prop") || f.Contains("amm"));
+        // check prop entries for the user
+        var dict = files.ToDictionary(f => f,
+            f => f.Contains("prop") || f.Contains("amm") || f.Contains("asset"));
 
-        if (Interactions.ShowChecklistDialogue((
-                    dict,
-                    "Select files to include",
+        if (Interactions.ShowChecklistDialogue(
+                new ChecklistDialogOptions(dict,
+                    "Select asset files",
                     "Select the files you want to make available to World Builder.",
                     "WorldBuilder file name",
-                    activeProject.ModName)) is not
-                { } dialogModel || dialogModel.SelectedOptions.Count == 0)
+                    activeProject.ModName.ToArchiveFileName()
+                )
+            ) is not { } dialogModel || dialogModel.SelectedOptions.Count == 0)
         {
             return;
         }
@@ -287,64 +296,33 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
 
         var subfolder = GetModderName();
 
-        WriteEntData();
-        WriteMeshData();
-        WriteMiData();
-
+        WriteData(f => f.EndsWith(".mesh"), ["spawnables", "mesh", "all"]);
+        WriteData(f => f.EndsWith(".anims"), ["spawnables", "ai", "aispot"]);
+        WriteData(f => f.EndsWith(".ent"), ["spawnables", "entity", "templates"]);
+        WriteData(f => f.EndsWith(".mi"), ["spawnables", "visual", "decals"]);
+        WriteData(f =>f.EndsWith(".particle"), ["spawnables", "visual", "particles"]);
+        WriteData(f =>f.EndsWith(".effect"), ["spawnables", "visual", "effects"]);
         return;
 
-        void WriteMeshData()
+        // Write data to file. First param: filter function (predicate for entries)
+        // Second function: path to target location (will write to moddername/filename.txt)
+        void WriteData(Func<string, bool> predicate, params string[] folderPath)
         {
-            var meshes = dialogModel.SelectedOptions.Where(f => f.EndsWith(".mesh")).ToList();
-            if (meshes.Count == 0)
+            var entries = dialogModel.SelectedOptions.Where(predicate).ToList();
+            if (entries.Count == 0)
             {
                 return;
             }
 
-            var meshFilePath = Path.Join("spawnables", "mesh", "all", subfolder);
-            Directory.CreateDirectory(Path.Join(wbDataFolder, meshFilePath));
+            var subdir = Path.Join([..folderPath, subfolder]);
+            Directory.CreateDirectory(Path.Join(wbDataFolder, subdir));
 
-            File.WriteAllText(Path.Join(wbDataFolder, meshFilePath, fileName),
-                string.Join(Environment.NewLine, meshes));
-
-            _loggerService.Success(
-                $"{meshes.Count} entries written to {Path.Join([..s_worldBuilderDataPath, meshFilePath, fileName])}");
-        }
-
-        void WriteEntData()
-        {
-            var ents = dialogModel.SelectedOptions.Where(f => f.EndsWith(".ent")).ToList();
-            if (ents.Count == 0)
-            {
-                return;
-            }
-
-            var entFolder = Path.Join(wbDataFolder, subfolder);
-            Directory.CreateDirectory(entFolder);
-
-            File.WriteAllText(Path.Join(entFolder, fileName), string.Join(Environment.NewLine, ents));
+            File.WriteAllText(Path.Join(wbDataFolder, subdir, fileName),
+                string.Join(Environment.NewLine, entries));
 
             _loggerService.Success(
-                $"{ents.Count} entries written to {Path.Join([..s_worldBuilderDataPath, subfolder, fileName])}");
+                $"{entries.Count} entries written to {Path.Join([..s_worldBuilderDataPath, subdir, fileName])}");
         }
-
-        void WriteMiData()
-        {
-            var miFiles = dialogModel.SelectedOptions.Where(f => f.EndsWith(".mi")).ToList();
-            if (miFiles.Count == 0)
-            {
-                return;
-            }
-
-            var miFolder = Path.Join(wbDataFolder, "spawnables", "mi", "all", subfolder);
-            Directory.CreateDirectory(miFolder);
-
-            File.WriteAllText(Path.Join(miFolder, fileName), string.Join(Environment.NewLine, miFiles));
-
-            _loggerService.Success(
-                $"{miFiles.Count} entries written to {Path.Join([..s_worldBuilderDataPath, miFolder, fileName])}");
-        }
-
     }
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
@@ -399,6 +377,13 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
     {
         if (_projectManager.ActiveProject is not Cp77Project activeProject)
         {
+            return;
+        }
+
+        if (!activeProject.ModFiles.Any(f => f.Contains(".mesh")))
+        {
+            Interactions.ShowPopup("You need at least one .mesh file in your project to use this",
+                "Please add a mesh!");
             return;
         }
 

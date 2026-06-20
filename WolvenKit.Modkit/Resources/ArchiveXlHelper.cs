@@ -96,7 +96,9 @@ public partial class ArchiveXlHelper
             { "feet", ["lifted", "flat", "high_heels", "flat_shoes"] }, //
             { "arms", ["base_arms", "mantis_blades", "monowire", "projectile_launcher"] }, //
             { "gender", ["m", "w"] },
+            { "sleeves", ["full", "part"] },
             { "body", ["base_body", "for a list check https://tinyurl.com/cyberpunk-body-mods"] },
+            { "hair", ["short", "long", "dreads", "buzz", "bald"] },
         };
 
 
@@ -111,7 +113,7 @@ public partial class ArchiveXlHelper
     public static bool HasSubstitution(string s) => s_substitutionRegex().IsMatch(s);
 
     /// <summary>
-    /// Could the string have substitution? 
+    /// Could the string have substitution?
     /// </summary>
     /// <param name="s"></param>
     /// <returns></returns>
@@ -125,7 +127,7 @@ public partial class ArchiveXlHelper
         return SubstitutionMap.SelectMany(kvp => kvp.Value)
             .Any(partial => s.Contains($"_{partial}_") || s.Contains($"_{partial}."));
     }
-    
+
     public static string? GetValuesForInvalidSubstitution(string? s)
     {
         if (s is null || !HasSubstitution(s))
@@ -144,7 +146,7 @@ public partial class ArchiveXlHelper
         }
 
         List<string> invalidSubstitutions = [];
-        
+
         foreach (Match match in s_substitutionRegex().Matches(s))
         {
             if (SubstitutionMap.ContainsKey(match.Value))
@@ -159,7 +161,7 @@ public partial class ArchiveXlHelper
         {
             return null;
         }
-        
+
 
         return
             $"Invalid substitutions used: [{string.Join(',', invalidSubstitutions)}]. Valid substitutions are: [{string.Join(',', SubstitutionMap.Keys)}] ";
@@ -196,7 +198,7 @@ public partial class ArchiveXlHelper
             else if (!values.Contains(value))
             {
                 result.Add($"{key}: [ {string.Join(", ", values)} ]");
-            } 
+            }
         }
 
         return result.Count == 0 ? null : string.Join(", ", result);
