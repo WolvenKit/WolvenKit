@@ -291,6 +291,109 @@ namespace WolvenKit.Modkit.RED4
         }
 
 
+        private static Mat4 ToNumericsMatrix4x4(CMatrix m) =>
+            new Mat4(
+                m.X.X, m.X.Y, m.X.Z, m.X.W,
+                m.Y.X, m.Y.Y, m.Y.Z, m.Y.W,
+                m.Z.X, m.Z.Y, m.Z.Z, m.Z.W,
+                m.W.X, m.W.Y, m.W.Z, m.W.W
+            );
+
+        private static void ApplyBonePosition(rendRenderMeshBlob rendBlob, int index, Vec3 rawInverseTranslation)
+        {
+            if (index < 0 || index >= rendBlob.Header.BonePositions.Count)
+            {
+                return;
+            }
+
+            var position = rendBlob.Header.BonePositions[index].NotNull();
+            position.X = rawInverseTranslation.X;
+            position.Y = rawInverseTranslation.Y;
+            position.Z = rawInverseTranslation.Z;
+            position.W = 1f;
+        }
+
+        private static bool TryGetBonePositionFromBoneRigMatrix(CMatrix boneRigMatrix, out Vec3 rawInverseTranslation)
+        {
+            rawInverseTranslation = Vec3.Zero;
+
+            var matrix = ToNumericsMatrix4x4(boneRigMatrix);
+            if (!Mat4.Invert(matrix, out var inverseMatrix))
+            {
+                return false;
+            }
+
+            rawInverseTranslation = inverseMatrix.Translation;
+            return true;
+        }
+
+        private static Vec3 ImportMeshToolsPosition(Vec3 gltfPosition)
+        {
+            // Mesh export converts raw RE coordinates to glTF coordinates as:
+            //     (x, y, z) -> (x, z, -y)
+            // Reverse that here before rebuilding BoneRigMatrices.
+            return new Vec3(gltfPosition.X, -gltfPosition.Z, gltfPosition.Y);
+        }
+
+        private static Quat ImportMeshToolsRotation(Quat gltfRotation)
+        {
+            // Mesh export converts raw RE quaternion components to glTF as:
+            //     (x, y, z, w) -> (x, z, -y, w)
+            // Reverse that here before rebuilding BoneRigMatrices.
+            return Quat.Normalize(new Quat(gltfRotation.X, -gltfRotation.Z, gltfRotation.Y, gltfRotation.W));
+        }
+
+        private static bool TryCreateBoneRigMatrixFromExportedJoint(Node joint, out Mat4 boneRigMatrix, out Vec3 rawInverseTranslation)
+        {
+            rawInverseTranslation = ImportMeshToolsPosition(joint.LocalTransform.Translation);
+            var rawRotation = ImportMeshToolsRotation(joint.LocalTransform.Rotation);
+
+            // export stores the transform extracted from BoneRigMatrix.Inverted()
+            // after applying the coordinate remap.
+            // Rebuild that inverse matrix from the edited glTF joint TRS, then invert it
+            // to get the original BoneRigMatrix representation.
+            var inverseBoneRigMatrix = Mat4.CreateFromQuaternion(rawRotation);
+            inverseBoneRigMatrix.Translation = rawInverseTranslation;
+
+            return Mat4.Invert(inverseBoneRigMatrix, out boneRigMatrix);
+        }
+
+        private static Node[] GetBestMatchingSkinJointArray(ModelRoot model, CMesh root)
+        {
+            if (model.LogicalSkins.Count == 0 || root.BoneNames.Count == 0)
+            {
+                return Array.Empty<Node>();
+            }
+
+            var expectedNames = root.BoneNames
+                .Select(x => x.ToString().NotNull())
+                .ToHashSet();
+
+            var bestScore = -1;
+            Node[] bestJoints = Array.Empty<Node>();
+
+            for (var skinIndex = 0; skinIndex < model.LogicalSkins.Count; skinIndex++)
+            {
+                var skin = model.LogicalSkins[skinIndex];
+                var joints = Enumerable
+                    .Range(0, skin.JointsCount)
+                    .Select(i => skin.GetJoint(i).Joint)
+                    .ToArray();
+
+                var score = joints.Count(j => j.Name is not null && expectedNames.Contains(j.Name));
+
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    bestJoints = joints;
+                }
+            }
+
+            return bestScore > 0 ? bestJoints : Array.Empty<Node>();
+        }
+
+
+
         public bool ImportMesh(FileInfo inGltfFile, Stream inMeshStream, GltfImportArgs args)
         {
             var cr2w = _parserService.ReadRed4File(inMeshStream);
@@ -334,24 +437,26 @@ namespace WolvenKit.Modkit.RED4
 
             var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.ValidationMode));
 
-            if (model.LogicalSkins.Count > 0 && originalRig != null)
+            if (model.LogicalSkins.Count > 0 && cr2w.RootChunk is CMesh rootForBoneMatrices)
             {
-                var jointArray = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint).ToArray();
+                var jointArray = GetBestMatchingSkinJointArray(model, rootForBoneMatrices);
 
-                if (cr2w.RootChunk is CMesh root)
+                if (jointArray.Length > 0)
                 {
-                    for (var i = 0; i < root.BoneNames.Count; i++)
+                    for (var i = 0; i < rootForBoneMatrices.BoneNames.Count; i++)
                     {
-                        var foundBone = jointArray.FirstOrDefault(x => root.BoneNames[i] == x.Name);
-                        if (foundBone is not null)
-                        {
-                            System.Numerics.Matrix4x4.Invert(foundBone.WorldMatrix, out var inversedWorldMatrix);
+                        var boneName = rootForBoneMatrices.BoneNames[i].ToString().NotNull();
+                        var foundBone = jointArray.FirstOrDefault(x => x.Name == boneName);
 
-                            root.BoneRigMatrices[i] = inversedWorldMatrix;
-                            root.BoneRigMatrices[i].NotNull().W.Y = -inversedWorldMatrix.M43;
-                            root.BoneRigMatrices[i].NotNull().W.Z = inversedWorldMatrix.M42;
-                            //component Y and -Z are being swapped in vector W
-                            //should probably figure out why
+                        if (foundBone is null)
+                        {
+                            continue;
+                        }
+
+                        if (TryCreateBoneRigMatrixFromExportedJoint(foundBone, out var boneRigMatrix, out var rawInverseTranslation))
+                        {
+                            rootForBoneMatrices.BoneRigMatrices[i] = boneRigMatrix;
+                            ApplyBonePosition(rendBlob, i, rawInverseTranslation);
                         }
                     }
                 }
@@ -1375,21 +1480,14 @@ namespace WolvenKit.Modkit.RED4
 
             blob.RenderBuffer.Buffer.SetBytes(buffer.ToArray());
 
-            if (cr2w.RootChunk is CMesh root && inverseBindMatrices != null)
+            if (cr2w.RootChunk is CMesh root)
             {
-                for (var i = 0; i < blob.Header.BonePositions.Count; i++)
+                var bonePositionCount = Math.Min(blob.Header.BonePositions.Count, root.BoneRigMatrices.Count);
+                for (var i = 0; i < bonePositionCount; i++)
                 {
-                    if (boneNames is not null)
+                    if (TryGetBonePositionFromBoneRigMatrix(root.BoneRigMatrices[i].NotNull(), out var rawInverseTranslation))
                     {
-                        var index = Array.FindIndex(boneNames, x => x.Contains(root.BoneNames[i].ToString().NotNull()) && x.Length == root.BoneNames[i].Length);
-
-                        var position = blob.Header.BonePositions[i].NotNull();
-
-                        position.X = inverseBindMatrices[index].M41;
-                        position.Y = -inverseBindMatrices[index].M43;
-                        position.Z = inverseBindMatrices[index].M42;
-                        position.W = inverseBindMatrices[index].M44;
-                        //position = root.BoneRigMatrices[i].W;
+                        ApplyBonePosition(blob, i, rawInverseTranslation);
                     }
                 }
             }
