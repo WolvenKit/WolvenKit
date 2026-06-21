@@ -1,0 +1,6 @@
+changes:
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 2958
+      author: "manavortex"
+      description: "entAnimatedComponent: rig and animgraph now have dropdown support."
