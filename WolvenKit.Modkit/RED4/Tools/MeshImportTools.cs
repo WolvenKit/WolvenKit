@@ -360,9 +360,25 @@ namespace WolvenKit.Modkit.RED4
 
         private static Node[] GetBestMatchingSkinJointArray(ModelRoot model, CMesh root)
         {
-            if (model.LogicalSkins.Count == 0 || root.BoneNames.Count == 0)
+            if (model.LogicalSkins.Count == 0)
             {
                 return Array.Empty<Node>();
+            }
+
+            Node[] GetSkinJoints(Skin skin) => Enumerable
+                .Range(0, skin.JointsCount)
+                .Select(i => skin.GetJoint(i).Joint)
+                .ToArray();
+
+            // If the destination mesh has no orphan bones yet, use the largest skin as
+            // the source skeleton so the import can create the missing mesh bones.
+            if (root.BoneNames.Count == 0)
+            {
+                return Enumerable
+                    .Range(0, model.LogicalSkins.Count)
+                    .Select(i => GetSkinJoints(model.LogicalSkins[i]))
+                    .OrderByDescending(joints => joints.Length)
+                    .FirstOrDefault() ?? Array.Empty<Node>();
             }
 
             var expectedNames = root.BoneNames
@@ -374,13 +390,8 @@ namespace WolvenKit.Modkit.RED4
 
             for (var skinIndex = 0; skinIndex < model.LogicalSkins.Count; skinIndex++)
             {
-                var skin = model.LogicalSkins[skinIndex];
-                var joints = Enumerable
-                    .Range(0, skin.JointsCount)
-                    .Select(i => skin.GetJoint(i).Joint)
-                    .ToArray();
-
-                var score = joints.Count(j => j.Name is not null && expectedNames.Contains(j.Name));
+                var joints = GetSkinJoints(model.LogicalSkins[skinIndex]);
+                var score = joints.Count(j => !string.IsNullOrEmpty(j.Name) && expectedNames.Contains(j.Name));
 
                 if (score > bestScore)
                 {
@@ -392,6 +403,129 @@ namespace WolvenKit.Modkit.RED4
             return bestScore > 0 ? bestJoints : Array.Empty<Node>();
         }
 
+        private static int FindMeshBoneIndex(CMesh root, string boneName)
+        {
+            for (var i = 0; i < root.BoneNames.Count; i++)
+            {
+                if (root.BoneNames[i].ToString() == boneName)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        private static void AddMissingMeshBonesFromGltfJoints(CMesh root, rendRenderMeshBlob rendBlob, Node[] jointArray)
+        {
+            foreach (var joint in jointArray)
+            {
+                var jointName = joint.Name;
+                if (string.IsNullOrWhiteSpace(jointName) || FindMeshBoneIndex(root, jointName) >= 0)
+                {
+                    continue;
+                }
+
+                if (!TryCreateBoneRigMatrixFromExportedJoint(joint, out var boneRigMatrix, out var rawInverseTranslation))
+                {
+                    continue;
+                }
+
+                root.BoneNames.Add(jointName);
+                root.BoneRigMatrices.Add(boneRigMatrix);
+                root.BoneVertexEpsilons.Add(0f);
+
+                rendBlob.Header.BonePositions.Add(new Vector4
+                {
+                    X = rawInverseTranslation.X,
+                    Y = rawInverseTranslation.Y,
+                    Z = rawInverseTranslation.Z,
+                    W = 1f
+                });
+            }
+        }
+
+
+
+
+
+        private static bool RecomputeBoneVertexEpsilons(CMesh root, IReadOnlyList<RawMeshContainer> meshes)
+        {
+            if (root.BoneVertexEpsilons.Count == 0)
+            {
+                return false;
+            }
+
+            while (root.BoneVertexEpsilons.Count < root.BoneNames.Count)
+            {
+                root.BoneVertexEpsilons.Add(0f);
+            }
+
+            // Clear all epsilons before recomputing them from the imported skinning data.
+            for (var epsilonIndex = 0; epsilonIndex < root.BoneVertexEpsilons.Count; epsilonIndex++)
+            {
+                root.BoneVertexEpsilons[epsilonIndex] = 0.0f;
+            }
+
+            var bonePositions = new Vec3[root.BoneVertexEpsilons.Count];
+            var validBonePositions = new bool[root.BoneVertexEpsilons.Count];
+            var matrixCount = Math.Min(root.BoneRigMatrices.Count, root.BoneVertexEpsilons.Count);
+
+            for (var boneIndex = 0; boneIndex < matrixCount; boneIndex++)
+            {
+                if (TryGetBonePositionFromBoneRigMatrix(root.BoneRigMatrices[boneIndex].NotNull(), out var bonePosition))
+                {
+                    bonePositions[boneIndex] = bonePosition;
+                    validBonePositions[boneIndex] = true;
+                }
+            }
+
+            var result = false;
+
+            foreach (var mesh in meshes)
+            {
+                if (mesh.positions is null || mesh.weights is null || mesh.boneindices is null)
+                {
+                    continue;
+                }
+
+                if (mesh.weightCount <= 0)
+                {
+                    continue;
+                }
+
+                result = true;
+                var usableWeightCount = Math.Min(8, Math.Min(mesh.weightCount, Math.Min(mesh.weights.GetLength(1), mesh.boneindices.GetLength(1))));
+
+                for (var vertIndex = 0; vertIndex < mesh.positions.Length; vertIndex++)
+                {
+                    var position = mesh.positions[vertIndex];
+
+                    for (var weightIndex = 0; weightIndex < usableWeightCount; weightIndex++)
+                    {
+                        var weight = mesh.weights[vertIndex, weightIndex];
+                        if (weight == 0.0f)
+                        {
+                            continue;
+                        }
+
+                        var boneIndex = mesh.boneindices[vertIndex, weightIndex];
+                        if (boneIndex >= root.BoneVertexEpsilons.Count || !validBonePositions[boneIndex])
+                        {
+                            continue;
+                        }
+
+                        var distance = Vec3.Distance(position, bonePositions[boneIndex]);
+                        if (distance > root.BoneVertexEpsilons[boneIndex])
+                        {
+                            root.BoneVertexEpsilons[boneIndex] = distance;
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
 
 
         public bool ImportMesh(FileInfo inGltfFile, Stream inMeshStream, GltfImportArgs args)
@@ -443,6 +577,9 @@ namespace WolvenKit.Modkit.RED4
 
                 if (jointArray.Length > 0)
                 {
+                    // Grow the destination mesh orphan skeleton before vertex joint remapping.
+                    AddMissingMeshBonesFromGltfJoints(rootForBoneMatrices, rendBlob, jointArray);
+
                     for (var i = 0; i < rootForBoneMatrices.BoneNames.Count; i++)
                     {
                         var boneName = rootForBoneMatrices.BoneNames[i].ToString().NotNull();
@@ -538,12 +675,13 @@ namespace WolvenKit.Modkit.RED4
             else
             {
                 existingJoints = MeshTools.GetOrphanRig(meshBlob);
-                if (model.LogicalSkins.Count > 0 && model.LogicalSkins[0].JointsCount > 0)
+                var jointArray = GetBestMatchingSkinJointArray(model, meshBlob);
+                if (jointArray.Length > 0)
                 {
                     incomingJoints = new RawArmature
                     {
-                        BoneCount = model.LogicalSkins[0].JointsCount,
-                        Names = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray()
+                        BoneCount = jointArray.Length,
+                        Names = jointArray.Select(joint => joint.Name).ToArray()
                     };
                 }
             }
@@ -558,6 +696,8 @@ namespace WolvenKit.Modkit.RED4
                 throw new WolvenKitException(e.ErrorCode,
                     $"You're trying to import bones into a mesh that doesn't have them. Wolvenkit can't create bones — please remove them in Blender, or import into a different file: {e.Message}");
             }
+
+            RecomputeBoneVertexEpsilons(meshBlob, meshes);
 
             UpdateSkinningParamCloth(ref meshes, ref cr2w, args);
 
