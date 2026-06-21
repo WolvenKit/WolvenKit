@@ -1,5 +1,5 @@
 changes:
-    - type: "changed"
+    - type: "added"
       packages: ["App"]
       pr-number: 2958
       author: "manavortex"
