@@ -288,6 +288,13 @@
     </Style>
 
     <Style
+        x:Key="WolvenkitExplanationStyle"
+        TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
+        <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginBottom}" />
+    </Style>
+
+    <Style
         x:Key="WolvenKitTabControl"
         BasedOn="{StaticResource SyncfusionDocumentTabControlExtStyle}"
         TargetType="{x:Type syncfusion:TabControlExt}">

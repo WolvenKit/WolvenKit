@@ -51,7 +51,7 @@ public abstract class CvmDropdownHelper
 
     private static readonly List<string> s_appearanceNames =
     [
-        "meshAppearance", "appearanceName"
+        "meshAppearance", "appearanceName", "defaultAppearance"
     ];
 
     private static readonly List<string> s_multilayerProperties =
@@ -713,6 +713,13 @@ public abstract class CvmDropdownHelper
                 ret = documentTools.CollectProjectFiles(".mesh");
                 break;
 
+            case entAnimatedComponent when cvm.Name is "rig":
+                ret = documentTools.CollectProjectFiles(".rig");
+                break;
+            case entAnimatedComponent when cvm.Name is "graph":
+                ret = documentTools.CollectProjectFiles(".animgraph");
+                break;
+
             #endregion
 
             #region entFile
@@ -982,9 +989,9 @@ public abstract class CvmDropdownHelper
 
             entSkinnedMeshComponent when s_appearanceNames.Contains(cvm.Name) => true,
             entSkinnedMeshComponent when parent.Name == "mesh" => true,
+            entAnimatedComponent when cvm.Name is ("rig" or "graph") => true,
 
-            entEntityTemplate when s_appearanceNames.Contains(cvm.Name) => true,
-            entEntityTemplate => cvm.Name is "defaultAppearance",
+            entEntityTemplate => s_appearanceNames.Contains(cvm.Name),
 
             IRedRef when cvm is { Name: "resource", Parent.ResolvedData: appearanceAppearancePart } => true,
             entGarmentSkinnedMeshComponent
