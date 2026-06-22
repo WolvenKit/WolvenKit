@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using DynamicData.Binding;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -12,12 +13,15 @@ using ReactiveUI;
 using Serilog;
 using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;
+using Syncfusion.SfSkinManager;
+using Syncfusion.Themes.MaterialDark.WPF;
 using WolvenKit.App;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Helpers;
 using WolvenKit.RED4.CR2W;
@@ -59,6 +63,26 @@ namespace WolvenKit
         // Application OnStartup Override.
         protected override void OnStartup(StartupEventArgs e)
         {
+            _settingsManager ??= Locator.Current.GetService<ISettingsManager>();
+
+            _loggerService = Locator.Current.GetService<ILoggerService>();
+            _loggerService.Info("Starting application");
+            _loggerService.Info($"Version: {_settingsManager.GetVersionNumber()}");
+
+            // Register themes before loading any UI to avoid exceptions.
+            try
+            {
+                _loggerService.Info("Registering themes...");
+                var themeSettings = BuildTheme(_settingsManager);
+                SfSkinManager.RegisterThemeSettings("MaterialDark", themeSettings);
+                SfSkinManager.ApplyStylesOnApplication = true;
+                _loggerService.Info("Themes registered successfully.");
+            }
+            catch (WolvenKitException ex)
+            {
+                _loggerService.Error($"Exception while registering themes: {ex.Message}");
+            }
+
             Interactions.ShowFirstTimeSetup = () =>
             {
                 var dialog = new FirstSetupView();
@@ -67,12 +91,6 @@ namespace WolvenKit
                 return result;
             };
 
-            _settingsManager ??= Locator.Current.GetService<ISettingsManager>();
-
-            _loggerService = Locator.Current.GetService<ILoggerService>();
-
-            _loggerService.Info("Starting application");
-            _loggerService.Info($"Version: {_settingsManager.GetVersionNumber()}");
 
             _loggerService.Debug("Initializing red database");
             Initializations.InitializeThemeHelper();
@@ -186,6 +204,49 @@ namespace WolvenKit
             }
         }
 
+        private static IThemeSetting BuildTheme(ISettingsManager settingsManager)
+        {
+            return new MaterialDarkThemeSettings
+            {
+                PrimaryBackground = new SolidColorBrush(settingsManager.GetThemeAccent()),
+                BodyFontSize = 11 * settingsManager.UiScalePercentage,
+                HeaderFontSize = 14 * settingsManager.UiScalePercentage,
+                SubHeaderFontSize = 13 * settingsManager.UiScalePercentage,
+                TitleFontSize = 13 * settingsManager.UiScalePercentage,
+                SubTitleFontSize = 12 * settingsManager.UiScalePercentage,
+                BodyAltFontSize = 11 * settingsManager.UiScalePercentage,
+                FontFamily = new FontFamily("Segoe UI")
+            };
+        }
+
+        // NOTE: used for debug environment
+        public static void UpdateTheme(ISettingsManager settingsManager)
+        {
+            var window = Application.Current.MainWindow;
+            // NOTE: trick SfSkinManager to unregister current ThemeSettings.
+            var theme = SfSkinManager.GetTheme(window);
+
+            theme.ThemeName = "";
+            var themeSettings = BuildTheme(settingsManager);
+
+            SfSkinManager.RegisterThemeSettings("MaterialDark", themeSettings);
+            SfSkinManager.ApplyStylesOnApplication = true;
+            SfSkinManager.SetTheme(window, new Theme("MaterialDark"));
+            window.InvalidateVisual();
+            window.UpdateLayout();
+            window.Visibility = Visibility.Collapsed;
+
+            Task.Delay(1000).ContinueWith(_ =>
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    window.InvalidateVisual();
+                    window.UpdateLayout();
+                    window.Visibility = Visibility.Visible;
+                });
+            });
+        }
+
         private void OnUiScaleChanged()
         {
             DispatcherHelper.RunOnMainThread(async () =>
@@ -193,7 +254,7 @@ namespace WolvenKit
 #if DEBUG
                 // NOTE: Allow dynamic scaling to speed-up workflow when working on UI.
                 //       You might need to restart manually in some cases.
-                Initializations.UpdateTheme(_settingsManager);
+                UpdateTheme(_settingsManager);
                 await Task.CompletedTask;
 #else
                 await Interactions.ShowMessageBoxAsync("WolvenKit will restart to apply UI changes.", "Restart to scale UI", WMessageBoxButtons.Ok);

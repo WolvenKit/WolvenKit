@@ -982,6 +982,7 @@
                     Margin="{DynamicResource WolvenKitMarginTinyFooter}"
                     Orientation="Horizontal">
                     <Button
+                        AutomationProperties.AutomationId="ExpandAllButton"
                         Height="Auto"
                         Padding="0"
                         Click="ExpandAll_OnClick"
@@ -1102,8 +1103,9 @@
         </Border>
 
         <!-- Hierarchical Tree View -->
-        <syncfusion:SfTreeGrid
-            Name="TreeGrid"
+        <others:InspectableTreeGrid
+            x:Name="TreeGrid"
+            AutomationProperties.AutomationId="ProjectExplorerTreeGrid"
             Grid.Row="2"
             Margin="0"
             BorderThickness="0"
@@ -1170,7 +1172,7 @@
                     ImmediateUpdateColumnFilter="True"
                     MappingName="Name" />
             </syncfusion:SfTreeGrid.Columns>
-        </syncfusion:SfTreeGrid>
+        </others:InspectableTreeGrid>
 
         <!-- Flat Tree View -->
         <syncfusion:SfTreeGrid
