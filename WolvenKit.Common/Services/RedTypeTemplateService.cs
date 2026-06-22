@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using WolvenKit.Common.Conversion;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
 using WolvenKit.Core.Interfaces;
@@ -15,6 +16,11 @@ namespace WolvenKit.Common.Services;
 public class RedTypeTemplateService
 {
     private readonly ILoggerService _logger;
+    private readonly JsonSerializerOptions _jsonOptions = new()
+    {
+        Converters = { new RedTypeTemplateConverter() },
+        WriteIndented = true
+    };
 
     private readonly string _systemTemplateDir;
     private readonly string _userTemplateDir;
@@ -111,7 +117,7 @@ public class RedTypeTemplateService
     /// <returns></returns>
     /// <exception cref="Exception">Template File contains invalid or mismatched data</exception>
     /// <remarks>When using <see cref="TemplateSource.Auto"/>, user templates are preferred over system templates.</remarks>
-    public RedBaseClass? CreateTypeInstance(RedTypeTemplateDescriptor templateDescriptor, TemplateSource src = TemplateSource.Auto) =>
+    public IRedType? CreateTypeInstance(RedTypeTemplateDescriptor templateDescriptor, TemplateSource src = TemplateSource.Auto) =>
         CreateTypeInstance(templateDescriptor.Type, templateDescriptor.Name, src);
 
     /// <summary>
@@ -122,7 +128,7 @@ public class RedTypeTemplateService
     /// <returns></returns>
     /// <exception cref="Exception">Template File contains invalid or mismatched data</exception>
     /// <remarks>When using <see cref="TemplateSource.Auto"/>, user templates are preferred over system templates.</remarks>
-    public RedBaseClass? CreateTypeInstance<T>(string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
+    public IRedType? CreateTypeInstance<T>(string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
         CreateTypeInstance(typeof(T), templateName, src);
 
     /// <summary>
@@ -134,8 +140,8 @@ public class RedTypeTemplateService
     /// <returns></returns>
     /// <exception cref="Exception">Template File contains invalid or mismatched data</exception>
     /// <remarks>When using <see cref="TemplateSource.Auto"/>, user templates are preferred over system templates.</remarks>
-    public RedBaseClass? CreateTypeInstance(Type type, string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
-        ReadTemplate(type, templateName, src)?.Data ?? ReadTemplate(type, "default", src)?.Data ?? (RedBaseClass?)Activator.CreateInstance(type);
+    public IRedType? CreateTypeInstance(Type type, string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
+        ReadTemplate(type, templateName, src)?.Data ?? ReadTemplate(type, "default", src)?.Data ?? (IRedType?)Activator.CreateInstance(type);
 
     /// <summary>
     /// Reads a template from the system or user template directory and returns an instance of the templated object.
@@ -205,7 +211,7 @@ public class RedTypeTemplateService
         ArgumentNullException.ThrowIfNull(template.Data, nameof(template.Data));
 
         var fn = Path.Join(dst == TemplateDestination.User ? _userTemplateDir : _systemTemplateDir, $"{templateName}.{template.Data.GetType().Name}.json");
-        var js = RedJsonSerializer.Serialize(template);
+        var js = JsonSerializer.Serialize(template, _jsonOptions);
 
         lock (_lock)
         {
@@ -305,35 +311,14 @@ public class RedTypeTemplateService
         .SelectMany(a => a.GetTypes())
         .FirstOrDefault(t => t.Name == typeName);
 
-    private static RedTypeTemplate DeserializeTemplate(Type type, string json)
+    private RedTypeTemplate DeserializeTemplate(Type type, string json)
     {
-        var doc = JsonDocument.Parse(json);
-
-        var formatVersionPresent = doc.RootElement.TryGetProperty("FormatVersion", out var formatVersion);
-        var dataPresent = doc.RootElement.TryGetProperty("Data", out var data);
-
-        if (!formatVersionPresent)
+        var template = JsonSerializer.Deserialize<RedTypeTemplate>(json, _jsonOptions);
+        if (template?.Data?.GetType() != type)
         {
-            throw new Exception("Template file is missing FormatVersion property");
+            throw new Exception("Failed to deserialize template, deserialized data type does not match expected type.");
         }
-
-        if (!dataPresent)
-        {
-            throw new Exception("Template file is missing Data property");
-        }
-
-        doc.RootElement.TryGetProperty("Author", out var author);
-        doc.RootElement.TryGetProperty("Description", out var description);
-        doc.RootElement.TryGetProperty("Version", out var version);
-
-        return new RedTypeTemplate
-        {
-            FormatVersion = formatVersion.GetInt32(),
-            Author = author.GetStringOrDefault(),
-            Description = description.GetStringOrDefault(),
-            Version = version.GetStringOrDefault(),
-            Data = (RedBaseClass?)RedJsonSerializer.Deserialize(type, data)
-        };
+        return template;
     }
 
     #endregion

@@ -17,7 +17,8 @@ using Key = System.Windows.Input.Key;
 namespace WolvenKit.Views.Dialogs;
 public partial class RedTypeTemplateManagerView : ReactiveUserControl<RedTypeTemplateManagerViewModel>
 {
-    private DispatcherTimer _debounceTimer;
+    private readonly DispatcherTimer _comboBoxDebounceTimer;
+    private readonly DispatcherTimer _metadataDebounceTimer;
     private ComboBoxAdv _typeSelectorComboBox;
 
     public RedTypeTemplateManagerView()
@@ -30,11 +31,18 @@ public partial class RedTypeTemplateManagerView : ReactiveUserControl<RedTypeTem
                 .DisposeWith(disposables);
         });
 
-        _debounceTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(100) };
-        _debounceTimer.Tick += (_, _) =>
+        _comboBoxDebounceTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(100) };
+        _comboBoxDebounceTimer.Tick += (_, _) =>
         {
-            _debounceTimer.Stop();
+            _comboBoxDebounceTimer.Stop();
             ApplyTypeComboBoxFilter(_typeSelectorComboBox);
+        };
+
+        _metadataDebounceTimer = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
+        _metadataDebounceTimer.Tick += (_, _) =>
+        {
+            _metadataDebounceTimer.Stop();
+            ViewModel.SaveModifiedTemplates();
         };
     }
 
@@ -116,8 +124,8 @@ public partial class RedTypeTemplateManagerView : ReactiveUserControl<RedTypeTem
             return;
         }
 
-        _debounceTimer.Stop();
-        _debounceTimer.Start();
+        _comboBoxDebounceTimer.Stop();
+        _comboBoxDebounceTimer.Start();
     }
 
     private void ApplyTypeComboBoxFilter(ComboBoxAdv cba)
@@ -138,5 +146,16 @@ public partial class RedTypeTemplateManagerView : ReactiveUserControl<RedTypeTem
         items.Refresh();
 
         cba.SetCurrentValue(ComboBoxAdv.IsDropDownOpenProperty, true);
+    }
+
+    private void MetaDataProperty_OnKeyUp(object sender, KeyEventArgs e)
+    {
+        if (sender is TextBox textBox)
+        {
+            textBox.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
+        }
+
+        _metadataDebounceTimer.Stop();
+        _metadataDebounceTimer.Start();
     }
 }

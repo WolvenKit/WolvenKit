@@ -9,7 +9,7 @@ public class RedTypeTemplate
     public string Description { get; set; }
     public string Version { get; set; }
 
-    public RedBaseClass? Data { get; set; }
+    public IRedType? Data { get; set; }
 
     public RedTypeTemplate()
     {

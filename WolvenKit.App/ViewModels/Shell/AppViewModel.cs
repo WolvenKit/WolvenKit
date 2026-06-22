@@ -1506,7 +1506,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                     if (file.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate.Source !=
                         RedTypeTemplateSelectionOptionSource.Raw)
                     {
-                        rootChunkData = _redTypeTemplateService.CreateTypeInstance(redType,
+                        rootChunkData = (RedBaseClass?)_redTypeTemplateService.CreateTypeInstance(redType,
                             file.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate.Name);
                     }
                     else
@@ -2319,6 +2319,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private bool IsInRawFolder(string path) => _projectManager.ActiveProject is not null && path.Contains(_projectManager.ActiveProject.RawDirectory);
     private bool IsInResourceFolder(string path) => _projectManager.ActiveProject is not null && path.Contains(_projectManager.ActiveProject.ResourcesDirectory);
+    private bool IsInTemplateFolder(string path) => path.Contains(ISettingsManager.GetUserTemplateDir(), StringComparison.OrdinalIgnoreCase);
 
     private void OpenRedengineFile(string fullpath, string ext)
     {
@@ -2498,7 +2499,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             // double file formats
             case ".csv":
             case ".json":
-                if (IsInRawFolder(absolutePath) || IsInResourceFolder(absolutePath))
+                if (IsInRawFolder(absolutePath) || IsInResourceFolder(absolutePath) || IsInTemplateFolder(absolutePath))
                 {
                     ShellExecute(absolutePath);
                 }

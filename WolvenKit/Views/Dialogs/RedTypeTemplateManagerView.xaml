@@ -191,7 +191,8 @@
                         Grid.Column="1"
                         VerticalAlignment="Top"
                         Text="{Binding SelectedTemplate.Version, TargetNullValue=''}"
-                        IsReadOnly="{Binding SelectedTemplate.CanEdit, Converter={StaticResource InvertBooleanConverter}}"/>
+                        IsReadOnly="{Binding SelectedTemplate.CanEdit, Converter={StaticResource InvertBooleanConverter}}"
+                        KeyUp="MetaDataProperty_OnKeyUp"/>
 
                     <TextBlock
                         Grid.Row="1"
@@ -203,7 +204,8 @@
                         Grid.Column="1"
                         VerticalAlignment="Top"
                         Text="{Binding SelectedTemplate.Author, TargetNullValue=''}"
-                        IsReadOnly="{Binding SelectedTemplate.CanEdit, Converter={StaticResource InvertBooleanConverter}}"/>
+                        IsReadOnly="{Binding SelectedTemplate.CanEdit, Converter={StaticResource InvertBooleanConverter}}"
+                        KeyUp="MetaDataProperty_OnKeyUp"/>
 
                     <TextBlock
                         Grid.Row="2"
@@ -218,7 +220,8 @@
                         IsReadOnly="{Binding SelectedTemplate.CanEdit, Converter={StaticResource InvertBooleanConverter}}"
                         AcceptsReturn="True"
                         TextWrapping="Wrap"
-                        VerticalScrollBarVisibility="Auto"/>
+                        VerticalScrollBarVisibility="Auto"
+                        KeyUp="MetaDataProperty_OnKeyUp"/>
                 </Grid>
             </Border>
         </Grid>

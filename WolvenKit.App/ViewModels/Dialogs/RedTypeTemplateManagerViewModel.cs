@@ -33,6 +33,7 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
     private readonly RedTypeTemplateService _templateService;
     private readonly ILoggerService _loggerService;
     private readonly Cr2WTools _cr2wTools;
+    private readonly object _lock = new();
 
 
     public RedTypeTemplateManagerViewModel(AppViewModel appViewModel, RedTypeTemplateService templateService, ILoggerService loggerService, Cr2WTools cr2wTools)
@@ -90,7 +91,7 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
             }
         }
 
-        RedBaseClass? typeInstance;
+        IRedType? typeInstance;
 
         if (RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate.Source != RedTypeTemplateSelectionOptionSource.Raw)
         {
@@ -99,7 +100,7 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
         }
         else
         {
-            typeInstance = (RedBaseClass?)Activator.CreateInstance(type);
+            typeInstance = (IRedType?)Activator.CreateInstance(type);
         }
 
         if (typeInstance is null)
@@ -182,103 +183,7 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
 
         #endregion
 
-        #region Temp CR2W File Creation
-
-        var tempFile = Path.Combine(Path.GetTempPath(), $"{desc.Name}.{desc.Type.Name}.tempcr2w");
-        RedTypeTemplate? template = null;
-
-        var tempFileCreated = await Task.Run(() =>
-        {
-            template = _templateService.ReadTemplate(desc);
-            if (template?.Data is null)
-            {
-                _loggerService.Error($"Failed to read template: {desc.FilePath}");
-                return false;
-            }
-
-            var cr2W = new CR2WFile
-            {
-                RootChunk = template.Data
-            };
-
-            if (!_cr2wTools.WriteCr2W(cr2W, tempFile))
-            {
-                _loggerService.Error($"Failed to create temporary file: {tempFile}");
-                return false;
-            }
-
-            return true;
-        });
-
-        if (!tempFileCreated || template is null)
-        {
-            return;
-        }
-
-        #endregion
-
-        #region Editing Event Handlers
-
-        _appViewModel.DockedViews.CollectionChanged += OnDockedViewsChanged;
-        _appViewModel.RequestFileOpen(tempFile);
-
-        Close();
-        return;
-
-        void OnDockedViewsChanged(object? sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.NewItems == null)
-            {
-                return;
-            }
-
-            foreach (var item in e.NewItems.OfType<RedDocumentViewModel>())
-            {
-                if (item.FilePath == tempFile)
-                {
-                    item.OnSaveCompleted += OnDocumentSaved;
-                    _appViewModel.DockedViews.CollectionChanged -= OnDockedViewsChanged;
-                    _appViewModel.DockedViews.CollectionChanged += OnRemoved;
-                    break;
-                }
-                continue;
-
-                void OnRemoved(object? s, NotifyCollectionChangedEventArgs ea)
-                {
-                    if (ea.OldItems?.Contains(item) != true)
-                    {
-                        return;
-                    }
-
-                    item.OnSaveCompleted -= OnDocumentSaved;
-                    _appViewModel.DockedViews.CollectionChanged -= OnRemoved;
-
-                    try
-                    {
-                        File.Delete(tempFile);
-                    }
-                    catch
-                    {
-                        /* ignore */
-                    }
-                }
-            }
-
-            return;
-
-            void OnDocumentSaved(object? docSavedSender, EventArgs docSavedArgs)
-            {
-                if (docSavedSender is not RedDocumentViewModel doc)
-                {
-                    return;
-                }
-                template.Data = doc.Cr2wFile.RootChunk;
-                _templateService.WriteTemplate(template, desc.Name);
-                _loggerService.Success($"Template '{desc.Name}' of type `{desc.TypeName}` updated.");
-            }
-        }
-
-        #endregion
+        _appViewModel.RequestFileOpen(desc.FilePath);
     }
 
     public async Task DeleteFile(RedTypeTemplateManagerOption template)
@@ -297,12 +202,20 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
 
     private void Close()
     {
-        foreach (var template in Templates.Where(t => t is
-                     { Source: RedTypeTemplateSelectionOptionSource.User, IsDirty: true }))
-        {
-            _templateService.WriteTemplate(template.Template, template.Name);
-        }
-
+        SaveModifiedTemplates();
         _appViewModel.CloseModalCommand.Execute(null);
+    }
+
+    public void SaveModifiedTemplates()
+    {
+        lock (_lock)
+        {
+            foreach (var template in Templates.Where(t => t is
+                         { Source: RedTypeTemplateSelectionOptionSource.User, IsDirty: true }))
+            {
+                _templateService.WriteTemplate(template.Template, template.Name);
+                template.IsDirty = false;
+            }
+        }
     }
 }
