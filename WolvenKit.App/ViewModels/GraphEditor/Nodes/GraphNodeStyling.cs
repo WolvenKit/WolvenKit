@@ -145,6 +145,24 @@ public static class GraphNodeStyling
             "LogicalHub" => "🌐",
             "LogicalXor" => "🚪",
             "GameManager" => "🎮",
+
+            // Behavior tree nodes
+            "Selector" => "🔀",
+            "Sequence" => "➡️",
+            "Parallel" => "⋕",
+            "Repeat" => "🔁",
+            "InstantTask" => "⚡",
+            "MonitorTask" => "👁️",
+            "InstantCondition" => "❓",
+            "MonitorCondition" => "🔎",
+            "IfElse" => "❔",
+            "Subtree" => "🌲",
+            "Included Tree" => "🔗",
+            "FSM" => "🔄",
+            "FSM State" => "◇",
+            "Idle" => "⏸️",
+            "Succeeder" => "✔️",
+            "Failer" => "❌",
             
             // Default fallback
             _ => "⚪"
@@ -228,4 +246,4 @@ public static class GraphNodeStyling
         
         return typeName;
     }
-} 
+}

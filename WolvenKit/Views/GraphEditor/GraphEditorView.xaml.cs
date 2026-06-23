@@ -406,6 +406,20 @@ public partial class GraphEditorView : UserControl
 
         node.ContextMenu.Items.Clear();
 
+        if (Source.GraphType == RedGraphType.Behavior)
+        {
+            var toggleBehaviorSlotsText = nvm.ShowUnusedSockets ? "Hide Structural Slots" : "Show Structural Slots";
+            node.ContextMenu.Items.Add(CreateMenuItem(toggleBehaviorSlotsText, "Eye", "WolvenKitYellow", () =>
+            {
+                nvm.ShowUnusedSockets = !nvm.ShowUnusedSockets;
+                Source.GraphStateSave();
+            }));
+
+            node.ContextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);
+            e.Handled = true;
+            return;
+        }
+
         if (SelectedNodes.Count > 1)
         {
             node.ContextMenu.Items.Add(CreateMenuItem("Destroy Nodes", "CloseBoxOutline", "WolvenKitRed", () => Source.RemoveNodes(SelectedNodes)));
@@ -745,6 +759,12 @@ public partial class GraphEditorView : UserControl
     {
         if (sender is Connection connection && connection.DataContext is ConnectionViewModel connectionViewModel && Source != null)
         {
+            if (Source.GraphType == RedGraphType.Behavior)
+            {
+                e.Handled = true;
+                return;
+            }
+
             // Clear other selections and select this connection to highlight it
             Editor.SelectedItems.Clear();
             Editor.SelectedItems.Add(connectionViewModel);

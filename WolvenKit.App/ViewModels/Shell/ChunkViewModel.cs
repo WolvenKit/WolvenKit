@@ -4766,7 +4766,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
 
     /// <summary>
-    /// Determines if we're currently in a graph editor context (scene or quest editor)
+    /// Determines if we're currently in a graph editor context (scene, quest, or behavior editor)
     /// </summary>
     private bool IsInGraphEditorContext()
     {
@@ -4785,7 +4785,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 return false;
             }
 
-            return rootNodeData is scnSceneGraphNode or questNodeDefinition;
+            return rootNodeData is scnSceneGraphNode or questNodeDefinition or AIbehaviorTreeNodeDefinition;
         }
         catch
         {
@@ -4794,7 +4794,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     }
 
     /// <summary>
-    /// Get the root node data (scene or quest graph node) that this property belongs to
+    /// Get the root node data (scene, quest, or behavior graph node) that this property belongs to
     /// </summary>
     private RedBaseClass? GetRootNodeData()
     {
@@ -4811,6 +4811,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             if (current.Data is questNodeDefinition questNode)
             {
                 return questNode;
+            }
+
+            if (current.Data is AIbehaviorTreeNodeDefinition behaviorNode)
+            {
+                return behaviorNode;
             }
 
             current = current.Parent;
