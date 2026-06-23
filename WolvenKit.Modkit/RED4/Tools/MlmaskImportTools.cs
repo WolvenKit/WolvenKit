@@ -13,6 +13,15 @@ using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
+/// <summary>
+/// Error code ranges used in multilayer mask import:
+/// 0x2000–0x20FF : Import / masklist parsing and image loading errors
+///   0x2001 = Invalid color space (must be R8/grayscale)
+///   0x2002 = Reserved (power-of-2 requirement)
+///   0x2004 = No layers found in masklist
+///   0x2005 = General image loading failure
+/// </summary>
+
 namespace WolvenKit.Modkit.RED4.MLMask
 {
     public class MLMASK
@@ -37,7 +46,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
             var lines = File.ReadAllLines(txtImageList.FullName);
             var baseDir = txtImageList.Directory.NotNull();
 
-            var filePaths = new List<string>();
+            var files = new List<string>();
 
             foreach (var line in lines)
             {
@@ -47,58 +56,36 @@ namespace WolvenKit.Modkit.RED4.MLMask
                     continue;
                 }
 
-                filePaths.Add(trimmed);
+                // Resolve to full path immediately (single pass)
+                files.Add(Path.Combine(baseDir.FullName, trimmed));
             }
 
-            if (filePaths.Count == 0)
-                throw new WolvenKitException(0x2002, "No layer files specified in masklist.");
-
-            var files = filePaths.Select(x => Path.Combine(baseDir.FullName, x)).ToList();
+            if (files.Count == 0)
+            {
+                // 0x2004 = No layers found in masklist (0x2002 is reserved for power-of-2 requirement errors)
+                throw new WolvenKitException(0x2004, "No layer files specified in masklist.");
+            }
 
             _mlmask = new MlMaskContainer();
 
             var textures = new List<RawTexContainer>();
 
-            // Add white base layer 0 (if the first layer does not end with _0)
-            var firstLayerName = Path.GetFileNameWithoutExtension(files[0]);
-            var needsLayer0 = !firstLayerName.EndsWith("_0") && !firstLayerName.Equals("0");
-
-            if (needsLayer0)
-            {
-                uint whiteW = 1024u;
-                uint whiteH = 1024u;
-
-                if (files.Count > 0 && File.Exists(files[0]))
-                {
-                    try
-                    {
-                        using var probe = RedImage.LoadFromFile(files[0]);
-                        if (probe != null)
-                        {
-                            whiteW = (uint)probe.Metadata.Width;
-                            whiteH = (uint)probe.Metadata.Height;
-                        }
-                    }
-                    catch { }
-                }
-
-                var whitePixels = new byte[whiteW * whiteH];
-                Array.Fill(whitePixels, (byte)255);
-                textures.Add(new RawTexContainer { Width = whiteW, Height = whiteH, Pixels = whitePixels });
-            }
-
-            // Load all layers from files
+            // Load all real layers first
             foreach (var f in files)
             {
                 if (!File.Exists(f))
+                {
                     throw new FileNotFoundException($"File not found: {f}");
+                }
 
                 try
                 {
-                    using var image = RedImage.LoadFromFile(f) ?? throw new WolvenKitException(0x2001, $"Could not load image: {f}");
+                    using var image = RedImage.LoadFromFile(f) ?? throw new WolvenKitException(0x2005, $"Could not load image: {f}"); // 0x2005 = General image loading failure
 
                     if (image.Metadata.Format != DXGI_FORMAT.DXGI_FORMAT_R8_UNORM)
+                    {
                         image.Convert(DXGI_FORMAT.DXGI_FORMAT_R8_UNORM);
+                    }
 
                     uint imgW = (uint)image.Metadata.Width;
                     uint imgH = (uint)image.Metadata.Height;
@@ -112,23 +99,31 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 }
                 catch (WolvenKitException e)
                 {
+                    // 0x2001 = Invalid color space (must be R8 / grayscale)
                     throw new WolvenKitException(0x2001, $"{e.Message} (must be grayscale R8)");
                 }
+            }
+
+            // Determine the low-resolution size (minimum across all loaded layers)
+            uint targetLowW = textures.Count > 0 ? textures.Min(t => t.Width) : 1024u;
+            uint targetLowH = textures.Count > 0 ? textures.Min(t => t.Height) : 1024u;
+
+            // Add white base layer 0 at the low-resolution size if needed
+            // (so it's only as big as it needs to be for the low-res path)
+            var firstLayerName = Path.GetFileNameWithoutExtension(files[0]);
+            var needsLayer0 = !firstLayerName.EndsWith("_0") && !firstLayerName.Equals("0");
+
+            if (needsLayer0)
+            {
+                var whitePixels = new byte[targetLowW * targetLowH];
+                Array.Fill(whitePixels, (byte)255);
+                textures.Insert(0, new RawTexContainer { Width = targetLowW, Height = targetLowH, Pixels = whitePixels });
             }
 
             _mlmask.Layers = textures.ToArray();
 
             Create();
             Write(outFile);
-        }
-
-        internal static bool IsBlankLayer(byte[] pixels)
-        {
-            if (pixels == null || pixels.Length == 0) return true;
-            var first = pixels[0];
-            for (int i = 1; i < pixels.Length; i++)
-                if (pixels[i] != first) return false;
-            return true;
         }
 
         #region Core Methods
@@ -215,7 +210,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
             if (hasThirdResolution)
             {
-                throw new WolvenKitException(0x2003, "More than 2 different resolutions detected in masklist. Only 2 resolution levels are supported.");
+                _logger.Info("MLMask import detected 3 or more different resolutions. Only 2 levels (High + Low) are fully supported. Results may be incorrect.");
             }
 
             _logger.Info($"MLMask layers: High-res {_mlmask.WidthHigh}x{_mlmask.HeightHigh}, Low-res {_mlmask.WidthLow}x{_mlmask.HeightLow}, Layers: {_mlmask.Layers.Length}");
@@ -325,25 +320,40 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 double aspect = (double)h / w;
 
                 // Hard filter: reject extremely bad aspect ratios
-                if (aspect > 4.0 || aspect < 0.25) continue;
+                if (aspect > 4.0 || aspect < 0.25)
+                {
+                    continue;
+                }
 
                 // Prefer lower waste ratio. If ratios are close, prefer reasonable aspect ratio.
                 bool better = false;
-                if (wasteRatio < bestWasteRatio - 0.01) better = true;
+                if (wasteRatio < bestWasteRatio - 0.01)
+                {
+                    better = true;
+                }
                 else if (Math.Abs(wasteRatio - bestWasteRatio) <= 0.01)
                 {
                     // Prefer aspect ratios in good range [0.5 .. 2.5]
                     bool currGood = aspect >= 0.5 && aspect <= 2.5;
                     bool bestGood = (bestHeight >= 0.5 * bestWidth) && (bestHeight <= 2.5 * bestWidth);
 
-                    if (currGood && !bestGood) better = true;
+                    if (currGood && !bestGood)
+                    {
+                        better = true;
+                    }
                     else if (currGood == bestGood)
                     {
                         // Among good aspects, prefer closer to square
                         double currDist = Math.Abs(aspect - 1.0);
                         double bestDist = Math.Abs((double)bestHeight / bestWidth - 1.0);
-                        if (currDist < bestDist - 0.08) better = true;
-                        else if (Math.Abs(currDist - bestDist) <= 0.08 && waste < bestWaste) better = true;
+                        if (currDist < bestDist - 0.08)
+                        {
+                            better = true;
+                        }
+                        else if (Math.Abs(currDist - bestDist) <= 0.08 && waste < bestWaste)
+                        {
+                            better = true;
+                        }
                     }
                 }
 
@@ -369,7 +379,9 @@ namespace WolvenKit.Modkit.RED4.MLMask
             _mlmask.AtlasHeight = bestHeight;
 
             if (_mlmask.AtlasWidth > 16384 || _mlmask.AtlasHeight > 16384)
+            {
                 throw new Exception("Atlas too large (over 16k)");
+            }
 
             // Ensure the number of tiles horizontally is a power of 2 (required by PutTiles bit-packing).
             uint tilesX = _mlmask.AtlasWidth / tileSize;
