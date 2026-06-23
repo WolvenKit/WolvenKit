@@ -375,7 +375,8 @@ namespace WolvenKit.Views.Documents
 
             var otherMeshFiles =
                 _documentTools.CollectProjectFiles(".mesh")
-                    .Where(f => !currentPath.EndsWith(f, StringComparison.OrdinalIgnoreCase))
+                    .Where(f => !currentPath.EndsWith(f))
+                    .Distinct()
                     .ToDictionary(x => x, x => false);
 
             if (otherMeshFiles.Count == 0)
@@ -407,30 +408,30 @@ namespace WolvenKit.Views.Documents
 
             var output = StringHelper.Stringify(selected.Where(s => !failedMeshes.Contains(s)).ToList(), true);
 
-            if (failedMeshes.Count > 0)
+            if (failedMeshes.Count == 0)
             {
-                output = output + "\nMaterial copy failed for:" + StringHelper.Stringify(failedMeshes, true);
+            _loggerService.Success($"Copied materials from {currentPath} to {output}");
+            _notificationService.Success(
+                $"Copied materials from {currentPath} to {selected.Count} file(s). Check the log for details.");
+            return;
             }
 
-            _loggerService.Success($"Copied materials from {currentPath} to {output}");
+            output = output + ", but there were problems:\nMaterial copy failed for:" +
+                     StringHelper.Stringify(failedMeshes, true);
+
+            _notificationService.Warning(
+                $"Copied materials from {currentPath} to {selected.Count} files, but there were problems. Check the log for details.");
+            _loggerService.Warning($"Copied materials from {currentPath} to {output}");
+
         }
 
         private void UnDynamifyMaterials(ChunkViewModel? cvm)
         {
             _cvmTools.UnDynamifyMaterials(cvm);
             ViewModel?.DeleteUnusedMaterialsCommand?.NotifyCanExecuteChanged();
-            _notificationService.Success("Dynamic materials resolved");
-        }
-
-        private void ExpandMeshAppearances(ChunkViewModel? cvm)
-        {
-            _cvmTools.ExpandMeshAppearances(cvm, out var _, true);
-            ViewModel?.DeleteUnusedMaterialsCommand?.NotifyCanExecuteChanged();
-            _notificationService.Success("Mesh appearances expanded");
         }
 
         private void OnUnDynamifyMaterialsClick(object _, RoutedEventArgs e) => UnDynamifyMaterials(RootChunk);
-        private void OnExpandMeshAppearancesClick(object _, RoutedEventArgs e) => ExpandMeshAppearances(RootChunk);
 
         private void OnConvertHairToCCXLMaterials(object _, RoutedEventArgs e)
         {
@@ -756,9 +757,7 @@ namespace WolvenKit.Views.Documents
                 childNode.ForceLoadPropertiesRecursive();
                 foreach (var (oldPath, newPath) in pathReplacements)
                 {
-                    // result of await can't be in if statement check, or logic is flaky
-                    var replaced = await childNode.SearchAndReplaceAsync(oldPath, newPath, true, false);
-                    if (replaced <= 0)
+                    if (await childNode.SearchAndReplaceAsync(oldPath, newPath, true, false) == 0)
                     {
                         continue;
                     }
