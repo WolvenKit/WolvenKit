@@ -11,51 +11,39 @@ using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
+/// <summary>
+/// Error code ranges used in multilayer mask processing:
+/// 0x3100–0x31FF : Core decoding, BC4 unpacking and layer processing errors
+/// </summary>
+
 namespace WolvenKit.Modkit.RED4;
 
 public partial class ModTools
 {
-    private const uint ATLAS_TILE_PADDING = 2;
+    private const uint s_atlasTilePadding = 2;
+
+    /// <summary>
+    /// Lightweight DTO for a decoded layer buffer + its dimensions.
+    /// Using record struct for clarity and performance (recommended over raw tuple).
+    /// </summary>
+    private readonly record struct LayerBuffer(byte[] Buffer, uint Width, uint Height);
 
     // Bit layout of tileDecl (from multilayer mask tiles data)
-    private const uint TILE_PARAM_MASK = 0x3FF;   // 10 bits (0-9)
-    private const int  TILE_DX_SHIFT   = 0;       // bits 0-9  → X offset in atlas
-    private const int  TILE_DY_SHIFT   = 10;      // bits 10-19 → Y offset in atlas
-    private const int  TILE_SX_SHIFT   = 20;      // bits 20-23 → X scale/shift
-    private const int  TILE_SY_SHIFT   = 24;      // bits 24-27 → Y scale/shift
-    private const uint TILE_S_MASK     = 0xF;     // 4 bits
+    private const uint s_tileParamMask = 0x3FF;   // 10 bits (0-9)
+    private const int  s_tileDxShift   = 0;       // bits 0-9  → X offset in atlas
+    private const int  s_tileDyShift   = 10;      // bits 10-19 → Y offset in atlas
+    private const int  s_tileSxShift   = 20;      // bits 20-23 → X scale/shift
+    private const int  s_tileSyShift   = 24;      // bits 24-27 → Y scale/shift
+    private const uint s_tileSMask     = 0xF;     // 4 bits
 
     #region Methods
 
     // Decode each grayscale layer to RedImage (always outputs linear R8G8B8A8_UNORM)
+    /// <summary>
+    /// Decodes all layers of a multilayer mask into RedImage objects (used by ConvertMultilayerMaskToDdsStreams).
+    /// </summary>
     private static IEnumerable<RedImage> GetRedImages(rendRenderMultilayerMaskBlobPC blob)
     {
-        uint atlasWidth = blob.Header.AtlasWidth;
-        uint atlasHeight = blob.Header.AtlasHeight;
-        uint maskWidth = blob.Header.MaskWidth;
-        uint maskHeight = blob.Header.MaskHeight;
-        uint maskWidthLow = blob.Header.MaskWidthLow;
-        uint maskHeightLow = blob.Header.MaskHeightLow;
-        uint maskTileSize = blob.Header.MaskTileSize;
-
-        var atlasRaw = new byte[atlasWidth * atlasHeight];
-        if (!BlockCompression.DecodeBC(blob.AtlasData.Buffer.GetBytes(), ref atlasRaw, atlasWidth, atlasHeight, BlockCompression.BlockCompressionType.BC4))
-        {
-            throw new WolvenKitException(0x3001, "BC4 decode failed for multilayer mask atlas.");
-        }
-
-        var tileBuffer = blob.TilesData.Buffer;
-        var tiles = new uint[tileBuffer.MemSize / 4];
-        using (var ms = new MemoryStream(tileBuffer.GetBytes()))
-        using (var br = new BinaryReader(ms))
-        {
-            ms.Seek(0, SeekOrigin.Begin);
-            for (var i = 0; i < tiles.Length; i++)
-            {
-                tiles[i] = br.ReadUInt32();
-            }
-        }
-
         foreach (var layer in DecodeLayerBuffers(blob))
         {
             var (layerBuffer, outWidth, outHeight) = layer;
@@ -97,7 +85,7 @@ public partial class ModTools
     /// Layers are exported either at full high resolution or at the reduced low resolution,
     /// depending on whether the layer has dedicated high-resolution tile data.
     /// </summary>
-    private static IEnumerable<(byte[] buffer, uint width, uint height)> DecodeLayerBuffers(rendRenderMultilayerMaskBlobPC blob)
+    private static IEnumerable<LayerBuffer> DecodeLayerBuffers(rendRenderMultilayerMaskBlobPC blob)
     {
         uint atlasWidth = blob.Header.AtlasWidth;
         uint atlasHeight = blob.Header.AtlasHeight;
@@ -111,7 +99,8 @@ public partial class ModTools
         var atlasRaw = new byte[atlasWidth * atlasHeight];
         if (!BlockCompression.DecodeBC(blob.AtlasData.Buffer.GetBytes(), ref atlasRaw, atlasWidth, atlasHeight, BlockCompression.BlockCompressionType.BC4))
         {
-            throw new WolvenKitException(0x3001, "BC4 decode failed for multilayer mask atlas.");
+            // 0x3101 = BC4 / multilayer mask decode error (core processing uses 0x31xx range)
+            throw new WolvenKitException(0x3101, "BC4 decode failed for multilayer mask atlas.");
         }
 
         var tileBuffer = blob.TilesData.Buffer;
@@ -130,7 +119,7 @@ public partial class ModTools
 
         for (var i = 0; i < maskCount; i++)
         {
-            Array.Clear(fullResBuffer, 0, fullResBuffer.Length);
+            Array.Clear(fullResBuffer, 0, fullResBuffer.Length); // Ensure pixels without tile data are black (0)
             Decode(ref fullResBuffer, maskWidth, maskHeight, maskWidthLow, maskHeightLow, atlasRaw, atlasWidth, atlasHeight, tiles, maskTileSize, i);
 
             var hasHighRes = HasLayerHighResolutionData(tiles, maskWidth, maskHeight, maskTileSize, i);
@@ -152,7 +141,7 @@ public partial class ModTools
                 layerBuffer = DownscaleNearest(fullResBuffer, maskWidth, maskHeight, outWidth, outHeight);
             }
 
-            yield return (layerBuffer, outWidth, outHeight);
+            yield return new LayerBuffer(layerBuffer, outWidth, outHeight);
         }
     }
 
@@ -198,7 +187,11 @@ public partial class ModTools
         {
             for (uint x = 0; x < maskWidth; x++)
             {
+                // Decode using low-res tile map first (fallback)
                 DecodeSingle(ref maskData, maskWidth, maskHeight, atlasData, atlasWidth, atlasHeight, x, y, tileData, maskTileSize, maskIndex, smallOffset, smallScale, widthInTilesScaled);
+                
+                // Then decode using full-res tile map — this can overwrite with higher quality data
+                // if the layer has dedicated high-resolution tiles for this pixel.
                 DecodeSingle(ref maskData, maskWidth, maskHeight, atlasData, atlasWidth, atlasHeight, x, y, tileData, maskTileSize, maskIndex, 0, 1, widthInTilesFull);
             }
         }
@@ -233,29 +226,27 @@ public partial class ModTools
         }
 
         // Extract atlas position and scaling factors from the packed tile declaration.
-        var dx = (tileDecl >> TILE_DX_SHIFT) & TILE_PARAM_MASK;
-        var dy = (tileDecl >> TILE_DY_SHIFT) & TILE_PARAM_MASK;
-        var sx = (tileDecl >> TILE_SX_SHIFT) & TILE_S_MASK;
-        var sy = (tileDecl >> TILE_SY_SHIFT) & TILE_S_MASK;
+        var dx = (tileDecl >> s_tileDxShift) & s_tileParamMask;
+        var dy = (tileDecl >> s_tileDyShift) & s_tileParamMask;
+        var sx = (tileDecl >> s_tileSxShift) & s_tileSMask;
+        var sy = (tileDecl >> s_tileSyShift) & s_tileSMask;
 
-        var atlasTileSize = maskTileSize + ATLAS_TILE_PADDING;
+        var atlasTileSize = maskTileSize + s_atlasTilePadding;
 
-        var ux = ((x >> (int)sx) % maskTileSize) + 1 + (dx * atlasTileSize);
-        var uy = ((y >> (int)sy) % maskTileSize) + 1 + (dy * atlasTileSize);
+        // Use Min to avoid reading into the right/bottom padding area of atlas tiles
+        var localX = Math.Min((x >> (int)sx) % maskTileSize, maskTileSize - 1);
+        var localY = Math.Min((y >> (int)sy) % maskTileSize, maskTileSize - 1);
+
+        var ux = localX + 1 + (dx * atlasTileSize);
+        var uy = localY + 1 + (dy * atlasTileSize);
 
         var p = atlasData[ux + (uy * atlasWidth)];
         maskData[x + (y * maskWidth)] = p;
     }
 
-    private static uint DivCeil(uint l, uint r)
-    {
-        return (l + r - 1) / r;
-    }
+    private static uint DivCeil(uint l, uint r) => (l + r - 1) / r;
 
-    private static uint CountBits(uint v)
-    {
-        return (uint)System.Numerics.BitOperations.PopCount(v);
-    }
+    private static uint CountBits(uint v) => (uint)System.Numerics.BitOperations.PopCount(v);
 
     private static byte[] DownscaleNearest(byte[] src, uint srcW, uint srcH, uint dstW, uint dstH)
     {
@@ -287,17 +278,24 @@ public partial class ModTools
         return dst;
     }
 
-    private static byte[] CreateWkPreviewPng(byte[] gray, int width, int height)
+    private static byte[] CreateWkPreviewPng(byte[] grayData, int width, int height)
     {
         var imgData = new byte[width * height * 4];
-        for (int i = 0; i < width * height; i++)
+
+        // Vertically flip so that the image appears correct in Blender / image editors
+        // (REDengine often stores textures with Y=0 at the bottom)
+        for (int y = 0; y < height; y++)
         {
-            var v = gray[i];
-            var baseIdx = i * 4;
-            imgData[baseIdx + 0] = v;
-            imgData[baseIdx + 1] = v;
-            imgData[baseIdx + 2] = v;
-            imgData[baseIdx + 3] = 255;
+            int srcY = height - 1 - y; // flip vertically
+            for (int x = 0; x < width; x++)
+            {
+                var v = grayData[srcY * width + x];
+                int dstIdx = (y * width + x) * 4;
+                imgData[dstIdx + 0] = v;
+                imgData[dstIdx + 1] = v;
+                imgData[dstIdx + 2] = v;
+                imgData[dstIdx + 3] = 255;
+            }
         }
 
         var info = new DDSUtils.DDSInfo
@@ -319,6 +317,10 @@ public partial class ModTools
         return png;
     }
 
+    // Note: We intentionally vertically flip PNG previews so they appear
+    // in the expected orientation in Blender / Photoshop (Y=0 at top).
+    // The in-game DDS representation remains correct for REDengine.
+
     public bool UncookMlmask(Multilayer_Mask mlmask, FileInfo outfile, MlmaskExportArgs args)
     {
         if (mlmask.RenderResourceBlob.RenderResourceBlobPC.Chunk is not rendRenderMultilayerMaskBlobPC blob)
@@ -338,7 +340,7 @@ public partial class ModTools
                 return false;
             }
 
-            var atlasTileSize = maskTileSize + ATLAS_TILE_PADDING;
+            var atlasTileSize = maskTileSize + s_atlasTilePadding;
             if (atlasWidth % atlasTileSize != 0 || atlasHeight % atlasTileSize != 0)
             {
                 _loggerService.Error($"Atlas dimensions {atlasWidth}x{atlasHeight} are not divisible by (MaskTileSize+2) = {atlasTileSize}.");
@@ -351,25 +353,28 @@ public partial class ModTools
             return false;
         }
 
-        DirectoryInfo? subDir = null;
-        if (args.AsList)
+        // Early argument validation
+        if (args.AsList && string.IsNullOrWhiteSpace(outfile.FullName))
         {
-            subDir = new DirectoryInfo(Path.ChangeExtension(outfile.FullName, null) + "_layers");
-            if (!subDir.Exists)
-            {
-                Directory.CreateDirectory(subDir.FullName);
-            }
-        }
-
-        if ((args.AsList && subDir is null) || (!args.AsList && outfile.Directory is null))
-        {
-            _loggerService.Error("directory was null");
+            _loggerService.Error("Output file path is required when AsList is true.");
             return false;
         }
 
+        DirectoryInfo? subDir = null;
+        if (args.AsList)
+        {
+            // Directory.CreateDirectory creates the folder only if it doesn't exist
+            // and returns the DirectoryInfo directly.
+            var layersDir = Path.ChangeExtension(outfile.FullName, null) + "_layers";
+            subDir = Directory.CreateDirectory(layersDir);
+        }
+
+        // Note: subDir is guaranteed non-null when args.AsList is true (created above).
+        // outfile.Directory can be null in rare cases (e.g. relative path with no directory).
+        // For robustness we could add an early argument check, but for now we rely on later Path.Combine calls.
+
         var cnt = 0;
         var masks = new List<string>();
-        var layerResolutions = new List<string>();
 
         foreach (var layer in DecodeLayerBuffers(blob))
         {
@@ -388,7 +393,6 @@ public partial class ModTools
                     masks.Add($"{subDir!.Name}/{layerFileName}.{args.UncookExtension}");
                 }
 
-                layerResolutions.Add($"{outWidth}x{outHeight}");
                 continue;
             }
 
@@ -436,7 +440,6 @@ public partial class ModTools
                 masks.Add($"{subDir!.Name}/{layerFileName}.{args.UncookExtension}");
             }
 
-            layerResolutions.Add($"{img.Metadata.Width}x{img.Metadata.Height}");
             img.Dispose();
         }
 
@@ -444,20 +447,22 @@ public partial class ModTools
         {
             var maskListPath = Path.ChangeExtension(outfile.FullName, "masklist");
 
-            // Simplified header - only basic info, no original atlas/mask dimensions
             var headerLines = new List<string>
             {
                 "# MLMask Export",
                 "# Layer image files (must be in correct order)",
                 ""
             };
-
             headerLines.AddRange(masks);
+
             File.WriteAllLines(maskListPath, headerLines);
         }
 
         return true;
     }
+
+    // Note: We add a small header to .masklist for human readability.
+    // The import side ignores lines starting with '#' or containing '='.
 
     public static bool ConvertMultilayerMaskToDdsStreams(Multilayer_Mask mask, out List<Stream> streams)
     {
