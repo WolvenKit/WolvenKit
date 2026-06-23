@@ -281,21 +281,14 @@ public partial class ModTools
     private static byte[] CreateWkPreviewPng(byte[] grayData, int width, int height)
     {
         var imgData = new byte[width * height * 4];
-
-        // Vertically flip so that the image appears correct in Blender / image editors
-        // (REDengine often stores textures with Y=0 at the bottom)
-        for (int y = 0; y < height; y++)
+        for (int i = 0; i < width * height; i++)
         {
-            int srcY = height - 1 - y; // flip vertically
-            for (int x = 0; x < width; x++)
-            {
-                var v = grayData[srcY * width + x];
-                int dstIdx = (y * width + x) * 4;
-                imgData[dstIdx + 0] = v;
-                imgData[dstIdx + 1] = v;
-                imgData[dstIdx + 2] = v;
-                imgData[dstIdx + 3] = 255;
-            }
+            var v = grayData[i];
+            var baseIdx = i * 4;
+            imgData[baseIdx + 0] = v;
+            imgData[baseIdx + 1] = v;
+            imgData[baseIdx + 2] = v;
+            imgData[baseIdx + 3] = 255;
         }
 
         var info = new DDSUtils.DDSInfo
@@ -316,10 +309,6 @@ public partial class ModTools
         img.Dispose();
         return png;
     }
-
-    // Note: We intentionally vertically flip PNG previews so they appear
-    // in the expected orientation in Blender / Photoshop (Y=0 at top).
-    // The in-game DDS representation remains correct for REDengine.
 
     public bool UncookMlmask(Multilayer_Mask mlmask, FileInfo outfile, MlmaskExportArgs args)
     {
@@ -460,9 +449,6 @@ public partial class ModTools
 
         return true;
     }
-
-    // Note: We add a small header to .masklist for human readability.
-    // The import side ignores lines starting with '#' or containing '='.
 
     public static bool ConvertMultilayerMaskToDdsStreams(Multilayer_Mask mask, out List<Stream> streams)
     {
