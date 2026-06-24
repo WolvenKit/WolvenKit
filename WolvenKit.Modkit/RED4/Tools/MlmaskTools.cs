@@ -12,8 +12,8 @@ using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
 /// <summary>
-/// Error code ranges used in multilayer mask processing:
-/// 0x3100–0x31FF : Core decoding, BC4 unpacking and layer processing errors
+/// MLMask processing error codes (registered in LogCodeHelper):
+///   0x3003 = BC4 decode failed for multilayer mask atlas
 /// </summary>
 
 namespace WolvenKit.Modkit.RED4;
@@ -38,7 +38,7 @@ public partial class ModTools
 
     #region Methods
 
-    // Decode each grayscale layer to RedImage (always outputs linear R8G8B8A8_UNORM)
+    // Decode each grayscale layer to RedImage (outputs R8_UNORM)
     /// <summary>
     /// Decodes all layers of a multilayer mask into RedImage objects (used by ConvertMultilayerMaskToDdsStreams).
     /// </summary>
@@ -99,8 +99,8 @@ public partial class ModTools
         var atlasRaw = new byte[atlasWidth * atlasHeight];
         if (!BlockCompression.DecodeBC(blob.AtlasData.Buffer.GetBytes(), ref atlasRaw, atlasWidth, atlasHeight, BlockCompression.BlockCompressionType.BC4))
         {
-            // 0x3101 = BC4 / multilayer mask decode error (core processing uses 0x31xx range)
-            throw new WolvenKitException(0x3101, "BC4 decode failed for multilayer mask atlas.");
+            // 0x3003 = BC4 decode error in multilayer mask
+            throw new WolvenKitException(0x3003, "BC4 decode failed for multilayer mask atlas.");
         }
 
         var tileBuffer = blob.TilesData.Buffer;
@@ -117,10 +117,36 @@ public partial class ModTools
 
         var fullResBuffer = new byte[maskWidth * maskHeight];
 
+        // Local function: decodes one layer into fullResBuffer.
+        // Made local to avoid passing many parameters (as suggested in code review).
+        void Decode(int maskIndex)
+        {
+            var widthInTiles0 = DivCeil(maskWidth, maskTileSize);
+            var heightInTiles0 = DivCeil(maskHeight, maskTileSize);
+            var smallOffset = widthInTiles0 * heightInTiles0;
+            var smallScale = (maskWidthLow == 0 || maskWidth < maskWidthLow) ? 1u : maskWidth / maskWidthLow;
+
+            var widthInTilesScaled = DivCeil(maskWidth / smallScale, maskTileSize);
+            var widthInTilesFull = DivCeil(maskWidth, maskTileSize);
+
+            for (uint y = 0; y < maskHeight; y++)
+            {
+                for (uint x = 0; x < maskWidth; x++)
+                {
+                    // Decode using low-res tile map first (fallback)
+                    DecodeSingle(ref fullResBuffer, maskWidth, maskHeight, atlasRaw, atlasWidth, atlasHeight, x, y, tiles, maskTileSize, maskIndex, smallOffset, smallScale, widthInTilesScaled);
+
+                    // Then decode using full-res tile map — this can overwrite with higher quality data
+                    // if the layer has dedicated high-resolution tiles for this pixel.
+                    DecodeSingle(ref fullResBuffer, maskWidth, maskHeight, atlasRaw, atlasWidth, atlasHeight, x, y, tiles, maskTileSize, maskIndex, 0, 1, widthInTilesFull);
+                }
+            }
+        }
+
         for (var i = 0; i < maskCount; i++)
         {
             Array.Clear(fullResBuffer, 0, fullResBuffer.Length); // Ensure pixels without tile data are black (0)
-            Decode(ref fullResBuffer, maskWidth, maskHeight, maskWidthLow, maskHeightLow, atlasRaw, atlasWidth, atlasHeight, tiles, maskTileSize, i);
+            Decode(i);
 
             var hasHighRes = HasLayerHighResolutionData(tiles, maskWidth, maskHeight, maskTileSize, i);
 
@@ -173,31 +199,7 @@ public partial class ModTools
         return false;
     }
 
-    private static void Decode(ref byte[] maskData, uint maskWidth, uint maskHeight, uint maskWidthLow, uint maskHeightLow, byte[] atlasData, uint atlasWidth, uint atlasHeight, uint[] tileData, uint maskTileSize, int maskIndex)
-    {
-        var widthInTiles0 = DivCeil(maskWidth, maskTileSize);
-        var heightInTiles0 = DivCeil(maskHeight, maskTileSize);
-        var smallOffset = widthInTiles0 * heightInTiles0;
-        var smallScale = (maskWidthLow == 0 || maskWidth < maskWidthLow) ? 1u : maskWidth / maskWidthLow;
-
-        var widthInTilesScaled = DivCeil(maskWidth / smallScale, maskTileSize);
-        var widthInTilesFull = DivCeil(maskWidth, maskTileSize);
-
-        for (uint y = 0; y < maskHeight; y++)
-        {
-            for (uint x = 0; x < maskWidth; x++)
-            {
-                // Decode using low-res tile map first (fallback)
-                DecodeSingle(ref maskData, maskWidth, maskHeight, atlasData, atlasWidth, atlasHeight, x, y, tileData, maskTileSize, maskIndex, smallOffset, smallScale, widthInTilesScaled);
-                
-                // Then decode using full-res tile map — this can overwrite with higher quality data
-                // if the layer has dedicated high-resolution tiles for this pixel.
-                DecodeSingle(ref maskData, maskWidth, maskHeight, atlasData, atlasWidth, atlasHeight, x, y, tileData, maskTileSize, maskIndex, 0, 1, widthInTilesFull);
-            }
-        }
-    }
-
-    private static void DecodeSingle(ref byte[] maskData, uint maskWidth, uint maskHeight, byte[] atlasData, uint atlasWidth, uint atlasHeight, uint x, uint y, uint[] tilesData, uint maskTileSize, int maskIndex, uint tilesOffset, uint smallScale, uint widthInTiles)
+    private static bool DecodeSingle(ref byte[] maskData, uint maskWidth, uint maskHeight, byte[] atlasData, uint atlasWidth, uint atlasHeight, uint x, uint y, uint[] tilesData, uint maskTileSize, int maskIndex, uint tilesOffset, uint smallScale, uint widthInTiles)
     {
         var xTile = x / maskTileSize / smallScale;
         var yTile = y / maskTileSize / smallScale;
@@ -206,7 +208,7 @@ public partial class ModTools
 
         if ((tileIndex * 2) + 1 >= tilesData.Length)
         {
-            return;
+            return false;
         }
 
         var paramOffset = tilesData[tileIndex * 2];
@@ -214,7 +216,7 @@ public partial class ModTools
 
         if ((uint)(paramBits & (1 << maskIndex)) == 0U)
         {
-            return;
+            return false;
         }
 
         var extraAdd = CountBits((uint)(paramBits & ((1 << maskIndex) - 1)));
@@ -242,6 +244,8 @@ public partial class ModTools
 
         var p = atlasData[ux + (uy * atlasWidth)];
         maskData[x + (y * maskWidth)] = p;
+
+        return true;
     }
 
     private static uint DivCeil(uint l, uint r) => (l + r - 1) / r;
@@ -309,6 +313,10 @@ public partial class ModTools
         img.Dispose();
         return png;
     }
+
+    // Note: We intentionally vertically flip PNG previews so they appear
+    // in the expected orientation in Blender / Photoshop (Y=0 at top).
+    // The in-game DDS representation remains correct for REDengine.
 
     public bool UncookMlmask(Multilayer_Mask mlmask, FileInfo outfile, MlmaskExportArgs args)
     {
@@ -435,12 +443,12 @@ public partial class ModTools
         if (args.AsList)
         {
             var maskListPath = Path.ChangeExtension(outfile.FullName, "masklist");
-            // .masklist contains only the list of layer image paths (one per line), in order.
             File.WriteAllLines(maskListPath, masks);
         }
 
         return true;
     }
+    // The import side ignores lines starting with '#' or containing '='.
 
     public static bool ConvertMultilayerMaskToDdsStreams(Multilayer_Mask mask, out List<Stream> streams)
     {
