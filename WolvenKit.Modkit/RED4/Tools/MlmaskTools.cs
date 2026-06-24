@@ -435,17 +435,11 @@ public partial class ModTools
         if (args.AsList)
         {
             var maskListPath = Path.ChangeExtension(outfile.FullName, "masklist");
-
-            var headerLines = new List<string>
-            {
-                "# MLMask Export",
-                "# Layer image files (must be in correct order)",
-                ""
-            };
-            headerLines.AddRange(masks);
-
-            File.WriteAllLines(maskListPath, headerLines);
+            // .masklist contains only the list of layer image paths (one per line), in order.
+            File.WriteAllLines(maskListPath, masks);
         }
+
+        return true;
 
         return true;
     }
