@@ -17,9 +17,11 @@ using Syncfusion.UI.Xaml.TreeView.Helpers;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.App.ViewModels.Tools;
+using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.RED4.Types;
@@ -40,6 +42,7 @@ namespace WolvenKit.Views.Tools
         private readonly ProjectResourceTools _projectResourceTools;
         private readonly ISettingsManager _settingsManager;
         private readonly CvmMaterialTools _cvmMaterialTools;
+        private readonly RedTypeTemplateService _redTypeTemplateService;
 
 
         public RedTreeView()
@@ -51,6 +54,7 @@ namespace WolvenKit.Views.Tools
             _projectResourceTools = Locator.Current.GetService<ProjectResourceTools>();
             _settingsManager = Locator.Current.GetService<ISettingsManager>();
             _cvmMaterialTools = Locator.Current.GetService<CvmMaterialTools>();
+            _redTypeTemplateService = Locator.Current.GetService<RedTypeTemplateService>();
 
             InitializeComponent();
 
@@ -1028,6 +1032,22 @@ namespace WolvenKit.Views.Tools
             {
                 _projectResourceTools.AddToProject(((IRedRef)SelectedItem.ResolvedData).DepotPath);
             }
+        }
+
+        private bool CanCreateNewTemplateFromSelection() => SelectedItem?.PropertyType.IsAssignableTo(typeof(IRedType)) == true;
+
+        [RelayCommand(CanExecute = nameof(CanCreateNewTemplateFromSelection))]
+        private async Task CreateNewTemplateFromSelection()
+        {
+            if (SelectedItem?.PropertyType.IsAssignableTo(typeof(IRedType)) != true)
+            {
+                return;
+            }
+
+            _loggerService.Debug($"C# reflection type: {SelectedItem.Data.GetType().FullName}\nRed reflection type: {SelectedItem.Data.RedType}");
+
+            await _appViewModel.SetActiveDialog(
+                new CreateTemplateFromChunkDialogViewModel(SelectedItem.Data, _redTypeTemplateService, _appViewModel));
         }
 
         private bool CanOpenSearchAndReplaceDialog => !_isContextMenuOpen &&

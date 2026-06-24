@@ -210,8 +210,6 @@ public class RedTypeTemplateService
     {
         ArgumentNullException.ThrowIfNull(template.Data, nameof(template.Data));
 
-        _logger.Debug($"{template.Data.GetType()} / {template.Data.RedType}");
-
         Type dataType;
         IRedType data;
         switch (template.Data)

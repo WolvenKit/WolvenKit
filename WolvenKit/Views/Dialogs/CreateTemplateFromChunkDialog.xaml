@@ -1,0 +1,123 @@
+<reactiveUi:ReactiveUserControl
+    x:Class="WolvenKit.Views.Dialogs.CreateTemplateFromChunkDialog"
+    x:TypeArguments="dialogs:CreateTemplateFromChunkDialogViewModel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dialogs="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=dialogs:CreateTemplateFromChunkDialogViewModel}"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    MinWidth="{DynamicResource WolvenKitDialogWidthSmall}"
+    MaxWidth="{DynamicResource WolvenKitDialogWidth}"
+    Padding="{DynamicResource WolvenKitMargin}"
+    Background="{StaticResource ContentBackgroundAlt3}">
+    <Grid Margin="{DynamicResource WolvenKitMarginSmall}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock
+            Grid.Row="0"
+            Margin="{DynamicResource WolvenKitMarginSmall}"
+            FontSize="{DynamicResource WolvenKitFontHeader}"
+            FontWeight="Bold"
+            Text="Create New Template" />
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="0"
+                Text="Name"
+                Margin="{StaticResource WolvenKitMarginSmall}"/>
+            <StackPanel
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="{StaticResource WolvenKitMarginSmall}">
+                <TextBox
+                    VerticalAlignment="Top"
+                    Text="{Binding TemplateName}"
+                    KeyUp="TemplateNameTextBox_KeyUp"/>
+                <TextBlock
+                    Name="TemplateNameErrorTextBlock"
+                    Foreground="Red"
+                    Visibility="Collapsed"/>
+            </StackPanel>
+
+
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="0"
+                Text="Version"
+                Margin="{StaticResource WolvenKitMarginSmall}"/>
+            <TextBox
+                Grid.Row="1"
+                Grid.Column="1"
+                VerticalAlignment="Top"
+                Text="{Binding Template.Version, TargetNullValue=''}"
+                Margin="{StaticResource WolvenKitMarginSmall}"/>
+
+            <TextBlock
+                Grid.Row="2"
+                Grid.Column="0"
+                Text="Author"
+                Margin="{StaticResource WolvenKitMarginSmall}"/>
+            <TextBox
+                Grid.Row="2"
+                Grid.Column="1"
+                VerticalAlignment="Top"
+                Text="{Binding Template.Author, TargetNullValue=''}"
+                Margin="{StaticResource WolvenKitMarginSmall}"/>
+
+            <TextBlock
+                Grid.Row="3"
+                Grid.Column="0"
+                Text="Description"
+                Margin="{StaticResource WolvenKitMarginSmall}"/>
+            <TextBox
+                Grid.Row="3"
+                Grid.Column="1"
+                VerticalAlignment="Top"
+                Text="{Binding Template.Description, TargetNullValue=''}"
+                AcceptsReturn="True"
+                TextWrapping="Wrap"
+                VerticalScrollBarVisibility="Auto"
+                Margin="{StaticResource WolvenKitMarginSmall}"/>
+        </Grid>
+
+        <StackPanel Grid.Row="2" HorizontalAlignment="Right" Orientation="Horizontal">
+            <Button
+                Click="CancelButton_OnClick"
+                Content="Cancel"
+                Margin="{StaticResource WolvenKitMarginSmallLeft}"
+                Style="{StaticResource DialogButtonStyle}"/>
+            <Button
+                Click="CreateButton_OnClick"
+                Content="Create"
+                Margin="{StaticResource WolvenKitMarginSmallLeft}"
+                Style="{StaticResource DialogPrimaryButtonStyle}"/>
+
+        </StackPanel>
+
+    </Grid>
+</reactiveUi:ReactiveUserControl>
+
