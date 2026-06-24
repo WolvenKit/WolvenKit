@@ -210,7 +210,33 @@ public class RedTypeTemplateService
     {
         ArgumentNullException.ThrowIfNull(template.Data, nameof(template.Data));
 
-        var fn = Path.Join(dst == TemplateDestination.User ? _userTemplateDir : _systemTemplateDir, $"{templateName}.{template.Data.GetType().Name}.json");
+        _logger.Debug($"{template.Data.GetType()} / {template.Data.RedType}");
+
+        Type dataType;
+        IRedType data;
+        switch (template.Data)
+        {
+            case DataBuffer dataBuffer:
+                dataType = dataBuffer.Data?.GetType() ?? typeof(DataBuffer);
+                data = dataBuffer.Data?.Data ?? throw new Exception("DataBuffer value is null");
+                break;
+            case IRedBaseHandle handle:
+                dataType = handle.GetValue()?.GetType() ?? typeof(IRedBaseHandle);
+                data = handle.GetValue() ?? throw new Exception("Handle value is null");
+                break;
+            case IRedEnum cenum:
+                dataType = cenum.GetEnumValue().GetType();
+                data = template.Data;
+                break;
+            default:
+                dataType = template.Data.GetType();
+                data = template.Data;
+                break;
+        }
+
+        template.Data = data;
+
+        var fn = Path.Join(dst == TemplateDestination.User ? _userTemplateDir : _systemTemplateDir, $"{templateName}.{dataType.Name}.json");
         var js = JsonSerializer.Serialize(template, _jsonOptions);
 
         lock (_lock)
@@ -218,9 +244,9 @@ public class RedTypeTemplateService
             File.WriteAllText(fn, js);
 
             var templateList = dst == TemplateDestination.User ? UserTemplates : SystemTemplates;
-            if (!templateList.Any(t => t.Name.Equals(templateName, StringComparison.CurrentCultureIgnoreCase) && t.Type == template.Data.GetType()))
+            if (!templateList.Any(t => t.Name.Equals(templateName, StringComparison.CurrentCultureIgnoreCase) && t.Type == dataType))
             {
-                templateList.Add(new RedTypeTemplateDescriptor(templateName, template.Data.GetType(), fn));
+                templateList.Add(new RedTypeTemplateDescriptor(templateName, dataType, fn));
             }
         }
     }
@@ -313,12 +339,12 @@ public class RedTypeTemplateService
 
     private RedTypeTemplate DeserializeTemplate(Type type, string json)
     {
-        var template = JsonSerializer.Deserialize<RedTypeTemplate>(json, _jsonOptions);
-        if (template?.Data?.GetType() != type)
-        {
-            throw new Exception("Failed to deserialize template, deserialized data type does not match expected type.");
-        }
-        return template;
+        var options = new JsonSerializerOptions(_jsonOptions);
+        options.Converters.Remove(options.Converters.First(c => c is RedTypeTemplateConverter));
+        options.Converters.Add(new RedTypeTemplateConverter(type));
+
+        var template = JsonSerializer.Deserialize<RedTypeTemplate>(json, options);
+        return template ?? throw new Exception("Failed to deserialize template");
     }
 
     #endregion

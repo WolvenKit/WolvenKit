@@ -48,7 +48,7 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
 
         ValidNewTypes = new ObservableCollection<TypeDesc>(AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(s => s.GetTypes())
-            .Where(p => typeof(IRedType).IsAssignableFrom(p) && p is { IsClass: true, IsAbstract: false })
+            .Where(p => typeof(IRedType).IsAssignableFrom(p) && p is { IsAbstract: false })
             .Select(x => new TypeDesc(x, x.Name))
             .OrderBy(x => x.TypeName)
         );

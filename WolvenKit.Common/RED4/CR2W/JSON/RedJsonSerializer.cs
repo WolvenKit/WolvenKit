@@ -191,7 +191,9 @@ public static class RedJsonSerializer
         }
     }
 
-    public static T? Deserialize<T>(string json, RedJsonSerializerOptions? redOptions = null)
+    public static T? Deserialize<T>(string json, RedJsonSerializerOptions? redOptions = null) => (T?)Deserialize(typeof(T), json, redOptions);
+
+    public static object? Deserialize(Type type, string json, RedJsonSerializerOptions? redOptions = null)
     {
         RedOptions = redOptions ?? new RedJsonSerializerOptions();
 
@@ -207,7 +209,7 @@ public static class RedJsonSerializer
 
         try
         {
-            return JsonSerializer.Deserialize<T>(json, Options);
+            return JsonSerializer.Deserialize(json, type, Options);
         }
         finally
         {

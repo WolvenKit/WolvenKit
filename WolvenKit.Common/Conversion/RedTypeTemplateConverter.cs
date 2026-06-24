@@ -10,6 +10,13 @@ namespace WolvenKit.Common.Conversion;
 
 public class RedTypeTemplateConverter : JsonConverter<RedTypeTemplate>
 {
+    private Type? _type;
+
+    public RedTypeTemplateConverter(Type? targetType = null)
+    {
+        _type = targetType;
+    }
+
     public override RedTypeTemplate? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         using var doc = JsonDocument.ParseValue(ref reader);
@@ -31,36 +38,40 @@ public class RedTypeTemplateConverter : JsonConverter<RedTypeTemplate>
             throw new JsonException("Template file is missing Data property");
         }
 
-        if (data.ValueKind != JsonValueKind.Object)
-        {
-            throw new JsonException("Template Data property must be an object");
-        }
-
-        if (!data.TryGetProperty("$type", out var typeElement) && !data.TryGetProperty("$type", out typeElement))
-        {
-            throw new JsonException("Template Data property is missing $type property");
-        }
-
-        var typeName = typeElement.GetString();
-        if (string.IsNullOrWhiteSpace(typeName))
-        {
-            throw new JsonException("Template Data $type property is empty");
-        }
-
-        var type = ParseType(typeName);
+        var type = _type;
         if (type is null)
         {
-            throw new JsonException($"Template Data contains unknown type '{typeName}'");
-        }
+            if (!data.TryGetProperty("$type", out var typeElement) && !data.TryGetProperty("$type", out typeElement))
+            {
+                throw new JsonException("Template Data property is missing $type property");
+            }
 
-        if (!typeof(IRedType).IsAssignableFrom(type))
-        {
-            throw new JsonException($"Template Data type '{typeName}' does not implement {nameof(IRedType)}");
+            var typeName = typeElement.GetString();
+            if (string.IsNullOrWhiteSpace(typeName))
+            {
+                throw new JsonException("Template Data $type property is empty");
+            }
+
+            type = ParseType(typeName);
+            if (type is null)
+            {
+                throw new JsonException($"Template Data contains unknown type '{typeName}'");
+            }
         }
 
         root.TryGetProperty(nameof(RedTypeTemplate.Author), out var author);
         root.TryGetProperty(nameof(RedTypeTemplate.Description), out var description);
         root.TryGetProperty(nameof(RedTypeTemplate.Version), out var version);
+
+        IRedType? deserializedData;
+        if (type.IsEnum)
+        {
+            deserializedData = CEnum.Parse(type, data.GetString() ?? "");
+        }
+        else
+        {
+            deserializedData = (IRedType?)RedJsonSerializer.Deserialize(type, data.GetRawText());
+        }
 
         return new RedTypeTemplate
         {
@@ -68,7 +79,7 @@ public class RedTypeTemplateConverter : JsonConverter<RedTypeTemplate>
             Author = GetStringOrDefault(author) ?? "",
             Description = GetStringOrDefault(description) ?? "",
             Version = GetStringOrDefault(version) ?? "",
-            Data = (IRedType?)RedJsonSerializer.Deserialize(type, data)
+            Data = deserializedData
         };
     }
 
