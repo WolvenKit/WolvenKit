@@ -440,8 +440,6 @@ public partial class ModTools
         }
 
         return true;
-
-        return true;
     }
 
     public static bool ConvertMultilayerMaskToDdsStreams(Multilayer_Mask mask, out List<Stream> streams)
