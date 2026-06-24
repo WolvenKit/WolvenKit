@@ -14,12 +14,10 @@ using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
 /// <summary>
-/// Error code ranges used in multilayer mask import:
-/// 0x2000–0x20FF : Import / masklist parsing and image loading errors
+/// MLMask import error codes (registered in LogCodeHelper):
 ///   0x2001 = Invalid color space (must be R8/grayscale)
-///   0x2002 = Reserved (power-of-2 requirement)
-///   0x2004 = No layers found in masklist
-///   0x2005 = General image loading failure
+///   0x2006 = No layer files specified in .masklist
+///   0x2007 = Failed to load layer image
 /// </summary>
 
 namespace WolvenKit.Modkit.RED4.MLMask
@@ -62,8 +60,8 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
             if (files.Count == 0)
             {
-                // 0x2004 = No layers found in masklist (0x2002 is reserved for power-of-2 requirement errors)
-                throw new WolvenKitException(0x2004, "No layer files specified in masklist.");
+                // 0x2006 = MLMask: No layer files specified in masklist
+                throw new WolvenKitException(0x2006, "No layer files specified in masklist.");
             }
 
             _mlmask = new MlMaskContainer();
@@ -80,7 +78,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
                 try
                 {
-                    using var image = RedImage.LoadFromFile(f) ?? throw new WolvenKitException(0x2005, $"Could not load image: {f}"); // 0x2005 = General image loading failure
+                    using var image = RedImage.LoadFromFile(f) ?? throw new WolvenKitException(0x2007, $"Could not load image: {f}"); // 0x2007 = MLMask: General image loading failure
 
                     if (image.Metadata.Format != DXGI_FORMAT.DXGI_FORMAT_R8_UNORM)
                     {
