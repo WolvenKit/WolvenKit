@@ -26,12 +26,15 @@ public static class LogCodeHelper
             "https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/npcs/a-new-head-for-v#step-6-optional-disabling-the-character-creator");
         s_mapping.Add(0x2005, // mesh: bone mismatch
             "https://wiki.redmodding.org/cyberpunk-2077-modding/for-mod-creators-theory/3d-modelling/troubleshooting-your-mesh-edits#bones-not-found-in-import-mesh-es");
+        s_mapping.Add(0x2006, "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/error-codes"); // MLMask: No layer files specified in masklist
+        s_mapping.Add(0x2007, "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/error-codes"); // MLMask: General image loading failure
 
         // 3: modKit stuff
         s_mapping.Add(0x3001,
             "https://wiki.redmodding.org/cyberpunk-2077-modding/for-mod-creators/core-mods-explained/archivexl/archivexl-resource-patching");
         s_mapping.Add(0x3002,
             "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/error-codes##id-0x3002-resources-plugin");
+        s_mapping.Add(0x3003, "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/error-codes"); // MLMask: BC4 decode error
 
         // 4: project stuff
         s_mapping.Add(0x4001, "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/settings#additional-mod-directory");
