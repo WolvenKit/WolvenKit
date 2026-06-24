@@ -220,6 +220,11 @@ public static class GraphNodeStyling
                 _ => typeName[3..^4] // Default: Remove "scn" prefix and "Node" suffix
             };
         }
+
+        if (typeof(AIbehaviorTreeNodeDefinition).IsAssignableFrom(nodeType))
+        {
+            return GetGenericBehaviorNodeTitle(typeName);
+        }
         
         return typeName;
     }
@@ -245,5 +250,32 @@ public static class GraphNodeStyling
         }
         
         return typeName;
+    }
+
+    private static string GetGenericBehaviorNodeTitle(string typeName)
+    {
+        if (typeName.StartsWith("AIbehavior", StringComparison.Ordinal))
+        {
+            typeName = typeName["AIbehavior".Length..];
+        }
+
+        if (typeName.EndsWith("TreeNodeDefinition", StringComparison.Ordinal))
+        {
+            typeName = typeName[..^"TreeNodeDefinition".Length];
+        }
+        else if (typeName.EndsWith("NodeDefinition", StringComparison.Ordinal))
+        {
+            typeName = typeName[..^"NodeDefinition".Length];
+        }
+        else if (typeName.EndsWith("Definition", StringComparison.Ordinal))
+        {
+            typeName = typeName[..^"Definition".Length];
+        }
+
+        return typeName switch
+        {
+            "IncludedTree" => "Included Tree",
+            _ => typeName
+        };
     }
 }
