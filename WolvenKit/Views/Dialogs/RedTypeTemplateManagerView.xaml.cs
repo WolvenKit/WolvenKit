@@ -12,6 +12,7 @@ using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Scripting;
 using WolvenKit.Common.Model;
+using WolvenKit.Core.Services;
 using Key = System.Windows.Input.Key;
 
 namespace WolvenKit.Views.Dialogs;
@@ -19,11 +20,15 @@ public partial class RedTypeTemplateManagerView : ReactiveUserControl<RedTypeTem
 {
     private readonly DispatcherTimer _comboBoxDebounceTimer;
     private readonly DispatcherTimer _metadataDebounceTimer;
-    private ComboBoxAdv _typeSelectorComboBox;
+    private readonly ComboBoxAdv _typeSelectorComboBox;
+    private readonly TextBlock _templateNameErrorBlock;
 
     public RedTypeTemplateManagerView()
     {
         InitializeComponent();
+
+        _typeSelectorComboBox = TypeSelectorComboBox;
+        _templateNameErrorBlock = TemplateNameErrorTextBlock;
 
         this.WhenActivated(disposables =>
         {
@@ -35,7 +40,7 @@ public partial class RedTypeTemplateManagerView : ReactiveUserControl<RedTypeTem
         _comboBoxDebounceTimer.Tick += (_, _) =>
         {
             _comboBoxDebounceTimer.Stop();
-            ApplyTypeComboBoxFilter(_typeSelectorComboBox);
+            ApplyTypeComboBoxFilter();
         };
 
         _metadataDebounceTimer = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
@@ -110,12 +115,10 @@ public partial class RedTypeTemplateManagerView : ReactiveUserControl<RedTypeTem
 
     private void TypeSelectorComboBox_OnKeyUp(object sender, KeyEventArgs e)
     {
-        if (sender is not ComboBoxAdv cba)
+        if (sender is not ComboBoxAdv)
         {
             return;
         }
-
-        _typeSelectorComboBox = cba;
 
         if (e.Key is Key.Escape
             or Key.Enter
@@ -128,24 +131,21 @@ public partial class RedTypeTemplateManagerView : ReactiveUserControl<RedTypeTem
         _comboBoxDebounceTimer.Start();
     }
 
-    private void ApplyTypeComboBoxFilter(ComboBoxAdv cba)
+    private void ApplyTypeComboBoxFilter()
     {
-        if (cba == null)
-        {
-            return;
-        }
-
-        var items = (CollectionView)CollectionViewSource.GetDefaultView(cba.ItemsSource);
+        var items = (CollectionView)CollectionViewSource.GetDefaultView(_typeSelectorComboBox.ItemsSource);
         items.Filter = (o) =>
         {
-            if (string.IsNullOrEmpty(cba.Text))
+            if (string.IsNullOrEmpty(_typeSelectorComboBox.Text))
+            {
                 return true;
+            }
 
-            return (o as TypeDesc)?.TypeName.Contains(cba.Text, StringComparison.InvariantCultureIgnoreCase) ?? true;
+            return (o as TypeDesc)?.TypeName.Contains(_typeSelectorComboBox.Text, StringComparison.InvariantCultureIgnoreCase) ?? true;
         };
         items.Refresh();
 
-        cba.SetCurrentValue(ComboBoxAdv.IsDropDownOpenProperty, true);
+        _typeSelectorComboBox.SetCurrentValue(ComboBoxAdv.IsDropDownOpenProperty, true);
     }
 
     private void MetaDataProperty_OnKeyUp(object sender, KeyEventArgs e)
@@ -157,5 +157,31 @@ public partial class RedTypeTemplateManagerView : ReactiveUserControl<RedTypeTem
 
         _metadataDebounceTimer.Stop();
         _metadataDebounceTimer.Start();
+    }
+
+    private void FileNameTextBox_OnKeyUp(object sender, KeyEventArgs e)
+    {
+        if (sender is not TextBox tb)
+        {
+            return;
+        }
+
+        tb.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
+
+        if (string.IsNullOrWhiteSpace(tb.Text))
+        {
+            _templateNameErrorBlock.SetCurrentValue(TextBlock.TextProperty, "Template name cannot be empty");
+            _templateNameErrorBlock.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+            return;
+        }
+
+        if (!FilepathValidationTools.IsOsFileNameValid(tb.Text.TrimEnd()))
+        {
+            _templateNameErrorBlock.SetCurrentValue(TextBlock.TextProperty, "Template name must be a valid operating system file name");
+            _templateNameErrorBlock.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+            return;
+        }
+
+        _templateNameErrorBlock.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
     }
 }

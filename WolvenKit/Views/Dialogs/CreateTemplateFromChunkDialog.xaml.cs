@@ -9,11 +9,12 @@ namespace WolvenKit.Views.Dialogs;
 
 public partial class CreateTemplateFromChunkDialog : ReactiveUserControl<CreateTemplateFromChunkDialogViewModel>
 {
-    private TextBlock TemplateNameErrorBlock => FindName("TemplateNameErrorTextBlock") as TextBlock;
+    private readonly TextBlock _templateNameErrorBlock;
 
     public CreateTemplateFromChunkDialog()
     {
         InitializeComponent();
+        _templateNameErrorBlock = TemplateNameErrorTextBlock;
     }
 
     private void CancelButton_OnClick(object sender, RoutedEventArgs e) => ViewModel?.Cancel();
@@ -27,21 +28,23 @@ public partial class CreateTemplateFromChunkDialog : ReactiveUserControl<CreateT
             return;
         }
 
+        tb.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
+
         if (string.IsNullOrWhiteSpace(tb.Text))
         {
-            TemplateNameErrorBlock.SetCurrentValue(TextBlock.TextProperty, "Template name cannot be empty");
-            TemplateNameErrorBlock.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+            _templateNameErrorBlock.SetCurrentValue(TextBlock.TextProperty, "Template name cannot be empty");
+            _templateNameErrorBlock.SetCurrentValue(VisibilityProperty, Visibility.Visible);
             return;
         }
 
         if (!FilepathValidationTools.IsOsFileNameValid(tb.Text.TrimEnd()))
         {
-            TemplateNameErrorBlock.SetCurrentValue(TextBlock.TextProperty, "Template name must be a valid operating system file name");
-            TemplateNameErrorBlock.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+            _templateNameErrorBlock.SetCurrentValue(TextBlock.TextProperty, "Template name must be a valid operating system file name");
+            _templateNameErrorBlock.SetCurrentValue(VisibilityProperty, Visibility.Visible);
             return;
         }
 
-        TemplateNameErrorBlock.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+        _templateNameErrorBlock.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
     }
 }
 

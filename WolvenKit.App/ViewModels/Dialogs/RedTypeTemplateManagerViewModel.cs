@@ -19,6 +19,7 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Core.Services;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 using Activator = System.Activator;
@@ -64,6 +65,12 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
     [ObservableProperty]
     private TypeDesc _selectedType;
     public ObservableCollection<TypeDesc> ValidNewTypes { get; }
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsTemplateNameValid))]
+    private string _templateName = "";
+
+    public bool IsTemplateNameValid => !string.IsNullOrWhiteSpace(TemplateName) && FilepathValidationTools.IsOsFileNameValid(TemplateName.TrimEnd());
 
     partial void OnSelectedTypeChanged(TypeDesc value)
     {

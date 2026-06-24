@@ -226,46 +226,57 @@
             </Border>
         </Grid>
 
-        <DockPanel Grid.Row="2">
-            <hc:TextBox
-                x:Name="FileNameTextBox"
-                Width="{DynamicResource WolvenKitScriptManagerFileNameWidth}"
-                hc:InfoElement.Title="Name: "
-                hc:InfoElement.TitlePlacement="Left"
-                FlowDirection="LeftToRight"/>
 
-            <syncfusion:ComboBoxAdv
-                Margin="{DynamicResource WolvenKitMarginSmallLeft}"
-                Width="{DynamicResource WolvenKitScriptManagerFileNameWidth}"
-                IsEditable="True"
-                ItemsSource="{Binding ValidNewTypes}"
-                DisplayMemberPath="TypeName"
-                SelectedItem="{Binding SelectedType, Mode=TwoWay}"
-                KeyUp="TypeSelectorComboBox_OnKeyUp"/>
+        <StackPanel Grid.Row="2">
+            <DockPanel>
+                <hc:TextBox
+                    x:Name="FileNameTextBox"
+                    Width="{DynamicResource WolvenKitScriptManagerFileNameWidth}"
+                    hc:InfoElement.Title="Name: "
+                    hc:InfoElement.TitlePlacement="Left"
+                    FlowDirection="LeftToRight"
+                    KeyUp="FileNameTextBox_OnKeyUp"
+                    Text="{Binding TemplateName}"/>
 
-            <controls:RedTypeTemplateDropdown
-                Margin="{DynamicResource WolvenKitMarginSmallLeft}"
-                ViewModel="{Binding RedTypeTemplateDropdownViewModel}" />
+                <syncfusion:ComboBoxAdv
+                    Name="TypeSelectorComboBox"
+                    Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                    Width="{DynamicResource WolvenKitScriptManagerFileNameWidth}"
+                    IsEditable="True"
+                    ItemsSource="{Binding ValidNewTypes}"
+                    DisplayMemberPath="TypeName"
+                    SelectedItem="{Binding SelectedType, Mode=TwoWay}"
+                    KeyUp="TypeSelectorComboBox_OnKeyUp"/>
 
-            <Button
-                Margin="{DynamicResource WolvenKitMarginSmallLeft}"
-                Click="Add_OnClick">
-                <StackPanel
-                    Margin="{DynamicResource WolvenKitMarginSmallHorizontal}"
-                    Orientation="Horizontal">
-                    <templates:IconBox
-                        IconPack="Codicons"
-                        Kind="NewFile"
-                        Margin="{DynamicResource WolvenKitMarginTinyVertical}"
-                        Size="{DynamicResource WolvenKitIconTiny}"
-                        Foreground="{StaticResource WolvenKitYellow}" />
+                <controls:RedTypeTemplateDropdown
+                    Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                    ViewModel="{Binding RedTypeTemplateDropdownViewModel}" />
 
-                    <TextBlock
-                        Margin="{DynamicResource WolvenKitMarginSmallLeft}"
-                        VerticalAlignment="Center"
-                        Text="Add" />
-                </StackPanel>
-            </Button>
-        </DockPanel>
+                <Button
+                    Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                    Click="Add_OnClick"
+                    IsEnabled="{Binding IsTemplateNameValid}">
+                    <StackPanel
+                        Margin="{DynamicResource WolvenKitMarginSmallHorizontal}"
+                        Orientation="Horizontal">
+                        <templates:IconBox
+                            IconPack="Codicons"
+                            Kind="NewFile"
+                            Margin="{DynamicResource WolvenKitMarginTinyVertical}"
+                            Size="{DynamicResource WolvenKitIconTiny}"
+                            Foreground="{StaticResource WolvenKitYellow}" />
+
+                        <TextBlock
+                            Margin="{DynamicResource WolvenKitMarginSmallLeft}"
+                            VerticalAlignment="Center"
+                            Text="Add" />
+                    </StackPanel>
+                </Button>
+            </DockPanel>
+            <TextBlock
+                Name="TemplateNameErrorTextBlock"
+                Foreground="Red"
+                Visibility="Collapsed"/>
+        </StackPanel>
     </Grid>
 </reactiveUi:ReactiveUserControl>

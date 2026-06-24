@@ -114,7 +114,8 @@
                 Click="CreateButton_OnClick"
                 Content="Create"
                 Margin="{StaticResource WolvenKitMarginSmallLeft}"
-                Style="{StaticResource DialogPrimaryButtonStyle}"/>
+                Style="{StaticResource DialogPrimaryButtonStyle}"
+                IsEnabled="{Binding IsTemplateNameValid}"/>
 
         </StackPanel>
 
