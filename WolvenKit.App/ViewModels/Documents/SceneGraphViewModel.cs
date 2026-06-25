@@ -139,6 +139,16 @@ namespace WolvenKit.App.ViewModels.Documents
             IsGraphLoading = false;
         }
 
+        public void OnDocumentSearchChanged(string searchBoxText)
+        {
+            var match = GraphDocumentSearchHelper.ApplySceneSearch(MainGraph, searchBoxText);
+
+            if (match is not null)
+            {
+                SelectedTab = Tabs.FirstOrDefault(tab => tab.Header == "Node Properties");
+            }
+        }
+
         private void CreateTabs()
         {
             // Create tab definitions using the CollectionViewHelper filters

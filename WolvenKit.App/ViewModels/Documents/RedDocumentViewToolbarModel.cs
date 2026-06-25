@@ -937,12 +937,18 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     public void OnSearchChanged(string searchBoxText)
     {
         CurrentActiveSearch = "";
-        if (CurrentTab is not RDTDataViewModel rtdViewModel)
+        switch (CurrentTab)
         {
-            return;
+            case RDTDataViewModel rtdViewModel:
+                rtdViewModel.OnSearchChanged(searchBoxText);
+                break;
+            case QuestPhaseGraphViewModel questPhaseGraphViewModel:
+                questPhaseGraphViewModel.OnDocumentSearchChanged(searchBoxText);
+                break;
+            case SceneGraphViewModel sceneGraphViewModel:
+                sceneGraphViewModel.OnDocumentSearchChanged(searchBoxText);
+                break;
         }
-
-        rtdViewModel.OnSearchChanged(searchBoxText);
     }
 
     /// <summary>
