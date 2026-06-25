@@ -26,6 +26,7 @@ namespace WolvenKit.App.ViewModels.Documents
         private bool _disposed = false;
         private readonly ILoggerService? _logger = Locator.Current.GetService<ILoggerService>();
         private readonly questQuestPhaseResource _questPhaseData;
+        private readonly GraphDocumentSearchState _searchState = new();
 
         public RDTDataViewModel RDTViewModel { get; }
         public RedGraph MainGraph { get; }
@@ -124,7 +125,8 @@ namespace WolvenKit.App.ViewModels.Documents
         {
             var match = GraphDocumentSearchHelper.ApplyQuestPhaseSearch(
                 MainGraph,
-                searchBoxText);
+                searchBoxText,
+                _searchState);
 
             if (match is null)
             {
