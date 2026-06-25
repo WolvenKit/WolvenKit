@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 using WolvenKit.Core.Extensions;
 using System.IO;
+using GraphNodeViewModel = WolvenKit.App.ViewModels.GraphEditor.NodeViewModel;
 
 namespace WolvenKit.App.ViewModels.Documents
 {
@@ -115,6 +116,23 @@ namespace WolvenKit.App.ViewModels.Documents
         public void SetGraphLoaded()
         {
             IsGraphLoading = false;
+        }
+
+        public event EventHandler<GraphSearchNavigationRequestedEventArgs>? GraphSearchNavigationRequested;
+
+        public void OnDocumentSearchChanged(string searchBoxText)
+        {
+            var match = GraphDocumentSearchHelper.ApplyQuestPhaseSearch(
+                MainGraph,
+                searchBoxText);
+
+            if (match is null)
+            {
+                return;
+            }
+
+            SelectedTab = Tabs.FirstOrDefault(tab => tab.Header == "Node Properties");
+            GraphSearchNavigationRequested?.Invoke(this, new GraphSearchNavigationRequestedEventArgs(match.Value.Node));
         }
 
         private void CreateTabs()
@@ -263,5 +281,10 @@ namespace WolvenKit.App.ViewModels.Documents
         {
             Dispose(false);
         }
+    }
+
+    public sealed class GraphSearchNavigationRequestedEventArgs(GraphNodeViewModel targetNode) : EventArgs
+    {
+        public GraphNodeViewModel TargetNode { get; } = targetNode;
     }
 } 
