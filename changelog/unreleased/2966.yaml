@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 2966
+      author: "misterchedda"
+      description: "Fixed the search function for quest and scene editor. The editor will now navigate through matching graph nodes."
