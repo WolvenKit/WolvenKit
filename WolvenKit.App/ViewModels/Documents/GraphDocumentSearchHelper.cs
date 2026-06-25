@@ -13,32 +13,26 @@ public static class GraphDocumentSearchHelper
 {
     internal static GraphDocumentSearchMatch? ApplyQuestPhaseSearch(
         RedGraph graph,
-        string searchBoxText)
+        string searchBoxText,
+        GraphDocumentSearchState searchState)
     {
-        if (string.IsNullOrWhiteSpace(searchBoxText))
-        {
-            return null;
-        }
-
-        return FindFirstQuestPhaseGraphNodeDataMatch(graph, searchBoxText);
+        return ApplyGraphSearch(
+            searchBoxText,
+            searchState,
+            () => FindQuestPhaseGraphNodeDataMatches(graph, searchBoxText),
+            selectGraphNode: false);
     }
 
     internal static GraphDocumentSearchMatch? ApplySceneSearch(
         RedGraph graph,
-        string searchBoxText)
+        string searchBoxText,
+        GraphDocumentSearchState searchState)
     {
-        if (string.IsNullOrWhiteSpace(searchBoxText))
-        {
-            return null;
-        }
-
-        var match = FindFirstSceneGraphNodeDataMatch(graph, searchBoxText);
-        if (match is not null)
-        {
-            SelectGraphNode(match.Value.Node);
-        }
-
-        return match;
+        return ApplyGraphSearch(
+            searchBoxText,
+            searchState,
+            () => FindSceneGraphNodeDataMatches(graph, searchBoxText),
+            selectGraphNode: true);
     }
 
     public static void SelectGraphNode(GraphNodeViewModel targetNode)
@@ -58,10 +52,37 @@ public static class GraphDocumentSearchHelper
         graph?.CenterOnSelectedNodes(new List<object> { targetNode });
     }
 
-    private static GraphDocumentSearchMatch? FindFirstQuestPhaseGraphNodeDataMatch(
+    private static GraphDocumentSearchMatch? ApplyGraphSearch(
+        string searchBoxText,
+        GraphDocumentSearchState searchState,
+        Func<IReadOnlyList<GraphDocumentSearchMatch>> findMatches,
+        bool selectGraphNode)
+    {
+        if (string.IsNullOrWhiteSpace(searchBoxText))
+        {
+            searchState.Reset();
+            return null;
+        }
+
+        var match = searchState.GetNextMatch(searchBoxText, findMatches);
+        if (match is null)
+        {
+            return null;
+        }
+
+        if (selectGraphNode)
+        {
+            SelectGraphNode(match.Value.Node);
+        }
+
+        return match;
+    }
+
+    private static IReadOnlyList<GraphDocumentSearchMatch> FindQuestPhaseGraphNodeDataMatches(
         RedGraph graph,
         string searchBoxText)
     {
+        var matches = new List<GraphDocumentSearchMatch>();
         var visited = new HashSet<RedGraph>();
         var pendingGraphs = new Queue<RedGraph>();
         pendingGraphs.Enqueue(graph);
@@ -77,7 +98,7 @@ public static class GraphDocumentSearchHelper
             {
                 if (NodeDataMatchesSearch(node, searchBoxText, skipEmbeddedGraphPayload: true))
                 {
-                    return new GraphDocumentSearchMatch(node);
+                    matches.Add(new GraphDocumentSearchMatch(node));
                 }
             }
 
@@ -95,13 +116,15 @@ public static class GraphDocumentSearchHelper
             }
         }
 
-        return null;
+        return matches;
     }
 
-    private static GraphDocumentSearchMatch? FindFirstSceneGraphNodeDataMatch(
+    private static IReadOnlyList<GraphDocumentSearchMatch> FindSceneGraphNodeDataMatches(
         RedGraph graph,
         string searchBoxText)
     {
+        var matches = new List<GraphDocumentSearchMatch>();
+
         foreach (var node in graph.Nodes)
         {
             if (node.Data is not scnSceneGraphNode)
@@ -111,11 +134,11 @@ public static class GraphDocumentSearchHelper
 
             if (NodeDataMatchesSearch(node, searchBoxText))
             {
-                return new GraphDocumentSearchMatch(node);
+                matches.Add(new GraphDocumentSearchMatch(node));
             }
         }
 
-        return null;
+        return matches;
     }
 
     private static bool CanSearchNestedQuestPhaseGraph(IGraphProvider provider) =>
@@ -244,3 +267,37 @@ public static class GraphDocumentSearchHelper
 }
 
 internal readonly record struct GraphDocumentSearchMatch(GraphNodeViewModel Node);
+
+internal sealed class GraphDocumentSearchState
+{
+    private string _searchText = "";
+    private IReadOnlyList<GraphDocumentSearchMatch> _matches = [];
+    private int _currentIndex = -1;
+
+    public GraphDocumentSearchMatch? GetNextMatch(
+        string searchText,
+        Func<IReadOnlyList<GraphDocumentSearchMatch>> findMatches)
+    {
+        if (!string.Equals(_searchText, searchText, StringComparison.Ordinal) || _matches.Count == 0)
+        {
+            _searchText = searchText;
+            _matches = findMatches();
+            _currentIndex = -1;
+        }
+
+        if (_matches.Count == 0)
+        {
+            return null;
+        }
+
+        _currentIndex = (_currentIndex + 1) % _matches.Count;
+        return _matches[_currentIndex];
+    }
+
+    public void Reset()
+    {
+        _searchText = "";
+        _matches = [];
+        _currentIndex = -1;
+    }
+}
