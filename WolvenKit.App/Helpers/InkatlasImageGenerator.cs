@@ -14,7 +14,7 @@ namespace WolvenKit.App.Helpers;
 
 public static class InkatlasImageGenerator
 {
-    public static void GenerateAtlas(
+    public static bool GenerateAtlas(
         string pngFolder,
         string relativeSourcePath,
         string atlasFileName,
@@ -32,10 +32,24 @@ public static class InkatlasImageGenerator
 
         // Ensure output directory exists
         Directory.CreateDirectory(absoluteSourcePath);
+        var destFileName = Path.Combine(absoluteSourcePath, $"{atlasFileName.Replace(".inkatlas", "")}.inkatlas");
+        var fileWasWritten = true;
 
+        if (File.Exists(destFileName))
+        {
+            try
+            {
+                File.Delete(destFileName);
+            }
+            catch
+            {
+                destFileName = destFileName.Replace(".inkatlas", "_new.inkatlas");
+                fileWasWritten = false;
+            }
+        }
         var cr2WFile = new CR2WFile() { RootChunk = inkatlas };
-        cr2WTools.WriteCr2W(cr2WFile,
-            Path.Combine(absoluteSourcePath, $"{atlasFileName.Replace(".inkatlas", "")}.inkatlas"));
+        cr2WTools.WriteCr2W(cr2WFile, destFileName);
+        return fileWasWritten;
     }
 
 
