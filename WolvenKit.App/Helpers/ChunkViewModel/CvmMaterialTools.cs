@@ -74,7 +74,7 @@ public class CvmMaterialTools
 
     #region helper methods and convenience
 
-    private static void RecalculateMaterialProperties(ChunkViewModel cvm, bool refreshAll = false)
+    public static void RecalculateMaterialProperties(ChunkViewModel cvm, bool refreshAll = false)
     {
         cvm.GetPropertyChild("materialEntries")?.RecalculateProperties();
 

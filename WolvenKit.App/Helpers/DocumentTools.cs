@@ -1162,13 +1162,8 @@ public class DocumentTools
 
     }
 
-    public void ClearMeshMaterials(CR2WFile? meshCr2W)
+    public void ClearMeshMaterials(CMesh mesh)
     {
-        if (meshCr2W?.RootChunk is not CMesh mesh)
-        {
-            return;
-        }
-
         mesh.Appearances.Clear();
         mesh.MaterialEntries.Clear();
         mesh.LocalMaterialBuffer.Materials.Clear();
@@ -1510,9 +1505,9 @@ public class DocumentTools
             throw new InvalidDataException($"target file {destPath} is not a valid mesh.");
         }
 
-        if (!append)
+        if (!append && destCr2W.RootChunk is CMesh mesh)
         {
-            ClearMeshMaterials(destCr2W);
+            ClearMeshMaterials(mesh);
         }
 
         var numChanges = meshPaths.Select((t, i) =>
