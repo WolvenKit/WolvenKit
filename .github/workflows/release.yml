@@ -52,28 +52,20 @@ jobs:
         id: get_version
         with:
           proj-path: ${{env.PROJ}}
+
       - name: change version
         shell: bash
         run: echo "VERSION_APP=${{steps.get_version.outputs.assembly-version}}" >> $GITHUB_ENV
 
+      - name: Create Release Tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a ${{env.VERSION_APP}} -m "Release ${{env.VERSION_APP}}"
+          git push origin --tag ${{env.VERSION_APP}}
+
       ##########################################
       # CHANGELOG
-
-      - name: Ensure changelog is staged
-        shell: pwsh
-        run: |
-          $branchExists = git ls-remote --exit-code --heads origin changelog-staging
-          if ($LASTEXITCODE -eq 0) {
-            Write-Host "Changelog branch exists"
-          } else {
-            Write-Host "Changelog branch does not exist, please run stage changelog first"
-            exit 1
-          }
-      
-      - name: Checkout changelog branch
-        run: |
-          git fetch origin changelog-staging
-          git checkout changelog-staging
 
       - name: Read MD Version Changelog
         id: md_changelog
@@ -81,7 +73,7 @@ jobs:
         run: |
           {
             echo 'content<<EOF'
-            cat compiled-changelog/CHANGELOG.md
+            cat changelog/generated/CHANGELOG.md
             echo EOF
           } >> "$GITHUB_OUTPUT"
 
@@ -91,58 +83,9 @@ jobs:
         run: |
           {
             echo 'content<<EOF'
-            cat compiled-changelog/CHANGELOG.txt
+            cat changelog/generated/CHANGELOG.txt
             echo EOF
           } >> "$GITHUB_OUTPUT"
-
-      - name: Read History Changelog
-        id: history_changelog
-        shell: bash
-        run: |
-          {
-            echo 'content<<EOF'
-            cat CHANGELOG.md
-            echo EOF
-          } >> "$GITHUB_OUTPUT"
-
-      - name: Clean up Branches
-        run: |
-          git checkout main
-          git branch -D changelog-staging
-
-      - name: Write Changelog
-        shell: pwsh
-        env:
-          CHANGELOG: ${{ steps.history_changelog.outputs.content }}
-        run: Set-Content -Path "CHANGELOG.md" -Value $env:CHANGELOG
-
-      - name: Name Unreleased
-        shell: pwsh
-        run: |
-          cd changelog
-          Rename-Item -Path "!unreleased.yaml" -NewName "${{env.VERSION_APP}}.yaml"
-
-      - name: Add Templated Unreleased
-        shell: pwsh
-        run: |
-          cd changelog
-          Copy-Item -Path "!template.yaml" -Destination "!unreleased.yaml"
-
-      - name: Commit
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add CHANGELOG.md
-          git add changelog\*.yaml
-          git commit -m "Update changelog for version ${{env.VERSION_APP}}" || echo "No changes to commit"
-
-      - name: Create Release Tag
-        run: git tag -a ${{env.VERSION_APP}} -m "Release ${{env.VERSION_APP}}"
-
-      - name: Push changes
-        run: |
-          git push origin --delete changelog-staging
-          git push origin main --tags
 
       - name: Populate Release Template
         shell: pwsh

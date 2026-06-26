@@ -177,6 +177,12 @@ public partial class ProjectManager : ObservableObject, IProjectManager
 
             return project;
         }
+        catch (InvalidOperationException ex) when (ex.Message.Contains("error in XML document"))
+        {
+            _loggerService.Error($"Failed to load project. Your .cpmodproj file may have been corrupted.");
+            return null;
+
+        }
         catch (Exception e)
         {
             _loggerService.Error($"Failed to load project.");

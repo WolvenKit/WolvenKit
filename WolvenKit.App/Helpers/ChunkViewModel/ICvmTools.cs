@@ -19,7 +19,6 @@ public interface ICvmTools
     void AdjustSubmeshCount(ChunkViewModel cvm);
     void UnDynamifyMaterials(ChunkViewModel? cvm);
     void AddMaterialAndDefinition(ChunkViewModel cvm, string newName);
-    int FindHighestMaterialIndex(ChunkViewModel materialDefinitionArray, bool isLocalInstance);
     void AddTagsToMeshAppearances(List<ChunkViewModel> chunks, List<string> tagList);
 
     #endregion

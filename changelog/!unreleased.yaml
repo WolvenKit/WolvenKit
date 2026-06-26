@@ -12,9 +12,13 @@ changes:
       pr-number: 2917
       author: "manavortex"
       description: "Fixed 'create item codes from yaml'"
-changes:
     - type: "fixed"
       packages: ["App"]
       pr-number: 2924
       author: "manavortex"
-      description: "Inkatlas generator will now delete file before overwriting and provide better feedback"
+      description: "Inkatlas generator will now delete file before overwriting and provide better feedback"      
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 2953
+      author: "Ametis81"
+      description: ".ent preview fix (index out of bounds)"

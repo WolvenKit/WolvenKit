@@ -34,6 +34,7 @@ public partial class WatcherService : ObservableObject, IWatcherService
 
     private readonly ConcurrentQueue<FileSystemEventArgsWrapper> _fileChanges = new();
 
+    public ConcurrentDictionary<string, FileSystemModel> FileLookup { get; } = new();
     private readonly ConcurrentDictionary<string, FileSystemModel> _fileLookup = new();
     private readonly ConcurrentDictionary<string, long> _removedFiles = new();
 
