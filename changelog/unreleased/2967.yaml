@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 2967
+      author: "misterchedda"
+      description: "Prompt before opening external quest phase resources from phase nodes in the quest phase editor."
