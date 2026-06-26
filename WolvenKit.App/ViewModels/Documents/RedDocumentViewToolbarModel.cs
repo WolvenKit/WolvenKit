@@ -669,8 +669,11 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             return;
         }
 
-        mesh.Appearances.Clear();
-        _cvmTools.DeleteUnusedMaterials(RootChunk, null, true);
+        _documentTools.ClearMeshMaterials(mesh);
+        RootChunk.GetPropertyChild("appearances")?.RecalculateProperties();
+        CvmMaterialTools.RecalculateMaterialProperties(RootChunk, true);
+
+        RootChunk.Tab?.Parent?.SetIsDirty(true);
     }
 
     private bool CanSelectTemplateAppearance() => SelectedChunk?.ResolvedData is CArray<CHandle<meshMeshAppearance>> ||
