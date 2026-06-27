@@ -1,6 +1,6 @@
 changes:
-    - type: "fixed | changed"
-      packages: ["App", "Nuget Packages"]
+    - type: "changed"
+      packages: ["App", "CLI", "Nuget Packages"]
       pr-number: 2922
       author: "Ametis81"
       description: "Export / Import masks at their native resolution (low and high res masks with no pixel shift / offset due to scaling)"
