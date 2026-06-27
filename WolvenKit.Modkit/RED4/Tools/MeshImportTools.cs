@@ -771,7 +771,7 @@ namespace WolvenKit.Modkit.RED4
             catch (WolvenKitException e)
             {
                 throw new WolvenKitException(e.ErrorCode,
-                    $"You're trying to import bones into a mesh that doesn't have them. Wolvenkit can't create bones — please remove them in Blender, or import into a different file: {e.Message}");
+                    $"You're trying to use a legacy export to add bones to a mesh. Wolvenkit can't create bones this way— Please remove the bones in Blender (delete orphaned vert groups), or re-export the mesh from Wolvenkit, import the glb into Blender, and re-parent your meshes to the updated armature");
             }
 
             RecomputeBoneVertexEpsilons(meshBlob, meshes);
