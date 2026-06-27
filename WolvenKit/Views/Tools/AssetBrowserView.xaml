@@ -225,7 +225,7 @@
                         </Grid.Resources>
 
                         <!-- Folder Tree -->
-                        <syncfusion:SfTreeGrid
+                        <others:InspectableTreeGrid
                             x:Name="LeftNavigation"
                             AutomationProperties.AutomationId="LeftNavigation"
                             Margin="0"
@@ -347,7 +347,7 @@
                                     </MenuItem>
                                 </ContextMenu>
                             </syncfusion:SfTreeGrid.ExpanderContextMenu>
-                        </syncfusion:SfTreeGrid>
+                        </others:InspectableTreeGrid>
                     </Grid>
 
                     <syncfusion:SfGridSplitter

@@ -20,6 +20,7 @@ using CommunityToolkit.Mvvm.Input;
 using DynamicData.Binding;
 using Microsoft.VisualBasic.FileIO;
 using Microsoft.Win32;
+using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Factories;
@@ -82,7 +83,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly DocumentTools _documentTools;
     private readonly Cr2WTools _cr2WTools;
     public readonly TemplateFileTools TemplateFileTools;
-    private readonly IWatcherService _watcherService;
     private readonly ArchiveXlItemService _archiveXlItemService;
     private readonly IUpdateService _updateService;
     // expose to view
@@ -109,7 +109,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         IHashService hashService,
         ITweakDBService tweakDBService,
         Red4ParserService parserService,
-        IWatcherService watcherService,
         ArchiveXlItemService archiveXlItemService,
         AppScriptService scriptService,
         IModTools modTools,
@@ -135,7 +134,6 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         _archiveManager = archiveManager;
         _tweakDBService = tweakDBService;
         _parser = parserService;
-        _watcherService = watcherService;
         _archiveXlItemService = archiveXlItemService;
         _scriptService = scriptService;
         _documentTools = documentTools;
@@ -707,7 +705,11 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         if (File.Exists(location))
         {
             CloseModal();
-            await LoadProjectFromPathAsync(location);
+
+            // Defer the actual (very expensive) project load until after the overlay fade-out
+            // animation has completed. This dramatically improves the perceived smoothness
+            // of OverlayFadeOut on large projects.
+            await RunAfterModalClosed(async () => await LoadProjectFromPathAsync(location));
             return;
         }
 
@@ -775,10 +777,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             UpdateTitle();
             _notificationService.Success($"Project {Path.GetFileNameWithoutExtension(location)} loaded!");
+
             // https://github.com/WolvenKit/WolvenKit/issues/1962
             if (!FilepathValidationTools.IsOsFilePathValid(location))
             {
                 _notificationService.Warning($"Project path {location} contains invalid characters!");
+
             }
 
             OnInitialProjectLoaded?.Invoke(this, EventArgs.Empty);
@@ -831,7 +835,13 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             await _projectManager.SaveAsync();
             np.CreateDefaultDirectories();
 
-            await LoadProjectFromPathAsync(projectLocation);
+            // Defer loading so the wizard close animation can complete smoothly.
+            // Await the returned task so that callers (e.g. NewProject) do not proceed until
+            // LoadProjectFromPathAsync has actually completed (after any modal close animation).
+            await RunAfterModalClosed(async () =>
+            {
+                await LoadProjectFromPathAsync(projectLocation);
+            });
         }
         catch (Exception ex)
         {
@@ -1409,15 +1419,15 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
-        _watcherService.Suspend();
+        GetToolViewModel<ProjectExplorerViewModel>()?.SuspendFileWatcher();
         try
         {
             _archiveXlItemService.CreateEquipmentItem(item);
         }
         finally
         {
-            _watcherService.Resume();
-            _watcherService.Refresh();
+            GetToolViewModel<ProjectExplorerViewModel>()?
+                .ResumeWatcher_AndReloadProject();
         }
     }
 
@@ -1870,6 +1880,102 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         {
             IsOverlayShown = false;
         }
+
+        // Run any work that was deferred because an overlay or dialog was open.
+        // This gives animations (like OverlayFadeOut) a clean shot at the UI thread.
+        while (_pendingAfterModalCloseActions.Count > 0 && !IsDialogShown && !IsOverlayShown)
+        {
+            var action = _pendingAfterModalCloseActions.Dequeue();
+            try
+            {
+                action();
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error($"Error running deferred post-modal action: {ex.Message}");
+            }
+        }
+
+        while (_pendingAfterModalCloseAsyncActions.Count > 0 && !IsDialogShown && !IsOverlayShown)
+        {
+            var asyncAction = _pendingAfterModalCloseAsyncActions.Dequeue();
+            _ = ExecuteDeferredAsync(asyncAction);
+        }
+    }
+
+    private async Task ExecuteDeferredAsync(Func<Task> asyncAction)
+    {
+        try
+        {
+            await asyncAction();
+        }
+        catch (Exception ex)
+        {
+            _loggerService.Error($"Error running deferred async post-modal action: {ex.Message}");
+        }
+    }
+
+    private readonly Queue<Action> _pendingAfterModalCloseActions = new();
+    private readonly Queue<Func<Task>> _pendingAfterModalCloseAsyncActions = new();
+
+    /// <summary>
+    /// Schedules an action to run on the UI thread after all modals and overlays have fully closed.
+    /// This is useful for kicking off heavy UI work (large tree builds, etc.) so that
+    /// fade-out animations are not starved for dispatcher time.
+    /// </summary>
+    public void RunAfterModalClosed(Action action)
+    {
+        if (!IsDialogShown && !IsOverlayShown)
+        {
+            action();
+        }
+        else
+        {
+            _pendingAfterModalCloseActions.Enqueue(action);
+        }
+    }
+
+    /// <summary>
+    /// Schedules an async action to run on the UI thread after all modals and overlays have fully closed.
+    /// Returns a Task that completes when the action has executed (immediately if no modals are open,
+    /// or after the close animation + execution if deferred).
+    /// This is useful for kicking off heavy UI work (large tree builds, etc.) so that
+    /// fade-out animations are not starved for dispatcher time, while still allowing callers to await completion.
+    /// </summary>
+    public Task RunAfterModalClosed(Func<Task> asyncAction)
+    {
+        _progressService.Status = EStatus.Running;
+        _progressService.IsIndeterminate = true;
+
+        if (!IsDialogShown && !IsOverlayShown)
+        {
+            var task = asyncAction();
+            // Ensure errors are logged even if caller does not await the returned task.
+            task.ContinueWith(t =>
+            {
+                if (t.IsFaulted)
+                {
+                    _loggerService.Error($"Error running immediate post-modal async action: {t.Exception?.GetBaseException().Message}");
+                }
+            }, TaskContinuationOptions.OnlyOnFaulted | TaskContinuationOptions.ExecuteSynchronously);
+            return task;
+        }
+
+        var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        _pendingAfterModalCloseAsyncActions.Enqueue(async () =>
+        {
+            try
+            {
+                await asyncAction();
+                tcs.TrySetResult();
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error($"Error running deferred async post-modal action: {ex.Message}");
+                tcs.TrySetException(ex);
+            }
+        });
+        return tcs.Task;
     }
 
     private bool CanCloseOverlay() => IsOverlayShown;

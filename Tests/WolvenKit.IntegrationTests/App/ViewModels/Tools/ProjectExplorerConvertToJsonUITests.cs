@@ -26,6 +26,7 @@ using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
 using Xunit;
+using Xunit.Abstractions;
 using Xunit.Sdk;
 using Assert = Xunit.Assert;
 
@@ -36,12 +37,13 @@ static class Const
     public static string BaseDirName = "base";
     public static string AnimationsName = "base\\animations";
     public static string AnimMotionDbName = "base\\animations\\anim_motion_database";
+    public static string GameplayName = "base\\gameplay";
+    public static string DevicesName = "base\\gameplay\\devices";
 }
 
 public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
 {
     private readonly string _tempProjectRoot;
-    private readonly Cp77Project _project;
     private IHost? _host;
     private ProjectExplorerViewModel? _projectExplorerVm;
 
@@ -51,66 +53,93 @@ public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
         Directory.CreateDirectory(_tempProjectRoot);
     }
 
-    private CancellationTokenSource _cts = new();
-
     [StaFact]
     public async Task WhenAnimsDbSelectedAssetBrowserRightViewHasRightItems()
     {
-        var dispatcher = Dispatcher.CurrentDispatcher;
+        await LoadANewProject();
 
         var expectedNumberOfItems = 27;
+        var numberOfFolders = 6;
 
-        _host = IntegrationTestHost.Create();
-        var services = _host.Services;
-        services.UseMicrosoftDependencyResolver();
-        var appViewModel = services.GetRequiredService<AppViewModel>();
+        Assert.NotNull(_host);
 
-        var resolver = Locator.CurrentMutable;
-        resolver.InitializeSplat();
+        var vm = _host.Services.GetRequiredService<AssetBrowserViewModel>();
 
-        var hashService = services.GetRequiredService<IHashService>();
-        hashService.Load();
+        // Grab the Archives and add them to the AssetBrowser
+        var archives = vm._boundRootNodes.First();
+        AddDirs(archives, vm);
 
-        var settingsManager = services.GetRequiredService<ISettingsManager>();
-        var gameDir = ResolveGameDirectory();
-        var exePath = Path.Combine(gameDir, "bin", "x64", "Cyberpunk2077.exe");
-        settingsManager.CP77ExecutablePath = exePath;
-        var gameControllerFactory = services.GetRequiredService<IGameControllerFactory>();
-        var controller = gameControllerFactory.GetRed4Controller();
-        Assert.NotNull(controller);
-        var projectManager = services.GetRequiredService<IProjectManager>();
-        _projectExplorerVm = appViewModel.GetToolViewModel<ProjectExplorerViewModel>();
+        // Navigate to the anim_motion_db folder
+        NavigateToAnimMotionDbFolder(vm);
 
-        var projectWizard = services.GetRequiredService<ProjectWizardViewModel>();
-        projectWizard.Author = "FF:06:B5";
-        projectWizard.ModName = "Cyberpunk2077";
-        projectWizard.ProjectName = "Make Misty Hot";
-        projectWizard.ProjectPath = _tempProjectRoot;
-        await appViewModel.NewProjectTask(projectWizard);
+        // Verify the correct number of items are in the RightItems
+        Assert.Equal(expectedNumberOfItems, vm.RightItems.Count);
 
-        Assert.NotNull(dispatcher);
-        Assert.NotNull(projectManager.ActiveProject);
+        await AddRightItemsToProject(vm);
 
-        Task.Delay(500).Wait();
+        // Pump dispatcher to ensure any posted projections (ProjectAdd via import publish) have landed
+        // in the GridGuard's FileList before we assert counts (shim isolation + ObserveOn + dispatch can queue).
+        PumpDispatcher();
 
-        Assert.NotNull(_projectExplorerVm.ActiveProject);
+        Assert.Equal(expectedNumberOfItems, _projectExplorerVm.FileList.Count - numberOfFolders);
+    }
 
-        var vm = appViewModel.GetToolViewModel<AssetBrowserViewModel>();
-        var progress = services.GetRequiredService<IProgressService<double>>();
-        var state = progress.Status;
-        await vm.LoadAssetBrowser();
+    [StaFact]
+    public async Task WhenFirstFileOfManyIsConvertedToJsonThenItAppearsInFlatFileList()
+    {
+        await LoadANewProject();
 
-        while (state != EStatus.Ready)
-        {
-            state = progress.Status;
-            await Task.Delay(100);
-        }
+        Assert.NotNull(_host);
 
+        var assetBrowser = _host.Services.GetRequiredService<AssetBrowserViewModel>();
+
+        NavigateToDevicesFolder(assetBrowser);
+        await AddRightItemsToProject(assetBrowser);
+
+        Assert.NotNull(_projectExplorerVm);
+        Assert.True(_projectExplorerVm.FileList.Count > 3600);
+
+        _projectExplorerVm.IsFlatModeEnabled = true;
+        var list = _projectExplorerVm.FileList.Where(model => !model.IsDirectory).ToList();
+            ;
+        list.Sort(Comparison);
+        var priorCount = list.Count;
+
+        Assert.NotNull(_projectExplorerVm.SelectedItems);
+
+        _projectExplorerVm.SelectedItems.Add(list.First());
+        await _projectExplorerVm.ConvertArchiveFile();
+        PumpDispatcher();
+        list = _projectExplorerVm.FileList.Where(model => !model.IsDirectory).ToList();
+
+        var count = list.Count;
+        Assert.True(count - priorCount == 1);
+    }
+
+    private int Comparison(FileSystemModel x, FileSystemModel y)
+        => string.Compare(x.GameRelativePath, y.GameRelativePath, StringComparison.Ordinal);
+
+    private async Task AddRightItemsToProject(AssetBrowserViewModel vm)
+    {
+        // Set all the RightItems to Checked so they can be added to ProjectManager
+        vm.RightItems.ToList().ForEach(item => item.IsChecked = true);
+
+        // Add the files to the mod project
+        await vm.AddSelectedAsync();
+    }
+
+    private void NavigateToBaseDir(AssetBrowserViewModel vm)
+    {
         var archives = vm._boundRootNodes.First();
         AddDirs(archives, vm);
 
         var baseDir = vm.LeftItems.First().Directories[Const.BaseDirName];
         AddDirs(baseDir, vm);
+    }
+
+    private void NavigateToAnimMotionDbFolder(AssetBrowserViewModel vm)
+    {
+        NavigateToBaseDir(vm);
 
         var animations = vm.LeftItems.First()
             .Directories[Const.BaseDirName]
@@ -122,17 +151,28 @@ public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
             .Directories[Const.AnimationsName]
             .Directories[Const.AnimMotionDbName];
         AddDirs(animMotionDb, vm);
+    }
 
-        var rightItems = vm.RightItems;
-        Assert.Equal(expectedNumberOfItems, rightItems.Count);
+    private void NavigateToDevicesFolder(AssetBrowserViewModel vm)
+    {
+        NavigateToBaseDir(vm);
 
-        vm.RightItems.ToList().ForEach(item => item.IsChecked = true);
-   }
+        var gameplay = vm.LeftItems.First()
+            .Directories[Const.BaseDirName]
+            .Directories[Const.GameplayName];
+        AddDirs(gameplay, vm);
+
+        var devices = vm.LeftItems.First()
+            .Directories[Const.BaseDirName]
+            .Directories[Const.GameplayName]
+            .Directories[Const.DevicesName];
+        AddDirs(devices, vm);
+    }
+
 
     private void AddDirs(RedFileSystemModel model,
         AssetBrowserViewModel vm)
     {
-        vm.SetLeftSelectedItem(model.Name);
         vm.RightItems.Clear();
 
         vm.RightItems.AddRange(model.Directories
@@ -161,5 +201,79 @@ public class ProjectExplorerConvertToJsonIntegrationTests : IDisposable
                 Directory.Delete(_tempProjectRoot, true);
         }
         catch { /* best effort */ }
+    }
+
+    private static void PumpDispatcher()
+    {
+        try
+        {
+            var disp = System.Windows.Application.Current?.Dispatcher;
+            disp?.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.ContextIdle);
+        }
+        catch { /* best effort in test env */ }
+    }
+
+    private async Task LoadANewProject()
+    {
+        // Setup Host
+        _host = IntegrationTestHost.Create();
+
+        // Setup Services
+        var services = _host.Services;
+        services.UseMicrosoftDependencyResolver();
+
+        // Setup DI Resolver
+        var resolver = Locator.CurrentMutable;
+        resolver.InitializeSplat();
+
+        // Setup Hash Services (needed for archives to load properly)
+        var hashService = services.GetRequiredService<IHashService>();
+        hashService.Load();
+
+        // Setup the Settings Manager & Game Directory
+        var gameDir = ResolveGameDirectory();
+        var settingsManager = services.GetRequiredService<ISettingsManager>();
+        var exePath = Path.Combine(gameDir, "bin", "x64", "Cyberpunk2077.exe");
+        settingsManager.CP77ExecutablePath = exePath;
+
+        // Grab the App View Model
+        var appViewModel = services.GetRequiredService<AppViewModel>();
+
+        // Grab the GameController
+        var gameControllerFactory = services.GetRequiredService<IGameControllerFactory>();
+        var controller = gameControllerFactory.GetRed4Controller();
+        Assert.NotNull(controller);
+
+        // Grab the Project Manager
+        var projectManager = services.GetRequiredService<IProjectManager>();
+
+        // Grab the Project Explorer
+        _projectExplorerVm = appViewModel.GetToolViewModel<ProjectExplorerViewModel>();
+
+        // Create a new Project & Add it to AppViewModel
+        var projectWizard = services.GetRequiredService<ProjectWizardViewModel>();
+        projectWizard.Author = "FF:06:B5";
+        projectWizard.ModName = "Cyberpunk2077";
+        projectWizard.ProjectName = "Make Misty Hot";
+        projectWizard.ProjectPath = _tempProjectRoot;
+        await appViewModel.NewProjectTask(projectWizard);
+
+        // Verify the project propagated to the right places
+        Assert.NotNull(projectManager.ActiveProject);
+        Assert.NotNull(_projectExplorerVm.ActiveProject);
+
+        // Grab the ProgressService
+        var progress = _host?.Services.GetRequiredService<IProgressService<double>>();
+
+        Assert.NotNull(progress);
+
+        var state = progress.Status;
+
+        // Wait until the Archives have loaded
+        while (state != EStatus.Ready)
+        {
+            state = progress.Status;
+            await Task.Delay(100);
+        }
     }
 }
