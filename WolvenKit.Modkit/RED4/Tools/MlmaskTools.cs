@@ -112,14 +112,61 @@ public partial class ModTools
 
         var fullResBuffer = new byte[maskWidth * maskHeight];
 
-        // Local function: decodes one layer into fullResBuffer.
-        // Made local to avoid passing many parameters (as suggested in code review).
+        bool DecodeSingle(uint x, uint y, int maskIndex, uint tilesOffset, uint smallScale, uint widthInTiles)
+        {
+            var xTile = x / maskTileSize / smallScale;
+            var yTile = y / maskTileSize / smallScale;
+
+            var tileIndex = (widthInTiles * yTile) + xTile + tilesOffset;
+
+            if ((tileIndex * 2) + 1 >= tiles.Length)
+            {
+                return false;
+            }
+
+            var paramOffset = tiles[tileIndex * 2];
+            var paramBits = tiles[(tileIndex * 2) + 1];
+
+            if ((uint)(paramBits & (1 << maskIndex)) == 0U)
+            {
+                return false;
+            }
+
+            var extraAdd = CountBits((uint)(paramBits & ((1 << maskIndex) - 1)));
+
+            uint tileDecl = 0;
+            if (paramOffset + extraAdd < tiles.Length)
+            {
+                tileDecl = tiles[paramOffset + extraAdd];
+            }
+
+            // Extract atlas position and scaling factors from the packed tile declaration.
+            var dx = (tileDecl >> s_tileDxShift) & s_tileParamMask;
+            var dy = (tileDecl >> s_tileDyShift) & s_tileParamMask;
+            var sx = (tileDecl >> s_tileSxShift) & s_tileSMask;
+            var sy = (tileDecl >> s_tileSyShift) & s_tileSMask;
+
+            var atlasTileSize = maskTileSize + s_atlasTilePadding;
+
+            // Use Min to avoid reading into the right/bottom padding area of atlas tiles
+            var localX = Math.Min((x >> (int)sx) % maskTileSize, maskTileSize - 1);
+            var localY = Math.Min((y >> (int)sy) % maskTileSize, maskTileSize - 1);
+
+            var ux = localX + 1 + (dx * atlasTileSize);
+            var uy = localY + 1 + (dy * atlasTileSize);
+
+            var p = atlasRaw[ux + (uy * atlasWidth)];
+            fullResBuffer[x + (y * maskWidth)] = p;
+
+            return true;
+        }
+
         void Decode(int maskIndex)
         {
             var widthInTiles0 = DivCeil(maskWidth, maskTileSize);
             var heightInTiles0 = DivCeil(maskHeight, maskTileSize);
             var smallOffset = widthInTiles0 * heightInTiles0;
-            var smallScale = maskWidthLow == 0 || maskWidth < maskWidthLow ? 1u : maskWidth / maskWidthLow;
+            var smallScale = (maskWidthLow == 0 || maskWidth < maskWidthLow) ? 1u : maskWidth / maskWidthLow;
 
             var widthInTilesScaled = DivCeil(maskWidth / smallScale, maskTileSize);
             var widthInTilesFull = DivCeil(maskWidth, maskTileSize);
@@ -128,14 +175,14 @@ public partial class ModTools
             {
                 for (uint x = 0; x < maskWidth; x++)
                 {
-                    // Decode using low-res tile map first (fallback)
-                    DecodeSingle(ref fullResBuffer, maskWidth, maskHeight, atlasRaw, atlasWidth, atlasHeight, x, y,
-                        tiles, maskTileSize, maskIndex, smallOffset, smallScale, widthInTilesScaled);
+                    // First try to decode using full-res tile map (primary)
+                    bool decoded = DecodeSingle(x, y, maskIndex, 0, 1, widthInTilesFull);
 
-                    // Then decode using full-res tile map — this can overwrite with higher quality data
-                    // if the layer has dedicated high-resolution tiles for this pixel.
-                    DecodeSingle(ref fullResBuffer, maskWidth, maskHeight, atlasRaw, atlasWidth, atlasHeight, x, y,
-                        tiles, maskTileSize, maskIndex, 0, 1, widthInTilesFull);
+                    // If full-res didn't have data for this layer/pixel, fall back to low-res tile map
+                    if (!decoded)
+                    {
+                        DecodeSingle(x, y, maskIndex, smallOffset, smallScale, widthInTilesScaled);
+                    }
                 }
             }
         }
@@ -458,7 +505,6 @@ public partial class ModTools
 
         return true;
     }
-    // The import side ignores lines starting with '#' or containing '='.
 
     public static bool ConvertMultilayerMaskToDdsStreams(Multilayer_Mask mask, out List<Stream> streams)
     {
