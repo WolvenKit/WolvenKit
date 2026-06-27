@@ -53,7 +53,7 @@ public class MLMASK
         if (files.Count == 0)
         {
             // 0x2006 = MLMask: No layer files specified in masklist
-            throw new WolvenKitException(0x2006, "No layer files specified in masklist.");
+            throw new ArgumentException("No layer files specified in masklist.", nameof(txtImageList));
         }
 
         _mlmask = new MlMaskContainer();
@@ -70,9 +70,8 @@ public class MLMASK
 
             try
             {
-                using var image = RedImage.LoadFromFile(f) ??
-                                  throw new WolvenKitException(0x2007,
-                                      $"Could not load image: {f}"); // 0x2007 = MLMask: General image loading failure
+                using var image = RedImage.LoadFromFile(f)
+                    ?? throw new InvalidDataException($"Could not load image: {f}");
 
                 if (image.Metadata.Format != DXGI_FORMAT.DXGI_FORMAT_R8_UNORM)
                 {
