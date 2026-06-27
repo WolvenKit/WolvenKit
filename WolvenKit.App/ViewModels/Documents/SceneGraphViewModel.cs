@@ -33,6 +33,7 @@ namespace WolvenKit.App.ViewModels.Documents
         private bool _disposed = false;
         private readonly ILoggerService? _logger = Locator.Current.GetService<ILoggerService>();
         private readonly scnSceneResource _sceneData;
+        private readonly GraphDocumentSearchState _searchState = new();
 
         public RDTDataViewModel RDTViewModel { get; }
         public RedGraph MainGraph { get; }
@@ -137,6 +138,16 @@ namespace WolvenKit.App.ViewModels.Documents
         public void SetGraphLoaded()
         {
             IsGraphLoading = false;
+        }
+
+        public void OnDocumentSearchChanged(string searchBoxText)
+        {
+            var match = GraphDocumentSearchHelper.ApplySceneSearch(MainGraph, searchBoxText, _searchState);
+
+            if (match is not null)
+            {
+                SelectedTab = Tabs.FirstOrDefault(tab => tab.Header == "Node Properties");
+            }
         }
 
         private void CreateTabs()

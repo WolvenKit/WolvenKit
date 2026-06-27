@@ -24,6 +24,7 @@ using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.GraphEditor;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
+using GraphNodeViewModel = WolvenKit.App.ViewModels.GraphEditor.NodeViewModel;
 
 namespace WolvenKit.Views.Documents
 {
@@ -203,6 +204,11 @@ namespace WolvenKit.Views.Documents
                 _lastActiveDocument = null;
                 
                 // Clean up event handlers (safe to unsubscribe even if not subscribed)
+                if (DataContext is QuestPhaseGraphViewModel viewModel)
+                {
+                    viewModel.GraphSearchNavigationRequested -= OnGraphSearchNavigationRequested;
+                }
+
                 DataContextChanged -= OnDataContextChanged;
                 KeyDown -= OnKeyDown;
                 
@@ -235,8 +241,9 @@ namespace WolvenKit.Views.Documents
             }
 
             // Clean up old subscription when switching contexts
-            if (e.OldValue is QuestPhaseGraphViewModel)
+            if (e.OldValue is QuestPhaseGraphViewModel oldViewModel)
             {
+                oldViewModel.GraphSearchNavigationRequested -= OnGraphSearchNavigationRequested;
                 CleanupEventSubscription();
             }
 
@@ -247,6 +254,7 @@ namespace WolvenKit.Views.Documents
 
             // Establish event subscription when we have a valid quest phase document
             EstablishEventSubscription();
+            viewModel.GraphSearchNavigationRequested += OnGraphSearchNavigationRequested;
             
             // Monitor document closing by watching DockedViews collection
             MonitorDocumentClosing();
@@ -1282,6 +1290,121 @@ namespace WolvenKit.Views.Documents
         /// Handle double-click on nodes for nested graph navigation
         /// </summary>
         private void Editor_OnNodeDoubleClick(object sender, RoutedEventArgs e) => HandleSubGraph();
+
+        private void OnGraphSearchNavigationRequested(object? sender, GraphSearchNavigationRequestedEventArgs e)
+        {
+            NavigateToSearchResult(e.TargetNode);
+        }
+
+        private void NavigateToSearchResult(GraphNodeViewModel targetNode)
+        {
+            if (_disposed ||
+                DataContext is not QuestPhaseGraphViewModel viewModel ||
+                QuestPhaseGraphEditor?.Editor == null)
+            {
+                return;
+            }
+
+            var graphPath = FindGraphPathToNode(viewModel.MainGraph, targetNode, []);
+            if (graphPath is null || graphPath.Count == 0)
+            {
+                GraphDocumentSearchHelper.SelectGraphNode(targetNode);
+                return;
+            }
+
+            viewModel.IsGraphLoading = true;
+
+            viewModel.History.Clear();
+            foreach (var graph in graphPath)
+            {
+                graph.DocumentViewModel ??= viewModel.Parent;
+                foreach (var node in graph.Nodes)
+                {
+                    node.DocumentViewModel ??= viewModel.Parent;
+                }
+
+                viewModel.History.Add(graph);
+            }
+
+            ApplySearchGraphStateParents(graphPath);
+
+            var targetGraph = graphPath[^1];
+            QuestPhaseGraphEditor.SetCurrentValue(GraphEditorView.SourceProperty, targetGraph);
+            BuildBreadcrumb();
+
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                QuestPhaseGraphEditor?.Editor?.SelectedItems?.Clear();
+                QuestPhaseGraphEditor?.Editor?.SelectedItems?.Add(targetNode);
+                NodeSelectionService.Instance.SelectedNode = targetNode;
+                ForceCenterOnNode(targetNode);
+                viewModel.SetGraphLoaded();
+            }), DispatcherPriority.ApplicationIdle);
+        }
+
+        private static void ApplySearchGraphStateParents(IReadOnlyList<RedGraph> graphPath)
+        {
+            for (var i = 1; i < graphPath.Count; i++)
+            {
+                var parentGraph = graphPath[i - 1];
+                var childGraph = graphPath[i];
+
+                var parentPhase = parentGraph.Nodes
+                    .OfType<GraphNodeViewModel>()
+                    .FirstOrDefault(node =>
+                        node is IGraphProvider provider &&
+                        ReferenceEquals(provider.Graph, childGraph) &&
+                        node.Data is questPhaseNodeDefinition { PhaseResource.IsSet: false });
+
+                if (parentPhase?.Data is not questPhaseNodeDefinition phaseData)
+                {
+                    continue;
+                }
+
+                childGraph.StateParents = parentGraph.StateParents + "." + phaseData.Id;
+                childGraph.DocumentViewModel = parentGraph.DocumentViewModel;
+            }
+        }
+
+        private static List<RedGraph>? FindGraphPathToNode(
+            RedGraph graph,
+            GraphNodeViewModel targetNode,
+            HashSet<RedGraph> visited)
+        {
+            if (!visited.Add(graph))
+            {
+                return null;
+            }
+
+            if (graph.Nodes.Contains(targetNode))
+            {
+                return [graph];
+            }
+
+            foreach (var provider in graph.Nodes.OfType<IGraphProvider>())
+            {
+                if (provider is GraphNodeViewModel { Data: questPhaseNodeDefinition { PhaseResource.IsSet: true } })
+                {
+                    continue;
+                }
+
+                if (provider.Graph is not { } subGraph)
+                {
+                    continue;
+                }
+
+                var childPath = FindGraphPathToNode(subGraph, targetNode, visited);
+                if (childPath is null)
+                {
+                    continue;
+                }
+
+                childPath.Insert(0, graph);
+                return childPath;
+            }
+
+            return null;
+        }
 
         /// <summary>
         /// Handle navigation to sub-graphs (phase nodes) or back to parent graphs
