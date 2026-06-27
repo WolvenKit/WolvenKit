@@ -57,6 +57,10 @@
                 <docV:QuestPhaseGraphView DataContext="{Binding}" />
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type docVM:BehaviorGraphViewModel}">
+                <docV:BehaviorGraphView DataContext="{Binding}" />
+            </DataTemplate>
+
         </Grid.Resources>
 
         <Grid.RowDefinitions>
