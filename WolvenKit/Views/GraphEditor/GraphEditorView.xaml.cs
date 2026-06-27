@@ -30,8 +30,16 @@ namespace WolvenKit.Views.GraphEditor;
 /// <summary>
 /// Interaktionslogik für GraphEditorView.xaml
 /// </summary>
-public partial class GraphEditorView : UserControl
+public partial class GraphEditorView : UserControl, INotifyPropertyChanged
 {
+    private const double HydrationZoomThreshold = 0.2;
+    private const double HydrationViewportOverscanFactor = 0.45;
+    private const int HydrationVisualPressureThreshold = 250;
+    private const int InitialHydratedNodesPerPass = 36;
+    private const int ViewportHydratedNodesPerPass = 8;
+    private static readonly TimeSpan ViewportHydrationSettleDelay = TimeSpan.FromMilliseconds(180);
+    private static readonly TimeSpan HydrationContinuationDelay = TimeSpan.FromMilliseconds(80);
+
     public static readonly DependencyProperty SourceProperty = DependencyProperty.Register(
         nameof(Source), typeof(RedGraph), typeof(GraphEditorView), new PropertyMetadata(null, OnSourceChanged));
 
@@ -42,11 +50,18 @@ public partial class GraphEditorView : UserControl
             return;
         }
 
+        view.BeginInitialDetailLoad();
+        UpdateView(view);
+
         view.Dispatcher.BeginInvoke(new Action(() =>
         {
-            UpdateView(view);
             //view.Source?.ArrangeNodes();
         }), DispatcherPriority.ContextIdle);
+
+        view.Dispatcher.BeginInvoke(new Action(() =>
+        {
+            view.AllowViewportHydration();
+        }), DispatcherPriority.ApplicationIdle);
     }
 
     private static void UpdateView(GraphEditorView view)
@@ -57,7 +72,281 @@ public partial class GraphEditorView : UserControl
         }
         view.Source.Editor = view.Editor;
         view.Source.GraphStateLoad();
+        view.EndInitialHydrationLoad();
+        view.UpdateHydration(0, false);
         //view.Editor.FitToScreen();
+    }
+
+    private void BeginInitialDetailLoad()
+    {
+        _suppressHydrationUpdates = true;
+        _hydrationPassScheduled = false;
+        _allowViewportHydration = false;
+        _hydrationRequestVersion++;
+        _isHydrationEnabled = ShouldUseHydration();
+        IsHighDetail = !_isHydrationEnabled;
+
+        foreach (var node in Source.Nodes)
+        {
+            node.IsLowDetail = _isHydrationEnabled;
+        }
+
+        if (_isHydrationEnabled)
+        {
+            UpdateLowDetailConnectionAnchors();
+        }
+
+    }
+
+    private void EndInitialHydrationLoad()
+    {
+        _suppressHydrationUpdates = false;
+    }
+
+    private void UpdateHydration(int maxViewportNodes, bool scheduleContinuation)
+    {
+        if (Source == null || _suppressHydrationUpdates)
+        {
+            return;
+        }
+
+        if (!_isHydrationEnabled)
+        {
+            if (!IsHighDetail)
+            {
+                HydrateAllNodes();
+            }
+
+            return;
+        }
+
+        var selectedHydrated = HydrateSelectedNodes();
+        var viewportHydrated = maxViewportNodes > 0 && _allowViewportHydration && Editor.ViewportZoom >= HydrationZoomThreshold
+            ? HydrateViewportNodes(maxViewportNodes, scheduleContinuation)
+            : 0;
+
+        UpdateLowDetailConnectionAnchors();
+        IsHighDetail = Source.Nodes.All(node => !node.IsLowDetail);
+    }
+
+    private void AllowViewportHydration()
+    {
+        _allowViewportHydration = true;
+        if (Editor.ViewportZoom >= HydrationZoomThreshold)
+        {
+            UpdateHydration(InitialHydratedNodesPerPass, true);
+        }
+    }
+
+    private void HydrateAllNodes()
+    {
+        if (Source == null)
+        {
+            return;
+        }
+
+        foreach (var node in Source.Nodes)
+        {
+            node.IsLowDetail = false;
+        }
+
+        IsHighDetail = true;
+    }
+
+    private bool ShouldUseHydration()
+        => Source is { GraphType: RedGraphType.Quest }
+           && Source.Title.EndsWith(".questphase", StringComparison.OrdinalIgnoreCase)
+           && GetGraphVisualPressure() >= HydrationVisualPressureThreshold;
+
+    private int GetGraphVisualPressure()
+    {
+        if (Source == null)
+        {
+            return 0;
+        }
+
+        return Source.Nodes.Count
+               + Source.Nodes.Sum(node => node.Input.Count)
+               + Source.Nodes.Sum(node => node.Output.Count)
+               + Source.Connections.Count;
+    }
+
+    private int HydrateSelectedNodes()
+    {
+        if (Source == null)
+        {
+            return 0;
+        }
+
+        var hydrated = 0;
+        if (SelectedNode != null)
+        {
+            hydrated += HydrateNode(SelectedNode) ? 1 : 0;
+        }
+
+        foreach (var node in SelectedNodes.OfType<NodeViewModel>())
+        {
+            hydrated += HydrateNode(node) ? 1 : 0;
+        }
+
+        return hydrated;
+    }
+
+    private int HydrateViewportNodes(int maxHydratedNodes, bool scheduleContinuation)
+    {
+        if (Source == null || !TryGetHydrationViewport(out var viewport))
+        {
+            return 0;
+        }
+
+        var viewportCenter = new System.Windows.Point(viewport.X + viewport.Width / 2, viewport.Y + viewport.Height / 2);
+        var candidates = Source.Nodes
+            .Where(node => node.IsLowDetail && IsNodeInHydrationViewport(node, viewport))
+            .OrderBy(node => GetDistanceSquaredToNodeCenter(node, viewportCenter))
+            .Take(maxHydratedNodes + 1)
+            .ToList();
+
+        var hydrated = 0;
+        foreach (var node in candidates.Take(maxHydratedNodes))
+        {
+            hydrated += HydrateNode(node) ? 1 : 0;
+        }
+
+        if (scheduleContinuation && candidates.Count > maxHydratedNodes)
+        {
+            ScheduleHydrationPass(maxHydratedNodes, scheduleContinuation);
+        }
+
+        return hydrated;
+    }
+
+    private bool HydrateNode(NodeViewModel node)
+    {
+        if (!node.IsLowDetail)
+        {
+            return false;
+        }
+
+        node.IsLowDetail = false;
+        return true;
+    }
+
+    private void ScheduleHydrationPass(int maxViewportNodes, bool scheduleContinuation)
+    {
+        if (_hydrationPassScheduled)
+        {
+            return;
+        }
+
+        var requestVersion = _hydrationRequestVersion;
+        _hydrationPassScheduled = true;
+        _ = Dispatcher.BeginInvoke(new Action(async () =>
+        {
+            await Task.Delay(HydrationContinuationDelay);
+            _hydrationPassScheduled = false;
+            if (requestVersion == _hydrationRequestVersion)
+            {
+                UpdateHydration(maxViewportNodes, scheduleContinuation);
+            }
+        }), DispatcherPriority.Background);
+    }
+
+    private void ScheduleSettledViewportHydration()
+    {
+        var requestVersion = ++_hydrationRequestVersion;
+        if (!_allowViewportHydration || !_isHydrationEnabled || Editor.ViewportZoom < HydrationZoomThreshold)
+        {
+            return;
+        }
+
+        _ = Dispatcher.BeginInvoke(new Action(async () =>
+        {
+            await Task.Delay(ViewportHydrationSettleDelay);
+            if (requestVersion == _hydrationRequestVersion)
+            {
+                UpdateHydration(ViewportHydratedNodesPerPass, false);
+            }
+        }), DispatcherPriority.Background);
+    }
+
+    private bool TryGetHydrationViewport(out System.Windows.Rect viewport)
+    {
+        viewport = System.Windows.Rect.Empty;
+        if (Editor.ViewportSize.Width <= 0 || Editor.ViewportSize.Height <= 0)
+        {
+            return false;
+        }
+
+        viewport = new System.Windows.Rect(Editor.ViewportLocation, Editor.ViewportSize);
+        viewport.Inflate(
+            viewport.Width * HydrationViewportOverscanFactor,
+            viewport.Height * HydrationViewportOverscanFactor);
+        return true;
+    }
+
+    private static bool IsNodeInHydrationViewport(NodeViewModel node, System.Windows.Rect viewport)
+    {
+        const double fallbackNodeWidth = 220;
+        const double fallbackNodeHeight = 70;
+
+        var width = node.Size.Width > 0 ? node.Size.Width : fallbackNodeWidth;
+        var height = node.Size.Height > 0 ? node.Size.Height : fallbackNodeHeight;
+        var nodeBounds = new System.Windows.Rect(node.Location, new System.Windows.Size(width, height));
+        return viewport.IntersectsWith(nodeBounds);
+    }
+
+    private static double GetDistanceSquaredToNodeCenter(NodeViewModel node, System.Windows.Point point)
+    {
+        const double fallbackNodeWidth = 220;
+        const double fallbackNodeHeight = 70;
+
+        var width = node.Size.Width > 0 ? node.Size.Width : fallbackNodeWidth;
+        var height = node.Size.Height > 0 ? node.Size.Height : fallbackNodeHeight;
+        var centerX = node.Location.X + width / 2;
+        var centerY = node.Location.Y + height / 2;
+        var deltaX = centerX - point.X;
+        var deltaY = centerY - point.Y;
+        return deltaX * deltaX + deltaY * deltaY;
+    }
+
+    private void UpdateLowDetailConnectionAnchors()
+    {
+        if (Source == null)
+        {
+            return;
+        }
+
+        const double fallbackNodeWidth = 220;
+        const double fallbackNodeHeight = 70;
+
+        var nodesById = Source.Nodes.ToDictionary(node => node.UniqueId);
+        foreach (var connection in Source.Connections)
+        {
+            if (!nodesById.TryGetValue(connection.Source.OwnerId, out var sourceNode) ||
+                !nodesById.TryGetValue(connection.Target.OwnerId, out var targetNode))
+            {
+                continue;
+            }
+
+            if (sourceNode.IsLowDetail)
+            {
+                var sourceWidth = sourceNode.Size.Width > 0 ? sourceNode.Size.Width : fallbackNodeWidth;
+                var sourceHeight = sourceNode.Size.Height > 0 ? sourceNode.Size.Height : fallbackNodeHeight;
+
+                connection.Source.Anchor = new System.Windows.Point(
+                    sourceNode.Location.X + sourceWidth,
+                    sourceNode.Location.Y + sourceHeight / 2);
+            }
+
+            if (targetNode.IsLowDetail)
+            {
+                var targetHeight = targetNode.Size.Height > 0 ? targetNode.Size.Height : fallbackNodeHeight;
+
+                connection.Target.Anchor = new System.Windows.Point(
+                    targetNode.Location.X,
+                    targetNode.Location.Y + targetHeight / 2);
+            }
+        }
     }
 
     public RedGraph Source
@@ -75,7 +364,6 @@ public partial class GraphEditorView : UserControl
     }
 
     private NodeViewModel _selectedNode;
-
     public NodeViewModel SelectedNode
     {
         get => _selectedNode;
@@ -85,6 +373,11 @@ public partial class GraphEditorView : UserControl
             {
                 // Update the global selection service
                 NodeSelectionService.Instance.SelectedNode = value;
+                if (value != null)
+                {
+                    HydrateNode(value);
+                    UpdateLowDetailConnectionAnchors();
+                }
             }
         }
     }
@@ -99,6 +392,19 @@ public partial class GraphEditorView : UserControl
 
     public System.Windows.Point ViewportLocation { get; set; }
 
+    private bool _isHighDetail;
+    private bool _suppressHydrationUpdates;
+    private bool _isHydrationEnabled;
+    private bool _hydrationPassScheduled;
+    private bool _allowViewportHydration;
+    private int _hydrationRequestVersion;
+
+    public bool IsHighDetail
+    {
+        get => _isHighDetail;
+        private set => SetField(ref _isHighDetail, value);
+    }
+
     private readonly AppViewModel _appViewModel;
 
     public GraphEditorView()
@@ -106,6 +412,7 @@ public partial class GraphEditorView : UserControl
         InitializeComponent();
 
         _appViewModel = Locator.Current.GetService<AppViewModel>();
+        Editor.ViewportUpdated += Editor_OnViewportUpdated;
 
         Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(
             handler => Editor.ViewportUpdated += handler,
@@ -114,11 +421,16 @@ public partial class GraphEditorView : UserControl
             .ObserveOn(RxApp.MainThreadScheduler)
             .Subscribe(x =>
             {
-                ViewportUpdated();
+                SaveViewportState();
             });
     }
 
-    private void ViewportUpdated()
+    private void Editor_OnViewportUpdated(object sender, RoutedEventArgs e)
+    {
+        ScheduleSettledViewportHydration();
+    }
+
+    private void SaveViewportState()
     {
         if (Source == null)
         {
@@ -126,6 +438,26 @@ public partial class GraphEditorView : UserControl
         }
 
         Source.GraphStateSave();
+    }
+
+    internal void PrepareForClose()
+    {
+        var graph = Source;
+
+        _hydrationRequestVersion++;
+        _hydrationPassScheduled = false;
+        _allowViewportHydration = false;
+        _suppressHydrationUpdates = true;
+
+        SelectedNode = null;
+        SelectedNodes.Clear();
+
+        if (graph?.Editor == Editor)
+        {
+            graph.Editor = null;
+        }
+
+        SetCurrentValue(SourceProperty, null);
     }
 
     private void ArrangeNodes()

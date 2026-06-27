@@ -56,11 +56,8 @@ public partial class RDTGraphView2
 
             if (Editor.SelectedNode.Data is questPhaseNodeDefinition ph)
             {
-                if (!ph.PhaseResource.IsSet)
-                {
-                    subGraph.StateParents = Editor.Source.StateParents + "." + ph.Id;
-                    subGraph.DocumentViewModel = Editor.Source.DocumentViewModel;
-                }
+                subGraph.StateParents = Editor.Source.StateParents + GetPhaseNodeStateSuffix(ph);
+                subGraph.DocumentViewModel = Editor.Source.DocumentViewModel;
             }
 
             ViewModel!.History.Add(subGraph);
@@ -90,6 +87,21 @@ public partial class RDTGraphView2
                 BuildBreadcrumb();
             }
         }
+    }
+
+    private static string GetPhaseNodeStateSuffix(questPhaseNodeDefinition phaseNode)
+    {
+        if (!phaseNode.PhaseResource.IsSet)
+        {
+            return "." + phaseNode.Id;
+        }
+
+        var depotPath = phaseNode.PhaseResource.DepotPath;
+        var stateValue = depotPath.IsResolvable
+            ? depotPath.GetResolvedText()!
+            : ((ulong)depotPath).ToString();
+
+        return RedGraph.CreateStateSuffix("phaseResource", stateValue);
     }
 
     private void BuildBreadcrumb()

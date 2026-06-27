@@ -272,7 +272,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
             .FirstOrDefault(x => x.DocumentItemType == ERedDocumentItemType.MainFile);
     }
 
-    protected void AddTabForRedType(RedBaseClass cls)
+    protected void AddTabForRedType(RedBaseClass cls, bool lazyEmbeddedGraphTabs = false, string? tabFilePath = null)
     {
         if (cls is CBitmapTexture xbm)
         {
@@ -341,10 +341,13 @@ public partial class RedDocumentViewModel : DocumentViewModel
 
         if (cls is questQuestPhaseResource questPhaseResource)
         {
-            var combinedQuestPhaseTab = new QuestPhaseGraphViewModel(questPhaseResource, this, _chunkViewmodelFactory, _nodeWrapperFactory);
+            RedDocumentTabViewModel combinedQuestPhaseTab = lazyEmbeddedGraphTabs
+                ? new LazyQuestPhaseGraphViewModel(questPhaseResource, this, _chunkViewmodelFactory, _nodeWrapperFactory)
+                : new QuestPhaseGraphViewModel(questPhaseResource, this, _chunkViewmodelFactory, _nodeWrapperFactory);
+            combinedQuestPhaseTab.FilePath = tabFilePath ?? combinedQuestPhaseTab.FilePath;
             TabItemViewModels.Insert(0, combinedQuestPhaseTab);
 
-            if (_globals.Value.ENABLE_NODE_EDITOR)
+            if (_globals.Value.ENABLE_NODE_EDITOR && !lazyEmbeddedGraphTabs)
             {
                 TabItemViewModels.Add(new RDTGraphViewModel2(questPhaseResource, this, _nodeWrapperFactory));
             }
@@ -424,7 +427,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
                 vm.IsEmbeddedFile = true;
 
                 TabItemViewModels.Add(vm);
-                AddTabForRedType(file.Content);
+                AddTabForRedType(file.Content, true, vm.FilePath);
             }
         }
 
@@ -505,7 +508,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
             vm.IsEmbeddedFile = true;
 
             TabItemViewModels.Add(vm);
-            AddTabForRedType(file.Content);
+            AddTabForRedType(file.Content, true, vm.FilePath);
         }
     }
 

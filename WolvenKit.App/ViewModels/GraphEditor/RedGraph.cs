@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Msagl.Core.Geometry.Curves;
@@ -32,6 +34,22 @@ public enum RedGraphType
 
 public partial class RedGraph : IDisposable
 {
+    private const double FallbackLayoutNodeWidth = 220;
+    private const double FallbackLayoutNodeHeight = 70;
+    private const double DefaultLayoutNodeSeparation = 10;
+    private const double DefaultLayoutLayerSeparation = 30;
+    private const double EstimatedLayoutNodeSeparation = 40;
+    private const double EstimatedLayoutLayerSeparation = 70;
+    private const double EstimatedLayoutNodeMinWidth = 420;
+    private const double EstimatedLayoutNodeMaxWidth = 680;
+    private const double EstimatedLayoutNodeMinHeight = 120;
+    private const double EstimatedLayoutNodeMaxHeight = 720;
+    private const double EstimatedLayoutNodeBaseHeight = 82;
+    private const double EstimatedLayoutNodeHorizontalPadding = 96;
+    private const double EstimatedLayoutTextCharacterWidth = 7.2;
+    private const double EstimatedLayoutDetailRowHeight = 22;
+    private const double EstimatedLayoutSocketRowHeight = 18;
+
     private IRedType _data;
 
     private uint _currentSceneNodeId;
@@ -83,6 +101,34 @@ public partial class RedGraph : IDisposable
         ItemsDragCompletedCommand = new RelayCommand(ItemsDragCompleted);
 
         _loggerService = Locator.Current.GetService<ILoggerService>();
+    }
+
+    public static string CreateStateSuffix(string prefix, string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return "";
+        }
+
+        var normalizedValue = value.Replace('\\', '/');
+        var name = Path.GetFileNameWithoutExtension(normalizedValue);
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            name = "graph";
+        }
+
+        var hash = Convert.ToHexString(SHA1.HashData(Encoding.UTF8.GetBytes(normalizedValue.ToLowerInvariant())))[..12].ToLowerInvariant();
+        return $".{CreateSafeStateSegment(prefix)}.{CreateSafeStateSegment(name)}.{hash}";
+    }
+
+    private static string CreateSafeStateSegment(string value)
+    {
+        var safeChars = value
+            .Select(ch => char.IsLetterOrDigit(ch) || ch is '_' or '-' ? ch : '_')
+            .ToArray();
+
+        var safeValue = new string(safeChars).Trim('_');
+        return string.IsNullOrWhiteSpace(safeValue) ? "graph" : safeValue;
     }
 
     public void Connect()
@@ -290,9 +336,9 @@ public partial class RedGraph : IDisposable
     {
         if (nodes.Count > 0 && Editor != null)
         {
-            if (nodes[0] is not NodeViewModel nvm)
+            if (nodes.OfType<NodeViewModel>().FirstOrDefault() is not { } nvm)
             {
-                throw new Exception();
+                return;
             }
 
             Editor.ViewportZoom = 1;
@@ -318,11 +364,13 @@ public partial class RedGraph : IDisposable
 
         // Extra height for external node ID (font + margin + padding)
         const double nodeIdExtraHeight = 35;
+        var hasEstimatedLayoutNodes = Nodes.Any(ShouldUseEstimatedLayoutSize);
 
         foreach (var node in Nodes)
         {
-            var layoutHeight = node.Size.Height + nodeIdExtraHeight;
-            var msaglNode = new Node(CurveFactory.CreateRectangle(node.Size.Width, layoutHeight, new Microsoft.Msagl.Core.Geometry.Point()))
+            var layoutWidth = GetLayoutNodeWidth(node);
+            var layoutHeight = GetLayoutNodeHeight(node) + nodeIdExtraHeight;
+            var msaglNode = new Node(CurveFactory.CreateRectangle(layoutWidth, layoutHeight, new Microsoft.Msagl.Core.Geometry.Point()))
             {
                 UserData = node
             };
@@ -339,6 +387,8 @@ public partial class RedGraph : IDisposable
         var settings = new SugiyamaLayoutSettings
         {
             Transformation = PlaneTransformation.Rotation(Math.PI / 2),
+            NodeSeparation = hasEstimatedLayoutNodes ? EstimatedLayoutNodeSeparation : DefaultLayoutNodeSeparation,
+            LayerSeparation = hasEstimatedLayoutNodes ? EstimatedLayoutLayerSeparation : DefaultLayoutLayerSeparation,
             EdgeRoutingSettings = { EdgeRoutingMode = EdgeRoutingMode.Spline }
         };
 
@@ -353,20 +403,89 @@ public partial class RedGraph : IDisposable
         foreach (var node in graph.Nodes)
         {
             var nvm = (NodeViewModel)node.UserData;
+            var layoutWidth = GetLayoutNodeWidth(nvm);
+            var layoutHeight = GetLayoutNodeHeight(nvm);
+
             // Offset the Y position to account for the extra height added for node ID spacing
             nvm.Location = new System.Windows.Point(
-                node.Center.X - graph.BoundingBox.Center.X - (nvm.Size.Width / 2) + xOffset,
-                node.Center.Y - graph.BoundingBox.Center.Y - (nvm.Size.Height / 2) + yOffset + (nodeIdExtraHeight / 2));
+                node.Center.X - graph.BoundingBox.Center.X - (layoutWidth / 2) + xOffset,
+                node.Center.Y - graph.BoundingBox.Center.Y - (layoutHeight / 2) + yOffset + (nodeIdExtraHeight / 2));
 
             // Calculate bounds including the node ID space
-            maxX = Math.Max(maxX, nvm.Location.X + nvm.Size.Width);
+            maxX = Math.Max(maxX, nvm.Location.X + layoutWidth);
             minX = Math.Min(minX, nvm.Location.X);
-            maxY = Math.Max(maxY, nvm.Location.Y + nvm.Size.Height + nodeIdExtraHeight);
+            maxY = Math.Max(maxY, nvm.Location.Y + layoutHeight + nodeIdExtraHeight);
             minY = Math.Min(minY, nvm.Location.Y - nodeIdExtraHeight);
         }
 
         return new System.Windows.Rect(minX, minY, maxX - minX, maxY - minY);
     }
+
+    private static double GetLayoutNodeWidth(NodeViewModel node)
+    {
+        if (!ShouldUseEstimatedLayoutSize(node))
+        {
+            return node.Size.Width;
+        }
+
+        return EstimateLayoutNodeWidth(node);
+    }
+
+    private static double GetLayoutNodeHeight(NodeViewModel node)
+    {
+        if (!ShouldUseEstimatedLayoutSize(node))
+        {
+            return node.Size.Height;
+        }
+
+        return EstimateLayoutNodeHeight(node);
+    }
+
+    private static bool ShouldUseEstimatedLayoutSize(NodeViewModel node) =>
+        node.IsLowDetail
+        || !IsValidLayoutDimension(node.Size.Width)
+        || !IsValidLayoutDimension(node.Size.Height);
+
+    private static double EstimateLayoutNodeWidth(NodeViewModel node)
+    {
+        var longestTextLength = node.Title?.Length ?? 0;
+
+        foreach (var (key, value) in node.Details)
+        {
+            longestTextLength = Math.Max(longestTextLength, (key?.Length ?? 0) + (value?.Length ?? 0) + 2);
+        }
+
+        foreach (var connector in node.Input.Concat<BaseConnectorViewModel>(node.Output))
+        {
+            longestTextLength = Math.Max(longestTextLength, connector.Title?.Length ?? connector.Name?.Length ?? 0);
+        }
+
+        var estimatedWidth = EstimatedLayoutNodeHorizontalPadding + longestTextLength * EstimatedLayoutTextCharacterWidth;
+        return Math.Clamp(
+            Math.Max(estimatedWidth, FallbackLayoutNodeWidth),
+            EstimatedLayoutNodeMinWidth,
+            EstimatedLayoutNodeMaxWidth);
+    }
+
+    private static double EstimateLayoutNodeHeight(NodeViewModel node)
+    {
+        var visibleInputCount = node.Input.Count(connector => connector.IsVisible);
+        var visibleOutputCount = node.Output.Count(connector => connector.IsVisible);
+        var socketRows = Math.Max(visibleInputCount, visibleOutputCount);
+        var detailRows = node.Details.Count;
+
+        var estimatedHeight = EstimatedLayoutNodeBaseHeight
+                              + Math.Max(
+                                  detailRows * EstimatedLayoutDetailRowHeight,
+                                  socketRows * EstimatedLayoutSocketRowHeight);
+
+        return Math.Clamp(
+            Math.Max(estimatedHeight, FallbackLayoutNodeHeight),
+            EstimatedLayoutNodeMinHeight,
+            EstimatedLayoutNodeMaxHeight);
+    }
+
+    private static bool IsValidLayoutDimension(double value) => value > 0 && double.IsFinite(value);
 
     public void GraphStateLoad()
     {
