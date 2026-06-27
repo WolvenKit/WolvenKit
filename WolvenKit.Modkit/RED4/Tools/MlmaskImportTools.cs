@@ -999,7 +999,9 @@ public class MLMASK
             {
                 atlasView = new TileView
                 {
-                    AtlasInPosition = _mlmask.AtlasTilesCount++, LayerIndex = layerIdx, LayerTileIndex = tileIndex
+                    AtlasInPosition = _mlmask.AtlasTilesCount++,
+                    LayerIndex = layerIdx,
+                    LayerTileIndex = tileIndex
                 };
                 _mlmask.AtlasTiles.Add(recursiveHash, atlasView);
             }
