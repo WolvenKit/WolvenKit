@@ -291,6 +291,299 @@ namespace WolvenKit.Modkit.RED4
         }
 
 
+        private static Mat4 ToNumericsMatrix4x4(CMatrix m) =>
+            new Mat4(
+                m.X.X, m.X.Y, m.X.Z, m.X.W,
+                m.Y.X, m.Y.Y, m.Y.Z, m.Y.W,
+                m.Z.X, m.Z.Y, m.Z.Z, m.Z.W,
+                m.W.X, m.W.Y, m.W.Z, m.W.W
+            );
+
+        private static void ApplyBonePosition(rendRenderMeshBlob rendBlob, int index, Vec3 rawInverseTranslation)
+        {
+            if (index < 0 || index >= rendBlob.Header.BonePositions.Count)
+            {
+                return;
+            }
+
+            var position = rendBlob.Header.BonePositions[index].NotNull();
+            position.X = rawInverseTranslation.X;
+            position.Y = rawInverseTranslation.Y;
+            position.Z = rawInverseTranslation.Z;
+            position.W = 1f;
+        }
+
+        private static bool TryGetBonePositionFromBoneRigMatrix(CMatrix boneRigMatrix, out Vec3 rawInverseTranslation)
+        {
+            rawInverseTranslation = Vec3.Zero;
+
+            var matrix = ToNumericsMatrix4x4(boneRigMatrix);
+            if (!Mat4.Invert(matrix, out var inverseMatrix))
+            {
+                return false;
+            }
+
+            rawInverseTranslation = inverseMatrix.Translation;
+            return true;
+        }
+
+        private static Vec3 ImportMeshToolsPosition(Vec3 gltfPosition)
+        {
+            // Mesh export converts raw RE coordinates to glTF coordinates as:
+            //     (x, y, z) -> (x, z, -y)
+            // Reverse that here before rebuilding BoneRigMatrices.
+            return new Vec3(gltfPosition.X, -gltfPosition.Z, gltfPosition.Y);
+        }
+
+        private static Quat ImportMeshToolsRotation(Quat gltfRotation)
+        {
+            // Mesh export converts raw RE quaternion components to glTF as:
+            //     (x, y, z, w) -> (x, z, -y, w)
+            // Reverse that here before rebuilding BoneRigMatrices.
+            return Quat.Normalize(new Quat(gltfRotation.X, -gltfRotation.Z, gltfRotation.Y, gltfRotation.W));
+        }
+
+        private static bool TryCreateBoneRigMatrixFromExportedJoint(Node joint, out Mat4 boneRigMatrix, out Vec3 rawInverseTranslation)
+        {
+            rawInverseTranslation = ImportMeshToolsPosition(joint.LocalTransform.Translation);
+            var rawRotation = ImportMeshToolsRotation(joint.LocalTransform.Rotation);
+
+            // export stores the transform extracted from BoneRigMatrix.Inverted()
+            // after applying the coordinate remap.
+            // Rebuild that inverse matrix from the edited glTF joint TRS, then invert it
+            // to get the original BoneRigMatrix representation.
+            var inverseBoneRigMatrix = Mat4.CreateFromQuaternion(rawRotation);
+            inverseBoneRigMatrix.Translation = rawInverseTranslation;
+
+            return Mat4.Invert(inverseBoneRigMatrix, out boneRigMatrix);
+        }
+
+        private static Node[] GetBestMatchingSkinJointArray(ModelRoot model, CMesh root)
+        {
+            if (model.LogicalSkins.Count == 0)
+            {
+                return Array.Empty<Node>();
+            }
+
+            Node[] GetSkinJoints(Skin skin) => Enumerable
+                .Range(0, skin.JointsCount)
+                .Select(i => skin.GetJoint(i).Joint)
+                .ToArray();
+
+            // If the destination mesh has no orphan bones yet, use the largest skin as
+            // the source skeleton so the import can create the missing mesh bones.
+            if (root.BoneNames.Count == 0)
+            {
+                return Enumerable
+                    .Range(0, model.LogicalSkins.Count)
+                    .Select(i => GetSkinJoints(model.LogicalSkins[i]))
+                    .OrderByDescending(joints => joints.Length)
+                    .FirstOrDefault() ?? Array.Empty<Node>();
+            }
+
+            var expectedNames = root.BoneNames
+                .Select(x => x.ToString().NotNull())
+                .ToHashSet();
+
+            var bestScore = -1;
+            Node[] bestJoints = Array.Empty<Node>();
+
+            for (var skinIndex = 0; skinIndex < model.LogicalSkins.Count; skinIndex++)
+            {
+                var joints = GetSkinJoints(model.LogicalSkins[skinIndex]);
+                var score = joints.Count(j => !string.IsNullOrEmpty(j.Name) && expectedNames.Contains(j.Name));
+
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    bestJoints = joints;
+                }
+            }
+
+            return bestScore > 0 ? bestJoints : Array.Empty<Node>();
+        }
+
+        private static int FindMeshBoneIndex(CMesh root, string boneName)
+        {
+            for (var i = 0; i < root.BoneNames.Count; i++)
+            {
+                if (root.BoneNames[i].ToString() == boneName)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        private static bool IsNearlyIdentityRotation(Quat rotation, float epsilon = 1e-5f)
+        {
+            var lengthSquared =
+                (rotation.X * rotation.X) +
+                (rotation.Y * rotation.Y) +
+                (rotation.Z * rotation.Z) +
+                (rotation.W * rotation.W);
+
+            if (lengthSquared == 0.0f)
+            {
+                return false;
+            }
+
+            var q = Quat.Normalize(rotation);
+
+            // q and -q represent the same rotation, so test |W| against 1.
+            return Math.Abs(q.X) <= epsilon &&
+                   Math.Abs(q.Y) <= epsilon &&
+                   Math.Abs(q.Z) <= epsilon &&
+                   Math.Abs(Math.Abs(q.W) - 1.0f) <= epsilon;
+        }
+
+        private static bool ImportedOrphanRigLooksLegacyIdentityRotated(CMesh root, Node[] jointArray, float epsilon = 1e-5f)
+        {
+            if (jointArray.Length == 0 || root.BoneNames.Count == 0)
+            {
+                return false;
+            }
+
+            var matched = 0;
+
+            foreach (var boneNameValue in root.BoneNames)
+            {
+                var boneName = boneNameValue.ToString();
+                if (string.IsNullOrEmpty(boneName))
+                {
+                    continue;
+                }
+
+                var joint = jointArray.FirstOrDefault(x => x.Name == boneName);
+                if (joint is null)
+                {
+                    continue;
+                }
+
+                matched++;
+
+                if (!IsNearlyIdentityRotation(joint.LocalTransform.Rotation, epsilon))
+                {
+                    return false;
+                }
+            }
+
+            return matched > 0;
+        }
+
+        private static void AddMissingMeshBonesFromGltfJoints(CMesh root, rendRenderMeshBlob rendBlob, Node[] jointArray)
+        {
+            foreach (var joint in jointArray)
+            {
+                var jointName = joint.Name;
+                if (string.IsNullOrWhiteSpace(jointName) || FindMeshBoneIndex(root, jointName) >= 0)
+                {
+                    continue;
+                }
+
+                if (!TryCreateBoneRigMatrixFromExportedJoint(joint, out var boneRigMatrix, out var rawInverseTranslation))
+                {
+                    continue;
+                }
+
+                root.BoneNames.Add(jointName);
+                root.BoneRigMatrices.Add(boneRigMatrix);
+                root.BoneVertexEpsilons.Add(0f);
+
+                rendBlob.Header.BonePositions.Add(new Vector4
+                {
+                    X = rawInverseTranslation.X,
+                    Y = rawInverseTranslation.Y,
+                    Z = rawInverseTranslation.Z,
+                    W = 1f
+                });
+            }
+        }
+
+
+
+
+
+        private static bool RecomputeBoneVertexEpsilons(CMesh root, IReadOnlyList<RawMeshContainer> meshes)
+        {
+            if (root.BoneVertexEpsilons.Count == 0)
+            {
+                return false;
+            }
+
+            while (root.BoneVertexEpsilons.Count < root.BoneNames.Count)
+            {
+                root.BoneVertexEpsilons.Add(0f);
+            }
+
+            // Clear all epsilons before recomputing them from the imported skinning data.
+            for (var epsilonIndex = 0; epsilonIndex < root.BoneVertexEpsilons.Count; epsilonIndex++)
+            {
+                root.BoneVertexEpsilons[epsilonIndex] = 0.0f;
+            }
+
+            var bonePositions = new Vec3[root.BoneVertexEpsilons.Count];
+            var validBonePositions = new bool[root.BoneVertexEpsilons.Count];
+            var matrixCount = Math.Min(root.BoneRigMatrices.Count, root.BoneVertexEpsilons.Count);
+
+            for (var boneIndex = 0; boneIndex < matrixCount; boneIndex++)
+            {
+                if (TryGetBonePositionFromBoneRigMatrix(root.BoneRigMatrices[boneIndex].NotNull(), out var bonePosition))
+                {
+                    bonePositions[boneIndex] = bonePosition;
+                    validBonePositions[boneIndex] = true;
+                }
+            }
+
+            var result = false;
+
+            foreach (var mesh in meshes)
+            {
+                if (mesh.positions is null || mesh.weights is null || mesh.boneindices is null)
+                {
+                    continue;
+                }
+
+                if (mesh.weightCount <= 0)
+                {
+                    continue;
+                }
+
+                result = true;
+                var usableWeightCount = Math.Min(8, Math.Min(mesh.weightCount, Math.Min(mesh.weights.GetLength(1), mesh.boneindices.GetLength(1))));
+
+                for (var vertIndex = 0; vertIndex < mesh.positions.Length; vertIndex++)
+                {
+                    var position = mesh.positions[vertIndex];
+
+                    for (var weightIndex = 0; weightIndex < usableWeightCount; weightIndex++)
+                    {
+                        var weight = mesh.weights[vertIndex, weightIndex];
+                        if (weight == 0.0f)
+                        {
+                            continue;
+                        }
+
+                        var boneIndex = mesh.boneindices[vertIndex, weightIndex];
+                        if (boneIndex >= root.BoneVertexEpsilons.Count || !validBonePositions[boneIndex])
+                        {
+                            continue;
+                        }
+
+                        var distance = Vec3.Distance(position, bonePositions[boneIndex]);
+                        if (distance > root.BoneVertexEpsilons[boneIndex])
+                        {
+                            root.BoneVertexEpsilons[boneIndex] = distance;
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+
         public bool ImportMesh(FileInfo inGltfFile, Stream inMeshStream, GltfImportArgs args)
         {
             var cr2w = _parserService.ReadRed4File(inMeshStream);
@@ -334,24 +627,50 @@ namespace WolvenKit.Modkit.RED4
 
             var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.ValidationMode));
 
-            if (model.LogicalSkins.Count > 0 && originalRig != null)
+            if (model.LogicalSkins.Count > 0 && cr2w.RootChunk is CMesh rootForBoneMatrices)
             {
-                var jointArray = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint).ToArray();
+                var jointArray = GetBestMatchingSkinJointArray(model, rootForBoneMatrices);
 
-                if (cr2w.RootChunk is CMesh root)
+                if (jointArray.Length > 0)
                 {
-                    for (var i = 0; i < root.BoneNames.Count; i++)
-                    {
-                        var foundBone = jointArray.FirstOrDefault(x => root.BoneNames[i] == x.Name);
-                        if (foundBone is not null)
-                        {
-                            System.Numerics.Matrix4x4.Invert(foundBone.WorldMatrix, out var inversedWorldMatrix);
+                    var legacyIdentityOrphanRig = ImportedOrphanRigLooksLegacyIdentityRotated(rootForBoneMatrices, jointArray);
 
-                            root.BoneRigMatrices[i] = inversedWorldMatrix;
-                            root.BoneRigMatrices[i].NotNull().W.Y = -inversedWorldMatrix.M43;
-                            root.BoneRigMatrices[i].NotNull().W.Z = inversedWorldMatrix.M42;
-                            //component Y and -Z are being swapped in vector W
-                            //should probably figure out why
+                    if (legacyIdentityOrphanRig)
+                    {
+                        // Compatibility path for meshes exported before orphan bone rotations were preserved.
+                        //
+                        // Legacy orphan mesh exports wrote every joint rotation as identity. Those GLBs do not
+                        // contain enough information to reconstruct BoneRigMatrices or BonePositions, and the
+                        // legacy importer reused the destination .mesh values instead. Preserve that behavior:
+                        // do not update transform tables and do not add missing orphan bones from identity-only data.
+                        if (args.ShowVerboseLogOutput)
+                        {
+                            _loggerService.Warning(
+                                "Imported mesh has identity rotations for all matching bones. " +
+                                "Treating this as a legacy export and preserving existing BoneRigMatrices and BonePositions.");
+                        }
+                    }
+                    else
+                    {
+                        // Corrected orphan mesh exports contain per-bone rotations, so the mesh orphan skeleton
+                        // can be grown and BoneRigMatrices/BonePositions can be rebuilt from the glTF joints.
+                        AddMissingMeshBonesFromGltfJoints(rootForBoneMatrices, rendBlob, jointArray);
+
+                        for (var i = 0; i < rootForBoneMatrices.BoneNames.Count; i++)
+                        {
+                            var boneName = rootForBoneMatrices.BoneNames[i].ToString().NotNull();
+                            var foundBone = jointArray.FirstOrDefault(x => x.Name == boneName);
+
+                            if (foundBone is null)
+                            {
+                                continue;
+                            }
+
+                            if (TryCreateBoneRigMatrixFromExportedJoint(foundBone, out var boneRigMatrix, out var rawInverseTranslation))
+                            {
+                                rootForBoneMatrices.BoneRigMatrices[i] = boneRigMatrix;
+                                ApplyBonePosition(rendBlob, i, rawInverseTranslation);
+                            }
                         }
                     }
                 }
@@ -433,12 +752,13 @@ namespace WolvenKit.Modkit.RED4
             else
             {
                 existingJoints = MeshTools.GetOrphanRig(meshBlob);
-                if (model.LogicalSkins.Count > 0 && model.LogicalSkins[0].JointsCount > 0)
+                var jointArray = GetBestMatchingSkinJointArray(model, meshBlob);
+                if (jointArray.Length > 0)
                 {
                     incomingJoints = new RawArmature
                     {
-                        BoneCount = model.LogicalSkins[0].JointsCount,
-                        Names = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray()
+                        BoneCount = jointArray.Length,
+                        Names = jointArray.Select(joint => joint.Name).ToArray()
                     };
                 }
             }
@@ -451,8 +771,10 @@ namespace WolvenKit.Modkit.RED4
             catch (WolvenKitException e)
             {
                 throw new WolvenKitException(e.ErrorCode,
-                    $"You're trying to import bones into a mesh that doesn't have them. Wolvenkit can't create bones — please remove them in Blender, or import into a different file: {e.Message}");
+                    $"You're trying to use a legacy export to add bones to a mesh. Wolvenkit can't create bones this way— Please remove the bones in Blender (delete orphaned vert groups), or re-export the mesh from Wolvenkit, import the glb into Blender, and re-parent your meshes to the updated armature");
             }
+
+            RecomputeBoneVertexEpsilons(meshBlob, meshes);
 
             UpdateSkinningParamCloth(ref meshes, ref cr2w, args);
 
@@ -1375,21 +1697,14 @@ namespace WolvenKit.Modkit.RED4
 
             blob.RenderBuffer.Buffer.SetBytes(buffer.ToArray());
 
-            if (cr2w.RootChunk is CMesh root && inverseBindMatrices != null)
+            if (cr2w.RootChunk is CMesh root)
             {
-                for (var i = 0; i < blob.Header.BonePositions.Count; i++)
+                var bonePositionCount = Math.Min(blob.Header.BonePositions.Count, root.BoneRigMatrices.Count);
+                for (var i = 0; i < bonePositionCount; i++)
                 {
-                    if (boneNames is not null)
+                    if (TryGetBonePositionFromBoneRigMatrix(root.BoneRigMatrices[i].NotNull(), out var rawInverseTranslation))
                     {
-                        var index = Array.FindIndex(boneNames, x => x.Contains(root.BoneNames[i].ToString().NotNull()) && x.Length == root.BoneNames[i].Length);
-
-                        var position = blob.Header.BonePositions[i].NotNull();
-
-                        position.X = inverseBindMatrices[index].M41;
-                        position.Y = -inverseBindMatrices[index].M43;
-                        position.Z = inverseBindMatrices[index].M42;
-                        position.W = inverseBindMatrices[index].M44;
-                        //position = root.BoneRigMatrices[i].W;
+                        ApplyBonePosition(blob, i, rawInverseTranslation);
                     }
                 }
             }
