@@ -1,6 +1,8 @@
 using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.Common.Services;
 using WolvenKit.RED4.Types.Pools;
@@ -132,6 +134,12 @@ public class HashServiceExt : HashService
 
     public void LoadProjectCache(Cp77Project project)
     {
+        Task.Run(() =>
+        {
+            var thread = new Thread(() =>
+            {
+                Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
+                Thread.CurrentThread.IsBackground = true;
         _projectRefCache.Clear();
         _projectTweakCache.Clear();
 
@@ -167,6 +175,11 @@ public class HashServiceExt : HashService
                 }
             }
         }
+            });
+
+            thread.Start();
+            return thread; // Optional: you can wait on the thread if needed
+        });
     }
 
     public void SaveProjectCache(Cp77Project project)
