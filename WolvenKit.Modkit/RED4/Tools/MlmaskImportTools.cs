@@ -52,7 +52,6 @@ public class MLMASK
 
         if (files.Count == 0)
         {
-            // 0x2006 = MLMask: No layer files specified in masklist
             throw new ArgumentException("No layer files specified in masklist.", nameof(txtImageList));
         }
 
