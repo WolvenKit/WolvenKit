@@ -24,6 +24,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -146,8 +147,24 @@
             hc:InfoElement.Title="Version"
             hc:InfoElement.TitlePlacement="Top" />
 
-        <Grid
+        <!-- Group selection (editable list of existing groups; empty = Ungrouped) -->
+        <hc:ComboBox
+            x:Name="GroupComboBox"
             Grid.Row="7"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Margin="{DynamicResource WolvenKitMarginBottom}"
+            hc:InfoElement.Title="Group (optional — empty = Ungrouped)"
+            hc:InfoElement.TitlePlacement="Top"
+            hc:InfoElement.Placeholder="Type a new group name or pick an existing one"
+            IsEditable="True"
+            ItemsSource="{Binding AvailableGroups}"
+            Text="{Binding SelectedGroup,
+                           Mode=TwoWay,
+                           UpdateSourceTrigger=PropertyChanged}" />
+
+        <Grid
+            Grid.Row="8"
             Grid.Column="0"
             Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
