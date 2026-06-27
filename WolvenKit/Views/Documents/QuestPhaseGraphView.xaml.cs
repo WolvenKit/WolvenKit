@@ -1326,6 +1326,8 @@ namespace WolvenKit.Views.Documents
                 viewModel.History.Add(graph);
             }
 
+            ApplySearchGraphStateParents(graphPath);
+
             var targetGraph = graphPath[^1];
             QuestPhaseGraphEditor.SetCurrentValue(GraphEditorView.SourceProperty, targetGraph);
             BuildBreadcrumb();
@@ -1337,7 +1339,31 @@ namespace WolvenKit.Views.Documents
                 NodeSelectionService.Instance.SelectedNode = targetNode;
                 ForceCenterOnNode(targetNode);
                 viewModel.SetGraphLoaded();
-            }), DispatcherPriority.Loaded);
+            }), DispatcherPriority.ApplicationIdle);
+        }
+
+        private static void ApplySearchGraphStateParents(IReadOnlyList<RedGraph> graphPath)
+        {
+            for (var i = 1; i < graphPath.Count; i++)
+            {
+                var parentGraph = graphPath[i - 1];
+                var childGraph = graphPath[i];
+
+                var parentPhase = parentGraph.Nodes
+                    .OfType<GraphNodeViewModel>()
+                    .FirstOrDefault(node =>
+                        node is IGraphProvider provider &&
+                        ReferenceEquals(provider.Graph, childGraph) &&
+                        node.Data is questPhaseNodeDefinition { PhaseResource.IsSet: false });
+
+                if (parentPhase?.Data is not questPhaseNodeDefinition phaseData)
+                {
+                    continue;
+                }
+
+                childGraph.StateParents = parentGraph.StateParents + "." + phaseData.Id;
+                childGraph.DocumentViewModel = parentGraph.DocumentViewModel;
+            }
         }
 
         private static List<RedGraph>? FindGraphPathToNode(
