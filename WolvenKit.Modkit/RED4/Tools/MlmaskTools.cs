@@ -119,7 +119,7 @@ public partial class ModTools
 
             var tileIndex = (widthInTiles * yTile) + xTile + tilesOffset;
 
-            if ((tileIndex * 2) + 1 >= tiles.Length)
+            if (tileIndex * 2 + 1 >= tiles.Length)
             {
                 return false;
             }
@@ -139,8 +139,11 @@ public partial class ModTools
             {
                 tileDecl = tiles[paramOffset + extraAdd];
             }
+            else
+            {
+                return false;
+            }
 
-            // Extract atlas position and scaling factors from the packed tile declaration.
             var dx = (tileDecl >> s_tileDxShift) & s_tileParamMask;
             var dy = (tileDecl >> s_tileDyShift) & s_tileParamMask;
             var sx = (tileDecl >> s_tileSxShift) & s_tileSMask;
@@ -148,15 +151,25 @@ public partial class ModTools
 
             var atlasTileSize = maskTileSize + s_atlasTilePadding;
 
-            // Use Min to avoid reading into the right/bottom padding area of atlas tiles
             var localX = Math.Min((x >> (int)sx) % maskTileSize, maskTileSize - 1);
             var localY = Math.Min((y >> (int)sy) % maskTileSize, maskTileSize - 1);
 
             var ux = localX + 1 + (dx * atlasTileSize);
             var uy = localY + 1 + (dy * atlasTileSize);
 
-            var p = atlasRaw[ux + (uy * atlasWidth)];
-            fullResBuffer[x + (y * maskWidth)] = p;
+            var atlasIndex = ux + (uy * atlasWidth);
+            if (atlasIndex >= atlasRaw.Length)
+            {
+                return false;
+            }
+
+            var p = atlasRaw[atlasIndex];
+
+            var bufferIndex = x + (y * maskWidth);
+            if (bufferIndex < fullResBuffer.Length)
+            {
+                fullResBuffer[bufferIndex] = p;
+            }
 
             return true;
         }
@@ -244,56 +257,6 @@ public partial class ModTools
         return false;
     }
 
-    private static bool DecodeSingle(ref byte[] maskData, uint maskWidth, uint maskHeight, byte[] atlasData,
-        uint atlasWidth, uint atlasHeight, uint x, uint y, uint[] tilesData, uint maskTileSize, int maskIndex,
-        uint tilesOffset, uint smallScale, uint widthInTiles)
-    {
-        var xTile = x / maskTileSize / smallScale;
-        var yTile = y / maskTileSize / smallScale;
-
-        var tileIndex = (widthInTiles * yTile) + xTile + tilesOffset;
-
-        if ((tileIndex * 2) + 1 >= tilesData.Length)
-        {
-            return false;
-        }
-
-        var paramOffset = tilesData[tileIndex * 2];
-        var paramBits = tilesData[(tileIndex * 2) + 1];
-
-        if ((uint)(paramBits & (1 << maskIndex)) == 0U)
-        {
-            return false;
-        }
-
-        var extraAdd = CountBits((uint)(paramBits & ((1 << maskIndex) - 1)));
-
-        uint tileDecl = 0;
-        if (paramOffset + extraAdd < tilesData.Length)
-        {
-            tileDecl = tilesData[paramOffset + extraAdd];
-        }
-
-        // Extract atlas position and scaling factors from the packed tile declaration.
-        var dx = (tileDecl >> s_tileDxShift) & s_tileParamMask;
-        var dy = (tileDecl >> s_tileDyShift) & s_tileParamMask;
-        var sx = (tileDecl >> s_tileSxShift) & s_tileSMask;
-        var sy = (tileDecl >> s_tileSyShift) & s_tileSMask;
-
-        var atlasTileSize = maskTileSize + s_atlasTilePadding;
-
-        // Use Min to avoid reading into the right/bottom padding area of atlas tiles
-        var localX = Math.Min((x >> (int)sx) % maskTileSize, maskTileSize - 1);
-        var localY = Math.Min((y >> (int)sy) % maskTileSize, maskTileSize - 1);
-
-        var ux = localX + 1 + (dx * atlasTileSize);
-        var uy = localY + 1 + (dy * atlasTileSize);
-
-        var p = atlasData[ux + (uy * atlasWidth)];
-        maskData[x + (y * maskWidth)] = p;
-
-        return true;
-    }
 
     private static uint DivCeil(uint l, uint r) => (l + r - 1) / r;
 
