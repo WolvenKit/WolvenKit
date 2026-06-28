@@ -119,7 +119,7 @@ public partial class ModTools
 
             var tileIndex = (widthInTiles * yTile) + xTile + tilesOffset;
 
-            if (tileIndex * 2 + 1 >= tiles.Length)
+            if ((tileIndex * 2) + 1 >= tiles.Length)
             {
                 return false;
             }
