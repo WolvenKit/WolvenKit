@@ -306,11 +306,13 @@ namespace WolvenKit.Modkit.RED4
                 return;
             }
 
-            var position = rendBlob.Header.BonePositions[index].NotNull();
-            position.X = rawInverseTranslation.X;
-            position.Y = rawInverseTranslation.Y;
-            position.Z = rawInverseTranslation.Z;
-            position.W = 1f;
+            rendBlob.Header.BonePositions[index] = new Vector4
+            {
+                X = rawInverseTranslation.X,
+                Y = rawInverseTranslation.Y,
+                Z = rawInverseTranslation.Z,
+                W = 1f
+            };
         }
 
         private static bool TryGetBonePositionFromBoneRigMatrix(CMatrix boneRigMatrix, out Vec3 rawInverseTranslation)
