@@ -1303,6 +1303,14 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
+            // Special handling for external phase resources - offer to open in Quest Phase Editor
+            if (selectedNode is questPhaseNodeDefinitionWrapper phaseNode &&
+                phaseNode.Data is questPhaseNodeDefinition { PhaseResource.IsSet: true })
+            {
+                HandlePhaseNodeRedirect(phaseNode);
+                return;
+            }
+
             // Navigation into phase subgraph
             if (selectedNode is IGraphProvider provider)
             {
@@ -1444,6 +1452,74 @@ namespace WolvenKit.Views.Documents
                 }
             }
             // If user clicked No, do nothing (don't load the scene subgraph)
+        }
+
+        /// <summary>
+        /// Handle external phase node redirect - ask user if they want to open in Quest Phase Editor
+        /// </summary>
+        private void HandlePhaseNodeRedirect(questPhaseNodeDefinitionWrapper phaseNode)
+        {
+            if (phaseNode.Data is not questPhaseNodeDefinition phaseData)
+            {
+                return;
+            }
+
+            if (phaseData.PhaseResource.DepotPath == ResourcePath.Empty)
+            {
+                return;
+            }
+
+            var phasePath = phaseData.PhaseResource.DepotPath.GetResolvedText();
+            var phaseFileName = string.IsNullOrEmpty(phasePath)
+                ? phaseData.PhaseResource.DepotPath.ToString()
+                : System.IO.Path.GetFileName(phasePath);
+
+            var result = Interactions.ShowQuestionYesNo((
+                $"This quest node references a phase file:\n\n{phaseFileName}\n\nWould you like to open this phase in the Quest Phase Editor instead of viewing it within the quest graph? (Recommended)",
+                "Open Phase in Quest Phase Editor?"));
+
+            if (result)
+            {
+                try
+                {
+                    var appViewModel = Locator.Current.GetService<AppViewModel>();
+                    if (appViewModel != null)
+                    {
+                        appViewModel.OpenFileFromDepotPath(phaseData.PhaseResource.DepotPath);
+
+                        Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            try
+                            {
+                                var phasePathString = phaseData.PhaseResource.DepotPath.GetResolvedText();
+                                if (phasePathString != null)
+                                {
+                                    var targetDocument = appViewModel.DockedViews
+                                        .OfType<RedDocumentViewModel>()
+                                        .FirstOrDefault(doc => doc.RelativePath == phasePathString);
+
+                                    if (targetDocument != null)
+                                    {
+                                        appViewModel.ActiveDocument = targetDocument;
+                                    }
+                                }
+                            }
+                            catch (Exception)
+                            {
+                                // Tab switching failed, but file was opened - not critical
+                            }
+                        }), DispatcherPriority.Background);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Interactions.ShowMessageBox(
+                        $"Failed to open phase file:\n{ex.Message}",
+                        "Error Opening Phase",
+                        WMessageBoxButtons.Ok,
+                        WMessageBoxImage.Error);
+                }
+            }
         }
 
         /// <summary>
