@@ -137,6 +137,18 @@ namespace WolvenKit.App.ViewModels.Documents
             GraphSearchNavigationRequested?.Invoke(this, new GraphSearchNavigationRequestedEventArgs(match.Value.Node));
         }
 
+        public void OnCurrentSearchResultRequested()
+        {
+            var match = _searchState.CurrentMatch;
+            if (match is null)
+            {
+                return;
+            }
+
+            SelectedTab = Tabs.FirstOrDefault(tab => tab.Header == "Node Properties");
+            GraphSearchNavigationRequested?.Invoke(this, new GraphSearchNavigationRequestedEventArgs(match.Value.Node));
+        }
+
         private void CreateTabs()
         {
             // Create tab definitions for quest phase

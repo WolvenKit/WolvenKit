@@ -150,6 +150,18 @@ namespace WolvenKit.App.ViewModels.Documents
             }
         }
 
+        public void OnCurrentSearchResultRequested()
+        {
+            var match = _searchState.CurrentMatch;
+            if (match is null)
+            {
+                return;
+            }
+
+            SelectedTab = Tabs.FirstOrDefault(tab => tab.Header == "Node Properties");
+            GraphDocumentSearchHelper.SelectGraphNode(match.Value.Node);
+        }
+
         private void CreateTabs()
         {
             // Create tab definitions using the CollectionViewHelper filters

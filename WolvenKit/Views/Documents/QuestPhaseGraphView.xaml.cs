@@ -1139,6 +1139,16 @@ namespace WolvenKit.Views.Documents
                 e.Handled = true;
             }
 
+            // Shortcut: Ctrl+Shift+G to return to the current search result
+            if (e.Key == Key.G &&
+                Keyboard.Modifiers.HasFlag(ModifierKeys.Control) &&
+                Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+            {
+                viewModel.OnCurrentSearchResultRequested();
+                e.Handled = true;
+                return;
+            }
+
             // Shortcut: Ctrl+G to open "go to node" dialog
             if (e.Key == Key.G && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
             {
