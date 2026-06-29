@@ -281,7 +281,7 @@ public static class CommonFunctions
             return DXGI_FORMAT.DXGI_FORMAT_R8_UNORM;
 
         if (compression == ETextureCompression.TCM_DXTAlpha)
-            return DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
+            return DXGI_FORMAT.DXGI_FORMAT_R8_UNORM;
 
         return DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
     }
