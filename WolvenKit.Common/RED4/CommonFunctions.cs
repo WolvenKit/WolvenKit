@@ -270,7 +270,7 @@ public static class CommonFunctions
                path.Contains("t_001__drill_machine_screen_frame_r", StringComparison.OrdinalIgnoreCase) ||
                path.Contains("t_001__drill_machine_screen_frame_m", StringComparison.OrdinalIgnoreCase) ||
                path.Contains("t_001__drill_machine_screen_r", StringComparison.OrdinalIgnoreCase) ||
-               path.Contains("t_001__drill_machine_screen_frame_m", StringComparison.OrdinalIgnoreCase);
+               path.Contains("t_001__drill_machine_screen_m", StringComparison.OrdinalIgnoreCase);
     }
 
     private static DXGI_FORMAT GetFallbackForKnownInvalid(ETextureCompression compression)
