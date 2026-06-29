@@ -1159,7 +1159,6 @@ public class DocumentTools
         // Let's try to find it by file name (but only allow single matches!)
         pathToPatch = Path.GetFileName(pathToPatch);
         return patchDict.Keys.Where(f => patchDict[f].Count(p => p.Contains(pathToPatch)) == 1).Distinct().ToList();
-
     }
 
     public void ClearMeshMaterials(CMesh mesh)
