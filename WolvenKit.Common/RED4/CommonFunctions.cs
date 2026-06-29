@@ -198,8 +198,14 @@ public static class CommonFunctions
                 ETextureRawFormat.TRF_HDRFloatGrayscale => DXGI_FORMAT.DXGI_FORMAT_R32_FLOAT,
                 ETextureRawFormat.TRF_R8G8 => DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM,
                 ETextureRawFormat.TRF_R32UI => DXGI_FORMAT.DXGI_FORMAT_R32_UINT,
-
-                ETextureRawFormat.TRF_Invalid => throw new NotImplementedException(),
+                // TRF_Invalid Fix
+                ETextureRawFormat.TRF_Invalid =>
+                    compression == ETextureCompression.TCM_QualityR
+                        ? DXGI_FORMAT.DXGI_FORMAT_R8_UNORM
+                        : compression == ETextureCompression.TCM_Normalmap
+                            ? DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM
+                            : DXGI_FORMAT.DXGI_FORMAT_R8_UNORM,
+                ////
                 ETextureRawFormat.TRF_Max => throw new NotImplementedException(),
                 _ => throw new ArgumentOutOfRangeException(),
             },
