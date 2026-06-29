@@ -274,6 +274,11 @@ internal sealed class GraphDocumentSearchState
     private IReadOnlyList<GraphDocumentSearchMatch> _matches = [];
     private int _currentIndex = -1;
 
+    public GraphDocumentSearchMatch? CurrentMatch =>
+        _currentIndex >= 0 && _currentIndex < _matches.Count
+            ? _matches[_currentIndex]
+            : null;
+
     public GraphDocumentSearchMatch? GetNextMatch(
         string searchText,
         Func<IReadOnlyList<GraphDocumentSearchMatch>> findMatches)
