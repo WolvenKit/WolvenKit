@@ -1,0 +1,9 @@
+# Indepth docs at https://wolvenkit.github.io/WolvenKit/contributing/keep-changelog.html
+Template changelog entry:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 2973
+      author: "manavortex"
+      description: "'Add items to atelier' will no longer break the atelier"
+
+changes:
