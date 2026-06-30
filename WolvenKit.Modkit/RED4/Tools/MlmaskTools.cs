@@ -111,6 +111,33 @@ public partial class ModTools
 
         var fullResBuffer = new byte[maskWidth * maskHeight];
 
+        for (var i = 0; i < maskCount; i++)
+        {
+            Array.Clear(fullResBuffer, 0, fullResBuffer.Length); // Ensure pixels without tile data are black (0)
+            Decode(i);
+
+            var hasHighRes = HasLayerHighResolutionData(tiles, maskWidth, maskHeight, maskTileSize, i);
+
+            byte[] layerBuffer;
+            uint outWidth;
+            uint outHeight;
+
+            if (hasHighRes || maskWidthLow == 0 || maskHeightLow == 0 || maskWidthLow == maskWidth)
+            {
+                layerBuffer = (byte[])fullResBuffer.Clone();
+                outWidth = maskWidth;
+                outHeight = maskHeight;
+            }
+            else
+            {
+                outWidth = maskWidthLow;
+                outHeight = maskHeightLow;
+                layerBuffer = DownscaleNearest(fullResBuffer, maskWidth, maskHeight, outWidth, outHeight);
+            }
+
+            yield return new LayerBuffer(layerBuffer, outWidth, outHeight);
+        }
+        
         bool DecodeSingle(uint x, uint y, int maskIndex, uint tilesOffset, uint smallScale, uint widthInTiles)
         {
             var xTile = x / maskTileSize / smallScale;
@@ -197,33 +224,6 @@ public partial class ModTools
                     }
                 }
             }
-        }
-
-        for (var i = 0; i < maskCount; i++)
-        {
-            Array.Clear(fullResBuffer, 0, fullResBuffer.Length); // Ensure pixels without tile data are black (0)
-            Decode(i);
-
-            var hasHighRes = HasLayerHighResolutionData(tiles, maskWidth, maskHeight, maskTileSize, i);
-
-            byte[] layerBuffer;
-            uint outWidth;
-            uint outHeight;
-
-            if (hasHighRes || maskWidthLow == 0 || maskHeightLow == 0 || maskWidthLow == maskWidth)
-            {
-                layerBuffer = (byte[])fullResBuffer.Clone();
-                outWidth = maskWidth;
-                outHeight = maskHeight;
-            }
-            else
-            {
-                outWidth = maskWidthLow;
-                outHeight = maskHeightLow;
-                layerBuffer = DownscaleNearest(fullResBuffer, maskWidth, maskHeight, outWidth, outHeight);
-            }
-
-            yield return new LayerBuffer(layerBuffer, outWidth, outHeight);
         }
     }
 
