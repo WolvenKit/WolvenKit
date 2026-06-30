@@ -107,38 +107,42 @@ public static class Oodle
 
     public static Status CompressBuffer(byte[] rawBuf, out byte[] compBuf, CompressionLevel compressionLevel, bool forceCompression)
     {
-        if (forceCompression || rawBuf.Length > 256)
+        ArgumentNullException.ThrowIfNull(rawBuf);
+        ArgumentOutOfRangeException.ThrowIfZero(rawBuf.Length, nameof(rawBuf));
+
+        if (!forceCompression && rawBuf.Length <= 256)
         {
-            //var compressedBufferSizeNeeded = GetCompressedBufferSizeNeeded(rawBuf.Length);
-            //var compressedBuffer = new byte[compressedBufferSizeNeeded];
-            IEnumerable<byte> compressedBuffer = new List<byte>();
+            compBuf = rawBuf;
+            return Status.Uncompressed;
+        }
 
-            var compressedSize = Oodle.Compress(rawBuf, ref compressedBuffer, false, compressionLevel);
+        var maxCompressedSize = GetCompressedBufferSizeNeeded(rawBuf.Length);
+        byte[] compressedBuffer;
+        int compressedOffset;
 
-            byte[] outArray;
-            if (forceCompression && rawBuf.Length <= 256)
-            {
-                outArray = new byte[compressedSize + 10];
+        if (forceCompression && rawBuf.Length <= 256)
+        {
+            compressedBuffer = new byte[maxCompressedSize + 10];
+            compressedOffset = 10;
+            Array.Copy(BitConverter.GetBytes(KARK), 0, compressedBuffer, 0, 4);
+            Array.Copy(BitConverter.GetBytes(rawBuf.Length), 0, compressedBuffer, 4, 4);
+            Array.Copy(new byte[] { 0xCC, 0x06 }, 0, compressedBuffer, 8, 2);
+        }
+        else
+        {
+            compressedBuffer = new byte[maxCompressedSize + 8];
+            compressedOffset = 8;
+            Array.Copy(BitConverter.GetBytes(KARK), 0, compressedBuffer, 0, 4);
+            Array.Copy(BitConverter.GetBytes(rawBuf.Length), 0, compressedBuffer, 4, 4);
+        }
 
-                Array.Copy(BitConverter.GetBytes(KARK), 0, outArray, 0, 4);
-                Array.Copy(BitConverter.GetBytes(rawBuf.Length), 0, outArray, 4, 4);
-                Array.Copy(new byte[] { 0xCC, 0x06 }, 0, outArray, 8, 2);
-                Array.Copy(compressedBuffer.ToArray(), 0, outArray, 10, compressedSize);
-            }
-            else
-            {
-                outArray = new byte[compressedSize + 8];
+        var realSize = CallCompress(rawBuf, compressedBuffer, compressedOffset, compressionLevel);
 
-                Array.Copy(BitConverter.GetBytes(KARK), 0, outArray, 0, 4);
-                Array.Copy(BitConverter.GetBytes(rawBuf.Length), 0, outArray, 4, 4);
-                Array.Copy(compressedBuffer.ToArray(), 0, outArray, 8, compressedSize);
-            }
-
-            if (forceCompression || rawBuf.Length > outArray.Length)
-            {
-                compBuf = outArray;
-                return Status.Compressed;
-            }
+        if (forceCompression || rawBuf.Length > compressedBuffer.Length)
+        {
+            compBuf = new byte[realSize + compressedOffset];
+            Array.Copy(compressedBuffer, 0, compBuf, 0, realSize + compressedOffset);
+            return Status.Compressed;
         }
 
         compBuf = rawBuf;
@@ -175,64 +179,81 @@ public static class Oodle
         return false;
     }
 
-    public static int Compress(byte[] inputBuffer, ref IEnumerable<byte> outputBuffer, bool useRedHeader,
+    public static int Compress(byte[] inputBuffer, out byte[] outputBuffer, bool useRedHeader,
         CompressionLevel level = CompressionLevel.Normal, Compressor compressor = Compressor.Kraken)
     {
-        if (inputBuffer == null)
-        {
-            throw new ArgumentNullException(nameof(inputBuffer));
-        }
-        var inputCount = inputBuffer.Length;
-        if (inputCount <= 0 || inputCount > inputBuffer.Length)
-        {
-            throw new ArgumentOutOfRangeException(nameof(inputCount));
-        }
-        if (outputBuffer == null)
-        {
-            throw new ArgumentNullException(nameof(outputBuffer));
-        }
+        ArgumentNullException.ThrowIfNull(inputBuffer);
+        ArgumentOutOfRangeException.ThrowIfZero(inputBuffer.Length, nameof(inputBuffer));
 
-        var result = 0;
-        var compressedBufferSizeNeeded = Oodle.GetCompressedBufferSizeNeeded(inputCount);
-        var compressedBuffer = new byte[compressedBufferSizeNeeded];
-
-        result = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-            ? CompressionSettings.Get().UseOodle
-                ? OodleLib.OodleLZ_Compress(inputBuffer, compressedBuffer, compressor, level)
-                : KrakenNative.Compress(inputBuffer, compressedBuffer, (int)level)
-            : RuntimeInformation.IsOSPlatform(OSPlatform.OSX)
-                ? KrakenNative.Compress(inputBuffer, compressedBuffer, (int)level)
-                : RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
-                            ? KrakenNative.Compress(inputBuffer, compressedBuffer, (int)level)
-                            : throw new NotImplementedException();
-
-
-        if (result == 0 || inputCount <= (result + 8))
-        {
-            outputBuffer = inputBuffer;
-            return outputBuffer.Count();
-        }
+        var maxCompressedSize = GetCompressedBufferSizeNeeded(inputBuffer.Length);
+        byte[] compressedBuffer;
+        var compressedOffset = 0;
 
         if (useRedHeader)
         {
-            // write KARK header
-            var writelist = new List<byte>()
-                    {
-                        0x4B, 0x41, 0x52, 0x4B  //KARK, TODO: make this dependent on the compression algo
-                    };
-            // write size
-            writelist.AddRange(BitConverter.GetBytes(inputCount));
-            // write compressed data
-            writelist.AddRange(compressedBuffer.Take(result));
-
-            outputBuffer = writelist;
+            compressedBuffer = new byte[maxCompressedSize + 8];
+            compressedOffset = 8;
+            Array.Copy(BitConverter.GetBytes(KARK), 0, compressedBuffer, 0, 4);
+            Array.Copy(BitConverter.GetBytes(inputBuffer.Length), 0, compressedBuffer, 4, 4);
         }
         else
         {
-            outputBuffer = compressedBuffer.Take(result);
+            compressedBuffer = new byte[maxCompressedSize];
         }
 
-        return outputBuffer.Count();
+        var realSize = CallCompress(inputBuffer, compressedBuffer, compressedOffset, level, compressor);
+
+        // should it really always be counting the header? It was like this before I touched it,
+        // so I'll leave it as it is for now
+        if (realSize != 0 && inputBuffer.Length > (realSize + 8))
+        {
+            outputBuffer = new byte[realSize + compressedOffset];
+            Array.Copy(compressedBuffer, 0, outputBuffer, 0, realSize + compressedOffset);
+            return outputBuffer.Length;
+        }
+
+        outputBuffer = inputBuffer;
+        return inputBuffer.Length;
+    }
+
+    /// <summary>
+    /// Compresses a buffer using the Kraken or Oodle library depending on the OS.
+    /// Caller should validate input.
+    /// </summary>
+    /// <param name="inputBuffer"></param>
+    /// <param name="outputBuffer"></param>
+    /// <param name="outputBufferOffset"></param>
+    /// <param name="level"></param>
+    /// <param name="compressor"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    private static unsafe int CallCompress(byte[] inputBuffer, byte[] outputBuffer, int outputBufferOffset,
+        CompressionLevel level = CompressionLevel.Normal, Compressor compressor = Compressor.Kraken)
+    {
+        int res;
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && CompressionSettings.Get().UseOodle)
+        {
+            fixed (byte* inPtr = &inputBuffer[0])
+            fixed (byte* outPtr = &outputBuffer[outputBufferOffset])
+            {
+                res = OodleLib.OodleLZ_Compress(inPtr, inputBuffer.Length, outPtr, compressor, level);
+            }
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ||
+                 RuntimeInformation.IsOSPlatform(OSPlatform.Linux) ||
+                 RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            fixed (byte* inPtr = &inputBuffer[0])
+            fixed (byte* outPtr = &outputBuffer[outputBufferOffset])
+            {
+                res = KrakenNative.Compress(inPtr, inputBuffer.Length, outPtr, (int)level);
+            }
+        }
+        else
+        {
+            throw new NotImplementedException();
+        }
+        return res;
     }
 
 
@@ -256,7 +277,7 @@ public static class Oodle
 
         return result;
     }
-    
+
     public static unsafe long Decompress(byte* inputBuffer, long inputBufferSize, byte* outputBuffer, long outputBufferSize)
     {
         int result;
@@ -394,9 +415,11 @@ public static class Oodle
     /// <returns></returns>
     public static int GetCompressedBufferSizeNeeded(int count)
     {
-        var n = (((count + 0x3ffff + ((uint)((count + 0x3ffff) >> 0x1f) & 0x3ffff)) >> 0x12) * 0x112) + count;
-        //var n  = OodleNative.GetCompressedBufferSizeNeeded((long)count);
-        return (int)n;
+        if (CompressionSettings.Get().UseOodle)
+        {
+            return (int)OodleLib.OodleLZ_GetCompressedBufferSizeNeeded(count);
+        }
+        return (int)((((count + 0x3ffff + ((uint)((count + 0x3ffff) >> 0x1f) & 0x3ffff)) >> 0x12) * 0x112) + count);
     }
 
     private static bool TryCopyOodleLib(string? filePath)
@@ -589,11 +612,9 @@ public static class Oodle
         if (compress)
         {
             var inbuffer = File.ReadAllBytes(path);
-            IEnumerable<byte> outBuffer = new List<byte>();
+            var r = Oodle.Compress(inbuffer, out var outBuffer, true);
 
-            var r = Oodle.Compress(inbuffer, ref outBuffer, true);
-
-            File.WriteAllBytes(outpath, outBuffer.ToArray());
+            File.WriteAllBytes(outpath, outBuffer);
         }
 
         return 1;
