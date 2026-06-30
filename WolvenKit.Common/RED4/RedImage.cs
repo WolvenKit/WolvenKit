@@ -962,16 +962,17 @@ public partial class RedImage : IDisposable
     {
         if (setup.RawFormat == ETextureRawFormat.TRF_Invalid)
         {
-            if (setup.Group == Enums.GpuWrapApieTextureGroup.TEXG_Generic_Grayscale)
+            if (setup.Group == Enums.GpuWrapApieTextureGroup.TEXG_Generic_Grayscale && setup.Compression == ETextureCompression.TCM_QualityR)
             {
                 setup.RawFormat = ETextureRawFormat.TRF_Grayscale;
             }
-            else if (setup.Group == Enums.GpuWrapApieTextureGroup.TEXG_Generic_Color)
+            else if (setup.Group == Enums.GpuWrapApieTextureGroup.TEXG_Generic_Color && setup.Compression == ETextureCompression.TCM_DXTAlpha)
             {
                 setup.RawFormat = ETextureRawFormat.TRF_Grayscale;
             }
         }
-        
+            
+         
         var info = new DDSUtils.DDSInfo()
         {
             Compression = setup.Compression,
