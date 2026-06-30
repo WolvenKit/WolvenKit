@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 using HandyControl.Data;
 using ReactiveUI;
 using Syncfusion.Data;
@@ -61,12 +62,14 @@ namespace WolvenKit.Views.Tools
         private string _currentFolderQuery = "";
         private bool _isDragging;
         private CancellationTokenSource _deferRefreshTokenSource = new();
+        private int _lastSearchLength = 0;
 
         #region Constructors
 
         public ProjectExplorerView()
         {
             InitializeComponent();
+            PESearchBar.TextChanged += PESearchBar_TextChanged;
             TreeGrid.ItemsSourceChanged += TreeGrid_ItemsSourceChanged;
             TreeGridFlat.ItemsSourceChanged += TreeGridFlat_ItemsSourceChanged;
             TreeGrid.RowDragDropController.DragStart += RowDragDropController_DragStart;
@@ -220,6 +223,18 @@ namespace WolvenKit.Views.Tools
                         view => view.TreeGridFlat.ItemsSource)
                     .DisposeWith(disposables);
 
+                this.WhenAnyValue(x => x.ViewModel.SearchText)
+                    .Subscribe(searchText =>
+                    {
+                        if (string.IsNullOrWhiteSpace(searchText) && TreeGrid?.View != null)
+                        {
+                            // Restore normal tab filtering when search is cleared
+                            TreeGrid.View.Filter = IsFileIn;
+                            TreeGrid.View.RefreshFilter();
+                        }
+                    })
+                    .DisposeWith(disposables);
+
                 ViewModel.OnToggleFlatMode += OnToggleFlatMode;
                 ViewModel.BeginDeferredRefreshContext += BeginDeferredRefreshContext;
 
@@ -267,50 +282,57 @@ namespace WolvenKit.Views.Tools
         // Run inside Dispatcher to avoid exception on startup
         private void ResetUiElements() => Dispatcher.Invoke(() =>
         {
-            // Hide loading text
             LoadingText.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
 
             _currentFolderQuery = "";
-            // Set search bar to empty if it wasn't
             PESearchBar?.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, "");
 
-            // now handle the grids
-            if (TreeGridFlat.View is not null)
+            if (ViewModel is ProjectExplorerViewModel vm)
             {
-                TreeGridFlat.ClearFilters();
-                TreeGridFlat.ClearSelections(false);
+                vm.SearchText = "";           // ← important: clear our new search
             }
 
-            if (TreeGrid.View is not null)
+            if (TreeGrid?.View != null)
             {
                 TreeGrid.ClearFilters();
-                TreeGrid.ClearSelections(false);
+                TreeGrid.View.Filter = IsFileIn;
+                TreeGrid.View.RefreshFilter();
+            }
+
+            if (TreeGridFlat?.View != null)
+            {
+                TreeGridFlat.ClearFilters();
+                TreeGridFlat.View.RefreshFilter();
             }
         });
         private async Task BeginDeferredRefreshContext(CancellationToken deferRefreshToken, Task doBeforeRefresh)
         {
-            CompositeDisposable disposables =
-            [
-                TreeGridFlat.View.DeferRefresh(TreeViewRefreshMode.DeferRefresh),
-                TreeGrid.View.DeferRefresh(TreeViewRefreshMode.DeferRefresh)
-            ];
+            IDisposable flatDefer = null;
 
-            using (disposables)
+            if (TreeGridFlat?.View != null)
+            {
+                flatDefer = TreeGridFlat.View.DeferRefresh(TreeViewRefreshMode.DeferRefresh);
+            }
+
+            try
             {
                 await doBeforeRefresh;
-                DispatcherHelper.WaitUntilCancelled(deferRefreshToken, () =>
+
+                // Refresh our DisplayedFileTree system after conversion
+                if (ViewModel is ProjectExplorerViewModel vm)
+                {
+                    vm.RefreshDisplayedTree();
+                }
+
+                if (TreeGridFlat?.View != null)
                 {
                     TreeGridFlat.View.Filter = IsFileInFlat;
                     TreeGridFlat.View.Refresh();
-
-                    Task.Run(() =>
-                    {
-                        DispatcherHelper.DelayOnMainThread(() =>
-                        {
-                            PESearchBar_OnSearchStarted(this, new FunctionEventArgs<string>(_currentFolderQuery));
-                        }, 10);
-                    });
-                });
+                }
+            }
+            finally
+            {
+                flatDefer?.Dispose();
             }
         }
 
@@ -540,7 +562,7 @@ namespace WolvenKit.Views.Tools
                         continue;
                     }
 
-                    if (ViewModel.GetExpansionStateOrNull(fileSystemModel.RawRelativePath) is true or null)
+                    if (ViewModel!.GetExpansionStateOrNull(fileSystemModel.RawRelativePath) == true)
                     {
                         TreeGrid.ExpandNode(treeNode);
                     }
@@ -577,30 +599,41 @@ namespace WolvenKit.Views.Tools
         private bool IsFileIn(object o)
         {
             if (tabControl == null || o is not FileSystemModel fm)
-            {
                 return false;
+
+            // No search active → normal tab filtering
+            if (string.IsNullOrWhiteSpace(_currentFolderQuery))
+            {
+                return tabControl.SelectedIndex switch
+                {
+                    0 => true,
+                    1 => fm.RawRelativePath == "archive" || fm.RawRelativePath.StartsWith("archive\\"),
+                    2 => fm.RawRelativePath == "raw" || fm.RawRelativePath.StartsWith("raw\\"),
+                    3 => fm.RawRelativePath == "resources" || fm.RawRelativePath.StartsWith("resources\\"),
+                    _ => true
+                };
             }
 
-            // Filtered by search
-            if (!string.IsNullOrWhiteSpace(_currentFolderQuery) && !fm.Name.Contains(_currentFolderQuery))
+            // Search active → check name/path + parent folders (so files inside "textures" appear)
+            if (fm.Name.Contains(_currentFolderQuery, StringComparison.OrdinalIgnoreCase) ||
+                fm.RawRelativePath.Contains(_currentFolderQuery, StringComparison.OrdinalIgnoreCase))
             {
-                return false;
+                return true;
             }
 
-            return tabControl.SelectedIndex switch
+            // Walk up parents
+            var current = fm.Parent;
+            while (current != null)
             {
-                0 => true,
-                1 => IsFileInInternal("archive"),
-                2 => IsFileInInternal("raw"),
-                3 => IsFileInInternal("resources"),
-                _ => true
-            };
-
-            bool IsFileInInternal(string folder)
-            {
-                return fm.RawRelativePath == folder ||
-                       fm.RawRelativePath.StartsWith($"{folder}{Path.DirectorySeparatorChar}");
+                if (current.Name.Contains(_currentFolderQuery, StringComparison.OrdinalIgnoreCase) ||
+                    current.RawRelativePath.Contains(_currentFolderQuery, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+                current = current.Parent;
             }
+
+            return false;
         }
 
         private bool IsFileInFlat(object o) => tabControl != null && o is FileSystemModel fm && IsFileIn(o) && !fm.IsDirectory;
@@ -677,18 +710,81 @@ namespace WolvenKit.Views.Tools
         {
             _currentFolderQuery = e.Info;
 
-            if (ViewModel?.IsFlatModeEnabled == true)
+            if (ViewModel is ProjectExplorerViewModel vm)
+            {
+                vm.SearchText = e.Info;
+
+                // Disable the old filter so our DisplayedFileTree logic works
+                if (TreeGrid?.View != null)
+                {
+                    TreeGrid.View.Filter = null;
+                    TreeGrid.View.RefreshFilter();
+                }
+
+                if (!string.IsNullOrWhiteSpace(e.Info))
+                {
+                    DispatcherHelper.RunOnMainThread(() =>
+                    {
+                        TreeGrid.ExpandAllNodes();
+                    }, DispatcherPriority.Background);
+                }
+            }
+
+            if (ViewModel?.IsFlatModeEnabled == true && TreeGridFlat?.View != null)
             {
                 TreeGridFlat.View.RefreshFilter();
             }
-            else
-            {
-                // expand all
-                TreeGrid.ExpandAllNodes();
+        }
 
-                // filter programmatically
-                TreeGrid.View.RefreshFilter();
-            }
+        private CancellationTokenSource _searchDebounceCts;
+
+        private void PESearchBar_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Cancel previous pending filter
+            _searchDebounceCts?.Cancel();
+            _searchDebounceCts = new CancellationTokenSource();
+            var token = _searchDebounceCts.Token;
+
+            Task.Delay(350, token).ContinueWith(_ =>
+            {
+                if (token.IsCancellationRequested)
+                    return;
+
+                // Only now apply the filter (user stopped typing)
+                _currentFolderQuery = PESearchBar.Text ?? string.Empty;
+
+                if (TreeGrid?.View != null)
+                {
+                    TreeGrid.View.Filter = string.IsNullOrWhiteSpace(_currentFolderQuery)
+                        ? null
+                        : IsFileIn;
+
+                    TreeGrid.View.RefreshFilter();
+                }
+
+               // Focus restoration
+               // DispatcherHelper.RunOnMainThread(() =>
+                //{
+                //    if (PESearchBar != null)
+                //    {
+                //        Keyboard.Focus(PESearchBar);
+                //        PESearchBar.Focus();
+                //        PESearchBar.CaretIndex = PESearchBar.Text?.Length ?? 0;
+                //    }
+                //}, DispatcherPriority.Input);
+
+                // Auto-expand only when search becomes active
+                if (!string.IsNullOrWhiteSpace(_currentFolderQuery) && _lastSearchLength == 0)
+                {
+                    DispatcherHelper.RunOnMainThread(() =>
+                    {
+                        TreeGrid.ExpandAllNodes();
+                    }, DispatcherPriority.Background);
+                }
+
+                _lastSearchLength = _currentFolderQuery.Length;
+
+            }, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         private void RowDragDropController_DragStart(object sender, TreeGridRowDragStartEventArgs e) =>
