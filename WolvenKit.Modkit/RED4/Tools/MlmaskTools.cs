@@ -94,8 +94,7 @@ public partial class ModTools
         if (!BlockCompression.DecodeBC(blob.AtlasData.Buffer.GetBytes(), ref atlasRaw, atlasWidth, atlasHeight,
                 BlockCompression.BlockCompressionType.BC4))
         {
-            // 0x3003 = BC4 decode error in multilayer mask
-            throw new WolvenKitException(0x3003, "BC4 decode failed for multilayer mask atlas.");
+            throw new InvalidDataException("BC4 decode failed for multilayer mask atlas.");
         }
 
         var tileBuffer = blob.TilesData.Buffer;
