@@ -60,7 +60,10 @@ public partial class AppScriptService : ScriptService
 
     private ProjectExplorerViewModel? GetProjectExplorerViewModel()
     {
-        _projectExplorerViewModel ??= Locator.Current.GetService<ProjectExplorerViewModel>();
+        if (_projectExplorerViewModel == null && _wkit.AppViewModel != null)
+        {
+            _projectExplorerViewModel = _wkit.AppViewModel.GetToolViewModel<ProjectExplorerViewModel>();
+        }
         return _projectExplorerViewModel;
     }
 
@@ -68,7 +71,7 @@ public partial class AppScriptService : ScriptService
     {
         GetProjectExplorerViewModel()?.SuspendFileWatcher();
         await ExecuteAsync(code, DefaultHostObject, null, enableDebugging);
-        GetProjectExplorerViewModel()?.ResumeFileWatcher();
+        GetProjectExplorerViewModel()?.ResumeWatcher_AndReloadProject();
     }
 
     public void SetAppViewModel(AppViewModel appViewModel) => _wkit.AppViewModel = appViewModel;

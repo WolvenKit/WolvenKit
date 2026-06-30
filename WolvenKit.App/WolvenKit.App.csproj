@@ -75,6 +75,7 @@
     <PackageReference Include="AutomaticGraphLayout" />
     <PackageReference Include="Nodify" />
     <PackageReference Include="Splat" />
+    <PackageReference Include="ReactiveUI" />
   </ItemGroup>
 
   <ItemGroup>

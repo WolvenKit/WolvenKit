@@ -797,8 +797,16 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         get
         {
-            var redName = GetRedTypeFromCSType(PropertyType, Flags);
-            return redName != "" ? redName : PropertyType.Name;
+            try
+            {
+                var redName = GetRedTypeFromCSType(PropertyType, Flags);
+                return redName != "" ? redName : PropertyType.Name;
+            }
+            catch (WolvenKitException ex)
+            {
+                _loggerService.Error($"File type could not be determined for a Tweak. Exception: ${ex.Message}");
+                return "";
+            }
         }
     }
 
