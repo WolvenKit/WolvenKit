@@ -62,7 +62,7 @@ public class HashServiceExt : HashService
                 ResourcePathPool.AddOrGetHash(p);
                 _globalRefCache.TryAdd(p, 0);
             }
-            
+
             File.Delete(customRefsFile);
         }
     }
@@ -140,41 +140,41 @@ public class HashServiceExt : HashService
             {
                 Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
                 Thread.CurrentThread.IsBackground = true;
-        _projectRefCache.Clear();
-        _projectTweakCache.Clear();
+                _projectRefCache.Clear();
+                _projectTweakCache.Clear();
 
-        MigrateLegacyProjectCache(project);
+                MigrateLegacyProjectCache(project);
 
-        foreach (var p in project.ModFiles.Where(AddResourcePath))
-        {
-            ResourcePathPool.AddOrGetHash(p);
-        }
-
-        var customRefsFile = Path.Combine(project.ProjectDirectory, "custom_refs.txt");
-        if (File.Exists(customRefsFile))
-        {
-            var paths = File.ReadAllLines(customRefsFile);
-            foreach (var p in paths)
-            {
-                if (AddResourcePath(p))
+                foreach (var p in project.ModFiles.Where(AddResourcePath))
                 {
                     ResourcePathPool.AddOrGetHash(p);
                 }
-            }
-        }
 
-        var customTweaksFile = Path.Combine(project.ProjectDirectory, "custom_tweaks.txt");
-        if (File.Exists(customTweaksFile))
-        {
-            var paths = File.ReadAllLines(customTweaksFile);
-            foreach (var p in paths)
-            {
-                if (AddTweakName(p))
+                var customRefsFile = Path.Combine(project.ProjectDirectory, "custom_refs.txt");
+                if (File.Exists(customRefsFile))
                 {
-                    TweakDBIDPool.AddOrGetHash(p);
+                    var paths = File.ReadAllLines(customRefsFile);
+                    foreach (var p in paths)
+                    {
+                        if (AddResourcePath(p))
+                        {
+                            ResourcePathPool.AddOrGetHash(p);
+                        }
+                    }
                 }
-            }
-        }
+
+                var customTweaksFile = Path.Combine(project.ProjectDirectory, "custom_tweaks.txt");
+                if (File.Exists(customTweaksFile))
+                {
+                    var paths = File.ReadAllLines(customTweaksFile);
+                    foreach (var p in paths)
+                    {
+                        if (AddTweakName(p))
+                        {
+                            TweakDBIDPool.AddOrGetHash(p);
+                        }
+                    }
+                }
             });
 
             thread.Start();
@@ -188,7 +188,7 @@ public class HashServiceExt : HashService
         {
             var list = _projectRefCache.Keys.ToList();
             list.Sort();
-            
+
             File.WriteAllLines(Path.Combine(project.ProjectDirectory, "custom_refs.txt"), list);
         }
 
