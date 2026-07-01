@@ -1269,7 +1269,7 @@ public partial class ProjectResourceTools
 
             try
             {
-                var insertIndex = match.Index + match.Length;
+                var insertIndex = match.Index + match.Length + 1;
                 var newItems = $",\n    {string.Join(", ", dialogVmItemCodes.Select(i => $"\"{i}\""))} ";
                 textContent = textContent.Insert(insertIndex - 1, newItems);
                 File.WriteAllText(absoluteRedsPath, textContent);
