@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 2978
+      author: "misterchedda"
+      description: "Added missing quest graph node details for item, reward, and some condition and journal nodes."
