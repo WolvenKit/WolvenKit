@@ -1,0 +1,13 @@
+changes:
+    -   type: "fixed"
+        packages: [ "App", "CLI", "Nuget Packages" ]
+        pr-number: 2962
+        author: "Doctor Presto"
+        description: ".mesh export now correctly preserves bone rotations by caclulating them from boneRigMatrices.
+        Import now recalculates boneRigMatrices, bonePositions and boneVertexEpsilons based on the data in the glb."
+    -   type: "addition"
+        packages: [ "App", "CLI", "Nuget Packages" ]
+        pr-number: 2962
+        author: "Doctor Presto"
+        description: ".mesh import can now add bones to meshes correctly"
+

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text.Json;
 using SharpGLTF.Geometry;
 using SharpGLTF.Geometry.VertexTypes;
@@ -33,6 +34,14 @@ namespace WolvenKit.Modkit.RED4.Tools
         private readonly Red4ParserService _red4ParserService;
 
         public MeshTools(Red4ParserService red4ParserService) => _red4ParserService = red4ParserService;
+
+        private static Matrix4x4 ToNumericsMatrix4x4(CMatrix m) =>
+            new Matrix4x4(
+                m.X.X, m.X.Y, m.X.Z, m.X.W,
+                m.Y.X, m.Y.Y, m.Y.Z, m.Y.W,
+                m.Z.X, m.Z.Y, m.Z.Z, m.Z.W,
+                m.W.X, m.W.Y, m.W.Z, m.W.W
+            );
 
         public static bool ExportMesh(CR2WFile cr2W, FileInfo outfile, MeshExportArgs meshExportArgs,
             ValidationMode vMode = ValidationMode.TryFix)
@@ -1155,25 +1164,56 @@ namespace WolvenKit.Modkit.RED4.Tools
         }
         public static RawArmature? GetOrphanRig(CMesh meshBlob)
         {
-            if (meshBlob.RenderResourceBlob.Chunk is rendRenderMeshBlob rendMeshBlob)
+            if (meshBlob.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendMeshBlob)
             {
-                if (rendMeshBlob.Header.BonePositions.Count != 0)
-                {
-                    var boneCount = rendMeshBlob.Header.BonePositions.Count;
-                    var rig = new RawArmature
-                    {
-                        BoneCount = boneCount,
-                        LocalPosn = rendMeshBlob.Header.BonePositions.Select(p => new Vec3(p.X, p.Z, -p.Y)).ToArray(),
-                        LocalRot = Enumerable.Repeat(System.Numerics.Quaternion.Identity, boneCount).ToArray(),
-                        LocalScale = Enumerable.Repeat(Vec3.One, boneCount).ToArray(),
-                        Parent = Enumerable.Repeat<short>(-1, boneCount).ToArray(),
-                        Names = meshBlob.BoneNames.Select(x => x.GetResolvedText().NotNull()).ToArray()
-                    };
-                    return rig;
-                }
+                return null;
             }
 
-            return null;
+            var boneCount = rendMeshBlob.Header.BonePositions.Count;
+            if (boneCount == 0)
+            {
+                return null;
+            }
+
+            var localPosn = new Vec3[boneCount];
+            var localRot = new System.Numerics.Quaternion[boneCount];
+
+            for (var i = 0; i < boneCount; i++)
+            {
+                if (meshBlob.BoneRigMatrices.Count > i)
+                {
+                    var m = ToNumericsMatrix4x4(meshBlob.BoneRigMatrices[i]);
+
+                    if (Matrix4x4.Invert(m, out var inv))
+                    {
+                        var t = inv.Translation;
+                        var q = System.Numerics.Quaternion.Normalize(
+                            System.Numerics.Quaternion.CreateFromRotationMatrix(inv)
+                        );
+
+                        localPosn[i] = new Vec3(t.X, t.Z, -t.Y);
+                        localRot[i] = new System.Numerics.Quaternion(q.X, q.Z, -q.Y, q.W);
+                        continue;
+                    }
+                }
+
+                // Fallback to existing behavior if matrices are unavailable.
+                var p = rendMeshBlob.Header.BonePositions[i];
+                localPosn[i] = new Vec3(p.X, p.Z, -p.Y);
+                localRot[i] = System.Numerics.Quaternion.Identity;
+            }
+
+            return new RawArmature
+            {
+                BoneCount = boneCount,
+                LocalPosn = localPosn,
+                LocalRot = localRot,
+                LocalScale = Enumerable.Repeat(Vec3.One, boneCount).ToArray(),
+                Parent = Enumerable.Repeat<short>(-1, boneCount).ToArray(),
+                Names = meshBlob.BoneNames
+                    .Select(x => x.GetResolvedText().NotNull())
+                    .ToArray()
+            };
         }
 
         public static RawArmature? GetOrphanRig(ModelRoot model)
