@@ -1034,18 +1034,12 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        private bool CanCreateNewTemplateFromSelection() => SelectedItem?.PropertyType.IsAssignableTo(typeof(IRedType)) == true;
+        private bool CanCreateNewTemplateFromSelection() => SelectedItem?.PropertyType is { } propType &&
+                                                            RedTypeTemplateService.IsTypeTemplatable(propType);
 
         [RelayCommand(CanExecute = nameof(CanCreateNewTemplateFromSelection))]
         private async Task CreateNewTemplateFromSelection()
         {
-            if (SelectedItem?.PropertyType.IsAssignableTo(typeof(IRedType)) != true)
-            {
-                return;
-            }
-
-            _loggerService.Debug($"C# reflection type: {SelectedItem.Data.GetType().FullName}\nRed reflection type: {SelectedItem.Data.RedType}");
-
             await _appViewModel.SetActiveDialog(
                 new CreateTemplateFromChunkDialogViewModel(SelectedItem.Data, _redTypeTemplateService, _appViewModel));
         }

@@ -84,6 +84,12 @@ public class RedTypeTemplateService
                 continue;
             }
 
+            if (!IsTypeTemplatable(type))
+            {
+                _logger.Warning($"Skipping file with non-templatable type {f.FullName}");
+                continue;
+            }
+
             try
             {
                 var template = DeserializeTemplate(type, File.ReadAllText(f.FullName));
@@ -206,9 +212,14 @@ public class RedTypeTemplateService
     /// <param name="dst">Template category destination</param>
     /// <remarks>If a template with that name already exists, it will be overwritten.</remarks>
     /// <exception cref="ArgumentNullException">Template Data property is null</exception>
+    /// <exception cref="ArgumentException">Template Data type is not templateable</exception>
     public void WriteTemplate(RedTypeTemplate template, string templateName, TemplateDestination dst = TemplateDestination.User)
     {
         ArgumentNullException.ThrowIfNull(template.Data, nameof(template.Data));
+        if (!IsTypeTemplatable(template.Data.GetType()))
+        {
+            throw new ArgumentException("Template Data property must be of a templatable type", nameof(template.Data));
+        }
 
         Type dataType;
         IRedType data;
@@ -322,6 +333,10 @@ public class RedTypeTemplateService
         TemplateSource.User => UserTemplates.Any(t => t.Name.Equals(templateName, StringComparison.CurrentCultureIgnoreCase) && t.Type == templateType),
         _ => throw new ArgumentOutOfRangeException(nameof(src), src, null)
     };
+
+    public static bool IsTypeTemplatable<T>() => IsTypeTemplatable(typeof(T));
+    public static bool IsTypeTemplatable(Type type) => typeof(IRedType).IsAssignableFrom(type) &&
+                                                type is { IsAbstract: false, IsPrimitive: false };
 
     #endregion
 
