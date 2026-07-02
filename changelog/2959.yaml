@@ -1,5 +1,6 @@
-- type: "changed"
-  packages: ["App"]
-  pr-number: 2959
-  author: "manavortex"
-  description: "copy material from other mesh: will now set default filter if multiple meshes are in the same folder, and select textbox content if saved from previous run"
+changes:
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 2959
+      author: "manavortex"
+      description: "copy material from other mesh: will now set default filter if multiple meshes are in the same folder, and select textbox content if saved from previous run"
