@@ -230,7 +230,7 @@
                         Grid.Row="14"
                         Grid.Column="1"
                         Grid.ColumnSpan="4"
-                        Margin="{StaticResource WolvenKitMarginTinyRight}"
+                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         helpers:TextBoxBehavior.FocusGainedSelectAll="True"
                         KeyboardNavigation.TabIndex="-1">
                         <TextBox.ToolTip>
@@ -243,6 +243,7 @@
                     <Button
                         Grid.Row="14"
                         Grid.Column="5"
+                        Margin="{StaticResource WolvenKitMarginTinyBottom}"
                         Padding="0"
                         syncfusion:FocusManagerHelper.FocusedElement="True"
                         KeyboardNavigation.TabIndex="-1"
