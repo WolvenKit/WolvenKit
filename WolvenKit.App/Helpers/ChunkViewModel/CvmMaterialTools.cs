@@ -269,6 +269,7 @@ public class CvmMaterialTools
                 externalMaterialIdx += 1;
             }
 
+            t.Index = (CUInt16)i;
             mesh.MaterialEntries.Add(t);
         }
 
@@ -567,7 +568,6 @@ public class CvmMaterialTools
         }
     }
 
-
     public void UnDynamifyMaterials(ChunkViewModel? cvm)
     {
         if (cvm?.ResolvedData is not CMesh mesh ||
@@ -791,7 +791,7 @@ public class CvmMaterialTools
         return FindHighestMaterialIndex(array, isLocalInstance);
     }
 
-    private static int FindHighestMaterialIndex(CArray<CMeshMaterialEntry> matDefArray, bool isLocalInstance)
+    public static int FindHighestMaterialIndex(CArray<CMeshMaterialEntry> matDefArray, bool isLocalInstance)
     {
         var maxIndex = -1;
         // ReSharper disable once ForCanBeConvertedToForeach - can't LINQ here
