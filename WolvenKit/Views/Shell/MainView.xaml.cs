@@ -207,9 +207,9 @@ namespace WolvenKit.Views.Shell
                     return dialog.ViewModel;
                 };
 
-                Interactions.ShowCopyMeshAppearancesDialogue = (options) =>
+                Interactions.ShowCopyMeshAppearancesDialogue = (args) =>
                 {
-                    var dialog = new CopyMeshAppearancesDialog(options);
+                    var dialog = new CopyMeshAppearancesDialog(args.options, args.filterDefaultValue);
                     if (dialog.ShowDialog() != true)
                     {
                         return null;
