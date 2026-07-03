@@ -20,6 +20,9 @@ public interface ICvmTools
 
     void AdjustSubmeshCount(ChunkViewModel cvm);
     void UnDynamifyMaterials(ChunkViewModel? cvm);
+
+    void ExpandMeshAppearances(ChunkViewModel? cvm, out Dictionary<string, List<string>> templatesAndValues,
+        bool preserveDynamicChunks = false);
     void AddMaterialAndDefinition(ChunkViewModel cvm, string newName);
     void AddTagsToMeshAppearances(List<ChunkViewModel> chunks, List<string> tagList);
 
