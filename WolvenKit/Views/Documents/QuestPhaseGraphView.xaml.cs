@@ -24,6 +24,7 @@ using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.GraphEditor;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
+using GraphNodeViewModel = WolvenKit.App.ViewModels.GraphEditor.NodeViewModel;
 
 namespace WolvenKit.Views.Documents
 {
@@ -203,6 +204,11 @@ namespace WolvenKit.Views.Documents
                 _lastActiveDocument = null;
                 
                 // Clean up event handlers (safe to unsubscribe even if not subscribed)
+                if (DataContext is QuestPhaseGraphViewModel viewModel)
+                {
+                    viewModel.GraphSearchNavigationRequested -= OnGraphSearchNavigationRequested;
+                }
+
                 DataContextChanged -= OnDataContextChanged;
                 KeyDown -= OnKeyDown;
                 
@@ -235,8 +241,9 @@ namespace WolvenKit.Views.Documents
             }
 
             // Clean up old subscription when switching contexts
-            if (e.OldValue is QuestPhaseGraphViewModel)
+            if (e.OldValue is QuestPhaseGraphViewModel oldViewModel)
             {
+                oldViewModel.GraphSearchNavigationRequested -= OnGraphSearchNavigationRequested;
                 CleanupEventSubscription();
             }
 
@@ -247,6 +254,7 @@ namespace WolvenKit.Views.Documents
 
             // Establish event subscription when we have a valid quest phase document
             EstablishEventSubscription();
+            viewModel.GraphSearchNavigationRequested += OnGraphSearchNavigationRequested;
             
             // Monitor document closing by watching DockedViews collection
             MonitorDocumentClosing();
@@ -1131,6 +1139,16 @@ namespace WolvenKit.Views.Documents
                 e.Handled = true;
             }
 
+            // Shortcut: Ctrl+Shift+G to return to the current search result
+            if (e.Key == Key.G &&
+                Keyboard.Modifiers.HasFlag(ModifierKeys.Control) &&
+                Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+            {
+                viewModel.OnCurrentSearchResultRequested();
+                e.Handled = true;
+                return;
+            }
+
             // Shortcut: Ctrl+G to open "go to node" dialog
             if (e.Key == Key.G && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
             {
@@ -1283,6 +1301,121 @@ namespace WolvenKit.Views.Documents
         /// </summary>
         private void Editor_OnNodeDoubleClick(object sender, RoutedEventArgs e) => HandleSubGraph();
 
+        private void OnGraphSearchNavigationRequested(object? sender, GraphSearchNavigationRequestedEventArgs e)
+        {
+            NavigateToSearchResult(e.TargetNode);
+        }
+
+        private void NavigateToSearchResult(GraphNodeViewModel targetNode)
+        {
+            if (_disposed ||
+                DataContext is not QuestPhaseGraphViewModel viewModel ||
+                QuestPhaseGraphEditor?.Editor == null)
+            {
+                return;
+            }
+
+            var graphPath = FindGraphPathToNode(viewModel.MainGraph, targetNode, []);
+            if (graphPath is null || graphPath.Count == 0)
+            {
+                GraphDocumentSearchHelper.SelectGraphNode(targetNode);
+                return;
+            }
+
+            viewModel.IsGraphLoading = true;
+
+            viewModel.History.Clear();
+            foreach (var graph in graphPath)
+            {
+                graph.DocumentViewModel ??= viewModel.Parent;
+                foreach (var node in graph.Nodes)
+                {
+                    node.DocumentViewModel ??= viewModel.Parent;
+                }
+
+                viewModel.History.Add(graph);
+            }
+
+            ApplySearchGraphStateParents(graphPath);
+
+            var targetGraph = graphPath[^1];
+            QuestPhaseGraphEditor.SetCurrentValue(GraphEditorView.SourceProperty, targetGraph);
+            BuildBreadcrumb();
+
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                QuestPhaseGraphEditor?.Editor?.SelectedItems?.Clear();
+                QuestPhaseGraphEditor?.Editor?.SelectedItems?.Add(targetNode);
+                NodeSelectionService.Instance.SelectedNode = targetNode;
+                ForceCenterOnNode(targetNode);
+                viewModel.SetGraphLoaded();
+            }), DispatcherPriority.ApplicationIdle);
+        }
+
+        private static void ApplySearchGraphStateParents(IReadOnlyList<RedGraph> graphPath)
+        {
+            for (var i = 1; i < graphPath.Count; i++)
+            {
+                var parentGraph = graphPath[i - 1];
+                var childGraph = graphPath[i];
+
+                var parentPhase = parentGraph.Nodes
+                    .OfType<GraphNodeViewModel>()
+                    .FirstOrDefault(node =>
+                        node is IGraphProvider provider &&
+                        ReferenceEquals(provider.Graph, childGraph) &&
+                        node.Data is questPhaseNodeDefinition { PhaseResource.IsSet: false });
+
+                if (parentPhase?.Data is not questPhaseNodeDefinition phaseData)
+                {
+                    continue;
+                }
+
+                childGraph.StateParents = parentGraph.StateParents + "." + phaseData.Id;
+                childGraph.DocumentViewModel = parentGraph.DocumentViewModel;
+            }
+        }
+
+        private static List<RedGraph>? FindGraphPathToNode(
+            RedGraph graph,
+            GraphNodeViewModel targetNode,
+            HashSet<RedGraph> visited)
+        {
+            if (!visited.Add(graph))
+            {
+                return null;
+            }
+
+            if (graph.Nodes.Contains(targetNode))
+            {
+                return [graph];
+            }
+
+            foreach (var provider in graph.Nodes.OfType<IGraphProvider>())
+            {
+                if (provider is GraphNodeViewModel { Data: questPhaseNodeDefinition { PhaseResource.IsSet: true } })
+                {
+                    continue;
+                }
+
+                if (provider.Graph is not { } subGraph)
+                {
+                    continue;
+                }
+
+                var childPath = FindGraphPathToNode(subGraph, targetNode, visited);
+                if (childPath is null)
+                {
+                    continue;
+                }
+
+                childPath.Insert(0, graph);
+                return childPath;
+            }
+
+            return null;
+        }
+
         /// <summary>
         /// Handle navigation to sub-graphs (phase nodes) or back to parent graphs
         /// </summary>
@@ -1300,6 +1433,14 @@ namespace WolvenKit.Views.Documents
             if (selectedNode is questSceneNodeDefinitionWrapper sceneNode)
             {
                 HandleSceneNodeRedirect(sceneNode);
+                return;
+            }
+
+            // Special handling for external phase resources - offer to open in Quest Phase Editor
+            if (selectedNode is questPhaseNodeDefinitionWrapper phaseNode &&
+                phaseNode.Data is questPhaseNodeDefinition { PhaseResource.IsSet: true })
+            {
+                HandlePhaseNodeRedirect(phaseNode);
                 return;
             }
 
@@ -1444,6 +1585,74 @@ namespace WolvenKit.Views.Documents
                 }
             }
             // If user clicked No, do nothing (don't load the scene subgraph)
+        }
+
+        /// <summary>
+        /// Handle external phase node redirect - ask user if they want to open in Quest Phase Editor
+        /// </summary>
+        private void HandlePhaseNodeRedirect(questPhaseNodeDefinitionWrapper phaseNode)
+        {
+            if (phaseNode.Data is not questPhaseNodeDefinition phaseData)
+            {
+                return;
+            }
+
+            if (phaseData.PhaseResource.DepotPath == ResourcePath.Empty)
+            {
+                return;
+            }
+
+            var phasePath = phaseData.PhaseResource.DepotPath.GetResolvedText();
+            var phaseFileName = string.IsNullOrEmpty(phasePath)
+                ? phaseData.PhaseResource.DepotPath.ToString()
+                : System.IO.Path.GetFileName(phasePath);
+
+            var result = Interactions.ShowQuestionYesNo((
+                $"This quest node references a phase file:\n\n{phaseFileName}\n\nWould you like to open this phase in the Quest Phase Editor instead of viewing it within the quest graph? (Recommended)",
+                "Open Phase in Quest Phase Editor?"));
+
+            if (result)
+            {
+                try
+                {
+                    var appViewModel = Locator.Current.GetService<AppViewModel>();
+                    if (appViewModel != null)
+                    {
+                        appViewModel.OpenFileFromDepotPath(phaseData.PhaseResource.DepotPath);
+
+                        Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            try
+                            {
+                                var phasePathString = phaseData.PhaseResource.DepotPath.GetResolvedText();
+                                if (phasePathString != null)
+                                {
+                                    var targetDocument = appViewModel.DockedViews
+                                        .OfType<RedDocumentViewModel>()
+                                        .FirstOrDefault(doc => doc.RelativePath == phasePathString);
+
+                                    if (targetDocument != null)
+                                    {
+                                        appViewModel.ActiveDocument = targetDocument;
+                                    }
+                                }
+                            }
+                            catch (Exception)
+                            {
+                                // Tab switching failed, but file was opened - not critical
+                            }
+                        }), DispatcherPriority.Background);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Interactions.ShowMessageBox(
+                        $"Failed to open phase file:\n{ex.Message}",
+                        "Error Opening Phase",
+                        WMessageBoxButtons.Ok,
+                        WMessageBoxImage.Error);
+                }
+            }
         }
 
         /// <summary>

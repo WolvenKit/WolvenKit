@@ -78,6 +78,11 @@ public partial class AddInkatlasDialog : IViewFor<AddInkatlasDialogViewModel>
                     x => x.RememberValues,
                     x => x.RememberValuesCheckBox.IsChecked)
                 .DisposeWith(disposables);
+
+            ClearExistingFileButton.Click += ClearFileButton_Click;
+
+            disposables.Add(Disposable.Create(() =>
+                ClearExistingFileButton.Click -= ClearFileButton_Click));
         });
     }
 
@@ -200,5 +205,15 @@ public partial class AddInkatlasDialog : IViewFor<AddInkatlasDialogViewModel>
 
         ViewModel.TileWidth = $"{kvp.Value.Item1}";
         ViewModel.TileHeight = $"{kvp.Value.Item2}";
+    }
+
+    private void ClearFileButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (ViewModel is not { } vm)
+        {
+            return;
+        }
+
+        vm.ExistingFile = "";
     }
 }

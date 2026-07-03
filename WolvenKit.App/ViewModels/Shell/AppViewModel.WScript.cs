@@ -62,7 +62,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
     private readonly ScriptFileViewModel? _fileValidationScript;
     private readonly ScriptFileViewModel? _entSpawnerImportScript;
 
-    private static readonly string[] s_ignoredExtensions = [".xbm", ".mlmask", ".bin"];
+    public static readonly string[] FileScanIgnoredExtensions = [".xbm", ".mlmask", ".bin", ".tmp"];
 
     private static readonly string[] s_packIgnoredExtensions = ["bin"];
 
@@ -109,7 +109,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         }
 
         var filesToValidate = projArchive.Files.Values
-            .Where(f => !s_ignoredExtensions.Contains(f.Extension.ToLower()))
+            .Where(f => !FileScanIgnoredExtensions.Contains(f.Extension.ToLower()))
             // no *.ext.json
             .Where(f => !f.Extension.Contains("json") || string.IsNullOrEmpty(
                 Path.GetExtension(f.FileName.Replace(".json", ""))))
