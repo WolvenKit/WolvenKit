@@ -1,7 +1,0 @@
-# Indepth docs at https://wolvenkit.github.io/WolvenKit/contributing/keep-changelog.html
-changes:
-    - type: "fixed"
-      packages: ["App"]
-      pr-number: 2968
-      author: "manavortex"
-      description: "'clear all materials' will now properly refresh the view"

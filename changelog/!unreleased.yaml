@@ -7,8 +7,3 @@ Template changelog entry:
       description: ""
 
 changes:
-    - type: "fixed"
-      packages: ["App"]
-      pr-number: 2953
-      author: "Ametis81"
-      description: ".ent preview fix (index out of bounds)"

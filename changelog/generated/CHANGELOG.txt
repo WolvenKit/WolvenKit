@@ -1,15 +1,33 @@
-[b]8.18.1 — 2026-06-08[/b]
-
-[b]New Contributor[/b]
-[*] @gistya made their first contribution in https://github.com/WolvenKit/WolvenKit/pull/2937
+[b]8.19.0 — 2026-07-03[/b]
 
 [b]App[/b]
 
-[*] [i]Removed[/i]: WKit will no longer try to update dynamic paths (breaking them in the process), and instead warn about them. by @manavortex
-[*] [i]Fixed[/i]: Fixed 'create item codes from yaml' by @manavortex
-[*] [i]Fixed[/i]: Fixed material loading in preview window with 'Generate Materials' button action by @Ametis81
-[*] [i]Fixed[/i]: Better error message if project fails to load because .cpmodproj is broken by @manavortex
-[*] [i]Fixed[/i]: When generating a radio, the folder in resources will now be created by @manavortex
-[*] [i]Fixed[/i]: 'Copy materials from other mesh' now reliably works for multiselect by @manavortex
-[*] [i]Fixed[/i]: Improved performance when adding thousands of game files to a mod by @gistya
-[*] [i]Fixed[/i]: Increased performance of JSON imports. by @gistya
+[*] [i]Added[/i]: entAnimatedComponent: rig and animgraph now have dropdown support. by @manavortex
+[*] [i]Added[/i]: .mesh import can now add bones to meshes correctly by @DoctorPresto
+[*] [i]Added[/i]: Added a graph editor for .behavior files with basic tree editing actions. by @misterchedda
+[*] [i]Fixed[/i]: .ent preview fix (index out of bounds) by @Ametis81
+[*] [i]Fixed[/i]: Archive file path being incorrectly read from modlist.txt by @manavortex
+[*] [i]Fixed[/i]: .mesh export now correctly preserves bone rotations by caclulating them from boneRigMatrices. Import now recalculates boneRigMatrices, bonePositions and boneVertexEpsilons based on the data in the glb. by @DoctorPresto
+[*] [i]Fixed[/i]: Fixed the search function for quest and scene editor. The editor will now navigate through matching graph nodes. by @misterchedda
+[*] [i]Fixed[/i]: Prompt before opening external quest phase resources from phase nodes in the quest phase editor. by @misterchedda
+[*] [i]Fixed[/i]: 'clear all materials' will now properly refresh the view by @manavortex
+[*] [i]Fixed[/i]: 'Add items to atelier' will no longer break the atelier by @manavortex
+[*] [i]Fixed[/i]: Added missing quest graph node details for item, reward, and some condition and journal nodes. by @misterchedda
+[*] [i]Changed[/i]: Export / Import masks at their native resolution (low and high res masks with no pixel shift / offset due to scaling) by @Ametis81
+[*] [i]Changed[/i]: Inkatlas generator will now reliably overwrite already-existing files by @manavortex
+[*] [i]Changed[/i]: copy material from other mesh: will now set default filter if multiple meshes are in the same folder, and select textbox content if saved from previous run by @manavortex
+[*] [i]Changed[/i]: Project-wide scans will now ignore .tmp file extension by @manavortex
+
+[b]CLI[/b]
+
+[*] [i]Added[/i]: .mesh import can now add bones to meshes correctly by @DoctorPresto
+[*] [i]Fixed[/i]: Archive file path being incorrectly read from modlist.txt by @manavortex
+[*] [i]Fixed[/i]: .mesh export now correctly preserves bone rotations by caclulating them from boneRigMatrices. Import now recalculates boneRigMatrices, bonePositions and boneVertexEpsilons based on the data in the glb. by @DoctorPresto
+[*] [i]Changed[/i]: Export / Import masks at their native resolution (low and high res masks with no pixel shift / offset due to scaling) by @Ametis81
+
+[b]Nuget Packages[/b]
+
+[*] [i]Added[/i]: .mesh import can now add bones to meshes correctly by @DoctorPresto
+[*] [i]Fixed[/i]: Archive file path being incorrectly read from modlist.txt by @manavortex
+[*] [i]Fixed[/i]: .mesh export now correctly preserves bone rotations by caclulating them from boneRigMatrices. Import now recalculates boneRigMatrices, bonePositions and boneVertexEpsilons based on the data in the glb. by @DoctorPresto
+[*] [i]Changed[/i]: Export / Import masks at their native resolution (low and high res masks with no pixel shift / offset due to scaling) by @Ametis81
