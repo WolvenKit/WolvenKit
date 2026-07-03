@@ -1,6 +1,0 @@
-changes:
-    - type: "added"
-      packages: ["App"]
-      pr-number: 2965
-      author: "misterchedda"
-      description: "Added a graph editor for .behavior files with basic tree editing actions."
