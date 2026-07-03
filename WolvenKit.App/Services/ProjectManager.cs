@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -81,7 +82,6 @@ public partial class ProjectManager : ObservableObject, IProjectManager
                 return;
             }
 
-
             ActiveProject = x.Result;
             _archiveManager.ProjectArchive = x.Result.AsArchive();
             IsProjectLoaded = true;
@@ -133,56 +133,64 @@ public partial class ProjectManager : ObservableObject, IProjectManager
 
     private async Task<Cp77Project?> Load(string path)
     {
-        try
+        Cp77Project? loadedProject = null;
+
+        await Task.Run(() =>
         {
-            await using FileStream lf = new(path, FileMode.Open, FileAccess.Read);
-            XmlSerializer ser = new(typeof(CP77Mod));
-            if (ser.Deserialize(lf) is not CP77Mod obj)
+            Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
+            try
             {
-                return null;
+                using FileStream lf = new(path, FileMode.Open, FileAccess.Read);
+                XmlSerializer ser = new(typeof(CP77Mod));
+                if (ser.Deserialize(lf) is not CP77Mod obj)
+                {
+                    return;
+                }
+
+                if (obj.Name is null)
+                {
+                    _loggerService.Error($"Failed to load project: project has no name");
+                    return;
+                }
+
+                obj.ModName ??= obj.Name;
+
+                var openProjectFiles =
+                    (obj.OpenProjectFiles ?? []).Distinct().ToDictionary(_ => DateTime.Now, x => x);
+                Cp77Project project = new(path, obj.Name, obj.ModName, openProjectFiles)
+                {
+                    Author = obj.Author,
+                    Email = obj.Email,
+                    Description = obj.Description,
+                    Version = obj.Version,
+                };
+
+                if (_hashService is HashServiceExt hashService)
+                {
+                    hashService.LoadProjectCache(project);
+                }
+
+                // fix legacy folders
+                MoveLegacyFolder(new DirectoryInfo(Path.Combine(project.FileDirectory, "tweaks")), project);
+                MoveLegacyFolder(new DirectoryInfo(Path.Combine(project.FileDirectory, "scripts")), project);
+                MoveLegacyFolder(new DirectoryInfo(Path.Combine(project.FileDirectory, "archiveXL")), project);
+
+                // fix legacy yaml tweaks
+                MoveLegacyYamlTweaks(project);
+
+                DiscordHelper.SetDiscordRPCStatus(string.Empty, project.ModName);
+
+                loadedProject = project;
             }
-
-            if (obj.Name is null)
+            catch (Exception e)
             {
-                _loggerService.Error($"Failed to load project: project has no name");
-                return null;
+                _loggerService.Error($"Failed to load project.");
+                _loggerService.Error(e);
+                return;
             }
+        });
 
-            obj.ModName ??= obj.Name;
-
-            var openProjectFiles =
-                (obj.OpenProjectFiles ?? []).Distinct().ToDictionary(_ => DateTime.Now, x => x);
-            Cp77Project project = new(path, obj.Name, obj.ModName, openProjectFiles)
-            {
-                Author = obj.Author,
-                Email = obj.Email,
-                Description = obj.Description,
-                Version = obj.Version,
-            };
-
-            if (_hashService is HashServiceExt hashService)
-            {
-                hashService.LoadProjectCache(project);
-            }
-
-            // fix legacy folders
-            MoveLegacyFolder(new DirectoryInfo(Path.Combine(project.FileDirectory, "tweaks")), project);
-            MoveLegacyFolder(new DirectoryInfo(Path.Combine(project.FileDirectory, "scripts")), project);
-            MoveLegacyFolder(new DirectoryInfo(Path.Combine(project.FileDirectory, "archiveXL")), project);
-
-            // fix legacy yaml tweaks
-            MoveLegacyYamlTweaks(project);
-
-            DiscordHelper.SetDiscordRPCStatus(string.Empty, project.ModName);
-
-            return project;
-        }
-        catch (Exception e)
-        {
-            _loggerService.Error($"Failed to load project.");
-            _loggerService.Error(e);
-            return null;
-        }
+        return loadedProject;
     }
 
     private void MoveLegacyYamlTweaks(Cp77Project project)

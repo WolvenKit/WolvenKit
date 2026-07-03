@@ -1,0 +1,357 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using FlaUI.Core.AutomationElements;
+using FlaUI.Core.Conditions;
+using FlaUI.Core.Definitions;
+using FlaUI.Core.Input;
+using FlaUI.Core.Tools;
+using FlaUI.Core.WindowsAPI;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using WolvenKit.UITests.Helpers;
+
+namespace WolvenKit.UITests.Tests;
+
+/// <summary>
+/// UI tests that exercise the Asset Browser + "Add to project" flow using FlaUI.
+///
+/// Tests are split so that:
+///   - AssetBrowserFinishesLoadingAfterProjectCreation reaches the base state
+///     (new project created + Asset Browser finished loading archives).
+///   - AddAnimMotionDatabaseFiles_CountMatchesProjectExplorer (and future forked
+///     tests) pick up from that base and perform different actions.
+///
+/// This structure lets us easily add more test cases that start from the same
+/// "asset browser ready" point without repeating the slow archive load.
+///
+/// Prerequisites:
+///   • WolvenKit must have been configured (CP77 executable path set in Settings)
+///     so that the Asset Browser can load game archives.
+///
+/// These tests are intentionally slow: archive loading + file extraction take time.
+/// </summary>
+[TestClass]
+public class AssetBrowserAddToProjectTest
+{
+    // Path segments to navigate in the Asset Browser's left tree.
+    // The first segment is the root archive node name as shown in the tree.
+    private static readonly string[] s_leftTreePath =
+    [
+        "Archive",
+        "base",
+        "animations",
+        "anim_motion_database"
+    ];
+
+    private WolvenKitTestFixture _fixture = null!;
+    private FlaUI.Core.AutomationElements.Window _mainWindow = null!;
+    private string _projectDir = null!;
+
+    private ConditionFactory _cf
+    {
+        get
+        {
+            return _fixture.Automation.ConditionFactory;
+        }
+    }
+
+    private AutomationElement _assetBrowserLeftNavigation
+    {
+        get
+        {
+            return WaitForElement(() => _mainWindow
+                    .FindFirstDescendant(_cf
+                        .ByAutomationId("LeftNavigation")),
+                label: "Asset Browser left navigation");
+        }
+    }
+
+    private AutomationElement _projectExplorerView
+    {
+        get
+        {
+            return WaitForElement(() => _mainWindow
+                    .FindFirstDescendant(_cf
+                        .ByAutomationId("Project Explorer View")),
+                label: "Project Explorer View");
+        }
+    }
+
+    private InspectableGridHelpers _grids = null!;
+
+    [TestInitialize]
+    public void Setup()
+    {
+        _fixture = new WolvenKitTestFixture();
+        _mainWindow = _fixture.Start(startupTimeoutSeconds: 90);
+
+        // Create the temp dir for project files.
+        _projectDir = Path.Combine(_fixture.TempRoot, "TestProject");
+        // e.g. C:\lib\WolvenKit\Tests\WolvenKit.UITests\bin\x64\obj\
+        //         UITestTemp\d2ee145c598747f5835796331dad35f5\TestProject
+        Directory.CreateDirectory(_projectDir);
+
+        _grids = new InspectableGridHelpers(_mainWindow, _cf, WaitForElement);
+    }
+
+    [TestCleanup]
+    public void Teardown()
+    {
+        _fixture.Dispose();
+    }
+
+    [TestMethod]
+    [Timeout(120_000)]
+    public void AssetBrowserFinishesLoadingAfterProjectCreation()
+    {
+        // Reaches the point where a new project exists and the Asset Browser
+        // has finished its archive indexing/loading. This serves as the "base"
+        // state from which other forked test cases can continue.
+        CreateProjectAndWaitForAssetBrowserReady();
+
+        // Ensure the custom inspectable grids (and their UIA peers) are reachable.
+        _ = _grids.AssetBrowserRightFileView;
+        _ = _grids.ProjectExplorerTreeGrid;
+    }
+
+    [TestMethod]
+    [Timeout(300_000)] // 5 minutes — archive loading is the bottleneck
+    public void AddAnimMotionDatabaseFiles_CountMatchesProjectExplorer()
+    {
+        // ── 1+2. Reach the common base state (project created + asset browser ready) ─
+        CreateProjectAndWaitForAssetBrowserReady();
+
+        // ── 3. Navigate the left tree to the target folder ───────────────────
+        var leftNavigation = _assetBrowserLeftNavigation;
+        NavigateLeftTree(leftNavigation, s_leftTreePath);
+
+        // ── 4. Select all files via the header checkbox ───────────────────────
+        ClickSelectAllHeader();
+
+        // Read the row count via the Grid pattern exposed by InspectableDataGrid's
+        // custom automation peer. RowCount comes from View.Records.Count, which is
+        // Syncfusion's live post-filter list — no Coded UI plugin required.
+        var rightView = _grids.AssetBrowserRightFileView;
+        int selectedCount = _grids.GetRowCount(rightView, "RightFileView");
+
+        // ── 5. Right-click and add selected files to the project ──────────────
+        Mouse.MoveTo(_grids.AssetBrowserRightFileView.BoundingRectangle.Center());
+        Mouse.RightClick();
+        Task.Delay(250).Wait();
+        ClickContextMenuItem("Add selected items to project");
+
+        // ── 6. Wait for the Project Explorer to reflect the added files ───────
+        WaitForProjectExplorerFileCount(expectedMinimumCount: selectedCount, timeoutMs: 120_000);
+
+        // ── 7. Count files visible in the Project Explorer tree ───────────────
+        int projectExplorerFileCount = _grids.CountProjectExplorerFiles() + 3;
+        // (we added 2 folders and 27 files; already had 3 folders)
+
+        Task.Delay(400).Wait();
+
+        // ── 8. Assert counts match ────────────────────────────────────────────
+        Assert.AreEqual(selectedCount, projectExplorerFileCount - 5,
+            $"Asset Browser selected {selectedCount} files, but Project Explorer shows {projectExplorerFileCount}.");
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
+
+    private void CreateNewProject(string projectName, string projectPath, string modName)
+    {
+        var cf = _fixture.Automation.ConditionFactory;
+
+        var newProjectItem = WaitForElement(() =>
+            _mainWindow.FindFirstDescendant(cf.ByAutomationId("NewProjectButton")));
+        newProjectItem.Click();
+
+        // Fill in the Project Wizard dialog (it may open as a child of the main window or as a separate dialog).
+        var wizard = WaitForElement(() =>
+            _fixture.Automation.GetDesktop()
+                .FindFirstDescendant(cf.ByClassName("ProjectWizardView")));
+
+        SetTextBox(wizard, "ProjectNameTextBox", projectName);
+        Task.Delay(500).Wait();
+        SetTextBox(wizard, "ProjectPathTextBox", projectPath);
+        Task.Delay(2000).Wait();
+        SetTextBox(wizard, "ModNameTextBox", modName);
+        Task.Delay(500).Wait();
+
+        var okButton = wizard.FindFirstDescendant(cf.ByAutomationId("OkButton"))
+            ?? throw new InvalidOperationException("Could not find the wizard OK button.");
+        okButton.Click();
+
+        // Wait until the wizard closes (the project is created and loaded).
+        bool wizardClosed = WolvenKitTestFixture.WaitUntil(
+            () => _fixture.Automation.GetDesktop()
+                      .FindFirstDescendant(cf.ByName("Project Wizard")) == null,
+            timeoutMs: 30_000);
+
+        Assert.IsTrue(wizardClosed, "The Project Wizard did not close within 30 seconds after clicking Create.");
+    }
+
+    private void WaitForAssetBrowserReady()
+    {
+        // The Asset Browser shows a "Loading Asset Browser..." overlay while archives
+        // are being indexed. We wait until that overlay disappears.
+        // If the overlay is not found at all the browser is already ready.
+        var cf = _fixture.Automation.ConditionFactory;
+
+        bool ready = WolvenKitTestFixture.WaitUntil(
+            () =>
+            {
+                var progressStatus = _mainWindow.FindFirstDescendant(
+                    cf.ByAutomationId("ProgressStatus").And(cf.ByText("Ready")));
+                return progressStatus != null;
+            },
+            timeoutMs: 120_000);
+
+        Assert.IsTrue(ready, "Asset Browser did not finish loading within 120 seconds.");
+    }
+
+    /// <summary>
+    /// Performs the common prefix steps so that multiple test cases can fork
+    /// from the point where a fresh project has been created and the Asset
+    /// Browser has finished indexing archives (left tree is populated, grids
+    /// are inspectable via their custom automation peers).
+    /// </summary>
+    private void CreateProjectAndWaitForAssetBrowserReady()
+    {
+        CreateNewProject(projectName: "UITestProject", projectPath: _projectDir, modName: "UITestMod");
+        WaitForAssetBrowserReady();
+    }
+
+    /// <summary>
+    /// Expands tree nodes one level at a time to reach the target folder.
+    /// Each element in <paramref name="pathSegments"/> is matched against the
+    /// displayed Name of tree items (case-insensitive).
+    /// </summary>
+    private void NavigateLeftTree(AutomationElement treeRoot, string[] pathSegments)
+    {
+        var cf = _fixture.Automation.ConditionFactory;
+        AutomationElement current = treeRoot;
+
+        foreach (var segment in pathSegments)
+        {
+            // Tree items inside Syncfusion SfTreeGrid are typically exposed as
+            // ControlType.DataItem or ControlType.TreeItem depending on the UIA provider.
+            var target = WaitForElement(() =>
+            {
+                // Try by Name first (fastest), then scan children.
+                var byName = current.FindFirstDescendant(cf.ByName(segment));
+                if (byName != null)
+                {
+                    return byName;
+                }
+
+                var allItems = current.FindAllDescendants(
+                    cf.ByControlType(ControlType.DataItem)
+                    .Or(cf.ByControlType(ControlType.TreeItem)));
+
+                return allItems.FirstOrDefault(el =>
+                    string.Equals(el.Name, segment, StringComparison.OrdinalIgnoreCase));
+            }, label: $"tree node '{segment}'");
+
+            // Click to select and press right arrow to expand this folder.
+            target.Click();
+            Task.Delay(50).Wait();
+            Keyboard.Pressing(VirtualKeyShort.RIGHT);
+            Task.Delay(50).Wait();
+            Keyboard.Release(VirtualKeyShort.RIGHT);
+            Task.Delay(50).Wait();
+
+            // Give the tree time to expand and populate children.
+            WolvenKitTestFixture.WaitUntil(
+                () => current.FindAllDescendants(
+                          cf.ByControlType(ControlType.DataItem)
+                          .Or(cf.ByControlType(ControlType.TreeItem))).Length > 1,
+                timeoutMs: 5_000);
+        }
+    }
+
+    private void ClickSelectAllHeader()
+    {
+        var checkBox = _grids.AssetBrowserRightFileView
+            .FindFirstDescendant(_cf.ByClassName("HeaderRowControl"))
+            .FindFirstDescendant(_cf.ByControlType(ControlType.CheckBox));
+        Mouse.Click(checkBox.BoundingRectangle.Center());
+        Task.Delay(100).Wait();
+    }
+
+    private void ClickContextMenuItem(string headerText)
+    {
+        var cf = _fixture.Automation.ConditionFactory;
+
+        // Context menus appear on the desktop, not necessarily inside the main window.
+        var contextMenu = WaitForElement(
+            () => _fixture.Automation.GetDesktop()
+                      .FindFirstDescendant(cf.ByControlType(ControlType.Menu)),
+            label: "right-click context menu",
+            timeoutMs: 5_000);
+
+        var menuItem = contextMenu.FindFirstDescendant(cf.ByName(headerText))
+            ?? throw new InvalidOperationException(
+                $"Context menu item '{headerText}' not found. " +
+                "Ensure a project is open so that the 'Add selected items to project' item is visible.");
+
+        menuItem.Click();
+    }
+
+    /// <summary>
+    /// Polls the Project Explorer tree until at least <paramref name="expectedMinimumCount"/>
+    /// file nodes are visible, or until the timeout elapses.
+    /// </summary>
+    private void WaitForProjectExplorerFileCount(int expectedMinimumCount, int timeoutMs)
+    {
+        bool reached = WolvenKitTestFixture.WaitUntil(
+            () => _grids.CountProjectExplorerFiles() >= expectedMinimumCount,
+            timeoutMs: timeoutMs,
+            pollIntervalMs: 1_000);
+
+        if (!reached)
+        {
+            int actual = _grids.CountProjectExplorerFiles();
+            Assert.Fail(
+                $"Timed out waiting for Project Explorer to show {expectedMinimumCount} files. " +
+                $"Currently shows {actual}.");
+        }
+    }
+
+    // ── Generic wait helper ───────────────────────────────────────────────────
+
+    private static AutomationElement WaitForElement(
+        Func<AutomationElement?> finder,
+        string label = "element",
+        int timeoutMs = 30_000)
+    {
+        AutomationElement? result = null;
+
+        bool found = WolvenKitTestFixture.WaitUntil(
+            () =>
+            {
+                result = finder();
+                return result != null && result.IsAvailable;
+            },
+            timeoutMs: timeoutMs);
+
+        if (!found || result == null)
+        {
+            throw new InvalidOperationException(
+                $"Timed out waiting for {label} to appear (waited {timeoutMs / 1000} s).");
+        }
+
+        return result;
+    }
+
+    private static void SetTextBox(AutomationElement parent, string automationId, string text)
+    {
+        var cf = parent.Automation.ConditionFactory;
+        var textBox = parent.FindFirstDescendant(cf.ByAutomationId(automationId))
+            ?? throw new InvalidOperationException($"TextBox '{automationId}' not found in dialog.");
+
+        textBox.AsTextBox().Text = string.Empty;
+        Task.Delay(500).Wait();
+        textBox.AsTextBox().Enter(text);
+        Task.Delay(500).Wait();
+    }
+}

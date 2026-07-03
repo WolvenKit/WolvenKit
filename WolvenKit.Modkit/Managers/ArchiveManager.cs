@@ -389,7 +389,7 @@ namespace WolvenKit.RED4.CR2W.Archive
 
                 foreach (var archiveName in legacyOrder)
                 {
-                    var archiveFile = Path.Combine(legacyModPath, $"{archiveName}.archive");
+                    var archiveFile = Path.Combine(legacyModPath, archiveName);
                     if (!File.Exists(archiveFile))
                     {
                         enabledButDontExist.Add(archiveFile);
@@ -643,8 +643,6 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         public IGameFile? GetGameFile(ResourcePath path, bool includeMods = true, bool includeProject = true)
         {
-            var filePath = path.GetResolvedText() ?? "";
-
             // check if the file is in the project archive
             if (includeProject && ProjectArchive != null && ProjectArchive.Files.TryGetValue(path, out var projectFile))
             {
@@ -652,15 +650,13 @@ namespace WolvenKit.RED4.CR2W.Archive
                 return projectFile;
             }
 
-            var fileHash = ResourcePath.CalculateHash(filePath);
-
             // check if the file is in a mod archive
             if (includeMods)
             {
                 var modFile = GetModArchives()
                     .Select(x => x.Files)
-                    .Where(x => x.ContainsKey(path) || x.ContainsKey(fileHash))
-                    .Select(x => x[path] ?? x[fileHash])
+                    .Where(x => x.ContainsKey(path))
+                    .Select(x => x[path])
                     .FirstOrDefault();
 
                 if (modFile != null)
@@ -673,8 +669,8 @@ namespace WolvenKit.RED4.CR2W.Archive
             // check if the file is in a base archive
             var baseFile = GetGameArchives()
                 .Select(x => x.Files)
-                .Where(x => x.ContainsKey(path) || x.ContainsKey(fileHash))
-                .Select(x => x[path] ?? x[fileHash])
+                .Where(x => x.ContainsKey(path))
+                .Select(x => x[path])
                 .FirstOrDefault();
 
 

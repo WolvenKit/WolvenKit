@@ -8,3 +8,5 @@
 
 **Additional notes:**
 closes_issue_number
+
+<!-- If this is your first time contributing please read https://wolvenkit.github.io/WolvenKit/contributing/pull-requests.html -->

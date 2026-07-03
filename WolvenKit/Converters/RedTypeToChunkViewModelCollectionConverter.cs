@@ -94,6 +94,11 @@ namespace WolvenKit.Converters
                 {
                     chunkViewModel = factory.ChunkViewModel(redData, combinedQuestPhase.RDTViewModel, appViewModel);
                 }
+                // If we have a BehaviorGraphViewModel, use its RDTViewModel as the tab reference
+                else if (currentTab is BehaviorGraphViewModel combinedBehavior && combinedBehavior.RDTViewModel != null)
+                {
+                    chunkViewModel = factory.ChunkViewModel(redData, combinedBehavior.RDTViewModel, appViewModel);
+                }
                 // If we have an RDTDataViewModel directly, use it
                 else if (currentTab is RDTDataViewModel rdtTab)
                 {
@@ -230,6 +235,11 @@ namespace WolvenKit.Converters
                     }
 
                 }
+                // For behavior tree nodes, expose editable payloads but keep structural tree links collapsed
+                else if (redData is AIbehaviorTreeNodeDefinition)
+                {
+                    AutoExpandBehaviorNodeProperties(rootChunk);
+                }
                 // For all quest node types in quest graphs, expand everything one level except sockets
                 else if (redData is questNodeDefinition)
                 {
@@ -266,6 +276,65 @@ namespace WolvenKit.Converters
                 LoggerService?.Error($"Exception in AutoExpandProperties: {ex.Message}");
             }
         }
+
+        private void AutoExpandBehaviorNodeProperties(ChunkViewModel rootChunk)
+        {
+            try
+            {
+                foreach (var property in rootChunk.TVProperties ?? Enumerable.Empty<ChunkViewModel>())
+                {
+                    if (IsBehaviorStructuralProperty(property.Name))
+                    {
+                        continue;
+                    }
+
+                    TryExpandBehaviorProperty(property);
+
+                    foreach (var nestedProperty in property.TVProperties ?? Enumerable.Empty<ChunkViewModel>())
+                    {
+                        if (IsBehaviorStructuralProperty(nestedProperty.Name) ||
+                            !IsBehaviorPayloadProperty(nestedProperty.Name))
+                        {
+                            continue;
+                        }
+
+                        TryExpandBehaviorProperty(nestedProperty);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggerService?.Error($"Failed to auto-expand behavior node properties: {ex.Message}");
+            }
+        }
+
+        private void TryExpandBehaviorProperty(ChunkViewModel property)
+        {
+            try
+            {
+                property.CalculateProperties();
+                property.IsExpanded = true;
+            }
+            catch (Exception ex)
+            {
+                LoggerService?.Error($"Failed to expand behavior property '{property.Name}': {ex.Message}");
+            }
+        }
+
+        private static bool IsBehaviorStructuralProperty(string propertyName) =>
+            propertyName.Equals("child", StringComparison.OrdinalIgnoreCase) ||
+            propertyName.Equals("children", StringComparison.OrdinalIgnoreCase) ||
+            propertyName.Equals("states", StringComparison.OrdinalIgnoreCase) ||
+            propertyName.Equals("transitions", StringComparison.OrdinalIgnoreCase) ||
+            propertyName.Equals("behaviorRoot", StringComparison.OrdinalIgnoreCase) ||
+            propertyName.Equals("initialState", StringComparison.OrdinalIgnoreCase);
+
+        private static bool IsBehaviorPayloadProperty(string propertyName) =>
+            propertyName.Equals("condition", StringComparison.OrdinalIgnoreCase) ||
+            propertyName.Equals("expression", StringComparison.OrdinalIgnoreCase) ||
+            propertyName.Equals("mapping", StringComparison.OrdinalIgnoreCase) ||
+            propertyName.Equals("script", StringComparison.OrdinalIgnoreCase) ||
+            propertyName.Equals("task", StringComparison.OrdinalIgnoreCase);
 
         public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {

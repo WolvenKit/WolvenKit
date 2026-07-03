@@ -6,6 +6,7 @@ using System.Linq;
 using DynamicData;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using YamlDotNet.Core;
 using YamlDotNet.RepresentationModel;
 using YamlDotNet.Serialization;
 
@@ -115,7 +116,9 @@ public static class YamlHelper
             }
         }
 
-        var serializer = new SerializerBuilder().WithIndentedSequences().Build();
+
+        var serializer = new SerializerBuilder().WithDefaultScalarStyle(ScalarStyle.Folded).WithIndentedSequences()
+            .Build();
         var yaml = serializer.Serialize(rootNode).Replace("'", "");
 
         existingFileContents.AddRange(yaml.Split(Environment.NewLine), 0);

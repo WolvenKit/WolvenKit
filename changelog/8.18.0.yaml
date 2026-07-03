@@ -1,0 +1,56 @@
+# Indepth docs at https://wolvenkit.github.io/WolvenKit/contributing/keep-changelog.html
+Template changelog entry:
+    - type: "security | deprecated | removed | added | fixed | changed"
+      packages: ["App", "CLI", "Nuget Packages"]
+      pr-number: 0
+      author: ""
+      description: ""
+
+changes:
+    -   type: "fixed"
+        packages: [ "App" ]
+        pr-number: 2893
+        author: "manavortex"
+        description: "AMM prop generation now correctly reads mesh appearances"
+
+    -   type: "fixed"
+        packages: [ "App" ]
+        pr-number: 2894
+        author: "manavortex"
+        description: "Delete unused materials now uses correct index"
+
+    -   type: "added"
+        packages: [ "App" ]
+        pr-number: 2895
+        author: "notaspirit"
+        description: "Import and export flow is now also available in the right click menu"
+
+    -   type: "added"
+        packages: [ "App", "CLI", "Nuget Packages" ]
+        pr-number: 2898
+        author: "manavortex"
+        description: "Sleeves and hair substitution for ArchiveXL"
+
+    -   type: "fixed"
+        packages: [ "App" ]
+        pr-number: 2866
+        author: "manavortex"
+        description: "ArchiveXL item generator will now successfully handle component name uniqueness - various robustness fixes"
+
+    -   type: "fixed"
+        packages: [ "App" ]
+        pr-number: 2904
+        author: "misterchedda"
+        description: "Nested quest phase nodes no longer lose internal socket connections after paste/duplicate operations"
+
+    -   type: "deprecated"
+        packages: [ "Nuget Packages" ]
+        pr-number: 2876
+        author: "notaspirit"
+        description: "SanitizePath in FileHelper, ToFilePath, ToFileName, IsSaneFilePath, and SanitizeFilePath in StringPathExtensions are now deprecated. Use new archive or os path methods in StringPathExtensions and in FilePathValidation tools instead."
+
+    -   type: "changed"
+        packages: [ "App", "CLI", "Nuget Packages" ]
+        pr-number: 2876
+        author: "notaspirit"
+        description: "Filepath handling has been adjusted to handle os and archive paths according to their respective specs. Archive paths are now stricter and os paths looser than the previous combined implementation."

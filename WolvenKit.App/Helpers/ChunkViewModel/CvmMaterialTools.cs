@@ -74,7 +74,7 @@ public class CvmMaterialTools
 
     #region helper methods and convenience
 
-    private static void RecalculateMaterialProperties(ChunkViewModel cvm, bool refreshAll = false)
+    public static void RecalculateMaterialProperties(ChunkViewModel cvm, bool refreshAll = false)
     {
         cvm.GetPropertyChild("materialEntries")?.RecalculateProperties();
 
@@ -269,7 +269,6 @@ public class CvmMaterialTools
                 externalMaterialIdx += 1;
             }
 
-            t.Index = (CUInt16)i;
             mesh.MaterialEntries.Add(t);
         }
 
@@ -567,6 +566,7 @@ public class CvmMaterialTools
             return startIndex;
         }
     }
+
 
     public void UnDynamifyMaterials(ChunkViewModel? cvm)
     {
@@ -1046,5 +1046,73 @@ public class CvmMaterialTools
 
             return true;
         }
+    }
+
+    public static IMaterial EmbeddedToDefault(IMaterial mat)
+    {
+        if (mat is not CMaterialInstance material)
+        {
+            return mat;
+        }
+
+        if (material.BaseMaterial.Flags == InternalEnums.EImportFlags.Embedded)
+        {
+            material.BaseMaterial =
+                new CResourceReference<IMaterial>(material.BaseMaterial.DepotPath, InternalEnums.EImportFlags.Default);
+        }
+
+        for (var i = 0; i < material.Values.Count; i++)
+        {
+            var kvp = material.Values[i];
+
+            if (kvp.Value is not IRedRef { Flags: InternalEnums.EImportFlags.Soft } redRef)
+            {
+                continue;
+            }
+
+            material.Values[i] = new CKeyValuePair(kvp.Key, UnEmbedResourceReference(kvp.Value));
+        }
+
+        return material;
+    }
+
+    public static IRedType UnEmbedResourceReference(IRedType cvpValue)
+    {
+        if (cvpValue is not IRedRef original)
+        {
+            return cvpValue;
+        }
+
+        var redType = cvpValue.RedType.Split(":").Last();
+
+        // @formatter:off
+        if (cvpValue is IRedResourceReference)
+        {
+            return redType switch
+            {
+                "Multilayer_Setup" => new CResourceReference<Multilayer_Setup>(original.DepotPath, InternalEnums.EImportFlags.Default),
+                "Multilayer_Mask" => new CResourceReference<Multilayer_Mask>(original.DepotPath, InternalEnums.EImportFlags.Default),
+                "ITexture" => new CResourceReference<ITexture>(original.DepotPath, InternalEnums.EImportFlags.Default),
+                "CGradient" => new CResourceReference<CGradient>(original.DepotPath, InternalEnums.EImportFlags.Default),
+                "CFoliageProfile" => new CResourceReference<CFoliageProfile>(original.DepotPath, InternalEnums.EImportFlags.Default),
+                "CHairProfile" => new CResourceReference<CHairProfile>(original.DepotPath, InternalEnums.EImportFlags.Default),
+                "CSkinProfile" => new CResourceReference<CSkinProfile>(original.DepotPath, InternalEnums.EImportFlags.Default),
+                "CTerrainSetup" => new CResourceReference<CTerrainSetup>(original.DepotPath, InternalEnums.EImportFlags.Default),
+                _ => original
+            };
+        }
+        return redType switch
+        {
+            "Multilayer_Setup" => new CResourceAsyncReference<Multilayer_Setup>(original.DepotPath, InternalEnums.EImportFlags.Default),
+            "Multilayer_Mask" => new CResourceAsyncReference<Multilayer_Mask>(original.DepotPath, InternalEnums.EImportFlags.Default),
+            "ITexture" => new CResourceAsyncReference<ITexture>(original.DepotPath, InternalEnums.EImportFlags.Default),
+            "CGradient" => new CResourceAsyncReference<CGradient>(original.DepotPath, InternalEnums.EImportFlags.Default),
+            "CFoliageProfile" => new CResourceAsyncReference<CFoliageProfile>(original.DepotPath, InternalEnums.EImportFlags.Default),
+            "CHairProfile" => new CResourceAsyncReference<CHairProfile>(original.DepotPath, InternalEnums.EImportFlags.Default),
+            "CSkinProfile" => new CResourceAsyncReference<CSkinProfile>(original.DepotPath, InternalEnums.EImportFlags.Default),
+            "CTerrainSetup" => new CResourceAsyncReference<CTerrainSetup>(original.DepotPath, InternalEnums.EImportFlags.Default),
+            _ => (IRedResourceAsyncReference) original
+        };
+        // @formatter:on
     }
 }
