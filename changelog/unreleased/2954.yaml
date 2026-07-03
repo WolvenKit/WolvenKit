@@ -1,7 +1,0 @@
-
-changes:
-    - type: "changed"
-      packages: ["App"]
-      pr-number: 2954
-      author: "manavortex"
-      description: "Inkatlas generator will now reliably overwrite already-existing files"
