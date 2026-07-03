@@ -44,6 +44,7 @@ namespace WolvenKit.Views.Documents
         private readonly ISettingsManager _settingsManager;
         private readonly IProjectManager _projectManager;
         private readonly ILoggerService _loggerService;
+        private readonly INotificationService _notificationService;
         private readonly WatcherService _projectWatcher;
         private readonly IAppArchiveManager _archiveManager;
         private readonly IModifierViewStateService _modifierStateService;
@@ -52,7 +53,7 @@ namespace WolvenKit.Views.Documents
         private readonly IProgressService<double> _progressService;
         private readonly ProjectResourceTools _projectResourceTools;
         private readonly DocumentTools _documentTools;
-        private readonly CvmMaterialTools _cvmMaterialTools;
+        private readonly ICvmTools _cvmTools;
         private readonly Cr2WTools _cr2WTools;
 
 
@@ -69,7 +70,8 @@ namespace WolvenKit.Views.Documents
             _projectExplorer = Locator.Current.GetService<ProjectExplorerViewModel>()!;
             _projectResourceTools = Locator.Current.GetService<ProjectResourceTools>()!;
             _cr2WTools = Locator.Current.GetService<Cr2WTools>()!;
-            _cvmMaterialTools = Locator.Current.GetService<CvmMaterialTools>()!;
+            _notificationService = Locator.Current.GetService<INotificationService>()!;
+            _cvmTools = Locator.Current.GetService<ICvmTools>()!;
 
             _appViewModel = Locator.Current.GetService<AppViewModel>()!;
 
@@ -87,7 +89,7 @@ namespace WolvenKit.Views.Documents
                 _projectManager,
                 _documentTools,
                 Locator.Current.GetService<CRUIDService>()!,
-                _cvmMaterialTools,
+                _cvmTools,
                 _loggerService) { CurrentTab = _currentTab };
             ViewModel = DataContext as RedDocumentViewToolbarModel;
 
@@ -191,20 +193,23 @@ namespace WolvenKit.Views.Documents
         {
             try
             {
-                if (_projectManager.ActiveProject is null || CurrentTab?.FilePath is not string s || !File.Exists(s))
+                if (_projectManager.ActiveProject is not { } project || CurrentTab?.FilePath is not string s ||
+                    !File.Exists(s))
                 {
                     return;
                 }
 
-                _loggerService.Info(
-                    "Scanning file for broken references. This is currently slow as foretold, please hold the line...");
+                _loggerService.Info("Scanning file for broken references. Wolvenkit may be unresponsive.");
+                _notificationService.Info("Scanning file for broken references. Wolvenkit may be unresponsive.");
 
-                var allReferences = await _projectManager.ActiveProject.GetAllReferencesAsync(
+                var allReferences = await project.GetAllReferencesAsync(
                     _progressService,
-                    _loggerService
+                    _loggerService,
+                    [project.GetRelativePath(CurrentTab.FilePath)]
+
                 );
 
-                var brokenReferences = await _projectManager.ActiveProject.ScanForBrokenReferencePathsInListAsync(
+                var brokenReferences = await project.ScanForBrokenReferencePathsAsync(
                     _archiveManager,
                     _loggerService,
                     _progressService,
@@ -214,16 +219,23 @@ namespace WolvenKit.Views.Documents
                 if (brokenReferences.Keys.Count == 0)
                 {
                     _loggerService.Success("No broken references... that we can find!");
+                    _notificationService.Success("No broken references... that we can find!");
                     return;
                 }
 
-                _loggerService.Info("Done!");
+                var numMatches = brokenReferences.Values.SelectMany(v => v).Count();
+
+                _loggerService.Success($"Found {numMatches} broken references in project.");
+                _notificationService.Success($"Found {numMatches} broken references in project.");
+
                 Interactions.ShowDictionaryAsCopyableList(new ShowDictAsCopyableListDialogOptions("Broken references",
-                    $"The following {brokenReferences.Count} files seem to hold broken references", brokenReferences,
+                    $"The following {brokenReferences.Count} files seem to hold broken references (ignore this if everything works)",
+                    brokenReferences,
                     true));
             }
             catch (Exception err)
             {
+                _notificationService.Error("Error while scanning for broken references (check the log for detes)");
                 _loggerService.Error("Error while scanning for broken references:");
                 _loggerService.Error(err);
             }
@@ -271,11 +283,16 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            var baseMaterial = dialog.ViewModel?.BaseMaterial ?? "";
-            var isLocal = dialog.ViewModel?.IsLocalMaterial ?? true;
-            var resolveSubstitutions = dialog.ViewModel?.ResolveSubstitutions ?? false;
+            if (dialog.ViewModel is null)
+            {
+                return;
+            }
 
-            _cvmMaterialTools.GenerateMissingMaterials(cvm, baseMaterial, isLocal, resolveSubstitutions);
+            var baseMaterial = dialog.ViewModel.BaseMaterial ?? "";
+            var isLocal = dialog.ViewModel.IsLocalMaterial;
+            var resolveSubstitutions = dialog.ViewModel.ResolveSubstitutions;
+
+            _cvmTools.GenerateMissingMaterials(cvm, baseMaterial, isLocal, resolveSubstitutions);
 
             cvm.Tab?.Parent.SetIsDirty(true);
         }
@@ -288,32 +305,62 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            if (ViewModel?.RootChunk is not ChunkViewModel { ResolvedData: CMesh mesh } || ViewModel.FilePath is null ||
+            if (ViewModel?.FilePath is not string currentPath ||
+                ViewModel?.RootChunk is not ChunkViewModel { ResolvedData: CMesh mesh } || ViewModel.FilePath is null ||
                 _projectManager.ActiveProject is not { } project)
             {
                 return;
             }
 
-            var files = _documentTools.CollectProjectFiles(".mesh").Where(f => f != ViewModel.FilePath)
-                .ToList();
 
+            var otherMeshFiles =
+                _documentTools.CollectProjectFiles(".mesh")
+                    .Where(f => !currentPath.EndsWith(f, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
 
-            if (Interactions.ShowCopyMeshAppearancesDialogue(files) is not { } dialog)
+            var filterDefaultValue = string.Empty;
+            if (Path.GetDirectoryName(project.GetRelativePath(currentPath)) is string parentFolder &&
+                otherMeshFiles.Any(f => f.Contains(parentFolder)))
             {
+                filterDefaultValue = parentFolder;
+            }
+
+
+            if (Interactions.ShowCopyMeshAppearancesDialogue((otherMeshFiles, filterDefaultValue)) is not { } dialog)
+            {
+                return;
+            }
+
+            var selectedOptions = dialog.GetAllSelectedOptions();
+
+            if (selectedOptions.Count == 0)
+            {
+                _loggerService.Info("No meshes selected, aborting");
+                _notificationService.Info("No meshes selected, aborting");
                 return;
             }
 
             try
             {
+                var isDirty = selectedOptions
+                    .Select((sourcePath, index) => (sourcePath, index))
+                    .Aggregate(false, (current, item) =>
+                        _documentTools.CopyMeshMaterials(item.sourcePath, ViewModel.FilePath,
+                            dialog.IsAppend || item.index > 0) || current);
+
                 // Only reload if we wrote anything
-                if (_documentTools.CopyMeshMaterials(dialog.SelectedOption, ViewModel.FilePath, dialog.IsAppend))
+                if (isDirty)
                 {
                     ViewModel.CurrentTab?.Parent.Reload(true);
+                    return;
                 }
-                else if (dialog.UseArchiveXlPatchMesh)
+
+                if (dialog.UseArchiveXlPatchMesh)
                 {
+                    _notificationService.Error(
+                        "Failed to copy mesh materials from ArchiveXL patch mesh (see log for detes)");
                     _loggerService.Error(
-                        "Failed to copy mesh materials from patch mesh. Try picking a mesh, or adding the file path directly.");
+                        "Failed to copy mesh materials from patch mesh (source mesh not found, or you have moved the file in your mod). Please pick the file path in the dialogue.");
                 }
                 else
                 {
@@ -336,8 +383,7 @@ namespace WolvenKit.Views.Documents
 
             var otherMeshFiles =
                 _documentTools.CollectProjectFiles(".mesh")
-                    .Where(f => !currentPath.EndsWith(f))
-                    .Distinct()
+                    .Where(f => !currentPath.EndsWith(f, StringComparison.OrdinalIgnoreCase))
                     .ToDictionary(x => x, x => false);
 
             if (otherMeshFiles.Count == 0)
@@ -364,21 +410,32 @@ namespace WolvenKit.Views.Documents
                 return;
             }
 
-            var failedMeshes = selected.Where(mesh => !_documentTools.CopyMeshMaterials(currentPath, mesh, false)).ToList();
+            var failedMeshes = selected.Where(mesh =>
+                !_documentTools.CopyMeshMaterials(currentPath, mesh, false)
+            ).ToList();
 
             var output = StringHelper.Stringify(selected.Where(s => !failedMeshes.Contains(s)).ToList(), true);
 
-            if (failedMeshes.Count > 0)
+            if (failedMeshes.Count == 0)
             {
-                output = output + "\nMaterial copy failed for:" + StringHelper.Stringify(failedMeshes, true);
+                _loggerService.Success($"Copied materials from {currentPath} to {output}");
+                _notificationService.Success(
+                    $"Copied materials from {currentPath} to {selected.Count} file(s). Check the log for details.");
+                return;
             }
 
-            _loggerService.Success($"Copied materials from {currentPath} to {output}");
+            output = output + ", but there were problems:\nMaterial copy failed for:" +
+                     StringHelper.Stringify(failedMeshes, true);
+
+            _notificationService.Warning(
+                $"Copied materials from {currentPath} to {selected.Count} files, but there were problems. Check the log for details.");
+            _loggerService.Warning($"Copied materials from {currentPath} to {output}");
+
         }
 
         private void UnDynamifyMaterials(ChunkViewModel? cvm)
         {
-            _cvmMaterialTools.UnDynamifyMaterials(cvm);
+            _cvmTools.UnDynamifyMaterials(cvm);
             ViewModel?.DeleteUnusedMaterialsCommand?.NotifyCanExecuteChanged();
         }
 
@@ -562,7 +619,7 @@ namespace WolvenKit.Views.Documents
 
             rootChunk.ForceLoadPropertiesRecursive();
 
-            _cvmMaterialTools.DeleteUnusedMaterials(rootChunk, null, true);
+            _cvmTools.DeleteUnusedMaterials(rootChunk, null, true);
             rootChunk.Tab?.Parent.Save(null);
 
             await LoadAndAnalyzeModArchivesAsync();
@@ -606,6 +663,8 @@ namespace WolvenKit.Views.Documents
                     "Didn't find any dependencies to add.\n" +
                     "To include base game files, hold shift while clicking the menu entry."
                 );
+                _notificationService.Info("Didn't find any dependencies to add.\n" +
+                                          "To include base game files, hold shift while clicking the menu entry.");
                 return;
             }
 
@@ -614,6 +673,7 @@ namespace WolvenKit.Views.Documents
             if (string.IsNullOrEmpty(destFolder))
             {
                 _loggerService.Info("Adding dependencies aborted by user input");
+                _notificationService.Info("Adding dependencies aborted by user input");
                 return;
             }
 
@@ -633,12 +693,16 @@ namespace WolvenKit.Views.Documents
                         "If modded files could not be resolved, click the scan button in the mod browser " +
                         "(to the right of the search bar)."
                     );
+                    _loggerService.Info("Didn't find any dependencies to add");
                 }
                 else
                 {
                     _loggerService.Success(
                         "No dependencies left to replace. To double-check, run file validation now."
                     );
+
+                    _loggerService.Success(
+                        "No dependencies left to replace. To double-check, run file validation now.");
                 }
 
                 return;
@@ -735,6 +799,7 @@ namespace WolvenKit.Views.Documents
             }
 
             _loggerService.Info("Scanning your mods... this can take a moment. Wolvenkit will be unresponsive.");
+            _notificationService.Info("Scanning your mods... this can take a moment. Wolvenkit will be unresponsive.");
 
             if (!_archiveManager.IsInitialized)
             {
@@ -754,7 +819,8 @@ namespace WolvenKit.Views.Documents
                     _archiveManager.LoadAdditionalModArchives(extraModDir, true, ignoredArchives);
                 }
 
-                _loggerService.Info("Scan complete.");
+                _loggerService.Success("Scan complete.");
+                _notificationService.Success("Scan complete.");
             });
         }
 
@@ -796,9 +862,12 @@ namespace WolvenKit.Views.Documents
                 _projectWatcher.Suspend();
 
                 await AddDependenciesToFileAsync(cvm, eventArgs is AddDependenciesFullEventArgs);
+                _notificationService.Success("Successfully added dependencies");
+                _loggerService.Success("Successfully added dependencies");
             }
             catch (Exception err)
             {
+                _notificationService.Error("Failed to add dependencies. For details, please check the log.");
                 _loggerService.Error("Failed to add dependencies:");
                 _loggerService.Error(err);
             }

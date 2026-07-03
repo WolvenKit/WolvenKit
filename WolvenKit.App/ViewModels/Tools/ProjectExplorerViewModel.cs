@@ -1,12 +1,16 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -14,7 +18,7 @@ using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.VisualBasic.FileIO;
-using Splat;
+
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
@@ -23,14 +27,20 @@ using WolvenKit.App.Models;
 using WolvenKit.App.Models.Docking;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Interfaces;
+using WolvenKit.Common.Model;
+using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Common.Services;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive;
 using Clipboard = System.Windows.Clipboard;
 using FileMode = System.IO.FileMode;
@@ -55,6 +65,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private const string s_toolTitle = "Project Explorer";
 
     private readonly ILoggerService _loggerService;
+    private readonly INotificationService _notificationService;
     private readonly IProjectManager _projectManager;
     private readonly IModTools _modTools;
     private readonly IProgressService<double> _progressService;
@@ -71,6 +82,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly IArchiveManager _archiveManager;
     private readonly ProjectResourceTools _projectResourceTools;
 
+    private CancellationTokenSource _deferredRefreshCts = new();
+    private readonly ImportExportHelper _importExportHelper;
+
+    public Func<CancellationToken, Task, Task>? BeginDeferredRefreshContext { get; set; }
     #endregion fields
 
     private static ProjectExplorerViewModel? s_instance;
@@ -78,6 +93,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         AppViewModel appViewModel,
         IProjectManager projectManager,
         ILoggerService loggerService,
+        INotificationService notificationService,
         IProgressService<double> progressService,
         IModTools modTools,
         IGameControllerFactory gameController,
@@ -85,11 +101,14 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         ISettingsManager settingsManager,
         IModifierViewStateService modifierSvc,
         IArchiveManager archiveManager,
-        ProjectResourceTools projectResourceTools
+        ProjectResourceTools projectResourceTools,
+        ImportExportHelper importExportHelper,
+        IWatcherService projectWatcher
     ) : base(s_toolTitle)
     {
         _projectManager = projectManager;
         _loggerService = loggerService;
+        _notificationService = notificationService;
         _modTools = modTools;
         _progressService = progressService;
         _gameController = gameController;
@@ -97,11 +116,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         _settingsManager = settingsManager;
         _archiveManager = archiveManager;
         _projectResourceTools = projectResourceTools;
+        _importExportHelper = importExportHelper;
         ModifierStateService = modifierSvc;
 
         _appViewModel = appViewModel;
 
-        _projectWatcher = Locator.Current.GetService<IWatcherService>()!;
+        _projectWatcher = projectWatcher;
 
         SideInDockedMode = DockSide.Left;
 
@@ -119,12 +139,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         _appViewModel.OnInitialProjectLoaded += AppViewModel_OnInitialProjectLoaded;
 
-        if (Locator.Current.GetService<AppIdleStateService>() is not AppIdleStateService svc)
-        {
-            return;
-        }
-
-        svc.ThreadIdleTenSeconds += Svc_ThreadIdleTenSeconds;
+        DispatcherHelper.StartRepeatingAction(
+            () => Svc_ThreadIdleTenSeconds(null, EventArgs.Empty),
+            TimeSpan.FromSeconds(10));
 
         s_instance = this;
     }
@@ -297,12 +314,16 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [NotifyCanExecuteChangedFor(nameof(OpenInMlsbCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertArchiveFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertRawFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ExportArchiveFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ImportRawFileCommand))]
     private FileSystemModel? _selectedItem;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(DeleteFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertArchiveFileCommand))]
     [NotifyCanExecuteChangedFor(nameof(ConvertRawFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ExportArchiveFileCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ImportRawFileCommand))]
     private ObservableCollection<object>? _selectedItems = new();
 
     [ObservableProperty] private bool _isFlatModeEnabled;
@@ -974,7 +995,15 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         if (!IsShiftKeyPressed)
         {
-            await ConvertToJsonInternal(selection);
+            _deferredRefreshCts = new CancellationTokenSource();
+            if (BeginDeferredRefreshContext == null)
+            {
+                await ConvertToJsonInternal(selection);
+                return;
+            }
+
+            await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertToJsonInternal(selection));
+
             return;
         }
 
@@ -986,56 +1015,518 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         var convertSelection = FileList
             .Where(x => selectedItemPaths.Contains(x.FullName) && File.Exists(x.FullName)).ToList();
 
-        await ConvertFromJsonInternal(convertSelection);
-    }
+        _deferredRefreshCts = new CancellationTokenSource();
+        if (BeginDeferredRefreshContext == null)
+        {
+            await ConvertToJsonInternal(selection);
+            return;
+        }
 
+        await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertToJsonInternal(convertSelection));
+    }
 
     private async Task ConvertToJsonInternal(IEnumerable<FileSystemModel> selection)
     {
-        List<string> files = new();
+        var createdJsonFiles = new ConcurrentBag<FileInfo>();
 
-        // get all files
-        foreach (var item in selection)
+        await Task.Run(async () =>
         {
-            if (item.IsDirectory)
-            {
-                files.AddRange(Directory.GetFiles(item.FullName, "*", SearchOption.AllDirectories));
-            }
-            else
-            {
-                files.Add(item.FullName);
-            }
-        }
+            var allFiles = selection
+                .SelectMany(item =>
+                {
+                    if (item.IsDirectory)
+                    {
+                        return Directory.EnumerateFiles(item.FullName, "*", SearchOption.AllDirectories);
+                    }
+                    return new[] { item.FullName };
+                })
+                .ToList();
 
-        var progress = 0;
-        _progressService.Report(0);
+            if (allFiles.Count == 0)
+            {
+                _progressService.Completed();
+                return;
+            }
 
-        // convert files
-        foreach (var file in files)
+            var validExtensions = Enum.GetNames<ERedExtension>()
+                .Select(x => x.ToLowerInvariant())
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+
+            int progress = 0;
+            _progressService.Report(0);
+
+            await Parallel.ForEachAsync(allFiles,
+                new ParallelOptions
+                {
+                    MaxDegreeOfParallelism = Environment.ProcessorCount * 2,
+                },
+                async (file, ct) =>
+                {
+                    if (!File.Exists(file))
+                    {
+                        Interlocked.Increment(ref progress);
+                        return;
+                    }
+
+                    var ext = Path.GetExtension(file).TrimStart('.').ToLowerInvariant();
+                    if (!validExtensions.Contains(ext))
+                    {
+                        Interlocked.Increment(ref progress);
+                        return;
+                    }
+
+                    try
+                    {
+                        var rawOutPath = Path.Combine(
+                            ActiveProject.NotNull().RawDirectory,
+                            ActiveProject.NotNull().GetRelativePath(file));
+
+                        var outDirectoryPath = Path.GetDirectoryName(rawOutPath);
+
+                        if (outDirectoryPath != null)
+                        {
+                            Directory.CreateDirectory(outDirectoryPath);
+
+                            await _modTools.ConvertToJsonAndWriteAsync(
+                                file,
+                                new DirectoryInfo(outDirectoryPath));
+
+                            var jsonFilePath = rawOutPath + ".json";
+
+                            if (File.Exists(jsonFilePath))
+                            {
+                                var jsonFileInfo = new FileInfo(jsonFilePath);
+
+                                if (_projectWatcher.FileLookup.ContainsKey(jsonFilePath))
+                                {
+                                    // don't add a duplicate file to the trees
+                                    return;
+                                }
+
+                                createdJsonFiles.Add(jsonFileInfo);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"Failed to convert {file}: {ex.Message}");
+                    }
+                    finally
+                    {
+                        var currentProgress = Interlocked.Increment(ref progress);
+                        _progressService.Report(currentProgress / (float)allFiles.Count);
+                    }
+                });
+
+            _progressService.Completed();
+        });
+
+        _ = Task.Run(() =>
         {
-            if (!File.Exists(file) || !Enum.GetNames<ERedExtension>()
-                    .Contains(Path.GetExtension(file).TrimStart('.').ToLower()))
+            var logMsg = "";
+
+            createdJsonFiles.ToList().ForEach(file =>
             {
-                progress++;
-                continue;
-            }
+                logMsg += $"JSON file converted: ${file.FullName}.\r\n";
+            });
 
-            var rawOutPath = Path.Combine(ActiveProject.NotNull().RawDirectory, ActiveProject!.GetRelativePath(file));
-            var outDirectoryPath = Path.GetDirectoryName(rawOutPath);
-            if (outDirectoryPath != null)
-            {
-                Directory.CreateDirectory(outDirectoryPath);
+            _loggerService.Info(logMsg);
+        });
 
-                await _modTools.ConvertToJsonAndWriteAsync(file, new DirectoryInfo(outDirectoryPath));
-            }
-
-            progress++;
-            _progressService.Report(progress / (float)files.Count);
-        }
-
-        _progressService.Completed();
+        await _deferredRefreshCts.CancelAsync();
+        _deferredRefreshCts.Dispose();
     }
 
+    /// <summary>
+    /// Gathers all file paths from selected items, including files contained in all selected folders and subfolders.
+    /// The resulting collection does not contain folders.
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerable<string> EnumerateSelectedFilePaths()
+    {
+        if (SelectedItems is null)
+        {
+            return [];
+        }
+
+        return SelectedItems
+            .Cast<FileSystemModel>()
+            .SelectMany(x =>
+                x.IsDirectory
+                    ? new DirectoryInfo(x.FullName)
+                        .EnumerateFiles("*", SearchOption.AllDirectories)
+                        .Select(f => f.FullName)
+                    : [x.FullName])
+            .Distinct();
+    }
+
+    private bool CanExportSelection() => ActiveProject is not null && SelectedItems is not null &&
+                                         SelectedItems.All(x =>
+                                             x is FileSystemModel { } m &&
+                                             IsInArchiveFolder(m)) &&
+                                         EnumerateSelectedFilePaths().Any(ImportExportHelper.CanExportFilepath);
+
+    [RelayCommand (CanExecute = nameof(CanExportSelection))]
+    private async Task ExportArchiveFile(string useDefaultArgs)
+    {
+        if (!bool.TryParse(useDefaultArgs, out var useDefaultArgsBool))
+        {
+            throw new ArgumentException("useDefaultArgs must be a stringified boolean value");
+        }
+
+        var selectedFilePaths = EnumerateSelectedFilePaths()
+            .Select(fp => fp.Replace($"{ActiveProject!.ModDirectory}{Path.DirectorySeparatorChar}", "")).ToArray();
+
+        var ineligibleFilePaths = selectedFilePaths.Where(fp => !ImportExportHelper.CanExportFilepath(fp)).ToArray();
+        var eligibleFilePaths = selectedFilePaths.Where(ImportExportHelper.CanExportFilepath).ToArray();
+
+        if (ineligibleFilePaths.Length > 0)
+        {
+            var msg = $"The following files are not exportable and will be skipped:\n {string.Join(",\n", ineligibleFilePaths)}";
+            _loggerService.Warning(msg);
+            _notificationService.Warning(msg);
+        }
+
+        var exportArgs = new GlobalExportArgs();
+
+        if (!_importExportHelper.Finalize(exportArgs))
+        {
+            const string msg = "Failed to initiate export arguments, aborting.";
+            _loggerService.Error(msg);
+            _notificationService.Error(msg);
+        }
+
+        if (!useDefaultArgsBool)
+        {
+            var displayExportArgs = new ExportArgsWrapper { Common = exportArgs.Get<CommonExportArgs>() };
+
+            foreach (var filePath in eligibleFilePaths)
+            {
+                SetExportArgs(displayExportArgs, exportArgs, filePath);
+            }
+
+            var dialog = new ExportArgsDialogViewModel(_appViewModel, _archiveManager, _notificationService, displayExportArgs);
+            await _appViewModel.SetActiveDialog(dialog);
+            await dialog.WaitAsync();
+            if (dialog.UserCanceled)
+            {
+                return;
+            }
+        }
+
+        var exportTasks = eligibleFilePaths
+            .Select(fp => _importExportHelper.Export(new FileInfo(Path.Join(ActiveProject!.ModDirectory, fp)),
+                exportArgs,
+                new DirectoryInfo(ActiveProject!.ModDirectory),
+                new DirectoryInfo(ActiveProject!.RawDirectory)
+                )).ToArray();
+
+        await Task.WhenAll(exportTasks);
+        _appViewModel.ReloadChangedFiles();
+
+        List<string> failedPaths = [];
+
+        for (var i = 0; i < exportTasks.Length; i++)
+        {
+            if (!exportTasks[i].Result)
+            {
+                failedPaths.Add(eligibleFilePaths[i]);
+            }
+        }
+
+        if (failedPaths.Count == 0)
+        {
+            var s = exportTasks.Length > 1 ? "s" : "";
+            var msg = $"Successfully exported {exportTasks.Length} file{s}";
+            _loggerService.Success(msg);
+            _notificationService.Success(msg);
+        }
+        else
+        {
+            var s = failedPaths.Count > 1 ? "s" : "";
+            var msg = $"Failed to export the following {failedPaths.Count} file{s}:\n {string.Join(",\n", failedPaths)}";
+            _loggerService.Error(msg);
+            _notificationService.Error(msg);
+        }
+
+        void SetExportArgs(ExportArgsWrapper displayArgs, GlobalExportArgs args, string fileName)
+        {
+            var extension = Path.GetExtension(fileName).TrimStart('.');
+            if (!Enum.TryParse(extension, out ECookedFileFormat fileFormat))
+            {
+                return;
+            }
+
+            switch (fileFormat)
+            {
+                case ECookedFileFormat.opusinfo:
+                    if (displayArgs.Opus != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Opus = args.Get<OpusExportArgs>();
+                    break;
+                case ECookedFileFormat.mesh:
+                case ECookedFileFormat.w2mesh:
+                    if (displayArgs.Mesh != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Mesh = args.Get<MeshExportArgs>();
+                    break;
+                case ECookedFileFormat.xbm:
+                    if (displayArgs.Xbm != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Xbm = args.Get<XbmExportArgs>();
+                    break;
+                case ECookedFileFormat.wem:
+                    if (displayArgs.Wem != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Wem = args.Get<WemExportArgs>();
+                    break;
+                case ECookedFileFormat.mlmask:
+                    if (displayArgs.Mlmask != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Mlmask = args.Get<MlmaskExportArgs>();
+                    break;
+                case ECookedFileFormat.fnt:
+                    if (displayArgs.Fnt != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Fnt = args.Get<FntExportArgs>();
+                    break;
+                case ECookedFileFormat.morphtarget:
+                    if (displayArgs.MorphTarget != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.MorphTarget = args.Get<MorphTargetExportArgs>();
+                    break;
+                case ECookedFileFormat.anims:
+                    if (displayArgs.Animation != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Animation = args.Get<AnimationExportArgs>();
+                    break;
+                case ECookedFileFormat.inkatlas:
+                    if (displayArgs.InkAtlas != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.InkAtlas = args.Get<InkAtlasExportArgs>();
+                    break;
+                case ECookedFileFormat.physicalscene:
+                    if (displayArgs.Mesh != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Mesh = args.Get<MeshExportArgs>();
+                    break;
+            }
+        }
+    }
+
+    private bool CanImportRawFile() =>  ActiveProject is not null && SelectedItems is not null &&
+                                            SelectedItems.All(x =>
+                                                x is FileSystemModel m && IsInRawFolder(m)) &&
+                                            EnumerateSelectedFilePaths().Any(ImportExportHelper.CanImportFilepath);
+
+    [RelayCommand (CanExecute = nameof(CanImportRawFile))]
+    private async Task ImportRawFile(string useDefaultArgs)
+    {
+        if (!bool.TryParse(useDefaultArgs, out var useDefaultArgsBool))
+        {
+            throw new ArgumentException("useDefaultArgs must be a stringified boolean value");
+        }
+
+        var selectedFilePaths = EnumerateSelectedFilePaths()
+            .Select(fp => fp.Replace($"{ActiveProject!.RawDirectory}{Path.DirectorySeparatorChar}", ""))
+            .Distinct().ToArray();
+
+        var ineligibleFilePaths = selectedFilePaths.Where(fp => !ImportExportHelper.CanImportFilepath(fp) && !fp.ToLowerInvariant().EndsWith(".material.json")).ToArray();
+        var eligibleFilePaths = selectedFilePaths.Where(ImportExportHelper.CanImportFilepath).ToArray();
+
+        if (ineligibleFilePaths.Length > 0)
+        {
+            var msg = $"The following files are not importable and will be skipped:\n {string.Join(",\n", ineligibleFilePaths)}";
+            _loggerService.Warning(msg);
+            _notificationService.Warning(msg);
+        }
+
+        var importArgs = new GlobalImportArgs();
+
+        if (!useDefaultArgsBool)
+        {
+            var displayImportArgs = new ImportArgsWrapper { Common = importArgs.Get<CommonImportArgs>() };
+
+            foreach (var filePath in eligibleFilePaths)
+            {
+                SetImportArgs(displayImportArgs, importArgs, filePath);
+            }
+
+            var dialog = new ImportArgsDialogViewModel(_appViewModel, displayImportArgs);
+            await _appViewModel.SetActiveDialog(dialog);
+            await dialog.WaitAsync();
+            if (dialog.UserCanceled)
+            {
+                return;
+            }
+        }
+
+        var importTasks = eligibleFilePaths
+            .Select(fp =>
+            {
+                var instanceImportArgs = importArgs;
+                // ReSharper disable InvertIf
+                if (fp.ToLowerInvariant().EndsWith(".glb"))
+                {
+                    var guessedImportFormat = ModTools.GltfImportAsFormatFromFileExt(fp);
+                    if (guessedImportFormat is { } extBasedFormat && importArgs.Get<GltfImportArgs>().ImportFormat != extBasedFormat)
+                    {
+                        instanceImportArgs = DeepCopyGlbArgs(importArgs);
+                        instanceImportArgs.Get<GltfImportArgs>().ImportFormat = extBasedFormat;
+                    }
+                }
+                // ReSharper restore InvertIf
+                return _importExportHelper.Import(
+                    new RedRelativePath(new DirectoryInfo(ActiveProject!.RawDirectory), fp),
+                    instanceImportArgs,
+                    new DirectoryInfo(ActiveProject!.ModDirectory)
+                );
+            }).ToArray();
+
+        await Task.WhenAll(importTasks);
+        _appViewModel.ReloadChangedFiles();
+
+        List<string> failedPaths = [];
+
+        for (var i = 0; i < importTasks.Length; i++)
+        {
+            if (!importTasks[i].Result)
+            {
+                failedPaths.Add(eligibleFilePaths[i]);
+            }
+        }
+
+        if (failedPaths.Count == 0)
+        {
+            var s = importTasks.Length > 1 ? "s" : "";
+            var msg = $"Successfully imported {importTasks.Length} file{s}";
+            _loggerService.Success(msg);
+            _notificationService.Success(msg);
+        }
+        else
+        {
+            var s = failedPaths.Count > 1 ? "s" : "";
+            var msg = $"Failed to import the following {failedPaths.Count} file{s}:\n {string.Join(",\n", failedPaths)}";
+            _loggerService.Error(msg);
+            _notificationService.Error(msg);
+        }
+
+        GlobalImportArgs DeepCopyGlbArgs(GlobalImportArgs args)
+        {
+            var newArgs = new GlobalImportArgs();
+
+            newArgs.Register([
+                args.Get<CommonImportArgs>(),
+                args.Get<XbmImportArgs>(),
+                JsonSerializer.Deserialize<GltfImportArgs>(JsonSerializer.Serialize(args.Get<GltfImportArgs>()))!,
+                args.Get<OpusImportArgs>(),
+                args.Get<MlmaskImportArgs>(),
+                args.Get<ReImportArgs>(),
+                args.Get<FntImportArgs>()
+            ]);
+
+            return newArgs;
+        }
+
+        void SetImportArgs(ImportArgsWrapper displayArgs, GlobalImportArgs args, string filePath)
+        {
+            var extension = Path.GetExtension(filePath).TrimStart('.');
+            if (!Enum.TryParse(extension, out ERawFileFormat rawFileFormat))
+            {
+                return;
+            }
+
+            switch (rawFileFormat)
+            {
+                case ERawFileFormat.tga:
+                case ERawFileFormat.bmp:
+                case ERawFileFormat.jpg:
+                case ERawFileFormat.png:
+                case ERawFileFormat.tiff:
+                case ERawFileFormat.dds:
+                case ERawFileFormat.cube:
+                    if (displayArgs.Xbm != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Xbm = args.Get<XbmImportArgs>();
+                    break;
+                case ERawFileFormat.glb:
+                case ERawFileFormat.gltf:
+                    if (displayArgs.Gltf != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Gltf = args.Get<GltfImportArgs>();
+                    break;
+                case ERawFileFormat.ttf:
+                    if (displayArgs.Fnt != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Fnt = args.Get<FntImportArgs>();
+                    break;
+                case ERawFileFormat.wav:
+                    if (displayArgs.Opus != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Opus = args.Get<OpusImportArgs>();
+                    break;
+                case ERawFileFormat.masklist:
+                    if (displayArgs.Mlmask != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Mlmask = args.Get<MlmaskImportArgs>();
+                    break;
+                case ERawFileFormat.re:
+                    if (displayArgs.Re != null)
+                    {
+                        break;
+                    }
+
+                    displayArgs.Re = args.Get<ReImportArgs>();
+                    break;
+            }
+        }
+    }
 
     // If shift key is pressed, we want to convert any matching files in archive _to_ json
     private bool CanConvertRawFile() => ActiveProject is not null && SelectedItems is not null &&
@@ -1048,7 +1539,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     {
         if (!IsShiftKeyPressed)
         {
-            await ConvertFromJsonInternal(SelectedItems!.OfType<FileSystemModel>().Where(IsInRawFolder));
+            _deferredRefreshCts = new CancellationTokenSource();
+            await BeginDeferredRefreshContext!(_deferredRefreshCts.Token, ConvertFromJsonInternal(SelectedItems!.OfType<FileSystemModel>().Where(IsInRawFolder)));
+
             return;
         }
 
@@ -1059,7 +1552,13 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             .Where(IsInArchiveFolder)
             .Where(x => selectedItemPaths.Contains(x.GameRelativePath)).ToList();
 
-        await ConvertToJsonInternal(convertSelection);
+        _deferredRefreshCts = new CancellationTokenSource();
+        if (BeginDeferredRefreshContext == null)
+        {
+            throw new Exception("Rendering context does not exist.");
+        }
+
+        await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertFromJsonInternal(convertSelection));
     }
 
     private async Task ConvertFromJsonInternal(IEnumerable<FileSystemModel> selection)

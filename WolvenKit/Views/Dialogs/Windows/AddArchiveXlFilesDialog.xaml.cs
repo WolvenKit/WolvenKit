@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using ReactiveUI;
@@ -152,14 +153,14 @@ namespace WolvenKit.Views.Dialogs.Windows
             model.SubSlot = tag;
         }
 
-        private void ItemVariants_FocusLost(object sender, RoutedEventArgs e)
+        private void PartToggles_FocusLost(object sender, RoutedEventArgs e)
         {
             if (sender is not SfTextBoxExt textBox || ViewModel is not AddArchiveXlFilesDialogViewModel model)
             {
                 return;
             }
 
-            model.Variants =
+            model.Toggles =
                 [.. textBox.Text.Split(",", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)];
         }
 
@@ -188,6 +189,40 @@ namespace WolvenKit.Views.Dialogs.Windows
             Process.Start(ps);
         }
 
+
+        private void ItemVariants_FocusLost(object sender, RoutedEventArgs e)
+        {
+            if (sender is not SfTextBoxExt textBox || ViewModel is not AddArchiveXlFilesDialogViewModel model)
+            {
+                return;
+            }
+
+            model.Variants =
+                [.. textBox.Text.Split(",", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)];
+        }
+
+        private void ItemVariants_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Tab || ViewModel == null)
+            {
+                return;
+            }
+
+            ViewModel.PrimaryAppearanceMesh = "";
+            PrimaryMeshPathDropdown.ClearValue(Selector.SelectedItemProperty);
+        }
+
+        private void SecondaryItemVariants_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Tab || ViewModel == null)
+            {
+                return;
+            }
+
+            ViewModel.SecondaryAppearanceMesh = "";
+            SecondaryMeshPathDropdown.ClearValue(Selector.SelectedItemProperty);
+        }
+
         private void SecondaryItemVariants_FocusLost(object sender, RoutedEventArgs e)
         {
             if (sender is not SfTextBoxExt textBox || ViewModel is not AddArchiveXlFilesDialogViewModel model)
@@ -197,6 +232,7 @@ namespace WolvenKit.Views.Dialogs.Windows
 
             model.SecondaryVariants =
                 [.. textBox.Text.Split(",", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)];
+            model.SecondaryAppearanceMesh = "";
         }
 
         private void ExistingFiles_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -220,22 +256,29 @@ namespace WolvenKit.Views.Dialogs.Windows
 
         private void PrimaryMeshPathDropdown_OnChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ViewModel is null || sender is not ComboBox { SelectedItem: string meshPath })
+            if (ViewModel is null || sender is not ComboBox { SelectedItem: string meshPath } ||
+                string.IsNullOrEmpty(meshPath))
             {
                 return;
             }
 
             ViewModel.PrimaryAppearanceMesh = meshPath;
+            ViewModel.Variants?.Clear();
+            ItemVariantsTextBox.Clear();
         }
 
         private void SecondaryMeshPathDropdown_OnChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ViewModel is null || sender is not ComboBox { SelectedItem: string meshPath })
+            if (ViewModel is null || sender is not ComboBox { SelectedItem: string meshPath } ||
+                string.IsNullOrEmpty(meshPath))
             {
                 return;
             }
 
             ViewModel.SecondaryAppearanceMesh = meshPath;
+            ViewModel.SecondaryVariants?.Clear();
+            SecondaryItemVariantsTextBox.Clear();
         }
+
     }
 }

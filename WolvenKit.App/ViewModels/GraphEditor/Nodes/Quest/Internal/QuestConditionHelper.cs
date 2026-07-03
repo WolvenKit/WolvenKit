@@ -98,6 +98,8 @@ public class QuestConditionHelper
                 // Fallback to type name if we can't format it semantically
                 details["Condition"] = conditionTypeName;
             }
+
+            AddSpecificConditionDetails(condition, details);
         }
 
         return details;
@@ -110,6 +112,7 @@ public class QuestConditionHelper
             questTriggerCondition trigger => FormatTriggerCondition(trigger),
             questFactsDBCondition facts => FormatFactsCondition(facts),
             questObjectCondition obj => FormatObjectCondition(obj),
+            questNodeLoadingCondition nodeLoading => FormatNodeLoadingCondition(nodeLoading),
             questTimeCondition time => FormatTimeCondition(time),
             questCharacterCondition character => FormatCharacterCondition(character),
             questDistanceCondition distance => FormatDistanceCondition(distance),
@@ -162,6 +165,11 @@ public class QuestConditionHelper
             var controllerClass = device.DeviceControllerClass.GetResolvedText();
             return $"{objectRef} ({controllerClass}) {function}";
         }
+        else if (obj.Type?.Chunk is questInteraction_ConditionType interaction)
+        {
+            var objectRef = interaction.ObjectRef.GetResolvedText();
+            return $"{objectRef} {interaction.EventType.ToEnumString()}";
+        }
         else if (obj.Type?.Chunk is questInventory_ConditionType inventory)
         {
             var target = inventory.IsPlayer ? "Player" : ParseGameEntityReference(inventory.ObjectRef);
@@ -172,6 +180,33 @@ public class QuestConditionHelper
             return $"{target} {op} {inventory.Quantity} {item}";
         }
         return "Object condition";
+    }
+
+    private static string FormatNodeLoadingCondition(questNodeLoadingCondition nodeLoading)
+    {
+        var objectRef = nodeLoading.ObjectRef.GetResolvedText();
+        if (string.IsNullOrEmpty(objectRef))
+        {
+            return "Node loading condition";
+        }
+
+        return nodeLoading.Inverted == true ? $"Node not loading {objectRef}" : $"Node loading {objectRef}";
+    }
+
+    private static void AddSpecificConditionDetails(questIBaseCondition condition, Dictionary<string, string> details)
+    {
+        if (condition is questObjectCondition obj && obj.Type?.Chunk is questInteraction_ConditionType interaction)
+        {
+            details["Event Type"] = interaction.EventType.ToEnumString();
+        }
+        else if (condition is questNodeLoadingCondition nodeLoading)
+        {
+            details["Inverted"] = nodeLoading.Inverted == true ? "True" : "False";
+        }
+        else if (condition is questSystemCondition system && system.Type?.Chunk is questSaveLock_ConditionType saveLock)
+        {
+            details["Inverted"] = saveLock.Inverted == true ? "True" : "False";
+        }
     }
 
     private static string FormatTimeCondition(questTimeCondition time)

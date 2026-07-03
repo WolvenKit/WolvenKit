@@ -29,7 +29,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
     private readonly ITweakDBService _tweakDbService;
     private readonly ILocKeyService _locKeyService;
     private readonly Red4ParserService _parserService;
-    private readonly CvmMaterialTools _cvmMaterialTools;
+    private readonly ICvmTools _cvmTools;
     private readonly CRUIDService _cruidService;
 
     public ChunkViewmodelFactory(
@@ -43,7 +43,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
         ITweakDBService tweakDbService,
         ILocKeyService locKeyService,
         Red4ParserService parserService,
-        CvmMaterialTools cvmMaterialTools,
+        ICvmTools cvmTools,
         CRUIDService cruidService)
     {
         _tabViewmodelFactory = tabViewmodelFactory;
@@ -56,7 +56,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
         _tweakDbService = tweakDbService;
         _locKeyService = locKeyService;
         _parserService = parserService;
-        _cvmMaterialTools = cvmMaterialTools;
+        _cvmTools = cvmTools;
         _cruidService = cruidService;
     }
 
@@ -75,7 +75,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
             _locKeyService,
             _parserService,
             _cruidService,
-            _cvmMaterialTools,
+            _cvmTools,
             parent,
             isReadOnly).SetInitialExpansionState();
 
@@ -93,7 +93,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
             _tweakDbService,
             _locKeyService,
             _parserService,
-            _cvmMaterialTools,
+            _cvmTools,
             _cruidService,
             isReadOnly).SetInitialExpansionState();
 
@@ -111,7 +111,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
             _tweakDbService,
             _locKeyService,
             _parserService,
-            _cvmMaterialTools,
+            _cvmTools,
             _cruidService,
             isReadOnly).SetInitialExpansionState();
 }

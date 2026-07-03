@@ -290,7 +290,7 @@ public partial class ImportViewModel : AbstractImportExportViewModel
         }
 
         var files = Directory.GetFiles(_projectManager.ActiveProject.RawDirectory, "*", SearchOption.AllDirectories)
-            .Where(CanImport).ToList();
+            .Where(ImportExportHelper.CanImportFilepath).ToList();
 
         // do not refresh if the files are the same
         if(Enumerable.SequenceEqual( Items.Select(x => x.BaseFile), files))
@@ -320,34 +320,6 @@ public partial class ImportViewModel : AbstractImportExportViewModel
 
         ProcessAllCommand.NotifyCanExecuteChanged();
         _progressService.IsIndeterminate = false;
-    }
-
-    // for checking if a dds file is part of a morphtarget
-    [GeneratedRegex("\\d+\\.dds$")]
-    private static partial Regex NumberedDdsFileRegex();
-
-    private static bool CanImport(string filePath)
-    {
-        var fileExtension = Path.GetExtension(filePath).TrimStart('.');
-        if (!Enum.TryParse<ERawFileFormat>(fileExtension.ToLower(), out var _))
-        {
-            return false;
-        }
-
-        switch (fileExtension)
-        {
-            // masklist items
-            case "png":
-                var masklistPath = (Path.GetDirectoryName(filePath) ?? "").Replace("_layers", ".masklist");
-                return !File.Exists(masklistPath) && !filePath.Contains($".inkatlas{Path.DirectorySeparatorChar}");
-            // morphtarget texturesF
-            case "dds":
-                var parentDirName = new DirectoryInfo(Path.GetDirectoryName(filePath) ?? string.Empty).Name;
-                var morphtargetFolderName = NumberedDdsFileRegex().Replace(Path.GetFileName(filePath), "textures");
-                return parentDirName != morphtargetFolderName;
-            default:
-                return true;
-        }
     }
 
     public Task InitCollectionEditor(CallbackArguments args)
