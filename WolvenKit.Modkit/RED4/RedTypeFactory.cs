@@ -7,16 +7,27 @@ namespace WolvenKit.Modkit.RED4;
 
 /// <summary>
 /// Some properties are uninitialized, despite the type specifying them as non-nullable.
-/// This factory will make sure that they have valid default values. 
+/// This factory will make sure that they have valid default values.
 /// </summary>
+/// <remarks>This class is deprecated and will be removed with the next major version. Use <see cref="RedTypeManager"/> instead.</remarks>
+[Obsolete("This class is deprecated and will be removed with the next major version. Use RedTypeManager instead.")]
 public static class RedTypeFactory
 {
+    /// <remarks>This method is deprecated and will be removed with the next major version. Use <see cref="RedTypeManager.CreateAndInit(Type)"/> instead.</remarks>
+    [Obsolete("This method is deprecated and will be removed with the next major version. Use RedTypeManager.CreateAndInit(Type) instead.")]
     public static RedBaseClass CreateAndInit(Type type) => Init(RedTypeManager.Create(type));
+
+    /// <remarks>This method is deprecated and will be removed with the next major version. Use <see cref="RedTypeManager.CreateAndInit(string)"/> instead.</remarks>
+    [Obsolete("This method is deprecated and will be removed with the next major version. Use RedTypeManager.CreateAndInit(string) instead.")]
     public static RedBaseClass CreateAndInit(string redTypeName) => Init(RedTypeManager.Create(redTypeName));
 
+    /// <remarks>This method is deprecated and will be removed with the next major version. Use <see cref="RedTypeManager.CreateAndInitRedType(Type, params object[])"/> instead.</remarks>
+    [Obsolete("This method is deprecated and will be removed with the next major version. Use RedTypeManager.CreateAndInitRedType(Type, params object[]) instead.")]
     public static IRedType CreateAndInitRedType(Type type, params object[] args) =>
         Init(RedTypeManager.CreateRedType(type, args));
 
+    /// <remarks>This method is deprecated and will be removed with the next major version. Use <see cref="RedTypeManager.CreateAndInitRedType(String, params object[])"/> instead.</remarks>
+    [Obsolete("This method is deprecated and will be removed with the next major version. Use RedTypeManager.CreateAndInitRedType(String, params object[]) instead.")]
     public static IRedType CreateAndInitRedType(string redTypeName, params object[] args) =>
         Init(RedTypeManager.CreateRedType(redTypeName, args));
 
