@@ -40,7 +40,7 @@ using WolvenKit.Views.Tools;
 
 namespace WolvenKit
 {
-    internal static class GenericHost
+    public static class GenericHost
     {
         public static IHostBuilder CreateHostBuilder() => Host
                 .CreateDefaultBuilder()
@@ -70,7 +70,7 @@ namespace WolvenKit
                     services.AddSingleton<IUpdateService, UpdateService>();
 
                     services.AddSingleton<ArchiveXlItemService>();
-                    services.AddSingleton<CvmMaterialTools>();
+                    services.AddSingleton<ICvmTools, CvmTools>();
 
                     // scripting
                     services.AddSingleton<IHookService, AppHookService>();
@@ -94,8 +94,8 @@ namespace WolvenKit
                     services.AddTransient<IGameControllerFactory, GameControllerFactory>();
                     services.AddSingleton<IPluginService, PluginService>();
                     services.AddSingleton<IModifierViewStateService, ModifierViewStateService>();
-                    services.AddSingleton<IWatcherService, WatcherService>();
                     services.AddSingleton<INodeSelectionService, NodeSelectionService>();
+                    services.AddSingleton<IWatcherService, WatcherService>();
 
                     // factories
                     services.AddTransient<IPageViewModelFactory, PageViewModelFactory>();

@@ -143,7 +143,7 @@ public partial class ExportViewModel : AbstractImportExportViewModel
         if (failedItems.Count > 0)
         {
             var failedItemsErrorString = $"The following items failed:\n{string.Join("\n", failedItems)}";
-            _notificationService.Error(failedItemsErrorString); //notify once only 
+            _notificationService.Error(failedItemsErrorString); //notify once only
             _loggerService.Error(failedItemsErrorString);
         }
 
@@ -179,7 +179,7 @@ public partial class ExportViewModel : AbstractImportExportViewModel
             return;
         }
 
-        var files = Directory.GetFiles(_projectManager.ActiveProject.ModDirectory, "*", SearchOption.AllDirectories).Where(CanExport);
+        var files = Directory.GetFiles(_projectManager.ActiveProject.ModDirectory, "*", SearchOption.AllDirectories).Where(ImportExportHelper.CanExportFilepath);
 
         // do not refresh if the files are the same
         if (Enumerable.SequenceEqual(Items.Select(x => x.BaseFile), files))
@@ -206,8 +206,6 @@ public partial class ExportViewModel : AbstractImportExportViewModel
 
         HasItems = Items.Any();
     }
-
-    private static bool CanExport(string x) => Enum.TryParse<ECookedFileFormat>(Path.GetExtension(x).TrimStart('.'), out var _);
 
     public Task InitCollectionEditor(CallbackArguments args)
     {

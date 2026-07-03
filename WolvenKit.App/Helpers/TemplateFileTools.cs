@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
 using DynamicData;
+using WolvenKit.App.Extensions;
 using WolvenKit.App.Interaction;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using WolvenKit.App.Services;
@@ -13,6 +14,7 @@ using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
+using WolvenKit.Core.Services;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
@@ -178,7 +180,7 @@ public partial class TemplateFileTools
             throw new Exception("NPC name is empty, this won't work");
         }
 
-        var fileName = options.NpcName.ToFileName();
+        var fileName = options.NpcName.ToArchiveFileName();
 
         if (File.Exists(options.YamlFileAbsolutePath) && !options.Overwrite)
         {
@@ -205,7 +207,7 @@ public partial class TemplateFileTools
         var yamlTemplate = File.ReadAllText(options.YamlFileAbsolutePath);
 
         yamlTemplate = yamlTemplate.Replace("DISPLAY_NAME",
-            $"LocKey#{options.ModderName.ToFileName()}_{fileName}_photomode_i18n");
+            $"LocKey#{options.ModderName.ToArchiveFileName()}_{fileName}_photomode_i18n");
 
         // upper case first letter makes them show up at the top of the list
         yamlTemplate = yamlTemplate.Replace("NPC_NAME", fileName.FirstCharToUpper());
@@ -1142,20 +1144,21 @@ public partial class TemplateFileTools
         }
 
         prop.Appearances ??= [];
+        ReadMeshAppearances();
+
         if (prop.Appearances.Count == 0)
         {
             prop.Appearances.Add("default");
         }
 
-        prop.Appearances = prop.Appearances.Select(x => x.ToFileName()).ToList();
+        prop.Appearances = prop.Appearances.Select(x => x.ToArchiveFileName()).ToList();
 
         var hasSingleAppearance = prop.Appearances.All(f => f == "default");
 
-        var absoluteParentFolder = Path.Combine(project.ModDirectory, prop.ParentFolder).ToFilePath();
+        var absoluteParentFolder = Path.Combine(project.ModDirectory, FilepathValidationTools.SanitizeArchiveFilePath(prop.ParentFolder));
         Directory.CreateDirectory(absoluteParentFolder);
 
-
-        var propFolderName = prop.PropName.ToFileName();
+        var propFolderName = prop.PropName.ToArchiveFileName();
         if (!absoluteParentFolder.Contains(propFolderName) &&
             Directory.GetFileSystemEntries(absoluteParentFolder).Length > 0)
         {
@@ -1164,23 +1167,78 @@ public partial class TemplateFileTools
             Directory.CreateDirectory(absoluteParentFolder);
         }
 
-
-        // generate .ent file
-        var entFilePath = Path.Combine(prop.ParentFolder, $"{propFolderName}.ent");
-        var appFilePath = Path.Combine(prop.ParentFolder, $"{propFolderName}.app");
-
+        // move meshes to parent folder if user checked the box
         MoveMeshes();
+
+        // get map of mesh path to boolean for easier mapping
         var meshFilesUseAppearances = prop.GetMeshFileData();
+
         PrepareMeshes();
 
+        // generate control files
+        var entFilePath = Path.Combine(prop.ParentFolder, $"{propFolderName}.ent");
+        var appFilePath = Path.Combine(prop.ParentFolder, $"{propFolderName}.app");
         GenerateEntFile();
         GenerateAppFile();
+
         WriteLuaFile();
         WriteWorldbuilderFile();
 
         DispatcherHelper.RunOnMainThread(() => project.DeleteEmptyFolders(_loggerService));
         return;
 
+        void ReadMeshAppearances()
+        {
+            // User does not want to read appearances from any of the files
+            if (!(prop.MeshFile1ReadFromMesh || prop.MeshFile2ReadFromMesh || prop.MeshFile3ReadFromMesh ||
+                  prop.MeshFile4ReadFromMesh))
+            {
+                return;
+            }
+
+            prop.Appearances.Clear();
+
+            if (prop.MeshFile1ReadFromMesh && !string.IsNullOrEmpty(prop.MeshFile1) &&
+                _cr2WTools.ReadCr2WNoException(Path.Join(project.ModDirectory, prop.MeshFile1)) is CR2WFile
+                {
+                    RootChunk: CMesh mesh
+                })
+            {
+                prop.Appearances.Clear();
+                prop.Appearances.AddRange(mesh.Appearances.Select(handle => handle.Chunk?.Name.GetResolvedText() ?? "")
+                    .Where(s => !string.IsNullOrEmpty(s)).ToList());
+            }
+
+            if (prop.MeshFile2ReadFromMesh && !string.IsNullOrEmpty(prop.MeshFile2) &&
+                _cr2WTools.ReadCr2WNoException(Path.Join(project.ModDirectory, prop.MeshFile2)) is CR2WFile
+                {
+                    RootChunk: CMesh mesh2
+                })
+            {
+                prop.Appearances.AddRange(mesh2.Appearances.Select(handle => handle.Chunk?.Name.GetResolvedText() ?? "")
+                    .Where(s => !string.IsNullOrEmpty(s)).ToList());
+            }
+
+            if (prop.MeshFile3ReadFromMesh && !string.IsNullOrEmpty(prop.MeshFile3) &&
+                _cr2WTools.ReadCr2WNoException(Path.Join(project.ModDirectory, prop.MeshFile3)) is CR2WFile
+                {
+                    RootChunk: CMesh mesh3
+                })
+            {
+                prop.Appearances.AddRange(mesh3.Appearances.Select(handle => handle.Chunk?.Name.GetResolvedText() ?? "")
+                    .Where(s => !string.IsNullOrEmpty(s)).ToList());
+            }
+
+            if (prop.MeshFile4ReadFromMesh && !string.IsNullOrEmpty(prop.MeshFile4) &&
+                _cr2WTools.ReadCr2WNoException(Path.Join(project.ModDirectory, prop.MeshFile4)) is CR2WFile
+                {
+                    RootChunk: CMesh mesh4
+                })
+            {
+                prop.Appearances.AddRange(mesh4.Appearances.Select(handle => handle.Chunk?.Name.GetResolvedText() ?? "")
+                    .Where(s => !string.IsNullOrEmpty(s)).ToList());
+            }
+        }
         void PrepareMeshes()
         {
             // if they aren't in the correct directory, move them and adjust list
@@ -1398,12 +1456,14 @@ public partial class TemplateFileTools
                 {
                     entTemplate.Appearances.Add(new entTemplateAppearance()
                     {
-                        Name = propAppearance.ToFileName(),
-                        AppearanceName = propAppearance.ToFileName(),
+                        Name = propAppearance.ToArchiveFileName(),
+                        AppearanceName = propAppearance.ToArchiveFileName(),
                         AppearanceResource = new CResourceAsyncReference<appearanceAppearanceResource>(appFilePath),
                     });
                 }
             }
+
+            entTemplate.DefaultAppearance = prop.Appearances.FirstOrDefault() ?? "default";
 
             entTemplate.Components.Add(new gameTargetingComponent() { Name = "targeting", });
 
@@ -1431,7 +1491,7 @@ public partial class TemplateFileTools
         {
             var luaFolderPath = Path.Combine(project.GetResourceCETDirectory(), "AppearanceMenuMod", "Collabs",
                 "Custom Props", GetFileOrganizationSubdir());
-            var luaPath = Path.Combine(luaFolderPath, $"{project.Name.ToFileName()}.lua");
+            var luaPath = Path.Combine(luaFolderPath, $"{project.Name.ToArchiveFileName()}.lua");
 
             var absolutePath = Path.Combine(project.ResourcesDirectory, luaPath);
             if (!File.Exists(absolutePath))
@@ -1439,7 +1499,7 @@ public partial class TemplateFileTools
                 Directory.CreateDirectory(luaFolderPath);
                 File.WriteAllText(absolutePath,
                     s_luaPropFileTemplate.Replace("MODDER_NAME", project.Author)
-                        .Replace("PROJECT_NAME", project.Name.ToFileName()));
+                        .Replace("PROJECT_NAME", project.Name.ToArchiveFileName()));
             }
 
             var fileContent = File.ReadAllLines(absolutePath).ToList();
@@ -1483,12 +1543,12 @@ public partial class TemplateFileTools
         {
             var entspawnerSubdir = Path.Combine(project.GetResourceCETDirectory(), "entSpawner", "data");
 
-            List<string> fileContent = [];
+            HashSet<string> fileContent = [];
             if (meshFilesUseAppearances.Count == 1)
             {
                 var entspawnerMeshDir = Path.Combine(entspawnerSubdir, "spawnables", "mesh", "all",
                     GetFileOrganizationSubdir());
-                var entspawnerMeshFile = Path.Combine(entspawnerMeshDir, project.Name.ToFileName() + ".txt");
+                var entspawnerMeshFile = Path.Combine(entspawnerMeshDir, project.Name.ToArchiveFileName() + ".txt");
                 var absolutePath = Path.Combine(project.ResourcesDirectory, entspawnerMeshFile);
 
                 Directory.CreateDirectory(Path.Combine(project.ResourcesDirectory, entspawnerMeshDir));
@@ -1503,13 +1563,13 @@ public partial class TemplateFileTools
                 }
 
                 fileContent.Add(meshFilesUseAppearances.Keys.First());
-                File.WriteAllLines(absolutePath, fileContent.Distinct().ToArray());
+                File.WriteAllLines(absolutePath, fileContent.ToArray());
 
                 return;
             }
 
             var entspawnerEntFile =
-                Path.Combine(entspawnerSubdir, GetFileOrganizationSubdir(), project.Name.ToFileName() + ".txt");
+                Path.Combine(entspawnerSubdir, GetFileOrganizationSubdir(), project.Name.ToArchiveFileName() + ".txt");
             var absoluteEntRegistryPath = Path.Combine(project.ResourcesDirectory, entspawnerEntFile);
             if (!File.Exists(absoluteEntRegistryPath))
             {
@@ -1522,7 +1582,13 @@ public partial class TemplateFileTools
             }
 
             fileContent.Add(entFilePath);
-            File.WriteAllLines(absoluteEntRegistryPath, fileContent.Distinct().ToArray());
+
+            if (prop.CleanupInvalidEntries)
+            {
+                fileContent = fileContent.Where(project.ModFiles.Contains).ToHashSet();
+            }
+
+            File.WriteAllLines(absoluteEntRegistryPath, fileContent.ToArray());
         }
     }
 

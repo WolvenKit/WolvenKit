@@ -42,7 +42,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     private readonly INotificationService _notificationService;
     private readonly StreamingSectorTools _sectorTools;
     private readonly AppViewModel _appViewModel;
-    private readonly CvmMaterialTools _cvmMaterialTools;
+    private readonly ICvmTools _cvmTools;
 
     public RedDocumentViewToolbarModel(
         ISettingsManager settingsManager,
@@ -50,7 +50,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         IProjectManager projectManager,
         DocumentTools documentTools,
         CRUIDService cruidService,
-        CvmMaterialTools cvmMaterialTools,
+        ICvmTools cvmTools,
         ILoggerService loggerService,
         INotificationService notificationService,
         StreamingSectorTools sectorTools,
@@ -62,7 +62,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
         _settingsManager = settingsManager;
         _cruidService = cruidService;
         _documentTools = documentTools;
-        _cvmMaterialTools = cvmMaterialTools;
+        _cvmTools = cvmTools;
         _loggerService = loggerService;
         _sectorTools = sectorTools;
         _notificationService = notificationService;
@@ -396,7 +396,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     {
         if (SelectedChunk is { Name: "components", Data: CArray<entIComponent> })
         {
-            SelectedChunk?.RegenerateVisualControllerCommand.Execute(null);
+            _cvmTools.RegenerateVisualControllers(SelectedChunk);
             return;
         }
 
@@ -407,14 +407,14 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             appearances.CalculateProperties();
             foreach (var app in appearances.TVProperties.Where(x => x.ResolvedData is appearanceAppearanceDefinition))
             {
-                app.RegenerateVisualControllerCommand.Execute(null);
+                _cvmTools.RegenerateVisualControllers(app);
             }
 
             return;
         }
 
         // .ent file
-        RootChunk?.GetPropertyChild("components")?.RegenerateVisualControllerCommand.Execute(null);
+        _cvmTools.RegenerateVisualControllers(RootChunk?.GetPropertyChild("components"));
     }
 
     /// <summary>
@@ -656,14 +656,14 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
                                                     mesh.ExternalMaterials.Count > 0);
 
     [RelayCommand(CanExecute = nameof(CanConvertToPreloadMaterials))]
-    private void ConvertToPreloadMaterials() => _cvmMaterialTools.ConvertMaterialsToPreload(RootChunk);
+    private void ConvertToPreloadMaterials() => _cvmTools.ConvertMaterialsToPreload(RootChunk);
 
     private bool CanConvertFromPreloadMaterials() => RootChunk?.ResolvedData is CMesh mesh &&
                                                      (mesh.PreloadExternalMaterials.Count > 0 ||
                                                       mesh.PreloadLocalMaterialInstances.Count > 0);
 
     [RelayCommand(CanExecute = nameof(CanConvertFromPreloadMaterials))]
-    private void ConvertFromPreloadMaterials() => _cvmMaterialTools.ConvertMaterialsFromPreload(RootChunk);
+    private void ConvertFromPreloadMaterials() => _cvmTools.ConvertMaterialsFromPreload(RootChunk);
 
     /*
      * mesh: clear appearances
@@ -680,8 +680,11 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             return;
         }
 
-        mesh.Appearances.Clear();
-        _cvmMaterialTools.DeleteUnusedMaterials(RootChunk, null, true);
+        _documentTools.ClearMeshMaterials(mesh);
+        RootChunk.GetPropertyChild("appearances")?.RecalculateProperties();
+        CvmMaterialTools.RecalculateMaterialProperties(RootChunk, true);
+
+        RootChunk.Tab?.Parent?.SetIsDirty(true);
     }
 
     private bool CanSelectTemplateAppearance() => SelectedChunk?.ResolvedData is CArray<CHandle<meshMeshAppearance>> ||
@@ -728,7 +731,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             appearanceChunks.AddRange(SelectedChunks.Where(cvm => cvm.ResolvedData is meshMeshAppearance));
         }
 
-        _cvmMaterialTools.AddTagsToMeshAppearances(appearanceChunks, [appearanceTemplate]);
+        _cvmTools.AddTagsToMeshAppearances(appearanceChunks, [appearanceTemplate]);
     }
 
     #region meshfile_materials
@@ -805,7 +808,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             RootChunk.GetPropertyChild("appearances")?.CalculateProperties();
         }
 
-        _cvmMaterialTools.DeleteUnusedMaterials(RootChunk);
+        _cvmTools.DeleteUnusedMaterials(RootChunk);
     }
 
     #endregion
@@ -989,12 +992,18 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     public void OnSearchChanged(string searchBoxText)
     {
         CurrentActiveSearch = "";
-        if (CurrentTab is not RDTDataViewModel rtdViewModel)
+        switch (CurrentTab)
         {
-            return;
+            case RDTDataViewModel rtdViewModel:
+                rtdViewModel.OnSearchChanged(searchBoxText);
+                break;
+            case QuestPhaseGraphViewModel questPhaseGraphViewModel:
+                questPhaseGraphViewModel.OnDocumentSearchChanged(searchBoxText);
+                break;
+            case SceneGraphViewModel sceneGraphViewModel:
+                sceneGraphViewModel.OnDocumentSearchChanged(searchBoxText);
+                break;
         }
-
-        rtdViewModel.OnSearchChanged(searchBoxText);
     }
 
     /// <summary>
@@ -1021,7 +1030,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             else
             {
                 // if the folder contains more than one .mesh file, add a subdirectory inside "textures"
-                var fileName = Path.GetFileName(CurrentTab.FilePath.Split('.').FirstOrDefault() ?? "").ToFileName();
+                var fileName = Path.GetFileName(CurrentTab.FilePath.Split('.').FirstOrDefault() ?? "").ToArchiveFileName();
                 destFolder = Path.Combine(dirName, fileName);
             }
         }

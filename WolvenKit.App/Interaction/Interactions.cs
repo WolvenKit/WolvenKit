@@ -87,7 +87,7 @@ public static class Interactions
 
 
     /// <summary>
-    /// Shows a message box with an extra button to open a weblink
+    /// Shows a message box
     /// </summary>
     /// <param name="title">Dialogue title</param>
     /// <param name="message">Dialogue message (auto-wrapping)</param>
@@ -100,6 +100,19 @@ public static class Interactions
         DispatcherHelper.RunOnMainThread(() =>
             result = ShowMessageBoxAsync(title, message, WMessageBoxButtons.Ok, WMessageBoxImage.Information).Result);
         return await Task.FromResult(result);
+    }
+
+
+    /// <summary>
+    /// Shows a message box
+    /// </summary>
+    /// <param name="title">Dialogue title</param>
+    /// <param name="message">Dialogue message (auto-wrapping)</param>
+    /// <returns>result of the task</returns>
+    public static WMessageBoxResult ShowPopup(string title, string message)
+    {
+        return ShowMessageBoxAsync(title, message, WMessageBoxButtons.Ok, WMessageBoxImage.Information).GetAwaiter()
+            .GetResult();
     }
 
     /// <summary>
@@ -131,7 +144,10 @@ public static class Interactions
     public static Func<
         (string text, string caption, WMessageBoxImage image, WMessageBoxButtons buttons),
         WMessageBoxResult
-    > ShowConfirmation { get; set; } = _ => throw new NotImplementedException();
+    > ShowConfirmation { get; set; } = _ =>
+        TestHelper.InActiveTest
+            ? WMessageBoxResult.OK
+            : throw new NotImplementedException();
 
 
     /// <summary>
@@ -262,7 +278,7 @@ public static class Interactions
     /// <summary>
     /// Shows dialogue to copy mesh materials/appearances.
     /// </summary>
-    public static Func<List<string>,
+    public static Func<(List<string> options, string filterDefaultValue),
         CopyMeshAppearancesDialogViewModel?> ShowCopyMeshAppearancesDialogue { get; set; } =
         _ => throw new NotImplementedException();
 

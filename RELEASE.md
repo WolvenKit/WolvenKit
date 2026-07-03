@@ -1,5 +1,5 @@
-## Notable changes:
-- 
+{CHANGELOG}
+
 ------------------
 
 :question: Wiki: https://wiki.redmodding.org/wolvenkit

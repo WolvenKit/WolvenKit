@@ -7,6 +7,7 @@
     xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:sfskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
     xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+    xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf">
 
     <ResourceDictionary.MergedDictionaries>
@@ -287,6 +288,13 @@
     </Style>
 
     <Style
+        x:Key="WolvenkitExplanationStyle"
+        TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
+        <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginBottom}" />
+    </Style>
+
+    <Style
         x:Key="WolvenKitTabControl"
         BasedOn="{StaticResource SyncfusionDocumentTabControlExtStyle}"
         TargetType="{x:Type syncfusion:TabControlExt}">
@@ -328,6 +336,21 @@
         <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
         <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
         <Setter Property="Foreground" Value="White" />
+    </Style>
+
+    <!--
+        Global visual defaults for our thin Inspectable* subclasses (used for
+        UI test accessibility hooks via custom AutomationPeer).
+    -->
+    <Style TargetType="{x:Type others:InspectableTreeGrid}">
+        <Setter Property="Background" Value="{StaticResource ContentBackground}" />
+        <!-- BorderThickness="0" etc. are usually set per-usage or via the
+             local .Resources styles for cells; add more Setters here if other
+             visual regressions appear on the subclass. -->
+    </Style>
+
+    <Style TargetType="{x:Type others:InspectableDataGrid}">
+        <Setter Property="Background" Value="{StaticResource ContentBackground}" />
     </Style>
 
     <!-- Menu Bar Entry Style -->
@@ -790,6 +813,56 @@
             </Setter.Value>
         </Setter>
         <Setter Property="Width" Value="45" />
+    </Style>
+
+    <Style
+        x:Key="DialogButtonStyle"
+        TargetType="Button">
+        <Setter Property="Background" Value="{x:Null}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginSmallLeft}" />
+        <Setter Property="MinWidth" Value="60" />
+        <Setter Property="Padding" Value="12,10" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border
+                        x:Name="border"
+                        Padding="5,3"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="4">
+                        <ContentPresenter
+                            Margin="5"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Opacity" Value="0.95" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Opacity" Value="0.9" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="border" Property="Opacity" Value="0.6" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        x:Key="DialogPrimaryButtonStyle"
+        BasedOn="{StaticResource DialogButtonStyle}"
+        TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
+        <Setter Property="BorderBrush" Value="{x:Null}" />
     </Style>
 
 

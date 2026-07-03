@@ -144,6 +144,12 @@
                     <DataTemplate DataType="{x:Type dialogVMs:ExtractEmbeddedFileDialogViewModel}">
                         <dialogs:ExtractEmbeddedFileDialog ViewModel="{Binding}" />
                     </DataTemplate>
+                    <DataTemplate DataType="{x:Type dialogVMs:ImportArgsDialogViewModel}">
+                        <dialogs:ImportArgsDialog ViewModel="{Binding}" />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type dialogVMs:ExportArgsDialogViewModel}">
+                        <dialogs:ExportArgsDialog ViewModel="{Binding}" />
+                    </DataTemplate>
                     <Storyboard x:Key="OverlayFadeIn">
                         <DoubleAnimation
                             FillBehavior="HoldEnd"
