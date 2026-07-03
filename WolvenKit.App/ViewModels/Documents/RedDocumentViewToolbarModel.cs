@@ -669,8 +669,11 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             return;
         }
 
-        mesh.Appearances.Clear();
-        _cvmTools.DeleteUnusedMaterials(RootChunk, null, true);
+        _documentTools.ClearMeshMaterials(mesh);
+        RootChunk.GetPropertyChild("appearances")?.RecalculateProperties();
+        CvmMaterialTools.RecalculateMaterialProperties(RootChunk, true);
+
+        RootChunk.Tab?.Parent?.SetIsDirty(true);
     }
 
     private bool CanSelectTemplateAppearance() => SelectedChunk?.ResolvedData is CArray<CHandle<meshMeshAppearance>> ||
@@ -937,12 +940,18 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
     public void OnSearchChanged(string searchBoxText)
     {
         CurrentActiveSearch = "";
-        if (CurrentTab is not RDTDataViewModel rtdViewModel)
+        switch (CurrentTab)
         {
-            return;
+            case RDTDataViewModel rtdViewModel:
+                rtdViewModel.OnSearchChanged(searchBoxText);
+                break;
+            case QuestPhaseGraphViewModel questPhaseGraphViewModel:
+                questPhaseGraphViewModel.OnDocumentSearchChanged(searchBoxText);
+                break;
+            case SceneGraphViewModel sceneGraphViewModel:
+                sceneGraphViewModel.OnDocumentSearchChanged(searchBoxText);
+                break;
         }
-
-        rtdViewModel.OnSearchChanged(searchBoxText);
     }
 
     /// <summary>
@@ -969,7 +978,7 @@ public partial class RedDocumentViewToolbarModel : ObservableObject
             else
             {
                 // if the folder contains more than one .mesh file, add a subdirectory inside "textures"
-                var fileName = Path.GetFileName(CurrentTab.FilePath.Split('.').FirstOrDefault() ?? "").ToFileName();
+                var fileName = Path.GetFileName(CurrentTab.FilePath.Split('.').FirstOrDefault() ?? "").ToArchiveFileName();
                 destFolder = Path.Combine(dirName, fileName);
             }
         }

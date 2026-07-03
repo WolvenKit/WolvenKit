@@ -121,7 +121,11 @@ public class FileHelper
 
         return new DirectoryInfo(directoryPath).GetFiles(searchPattern).MaxBy(f => f.LastWriteTime);
     }
-    
+
+    #region deprecated
+
+    /// <remarks><see cref="SanitizePath"/> is deprecated, use <see cref="WolvenKit.Core.Services.FilepathValidationTools.SanitizeOsFilePath"/> or <see cref="WolvenKit.Core.Services.FilepathValidationTools.SanitizeArchiveFilePath"/> instead.</remarks>
+    [Obsolete("SanitizePath() is deprecated, use FilePathValidationTools.SanitizeOsFilePath() or FilePathValidationTools.SanitizeArchiveFilePath() instead.")]
     public static string SanitizePath(string path)
     {
         char[] additionalInvalidChars = { '?', '*', '"', '<', '>', '|', '\\', '/' };
@@ -151,4 +155,6 @@ public class FileHelper
         inputPath = string.Join(Path.DirectorySeparatorChar, inputPathArray);
         return inputPath;
     }
+
+    #endregion
 }

@@ -1,0 +1,53 @@
+<reactiveUi:ReactiveUserControl
+    x:Class="WolvenKit.Views.Dialogs.ExportArgsDialog"
+    x:TypeArguments="dialogs:ExportArgsDialogViewModel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:dialogs="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=dialogs:ExportArgsDialogViewModel,
+                                     IsDesignTimeCreatable=True}"
+    d:DesignHeight="300"
+    d:DesignWidth="600">
+    <StackPanel Width="600">
+        <TextBlock
+            Margin="{DynamicResource WolvenKitMarginSmall}"
+            Background="{DynamicResource BackgroundColor_Frame_Background}"
+            FontSize="{DynamicResource WolvenKitFontHeader}"
+            FontWeight="Bold"
+            Text="Export Configuration" />
+
+        <syncfusion:PropertyGrid
+            x:Name="OverlayPropertyGrid"
+            BorderThickness="0,1,0,0"
+            ButtonPanelVisibility="Hidden"
+            CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
+            DescriptionPanelVisibility="Visible"
+            EnableGrouping="True"
+            PropertyExpandMode="NestedMode"
+            ReadOnlyBackground="{DynamicResource ContentBackgroundAlt}"
+            AutoGeneratingPropertyGridItem="OverlayPropertyGrid_OnAutoGeneratingPropertyGridItem"
+            SearchBoxVisibility="Hidden"
+            SelectedObject="{Binding ArgsWrapper}"
+            SortDirection="{x:Null}" />
+
+        <StackPanel
+            Margin="10"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+            <Button
+                Style="{StaticResource DialogButtonStyle}"
+                Click="CancelButton_Click"
+                Content="Cancel" />
+            <Button
+                Style="{StaticResource DialogPrimaryButtonStyle}"
+                Click="OkButton_Click"
+                Content="OK" />
+        </StackPanel>
+    </StackPanel>
+</reactiveUi:ReactiveUserControl>
+

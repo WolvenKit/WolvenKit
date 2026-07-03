@@ -753,7 +753,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     public event EventHandler? OnInitialProjectLoaded;
 
-    private async Task LoadProjectFromPathAsync(string location)
+    internal async Task LoadProjectFromPathAsync(string location)
     {
         var p = await _projectManager.LoadAsync(location);
         if (p is null)
@@ -776,7 +776,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             UpdateTitle();
             _notificationService.Success($"Project {Path.GetFileNameWithoutExtension(location)} loaded!");
             // https://github.com/WolvenKit/WolvenKit/issues/1962
-            if (!location.IsSaneFilePath())
+            if (!FilepathValidationTools.IsOsFilePathValid(location))
             {
                 _notificationService.Warning($"Project path {location} contains invalid characters!");
             }
@@ -808,7 +808,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         UpdateTitle();
     }
 
-    private async Task NewProjectTask(ProjectWizardViewModel project)
+    internal async Task NewProjectTask(ProjectWizardViewModel project)
     {
         try
         {
@@ -2528,6 +2528,12 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private void UpdateScalesResource()
     {
+        // During integration testing, return here to avoid crash.
+        if (Application.Current == null)
+        {
+            return;
+        }
+
         // NOTE: keep in sync with App.Sizes.xaml
         var resources = Application.Current.Resources;
 

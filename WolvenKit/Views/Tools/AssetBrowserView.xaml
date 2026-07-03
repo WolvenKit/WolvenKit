@@ -227,6 +227,7 @@
                         <!-- Folder Tree -->
                         <syncfusion:SfTreeGrid
                             x:Name="LeftNavigation"
+                            AutomationProperties.AutomationId="LeftNavigation"
                             Margin="0"
                             BorderThickness="0"
                             HeaderRowHeight="{DynamicResource WolvenKitTreeGridRowHeaderHeight}"
@@ -362,9 +363,9 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <syncfusion:SfDataGrid
+                        <others:InspectableDataGrid
                             x:Name="RightFileView"
-                            Background="{StaticResource ContentBackground}"
+                            AutomationProperties.AutomationId="RightFileView"
                             BorderThickness="0"
                             HeaderRowHeight="{DynamicResource WolvenKitTreeGridRowHeaderHeight}"
                             RowHeight="{DynamicResource WolvenKitTreeGridRowHeight}"
@@ -630,7 +631,7 @@
                                     <hc:EventToCommand Command="{Binding OpenFileSystemItemCommand}" />
                                 </hc:EventTrigger>
                             </hc:Interaction.Triggers>
-                        </syncfusion:SfDataGrid>
+                        </others:InspectableDataGrid>
 
                         <!--<syncfusion:SfDataPager
                                 x:Name="dataPager"

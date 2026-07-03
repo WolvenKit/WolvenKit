@@ -146,6 +146,12 @@ internal class NodeProperties
                 details["Required Entry Type"] = journalBulkUpdateCasted?.RequiredEntryType.ToString()!;
                 details["Send Notification"] = journalBulkUpdateCasted?.SendNotification == true ? "True" : "False";
             }
+            if (journalNodeCasted?.Type?.Chunk is questJournalChangeMappinPhase_NodeType journalChangeMappinCasted)
+            {
+                details.AddRange(ParseJournalPath(journalChangeMappinCasted?.Path?.Chunk));
+                details["Phase"] = journalChangeMappinCasted?.Phase.ToEnumString()!;
+                details["Notify UI"] = journalChangeMappinCasted?.NotifyUI == true ? "True" : "False";
+            }
         }
         else if (node is questUseWorkspotNodeDefinition useWorkspotNodeCasted)
         {
@@ -702,6 +708,53 @@ internal class NodeProperties
                     counter++;
                 }
             }
+            if (itemManagerCasted?.Type?.Chunk is questInjectLoot_NodeType injectLootNodeCasted)
+            {
+                var paramsArr = injectLootNodeCasted.Params;
+
+                int counter = 1;
+                foreach (var param in paramsArr)
+                {
+                    var paramChunk = param?.Chunk;
+                    details["#" + counter + " Object Ref"] = GetNameFromUniversalRef(paramChunk?.ObjectRef?.Chunk);
+
+                    var operations = GetInjectLootOperations(paramChunk);
+                    if (operations.Count > 0)
+                    {
+                        var firstOperation = operations[0];
+                        details["#" + counter + " Operation"] = firstOperation.OperationType.ToEnumString();
+                        details["#" + counter + " Item"] = firstOperation.ItemTDBID.GetResolvedText()!;
+                        details["#" + counter + " Quantity"] = firstOperation.Quantity.ToString()!;
+
+                        if (operations.Count > 1)
+                        {
+                            details["#" + counter + " Operations Count"] = operations.Count.ToString();
+                        }
+                    }
+
+                    counter++;
+                }
+            }
+        }
+        else if (node is questRewardManagerNodeDefinition rewardManagerCasted)
+        {
+            details["Manager"] = GetNameFromClass(rewardManagerCasted?.Type?.Chunk);
+
+            if (rewardManagerCasted?.Type?.Chunk is questGiveReward_NodeType giveRewardNodeCasted)
+            {
+                int counter = 1;
+                foreach (var reward in giveRewardNodeCasted.Rewards)
+                {
+                    var rewardName = reward.GetResolvedText();
+                    if (string.IsNullOrEmpty(rewardName))
+                    {
+                        continue;
+                    }
+
+                    details["#" + counter + " Reward"] = rewardName;
+                    counter++;
+                }
+            }
         }
         else if (node is questCrowdManagerNodeDefinition crowdManagerCasted)
         {
@@ -887,6 +940,21 @@ internal class NodeProperties
 
         // Return true if we found curated properties (more than just the initial "Type")
         return details.Count > initialCount;
+    }
+
+    private static List<questInjectLoot_NodeTypeParams_OperationData> GetInjectLootOperations(questInjectLoot_NodeTypeParams? param)
+    {
+        var operations = new List<questInjectLoot_NodeTypeParams_OperationData>();
+
+        if (param == null)
+        {
+            return operations;
+        }
+
+        operations.AddRange(param.Operations);
+        operations.AddRange(param.LootOperations.Select(x => x?.Chunk).OfType<questInjectLoot_NodeTypeParams_OperationData>());
+
+        return operations;
     }
 
     private static Dictionary<string, string> GetSmartAutoDiscoveredProperties(questNodeDefinition? node)

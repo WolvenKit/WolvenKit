@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
@@ -274,10 +275,10 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
     /// <returns><code>/source/resources/r6/scripts/$MOD_NAME</code> or <code>/source/resources/r6/scripts/$AUTHOR_NAME</code></returns>
     public string GetResourceScriptsDirectory(bool useModderName = false)
     {
-        var subDir = ModName.ToFileName();
+        var subDir = ModName.ToArchiveFileName();
         if (useModderName && !string.IsNullOrEmpty(Author))
         {
-            subDir = Author.ToFileName();
+            subDir = Author.ToArchiveFileName();
         }
 
         var dir = Path.Combine(ResourcesDirectory, "r6", "scripts", subDir);
@@ -309,10 +310,10 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
     /// <returns><code>$ABSOLUTE_PATH/source/resources/r6/tweaks/$MOD_NAME</code> or <code>$ABSOLUTE_PATH/source/resources/r6/tweaks/$AUTHOR_NAME</code></returns>
     public string GetResourceTweakDirectory(bool useModderName = false, bool createDirectory = false)
     {
-        var subDir = ModName.ToFileName();
+        var subDir = ModName.ToArchiveFileName();
         if (useModderName && !string.IsNullOrEmpty(Author))
         {
-            subDir = Author.ToFileName();
+            subDir = Author.ToArchiveFileName();
         }
 
         var dirPath = Path.Combine(ResourcesDirectory, s_tweakSubfolder, subDir);
@@ -735,6 +736,10 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
             filePaths.AddRange(ModFiles);
             filePaths.AddRange(ResourceFiles);
         }
+
+        filePaths = filePaths
+            .Where(f => !AppViewModel.FileScanIgnoredExtensions.Contains(Path.GetExtension(f).ToLower()))
+            .ToList();
 
         progressService?.Report(0);
         var totalFiles = filePaths.Count;

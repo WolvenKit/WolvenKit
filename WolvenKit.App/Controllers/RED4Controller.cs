@@ -6,6 +6,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -46,8 +47,6 @@ public class RED4Controller : ObservableObject, IGameController
     private readonly Red4ParserService _parserService;
     private readonly IModifierViewStateService _modifierService;
 
-    private bool _initialized = false;
-
     #endregion
 
     public RED4Controller(
@@ -78,17 +77,7 @@ public class RED4Controller : ObservableObject, IGameController
 
     public async Task HandleStartup()
     {
-        if (!_initialized)
-        {
-            _initialized = true;
-            _progressService.IsIndeterminate = true;
-
-            // load archives
-            await LoadArchiveManager();
-
-            _progressService.IsIndeterminate = false;
-            _progressService.Completed();
-        }
+        await LoadArchiveManagerAsync();
     }
 
     // TODO: Move this somewhere else
@@ -145,36 +134,82 @@ public class RED4Controller : ObservableObject, IGameController
         }
     }
 
-    private Task LoadArchiveManager()
+    private Guid _loadingCompletion = Guid.NewGuid();
+
+    private void EnableLoadingMode()
     {
-        return Task.Run(() =>
+        _loadingCompletion = DispatcherHelper.StartRepeatingAction(
+            () =>
+            {
+                _progressService.IsIndeterminate = true;
+                _progressService.Status = EStatus.Running;
+            },
+            TimeSpan.FromMilliseconds(100),
+            DisableLoadingMode
+        );
+    }
+
+    private void DisableLoadingMode()
+    {
+        _progressService.IsIndeterminate = false;
+        _progressService.Status = EStatus.Ready;
+        DispatcherHelper.StopRepeatingAction(_loadingCompletion);
+    }
+
+    /// <summary>
+    /// Loads the basegame + EP1 archives on a background thread.
+    /// While loading, a 100ms repeating timer forces the global ProgressService
+    /// into Running/Indeterminate state. This mitigates the problem that there is
+    /// only a single global "Ready/Running" state — other code can (and does)
+    /// call Completed() or set IsIndeterminate=false while this long job is still
+    /// in progress.
+    /// </summary>
+    private async Task LoadArchiveManagerAsync()
+    {
+        // Fast path checks — do NOT start the loading indicator if there's nothing to do.
+        if (_archiveManager.IsManagerLoaded)
         {
-            if (_archiveManager.IsManagerLoaded)
-            {
-                return;
-            }
-            if (_settingsManager.CP77ExecutablePath is null)
-            {
-                return;
-            }
+            return;
+        }
 
-            _loggerService.Info("Loading Archive Manager ... ");
-            try
+        if (_settingsManager.CP77ExecutablePath is null)
+        {
+            _loggerService.Warning("Cyberpunk 2077 executable path is not set. Skipping Archive Manager load.");
+            return;
+        }
+
+        EnableLoadingMode();
+
+        try
+        {
+            await Task.Run(() =>
             {
+                // Keep priority low so the UI stays responsive during the (potentially long)
+                // first-time scan of dozens of large .archive files.
+                Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
+                Thread.CurrentThread.IsBackground = true;
+
+                _loggerService.Info("Loading Archive Manager ... ");
+
                 _archiveManager.LoadGameArchives(new FileInfo(_settingsManager.CP77ExecutablePath));
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error(e);
-                throw;
-            }
-            finally
-            {
-                _loggerService.Success("Finished loading Archive Manager.");
-            }
 
+                // Custom hash population needs the archives to be loaded, so do it here on the same thread.
+                LoadCustomHashes();
+            });
+
+            _loggerService.Success("Finished loading Archive Manager.");
+        }
+        catch (Exception e)
+        {
+            _loggerService.Error(e);
+            throw;
+        }
+        finally
+        {
+            // Always stop the heartbeat timer and release the progress indicator.
+            DisableLoadingMode();
             LoadCustomHashes();
-        });
+        }
     }
 
     #region Packing
@@ -1012,6 +1047,53 @@ public class RED4Controller : ObservableObject, IGameController
         return true;
     }
 
+    public async Task AddToModAsync(IList<IGameFile> files)
+    {
+        var progress = 0;
+
+        _progressService.IsIndeterminate = false;
+        _progressService.Report(0);
+
+        var total = files.Count;
+
+        if (total > 0)
+        {
+            // Limit concurrency for disk I/O (extraction + writes). Unbounded parallelism
+            // often saturates the disk and ends up slower + spams the UI thread.
+            var dop = Math.Min(8, Math.Max(1, Environment.ProcessorCount / 2));
+
+            await Parallel.ForEachAsync(
+                files,
+                new ParallelOptions { MaxDegreeOfParallelism = dop },
+                (file, token) =>
+                {
+                    token.ThrowIfCancellationRequested();
+                    AddToMod(file);
+                    var current = Interlocked.Increment(ref progress);
+                    var reportInterval = Math.Max(1, total / 50);
+
+                    if (current % reportInterval == 0 || current == total)
+                    {
+                        _progressService.Report(current / (float)total);
+                    }
+
+                    return ValueTask.CompletedTask;
+                });
+
+            var report = "";
+
+            foreach (var file in files)
+            {
+                report += $"Added game file to project: {file.Name}\r\n";
+            }
+
+            _loggerService.Info(report);
+        }
+
+        _progressService.Completed();
+    }
+
+
     /// <Inheritdoc />
     public bool AddToMod(ulong hash)
     {
@@ -1071,7 +1153,6 @@ public class RED4Controller : ObservableObject, IGameController
             {
                 using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
                 file.Extract(fs);
-                _loggerService.Info($"Added game file to project: {file.Name}");
             }
             catch (Exception ex)
             {
