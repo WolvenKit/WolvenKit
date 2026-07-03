@@ -485,28 +485,61 @@ public abstract partial class StringHelper
     /// </summary>
     /// <param name="input">String to be replaced in</param>
     /// <param name="searchOrPattern">Search string or regex pattern</param>
-    /// <param name="isWholeWord">Search refinement: whole word only</param>
-    /// <param name="isRegex">Search refinement: regular expression</param>
-    /// <returns></returns>
-    public static bool StringContains(string? input, string searchOrPattern, bool isWholeWord, bool isRegex)
+    /// <param name="searchType">Search refinement</param>
+    /// <returns>is the string a match?</returns>
+    public static bool StringContains(string? input, string searchOrPattern, SearchType searchType)
     {
         if (input is null)
         {
             return false;
         }
 
-        if (isWholeWord)
+        switch (searchType)
         {
-            var pattern = isRegex ? $@"\b{searchOrPattern}\b" : @"\b" + Regex.Escape(searchOrPattern) + @"\b";
-            return Regex.IsMatch(input, pattern, RegexOptions.IgnoreCase);
+            case SearchType.Contains:
+                return input.Contains(searchOrPattern);
+            case SearchType.Regex:
+                return Regex.IsMatch(input, searchOrPattern);
+            case SearchType.WholeWord:
+                return Regex.IsMatch(input, @$"\b{Regex.Escape(searchOrPattern)}\b", RegexOptions.IgnoreCase);
+            case SearchType.RegexWholeWord:
+                if (!searchOrPattern.StartsWith("\\b") && !searchOrPattern.EndsWith("\\b"))
+                {
+                    searchOrPattern = $@"\b{searchOrPattern}\b";
+                }
+
+                return Regex.IsMatch(input, searchOrPattern, RegexOptions.IgnoreCase);
+        }
+
+        return false;
+    }
+
+    public static SearchType GetSearchType(bool isRegex, bool isWholeWord)
+    {
+        if (!isRegex && !isWholeWord)
+        {
+            return SearchType.Contains;
         }
 
         if (!isRegex)
         {
-            return input.Contains(searchOrPattern);
+            return SearchType.WholeWord;
         }
 
-        return Regex.IsMatch(input, searchOrPattern);
+        if (!isWholeWord)
+        {
+            return SearchType.Regex;
+        }
+
+        return SearchType.RegexWholeWord;
     }
 
+}
+
+public enum SearchType
+{
+    Contains,
+    Regex,
+    WholeWord,
+    RegexWholeWord,
 }

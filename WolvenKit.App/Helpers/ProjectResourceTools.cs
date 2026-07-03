@@ -1439,7 +1439,7 @@ public partial class ProjectResourceTools
             try
             {
                 var json = _crwWTools.ReadAsJson(Path.Join(project.ModDirectory, filePath));
-                if (StringHelper.StringContains(json, searchText, isWholeWord, isRegex))
+                if (StringHelper.StringContains(json, searchText, StringHelper.GetSearchType(isWholeWord, isRegex)))
                 {
                     filesWithMatch.Add(filePath);
                 }
@@ -1460,7 +1460,8 @@ public partial class ProjectResourceTools
             try
             {
                 var fileContent = File.ReadAllText(Path.Join(project.ResourcesDirectory, filePath));
-                if (StringHelper.StringContains(fileContent, searchText, isWholeWord, isRegex))
+                if (StringHelper.StringContains(fileContent, searchText,
+                        StringHelper.GetSearchType(isWholeWord, isRegex)))
                 {
                     filesWithMatch.Add($"resources{Path.DirectorySeparatorChar}{filePath}");
                 }
