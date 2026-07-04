@@ -400,8 +400,15 @@ public class RedTypeTemplateService
         return false;
     }
 
-    public bool IsAnyTemplateOfTypeAvailable<T>() => IsAnyTemplateOfTypeAvailable(typeof(T));
-    public bool IsAnyTemplateOfTypeAvailable(Type type) => SystemTemplates.Any(t => t.Type == type) || UserTemplates.Any(t => t.Type == type);
+    public bool IsAnyTemplateOfTypeAvailable<T>(TemplateSource src = TemplateSource.Auto) => IsAnyTemplateOfTypeAvailable(typeof(T), src);
+
+    public bool IsAnyTemplateOfTypeAvailable(Type type, TemplateSource src = TemplateSource.Auto) => src switch
+    {
+        TemplateSource.Auto => SystemTemplates.Any(t => t.Type == type) || UserTemplates.Any(t => t.Type == type),
+        TemplateSource.System => SystemTemplates.Any(t => t.Type == type),
+        TemplateSource.User => UserTemplates.Any(t => t.Type == type),
+        _ => throw new ArgumentOutOfRangeException(nameof(src), src, null)
+    };
 
     #endregion
 

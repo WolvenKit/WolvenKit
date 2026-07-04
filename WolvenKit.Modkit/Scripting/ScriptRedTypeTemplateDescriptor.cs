@@ -17,7 +17,7 @@ public class ScriptRedTypeTemplateDescriptor
         FilePath = "";
     }
 
-    public ScriptRedTypeTemplateDescriptor(string name, string type, string filePath)
+    public ScriptRedTypeTemplateDescriptor(string name, string type, string filePath = "")
     {
         Name = name;
         Type = type;

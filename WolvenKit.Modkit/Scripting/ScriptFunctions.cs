@@ -5,6 +5,7 @@ using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using WolvenKit.Common;
@@ -18,6 +19,7 @@ using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.JSON;
+using WolvenKit.RED4.Types;
 using YamlDotNet.Serialization;
 
 namespace WolvenKit.Modkit.Scripting;
@@ -225,6 +227,11 @@ public partial class ScriptFunctions
     #region Template Service
 
     /// <summary>
+    /// Reloads all templates from the disk.
+    /// </summary>
+    public virtual void ReloadTemplates() => _redTypeTemplateService.LoadTemplates();
+
+    /// <summary>
     /// Gets a list of template descriptors for the specified template destination
     /// </summary>
     /// <param name="src">The source for the template list can be "TemplateDestination.System" or "TemplateDestination.User"</param>
@@ -233,10 +240,116 @@ public partial class ScriptFunctions
     /// <remarks>The list is passed via copy, changes to it will not be reflected upstream.</remarks>
     public virtual List<ScriptRedTypeTemplateDescriptor> GetTemplateDescriptors(TemplateDestination src) => src switch
     {
-        TemplateDestination.System => _redTypeTemplateService.SystemTemplates.Select(t => new ScriptRedTypeTemplateDescriptor(t)).ToList(),
-        TemplateDestination.User => _redTypeTemplateService.UserTemplates.Select(t => new ScriptRedTypeTemplateDescriptor(t)).ToList(),
+        TemplateDestination.System => _redTypeTemplateService.SystemTemplates
+            .Select(t => new ScriptRedTypeTemplateDescriptor(t)).ToList(),
+        TemplateDestination.User => _redTypeTemplateService.UserTemplates
+            .Select(t => new ScriptRedTypeTemplateDescriptor(t)).ToList(),
         _ => throw new ArgumentOutOfRangeException(nameof(src), src, null)
     };
+
+    /// <inheritdoc cref="RedTypeTemplateService.GetTemplateDescriptor(Type, string, TemplateSource)"/>
+    /// <exception cref="ArgumentException">String does not represent a valid C# type</exception>
+    public virtual ScriptRedTypeTemplateDescriptor? GetTemplateDescriptor(string type, string templateName = "default", TemplateSource src = TemplateSource.Auto)
+    {
+        var parsedType = RedTypeTemplateService.ParseType(type);
+        if (parsedType == null)
+        {
+            throw new ArgumentException("Invalid type: " + type, nameof(type));
+        }
+
+        var desc = _redTypeTemplateService.GetTemplateDescriptor(parsedType, templateName);
+        if (desc == null)
+        {
+            return null;
+        }
+
+        return new ScriptRedTypeTemplateDescriptor(desc);
+    }
+
+    /// <inheritdoc cref="RedTypeTemplateService.CreateTypeInstance(Type, string, TemplateSource)"/>
+    public virtual IRedType CreateTemplatedTypeInstance(string type, string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
+        CreateTemplatedTypeInstance(new ScriptRedTypeTemplateDescriptor(templateName, type), src);
+
+    /// <inheritdoc cref="RedTypeTemplateService.CreateTypeInstance(RedTypeTemplateDescriptor, TemplateSource)"/>
+    public virtual IRedType CreateTemplatedTypeInstance(ScriptRedTypeTemplateDescriptor templateDescriptor, TemplateSource src = TemplateSource.Auto)
+        => _redTypeTemplateService.CreateTypeInstance(templateDescriptor.ToRedTypeTemplateDescriptor(), src);
+
+
+    /// <inheritdoc cref="RedTypeTemplateService.ReadTemplate(Type, string, TemplateSource)"/>
+    public virtual RedTypeTemplate? ReadTemplate(string type, string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
+        ReadTemplate(new ScriptRedTypeTemplateDescriptor(templateName, type), src);
+
+    /// <inheritdoc cref="RedTypeTemplateService.ReadTemplate(RedTypeTemplateDescriptor, TemplateSource)"/>
+    public virtual RedTypeTemplate? ReadTemplate(ScriptRedTypeTemplateDescriptor templateDescriptor, TemplateSource src = TemplateSource.Auto)
+        => _redTypeTemplateService.ReadTemplate(templateDescriptor.ToRedTypeTemplateDescriptor(), src);
+
+    // rider doesn't support inheritdocs path property, hence all XML docs that need to filter the content they're inheriting need to be duplicated
+    /// <summary>
+    /// Writes a template to the user directory.
+    /// </summary>
+    /// <param name="template">Instance of the template</param>
+    /// <param name="templateName">Name of the template</param>
+    /// <remarks>If a template with that name already exists, it will be overwritten.</remarks>
+    /// <exception cref="ArgumentNullException">Template Data property is null</exception>
+    /// <exception cref="ArgumentException">Template Data type is not templateable</exception>
+    public virtual void WriteTemplate(RedTypeTemplate template, string templateName)
+        => _redTypeTemplateService.WriteTemplate(template, templateName);
+
+    /// <summary>
+    /// Deletes a template from the user directory.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="templateName"></param>
+    public virtual void DeleteTemplate(string type, string templateName)
+        => DeleteTemplate(new ScriptRedTypeTemplateDescriptor(templateName, type));
+
+    /// <summary>
+    /// Deletes a template from the user directory.
+    /// </summary>
+    /// <param name="templateDescriptor"></param>
+    public virtual void DeleteTemplate(ScriptRedTypeTemplateDescriptor templateDescriptor)
+        => _redTypeTemplateService.DeleteTemplate(templateDescriptor.ToRedTypeTemplateDescriptor());
+
+    /// <inheritdoc cref="RedTypeTemplateService.TemplateExists(Type, string, TemplateSource)"/>
+    public virtual bool TemplateExists(string type, string templateName, TemplateSource src = TemplateSource.Auto)
+        => TemplateExists(new ScriptRedTypeTemplateDescriptor(templateName, type), src);
+
+    /// <inheritdoc cref="RedTypeTemplateService.TemplateExists(RedTypeTemplateDescriptor, TemplateSource)"/>
+    public virtual bool TemplateExists(ScriptRedTypeTemplateDescriptor templateDesc, TemplateSource src = TemplateSource.Auto)
+        => _redTypeTemplateService.TemplateExists(templateDesc.ToRedTypeTemplateDescriptor(), src);
+
+    /// <summary>
+    /// Checks if the specified type is templatable.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException">String does not represent a valid C# type</exception>
+    public virtual bool IsTypeTemplatable(string type)
+    {
+        var parsedType = RedTypeTemplateService.ParseType(type);
+        if (parsedType == null)
+        {
+            throw new ArgumentException("Invalid type: " + type, nameof(type));
+        }
+        return RedTypeTemplateService.IsTypeTemplatable(parsedType);
+    }
+
+    /// <summary>
+    /// Checks if a template of the specified type is available.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="src"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException">String does not represent a valid C# type</exception>
+    public virtual bool IsAnyTemplateOfTypeAvailable(string type, TemplateSource src = TemplateSource.Auto)
+    {
+        var parsedType = RedTypeTemplateService.ParseType(type);
+        if (parsedType == null)
+        {
+            throw new ArgumentException("Invalid type: " + type, nameof(type));
+        }
+        return _redTypeTemplateService.IsAnyTemplateOfTypeAvailable(parsedType, src);
+    }
 
     #endregion
 }
