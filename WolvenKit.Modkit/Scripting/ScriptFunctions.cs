@@ -230,6 +230,7 @@ public partial class ScriptFunctions
     /// <param name="src">The source for the template list can be "TemplateDestination.System" or "TemplateDestination.User"</param>
     /// <returns></returns>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <remarks>The list is passed via copy, changes to it will not be reflected upstream.</remarks>
     public virtual List<ScriptRedTypeTemplateDescriptor> GetTemplateDescriptors(TemplateDestination src) => src switch
     {
         TemplateDestination.System => _redTypeTemplateService.SystemTemplates.Select(t => new ScriptRedTypeTemplateDescriptor(t)).ToList(),
