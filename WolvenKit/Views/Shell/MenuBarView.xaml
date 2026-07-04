@@ -43,9 +43,9 @@
             <!-- File -->
             <MenuItem
                 x:Name="MenuItemFile"
-                AutomationProperties.AutomationId="MenuItemFile"
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
                 FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                AutomationProperties.AutomationId="MenuItemFile"
                 Header="File">
                 <MenuItem
                     x:Name="MenuItemNewFile"
@@ -63,8 +63,8 @@
 
                 <MenuItem
                     Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
-                    Header="Add files..."
-                    ToolTip="New complex file">
+                    Header="Generate files"
+                    ToolTip="Generate complex files">
                     <MenuItem.Icon>
                         <local:IconBox
                             IconPack="Empty"
@@ -90,7 +90,7 @@
                     <MenuItem
                         x:Name="MenuItemGenerateInkatlas"
                         Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
-                        Header="Generate .inkatlas"
+                        Header="Icon file (.inkatlas)"
                         ToolTip="Adds an .inkatlas file from a folder and generates the textures for it">
                         <MenuItem.Icon>
                             <local:IconBox
@@ -108,7 +108,7 @@
                     <MenuItem
                         x:Name="MenuItemGenerateMinimalQuest"
                         Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
-                        Header="Generate quest files"
+                        Header="Quest (skeleton files)"
                         ToolTip="Adds minimal quest structure and files">
                         <MenuItem.Icon>
                             <local:IconBox
@@ -140,7 +140,7 @@
                     <MenuItem
                         x:Name="MenuItemGeneratePropFile"
                         Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
-                        Header="Create a prop"
+                        Header="Prop (decoration)"
                         ToolTip="Generates a prop for WorldBuilder and AMM">
                         <MenuItem.Icon>
                             <local:IconBox
@@ -155,8 +155,8 @@
                     <MenuItem
                         x:Name="MenuItemRegisterWorldbuilderFiles"
                         Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
-                        Header="Create WorldBuilder asset file"
-                        ToolTip="Generates prop file for WorldBuilder">
+                        Header="WorldBuilder asset file"
+                        ToolTip="Register existing props with WorldBuilder">
                         <MenuItem.Icon>
                             <local:IconBox
                                 IconPack="Codicons"
@@ -172,7 +172,7 @@
                     <MenuItem
                         x:Name="MenuItemAddAxlItemFiles"
                         Margin="2,1"
-                        Header="ArchiveXL item"
+                        Header="Clothing Item (ArchiveXL)"
                         ToolTip="Adds all necessary files for a new ArchiveXL item">
                         <MenuItem.Icon>
                             <local:IconBox
@@ -185,7 +185,7 @@
 
                     <Separator />
 
-                    <!-- ArchiveXL item files -->
+                    <!-- Player head -->
                     <MenuItem
                         x:Name="MenuItemAddPlayerHead"
                         Margin="2,1"
@@ -285,9 +285,9 @@
 
             <!-- Project -->
             <MenuItem
-                AutomationProperties.AutomationId="MenuItemProject"
                 Padding="{DynamicResource WolvenKitMarginHorizontal}"
                 FontSize="{DynamicResource WolvenKitFontSubTitle}"
+                AutomationProperties.AutomationId="MenuItemProject"
                 Header="Project">
 
                 <MenuItem
