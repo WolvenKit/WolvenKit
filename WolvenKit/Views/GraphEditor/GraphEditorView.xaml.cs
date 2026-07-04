@@ -176,11 +176,13 @@ public partial class GraphEditorView : UserControl
                     DialogHandler = model =>
                     {
                         _appViewModel.CloseDialogCommand.Execute(null);
-                        if (model is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
+                        if (model is not TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType } tsdvm)
                         {
-                            var nodeId = Source.CreateSceneNode(selectedType, mousePosition);
-                            SelectNodeById(nodeId);
+                            return;
                         }
+
+                        var nodeId = Source.CreateSceneNode(selectedType, mousePosition, tsdvm.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate);
+                        SelectNodeById(nodeId);
                     }
                 });
             }));
@@ -325,10 +327,12 @@ public partial class GraphEditorView : UserControl
                     DialogHandler = model =>
                     {
                         _appViewModel.CloseDialogCommand.Execute(null);
-                        if (model is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
+                        if (model is not TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType} tsdvm)
                         {
-                            Source.CreateQuestNode(selectedType, mousePosition);
+                            return;
                         }
+
+                        Source.CreateQuestNode(selectedType, mousePosition, tsdvm.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate);
                     }
                 });
             }));

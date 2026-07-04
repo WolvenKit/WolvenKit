@@ -1203,12 +1203,14 @@ namespace WolvenKit.Views.Documents
                     DialogHandler = model =>
                     {
                         appViewModel.CloseDialogCommand.Execute(null);
-                        if (model is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
+                        if (model is not TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType } tsdvm)
                         {
-                            // Create new node at current viewport center
-                            var viewportCenter = GetViewportCenter();
-                            graph.CreateQuestNode(selectedType, viewportCenter);
+                            return;
                         }
+
+                        // Create new node at current viewport center
+                        var viewportCenter = GetViewportCenter();
+                        graph.CreateQuestNode(selectedType, viewportCenter, tsdvm.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate);
                     }
                 });
             }

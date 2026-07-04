@@ -20,6 +20,7 @@ using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
 using WolvenKit.App.Services;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.App.ViewModels.GraphEditor;
 
@@ -57,6 +58,7 @@ public partial class RedGraph : IDisposable
     public string StateParents { get; set; } = "";
 
     private static ILoggerService? _loggerService;
+    private RedTypeTemplateService? _templateService;
 
     static RedGraph()
     {
@@ -83,6 +85,7 @@ public partial class RedGraph : IDisposable
         ItemsDragCompletedCommand = new RelayCommand(ItemsDragCompleted);
 
         _loggerService = Locator.Current.GetService<ILoggerService>();
+        _templateService = Locator.Current.GetService<RedTypeTemplateService>();
     }
 
     public void Connect()
@@ -198,7 +201,7 @@ public partial class RedGraph : IDisposable
         }
 
         GraphStateSave();
-        
+
         // Mark document as dirty since we modified the data
         DocumentViewModel?.SetIsDirty(true);
     }
@@ -244,7 +247,7 @@ public partial class RedGraph : IDisposable
         {
             DuplicateQuestNode(questNode);
         }
-        
+
         // Mark document as dirty since we modified the data
         DocumentViewModel?.SetIsDirty(true);
     }
@@ -262,7 +265,7 @@ public partial class RedGraph : IDisposable
         {
             PasteQuestNode(copiedData, location);
         }
-        
+
         // Mark document as dirty since we modified the data
         DocumentViewModel?.SetIsDirty(true);
     }
@@ -492,7 +495,7 @@ public partial class RedGraph : IDisposable
 
                     jNodes.Add(newPerfSet);
                 }
-                
+
                 var jRoot = new JObject
                 {
                     new JProperty("EditorX", Editor != null ? Editor.ViewportLocation.X : 0),
