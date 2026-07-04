@@ -144,7 +144,9 @@
                     Margin="{DynamicResource WolvenKitMarginSmallRight}"
                     FlowDirection="LeftToRight" />
 
-                <controls:RedTypeTemplateDropdown Grid.Column="2" ViewModel="{Binding RedTypeTemplateDropdownViewModel}"/>
+                <controls:RedTypeTemplateDropdown
+                    Grid.Column="2"
+                    ViewModel="{Binding RedTypeTemplateDropdownViewModel}"/>
             </Grid>
         </Border>
 

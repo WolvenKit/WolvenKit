@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 using WolvenKit.Core.Extensions;
 using System.IO;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.App.ViewModels.Documents
 {
@@ -25,11 +26,12 @@ namespace WolvenKit.App.ViewModels.Documents
         private bool _disposed = false;
         private readonly ILoggerService? _logger = Locator.Current.GetService<ILoggerService>();
         private readonly questQuestPhaseResource _questPhaseData;
+        public readonly RedTypeTemplateService RedTypeTemplateService;
 
         public RDTDataViewModel RDTViewModel { get; }
         public RedGraph MainGraph { get; }
         public ObservableCollection<QuestPhaseTabDefinition> Tabs { get; } = new();
-        
+
         // Navigation history for nested graphs
         public ObservableCollection<RedGraph> History { get; } = new();
 
@@ -46,33 +48,34 @@ namespace WolvenKit.App.ViewModels.Documents
 
         // Quest phase statistics properties
         public string FileName => Path.GetFileNameWithoutExtension(Parent?.Header ?? "Unknown");
-        
+
         public int TotalNodes => CalculateTotalNodes();
-        
+
         public int TotalPhaseNodes => CalculatePhaseNodes();
-        
+
         public int TotalPhasePrefabs => _questPhaseData.PhasePrefabs?.Count ?? 0;
-        
+
         public int TotalInplacePhases => _questPhaseData.InplacePhases?.Count ?? 0;
 
         public QuestPhaseGraphViewModel(questQuestPhaseResource data, RedDocumentViewModel parent, IChunkViewmodelFactory chunkViewmodelFactory, INodeWrapperFactory nodeWrapperFactory)
             : base(parent, "Quest Phase Editor")
         {
             _questPhaseData = data;
-            
+
             var appViewModel = Locator.Current.GetService<AppViewModel>() ?? throw new ArgumentNullException(nameof(AppViewModel));
             var settingsManager = Locator.Current.GetService<ISettingsManager>() ?? throw new ArgumentNullException(nameof(ISettingsManager));
             var gameController = Locator.Current.GetService<IGameControllerFactory>() ?? throw new ArgumentNullException(nameof(IGameControllerFactory));
+            RedTypeTemplateService = Locator.Current.GetService<RedTypeTemplateService>() ?? throw new ArgumentNullException(nameof(RedTypeTemplateService));
 
             RDTViewModel = new RDTDataViewModel(data, parent, appViewModel, chunkViewmodelFactory, settingsManager, gameController);
-            
+
             // Create MainGraph - handle cases where graph might be null
             try
             {
                 if (data.Graph?.Chunk != null)
                 {
                     MainGraph = RedGraph.GenerateQuestGraph(parent.Header, data.Graph.Chunk, nodeWrapperFactory);
-                    
+
                     // Set document reference for property change syncing
                     MainGraph.DocumentViewModel = parent;
 
@@ -100,9 +103,9 @@ namespace WolvenKit.App.ViewModels.Documents
 
             // Initialize navigation history with the main graph
             History.Add(MainGraph);
-            
+
             CreateTabs();
-            
+
             // Set the first tab as selected
             SelectedTab = Tabs.FirstOrDefault();
 
@@ -165,7 +168,7 @@ namespace WolvenKit.App.ViewModels.Documents
         private int CalculateTotalNodes()
         {
             int total = _questPhaseData.Graph?.Chunk?.Nodes?.Count ?? 0;
-            
+
             // Add nodes from phase prefabs (nested graphs)
             if (_questPhaseData.PhasePrefabs != null)
             {
@@ -200,21 +203,21 @@ namespace WolvenKit.App.ViewModels.Documents
                     }
                 }
             }
-            
+
             return total;
         }
 
         private int CalculatePhaseNodes()
         {
             int total = 0;
-            
+
             // Count phase nodes in the main graph
             if (_questPhaseData.Graph?.Chunk?.Nodes != null)
             {
                 total += _questPhaseData.Graph.Chunk.Nodes.Count(
                     nodeHandle => nodeHandle.Chunk is questPhaseNodeDefinition);
             }
-            
+
             return total;
         }
 
@@ -264,4 +267,4 @@ namespace WolvenKit.App.ViewModels.Documents
             Dispose(false);
         }
     }
-} 
+}

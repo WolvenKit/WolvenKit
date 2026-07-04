@@ -123,7 +123,7 @@ public class RedTypeTemplateService
     /// <returns></returns>
     /// <exception cref="Exception">Template File contains invalid or mismatched data</exception>
     /// <remarks>When using <see cref="TemplateSource.Auto"/>, user templates are preferred over system templates.</remarks>
-    public IRedType? CreateTypeInstance(RedTypeTemplateDescriptor templateDescriptor, TemplateSource src = TemplateSource.Auto) =>
+    public IRedType CreateTypeInstance(RedTypeTemplateDescriptor templateDescriptor, TemplateSource src = TemplateSource.Auto) =>
         CreateTypeInstance(templateDescriptor.Type, templateDescriptor.Name, src);
 
     /// <summary>
@@ -134,7 +134,7 @@ public class RedTypeTemplateService
     /// <returns></returns>
     /// <exception cref="Exception">Template File contains invalid or mismatched data</exception>
     /// <remarks>When using <see cref="TemplateSource.Auto"/>, user templates are preferred over system templates.</remarks>
-    public IRedType? CreateTypeInstance<T>(string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
+    public IRedType CreateTypeInstance<T>(string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
         CreateTypeInstance(typeof(T), templateName, src);
 
     /// <summary>
@@ -146,8 +146,8 @@ public class RedTypeTemplateService
     /// <returns></returns>
     /// <exception cref="Exception">Template File contains invalid or mismatched data</exception>
     /// <remarks>When using <see cref="TemplateSource.Auto"/>, user templates are preferred over system templates.</remarks>
-    public IRedType? CreateTypeInstance(Type type, string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
-        ReadTemplate(type, templateName, src)?.Data ?? ReadTemplate(type, "default", src)?.Data ?? (IRedType?)Activator.CreateInstance(type);
+    public IRedType CreateTypeInstance(Type type, string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
+        ReadTemplate(type, templateName, src)?.Data ?? ReadTemplate(type, "default", src)?.Data ?? (IRedType)Activator.CreateInstance(type)!;
 
     /// <summary>
     /// Reads a template from the system or user template directory and returns an instance of the templated object.
@@ -199,6 +199,40 @@ public class RedTypeTemplateService
             return template == null ? null : DeserializeTemplate(templateType, File.ReadAllText(template.FilePath));
         }
     }
+
+    /// <summary>
+    /// Gets a template descriptor from the system or user template directory.
+    /// </summary>
+    /// <param name="templateName">Name of the template, defaults to "default"</param>
+    /// <param name="src">Source of the template, defaults to "Auto"</param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <exception cref="Exception">Template File contains invalid or mismatched data</exception>
+    /// <remarks>When using <see cref="TemplateSource.Auto"/>, user templates are preferred over system templates.</remarks>
+    public RedTypeTemplateDescriptor? GetTemplateDescriptor<T>(string templateName = "default", TemplateSource src = TemplateSource.Auto) => GetTemplateDescriptor(typeof(T), templateName, src);
+
+    /// <summary>
+    /// Gets a template descriptor from the system or user template directory.
+    /// </summary>
+    /// <param name="templateName">Name of the template, defaults to "default"</param>
+    /// <param name="type">Type of the template</param>
+    /// <param name="src">Source of the template, defaults to "Auto"</param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <exception cref="Exception">Template File contains invalid or mismatched data</exception>
+    /// <remarks>When using <see cref="TemplateSource.Auto"/>, user templates are preferred over system templates.</remarks>
+    public RedTypeTemplateDescriptor? GetTemplateDescriptor(Type type, string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
+        src switch
+        {
+            TemplateSource.Auto => GetTemplateDescriptor(type, templateName, UserTemplates) ??
+                                   GetTemplateDescriptor(type, templateName, SystemTemplates),
+            TemplateSource.System => GetTemplateDescriptor(type, templateName, SystemTemplates),
+            TemplateSource.User => GetTemplateDescriptor(type, templateName, UserTemplates),
+            _ => throw new ArgumentOutOfRangeException(nameof(src), src, null)
+        };
+
+    private RedTypeTemplateDescriptor? GetTemplateDescriptor(Type templateType, string templateName,
+        List<RedTypeTemplateDescriptor> templates) => templates.FirstOrDefault(t => t.Name == templateName && t.Type == templateType);
 
     #endregion
 
@@ -337,6 +371,37 @@ public class RedTypeTemplateService
     public static bool IsTypeTemplatable<T>() => IsTypeTemplatable(typeof(T));
     public static bool IsTypeTemplatable(Type type) => typeof(IRedType).IsAssignableFrom(type) &&
                                                 type is { IsAbstract: false, IsPrimitive: false };
+
+    public bool IsOnlyNoneOrDefaultAvailable<T>(TemplateSource src = TemplateSource.Auto) => IsOnlyNoneOrDefaultAvailable(typeof(T), src);
+
+    public bool IsOnlyNoneOrDefaultAvailable(Type type, TemplateSource src = TemplateSource.Auto) => src switch
+    {
+        TemplateSource.Auto => IsOnlyNoneOrDefaultAvailable(type, UserTemplates) &&
+                               IsOnlyNoneOrDefaultAvailable(type, SystemTemplates),
+        TemplateSource.System => IsOnlyNoneOrDefaultAvailable(type, SystemTemplates),
+        TemplateSource.User => IsOnlyNoneOrDefaultAvailable(type, UserTemplates),
+        _ => throw new ArgumentOutOfRangeException(nameof(src), src, null)
+    };
+
+    private static bool IsOnlyNoneOrDefaultAvailable(Type type, List<RedTypeTemplateDescriptor> templates)
+    {
+        var filtered = templates.Where(t => t.Type == type).ToList();
+
+        if (filtered.Count == 0)
+        {
+            return true;
+        }
+
+        if (filtered is [{ Name: "default" }])
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool IsAnyTemplateOfTypeAvailable<T>() => IsAnyTemplateOfTypeAvailable(typeof(T));
+    public bool IsAnyTemplateOfTypeAvailable(Type type) => SystemTemplates.Any(t => t.Type == type) || UserTemplates.Any(t => t.Type == type);
 
     #endregion
 

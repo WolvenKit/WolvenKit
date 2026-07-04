@@ -24,6 +24,7 @@ using WolvenKit.Views.Templates;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
+using WolvenKit.Common.Services;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.GraphEditor;
@@ -32,6 +33,8 @@ namespace WolvenKit.Views.GraphEditor;
 /// </summary>
 public partial class GraphEditorView : UserControl
 {
+    private readonly RedTypeTemplateService _redTypeTemplateService = Locator.Current.GetService<RedTypeTemplateService>();
+
     public static readonly DependencyProperty SourceProperty = DependencyProperty.Register(
         nameof(Source), typeof(RedGraph), typeof(GraphEditorView), new PropertyMetadata(null, OnSourceChanged));
 
@@ -168,7 +171,7 @@ public partial class GraphEditorView : UserControl
             // Open Dialog option
             addMenu.Items.Add(CreateMenuItem("Search Node ...", "Magnify", "WolvenKitYellow", async () =>
             {
-                await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(allTypes.OrderBy(x => x.Name).ToList())
+                await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, allTypes.OrderBy(x => x.Name).ToList())
                 {
                     DialogHandler = model =>
                     {
@@ -317,7 +320,7 @@ public partial class GraphEditorView : UserControl
 
             addMenu.Items.Add(CreateMenuItem("Search Node ...", "Magnify", "WolvenKitYellow", async () =>
             {
-                await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
+                await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, types)
                 {
                     DialogHandler = model =>
                     {

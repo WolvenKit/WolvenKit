@@ -29,6 +29,7 @@ using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes;
 using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.App.ViewModels.Tools.EditorDifficultyLevel;
+using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
@@ -71,6 +72,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     private readonly Red4ParserService _parserService;
     private readonly CRUIDService _cruidService;
     private readonly ICvmTools _cvmTools;
+    private readonly RedTypeTemplateService _redTypeTemplateService;
 
 
     private static readonly List<string> s_hiddenProperties = new()
@@ -111,6 +113,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         Red4ParserService parserService,
         CRUIDService cruidService,
         ICvmTools cvmTools,
+        RedTypeTemplateService redTypeTemplateService,
         ChunkViewModel? parent = null,
         bool isReadOnly = false
     )
@@ -128,6 +131,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         _parserService = parserService;
         _cruidService = cruidService;
         _cvmTools = cvmTools;
+        _redTypeTemplateService = redTypeTemplateService;
 
         _appViewModel = appViewModel;
         _data = data;
@@ -176,12 +180,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         Red4ParserService parserService,
         ICvmTools cvmTools,
         CRUIDService cruidService,
+        RedTypeTemplateService redTypeTemplateService,
         bool isReadOnly = false
     )
         : this(data, nameof(RDTDataViewModel), appViewModel,
             chunkViewmodelFactory, tabViewmodelFactory, hashService, loggerService, projectManager,
             gameController, settingsManager, archiveManager, tweakDbService, locKeyService, parserService,
-            cruidService, cvmTools, null, isReadOnly)
+            cruidService, cvmTools,  redTypeTemplateService,null, isReadOnly)
     {
         _tab = tab;
         RelativePath = _tab.Parent.RelativePath;
@@ -202,12 +207,13 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         Red4ParserService parserService,
         ICvmTools cvmTools,
         CRUIDService cruidService,
+        RedTypeTemplateService redTypeTemplateService,
         bool isReadOnly = false
     )
         : this(export, nameof(ReferenceSocket), appViewModel,
             chunkViewmodelFactory, tabViewmodelFactory, hashService, loggerService, projectManager,
             gameController, settingsManager, archiveManager, tweakDbService, locKeyService, parserService,
-            cruidService, cvmTools, null, isReadOnly
+            cruidService, cvmTools, redTypeTemplateService, null, isReadOnly
         )
     {
         Socket = socket;
@@ -1266,31 +1272,34 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     private async Task AddHandle()
     {
         var data = RedTypeFactory.CreateAndInitRedType(PropertyType);
-        if (data is IRedBaseHandle handle)
+        if (data is not IRedBaseHandle handle)
         {
-            var types = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(s => s.GetTypes())
-                .Where(p => handle.InnerType.IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
-                .Select(x => new TypeEntry(x.Name, "", x))
-                .ToList();
-            var allowCreating = handle.InnerType.IsAssignableTo(typeof(inkWidgetLogicController)) ||
-                                handle.InnerType.IsAssignableTo(typeof(inkIWidgetController));
-
-            if (!allowCreating)
-            {
-                switch (types.Count)
-                {
-                    case 0:
-                        return;
-                    case 1:
-                        HandlePointer((Type)types[0].UserData!);
-                        return;
-                }
-            }
-
-            await _appViewModel.SetActiveDialog(
-                new TypeSelectorDialogViewModel(types, allowCreating) { DialogHandler = HandlePointer });
+            return;
         }
+
+        var types = AppDomain.CurrentDomain.GetAssemblies()
+            .SelectMany(s => s.GetTypes())
+            .Where(p => handle.InnerType.IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
+            .Select(x => new TypeEntry(x.Name, "", x))
+            .ToList();
+        var allowCreating = handle.InnerType.IsAssignableTo(typeof(inkWidgetLogicController)) ||
+                            handle.InnerType.IsAssignableTo(typeof(inkIWidgetController));
+
+        if (!allowCreating)
+        {
+            switch (types.Count)
+            {
+                case 0:
+                    return;
+                case 1 when _redTypeTemplateService.IsOnlyNoneOrDefaultAvailable((Type)types[0].UserData!):
+                    var templateDescriptor = _redTypeTemplateService.GetTemplateDescriptor((Type)types[0].UserData!);
+                    HandlePointer((Type)types[0].UserData!, "", templateDescriptor);
+                    return;
+            }
+        }
+
+        await _appViewModel.SetActiveDialog(
+            new TypeSelectorDialogViewModel(_redTypeTemplateService, types, allowCreating) { DialogHandler = HandlePointer });
     }
 
     private bool CanAddItemToArray() =>
@@ -1304,188 +1313,87 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         ArgumentNullException.ThrowIfNull(Parent);
 
-        if (PropertyType.IsAssignableTo(typeof(IRedArray)))
+        if (!PropertyType.IsAssignableTo(typeof(IRedArray)))
         {
-            if (!CreateArray())
-            {
-                throw new Exception("Error while accessing or creating the array!");
-            }
-
-            if (Data is IRedArray arr)
-            {
-                // Special handling for scnActorDef arrays - just calculate correct actor ID
-                if (arr.InnerType == typeof(scnActorDef))
-                {
-                    var newActor = new scnActorDef();
-
-                    // Calculate the next actor ID based on current array count
-                    uint nextActorId = (uint)arr.Count;
-                    newActor.ActorId.Id = nextActorId;
-
-                    InsertChild(-1, newActor);
-                    return;
-                }
-
-                // Special handling for scnPlayerActorDef arrays - calculate ID continuing after actors
-                if (arr.InnerType == typeof(scnPlayerActorDef) && GetRootModel().ResolvedData is scnSceneResource scene)
-                {
-                    var newPlayerActor = new scnPlayerActorDef();
-
-                    // Calculate the next actor ID continuing after regular actors
-                    // Total ID = actors.Count + playerActors.Count
-                    uint nextActorId = (uint)(scene.Actors.Count + arr.Count);
-                    newPlayerActor.ActorId.Id = nextActorId;
-
-                    InsertChild(-1, newPlayerActor);
-                    return;
-                }
-
-                // Special handling for scnPropDef arrays - calculate correct prop ID
-                if (arr.InnerType == typeof(scnPropDef))
-                {
-                    var newProp = new scnPropDef();
-
-                    // Calculate the next prop ID based on current array count (0, 1, 2, etc.)
-                    uint nextPropId = (uint)arr.Count;
-                    newProp.PropId.Id = nextPropId;
-
-                    InsertChild(-1, newProp);
-                    return;
-                }
-
-                // Special handling for screenplay lines - itemId: 0, 257, 513, 769, etc.
-                if (arr.InnerType == typeof(scnscreenplayDialogLine))
-                {
-                    var newLine = new scnscreenplayDialogLine();
-
-                    // Calculate itemId: 0 + lineIndex * 256
-                    uint itemId = (uint)arr.Count * 256;
-                    newLine.ItemId.Id = itemId;
-
-                    InsertChild(-1, newLine);
-                    return;
-                }
-
-                // Special handling for screenplay options - itemId: 2, 258, 514, 770, etc.
-                if (arr.InnerType == typeof(scnscreenplayChoiceOption))
-                {
-                    var newOption = new scnscreenplayChoiceOption();
-
-                    // Calculate itemId: 2 + optionIndex * 256
-                    uint itemId = 2 + (uint)arr.Count * 256;
-                    newOption.ItemId.Id = itemId;
-
-                    InsertChild(-1, newOption);
-                    return;
-                }
-
-                // Special handling for scnPerformerSymbol arrays - just calculate correct performer ID
-                if (arr.InnerType == typeof(scnPerformerSymbol))
-                {
-                    var newPerformer = new scnPerformerSymbol();
-
-                    // Calculate the next performer ID based on current array count
-                    // Formula: performerId = 1 + performerIndex * 256
-                    uint performerId = 1 + (uint)arr.Count * 256;
-                    newPerformer.PerformerId.Id = performerId;
-
-                    InsertChild(-1, newPerformer);
-                    return;
-                }
-
-                // Special handling for scnCinematicAnimSetSRRefId arrays - auto-assign next available index
-                if (arr.InnerType == typeof(scnCinematicAnimSetSRRefId))
-                {
-                    var newAnimSetRefId = new scnCinematicAnimSetSRRefId();
-
-                    // Calculate the next index - start from 0 and increment
-                    uint nextIndex = (uint)arr.Count;
-                    newAnimSetRefId.Id = nextIndex;
-
-                    InsertChild(-1, newAnimSetRefId);
-                    return;
-                }
-
-                var innerType = arr.InnerType;
-                if (innerType.IsValueType)
-                {
-                    InsertChild(-1, RedTypeFactory.CreateAndInitRedType(innerType));
-                    return;
-                }
-
-                DialogHandlerDelegate handler = HandleChunk;
-                if (innerType.IsAssignableTo(typeof(IRedBaseHandle)))
-                {
-                    handler = HandleChunkPointer;
-                    innerType = innerType.GenericTypeArguments[0];
-                }
-                else if (innerType.IsGenericType) // handles CResoruceReference<>, etc
-                {
-                    innerType = innerType.GetGenericTypeDefinition();
-                }
-
-                var types = AppDomain.CurrentDomain.GetAssemblies()
-                    .SelectMany(s => s.GetTypes())
-                    .Where(p => innerType.IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
-                    .Select(x => new TypeEntry(x.Name, "", x))
-                    .ToList();
-
-                // no inheritable
-                if (types.Count == 1)
-                {
-                    var type = arr.InnerType;
-                    if (type == typeof(CKeyValuePair))
-                    {
-                        types = TypeHelper.GetCKeyValueEntryTypes();
-                        await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
-                        {
-                            DialogHandler = HandleCKeyValuePair
-                        });
-
-                        return;
-                    }
-
-                    IRedType newItem;
-                    if (type == typeof(IRedCurvePoint))
-                    {
-                        newItem = CurvePoint.Create(arr.GetType().GetGenericArguments()[0]);
-                    }
-                    else
-                    {
-                        newItem = RedTypeFactory.CreateAndInitRedType(type);
-                    }
-
-                    if (newItem is IRedBaseHandle handle)
-                    {
-                        var pointee = RedTypeFactory.CreateAndInitRedType(handle.InnerType);
-                        handle.SetValue((RedBaseClass)pointee);
-                    }
-
-                    InsertChild(-1, newItem);
-                }
-                else
-                {
-                    await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
-                    {
-                        DialogHandler = handler
-                    });
-                }
-            }
+            return;
         }
 
-        /*if (PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
+        if (!CreateArray())
         {
-            if (!CreateArray())
+            throw new Exception("Error while accessing or creating the array!");
+        }
+
+        if (Data is not IRedArray arr)
+        {
+            return;
+        }
+
+        var innerType = arr.InnerType;
+        DialogHandlerDelegate handler = HandleChunk;
+        if (innerType.IsAssignableTo(typeof(IRedBaseHandle)))
+        {
+            handler = HandleChunkPointer;
+            innerType = innerType.GenericTypeArguments[0];
+        }
+        else if (innerType.IsGenericType) // handles CResoruceReference<>, etc
+        {
+            innerType = innerType.GetGenericTypeDefinition();
+        }
+
+        var types = AppDomain.CurrentDomain.GetAssemblies()
+            .SelectMany(s => s.GetTypes())
+            .Where(p => innerType.IsAssignableFrom(p) && p.IsClass && !p.IsAbstract)
+            .Select(x => new TypeEntry(x.Name, "", x))
+            .ToList();
+
+        // no inheritable
+        if (types.Count == 1 && _redTypeTemplateService.IsOnlyNoneOrDefaultAvailable(innerType))
+        {
+            var type = arr.InnerType;
+            if (type == typeof(CKeyValuePair))
             {
-                throw new Exception("Error while accessing or creating the array!");
+                types = TypeHelper.GetCKeyValueEntryTypes();
+                await _appViewModel.SetActiveDialog(
+                    new TypeSelectorDialogViewModel(_redTypeTemplateService, types)
+                    {
+                        DialogHandler = HandleCKeyValuePair
+                    });
+
+                return;
             }
 
-            var curve = (IRedLegacySingleChannelCurve)Data;
+            IRedType newItem;
+            if (type == typeof(IRedCurvePoint))
+            {
+                newItem = CurvePoint.Create(arr.GetType().GetGenericArguments()[0]);
+            }
+            else
+            {
+                newItem = _redTypeTemplateService.CreateTypeInstance(type);
+                ConfigureNewItem(newItem, arr);
+            }
 
-            var type = curve.ElementType;
-            var newItem = RedTypeFactory.CreateAndInitRedType(type);
+            if (newItem is IRedBaseHandle handle)
+            {
+                var pointee = _redTypeTemplateService.CreateTypeInstance(handle.InnerType);
+                ConfigureNewItem(pointee, arr);
+                handle.SetValue((RedBaseClass)pointee);
+            }
+
             InsertChild(-1, newItem);
-        }*/
+            return;
+        }
+
+        if (innerType.IsValueType)
+        {
+            InsertChild(-1, RedTypeFactory.CreateAndInitRedType(innerType));
+            return;
+        }
+
+        await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, types)
+        {
+            DialogHandler = handler
+        });
     }
 
     private bool CanSaveBufferToDisk() =>
@@ -1677,7 +1585,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 .Select(x => new TypeEntry(x.Name, "", x))
                 .ToList();
 
-            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
+            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, types)
             {
                 DialogHandler = HandleNewDynamicProperty
             });
@@ -1688,20 +1596,24 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     {
         _appViewModel.CloseDialogCommand.Execute(null);
 
-        if (sender is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType }
-            && selectedType is not null && ResolvedData is RedBaseClass rbc)
+        if (sender is not TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType } tsdvm ||
+            ResolvedData is not RedBaseClass rbc)
         {
-            var propertyName = Interactions.Rename("");
-            var instance = RedTypeFactory.CreateAndInitRedType(selectedType);
-            rbc.AddDynamicProperty(propertyName, selectedType);
-            rbc.SetProperty(propertyName, instance);
-            //if (Data is IRedBaseHandle handle)
-            //{
-            //    handle.SetValue(rbc);
-            //}
-            Tab?.Parent.SetIsDirty(true);
-            RecalculateProperties(instance);
+            return;
         }
+
+        var propertyName = Interactions.Rename("");
+        var instance =
+            _redTypeTemplateService.CreateTypeInstance(tsdvm.RedTypeTemplateDropdownViewModel
+                .SelectedRedTypeTemplate);
+        rbc.AddDynamicProperty(propertyName, selectedType);
+        rbc.SetProperty(propertyName, instance);
+        //if (Data is IRedBaseHandle handle)
+        //{
+        //    handle.SetValue(rbc);
+        //}
+        Tab?.Parent.SetIsDirty(true);
+        RecalculateProperties(instance);
     }
 
     private bool CanRenameDynamicClass() => ResolvedData is IDynamicClass; // TODO RelayCommand check notify
@@ -1756,11 +1668,15 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         {
             var types = new List<TypeEntry>();
 
-            if (db.GetValue().Data is worldNodeDataBuffer worldNodeDataBuffer)
+            if (db.GetValue().Data is worldNodeDataBuffer nodeBuffer)
             {
-                worldNodeDataBuffer.Add(new worldNodeData());
-                RecalculateProperties(worldNodeDataBuffer);
-                return;
+                if (_redTypeTemplateService.IsOnlyNoneOrDefaultAvailable(typeof(worldNodeData)))
+                {
+                    nodeBuffer.Add(_redTypeTemplateService.CreateTypeInstance(typeof(worldNodeData)));
+                    return;
+                }
+
+                types.Add(new TypeEntry(typeof(worldNodeData).Name, "", typeof(worldNodeData)));
             }
 
             if (Parent?.ResolvedData is entEntityInstanceData)
@@ -1781,7 +1697,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     $"You can't create new items for {Data.RedType} yet. Please create a ticket and tell us what you need here.");
             }
 
-            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types) { DialogHandler = HandleChunk });
+            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, types) { DialogHandler = HandleChunk });
         }
     }
 
@@ -3642,10 +3558,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     public void HandlePointer(DialogViewModel? sender)
     {
         _appViewModel.CloseDialogCommand.Execute(null);
-        if (sender is TypeSelectorDialogViewModel { SelectedEntry: TypeEntry selectedEntry } &&
+        if (sender is TypeSelectorDialogViewModel { SelectedEntry: TypeEntry selectedEntry } tsdvm &&
             selectedEntry.UserData is Type selectedType)
         {
-            HandlePointer(selectedType, selectedEntry.Name);
+            HandlePointer(selectedType, selectedEntry.Name, tsdvm.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate);
         }
         else
         {
@@ -3653,9 +3569,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
     }
 
-    private void HandlePointer(Type type, string customName = "")
+    private void HandlePointer(Type type, string customName = "", RedTypeTemplateDescriptor? templateDesc = null)
     {
-        var instance = RedTypeFactory.CreateAndInit(type);
+        var instance = templateDesc == null ? RedTypeFactory.CreateAndInitRedType(type) : _redTypeTemplateService.CreateTypeInstance(templateDesc);
+
         if (instance is DynamicBaseClass dbc)
         {
             if (string.IsNullOrEmpty(customName))
@@ -3667,71 +3584,144 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         }
 
         var data = RedTypeFactory.CreateAndInitRedType(PropertyType);
-        if (data is IRedBaseHandle handle)
+        if (data is not IRedBaseHandle handle || instance is not RedBaseClass rbcInstance)
         {
-            handle.SetValue(instance);
-            Data = data;
-
-            if (Parent?.ResolvedData is RedBaseClass rbc)
-            {
-                rbc.SetProperty(PropertyName, Data);
-            }
-
-            PropertyCount = -1;
-            // might not be needed
-            CalculateDescriptor();
-            _propertiesLoaded = false;
-            CalculateProperties();
-            OnPropertyChanged(nameof(Data));
-            Tab?.Parent.SetIsDirty(true);
-
-            // Notify for graph sync when handle is set
-            NotifyPropertyUpdateForGraphSync();
+            return;
         }
+
+        if (Data is IRedArray arr)
+        {
+            ConfigureNewItem(instance, arr);
+        }
+
+        handle.SetValue(rbcInstance);
+        Data = data;
+
+        if (Parent?.ResolvedData is RedBaseClass rbc)
+        {
+            rbc.SetProperty(PropertyName, Data);
+        }
+
+        PropertyCount = -1;
+        // might not be needed
+        CalculateDescriptor();
+        _propertiesLoaded = false;
+        CalculateProperties();
+        OnPropertyChanged(nameof(Data));
+        Tab?.Parent.SetIsDirty(true);
+
+        // Notify for graph sync when handle is set
+        NotifyPropertyUpdateForGraphSync();
     }
 
     public void HandleCKeyValuePair(DialogViewModel? sender)
     {
         _appViewModel.CloseDialogCommand.Execute(null);
-        if (sender is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
+        if (sender is not TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType } tsdvm)
         {
-            if (System.Activator.CreateInstance(selectedType) is IRedType t)
-            {
-                var instance = new CKeyValuePair(CName.Empty, t);
-                InsertChild(-1, instance);
-            }
+            return;
         }
+
+        var inner =  _redTypeTemplateService.CreateTypeInstance(tsdvm.RedTypeTemplateDropdownViewModel
+            .SelectedRedTypeTemplate);
+
+        if (Data is IRedArray arr)
+        {
+            ConfigureNewItem(inner, arr);
+        }
+
+        var instance = new CKeyValuePair(CName.Empty, inner);
+        InsertChild(-1, instance);
     }
 
     public void HandleChunk(DialogViewModel? sender)
     {
         _appViewModel.CloseDialogCommand.Execute(null);
-        if (sender is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
+        if (sender is not TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType } tsdvm)
         {
-            var instance = RedTypeFactory.CreateAndInitRedType(selectedType);
-            if (!InsertChild(-1, instance))
-            {
-                _loggerService.Error("Unable to insert child");
-            }
+            return;
+        }
+
+        var instance =  _redTypeTemplateService.CreateTypeInstance(tsdvm.RedTypeTemplateDropdownViewModel
+            .SelectedRedTypeTemplate);
+
+        if (Data is IRedArray arr)
+        {
+            ConfigureNewItem(instance, arr);
+        }
+
+        if (!InsertChild(-1, instance))
+        {
+            _loggerService.Error("Unable to insert child");
         }
     }
 
     public void HandleChunkPointer(DialogViewModel? sender)
     {
         _appViewModel.CloseDialogCommand.Execute(null);
-        if (sender is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType } &&
-            Data is IRedArray arr)
+        if (sender is not TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType } tsdvm ||
+            Data is not IRedArray arr)
         {
-            var newItem = RedTypeFactory.CreateAndInitRedType(arr.InnerType);
-            if (newItem is IRedBaseHandle handle)
-            {
-                var instance = RedTypeFactory.CreateAndInit(selectedType);
-                handle.SetValue(instance);
-                if (!InsertChild(-1, newItem))
-                {
-                    _loggerService.Error("Unable to insert child");
-                }
-            }
+            return;
+        }
+
+        var newItem = RedTypeFactory.CreateAndInitRedType(arr.InnerType);
+        if (newItem is not IRedBaseHandle handle)
+        {
+            return;
+        }
+
+        var instance = _redTypeTemplateService.CreateTypeInstance(tsdvm.RedTypeTemplateDropdownViewModel
+            .SelectedRedTypeTemplate);
+
+        if (instance is not RedBaseClass rbcInstance)
+        {
+            return;
+        }
+
+        ConfigureNewItem(rbcInstance, arr);
+
+        handle.SetValue(rbcInstance);
+        if (!InsertChild(-1, newItem))
+        {
+            _loggerService.Error("Unable to insert child");
+        }
+    }
+
+    private void ConfigureNewItem(IRedType newItem, IRedArray arr)
+    {
+        switch (newItem)
+        {
+            // Special handling for scnCinematicAnimSetSRRefId arrays - auto-assign next available index
+            case scnCinematicAnimSetSRRefId cinematicAnimSetSrRefId:
+                cinematicAnimSetSrRefId.Id = (uint)arr.Count;
+                break;
+            // Special handling for scnPerformerSymbol arrays - just calculate correct performer ID
+            case scnPerformerSymbol performerSymbol:
+                performerSymbol.PerformerId.Id = 1 + ((uint)arr.Count * 256);
+                break;
+            // Special handling for screenplay options - itemId: 2, 258, 514, 770, etc.
+            case scnscreenplayChoiceOption scnscreenplayChoiceOption:
+                scnscreenplayChoiceOption.ItemId.Id = 2 + ((uint)arr.Count * 256);
+                break;
+            // Special handling for screenplay lines - itemId: 0, 257, 513, 769, etc.
+            case scnscreenplayDialogLine scnscreenplayDialogLine:
+                // Calculate itemId: 0 + lineIndex * 256
+                scnscreenplayDialogLine.ItemId.Id = (uint)arr.Count * 256;
+                break;
+            // Special handling for scnPropDef arrays - calculate correct prop ID
+            case scnPropDef propDef:
+                propDef.PropId.Id = (uint)arr.Count;
+                break;
+            // Special handling for scnPlayerActorDef arrays - calculate ID continuing after actors
+            case scnPlayerActorDef playerActorDef when GetRootModel().ResolvedData is scnSceneResource scene:
+                // Calculate the next actor ID continuing after regular actors
+                playerActorDef.ActorId.Id = (uint)(scene.Actors.Count + arr.Count);
+                break;
+            case scnActorDef playerActorDefReg:
+                // Calculate the next actor ID based on current array count
+                playerActorDefReg.ActorId.Id = (uint)arr.Count;
+                break;
         }
     }
 
