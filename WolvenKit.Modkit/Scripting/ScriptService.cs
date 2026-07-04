@@ -8,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.ClearScript;
 using Microsoft.ClearScript.JavaScript;
 using Microsoft.ClearScript.V8;
+using WolvenKit.Common;
 using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Modkit.Scripting;
@@ -26,7 +27,7 @@ public partial class ScriptService : ObservableObject
     private bool _isRunning;
 
     public static bool SuppressLogOutput { get; set; }
-    
+
     public ScriptService(ILoggerService loggerService) => _loggerService = loggerService;
 
     public async Task ExecuteAsync(string code, Dictionary<string, object>? hostObjects = null, List<string>? searchPaths = null, bool enableDebugging = false)
@@ -103,6 +104,10 @@ public partial class ScriptService : ObservableObject
         var engine = new V8ScriptEngine(flags);
 
         engine.AddHostType(typeof(OpenAs));
+
+        engine.AddHostType(typeof(TemplateDestination));
+        engine.AddHostType(typeof(TemplateSource));
+
         engine.AddHostObject("logger", _loggerService);
         if (hostObjects != null)
         {

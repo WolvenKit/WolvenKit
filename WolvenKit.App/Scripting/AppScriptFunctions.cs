@@ -59,8 +59,9 @@ public class AppScriptFunctions : ScriptFunctions
         ImportExportHelper importExportHelper,
         IGameControllerFactory gameController,
         GeometryCacheService geometryCacheService,
-        ISettingsManager settingsManager)
-        : base(loggerService, archiveManager, parserService)
+        ISettingsManager settingsManager,
+        RedTypeTemplateService templateService)
+        : base(loggerService, archiveManager, parserService, templateService)
     {
         _projectManager = projectManager;
         _modTools = modTools;
@@ -68,7 +69,7 @@ public class AppScriptFunctions : ScriptFunctions
         _gameController = gameController;
         _geometryCacheService = geometryCacheService;
         _settingsManager = settingsManager;
-        
+
     }
 
     /// <summary>
@@ -78,7 +79,7 @@ public class AppScriptFunctions : ScriptFunctions
     [Obsolete]
     public void SuspendFileWatcher(bool suspend)
     {
-
+        _loggerService.Info(JsonSerializer.Serialize(_redTypeTemplateService.SystemTemplates[0]));
     }
 
     /// <summary>
@@ -742,7 +743,7 @@ public class AppScriptFunctions : ScriptFunctions
         {
             return false;
         }
-        
+
         File.Delete(absoluteFilePath);
         return !File.Exists(baseFolder);
     }

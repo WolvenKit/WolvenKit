@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
@@ -9,6 +10,8 @@ using Newtonsoft.Json.Converters;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Model;
+using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Modkit.Resources;
 using WolvenKit.RED4.Archive;
@@ -27,12 +30,14 @@ public partial class ScriptFunctions
     protected readonly ILoggerService _loggerService;
     protected readonly IArchiveManager _archiveManager;
     protected readonly Red4ParserService _redParserService;
+    protected readonly RedTypeTemplateService _redTypeTemplateService;
 
-    public ScriptFunctions(ILoggerService loggerService, IArchiveManager archiveManager, Red4ParserService parserService)
+    public ScriptFunctions(ILoggerService loggerService, IArchiveManager archiveManager, Red4ParserService parserService, RedTypeTemplateService redTypeTemplateService)
     {
         _loggerService = loggerService;
         _archiveManager = archiveManager;
         _redParserService = parserService;
+        _redTypeTemplateService = redTypeTemplateService;
     }
 
     /// <summary>
@@ -216,6 +221,23 @@ public partial class ScriptFunctions
         var serializer = new Serializer();
         return serializer.Serialize(deserializedObject);
     }
+
+    #region Template Service
+
+    /// <summary>
+    /// Gets a list of template descriptors for the specified template destination
+    /// </summary>
+    /// <param name="src">The source for the template list can be "TemplateDestination.System" or "TemplateDestination.User"</param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    public virtual List<ScriptRedTypeTemplateDescriptor> GetTemplateDescriptors(TemplateDestination src) => src switch
+    {
+        TemplateDestination.System => _redTypeTemplateService.SystemTemplates.Select(t => new ScriptRedTypeTemplateDescriptor(t)).ToList(),
+        TemplateDestination.User => _redTypeTemplateService.UserTemplates.Select(t => new ScriptRedTypeTemplateDescriptor(t)).ToList(),
+        _ => throw new ArgumentOutOfRangeException(nameof(src), src, null)
+    };
+
+    #endregion
 }
 
 public enum OpenAs
