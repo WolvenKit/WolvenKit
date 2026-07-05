@@ -321,7 +321,7 @@
         <Setter Property="Foreground" Value="White" />
     </Style>
     <Style
-      BasedOn="{StaticResource WolvenkitTexStBoxStyle}"
+      BasedOn="{StaticResource WolvenkitTextBoxStyle}"
       TargetType="{x:Type TextBox}"/>
 
     <!-- Also counts for syncfusion:SfTextBoxExt -->
