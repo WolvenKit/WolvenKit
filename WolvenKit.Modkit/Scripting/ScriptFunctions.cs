@@ -276,12 +276,21 @@ public partial class ScriptFunctions
 
 
     /// <inheritdoc cref="RedTypeTemplateService.ReadTemplate(Type, string, TemplateSource)"/>
-    public virtual RedTypeTemplate? ReadTemplate(string type, string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
+    public virtual ScriptRedTypeTemplate? ReadTemplate(string type, string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
         ReadTemplate(new ScriptRedTypeTemplateDescriptor(templateName, type), src);
 
     /// <inheritdoc cref="RedTypeTemplateService.ReadTemplate(RedTypeTemplateDescriptor, TemplateSource)"/>
-    public virtual RedTypeTemplate? ReadTemplate(ScriptRedTypeTemplateDescriptor templateDescriptor, TemplateSource src = TemplateSource.Auto)
-        => _redTypeTemplateService.ReadTemplate(templateDescriptor.ToRedTypeTemplateDescriptor(), src);
+    public virtual ScriptRedTypeTemplate? ReadTemplate(ScriptRedTypeTemplateDescriptor templateDescriptor,
+        TemplateSource src = TemplateSource.Auto)
+    {
+        var template = _redTypeTemplateService.ReadTemplate(templateDescriptor.ToRedTypeTemplateDescriptor(), src);
+        if (template == null)
+        {
+            return null;
+        }
+
+        return new ScriptRedTypeTemplate(template);
+    }
 
     // rider doesn't support inheritdocs path property, hence all XML docs that need to filter the content they're inheriting need to be duplicated
     /// <summary>
@@ -292,8 +301,8 @@ public partial class ScriptFunctions
     /// <remarks>If a template with that name already exists, it will be overwritten.</remarks>
     /// <exception cref="ArgumentNullException">Template Data property is null</exception>
     /// <exception cref="ArgumentException">Template Data type is not templateable</exception>
-    public virtual void WriteTemplate(RedTypeTemplate template, string templateName)
-        => _redTypeTemplateService.WriteTemplate(template, templateName);
+    public virtual void WriteTemplate(ScriptRedTypeTemplate template, string templateName)
+        => _redTypeTemplateService.WriteTemplate(template.ToRedTypeTemplate(), templateName);
 
     /// <summary>
     /// Deletes a template from the user directory.
