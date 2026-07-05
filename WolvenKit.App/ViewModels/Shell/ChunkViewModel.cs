@@ -446,7 +446,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     else
                     {
                         Parent.Data = parentData is IRedRef
-                            ? RedTypeFactory.CreateAndInitRedType(parentData.RedType, Data)
+                            ? RedTypeManager.CreateAndInitRedType(parentData.RedType, Data)
                             : throw new Exception();
                     }
 
@@ -1271,7 +1271,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     [RelayCommand(CanExecute = nameof(CanAddHandle))]
     private async Task AddHandle()
     {
-        var data = RedTypeFactory.CreateAndInitRedType(PropertyType);
+        var data = RedTypeManager.CreateAndInitRedType(PropertyType);
         if (data is not IRedBaseHandle handle)
         {
             return;
@@ -1386,7 +1386,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
         if (innerType.IsValueType)
         {
-            InsertChild(-1, RedTypeFactory.CreateAndInitRedType(innerType));
+            InsertChild(-1, RedTypeManager.CreateAndInitRedType(innerType));
             return;
         }
 
@@ -1641,7 +1641,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         ArgumentNullException.ThrowIfNull(ResolvedPropertyType);
         if (Data is RedDummy)
         {
-            Data = RedTypeFactory.CreateAndInitRedType(ResolvedPropertyType);
+            Data = RedTypeManager.CreateAndInitRedType(ResolvedPropertyType);
             if (Data is IRedBufferPointer ptr)
             {
                 ptr.SetValue(new RedBuffer { Data = new RedPackage { Chunks = new List<RedBaseClass>() } });
@@ -3452,7 +3452,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 ResolvedData is CMeshMaterialEntry materialDefinition:
             {
                 var materialIndex =
-                    _cvmTools.FindHighestMaterialIndex(Parent, materialDefinition.IsLocalInstance);
+                    CvmMaterialTools.FindHighestMaterialIndex(materialDefinitionArray,
+                        materialDefinition.IsLocalInstance);
                 SetDataIndexProperty(materialIndex + 1);
                 break;
             }
@@ -3490,6 +3491,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         CalculateProperties();
         CalculateDescriptor();
         CalculateValue();
+        CalculateIsDefault();
 
         if (IsArray)
         {
@@ -3571,7 +3573,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     private void HandlePointer(Type type, string customName = "", RedTypeTemplateDescriptor? templateDesc = null)
     {
-        var instance = templateDesc == null ? RedTypeFactory.CreateAndInitRedType(type) : _redTypeTemplateService.CreateTypeInstance(templateDesc);
+        var instance = templateDesc == null ? RedTypeManager.CreateAndInitRedType(type) : _redTypeTemplateService.CreateTypeInstance(templateDesc);
 
         if (instance is DynamicBaseClass dbc)
         {
@@ -3583,7 +3585,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             dbc.ClassName = customName;
         }
 
-        var data = RedTypeFactory.CreateAndInitRedType(PropertyType);
+        var data = RedTypeManager.CreateAndInitRedType(PropertyType);
         if (data is not IRedBaseHandle handle || instance is not RedBaseClass rbcInstance)
         {
             return;
@@ -3665,7 +3667,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        var newItem = RedTypeFactory.CreateAndInitRedType(arr.InnerType);
+        var newItem = RedTypeManager.CreateAndInitRedType(arr.InnerType);
         if (newItem is not IRedBaseHandle handle)
         {
             return;
@@ -4754,7 +4756,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
 
     /// <summary>
-    /// Determines if we're currently in a graph editor context (scene or quest editor)
+    /// Determines if we're currently in a graph editor context (scene, quest, or behavior editor)
     /// </summary>
     private bool IsInGraphEditorContext()
     {
@@ -4773,7 +4775,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 return false;
             }
 
-            return rootNodeData is scnSceneGraphNode or questNodeDefinition;
+            return rootNodeData is scnSceneGraphNode or questNodeDefinition or AIbehaviorTreeNodeDefinition;
         }
         catch
         {
@@ -4782,7 +4784,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     }
 
     /// <summary>
-    /// Get the root node data (scene or quest graph node) that this property belongs to
+    /// Get the root node data (scene, quest, or behavior graph node) that this property belongs to
     /// </summary>
     private RedBaseClass? GetRootNodeData()
     {
@@ -4799,6 +4801,11 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             if (current.Data is questNodeDefinition questNode)
             {
                 return questNode;
+            }
+
+            if (current.Data is AIbehaviorTreeNodeDefinition behaviorNode)
+            {
+                return behaviorNode;
             }
 
             current = current.Parent;

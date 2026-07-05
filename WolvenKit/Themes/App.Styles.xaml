@@ -7,6 +7,7 @@
     xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:sfskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
     xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+    xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf">
 
     <ResourceDictionary.MergedDictionaries>
@@ -287,6 +288,13 @@
     </Style>
 
     <Style
+        x:Key="WolvenkitExplanationStyle"
+        TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource ForegroundColor_Grey1}" />
+        <Setter Property="Margin" Value="{DynamicResource WolvenKitMarginBottom}" />
+    </Style>
+
+    <Style
         x:Key="WolvenKitTabControl"
         BasedOn="{StaticResource SyncfusionDocumentTabControlExtStyle}"
         TargetType="{x:Type syncfusion:TabControlExt}">
@@ -328,6 +336,21 @@
         <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt2}" />
         <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
         <Setter Property="Foreground" Value="White" />
+    </Style>
+
+    <!--
+        Global visual defaults for our thin Inspectable* subclasses (used for
+        UI test accessibility hooks via custom AutomationPeer).
+    -->
+    <Style TargetType="{x:Type others:InspectableTreeGrid}">
+        <Setter Property="Background" Value="{StaticResource ContentBackground}" />
+        <!-- BorderThickness="0" etc. are usually set per-usage or via the
+             local .Resources styles for cells; add more Setters here if other
+             visual regressions appear on the subclass. -->
+    </Style>
+
+    <Style TargetType="{x:Type others:InspectableDataGrid}">
+        <Setter Property="Background" Value="{StaticResource ContentBackground}" />
     </Style>
 
     <!-- Menu Bar Entry Style -->

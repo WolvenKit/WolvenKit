@@ -37,6 +37,7 @@ namespace WolvenKit.App.ViewModels.Documents
         public readonly RedTypeTemplateService RedTypeTemplateService =
             Locator.Current.GetService<RedTypeTemplateService>() ?? throw new ArgumentNullException(nameof(RedTypeTemplateService));
         private readonly scnSceneResource _sceneData;
+        private readonly GraphDocumentSearchState _searchState = new();
 
         public RDTDataViewModel RDTViewModel { get; }
         public RedGraph MainGraph { get; }
@@ -141,6 +142,28 @@ namespace WolvenKit.App.ViewModels.Documents
         public void SetGraphLoaded()
         {
             IsGraphLoading = false;
+        }
+
+        public void OnDocumentSearchChanged(string searchBoxText)
+        {
+            var match = GraphDocumentSearchHelper.ApplySceneSearch(MainGraph, searchBoxText, _searchState);
+
+            if (match is not null)
+            {
+                SelectedTab = Tabs.FirstOrDefault(tab => tab.Header == "Node Properties");
+            }
+        }
+
+        public void OnCurrentSearchResultRequested()
+        {
+            var match = _searchState.CurrentMatch;
+            if (match is null)
+            {
+                return;
+            }
+
+            SelectedTab = Tabs.FirstOrDefault(tab => tab.Header == "Node Properties");
+            GraphDocumentSearchHelper.SelectGraphNode(match.Value.Node);
         }
 
         private void CreateTabs()

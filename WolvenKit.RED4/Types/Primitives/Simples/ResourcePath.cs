@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using WolvenKit.Common.FNV1A;
@@ -137,8 +137,8 @@ public readonly struct ResourcePath : IRedString, IRedPrimitive<string>, IEquata
         return strResult.ToString().ToLowerInvariant();
     }
 
-    public static ulong CalculateHash(string resourcePath) =>
-        FNV1A64HashAlgorithm.HashString(SanitizePath(resourcePath));
+    public static ulong CalculateHash(string resourcePath, bool sanitize = true) =>
+        FNV1A64HashAlgorithm.HashString(sanitize ? SanitizePath(resourcePath) : resourcePath);
 
     public string? GetString() => this;
     public override string? ToString() => GetResolvedText();

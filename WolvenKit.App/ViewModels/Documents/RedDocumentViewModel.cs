@@ -355,6 +355,14 @@ public partial class RedDocumentViewModel : DocumentViewModel
             return;
         }
 
+        if (cls is AIbehaviorResource behaviorResource)
+        {
+            var behaviorTab = new BehaviorGraphViewModel(behaviorResource, this, _chunkViewmodelFactory);
+            TabItemViewModels.Insert(0, behaviorTab);
+
+            return;
+        }
+
         if (_globals.Value.ENABLE_NODE_EDITOR && cls is graphGraphResource)
         {
             TabItemViewModels.Add(new RDTGraphViewModel2(cls, this, _nodeWrapperFactory));

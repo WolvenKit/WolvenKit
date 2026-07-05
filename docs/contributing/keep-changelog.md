@@ -1,17 +1,18 @@
 # Keep a Changelog
 
-Our changelog rules generally follow [keepachangelog.com](https://keepachangelog.com/en/1.1.0/).
+Our changelog rules generally  follow [keepachangelog.com](https://keepachangelog.com/en/1.1.0/).
 
-This project keeps the changelog in `.yaml` files within the `changelog` directory. The `!unreleased.yaml` file contains changes that are merged into main but have not been part of a stable release yet.
-::: info
-This is the file that is modified as part of the pull request process.
-:::
+This project keeps the unreleased changes in yaml format under `changelog/unreleased` where each file represents an individual pull request. The file name is the pull request number.
 ::: warning
-`CHANGELOG.md` as well as `{VERSION}.yaml` files are auto generated as part of the release process and should not be manually modified.
+
+All other files in the `changelog` directory should not be manually modified as they are generated.
+While `changelog/!unreleased.yaml` will consider changes added to it directly, it should be avoided due to the high risk of merge conflicts.
+
 :::
 
-Each changelog entry should be added to the `changes:` array in the `!unreleased.yaml` file where each entry has the follwing structure:
+To add a new changelog entry make a copy of the `changelog/!template.yaml` file under `changelog/unreleased/{PR_NUMBER}.yaml` and add as many entries as needed to the `changes:` array.
 
+Each changes entry follows the following format:
 ```yaml
 # This can be either `security`, `deprecated`, `removed`, `added`, `fixed`, or `changed`.
 # Pick one.
@@ -27,7 +28,3 @@ Each changelog entry should be added to the `changes:` array in the `!unreleased
     # User facing change description
     description: ""
 ```
-::: info
-A Pull request can have multiple changelog entries.
-:::
-

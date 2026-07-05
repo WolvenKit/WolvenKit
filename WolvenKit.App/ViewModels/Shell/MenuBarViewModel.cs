@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using WolvenKit.App.Extensions;
@@ -80,7 +81,7 @@ public partial class MenuBarViewModel : ObservableObject
 
         foreach (var file in files)
         {
-            allItems.AddRange(YamlHelper.GetItemRecordsFromYaml(project.GetAbsolutePath(file)));
+            allItems.AddRange(YamlHelper.GetItemRecordsFromYaml(Path.Join(project.ResourcesDirectory, file)));
         }
 
         return allItems;

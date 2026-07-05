@@ -141,7 +141,10 @@ public static class Interactions
     public static Func<
         (string text, string caption, WMessageBoxImage image, WMessageBoxButtons buttons),
         WMessageBoxResult
-    > ShowConfirmation { get; set; } = _ => throw new NotImplementedException();
+    > ShowConfirmation { get; set; } = _ =>
+        TestHelper.InActiveTest
+            ? WMessageBoxResult.OK
+            : throw new NotImplementedException();
 
 
     /// <summary>
@@ -272,7 +275,7 @@ public static class Interactions
     /// <summary>
     /// Shows dialogue to copy mesh materials/appearances.
     /// </summary>
-    public static Func<List<string>,
+    public static Func<(List<string> options, string filterDefaultValue),
         CopyMeshAppearancesDialogViewModel?> ShowCopyMeshAppearancesDialogue { get; set; } =
         _ => throw new NotImplementedException();
 

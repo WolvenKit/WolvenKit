@@ -88,7 +88,7 @@ public partial class TemplateFileTools
             model.InkatlasPath = Path.Combine(relativePath, $"{fileName}.inkatlas");
         }
 
-        InkatlasImageGenerator.GenerateAtlas(
+        var fileSuccessfullyWritten = InkatlasImageGenerator.GenerateAtlas(
             pngFolder: destDir.FullName,
             relativeSourcePath: relativePath,
             atlasFileName: fileName,
@@ -97,6 +97,19 @@ public partial class TemplateFileTools
             _cr2WTools,
             project
         );
+
+        if (fileSuccessfullyWritten)
+        {
+            _loggerService.Success("Icon atlas created! Now import the .png files via Import Tool.");
+            _notificationService.Success("Icon atlas created! Now import the .png files via Import Tool.");
+        }
+        else
+        {
+            _loggerService.Warning(
+                "Couldn't overwrite icon atlas! Please rename _new.inkatlas and import the .png files via Import Tool.");
+            _notificationService.Warning(
+                "Couldn't overwrite icon atlas (wrote to _new.inkatlas instead).");
+        }
     }
 
     private void SerializeToJson(AddRadioExtFilesDialogViewModel model, string modderName)
@@ -233,6 +246,10 @@ public partial class TemplateFileTools
                 viewModel.StationName!.ToArchiveFileName());
         }
 
+
+        Directory.CreateDirectory(viewModel.JsonFileFolder);
+
+
         var songPaths = viewModel.SongItems.Select(f => f.FilePath).ToList();
 
         var songsToDelete = Directory.EnumerateFiles(project.ResourcesDirectory, "*.*", SearchOption.AllDirectories)
@@ -262,7 +279,6 @@ public partial class TemplateFileTools
         {
             return;
         }
-
 
         var sourceDestPath = songsOutsideOfProject.ToDictionary(x => x,
             s => Path.Combine(viewModel.JsonFileFolder, Path.GetFileName(s.FilePath)));

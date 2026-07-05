@@ -28,7 +28,8 @@ public enum RedGraphType
 {
     Invalid,
     Quest,
-    Scene
+    Scene,
+    Behavior
 }
 
 public partial class RedGraph : IDisposable
@@ -75,6 +76,10 @@ public partial class RedGraph : IDisposable
         else if (_data is scnSceneResource)
         {
             GraphType = RedGraphType.Scene;
+        }
+        else if (_data is AIbehaviorResource)
+        {
+            GraphType = RedGraphType.Behavior;
         }
 
         Title = title;
@@ -484,6 +489,10 @@ public partial class RedGraph : IDisposable
                     if (node.Data is questNodeDefinition q)
                     {
                         nodeID = q.Id;
+                    }
+                    if (nodeID == 0)
+                    {
+                        nodeID = node.UniqueId;
                     }
 
                     JObject newPerfSet = new(

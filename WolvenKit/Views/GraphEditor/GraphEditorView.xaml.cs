@@ -22,6 +22,7 @@ using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Views.Templates;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes.Behavior;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 using WolvenKit.Common.Services;
@@ -355,6 +356,18 @@ public partial class GraphEditorView : UserControl
             nodifyEditor.ContextMenu.Items.Add(addMenu);
         }
 
+        if (Source.GraphType == RedGraphType.Behavior && Source.CanCreateBehaviorRoot())
+        {
+            var addMenu = CreateAddMenuItem();
+            AddBehaviorNodeCreationItems(addMenu, type =>
+            {
+                var nodeId = Source.CreateBehaviorRoot(type, mousePosition);
+                SelectNodeById(nodeId);
+            });
+
+            nodifyEditor.ContextMenu.Items.Add(addMenu);
+        }
+
         nodifyEditor.ContextMenu.Items.Add(CreateMenuItem("Arrange Items", "ViewDashboard", ArrangeNodes));
 
         nodifyEditor.ContextMenu.Items.Add(CreateMenuItem("Hide/unhide sockets", "Eye", ToggleAllSockets));
@@ -412,6 +425,33 @@ public partial class GraphEditorView : UserControl
         node.ContextMenu ??= new ContextMenu();
 
         node.ContextMenu.Items.Clear();
+
+        if (Source.GraphType == RedGraphType.Behavior)
+        {
+            if (nvm is BehaviorNodeViewModel behaviorNode && Source.CanAddBehaviorChild(behaviorNode))
+            {
+                var addChildMenu = CreateCategoryMenuItem("Add Child");
+                AddBehaviorNodeCreationItems(addChildMenu, type =>
+                {
+                    var nodeId = Source.AddBehaviorChild(behaviorNode, type);
+                    SelectNodeById(nodeId);
+                });
+
+                node.ContextMenu.Items.Add(addChildMenu);
+                node.ContextMenu.Items.Add(new Separator());
+            }
+
+            var toggleBehaviorSlotsText = nvm.ShowUnusedSockets ? "Hide Structural Slots" : "Show Structural Slots";
+            node.ContextMenu.Items.Add(CreateMenuItem(toggleBehaviorSlotsText, "Eye", "WolvenKitYellow", () =>
+            {
+                nvm.ShowUnusedSockets = !nvm.ShowUnusedSockets;
+                Source.GraphStateSave();
+            }));
+
+            node.ContextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);
+            e.Handled = true;
+            return;
+        }
 
         if (SelectedNodes.Count > 1)
         {
@@ -705,6 +745,69 @@ public partial class GraphEditorView : UserControl
         };
     }
 
+    private static readonly string[] s_commonBehaviorNodeTypeNames =
+    {
+        nameof(AIbehaviorSelectorTreeNodeDefinition),
+        nameof(AIbehaviorSequenceTreeNodeDefinition),
+        nameof(AIbehaviorParallelNodeDefinition),
+        nameof(AIbehaviorIfElseNodeDefinition),
+        nameof(AIbehaviorRepeatNodeDefinition),
+        nameof(AIbehaviorInstantTaskNodeDefinition),
+        nameof(AIbehaviorMonitorTaskNodeDefinition),
+        nameof(AIbehaviorInstantConditionNodeDefinition),
+        nameof(AIbehaviorMonitorConditionNodeDefinition),
+        nameof(AIbehaviorSubtreeDefinition),
+        nameof(AIbehaviorIncludedTreeDefinition),
+        nameof(AIbehaviorIdleTreeNodeDefinition),
+        nameof(AIbehaviorSucceederNodeDefinition),
+        nameof(AIbehaviorFailerNodeDefinition)
+    };
+
+    private void AddBehaviorNodeCreationItems(MenuItem parentMenu, Action<Type> createNode, IEnumerable<Type> nodeTypesOverride = null)
+    {
+        var nodeTypes = (nodeTypesOverride ?? Source.GetBehaviorNodeTypes()).ToList();
+        var typeMap = nodeTypes.ToDictionary(type => type.Name, type => type);
+        var types = nodeTypes
+            .Select(type => new TypeEntry(GraphNodeStyling.GetTitleForNodeType(type), "", type))
+            .OrderBy(entry => entry.Name)
+            .ToList();
+
+        parentMenu.Items.Add(CreateMenuItem("Search Node ...", "Magnify", "WolvenKitYellow", async () =>
+        {
+            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
+            {
+                DialogHandler = model =>
+                {
+                    _appViewModel.CloseDialogCommand.Execute(null);
+                    if (model is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
+                    {
+                        createNode(selectedType);
+                    }
+                }
+            });
+        }));
+
+        parentMenu.Items.Add(new Separator());
+
+        foreach (var typeName in s_commonBehaviorNodeTypeNames)
+        {
+            AddBehaviorNodeToMenu(parentMenu, typeName, typeMap, createNode, true);
+        }
+    }
+
+    private void AddBehaviorNodeToMenu(MenuItem parentMenu, string typeName, Dictionary<string, Type> typeMap, Action<Type> createNode, bool isRootItem = false)
+    {
+        if (!typeMap.TryGetValue(typeName, out var nodeType))
+        {
+            return;
+        }
+
+        var displayName = GraphNodeStyling.GetTitleForNodeType(nodeType);
+        var emoji = GraphNodeStyling.GetIconForNodeTitle(displayName);
+        var leftMargin = isRootItem ? -30 : -15;
+        parentMenu.Items.Add(CreateEmojiMenuItem($"{emoji}   {displayName}", () => createNode(nodeType), leftMargin));
+    }
+
     private void AddNodeToMenu(MenuItem parentMenu, string typeName, Dictionary<string, Type> typeMap, System.Windows.Point mousePosition, bool isRootItem = false)
     {
         if (typeMap.TryGetValue(typeName, out var nodeType))
@@ -752,6 +855,17 @@ public partial class GraphEditorView : UserControl
     {
         if (sender is Connection connection && connection.DataContext is ConnectionViewModel connectionViewModel && Source != null)
         {
+            if (Source.GraphType == RedGraphType.Behavior)
+            {
+                if (Source.CanEditBehaviorChildConnection(connectionViewModel))
+                {
+                    ShowBehaviorConnectionContextMenu(connection, connectionViewModel);
+                }
+
+                e.Handled = true;
+                return;
+            }
+
             // Clear other selections and select this connection to highlight it
             Editor.SelectedItems.Clear();
             Editor.SelectedItems.Add(connectionViewModel);
@@ -789,6 +903,65 @@ public partial class GraphEditorView : UserControl
 
             e.Handled = true;
         }
+    }
+
+    private void ShowBehaviorConnectionContextMenu(Connection connection, ConnectionViewModel connectionViewModel)
+    {
+        Editor.SelectedItems.Clear();
+        Editor.SelectedItems.Add(connectionViewModel);
+        connectionViewModel.IsSelected = true;
+
+        var contextMenu = new ContextMenu();
+
+        var canMoveUp = Source.CanMoveBehaviorChild(connectionViewModel, -1);
+        var moveUpMenuItem = CreateMenuItem("Move Child Up", "ArrowUp", () =>
+        {
+            var nodeId = Source.MoveBehaviorChild(connectionViewModel, -1);
+            connectionViewModel.IsSelected = false;
+            SelectNodeById(nodeId);
+        });
+        moveUpMenuItem.IsEnabled = canMoveUp;
+        contextMenu.Items.Add(moveUpMenuItem);
+
+        var canMoveDown = Source.CanMoveBehaviorChild(connectionViewModel, 1);
+        var moveDownMenuItem = CreateMenuItem("Move Child Down", "ArrowDown", () =>
+        {
+            var nodeId = Source.MoveBehaviorChild(connectionViewModel, 1);
+            connectionViewModel.IsSelected = false;
+            SelectNodeById(nodeId);
+        });
+        moveDownMenuItem.IsEnabled = canMoveDown;
+        contextMenu.Items.Add(moveDownMenuItem);
+        contextMenu.Items.Add(new Separator());
+
+        var replaceMenu = CreateCategoryMenuItem("Replace Child");
+        AddBehaviorNodeCreationItems(replaceMenu, type =>
+        {
+            var nodeId = Source.ReplaceBehaviorChild(connectionViewModel, type);
+            connectionViewModel.IsSelected = false;
+            SelectNodeById(nodeId);
+        });
+        contextMenu.Items.Add(replaceMenu);
+
+        var wrapMenu = CreateCategoryMenuItem("Wrap Child With");
+        AddBehaviorNodeCreationItems(wrapMenu, type =>
+        {
+            var nodeId = Source.WrapBehaviorChild(connectionViewModel, type);
+            connectionViewModel.IsSelected = false;
+            SelectNodeById(nodeId);
+        }, Source.GetBehaviorWrapperNodeTypes());
+        contextMenu.Items.Add(wrapMenu);
+        contextMenu.Items.Add(new Separator());
+
+        contextMenu.Items.Add(CreateMenuItem("Delete Child Branch", "Delete", "WolvenKitRed", () =>
+        {
+            var nodeId = Source.DeleteBehaviorChild(connectionViewModel);
+            connectionViewModel.IsSelected = false;
+            SelectNodeById(nodeId);
+        }));
+
+        connection.SetCurrentValue(ContextMenuProperty, contextMenu);
+        contextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);
     }
 
 
