@@ -267,11 +267,11 @@ public partial class ScriptFunctions
     }
 
     /// <inheritdoc cref="RedTypeTemplateService.CreateTypeInstance(Type, string, TemplateSource)"/>
-    public virtual IRedType CreateTemplatedTypeInstance(string type, string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
+    public virtual object CreateTemplatedTypeInstance(string type, string templateName = "default", TemplateSource src = TemplateSource.Auto) =>
         CreateTemplatedTypeInstance(new ScriptRedTypeTemplateDescriptor(templateName, type), src);
 
     /// <inheritdoc cref="RedTypeTemplateService.CreateTypeInstance(RedTypeTemplateDescriptor, TemplateSource)"/>
-    public virtual IRedType CreateTemplatedTypeInstance(ScriptRedTypeTemplateDescriptor templateDescriptor, TemplateSource src = TemplateSource.Auto)
+    public virtual object CreateTemplatedTypeInstance(ScriptRedTypeTemplateDescriptor templateDescriptor, TemplateSource src = TemplateSource.Auto)
         => _redTypeTemplateService.CreateTypeInstance(templateDescriptor.ToRedTypeTemplateDescriptor(), src);
 
 
