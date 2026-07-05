@@ -1,0 +1,6 @@
+changes:
+    - type: "deprecated"
+      packages: ["Nuget Packages"]
+      pr-number: 2984
+      author: "notaspirit"
+      description: "All functionality of ModKit.RED4.RedTypeFactory has been moved to RED4.Types.RedTypeManager."
