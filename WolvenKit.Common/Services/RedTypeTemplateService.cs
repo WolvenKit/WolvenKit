@@ -370,7 +370,8 @@ public class RedTypeTemplateService
 
     public static bool IsTypeTemplatable<T>() => IsTypeTemplatable(typeof(T));
     public static bool IsTypeTemplatable(Type type) => typeof(IRedType).IsAssignableFrom(type) &&
-                                                type is { IsAbstract: false, IsPrimitive: false };
+                                                type is { IsAbstract: false, IsPrimitive: false } &&
+                                                !typeof(IRedPrimitive).IsAssignableFrom(type);
 
     public bool IsOnlyNoneOrDefaultAvailable<T>(TemplateSource src = TemplateSource.Auto) => IsOnlyNoneOrDefaultAvailable(typeof(T), src);
 
