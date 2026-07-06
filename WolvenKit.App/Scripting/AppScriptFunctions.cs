@@ -79,7 +79,7 @@ public class AppScriptFunctions : ScriptFunctions
     [Obsolete]
     public void SuspendFileWatcher(bool suspend)
     {
-        _loggerService.Info(JsonSerializer.Serialize(_redTypeTemplateService.SystemTemplates[0]));
+
     }
 
     /// <summary>
