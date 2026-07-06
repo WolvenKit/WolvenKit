@@ -1,8 +1,8 @@
 using System;
-using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using WolvenKit.Common.Model;
+using WolvenKit.Common.Services;
 using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
 
@@ -52,7 +52,7 @@ public class RedTypeTemplateConverter : JsonConverter<RedTypeTemplate>
                 throw new JsonException("Template Data $type property is empty");
             }
 
-            type = ParseType(typeName);
+            type = RedTypeTemplateService.ParseType(typeName);
             if (type is null)
             {
                 throw new JsonException($"Template Data contains unknown type '{typeName}'");
@@ -115,12 +115,4 @@ public class RedTypeTemplateConverter : JsonConverter<RedTypeTemplate>
 
     private static string? GetStringOrDefault(JsonElement element) =>
         element.ValueKind is JsonValueKind.Undefined or JsonValueKind.Null ? null : element.GetString();
-
-    private static Type? ParseType(string typeName) => AppDomain.CurrentDomain
-        .GetAssemblies()
-        .SelectMany(a => a.GetTypes())
-        .FirstOrDefault(t =>
-            t.Name == typeName ||
-            t.FullName == typeName ||
-            t.AssemblyQualifiedName == typeName);
 }

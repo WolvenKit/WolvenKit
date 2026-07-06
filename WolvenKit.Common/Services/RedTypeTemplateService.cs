@@ -2,14 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.Json;
 using WolvenKit.Common.Conversion;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
-using Activator = System.Activator;
 
 namespace WolvenKit.Common.Services;
 
@@ -90,6 +88,7 @@ public class RedTypeTemplateService
                 continue;
             }
 
+            // If 200 templates / second is too slow, this deserialization check can be removed
             try
             {
                 var template = DeserializeTemplate(type, File.ReadAllText(f.FullName));
@@ -394,10 +393,19 @@ public class RedTypeTemplateService
     private string GetTemplateFilePath(Type type, string name, TemplateDestination src) => Path.Join(
         src == TemplateDestination.User ? _userTemplateDir : _systemTemplateDir, $"{name}.{type.Name}.json");
 
-    public static Type? ParseType(string typeName) => AppDomain.CurrentDomain
-        .GetAssemblies()
-        .SelectMany(a => a.GetTypes())
-        .FirstOrDefault(t => t.Name == typeName);
+    private static readonly Lazy<Dictionary<string, Type>> s_typesByName = new(() =>
+        AppDomain.CurrentDomain.GetAssemblies()
+            .SelectMany(a =>
+            {
+                try { return a.GetTypes(); }
+                catch (ReflectionTypeLoadException ex) { return ex.Types.Where(t => t != null)!; }
+            })
+            .Where(t => t != null)
+            .Select(t => t!)
+            .GroupBy(t => t.Name)
+            .ToDictionary(g => g.Key, g => g.First()));
+
+    public static Type? ParseType(string typeName) => s_typesByName.Value.TryGetValue(typeName, out var t) ? t : null;
 
     private RedTypeTemplate DeserializeTemplate(Type type, string json)
     {
