@@ -107,7 +107,6 @@ public class RedTypeTemplateService
             }
 
             templates.Add(new RedTypeTemplateDescriptor(sections[0], type, f.FullName));
-            _logger.Debug($"Loaded file {f.FullName} with type {type.Name} and name {sections[0]}");
         }
     }
 
