@@ -190,8 +190,107 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
 
         #endregion
 
-        _appViewModel.RequestFileOpen(desc.FilePath);
+        var template = _templateService.ReadTemplate(desc);
+        if (template is null)
+        {
+            _loggerService.Error($"Failed to read template {desc.Name} of type {desc.Type.Name} from {desc.Source}");
+            return;
+        }
+
+        string? tempFilePath;
+
+        if (template.Data is RedBaseClass rbcData)
+        {
+            tempFilePath = CreateTempFile(rbcData);
+            if (tempFilePath == null)
+            {
+                return;
+            }
+
+            _appViewModel.DockedViews.CollectionChanged += OnDockedViewsChanged;
+            _appViewModel.RequestFileOpen(tempFilePath);
+        }
+        else
+        {
+            _appViewModel.RequestFileOpen(desc.FilePath);
+        }
+
+        _appViewModel.CloseModalCommand.Execute(null);
+        return;
+
+        string? CreateTempFile(RedBaseClass templateData)
+        {
+            var fp = Path.Combine(Path.GetTempPath(), $"{templateDesc.Name}.{templateDesc.TypeName}.tempcr2w");
+            var cr2w = new CR2WFile
+            {
+                RootChunk = templateData
+            };
+
+            if (!_cr2wTools.WriteCr2W(cr2w, fp))
+            {
+                _loggerService.Error($"Failed to create temporary file: {fp}");
+                return null;
+            }
+
+            return fp;
+        }
+
+        void OnDockedViewsChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems == null)
+            {
+                return;
+            }
+
+            foreach (var item in e.NewItems.OfType<RedDocumentViewModel>())
+            {
+                if (item.FilePath == tempFilePath)
+                {
+                    item.OnSaveCompleted += OnDocumentSaved;
+                    _appViewModel.DockedViews.CollectionChanged -= OnDockedViewsChanged;
+                    _appViewModel.DockedViews.CollectionChanged += OnRemoved;
+                    break;
+                }
+                continue;
+
+                void OnRemoved(object? s, NotifyCollectionChangedEventArgs ea)
+                {
+                    if (ea.OldItems?.Contains(item) != true)
+                    {
+                        return;
+                    }
+
+                    item.OnSaveCompleted -= OnDocumentSaved;
+                    _appViewModel.DockedViews.CollectionChanged -= OnRemoved;
+
+                    try
+                    {
+                        File.Delete(tempFilePath);
+                    }
+                    catch
+                    {
+                        /* ignore */
+                    }
+                }
+            }
+
+            return;
+
+            void OnDocumentSaved(object? docSavedSender, EventArgs docSavedArgs)
+            {
+                if (docSavedSender is not RedDocumentViewModel doc)
+                {
+                    return;
+                }
+
+                template.Data = doc.Cr2wFile.RootChunk;
+                _templateService.WriteTemplate(template, templateDesc.Name);
+                _loggerService.Success($"Saved template '{templateDesc.Name}' of type '{templateDesc.TypeName}'.");
+            }
+        }
     }
+
+
 
     public async Task DeleteFile(RedTypeTemplateManagerOption template)
     {
