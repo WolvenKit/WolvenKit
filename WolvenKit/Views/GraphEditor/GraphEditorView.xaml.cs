@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -25,10 +24,15 @@ using WolvenKit.App.ViewModels.GraphEditor.Nodes;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Behavior;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
+using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.GraphEditor;
+
+#nullable enable
+public record NodeCreationParams(Type Type, RedTypeTemplateDescriptor? RedTypeTemplateDescriptor = null);
+#nullable disable
 /// <summary>
 /// Interaktionslogik für GraphEditorView.xaml
 /// </summary>
@@ -361,7 +365,7 @@ public partial class GraphEditorView : UserControl
             var addMenu = CreateAddMenuItem();
             AddBehaviorNodeCreationItems(addMenu, type =>
             {
-                var nodeId = Source.CreateBehaviorRoot(type, mousePosition);
+                var nodeId = Source.CreateBehaviorRoot(type.Type, mousePosition, type.RedTypeTemplateDescriptor);
                 SelectNodeById(nodeId);
             });
 
@@ -433,7 +437,7 @@ public partial class GraphEditorView : UserControl
                 var addChildMenu = CreateCategoryMenuItem("Add Child");
                 AddBehaviorNodeCreationItems(addChildMenu, type =>
                 {
-                    var nodeId = Source.AddBehaviorChild(behaviorNode, type);
+                    var nodeId = Source.AddBehaviorChild(behaviorNode, type.Type, type.RedTypeTemplateDescriptor);
                     SelectNodeById(nodeId);
                 });
 
@@ -763,7 +767,7 @@ public partial class GraphEditorView : UserControl
         nameof(AIbehaviorFailerNodeDefinition)
     };
 
-    private void AddBehaviorNodeCreationItems(MenuItem parentMenu, Action<Type> createNode, IEnumerable<Type> nodeTypesOverride = null)
+    private void AddBehaviorNodeCreationItems(MenuItem parentMenu, Action<NodeCreationParams> createNode, IEnumerable<Type> nodeTypesOverride = null)
     {
         var nodeTypes = (nodeTypesOverride ?? Source.GetBehaviorNodeTypes()).ToList();
         var typeMap = nodeTypes.ToDictionary(type => type.Name, type => type);
@@ -774,14 +778,14 @@ public partial class GraphEditorView : UserControl
 
         parentMenu.Items.Add(CreateMenuItem("Search Node ...", "Magnify", "WolvenKitYellow", async () =>
         {
-            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(types)
+            await _appViewModel.SetActiveDialog(new TypeSelectorDialogViewModel(_redTypeTemplateService, types)
             {
                 DialogHandler = model =>
                 {
                     _appViewModel.CloseDialogCommand.Execute(null);
-                    if (model is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
+                    if (model is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType } tsdvm)
                     {
-                        createNode(selectedType);
+                        createNode(new NodeCreationParams(selectedType, tsdvm.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate));
                     }
                 }
             });
@@ -795,7 +799,7 @@ public partial class GraphEditorView : UserControl
         }
     }
 
-    private void AddBehaviorNodeToMenu(MenuItem parentMenu, string typeName, Dictionary<string, Type> typeMap, Action<Type> createNode, bool isRootItem = false)
+    private void AddBehaviorNodeToMenu(MenuItem parentMenu, string typeName, Dictionary<string, Type> typeMap, Action<NodeCreationParams> createNode, bool isRootItem = false)
     {
         if (!typeMap.TryGetValue(typeName, out var nodeType))
         {
@@ -805,7 +809,7 @@ public partial class GraphEditorView : UserControl
         var displayName = GraphNodeStyling.GetTitleForNodeType(nodeType);
         var emoji = GraphNodeStyling.GetIconForNodeTitle(displayName);
         var leftMargin = isRootItem ? -30 : -15;
-        parentMenu.Items.Add(CreateEmojiMenuItem($"{emoji}   {displayName}", () => createNode(nodeType), leftMargin));
+        parentMenu.Items.Add(CreateEmojiMenuItem($"{emoji}   {displayName}", () => createNode(new NodeCreationParams(nodeType)), leftMargin));
     }
 
     private void AddNodeToMenu(MenuItem parentMenu, string typeName, Dictionary<string, Type> typeMap, System.Windows.Point mousePosition, bool isRootItem = false)
@@ -937,7 +941,7 @@ public partial class GraphEditorView : UserControl
         var replaceMenu = CreateCategoryMenuItem("Replace Child");
         AddBehaviorNodeCreationItems(replaceMenu, type =>
         {
-            var nodeId = Source.ReplaceBehaviorChild(connectionViewModel, type);
+            var nodeId = Source.ReplaceBehaviorChild(connectionViewModel, type.Type, type.RedTypeTemplateDescriptor);
             connectionViewModel.IsSelected = false;
             SelectNodeById(nodeId);
         });
@@ -946,7 +950,7 @@ public partial class GraphEditorView : UserControl
         var wrapMenu = CreateCategoryMenuItem("Wrap Child With");
         AddBehaviorNodeCreationItems(wrapMenu, type =>
         {
-            var nodeId = Source.WrapBehaviorChild(connectionViewModel, type);
+            var nodeId = Source.WrapBehaviorChild(connectionViewModel, type.Type, type.RedTypeTemplateDescriptor);
             connectionViewModel.IsSelected = false;
             SelectNodeById(nodeId);
         }, Source.GetBehaviorWrapperNodeTypes());

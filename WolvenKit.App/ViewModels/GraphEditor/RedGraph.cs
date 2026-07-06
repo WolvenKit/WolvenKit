@@ -59,7 +59,7 @@ public partial class RedGraph : IDisposable
     public string StateParents { get; set; } = "";
 
     private static ILoggerService? _loggerService;
-    private RedTypeTemplateService? _templateService;
+    private RedTypeTemplateService _templateService;
 
     static RedGraph()
     {
@@ -90,7 +90,7 @@ public partial class RedGraph : IDisposable
         ItemsDragCompletedCommand = new RelayCommand(ItemsDragCompleted);
 
         _loggerService = Locator.Current.GetService<ILoggerService>();
-        _templateService = Locator.Current.GetService<RedTypeTemplateService>();
+        _templateService = Locator.Current.GetService<RedTypeTemplateService>()!;
     }
 
     public void Connect()
