@@ -951,6 +951,7 @@ namespace WolvenKit.Views.Tools
             DeleteSelectionCommand.NotifyCanExecuteChanged();
             DeleteAllButSelectionCommand.NotifyCanExecuteChanged();
             CopyHandleCommand.NotifyCanExecuteChanged();
+            CreateNewTemplateFromSelectionCommand.NotifyCanExecuteChanged();
 
             SelectedItem?.RefreshCommandStatus();
         }
