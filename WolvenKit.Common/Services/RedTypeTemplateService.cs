@@ -88,7 +88,8 @@ public class RedTypeTemplateService
                 continue;
             }
 
-            // If 200 templates / second is too slow, this deserialization check can be removed
+            // If 200 templates / second is too slow, this deserialization check can be removed,
+            // but this check better communicates to the user that a templates' content is broken
             try
             {
                 var template = DeserializeTemplate(type, File.ReadAllText(f.FullName));
