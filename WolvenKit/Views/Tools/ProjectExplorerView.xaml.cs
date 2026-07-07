@@ -49,34 +49,7 @@ namespace WolvenKit.Views.Tools
             set => SetValue(TreeItemSourceProperty, value);
         }
 
-        private void RefreshButton_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var vm = ViewModel; // capture on UI thread to avoid Dispatcher access from background threads
-                if (vm == null)
-                {
-                    return;
-                }
 
-                var bw = vm.BeginDeferredRefreshContext;
-                if (bw != null)
-                {
-                    // Run the preserve refresh inside deferred context so UI defers refresh and reapplies filters/expansion correctly
-                    var doBefore = Task.Run(() => vm.ResumeFileWatcher());
-                    _ = bw(CancellationToken.None, doBefore);
-                }
-                else
-                {
-                    // Fallback: directly resume watcher which will trigger a preserve refresh
-                    vm.ResumeFileWatcher();
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"[ProjectExplorerView] RefreshButton_Click failed: {ex.Message}");
-            }
-        }
 
         public static readonly DependencyProperty FlatItemSourceProperty =
             DependencyProperty.Register(nameof(FlatItemSource), typeof(ObservableCollection<FileSystemModel>),
@@ -91,7 +64,7 @@ namespace WolvenKit.Views.Tools
         private string _currentFolderQuery = "";
         private bool _isDragging;
         private CancellationTokenSource _deferRefreshTokenSource = new();
-        private int _lastSearchLength = 0;
+        private bool _searchApplied = false;
 
         #region Constructors
 
@@ -289,9 +262,7 @@ namespace WolvenKit.Views.Tools
                     .DisposeWith(disposables);
             });
 
-            // Refresh button click is handled in code-behind
-            // Wire up handler for refresh button
-            RefreshButton.Click += RefreshButton_Click;
+            // Refresh button click is handled via ViewModel command binding; no code-behind handler required
         }
 
         private static (string Text, bool EnableRefactoring) ShowRenameDialog(string input, bool showCheckbox = false)
@@ -881,6 +852,7 @@ namespace WolvenKit.Views.Tools
             if (string.IsNullOrWhiteSpace(PESearchBar.Text))
             {
                 _currentFolderQuery = "";
+                _searchApplied = false;
                 if (TreeGrid?.View != null)
                 {
                     TreeGrid.View.Filter = null;
@@ -926,12 +898,13 @@ namespace WolvenKit.Views.Tools
                             : IsFileIn;
                         TreeGrid.View.RefreshFilter();
 
-                        if (!string.IsNullOrWhiteSpace(_currentFolderQuery) && _lastSearchLength == 0)
+                        if (!string.IsNullOrWhiteSpace(_currentFolderQuery) && !_searchApplied)
                         {
                             DispatcherHelper.RunOnMainThread(() =>
                             {
                                 TreeGrid.ExpandAllNodes();
                             }, DispatcherPriority.Background);
+                            _searchApplied = true;
                         }
                     }
                 }
@@ -939,7 +912,9 @@ namespace WolvenKit.Views.Tools
                 DispatcherHelper.RunOnMainThread(() =>
                 {
                     if (PESearchBar == null)
+                    {
                         return;
+                    }
 
                     Keyboard.Focus(PESearchBar);
                     PESearchBar.Focus();
@@ -959,7 +934,8 @@ namespace WolvenKit.Views.Tools
                     }, TaskScheduler.FromCurrentSynchronizationContext());
                 }, DispatcherPriority.ContextIdle);
 
-                _lastSearchLength = _currentFolderQuery.Length;
+                // mark that a search is currently applied
+                _searchApplied = !string.IsNullOrWhiteSpace(_currentFolderQuery);
 
             }, TaskScheduler.FromCurrentSynchronizationContext());
         }
