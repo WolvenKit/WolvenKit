@@ -1080,6 +1080,7 @@
                         x:Name="RefreshButton"
                         Height="Auto"
                         Padding="0"
+                        Click="RefreshButton_Click"
                         ToolTip="Refresh all Files">
                         <templates:IconBox
                             IconPack="Material"
