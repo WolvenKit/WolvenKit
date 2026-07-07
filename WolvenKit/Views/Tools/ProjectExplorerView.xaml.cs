@@ -250,12 +250,10 @@ namespace WolvenKit.Views.Tools
                             if (string.IsNullOrWhiteSpace(_currentFolderQuery) || TreeGrid?.View == null)
                                 return;
 
-                            // Сильная защита после полного Refresh
-                            TreeGrid.View.Filter = null;           // сбрасываем
-                            TreeGrid.View.Filter = IsFileIn;       // ставим заново
+                            TreeGrid.View.Filter = null;
+                            TreeGrid.View.Filter = IsFileIn;
                             TreeGrid.View.RefreshFilter();
 
-                            // Принудительно разворачиваем, чтобы фильтр увидел результаты
                             TreeGrid.ExpandAllNodes();
                         }, DispatcherPriority.Background);
                     })
@@ -766,14 +764,14 @@ namespace WolvenKit.Views.Tools
         {
             _currentFolderQuery = e.Info ?? string.Empty;
 
-            // Иерархическое дерево (FileTree)
+            // (FileTree)
             if (TreeGrid?.View != null)
             {
                 TreeGrid.View.Filter = IsFileIn;
                 TreeGrid.View.RefreshFilter();
             }
 
-            // Плоское дерево (FileList)
+            // (FileList)
             if (TreeGridFlat?.View != null)
             {
                 TreeGridFlat.View.Filter = IsFileInFlat;
