@@ -12,6 +12,8 @@ public interface IWatcherService
 
     public void Refresh();
 
+    public void RefreshPreserve();
+
     public void ForceStop();
 
     public void Suspend();
