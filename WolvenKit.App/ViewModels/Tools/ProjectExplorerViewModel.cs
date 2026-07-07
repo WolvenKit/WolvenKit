@@ -139,7 +139,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         bool nameMatches = node.Name.Contains(search, StringComparison.OrdinalIgnoreCase) ||
                            node.RawRelativePath.Contains(search, StringComparison.OrdinalIgnoreCase);
 
-        // Если папка сама по себе совпадает по имени — возвращаем оригинал со всеми детьми (хороший UX)
+        // If the folder itself matches by name, we return the original with all its children (good UX)
         if (nameMatches && node.IsDirectory)
         {
             return node;
