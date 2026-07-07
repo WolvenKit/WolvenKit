@@ -393,6 +393,58 @@ public partial class WatcherService : ObservableObject, IWatcherService
         }
     }
 
+    /// <summary>
+    /// Refresh the watcher by enqueuing create/delete events for differences between
+    /// the current file system and the internal lookup. This does not clear the
+    /// current tree which helps preserve UI expansion and search state.
+    /// </summary>
+    public void RefreshPreserve()
+    {
+        if (string.IsNullOrEmpty(_projectDirectory))
+        {
+            return;
+        }
+
+        try
+        {
+            var allFiles = new DirectoryInfo(_projectDirectory).GetFileSystemInfos("*", SearchOption.AllDirectories);
+            var fileSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var f in allFiles)
+            {
+                var name = f.FullName[(_projectDirectory.Length + 1)..];
+                fileSet.Add(name);
+                if (!_fileLookup.ContainsKey(name))
+                {
+                    // Enqueue create for missing entries
+                    _fileChanges.Enqueue(new FileSystemEventArgsWrapper(new FileSystemEventArgs(WatcherChangeTypes.Created, _projectDirectory, name)));
+                }
+            }
+
+            // Detect removed files
+            foreach (var key in _fileLookup.Keys)
+            {
+                if (!fileSet.Contains(key))
+                {
+                    _fileChanges.Enqueue(new FileSystemEventArgsWrapper(new FileSystemEventArgs(WatcherChangeTypes.Deleted, _projectDirectory, key)));
+                }
+            }
+
+            // Ensure update loop is running
+            if (_updateTask == null || _updateTask.IsCompleted)
+            {
+                _updateThreadCancellationTokenSource = new CancellationTokenSource();
+                _updateTask = Task.Factory.StartNew(() => Update(_updateThreadCancellationTokenSource.Token), _updateThreadCancellationTokenSource.Token);
+            }
+
+            _modsWatcher.EnableRaisingEvents = true;
+        }
+        catch (Exception ex)
+        {
+            _loggerService?.Error($"WatcherService.RefreshPreserve failed: {ex.Message}");
+        }
+    }
+
     private void Clear()
     {
         _fileChanges.Clear();
