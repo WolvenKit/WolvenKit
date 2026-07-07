@@ -134,50 +134,51 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         ApplySearchFilter();
     }
 
-    private FileSystemModel? FilterNode(FileSystemModel node, string search)
-    {
-        bool nameMatches = node.Name.Contains(search, StringComparison.OrdinalIgnoreCase) ||
-                           node.RawRelativePath.Contains(search, StringComparison.OrdinalIgnoreCase);
-
-        var matchingChildren = new ObservableCollection<FileSystemModel>();
-
-        // Normal recursive filtering
-        if (node.Children != null)
+        private FileSystemModel? FilterNode(FileSystemModel node, string search)
         {
-            foreach (var child in node.Children)
+            bool nameMatches = node.Name.Contains(search, StringComparison.OrdinalIgnoreCase) ||
+                               node.RawRelativePath.Contains(search, StringComparison.OrdinalIgnoreCase);
+
+            // === When folder matches → return original node (with all its real children) ===
+            // If the folder itself matches, we should show the folder and all its children unchanged.
+            if (nameMatches && node.IsDirectory)
             {
-                var filteredChild = FilterNode(child, search);
-                if (filteredChild != null)
-                {
-                    matchingChildren.Add(filteredChild);
-                }
+                return node;
             }
-        }
 
-        // === When folder matches → return original node (with all its real children) ===
-        if (nameMatches && node.IsDirectory)
-        {
-            return node;
-        }
+            var matchingChildren = new ObservableCollection<FileSystemModel>();
 
-        if (nameMatches || matchingChildren.Count > 0)
-        {
-            // Only create a copy when we need to show a filtered list of children
-            var copy = new FileSystemModel(node.Parent, node.Name, node.RawRelativePath, node.IsDirectory);
-
-            foreach (var child in matchingChildren)
+            // Normal recursive filtering
+            if (node.Children != null)
             {
-                if (copy.Children != null)
+                foreach (var child in node.Children)
                 {
-                    copy.Children.Add(child);
+                    var filteredChild = FilterNode(child, search);
+                    if (filteredChild != null)
+                    {
+                        matchingChildren.Add(filteredChild);
+                    }
                 }
             }
 
-            return copy;
-        }
+            if (nameMatches || matchingChildren.Count > 0)
+            {
+                // Only create a copy when we need to show a filtered list of children
+                var copy = new FileSystemModel(node.Parent, node.Name, node.RawRelativePath, node.IsDirectory);
 
-        return null;
-    }
+                foreach (var child in matchingChildren)
+                {
+                    if (copy.Children != null)
+                    {
+                        copy.Children.Add(child);
+                    }
+                }
+
+                return copy;
+            }
+
+            return null;
+        }
 
     #endregion
 
@@ -263,7 +264,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         CheckForOneDriveInPath();
 
         // On first project load, we're already initialized, so this won't fire
-        Refresh();
+        // Clear any existing search filter so initial refresh shows full tree
+        SearchText = string.Empty;
+        _ = Refresh();
         OnProjectChanged?.Invoke();
         ApplySearchFilter();
     }
@@ -457,19 +460,32 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     private bool CanRefresh() => ActiveProject != null;
     [RelayCommand(CanExecute = nameof(CanRefresh))]
-    private void Refresh()
+    private async Task Refresh()
     {
-        if (_projectWatcher.IsWatcherStopped)
+        try
         {
-            ResumeFileWatcher();
+            if (BeginDeferredRefreshContext != null)
+            {
+                var doBefore = Task.Run(() => ResumeFileWatcher());
+                await BeginDeferredRefreshContext(CancellationToken.None, doBefore).ConfigureAwait(false);
+                await doBefore.ConfigureAwait(false);
+            }
+            else
+            {
+                if (_projectWatcher.IsWatcherStopped)
+                {
+                    ResumeFileWatcher();
+                }
+                else
+                {
+                    _projectWatcher.Refresh();
+                }
+            }
         }
-        else
+        catch (Exception ex)
         {
-            _projectWatcher.Refresh();
+            _loggerService.Error($"Failed to refresh project explorer: {ex.Message}");
         }
-
-        // Сообщаем View, что нужно восстановить поиск (если он был активен)
-        // Это можно сделать через событие или свойство, если нужно более чисто
     }
 
     private string GetActiveFolderPath() => SelectedTabIndex switch
