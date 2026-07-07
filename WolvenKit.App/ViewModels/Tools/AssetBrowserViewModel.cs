@@ -581,10 +581,56 @@ public partial class AssetBrowserViewModel : ToolViewModel
 
     private async Task InternalAddFiles(IList<IGameFile> files)
     {
-        _appViewModel.GetToolViewModel<ProjectExplorerViewModel>()?.SuspendFileWatcher();
-        await _gameController.GetController().AddToModAsync(files);
-        _loggerService.Success($"Added {files.Count} files to the project.");
-        _appViewModel.GetToolViewModel<ProjectExplorerViewModel>()?.ResumeFileWatcher();
+        var projVm = _appViewModel.GetToolViewModel<ProjectExplorerViewModel>();
+
+        if (projVm?.BeginDeferredRefreshContext != null)
+        {
+            var expectedPaths = files
+                .Select(f => f.FileName?.Replace('/', Path.DirectorySeparatorChar) ?? string.Empty)
+                .ToList();
+
+            await projVm.BeginDeferredRefreshContext(CancellationToken.None, Task.Run(async () =>
+            {
+                projVm.SuspendFileWatcher();
+                await _gameController.GetController().AddToModAsync(files);
+                _loggerService.Success($"Added {files.Count} files to the project.");
+                projVm.ResumeFileWatcher();
+
+                var sw = System.Diagnostics.Stopwatch.StartNew();
+                const int timeoutMs = 300; // was 3000
+                while (sw.ElapsedMilliseconds < timeoutMs)
+                {
+                    var allFound = false;
+                    DispatcherHelper.RunOnMainThread(() =>
+                    {
+                        bool ContainsPath(IEnumerable<FileSystemModel> nodes, string path)
+                        {
+                            foreach (var n in nodes)
+                            {
+                                if (n.RawRelativePath.Equals(path, StringComparison.OrdinalIgnoreCase))
+                                    return true;
+                                if (n.Children != null && ContainsPath(n.Children, path))
+                                    return true;
+                            }
+                            return false;
+                        }
+
+                        allFound = expectedPaths.All(p => !string.IsNullOrEmpty(p) && ContainsPath(projVm.FileTree, p));
+                    });
+
+                    if (allFound)
+                        break;
+                    await Task.Delay(30);
+                }
+            }));
+        }
+        else
+        {
+            projVm?.SuspendFileWatcher();
+            await _gameController.GetController().AddToModAsync(files);
+            _loggerService.Success($"Added {files.Count} files to the project.");
+            projVm?.ResumeFileWatcher();
+        }
     }
 
     /// <summary>
