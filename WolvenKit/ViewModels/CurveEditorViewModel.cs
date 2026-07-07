@@ -341,9 +341,8 @@ namespace WolvenKit.ViewModels
                 case Enums.EInterpolationType.Linear:
                     // no control points
                     foreach (var p in Curve)
-                    {
                         p.IsControlPoint = false;
-                    }
+
 
                     break;
                 case Enums.EInterpolationType.BezierQuadratic:
