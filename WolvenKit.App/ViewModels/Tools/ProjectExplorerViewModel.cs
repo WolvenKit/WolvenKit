@@ -82,6 +82,105 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly IArchiveManager _archiveManager;
     private readonly ProjectResourceTools _projectResourceTools;
 
+    #region Search Filter
+
+    private string _searchText = string.Empty;
+    public string SearchText
+    {
+        get => _searchText;
+        set
+        {
+            if (SetProperty(ref _searchText, value))
+            {
+                ApplySearchFilter();
+            }
+        }
+    }
+
+    public ObservableCollection<FileSystemModel> DisplayedFileTree { get; } = new();
+    private void ApplySearchFilter()
+    {
+        DisplayedFileTree.Clear();
+
+        if (string.IsNullOrWhiteSpace(SearchText))
+        {
+            // Normal mode - show full tree
+            foreach (var item in FileTree)
+            {
+                DisplayedFileTree.Add(item);
+            }
+            return;
+        }
+
+        // Search mode
+        string search = SearchText.Trim();
+
+        foreach (var root in FileTree)
+        {
+            var filteredNode = FilterNode(root, search);
+            if (filteredNode != null)
+            {
+                DisplayedFileTree.Add(filteredNode);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Public method to refresh the hierarchical tree view.
+    /// Used after long operations like Convert to/from JSON.
+    /// </summary>
+    public void RefreshDisplayedTree()
+    {
+        ApplySearchFilter();
+    }
+
+    private FileSystemModel? FilterNode(FileSystemModel node, string search)
+    {
+        bool nameMatches = node.Name.Contains(search, StringComparison.OrdinalIgnoreCase) ||
+                           node.RawRelativePath.Contains(search, StringComparison.OrdinalIgnoreCase);
+
+        var matchingChildren = new ObservableCollection<FileSystemModel>();
+
+        // Normal recursive filtering
+        if (node.Children != null)
+        {
+            foreach (var child in node.Children)
+            {
+                var filteredChild = FilterNode(child, search);
+                if (filteredChild != null)
+                {
+                    matchingChildren.Add(filteredChild);
+                }
+            }
+        }
+
+        // === When folder matches → return original node (with all its real children) ===
+        if (nameMatches && node.IsDirectory)
+        {
+            return node;
+        }
+
+        if (nameMatches || matchingChildren.Count > 0)
+        {
+            // Only create a copy when we need to show a filtered list of children
+            var copy = new FileSystemModel(node.Parent, node.Name, node.RawRelativePath, node.IsDirectory);
+
+            foreach (var child in matchingChildren)
+            {
+                if (copy.Children != null)
+                {
+                    copy.Children.Add(child);
+                }
+            }
+
+            return copy;
+        }
+
+        return null;
+    }
+
+    #endregion
+
     private CancellationTokenSource _deferredRefreshCts = new();
     private readonly ImportExportHelper _importExportHelper;
 
@@ -166,6 +265,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         // On first project load, we're already initialized, so this won't fire
         Refresh();
         OnProjectChanged?.Invoke();
+        ApplySearchFilter();
     }
 
     /// <summary>
@@ -367,6 +467,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         {
             _projectWatcher.Refresh();
         }
+
+        // Сообщаем View, что нужно восстановить поиск (если он был активен)
+        // Это можно сделать через событие или свойство, если нужно более чисто
     }
 
     private string GetActiveFolderPath() => SelectedTabIndex switch
@@ -1136,6 +1239,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         await _deferredRefreshCts.CancelAsync();
         _deferredRefreshCts.Dispose();
+        ApplySearchFilter();
     }
 
     /// <summary>
@@ -1591,6 +1695,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
 
         _progressService.Completed();
+        ApplySearchFilter();
     }
 
     private async Task ConvertFromJsonAsync(string file)
@@ -1774,6 +1879,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             ExpansionStateDictionary = [];
         }
 
+        ExpansionStateDictionary.Clear();
+
         // Abort if user doesn't want to reopen any files
         if (!_settingsManager.ReopenFiles || _settingsManager.NumFilesToReopen == 0 ||
             project.OpenProjectFiles.Count == 0)
@@ -1914,8 +2021,8 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         try
         {
-            _projectWatcher.UnwatchProject(project);
-            _projectWatcher.ForceStop();
+            // Use Suspend to avoid a full Unwatch which clears the tree.
+            _projectWatcher.Suspend();
         }
         catch
         {
@@ -1935,7 +2042,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         try
         {
-            _projectWatcher.WatchProject(project);
+            // Resume watcher and request a preserve refresh to pick up files added while suspended
+            // without clearing the current tree (preserve expansion/search state).
+            _projectWatcher.Resume();
+            _projectWatcher.RefreshPreserve();
         }
         catch
         {
