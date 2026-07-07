@@ -18,7 +18,6 @@ using System.Xml.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.VisualBasic.FileIO;
-
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
@@ -100,29 +99,30 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     public ObservableCollection<FileSystemModel> DisplayedFileTree { get; } = new();
     private void ApplySearchFilter()
     {
-        DisplayedFileTree.Clear();
-
-        if (string.IsNullOrWhiteSpace(SearchText))
+        DispatcherHelper.RunOnMainThread(() =>
         {
-            // Normal mode - show full tree
-            foreach (var item in FileTree)
-            {
-                DisplayedFileTree.Add(item);
-            }
-            return;
-        }
+            DisplayedFileTree.Clear();
 
-        // Search mode
-        string search = SearchText.Trim();
-
-        foreach (var root in FileTree)
-        {
-            var filteredNode = FilterNode(root, search);
-            if (filteredNode != null)
+            if (string.IsNullOrWhiteSpace(SearchText))
             {
-                DisplayedFileTree.Add(filteredNode);
+                foreach (var item in FileTree)
+                {
+                    DisplayedFileTree.Add(item);
+                }
+                return;
             }
-        }
+
+            string search = SearchText.Trim();
+
+            foreach (var root in FileTree)
+            {
+                var filteredNode = FilterNode(root, search);
+                if (filteredNode != null)
+                {
+                    DisplayedFileTree.Add(filteredNode);
+                }
+            }
+        });
     }
 
     /// <summary>
@@ -131,54 +131,48 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     public void RefreshDisplayedTree()
     {
-        ApplySearchFilter();
+        DispatcherHelper.RunOnMainThread(ApplySearchFilter);
     }
 
-        private FileSystemModel? FilterNode(FileSystemModel node, string search)
+    private FileSystemModel? FilterNode(FileSystemModel node, string search)
+    {
+        bool nameMatches = node.Name.Contains(search, StringComparison.OrdinalIgnoreCase) ||
+                           node.RawRelativePath.Contains(search, StringComparison.OrdinalIgnoreCase);
+
+        // Если папка сама по себе совпадает по имени — возвращаем оригинал со всеми детьми (хороший UX)
+        if (nameMatches && node.IsDirectory)
         {
-            bool nameMatches = node.Name.Contains(search, StringComparison.OrdinalIgnoreCase) ||
-                               node.RawRelativePath.Contains(search, StringComparison.OrdinalIgnoreCase);
-
-            // === When folder matches → return original node (with all its real children) ===
-            // If the folder itself matches, we should show the folder and all its children unchanged.
-            if (nameMatches && node.IsDirectory)
-            {
-                return node;
-            }
-
-            var matchingChildren = new ObservableCollection<FileSystemModel>();
-
-            // Normal recursive filtering
-            if (node.Children != null)
-            {
-                foreach (var child in node.Children)
-                {
-                    var filteredChild = FilterNode(child, search);
-                    if (filteredChild != null)
-                    {
-                        matchingChildren.Add(filteredChild);
-                    }
-                }
-            }
-
-            if (nameMatches || matchingChildren.Count > 0)
-            {
-                // Only create a copy when we need to show a filtered list of children
-                var copy = new FileSystemModel(node.Parent, node.Name, node.RawRelativePath, node.IsDirectory);
-
-                foreach (var child in matchingChildren)
-                {
-                    if (copy.Children != null)
-                    {
-                        copy.Children.Add(child);
-                    }
-                }
-
-                return copy;
-            }
-
-            return null;
+            return node;
         }
+
+        var matchingChildren = new ObservableCollection<FileSystemModel>();
+
+        if (node.Children != null)
+        {
+            foreach (var child in node.Children)
+            {
+                var filteredChild = FilterNode(child, search);
+                if (filteredChild != null)
+                {
+                    matchingChildren.Add(filteredChild);
+                }
+            }
+        }
+
+        if (nameMatches || matchingChildren.Count > 0)
+        {
+            var copy = new FileSystemModel(node.Parent, node.Name, node.RawRelativePath, node.IsDirectory);
+
+            foreach (var child in matchingChildren)
+            {
+                copy.Children?.Add(child);
+            }
+
+            return copy;
+        }
+
+        return null;
+    }
 
     #endregion
 
@@ -253,28 +247,29 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private void Svc_ThreadIdleTenSeconds(object? sender, EventArgs e)
     {
-        SaveProjectExplorerExpansionStateIfDirty();
+        if (string.IsNullOrWhiteSpace(SearchText))
+        {
+            SaveProjectExplorerExpansionStateIfDirty(ActiveProject);
+        }
         SaveProjectExplorerTabIfDirty();
     }
 
     private void AppViewModel_OnInitialProjectLoaded(object? sender, EventArgs e)
     {
         RefreshProjectData();
-
         CheckForOneDriveInPath();
 
-        // On first project load, we're already initialized, so this won't fire
-        // Clear any existing search filter so initial refresh shows full tree
         SearchText = string.Empty;
         _ = Refresh();
         OnProjectChanged?.Invoke();
-        ApplySearchFilter();
+
+        DispatcherHelper.RunOnMainThread(ApplySearchFilter);
     }
 
     /// <summary>
     /// Save project browser expansion state (will be written to <see cref="Cp77Project.InterfaceProjectTreeStatePath"/>)
     /// </summary>
-    public Dictionary<string, bool> ExpansionStateDictionary = [];
+    public ConcurrentDictionary<string, bool> ExpansionStateDictionary { get; private set; } = new();
 
     public bool? GetExpansionStateOrNull(string relPath) => ExpansionStateDictionary.TryGetValue(relPath, out var state) ? state : null;
 
@@ -485,6 +480,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         catch (Exception ex)
         {
             _loggerService.Error($"Failed to refresh project explorer: {ex.Message}");
+            _loggerService.Error($"Exception type: {ex.GetType().FullName}");
         }
     }
 
@@ -1255,7 +1251,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         await _deferredRefreshCts.CancelAsync();
         _deferredRefreshCts.Dispose();
-        ApplySearchFilter();
+        DispatcherHelper.RunOnMainThread(ApplySearchFilter);
     }
 
     /// <summary>
@@ -1711,7 +1707,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
 
         _progressService.Completed();
-        ApplySearchFilter();
+        DispatcherHelper.RunOnMainThread(ApplySearchFilter);
     }
 
     private async Task ConvertFromJsonAsync(string file)
@@ -1881,32 +1877,41 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private void RestoreProjectState(Cp77Project project)
     {
-
-        // read tree state from file
+        // Read tree state from file
         if (File.Exists(project.InterfaceProjectTreeStatePath))
         {
-            _hasUnsavedFileTreeChanges = false;
-            ExpansionStateDictionary =
-                JsonSerializer.Deserialize<Dictionary<string, bool>>(
-                    File.ReadAllText(project.InterfaceProjectTreeStatePath)) ?? [];
+            try
+            {
+                var loaded = JsonSerializer.Deserialize<Dictionary<string, bool>>(
+                    File.ReadAllText(project.InterfaceProjectTreeStatePath)) ?? new Dictionary<string, bool>();
+
+                foreach (var kvp in loaded)
+                {
+                    ExpansionStateDictionary[kvp.Key] = kvp.Value;
+                }
+            }
+            catch
+            {
+                // Corrupt or incompatible file — just start fresh
+                ExpansionStateDictionary.Clear();
+            }
         }
         else
         {
-            ExpansionStateDictionary = [];
+            ExpansionStateDictionary = new ConcurrentDictionary<string, bool>();
         }
 
-        ExpansionStateDictionary.Clear();
-
         // Abort if user doesn't want to reopen any files
-        if (!_settingsManager.ReopenFiles || _settingsManager.NumFilesToReopen == 0 ||
+        if (!_settingsManager.ReopenFiles ||
+            _settingsManager.NumFilesToReopen == 0 ||
             project.OpenProjectFiles.Count == 0)
         {
             return;
         }
 
         var lastFilePaths = project.OpenProjectFiles
-            .OrderBy(x => x.Key) // order by timestamp
-            .Select(x => x.Value) // select relative file path
+            .OrderBy(x => x.Key)
+            .Select(x => x.Value)
             .Select(project.GetAbsolutePath)
             .Where(File.Exists)
             .Distinct()
@@ -1963,15 +1968,35 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
     private void SaveProjectExplorerExpansionStateIfDirty() => SaveProjectExplorerExpansionStateIfDirty(ActiveProject);
 
+    private readonly object _expansionLock = new();
     private void SaveProjectExplorerExpansionStateIfDirty(Cp77Project? project)
     {
         if (project is null || !_hasUnsavedFileTreeChanges)
-        {
             return;
-        }
 
-        File.WriteAllText(project.InterfaceProjectTreeStatePath, JsonSerializer.Serialize(ExpansionStateDictionary));
-        _hasUnsavedFileTreeChanges = false;
+        DispatcherHelper.RunOnMainThread(() =>
+        {
+            lock (_expansionLock)
+            {
+                try
+                {
+                    // Делаем снапшот под lock'ом
+                    var snapshot = ExpansionStateDictionary.ToDictionary(
+                        kvp => kvp.Key,
+                        kvp => kvp.Value);
+
+                    File.WriteAllText(
+                        project.InterfaceProjectTreeStatePath,
+                        JsonSerializer.Serialize(snapshot));
+
+                    _hasUnsavedFileTreeChanges = false;
+                }
+                catch (Exception ex)
+                {
+                    _loggerService?.Error($"Failed to save expansion state: {ex.Message}");
+                }
+            }
+        });
     }
 
     public void StopWatcher() => _projectWatcher.ForceStop();
