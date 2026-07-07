@@ -20,8 +20,8 @@ public static class WikiLinks
     public const string PlayerHeadTutorial =
         "https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/npcs/a-new-head-for-v";
 
-    public const string Props =
-        "https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/everything-else/custom-props";
+    public const string PropGenerator =
+        "https://wiki.redmodding.org/wolvenkit/wolvenkit-app/editor/generators/prop-generator";
 
     public const string AMM_NPCs =
         "https://wiki.redmodding.org/cyberpunk-2077-modding/modding-guides/npcs/amm-custom-npcs";
