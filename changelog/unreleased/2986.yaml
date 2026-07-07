@@ -12,3 +12,8 @@ changes:
       pr-number: 2986
       author: "manavortex"
       description: "Removed obsolete checkbox from prop generator, changed Help link"
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 2986
+      author: "manavortex"
+      description: "Updated wiki link in prop generator"
