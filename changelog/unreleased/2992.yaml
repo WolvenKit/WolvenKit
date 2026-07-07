@@ -1,0 +1,6 @@
+changes:
+    - type: "changed"
+      packages: ["App", "CLI", "Nuget Packages"]
+      pr-number: 2992
+      author: "Ametis81"
+      description: "Live search feature / better search results"
