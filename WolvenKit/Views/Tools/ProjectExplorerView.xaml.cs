@@ -26,6 +26,7 @@ using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Tools;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
 using WolvenKit.Views.Templates;
@@ -285,19 +286,29 @@ namespace WolvenKit.Views.Tools
         private void OnToggleFlatMode(object sender, EventArgs e)
         {
             if (sender is not ProjectExplorerViewModel model)
-            {
                 return;
-            }
 
             if (model.IsFlatModeEnabled)
             {
                 TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
                 TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+
+                if (!string.IsNullOrWhiteSpace(_currentFolderQuery) && TreeGridFlat?.View != null)
+                {
+                    TreeGridFlat.View.Filter = IsFileInFlat;
+                    TreeGridFlat.View.RefreshFilter();
+                }
             }
             else
             {
                 TreeGrid.SetCurrentValue(VisibilityProperty, Visibility.Visible);
                 TreeGridFlat.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+
+                if (!string.IsNullOrWhiteSpace(_currentFolderQuery) && TreeGrid?.View != null)
+                {
+                    TreeGrid.View.Filter = IsFileIn;
+                    TreeGrid.View.RefreshFilter();
+                }
             }
         }
 
@@ -332,10 +343,6 @@ namespace WolvenKit.Views.Tools
         private async Task BeginDeferredRefreshContext(CancellationToken deferRefreshToken, Task doBeforeRefresh)
         {
             IDisposable flatDefer = null;
-            if (TreeGridFlat?.View != null)
-            {
-                flatDefer = TreeGridFlat.View.DeferRefresh(TreeViewRefreshMode.DeferRefresh);
-            }
 
             try
             {
@@ -343,32 +350,39 @@ namespace WolvenKit.Views.Tools
 
                 bool hadActiveSearch = !string.IsNullOrWhiteSpace(_currentFolderQuery);
 
-                if (TreeGridFlat?.View != null)
+                DispatcherHelper.RunOnMainThread(() =>
                 {
-                    TreeGridFlat.View.Filter = string.IsNullOrWhiteSpace(_currentFolderQuery)
-                        ? null
-                        : IsFileInFlat;
-                    TreeGridFlat.View.RefreshFilter();
-                }
-
-                if (hadActiveSearch && TreeGrid?.View != null)
-                {
-                    DispatcherHelper.RunOnMainThread(async () =>
+                    if (TreeGridFlat?.View != null)
                     {
-                        await Task.Delay(5);
+                        flatDefer = TreeGridFlat.View.DeferRefresh(TreeViewRefreshMode.DeferRefresh);
+                    }
 
-                        if (!string.IsNullOrWhiteSpace(_currentFolderQuery) && TreeGrid?.View != null)
-                        {
-                            TreeGrid.ExpandAllNodes();
-                            TreeGrid.View.Filter = IsFileIn;
-                            TreeGrid.View.RefreshFilter();
-                        }
-                    }, DispatcherPriority.Background);
-                }
+                    if (TreeGridFlat?.View != null)
+                    {
+                        TreeGridFlat.View.Filter = string.IsNullOrWhiteSpace(_currentFolderQuery)
+                            ? null
+                            : IsFileInFlat;
+                        TreeGridFlat.View.RefreshFilter();
+                    }
+
+                    if (hadActiveSearch && TreeGrid?.View != null)
+                    {
+                        TreeGrid.ExpandAllNodes();
+                        TreeGrid.View.Filter = IsFileIn;
+                        TreeGrid.View.RefreshFilter();
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error in BeginDeferredRefreshContext: {ex.Message}");
             }
             finally
             {
-                flatDefer?.Dispose();
+                DispatcherHelper.RunOnMainThread(() =>
+                {
+                    flatDefer?.Dispose();
+                });
             }
         }
 
@@ -635,7 +649,7 @@ namespace WolvenKit.Views.Tools
                 if (item is not TreeNode { Item: FileSystemModel { IsDirectory: true } fileSystemModel })
                     continue;
 
-                ViewModel.ExpansionStateDictionary.Remove(fileSystemModel.RawRelativePath);
+                ViewModel.ExpansionStateDictionary.TryRemove(fileSystemModel.RawRelativePath, out _);
             }
         }
 
@@ -668,7 +682,7 @@ namespace WolvenKit.Views.Tools
                 };
             }
 
-            // Search active → check name/path + parent folders (so files inside "textures" appear)
+            // Search active → check name/path + parent folders
             if (fm.Name.Contains(_currentFolderQuery, StringComparison.OrdinalIgnoreCase) ||
                 fm.RawRelativePath.Contains(_currentFolderQuery, StringComparison.OrdinalIgnoreCase))
             {
@@ -816,31 +830,6 @@ namespace WolvenKit.Views.Tools
             Recurse(TreeGrid.View.Nodes);
         }
 
-        private void RestoreExpansionFromDictionary()
-        {
-            if (TreeGrid?.View?.Nodes == null || ViewModel?.ExpansionStateDictionary == null)
-                return;
-
-            foreach (var node in TreeGrid.View.Nodes)
-            {
-                RestoreNodeExpansionRecursive(node);
-            }
-        }
-
-        private void RestoreNodeExpansionRecursive(TreeNode node)
-        {
-            if (node.Item is FileSystemModel model &&
-                ViewModel!.ExpansionStateDictionary.TryGetValue(model.RawRelativePath, out bool shouldExpand) &&
-                shouldExpand)
-            {
-                TreeGrid.ExpandNode(node);
-            }
-
-            foreach (var child in node.ChildNodes)
-            {
-                RestoreNodeExpansionRecursive(child);
-            }
-        }
 
         private CancellationTokenSource _searchDebounceCts;
 
