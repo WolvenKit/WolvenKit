@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
@@ -43,13 +45,16 @@ public partial class RedGraph : IDisposable
     public RedGraphType GraphType { get; } = RedGraphType.Invalid;
 
     public string Title { get; }
+    public ObservableCollection<object> CanvasItems { get; } = new();
     public ObservableCollection<NodeViewModel> Nodes { get; } = new();
     public ObservableCollection<ConnectionViewModel> Connections { get; } = new();
+    public ObservableCollection<GraphCommentViewModel> Comments { get; } = new();
     public PendingConnectionViewModel PendingConnection { get; }
 
     public ICommand ConnectCommand { get; }
     public ICommand DisconnectCommand { get; }
     public ICommand ItemsDragCompletedCommand { get; }
+    public ICommand RemoveCommentCommand { get; }
 
     public Nodify.NodifyEditor? Editor { get; set; }
 
@@ -86,8 +91,12 @@ public partial class RedGraph : IDisposable
         ConnectCommand = new RelayCommand(Connect);
         DisconnectCommand = new RelayCommand<BaseConnectorViewModel>(Disconnect);
         ItemsDragCompletedCommand = new RelayCommand(ItemsDragCompleted);
+        RemoveCommentCommand = new RelayCommand<GraphCommentViewModel>(RemoveComment);
 
         _loggerService = Locator.Current.GetService<ILoggerService>();
+
+        Comments.CollectionChanged += CommentsOnCollectionChanged;
+        Nodes.CollectionChanged += NodesOnCollectionChanged;
     }
 
     public void Connect()
@@ -293,19 +302,22 @@ public partial class RedGraph : IDisposable
 
     public void CenterOnSelectedNodes(IList<object> nodes)
     {
-        if (nodes.Count > 0 && Editor != null)
+        if (Editor == null)
         {
-            if (nodes[0] is not NodeViewModel nvm)
-            {
-                throw new Exception();
-            }
-
-            Editor.ViewportZoom = 1;
-            Editor.ViewportLocation = new System.Windows.Point(
-                nvm.Location.X - (Editor.ViewportSize.Width / 2) + (nvm.Size.Width / 2),
-                nvm.Location.Y - (Editor.ViewportSize.Height / 2) + (nvm.Size.Height / 2)
-            );
+            return;
         }
+
+        var nvm = nodes.OfType<NodeViewModel>().FirstOrDefault();
+        if (nvm == null)
+        {
+            return;
+        }
+
+        Editor.ViewportZoom = 1;
+        Editor.ViewportLocation = new System.Windows.Point(
+            nvm.Location.X - (Editor.ViewportSize.Width / 2) + (nvm.Size.Width / 2),
+            nvm.Location.Y - (Editor.ViewportSize.Height / 2) + (nvm.Size.Height / 2)
+        );
     }
 
     public void RecalculateSockets(IGraphProvider nodeViewModel)
@@ -373,17 +385,120 @@ public partial class RedGraph : IDisposable
         return new System.Windows.Rect(minX, minY, maxX - minX, maxY - minY);
     }
 
+    public GraphCommentViewModel AddComment(System.Windows.Point location, IEnumerable<object>? selectedItems = null)
+    {
+        const double padding = 60;
+        const double headerPadding = 90;
+
+        var selectedNodes = selectedItems?
+            .OfType<NodeViewModel>()
+            .ToList() ?? [];
+
+        GraphCommentViewModel comment;
+        if (selectedNodes.Count > 0)
+        {
+            var minX = selectedNodes.Min(node => node.Location.X);
+            var minY = selectedNodes.Min(node => node.Location.Y);
+            var maxX = selectedNodes.Max(node => node.Location.X + Math.Max(node.Size.Width, 260));
+            var maxY = selectedNodes.Max(node => node.Location.Y + Math.Max(node.Size.Height, 120));
+
+            comment = new GraphCommentViewModel
+            {
+                Location = new System.Windows.Point(minX - padding, minY - headerPadding),
+                Width = maxX - minX + (padding * 2),
+                Height = maxY - minY + headerPadding + padding
+            };
+        }
+        else
+        {
+            comment = new GraphCommentViewModel
+            {
+                Location = location
+            };
+        }
+
+        AddComment(comment);
+        GraphCommentStateSave();
+
+        return comment;
+    }
+
+    private void AddComment(GraphCommentViewModel comment)
+    {
+        comment.PropertyChanged += CommentOnPropertyChanged;
+        Comments.Add(comment);
+    }
+
+    private void RemoveComment(GraphCommentViewModel? comment)
+    {
+        if (comment == null)
+        {
+            return;
+        }
+
+        comment.PropertyChanged -= CommentOnPropertyChanged;
+        Comments.Remove(comment);
+        GraphCommentStateSave();
+    }
+
+    private void ClearComments()
+    {
+        if (Comments.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var comment in Comments)
+        {
+            comment.PropertyChanged -= CommentOnPropertyChanged;
+        }
+
+        Comments.Clear();
+    }
+
+    private void CommentsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) => RebuildCanvasItems();
+
+    private void NodesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) => RebuildCanvasItems();
+
+    private void RebuildCanvasItems()
+    {
+        CanvasItems.Clear();
+
+        foreach (var comment in Comments)
+        {
+            CanvasItems.Add(comment);
+        }
+
+        foreach (var node in Nodes)
+        {
+            CanvasItems.Add(node);
+        }
+    }
+
+    private void CommentOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(GraphCommentViewModel.Text))
+        {
+            GraphCommentStateSave();
+        }
+        else if (e.PropertyName == nameof(GraphCommentViewModel.AccentColor))
+        {
+            GraphCommentStateSave();
+        }
+    }
+
     public void GraphStateLoad()
     {
         var loaded = false;
+        _allowGraphSave = false;
 
         if (DocumentViewModel != null)
         {
             var proj = DocumentViewModel.GetActiveProject();
             if (proj != null)
             {
-                var statePath = Path.Combine(proj.ProjectDirectory, "GraphEditorStates", DocumentViewModel.RelativePath + StateParents + ".json");
-                if (File.Exists(statePath))
+                var statePath = GetGraphEditorStatePath(".json");
+                if (statePath != null && File.Exists(statePath))
                 {
                     var jsonData = JObject.Parse(File.ReadAllText(statePath));
                     var nodesArray = jsonData.SelectTokens("Nodes.[*]");
@@ -447,12 +562,15 @@ public partial class RedGraph : IDisposable
             node.IsInitialLoad = false;
         }
 
+        ClearComments();
+        GraphCommentStateLoad();
         _allowGraphSave = true;
     }
 
     private void ItemsDragCompleted()
     {
         GraphStateSave();
+        GraphCommentStateSave();
     }
 
     public void GraphStateSave()
@@ -462,13 +580,13 @@ public partial class RedGraph : IDisposable
             var proj = DocumentViewModel.GetActiveProject();
             if (proj != null)
             {
-                var statePath = Path.Combine(proj.ProjectDirectory, "GraphEditorStates", DocumentViewModel.RelativePath + StateParents + ".json");
-                var parentFolder = Path.GetDirectoryName(statePath);
-
-                if (parentFolder != null && !Directory.Exists(parentFolder))
+                var statePath = GetGraphEditorStatePath(".json");
+                if (statePath == null)
                 {
-                    Directory.CreateDirectory(parentFolder);
+                    return;
                 }
+
+                EnsureGraphEditorStateFolder(statePath);
 
                 if (File.Exists(statePath))
                 {
@@ -515,6 +633,119 @@ public partial class RedGraph : IDisposable
         }
     }
 
+    private void GraphCommentStateLoad()
+    {
+        if (DocumentViewModel == null)
+        {
+            return;
+        }
+
+        var statePath = GetGraphEditorStatePath(".comments.json");
+        if (statePath == null)
+        {
+            return;
+        }
+
+        if (!File.Exists(statePath))
+        {
+            return;
+        }
+
+        var jsonData = JObject.Parse(File.ReadAllText(statePath));
+        var commentsArray = jsonData.SelectTokens("Comments.[*]");
+        foreach (var commentToken in commentsArray)
+        {
+            var id = commentToken.SelectToken("Id")?.ToObject<string>();
+            var text = commentToken.SelectToken("Text")?.ToObject<string>();
+            var x = commentToken.SelectToken("X")?.ToObject<double>();
+            var y = commentToken.SelectToken("Y")?.ToObject<double>();
+            var width = commentToken.SelectToken("Width")?.ToObject<double>();
+            var height = commentToken.SelectToken("Height")?.ToObject<double>();
+            var accentColor = commentToken.SelectToken("AccentColor")?.ToObject<string>();
+
+            if (x is null || y is null || width is null || height is null)
+            {
+                continue;
+            }
+
+            AddComment(new GraphCommentViewModel
+            {
+                Id = string.IsNullOrWhiteSpace(id) ? Guid.NewGuid().ToString("N") : id,
+                Text = string.IsNullOrWhiteSpace(text) ? "Comment" : text,
+                AccentColor = string.IsNullOrWhiteSpace(accentColor) ? GraphCommentViewModel.DefaultAccentColor : accentColor,
+                Location = new System.Windows.Point(x.Value, y.Value),
+                Width = width.Value,
+                Height = height.Value
+            });
+        }
+    }
+
+    public void GraphCommentStateSave()
+    {
+        if (DocumentViewModel == null || !_allowGraphSave)
+        {
+            return;
+        }
+
+        var statePath = GetGraphEditorStatePath(".comments.json");
+        if (statePath == null)
+        {
+            return;
+        }
+
+        if (Comments.Count == 0)
+        {
+            if (File.Exists(statePath))
+            {
+                File.Delete(statePath);
+            }
+
+            return;
+        }
+
+        EnsureGraphEditorStateFolder(statePath);
+
+        var jComments = new JArray();
+        foreach (var comment in Comments)
+        {
+            jComments.Add(new JObject(
+                new JProperty("Id", comment.Id),
+                new JProperty("Text", comment.Text),
+                new JProperty("AccentColor", comment.AccentColor),
+                new JProperty("X", comment.Location.X),
+                new JProperty("Y", comment.Location.Y),
+                new JProperty("Width", comment.Width),
+                new JProperty("Height", comment.Height)
+            ));
+        }
+
+        var jRoot = new JObject
+        {
+            new JProperty("Comments", jComments)
+        };
+
+        File.WriteAllText(statePath, JsonConvert.SerializeObject(jRoot));
+    }
+
+    private string? GetGraphEditorStatePath(string extension)
+    {
+        var proj = DocumentViewModel?.GetActiveProject();
+
+        return proj == null
+            ? null
+            : Path.Combine(proj.ProjectDirectory, "GraphEditorStates", DocumentViewModel!.RelativePath + StateParents + extension);
+    }
+
+    private static void EnsureGraphEditorStateFolder(string statePath)
+    {
+        var parentFolder = Path.GetDirectoryName(statePath);
+
+        if (parentFolder != null && !Directory.Exists(parentFolder))
+        {
+            Directory.CreateDirectory(parentFolder);
+        }
+    }
+
     private void NotifyNodesUpdated(params uint[] nodeIds)
     {
         foreach (var nodeId in nodeIds)
@@ -549,6 +780,8 @@ public partial class RedGraph : IDisposable
                 {
                     node.Dispose();
                 }
+
+                ClearComments();
             }
 
             _disposedValue = true;

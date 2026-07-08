@@ -8,8 +8,10 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 using Nodify;
 using ReactiveUI;
@@ -33,6 +35,18 @@ namespace WolvenKit.Views.GraphEditor;
 /// </summary>
 public partial class GraphEditorView : UserControl
 {
+    private static readonly (string Name, string Color)[] s_commentColorPresets =
+    [
+        ("Yellow", "#FFFFD400"),
+        ("Green", "#FF5BB85B"),
+        ("Blue", "#FF3FA7FF"),
+        ("Purple", "#FFB77AFF"),
+        ("Pink", "#FFFF80C8"),
+        ("Red", "#FFFF5C5C"),
+        ("Gray", "#FFAAAAAA"),
+        ("Orange", "#FFFF9F1C")
+    ];
+
     public static readonly DependencyProperty SourceProperty = DependencyProperty.Register(
         nameof(Source), typeof(RedGraph), typeof(GraphEditorView), new PropertyMetadata(null, OnSourceChanged));
 
@@ -73,6 +87,20 @@ public partial class GraphEditorView : UserControl
     {
         add => AddHandler(NodeDoubleClickEvent, value);
         remove => RemoveHandler(NodeDoubleClickEvent, value);
+    }
+
+    private object _selectedItem;
+
+    public object SelectedItem
+    {
+        get => _selectedItem;
+        set
+        {
+            if (SetField(ref _selectedItem, value))
+            {
+                SelectedNode = value as NodeViewModel;
+            }
+        }
     }
 
     private NodeViewModel _selectedNode;
@@ -361,6 +389,15 @@ public partial class GraphEditorView : UserControl
             nodifyEditor.ContextMenu.Items.Add(addMenu);
         }
 
+        if (Source.GraphType is RedGraphType.Quest or RedGraphType.Scene)
+        {
+            var hasNodeSelection = SelectedNodes.OfType<NodeViewModel>().Any();
+            nodifyEditor.ContextMenu.Items.Add(CreateMenuItem(
+                hasNodeSelection ? "Add Comment Around Selection" : "Add Comment",
+                "CommentTextOutline",
+                () => Source.AddComment(mousePosition, SelectedNodes)));
+        }
+
         nodifyEditor.ContextMenu.Items.Add(CreateMenuItem("Arrange Items", "ViewDashboard", ArrangeNodes));
 
         nodifyEditor.ContextMenu.Items.Add(CreateMenuItem("Hide/unhide sockets", "Eye", ToggleAllSockets));
@@ -446,12 +483,13 @@ public partial class GraphEditorView : UserControl
             return;
         }
 
-        if (SelectedNodes.Count > 1)
+        var selectedGraphNodes = SelectedNodes.OfType<NodeViewModel>().Cast<object>().ToList();
+        if (selectedGraphNodes.Count > 1)
         {
-            node.ContextMenu.Items.Add(CreateMenuItem("Destroy Nodes", "CloseBoxOutline", "WolvenKitRed", () => Source.RemoveNodes(SelectedNodes)));
+            node.ContextMenu.Items.Add(CreateMenuItem("Destroy Nodes", "CloseBoxOutline", "WolvenKitRed", () => Source.RemoveNodes(selectedGraphNodes)));
             if (Source.GraphType == RedGraphType.Quest)
             {
-                node.ContextMenu.Items.Add(CreateMenuItem("Convert to Phase", "FolderOutline", "WolvenKitRed", () => Source.CreatePhaseFromSelection(SelectedNodes)));
+                node.ContextMenu.Items.Add(CreateMenuItem("Convert to Phase", "FolderOutline", "WolvenKitRed", () => Source.CreatePhaseFromSelection(selectedGraphNodes)));
             }
             node.ContextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);
 
@@ -658,6 +696,166 @@ public partial class GraphEditorView : UserControl
         node.ContextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);
 
         e.Handled = true;
+    }
+
+    private void Comment_OnResizeCompleted(object sender, Nodify.Events.ResizeEventArgs e)
+    {
+        if (sender is not GroupingNode { DataContext: GraphCommentViewModel comment })
+        {
+            return;
+        }
+
+        comment.Width = e.NewSize.Width;
+        comment.Height = e.NewSize.Height;
+        Source?.GraphCommentStateSave();
+    }
+
+    private void CommentText_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ClickCount < 2)
+        {
+            return;
+        }
+
+        if (sender is not FrameworkElement { DataContext: GraphCommentViewModel comment })
+        {
+            return;
+        }
+
+        comment.IsEditing = true;
+        e.Handled = true;
+    }
+
+    private void CommentEditTextBox_OnIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+        if (sender is not TextBox { IsVisible: true } textBox)
+        {
+            return;
+        }
+
+        textBox.Dispatcher.BeginInvoke(new Action(() =>
+        {
+            textBox.Focus();
+            textBox.SelectAll();
+        }), DispatcherPriority.Input);
+    }
+
+    private void CommentEditTextBox_OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+    {
+        EndCommentTextEdit(sender);
+    }
+
+    private void CommentEditTextBox_OnPreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key is not (Key.Enter or Key.Escape))
+        {
+            return;
+        }
+
+        EndCommentTextEdit(sender);
+        Keyboard.ClearFocus();
+        e.Handled = true;
+    }
+
+    private static void EndCommentTextEdit(object sender)
+    {
+        if (sender is not TextBox { DataContext: GraphCommentViewModel comment } textBox)
+        {
+            return;
+        }
+
+        textBox.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
+        comment.IsEditing = false;
+    }
+
+    private void Comment_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+    {
+        if (sender is not GroupingNode { DataContext: GraphCommentViewModel comment } groupingNode || Source == null)
+        {
+            return;
+        }
+
+        groupingNode.ContextMenu ??= new ContextMenu();
+        groupingNode.ContextMenu.Items.Clear();
+        groupingNode.ContextMenu.Items.Add(CreateCommentColorMenu(comment));
+        groupingNode.ContextMenu.Items.Add(CreateMenuItem(
+            "Reset Comment Size",
+            "Resize",
+            "WolvenKitYellow",
+            () =>
+            {
+                comment.ResetSize();
+                Source.GraphCommentStateSave();
+            }));
+        groupingNode.ContextMenu.Items.Add(new Separator());
+        groupingNode.ContextMenu.Items.Add(CreateMenuItem(
+            "Delete Comment",
+            "Delete",
+            "WolvenKitRed",
+            () => Source.RemoveCommentCommand.Execute(comment)));
+        groupingNode.ContextMenu.SetCurrentValue(ContextMenu.IsOpenProperty, true);
+
+        e.Handled = true;
+    }
+
+    private MenuItem CreateCommentColorMenu(GraphCommentViewModel comment)
+    {
+        var item = new MenuItem
+        {
+            Header = "Change Color",
+            Padding = (Thickness)Application.Current.Resources["WolvenKitMarginTiny"]!,
+            Icon = new IconBox
+            {
+                IconPack = IconPackType.Material,
+                Kind = "Palette",
+                Foreground = (Brush)Application.Current.Resources["WolvenKitYellow"]!,
+                Margin = (Thickness)Application.Current.Resources["WolvenKitMarginTiny"]!,
+                Size = (double)Application.Current.Resources["WolvenKitIconMicro"]!
+            }
+        };
+
+        foreach (var (name, color) in s_commentColorPresets)
+        {
+            var colorItem = new MenuItem
+            {
+                Header = name,
+                IsCheckable = true,
+                IsChecked = string.Equals(comment.AccentColor, color, StringComparison.OrdinalIgnoreCase),
+                Padding = (Thickness)Application.Current.Resources["WolvenKitMarginTiny"]!,
+                Icon = new Rectangle
+                {
+                    Width = 12,
+                    Height = 12,
+                    Fill = CreateCommentSwatchBrush(color),
+                    Stroke = Brushes.White,
+                    StrokeThickness = 0.5,
+                    Margin = (Thickness)Application.Current.Resources["WolvenKitMarginTiny"]!
+                }
+            };
+
+            colorItem.Click += (_, _) => comment.AccentColor = color;
+            item.Items.Add(colorItem);
+        }
+
+        return item;
+    }
+
+    private static Brush CreateCommentSwatchBrush(string colorValue)
+    {
+        try
+        {
+            if (ColorConverter.ConvertFromString(colorValue) is Color color)
+            {
+                var brush = new SolidColorBrush(color);
+                brush.Freeze();
+                return brush;
+            }
+        }
+        catch (FormatException)
+        {
+        }
+
+        return Brushes.Gold;
     }
 
 
