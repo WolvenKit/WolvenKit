@@ -1501,20 +1501,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 var redType = RedTypeTemplateService.ParseType(file.SelectedFile?.Name ?? "");
                 if (redType is not null)
                 {
-                    RedBaseClass? rootChunkData;
-
-                    if (file.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate.Source !=
-                        RedTypeTemplateSelectionOptionSource.Raw)
-                    {
-                        rootChunkData = (RedBaseClass?)_redTypeTemplateService.CreateTypeInstance(redType,
-                            file.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate.Name);
-                    }
-                    else
-                    {
-                        rootChunkData =
-                            RedTypeManager.CreateAndInit(file.RedTypeTemplateDropdownViewModel
-                                .SelectedRedTypeTemplate.Type);
-                    }
+                    var rootChunkData = (RedBaseClass?)_redTypeTemplateService.CreateTypeInstanceFromSelectionOption(
+                        file.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate);
 
                     if (rootChunkData is null)
                     {

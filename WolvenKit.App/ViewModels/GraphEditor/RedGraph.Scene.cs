@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
@@ -44,7 +45,7 @@ public partial class RedGraph
             .ToList();
     }
 
-    public uint CreateSceneNode(Type type, System.Windows.Point point, RedTypeTemplateDescriptor? templateDesc = null)
+    public uint CreateSceneNode(Type type, System.Windows.Point point, RedTypeTemplateSelectionOption? templateDesc = null)
     {
         scnSceneGraphNode instance;
 
@@ -97,12 +98,12 @@ public partial class RedGraph
         return instance.NodeId.Id;
     }
 
-    private scnSceneGraphNode InternalCreateSceneNode(Type type, RedTypeTemplateDescriptor? templateDesc = null)
+    private scnSceneGraphNode InternalCreateSceneNode(Type type, RedTypeTemplateSelectionOption? templateDesc = null)
     {
         IRedType instance;
         if (templateDesc != null)
         {
-            instance = _templateService.CreateTypeInstance(templateDesc);
+            instance = _templateService.CreateTypeInstanceFromSelectionOption(templateDesc);
         }
         else
         {
@@ -230,13 +231,13 @@ public partial class RedGraph
     /// <summary>
     /// Create a scnQuestNode that wraps a quest node type
     /// </summary>
-    private scnQuestNode InternalCreateSceneQuestNode(Type questNodeType, RedTypeTemplateDescriptor? templateDesc = null)
+    private scnQuestNode InternalCreateSceneQuestNode(Type questNodeType, RedTypeTemplateSelectionOption? templateDesc = null)
     {
         // Create the quest node instance
         IRedType questInstance;
-        if (templateDesc != null && _templateService != null)
+        if (templateDesc != null)
         {
-            questInstance = _templateService.CreateTypeInstance(templateDesc);
+            questInstance = _templateService.CreateTypeInstanceFromSelectionOption(templateDesc);
         }
         else
         {

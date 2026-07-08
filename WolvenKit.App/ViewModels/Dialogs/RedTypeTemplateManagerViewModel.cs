@@ -97,22 +97,8 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
             }
         }
 
-        IRedType? typeInstance;
-
-        if (RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate.Source != RedTypeTemplateSelectionOptionSource.Raw)
-        {
-            typeInstance =
-                _templateService.CreateTypeInstance(RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate);
-        }
-        else
-        {
-            typeInstance = (IRedType?)Activator.CreateInstance(type);
-        }
-
-        if (typeInstance is null)
-        {
-            throw new Exception($"Failed to create instance of type {type.Name}");
-        }
+        var typeInstance = _templateService.CreateTypeInstanceFromSelectionOption(RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate) ??
+                           throw new Exception($"Failed to create instance of type {type.Name}");
 
         _templateService.WriteTemplate(new RedTypeTemplate { Data = typeInstance }, name);
         var userTemplate = _templateService.ReadTemplate(type, name, TemplateSource.User) ?? throw new Exception($"Failed to read user template `{name}` of type `{type.Name}`");

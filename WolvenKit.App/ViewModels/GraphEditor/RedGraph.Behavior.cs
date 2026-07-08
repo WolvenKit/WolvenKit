@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Behavior;
 using WolvenKit.Common.Model;
@@ -121,7 +122,7 @@ public partial class RedGraph
         };
     }
 
-    public uint CreateBehaviorRoot(Type type, System.Windows.Point location, RedTypeTemplateDescriptor? template = null)
+    public uint CreateBehaviorRoot(Type type, System.Windows.Point location, RedTypeTemplateSelectionOption? template = null)
     {
         if (_data is not AIbehaviorResource behaviorResource)
         {
@@ -146,7 +147,7 @@ public partial class RedGraph
         return nodeViewModel.UniqueId;
     }
 
-    public uint AddBehaviorChild(BehaviorNodeViewModel parent, Type type, RedTypeTemplateDescriptor? template = null)
+    public uint AddBehaviorChild(BehaviorNodeViewModel parent, Type type, RedTypeTemplateSelectionOption? template = null)
     {
         if (GraphType != RedGraphType.Behavior)
         {
@@ -258,7 +259,7 @@ public partial class RedGraph
         return FinishBehaviorStructureEdit(movedNode, locationOverrides);
     }
 
-    public uint ReplaceBehaviorChild(ConnectionViewModel connection, Type type, RedTypeTemplateDescriptor? template = null)
+    public uint ReplaceBehaviorChild(ConnectionViewModel connection, Type type, RedTypeTemplateSelectionOption? template = null)
     {
         if (!TryGetBehaviorChildSlot(connection, out var slot))
         {
@@ -276,7 +277,7 @@ public partial class RedGraph
         return FinishBehaviorStructureEdit(behaviorNode, locationOverrides);
     }
 
-    public uint WrapBehaviorChild(ConnectionViewModel connection, Type type, RedTypeTemplateDescriptor? template = null)
+    public uint WrapBehaviorChild(ConnectionViewModel connection, Type type, RedTypeTemplateSelectionOption? template = null)
     {
         if (!TryGetBehaviorChildSlot(connection, out var slot))
         {
@@ -482,14 +483,14 @@ public partial class RedGraph
         return maxId + 1;
     }
 
-    private AIbehaviorTreeNodeDefinition InternalCreateBehaviorNode(Type type, RedTypeTemplateDescriptor? template = null)
+    private AIbehaviorTreeNodeDefinition InternalCreateBehaviorNode(Type type, RedTypeTemplateSelectionOption? template = null)
     {
         if (!GetBehaviorNodeTypes().Contains(type))
         {
             throw new InvalidOperationException($"{type.Name} is not a supported behavior node type.");
         }
 
-        var rawInstance = template != null ? _templateService.CreateTypeInstance(template) : RedTypeManager.CreateAndInitRedType(type);
+        var rawInstance = template != null ? _templateService.CreateTypeInstanceFromSelectionOption(template) : RedTypeManager.CreateAndInitRedType(type);
 
         if (rawInstance is not AIbehaviorTreeNodeDefinition behaviorNode)
         {
