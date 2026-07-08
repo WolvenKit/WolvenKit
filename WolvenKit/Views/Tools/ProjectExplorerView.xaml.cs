@@ -26,7 +26,6 @@ using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.Tools;
-using WolvenKit.Core.Interfaces;
 using WolvenKit.Views.Dialogs;
 using WolvenKit.Views.Dialogs.Windows;
 using WolvenKit.Views.Templates;
@@ -66,6 +65,12 @@ namespace WolvenKit.Views.Tools
         private bool _isDragging;
         private CancellationTokenSource _deferRefreshTokenSource = new();
         private bool _searchApplied = false;
+
+        /// <summary>
+        /// Timer used for debouncing the search input in PESearchBar.
+        /// Prevents filtering the tree on every single keystroke.
+        /// </summary>
+        private DispatcherTimer _searchDebounceTimer;
 
         #region Constructors
 
@@ -191,6 +196,19 @@ namespace WolvenKit.Views.Tools
                     }
 
                     return innerVm.SelectedOption;
+                };
+
+                // Initialize search debounce timer
+                _searchDebounceTimer = new DispatcherTimer
+                {
+                    // 350ms delay after the last keystroke before applying the filter
+                    Interval = TimeSpan.FromMilliseconds(350)
+                };
+
+                _searchDebounceTimer.Tick += (_, _) =>
+                {
+                    _searchDebounceTimer.Stop();
+                    PerformSearchFilter(); // Execute the actual filtering logic
                 };
 
                 //EventBindings
@@ -870,101 +888,68 @@ namespace WolvenKit.Views.Tools
             Recurse(TreeGrid.View.Nodes);
         }
 
-
-        private CancellationTokenSource _searchDebounceCts;
-
+        /// <summary>
+        /// Called every time the user types in the search bar.
+        /// Instead of filtering immediately, we restart the debounce timer.
+        /// The filter will only be applied after the user stops typing for 350ms.
+        /// </summary>
         private void PESearchBar_TextChanged(object sender, TextChangedEventArgs e)
         {
+            _searchDebounceTimer.Stop();
+            _searchDebounceTimer.Start();
+        }
 
-            if (string.IsNullOrWhiteSpace(PESearchBar.Text))
+        /// <summary>
+        /// Applies the current search filter to both hierarchical (TreeGrid) and flat (TreeGridFlat) views.
+        /// Also handles auto-expansion of nodes when search starts and restores focus to the search bar.
+        /// </summary>
+        private void PerformSearchFilter()
+        {
+            _currentFolderQuery = PESearchBar.Text ?? string.Empty;
+
+            bool isFlat = ViewModel?.IsFlatModeEnabled == true;
+
+            if (isFlat)
             {
-                _currentFolderQuery = "";
-                _searchApplied = false;
-                if (TreeGrid?.View != null)
-                {
-                    TreeGrid.View.Filter = null;
-                    TreeGrid.View.RefreshFilter();
-                }
                 if (TreeGridFlat?.View != null)
                 {
-                    TreeGridFlat.View.Filter = null;
+                    TreeGridFlat.View.Filter = string.IsNullOrWhiteSpace(_currentFolderQuery)
+                        ? null
+                        : IsFileInFlat;
                     TreeGridFlat.View.RefreshFilter();
                 }
-                return;
             }
-
-            _searchDebounceCts?.Cancel();
-            _searchDebounceCts = new CancellationTokenSource();
-            var token = _searchDebounceCts.Token;
-
-            Task.Delay(350, token).ContinueWith(_ =>
+            else
             {
-                if (token.IsCancellationRequested)
-                    return;
-
-                _currentFolderQuery = PESearchBar.Text ?? string.Empty;
-
-                bool isFlat = ViewModel?.IsFlatModeEnabled == true;
-
-                if (isFlat)
+                if (TreeGrid?.View != null)
                 {
-                    if (TreeGridFlat?.View != null)
-                    {
-                        TreeGridFlat.View.Filter = string.IsNullOrWhiteSpace(_currentFolderQuery)
-                            ? null
-                            : IsFileInFlat;
-                        TreeGridFlat.View.RefreshFilter();
-                    }
-                }
-                else
-                {
-                    if (TreeGrid?.View != null)
-                    {
-                        TreeGrid.View.Filter = string.IsNullOrWhiteSpace(_currentFolderQuery)
-                            ? null
-                            : IsFileIn;
-                        TreeGrid.View.RefreshFilter();
+                    TreeGrid.View.Filter = string.IsNullOrWhiteSpace(_currentFolderQuery)
+                        ? null
+                        : IsFileIn;
+                    TreeGrid.View.RefreshFilter();
 
-                        if (!string.IsNullOrWhiteSpace(_currentFolderQuery) && !_searchApplied)
-                        {
-                            DispatcherHelper.RunOnMainThread(() =>
-                            {
-                                TreeGrid.ExpandAllNodes();
-                            }, DispatcherPriority.Background);
-                            _searchApplied = true;
-                        }
-                    }
-                }
-
-                DispatcherHelper.RunOnMainThread(() =>
-                {
-                    if (PESearchBar == null)
-                    {
-                        return;
-                    }
-
-                    Keyboard.Focus(PESearchBar);
-                    PESearchBar.Focus();
-                    PESearchBar.CaretIndex = PESearchBar.Text?.Length ?? 0;
-
-                    Task.Delay(80).ContinueWith(__ =>
+                    // Auto-expand nodes only the first time search becomes active
+                    if (!string.IsNullOrWhiteSpace(_currentFolderQuery) && !_searchApplied)
                     {
                         DispatcherHelper.RunOnMainThread(() =>
                         {
-                            if (PESearchBar != null && !PESearchBar.IsKeyboardFocused)
-                            {
-                                Keyboard.Focus(PESearchBar);
-                                PESearchBar.Focus();
-                                PESearchBar.CaretIndex = PESearchBar.Text?.Length ?? 0;
-                            }
+                            TreeGrid.ExpandAllNodes();
                         }, DispatcherPriority.Background);
-                    }, TaskScheduler.FromCurrentSynchronizationContext());
+
+                        _searchApplied = true;
+                    }
+                }
+            }
+
+            // Restore keyboard focus back to the search bar after filtering
+            if (PESearchBar != null && PESearchBar.IsKeyboardFocused)
+            {
+                DispatcherHelper.RunOnMainThread(() =>
+                {
+                    PESearchBar.Focus();
+                    PESearchBar.CaretIndex = PESearchBar.Text?.Length ?? 0;
                 }, DispatcherPriority.ContextIdle);
-
-                // mark that a search is currently applied
-                _searchApplied = !string.IsNullOrWhiteSpace(_currentFolderQuery);
-
-            }, TaskScheduler.FromCurrentSynchronizationContext());
+            }
         }
 
         private void RowDragDropController_DragStart(object sender, TreeGridRowDragStartEventArgs e) =>
