@@ -312,6 +312,8 @@ namespace WolvenKit.Views.Tools
             }
         }
 
+        private bool _isDeferredRefreshRunning;
+
         // Run inside Dispatcher to avoid exception on startup
         private void ResetUiElements() => Dispatcher.Invoke(() =>
         {
@@ -340,23 +342,40 @@ namespace WolvenKit.Views.Tools
                 TreeGridFlat.View.RefreshFilter();
             }
         });
+
+        /// <summary>
+        /// Executes the provided task (usually file addition) and then safely refreshes
+        /// the Project Explorer UI. When a search filter is active, it prevents multiple
+        /// rapid calls from causing repeated expensive operations (ExpandAllNodes + RefreshFilter).
+        /// </summary>
         private async Task BeginDeferredRefreshContext(CancellationToken deferRefreshToken, Task doBeforeRefresh)
         {
-            IDisposable flatDefer = null;
+            await doBeforeRefresh;
 
-            try
+            bool hadActiveSearch = !string.IsNullOrWhiteSpace(_currentFolderQuery);
+
+            if (!hadActiveSearch && TreeGridFlat?.View == null)
+                return;
+
+            DispatcherHelper.RunOnMainThread(async () =>
             {
-                await doBeforeRefresh;
+                // Prevent overlapping heavy UI updates when multiple files are added quickly
+                // (e.g. from Asset Browser while search is active)
+                if (_isDeferredRefreshRunning)
+                    return;
 
-                bool hadActiveSearch = !string.IsNullOrWhiteSpace(_currentFolderQuery);
+                _isDeferredRefreshRunning = true;
 
-                DispatcherHelper.RunOnMainThread(() =>
+                IDisposable flatDefer = null;
+
+                try
                 {
                     if (TreeGridFlat?.View != null)
                     {
                         flatDefer = TreeGridFlat.View.DeferRefresh(TreeViewRefreshMode.DeferRefresh);
                     }
 
+                    // Update flat list view
                     if (TreeGridFlat?.View != null)
                     {
                         TreeGridFlat.View.Filter = string.IsNullOrWhiteSpace(_currentFolderQuery)
@@ -365,25 +384,24 @@ namespace WolvenKit.Views.Tools
                         TreeGridFlat.View.RefreshFilter();
                     }
 
+                    // When search is active, we need to re-apply the filter and expand nodes
+                    // so that matching files become visible
                     if (hadActiveSearch && TreeGrid?.View != null)
                     {
                         TreeGrid.ExpandAllNodes();
                         TreeGrid.View.Filter = IsFileIn;
                         TreeGrid.View.RefreshFilter();
                     }
-                });
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Error in BeginDeferredRefreshContext: {ex.Message}");
-            }
-            finally
-            {
-                DispatcherHelper.RunOnMainThread(() =>
+
+                    // Small delay to allow the tree to stabilize before/after heavy operations
+                    await Task.Delay(30);
+                }
+                finally
                 {
+                    _isDeferredRefreshRunning = false;
                     flatDefer?.Dispose();
-                });
-            }
+                }
+            }, DispatcherPriority.Background);
         }
 
         private void TreeGrid_OnNodeExpanding(object sender, NodeExpandingEventArgs e)
@@ -605,6 +623,8 @@ namespace WolvenKit.Views.Tools
             TreeGrid.View.RefreshFilter();
         }
 
+
+
         private void View_OnNodeCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (ViewModel is null)
@@ -614,6 +634,7 @@ namespace WolvenKit.Views.Tools
             {
                 bool hadActiveSearch = !string.IsNullOrWhiteSpace(_currentFolderQuery);
 
+                // Expand newly added directories according to saved expansion state
                 foreach (var item in e.NewItems)
                 {
                     if (item is not TreeNode { Item: FileSystemModel { IsDirectory: true } fileSystemModel } treeNode)
@@ -625,22 +646,37 @@ namespace WolvenKit.Views.Tools
                     }
                 }
 
+                // When search is active, we must re-apply the filter after new nodes are added.
+                // We use a guard flag to avoid stacking multiple expensive ExpandAllNodes + RefreshFilter calls.
                 if (hadActiveSearch && TreeGrid?.View != null)
                 {
                     DispatcherHelper.RunOnMainThread(async () =>
                     {
-                        await Task.Delay(5);
+                        if (_isDeferredRefreshRunning)
+                            return;
 
-                        if (!string.IsNullOrWhiteSpace(_currentFolderQuery) && TreeGrid?.View != null)
+                        _isDeferredRefreshRunning = true;
+
+                        try
                         {
-                            TreeGrid.ExpandAllNodes();
-                            TreeGrid.View.Filter = IsFileIn;
-                            TreeGrid.View.RefreshFilter();
+                            await Task.Delay(30);
+
+                            if (!string.IsNullOrWhiteSpace(_currentFolderQuery) && TreeGrid?.View != null)
+                            {
+                                TreeGrid.ExpandAllNodes();
+                                TreeGrid.View.Filter = IsFileIn;
+                                TreeGrid.View.RefreshFilter();
+                            }
+                        }
+                        finally
+                        {
+                            _isDeferredRefreshRunning = false;
                         }
                     }, DispatcherPriority.Background);
                 }
             }
 
+            // Cleanup expansion state for removed directories when not in search mode
             if (e.Action != NotifyCollectionChangedAction.Remove || e.OldItems == null || !string.IsNullOrEmpty(_currentFolderQuery))
                 return;
 
@@ -669,27 +705,31 @@ namespace WolvenKit.Views.Tools
             if (tabControl == null || o is not FileSystemModel fm)
                 return false;
 
-            // No search active → normal tab filtering
-            if (string.IsNullOrWhiteSpace(_currentFolderQuery))
+            // === Step 1: Always apply tab filter first ===
+            bool passesTabFilter = tabControl.SelectedIndex switch
             {
-                return tabControl.SelectedIndex switch
-                {
-                    0 => true,
-                    1 => fm.RawRelativePath == "archive" || fm.RawRelativePath.StartsWith("archive\\"),
-                    2 => fm.RawRelativePath == "raw" || fm.RawRelativePath.StartsWith("raw\\"),
-                    3 => fm.RawRelativePath == "resources" || fm.RawRelativePath.StartsWith("resources\\"),
-                    _ => true
-                };
-            }
+                0 => true, // SOURCE tab - show everything
+                1 => fm.RawRelativePath.StartsWith("archive", StringComparison.OrdinalIgnoreCase),
+                2 => fm.RawRelativePath.StartsWith("raw", StringComparison.OrdinalIgnoreCase),
+                3 => fm.RawRelativePath.StartsWith("resources", StringComparison.OrdinalIgnoreCase),
+                _ => true
+            };
 
-            // Search active → check name/path + parent folders
+            if (!passesTabFilter)
+                return false;
+
+            // === Step 2: If no search query is active, we're done ===
+            if (string.IsNullOrWhiteSpace(_currentFolderQuery))
+                return true;
+
+            // === Step 3: Search is active - check if item or any parent matches ===
             if (fm.Name.Contains(_currentFolderQuery, StringComparison.OrdinalIgnoreCase) ||
                 fm.RawRelativePath.Contains(_currentFolderQuery, StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }
 
-            // Walk up parents
+            // Walk up the parent chain (so files inside a matching folder are also shown)
             var current = fm.Parent;
             while (current != null)
             {
