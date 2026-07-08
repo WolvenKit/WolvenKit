@@ -63,7 +63,6 @@ namespace WolvenKit.Views.Tools
 
         private string _currentFolderQuery = "";
         private bool _isDragging;
-        private CancellationTokenSource _deferRefreshTokenSource = new();
         private bool _searchApplied = false;
 
         /// <summary>
@@ -457,15 +456,6 @@ namespace WolvenKit.Views.Tools
                     RecursiveStateSave(childNode.ChildNodes);
                 }
             }
-        }
-
-        private void ExpandAncestors(TreeNode node)
-        {
-            if (node?.ParentNode == null)
-                return;
-
-            ExpandAncestors(node.ParentNode);
-            TreeGrid?.ExpandNode(node.ParentNode);
         }
 
         private void CollapseAllNodes(TreeNode node)
@@ -907,6 +897,8 @@ namespace WolvenKit.Views.Tools
         {
             _currentFolderQuery = PESearchBar.Text ?? string.Empty;
 
+            bool searchBarHadFocus = PESearchBar?.IsKeyboardFocused == true;
+
             bool isFlat = ViewModel?.IsFlatModeEnabled == true;
 
             if (isFlat)
@@ -942,7 +934,7 @@ namespace WolvenKit.Views.Tools
             }
 
             // Restore keyboard focus back to the search bar after filtering
-            if (PESearchBar != null && PESearchBar.IsKeyboardFocused)
+            if (searchBarHadFocus && PESearchBar != null)
             {
                 DispatcherHelper.RunOnMainThread(() =>
                 {
