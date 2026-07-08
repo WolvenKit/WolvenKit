@@ -59,9 +59,8 @@ public class AppScriptFunctions : ScriptFunctions
         ImportExportHelper importExportHelper,
         IGameControllerFactory gameController,
         GeometryCacheService geometryCacheService,
-        ISettingsManager settingsManager,
-        RedTypeTemplateService templateService)
-        : base(loggerService, archiveManager, parserService, templateService)
+        ISettingsManager settingsManager)
+        : base(loggerService, archiveManager, parserService)
     {
         _projectManager = projectManager;
         _modTools = modTools;
