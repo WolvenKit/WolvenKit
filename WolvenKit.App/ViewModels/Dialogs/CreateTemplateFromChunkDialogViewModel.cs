@@ -16,9 +16,12 @@ public partial class CreateTemplateFromChunkDialogViewModel : DialogViewModel
 
     [ObservableProperty]
     private RedTypeTemplate _template;
+
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsTemplateNameValid))]
     private string _templateName = "";
+
+    public bool IsTemplateNameValid => !string.IsNullOrWhiteSpace(TemplateName) && FilepathValidationTools.IsOsFileNameValid(TemplateName.TrimEnd());
 
     public CreateTemplateFromChunkDialogViewModel(IRedType templateData, RedTypeTemplateService templateService, AppViewModel appViewModel)
     {
@@ -27,8 +30,6 @@ public partial class CreateTemplateFromChunkDialogViewModel : DialogViewModel
 
         Template = new RedTypeTemplate() { Data = templateData };
     }
-
-    public bool IsTemplateNameValid => !string.IsNullOrWhiteSpace(TemplateName) && FilepathValidationTools.IsOsFileNameValid(TemplateName.TrimEnd());
 
     public async Task Create()
     {

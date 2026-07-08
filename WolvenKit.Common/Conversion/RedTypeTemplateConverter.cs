@@ -63,23 +63,13 @@ public class RedTypeTemplateConverter : JsonConverter<RedTypeTemplate>
         root.TryGetProperty(nameof(RedTypeTemplate.Description), out var description);
         root.TryGetProperty(nameof(RedTypeTemplate.Version), out var version);
 
-        IRedType? deserializedData;
-        if (type.IsEnum)
-        {
-            deserializedData = CEnum.Parse(type, data.GetString() ?? "");
-        }
-        else
-        {
-            deserializedData = (IRedType?)RedJsonSerializer.Deserialize(type, data.GetRawText());
-        }
-
         return new RedTypeTemplate
         {
             FormatVersion = formatVersion.GetInt32(),
             Author = GetStringOrDefault(author) ?? "",
             Description = GetStringOrDefault(description) ?? "",
             Version = GetStringOrDefault(version) ?? "",
-            Data = deserializedData
+            Data = (IRedType?)RedJsonSerializer.Deserialize(type, data.GetRawText())
         };
     }
 

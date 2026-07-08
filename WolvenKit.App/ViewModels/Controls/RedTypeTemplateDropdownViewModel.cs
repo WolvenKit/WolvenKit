@@ -16,6 +16,22 @@ public partial class RedTypeTemplateDropdownViewModel : ObservableObject
 {
     private readonly RedTypeTemplateService _redTypeTemplateService;
 
+    private readonly List<RedTypeTemplateSelectionOption> _defaultList;
+
+    public event EventHandler? PostRefresh;
+
+    [ObservableProperty]
+    private CollectionViewSource _currentRedTypeTemplates;
+
+    [ObservableProperty]
+    private RedTypeTemplateSelectionOption _selectedRedTypeTemplate;
+
+    [ObservableProperty]
+    private Type _requestedType;
+
+    [ObservableProperty]
+    private Dictionary<Type, List<RedTypeTemplateSelectionOption>> _templatesByType = new();
+
     public RedTypeTemplateDropdownViewModel(RedTypeTemplateService redTypeTemplateService)
     {
         _redTypeTemplateService = redTypeTemplateService;
@@ -35,22 +51,6 @@ public partial class RedTypeTemplateDropdownViewModel : ObservableObject
         RequestedType = typeof(object);
         _ = Refresh();
     }
-
-    public event EventHandler? PostRefresh;
-
-    private readonly List<RedTypeTemplateSelectionOption> _defaultList;
-
-    [ObservableProperty]
-    private CollectionViewSource _currentRedTypeTemplates;
-
-    [ObservableProperty]
-    private RedTypeTemplateSelectionOption _selectedRedTypeTemplate;
-
-    [ObservableProperty]
-    private Type _requestedType;
-
-    [ObservableProperty]
-    private Dictionary<Type, List<RedTypeTemplateSelectionOption>> _templatesByType = new();
 
     partial void OnRequestedTypeChanged(Type value)
     {

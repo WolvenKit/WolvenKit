@@ -100,13 +100,13 @@ public partial class RedGraph
     private scnSceneGraphNode InternalCreateSceneNode(Type type, RedTypeTemplateDescriptor? templateDesc = null)
     {
         IRedType instance;
-        if (templateDesc != null && _templateService != null)
+        if (templateDesc != null)
         {
             instance = _templateService.CreateTypeInstance(templateDesc);
         }
         else
         {
-            instance = RedTypeManager.CreateRedType(type);
+            instance = RedTypeManager.CreateAndInit(type);
         }
         if (instance is not scnSceneGraphNode sceneNode)
         {
@@ -240,7 +240,7 @@ public partial class RedGraph
         }
         else
         {
-            questInstance = RedTypeManager.CreateRedType(questNodeType);
+            questInstance = RedTypeManager.CreateAndInit(questNodeType);
         }
 
         if (questInstance is not questNodeDefinition questNode)

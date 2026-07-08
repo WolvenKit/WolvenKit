@@ -37,6 +37,21 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
     private readonly object _lock = new();
 
 
+    public RedTypeTemplateDropdownViewModel RedTypeTemplateDropdownViewModel { get; }
+    public ObservableCollection<RedTypeTemplateManagerOption> Templates { get; } = new();
+    public ObservableCollection<TypeDesc> ValidNewTypes { get; }
+
+    [ObservableProperty]
+    private RedTypeTemplateManagerOption? _selectedTemplate;
+
+    [ObservableProperty]
+    private TypeDesc _selectedType;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsTemplateNameValid))]
+    private string _templateName = "";
+    public bool IsTemplateNameValid => !string.IsNullOrWhiteSpace(TemplateName) && FilepathValidationTools.IsOsFileNameValid(TemplateName.TrimEnd());
+
     public RedTypeTemplateManagerViewModel(AppViewModel appViewModel, RedTypeTemplateService templateService, ILoggerService loggerService, Cr2WTools cr2wTools)
     {
         _appViewModel = appViewModel;
@@ -55,22 +70,6 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
         );
         SelectedType = ValidNewTypes.FirstOrDefault()!;
     }
-
-    public RedTypeTemplateDropdownViewModel RedTypeTemplateDropdownViewModel { get; }
-    public ObservableCollection<RedTypeTemplateManagerOption> Templates { get; } = new();
-
-    [ObservableProperty]
-    private RedTypeTemplateManagerOption? _selectedTemplate;
-
-    [ObservableProperty]
-    private TypeDesc _selectedType;
-    public ObservableCollection<TypeDesc> ValidNewTypes { get; }
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsTemplateNameValid))]
-    private string _templateName = "";
-
-    public bool IsTemplateNameValid => !string.IsNullOrWhiteSpace(TemplateName) && FilepathValidationTools.IsOsFileNameValid(TemplateName.TrimEnd());
 
     partial void OnSelectedTypeChanged(TypeDesc value)
     {

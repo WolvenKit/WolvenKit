@@ -1512,7 +1512,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                     else
                     {
                         rootChunkData =
-                            (RedBaseClass?)Activator.CreateInstance(file.RedTypeTemplateDropdownViewModel
+                            RedTypeManager.CreateAndInit(file.RedTypeTemplateDropdownViewModel
                                 .SelectedRedTypeTemplate.Type);
                     }
 
