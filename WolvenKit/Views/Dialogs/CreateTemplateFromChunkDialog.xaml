@@ -48,11 +48,11 @@
                 Grid.Row="0"
                 Grid.Column="0"
                 Text="Name"
-                Margin="{StaticResource WolvenKitMarginSmall}"/>
+                Margin="{DynamicResource WolvenKitMarginSmall}"/>
             <StackPanel
                 Grid.Row="0"
                 Grid.Column="1"
-                Margin="{StaticResource WolvenKitMarginSmall}">
+                Margin="{DynamicResource WolvenKitMarginSmall}">
                 <TextBox
                     VerticalAlignment="Top"
                     Text="{Binding TemplateName}"
@@ -68,31 +68,31 @@
                 Grid.Row="1"
                 Grid.Column="0"
                 Text="Version"
-                Margin="{StaticResource WolvenKitMarginSmall}"/>
+                Margin="{DynamicResource WolvenKitMarginSmall}"/>
             <TextBox
                 Grid.Row="1"
                 Grid.Column="1"
                 VerticalAlignment="Top"
                 Text="{Binding Template.Version, TargetNullValue=''}"
-                Margin="{StaticResource WolvenKitMarginSmall}"/>
+                Margin="{DynamicResource WolvenKitMarginSmall}"/>
 
             <TextBlock
                 Grid.Row="2"
                 Grid.Column="0"
                 Text="Author"
-                Margin="{StaticResource WolvenKitMarginSmall}"/>
+                Margin="{DynamicResource WolvenKitMarginSmall}"/>
             <TextBox
                 Grid.Row="2"
                 Grid.Column="1"
                 VerticalAlignment="Top"
                 Text="{Binding Template.Author, TargetNullValue=''}"
-                Margin="{StaticResource WolvenKitMarginSmall}"/>
+                Margin="{DynamicResource WolvenKitMarginSmall}"/>
 
             <TextBlock
                 Grid.Row="3"
                 Grid.Column="0"
                 Text="Description"
-                Margin="{StaticResource WolvenKitMarginSmall}"/>
+                Margin="{DynamicResource WolvenKitMarginSmall}"/>
             <TextBox
                 Grid.Row="3"
                 Grid.Column="1"
@@ -101,19 +101,17 @@
                 AcceptsReturn="True"
                 TextWrapping="Wrap"
                 VerticalScrollBarVisibility="Auto"
-                Margin="{StaticResource WolvenKitMarginSmall}"/>
+                Margin="{DynamicResource WolvenKitMarginSmall}"/>
         </Grid>
 
         <StackPanel Grid.Row="2" HorizontalAlignment="Right" Orientation="Horizontal">
             <Button
                 Click="CancelButton_OnClick"
                 Content="Cancel"
-                Margin="{StaticResource WolvenKitMarginSmallLeft}"
                 Style="{StaticResource DialogButtonStyle}"/>
             <Button
                 Click="CreateButton_OnClick"
                 Content="Create"
-                Margin="{StaticResource WolvenKitMarginSmallLeft}"
                 Style="{StaticResource DialogPrimaryButtonStyle}"
                 IsEnabled="{Binding IsTemplateNameValid}"/>
 
