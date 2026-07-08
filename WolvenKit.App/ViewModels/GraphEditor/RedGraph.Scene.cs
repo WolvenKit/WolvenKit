@@ -103,7 +103,7 @@ public partial class RedGraph
         IRedType instance;
         if (templateDesc != null)
         {
-            instance = _templateService.CreateTypeInstanceFromSelectionOption(templateDesc);
+            instance = _templateService.CreateTypeInstanceFromSelectionOption(templateDesc, type);
         }
         else
         {
@@ -237,7 +237,7 @@ public partial class RedGraph
         IRedType questInstance;
         if (templateDesc != null)
         {
-            questInstance = _templateService.CreateTypeInstanceFromSelectionOption(templateDesc);
+            questInstance = _templateService.CreateTypeInstanceFromSelectionOption(templateDesc, questNodeType);
         }
         else
         {

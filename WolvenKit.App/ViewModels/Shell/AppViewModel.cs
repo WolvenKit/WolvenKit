@@ -1502,7 +1502,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 if (redType is not null)
                 {
                     var rootChunkData = (RedBaseClass?)_redTypeTemplateService.CreateTypeInstanceFromSelectionOption(
-                        file.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate);
+                        file.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate, redType);
 
                     if (rootChunkData is null)
                     {

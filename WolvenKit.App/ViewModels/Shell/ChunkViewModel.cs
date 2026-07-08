@@ -1615,7 +1615,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         var propertyName = Interactions.Rename("");
         var instance =
             _redTypeTemplateService.CreateTypeInstanceFromSelectionOption(tsdvm.RedTypeTemplateDropdownViewModel
-                .SelectedRedTypeTemplate);
+                .SelectedRedTypeTemplate, selectedType);
         rbc.AddDynamicProperty(propertyName, selectedType);
         rbc.SetProperty(propertyName, instance);
         //if (Data is IRedBaseHandle handle)
@@ -3583,7 +3583,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     private void HandlePointer(Type type, string customName = "", RedTypeTemplateSelectionOption? templateDesc = null)
     {
-        var instance = templateDesc == null ? RedTypeManager.CreateAndInitRedType(type) : _redTypeTemplateService.CreateTypeInstanceFromSelectionOption(templateDesc);
+        var instance = templateDesc == null ? RedTypeManager.CreateAndInitRedType(type) : _redTypeTemplateService.CreateTypeInstanceFromSelectionOption(templateDesc, type);
 
         if (instance is DynamicBaseClass dbc)
         {
@@ -3634,8 +3634,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        var inner =  _redTypeTemplateService.CreateTypeInstanceFromSelectionOption(tsdvm.RedTypeTemplateDropdownViewModel
-            .SelectedRedTypeTemplate);
+        var inner =  _redTypeTemplateService.CreateTypeInstanceFromSelectionOption(
+            tsdvm.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate, selectedType);
 
         if (Data is IRedArray arr)
         {
@@ -3654,18 +3654,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        IRedType instance;
-        var templateDesc = tsdvm.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate;
-        if (templateDesc.Source != RedTypeTemplateSelectionOptionSource.Raw)
-        {
-            instance = _redTypeTemplateService.CreateTypeInstanceFromSelectionOption(tsdvm.RedTypeTemplateDropdownViewModel
-                .SelectedRedTypeTemplate);
-        }
-        else
-        {
-            instance = RedTypeManager.CreateAndInitRedType(selectedType);
-        }
-
+        var instance = _redTypeTemplateService.CreateTypeInstanceFromSelectionOption(
+            tsdvm.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate, selectedType);
 
         if (Data is IRedArray arr)
         {
@@ -3693,8 +3683,8 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             return;
         }
 
-        var instance = _redTypeTemplateService.CreateTypeInstanceFromSelectionOption(tsdvm.RedTypeTemplateDropdownViewModel
-            .SelectedRedTypeTemplate);
+        var instance = _redTypeTemplateService.CreateTypeInstanceFromSelectionOption(
+            tsdvm.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate, selectedType);
 
         if (instance is not RedBaseClass rbcInstance)
         {

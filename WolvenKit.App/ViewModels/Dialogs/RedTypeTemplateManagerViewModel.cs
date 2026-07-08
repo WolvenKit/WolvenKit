@@ -97,7 +97,7 @@ public partial class RedTypeTemplateManagerViewModel : DialogViewModel
             }
         }
 
-        var typeInstance = _templateService.CreateTypeInstanceFromSelectionOption(RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate) ??
+        var typeInstance = _templateService.CreateTypeInstanceFromSelectionOption(RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate, type) ??
                            throw new Exception($"Failed to create instance of type {type.Name}");
 
         _templateService.WriteTemplate(new RedTypeTemplate { Data = typeInstance }, name);

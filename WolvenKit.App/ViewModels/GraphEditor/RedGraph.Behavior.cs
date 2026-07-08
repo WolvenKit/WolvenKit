@@ -490,7 +490,7 @@ public partial class RedGraph
             throw new InvalidOperationException($"{type.Name} is not a supported behavior node type.");
         }
 
-        var rawInstance = template != null ? _templateService.CreateTypeInstanceFromSelectionOption(template) : RedTypeManager.CreateAndInitRedType(type);
+        var rawInstance = template != null ? _templateService.CreateTypeInstanceFromSelectionOption(template, type) : RedTypeManager.CreateAndInitRedType(type);
 
         if (rawInstance is not AIbehaviorTreeNodeDefinition behaviorNode)
         {

@@ -498,9 +498,9 @@ public partial class RedDocumentViewModel : DocumentViewModel
         }
 
         _appViewModel.CloseDialogCommand.Execute(null);
-        if (sender is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type } tsdvm)
+        if (sender is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type type } tsdvm)
         {
-            var instance = (RedBaseClass)_redTypeTemplateService.CreateTypeInstanceFromSelectionOption(tsdvm.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate);
+            var instance = (RedBaseClass)_redTypeTemplateService.CreateTypeInstanceFromSelectionOption(tsdvm.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate, type);
 
             var file = new CR2WEmbedded
             {

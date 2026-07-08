@@ -128,7 +128,7 @@ public partial class RedGraph
         IRedType instance;
         if (templateDesc != null)
         {
-            instance = _templateService.CreateTypeInstanceFromSelectionOption(templateDesc);
+            instance = _templateService.CreateTypeInstanceFromSelectionOption(templateDesc, type);
         }
         else
         {
