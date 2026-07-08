@@ -31,7 +31,7 @@ using WolvenKit.RED4.Types;
 namespace WolvenKit.Views.GraphEditor;
 
 #nullable enable
-public record NodeCreationParams(Type Type, RedTypeTemplateDescriptor? RedTypeTemplateDescriptor = null);
+public record NodeCreationParams(Type Type, RedTypeTemplateSelectionOption? RedTypeTemplateSelectionOption = null);
 #nullable disable
 /// <summary>
 /// Interaktionslogik für GraphEditorView.xaml
@@ -365,7 +365,7 @@ public partial class GraphEditorView : UserControl
             var addMenu = CreateAddMenuItem();
             AddBehaviorNodeCreationItems(addMenu, type =>
             {
-                var nodeId = Source.CreateBehaviorRoot(type.Type, mousePosition, type.RedTypeTemplateDescriptor);
+                var nodeId = Source.CreateBehaviorRoot(type.Type, mousePosition, type.RedTypeTemplateSelectionOption);
                 SelectNodeById(nodeId);
             });
 
@@ -437,7 +437,7 @@ public partial class GraphEditorView : UserControl
                 var addChildMenu = CreateCategoryMenuItem("Add Child");
                 AddBehaviorNodeCreationItems(addChildMenu, type =>
                 {
-                    var nodeId = Source.AddBehaviorChild(behaviorNode, type.Type, type.RedTypeTemplateDescriptor);
+                    var nodeId = Source.AddBehaviorChild(behaviorNode, type.Type, type.RedTypeTemplateSelectionOption);
                     SelectNodeById(nodeId);
                 });
 
@@ -941,7 +941,7 @@ public partial class GraphEditorView : UserControl
         var replaceMenu = CreateCategoryMenuItem("Replace Child");
         AddBehaviorNodeCreationItems(replaceMenu, type =>
         {
-            var nodeId = Source.ReplaceBehaviorChild(connectionViewModel, type.Type, type.RedTypeTemplateDescriptor);
+            var nodeId = Source.ReplaceBehaviorChild(connectionViewModel, type.Type, type.RedTypeTemplateSelectionOption);
             connectionViewModel.IsSelected = false;
             SelectNodeById(nodeId);
         });
@@ -950,7 +950,7 @@ public partial class GraphEditorView : UserControl
         var wrapMenu = CreateCategoryMenuItem("Wrap Child With");
         AddBehaviorNodeCreationItems(wrapMenu, type =>
         {
-            var nodeId = Source.WrapBehaviorChild(connectionViewModel, type.Type, type.RedTypeTemplateDescriptor);
+            var nodeId = Source.WrapBehaviorChild(connectionViewModel, type.Type, type.RedTypeTemplateSelectionOption);
             connectionViewModel.IsSelected = false;
             SelectNodeById(nodeId);
         }, Source.GetBehaviorWrapperNodeTypes());
