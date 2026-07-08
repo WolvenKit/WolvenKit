@@ -139,14 +139,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         bool nameMatches = node.Name.Contains(search, StringComparison.OrdinalIgnoreCase) ||
                            node.RawRelativePath.Contains(search, StringComparison.OrdinalIgnoreCase);
 
-        // If the folder itself matches by name, we return the original with all its children (good UX)
-        if (nameMatches && node.IsDirectory)
-        {
-            return node;
-        }
-
         var matchingChildren = new ObservableCollection<FileSystemModel>();
 
+        // Recursively filter children
         if (node.Children != null)
         {
             foreach (var child in node.Children)
@@ -159,19 +154,34 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             }
         }
 
-        if (nameMatches || matchingChildren.Count > 0)
-        {
-            var copy = new FileSystemModel(node.Parent, node.Name, node.RawRelativePath, node.IsDirectory);
+        // Nothing matches — exclude this node
+        if (!nameMatches && matchingChildren.Count == 0)
+            return null;
 
+        // Create a copy of the node (safer than mixing original and filtered nodes)
+        var copy = new FileSystemModel(node.Parent, node.Name, node.RawRelativePath, node.IsDirectory);
+
+        if (nameMatches && node.IsDirectory)
+        {
+            // Folder name matches → show all original children (full folder view)
+            if (node.Children != null)
+            {
+                foreach (var child in node.Children)
+                {
+                    copy.Children?.Add(child);
+                }
+            }
+        }
+        else
+        {
+            // Only some children matched → add filtered children
             foreach (var child in matchingChildren)
             {
                 copy.Children?.Add(child);
             }
-
-            return copy;
         }
 
-        return null;
+        return copy;
     }
 
     #endregion
