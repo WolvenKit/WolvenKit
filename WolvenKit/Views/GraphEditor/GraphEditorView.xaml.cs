@@ -698,6 +698,17 @@ public partial class GraphEditorView : UserControl
         e.Handled = true;
     }
 
+    public bool AddCommentFromCurrentCursor()
+    {
+        if (Source?.GraphType is not (RedGraphType.Quest or RedGraphType.Scene))
+        {
+            return false;
+        }
+
+        Source.AddComment(GetMousePositionInGraph(Editor), SelectedNodes);
+        return true;
+    }
+
     private void Comment_OnResizeCompleted(object sender, Nodify.Events.ResizeEventArgs e)
     {
         if (sender is not GroupingNode { DataContext: GraphCommentViewModel comment })
