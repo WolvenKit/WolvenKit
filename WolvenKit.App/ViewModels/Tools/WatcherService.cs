@@ -10,11 +10,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using DynamicData;
 using WolvenKit.App.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.App.Models.ProjectManagement.Project;
 using ReactiveUI;
 using WolvenKit.App.Services;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types.Exceptions;
 
@@ -51,6 +53,7 @@ public partial class ProjectExplorerViewModel
         private readonly FileSystemWatcher _modsWatcher;
 
         private readonly object _modLoadingLock = new();
+        private readonly object _batchLock = new();
 
         private Task? _updateTask;
         private CancellationTokenSource _updateThreadCancellationTokenSource = new();
@@ -98,7 +101,7 @@ public partial class ProjectExplorerViewModel
                 fileExtension.Contains(partial, StringComparison.OrdinalIgnoreCase));
         }
 
-        public WatcherState _watcherState;
+        public WatcherState _watcherState = WatcherState.NoProject;
 
         public WatcherState WatcherState => _watcherState;
 
@@ -124,10 +127,21 @@ public partial class ProjectExplorerViewModel
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(OnFilesImported)
                 .DisposeWith(_disposables);
+
+            projectEvents.FilesMoved
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(OnFilesMoved)
+                .DisposeWith(_disposables);
+
+            projectEvents.FilesDeleted
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(OnFilesOrDirectoriesDeleted)
+                .DisposeWith(_disposables);
         }
 
         public void ResumeWatcher_AndLoadProject()
         {
+            Suspend();
             Locked_LoadModProjectFileStructure();
             Resume();
         }
@@ -246,7 +260,9 @@ public partial class ProjectExplorerViewModel
                     throw new TodoException();
                 }
 
-                if (!_fileLookup.TryGetValue(e.FullPath, out var item))
+                var lookup = e.FullPath.Substring(_projectDirectory.Length + 1);
+
+                if (!_fileLookup.TryGetValue(lookup, out var item))
                 {
                     if (_watcherState == WatcherState.NoProject && _fileProcessing.ContainsKey(e.FullPath))
                     {
@@ -300,7 +316,10 @@ public partial class ProjectExplorerViewModel
                     }
 
                     var newName = renamedEventArgs.Name.Split(Path.DirectorySeparatorChar)[^1];
+                    // Capture the clone key before the rename changes FullName, then project it.
+                    var oldFullName = item.FullName;
                     item.Rename(newName);
+                    _guard.ProjectRename(item, oldFullName);
                 }
             }
 
@@ -313,26 +332,59 @@ public partial class ProjectExplorerViewModel
 
                 if (_fileLookup.TryRemove(e.FullPath, out var item))
                 {
-                    FileTree.Remove(item);
-                    FileList.Remove(item);
-
-                    ClearChildren(item);
-
-                    item.Parent?.Children.Remove(item);
+                    RemoveModel(item, e.EventAddedAt);
                 }
-
-                _removedFiles.TryAdd(e.FullPath, e.EventAddedAt);
-
-                void ClearChildren(FileSystemModel model)
+                else
                 {
-                    foreach (var subModel in model.Children)
-                    {
-                        ClearChildren(subModel);
-
-                        _fileLookup.Remove(subModel.RawRelativePath, out _);
-                        FileList.Remove(subModel);
-                    }
+                    _removedFiles.TryAdd(e.FullPath, e.EventAddedAt);
                 }
+            }
+        }
+
+        private void RemoveModel(FileSystemModel model, long removedAt = 0)
+        {
+            if (model == null) return;
+
+            _fileLookup.TryRemove(model.FullName, out _);
+
+            if (FileTree.Contains(model))
+                FileTree.Remove(model);
+            if (FileList.Contains(model))
+                FileList.Remove(model);
+
+            RemoveChildModels(model);
+
+            if (model.Parent != null && model.Parent.Children.Contains(model))
+                model.Parent.Children.Remove(model);
+
+            if (removedAt != 0)
+                _removedFiles.TryAdd(model.FullName, removedAt);
+
+        }
+
+        private void RemoveChildModels(FileSystemModel model)
+        {
+            var children = model.Children.ToList();
+            foreach (var subModel in children)
+            {
+                RemoveChildModels(subModel);
+
+                _fileLookup.Remove(subModel.FullName, out _);
+                if (FileList.Contains(subModel))
+                    FileList.Remove(subModel);
+            }
+        }
+
+        internal void RemoveItems(IEnumerable<FileSystemModel> items)
+        {
+            foreach (var item in items)
+            {
+                if (item == null) continue;
+                // `item` is usually a grid clone (it came from the grid's SelectedItems). Resolve it
+                // to the domain model of the same path so RemoveModel operates on real domain state;
+                // RemoveModel then projects the removal back onto the clones.
+                var domain = _fileLookup.TryGetValue(item.FullName, out var d) ? d : item;
+                RemoveModel(domain, DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond);
             }
         }
 
@@ -351,6 +403,8 @@ public partial class ProjectExplorerViewModel
                 // On first app launch, there's no project yet.
                 return;
             }
+
+            _watcherState = WatcherState.Loading;
 
             void Clear()
             {
@@ -382,6 +436,7 @@ public partial class ProjectExplorerViewModel
 
                     DispatcherHelper.StopRepeatingAction(CompletionTimer);
                     StartBackgroundPolling();
+                    _watcherState = WatcherState.Active;
                 });
             });
         }
@@ -649,15 +704,24 @@ public partial class ProjectExplorerViewModel
                         switch (e.ChangeType)
                         {
                             case WatcherChangeTypes.Created:
-                                var parent = FindParentModel(e.FullPath);
-                                var newItem = CreateFromScratch(parent, e);
-                                if (newItem != null)
+                                DispatcherHelper.RunOnMainThread(() =>
                                 {
-                                    parent?.Children.Add(newItem);
-                                    created.Add(newItem);
-                                    _fileLookup.TryAdd(e.FullPath, newItem);
-                                    _fileProcessing.TryRemove(e.FullPath, out _);
-                                }
+                                    lock (_batchLock)
+                                    {
+                                        var parent = FindParentModel(e.FullPath);
+                                        var newItem = CreateFromScratch(parent, e);
+                                        if (newItem != null)
+                                        {
+                                            if (parent != null && !parent.Children.Contains(newItem) && !_fileLookup.ContainsKey(e.FullPath))
+                                            {
+                                                parent.Children.Add(newItem);
+                                                created.Add(newItem);
+                                                _fileLookup.TryAdd(e.FullPath, newItem);
+                                            }
+                                            _fileProcessing.TryRemove(e.FullPath, out _);
+                                        }
+                                    }
+                                });
                                 break;
                         }
                     }
@@ -777,6 +841,200 @@ public partial class ProjectExplorerViewModel
         }
 
         /// <summary>
+        /// Applies an authoritative, already-completed set of file moves (see
+        /// <see cref="IProjectEvents.PublishFilesMoved"/>) to the domain models and, through the
+        /// guard, the grid clones. This is the replacement for optimistic pre-projection from command
+        /// handlers: the tree is only ever changed to match what actually happened on disk, so
+        /// declining an overwrite prompt can no longer leave it out of sync. Runs on the UI thread
+        /// and is idempotent, so racing with a live OS watcher event (or a duplicate publish) is a
+        /// no-op.
+        /// </summary>
+        private void OnFilesMoved(FilesMovedMessage msg)
+        {
+            if (msg.Moves.Count == 0)
+            {
+                return;
+            }
+
+            var sourceParents = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var batch = new List<FileSystemModel>();
+
+            foreach (var (from, to) in msg.Moves)
+            {
+                if (string.IsNullOrEmpty(to))
+                {
+                    continue;
+                }
+
+                // A same-folder file rename: rename the node IN PLACE instead of remove+add. This
+                // preserves the model's (and its grid clone's) identity, so the grid keeps its
+                // selection and expansion — which is exactly what GridGuard.ProjectRename is for.
+                // Losing that identity is what left "Rename" greyed out and broke the next rename.
+                if (!string.IsNullOrEmpty(from)
+                    && !from.Equals(to, StringComparison.OrdinalIgnoreCase)
+                    && PathsShareParent(from, to)
+                    && _fileLookup.TryGetValue(from, out var renameModel)
+                    && !renameModel.IsDirectory)
+                {
+                    RenameModelInPlace(renameModel, from, to);
+                    continue;
+                }
+
+                // Otherwise remove the source model (and its grid clone) then add the destination.
+                if (!string.IsNullOrEmpty(from))
+                {
+                    var parent = Path.GetDirectoryName(from);
+                    if (!string.IsNullOrEmpty(parent))
+                    {
+                        sourceParents.Add(parent);
+                    }
+
+                    if (_fileLookup.TryGetValue(from, out var model))
+                    {
+                        RemoveModel(model);
+                    }
+                }
+
+                EnsureModelForPath(to, batch);
+            }
+
+            if (batch.Count > 0)
+            {
+                FileList.AddRange(batch);
+            }
+
+            // Prune source directory models whose backing folder no longer exists (an empty folder
+            // left behind by the move was deleted on disk). Walk upward so nested empties go too.
+            foreach (var parent in sourceParents)
+            {
+                PruneVanishedDirectories(parent);
+            }
+        }
+
+        private static bool PathsShareParent(string a, string b) =>
+            string.Equals(Path.GetDirectoryName(a), Path.GetDirectoryName(b), StringComparison.OrdinalIgnoreCase);
+
+        /// <summary>
+        /// Renames a file model in place (domain + grid clone), preserving node identity so the grid
+        /// keeps its selection/expansion. Re-keys the lookup and hands GridGuard a ProjectRename intent
+        /// rather than a remove-then-add. Must be called on the UI thread.
+        /// </summary>
+        private void RenameModelInPlace(FileSystemModel model, string oldFullName, string newFullName)
+        {
+            _fileLookup.TryRemove(oldFullName, out _);
+            model.Rename(Path.GetFileName(newFullName)); // recomputes FullName; keeps the same parent
+            _fileLookup.TryAdd(newFullName, model);
+        }
+
+        /// <summary>
+        /// Applies an authoritative set of deletions (see <see cref="IProjectEvents.PublishFileDeleted"/>
+        /// / <see cref="IProjectEvents.PublishDirectoryDeleted"/>) to the domain models and grid clones.
+        /// Handles BOTH files and directories: RemoveModel recurses into children, so a deleted
+        /// directory path drops its whole subtree. Idempotent: a path the tree doesn't know is a no-op.
+        /// Must run on the UI thread.
+        /// </summary>
+        private void OnFilesOrDirectoriesDeleted(FilesDeletedMessage msg)
+        {
+            foreach (var path in msg.AbsolutePaths)
+            {
+                if (!string.IsNullOrEmpty(path) && _fileLookup.TryGetValue(path, out var model))
+                {
+                    RemoveModel(model);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Ensures a <see cref="FileSystemModel"/> exists for the given absolute path, creating it
+        /// and any missing ancestor directory models up to the project root. Returns the existing
+        /// model when one is already present (keeping the apply idempotent). New models are appended
+        /// to <paramref name="batch"/> so the caller can add them to the flat list / grid clones in
+        /// one shot. Must be called on the UI thread.
+        /// </summary>
+        private FileSystemModel? EnsureModelForPath(string absolutePath, List<FileSystemModel> batch)
+        {
+            if (string.IsNullOrEmpty(absolutePath) || _projectFileSystemModel is null)
+            {
+                return null;
+            }
+
+            if (_fileLookup.TryGetValue(absolutePath, out var existing))
+            {
+                return existing;
+            }
+
+            // The project root itself is the base of every FullName but is not stored in _fileLookup.
+            if (string.Equals(absolutePath, _projectDirectory, StringComparison.OrdinalIgnoreCase))
+            {
+                return _projectFileSystemModel;
+            }
+
+            if (!absolutePath.StartsWith(_projectDirectory, StringComparison.OrdinalIgnoreCase)
+                || IsIgnoredPath(absolutePath))
+            {
+                return null;
+            }
+
+            var parentPath = Path.GetDirectoryName(absolutePath);
+            if (string.IsNullOrEmpty(parentPath))
+            {
+                return null;
+            }
+
+            var parentModel = EnsureModelForPath(parentPath, batch);
+            if (parentModel is null)
+            {
+                return null;
+            }
+
+            var isDirectory = Directory.Exists(absolutePath);
+            var relativePath = absolutePath[(_projectDirectory.Length + 1)..];
+            var name = Path.GetFileName(absolutePath);
+            var desiredExpansion = isDirectory && _getDesiredExpansionState(relativePath);
+
+            var model = new FileSystemModel(parentModel, name, relativePath, isDirectory, desiredExpansion);
+
+            if (!parentModel.Children.Contains(model))
+            {
+                parentModel.Children.Add(model);
+            }
+
+            _fileLookup.TryAdd(absolutePath, model);
+            batch.Add(model);
+            return model;
+        }
+
+        /// <summary>
+        /// Removes directory models whose backing directory no longer exists on disk, walking upward
+        /// from <paramref name="directoryAbsPath"/> so a chain of emptied parents is cleaned. Never
+        /// removes the archive/raw/resources roots. Must be called on the UI thread.
+        /// </summary>
+        private void PruneVanishedDirectories(string directoryAbsPath)
+        {
+            var dir = directoryAbsPath;
+            while (!string.IsNullOrEmpty(dir)
+                   && dir.Length > _projectDirectory.Length
+                   && _fileLookup.TryGetValue(dir, out var dirModel))
+            {
+                // Never prune the archive/raw/resources roots (parent is the invisible project root).
+                if (dirModel.Parent is null || dirModel.Parent.Name == FileSystemModel.ProjectDirName)
+                {
+                    break;
+                }
+
+                // Keep any directory that still exists on disk (it may hold files we did not move).
+                if (Directory.Exists(dir))
+                {
+                    break;
+                }
+
+                var parent = Path.GetDirectoryName(dir);
+                RemoveModel(dirModel);
+                dir = parent;
+            }
+        }
+
+        /// <summary>
         /// Logs a large number of added files in the background.
         /// Chunks the list, logs alphabetically, uses a low-priority background task with light debouncing,
         /// and ends with a summary count.
@@ -797,6 +1055,7 @@ public partial class ProjectExplorerViewModel
 
                     // Sort alphabetically for consistent logging order
                     var sortedNames = addedFiles
+                        .Where(file => !file.IsDirectory)
                         .Select(f => f.FullName)
                         .OrderBy(name => name, StringComparer.OrdinalIgnoreCase)
                         .ToList();
@@ -863,13 +1122,17 @@ public partial class ProjectExplorerViewModel
             var fileName = file.Name;
             var parentDirInfo = Directory.GetParent(fullPath);
             var parentPath = parentDirInfo!.FullName;
+            var rawRelativePath = fullPath.Substring(_projectDirectory.Length + 1);
 
             if (_fileLookup.TryGetValue(parentPath, out var parent))
             {
-                var fileSystemModel = new FileSystemModel(parent, fileName, fullPath, false);
-                parent.Children.Add(fileSystemModel);
-                _fileLookup.TryAdd(fullPath, fileSystemModel);
-                batch.Add(fileSystemModel);
+                if (!parent.Children.Any(m => m.FullName == fullPath) && !_fileLookup.ContainsKey(fullPath))
+                {
+                    var fileSystemModel = new FileSystemModel(parent, fileName, rawRelativePath, false);
+                    parent.Children.Add(fileSystemModel);
+                    _fileLookup.TryAdd(fullPath, fileSystemModel);
+                    batch.Add(fileSystemModel);
+                }
                 return;
             }
 
@@ -882,13 +1145,22 @@ public partial class ProjectExplorerViewModel
                 currentLevel = currentLevel.Parent!;
             }
 
-            var parentModel = _fileLookup[Path.Combine(_projectDirectory, destination)]!;
+            var lookupKey = Path.Combine(_projectDirectory, destination);
+
+            if (!_fileLookup.TryGetValue(lookupKey, out var parentModel))
+            {
+                throw new WolvenKitException(987, $"Filed to find needed directory ${lookupKey}. " +
+                                                  "This means the file system is in an inconsistent state. " +
+                                                  "Please close and reload WolvenKit. ");
+
+            }
 
             while (parentDirs.Count > 0)
             {
                 var current = parentDirs.Pop();
+                var lookup = current.FullName.Substring(_projectDirectory.Length + 1);
 
-                if (_fileLookup.TryGetValue(current.FullName, out var currentModel))
+                if (_fileLookup.TryGetValue(lookup, out var currentModel))
                 {
                     parentModel = currentModel;
                     continue;
@@ -896,16 +1168,28 @@ public partial class ProjectExplorerViewModel
 
                 // Make the directory if needed. (Does nothing if already exists.)
                 current.Create();
-                var newCurrentModel = new FileSystemModel(parentModel, current.Name, current.FullName, true);
-                parentModel.Children.Add(newCurrentModel);
-                _fileLookup.TryAdd(current.FullName, newCurrentModel);
-                batch.Add(newCurrentModel);
-                parentModel = newCurrentModel;
+                var currentRawRelativePath = current.FullName.Substring(_projectDirectory.Length + 1);
+                if (!_fileLookup.ContainsKey(current.FullName))
+                {
+                    var newCurrentModel = new FileSystemModel(parentModel, current.Name, currentRawRelativePath, true);
+                    parentModel.Children.Add(newCurrentModel);
+                    _fileLookup.TryAdd(current.FullName, newCurrentModel);
+                    batch.Add(newCurrentModel);
+                    parentModel = newCurrentModel;
+                }
+                else
+                {
+                    parentModel = _fileLookup[current.FullName];
+                }
             }
 
-            var newFileModel = new FileSystemModel(parentModel, fileName, fullPath, false);
-            parentModel.Children.Add(newFileModel);
-            _fileLookup.TryAdd(fullPath, newFileModel);
+            if (!_fileLookup.ContainsKey(fullPath))
+            {
+                var newFileModel = new FileSystemModel(parentModel, fileName, rawRelativePath, false);
+                batch.Add(newFileModel);
+                parentModel.Children.Add(newFileModel);
+                _fileLookup.TryAdd(fullPath, newFileModel);
+            }
         }
     }
 
@@ -918,6 +1202,8 @@ public partial class ProjectExplorerViewModel
     {
         NoProject,
         Suspended,
-        Active
+        Active,
+        Loading,
+        Error
     }
 }
