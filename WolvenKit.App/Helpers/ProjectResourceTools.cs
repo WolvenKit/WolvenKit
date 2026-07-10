@@ -39,6 +39,8 @@ public partial class ProjectResourceTools
 
     private readonly Cr2WTools _crwWTools;
 
+    private readonly IProjectEvents _projectEvents;
+
 
     private static readonly List<string> s_ignoredDependencyPartials =
     [
@@ -107,13 +109,15 @@ public partial class ProjectResourceTools
     private readonly SemaphoreSlim _semaphore = new(1, 1);
 
     public ProjectResourceTools(IProjectManager projectManager, IArchiveManager archiveManager,
-        ILoggerService loggerService, ISettingsManager settingsServiceManager, Cr2WTools cr2WTools)
+        ILoggerService loggerService, ISettingsManager settingsServiceManager, Cr2WTools cr2WTools,
+        IProjectEvents projectEvents)
     {
         _projectManager = projectManager;
         _archiveManager = archiveManager;
         _loggerService = loggerService;
         _settingsService = settingsServiceManager;
         _crwWTools = cr2WTools;
+        _projectEvents = projectEvents;
     }
 
     private RED4Controller? _red4Controller = null;
@@ -539,6 +543,10 @@ public partial class ProjectResourceTools
 
         var fileReplacements = new Dictionary<string, string>();
 
+        // Authoritative (from -> to) pairs to announce to the project explorer once the move has
+        // actually completed on disk. Absolute paths, keyed by the path the tree currently knows.
+        var publishedMoves = new List<(string From, string To)>();
+
         foreach (var sourceAbsPath in files)
         {
             // If the file is not a folder, this is just the dest path
@@ -556,6 +564,17 @@ public partial class ProjectResourceTools
             {
                 continue;
             }
+
+            // The absolute path the project explorer currently knows this file by. Normally that is
+            // just the source; for the case-only-rename three-way move we relocated via a temp dir,
+            // so map the temp source back onto the original (rooted) path the tree still holds.
+            var fromAbsPath = sourceAbsPath;
+            if (originalSourcePath != sourceFileOrDirAbsPath && Path.IsPathRooted(originalSourcePath))
+            {
+                fromAbsPath = sourceAbsPath.Replace(sourceFileOrDirAbsPath, originalSourcePath);
+            }
+
+            publishedMoves.Add((fromAbsPath, targetAbsPath));
 
             var relativeSourcePath = activeProject.GetRelativePath(sourceAbsPath);
 
@@ -584,6 +603,15 @@ public partial class ProjectResourceTools
         if (successfulReplacements.Count > 0)
         {
             DeleteEmptyDirectoriesRecursive(sourceFileOrDirAbsPath);
+        }
+
+        // Announce the moves that actually landed (target exists) so the project explorer reconciles
+        // its tree to reality. Files the user declined to overwrite were never added to publishedMoves,
+        // so a "no" answer can no longer leave the tree out of sync with disk.
+        var confirmedMoves = publishedMoves.Where(m => File.Exists(m.To)).ToList();
+        if (confirmedMoves.Count > 0)
+        {
+            _projectEvents.PublishFilesMoved(new FilesMovedMessage(confirmedMoves));
         }
 
         if (!refactor)
