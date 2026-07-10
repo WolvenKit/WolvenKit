@@ -126,6 +126,7 @@ public partial class WelcomePageViewModel : PageViewModel
     [RelayCommand]
     private void DeleteProject(string s)
     {
+        // TODO: Make this more efficient. It refreshes the whole list twice.
         _mainViewModel.DeleteProjectFromRecentCommand.Execute(s);
     }
 
