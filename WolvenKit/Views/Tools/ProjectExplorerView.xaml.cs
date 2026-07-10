@@ -835,8 +835,21 @@ namespace WolvenKit.Views.Tools
             TreeGrid.View.RefreshFilter();
         }
 
-        private void RowDragDropController_DragStart(object sender, TreeGridRowDragStartEventArgs e) =>
+        private void RowDragDropController_DragStart(object sender, TreeGridRowDragStartEventArgs e)
+        {
+            if (ViewModel is not ProjectExplorerViewModel vm)
+            {
+                return;
+            }
+
+            // Don't drag stuff you're not freakin' draggin' choom... gosh.
+            var draggedItems = e.DraggingNodes.ToList();
+            var selectedItems = vm.SelectedItems?.ToList() ?? [];
+            var nonDraggedSelections = selectedItems.Where(x => !draggedItems.Contains(x)).ToList();
+            vm.SelectedItems?.RemoveMany(nonDraggedSelections);
+
             _isDragging = true;
+        }
 
         private void RowDragDropController_DragOver(object sender, TreeGridRowDragOverEventArgs e)
         {
@@ -1019,6 +1032,11 @@ namespace WolvenKit.Views.Tools
                 isOverwrite = messageBoxResult == WMessageBoxResult.Yes;
             }
 
+            // Track what actually happened on disk so we can hand the project explorer an
+            // authoritative reconciliation afterwards, rather than relying on (flaky) FS events.
+            var movedPairs = new List<(string From, string To)>();
+            var addedPaths = new List<string>();
+
             foreach (var copyMe in fileMap)
             {
                 var targetFile = copyMe.Value ?? "";
@@ -1050,26 +1068,33 @@ namespace WolvenKit.Views.Tools
                 if (isCopy)
                 {
                     File.Copy(copyMe.Key, targetFile, true);
+                    addedPaths.Add(targetFile);
                 }
                 else
                 {
                     File.Move(copyMe.Key, targetFile, true);
+                    movedPairs.Add((copyMe.Key, targetFile));
                 }
             }
 
-            if (isCopy)
+            // Moves leave behind emptied source folders — delete them BEFORE reconciling so the
+            // watcher prunes their now-vanished models. Copies leave the source in place.
+            if (!isCopy)
             {
-                return;
-            }
-
-            foreach (var directory in directories.OrderByDescending(dir => dir.Length).ToList())
-            {
-                if (Directory.EnumerateFiles(directory, "*.*", SearchOption.AllDirectories).Any())
+                foreach (var directory in directories.OrderByDescending(dir => dir.Length).ToList())
                 {
-                    continue;
-                }
+                    if (Directory.EnumerateFiles(directory, "*.*", SearchOption.AllDirectories).Any())
+                    {
+                        continue;
+                    }
 
-                Directory.Delete(directory, true);
+                    Directory.Delete(directory, true);
+                }
+            }
+
+            if (ViewModel is ProjectExplorerViewModel reconcileVm)
+            {
+                reconcileVm.NotifyDragDropReconciled(movedPairs, addedPaths);
             }
         }
 

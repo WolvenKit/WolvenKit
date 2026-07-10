@@ -979,6 +979,31 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     }
 
     public void ResumeFileWatcher() => _projectWatcher.Resume();
+    /// <summary>
+    /// Called by the View after a drag-and-drop has moved and/or copied files on disk. Publishes an
+    /// authoritative reconciliation so the grids update immediately from what actually happened,
+    /// instead of waiting on (flaky) OS file system events. <paramref name="moves"/> are
+    /// (fromAbs -&gt; toAbs) relocations; <paramref name="additions"/> are newly created absolute
+    /// paths (copy targets). The watcher applies this idempotently, so a live FS event for the same
+    /// change is a harmless no-op.
+    /// </summary>
+    public void NotifyDragDropReconciled(
+        IReadOnlyList<(string From, string To)> moves,
+        IReadOnlyList<string> additions)
+    {
+        if (moves.Count == 0 && additions.Count == 0)
+        {
+            return;
+        }
+
+        // Pure additions are modelled as moves with an empty source (OnFilesMoved skips the removal
+        // for an empty From and just materializes the destination).
+        var payload = new List<(string From, string To)>(moves.Count + additions.Count);
+        payload.AddRange(moves);
+        payload.AddRange(additions.Select(a => (string.Empty, a)));
+
+        _projectEvents.PublishFilesMoved(new FilesMovedMessage(payload));
+    }
 
     public void UnwatchProject() => _projectWatcher.UnwatchProject();
 
