@@ -86,7 +86,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private Guid _loadingCompletion = Guid.NewGuid();
     private CancellationTokenSource _deferredRefreshCts = new();
     private readonly ImportExportHelper _importExportHelper;
-    private readonly TimeSpan _singleOperationTimeout = TimeSpan.FromMilliseconds(100);
+    private readonly TimeSpan _singleOperationTimeout = TimeSpan.FromSeconds(3);
 
     // Bound to TreeGrid.ItemsSource / TreeGridFlat.ItemsSource by the View. The collections are
     // owned by the GridGuard (the watcher mutates those same instances), so the grids' single
@@ -1180,7 +1180,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 throw new Exception("Rendering context does not exist.");
             }
 
-            await BeginDeferredRefreshContext(_deferredRefreshCts.Token, TimeSpan.FromSeconds(1.0 * selection.Count), ConvertToJsonInternal(selection));
+            await BeginDeferredRefreshContext(_deferredRefreshCts.Token, TimeSpan.FromSeconds(3.0 * selection.Count), ConvertToJsonInternal(selection));
 
             return;
         }
