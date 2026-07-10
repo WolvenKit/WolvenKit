@@ -13,6 +13,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
+using DynamicData;
 using DynamicData.Binding;
 using HandyControl.Data;
 using HandyControl.Tools.Extension;
