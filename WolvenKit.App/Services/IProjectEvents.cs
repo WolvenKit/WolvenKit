@@ -17,12 +17,48 @@ public interface IProjectEvents
     IObservable<FilesImportedMessage> FilesImported { get; }
 
     /// <summary>
+    /// Consumers of completed-move events should subscribe here.
+    /// </summary>
+    IObservable<FilesMovedMessage> FilesMoved { get; }
+
+    /// <summary>
+    /// Consumers of completed-deletion events should subscribe here.
+    /// </summary>
+    IObservable<FilesDeletedMessage> FilesDeleted { get; }
+
+    /// <summary>
     /// To be called when a known batch of files are being added to the project.
     /// E.g.: when adding files from AssetBrowser or exporting JSON, etc.
     /// NOTE: Be sure to disable monitoring of file system events before use.
     /// </summary>
     /// <param name="message"></param>
     void PublishFilesImported(FilesImportedMessage message);
+
+    /// <summary>
+    /// Publish an authoritative set of file moves that have <b>already happened on disk</b>.
+    /// Call this AFTER the move completes and after any overwrite/confirmation prompts have been
+    /// resolved, so the project explorer reflects what actually happened rather than what was
+    /// intended. The apply is idempotent, so it is safe to publish whether or not the OS file
+    /// system watcher is suspended (a live watcher's own events simply become no-ops).
+    /// </summary>
+    /// <param name="message"></param>
+    void PublishFilesMoved(FilesMovedMessage message);
+
+    /// <summary>
+    /// Publish that a single file was deleted on disk (e.g. an overwrite target removed just before a
+    /// move takes its place). Call this AFTER the delete has happened. The project explorer removes the
+    /// matching node. Idempotent: a path the tree doesn't know is a no-op.
+    /// </summary>
+    /// <param name="absolutePath">Absolute path of the deleted file.</param>
+    void PublishFileDeleted(string absolutePath);
+
+    /// <summary>
+    /// Publish that a directory (and everything under it) was deleted on disk. Call this AFTER the
+    /// delete has happened. The project explorer removes the matching node and its whole subtree.
+    /// Idempotent: a path the tree doesn't know is a no-op.
+    /// </summary>
+    /// <param name="absoluteDirectoryPath">Absolute path of the deleted directory.</param>
+    void PublishDirectoryDeleted(string absoluteDirectoryPath);
 }
 
 /// <summary>
