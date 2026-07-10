@@ -88,8 +88,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private readonly ImportExportHelper _importExportHelper;
     private readonly TimeSpan _singleOperationTimeout = TimeSpan.FromMilliseconds(100);
 
-    public DispatchedObservableCollection<FileSystemModel> FileTree => _projectWatcher.FileTree;
-    public DispatchedObservableCollection<FileSystemModel> FileList => _projectWatcher.FileList;
+    // Bound to TreeGrid.ItemsSource / TreeGridFlat.ItemsSource by the View. The collections are
+    // owned by the GridGuard (the watcher mutates those same instances), so the grids' single
+    // source of truth is the guard.
+    public DispatchedObservableCollection<FileSystemModel> FileTree => _gridGuard.FileTree;
+    public DispatchedObservableCollection<FileSystemModel> FileList => _gridGuard.FileList;
     public WatcherState FileWatcherState => _projectWatcher.WatcherState;
     public Func<CancellationToken, TimeSpan, Task, Task>? BeginDeferredRefreshContext { get; set; }
     public Dictionary<string, bool> ExpansionStateDictionary = [];
@@ -131,7 +134,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         _appViewModel = appViewModel;
 
-        _projectWatcher = new WatcherService(GetDesiredExpansionState, loggerService, projectEvents);
+        _projectWatcher = new WatcherService(GetDesiredExpansionState, loggerService, projectEvents, _gridGuard);
 
         SideInDockedMode = DockSide.Left;
 
@@ -196,6 +199,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// <param name="isReload"></param>
     public void StartWatcher_AndLoadProject(Cp77Project activeProject, bool isReload)
     {
+        _gridGuard.NotifyChangeRequested();
+        _gridGuard.BeginChanges();
+
         if (_appViewModel.IsDialogShown || _appViewModel.IsOverlayShown)
         {
             _appViewModel.RunAfterModalClosed(() => StartWatcher_AndLoadProject(activeProject, isReload));
@@ -263,6 +269,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     {
         _progressService.IsIndeterminate = false;
         OnSetLoading?.Invoke(this, (false, false));
+
+        // The rebuild is done and the grids have their new nodes — walk the machine back to Ready
+        // (MakingChangesToFiles -> AwaitingRedrawsOfGrids -> Ready). ForceReady is safe to call from
+        // any mode, so this can't strand the guard if the load took an unusual path.
+        _gridGuard.ForceReady();
+
         _loggerService?.Success($"Loaded project: {ActiveProject!.ProjectDirectory} ({FileList.Count} files). File watcher active.");
     }
 
@@ -1038,8 +1050,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             InternalRenameFile(SelectedItem, currentRawRelativePath, newRawRelativePath, ActiveProject.FileDirectory, refactor)
         );
 
+        _gridGuard.ConfirmRedrawComplete();
 
-        if (string.IsNullOrEmpty(newRelativePath) || newRelativePath == relativePath)
+        if (_gridGuard.GridsLocked)
         {
             throw new WolvenKitException(352345, "Internal inconsistency found. Please quit and restart the app.");
         }
@@ -1073,6 +1086,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     public void ResumeFileWatcher()
     {
         _projectWatcher.Resume();
+        // The watcher is live again, so the grids are back to a safe, mutable state. ForceReady is a
+        // no-op if we were already Ready, so calling it here can never strand the guard.
+        _gridGuard.ForceReady();
     }
 
     /// <summary>
@@ -1773,6 +1789,9 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
 
         _progressService.Completed();
+
+        // Ensure guard is back to Ready (in case this path was entered while locked).
+        _gridGuard.ForceReady();
     }
 
     private async Task ConvertFromJsonAsync(string file)
@@ -2151,6 +2170,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         try
         {
             _projectWatcher.Suspend();
+            // Suspending the watcher means a high-level operation is about to mutate files behind the
+            // grids. Move the guard into MakingChangesToFiles so GridsLocked is true for the duration;
+            // ResumeFileWatcher (or the next load) walks it back to Ready.
+            _gridGuard.NotifyChangeRequested();
+            _gridGuard.BeginChanges();
         }
         catch
         {

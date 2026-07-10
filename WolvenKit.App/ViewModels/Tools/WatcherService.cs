@@ -76,11 +76,17 @@ public partial class ProjectExplorerViewModel
 
         private readonly CompositeDisposable _disposables = new();
 
-        [ObservableProperty]
-        private DispatchedObservableCollection<FileSystemModel> _fileList = new();
+        // The grids bind to the GridGuard's clone projection, not to these. These are the DOMAIN
+        // models the watcher builds and the rest of the app mutates freely. After each domain
+        // mutation the watcher calls _guard.Project*(...) so the shim updates the clones the grids
+        // actually show — that indirection is what keeps the wild mutations off the Syncfusion grids.
+        private readonly GridGuard _guard;
 
-        [ObservableProperty]
-        private DispatchedObservableCollection<FileSystemModel> _fileTree = new();
+        private readonly DispatchedObservableCollection<FileSystemModel> _fileList = new();
+        private readonly DispatchedObservableCollection<FileSystemModel> _fileTree = new();
+
+        public DispatchedObservableCollection<FileSystemModel> FileList => _fileList;
+        public DispatchedObservableCollection<FileSystemModel> FileTree => _fileTree;
 
 
         private static readonly List<string> s_ignoredExtensions =
@@ -107,10 +113,11 @@ public partial class ProjectExplorerViewModel
 
         #endregion
 
-        public WatcherService(Func<string, bool> getDesiredExpansionState, ILoggerService? loggerService, IProjectEvents projectEvents)
+        public WatcherService(Func<string, bool> getDesiredExpansionState, ILoggerService? loggerService, IProjectEvents projectEvents, GridGuard guard)
         {
             _loggerService = loggerService;
             _getDesiredExpansionState = getDesiredExpansionState;
+            _guard = guard;
 
             _modsWatcher = new FileSystemWatcher
             {
@@ -277,6 +284,7 @@ public partial class ProjectExplorerViewModel
                 }
 
                 item.UpdateFileInfo();
+                _guard.ProjectUpdateFileInfo(item);
             }
 
             void Renamed(FileSystemEventArgsWrapper e)
@@ -360,6 +368,8 @@ public partial class ProjectExplorerViewModel
             if (removedAt != 0)
                 _removedFiles.TryAdd(model.FullName, removedAt);
 
+            // Mirror the removal onto the grid-bound clone subtree.
+            _guard.ProjectRemove(model);
         }
 
         private void RemoveChildModels(FileSystemModel model)
@@ -433,6 +443,9 @@ public partial class ProjectExplorerViewModel
                     FileTree.AddRange((treeRoot != null)
                         ? treeRoot.Children
                         : Array.Empty<FileSystemModel>());
+
+                    // Project the freshly built domain tree onto the grid-bound clones.
+                    _guard.ProjectReset(flatListReturn, treeRoot?.Children.ToList() ?? new List<FileSystemModel>());
 
                     DispatcherHelper.StopRepeatingAction(CompletionTimer);
                     StartBackgroundPolling();
@@ -756,6 +769,8 @@ public partial class ProjectExplorerViewModel
                         FileTree.AddRange(created);
                     }
 
+                    _guard.ProjectAdd(created);
+
                 }, DispatcherPriority.Background);
             }
         }
@@ -834,6 +849,7 @@ public partial class ProjectExplorerViewModel
             }
 
             FileList.AddRange(batch);
+            _guard.ProjectAdd(batch);
             Resume();
 
             // Log added files in the background to avoid hanging the UI on very large imports.
@@ -901,6 +917,7 @@ public partial class ProjectExplorerViewModel
             if (batch.Count > 0)
             {
                 FileList.AddRange(batch);
+                _guard.ProjectAdd(batch);
             }
 
             // Prune source directory models whose backing folder no longer exists (an empty folder
@@ -924,6 +941,7 @@ public partial class ProjectExplorerViewModel
             _fileLookup.TryRemove(oldFullName, out _);
             model.Rename(Path.GetFileName(newFullName)); // recomputes FullName; keeps the same parent
             _fileLookup.TryAdd(newFullName, model);
+            _guard.ProjectRename(model, oldFullName);
         }
 
         /// <summary>
