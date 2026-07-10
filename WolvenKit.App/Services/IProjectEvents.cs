@@ -70,3 +70,25 @@ public sealed record FilesImportedMessage(
     IReadOnlyList<IGameFile> GameFiles,
     IReadOnlyList<FileInfo> RawFiles
 );
+
+/// <summary>
+/// An authoritative list of completed moves, each an absolute source path that was moved to an
+/// absolute target path. Renames are moves too. Covers whole-directory moves as a flat list of the
+/// files that were actually relocated (empty source directories left behind are reconciled by the
+/// consumer). Emitted only for moves that succeeded, so declining an overwrite prompt simply omits
+/// those files from the set. An entry with an empty <c>From</c> is a pure addition (e.g. a copy
+/// target): the consumer just materializes <c>To</c> and performs no removal.
+/// </summary>
+/// <param name="Moves"></param>
+public sealed record FilesMovedMessage(
+    IReadOnlyList<(string From, string To)> Moves
+);
+
+/// <summary>
+/// An authoritative list of absolute paths that were deleted on disk. A directory path implies its
+/// entire subtree was removed; the consumer removes the matching node (recursing for directories).
+/// </summary>
+/// <param name="AbsolutePaths"></param>
+public sealed record FilesDeletedMessage(
+    IReadOnlyList<string> AbsolutePaths
+);
