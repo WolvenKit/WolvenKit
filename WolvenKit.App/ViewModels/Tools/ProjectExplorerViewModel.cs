@@ -86,11 +86,12 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     private Guid _loadingCompletion = Guid.NewGuid();
     private CancellationTokenSource _deferredRefreshCts = new();
     private readonly ImportExportHelper _importExportHelper;
+    private readonly TimeSpan _singleOperationTimeout = TimeSpan.FromMilliseconds(100);
 
     public DispatchedObservableCollection<FileSystemModel> FileTree => _projectWatcher.FileTree;
     public DispatchedObservableCollection<FileSystemModel> FileList => _projectWatcher.FileList;
     public WatcherState FileWatcherState => _projectWatcher.WatcherState;
-    public Func<CancellationToken, Task, Task>? BeginDeferredRefreshContext { get; set; }
+    public Func<CancellationToken, TimeSpan, Task, Task>? BeginDeferredRefreshContext { get; set; }
     public Dictionary<string, bool> ExpansionStateDictionary = [];
     public bool IsKeyUpEventAssigned { get; set; }
 
@@ -250,7 +251,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 _progressService.IsIndeterminate = true;
                 _progressService.Status = EStatus.Running;
             },
-            TimeSpan.FromMilliseconds(100),
+            _singleOperationTimeout,
             DisableLoadingMode
         );
 
@@ -1033,6 +1034,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         await BeginDeferredRefreshContext!(
             token,
+            _singleOperationTimeout,
             InternalRenameFile(SelectedItem, currentRawRelativePath, newRawRelativePath, ActiveProject.FileDirectory, refactor)
         );
 
@@ -1155,7 +1157,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 throw new Exception("Rendering context does not exist.");
             }
 
-            await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertToJsonInternal(selection));
+            await BeginDeferredRefreshContext(_deferredRefreshCts.Token, TimeSpan.FromSeconds(1.0 * selection.Count), ConvertToJsonInternal(selection));
 
             return;
         }
@@ -1174,7 +1176,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             throw new Exception("Rendering context does not exist.");
         }
 
-        await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertToJsonInternal(convertSelection));
+        await BeginDeferredRefreshContext(_deferredRefreshCts.Token, TimeSpan.FromSeconds(3.0 * convertSelection.Count), ConvertToJsonInternal(convertSelection));
     }
 
     private async Task ConvertToJsonInternal(IEnumerable<FileSystemModel> selection)
@@ -1702,7 +1704,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 throw new Exception("Rendering context does not exist.");
             }
 
-            await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertFromJsonInternal(SelectedItems!.OfType<FileSystemModel>().Where(IsInRawFolder)));
+            await BeginDeferredRefreshContext(
+                _deferredRefreshCts.Token,
+                TimeSpan.FromSeconds(3.0 * SelectedItems!.Count),
+                ConvertFromJsonInternal(SelectedItems!.OfType<FileSystemModel>().Where(IsInRawFolder))
+            );
 
             return;
         }
@@ -1720,7 +1726,11 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             throw new Exception("Rendering context does not exist.");
         }
 
-        await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertFromJsonInternal(convertSelection));
+        await BeginDeferredRefreshContext(
+            _deferredRefreshCts.Token,
+            TimeSpan.FromSeconds(3.0 * convertSelection.Count),
+            ConvertFromJsonInternal(convertSelection)
+        );
     }
 
     // TODO: Refactor this method to use PublishFilesImported rather than relying on WatcherService.
