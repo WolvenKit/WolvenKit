@@ -469,10 +469,44 @@ public partial class ProjectResourceTools
             files.Add(sourceFileOrDirAbsPath);
         }
 
+        var doesDestinationExist = Directory.Exists(destAbsPath) || File.Exists(destAbsPath);
+
         // the user is moving an empty directory
         if (files.Count == 0 && sourceIsDirectory)
         {
+
+            if (doesDestinationExist)
+            {
+                var response = Interactions.ShowQuestionYesNo((
+                    $"Do you want to overwrite the existing file or directory {string.Join('\n', Path.GetFileName(destAbsPath))}?",
+                    "That file or directory already exists!"));
+
+                if (!response)
+                {
+                    return;
+                }
+
+                if (Directory.Exists(destAbsPath))
+                {
+                    Directory.Delete(destAbsPath, true);
+                    _projectEvents.PublishDirectoryDeleted(destAbsPath);
+                } else if (File.Exists(destAbsPath))
+                {
+                    File.Delete(destAbsPath);
+                    _projectEvents.PublishFileDeleted(destAbsPath);
+                }
+            }
+
             Directory.Move(sourceFileOrDirAbsPath, destAbsPath);
+
+            // Tell the project explorer what actually happened so its tree reflects the moved folder
+            // without waiting on (flaky) OS file system events. See PublishFilesMoved docs.
+            if (Directory.Exists(destAbsPath) && !destAbsPath.Contains(s_tempDirSuffix))
+            {
+                _projectEvents.PublishFilesMoved(
+                    new FilesMovedMessage([(sourceFileOrDirAbsPath, destAbsPath)]));
+            }
+
             return;
         }
 

@@ -37,6 +37,7 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
@@ -795,7 +796,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     /// </summary>
     private bool CanDeleteFile() => ActiveProject != null && SelectedItems != null;
     [RelayCommand(CanExecute = nameof(CanDeleteFile))]
-    private void DeleteFile()
+    private async Task DeleteFile()
     {
         var selected = SelectedItems.NotNull().OfType<FileSystemModel>().ToList();
         var delete = Interactions.DeleteFiles(selected.Select(d => d.Name));
@@ -804,7 +805,10 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        // Delete from file structure
+        SuspendFileWatcher();
+
+        // Delete the files/directories on disk (to recycle bin). We suspend the watcher so
+        // we don't get concurrent Deleted FS events fighting with our manual model cleanup.
         foreach (var item in selected)
         {
             var fullPath = item.FullName;
@@ -824,6 +828,65 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 _loggerService.Error("Failed to delete " + fullPath + ".\r\n");
             }
         }
+
+        // Manually remove the corresponding models from the watcher collections.
+        // We do this under BeginDeferredRefreshContext so that the Syncfusion TreeGrid
+        // (and TreeGridFlat) views are in DeferRefresh mode while the Removes (and their
+        // CollectionChanged notifications) happen. This prevents NREs inside
+        // TreeGridView.RemoveNode / QueryableView when the item being removed was added
+        // via the bypass path (OnFilesImported/CreateFileAndAllNeededDirectories) and
+        // may not have had a materialized TreeNode in the grid's internal map (e.g. because
+        // the parent folder was not expanded, or due to prior Reset notifications, filters, etc.).
+        _deferredRefreshCts = new CancellationTokenSource();
+
+        if (BeginDeferredRefreshContext == null)
+        {
+            if (TestHelper.InActiveTest)
+            {
+                _projectWatcher.RemoveItems(selected);
+            }
+            else
+            {
+                _projectWatcher.RemoveItems(selected);
+            }
+
+            ResumeFileWatcher();
+            return;
+        }
+
+        var cts = _deferredRefreshCts;
+        await BeginDeferredRefreshContext(
+            cts.Token,
+            TimeSpan.FromMilliseconds(100),
+            Task.Run(async () =>
+            {
+                try
+                {
+                    _projectWatcher.RemoveItems(selected);
+
+                    // The RemoveItems queue their actual collection mutations via
+                    // DispatcherHelper.RunOnMainThread (which is InvokeAsync). Wait here
+                    // (on this worker) for the dispatcher to reach a point after our Normal
+                    // priority remove actions have executed. This ensures the CC notifications
+                    // are delivered while the view's DeferRefresh is still active.
+                    try
+                    {
+                        System.Windows.Application.Current?.Dispatcher?.Invoke(
+                            () => { },
+                            System.Windows.Threading.DispatcherPriority.ContextIdle);
+                    }
+                    catch { }
+                }
+                finally
+                {
+                    // Always unblock the deferred refresh (so the grids get a chance to
+                    // reconcile their node state via Refresh) even if something went wrong.
+                    try { await cts.CancelAsync(); } catch { }
+                    try { cts.Dispose(); } catch { }
+                }
+            }));
+
+        ResumeFileWatcher();
     }
 
     /// <summary>
@@ -948,37 +1011,68 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     [RelayCommand(CanExecute = nameof(CanRenameFile))]
     private async Task RenameFile()
     {
-        if (_projectManager.ActiveProject is null || SelectedItem?.FullName is not string absolutePath)
+        if (SelectedItem == null || ActiveProject == null || SelectedItem?.FullName is not string absolutePath)
         {
             return;
         }
 
-        var (prefixPath, relativePath) = _projectManager.ActiveProject.SplitFilePath(absolutePath);
+        var currentRawRelativePath = SelectedItem.RawRelativePath;
 
-        if (absolutePath.StartsWith(_projectManager.ActiveProject.ModDirectory))
+        var (newRawRelativePath, refactor) = Interactions.RenameAndRefactor((
+            currentRawRelativePath,
+            absolutePath.StartsWith(ActiveProject.ModDirectory)
+        ));
+
+        if (string.IsNullOrEmpty(newRawRelativePath) || newRawRelativePath == currentRawRelativePath)
         {
-            relativePath = absolutePath[(_projectManager.ActiveProject.ModDirectory.Length + 1)..];
+            return;
         }
 
-        var (newRelativePath, refactor) = Interactions.RenameAndRefactor((
-            relativePath,
-            absolutePath.StartsWith(_projectManager.ActiveProject.ModDirectory)
-        ));
+        _deferredRefreshCts = new CancellationTokenSource();
+        var token = _deferredRefreshCts.Token;
+
+        await BeginDeferredRefreshContext!(
+            token,
+            InternalRenameFile(SelectedItem, currentRawRelativePath, newRawRelativePath, ActiveProject.FileDirectory, refactor)
+        );
+
 
         if (string.IsNullOrEmpty(newRelativePath) || newRelativePath == relativePath)
         {
-            return;
+            throw new WolvenKitException(352345, "Internal inconsistency found. Please quit and restart the app.");
         }
-
-        SuspendFileWatcher();
-
-        await _projectResourceTools.MoveAndRefactorAsync(relativePath, newRelativePath, prefixPath, refactor);
-        _appViewModel.ReloadChangedFiles();
-
-        ResumeWatcher_AndReloadProject();
     }
 
-    public void ResumeFileWatcher() => _projectWatcher.Resume();
+    /// <summary>
+    /// Renames the supplied FileSystemModel.
+    /// You must pass in the old RawRelativePath and new RawRelativePath as well as the path to /source.
+    /// 'Refactor' checkbox makes the name change effected in references to that file in the mod.
+    /// </summary>
+    /// <param name="selectedItem"></param>
+    /// <param name="relativePath"></param>
+    /// <param name="newRelativePath"></param>
+    /// <param name="prefixPath"></param>
+    /// <param name="refactor"></param>
+    private async Task InternalRenameFile(FileSystemModel selectedItem, string relativePath, string newRelativePath, string prefixPath, bool refactor)
+    {
+        SuspendFileWatcher();
+        try
+        {
+            await _projectResourceTools.MoveAndRefactorAsync(relativePath, newRelativePath, prefixPath, refactor);
+            _appViewModel.ReloadChangedFiles();
+        }
+        finally
+        {
+            try { await _deferredRefreshCts.CancelAsync(); } catch { /* token may already be gone */ }
+            ResumeFileWatcher();
+        }
+    }
+
+    public void ResumeFileWatcher()
+    {
+        _projectWatcher.Resume();
+    }
+
     /// <summary>
     /// Called by the View after a drag-and-drop has moved and/or copied files on disk. Publishes an
     /// authoritative reconciliation so the grids update immediately from what actually happened,
@@ -1181,10 +1275,24 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             _progressService.Completed();
             // Return list of created JSON files
             _projectEvents.PublishFilesImported(new FilesImportedMessage([],[.. createdJsonFiles.ToList()]));
+
+            // Ensure any ObserveOn-scheduled handler + ProjectAdd dispatches have run to completion
+            // (so FileList/FileTree clones are updated) before unblocking awaiters/tests.
+            try
+            {
+                System.Windows.Application.Current?.Dispatcher?.Invoke(
+                    () => { },
+                    System.Windows.Threading.DispatcherPriority.ContextIdle);
+            }
+            catch { /* best effort for tests/headless */ }
         });
 
         await _deferredRefreshCts.CancelAsync();
         _deferredRefreshCts.Dispose();
+
+        // Pair the SuspendFileWatcher (which locked the guard) with resume + force back to Ready.
+        // This prevents the guard from being stranded in MakingChangesToFiles after a convert.
+        ResumeFileWatcher();
     }
 
     /// <summary>
