@@ -40,6 +40,8 @@ public class WatcherServiceTests : IDisposable
     private readonly Mock<ILoggerService> _loggerMock;
     private readonly ProjectEvents _projectEvents;
     private readonly ProjectExplorerViewModel.WatcherService _watcher;
+    private readonly GridGuard _guard;
+    private readonly string _tempRootDir;
     private readonly string _tempProjectDir;
     private Cp77Project? _currentProject;
     bool NoOp(string rawRelativePath) => false;
@@ -91,11 +93,27 @@ public class WatcherServiceTests : IDisposable
         _loggerMock = new Mock<ILoggerService>();
         _projectEvents = new ProjectEvents();
 
+        _guard = new GridGuard();
+        _watcher = new ProjectExplorerViewModel.WatcherService(NoOp, _loggerMock.Object, _projectEvents, _guard);
 
-        _watcher = new ProjectExplorerViewModel.WatcherService(NoOp, _loggerMock.Object, _projectEvents);
-
-        _tempProjectDir = Path.Combine(Path.GetTempPath(), "WatcherServiceTests_" + Guid.NewGuid().ToString("N"));
+        // Cp77Project derives ProjectDirectory as Path.GetDirectoryName(Location). If Location is a
+        // folder directly under %TEMP%, ProjectDirectory collapses to the shared %TEMP% root and
+        // every test's files land in the same %TEMP%\source\archive — accumulating across runs and
+        // never cleaned (Dispose only removed the empty Guid folder). Nest Location under a unique
+        // root so ProjectDirectory is per-test, and delete that root in Dispose to actually clear it.
+        _tempRootDir = Path.Combine(Path.GetTempPath(), "WatcherServiceTests_" + Guid.NewGuid().ToString("N"));
+        _tempProjectDir = Path.Combine(_tempRootDir, "project");
         Directory.CreateDirectory(_tempProjectDir);
+
+        // In production a project always has archive/raw/resources on disk, so the watcher finds
+        // those root models at load. Materialize them here (the getters create the folders) so tests
+        // that add files only AFTER StartWatcher don't hit "needed directory not found". Previously
+        // these tests only passed because they all shared %TEMP%\source\archive, which had been
+        // created by earlier runs. All test projects resolve to this same FileDirectory (<root>\source).
+        var scaffold = new Cp77Project(_tempProjectDir, "Scaffold", "Scaffold");
+        _ = scaffold.ModDirectory;
+        _ = scaffold.RawDirectory;
+        _ = scaffold.ResourcesDirectory;
     }
 
     [Fact]
@@ -282,6 +300,11 @@ public class WatcherServiceTests : IDisposable
         var project = new Cp77Project(_tempProjectDir, "LogTestMod", "LogTestMod");
         _watcher.StartWatcher_AndLoadProject(project);
 
+        // Suspend before dropping files on disk: the bypass path is defined as "disable FS monitoring,
+        // then publish" (see IProjectEvents). Otherwise the live watcher also ingests the new files and
+        // races/double-counts against the explicit publish, making the count non-deterministic.
+        _watcher.Suspend();
+
         // Create a reasonably large batch (250 files → multiple chunks + summary)
         const int fileCount = 250;
         var fakeFiles = Enumerable.Range(0, fileCount)
@@ -317,6 +340,10 @@ public class WatcherServiceTests : IDisposable
         // Arrange
         var project = new Cp77Project(_tempProjectDir, "CancelLogTest", "CancelLogTest");
         _watcher.StartWatcher_AndLoadProject(project);
+
+        // Suspend before dropping files on disk (bypass protocol: disable FS monitoring, then publish),
+        // so the models come from the explicit publish rather than a race with the live watcher.
+        _watcher.Suspend();
 
         // Large enough batch that full logging would take noticeable time
         const int fileCount = 600;
@@ -547,11 +574,13 @@ public class WatcherServiceTests : IDisposable
             if (!File.Exists(dest)) File.WriteAllText(dest, "dummy");
         }
 
-        // Mix real game files + mock raw files
+        // Mix real game files + mock raw files. These must live under the project's RawDirectory
+        // (FileDirectory\raw) — where the watcher computes their relative path — not under an
+        // arbitrary folder, otherwise the model gets a bogus path and UpdateFileInfo throws.
         var mockRawFiles = new[]
         {
-            new FileInfo(Path.Combine(_tempProjectDir, "raw", "test", "extra1.json")),
-            new FileInfo(Path.Combine(_tempProjectDir, "raw", "test", "extra2.json"))
+            new FileInfo(Path.Combine(project.RawDirectory, "test", "extra1.json")),
+            new FileInfo(Path.Combine(project.RawDirectory, "test", "extra2.json"))
         };
         foreach (var rf in mockRawFiles)
         {
@@ -680,7 +709,8 @@ public class WatcherServiceTests : IDisposable
     public void OnFilesImported_WithNullLogger_DoesNotThrow()
     {
         var events = new ProjectEvents();
-        var watcherWithNullLogger = new ProjectExplorerViewModel.WatcherService(NoOp, null, events);
+        using var guard = new GridGuard();
+        var watcherWithNullLogger = new ProjectExplorerViewModel.WatcherService(NoOp, null, events, guard);
 
         var project = new Cp77Project(_tempProjectDir, "NullLoggerTest", "NullLoggerTest");
         watcherWithNullLogger.StartWatcher_AndLoadProject(project);
@@ -709,11 +739,401 @@ public class WatcherServiceTests : IDisposable
         watcherWithNullLogger.UnwatchProject();
     }
 
+    // ============================================================
+    // FilesMoved apply path (post-hoc, authoritative move reconciliation)
+    // ============================================================
+
+    /// <summary>
+    /// Regression for the "declined overwrite desyncs the tree" bug. When a move only partially
+    /// happens (the user says "no" to overwriting some files), MoveAndRefactorAsync publishes ONLY
+    /// the files that actually moved. The tree must end up reflecting exactly that: the moved file
+    /// relocated, and the file the user declined to move left untouched.
+    /// </summary>
+    [Fact]
+    public async Task PublishFilesMoved_PartialSet_RelocatesMovedFile_AndKeepsDeclinedFile()
+    {
+        _currentProject = new Cp77Project(_tempProjectDir, "MoveTestMod", "MoveTestMod");
+        var archiveRoot = Path.Combine(_currentProject.FileDirectory, "archive");
+
+        // Seed two files on disk BEFORE loading so BuildFullFileStructure indexes them.
+        var movedSrc = Path.Combine(archiveRoot, "src", "moved.mesh");
+        var declinedSrc = Path.Combine(archiveRoot, "src", "declined.mesh");
+        Directory.CreateDirectory(Path.GetDirectoryName(movedSrc)!);
+        File.WriteAllText(movedSrc, "moved");
+        File.WriteAllText(declinedSrc, "declined");
+
+        _watcher.StartWatcher_AndLoadProject(_currentProject);
+        await WaitForConditionAsync(
+            () => _watcher.FileLookup.ContainsKey(movedSrc) && _watcher.FileLookup.ContainsKey(declinedSrc),
+            TimeSpan.FromSeconds(5));
+
+        // Reproduce the on-disk result of a move where the user DECLINED overwriting 'declined':
+        // only 'moved' actually relocated to archive\dst; 'declined' stays exactly where it was.
+        var movedDest = Path.Combine(archiveRoot, "dst", "moved.mesh");
+        Directory.CreateDirectory(Path.GetDirectoryName(movedDest)!);
+        File.Move(movedSrc, movedDest);
+
+        // Publish only what actually happened.
+        _projectEvents.PublishFilesMoved(new FilesMovedMessage(new[] { (movedSrc, movedDest) }));
+
+        await WaitForConditionAsync(
+            () => _watcher.FileLookup.ContainsKey(movedDest) && !_watcher.FileLookup.ContainsKey(movedSrc),
+            TimeSpan.FromSeconds(5));
+
+        Assert.True(_watcher.FileLookup.ContainsKey(movedDest), "moved file should now be at the destination");
+        Assert.False(_watcher.FileLookup.ContainsKey(movedSrc), "moved file should no longer be at the source");
+        Assert.True(_watcher.FileLookup.ContainsKey(declinedSrc),
+            "the declined file must remain in the tree — declining an overwrite must not desync it");
+    }
+
+    /// <summary>
+    /// Moving a whole directory publishes a flat set of the files that relocated. The apply must add
+    /// them at the destination and prune the emptied source directory models (which the move deleted
+    /// off disk), rather than leaving orphaned empty folders in the tree.
+    /// </summary>
+    [Fact]
+    public async Task PublishFilesMoved_WholeDirectory_PrunesEmptiedSourceFolders()
+    {
+        _currentProject = new Cp77Project(_tempProjectDir, "MoveDirMod", "MoveDirMod");
+        var archiveRoot = Path.Combine(_currentProject.FileDirectory, "archive");
+
+        var f1Src = Path.Combine(archiveRoot, "grp", "f1.mesh");
+        var f2Src = Path.Combine(archiveRoot, "grp", "sub", "f2.mesh");
+        Directory.CreateDirectory(Path.GetDirectoryName(f2Src)!);
+        File.WriteAllText(f1Src, "f1");
+        File.WriteAllText(f2Src, "f2");
+
+        _watcher.StartWatcher_AndLoadProject(_currentProject);
+
+        var grpDir = Path.Combine(archiveRoot, "grp");
+        var subDir = Path.Combine(archiveRoot, "grp", "sub");
+        await WaitForConditionAsync(
+            () => _watcher.FileLookup.ContainsKey(f1Src) && _watcher.FileLookup.ContainsKey(f2Src),
+            TimeSpan.FromSeconds(5));
+        Assert.True(_watcher.FileLookup.ContainsKey(grpDir));
+        Assert.True(_watcher.FileLookup.ContainsKey(subDir));
+
+        // Move the whole 'grp' directory to 'dst\grp' on disk, then delete the emptied source
+        // (mirrors MoveAndRefactorAsync + DeleteEmptyDirectoriesRecursive).
+        var f1Dest = Path.Combine(archiveRoot, "dst", "grp", "f1.mesh");
+        var f2Dest = Path.Combine(archiveRoot, "dst", "grp", "sub", "f2.mesh");
+        Directory.CreateDirectory(Path.GetDirectoryName(f2Dest)!);
+        File.Move(f1Src, f1Dest);
+        File.Move(f2Src, f2Dest);
+        Directory.Delete(grpDir, true);
+
+        _projectEvents.PublishFilesMoved(new FilesMovedMessage(new[] { (f1Src, f1Dest), (f2Src, f2Dest) }));
+
+        await WaitForConditionAsync(
+            () => _watcher.FileLookup.ContainsKey(f1Dest)
+                  && _watcher.FileLookup.ContainsKey(f2Dest)
+                  && !_watcher.FileLookup.ContainsKey(f1Src),
+            TimeSpan.FromSeconds(5));
+
+        Assert.True(_watcher.FileLookup.ContainsKey(f1Dest), "moved file present at destination");
+        Assert.True(_watcher.FileLookup.ContainsKey(f2Dest), "nested moved file present at destination");
+        Assert.False(_watcher.FileLookup.ContainsKey(f1Src), "old file path gone");
+        Assert.False(_watcher.FileLookup.ContainsKey(f2Src), "old nested file path gone");
+        Assert.False(_watcher.FileLookup.ContainsKey(grpDir), "emptied source directory model should be pruned");
+        Assert.False(_watcher.FileLookup.ContainsKey(subDir), "emptied nested source directory model should be pruned");
+    }
+
+    /// <summary>
+    /// Re-applying the same move (e.g. a live OS watcher event races the published set) must be a
+    /// no-op rather than throwing or duplicating nodes.
+    /// </summary>
+    [Fact]
+    public async Task PublishFilesMoved_AppliedTwice_IsIdempotent()
+    {
+        _currentProject = new Cp77Project(_tempProjectDir, "MoveIdempotentMod", "MoveIdempotentMod");
+        var archiveRoot = Path.Combine(_currentProject.FileDirectory, "archive");
+
+        var src = Path.Combine(archiveRoot, "a", "file.mesh");
+        Directory.CreateDirectory(Path.GetDirectoryName(src)!);
+        File.WriteAllText(src, "x");
+
+        _watcher.StartWatcher_AndLoadProject(_currentProject);
+        await WaitForConditionAsync(() => _watcher.FileLookup.ContainsKey(src), TimeSpan.FromSeconds(5));
+
+        var dest = Path.Combine(archiveRoot, "b", "file.mesh");
+        Directory.CreateDirectory(Path.GetDirectoryName(dest)!);
+        File.Move(src, dest);
+
+        var msg = new FilesMovedMessage(new[] { (src, dest) });
+        _projectEvents.PublishFilesMoved(msg);
+        await WaitForConditionAsync(() => _watcher.FileLookup.ContainsKey(dest), TimeSpan.FromSeconds(5));
+
+        var ex = Record.Exception(() => _projectEvents.PublishFilesMoved(msg));
+        Assert.Null(ex);
+
+        var destCount = _watcher.FileList.Count(f => string.Equals(f.FullName, dest, StringComparison.OrdinalIgnoreCase));
+        Assert.Equal(1, destCount);
+    }
+
+    /// <summary>
+    /// Drag-and-drop COPY reconciliation is modelled as a move with an empty source. Such an entry
+    /// must add the destination model and remove nothing (mirrors NotifyDragDropReconciled additions).
+    /// </summary>
+    [Fact]
+    public async Task PublishFilesMoved_EmptyFrom_IsTreatedAsPureAddition()
+    {
+        _currentProject = new Cp77Project(_tempProjectDir, "MoveAddMod", "MoveAddMod");
+        var archiveRoot = Path.Combine(_currentProject.FileDirectory, "archive");
+
+        // A pre-existing file so the archive root is indexed at load and gives us a "must not be
+        // removed" witness.
+        var seed = Path.Combine(archiveRoot, "seed.mesh");
+        Directory.CreateDirectory(archiveRoot);
+        File.WriteAllText(seed, "seed");
+
+        _watcher.StartWatcher_AndLoadProject(_currentProject);
+        await WaitForConditionAsync(() => _watcher.FileLookup.ContainsKey(seed), TimeSpan.FromSeconds(5));
+
+        // Simulate a drag-COPY: a brand-new file appears at the destination, nothing is removed.
+        var copyTarget = Path.Combine(archiveRoot, "copies", "copied.mesh");
+        Directory.CreateDirectory(Path.GetDirectoryName(copyTarget)!);
+        File.WriteAllText(copyTarget, "copied");
+
+        _projectEvents.PublishFilesMoved(new FilesMovedMessage(new[] { (string.Empty, copyTarget) }));
+
+        await WaitForConditionAsync(() => _watcher.FileLookup.ContainsKey(copyTarget), TimeSpan.FromSeconds(5));
+
+        Assert.True(_watcher.FileLookup.ContainsKey(copyTarget), "empty-From entry should add the destination");
+        Assert.True(_watcher.FileLookup.ContainsKey(seed), "a pure addition must not remove anything");
+    }
+
+    /// <summary>
+    /// Repro for the reported bug: add a file, rename it, then rename it BACK to the original name.
+    /// The disk rename works but the tree (grid clones) must also reflect it, and the guard must not
+    /// be left in a bad state. Asserts both the domain lookup AND the GridGuard clone projection
+    /// (what the grids actually show).
+    /// </summary>
+    [Fact]
+    public async Task PublishFilesMoved_RenameThenRenameBackToOriginal_KeepsCloneTreeConsistent()
+    {
+        _currentProject = new Cp77Project(_tempProjectDir, "RenameBackMod", "RenameBackMod");
+        var archiveRoot = Path.Combine(_currentProject.FileDirectory, "archive");
+        var pathA = Path.Combine(archiveRoot, "foo", "A.mesh");
+        var pathB = Path.Combine(archiveRoot, "foo", "B.mesh");
+        Directory.CreateDirectory(Path.GetDirectoryName(pathA)!);
+        File.WriteAllText(pathA, "data");
+
+        _watcher.StartWatcher_AndLoadProject(_currentProject);
+        await WaitForConditionAsync(() => _watcher.FileLookup.ContainsKey(pathA), TimeSpan.FromSeconds(5));
+        Assert.True(_guard.HasNode(pathA), "clone for A should exist after load");
+
+        // Rename A -> B
+        File.Move(pathA, pathB);
+        _projectEvents.PublishFilesMoved(new FilesMovedMessage(new[] { (pathA, pathB) }));
+        await WaitForConditionAsync(
+            () => _watcher.FileLookup.ContainsKey(pathB) && !_watcher.FileLookup.ContainsKey(pathA),
+            TimeSpan.FromSeconds(5));
+        Assert.True(_guard.HasNode(pathB), "clone for B should exist after first rename");
+        Assert.False(_guard.HasNode(pathA), "clone for A should be gone after first rename");
+
+        // Rename B -> A (back to the original name)
+        File.Move(pathB, pathA);
+        _projectEvents.PublishFilesMoved(new FilesMovedMessage(new[] { (pathB, pathA) }));
+        await WaitForConditionAsync(
+            () => _watcher.FileLookup.ContainsKey(pathA) && !_watcher.FileLookup.ContainsKey(pathB),
+            TimeSpan.FromSeconds(5));
+
+        Assert.True(_watcher.FileLookup.ContainsKey(pathA), "domain lookup: A should exist after rename-back");
+        Assert.True(_guard.HasNode(pathA), "CLONE for A should exist after rename-back (tree must reflect it)");
+        Assert.False(_guard.HasNode(pathB), "clone for B should be gone after rename-back");
+        Assert.Contains(_guard.FileList, m => string.Equals(m.FullName, pathA, StringComparison.OrdinalIgnoreCase));
+    }
+
+    /// <summary>
+    /// A same-folder file rename must be projected as an in-place rename, preserving the clone
+    /// object's identity. That identity is what keeps the grid's selection alive (and therefore
+    /// "Rename" enabled). A remove+add would mint a new node and drop the selection.
+    /// </summary>
+    [Fact]
+    public async Task PublishFilesMoved_SameFolderFileRename_PreservesCloneIdentity()
+    {
+        _currentProject = new Cp77Project(_tempProjectDir, "RenameIdentityMod", "RenameIdentityMod");
+        var archiveRoot = Path.Combine(_currentProject.FileDirectory, "archive");
+        var pathA = Path.Combine(archiveRoot, "foo", "A.mesh");
+        var pathB = Path.Combine(archiveRoot, "foo", "B.mesh");
+        Directory.CreateDirectory(Path.GetDirectoryName(pathA)!);
+        File.WriteAllText(pathA, "data");
+
+        _watcher.StartWatcher_AndLoadProject(_currentProject);
+        await WaitForConditionAsync(() => _guard.HasNode(pathA), TimeSpan.FromSeconds(5));
+
+        var cloneBefore = _guard.FileList.First(m => string.Equals(m.FullName, pathA, StringComparison.OrdinalIgnoreCase));
+
+        File.Move(pathA, pathB);
+        _projectEvents.PublishFilesMoved(new FilesMovedMessage(new[] { (pathA, pathB) }));
+        await WaitForConditionAsync(() => _guard.HasNode(pathB) && !_guard.HasNode(pathA), TimeSpan.FromSeconds(5));
+
+        var cloneAfter = _guard.FileList.First(m => string.Equals(m.FullName, pathB, StringComparison.OrdinalIgnoreCase));
+
+        Assert.Same(cloneBefore, cloneAfter);
+        Assert.Equal("B.mesh", cloneAfter.Name);
+        Assert.False(_guard.HasNode(pathA));
+    }
+
+    /// <summary>
+    /// Repro for "rename a file, then rename it again". Both renames must land and the node identity
+    /// must survive both, so the grid keeps its selection and stays renameable.
+    /// </summary>
+    [Fact]
+    public async Task PublishFilesMoved_RenameFileTwice_KeepsTreeConsistentAndIdentityStable()
+    {
+        _currentProject = new Cp77Project(_tempProjectDir, "RenameTwiceMod", "RenameTwiceMod");
+        var archiveRoot = Path.Combine(_currentProject.FileDirectory, "archive");
+        var pathA = Path.Combine(archiveRoot, "foo", "A.mesh");
+        var pathB = Path.Combine(archiveRoot, "foo", "B.mesh");
+        var pathC = Path.Combine(archiveRoot, "foo", "C.mesh");
+        Directory.CreateDirectory(Path.GetDirectoryName(pathA)!);
+        File.WriteAllText(pathA, "data");
+
+        _watcher.StartWatcher_AndLoadProject(_currentProject);
+        await WaitForConditionAsync(() => _guard.HasNode(pathA), TimeSpan.FromSeconds(5));
+        var original = _guard.FileList.First(m => string.Equals(m.FullName, pathA, StringComparison.OrdinalIgnoreCase));
+
+        File.Move(pathA, pathB);
+        _projectEvents.PublishFilesMoved(new FilesMovedMessage(new[] { (pathA, pathB) }));
+        await WaitForConditionAsync(() => _guard.HasNode(pathB), TimeSpan.FromSeconds(5));
+
+        File.Move(pathB, pathC);
+        _projectEvents.PublishFilesMoved(new FilesMovedMessage(new[] { (pathB, pathC) }));
+        await WaitForConditionAsync(() => _guard.HasNode(pathC) && !_guard.HasNode(pathB), TimeSpan.FromSeconds(5));
+
+        Assert.True(_guard.HasNode(pathC), "clone for C should exist after the second rename");
+        Assert.False(_guard.HasNode(pathA));
+        Assert.False(_guard.HasNode(pathB));
+        var final = _guard.FileList.First(m => string.Equals(m.FullName, pathC, StringComparison.OrdinalIgnoreCase));
+        Assert.Same(original, final);
+    }
+
+    /// <summary>
+    /// Deleting a path the tree never knew must be a no-op: no throw, and unrelated nodes survive.
+    /// </summary>
+    [Fact]
+    public async Task PublishDeleted_UnknownPath_IsNoOpAndLeavesOthersIntact()
+    {
+        _currentProject = new Cp77Project(_tempProjectDir, "DeleteNoopMod", "DeleteNoopMod");
+        var archiveRoot = Path.Combine(_currentProject.FileDirectory, "archive");
+        var keep = Path.Combine(archiveRoot, "keep.mesh");
+        Directory.CreateDirectory(archiveRoot);
+        File.WriteAllText(keep, "x");
+
+        _watcher.StartWatcher_AndLoadProject(_currentProject);
+        await WaitForConditionAsync(() => _guard.HasNode(keep), TimeSpan.FromSeconds(5));
+
+        var ex = Record.Exception(() =>
+        {
+            _projectEvents.PublishFileDeleted(Path.Combine(archiveRoot, "never", "existed.mesh"));
+            _projectEvents.PublishDirectoryDeleted(Path.Combine(archiveRoot, "not-a-real-dir"));
+            _projectEvents.PublishFileDeleted(string.Empty);
+        });
+        Assert.Null(ex);
+
+        await Task.Delay(50); // let any dispatched apply run
+        Assert.True(_guard.HasNode(keep), "an unrelated node must survive a no-op deletion");
+        Assert.True(_watcher.FileLookup.ContainsKey(keep));
+    }
+
+    /// <summary>
+    /// The overwrite call site deletes a stale destination and then a move drops a fresh node into the
+    /// same path. The deletion must clear the lookup so the re-add materializes a NEW node instead of
+    /// finding the stale key and skipping it.
+    /// </summary>
+    [Fact]
+    public async Task PublishDirectoryDeleted_ThenReAddedAtSamePath_MaterializesFreshNode()
+    {
+        _currentProject = new Cp77Project(_tempProjectDir, "DeleteReaddMod", "DeleteReaddMod");
+        var archiveRoot = Path.Combine(_currentProject.FileDirectory, "archive");
+        var destDir = Path.Combine(archiveRoot, "dest");
+        var file = Path.Combine(destDir, "a.mesh");
+        Directory.CreateDirectory(destDir);
+        File.WriteAllText(file, "old");
+
+        _watcher.StartWatcher_AndLoadProject(_currentProject);
+        await WaitForConditionAsync(() => _guard.HasNode(destDir) && _guard.HasNode(file), TimeSpan.FromSeconds(5));
+
+        // Delete the stale destination (as the overwrite branch does).
+        Directory.Delete(destDir, true);
+        _projectEvents.PublishDirectoryDeleted(destDir);
+        await WaitForConditionAsync(
+            () => !_watcher.FileLookup.ContainsKey(destDir) && !_watcher.FileLookup.ContainsKey(file),
+            TimeSpan.FromSeconds(5));
+
+        // A move now drops a fresh file into the same path (modelled as a pure add).
+        Directory.CreateDirectory(destDir);
+        File.WriteAllText(file, "new");
+        _projectEvents.PublishFilesMoved(new FilesMovedMessage(new[] { (string.Empty, file) }));
+        await WaitForConditionAsync(() => _guard.HasNode(file), TimeSpan.FromSeconds(5));
+
+        Assert.True(_guard.HasNode(file), "re-added file must appear after its destination was deleted");
+        Assert.True(_guard.HasNode(destDir), "the destination directory node must be re-materialized too");
+    }
+
+    /// <summary>
+    /// PublishFileDeleted / PublishDirectoryDeleted must drop the matching node from the tree — and a
+    /// directory deletion must drop its whole subtree (domain lookup + grid clones).
+    /// </summary>
+    [Fact]
+    public async Task PublishDeleted_RemovesFileAndDirectorySubtree()
+    {
+        _currentProject = new Cp77Project(_tempProjectDir, "DeleteMod", "DeleteMod");
+        var archiveRoot = Path.Combine(_currentProject.FileDirectory, "archive");
+        var file = Path.Combine(archiveRoot, "loose.mesh");
+        var dir = Path.Combine(archiveRoot, "grp");
+        var subDir = Path.Combine(dir, "sub");
+        var nested = Path.Combine(subDir, "inner.mesh");
+        Directory.CreateDirectory(subDir);
+        File.WriteAllText(file, "x");
+        File.WriteAllText(nested, "y");
+
+        _watcher.StartWatcher_AndLoadProject(_currentProject);
+        await WaitForConditionAsync(
+            () => _watcher.FileLookup.ContainsKey(file)
+                  && _watcher.FileLookup.ContainsKey(dir)
+                  && _watcher.FileLookup.ContainsKey(nested),
+            TimeSpan.FromSeconds(5));
+
+        // Single file deletion.
+        File.Delete(file);
+        _projectEvents.PublishFileDeleted(file);
+        await WaitForConditionAsync(() => !_watcher.FileLookup.ContainsKey(file), TimeSpan.FromSeconds(5));
+        Assert.False(_guard.HasNode(file), "deleted file's clone should be gone");
+
+        // Recursive directory deletion.
+        Directory.Delete(dir, true);
+        _projectEvents.PublishDirectoryDeleted(dir);
+        await WaitForConditionAsync(
+            () => !_watcher.FileLookup.ContainsKey(dir) && !_watcher.FileLookup.ContainsKey(nested),
+            TimeSpan.FromSeconds(5));
+
+        Assert.False(_guard.HasNode(dir), "deleted directory's clone should be gone");
+        Assert.False(_guard.HasNode(subDir), "intermediate directory's clone should be gone");
+        Assert.False(_guard.HasNode(nested), "nested descendant's clone should be gone too");
+    }
+
+    private static async Task WaitForConditionAsync(Func<bool> condition, TimeSpan timeout)
+    {
+        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+        while (!condition())
+        {
+            if (stopwatch.Elapsed > timeout)
+            {
+                throw new TimeoutException("Condition was not met within the timeout.");
+            }
+
+            await Task.Delay(20);
+        }
+    }
+
     public void Dispose()
     {
         try
         {
             _watcher.UnwatchProject();
+            _guard?.Dispose();
         }
         catch (Exception e)
         {
@@ -724,8 +1144,10 @@ public class WatcherServiceTests : IDisposable
 
         try
         {
-            if (Directory.Exists(_tempProjectDir))
-                Directory.Delete(_tempProjectDir, recursive: true);
+            // Delete the whole unique root (which contains the project + its source/archive tree),
+            // not just the empty project folder, so this test's files are actually cleared.
+            if (Directory.Exists(_tempRootDir))
+                Directory.Delete(_tempRootDir, recursive: true);
         }
         catch (Exception e)
         {
