@@ -58,10 +58,8 @@ public static class DispatcherHelper
             .ContinueWith(_ => RunOnMainThread(action), TaskScheduler.Default);
     }
 
-    public static void WaitUntilCancelled(CancellationToken token, TimeSpan? timeout, Action onCancelled)
+    public static void WaitUntilCancelled(CancellationToken token, Action onCancelled)
     {
-        var startTime = DateTime.Now;
-
         if (token.IsCancellationRequested)
         {
             onCancelled?.Invoke();
@@ -79,12 +77,6 @@ public static class DispatcherHelper
             }
             else
             {
-                if (timeout != null && DateTime.Now - startTime > timeout)
-                {
-                    onCancelled?.Invoke();
-                    return;
-                }
-
                 // Re-queue itself with low priority so other UI work can run
                 dispatcher.BeginInvoke(CheckCancellation, DispatcherPriority.Background);
             }
