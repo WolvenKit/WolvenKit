@@ -651,31 +651,27 @@ public partial class RedGraph : IDisposable
             return;
         }
 
-        var jsonData = JObject.Parse(File.ReadAllText(statePath));
-        var commentsArray = jsonData.SelectTokens("Comments.[*]");
-        foreach (var commentToken in commentsArray)
+        var state = JsonConvert.DeserializeObject<GraphCommentState>(File.ReadAllText(statePath));
+        if (state == null)
         {
-            var id = commentToken.SelectToken("Id")?.ToObject<string>();
-            var text = commentToken.SelectToken("Text")?.ToObject<string>();
-            var x = commentToken.SelectToken("X")?.ToObject<double>();
-            var y = commentToken.SelectToken("Y")?.ToObject<double>();
-            var width = commentToken.SelectToken("Width")?.ToObject<double>();
-            var height = commentToken.SelectToken("Height")?.ToObject<double>();
-            var accentColor = commentToken.SelectToken("AccentColor")?.ToObject<string>();
+            return;
+        }
 
-            if (x is null || y is null || width is null || height is null)
+        foreach (var comment in state.Comments ?? [])
+        {
+            if (comment.X is null || comment.Y is null || comment.Width is null || comment.Height is null)
             {
                 continue;
             }
 
             AddComment(new GraphCommentViewModel
             {
-                Id = string.IsNullOrWhiteSpace(id) ? Guid.NewGuid().ToString("N") : id,
-                Text = string.IsNullOrWhiteSpace(text) ? "Comment" : text,
-                AccentColor = string.IsNullOrWhiteSpace(accentColor) ? GraphCommentViewModel.DefaultAccentColor : accentColor,
-                Location = new System.Windows.Point(x.Value, y.Value),
-                Width = width.Value,
-                Height = height.Value
+                Id = string.IsNullOrWhiteSpace(comment.Id) ? Guid.NewGuid().ToString("N") : comment.Id,
+                Text = string.IsNullOrWhiteSpace(comment.Text) ? "Comment" : comment.Text,
+                AccentColor = string.IsNullOrWhiteSpace(comment.AccentColor) ? GraphCommentViewModel.DefaultAccentColor : comment.AccentColor,
+                Location = new System.Windows.Point(comment.X.Value, comment.Y.Value),
+                Width = comment.Width.Value,
+                Height = comment.Height.Value
             });
         }
     }
@@ -705,26 +701,21 @@ public partial class RedGraph : IDisposable
 
         EnsureGraphEditorStateFolder(statePath);
 
-        var jComments = new JArray();
-        foreach (var comment in Comments)
+        var state = new GraphCommentState
         {
-            jComments.Add(new JObject(
-                new JProperty("Id", comment.Id),
-                new JProperty("Text", comment.Text),
-                new JProperty("AccentColor", comment.AccentColor),
-                new JProperty("X", comment.Location.X),
-                new JProperty("Y", comment.Location.Y),
-                new JProperty("Width", comment.Width),
-                new JProperty("Height", comment.Height)
-            ));
-        }
-
-        var jRoot = new JObject
-        {
-            new JProperty("Comments", jComments)
+            Comments = Comments.Select(comment => new GraphCommentStateEntry
+            {
+                Id = comment.Id,
+                Text = comment.Text,
+                AccentColor = comment.AccentColor,
+                X = comment.Location.X,
+                Y = comment.Location.Y,
+                Width = comment.Width,
+                Height = comment.Height
+            }).ToList()
         };
 
-        File.WriteAllText(statePath, JsonConvert.SerializeObject(jRoot));
+        File.WriteAllText(statePath, JsonConvert.SerializeObject(state));
     }
 
     private string? GetGraphEditorStatePath(string extension)
