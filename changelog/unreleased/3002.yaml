@@ -1,0 +1,11 @@
+changes:
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3002
+      author: "misterchedda"
+      description: "Improved quest phase graph loading performance by avoiding eager loading of external phase resources"
+    - type: "changed"
+      packages: ["App"]
+      pr-number: 3002
+      author: "misterchedda"
+      description: "Improved quest and scene graph document closing performance"
