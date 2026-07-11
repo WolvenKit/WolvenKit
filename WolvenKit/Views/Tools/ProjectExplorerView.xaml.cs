@@ -433,6 +433,47 @@ namespace WolvenKit.Views.Tools
                     });
                 });
             }
+
+            // DeferRefresh has ended. Syncfusion's virtualized TreeGridPanel would otherwise present the
+            // refreshed rows painted OVER the stale ones for a few frames (the "drawn twice" ghost) before
+            // settling. Re-measure the panels and force the layout pass to complete NOW — synchronously, in
+            // this same dispatcher operation, before WPF presents the next frame — so the very FIRST frame
+            // after the refresh is already correct. (Doing this via a Background dispatch a tick later is
+            // what left the ghost briefly visible.) UpdateLayout re-measures only the virtualized/visible
+            // rows, so it's cheap, and it does not pump the dispatcher — no deferred-refresh deadlock risk.
+            InvalidateVirtualizedRows(TreeGrid);
+            InvalidateVirtualizedRows(TreeGridFlat);
+            TreeGrid.UpdateLayout();
+            TreeGridFlat.UpdateLayout();
+        }
+
+        /// <summary>
+        /// Forces a Syncfusion SfTreeGrid to re-measure its virtualized rows, clearing the "rows drawn
+        /// over each other" artifact that appears when the bound data changes while the grid is scrolled.
+        /// Safe no-op if the panel isn't in the visual tree yet.
+        /// </summary>
+        private static void InvalidateVirtualizedRows(DependencyObject grid) =>
+            FindVisualDescendant<TreeGridPanel>(grid)?.InvalidateMeasureInfo();
+
+        private static T FindVisualDescendant<T>(DependencyObject root) where T : DependencyObject
+        {
+            var count = System.Windows.Media.VisualTreeHelper.GetChildrenCount(root);
+            for (var i = 0; i < count; i++)
+            {
+                var child = System.Windows.Media.VisualTreeHelper.GetChild(root, i);
+                if (child is T match)
+                {
+                    return match;
+                }
+
+                var nested = FindVisualDescendant<T>(child);
+                if (nested != null)
+                {
+                    return nested;
+                }
+            }
+
+            return default;
         }
 
         private void OnToggleFlatMode(object sender, EventArgs e)
