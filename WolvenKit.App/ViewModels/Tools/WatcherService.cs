@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading;
@@ -76,6 +77,11 @@ public partial class ProjectExplorerViewModel
 
         private readonly CompositeDisposable _disposables = new();
 
+        // Delivers IProjectEvents onto the UI thread, but runs INLINE when the publisher is already on
+        // it (unlike RxApp.MainThreadScheduler, which always re-posts). That makes a UI-thread publish +
+        // deferred-refresh release deterministic — the GridGuard is updated before the refresh runs.
+        private readonly IScheduler _projectEventScheduler;
+
         // The grids bind to the GridGuard's clone projection, not to these. These are the DOMAIN
         // models the watcher builds and the rest of the app mutates freely. After each domain
         // mutation the watcher calls _guard.Project*(...) so the shim updates the clones the grids
@@ -130,18 +136,24 @@ public partial class ProjectExplorerViewModel
             _modsWatcher.Deleted += OnChanged;
             _modsWatcher.Renamed += OnRenamed;
 
+            // Capture the UI dispatcher now (this ctor runs on the UI thread). Prefer the application's
+            // dispatcher when available and fall back to the current thread's so this also works in
+            // headless/STA test hosts where Application.Current may be null.
+            var uiDispatcher = System.Windows.Application.Current?.Dispatcher ?? Dispatcher.CurrentDispatcher;
+            _projectEventScheduler = new MainThreadInlineScheduler(RxApp.MainThreadScheduler, uiDispatcher);
+
             projectEvents.FilesImported
-                .ObserveOn(RxApp.MainThreadScheduler)
+                .ObserveOn(_projectEventScheduler)
                 .Subscribe(OnFilesImported)
                 .DisposeWith(_disposables);
 
             projectEvents.FilesMoved
-                .ObserveOn(RxApp.MainThreadScheduler)
+                .ObserveOn(_projectEventScheduler)
                 .Subscribe(OnFilesMoved)
                 .DisposeWith(_disposables);
 
             projectEvents.FilesDeleted
-                .ObserveOn(RxApp.MainThreadScheduler)
+                .ObserveOn(_projectEventScheduler)
                 .Subscribe(OnFilesOrDirectoriesDeleted)
                 .DisposeWith(_disposables);
         }
@@ -892,6 +904,15 @@ public partial class ProjectExplorerViewModel
                     && _fileLookup.TryGetValue(from, out var renameModel)
                     && !renameModel.IsDirectory)
                 {
+                    // Overwrite case: if a different node already occupies the destination (the moved
+                    // file replaced an existing file on disk), drop that stale node first so the in-place
+                    // rename doesn't leave a duplicate. The remove+add branch below gets this for free via
+                    // EnsureModelForPath's idempotency; the in-place branch has to do it explicitly.
+                    if (_fileLookup.TryGetValue(to, out var overwritten) && !ReferenceEquals(overwritten, renameModel))
+                    {
+                        RemoveModel(overwritten);
+                    }
+
                     RenameModelInPlace(renameModel, from, to);
                     continue;
                 }
