@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using ReactiveUI;
 using Syncfusion.Windows.Controls.Input;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
 using WolvenKit.Views.Templates;
@@ -203,7 +204,31 @@ namespace WolvenKit.Views.Editors
 
             if (DataContext is ChunkViewModel { Data: CString var } cvm && ((var.ToString() ?? "") != SelectedOption))
             {
+                var refreshPropertyPanel = false;
+                if (cvm.Parent?.ResolvedData is gameJournalPath &&
+                    _documentTools.TryGetJournalPathMetadata(SelectedOption, out var fileEntryIndex,
+                        out var className))
+                {
+                    if (cvm.Parent.GetPropertyChild("className") is { } classNameCvm)
+                    {
+                        classNameCvm.Data = (CName)className;
+                    }
+
+                    if (cvm.Parent.GetPropertyChild("fileEntryIndex") is { } fileEntryIndexCvm)
+                    {
+                        fileEntryIndexCvm.Data = (CInt32)fileEntryIndex;
+                    }
+
+                    refreshPropertyPanel = true;
+                }
+
+                // Update this last so graph details refresh after all path metadata is consistent.
                 cvm.Data = (CString)SelectedOption;
+
+                if (refreshPropertyPanel)
+                {
+                    NodePropertyUpdateService.RequestPropertyPanelRefresh();
+                }
             }
         }
 

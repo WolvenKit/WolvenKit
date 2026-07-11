@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using WolvenKit.App.ViewModels.Documents;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Scene.Internal;
 using WolvenKit.App.ViewModels.Shell;
@@ -272,6 +273,16 @@ public partial class RedGraph
                 sceneQuestNode.OsockMappings.Add("False");
                 sceneQuestNode.OutputSockets.Add(new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = 0 } });
                 sceneQuestNode.OutputSockets.Add(new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = 1 } });
+                break;
+            case questUseWorkspotNodeDefinition useWorkspotNode:
+                sceneQuestNode.OsockMappings.Add("Success");
+                sceneQuestNode.OutputSockets.Add(new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = 0 } });
+
+                if (questUseWorkspotNodeDefinitionWrapper.RequiresWorkStartedSocket(useWorkspotNode))
+                {
+                    sceneQuestNode.OsockMappings.Add("Work Started");
+                    sceneQuestNode.OutputSockets.Add(new scnOutputSocket { Stamp = new scnOutputSocketStamp { Name = 0, Ordinal = 1 } });
+                }
                 break;
             default:
                 // Default case: single output socket

@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3001
+      author: "misterchedda"
+      description: "Populate className and fileEntryIndex automatically from journal's realPath dropdown"

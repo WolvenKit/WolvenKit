@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3004
+      author: "misterchedda"
+      description: "Recalculating sockets on questScene nodes now generates INT and RET socket pairs from scene interruption scenario names and preserves existing Prefetch sockets"
