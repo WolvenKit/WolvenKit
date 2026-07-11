@@ -346,10 +346,10 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
             File.Delete(destPath);
             _projectEvents.PublishFileDeleted(destPath);
             // NOTE: destPath sits directly under RawDirectory, so DeleteEmptyParents stops immediately
-            // (it never deletes a folder directly under the project root), i.e. nothing to publish here.
-            // If this ever moves deeper, DeleteEmptyParents' directory deletions would need publishing —
-            // it is a shared helper that mutates without notifying (flagged in the audit).
-            ProjectResourceTools.DeleteEmptyParents(destPath, ActiveProject);
+            // (it never deletes a folder directly under the project root), i.e. nothing to publish here in
+            // practice. We still forward _projectEvents so that if this path ever moves deeper, the emptied
+            // folders it removes are announced to the tree rather than left stale.
+            ProjectResourceTools.DeleteEmptyParents(destPath, ActiveProject, _projectEvents);
         }
         catch
         {

@@ -281,7 +281,7 @@ public partial class ProjectResourceTools
         }
         finally
         {
-            currentProject.DeleteEmptyFolders(_loggerService);
+            currentProject.DeleteEmptyFolders(_loggerService, _projectEvents);
             _semaphore.Release();
         }
     }
@@ -402,6 +402,12 @@ public partial class ProjectResourceTools
         }
 
         File.Move(sourceAbsolutePath, targetAbsoluteFile, true);
+
+        // AddToMod published the file at its extracted (source) path; it has now been relocated into the
+        // target folder. Announce the move so the tree drops the source node and shows the file at its
+        // final path. If we overwrote a pre-existing target, its node simply stays (the move re-adds it),
+        // and the To-path notification refreshes any open tab for it.
+        _projectEvents.PublishFilesMoved(new FilesMovedMessage([(sourceAbsolutePath, targetAbsoluteFile)]));
 
         // pop it into our map
         pathReplacements.TryAdd(sourceRelativePath, Path.Combine(targetRelativePath, fileName));
@@ -1058,7 +1064,8 @@ public partial class ProjectResourceTools
     /// </summary>
     /// <param name="absolutePath">Absolute path to file or folder</param>
     /// <param name="activeProject">Current Wolvenkit project (so we don't delete too many folders)</param>
-    public static void DeleteEmptyParents(string? absolutePath, Cp77Project activeProject)
+    /// <param name="projectEvents">Optional: when supplied, each deleted folder is announced to the project explorer.</param>
+    public static void DeleteEmptyParents(string? absolutePath, Cp77Project activeProject, IProjectEvents? projectEvents = null)
     {
         var absoluteFolderPath = absolutePath;
 
@@ -1088,7 +1095,8 @@ public partial class ProjectResourceTools
         }
 
         Directory.Delete(absoluteFolderPath);
-        DeleteEmptyParents(absoluteFolderPath, activeProject);
+        projectEvents?.PublishDirectoryDeleted(absoluteFolderPath);
+        DeleteEmptyParents(absoluteFolderPath, activeProject, projectEvents);
     }
 
     public void ScanModArchives(bool? executeScan = null, string? archiveName = null)
@@ -1434,6 +1442,7 @@ public partial class ProjectResourceTools
             try
             {
                 File.Delete(absolutePath);
+                _projectEvents.PublishFileDeleted(absolutePath);
             }
             catch
             {
@@ -1441,7 +1450,7 @@ public partial class ProjectResourceTools
             }
         }
 
-        activeProject.DeleteEmptyFolders(_loggerService);
+        activeProject.DeleteEmptyFolders(_loggerService, _projectEvents);
     }
 
     # region meshFiles

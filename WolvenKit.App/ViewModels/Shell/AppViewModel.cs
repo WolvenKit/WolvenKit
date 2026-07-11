@@ -1039,7 +1039,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     }
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
-    private void DeleteEmptyFolders() => _projectManager.ActiveProject?.DeleteEmptyFolders(_loggerService);
+    private void DeleteEmptyFolders() => _projectManager.ActiveProject?.DeleteEmptyFolders(_loggerService, _projectEvents);
 
     [RelayCommand(CanExecute = nameof(CanShowProjectActions))]
     private void DeleteEmptyMeshes()
