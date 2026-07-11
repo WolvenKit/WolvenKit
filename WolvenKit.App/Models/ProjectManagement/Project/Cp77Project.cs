@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Helpers;
+using WolvenKit.App.Services;
 using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
 using WolvenKit.Core.Extensions;
@@ -994,32 +995,38 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
     [GeneratedRegex(@"(((\w+\/)|(\w+\\\\?))+\w+\.\w+)")]
     private static partial Regex ResourceFilePathsRegex();
 
-    public void DeleteEmptyFolders(ILoggerService loggerService)
+    public void DeleteEmptyFolders(ILoggerService loggerService, IProjectEvents? projectEvents = null)
     {
-        var numEmptyFolders = DeleteEmptyFolders(ModDirectory);
-        if (numEmptyFolders > 0)
+        var deletedFolders = new List<string>();
+        DeleteEmptyFolders(ModDirectory, deletedFolders);
+        if (deletedFolders.Count > 0)
         {
-            loggerService.Success($"Deleted {numEmptyFolders} empty folders");
+            loggerService.Success($"Deleted {deletedFolders.Count} empty folders");
+
+            // Announce the removed folders so the project explorer prunes their nodes; without this the
+            // tree keeps showing folders that no longer exist on disk. Idempotent, so callers that also
+            // trigger a full reload (or pass null) are unaffected.
+            foreach (var folder in deletedFolders)
+            {
+                projectEvents?.PublishDirectoryDeleted(folder);
+            }
         }
     }
 
-    private static int DeleteEmptyFolders(string directory)
+    private static void DeleteEmptyFolders(string directory, List<string> deletedFolders)
     {
-        var numEmptyFolders = 0;
         foreach (var subdirectory in Directory.GetDirectories(directory))
         {
-            DeleteEmptyFolders(subdirectory);
+            DeleteEmptyFolders(subdirectory, deletedFolders);
 
             if (Directory.GetFiles(subdirectory).Length != 0 || Directory.GetDirectories(subdirectory).Length != 0)
             {
                 continue;
             }
 
-            numEmptyFolders += 1;
             Directory.Delete(subdirectory);
+            deletedFolders.Add(subdirectory);
         }
-
-        return numEmptyFolders;
     }
 
     /// <summary>
