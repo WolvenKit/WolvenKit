@@ -83,7 +83,7 @@ public abstract class EditorDifficultyLevelInformation
         { typeof(inkTextureAtlas), ["activeTexture", "dynamicTexture", "dynamicTextureSlot", "texture"] },
         // .app file: appearance definition: parts override - ArchiveXL will handle this
         { typeof(appearanceAppearancePartOverrides), ["partResource"] },
-        { typeof(appearanceAppearanceDefinition), ["parametersBuffer"] },
+        { typeof(appearanceAppearanceDefinition), ["parametersBuffer", "partsMasks"] },
     };
 
     /// <summary>
