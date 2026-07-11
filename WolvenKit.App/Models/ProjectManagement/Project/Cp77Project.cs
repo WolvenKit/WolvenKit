@@ -574,10 +574,11 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         };
 
     /// <summary>
-    /// Gives you the game relative path for a particular filepath.
+    /// Resolves a path to its absolute form: an already-absolute path is returned unchanged; a relative
+    /// path is resolved under the appropriate source subdirectory.
     /// </summary>
     /// <param name="relativeOrAbsolutePath"></param>
-    /// <returns>GameRelativePath</returns>
+    /// <returns>The absolute path on disk.</returns>
     public string GetAbsolutePath(string relativeOrAbsolutePath)
     {
         if (Path.IsPathRooted(relativeOrAbsolutePath))

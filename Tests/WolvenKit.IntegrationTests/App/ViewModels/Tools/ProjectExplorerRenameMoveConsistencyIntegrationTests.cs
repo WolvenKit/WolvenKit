@@ -71,32 +71,36 @@ public class ProjectExplorerRenameMoveConsistencyIntegrationTests : IDisposable
         // Always confirm overwrite prompts (the final collision step relies on this).
         Interactions.ShowQuestionYesNo = _ => true;
 
+        // All paths below are GAME-relative (relative to the archive/raw/resources dir, i.e. NO leading
+        // "archive\" segment). The rename/move APIs (RenameAndRefactor, MoveAndRefactorAsync) expect
+        // game-relative paths; passing raw-relative ones would get double-prefixed into archive\archive\...
+
         // 1) Import a single file from the asset browser.
-        var rFoo = await ImportOneFileFromAssetBrowser();
+        var gameFoo = await ImportOneFileFromAssetBrowser();
         DumpTree("after import #1");
         AssertSingleFile("after first import");
 
-        var childDir = Path.GetDirectoryName(rFoo)!;   // ...\archive\base\animations\anim_motion_database
-        var parentDir = Path.GetDirectoryName(childDir)!; // ...\archive\base\animations
-        var ext = Path.GetExtension(rFoo);
-        var rA = Path.Combine(childDir, "wk_rename_a" + ext);
-        var rB = Path.Combine(childDir, "wk_rename_b" + ext);
-        var rParentB = Path.Combine(parentDir, "wk_rename_b" + ext);
+        var childDir = Path.GetDirectoryName(gameFoo)!;   // base\animations\anim_motion_database
+        var parentDir = Path.GetDirectoryName(childDir)!; // base\animations
+        var ext = Path.GetExtension(gameFoo);
+        var gameA = Path.Combine(childDir, "wk_rename_a" + ext);
+        var gameB = Path.Combine(childDir, "wk_rename_b" + ext);
+        var gameParentB = Path.Combine(parentDir, "wk_rename_b" + ext);
 
         // 2) rename foo -> A
-        await RenameVia(rFoo, rA);
+        await RenameVia(gameFoo, gameA);
         AssertSingleFile("after rename foo->A");
 
         // 3) rename A -> foo (back)
-        await RenameVia(rA, rFoo);
+        await RenameVia(gameA, gameFoo);
         AssertSingleFile("after rename A->foo");
 
         // 4) rename foo -> B
-        await RenameVia(rFoo, rB);
+        await RenameVia(gameFoo, gameB);
         AssertSingleFile("after rename foo->B");
 
         // 5) move B into the parent directory
-        await RenameVia(rB, rParentB);
+        await RenameVia(gameB, gameParentB);
         AssertSingleFile("after move B->parent");
 
         // 6) import the same file again -> a second file appears at the original child path
@@ -105,32 +109,40 @@ public class ProjectExplorerRenameMoveConsistencyIntegrationTests : IDisposable
         AssertFileCounts("after second import", 2);
 
         // 7) move the first file back into the child directory (now two distinct names live there)
-        await RenameVia(rParentB, rB);
+        await RenameVia(gameParentB, gameB);
         AssertFileCounts("after moving first back to child", 2);
 
         // 8) rename the newer file onto the first one's name -> overwrite collapses to one file
-        await RenameVia(rFoo, rB);
+        await RenameVia(gameFoo, gameB);
         DumpTree("after overwrite rename");
         AssertSingleFile("after final overwrite");
     }
 
     // ---------------- helpers ----------------
 
-    private async Task RenameVia(string fromRaw, string toRaw)
+    private async Task RenameVia(string fromGameRel, string toGameRel)
     {
-        var model = FindFileModel(fromRaw);
-        Assert.True(model is not null, $"No file node found for '{fromRaw}'. Tree:\n{TreeDump()}");
+        var model = FindFileModel(fromGameRel);
+        Assert.True(model is not null, $"No file node found for game-relative '{fromGameRel}'. Tree:\n{TreeDump()}");
 
         _pe!.SelectedItem = model;
-        Interactions.RenameAndRefactor = _ => new Tuple<string, bool>(toRaw, false);
+        // RenameAndRefactor receives/returns a GAME-relative path (see RenameFile); return the destination.
+        Interactions.RenameAndRefactor = _ => new Tuple<string, bool>(toGameRel, false);
 
         await _pe.RenameFileCommand.ExecuteAsync(null);
         PumpDispatcher();
     }
 
-    private FileSystemModel? FindFileModel(string rawRelativePath) =>
+    private FileSystemModel? FindFileModel(string gameRelativePath) =>
         _pe!.FileList.FirstOrDefault(m =>
-            !m.IsDirectory && string.Equals(m.RawRelativePath, rawRelativePath, StringComparison.OrdinalIgnoreCase));
+            !m.IsDirectory && string.Equals(ToGameRel(m.RawRelativePath), gameRelativePath, StringComparison.OrdinalIgnoreCase));
+
+    // Game-relative path = RawRelativePath ("archive\base\...\foo") minus its leading extension segment.
+    private static string ToGameRel(string rawRelativePath)
+    {
+        var sep = rawRelativePath.IndexOf(Path.DirectorySeparatorChar);
+        return sep >= 0 ? rawRelativePath[(sep + 1)..] : rawRelativePath;
+    }
 
     private int FilesInTree() => _pe!.FileList.Count(m => !m.IsDirectory);
 
@@ -160,7 +172,7 @@ public class ProjectExplorerRenameMoveConsistencyIntegrationTests : IDisposable
 
     /// <summary>
     /// Navigates the asset browser to a folder with real files and imports exactly one of them.
-    /// Returns the imported file's RawRelativePath.
+    /// Returns the imported file's GAME-relative path (no leading "archive\" segment).
     /// </summary>
     private async Task<string> ImportOneFileFromAssetBrowser()
     {
@@ -180,7 +192,7 @@ public class ProjectExplorerRenameMoveConsistencyIntegrationTests : IDisposable
             .Where(m => !m.IsDirectory && m.RawRelativePath.Contains("anim_motion_database"))
             .OrderByDescending(m => m.RawRelativePath.Length)
             .First();
-        return imported.RawRelativePath;
+        return ToGameRel(imported.RawRelativePath);
     }
 
     // ---------------- asset browser navigation (mirrors ProjectExplorerConvertToJson test) ----------------
