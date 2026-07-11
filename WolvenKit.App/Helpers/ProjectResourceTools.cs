@@ -488,9 +488,15 @@ public partial class ProjectResourceTools
         // the user is moving an empty directory
         if (files.Count == 0 && sourceIsDirectory)
         {
+            // This will fail if a file or directory already exists at the destination.
             Directory.Move(sourceFileOrDirAbsPath, destAbsPath);
 
-            if (Directory.Exists(destAbsPath) && !destAbsPath.Contains(s_tempDirSuffix))
+            var didMoveSucceed = Directory.Exists(destAbsPath) // a dir exists at the destination
+                                 && !destAbsPath.Contains(s_tempDirSuffix) // it's not the temp dir
+                                 && !Directory.Exists(sourceFileOrDirAbsPath); // and the source dir got deleted/moved
+
+            // Notify GridGuard that the move succeeded so the file grids can be updated.
+            if (didMoveSucceed)
             {
                 _projectEvents.PublishFilesMoved(
                     new FilesMovedMessage([(sourceFileOrDirAbsPath, destAbsPath)]));
@@ -498,6 +504,8 @@ public partial class ProjectResourceTools
 
             return;
         }
+
+        // Below we prepare to merge the files being moved with any files at the destination.
 
         files = files.Distinct().ToList();
 
