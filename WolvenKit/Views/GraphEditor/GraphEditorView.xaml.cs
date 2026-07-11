@@ -82,10 +82,13 @@ public partial class GraphEditorView : UserControl
         get => _selectedNode;
         set
         {
+            var previousNode = _selectedNode;
             if (SetField(ref _selectedNode, value))
             {
-                // Update the global selection service
-                NodeSelectionService.Instance.SelectedNode = value;
+                if (value is not null || ReferenceEquals(NodeSelectionService.Instance.SelectedNode, previousNode))
+                {
+                    NodeSelectionService.Instance.SelectedNode = value;
+                }
             }
         }
     }
@@ -127,6 +130,22 @@ public partial class GraphEditorView : UserControl
         }
 
         Source.GraphStateSave();
+    }
+
+    internal void PrepareForClose()
+    {
+        var graph = Source;
+
+        SelectedNode = null;
+        SelectedNodes.Clear();
+
+        if (graph?.Editor == Editor)
+        {
+            graph.GraphStateSave();
+            graph.Editor = null;
+        }
+
+        SetCurrentValue(SourceProperty, null);
     }
 
     private void ArrangeNodes()
