@@ -868,7 +868,7 @@ namespace WolvenKit.Views.Tools
             if (!e.Data.GetDataPresent("Nodes") ||
                 e.Data.GetData("Nodes") is not ObservableCollection<TreeNode> treeNodes ||
                 treeNodes[0].Item is not FileSystemModel sourceFile ||
-                e.TargetNode.Item is not FileSystemModel targetFile)
+                e.TargetNode?.Item is not FileSystemModel targetFile)
             {
                 return;
             }
@@ -929,7 +929,9 @@ namespace WolvenKit.Views.Tools
                     return;
                 }
 
+                ViewModel.SuspendFileWatcher();
                 await ProcessFileAction(files, targetDirectory);
+                ViewModel.ResumeFileWatcher();
             }
             catch (Exception error)
             {
