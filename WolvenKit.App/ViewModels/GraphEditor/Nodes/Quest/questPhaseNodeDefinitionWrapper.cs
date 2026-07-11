@@ -144,13 +144,5 @@ public class questPhaseNodeDefinitionWrapper : questEmbeddedGraphNodeDefinitionW
     /// <summary>
     /// Get the node count from an inline phase graph without loading an external resource
     /// </summary>
-    private int GetInlinePhaseNodeCount()
-    {
-        if (_castedData.PhaseGraph?.Chunk != null)
-        {
-            return _castedData.PhaseGraph.Chunk.Nodes?.Count ?? 0;
-        }
-
-        return 0;
-    }
+    private int GetInlinePhaseNodeCount() => _castedData.PhaseGraph?.Chunk?.Nodes?.Count ?? 0;
 }

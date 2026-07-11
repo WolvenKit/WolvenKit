@@ -83,12 +83,14 @@ public partial class GraphEditorView : UserControl
         set
         {
             var previousNode = _selectedNode;
-            if (SetField(ref _selectedNode, value))
+            if (!SetField(ref _selectedNode, value))
             {
-                if (value is not null || ReferenceEquals(NodeSelectionService.Instance.SelectedNode, previousNode))
-                {
-                    NodeSelectionService.Instance.SelectedNode = value;
-                }
+                return;
+            }
+
+            if (value is not null || ReferenceEquals(NodeSelectionService.Instance.SelectedNode, previousNode))
+            {
+                NodeSelectionService.Instance.SelectedNode = value;
             }
         }
     }
