@@ -61,6 +61,8 @@ public class DocumentTools
     private readonly Dictionary<(string filePath, string filter), FilteredCacheEntry> _filteredResultsCache = new();
     private readonly SortedDictionary<int, HashSet<(string filePath, string filter)>> _frequencyMap = new();
     private readonly Dictionary<(string filePath, string filter), int> _keyFrequency = new();
+    private readonly Dictionary<string, JournalPathOption> _journalPathMetadataCache =
+        new(StringComparer.OrdinalIgnoreCase);
     private const int FilteredCacheLimit = 100;
     private const int FilteredCacheTTLMinutes = 30;
     private DateTime _lastCleanupTime = DateTime.UtcNow;
@@ -84,10 +86,10 @@ public class DocumentTools
     // Cache entry with metadata for LFU + TTL
     private class FilteredCacheEntry
     {
-        public List<string> Results { get; set; }
+        public List<JournalPathOption> Results { get; set; }
         public DateTime CachedAt { get; set; }
 
-        public FilteredCacheEntry(List<string> results)
+        public FilteredCacheEntry(List<JournalPathOption> results)
         {
             Results = results;
             CachedAt = DateTime.UtcNow;
@@ -185,6 +187,8 @@ public class DocumentTools
 
     #region journalFile
 
+    private sealed record JournalPathOption(string Path, int FileEntryIndex, string ClassName);
+
     public async Task<List<string>> GetAllJournalPathsAsync(bool forceCacheRefresh, string? filter = null,
         bool sortAndDistinct = true)
     {
@@ -195,6 +199,8 @@ public class DocumentTools
 
         if (forceCacheRefresh)
         {
+            _journalPathMetadataCache.Clear();
+
             foreach (var journalPath in journalPaths)
             {
                 _cr2wFileCache.Remove(journalPath);
@@ -231,16 +237,39 @@ public class DocumentTools
         });
 
         var results = await Task.WhenAll(tasks);
-        IEnumerable<string> allIds = results.SelectMany(ids => ids);
-        if (sortAndDistinct && (string.IsNullOrEmpty(filter) || sortAndDistinct))
+        IEnumerable<JournalPathOption> allIds = results.SelectMany(ids => ids);
+        if (sortAndDistinct)
         {
-            allIds = allIds.Distinct().OrderBy(x => x);
+            allIds = allIds.GroupBy(x => x.Path, StringComparer.OrdinalIgnoreCase)
+                .Select(x => x.First())
+                .OrderBy(x => x.Path);
         }
 
-        return allIds.ToList();
+        var journalPathOptions = allIds.ToList();
+        foreach (var option in journalPathOptions)
+        {
+            _journalPathMetadataCache[option.Path] = option;
+        }
+
+        return journalPathOptions.Select(x => x.Path).ToList();
     }
 
-    private async Task<List<string>> GetJournalIDsAsync(CR2WFile? cr2W, string absoluteFilePath, string? filter = null)
+    public bool TryGetJournalPathMetadata(string path, out int fileEntryIndex, out string className)
+    {
+        if (_journalPathMetadataCache.TryGetValue(path, out var option))
+        {
+            fileEntryIndex = option.FileEntryIndex;
+            className = option.ClassName;
+            return true;
+        }
+
+        fileEntryIndex = -1;
+        className = string.Empty;
+        return false;
+    }
+
+    private async Task<List<JournalPathOption>> GetJournalIDsAsync(CR2WFile? cr2W, string absoluteFilePath,
+        string? filter = null)
     {
         if (cr2W == null || string.IsNullOrEmpty(filter)) return [];
 
@@ -274,7 +303,7 @@ public class DocumentTools
         return entriesIDs;
     }
 
-    private async Task<List<string>> ProcessJournalEntries(CR2WFile? cr2W, string filter)
+    private static async Task<List<JournalPathOption>> ProcessJournalEntries(CR2WFile? cr2W, string filter)
     {
         if (cr2W?.RootChunk is not gameJournalResource journalResource ||
             journalResource.Entry.Chunk is not gameJournalContainerEntry journalEntry)
@@ -282,28 +311,27 @@ public class DocumentTools
             return [];
         }
 
-        var rootPath = journalResource.Entry.Chunk?.Id.ToString() ?? "";
-        var entriesIDs = new List<string>(50);
+        var entriesIDs = new List<JournalPathOption>(50);
 
-        await ProcessEntries(journalEntry.Entries, entriesIDs, rootPath, filter);
+        await ProcessEntries(journalEntry.Entries, entriesIDs, "", filter, 0, -1);
 
         return entriesIDs;
     }
 
-    private Task ProcessEntries(IList<CHandle<gameJournalEntry>> entries, List<string> results, string currentPath,
-        string filterStr)
+    private static Task ProcessEntries(IList<CHandle<gameJournalEntry>> entries, List<JournalPathOption> results,
+        string currentPath, string filterStr, int depth, int fileEntryIndex)
     {
         if (entries.Count == 0) return Task.CompletedTask;
 
         // Use parallel processing for larger entry sets
         if (entries.Count > 5)
         {
-            var bag = new System.Collections.Concurrent.ConcurrentBag<string>();
+            var bag = new System.Collections.Concurrent.ConcurrentBag<JournalPathOption>();
             System.Threading.Tasks.Parallel.ForEach(entries, entry =>
             {
                 if (entry.Chunk != null)
                 {
-                    ProcessEntry(entry, currentPath, filterStr, bag);
+                    ProcessEntry(entry, currentPath, filterStr, bag.Add, depth, fileEntryIndex);
                 }
             });
             results.AddRange(bag);
@@ -315,7 +343,7 @@ public class DocumentTools
             {
                 if (entry.Chunk != null)
                 {
-                    ProcessEntry(entry, currentPath, filterStr, results);
+                    ProcessEntry(entry, currentPath, filterStr, results.Add, depth, fileEntryIndex);
                 }
             }
         }
@@ -323,65 +351,53 @@ public class DocumentTools
         return Task.CompletedTask;
     }
 
-    private void ProcessEntry(CHandle<gameJournalEntry> entry, string currentPath, string filterStr, object results)
+    private static void ProcessEntry(CHandle<gameJournalEntry> entry, string currentPath, string filterStr,
+        Action<JournalPathOption> addResult, int depth, int fileEntryIndex)
     {
         var entryId = entry.Chunk!.Id.ToString();
         var entryPath = string.IsNullOrEmpty(currentPath) ? entryId : $"{currentPath}/{entryId}";
+        var currentFileEntryIndex = entry.Chunk is gameJournalFileEntry ? depth : fileEntryIndex;
 
-        // Check if this entry matches the filter
         if (ContainsFilter(entryPath, filterStr))
         {
-            // Handle both ICollection<string> and ConcurrentBag<string>
-            if (results is ICollection<string> collection)
-            {
-                collection.Add(entryPath);
-            }
-            else if (results is System.Collections.Concurrent.ConcurrentBag<string> bag)
-            {
-                bag.Add(entryPath);
-            }
+            addResult(new JournalPathOption(entryPath, currentFileEntryIndex, entry.Chunk.GetType().Name));
         }
 
-        // Always process children if it's a container entry
         if (entry.Chunk is gameJournalContainerEntry containerEntry)
         {
-            ProcessContainerChildren(containerEntry.Entries, entryPath, filterStr, results);
+            ProcessContainerChildren(containerEntry.Entries, entryPath, filterStr, addResult, depth + 1,
+                currentFileEntryIndex);
         }
     }
 
-    private void ProcessContainerChildren(IList<CHandle<gameJournalEntry>> entries, string parentPath, string filterStr,
-        object results)
+    private static void ProcessContainerChildren(IList<CHandle<gameJournalEntry>> entries, string parentPath,
+        string filterStr, Action<JournalPathOption> addResult, int depth, int fileEntryIndex)
     {
-        var stack = new Stack<(IList<CHandle<gameJournalEntry>>, string)>();
-        stack.Push((entries, parentPath));
+        var stack = new Stack<(IList<CHandle<gameJournalEntry>> Entries, string ParentPath, int Depth,
+            int FileEntryIndex)>();
+        stack.Push((entries, parentPath, depth, fileEntryIndex));
 
         while (stack.Count > 0)
         {
-            var (currentEntries, currentPath) = stack.Pop();
+            var (currentEntries, currentPath, currentDepth, currentFileEntryIndex) = stack.Pop();
             foreach (var entry in currentEntries)
             {
                 if (entry.Chunk == null) continue;
 
                 var entryId = entry.Chunk.Id.ToString();
                 var entryPath = $"{currentPath}/{entryId}";
+                var entryFileEntryIndex = entry.Chunk is gameJournalFileEntry
+                    ? currentDepth
+                    : currentFileEntryIndex;
 
-                // Check if this entry matches the filter
                 if (ContainsFilter(entryPath, filterStr))
                 {
-                    if (results is ICollection<string> collection)
-                    {
-                        collection.Add(entryPath);
-                    }
-                    else if (results is System.Collections.Concurrent.ConcurrentBag<string> bag)
-                    {
-                        bag.Add(entryPath);
-                    }
+                    addResult(new JournalPathOption(entryPath, entryFileEntryIndex, entry.Chunk.GetType().Name));
                 }
 
-                // Always add children to stack if it's a container
                 if (entry.Chunk is gameJournalContainerEntry containerEntry)
                 {
-                    stack.Push((containerEntry.Entries, entryPath));
+                    stack.Push((containerEntry.Entries, entryPath, currentDepth + 1, entryFileEntryIndex));
                 }
             }
         }

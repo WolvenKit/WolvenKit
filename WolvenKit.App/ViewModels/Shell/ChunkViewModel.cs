@@ -440,7 +440,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     else
                     {
                         Parent.Data = parentData is IRedRef
-                            ? RedTypeFactory.CreateAndInitRedType(parentData.RedType, Data)
+                            ? RedTypeManager.CreateAndInitRedType(parentData.RedType, Data)
                             : throw new Exception();
                     }
 
@@ -1265,7 +1265,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
     [RelayCommand(CanExecute = nameof(CanAddHandle))]
     private async Task AddHandle()
     {
-        var data = RedTypeFactory.CreateAndInitRedType(PropertyType);
+        var data = RedTypeManager.CreateAndInitRedType(PropertyType);
         if (data is IRedBaseHandle handle)
         {
             var types = AppDomain.CurrentDomain.GetAssemblies()
@@ -1409,7 +1409,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                 var innerType = arr.InnerType;
                 if (innerType.IsValueType)
                 {
-                    InsertChild(-1, RedTypeFactory.CreateAndInitRedType(innerType));
+                    InsertChild(-1, RedTypeManager.CreateAndInitRedType(innerType));
                     return;
                 }
 
@@ -1452,12 +1452,12 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
                     }
                     else
                     {
-                        newItem = RedTypeFactory.CreateAndInitRedType(type);
+                        newItem = RedTypeManager.CreateAndInitRedType(type);
                     }
 
                     if (newItem is IRedBaseHandle handle)
                     {
-                        var pointee = RedTypeFactory.CreateAndInitRedType(handle.InnerType);
+                        var pointee = RedTypeManager.CreateAndInitRedType(handle.InnerType);
                         handle.SetValue((RedBaseClass)pointee);
                     }
 
@@ -1692,7 +1692,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             && selectedType is not null && ResolvedData is RedBaseClass rbc)
         {
             var propertyName = Interactions.Rename("");
-            var instance = RedTypeFactory.CreateAndInitRedType(selectedType);
+            var instance = RedTypeManager.CreateAndInitRedType(selectedType);
             rbc.AddDynamicProperty(propertyName, selectedType);
             rbc.SetProperty(propertyName, instance);
             //if (Data is IRedBaseHandle handle)
@@ -1729,7 +1729,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         ArgumentNullException.ThrowIfNull(ResolvedPropertyType);
         if (Data is RedDummy)
         {
-            Data = RedTypeFactory.CreateAndInitRedType(ResolvedPropertyType);
+            Data = RedTypeManager.CreateAndInitRedType(ResolvedPropertyType);
             if (Data is IRedBufferPointer ptr)
             {
                 ptr.SetValue(new RedBuffer { Data = new RedPackage { Chunks = new List<RedBaseClass>() } });
@@ -3657,7 +3657,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
 
     private void HandlePointer(Type type, string customName = "")
     {
-        var instance = RedTypeFactory.CreateAndInit(type);
+        var instance = RedTypeManager.CreateAndInit(type);
         if (instance is DynamicBaseClass dbc)
         {
             if (string.IsNullOrEmpty(customName))
@@ -3668,7 +3668,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
             dbc.ClassName = customName;
         }
 
-        var data = RedTypeFactory.CreateAndInitRedType(PropertyType);
+        var data = RedTypeManager.CreateAndInitRedType(PropertyType);
         if (data is IRedBaseHandle handle)
         {
             handle.SetValue(instance);
@@ -3710,7 +3710,7 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         _appViewModel.CloseDialogCommand.Execute(null);
         if (sender is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType })
         {
-            var instance = RedTypeFactory.CreateAndInitRedType(selectedType);
+            var instance = RedTypeManager.CreateAndInitRedType(selectedType);
             if (!InsertChild(-1, instance))
             {
                 _loggerService.Error("Unable to insert child");
@@ -3724,10 +3724,10 @@ public partial class ChunkViewModel : ObservableObject, ISelectableTreeViewItemM
         if (sender is TypeSelectorDialogViewModel { SelectedEntry.UserData: Type selectedType } &&
             Data is IRedArray arr)
         {
-            var newItem = RedTypeFactory.CreateAndInitRedType(arr.InnerType);
+            var newItem = RedTypeManager.CreateAndInitRedType(arr.InnerType);
             if (newItem is IRedBaseHandle handle)
             {
-                var instance = RedTypeFactory.CreateAndInit(selectedType);
+                var instance = RedTypeManager.CreateAndInit(selectedType);
                 handle.SetValue(instance);
                 if (!InsertChild(-1, newItem))
                 {
