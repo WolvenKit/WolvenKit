@@ -305,7 +305,6 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         {
             if (File.Exists(destPath))
             {
-                File.Delete(destPath);
                 var response = await Interactions.ShowMessageBoxAsync(
                     "A file with the same name already exists in the project. Do you want to overwrite it?",
                     "Overwrite file",
@@ -316,6 +315,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
                     return;
                 }
 
+                File.Delete(destPath);
                 _projectEvents.PublishFileDeleted(destPath);
             }
 

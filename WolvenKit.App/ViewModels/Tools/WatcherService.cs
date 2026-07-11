@@ -279,9 +279,7 @@ public partial class ProjectExplorerViewModel
                     throw new TodoException();
                 }
 
-                var lookup = e.FullPath.Substring(_projectDirectory.Length + 1);
-
-                if (!_fileLookup.TryGetValue(lookup, out var item))
+                if (!_fileLookup.TryGetValue(e.FullPath, out var item))
                 {
                     if (_watcherState == WatcherState.NoProject && _fileProcessing.ContainsKey(e.FullPath))
                     {
