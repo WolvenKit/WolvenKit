@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3005
+      author: "misterchedda"
+      description: "UseWorkspot nodes now generate function appropriate sockets in questphase and scene graphs"
