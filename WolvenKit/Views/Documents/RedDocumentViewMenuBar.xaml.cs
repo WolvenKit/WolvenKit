@@ -206,7 +206,7 @@ namespace WolvenKit.Views.Documents
                 var allReferences = await project.GetAllReferencesAsync(
                     _progressService,
                     _loggerService,
-                    [project.GetRelativePath(CurrentTab.FilePath)]
+                    [project.GetGameRelativePath(CurrentTab.FilePath)]
 
                 );
 
@@ -320,7 +320,7 @@ namespace WolvenKit.Views.Documents
                     .ToList();
 
             var filterDefaultValue = string.Empty;
-            if (Path.GetDirectoryName(project.GetRelativePath(currentPath)) is string parentFolder &&
+            if (Path.GetDirectoryName(project.GetGameRelativePath(currentPath)) is string parentFolder &&
                 otherMeshFiles.Any(f => f.Contains(parentFolder)))
             {
                 filterDefaultValue = parentFolder;
@@ -394,7 +394,7 @@ namespace WolvenKit.Views.Documents
             }
 
             var filterDefaultValue = string.Empty;
-            if (Path.GetDirectoryName(project.GetRelativePath(currentPath)) is string parentFolder &&
+            if (Path.GetDirectoryName(project.GetGameRelativePath(currentPath)) is string parentFolder &&
                 otherMeshFiles.Select(kvp => kvp.Key).Any(f => f.Contains(parentFolder)))
             {
                 filterDefaultValue = parentFolder;
@@ -1181,7 +1181,7 @@ namespace WolvenKit.Views.Documents
                     return;
                 }
 
-                var relativePath = project.GetRelativePath(currentFile);
+                var relativePath = project.GetGameRelativePath(currentFile);
 
                 _loggerService.Info("Reading references from .app file...");
                 var referencesInFile = await _projectManager.ActiveProject.GetAllReferencesAsync(
