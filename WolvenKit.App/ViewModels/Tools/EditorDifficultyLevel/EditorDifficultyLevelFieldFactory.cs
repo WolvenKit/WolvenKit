@@ -83,6 +83,7 @@ public abstract class EditorDifficultyLevelInformation
         { typeof(inkTextureAtlas), ["activeTexture", "dynamicTexture", "dynamicTextureSlot", "texture"] },
         // .app file: appearance definition: parts override - ArchiveXL will handle this
         { typeof(appearanceAppearancePartOverrides), ["partResource"] },
+        { typeof(appearanceAppearanceDefinition), ["parametersBuffer"] },
     };
 
     /// <summary>
@@ -147,7 +148,6 @@ public abstract class EditorDifficultyLevelInformation
                 "cookedDataPathOverride",
                 "forcedLodDistance",
                 "hitRepresentationOverrides",
-                "parametersBuffer",
                 "parentAppearance",
             ]
         },
@@ -254,20 +254,28 @@ public abstract class EditorDifficultyLevelInformation
             return false;
         }
 
-        return
+        if (cvm is { IsArray: true, TVProperties.Count: 0 }
             // empty array
-            cvm is { IsArray: true, TVProperties.Count: 0 }
-            // empty array
-            || (cvm.TVProperties.Count == 1 && cvm.TVProperties.FirstOrDefault() is { IsArray: true, TVProperties.Count: 0 })
-            //false boolean
-            || (cvm.ResolvedData is CBool boolValue && boolValue == false)
+            || (cvm.TVProperties.Count == 1 && cvm.TVProperties.FirstOrDefault() is
+                { IsArray: true, TVProperties.Count: 0 }))
+        {
+            return true;
+        }
+
+        return cvm.ResolvedData switch
+        {
+            // falsy bool
+            CBool boolValue => boolValue == false,
             // empty string
-            || (cvm.ResolvedData is IRedString str && string.IsNullOrEmpty(str.ToString()))
-            // empty raref
-            || (cvm.ResolvedData is IRedResourceAsyncReference refAs && refAs.DepotPath == ResourcePath.Empty)
+            IRedString str => string.IsNullOrEmpty(str.ToString()),
             // empty ref
-            || (cvm.ResolvedData is IRedResourceReference refS && refS.DepotPath == ResourcePath.Empty)
-            ;
+            IRedResourceAsyncReference refAs => refAs.DepotPath == ResourcePath.Empty,
+            // empty ref
+            IRedResourceReference refS => refS.DepotPath == ResourcePath.Empty,
+            // empty buffer
+            entEntityParametersBuffer buf => buf.ParameterBuffers.Count == 0,
+            _ => false
+        };
     }
 }
 
