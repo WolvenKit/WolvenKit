@@ -29,6 +29,17 @@ public class ProjectEvents : IProjectEvents
         _filesMoved.OnNext(message);
     }
 
+    // A single-file add is modelled as a move with an empty source: the consumer materializes the
+    // destination (and any missing parent dirs) and removes nothing. Reusing FilesMoved keeps the add
+    // path side-effect-free (unlike OnFilesImported, which also Resumes the watcher for the bulk flow).
+    public void PublishFileImported(string absolutePath)
+    {
+        if (!string.IsNullOrEmpty(absolutePath))
+        {
+            _filesMoved.OnNext(new FilesMovedMessage([(string.Empty, absolutePath)]));
+        }
+    }
+
     public void PublishFileDeleted(string absolutePath) => PublishDeleted(absolutePath);
 
     public void PublishDirectoryDeleted(string absoluteDirectoryPath) => PublishDeleted(absoluteDirectoryPath);

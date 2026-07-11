@@ -21,6 +21,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using Semver;
 using Microsoft.VisualBasic.FileIO;
+using Splat;
 using WolvenKit.App.Controllers;
 using WolvenKit.App.Extensions;
 using WolvenKit.App.Factories;
@@ -304,6 +305,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         {
             if (File.Exists(destPath))
             {
+                File.Delete(destPath);
                 var response = await Interactions.ShowMessageBoxAsync(
                     "A file with the same name already exists in the project. Do you want to overwrite it?",
                     "Overwrite file",
@@ -314,10 +316,11 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
                     return;
                 }
 
-                File.Delete(destPath);
+                _projectEvents.PublishFileDeleted(destPath);
             }
 
             File.Copy(filePath, destPath);
+            _projectEvents.PublishFileImported(destPath);
         }
 
         try
@@ -341,6 +344,11 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
         try
         {
             File.Delete(destPath);
+            _projectEvents.PublishFileDeleted(destPath);
+            // NOTE: destPath sits directly under RawDirectory, so DeleteEmptyParents stops immediately
+            // (it never deletes a folder directly under the project root), i.e. nothing to publish here.
+            // If this ever moves deeper, DeleteEmptyParents' directory deletions would need publishing —
+            // it is a shared helper that mutates without notifying (flagged in the audit).
             ProjectResourceTools.DeleteEmptyParents(destPath, ActiveProject);
         }
         catch

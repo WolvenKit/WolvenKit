@@ -35,6 +35,14 @@ public interface IProjectEvents
     void PublishFilesImported(FilesImportedMessage message);
 
     /// <summary>
+    /// Publish that a single file was added to the project at <paramref name="absolutePath"/> (e.g.
+    /// copied in from outside the project). Call this AFTER the file exists on disk. The project
+    /// explorer materializes the node and any missing parent directories. Idempotent.
+    /// </summary>
+    /// <param name="absolutePath">Absolute path of the added file.</param>
+    void PublishFileImported(string absolutePath);
+
+    /// <summary>
     /// Publish an authoritative set of file moves that have <b>already happened on disk</b>.
     /// Call this AFTER the move completes and after any overwrite/confirmation prompts have been
     /// resolved, so the project explorer reflects what actually happened rather than what was

@@ -48,6 +48,14 @@ public class AppScriptFunctions : ScriptFunctions
     private readonly GeometryCacheService _geometryCacheService;
     private readonly ISettingsManager _settingsManager;
 
+    // IMPORTANT: this is the ONLY sandboxed surface through which a script can mutate project files
+    // (the V8 engine exposes no System.IO / reflection). Every method here that creates, deletes,
+    // moves or renames a file/dir inside the project MUST notify the project explorer via
+    // _projectEvents, because ExecuteAsync suspends the file watcher around scripts. Once the
+    // post-script full reload is removed, an unpublished mutation here becomes a silent, un-fixable
+    // desync of the tree.
+    private readonly IProjectEvents _projectEvents;
+
     public AppViewModel? AppViewModel;
 
     public AppScriptFunctions(
@@ -59,7 +67,8 @@ public class AppScriptFunctions : ScriptFunctions
         ImportExportHelper importExportHelper,
         IGameControllerFactory gameController,
         GeometryCacheService geometryCacheService,
-        ISettingsManager settingsManager)
+        ISettingsManager settingsManager,
+        IProjectEvents projectEvents)
         : base(loggerService, archiveManager, parserService)
     {
         _projectManager = projectManager;
@@ -68,7 +77,7 @@ public class AppScriptFunctions : ScriptFunctions
         _gameController = gameController;
         _geometryCacheService = geometryCacheService;
         _settingsManager = settingsManager;
-        
+        _projectEvents = projectEvents;
     }
 
     /// <summary>
@@ -158,6 +167,9 @@ public class AppScriptFunctions : ScriptFunctions
         try
         {
             action(diskPathInfo.FullName);
+            // Announce the add to the project explorer (covers SaveToProject/SaveToRaw/SaveToResources).
+            // For an overwrite the tree add is a no-op, but the publish still reloads an open editor tab.
+            _projectEvents.PublishFileImported(diskPathInfo.FullName);
         }
         catch (Exception ex)
         {
@@ -473,7 +485,7 @@ public class AppScriptFunctions : ScriptFunctions
     /// <param name="fileList"></param>
     /// <param name="defaultSettings"></param>
     /// <param name="blocking"></param>
-    public void ExportFiles(IList fileList, ScriptObject? defaultSettings = null)
+    public async Task ExportFiles(IList fileList, ScriptObject? defaultSettings = null)
     {
         if (_projectManager.ActiveProject is not { } proj)
         {
@@ -508,17 +520,26 @@ public class AppScriptFunctions : ScriptFunctions
             _loggerService.Warning($"\"{entry}\" is not a valid entry");
         }
 
-        Parallel.ForEach(fileDict, (kvp) =>
-        {
-            if (kvp.Value.Get<MeshExportArgs>().MeshExporter == MeshExporterType.REDmod)
-            {
-                Task.Run(() => _importExportHelper.Export(new DirectoryInfo(proj.ModDirectory), kvp.Key, new DirectoryInfo(proj.RawDirectory), kvp.Value.Get<MeshExportArgs>()));
-            }
-            else
-            {
-                Task.Run(() => _importExportHelper.Export(kvp.Key, kvp.Value, new DirectoryInfo(proj.ModDirectory), new DirectoryInfo(proj.RawDirectory)));
-            }
-        });
+        // Snapshot the raw output folder up front. Exports produce derived, possibly multi-file
+        // outputs (a mesh yields a .glb plus textures) whose exact paths we can't know here, so we
+        // diff the folder before/after rather than guess.
+        var rawBefore = ProjectFileDiff.Snapshot(proj.RawDirectory);
+
+        // Kick off every export concurrently (Task.Run keeps the heavy sync portion off the calling
+        // thread, matching the old behaviour) but AWAIT them all, so ExportFiles only returns once the
+        // raw outputs have actually been written. Previously these were fire-and-forget Task.Run calls,
+        // so a caller had no way to know when — or whether — the exports finished; that made publishing
+        // the results or reconciling the tree impossible to do deterministically.
+        var exportTasks = fileDict.Select(kvp =>
+            kvp.Value.Get<MeshExportArgs>().MeshExporter == MeshExporterType.REDmod
+                ? Task.Run(() => _importExportHelper.Export(new DirectoryInfo(proj.ModDirectory), kvp.Key, new DirectoryInfo(proj.RawDirectory), kvp.Value.Get<MeshExportArgs>()))
+                : Task.Run(() => _importExportHelper.Export(kvp.Key, kvp.Value, new DirectoryInfo(proj.ModDirectory), new DirectoryInfo(proj.RawDirectory)))
+        ).ToList();
+
+        await Task.WhenAll(exportTasks).ConfigureAwait(false);
+
+        // Everything has landed — announce exactly what the exports wrote to the project explorer.
+        ProjectFileDiff.Publish(rawBefore, ProjectFileDiff.Snapshot(proj.RawDirectory), _projectEvents);
 
         void AddFile(string filePath, ScriptObject? settings = null)
         {
@@ -744,6 +765,7 @@ public class AppScriptFunctions : ScriptFunctions
         }
         
         File.Delete(absoluteFilePath);
+        _projectEvents.PublishFileDeleted(absoluteFilePath);
         return !File.Exists(baseFolder);
     }
 
