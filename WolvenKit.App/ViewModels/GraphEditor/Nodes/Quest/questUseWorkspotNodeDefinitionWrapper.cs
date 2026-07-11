@@ -1,15 +1,28 @@
-using WolvenKit.RED4.Types;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest.Internal;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.App.ViewModels.GraphEditor.Nodes.Quest;
 
 public class questUseWorkspotNodeDefinitionWrapper : questAICommandNodeBaseWrapper<questUseWorkspotNodeDefinition>
 {
+    private Enums.questUseWorkspotNodeFunctions? _lastWorkspotFunction;
+    private bool _removeWorkStartedWhenDisconnected;
+
     public questUseWorkspotNodeDefinitionWrapper(questUseWorkspotNodeDefinition questAICommandNodeBase) : base(questAICommandNodeBase)
     {
+        _lastWorkspotFunction = GetWorkspotFunction(_castedData);
         PopulateWorkspotDetails();
     }
+
+    public override void RefreshFromData()
+    {
+        SynchronizeWorkStartedSocket();
+        base.RefreshFromData();
+    }
+
     public override void RefreshDetails()
     {
         PopulateWorkspotDetails();
@@ -164,6 +177,80 @@ public class questUseWorkspotNodeDefinitionWrapper : questAICommandNodeBaseWrapp
         CreateSocket("CutDestination", Enums.questSocketType.CutDestination);
         CreateSocket("In", Enums.questSocketType.Input);
         CreateSocket("Success", Enums.questSocketType.Output);
-        //CreateSocket("Work Started", Enums.questSocketType.Output); TODO[Graph]
+        if (RequiresWorkStartedSocket(_castedData))
+        {
+            CreateSocket("Work Started", Enums.questSocketType.Output);
+        }
+    }
+
+    internal static Enums.questUseWorkspotNodeFunctions? GetWorkspotFunction(questUseWorkspotNodeDefinition node)
+    {
+        if (node.ParamsV1?.GetValue() is questUseWorkspotParamsV1 paramsV1)
+        {
+            return (Enums.questUseWorkspotNodeFunctions)paramsV1.Function;
+        }
+
+        return null;
+    }
+
+    internal static bool RequiresWorkStartedSocket(questUseWorkspotNodeDefinition node) =>
+        GetWorkspotFunction(node) == Enums.questUseWorkspotNodeFunctions.UseWorkspot;
+
+    private void SynchronizeWorkStartedSocket()
+    {
+        var function = GetWorkspotFunction(_castedData);
+        var functionChanged = function != _lastWorkspotFunction;
+        if (!functionChanged && !_removeWorkStartedWhenDisconnected)
+        {
+            return;
+        }
+
+        _lastWorkspotFunction = function;
+        var socket = _castedData.Sockets
+            .Select(x => x.Chunk)
+            .OfType<questSocketDefinition>()
+            .FirstOrDefault(x => x.Type == Enums.questSocketType.Output && x.Name.GetResolvedText() == "Work Started");
+
+        if (function == Enums.questUseWorkspotNodeFunctions.UseWorkspot)
+        {
+            _removeWorkStartedWhenDisconnected = false;
+            if (socket == null)
+            {
+                socket = CreateSocket("Work Started", Enums.questSocketType.Output);
+                Output.Add(new QuestOutputConnectorViewModel("Work Started", "Work Started", UniqueId, socket));
+                NotifySocketsChanged();
+            }
+            return;
+        }
+
+        if (socket == null)
+        {
+            _removeWorkStartedWhenDisconnected = false;
+            return;
+        }
+
+        var connector = Output
+            .OfType<QuestOutputConnectorViewModel>()
+            .FirstOrDefault(x => ReferenceEquals(x.Data, socket));
+        if (socket.Connections.Count > 0 || connector?.IsConnected == true)
+        {
+            _removeWorkStartedWhenDisconnected = true;
+            return;
+        }
+
+        _removeWorkStartedWhenDisconnected = false;
+        if (connector != null)
+        {
+            Output.Remove(connector);
+        }
+        for (var i = _castedData.Sockets.Count - 1; i >= 0; i--)
+        {
+            if (ReferenceEquals(_castedData.Sockets[i].Chunk, socket))
+            {
+                _castedData.Sockets.RemoveAt(i);
+                break;
+            }
+        }
+        NotifySocketsChanged();
     }
 }
