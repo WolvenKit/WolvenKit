@@ -40,10 +40,10 @@ public class Cp77ProjectTest
         var absolutePath = Path.Join(testProject.FileDirectory, relativePath);
         var absolutePrefix = Path.Join(testProject.FileDirectory, expectedPrefix);
 
-        var (prefix, rel) = testProject.SplitFilePath(absolutePath);
+        var (prefix, rel) = testProject.SplitFilePathIntoAbsoluteAndGameRelativePaths(absolutePath);
         Assert.Equal(expectedRelativePath, rel);
 
-        Assert.Equal(expectedRelativePath, testProject.GetRelativePath(absolutePath));
+        Assert.Equal(expectedRelativePath, testProject.GetGameRelativePath(absolutePath));
         Assert.Equal(absolutePrefix, testProject.GetAbsoluteSubDirPath(absolutePath));
     }
 }

@@ -174,7 +174,7 @@ public partial class AppViewModel : ObservableObject /*, IAppViewModel*/
                 continue;
             }
 
-            _loggerService.Info($"Scanning {ActiveProject.GetRelativePath(file.FileName)}");
+            _loggerService.Info($"Scanning {ActiveProject.GetGameRelativePath(file.FileName)}");
             try
             {
                 await _scriptService.ExecuteAsync(code);

@@ -1449,7 +1449,7 @@ public class DocumentTools
         List<string> meshPaths;
         if (string.IsNullOrEmpty(sourcePath))
         {
-            meshPaths = FindPatchMeshPaths(activeProject.GetRelativePath(destPath));
+            meshPaths = FindPatchMeshPaths(activeProject.GetGameRelativePath(destPath));
             sourcePath ??= "";
         }
         else

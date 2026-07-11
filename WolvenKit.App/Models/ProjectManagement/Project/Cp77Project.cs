@@ -332,7 +332,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
     /// <param name="useModderName">Default: false, will use name of mod author as subfolder</param>
     /// <returns><code>source/resources/r6/tweaks/$MOD_NAME</code> or <code>source/resources/r6/tweaks/$AUTHOR_NAME</code></returns>
     public string GetRelativeResourceTweakDirectory(bool useModderName = false) =>
-        GetRelativePath(GetResourceTweakDirectory(useModderName));
+        GetGameRelativePath(GetResourceTweakDirectory(useModderName));
 
     /// <summary>
     /// Path to /packed
@@ -525,8 +525,8 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
     /// </summary>
     /// <param name="fullPath"></param>
     /// <returns>(AbsolutePathToGameRelativeRoot, GameRelativePath)</returns>
-    public (string, string) SplitFilePath(string fullPath) =>
-        (GetAbsoluteSubDirPath(fullPath), GetRelativePath(fullPath));
+    public (string, string) SplitFilePathIntoAbsoluteAndGameRelativePaths(string fullPath) =>
+        (GetAbsoluteSubDirPath(fullPath), GetGameRelativePath(fullPath));
 
     /// <returns>The absolute path to the subdirectory containing the file, e.g. C:\CyberpunkFiles\...\source\archive</returns>
     public string GetAbsoluteSubDirPath(string absolutePath)
@@ -585,7 +585,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
             return relativeOrAbsolutePath;
         }
 
-        var (prefix, relativePath) = SplitFilePath(relativeOrAbsolutePath);
+        var (prefix, relativePath) = SplitFilePathIntoAbsoluteAndGameRelativePaths(relativeOrAbsolutePath);
         prefix = prefix.Replace(ProjectDirectory, "");
 
         if (relativePath == relativeOrAbsolutePath)
@@ -636,7 +636,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
     /// </summary>
     /// <param name="absolutePath"></param>
     /// <returns>GameRelativePath</returns>
-    public string GetRelativePath(string absolutePath)
+    public string GetGameRelativePath(string absolutePath)
     {
         if (absolutePath.Equals(FileDirectory, StringComparison.Ordinal))
         {
@@ -708,7 +708,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
 
     public ResourcePath GetResourcePathFromRoot(string fullPath)
     {
-        var relPath = GetRelativePath(fullPath);
+        var relPath = GetGameRelativePath(fullPath);
         if (ulong.TryParse(Path.GetFileNameWithoutExtension(relPath), out var hash))
         {
             return hash;
@@ -726,7 +726,7 @@ public sealed partial class Cp77Project : IEquatable<Cp77Project>, ICloneable
         }
 
 
-        var relPath = GetRelativePath(fullPath);
+        var relPath = GetGameRelativePath(fullPath);
         if (ulong.TryParse(Path.GetFileNameWithoutExtension(relPath), out var hash))
         {
             return hash;

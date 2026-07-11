@@ -555,7 +555,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             var activeItemPath = relativePath.Replace('/', Path.DirectorySeparatorChar);
             if (!isAbsolute)
             {
-                activeItemPath = ActiveProject!.GetRelativePath(activeItemPath);
+                activeItemPath = ActiveProject!.GetGameRelativePath(activeItemPath);
             }
 
             if (switchToRaw)
@@ -718,7 +718,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             // add from AB
             foreach (var material in materials)
             {
-                var relPath = ActiveProject!.GetRelativePath(material);
+                var relPath = ActiveProject!.GetGameRelativePath(material);
                 var hash = FNV1A64HashAlgorithm.HashString(relPath);
                 await Task.Run(() => _gameController.GetController().AddToMod(hash));
             }
@@ -763,7 +763,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
             var files = Directory.GetFiles(currentItem.FullName, "*", SearchOption.AllDirectories).ToList();
             foreach (var hash in files
-                         .Select(file => ActiveProject!.GetRelativePath(file))
+                         .Select(file => ActiveProject!.GetGameRelativePath(file))
                          .Select(FNV1A64HashAlgorithm.HashString))
             {
                 selectedItems.Add(hash);
@@ -1026,14 +1026,19 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        var currentRawRelativePath = SelectedItem.RawRelativePath;
+        var (prefixPath, gameRelativePath) = ActiveProject.SplitFilePathIntoAbsoluteAndGameRelativePaths(absolutePath);
 
-        var (newRawRelativePath, refactor) = Interactions.RenameAndRefactor((
-            currentRawRelativePath,
+        if (absolutePath.StartsWith(ActiveProject.ModDirectory))
+        {
+            gameRelativePath = absolutePath[(ActiveProject.ModDirectory.Length + 1)..];
+        }
+
+        var (newGameRelativePath, refactor) = Interactions.RenameAndRefactor((
+            gameRelativePath,
             absolutePath.StartsWith(ActiveProject.ModDirectory)
         ));
 
-        if (string.IsNullOrEmpty(newRawRelativePath) || newRawRelativePath == currentRawRelativePath)
+        if (string.IsNullOrEmpty(newGameRelativePath) || newGameRelativePath == gameRelativePath)
         {
             return;
         }
@@ -1043,7 +1048,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         await BeginDeferredRefreshContext!(
             token,
-            InternalRenameFile(SelectedItem, currentRawRelativePath, newRawRelativePath, ActiveProject.FileDirectory, refactor)
+            InternalRenameFile(gameRelativePath, newGameRelativePath, prefixPath, refactor)
         );
 
         _gridGuard.ConfirmRedrawComplete();
@@ -1054,22 +1059,25 @@ public partial class ProjectExplorerViewModel : ToolViewModel
         }
     }
 
+    // add sanitizer to ensure moves can't cross file scope boundary
+
     /// <summary>
     /// Renames the supplied FileSystemModel.
-    /// You must pass in the old RawRelativePath and new RawRelativePath as well as the path to /source.
+    /// You must pass in the old GameRelativePath and new GameRelativePath as well as the path to /source.
     /// 'Refactor' checkbox makes the name change effected in references to that file in the mod.
     /// </summary>
     /// <param name="selectedItem"></param>
-    /// <param name="relativePath"></param>
-    /// <param name="newRelativePath"></param>
+    /// <param name="gameRelativePath"></param>
+    /// <param name="newGameRelativePath"></param>
     /// <param name="prefixPath"></param>
     /// <param name="refactor"></param>
-    private async Task InternalRenameFile(FileSystemModel selectedItem, string relativePath, string newRelativePath, string prefixPath, bool refactor)
+    private async Task InternalRenameFile(string gameRelativePath, string newGameRelativePath, string prefixPath, bool refactor)
     {
         SuspendFileWatcher();
+
         try
         {
-            await _projectResourceTools.MoveAndRefactorAsync(relativePath, newRelativePath, prefixPath, refactor);
+            await _projectResourceTools.MoveAndRefactorAsync(gameRelativePath, newGameRelativePath, prefixPath, refactor);
             _appViewModel.ReloadChangedFiles();
         }
         finally
@@ -1254,7 +1262,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                     {
                         var rawOutPath = Path.Combine(
                             ActiveProject.NotNull().RawDirectory,
-                            ActiveProject.NotNull().GetRelativePath(file));
+                            ActiveProject.NotNull().GetGameRelativePath(file));
 
                         var outDirectoryPath = Path.GetDirectoryName(rawOutPath);
 
@@ -1800,7 +1808,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             return;
         }
 
-        var modPath = Path.Combine(ActiveProject.NotNull().ModDirectory, ActiveProject!.GetRelativePath(file));
+        var modPath = Path.Combine(ActiveProject.NotNull().ModDirectory, ActiveProject!.GetGameRelativePath(file));
         var outDirectoryPath = Path.GetDirectoryName(modPath);
         if (outDirectoryPath is null)
         {
@@ -2013,7 +2021,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 .Where(x => x.FilePath is not null)
                 .OrderBy(x => x.OpenedAt)
                 .DistinctBy(x => x.FilePath)
-                .ToDictionary(x => x.OpenedAt, x => project.GetRelativePath(x.FilePath!));
+                .ToDictionary(x => x.OpenedAt, x => project.GetGameRelativePath(x.FilePath!));
 
             // only write if we had a change
             if (project.OpenProjectFiles.Equals(openProjectFiles))

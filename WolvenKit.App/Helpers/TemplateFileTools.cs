@@ -155,7 +155,7 @@ public partial class TemplateFileTools
         }
         catch (JsonException err)
         {
-            var relativePath = activeProject.GetRelativePath(sourceAbsolutePath);
+            var relativePath = activeProject.GetGameRelativePath(sourceAbsolutePath);
 
             if (err.Message.Contains(" | LineNumber"))
             {

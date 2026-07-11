@@ -557,7 +557,7 @@ public partial class RedDocumentViewModel : DocumentViewModel
                     {
                         foreach (var file in Directory.GetFiles(_projectManager.ActiveProject.ModDirectory, "*", SearchOption.AllDirectories))
                         {
-                            var relativePath = _projectManager.ActiveProject.GetRelativePath(file);
+                            var relativePath = _projectManager.ActiveProject.GetGameRelativePath(file);
                             if (depotPath.GetRedHash() == ResourcePath.CalculateHash(relativePath))
                             {
                                 path = file;

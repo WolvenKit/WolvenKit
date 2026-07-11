@@ -415,8 +415,15 @@ public partial class ProjectResourceTools
 
     private const string s_tempDirSuffix = "_wolvenkit_tempdir";
 
-    // TODO: Remove stupid AbsoluteFolderPrefix
-    public async Task MoveAndRefactorAsync(string sourcePath, string destPath, string absoluteFolderPrefix,
+    /// <summary>
+    /// Carries out the action of moving the file from the source to the destination.
+    /// </summary>
+    /// <param name="sourceGameRelativePath"></param>
+    /// <param name="destGameRelativePath"></param>
+    /// <param name="absoluteFolderPrefix"></param>
+    /// <param name="refactor"></param>
+    /// <exception cref="InvalidDataException"></exception>
+    public async Task MoveAndRefactorAsync(string sourceGameRelativePath, string destGameRelativePath, string absoluteFolderPrefix,
         bool refactor)
     {
         if (_projectManager.ActiveProject is not Cp77Project activeProject)
@@ -424,10 +431,9 @@ public partial class ProjectResourceTools
             return;
         }
 
-        var originalSourcePath = sourcePath;
-
-        var sourceRelPath = sourcePath;
-        var destRelPath = destPath;
+        var originalSourceGameRelativePath = sourceGameRelativePath;
+        var sourceGameRelPath = sourceGameRelativePath;
+        var destGameRelPath = destGameRelativePath;
 
         var projectRootPath = string.Join(Path.DirectorySeparatorChar,
             absoluteFolderPrefix.ToLower().Split(Path.DirectorySeparatorChar)[..^1]);
@@ -437,15 +443,15 @@ public partial class ProjectResourceTools
 
         try
         {
-            destRelPath = FilepathValidationTools.SanitizeOsFilePath(destRelPath);
-            destAbsPath = ToAbsolutePath(destRelPath);
+            destGameRelPath = FilepathValidationTools.SanitizeOsFilePath(destGameRelPath);
+            destAbsPath = ToAbsolutePath(destGameRelPath);
 
-            sourceRelPath = FilepathValidationTools.SanitizeOsFilePath(sourceRelPath);
-            sourceFileOrDirAbsPath = ToAbsolutePath(sourceRelPath);
+            sourceGameRelPath = FilepathValidationTools.SanitizeOsFilePath(sourceGameRelPath);
+            sourceFileOrDirAbsPath = ToAbsolutePath(sourceGameRelPath);
         }
         catch (Exception e)
         {
-            _loggerService.Error($"Failed to move \"{sourcePath}\" to \"{destPath}\": {e.Message}");
+            _loggerService.Error($"Failed to move \"{sourceGameRelativePath}\" to \"{destGameRelativePath}\": {e.Message}");
             return;
         }
 
@@ -575,24 +581,24 @@ public partial class ProjectResourceTools
             // just the source; for the case-only-rename three-way move we relocated via a temp dir,
             // so map the temp source back onto the original (rooted) path the tree still holds.
             var fromAbsPath = sourceAbsPath;
-            if (originalSourcePath != sourceFileOrDirAbsPath && Path.IsPathRooted(originalSourcePath))
+            if (originalSourceGameRelativePath != sourceFileOrDirAbsPath && Path.IsPathRooted(originalSourceGameRelativePath))
             {
-                fromAbsPath = sourceAbsPath.Replace(sourceFileOrDirAbsPath, originalSourcePath);
+                fromAbsPath = sourceAbsPath.Replace(sourceFileOrDirAbsPath, originalSourceGameRelativePath);
             }
 
             publishedMoves.Add((fromAbsPath, targetAbsPath));
 
-            var relativeSourcePath = activeProject.GetRelativePath(sourceAbsPath);
+            var relativeSourcePath = activeProject.GetGameRelativePath(sourceAbsPath);
 
             // We've been moving across temp directories
-            if (originalSourcePath != sourceFileOrDirAbsPath)
+            if (originalSourceGameRelativePath != sourceFileOrDirAbsPath)
             {
-                var relativeTempPath = activeProject.GetRelativePath(sourceFileOrDirAbsPath);
-                var relativePath = activeProject.GetRelativePath(originalSourcePath);
+                var relativeTempPath = activeProject.GetGameRelativePath(sourceFileOrDirAbsPath);
+                var relativePath = activeProject.GetGameRelativePath(originalSourceGameRelativePath);
                 relativeSourcePath = relativeSourcePath.Replace(relativeTempPath, relativePath);
             }
 
-            var relativeDestPath = activeProject.GetRelativePath(targetAbsPath);
+            var relativeDestPath = activeProject.GetGameRelativePath(targetAbsPath);
             _loggerService.Info($"Moved \"{relativeSourcePath}\" to \"{relativeDestPath}\"");
 
         }
@@ -844,8 +850,8 @@ public partial class ProjectResourceTools
 
                     foreach (var (oldAbsPath, newAbsPath) in pathReplacements)
                     {
-                        var oldPathStr = activeProject.GetRelativePath(oldAbsPath);
-                        var newPathStr = activeProject.GetRelativePath(newAbsPath);
+                        var oldPathStr = activeProject.GetGameRelativePath(oldAbsPath);
+                        var newPathStr = activeProject.GetGameRelativePath(newAbsPath);
 
                         if (string.IsNullOrEmpty(oldPathStr) || string.IsNullOrEmpty(newPathStr))
                         {
@@ -870,7 +876,7 @@ public partial class ProjectResourceTools
                         return Task.CompletedTask;
                     }
 
-                    var relativePath = activeProject.GetRelativePath(absoluteFilePath);
+                    var relativePath = activeProject.GetGameRelativePath(absoluteFilePath);
                     _loggerService.Debug(
                         $"Replaced the following paths in \"{relativePath}\"\n\t: {string.Join(",\n\t", foundReplacements.Select(kvp => $"{kvp.Key} -> {kvp.Value}"))}");
 
@@ -1381,7 +1387,7 @@ public partial class ProjectResourceTools
         }
 
         var materialDependencies = GetDependencyPaths(cr2W);
-        var relativeDestPath = activeProject.GetRelativePath(destFolder);
+        var relativeDestPath = activeProject.GetGameRelativePath(destFolder);
 
         // Now ignore any files that are already in target folder
         foreach (var resourcePath in materialDependencies.ToList().Where(p =>

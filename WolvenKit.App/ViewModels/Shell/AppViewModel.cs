@@ -1122,9 +1122,9 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         var referencesHashSet = new HashSet<string>(allReferencePaths.SelectMany((r) => r.Value));
 
         var potentiallyUnusedFiles = ActiveProject!.ModFiles
-            .Where(f => !referencesHashSet.Contains(ActiveProject.GetRelativePath(f))) // they're used
+            .Where(f => !referencesHashSet.Contains(ActiveProject.GetGameRelativePath(f))) // they're used
             .Where(f => !_archiveManager.Lookup(f, ArchiveManagerScope.Basegame).HasValue) // they overwrite basegame files
-            .Where(f => !ActiveProject.GetRelativePath(f)
+            .Where(f => !ActiveProject.GetGameRelativePath(f)
                 .StartsWith(@"base\characters\appearances\main_npc\npv")) // npv apps
             .ToList();
 
@@ -3035,7 +3035,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         else if (!saveIfDirty)
         {
             _loggerService.Warning(
-                $"File {project.GetRelativePath(absolutePath)} has unsaved changes and will not be reloaded!");
+                $"File {project.GetGameRelativePath(absolutePath)} has unsaved changes and will not be reloaded!");
             return;
         }
 
@@ -3048,7 +3048,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
         catch
         {
-            _loggerService.Error($"Failed to reload {project.GetRelativePath(absolutePath)}");
+            _loggerService.Error($"Failed to reload {project.GetGameRelativePath(absolutePath)}");
         }
     }
 
@@ -3196,7 +3196,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         }
         catch
         {
-            _loggerService.Error($"Failed to save {project.GetRelativePath(absolutePath)}");
+            _loggerService.Error($"Failed to save {project.GetGameRelativePath(absolutePath)}");
             return false;
         }
 
