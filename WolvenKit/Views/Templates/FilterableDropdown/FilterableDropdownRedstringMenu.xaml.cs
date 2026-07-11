@@ -203,6 +203,22 @@ namespace WolvenKit.Views.Editors
 
             if (DataContext is ChunkViewModel { Data: CString var } cvm && ((var.ToString() ?? "") != SelectedOption))
             {
+                if (cvm.Parent?.ResolvedData is gameJournalPath &&
+                    _documentTools.TryGetJournalPathMetadata(SelectedOption, out var fileEntryIndex,
+                        out var className))
+                {
+                    if (cvm.Parent.GetPropertyChild("className") is { } classNameCvm)
+                    {
+                        classNameCvm.Data = (CName)className;
+                    }
+
+                    if (cvm.Parent.GetPropertyChild("fileEntryIndex") is { } fileEntryIndexCvm)
+                    {
+                        fileEntryIndexCvm.Data = (CInt32)fileEntryIndex;
+                    }
+                }
+
+                // Update this last so graph details refresh after all path metadata is consistent.
                 cvm.Data = (CString)SelectedOption;
             }
         }
