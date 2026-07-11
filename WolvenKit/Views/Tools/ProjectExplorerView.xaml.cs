@@ -309,7 +309,7 @@ namespace WolvenKit.Views.Tools
 
                 var tcs = new TaskCompletionSource<bool>();
 
-                DispatcherHelper.WaitUntilCancelled(deferRefreshToken, timeout: null, () =>
+                DispatcherHelper.WaitUntilCancelled(deferRefreshToken, () =>
                 {
                     var isFlatModeEnabled = ViewModel?.IsFlatModeEnabled ?? false;
                     if (isFirstLoad)
@@ -406,7 +406,7 @@ namespace WolvenKit.Views.Tools
 
         #endregion Project_Loading
 
-        private async Task BeginDeferredRefreshContext(CancellationToken deferRefreshToken, TimeSpan timeout, Task doBeforeRefresh)
+        private async Task BeginDeferredRefreshContext(CancellationToken deferRefreshToken, Task doBeforeRefresh)
         {
             CompositeDisposable disposables =
             [
@@ -418,7 +418,7 @@ namespace WolvenKit.Views.Tools
             {
                 await doBeforeRefresh;
 
-                DispatcherHelper.WaitUntilCancelled(deferRefreshToken, timeout: timeout, () =>
+                DispatcherHelper.WaitUntilCancelled(deferRefreshToken, () =>
                 {
 
                     TreeGridFlat.View.Filter = IsFileInFlat;
