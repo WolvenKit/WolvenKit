@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3008
+      author: "misterchedda"
+      description: "Add actor button in scene editor will now recalculate all instances of the player's scnActorId and scnPerformerId automatically"
