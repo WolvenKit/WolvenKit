@@ -585,7 +585,11 @@ public partial class RedGraph : IDisposable
         Comments.Clear();
     }
 
-    private void CommentsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) => RebuildCanvasItems();
+    private void CommentsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        UpdateCommentZIndices();
+        RebuildCanvasItems();
+    }
 
     private void NodesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) => RebuildCanvasItems();
 
@@ -613,6 +617,24 @@ public partial class RedGraph : IDisposable
         else if (e.PropertyName == nameof(GraphCommentViewModel.AccentColor))
         {
             GraphCommentStateSave();
+        }
+        else if (e.PropertyName is nameof(GraphCommentViewModel.Width) or nameof(GraphCommentViewModel.Height))
+        {
+            UpdateCommentZIndices();
+        }
+    }
+
+    private void UpdateCommentZIndices()
+    {
+        var orderedComments = Comments
+            .Select((comment, index) => new { Comment = comment, Index = index })
+            .OrderByDescending(item => item.Comment.Width * item.Comment.Height)
+            .ThenBy(item => item.Index)
+            .ToList();
+
+        for (var index = 0; index < orderedComments.Count; index++)
+        {
+            orderedComments[index].Comment.ZIndex = index - orderedComments.Count;
         }
     }
 
