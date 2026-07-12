@@ -563,6 +563,20 @@ internal class NodeProperties
                     counter++;
                 }
             }
+            else if (voicesetManagerCasted?.Type?.Chunk is questChangeVoicesetState_NodeType changeVoicesetState)
+            {
+                var param = changeVoicesetState.Params.FirstOrDefault();
+                if (param != null)
+                {
+                    details["Entity"] = ParseGameEntityReference(param.PuppetRef);
+                    details["Player"] = param.IsPlayer ? "True" : "False";
+                    details["Voiceset Lines"] = param.EnableVoicesetLines ? "Enabled" : "Disabled";
+                    details["Voiceset Grunts"] = param.EnableVoicesetGrunts ? "Enabled" : "Disabled";
+                    details["Blocked Inputs"] = param.InputsToBlock.Count == 0
+                        ? "None"
+                        : string.Join(", ", param.InputsToBlock.Select(input => input.Input.GetResolvedText()));
+                }
+            }
         }
         else if (node is questInteractiveObjectManagerNodeDefinition interactiveObjectManagerCasted)
         {
@@ -843,10 +857,70 @@ internal class NodeProperties
         {
             details["Entity Reference"] = ParseGameEntityReference(movePuppetManagerCasted?.EntityReference);
             details["Move Type"] = movePuppetManagerCasted?.MoveType.ToString()!;
+            details["Parameters"] = GetNameFromClass(movePuppetManagerCasted?.NodeParams?.Chunk);
 
             if (movePuppetManagerCasted?.NodeParams?.Chunk is questMoveOnSplineParams splineParams)
             {
                 details["Spline Node Ref"] = splineParams?.SplineNodeRef.GetResolvedText()!;
+            }
+            else if (movePuppetManagerCasted?.NodeParams?.Chunk is questMovePuppetNodeParams moveParams)
+            {
+                details["Movement"] = moveParams.MoveType.ToEnumString();
+
+                if (moveParams.MoveOnSplineParams?.Chunk is questMoveOnSplineParams nestedSplineParams)
+                {
+                    details["Spline Node Ref"] = nestedSplineParams.SplineNodeRef.GetResolvedText()!;
+                }
+                else if (moveParams.MoveToParams?.Chunk is questMoveToParams moveToParams)
+                {
+                    details["Movement Type"] = moveToParams.MovementType.ToEnumString();
+                    details["Movement Target"] = GetNameFromUniversalRef(moveToParams.MovementTargetRef?.Chunk);
+                    details["Facing Target"] = GetNameFromUniversalRef(moveToParams.FacingTargetRef?.Chunk);
+                }
+            }
+        }
+        else if (node is questCombatNodeDefinition combatNode)
+        {
+            details["Entity"] = ParseGameEntityReference(combatNode.EntityReference);
+            details["Command"] = combatNode.Function.GetResolvedText()?.Replace("questCombatNodeParams_", "") ?? "";
+            details["Parameters"] = GetNameFromClass(combatNode.Params?.Chunk);
+
+            switch (combatNode.Params?.Chunk)
+            {
+                case questCombatNodeParams_ShootAt shootAt:
+                    AddCombatTargetDetails(details, shootAt.TargetOverrideNode, shootAt.TargetOverridePuppet);
+                    details["Duration"] = shootAt.Duration.ToString();
+                    details["Once"] = shootAt.Once ? "True" : "False";
+                    break;
+                case questCombatNodeParams_ThrowGrenade throwGrenade:
+                    AddCombatTargetDetails(details, throwGrenade.TargetOverrideNode, throwGrenade.TargetOverridePuppet);
+                    details["Duration"] = throwGrenade.Duration.ToString();
+                    details["Once"] = throwGrenade.Once ? "True" : "False";
+                    break;
+                case questCombatNodeParams_CombatTarget combatTarget:
+                    AddCombatTargetDetails(details, combatTarget.TargetNode, combatTarget.TargetPuppet);
+                    details["Duration"] = combatTarget.Duration.ToString();
+                    break;
+                case questCombatNodeParams_LookAtTarget lookAtTarget:
+                    AddCombatTargetDetails(details, lookAtTarget.TargetNode, lookAtTarget.TargetPuppet);
+                    details["Duration"] = lookAtTarget.Duration.ToString();
+                    break;
+                case questCombatNodeParams_RestrictMovementToArea restrictMovement:
+                    details["Area"] = restrictMovement.Area.GetResolvedText() ?? "";
+                    break;
+                case questCombatNodeParams_SwitchWeapon switchWeapon:
+                    details["Mode"] = switchWeapon.Mode.ToEnumString();
+                    break;
+                case questCombatNodeParams_PrimaryWeapon primaryWeapon:
+                    details["Unequip"] = primaryWeapon.UnEquip ? "True" : "False";
+                    break;
+                case questCombatNodeParams_SecondaryWeapon secondaryWeapon:
+                    details["Unequip"] = secondaryWeapon.UnEquip ? "True" : "False";
+                    break;
+                case questCombatNodeParams_UseCover useCover:
+                    details["Cover"] = useCover.Cover.GetResolvedText() ?? "";
+                    details["One Time Selection"] = useCover.OneTimeSelection ? "True" : "False";
+                    break;
             }
         }
         else if (node is questPhoneManagerNodeDefinition phoneManagerCasted)
@@ -1557,6 +1631,24 @@ internal class NodeProperties
         }
 
         return "";
+    }
+
+    private static void AddCombatTargetDetails(
+        Dictionary<string, string> details,
+        NodeRef targetNode,
+        gameEntityReference targetPuppet)
+    {
+        var nodeRef = targetNode.GetResolvedText();
+        if (!string.IsNullOrEmpty(nodeRef))
+        {
+            details["Target Node"] = nodeRef;
+        }
+
+        var puppetRef = ParseGameEntityReference(targetPuppet);
+        if (puppetRef != "-")
+        {
+            details["Target Puppet"] = puppetRef;
+        }
     }
 
     public static string ParseGameEntityReference(gameEntityReference? entRef)
