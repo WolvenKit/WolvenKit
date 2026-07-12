@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 
 namespace WolvenKit.RED4.Types;
@@ -11,12 +12,52 @@ public partial class scnSceneResource
     public void AddActor(scnActorDef actor)
     {
         if (actor == null) return;
-        
+
+        ShiftPlayerActorIds();
+
         // Initialize the actor with automatic ID and performer symbol
         actor.InitializeInScene(this);
         
         // Add to actors collection
         Actors.Add(actor);
+    }
+
+    private void ShiftPlayerActorIds()
+    {
+        if (PlayerActors.Count == 0)
+        {
+            return;
+        }
+
+        var actorIdMap = new Dictionary<uint, uint>();
+        var performerIdMap = new Dictionary<uint, uint>();
+
+        for (var i = 0; i < PlayerActors.Count; i++)
+        {
+            var oldActorId = (uint)PlayerActors[i].ActorId.Id;
+            var newActorId = (uint)(Actors.Count + i + 1);
+
+            actorIdMap[oldActorId] = newActorId;
+            performerIdMap[CalculatePerformerId(oldActorId)] = CalculatePerformerId(newActorId);
+        }
+
+        foreach (var result in FindType(typeof(scnActorId)))
+        {
+            var actorId = (scnActorId)result.Value;
+            if (actorIdMap.TryGetValue(actorId.Id, out var newActorId))
+            {
+                actorId.Id = newActorId;
+            }
+        }
+
+        foreach (var result in FindType(typeof(scnPerformerId)))
+        {
+            var performerId = (scnPerformerId)result.Value;
+            if (performerIdMap.TryGetValue(performerId.Id, out var newPerformerId))
+            {
+                performerId.Id = newPerformerId;
+            }
+        }
     }
     
     /// <summary>
