@@ -275,6 +275,11 @@ namespace WolvenKit.App.ViewModels.Documents
                 // Use the built-in AddActor method which handles initialization and performer symbol creation
                 _sceneData.AddActor(newActor);
 
+                foreach (var node in MainGraph.Nodes.OfType<IRefreshableDetails>())
+                {
+                    node.RefreshDetails();
+                }
+
                 // Mark document as dirty
                 Parent?.SetIsDirty(true);
 
