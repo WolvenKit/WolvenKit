@@ -249,7 +249,7 @@ namespace WolvenKit.Views.Shell
                 Interactions.ShowNpvCreationDialogue = (activeProject) =>
                 {
                     NpvCreationDialogView dialog = new(activeProject);
-                    if (dialog.ShowDialog(this) != true)
+                    if (dialog.ShowDialog() != true)
                     {
                         return null;
                     }
