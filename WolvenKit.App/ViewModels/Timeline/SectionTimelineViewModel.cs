@@ -28,6 +28,8 @@ public partial class SectionTimelineViewModel : ObservableObject, IDisposable
     public bool HasSectionNode => _service.HasSectionNode;
     public string SectionName => _service.SectionName;
     public uint SectionDuration => _service.SectionDuration;
+    public uint TimelineDuration => _service.TimelineDuration;
+    public bool IsSectionDurationOutOfSync => _service.IsSectionDurationOutOfSync;
     public uint SnapInterval { get => _service.SnapInterval; set => _service.SnapInterval = value; }
     public bool IsSnapEnabled { get => _service.IsSnapEnabled; set => _service.IsSnapEnabled = value; }
     public bool IsDragging { get => _service.IsDragging; set => _service.IsDragging = value; }
@@ -43,7 +45,7 @@ public partial class SectionTimelineViewModel : ObservableObject, IDisposable
     public double MinPixelsPerMs => _service.MinZoomLevel * BasePixelsPerMs;
     public double MaxPixelsPerMs => _service.MaxZoomLevel * BasePixelsPerMs;
 
-    public double TimelineWidth => Math.Max(ViewportWidth, SectionDuration * PixelsPerMs);
+    public double TimelineWidth => Math.Max(ViewportWidth, TimelineDuration * PixelsPerMs);
     public double GetRowHeight() => BaseRowHeight;
     public double GetTrackHeight(TimelineTrack track) => track.HeightMultiplier * BaseRowHeight;
     public double TotalTrackHeight => Tracks.Sum(t => GetTrackHeight(t));
@@ -58,7 +60,13 @@ public partial class SectionTimelineViewModel : ObservableObject, IDisposable
                 break;
             case nameof(TimelineService.SectionDuration):
                 OnPropertyChanged(nameof(SectionDuration));
+                break;
+            case nameof(TimelineService.TimelineDuration):
+                OnPropertyChanged(nameof(TimelineDuration));
                 OnPropertyChanged(nameof(TimelineWidth));
+                break;
+            case nameof(TimelineService.IsSectionDurationOutOfSync):
+                OnPropertyChanged(nameof(IsSectionDurationOutOfSync));
                 break;
             case nameof(TimelineService.Tracks):
                 OnPropertyChanged(nameof(Tracks));
@@ -98,6 +106,9 @@ public partial class SectionTimelineViewModel : ObservableObject, IDisposable
 
     [RelayCommand]
     private void ZoomToFit() => _service.ZoomToFit(ViewportWidth);
+
+    [RelayCommand]
+    private void FitSectionDurationToEvents() => _service.FitSectionDurationToEvents();
 
     public void Dispose() => _service.Dispose();
 }

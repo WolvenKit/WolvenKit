@@ -109,6 +109,7 @@ public partial class SectionTimelineView : UserControl
         if (e.PropertyName is nameof(SectionTimelineViewModel.HasSectionNode) 
             or nameof(SectionTimelineViewModel.PixelsPerMs)
             or nameof(SectionTimelineViewModel.SectionDuration)
+            or nameof(SectionTimelineViewModel.TimelineDuration)
             or nameof(SectionTimelineViewModel.Tracks))
         {
             Dispatcher.BeginInvoke(new Action(RenderTimeline));
@@ -138,7 +139,7 @@ public partial class SectionTimelineView : UserControl
 
         TimeRulerCanvas.Children.Clear();
 
-        var duration = _viewModel.SectionDuration;
+        var duration = _viewModel.TimelineDuration;
         var pixelsPerMs = _viewModel.PixelsPerMs;
         
         if (duration == 0 || pixelsPerMs == 0)
@@ -252,7 +253,7 @@ public partial class SectionTimelineView : UserControl
             return;
 
         var pixelsPerMs = _viewModel.PixelsPerMs;
-        var duration = _viewModel.SectionDuration;
+        var duration = _viewModel.TimelineDuration;
         var totalHeight = _viewModel.TotalTrackHeight;
         
         uint gridInterval = GetTickInterval(pixelsPerMs);
