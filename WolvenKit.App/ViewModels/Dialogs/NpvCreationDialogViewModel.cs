@@ -40,7 +40,9 @@ public partial class NpvCreationDialogViewModel : DialogViewModel
     [ObservableProperty] private string _bodyGender = "Female";
     [ObservableProperty] private bool _bodyGenderMale = false;
 
-    public bool CanSave()
+    [ObservableProperty] private bool _formValid = false;
+
+    private bool CanSave()
     {
         if (string.IsNullOrEmpty(DestFolderPath) ||
             string.IsNullOrEmpty(Name))
@@ -57,6 +59,8 @@ public partial class NpvCreationDialogViewModel : DialogViewModel
         {
             BodyGenderMale = BodyGender == "Male";
         }
+
+        FormValid = CanSave();
 
         base.OnPropertyChanged(e);
     }

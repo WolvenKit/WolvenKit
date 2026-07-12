@@ -9,12 +9,11 @@
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     mc:Ignorable="d"
-    d:DesignHeight="{DynamicResource WolvenKitDialogHeightMedium}"
+    d:DesignHeight="{DynamicResource WolvenKitDialogHeightLarge}"
     d:DesignWidth="{DynamicResource WolvenKitDialogWidth}"
     Title="Configure your NPV"
-    Height="{DynamicResource WolvenKitDialogHeightMedium}"
+    Height="{DynamicResource WolvenKitDialogHeightLarge}"
     MaxWidth="{DynamicResource WolvenKitDialogWidth}"
-    MaxHeight="{DynamicResource WolvenKitDialogHeightMedium}"
     Background="{StaticResource BackgroundColor_Control}"
     DataContext="{Binding RelativeSource={RelativeSource Self},
                           Path=ViewModel}"
@@ -62,7 +61,7 @@
         <x:Array
             x:Key="BeardListBoxItems"
             Type="system:String">
-            <system:String>00</system:String>
+            <system:String>None</system:String>
             <system:String>01</system:String>
             <system:String>02</system:String>
             <system:String>03</system:String>
@@ -94,7 +93,7 @@
         <x:Array
             x:Key="EyeMakeupListBoxItems"
             Type="system:String">
-            <system:String>"None"</system:String>
+            <system:String>None</system:String>
             <system:String>01</system:String>
             <system:String>02</system:String>
             <system:String>03</system:String>
@@ -121,7 +120,7 @@
         <x:Array
             x:Key="LipMakeupListBoxItems"
             Type="system:String">
-            <system:String>00</system:String>
+            <system:String>None</system:String>
             <system:String>01</system:String>
             <system:String>02</system:String>
             <system:String>03</system:String>
@@ -148,7 +147,7 @@
         <x:Array
             x:Key="CheekMakeupListBoxItems"
             Type="system:String">
-            <system:String>00</system:String>
+            <system:String>None</system:String>
             <system:String>01</system:String>
             <system:String>02</system:String>
             <system:String>03</system:String>
@@ -169,7 +168,7 @@
         <x:Array
             x:Key="BlemishListBoxItems"
             Type="system:String">
-            <system:String>00</system:String>
+            <system:String>None</system:String>
             <system:String>01</system:String>
             <system:String>02</system:String>
             <system:String>03</system:String>
@@ -179,7 +178,7 @@
         <x:Array
             x:Key="FacialTattooListBoxItems"
             Type="system:String">
-            <system:String>00</system:String>
+            <system:String>None</system:String>
             <system:String>01</system:String>
             <system:String>02</system:String>
             <system:String>03</system:String>
@@ -197,6 +196,7 @@
         <x:Array
             x:Key="PiercingListBoxItems"
             Type="system:String">
+            <system:String>None</system:String>
             <system:String>01</system:String>
             <system:String>02</system:String>
             <system:String>03</system:String>
@@ -217,7 +217,7 @@
         <x:Array
             x:Key="CyberwareListBoxItems"
             Type="system:String">
-            <system:String>00</system:String>
+            <system:String>None</system:String>
             <system:String>01</system:String>
             <system:String>02</system:String>
             <system:String>03</system:String>
@@ -232,7 +232,7 @@
         <x:Array
             x:Key="FacialScarListBoxItems"
             Type="system:String">
-            <system:String>00</system:String>
+            <system:String>None</system:String>
             <system:String>01</system:String>
             <system:String>02</system:String>
             <system:String>03</system:String>
@@ -248,6 +248,7 @@
         <x:Array
             x:Key="NippleListBoxItems"
             Type="system:String">
+            <system:String>None</system:String>
             <system:String>01</system:String>
             <system:String>02</system:String>
             <system:String>03</system:String>
@@ -257,7 +258,7 @@
         <x:Array
             x:Key="BodyScarListBoxItems"
             Type="system:String">
-            <system:String>00</system:String>
+            <system:String>None</system:String>
             <system:String>01</system:String>
             <system:String>02</system:String>
         </x:Array>
@@ -266,7 +267,7 @@
         <x:Array
             x:Key="PubeListBoxItems"
             Type="system:String">
-            <system:String>00</system:String>
+            <system:String>None</system:String>
             <system:String>01</system:String>
             <system:String>02</system:String>
             <system:String>03</system:String>
@@ -286,7 +287,7 @@
         <x:Array
             x:Key="GenitalListBoxItems"
             Type="system:String">
-            <system:String>00</system:String>
+            <system:String>None</system:String>
             <system:String>Vagina</system:String>
             <system:String>Pensi1</system:String>
             <system:String>Pensi2</system:String>
@@ -326,6 +327,7 @@
             FinishVisibility="Collapsed"
             NextVisibility="Visible"
             BackVisibility="Collapsed"
+            NextEnabled="{Binding FormValid}"
             PreviewKeyDown="WizardPage_PreviewKeyDown"
             Description="Enter the numeric values from character creator (check your apartment's mirror)."
             NextPage="{Binding ElementName=ComponentsPage}">
