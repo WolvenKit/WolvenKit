@@ -8,7 +8,7 @@ namespace WolvenKit.App.ViewModels.Dialogs;
 
 public partial class NpvCreationDialogViewModel : DialogViewModel
 {
-    [ObservableProperty] private Dictionary<string, string> _projectFolders;
+    [ObservableProperty] private Dictionary<string, string> _projectFolders = [];
 
     [ObservableProperty] private string _destFolderPath = "";
     [ObservableProperty] private string _name = "";
@@ -42,10 +42,8 @@ public partial class NpvCreationDialogViewModel : DialogViewModel
 
     public bool CanSave()
     {
-        if (
-            string.IsNullOrEmpty(DestFolderPath) ||
-            string.IsNullOrEmpty(Name)
-        )
+        if (string.IsNullOrEmpty(DestFolderPath) ||
+            string.IsNullOrEmpty(Name))
         {
             return false;
         }
@@ -62,7 +60,4 @@ public partial class NpvCreationDialogViewModel : DialogViewModel
 
         base.OnPropertyChanged(e);
     }
-
-    public NpvCreationDialogViewModel(Cp77Project activeProject) => ProjectFolders =
-        activeProject.GetAllFolders(activeProject.ModDirectory).ToDictionary<string, string>(x => x);
 }

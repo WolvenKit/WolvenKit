@@ -20,14 +20,21 @@ namespace WolvenKit.Views.Dialogs.Windows;
 /// </summary>
 public partial class NpvCreationDialogView : IViewFor<NpvCreationDialogViewModel>
 {
-    object IViewFor.ViewModel { get => ViewModel; set => ViewModel = (NpvCreationDialogViewModel)value; }
+    object IViewFor.ViewModel
+    {
+        get => ViewModel;
+        set => ViewModel = (NpvCreationDialogViewModel)value;
+    }
 
 
     public NpvCreationDialogView(Cp77Project activeProject)
     {
         InitializeComponent();
 
-        ViewModel = new NpvCreationDialogViewModel(activeProject);
+        ViewModel = new NpvCreationDialogViewModel()
+        {
+            ProjectFolders = activeProject.GetAllFolders(activeProject.ModDirectory).ToDictionary<string, string>(x => x)
+        };
         DataContext = ViewModel;
 
         this.WhenActivated(disposables =>
@@ -52,6 +59,77 @@ public partial class NpvCreationDialogView : IViewFor<NpvCreationDialogViewModel
                     x => x.Ears,
                     x => x.ComboboxEars.SelectedIndex)
                 .DisposeWith(disposables);
+
+            this.Bind(ViewModel,
+                    x => x.Beard,
+                    x => x.ComboboxBeard.SelectedIndex)
+                .DisposeWith(disposables);
+            this.Bind(ViewModel,
+                    x => x.BeardStyle,
+                    x => x.ComboboxBeardStyle.SelectedIndex)
+                .DisposeWith(disposables);
+            this.Bind(ViewModel,
+                    x => x.Cyberware,
+                    x => x.ComboboxCyberware.SelectedIndex)
+                .DisposeWith(disposables);
+            this.Bind(ViewModel,
+                    x => x.EyeMakeup,
+                    x => x.ComboboxEyeMakeUp.SelectedIndex)
+                .DisposeWith(disposables);
+            this.Bind(ViewModel,
+                    x => x.LipMakeup,
+                    x => x.ComboboxLipMakeUp.SelectedIndex)
+                .DisposeWith(disposables);
+            this.Bind(ViewModel,
+                    x => x.CheekMakeup,
+                    x => x.ComboboxCheekMakeUp.SelectedIndex)
+                .DisposeWith(disposables);
+
+            this.Bind(ViewModel,
+                    x => x.Blemishes,
+                    x => x.ComboboxBlemishes.SelectedIndex)
+                .DisposeWith(disposables);
+            this.Bind(ViewModel,
+                    x => x.Nails,
+                    x => x.ComboboxNails.SelectedIndex)
+                .DisposeWith(disposables);
+            this.Bind(ViewModel,
+                    x => x.Genitals,
+                    x => x.ComboboxGenitals.SelectedIndex)
+                .DisposeWith(disposables);
+            this.Bind(ViewModel,
+                    x => x.GenitalSize,
+                    x => x.ComboboxGenitals2.SelectedIndex)
+                .DisposeWith(disposables);
+            this.Bind(ViewModel,
+                    x => x.FacialTattoos,
+                    x => x.ComboboxFacialTattoos.SelectedIndex)
+                .DisposeWith(disposables);
+            this.Bind(ViewModel,
+                    x => x.FacialScars,
+                    x => x.ComboboxFacialScars.SelectedIndex)
+                .DisposeWith(disposables);
+            this.Bind(ViewModel,
+                    x => x.Piercings,
+                    x => x.ComboboxPiercings.SelectedIndex)
+                .DisposeWith(disposables);
+            this.Bind(ViewModel,
+                    x => x.Nipples,
+                    x => x.ComboboxNipples.SelectedIndex)
+                .DisposeWith(disposables);
+            this.Bind(ViewModel,
+                    x => x.BodyScars,
+                    x => x.ComboboxBodyScars.SelectedIndex)
+                .DisposeWith(disposables);
+            this.Bind(ViewModel,
+                    x => x.PubicHair,
+                    x => x.ComboboxPubicHair.SelectedIndex)
+                .DisposeWith(disposables);
+
+            this.Bind(ViewModel,
+                    x => x.ProjectFolders,
+                    x => x.FilterableDropdownMenu.Options)
+                .DisposeWith(disposables);
         });
     }
 
@@ -70,49 +148,20 @@ public partial class NpvCreationDialogView : IViewFor<NpvCreationDialogViewModel
         e.Handled = true;
     }
 
-    private void OnCancelButtonClick(object sender, RoutedEventArgs e)
-    {
-        DialogResult = false;
-        Close();
-    }
-
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
-        if (e.Key == Key.Enter)
-        {
-            OnOkButtonClick(null, null);
-            return;
-        }
-
         if (e.Key != Key.Escape)
         {
             return;
         }
 
-        OnCancelButtonClick(null, null);
-    }
-
-    private void OnOkButtonClick(object sender, RoutedEventArgs e)
-    {
-        DialogResult = true;
         Close();
-    }
-
-    private void WizardControl_OnFinish(object sender, RoutedEventArgs e)
-    {
-        throw new System.NotImplementedException();
     }
 
     private void WizardPage_PreviewKeyDown(object sender, KeyEventArgs e)
     {
         // throw new System.NotImplementedException();
     }
-
-    private void OnBodyGenderSelected(object sender, SelectionChangedEventArgs e)
-    {
-        // throw new System.NotImplementedException();
-    }
-
     private void WizardControl_OnHelpButtonClicked(object sender, RoutedEventArgs e)
     {
         var ps = new ProcessStartInfo(WikiLinks.NPVs) { UseShellExecute = true, Verb = "open" };

@@ -8,13 +8,13 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
     xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
-    mc:Ignorable="d"                                                
+    mc:Ignorable="d"
     d:DesignHeight="{DynamicResource WolvenKitDialogHeightMedium}"
     d:DesignWidth="{DynamicResource WolvenKitDialogWidth}"
     Title="Configure your NPV"
     Height="{DynamicResource WolvenKitDialogHeightMedium}"
     MaxWidth="{DynamicResource WolvenKitDialogWidth}"
-    MaxHeight="{DynamicResource WolvenKitDialogHeightLarge}"
+    MaxHeight="{DynamicResource WolvenKitDialogHeightMedium}"
     Background="{StaticResource BackgroundColor_Control}"
     DataContext="{Binding RelativeSource={RelativeSource Self},
                           Path=ViewModel}"
@@ -317,8 +317,7 @@
         CancelButtonCancelsWindow="True"
         FinishButtonClosesWindow="True"
         CancelVisible="True"
-        HelpVisible="True"
-        Finish="WizardControl_OnFinish">
+        HelpVisible="True">
 
         <syncfusion:WizardPage
             Name="InitialConfigPage"
@@ -408,8 +407,7 @@
                     Grid.Column="1"
                     Grid.ColumnSpan="2"
                     Label="Target Folder:"
-                    Options="{Binding ProjectFolders,
-                                      UpdateSourceTrigger=PropertyChanged}"
+                    Options="{Binding ProjectFolders}"
                     SelectedOption="{Binding DestFolderPath,
                                              Mode=TwoWay}"
                     IsInline="True" />
