@@ -711,6 +711,23 @@ public partial class ChunkViewModel
 
                 IsValueExtrapolated = true;
                 break;
+            case gameSceneTierData data when data.EmptyHands:
+                Value = $"(empty hands)";
+                IsValueExtrapolated = true;
+                break;
+            case scneventsPlayAnimEventExData { Basic: scneventsPlayAnimEventData data }:
+                if (data.BlendIn > 0 || data.BlendOut > 0)
+                {
+                    Value = $"Blend: {data.BlendIn} - {data.BlendOut} ";
+                }
+
+                if (data.ClipEnd > 0 || data.ClipFront > 0)
+                {
+                    Value = $"{Value}Clip: {data.ClipFront} - {data.ClipEnd}";
+                }
+
+                IsValueExtrapolated = !string.IsNullOrEmpty(Value);
+                break;
             case graphGraphConnectionDefinition conn:
                 List<string> nameParts = [];
                 if (conn.Source?.GetValue() is graphGraphSocketDefinition source)
