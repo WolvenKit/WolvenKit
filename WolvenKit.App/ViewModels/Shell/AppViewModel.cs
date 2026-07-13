@@ -3093,16 +3093,25 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             return;
         }
 
-        foreach (var gameFile in msg.GameFiles)
+        switch (msg)
         {
-            // FileName is a resource path and may use '/'; normalize to an OS path so it matches the
-            // document's FilePath (which the watcher builds via FileInfo).
-            TryRefreshOpenDocument(Path.GetFullPath(Path.Combine(project.ModDirectory, gameFile.FileName)));
-        }
+            case FilesImportedMessage.GameFiles(var files):
+                foreach (var gameFile in files)
+                {
+                    // FileName is a resource path and may use '/'; normalize to an OS path so it matches the
+                    // document's FilePath (which the watcher builds via FileInfo).
+                    TryRefreshOpenDocument(Path.GetFullPath(Path.Combine(project.ModDirectory, gameFile.FileName)));
+                }
 
-        foreach (var rawFile in msg.RawFiles)
-        {
-            TryRefreshOpenDocument(rawFile.FullName);
+                break;
+
+            case FilesImportedMessage.RawFiles(var files):
+                foreach (var rawFile in files)
+                {
+                    TryRefreshOpenDocument(rawFile.FullName);
+                }
+
+                break;
         }
     }
 

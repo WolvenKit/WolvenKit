@@ -1303,7 +1303,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
             _progressService.Completed();
             // Return list of created JSON files
-            _projectEvents.PublishFilesImported(new FilesImportedMessage([],[.. createdJsonFiles.ToList()]));
+            _projectEvents.PublishFilesImported(new FilesImportedMessage.RawFiles([.. createdJsonFiles.ToList()]));
 
             // Ensure any ObserveOn-scheduled handler + ProjectAdd dispatches have run to completion
             // (so FileList/FileTree clones are updated) before unblocking awaiters/tests.

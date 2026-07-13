@@ -1089,7 +1089,7 @@ public class RED4Controller : ObservableObject, IGameController
         }
 
         _progressService.Completed();
-        _projectEvents.PublishFilesImported(new FilesImportedMessage([.. files],[]));
+        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles([.. files]));
 
         // Ensure projection of the imported files onto the GridGuard clones (FileList/FileTree)
         // has completed before returning to awaiters (e.g. tests asserting counts, or UI code).
