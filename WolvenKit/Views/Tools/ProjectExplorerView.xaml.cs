@@ -433,9 +433,6 @@ namespace WolvenKit.Views.Tools
             {
                 await doBeforeRefresh;
 
-                RefreshFlatViewIfNeeded();
-                RefreshTreeViewIfNeeded();
-
                 DispatcherHelper.WaitUntilCancelled(deferRefreshToken, () =>
                 {
                     DispatcherHelper.DelayOnMainThread(() =>
@@ -453,7 +450,7 @@ namespace WolvenKit.Views.Tools
 
             DispatcherHelper.RunOnMainThread(() =>
             {
-                 InvalidateLayout();
+                InvalidateLayout();
             });
         }
 
