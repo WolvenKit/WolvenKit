@@ -151,7 +151,7 @@ public class WatcherServiceTests : IDisposable
 
         var fakeGameFiles = filesToPublish.Select(p => (IGameFile)new FakeGameFile(p)).ToList();
 
-        _projectEvents.PublishFilesImported(new FilesImportedMessage(fakeGameFiles, Array.Empty<FileInfo>()));
+        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles(fakeGameFiles));
 
         // The handler runs work on background then marshals AddRange to main thread.
         // Give the dispatcher a moment in real runs; in CI this may need more robust waiting.
@@ -190,9 +190,7 @@ public class WatcherServiceTests : IDisposable
         // OnFilesImported / CreateFileAndAllNeededDirectories.
         EnsurePhysicalDummyFileExists(relativePath);
 
-        var msg = new FilesImportedMessage(
-            new[] { new FakeGameFile(relativePath) },
-            Array.Empty<FileInfo>());
+        var msg = new FilesImportedMessage.GameFiles(new[] { new FakeGameFile(relativePath) });
 
         var ex = Record.Exception(() => _projectEvents.PublishFilesImported(msg));
         Assert.Null(ex); // must not throw even when FS watcher is suspended
@@ -252,7 +250,7 @@ public class WatcherServiceTests : IDisposable
         }
 
         // This Publish call is the heart of the bypass the PR introduced
-        _projectEvents.PublishFilesImported(new FilesImportedMessage(fakeGameFiles, Array.Empty<FileInfo>()));
+        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles(fakeGameFiles));
 
         _watcher.Resume();
 
@@ -281,7 +279,7 @@ public class WatcherServiceTests : IDisposable
         var countBeforeJsonPublish = _watcher.FileList.Count;
 
         // Exactly like the real JSON batch path in ProjectExplorerViewModel
-        _projectEvents.PublishFilesImported(new FilesImportedMessage(Array.Empty<IGameFile>(), createdJsons));
+        _projectEvents.PublishFilesImported(new FilesImportedMessage.RawFiles(createdJsons));
 
         _watcher.Resume();
 
@@ -325,7 +323,7 @@ public class WatcherServiceTests : IDisposable
         var countBeforeBatch = _watcher.FileList.Count;
 
         // Act - trigger the bypass import path
-        _projectEvents.PublishFilesImported(new FilesImportedMessage(fakeFiles, Array.Empty<FileInfo>()));
+        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles(fakeFiles));
 
         // Assert using model state instead of log messages (more robust)
         await WaitForFileListCountAsync(countBeforeBatch + fileCount, TimeSpan.FromSeconds(10));
@@ -363,7 +361,7 @@ public class WatcherServiceTests : IDisposable
         }
 
         // Act
-        _projectEvents.PublishFilesImported(new FilesImportedMessage(fakeFiles, Array.Empty<FileInfo>()));
+        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles(fakeFiles));
 
         // Give the background logging task a moment to start, but not enough time to finish
         await Task.Delay(120);
@@ -409,7 +407,7 @@ public class WatcherServiceTests : IDisposable
         }
 
         // Start large import
-        _projectEvents.PublishFilesImported(new FilesImportedMessage(openWorldFiles, Array.Empty<FileInfo>()));
+        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles(openWorldFiles));
 
         // Immediately switch projects (the critical race condition)
         _watcher.UnwatchProject();
@@ -428,7 +426,7 @@ public class WatcherServiceTests : IDisposable
                 File.WriteAllText(dest, "dummy");
         }
 
-        _projectEvents.PublishFilesImported(new FilesImportedMessage(smallBatch, Array.Empty<FileInfo>()));
+        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles(smallBatch));
 
         await Task.Delay(2000);
 
@@ -465,7 +463,7 @@ public class WatcherServiceTests : IDisposable
             Directory.CreateDirectory(Path.GetDirectoryName(dest)!);
             if (!File.Exists(dest)) File.WriteAllText(dest, "dummy");
         }
-        _projectEvents.PublishFilesImported(new FilesImportedMessage(dynamicEvents, Array.Empty<FileInfo>()));
+        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles(dynamicEvents));
         await WaitForFileListCountAsync(dynamicEvents.Count, TimeSpan.FromSeconds(10));
 
         Assert.True(_watcher.FileList.Count >= dynamicEvents.Count);
@@ -477,7 +475,7 @@ public class WatcherServiceTests : IDisposable
             Directory.CreateDirectory(Path.GetDirectoryName(dest)!);
             if (!File.Exists(dest)) File.WriteAllText(dest, "dummy");
         }
-        _projectEvents.PublishFilesImported(new FilesImportedMessage(worldEncounters, Array.Empty<FileInfo>()));
+        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles(worldEncounters));
         await WaitForFileListCountAsync(dynamicEvents.Count + worldEncounters.Count, TimeSpan.FromSeconds(10));
 
         Assert.True(_watcher.FileList.Count >= dynamicEvents.Count + worldEncounters.Count);
@@ -506,14 +504,14 @@ public class WatcherServiceTests : IDisposable
             Directory.CreateDirectory(Path.GetDirectoryName(dest)!);
             if (!File.Exists(dest)) File.WriteAllText(dest, "dummy");
         }
-        _projectEvents.PublishFilesImported(new FilesImportedMessage(fiveFiles, Array.Empty<FileInfo>()));
+        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles(fiveFiles));
         await WaitForFileListCountAsync(5, TimeSpan.FromSeconds(10));
 
         Assert.True(_watcher.FileList.Count >= 5);
 
         // 0 files - should not add anything
         var countAfterTinyBatch = _watcher.FileList.Count;
-        _projectEvents.PublishFilesImported(new FilesImportedMessage(Array.Empty<IGameFile>(), Array.Empty<FileInfo>()));
+        _projectEvents.PublishFilesImported(new FilesImportedMessage.RawFiles(Array.Empty<FileInfo>()));
         await Task.Delay(500);
 
         // Empty publish should not cause massive growth (previous tests may have left state,
@@ -543,7 +541,7 @@ public class WatcherServiceTests : IDisposable
         }
 
         var batch = openWorldFiles.Take(300).ToList();
-        _projectEvents.PublishFilesImported(new FilesImportedMessage(batch, Array.Empty<FileInfo>()));
+        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles(batch));
 
         await WaitForFileListCountAsync(300, TimeSpan.FromSeconds(15));
 
@@ -588,7 +586,7 @@ public class WatcherServiceTests : IDisposable
             File.WriteAllText(rf.FullName, "{ \"test\": true }");
         }
 
-        _projectEvents.PublishFilesImported(new FilesImportedMessage(gameFiles, mockRawFiles));
+        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles(gameFiles));
 
         await WaitForFileListCountAsync(gameFiles.Count + mockRawFiles.Length, TimeSpan.FromSeconds(10));
 
@@ -617,7 +615,7 @@ public class WatcherServiceTests : IDisposable
             if (!File.Exists(dest)) File.WriteAllText(dest, "dummy");
         }
 
-        _projectEvents.PublishFilesImported(new FilesImportedMessage(files, Array.Empty<FileInfo>()));
+        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles(files));
 
         await Task.Delay(1000);
 
@@ -650,7 +648,7 @@ public class WatcherServiceTests : IDisposable
             if (!File.Exists(dest)) File.WriteAllText(dest, "dummy");
         }
 
-        _projectEvents.PublishFilesImported(new FilesImportedMessage(files, Array.Empty<FileInfo>()));
+        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles(files));
 
         await WaitForFileListCountAsync(files.Count, TimeSpan.FromSeconds(10));
 
@@ -684,7 +682,7 @@ public class WatcherServiceTests : IDisposable
             Directory.CreateDirectory(Path.GetDirectoryName(dest)!);
             if (!File.Exists(dest)) File.WriteAllText(dest, "dummy");
         }
-        _projectEvents.PublishFilesImported(new FilesImportedMessage(exactly100, Array.Empty<FileInfo>()));
+        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles(exactly100));
         await WaitForFileListCountAsync(100, TimeSpan.FromSeconds(10));
 
         Assert.True(_watcher.FileList.Count >= 100);
@@ -699,7 +697,7 @@ public class WatcherServiceTests : IDisposable
             Directory.CreateDirectory(Path.GetDirectoryName(dest)!);
             if (!File.Exists(dest)) File.WriteAllText(dest, "dummy");
         }
-        _projectEvents.PublishFilesImported(new FilesImportedMessage(oneOhOne, Array.Empty<FileInfo>()));
+        _projectEvents.PublishFilesImported(new FilesImportedMessage.GameFiles(oneOhOne));
         await WaitForFileListCountAsync(100 + 101, TimeSpan.FromSeconds(10));
 
         Assert.True(_watcher.FileList.Count >= 201);
@@ -730,7 +728,7 @@ public class WatcherServiceTests : IDisposable
         // This should not throw even though logger is null
         var ex = Record.Exception(() =>
         {
-            events.PublishFilesImported(new FilesImportedMessage(files, Array.Empty<FileInfo>()));
+            events.PublishFilesImported(new FilesImportedMessage.GameFiles(files));
         });
 
         Assert.Null(ex);
