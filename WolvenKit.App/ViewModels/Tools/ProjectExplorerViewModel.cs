@@ -819,7 +819,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         SuspendFileWatcher();
 
-
         foreach (var item in selected)
         {
             var fullPath = item.FullName;

@@ -298,7 +298,7 @@ namespace WolvenKit.Views.Tools
         /// <returns></returns>
         private Task InitiateLoadingUntilCancellation(CancellationToken deferRefreshToken, bool isFirstLoad)
         {
-            using (TreeGrid.View.DeferRefresh(TreeViewRefreshMode.DeferRefresh))
+            using (TreeGrid.View.DeferRefresh(TreeViewRefreshMode.NodeRefresh))
             {
                 // Only show "Loading" if switching projects or loading the first one after
                 // a fresh launch of the app.
@@ -319,9 +319,18 @@ namespace WolvenKit.Views.Tools
                     }
                     else
                     {
-                        RefreshTreeViewIfNeeded();
-                        RefreshFlatViewIfNeeded();
-                        PESearchBar_OnSearchStarted(this, new FunctionEventArgs<string>(_currentFolderQuery));
+                        // RefreshTreeViewIfNeeded();
+                        // RefreshFlatViewIfNeeded();
+
+                        if (!_currentFolderQuery.IsNullOrEmpty())
+                        {
+                            PESearchBar_OnSearchStarted(this, new FunctionEventArgs<string>(_currentFolderQuery));
+                        }
+
+                        DispatcherHelper.DelayOnMainThread(() =>
+                        {
+                            InvalidateLayout();
+                        }, 10);
                     }
                 });
 
@@ -374,14 +383,20 @@ namespace WolvenKit.Views.Tools
 
         private void RefreshFlatViewIfNeeded()
         {
-            TreeGridFlat.View.Filter = IsFileInFlat;
-            TreeGridFlat.View.Refresh();
+            if (TreeGridFlat.IsVisible)
+            {
+                TreeGridFlat.View.Filter = IsFileInFlat;
+                TreeGridFlat.View.Refresh();
+            }
         }
 
         private void RefreshTreeViewIfNeeded()
         {
-            TreeGrid.View.Filter = IsFileIn;
-            TreeGrid.View.Refresh();
+            if (TreeGrid.IsVisible)
+            {
+                TreeGrid.View.Filter = IsFileIn;
+                TreeGrid.View.Refresh();
+            }
         }
 
         // Run inside Dispatcher to avoid exception on startup
@@ -418,22 +433,32 @@ namespace WolvenKit.Views.Tools
             {
                 await doBeforeRefresh;
 
+                RefreshFlatViewIfNeeded();
+                RefreshTreeViewIfNeeded();
+
                 DispatcherHelper.WaitUntilCancelled(deferRefreshToken, () =>
                 {
-
-                    TreeGridFlat.View.Filter = IsFileInFlat;
-                    TreeGridFlat.View.Refresh();
-
-                    Task.Run(() =>
+                    DispatcherHelper.DelayOnMainThread(() =>
                     {
-                        DispatcherHelper.DelayOnMainThread(() =>
+                        InvalidateLayout();
+
+                        if (!_currentFolderQuery.IsNullOrEmpty())
                         {
-                            PESearchBar_OnSearchStarted(this, new FunctionEventArgs<string>(_currentFolderQuery));
-                        }, 10);
-                    });
+                            PESearchBar_OnSearchStarted(this,
+                                new FunctionEventArgs<string>(_currentFolderQuery));
+                        }
+                    }, 1);
                 });
             }
 
+            DispatcherHelper.RunOnMainThread(() =>
+            {
+                 InvalidateLayout();
+            });
+        }
+
+        private void InvalidateLayout()
+        {
             // DeferRefresh has ended. Syncfusion's virtualized TreeGridPanel would otherwise present the
             // refreshed rows painted OVER the stale ones for a few frames (the "drawn twice" ghost) before
             // settling. Re-measure the panels and force the layout pass to complete NOW — synchronously, in
@@ -441,10 +466,18 @@ namespace WolvenKit.Views.Tools
             // after the refresh is already correct. (Doing this via a Background dispatch a tick later is
             // what left the ghost briefly visible.) UpdateLayout re-measures only the virtualized/visible
             // rows, so it's cheap, and it does not pump the dispatcher — no deferred-refresh deadlock risk.
-            InvalidateVirtualizedRows(TreeGrid);
+
+            if (TreeGrid.IsVisible)
+            {
+                InvalidateVirtualizedRows(TreeGrid);
+                TreeGridFlat.UpdateLayout();
+                TreeGridFlat.InvalidateVisual();
+                return;
+            }
+
             InvalidateVirtualizedRows(TreeGridFlat);
             TreeGrid.UpdateLayout();
-            TreeGridFlat.UpdateLayout();
+            TreeGrid.InvalidateVisual();
         }
 
         /// <summary>
@@ -452,8 +485,15 @@ namespace WolvenKit.Views.Tools
         /// over each other" artifact that appears when the bound data changes while the grid is scrolled.
         /// Safe no-op if the panel isn't in the visual tree yet.
         /// </summary>
-        private static void InvalidateVirtualizedRows(DependencyObject grid) =>
-            FindVisualDescendant<TreeGridPanel>(grid)?.InvalidateMeasureInfo();
+        private static void InvalidateVirtualizedRows(DependencyObject grid)
+        {
+            var panel = FindVisualDescendant<TreeGridPanel>(grid);
+                if (panel == null) return;
+
+                panel.InvalidateMeasureInfo();
+                panel.InvalidateMeasure();
+                panel.InvalidateArrange();
+        }
 
         private static T FindVisualDescendant<T>(DependencyObject root) where T : DependencyObject
         {
