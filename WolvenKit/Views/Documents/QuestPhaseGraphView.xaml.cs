@@ -1037,12 +1037,41 @@ namespace WolvenKit.Views.Documents
             // Get the currently displayed graph (could be main graph or a subgraph)
             var currentGraph = QuestPhaseGraphEditor.Source;
 
+            // Shortcut: C to add a comment at the cursor or around selected nodes
+            if (e.Key == Key.C && Keyboard.Modifiers == ModifierKeys.None)
+            {
+                if (IsTextEditingControlFocused())
+                {
+                    return;
+                }
+
+                if (QuestPhaseGraphEditor.AddCommentFromCurrentCursor())
+                {
+                    e.Handled = true;
+                    return;
+                }
+            }
+
             // Shortcut: Delete key to soft delete, Shift+Delete for hard delete
             if (e.Key == Key.Delete)
             {
                 // Don't handle delete key if user is editing text
                 if (IsTextEditingControlFocused())
                     return;
+
+                var selectedComments = QuestPhaseGraphEditor?.Editor?.SelectedItems?
+                    .OfType<GraphCommentViewModel>()
+                    .ToList();
+
+                if (selectedComments is { Count: > 0 })
+                {
+                    foreach (var comment in selectedComments)
+                    {
+                        currentGraph.RemoveCommentCommand.Execute(comment);
+                    }
+
+                    e.Handled = true;
+                }
 
                 // Use SelectedNodes from underlying GraphEditor
                 var selectedNodes = QuestPhaseGraphEditor?.Editor?.SelectedItems?

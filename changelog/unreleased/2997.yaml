@@ -1,0 +1,6 @@
+changes:
+    - type: "added"
+      packages: ["App"]
+      pr-number: 2997
+      author: "misterchedda"
+      description: "Added comment boxes to quest and scene editors"

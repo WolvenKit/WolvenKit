@@ -653,6 +653,21 @@ public partial class ChunkViewModel
             case CKeyValuePair kvp:
                 Descriptor = kvp.Key;
                 break;
+            case gameSceneTierData data:
+                Descriptor = $"{data.Tier}";
+                break;
+            case scneventsPlayAnimEventData data:
+                if (data.BlendIn > 0 || data.BlendOut > 0)
+                {
+                    Descriptor = $"Blend: {data.BlendIn} - {data.BlendOut} ";
+                }
+
+                if (data.ClipEnd > 0 || data.ClipFront > 0)
+                {
+                    Descriptor = $"{Descriptor}Clip: {data.ClipFront} - {data.ClipEnd}";
+                }
+
+                break;
             case questNodeDefinition qnd:
                 Descriptor = qnd.Id.ToString();
                 return;
