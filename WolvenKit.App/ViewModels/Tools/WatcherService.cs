@@ -840,22 +840,28 @@ public partial class ProjectExplorerViewModel
         /// <param name="msg"></param>
         private void OnFilesImported(FilesImportedMessage msg)
         {
-            var gameFiles = msg.GameFiles;
-            var rawFiles = msg.RawFiles;
-
             var batch = new List<FileSystemModel>();
 
-            foreach (var file in gameFiles)
+            switch (msg)
             {
-                var gameRelativePath = file.FileName;
-                var fullPath = Path.Combine(_projectDirectory, "archive", gameRelativePath);
-                var fileInfo = new FileInfo(fullPath);
-                CreateFileAndAllNeededDirectories(FileDestination.Archive, fileInfo, batch);
-            }
+                case FilesImportedMessage.GameFiles(var files):
+                    foreach (var file in files)
+                    {
+                        var gameRelativePath = file.FileName;
+                        var fullPath = Path.Combine(_projectDirectory, "archive", gameRelativePath);
+                        var fileInfo = new FileInfo(fullPath);
+                        CreateFileAndAllNeededDirectories(FileDestination.Archive, fileInfo, batch);
+                    }
 
-            foreach (var file in rawFiles)
-            {
-                CreateFileAndAllNeededDirectories(FileDestination.Raw, file, batch);
+                    break;
+                case FilesImportedMessage.RawFiles(var files):
+                    foreach (var file in files)
+                    {
+                        CreateFileAndAllNeededDirectories(FileDestination.Raw, file, batch);
+                    }
+
+                    break;
+
             }
 
             FileList.AddRange(batch);

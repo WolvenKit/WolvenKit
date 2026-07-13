@@ -74,10 +74,11 @@ public interface IProjectEvents
 /// this record could be expanded upon.
 /// </summary>
 /// <param name="Files"></param>
-public sealed record FilesImportedMessage(
-    IReadOnlyList<IGameFile> GameFiles,
-    IReadOnlyList<FileInfo> RawFiles
-);
+public abstract record FilesImportedMessage
+{
+    public sealed record GameFiles(IReadOnlyList<IGameFile> Files): FilesImportedMessage;
+    public sealed record RawFiles(IReadOnlyList<FileInfo> Files): FilesImportedMessage;
+}
 
 /// <summary>
 /// An authoritative list of completed moves, each an absolute source path that was moved to an
