@@ -1,0 +1,6 @@
+changes:
+    - type: "fixed"
+      packages: ["App"]
+      pr-number: 3010
+      author: "misterchedda"
+      description: "Arrange Items preserves node placement within comment boxes, and nested comments can be selected correctly"

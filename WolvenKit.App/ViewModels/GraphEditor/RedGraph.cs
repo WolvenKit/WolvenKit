@@ -332,11 +332,31 @@ public partial class RedGraph : IDisposable
     {
         var graph = new GeometryGraph();
         var msaglNodes = new Dictionary<uint, Node>();
+        var commentClusters = GetCommentLayoutClusters();
+        var clusteredNodes = commentClusters
+            .SelectMany(cluster => cluster.Nodes)
+            .ToHashSet();
 
         // Extra height for external node ID (font + margin + padding)
         const double nodeIdExtraHeight = 35;
 
-        foreach (var node in Nodes)
+        foreach (var cluster in commentClusters)
+        {
+            var bounds = cluster.Bounds;
+            var msaglNode = new Node(CurveFactory.CreateRectangle(bounds.Width, bounds.Height, new Microsoft.Msagl.Core.Geometry.Point()))
+            {
+                UserData = cluster
+            };
+
+            foreach (var node in cluster.Nodes)
+            {
+                msaglNodes.Add(node.UniqueId, msaglNode);
+            }
+
+            graph.Nodes.Add(msaglNode);
+        }
+
+        foreach (var node in Nodes.Where(node => !clusteredNodes.Contains(node)))
         {
             var layoutHeight = node.Size.Height + nodeIdExtraHeight;
             var msaglNode = new Node(CurveFactory.CreateRectangle(node.Size.Width, layoutHeight, new Microsoft.Msagl.Core.Geometry.Point()))
@@ -350,7 +370,12 @@ public partial class RedGraph : IDisposable
 
         foreach (var connection in Connections.Reverse())
         {
-            graph.Edges.Add(new Edge(msaglNodes[connection.Source.OwnerId], msaglNodes[connection.Target.OwnerId]));
+            var source = msaglNodes[connection.Source.OwnerId];
+            var target = msaglNodes[connection.Target.OwnerId];
+            if (!ReferenceEquals(source, target))
+            {
+                graph.Edges.Add(new Edge(source, target));
+            }
         }
 
         var settings = new SugiyamaLayoutSettings
@@ -369,6 +394,31 @@ public partial class RedGraph : IDisposable
 
         foreach (var node in graph.Nodes)
         {
+            if (node.UserData is CommentLayoutCluster cluster)
+            {
+                var bounds = cluster.Bounds;
+                var arrangedLocation = new System.Windows.Point(
+                    node.Center.X - graph.BoundingBox.Center.X - (bounds.Width / 2) + xOffset,
+                    node.Center.Y - graph.BoundingBox.Center.Y - (bounds.Height / 2) + yOffset);
+                var offset = arrangedLocation - bounds.Location;
+
+                foreach (var comment in cluster.Comments)
+                {
+                    comment.Location += offset;
+                }
+
+                foreach (var childNode in cluster.Nodes)
+                {
+                    childNode.Location += offset;
+                }
+
+                maxX = Math.Max(maxX, arrangedLocation.X + bounds.Width);
+                minX = Math.Min(minX, arrangedLocation.X);
+                maxY = Math.Max(maxY, arrangedLocation.Y + bounds.Height);
+                minY = Math.Min(minY, arrangedLocation.Y);
+                continue;
+            }
+
             var nvm = (NodeViewModel)node.UserData;
             // Offset the Y position to account for the extra height added for node ID spacing
             nvm.Location = new System.Windows.Point(
@@ -383,6 +433,85 @@ public partial class RedGraph : IDisposable
         }
 
         return new System.Windows.Rect(minX, minY, maxX - minX, maxY - minY);
+    }
+
+    private List<CommentLayoutCluster> GetCommentLayoutClusters()
+    {
+        if (Comments.Count == 0)
+        {
+            return [];
+        }
+
+        var parents = Enumerable.Range(0, Comments.Count).ToArray();
+
+        int Find(int index)
+        {
+            while (parents[index] != index)
+            {
+                parents[index] = parents[parents[index]];
+                index = parents[index];
+            }
+
+            return index;
+        }
+
+        void Union(int first, int second)
+        {
+            var firstRoot = Find(first);
+            var secondRoot = Find(second);
+            if (firstRoot != secondRoot)
+            {
+                parents[secondRoot] = firstRoot;
+            }
+        }
+
+        for (var i = 0; i < Comments.Count; i++)
+        {
+            var firstBounds = GetCommentBounds(Comments[i]);
+            for (var j = i + 1; j < Comments.Count; j++)
+            {
+                if (firstBounds.IntersectsWith(GetCommentBounds(Comments[j])))
+                {
+                    Union(i, j);
+                }
+            }
+        }
+
+        var clusters = Comments
+            .Select((comment, index) => new { Comment = comment, Root = Find(index) })
+            .GroupBy(item => item.Root)
+            .Select(group => new CommentLayoutCluster(group.Select(item => item.Comment)))
+            .ToList();
+
+        foreach (var node in Nodes)
+        {
+            var nodeBounds = new System.Windows.Rect(node.Location, node.Size);
+            var cluster = clusters.FirstOrDefault(candidate =>
+                candidate.Comments.Any(comment => GetCommentBounds(comment).Contains(nodeBounds)));
+            cluster?.Nodes.Add(node);
+        }
+
+        return clusters;
+    }
+
+    private static System.Windows.Rect GetCommentBounds(GraphCommentViewModel comment) =>
+        new(comment.Location, new System.Windows.Size(comment.Width, comment.Height));
+
+    private sealed class CommentLayoutCluster
+    {
+        public CommentLayoutCluster(IEnumerable<GraphCommentViewModel> comments)
+        {
+            Comments = comments.ToList();
+            Bounds = Comments
+                .Select(GetCommentBounds)
+                .Aggregate(System.Windows.Rect.Union);
+        }
+
+        public List<GraphCommentViewModel> Comments { get; }
+
+        public List<NodeViewModel> Nodes { get; } = [];
+
+        public System.Windows.Rect Bounds { get; }
     }
 
     public GraphCommentViewModel AddComment(System.Windows.Point location, IEnumerable<object>? selectedItems = null)
@@ -456,7 +585,11 @@ public partial class RedGraph : IDisposable
         Comments.Clear();
     }
 
-    private void CommentsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) => RebuildCanvasItems();
+    private void CommentsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        UpdateCommentZIndices();
+        RebuildCanvasItems();
+    }
 
     private void NodesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e) => RebuildCanvasItems();
 
@@ -484,6 +617,24 @@ public partial class RedGraph : IDisposable
         else if (e.PropertyName == nameof(GraphCommentViewModel.AccentColor))
         {
             GraphCommentStateSave();
+        }
+        else if (e.PropertyName is nameof(GraphCommentViewModel.Width) or nameof(GraphCommentViewModel.Height))
+        {
+            UpdateCommentZIndices();
+        }
+    }
+
+    private void UpdateCommentZIndices()
+    {
+        var orderedComments = Comments
+            .Select((comment, index) => new { Comment = comment, Index = index })
+            .OrderByDescending(item => item.Comment.Width * item.Comment.Height)
+            .ThenBy(item => item.Index)
+            .ToList();
+
+        for (var index = 0; index < orderedComments.Count; index++)
+        {
+            orderedComments[index].Comment.ZIndex = index - orderedComments.Count;
         }
     }
 

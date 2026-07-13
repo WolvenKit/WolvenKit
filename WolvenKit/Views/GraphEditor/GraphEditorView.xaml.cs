@@ -188,6 +188,7 @@ public partial class GraphEditorView : UserControl
         UpdateLayout();
         Source.ArrangeNodes();
         Source.GraphStateSave();
+        Source.GraphCommentStateSave();
         Source.CenterOnSelectedNodes(SelectedNodes);
     }
 
