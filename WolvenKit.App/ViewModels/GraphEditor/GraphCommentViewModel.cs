@@ -17,7 +17,8 @@ public partial class GraphCommentViewModel : ObservableObject
 
     public string Id { get; init; } = Guid.NewGuid().ToString("N");
 
-    public int ZIndex => -1000;
+    [ObservableProperty]
+    private int _zIndex = -1000;
 
     public double MaximumWidth => MaxWidth;
 
