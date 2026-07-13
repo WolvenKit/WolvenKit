@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using WolvenKit.App.Services;
 using WolvenKit.Common;
@@ -25,12 +26,18 @@ public class ProjectEventsTests
         using var sub = events.FilesImported.Subscribe(received.Add);
 
         var fakeFiles = new List<IGameFile> { new FakeGameFile("archive\\test\\file.mesh") };
-        events.PublishFilesImported(new FilesImportedMessage(fakeFiles, Array.Empty<FileInfo>()));
+        events.PublishFilesImported(new FilesImportedMessage.GameFiles(fakeFiles));
 
         Assert.Single(received);
-        Assert.Single(received[0].GameFiles);
-        Assert.Equal("archive\\test\\file.mesh", received[0].GameFiles[0].FileName);
-        Assert.Empty(received[0].RawFiles);
+
+        if (received[0] is not FilesImportedMessage.GameFiles gameFilesMsg)
+        {
+            Assert.Fail("FilesImportedMessage received was not a GameFiles.");
+            return;
+        }
+
+        Assert.Single(gameFilesMsg.Files);
+        Assert.Equal("archive\\test\\file.mesh", gameFilesMsg.Files.First().FileName);
     }
 
     [Fact]
@@ -44,11 +51,16 @@ public class ProjectEventsTests
         var raw = new FileInfo(Path.GetTempFileName());
         try
         {
-            events.PublishFilesImported(new FilesImportedMessage(Array.Empty<IGameFile>(), new[] { raw }));
+            events.PublishFilesImported(new FilesImportedMessage.RawFiles(new[] { raw }));
 
             Assert.Single(received);
-            Assert.Empty(received[0].GameFiles);
-            Assert.Single(received[0].RawFiles);
+
+            if (received[0] is not FilesImportedMessage.RawFiles rawFilesMsg)
+            {
+                Assert.Fail("FilesImportedMessage received was not a GameFiles.");
+                return;
+            }
+            Assert.Single(rawFilesMsg.Files);
         }
         finally
         {
@@ -66,7 +78,7 @@ public class ProjectEventsTests
         using var s1 = events.FilesImported.Subscribe(_ => count1++);
         using var s2 = events.FilesImported.Subscribe(_ => count2++);
 
-        events.PublishFilesImported(new FilesImportedMessage(Array.Empty<IGameFile>(), Array.Empty<FileInfo>()));
+        events.PublishFilesImported(new FilesImportedMessage.RawFiles(Array.Empty<FileInfo>()));
 
         Assert.Equal(1, count1);
         Assert.Equal(1, count2);
