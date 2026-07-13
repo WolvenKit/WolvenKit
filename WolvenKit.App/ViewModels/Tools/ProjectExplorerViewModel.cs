@@ -811,6 +811,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
     {
         var selected = SelectedItems.NotNull().OfType<FileSystemModel>().ToList();
         var delete = Interactions.DeleteFiles(selected.Select(d => d.Name));
+
         if (!delete)
         {
             return;
@@ -818,8 +819,7 @@ public partial class ProjectExplorerViewModel : ToolViewModel
 
         SuspendFileWatcher();
 
-        // Delete the files/directories on disk (to recycle bin). We suspend the watcher so
-        // we don't get concurrent Deleted FS events fighting with our manual model cleanup.
+
         foreach (var item in selected)
         {
             var fullPath = item.FullName;
@@ -840,14 +840,6 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             }
         }
 
-        // Manually remove the corresponding models from the watcher collections.
-        // We do this under BeginDeferredRefreshContext so that the Syncfusion TreeGrid
-        // (and TreeGridFlat) views are in DeferRefresh mode while the Removes (and their
-        // CollectionChanged notifications) happen. This prevents NREs inside
-        // TreeGridView.RemoveNode / QueryableView when the item being removed was added
-        // via the bypass path (OnFilesImported/CreateFileAndAllNeededDirectories) and
-        // may not have had a materialized TreeNode in the grid's internal map (e.g. because
-        // the parent folder was not expanded, or due to prior Reset notifications, filters, etc.).
         _deferredRefreshCts = new CancellationTokenSource();
 
         if (BeginDeferredRefreshContext == null)
@@ -861,42 +853,26 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 _projectWatcher.RemoveItems(selected);
             }
 
-            ResumeFileWatcher();
             return;
         }
 
         var cts = _deferredRefreshCts;
+
         await BeginDeferredRefreshContext(
             cts.Token,
-            Task.Run(async () =>
+            Task.Run(() =>
             {
                 try
                 {
                     _projectWatcher.RemoveItems(selected);
-
-                    // The RemoveItems queue their actual collection mutations via
-                    // DispatcherHelper.RunOnMainThread (which is InvokeAsync). Wait here
-                    // (on this worker) for the dispatcher to reach a point after our Normal
-                    // priority remove actions have executed. This ensures the CC notifications
-                    // are delivered while the view's DeferRefresh is still active.
-                    try
-                    {
-                        System.Windows.Application.Current?.Dispatcher?.Invoke(
-                            () => { },
-                            System.Windows.Threading.DispatcherPriority.ContextIdle);
-                    }
-                    catch { }
                 }
                 finally
                 {
-                    // Always unblock the deferred refresh (so the grids get a chance to
-                    // reconcile their node state via Refresh) even if something went wrong.
-                    try { await cts.CancelAsync(); } catch { }
-                    try { cts.Dispose(); } catch { }
+                    cts.Cancel();
+                    cts.Dispose();
+                    ResumeFileWatcher();
                 }
             }));
-
-        ResumeFileWatcher();
     }
 
     /// <summary>
