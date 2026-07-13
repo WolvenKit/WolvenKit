@@ -40,7 +40,10 @@ public partial class TimelineService : ObservableObject, IDisposable
     private uint _timelineDuration;
 
     [ObservableProperty]
-    private bool _isSectionDurationOutOfSync;
+    private uint _latestEventEndTime;
+
+    [ObservableProperty]
+    private bool _isSectionDurationTooShort;
 
     [ObservableProperty]
     private uint _snapInterval = 100;
@@ -99,7 +102,8 @@ public partial class TimelineService : ObservableObject, IDisposable
         Tracks.Clear();
         SectionDuration = 0;
         TimelineDuration = 0;
-        IsSectionDurationOutOfSync = false;
+        LatestEventEndTime = 0;
+        IsSectionDurationTooShort = false;
     }
 
     private void RebuildTracks()
@@ -266,9 +270,9 @@ public partial class TimelineService : ObservableObject, IDisposable
 
     private void RefreshTimelineDuration()
     {
-        var eventEndTime = GetMaxEventEndTime();
-        TimelineDuration = Math.Max(SectionDuration, eventEndTime);
-        IsSectionDurationOutOfSync = SectionDuration != eventEndTime;
+        LatestEventEndTime = GetMaxEventEndTime();
+        TimelineDuration = Math.Max(SectionDuration, LatestEventEndTime);
+        IsSectionDurationTooShort = LatestEventEndTime > SectionDuration;
     }
 
     private uint GetMaxEventEndTime()
@@ -302,22 +306,36 @@ public partial class TimelineService : ObservableObject, IDisposable
             .Any(evt => evt.StartTime != evt.Event.StartTime || evt.Duration != evt.Event.Duration);
     }
 
-    public void FitSectionDurationToEvents()
+    public void ExtendSectionDurationToEvents()
+    {
+        if (LatestEventEndTime > SectionDuration)
+        {
+            SetSectionDuration(LatestEventEndTime);
+        }
+    }
+
+    public void PreviewSectionDuration(uint duration)
+    {
+        SectionDuration = duration;
+        TimelineDuration = Math.Max(duration, LatestEventEndTime);
+        IsSectionDurationTooShort = LatestEventEndTime > duration;
+    }
+
+    public void SetSectionDuration(uint duration)
     {
         if (_sectionNode == null)
         {
             return;
         }
 
-        var newDuration = GetMaxEventEndTime();
+        var newDuration = Math.Max(duration, LatestEventEndTime);
         if ((_sectionNode.SectionDuration?.Stu ?? 0) == newDuration)
         {
+            PreviewSectionDuration(newDuration);
             return;
         }
 
-        SectionDuration = newDuration;
-        TimelineDuration = newDuration;
-        IsSectionDurationOutOfSync = false;
+        PreviewSectionDuration(newDuration);
         _sectionNode.SectionDuration = new scnSceneTime { Stu = newDuration };
 
         MarkDocumentDirty();
@@ -338,6 +356,9 @@ public partial class TimelineService : ObservableObject, IDisposable
 
         return (uint)(Math.Round((double)value / SnapInterval) * SnapInterval);
     }
+
+    public uint GetSnappedSectionDuration(uint duration) =>
+        Math.Max(SnapValue(duration), LatestEventEndTime);
 
     public void ZoomIn()
     {

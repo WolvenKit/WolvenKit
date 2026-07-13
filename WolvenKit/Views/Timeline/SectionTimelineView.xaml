@@ -130,26 +130,13 @@
                     <Button
                         Margin="8,0,0,0"
                         Padding="8,3"
-                        Command="{Binding FitSectionDurationToEventsCommand}"
-                        IsEnabled="{Binding IsSectionDurationOutOfSync}"
-                        ToolTipService.ShowOnDisabled="True">
-                        <Button.Style>
-                            <Style
-                                BasedOn="{StaticResource {x:Type Button}}"
-                                TargetType="Button">
-                                <Setter Property="ToolTip" Value="Section duration already matches the event end" />
-                                <Style.Triggers>
-                                    <DataTrigger
-                                        Binding="{Binding IsSectionDurationOutOfSync}"
-                                        Value="True">
-                                        <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
-                                        <Setter Property="BorderBrush" Value="{StaticResource WolvenKitRed}" />
-                                        <Setter Property="Foreground" Value="White" />
-                                        <Setter Property="ToolTip" Value="Set section duration to the end of the last event" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
+                        Background="{StaticResource WolvenKitRed}"
+                        BorderBrush="{StaticResource WolvenKitRed}"
+                        Command="{Binding ExtendSectionDurationToEventsCommand}"
+                        Foreground="White"
+                        ToolTip="Extend section duration to the end of the last event"
+                        Visibility="{Binding IsSectionDurationTooShort,
+                                             Converter={StaticResource BoolToVis}}">
                         <StackPanel Orientation="Horizontal">
                             <iconPacks:PackIconMaterial
                                 Kind="ArrowExpandHorizontal"
@@ -159,7 +146,7 @@
                                 VerticalAlignment="Center" />
                             <TextBlock
                                 VerticalAlignment="Center"
-                                Text="Set to event end" />
+                                Text="Extend to event end" />
                         </StackPanel>
                     </Button>
                 </StackPanel>

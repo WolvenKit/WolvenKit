@@ -29,7 +29,8 @@ public partial class SectionTimelineViewModel : ObservableObject, IDisposable
     public string SectionName => _service.SectionName;
     public uint SectionDuration => _service.SectionDuration;
     public uint TimelineDuration => _service.TimelineDuration;
-    public bool IsSectionDurationOutOfSync => _service.IsSectionDurationOutOfSync;
+    public uint LatestEventEndTime => _service.LatestEventEndTime;
+    public bool IsSectionDurationTooShort => _service.IsSectionDurationTooShort;
     public uint SnapInterval { get => _service.SnapInterval; set => _service.SnapInterval = value; }
     public bool IsSnapEnabled { get => _service.IsSnapEnabled; set => _service.IsSnapEnabled = value; }
     public bool IsDragging { get => _service.IsDragging; set => _service.IsDragging = value; }
@@ -65,8 +66,11 @@ public partial class SectionTimelineViewModel : ObservableObject, IDisposable
                 OnPropertyChanged(nameof(TimelineDuration));
                 OnPropertyChanged(nameof(TimelineWidth));
                 break;
-            case nameof(TimelineService.IsSectionDurationOutOfSync):
-                OnPropertyChanged(nameof(IsSectionDurationOutOfSync));
+            case nameof(TimelineService.LatestEventEndTime):
+                OnPropertyChanged(nameof(LatestEventEndTime));
+                break;
+            case nameof(TimelineService.IsSectionDurationTooShort):
+                OnPropertyChanged(nameof(IsSectionDurationTooShort));
                 break;
             case nameof(TimelineService.Tracks):
                 OnPropertyChanged(nameof(Tracks));
@@ -88,7 +92,13 @@ public partial class SectionTimelineViewModel : ObservableObject, IDisposable
 
     public void RefreshAfterDrag() => _service.RefreshAfterDrag();
 
+    public void PreviewSectionDuration(uint duration) => _service.PreviewSectionDuration(duration);
+
+    public void SetSectionDuration(uint duration) => _service.SetSectionDuration(duration);
+
     public uint SnapValue(uint value) => _service.SnapValue(value);
+
+    public uint GetSnappedSectionDuration(uint duration) => _service.GetSnappedSectionDuration(duration);
 
     public uint PixelsToTime(double pixels)
     {
@@ -108,7 +118,7 @@ public partial class SectionTimelineViewModel : ObservableObject, IDisposable
     private void ZoomToFit() => _service.ZoomToFit(ViewportWidth);
 
     [RelayCommand]
-    private void FitSectionDurationToEvents() => _service.FitSectionDurationToEvents();
+    private void ExtendSectionDurationToEvents() => _service.ExtendSectionDurationToEvents();
 
     public void Dispose() => _service.Dispose();
 }
