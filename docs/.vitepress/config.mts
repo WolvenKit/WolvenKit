@@ -55,6 +55,19 @@ export default defineConfig({
         collapsed: false,
         items: [
           { text: 'Homepage', link: '/code-documentation/home' },
+            {
+                text: 'Subprojects',
+                collapsed: false,
+                items: [
+                    {
+                        text: 'WolvenKit.Common',
+                        collapsed: true,
+                        items: [
+                            { text: 'Red Type Template Service', link: '/code-documentation/Subprojects/WolvenKit.Common/RedTypeTemplateService' },
+                        ]
+                    }
+                ]
+            }
         ]
       }
     ],
