@@ -1173,12 +1173,25 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             .Where(x => selectedItemPaths.Contains(x.FullName) && File.Exists(x.FullName)).ToList();
 
         _deferredRefreshCts = new CancellationTokenSource();
+
         if (BeginDeferredRefreshContext == null)
         {
             throw new Exception("Rendering context does not exist.");
         }
 
-        await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertToJsonInternal(convertSelection));
+        try
+        {
+            await BeginDeferredRefreshContext(_deferredRefreshCts.Token, ConvertToJsonInternal(convertSelection));
+        }
+        catch (WolvenKitException e)
+        {
+            _loggerService.Error($"Exception when converting to JSON: ${e}");
+        }
+        finally
+        {
+            _deferredRefreshCts.Cancel();
+            _deferredRefreshCts.Dispose();
+        }
     }
 
     private async Task ConvertToJsonInternal(IEnumerable<FileSystemModel> selection)
@@ -1706,10 +1719,27 @@ public partial class ProjectExplorerViewModel : ToolViewModel
                 throw new Exception("Rendering context does not exist.");
             }
 
-            await BeginDeferredRefreshContext(
-                _deferredRefreshCts.Token,
-                ConvertFromJsonInternal(SelectedItems!.OfType<FileSystemModel>().Where(IsInRawFolder))
-            );
+            _gridGuard.BeginChanges();
+
+            try
+            {
+                _loggerService?.Debug("Beginning deferred refresh context for JSON to file conversion.");
+                await BeginDeferredRefreshContext(
+                    _deferredRefreshCts.Token,
+                    ConvertFromJsonInternal(SelectedItems!.OfType<FileSystemModel>().Where(IsInRawFolder))
+                );
+            }
+            catch (WolvenKitException e)
+            {
+                _loggerService?.Error(4534534, $"Exception when refreshing after converting raw file: ${e.Message}");
+            }
+            finally
+            {
+                _deferredRefreshCts.Cancel();
+                _deferredRefreshCts.Dispose();
+                _gridGuard.ConfirmChangesMade();
+                _gridGuard.ConfirmRedrawComplete();
+            }
 
             return;
         }
@@ -1727,10 +1757,24 @@ public partial class ProjectExplorerViewModel : ToolViewModel
             throw new Exception("Rendering context does not exist.");
         }
 
-        await BeginDeferredRefreshContext(
-            _deferredRefreshCts.Token,
-            ConvertFromJsonInternal(convertSelection)
-        );
+        try
+        {
+            _gridGuard.BeginChanges();
+
+            await BeginDeferredRefreshContext(
+                _deferredRefreshCts.Token,
+                ConvertFromJsonInternal(convertSelection)
+            );
+        }
+        catch (WolvenKitException e)
+        {
+            _loggerService?.Error(4534534, $"Exception when refreshing after converting raw file: ${e.Message}");
+        }
+        finally
+        {
+            _deferredRefreshCts.Cancel();
+            _deferredRefreshCts.Dispose();
+        }
     }
 
     // TODO: Refactor this method to use PublishFilesImported rather than relying on WatcherService.
