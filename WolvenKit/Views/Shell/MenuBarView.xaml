@@ -794,6 +794,19 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <MenuItem
+                    x:Name="MenuItemShowRedTypeTemplateManager"
+                    Margin="{DynamicResource WolvenKitMenuBarItemMarginHorizontal}"
+                    Header="Template Manager">
+                    <MenuItem.Icon>
+                        <local:IconBox
+                            IconPack="Unicons"
+                            Kind="CopyAltLine"
+                            Size="{DynamicResource WolvenKitIconTiny}"
+                            Foreground="{StaticResource WolvenKitPurple}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
                 <Separator />
 
                 <MenuItem

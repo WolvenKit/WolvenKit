@@ -10,9 +10,12 @@
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    xmlns:controls="clr-namespace:WolvenKit.Views.Controls"
     mc:Ignorable="d"
     d:DesignWidth="800"
     d:DesignHeight="600"
+    d:DataContext="{d:DesignInstance Type=dialogs:NewFileViewModel}"
     Width="800"
     Height="600"
     Background="{StaticResource ContentBackgroundAlt3}">
@@ -126,6 +129,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
                 <TextBlock
@@ -137,7 +141,12 @@
                 <hc:TextBox
                     x:Name="FileName"
                     Grid.Column="1"
+                    Margin="{DynamicResource WolvenKitMarginSmallRight}"
                     FlowDirection="LeftToRight" />
+
+                <controls:RedTypeTemplateDropdown
+                    Grid.Column="2"
+                    ViewModel="{Binding RedTypeTemplateDropdownViewModel}"/>
             </Grid>
         </Border>
 

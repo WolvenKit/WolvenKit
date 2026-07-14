@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WolvenKit.App.Helpers;
 using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.App.ViewModels.GraphEditor.Nodes.Behavior;
+using WolvenKit.Common.Model;
 using WolvenKit.RED4.Types;
 using WpfPoint = System.Windows.Point;
 
@@ -120,7 +122,7 @@ public partial class RedGraph
         };
     }
 
-    public uint CreateBehaviorRoot(Type type, System.Windows.Point location)
+    public uint CreateBehaviorRoot(Type type, System.Windows.Point location, RedTypeTemplateSelectionOption? template = null)
     {
         if (_data is not AIbehaviorResource behaviorResource)
         {
@@ -132,7 +134,7 @@ public partial class RedGraph
             throw new InvalidOperationException("Behavior resource already has a root node.");
         }
 
-        var behaviorNode = InternalCreateBehaviorNode(type);
+        var behaviorNode = InternalCreateBehaviorNode(type, template);
         behaviorResource.Root = new CHandle<AIbehaviorTreeNodeDefinition>(behaviorNode);
 
         var nodeViewModel = CreateBehaviorNodeViewModel(behaviorNode, "root", true);
@@ -145,14 +147,14 @@ public partial class RedGraph
         return nodeViewModel.UniqueId;
     }
 
-    public uint AddBehaviorChild(BehaviorNodeViewModel parent, Type type)
+    public uint AddBehaviorChild(BehaviorNodeViewModel parent, Type type, RedTypeTemplateSelectionOption? template = null)
     {
         if (GraphType != RedGraphType.Behavior)
         {
             throw new InvalidOperationException("Cannot add behavior child on non-behavior graph.");
         }
 
-        var behaviorNode = InternalCreateBehaviorNode(type);
+        var behaviorNode = InternalCreateBehaviorNode(type, template);
         string slotName;
         string slotTitle;
         string nodePath;
@@ -257,14 +259,14 @@ public partial class RedGraph
         return FinishBehaviorStructureEdit(movedNode, locationOverrides);
     }
 
-    public uint ReplaceBehaviorChild(ConnectionViewModel connection, Type type)
+    public uint ReplaceBehaviorChild(ConnectionViewModel connection, Type type, RedTypeTemplateSelectionOption? template = null)
     {
         if (!TryGetBehaviorChildSlot(connection, out var slot))
         {
             throw new InvalidOperationException("Selected behavior connection is not a child slot.");
         }
 
-        var behaviorNode = InternalCreateBehaviorNode(type);
+        var behaviorNode = InternalCreateBehaviorNode(type, template);
         SetBehaviorChildSlot(slot, behaviorNode);
 
         var locationOverrides = new Dictionary<AIbehaviorTreeNodeDefinition, WpfPoint>(ReferenceEqualityComparer.Instance)
@@ -275,7 +277,7 @@ public partial class RedGraph
         return FinishBehaviorStructureEdit(behaviorNode, locationOverrides);
     }
 
-    public uint WrapBehaviorChild(ConnectionViewModel connection, Type type)
+    public uint WrapBehaviorChild(ConnectionViewModel connection, Type type, RedTypeTemplateSelectionOption? template = null)
     {
         if (!TryGetBehaviorChildSlot(connection, out var slot))
         {
@@ -287,7 +289,7 @@ public partial class RedGraph
             throw new InvalidOperationException($"{type.Name} cannot wrap behavior child nodes.");
         }
 
-        var wrapperNode = InternalCreateBehaviorNode(type);
+        var wrapperNode = InternalCreateBehaviorNode(type, template);
         if (!TryAttachBehaviorChild(wrapperNode, (AIbehaviorTreeNodeDefinition)slot.Child.Data))
         {
             throw new InvalidOperationException($"{type.Name} cannot contain behavior child nodes.");
@@ -481,14 +483,16 @@ public partial class RedGraph
         return maxId + 1;
     }
 
-    private AIbehaviorTreeNodeDefinition InternalCreateBehaviorNode(Type type)
+    private AIbehaviorTreeNodeDefinition InternalCreateBehaviorNode(Type type, RedTypeTemplateSelectionOption? template = null)
     {
         if (!GetBehaviorNodeTypes().Contains(type))
         {
             throw new InvalidOperationException($"{type.Name} is not a supported behavior node type.");
         }
 
-        if (System.Activator.CreateInstance(type) is not AIbehaviorTreeNodeDefinition behaviorNode)
+        var rawInstance = template != null ? _templateService.CreateTypeInstanceFromSelectionOption(template, type) : RedTypeManager.CreateAndInitRedType(type);
+
+        if (rawInstance is not AIbehaviorTreeNodeDefinition behaviorNode)
         {
             throw new InvalidOperationException($"Failed to create behavior node of type {type.Name}.");
         }

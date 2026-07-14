@@ -26,7 +26,7 @@ public class DocumentViewmodelFactory : IDocumentViewmodelFactory
     private readonly INodeWrapperFactory _nodeWrapperFactory;
     private readonly ISettingsManager _settingsManager;
     private readonly Cr2WTools _cr2WTools;
-
+    private readonly RedTypeTemplateService _redTypeTemplateService;
 
     public DocumentViewmodelFactory(
         IDocumentTabViewmodelFactory tabViewmodelFactory,
@@ -41,7 +41,8 @@ public class DocumentViewmodelFactory : IDocumentViewmodelFactory
         INodeWrapperFactory nodeWrapperFactory,
         ISettingsManager settingsManager,
         IHashService hashService,
-        Cr2WTools cr2WTools
+        Cr2WTools cr2WTools,
+        RedTypeTemplateService redTypeTemplateService
     )
     {
         _tabViewmodelFactory = tabViewmodelFactory;
@@ -56,12 +57,13 @@ public class DocumentViewmodelFactory : IDocumentViewmodelFactory
         _nodeWrapperFactory = nodeWrapperFactory;
         _settingsManager = settingsManager;
         _cr2WTools = cr2WTools;
+        _redTypeTemplateService = redTypeTemplateService;
     }
 
     public RedDocumentViewModel RedDocumentViewModel(CR2WFile file, string path, AppViewModel appViewModel, bool isReadOnly = false)
         => new(file, path, appViewModel, _tabViewmodelFactory, _chunkViewmodelFactory, _projectManager, _loggerService, _globals,
             _parserService, _archiveManager, _hookService, _nodeWrapperFactory,
-            _cr2WTools, _settingsManager, isReadOnly);
+            _cr2WTools, _settingsManager, _redTypeTemplateService, isReadOnly);
 
     public WScriptDocumentViewModel WScriptDocumentViewModel(string path) => new(path, _scriptService);
 

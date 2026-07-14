@@ -31,6 +31,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
     private readonly Red4ParserService _parserService;
     private readonly ICvmTools _cvmTools;
     private readonly CRUIDService _cruidService;
+    private readonly RedTypeTemplateService _redTypeTemplateService;
 
     public ChunkViewmodelFactory(
         IDocumentTabViewmodelFactory tabViewmodelFactory,
@@ -44,7 +45,8 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
         ILocKeyService locKeyService,
         Red4ParserService parserService,
         ICvmTools cvmTools,
-        CRUIDService cruidService)
+        CRUIDService cruidService,
+        RedTypeTemplateService redTypeTemplateService)
     {
         _tabViewmodelFactory = tabViewmodelFactory;
         _hashService = hashService;
@@ -58,6 +60,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
         _parserService = parserService;
         _cvmTools = cvmTools;
         _cruidService = cruidService;
+        _redTypeTemplateService = redTypeTemplateService;
     }
 
     public ChunkViewModel ChunkViewModel(IRedType rootChunk, string name, AppViewModel appViewModel,
@@ -76,6 +79,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
             _parserService,
             _cruidService,
             _cvmTools,
+            _redTypeTemplateService,
             parent,
             isReadOnly).SetInitialExpansionState();
 
@@ -95,6 +99,7 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
             _parserService,
             _cvmTools,
             _cruidService,
+            _redTypeTemplateService,
             isReadOnly).SetInitialExpansionState();
 
     public ChunkViewModel ChunkViewModel(IRedType rootChunk, RDTDataViewModel tab, AppViewModel appViewModel,
@@ -113,5 +118,6 @@ public class ChunkViewmodelFactory : IChunkViewmodelFactory, IFactory<ChunkViewM
             _parserService,
             _cvmTools,
             _cruidService,
+            _redTypeTemplateService,
             isReadOnly).SetInitialExpansionState();
 }

@@ -54,6 +54,7 @@ using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
+using Activator = System.Activator;
 using FileSystem = Microsoft.VisualBasic.FileIO.FileSystem;
 using NativeMethods = WolvenKit.App.Helpers.NativeMethods;
 using Rect = System.Windows.Rect;
@@ -85,6 +86,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
     private readonly IWatcherService _watcherService;
     private readonly ArchiveXlItemService _archiveXlItemService;
     private readonly IUpdateService _updateService;
+    private readonly RedTypeTemplateService _redTypeTemplateService;
     // expose to view
     public ISettingsManager SettingsManager { get; init; }
     public ProjectResourceTools ProjectResourceTools { get; init; }
@@ -117,7 +119,8 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         Cr2WTools cr2WTools,
         TemplateFileTools templateFileTools,
         ProjectResourceTools projectResourceTools,
-        IUpdateService updateService
+        IUpdateService updateService,
+        RedTypeTemplateService redTypeTemplateService
     )
     {
         _documentViewmodelFactory = documentViewmodelFactory;
@@ -143,6 +146,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         TemplateFileTools = templateFileTools;
         ProjectResourceTools = projectResourceTools;
         _updateService = updateService;
+        _redTypeTemplateService = redTypeTemplateService;
 
         _fileValidationScript = _scriptService.GetScripts().ToList()
             .Where(s => s.Name == "run_FileValidation_on_active_tab")
@@ -1292,6 +1296,14 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         await SetActiveDialog(new ScriptManagerViewModel(this, _scriptService, SettingsManager, _loggerService));
     }
 
+    private bool CanShowRedTypeTemplateManager() => !IsDialogShown;
+    [RelayCommand(CanExecute = nameof(CanShowRedTypeTemplateManager))]
+    private async Task ShowRedTypeTemplateManager()
+    {
+        CloseModalCommand.Execute(null);
+        await SetActiveDialog(new RedTypeTemplateManagerViewModel(this, _redTypeTemplateService, _loggerService, _cr2WTools));
+    }
+
     private bool CanShowPlugin() => !IsDialogShown;
     [RelayCommand(CanExecute = nameof(CanShowPlugin))]
     private async Task ShowPlugin() => await ShowHomePageAsync(EHomePage.Plugins);
@@ -1439,7 +1451,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         });
     }
 
-    private static async Task OpenFromNewFileAsync(NewFileViewModel file)
+    private async Task OpenFromNewFileAsync(NewFileViewModel file)
     {
         if (file.SelectedFile is null || file.FullPath is null)
         {
@@ -1486,12 +1498,20 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
                 break;
             }
             case EWolvenKitFile.Cr2w:
-                var redType = file.SelectedFile.Name;
-                if (!string.IsNullOrEmpty(redType))
+                var redType = RedTypeTemplateService.ParseType(file.SelectedFile?.Name ?? "");
+                if (redType is not null)
                 {
+                    var rootChunkData = (RedBaseClass?)_redTypeTemplateService.CreateTypeInstanceFromSelectionOption(
+                        file.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate, redType);
+
+                    if (rootChunkData is null)
+                    {
+                        throw new Exception($"Failed to create {file.RedTypeTemplateDropdownViewModel.SelectedRedTypeTemplate.Type.Name} when creating a new CR2W file.");
+                    }
+
                     CR2WFile cr2W = new()
                     {
-                        RootChunk = RedTypeManager.Create(redType)
+                        RootChunk = rootChunkData
                     };
                     stream = new FileStream(file.FullPath, FileMode.Create, FileAccess.Write);
                     using CR2WWriter writer = new(stream);
@@ -2287,6 +2307,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
 
     private bool IsInRawFolder(string path) => _projectManager.ActiveProject is not null && path.Contains(_projectManager.ActiveProject.RawDirectory);
     private bool IsInResourceFolder(string path) => _projectManager.ActiveProject is not null && path.Contains(_projectManager.ActiveProject.ResourcesDirectory);
+    private bool IsInTemplateFolder(string path) => path.Contains(ISettingsManager.GetUserTemplateDir(), StringComparison.OrdinalIgnoreCase);
 
     private void OpenRedengineFile(string fullpath, string ext)
     {
@@ -2466,7 +2487,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
             // double file formats
             case ".csv":
             case ".json":
-                if (IsInRawFolder(absolutePath) || IsInResourceFolder(absolutePath))
+                if (IsInRawFolder(absolutePath) || IsInResourceFolder(absolutePath) || IsInTemplateFolder(absolutePath))
                 {
                     ShellExecute(absolutePath);
                 }
@@ -2585,6 +2606,7 @@ public partial class AppViewModel : ObservableObject/*, IAppViewModel*/
         resources["WolvenKitMarginSmallLeftSide"] = new Thickness(8, 8, 0, 8).Mul(_uiScalePercentage).Round();
         resources["WolvenKitMarginSmallRightSide"] = new Thickness(0, 8, 8, 8).Mul(_uiScalePercentage).Round();
         resources["WolvenKitMarginSmallLeftTop"] = new Thickness(8, 8, 0, 0).Mul(_uiScalePercentage).Round();
+        resources["WolvenKitMarginSmallRightTop"] = new Thickness(0, 8, 8, 0).Mul(_uiScalePercentage).Round();
 
         resources["WolvenKitMarginTiny"] = new Thickness(4).Mul(_uiScalePercentage).Round();
         resources["WolvenKitMarginTinyRight"] = new Thickness(0, 0, 4, 0).Mul(_uiScalePercentage).Round();

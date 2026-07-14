@@ -1765,6 +1765,24 @@
                             Foreground="{StaticResource WolvenKitYellow}" />
                     </MenuItem.Icon>
                 </MenuItem>
+
+                <MenuItem
+                    Visibility="{Binding Path=IsEnabled,
+                                         RelativeSource={RelativeSource Self},
+                                         Mode=OneWay,
+                                         Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Header="Create Template"
+                    Command="{Binding Path=CreateNewTemplateFromSelectionCommand,
+                                      Source={x:Reference redTreeView}}">
+                    <MenuItem.Icon>
+                        <templates:IconBox
+                            IconPack="Unicons"
+                            Kind="CopyAltLine"
+                            Margin="{DynamicResource WolvenKitMarginTiny}"
+                            Size="{DynamicResource WolvenKitIconMilli}"
+                            Foreground="{StaticResource WolvenKitPurple}" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </ContextMenu>
 
             <!-- Converter for the right-hand properties that decides which partial to render -->

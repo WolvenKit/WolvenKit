@@ -68,7 +68,7 @@ public class AppScriptFunctions : ScriptFunctions
         _gameController = gameController;
         _geometryCacheService = geometryCacheService;
         _settingsManager = settingsManager;
-        
+
     }
 
     /// <summary>
@@ -742,7 +742,7 @@ public class AppScriptFunctions : ScriptFunctions
         {
             return false;
         }
-        
+
         File.Delete(absoluteFilePath);
         return !File.Exists(baseFolder);
     }
