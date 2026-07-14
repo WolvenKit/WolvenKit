@@ -53,5 +53,12 @@ All methods are thread safe.
 Most methods have several overloads, e.g. accepting the type as a generic as well as a parameter, or a `RedTypeTemplateDescriptor`. <br>
 Many parameters are optional, for example when reading, the name defaults to "default" and source to Auto, when writing only the destination is defaulted to User.
 
+## Design
+
+Templates when stored are plain json files containing a serialized `RedTypeTemplate` where the name and type are primarily encoded in it's filename which follows the `NAME.TYPE.json` pattern. <br>
+When templates are loaded a descriptor is created for each template that contains it's name, type and backing filepath. It is only deserialized during the `LoadTemplates` method to validate that it does not contain malformed data as this is a good place to communicate any issues with the user. <br>
+In addition catching most malformed templates early means there is less of a chance for unexpected template resolution when reading templates where a template is indexed but cannot be read.
+
+Template files are ultimately read at the time of reading the template using either `ReadTemplate` or `CreateTypeInstance`. This lowers the memory footprint of the service as it only needs to keep track of the descriptors rather than the entire payload.
 
 
